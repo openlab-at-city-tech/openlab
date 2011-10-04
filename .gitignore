@@ -11,6 +11,9 @@ env.php
 # Don't include the dev site
 openlabdev
 
+# Don't include the error log
+php_error.log
+
 # Misc exclusions
 *.bak
 PHP_errors.log
