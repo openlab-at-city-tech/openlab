@@ -1,0 +1,498 @@
+# Translation of the WordPress theme Coraline 1.0.2 by Automattic.
+# Copyright (C) 2010 Automattic
+# This file is distributed under the same license as the Coraline package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Coraline 1.0.2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/coraline\n"
+"POT-Creation-Date: 2010-12-03 13:40-0700\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: 404.php:14 loop.php:20
+msgid "Not Found"
+msgstr ""
+
+#: 404.php:16
+msgid ""
+"Apologies, but the page you requested could not be found. Perhaps searching "
+"will help."
+msgstr ""
+
+#: archive.php:17
+#, php-format
+msgid "Daily Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:19
+#, php-format
+msgid "Monthly Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:21
+#, php-format
+msgid "Yearly Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:23
+msgid "Blog Archives"
+msgstr ""
+
+#: author.php:15
+#, php-format
+msgid "Author Archives: %s"
+msgstr ""
+
+#: category.php:14
+#, php-format
+msgid "Category Archives: %s"
+msgstr ""
+
+#: comments.php:11
+msgid ""
+"This post is password protected. Enter the password to view any comments."
+msgstr ""
+
+#: comments.php:25
+#, php-format
+msgid "One Response to %2$s"
+msgid_plural "%1$s Responses to %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:29 comments.php:40
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr ""
+
+#: comments.php:30 comments.php:41
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: comments.php:53
+msgid "Comments are closed."
+msgstr ""
+
+#: footer.php:14
+#, php-format
+msgid "Theme: %1$s by %2$s"
+msgstr ""
+
+#: footer.php:14
+msgid "http://wordpress.org/"
+msgstr ""
+
+#: footer.php:14
+msgid "A Semantic Personal Publishing Platform"
+msgstr ""
+
+#: footer.php:14
+#, php-format
+msgid "Proudly powered by %s."
+msgstr ""
+
+#: full-width-page.php:20 image.php:96 loop.php:112 page.php:24 single.php:30
+msgid "Pages:"
+msgstr ""
+
+#: full-width-page.php:21 functions.php:326 image.php:33 image.php:45
+#: image.php:102 loop.php:69 loop.php:91 loop.php:131 page.php:25
+#: single.php:25 single.php:35
+msgid "Edit"
+msgstr ""
+
+#: functions.php:60
+msgid "Primary Navigation"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:93
+msgid "Water drops"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:99
+msgid "Limestone cave"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:105
+msgid "Cactii"
+msgstr ""
+
+#: functions.php:253 loop.php:84 loop.php:111
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#. translators: 1: date, 2: time
+#: functions.php:320
+#, php-format
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: functions.php:331
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: functions.php:345
+msgid "Pingback:"
+msgstr ""
+
+#: functions.php:345
+msgid "(Edit)"
+msgstr ""
+
+#: functions.php:361
+msgid "Primary Widget Area"
+msgstr ""
+
+#: functions.php:363
+msgid "The primary widget area"
+msgstr ""
+
+#: functions.php:372
+msgid "Secondary Widget Area"
+msgstr ""
+
+#: functions.php:374
+msgid "The secondary widget area appears in 3-column layouts"
+msgstr ""
+
+#: functions.php:383
+msgid "Feature Widget Area"
+msgstr ""
+
+#: functions.php:385
+msgid ""
+"The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-"
+"Sidebar-Content layouts"
+msgstr ""
+
+#: functions.php:394
+msgid "First Footer Widget Area"
+msgstr ""
+
+#: functions.php:396
+msgid "The first footer widget area"
+msgstr ""
+
+#: functions.php:405
+msgid "Second Footer Widget Area"
+msgstr ""
+
+#: functions.php:407
+msgid "The second footer widget area"
+msgstr ""
+
+#: functions.php:416
+msgid "Third Footer Widget Area"
+msgstr ""
+
+#: functions.php:418
+msgid "The third footer widget area"
+msgstr ""
+
+#: functions.php:427
+msgid "Fourth Footer Widget Area"
+msgstr ""
+
+#: functions.php:429
+msgid "The fourth footer widget area"
+msgstr ""
+
+#: functions.php:458
+#, php-format
+msgid ""
+"<span class=\"%1$s\">Posted on</span> %2$s <span class=\"%4$s\"><span class="
+"\"meta-sep\">by</span> %3$s</span>"
+msgstr ""
+
+#: functions.php:467
+#, php-format
+msgid "View all posts by %s"
+msgstr ""
+
+#: functions.php:485
+#, php-format
+msgid ""
+"This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" "
+"title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#: functions.php:487
+#, php-format
+msgid ""
+"This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title="
+"\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#: functions.php:489
+#, php-format
+msgid ""
+"Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark"
+"\">permalink</a>."
+msgstr ""
+
+#: header.php:34
+#, php-format
+msgid "Page %s"
+msgstr ""
+
+#: header.php:71
+msgid "Skip to content"
+msgstr ""
+
+#: image.php:23
+#, php-format
+msgid ""
+"<span class=\"meta-prep meta-prep-entry-date\">Published </span> <span class="
+"\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  "
+"at <a href=\"%3$s\" title=\"Link to full-size image\">%4$s &times; %5$s</a> "
+"in <a href=\"%6$s\" title=\"Return to %7$s\" rel=\"gallery\">%7$s</a>"
+msgstr ""
+
+#: image.php:39
+#, php-format
+msgid ""
+"<span class=\"meta-prep meta-prep-entry-date\">Uploaded </span> at <a href="
+"\"%1$s\" title=\"Link to full-size image\">%2$s &times; %3$s</a>"
+msgstr ""
+
+#: image.php:50
+msgid "&larr; Previous"
+msgstr ""
+
+#: image.php:51
+msgid "Next &rarr;"
+msgstr ""
+
+#: inc/theme-options.php:25
+msgid "Theme Options"
+msgstr ""
+
+#: inc/theme-options.php:35
+msgid "Light"
+msgstr ""
+
+#: inc/theme-options.php:39
+msgid "Dark"
+msgstr ""
+
+#: inc/theme-options.php:53
+msgid "Content-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:57
+msgid "Sidebar-Content"
+msgstr ""
+
+#: inc/theme-options.php:61
+msgid "Content-Sidebar-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:65
+msgid "Sidebar-Sidebar-Content"
+msgstr ""
+
+#: inc/theme-options.php:69
+msgid "Sidebar-Content-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:104
+#, php-format
+msgid "%1$s Theme Options"
+msgstr ""
+
+#: inc/theme-options.php:108
+msgid "Options saved"
+msgstr ""
+
+#: inc/theme-options.php:122
+msgid "Color Scheme"
+msgstr ""
+
+#: inc/theme-options.php:141
+msgid "Select a default color scheme"
+msgstr ""
+
+#: inc/theme-options.php:150 inc/theme-options.php:152
+msgid "Default Layout"
+msgstr ""
+
+#: inc/theme-options.php:188
+msgid "Aside Category"
+msgstr ""
+
+#: inc/theme-options.php:191 inc/theme-options.php:219
+msgid "Select a category &hellip;"
+msgstr ""
+
+#: inc/theme-options.php:207
+msgid "Select a category to use for shorter aside posts"
+msgstr ""
+
+#: inc/theme-options.php:216
+msgid "Gallery Category"
+msgstr ""
+
+#: inc/theme-options.php:235
+msgid "Select a category to use for posts with image galleries"
+msgstr ""
+
+#: inc/theme-options.php:243
+msgid "Save Options"
+msgstr ""
+
+#: loop.php:12 loop.php:144
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr ""
+
+#: loop.php:13 loop.php:145
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: loop.php:22
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr ""
+
+#: loop.php:37 loop.php:58 loop.php:99
+#, php-format
+msgid "Permalink to %s"
+msgstr ""
+
+#: loop.php:57
+#, php-format
+msgid "This gallery contains <a %1$s>%2$s photos</a>."
+msgstr ""
+
+#: loop.php:67 loop.php:89 loop.php:117
+msgid "&rarr; Leave a comment"
+msgstr ""
+
+#: loop.php:67 loop.php:89 loop.php:117
+msgid "&rarr; 1 Comment"
+msgstr ""
+
+#: loop.php:67 loop.php:89 loop.php:117
+msgid "&rarr; % Comments"
+msgstr ""
+
+#: loop.php:68
+msgid "View posts in the Gallery category"
+msgstr ""
+
+#: loop.php:68
+msgid "More Galleries"
+msgstr ""
+
+#: loop.php:102 single.php:24
+msgid "Leave a comment"
+msgstr ""
+
+#: loop.php:102 single.php:24
+msgid "1 Comment"
+msgstr ""
+
+#: loop.php:102 single.php:24
+msgid "% Comments"
+msgstr ""
+
+#: loop.php:120
+#, php-format
+msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+msgstr ""
+
+#: loop.php:128
+#, php-format
+msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+msgstr ""
+
+#: search.php:14
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: search.php:18
+msgid "Nothing Found"
+msgstr ""
+
+#: search.php:20
+msgid ""
+"Sorry, but nothing matched your search criteria. Please try again with some "
+"different keywords."
+msgstr ""
+
+#: sidebar.php:42
+msgid "Search It!"
+msgstr ""
+
+#: sidebar.php:47
+msgid "Recent Entries"
+msgstr ""
+
+#: sidebar.php:63
+msgid "Links"
+msgstr ""
+
+#: sidebar.php:86
+msgid "Meta"
+msgstr ""
+
+#: single.php:16 single.php:40
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr ""
+
+#: single.php:17 single.php:41
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr ""
+
+#: tag.php:14
+#, php-format
+msgid "Tag Archives: %s"
+msgstr ""
+
+#. Theme Name of the plugin/theme
+msgid "Coraline"
+msgstr ""
+
+#. Theme URI of the plugin/theme
+msgid "http://wordpress.org/extend/themes/coraline/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"A squeaky-clean theme featuring a custom menu, header, background, and "
+"layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in "
+"the footer) and featured images (thumbnails for gallery posts and custom "
+"header images for posts and pages). It includes styles for print and the "
+"Visual Editor, special styles for posts in \"Asides\" and \"Gallery\" "
+"categories, and has an optional full-width page template that removes the "
+"sidebar."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Automattic"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://automattic.com/"
+msgstr ""
+
+#. Tags of the plugin/theme
+msgid ""
+"black, white, dark, light, one-column, two-columns, three-columns, left-"
+"sidebar, right-sidebar, flexible-width, custom-background, custom-header, "
+"custom-menu, editor-style, theme-options, threaded-comments, sticky-post, "
+"microformats, rtl-language-support, translation-ready, full-width-template"
+msgstr ""

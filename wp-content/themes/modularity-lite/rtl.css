@@ -1,0 +1,154 @@
+/*
+Theme Name: Modularity Lite
+RTL: yoav@automattic.com
+*/
+
+/************************* GLOBAL STYLES ***************************/
+body {
+	direction:rtl;
+	unicode-bidi:embed;
+}
+.login {
+	float: right;
+}
+/* Masthead */
+#masthead {
+	float:right;
+}
+#masthead h4 {
+	float:right
+}
+/* Navigation */
+#top div.main-nav {
+	float:left;
+	text-align:right;
+}
+#top div.main-nav ul {
+	padding-right:0;
+}
+#top div.main-nav li {
+	float:right;
+}
+#top div.main-nav a {
+	border-left:1px dotted #666;
+	border-right:none;
+}
+#top div.main-nav ul ul {
+	right:0;
+	left:auto;
+	float:right;
+}
+#top div.main-nav ul ul ul {
+	right:100%;
+	left:auto;
+	top:0;
+}
+#top div.main-nav ul ul a {
+	padding:.5em 1em .5em .5em;
+}
+/* Posts */
+.content h2 {
+	font-family:Arial,sans-serif;
+}
+.post h4,.post h6 {
+	font-family:Arial,sans-serif;
+}
+.nav-image-left,.nav-image-up,.nav-image-right {
+	float:right;
+	margin:0 2px 0 10px;
+}
+.nav-image-left a,.nav-image-up a,.nav-image-right a {
+	padding:2px 52% 2px 48%;
+}
+.nav-interior .next {
+	float:left;
+}
+.nav-interior .prev {
+	float:right;
+}
+/* Sidebar */
+#sidebar ul li a,ul.txt li {
+	padding:6px 8px 6px 0;
+}
+/* Widgets */
+/* Some widget link styles will need a little resetting for inline links */
+#sidebar .widget_categories ul li,#footer .widget_categories ul li,#sidebar .widget_twitter ul li,#footer .widget_twitter ul li {
+	padding-right: 8px;
+	padding-left:0;
+}
+#footer {
+	text-align:right
+}
+#footer ul li a,ul.txt li {
+	padding:6px 8px 6px 0;
+}
+#footer ul li a:hover,ul.txt li:hover {
+	background-position:100% 0.8em;
+}
+#footer ul#recentcomments li.recentcomments {
+	padding:4px 8px 4px 0;
+}
+#footer ul#recentcomments li.recentcomments a:hover {
+	background-position:100% 0.8em;
+}
+/* Floats & Images */
+.right {
+	float:left;
+}
+.left {
+	float:right;
+}
+.middle {
+	float:right;
+}
+.thumbnail,.attachment-thumbnail,#featured-section .timthumbnail,.archive .timthumbnail,.search .timthumbnail,#category-stack .timthumbnail {
+	margin:0 0 1.5em 1.5em;
+	float:right
+}
+.content .size-medium,content size-large {
+	margin:0 0 1.5em 1.5em
+}
+.home .size-medium,.home .size-large {
+	margin:0 0 .5em .5em;
+}
+.gallery-caption {
+	margin-right:0;
+}
+.navigation .alignleft {
+	float:right;
+}
+.navigation .alignright {
+	float:left;
+}
+/* Etc */
+#filters li {
+	float:right;
+	margin-left:2em;
+}
+#search #s {
+	background-position:100% center;
+	padding:4px 17px 4px 0;
+}
+#search #s:hover {
+	background-position:100% center;
+}
+/* Comments */
+h3#comments span.comments-subscribe {
+	float:left;
+	margin-right:3px;
+	margin-left:0;
+	padding:0 19px 0 0;
+	background-position:100% 50%;
+}
+ol.commentlist li strong.fn {
+	padding-right:1em;
+	padding-left:0;
+}
+ol.commentlist li .avatar {
+	margin:2em 0 1em 1em;
+}
+#commentform input[type=text] {
+	float:right;
+	margin-left:5px;
+	margin-right:0;
+}

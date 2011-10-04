@@ -1,0 +1,82 @@
+/** A dividing horizontal rule **/
+hr.div {
+	background: #CCC;
+	height: 1px;
+	border: none;
+	margin: 10px 0;
+}
+
+/** Genesis metabox Styles **/
+.genesis-metaboxes {
+	width: 800px;
+	padding-bottom: 20px;
+}
+.genesis-metaboxes .bottom-buttons {
+	text-align: right;
+	padding-right: 20px;
+}
+
+.genesis-metaboxes .metabox-holder {
+	width: 800px;
+	overflow: hidden;
+	clear: both;
+}
+.genesis-metaboxes .meta-box-sortables {
+	padding-right: 10px;
+}
+.genesis-metaboxes .inside {
+	padding: 0 10px;
+	overflow: hidden;
+}
+
+
+/** In-Post Layout Options Styles **/
+#genesis_inpost_layout_box .inside,
+.form-table .inside {
+	padding: 10px;
+	overflow: auto;
+}
+#genesis_inpost_layout_box label.box,
+.form-table label.box {
+	display: block; float: left;
+	margin: 0 10px 10px 0;
+}
+#genesis_inpost_layout_box label.box input,
+.form-table label.box input {
+	float: left;
+	margin-right: 5px;
+}
+
+/* Widgets
+------------------------------------------------------------ */
+
+.genesis-widget-column {
+	float: left;
+	width: 250px;
+}
+.genesis-widget-column-right {
+	margin-left: 10px;
+}
+.genesis-widget-column-box {
+	background: #f1f1f1;
+	border: 1px solid #ddd;
+	margin-top: 10px;
+	padding: 10px 10px 0;
+}
+.genesis-widget-column-box-top {
+	margin-top: 0;
+}
+
+.genesis-pagechecklist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.no-js .hide-if-no-js {
+	display: none;
+}
+
+.widget-control-actions {
+	clear: both;
+}

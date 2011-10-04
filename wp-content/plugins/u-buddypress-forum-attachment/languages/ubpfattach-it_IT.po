@@ -1,0 +1,214 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ubpfattach\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-04-11 15:03+0900\n"
+"PO-Revision-Date: 2011-05-29 23:27+0100\n"
+"Last-Translator: czz <ishi.t@email.it>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: u-bp-forum-attachment.php:134
+msgid "Uploaded File List"
+msgstr "Lista file caricata"
+
+#: u-bp-forum-attachment.php:135
+#, php-format
+msgid "Uploading Files <small>(Less than <strong>%s</strong>Mbytes, Maximum <strong>%s</strong> per comment)</small>"
+msgstr "Caricando file <small>(Minori di <strong>%s</strong>Mbyte, Massimo <strong>%s</strong> per commento)</small>"
+
+#: u-bp-forum-attachment.php:136
+msgid "Insert into editor"
+msgstr "Inserisci dentro l'editor"
+
+#: u-bp-forum-attachment.php:137
+msgid "Delete"
+msgstr "Elimina"
+
+#: u-bp-forum-attachment.php:138
+msgid "Choose File"
+msgstr "Scegli file"
+
+#: u-bp-forum-attachment.php:139
+msgid "Cancel"
+msgstr "Cancella"
+
+#: u-bp-forum-attachment.php:141
+msgid "Upload directory is not exist."
+msgstr "Carica l'elenco se non esiste"
+
+#: u-bp-forum-attachment.php:142
+#, php-format
+msgid "For uploading, file size must be less than %s Mbytes"
+msgstr "Per il caricamento, i file devono essere minori di %s Mbyte"
+
+#: u-bp-forum-attachment.php:143
+msgid "This file type is not allowed. Please try another."
+msgstr "Non è consentito questo tipo di file. si prega di provare un altro tipo."
+
+#: u-bp-forum-attachment.php:144
+#, php-format
+msgid "[%s] is successfully uploaded."
+msgstr "[%s] è inserito con successo."
+
+#: u-bp-forum-attachment.php:145
+msgid "There was an error. please try again."
+msgstr "Si è verificato un errore. Si prega di riprovare."
+
+#: u-bp-forum-attachment.php:146
+msgid "Upload canceled."
+msgstr "Caricamento cancellato."
+
+#: u-bp-forum-attachment.php:147
+msgid "Attachment Uploader Security error. Please contact the administrator."
+msgstr "Allegato Uploader errore di sicurezza. Si prega di contattare l'amministratore."
+
+#: u-bp-forum-attachment.php:148
+msgid "This Plugin requires Adobe Flash Player 9.0. or greater."
+msgstr "Questo Plugin richiede Adobe Flash Player 9.0. o superiore."
+
+#: u-bp-forum-attachment.php:149
+msgid "Now uploading. please try again later."
+msgstr "Caricando. Riprova più tardi."
+
+#: u-bp-forum-attachment.php:173
+msgid "Error: Please enter a title."
+msgstr "Errore: inserire un titolo."
+
+#: u-bp-forum-attachment.php:174
+msgid "Error: Please enter a content."
+msgstr "Errore: inserire il contenuto."
+
+#: u-bp-forum-attachment.php:175
+msgid "Error: Please select a Group Forum."
+msgstr "Errore: selezionare un gruppo per il forum."
+
+#: u-bp-forum-attachment.php:197
+msgid "Attachments"
+msgstr "Allegati"
+
+#: u-bp-forum-attachment.php:203
+msgid "Download"
+msgstr "Download"
+
+#: u-bp-forum-attachment.php:206
+msgid "Open Image in New Window"
+msgstr "Apri immagine in una nuova finestra."
+
+#: u-bp-forum-attachment.php:206
+msgid "View"
+msgstr "Vedi"
+
+#: u-bp-forum-attachment.php:279
+msgid "Forum Attachment"
+msgstr "Allegati Forum"
+
+#: u-bp-forum-attachment.php:297
+msgid "BuddyPress Forum Attachment"
+msgstr "Allegati forum buddypress"
+
+#: u-bp-forum-attachment.php:299
+#, php-format
+msgid "This plugin is using %s as a file uploader."
+msgstr "Questo plugin usa  %s un caricatore di file."
+
+#: u-bp-forum-attachment.php:306
+#: u-bp-forum-attachment.php:308
+#: u-bp-forum-attachment.php:315
+msgid "Enable"
+msgstr "Attiva"
+
+#: u-bp-forum-attachment.php:313
+msgid "Form Validate"
+msgstr "Convalida modulo"
+
+#: u-bp-forum-attachment.php:316
+msgid "Validating whether form fields are filled out before submission."
+msgstr "Convalida se i campi modulo vengono compilati prima dell'invio."
+
+#: u-bp-forum-attachment.php:320
+msgid "Absolute path of upload directory"
+msgstr "Percorso assoluto della directory di upload"
+
+#: u-bp-forum-attachment.php:324
+msgid "Upload directory is not exists."
+msgstr "La directory di upload non esiste."
+
+#: u-bp-forum-attachment.php:327
+#: u-bp-forum-attachment.php:336
+msgid "Example"
+msgstr "Esempio"
+
+#: u-bp-forum-attachment.php:332
+msgid "Complete URL of upload directory"
+msgstr "URL completo della directory di upload"
+
+#: u-bp-forum-attachment.php:341
+msgid "Max file size per file"
+msgstr "Massima dimensione per file"
+
+#: u-bp-forum-attachment.php:347
+msgid "Max file count per post"
+msgstr "Numero massimo di file per post"
+
+#: u-bp-forum-attachment.php:350
+msgid "How many files can be attached per post."
+msgstr "Quanti file possono essere allegati per post."
+
+#: u-bp-forum-attachment.php:354
+msgid "Allowed file types"
+msgstr "Tipi di file permessi"
+
+#: u-bp-forum-attachment.php:357
+msgid "Separate file extentions with commas. If you would like to allow all types, Input asterisk( * ) character. however, files in blacklist, in any case, are not allowed."
+msgstr "Estensioni di file separate da virgole. Se si desidera consentire a tutti i tipi, inserire asterisco (*) carattere. Tuttavia, i file in lista nera, in ogni caso, non sono ammessi."
+
+#: u-bp-forum-attachment.php:360
+msgid "Blacklist"
+msgstr "Lista nera"
+
+#: u-bp-forum-attachment.php:362
+msgid "Ignor case and subfix. Following cases are also not allowed."
+msgstr "Ignora caso e subfix. Seguenti casi non sono inoltre ammessi."
+
+#: u-bp-forum-attachment.php:371
+msgid "Save Changes"
+msgstr "Salva cambiamenti"
+
+#: u-bp-forum-attachment.php:375
+msgid "Related Plugin"
+msgstr "Plugin correlati"
+
+#~ msgid ""
+#~ "If your are already using %s's Form validation, this plugin's form "
+#~ "validation will be ignored."
+#~ msgstr ""
+#~ "%s의 폼 검사를 이미 사용중이라면, 이 플러그인의 폼 검사는 실행되지 않습니"
+#~ "다."
+
+#~ msgid "Settings"
+#~ msgstr "설정"
+
+#~ msgid "Upload server path"
+#~ msgstr "업로드 서버 경로"
+
+#~ msgid "Your server root:"
+#~ msgstr "당신의 서버 루트:"
+
+#~ msgid "Error: your nonce did not verify."
+#~ msgstr "에러: 확인되지않은 넌스(nonce)입니다."
+
+#~ msgid "Error: The password is incorrect."
+#~ msgstr "에러: 비밀번호가 틀렸습니다."
+
+#~ msgid "Password"
+#~ msgstr "비밀번호"
+
+#~ msgid "Update"
+#~ msgstr "업데이트"

@@ -1,0 +1,147 @@
+/* uploader
+ --------------------------------------------------------------------------------------- */
+#ubpfattach { margin: 20px 0; }
+
+#ubpfattach-message,
+#ubpfattach-list,
+#ubpfattach-process{ display: none;}
+
+#ubpfattach-button {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	margin-right: 10px;
+}
+#ubpfattach-button span {
+	display: inline-block;
+	border: 1px solid #999;
+	background: #eee url(white-grad.png) repeat-x;
+	color: #666;
+	border-radius: 20px;
+	line-height: 1;
+	padding: 5px 20px;
+}
+#ubpfattach-button:hover span { 
+	border-color: #333;
+	color: #111;
+}
+#ubpfattach-button input {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	filter: alpha(opacity=1);
+	-moz-opacity: 0.01;
+	opacity: 0.01;
+	padding: 100px !important;
+	font-size: 100px !important;
+	cursor: pointer;
+}
+
+#ubpfattach-process img { vertical-align: middle; margin-top: -3px; }
+
+#ubpfattach-info {
+	font-family: Arial, sans-serif;
+	font-size: 11px;
+	color: #999;
+	vertical-align: top;
+	display: inline-block;
+	line-height: 24px;
+	
+}
+#ubpfattach-info strong{
+	color: #333;
+	font-weight: normal !important;
+}
+
+#ubpfattach-message {
+	background: lightYellow;
+	border: 1px solid #FFC597;
+	color: #FF5917;
+	padding: 5px 10px;
+	border-radius: 4px;
+	margin: 15px 0;
+}
+#ubpfattach-message.err {
+	border:none;
+	background: #E41717;
+	color: #FFF;
+	padding: 5px 10px;
+	border-radius: 4px;
+}
+
+#ubpfattach-target, 
+#ubpfattach-form { width: 0; height: 0; visibility: hidden; position: absolute;}
+
+/* filelist
+ --------------------------------------------------------------------------------------- */ 
+table.ubpfattach-filelist {
+	border-collapse: collapse;
+	border-spacing: 0;
+	padding: 0;
+	clear: both;
+	position: relative;
+	width: auto !important;
+	margin: 15px 0 !important;
+	border: 1px solid #ddd !important;
+	background: #f0f0f0 !important;
+}
+table.ubpfattach-filelist td {
+	line-height: 1;
+	font-family: Arial, sans-serif;
+	font-size: 11px;
+	color: #666;
+	padding: 6px 8px !important;
+	border: none !important;
+	border-bottom: 1px solid #ddd !important;
+	vertical-align: middle !important;
+}
+table.ubpfattach-filelist tr.even td {
+	background: #f8f8f8 !important;
+}
+table.ubpfattach-filelist td a {
+	color: #666;
+	text-decoration: none;
+}
+table.ubpfattach-filelist td a:hover {
+	text-decoration: underline;
+}
+table.ubpfattach-filelist td.links {
+	padding-left: 50px !important;
+	text-align: right;
+}
+table.ubpfattach-filelist.processing td.links a{
+	visibility: hidden;
+}
+table.ubpfattach-filelist .pipe {
+	color: #ccc;
+}
+table.ubpfattach-filelist td.thumb {
+	padding: 0 !important;
+	position: relative;
+	width: 25px;
+}
+table.ubpfattach-filelist td.thumb.empty {
+	width: 0;	
+}
+table.ubpfattach-filelist img.thumb {
+	width: 25px !important;
+	height: 25px !important;
+	max-width: none !important;
+	max-height: none !important;
+	margin: -1px;
+}
+.post-content table.ubpfattach-filelist tr:hover img.thumb {
+	width: 100px !important;
+	height: 100px !important;
+	position: absolute;
+	top: -75px;
+	left: 0;
+	z-index: 2;
+	box-shadow: 0px 2px 10px rgba(0,0,0,0.4);
+}
+.post-content table.ubpfattach-filelist tr:hover td{
+	background: lightyellow !important;
+}
+

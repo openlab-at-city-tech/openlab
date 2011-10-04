@@ -1,0 +1,182 @@
+# Translation of the WordPress plugin BP Group Management 0.2 by Boone Gorges.
+# Copyright (C) 2010 Boone Gorges
+# This file is distributed under the same license as the BP Group Management package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Group Management 0.2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-group-management\n"
+"POT-Creation-Date: 2010-03-07 21:39+0000\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bp-group-management-bp-functions.php:5
+#: bp-group-management-bp-functions.php:59
+#: bp-group-management-bp-functions.php:243
+#: bp-group-management-bp-functions.php:367
+msgid "Group Management"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:45
+#: bp-group-management-bp-functions.php:163
+#: bp-group-management-bp-functions.php:177
+#: bp-group-management-bp-functions.php:191
+#: bp-group-management-bp-functions.php:205
+#: bp-group-management-bp-functions.php:219
+#: bp-group-management-bp-functions.php:231
+msgid "Sorry, there was an error."
+msgstr ""
+
+#: bp-group-management-bp-functions.php:47
+msgid "Group deleted."
+msgstr ""
+
+#: bp-group-management-bp-functions.php:65
+msgid "Group ID"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:66
+msgid "Group Name"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:67
+msgid "Date Created"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:68
+msgid "Number of Members"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:104
+msgid "Edit"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:107
+msgid "Delete"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:109
+msgid "Visit"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:165
+msgid "Member kicked and banned"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:179
+msgid "Member unbanned"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:193
+msgid "Member demoted"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:207
+msgid "Member promoted to moderator"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:221
+msgid "Member promoted to admin"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:233
+msgid "User added to group"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:244
+#: bp-group-management-bp-functions.php:368
+msgid "Back to group index"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:248
+msgid "Manage current and banned group members"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:277
+msgid "(banned)"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:277
+msgid "Remove Ban"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick and ban this member"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick &amp; Ban"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:302
+#: bp-group-management-bp-functions.php:304
+msgid "Demote to Member"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:304
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Admin"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Moderator"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:325
+msgid "Add members to group"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:342
+msgid "Add"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:371
+msgid "Deleting the group"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:372
+msgid "You are about to delete the group"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:372
+msgid "This action cannot be undone."
+msgstr ""
+
+#: bp-group-management-bp-functions.php:374
+msgid "Delete Group"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:375
+msgid "Oops, I changed my mind"
+msgstr ""
+
+#: bp-group-management-bp-functions.php:477
+#, php-format
+msgid "%s joined the group %s"
+msgstr ""
+
+#. Plugin Name of an extension
+msgid "BP Group Management"
+msgstr ""
+
+#. Plugin URI of an extension
+msgid "http://teleogistic.net/code/buddypress/bp-group-management"
+msgstr ""
+
+#. Description of an extension
+msgid "Allows site administrators to manage BuddyPress group membership"
+msgstr ""
+
+#. Author of an extension
+msgid "Boone Gorges"
+msgstr ""
+
+#. Author URI of an extension
+msgid "http://teleogistic.net"
+msgstr ""

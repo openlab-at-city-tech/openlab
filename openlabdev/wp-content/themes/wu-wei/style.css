@@ -1,0 +1,202 @@
+/*
+Theme Name: Wu Wei
+Theme URI: http://equivocality.com/wu-wei
+Description: A clean, minimalist, grid-based theme, with high contrast and multiple colour schemes
+Version: 1.2.4
+Author: Jeff Ngan
+Author URI: http://equivocality.com/
+Tags: black, white, fixed-width, two-columns, custom-colors, threaded-comments, sticky-post
+
+This theme was designed and built by Jeff Ngan, http://equivocality.com/
+Dedicated to Michael Babin
+
+License: GNU General Public License (GPL) version 3
+
+*/
+
+/*** Reset Styles ************************************************************/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, acronym, abbr, blockquote, pre, a, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin:0; padding:0; border:0;	outline:0; font-size:100%; vertical-align:baseline; background:transparent;}
+body {line-height:1.5;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after {content:''; content:none;}
+:focus {outline:0;}
+ins {text-decoration:none;}
+del {text-decoration: line-through;}
+table {border-collapse:collapse; border-spacing:0;}
+a img {border:none;}
+
+
+/*** General *****************************************************************/
+
+body {background-color:#fff; color:#516064; margin:0; padding:0; text-align:center; font-size:75%; font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;}
+
+p {font-size:1.167em; line-height:1.5em; margin:0 0 1.5em;}
+small {font-size:0.75em;}
+
+a:link, a:visited {color:#ff8a00; text-decoration:none;}
+a:hover {color:#feb925;}
+
+img {margin:0 0 1.5em;}
+img.alignleft {margin-right:1.5em;}
+img.alignright {margin-left:1.5em;}
+
+.full-column {border-bottom:1px solid #d1d9dc;}
+.center-column {width:58.334em; margin:0px auto; text-align:left; clear:both;}
+
+.alignright {float:right;}
+.alignleft {float:left;}
+.aligncenter, div.aligncenter {display:block; margin-left:auto; margin-right:auto;}
+.wp-caption {border:1px solid #ddd; text-align: center; background-color:#f3f3f3; padding-top:4px; margin:10px;}
+.wp-caption img {margin:0; padding:0; border:0 none;}
+.wp-caption p.wp-caption-text {font-size:11px; line-height:17px; padding:0 4px 5px; margin:0;}
+.clearboth {clear:both;}
+
+.navigation {padding:0.333em 0; font-size:1.5em; border-top:1px solid #d1d9dc;}
+
+.pagetitle {padding:0.333em 0; font-size:1.5em; color:#959ea1; position:relative; border-top:1px solid #d1d9dc;}
+.pagetitle span {position:absolute; left:240px;}
+
+#searchform {margin:0 0 1.5em; font-size:1.167em;}
+
+
+/*** Header ******************************************************************/
+
+ul#menu {margin:0; padding:0;}
+ul#menu li {font-size:0.916em; float:left; margin-right:1.819em; padding:0; display:block; list-style:none;}
+ul#menu li a:link, ul#menu li a:visited {display:block; padding:7px 0 10px; line-height:1em; width:9.08em; color:#6a797d; font-weight:bold; text-decoration:none; border-top:3px solid #fff; text-transform:lowercase;}
+ul#menu li a:hover {border-top:3px solid #ff8a00;}
+ul#menu li a span {font-size:0.833em; color:#d1d9dc; text-transform:lowercase;}
+ul#menu li a.selected {border-top:3px solid #6a797d;}
+ul#menu .last {margin-right:0;}
+
+.blog-name {font-size:5em; font-weight:bold; line-height:1em;}
+.blog-name a:link, .blog-name a:visited {color:#d1d9dc; text-decoration:none;}
+.blog-name a:hover {color:#ff8a00;}
+
+.description {margin-top:0.5em; font-size:1.5em; color:#6a797d;}
+
+#header {padding:2em 0;}
+
+
+/*** Posts and Pages *********************************************************/
+
+.post, .page {border-top:1px solid #d1d9dc; padding-top:1.5em;}
+* html .post, * html .page {height:1%;} /* Fix for IE6 */
+
+.sticky {border-top:3px solid #d1d9dc;}
+
+h1 {color:#959ea1; font-size:2.5em; font-weight:bold; line-height:1em; text-transform:lowercase; padding-bottom:0.6em;}
+h1 a:link, h1 a:visited {color:#959ea1; text-decoration:none;}
+h1 a:hover {color:#ff8a00;}
+
+.post-info {float:left; width:18.333em; margin:0 1.667em 0 0;}
+
+.timestamp {float:left; font-size:1.5em; color:#959ea1;}
+
+.comment-bubble {float:left; font-size:1.5em; margin-left:0.5em; text-align:center;}
+.comment-bubble a:link, .comment-bubble a:visited {color:#959ea1; text-decoration:none; display:block; width:27px; height:32px; background:url(images/comment-bubble.gif) no-repeat 0 2px;}
+.comment-bubble a:hover {color:#ff8a00;}
+
+.post-content {float:left; width:38.333em; overflow:visible;}
+
+.post-content h2 {font-size:2.0em; margin-bottom:0.75em;}
+.post-content h3 {font-size:1.5em; margin-bottom:1em;}
+.post-content h4 {font-size:1.167em; margin-bottom:0.867em;}
+
+blockquote {background:#fff url(images/blockquote.gif) no-repeat top left; margin-left:7em; padding-left:3em; font-style:italic;}
+
+.pull-1 {margin-left:-8.571em; width:41.428em}
+.pull-2 {margin-left:-17.143em; width:50em;}
+* html .pull-1, * html .pull-2 {position:relative;} /* Fix for IE6 */
+
+.post-content ul, .post-content ol {margin:0 0 1.5em; padding:0; font-size:1.167em;}
+.post-content ul li, .post-content ol li {margin-left:3em; padding-left:0em; line-height:1.5em;}
+.post-content ul li ul, .post-content ol li ol, .post-content ul li ol, .post-content ol li ul {font-size:1em;}
+
+pre {white-space:pre-wrap; word-wrap:break-word; margin:0 0 1.5em;}
+
+dl {margin:0 0 1.5em;}
+dt {font-weight:bold; font-size:1.167em;}
+dd {font-size:1.167em; margin-left:8.571em;}
+
+acronym, abbr {border-bottom:1px dotted #333;}
+
+hr {color:#d1d9dc; height:1px; background-color:#d1d9dc; border:0;}
+
+.more-link {display:block; margin-top:1.5em;}
+
+.post-meta-data {position:relative; margin:0 0 0 10em; height:100%; padding:0.333em 0; border-top:1px solid #d1d9dc;}
+.post-meta-data span {position:absolute; left:10em; top:0.333em;}
+
+.gallery {margin:0 0 1.5em 0; padding:0;}
+.gallery-item {float:left; margin:10px 0 0 0; text-align:left; padding:0;}
+.gallery img, .gallery a img {border:solid 1px #D9D9D9; background:#ffffff; padding:4px; margin:0;}
+.gallery a:hover img {border-color:#666666; background:#fff;}
+.gallery-caption {margin:0 0 1.5em 0; font-size:0.833em; line-height:1.167em; color:#666;}
+
+table {margin:1.5em 0; padding:0; border-collapse:collapse;}
+table th {padding:0.5em; border:1px solid #d1d9dc; background-color:#f8f8f8;}
+table tr {margin:0; padding:0;}
+table tr td {padding:0.5em; border:1px solid #d1d9dc;}
+
+/*** Comments ****************************************************************/
+
+#comment-wrapper {padding-left:10em; border-top:1px solid #d1d9dc;}
+
+h3#comments {font-size:1.5em; position:relative; height:100%; padding:0.333em 0; color:#959ea1; font-weight:normal;}
+h3#comments span {position:absolute; left:6.667em; top:0.333em;}
+
+ol.commentlist {margin:0; padding:0;}
+ol.commentlist li {list-style:none; position:relative; border-top:1px solid #d1d9dc; padding:0.333em 0 0 10em;} 
+ol.commentlist li.bypostauthor {border-top:1px solid #6a797d;} 
+ol.commentlist li.comment-author-admin {border-top:1px solid #6a797d;} 
+ol.commentlist li.comment div.vcard {padding-top:1.0em; }
+ol.commentlist li.comment div.vcard cite.fn {font-size:1.167em;} 
+ol.commentlist li.comment div.vcard img.avatar {position:absolute; left:0em; padding-top:0.333em;}
+* html ol.commentlist li.comment div.vcard img.avatar {left:-10em;} /* Fix for IE6 */
+ol.commentlist li.comment div.vcard span.says {visibility:hidden;}
+ol.commentlist li.comment div.comment-meta {margin-bottom:1em;} 
+ol.commentlist li.comment div.reply {position:absolute; top:8px; right:3px;}
+ol.commentlist li.pingback div.vcard {padding-top:1.0em;} 
+ol.commentlist li.pingback div.vcard cite.fn {font-size:1.167em;} 
+ol.commentlist li.pingback div.vcard span.says {visibility:hidden;} 
+ol.commentlist li.pingback div.reply {position:absolute; top:8px; right:3px;}
+
+#respond {position:relative; padding:0; border-top:1px solid #d1d9dc; margin-bottom:3em;}
+#respond h3 {font-size:1.5em; color:#959ea1; padding:0.333em 0; font-weight:normal;}
+
+.cancel-comment-reply {position:absolute; top:8px; right:3px;}
+
+#commentform {border-top:1px solid #d1d9dc; padding-top:1em;}
+
+.nocomments {border-top:1px solid #d1d9dc; padding:1em 0 0 8.571em;}
+
+.form-field {position:relative; margin-bottom:1em; height:100%;}
+.form-field span {position:absolute; left:8.571em;}
+.form-field #author, .form-field #email, .form-field #url {background-color:#fcfcfc; border:1px solid #333;}
+.form-field span textarea#comment {background-color:#fcfcfc; border:1px solid #333; width:32.857em; height:200px; font-size:1em; font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;}
+
+.comment-box {margin-bottom:200px;}
+
+
+/*** Sidebar + Widgets *******************************************************/
+
+.center-column-sidebar {width:58.334em; margin:0px auto; text-align:left; clear:both; overflow:hidden;}
+
+#sidebar {width:60em; border-top:1px solid #d1d9dc; margin:0 0 1em 0; padding:1em 0 0 0;}
+#sidebar li {display:inline; width:15.713em; margin-right:1.429em; overflow:hidden; float:left; list-style:none;}
+#sidebar .widget {font-size:1.167em; line-height:1.5em;}
+#sidebar li h2 {font-size:1.714em; color:#959ea1; padding:0.333em 0;}
+
+#sidebar li ul li a {display:block;}
+
+
+/*** Footer ******************************************************************/
+
+#footer {margin:2em 0; padding:0.5em 0 0 0; border-top:3px solid #eee; font-size:0.916em; color:#d1d9dc; line-height:1em;}
+#footer a:link, #footer a:visited {margin:0; padding:0; color:#959ea1; font-weight:bold;}
+#footer a:hover {color:#ff8a00;}
+
+.credits {float:left;}
+.bottom-link {float:right;}

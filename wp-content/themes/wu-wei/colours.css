@@ -1,0 +1,59 @@
+/*** Dark Colours ********************************************************/
+
+.dark {background:#494949; color:#fff;}
+
+.dark a:link, .dark a:visited {color:#AFD7F5;}
+.dark a:hover {color:#597298;}
+
+.dark .pagetitle {color:#fff; border-top:1px solid #666;}
+
+.dark .navigation {border-top:1px solid #666;}
+
+.dark hr {color:#8F8F87; background-color:#8F8F87;}
+
+.dark .full-column {border-bottom:1px solid #666;}
+
+.dark ul#menu li a:link, .dark ul#menu li a:visited {color:#fff; border-top:3px solid #494949;}
+.dark ul#menu li a:hover {border-top:3px solid #AFD7F5;}
+.dark ul#menu li a span {color:#999;}
+.dark ul#menu li a.selected {border-top:3px solid #F1EFEB;}
+
+.dark .blog-name a:link, .dark .blog-name a:visited {color:#fff;}
+.dark .blog-name a:hover {color:#AFD7F5;}
+
+.dark .description {color:#F1EFEB;}
+
+.dark h1 {color:#fff;}
+.dark h1 a:link, .dark h1 a:visited {color:#fff;}
+.dark h1 a:hover {color:#AFD7F5;}
+
+.dark .post, .dark .page {border-top:1px solid #666;}
+
+.dark blockquote {background:#494949 url('images/blockquote_dark.gif') no-repeat;}
+
+.dark .timestamp {color:#999;}
+
+.dark .comment-bubble a:link, .dark .comment-bubble a:visited {color:#fff; background:url('images/comment-bubble_dark.gif') no-repeat 0 2px;}
+.dark .comment-bubble a:hover {color:#AFD7F5;}
+
+.dark .post-meta-data {border-top:1px solid #666;}
+
+.dark #comment-wrapper {padding-left:120px; border-top:1px solid #666;}
+
+.dark h3#comments {color:#fff;}
+
+.dark ol.commentlist li {border-top:1px solid #666;} 
+.dark ol.commentlist li.bypostauthor {border-top:1px solid #ccc;} 
+.dark ol.commentlist li.comment-author-admin {border-top:1px solid #ccc;} 
+
+.dark #respond {border-top:1px solid #666;}
+.dark #respond h3 {color:#fff;}
+
+.dark #commentform {border-top:1px solid #666;}
+
+.dark #sidebar {border-top:1px solid #666;}
+.dark #sidebar li h2 {color:#fff;}
+
+.dark #footer {border-top:3px solid #666;}
+.dark #footer a:link, .dark #footer a:visited {color:#fff;}
+.dark #footer a:hover {color:#AFD7F5;}

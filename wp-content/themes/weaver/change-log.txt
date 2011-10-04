@@ -1,0 +1,158 @@
+=== Weaver Theme Change Log ===
+Contributors: wpweaver
+Tags: custom-header, custom-colors, custom-background, custom-menu, theme-options, left-sidebar, right-sidebar,
+fixed-width, three-columns, two-columns, black, blue, brown, green, orange, red, tan, dark, white, light,
+translation-ready, rtl-language-support, editor-style
+Requires at least: 3.0
+Tested up to: 3.0.4
+Stable tag: 1.6
+
+== Change Log ==
+This change log was started beginning with Version 1.6
+
+= Changes Version 1.6 =
+* Greatly improved help system - many direct links to relevant help documentation
+* New Main Options
+** Can put borders around only Top and Bottom Widget Areas
+** Allow comments for attachment pages
+** Hide Author info box
+** Complete by item visibility control of Post information lines
+** Option to include Search box on menu
+** Option to include Log in link on menu
+** No Home Menu Item
+** Specify left and top margins for Title over Header Image
+** Hide Featured Image as Header Image
+** Hide Entire Footer
+** Change Footer Widget Area Display Blocks
+* Option to include extra links with images on menu bar (for social links)
+* Added new page templates
+** Page with Posts (4 versions) - will display posts, can define filter to select posts to show
+** Sitemap
+* Per page settings
+** Hide Page Title
+** Hide standard widget areas
+** Define per page top widget area
+** Define Primary and Secondary sidebar replacement widget areas
+** Per page <HEAD> and header insert code
+** Make "Placeholder Page" - for empty, don't go anywhere, top level menu items.
+** Options for Page with Posts
+* Per post settings
+** Excerpt, full post control
+** Featured image display
+** Show author avatar
+* New sub-themes: The Grays, Kitchen Sink, Mist, Turquoise, Magazine
+* New site wide Top and Bottom widget areas - displays on both regular page and special post pages (archives, etc.)
+* Enhanced Featured Image Support for posts
+* Preview window now off by default
+* Improved theme compatibility with special post display pages - category, archive, etc.
+* Improved organization of Options screens, including new sub-menus
+* Added PIE script for IE rounded corners
+* Added simple 'Log in' widget
+* Changed handling of no widgets defined in Primary Widget Area - less confusing to user.
+* Added unfiltered_html capability handling
+* Enhanced Multi-site option control
+* [weaver_show_posts] shortcode
+* Hide sidebars on a per page basis
+* Support for custom Continue reading...
+* Gallery Post Format support for WP 3.1
+* Fixed broken [gallery] shortcode support
+
+
+* Possible incompatibilities
+** Changed order of things in #header div - top menu and site title are now before #branding div instead of inside it.
+** Changed how "Use SEO plugin instead" option works - use just "wp_title('');".
+** Changed behavior of [gallery] shortcode - will support column specification.
+
+= Changes Version 1.7 =
+This is for Weaver 1.7
+
+* Changed theme name to Weaver
+* Fixed final IE 7 incompatibility - now fully IE compatible!
+* Changed all internal function names to weaver_ for new theme stub name.
+* Fixed all textarea output escaping and input filtering, including for post/page edit screens.
+* include of Weaver .css file now via enqueue style function
+* improved wording on bad extra widget inclusion
+
+Known Incompatibilities
+* Advanced settings might have \" in them that will need to be manually fixed.
+* Slider theme 1.5 not compatible - need to switch to Slider 1.7
+
+= Changes Version 2.0 =
+
+* changed to two options arrays, weaver_main_settings, weaver_advanced_settings - interface to SAPI
+* New distinction between theme settings and per site settings. Saving/restoring a theme only changes theme related
+  settigns (except My Saved Theme).
+* My Saved Theme will become a Save Everything to a file -- not exactly same as before, but probably what
+  people really need.
+* Theme Margin option
+* Tiny Author Avatar option
+* Hide sidebars on archive-like post pages option
+* New Blank Table option
+* Always access files via file path, never http: - Removed upload from URL option
+* Update documentation
+* Added dynamic page/post editor styling
+* Import old Weaver Version Settings
+* Slight change to Per Post Display as Full Post option
+* Basic validation on many Main Option fields
+* New .pot file
+* Reset file timestamps
+* Fixed IE 7/8 support bug
+* Alternative Sidebar replacement option
+* Added WP NaviPage support
+* Added per post styling
+* Added radius for rounded corners
+* Added superfish menu features
+* Fixed <!--more--> bug for archive-like full post display
+* Added clear:both at end of static page part of PWPs.
+* Removed unneeded z-index from PIE styling (now works with NextGEN).
+
+= Changes Version 2.1 =
+
+* Wrap weaver_page_menu_args with conditional so child can do it instead
+* Fixed bug with unnecessary call to loop in wvr-wphead thanks to Matt @ http://subscribe2.wordpress.com
+* Added support for Weaver Plus in several places
+* Added Pop Up template
+* Added shortcode support for add html to menu
+* Revised Admin Panel to use more submenus on Main and Advanced Options pages
+* Added Disable Visual Editor per post/page
+* Fixed visited/hover link styling order - been broken a LONG time.
+* Fixed 404 for bullets on admin panel list
+* Route all I/O through weaver_f_ functions for possible change to file I/O
+* allow multisite admins to add <style> and <script>
+* .one-page styling was wrong
+* z-index on #nav-top and #nav-bottom raised. Menus were going behind shifted site title/description.
+* added search-results class to search page title to match other archive-type post pages
+* changed all except body font to a relative size in style sheet.
+* added more conditional function defs in functions.php to better support child themes.
+* fixed IE7 issue with double size menu bar.
+* added #header and #footer outside #wrapper options.
+* fixed some printer CSS limits for left side sidebars.
+* fixed "Continue reading..." double link issue
+* Added styling for standard RSS widget to make feeds look nicer
+
+= Changes Version 2.2 =
+
+* Support WP_Filesystem, as well as Weaver File Access Plugin to avoid FTP junk
+* rel="author"
+* hide title/descrition now using display:none; so H1 tags work right
+* added pgtpl-container template for most content display
+* added several hdr-x templates to simplify header code generation
+* Raw HTML per page
+
+= Changes Version 2.2.1 =
+
+* Full support for WP_Filesystem for file access
+* Fixed Admin Display bug for IE9
+* Fixed settings init bug when non-direct file access
+* Changed Snippets/Css Help to link instead of iframe.
+
+= Changes Version 2.2.2 =
+* no changes, version number changed due to submitting wrong file to WP.org
+
+= Changes 2.2.3 =
+* Never released
+
+= Changes Version 2.2.4 =
+* Weaver Admin menus display issue revealed by IE9. Moved Clear All Settings to Save/Restore tab to fix.
+* fixed one column iframe style.css rule
+* added a version number to weaver-style.css enqueue to (hopefully) force cache refresh after save changes

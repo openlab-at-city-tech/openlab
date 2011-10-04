@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BuddyPress Group Management\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-group-management\n"
+"POT-Creation-Date: 2010-03-07 21:39+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Thomas Opp <t.opp@yaway.de>\n"
+"Language-Team: Yaway Media <mail@yaway.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: bp-group-management-bp-functions.php:5
+#: bp-group-management-bp-functions.php:59
+#: bp-group-management-bp-functions.php:243
+#: bp-group-management-bp-functions.php:367
+msgid "Group Management"
+msgstr "Gruppenverwaltung"
+
+#: bp-group-management-bp-functions.php:45
+#: bp-group-management-bp-functions.php:163
+#: bp-group-management-bp-functions.php:177
+#: bp-group-management-bp-functions.php:191
+#: bp-group-management-bp-functions.php:205
+#: bp-group-management-bp-functions.php:219
+#: bp-group-management-bp-functions.php:231
+msgid "Sorry, there was an error."
+msgstr "Entschuldigung, es ist ein Fehler aufgetreten."
+
+#: bp-group-management-bp-functions.php:47
+msgid "Group deleted."
+msgstr "Gruppe gelöscht"
+
+#: bp-group-management-bp-functions.php:65
+msgid "Group ID"
+msgstr "Gruppen-ID"
+
+#: bp-group-management-bp-functions.php:66
+msgid "Group Name"
+msgstr "Gruppenname"
+
+#: bp-group-management-bp-functions.php:67
+msgid "Date Created"
+msgstr "Erstellungsdatum"
+
+#: bp-group-management-bp-functions.php:68
+msgid "Number of Members"
+msgstr "Anzahl der Mitglieder"
+
+#: bp-group-management-bp-functions.php:104
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: bp-group-management-bp-functions.php:107
+msgid "Delete"
+msgstr "Löschen"
+
+#: bp-group-management-bp-functions.php:109
+msgid "Visit"
+msgstr "Besuchen"
+
+#: bp-group-management-bp-functions.php:165
+msgid "Member kicked and banned"
+msgstr "Mitglied gesperrt"
+
+#: bp-group-management-bp-functions.php:179
+msgid "Member unbanned"
+msgstr "Mitglied entsperrt"
+
+#: bp-group-management-bp-functions.php:193
+msgid "Member demoted"
+msgstr "Mitglied zurückgestuft"
+
+#: bp-group-management-bp-functions.php:207
+msgid "Member promoted to moderator"
+msgstr "Mitglied wurde zum Moderator befördert"
+
+#: bp-group-management-bp-functions.php:221
+msgid "Member promoted to admin"
+msgstr "Mitglied wurde zum Administrator befördert"
+
+#: bp-group-management-bp-functions.php:233
+msgid "User added to group"
+msgstr "Mitglied der Gruppe hinzugefügt"
+
+#: bp-group-management-bp-functions.php:244
+#: bp-group-management-bp-functions.php:368
+msgid "Back to group index"
+msgstr "Zurück zum Gruppenverzeichnis"
+
+#: bp-group-management-bp-functions.php:248
+msgid "Manage current and banned group members"
+msgstr "Verwalte alle Gruppenmitglieder"
+
+#: bp-group-management-bp-functions.php:277
+msgid "(banned)"
+msgstr "(gesperrt)"
+
+#: bp-group-management-bp-functions.php:277
+msgid "Remove Ban"
+msgstr "Sperre aufheben"
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick and ban this member"
+msgstr "Diese Mitglied sperren"
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick &amp; Ban"
+msgstr "Sperren"
+
+#: bp-group-management-bp-functions.php:302
+#: bp-group-management-bp-functions.php:304
+msgid "Demote to Member"
+msgstr "Auf Mitglied zurückstufen"
+
+#: bp-group-management-bp-functions.php:304
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Admin"
+msgstr "Zu Administrator befördern"
+
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Moderator"
+msgstr "Zu Moderator befördern"
+
+#: bp-group-management-bp-functions.php:325
+msgid "Add members to group"
+msgstr "Mitglieder zur Gruppe hinzufügen"
+
+#: bp-group-management-bp-functions.php:342
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: bp-group-management-bp-functions.php:371
+msgid "Deleting the group"
+msgstr "Gruppe wird gelöscht"
+
+#: bp-group-management-bp-functions.php:372
+msgid "You are about to delete the group"
+msgstr "Du bist dabei, die Gruppe zu löschen."
+
+#: bp-group-management-bp-functions.php:372
+msgid "This action cannot be undone."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
+
+#: bp-group-management-bp-functions.php:374
+msgid "Delete Group"
+msgstr "Gruppe löschen"
+
+#: bp-group-management-bp-functions.php:375
+msgid "Oops, I changed my mind"
+msgstr "Ich hab´s mir doch anders überlegt."
+
+#: bp-group-management-bp-functions.php:477
+#, php-format
+msgid "%s joined the group %s"
+msgstr "%s ist jetzt Mitglied der Gruppe %s"
+
+#. Plugin Name of an extension
+msgid "BP Group Management"
+msgstr "BP Group Management"
+
+#. Plugin URI of an extension
+msgid "http://teleogistic.net/code/buddypress/bp-group-management"
+msgstr "http://teleogistic.net/code/buddypress/bp-group-management"
+
+#. Description of an extension
+msgid "Allows site administrators to manage BuddyPress group membership"
+msgstr "Erlaubt Administratoren das Verwalten von Mitgliedschaften in BuddyPress-Gruppen"
+
+#. Author of an extension
+msgid "Boone Gorges"
+msgstr "Boone Gorges"
+
+#. Author URI of an extension
+msgid "http://teleogistic.net"
+msgstr "http://teleogistic.net"
+

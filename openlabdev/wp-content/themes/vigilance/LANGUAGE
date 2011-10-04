@@ -1,0 +1,10 @@
+Vigilance is ready to be translated to your language. Please follow these simple instructions:
+
+1. Download the latest language pack from http://github.com/jestro/vigilance_languages (click the download button at the top).
+2. Unzip the package and find the .po and .mo files for your language.
+3. Create a /languages directory within your Vigilance theme directory or your Vigilance child theme directory and copy the .po and .mo files into that directory.
+4. Define your language in your wp-config.php file.
+
+Please help with translating Vigilance!
+
+We have provided the vigilance.po and vigilance.mo files as a starting point for translating Vigilance into your language. If you have a completed translation and would like us to include it in the language pack please send your .po and .mo files to themes {at} jestro.com.

@@ -1,0 +1,25 @@
+Some notes on creating a child theme:
+
+1. This directory contains a very minimal example of a Weaver Child theme.
+
+2. You can use functions.php to write functions to override any function in the main theme that is wrapped by
+   an "if (!function_exists('func_name'))" check. Most of these are in functions.php, but a few are found
+   elsewhere in the code.
+
+3. You can provide a complete replacement for template-type files in the parent. These are files that generate
+   output HTML directly such as 404.php, archive.php, or footer.php. You can tell these mostly because they
+   generate lots of HTML that will make up the final output page, and that many of them are used
+   by the "get_template_part" function.
+
+4. The sample code has an example of overriding a template part - 404.php. There are comments in the file to explain.
+
+5. Another example. Say you wanted to replace Weaver's selection of subthemes. This is all controlled by specific
+   functions. Most are in the file wvr_subthemes.php, and are wrapped by function_exists calls. There is one
+   more related function (weaver_activate_subtheme) in wvr-settings-lib.php. You can override any or all of
+   the relevant functions as needed to create your own subthemes list. Because none of these are template
+   parts, everything is handled via function_exists wraps.
+
+6. Weaver never was very carefully designed to accommodate child themes, but it has improved over time. If there
+   are sections that need function_exists wrapping, or should be template files, suggestions are welcome.
+
+

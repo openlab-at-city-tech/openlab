@@ -1,0 +1,272 @@
+/*
+ Description: A brown color scheme for the Pilcrow theme
+*/
+
+
+/* =Global
+----------------------------------------------- */
+
+body {
+	background: #29241b;
+	color: #9f9c80;
+}
+#wrapper {
+	background: #29241b;
+}
+hr {
+	background-color: #3a3121;
+}
+blockquote {
+	background: #241f16;
+	border-color: #3a3121;
+	color: #87846c;
+}
+pre {
+	background: #241f16;
+}
+code, kbd {
+	color: #1d5e7d;
+}
+abbr, acronym {
+	border-color: #666;
+}
+ins {
+	background: #3a3121;
+}
+input[type=text],
+textarea {
+	border: 1px solid #bbb;
+}
+
+/* Links */
+a {
+	color: #b58942;
+}
+a:focus,
+a:active,
+a:hover {
+	color: #c5903b;
+}
+
+
+/* =Header
+----------------------------------------------- */
+
+#site-title a {
+	color: #fff;
+}
+#header img {
+	border-color: #3a3121;
+}
+
+
+/* =Menu
+----------------------------------------------- */
+
+#nav {
+	border-color: #3a3121;
+}
+#nav a {
+	color: #9f9c80;
+}
+#nav ul ul a {
+	background: #3a3121;
+	color: #fff;
+}
+#nav .current_page_item a,
+#nav li:hover > a,
+#nav ul ul :hover > a {
+	background: #3a3121;
+	color: #fff;
+}
+#nav ul ul a:hover {
+	background: #312b1f;
+}
+
+
+/* =Content
+----------------------------------------------- */
+
+.page-title {
+	background: #241f16;
+	border-color: #3a3121;
+	color: #fff;
+}
+.page-title span {
+	color: #64604e;
+}
+.entry-meta {
+	background: #241f16;
+	border-color: #3a3121;
+}
+.entry-meta a {
+	color: #64604e;	
+}
+.entry-meta a:focus,
+.entry-meta a:active,
+.entry-meta a:hover {
+	color: #c5903b;
+}
+.entry-title {
+	color: #fff;
+}
+.entry-title a {
+	color: #fff;
+}
+.entry-title a:focus,
+.entry-title a:active,
+.entry-title a:hover {
+	color: #c5903b;
+}
+.entry-content h1 {
+	color: #fff;
+}
+.entry-content h2 {
+	color: #fff;
+}
+.entry-content h3 {
+	color: #64604e;
+}
+.entry-content h4 {
+	background: #241f16;
+	border-color: #3a3121;
+}
+.entry-content a:visited {
+	color: #9F9C80;
+}
+.page-link {
+	color: #fff;
+}
+.page-link a:link,
+.page-link a:visited {
+	background: #241f16;
+	border-color: #3a3121;
+	color: #d8d8cd;
+}
+.page-link a:active,
+.page-link a:hover {
+	color: #c5903b;
+}
+.entry-links {
+	background: #241f16;
+	border-color: #3a3121;
+}
+.entry-links .comment-number {
+	background-image: url(../images/icons/bubble-brown.png);
+}
+.entry-links .tagged {
+	background-image: url(../images/icons/cabinet-brown.png);
+}
+
+/* Sticky Posts */
+.sticky .entry-content {
+	background: #241f16;
+	border-color: #29241b;
+}
+.sticky .entry-links {
+	border-color: #312718;
+}
+.sticky .page-link a {
+	background: #312718;
+}
+
+/* Image Attachments */
+.image-attachment .entry-attachment {
+	background: #241f16;
+}
+
+/* =Images
+----------------------------------------------- */
+
+.wp-caption {
+	background-color: #241f16;
+	border: 1px solid #312b1f;
+}
+
+
+/* =Widgets
+----------------------------------------------- */
+
+.widget ul {
+	background: #241f16;
+	border-color: #3a3121;
+}
+.widget-title {
+	color: #64604e;
+}
+.sidebar-list h2 {
+	color: #64604e;
+}
+
+/* RSS Links Widget */
+.widget_rss_links a  {
+	background-image: url(../images/icons/rss-brown.png);
+}
+
+/* Footer Widgets */
+#footer .widget ul {
+	background: #2b2418;
+	border-color: #000;
+}
+
+/* =Comments
+----------------------------------------------- */
+
+#comments-title {
+	border-color: #3a3121;
+	color: #fff;
+}
+#comments li.thread-alt,
+#comments li.author_comment_alt {
+	background:none repeat scroll 0 0 #241f16;
+}
+#comments li,
+#comments li.thread-alt,
+#comments li.author_comment_,
+#comments li.author_comment_alt {
+	border-color: #3a3121;
+}
+#comments .avatar {
+	border-color: #64604e;
+}
+.comment-meta,
+.comment-meta a {
+	color: #64604e;
+}
+#comments li.bypostauthor > .comment-container {
+	background: transparent;
+}
+
+/* Comment Form */
+#reply-title {
+	color: #fff;
+}
+#respond .required {
+	color: #ff3730;
+}
+.form-allowed-tags {
+	color: #64604e;
+}
+.form-allowed-tags code {
+	color: #64604e;
+}
+
+
+/* =Footer
+----------------------------------------------- */
+
+#footer {
+	border-color: #241f16;
+}
+#footer #colophon {
+	background: #241f16;
+	color: #9f9c80;
+}
+#footer #colophon a {
+	border-color: #64604e;
+	color: #9f9c80;
+}
+#footer #colophon a:hover {
+	border-color: #9f9c80;
+}
+

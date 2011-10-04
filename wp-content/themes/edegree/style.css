@@ -1,0 +1,436 @@
+/*
+Theme Name: eDegree&#176;
+Description: This minimalistic, yet clean & professional theme is highly SEO optimized and fully customizable design with 3 completely different skins. Theme options include custom header, footer and background images, logo uploader, custom home page content, social networking integration and more. Tested on WP 2.8.x using Firefox, IE6/7/8, Google Chrome, and Safari. W3C validated CSS & HTML.
+Version: 1.1
+Author: Top Blog Formula
+Author URI: http://www.topblogformula.com/
+Theme URI: http://www.topblogformula.com/wordpress-business-themes/edegree
+Tags: white,red,silver,black,two-columns,right-sidebar,fixed-width,custom-header,theme-options,threaded-comments
+
+The CSS, XHTML and design is released under GPL:
+http://www.opensource.org/licenses/gpl-license.php
+*/
+
+
+/* ***GLOBAL*** */
+	@import url(reset.css);
+	
+	@import url(custom.css);
+
+	body {background: #edecec url(images/back-body.gif) repeat-x; font: 11px Arial, Helvetica, sans-serif; color: #575757;  } /*5e5e5e*/
+	
+	h1 {font-size:26px; color: #fe2400 }
+	
+	h2 {font-size: 24px; color: #fa2300; padding: 0 }
+	
+	h3 {font-size: 20px; color: #ff0000 }
+	
+	h4 {font-size: 18px; color: #5b4e64 }
+	
+	h5 {font-size: 16px; color: #fa4700 }
+	
+	h6 {font-size: 14px; color: #000 }
+	
+	p {margin:5px 0 14px 0; line-height: 130% }
+	
+	strong, b, caption, th {font-weight: bold }
+		
+	blockquote {border-left:3px solid #e8e8e8; margin:10px 10px 0 10px; padding-left:8px }
+	
+	acronym, abbr {border-bottom:1px dashed #333; cursor:help }
+	
+	dd {margin-left:15px }
+		
+	a:link {color: #eb1b29; text-decoration: none }
+	a:visited {color: #d11723;}
+	a:hover, a:active {color: #ff1c2b; text-decoration: underline }
+/* ***END GLOBAL*** */
+
+
+/* ***LAYOUT*** */
+	#bg {width: 100%; display: table; background: url(images/back-bg.jpg) no-repeat center top}
+	
+	.internalpage #wrapper {background: url(images/back-wrapper.jpg) no-repeat center bottom }
+	
+	#shadow, #header, #container, #footer {margin: 0 auto }
+	
+	#shadow {width: 900px; position: relative }
+	
+	* html body #shadow {width: 910px }
+	
+	#container {padding: 0 0 10px; background: #edecec url(images/back-container.gif) repeat-y }
+	
+	#container-shoulder {background: url(images/back-container-shoulder.jpg) no-repeat }
+	
+	#container-shoulder-plain {background: url(images/back-container-shoulder-plain.jpg) no-repeat }
+	
+	#header {height: 119px }
+	
+	#logo {margin: 1px 0 0 0; overflow:hidden }
+	
+	#logo a {outline: none }
+	
+	#header .search_form {float: right; margin: -37px 2px 0 10px }
+	
+	.widget #search_form {float:none }
+	
+	.search_form #s {padding: 5px 6px 0; width: 130px; height: 19px; color: #fff; background:#b0b0b0; border:none; font-size:11px }
+	
+	#featured-zone {height:294px; overflow:hidden }
+	
+	#slidespot {float:left; width:624px }
+	
+	#featured-wiz {float:right; width:261px; color:#cccaca; height:288px; overflow:hidden }
+	
+	#shadow #featured-wiz h2 {margin: 0 0 15px 0 }
+	
+	#featured-wiz p {margin: 0 0 10px 7px; padding:0 }
+	
+	#left-col {width: 595px; float: left; padding: 50px 0 0 0}
+	
+	#container-shoulder-plain #left-col {padding: 23px 0 0 0}
+	
+	#sidebar {float: right; width: 275px; color: #525252; padding: 7px 1px 10px }
+	
+	#footer {background:#010101 url(images/back-footer.jpg) repeat-x 0 top }
+	
+	#footer .footer-content {position: relative; padding: 29px 28px 0; color: #f0f0f0; width:900px; margin:0 auto;  height:auto !important; height: 200px; min-height:200px  }
+	
+	#footer .footer-widget {float: left; width: 215px; padding:0 20px 0 0 }
+	
+	#footer ul.footerlinks {list-style-image:none; list-style-position:outside; list-style-type:none; margin:0 0 70px -7px }	
+	
+	#footer ul.footerlinks li {padding:0 7px }
+			
+	#top-content-internal .textfield {width: 235px; height:18px; line-height:18px; padding:6px 10px 0; border: 1px solid #707070; font-size:11px; font-weight: normal; color: #fff; background: #a6a6a6; margin-bottom: 8px }
+	
+	#top-content-internal #opt_submit {background: url(images/back-optin-submit.png) no-repeat; text-align:center; border:none; color:#fff; font-size: 18px; cursor:pointer }
+/* *** END LAYOUT*** */
+
+
+/* ***STYLES*** */
+	.recover {clear: both; line-height:0 }
+	
+	.bold {font-weight: bold }
+	
+	.italic {font-style: italic }
+	
+	.txtcenter {text-align: center }
+	
+	#blogname {padding:0; display:inline-block; background:transparent url(images/edegree-logo.png) no-repeat 0 7px; height:60px; text-indent: -66666px; overflow: hidden; line-height:60px }
+	
+	#copyright {color: #858585; position: absolute; bottom: 16px; left: 25px; font-size: 11px }
+	
+	#footer-tag {width: 375px; text-align: left }
+	
+	.sidebar p {padding: 0 15px 0 20px; margin: 0 0 5px }
+	
+	.home-content {padding:25px 0 0 32px; width: 600px}
+	
+	.home-content h2 {background: url(images/back-home-heading.gif) no-repeat bottom right; color:#F3832B; font-size:18px; letter-spacing:-1px; margin:0 0 8px; padding:6px 86px 19px 0; text-transform:capitalize; width:305px }
+	
+	#container .page {padding: 16px 0 12px 30px }
+	
+	#container .page h2 {font-size: 22px; padding:0 20px 0 0 }
+	
+	.page-content {background:transparent url(images/dots.gif) repeat-x 0 top; margin:2px 0 0 0; padding:12px 0 0 0; width: 560px}
+	
+	.entry {clear: both; padding:0 12px 8px 0; margin: 0 0 0 82px }
+	
+	.post {background: url(images/back-entrydate.png) no-repeat 12px 0; padding: 0 0 20px 15px; margin:0; clear: both }
+	* html body .post {background-position: 12px 15px; padding: 15px 0 12px 15px }
+	*+html body .post {background-position: 12px 15px; padding: 15px 0 12px 15px }
+	
+    .entry_header {margin: 0; position: relative }
+	
+	.entry_header h1, .entry_header h2.home {float: left; margin: 0; width: 380px; padding: 9px 80px 5px 0; 
+		line-height: 1.7em; font-size: 18px; height:auto !important; height:40px; min-height:40px }
+
+	.entry-date {float: left; width: 58px; height: 52px; text-align: center; padding: 7px 20px 0 1px; font-weight: normal; margin: 0; font-size: 11px; color: #fff; font-family: Tahoma, Geneva, sans-serif; text-transform:uppercase }
+	
+	#left-col .date {font-family: Arial, Helvetica, sans-serif; color: #fe0606; font-size:27px; display:block; font-weight:bold; line-height:28px }
+	
+	.entry-meta {margin: 0 44px 0 0; color: #595050; font-size: 11px; background: url(images/dots.gif) repeat-x 0 top; padding: 3px 0 0 0; width: 492px; float: right }
+	
+	.comment-bubble {background:#ff2400; color:#fff; font-size:11px; font-weight: bold; padding: 4px 12px; position:absolute; right:8px; top:18px; z-index:10 }
+	
+	.entry_content {clear: both; margin: 0 0 0 82px }
+	
+	#search-submit {background: url(images/btn-search.png) no-repeat; width: 25px; height:20px; overflow: hidden; border: none; cursor: pointer; text-indent: -7000px }
+	
+	* html body #search-submit {padding-top:22px}	
+	*+html body #search-submit {padding-top:22px}
+	
+	#top-content-internal {background:url(images/back-top-content-internal.jpg) no-repeat; float:right; width:266px; color:#cccaca; padding:0 0 0 15px;margin:-7px -1px 9px 0 }
+	
+	#top-content-internal h2 {color: #fff; font-weight: bold; padding:8px 0 7px 15px; font-size: 14px; background: url(images/back-sidebar-title.png) no-repeat left top; 
+		overflow: hidden; width:246px; margin:0 0 0 -5px }
+	
+	#sidebar #top-content-internal .widget {background:transparent }
+	
+	#sidebar h2, #featured-wiz h2 {color: #fff; font-weight: bold; padding:8px 0 7px 15px; font-size: 14px; text-align: left;
+		background: url(images/back-sidebar-title.png) no-repeat left top; overflow: hidden; margin:-5px 0 0 -5px; width:246px }
+	
+	#sidebar .side-switch h2 {background-position: right bottom}
+	
+	#sidebar ul {padding: 0 7px 19px; list-style: none }
+	
+	#sidebar ul ul {background:none; padding:0 }
+	
+	#sidebar li {padding: 0; list-style: none }
+	
+	#sidebar ul ul {padding: 0 0 15px 11px; background:#f2f2f2 }
+	
+	#sidebar li li {margin:0 9px 0 15px; list-style-image:url(images/icon-sidebar-link.png); 
+		padding:9px 0; background:url(images/back-sidebar-link.gif) repeat-x 0 bottom }
+		
+	#sidebar li li li {background: none }
+	
+	#sidebar .widget {margin:0 0 23px 1px; padding:5px; background:#f2f2f2; clear:both }
+	
+	#sidebar div.widget {margin:0 }
+			
+	#sidebar ul ul ul {padding:0 }
+	
+	.sidebar-divider {background: url(images/sidebar-divider.gif) repeat-x 0 top; height:1px; line-height:1px; margin: 0 0 5px; width: 292px }
+	
+	#optin-container p {padding: 0 40px; margin:0 }
+
+	#optin-container p.freeaudio { padding: 0 30px; margin:0 }
+
+	.btn-submit {background: url(images/btn-submit.gif) no-repeat; width: 87px; height: 24px; border: none; cursor: pointer }
+	
+	#location-name {background: url(images/location-name.gif) no-repeat; width: 105px; height: 13px; position: absolute;	right: 243px; top: 72px; text-indent:-7000px;  }
+	
+	#fcg-slides {margin: 0 0 18px 12px; border: 1px solid #dfdfdf; padding: 7px; background: #fff }
+	
+	#fcg-slides h2 {color: #54b4f7 !important; margin:16px 0 0 16px !important; font-size: 16px !important }
+	
+	#fcg-slides p {margin:2px 0 0 16px !important }
+	
+	#fcg-slides .slideInfoZone {bottom: 0 }
+	
+	#socialize-icons {margin:8px auto 0; clear: both; width: 215px; padding-top: 25px; height:50px; background:url(images/back-socialize-icons.png) no-repeat center top }
+	
+	#socialize-icons ul {list-style:none }
+	
+	#socialize-icons a {display: block; height: 35px; width:35px }
+	
+	#socialize-icons li {float: left; overflow:hidden; text-indent: -33333px; margin:0 7px  }
+	
+	#icon-twitter {background: url(images/icon-twitter.jpg) no-repeat }
+	
+	#icon-facebook {background: url(images/icon-facebook.jpg) no-repeat }
+	
+	#icon-rss {background: url(images/icon-rss.jpg) no-repeat }
+	
+	#icon-youtube {background: url(images/icon-youtube.jpg) no-repeat }
+	
+	.customhtml {padding:0 0 0 98px }
+	
+	#opt_data {display: none }
+	
+	.meta {margin: 0 0 10px}
+	
+	.footer-widget h2 {font-size:1.4em; color:#fff; border-bottom:1px dotted #666; padding:0 0 3px; margin:0 0 15px }
+	
+	.tagmeta {color:#666; font-style:italic }
+	
+	#tagcloud {margin-bottom:25px }
+	
+	.post ul {margin-left:0; padding-left:30px }
+	div.page ul {margin-left:0; padding-left:30px }
+	div.page ul.children {padding: 0}
+	.customhtml ul {margin-left: 0; padding-left:30px }
+	
+	.post ol {margin-left:0; padding-left:30px }
+	div.page ol {margin-left:0; padding-left:30px }
+	div.page ol.children {padding:0 }
+	.customhtml ol {margin-left:0; padding-left:30px }
+	
+	.btn {background:url(images/btn-comment-submit.png) no-repeat right top; color:#fff; cursor:pointer; display:inline-block; font-size:24px; font-weight:bold; height:27px; line-height:27px; vertical-align:middle; padding-right:10px }
+	.btn span {background:url(images/btn-comment-submit.png) no-repeat left top; display:inline-block; height:27px; line-height:27px; padding-left:10px }
+	.btn span input {background:none; border:0 none; color:#fff; cursor:pointer; font-family:inherit; font-size:14px; font-weight:bold; padding-top:5px }
+	
+	.comment-text .reply {display:block; text-align:right }
+	
+	.comment-text .reply a {margin-top:-25px; display:block; width:30px; float:right }
+	
+	#sidebar li#promo {margin:0 0 0 20px }
+	
+	#commentform lable {font-size:120% }
+	
+	.editpost {background:url(images/icon-edit.gif) no-repeat 0 1px; padding:0 0 2px 18px }
+	.comment-icon, .comment-reply-link {background:url(images/icon-comment.gif) no-repeat; padding:0 0 0 18px }
+	.navigation {text-align:center; margin:18px 18px 0 93px; border-top:1px dotted #020202; padding:18px 0 30px }
+	.navigation .alignleft a, .navigation .alignright a {font-size:160%; text-decoration:none; line-height:1.3em }
+	#optinbox .optin-nomsg {background: url(images/optin-container.png) no-repeat }
+	
+	.containwithin {overflow:hidden }
+	
+	.postedinfo {margin: 5px 0 0 0 }
+	
+	.internalpage {background-color:#515151 }
+	
+	.page-content h2, .page-content h3, .page-content h4, .page-content h5, .page-content h6, .entry h2, .entry h3, .entry h4, .entry h5, .entry h6,
+		.entry_content h2, .entry_content h3, .entry_content h4, .entry_content h5, .entry_content h6 {border-bottom:1px dotted #ccc; margin-bottom:.5em }
+/* *** END STYLES*** */
+
+
+/* *** LINK / NAVIGATION *** */
+	#logo a:link, #logo a:visited {color:#4d4b4b }
+	
+	#globalnav {position: absolute; top: 57px; left:-8px; height: 36px; z-index: 9997; width:908px }
+	
+	#globalnav ul {list-style: none; float: left }
+	
+	#globalnav ul li {float: left; padding: 0 10px; background:url(images/back-nav-toplist.gif) no-repeat right center }
+	
+	#globalnav ul li li {background: none }
+	
+	#globalnav ul li.last { background: none }
+	
+	#globalnav a:link, #globalnav a:visited {color: #666; text-decoration: none; font-size: 12px; font-family:Arial, Helvetica, sans-serif }
+	
+	#globalnav a:hover {color: #fb2300; text-decoration:underline }
+	
+	#navpocket {height: 36px; overflow:hidden }
+	
+	#nav li a, #nav li a:link {display: block; font-size: 12px;	text-decoration: none; padding:11px 0; font-weight:bold }
+	
+	#nav li a:hover, #nav li a:active {display: block; text-decoration: none }
+		
+	#nav li li a, #nav li li a:link, #nav li li a:visited {color: #eee; background: url(images/back-navi.png) repeat-x; 
+		width: 126px; float: none; margin: 0px; padding:10px 11px; border-bottom: 1px solid #333; border-left: 1px solid #333; border-right: 1px solid #333 }
+		
+	#nav li li a:hover, #nav li li a:active {color:#FF0000; text-decoration:none }
+
+	#nav li ul {position: absolute; left: -999em; height: auto; width: 150px; margin:-1px 0 0 -12px; border-width:0 1px 1px 1px; border-color:#1a1a1a; border-style:solid }
+	
+	#nav li li {padding: 0 }
+
+	#nav li ul ul {margin: -36px 0 0 150px }
+
+	#nav li:hover ul ul, #nav li:hover ul ul ul, #nav li.sfhover ul ul, #nav li.sfhover ul ul ul {left: -999em }
+
+	#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li.sfhover ul, #nav li li.sfhover ul, #nav li li li.sfhover ul {left: auto}
+	
+	#nav li:hover, #nav li.sfhover { position: static }
+	
+	#navpocket .nav-wide {width:100% }
+		
+	#nav .current_page_item a:link, #nav .current_page_item a:visited {color: #fb2300 }
+	
+	#logo a:link, #logo a:visited, #logo a:hover, #logo a:active {font-size: 18px; text-decoration: none; font-weight:normal; color:#ff0000; /*text-shadow:0 1px 4px #000 0 1px 4px #000*/ }
+	
+	#logo a span {font-weight:bold; font-size:26px; color:#4c4c4c; background:url(images/blogname-divider.gif) no-repeat right center; padding:0 20px 0 0; letter-spacing:-0.04em }
+	
+	.entry_header h1 a:link, .entry_header h1 a:visited, .entry_header h2.home a:link, .entry_header h2.home a:visited {font-size:29px; font-weight:normal; color: #fe2400; text-decoration: none; outline: none }
+	
+	.post-edit-link a:link, .post-edit-link a:visited {font-size:12px; font-weight:normal }
+	
+	#featured-wiz a:link, #featured-wiz a:visited {color: #fff }
+	
+	#sidebar ul li a:link, #sidebar ul li a:visited  { color: #4f4f4f; text-decoration: none; font-weight: normal  }
+	
+	#sidebar ul li a:hover { text-decoration: underline }
+	
+	#sidebar ul li a.sidebartitle:link, #sidebar ul li a.sidebartitle:visited  { color: #fff; text-decoration: none; font-weight: normal;  padding: 26px 0 22px 52px; display: block; outline: none  }
+	
+	#footer a:link, #footer a:visited {color: #fff; text-decoration: none; font-weight: normal }
+	
+	#footer a:active, #footer a:hover {color: #fff; text-decoration: underline }
+	
+	#footer a.attribution:link, #footer a.attribution:visited, #footer a.attribution:hover {color: #636363; display: block; text-decoration: none; font-style: italic; letter-spacing: 1px; width: 870px }
+	
+	#footer h2 a:link, #footer h2 a:visited, #footer h2 a:hover, #footer h2 a:active {font-weight: bold; color: #a1d8ff }
+	
+	#footer ul.footerlinks li li {margin: 0 0 4px 20px; padding: 0 0 0 4px; list-style-type:square }
+	
+	.footer-content .divider {margin: 0 12px }
+		
+	#footer-tag a:link, #footer-tag a:visited {color: #858585; font-weight: normal }
+	
+	#footer-tag a:active, #footer-tag a:hover {color: #ccc }
+	
+	#left-col a.post-edit-link:link, #left-col a.post-edit-link:visited, #left-col a.post-edit-link:hover {font-size:12px; text-decoration: underline }
+	#left-col .editpost a:link, #left-col .editpost a:visited, #left-col .editpost a:hover {font-size:12px; text-decoration: underline }
+	
+	.categories a:link, .categories a:hover, .categories a:visited {background: #ff2400; padding: 3px 3px; color: #fff; text-decoration: none; white-space:nowrap; font-size:11px; font-weight:normal }
+	
+	.comment-bubble a:link, .comment-bubble a:visited {font-weight: normal; color: #fff; text-decoration: none }
+	
+	.page-content h3 a:link, .page-content h3 a:visited, .page-content h3 a:hover {text-decoration: none }
+	
+	.fn a:link, .fn a:visited {text-decoration:none }
+/* *** END LINK / NAVIGATION *** */
+
+
+/* *** Start WordPress *** */
+	.alignleft {float: left; margin:0 1em 1em 0 }
+	.alignright {float: right; margin:0 0 1em 1em }
+	.aligncenter {display: block; margin-left: auto; margin-right: auto; text-align: center }
+	#login {position: absolute; top: 0px; width: 100%; height: 20px; background: url(images/login.png) repeat-x; color: #e1e1e1; font-size: 10px }
+	#login ul {list-style: none; float: right; margin-top:3px }
+	#login li {float: left; margin-right: 15px }
+	#login li.dot {padding-left: 12px; background: url(images/whitedot.png) no-repeat 0 2px }
+	#login a:link, #login a:visited {color: #e1e1e1; font-size: 10px; text-decoration: none }
+	#shadow #header-search {display: inline; width: 130px; right: 25px; top: 7px; margin: 0;  }
+	#shadow #header-search form {display: inline}
+	#shadow #header-search #s {border: 1px solid #ccc; background: #ccc; width: 120px; font-size: 11px; color: #666;  }
+	#respond {margin: 0 18px 0 93px }
+	.comments-box a:link, .comments-box a:visited, .comments-box a:hover {color: #918872; font-size: 24px; padding: 18px 0 0 0; display: block; text-decoration: none }
+	.comments-box {background: url(images/back-comment-bubble.jpg) no-repeat;display:block;float:right;height: 95px;margin:-50px -10px 0 0;
+		padding:5px 10px 0 28px;position:relative;width:98px }
+	.comments-box a:link, .comments-box a:visited, .comments-box a:hover, .comments-box a:active {font-size:15px}
+	.commentlist {list-style: none; padding:13px 0; margin:0 0 0 81px; color:#000 }
+	.commentlist li.depth-1 {margin:5px 0 3px; padding:5px 0 10px 5px }
+	.commentlist li li {padding:5px 0 3px 0; list-style:none }
+	.commentlist .alt { }
+	.commentlist p {margin:10px 5px 10px 0 }
+	.formfield {background:#e3e3e3 url(images/textfield.gif) repeat-x center top; border:1px solid #bfbfbf;padding:5px 4px }
+	.comment-author, .comment-author a:link, .comment-author a:visited, .comment-author a:hover, .fn {font-weight: bold; color:#a19999 }
+	#commentform #submit {color:#fff;cursor:pointer;font-size:12px;padding:5px 6px 3px 6px; font-family:"Trebuchet MS", Arial, Helvetica, sans-serif }
+	#comment {width:98% }
+	.comment #comment {width:97% }
+	#respond {padding-top: 20px; border-top:1px dotted #020202; margin-top:10px; color:#000 }
+	#respond h5 {background:url(images/back-leave-comment.png) no-repeat; padding:0 0 10px 40px; color:#000; font-size:18px; border:none }
+	.comments-box {color: #918872; font-size: 24px; display: block; background: url(images/back-comments-box.gif) no-repeat right top; width:544px }
+	.commentheading {color:#000; padding:20px 0 4px; margin: 0 10px 0 95px; font-size:18px; background: url(images/dash.png) repeat-x 0 top; }
+	.author {display:block; float:right; padding:0 0 7px; width:520px; background: url(images/post-title-line.gif) repeat-x 0 bottom }
+	.comment-avatar {float:left; width:90px }	
+	.comment-avatar .pic {background:url(images/commentpoint.png) no-repeat 100% 33%; margin-top:10px; padding-right:14px }
+	.comment-avatar .pic img {display:block; padding:3px }
+	.comment-avatar .name {font-weight:normal; overflow:hidden; padding-right:14px; width:67px }
+	.comment-meta {float: left; background:#d5d4d4 url(images/comment.gif) no-repeat; padding:10px 15px 0; width:387px }
+	.comment-text {clear:both; background: url(images/comment.gif) no-repeat right bottom; line-height:145%; margin:10px -15px 0; padding:0 15px 30px }
+	.commentlist .children .comment-avatar .pic {background:none }
+	.commentlist .children .comment-time-meta {padding:0 0 1px 20px; background:url(images/icon-return.gif) no-repeat }
+	.bypostauthor .comment-avatar .pic {background:url(images/commentpoint-author.png) no-repeat 100% 33% }
+	.bypostauthor .comment-meta {background-color:#e5e4e4; color:#000 }
+	.postmetadata {background:#f0f0f0 none; margin:15px 0; padding:5px 10px;}
+	.postmetacat, .categories {line-height: 200%; color:#7a7a7a; font-weight:bold }
+	.postmetacat {background: url(images/dash.png) repeat-x 0 top; padding:6px 0 0 0 }
+	#left-col .catheader {text-align:left; display:inline }
+	#left-col .catcenter {text-align:left; display:block; font-size:24px; color:#fe2400; font-weight:bold }
+	.comment-text ul {padding: 0 0 0 30px }
+	.comment-text li {margin: 0 }
+	.nocomments {text-align: center; color:#999 }
+	.post img, .page img, .customhtml img {max-width: 505px }
+	.page #respond, .page .commentheading, .page #comments, .page .navigation, .page .commentlist {margin-left: 0 }
+	.wp-caption {background-color:#f3f3f3; border:1px solid #ddd; margin:10px; padding-top:4px;text-align:center }
+	.submit-line {text-align:right }
+	.comment-author-admin .name, .bypostauthor .name {background:#FF2400; color:#fff; padding:3px; display:block; margin-top:3px }
+	.bypostauthor .fn {color:#fff }
+	.readmore {display: block; margin: 15px 0 0 0 }
+/* *** End WordPress *** */
+
+
+/* ***For LandingPage *** */
+	.landingpage #shadow {width: 702px; overflow: hidden }
+	.landingpage #container {background: #fff url(images/back-container-landing.jpg) no-repeat; padding:58px 25px 20px; min-height: 240px }
+	.landingpage #header {height: 90px }
+	.landingpage #footer {width: 702px }
+	.landingpage #footer-bottom {width: 702px; height:9px; line-height:9px; background:#118bdf }
+	.landingpage #footer .footer-widget {width: 195px }
+/* ***End LandingPage *** */

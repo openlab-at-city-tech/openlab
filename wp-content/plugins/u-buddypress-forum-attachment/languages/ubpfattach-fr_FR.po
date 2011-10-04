@@ -1,0 +1,154 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: U BuddyPress Forum Attachment v1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2011-07-25 08:57+0900\n"
+"Last-Translator: taehan lee <urlless@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ../\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#@ plugin_id
+#: inc/upload.php:15
+msgid "Your nonce did not verify."
+msgstr ""
+
+#@ plugin_id
+#: inc/upload.php:20
+#, php-format
+msgid "For uploading, file size must be less than %s Mbytes"
+msgstr ""
+
+#@ plugin_id
+#: inc/upload.php:67
+#, php-format
+msgid "[%s] is successfully uploaded."
+msgstr ""
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:70
+msgid "Insert into editor"
+msgstr "Insérez dans l'éditeur"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:71
+msgid "Delete"
+msgstr "Supprimer"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:96
+msgid "Uploaded File List"
+msgstr "Liste fichiers téléchargés"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:101
+#: u-bp-forum-attachment.php:150
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:104
+msgid "Upload"
+msgstr "Télécharger"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:106
+#: u-bp-forum-attachment.php:301
+msgid "Upload File types"
+msgstr "Types de fichiers à télécharger"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:107
+#: u-bp-forum-attachment.php:288
+msgid "Max file size per file"
+msgstr "Taille maximum par fichier"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:108
+#: u-bp-forum-attachment.php:294
+msgid "Max file count per post"
+msgstr "Nombre de fichiers max par publication"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:161
+msgid "Download"
+msgstr "Télécharger"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:164
+msgid "Open Image in New Window"
+msgstr "Ouvrir l'image dans une nouvelle fenêtre"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:164
+msgid "View"
+msgstr "Voir"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:243
+#: u-bp-forum-attachment.php:244
+msgid "Forum Attachment"
+msgstr "Pièce jointe au forum"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:267
+msgid "BuddyPress Forum Attachment"
+msgstr "Pièce jointe au forum Buddypress"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:275
+#: u-bp-forum-attachment.php:277
+msgid "Enable"
+msgstr "Activer"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:281
+msgid "Upload directory"
+msgstr "Répertoire de téléchargement"
+
+#@ default
+#: u-bp-forum-attachment.php:290
+#, php-format
+msgid "Maximum size: %s"
+msgstr ""
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:297
+msgid "How many files can be attached per post."
+msgstr "Combien de fichiers peuvent être joints par message."
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:304
+msgid "Separate file extentions with commas."
+msgstr "Séparer extentions de fichiers  par des virgules."
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:310
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:314
+msgid "Related Plugin"
+msgstr "Plugin connexes"
+
+#@ ubpfattach
+#: u-bp-forum-attachment.php:327
+msgid "Error: please fill the required fields."
+msgstr "Erreur: s'il vous plaît remplissez les champs requis."
+
+#@ default
+#: u-bp-forum-attachment.php:330
+msgid "Settings saved."
+msgstr ""
+

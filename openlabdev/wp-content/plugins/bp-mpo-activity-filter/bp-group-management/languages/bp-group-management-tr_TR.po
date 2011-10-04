@@ -1,0 +1,185 @@
+# Translation of the WordPress plugin BP Group Management 0.2 by Boone Gorges.
+# Copyright (C) 2010 Boone Gorges
+# This file is distributed under the same license as the BP Group Management package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Group Management 0.2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-group-management\n"
+"POT-Creation-Date: 2010-03-07 21:39+0000\n"
+"PO-Revision-Date: 2010-03-08 20:40+0200\n"
+"Last-Translator: h <h@h.com>\n"
+"Language-Team: luccame\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: bp-group-management-bp-functions.php:5
+#: bp-group-management-bp-functions.php:59
+#: bp-group-management-bp-functions.php:243
+#: bp-group-management-bp-functions.php:367
+msgid "Group Management"
+msgstr "Grup Yönetimi"
+
+#: bp-group-management-bp-functions.php:45
+#: bp-group-management-bp-functions.php:163
+#: bp-group-management-bp-functions.php:177
+#: bp-group-management-bp-functions.php:191
+#: bp-group-management-bp-functions.php:205
+#: bp-group-management-bp-functions.php:219
+#: bp-group-management-bp-functions.php:231
+msgid "Sorry, there was an error."
+msgstr "Üzgünüm, bir hata meydana geldi."
+
+#: bp-group-management-bp-functions.php:47
+msgid "Group deleted."
+msgstr "Grup silindi."
+
+#: bp-group-management-bp-functions.php:65
+msgid "Group ID"
+msgstr "Grup Sırası"
+
+#: bp-group-management-bp-functions.php:66
+msgid "Group Name"
+msgstr "Grup Adı"
+
+#: bp-group-management-bp-functions.php:67
+msgid "Date Created"
+msgstr "Kurulma Tarihi"
+
+#: bp-group-management-bp-functions.php:68
+msgid "Number of Members"
+msgstr "Üye Sayısı"
+
+#: bp-group-management-bp-functions.php:104
+msgid "Edit"
+msgstr "Düzenle"
+
+#: bp-group-management-bp-functions.php:107
+msgid "Delete"
+msgstr "Sil"
+
+#: bp-group-management-bp-functions.php:109
+msgid "Visit"
+msgstr "Görüntüle"
+
+#: bp-group-management-bp-functions.php:165
+msgid "Member kicked and banned"
+msgstr "Üye yasaklandı"
+
+#: bp-group-management-bp-functions.php:179
+msgid "Member unbanned"
+msgstr "Üyenin yasağı kaldırıldı"
+
+#: bp-group-management-bp-functions.php:193
+msgid "Member demoted"
+msgstr "Üyenin yetkisi alındı"
+
+#: bp-group-management-bp-functions.php:207
+msgid "Member promoted to moderator"
+msgstr "Üye mod yapıldı"
+
+#: bp-group-management-bp-functions.php:221
+msgid "Member promoted to admin"
+msgstr "Üye yönetici yapıldı"
+
+#: bp-group-management-bp-functions.php:233
+msgid "User added to group"
+msgstr "Üye gruba eklendi"
+
+#: bp-group-management-bp-functions.php:244
+#: bp-group-management-bp-functions.php:368
+msgid "Back to group index"
+msgstr "Grup dizinine dön"
+
+#: bp-group-management-bp-functions.php:248
+msgid "Manage current and banned group members"
+msgstr "Üyeleri ve yasaklı üyeleri yönet"
+
+#: bp-group-management-bp-functions.php:277
+msgid "(banned)"
+msgstr "(yasaklı)"
+
+#: bp-group-management-bp-functions.php:277
+msgid "Remove Ban"
+msgstr "Yasağı Kaldır"
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick and ban this member"
+msgstr "Bu üyeyi yasakla"
+
+#: bp-group-management-bp-functions.php:300
+msgid "Kick &amp; Ban"
+msgstr "Yasakla"
+
+#: bp-group-management-bp-functions.php:302
+#: bp-group-management-bp-functions.php:304
+msgid "Demote to Member"
+msgstr "Yetkisini Al"
+
+#: bp-group-management-bp-functions.php:304
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Admin"
+msgstr "Yönetici Yap"
+
+#: bp-group-management-bp-functions.php:306
+msgid "Promote to Moderator"
+msgstr "Mod Yap"
+
+#: bp-group-management-bp-functions.php:325
+msgid "Add members to group"
+msgstr "Gruba Dahil Et"
+
+#: bp-group-management-bp-functions.php:342
+msgid "Add"
+msgstr "Ekle"
+
+#: bp-group-management-bp-functions.php:371
+msgid "Deleting the group"
+msgstr "Grup siliniyor"
+
+#: bp-group-management-bp-functions.php:372
+msgid "You are about to delete the group"
+msgstr "Bu grubu silmek üzeresiniz"
+
+#: bp-group-management-bp-functions.php:372
+msgid "This action cannot be undone."
+msgstr "Bu işlemin geri dönüşü yok."
+
+#: bp-group-management-bp-functions.php:374
+msgid "Delete Group"
+msgstr "Grubu Sil"
+
+#: bp-group-management-bp-functions.php:375
+msgid "Oops, I changed my mind"
+msgstr "Ehm, fikrimi değiştirdim"
+
+#: bp-group-management-bp-functions.php:477
+#, php-format
+msgid "%s joined the group %s"
+msgstr "%s, %s grubuna katıldı"
+
+#. Plugin Name of an extension
+msgid "BP Group Management"
+msgstr "BP Grup Yönetimi"
+
+#. Plugin URI of an extension
+msgid "http://teleogistic.net/code/buddypress/bp-group-management"
+msgstr "http://teleogistic.net/code/buddypress/bp-group-management"
+
+#. Description of an extension
+msgid "Allows site administrators to manage BuddyPress group membership"
+msgstr "Site yöneticilerinin grup üyeliklerini yönetmelerine izin ver"
+
+#. Author of an extension
+msgid "Boone Gorges"
+msgstr "Boone Gorges"
+
+#. Author URI of an extension
+msgid "http://teleogistic.net"
+msgstr "http://teleogistic.net"
+

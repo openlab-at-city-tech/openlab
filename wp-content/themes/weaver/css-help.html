@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Weaver Theme Snippets</title>
+<style type="text/css">
+<!--
+body {
+	background: #eeeeee;
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0; /* this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+	color: #000000;
+	text-align: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	background-color: #F5F5DC;
+}
+#container {
+	background-color: #00CC00;
+}
+#mainContent {
+	background-color: #FFFFCD;
+}
+
+.oneColFixCtr #container {
+	width: 750px;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
+	background: #FFFFCD;
+	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
+	border: 1px solid #000000;
+	text-align: left; /* this overrides the text-align: center on the body element. */
+}
+.oneColFixCtr #mainContent {
+	padding: 0 20px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+	font-size:12px;
+}
+h3 {
+	font-size: medium;
+	font-weight: bold;
+	color: #000066;
+
+}
+h2 {
+	font-size: large;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: underline;
+	margin-top: 40pt;
+}
+h1 {
+	font-size: x-large;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: underline;
+}
+.attrs {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color:#000000;
+	text-decoration: none;
+}
+.css {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 9pt;
+	font-style: normal;
+}
+.box {
+	color: #000000;
+	text-decoration: none;
+	margin: 15px;
+	padding: 5px;
+	border: thin solid #000000;
+	display: block;
+	background-color: #e8e8e8;
+	width: 600px;
+}
+.nospace {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.pre { border: thin }
+.style1 {font-family: monospace}
+.style2 {font-size: 16px}
+.style3 {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 16px;
+}
+.style4 {color: #0000FF}
+-->
+</style>
+</head>
+
+<body class="oneColFixCtr">
+
+<div id="container">
+  <div id="mainContent">
+    <p>&nbsp;</p>
+    <h1 align="center">Weaver's CSS Help</h1>
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#intro">Basic Introduction to CSS</a></li>
+      <li><a href="#w3schools">More CSS Info: w3schools.com</a></li>
+      <li><a href="#weaver_elements">Styling Weaver Elements</a></li>
+      <ul>
+      <li><a href="#text_elements">Text Elements</a></li>
+      <li><a href="#link_elements">Link Elements</a></li>
+      <li><a href="#menu_elelemts">Menu Elements</a></li>
+      <li><a href="#area_elements">Area Elements</a></li>
+      <li><a href="#border_elements">Borders and Other Elements</a></li>
+      <li><a href="#WeaverCSS">Special Weaver CSS Elements</a></li>
+      </ul>
+      <li><a href="#more_about">More About Styling</a></li>
+      <ul>
+      <li><a href="#color_vs_bg">Color vs. Background Color</a></li>
+      <li><a href="#how_do_i">How Do I Do That?</a></li>
+      <li><a href="#cascading_tags">Cascading Tags</a></li>
+      </ul>
+    </ul>
+    <h2><a name="intro" id="intro"></a>Basic Introduction to CSS</h2>
+    <p>CSS stands for Cascading Style Sheets. CSS is used to style different elements on your web page. When using Weaver,
+    virtually every single different element - Site Title, Page Titles, Widget text, links, content area, widget areas,
+    and so on - has the way it looks on the page controlled by a style rule. Every style rule has a name and some parameters
+    that tell your browser how to display that item. When you pick a Weaver sub-theme, or change one of the &quot;checkbox&quot;
+    settings from the <em>Main Options </em>tab, you are really specifying a particular set of CSS rules that give the specified look.</p>
+    <p>In addition to the pre-defined themes and <em>Main Options</em>, Weaver provides you with two different ways to customize your theme -
+    the <strong><em>CSS</em></strong> slide-open box associated with many options on the <em>Main Options </em>tab, and the
+    <strong><em>&lt;HEAD&gt; Section</em></strong> on the <em>Advanced Options</em> tab. The Snippets tab on the Weave admin page
+    has information about using the &lt;HEAD&gt; Section, while this document will focus on the actual styling parameters
+    you can use. It will be especially useful for using the CSS slide-open options, but can be helpful for writing full snippets as well.</p>
+    <p>What is the difference between writing a snippet for the &lt;HEAD&gt; Section, and adding some CSS using the
+    slide-open CSS option? Basically, using the sliding CSS interface, you only need to pick a specific element from the <em>Main Options </em>page,
+    and then add appropriate CSS styling parameters (we'll get to the specifics shortly). With a &lt;HEAD&gt; Section snippet, you need
+    to know the specific CSS class or id, as well as the styling parameter.</p>
+    <p>A simple example should clarify this. Each CSS rule has two parts: a name (called the class/id), and a list of one
+    or more style parameters contained in braces ( {...} ). Each parameter is separated by a semi-colon (;).
+    Consider the Site Title that is included by default on every WordPress page. The site title is styled by a CSS rule
+    with the name &quot;#site-title&quot;. Suppose you wanted to make the site title be displayed in italics, and to be
+    larger than the default size. This CSS rule would do that:</p>
+    <p class="style1">#site-title {font-style:italic; font-size:300%;}</p>
+    <p>Note the name: <span class="style1">#site-title</span>, and the style parameters: <span class="style1">font-style:italic; font-size:300%;</span>. All CSS rules follow this form. The names will most often begin with a hash (#),  a period (.), or a letter, depending on a technical difference that is not critical at this point. Each of these names is associated with a specific element on your WordPress web page. The style parameters are derived from a very large list of specific possibilities (e.g., font-style), and usually include a value after a colon (:), again from a large list of specific possibilities (e.g., italic) or values (e.g., 300%, but which include many other possible units (e.g., px, em, and more).</p>
+    <p>The fun and challenging part of styling your page is learning all the different possible parameters that can apply to a specific kind of element, and providing the exact styling parameter to achieve just what you want. A completely different challenge is to determine the name of a specific element you want. To use the &lt;HEAD&gt; Section and the snippets, you need to know the name. We know the name of the Site Title element (#site-title), and that it is a text based element (different style parameters are available for different elements - text, links, boxes, images, areas, etc.). The slide-open CSS interface available on the <em>Main Options </em>tab avoids the need to find out the specific name of an element - you can simply provide the parameters.</p>
+    <p>To summarize by example, if you wanted to style the Site Title as in the example using the &lt;HEAD&gt; Section, you would enter the following into the box between the &lt;style&gt; and &lt;/style&gt; tags:</p>
+    <p><span class="style1">#site-title {font-style:italic; font-size:300%;}</span></p>
+    <p>If, on the other hand, you wanted to achieve the same effect using the <em>Main Options </em>tab, you would click on the [+] box after the color box on the &quot;Site Title&quot; line. An entry box will slide open, and there you can enter simply:</p>
+    <p><span class="style1">{font-style:italic; font-size:300%;</span>}</p>
+    <p>Note that you don't need the name, just the style parameters enclosed in {braces}. The CSS slide-open interface is available for all the elements that have color boxes on the <em>Main Options </em>tab. Note that there are basically four kinds of elements that have color options: text elements, menu elements, link elements, and area elements (areas with bg colors). The following sections will discuss the kinds of style parameters that are most appropriate for each area, as well as a discussion of borders, which can be used for almost all elements.</p>
+    <p>By default, when you've added a CSS rule to a <em>Main Options </em>element, the value box will automatically be displayed. (This applies also when a sub-theme has added CSS element rules.) There is an administrative option at the bottom of the <em>Advanced Options</em> tab that will let you hide CSS element slide-open rules.</p>
+    <h2><a name="w3schools" id="w3schools"></a>More CSS Info: w3schools.com</h2>
+
+    <p>The web site w3schools.com may be the most definitive web site with CSS information and tutorials. If you want to
+    know all about CSS, start with this tutorial. There are also reference sections for most kinds of CSS parameters, and
+    these will be links below in the appropriate areas. For a more complete introduction to CSS, start with the Basics at
+    <a href="http://www.w3schools.com/css/default.asp" target="_blank">w3schools.com</a>. More details, including a reference
+    summary, are included in the other sections.</p>
+
+<p> <div style="float:left; width:30%; padding-right:3%;"> <strong>CSS Basics</strong>
+    <p><a href="http://www.w3schools.com/css/default.asp" target="_blank">CSS Tutorial</a><br />
+    <a href="http://www.w3schools.com/css/css_intro.asp" target="_blank">CSS Introduction</a><br />
+<a href="http://www.w3schools.com/css/css_syntax.asp" target="_blank">CSS Syntax</a><br />
+<a href="http://www.w3schools.com/css/css_id_class.asp" target="_blank">CSS Id &amp; Class</a><br />
+<a href="http://www.w3schools.com/css/css_howto.asp" target="_blank">CSS How To</a><br />
+    </p></div>
+    <div style="float:left; width:30%; padding-right:3%;"><strong>CSS Styling</strong>
+    <p><a href="http://www.w3schools.com/css/css_background.asp" target="_blank">Styling Backgrounds</a><br />
+      <a href="http://www.w3schools.com/css/css_text.asp" target="_blank">Styling Text</a><br />
+      <a href="http://www.w3schools.com/css/css_font.asp" target="_blank">Styling Fonts</a><br />
+      <a href="http://www.w3schools.com/css/css_link.asp" target="_blank">Styling Links</a><br />
+      <a href="http://www.w3schools.com/css/css_list.asp" target="_blank">Styling Lists</a><br />
+      <a href="http://www.w3schools.com/css/css_table.asp" target="_blank">Styling Tables</a><br />
+      <br /></div>
+        </p>
+    <div style="float:left; width:30%;"><strong>CSS Box Model</strong>
+    <p><a href="http://www.w3schools.com/css/css_boxmodel.asp" target="_blank">CSS Box Model</a><br />
+      <a href="http://www.w3schools.com/css/css_border.asp" target="_blank">CSS Border</a><br />
+      <a href="http://www.w3schools.com/css/css_outline.asp" target="_blank">CSS Outline</a><br />
+      <a href="http://www.w3schools.com/css/css_margin.asp" target="_blank">CSS Margin</a><br />
+      <a href="http://www.w3schools.com/css/css_padding.asp" target="_blank">CSS Padding</a></p></div>
+    <div style="clear:both"></div></p>
+
+    <h2><a name="weaver_elements" id="weaver_elements"></a>Styling Weaver Elements</h2>
+    <p>The following sections give a few details on each type of element found on the <em>Main Options </em>tab.</p>
+    <p><strong>HINT:</strong> When you are trying to style a specific element, first note the original color, then
+    change the element to a recognizable color (red, for example). Then save the options and view your page.
+    The element you want to style should now be easy to find. Now make your style changes, and test after each change
+    to see if you got what you wanted. It is always better to change only one thing at a time until you are sure you got
+    what you wanted. Don't forget to change the element back to the original color!</p>
+    <h3><a name="text_elements" id="text_elements"></a>Text Elements</h3>
+    <p>The text elements include titles, content, post info, menu text, and the site title and description.
+    You can specify specific font styles, background color, borders, decorations, and more, for text elements.
+    Start with <a  href="http://www.w3schools.com/css/css_text.asp" target="_blank">Styling Text</a>.</p>
+    <h3><a name="link_elements" id="link_elements"></a>Link Elements</h3>
+    <p>Link elements can use the same kind of styling as text elements, plus some specific styling just for links.
+    See <a href="http://www.w3schools.com/css/css_link.asp" target="_blank">Styling Links</a>.</p>
+    <h3><a name="menu_elelemts" id="menu_elelemts"></a>Menu Elements</h3>
+    <p>The menu options in the <em>Main Options </em>tab were designed to give colors to the specific parts of a menu.
+    Adding text decorations, spacing, padding, and link styles are common things to do with menus. Because of the
+    interaction of the different menu elements, you will likely have to use a try and see what happened approach to
+    getting what you want. Many of the items in the Box Model CSS section can be helpful with menu styling.</p>
+    <h3><a name="area_elements" id="area_elements"></a>Area Elements</h3>
+    <p>Area elements are mostly areas that include specific components - the entire site page, widget areas, and so on.
+    One thing to note about areas is that some areas are nested inside of other areas, and that other specific elements
+    of your site are included in areas. Because of the way CSS works, styling applied to an outer area will be inherited
+    by elements contained within that area. For example, by styling the font of a widget area bg, all the text displayed
+    in that widget area will use that font style. This can be an easy way to apply a consistent style to a large area without
+    needing to style each element separately.</p>
+    <h3><a name="border_elements" id="border_elements"></a>Borders and Other Elements</h3>
+    <p>The CSS box model applies to most elements. For example, you can put a border with margins, padding, and a background
+    color around Widget Titles, for example, to get interesting effects for your sidebars. Just how the borders, margins,
+    and padding interact is somewhat complex, and often requires trial and error.</p>
+    <h3><a name="WeaverCSS" id="WeaverCSS"></a>Special Weaver CSS Elements</h3>
+    <p>Weaver has defined several special CSS id's and classes to help you style some of the more detailed elements on pages. These are elements that most people will find that the default styleing is acceptable, and so did not warrant inclusion on the Main Options tab. These include things such as the &quot;Older posts&quot; and &quot;Newer posts&quot; links on blog pages, or the separate fields of the post meta info lines (&quot;Posted on&quot;, etc.). These elements are described in the Snippets document (click Snippets tab).</p>
+    <h2><a name="more_about" id="more_about"></a>More About Styling</h2>
+    <p>Most of the time, you will be able to simply enter the style parameters in the slide-open box. You should include your rules inside {braces}, but if you forget, they will be added automatically. </p>
+    <h3><a name="color_vs_bg" id="color_vs_bg"></a>Color vs. Background Color</h3>
+    <p>The <em>Main Options</em> tab has options for setting two different kinds of color - the color of an element's text, and the color of an element's background. These were added to the interface mostly on the basis of the use of the element on a web page. In general, you can use the CSS slide-open option to add CSS parameters almost equally. The correct element will be styled. Text colors add a color style: <span class="style1">{color: #FF0000;}</span>, while the BG options style with: <span class="style1">{background-color: #0000FF;}</span>. A few options may represent the same element - with both a text color and a BG color - for the sake of convenience.</p>
+    <h3><a name="how_do_i" id="how_do_i"></a>How Do I Do That?</h3>
+    <p>This section contains some commonly used CSS rules that can be applied to almost any of the elements found on the <em>Main Options</em> tab. You can copy/paste most these examples as-is. Some will have values that can be adjusted in an obvious fashion. The styling paramaters can be combined, e.g.: <em><strong>Bold-Italic</strong></em> - <span class="style1">{font-style:italic;font-weight:bold;}</span></p>
+    <ol>
+      <li>Hide an Element: <span class="style1">{display:none;}<br />
+        <br />
+      </span></li>
+      <li><em>Italic</em> text: <span class="style1">{font-style:italic;}</span><br />
+        <br />
+      </li>
+      <li><strong>Bold</strong> text: <span class="style1">{font-weight:bold;}</span><br />
+        <br />
+      </li>
+      <li><u>Underlined</u> text: <span class="style1">{text-decoration:underline;}</span><br />
+      (also: overline, line-through)<br />
+      <br />
+      </li>
+      <li><span style="font-variant:small-caps;">Small Caps</span> text: <span class="style1">{font-variant:small-caps;}</span><br />
+        <br />
+      </li>
+      <li><span class="style2">Font size</span>: <span class="style1">{font-size:medium;}</span> <br />
+      (also: x-small, small, large, x-large, xx-large, nnn%, and more)<br />
+      <br />
+      </li>
+      <li><span class="style3">Font Family</span>: <span class="style1">{font-family:Times, serif;}<br />
+      </span> (many options for this!)<br />
+        <br />
+      </li>
+      <li><span class="style4">Text color</span>: <span class="style1">{color:blue;}</span> <br />
+      (or #000000 hex value - style text on a BG element)<br />
+      <br />
+      </li>
+      <li>Indent Text:<span class="style1">{text-indent:50px;}</span> <br />
+        <br />
+      </li>
+      <li><span style="background-color:green;">BG color:</span> <span class="style1">{background-color:green;}</span><br />
+      (or hex value - add a nice block bg to titles, for example. Use padding to leave padding.)<br />
+      <br />
+      </li>
+      <li><span style="border-bottom: 1px solid black;">Borders:</span> <span class="style1">{border-bottom: 1px solid black;}<br />
+      </span>(Many options. This example adds a bar under an element. See the w3schools <a href="http://www.w3schools.com/css/css_border.asp" title="All about CSS borders." target="_blank">Border</a> page.)<span class="style1"><br />
+      <br />
+      </span></li>
+      <li><span style="border: 1px solid black;">Box:</span> <span class="style1">{border: 1px solid blue;}<br />
+      </span> (or border-top, border-bottom, border-left, border-right)<br />
+        <br />
+      </li>
+      <li>Padding: <span class="style1">{padding: 10px;}</span> <br />
+      (or padding-top, etc.)<br />
+      <br />
+      </li>
+      <li>Margins: <span class="style1">{margin:10px;}</span> <br />
+      (or margin-top, etc. Margins and padding interact.)<br />
+      <br />
+      </li>
+      <li>Width: <span class="style1">{width:100px;}</span></li>
+    </ol>
+    <p>There are, of course, many more things you can do with CSS, but you can do a lot with just the above style parameters. In fact, nearly all the effects found on the various Weave sub-themes were accomplished using just the above style parameters.</p>
+    <h3><a name="cascading_tags" id="cascading_tags"></a>Cascading Tags</h3>
+    <p>And if you really understand CSS, please note that you can also add a cascaded tag to your rules for most of the elements supported. For example, suppose you've created a dark background for the footers, and your links don't show up properly. What you'd really like to do to avoid resorting to &lt;HEAD&gt; Section rules is add a style for anchor ('a') in the footer. You can do that by adding a style rule in the form 'a{color:#333333;}', which will cause the rule '#footer a{color:#333333;}' to be included in the generated style sheet. (See the Tan and Gray sub-theme for an example of this in action!)</p>
+    <hr />
+    <p>CSS Help V 1.0 - 2/10/2011</p>
+    <p>&nbsp;</p>
+  </div>
+<!-- end #container --></div>
+</body>
+</html>

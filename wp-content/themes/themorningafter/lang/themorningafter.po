@@ -1,0 +1,764 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Text in function
+#: themorningafter/includes/theme-functions.php:35
+msgid " Older Entries &raquo;"
+msgstr ""
+
+#. Text in function
+#: themorningafter/comments.php:26
+msgid "% Responses"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/theme-functions.php:34
+msgid "&laquo; Newer Entries "
+msgstr ""
+
+#. Text in function
+#: themorningafter/index.php:41
+#: themorningafter/search.php:43
+msgid "&laquo; Previous"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:60
+msgid "<a href=\"http://www.gravatar.com/\">Gravatar</a> E-mail:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:100
+msgid "<strong>Thanks!</strong> Your email was successfully sent."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-adspace.php:57
+msgid "Ad Code:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2367
+msgid "Advanced Options:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:85
+msgid "All"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/footer.php:9
+msgid "All Rights Reserved."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-adspace.php:70
+msgid "Alt text:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/archive.php:46
+#: themorningafter/archive.php:49
+#: themorningafter/archive.php:52
+msgid "Archive for"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+msgid "Author Archives"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:56
+msgid "Bio:"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/theme-functions.php:125
+msgid "Book"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/index.php:33
+#: themorningafter/author.php:43
+#: themorningafter/archive.php:66
+#: themorningafter/search.php:35
+#: themorningafter/single.php:22
+msgid "By"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-sitemap.php:27
+#: themorningafter/template-archives.php:33
+msgid "Categories"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+msgid "Category Archive"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-embed.php:100
+msgid "Category:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:115
+msgid "Comment"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-sitemap.php:48
+msgid "Comments"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:59
+msgid "Comments are closed."
+msgstr ""
+
+#. Text in function
+#: themorningafter/home.php:31
+msgid "Comments off"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "Contact Form Submission from "
+msgstr ""
+
+#. Text in echo
+#: themorningafter/home.php:30
+msgid "Continue Reading"
+msgstr ""
+
+#. Text in function
+#: themorningafter/page.php:18
+#: themorningafter/single.php:31
+msgid "Continue reading this post"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/footer.php:19
+msgid "Designed by"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:19
+msgid "Discussion"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:100
+msgid "E-mail"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:145
+msgid "E-mail has not been setup properly. Please add your contact e-mail!"
+msgstr ""
+
+#. Text in function
+#: themorningafter/page.php:22
+#: themorningafter/single.php:35
+msgid "Edit this entry."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:159
+msgid "Email"
+msgstr ""
+
+#. Text in function
+#: themorningafter/single.php:26
+msgid "Filed Under"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:48
+msgid "Flickr ID (<a href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "From: "
+msgstr ""
+
+#. Text in echo
+#: themorningafter/header.php:62
+msgid "Go"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:68
+msgid "Gravatar Alignment:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:64
+msgid "Gravatar Size:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:63
+msgid "Group"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:86
+msgid "Home only"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:173
+msgid "If you want to submit this form, do not enter anything in this field"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-adspace.php:62
+msgid "Image Url:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:69
+msgid "Latest"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/home.php:19
+msgid "Latest Post"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:70
+msgid "Left"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-embed.php:125
+msgid "Limit (optional):"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-twitter.php:48
+msgid "Limit:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-adspace.php:66
+msgid "Link URL:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:88
+msgid "Logged in as"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:88
+msgid "Logout"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/404.php:30
+msgid "Looks like the page you're looking for has been moved or had its name changed. Or maybe it's just fate. You could use the search box in the header to search for what you're looking for, or begin again from the"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/index.php:46
+#: themorningafter/author.php:56
+#: themorningafter/archive.php:79
+#: themorningafter/template-fullwidth.php:31
+#: themorningafter/single.php:47
+msgid "Lost? Go back to the"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:77
+msgid "Medium"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:166
+msgid "Message"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+msgid "Monthly Archive"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-archives.php:39
+msgid "Monthly Archives"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:95
+#: themorningafter/template-contact.php:152
+msgid "Name"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "Name: $name \\n\\nEmail: $email \\n\\nComments: $comments"
+msgstr ""
+
+#. Text in function
+#: themorningafter/index.php:41
+#: themorningafter/search.php:43
+msgid "Next &raquo;"
+msgstr ""
+
+#. Text in function
+#: themorningafter/comments.php:26
+msgid "No Responses"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:55
+msgid "No comments yet."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-recent.php:72
+msgid "Number of posts:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:52
+msgid "Number:"
+msgstr ""
+
+#. Text in function
+#: themorningafter/comments.php:26
+msgid "One Response"
+msgstr ""
+
+#. Text in function
+#: themorningafter/index.php:33
+#: themorningafter/author.php:43
+#: themorningafter/home.php:31
+#: themorningafter/archive.php:66
+#: themorningafter/search.php:35
+msgid "One comment"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/404.php:28
+msgid "Oops!"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-sitemap.php:21
+#: themorningafter/page.php:20
+#: themorningafter/single.php:33
+msgid "Pages"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/index.php:31
+#: themorningafter/author.php:41
+#: themorningafter/home.php:25
+#: themorningafter/home.php:67
+#: themorningafter/home.php:94
+#: themorningafter/search.php:33
+msgid "Permanent Link to"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:23
+msgid "Photos on <span>flick<span>r</span></span>"
+msgstr ""
+
+#. Text in function
+#: themorningafter/index.php:33
+#: themorningafter/author.php:43
+#: themorningafter/home.php:31
+#: themorningafter/archive.php:66
+#: themorningafter/search.php:35
+#: themorningafter/single.php:22
+msgid "Post a comment"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/theme-comments.php:27
+msgid "Posted by"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-sitemap.php:33
+msgid "Posts per category"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/footer.php:19
+msgid "Powered by"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/index.php:19
+#: themorningafter/404.php:19
+msgid "RSS feed for"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:70
+msgid "Random"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:75
+msgid "Read More Text (optional):"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:79
+msgid "Read More URL (optional):"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "Reply-To: "
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:71
+msgid "Right"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/theme-functions.php:125
+msgid "Road"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/header.php:54
+msgid "Search"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+#: themorningafter/search.php:16
+msgid "Search Results"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/header.php:59
+msgid "Search for"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2332
+msgid "Select Menu:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:172
+msgid "Send a copy of this email to yourself"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2415
+msgid "Show Top Level Descriptions:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:87
+msgid "Single only"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-embed.php:118
+#: themorningafter/includes/widgets/widget-woo-flickr.php:74
+msgid "Size:"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/theme-functions.php:125
+msgid "Sky"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/search.php:53
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:67
+msgid "Sorting:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:76
+msgid "Square"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:174
+msgid "Submit"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+msgid "Tag Archive"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-embed.php:113
+msgid "Tag:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2435
+msgid "The Custom Menu has not been configured correctly.  Please check your theme settings before adding this widget."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-archives.php:23
+msgid "The Last 30 Posts"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:141
+msgid "There was an error submitting the form."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/archive.php:28
+msgid "This category contains"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:9
+msgid "This post is password protected. Enter the password to view comments."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/archive.php:40
+msgid "This tag is associated with"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:78
+msgid "Thumbnail"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-recent.php:77
+msgid "Thumbnail Size (0=disable):"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-adspace.php:53
+msgid "Title (optional):"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-embed.php:96
+#: themorningafter/includes/widgets/widget-woo-search.php:33
+#: themorningafter/includes/widgets/widget-woo-recent.php:67
+#: themorningafter/functions/admin-custom-nav.php:2358
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:52
+#: themorningafter/includes/widgets/widget-woo-twitter.php:40
+msgid "Title:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:43
+msgid "Trackbacks/Pingbacks"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:60
+msgid "Type:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-flickr.php:62
+msgid "User"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-twitter.php:44
+msgid "Username:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:83
+msgid "Visible Pages:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:105
+msgid "Web site"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-adspace.php:1
+msgid "Woo - Adspace Widget"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-blogauthor.php:1
+msgid "Woo - Blog Author Info"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-custom-nav.php:1991
+msgid "Woo - Custom Nav Menu"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-embed.php:160
+msgid "Woo - Embed/Video"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-flickr.php:1
+msgid "Woo - Flickr"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-recent.php:1
+msgid "Woo - Recent Posts"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-search.php:1
+msgid "Woo - Search"
+msgstr ""
+
+#. Text in function
+#: themorningafter/includes/widgets/widget-woo-twitter.php:1
+msgid "Woo - Twitter Stream"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2387
+msgid "Wrap in container DIV:"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/functions/admin-custom-nav.php:2400
+msgid "Wrap in container UL:"
+msgstr ""
+
+#. Text in function
+#: themorningafter/functions/admin-functions.php:1023
+msgid "Yearly Archive"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "You emailed "
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:90
+msgid "You entered an invalid"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "You entered an invalid email address."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:83
+msgid "You forgot to enter your"
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "You forgot to enter your comments."
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "You forgot to enter your email address."
+msgstr ""
+
+#. Text in function
+#: themorningafter/template-contact.php:7
+msgid "You forgot to enter your name."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:79
+msgid "You must be"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/search.php:21
+msgid "You searched for"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/theme-comments.php:20
+msgid "Your comment is awaiting moderation"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-contact.php:128
+msgid "Your email was successfully sent."
+msgstr ""
+
+#. Text in echo
+#: themorningafter/search.php:21
+msgid "Your search returned"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/template-archives.php:29
+msgid "comments"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/author.php:29
+msgid "has written"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/index.php:46
+#: themorningafter/author.php:56
+#: themorningafter/404.php:30
+#: themorningafter/archive.php:79
+#: themorningafter/template-fullwidth.php:31
+#: themorningafter/single.php:47
+msgid "home page"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:79
+msgid "logged in"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/includes/theme-functions.php:120
+msgid "on "
+msgstr ""
+
+#. Text in echo
+#: themorningafter/archive.php:40
+msgid "posts"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/author.php:29
+msgid "posts for"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/search.php:21
+msgid "results"
+msgstr ""
+
+#. Text in echo
+#: themorningafter/comments.php:26
+msgid "to"
+msgstr ""

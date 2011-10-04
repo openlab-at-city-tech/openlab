@@ -1,0 +1,1619 @@
+/**
+ * Screen Stylesheet
+ */
+
+/* all content is inside the wrap */
+#wrap { width: 960px; }
+
+/* #header -- Contains the top level navigation and the logo */
+#header ul#nav {
+        float: right;
+        list-style: none;
+        margin: 30px 0 30px 0;
+        padding: 0;
+}
+#header ul#nav li {
+        float: left;
+        margin-right: 20px;
+}
+#header ul#nav li a {
+        display: block;
+        background: #eee;
+        padding: 4px 12px;
+}
+#header h1#logo {
+        float: left;
+        margin: 30px 0 30px 15px;
+}
+#header h1#logo a {
+        font-size: 2em;
+        color: #ccc;
+        font-style: italic;
+        font-family: Georgia, times, serif;
+        display: block;
+}
+#header .widget {
+	border: none;
+}
+
+/* BuddyPress navigation */
+ul#bpauto {
+	width: auto;
+}
+#bpnav,
+	.internal-page .item-list-tabs,
+	.internal-page #user-nav {
+		margin: 0px auto;
+		border:1px solid #E6E6E6;
+}
+#bpnav ul,
+	.internal-page .item-list-tabs ul {
+		margin: 0px;
+}
+#bpnav ul,
+	.directory .item-list-tabs ul,
+	.directory ul.item-list,
+	.internal-page #content ul {
+		list-style-type: none;
+}
+#bpnav ul li,
+	.directory .item-list-tabs ul li,
+	#bpsubnav ul li,
+	#object-nav ul li {
+		border-right: 2px solid #F0F0F0;
+		float: left;
+		list-style-type: none;
+		margin: 0;
+}
+#bpnav ul li.last,
+	.directory .item-list-tabs ul li.last,
+	.internal-page #content ul li.last {
+		float:right;
+}
+#bpnav ul#nav li.selected, 
+	.internal-page #object-nav ul li.current,
+	.internal-page #bpsubnav ul li.current {
+		background: #F0F0F0;
+}
+#bpnav ul li a,
+	.internal-page #object-nav ul li a,
+	.internal-page #bpsubnav ul li a {
+		display: block;
+}
+#bpnav ul li a,
+	.directory .item-list-tabs ul li a,
+	.item-list-tabs ul li a {
+		color: #838383;
+		display: block;
+		font-size: 13px;
+		padding: 2px 15px;
+		position: relative;
+}
+
+#nav #search-bar, #subnav #search-bar, #bpnav #search-bar { float: right; }
+#nav .padder, #subnav .padder, #bpnav .padder { padding: 5px; }
+
+/* .internal-page -- buddypress body class
+    #content --  Holds the main content on every page */
+#inner .bp-content-top .wrap {
+	width: 100%;
+}
+
+.internal-page #content ul li {
+	list-style:none;
+}
+.internal-page #content ul li.current {
+	background: #EAEAEA;
+}
+.internal-page #content .padder,
+	.widget .padder { 
+	    padding: 15px;
+	}
+.internal-page #content ul li p a,
+	.internal-page #content ul li .activity-meta a,
+	.internal-page #content ul li .activity-inner a {
+		display: inline;
+}
+.internal-page #content .item-list li { width: 100% }
+
+.internal-page #item-nav #user-nav ul li.current { background: #fff; }
+.internal-page #item-header { width: 100%; }
+.internal-page #item-header h2 { font-size: 1em; }
+.internal-page #item-header h2 a { font-size: 2em; }
+.internal-page #item-header img.avatar {
+	float: left;
+	margin: 0px 15px 15px 0px;
+	height: 100px;
+	width: 100px;
+}
+.internal-page #item-header span.activity,
+	.internal-page .item-meta span.activity {
+		font-size: 1em;
+		vertical-align: top;
+}
+.internal-page #item-header ul li { float: right; }
+.internal-page #item-header ul li img.avatar {
+	margin: 2px;
+	float: right;
+	height: 50px;
+	width: 50px;
+}
+.internal-page #item-buttons a,
+	.directory #item-buttons a {
+		padding: 0 3px;
+}
+/* Main column within the #content div */
+.internal-page #item-body { clear: left; }
+.internal-page #item-body h5 {
+    font-size: 1em;
+    margin: 5px 0px;
+}
+.internal-page #bpsubnav, #create-group-form {
+    font-size: 1em;
+    margin: 5px 0px;
+    clear: both;
+}
+.internal-page #item-body .item-list-tabs ul li.last { float: right; }
+/* .internal-page #item-body div.item { width: 50% }
+.internal-page #item-body .item-list li { width: 100% }
+.internal-page #item-body ul li div { float: left; } */
+.internal-page #item-body div.action {
+	float: right; 
+}
+.internal-page #item-body .radio ul { margin-bottom: 1.5em; }
+.internal-page #content #item-body .radio ul li,
+	.internal-page #content .item-body .radio ul li,
+	.internal-page #content #item-body .radio label,
+	.internal-page #content .item-body .radio label {
+		clear: left;
+		float: none;
+		display: block;
+}
+
+.internal-page .acomment-meta { display: block; }
+/* what's new form */
+.internal-page #whats-new-form, .directory #whats-new-form {
+    clear: both;
+    padding: 1px;
+    margin-bottom: 15px;
+}
+.internal-page #whats-new-avatar, .directory #whats-new-avatar {
+    float: left;
+    margin: 0px 10px 10px 0px;
+}
+.internal-page textarea#whats-new #internal-page textarea#ac-input-2, .directory textarea#whats-new {
+    height: 6em;
+    width: 100%;
+}
+.internal-page #whats-new-submit, .directory #whats-new-submit { float: right; margin-top: 5px; }
+.internal-page #whats-new-content, .directory #whats-new-content { margin-left: 76px; }
+
+/* item list tabs */
+.internal-page .item-list-tabs ul { list-style-type: none; }
+.internal-page .item-list-tabs ul li {
+	float: left;
+}
+.internal-page .item-list-tabs ul li.last { 
+	margin: 4px 5px 4px 0;
+}
+.internal-page .activity {
+	clear: both;
+	padding-top: 1px;
+}
+.internal-page .activity-comments { width: 100%; }
+.internal-page #content .activity ul li a {
+		padding: 4px 8px;
+		display: inline;
+}
+.internal-page #content .activity ul li .acomment-avatar a { padding: 0px; }
+.internal-page #content .activity ul li .activity-content { 
+	margin-left: 80px;
+	float: none;
+}
+.internal-page #content .activity ul li .activity-content p { line-height: 2.2em; }
+
+/* BuddyPress Directories */
+.dir-form h2 { width: 300px; }
+.dir-search {
+    float: right;
+    margin-top: -2em;
+}
+.dir-list {
+    clear: left;
+    margin-top: 10px;
+}
+/* create groups/forums */
+#content #group-create-tabs {
+	background: #eee;
+}
+#content #group-create-tabs ul li a {
+	background: #f7f7f7;
+}
+#content #group-create-tabs ul li span {
+        display: block;
+        background: #eee;
+        padding: 6px 10px 5px;
+}
+#forum-topic-form .submit, #forum-topic-form select#topic_group_id {
+	margin: 10px;
+	float: right;
+}
+/* widgets */
+#content .bp-content-top .widget {
+	border:1px solid #E6E6E6;
+	padding-bottom: 10px;
+	margin-bottom: 15px;
+}
+#content .bp-content-top .widget h4 {
+	background: #f7f7f7;
+	padding: 5px 5px 5px 10px;
+}
+#content .bp-content-top .widget ul,
+	#content .bp-content-top .widget ol {
+	list-style-type: square;
+	margin: 10px 0 0;
+	padding: 0 10px 0 25px;
+}
+#content .bp-content-top .widget ul li {
+	display: inline-block;
+	float: none;
+}
+#content .bp-content-top .widget ul li a {
+	display: inline;
+	padding: 0px;
+}
+
+.widget ul#members-list {
+	list-style-type: none;
+	padding: 0px 5px 20px;
+}
+.widget ul.item-list li {
+	border-bottom: none;
+	padding-top: 5px;
+	clear: left;
+}
+.widget ul.item-list li .item { 
+	clear: none;
+}
+.widget .item-avatar img.avatar {
+	float: left;
+	border: none;
+	padding: 3px;
+}
+.widget .avatar-block {
+	overflow: auto;
+}
+
+div.bp-widget {
+        margin-bottom: 20px;
+        padding: 15px;
+}
+        div.bp-widget h4 {
+                background: #ddd;
+                padding: 5px 5px 5px 12px;
+                font-size: 1em;
+                font-weight: bold;
+                margin: -14px -14px 15px -14px;
+                clear: both;
+        }
+                /* "See All" links in widget headers */
+                div.bp-widget h4 span { float: right; }
+#content .bp-widget ul li h5 a { display: inline; }
+		
+	/* Horizonal listing of content, for example random friends or groups on the profile page */
+	ul.horiz-gallery {
+		list-style: none;
+		overflow: auto;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+		ul.horiz-gallery li {
+			float: left;
+			padding-right: 25px;
+			text-align: center;
+		}
+			ul.horiz-gallery li h5 { font-size: 1em; }
+
+	/* All buttons contain this class */
+	div.generic-button { 
+		background: none repeat scroll 0 0 #EEEEEE;
+		margin: 5px 0;
+		padding: 2px 5px;
+	}
+	div.generic-button a {
+		color: #838383;
+	}
+	
+	/* All pagination is contained within a div.pagination */
+	div.pagination {
+		overflow: auto;
+		width: 100%;
+		padding-bottom: 20px;
+	}
+		/* div.pagination-links holds the actual numbered page links */
+		div.pagination div.pagination-links {
+			float: right;
+		}
+			div.pagination div.pagination-links a {
+				padding: 3px 5px;
+			}
+
+		/* Pagination status text - "Viewing X to X of X" */
+		div.pagination div.pag-count {
+			float: left;
+			
+		}
+
+div#item-header div#item-actions {
+	float: right;
+	width: 20%;
+	margin: 0 0 15px 15px;
+	text-align: right;
+}
+div#item-header ul h5, div#item-header ul span, div#item-header ul hr {	display: none; }
+
+ul.item-list { width: 100%; }
+	ul.item-list li {
+		position: relative;
+		padding: 15px 0;
+		border-bottom: 1px solid #eaeaea;
+width:96%;
+	}
+		ul.single-line li { border: none; }
+		body.activity-permalink ul.item-list li { padding-top: 0; }
+
+		ul.item-list li img.avatar {
+			float: left;
+			margin: 0 10px 10px 0;
+		}
+		
+		ul.item-list li h4 a {
+			padding: 0;
+			display: inline;
+		}
+			
+		ul.item-list li div.item-title, ul.item-list li h4 {
+			font-weight: normal;
+			font-size: 1.2em;
+			width: 75%;
+			margin: 0;
+			display: inline;
+		}
+			ul.item-list li div.item-title span {
+				font-size: 1em;
+				color: #999;
+			}
+
+		ul.item-list li div.item-desc {
+			margin: 10px 0px 0px;
+			font-size: .9em;
+			color: #888;
+		}
+
+		ul.item-list li div.action {
+			position: absolute;
+			top: 15px;
+			right: 0;
+			text-align: right;
+		}
+
+		ul.item-list li div.meta {
+			margin-top: 10px;
+			font-size: .9em;
+		}
+
+		ul.item-list li h5 span.small {
+			font-weight: normal;
+			font-size: .9em;
+		}
+
+
+	/* #message -- This is used for all error/success message feedback */
+	div#message p {
+		background: none repeat scroll 0 0 #63DFD2;
+		border: 1px solid #F5F6F7;
+		font-weight: bold;
+		padding: 10px;
+	}
+		/* #message.error -- When there is an error, there is a .error class appended */
+		div#message.error p {
+			border-color: #dc7e7e;
+			background: #ffc9c9;
+		}
+
+		/* #message.info -- Help text or an information box has a .info class appended */
+		div#message.info p {
+			background: none repeat scroll 0%;
+			border:1px solid #E6E6E6;
+		}
+
+	/* .standard-form -- Most forms contain this class */
+	form.standard-form {
+		
+	}
+		form.standard-form label {
+			display: block;
+			font-weight: bold;
+			margin: 10px 0 5px 0;
+		}
+		
+		form.standard-form input[type=text] {
+
+		}
+
+		form.standard-form textarea {
+			width: 99%;
+		}
+
+	/* #invite-list -- Lists of friends with checkboxes always carry this ID */
+	div#invite-list {
+		border: 1px solid #ccc;
+		background: #f0f0f0;
+		padding: 5px;
+	}
+		div#invite-list ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		
+		div#invite-list input { width: auto; }
+
+	/* .ajax-loader -- All ajax loading indicators carry this class */
+	.ajax-loader {
+		background: url( ../images/ajax-loader.gif ) center left no-repeat !important;
+		padding: 8px;
+		display: none;
+	}
+
+.activity-list .activity-content span a { border: none; background: none; }
+div.activity-meta, div.activity-comments {
+	margin: 10px 0 10px 3px;
+	clear: left;
+}
+div.acomment-content .comment-header { display:none; }
+.internal-page div.activity-comments { 
+	width:auto;
+	margin:0 0 0 75px;
+	overflow:hidden;
+	position:relative;
+}
+.activity-list .activity-avatar img {
+	height:60px;
+	width:60px;
+}
+div.activity-comments ul li { border:medium none; }
+div.activity-comments ul li ul {
+	margin-left:25px;
+	margin-top:5px;
+}
+
+/***********************************************************************************
+ * Component specific styles 
+ */
+
+/*** Activity Streams ****************/
+
+ul#activity-list, ul#site-wide-stream, ul#activity-filter-links {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	width: 100%;
+}
+	ul#activity-list li blockquote, ul#site-wide-stream li blockquote {
+		background: #f0f0f0;
+		padding: 10px;
+		margin: 0px 0 25px 10px;
+	}
+		ul#activity-list li blockquote p, ul#site-wide-stream li blockquote p {
+			margin: 0;
+		}
+	
+	ul#activity-list span.time-since, ul#site-wide-stream span.time-since {
+		font-size: 0.9em;
+		color: #888;
+	}
+
+ul#activity-filter-links {
+	margin-bottom: 20px;
+}
+
+	ul#activity-filter-links li {
+		float: left;
+		margin-right: 10px;
+	}
+		ul#activity-filter-links li a {
+			background: #f0f0f0;
+			padding: 3px 8px;
+			display: block;
+		}
+div.activity-comments form div.ac-reply-avatar { float:left; }
+div.activity-comments form div.ac-reply-content { margin-left: 40px; }
+div.activity-comments form textarea {
+	height:15em;
+	padding:0;
+	width:98%;
+}
+/*** Profiles ****************/
+
+div#profile-name h1, #group-name h1 {
+	font-size: 3em;
+	margin: 10px 0 25px 0;
+	font-family: Georgia, times, serif;
+}
+
+/* Profile Field Display */
+table.profile-fields { 
+	width: 100%;
+}
+
+table.profile-fields td {
+	vertical-align: middle;
+	padding-left: 10px;
+}
+	table.profile-fields td p {
+		margin: 0;
+	}	
+
+	table.profile-fields td.label {
+		width: 20%;
+		font-weight: bold;
+	}
+	table.profile-fields tr.alt {  }
+
+/* Profile Field Edit */
+div.editfield label { 
+	display: block;
+	font-weight: bold;
+}
+
+div.editfield input, div.editfield textarea {
+	width: 60%;
+}
+
+div.checkbox input, div.radio input { width: auto; }
+div.checkbox label, div.radio label { 
+	display: inline; 
+	font-weight: normal;
+}
+
+span.label {
+	display: block;
+	font-weight: bold;
+}
+
+/* Profile Change Avatar */
+#avatar-upload-form p { margin-top: 20px; }
+
+
+/*** Messages ****************/
+
+table#message-threads {
+	width: 100%;
+}
+	table#message-threads tr {
+		border-bottom: 1px solid #ccc;
+		border-top: 1px solid #ccc;
+	}
+
+	table#message-threads td {
+		vertical-align: middle;
+		padding: 10px;
+	}
+
+/* View Thread Screen */
+
+/* .message-box -- holds each message in a thread */
+div.message-box {
+	border-bottom: 1px solid #ccc;
+	padding: 15px;
+	overflow: hidden;
+}
+	div.message-box .message-metadata {
+
+	}
+		div.message-box .message-metadata a {
+			
+		}
+		
+		div.message-box .message-metadata .avatar {
+			float: left;
+			margin-bottom: 10px;
+			margin-right: 10px;
+			width: 30px;
+		}
+		
+		div.message-box .message-metadata h3 {
+			font-size: 1.1em;
+		}
+	div.message-box .message-content {
+	}
+
+/*** Registration / Activation ****************/
+
+.register-section {
+	margin: 0 0 30px 0;
+}
+	#basic-details-section input, #basic-details-section textarea, 
+	#profile-details-section input, #profile-details-section textarea,
+	input#signup_blog_title {
+		width: 50% !important;
+	}
+		.register-section .checkbox input { width: auto !important; }
+		.register-section .radio input { width: auto !important; }
+		#basic-details-section input[type=password] { width: 25% !important; }
+
+	#blog-details-section input#signup_blog_url { width: 20%; }
+
+	.register-section span.label {
+		margin-top: 20px;
+	}
+	
+	.register-section div.error {
+		border: 1px solid #dc7e7e;
+		background: #ffc9c9;
+		padding: 5px;
+		width: 35%;
+		margin: 5px 0 10px 0;
+	}
+
+/*** Status Updates *****************************/
+
+#user-status {
+	margin-bottom: 20px;
+}
+
+#user-status p {
+	margin: 15px 0;
+	padding: 10px 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+	#user-status .time-since {
+		font-size: 0.9em;
+		color: #888;
+	}
+	
+	#user-status a#status-clear-status { 
+		color: red; 
+		font-size: 0.9em;
+	}
+	
+/*** Forums *************************************/
+table.forum {
+	width: 100%;
+}
+table.forum td { 
+	text-align: center; 
+}
+.internal-page table tr td, .internal-page table tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+.forum #content ul li .poster-meta a { 
+	display: inline;
+	background:#F7F7F7 none repeat scroll 0%;
+	border:1px solid #E6E6E6;
+	font-size: 1em;
+	padding: 3px 5px;
+	margin: 0 5px 0 0;
+}
+.forums #global-forum-topic-filters ul {
+	margin: 0.3em 0px 0.5em;
+	list-style-type: none;
+	height: 1.3em;
+}
+.forums #global-forum-topic-filters ul li {
+	float: left;
+	list-style-type: none;
+	padding: 0px 0.2em;
+}
+ul#forum-topic-list li {
+	position: relative;
+	min-height: 0;
+	padding-bottom: 0;
+	overflow: hidden;
+	width: 100%;
+}
+	ul#forum-topic-list li.sticky {
+		background: #ffffdd;
+	}
+	
+	ul#forum-topic-list li.closed a.topic-title {
+		background: url( ../images/closed_topic.png ) no-repeat center left;
+		padding: 0 0 0 20px;
+	}
+	
+	ul#forum-topic-list li span.latest { 
+		display: block;
+		margin-left: 50px;
+	}
+	
+	ul#forum-topic-list li div.admin-links, ul#topic-post-list li div.admin-links {
+		position: absolute;
+		top: 1em;
+		right: 1em;
+		background: #eee;
+		display: none;
+		padding: 0.1em 0.5em;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+		border-radius: 3px;
+		margin-left: 50px;
+		margin-bottom: 15px;
+		font-size: 11px;
+		color: #888;
+	}
+	ul#forum-topic-list li div.admin-links a, ul#topic-post-list li div.admin-links a {
+		display: inline;
+	}
+		ul#forum-topic-list li:hover div.admin-links, ul#topic-post-list:hover li div.admin-links { display: inline-block; }
+
+ul#topic-post-list li .poster-meta {
+	color: #888;
+}
+
+ul#topic-post-list li .poster-meta .avatar {
+	float: none;
+	margin: 0 0.3em 0 0;
+	vertical-align: middle;
+}
+
+ul#topic-post-list .post-content {
+	margin: 1em 0 0 14px;
+	border-left: 1px solid #ccc;
+	padding-left: 22px;
+}
+
+	ul#topic-post-list li#topic-meta h3 {
+		margin: 5px 0 0 0;
+		font-size: 20px;
+	}
+	
+ul#topic-post-list li input#submit_reply, input#submit_topic {
+	width: auto;
+}
+
+div.latest-post {
+	font-size: 0.9em;
+	color: #888;
+	margin-left: 70px;
+}
+
+	div#post-new-topic label, div#edit-topic label, div#edit-post lable div#post-topic-reply label {
+		display: block;
+		margin: 10px 0 3px 0;
+	}
+	
+	div#edit-post textarea {
+		height: 150px;
+		width: 98%;
+	}
+
+	input#topic_title { width: 80%; }
+	input#topic_tags { width: 60%; }
+	textarea#topic_text, textarea#reply_text { width: 98%; height: 150px; }
+
+	input#submit_topic, input#submit_reply {
+		display: block;
+		margin-top: 20px;
+	}
+
+/* Form Styling */
+	
+/** boxes **/
+
+#search-terms, #search-which, #whats-new-post-in, 
+#activity-filter-select select, .ac-input,
+.dir-search label input, .item-list-tabs ul li.filter select,
+#field_ids, #message_content, #subject, #send-notice, #send-to-input, #pass1, #pass2
+ {
+	background: #f7f7f7;
+	color: #000;
+	font-family: Arial, Tahoma, Verdana;	
+	font-size: 12px;
+	padding: 2px 0 1px 5px;
+	border: 1px solid #e6e6e6;
+	}
+.internal-page #content #item-body #invite-list ul li {
+	display: block;
+	float: none;
+}
+/* buttons */
+
+form .submit { 
+    float: right;
+    margin: 15px;
+}
+.forgot-password-link {
+	margin:0;
+	padding:0;
+}
+#search-submit, 
+#aw-whats-new-submit, #ac-form-submit, #groups_search_submit, #forums_search_submit, #members_search_submit,
+#profile-group-edit-submit,
+#send, .submit input, #ass-save {
+    background-color: #666666;
+    border: 1px solid #666666;
+    color: #FFFFFF;
+    cursor: pointer;
+   /* float: right; */
+    font-size: 11px;
+    padding: 3px 5px;
+    text-decoration: none;
+    text-transform: uppercase;
+	}
+#search-submit:hover, 
+#aw-whats-new-submit:hover, #ac-form-submit:hover, #groups_search_submit:hover, #forums_search_submit:hover, #members_search_submit:hover,
+#profile-group-edit-submit:hover,
+#send:hover, .submit input:hover, #ass-save:hover {
+	background: #000;
+}
+#search-submit:hover, #aw-whats-new-submit:hover, #ac-form-submit:hover  {
+	background: #333;
+	border: 1px solid #333;
+	}
+
+/* text areas */
+#whats-new, #reply_text, #topic_text, #topic_tags, #topic_title {
+background:#f7f7f7 none repeat scroll 0 0;
+border:1px solid #e6e6e6;
+color:#000;
+font-size:12px;
+width:100%;
+}
+
+/* override table issue in some child themes */
+#content img, #content p img {
+	max-width: none;
+}
+
+
+
+table.forum,
+#topic-post-list p {
+    font-size: 12px;
+    width: 100%;
+}
+
+table.forum .td-poster .avatar {
+	float: left;
+}
+
+.ass-email-type label input {
+	margin: 0 10px 0 0;
+}
+
+.ass-email-type .ass-email-explain {
+    margin-left: 23px;
+}
+
+.ass-email-type {
+    font-size: 11px;
+}
+
+.ass-email-type .ass-email-explain {
+    font-size: 10px;
+}
+
+.ass-sub-note {
+    clear: both;
+    float: left;
+    font-size: 10px;
+    margin-top: 20px;
+}
+
+
+
+
+
+form.standard-form {
+}
+
+form.standard-form select {
+    padding: 3px;
+}
+form.standard-form input[type="password"] {
+    margin-bottom: 5px;
+}
+form.standard-form label, form.standard-form span.label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 5px;
+}
+form.standard-form div.checkbox label, form.standard-form div.radio label {
+    color: #888888;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 5px 0 0;
+}
+form#sidebar-login-form.standard-form label {
+    margin-top: 5px;
+}
+
+form.standard-form #basic-details-section input[type="password"], form.standard-form #blog-details-section input#signup_blog_url {
+    width: 35%;
+}
+form#signup_form.standard-form input[type="text"], form#signup_form.standard-form textarea {
+    width: 90%;
+}
+form#signup_form.standard-form div.submit {
+    float: right;
+}
+div#signup-avatar img {
+    margin: 0 15px 10px 0;
+}
+form.standard-form textarea {
+    height: 120px;
+    width: 75%;
+}
+form.standard-form textarea#message_content {
+    height: 200px;
+}
+form#send-reply.standard-form textarea {
+    width: 97.5%;
+}
+form.standard-form p.description {
+    color: #888888;
+    font-size: 11px;
+    margin: 5px 0;
+}
+form.standard-form div.submit {
+    clear: both;
+    padding: 15px 0;
+}
+form.standard-form div.submit input {
+    margin-right: 15px;
+}
+form.standard-form div.radio ul {
+    list-style: disc outside none;
+    margin: 10px 0 15px 38px;
+}
+form.standard-form div.radio ul li {
+    margin-bottom: 5px;
+}
+form.standard-form a.clear-value {
+    display: block;
+    margin-top: 5px;
+    outline: medium none;
+}
+form.standard-form #basic-details-section, form.standard-form #blog-details-section, form.standard-form #profile-details-section {
+    float: left;
+    width: 48%;
+}
+form.standard-form #profile-details-section {
+    float: right;
+}
+form.standard-form #blog-details-section {
+    clear: left;
+}
+form.standard-form input:focus, form.standard-form textarea:focus, form.standard-form select:focus {
+    background: none repeat scroll 0 0 #FAFAFA;
+    color: #555555;
+}
+form#send-invite-form {
+    margin-top: 20px;
+}
+div#invite-list {
+    background: none repeat scroll 0 0 #F5F5F5;
+    border: 1px solid #E4E4E4;
+    border-radius: 3px 3px 3px 3px;
+    height: 400px;
+    margin: 10px 0;
+    overflow: scroll;
+    padding: 5px;
+    width: 160px;
+}
+table {
+    width: 100%;
+}
+table thead tr {
+    background: none repeat scroll 0 0 #EAEAEA;
+}
+table#message-threads {
+    margin: 0 -20px;
+    width: auto;
+}
+table.profile-fields {
+    margin-bottom: 20px;
+}
+div#sidebar table {
+    margin: 0 -16px;
+    width: 117%;
+}
+table tr td, table tr th {
+    padding: 8px;
+    vertical-align: middle;
+}
+table tr td.label {
+    border-right: 1px solid #EAEAEA;
+    font-weight: bold;
+    width: 25%;
+}
+table tr td.thread-info p {
+    margin: 0;
+}
+table tr td.thread-info p.thread-excerpt {
+    color: #888888;
+    font-size: 11px;
+    margin-top: 3px;
+}
+div#sidebar table td, table.forum td {
+    text-align: center;
+}
+table tr.alt {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+table.notification-settings {
+    margin-bottom: 20px;
+    text-align: left;
+}
+table.notification-settings th.icon, table.notification-settings td:first-child {
+    display: none;
+}
+table.notification-settings th.title {
+    width: 80%;
+}
+table.notification-settings .yes, table.notification-settings .no {
+    text-align: center;
+    width: 40px;
+}
+table.forum {
+    width: auto;
+}
+table.forum tr.sticky td {
+    background: none repeat scroll 0 0 #FFF9DB;
+    border-bottom: 1px solid #FFE8C4;
+    border-top: 1px solid #FFE8C4;
+}
+table.forum tr.closed td.td-title {
+    background-image: url("../images/closed.png");
+    background-position: 15px 50%;
+    background-repeat: no-repeat;
+    padding-left: 35px;
+}
+table.forum td p.topic-text {
+    color: #888888;
+    font-size: 11px;
+}
+table.forum tr > td:first-child, table.forum tr > th:first-child {
+    padding-left: 15px;
+}
+table.forum tr > td:last-child, table.forum tr > th:last-child {
+    padding-right: 15px;
+}
+table.forum tr th#th-title, table.forum tr th#th-poster, table.forum tr th#th-group, table.forum td.td-poster, table.forum td.td-group, table.forum td.td-title {
+    text-align: left;
+}
+table.forum td.td-freshness {
+    color: #888888;
+    font-size: 11px;
+}
+table.forum td img.avatar {
+    margin-right: 5px;
+}
+table.forum td.td-poster, table.forum td.td-group {
+    min-width: 130px;
+}
+table.forum th#th-title {
+    width: 40%;
+}
+table.forum th#th-postcount {
+    width: 1%;
+}
+form#whats-new-form {
+    border-bottom: 1px solid #F0F0F0;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+#item-body form#whats-new-form {
+    border: medium none;
+    margin-top: 20px;
+}
+.home-page form#whats-new-form {
+    border-bottom: medium none;
+    padding-bottom: 0;
+}
+form#whats-new-form h5 {
+    color: #888888;
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0 0 0 76px;
+    padding: 0 0 3px;
+}
+form#whats-new-form #whats-new-avatar {
+    float: left;
+}
+form#whats-new-form #whats-new-content {
+    margin-left: 54px;
+    padding-left: 22px;
+}
+form#whats-new-form #whats-new-textarea {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px inset #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+form#whats-new-form textarea {
+    border: medium none;
+    color: #555555;
+    font-family: inherit;
+    font-size: 14px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+form#whats-new-form #whats-new-options select {
+    max-width: 200px;
+}
+form#whats-new-form #whats-new-submit {
+    float: right;
+    margin: 0;
+}
+ul.activity-list li {
+    overflow: hidden;
+    padding: 20px 0 0;
+}
+ul.activity-list > li:first-child {
+    padding-top: 5px;
+}
+ul.activity-list li.has-comments {
+    padding-bottom: 20px;
+}
+.activity-list li.mini {
+    font-size: 11px;
+    min-height: 35px;
+    padding: 12px 0 0;
+    position: relative;
+}
+.activity-list li.mini div.activity-meta {
+    margin: 0;
+}
+.activity-list li.mini div.activity-meta a {
+    padding: 3px 8px;
+}
+.activity-list li.mini .activity-avatar img.avatar, .activity-list li.mini .activity-avatar img.FB_profile_pic {
+    height: 20px;
+    margin-left: 36px;
+    width: 20px;
+}
+.activity-list li.activity_comment .activity-avatar img.avatar, .activity-list li.activity_comment .activity-avatar img.FB_profile_pic {
+    height: 40px;
+    margin-left: 20px;
+    width: 40px;
+}
+body.activity-permalink .activity-list li .activity-avatar img.avatar, body.activity-permalink .activity-list li .activity-avatar img.FB_profile_pic {
+    height: 100px;
+    margin-left: 0;
+    width: 100px;
+}
+.activity-list li.mini .activity-content {
+    margin-right: 175px;
+}
+.activity-list li.mini .activity-content p {
+    float: left;
+    margin: 0;
+}
+.activity-list li.mini .activity-meta {
+    position: absolute;
+    right: 0;
+}
+body.activity-permalink .activity-list li.mini .activity-meta {
+    position: absolute;
+    right: 15px;
+}
+.activity-list li.mini .activity-comments {
+    clear: left;
+    font-size: 12px;
+    margin-top: 30px;
+}
+.activity-list li .activity-inreplyto {
+    background: url("../images/replyto_arrow.gif") no-repeat scroll 7px 0 transparent;
+    color: #888888;
+    font-size: 11px;
+    margin-bottom: 15px;
+    margin-left: 70px;
+    padding-left: 25px;
+}
+.activity-list li .activity-inreplyto > p {
+    display: inline;
+    margin: 0;
+}
+.activity-list li .activity-inreplyto blockquote, .activity-list li .activity-inreplyto div.activity-inner {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    display: inline;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+.activity-list .activity-avatar img {
+    height: 50px;
+    width: 50px;
+}
+body.activity-permalink .activity-list .activity-avatar img {
+    height: 100px;
+    width: 100px;
+}
+.activity-list .activity-content {
+    margin-left: 70px;
+}
+body.activity-permalink .activity-list li .activity-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    border-right: 1px solid #DDDDDD;
+    font-size: 16px;
+    line-height: 150%;
+    margin-left: 135px;
+    margin-right: 0;
+    min-height: 35px;
+    padding: 15px;
+}
+body.activity-permalink .activity-list li .activity-header > p {
+    background: url("../images/activity_arrow.gif") no-repeat scroll left top transparent;
+    height: 35px;
+    margin-bottom: 0;
+    margin-left: -35px;
+    padding: 5px 0 0 38px;
+}
+.activity-list .activity-content .activity-header, .activity-list .activity-content .comment-header {
+    color: #888888;
+    font-size: 11px;
+    line-height: 220%;
+}
+.activity-list .activity-content .activity-header img.avatar {
+    float: none !important;
+    margin: 0 5px -8px 0 !important;
+}
+/*
+.activity-list .activity-header a:first-child, span.highlight {
+    background: none repeat scroll 0 0 #EBF7FF;
+    border-bottom: 1px solid #A1DCFA;
+    border-radius: 4px 4px 4px 4px;
+    border-right: 1px solid #A1DCFA;
+    color: #059AE7;
+    margin-right: 3px;
+    padding: 3px 8px;
+    text-decoration: none;
+}
+*/
+.activity-list .activity-header a:first-child:hover {
+    background: none repeat scroll 0 0 #059AE7 !important;
+    color: #FFFFFF !important;
+}
+.activity-list .activity-content a:first-child:focus {
+    outline: medium none;
+}
+.activity-list .activity-content span.time-since {
+    color: #BBBBBB;
+}
+.activity-list .activity-content span.activity-header-meta a {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #AAAAAA;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+}
+.activity-list .activity-content span.activity-header-meta a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+.activity-list .activity-content .activity-inner, .activity-list .activity-content blockquote {
+    margin: 15px 0 15px 5px;
+    overflow: hidden;
+}
+body.activity-permalink .activity-content .activity-inner, body.activity-permalink .activity-content blockquote {
+    margin-top: 5px;
+}
+.activity-inner > .activity-inner {
+    margin: 0 !important;
+}
+.activity-inner > blockquote {
+    margin: 0 !important;
+}
+.activity-list .activity-content img.thumbnail {
+    border: 2px solid #EEEEEE;
+    float: left;
+    margin: 0 10px 5px 0;
+}
+.activity-list li.load-more {
+    background: none repeat scroll 0 0 #F0F0F0 !important;
+    border-bottom: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    border-right: 1px solid #DDDDDD;
+    font-size: 1.2em;
+    margin: 15px 0 !important;
+    padding: 10px 15px !important;
+    text-align: center;
+}
+.activity-list li.load-more a {
+    color: #555555;
+}
+div.activity-meta {
+    clear: left;
+    margin: 0 0 20px 3px;
+}
+.activity-list div.activity-meta a {
+    background: none repeat scroll 0 0 #F4F4F4;
+    border-bottom: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    border-right: 1px solid #DDDDDD;
+    color: #999999;
+    font-size: 11px;
+    margin-right: 3px;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+.activity-list div.activity-meta a.acomment-reply {
+    background: none repeat scroll 0 0 #FFF9DB;
+    border-bottom: 1px solid #FFE8C4;
+    border-right: 1px solid #FFE8C4;
+    color: #FFA200;
+}
+div.activity-meta a:focus {
+    outline: medium none;
+}
+div.activity-meta a:hover {
+    background: none repeat scroll 0 0 #AAAAAA;
+    border-color: #AAAAAA;
+    color: #FFFFFF;
+}
+div.activity-meta a.acomment-reply:hover {
+    background: none repeat scroll 0 0 #F7740A;
+    border-color: #F7740A;
+    color: #FFFFFF;
+}
+div.activity-comments {
+    margin: 0 0 0 75px;
+    overflow: hidden;
+    position: relative;
+    width: auto;
+}
+body.activity-permalink div.activity-comments {
+    background: none repeat scroll 0 0 transparent;
+    margin-left: 135px;
+    width: auto;
+}
+div.activity-comments > ul {
+    background: none repeat scroll 0 0 #F5F5F5;
+    border-radius: 4px 4px 4px 4px;
+    padding: 0 10px;
+}
+div.activity-comments ul, div.activity-comments ul li {
+    border: medium none;
+    list-style: none outside none;
+}
+div.activity-comments ul {
+    clear: left;
+}
+div.activity-comments ul li {
+    border-top: 2px solid #FFFFFF;
+    padding: 10px 0 0;
+}
+body.activity-permalink div.activity-comments ul li {
+    border-width: 1px;
+    padding: 10px 0 0;
+}
+div.activity-comments ul li p:last-child {
+    margin-bottom: 10px;
+}
+div.activity-comments > ul > li:first-child {
+    border-top: medium none;
+}
+div.activity-comments ul li:last-child {
+    margin-bottom: 0;
+}
+div.activity-comments ul li > ul {
+    margin-left: 20px;
+    margin-top: 0;
+}
+body.activity-permalink div.activity-comments ul li > ul {
+    margin-top: 15px;
+}
+div.activity-comments div.acomment-avatar img {
+    border-width: 2px !important;
+    float: left;
+    margin-right: 10px;
+}
+div.activity-comments div.acomment-content {
+    font-size: 11px;
+    margin-left: 39px;
+    margin-top: 5px;
+}
+div.acomment-content .time-since {
+    display: none;
+}
+div.acomment-content .activity-delete-link {
+    display: none;
+}
+div.acomment-content .comment-header {
+    display: none;
+}
+body.activity-permalink div.activity-comments div.acomment-content {
+    font-size: 14px;
+}
+div.activity-comments div.acomment-meta {
+    color: #888888;
+    font-size: 11px;
+}
+div.activity-comments form.ac-form {
+    background: none repeat scroll 0 0 #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    display: none;
+    margin: 10px 0 10px 33px;
+    padding: 8px;
+}
+div.activity-comments li form.ac-form {
+    margin-right: 15px;
+}
+div.activity-comments form.root {
+    margin-left: 0;
+}
+div.activity-comments div#message {
+    margin-bottom: 0;
+    margin-top: 15px;
+}
+div.activity-comments form.loading {
+    background-image: url("../images/ajax-loader.gif");
+    background-position: 2% 95%;
+    background-repeat: no-repeat;
+}
+div.activity-comments form .ac-textarea {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px inset #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+div.activity-comments form textarea {
+    border: medium none;
+    color: #555555;
+    font-family: inherit;
+    font-size: 11px;
+    height: 60px;
+    padding: 0;
+    width: 100%;
+}
+div.activity-comments form input {
+    margin-top: 5px;
+}
+div.activity-comments form div.ac-reply-avatar {
+    float: left;
+}
+div.ac-reply-avatar img {
+    border: 2px solid #FFFFFF !important;
+}
+div.activity-comments form div.ac-reply-content {
+    color: #888888;
+    font-size: 11px;
+    margin-left: 50px;
+    padding-left: 15px;
+}
+table#message-threads tr.unread td {
+    background: none repeat scroll 0 0 #FFF9DB;
+    border-bottom: 1px solid #FFE8C4;
+    border-top: 1px solid #FFE8C4;
+    font-weight: bold;
+}
+table#message-threads tr.unread td span.activity {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+li span.unread-count, tr.unread span.unread-count {
+    background: none repeat scroll 0 0 #DD0000;
+    border-radius: 3px 3px 3px 3px;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 2px 8px;
+}
+div.item-list-tabs ul li a span.unread-count {
+    color: #FFFFFF;
+    padding: 1px 6px;
+}
+div.messages-options-nav {
+    background: none repeat scroll 0 0 #EEEEEE;
+    font-size: 11px;
+    margin: 0 -20px;
+    padding: 5px 15px;
+    text-align: right;
+}
+
+div#message-thread div.alt {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+div#message-thread p#message-recipients {
+    margin: 10px 0 20px;
+}
+div#message-thread img.avatar {
+    float: left;
+    margin: 0 10px 0 0;
+    vertical-align: middle;
+}
+div#message-thread strong {
+    font-size: 16px;
+    margin: 0;
+}
+div#message-thread strong a {
+    text-decoration: none;
+}
+div#message-thread strong span.activity {
+    margin: 4px 0 0 10px;
+}
+div#message-thread div.message-metadata {
+    overflow: hidden;
+}
+div#message-thread div.message-content {
+    margin-left: 45px;
+}
+div#message-thread div.message-options {
+    text-align: right;
+}
+ul#topic-post-list {
+    width: auto;
+}
+ul#topic-post-list li {
+    padding: 15px;
+    position: relative;
+}
+ul#topic-post-list li.alt {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+ul#topic-post-list li div.poster-meta {
+    color: #888888;
+    margin-bottom: 10px;
+}
+ul#topic-post-list li div.post-content {
+    margin-left: 54px;
+}
+div.admin-links {
+    color: #888888;
+    font-size: 11px;
+    position: absolute;
+    right: 25px;
+    top: 15px;
+}
+div#topic-meta div.admin-links {
+    bottom: 0;
+    right: 0;
+    top: auto;
+}
+div#topic-meta {
+    padding: 5px 0;
+    position: relative;
+}
+div#topic-meta h3 {
+    font-size: 20px;
+}
+div#new-topic-post {
+    margin: 0;
+    padding: 1px 0 0;
+}
+
+.invite-anyone .left-menu, .group-create .left-menu {
+    float: left;
+    width: 250px;
+}
+
+.invite-anyone .main-column, .group-create .main-column, body.invite-anyone div#content .main-column body.group-create div#content .main-column {
+    margin-left: 265px !important;
+}
+
+.internal-page #content #invite-anyone-invite-list {
+	float: right;
+}
+.internal-page #content #invite-anyone-invite-list li {
+	clear: both;
+	overflow: hidden;
+}
+
+#member-list {
+	overflow: hidden;
+}

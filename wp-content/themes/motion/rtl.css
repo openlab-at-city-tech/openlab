@@ -1,0 +1,187 @@
+
+/************************************************
+* General elements *
+************************************************/
+body {
+	background-image: url(images/bodybg-rtl.jpg);
+	font-family: sans-serif;
+	direction:rtl;
+	unicode-bidi:embed;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-family: tahoma, verdana, sans-serif;
+}
+code {
+	font-family: "Bitstream Vera Sans Mono",Monaco,"Lucida Console",monospace;
+}
+dd {
+	padding-right: 1em;
+	padding-left:0;
+}
+input,textarea,select {
+	font-family: "Lucida Grande","Lucida Sans Unicode",Verdana,Arial,Helvetica,sans-serif;
+}
+
+/************************************************
+* General *
+************************************************/
+#wrapper {
+	text-align: right;
+}
+
+/************************************************
+* Header *
+************************************************/
+#top #topmenu {
+	float: right;
+}
+#top #topmenu li {
+	float: right;
+	margin: 0 0 .4em .4em;
+}
+#top #topmenu li a.rss {
+	background-position: right 2px;
+	padding-right: 17px;
+	padding-left: 0;
+}
+#top #search {
+	float: left;
+	text-align: left;
+}
+
+#header #logo {
+	float: right;
+}
+#header #logo img {
+	float: right;
+	margin: 4px 0 10px 10px;
+}
+#header #headerbanner {
+	float: left;
+	text-align: left;
+}
+#nav li {
+	float: right;
+	margin: 5px 5px 5px 0;
+}
+#nav li ul {
+	left:auto;
+	right:-9999px;
+}
+#nav li:hover ul,#nav li.sfhover ul {
+	right: auto;
+	left:auto;
+}
+
+/************************************************
+* Content *
+************************************************/
+#content {
+	float: right;
+}
+.postmetatop .categs {
+	float: right;
+	background-position: right 2px;
+	padding-right: 20px;
+	padding-left: 0;
+}
+.postmetatop .date {
+	float: left;
+	text-align: left;
+}
+.postmetatop .date span {
+	background-position: right;
+	padding-right: 20px;
+	padding-left: 0;
+}
+.postcontent ul,.postcontent ol {
+	padding: .4em 2em .5em 0;
+}
+.postmetabottom .tags {
+	float: right;
+	background-position: right 1px;
+	margin-right: 10px;
+	margin-left: 0;
+	padding-right: 20px;
+	padding-left: 0;
+}
+.postmetabottom .readmore {
+	float: left;
+	padding-left: 10px;
+	padding-right: 0;
+	text-align: left;
+}
+.postmetabottom .readmore span {
+	background: url(images/more-rtl.png) right 4px no-repeat;
+	padding-right: 17px;
+	padding-left: 0;
+}
+.postmetaauthor .authorpic {
+	float: right;
+}
+.postmetaauthor .authordesc {
+	float: left;
+}
+
+/************************************************
+* Comments *
+************************************************/
+#comments ul.commentlist li ul.children li {
+	margin: 20px 20px 0 0;
+}
+#comments img.avatar {
+	float: right;
+	margin: 0 0 0 20px;
+}
+#comments .reply a {
+	float: right;
+}
+#comments #respond p.subscribe-to-comments label {
+	margin-right: 4px;
+	margin-left: 0;
+}
+
+/************************************************
+* Sidebar *
+************************************************/
+#sidebar {
+	float: left;
+}
+}
+#sidebar ul ul ul li {
+	background-position: right 7px;
+	padding: 0 10px 0 0;
+	margin: 0 10px 0 0;
+}
+#sidebar img.avatar {
+	float: right;
+	padding: 0 5px 5px 15px;
+}
+
+/************************************************
+* Footer *
+************************************************/
+#footer .foot1 {
+	float: right;
+	margin: 10px 10px 0 0;
+}
+#footer .foot2 {
+	float: right;
+}
+#footer .foot3 {
+	float: right;
+}
+#footer h4 {
+	font-family: "Lucida Grande","Lucida Sans Unicode",Verdana,Arial,Helvetica,sans-serif;
+}
+#footer ul ul li {
+	background-position: right 7px;
+	padding: 0 10px 0 0;
+}
+#credits #creditsleft {
+	float: right;
+}
+#credits #creditsright {
+	float: left;
+	text-align: left;
+}

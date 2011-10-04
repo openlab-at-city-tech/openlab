@@ -1,0 +1,37 @@
+#bp-sr-table {
+	text-align: right;
+	margin-top: 30px;
+}
+
+#bp-sr-table th, #bp-sr-table td {
+	padding: 3px 10px;
+}
+
+#bp-sr-table th {
+	font-size: 1em;
+}
+
+#bp-sr-table tr:first-child th {
+	text-align: center;
+}
+
+#bp-sr-table .padder {
+	height: 20px;
+}
+
+#bp-sr-table td {
+	border: 1px solid #666;
+	margin: 0;
+	min-width: 100px;
+}
+
+#bp-sr-table .bp-sr-type-label th {
+	border-bottom: 1px solid #666;
+	font-style: italic;
+	text-align: left;
+	margin-top: 10px !important;
+	padding: 20px 0 5px 12px;
+}
+
+
+

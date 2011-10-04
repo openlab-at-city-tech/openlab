@@ -1,0 +1,765 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Vigilance WordPress Theme\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-17 11:41-0700\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Drew Strojny <info@thethemefoundry.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: 404.php:2
+msgid "404: Page Not Found"
+msgstr ""
+
+#: 404.php:4
+msgid "We are terribly sorry, but the URL you typed no longer exists. It might have been moved or deleted, or perhaps you mistyped it. We suggest searching the site:"
+msgstr ""
+
+#: archive.php:4
+#, php-format
+msgid "Posts from the\t&#8216;%s&#8217; Category"
+msgstr ""
+
+#: archive.php:6
+#, php-format
+msgid "Posts tagged &#8216;%s&#8217;"
+msgstr ""
+
+#: archive.php:8
+#: archive.php:10
+#: archive.php:12
+msgid "Archive for"
+msgstr ""
+
+#: archive.php:8
+msgid "F jS, Y"
+msgstr ""
+
+#: archive.php:10
+msgid "F, Y"
+msgstr ""
+
+#: archive.php:12
+msgid "Y"
+msgstr ""
+
+#: archive.php:14
+#, php-format
+msgid "Posts by %s"
+msgstr ""
+
+#: archive.php:16
+msgid "Blog Archives"
+msgstr ""
+
+#: archive.php:18
+msgid "comment"
+msgstr ""
+
+#: archive.php:22
+#: search.php:8
+msgid "n.j.y"
+msgstr ""
+
+#: archive.php:27
+#: index.php:26
+#: search.php:13
+msgid "&laquo; Older Entries"
+msgstr ""
+
+#: archive.php:28
+#: index.php:27
+#: search.php:14
+msgid "Newer Entries &raquo;"
+msgstr ""
+
+#: comments.php:7
+msgid "This post is password protected. Enter the password to view comments."
+msgstr ""
+
+#: comments.php:16
+msgid "No Responses"
+msgstr ""
+
+#: comments.php:16
+msgid "One Response"
+msgstr ""
+
+#: comments.php:16
+msgid "% Responses"
+msgstr ""
+
+#: comments.php:18
+msgid "Leave One"
+msgstr ""
+
+#: comments.php:18
+msgid "leave one &rarr;"
+msgstr ""
+
+#: comments.php:27
+msgid "&laquo; Older Comments"
+msgstr ""
+
+#: comments.php:28
+msgid "Newer Comments &raquo;"
+msgstr ""
+
+#: comments.php:31
+msgid "Trackbacks and Pingbacks"
+msgstr ""
+
+#: comments.php:37
+#: comments.php:48
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php:43
+msgid "No comments yet"
+msgstr ""
+
+#: comments.php:59
+msgid "Leave a Reply"
+msgstr ""
+
+#: comments.php:61
+msgid "You must be"
+msgstr ""
+
+#: comments.php:61
+msgid "logged in"
+msgstr ""
+
+#: comments.php:61
+msgid "to post a comment."
+msgstr ""
+
+#: comments.php:66
+msgid "Logged in as"
+msgstr ""
+
+#: comments.php:66
+msgid "Log out &raquo;"
+msgstr ""
+
+#: comments.php:68
+msgid "Name:"
+msgstr ""
+
+#: comments.php:68
+#: comments.php:69
+msgid "(required)"
+msgstr ""
+
+#: comments.php:69
+msgid "Email:"
+msgstr ""
+
+#: comments.php:70
+msgid "Website:"
+msgstr ""
+
+#: comments.php:72
+msgid "Comment:"
+msgstr ""
+
+#: comments.php:73
+msgid "<strong>Note:</strong> You can use basic XHTML in your comments. Your email address will <strong>never</strong> be published."
+msgstr ""
+
+#: comments.php:74
+msgid "Subscribe to this comment feed via RSS"
+msgstr ""
+
+#: comments.php:79
+msgid "Submit Comment"
+msgstr ""
+
+#: footer.php:3
+msgid "Copyright"
+msgstr ""
+
+#: header.php:9
+msgid "Page Not Found |"
+msgstr ""
+
+#: header.php:11
+#: search.php:3
+#: search.php:17
+#, php-format
+msgid "Search results for '%s'"
+msgstr ""
+
+#: header.php:41
+msgid "Skip to content"
+msgstr ""
+
+#: header.php:50
+msgid "Home"
+msgstr ""
+
+#: index.php:7
+#: single.php:7
+msgid "F j"
+msgstr ""
+
+#: index.php:8
+msgid "Leave a comment"
+msgstr ""
+
+#: index.php:8
+msgid "1 Comment"
+msgstr ""
+
+#: index.php:8
+msgid "% Comment"
+msgid_plural "% Comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: index.php:11
+msgid "tags: "
+msgstr ""
+
+#: index.php:12
+#: single.php:11
+#, php-format
+msgid "by %s"
+msgstr ""
+
+#: index.php:16
+msgid "read more..."
+msgstr ""
+
+#: index.php:17
+#: page.php:7
+#: single.php:16
+msgid "Edit this"
+msgstr ""
+
+#: index.php:21
+#: single.php:20
+msgid "from &rarr;"
+msgstr ""
+
+#: search.php:19
+#, php-format
+msgid "Sorry your search for \"%s\" did not turn up any results. Please try again."
+msgstr ""
+
+#: searchform.php:1
+#: searchform.php:5
+msgid "Search"
+msgstr ""
+
+#: searchform.php:4
+msgid "type and press enter"
+msgstr ""
+
+#: sidebar-feedbox.php:2
+msgid "Get Free Updates"
+msgstr ""
+
+#: sidebar-feedbox.php:4
+msgid "Get the latest and the greatest news delivered for free to your reader or your inbox:"
+msgstr ""
+
+#: sidebar-feedbox.php:5
+msgid "RSS Feed"
+msgstr ""
+
+#: sidebar-feedbox.php:6
+msgid "Email Updates"
+msgstr ""
+
+#: sidebar-feedbox.php:8
+msgid "Twitter"
+msgstr ""
+
+#: sidebar.php:15
+msgid "Recent Articles"
+msgstr ""
+
+#: functions/comments.php:26
+msgid "permalink"
+msgstr ""
+
+#: functions/comments.php:32
+msgid "<em><strong>Please Note:</strong> Your comment is awaiting moderation.</em>"
+msgstr ""
+
+#: functions/sidebars.php:4
+msgid "Wide Sidebar"
+msgstr ""
+
+#: functions/sidebars.php:12
+msgid "Left Sidebar"
+msgstr ""
+
+#: functions/sidebars.php:20
+msgid "Right Sidebar"
+msgstr ""
+
+#: functions/vigilance-admin.php:37
+msgid "The <code>/wp-content/uploads</code> folder is not writable. Try changing the permissions. <a href=\"http://codex.wordpress.org/Changing_File_Permissions\">Learn how to change permissions &rarr;</a>"
+msgstr ""
+
+#: functions/vigilance-admin.php:51
+msgid "There was an error uploading the file. Please try again."
+msgstr ""
+
+#: functions/vigilance-admin.php:71
+msgid "There was an error, please remove the logo and try again."
+msgstr ""
+
+#: functions/vigilance-admin.php:108
+msgid " settings saved!"
+msgstr ""
+
+#: functions/vigilance-admin.php:109
+msgid " settings reset."
+msgstr ""
+
+#: functions/vigilance-admin.php:113
+msgid "Options"
+msgstr ""
+
+#: functions/vigilance-admin.php:114
+msgid "Need help with these options?"
+msgstr ""
+
+#: functions/vigilance-admin.php:114
+msgid "Read the tutorials"
+msgstr ""
+
+#: functions/vigilance-admin.php:114
+msgid "or visit the <a href=\"http://thethemefoundry.com/forums/\">support forums.</a>"
+msgstr ""
+
+#: functions/vigilance-admin.php:126
+#: functions/vigilance-admin.php:252
+msgid "Save changes"
+msgstr ""
+
+#: functions/vigilance-admin.php:178
+msgid "Choose your image"
+msgstr ""
+
+#: functions/vigilance-admin.php:183
+msgid "Remove"
+msgstr ""
+
+#: functions/vigilance-admin.php:186
+msgid "Preview logo"
+msgstr ""
+
+#: functions/vigilance-admin.php:187
+msgid "Cannot locate your logo image, it may have been moved or renamed. Please remove and try uploading again."
+msgstr ""
+
+#: functions/vigilance-admin.php:208
+msgid "show color picker"
+msgstr ""
+
+#: functions/vigilance-admin.php:208
+msgid "hide color picker"
+msgstr ""
+
+#: functions/vigilance-admin.php:257
+msgid "Save all changes"
+msgstr ""
+
+#: functions/vigilance-admin.php:263
+msgid "Reset all options"
+msgstr ""
+
+#: functions/vigilance-extend.php:29
+msgid "Custom Logo Image <span>insert your custom logo image in the header</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:33
+msgid "Enable custom logo image"
+msgstr ""
+
+#: functions/vigilance-extend.php:35
+msgid "Check to use a custom logo in the header."
+msgstr ""
+
+#: functions/vigilance-extend.php:40
+msgid "Prefer FTP? Specify a file name."
+msgstr ""
+
+#: functions/vigilance-extend.php:42
+#, php-format
+msgid "Choose an image from your computer or specify any image file name you have uploaded to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:48
+msgid "Logo image <code>&lt;alt&gt;</code> tag"
+msgstr ""
+
+#: functions/vigilance-extend.php:50
+msgid "Specify the <code>&lt;alt&gt;</code> tag for your logo image."
+msgstr ""
+
+#: functions/vigilance-extend.php:55
+msgid "Display tagline"
+msgstr ""
+
+#: functions/vigilance-extend.php:58
+msgid "Check to show your tagline below your logo."
+msgstr ""
+
+#: functions/vigilance-extend.php:63
+msgid "Navigation <span>control your top navigation menu</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:67
+msgid "Use WordPress menus"
+msgstr ""
+
+#: functions/vigilance-extend.php:69
+msgid "Check this box to use the built in WordPress menus (overrides all other navigation options). This option <strong>requires WordPress 3.0 or higher</strong>."
+msgstr ""
+
+#: functions/vigilance-extend.php:74
+msgid "Hide all pages"
+msgstr ""
+
+#: functions/vigilance-extend.php:76
+msgid "Check this box to hide all pages."
+msgstr ""
+
+#: functions/vigilance-extend.php:81
+msgid "Exclude specific pages"
+msgstr ""
+
+#: functions/vigilance-extend.php:83
+msgid "The page ID of pages you do not want displayed in your navigation menu. Use a comma-delimited list, eg. 1,2,3."
+msgstr ""
+
+#: functions/vigilance-extend.php:88
+msgid "Hide all categories"
+msgstr ""
+
+#: functions/vigilance-extend.php:90
+msgid "Check this box to hide all categories."
+msgstr ""
+
+#: functions/vigilance-extend.php:95
+msgid "Exclude specific categories"
+msgstr ""
+
+#: functions/vigilance-extend.php:97
+msgid "The category ID of pages you do not want displayed in your navigation menu. Use a comma-delimited list, eg. 1,2,3."
+msgstr ""
+
+#: functions/vigilance-extend.php:102
+msgid "Hide home navigation menu item"
+msgstr ""
+
+#: functions/vigilance-extend.php:104
+msgid "Check this box if you are using a static page as your homepage instead of your blog (the default). The extra <em>Home</em> menu item will be removed."
+msgstr ""
+
+#: functions/vigilance-extend.php:109
+msgid "Color Scheme <span>customize your color scheme</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:113
+msgid "Customize colors"
+msgstr ""
+
+#: functions/vigilance-extend.php:115
+msgid "If enabled your theme will use the layouts and colors you choose below."
+msgstr ""
+
+#: functions/vigilance-extend.php:119
+#: functions/vigilance-extend.php:309
+msgid "Disabled"
+msgstr ""
+
+#: functions/vigilance-extend.php:120
+#: functions/vigilance-extend.php:310
+msgid "Enabled"
+msgstr ""
+
+#: functions/vigilance-extend.php:123
+msgid "Background color"
+msgstr ""
+
+#: functions/vigilance-extend.php:125
+#: functions/vigilance-extend.php:132
+#: functions/vigilance-extend.php:139
+#: functions/vigilance-extend.php:146
+msgid "Use hex values and be sure to include the leading #."
+msgstr ""
+
+#: functions/vigilance-extend.php:130
+msgid "Border color"
+msgstr ""
+
+#: functions/vigilance-extend.php:137
+msgid "Link color"
+msgstr ""
+
+#: functions/vigilance-extend.php:144
+msgid "Link hover color"
+msgstr ""
+
+#: functions/vigilance-extend.php:151
+msgid "Disable hover background images"
+msgstr ""
+
+#: functions/vigilance-extend.php:153
+msgid "Check this box if you use custom link colors and do not want the default red showing when a user hovers over the comments bubble or the sidebar menu items."
+msgstr ""
+
+#: functions/vigilance-extend.php:158
+msgid "Top Banner Image <span>control your top banner image state</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:162
+msgid "Banner state"
+msgstr ""
+
+#: functions/vigilance-extend.php:164
+#, php-format
+msgid "Add your images to the top banner rotation by uploading them to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:168
+#: functions/vigilance-extend.php:254
+msgid "Rotating images"
+msgstr ""
+
+#: functions/vigilance-extend.php:169
+#: functions/vigilance-extend.php:255
+#: functions/vigilance-extend.php:275
+msgid "Static image"
+msgstr ""
+
+#: functions/vigilance-extend.php:170
+#: functions/vigilance-extend.php:257
+msgid "Page or post specific"
+msgstr ""
+
+#: functions/vigilance-extend.php:171
+#: functions/vigilance-extend.php:203
+#: functions/vigilance-extend.php:256
+#: functions/vigilance-extend.php:289
+msgid "Custom code"
+msgstr ""
+
+#: functions/vigilance-extend.php:172
+#: functions/vigilance-extend.php:258
+msgid "Do not show an image"
+msgstr ""
+
+#: functions/vigilance-extend.php:175
+msgid "Banner height"
+msgstr ""
+
+#: functions/vigilance-extend.php:177
+msgid "The height of your image. The width is fixed at 596px."
+msgstr ""
+
+#: functions/vigilance-extend.php:182
+msgid "Banner <code>&lt;alt&gt;</code> tag"
+msgstr ""
+
+#: functions/vigilance-extend.php:184
+msgid "Specify the <code>&lt;alt&gt;</code> tag for your banner image(s). Will default to your blog title if left blank."
+msgstr ""
+
+#: functions/vigilance-extend.php:189
+msgid "Static image name"
+msgstr ""
+
+#: functions/vigilance-extend.php:191
+#, php-format
+msgid "Set the <em>Banner State</em> to \"Static Image\" and upload your image to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:196
+msgid "Home image name"
+msgstr ""
+
+#: functions/vigilance-extend.php:198
+#, php-format
+msgid "To replace your home top banner with a specific image upload it to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:205
+msgid "Replace your top banner with custom code. The <em>Banner State</em> must be set to \"Custom code\" for this to work."
+msgstr ""
+
+#: functions/vigilance-extend.php:213
+msgid "Alert Box <span>toggle your custom alert box</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:217
+msgid "Alert Box on/off switch"
+msgstr ""
+
+#: functions/vigilance-extend.php:219
+msgid "Toggle the alert box on or off."
+msgstr ""
+
+#: functions/vigilance-extend.php:223
+msgid "Off"
+msgstr ""
+
+#: functions/vigilance-extend.php:224
+msgid "On"
+msgstr ""
+
+#: functions/vigilance-extend.php:227
+msgid "Alert Title"
+msgstr ""
+
+#: functions/vigilance-extend.php:229
+msgid "The heading for your alert."
+msgstr ""
+
+#: functions/vigilance-extend.php:234
+msgid "Alert Message"
+msgstr ""
+
+#: functions/vigilance-extend.php:236
+msgid "A special alert message that is shown on the homepage of your blog."
+msgstr ""
+
+#: functions/vigilance-extend.php:244
+msgid "Sidebar Image <span>control your sidebar image state</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:248
+msgid "Image state"
+msgstr ""
+
+#: functions/vigilance-extend.php:249
+#, php-format
+msgid "Add your images to the sidebar rotation by uploading them to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:261
+msgid "Image height"
+msgstr ""
+
+#: functions/vigilance-extend.php:263
+msgid "The height of your image. The width is fixed at 300px."
+msgstr ""
+
+#: functions/vigilance-extend.php:268
+msgid "Image <code>&lt;alt&gt;</code> tag"
+msgstr ""
+
+#: functions/vigilance-extend.php:270
+msgid "The <code>&lt;alt&gt;</code> tag for your sidebar image(s). Will default to your blog title if left blank."
+msgstr ""
+
+#: functions/vigilance-extend.php:277
+#, php-format
+msgid "Set the <em>Image State</em> to \"Static Image\" and upload your image to the %s directory."
+msgstr ""
+
+#: functions/vigilance-extend.php:282
+msgid "Image link"
+msgstr ""
+
+#: functions/vigilance-extend.php:284
+msgid "Define a hyperlink for your sidebar image. If left empty the anchor tags will not be included."
+msgstr ""
+
+#: functions/vigilance-extend.php:291
+msgid "Replace your sidebar image with custom code. The <em>Image State</em> must be set to \"Custom code\" for this to work."
+msgstr ""
+
+#: functions/vigilance-extend.php:299
+msgid "Sidebar Feed Box <span>share feeds and updates with your readers</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:303
+msgid "Feed box state"
+msgstr ""
+
+#: functions/vigilance-extend.php:304
+msgid "Enable or disable the feed box located in the sidebar."
+msgstr ""
+
+#: functions/vigilance-extend.php:313
+msgid "Feed box title text"
+msgstr ""
+
+#: functions/vigilance-extend.php:315
+msgid "Header for your feed box."
+msgstr ""
+
+#: functions/vigilance-extend.php:320
+msgid "Feed box intro text"
+msgstr ""
+
+#: functions/vigilance-extend.php:322
+msgid "Enter your feed intro text here."
+msgstr ""
+
+#: functions/vigilance-extend.php:330
+msgid "<a href=\"http://feedburner.google.com\">Feedburner</a> email updates link"
+msgstr ""
+
+#: functions/vigilance-extend.php:332
+msgid "Enter your feed email link here. Do not paste the provided link code, extract and paste the URL only."
+msgstr ""
+
+#: functions/vigilance-extend.php:340
+msgid "Enable Twitter"
+msgstr ""
+
+#: functions/vigilance-extend.php:342
+msgid "Hip to Twitter? Check this box."
+msgstr ""
+
+#: functions/vigilance-extend.php:347
+msgid "Twitter updates link"
+msgstr ""
+
+#: functions/vigilance-extend.php:349
+msgid "Enter your twitter link here."
+msgstr ""
+
+#: functions/vigilance-extend.php:353
+msgid "Footer <span>add a copyright notice and tracking codes</span>"
+msgstr ""
+
+#: functions/vigilance-extend.php:357
+msgid "Copyright notice"
+msgstr ""
+
+#: functions/vigilance-extend.php:359
+msgid "Your name or the name of your business."
+msgstr ""
+
+#: functions/vigilance-extend.php:364
+msgid "Stats code"
+msgstr ""
+
+#: functions/vigilance-extend.php:366
+#, php-format
+msgid "If you would like to use Google Analytics or any other tracking script in your footer just paste it here. The script will be inserted before the closing %s tag."
+msgstr ""
+
+#: functions/vigilance-extend.php:435
+msgid "Top Navigation"
+msgstr ""
+

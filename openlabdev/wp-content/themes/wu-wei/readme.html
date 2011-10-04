@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Wu Wei Manual</title>
+
+<style type="text/css">
+body {background-color:#fff; font-size:75%; color:#999; font-family:"Helvetica Neue", Arial, Helvetica, sans-serif; text-align:center; padding-top:1.5em;}
+#content {width:50em; margin:0px auto; text-align:left;}
+a:link, a:visited {color:#000;}
+html>body {font-size:12px;}
+h1 {font-size:4em; text-transform: uppercase; color:#414141;}
+h2 {font-size:2em; color:#414141;}
+p {font-size:1.5em; margin-top:1.5em;}
+ul, ol {font-size:1.5em;}
+small {font-size:0.667em;}
+blockquote {font: italic 1.5em georgia; color:#666;}
+strong {color:#333;}
+</style>
+
+</head>
+
+<body id="top">
+
+<div id="content">
+
+	<h1>Wu Wei Manual</h1>
+
+	<p><small>Last updated on June 5th, 2009</small></p>
+
+	<ol>
+		<li><a href="#About">About</a></li>
+		<li><a href="#Installation">Installation</a></li>
+		<li><a href="#Special-Formatting">Special Formatting</a></li>
+		<li><a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+		<li><a href="#Support">Support</a></li>
+		<li><a href="#Special-Thanks">Special Thanks</a></li>
+	</ol>
+
+	<h2 id="About">About</h2>
+
+	<p>Wu Wei is a Wordpress theme that was created with clean, modern, minimalism in mind. Information is presented in a logical manner, without any superfluous elements getting in the way. Just like the Taoist concept of <a href="http://en.wikipedia.org/wiki/Wu_wei">wu wei</a>, it&#146;s knowing when to act, and knowing when not to act.</p>
+
+	<p><strong>Features:</strong></p>
+
+	<ul>
+		<li>Wordpress 2.7+ compatible</li>
+		<li>Two colours schemes (light and dark)</li>
+		<li>Widget enabled sidebar (or in this case, a bottom bar)</li>
+		<li>Supports threaded comments</li>
+		<li>SEO Optimized</li>
+		<li><strong>Em based layout (!)</strong> (scales both horizontally and vertically)</li>
+		<li>Validates as <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fprojects.equivocality.com%2Fwu-wei%2F">XHTML Strict</a> and <a href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fprojects.equivocality.com%2Fwu-wei%2F">CSS Level 2.1</a></li>
+		<li>Renders correctly in most major browsers. (Tested in Firefox 3+, Internet Explorer 6.0, Internet Explorer 7.0, Safari 3.0, and Google Chrome).</li>
+		<li>GPL-licensed</li>
+	</ul>
+
+	<p><a href="#top">Back to Top</a></p>
+
+	<h2 id="Installation">Installation</h2>
+
+	<p>Wu Wei is installed like a regular Wordpress theme: upload the entire wu-wei folder to your wp-content/themes directory. Then login into the Wordpress administration panel, go to &ldquo;Themes&rdquo; link under &ldquo;Appearance&rdquo;, and activate Wu Wei. If you have any trouble, you can use the instructions in the Wordpress codex <a href="http://codex.wordpress.org/Using_Themes#Adding_New_Themes">here</a>.</p>
+
+	<p><a href="#top">Back to Top</a></p>
+
+	<h2 id="Special-Formatting">Special Formatting</h2>
+
+	<p>This theme is based on principles of a grid system. You can break out of the grid with css declarations &ldquo;pull-1&rdquo; and &ldquo;pull-2&rdquo;, as seen in <a href="http://projects.equivocality.com/wu-wei/2009/05/20/breaking-out-of-the-grid/">this entry</a>.</p>
+
+	<p>You can also change the colour scheme of Wu Wei, by going to the &ldquo;Wu Wei&rdquo; link under the &ldquo;Appearance&rdquo; section of the Wordpress administration panel. The default is &ldquo;light&rdquo;.</p>
+
+	<p><a href="#top">Back to Top</a></p>
+
+	<h2 id="Frequently-Asked-Questions">Frequently Asked Questions</h2>
+
+	<blockquote>&ldquo;Jeff, how do I get those fancy grey page markers at the top of the menu in the header like you do <a href="http://projects.equivocality.com/wu-wei/archives/">here</a>?&rdquo;</blockquote>
+
+	<p>Easy! Just add the code &lt;?php if(is_page(&#39;archives&#39;)) {echo &#39;class=&quot;selected&quot;&#39;;} ?&gt; in the anchor (if the link is for &ldquo;archives&rdquo;). You'll need to have "nice" permalinks enabled for this to work. Otherwise, you can just use the page_id instead of the page name.</p>
+
+	<blockquote>&ldquo;Ordered/unordered lists in a comment aren't displaying correctly!&rdquo;</blockquote>
+
+	<p>I believe this is an inherent design flaw introduced with threaded comments in Wordpress 2.7. Since comment threads themselves are lists, there is no way to separate a <strong>list in a comment</strong>, and a <strong>comment that's a list item</strong> (aside from introducing extra css declarations). There probably won't be any support for this, unless the core Wordpress code is changed.</p>
+
+	<p><a href="#top">Back to Top</a></p>
+
+	<h2 id="Support">Support</h2>
+
+	<p>Feel free to <a href="http://equivocality.com/about#contact">contact me</a> for feedback, feature requests, or support.</p>
+
+	<p><a href="#top">Back to Top</a></p>
+
+	<h2 id="Special-Thanks">Special Thanks</h2>
+
+	<p>This theme is dedicated to Michael Babin, my devoted and modest Tai Chi Chuan teacher, who helps me improve myself every week, and, using Tai Chi applications, continues to teach me to be patient and follow the principle of wu wei.</p>
+
+	<p>And a big thank you to you for using Wu Wei!</p>
+
+	<p><a href="#top">Back to Top</a></p>
+
+</div>
+
+</body>
+
+</html>

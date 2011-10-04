@@ -1,0 +1,1344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Weaver Theme</title>
+  <style type="text/css">
+<!--
+body {
+	background: #eeeeee;
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0; /* this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+	color: #000000;
+	text-align: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	background-color: #F5F5DC;
+}
+#container {
+	background-color: #00CC00;
+}
+#mainContent {
+	background-color: #FFFFCD;
+}
+
+.oneColFixCtr #container {
+	width: 750px;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
+	background: #FFFFCD;
+	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
+	border: 1px solid #000000;
+	text-align: left; /* this overrides the text-align: center on the body element. */
+}
+.oneColFixCtr #mainContent {
+	padding: 0 20px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+	font-size:12px;
+}
+h3 {
+	font-size: medium;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: underline;
+}
+h2 {
+	font-size: large;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: underline;
+	margin-top: 40pt;
+}
+.codebox {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 10px;
+	font-style: normal;
+	background-color: #E8E8E8;
+	margin: 10px;
+	padding: 4px;
+	border: 1px solid #333333;
+	color: #000000;
+	width: 80%;
+}
+h1 {
+	font-size: x-large;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: underline;
+}
+.attrs {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color:#000000;
+	text-decoration: none;
+}
+.css {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 9pt;
+	font-style: normal;
+}
+.box {
+	color: #000000;
+	text-decoration: none;
+	margin: 5px;
+	padding: 5px;
+	border: thin solid #000000;
+}
+.nospace {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.style3 {font-family: "Courier New", Courier, monospace}
+.style4 {font-family: monospace}
+.style5 {font-size: 9px}
+.style6 {
+	color: #990000;
+	font-style: italic;
+}
+-->
+  </style>
+</head>
+<body class="oneColFixCtr">
+<div id="container">
+<div id="mainContent">
+<a name="top" id="top"></a>
+<h2><b>Weaver Theme Documentation -- Version 2.2</b></h2>
+<h4><a href="#release_notes_2_2">See Version 2.2 Release Notes for important new features and changes.</a></h4>
+<p>Weaver 2.2 has a few changes from 2.0, and is virtually the same as 2.1. Probably the most significant in a change in the Admin interface to put related sets of Main and Advanced on separate tabs. Also include is support for the new Weaver Plus premium plugin, which adds many new features to Weaver. Other changes are listed in the release notes.</p>
+<h3>Table of Contents</h3>
+<ul>
+  <li><a href="#get_started">How to get started</a></li>
+  <li><a href="#DesignHints">Design Hints</a></li>
+  <li><a href="#homepage">All About Your Site's Home Page</a></li>
+  <li><a href="#PredefinedThemes">Weaver Predefined Sub-Themes</a></li>
+  <li><a href="#MainOptions">Weaver Main Options</a><ul><li><a href="#GenApp">General Appearance</a></li>
+  <li><a href="#HeaderOpt">Header Options</a></li>
+  <li><a href="#FooterOpt">Footer Options</a></li>
+  <li><a href="#ContentAreas">Content Areas</a></li>
+  <li><a href="#PPSpecifics">Post Page Specifics</a></li>
+  <ul>
+  <li><a href="#FeaturedImage">The Featured Image</a></li>
+  </ul>
+  <li><a href="#WidgetAreas">Widget Areas</a></li>
+  </ul>
+  </li>
+    <li><a href="#AdvancedOptions">Weaver Advanced Options</a></li>
+    <li><a href="#SaveRestore">Save/Restore Themes</a></li>
+    <li><a href="#PageTemplates">Weaver Page Templates</a></li>
+  <ul>
+  <li><a href="#PerPostTemplate">Settings for "Page with Posts" Template</a></li>
+  </ul>
+  <li><a href="#editstyling">Post/Page Editor Styling</a>
+  <li><a href="#raw_html">Entering Raw HTML and Scripts </a>
+  <li><a href="#post_formats">Post Formats </a>
+  <li><a href="#PerPage">Per Page and Per Post Options</a>
+      <ul>
+	<li><a href="#perpoststyle">Per Post Style</a></li>
+        <li><a href="#shortcodes">Weaver Shortcodes</a></li>
+        </ul>
+  <li><a href="#CustomMenus">Custom Menus</a></li>
+  <li><a href="#plugins">Built-in Support for Other Plugins</a></li>
+  <li><a href="#language_support">Using Weaver in your language</a></li>
+  <li><a href="#ie">Internet Explorer Compatibility</a></li>
+  <li><a href="#File_access_plugin">Weaver File Access Plugin</a></li>
+  <li><a href="#TechNotes">Technical Notes</a></li>
+  <li><a href="#divhierarchy">Weaver HTML&lt;div&gt;Hierarchy</a></li>
+  <li><a href="#v3releasenotes" title="Important notes about V 1.3">Version 1.3 Release Notes</a></li>
+  <li><a href="#v4releasenotes" title="Important notes about V 1.4">Version 1.4 Release Notes</a></li>
+  <li><a href="#v5releasenotes" title="Important notes about V 1.5">Version 1.5 Release Notes</a></li>
+  <li><a href="#v6releasenotes" title="Important notes about V 1.6">Version 1.6 Release Notes</a></li>
+  <li><a href="#v7releasenotes">Version 1.7 Release Notes</a></li>
+  <li><a href="#v2ReleaseNotes">Version 2.0 Release Notes</a></li>
+  <li><a href="#v21releasenotes">Version 2.1 Release Notes</a></li>
+</ul>
+<p>The <em>Weaver</em> WordPress theme was originally derived from the WordPress 3 standard <em>Twenty Ten</em> theme.
+Unlike the original, <em>Weaver</em> allows you to change  colors, fonts, sidebars, and
+other aspects of your site's look. In addition,
+it allows you to easily add whatever special code you might need (such
+as advertising tracking code), all from an easy to use "check mark" based theme
+admin page. It also has many per page and per post options, along with many page templates,
+that will allow you to totally customize the look of your site.</p>
+<p><em>Weaver </em>allows you to build a custom site look by tweaking
+many of the style rules for your WordPress blog. You can get a very
+customized look just by picking colors and layout options. While the <em>Main
+and Advanced Options</em> control panels may look overwhelming, they
+really aren't that hard to use once you play with them a bit. This <em>Help</em>
+document has lots more information to help you design your own site
+look by staring with one of over 20 pre-defined
+sub-themes, and changing the settings to suite your needs.
+It is easy to get started: you just have to pick
+colors and click on check marks.</p>
+<p>For more advanced developers, there a many options for fine tuning. These include custom CSS, options to add HTML to various areas of the screen, and several ways to display posts in places other than the standard blog page.</p>
+<h3><a name="get_started" id="get_started"></a>How to get started:</h3>
+<ol>
+  <li>Select one of the predefined sub-themes. There are over twenty
+to choose from.</li>
+  <li>Go to the <em>Main Options</em> panel. You'll see a list of
+options you can change. Play around with them, and see how the theme
+you selected changes. This may be enough to get a custom theme you like.</li>
+  <li>If you have ad-sense code, or other code from a similar site, you
+can easily add it to your site in the <em>Advanced Options</em> panel.</li>
+  <li>Finally, read the help page. There are lots of tips there, as
+well as fairly detailed explanations of exactly which CSS rules Weaver
+supports, and hints on how to go beyond the basics and really customize
+your site.</li>
+</ol>
+<h4>Twenty Ten Weaver?</h4>
+<p>Previously, there were two different versions of Weaver: Twenty Ten Weaver and 2010 Weaver. There was a subtle technical difference between the two versions, but as of Version 1.5, only the 2010 Weaver version was available.</p>
+<p>Partly due to this name confusion, and partly to emphasize some significant
+new features, the name 2010 Weaver was changed to simply Weaver in early 2011.</p>
+<h4>Using With WordPress Multisite</h4>
+<p>Weaver will work with no additional
+settings on WordPress Multisite installations. Because the <em>Advanced
+Options</em> tab allows people to add JavaScript, the <em>Advanced
+Options</em> and <em>Save/Restore</em> tabs may be partially <em>disabled</em>
+by changing a value in the Weaver wvr-settings php file. Administrators of
+Multisite installations can edit the <span class="style3">/wp-content/themes/weaver/wvr-settings.php</span>
+file and change the <span class="style3">'WEAVER_MULTISITE_ALLOPTIONS'</span>
+definition to <span class="style3">false</span>, which will then
+disable the potentially unsafe options Advanced Options and Save/Restore tabs. This setting might
+make a Multisite installation slightly more secure. Weaver does follow the 'unfiltered_html' capability, which means that users below Editor capability will be able to enter only a limited set of HTML. (On a Multi-site installation, this seems to apply to the base site &quot;Super&quot; role. An Administrator of a user site that doesn't have Super-Admin or Super-Editor capabilities will be restricted to 'unfiltered_html' capability.)</p>
+<h3><a name="homepage" id="homepage"></a>All About Your Site's Home Page</h3>
+<p>Your Home Page is the one that is displayed when a visitor enters the address of your WordPress Site. Normally, your blog will serve as the home page,
+and WordPress will automatically add a Home item as the first item on your menu bar. If you instead want a static page as your home, you can go to the dashboard
+Settings-&gt;Reading menu, and click the &quot;A static page&quot; option, and specify an existing static page to serve as Home. (It will be called Home on the
+menu even if it has a different name when you created it.) If you don't want a blog at all, you can leave the &quot;Posts page&quot; option as '--Select--', and
+no blog will be displayed. If you specify the name of an existing static page, then the default blog will be displayed using the title of that page.
+The content of that page (as well as the page's template, such as Page with Post) is ignored.</p>
+<p>Weaver gives you options on just what appears as your home page. The Main Options, Header Options section has an option called &quot;No Home Menu Item&quot;. If you check that, the automatically generated Home menu item goes away. That means if you have your blog set as the home page, there won't be a Home menu item to get back to it, but entering just your site name will get you to the blog.</p>
+<p>All that can be very confusing, to say the least. Here's how to get exactly what you want as your Home page.</p>
+<ol>
+  <li>Create a static page that you want to serve as your Home page - If you want it called Home, then give the page Home as its title. Add content as needed. If you want this page to be your <em>Blog Posts</em>, then use the <em>Page with Posts </em>template when you create the page, and check the 'Hide Page Title' in the Per Page Options section. Don't add any additional content.</li>
+  <li>Check the 'No Home Menu Item' option in the Main Options:Header Options section.</li>
+  <li>On the Settings-&gt;Reading menu, check the &quot;A static page' option, and specify the page you defined in step 1 as the Front page. Set the Posts page top to '-- Select --' if the static front page you specified will be your blog page or you don't want any blog page at all. If the blog will be on a non-home page, then enter the name of a blank place holder for the blog, as usual.</li>
+  <li>You can use a Page with Posts page as your blog page, either as the Home page, or as a secondary page.
+  Step 1 explained how to make it your Home page. Use the method of Step 3, and set the Posts page option to --Select--. This step is important. If you specify
+  the static "Page with Posts" page in the selection box, you will end up with get the default blog page, and not your "Page with Posts" and any options you may
+  have set for that page. And the main reason to use a "Page with Posts" for your blog page is to add filters to control just which posts are displayed
+-- something you can't do if you use the default Home page.</li>
+</ol>
+<h3><a name="DesignHints" id="DesignHints"></a>Design Hints</h3>
+<p>This section has a few hints on designing your own theme.</p>
+<h4>Choosing Colors</h4>
+<p>Good themes use related colors. Many times (but not always), when
+you look at the Main Options page, you'll notice that all the colors of
+the should "look good". They don't have to, but having a nicely
+matching set of colors.</p>
+<p>The color picker has an interesting feature. Once you pick a color
+from the left section, the right bar shows different brightness levels
+of that color. This is especially useful for making a color lighter or
+darker.</p>
+<p>Some themes use the same colors for all links, some vary. But using
+the same link hover color for all the different kind of links lends
+consistency to your theme. The same is true for the other colors - try
+for a consistent look in your theme.</p>
+<h4>Testing</h4>
+<p>There a a couple of tricks that can help make testing you theme
+easier. First is the preview window at the bottom of the theme settings
+tabs. However, you might find it easier to open a new tab in your
+browser. Open the theme admin page on one tab, and the main site on the
+other. After you make a change (and save them), you can toggle to the
+second tab and refresh the page.</p>
+<p>Another important thing is to change just one thing at a time. This
+may seem to take longer, but you will really be able to see the effect
+of your change this way and be sure it does what you want.</p>
+<h4>Saving Option Settings</h4>
+<p>After you make any changes to the values of the Main or Advanced
+Options, you must save your changes. If you navigate away from the
+design tabs without first saving your values, everything will be lost.
+This is typical behavior for most WordPress settings screens.</p>
+<p>After you save your settings, the preview window at the bottom of
+the Weaver admin page will be updated to show the effects of
+your settings.</p>
+<h4>Saving Your Own Theme</h4>
+<p>Once you have a design you like, you can click the "<em>Save in My
+Saved Theme</em>" button near the bottom of the <em>Main Options </em>tab
+to
+save your theme. You restore that saved theme by selecting it from
+the Sub-Theme list. Your saved theme will then overwrite all options,
+including the <em>Advanced Options</em>. This is the one way to
+preserve all your work, so when you get something you like, save it.
+You can then fiddle and fine tune more without losing your previous
+work.</p>
+<p>You can also use the Save/Restore tab to save your theme definition to a file on your computer, or a file on your site. You can later restore the definitions, or even use them on another Weaver site. If you are experimenting, it is a good idea to save copies of your work so you can get back to where you were.</p>
+<h4>Sidebar and Content Widths</h4>
+<p>This table gives the maximum width of the usable areas of sidebars
+and other areas depending on which sidebar scheme you've selected - <em>using
+the
+standard width of 940px.</em> Usable area is the maximum width of
+an image you could put in the area and still maintain the appropriate
+margins in area. These numbers will change if you use a custom theme
+width.</p>
+<table border="1" cellpadding="4" cellspacing="2" width="700">
+  <tbody>
+    <tr>
+      <td width="15%">&nbsp;</td>
+      <td width="14%">Content</td>
+      <td width="14%">Content<br>
+(single col)</td>
+      <td width="14%">Primary<br>
+Widget Area</td>
+      <td width="14%">Secondary<br>
+Widget Area</td>
+      <td width="14%">Footer<br>
+Widget Areas</td>
+      <td width="14%">Top/Bottom<br>
+Widget Areas</td>
+    </tr>
+    <tr>
+      <td>Default sidebar<br>
+1 right</td>
+      <td>670px</td>
+      <td>800px</td>
+      <td>210px</td>
+      <td>210px</td>
+      <td>220px</td>
+      <td>570px</td>
+    </tr>
+    <tr>
+      <td>Right sidebar<br>
+wider</td>
+      <td>590px</td>
+      <td>800px</td>
+      <td>290px</td>
+      <td>290px</td>
+      <td>220px</td>
+      <td>510px</td>
+    </tr>
+    <tr>
+      <td>One Left</td>
+      <td>630px</td>
+      <td>800px</td>
+      <td>210px</td>
+      <td>210px</td>
+      <td>220px</td>
+      <td>590px</td>
+    </tr>
+    <tr>
+      <td>
+      <p>Two sidebars<br>
+left and right</p>
+      </td>
+      <td>460px</td>
+      <td>800px</td>
+      <td>200px</td>
+      <td>200px</td>
+      <td>220px</td>
+      <td>390px</td>
+    </tr>
+    <tr>
+      <td>
+      <p>Two sidebars<br>
+right side</p>
+      </td>
+      <td>490px</td>
+      <td>800px</td>
+      <td>210px</td>
+      <td>160px</td>
+      <td>220px</td>
+      <td>410px</td>
+    </tr>
+    <tr>
+      <td>Two sidebars<br>
+left side</td>
+      <td>500px</td>
+      <td>800px</td>
+      <td>205px</td>
+      <td>160px</td>
+      <td>220px</td>
+      <td>410px</td>
+    </tr>
+    <tr>
+      <td>No sidebars</td>
+      <td>860px</td>
+      <td>800px</td>
+      <td>n/a</td>
+      <td>n/a</td>
+      <td>220px</td>
+      <td>790px</td>
+    </tr>
+  </tbody>
+</table>
+<p>&nbsp;</p>
+<h3><a name="PredefinedThemes" id="PredefinedThemes"></a>Weaver Predefined Sub-Themes</h3>
+<p><em>Weaver</em> comes with over twenty predefined themes. You can use
+them as-is, or as a starting point for your own designs. When you
+select a new sub-theme, <em><strong>all</strong></em> the options
+values from the <em>Weaver Main Options</em> are cleared
+and set to the new values of the sub-theme. Most of the Advanced
+Options are not changed - except the <em>Predefined Theme CSS Rules</em> are set to the
+values required by the new sub-theme.</p>
+<p>To select a predefined theme, pick one from the &quot;Select a theme&quot; list, and click the &quot;Set to Selected Sub-Theme&quot; button. The name and small thumbnail of the currently selected theme is displayed on the right. Now you can open the Main Options Tab to start customizing the theme in ways you like.</p>
+<h2><a name="MainOptions" id="MainOptions"></a>Weaver Main Options</h2>
+<p>The Main Options tab provides you with over 100 &quot;checkbox&quot; options for customizing your theme. This might seem overwhelming at first, but the options have been grouped according to the part of the theme they affect. Each option includes an explanation as to what it does, often with extra information about using the option. It will be worth your time to scroll over all the options just to get an idea of all the things you can customize. Many of the options have been added after multiple requests from users on the Weaver Forum, and may not be anything you care about. Remember, these are options - it is unlikely that any one site design will use all the available options.</p>
+<p>The options have been organized according to the different parts and functioning of your site's pages. The top of the Main Options page has a sub-menu that let's you quickly jump to each section, or you can scroll over the whole page.</p>
+<h5>Color Selection</h5>
+<p> Please note that you can provide values for the color boxes in a couple of ways. The easiest way is to click on a color, and a color selection palette will pop up. You can also provide values directly. This includes hex values as well as text values. The text values can include standard web colors such as <em>red</em>, <em>blue</em>, etc.; <em>transparent</em>; or even <em>rgba()</em> values. This gives you maximum flexibility for specifying colors.</p>
+<p>Weaver defines default colors for many items. If you see 'default-style-color' in the color picker, it means Weaver will use the default color from the default style.css file. You can override this if you wish.</p>
+<h5><a name="CSSOpts" id="CSSOpts"></a>CSS Options</h5>
+<p>For more experienced users, it is easy to add extra CSS styling to any of the elements included in the Main Options tab that have a color setting. When you click on the + next to the CSS tag, a new input area will open. You can enter CSS style rules, enclosed in {}'s. These rules will be associated with the specific area that the color specifies. There are essentially two kinds of color setting options - a background (BG) color, and a text color. The CSS you add to the pop-open CSS box will apply to the associated area. In practice, it doesn't matter if the option is a BG or a text color - the rules will apply to the same item.</p>
+<p>Please see the CSS Help tab to get more details on using this feature.</p>
+<p>&nbsp;</p>
+<h3><a name="GenApp" id="GenApp"></a>General Appearance</h3>
+<p>The General Appearance section contains options that affect the overall look of your site, including both content and widget areas. These combine to give your site it overall look, including things such as fonts, width, borders, and more. The entire site is overlaid on the Wrapper, Main, and Container areas. You might want to experiment with primary colors (e.g., red, green, blue) just to get an idea of how they fit into the big picture.</p>
+<h3><a name="HeaderOpt" id="HeaderOpt"></a>Header Options</h3>
+<p>The Header Area seems is at the top of your site, and really gives the world the first impression of your site. Thus, there are many options for tweaking the site Header.</p>
+<p>Weaver supports up to two menu bars. With no additional action, your menu will be built automatically using the pages you've defined (using the Page Attributes parent and order settings). Display of your posts (blog) in the menu is determined by how you've set the main <em>Settings-&gt;Reading</em> Front page displays options. To use a second menu, you'll need to use <em>Appearance-&gt;Menus</em>, and define the Secondary Navigation menu. If you define the Primary Navigation menu, it will be used instead of the automatic menu generation. Note that by using the <em>Page with Posts</em> template to create a blog page, combined with the <em>Reading</em> Front page displays setting, and the <em>No Home Menu Item</em>, you have complete control over menu content and blog display.</p>
+<p>You also have several options for controlling basic display of the Site Title and Description (set in the <em>Settings-&gt;General </em>panel). If these settings don't give exactly what you want, the very best way to get exactly what you want is to use a photo or image editor to add exactly the site logo or title you want - you can simply hide the default display of the site title and description in that case.</p>
+<p>You can control the height of the header image used, including specifying a height of 0 if you don't want any image. The header image will always be displayed using the site's full width. The default is 940px width by 198px high. You can also control how much space is displayed after the header and before the content.</p>
+<p>This theme (based on its Twenty Ten origins) has automatic header image support for posts that include a <a href="#FeaturedImage">Featured Image</a>. You can disable that behavior in this section.</p>
+<p>For ultimate control of the Header, it is possible to completely replace it on a site wide or per page basis using the <a href="HeaderInsCode">Site Header Insert Code</a> boxes on the <em>Advanced Options</em> tab or using the equivalent per page options.</p>
+<h3><a name="FooterOpt" id="FooterOpt"></a>Footer Options</h3>
+<p>The Footer Options control basic Footer appearance.</p>
+<h3><a name="ContentAreas" id="ContentAreas"></a>Content Areas</h3>
+<p>The <em>Content Areas </em>section covers options that affect both your static page content, and blog post pages. These options all work as explained. The <em>Page Title Text</em> option is slightly different in that it applies only to static pages, and not to blog post titles. Each blog post title is actually a link to the full view page of that post, and uses the <em>Post Entry Title Link</em> value in next section to set the title color. It seems common practice to have both the Page Title and the Post Entry Title the same color.</p>
+<h3><a name="PPSpecifics" id="PPSpecifics"></a>Post Page Specifics</h3>
+<p>Next to the Header, it seems that control of just how Posts (blog articles) are displayed is something many people want. This section discusses some of the things you can control.</p>
+<p><strong>Post BG</strong> </p>
+<p>This will change the background color of just the post. This can be used to highlight each individual post. You can also add CSS to this option to change the font color ({color:#xxxxxx;}) or add a border with a bit of padding ({border: 1px solid black;padding:5px;}).</p>
+<p><strong>Post Entry Title Link </strong></p>
+<p>The title of each post is a link, and controlled by the three link colors shown here. Note that the<em> Bar under Titles</em> option in the <em>Content Areas</em> section also controls this title.</p>
+<p><strong>The Info Lines</strong></p>
+<p> Each post has two information lines (also called Meta Info). The line right after the title has the date of the post and the author. The last line of the post has the post's category, tags, and link for comments. You can control the appearance of these Meta lines in several ways. The two Info BG color settings let you put a background color behind the Meta lines if you wish, and you can add CSS to them for more effects. You can use the default Meta info wording and | separators, hide those, and use Icons for each part of the meta info. You can selectively hide different parts of the meta info. (Comments will always be displayed if they are enabled and associated with a post.) One of the design features of Weaver is that it is language dependent on the Twenty Ten theme's user interface wording. Thus, it is not possible to change the wording such as Posted on date by author. If you don't like that wording, you can hide it and use icons instead. <span class="style5">Unfortunately, if you want to hide the author, you will probably need to hide the wording since the &quot;by&quot; can't be hidden on its own due to the way the translation string was defined by Twenty Ten.</span></p>
+<p><strong>Full Posts and Excerpts</strong> </p>
+<p> Posts are displayed in three distinct places: the main blog page, when part of a specified list (archives, categories, author, etc.), or when
+displayed as a single page by itself. The full content of a post is always displayed on the single page view. The blog page also displays the full
+content of a post, unless you've manually added the &lt;!--more--&gt; tag, which then causes a &quot;Continue reading...&quot; message to
+be displayed on the blog page. In special list views (archives, etc.), posts are displayed as excerpts. These excerpts are normally 55 words long,
+with all images, formatting, and links removed. You can adjust the excerpt length. You can specify to display full posts on special post list pages,
+and display posts as excerpts on the main blog page (which can be combined with the Featured Image to generate nice looking post list). These can also
+be controlled on a per post basis from the Edit Post page. Note that checking a display as full post option does <em>not</em> override your manual placement of &lt;!--more--&gt; tags.</p>
+<h4><a name="FeaturedImage" id="FeaturedImage"></a>The Featured Image</h4>
+<p>You may have seen the Set <em>Featured Image</em> option on your post and static page edit panel. What is it good for? With
+  Weaver's new options, it is good for a lot. The old, default Twenty Ten behavior was to display the <em>Featured Image</em> as a replacement header image
+  for pages and post where it was set. That still works (as long a the Featured Image is as wide as the standard header image). An option to stop that behavior is included in the header section.</p>
+<p>In addition,
+  you can now have the Featured Image be automatically displayed whenever you display a post - in any combination of excerpted posts and full length posts.
+  Here's how:</p>
+<ol>
+  <li>Click the <em>Set  Featured Image</em> from the post/page edit panel. It is usually on the lower right. (To change the Featured Image, you first have to delete the current one, and then set a new one all over.)<br />
+      <br />
+  </li>
+  <li>Pick an image. This will pop up the Add Media interface. After you upload a new image, or pick one from your media library, you'll be shown the info about the image. Important step: at the bottom, click the <em>Use as featured image</em> link. Close that box.<br />
+      <br />
+  </li>
+  <li>Select one or both of the Weaver Main Options tab options in the Post Page Specific section: <em>Show Featured Image for full posts</em> and/or <em>Show the Featured Image for excerpted posts</em>.</li>
+</ol>
+<p>For excerpted posts, a thumbnail will be displayed at the top left of the post. For full length posts, the full image will be displayed at the top of the post.</p>
+<p><strong>Other Options</strong></p>
+<p>You can set the background color for sticky posts. (Add {border:none;padding:0;} to the CSS of the <em>Sticky Post BG</em> option to make sticky posts look like other posts.)</p>
+<p>You can control author information display, as well. You can also show the author's avatar (as defined by a gravatar.com account, for example) on each post. By default, if the author has included biographical information on author's account settings page, that information will be included when the post's single page view is displayed. You can hide that.</p>
+<p>When a visitor clicks on a image thumbnail, an attachment page will open up with the full sized view of the image. If you want your visitors to be able to leave comments for that image, check the <em>Allow comments for attachments</em> box.</p>
+<p>&nbsp;</p>
+<h3><a name="WidgetAreas" id="WidgetAreas"></a>Widget Areas</h3>
+<p>The Widget Areas section controls the appearance of the various widget areas. The options are fairly straight forward with a couple of exceptions. Also, you have great flexibility on which sidebars are displayed when using the Per Page options from the Edit Page screen.</p>
+<p>You can add your own border specifications to any of the widget areas by adding appropriate CSS border styling to the areas BG color option. See the CSS Help document for more information about that.</p>
+<p>The Horizontal Footer Widget Area Blocks option allows you to specify how may horizontal blocks are used to display the 4 footer widget areas. By default, 4 blocks are used to display up to the 4 widget areas. If you use less than 4 widget areas, the footer can be a bit unattractive. This option allows you to specify 3 blocks if you use 3 widget areas. However, you can specifies fewer block than widget areas you've used. So if you've used all 4 footer widget areas, and specify 2 blocks, you'll get the widget areas stacked 2 over 2. The stacking isn't a grid, but will depend on the actual height of each widget area. You can mix, match, and reorder to get a decent looking set of widget areas.</p>
+<p>Possibly the most confusing option is the <em>Sidebar Border Adjust</em>. This option might be come necessary if you use CSS to add new borders to widget areas, the main content area, or posts. Because Weaver is a fixed width theme (although you can adjust that width), it must calculate all the width interaction among the various areas. Because of the way borders are added to page elements, they can throw off the width calculation. The result will be evident if the sidebars display under the content area instead of at the side. Adding an even number to this option will help adjust the total width calculations. If your sidebars start to display incorrectly because of some styling you added, increase this value by 2's until the sidebars work correctly again.</p>
+<h3><a name="AdvancedOptions" id="AdvancedOptions"></a>Weaver Advanced Options</h3>
+<p>The Advanced Options page allows you to save pieces of HTML code
+required by third-party plugins and widgets. You can also use them to
+save Google Maps/Analytics/AdSense JavaScript snippets. You will need
+to understand a bit of HTML coding to used these fields effectively.</p>
+<p>The values you put here are saved in the WordPress database, and
+will survive theme upgrades and other changes. When you select a new
+sub-theme, all the <em>Advanced Options</em> are left untouched
+(except the <em>Special Theme Overrides</em>, which are set by the new
+sub-theme). However, if you pick "My Saved Theme", then all Advanced
+options are replaced. The idea is that you can use the Advanced Options
+to set up things you want, and try different sub-theme looks without
+losing your work. But if you restore "My Saved Theme", then you should
+get back what you really saved.</p>
+<p>PLEASE NOTE: NO validation is made on the field values, so be
+careful not to paste invalid code. Invalid code is usually harmless,
+but it can make your site display incorrectly. If your site looks
+broken after you add stuff here, please double check that what you
+entered uses valid HTML commands. Also note that backslashes will be
+stripped.</p>
+<hr> <label><b>&lt;HEAD&gt; Section</b></label>
+<p>
+  This input area is one of the most important options in Weaver for customizing your site. Code entered into this box is included right before the
+  </HEAD>
+  tag in your site. The most important use for this area is to enter custom CSS rules to control the look of your site. Note: The Snippets tab (above) contains many examples of CSS rules to customize your site. This field can also for entering JavaScript or links to JavaScript files or anything else that belongs in the
+  &lt;HEAD&gt;
+  . For example, Google Analytics code belongs here.</p>
+<p>Note: You can also insert code into the &lt;HEAD&gt; section on a per page basis when you use the Edit Page editor. If you define a <em>Custom Field</em> named <em>page-head-code</em> for the page, then you can supply HTML for that page's &lt;HEAD&gt; section.</p>
+<p><br>
+
+  <strong>HTML Code Insertion Areas </strong></p>
+<p>The options in this section allow you to insert HTML code into various regions of you page. These areas must use HTML markup code, and all can include WP shortcodes. Important: You almost certainly will need to provide CSS styling rules for these code blocks, either as in-tag style="..." rules, or by adding CSS rules the the
+  &lt;HEAD&gt; Section above.
+
+  Note: Providing margin style values, including negative values, can be used to control the spacing before and after these code blocks.</p>
+<label><b><a name="HeaderInsCode" id="HeaderInsCode"></a>Site Header Insert Code</b></label>
+<p>This must be HTML markup code (including WP shortcodes), and will be
+inserted into the #branding div header area right above where the
+standard site header image goes. You can use it for logos, better site
+name text - whatever. When used in combination with hiding the site
+title, header image, and the menu, you can design a completely custom
+header. </p>
+<p>Note that this code will be after or before the default Primary menu
+depending on the move menu setting. You can completely replace the
+default menu (hide it), but you will have to hard-wire the links to
+pages in your replacement menu. </p>
+<p>If you hide the title, image, and header, no other code is generated
+in the #branding div, so the code here can be a complete header
+replacement. You will almost certainly need to add some CSS style, too.
+(We've added a class called ttw-center which you can use to div-wrap
+your insert code to center it:<br>
+<span class="css">&lt;div class="ttw-center"&gt;[shortcode]&lt;/div&gt;</span>)
+</p>
+<p>You can also override the CSS <span class="css">#branding </span>rule,
+create
+a new <span class="css">div</span>, or use in-line styling. One
+of the most flexible capabilities of the section is the ability to
+embed WordPress shortcodes. This might be most useful for adding a
+rotating header image using a plugin such as Meteor Slides or WP-Cycle.</p>
+<p>For example, assume you've installed the Meteor Slides plugin, and
+have uploaded your rotating header images for the plugin to use. To add
+this slide show header image, you should first disable the default
+header image by setting the header image size to zero in the <em>Main
+Options</em> tab. Then, add this code to the Site Header Insert Code
+box:</p>
+<p><span class="css">&lt;div
+class="ttw-center"&gt;[meteor_slideshow]&lt;/div&gt;</span></p>
+<p>Note that the built-in <span class="css">ttw-center</span> CSS
+class will ensure the slide show is displayed properly. Without
+appropriate CSS styling, you may get unexpected placement of the plugin
+output. The <span class="css">ttw-center</span> class will usually do
+what you want.</p>
+<label><b>Site Footer Area</b></label>
+<p>This code will be inserted into the site footer area, right before the
+  before the "Powered by" credits, but after any Footer widgets. This
+  could include extra information, visit counters, etc. You can use HTML
+  here, so include style tags if you want! And like the Site Header
+  Insert Code section, you can also use shortcodes.</p>
+<p><strong>Pre-Header, Post-Header, Pre-Footer, Post-Footer, Pre-Sidebar</strong></p>
+<p>These areas can be used to insert HTML and shortcodes in the given areas of a site page.
+  <br>
+</p>
+<label></label>
+<p>
+  <label><b>"Custom Header Page Template" Code and Options</b></label>
+  <br />
+  This block functions exactly the same as Site Header Insert Code when used with pages created with the Custom Header (see Adv Opts admin) page template. The template creates pages that use only this code to display a header (they don't use the standard site header image), plus the options below.  </p>
+  <p>
+    <label><b>"Blank Page Template" Options</b></label>
+    <br />
+    The <em>Blank - (see Adv Opts admin)</em> page template will wrap the content of an associated page only with the
+    '#wrapper' HTML div surrounding the optional #header and #footer divs, and the #main div for the actual content.
+    ('&lt;div id="wrapper">&lt;div id="header">header&lt;/div>&lt;div id="main">Content of page&lt;/div>&lt;div id="footer">footer&lt;/div>').
+    You will probably want to wrap your content in its own div with styling defined by a class added to the &lt;HEAD&gt; Section.
+    Use Per Page Options on main Page edit menu to control Menu, Site Title, and Header Image visibility.
+    <p>
+<a name="PPWidgets" id="PPWidgets"></a><label><b>Per Page Widget Areas</b></label>
+<br />
+Weaver allows you to have as many widget areas you need that can be displayed on a per page basis. For example, using the Per Page options when you edit a page, you could have a different Top Widget Area, as well as different Primary and Secondary sidebars for every single page of you site if you wanted. You tell Weaver to create these areas by providing a list of Widget Area identifiers in this option area. The names should be letters, underscores, or numbers, and not include any spaces or other special characters. You can name them as you will - <em>mytop,mytop2,myprimary </em>and so on. These names are then used to specify which widget area to use on a per page basis. Note that some add-on widgets can have only a single instance defined to work properly, so if you have trouble having one work properly, check on that. Standard WordPress widgets don't have that restriction.<br />
+    </p>
+    <p>
+    <label><b>SEO Tags</b></label>
+    <br />
+Every site should have at least "description" and "keywords" meta tags for basic SEO (Search Engine Optimization) support. Please edit these tags to provide more information about your site, which is inserted into the <HEAD> section of your site. You might want to check out other WordPress SEO plugins if you need more advanced SEO. Note that this information is not part of your theme settings, and will not be included when you save or restore your theme.
+<br />
+    </p>
+  <p>
+    <label><b>Site Copyright</b></label>
+    <br />
+If you fill this in, the default copyright notice in the footer will be replaced with the text here. It will not automatically update from year to year. Use <span class="style4">&amp;copy;</span> to display &copy;. You can use other HTML as well.</p>
+  <p>
+    <label><b>The Last Thing</b></label>
+    <br />
+This code is inserted right before the closing <span class="css">&lt;/body&gt;</span> tag. This is the best place for your Google analytics code other final
+code that is not usually displayed.</p>
+<p>
+<strong>Add CSS Rules to Weaver's style rules</strong><br />
+
+Some advanced developers prefer that their custom CSS rules be added to the <span class="style4">weaver_style.css</span> file rather than included in the
+ &lt;HEAD&gt; Section above. Any CSS style provided for this option here will be added at the <em>end</em> of the regular Weaver CSS rules. Do not add
+&lt;style&gt; and &lt;/style&gt; to this option - just CSS. These rules will be saved with your theme <span class="style4">.wvr</span> file.<br />
+      <br />
+      <label><b>Predefined Theme CSS Rules</b></label>
+      <br />
+    The entries in this field are usually generated by some of the example
+    themes provided with Weaver. You may have to edit these rules to adjust the look, but
+    it is generally better to use the regular <span class="css">&lt;HEAD&gt;</span> overrides. (Note: this code is included before the standard <span
+ class="css">&lt;HEAD&gt;</span> section code above.)</p>
+  <h2><a name="SaveRestore" id="SaveRestore"></a>Save/Restore Themes and Backups</h2>
+  <p>Weaver allows you to save your work in two basically different ways.<br />
+    <br />
+  </p>
+  <ol><li><strong>Save Backup</strong> - If you save your settings to a backup (and this <em>includes</em> saving to &quot;My Saved Theme&quot;), then <em>every setting</em> is saved in a file with a &quot;.wvb&quot; extension. The &quot;My Saved Theme&quot; version has a special name, but using the &quot;Make a Backup&quot; button saves the current settings in a file called &quot;weaver_backup_date-info.wvb&quot;. There is a maintenance option to delete unneeded backup versions.<br />
+      <br />
+    </li>
+    <li><strong>Save Theme Settings </strong>- If you save the current theme to a file - on your computer or on you site's file system, then the settings <em>relevant to a theme</em> are saved in a file with a &quot;.wvr&quot; extension. Settings that are considered &quot;per-site&quot; (like customize headers, showing excerpts, and other marked with a '*' on the Main Options tab) are not saved or restored from a theme &quot;.wvr&quot; file.</li>
+  </ol>
+  <p>Weaver saves your settings in a format based on a PHP language tool. (PHP is the programming language used by WordPress.) You can save and restore your settings to a file in several ways. </p>
+  <p><strong>What is the difference between the two?</strong></p>
+  <p>You might ask what the difference between a Backup and a Theme Setting is. The difference is that when you save a theme's settings, settings that apply to a particular site aren't save. This allows people to share their theme designs. Most people won't care about sharing their theme design - they will be using it just for their own site. So unless you know you're going to be sharing a theme, stick to Backup or Save in My Saved Theme.</p>
+  <p>You should note that if you make changes to the settings, they are saved in the &quot;current&quot; settings. If you then pick another Weaver sub-theme, for example, many of your settings will be lost and replaced with the new theme settings (per-site settings are not replaced when you change a sub-theme, but ARE replaced when you use &quot;My Saved Theme&quot;). Thus, you really need to save your work if you want to be able to restore it.</p>
+  <p>The simplest way to save the settings is to save them to &quot;My Saved Theme&quot;. The settings are saved in the WordPress data base. These settings will survive theme and WordPress upgrades, and as long as you're only using one theme, is perhaps the easiest way to save your work.</p>
+  <p>For each of these save methods, there is a corresponding way to restore your settings.</p>
+  <h2><a name="PageTemplates" id="PageTemplates"></a>Page Templates</h2>
+  <p>Weaver provides you with several additional page templates for creating static pages. (Please note: the page templates are designed to give you alternative page layouts
+  for specific pages. To set your site wide sidebar arrangement, you should use the Main Options : Widget Areas : Main Sidebar Columns selection.) </p>
+  <ol>
+	<li><em>Alternative Sidebar Left</em> - page with sidebar on left. There is a widget area called the Alternative Widget Area. The two Alternative Sidebar templates use  the Alternative Widget Area exclusively - they don't use any other widget areas (except for the footer widgets).<br />
+	  <br />
+	</li>
+	<li><em>Alternative Sidebar Right</em>- same, on right.<br />
+	  <br />
+	</li>
+	<li><em>Blank Content Area</em> - Provides a totally blank content area inside the #wrapper div. (This means the page will match the overall look of your site.) It Al lets you provide totally custom HTML on a page. It doesn't show the page title you set when creating the page, nor does it display comments. You can optionally hide the header and footer areas using the check boxes on the Advanced Options tab. This template is good for entering raw HTML using the HTML editor tab. This page does not use any widget areas except when the footer is displayed, and will take the full width of the #wrapper area.<br />
+	  <br />
+	</li>
+	<li><em>Custom Header</em> - Provides a standard page, but uses a new custom header block found on the Advanced Options page. Doesn't show standard header image, and you can optionally hide menus and site title/description.<br />
+	  <br />
+	</li>
+	<li><em>Two Column Content</em> - Allows you to create a content page with two columns of content using the standard &lt;!--more--&gt; page tag (entered using the page break icon from the Visual Editor). If you break the content into more than two areas, they will automatically be placed vertically (in other words, you can use more than one &lt;!--more--&gt; tag.<br />
+	  <br />
+	</li>
+    <li><em>One column, iframe full width</em> - This template is designed especially for using an iframe external site embed on a regular static page. If you have an old site in html that you don't want to convert to WordPress, or some other site you want to take on the appearance of your site, then this is the page template for you. It hides the standard page title so the external site can take the full page space. You can enable comments, if you wish. To embed and external site, simply add an iframe html command to your page:<br />
+      <span class="style4">&lt;iframe src=&quot;http://example.com&quot; style=&quot;width:100%;height:600px;border: 0px&quot;&gt;&lt;/iframe&gt; </span><br />
+    (You'll need to use the &quot;html&quot; page editor view to add this command, and you can include other content as well for titles or introduction material.) You can adjust the height to best display the external page, as well as the width if you want. The page will continue to fill the full width even if you change the overall site width. While this template is designed for using iframes, it really can be used however you like - kind of like the Blank Content Area template, but allowing comments.<br />
+      <br />
+    </li>
+    <li><em>One column, no sidebar</em> - This template gives you a single column layout with no sidebar. By default, the single column only uses about 90% of the full width and leaves some padding on the side. This page template is based on the similar page template found in Twenty Ten.<br />
+      <br />
+    </li>
+    <li><em>Page with Posts</em> - When used with no options set, this page will display all your posts exactly the same way as the default blog post page.  When used in the default mode, the main use for this feature would be to hide the Home menu item, and put your posts on a page with your own title. (You can hide the title from the page using the Per Page options.) But what is really great is that you can create a <a href="#PerPostTemplate">filter</a> which controls just which posts will be displayed - specific categories, for example.<br />
+        <br />
+      The Page with Posts each have a two column variant which shows the full, excerpt, or title posts in two column, arranged left to right, then top to bottom.<br />
+          <br />
+      Because these are in fact true static pages with automatic inclusion of filtered posts, you can enter whatever content you want in the content edit box, and that content will appear above the posts that are displayed.<br />
+          <br />
+        While the Page with Posts templates allow you to easily display posts on a page, you can also add posts to any static page using the [weaver_show_posts] shortcode for even more fine-tuned control.        <br />
+        <br />
+    </li>
+    <li><em>Page with Posts (excerpts)</em> - This works exactly like Page with Posts except only excerpts are displayed.<br />
+      <br />
+    </li>
+    <li><em>Page with Posts (title)</em> - Again, like Page with Posts, but only post titles, date, and author are displayed.<br />
+      <br />
+    </li>
+    <li><em>Page with Posts (one column) </em>- A one column, no sidebar version of Page with Posts. Make your blog full width!<br />
+      <br />
+    </li>
+    <li>Pop Up - This template has minimal styling, and is intened to allow you to add pure html to a page. The page will be suitable for using as the target of a pop up link (such as provided by Weaver Plus).<br />
+      <br />
+    </li>
+    <li><em>Sitemap</em> - This page template will display a simple sitemap, consisting of a list of all ages, monthly post archives, all categories, and the tag cloud. You can add content to the page that will appear above the sitemap, but there are no other options to control the organization or content of the sitemap.</li>
+  </ol>
+
+  <h3><a name="PerPostTemplate" id="PerPostTemplate"></a>Settings for &quot;Page with Posts&quot; Template
+  </h3>
+  <p> One of the most powerful features of the Page with Posts template is that it allows you to create filters on a <a href="#PerPage">per page</a> basis that lets you display specific posts on a page. You can have as many different pages using the Page with Posts template as you need, all showing a different set of posts.</p>
+  <p>The standard items you can use in your filter include: Category, Tags, Single Page, Order by, Sort Order, and number of posts to display. The Order by, Sort Order, and Posts per Page are explained on the Weaver Options for This Page form. The Category, Tags, and Single Page options are based on slugs. As a rule, if you include values in more than one box, they will be combined, and the posts displayed will meet all the criteria you specified.</p>
+  <p>For example, say you have defined the categories 'Cat A', 'Cat B', and 'News' (among others, perhaps). These categories will have the slugs 'cat-a', 'cat-b', and 'news'. You can see the slug names if you open the <em>Posts-&gt;Categories</em> admin page. The same is true for tags. So, to display a list of posts from a specific set of categories and/or tags, you simply enter a list of one or more slugs you want included, separated by commas.</p>
+  <p>The Categories list has an extra feature. If you add a '-' (minus sign) to the front of a category slug (e.g., <em>-uncategorized</em>), then all the posts from that category will be excluded. So if you placed <em>-uncategorized</em> in the <em>Category</em> box, then only posts that have a category other than Uncategorized will be displayed.</p>
+  <p>The final <em>Advanced Selections</em> bears some explanation. This field is really for advanced users. The entire post filter is based on the capabilities of the WordPress <a href="http://codex.wordpress.org/Function_Reference/query_posts" title="query_posts WordPress reference page" target="_blank">query_posts</a> function. The final field allows one to add some (but not all) of the additional filtering specifications supported by query_posts. So, just for example, if I added the value <em>author_name=wpweaver</em> to the Advanced Selections field, then the Page with Posts would display all the posts on the site made by 'wpweaver'. Values to query_posts that require an 'array' won't work, but any that can be built from a string should work. You can combine different filter specifications using '&amp;' as described in the query_posts documentation. With this capability, anyone who can understand the examples provide for query_posts should be able to create quite explicit filters for the posts that will appear on the page using the Page with Posts template.</p>
+  <h2><a name="editstyling" id="editstyling"></a>Post/Page Editor Styling</h2>
+  <p>Weaver 2.0 now will add style settings for the tinyMCE editor used whenever you edit a page or post. The colors and font information for your text, headings, images, and tables will now closely match the values you've set for your theme. While this is a huge improvement from earlier versions of Weaver, it is still impossible to get an exact match between the edit visual view, and the ultimate display on your site in an actual browser. This is due to differences in the way the editor displays content.</p>
+  <p>There are a couple of other caveats. Weaver allows you to style your page content and post content a little differently. The Page/Post editor does not distinguish between the two types of content, so you will see Page styling for both pages and posts. If you have a background color, it will display only in part of the background of the editor window. This corresponds to the width of the  Weaver default content area for a 940px wide page with a single default size sidebar. It was not possible to have the editor recognize all the different content widths possible with the various page templates.</p>
+  <h2><a name="raw_html" id="raw_html"></a>Entering Raw HTML and Scripts</h2>
+  <p>A not commonly known feature of the WordPress page and post editor is a significant amount of automatic formatting and filtering it does. It will automatically add paragraph tags, it will &quot;texturize&quot; content by changing quote marks to &quot;curly&quot; quotes and others, it add smileys, and does some other automatic character conversions. This automatic formatting happens even if you use the HTML view. The HTML view will allow you to add some HTML markup, but the auto-paragraph filtering still happens.</p>
+  <p>Sometimes you just need to enter HTML markup, and even JavaScript code, and have the page look exactly how you want it to. You might have HTML from another site or page you've created somewhere else. Weaver has a per page and per post option called &quot;Allow Raw HTML and scripts.&quot; If you check this option, your page content will not be filtered. Shortcodes are still processed. This option also disables the Visual editor. If you were to switch between the HTML and Visual editor views, your carefully crafted HTML code will be altered.</p>
+  <p>If you check the &quot;Disable Visual Editor&quot; option, the Visual editor will be disabled, and your simple HTML will be left alone, but the auto-paragraph and other filtering will still happen.</p>
+  <h2><a name="post_formats" id="post_formats"></a>Post Formats</h2>
+  <p>Beginning with WordPress Version 3.1, and new feature has been added to the Edit Post screen - Format. Weaver supports several additional Post Formats over the Standard one. You may find the Post Formats useful. Posts with a Format specified will display a &quot;pre-title&quot; showing the Format. This helps these posts stand out. The descriptions for each Post Format describe how the post will be displayed from the blog  pages. Archive pages display the post as an excerpt, but with the Format type's titles. These Post Formats were modeled after Twenty Eleven.</p>
+  <p><a name="format_aside" id="aside"><strong>Aside</strong></a></p>
+  <p>The Aside Format is intended to display a short note from the author. This Format does not display the post title or category info, and puts the date and author at the bottom.</p>
+  <p><a name="gallerypost" id="gallerypost"></a><strong>Gallery Post Format</strong></p>
+  <p> If you check this for a post, Weaver will display this as a Gallery. When displayed on the blog page, a Gallery Format Post will display as a special excerpt that shows one thumbnail from all the images included from the Media Library. If the user clicks on the image, they will be taken to the full post with all the images.</p>
+  <p><a name="format_link" id="format_link"></a><strong>Link</strong></p>
+  <p>The Link Format is intended to display links. It will be displayed like the Aside, but with Link as the title.</p>
+  <p><a name="format_quote" id="format_quote"></a><strong>Quote</strong></p>
+  <p>The Quote Format is intended for quotations. (For the language sticklers, this should be called Quotation, but Quote is the name used.). It works like any other post, but with a &quot;Quote&quot; pre-title.</p>
+  <p><a name="format_status" id="format_status"></a><strong>Status</strong></p>
+  <p>The Status Format is intended for a short status update from the author. It displays like an Aside, but also add the Author's avatar to the post.</p>
+  <h2><a name="PerPage" id="PerPage"></a>Per Page and Per Post Options</a>
+  </h2>
+  <p>One of the most powerful features Weaver provides for customizing the content of your site is the set of <em>Weaver Options for This Page </em>and <em>Weaver Options for This Post</em>. When you create or edit a Page or Post from the admin page, you will see one of those two areas below the Editor box. They contain options that will be applied to that specific page or post. These settings often correspond to setting you find on the Standard Weaver Main Options or Advanced Options pages. Any settings made on the per page boxes will override the standard settings.</p>
+  <p><strong>Weaver Options for This Post</strong></p>
+  <p>The per post settings allow you to control excerpts, featured image, and author avatar. In addition, if you mark the post as a favorite, the post will be displayed with a yellow star to its left on all but the single post full page.</p>
+  <p><strong><a name="perpoststyle" id="perpoststyle"></a>Per Post Style</strong></p>
+  <p>Per Post Style allows you to add CSS styling to a specific post. To add CSS, you place rules in the Per Post Style box. Each rule should be bracketed by the usual {}'s, and you should <strong>not</strong> add the &lt;style&gt; and &lt;/style&gt; tags. If you want the rule to apply to the entire post, you would just provide the {}'s with no class or id name. If you are styling a specific element in the post (e.g., '.entry-title a' for the post's title), then add the class or id name. (See the example below.) Weaver will automatically add a post specific id (in the form '#post-nnn') to the beginning of each rule you provide. Note that this means you cannot combine classes into one rule (e.g. '.class1, .class2 {style info}'). Use a separate rule for each class or id.</p>
+  <p> For example, to put a yellow background with a border and some padding around the post, plus make the title italic, add the following CSS to the Per Post Style box:</p>
+  <pre>{background-color:yellow; border:1px solid blue; padding:5px;} /* style entire post with these styles */
+.entry-title a {color:red; font-style:italic;} /* make the title red and italic */
+ </pre>
+  <p>Here's a list of most of the elements of a post:</p>
+  <ul>
+    <li>.entry-title - the title</li>
+    <li>.entry-title a - needed to change colors since the entry title is really a link</li>
+    <li>.entry-meta - the top info line</li>
+    <li>.entry-date - the date</li>
+    <li>.meta-sep - the info between the info line elements</li>
+    <li>.vcard - author</li>
+    <li>.entry-content - the actual post content</li>
+    <li>.entry-utility - the bottom info line</li>
+    <li>.cat-links - category on bottom info line</li>
+    <li>.comments-link - the link to comments</li>
+    </ul>
+  <p><a name="optsperpage" id="optsperpage"></a><strong>Weaver Options for This Page</strong></p>
+  <p>The per page options box has several groups of options. The first option simply has a link to the Weaver <a href="#PageTemplates">Page Templates</a> documentation.</p>
+  <p>The Per Page Options section controls display of the page's content title (Hide Page Title), as well as several aspects of the standard Header and Footer areas.</p>
+  <p>The Selective Display of Widget Areas allows fine control of which widget areas are displayed with the page. In addition to hiding specific standard widget areas, you can specify one of the <a href="#PPWidgets">Per Page Widget Areas</a> to serve as a replacement for the standard Primary or Secondary sidebar areas, or an additional Top Widget area for that page. You simply add the name of one of the extra widget areas previously define from the Advanced Options tab.</p>
+  <p>The Menu &quot;Placeholder&quot; option is useful if you want a top-level menu item that doesn't require a 'dummy page'. This can be used if you have a set of sub-pages on the menu that have content, but you don't want to create a dummy page for the top level item. When the item is clicked, nothing will happen.</p>
+  <p>The &quot;Hide Page on the Primary Menu&quot; option will hide the specific page from the automatically generated Primary menu. If you define a custom Primary menu, then this option
+  isn't really needed. This will not hide the page from the Page widget - you will have to use the exclude feature of that widget to hide the page there. One good use of
+  this option is to remove obsolete pages from your primary menu, yet retain the page's URL so that if other sites have linked to it, there will still be a page there.</p>
+  <p>The Settings for &quot;<a href="#PerPostTemplate">Page with Posts Template</a>&quot; is explained above.</p>
+  <p><strong>Custom Fields Mechanism</strong></p>
+  <p> All of the per page and per posts options are saved using the standard WordPress Custom Fields mechanism. (If you ever wondered what that was for - well, it is very useful for saving per page values for templates like Weaver to use!) After you set a value in the Weaver Options box and update the page, you'll notice that the Custom Fields box will no longer be empty. (If you've unchecked the Custom Fields box in the Screen Options, then you won't see it displayed.) These values are used by Weaver to implement the options.</p>
+  <p>While this is a very powerful capability, and allows you incredible per page customization, you should be aware of one factor - these settings will work only with the Weaver theme. These settings are associated with each individual page. They are not part of your theme definition, and won't be saved when you use Weaver's Save/Restore tab. But they are saved with the page, so if you upgrade Weaver, or even switch to an alternate theme, those settings will remain intact. However, even though you can switch themes without losing that information, other themes won't know what to do with it, so your pages will most likely just display with the other theme's default template. You might even have to re-set each page's template after you go back to Weaver. This all isn't bad - but you should know what is going on.</p>
+  <p>&nbsp;</p>
+  <h3><a name="ExtraPP" id="ExtraPP"></a>Extra Per Page Options</h3>
+  <p> For even more advanced control on a per page basis, Weaver will recognize other options that you must manually define in the Edit Page <em>Custom Fields</em> box. These options match equivalent global settings found on the Advanced Options tab, but apply on a per page basis.</p>
+  <p>Define <em>page-head-code</em>, and the value contents will be added to the &lt;HEAD&gt; section. This will be inserted into the &lt;HEAD&gt; Section after the settings in the global <em>&lt;HEAD&gt; Section</em> on the <em>Advanced Options</em> tab.</p>
+  <p> Define <em>page-pre-header-code</em>, and the value contents will be inserted before the &lt;header&gt; div. This setting will override the global <em>Pre-Header Code</em> setting.</p>
+  <p> Define <em>page-header-insert-code</em>, and the value content will be inserted above the header image. This setting will override the global Site Header Insert Code setting.</p>
+
+  <h2><a name="shortcodes" id="shortcodes"></a>Weaver Shortcodes</h2>
+<p>
+  The Weaver theme includes some shortcodes to allow you to easily add extra content and features to your regular content. </p>
+<h3><br />
+		<strong>[weaver_show_posts] Shortcode</strong>        </h3>
+<p>
+	The [weaver_show_posts] is a very powerful tool for displaying posts from within your pages. Among other possibilities, it can be used to get a magazine style layout on your pages.</p>
+<p>Which posts are displayed are controlled by the filtering options provided as parameters of the shortcode. Below is a summary of all parameters, shown with default values. You don't need to supply every
+  option when you add the [weaver_show_posts] to your own content. There may seem to be an overwhelming set of options for this shortcode, but it gives you many options for displaying specific posts within a static page. One way to use this short code would be to create a magazine style layout, for example.</p>
+<p>Note that the default global settings for various display options will be used unless overridden with a value in the shortcode. Also, this short code is really intended to show just a few posts, and does not support paging - if there are more posts than 'number' that match the filter, only the first 'number' posts will be displayed. This is really a good thing. For example, if you had a &quot;news&quot; category, you could set cats=&quot;news&quot; and number=&quot;1&quot; and display just the most recent news post.</p>
+<h4>Summary</h4>
+<p class="style4">[weaver_show_posts cats="" tags="" author="" single_post="" orderby="date" sort="DESC" number="5" show="full" hide_title=""
+    hide_top_info="" hide_bottom_info="" show_featured_image="" show_avatar="" show_bio="" excerpt_length="" style=""
+    class="" header="" header_style="" header_class="" more_msg=&quot;&quot;]  </p>
+<p>You can enclose the option values in either double or single quotation marks. If there is just one value, you don't need any quotation marks. If you don't include an option, the default value will be used. For most option, the default value is an empty string, which means that option won't be used to filter for posts, or that the global formatting from the Main Options settings will be used.</p>
+<p><span class="style6">Important Note:</span> [weaver_show_posts] only works on regular pages and most widget areas. It does not work when used within a post, and you will get an error message. It does work with MOST widget areas, but not all. If will not work correctly in widget areas that appear at the top of a blog page - it will display properly, but then your blog posts will not display correctly, but you won't get an error message. This restriction may be fixed in a future version.</p>
+<h4>Filtering Options</h4>
+<p>These options are used to filter or select which set of posts are displayed. Default value in {}'s.</p>
+<ul>
+<li><em>cats</em> - Select posts from a comma separated list of category slugs. Add minus (-) to front of slug to exclude posts from that category. </li>
+
+<li><em>tags</em> - Select posts from a comma separated list of tag slugs.</li>
+
+<li><em>author</em> - Display posts from a single author. Use the author <em>Username</em>, including any spaces.</li>
+<li><em>single_post</em> - Display single post. Specify slug of post name.</li>
+<li><em>orderby</em> - Sort order used to display posts. Possible values: <span class="style4">author</span> | <span class="style4">date</span> | <span class="style4">title</span> | <span class="style4">rand</span> |  <span class="style4">parent</span> {<span class="style4">date</span>}</li>
+
+<li><em>sort</em> -  Sort order. Possible values: <span class="style4">ASC</span> | <span class="style4">DESC</span> {<span class="style4">DESC</span>}</li>
+
+<li><em>number</em> - The number of posts to show  {5}. Note that if there are more posts that match the filter you've created, only this number of post will be displayed, and there will be no &quot;Previous&quot; or &quot;Next&quot; link as found on you full blog page.</li>
+</ul>
+<h4>Formatting Options</h4>
+These options control how posts displayed by [weaver_show_posts] are formatted, and which parts of a post are displayed. These options will override any other settings for posts. If you don't set a particular option, then the formatting will be controlled first by any per post settings, then by any options specified in the Main Options admin tab.
+<ul>
+<li><em>show</em> - Display posts by title, excerpt, or full post. Possible values: <span class="style4">title</span> | <span class="style4">excerpt</span> | <span class="style4">full</span> </li>
+<li><em>hide_title</em> - Use value of 1 to hide the post title</li>
+<li><em>hide_top_info</em> - Hide the top info line (Posted on, by).</li>
+<li><em>hide_bottom_info</em> -  Hide bottom info line (Category, tags, comment link)</li>
+<li><em>show_featured_image</em> -  Force showing post associated featured image.</li>
+<li><em>show_avatar</em> - Show the author avatar if defined.</li>
+<li><em>show_bio</em> -Show the author bio below posts.</li>
+<li><em>excerpt_length</em> - Override excerpt length. </li>
+<li><em>style</em> - Inline CSS style for <span class="style4">.wvr-show-posts</span> class. Provide just the rules that would go inside the quotation marks for a standard HTML <span class="style4">'style='</span> tag (e.g. the option could look like <span class="style4">style='border: 1px solid blue;' </span>which would generate <span class="style4">&lt;div class=&quot;wvr-show-posts&quot; style=&quot;border: 1px solid blue;&quot;&gt;</span>, which would enclose the list of posts in a solid blue border). The point of these style and class options is to allow you to place as many post list on a single static page as you want, each with a different style if needed. This would be great for a Magazine style layout.</li>
+<li><em>class</em> - Optional class to allow external styling. Adds an additional class name to the <span class="style4">.wvr-show-posts</span> div, which you could add to the <em>&lt;HEAD&gt; Section</em> option.</li>
+<li><em>header</em> - Optional header for post. This text will be placed in a &lt;div&gt; above the posts. You could use it to add a &quot;Most Recent News&quot; header for a list of recent new posts, for example.</li>
+<li><em>header_style</em> - Optional inline style for header. Applies just to the <em>header</em> text.</li>
+<li><em>header_class</em> - Add a class for the header.</li>
+   <li>more_msg - Use this text to replace the standard <em>Continue Reading &rarr;</em> message for excerpts.</li>
+</ul>
+
+
+<h4>Using in a Sidebar</h4>
+This shortcode has been designed to use in a sidebar using the standard Text widget. There is special CSS styling that reduces the margins on the featured image thumbnail. If you provide the posts you want to show in the sidebar a featured image, you can get quite attractive post excerpts in the sidebar. For example, putting this in a text widget in one of your sidebars:
+<pre>[weaver_show_posts cats='new' show_featured_image='1' show='excerpt' excerpt_length='25' number='2']</pre>
+<p>will display the latest two posts from the 'news' category. The featured image will be shown in the upper left corner.</p>
+<h4>CSS styling</h4>
+<p> The group of posts will be wrapped with a &lt;div&gt;  with called .wvr-show-posts. (You provide a CSS rule in the &lt;HEAD&gt; Section of Advanced Options called .wvr-show-posts.) You can add a class to that by providing a 'class=classname' option, where you use the name with a period in the CSS in the &lt;HEAD&gt; Section, but just the classname for the [weaver-show-posts] option.</p>
+<p>You can also provide inline styling by providing a 'style=value' option where value is whatever styling you need, each terminated with a semi-colon (;).</p>
+<p>These CSS rules are pre-defined, but can be overridden using the &lt;HEAD&gt; Section of the Advanced Options tab. The element you're most likely to want to change is the margin-bottom. That determines how much space is added after each post.</p>
+<pre>.wvr-show-posts .hentry {margin-top: 0px; margin-right: 0px; margin-bottom: 40px; margin-left: 0px;}
+.widget-area .wvr-show-posts .hentry {margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;}
+.widget-area .wvr-show-posts .hentry {margin-bottom: 0px;}<br />.widget-area .wvr-show-posts .attachment-thumbnail {float: left; margin-right: 2px; margin-bottom: 0px; padding: 2px;}</pre>
+<p>
+
+</p>
+<h2><a name="CustomMenus" id="CustomMenus"></a>Custom Menus</h2>
+  <p>One of the new features included with WordPress 3 is support for
+custom menus. By using the <em>Appearance-&gt;Menus</em> panel, you
+can create a menu completely under your control. While the standard
+Twenty Ten only supports one custom menu, Weaver supports two. If you
+have defined two custom menus, they will be placed above and below the
+site header image.</p>
+<p>Custom Menus can let you really customize site navigation. One
+typical use of multiple menus is one for pages, the other organized by
+category or tags. But you have complete control. However, which menus
+show can be a bit confusing. There are three specific cases of
+specifying menus that are most likely to be useful:</p>
+<ol>
+  <li><strong>No Custom Menus Defined</strong><br>
+This might be the most common case. If you don't use the <em>Menus</em>
+panel, and don't define any custom menus, then the theme will
+automatically generate a menu based on your pages (including Home)
+using the page order defined in the page editor when you create pages.
+This is the legacy method, and works fine for many situations.<br>
+    <br>
+  </li>
+  <li><strong>Defining One or Two Custom Menus</strong><br>
+You can also define one or two custom menus. The two menus supported by
+Weaver are called the Primary and Secondary Menus. If you define a
+Primary Menu, then it will be the main menu bar normally under the
+Header Image. If you don't define a Secondary menu, then only one will
+be displayed. If you define the Secondary Menu, then it will normally
+be displayed above the Header Image. You can switch the order of the
+two menus either using the <em>Main Options</em> tab, or by switching
+the order in the <em>Menus</em> panel.<br>
+    <br>
+Normally, both menu bars will use the same menu bar color scheme. When
+you've selected the rounded area option, the top menu bar will have the
+top edge rounded, and the bottom menu bar the lower edge rounded. This
+look great with a square Header Image.<br>
+    <br>
+You can use CSS snippets to change the color of the Secondary menu bar
+- it uses <span class="css">#access2</span> for its CSS tags.<br>
+    <br>
+  </li>
+  <li><strong>Define Only Secondary Custom Menu</strong><br>
+If you define only the Secondary Menu and leave the Primary Navigation
+theme location blank, then Weaver will display two menu bars - the
+Secondary Menu bar on top as you defined, and the default menu with
+pages (as discussed in #1 above) on the bottom menu bar.</li>
+</ol>
+<h3><a name="plugins" id="plugins"></a>Built-in Support for Other Plugins</h3>
+<p>Weaver includes built-in support for a few plugins available from WordPress.org. These plugins have been tested, and work well with Weaver.</p>
+<ol>
+  <li><strong>Meteor Slides</strong> - This plugin uses shortcodes to display a slide show. Weaver includes some extra CSS styling to make Meteor Slide shows display better. You won't need to do anything extra to use this plugin. (<a href="http://wordpress.org/extend/plugins/meteor-slides/">Meteor Slides</a>)<br />
+    <br />
+  </li>
+  <li><strong>Dynamic Headers</strong> - This plugin gives you extreme control over your headers. It normally requires some modification to your code, but with Weaver, you can simply upload and activate Dynamic Headers, and it will be ready to use. (<a href="http://wordpress.org/extend/plugins/dynamic-headers/">Dynamic Headers</a>)<br />
+    <br />
+  </li>
+  <li><strong>WP PageNavi</strong> - This popular plugin adds a page numbered navigation menu for your blog posts. It requires modification to code, plus some extra CSS styling. Now you can simply install and activate WP PageNavi, and your site will feature page number navigation. The default styling creates menus that work with existing Weaver sub-themes, but you can still use WP PageNavi options to fine tune its appearance, and add custom styling for the <span class="style4">.wp-pagenavi</span> rules (see wp-pagenavi documentation about its rules) to the Advanced Options &lt;HEAD&gt; section if needed.<br />
+    <br />
+    PageNavi menus can be displayed a the top, bottom, or combination on your post pages. You can add the following rules to the &lt;HEAD&gt; Section of advanced options to control where the PageNavi menus are displayed:<br />
+    <br />
+    <ul>
+    <li>Not at top on first page, include at top on subsequent pages: default behavior</li>
+     <li>Always show at top: <span class="style4">#nav-above {display:block !important;}</span></li>
+     <li>Never at top: <span class="style4">#nav-above {display:none !important;}</span></li>
+    <li>Always on bottom: default behavior</li>
+    <li>Never on bottom: <span class="style4">#nav-below {display:none !important;}</span>
+      </li>
+    </ul>
+    <br />
+          You can also control the position of the PageNavi menu by adding these rules to the &lt;HEAD&gt; Section:
+          <br />
+          <br />
+          <ul>
+          <li>Left: default</li>
+          <li>Center: <span class="style4">.wp-pagenavi {text-align:center;}</span></li>
+          <li>Right:
+            <span class="style4">.wp-pagenavi {float:right;}            </span>
+            <br />
+
+          </ul>
+      <br />
+      (<a href="http://wordpress.org/extend/plugins/wp-pagenavi/">WP-PageNavi</a>)<br />
+    <br />
+    </li>
+  <li><strong>Events Manager Extended</strong> - This plugin is among the best plugins for managing events for your club or other organization. While it technically doesn't require extra support, adding proper styling information to the EME's settings page makes it work totally seamlessly with your Weaver theme. Please see the <a href="http://wpweaver.info/?p=1024">Events Manager Extended - Calendar Plugin</a> article on the wpweaver.info web site. (<a href="http://wordpress.org/extend/plugins/events-manager-extended/">Events Manager Extended</a>)<br />
+    <br />
+  </li>
+  <li><strong>Mingle Forum</strong> - WP Weaver uses the <a href="http://wordpress.org/extend/plugins/mingle-forum/">Mingle Forum</a> as the main support forum for the Weaver Theme. This is a simple, easy-to-use, and robust forum that really gets the job done without a lot of unnecessary frills. WP Weaver supports this plugin with its own add-on plugin, <a href="http://wordpress.org/extend/plugins/mingle-forum-guest-info/">Mingle Forum Guest Info</a>, which allows posts without going through a registration process.</li>
+</ol>
+<h3>&nbsp;</h3>
+<h3><a name="MiscNotes" id="MiscNotes"></a>Miscellaneous Notes<br>
+  <br>
+</h3>
+<ul><li><strong>Things you can't do</strong><br>
+Because of the design of Weaver started as a "strict" child theme of
+Twenty Ten, there are some things you can't really do using CSS
+overrides because the order of the elements on a page are &quot;hard wired&quot;. For example, the Sidebars are placed outside of the main
+content area. The information about posts (&quot;Posted on ... by ...&quot; and the &quot;Posted in category&quot;) must be above and below the post.<br />
+<br />
+</li>
+  <li><strong>Wording of User Text</strong><br />
+    The wording of the end User (site visitor) messages is fixed (e.g., Posted on, Previous Post, etc.). This is due to internationalization issues. Weaver was based on the default WordPress Twenty Ten theme, and can use all of its language translations so that Weaver can be used in many languages. (This is the user interface only - the Admin interface is likely to remain in English for the foreseeable future because of its complexity and lengthy help messages.)
+    <br>
+  </li>
+</ul>
+
+<h2><a name="language_support" id="language_support"></a>Using Weaver in your language</h2>
+
+First of all, WordPress and Twenty Ten have translations available for many languages. If you need to make your site display in a language other than English, the place to start is the <a href="http://codex.wordpress.org/Installing_WordPress_in_Your_Language">Installing WordPress in Your Language</a> page at WordPress.org. You have to install both the WordPress translations for your language, plus the <em>theme</em> translations. But since Twenty Ten is the standard theme, its translations should be automatically included when you install WordPress for your language.
+
+Because Weaver is based on the default Twenty Ten theme, it uses all the same text phrases found on the visitor side of your site that Twenty Ten does. (The Weaver admin panel, on the other hand, is still strictly English - it is has so much help and explanations, that it would be very difficult to translate.)
+
+But the important part is that you can easily use the language translation files for Twenty Ten with Weaver so that people who visit your site will see your native language.
+
+Here's what you need to do. The goal is to copy some files from the Twenty Ten theme directory to the Weaver directory. You may need to use your site's host control panel interface (e.g., cPanel), or use your ftp access. Here's the steps.
+<ol>
+	<li>Find Twenty Ten's language directory. It will usually be at "<span style="font-family: courier new,courier;">/your-site-root-directory/wp-content/themes/twentyten/languages</span>". That directory contains the language files. Once your site has been installed for your language, that directory should contain 2 or 3 files (perhaps more). Two of those files will match your language setting. For example, if you have installed the Spanish version of WordPress, you'll find &lt;<span style="font-family: courier new,courier;">es_ES.po</span> and <span style="font-family: courier new,courier;">es_ES.mo</span> there. (There is some chance you'll have only .mo file(s).)</li>
+	<li>Copy the language files (e.g., <span style="font-family: courier new,courier;">es_ES.po</span> and <span style="font-family: courier new,courier;">es_ES.mo</span>) from the Twenty Ten directory to  Weaver's directory: (<span style="font-family: courier new,courier;">/your-site-root-directory/wp-content-themes/weaver/languages</span>). Use your cPanel or ftp to do this.</li>
+	<li>Your site should now display your native language when visitors see it.</li>
+</ol>
+
+<h2><a name="ie" id="ie"></a>Internet Explorer Compatibility</h2>
+<p>Microsoft's Internet Explorer has varying native compatibility with Weaver, sometimes depending on what other plugins you are using with your site. The new IE 9 finally seems to be standards compliant, and seems to work perfectly with Weaver.
+Versions previous to IE 9 have various incompatibilities that have been solved with a special script included with Weaver that works on almost all IE 7 and IE 8 sites.</p>
+<p>There are two main incompatibilities with pre-IE 9 versions. First, IE does not support rounded corners or shadows. Weaver includes a fix called PIE that displays rounded corners and shadows on IE 8 and IE 7. IE 7 also requires some special rules to display all elements properly, which are included</p>
+<p>By default, Weaver automatically adds support for rounded corners and shadows for IE 7 and IE 8. If by some chance, plugin
+or other feature that doesn't display properly (this seems very rare), there is an option near the bottom of the Advanced Options page that lets you turn off this support.
+In that case, your site will work correctly, but have square corners and no shadows. </p>
+<p>IE 6 is an entirely different issue. WordPress has officially abandoned support for IE 6. The main issue with IE 6 is improper display of the menus. Anyone who has access to your site using IE6 should really upgrade to a later version of IE. If it is important for your site to handle IE6, there are plugins available that will notify visitors that they are using an incompatible browser, and provide upgrade instructions.</p>
+<h2><a name="File_access_plugin" id="File_access_plugin"></a>Weaver File Access Plugin</h2>
+<p>You are probably reading this section because you received an &quot;Important Notice&quot; after you installed Weaver on your system. </p>
+<p>For added security, on some web hosts, WordPress requires that files on the site's host be accessed via &quot;FTP&quot;. If your host is one of those, you will either have to provide proper credentials to use the FTP file access, or install the Weaver File Access Plugin.</p>
+<p> Because of the dynamic nature of Weaver, and its features to Save and Restore your settings, it must read and write files on your web host. These files include sub-theme definition files, the CSS files it creates to support site display and page/post editor styling, as well as the theme definition and backup files you create from the Save/Restore tab.</p>
+<p>When WordPress tells Weaver that it can't run on properly on your system, Weaver issues a warning. Without full file access, Weaver <em>will</em>  allow you to select sub-themes and change and save all the options. But you won't be able to save and restore settings, the theme CSS rules will be included in-line instead of from a file (which is more SEO friendly), and the page/theme editor will use a simple black on white styling. </p>
+<p>Assuming you want all the features of Weaver, you will either have to provide the proper login credentials for FTP access, or use the Weaver File Access Plugin. FTP access is described later.</p>
+<p>In almost all cases, you will be able to get Weaver to work properly on your system by installing the &quot;Weaver File Access Plugin&quot;. This plugin is available for free from <a href="http://wpweaver.info/themes/weaver/weaver-file-access-plugin/" title="Weaver File Access Plugin" target="_blank">WPWeaver.info</a>, as well as the standard <a href="http://wordpress.org/extend/plugins/weaver-file-access-plugin/" target="_blank">WordPress.org</a> plugin repository. And the easiest way is to use the WordPress <em>Dashboard Plugins-&gt;Add New</em> menu and enter <em>Weaver File Access Plugin</em> into the search box to install the plugin directly onto your system. Be sure to activate!</p>
+<p>To install the plugin from WPWeaver.info or WordPress.org, download the plugin by clicking the download link found on the <a href="http://wordpress.org/extend/plugins/weaver-file-access-plugin/" target="_blank">WordPress.org link</a>, or follow the directions on the <a href="http://wpweaver.info/themes/weaver/weaver-file-access-plugin/" target="_blank">Weaver File Access Plugin</a> page. Then, go to the<em> Add New Plugin </em>menu on the dashboard, click the Upload button, and upload the plugin file you just downloaded. Then be sure to activate the plugin.</p>
+<p> Weaver should now work with full capability.</p>
+<p><em>There are a very few cases when the plugin will not solve your problems</em> - that situation is covered later.</p>
+<h4>Why Do You Need the Weaver File Access Plugin?</h4>
+<p>Your are likely to receive this message due to one of two reasons:</p>
+<ol>
+
+  <li>You are hosting your site on an  shared server that isn't optimally configured for WordPress.</li>
+  <li>You are hosting your site on your own server, or on a VPS system.</li>
+  </ol>
+  <p>The issue is caused by a limitation of WordPress and Weaver to create and write to files because of file permission issues. </p>
+  <p>On some shared hosting systems, there is a potential security issue with file access. WordPress has addressed this issue by requiring the FTP file access mechanism. This security issue is almost always the result of a non-optimally configured shared host. If you
+    </li>
+
+    get this message and you have your site hosted on some kind of shared server, you should seriously consider moving to a different host, or getting your hosting company to update their system so that all WordPress files are owned by the account owner. Until then, your site will be at a relatively small risk of attack by other sites hosted on the same server. (If you are using your own shared server where you have control of all the sites on it, then this will not be an issue.) </p>
+  <p>If you are using a VPS (Virtual Private Server) or other private hosting solution, then the security issue for shared hosting does not apply to you. Such systems are often configured so they will trigger the file access warning, but  is safe to use the Weaver File Access plugin because you have control over server access.</p>
+  <h4>Setting up FTP File Access</h4>
+  <p>If you are running on a server that requires FTP access, it is likely you've already encountered the requirement whey you update themes or plugins. You get a screen that asks for you to enter you FTP access credentials - usually consisting of the host name, your user name, and your password.</p>
+  <p>There are two ways to get around entering your credentials for each file access. Needing to do that would quickly make using Weaver totally unacceptable.</p>
+  <p>First, you can enter your hostname, user name, and password in the form Weaver displays when it detects that FTP file access is required. If you enter your hostname, username, and password, they will be saved. The password will be encrypted before it is saved for better security. </p>
+  <p>Second, you can instead edit the wp-config.php file contained in the WordPress root directory on your site. Once in the wp-config.php, you would add the following lines, with the correct values, of course. You can put these lines anywhere, but right after the database access definitions is a good place.</p>
+  <p>Here are the lines:</p>
+  <pre>define('FS_METHOD', 'ftpext');
+define('FTP_USER', 'username');
+define('FTP_PASS', 'password');
+define('FTP_HOST', 'ftp.example.org');
+define('FTP_SSL', false);
+</pre>
+<p>If your site requires FTP_SSL or SSH access instead of normal FTP, you will need to edit the wp-config.php file to provide the appropriate values. All the settings for the different kinds of file access are described in this WordPress.org <a href="http://codex.wordpress.org/Editing_wp-config.php" target="_blank">article</a>.</p>
+  <h4>What if the Weaver File Access Plugin doesn't fix the problem?</h4>
+  <p>Sometimes if you move your site to a new host, or upgrade Weaver and change to or from FTP file access, you will get an error message about the inability to write or create a file. These messages are usually caused by file write access permissions.</p>
+  <p>On common time this happens is for sites hosted on private servers or VPS systems. There can be issues with file permissions caused by the way the server was set up. Such systems are likely to require the Weaver File Access Plugin, but may also need some manual setting of file permissions.</p>
+  <p>Just to site an example I personally encountered when setting up WordPress and Weaver on a VPS host. This was an unmanaged VPS, so I had to set up everything myself. On such a system, it is typical that the web files will be owned by a specific user, but be served by the &quot;apache&quot; or &quot;nobody&quot; process. If permissions are not set properly, then WordPress is unable to write files - such as Media Library files, or Weaver files. The solution for this case was to put the user and apache into the same group, and change appropriate permissions to 775. This is a safe thing to do on privately controlled servers.</p>
+  <p>There is much more information on this topic in <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">This Article</a> from WordPress.org. Note that the information in that article most likely doesn't apply to shared servers.</p>
+  <h2><a name="TechNotes" id="TechNotes"></a>Technical Notes</h2>
+<p>The <em>Weaver</em> theme was originally designed as a child theme of the <em>Twenty
+Ten</em> theme, which is the  standard for WordPress 3. Many of the features used by Weaver are completely influenced by Twenty Ten.
+As of Version 1.5, Weaver started to move away from the strict child-theme approach, and has become a true standalone theme with the release of Version 2.0.
+However, the strong influence of Twenty Ten will always remain, as will the compatibility with Twenty Ten's visitor interface side language translations.</p>
+<h2><a name="divhierarchy" id="divhierarchy"></a>Weaver HTML
+&lt;div&gt; Hierarchy</h2>
+<p>The Weaver theme generates content that is wrapped in HTML
+&lt;div&gt;'s with a set of conventional names. A typical site page
+will have the following hierarchy. Knowing this can help you make
+additional custom modifications. (Another useful thing to do is to use
+the "View Document Source" option of your web browser to see the actual
+HTML generated by WordPress for your site content.)</p>
+<pre class="codebox">#wrapper<br>	#header<br>		#masthead<br><br>  # main<br>	    #container<br>			#content<br>				#comments<br><br>		#primary<br>		#secondary<br>	#footer<br>		#colophon</pre>
+<p>&nbsp;</p>
+<h3><a name="MoreHelpSug" id="MoreHelpSug"></a>More Help - Suggestions</h3>
+<p>The <em>Weaver</em> page at WPWeaver.info allows
+comments. You can leave questions or comments there. No promises on how
+quickly you will get a response, however. I have a lot of other
+projects going, and travel some, so I might not get a chance to respond
+immediately, but I will try. If this theme becomes popular, I might
+create a support forum for it. But for now - just comments.</p>
+<p>Thanks for checking out <em> Weaver</em>. Hope you create
+a beautiful WordPress theme with it!<!-- end #mainContent --> </p>
+<p>&nbsp;</p>
+<hr>
+<h2><a name="v3releasenotes" id="v3releasenotes"></a>Version 1.3
+Release Notes </h2>
+<p>Weaver Version 1.3 has some significant enhancements and <a
+ href="#changes13">changes</a> over previous versions. It is possible
+you will have to make a couple of minor changes to your theme to have
+it look exactly the way it did before.</p>
+<strong>More Header Options</strong>
+<ul>
+  <li>Option for Header Image to be a link to site</li>
+  <li>Move Site Title and Description over Header Image</li>
+  <li>Gradient on Menu Bar</li>
+  <li>New special purpose header widget area for social links and more</li>
+  <li>Support for <a
+ href="http://wordpress.org/extend/plugins/dynamic-headers/">Dynamic
+Headers</a> plugin (gives you total control over which header image
+appears on which page and more)</li>
+</ul>
+<strong>Improved Widget Area Options</strong>
+<ul>
+  <li>Top and Bottom Widget Areas can be full width</li>
+  <li>Better control on which pages Top and Bottom Widget areas show</li>
+</ul>
+<strong>Other new and improved features</strong>
+<ul>
+  <li>Color picker boxes now allow text - e.g. <em>blue, transparent,
+inherit</em>, etc.</li>
+  <li>Improved Save/Restore of your own designed sub-themes</li>
+  <li>Optional styling for tables - gets around the huge default
+padding in Twenty Ten</li>
+  <li>More options, including none, for list bullets</li>
+  <li>New Admin options (e.g., hide site preview)</li>
+  <li>Significantly faster generating pages</li>
+  <li>Theme extensions (e.g., Slider) now done with plugins</li>
+  <li>Separate Multi-Weaver discontinued - now merged into Weaver.
+Significant new features for WP Multisite.</li>
+</ul>
+<p><strong><a name="changes13" id="changes13"></a>Changes to Weaver
+Functionality</strong></p>
+<p><strong>1. Area Background Colors</strong></p>
+<p>The most significant change to Weaver involves how the background
+colors of the major areas are handled. These background colors are set
+in the Theme Background Colors section of the Main Options tab of the
+admin page. These are the areas, and the corresponding CSS &lt;div&gt;
+names:</p>
+<table class="attrs">
+  <tbody>
+    <tr>
+      <td align="left" width="25%">Wrapper Page BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for top level
+#wrapper div - default BG if you don't change others. <span class="css">{#wrapper}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">Main Area BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for main page
+#main div - wraps container, content and sidebars (uses wrapper bg if
+not set). <span class="css">{#main}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">Container Area BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for #container
+div - wraps content and sidebars (uses wrapper bg if not set). <span
+ class="css">{#container}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">Content BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for post and
+page content area (uses main bg if not set). <span class="css">{#content}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">XX Widget Area BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for the four
+widget areas. <span class="css">{#primary, etc.}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">Footer BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background for the footer
+area. <span class="css">{#footer}</span></small></td>
+    </tr>
+    <tr>
+      <td align="left">Outside BG:&nbsp;</td>
+      <td style="padding-left: 10px;"><small>Background color that
+wraps entire page. Using Appearance-&gt;Background will override this
+value, or allow a background image instead.<span class="css">{body}</span></small></td>
+    </tr>
+  </tbody>
+</table>
+<p>&nbsp;</p>
+<p><strong>2. Theme Save File Extension</strong></p>
+<p>The file extension used for Weaver saved theme files. Previously,
+the extension was <span class="style3">.txt</span>. That has been
+changed to <span class="style3">.wvr</span>. The actual format of the
+file has not changed. If you have old themes saved, simply rename them
+and change the extension from <span class="style3">.txt</span> to <span
+ class="style3">.wvr</span>.</p>
+<p><strong>3. SEO Tags</strong></p>
+<p>A new advanced option called "SEO Tags" has been added. Search
+Engine Optimization is somewhat of a black art, and this provides
+minimal support. The difference is that previously, the meta tags now
+included here were in the &lt;HEAD&gt; Section, which meant your tags
+were saved in any themes you saved, which isn't exactly correct. Now,
+these SEO meta tags are not saved with theme settings, but are just
+site specific. If you had filled in the meta tags on your old versions,
+you should remove them from the &lt;HEAD&gt; Section, and copy them
+here.</p>
+<p><strong>4. The Last Thing</strong></p>
+<p>Just as the SEO tags don't belong with the theme, the code you
+include in this section are site specific. They will not longer be
+saved with a theme. If you have an old saved theme, however, the
+settings will be copied over automatically.</p>
+<p>&nbsp;</p>
+<hr>
+<h2><a name="v4releasenotes" id="v4releasenotes"></a>Version 1.4
+Release Notes </h2>
+Weaver 1.4 has a few changes and some new features. This is a summary
+of the changes:<br>
+<ol>
+  <li>Two new sub-themes<br>
+Transparent Dark and Transparent Light. These two themes use
+transparent backgrounds, and can make truly beautiful sites when used
+with an appropriate background image or solid color.<br>
+    <br>
+  </li>
+  <li>Icons for Post Meta Info<br>
+A set of icons suitable for using with the Meta Information above and
+below Blog Posts has been included. You can use the default set (a gray
+theme that works well with almost any color) with a Main Options check
+mark, or use custom CSS in the &lt;HEAD&gt; Section. There is also a
+check mark option to remove the fill-in text (e.g., 'Posted on', 'by',
+etc.) in the info lines, which allows a very nice icon-only look. There
+are a number of icons available for your custom use in the
+/wp-content/themes/2010-weaver/images/icons directory.<br>
+    <br>
+  </li>
+  <li>Advanced Option to customize copyright<br>
+You can now put a totally customized copyright notice in the footer to
+replace the automatically generated one. There is also a check mark to
+hide the "Powered by" credit if you really don't want to give credit to
+WordPress and WPWeaver.<br>
+    <br>
+  </li>
+  <li>Advanced Option to Clear the Weaver database<br>
+Sometimes it is just best to start over. This new option allows you to
+clear the existing Weaver settings back to the original default values.<br>
+    <br>
+  </li>
+  <li>Internet Explorer fixes<br>
+Code was added to support rounded corners in the upcoming IE 9. A long
+unreported problem with a bug in IE that made it display the color
+boxes&nbsp; was fixed to work around the problem.<br>
+  </li>
+</ol>
+<br>
+<hr>
+<h2><a name="v5releasenotes" id="v5releasenotes"></a>Version 1.5
+Release Notes
+</h2>
+<p>Weaver Version 1.5 represents a major revision of Weaver and has many new features, many in response to requests from some of our more advanced users.
+ Virtually every element of your WordPress site can now be easily customized from the Main Options tab. The new features add even more flexibility to how you can customize Weaver.</p>
+
+<p>New feature summary:</p>
+
+<ul>
+	<li>The most important new feature added to Version 1.5 is the ability to easily add custom CSS styling to specific elements of a WP site. If you don't know CSS, there is a new CSS Help document that introduces you to this powerful feature. But you don't need to use this feature if you don't want to - there's still plenty of customization that can be done just with the &quot;check-box&quot; interface. But more advanced users can now apply CSS to specific page elements very easily.<br />
+	  <br />
+	</li>
+	<li>The Main Options admin tab has been reorganized into more logical sections, makes it easier to find the options for each part of your site. The Advance Options page was reorganized to accommodate the HTML new code areas.<br />
+	  <br />
+	  </li>
+	<li>Five new page templates:<br />
+	  <br />
+<ol>
+	<li><em>Alternative Sidebar Left</em> - page with sidebar on left. Sidebar uses new, Alternative Widget Area, exclusive to the Alternative Sidebar templates.</li>
+	<li><em>Alternative Sidebar Right</em>- same, on right.</li>
+	<li><em>Blank Content Area</em> - Provides a totally blank content area inside the #wrapper div. Lets you provide totally custom HTML on a page. Doesn't show page title or comments. Optionally hide header and footer.</li>
+	<li><em>Custom Header</em> - Provides a standard page, but uses a new custom header block found on the Advanced Options page. Doesn't show standard header image, and can optionally hide menus and site title/description.</li>
+	<li><em>Two Column Content</em> - Allows you to create a content page with two columns of content using the standard &lt;!--more--&gt; page tag. If you break the content into more than two areas, they will automatically be placed vertically.<br />
+      <br />
+    </li>
+    </ol>
+</li>
+	<li>Two new Widget Areas - one for the new Alternative page templates, and one for specialized post pages (e.g., Archive, Single Post, etc.).<br />
+	  <br />
+	</li>
+	<li>More control over post excerpts. You can set the excerpt length (and even stop auto excerpts), and force posts on the main blog page to be excerpted.<br />
+	  <br />
+	  </li>
+	<li><em>Featured Image</em> done right! You may have seen the "Featured Image" option on your post and static page edit panel. What is it good for? With
+	Weaver's new options, it is good for a lot. The old, default Twenty Ten behavior was to display the "Featured Image" as a replacement header image
+	for pages where it was set. That still works (as long a the Featured Image is as wide as the standard header image). There is an option to stop that behavior. Instead,
+	you can have the Featured Image be automatically displayed whenever you display a post - in any combination of excerpted posts and full length posts.
+	For excerpted posts, a thumbnail will be displayed. For full length posts, the full image will be displayed. Finally, Featured Image works the way it should.
+	<br /> <br /></li>
+	<li>A new text widget called 'Weaver Text 2' was added. This widget allow you to add two columns of text, especially useful for the wider top and bottom widget areas. It also supports shortcodes, and add shortcode support to the standard Text widget.<br />
+	  <br />
+	</li>
+	<li>Five new HTML code areas on Advanced Options page. These areas allow you to add arbitrary HTML (including WP shortcodes) above and below the header,  above and below the footer, and above the sidebar.<br />
+	    <br />
+	  </li>
+	<li>Five different table styles to select from.<br />
+	  <br />
+	</li>
+	<li>Control over media library image display - border color and caption text color.<br />
+	  <br />
+	</li>
+	<li>Option to completely hide footer area - can be used in conjunction with the new footer HTML code areas.<br />
+	  <br />
+	  </li>
+	<li>Background control for posts. You can now use a distinct background for your posts. Using the new CSS slide-open, you
+	can also add borders to posts.<br />
+	  <br />
+	</li>
+	<li>Background control for sticky posts and input areas. You can now easily make these areas match your theme.<br />
+	  <br />
+	</li>
+	<li>Sidebar border adjustment. Before, if you tried to add wide borders to the sidebar areas, they would tend
+	to float below the main content area. This was due to the fact that supporting the different sidebar arrangements
+	required server-side calculations. This new value allows you to add an adjustment factor for those calculations
+	if you've added styling for wide borders on your sidebars.<br />
+	<br />
+	<li>New CSS id's were added to the special post pages (e.g., archive, category, etc.) to allow using CSS to hide the extra title on those pages. See the Snippets.<br />
+	  <br />
+	</li>
+	<li>Additional Weaver defined CSS id's and classes to help style some fine details of various page elements (e.g., the &quot;previous&quot; and &quot;next&quot; page links). See the <em>Weaver CSS Elements</em> in the Snippets document.<br />
+	  <br />
+	  </li>
+	<li>Some small adjustments to the margins and placement of the top and bottom widget areas were made.<br />
+	  <br />
+	  </li>
+	<li>Automatically display a small warning at the bottom of page that encourages visitors using old versions of Internet Explorer to upgrade to the latest version (can be turned off).<br />
+	  <br />
+	</li>
+	<li>"Main Options" CSS style rules now come from .css file instead of being included inline. This is a settable option. This should slightly speed up site load, and some people think it will lead to better SEO placement.</li>
+    </ul>
+    <hr />
+<h2><a name="v6releasenotes" id="v6releasenotes2"></a>Version 1.6
+  Release Notes </h2>
+<p>Weaver 1.6 represents yet another major release over the 1.5 and earlier versions of 2010 Weaver, with the addition of many new features. For this release, the new features concentrated on adding new per post and per page customization features.</p>
+<ul>
+  <li>Greatly improved help system - many direct links to relevant help documentation</li>
+  <li>New Main Options</li>
+<ul><li>Author Avatar Display for posts</li>
+  <li>Can put borders around only Top and Bottom Widget Areas</li>
+  <li>Allow comments for attachment pages</li>
+  <li>Hide Author info box</li>
+  <li>Complete by item visibility control of Post information lines</li>
+  <li>Option to include Search box on menu</li>
+  <li>Option to include Log in link on menu</li>
+  <li>No Home Menu Item</li>
+  <li>Specify left and top margins for Title over Header Image</li>
+  <li>Hide Featured Image as Header Image</li>
+  <li>Hide Entire Footer</li>
+  <li>Define number of display blocks for widget areas in footer</li>
+</ul>
+  <li>Option to include extra links with images on menu bar (for social links)</li>
+  <li>Added new page templates</li>
+  <ul>
+  <li>Page with Posts (4 versions) - will display posts, can define filter to select posts to show</li>
+  <li>Sitemap</li>
+  </ul>
+  <li>Per page settings</li>
+  <ul>
+  <li>Hide Page Title</li>
+  <li>Hide standard widget areas</li>
+  <li>Define per page top widget area</li>
+  <li>Define Primary and Secondary sidebar replacement widget areas</li>
+  <li>Per page &lt;HEAD&gt; and header insert code</li>
+  <li>Make &quot;Placeholder Page&quot; - for empty, don't go anywhere, top level menu items.</li>
+  </ul>
+  <li>Per post settings</li>
+  <ul>
+    <li>Excerpt, full post control</li>
+    <li>Featured image display</li>
+    <li>Show author avatar</li>
+    <li>Mark as favorite, indicated with star on display</li>
+    <li>Control of top and bottom post info lines</li>
+    </ul>
+  <li>New sub-themes: The Grays, Kitchen Sink, Mist, Turquoise, Magazine</li>
+  <li>New site wide Top and Bottom widget areas - displays on both regular page and special post pages (archives, etc.)</li>
+  <li>New Alternative Widget areas for Left and Right Alternative Page Templates</li>
+  <li>Enhanced Featured Image Support for posts</li>
+  <li>Preview window now off by default</li>
+  <li>Improved theme compatibility with special post display pages - category, archive, etc.</li>
+  <li>Some internal code reorganization, including changing way include sub-themes are defined.</li>
+  <li>Improved organization of Options screens, including new sub-menus<br />
+  <li>Added PIE script for IE rounded corners</li>
+  <li>Added simple Log in widget</li>
+  <li>Enhanced Multi-site support</li>
+  <li>[weaver_show_posts] shortcode</li>
+  <li>Hide sidebars on per page for static pages, and also for Single Post pages.</li>
+  <li>Support custom <em>Continue reading...</em> message.</li>
+  <li>Added Gallery Post Format support for WP 3.1</li>
+  <li>Fixed broken [gallery] shortcode support (as inherited from Twenty Ten).</li>
+  <li>New security measures added.</li>
+</ul>
+<p><em> Possible incompatibilities with older versions
+  </li>
+  </em>
+<ul>
+    <li>Changed order of things in #header div - top menu and site title are now before #branding div instead of inside it.</li>
+    <li>Changed how "Use SEO plugin instead" option works - now uses just "wp_title('');" when checked.</li>
+    <li>Changed behavior for [gallery] shortcode - now supports columns as specified. Twenty Ten forces always 3 columns.</li>
+    <li>All references to <span class="style4">/wp-content/themes/2010-weaver/ </span>should be changed to <span class="style4">/wp-content/themes/weaver/</span>.  </li>
+</ul>
+<h2><a name="v7releasenotes" id="v7releasenotes2"></a>Version 1.7
+  Release Notes </h2><p>* Changed theme name to Weaver<br />
+    * Fixed final IE 7 incompatibility - now fully IE compatible!<br />
+    * Changed all internal function names to weaver_ for new theme stub name.<br />
+    * Fixed all textarea output escaping and input filtering, including for post/page edit screens.<br />
+    * include of Weaver .css file now via enqueue style function<br />
+    * improved wording on bad extra widget inclusion</p>
+  <p><em>Known Incompatibilities</em><br />
+    <br />
+  * Advanced settings might have \&quot; in them that will need to be manually fixed.<br />
+    * Slider theme 1.5 not compatible - need to switch to Slider 1.8</p>
+  <p>&nbsp;</p>
+  <h2><a name="v2ReleaseNotes" id="v2ReleaseNotes"></a>Version 2.0 Release Notes</h2>
+  <p>Weaver 2.0 contains significant internal changes that help Weaver make your web site more secure. There are also several important
+new features, including Page/Post Editor styling and Menu Effects. Because the internal data representation has changed,
+Weaver 2.0 requires an automatic conversion of the settings saved by older versions of Weaver and 2010 Weaver. When you first
+enter the Weaver 2.0 admin panel, you'll see a notice at the top offering to import old Weaver settings if old settings were found.
+You can import the settings, ignore the notice, or turn the notice off.</p>
+<p>The way saved settings are handled is also now a bit different. Weaver 2.0 makes a clear distinction between settings that are strictly
+theme related (colors, fonts, and similar), and settings that are related just to the particular site (which widget areas to hide,
+display of excerpts, AdSense code, etc.). There's a new easy-to-use backup option that will save every setting for your site, while saving
+a theme definition saves just the theme related settings.</p>
+  <p><strong>New Features</strong></p>
+<ul>
+  <li>New Backup feature. You can create a backup of all your Weaver settings with one click from the Save/Restore tab.</li>
+  <li>New Page/Post Editor styling. Weaver will now add the proper styling to the Page/Post editor to match the colors, fonts, size, and table settings defined by your theme. However, because of some inherent differences between how the tinyMCE editor displays your content from the actual page display, the exact line breaks will not quite correspond between the same views. But your editor view will now match the actual view much more closely.</li>
+  <li>Theme Margin - you can now change the default 20px margin displayed around the edge of site pages.</li>
+  <li>Option to display tiny author avatar with posts.</li>
+  <li>Option to hide sidebars on special archive-type post pages.</li>
+  <li>Options that are theme-only vs. site-only are treated differently when saving themes vs. backups.</li>
+  <li>Improved compatibility with different web hosts.</li>
+  <li>Added support for WP-PageNavi and Meteor Slides, in addition to previous Dynamic Headers.</li>
+  <li>Added Per Post Style option</li>
+  <li>Added Per Page Hide From Menu</li>
+  <li>Added Rounded Corner Radius setting</li>
+  <li>Added Menu Effects - arrows to sub-menus, shading, smoothing</li>
+</ul>
+<h3><a name="v2incompatibilities" id="v2incompatibilities"></a>Version 2.0 vs. Version 1.7 - Incompatibilities</h3>
+  <ul>
+    <li>Saving a theme definition to a file saves theme related settings only. The settings in the &lt;HEAD&gt; Section are not saved as part of a theme definition. <em>Use Advanced Options : Add CSS Rules to Weaver's style rules</em> instead.</li>
+    <li>Saving to My Saved Theme
+now saves all settings, including all Advanced Options settings.</li>
+    <li>Settings made using 2010 Weaver or Weaver 1.7 must be imported into Weaver 2.0. No information will be lost during the import, and you site should look identical.</li>
+    <li>You will probably have to re-activate any Custom Menus you have defined using <em>Appearance-&gt;Menus</em>.</li>
+    <li>Some option formerly found on Advanced Options (e.g., hiding some block from front page) are now found on the Per Page or Per Post settings.</li>
+    <li>The behavior of the CSS + add CSS to Main Option color settings has changed slightly. You now <em>must</em> provide the surrounding {}'s. If you have left these out, you will get an error message when you try to save your Main Option settings, and your site will likely not look right. You'll have to manually fix these.</li>
+    <li>Some default styling has been changed, and if you've added custom styling, you may have to make manual changes.</li>
+    <li>Per Post Display as Full Post option now includes Blog Page as well as special archive-type pages.</li>
+    <li>Upload theme from URL removed for security reasons.</li>
+    </ul>
+  <h3><a name="v21releasenotes" id="v21releasenotes"></a>Version 2.1 Release Notes</h3>
+  <p>Changes to Weaver 2.1 include:</p>
+  <ul>
+    <li>Support for Weaver Plus</li>
+    <li>Improved Admin Interface</li>
+    <li>Disable Visual Page/Post Editor on a per page/post basis (forces HTML mode)</li>
+    <li>Fixed some menu z-index issues</li>
+    <li>Fixed some minor code bugs</li>
+    <li>Fixed one page, no sidebar styling</li>
+    <li>Made all except baseline body font-size relative values</li>
+    <li>Option to place #header and #footer blocks outside #wrapper div.</li>
+    <li>Tweaked Printer styling when site has left sidebars</li>
+    <li>Added code improvements for child theme support</li>
+    <li>Fixed link visited/hover styling issue</li>
+    <li>New Pop Up template</li>
+    <li>Made some changes for non-super-Multisite admins.</li>
+    <li>Fixed some of the printing styling.</li>
+    <li>Improved styling for standard RSS widget.</li>
+    <li>Improved IE 7 compatibility.</li>
+    </ul>
+  <h3><a name="release_notes_2_2" id="release_notes_2_2"></a>Version 2.2 Release Notes</h3>
+  <ul><li>WordPress 3.2 updates</li>
+    <li>Added Post Formats: Aside, Gallery, Link, Quote, Status</li>
+    <li>Added Raw HTML page/post support on a per page/post basis</li>
+    <li>Added option to adjust CSS + edit box height</li>
+    <li>Added rel=&quot;author&quot; attribute for author meta info link</li>
+    <li>Added support for 'default-style-color' value for new color options (e.g., for Post Format title)</li>
+    <li>New file acccess design to meet WordPress.org specifications</li>
+  </ul>
+  </div>
+<p>&nbsp;</p>
+</div>
+</body>
+</html>

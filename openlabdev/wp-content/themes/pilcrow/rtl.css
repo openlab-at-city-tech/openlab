@@ -1,0 +1,193 @@
+/*
+Theme Name: Pilcrow
+*/
+
+body {
+	direction:rtl;
+	unicode-bidi:embed;
+}
+html body {
+	text-align: right;
+}
+caption, th, td {
+	text-align: right;
+}
+ul, ol {
+	margin: 0 2.5em 1.7em 0;
+}
+textarea {
+	padding-right: 3px;
+	padding-left: auto;
+}
+
+#content-box {
+	direction: ltr;
+}
+#content-container,
+#sidebar,
+#secondary-sidebar {
+	direction: rtl;
+}
+
+
+/* =Header
+----------------------------------------------- */
+
+#header {
+	float: right;
+}
+#site-title {
+	text-align: left;
+}
+
+
+/* =Menu
+----------------------------------------------- */
+
+#nav ul {
+	padding-left: auto;
+	padding-right: 0;
+}
+#nav li {
+	float: right;
+}
+#nav ul ul {
+	float: right;
+	right: 0;
+}
+#nav ul ul ul {
+	right: 212px;
+}
+
+
+/* =Content
+----------------------------------------------- */
+
+.entry-meta {
+	float: right;
+}
+.jump {
+	float: left;
+}
+.entry-links .comment-number {
+	background: url(images/icons/bubble-rtl.png) no-repeat right 4px;
+	float: left;
+	padding: 0 26px 2px 0;
+}
+.entry-links .tagged {
+	background-position: right 2px;
+	padding: 0 24px 0 0;
+}
+
+/* Image Attachments */
+.image-attachment div.entry-meta {
+	float: right;
+}
+.image-attachment #image-navigation {
+	float: left;
+}
+.image-attachment .next-image a {
+	padding-left: auto;
+	padding-right: .5em;
+}
+
+
+/* =Navigation
+-------------------------------------------------------------- */
+
+.nav-previous {
+	float: right;
+}
+.nav-next {
+	float: left;
+	text-align: left;
+}
+
+
+/* =Widgets
+----------------------------------------------- */
+
+.widget-area ul {
+	margin-left: auto;
+	margin-right: 0;
+}
+.widget ul {
+	margin-left: auto;
+	margin-right: 1em;
+}
+#first {
+	float: right;
+}
+#second {
+	float: left;
+}
+
+
+/* =Comments
+----------------------------------------------- */
+
+#comments .avatar {
+	right: auto;
+	left: 10px;
+}
+#comments ol {
+	margin-left: auto;
+	margin-right: 0;
+}
+#ie7 #comments li {
+	position: static;
+}
+#comments li.bypostauthor > .comment-container {
+	margin: -15px -10px -5px 0;
+	padding: 15px 10px 5px 0;
+}
+#comments li,
+#comments li.thread-alt,
+#comments li.author_comment_,
+#comments li.author_comment_alt {
+	padding: 15px 10px 5px 0;
+}
+#comments li .children li {
+	border-bottom: none;
+}
+#ie7 #comments .avatar {
+	margin: 0 0 -1px 5px;
+	position: static;
+}
+
+/* Comment Form */
+#respond input[type=text] {
+	float: right;
+	margin-left: 7px;
+	margin-right: 0;
+}
+
+
+/* =Images
+----------------------------------------------- */
+
+.wp-caption .wp-caption-text {
+	padding: 0 0 8px 4px;
+}
+
+
+/* =Footer
+----------------------------------------------- */
+
+#site-info {
+	float: right;
+}
+#site-generator {
+	float: left;
+	text-align: left;
+}
+
+
+/* =Print
+----------------------------------------------- */
+
+@media print {
+	#site-title {
+		text-align: right;
+	}
+}

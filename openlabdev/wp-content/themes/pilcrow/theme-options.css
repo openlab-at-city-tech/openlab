@@ -1,0 +1,22 @@
+#wpcontent select option {
+	padding-right: 5px;
+}
+#pilcrow-layouts td {
+	padding-top: 15px;
+}
+#pilcrow-layouts label {
+	display: block;
+	float: left;
+	margin: 0 20px 20px 2px;
+	position: relative;
+}
+#pilcrow-layouts input {
+	margin: 0 0 10px;
+}
+#pilcrow-layouts span {
+	display: block;
+	width: 136px;
+}
+#pilcrow-layouts img {
+	margin: 0 0 0 -2px;
+}

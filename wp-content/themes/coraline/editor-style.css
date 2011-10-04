@@ -1,0 +1,271 @@
+/*
+Theme Name: Coraline
+Used to style the TinyMCE editor.
+*/
+html .mceContentBody {
+	max-width: 500px;
+}
+* {
+	font-family: Georgia, "Bitstream Charter", serif;
+	color: #444;
+	line-height: 1.7;
+}
+p,
+dl,
+td,
+th,
+ul,
+ol,
+blockquote {
+	font-size: 14px;
+}
+span {
+	color: inherit;
+}
+h1,
+h2,
+h3,
+tr th,
+thead th,
+label,
+tr th,
+thead th {
+	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+}
+pre {
+	font-family: "Courier 10 Pitch", Courier, monospace;
+}
+code, code var {
+	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.7em;
+	clear: both;
+}
+/* Text elements */
+p {
+	margin-bottom: 1.7em;
+}
+ul {
+	list-style: square;
+	margin: 0 0 1.7em 2.5em;
+}
+ol {
+	list-style: decimal;
+	margin: 0 0 1.7em 2.5em;
+}
+ol ol {
+	list-style: upper-alpha;
+}
+ol ol ol {
+	list-style: lower-roman;
+}
+ol ol ol ol {
+	list-style: lower-alpha;
+}
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+	margin-bottom: 0;
+}
+dl {
+	margin: 0 0 1.7em 0;
+}
+dt {
+	font-weight: bold;
+}
+dd {
+	margin-bottom: 1.7em;
+}
+h1,
+h2,
+h3,
+h5,
+h6
+strong {
+	font-weight: bold;
+}
+h1,
+h2 {
+	font-size: 28px;
+}
+h3 {
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+}
+h4 {
+	color: #888;
+	font-size: 17px;
+	font-style: italic;
+	font-weight: normal;
+}
+cite,
+em,
+i {
+	font-style: italic;
+	border: none;
+}
+big {
+	font-size: 131.25%;
+}
+ins {
+	background: #ffffcc;
+	border: none;
+	color: #444;
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+blockquote {
+	font-style: italic;
+	padding: 0 3em;
+}
+blockquote cite,
+blockquote em,
+blockquote i {
+	font-style: normal;
+}
+pre {
+	background: #f7f7f7;
+	color: #222;
+	line-height: 1.7;
+	margin-bottom: 1.7em;
+	padding: 1.7em;
+}
+abbr,
+acronym {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+sup,
+sub {
+	height: 0;
+	line-height: 1;
+	vertical-align: baseline;
+	position: relative;
+	font-size: 10px;
+}
+sup {
+	bottom: 1ex;
+}
+sub {
+	top: .5ex;
+}
+a:link {
+	color: #0060ff;
+}
+a:visited {
+	color: #333;
+}
+a:active,
+a:hover {
+	color: #df0000;
+}
+p,
+ul,
+ol,
+dd,
+pre,
+hr {
+	margin-bottom: 1.7em;
+}
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+	margin-bottom: 0;
+}
+pre,
+kbd,
+tt,
+var {
+	font-size: 12px;
+	line-height: 1.7;
+}
+code {
+	font-size: 12px;
+}
+table {
+	border: 1px solid #ccc !important;
+	text-align: left;
+	margin: 0 -1px 24px 0;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+tr th,
+thead th {
+	border: none !important;
+	color: #888;
+	font: 12px "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 9px 24px;
+}
+tr td {
+	border: none !important;
+	border-top: 1px solid #ccc !important;
+	padding: 6px 24px;
+}
+img {
+	margin: 0;
+}
+img.size-auto,
+img.size-large,
+img.size-full,
+img.size-medium {
+	max-width: 100%;
+}
+.wp-caption {
+	max-width: 96%;
+}
+.alignleft,
+img.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 1.7em;
+}
+.alignright,
+img.alignright {
+	display: inline;
+	float: right;
+	margin-left: 1.7em;
+}
+.aligncenter,
+img.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+img.alignleft,
+img.alignright,
+img.aligncenter {
+	margin-bottom: 2px;
+}
+.wp-caption {
+	border: none;
+	background: #eee;
+	text-align: center;
+	margin-bottom: 1.7em;
+	padding: 5px 3px 10px;
+}
+.wp-caption-dd {
+	font: 12px "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	line-height: 1.7em;
+	padding: 6px;
+}
+.wp-caption img {
+	margin: 2px 0 0 0;
+}
+.wp-caption p.wp-caption-text {
+	margin: .5em 0 0 0;
+}
+.wp-smiley {
+	margin: 0;
+}

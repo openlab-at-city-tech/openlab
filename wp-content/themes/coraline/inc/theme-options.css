@@ -1,0 +1,22 @@
+#wpcontent select option {
+	padding-right: 5px;
+}
+#coraline-layouts td {
+	padding-top: 15px;
+}
+#coraline-layouts label {
+	display: block;
+	float: left;
+	margin: 0 20px 20px 2px;
+	position: relative;
+}
+#coraline-layouts input {
+	margin: 0 0 10px;
+}
+#coraline-layouts span {
+	display: block;
+	width: 136px;
+}
+#coraline-layouts img {
+	margin: 0 0 0 -2px;
+}

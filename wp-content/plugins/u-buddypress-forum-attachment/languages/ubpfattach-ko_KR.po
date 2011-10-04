@@ -1,0 +1,314 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ubpfattach\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-16 12:17+0900\n"
+"PO-Revision-Date: 2011-08-16 12:18+0900\n"
+"Last-Translator: taehan lee <urlless@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: u-bp-forum-attachment.php:118
+msgid "Insert into editor"
+msgstr "편집기에 이미지 삽입"
+
+#: u-bp-forum-attachment.php:119
+msgid "Delete"
+msgstr "삭제"
+
+#: u-bp-forum-attachment.php:120
+msgid "Attachment deleted"
+msgstr "첨부파일 삭제됨"
+
+#: u-bp-forum-attachment.php:121
+msgid "Are you sure you want to delete?"
+msgstr "정말로 삭제하시겠습니까?"
+
+#: u-bp-forum-attachment.php:122
+msgid "Processing"
+msgstr "처리중"
+
+#: u-bp-forum-attachment.php:142
+msgid "Attach a file"
+msgstr "파일첨부"
+
+#: u-bp-forum-attachment.php:143
+msgid "Uploading"
+msgstr "업로드중"
+
+#: u-bp-forum-attachment.php:145
+msgid "File types"
+msgstr "파일 타입"
+
+#: u-bp-forum-attachment.php:146
+msgid "Max size"
+msgstr "최대 크기"
+
+#: u-bp-forum-attachment.php:147
+msgid "Max count"
+msgstr "최대 개수"
+
+#: u-bp-forum-attachment.php:217
+msgid "Download"
+msgstr "다운로드"
+
+#: u-bp-forum-attachment.php:220
+msgid "Open Image in New Window"
+msgstr "새 창에서 이미지 열기"
+
+#: u-bp-forum-attachment.php:220
+#: u-bp-forum-attachment.php:960
+#: u-bp-forum-attachment.php:1049
+msgid "View"
+msgstr "보기"
+
+#: u-bp-forum-attachment.php:339
+#: u-bp-forum-attachment.php:427
+msgid "Your nonce did not verify."
+msgstr "확인되지않은 넌스(nonce)입니다."
+
+#: u-bp-forum-attachment.php:342
+msgid "Please select a file to upload"
+msgstr "업로드할 파일을 선택하세요"
+
+#: u-bp-forum-attachment.php:345
+#, php-format
+msgid "For uploading, file size must be less than %s Mbytes"
+msgstr "업로드할 수 있는 파일 크기는 %sMbytes 이하입니다."
+
+#: u-bp-forum-attachment.php:357
+#, php-format
+msgid "[%s] is successfully uploaded."
+msgstr "[%s] 파일이 업로드되었습니다."
+
+#: u-bp-forum-attachment.php:410
+msgid "Unable to create sub-size images."
+msgstr "서브-사이즈 이미지를 생성할 수 없습니다."
+
+#: u-bp-forum-attachment.php:433
+msgid "File does not exist"
+msgstr "파일이 존재하지 않습니다."
+
+#: u-bp-forum-attachment.php:450
+msgid "Invalid file type"
+msgstr "올바르지 않은 파일 타입"
+
+#: u-bp-forum-attachment.php:675
+#: u-bp-forum-attachment.php:676
+#: u-bp-forum-attachment.php:684
+#: u-bp-forum-attachment.php:685
+msgid "Forum Attachment"
+msgstr "포럼 첨부파일"
+
+#: u-bp-forum-attachment.php:684
+#: u-bp-forum-attachment.php:685
+#: u-bp-forum-attachment.php:911
+msgid "File Manager"
+msgstr "파일 관리자"
+
+#: u-bp-forum-attachment.php:714
+#: u-bp-forum-attachment.php:911
+msgid "BuddyPress Forum Attachment"
+msgstr "버디프레스 포럼 첨부파일"
+
+#: u-bp-forum-attachment.php:722
+#: u-bp-forum-attachment.php:725
+msgid "Enable"
+msgstr "활성화"
+
+#: u-bp-forum-attachment.php:730
+msgid "Upload directory"
+msgstr "업로드 디렉토리"
+
+#: u-bp-forum-attachment.php:737
+msgid "Max file size per file"
+msgstr "파일당 제한 파일 용량"
+
+#: u-bp-forum-attachment.php:743
+msgid "Max file count per post"
+msgstr "포스트당 제한 파일 개수"
+
+#: u-bp-forum-attachment.php:746
+msgid "How many files can be attached per post."
+msgstr "포스트당 업로드할 수 있는 파일 개수"
+
+#: u-bp-forum-attachment.php:750
+msgid "Upload file types"
+msgstr "업로드 파일 타입"
+
+#: u-bp-forum-attachment.php:753
+msgid "Separate file extentions with commas."
+msgstr "확장자를 쉼표로 구분하세요."
+
+#: u-bp-forum-attachment.php:756
+msgid "Extention(s) in the square brackets is same type each other. so, for example, if you inputted 'jpg', you don't need to input 'jpeg' or 'jpe'."
+msgstr "각괄호로 묶인 확장자들은 서로 같은 파일 타입입니다. 그래서, 예를들어, 'jpg'를 입력했다면, 'jpeg' 또는 'jpe'는 입력할 필요 없습니다."
+
+#: u-bp-forum-attachment.php:762
+msgid "Number of posts to show in File Manager"
+msgstr "파일 관리자 목록에서 보여줄 포스트 수"
+
+#: u-bp-forum-attachment.php:771
+msgid "Save Changes"
+msgstr "변경사항 저장"
+
+#: u-bp-forum-attachment.php:790
+msgid "Error: please fill the required fields."
+msgstr "에러: 필수항목을 입력하세요."
+
+#: u-bp-forum-attachment.php:793
+msgid "Settings saved."
+msgstr "설정을 저장하였습니다."
+
+#: u-bp-forum-attachment.php:863
+msgid "(Deleted)"
+msgstr "(삭제됨)"
+
+#: u-bp-forum-attachment.php:864
+msgid "(Trash)"
+msgstr "(휴지통)"
+
+#: u-bp-forum-attachment.php:920
+msgid "Bulk Actions"
+msgstr "일괄 작업"
+
+#: u-bp-forum-attachment.php:921
+#: u-bp-forum-attachment.php:959
+msgid "Delete Permanently"
+msgstr "영구 삭제"
+
+#: u-bp-forum-attachment.php:922
+msgid "Apply"
+msgstr "적용"
+
+#: u-bp-forum-attachment.php:935
+msgid "File"
+msgstr "파일"
+
+#: u-bp-forum-attachment.php:936
+msgid "Attached to"
+msgstr "첨부"
+
+#: u-bp-forum-attachment.php:937
+msgid "Author"
+msgstr "저자"
+
+#: u-bp-forum-attachment.php:938
+msgid "Date"
+msgstr "날짜"
+
+#: u-bp-forum-attachment.php:1041
+msgid "No unattached files"
+msgstr "첨부되지 않은 파일 없음."
+
+#~ msgid "Related Plugin"
+#~ msgstr "연관 플러그인"
+
+#~ msgid "Uploaded File List"
+#~ msgstr "업로드한 파일 목록"
+
+#~ msgid "File Upload"
+#~ msgstr "파일 업로드"
+
+#~ msgid ""
+#~ "Uploading Files <small>(Less than <strong>%s</strong>Mbytes, Maximum "
+#~ "<strong>%s</strong> per comment)</small>"
+#~ msgstr ""
+#~ "파일 업로드 <small>(<strong>%s</strong>Mbytes 이하, 댓글당 최대 <strong>%"
+#~ "s</strong>개)</small>"
+
+#~ msgid "Choose File"
+#~ msgstr "파일 선택"
+
+#~ msgid "Cancel"
+#~ msgstr "취소"
+
+#~ msgid "This file type is not allowed. Please try another."
+#~ msgstr "이 파일 형식은 허용하지 않습니다. 다른 것으로 올려주세요."
+
+#~ msgid "There was an error. please try again."
+#~ msgstr "오류가 발생하였습니다. 다시 시도해주세요."
+
+#~ msgid "Upload canceled."
+#~ msgstr "파일 업로드가 취소되었습니다."
+
+#~ msgid ""
+#~ "Attachment Uploader Security error. Please contact the administrator."
+#~ msgstr "첨부파일 업로더 보안 오류! 관리자에게 문의해주세요."
+
+#~ msgid "This Plugin requires Adobe Flash Player 9.0. or greater."
+#~ msgstr "어도비 플래시 플레이어(9.0 이상) 플러그인이 필요합니다."
+
+#~ msgid "Now uploading. please try again later."
+#~ msgstr "업로드중입니다. 완료후 다시 시도하세요."
+
+#~ msgid "Error: Please enter a title."
+#~ msgstr "에러: 제목을 입력하세요."
+
+#~ msgid "Error: Please enter a content."
+#~ msgstr "에러: 내용을 입력하세요."
+
+#~ msgid "This plugin is using %s as a file uploader."
+#~ msgstr "이 플러그인은 %s를 파일 업로더로 사용하고 있습니다."
+
+#~ msgid "Form Validate"
+#~ msgstr "폼 검사"
+
+#~ msgid "Validating whether form fields are filled out before submission."
+#~ msgstr "포스트 하기 전에 폼 필드들에 값이 입력되었는지 확인. "
+
+#~ msgid "Absolute path of upload directory"
+#~ msgstr "업로드 디렉토리의 절대 경로"
+
+#~ msgid "Example"
+#~ msgstr "예"
+
+#~ msgid "Complete URL of upload directory"
+#~ msgstr "업로드 디렉토리의 완성형 URL"
+
+#~ msgid "Allowed file types"
+#~ msgstr "허용 파일 확장자"
+
+#~ msgid ""
+#~ "Separate file extentions with commas. If you would like to allow all "
+#~ "types, Input asterisk( * ) character. however, files in blacklist, in any "
+#~ "case, are not allowed."
+#~ msgstr ""
+#~ "파일 확장자를 쉼표로 구분하세요. 모든 파일을 허용하려면, 꽃표(*)를 입력하"
+#~ "세요. 단, 블랙리스트에 포함된 파일 타입은 어떤 경우에도 허용되지않습니다."
+
+#~ msgid "Blacklist"
+#~ msgstr "블랙리스트"
+
+#~ msgid "Ignor case and subfix. Following cases are also not allowed."
+#~ msgstr ""
+#~ "대소문자를 구분하지않으모, 뒤따라오는 문자 역시 무시함. 아래와 같은 파일들"
+#~ "은 모두 업로드가 금지된다."
+
+#~ msgid ""
+#~ "If your are already using %s's Form validation, this plugin's form "
+#~ "validation will be ignored."
+#~ msgstr ""
+#~ "%s의 폼 검사를 이미 사용중이라면, 이 플러그인의 폼 검사는 실행되지 않습니"
+#~ "다."
+
+#~ msgid "Upload server path"
+#~ msgstr "업로드 서버 경로"
+
+#~ msgid "Your server root:"
+#~ msgstr "당신의 서버 루트:"
+
+#~ msgid "Error: The password is incorrect."
+#~ msgstr "에러: 비밀번호가 틀렸습니다."
+
+#~ msgid "Password"
+#~ msgstr "비밀번호"
+
+#~ msgid "Update"
+#~ msgstr "업데이트"

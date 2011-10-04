@@ -1,0 +1,262 @@
+/*
+ Description: A dark color scheme for the Pilcrow theme
+*/
+
+
+/* =Global
+----------------------------------------------- */
+
+body {
+	background: #0a0a0a;
+	color: #d8d8cd;
+}
+#wrapper {
+	background: #0a0a0a;
+}
+hr {
+	background-color: #ccc;
+}
+blockquote {
+	background: #141414;
+	border-color: #282828;
+	color: #666;
+}
+pre {
+	background: #1e1e1e;
+}
+code, kbd {
+	color: #037503;
+}
+abbr, acronym {
+	border-color: #666;
+}
+ins {
+	background: #323232;
+}
+input[type=text],
+textarea {
+	border: 1px solid #bbb;
+}
+
+/* Links */
+a {
+	color:#1c9bdc;
+}
+a:focus,
+a:active,
+a:hover {
+	color: #1873a1;
+}
+
+
+/* =Header
+----------------------------------------------- */
+
+#site-title a {
+	color: #fff;
+}
+#header img {
+	border-color: #ddd;
+}
+
+
+/* =Menu
+----------------------------------------------- */
+
+#nav {
+	border-color: #ddd;
+}
+#nav a {
+	color: #d8d8cd;
+}
+#nav ul ul a {
+	background: #ddd;
+	color: #0a0a0a;
+}
+#nav .current_page_item a,
+#nav li:hover > a,
+#nav ul ul :hover > a {
+	background: #ddd;
+	color: #0a0a0a;
+}
+#nav ul ul a:hover {
+	background: #ccc;
+}
+
+
+/* =Content
+----------------------------------------------- */
+
+.page-title {
+	background: #141414;
+	border-color: #282828;
+	color: #fff;
+}
+.page-title span {
+	color: #999;
+}
+.entry-meta {
+	background: #141414;
+	border-color: #282828;
+}
+.entry-meta a {
+	color: #999;	
+}
+.entry-title {
+	color: #fff;
+}
+.entry-title a {
+	color: #fff;
+}
+.entry-title a:focus,
+.entry-title a:active,
+.entry-title a:hover {
+	color: #1873a1;
+}
+.entry-content h1 {
+	color: #fff;
+}
+.entry-content h2 {
+	color: #fff;
+}
+.entry-content h3 {
+	color: #999;
+}
+.entry-content h4 {
+	background: #141414;
+	border-color: #282828;
+}
+.entry-content a:visited {
+	color: #d8d8cd;
+}
+.page-link {
+	color: #fff;
+}
+.page-link a:link,
+.page-link a:visited {
+	background: #141414;
+	border-color: #282828;
+	color: #d8d8cd;
+}
+.page-link a:active,
+.page-link a:hover {
+	color: #1873a1;
+}
+.entry-links {
+	background: #141414;
+	border-color: #282828;
+}
+.entry-links .comment-number {
+	background-image: url(../images/icons/bubble.png);
+}
+.entry-links .tagged {
+	background-image: url(../images/icons/cabinet.png);
+}
+
+/* Sticky Posts */
+.sticky .entry-content {
+	background: #141414;
+	border-color: #282828;
+}
+.sticky .entry-links {
+	border-color: #0a0a0a;
+}
+.sticky .page-link a {
+	background: #0a0a0a;
+}
+
+/* Image Attachments */
+.image-attachment .entry-attachment {
+	background: #141414;
+}
+
+/* =Images
+----------------------------------------------- */
+
+.wp-caption {
+	background-color: #141414;
+	border: 1px solid #282828;
+}
+
+
+/* =Widgets
+----------------------------------------------- */
+
+.widget ul {
+	background: #141414;
+	border-color: #282828;
+}
+.widget-title {
+	color: #999;
+}
+.sidebar-list h2 {
+	color: #999;
+}
+
+/* Footer Widgets */
+#footer .widget ul {
+	background: #fff;
+	border-color: #bcbcbc;
+}
+
+/* =Comments
+----------------------------------------------- */
+
+#comments-title {
+	border-color: #282828;
+	color: #fff;
+}
+#comments li.thread-alt,
+#comments li.author_comment_alt {
+	background:none repeat scroll 0 0 #141414;
+}
+#comments li,
+#comments li.thread-alt,
+#comments li.author_comment_,
+#comments li.author_comment_alt {
+	border-color: #282828;
+}
+#comments .avatar {
+	border: 1px solid #eee;
+}
+.comment-meta,
+.comment-meta a {
+	color: #999;
+}
+#comments li.bypostauthor > .comment-container {
+	background: transparent;
+}
+
+/* Comment Form */
+#reply-title {
+	color: #fff;
+}
+#respond .required {
+	color: #ff3730;
+}
+.form-allowed-tags {
+	color: #999;
+}
+.form-allowed-tags code {
+	color: #999;
+}
+
+
+/* =Footer
+----------------------------------------------- */
+
+#footer {
+	border-color: #ddd;
+}
+#footer #colophon {
+	background: #ddd;
+	color: #0a0a0a;
+}
+#footer #colophon a {
+	border-color: #aaa;
+	color: #0a0a0a;
+}
+#footer #colophon a:hover {
+	border-color: #777;
+}
+

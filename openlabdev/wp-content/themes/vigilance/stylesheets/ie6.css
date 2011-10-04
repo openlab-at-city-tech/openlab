@@ -1,0 +1,5 @@
+/*Prevent IE6 from breaking 2 column sidebar with a search*/
+#search_form input.search_input { width: 127px; }
+pre { zoom: 1; }
+/* Keep sidebar on the side when blockquote is inside a list */
+.entry ul blockquote, .entry ol blockquote { width: 85%; }

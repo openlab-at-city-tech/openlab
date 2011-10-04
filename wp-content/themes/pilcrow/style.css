@@ -1,0 +1,1036 @@
+/*
+Theme Name: Pilcrow
+Theme URI: http://wordpress.org/extend/themes/pilcrow/
+Description: Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, four default color schemes, custom header images, and a customizable background, make personalizing your blog a snap.
+Version: 1.0
+Author: Automattic
+Author URI: http://automattic.com/
+Tags: custom-header, custom-background, custom-menu, threaded-comments, sticky-post, microformats, rtl-language-support, translation-ready
+*/
+
+
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label {
+	border: 0;
+	font-family: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+legend, caption, table, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+body {
+	background: #fff;
+	line-height: 1;
+}
+html body {
+	text-align: left;
+}
+ol, ul {
+	list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	font-weight: normal;
+	text-align: left;
+}
+a img {
+	border: 0;
+}
+
+
+/* =Structure
+----------------------------------------------- */
+
+body {
+	padding: 0 3.8%;
+}
+#wrapper {
+	max-width: 850px;
+	margin: 0 auto;
+}
+#container {
+	clear: both;
+	margin: 0 auto;
+}
+#wrapper #container {
+	margin: 0 4.7%;
+}
+#header {
+	float: left;
+	width: 100%;
+}
+#content-box {
+	width: 100%;
+}
+#content-container {
+	width: 100%;
+}
+#content {
+}
+#main-sidebars {
+	max-width: 450px;
+	width: 45.5%;
+}
+#feature {
+	width: 100%;
+}
+#sidebar,
+#secondary-sidebar {
+	overflow: hidden;
+}
+#secondary-sidebar {
+}
+#footer {
+	clear: both;
+	width: 100%;
+}
+
+/* 2-column layouts */
+.two-column #container {
+	max-width: 770px;
+}
+.two-column #content {
+	overflow: hidden;
+	width: 64.99%;
+}
+.two-column #sidebar,
+.two-column #secondary-sidebar {
+	float: right;
+	width: 29.806%;
+}
+
+/* 3-column layouts */
+.three-column #wrapper {
+	max-width: 1070px;
+}
+.three-column #container {
+	max-width: 990px;
+}
+.three-column #wrapper #container {
+	margin: 0 3.9%;
+}
+.three-column #content {
+	overflow: hidden;
+	width: 50.5%;
+}
+.three-column #sidebar {
+	width: 51.15%;
+}
+.three-column #secondary-sidebar {
+	width: 39.89%;
+}
+
+/* Content-Sidebar layouts */
+.content-sidebar #content-container {
+	float: left;
+	margin: 0 -30.4% 0 0;
+}
+.content-sidebar #content {
+	margin: 0 35.1% 0 0;
+}
+.content-sidebar #sidebar,
+.content-sidebar #secondary-sidebar {
+	float: right;
+}
+.content-sidebar #secondary-sidebar {
+	clear: right;
+}
+
+/* Sidebar-Content layouts */
+.sidebar-content #content-container {
+	float: right;
+	margin: 0 0 0 -30.4%;
+}
+.sidebar-content #content {
+	margin: 0 0 0 35.1%;
+}
+.sidebar-content #sidebar,
+.sidebar-content #secondary-sidebar {
+	float: left;
+}
+.sidebar-content #secondary-sidebar {
+	clear: left;
+}
+
+/* Content-Sidebar-Sidebar layouts */
+.content-sidebar-sidebar #content-container {
+	float: left;
+	margin: 0 -45.5% 0 0;
+}
+.content-sidebar-sidebar #content {
+	margin: 0 49.5% 0 0;
+}
+.content-sidebar-sidebar #main-sidebars {
+	float: right;
+}
+.content-sidebar-sidebar #feature,
+.content-sidebar-sidebar #sidebar,
+.content-sidebar-sidebar #secondary-sidebar {
+	float: left;
+}
+.content-sidebar-sidebar #secondary-sidebar {
+	margin: 0 0 0 8.963%;
+}
+
+/* Sidebar-Sidebar-Content layouts */
+.sidebar-sidebar-content #content-container {
+	float: right;
+	margin: 0 0 0 -45.5%;
+}
+.sidebar-sidebar-content #content {
+	margin: 0 0 0 49.5%;
+}
+.sidebar-sidebar-content #main-sidebars {
+	float: left;
+}
+.sidebar-sidebar-content #feature,
+.sidebar-sidebar-content #sidebar,
+.sidebar-sidebar-content #secondary-sidebar {
+	float: left;
+}
+.sidebar-sidebar-content #secondary-sidebar {
+	margin: 0 0 0 8.963%;
+}
+
+/* Sidebar-Content-Sidebar layouts */
+.sidebar-content-sidebar #content-container {
+	float: left;
+}
+.sidebar-content-sidebar #content {
+	margin: 0 24.8%;
+}
+.sidebar-content-sidebar #sidebar,
+.sidebar-content-sidebar #secondary-sidebar {
+	width: 20.69%;
+}
+.sidebar-content-sidebar #sidebar {
+	float: left;
+	margin: 0 0 0 -100%;
+}
+.sidebar-content-sidebar #secondary-sidebar {
+	float: right;
+	margin: 0 0 0 -20.7%;
+}
+
+/* Full width content with no sidebar */
+.no-sidebar #wrapper {
+	max-width: 1070px;
+}
+.no-sidebar #container {
+	max-width: 990px;
+}
+.no-sidebar #wrapper #container {
+	margin: 0 3.9%;
+}
+.no-sidebar #content,
+.full-width #content,
+.image-attachment #content {
+	margin: 0 auto;
+	width: 100%;
+}
+
+/* Alignment */
+.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 7px;
+}
+.alignright {
+	display: inline;
+	float: right;
+	margin-left: 7px;
+}
+.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+/* =Global
+----------------------------------------------- */
+
+body, input, textarea {
+	color: #333;
+	font: 14px Georgia, "Bitstream Charter", serif;
+	line-height: 1.7;
+}
+#wrapper {
+	background: #fff;
+}
+
+/* Headings */
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.7em;
+}
+
+/* Text elements */
+p {
+	margin-bottom: 15px;
+}
+ul, ol {
+	margin: 0 0 1.7em 2.5em;
+}
+ul {
+	list-style: square;
+}
+ol {
+	list-style-type: decimal;
+}
+ul ul, ol ol, ul ol, ol ul {
+	margin-bottom: 0;
+}
+dl {
+	margin-bottom: 1.7em;
+}
+dt {
+	font-weight: bold;
+}
+dd {
+	font-style: italic;
+	margin: 0 1.7em 0;
+}
+strong {
+	font-weight: bold;
+}
+cite, em, i {
+	font-style: italic;
+}
+blockquote {
+	background: #F5F5F5;
+	border: solid #bbb;
+	border-width: 1px 0;
+	color: #666;
+	margin: 0 0 1.7em;
+	padding: 5px 10px 0;
+}
+blockquote p {
+	margin-bottom: 7px;
+}
+pre {
+	background: #f4f4f4;
+	font: 13px "Courier New", Courier, monospace;
+	line-height: 1.7;
+	margin-bottom: 1.7em;
+	overflow-x: auto;
+	padding: 0.75em 1.7em;
+}
+code, kbd {
+	color: #009900;
+	font: 13px "Courier New", Courier, monospace;
+}
+abbr, acronym {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+sup,
+sub {
+	font-size: 10px;
+	height: 0;
+	line-height: 1;
+	position: relative;
+	vertical-align: baseline;
+}
+sup {
+	bottom: 1ex;
+}
+sub {
+	top: .5ex;
+}
+input[type=text],
+textarea {
+	border: 1px solid #bbb;
+}
+textarea {
+	padding-left: 3px;
+	width: 98%;
+}
+input[type=text] {
+	padding: 3px;
+}
+
+/* Links */
+a {
+	color:#1c9bdc;
+	text-decoration: none;
+}
+a:focus,
+a:active,
+a:hover {
+	color: #1873a1;
+	text-decoration: underline;
+}
+
+/* Text meant only for screen readers */
+.screen-reader-text {
+	position: absolute !important;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+
+/* =Header
+----------------------------------------------- */
+
+#header {
+	margin-bottom: 30px;
+}
+#site-title {
+	text-align: right;	
+}
+#site-title a {
+	color: #000;
+	font-size: 40px;
+	font-weight: bold;
+	line-height: 72px;
+	text-decoration: none;
+}
+#header img {
+	border-bottom: 2px solid #222;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+}
+
+/* =Menu
+----------------------------------------------- */
+
+#nav {
+	border: solid #222;
+	border-width: 1px 0 2px;
+	display: block;
+	float: left;
+	margin: 0 auto;
+	width: 100%;
+}
+#nav ul {
+	font-size: 12px;
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+}
+#nav li {
+	float: left;
+	position: relative;
+}
+#nav a {
+	color: #222;
+	display: block;
+	line-height: 42px;
+	letter-spacing: 0.3em;
+	padding: 0 16px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+#nav ul ul {
+	box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+	display: none;
+	float: left;
+	position: absolute;
+	top: 42px;
+	left: 0;
+	width: 180px;
+	z-index: 99999;
+}
+#nav ul ul ul {
+	left: 212px;
+	top: 0;
+}
+#nav ul ul a {
+	background: #222;
+	color: #fff;
+	width: 180px;
+	height: auto;
+}
+#nav .current_page_item a,
+#nav li:hover > a,
+#nav ul ul :hover > a {
+	background: #222;
+	color: #fff;
+}
+#nav ul ul a:hover {
+	background: #000;
+}
+#nav ul li:hover > ul {
+	display: block;
+}
+
+
+/* =Content
+----------------------------------------------- */
+
+.page-title {
+	background: #F5F5F5;
+	border-bottom: 1px solid #ddd;
+	color: #000;
+	font-size: 24px;
+	margin-bottom: 30px;
+	padding: 4px 8px;	
+}
+.page-title span {
+	color: #999;
+	font-style: italic;
+}
+.entry-meta {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	display: inline;
+	float: left;
+	font-size: 11px;
+	line-height: 24px;
+	padding: 0 6px;
+	text-transform: uppercase;
+}
+.entry-meta a {
+	color: #333;
+}
+.entry-meta a:hover {
+	color: #1873a1;
+}
+.jump {
+	border-bottom: 1px solid transparent;
+	display: inline;
+	float: right;
+	line-height: 24px;
+	padding: 4px 10px;
+}
+.entry-title {
+	clear: both;
+	color: #000;
+	font-size: 28px;
+	line-height: 33px;
+	margin: 0 0 10px;
+	padding: 10px 0 0;
+}
+.entry-title a {
+	color: #000;
+}
+.entry-title a:focus,
+.entry-title a:active,
+.entry-title a:hover {
+	color: #1873a1;
+	text-decoration: none;
+}
+.single .entry-content {
+	padding-top: 1.7em;
+}
+.entry-content h1 {
+	color: #000;
+	font-size: 56px;
+	font-weight: bold;
+}
+.entry-content h2 {
+	color: #000;
+	font-size: 28px;
+	line-height: 33px;
+	margin: 0 0 10px;
+	padding: 10px 0 0;
+}
+.entry-content h3 {
+	color: #999;
+	font-size: 21px;
+	margin-bottom: 4px;
+}
+.entry-content h4 {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	font-size: 11px;
+	display: inline;
+	line-height: 24px;
+	padding: 4px 6px;
+	text-transform: uppercase;
+}
+.entry-content h5,
+.entry-content h6 {
+	font-size: 12px;
+	font-weight: bold;
+}
+.entry-content h6 {
+	font-size: 10px;
+}
+.entry-content a {
+	text-decoration: underline;
+}
+.entry-content a:visited {
+	color: #333;
+}
+.page-link {
+	color: #000;
+	clear: both;
+	font-weight: bold;
+	margin: 0 0 1.7em;
+	padding: 4px 0 0;
+	word-spacing: 0.5em;
+}
+.page-link a:link,
+.page-link a:visited {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	color: #333;
+	font-weight: normal;
+	padding: 0.5em 0.75em;
+	text-decoration: none;
+}
+.page-link a:active,
+.page-link a:hover {
+	color: #1873a1;
+}
+.entry-links {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	clear: both;
+	margin: 0 0 3.4em;
+	overflow: hidden;
+	padding: 10px;
+}
+.entry-links p {
+	margin: 0;
+}
+.entry-links .comment-number {
+	background: url(images/icons/bubble.png) no-repeat 0 4px;
+	float: right;
+	padding: 0 0 2px 26px;
+}
+.entry-links .tagged {
+	background: url(images/icons/cabinet.png) no-repeat 0 2px;
+	padding: 0 0 0 24px;
+}
+
+/* Sticky Posts */
+.sticky .entry-meta {
+	display: none;
+}
+.sticky .entry-title {
+	padding: 0;
+}
+.sticky .entry-content {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	padding: 10px 10px 0;
+}
+.sticky .entry-links {
+	border-top: 1px solid #fff;
+}
+.sticky .page-link {
+	margin: 0;
+	padding: 0 0 1.7em;
+}
+.sticky .page-link a {
+	background: #fff;
+}
+
+/* Image Attachments */
+.image-attachment div.entry-meta {
+	float: left;
+}
+.image-attachment #image-navigation {
+	float: right;
+}
+.image-attachment .next-image a {
+	padding-left: .5em;
+}
+.image-attachment .entry-attachment {
+	background: #f5f5f5;
+	margin: 0 0 10px;
+	padding: 10px 10px 0;
+	text-align: center;
+}
+
+
+/* =Images
+----------------------------------------------- */
+
+img.size-auto,
+img.size-large,
+img.size-full,
+img.size-medium,
+img.size-thumbnail,
+.attachment img {
+	max-width: 100%;
+}
+object,
+embed {
+	width: 100%;
+}
+p img.wp-smiley {
+	margin-bottom: 0;
+}
+p img,
+.wp-caption {
+	margin-bottom: 2px;
+}
+.wp-caption {
+	background-color: #f5f5f5;
+	border: 1px solid #ddd;
+	max-width: 99%;
+	margin-bottom: 10px;
+	padding-top: 4px;
+	text-align: center;
+}
+.wp-caption img {
+	border: 0 none;
+	margin: 0;
+	max-width: 98%;
+	padding: 0;
+}
+.wp-caption .wp-caption-text {
+	font-size: 11px;
+	line-height: 17px;
+	margin: 0;
+	padding: 0 4px 8px 0;
+}
+.gallery-caption {
+	
+}
+
+
+/* =Navigation
+-------------------------------------------------------------- */
+
+.navigation {
+	overflow: hidden;
+}
+.nav-previous {
+	float: left;
+	width: 50%;
+}
+.nav-next {
+	float: right;
+	text-align: right;
+	width: 50%;
+}
+#nav-above {
+	margin: 0 0 1.7em;
+}
+#nav-above {
+	display: none;
+}
+.paged #nav-above,
+.single #nav-above {
+	display: block;
+}
+#nav-below {
+	margin: 0 0 1.7em;
+}
+.single #nav-below {
+	display: none;
+}
+
+
+/* =Widgets
+----------------------------------------------- */
+
+.sidebar-list {
+	list-style: none;
+	margin-left: 0;
+}
+.widget {
+	font-size: 12px;
+	line-height: 18px;
+	margin: 0 0 1.7em 0;
+}
+.widget-title {
+	color: #999;
+	font-size: 24px;
+	line-height: 18px;
+	margin: 0;
+}
+.sidebar-list h2 {
+	color: #999;
+	font-size: 24px;
+	line-height: 18px;
+}
+.widget ul {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	margin-left: 0;
+	padding: 10px 10px 10px 20px;
+}
+.widget ul ul {
+	border: none;
+	margin-left: 1em;
+	padding: 0;
+}
+.widget li {
+	padding: 3px 0;
+}
+.widget select {
+	max-width: 99%;
+}
+
+/* Titleless Widgets */
+.widget_vodpod {
+	padding-top: 10px;
+}
+
+/* Search Widget */
+.widget_search #s {
+	width: 60%;
+}
+
+/* Tag Clouds */
+.wp_widget_tag_cloud div,
+.widget_tag_cloud div {
+	padding: .5em 0;
+}
+
+/* RSS Links Widget */
+.widget_rss_links p {
+	margin: 0;
+}
+.widget_rss_links img {
+	margin: 0 0 -1px;
+}
+
+/* Flickr Widget */
+#flickr_badge_wrapper {
+	margin-top: 10px;
+	padding: 10px;
+}
+#flickr_badge_wrapper td {
+	text-align: center;
+}
+
+/* Recent Comments Widget */
+.widget_recent_comments td {
+	vertical-align: middle;
+}
+
+
+/* Footer Widgets */
+#footer-widget-area {
+	overflow: hidden;
+	margin-bottom: -1.5em;
+	padding: 10px 0 0;
+}
+#footer .widget-area {
+	width: 49.4%;
+}
+#first {
+	float: left;
+}
+#second {
+	float: right;
+}
+#footer .widget ul {
+	background: #000;
+	border-color: #444;
+}
+
+
+/* =Comments
+----------------------------------------------- */
+
+#comments-title {
+	border-bottom: 1px dotted #ddd;
+	color: #000;
+	font-size: 28px;
+	line-height: 33px;
+	margin: 0 0 10px;
+	padding: 10px 0;
+}
+#comments ol {
+	list-style: none;
+	margin-left: 0;
+}
+#comments ul.children {
+	margin-left: 10px;
+}
+#comments li {
+	padding: 1.7em 10px;
+	position: relative;
+}
+#comments li.pingback p {
+	margin-bottom: 10px;
+}
+#comments li.thread-alt,
+#comments li.author_comment_alt {
+	background: #f5f5f5;
+}
+#comments li.bypostauthor > .comment-container {
+	background: #e9f6fc;
+	margin: -15px 0 -5px -10px;
+	padding: 15px 0 5px 10px;
+}
+#comments li,
+#comments li.thread-alt,
+#comments li.author_comment_,
+#comments li.author_comment_alt {
+	border-bottom: 1px dotted #bbb;
+	list-style: none;
+	padding: 15px 0 5px 10px;
+}
+#comments li .children li {
+	border-bottom: none;
+}
+#comments .avatar {
+	border: 1px solid #eee;
+	padding: 2px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+.comment-author {
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 20px;
+}
+cite.fn {
+	font-style: normal;
+}
+.comment-meta,
+.comment-meta a {
+	color: #999;
+	font-size: 12px;
+}
+.comment-body {
+	padding: 1.7em 10px 0 0;
+}
+.reply {
+	padding: 0 0 5px;
+}
+
+/* Comment Form */
+#reply-title {
+	color: #000;
+	font-size: 28px;
+	line-height: 33px;
+	margin: 0 0 10px;
+	padding: 10px 0;
+}
+#respond .required {
+	color: #ff3730;
+}
+#respond .comment-form-author,
+#respond .comment-form-email,
+#respond .comment-form-url {
+	overflow: hidden;
+}
+#respond .comment-form-author input,
+#respond .comment-form-email input,
+#respond .comment-form-url input {
+	float: left;
+	margin-right: 7px;
+}
+.comment-form-comment label {
+	display: none;
+}
+.comment-form-comment {
+	margin: 0;
+}
+.form-allowed-tags {
+	color: #999;
+	font-size: 12px;	
+}
+.form-allowed-tags code {
+	color: #999;
+}
+
+
+/* =Footer
+----------------------------------------------- */
+
+#footer {
+	border-top: 1px solid #000;
+	padding-top: 3px;
+}
+#footer #colophon {
+	background: #222;
+	color: #fff;
+	overflow: hidden;
+	padding: 4px 10px;
+}
+#footer #colophon a {
+	border-bottom: 1px solid #555;
+	color: #fff;
+	text-decoration: none;
+}
+#footer #colophon a:hover {
+	border-color: #777;
+}
+#site-info {
+	font-size: 12px;
+	float: left;
+	width: 50%;
+}
+#site-generator {
+	font-size: 12px;
+	float: right;
+	text-align: right;
+	width: 50%;
+}
+#wpstats {
+	position: absolute;
+	top: -9000px;
+}
+
+
+/* =Print
+----------------------------------------------- */
+
+@media print {
+	body {
+		background: none !important;
+		color: #000;
+		font: 12px Georgia, "Bitstream Charter", serif;
+		line-height: 1.7;
+	}	
+	#container {
+		clear: both !important;
+		display: block !important;
+		float: none !important;
+		position: relative !important;
+	}
+	#content {
+		width: 100% !important;
+	}
+	#site-title {
+		text-align: left;
+	}
+	.entry-meta {
+		padding: 0;
+	}
+	#nav,
+	#pic,
+	.navigation,
+	.jump,
+	#wpl-likebox,
+	.entry-links,
+	.widget-area,
+	#footer {
+		display: none !important;
+	}
+}
+

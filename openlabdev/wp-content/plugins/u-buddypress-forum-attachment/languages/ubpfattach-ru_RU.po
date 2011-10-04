@@ -1,0 +1,213 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: U BuddyPress Forum Attachment v1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-30 20:27+0300\n"
+"PO-Revision-Date: 2011-08-31 00:06+0300\n"
+"Last-Translator: Gr1N <grin.minsk@gmail.com>\n"
+"Language-Team: 4to-to.by <grin.minsk@gmail.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;_x;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: /home/gr1n/Downloads/u-buddypress-forum-attachment\n"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:113
+msgid "Insert into editor"
+msgstr "Вставить"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:114
+msgid "Delete"
+msgstr "Удалить"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:115
+msgid "Attachment deleted"
+msgstr "Файл удален"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:116
+msgid "Are you sure you want to delete?"
+msgstr "Вы действительно хотите удалить файл?"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:117
+msgid "Processing"
+msgstr "Выполняется"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:140
+msgid "Attach a file"
+msgstr "Прикрепить файл"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:141
+msgid "Uploading"
+msgstr "Загрузка"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:143
+msgid "File types"
+msgstr "Типы файлов"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:144
+msgid "Max size"
+msgstr "Максимальный размер"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:145
+msgid "Max count"
+msgstr "Кол-во файлов"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:215
+msgid "Download"
+msgstr "Сохранить"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:218
+msgid "Open Image in New Window"
+msgstr "Открыть изображение в новом окне"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:218
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:959
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:1051
+msgid "View"
+msgstr "Просмотреть"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:337
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:425
+#, fuzzy
+msgid "Your nonce did not verify."
+msgstr "Ваш случай не подтвержден."
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:340
+msgid "Please select a file to upload"
+msgstr "Пожалуйста выберите файл для загрузки"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:343
+#, php-format
+msgid "For uploading, file size must be less than %s Mbytes"
+msgstr "Для загрузки размер файла должен быть меньше чем %s Mbytes"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:355
+#, php-format
+msgid "[%s] is successfully uploaded."
+msgstr "[%s] загружен успешно"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:408
+msgid "Unable to create sub-size images."
+msgstr "Невозможно создать суб-размер изображения"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:431
+msgid "File does not exist"
+msgstr "Файл не найден"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:448
+msgid "Invalid file type"
+msgstr "Недопустимый тип файла"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:666
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:667
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:675
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:676
+msgid "Forum Attachment"
+msgstr "Forum Attachment"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:675
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:676
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:910
+msgid "File Manager"
+msgstr "Файловый менеджер"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:705
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:910
+msgid "BuddyPress Forum Attachment"
+msgstr "BuddyPress Forum Attachment"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:713
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:716
+msgid "Enable"
+msgstr "Включить"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:721
+msgid "Upload directory"
+msgstr "Директория для хранения"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:728
+msgid "Max file size per file"
+msgstr "Максимальный размер файла"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:734
+msgid "Max file count per post"
+msgstr "Кол-во фалов"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:737
+msgid "How many files can be attached per post."
+msgstr "Как много фалов может быть загружено для одного сообщения"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:741
+msgid "Upload file types"
+msgstr "Типы загружаемых фалов"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:744
+msgid "Separate file extentions with commas."
+msgstr "Отделяйте расширения фалов запятыми"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:747
+msgid "Extention(s) in the square brackets is same type each other. so, for example, if you inputted 'jpg', you don't need to input 'jpeg' or 'jpe'."
+msgstr "Расширения в квадратных скобках одного типа. Поэтому, если вы ввели \"jpg\", вам не нужно вводить \"jpeg\" или \"jpe\"."
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:753
+msgid "Number of posts to show in File Manager"
+msgstr "Кол-во сообщений отображаемых в файловом менеджере"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:762
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:779
+msgid "Error: please fill the required fields."
+msgstr "Ошибка: пожалуйста, заполните необходимые поля."
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:782
+msgid "Settings saved."
+msgstr "Настойки сохранены"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:852
+msgid "(Deleted)"
+msgstr "(Удалено)"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:853
+msgid "(Trash)"
+msgstr "(Помещено в корзину)"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:919
+msgid "Bulk Actions"
+msgstr "Массовоые действия"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:920
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:958
+msgid "Delete Permanently"
+msgstr "Удалить навсегда"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:921
+msgid "Apply"
+msgstr "Подтвердить"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:934
+msgid "File"
+msgstr "Файл"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:935
+msgid "Attached to"
+msgstr "Прикреплен к"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:936
+msgid "Author"
+msgstr "Автор"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:937
+msgid "Date"
+msgstr "Дата"
+
+#: /home/gr1n/Downloads/u-buddypress-forum-attachment/u-bp-forum-attachment.php:1042
+msgid "No unattached files"
+msgstr "Нет прикрепленных фалов"
+

@@ -1,0 +1,24 @@
+/* Miscellaneous styles
+-------------------------------------------------------------- */
+
+h2.archive_name { letter-spacing: -0.07em; }
+
+h3.archive_title a { font: bold 1.0em arial, sans-serif; color: #000; letter-spacing: -0.05em; }
+
+ul.email li { padding: 0 0 0.4em 20px; margin: 0 0 0.5em 0; border-bottom: 1px solid #dadada; background: url(images/bg/doc.png) no-repeat 0 3px; }
+
+ul.reccom li { padding: 0 0 0.4em 20px; margin: 0 0 0.5em 0; border-bottom: 1px solid #dadada; background: url(images/bg/bubble.png) no-repeat 0 3px; }
+
+h3.latest_post_title { font: bold 1.6em arial, sans-serif; line-height: 1.6em; margin: 0; letter-spacing: -.035em; }
+
+.home_recent_thumb { padding: 0 8px 0 0; margin: 0 0 0.3em 0; float: left; }
+
+.archive_feed { padding: 0.5em 1.5em; margin: 0; border-bottom: 1px solid #dadada; background: url(images/bg/feedicon12.png) no-repeat 0 9px; }
+
+.archive_post_block { padding: 0.6em 0 0 0; }
+
+.archive_post_block { padding: 0.1em 0 0 0; border-bottom: 1px solid #dadada; margin: 0 0 1em 0; }
+
+table#wp-calendar th { border-right: 0;  }
+
+table#wp-calendar td { border-right: 1px solid #fff;  }

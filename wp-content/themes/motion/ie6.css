@@ -1,0 +1,92 @@
+/*
+Theme Name: Motion
+Description: IE6-specific styles
+*/
+
+#top #topmenu li a.rss {
+	background: none;
+	padding-left: 0;
+}
+#nav li ul {
+	display: none;
+}
+#nav li {
+	background: none;
+}
+#header #headerbanner {
+	padding: 10px 10px 0 10px;
+}
+#header #headerbanner a:hover {
+	background: none;
+	color: #fff;
+}
+.sticky {
+	background: none;
+	margin-bottom: 35px;
+	padding: 0;
+}
+.postmetatop .categs {
+	background: none;
+	padding-left: 0;
+}
+.postmetatop .date span {
+	background: none;
+	padding-left: 0;
+}
+.postcontent a:hover {
+	background: none;
+	color: #fff;
+}
+.postmetabottom {
+	padding: 10px 10px 0 10px;
+}
+.postmetabottom .tags {
+	background: none;
+	margin: 0 10px 0 0;
+	padding: 0 0 0 10px;
+}
+.postmetabottom .readmore {
+	margin-right: 10px;
+	padding: 0;
+}
+.postmetabottom .readmore span {
+	background: none;
+	padding: 0;
+}
+#navigation a:hover {
+	background: none;
+	color: #fff;
+}
+#sidebar ul ul li {
+	margin-bottom: 10px;
+}
+#sidebar ul ul li a {
+	display: inline;
+	padding: 5px 0;
+}
+#sidebar ul ul li a:hover {
+	background: none;
+	display: inline;
+	color: #fff;
+}
+#footer ul li {
+	background: none;
+	padding: 5px;
+}
+#footer ul ul li {
+	background: none;
+	margin: 5px 0;
+}
+#footer li a {
+	display: inline;
+	padding: 5px 0;
+}
+#footer li a:hover {
+	background: none;
+	display: inline;
+	color: #fff;
+}
+#credits a:hover {
+	background: none;
+	color: #fff;
+}

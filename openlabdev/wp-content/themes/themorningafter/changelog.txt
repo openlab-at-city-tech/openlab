@@ -1,0 +1,80 @@
+*** The Morning After Changelog ***
+
+2011.07.06 - version 3.3.0
+ * 404.php, 
+   archive.php, 
+   author.php, 
+   footer.php, 
+   header.php, 
+   home.php, 
+   index.php, 
+   page.php, 
+   search.php, 
+   sidebar.php, 
+   single.php, 
+   template-archives.php, 
+   template-contact.php, 
+   template-fullwidth.php, 
+   template-imagegallery.php, 
+   template-redirect.php, 
+   template-sitemap.php, 
+   /includes/theme-functions.php, 
+   /includes/sidebar-init.php, 
+   /includes/theme-widgets.php, 
+   /includes/theme-options.php - Code clean-up, optimisation and consistency checks.
+ * /includes/theme-comments.php - Added comment_form() arguments.
+ * comments.php - Updated to use the comment_form() function.
+ * image.php - Added to display "image" attachments.
+ * top-banner.php - Added to standardise control over the top banner area.
+
+2010.01.06 - version 3.2.4 
+ * home.php - Added stripslashes to the heading
+
+2011.01.05 - version 3.2.3
+ * includes/theme-options.php - change page headings to textarea
+ * author.php, search.php, 404.php, archives.php, single.php, index.php, home.php - Added stripslashes to the heading
+
+2010.11.12 - version 3.2.2
+ * includes/theme-options.php - added embed custom field
+ * single.php - output woo_embed
+
+2010.11.02 - version 3.2.1
+ * page.php - added comments
+
+2010.09.09 - version 3.2
+ * archive.php - Added translations
+ * author.php - Added translations
+ * comments.php - Added translations
+ * header.php - Added WordPress menu navigation, and added php checks for content.
+ * home.php - Added translations
+ * search.php - Updated page layout
+ * style.css - Added navigation styling
+ * /css/* - Added IE fixes for navmenus from Wooframework.
+
+2010.08.20 - version 3.1
+ * archive.php - Added translation to some strings
+ * comments.php - Added translation to some strings
+ * page.php - Added translation to some strings
+ * search.php - Added translation to some strings
+ * single.php - Added translation to some strings
+ * author.php - Added translation to some strings
+ * index.php - Added translation to some strings
+
+ * includes/theme-functions.php - changed path.jpg 
+ * lang/themorningafter.po - updated po file
+ * header.php - Fixed navigation to only show item if it has a link.
+ * home.php - Fixed featured posts loop
+
+2010.08.19 - version 3.0.3
+ * search.php - fixed layout when no results
+ 
+2010.07.31 - version 3.0.2
+ * includes/theme-actions.php - removed unused IE styling in HEAD
+ * style.css - removed foo.gif and other images not used
+ * header.php - removed effects.css from loading
+
+2010.07.15 - version 3.0.1
+ * includes/theme-widgets.php - Fixed bug with theme previewing
+	
+2010.06.08 - version 3.0
+ * First time released on WooFramework. Partly rebuilt.

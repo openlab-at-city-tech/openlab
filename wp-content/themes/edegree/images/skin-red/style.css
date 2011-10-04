@@ -1,0 +1,29 @@
+body {background: #515151 url(back-body.gif) repeat-x }
+
+#bg {background: url(back-bg.jpg) no-repeat center top }
+
+#logo a:link, #logo a:visited, #logo a:hover, #logo a:active {color:#f6d4ce }
+
+#logo a span {color:#fff; }
+
+#globalnav a:link, #globalnav a:visited {color:#fff }
+
+.search_form #s {background:#991600 }
+
+#search-submit {background: url(btn-search.png) no-repeat }
+
+.post {background:url(entrydate.png) no-repeat 12px 0 }
+
+#left-col .date {color:#fff }
+
+#footer {background:#d21e00 }
+
+.footer-widget h2 {border-bottom:1px dotted #ec2f00 }
+
+#copyright {color:#e98f80 }
+
+#footer-tag a:link, #footer-tag a:visited {color:#e98f80 }
+
+#footer-tag a:active, #footer-tag a:hover {color:#ff9d8c }
+
+#nav .current_page_item a:link, #nav .current_page_item a:visited {color:#f6d4ce }

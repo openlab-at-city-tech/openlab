@@ -1,0 +1,1304 @@
+# Translation of the WordPress theme Weaver
+# Copyright (C) 2011 Bruce Wampler
+# This file is distributed under the same license as the Weaver package.
+#
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid " Please correct your entry."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid " Reset to blank value."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "\" to individual pages from the \"Weaver Options For This Page\" box. You can style it using: "
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "\"Add CSS Rules\" option must not contain &lt;style&gt; tags!"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:881
+msgid "% Comments"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:515
+msgid "%1$s at %2$s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:507
+msgid "%s <span class=\"says\">says:</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:12
+msgid "&lt;HEAD&gt; Section"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:517
+#: weaver/functions.php:534
+msgid "(Edit)"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:881
+msgid "1 Comment"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:77
+msgid "<em>Additional Top Widget Area</em> - Enter name of a Per Page Widget Top Area to display."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:89
+msgid "<em>Alternative Replacement</em> - Enter name of a Per Page Widget Area to replace the Alternative area on alt-left and alt-right template pages."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:130
+msgid "<em>Author</em> - Enter author (use username, including spaces)"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:106
+msgid "<em>Category</em> - Enter list of category slugs of posts to include. (-slug will exclude specified category)"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:195
+msgid "<em>Note:</em> when you add settings for the post here, values will be created and displayed in the \"Custom Fields\" box."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:118
+msgid "<em>Order by</em> - Enter method to order posts by: author, date, title, or rand."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:126
+msgid "<em>Posts per Page</em> - Enter maximum number of posts per page."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:81
+msgid "<em>Primary Replacement</em> - Enter name of a Per Page Widget Area to replace the standard Primary area."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:85
+msgid "<em>Secondary Replacement</em> - Enter name of a Per Page Widget Area to replace the standard Secondary area."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:114
+msgid "<em>Single Post</em> - Enter post slug of a single post to display."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:122
+msgid "<em>Sort order</em> - Enter ASC or DESC for sort order."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:110
+msgid "<em>Tags</em> - Enter list of tag slugs of posts to include."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Always Show Top/Bottom widget area on front page</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Area Border on Top/Bottom widget areas</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Full Width Top/Bottom widget areas</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Hide Special Post Pages widget area</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Hide Top/Bottom widget area in blog</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "<small>Hide Top/Bottom widget area in pages</small>"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:843
+msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "<span class=\"%1$s\">Posted on</span> %2$s %3$s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "<span class=\"%1$s\">Posted on</span> %2$s <span class=\"meta-sep\">by</span> %3$s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:863
+msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+msgstr ""
+
+#. Text in function
+#: weaver/attachment.php:18
+msgid "<span class=\"meta-nav\">&larr;</span> %s"
+msgstr ""
+
+#. Text in function
+#: weaver/comments.php:56
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr ""
+
+#. Text in function
+#: weaver/loop-pwp.php:95
+#: weaver/loop-twocol.php:105
+#: weaver/loop.php:69
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-utils.php:360
+msgid "<strong>Note: Per Page widget area: $area not found.</strong> You've likely mistyped the name, haven't defined the area yet, or haven't added a widget."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "<strong>Selective Display of Widget Areas</strong><br />
+	These settings let you hide display of widget areas that would normally be displayed for a given page template. (Note that
+	different page templates don't necessarily display the same widget areas.)"
+msgstr ""
+
+#. Text in function
+#: weaver/author.php:41
+#: weaver/single.php:44
+#: weaver/wvr-includes/wvr-shortcodes.php:131
+msgid "About %s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Admin"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:20
+msgid "Administrative"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:58
+msgid "Advanced Options"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "All Weaver settings have been reset to the defaults."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "All current main and advanced options backed up in <em>My Saved Theme</em>."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "All current main and advanced options backed up in:"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "All current main and advanced options saved in "
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Allow Raw HTML and scripts. Disables auto paragraph, texturize, and other processing."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "An alternative widget area used only by the Alternative Left and Right page templates."
+msgstr ""
+
+#. Text in echo
+#: weaver/loop-pwp.php:36
+#: weaver/loop-twocol.php:33
+#: weaver/loop.php:36
+msgid "Apologies, but no results were found for the requested archive. Perhaps searching will help find a related post."
+msgstr ""
+
+#. Text in echo
+#: weaver/404.php:14
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Aqua"
+msgstr ""
+
+#. Text in echo
+#: weaver/content-aside.php:7
+msgid "Aside"
+msgstr ""
+
+#. Text in function
+#: weaver/author.php:29
+msgid "Author Archives: %s"
+msgstr ""
+
+#. Text in function
+#: weaver/page-sitemap.php:77
+msgid "Authors"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-widgets.php:69
+msgid "Automatically add paragraphs"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Black"
+msgstr ""
+
+#. Text in echo
+#: weaver/archive.php:37
+msgid "Blog Archives"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Blue"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Bottom Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Buds"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:62
+msgid "CSS Help"
+msgstr ""
+
+#. Text in function
+#: weaver/page-sitemap.php:77
+msgid "Categories"
+msgstr ""
+
+#. Text in function
+#: weaver/category.php:15
+msgid "Category Archives: %s"
+msgstr ""
+
+#. Text in echo
+#: weaver/comments.php:68
+msgid "Comments are closed."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:242
+msgid "Content Areas"
+msgstr ""
+
+#. Text in function
+#: weaver/attachment.php:66
+#: weaver/functions.php:377
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/archive.php:31
+msgid "Daily Archives: <span>%s</span>"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:137
+msgid "Define <em>page-head-code</em>, and the value contents will be added to the &lt;HEAD&gt; section. Include &lt;style>...&lt;/style> if adding CSS."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:137
+msgid "Define <em>page-header-insert-code</em>, and the value content will be inserted above the header image."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:137
+msgid "Define <em>page-pre-header-code</em>, and the value contents will be inserted before the &lt;header&gt; div."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Disable Visual Editor for this page. Useful if you enter simple HTML or other code."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Display as full post where normally excerpted."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Display post excerpt on main blog pages"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "ERROR: Saving <em>My Saved Theme</em> failed."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "ERROR: Saving backup failed."
+msgstr ""
+
+#. Text in function
+#: weaver/pgtpl-container.php:20
+#: weaver/page-sitemap.php:71
+#: weaver/page-posts2col.php:47
+#: weaver/page-posts-excerpt.php:48
+#: weaver/page-multicolcontent.php:32
+#: weaver/page-wrapperonly.php:13
+#: weaver/page-posts-excerpt2col.php:50
+#: weaver/page-posts-title2col.php:48
+#: weaver/functions.php:1007
+#: weaver/pg-popup.php:13
+#: weaver/page-posts-title.php:48
+#: weaver/page-posts.php:49
+msgid "Edit"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:190
+msgid "Enter optional per post CSS style rules. <strong>Do not</strong> include the &lt;style> and &lt;/style> tags.
+	    Include the {}'s. Don't use class names if rules apply to whole post, but do include class names
+	    (e.g., <em>.entry-title a</em>) for specific elements. Custom styles will not be displayed by the Post Editor."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "FTP File Access Form Settings Saved."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-admin.php:486
+#: weaver/wvr-includes/wvr-advancedopts.php:476
+msgid "FTP Password"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:484
+#: weaver/wvr-includes/wvr-advancedopts.php:474
+msgid "FTP Username"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "First Footer Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:244
+msgid "Footer Options"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Fourth Footer Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/attachment.php:26
+msgid "Full size is %s pixels"
+msgstr ""
+
+#. Text in echo
+#: weaver/content-gallery.php:7
+msgid "Gallery"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:240
+msgid "General Appearance"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Grand Tetons"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Gray"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Green"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:13
+msgid "HTML Insertion"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:241
+msgid "Header Options"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Header Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:63
+msgid "Help"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:137
+msgid "Help for Extra Per Page Options"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:95
+msgid "Help for Page with Posts Templates"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Help for Per Page Options"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:73
+#: weaver/wvr-includes/wvr-advancedopts.php:275
+msgid "Help for Per Page Widget Areas"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:195
+msgid "Help for Per Post Format"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Help for Per Post Options"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:188
+msgid "Help for Per Post Style"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Help for Weaver Page Templates"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "Hide 2010 Weaver Notice"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Bottom Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Page Title"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Primary Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Secondary Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Hide Sidebars when this post displayed on Single Post page."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Sitewide Bottom Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Sitewide Top Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:132
+msgid "Hide Sticky Posts"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Hide Top Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:134
+msgid "Hide bottom info line"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "Hide the Special Post Pages widget area on special post pages (archives, attachment, author, category, single post). It does not display if no widgets added to area. &diams;"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "Hide the top and bottom widget areas on main posts (blog) page. They do not display if no widgets added to area. &diams;"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "Hide the top and bottom widget areas on pages. They do not display if no widgets added to area. &diams;"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:133
+msgid "Hide top info line"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-admin.php:482
+#: weaver/wvr-includes/wvr-advancedopts.php:472
+msgid "Hostname"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "INVALID FILE NAME PROVIDED - Try Again"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-admin.php:476
+#: weaver/wvr-includes/wvr-advancedopts.php:510
+msgid "If you do not remember your credentials, you should contact your web host."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Indie Ave 940x180 Blank Header BG"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "Invalid name supplied to save theme to file."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Ivory Drive 940x198 Blank Header BG"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:881
+msgid "Leave a comment"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Lime"
+msgstr ""
+
+#. Text in echo
+#: weaver/content-link.php:7
+msgid "Link"
+msgstr ""
+
+#. Text in function
+#: weaver/attachment.php:26
+msgid "Link to full-size image"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Log in/out, admin"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Login"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:57
+msgid "Main Options"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Mark as a favorite post (adds star to title)"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Maroon"
+msgstr ""
+
+#. Text in function
+#: weaver/archive.php:33
+msgid "Monthly Archives: <span>%s</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Moon"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Moss"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Mum 940x198 Header"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Navy"
+msgstr ""
+
+#. Text in function
+#: weaver/comments.php:57
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/loop-pwp.php:96
+#: weaver/loop-twocol.php:106
+#: weaver/loop.php:70
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#. Text in echo
+#: weaver/loop-pwp.php:34
+#: weaver/404.php:12
+#: weaver/loop-twocol.php:31
+#: weaver/loop.php:34
+msgid "Not Found"
+msgstr ""
+
+#. Text in echo
+#: weaver/search.php:30
+msgid "Nothing Found"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Ocean Birds"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Olive"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "Option must be an integer value: "
+msgstr ""
+
+#. Text in function
+#: weaver/hdr-title.php:3
+msgid "Page %s"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:15
+msgid "Page Template Options"
+msgstr ""
+
+#. Text in function
+#: weaver/page-sitemap.php:77
+msgid "Pages"
+msgstr ""
+
+#. Text in function
+#: weaver/loop-pwp.php:73
+#: weaver/content-link.php:16
+#: weaver/pgtpl-container.php:20
+#: weaver/content-status.php:17
+#: weaver/attachment.php:66
+#: weaver/page-multicolcontent.php:32
+#: weaver/content-quote.php:19
+#: weaver/loop-twocol.php:74
+#: weaver/single.php:35
+#: weaver/content.php:18
+#: weaver/content-aside.php:16
+msgid "Pages:"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Painted Desert"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Path"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Per Page Area "
+msgstr ""
+
+#. Text in function
+#: weaver/content-gallery.php:21
+#: weaver/functions.php:699
+#: weaver/functions.php:1005
+msgid "Permalink to %s"
+msgstr ""
+
+#. Text in echo
+#: weaver/functions.php:534
+msgid "Pingback:"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "Please click the (?) for more information about all the Weaver Page Templates."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-admin.php:476
+#: weaver/wvr-includes/wvr-advancedopts.php:510
+msgid "Please enter your FTP credentials to proceed."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:243
+msgid "Post Page Specifics"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Post Pages Top Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "Previously existing settngs imported."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Primary Navigation"
+msgstr ""
+
+#. Text in echo
+#: weaver/sidebar.php:22
+#: weaver/functions.php:1007
+msgid "Primary Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/footer.php:36
+msgid "Proudly powered by %s."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Purple"
+msgstr ""
+
+#. Text in echo
+#: weaver/content-quote.php:7
+msgid "Quote"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Red"
+msgstr ""
+
+#. Text in function
+#: weaver/attachment.php:18
+msgid "Return to %s"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:59
+msgid "Save/Restore"
+msgstr ""
+
+#. Text in function
+#: weaver/search.php:20
+msgid "Search Results for: %s"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Second Footer Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Secondary Navigation"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Secondary Widget Area"
+msgstr ""
+
+#. Text in echo
+#: weaver/footer.php:36
+msgid "Semantic Personal Publishing Platform"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:19
+msgid "Shortcodes"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Show Featured Image with post"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "Show author avatar with post"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Silver"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-advancedopts.php:17
+msgid "Site Options"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Sitewide Bottom Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Sitewide Top Widget Area"
+msgstr ""
+
+#. Text in echo
+#: weaver/hdr-sitetitle.php:18
+msgid "Skip to content"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:61
+msgid "Snippets"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Sopris 940x198 Header"
+msgstr ""
+
+#. Text in echo
+#: weaver/search.php:32
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:523
+msgid "Sorry, there was a problem uploading your file. The file you picked was not a valid Weaver theme file."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:523
+msgid "Sorry, there was a problem uploading your file. You may need to check your folder permissions or other server settings."
+msgstr ""
+
+#. Text in echo
+#: weaver/content-status.php:7
+msgid "Status"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Sunset"
+msgstr ""
+
+#. Text in function
+#: weaver/tag.php:16
+msgid "Tag Archives: %s"
+msgstr ""
+
+#. Text in function
+#: weaver/page-sitemap.php:77
+msgid "Tag Cloud"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Teal"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Text Widget with Two Columns - with HTML and shortcode support. Also adds shortcodes to standard Text widget."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:187
+msgid "The above settings are not used by the [weaver_show_posts] shortcode."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The bottom widget area appears below the content area. It is not displayed on special post pages."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The first footer widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The fourth footer widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The header widget area appears at the top of the page. It is intended
+		for more advanced web pages, and is designed primarily to use Text Widgets to show social feeds
+		or other custom items. Styling is via '#ttw-head-widget', '#ttw-head-widget .textwidget',
+		and inline span style rules. Unless you add widgets, it doesn't show."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The primary widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The second footer widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The secondary widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The third footer widget area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "The top widget area appears above the content area, including the main blog page. It is not displayed on special post pages (archives, etc.)."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:137
+msgid "These areas also supported: <em>page-postheader-code</em>, <em>page-presidebar-code</em>, <em>page-prefooter-code</em>, and <em>page-postfooter-code</em>."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:99
+msgid "These settings are optional, and can filter which posts are displayed when you use one of the \"Page
+	with Posts\" templates. The settings will be combined for the final filtered list of posts displayed.
+	(If you make mistakes in your settings, it won\\'t be apparent until you display the page.)"
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:158
+msgid "These settings let you control display of this individual post."
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:17
+msgid "These settings let you hide various elements on a per page basis."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Third Footer Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#. Text in function
+#: weaver/content-gallery.php:21
+msgid "This gallery contains <a %1$s>%2$s photos</a>."
+msgstr ""
+
+#. Text in echo
+#: weaver/comments.php:14
+msgid "This post is password protected. Enter the password to view any comments."
+msgstr ""
+
+#. Text in echo
+#: weaver/sidebar.php:24
+msgid "This theme has been designed to be used with sidebars. This message will no
+longer be displayed after you add at least one widget to the Primary Widget Area
+using the Appearance->Widgets control panel."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This widget area appears at the bottom of all site static pages and post pages (including special post pages) EXCEPT pages using the blank or iframe page templates."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This widget area appears at the top of all site static pages and post pages (including special post pages) EXCEPT pages using the blank or iframe page templates."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This widget area will appear at the top of special post pages (archives, attachment, author, category, single post) This is not used on the main blog page."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "This widget can serve as an additional Top, Primary, Secondary, Alternative, or Weaver Plus [weaver_widget_area] area replacement when you add its name \""
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-widgets.php:63
+#: weaver/wvr-includes/wvr-widgets.php:115
+msgid "Title:"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Top Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Transparent header image"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "Use full width of content area for top and bottom widget areas"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "View all posts by %s"
+msgstr ""
+
+#. Text in function
+#: weaver/single.php:48
+#: weaver/wvr-includes/wvr-shortcodes.php:135
+msgid "View all posts by %s <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "WPWeaver 940x140 Header"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "Warning: CSS options must be enclosed in {}\\'s: "
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "Weaver Advanced Settings Saved."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:1007
+msgid "Weaver Alternative Widget Area"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-help.php:14
+msgid "Weaver Help"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Weaver Login"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "Weaver Main Settings Saved."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Weaver Text 2"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:56
+msgid "Weaver Themes"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1141
+msgid "Weaver Version 2.0 Differences"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "Weaver current sub-theme set to: "
+msgstr ""
+
+#. Text in echo
+#: weaver/wvr-includes/wvr-page-post-admin.php:195
+msgid "Weaver supports two post formats: Standard and Gallery. Click the ? for more info."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:523
+msgid "Weaver theme options reset to uploaded theme, saved as: "
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:1156
+msgid "Weaver theme restored from file, saved as: "
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-widgets.php:116
+msgid "Welcome"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Wheat 940x198 Header"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-globals.php:1
+msgid "When checked, the top and bottom widget areas will always be displayed on the front page. Overrides other settings. &diams;"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "White"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-admin.php:245
+msgid "Widget Areas"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "Wrong theme file format version"
+msgstr ""
+
+#. Text in function
+#: weaver/archive.php:35
+msgid "Yearly Archives: <span>%s</span>"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Yellow"
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "Yosemite"
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-help.php:164
+msgid "You are not using %s."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-help.php:164
+msgid "You are using %s."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-help.php:164
+msgid "You are using <span class=\"b\">WordPress %s</span>."
+msgstr ""
+
+#. Text in function
+#: weaver/wvr-includes/wvr-settings-lib.php:70
+msgid "You entered "
+msgstr ""
+
+#. Text in echo
+#: weaver/functions.php:510
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#. Text in function
+#: weaver/functions.php:377
+msgid "fuchsia"
+msgstr ""

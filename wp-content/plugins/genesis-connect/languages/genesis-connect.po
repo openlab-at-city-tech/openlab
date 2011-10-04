@@ -1,0 +1,449 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-10 13:26-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/ajax.php:39
+msgid "Search anything..."
+msgstr ""
+
+#: lib/ajax.php:107
+msgid "Please enter some content to post."
+msgstr ""
+
+#: lib/ajax.php:120
+msgid "There was a problem posting your update, please try again."
+msgstr ""
+
+#: lib/ajax.php:146
+msgid "Please do not leave the comment area blank."
+msgstr ""
+
+#: lib/ajax.php:151 lib/ajax.php:162
+msgid "There was an error posting that reply, please try again."
+msgstr ""
+
+#: lib/ajax.php:175
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: lib/ajax.php:176
+msgid "Reply"
+msgstr ""
+
+#: lib/ajax.php:177
+msgid "Delete"
+msgstr ""
+
+#: lib/ajax.php:214 lib/ajax.php:247
+msgid "There was a problem when deleting. Please try again."
+msgstr ""
+
+#: lib/ajax.php:260
+msgid "Remove Favorite"
+msgstr ""
+
+#: lib/ajax.php:269
+msgid "Favorite"
+msgstr ""
+
+#: lib/ajax.php:300
+msgid "Remove Invite"
+msgstr ""
+
+#: lib/ajax.php:326
+msgid "Friendship could not be canceled."
+msgstr ""
+
+#: lib/ajax.php:328
+msgid "Add Friend"
+msgstr ""
+
+#: lib/ajax.php:336
+msgid "Friendship could not be requested."
+msgstr ""
+
+#: lib/ajax.php:338
+msgid "Friendship Requested"
+msgstr ""
+
+#: lib/ajax.php:341
+msgid "Request Pending"
+msgstr ""
+
+#: lib/ajax.php:353
+msgid "There was a problem accepting that request. Please try again."
+msgstr ""
+
+#: lib/ajax.php:364
+msgid "There was a problem rejecting that request. Please try again."
+msgstr ""
+
+#: lib/ajax.php:390
+msgid "Error joining group"
+msgstr ""
+
+#: lib/ajax.php:392
+msgid "Leave Group"
+msgstr ""
+
+#: lib/ajax.php:400
+msgid "Error requesting membership"
+msgstr ""
+
+#: lib/ajax.php:402
+msgid "Membership Requested"
+msgstr ""
+
+#: lib/ajax.php:411
+msgid "Error leaving group"
+msgstr ""
+
+#: lib/ajax.php:414
+msgid "Join Group"
+msgstr ""
+
+#: lib/ajax.php:416
+msgid "Request Membership"
+msgstr ""
+
+#: lib/ajax.php:428
+msgid "There was a problem closing the notice."
+msgstr ""
+
+#: lib/ajax.php:453
+#, php-format
+msgid "Sent %s ago"
+msgstr ""
+
+#: lib/ajax.php:470
+msgid "There was a problem sending that reply. Please try again."
+msgstr ""
+
+#: lib/ajax.php:480
+msgid "There was a problem marking messages as unread."
+msgstr ""
+
+#: lib/ajax.php:496
+msgid "There was a problem marking messages as read."
+msgstr ""
+
+#: lib/ajax.php:512
+msgid "There was a problem deleting messages."
+msgstr ""
+
+#: lib/ajax.php:519
+msgid "Messages deleted."
+msgstr ""
+
+#: lib/class.front.php:52
+msgid "My Favorites"
+msgstr ""
+
+#: lib/class.front.php:53
+msgid "Accepted"
+msgstr ""
+
+#: lib/class.front.php:54
+msgid "Rejected"
+msgstr ""
+
+#: lib/class.front.php:55
+msgid "Show all comments for this thread"
+msgstr ""
+
+#: lib/class.front.php:56
+msgid "Show all"
+msgstr ""
+
+#: lib/class.front.php:57
+msgid "comments"
+msgstr ""
+
+#: lib/class.front.php:58
+msgid "Close"
+msgstr ""
+
+#: lib/class.front.php:59
+#, php-format
+msgid ""
+"%s is a unique identifier for %s that you can type into any message on this "
+"site. %s will be sent a notification and a link to your message any time you "
+"use it."
+msgstr ""
+
+#: lib/class.front.php:169
+msgid "Log Out"
+msgstr ""
+
+#: lib/class.front.php:177
+msgid "Username"
+msgstr ""
+
+#: lib/class.front.php:180
+msgid "Password"
+msgstr ""
+
+#: lib/class.front.php:183
+msgid "Remember Me"
+msgstr ""
+
+#: lib/class.front.php:185 lib/class.visitor.php:126
+msgid "Log In"
+msgstr ""
+
+#: lib/class.front.php:330
+msgid "Before BuddyPress (Optional)"
+msgstr ""
+
+#: lib/class.front.php:332
+msgid ""
+"This is an optional widgeted area which is called Before BuddyPress. To get "
+"started, log into your WordPress dashboard, and then go to the Genesis > "
+"Theme Settings. In the BuddyPress Settings choose Widget Area on the "
+"BuddyPress Before Content dropdown. Then go to Appearance > Widgets screen. "
+"There you can drag any widget into the Before BuddyPress widget area on the "
+"right hand side. "
+msgstr ""
+
+#: lib/class.front.php:347 lib/class.front.php:379
+msgid "Members"
+msgstr ""
+
+#: lib/class.front.php:351 lib/class.front.php:383
+msgid "Groups"
+msgstr ""
+
+#: lib/class.front.php:355 lib/class.front.php:387
+msgid "Forums"
+msgstr ""
+
+#: lib/class.front.php:361 lib/class.front.php:393
+msgid "Blogs"
+msgstr ""
+
+#: lib/class.front.php:451
+msgid "Groups Directory"
+msgstr ""
+
+#: lib/class.front.php:452
+msgid "Create a Group"
+msgstr ""
+
+#: lib/class.front.php:455
+msgid "Groups Forums Directory"
+msgstr ""
+
+#: lib/class.front.php:456
+msgid "New Topic"
+msgstr ""
+
+#: lib/class.front.php:460
+msgid "Blogs Directory"
+msgstr ""
+
+#: lib/class.front.php:461
+msgid "Create a Blog"
+msgstr ""
+
+#: lib/class.options.php:27
+#, php-format
+msgid ""
+"Please <a href=\"%s\">deactivate</a> the BP Template Pack plugin to enable "
+"the BuddyPress features in GenesisBuddy."
+msgstr ""
+
+#: lib/class.options.php:35
+msgid "Connect Settings"
+msgstr ""
+
+#: lib/class.options.php:38
+msgid "BuddyPress"
+msgstr ""
+
+#: lib/class.options.php:42
+msgid "Navigation"
+msgstr ""
+
+#: lib/class.options.php:43
+msgid "Registration"
+msgstr ""
+
+#: lib/class.options.php:44
+msgid "Layout"
+msgstr ""
+
+#: lib/class.options.php:77
+msgid "Genesis - Connect Settings"
+msgstr ""
+
+#: lib/class.options.php:78 lib/class.options.php:96
+msgid "Save Settings"
+msgstr ""
+
+#: lib/class.options.php:115 lib/class.options.php:150
+#: lib/class.options.php:178
+msgid "None"
+msgstr ""
+
+#: lib/class.options.php:116
+msgid "Primary Navigation"
+msgstr ""
+
+#: lib/class.options.php:117
+msgid "Secondary Navigation"
+msgstr ""
+
+#: lib/class.options.php:118
+msgid "Below Navigation"
+msgstr ""
+
+#: lib/class.options.php:120
+msgid "BuddyPress Navigation:"
+msgstr ""
+
+#: lib/class.options.php:128
+msgid "Add BuddyPress navigation to the adminbar"
+msgstr ""
+
+#: lib/class.options.php:130
+msgid "Show the adminbar on the home page"
+msgstr ""
+
+#: lib/class.options.php:132
+msgid "Show the login form at the top of the main sidebar"
+msgstr ""
+
+#: lib/class.options.php:134
+msgid "Show the login link in the adminbar"
+msgstr ""
+
+#: lib/class.options.php:140
+msgid "Visitors"
+msgstr ""
+
+#: lib/class.options.php:140
+msgid "Logged in Users"
+msgstr ""
+
+#: lib/class.options.php:143
+msgid "On front page show:"
+msgstr ""
+
+#: lib/class.options.php:145
+msgid "Blog Posts"
+msgstr ""
+
+#: lib/class.options.php:146
+msgid "Activity Stream"
+msgstr ""
+
+#: lib/class.options.php:148
+msgid "BuddyPress Before Content:"
+msgstr ""
+
+#: lib/class.options.php:151
+msgid "Widget Area"
+msgstr ""
+
+#: lib/class.options.php:152
+msgid "Genesis Before Content"
+msgstr ""
+
+#: lib/class.options.php:162
+msgid "Primary Sidebar"
+msgstr ""
+
+#: lib/class.options.php:162
+msgid "Secondary Sidebar"
+msgstr ""
+
+#: lib/class.options.php:169
+msgid "Registration is currently disabled"
+msgstr ""
+
+#: lib/class.options.php:176
+msgid "Custom Registration Permalink:"
+msgstr ""
+
+#: lib/class.options.php:179
+msgid "Before Pages"
+msgstr ""
+
+#: lib/class.options.php:180
+msgid "After Pages"
+msgstr ""
+
+#: lib/class.options.php:181
+msgid "On the Adminbar"
+msgstr ""
+
+#: lib/class.options.php:183
+msgid "Custom Permalink:"
+msgstr ""
+
+#: lib/class.options.php:185
+#, php-format
+msgid "Don't include the %s"
+msgstr ""
+
+#: lib/class.options.php:187
+msgid "Custom Title:"
+msgstr ""
+
+#: lib/class.options.php:189
+msgid "The title for the link"
+msgstr ""
+
+#: lib/class.options.php:191
+msgid "Registration Time:"
+msgstr ""
+
+#: lib/class.options.php:193
+msgid "Minimum number of seconds for a human signup"
+msgstr ""
+
+#: lib/class.options.php:199
+msgid "Use this for the Recent Activity Page"
+msgstr ""
+
+#: lib/class.options.php:209
+msgid "Default"
+msgstr ""
+
+#: lib/class.theme.php:58
+msgid "This is above the BuddyPress content"
+msgstr ""
+
+#: lib/class.theme.php:108 lib/class.theme.php:109
+msgid "Genesis Connect Login Widget"
+msgstr ""
+
+#: lib/class.theme.php:226
+msgid "Sign Up"
+msgstr ""
+
+#: lib/class.theme.php:258
+#, php-format
+msgid ""
+"Please <a href=\"%s\">switch</a> to a non-GenesisBuddy child theme to enable "
+"the BuddyPress features in Genesis Connect."
+msgstr ""
+
+#: lib/class.visitor.php:59 lib/class.visitor.php:82
+msgid "Please try again"
+msgstr ""

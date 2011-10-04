@@ -1,0 +1,224 @@
+/* 
+    Document   : buddypress
+    Created on : 16-Jan-2010, 6:25:54 PM
+    Author     : ron
+    Description:
+        Purpose of the stylesheet follows.
+*/
+#nav .padder {
+	padding: 9px;
+}
+#subnav .padder {
+	padding: 3px;
+}
+#wp-admin-bar {
+	width: 980px;
+	margin-left: -10px;
+}
+	
+/** boxes **/
+#search-terms, 
+	#whats-new-post-in,
+	.dir-search label input,
+	#forums_search,
+	#forums_search select,
+	#members_search,
+	#members_search select,
+	#field_ids,
+	#message_content,
+	#subject,
+	#send-notice,
+	#send-to-input,
+	#pass1,
+	#pass2  {
+	background: #F7F7F7 !important;
+	color: #BA7A9A;
+	font-family: Arial, Tahoma, Verdana;	
+	font-size: 11px;
+	margin: 0 5px 0 0;
+	padding: 4px 0 4px 5px;
+	border: 1px solid #BA7A9A;
+	}
+	
+/* buttons */
+#search-submit, 
+	#aw-whats-new-submit,
+	#ac-form-submit,
+	#groups_search_submit,
+	#forums_search_submit,
+	#members_search_submit,
+	.dir-search input,
+	#profile-group-edit-submit,
+	#send,
+	div.ac-reply-content input,
+	.internal-page #content .padder a.button,
+	.internal-page #content .padder .submit input[type=button],
+	#sidebar-me a.button,
+	input[type=submit] {
+		background: #9E577B;
+		color: #FFFFFF;
+		font-size: 11px;
+		font-family: Arial, Tahoma, Verdana;
+		text-decoration: none;
+		text-transform: uppercase;
+		margin: 0;
+		padding: 2px 5px 2px 5px;
+		border: 1px solid #9E577B;
+		-moz-border-radius: 0px;
+		-khtml-border-radius: 0px;
+		-webkit-border-radius: 0px;
+}
+
+#search-submit:hover, 
+	#aw-whats-new-submit:hover,
+	#ac-form-submit:hover,
+	#groups_search_submit:hover,
+	#forums_search_submit:hover,
+	#members_search_submit:hover,
+	.dir-search input:hover,
+	.internal-page #content .padder a.button:hover,
+	.internal-page #content .padder .submit input[type=button]:hover,
+	#sidebar-me a.button:hover,
+	input[type=submit]:hover {
+		background: #BA7A9A;
+		border: 1px solid #BA7A9A;
+}
+
+/* text areas */
+#whats-new, 
+	#reply_text,
+	#topic_text,
+	#topic_tags,
+	#topic_title {
+		background:#F7F7F7 none repeat scroll 0 0 !important;
+		border:1px solid #DDDDDD;
+		color:#BA7A9A;
+		font-family:Arial,Tahoma,Verdana;
+		font-size:12px;
+}
+#content .dir-search label input[type=text] {
+	font-size: 11px;
+	text-transform: none;
+}
+.item-list-tabs ul li.filter select {
+	background:#F7F7F7;
+	border:1px solid #E6E6E6;
+	color:#000000;
+	font-family:Arial,Tahoma,Verdana;
+	font-size:11px;
+	margin:0 5px 0 0;
+	padding:4px 0 4px 5px;
+}
+
+.button {
+	background: #EEE;
+	padding: 2px;
+}
+div.generic-button {
+	padding: 2px 4px;
+}
+
+/* misc */
+#content div.pagination-links a {
+	background: transparent;
+}
+.sidebar-sidebar-content #item-header span.activity,
+	.sidebar-content-sidebar #item-header span.activity,
+	.content-sidebar-sidebar #item-header span.activity {
+		display: inline-block;
+}
+.sidebar-sidebar-content #content .padder h3,
+	.sidebar-content-sidebar #content .padder h3,
+	.content-sidebar-sidebar #content .padder h3 {
+		font-size: 14px;
+}
+.sidebar-sidebar-content .dir-search label input,
+	.sidebar-content-sidebar .dir-search label input,
+	.content-sidebar-sidebar .dir-search label input {
+		width: 10em;
+}
+/* BP widgets */
+.widget ul#groups-list {
+	padding: 0px 5px 20px;
+}
+#sidebar .widget ul.item-list li img.avatar,
+	#featured-top .widget ul.item-list li img.avatar,
+	#featured-bottom .widget ul.item-list li img.avatar,
+	#sidebar-alt .widget ul.item-list li img.avatar {
+		margin: 0px;
+}
+/* this is to give the featured widgets list items the same look as the sidebar */
+#featured-top .widget ul,
+	#featured-bottom .widget ul {
+		list-style-type:none;
+		margin:10px 0 5px;
+}
+#featured-top .widget ul li,
+	#featured-bottom .widget ul li {
+		list-style-type: none;
+		background: transparent url(images/pink/sidebar-list.png) no-repeat scroll left top;
+		padding-left: 15px;
+		margin-left: 0px;
+}
+/**/
+#content .bp-content-top .widget {
+	border: none;
+}
+#content .bp-content-top .widget h4 {
+	background: #BA7A9A;
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	font-weight: bold;
+	text-shadow: #333333 1px 1px;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 2px 5px 1px 8px;
+}
+
+#content .bp-content-top .textwidget p {
+	margin: 0;
+	padding: 10px 0 5px 0;
+}
+
+#content .bp-content-top ul,
+	#content .bp-content-top ol {
+		list-style-type: none;
+		margin: 10px 0 5px 0;
+		padding: 0;
+}
+
+#content .bp-content-top ul ul,
+	#content .bp-content-top ol ol {
+		margin: 0;
+		padding: 0 0 0 15px;
+}
+
+#content .bp-content-top li {
+	background: url(images/pink/sidebar-list.png) no-repeat top left;
+	margin: 0;
+	padding: 0 0 0 18px;
+ 	word-wrap: break-word;
+}
+
+#content .bp-content-top embed,
+	#content .bp-content-top object {
+		width: 300px;
+		height: 225px;
+		margin: 0;
+		padding: 0;
+}
+ul#topic-post-list li.alt {
+	padding: 15px 5px 0;
+}
+ul.item-list li {
+	padding: 10px 0;
+}
+/* create groups/forums */
+#content #group-create-tabs,
+	#content #group-create-tabs ul li span {
+		background: #F7F7F7;
+}
+#content #group-create-tabs ul li a {
+   background: #FFFFFF;
+}

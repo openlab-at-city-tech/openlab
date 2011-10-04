@@ -1,0 +1,28 @@
+# Exclude user generated content
+wp-content/blogs.dir/
+wp-content/uploads/*
+wp-content/cache/*
+
+wiki/images/*
+
+# Exclude environment files
+cac-env-config.php
+
+# Misc exclusions
+*.bak
+PHP_errors.log
+error_log
+.DS_store
+.DS_Store
+#maintenance.html
+LocalSettings.old*
+wp-content/plugins/custom-anti-spam/cas_*
+*.php.orig
+
+.svn
+wp-admin/error_log
+.fseventsd/
+
+# vim files
+*.swp
+
