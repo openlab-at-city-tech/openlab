@@ -8,6 +8,9 @@ wiki/images/*
 # Exclude environment files
 env.php
 
+# Don't include the dev site
+openlabdev
+
 # Misc exclusions
 *.bak
 PHP_errors.log
