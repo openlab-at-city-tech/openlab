@@ -6,7 +6,7 @@ wp-content/cache/*
 wiki/images/*
 
 # Exclude environment files
-cac-env-config.php
+env.php
 
 # Misc exclusions
 *.bak
