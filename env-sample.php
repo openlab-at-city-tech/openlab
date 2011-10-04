@@ -21,6 +21,7 @@ define( 'BBDB_HOST', '' );
 /**
  * Other environment specific constants
  */
+define( 'IS_LOCAL_ENV', true ); // Leave this as true, except on staging and production environments
 define( 'WP_DEBUG', false );
 define( 'DOMAIN_CURRENT_SITE', 'openlab.citytech.cuny.edu' );
 define( 'PATH_CURRENT_SITE', '/' );

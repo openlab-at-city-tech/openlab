@@ -1,0 +1,173 @@
+<?php
+
+class wpmuSetDomain {
+
+	private $dbConn = false;
+
+	private $env_path = '';
+
+	public function __construct() {
+		error_reporting(E_ALL);
+
+		// Set the env file path. A bit hackish
+		$this->env_path = substr( dirname(__FILE__), 0, strrpos( dirname(__FILE__), '/' ) ) . '/env.php';
+	}
+
+	public function setDatabaseConnection($host,$user,$password,$db) {
+		$host = '127.0.0.1';
+
+		if( $db == 'openlab_citytech' ) {
+			$msg = 'This script will not run on databases named "openlab_citytech". This is a precaution to prevent it from being run on the production database by mistake';
+			die($msg);
+		}
+		$this->dbConn = mysql_connect($host,$user,$password);
+		$this->db = $db;
+		mysql_select_db($db,$this->dbConn);
+	}
+
+	private function getTables() {
+		$q = 'SHOW TABLES FROM '.$this->db;
+		$qres = mysql_query($q);
+		$tables = array();
+		while($row = mysql_fetch_array($qres)) {
+			$tables[] = $row[0];
+		}
+		return $tables;
+	}
+
+	private function getFields($table) {
+		$q = 'SHOW FIELDS FROM '.$table;
+		$qres = mysql_query($q);
+		$fields = array();
+		while($row = mysql_fetch_assoc($qres)) {
+			$type = $row['Type'];
+			$typeOk = false;
+			if(stristr(strtolower($type),'char')) $typeOk = true;
+			elseif(stristr(strtolower($type),'text')) $typeOk = true;
+			elseif(stristr(strtolower($type),'blob')) $typeOk = true;
+			if($typeOk == true) $fields[] = $row;
+		}
+		return $fields;
+	}
+
+	private function fatalError($msg) {
+		print $msg;
+		print 'TEST';
+		die('EXITING...');
+	}
+
+	public function setDomain($oldDomain, $newDomain, $testOnly) {
+
+		if($testOnly) {
+			$queryType = 'select';
+		} else {
+			$queryType = 'replace';
+		}
+
+		// get all tables
+		$tables = $this->getTables();
+
+		$i = 0;
+		foreach($tables as $table) {
+			$fields = $this->getFields($table);
+
+			if(count($fields) > 0) {
+				print 'Updating table "'.$table.'"'."\n";
+
+				foreach($fields as $field) {
+					$i++;
+					$fieldName = $field['Field'];
+					if($queryType == 'replace') {
+		                $q = 'UPDATE '.$table.' SET '.$fieldName.' = REPLACE('.$fieldName.',\''.$oldDomain.'\',\''.$newDomain.'\')';
+						#print $q.'</br>';
+						mysql_query($q);
+					} else {
+		                $q = 'SELECT * FROM '.$table.' WHERE '.$fieldName.' REGEXP(\''.$oldDomain.'\')';
+						#print $q.'</br>';
+		            }
+				}
+			}
+		}
+		if($i > 1000) {
+			print 'Executed '.$i.' queries. Wow, that\'s a lot!'."\n";
+		} else {
+			print 'Executed '.$i.' queries. Heck, that\'s nothing!'."\n";
+		}
+	}
+
+	public function confirm($oldDomain, $newDomain) {
+		require_once($this->env_path);
+
+		echo "\n\n";
+		echo "Please confirm that you would like to do the following:\n\n";
+		echo "Replace '$oldDomain' in the Wordpress Database [".strtoupper(DB_NAME).'], the BuddyPress Database ['.strtoupper(BBDB_NAME).']\n';
+		echo "\nAre you sure you want me to do this? If so, type 'yes' and press return\n";
+		$confirm = trim(fgets(STDIN));
+		if($confirm != "yes") die("\n".'You did\'nt say yes! Alas, I am done for.'."\n\n");
+	}
+
+	public function doUpdates($oldDomain, $newDomain, $testOnly) {
+		require_once($this->env_path);
+
+		$wpmu = true;
+		$bpress = true;
+		//$mwiki = true;
+		$mwiki = false;
+
+		// WPMU
+		if($wpmu == true) {
+			print '######################'."\n";
+			print 'Updating WPMU Database: '.DB_NAME."\n";
+			print '######################'."\n";
+			$this->setDatabaseConnection(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+			$this->setDomain($oldDomain,$newDomain,$testOnly);
+		}
+
+		// BUDDYPRESS, IF IT'S NOT IN THE SAME DB.
+		if($bpress == true && DB_NAME != BBDB_NAME && BBDB_USER && BBDB_PASSWORD && BBDB_NAME) {
+			print '######################'."\n";
+			print 'Updating BBPress Database: '.BBDB_NAME."\n";
+			print '######################'."\n";
+			$this->setDatabaseConnection(BBDB_HOST,BBDB_USER,BBDB_PASSWORD,BBDB_NAME);
+			$this->setDomain($oldDomain,$newDomain,$testOnly);
+		}
+
+		// MEDIAWIKI, IF IT'S NOT IN THE SAME DB.
+		if($mwiki == true && MW_DB_NAME != BBDB_NAME && MW_DB_NAME != DB_NAME && MW_DB_SERVER && MW_DB_USER && MW_DB_PASSWORD && MW_DB_NAME) {
+			print '######################'."\n";
+			print 'Updating MediaWiki Database: '.MW_DB_PASSWORD."\n";
+			print '######################'."\n";
+			$this->setDatabaseConnection(MW_DB_SERVER,MW_DB_USER,MW_DB_PASSWORD,MW_DB_NAME);
+			$this->setDomain($oldDomain,$newDomain,$testOnly);
+		}
+
+
+
+	}
+}
+
+$wpmuSetDomain = new wpmuSetDomain;
+echo 'This script replaces all instances of one domain in the OpenLab databases with another domain name.'."\n";
+
+echo 'Enter the domain name that you want to change (press return to accept the default: "openlabdev.org"):'."\n";
+$oldDomain = trim(fgets(STDIN));
+if($oldDomain == '') $oldDomain = 'openlabdev.org';
+
+$newDomain = false;
+
+$first = true;
+while($newDomain == '') {
+	if($first == true) {
+		echo 'Enter the domain name that you want to change to:'."\n";
+	} else {
+		echo 'That\'s not a domain name. Enter the domain name that you want to change to or press ctrl+c to exit'."\n";
+	}
+	$first = false;
+	$newDomain = trim(fgets(STDIN));
+}
+
+$wpmuSetDomain->confirm($oldDomain,$newDomain);
+$wpmuSetDomain->doUpdates($oldDomain,$newDomain,0);
+
+
+?>
