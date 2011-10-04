@@ -1,4 +1,4 @@
-php_flag log_errors on 
+php_flag log_errors on
 php_value error_log /usr/home/openlab/public_html/php_error.log
 
 # -FrontPage-
@@ -37,5 +37,5 @@ RewriteRule . index.php [L]
 
 #AuthUserFile /usr/www/users/openlab/.htpasswd
 #AuthType Basic
-#AuthName “OpenLab”
+#AuthName <E2><80><9C>OpenLab<E2><80><9D>
 #Require valid-user

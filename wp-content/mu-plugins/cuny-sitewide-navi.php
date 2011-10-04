@@ -1,4 +1,37 @@
 <?php
+
+/**
+ * Adds 'local environment' tab
+ */
+function cuny_local_env_flag() {
+	if ( defined( 'IS_LOCAL_ENV' ) && IS_LOCAL_ENV ) {
+		?>
+
+		<style type="text/css">
+			#local-env-flag {
+				position: fixed;
+				left: 0;
+				top: 50px;
+				width: 150px;
+				padding: 10px 15px;
+				text-align: center;
+				background: #f00;
+				color: #fff;
+				font-size: 1.5em;
+				line-height: 1.8em;
+				border: 2px solid #666;
+			}
+		</style>
+
+		<div id="local-env-flag">
+			LOCAL ENVIRONMENT
+		</div>
+
+		<?php
+	}
+}
+add_action( 'wp_footer', 'cuny_local_env_flag' );
+
 add_action('wp_enqueue_scripts','wds_jquery');
 function wds_jquery() {
 		wp_enqueue_script('jquery');
