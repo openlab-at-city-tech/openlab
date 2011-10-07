@@ -8,6 +8,9 @@ wiki/images/*
 # Exclude environment files
 env.php
 
+# Don't include .htaccess, which causes problems with the dev site
+.htaccess
+
 # Don't include the dev site
 openlabdev
 
