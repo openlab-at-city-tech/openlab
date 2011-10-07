@@ -216,6 +216,7 @@ a:hover {
 
 #mainnav .current_page_item a { text-decoration: none; background: #7fb2cc; color: #666666; }
 #mainnav .current_page_parent a { text-decoration: none; background: #7fb2cc; color: #666666; }
+#mainnav .current_page_item ul li a { color: #fff; }
 #mainnav .current_page_item .sub-menu { left: auto; }
 #mainnav .current_page_parent .sub-menu { left: auto; }
 #mainnav .current_page_parent .sub-menu .current_page_item { font-weight: bold; }
