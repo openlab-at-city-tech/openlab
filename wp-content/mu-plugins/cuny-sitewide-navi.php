@@ -20,6 +20,7 @@ function cuny_local_env_flag() {
 				font-size: 1.5em;
 				line-height: 1.8em;
 				border: 2px solid #666;
+				z-index: 1000;
 			}
 		</style>
 
