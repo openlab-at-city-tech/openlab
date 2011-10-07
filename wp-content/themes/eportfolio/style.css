@@ -171,15 +171,35 @@ a:hover {
 
 #mainnav li ul { /* second-level lists */
 	position: absolute;
-	width: 400px;
 	left: -999em;
 	font-family: Arial;
 	text-transform: none;
+	background: #7fb2cc;
 }
 
-#mainnav li ul li { padding: 0 0 0 10px; }
-#mainnav li ul li a { padding: 4px 0 3px 0; background: none; }
-#mainnav li ul li a:hover { text-decoration: underline; }
+#mainnav li ul li {
+	float: none;
+	padding: 5px 10px;
+}
+	#mainnav li ul li:first-child {
+		padding-top: 10px;
+		background: #7fb2cc;
+	}
+	#mainnav li ul li:last-child {
+		padding-bottom: 10px;
+		background: #7fb2cc;
+	}
+	#mainnav li ul li:hover {
+		background: #a5d0e6;
+	}
+#mainnav li ul li a {
+	padding: 0;
+	background: #7fb2cc;
+}
+	#mainnav li ul li:hover a {
+		text-decoration: underline;
+		background: #a5d0e6;
+	}
 
 #mainnav li ul ul { /* third-and-above-level lists */
 	margin: -1em 0 0 10em;
