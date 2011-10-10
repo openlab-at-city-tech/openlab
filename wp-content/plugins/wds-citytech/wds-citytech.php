@@ -1,4 +1,4 @@
-<?php /* 
+<?php /*
  Plugin Name: WDS CityTech
  Plugin URI: http://citytech.webdevstudios.com
  Description: Custom Functionality for CityTech BuddyPress Site.
@@ -95,6 +95,14 @@ function wds_forum_topic_next_prev () {
  echo "<br />Topic ID: " . bp_get_the_topic_id();
 */
 }
+
+/**
+ * On activation, copies the BP first/last name profile field data into the WP 'first_name' and
+ * 'last_name' fields.
+ *
+ * @todo This should probably be moved to a different hook. This $last_user lookup is hackish and
+ *       may fail in some edge cases. I believe the hook bp_activated_user is correct.
+ */
 add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
 function wds_bp_complete_signup(){
         global $bp,$wpdb,$user_ID;
@@ -108,7 +116,14 @@ function wds_bp_complete_signup(){
 	$update_user_first = update_user_meta($user_id,'first_name',$first_name);
 	$update_user_last = update_user_meta($user_id,'last_name',$last_name);
 }
-//Add members to wpms website if attached to bp group and they are a group member
+
+
+/**
+ * Add members to wpms website if attached to bp group and they are a group member
+ *
+ * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
+ *       overhead, and should be rewritten to avoid PHP warnings.
+ */
 add_action('init','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
@@ -123,7 +138,7 @@ function wds_add_group_members_2_blog(){
 		      $rs = $wpdb->get_results( $sql );
 		      if ( count( $rs ) > 0 ) {
 			      foreach( $rs as $r ) {
-				      $user_title = $r->user_title;	
+				      $user_title = $r->user_title;
 			      }
 			      if($user_title=="Group Admin"){
 				      $role="administrator";
@@ -163,10 +178,10 @@ function wds_check_blog_privacy(){
 				}
 			}
 		}
-	}	
+	}
 }*/
 
- 
+
 
 
 //child theme menu filter to link to website
@@ -203,17 +218,17 @@ function cuny_add_group_menu_items($items) {
 }
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
-	
+
 	$wds_bp_group_id = get_option('wds_bp_group_id');
-	
+
 	if($wds_bp_group_id){
 		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		
+
 		$tab = '<li><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Home</a></li>';
 		$tabs = $tab;
 	}
-	
+
 	return $tabs;
 }
 
@@ -288,7 +303,7 @@ function wds_footer_breadcrumbs(){
 		}else{
 			$b1='<a href="'.site_url().'/groups/">Groups</a>';
 		}
-	    
+
 	}
 	if($bp->displayed_user->id){
 		$account_type = xprofile_get_field_data( 'Account Type', $bp->displayed_user->id);
@@ -351,14 +366,19 @@ function wds_bp_the_site_member_realname_activity(){
 	return "werwe";
 }*/
 
-//Default BP Avatar Full 
+//Default BP Avatar Full
 if ( !defined( 'BP_AVATAR_FULL_WIDTH' ) )
 define( 'BP_AVATAR_FULL_WIDTH', 225 );
 if ( !defined( 'BP_AVATAR_FULL_HEIGHT' ) )
 define( 'BP_AVATAR_FULL_HEIGHT', 225 );
 
 
-//Default blog theme
+/**
+ * Don't let child blogs use bp-default or a child thereof
+ *
+ * @todo Why isn't this done by network disabling BP Default and its child themes?
+ * @todo Why isn't BP_DISABLE_ADMIN_BAR defined somewhere like bp-custom.php?
+ */
 function wds_default_theme(){
 	global $wpdb,$blog_id;
 	if($blog_id>1){
@@ -373,7 +393,7 @@ function wds_default_theme(){
 }
 add_action( 'init', 'wds_default_theme' );
 
-//register.php -hook for new div to show account type fields 
+//register.php -hook for new div to show account type fields
 add_action( 'bp_after_signup_profile_fields', 'wds__bp_after_signup_profile_fields' );
 function wds__bp_after_signup_profile_fields(){?>
 <div class="editfield"><div id="wds-account-type"></div></div>
@@ -388,7 +408,7 @@ function wds_registration_ajax(){
 	$loading='<img src="'.get_bloginfo('template_directory').'/_inc/images/ajax-loader.gif">';?>
 	<script type="text/javascript">
 		//<![CDATA[
-		
+
 		//load register account type
 		function wds_load_account_type(id,default_type){
 			<?php echo $sack;?>
@@ -400,13 +420,13 @@ function wds_registration_ajax(){
 			   var selected_index=select_box.selectedIndex;
 			   var selected_value = select_box.options[selected_index].value;
 			}
-	      
+
 			if(selected_value!=""){
 				document.getElementById('signup_submit').style.display='';
 			}else{
 				document.getElementById('signup_submit').style.display='none';
 			}
-	      
+
 			isack.execute = 1;
 			isack.method = 'POST';
 			isack.setVar( "action", "wds_load_account_type" );
@@ -414,8 +434,8 @@ function wds_registration_ajax(){
 			isack.runAJAX();
 			return true;
 		}
-		
-		
+
+
 		//]]>
 	</script>
 	<?php
@@ -440,7 +460,7 @@ function wds_load_default_account_type() {
 		    $return .= "wds_load_account_type('field_7','$type');";
 		    $return .= '</script>';
 		    echo $return;
-		    
+
 }
 
 add_action('wp_ajax_wds_load_account_type', 'wds_load_account_type');
@@ -453,14 +473,14 @@ function wds_load_account_type(){
 		//get matching profile group_id
 		$sql = "SELECT id FROM wp_bp_xprofile_groups where name='".$account_type."'";
 		$posts = $wpdb->get_results($sql, OBJECT);
-		if ($posts){ 
-			foreach ($posts as $post): 
+		if ($posts){
+			foreach ($posts as $post):
 				$group_id=$post->id;
 			endforeach;
 			$return.=wds_get_register_fields($group_id);
 		}
 	}else{
-		$return="Please select an Account Type.";	
+		$return="Please select an Account Type.";
 	}
 	$return=str_replace("'","\'",$return);
 	die("document.getElementById('wds-account-type').innerHTML='$return'");
@@ -509,9 +529,9 @@ function wds_groups_ajax(){
 			isack.runAJAX();
 			return true;
 		}
-		
+
 		function wds_load_group_departments(id){
-			<?php $group=$bp->groups->current_group->id; 
+			<?php $group=$bp->groups->current_group->id;
 			echo $sack;?>
 			var schools="0";
 			if(document.getElementById('school_tech').checked){
@@ -544,7 +564,7 @@ function wds_load_group_departments(){
 	$schools = $_POST['schools'];
 	$schools=str_replace("0,","",$schools);
 	$schools=explode(",",$schools);
-	
+
 	$departments_tech=array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology');
 	$departments_studies=array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology');
 	$departments_arts=array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science');
@@ -565,7 +585,7 @@ function wds_load_group_departments(){
 	foreach ($departments as $i => $value) {
 		$checked="";
 		if(in_array($value,$wds_departments)){
-			$checked="checked";	
+			$checked="checked";
 		}
 		$return.="<input type='checkbox' name='wds_departments[]' value='".$value."' ".$checked."> ".$value."<br>";
 	}
@@ -580,11 +600,11 @@ function wds_new_group_type(){
 	  global $bp;
 	  unset( $bp->groups->current_create_step );
 	  unset( $bp->groups->completed_create_steps );
-  
+
 	  setcookie( 'bp_new_group_id', false, time() - 1000, COOKIEPATH );
 	  setcookie( 'bp_completed_create_steps', false, time() - 1000, COOKIEPATH );
 	  setcookie( 'wds_bp_group_type', $_GET['type'], time() + 20000, COOKIEPATH );
-	  bp_core_redirect( $bp->root_domain . '/' . $bp->groups->slug . '/create/step/group-details/?type='.$_GET['type'] );	
+	  bp_core_redirect( $bp->root_domain . '/' . $bp->groups->slug . '/create/step/group-details/?type='.$_GET['type'] );
   }
 }
 
@@ -599,7 +619,7 @@ function wds_load_group_type($group_type){
 	}else{
 		$group_type = $_POST['group_type'];
 	}
-	
+
 	if(is_super_admin( $user_ID )){
 		$wds_group_featured=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_featured' );
 		if($wds_group_featured){
@@ -613,26 +633,26 @@ function wds_load_group_type($group_type){
 		$return.='<tr>';
             $return.='<td>School(s):';
             $return.='<td>';
-			$checked="";	
+			$checked="";
 			if($bp->groups->current_group->id && in_array("tech",$wds_group_school)){
-				$checked="checked";	
+				$checked="checked";
 			}
 			if($group_type=="course"){
-				$onclick='onclick="wds_load_group_departments();"';	
+				$onclick='onclick="wds_load_group_departments();"';
 			}
 			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' '.$checked.'> Technology & Design ';
-			$checked="";	
+			$checked="";
 			if($bp->groups->current_group->id &&in_array("studies",$wds_group_school)){
-				$checked="checked";	
+				$checked="checked";
 			}
 			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '.$checked.'> Professional Studies ';
-			$checked="";	
+			$checked="";
 			if($bp->groups->current_group->id &&in_array("arts",$wds_group_school)){
-				$checked="checked";	
+				$checked="checked";
 			}
 			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '.$checked.'> Arts & Sciences ';
 			$return.='</td>';
-        	
+
 		$return.='</tr>';
 	if($group_type=="course"){
 		if($bp->groups->current_group->id){
@@ -649,7 +669,7 @@ function wds_load_group_type($group_type){
         //$return.='</tr>';
 		$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id);
 		$return.='<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
-		
+
 		$return.='<tr>';
             $return.='<td>Department(s):';
             $return.='<td id="departments_html"></td>';
@@ -666,15 +686,15 @@ function wds_load_group_type($group_type){
             $return.='<td>Semester:';
             $return.='<td><select name="wds_semester">';
                 $return.='<option value="">--select one--';
-				$checked="";	
+				$checked="";
 				if($wds_semester=="Spring"){
-					$Spring="selected";	
+					$Spring="selected";
 				}elseif($wds_semester=="Summer"){
-					$Summer="selected";	
+					$Summer="selected";
 				}elseif($wds_semester=="Fall"){
-					$Fall="selected";	
+					$Fall="selected";
 				}elseif($wds_semester=="Winter"){
-					$Winter="selected";	
+					$Winter="selected";
 				}
 				$return.='<option value="Spring" '.$Spring.'>Spring';
                 $return.='<option value="Summer" '.$Summer.'>Summer';
@@ -690,13 +710,13 @@ function wds_load_group_type($group_type){
             $return.='<td>Additional Description/HTML:';
             $return.='<td><textarea name="wds_course_html">'.$wds_course_html.'</textarea></td>';
         $return.='</tr>';
-		
+
 	}elseif($group_type=="project"){
-		
+
 	}elseif($group_type=="club"){
-		
+
 	}else{
-		$return="Please select a Group Type.";	
+		$return="Please select a Group Type.";
 	}
 	$return.='</table>';
 	if($group_type=="course"){
@@ -710,7 +730,7 @@ function wds_load_group_type($group_type){
 	}
 }
 
-add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta'); 
+add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta');
 add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
 function wds_bp_group_meta(){
 	global $wpdb, $bp, $current_site, $base;
@@ -719,7 +739,7 @@ function wds_bp_group_meta(){
 	$group_project_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_project_type' );
 	?>
     <div class="ct-group-meta">
-      <?php 
+      <?php
 	  $type=$_GET['type'];
 	  if(!$type){
 		  $type=groups_get_groupmeta(bp_get_new_group_id(), 'wds_group_type' );
@@ -744,7 +764,7 @@ function wds_bp_group_meta(){
 	  }else{?>
         <table>
         <tr>
-        <td>Type:</td> 
+        <td>Type:</td>
         <td><select id="group_type" name="group_type" onchange="wds_load_group_type('group_type');">
             <option value="" <?php if($group_type==""){echo "selected";}?>>--select one--
             <option value="club" <?php if($group_type=="club"){echo "selected";}?>>Club
@@ -756,30 +776,30 @@ function wds_bp_group_meta(){
         </table>
       <?php } ?>
       <div id="wds-group-type"></div>
-      <?php //Copy Site 
+      <?php //Copy Site
 	  $wds_bp_group_site_id=groups_get_groupmeta($bp->groups->current_group->id, 'wds_bp_group_site_id' );
 	  if(!$wds_bp_group_site_id){
 		$template="template-".strtolower($group_type);
 		$blog_details = get_blog_details($template);
 		?>
 		<script>
-		function showHide(id) 
+		function showHide(id)
 		{
-		  var style = document.getElementById(id).style 
-		   if (style.display == "none") 
-			style.display = ""; 
-		   else 
-			style.display = "none"; 
+		  var style = document.getElementById(id).style
+		   if (style.display == "none")
+			style.display = "";
+		   else
+			style.display = "none";
 		}
 		</script>
         <input type="hidden" name="action" value="copy_blog" />
 		<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 		<table class="form-table">
-			<?php 
+			<?php
 			/*if($bp->current_action=="create"){?>
             <tr class="form-field form-required">
 				<td>
-            		<input type="checkbox" name="wds_bp_docs_wiki" value="yes" checked="checked" /> Setup a <?php echo $group_type;?> Wiki? 
+            		<input type="checkbox" name="wds_bp_docs_wiki" value="yes" checked="checked" /> Setup a <?php echo $group_type;?> Wiki?
 				</td>
             </tr>
 			<?php }*/
@@ -787,13 +807,13 @@ function wds_bp_group_meta(){
 				$show_website="none"?>
             <tr class="form-field form-required">
 				<th style="text-align:center;" scope='row'>
-            		<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');" /> Setup a Site? 
+            		<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');" /> Setup a Site?
 				</th>
             </tr>
             <?php }else{
-			 	$show_website="";	
+			 	$show_website="";
 			}?>
-            <tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>"> 
+            <tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<td valign="top" scope='row'><?php _e('Site Address') ?><br /></td>
 				<td>
 				<?php
@@ -802,7 +822,7 @@ function wds_bp_group_meta(){
 				<?php else:
 					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
 				<?php endif; ?>
-               
+
                 <select name="wds_group_privacy">
                     	<option value="">Public
                         <option value="private">Private
@@ -824,7 +844,7 @@ function wds_bp_group_meta_save($group) {
 	if ( isset($_POST['group_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_type', $_POST['group_type']);
 	}
-    
+
 	if ( isset($_POST['wds_faculty']) ) {
 		groups_update_groupmeta( $group->id, 'wds_faculty', $_POST['wds_faculty']);
 	}
@@ -865,16 +885,16 @@ function wds_bp_group_meta_save($group) {
 	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
 		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
 	}*/
-	
+
 	//copy blog function
 	ra_copy_blog_page($group->id);
 }
 
 //show blog and pages on menu
-class WDS_Group_Extension extends BP_Group_Extension {	
-	
+class WDS_Group_Extension extends BP_Group_Extension {
+
 	var $enable_nav_item = true;
-	var $enable_create_step = false; 
+	var $enable_create_step = false;
 	function wds_group_extension() {
 		global $bp;
 		$group_id=$bp->groups->current_group->id;
@@ -885,7 +905,7 @@ class WDS_Group_Extension extends BP_Group_Extension {
   		  $this->nav_item_position = 10;
 		}
 	}
-	
+
 	function create_screen() {
 		if ( !bp_is_group_creation_step( $this->slug ) )
 			return false;
@@ -932,12 +952,12 @@ class WDS_Group_Extension extends BP_Group_Extension {
 		global $bp;
 		gconnect_locate_template( array( 'groups/single/group-header.php' ), true );
 		gconnect_locate_template( array( 'groups/single/activity.php' ), true );
-		
+
 		/*$group_id=$bp->groups->current_group->id;
 		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 		if($wds_bp_group_site_id!=""){
 		  switch_to_blog($wds_bp_group_site_id);
-		  $pages = get_pages(); 
+		  $pages = get_pages();
 		  ?>
 		  <div role="navigation" id="subnav" class="item-list-tabs no-ajax">
 			  <ul>
@@ -962,7 +982,7 @@ class WDS_Group_Extension extends BP_Group_Extension {
 		</div>
 		<?php
 	}
-	
+
 }
 //bp_register_group_extension( 'WDS_Group_Extension' );
 
@@ -976,7 +996,7 @@ function wds_bp_group_site_pages(){
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	if($wds_bp_group_site_id!=""){
 	  switch_to_blog($wds_bp_group_site_id);
-	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order')); 
+	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
 	  echo "<ul class='website-links'>";
 	  echo "<li><a href='".site_url()."'>Site</a><ul>";
 	  foreach ($pages as $pagg) {
@@ -999,21 +1019,21 @@ function ra_copy_blog_page($group_id) {
 		  $join = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
 		  $where = "AND d.domain IS NULL ";
 	  }
-  
+
 	  $src_id = intval( $_POST['source_blog'] );
 	  $blog_privacy=$_POST['wds_group_privacy'];
-	  
+
 	  $domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 	  $domain=str_replace(".","",$domain);
 	  $email = sanitize_email( $user_email );
 	  $title = $_POST['group-name'];
-  
+
 	  if ( !$src_id) {
 		  $msg = __('Select a source blog.');
 	  } elseif ( empty($domain) || empty($email)) {
 		  $msg = __('Missing blog address or email address.');
-	  } elseif( !is_email( $email ) ) { 
-		  $msg = __('Invalid email address'); 
+	  } elseif( !is_email( $email ) ) {
+		  $msg = __('Invalid email address');
 	  } else {
 		  if( constant('VHOST') == 'yes' ) {
 			  $newdomain = $domain.".".$current_site->domain;
@@ -1022,7 +1042,7 @@ function ra_copy_blog_page($group_id) {
 			  $newdomain = $current_site->domain;
 			  $path = $base.$domain.'/';
 		  }
-  	
+
 		  $password = 'N/A';
 		  $user_id = email_exists($email);
 		  if( !$user_id ) {
@@ -1047,7 +1067,7 @@ function ra_copy_blog_page($group_id) {
 			  wpmu_welcome_notification( $id, $user_id, $password, $title, array( "public" => 1 ) );
 			  $msg = __('Site Created');
 			  // now copy
-			  $blogtables = $wpdb->base_prefix . $src_id . "_";				
+			  $blogtables = $wpdb->base_prefix . $src_id . "_";
 			  $newtables = $wpdb->base_prefix . $new_id . "_";
 			  $query = "SHOW TABLES LIKE '{$blogtables}%'";
   //				var_dump($query);
@@ -1058,8 +1078,8 @@ function ra_copy_blog_page($group_id) {
 				  $data = array();
 				  $len = strlen($blogtables);
 				  $create_col = 'Create Table';
-				  // add std wp tables to this array 
-				  $wptables = array($blogtables . 'links', $blogtables . 'postmeta', $blogtables . 'posts', 
+				  // add std wp tables to this array
+				  $wptables = array($blogtables . 'links', $blogtables . 'postmeta', $blogtables . 'posts',
 					  $blogtables . 'terms', $blogtables . 'term_taxonomy', $blogtables . 'term_relationships');
 				  for($i = 0;$i < count($tables);$i++) {
 					  $table = current($tables[$i]);
@@ -1100,7 +1120,7 @@ function ra_copy_blog_page($group_id) {
 					  }
 					  // copy media
 					  $cp_base = ABSPATH . '/' . UPLOADBLOGSDIR . '/';
-					  $cp_cmd = 'cp -r ' . $cp_base . $src_id . ' ' . $cp_base . $new_id; 
+					  $cp_cmd = 'cp -r ' . $cp_base . $src_id . ' ' . $cp_base . $new_id;
 					  exec($cp_cmd);
 					  // update options
 					  $skip_options = array('admin_email','blogname','blogdescription','cron','db_version','doing_cron',
@@ -1135,7 +1155,7 @@ function ra_copy_blog_page($group_id) {
 							  'post_type'		=>	'page'
 						  );
 						  wp_insert_post( $args );
-						  
+
 						  restore_current_blog();
 						  $msg = __('Blog Copied');
 					  }
@@ -1146,4 +1166,4 @@ function ra_copy_blog_page($group_id) {
 		  }
 	  }
 	}
-} 
+}
