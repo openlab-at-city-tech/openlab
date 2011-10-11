@@ -18,7 +18,7 @@ function ahs_excerpt($text,$chars=240,$allowed_tags="<b><strong><br><br /><a>") 
 	$text = strip_tags($text,$allowed_tags);
 	if (ereg('<a',$text)) $text .= "</a>";
 	$text = substrws($text,$chars);
-	return $text;
+	return $text . '&hellip;';
 }
 
 /* Thanks, Benny. http://www.php.net/manual/en/function.substr.php#90724 */
