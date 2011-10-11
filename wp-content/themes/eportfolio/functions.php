@@ -18,41 +18,41 @@ function ahs_excerpt($text,$chars=240,$allowed_tags="<b><strong><br><br /><a>") 
 	$text = strip_tags($text,$allowed_tags);
 	if (ereg('<a',$text)) $text .= "</a>";
 	$text = substrws($text,$chars);
-	return $text;
+	return $text . '&hellip;';
 }
 
 /* Thanks, Benny. http://www.php.net/manual/en/function.substr.php#90724 */
-/** 
-* word-sensitive substring function with html tags awareness 
-* @param text The text to cut 
-* @param len The maximum length of the cut string 
-* @returns string 
-**/ 
-function substrws( $text, $len=180 ) { 
+/**
+* word-sensitive substring function with html tags awareness
+* @param text The text to cut
+* @param len The maximum length of the cut string
+* @returns string
+**/
+function substrws( $text, $len=180 ) {
 
-    if ( (strlen($text) > $len) ) { 
+    if ( (strlen($text) > $len) ) {
 
-        $whitespaceposition = strpos($text," ",$len)-1; 
+        $whitespaceposition = strpos($text," ",$len)-1;
 
         if ($whitespaceposition > 0)
-            $text = substr($text, 0, ($whitespaceposition+1)); 
+            $text = substr($text, 0, ($whitespaceposition+1));
 
-        // close unclosed html tags 
-        if (preg_match_all("|<([a-zA-Z]+)>|",$text,$aBuffer) ) { 
-            if( !empty($aBuffer[1]) ) { 
-                preg_match_all("|</([a-zA-Z]+)>|",$text,$aBuffer2); 
-                if( count($aBuffer[1]) != count($aBuffer2[1]) ) { 
-                    foreach( $aBuffer[1] as $index => $tag ) { 
-                        if( empty($aBuffer2[1][$index]) || $aBuffer2[1][$index] != $tag) 
-                            $text .= '</'.$tag.'>'; 
-                    } 
-                } 
-            } 
-        } 
-    } 
+        // close unclosed html tags
+        if (preg_match_all("|<([a-zA-Z]+)>|",$text,$aBuffer) ) {
+            if( !empty($aBuffer[1]) ) {
+                preg_match_all("|</([a-zA-Z]+)>|",$text,$aBuffer2);
+                if( count($aBuffer[1]) != count($aBuffer2[1]) ) {
+                    foreach( $aBuffer[1] as $index => $tag ) {
+                        if( empty($aBuffer2[1][$index]) || $aBuffer2[1][$index] != $tag)
+                            $text .= '</'.$tag.'>';
+                    }
+                }
+            }
+        }
+    }
 
-    return $text; 
-} 
+    return $text;
+}
 
 
 ?>
