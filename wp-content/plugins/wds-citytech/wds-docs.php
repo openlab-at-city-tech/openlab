@@ -1,7 +1,7 @@
 <?php
 //Document post types...
 
-add_action( 'init', 'wds_register_post_types' );
+//add_action( 'init', 'wds_register_post_types' );
 function wds_register_post_types() {
 	wds_register_post_type('Lab Document','Lab Documents',array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'comments', 'author' ));
 	wds_register_tax('Lab Document Type','Lab Document Types',array('lab-documents'));
