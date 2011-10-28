@@ -6,7 +6,7 @@
 <h2>Welcome to ePortfolio @ City Tech</h2>
 
 <?php $post = get_post($ahstheme_welcomepage); setup_postdata($post); $image_url=ahs_getimg($post->ID,array(217,300)); ?>
-<p><img src="<?php echo $image_url ?>" width="217" class="alignleft" /><?php echo ahs_excerpt(get_the_content(),920) ?></p>
+<p><img src="<?php echo $image_url ?>" width="217" class="alignleft" /><?php echo ahs_excerpt(get_the_content(),920) ?>&hellip;</p>
 <div class="read_more"><a href="<?php echo esc_url(home_url('/')); ?>?page_id=<?php echo $ahstheme_welcomepage ?>">Read More</a></div>
 
 <div class="hr"></div>
@@ -48,7 +48,7 @@
 		<div class="read_more"><a href="<?php echo get_permalink($post->ID) ?>">Read More</a></div>
 <?php endforeach; ?>
 
-		
+
 	</li>
 </ul>
 
