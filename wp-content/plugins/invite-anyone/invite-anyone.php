@@ -1,22 +1,25 @@
 <?php
-
 /*
-Plugin Name: Invite Anyone [WDS Modified - Do Not Upgrade]
+Plugin Name: Invite Anyone
 Plugin URI: http://teleogistic.net/code/buddypress/invite-anyone/
-Description: Allows group admins to invite any BuddyPress member to a group, whether or not they are friends
-Version: 0.9.3
+Description: Allows group admins to invite any member of their BuddyPress community to a group or to the site
+Version: 1.0.8
 Author: Boone Gorges
 Author URI: http://boonebgorges.com
 */
-
-define( 'BP_INVITE_ANYONE_VER', 	'0.9.3' );
-define( 'BP_INVITE_ANYONE_DB_VER', 	'0.9.3' );
+define( 'BP_INVITE_ANYONE_VER', 	'1.0.8' );
+define( 'BP_INVITE_ANYONE_DB_VER', 	'1.0.8' );
 
 if ( !defined( 'BP_INVITE_ANYONE_SLUG' ) )
 	define( 'BP_INVITE_ANYONE_SLUG', 'invite-anyone' );
 
+register_activation_hook( __FILE__, 'invite_anyone_activation' );
+
 /* Only load the BuddyPress plugin functions if BuddyPress is loaded and initialized. */
 function invite_anyone_init() {
+	
+	require( dirname( __FILE__ ) . '/functions.php' );
+	
 	if ( function_exists( 'bp_is_active' ) ) {
 		if ( bp_is_active( 'groups' ) )
 			require( dirname( __FILE__ ) . '/group-invites/group-invites.php' );
@@ -30,10 +33,6 @@ function invite_anyone_init() {
 		require( dirname( __FILE__ ) . '/admin/admin-panel.php' );
 }
 add_action( 'bp_include', 'invite_anyone_init' );
-
-if ( function_exists( 'bp_post_get_permalink' ) )
-	require( dirname( __FILE__ ) . '/group-invites/group-invites.php' );
-
 
 function invite_anyone_locale_init () {
 	$plugin_dir = basename(dirname(__FILE__));
@@ -71,6 +70,5 @@ function invite_anyone_activation() {
 
 	update_option( 'invite_anyone', $iaoptions );
 }
-register_activation_hook( __FILE__, 'invite_anyone_activation' );
 
 ?>
