@@ -284,7 +284,7 @@ function cuny_bp_admin_menu() {
 
 add_action('init','wds_search_override',1);
 function wds_search_override(){
-	if($_POST['search-submit'] && $_POST['search-terms']){
+	if(isset($_POST['search-submit']) && $_POST['search-terms']){
 		if($_POST['search-which']=="members"){
 			wp_redirect('http://openlab.citytech.cuny.edu/people/?search='.$_POST['search-terms']);
 			exit();
