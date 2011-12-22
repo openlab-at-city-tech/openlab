@@ -232,60 +232,6 @@ function cuny_group_menu_items() {
 	return $tabs;
 }
 
-//Change "Group" to something else
-class buddypress_Translation_Mangler {
- /*
- * Filter the translation string before it is displayed.
-  */
- function filter_gettext($translation, $text, $domain) {
-   $group_id = bp_get_group_id();
-   $grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
-   $uc_grouptype = ucfirst($grouptype);
-   $translations = &get_translations_for_domain( 'buddypress' );
-   switch($text){
-	case "Forum":
-     return $translations->translate( "Discussion" );
-     break;
-	case "Group Forum":
-     return $translations->translate( "$uc_grouptype Discussion" );
-     break;
-	case "Group Forum Directory":
-     return $translations->translate( "" );
-     break;
-	case "Group Forums Directory":
-     return $translations->translate( "Group Discussions Directory" );
-     break;
-	case "Join Group":
-     return $translations->translate( "Join Now!" );
-     break;
-	case "You successfully joined the group.":
-     return $translations->translate( "You successfully joined!" );
-     break;
-	case "Recent Discussion":
-     return $translations->translate( "Recent Forum Discussion" );
-     break;
-    case "This is a hidden group and only invited members can join.":
-     return $translations->translate( "This is a hidden " . $grouptype . " and only invited members can join." );
-     break;
-    case "This is a private group and you must request group membership in order to join.":
-     return $translations->translate( "This is a private " . $grouptype . " and you must request " . $grouptype . " membership in order to join." );
-     break;
-    case "This is a private group. To join you must be a registered site member and request group membership.":
-     return $translations->translate( "This is a private " . $grouptype . ". To join you must be a registered site member and request " . $grouptype . " membership." );
-     break;
-    case "This is a private group. Your membership request is awaiting approval from the group administrator.":
-     return $translations->translate( "This is a private " . $grouptype . ". Your membership request is awaiting approval from the " . $grouptype . " administrator." );
-     break;
-    case "said ":
-     return $translations->translate( "" );
-     break;
-  }
-  return $translation;
- }
-}
-add_filter('gettext', array('buddypress_Translation_Mangler', 'filter_gettext'), 10, 4);
-
-
 //add breadcrumbs for buddypress pages
 add_action('wp_footer','wds_footer_breadcrumbs');
 function wds_footer_breadcrumbs(){
@@ -890,102 +836,15 @@ function wds_bp_group_meta_save($group) {
 	ra_copy_blog_page($group->id);
 }
 
-//show blog and pages on menu
-class WDS_Group_Extension extends BP_Group_Extension {
-
-	var $enable_nav_item = true;
-	var $enable_create_step = false;
-	function wds_group_extension() {
-		global $bp;
-		$group_id=$bp->groups->current_group->id;
-		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-		if($wds_bp_group_site_id!=""){
-		  $this->name = 'Activity';
-		  $this->slug = 'activity';
-  		  $this->nav_item_position = 10;
-		}
-	}
-
-	function create_screen() {
-		if ( !bp_is_group_creation_step( $this->slug ) )
-			return false;
-		wp_nonce_field( 'groups_create_save_' . $this->slug );
-	}
-
-	function create_screen_save() {
-		global $bp;
-
-		check_admin_referer( 'groups_create_save_' . $this->slug );
-
-		groups_update_groupmeta( $bp->groups->new_group_id, 'my_meta_name', 'value' );
-	}
-
-	function edit_screen() {
-		if ( !bp_is_group_admin_screen( $this->slug ) )
-			return false; ?>
-
-		<h2><?php echo esc_attr( $this->name ) ?></h2>
-        <?php
-		wp_nonce_field( 'groups_edit_save_' . $this->slug );
-	}
-
-	function edit_screen_save() {
-		global $bp;
-
-		if ( !isset( $_POST['save'] ) )
-			return false;
-
-		check_admin_referer( 'groups_edit_save_' . $this->slug );
-
-		/* Insert your edit screen save code here */
-
-		/* To post an error/success message to the screen, use the following */
-		if ( !$success )
-			bp_core_add_message( __( 'There was an error saving, please try again', 'buddypress' ), 'error' );
-		else
-			bp_core_add_message( __( 'Settings saved successfully', 'buddypress' ) );
-
-		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) . '/admin/' . $this->slug );
-	}
-
-	function display() {
-		global $bp;
-		gconnect_locate_template( array( 'groups/single/group-header.php' ), true );
-		gconnect_locate_template( array( 'groups/single/activity.php' ), true );
-
-		/*$group_id=$bp->groups->current_group->id;
-		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-		if($wds_bp_group_site_id!=""){
-		  switch_to_blog($wds_bp_group_site_id);
-		  $pages = get_pages();
-		  ?>
-		  <div role="navigation" id="subnav" class="item-list-tabs no-ajax">
-			  <ul>
-				 <?php foreach ($pages as $pagg) {?>
-					<li class="current"><a href="?page=<?php echo $pagg->ID;?>"><?php echo $pagg->post_title;?></a></li>
-				  <?php }?>
-			  </ul>
-		  </div>
-		  <?php
-		  if($_GET['page']){
-			  $id=$_GET['page'];
-			  $post = get_post($id);
-			  echo $post->post_content;
-		  }
-		  restore_current_blog();
-		}*/
-	}
-
-	function widget_display() { ?>
-		<div class=&quot;info-group&quot;>
-			<h4><?php echo esc_attr( $this->name ) ?></h4>
-		</div>
-		<?php
-	}
-
+/**
+ * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
+ * Ensure that it's only loaded when BP is present.
+ * See http://openlab.citytech.cuny.edu/redmine/issues/31
+ */
+function openlab_load_custom_bp_functions() {
+	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
 }
-//bp_register_group_extension( 'WDS_Group_Extension' );
-
+add_action( 'bp_include', 'openlab_load_custom_bp_functions' );
 
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
 function wds_bp_group_site_pages(){
