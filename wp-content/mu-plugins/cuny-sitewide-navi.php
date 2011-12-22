@@ -150,10 +150,10 @@ function cuny_bp_admin_menu() {
 <?php
         if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
             $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
 	      }
 
-	      $course_info = $course_info[groups];
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
 	       if(count( $course_info )>0){
 	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
 	      		echo '<li>';
@@ -181,7 +181,7 @@ function cuny_bp_admin_menu() {
             wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
 		}
 
-	      $project_info = $project_info[groups];
+	      $project_info = isset( $project_info['groups'] ) ? $project_info['groups'] : array();
 	      if(count( $project_info )>0){
 		  //print_r($project_info);
 	      	for ( $i = 0; $i < count( $project_info ); $i++ ) {
@@ -203,10 +203,10 @@ function cuny_bp_admin_menu() {
 <?php
         if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
             $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
 		}
 
-	      $course_info = $course_info[groups];
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
 	      if(count( $course_info )>0){
 	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
 	      		echo '<li>';

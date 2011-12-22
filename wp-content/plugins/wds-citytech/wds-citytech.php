@@ -871,13 +871,19 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 
 	if ( $limit && $page )
 		$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
+	else
+		$pag_sql = '';
 
 	if ( !is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
 		$hidden_sql = " AND g.status != 'hidden'";
+	else
+		$hidden_sql = '';
 
 	if ( $search_terms ) {
 		$search_terms = like_escape( $wpdb->escape( $search_terms ) );
 		$search_sql = " AND ( g.name LIKE '%%{$search_terms}%%' OR g.description LIKE '%%{$search_terms}%%' )";
+	} else {
+		$search_sql = '';
 	}
 
 	if ( $user_id ) {
