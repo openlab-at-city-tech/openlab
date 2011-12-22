@@ -127,11 +127,11 @@ function wds_bp_complete_signup(){
 add_action('init','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
-	if ($bp->groups->current_group->id) {
+	if ( bp_get_current_group_id() ) {
 	     $group_id = $bp->groups->current_group->id;
 	     $blog_id = groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	}
-	if($user_ID!=0 && $group_id != "" && $blog_id != ""){
+	if($user_ID!=0 && !empty( $group_id ) && !empty( $blog_id ) ){
 		switch_to_blog($blog_id);
 		if(!is_blog_user($blog_id)){
 		      $sql="SELECT user_title FROM {$bp->groups->table_name}_members WHERE group_id = $group_id and user_id=$user_ID AND is_confirmed='1'";
@@ -542,7 +542,7 @@ function wds_load_group_departments(){
 
 add_action('init', 'wds_new_group_type');
 function wds_new_group_type(){
-  if($_GET['new']=="true" && $_GET['type']){
+  if( isset( $_GET['new'] ) && $_GET['new']=="true" && isset( $_GET['type'] ) ){
 	  global $bp;
 	  unset( $bp->groups->current_create_step );
 	  unset( $bp->groups->completed_create_steps );
