@@ -10,8 +10,8 @@ function cuny_local_env_flag() {
 		<style type="text/css">
 			#local-env-flag {
 				position: fixed;
-				left: 0;
-				top: 50px;
+				right: 0;
+				bottom: 50px;
 				width: 150px;
 				padding: 10px 15px;
 				text-align: center;
