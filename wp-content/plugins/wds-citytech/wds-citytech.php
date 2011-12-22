@@ -133,7 +133,7 @@ function wds_add_group_members_2_blog(){
 	}
 	if($user_ID!=0 && !empty( $group_id ) && !empty( $blog_id ) ){
 		switch_to_blog($blog_id);
-		if(!is_blog_user($blog_id)){
+		if(!is_user_member_of_blog($blog_id)){
 		      $sql="SELECT user_title FROM {$bp->groups->table_name}_members WHERE group_id = $group_id and user_id=$user_ID AND is_confirmed='1'";
 		      $rs = $wpdb->get_results( $sql );
 		      if ( count( $rs ) > 0 ) {
