@@ -73,7 +73,6 @@ div.generic-button { padding: 2px 4px; background: transparent; }
 	function  __construct() {
 		add_action( 'update_option', array( &$this, 'update_option' ), 10, 3 );
 		add_action( 'genesis_meta', array( &$this, 'genesis_meta' ), 1 );
-		add_action( 'wp_head', array( &$this, 'wp_head' ), 11 );
 		add_action( 'gconnect_load_template', 'prose_add_stylesheets' );
 	}
 	function update_option( $option, $old, $new ) {
@@ -116,14 +115,6 @@ div.generic-button { padding: 2px 4px; background: transparent; }
 		global $gconnect_theme;
 		if( !empty( $gconnect_theme->front ) )
 			$gconnect_theme->front->set_addon( get_stylesheet_directory() . '/css', get_stylesheet_directory_uri() . '/css' );
-	}
-	function wp_head() {
-		global $gconnect_theme;
-		if( 'nav' == $gconnect_theme->get_option( 'subnav' ) ) {
-			remove_action('genesis_after_header','gconnect_site_nav', 10);
-			remove_action('genesis_before_header','genesis_do_nav', 10);
-			add_action('genesis_before_header','gconnect_site_nav', 10);
-		}
 	}
 }
 new GConnect_Prose_CSS();

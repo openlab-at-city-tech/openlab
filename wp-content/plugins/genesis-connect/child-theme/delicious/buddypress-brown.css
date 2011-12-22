@@ -121,18 +121,19 @@ body.adminbar #wrap {
 	div.ac-reply-content input,
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
+	#submit_topic_cancel,
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	input[type=submit] {
-		background: #423B35 url(images/repeat-x.png) repeat-x scroll 0 -92px;
+		background: #608B09 url(images/repeat-x.png) repeat-x scroll 0 -92px;
 		padding: 0 8px 0 8px;
 		color: #FFFFFF;
 		text-decoration: none;
 		font-size: 10px;
 		text-transform: uppercase;
-/*		height: 23px; */
 		cursor: pointer;
 		text-shadow: 0 -1px 1px #444444;
-		border: 1px solid #25211D;
+		border: 1px solid #567618;
 		border-radius: 6px;
 		-moz-border-radius: 6px;
 		-webkit-border-radius: 6px;
@@ -140,6 +141,9 @@ body.adminbar #wrap {
 		-webkit-background-origin: padding-box;
 		-moz-box-shadow: 0 1px 3px #7F7F7F;
 		-webkit-box-shadow: 0 1px 3px #7F7F7F;
+}
+#submit_topic_cancel {
+	height: 23px;
 }
 
 #search-submit:hover, 
@@ -152,8 +156,9 @@ body.adminbar #wrap {
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
-		background: #608B09 url(images/repeat-x.png) repeat-x 0 -68px;
+		background: #739D23 url(images/repeat-x.png) repeat-x 0 -68px;
 		color:#FFFFFF;
 		border: 1px solid #527508;
 }
@@ -221,7 +226,8 @@ input.searchsubmit:hover,
 	margin: 6px 0;
 	padding: 6px 0 6px 10px;
 }
-.item-list-tabs ul li.filter select {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:#F7F7F7;
 	border:1px solid #E6E6E6;
 	color:#000000;

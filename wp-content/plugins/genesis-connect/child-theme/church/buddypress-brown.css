@@ -54,6 +54,7 @@
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	input[type=submit] {
 		background: #524430;
 		color: #FFFFFF;
@@ -62,7 +63,7 @@
 		text-decoration: none;
 		text-transform: uppercase;
 		margin: 0;
-		padding: 2px 5px 2px 5px;
+		padding: 3px 5px;
 		border: 1px solid #524430;
 		-moz-border-radius: 0;
 		-khtml-border-radius: 0;
@@ -79,6 +80,7 @@
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 		background: #786b58;
 		border: 1px solid #786b58;
@@ -100,7 +102,8 @@
 	font-size: 11px;
 	text-transform: none;
 }
-.item-list-tabs ul li.filter select {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:#F7F7F7;
 	border:1px solid #E6E6E6;
 	color:#000000;

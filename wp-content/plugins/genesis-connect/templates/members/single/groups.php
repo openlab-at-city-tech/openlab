@@ -1,10 +1,8 @@
-<div class="item-list-tabs no-ajax" id="bpsubnav">
+<div class="item-list-tabs no-ajax" id="bpsubnav" role="navigation">
 	<ul>
-		<?php if ( bp_is_my_profile() ) : ?>
-			<?php bp_get_options_nav() ?>
-		<?php endif; ?>
+		<?php if ( bp_is_my_profile() ) { bp_get_options_nav(); } ?>
 
-		<?php if ( 'invites' != bp_current_action() ) : ?>
+		<?php if ( !bp_is_current_action( 'invites' ) ) : ?>
 		<li id="members-order-select" class="last filter">
 
 			<?php _e( 'Order By:', 'buddypress' ) ?>
@@ -21,18 +19,16 @@
 	</ul>
 	<div class="clear"></div>
 </div>
+<?php 
 
-<?php if ( 'invites' == bp_current_action() ) : ?>
-	<?php gconnect_locate_template( array( 'members/single/groups/invites.php' ), true ) ?>
-
-<?php else : ?>
-
-	<?php do_action( 'bp_before_member_groups_content' ) ?>
-
+if ( bp_is_current_action( 'invites' ) ) :
+	gconnect_locate_template( array( 'members/single/groups/invites.php' ), true );
+else :
+	do_action( 'bp_before_member_groups_content' ); 
+?>
 	<div class="groups mygroups">
 		<?php gconnect_locate_template( array( 'groups/groups-loop.php' ), true ); ?>
 	</div>
-
-	<?php do_action( 'bp_after_member_groups_content' ) ?>
-
-<?php endif; ?>
+<?php 
+	do_action( 'bp_after_member_groups_content' );
+endif;

@@ -74,54 +74,56 @@ body.adminbar #header {
 }
 /* buttons */
 #search-submit, 
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	input[type=submit],
-	.button {
-		background: #FFFFFF url(images/button.png);
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Arial, Tahoma, Verdana;
-		font-weight: bold;
-		text-decoration: none;
-		text-shadow: #436D04 1px 1px;
-		text-transform: uppercase;
-		margin: 0;
-		padding: 5px;
-		border: 1px solid #73AB00;
-		-moz-border-radius: 0px;
-		-khtml-border-radius: 0px;
-		-webkit-border-radius: 0px;
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+input[type=submit],
+#submit_topic_cancel,
+.button {
+	background: #FFFFFF url(images/button.png);
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	font-weight: bold;
+	text-decoration: none;
+	text-shadow: #436D04 1px 1px;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 5px;
+	border: 1px solid #73AB00;
+	-moz-border-radius: 0px;
+	-khtml-border-radius: 0px;
+	-webkit-border-radius: 0px;
 }
 
 .searchsubmit:hover,
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.dir-search input:hover,
-	#profile-group-edit-submit:hover,
-	#send:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	div.ac-reply-content input:hover,
-	input[type=submit]:hover,
-	.button:hover {
-		background: #FFFFFF url(images/button-hover.png);
-		border: 1px solid #73AB00;
-		color: #FFFFFF;
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.dir-search input:hover,
+#profile-group-edit-submit:hover,
+#send:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+div.ac-reply-content input:hover,
+input[type=submit]:hover,
+#submit_topic_cancel:hover,
+.button:hover {
+	background: #FFFFFF url(images/button-hover.png);
+	border: 1px solid #73AB00;
+	color: #FFFFFF;
 }
 #content .dir-search label input[type=text] {
 	font-size: 11px;

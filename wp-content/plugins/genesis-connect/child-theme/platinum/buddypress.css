@@ -1,10 +1,4 @@
-/* 
-    Document   : buddypress
-    Created on : 16-Jan-2010, 6:25:54 PM
-    Author     : ron
-    Description:
-        Purpose of the stylesheet follows.
-*/
+/* buddypress for platinum */
 #nav .padder {
 	padding:9px;
 }
@@ -159,43 +153,45 @@
 
 /* buttons */
 #search-submit,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	div.ac-reply-content input,
-	input[type=submit] {
-		background: #333333;
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Tahoma, Arial, Verdana;
-		text-decoration: none;
-		text-transform: uppercase;
-		margin: 0;
-		padding: 2px 5px 2px 5px;
-		border: 1px solid #333333;
-		-moz-border-radius: 5px;
-		-khtml-border-radius: 5px;
-		-webkit-border-radius: 5px;
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+div.ac-reply-content input,
+#submit_topic_cancel,
+input[type=submit] {
+	background: #333333;
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Tahoma, Arial, Verdana;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 2px 5px 2px 5px;
+	border: 1px solid #333333;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 #search-submit:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-search input:hover,
-	input[type=submit]:hover {
-		background: #CF152A;
-		border: 1px solid #CF152A;
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-search input:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #CF152A;
+	border: 1px solid #CF152A;
 }
 #content .dir-search label input[type=text] {
 	font-size: 11px;

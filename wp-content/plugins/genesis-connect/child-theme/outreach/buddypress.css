@@ -12,7 +12,7 @@ body {
 #wp-admin-bar {
 	width: 100%;
 }
-#header {
+.adminbar #header {
 	padding-top: 2.1em;
 }
 #nav .padder,
@@ -118,6 +118,7 @@ LI.vcard {
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	input[type=submit],
+	#submit_topic_cancel,
 	.button, #content .activity-content a.acomment-reply {
 		background: #FFFFFF url(images/button.png);
 		-moz-border-radius: 0px;
@@ -149,6 +150,7 @@ LI.vcard {
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	input[type=submit]:hover, 
+	#submit_topic_cancel:hover,
 	.button:hover , #content a.acomment-reply:hover  {
 		background: #FFFFFF url(images/button-hover.png);
 		border: 1px solid #73AB00;

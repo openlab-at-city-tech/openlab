@@ -96,6 +96,7 @@ LI.vcard {
 	.directory #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	input[type=submit],
+	#submit_topic_cancel,
 	#sidebar-me a.button,
 	.button {
 		background:#FFF url(images/button.png);
@@ -128,6 +129,7 @@ LI.vcard {
 	.directory #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	.button:hover {
 		background:#FFF url(images/button-hover.png);
 		border:1px solid #C30;

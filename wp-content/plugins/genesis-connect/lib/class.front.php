@@ -20,7 +20,6 @@ class GConnect_Front {
 		$this->nav = $this->theme->get_option( 'subnav' );
 
 		add_action( 'genesis_meta', array( &$this, 'genesis_meta' ), 2 );
-		add_filter( 'wp_title', array( &$this, 'wp_title' ) );
 
 		if( $tp_active )
 			return;
@@ -28,8 +27,9 @@ class GConnect_Front {
 		add_filter( 'bp_located_template', array( &$this, 'bp_located_template' ), 10, 2 );
 		add_filter( 'bp_get_activation_page', array( &$this, 'bp_get_activation_page' ) );
 		add_filter( 'bp_get_signup_page', array( &$this, 'bp_get_signup_page' ) );
+		add_filter( 'genesis_pre_get_option_site_layout', array( &$this, 'site_layout' ), 20 );
 		add_action( 'wp_head', array( &$this, 'wp_head' ) );
-		add_action( 'template_redirect', array( &$this, 'template_redirect' ) );
+		add_action( 'template_include', array( &$this, 'template_include' ) );
 		add_action( 'init', array( &$this, 'init' ), 11 );
 		add_action( 'after_setup_theme', array( &$this, 'after_setup_theme' ) );
 		add_action( 'gconnect_load_template', array( &$this, 'crop_avatar' ), 2 );
@@ -56,7 +56,7 @@ class GConnect_Front {
 				'show_all'          => __( 'Show all', 'buddypress' ),
 				'comments'          => __( 'comments', 'buddypress' ),
 				'close'             => __( 'Close', 'buddypress' ),
-				'mention_explain'   => sprintf( __( '%s is a unique identifier for %s that you can type into any message on this site. %s will be sent a notification and a link to your message any time you use it.', 'buddypress' ), '@' . bp_get_displayed_user_username(), bp_get_user_firstname( bp_get_displayed_user_fullname() ), bp_get_user_firstname( bp_get_displayed_user_fullname() ) )
+				'view'              => __( 'View', 'buddypress' )
 			);
 			wp_localize_script( 'gconnect-ajax-js', 'Connect', $params );
 			
@@ -66,7 +66,7 @@ class GConnect_Front {
 		foreach( array( '-' . $this->theme->child_style(), '.css' ) as $f ) {
 			$maybe_css = '/buddypress' . $f;
 			if( is_file( CHILD_DIR . $maybe_css ) ) {
-				wp_enqueue_style( 'gconnect-cust' . str_replace( '.css', '', $f ), CHILD_URL . $maybe_css, CHILD_THEME_VERSION );
+				wp_enqueue_style( 'gconnect-cust' . str_replace( '.css', '', $f ), CHILD_URL . $maybe_css, defined( 'CHILD_THEME_VERSION' ) ? CHILD_THEME_VERSION : GENESISCONNECT_VERSION );
 				break;
 			}
 			if( is_file( $this->addon_directory . $maybe_css ) ) {
@@ -80,9 +80,9 @@ class GConnect_Front {
 			
 		add_action( 'bp_member_header_actions', 'gconnect_member_header' );
 		if ( bp_is_active( 'groups' ) ) {
-		    add_action( 'bp_group_header_actions',     'bp_group_join_button' );
-		    add_action( 'bp_group_header_actions',     'bp_group_new_topic_button' );
-		    add_action( 'bp_directory_groups_actions', 'bp_group_join_button' );
+			add_action( 'bp_group_header_actions',     'bp_group_join_button' );
+			add_action( 'bp_group_header_actions',     'bp_group_new_topic_button' );
+			add_action( 'bp_directory_groups_actions', 'bp_group_join_button' );
 		}
 	}
 	function after_setup_theme() {
@@ -94,19 +94,13 @@ class GConnect_Front {
 			return;
 
 		wp_deregister_style( 'bp-admin-bar' );
-		foreach( array( 'groups', 'forums', 'blogs' ) as $component )
+		foreach( array( 'groups'/*, 'forums' , 'blogs'*/ ) as $component )
 			add_action( "bp_before_directory_{$component}_content", array( &$this, 'directory_before_content' ), 0 );
-	}
-	function wp_title( $title ) {
-		if( $this->theme->is_home() && !bp_is_blog_page() ) {
-			return bp_get_page_title();
-		}
-		return $title;
 	}
 	function crop_avatar() {
 		global $bp;
 		$step = bp_get_avatar_admin_step();
-		if( 'upload-image' == $step || 'crop-image' == $step || ( !empty( $bp->groups->current_create_step ) && $bp->groups->current_create_step == 'group-avatar' ) )
+		if( 'crop-image' == $step || ( !empty( $bp->groups->current_create_step ) && $bp->groups->current_create_step == 'group-avatar' ) )
 			bp_core_add_jquery_cropper();
 	}
 	function wp_head() {
@@ -122,21 +116,6 @@ class GConnect_Front {
 				remove_action( 'bp_adminbar_logo', 'bp_adminbar_logo' );
 				add_action( 'bp_adminbar_logo', array( &$this, 'bp_adminbar_logo' ) );
 			}
-		}
-		switch( $this->nav ) {
-			case 'nav':
-				remove_action('genesis_after_header', 'genesis_do_nav');
-				remove_action('genesis_after_header', 'genesis_do_subnav');
-				add_action('genesis_after_header','gconnect_site_nav', 10);
-				add_action('genesis_after_header','genesis_do_subnav', 11);
-				break;
-			case 'subnav':
-				remove_action('genesis_after_header', 'genesis_do_subnav');
-				add_action('genesis_after_header','gconnect_site_nav', 11);
-				break;
-			case 'bpnav':
-				add_action('genesis_after_header','gconnect_site_nav', 20);
-				break;
 		}
 		if( $this->get_option( 'login_sidebar' ) )
 			add_action('genesis_before_sidebar_widget_area', array( &$this, 'sidebar' ) );
@@ -164,8 +143,10 @@ class GConnect_Front {
 		if( preg_match( '|^([^\?]+)|', $_SERVER['REQUEST_URI'], $match ) )
 			$url = $match[0];
 		else
-			$url = get_option( 'siteurl' ); ?>
-	<div class="widget"><div class="padder">
+			$url = get_option( 'siteurl' );
+			
+		$url = apply_filters( 'gconnect_login_redirect', $url ); ?>
+	<div class="widget gc-login-widget"><div class="padder">
 
 	<?php if ( $this->theme->is_home() ) { do_action( 'bp_inside_before_sidebar' ); } ?>
 
@@ -191,7 +172,7 @@ class GConnect_Front {
 
 				<p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="userbar_rememberme" value="forever" tabindex="99" /> <?php _e( 'Remember Me', 'buddypress' ) ?></label></p>
 
-				<input type="submit" name="wp-submit" id="userbar_wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
+				<input type="submit" name="wp-submit" id="userbar_wp-submit" value="<?php _e( 'Log In', 'genesis-connect' ); ?>" tabindex="100" />
 				<input type="hidden" name="redirect_to" value="<?php echo $url; ?>" />
 				<input type="hidden" name="testcookie" value="1" />
 			</form>
@@ -217,7 +198,7 @@ class GConnect_Front {
 		if( $this->adminbar && $this->theme->have_adminbar() )
 			$bp_classes[] = 'adminbar';
 
-		if( is_home() && is_file( CHILD_DIR . '/home.php' ) )
+		if( !is_page() && is_front_page() && is_file( CHILD_DIR . '/home.php' ) )
 			$bp_classes[] = 'home';
 
 		if( $this->show_activity_page )
@@ -260,7 +241,7 @@ class GConnect_Front {
 					$bp_classes[] = 'compose';
 				elseif( bp_is_notices() )
 					$bp_classes[] = 'notices';
-				elseif( bp_is_friend_requests() )
+				elseif( bp_is_user_friend_requests() )
 					$bp_classes[] = 'friend-requests';
 				elseif( bp_is_create_blog() )
 					$bp_classes[] = 'create-blog';
@@ -274,12 +255,14 @@ class GConnect_Front {
 					$bp_classes[] = 'group-admin';
 				elseif( bp_is_group_create() )
 					$bp_classes[] = 'group-create';
-				elseif( bp_is_change_avatar() )
+				elseif( bp_is_user_change_avatar() )
 					$bp_classes[] = 'change-avatar';
-				elseif( bp_is_profile_edit() )
+				elseif( bp_is_user_profile_edit() )
 					$bp_classes[] = 'profile-edit';
 			}
-		}
+		} else 
+			$bp_classes[] = 'visitor';
+			
 		if( bp_is_group_members() )
 			$bp_classes[] = 'group-members';
 		elseif( bp_is_group_home() )
@@ -298,7 +281,7 @@ class GConnect_Front {
 
 			if( bp_is_user_friends_activity() )
 				$bp_classes[] = 'friends-activity';
-			elseif( bp_is_activity_permalink() )
+			elseif( bp_is_single_activity() )
 				$bp_classes[] = 'activity-permalink';
 			elseif( bp_is_register_page() )
 				$bp_classes[] = 'registration';
@@ -329,7 +312,7 @@ class GConnect_Front {
 	function genesis_before_content( $wrap = false ) {
 		$before = $this->get_option( 'before_content' );
 		if( 'genesis' == $before )
-			genesis_before_content();
+			do_action( 'genesis_before_content' );
 		if( $wrap )
 			echo "<div id=\"content\">\n";
 		if( 'widget' == $before ) { ?>
@@ -345,7 +328,7 @@ class GConnect_Front {
 				</div><!-- end .bp-content-top -->
 	<?php	}
 	}
-	function site_nav() {
+/*	function site_nav() {
 		global $bp;
 		if( $this->theme->is_home() ) { ?>
 <div id="<?php echo $this->get_option( 'subnav' ); ?>">
@@ -377,34 +360,11 @@ class GConnect_Front {
     </div>
 </div>
 	<?php	}
-	}
+	} */
 	function bp_adminbar_logo() {
 		global $bp;
 		echo '<ul class="main-nav"><li><a href="' . $bp->root_domain . '">' . get_blog_option( BP_ROOT_BLOG, 'blogname') . '</a>';
-?>
-
-        <ul class="clear">
-                <li<?php if ( bp_is_page( BP_MEMBERS_SLUG ) || bp_is_member() ) : ?> class="selected"<?php endif; ?>>
-                        <a href="<?php echo $bp->root_domain ?>/<?php echo BP_MEMBERS_SLUG ?>" title="<?php _e( 'Members', 'buddypress' ) ?>"><?php _e( 'Members', 'buddypress' ) ?></a>
-                </li>
-                <?php if ( bp_is_active( 'groups' ) ) : ?>
-                        <li<?php if ( bp_is_page( BP_GROUPS_SLUG ) || bp_is_group() ) : ?> class="selected"<?php endif; ?>>
-                                <a href="<?php echo $bp->root_domain ?>/<?php echo BP_GROUPS_SLUG ?>" title="<?php _e( 'Groups', 'buddypress' ) ?>"><?php _e( 'Groups', 'buddypress' ) ?></a>
-                        </li>
-                    <?php if ( bp_is_active( 'forums' ) && !(int) get_site_option( 'bp-disable-forum-directory' ) ) : ?>
-                            <li<?php if ( bp_is_page( BP_FORUMS_SLUG ) ) : ?> class="selected"<?php endif; ?>>
-                                    <a href="<?php echo $bp->root_domain ?>/<?php echo BP_FORUMS_SLUG ?>" title="<?php _e( 'Forums', 'buddypress' ) ?>"><?php _e( 'Forums', 'buddypress' ) ?></a>
-                            </li>
-                    <?php endif; ?>
-                <?php endif; ?>
-                <?php if ( is_multisite() && bp_is_active( 'blogs' ) ) : ?>
-                        <li<?php if ( bp_is_page( BP_BLOGS_SLUG ) ) : ?> class="selected"<?php endif; ?>>
-                                <a href="<?php echo $bp->root_domain ?>/<?php echo BP_BLOGS_SLUG ?>" title="<?php _e( 'Blogs', 'buddypress' ) ?>"><?php _e( 'Blogs', 'buddypress' ) ?></a>
-                        </li>
-                <?php endif; ?>
-                <?php do_action( 'bp_nav_items' ); ?>
-        </ul>
-<?php
+		wp_nav_menu( array( 'menu' => $this->get_option('adminbar') ) );
 		echo '</li></ul>';
 	}
 	function wp_list_pages( $menu ) {
@@ -417,22 +377,18 @@ class GConnect_Front {
 		return $menu;
 	}
 	function bp_located_template( $found, $templates ) {
-		global $wp_query, $bp_no_status_set;
+		// exists in the child theme
+		if( !empty( $found ) )
+			return $found;
+
 		if( !empty( $templates ) ) {
 			reset( $templates );
 			$template = current( $templates );
-			if( !locate_template( array( $template ) ) ) {
-				$maybe = $this->locate_template( $template, $found );
-				if( $maybe != $found ) {
-					do_action( 'gconnect_load_template', $template, $maybe );
-					if ( !$bp_no_status_set ) {
-						status_header( 200 );
-						$wp_query->is_404 = false;
-						$wp_query->is_page = true;
-					}
-					require( $maybe );
-					die;
-				}
+
+			$maybe = $this->locate_template( $template );
+			if( $maybe ) {
+				do_action( 'gconnect_load_template', $template, $maybe );
+				return $maybe;
 			}
 		}
 		return $found;
@@ -448,6 +404,7 @@ class GConnect_Front {
 	function directory_before_content() {
 		if( !preg_match( '|^bp_before_directory_([^\_]+)_content$|', current_filter(), $match ) )
 			return;
+
 		$component = $match[1];
 
 		$defaults = array(
@@ -458,7 +415,7 @@ class GConnect_Front {
 		switch( $component ) {
 			case 'groups':
 				$defaults['directory_title'] = __( 'Groups Directory', 'buddypress' );
-				$defaults['create_html'] = ' &nbsp;<a class="button" href="' . bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/">' . __( 'Create a Group', 'buddypress' ) . '</a>';
+				$defaults['create_html'] = ' &nbsp;<a class="button" href="' . bp_get_root_domain() . '/' . bp_get_root_slug( 'groups' ) . '/create/">' . __( 'Create a Group', 'buddypress' ) . '</a>';
 				break;
 			case 'forums':
 				$defaults['directory_title'] = __( 'Group Forums Directory', 'buddypress' );
@@ -467,7 +424,7 @@ class GConnect_Front {
 			case 'blogs':
 				$defaults['show_create'] &= bp_blog_signup_enabled();
 				$defaults['directory_title'] = __( 'Blogs Directory', 'buddypress' );
-				$defaults['create_html'] = ' &nbsp;<a class="button" href="' . bp_get_root_domain() . '/' . BP_BLOGS_SLUG . '/create/">' . __( 'Create a Blog', 'buddypress' ) . '</a>';
+				$defaults['create_html'] = ' &nbsp;<a class="button" href="' . bp_get_root_domain() . '/' . bp_get_root_slug( 'blogs' ) . '/create/">' . __( 'Create a Blog', 'buddypress' ) . '</a>';
 				break;
 		}
 		$args = apply_filters( 'gconnect_directory_title', $defaults, $component );
@@ -497,11 +454,23 @@ class GConnect_Front {
 		$bar = 'genesis_do_sidebar' . $suffix;
 		$bar();
 	}
-	function template_redirect() {
+	function template_include( $template ) {
 		if( ( ( is_home() || is_front_page() ) && 'activity' == $this->get_option( 'home' ) ) || ( ( $page = get_option( 'gconnect_activity_page' ) ) && is_page( $page ) ) ) {
 			$this->show_activity_page = true;
-			$this->bp_located_template( 'activity', array( 'activity/index.php' ) );
+			$activity = gconnect_locate_template( array( 'activity/index.php' ) );
+			if( $activity )
+				return $activity;
 		}
+		return $template;
+	}
+	function site_layout( $layout ) {
+		global $bp;
+		if( !$this->is_blog_page() && ( bp_is_group_forum() || ( isset( $bp->component ) && $bp->component == 'forum' ) ) ) {
+			$forum_layout = $this->get_option( 'forum_layout' );
+			if( !empty( $forum_layout ) )
+				return $forum_layout;
+		}
+		return $layout;
 	}
 	function is_blog_page() {
 		global $wp_query;

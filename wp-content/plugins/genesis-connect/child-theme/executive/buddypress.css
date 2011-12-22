@@ -1,10 +1,5 @@
-/* 
-    Document   : buddypress
-    Created on : 16-Jan-2010, 6:25:54 PM
-    Author     : ron
-    Description:
-        Purpose of the stylesheet follows.
-*/
+/* buddypress.css for executive */
+
 body.internal-page #inner { width: 960px; margin: 0 auto; }
 #wrap { width: 100% }
 #nav .padder {
@@ -96,6 +91,7 @@ body.internal-page #inner { width: 960px; margin: 0 auto; }
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	input[type=submit] {
 		background: #666666;
 		color: #FFFFFF;
@@ -120,6 +116,7 @@ body.internal-page #inner { width: 960px; margin: 0 auto; }
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 		background: #333333;
 		border: 1px solid #333333;

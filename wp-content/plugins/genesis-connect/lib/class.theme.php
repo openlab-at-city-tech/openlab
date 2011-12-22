@@ -22,7 +22,7 @@ class GConnect_Theme {
 		global $current_blog, $gsm_simple_menu;
 
 		$this->home = ( !is_multisite() || defined( 'BP_ENABLE_MULTIBLOG' ) || $current_blog->blog_id == BP_ROOT_BLOG );
-		$this->adminbar = !( defined( 'BP_DISABLE_ADMIN_BAR' ) || ( get_site_option( 'hide-loggedout-adminbar' ) && !is_user_logged_in() ) );
+		$this->adminbar = !( bp_use_wp_admin_bar() || defined( 'BP_DISABLE_ADMIN_BAR' ) || ( get_site_option( 'hide-loggedout-adminbar' ) && !is_user_logged_in() ) );
 		$this->stylesheet = get_option( 'stylesheet' );
 		$this->settings = get_option( $this->settings_key );
 		if( !( $this->style = genesis_get_option( 'style_selection' ) ) )
@@ -30,18 +30,20 @@ class GConnect_Theme {
 		if( ( $this->simple_menu = !empty( $gsm_simple_menu ) ) )
 			$this->custom_subnav = &$gsm_simple_menu;
 
+		do_action( 'gconnect_before_init' );
+		
 		if( is_admin() ) {
 			require_once( GENESISCONNECT_DIR . 'lib/class.options.php' );
-			$this->admin = new GConnect_Admin( &$this, $tp_active );
+			$this->admin = new GConnect_Admin( $this, $tp_active );
 		} else {
 			require_once( GENESISCONNECT_DIR . 'lib/class.front.php' );
-			$this->front = new GConnect_Front( &$this, $tp_active );
+			$this->front = new GConnect_Front( $this, $tp_active );
 			if( !$tp_active && !is_user_logged_in() && $this->home ) {
 				$custom_register = $this->get_option( 'custom_register' );
 				if( $custom_register && 'none' != $custom_register ) {
 					require_once( GENESISCONNECT_DIR . 'lib/class.visitor.php' );
-					$this->front->set_visitor( new GConnect_visitor( &$this, $custom_register ) );
-				} elseif ( bp_core_is_multisite() )
+					$this->front->set_visitor( new GConnect_visitor( $this, $custom_register ) );
+				} elseif ( is_multisite() )
 					add_action( 'wp', array( &$this, 'bp_core_wpsignup_redirect' ) );
 				else
 					add_action( 'init', array( &$this, 'bp_core_wpsignup_redirect' ) );
@@ -63,6 +65,8 @@ class GConnect_Theme {
 				$this->front->set_addon( $addon_directory, GENESISCONNECT_URL . 'child-theme/' . $this->stylesheet );
 		} elseif( !is_admin() )
 			$this->front->set_addon( get_stylesheet_directory(), get_stylesheet_directory_uri() );
+			
+		do_action( 'gconnect_after_init' );
 	}
 	function is_home() {
 		return $this->home;
@@ -86,7 +90,7 @@ class GConnect_Theme {
 		return $this->settings[$key];
 	}
 	function bp_core_wpsignup_redirect() {
-		if ( false === strpos( $_SERVER['SCRIPT_NAME'], 'wp-signup.php') && $_GET['action'] != 'register' )
+		if ( ( !isset( $_SERVER['SCRIPT_NAME'] ) || false === strpos( $_SERVER['SCRIPT_NAME'], 'wp-signup.php' ) ) && ( !isset( $_GET['action'] ) || $_GET['action'] != 'register' ) )
 			return false;
 
 		if ( gconnect_locate_template( array( 'registration/register.php' ), false ) || gconnect_locate_template( array( 'register.php' ), false ) )
@@ -151,9 +155,26 @@ function gconnect_after_content() {
 ?>
 		</div><!-- .padder -->
 	</div><!-- #content -->
-	<?php genesis_after_content(); ?>
+	<?php do_action( 'genesis_after_content' ); ?>
 </div><!-- end #content-sidebar-wrap -->
 <?php
+}
+function gconnect_get_header() {
+	global $gconnect_theme;
+	
+	get_header();
+	do_action( 'genesis_before_content_sidebar_wrap' );
+	echo "\n\t\t<div id=\"content-sidebar-wrap\">\n";
+	$gconnect_theme->front->genesis_before_content( 'true' );
+	echo "\t\t\t<div class=\"padder\">\n";
+}
+function gconnect_get_footer() {
+	do_action( 'gconnect_after_content' );
+	echo "\t\t\t</div><!-- .padder -->\n\t\t</div><!-- #content -->\n";
+	do_action( 'genesis_after_content' );
+	echo "</div><!-- end #content-sidebar-wrap -->\n";
+	do_action( 'genesis_after_content_sidebar_wrap' );
+	get_footer();
 }
 function gconnect_group_single_template() {
 	$template = false;

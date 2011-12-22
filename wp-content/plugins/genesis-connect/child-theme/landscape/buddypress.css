@@ -55,42 +55,44 @@
 }	
 /* buttons */
 #search-submit, 
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	input[type=submit],
-	.button {
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+input[type=submit],
+#submit_topic_cancel,
+.button {
 	background: #333333;
 	color: #FFFFFF;
 	font-size: 11px;
 	text-decoration: none;
 	text-transform: uppercase;
-    margin: 0;
+	margin: 0;
 	padding: 3px 5px 3px 5px;
 	border: none;
-		-moz-border-radius: 0;
-		-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
 }
 #search-submit:hover, 
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-form a:hover,
-	input[type=submit]:hover {
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
 	background: #3A8A91;
 	border: none;
 }
@@ -178,7 +180,7 @@ ul.item-list li img.avatar {
 }
 
 .dir-form a:hover {
-	color:#55A5AC;
+	color: #FFFFFF;
 }
 
 .sidebar-sidebar-content #item-header span.activity,

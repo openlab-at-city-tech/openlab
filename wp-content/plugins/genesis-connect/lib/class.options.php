@@ -1,4 +1,6 @@
 <?php
+// silence the theme notice in BP 1.5
+define( 'BP_SILENCE_THEME_NOTICE', true );
 /*
  * The admin class
  */
@@ -15,10 +17,9 @@ class GConnect_Admin {
 			return add_action( 'admin_notices', array( &$this, 'admin_notice' ) );
 
 		$this->theme = $theme;
-		remove_action( 'admin_notices', 'bp_core_activation_notice' );
 		add_action( 'admin_init', array( &$this, 'admin_init' ) );
 		add_action( 'admin_menu', array( &$this, 'admin_menu' ), 20 );
-		add_action( 'save_post', array( &$this, 'save_post' ), 10, 2 );
+//		add_action( 'save_post', array( &$this, 'save_post' ), 10, 2 );
 		add_filter( 'pre_update_option_' . $theme->settings_key, array( &$this, 'options_filter' ), 10, 2 );
 		add_filter( 'screen_layout_columns', array( &$this, 'layout_columns' ), 10, 2 );
 	}
@@ -35,36 +36,24 @@ class GConnect_Admin {
 		$this->pagehook = add_submenu_page( 'genesis', __( 'Connect Settings', 'genesis-connect' ), __( 'Connect Settings', 'genesis-connect' ), $cap, 'connect-settings', array( &$this, 'theme_options' ) );
 		add_action('load-' . $this->pagehook, 'genesis_theme_settings_scripts');
 		add_action( 'load-' . $this->pagehook, array( &$this, 'add_metabox' ) );
-		add_meta_box( 'connect-activity-page', __( 'BuddyPress', 'buddypress' ), array( &$this, 'page_metabox' ), 'page', 'side', 'low' );
+//		add_meta_box( 'connect-activity-page', __( 'BuddyPress', 'buddypress' ), array( &$this, 'page_metabox' ), 'page', 'side', 'low' );
 	}
 	function add_metabox() {
-//		add_meta_box( 'rabp-genesis-homepage', __('BuddyPress', 'buddypress'), array( &$this, 'theme_options' ), $this->pagehook, 'column2' );
 		add_meta_box('connect-theme-settings-nav', __('Navigation', 'genesis-connect'), array( &$this, 'metabox_navigation' ), $this->pagehook, 'column1');
 		add_meta_box('connect-theme-settings-registration', __('Registration', 'genesis-connect'), array( &$this, 'metabox_registration' ), $this->pagehook, 'column1');
-		add_meta_box('connect-theme-settings-layout', __('Layout', 'genesis-connect'), array( &$this, 'metabox_layout' ), $this->pagehook, 'column2');
+		add_meta_box('connect-theme-settings-layout', __('Layout', 'genesis-connect'), array( &$this, 'metabox_layout' ), $this->pagehook, 'column1');
 	}
 	function layout_columns( $columns, $screen ) {
 		if ( $screen == $this->pagehook )
-			$columns[$this->pagehook] = 2;
+			$columns[$this->pagehook] = 1;
 
 		return $columns;
 	}
 	function theme_options() {
 		global $gconnect_theme, $screen_layout_columns;
 	
-		if ( $screen_layout_columns == 3 ) {
-			$width = 'width: 32.67%';
-			$hide2 = $hide3 = ' display: block;';
-		}
-		elseif ( $screen_layout_columns == 2 ) {
-			$width = 'width: 49%;';
-			$hide2 = ' display: block;';
-			$hide3 = ' display: none;';
-		}
-		else {
-			$width = 'width: 99%;';
-			$hide2 = $hide3 = ' display: none;';
-		}
+		$width = 'width: 99%;';
+		$hide2 = $hide3 = ' display: none;';
 ?>	
 <div id="connect-theme-settings" class="wrap genesis-metaboxes">
 <form method="post" action="options.php">
@@ -75,15 +64,15 @@ class GConnect_Admin {
 		screen_icon('options-general'); ?>
 	<h2>
 		<?php _e('Genesis - Connect Settings', 'genesis-connect'); ?>
-		<input type="submit" class="button-primary add-new-h2" value="<?php _e('Save Settings', 'genesis') ?>" />
+		<input type="submit" class="button-primary" value="<?php _e('Save Settings', 'genesis-connect') ?>" />
 	</h2>
 
 		<div class="metabox-holder">
 			<div class="postbox-container" style="<?php echo $width; ?>">
 				<?php do_meta_boxes( $this->pagehook, 'column1', null ); ?>
-			</div>
-			<div class="postbox-container" style="<?php echo $width; echo $hide2; ?>">
-				<?php do_meta_boxes( $this->pagehook, 'column2', null ); ?>
+				<div class="bottom-buttons">
+					<input type="submit" class="button-primary" value="<?php _e('Save Settings', 'genesis-connect') ?>" />
+				</div>
 			</div>
 		</div>
 		<div class="inside">
@@ -92,9 +81,6 @@ class GConnect_Admin {
 		<div class="inside">
 		</div>
 		
-		<div class="bottom-buttons">
-			<input type="submit" class="button-primary" value="<?php _e('Save Settings', 'genesis') ?>" />
-		</div>
 	</form>
 	</div>
 	<script type="text/javascript">
@@ -109,23 +95,16 @@ class GConnect_Admin {
 	</script>
 	<?php
 	}
-	function metabox_navigation() {
-		$bpnav_subnav = $this->get_option( 'subnav' );
-		$nav = (array) apply_filters( 'gconnect_subnav_options', array( 
-				'none' => __( 'None', 'genesis-connect' ),
-				'nav' => __( 'Primary Navigation', 'genesis' ),
-				'subnav' => __( 'Secondary Navigation', 'genesis' ),
-				'bpnav' => __( 'Below Navigation', 'genesis-connect' )
-		) ); ?>
-			<p><?php _e( 'BuddyPress Navigation:', 'genesis-connect' ); ?>
-			<select name="<?php echo $this->theme->settings_key; ?>[subnav]">
-<?php		foreach( $nav as $key => $value ) { ?>
-				<option style="padding-right:10px;" value="<?php echo $key; ?>" <?php selected( $key, $bpnav_subnav ); ?>><?php echo $value; ?></option>
-<?php		} ?>
+	function metabox_navigation() { ?>
+			<p><?php _e( 'BuddyPress Adminbar Navigation:', 'genesis-connect' ); ?>
+			<select name="<?php echo $this->theme->settings_key; ?>[adminbar]">
+			<option value=""><?php _e( ' -- None -- ', 'genesis-connect' ); ?></option>
+<?php		$menus = wp_get_nav_menus( array('orderby' => 'name') );
+		foreach ( $menus as $menu ) {
+			printf( '<option value="%d" %s>%s</option>', $menu->term_id, selected( $this->get_option( 'adminbar' ), $menu->term_id, false ), esc_html( $menu->name ) );
+		} ?>
 			</select></p>
 			<hr class="div" />
-			<p><input type="checkbox" name="<?php echo $this->theme->settings_key; ?>[adminbar]" id="<?php echo $this->theme->settings_key; ?>[adminbar]" value="1" <?php checked(1, $this->get_option('adminbar')); ?> />
-				<label for="<?php echo $this->theme->settings_key; ?>[adminbar]"><?php _e('Add BuddyPress navigation to the adminbar', 'genesis-connect'); ?></label></p>
 			<p><input type="checkbox" name="<?php echo $this->theme->settings_key; ?>[home_adminbar]" id="<?php echo $this->theme->settings_key; ?>[home_adminbar]" value="1" <?php checked(1, $this->get_option('home_adminbar')); ?> />
 				<label for="<?php echo $this->theme->settings_key; ?>[home_adminbar]"><?php _e('Show the adminbar on the home page', 'genesis-connect'); ?></label></p>
 			<p><input type="checkbox" name="<?php echo $this->theme->settings_key; ?>[login_sidebar]" id="<?php echo $this->theme->settings_key; ?>[login_sidebar]" value="1" <?php checked(1, $this->get_option('login_sidebar')); ?> />
@@ -139,13 +118,14 @@ class GConnect_Admin {
 		$bp_before_content = $this->get_option( 'before_content' );
 		$custom_subnav = array( 'visitor' => __( 'Visitors', 'genesis-connect' ), 'user' => __( 'Logged in Users', 'genesis-connect' ) );
 		$bpnav_subnav = $this->get_option( 'subnav' );
-?>
-			<p><?php _e('On front page show:', 'buddypress'); ?>
-			<select name="<?php echo $this->theme->settings_key; ?>[home]">
-				<option style="padding-right:10px;" value="blog" <?php selected( 'blog', $rabp_home ); ?>><?php _e('Blog Posts', 'buddypress'); ?></option>
-				<option style="padding-right:10px;" value="activity" <?php selected( 'activity', $rabp_home ); ?>><?php _e('Activity Stream', 'buddypress'); ?></option>
-			</select></p>
-			<p><?php _e('BuddyPress Before Content:', 'genesis_buddy'); ?>
+
+		?><p><label><input type="checkbox" name="<?php echo $this->theme->settings_key; ?>[home]" value="activity" <?php checked( 'activity', $rabp_home ); ?> />&nbsp;<?php 
+		_e( 'Show activity on the front page', 'genesis-connect' ); 
+		?></label></p>
+		<p><label><input type="checkbox" name="<?php echo $this->theme->settings_key; ?>[forum_layout]" value="full-width-content" <?php checked( 'full-width-content', $this->get_option( 'forum_layout' ) ); ?> />&nbsp;<?php 
+		_e( 'Full Width Content for Forum layout', 'genesis-connect' ); 
+		?></label></p>
+			<p><?php _e('BuddyPress Before Content:', 'genesis-connect'); ?>
 			<select name="<?php echo $this->theme->settings_key; ?>[before_content]">
 				<option style="padding-right:10px;" value="none" <?php selected( 'none', $bp_before_content ); ?>><?php _e('None', 'genesis-connect'); ?></option>
 				<option style="padding-right:10px;" value="widget" <?php selected( 'widget', $bp_before_content ); ?>><?php _e('Widget Area', 'genesis-connect'); ?></option>
@@ -159,7 +139,7 @@ class GConnect_Admin {
 				if( $gconnect_theme->do_custom_subnav() )
 					$gconnect_theme->custom_subnav->print_menu_select( $this->theme->settings_key . "[{$key}subnav]", $this->get_option( $key . 'subnav' ), '', 'padding-right: 10px;' );
 				if( $do_sidebars )
-					$this->print_sidebar_select( array( $key . 'sidebar' => __('Primary Sidebar', 'ss'), $key . 'sidebar_alt' => __('Secondary Sidebar', 'ss') ) );
+					$this->print_sidebar_select( array( $key . 'sidebar' => __( 'Primary Sidebar', 'genesis-connect' ), $key . 'sidebar_alt' => __( 'Secondary Sidebar', 'genesis-connect' ) ) );
 				echo '</p>';
 			}
 		}
@@ -180,7 +160,8 @@ class GConnect_Admin {
 				<option style="padding-right:10px;" value="after_pages" <?php selected( 'after_pages', $custom_register ); ?>><?php _e('After Pages', 'genesis-connect'); ?></option>
 				<option style="padding-right:10px;" value="adminbar" <?php selected( 'adminbar', $custom_register ); ?>><?php _e('On the Adminbar', 'genesis-connect'); ?></option>
 			</select></p>
-			<p><?php _e("Custom Permalink:", 'genesis-connect'); ?><br />
+			<small><strong><?php _e( 'Using the custom registration disables the default BuddyPress registration page', 'genesis-connect' ); ?></strong></small></p>
+			<p><?php _e( 'Custom Permalink:', 'genesis-connect' ); ?><br />
 			<input type="text" name="<?php echo $this->theme->settings_key; ?>[register_slug]" value="<?php echo esc_attr( $this->get_option('register_slug') ); ?>" size="40" /><br />
 			<small><strong><?php printf( __( "Don't include the %s", 'genesis-connect' ), get_option( 'siteurl' ) ); ?></strong></small></p>
 
@@ -206,7 +187,7 @@ class GConnect_Admin {
 		<p>
 			<label for="<?php echo $this->theme->settings_key . "[$field_name]"; ?>"><span><?php echo $description; ?><span></label>
 			<select name="<?php echo $this->theme->settings_key . "[$field_name]"; ?>" id="<?php echo $this->theme->settings_key . "[$field_name]"; ?>">
-				<option style="padding-right:10px;" value=""><?php _e('Default', 'ss'); ?></option>
+				<option style="padding-right:10px;" value=""><?php _e( 'Default', 'genesis-connect' ); ?></option>
 	<?php		foreach ( (array)$_sidebars as $id => $info ) {
 				printf( '<option style="padding-right:10px;" value="%s" %s>%s</option>', esc_attr( $id ), selected( $id, $selected, false), esc_html( $info['name'] ) );
 			} ?>
@@ -243,7 +224,7 @@ class GConnect_Admin {
 			if( substr( $slug, 0, strlen( $base ) ) == $base )
 				$slug = substr( $slug, strlen( $base ) );
 			if( strlen( $slug ) > 2 )
-				$settings[ 'register_slug' ] = clean_url( str_replace( ' ', '-', $slug ) );
+				$settings[ 'register_slug' ] = esc_url( untrailingslashit( str_replace( ' ', '-', $slug ) ) );
 			else
 				unset( $settings[ 'register_slug' ] );
 		}

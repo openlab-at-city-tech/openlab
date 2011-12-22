@@ -97,52 +97,57 @@ body.adminbar {
 
 /* buttons */
 #search-submit, 
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	input[type=submit],
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	#sidebar-me a.button,
-	.button {
-		background: #FFFFFF url(images/button.png);
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Arial, Tahoma, Verdana;
-		font-style: italic;
-		font-weight: bold;
-		text-decoration: none;
-		text-shadow: #0B87D9 1px 1px;
-		text-transform: uppercase;
-		    margin: 0;
-		padding: 5px;
-		border: 1px solid #2BC2F7;
-		-moz-border-radius: 5px;
-		-khtml-border-radius: 5px;
-		-webkit-border-radius: 5px;
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+input[type=submit],
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+#sidebar-me a.button,
+#submit_topic_cancel,
+.button {
+	background: #FFFFFF url(images/button.png);
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: none;
+	text-shadow: #0B87D9 1px 1px;
+	text-transform: uppercase;
+	    margin: 0;
+	padding: 5px;
+	border: 1px solid #427BAA;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 #search-submit:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.dir-search input[type=submit]:hover,
-	#sidebar-me a.button:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-form h3 a:hover,
-	input[type=submit]:hover {
-		background: #FFFFFF url(images/button-hover.png);
-		border: 1px solid #2BC2F7;
-		color: #FFFFFF;
-		text-decoration: none;
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.dir-search input[type=submit]:hover,
+#sidebar-me a.button:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form h3 a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #FFFFFF url(images/button-hover.png);
+	border: 1px solid #2BC2F7;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#content .padder #submit {
+	font-size: 11px;
 }
 .activity-list div.activity-meta a,
 	.activity-list .activity-content a {

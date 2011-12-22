@@ -43,6 +43,7 @@ div.ac-reply-content input,
 .internal-page #content .padder a.button,
 .internal-page #content .padder .submit input[type=button],
 input[type=submit],
+#submit_topic_cancel,
 .button {
 	background: url(images/button.png) center;
 	border: 1px solid #f1811a;
@@ -67,6 +68,7 @@ input[type=submit],
 .internal-page #content .padder a.button:hover,
 .internal-page #content .padder .submit input[type=button]:hover,
 .dir-form a:hover,
+#submit_topic_cancel:hover,
 input[type=submit]:hover {
 	border: 1px solid #f1811a;
 	background: url(images/button-hover.png) center;
@@ -183,7 +185,7 @@ ul.item-list li div.meta {
 .focus-blue div.ac-reply-content input,
 .focus-blue #content .padder a.button,
 .focus-blue #content .padder .submit input[type=button],
-input[type=submit],
+.focus-blue #submit_topic_cancel,
 .button {
 	color: #fff;
 }
@@ -206,6 +208,7 @@ input[type=submit],
 .focus-black #content .padder a.button,
 .focus-black #content .padder .submit input[type=button],
 .focus-black input[type=submit],
+.focus-black #submit_topic_cancel,
 .focus-black .button {
 	background: url(images/black/button.png) center;
 	border: 1px solid #7a0000;
@@ -220,6 +223,7 @@ input[type=submit],
 .focus-black #content .padder a.button:hover,
 .focus-black #content .padder .submit input[type=button]:hover,
 .focus-black .dir-form a:hover,
+.focus-black #submit_topic_cancel:hover,
 .focus-black input[type=submit]:hover {
 	border: 1px solid #7a0000;
 	background: url(images/black/button-hover.png) center;

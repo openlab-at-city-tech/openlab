@@ -8,9 +8,3 @@ function gconnect_landscape_head() {
 		add_action( 'genesis_after', 'bp_core_admin_bar', 88 );
 }
 add_action( 'wp_head', 'gconnect_landscape_head', 91 );
-
-function landscape_bp_nav_filter( $nav ) {
-	unset( $nav['bpnav'] );
-	return $nav;
-}
-add_filter( 'gconnect_subnav_options', 'landscape_bp_nav_filter' );

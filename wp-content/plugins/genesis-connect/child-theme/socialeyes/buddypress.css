@@ -37,27 +37,28 @@
 	
 /* buttons */
 #search-submit, 
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	#sidebar-me a.button,
-	input[type=submit] {
-		background: #115E74;
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+#sidebar-me a.button,
+#submit_topic_cancel,
+input[type=submit] {
+	background: #115E74;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-family: Arial, Tahoma, Verdana;
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
-    margin: 0;
+	margin: 0;
 	padding: 5px;
 	border: 1px solid #115E74;
 	cursor: pointer;
@@ -65,17 +66,18 @@
 }
 
 #search-submit:hover, 
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.dir-search input:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	#sidebar-me a.button:hover,
-	input[type=submit]:hover {
-		background: #0A3946;
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.dir-search input:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+#sidebar-me a.button:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #0A3946;
 	text-decoration: none;
 	border: 1px solid #0A3946;
 }
@@ -110,8 +112,8 @@
 }
 
 .button {
- background:  #ECF5F8;
-    border: 1px solid #CFECF3;
+ 	background:  transparent;
+ 	border: none;
 	padding: 2px;
 }
 div.generic-button {
@@ -265,6 +267,7 @@ ul.item-list li {
 .social-pink  	.internal-page #content .padder a.button,
 .social-pink  	.internal-page #content .padder .submit input[type=button],
 .social-pink  	#sidebar-me a.button,
+.social-pink #submit_topic_cancel,
 .social-pink  	input[type=submit] {
 		background: #6F4B60;
 	border: 1px solid #6F4B60;
@@ -280,17 +283,18 @@ ul.item-list li {
 .social-pink  	.internal-page #content .padder a.button:hover,
 .social-pink  	.internal-page #content .padder .submit input[type=button]:hover,
 .social-pink  	#sidebar-me a.button:hover,
+.social-pink #sidebar-me a.button:hover,
 .social-pink  	input[type=submit]:hover {
-		background: #0A3946;
+	background: #0A3946;
 	border: 1px solid #0A3946;
 }
 
 /* pink text areas */
 .social-pink  #whats-new, 
-	#reply_text,
-	#topic_text,
-	#topic_tags,
-	#topic_title {
+.social-pink #reply_text,
+.social-pink #topic_text,
+.social-pink #topic_tags,
+.social-pink #topic_title {
 	color: #523C49;
 	border: 1px solid #523C49;
 }
@@ -299,16 +303,6 @@ ul.item-list li {
 .social-pink  .item-list-tabs ul li.filter select {
 	background:#F7F7F7;
 	border:1px solid #E6E6E6;
-}
-
-.social-pink .button {
- background:  #ECF5F8;
-    border: 1px solid #6F4B60;
-
-}
-.social-pink div.generic-button {
- background:  #ECF5F8;
-    border: 1px solid #6F4B60;
 }
 
 .social-pink #content .bp-content-top .widget h4 {

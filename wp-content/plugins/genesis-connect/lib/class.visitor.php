@@ -29,7 +29,7 @@ class GConnect_visitor {
 		add_action( 'signup_extra_fields', array( &$this, 'signup_time_error' ) );
 		add_action( 'wp', array( &$this, 'signup_redirect' ), 2 );
 
-		if( $_GET['action'] == 'register' )
+		if( isset( $_GET['action'] ) && $_GET['action'] == 'register' )
 			remove_action( 'init', 'bp_core_wpsignup_redirect' );
 
 		if( false !== strpos( $_SERVER['SCRIPT_NAME'], 'wp-signup.php') ) {
@@ -106,6 +106,7 @@ class GConnect_visitor {
 		global $bp;
 
 		$slug = $this->get_option( 'register_slug' );
+
 		if( $bp->current_component == BP_REGISTER_SLUG && '/' . BP_REGISTER_SLUG != $slug )
 			bp_core_redirect( $bp->root_domain );
 
