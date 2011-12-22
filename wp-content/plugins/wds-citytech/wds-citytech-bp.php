@@ -100,9 +100,18 @@ class WDS_Group_Extension extends BP_Group_Extension {
 //Change "Group" to something else
 class buddypress_Translation_Mangler {
  /*
- * Filter the translation string before it is displayed.
+  * Filter the translation string before it is displayed.
+  * 
+  * This function will choke if we try to load it when not viewing a group page or in a group loop
+  * So we bail in cases where neither of those things is present, by checking $groups_template
   */
  function filter_gettext($translation, $text, $domain) {
+   global $groups_template;
+   
+   if ( empty( $groups_template->group ) ) {
+   	return $translation;
+   }
+   
    $group_id = bp_get_group_id();
    $grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
    $uc_grouptype = ucfirst($grouptype);
