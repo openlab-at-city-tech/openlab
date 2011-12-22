@@ -1,7 +1,7 @@
 <?php 
 function cuny_member_profile_header() { 
-global $site_members_template, $ribbonclass, $user_ID, $bp;
-$account_type = xprofile_get_field_data( 'Account Type', $site_members_template->member->id);
+
+$account_type = xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
 
 //
 //     whenever profile is viewed, update user meta for first name and last name so this shows up
@@ -372,7 +372,20 @@ get_currentuserinfo();
 	
 	</div><!-- #item-buttons -->
 	
-		<?php bp_add_friend_button( bp_get_group_member_id(), bp_get_group_member_is_friend() ) ?>
+	<?php
+		global $members_template;
+		
+		// Not really sure where this function appears, so I'll make a cascade
+		if ( isset( $members_template->member->user_id ) ) {
+			$button_user_id = $members_template->member->user_id;
+		} else if ( bp_displayed_user_id() ) {
+			$button_user_id = bp_displayed_user_id();
+		}
+		
+		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
+	?>
+	
+		<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
 		
 <?php if ( !bp_is_user_messages() ) { ?>
 	<?php if ( bp_is_user_friends() ) { ?>
