@@ -187,7 +187,7 @@ function cuny_home_square($type,$last){
 	  }
 	  //echo $ids;
 	  
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=' . $instance['max_groups'] . '&max=' . $instance['max_groups'] ) ) : 
+	  if ( bp_has_groups( 'include='.$ids.'&per_page=1&max=1' ) ) : 
 		  while ( bp_groups() ) : bp_the_group();
 		global $groups_template;
 		$group = $groups_template->group;
@@ -221,10 +221,16 @@ function cuny_home_square($type,$last){
              	switch_to_blog($blogs_template->blog->blog_id);
              	global $post;
 				$query = new WP_Query( array('posts_per_page' => 1) );
+				// For some reason, posts_per_page broke.
+				$postcount = 0;
+
 				  while ( $query->have_posts() ) : $query->the_post();
+					if ( $postcount > 0 ) 
+						break;
 
 					 echo '<p>'.substr(strip_tags($post->post_content),  0, 135).'&hellip; (<a href="'.bp_get_blog_permalink().'">View More</a>)</p>';
 
+					$postcount++;
 				endwhile;	
 
 				restore_current_blog();
