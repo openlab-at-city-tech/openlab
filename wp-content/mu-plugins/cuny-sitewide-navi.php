@@ -149,7 +149,7 @@ function cuny_bp_admin_menu() {
 	<li class="<?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">My Courses</a><ul>
 <?php
         if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
             wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
 	      }
 
@@ -177,7 +177,7 @@ function cuny_bp_admin_menu() {
 	<li class="<?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">My Projects</a><ul>
 <?php
         if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $project_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
+            $project_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
             wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
 		}
 
@@ -202,7 +202,7 @@ function cuny_bp_admin_menu() {
 	<li class="<?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">My Clubs</a><ul>
 <?php
         if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
             wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
 		}
 

@@ -866,6 +866,38 @@ function wds_bp_group_site_pages(){
 	}
 }
 
+function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search_terms = false, $populate_extras = true, $meta_key = null, $meta_value = null ) {
+	global $wpdb, $bp;
+
+	if ( $limit && $page )
+		$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
+
+	if ( !is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
+		$hidden_sql = " AND g.status != 'hidden'";
+
+	if ( $search_terms ) {
+		$search_terms = like_escape( $wpdb->escape( $search_terms ) );
+		$search_sql = " AND ( g.name LIKE '%%{$search_terms}%%' OR g.description LIKE '%%{$search_terms}%%' )";
+	}
+
+	if ( $user_id ) {
+		$user_id = $wpdb->escape( $user_id );
+		$paged_groups = $wpdb->get_results( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 ORDER BY g.name ASC {$pag_sql}" );
+		$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT m.group_id) FROM {$bp->groups->table_name_members} m LEFT JOIN {$bp->groups->table_name_groupmeta} gm ON m.group_id = gm.group_id INNER JOIN {$bp->groups->table_name} g ON m.group_id = g.id WHERE gm.meta_key = 'last_activity' {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0" );
+	} else {
+		$paged_groups = $wpdb->get_results( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql} ORDER BY g.name ASC {$pag_sql}" );
+		$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql}" );
+	}
+//echo $total_groups;
+	if ( !empty( $populate_extras ) ) {
+		foreach ( (array)$paged_groups as $group ) $group_ids[] = $group->id;
+		$group_ids = $wpdb->escape( join( ',', (array)$group_ids ) );
+		$paged_groups = BP_Groups_Group::get_group_extras( &$paged_groups, $group_ids, 'newest' );
+	}
+
+	return array( 'groups' => $paged_groups, 'total' => $total_groups );
+}
+
 //Copy the group blog template
 function ra_copy_blog_page($group_id) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
