@@ -3,7 +3,7 @@
 Plugin Name: BP MPO Activity Filter
 Plugin URI: http://qwriting.org
 Description: When using More Privacy Options, this plugin removes items from BP activity streams according to user roles
-Version: 1.0.1
+Version: 1.1.1
 Author: Boone Gorges
 Author URI: http://teleogistic.net
 */

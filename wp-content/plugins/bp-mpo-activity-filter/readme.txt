@@ -1,10 +1,10 @@
 === Plugin Name ===
-Contributors: boonebgorges
+Contributors: boonebgorges, cuny-academic-commons
 Tags: buddypress, activity, privacy, more privacy options, filter
-Requires at least: WPMU 2.8, BuddyPress 1.2
-Tested up to: WPMU 2.9.1.1, BuddyPress 1.2.1
+Requires at least: WP 2.8, BuddyPress 1.2
+Tested up to: WP 3.2.1, BuddyPress 1.5.1
 Donate link: http://teleogistic.net/donate/
-Stable tag: trunk
+Stable tag: 1.1.1
 
 When using More Privacy Options, this plugin removes items from BP activity streams according to user roles.
 
@@ -24,9 +24,16 @@ I borrowed the idea, and a little bit of the code, from this plugin: http://blog
 
 == Changelog ==
 
-= 1.0 =
-* Initial release
+= 1.1.1 =
+* Oops
+
+= 1.1 =
+* Upgraded to reduce unnecessary switch_to_blog()
 
 = 1.0.1 =
 * Added code to ensure that plugin is not loaded before BuddyPress is
 * Updated readme file to include more information on compatibility with BP < 1.2
+
+= 1.0 =
+* Initial release
+
