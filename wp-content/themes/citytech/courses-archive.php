@@ -10,7 +10,7 @@ remove_action('genesis_post_content', 'genesis_do_post_content');
 add_action('genesis_post_content', 'cuny_course_archive' );
 function cuny_course_archive() {
 global $wpdb,$bp,$groups_template;
-if ($_GET['group_sequence'] == "") {
+if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {
@@ -42,16 +42,20 @@ switch ($_GET['group_sequence']) {
 	<input type="submit" name="group_seq_submit" value="Sequence">
 </form>
 <?php
-if ($_GET['group_sequence'] != "") {
+if ( !empty( $_GET['group_sequence'] ) ) {
 	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 }
-if($_POST['group_search']){
+
+$search_terms = '';
+
+if ( !empty( $_POST['group_search'] ) ) {
 	$search_terms="search_terms=".$_POST['group_search']."&";
 }
-if($_GET['search']){
-		$search_terms="search_terms=".$_GET['search']."&";
-	}
-if($_GET['school']){
+if ( !empty( $_GET['search'] ) ){
+	$search_terms="search_terms=".$_GET['search']."&";
+}
+
+if ( !empty( $_GET['school'] ) ) {
 	$school=$_GET['school'];
 	if($school=="tech"){
 		$school="School of Technology & Design";
@@ -61,16 +65,17 @@ if($_GET['school']){
 		$school="School of Arts & Sciences";
 	}
 }
-if($_GET['department']){
+
+if ( !empty( $_GET['department'] ) ) {
 	$department=str_replace("-"," ",$_GET['department']);
 	$department=ucwords($department);
 }
 
-if($_GET['school']&&$_GET['department']){
+if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) ) {
 	echo "<h3>".$school."<br>";
 	echo "Department: ".$department."</h3>";
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%'";
-}elseif($_GET['school']){
+} elseif( !empty( $_GET['school'] ) ) {
 	echo "<h3>".$school."</h3>";
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b where a.group_id=b.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%'";
 }else{
@@ -79,7 +84,7 @@ if($_GET['school']&&$_GET['department']){
 $ids="9999999";
 $rs = $wpdb->get_results( $sql );
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
-if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' . '&max=' . $instance['max_groups'] ) ) : ?>
+if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 	<ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;
@@ -146,7 +151,8 @@ if ( is_super_admin( get_current_user_id() ) || $faculty=="Faculty" ) {?>
 <?php } ?>
      <div class="archive-search">
     <form method="post">
-    <input type="text" name="group_search" value="<?php echo $_POST['group_search'];?>" />
+    <?php $group_search = isset( $_POST['group_search'] ) ? $_POST['group_search'] : '' ?>
+    <input type="text" name="group_search" value="<?php echo $group_search ?>" />
     <input type="submit" name="group_search_go" value="Search" />
     </form>
     </div>
