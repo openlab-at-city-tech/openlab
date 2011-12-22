@@ -110,8 +110,7 @@ function cuny_the_clear_div() {
 }
 
 add_filter( 'wp_title', 'test', 10, 2 );
-function test() {
-	$title = bp_get_page_title();
+function test( $title ) {
 	$find = " &#124; Groups &#124; ";
 	$replace = " | ";
 	$title = str_replace( $find , $replace, $title);
