@@ -142,12 +142,16 @@ function slider_meta(){
 
 /* Save Post */
 add_action('save_post', 'save_details');
-
 function save_details(){
-  global $post;
- 
-  update_post_meta($post->ID, "tab_title", $_POST["tab_title"]);
-  update_post_meta($post->ID, "slide_url", $_POST["slide_url"]);
+	global $post;
+	
+	if ( isset( $_POST['tab_title'] ) ) {
+		update_post_meta($post->ID, "tab_title", $_POST["tab_title"]);
+	}
+
+	if ( isset( $_POST['slide_url'] ) ) {	
+		update_post_meta($post->ID, "slide_url", $_POST["slide_url"]);
+	}		
 }
 
 /* Slider Columns */
