@@ -44,7 +44,7 @@ function bp_group_documents_add_category() {
 
 	$parent_id = BP_Group_Documents_Template::get_parent_category_id();
 
-	if( !is_term( $category_name, 'group-documents-category',$parent_id ) )
+	if( !term_exists( $category_name, 'group-documents-category',$parent_id ) )
 		$new_term = wp_insert_term( $category_name,'group-documents-category',array('parent'=>$parent_id));
 
 	$output = "<li id='category-{$new_term['term_id']}'><strong>$category_name</strong>";
@@ -68,7 +68,7 @@ add_action('wp_ajax_group_documents_add_category','bp_group_documents_add_catego
 function bp_group_documents_delete_category() {
 	$id = $_POST['category_id'];
 
-	if( ctype_digit( $id ) && is_term( (int)$id,'group-documents-category' ) ) {
+	if( ctype_digit( $id ) && term_exists( (int)$id,'group-documents-category' ) ) {
 
 		if( wp_delete_term( (int)$id, 'group-documents-category') ) {
 			die('1');

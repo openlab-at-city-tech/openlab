@@ -47,13 +47,8 @@ function bp_group_documents_bulk_uploads(){
 					<div class="group"><select name="group">
 						<option value="0"><?php _e('Select Group...','bp-group-documents'); ?></option>
 	<?php 
-			if( '1.1' == substr(BP_VERSION,0,3) ) {
-				$group = new BP_Groups_Group();
-				$groups_list = $group->get_all(false,false,false,'name','ASC');
-			} else {
-				$groups_list = BP_Groups_Group::get_alphabetically();
-				$groups_list = $groups_list['groups'];
-			}
+			$groups_list = BP_Groups_Group::get_alphabetically();
+			$groups_list = $groups_list['groups'];
 			foreach( $groups_list as $group ) {
 				echo "<option value='{$group->id}'>" . stripslashes($group->name) . "</option>\n";
 			}

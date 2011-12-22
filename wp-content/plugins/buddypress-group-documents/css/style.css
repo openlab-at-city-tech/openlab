@@ -26,6 +26,10 @@
 	overflow:hidden;
 }
 
+ul#bp-group-documents-list li {
+	position:relative;
+}
+
 .bp-group-documents-category-wrapper {
 	padding-top:1px;
 }
@@ -43,7 +47,7 @@
 	margin-bottom: 5px;
 }
 
-form.standard-form input.bp-group-documents-new-category {
+#bp-group-documents form.standard-form input.bp-group-documents-new-category {
 	width:160px;
 }
 
@@ -64,7 +68,7 @@ input.bp-group-documents-file {
 }
 
 #bp-group-documents-form #bp-group-documents-description {
-	height:148px;
+	height:158px;
 }
 
 #group-documents-group-admin-categories {

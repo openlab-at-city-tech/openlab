@@ -4,6 +4,9 @@ jQuery(document).ready(function($) {
 	return false;
 	});
 
+	jq("#whats-new-options").animate({height:'40px'});
+	jq("form#whats-new-form textarea").animate({height:'50px'});
+
 	function limitChars(textid, limit, infodiv) {
 	  var text = $('#'+textid).val();
 	  var textlength = text.length;
@@ -25,18 +28,18 @@ jQuery(document).ready(function($) {
 		var $id = $(this).attr('id');
 		$('#whats-new-post').removeClass('status post photo video featured').addClass($id);
 		$('#whats-new-textarea').removeClass('status post photo video featured').addClass($id);
-		
+
 		if($(this).attr('id') != 'status') {
-			$('#whats-new-status').hide();		
-			$('#char-count').hide();	
-			$('.post-input').show();	
+			$('#whats-new-status').hide();
+			$('#char-count').hide();
+			$('.post-input').show();
 			$('#media-buttons').show();
 		} else {
-			$('#whats-new-status').fadeIn(300);		
-			$('#char-count').show();	
+			$('#whats-new-status').fadeIn(300);
+			$('#char-count').show();
 			$('#media-buttons').hide();
 		}
-		
+
 		if ( $('#whats-new-post').hasClass('.status') ) {
 			$('#submit').val('Post Update');
 		} else if ( $('#whats-new-post').hasClass('.post') ) {
@@ -52,10 +55,10 @@ jQuery(document).ready(function($) {
 			$('#posttitle').val('Enter a title for your Featured Post...').attr('title', 'Enter a title for your Featured Post...');
 			$('#submit').val('Feature This');
 		}
-								
+
 		$('#post_cat').val($(this).attr('id'));
-		return false;	
-							
+		return false;
+
 	});
 
 	$('#posttext').click(function() {
@@ -63,7 +66,7 @@ jQuery(document).ready(function($) {
   		limitChars('posttext', 140, 'counter');
 		});
 	});
-			
+
 	$('#posttitle').focus(function () {
 		if ($(this).val() === $(this).attr('title')) {
 			$(this).val('');
@@ -73,9 +76,9 @@ jQuery(document).ready(function($) {
 			$(this).val($(this).attr('title'));
 		}
 	});
-	
+
 	// This is an exact copy from inc/global.js.
-	// We only change the content id and submit id to match the P2 post form. 
+	// We only change the content id and submit id to match the P2 post form.
 	// We try to leave the P2 framework in tact while changes the BP javascript
 	// in a custom file here. It seems to work BUT we need to send more variables.
 	// For example Title and possibly a blog id, to extract group id?
@@ -153,7 +156,7 @@ jQuery(document).ready(function($) {
 		});
 
 	});
-	
+
 });
 
 (function($){$.fn.TextAreaExpander=function(minHeight,maxHeight){var hCheck=!($.browser.msie||$.browser.opera);function ResizeTextarea(e){e=e.target||e;var vlen=e.value.length,ewidth=e.offsetWidth;if(vlen!=e.valLength||ewidth!=e.boxWidth){if(hCheck&&(vlen<e.valLength||ewidth!=e.boxWidth))e.style.height="0px";var h=Math.max(e.expandMin,Math.min(e.scrollHeight,e.expandMax));e.style.overflow=(e.scrollHeight>h?"auto":"hidden");e.style.height=h+"px";e.valLength=vlen;e.boxWidth=ewidth}return true};this.each(function(){if(this.nodeName.toLowerCase()!="textarea")return;var p=this.className.match(/expand(\d+)\-*(\d+)*/i);this.expandMin=minHeight||(p?parseInt('0'+p[1],10):0);this.expandMax=maxHeight||(p?parseInt('0'+p[2],10):99999);ResizeTextarea(this);if(!this.Initialized){this.Initialized=true;$(this).css("padding-top",0).css("padding-bottom",0);$(this).bind("keyup",ResizeTextarea).bind("focus",ResizeTextarea)}});return this}})($);

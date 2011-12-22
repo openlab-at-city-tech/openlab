@@ -1,13 +1,13 @@
 <?php
 /***** The following is optional and requires editing the original p2/js/P2.js file ******/
- 
-/****** 
- * Uncomment in the function getPosts between line 106-151 of P2.js 
- * the code between and including "toggleUpdates('unewposts')" to 
- * deactivate Go to homepage Notifications 
+
+/******
+ * Uncomment in the function getPosts between line 106-151 of P2.js
+ * the code between and including "toggleUpdates('unewposts')" to
+ * deactivate Go to homepage Notifications
  ******/
 
-/****** 
+/******
  * Around line 235 find and change the following code in order to show Update Posted Notification:
  *
  *	if (isFirstFrontPage && result != "0") {
@@ -23,28 +23,28 @@
 		}
  *
  *****/
- 
-/****** 
- * In p2/inc/ajax.php add the following categories to "$accepted_post_cats" array: 
+
+/******
+ * In p2/inc/ajax.php add the following categories to "$accepted_post_cats" array:
  * 'photo', 'video', 'featured' around line 155
  ******/
- 
-/******************************************************** 
+
+/********************************************************
  * START P2 FUNCTIONS
  ********************************************************/
 
 function status_excerpt() {
 	global $post;
-	
+
 	$excerpt = get_the_excerpt();
 	$maxchar = 140;
-	
+
 	$status .= substr( $excerpt, 0, $maxchar );
 	$status .= '... <a href="' . get_permalink() .'" title="' . __('Read On', 'groupblog') . '">&raquo;</a>';
-	
+
 	echo $status;
 }
-   
+
 function catch_that_image() {
   global $post, $posts;
   $first_img = '';
@@ -59,16 +59,16 @@ function catch_that_image() {
   return $first_img;
 }
 
-/******************************************************** 
+/********************************************************
  * START GROUPBLOG FUNCTIONS
  ********************************************************/
- 
-function blog_id() {	
+
+function blog_id() {
 	echo get_blog_id();
 }
 	function get_blog_id() {
 		global $blog_id;
-		
+
 		return $blog_id;
 	}
 
@@ -83,19 +83,19 @@ function is_home_redirect() {
 	else
 		return false;
 }
- 
+
 /**
  * bp_p2_post_update()
  *
  * We duplicate this function form inc/ajax.php
- * In order to update the stream through ajax but trying to post the right 
+ * In order to update the stream through ajax but trying to post the right
  * activity_id, we need to figure out how to do that before sending the info.
  *
  * AJAX update posting
  */
 function bp_p2_post_update() {
 	global $bp, $activities_template;
-	
+
 	/* Check the nonce */
 	check_admin_referer( 'p2_post_update', '_wpnonce_p2_post_update' );
 
@@ -108,11 +108,11 @@ function bp_p2_post_update() {
 		echo '-1<div id="message" class="error"><p>' . __( 'Please enter some content to post.', 'buddypress' ) . '</p></div>';
 		return false;
 	}
- 	
+
 	$groupblog_id = $_POST['item_id'];
 	$post_id = apply_filters( 'bp_get_activity_secondary_item_id', $activities_template->activity->secondary_item_id );
 	// $post_id = If we would only already know the get_the_ID();
-	
+
 	if ( bp_has_activities ( 'max=1&primary_id=' . $groupblog_id . '&secondary_id=' . $post_id ) ) {
 		while ( bp_activities() ) : bp_the_activity();
 
@@ -126,7 +126,7 @@ if ( groupblog_current_layout() == 'magazine' )
 				include( 'groupblog/layouts/microblog-entry.php' );
 			else
 				include( WP_PLUGIN_DIR . '/buddypress/bp-themes/bp-default/activity/entry.php' );
-				
+
 		endwhile;
 	}
 
@@ -145,19 +145,19 @@ function bp_groupblog_options_nav() {
   global $bp;
   $checks = get_site_option('bp_groupblog_blog_defaults_options');
   ?>
-  
+
 	  <li id="home-personal-li"<?php if ( $checks['deep_group_integration'] ) : ?> class="current selected"<?php endif; ?>>
 			<a id="home" href="<?php bp_group_permalink() ?>"><?php _e( 'Home', 'groupblog' ); ?></a>
 		</li>
 
-    <?php if ( groups_is_user_admin( $bp->loggedin_user->id, bp_get_group_id() ) || groups_is_user_mod( $bp->loggedin_user->id, bp_get_group_id() ) ) : ?> 			
+    <?php if ( groups_is_user_admin( $bp->loggedin_user->id, bp_get_group_id() ) || groups_is_user_mod( $bp->loggedin_user->id, bp_get_group_id() ) ) : ?>
 			<li id="admin-personal-li" >
 				<a id="admin" href="<?php bp_group_permalink() ?>admin/"><?php _e( 'Admin', 'groupblog' ); ?></a>
 			</li>
 		<?php endif; ?>
 
-		<?php if ( bp_group_is_visible() ) : ?>	
-			
+		<?php if ( bp_group_is_visible() ) : ?>
+
 			<?php if ( bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
 				<?php if ( !$checks['deep_group_integration'] ) : ?>
 					<li id="<?php echo BP_GROUPBLOG_SLUG; ?>-personal-li"<?php //if ( is_page() ) : ?> class="current selected"<?php //endif; ?>>
@@ -165,36 +165,36 @@ function bp_groupblog_options_nav() {
 					</li>
 				<?php endif; ?>
 		  <?php endif; ?>
-						
+
 			<?php if ( bp_is_active( 'forums' ) && ( function_exists( 'bp_forums_is_installed_correctly' ) && bp_group_is_forum_enabled() && !(int) bp_get_option( 'bp-disable-forum-directory' ) ) && bp_forums_is_installed_correctly() ) : ?>
 				<li id="<?php echo BP_FORUMS_SLUG; ?>-personal-li" >
 					<a id="<?php echo BP_FORUMS_SLUG; ?>" href="<?php bp_group_permalink() ?>forum/"><?php _e( 'Forum', 'groupblog' ); ?></a>
 				</li>
 			<?php endif; ?>
-			
+
 			<li id="<?php echo BP_MEMBERS_SLUG; ?>-personal-li" >
 				<a id="<?php echo BP_MEMBERS_SLUG; ?>" href="<?php bp_group_permalink() ?>members/"><?php _e( 'Members', 'groupblog' ); ?> (<?php bp_group_total_members() ?>)</a>
 			</li>
-			
+
 			<li id="invite-personal-li" >
 				<a id="invite" href="<?php bp_group_permalink() ?>send-invites/"><?php _e( 'Send Invites', 'groupblog' ); ?></a>
 			</li>
-			
+
 		<?php elseif ( !bp_group_is_visible() && bp_get_group_status() != 'hidden' ) : ?>
-		
+
 			<li id="request-membership-personal-li" >
 				<a id="request-membership" href="<?php bp_group_permalink() ?>request-membership/"><?php _e( 'Request Membership', 'groupblog' ); ?></a>
 			</li>
-			
+
 		<?php endif; ?>
-	
+
 	<?php
 }
 
 /* Load the javascript for the theme */
-wp_enqueue_script( 'p2theme-ajax-js', get_stylesheet_directory_uri() . '/groupblog/_inc/custom.js', array( 'jquery' ) );			
+wp_enqueue_script( 'p2theme-ajax-js', get_stylesheet_directory_uri() . '/groupblog/_inc/custom.js', array( 'jquery' ) );
 
-/******************************************************** 
+/********************************************************
  * START BUDDYPRESS FUNCTIONS
  ********************************************************/
 
@@ -202,19 +202,19 @@ wp_enqueue_script( 'p2theme-ajax-js', get_stylesheet_directory_uri() . '/groupbl
 if ( !class_exists( 'BP_Core_User' ) )
 	return false;
 
-/* Register the widget columns */
-register_sidebars( 1,
-	array(
-		'name' => 'BuddyPress Sidebar',
-		'before_widget' => '<div id="%1$s" class="widget %2$s">',
-		'after_widget' => '</div>',
-		'before_title' => '<h3 class="widgettitle">',
-		'after_title' => '</h3>'
-	)
-);
-
 /* Load the AJAX functions for the theme */
 require_once( WP_PLUGIN_DIR . '/buddypress/bp-themes/bp-default/_inc/ajax.php' );
+
+function bp_dtheme_enqueue_styles() {
+	// Default CSS
+	wp_enqueue_style( 'bp-default-main', WP_PLUGIN_URL . '/buddypress/bp-themes/bp-default/_inc/css/default.css', array() );
+
+	// Default CSS RTL
+	if ( is_rtl() )
+		wp_enqueue_style( 'bp-default-main-rtl', WP_PLUGIN_URL . '/buddypress/bp-themes/bp-default/_inc/css/default-rtl.css', array( 'bp-default-main' ) );
+
+}
+add_action( 'wp_print_styles', 'bp_dtheme_enqueue_styles' );
 
 /* Load the javascript for the theme */
 wp_enqueue_script( 'dtheme-ajax-js', WP_PLUGIN_URL . '/buddypress/bp-themes/bp-default/_inc/global.js', array( 'jquery' ) );

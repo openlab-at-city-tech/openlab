@@ -8,11 +8,10 @@ Template: p2
 Tags: buddypress, groupblog, p2
 Version: 0.1
 */
- 
+
 
 /* Inherit the default theme styles */
 @import url( ../p2/style.css );
-@import url( ../../plugins/buddypress/bp-themes/bp-default/_inc/css/default.css );
 
 /* Inherit the default theme adminbar styles */
 @import url( ../../plugins/buddypress/bp-themes/bp-default/_inc/css/adminbar.css );

@@ -176,6 +176,7 @@ class BP_Group_Documents {
 		global $wpdb, $bp;
 		
 		if( $this->current_user_can('delete') ) {
+			do_action('bp_group_documents_data_before_delete', $this);
 			if( $this->file && file_exists( $this->get_path(1) ) )
 				@unlink( $this->get_path(1) );
 
@@ -364,13 +365,7 @@ class BP_Group_Documents {
 		 * place 'group-documents' on the same level as 'group-avatars'
 		 * organize docs within group sub-folders
 		 */
-		if( function_exists('bp_core_avatar_upload_path')) { //bp 1.2 and later
-			$document_dir = bp_core_avatar_upload_path() . '/group-documents/' . $this->group_id;
-		} else { //bp 1.1
-			$path  = get_blog_option( BP_ROOT_BLOG, 'upload_path' ); //wp-content/blogs.dir/1/files
-			$document_dir = WP_CONTENT_DIR . str_replace( 'wp-content', '', $path );
-			$document_dir .= '/group-documents/' . $this->group_id;
-		}
+		$document_dir = bp_core_avatar_upload_path() . '/group-documents/' . $this->group_id;
 
 
 		if( $create_folders && !is_dir( $document_dir ) )
@@ -480,7 +475,7 @@ class BP_Group_Documents {
 
 			$img_url = $img_folder . $icons[$extension];
 
-			return apply_filters('bp_group_documents_get_icon',$img_url);
+			return apply_filters('bp_group_documents_get_icon',$img_url, $this->group_id, $this->file);
 		}
 
 

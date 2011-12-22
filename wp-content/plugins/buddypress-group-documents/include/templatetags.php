@@ -58,7 +58,9 @@ class BP_Group_Documents_Template {
 	public static function get_parent_category_id() {
 		global $bp;
 
-		$parent_info = is_term( "g" . $bp->groups->current_group->id, 'group-documents-category');
+		//in order to shoehorn the group-less wordpress taxonomy to behave like groups,
+		//all groups have a unique parent taxonomy item.  eg: g3
+		$parent_info = term_exists( "g" . $bp->groups->current_group->id, 'group-documents-category');
 		if( !$parent_info ){
 			$parent_info = wp_insert_term( "g" . $bp->groups->current_group->id, 'group-documents-category');
 		}
@@ -82,7 +84,6 @@ class BP_Group_Documents_Template {
 				$_POST = array_map( 'stripslashes_deep', $_POST );
 			}
 
-
 			switch( $_POST['bp_group_documents_operation'] ) {
 				case 'add':
 					$document = new BP_Group_Documents();
@@ -90,7 +91,8 @@ class BP_Group_Documents_Template {
 					$document->group_id = $bp->groups->current_group->id;
 					$document->name = $_POST['bp_group_documents_name'];
 					$document->description = $_POST['bp_group_documents_description'];
-					$document->featured = apply_filters('bp_group_documents_featured_in',$_POST['bp_group_documents_featured']);
+					if ( isset( $_POST['bp_group_documents_featured'] ) )
+                        $document->featured = apply_filters('bp_group_documents_featured_in',$_POST['bp_group_documents_featured']);
 					if( $document->save() ) {
 						self::update_categories($document);
 						do_action('bp_group_documents_add_success',$document);
@@ -101,7 +103,8 @@ class BP_Group_Documents_Template {
 					$document = new BP_Group_Documents($_POST['bp_group_documents_id']);
 					$document->name = $_POST['bp_group_documents_name'];
 					$document->description = $_POST['bp_group_documents_description'];
-					$document->featured = apply_filters('bp_group_documents_featured_in',$_POST['bp_group_documents_featured']);
+                    if ( isset( $_POST['bp_group_documents_featured'] ) )
+					    $document->featured = apply_filters('bp_group_documents_featured_in',$_POST['bp_group_documents_featured']);
 					self::update_categories($document);
 					if( $document->save() ) {
 						do_action('bp_group_documents_edit_success',$document);
@@ -116,14 +119,16 @@ class BP_Group_Documents_Template {
 		global $bp;
 
 		//update categories from checkbox list
-		$category_ids = apply_filters('bp_group_documents_category_ids_in',$_POST['bp_group_documents_categories']);
+        if ( isset( $_POST['bp_group_documents_categories'] ) )
+            $category_ids = apply_filters('bp_group_documents_category_ids_in',$_POST['bp_group_documents_categories']);
 
-		wp_set_object_terms($document->id,$category_ids,'group-documents-category');
+        if ( isset( $category_ids ) )
+		    wp_set_object_terms($document->id,$category_ids,'group-documents-category');
 
 		//check if new category was added, if so, append to current list
-		if( $_POST['bp_group_documents_new_category'] ) {
+		if( isset( $_POST['bp_group_documents_new_category'] ) && $_POST['bp_group_documents_new_category'] ) {
 
-			if( !is_term( $_POST['bp_group_documents_new_category'], 'group-documents-category',$this->parent_id ) ) {
+			if( !term_exists( $_POST['bp_group_documents_new_category'], 'group-documents-category',$this->parent_id ) ) {
 				$term_info = wp_insert_term( $_POST['bp_group_documents_new_category'],'group-documents-category',array('parent'=>$this->parent_id));
 				wp_set_object_terms($document->id, $term_info['term_id'], 'group-documents-category', true);
 			}
@@ -144,7 +149,7 @@ class BP_Group_Documents_Template {
 			$this->show_detail = 1;
 		}
 		//if we're editing, grab existing data
-		if( ($bp->current_action == $bp->group_documents->slug ) && ($bp->action_variables[0] == 'edit') ) {
+		if( ($bp->current_action == $bp->group_documents->slug ) && ( isset( $bp->action_variables[0] ) && $bp->action_variables[0] == 'edit') ) {
 			if( ctype_digit( $bp->action_variables[1] ) ){
 				$document = new BP_Group_Documents( $bp->action_variables[1] );
 				$this->name = apply_filters('bp_group_documents_name_out',$document->name);
@@ -156,7 +161,7 @@ class BP_Group_Documents_Template {
 				$this->header =  __( 'Edit Document', 'bp-group-documents' );
 			}
 		//otherwise, we might be deleting
-		} else if ( $bp->current_action == $bp->group_documents->slug && $bp->action_variables[0] == 'delete' ) {
+		} else if ( $bp->current_action == $bp->group_documents->slug && isset( $bp->action_variables[0] ) && $bp->action_variables[0] == 'delete' ) {
 			if( bp_group_documents_delete( $bp->action_variables[1] ) ){
 				bp_core_add_message( __('Document successfully deleted','bp-group-documents') );
 			}

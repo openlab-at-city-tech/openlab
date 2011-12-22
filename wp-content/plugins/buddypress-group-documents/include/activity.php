@@ -8,7 +8,7 @@
 function bp_group_documents_record_add( $document ) {
 	global $bp;
 
-	$params = array('action'=>sprintf( __ ('%s uploaded the file: %s to %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),'<a href="' . $document->get_url() . '">' . attribute_escape( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . attribute_escape( $bp->groups->current_group->name ) . '</a>'),
+	$params = array('action'=>sprintf( __ ('%s uploaded the file: %s to %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_attr( $bp->groups->current_group->name ) . '</a>'),
 					'content'=>$document->description,
 					'component_action'=>'added_group_document',
 					'secondary_item_id'=>$document->id);
@@ -28,7 +28,7 @@ add_action('bp_group_documents_add_success','bp_group_documents_record_add',15,1
 function bp_group_documents_record_edit( $document ) {
 	global $bp;
 
-	$params = array('action'=>sprintf( __ ('%s edited the file: %s in %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),'<a href="' . $document->get_url() . '">' . attribute_escape( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . attribute_escape( $bp->groups->current_group->name ) . '</a>'),
+	$params = array('action'=>sprintf( __ ('%s edited the file: %s in %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_attr( $bp->groups->current_group->name ) . '</a>'),
 					'component_action'=>'edited_group_document',
 					'secondary_item_id'=>$document->id);
 	bp_group_documents_record_activity($params);
@@ -45,7 +45,7 @@ add_action('bp_group_documents_edit_success','bp_group_documents_record_edit',15
 function bp_group_documents_record_delete( $document ) {
 	global $bp;
 
-	$params = array('action'=>sprintf( __ ('%s deleted the file: %s from %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),$document->name,'<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . attribute_escape( $bp->groups->current_group->name ) . '</a>'),
+	$params = array('action'=>sprintf( __ ('%s deleted the file: %s from %s','bp-group-documents'),bp_core_get_userlink($bp->loggedin_user->id),$document->name,'<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_attr( $bp->groups->current_group->name ) . '</a>'),
 					'component_action'=>'deleted_group_document',
 					'secondary_item_id'=>$document->id);
 	bp_group_documents_record_activity($params);
@@ -76,6 +76,7 @@ function bp_group_documents_record_activity( $args = '' ) {
 		'user_id' => $bp->loggedin_user->id, // Optional		
 		'item_id' => $bp->groups->current_group->id, // Optional
 		'secondary_item_id' => false, // Optional
+        'content' => ''
 	);
 
 	$r = wp_parse_args( $args, $defaults );
@@ -85,11 +86,6 @@ function bp_group_documents_record_activity( $args = '' ) {
 	if ( 'public' != $bp->groups->current_group->status )	
 		$hide_sitewide = 1;
 	
-	// BP1.1 used the 'content' field as the 1-line summary that is now used as the action link
-	if( '1.1' == substr(BP_VERSION, 0, 3 ) ){
-		return bp_activity_add( array( 'content' => $action, 'primary_link' => $primary_link, 'component_name' => $component_name, 'component_action' => $component_action, 'user_id' => $user_id, 'item_id' => $item_id, 'secondary_item_id' => $secondary_item_id, 'hide_sitewide' => $hide_sitewide ) );
-	}
-
 	return bp_activity_add( array( 'content' => $content, 'primary_link' => $primary_link, 'component_name' => $component_name, 'component_action' => $component_action, 'user_id' => $user_id, 'item_id' => $item_id, 'secondary_item_id' => $secondary_item_id, 'hide_sitewide' => $hide_sitewide, 'action'=>$action ) );
 }
 

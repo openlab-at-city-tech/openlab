@@ -6,7 +6,7 @@
 
 		<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 
-		<title><?php bp_page_title() ?> | <?php bloginfo('name'); ?></title>
+		<title><?php wp_title() ?> | <?php bloginfo('name'); ?></title>
 
 		<?php do_action( 'bp_head' ) ?>
 
@@ -24,7 +24,7 @@
 		<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 
 		<?php wp_head(); ?>
-		
+
 	</head>
 
 	<body <?php body_class() ?> id="bp-default">
@@ -32,7 +32,7 @@
 		<?php do_action( 'bp_before_header' ) ?>
 
 		<div id="header">
-			
+
 			<h1 id="logo"><a href="<?php site_url() ?>"><?php bp_site_name() ?></a></h1>
 
 			<ul id="nav">
@@ -60,12 +60,12 @@
 					<?php endif; ?>
 				<?php endif; ?>
 
-				<?php if ( bp_is_active( 'blogs' ) && bp_core_is_multisite() ) : ?>
+				<?php if ( bp_is_active( 'blogs' ) && is_multisite() ) : ?>
 					<li>
 						<a href="<?php bp_root_domain() ?>/<?php echo BP_BLOGS_SLUG ?>/" title="<?php _e( 'Blogs', 'buddypress' ) ?>"><?php _e( 'Blogs', 'buddypress' ) ?></a>
 					</li>
 				<?php endif; ?>
-				
+
 				<?php wp_list_pages( 'title_li=&depth=1&exclude=' . bp_dtheme_page_on_front() ); ?>
 
 				<?php do_action( 'bp_nav_items' ); ?>
