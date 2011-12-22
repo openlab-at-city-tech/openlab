@@ -2,6 +2,55 @@
 
 /* Posts */
 
+/**
+ * Check to make sure that a user is not making too many posts in a short amount of time.
+ */
+function bb_check_post_flood() {
+	global $bbdb;
+	$user_id = (int) $user_id;
+	$throttle_time = bb_get_option( 'throttle_time' );
+
+	if ( bb_current_user_can( 'manage_options' ) || empty( $throttle_time ) )
+		return;
+
+	if ( bb_is_user_logged_in() ) {
+		$bb_current_user = bb_get_current_user();
+		
+		if ( isset($bb_current_user->data->last_posted) && time() < $bb_current_user->data->last_posted + $throttle_time && ! bb_current_user_can( 'throttle' ) )
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+				die( __( 'Slow down; you move too fast.' ) );
+			else
+				bb_die( __( 'Slow down; you move too fast.' ) );
+	} else {
+		if ( ( $last_posted = bb_get_transient($_SERVER['REMOTE_ADDR'] . '_last_posted') ) && time() < $last_posted + $throttle_time )
+			if ( defined('DOING_AJAX') && DOING_AJAX )
+				die( __( 'Slow down; you move too fast.' ) );
+			else
+				bb_die( __( 'Slow down; you move too fast.' ) );
+	}
+}
+
+/**
+ * Get the current, non-logged-in poster data.
+ * @return array The associative array of author, email, and url data.
+ */
+function bb_get_current_poster() {
+	// Cookies should already be sanitized.
+	$post_author = '';
+	if ( isset( $_COOKIE['post_author_' . BB_HASH] ) )
+		$post_author = $_COOKIE['post_author_' . BB_HASH];
+
+	$post_author_email = '';
+	if ( isset( $_COOKIE['post_author_email_' . BB_HASH] ) )
+		$post_author_email = $_COOKIE['post_author_email_' . BB_HASH];
+
+	$post_author_url = '';
+	if ( isset( $_COOKIE['post_author_url_' . BB_HASH] ) )
+		$post_author_url = $_COOKIE['post_author_url_' . BB_HASH];
+
+	return compact( 'post_author', 'post_author_email', 'post_author_url' );
+}
+
 function bb_get_post( $post_id ) {
 	global $bbdb;
 	$post_id = (int) $post_id;
@@ -77,7 +126,7 @@ function bb_cache_first_posts( $_topics = false, $author_cache = true ) {
 
 	$_topic_ids = join(',', $topic_ids);
 
-	$posts = (array) bb_cache_posts( "SELECT post_id FROM $bbdb->posts WHERE topic_id IN ($_topic_ids) AND post_position = 1 AND post_status = 0", true );
+	$posts = (array) bb_cache_posts( "SELECT post_id FROM $bbdb->posts WHERE topic_id IN ($_topic_ids) AND post_position = 1", true );
 
 	$first_posts = array();
 	foreach ( $posts as $post ) {
@@ -98,6 +147,7 @@ function bb_cache_posts( $query, $post_id_query = false ) {
 	$_query_post_ids = array();
 	$_query_posts = array();
 	$_cached_posts = array();
+	$ordered_post_ids = array();
 
 	if ( $post_id_query && is_string( $query ) ) {
 		// The query is a SQL query to retrieve post_ids only
@@ -112,7 +162,10 @@ function bb_cache_posts( $query, $post_id_query = false ) {
 	}
 
 	if ( is_array( $query ) ) {
+		$get_order_from_query = false;
+
 		foreach ( $query as $_post_id ) {
+			$ordered_post_ids[] = $_post_id;
 			if ( false === $_post = wp_cache_get( $_post_id, 'bb_post' ) ) {
 				$_query_post_ids[] = $_post_id;
 			} else {
@@ -131,12 +184,16 @@ function bb_cache_posts( $query, $post_id_query = false ) {
 		}
 	} else {
 		// The query is a full SQL query which needs to be executed
+		$get_order_from_query = true;
 		$_query = $query;
 	}
 
 	if ( $_query_posts = (array) $bbdb->get_results( $_query ) ) {
 		$_appendable_posts = array();
 		foreach ( $_query_posts as $_query_post ) {
+			if ( $get_order_from_query ) {
+				$ordered_post_ids[] = $_query_post->post_id;
+			}
 			if ( false === $_post = wp_cache_get( $_query_post->post_id, 'bb_post' ) ) {
 				$_appendable_posts[] = $_query_post;
 			} else {
@@ -148,12 +205,23 @@ function bb_cache_posts( $query, $post_id_query = false ) {
 			foreach( $_query_posts as $_query_post ) {
 				wp_cache_add( $_query_post->post_id, $_query_post, 'bb_post' );
 			}
+		} else {
+			$_query_posts = array();
 		}
 	} else {
 		$_query_posts = array();
 	}
 
-	return array_merge( $_cached_posts, $_query_posts );
+	foreach ( array_merge( $_cached_posts, $_query_posts ) as $_post ) {
+		$keyed_posts[$_post->post_id] = $_post;
+	}
+
+	$the_posts = array();
+	foreach ( $ordered_post_ids as $ordered_post_id ) {
+		$the_posts[] = $keyed_posts[$ordered_post_id];
+	}
+
+	return $the_posts;
 }
 
 // Globalizes the result
@@ -250,7 +318,7 @@ function bb_get_latest_forum_posts( $forum_id, $limit = 0, $page = 1 ) {
 }
 
 function bb_insert_post( $args = null ) {
-	global $bbdb, $bb_current_user;
+	global $bbdb, $bb_current_user, $bb;
 
 	if ( !$args = wp_parse_args( $args ) )
 		return false;
@@ -300,11 +368,13 @@ function bb_insert_post( $args = null ) {
 
 	$defaults['throttle'] = true;
 	extract( wp_parse_args( $args, $defaults ) );
+	
+	// If the user is not logged in and loginless posting is ON, then this function expects $post_author, $post_email and $post_url to be sanitized (check bb-post.php for example)
 
 	if ( !$topic = get_topic( $topic_id ) )
 		return false;
 
-	if ( !$user = bb_get_user( $poster_id ) )
+	if ( bb_is_login_required() && ! $user = bb_get_user( $poster_id ) )
 		return false;
 
 	$topic_id = (int) $topic->topic_id;
@@ -333,8 +403,8 @@ function bb_insert_post( $args = null ) {
 
 		if ( 0 == $post_status ) {
 			$topic_time = $post_time;
-			$topic_last_poster = $poster_id;
-			$topic_last_poster_name = $user->user_login;
+			$topic_last_poster = ( ! bb_is_user_logged_in() && ! bb_is_login_required() ) ? -1 : $poster_id;
+			$topic_last_poster_name = ( ! bb_is_user_logged_in() && ! bb_is_login_required() ) ? $post_author : $user->user_login;
 
 			$bbdb->query( $bbdb->prepare( "UPDATE $bbdb->forums SET posts = posts + 1 WHERE forum_id = %d;", $topic->forum_id ) );
 			$bbdb->update(
@@ -344,17 +414,37 @@ function bb_insert_post( $args = null ) {
 			);
 
 			$query = new BB_Query( 'post', array( 'post_author_id' => $poster_id, 'topic_id' => $topic_id, 'post_id' => "-$post_id" ) );
-			if ( !$query->results )
-				bb_update_usermeta( $poster_id, $bbdb->prefix . 'topics_replied', $user->topics_replied + 1 );
+			if ( !$query->results ) {
+				$topics_replied_key = $bbdb->prefix . 'topics_replied';
+				bb_update_usermeta( $poster_id, $topics_replied_key, $user->$topics_replied_key + 1 );
+			}
 
 		} else {
 			bb_update_topicmeta( $topic->topic_id, 'deleted_posts', isset($topic->deleted_posts) ? $topic->deleted_posts + 1 : 1 );
 		}
 	}
 	bb_update_topic_voices( $topic_id );
+
+	// if user not logged in, save user data as meta data
+	if ( !$user ) {
+		bb_update_meta($post_id, 'post_author', $post_author, 'post');
+		bb_update_meta($post_id, 'post_email', $post_email, 'post');
+		bb_update_meta($post_id, 'post_url', $post_url, 'post');
+	}
 	
-	if ( $throttle && !bb_current_user_can( 'throttle' ) )
-		bb_update_usermeta( $poster_id, 'last_posted', time() );
+	if ( $throttle && !bb_current_user_can( 'throttle' ) ) {
+		if ( $user )
+			bb_update_usermeta( $poster_id, 'last_posted', time() );
+		else
+			bb_set_transient( $_SERVER['REMOTE_ADDR'] . '_last_posted', time() );
+	}
+	
+	if ( !bb_is_login_required() && !$user = bb_get_user( $poster_id ) ) {
+		$post_cookie_lifetime = apply_filters( 'bb_post_cookie_lifetime', 30000000 );
+		setcookie( 'post_author_' . BB_HASH, $post_author, time() + $post_cookie_lifetime, $bb->cookiepath, $bb->cookiedomain );
+		setcookie( 'post_author_email_' . BB_HASH, $post_email, time() + $post_cookie_lifetime, $bb->cookiepath, $bb->cookiedomain );
+		setcookie( 'post_author_url_' . BB_HASH, $post_url, time() + $post_cookie_lifetime, $bb->cookiepath, $bb->cookiedomain );
+	}
 
 	wp_cache_delete( $topic_id, 'bb_topic' );
 	wp_cache_delete( $topic_id, 'bb_thread' );
@@ -449,8 +539,10 @@ function bb_delete_post( $post_id, $new_status = 0 ) {
 		$user = bb_get_user( $uid );
 
 		$user_posts = new BB_Query( 'post', array( 'post_author_id' => $user->ID, 'topic_id' => $topic_id ) );
-		if ( $new_status && !$user_posts->results )
-			bb_update_usermeta( $user->ID, $bbdb->prefix . 'topics_replied', $user->topics_replied - 1 );
+		if ( $new_status && !$user_posts->results ) {
+			$topics_replied_key = $bbdb->prefix . 'topics_replied';
+			bb_update_usermeta( $user->ID, $topics_replied_key, $user->$topics_replied_key - 1 );
+		}
 		wp_cache_delete( $topic_id, 'bb_topic' );
 		wp_cache_delete( $topic_id, 'bb_thread' );
 		wp_cache_flush( 'bb_forums' );
@@ -469,6 +561,7 @@ function _bb_delete_post( $post_id, $post_status ) {
 	$post_status = (int) $post_status;
 	$bbdb->update( $bbdb->posts, compact( 'post_status' ), compact( 'post_id' ) );
 	wp_cache_delete( $post_id, 'bb_post' );
+	do_action( '_bb_delete_post', $post_id, $post_status );
 }
 
 function bb_topics_replied_on_undelete_post( $post_id ) {
@@ -478,8 +571,10 @@ function bb_topics_replied_on_undelete_post( $post_id ) {
 
 	$user_posts = new BB_Query( 'post', array( 'post_author_id' => $bb_post->poster_id, 'topic_id' => $topic->topic_id ) );
 
-	if ( 1 == count($user_posts) && $user = bb_get_user( $bb_post->poster_id ) )
-		bb_update_usermeta( $user->ID, $bbdb->prefix . 'topics_replied', $user->topics_replied + 1 );
+	if ( 1 == count($user_posts) && $user = bb_get_user( $bb_post->poster_id ) ) {
+		$topics_replied_key = $bbdb->prefix . 'topics_replied';
+		bb_update_usermeta( $user->ID, $topics_replied_key, $user->$topics_replied_key + 1 );
+	}
 }
 
 function bb_post_author_cache($posts) {
@@ -496,7 +591,7 @@ function bb_post_author_cache($posts) {
 
 // These two filters are lame.  It'd be nice if we could do this in the query parameters
 function bb_get_recent_user_replies_fields( $fields ) {
-	return $fields . ', MAX(post_time) as post_time';
+	return 'MAX( p.post_id ) AS post_id';
 }
 
 function bb_get_recent_user_replies_group_by() {
@@ -507,7 +602,138 @@ function bb_get_recent_user_replies( $user_id ) {
 	global $bbdb;
 	$user_id = (int) $user_id;
 
-	$post_query = new BB_Query( 'post', array( 'post_author_id' => $user_id, 'order_by' => 'post_time' ), 'get_recent_user_replies' );
+	$post_query = new BB_Query(
+		'post',
+		array(
+			'post_author_id' => $user_id,
+			'order_by' => 'post_id',
+			'post_id_only' => true,
+		),
+		'get_recent_user_replies'
+	);
 
 	return $post_query->results;
+}
+
+/**
+ * Sends notification emails for new posts.
+ *
+ * Gets new post's ID and check if there are subscribed
+ * user to that topic, and if there are, send notifications
+ *
+ * @since 1.1
+ *
+ * @param int $post_id ID of new post
+ */
+function bb_notify_subscribers( $post_id ) {
+	global $bbdb, $bb_ksd_pre_post_status;
+
+	if ( !empty( $bb_ksd_pre_post_status ) )
+		return false;
+
+	if ( !$post = bb_get_post( $post_id ) )
+		return false;
+
+	if ( !$topic = get_topic( $post->topic_id ) )
+		return false;
+	
+	$post_id = $post->post_id;
+	$topic_id = $topic->topic_id;
+
+	if ( !$poster_name = get_post_author( $post_id ) )
+		return false;
+	
+	do_action( 'bb_pre_notify_subscribers', $post_id, $topic_id );
+
+	if ( !$user_ids = $bbdb->get_col( $bbdb->prepare( "SELECT `$bbdb->term_relationships`.`object_id`
+		FROM $bbdb->term_relationships, $bbdb->term_taxonomy, $bbdb->terms
+		WHERE `$bbdb->term_relationships`.`term_taxonomy_id` = `$bbdb->term_taxonomy`.`term_taxonomy_id`
+		AND `$bbdb->term_taxonomy`.`term_id` = `$bbdb->terms`.`term_id`
+		AND `$bbdb->term_taxonomy`.`taxonomy` = 'bb_subscribe'
+		AND `$bbdb->terms`.`slug` = 'topic-%d'",
+		$topic_id ) ) )
+		return false;
+
+	foreach ( (array) $user_ids as $user_id ) {
+		if ( $user_id == $post->poster_id )
+			continue; // don't send notifications to the person who made the post
+		
+		$user = bb_get_user( $user_id );
+		
+		if ( !$message = apply_filters( 'bb_subscription_mail_message', __( "%1\$s wrote:\n\n%2\$s\n\nRead this post on the forums: %3\$s\n\nYou're getting this email because you subscribed to '%4\$s.'\nPlease click the link above, login, and click 'Unsubscribe' at the top of the page to stop receiving emails from this topic." ), $post_id, $topic_id ) )
+			continue; /* For plugins */
+		
+		bb_mail(
+			$user->user_email,
+			apply_filters( 'bb_subscription_mail_title', '[' . bb_get_option( 'name' ) . '] ' . $topic->topic_title, $post_id, $topic_id ),
+			sprintf( $message, $poster_name, strip_tags( $post->post_text ), get_post_link( $post_id ), strip_tags( $topic->topic_title ) )
+		);
+	}
+	
+	do_action( 'bb_post_notify_subscribers', $post_id, $topic_id );
+}
+
+/**
+ * Updates user's subscription status in database.
+ *
+ * Gets user's new subscription status for topic and
+ * adds new status to database.
+ *
+ * @since 1.1
+ *
+ * @param int $topic_id ID of topic for subscription
+ * @param string $new_status New subscription status
+ * @param int $user_id Optional. ID of user for subscription
+ */
+function bb_subscription_management( $topic_id, $new_status, $user_id = '' ) {
+	global $bbdb, $wp_taxonomy_object;
+	
+	$topic = get_topic( $topic_id );
+	if (!$user_id) {
+		$user_id = bb_get_current_user_info( 'id' );
+	}
+	
+	do_action( 'bb_subscripton_management', $topic_id, $new_status, $user_id );
+	
+	switch ( $new_status ) {
+		case 'add':
+			$tt_ids = $wp_taxonomy_object->set_object_terms( $user_id, 'topic-' . $topic->topic_id, 'bb_subscribe', array( 'append' => true, 'user_id' => $user_id ) );
+			break;
+		case 'remove':
+			// I hate this with the passion of a thousand suns
+			$term_id = $bbdb->get_var( "SELECT term_id FROM $bbdb->terms WHERE slug = 'topic-$topic->topic_id'" );
+			$term_taxonomy_id = $bbdb->get_var( "SELECT term_taxonomy_id FROM $bbdb->term_taxonomy WHERE term_id = $term_id AND taxonomy = 'bb_subscribe'" );
+			$bbdb->query( "DELETE FROM $bbdb->term_relationships WHERE object_id = $user_id AND term_taxonomy_id = $term_taxonomy_id" );
+			$bbdb->query( "DELETE FROM $bbdb->term_taxonomy WHERE term_id = $term_id AND taxonomy = 'bb_subscribe'" );
+			break;
+	}
+	
+}
+
+/**
+ * Process subscription checkbox submission.
+ *
+ * Get ID of and new subscription status and pass values to
+ * bb_user_subscribe_checkbox_update function
+ *
+ * @since 1.1
+ *
+ * @param int $post_id ID of new/edited post
+ */
+function bb_user_subscribe_checkbox_update( $post_id ) {
+	if ( !bb_is_user_logged_in() )
+		return false;
+	
+	$post		= bb_get_post( $post_id );
+	$topic_id	= (int) $post->topic_id;
+	$subscribed	= bb_is_user_subscribed( array( 'topic_id' => $topic_id, 'user_id' => $post->poster_id ) ) ? true : false;
+	$check		= $_REQUEST['subscription_checkbox'];
+	
+	do_action( 'bb_user_subscribe_checkbox_update', $post_id, $topic_id, $subscribe, $check );
+	
+	if ( 'subscribe' == $check && !$subscribed )
+		bb_subscription_management( $topic_id, 'add' );
+	elseif ( !$check && $subscribed )
+		bb_subscription_management( $topic_id, 'remove' );
+	
 }

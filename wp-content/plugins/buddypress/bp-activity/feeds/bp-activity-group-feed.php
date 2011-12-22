@@ -1,9 +1,15 @@
 <?php
+
 /**
  * RSS2 Feed Template for displaying a group activity stream
  *
  * @package BuddyPress
+ * @subpackage ActivityFeeds
  */
+
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 header('Status: 200 OK');
 ?>
@@ -18,9 +24,9 @@ header('Status: 200 OK');
 >
 
 <channel>
-	<title><?php echo bp_site_name() ?> | <?php echo $bp->groups->current_group->name ?> | <?php _e( 'Group Activity', 'buddypress' ) ?></title>
+	<title><?php bp_site_name() ?> | <?php echo $bp->groups->current_group->name ?> | <?php _e( 'Group Activity', 'buddypress' ) ?></title>
 	<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
-	<link><?php echo bp_get_group_permalink( $bp->groups->current_group ) . $bp->activity->slug . '/feed' ?></link>
+	<link><?php echo bp_get_group_permalink( $bp->groups->current_group ) . bp_get_activity_slug() . '/feed' ?></link>
 	<description><?php printf( __( '%s - Group Activity Feed', 'buddypress' ), $bp->groups->current_group->name  ) ?></description>
 	<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_activity_get_last_updated(), false); ?></pubDate>
 	<generator>http://buddypress.org/?v=<?php echo BP_VERSION ?></generator>
@@ -31,7 +37,7 @@ header('Status: 200 OK');
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
 			<item>
 				<guid><?php bp_activity_thread_permalink() ?></guid>
-				<title><![CDATA[<?php bp_activity_feed_item_title() ?>]]></title>
+				<title><?php bp_activity_feed_item_title() ?></title>
 				<link><?php echo bp_activity_thread_permalink() ?></link>
 				<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_get_activity_feed_item_date(), false); ?></pubDate>
 

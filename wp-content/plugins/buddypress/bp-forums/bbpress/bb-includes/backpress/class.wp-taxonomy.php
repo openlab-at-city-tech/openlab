@@ -1,5 +1,5 @@
 <?php
-// Last sync [WP11537]
+// Last sync [WP11537] - Refactored into a class based on wp-includes/taxonomy.php
 
 /**
  * Taxonomy API
@@ -302,12 +302,14 @@ class WP_Taxonomy {
 
 		if ( is_object($term) ) {
 			wp_cache_add($term->term_id, $term, $taxonomy);
+			wp_cache_add($term->term_taxonomy_id, $term->term_id, "$taxonomy:tt_id" );
 			$_term = $term;
 		} else {
 			$term = (int) $term;
 			if ( ! $_term = wp_cache_get($term, $taxonomy) ) {
 				$_term = $this->db->get_row( $this->db->prepare( "SELECT t.*, tt.* FROM {$this->db->terms} AS t INNER JOIN {$this->db->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND t.term_id = %s LIMIT 1", $taxonomy, $term) );
 				wp_cache_add($term, $_term, $taxonomy);
+				wp_cache_add($_term->term_taxonomy_id, $_term->term_id, "$taxonomy:tt_id" );
 			}
 		}
 
@@ -361,6 +363,8 @@ class WP_Taxonomy {
 		} else if ( 'tt_id' == $field ) {
 			$field = 'tt.term_taxonomy_id';
 			$value = (int) $value;
+			if ( $_term_id = wp_cache_get( $value, "$taxonomy:tt_id" ) )
+				return $this->get_term( $_term_id, $taxonomy, $output, $filter );
 		} else {
 			$field = 't.term_id';
 			$value = (int) $value;
@@ -371,6 +375,7 @@ class WP_Taxonomy {
 			return false;
 
 		wp_cache_add($term->term_id, $term, $taxonomy);
+		wp_cache_add($term->term_taxonomy_id, $term->term_id, "$taxonomy:tt_id" );
 
 		$term = $this->sanitize_term($term, $taxonomy, $filter);
 
@@ -1770,16 +1775,20 @@ class WP_Taxonomy {
 		$taxonomies = array();
 		// If no taxonomy, assume tt_ids.
 		if ( empty($taxonomy) ) {
-			$tt_ids = implode(', ', $ids);
-			$terms = $this->db->get_results("SELECT term_id, taxonomy FROM {$this->db->term_taxonomy} WHERE term_taxonomy_id IN ($tt_ids)");
+			$tt_ids = implode( ',', array_map( 'intval', $ids ) );
+			$terms = $this->db->get_results("SELECT term_id, term_taxonomy_id, taxonomy FROM {$this->db->term_taxonomy} WHERE term_taxonomy_id IN ($tt_ids)");
 			foreach ( (array) $terms as $term ) {
 				$taxonomies[] = $term->taxonomy;
 				wp_cache_delete($term->term_id, $term->taxonomy);
+				wp_cache_delete($term->term_taxonomy_id, "{$term->taxonomy}:tt_id");
 			}
 			$taxonomies = array_unique($taxonomies);
 		} else {
-			foreach ( $ids as $id ) {
-				wp_cache_delete($id, $taxonomy);
+			$tt_ids = implode( ',', array_map( 'intval', $ids ) );
+			$terms = $this->db->get_results("SELECT term_id, term_taxonomy_id FROM {$this->db->term_taxonomy} WHERE term_id IN ($tt_ids)");
+			foreach ( (array) $terms as $term ) {
+				wp_cache_delete($term->term_id, $taxonomy);
+				wp_cache_delete($term->term_taxonomy_id, "$taxonomy:tt_id");
 			}
 			$taxonomies = array($taxonomy);
 		}
@@ -1902,6 +1911,7 @@ class WP_Taxonomy {
 				$term_taxonomy = $term->taxonomy;
 
 			wp_cache_add($term->term_id, $term, $term_taxonomy);
+			wp_cache_add($term->term_taxonomy_id, $term->term_id, "$term_taxonomy:tt_id");
 		}
 	}
 

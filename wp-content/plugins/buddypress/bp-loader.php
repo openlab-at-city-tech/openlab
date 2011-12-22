@@ -1,102 +1,136 @@
 <?php
-/*
-Plugin Name: BuddyPress
-Plugin URI: http://buddypress.org
-Description: Social networking in a box. Build a social network for your company, school, sports team or niche community all based on the power and flexibility of WordPress.
-Author: The BuddyPress Community
-Version: 1.2.8
-Author URI: http://buddypress.org/community/members/
-Network: true
-*/
-
-define( 'BP_VERSION', '1.2.8' );
-
-/***
- * This file will load in each BuddyPress component based on which
- * of the components have been activated on the "BuddyPress" admin menu.
- */
-
-require_once( WP_PLUGIN_DIR . '/buddypress/bp-core.php' );
-$bp_deactivated = apply_filters( 'bp_deactivated_components', get_site_option( 'bp-deactivated-components' ) );
-
-do_action( 'bp_core_loaded' );
-
-/* Activity Streams */
-if ( !isset( $bp_deactivated['bp-activity.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-activity.php') )
-	include( BP_PLUGIN_DIR . '/bp-activity.php' );
-
-/* Blog Tracking */
-if ( !isset( $bp_deactivated['bp-blogs.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-blogs.php') )
-	include( BP_PLUGIN_DIR . '/bp-blogs.php' );
-
-/* bbPress Forum Integration */
-if ( !isset( $bp_deactivated['bp-forums.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-forums.php') )
-	include( BP_PLUGIN_DIR . '/bp-forums.php' );
-
-/* Friend Connections */
-if ( !isset( $bp_deactivated['bp-friends.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-friends.php') )
-	include( BP_PLUGIN_DIR . '/bp-friends.php' );
-
-/* Groups Support */
-if ( !isset( $bp_deactivated['bp-groups.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-groups.php') )
-	include( BP_PLUGIN_DIR . '/bp-groups.php' );
-
-/* Private Messaging */
-if ( !isset( $bp_deactivated['bp-messages.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-messages.php') )
-	include( BP_PLUGIN_DIR . '/bp-messages.php' );
-
-/* Extended Profiles */
-if ( !isset( $bp_deactivated['bp-xprofile.php'] ) && file_exists( BP_PLUGIN_DIR . '/bp-xprofile.php') )
-	include( BP_PLUGIN_DIR . '/bp-xprofile.php' );
-
 /**
- * bp_loaded()
- * 
- * Allow dependent plugins and core actions to attach themselves in a safe way.
- *
- * See bp-core.php for the following core actions:
- *	- bp_init|bp_setup_globals|bp_setup_root_components|bp_setup_nav|bp_register_widgets
+ * Plugin Name: BuddyPress
+ * Plugin URI:  http://buddypress.org
+ * Description: Social networking in a box. Build a social network for your company, school, sports team or niche community all based on the power and flexibility of WordPress.
+ * Author:      The BuddyPress Community
+ * Version:     1.5.2
+ * Author URI:  http://buddypress.org/community/members/
+ * Network:     true
  */
-function bp_loaded() {
-	do_action( 'bp_loaded' );
-}
-add_action( 'plugins_loaded', 'bp_loaded', 20 );
 
-/* Activation Function */
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
+/** Constants *****************************************************************/
+global $wpdb;
+
+// Define the BuddyPress version
+if ( !defined( 'BP_VERSION' ) )
+	define( 'BP_VERSION', '1.5.2' );
+
+// Define the database version
+if ( !defined( 'BP_DB_VERSION' ) )
+	define( 'BP_DB_VERSION', 3820 );
+
+// Place your custom code (actions/filters) in a file called
+// '/plugins/bp-custom.php' and it will be loaded before anything else.
+if ( file_exists( WP_PLUGIN_DIR . '/bp-custom.php' ) )
+	require( WP_PLUGIN_DIR . '/bp-custom.php' );
+
+// Define on which blog ID BuddyPress should run
+if ( !defined( 'BP_ROOT_BLOG' ) ) {
+
+	// Root blog is the main site on this network
+	if ( is_multisite() && !defined( 'BP_ENABLE_MULTIBLOG' ) ) {
+		$current_site = get_current_site();
+		$root_blog_id = $current_site->blog_id;
+
+	// Root blog is every site on this network
+	} elseif ( is_multisite() && defined( 'BP_ENABLE_MULTIBLOG' ) ) {
+		$root_blog_id = get_current_blog_id();
+
+	// Root blog is the only blog on this network
+	} elseif( !is_multisite() ) {
+		$root_blog_id = 1;
+	}
+
+	define( 'BP_ROOT_BLOG', $root_blog_id );
+}
+
+// Path and URL
+if ( !defined( 'BP_PLUGIN_DIR' ) )
+	define( 'BP_PLUGIN_DIR', WP_PLUGIN_DIR . '/buddypress' );
+
+if ( !defined( 'BP_PLUGIN_URL' ) )
+	define( 'BP_PLUGIN_URL', plugins_url( 'buddypress' ) );
+
+// The search slug has to be defined nice and early because of the way search requests are loaded
+if ( !defined( 'BP_SEARCH_SLUG' ) )
+	define( 'BP_SEARCH_SLUG', 'search' );
+
+// Setup the BuddyPress theme directory
+register_theme_directory( BP_PLUGIN_DIR . '/bp-themes' );
+
+/** Loader ********************************************************************/
+
+// Load the WP abstraction file so BuddyPress can run on all WordPress setups.
+require( BP_PLUGIN_DIR . '/bp-core/bp-core-wpabstraction.php' );
+
+// Test to see whether this is a new installation or an upgraded version of BuddyPress
+if ( !$bp->database_version = get_site_option( 'bp-db-version' ) ) {
+	if ( $bp->database_version = get_option( 'bp-db-version' ) ) {
+		$bp->is_network_activate = 1;
+	} else {
+		$bp->database_version = get_site_option( 'bp-core-db-version' );  // BP 1.2 option
+	}
+}
+
+// This is a new installation.
+if ( empty( $bp->database_version ) ) {
+	$bp->maintenance_mode = 'install';
+	require( BP_PLUGIN_DIR . '/bp-core/admin/bp-core-update.php' );
+
+// There is a previous installation
+} else {
+	// Load core
+	require( BP_PLUGIN_DIR . '/bp-core/bp-core-loader.php' );
+
+	// Check if an update is required
+	if ( (int)$bp->database_version < (int)constant( 'BP_DB_VERSION' ) || isset( $bp->is_network_activate ) ) {
+		$bp->maintenance_mode = 'update';
+		require( BP_PLUGIN_DIR . '/bp-core/admin/bp-core-update.php' );
+	}
+}
+
+/** Activation ****************************************************************/
+
+if ( !function_exists( 'bp_loader_activate' ) ) :
+/**
+ * Defines BP's activation routine.
+ *
+ * Most of BP's crucial setup is handled by the setup wizard. This function takes care of some
+ * issues with incompatible legacy themes, and provides a hook for other functions to know that
+ * BP has been activated.
+ *
+ * @package BuddyPress Core
+*/
 function bp_loader_activate() {
-	/* Force refresh theme roots. */
+	// Force refresh theme roots.
 	delete_site_transient( 'theme_roots' );
 
-	/* Switch the user to the new bp-default if they are using the old bp-default on activation. */
-	if ( 'bp-sn-parent' == get_blog_option( BP_ROOT_BLOG, 'template' ) && 'bp-default' == get_blog_option( BP_ROOT_BLOG, 'stylesheet' ) )
-		switch_theme( 'bp-default', 'bp-default' );
+	if ( !function_exists( 'get_blog_option' ) )
+		require ( WP_PLUGIN_DIR . '/buddypress/bp-core/bp-core-wpabstraction.php' );
 
-	/* Install site options on activation */
-	bp_core_activate_site_options( array( 'bp-disable-account-deletion' => 0, 'bp-disable-avatar-uploads' => 0, 'bp-disable-blogforum-comments' => 0,  'bp-disable-forum-directory' => 0,  'bp-disable-profile-sync' => 0 ) );
+	if ( !function_exists( 'bp_get_root_blog_id' ) )
+		require ( WP_PLUGIN_DIR . '/buddypress/bp-core/bp-core-functions.php' );
+
+	// Switch the user to the new bp-default if they are using the old
+	// bp-default on activation.
+	if ( 'bp-sn-parent' == get_blog_option( bp_get_root_blog_id(), 'template' ) && 'bp-default' == get_blog_option( bp_get_root_blog_id(), 'stylesheet' ) )
+		switch_theme( 'bp-default', 'bp-default' );
 
 	do_action( 'bp_loader_activate' );
 }
 register_activation_hook( 'buddypress/bp-loader.php', 'bp_loader_activate' );
+endif;
 
-
-
-/* Deactivation Function */
+if ( !function_exists( 'bp_loader_deactivate' ) ) :
+// Deactivation Function
 function bp_loader_deactivate() {
-	if ( !function_exists( 'delete_site_option') )
-		return false;
-
-	delete_site_option( 'bp-core-db-version' );
-	delete_site_option( 'bp-activity-db-version' );
-	delete_site_option( 'bp-blogs-db-version' );
-	delete_site_option( 'bp-friends-db-version' );
-	delete_site_option( 'bp-groups-db-version' );
-	delete_site_option( 'bp-messages-db-version' );
-	delete_site_option( 'bp-xprofile-db-version' );
-	delete_site_option( 'bp-deactivated-components' );
-	delete_site_option( 'bp-blogs-first-install' );
-
 	do_action( 'bp_loader_deactivate' );
 }
 register_deactivation_hook( 'buddypress/bp-loader.php', 'bp_loader_deactivate' );
+endif;
 
 ?>

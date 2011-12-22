@@ -1,5 +1,5 @@
 <?php
-// Last sync [WP11537]
+// Last sync [WP13425]
 
 /*~ class.smtp.php
 .---------------------------------------------------------------------------.
@@ -267,7 +267,7 @@ class SMTP
    * finializing the mail transaction. $msg_data is the message
    * that is to be send with the headers. Each header needs to be
    * on a single line followed by a <CRLF> with the message headers
-   * and the message body being seperated by and additional <CRLF>.
+   * and the message body being separated by and additional <CRLF>.
    *
    * Implements rfc 821: DATA <CRLF>
    *

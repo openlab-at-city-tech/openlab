@@ -1,4 +1,4 @@
-<?php get_header() ?>
+<?php get_header( 'buddypress' ) ?>
 
 	<div id="content">
 		<div class="padder">
@@ -11,7 +11,7 @@
 			</div><!-- #item-header -->
 
 			<div id="item-nav">
-				<div class="item-list-tabs no-ajax" id="object-nav">
+				<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
 					<ul>
 						<?php bp_get_options_nav() ?>
 
@@ -29,13 +29,13 @@
 				<?php do_action( 'bp_after_group_body' ) ?>
 			</div><!-- #item-body -->
 
-			<?php endwhile; endif; ?>
-
 			<?php do_action( 'bp_after_group_plugin_template' ) ?>
+
+			<?php endwhile; endif; ?>
 
 		</div><!-- .padder -->
 	</div><!-- #content -->
 
-	<?php locate_template( array( 'sidebar.php' ), true ) ?>
+	<?php get_sidebar( 'buddypress' ) ?>
 
-<?php get_footer() ?>
+<?php get_footer( 'buddypress' ) ?>

@@ -73,7 +73,7 @@ function get_latest_topics( $args = null ) {
 	extract( $args, EXTR_SKIP );
 
 	if ( $exclude ) {
-		$exclude = '-' . str_replace(',', '-,', $exclude);
+		$exclude = '-' . str_replace(',', ',-', $exclude);
 		$exclude = str_replace('--', '-', $exclude);
 		if ( $forum )
 			$forum = (string) $forum . ",$exclude";
@@ -176,16 +176,20 @@ function bb_insert_topic( $args = null ) {
 	$forum_id = (int) $forum->forum_id;
 
 	if ( !$user = bb_get_user( $topic_poster ) )
-		if ( !$user = bb_get_user( $topic_poster_name, array( 'by' => 'login' ) ) )
-			return false;
-	$topic_poster = $user->ID;
-	$topic_poster_name = $user->user_login;
+		$user = bb_get_user( $topic_poster_name, array( 'by' => 'login' ) );
+
+	if ( !empty( $user ) ) {
+		$topic_poster      = $user->ID;
+		$topic_poster_name = $user->user_login;
+	}
 
 	if ( !$last_user = bb_get_user( $topic_last_poster ) )
-		if ( !$last_user = bb_get_user( $topic_last_poster_name, array( 'by' => 'login' ) ) )
-			return false;
-	$topic_last_poster = $last_user->ID;
-	$topic_last_poster_name = $last_user->user_login;
+		$last_user = bb_get_user( $topic_last_poster_name, array( 'by' => 'login' ) );
+
+	if ( !empty( $last_user ) ) {
+		$topic_last_poster      = $last_user->ID;
+		$topic_last_poster_name = $last_user->user_login;
+	}
 
 	if ( in_array( 'topic_title', $fields ) ) {
 		$topic_title = apply_filters( 'pre_topic_title', $topic_title, $topic_id );
@@ -234,11 +238,11 @@ function bb_insert_topic( $args = null ) {
 }
 
 // Deprecated: expects $title to be pre-escaped
-function bb_new_topic( $title, $forum, $tags = '' ) {
+function bb_new_topic( $title, $forum, $tags = '', $args = '' ) {
 	$title = stripslashes( $title );
 	$tags  = stripslashes( $tags );
 	$forum = (int) $forum;
-	return bb_insert_topic( array( 'topic_title' => $title, 'forum_id' => $forum, 'tags' => $tags ) );
+	return bb_insert_topic( wp_parse_args( $args ) + array( 'topic_title' => $title, 'forum_id' => $forum, 'tags' => $tags ) );
 }
 
 // Deprecated: expects $title to be pre-escaped
@@ -257,23 +261,26 @@ function bb_delete_topic( $topic_id, $new_status = 0 ) {
 		if ( $new_status == $old_status )
 			return;
 
+		$thread_args = array( 'per_page' => -1, 'order' => 'DESC' );
 		if ( 0 != $old_status && 0 == $new_status )
-			add_filter('get_thread_where', 'bb_no_where');
+			$thread_args['post_status'] = 'all';
 		$poster_ids = array();
-		$posts = get_thread( $topic_id, array( 'per_page' => -1, 'order' => 'DESC' ) );
+		$posts = get_thread( $topic_id, $thread_args );
 		if ( $posts && count( $posts ) ) {
 			foreach ( $posts as $post ) {
 				_bb_delete_post( $post->post_id, $new_status );
 				$poster_ids[] = $post->poster_id;
 			}
 		}
-		if ( 0 != $old_status && 0 == $new_status )
-			remove_filter('get_thread_where', 'bb_no_where');
 
-		if ( count( $poster_ids ) )
-			foreach ( array_unique( $poster_ids ) as $id )
-				if ( $user = bb_get_user( $id ) )
-					bb_update_usermeta( $user->ID, $bbdb->prefix . 'topics_replied', ( $old_status ? $user->topics_replied + 1 : $user->topics_replied - 1 ) );
+		if ( count( $poster_ids ) ) {
+			foreach ( array_unique( $poster_ids ) as $id ) {
+				if ( $user = bb_get_user( $id ) ) {
+					$topics_replied_key = $bbdb->prefix . 'topics_replied';
+					bb_update_usermeta( $user->ID, $topics_replied_key, ( $old_status ? $user->$topics_replied_key + 1 : $user->$topics_replied_key - 1 ) );
+				}
+			}
+		}
 
 		if ( $ids = $bbdb->get_col( "SELECT user_id, meta_value FROM $bbdb->usermeta WHERE meta_key = 'favorites' and FIND_IN_SET('$topic_id', meta_value) > 0" ) )
 			foreach ( $ids as $id )

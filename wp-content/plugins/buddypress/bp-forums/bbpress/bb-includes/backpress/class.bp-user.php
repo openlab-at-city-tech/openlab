@@ -184,7 +184,7 @@ class BP_User {
 		//Build $allcaps from role caps, overlay user's $caps
 		$this->allcaps = array();
 		foreach ( (array) $this->roles as $role ) {
-			$role =& $wp_roles->get_role( $role );
+			$role = $wp_roles->get_role( $role );
 			$this->allcaps = array_merge( (array) $this->allcaps, (array) $role->capabilities );
 		}
 		$this->allcaps = array_merge( (array) $this->allcaps, (array) $this->caps );

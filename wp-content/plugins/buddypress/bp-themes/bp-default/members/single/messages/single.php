@@ -1,4 +1,4 @@
-<div id="message-thread">
+<div id="message-thread" role="main">
 
 	<?php do_action( 'bp_before_message_thread_content' ) ?>
 
@@ -8,15 +8,27 @@
 
 		<p id="message-recipients">
 			<span class="highlight">
-				<?php printf( __('Sent between %s and %s', 'buddypress'), bp_get_the_thread_recipients(), '<a href="' . bp_get_loggedin_user_link() . '" title="' . bp_get_loggedin_user_fullname() . '">' . bp_get_loggedin_user_fullname() . '</a>' ) ?>
+
+				<?php if ( !bp_get_the_thread_recipients() ) : ?>
+
+					<?php _e( 'You are alone in this conversation.', 'buddypress' ); ?>
+
+				<?php else : ?>
+
+					<?php printf( __( 'Conversation between %s and you.', 'buddypress' ), bp_get_the_thread_recipients() ) ?>
+
+				<?php endif; ?>
+
 			</span>
+
+			<a class="button confirm" href="<?php bp_the_thread_delete_link() ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>"><?php _e( 'Delete', 'buddypress' ) ?></a> &nbsp;
 		</p>
 
 		<?php do_action( 'bp_before_message_thread_list' ) ?>
 
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>
 
-			<div class="message-box">
+			<div class="message-box <?php bp_the_thread_message_alt_class(); ?>">
 
 				<div class="message-metadata">
 
@@ -76,11 +88,11 @@
 					<?php do_action( 'bp_after_message_reply_box' ) ?>
 
 					<div class="submit">
-						<input type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?> &rarr;" id="send_reply_button"/>
-						<span class="ajax-loader"></span>
+						<input type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?>" id="send_reply_button"/>
 					</div>
 
 					<input type="hidden" id="thread_id" name="thread_id" value="<?php bp_the_thread_id(); ?>" />
+					<input type="hidden" id="messages_order" name="messages_order" value="<?php bp_thread_messages_order(); ?>" />
 					<?php wp_nonce_field( 'messages_send_message', 'send_message_nonce' ) ?>
 
 				</div><!-- .message-content -->

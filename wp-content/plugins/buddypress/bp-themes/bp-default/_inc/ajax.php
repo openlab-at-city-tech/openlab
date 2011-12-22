@@ -4,9 +4,6 @@
  *
  * All of these functions enhance the responsiveness of the user interface in the default
  * theme by adding AJAX functionality.
- *
- * By default your child theme will inherit this AJAX functionality. You can however create
- * your own _inc/ajax.php file and add/remove AJAX functionality as you see fit.
  */
 
 /***
@@ -53,46 +50,85 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 	if ( !empty( $_POST['page'] ) && '-1' != $_POST['page'] )
 		$qs[] = 'page=' . $_POST['page'];
 
-	if ( !empty( $_POST['search_terms'] ) && __( 'Search anything...', 'buddypress' ) != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
+	$object_search_text = bp_get_search_default_text( $object );
+ 	if ( !empty( $_POST['search_terms'] ) && $object_search_text != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
 		$qs[] = 'search_terms=' . $_POST['search_terms'];
 
 	/* Now pass the querystring to override default values. */
 	$query_string = empty( $qs ) ? '' : join( '&', (array)$qs );
 
-	return apply_filters( 'bp_dtheme_ajax_querystring', $query_string, $object, $_BP_COOKIE['bp-' . $object . '-filter'], $_BP_COOKIE['bp-' . $object . '-scope'], $_BP_COOKIE['bp-' . $object . '-page'], $_BP_COOKIE['bp-' . $object . '-search-terms'], $_BP_COOKIE['bp-' . $object . '-extras'] );
+	$object_filter = '';
+	if ( isset( $_BP_COOKIE['bp-' . $object . '-filter'] ) )
+		$object_filter = $_BP_COOKIE['bp-' . $object . '-filter'];
+
+	$object_scope = '';
+	if ( isset( $_BP_COOKIE['bp-' . $object . '-scope'] ) )
+		$object_scope = $_BP_COOKIE['bp-' . $object . '-scope'];
+
+	$object_page = '';
+	if ( isset( $_BP_COOKIE['bp-' . $object . '-page'] ) )
+		$object_page = $_BP_COOKIE['bp-' . $object . '-page'];
+
+	$object_search_terms = '';
+	if ( isset( $_BP_COOKIE['bp-' . $object . '-search-terms'] ) )
+		$object_search_terms = $_BP_COOKIE['bp-' . $object . '-search-terms'];
+
+	$object_extras = '';
+	if ( isset( $_BP_COOKIE['bp-' . $object . '-extras'] ) )
+		$object_extras = $_BP_COOKIE['bp-' . $object . '-extras'];
+
+	return apply_filters( 'bp_dtheme_ajax_querystring', $query_string, $object, $object_filter, $object_scope, $object_page, $object_search_terms, $object_extras );
 }
 add_filter( 'bp_ajax_querystring', 'bp_dtheme_ajax_querystring', 10, 2 );
 
 /* This function will simply load the template loop for the current object. On an AJAX request */
 function bp_dtheme_object_template_loader() {
+
+ 	/**
+	 * AJAX requests happen too early to be seen by bp_update_is_directory()
+	 * so we do it manually here to ensure templates load with the correct
+	 * context. Without this check, templates will load the 'single' version
+	 * of themselves rather than the directory version.
+	 */
+	if ( !bp_current_action() )
+		bp_update_is_directory( true, bp_current_component() );
+
+	// Sanitize the post object
 	$object = esc_attr( $_POST['object'] );
+
+	// Locate the object template
 	locate_template( array( "$object/$object-loop.php" ), true );
 }
 add_action( 'wp_ajax_members_filter', 'bp_dtheme_object_template_loader' );
-add_action( 'wp_ajax_groups_filter', 'bp_dtheme_object_template_loader' );
-add_action( 'wp_ajax_blogs_filter', 'bp_dtheme_object_template_loader' );
-add_action( 'wp_ajax_forums_filter', 'bp_dtheme_object_template_loader' );
+add_action( 'wp_ajax_groups_filter',  'bp_dtheme_object_template_loader' );
+add_action( 'wp_ajax_blogs_filter',   'bp_dtheme_object_template_loader' );
+add_action( 'wp_ajax_forums_filter',  'bp_dtheme_object_template_loader' );
 
-/* This function will load the activity loop template when activity is requested via AJAX */
+// This function will load the activity loop template when activity is requested via AJAX
 function bp_dtheme_activity_template_loader() {
 	global $bp;
 
-	/* We need to calculate and return the feed URL for each scope */
-	$feed_url = site_url( BP_ACTIVITY_SLUG . '/feed/' );
+	$scope = '';
+	if ( !empty( $_POST['scope'] ) )
+		$scope = $_POST['scope'];
 
-	switch ( $_POST['scope'] ) {
+	// We need to calculate and return the feed URL for each scope
+	switch ( $scope ) {
 		case 'friends':
-			$feed_url = $bp->loggedin_user->domain . BP_ACTIVITY_SLUG . '/friends/feed/';
+			$feed_url = $bp->loggedin_user->domain . bp_get_activity_slug() . '/friends/feed/';
 			break;
 		case 'groups':
-			$feed_url = $bp->loggedin_user->domain . BP_ACTIVITY_SLUG . '/groups/feed/';
+			$feed_url = $bp->loggedin_user->domain . bp_get_activity_slug() . '/groups/feed/';
 			break;
 		case 'favorites':
-			$feed_url = $bp->loggedin_user->domain . BP_ACTIVITY_SLUG . '/favorites/feed/';
+			$feed_url = $bp->loggedin_user->domain . bp_get_activity_slug() . '/favorites/feed/';
 			break;
 		case 'mentions':
-			$feed_url = $bp->loggedin_user->domain . BP_ACTIVITY_SLUG . '/mentions/feed/';
-			delete_usermeta( $bp->loggedin_user->id, 'bp_new_mention_count' );
+			$feed_url = $bp->loggedin_user->domain . bp_get_activity_slug() . '/mentions/feed/';
+			bp_activity_clear_new_mentions( $bp->loggedin_user->id );
+			break;
+		default:
+			$feed_url = home_url( bp_get_activity_root_slug() . '/feed/' );
 			break;
 	}
 
@@ -100,7 +136,7 @@ function bp_dtheme_activity_template_loader() {
 	ob_start();
 	locate_template( array( 'activity/activity-loop.php' ), true );
 	$result['contents'] = ob_get_contents();
-	$result['feed_url'] = apply_filters( 'bp_dtheme_activity_feed_url', $feed_url, $_POST['scope'] );
+	$result['feed_url'] = apply_filters( 'bp_dtheme_activity_feed_url', $feed_url, $scope );
 	ob_end_clean();
 
 	echo json_encode( $result );
@@ -112,7 +148,7 @@ add_action( 'wp_ajax_activity_get_older_updates', 'bp_dtheme_activity_template_l
 function bp_dtheme_post_update() {
 	global $bp;
 
-	/* Check the nonce */
+	// Check the nonce
 	check_admin_referer( 'post_update', '_wpnonce_post_update' );
 
 	if ( !is_user_logged_in() ) {
@@ -125,15 +161,19 @@ function bp_dtheme_post_update() {
 		return false;
 	}
 
-	if ( empty( $_POST['object'] ) && function_exists( 'bp_activity_post_update' ) ) {
+	$activity_id = 0;
+	if ( empty( $_POST['object'] ) && bp_is_active( 'activity' ) ) {
 		$activity_id = bp_activity_post_update( array( 'content' => $_POST['content'] ) );
-	} elseif ( $_POST['object'] == 'groups' ) {
-		if ( !empty( $_POST['item_id'] ) && function_exists( 'groups_post_update' ) )
-			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $_POST['item_id'] ) );
-	} else
-		$activity_id = apply_filters( 'bp_activity_custom_update', $_POST['object'], $_POST['item_id'], $_POST['content'] );
 
-	if ( !$activity_id ) {
+	} elseif ( $_POST['object'] == 'groups' ) {
+		if ( !empty( $_POST['item_id'] ) && bp_is_active( 'groups' ) )
+			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $_POST['item_id'] ) );
+
+	} else {
+		$activity_id = apply_filters( 'bp_activity_custom_update', $_POST['object'], $_POST['item_id'], $_POST['content'] );
+	}
+
+	if ( empty( $activity_id ) ) {
 		echo '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update, please try again.', 'buddypress' ) . '</p></div>';
 		return false;
 	}
@@ -150,7 +190,7 @@ add_action( 'wp_ajax_post_update', 'bp_dtheme_post_update' );
 function bp_dtheme_new_activity_comment() {
 	global $bp;
 
-	/* Check the nonce */
+	// Check the nonce
 	check_admin_referer( 'new_activity_comment', '_wpnonce_new_activity_comment' );
 
 	if ( !is_user_logged_in() ) {
@@ -169,35 +209,37 @@ function bp_dtheme_new_activity_comment() {
 	}
 
 	$comment_id = bp_activity_new_comment( array(
-		'content' => $_POST['content'],
 		'activity_id' => $_POST['form_id'],
-		'parent_id' => $_POST['comment_id']
-	));
+		'content'     => $_POST['content'],
+		'parent_id'   => $_POST['comment_id']
+	) );
 
 	if ( !$comment_id ) {
 		echo '-1<div id="message" class="error"><p>' . __( 'There was an error posting that reply, please try again.', 'buddypress' ) . '</p></div>';
 		return false;
 	}
 
-	if ( bp_has_activities ( 'include=' . $comment_id ) ) : ?>
-		<?php while ( bp_activities() ) : bp_the_activity(); ?>
-			<li id="acomment-<?php bp_activity_id() ?>">
-				<div class="acomment-avatar">
-					<?php bp_activity_avatar() ?>
-				</div>
+	global $activities_template;
 
-				<div class="acomment-meta">
-					<?php echo bp_core_get_userlink( bp_get_activity_user_id() ) ?> &middot; <?php printf( __( '%s ago', 'buddypress' ), bp_core_time_since( bp_core_current_time() ) ) ?> &middot;
-					<a class="acomment-reply" href="#acomment-<?php bp_activity_id() ?>" id="acomment-reply-<?php echo esc_attr( $_POST['form_id'] ) ?>"><?php _e( 'Reply', 'buddypress' ) ?></a>
-					 &middot; <a href="<?php echo wp_nonce_url( $bp->root_domain . '/' . $bp->activity->slug . '/delete/' . bp_get_activity_id() . '?cid=' . $comment_id, 'bp_activity_delete_link' ) ?>" class="delete acomment-delete confirm"><?php _e( 'Delete', 'buddypress' ) ?></a>
-				</div>
+	// Load the new activity item into the $activities_template global
+	bp_has_activities( 'display_comments=stream&include=' . $comment_id );
 
-				<div class="acomment-content">
-					<?php bp_activity_content_body() ?>
-				</div>
-			</li>
-		<?php endwhile; ?>
-	 <?php endif;
+	// Swap the current comment with the activity item we just loaded
+	$activities_template->activity->id              = $activities_template->activities[0]->item_id;
+	$activities_template->activity->current_comment = $activities_template->activities[0];
+
+	$template = locate_template( 'activity/comment.php', false, false );
+
+	// Backward compatibility. In older versions of BP, the markup was
+	// generated in the PHP instead of a template. This ensures that
+	// older themes (which are not children of bp-default and won't
+	// have the new template) will still work.
+	if ( empty( $template ) )
+		$template = BP_PLUGIN_DIR . '/bp-themes/bp-default/activity/comment.php';
+
+	load_template( $template, false );
+
+	unset( $activities_template );
 }
 add_action( 'wp_ajax_new_activity_comment', 'bp_dtheme_new_activity_comment' );
 
@@ -205,7 +247,7 @@ add_action( 'wp_ajax_new_activity_comment', 'bp_dtheme_new_activity_comment' );
 function bp_dtheme_delete_activity() {
 	global $bp;
 
-	/* Check the nonce */
+	// Check the nonce
 	check_admin_referer( 'bp_activity_delete_link' );
 
 	if ( !is_user_logged_in() ) {
@@ -213,22 +255,28 @@ function bp_dtheme_delete_activity() {
 		return false;
 	}
 
-	$activity = new BP_Activity_Activity( $_POST['id'] );
-
-	/* Check access */
-	if ( !is_super_admin() && $activity->user_id != $bp->loggedin_user->id )
+	if ( empty( $_POST['id'] ) || !is_numeric( $_POST['id'] ) ) {
+		echo '-1';
 		return false;
+	}
 
-	if ( empty( $_POST['id'] ) || !is_numeric( $_POST['id'] ) )
+	$activity = new BP_Activity_Activity( (int) $_POST['id'] );
+
+	// Check access
+	if ( empty( $activity->user_id ) || !bp_activity_user_can_delete( $activity ) ) {
+		echo '-1';
 		return false;
+	}
 
-	/* Call the action before the delete so plugins can still fetch information about it */
-	do_action( 'bp_activity_action_delete_activity', $_POST['id'], $activity->user_id );
+	// Call the action before the delete so plugins can still fetch information about it
+	do_action( 'bp_activity_before_action_delete_activity', $activity->id, $activity->user_id );
 
-	if ( !bp_activity_delete( array( 'id' => $_POST['id'], 'user_id' => $activity->user_id ) ) ) {
+	if ( !bp_activity_delete( array( 'id' => $activity->id, 'user_id' => $activity->user_id ) ) ) {
 		echo '-1<div id="message" class="error"><p>' . __( 'There was a problem when deleting. Please try again.', 'buddypress' ) . '</p></div>';
 		return false;
 	}
+
+	do_action( 'bp_activity_action_delete_activity', $activity->id, $activity->user_id );
 
 	return true;
 }
@@ -256,12 +304,14 @@ function bp_dtheme_delete_activity_comment() {
 		return false;
 
 	/* Call the action before the delete so plugins can still fetch information about it */
-	do_action( 'bp_activity_action_delete_activity', $_POST['id'], $comment->user_id );
+	do_action( 'bp_activity_before_action_delete_activity', $_POST['id'], $comment->user_id );
 
 	if ( !bp_activity_delete_comment( $comment->item_id, $comment->id ) ) {
 		echo '-1<div id="message" class="error"><p>' . __( 'There was a problem when deleting. Please try again.', 'buddypress' ) . '</p></div>';
 		return false;
 	}
+
+	do_action( 'bp_activity_action_delete_activity', $_POST['id'], $comment->user_id );
 
 	return true;
 }
@@ -285,6 +335,34 @@ function bp_dtheme_unmark_activity_favorite() {
 }
 add_action( 'wp_ajax_activity_mark_unfav', 'bp_dtheme_unmark_activity_favorite' );
 
+/**
+ * AJAX handler for Read More link on long activity items
+ *
+ * @package BuddyPress
+ * @since 1.5
+ */
+function bp_dtheme_get_single_activity_content() {
+	$activity_array = bp_activity_get_specific( array(
+		'activity_ids'     => $_POST['activity_id'],
+		'display_comments' => 'stream'
+	) );
+
+	$activity = !empty( $activity_array['activities'][0] ) ? $activity_array['activities'][0] : false;
+
+	if ( !$activity )
+		exit(); // todo: error?
+
+	do_action_ref_array( 'bp_dtheme_get_single_activity_content', array( &$activity ) );
+
+	// Activity content retrieved through AJAX should run through normal filters, but not be truncated
+	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+	$content = apply_filters( 'bp_get_activity_content_body', $activity->content );
+
+	echo $content;
+	exit();
+}
+add_action( 'wp_ajax_get_single_activity_content', 'bp_dtheme_get_single_activity_content' );
+
 /* AJAX invite a friend to a group functionality */
 function bp_dtheme_ajax_invite_user() {
 	global $bp;
@@ -294,7 +372,7 @@ function bp_dtheme_ajax_invite_user() {
 	if ( !$_POST['friend_id'] || !$_POST['friend_action'] || !$_POST['group_id'] )
 		return false;
 
-	if ( !groups_is_user_admin( $bp->loggedin_user->id, $_POST['group_id'] ) )
+	if ( !bp_groups_user_can_send_invites( $_POST['group_id'] ) )
 		return false;
 
 	if ( !friends_check_friendship( $bp->loggedin_user->id, $_POST['friend_id'] ) )
@@ -312,7 +390,7 @@ function bp_dtheme_ajax_invite_user() {
 		echo '<h4>' . $user->user_link . '</h4>';
 		echo '<span class="activity">' . esc_attr( $user->last_active ) . '</span>';
 		echo '<div class="action">
-				<a class="remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . $bp->groups->slug . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
+				<a class="button remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . bp_get_groups_slug() . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
 			  </div>';
 		echo '</li>';
 
@@ -340,7 +418,7 @@ function bp_dtheme_ajax_addremove_friend() {
 		if ( !friends_remove_friend( $bp->loggedin_user->id, $_POST['fid'] ) ) {
 			echo __("Friendship could not be canceled.", 'buddypress');
 		} else {
-			echo '<a id="friend-' . $_POST['fid'] . '" class="add" rel="add" title="' . __( 'Add Friend', 'buddypress' ) . '" href="' . wp_nonce_url( $bp->loggedin_user->domain . $bp->friends->slug . '/add-friend/' . $_POST['fid'], 'friends_add_friend' ) . '">' . __( 'Add Friend', 'buddypress' ) . '</a>';
+			echo '<a id="friend-' . $_POST['fid'] . '" class="add" rel="add" title="' . __( 'Add Friend', 'buddypress' ) . '" href="' . wp_nonce_url( $bp->loggedin_user->domain . bp_get_friends_slug() . '/add-friend/' . $_POST['fid'], 'friends_add_friend' ) . '">' . __( 'Add Friend', 'buddypress' ) . '</a>';
 		}
 
 	} else if ( 'not_friends' == BP_Friends_Friendship::check_is_friend( $bp->loggedin_user->id, $_POST['fid'] ) ) {
@@ -350,7 +428,7 @@ function bp_dtheme_ajax_addremove_friend() {
 		if ( !friends_add_friend( $bp->loggedin_user->id, $_POST['fid'] ) ) {
 			echo __("Friendship could not be requested.", 'buddypress');
 		} else {
-			echo '<a href="' . $bp->loggedin_user->domain . $bp->friends->slug . '" class="requested">' . __( 'Friendship Requested', 'buddypress' ) . '</a>';
+			echo '<a href="' . $bp->loggedin_user->domain . bp_get_friends_slug() . '/requests" class="requested">' . __( 'Friendship Requested', 'buddypress' ) . '</a>';
 		}
 	} else {
 		echo __( 'Request Pending', 'buddypress' );
@@ -390,9 +468,6 @@ function bp_dtheme_ajax_joinleave_group() {
 		return false;
 
 	if ( !$group = new BP_Groups_Group( $_POST['gid'], false, false ) )
-		return false;
-
-	if ( 'hidden' == $group->status )
 		return false;
 
 	if ( !groups_is_user_member( $bp->loggedin_user->id, $group->id ) ) {
@@ -442,11 +517,11 @@ function bp_dtheme_ajax_close_notice() {
 	if ( !isset( $_POST['notice_id'] ) ) {
 		echo "-1<div id='message' class='error'><p>" . __('There was a problem closing the notice.', 'buddypress') . '</p></div>';
 	} else {
-		$notice_ids = get_user_meta( $userdata->ID, 'closed_notices', true );
+		$notice_ids = bp_get_user_meta( $userdata->ID, 'closed_notices', true );
 
 		$notice_ids[] = (int) $_POST['notice_id'];
 
-		update_user_meta( $userdata->ID, 'closed_notices', $notice_ids );
+		bp_update_user_meta( $userdata->ID, 'closed_notices', $notice_ids );
 	}
 }
 add_action( 'wp_ajax_messages_close_notice', 'bp_dtheme_ajax_close_notice' );
@@ -465,7 +540,7 @@ function bp_dtheme_ajax_messages_send_reply() {
 				<?php do_action( 'bp_before_message_meta' ) ?>
 				<?php echo bp_loggedin_user_avatar( 'type=thumb&width=30&height=30' ); ?>
 
-				<strong><a href="<?php echo $bp->loggedin_user->domain ?>"><?php echo $bp->loggedin_user->fullname ?></a> <span class="activity"><?php printf( __( 'Sent %s ago', 'buddypress' ), bp_core_time_since( bp_core_current_time() ) ) ?></span></strong>
+				<strong><a href="<?php echo $bp->loggedin_user->domain ?>"><?php echo $bp->loggedin_user->fullname ?></a> <span class="activity"><?php printf( __( 'Sent %s', 'buddypress' ), bp_core_time_since( bp_core_current_time() ) ) ?></span></strong>
 
 				<?php do_action( 'bp_after_message_meta' ) ?>
 			</div>
@@ -496,7 +571,7 @@ function bp_dtheme_ajax_message_markunread() {
 	} else {
 		$thread_ids = explode( ',', $_POST['thread_ids'] );
 
-		for ( $i = 0; $i < count($thread_ids); $i++ ) {
+		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
 			BP_Messages_Thread::mark_as_unread($thread_ids[$i]);
 		}
 	}
@@ -512,7 +587,7 @@ function bp_dtheme_ajax_message_markread() {
 	} else {
 		$thread_ids = explode( ',', $_POST['thread_ids'] );
 
-		for ( $i = 0; $i < count($thread_ids); $i++ ) {
+		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
 			BP_Messages_Thread::mark_as_read($thread_ids[$i]);
 		}
 	}
@@ -528,31 +603,72 @@ function bp_dtheme_ajax_messages_delete() {
 	} else {
 		$thread_ids = explode( ',', $_POST['thread_ids'] );
 
-		for ( $i = 0; $i < count($thread_ids); $i++ )
+		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i )
 			BP_Messages_Thread::delete($thread_ids[$i]);
 
-		_e('Messages deleted.', 'buddypress');
+		_e( 'Messages deleted.', 'buddypress' );
 	}
 }
 add_action( 'wp_ajax_messages_delete', 'bp_dtheme_ajax_messages_delete' );
 
-/* AJAX autocomplete your friends names on the compose screen */
+/**
+ * bp_dtheme_ajax_messages_autocomplete_results()
+ *
+ * AJAX handler for autocomplete. Displays friends only, unless BP_MESSAGES_AUTOCOMPLETE_ALL is defined
+ *
+ * @global object object $bp Global BuddyPress settings object
+ * @return none
+ */
 function bp_dtheme_ajax_messages_autocomplete_results() {
 	global $bp;
 
-	$friends = false;
+	// Include everyone in the autocomplete, or just friends?
+	if ( $bp->messages->slug == $bp->current_component )
+		$autocomplete_all = $bp->messages->autocomplete_all;
 
-	// Get the friend ids based on the search terms
-	if ( function_exists( 'friends_search_friends' ) )
-		$friends = friends_search_friends( $_GET['q'], $bp->loggedin_user->id, $_GET['limit'], 1 );
+	$friends  = false;
+	$pag_page = 1;
 
-	$friends = apply_filters( 'bp_friends_autocomplete_list', $friends, $_GET['q'], $_GET['limit'] );
+	$limit = $_GET['limit'] ? $_GET['limit'] : apply_filters( 'bp_autocomplete_max_results', 10 );
 
-	if ( $friends['friends'] ) {
-		foreach ( (array)$friends['friends'] as $user_id ) {
-			$ud = get_userdata($user_id);
-			$username = $ud->user_login;
-			echo bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => 'thumb', 'width' => 15, 'height' => 15 ) ) . ' &nbsp;' . bp_core_get_user_displayname( $user_id ) . ' (' . $username . ')
+	// Get the user ids based on the search terms
+	if ( !empty( $autocomplete_all ) ) {
+		$users = BP_Core_User::search_users( $_GET['q'], $limit, $pag_page );
+
+		if ( !empty( $users['users'] ) ) {
+			// Build an array with the correct format
+			$user_ids = array();
+			foreach( $users['users'] as $user ) {
+				if ( $user->id != $bp->loggedin_user->id )
+					$user_ids[] = $user->id;
+			}
+
+			$user_ids = apply_filters( 'bp_core_autocomplete_ids', $user_ids, $_GET['q'], $limit );
+		}
+	} else {
+		if ( bp_is_active( 'friends' ) ) {
+			$users = friends_search_friends( $_GET['q'], $bp->loggedin_user->id, $limit, 1 );
+
+			// Keeping the bp_friends_autocomplete_list filter for backward compatibility
+			$users = apply_filters( 'bp_friends_autocomplete_list', $users, $_GET['q'], $limit );
+
+			if ( !empty( $users['friends'] ) )
+				$user_ids = apply_filters( 'bp_friends_autocomplete_ids', $users['friends'], $_GET['q'], $limit );
+		}
+	}
+
+	if ( !empty( $user_ids ) ) {
+		foreach ( $user_ids as $user_id ) {
+			$ud = get_userdata( $user_id );
+			if ( !$ud )
+				continue;
+
+			if ( bp_is_username_compatibility_mode() )
+				$username = $ud->user_login;
+			else
+				$username = $ud->user_nicename;
+
+			echo '<span id="link-' . $username . '" href="' . bp_core_get_user_domain( $user_id ) . '"></span>' . bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => 'thumb', 'width' => 15, 'height' => 15 ) ) . ' &nbsp;' . bp_core_get_user_displayname( $user_id ) . ' (' . $username . ')
 			';
 		}
 	}

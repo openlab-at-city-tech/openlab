@@ -1,5 +1,5 @@
 <?php
-// Last sync [WP11537]
+// Last sync [WP12206]
 
 /**
  * WordPress API for creating bbcode like tags or what WordPress calls
@@ -177,6 +177,7 @@ function get_shortcode_regex() {
 	$tagnames = array_keys($shortcode_tags);
 	$tagregexp = join( '|', array_map('preg_quote', $tagnames) );
 
+	// WARNING! Do not change this regex without changing do_shortcode_tag() and strip_shortcodes()
 	return '(.?)\[('.$tagregexp.')\b(.*?)(?:(\/))?\](?:(.+?)\[\/\2\])?(.?)';
 }
 
@@ -291,5 +292,5 @@ function strip_shortcodes( $content ) {
 
 	$pattern = get_shortcode_regex();
 
-	return preg_replace('/'.$pattern.'/s', '', $content);
+	return preg_replace('/'.$pattern.'/s', '$1$6', $content);
 }

@@ -3,7 +3,7 @@ bbTopicJS = jQuery.extend( {
 	topicId: '0',
 	favoritesLink: '',
 	isFav: 0,
-	confirmPostDelete: 'Are you sure you wanna delete this post?',
+	confirmPostDelete: 'Are you sure you want to delete this post?',
 	favLinkYes: 'favorites',
 	favLinkNo: '?',
 	favYes: 'This topic is one of your %favLinkYes% [%favDel%]',
@@ -30,7 +30,6 @@ jQuery( function($) {
 	var favoritesToggleSpan = favoritesToggle.children( 'span' )
 		[bbTopicJS.isFav ? 'addClass' : 'removeClass' ]( 'is-favorite' );
 	
-
 	function favLinkSetup() {
 		bbTopicJS.isFav = favoritesToggleSpan.is('.is-favorite');
 		var aLink = "<a href='" + bbTopicJS.favoritesLink + "'>";
@@ -56,5 +55,10 @@ jQuery( function($) {
 		return confirm( bbTopicJS[ $('#' + s.element).is('.deleted') ? 'confirmPostUnDelete' : 'confirmPostDelete'] );
 	};
 
-	$('#thread').addClass( 'list:post' ).wpList( { alt: 'alt', altOffset: 1, confirm: postConfirm } );
+	$('#thread').addClass( 'list:post' ).wpList( { alt: 'alt', altOffset: 1, confirm: postConfirm, delAfter: function( r, s ) {
+		try {
+			// If we deleted the only post, we got an WP AJAX Response object back with a URL to redirect to
+			document.location = s.parsed.responses[0].data;
+		} catch ( e ) {}
+	} } );
 } );

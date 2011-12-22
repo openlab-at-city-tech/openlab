@@ -55,7 +55,7 @@ class BB_Query {
 		$key = md5( $this->request );
 		if ( false === $cached_ids = wp_cache_get( $key, 'bb_query' ) ) {
 			if ( 'post' == $this->type ) {
-				$this->results = bb_cache_posts( $this->request ); // This always appends meta
+				$this->results = bb_cache_posts( $this->request, $this->query_vars['post_id_only'] ); // This always appends meta
 				$_the_id = 'post_id';
 				$this->query_vars['append_meta'] = false;
 			} else {
@@ -198,10 +198,12 @@ class BB_Query {
 		// parameters commented out are handled farther down
 
 		$ints = array(
-//			'page',		// Defaults to global or number in URI
-//			'per_page',	// Defaults to page_topics
-			'tag_id',	// one tag ID
-			'favorites'	// one user ID
+//			'page',		 // Defaults to global or number in URI
+//			'per_page',	 // Defaults to page_topics
+			'tag_id',	 // one tag ID
+			'favorites', // one user ID,
+			'offset',	 // first item to query
+			'number'	 // number of items to retrieve
 		);
 
 		$parse_ints = array(
@@ -262,7 +264,8 @@ class BB_Query {
 //			'append_meta',	// *true, false: topics only
 //			'cache_users',	// *true, false
 //			'cache_topics,	// *true, false: posts only
-			'cache_posts'	// not implemented: none, first, last
+//			'post_id_only', // true, *false: this query is only returning post IDs
+			'cache_posts'	 // not implemented: none, first, last
 		);
 
 		foreach ( $ints as $key )
@@ -309,6 +312,7 @@ class BB_Query {
 		$array['append_meta']  = isset($array['append_meta'])  ? (int) (bool) $array['append_meta']  : 1;
 		$array['cache_users']  = isset($array['cache_users'])  ? (int) (bool) $array['cache_users']  : 1;
 		$array['cache_topics'] = isset($array['cache_topics']) ? (int) (bool) $array['cache_topics'] : 1;
+		$array['post_id_only'] = isset($array['post_id_only']) ? (int) (bool) $array['post_id_only'] : 1;
 
 		// Only one FULLTEXT search per query please
 		if ( $array['search'] )
@@ -434,16 +438,11 @@ class BB_Query {
 				$where .= " AND t.forum_id = $q[forum_id]";
 			endif;
 
-			/* Convert to JOIN after new taxonomy tables are in */
-
 			if ( $q['tag'] && !is_int($q['tag_id']) )
 				$q['tag_id'] = (int) bb_get_tag_id( $q['tag'] );
 
 			if ( is_numeric($q['tag_id']) ) :
-				if ( $tagged_topic_ids = bb_get_tagged_topic_ids( $q['tag_id'] ) )
-					$where .= " AND t.topic_id IN (" . join(',', $tagged_topic_ids) . ")";
-				else
-					$where .= " AND 0 /* No such tag */";
+				$join .= " JOIN `$bbdb->term_relationships` AS tr ON ( t.`topic_id` = tr.`object_id` AND tr.`term_taxonomy_id` = $q[tag_id] )";
 			endif;
 
 			if ( is_numeric($q['favorites']) && $f_user = bb_get_user( $q['favorites'] ) )
@@ -577,10 +576,7 @@ class BB_Query {
 				$q['tag_id'] = (int) bb_get_tag_id( $q['tag'] );
 
 			if ( is_numeric($q['tag_id']) ) :
-				if ( $tagged_topic_ids = bb_get_tagged_topic_ids( $q['tag_id'] ) )
-					$where .= " AND p.topic_id IN (" . join(',', $tagged_topic_ids) . ")";
-				else
-					$where .= " AND 0 /* No such tag */";
+				$join .= " JOIN `$bbdb->term_relationships` AS tr ON ( p.`topic_id` = tr.`object_id` AND tr.`term_taxonomy_id` = $q[tag_id] )";
 			endif;
 
 			if ( is_numeric($q['favorites']) && $f_user = bb_get_user( $q['favorites'] ) )
@@ -725,15 +721,25 @@ class BB_Query {
 		else
 			$bits['order_by'] .= " DESC";
 
-		if ( !$q['per_page'] )
-			$q['per_page'] = (int) bb_get_option( 'page_topics' );
-
 		$bits['limit'] = '';
-		if ( $q['per_page'] > 0 ) :
-			if ( $q['page'] > 1 )
-				$bits['limit'] .= $q['per_page'] * ( $q['page'] - 1 ) . ", ";
-			$bits['limit'] .= $q['per_page'];
-		endif;
+
+		// When offset and number are provided, skip per_page and limit checks
+		if ( !empty( $q['offset'] ) && !empty( $q['number'] ) ) {
+			$bits['limit'] .= $q['offset'] . ", " . $q['number'];
+
+		// Else proceed as normal
+		} else {
+			if ( !$q['per_page'] ) {
+				$q['per_page'] = (int) bb_get_option( 'page_topics' );
+			}
+	
+			if ( $q['per_page'] > 0 ) {
+				if ( $q['page'] > 1 ) {
+					$bits['limit'] .= $q['per_page'] * ( $q['page'] - 1 ) . ", ";
+				}
+				$bits['limit'] .= $q['per_page'];
+			}
+		}
 
 		$name = "get_{$this->type}s_";
 
@@ -940,7 +946,7 @@ class BB_Query_Form extends BB_Query {
 
 		if ( $forum ) {
 			$r .= "\t<div><label for=\"forum-id\">" . __('Forum')  . "</label>\n";
-			$r .= "\t\t<div>" . bb_get_forum_dropdown( array( 'selected' => $q_forum_id, 'none' => __('Any'), 'id' => 'forum-id' ) ) . "</div>\n";
+			$r .= "\t\t<div>" . bb_get_forum_dropdown( array( 'selected' => $q_forum_id, 'none' => __('Any') ) ) . "</div>\n";
 			$r .= "\t</div>\n\n";
 		}
 
@@ -965,7 +971,7 @@ class BB_Query_Form extends BB_Query {
 			$r .= "\t</div>\n\n";
 		}
 
-		$stati = apply_filters( 'bb_query_form_post_status', array( 'all' => __('All'), '0' => __('Normal'), '1' => __('Deleted') ), $this->type );
+		$stati = apply_filters( 'bb_query_form_post_status', array( 'all' => _x( 'All', 'post status' ), '0' => __('Normal'), '1' => __('Deleted') ), $this->type );
 
 		if ( $topic_status ) {
 			$r .= "\t<div><label for=\"topic-status\">" . __('Topic status') . "</label>\n";
@@ -998,7 +1004,7 @@ class BB_Query_Form extends BB_Query {
 		if ( $open ) {
 			$r .= "\t<div><label for=\"topic-open\">" . __('Open?') . "</label>\n";
 			$r .= "\t\t<div><select name='open' id='topic-open'>\n";
-			foreach ( array( 'all' => __('All'), '1' => _x( 'Open', 'posting status' ), '0' => __('Closed') ) as $status => $label ) {
+			foreach ( array( 'all' => _x( 'All', 'posting status' ), '1' => _x( 'Open', 'posting status' ), '0' => __('Closed') ) as $status => $label ) {
 				$label = esc_html( $label );
 				$selected = (string) $status == (string) $q_open ? " selected='selected'" : '';
 				$r .= "\t\t\t<option value='$status'$selected>$label</option>\n";
@@ -1013,6 +1019,8 @@ class BB_Query_Form extends BB_Query {
 			$r .= "\t\t<div><input name='topic_title' id='topic-title' type='text' class='text-input' value='$q_topic_title' /></div>\n";
 			$r .= "\t</div>\n\n";
 		}
+
+		$r .= apply_filters( 'bb_query_form_inputs', '', $args, $query_vars );
 
 		$r .= "\t<div class=\"submit\"><label for=\"$id-submit\">" . __('Search') . "</label>\n";
 		$r .= "\t\t<div><input type='submit' class='button submit-input' value='$submit' id='$id-submit' /></div>\n";

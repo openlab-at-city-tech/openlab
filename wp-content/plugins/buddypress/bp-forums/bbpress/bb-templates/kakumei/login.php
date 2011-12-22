@@ -2,7 +2,7 @@
 
 <div class="bbcrumb"><a href="<?php bb_uri(); ?>"><?php bb_option('name'); ?></a> &raquo; <?php _e('Log in'); ?></div>
 
-<h2 id="userlogin" role="main"><?php isset($_POST['user_login']) ? _e('Log in Failed') : _e('Log in') ; ?></h2>
+<h2 id="userlogin" role="main"><?php !empty( $user_login ) ? _e('Log in Failed') : _e('Log in') ; ?></h2>
 
 <form method="post" action="<?php bb_uri('bb-login.php', null, BB_URI_CONTEXT_FORM_ACTION + BB_URI_CONTEXT_BB_USER_FORMS); ?>">
 <fieldset>
@@ -19,7 +19,7 @@
 			<?php if ( $user_email_error ) echo "<em>$user_email_error</em>"; ?>
 		</th>
 		<td>
-			<input name="user_login" id="user_login" type="text" value="<?php echo $user_login; ?>" />
+			<input name="log" id="user_login" type="text" value="<?php echo $user_login; ?>" />
 		</td>
 	</tr>
 	<tr valign="top" class="form-field <?php if ( $user_password_error ) echo 'form-invalid error'; ?>">
@@ -28,19 +28,19 @@
 			<?php if ( $user_password_error ) echo "<em>$user_password_error</em>"; ?>
 		</th>
 		<td>
-			<input name="password" id="password" type="password" />
+			<input name="pwd" id="password" type="password" />
 		</td>
 	</tr>
 
 	<tr valign="top" class="form-field">
 		<th scope="row"><label for="remember"><?php _e('Remember me'); ?></label></th>
-		<td><input name="remember" type="checkbox" id="remember" value="1"<?php echo $remember_checked; ?> /></td>
+		<td><input name="rememberme" type="checkbox" id="remember" value="1"<?php echo $remember_checked; ?> /></td>
 	</tr>
 	<tr>
 		<th scope="row">&nbsp;</th>
 		<td>
-			<input name="re" type="hidden" value="<?php echo $redirect_to; ?>" />
-			<input type="submit" value="<?php echo esc_attr( isset($_POST['user_login']) ? __('Try Again &raquo;'): __('Log in &raquo;') ); ?>" />
+			<input name="redirect_to" type="hidden" value="<?php echo $redirect_to; ?>" />
+			<input type="submit" value="<?php echo esc_attr( !empty( $user_login ) ? __( 'Try Again &raquo;' ): __( 'Log in &raquo;' ) ); ?>" />
 			<?php wp_referer_field(); ?>
 		</td>
 	</tr>

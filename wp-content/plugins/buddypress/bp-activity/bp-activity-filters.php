@@ -1,6 +1,16 @@
 <?php
 
-/* Apply WordPress defined filters */
+/**
+ * The Activity filters
+ *
+ * @package BuddyPress
+ * @subpackage ActivityFilters
+ */
+
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
+// Apply WordPress defined filters
 add_filter( 'bp_get_activity_action',                'bp_activity_filter_kses', 1 );
 add_filter( 'bp_get_activity_content_body',          'bp_activity_filter_kses', 1 );
 add_filter( 'bp_get_activity_content',               'bp_activity_filter_kses', 1 );
@@ -46,13 +56,13 @@ add_filter( 'bp_get_activity_content_body',          'wpautop' );
 add_filter( 'bp_get_activity_content',               'wpautop' );
 add_filter( 'bp_get_activity_feed_item_description', 'wpautop' );
 
-add_filter( 'bp_get_activity_action',                'make_clickable' );
-add_filter( 'bp_get_activity_content_body',          'make_clickable' );
-add_filter( 'bp_get_activity_content',               'make_clickable' );
-add_filter( 'bp_get_activity_parent_content',        'make_clickable' );
-add_filter( 'bp_get_activity_latest_update',         'make_clickable' );
-add_filter( 'bp_get_activity_latest_update_excerpt', 'make_clickable' );
-add_filter( 'bp_get_activity_feed_item_description', 'make_clickable' );
+add_filter( 'bp_get_activity_action',                'make_clickable', 9 );
+add_filter( 'bp_get_activity_content_body',          'make_clickable', 9 );
+add_filter( 'bp_get_activity_content',               'make_clickable', 9 );
+add_filter( 'bp_get_activity_parent_content',        'make_clickable', 9 );
+add_filter( 'bp_get_activity_latest_update',         'make_clickable', 9 );
+add_filter( 'bp_get_activity_latest_update_excerpt', 'make_clickable', 9 );
+add_filter( 'bp_get_activity_feed_item_description', 'make_clickable', 9 );
 
 add_filter( 'bp_acomment_name',                      'stripslashes_deep' );
 add_filter( 'bp_get_activity_action',                'stripslashes_deep' );
@@ -63,7 +73,7 @@ add_filter( 'bp_get_activity_latest_update',         'stripslashes_deep' );
 add_filter( 'bp_get_activity_latest_update_excerpt', 'stripslashes_deep' );
 add_filter( 'bp_get_activity_feed_item_description', 'stripslashes_deep' );
 
-/* Apply BuddyPress defined filters */
+// Apply BuddyPress defined filters
 add_filter( 'bp_get_activity_content',               'bp_activity_make_nofollow_filter' );
 add_filter( 'bp_get_activity_content_body',          'bp_activity_make_nofollow_filter' );
 add_filter( 'bp_get_activity_parent_content',        'bp_activity_make_nofollow_filter' );
@@ -71,12 +81,24 @@ add_filter( 'bp_get_activity_latest_update',         'bp_activity_make_nofollow_
 add_filter( 'bp_get_activity_latest_update_excerpt', 'bp_activity_make_nofollow_filter' );
 add_filter( 'bp_get_activity_feed_item_description', 'bp_activity_make_nofollow_filter' );
 
-add_filter( 'bp_get_activity_parent_content', 'bp_create_excerpt' );
+add_filter( 'pre_comment_content',                   'bp_activity_at_name_filter' );
+add_filter( 'group_forum_topic_text_before_save',    'bp_activity_at_name_filter' );
+add_filter( 'group_forum_post_text_before_save',     'bp_activity_at_name_filter' );
 
-/* Allow shortcodes in activity posts */
-add_filter( 'bp_get_activity_content', 'do_shortcode' );
-add_filter( 'bp_get_activity_content_body', 'do_shortcode' );
+add_filter( 'bp_get_activity_parent_content',        'bp_create_excerpt' );
 
+/**
+ * Custom kses filtering for activity content
+ *
+ * @since 1.1.0
+ *
+ * @param string $content The activity content
+ *
+ * @uses apply_filters() To call the 'bp_activity_allowed_tags' hook.
+ * @uses wp_kses()
+ *
+ * @return string $content Filtered activity content
+ */
 function bp_activity_filter_kses( $content ) {
 	global $allowedtags;
 
@@ -87,6 +109,8 @@ function bp_activity_filter_kses( $content ) {
 	$activity_allowedtags['div']['class']  = array();
 	$activity_allowedtags['div']['id']     = array();
 	$activity_allowedtags['a']['class']    = array();
+	$activity_allowedtags['a']['id']       = array();
+	$activity_allowedtags['a']['rel']      = array();
 	$activity_allowedtags['img']           = array();
 	$activity_allowedtags['img']['src']    = array();
 	$activity_allowedtags['img']['alt']    = array();
@@ -102,43 +126,143 @@ function bp_activity_filter_kses( $content ) {
 	return wp_kses( $content, $activity_allowedtags );
 }
 
-function bp_activity_at_name_filter( $content ) {
-	include_once( ABSPATH . WPINC . '/registration.php' );
-
-	$pattern = '/[@]+([A-Za-z0-9-_\.]+)/';
-	preg_match_all( $pattern, $content, $usernames );
-
-	// Make sure there's only one instance of each username
-	if ( !$usernames = array_unique( $usernames[1] ) )
-		return $content;
+/**
+ * Finds and links @-mentioned users in the contents of activity items
+ *
+ * @since 1.2.0
+ *
+ * @param string $content The activity content
+ * @param int $activity_id The activity id
+ *
+ * @uses bp_activity_find_mentions()
+ * @uses bp_is_username_compatibility_mode()
+ * @uses bp_core_get_userid_from_nicename()
+ * @uses bp_activity_at_message_notification()
+ * @uses bp_core_get_user_domain()
+ * @uses bp_activity_adjust_mention_count()
+ *
+ * @return string $content Content filtered for mentions
+ */
+function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
+	$usernames = bp_activity_find_mentions( $content );
 
 	foreach( (array)$usernames as $username ) {
-		if ( !$user_id = username_exists( $username ) )
+		if ( bp_is_username_compatibility_mode() )
+			$user_id = username_exists( $username );
+		else
+			$user_id = bp_core_get_userid_from_nicename( $username );
+
+		if ( empty( $user_id ) )
 			continue;
 
-		// Increase the number of new @ mentions for the user
-		$new_mention_count = (int)get_user_meta( $user_id, 'bp_new_mention_count', true );
-		update_user_meta( $user_id, 'bp_new_mention_count', $new_mention_count + 1 );
+		// If an activity_id is provided, we can send email and BP notifications
+		if ( $activity_id ) {
+			bp_activity_at_message_notification( $activity_id, $user_id );
+		}
 
-		$content = str_replace( "@$username", "<a href='" . bp_core_get_user_domain( bp_core_get_userid( $username ) ) . "' rel='nofollow'>@$username</a>", $content );
+		$content = preg_replace( '/(@' . $username . '\b)/', "<a href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $content );
 	}
+
+	// Adjust the activity count for this item
+	if ( $activity_id )
+		bp_activity_adjust_mention_count( $activity_id, 'add' );
 
 	return $content;
 }
-add_filter( 'bp_activity_new_update_content',     'bp_activity_at_name_filter' );
-add_filter( 'groups_activity_new_update_content', 'bp_activity_at_name_filter' );
-add_filter( 'pre_comment_content',                'bp_activity_at_name_filter' );
-add_filter( 'group_forum_topic_text_before_save', 'bp_activity_at_name_filter' );
-add_filter( 'group_forum_post_text_before_save',  'bp_activity_at_name_filter' );
-add_filter( 'bp_activity_comment_content',        'bp_activity_at_name_filter' );
 
+/**
+ * Catch mentions in saved activity items
+ *
+ * @since 1.5.0
+ *
+ * @param obj $activity
+ *
+ * @uses remove_filter() To remove the 'bp_activity_at_name_filter_updates' hook.
+ * @uses bp_activity_at_name_filter()
+ * @uses BP_Activity_Activity::save() {@link BP_Activity_Activity}
+ */
+function bp_activity_at_name_filter_updates( $activity ) {
+	// Only run this function once for a given activity item
+	remove_filter( 'bp_activity_after_save', 'bp_activity_at_name_filter_updates' );
+
+	// Run the content through the linking filter, making sure to increment mention count
+	$activity->content = bp_activity_at_name_filter( $activity->content, $activity->id );
+
+	// Resave the activity with the new content
+	$activity->save();
+}
+add_filter( 'bp_activity_after_save', 'bp_activity_at_name_filter_updates' );
+
+/**
+ * Catches links in activity text so rel=nofollow can be added
+ *
+ * @since 1.2.0
+ *
+ * @param string $text Activity text
+ *
+ * @return string $text Text with rel=nofollow added to any links
+ */
 function bp_activity_make_nofollow_filter( $text ) {
 	return preg_replace_callback( '|<a (.+?)>|i', 'bp_activity_make_nofollow_filter_callback', $text );
 }
+
+	/**
+	 * Adds rel=nofollow to a link
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $matches
+	 *
+	 * @return string $text Link with rel=nofollow added
+	 */
 	function bp_activity_make_nofollow_filter_callback( $matches ) {
 		$text = $matches[1];
 		$text = str_replace( array( ' rel="nofollow"', " rel='nofollow'"), '', $text );
 		return "<a $text rel=\"nofollow\">";
 	}
+
+/**
+ * Truncates long activity entries when viewed in activity streams
+ *
+ * @since 1.5.0
+ *
+ * @param $text The original activity entry text
+ *
+ * @uses bp_is_single_activity()
+ * @uses apply_filters() To call the 'bp_activity_excerpt_append_text' hook
+ * @uses apply_filters() To call the 'bp_activity_excerpt_length' hook
+ * @uses bp_create_excerpt()
+ * @uses bp_get_activity_id()
+ * @uses bp_get_activity_thread_permalink()
+ * @uses apply_filters() To call the 'bp_activity_truncate_entry' hook
+ *
+ * @return string $excerpt The truncated text
+ */
+function bp_activity_truncate_entry( $text ) {
+	global $activities_template;
+
+	// The full text of the activity update should always show on the single activity screen
+	if ( bp_is_single_activity() )
+		return $text;
+
+	$append_text    = apply_filters( 'bp_activity_excerpt_append_text', __( '[Read more]', 'buddypress' ) );
+	$excerpt_length = apply_filters( 'bp_activity_excerpt_length', 358 );
+
+	// Run the text through the excerpt function. If it's too short, the original text will be
+	// returned.
+	$excerpt        = bp_create_excerpt( $text, $excerpt_length, array( 'ending' => __( '&hellip;', 'buddypress' ) ) );
+
+	// If the text returned by bp_create_excerpt() is different from the original text (ie it's
+	// been truncated), add the "Read More" link.
+	if ( $excerpt != $text ) {
+		$id = !empty( $activities_template->activity->current_comment->id ) ? 'acomment-read-more-' . $activities_template->activity->current_comment->id : 'activity-read-more-' . bp_get_activity_id();
+
+		$excerpt = sprintf( '%1$s<span class="activity-read-more" id="%2$s"><a href="%3$s" rel="nofollow">%4$s</a></span>', $excerpt, $id, bp_get_activity_thread_permalink(), $append_text );
+	}
+
+	return apply_filters( 'bp_activity_truncate_entry', $excerpt, $text, $append_text );
+}
+add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+add_filter( 'bp_get_activity_content', 'bp_activity_truncate_entry', 5 );
 
 ?>

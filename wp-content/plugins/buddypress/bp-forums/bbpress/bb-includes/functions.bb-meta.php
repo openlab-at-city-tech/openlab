@@ -2,7 +2,6 @@
 
 /* Options/Meta */
 
-
 /* Internal */
 
 function bb_sanitize_meta_key( $key )
@@ -60,7 +59,11 @@ function bb_update_meta( $object_id = 0, $meta_key, $meta_value, $type, $global 
 
 	$cur = $bbdb->get_row( $bbdb->prepare( "SELECT * FROM `$bbdb->meta` WHERE `object_type` = %s AND `object_id` = %d AND `meta_key` = %s", $object_type, $object_id, $meta_key ) );
 	if ( !$cur ) {
-		$bbdb->insert( $bbdb->meta, array( 'object_type' => $object_type, 'object_id' => $object_id, 'meta_key' => $meta_key, 'meta_value' => $_meta_value ) );
+		$bbdb->query( $bbdb->prepare(
+			"INSERT INTO `$bbdb->meta` ( `object_type`, `object_id`, `meta_key`, `meta_value` ) VALUES( %s, %d, %s, %s )
+			ON DUPLICATE KEY UPDATE `meta_value` = VALUES( `meta_value` )",
+			$object_type, $object_id, $meta_key, $_meta_value
+		) );
 	} elseif ( $cur->meta_value != $meta_value ) {
 		$bbdb->update( $bbdb->meta, array( 'meta_value' => $_meta_value), array( 'object_type' => $object_type, 'object_id' => $object_id, 'meta_key' => $meta_key ) );
 	}
@@ -95,7 +98,7 @@ function bb_delete_meta( $object_id = 0, $meta_key, $meta_value, $type, $global 
 		case 'user':
 			global $wp_users_object;
 			$id = $object_id;
-			return $wp_users_object->update_meta( compact( 'id', 'meta_key', 'meta_value' ) );
+			return $wp_users_object->delete_meta( compact( 'id', 'meta_key', 'meta_value' ) );
 			break;
 		case 'forum':
 			$object_type = 'bb_forum';
@@ -297,10 +300,10 @@ function bb_get_option( $option )
 			$r = $bb_locale->text_direction;
 			break;
 		case 'version':
-			return '1.0.3'; // Don't filter
+			return '1.1'; // Don't filter
 			break;
 		case 'bb_db_version' :
-			return '2078'; // Don't filter
+			return '2471'; // Don't filter
 			break;
 		case 'html_type':
 			$r = 'text/html';
@@ -465,6 +468,8 @@ function bb_cache_all_options()
 		'wp_admin_cookie_path',
 		'wp_plugins_cookie_path',
 		'wordpress_mu_primary_blog_id',
+		'enable_loginless',
+		'enable_subscriptions',
 		'enable_xmlrpc',
 		'enable_pingback',
 		'throttle_time',
@@ -475,7 +480,9 @@ function bb_cache_all_options()
 		'plugin_cookie_paths',
 		'wp_roles_map',
 		'gmt_offset',
-		'timezone_string'
+		'timezone_string',
+		'name_link_profile',
+		'bp_bbpress_cron_check',
 	);
 
 	// Check that these aren't already in the cache
@@ -504,7 +511,7 @@ function bb_cache_all_options()
 
 	if ( count( $base_options ) === count( $query_options ) && ( !$results || !is_array( $results ) || !count( $results ) ) ) {
 		// Let's assume that the options haven't been populated from the old topicmeta table
-		if ( !BB_INSTALLING ) {
+		if ( !BB_INSTALLING && ( !defined( 'BB_DO_NOT_UPGRADE_TOPICMETA' ) || !BB_DO_NOT_UPGRADE_TOPICMETA ) ) {
 			$topicmeta_exists = $bbdb->query( "SELECT * FROM $bbdb->topicmeta LIMIT 1" );
 			if ($topicmeta_exists) {
 				require_once( BB_PATH . 'bb-admin/includes/defaults.bb-schema.php' );
@@ -654,7 +661,8 @@ function bb_update_usermeta( $user_id, $meta_key, $meta_value )
 	return bb_update_meta( $user_id, $meta_key, $meta_value, 'user' );
 }
 
-function bb_delete_usermeta( $user_id, $meta_key, $meta_value = '' )
+// $meta_value defaults to null to conform to BackPress' WP_User::delete_meta()
+function bb_delete_usermeta( $user_id, $meta_key, $meta_value = null )
 {
 	return bb_delete_meta( $user_id, $meta_key, $meta_value, 'user' );
 }

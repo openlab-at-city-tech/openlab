@@ -1,4 +1,6 @@
 <?php
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
 
 class BP_Friends_Friendship {
 	var $id;
@@ -14,6 +16,10 @@ class BP_Friends_Friendship {
 	var $friend;
 
 	function bp_friends_friendship( $id = null, $is_request = false, $populate_friend_details = true ) {
+		$this->__construct( $id, $is_request, $populate_friend_details );
+	}
+
+	function __construct( $id = null, $is_request = false, $populate_friend_details = true ) {
 		$this->is_request = $is_request;
 
 		if ( $id ) {
@@ -28,10 +34,10 @@ class BP_Friends_Friendship {
 
 		if ( $friendship = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->friends->table_name} WHERE id = %d", $this->id ) ) ) {
 			$this->initiator_user_id = $friendship->initiator_user_id;
-			$this->friend_user_id = $friendship->friend_user_id;
-			$this->is_confirmed = $friendship->is_confirmed;
-			$this->is_limited = $friendship->is_limited;
-			$this->date_created = $friendship->date_created;
+			$this->friend_user_id    = $friendship->friend_user_id;
+			$this->is_confirmed      = $friendship->is_confirmed;
+			$this->is_limited        = $friendship->is_limited;
+			$this->date_created      = $friendship->date_created;
 		}
 
 		// if running from ajax.
@@ -51,12 +57,12 @@ class BP_Friends_Friendship {
 		global $wpdb, $bp;
 
 		$this->initiator_user_id = apply_filters( 'friends_friendship_initiator_user_id_before_save', $this->initiator_user_id, $this->id );
-		$this->friend_user_id = apply_filters( 'friends_friendship_friend_user_id_before_save', $this->friend_user_id, $this->id );
-		$this->is_confirmed = apply_filters( 'friends_friendship_is_confirmed_before_save', $this->is_confirmed, $this->id );
-		$this->is_limited = apply_filters( 'friends_friendship_is_limited_before_save', $this->is_limited, $this->id );
-		$this->date_created = apply_filters( 'friends_friendship_date_created_before_save', $this->date_created, $this->id );
+		$this->friend_user_id    = apply_filters( 'friends_friendship_friend_user_id_before_save',    $this->friend_user_id,    $this->id );
+		$this->is_confirmed      = apply_filters( 'friends_friendship_is_confirmed_before_save',      $this->is_confirmed,      $this->id );
+		$this->is_limited        = apply_filters( 'friends_friendship_is_limited_before_save',        $this->is_limited,        $this->id );
+		$this->date_created      = apply_filters( 'friends_friendship_date_created_before_save',      $this->date_created,      $this->id );
 
-		do_action( 'friends_friendship_before_save', $this );
+		do_action_ref_array( 'friends_friendship_before_save', array( &$this ) );
 
 		if ( $this->id ) {
 			// Update
@@ -67,7 +73,7 @@ class BP_Friends_Friendship {
 			$this->id = $wpdb->insert_id;
 		}
 
-		do_action( 'friends_friendship_after_save', $this );
+		do_action( 'friends_friendship_after_save', array( &$this ) );
 
 		return $result;
 	}
@@ -92,8 +98,9 @@ class BP_Friends_Friendship {
 		}
 
 		$friends = $wpdb->get_results( $wpdb->prepare( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} $friend_sql $oc_sql ORDER BY date_created DESC" ) );
+		$fids = array();
 
-		for ( $i = 0; $i < count($friends); $i++ ) {
+		for ( $i = 0, $count = count( $friends ); $i < $count; ++$i ) {
 			if ( $assoc_arr )
 				$fids[] = array( 'user_id' => ( $friends[$i]->friend_user_id == $user_id ) ? $friends[$i]->initiator_user_id : $friends[$i]->friend_user_id );
 			else
@@ -115,7 +122,7 @@ class BP_Friends_Friendship {
 		return $wpdb->get_col( $wpdb->prepare( "SELECT initiator_user_id FROM {$bp->friends->table_name} WHERE friend_user_id = %d AND is_confirmed = 0", $user_id ) );
 	}
 
-	function total_friend_count( $user_id = false ) {
+	function total_friend_count( $user_id = 0 ) {
 		global $wpdb, $bp;
 
 		if ( !$user_id )
@@ -127,10 +134,10 @@ class BP_Friends_Friendship {
 		$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM {$bp->friends->table_name} WHERE (initiator_user_id = %d OR friend_user_id = %d) AND is_confirmed = 1", $user_id, $user_id ) );
 
 		// Do not update meta if user has never had friends
-		if ( !$count && !get_user_meta( $user_id, 'total_friend_count', true ) )
+		if ( !$count && !bp_get_user_meta( $user_id, 'total_friend_count', true ) )
 			return 0;
 
-		update_user_meta( $user_id, 'total_friend_count', (int)$count );
+		bp_update_user_meta( $user_id, 'total_friend_count', (int)$count );
 		return (int)$count;
 	}
 
@@ -157,12 +164,12 @@ class BP_Friends_Friendship {
 			return false;
 
 		// filter the user_ids based on the search criteria.
-		if ( function_exists('xprofile_install') ) {
+		if ( bp_is_active( 'xprofile' ) ) {
 			$sql = "SELECT DISTINCT user_id FROM {$bp->profile->table_name_data} WHERE user_id IN ($fids) AND value LIKE '$filter%%' {$pag_sql}";
 			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$bp->profile->table_name_data} WHERE user_id IN ($fids) AND value LIKE '$filter%%'";
 		} else {
-			$sql = "SELECT DISTINCT user_id FROM " . CUSTOM_USER_META_TABLE . " WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%' {$pag_sql}";
-			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM " . CUSTOM_USER_META_TABLE . " WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%'";
+			$sql = "SELECT DISTINCT user_id FROM {$wpdb->usermeta} WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%' {$pag_sql}";
+			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$wpdb->usermeta} WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%'";
 		}
 
 		$filtered_friend_ids = $wpdb->get_col($sql);
@@ -196,7 +203,7 @@ class BP_Friends_Friendship {
 	function get_bulk_last_active( $user_ids ) {
 		global $wpdb, $bp;
 
-		return $wpdb->get_results( $wpdb->prepare( "SELECT meta_value as last_activity, user_id FROM " . CUSTOM_USER_META_TABLE . " WHERE meta_key = 'last_activity' AND user_id IN ( {$user_ids} ) ORDER BY meta_value DESC" ) );
+		return $wpdb->get_results( $wpdb->prepare( "SELECT meta_value as last_activity, user_id FROM {$wpdb->usermeta} WHERE meta_key = %s AND user_id IN ( {$user_ids} ) ORDER BY meta_value DESC", bp_get_user_meta_key( 'last_activity' ) ) );
 	}
 
 	function accept($friendship_id) {
@@ -220,10 +227,10 @@ class BP_Friends_Friendship {
 		$users_table = $wpdb->base_prefix . 'users';
 
 		if ( $limit && $page )
-			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
+			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * intval( $limit ) ), intval( $limit ) );
 
 		// filter the user_ids based on the search criteria.
-		if ( function_exists('xprofile_install') ) {
+		if ( bp_is_active( 'xprofile' ) ) {
 			$sql = $wpdb->prepare( "SELECT DISTINCT d.user_id as id FROM {$bp->profile->table_name_data} d, $users_table u WHERE d.user_id = u.id AND d.value LIKE '$filter%%' ORDER BY d.value DESC $pag_sql" );
 		} else {
 			$sql = $wpdb->prepare( "SELECT DISTINCT user_id as id FROM $usermeta_table WHERE meta_value LIKE '$filter%%' ORDER BY d.value DESC $pag_sql" );
@@ -246,7 +253,7 @@ class BP_Friends_Friendship {
 		$users_table = $wpdb->base_prefix . 'users';
 
 		// filter the user_ids based on the search criteria.
-		if ( function_exists('xprofile_install') ) {
+		if ( bp_is_active( 'xprofile' ) ) {
 			$sql = $wpdb->prepare( "SELECT COUNT(DISTINCT d.user_id) FROM {$bp->profile->table_name_data} d, $users_table u WHERE d.user_id = u.id AND d.value LIKE '$filter%%'" );
 		} else {
 			$sql = $wpdb->prepare( "SELECT COUNT(DISTINCT user_id) FROM $usermeta_table WHERE meta_value LIKE '$filter%%'" );
@@ -263,10 +270,10 @@ class BP_Friends_Friendship {
 	function sort_by_name( $user_ids ) {
 		global $wpdb, $bp;
 
-		if ( !function_exists( 'xprofile_install') )
+		if ( !bp_is_active( 'xprofile' ) )
 			return false;
 
-		return $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM {$bp->profile->table_name_data} pd, {$bp->profile->table_name_fields} pf WHERE pf.id = pd.field_id AND pf.name = %s AND pd.user_id IN ( {$user_ids} ) ORDER BY pd.value ASC", BP_XPROFILE_FULLNAME_FIELD_NAME ) );
+		return $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM {$bp->profile->table_name_data} pd, {$bp->profile->table_name_fields} pf WHERE pf.id = pd.field_id AND pf.name = %s AND pd.user_id IN ( {$user_ids} ) ORDER BY pd.value ASC", bp_xprofile_fullname_field_name() ) );
 	}
 
 	function get_random_friends( $user_id, $total_friends = 5 ) {
@@ -275,12 +282,12 @@ class BP_Friends_Friendship {
 		$sql = $wpdb->prepare( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} WHERE (friend_user_id = %d || initiator_user_id = %d) && is_confirmed = 1 ORDER BY rand() LIMIT %d", $user_id, $user_id, $total_friends );
 		$results = $wpdb->get_results($sql);
 
-		for ( $i = 0; $i < count($results); $i++ ) {
+		for ( $i = 0, $count = count( $results ); $i < $count; ++$i ) {
 			$fids[] = ( $results[$i]->friend_user_id == $user_id ) ? $results[$i]->initiator_user_id : $results[$i]->friend_user_id;
 		}
 
 		// remove duplicates
-		if ( count($fids) > 0 )
+		if ( count( $fids ) > 0 )
 			return array_flip(array_flip($fids));
 		else
 			return false;
@@ -292,7 +299,7 @@ class BP_Friends_Friendship {
 		$friend_ids = BP_Friends_Friendship::get_friend_user_ids( $user_id );
 
 		$invitable_count = 0;
-		for ( $i = 0; $i < count($friend_ids); $i++ ) {
+		for ( $i = 0, $count = count( $friend_ids ); $i < $count; ++$i ) {
 
 			if ( BP_Groups_Member::check_is_member( (int)$friend_ids[$i], $group_id ) )
 				continue;
@@ -330,5 +337,4 @@ class BP_Friends_Friendship {
 		}
 	}
 }
-
 ?>

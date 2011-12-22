@@ -31,6 +31,8 @@ pre, p { margin-bottom: 1.0em; }
 
 .right { float: right; }
 
+.clear { clear: both; }
+
 .delete:hover {
 	background-color: #c00;
 	color: #fff;
@@ -239,6 +241,7 @@ form.login input {
 	-khtml-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
+	background-color:#fff;
 }
 
 form.login input.submit {
@@ -588,12 +591,16 @@ h2.post-form {
 	-khtml-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
+	background-color:#fff;
 }
 
 .postform label { display: block; }
 
+.postform #author,
+.postform #email,
 .postform #topic,
-.postform #tags-input {
+.postform #tags-input,
+.postform #url {
 	margin: 5px 0;
 	padding: 5px;
 	width: 724px;
@@ -603,6 +610,7 @@ h2.post-form {
 	-khtml-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
+	background-color:#fff;
 }
 
 .postform p#post-form-forum-container label span {
@@ -840,11 +848,21 @@ tr.bb-category td {
 
 #search-for { margin: 15px 0 5px; }
 
+ul#search-suggestions { margin-left: 25px; }
+
 .search-results { margin: 0 0 10px; }
 
 .search-results ol { margin: 5px 0 0 28px; }
 
-.search-results ol li { margin: 0 0 3px; }
+.search-results ol li { border-bottom: 1px solid #ccc; padding: 2px 5px 0 5px; min-height: 50px; }
+
+.search-results ol li.alt { background-color: #f8f8f8; }
+
+.search-results ol li:hover { background-color: #e4f3e1; }
+
+.search-results ol li a.result { font-size: 15px; }
+
+.search-results ol li span.freshness { float: right; font-style: italic; }
 
 /* Login, Register, Profile Edit
 =================================== */
@@ -925,6 +943,7 @@ tr.bb-category td {
 	-khtml-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
+	background-color:#fff;
 }
 
 #login-page fieldset p,

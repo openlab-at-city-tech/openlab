@@ -17,10 +17,10 @@
 	<?php do_action( 'bp_after_member_messages_pagination' ) ?>
 	<?php do_action( 'bp_before_member_messages_threads' ) ?>
 
-	<table id="message-threads" class="zebra">
+	<table id="message-threads" class="messages-notices">
 		<?php while ( bp_message_threads() ) : bp_message_thread(); ?>
 
-			<tr id="m-<?php bp_message_thread_id() ?>"<?php if ( bp_message_thread_has_unread() ) : ?> class="unread"<?php else: ?> class="read"<?php endif; ?>>
+			<tr id="m-<?php bp_message_thread_id() ?>" class="<?php bp_message_css_class(); ?><?php if ( bp_message_thread_has_unread() ) : ?> unread"<?php else: ?> read"<?php endif; ?>>
 				<td width="1%" class="thread-count">
 					<span class="unread-count"><?php bp_message_thread_unread_count() ?></span>
 				</td>
@@ -47,7 +47,7 @@
 
 				<td width="13%" class="thread-options">
 					<input type="checkbox" name="message_ids[]" value="<?php bp_message_thread_id() ?>" />
-					<a class="button confirm" href="<?php bp_message_thread_delete_link() ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>">x</a> &nbsp;
+					<a class="button confirm" href="<?php bp_message_thread_delete_link() ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>"><?php _e( 'Delete', 'buddypress' ) ?></a> &nbsp;
 				</td>
 			</tr>
 

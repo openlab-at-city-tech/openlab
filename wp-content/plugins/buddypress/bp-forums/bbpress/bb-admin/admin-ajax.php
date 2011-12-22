@@ -48,12 +48,13 @@ case 'add-tag' : // $id is topic_id
 				continue;
 			}
 		}
+		$tag->tag_id  = $tag_id;
 		$tag->user_id = bb_get_current_user_info( 'id' );
-		$tag_id_val = $tag->tag_id . '_' . $tag->user_id;
-		$tag->raw_tag = esc_attr( $tag->raw_tag );
+		$tag_id_val   = $tag->tag_id . '_' . $tag->user_id;
+		$tag->raw_tag = esc_attr( $tag_name );
 		$x->add( array(
 			'what' => 'tag',
-			'id' => $tag_id_val,
+			'id'   => $tag_id_val,
 			'data' => _bb_list_tag_item( $tag, array( 'list_id' => 'tags-list', 'format' => 'list' ) )
 		) );
 	}
@@ -118,8 +119,28 @@ case 'delete-post' : // $id is post_id
 	if ( $status == $bb_post->post_status )
 		die('1'); // We're already there
 
-	if ( bb_delete_post( $id, $status ) )
+	if ( bb_delete_post( $id, $status ) ) {
+		$topic = get_topic( $bb_post->topic_id );
+		if ( 0 == $topic->topic_posts ) {
+			// If we deleted the only post, send back a WP_Ajax_Response object with a URL to redirect to
+			if ( $ref = wp_get_referer() ) {
+				$ref_topic = bb_get_topic_from_uri( $ref );
+				if ( $ref_topic && $ref_topic->topic_id == $topic->topic_id )
+					$ref = add_query_arg( 'view', 'all', $ref );
+				if ( false === strpos( $ref, '#' ) )
+					$ref .= "#post-{$bb_post->post_id}";
+			} else {
+				$ref = add_query_arg( 'view', 'all', get_post_link( $topic->topic_id ) );
+			}
+			$x = new WP_Ajax_Response( array(
+				'what' => 'post',
+				'id' => $bb_post->post_id,
+				'data' => $ref,
+			) );
+			$x->send();
+		}
 		die('1');
+	}
 	break;
 /*
 case 'add-post' : // Can put last_modified stuff back in later

@@ -100,7 +100,7 @@ function bb_ksd_configuration_page()
 
 function bb_ksd_configuration_page_add()
 {
-	bb_admin_add_submenu( __( 'Akismet' ), 'moderate', 'bb_ksd_configuration_page', 'options-general.php' );
+	bb_admin_add_submenu( __( 'Akismet' ), 'use_keys', 'bb_ksd_configuration_page', 'options-general.php' );
 }
 add_action( 'bb_admin_menu_generator', 'bb_ksd_configuration_page_add' );
 
@@ -215,7 +215,7 @@ function bb_ksd_stats_page()
 		return;
 	}
 	if ( function_exists( 'bb_admin_add_submenu' ) ) {
-		bb_admin_add_submenu( __( 'Akismet Stats' ), 'use_keys', 'bb_ksd_stats_display', 'index.php' );
+		bb_admin_add_submenu( __( 'Akismet Stats' ), 'moderate', 'bb_ksd_stats_display', 'index.php' );
 	}
 }
 add_action( 'bb_admin_menu_generator', 'bb_ksd_stats_page' );
@@ -319,19 +319,10 @@ function bb_ksd_submit_spam( $post_id )
 
 function bb_ksd_check_post( $post_text )
 {
-	global $bb_current_user;
-	global $bb_ksd_pre_post_status;
+	global $bb_ksd_pre_post_status, $bb_ksd_pre_post;
 
-	// Don't filter content from users with a trusted role
-	if ( in_array( $bb_current_user->roles[0], bb_trusted_roles() ) ) {
-		return $post_text;
-	}
+	$bb_ksd_pre_post = $post_text;
 
-	$response = bb_ksd_submit( $post_text );
-	if ( 'true' == $response[1] ) {
-		$bb_ksd_pre_post_status = '2';
-	}
-	bb_akismet_delete_old();
 	return $post_text;
 }
 add_action( 'pre_post', 'bb_ksd_check_post', 1 );
@@ -393,9 +384,17 @@ function bb_akismet_delete_old()
 
 function bb_ksd_pre_post_status( $post_status )
 {
-	global $bb_ksd_pre_post_status;
-	if ( '2' == $bb_ksd_pre_post_status ) {
-		$post_status = $bb_ksd_pre_post_status;
+	global $bb_current_user, $bb_ksd_pre_post_status, $bb_ksd_pre_post;
+
+	// Don't filter content from users with a trusted role
+	if ( in_array( $bb_current_user->roles[0], bb_trusted_roles() ) ) {
+		return $post_status;
+	}
+
+	$response = bb_ksd_submit( $bb_ksd_pre_post );
+	if ( 'true' == $response[1] ) {
+		$bb_ksd_pre_post_status = '2';
+		return $bb_ksd_pre_post_status;
 	}
 	return $post_status;
 }
@@ -469,6 +468,40 @@ function bb_ksd_post_delete_link( $parts, $args )
 	return $parts;
 }
 add_filter( 'bb_post_admin', 'bb_ksd_post_delete_link', 10, 2 );
+
+function bb_ksd_bulk_post_actions( &$bulk_actions, &$post_query ) {
+	$status = $post_query->get( 'post_status' );
+
+	$bulk_actions['unspam'] = __( 'Not Spam' );
+	$bulk_actions['spam'] = __( 'Mark as Spam' );
+
+	if ( 2 == $status )
+		unset( $bulk_actions['undelete'], $bulk_actions['spam'] );
+	elseif ( is_numeric( $status ) )
+		unset( $bulk_actions['unspam'] );
+}
+
+add_action( 'bulk_post_actions', 'bb_ksd_bulk_post_actions', 10, 2 );
+
+function bb_ksd_bulk_post__action( $query_vars, $post_ids, $action ) {
+	$count = 0;
+
+	switch ( $action ) {
+	case 'spam' :
+		foreach ( $post_ids as $post_id ) {
+			$count += (int) (bool) bb_delete_post( $post_id, 2 );
+		}
+		return array( 'message' => 'spammed', 'count' => $count );
+	case 'unspam' :
+		foreach ( $post_ids as $post_id ) {
+			$count += (int) (bool) bb_delete_post( $post_id, 0 );
+		}
+		return array( 'message' => 'unspammed-normal', 'count' => $count );
+	}
+}
+
+add_action( 'bulk_post__spam', 'bb_ksd_bulk_post__action', 10, 3 );
+add_action( 'bulk_post__unspam', 'bb_ksd_bulk_post__action', 10, 3 );
 
 function bb_ksd_add_post_status_to_forms( $stati, $type )
 {

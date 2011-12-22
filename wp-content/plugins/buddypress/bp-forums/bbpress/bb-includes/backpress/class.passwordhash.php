@@ -1,11 +1,11 @@
 <?php
-// Last sync [WP11537]
+// Last sync [WP13429]
 
 /**
  * Portable PHP password hashing framework.
  * @package phpass
  * @since 2.5
- * @version 0.1
+ * @version 0.2 / genuine.
  * @link http://www.openwall.com/phpass/
  */
 
@@ -31,7 +31,7 @@
  * Portable PHP password hashing framework.
  *
  * @package phpass
- * @version 0.1 / genuine
+ * @version 0.2 / genuine.
  * @link http://www.openwall.com/phpass/
  * @since 2.5
  */
@@ -51,14 +51,14 @@ class PasswordHash {
 
 		$this->portable_hashes = $portable_hashes;
 
-		$this->random_state = microtime() . (function_exists('getmypid') ? getmypid() : '') . uniqid(rand(), TRUE);
-
+		$this->random_state = microtime() . uniqid(rand(), TRUE); // removed getmypid() for compability reasons
 	}
 
 	function get_random_bytes($count)
 	{
 		$output = '';
-		if (($fh = @fopen('/dev/urandom', 'rb'))) {
+		if ( @is_readable('/dev/urandom') &&
+		    ($fh = @fopen('/dev/urandom', 'rb'))) {
 			$output = fread($fh, $count);
 			fclose($fh);
 		}

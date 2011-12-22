@@ -60,6 +60,15 @@ div#bbContent {
 }
 
 
+pre {
+	/* http://www.longren.org/2006/09/27/wrapping-text-inside-pre-tags/ */
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
 /* Header */
 
 div#bbHead {
@@ -201,6 +210,12 @@ body.bb-admin-users h2 {
 	padding-left: 47px;
 	background-image: url('images/icons32.png');
 	background-position: 0 -891px;
+}
+
+body.bb-admin-user-manage h2 {
+       padding-left: 47px;
+       background-image: url('images/icons32.png');
+       background-position: 0 -891px;
 }
 
 body.bb-admin-tools h2 {
@@ -822,8 +837,9 @@ div.dashboard ul li a {
 
 /* Search forms */
 
-form.search-form fieldset {
+form.search-form fieldset, form.bulk-form fieldset {
 	margin: 10px 0 0 0;
+	clear: left;
 	float: left;
 }
 
@@ -863,7 +879,7 @@ form.search-form fieldset div div input.checkbox-input {
 	margin: 4px;
 }
 
-form.search-form fieldset div div select {
+form.search-form select, form.bulk-form select {
 	height: 2.1em;
 	margin: 0;
 	padding: 3px;
@@ -887,7 +903,7 @@ form.search-form div.submit label {
 	overflow: hidden;
 }
 
-form.search-form div.submit input.button {
+form.search-form div.submit input.button, form.bulk-form input.button {
 	font-family: 'Lucida Grande', Verdana, Arial, 'Bitstream Vera Sans', sans-serif;
 	-moz-border-radius: 10px;
 	-khtml-border-radius: 10px;
@@ -902,12 +918,12 @@ form.search-form div.submit input.button {
 	font-size: 0.85em;
 }
 
-form.search-form div.submit input.button:hover {
+form.search-form div.submit input.button:hover, form.bulk-form input.button:hover {
 	border-color: rgb(102, 102, 102);
 	color: rgb(0, 0, 0);
 }
 
-form.search-form div.submit input.button:active {
+form.search-form div.submit input.button:active, form.bulk-form input.button:active {
 	background: url('images/white-grad-active.png') repeat-x scroll rgb(238, 238, 238);
 }
 
@@ -916,7 +932,12 @@ form.search-form div.submit input.button:active {
 /* Table nav */
 
 div.tablenav {
+	margin-top: -1em;
 	float: right;
+}
+
+div.bottom {
+	margin-top: 0;
 }
 
 div.tablenav a {
@@ -1108,6 +1129,11 @@ table.widefat tfoot tr th {
 	border-bottom-width: 0;
 }
 
+table.widefat .check-column {
+	width: 2.2em;
+	padding-right: 0;
+}
+	
 table#posts-list.widefat tr td.post {
 	width: 46%;
 	font-size: 0.9em;
@@ -1210,6 +1236,7 @@ table.widefat tr td code,
 table.widefat tr td kbd {
 	font-family: Consolas, Monaco, Courier, monospace;
 	font-size: 1.2em;
+	line-height: 1.4;
 	background: rgb(234, 234, 234);
 	margin: 0px 1px;
 	padding: 1px 3px;
@@ -1459,6 +1486,53 @@ table.theme-list-active td a:hover {
 }
 
 
+/* Users */
+
+.bb-admin-user-manage form {
+	width: 550px;
+}
+
+#option-pass-strength-fake-input {
+	clear: none;
+	width: 200px;
+}
+.bb-admin-user-manage #pass-strength-result {
+	clear: left;
+	float: left;
+	margin-top: -25px;
+}
+
+#pass-strength-result {
+	padding: 2px;
+	text-align: center;
+	width: 280px;
+	border: 1px solid #ccc;
+	background-color: #e3e3e3;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#pass-strength-result.bad {
+	background-color: #ffeff7;
+	border-color: #c69;
+}
+
+#pass-strength-result.good {
+	background-color: #effff4;
+	border-color: #66cc87;
+}
+
+#pass-strength-result.short {
+	background-color: #e3e3e3;
+}
+
+#pass-strength-result.strong {
+	background-color: #59ef86;
+	border-color: #319f52;
+}
+
 
 /* Options */
 
@@ -1644,7 +1718,7 @@ form.settings div.table {
 	border-radius: 4px;
 	border: 1px solid rgb(223, 223, 223);
 	background-color: rgb(221, 221, 221);
-	width: 300px;
+	width: 400px;
 }
 
 form.settings div.table table {
@@ -1742,6 +1816,10 @@ form.settings div#option-mod-rewrite div.inputs label.radios code {
 
 form.settings textarea#rewrite-rules {
 	width: 99%;
+}
+
+form.settings select#timezone-string option {
+	margin-left: 1em;
 }
 
 

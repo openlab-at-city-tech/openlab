@@ -116,7 +116,7 @@ class WP_Object_Cache
 
 		$this->cache[$key] = $value;
 
-		if ( 'checkthedatabaseplease' == $value ) {
+		if ( 'checkthedatabaseplease' === $value ) {
 			$value = false;
 		}
 
@@ -185,7 +185,7 @@ class WP_Object_Cache
 	{
 		$key = $this->key($id, $group);
 
-		if ( isset( $this->cache[$key] ) && 'checkthedatabaseplease' == $this->cache[$key] ) {
+		if ( isset( $this->cache[$key] ) && 'checkthedatabaseplease' === $this->cache[$key] ) {
 			return false;
 		}
 		$this->cache[$key] = $data;
@@ -207,6 +207,10 @@ class WP_Object_Cache
 
 	function replace($id, $data, $group = 'default', $expire = 0) {
 		$key = $this->key($id, $group);
+		if ( in_array( $group, $this->no_mc_groups ) ) {
+			$this->cache[$key] = $data;
+			return true;
+		}
 		$expire = ($expire == 0) ? $this->default_expiration : $expire;
 		$mc =& $this->get_mc($group);
 		$result = $mc->replace($key, $data, false, $expire);
