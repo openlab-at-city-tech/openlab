@@ -11,7 +11,7 @@ add_action('genesis_post_content', 'cuny_project_archive' );
 function cuny_project_archive() {
 
 	global $wpdb,$bp;
-if ($_GET['group_sequence'] == "") {
+if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {
@@ -48,16 +48,18 @@ switch ($_GET['group_sequence']) {
 	if ($_GET['group_sequence'] != "") {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
-	if($_POST['group_search']){
+	if( !empty( $_POST['group_search'] ) ){
 		$search_terms="search_terms=".$_POST['group_search']."&";
 	}
-	if($_GET['search']){
+	
+	$search_terms = '';
+	if( !empty( $_GET['search'] ) ){
 		$search_terms="search_terms=".$_GET['search']."&";
 	}
 	
 	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
-	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12&max=' . $instance['max_groups'] ) ) : ?>
+	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 
 	<ul id="project-list" class="item-list">
 	<?php $count = 1; ?>
@@ -109,7 +111,10 @@ function cuny_buddypress_courses_actions() { ?>
     <?php } ?>
     <div class="archive-search">
     <form method="post">
-    <input type="text" name="group_search" value="<?php echo $_POST['group_search'];?>" />
+    
+    <?php $group_search = isset( $_POST['group_search'] ) ? $_POST['group_search'] : '' ?>
+    
+    <input type="text" name="group_search" value="<?php echo $group_search ?>" />
     <input type="submit" name="group_search_go" value="Search" />
     </form>
     </div>
