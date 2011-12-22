@@ -17,7 +17,7 @@ function cuny_club_archive() {
 <hr />
 <?php */
 global $wpdb,$bp;
-if ($_GET['group_sequence'] == "") {
+if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {
@@ -55,13 +55,15 @@ foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 if ($_GET['group_sequence'] != "") {
 	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 }
-if($_POST['group_search']){
+if( !empty( $_POST['group_search'] ) ){
 	$search_terms="search_terms=".$_POST['group_search']."&";
 }
-if($_GET['search']){
+
+$search_terms = '';
+if( !empty( $_GET['search'] ) ){
 	$search_terms="search_terms=".$_GET['search']."&";
 }
-if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12&max=' . $instance['max_groups'] ) ) : ?>
+if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 
 	<ul id="club-list" class="item-list">
 	<?php $count = 1 ?>
@@ -123,7 +125,10 @@ function cuny_buddypress_courses_actions() { ?>
     <?php } ?>
     <div class="archive-search">
     <form method="post">
-    <input type="text" name="group_search" value="<?php echo $_POST['group_search'];?>" />
+    
+    <?php $group_search = isset( $_POST['group_search'] ) ? $_POST['group_search'] : '' ?>
+    
+    <input type="text" name="group_search" value="<?php echo $group_search ?>" />
     <input type="submit" name="group_search_go" value="Search" />
     </form>
     </div>
