@@ -18,7 +18,7 @@ var ImageDialog = {
 
 		e = ed.selection.getNode();
 
-		this.fillFileList('image_list', 'tinyMCEImageList');
+		this.fillFileList('image_list', tinyMCEPopup.getParam('external_image_list', 'tinyMCEImageList'));
 
 		if (e.nodeName == 'IMG') {
 			f.src.value = ed.dom.getAttrib(e, 'src');
@@ -29,7 +29,6 @@ var ImageDialog = {
 			f.width.value = ed.dom.getAttrib(e, 'width');
 			f.height.value = ed.dom.getAttrib(e, 'height');
 			f.insert.value = ed.getLang('update');
-			f.class_name.value = ed.dom.getAttrib(e, 'class');
 			this.styleVal = ed.dom.getAttrib(e, 'style');
 			selectByValue(f, 'image_list', f.src.value);
 			selectByValue(f, 'align', this.getAttrib(e, 'align'));
@@ -40,7 +39,7 @@ var ImageDialog = {
 	fillFileList : function(id, l) {
 		var dom = tinyMCEPopup.dom, lst = dom.get(id), v, cl;
 
-		l = window[l];
+		l = typeof(l) === 'function' ? l() : window[l];
 
 		if (l && l.length > 0) {
 			lst.options[lst.options.length] = new Option('', '');
@@ -78,21 +77,26 @@ var ImageDialog = {
 			args.style = this.styleVal;
 
 		tinymce.extend(args, {
-			src : f.src.value,
+			src : f.src.value.replace(/ /g, '%20'),
 			alt : f.alt.value,
 			width : f.width.value,
-			height : f.height.value,
-			'class' : f.class_name.value
+			height : f.height.value
 		});
 
 		el = ed.selection.getNode();
 
 		if (el && el.nodeName == 'IMG') {
 			ed.dom.setAttribs(el, args);
+			tinyMCEPopup.editor.execCommand('mceRepaint');
+			tinyMCEPopup.editor.focus();
 		} else {
-			ed.execCommand('mceInsertContent', false, '<img id="__mce_tmp" />', {skip_undo : 1});
-			ed.dom.setAttribs('__mce_tmp', args);
-			ed.dom.setAttrib('__mce_tmp', 'id', '');
+			tinymce.each(args, function(value, name) {
+				if (value === "") {
+					delete args[name];
+				}
+			});
+
+			ed.execCommand('mceInsertContent', false, tinyMCEPopup.editor.dom.createHTML('img', args), {skip_undo : 1});
 			ed.undoManager.add();
 		}
 
@@ -100,31 +104,24 @@ var ImageDialog = {
 	},
 
 	updateStyle : function() {
-		var dom = tinyMCEPopup.dom, st, v, cls, oldcls, rep, f = document.forms[0];
+		var dom = tinyMCEPopup.dom, st, v, f = document.forms[0];
 
 		if (tinyMCEPopup.editor.settings.inline_styles) {
 			st = tinyMCEPopup.dom.parseStyle(this.styleVal);
 
 			// Handle align
 			v = getSelectValue(f, 'align');
-			cls = f.class_name.value || '';
-			cls = cls ? cls.replace(/alignright\s*|alignleft\s*|aligncenter\s*/g, '') : '';
-			cls = cls ? cls.replace(/^\s*(.+?)\s*$/, '$1') : '';
 			if (v) {
 				if (v == 'left' || v == 'right') {
 					st['float'] = v;
 					delete st['vertical-align'];
-					oldcls = cls ? ' '+cls : '';
-					f.class_name.value = 'align' + v + oldcls;
 				} else {
 					st['vertical-align'] = v;
 					delete st['float'];
-					f.class_name.value = cls;
 				}
 			} else {
 				delete st['float'];
 				delete st['vertical-align'];
-				f.class_name.value = cls;
 			}
 
 			// Handle border

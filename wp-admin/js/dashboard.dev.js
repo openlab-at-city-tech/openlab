@@ -1,17 +1,43 @@
 var ajaxWidgets, ajaxPopulateWidgets, quickPressLoad;
 
 jQuery(document).ready( function($) {
+	/* Dashboard Welcome Panel */
+	var welcomePanel = $('#welcome-panel'),
+		welcomePanelHide = $('#wp_welcome_panel-hide'),
+	 	updateWelcomePanel = function( visible ) {
+			$.post( ajaxurl, {
+				action: 'update-welcome-panel',
+				visible: visible,
+				welcomepanelnonce: $('#welcomepanelnonce').val()
+			});
+		};
+
+	if ( welcomePanel.hasClass('hidden') && welcomePanelHide.prop('checked') )
+		welcomePanel.removeClass('hidden');
+
+	$('.welcome-panel-close, .welcome-panel-dismiss a', welcomePanel).click( function(e) {
+		e.preventDefault();
+		welcomePanel.addClass('hidden');
+		updateWelcomePanel( 0 );
+		$('#wp_welcome_panel-hide').prop('checked', false);
+	});
+
+
+	welcomePanelHide.click( function() {
+		welcomePanel.toggleClass('hidden', ! this.checked );
+		updateWelcomePanel( this.checked ? 1 : 0 );
+	});
+
 	// These widgets are sometimes populated via ajax
 	ajaxWidgets = [
 		'dashboard_incoming_links',
 		'dashboard_primary',
 		'dashboard_secondary',
-		'dashboard_plugins',
-		'dashboard_quick_press'
+		'dashboard_plugins'
 	];
 
 	ajaxPopulateWidgets = function(el) {
-		show = function(id, i) {
+		function show(i, id) {
 			var p, e = $('#' + id + ' div.inside:visible').find('.widget-loading');
 			if ( e.length ) {
 				p = e.parent();
@@ -19,21 +45,18 @@ jQuery(document).ready( function($) {
 					p.load( ajaxurl.replace( '/admin-ajax.php', '' ) + '/index-extra.php?jax=' + id, '', function() {
 						p.hide().slideDown('normal', function(){
 							$(this).css('display', '');
-							if ( 'dashboard_quick_press' == id )
-								quickPressLoad();
 						});
 					});
 				}, i * 500 );
 			}
 		}
+
 		if ( el ) {
 			el = el.toString();
 			if ( $.inArray(el, ajaxWidgets) != -1 )
-				show(el, 0);
+				show(0, el);
 		} else {
-			$.each( ajaxWidgets, function(i) {
-				show(this, i);
-			});
+			$.each( ajaxWidgets, show );
 		}
 	};
 	ajaxPopulateWidgets();
@@ -45,7 +68,7 @@ jQuery(document).ready( function($) {
 		var act = $('#quickpost-action'), t;
 		t = $('#quick-press').submit( function() {
 			$('#dashboard_quick_press #publishing-action img.waiting').css('visibility', 'visible');
-			$('#quick-press .submit input[type="submit"], #quick-press .submit input[type="reset"]').attr('disabled','disabled');
+			$('#quick-press .submit input[type="submit"], #quick-press .submit input[type="reset"]').prop('disabled', true);
 
 			if ( 'post' == act.val() ) {
 				act.val( 'post-quickpress-publish' );
@@ -53,7 +76,7 @@ jQuery(document).ready( function($) {
 
 			$('#dashboard_quick_press div.inside').load( t.attr( 'action' ), t.serializeArray(), function() {
 				$('#dashboard_quick_press #publishing-action img.waiting').css('visibility', 'hidden');
-				$('#quick-press .submit input[type="submit"], #quick-press .submit input[type="reset"]').attr('disabled','');
+				$('#quick-press .submit input[type="submit"], #quick-press .submit input[type="reset"]').prop('disabled', false);
 				$('#dashboard_quick_press ul').next('p').remove();
 				$('#dashboard_quick_press ul').find('li').each( function() {
 					$('#dashboard_recent_drafts ul').prepend( this );
@@ -66,5 +89,6 @@ jQuery(document).ready( function($) {
 		$('#publish').click( function() { act.val( 'post-quickpress-publish' ); } );
 
 	};
+	quickPressLoad();
 
 } );

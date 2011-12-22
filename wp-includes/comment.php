@@ -213,6 +213,11 @@ class WP_Comment_Query {
 			'parent' => '',
 			'post_ID' => '',
 			'post_id' => 0,
+			'post_author' => '',
+			'post_name' => '',
+			'post_parent' => '',
+			'post_status' => '',
+			'post_type' => '',
 			'status' => '',
 			'type' => '',
 			'user_id' => '',
@@ -318,6 +323,13 @@ class WP_Comment_Query {
 			$where .= $wpdb->prepare( ' AND user_id = %d', $user_id );
 		if ( '' !== $search )
 			$where .= $this->get_search_sql( $search, array( 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_author_IP', 'comment_content' ) );
+
+		$post_fields = array_filter( compact( array( 'post_author', 'post_name', 'post_parent', 'post_status', 'post_type', ) ) );
+		if ( ! empty( $post_fields ) ) {
+			$join = "JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->comments.comment_post_ID";
+			foreach( $post_fields as $field_name => $field_value )
+				$where .= $wpdb->prepare( " AND {$wpdb->posts}.{$field_name} = %s", $field_value );
+		}
 
 		$pieces = array( 'fields', 'join', 'where', 'orderby', 'order', 'limits' );
 		$clauses = apply_filters_ref_array( 'comments_clauses', array( compact( $pieces ), &$this ) );
@@ -892,12 +904,11 @@ function wp_count_comments( $post_id = 0 ) {
 
 	$total = 0;
 	$approved = array('0' => 'moderated', '1' => 'approved', 'spam' => 'spam', 'trash' => 'trash', 'post-trashed' => 'post-trashed');
-	$known_types = array_keys( $approved );
 	foreach ( (array) $count as $row ) {
 		// Don't count post-trashed toward totals
 		if ( 'post-trashed' != $row['comment_approved'] && 'trash' != $row['comment_approved'] )
 			$total += $row['num_comments'];
-		if ( in_array( $row['comment_approved'], $known_types ) )
+		if ( isset( $approved[$row['comment_approved']] ) )
 			$stats[$approved[$row['comment_approved']]] = $row['num_comments'];
 	}
 
@@ -1394,7 +1405,7 @@ function wp_set_comment_status($comment_id, $comment_status, $wp_error = false) 
 			return false;
 	}
 
-	$comment_old = wp_clone(get_comment($comment_id));
+	$comment_old = clone get_comment($comment_id);
 
 	if ( !$wpdb->update( $wpdb->comments, array('comment_approved' => $status), array('comment_ID' => $comment_id) ) ) {
 		if ( $wp_error )
@@ -1608,11 +1619,11 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	if ( is_wp_error( $response ) )
 		return false;
 
-	if ( isset( $response['headers']['x-pingback'] ) )
-		return $response['headers']['x-pingback'];
+	if ( wp_remote_retrieve_header( $response, 'x-pingback' ) )
+		return wp_remote_retrieve_header( $response, 'x-pingback' );
 
 	// Not an (x)html, sgml, or xml page, no use going further.
-	if ( isset( $response['headers']['content-type'] ) && preg_match('#(image|audio|video|model)/#is', $response['headers']['content-type']) )
+	if ( preg_match('#(image|audio|video|model)/#is', wp_remote_retrieve_header( $response, 'content-type' )) )
 		return false;
 
 	// Now do a GET since we're going to look in the html headers (and we're sure its not a binary file)
@@ -1621,7 +1632,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	if ( is_wp_error( $response ) )
 		return false;
 
-	$contents = $response['body'];
+	$contents = wp_remote_retrieve_body( $response );
 
 	$pingback_link_offset_dquote = strpos($contents, $pingback_str_dquote);
 	$pingback_link_offset_squote = strpos($contents, $pingback_str_squote);
@@ -1653,21 +1664,15 @@ function do_all_pings() {
 	global $wpdb;
 
 	// Do pingbacks
-	while ($ping = $wpdb->get_row("SELECT * FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_pingme' LIMIT 1")) {
-		$mid = $wpdb->get_var( "SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = {$ping->ID} AND meta_key = '_pingme' LIMIT 1");
-		do_action( 'delete_postmeta', $mid );
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_id = %d", $mid ) );
-		do_action( 'deleted_postmeta', $mid );
-		pingback($ping->post_content, $ping->ID);
+	while ($ping = $wpdb->get_row("SELECT ID, post_content, meta_id FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_pingme' LIMIT 1")) {
+		delete_metadata_by_mid( 'post', $ping->meta_id );
+		pingback( $ping->post_content, $ping->ID );
 	}
 
 	// Do Enclosures
-	while ($enclosure = $wpdb->get_row("SELECT * FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_encloseme' LIMIT 1")) {
-		$mid = $wpdb->get_var( $wpdb->prepare("SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = '_encloseme'", $enclosure->ID) );
-		do_action( 'delete_postmeta', $mid );
-		$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE meta_id =  %d", $mid) );
-		do_action( 'deleted_postmeta', $mid );
-		do_enclose($enclosure->post_content, $enclosure->ID);
+	while ($enclosure = $wpdb->get_row("SELECT ID, post_content, meta_id FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_encloseme' LIMIT 1")) {
+		delete_metadata_by_mid( 'post', $enclosure->meta_id );
+		do_enclose( $enclosure->post_content, $enclosure->ID );
 	}
 
 	// Do Trackbacks
@@ -1706,7 +1711,7 @@ function do_trackbacks($post_id) {
 	$excerpt = str_replace(']]>', ']]&gt;', $excerpt);
 	$excerpt = wp_html_excerpt($excerpt, 252) . '...';
 
-	$post_title = apply_filters('the_title', $post->post_title);
+	$post_title = apply_filters('the_title', $post->post_title, $post->ID);
 	$post_title = strip_tags($post_title);
 
 	if ( $to_ping ) {
@@ -1948,14 +1953,19 @@ function update_comment_cache($comments) {
  * @since 2.7.0
  *
  * @param object $posts Post data object.
+ * @param object $query Query object.
  * @return object
  */
-function _close_comments_for_old_posts( $posts ) {
-	if ( empty($posts) || !is_singular() || !get_option('close_comments_for_old_posts') )
+function _close_comments_for_old_posts( $posts, $query ) {
+	if ( empty( $posts ) || ! $query->is_singular() || ! get_option( 'close_comments_for_old_posts' ) )
 		return $posts;
 
-	$days_old = (int) get_option('close_comments_days_old');
-	if ( !$days_old )
+	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
+	if ( ! in_array( $posts[0]->post_type, $post_types ) )
+		return $posts;
+
+	$days_old = (int) get_option( 'close_comments_days_old' );
+	if ( ! $days_old )
 		return $posts;
 
 	if ( time() - strtotime( $posts[0]->post_date_gmt ) > ( $days_old * 24 * 60 * 60 ) ) {
@@ -1988,6 +1998,10 @@ function _close_comments_for_old_post( $open, $post_id ) {
 		return $open;
 
 	$post = get_post($post_id);
+
+	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
+	if ( ! in_array( $post->post_type, $post_types ) )
+		return $open;
 
 	if ( time() - strtotime( $post->post_date_gmt ) > ( $days_old * 24 * 60 * 60 ) )
 		return false;

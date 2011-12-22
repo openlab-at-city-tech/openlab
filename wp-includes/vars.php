@@ -12,15 +12,19 @@
  * @package WordPress
  */
 
+global $pagenow,
+	$is_lynx, $is_gecko, $is_winIE, $is_macIE, $is_opera, $is_NS4, $is_safari, $is_chrome, $is_iphone, $is_IE,
+	$is_apache, $is_IIS, $is_iis7;
+
 // On which page are we ?
 if ( is_admin() ) {
 	// wp-admin pages are checked more carefully
 	if ( is_network_admin() )
-		preg_match('#/wp-admin/network/?(.*?)$#i', $PHP_SELF, $self_matches);
+		preg_match('#/wp-admin/network/?(.*?)$#i', $_SERVER['PHP_SELF'], $self_matches);
 	elseif ( is_user_admin() )
-		preg_match('#/wp-admin/user/?(.*?)$#i', $PHP_SELF, $self_matches);
+		preg_match('#/wp-admin/user/?(.*?)$#i', $_SERVER['PHP_SELF'], $self_matches);
 	else
-		preg_match('#/wp-admin/?(.*?)$#i', $PHP_SELF, $self_matches);
+		preg_match('#/wp-admin/?(.*?)$#i', $_SERVER['PHP_SELF'], $self_matches);
 	$pagenow = $self_matches[1];
 	$pagenow = trim($pagenow, '/');
 	$pagenow = preg_replace('#\?.*?$#', '', $pagenow);
@@ -33,7 +37,7 @@ if ( is_admin() ) {
 			$pagenow .= '.php'; // for Options +Multiviews: /wp-admin/themes/index.php (themes.php is queried)
 	}
 } else {
-	if ( preg_match('#([^/]+\.php)([?/].*?)?$#i', $PHP_SELF, $self_matches) )
+	if ( preg_match('#([^/]+\.php)([?/].*?)?$#i', $_SERVER['PHP_SELF'], $self_matches) )
 		$pagenow = strtolower($self_matches[1]);
 	else
 		$pagenow = 'index.php';
@@ -47,7 +51,13 @@ if ( isset($_SERVER['HTTP_USER_AGENT']) ) {
 	if ( strpos($_SERVER['HTTP_USER_AGENT'], 'Lynx') !== false ) {
 		$is_lynx = true;
 	} elseif ( stripos($_SERVER['HTTP_USER_AGENT'], 'chrome') !== false ) {
-		$is_chrome = true;
+		if ( stripos( $_SERVER['HTTP_USER_AGENT'], 'chromeframe' ) !== false ) {
+			if ( $is_chrome = apply_filters( 'use_google_chrome_frame', is_admin() ) )
+				header( 'X-UA-Compatible: chrome=1' );
+			$is_winIE = ! $is_chrome;
+		} else {
+			$is_chrome = true;
+		}
 	} elseif ( stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false ) {
 		$is_safari = true;
 	} elseif ( strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false ) {

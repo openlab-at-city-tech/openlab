@@ -5,6 +5,8 @@
  * The permissions for the base directory must allow for writing files in order
  * for the wp-config.php to be created using this page.
  *
+ * @internal This file must be parsable by PHP4.
+ *
  * @package WordPress
  * @subpackage Administration
  */
@@ -40,10 +42,12 @@ define('WP_DEBUG', false);
 /**#@-*/
 
 require_once(ABSPATH . WPINC . '/load.php');
+require_once(ABSPATH . WPINC . '/version.php');
+wp_check_php_mysql_versions();
+
 require_once(ABSPATH . WPINC . '/compat.php');
 require_once(ABSPATH . WPINC . '/functions.php');
 require_once(ABSPATH . WPINC . '/class-wp-error.php');
-require_once(ABSPATH . WPINC . '/version.php');
 
 if (!file_exists(ABSPATH . 'wp-config-sample.php'))
 	wp_die('Sorry, I need a wp-config-sample.php file to work from. Please re-upload this file from your WordPress installation.');
@@ -57,12 +61,6 @@ if (file_exists(ABSPATH . 'wp-config.php'))
 // Check if wp-config.php exists above the root directory but is not part of another install
 if (file_exists(ABSPATH . '../wp-config.php') && ! file_exists(ABSPATH . '../wp-settings.php'))
 	wp_die("<p>The file 'wp-config.php' already exists one level above your WordPress installation. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='install.php'>installing now</a>.</p>");
-
-if ( version_compare( $required_php_version, phpversion(), '>' ) )
-	wp_die( sprintf( /*WP_I18N_OLD_PHP*/'Your server is running PHP version %1$s but WordPress requires at least %2$s.'/*/WP_I18N_OLD_PHP*/, phpversion(), $required_php_version ) );
-
-if ( !extension_loaded('mysql') && !file_exists(ABSPATH . 'wp-content/db.php') )
-	wp_die( /*WP_I18N_OLD_MYSQL*/'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.'/*/WP_I18N_OLD_MYSQL*/ );
 
 if (isset($_GET['step']))
 	$step = $_GET['step'];
@@ -80,7 +78,7 @@ else
 function display_header() {
 	header( 'Content-Type: text/html; charset=utf-8' );
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -132,7 +130,7 @@ switch($step) {
 		<tr>
 			<th scope="row"><label for="pwd">Password</label></th>
 			<td><input name="pwd" id="pwd" type="text" size="25" value="password" /></td>
-			<td>...and MySQL password.</td>
+			<td>...and your MySQL password.</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
@@ -141,7 +139,7 @@ switch($step) {
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Table Prefix</label></th>
-			<td><input name="prefix" id="prefix" type="text" id="prefix" value="wp_" size="25" /></td>
+			<td><input name="prefix" id="prefix" type="text" value="wp_" size="25" /></td>
 			<td>If you want to run multiple WordPress installations in a single database, change this.</td>
 		</tr>
 	</table>

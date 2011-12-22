@@ -427,6 +427,12 @@ var wpNavMenu;
 					}
 				}
 			});
+			$('#add-custom-links input[type="text"]').keypress(function(e){
+				if ( e.keyCode === 13 ) {
+					e.preventDefault();
+					$("#submit-customlinkdiv").click();
+				}
+			});
 		},
 
 		/**
@@ -461,7 +467,7 @@ var wpNavMenu;
 			var loc = $('#nav-menu-theme-locations'), params = {};
 			params['action'] = 'menu-locations-save';
 			params['menu-settings-column-nonce'] = $('#menu-settings-column-nonce').val();
-			loc.find('input[type=submit]').click(function() {
+			loc.find('input[type="submit"]').click(function() {
 				loc.find('select').each(function() {
 					params[this.name] = $(this).val();
 				});
@@ -598,7 +604,7 @@ var wpNavMenu;
 				};
 			} else {
 				// Make the post boxes read-only, as they can't be used yet
-				$('#menu-settings-column').find('input,select').attr('disabled', 'disabled').end().find('a').attr('href', '#').unbind('click');
+				$('#menu-settings-column').find('input,select').prop('disabled', true).end().find('a').attr('href', '#').unbind('click');
 			}
 		},
 
@@ -640,7 +646,7 @@ var wpNavMenu;
 						if( items.length === items.filter(':checked').length )
 							items.removeAttr('checked');
 						else
-							items.attr('checked', 'checked');
+							items.prop('checked', true);
 						return false;
 					}
 				} else if ( target.hasClass('submit-add-to-menu') ) {

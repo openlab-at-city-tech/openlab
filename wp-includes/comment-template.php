@@ -362,7 +362,7 @@ function get_comment_class( $class = '', $comment_id = null, $post_id = null ) {
  * Retrieve the comment date of the current comment.
  *
  * @since 1.5.0
- * @uses apply_filters() Calls 'get_comment_date' hook with the formated date and the $d parameter respectively
+ * @uses apply_filters() Calls 'get_comment_date' hook with the formatted date and the $d parameter respectively
  * @uses $comment
  *
  * @param string $d The format of the date (defaults to user's config)
@@ -832,7 +832,7 @@ function wp_comment_form_unfiltered_html_nonce() {
  *
  * The $file path is passed through a filter hook called, 'comments_template'
  * which includes the TEMPLATEPATH and $file combined. Tries the $filtered path
- * first and if it fails it will require the default comment themplate from the
+ * first and if it fails it will require the default comment template from the
  * default theme. If either does not exist, then the WordPress process will be
  * halted. It is advised for that reason, that the default theme is not deleted.
  *
@@ -1162,8 +1162,9 @@ function cancel_comment_reply_link($text = '') {
  *
  * @return string Hidden input HTML for replying to comments
  */
-function get_comment_id_fields() {
-	$id = get_the_ID();
+function get_comment_id_fields( $id = 0 ) {
+	if ( empty( $id ) )
+		$id = get_the_ID();
 
 	$replytoid = isset($_GET['replytocom']) ? (int) $_GET['replytocom'] : 0;
 	$result  = "<input type='hidden' name='comment_post_ID' value='$id' id='comment_post_ID' />\n";
@@ -1177,8 +1178,8 @@ function get_comment_id_fields() {
  * @since 2.7.0
  * @see get_comment_id_fields() Echoes result
  */
-function comment_id_fields() {
-	echo get_comment_id_fields();
+function comment_id_fields( $id = 0 ) {
+	echo get_comment_id_fields( $id );
 }
 
 /**
@@ -1507,7 +1508,7 @@ function wp_list_comments($args = array(), $comments = null ) {
  * @return void
  */
 function comment_form( $args = array(), $post_id = null ) {
-	global $user_identity, $id;
+	global $id;
 
 	if ( null === $post_id )
 		$post_id = $id;
@@ -1515,6 +1516,8 @@ function comment_form( $args = array(), $post_id = null ) {
 		$id = $post_id;
 
 	$commenter = wp_get_current_commenter();
+	$user = wp_get_current_user();
+	$user_identity = ! empty( $user->ID ) ? $user->display_name : '';
 
 	$req = get_option( 'require_name_email' );
 	$aria_req = ( $req ? " aria-required='true'" : '' );
@@ -1573,7 +1576,7 @@ function comment_form( $args = array(), $post_id = null ) {
 						<?php echo $args['comment_notes_after']; ?>
 						<p class="form-submit">
 							<input name="submit" type="submit" id="<?php echo esc_attr( $args['id_submit'] ); ?>" value="<?php echo esc_attr( $args['label_submit'] ); ?>" />
-							<?php comment_id_fields(); ?>
+							<?php comment_id_fields( $post_id ); ?>
 						</p>
 						<?php do_action( 'comment_form', $post_id ); ?>
 					</form>

@@ -138,8 +138,8 @@ echo esc_html( $visibility_trans ); ?></span>
 
 
 <input type="radio" name="visibility" id="visibility-radio-public" value="public" <?php checked( $visibility, 'public' ); ?> /> <label for="visibility-radio-public" class="selectit"><?php _e('Public'); ?></label><br />
-<?php if ($post_type == 'post'): ?>
-<span id="sticky-span"><input id="sticky" name="sticky" type="checkbox" value="sticky" <?php checked(is_sticky($post->ID)); ?> tabindex="4" /> <label for="sticky" class="selectit"><?php _e('Stick this post to the front page') ?></label><br /></span>
+<?php if ( $post_type == 'post' && current_user_can( 'edit_others_posts' ) ) : ?>
+<span id="sticky-span"><input id="sticky" name="sticky" type="checkbox" value="sticky" <?php checked( is_sticky( $post->ID ) ); ?> tabindex="4" /> <label for="sticky" class="selectit"><?php _e( 'Stick this post to the front page' ); ?></label><br /></span>
 <?php endif; ?>
 <input type="radio" name="visibility" id="visibility-radio-password" value="password" <?php checked( $visibility, 'password' ); ?> /> <label for="visibility-radio-password" class="selectit"><?php _e('Password protected'); ?></label><br />
 <span id="password-span"><label for="post_password"><?php _e('Password:'); ?></label> <input type="text" name="post_password" id="post_password" value="<?php echo esc_attr($post->post_password); ?>" /><br /></span>
@@ -155,7 +155,7 @@ echo esc_html( $visibility_trans ); ?></span>
 </div><?php // /misc-pub-section ?>
 
 <?php
-// translators: Publish box date formt, see http://php.net/date
+// translators: Publish box date format, see http://php.net/date
 $datef = __( 'M j, Y @ G:i' );
 if ( 0 != $post->ID ) {
 	if ( 'future' == $post->post_status ) { // scheduled for publishing at a future date
@@ -248,7 +248,6 @@ function post_format_meta_box( $post, $box ) {
 		$post_format = get_post_format( $post->ID );
 		if ( !$post_format )
 			$post_format = '0';
-		$post_format_display = get_post_format_string( $post_format );
 		// Add in the current one if it isn't there yet, in case the current theme doesn't support it
 		if ( $post_format && !in_array( $post_format, $post_formats[0] ) )
 			$post_formats[0][] = $post_format;
@@ -426,7 +425,11 @@ function post_custom_meta_box($post) {
 <div id="ajax-response"></div>
 <?php
 $metadata = has_meta($post->ID);
-list_meta($metadata);
+foreach ( $metadata as $key => $value ) {
+	if ( is_protected_meta( $metadata[ $key ][ 'meta_key' ], 'post' ) || ! current_user_can( 'edit_post_meta', $post->ID, $metadata[ $key ][ 'meta_key' ] ) )
+		unset( $metadata[ $key ] );
+}
+list_meta( $metadata );
 meta_form(); ?>
 </div>
 <p><?php _e('Custom fields can be used to add extra metadata to a post that you can <a href="http://codex.wordpress.org/Using_Custom_Fields" target="_blank">use in your theme</a>.'); ?></p>
@@ -507,7 +510,7 @@ function post_comment_meta_box($post) {
  */
 function post_slug_meta_box($post) {
 ?>
-<label class="screen-reader-text" for="post_name"><?php _e('Slug') ?></label><input name="post_name" type="text" size="13" id="post_name" value="<?php echo esc_attr( $post->post_name ); ?>" />
+<label class="screen-reader-text" for="post_name"><?php _e('Slug') ?></label><input name="post_name" type="text" size="13" id="post_name" value="<?php echo esc_attr( apply_filters('editable_slug', $post->post_name) ); ?>" />
 <?php
 }
 
@@ -557,7 +560,18 @@ function post_revisions_meta_box($post) {
 function page_attributes_meta_box($post) {
 	$post_type_object = get_post_type_object($post->post_type);
 	if ( $post_type_object->hierarchical ) {
-		$pages = wp_dropdown_pages(array('post_type' => $post->post_type, 'exclude_tree' => $post->ID, 'selected' => $post->post_parent, 'name' => 'parent_id', 'show_option_none' => __('(no parent)'), 'sort_column'=> 'menu_order, post_title', 'echo' => 0));
+		$dropdown_args = array(
+			'post_type'        => $post->post_type,
+			'exclude_tree'     => $post->ID,
+			'selected'         => $post->post_parent,
+			'name'             => 'parent_id',
+			'show_option_none' => __('(no parent)'),
+			'sort_column'      => 'menu_order, post_title',
+			'echo'             => 0,
+		);
+
+		$dropdown_args = apply_filters( 'page_attributes_dropdown_pages_args', $dropdown_args, $post );
+		$pages = wp_dropdown_pages( $dropdown_args );
 		if ( ! empty($pages) ) {
 ?>
 <p><strong><?php _e('Parent') ?></strong></p>

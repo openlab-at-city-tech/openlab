@@ -20,12 +20,45 @@ $parent_file = 'users.php';
 add_screen_option( 'per_page', array('label' => _x( 'Users', 'users per page (screen options)' )) );
 
 // contextual help - choose Help on the top right of admin panel to preview this.
-add_contextual_help($current_screen,
-    '<p>' . __('This screen lists all the existing users for your site. Each user has one of five defined roles as set by the site admin: Site Administrator, Editor, Author, Contributor, or Subscriber. Users with roles other than Administrator will see fewer options in the dashboard navigation when they are logged in, based on their role.') . '</p>' .
-    '<p>' . __('You can customize the display of information on this screen as you can on other screens, by using the Screen Options tab and the on-screen filters.') . '</p>' .
-    '<p>' . __('To add a new user for your site, click the Add New button at the top of the screen or Add New in the Users menu section.') . '</p>' .
+get_current_screen()->add_help_tab( array(
+	'id'      => 'overview',
+	'title'   => __('Overview'),
+	'content' => '<p>' . __('This screen lists all the existing users for your site. Each user has one of five defined roles as set by the site admin: Site Administrator, Editor, Author, Contributor, or Subscriber. Users with roles other than Administrator will see fewer options in the dashboard navigation when they are logged in, based on their role.') . '</p>' .
+				 '<p>' . __('To add a new user for your site, click the Add New button at the top of the screen or Add New in the Users menu section.') . '</p>'
+) ) ;
+
+get_current_screen()->add_help_tab( array(
+	'id'      => 'screen-display',
+	'title'   => __('Screen Display'),
+	'content' => '<p>' . __('You can customize the display of this screen in a number of ways:') . '</p>' .
+					'<ul>' .
+					'<li>' . __('You can hide/display columns based on your needs and decide how many users to list per screen using the Screen Options tab.') . '</li>' .
+					'<li>' . __('You can filter the list of users by User Role using the text links in the upper left to show All, Administrator, Editor, Author, Contributor, or Subscriber. The default view is to show all users.  Unused User Roles are not listed.') . '</li>' .
+					'<li>' . __('You can view all posts made by a user by clicking on the number under the Posts column.') . '</li>' .
+					'</ul>'
+) );
+
+$help = '<p>' . __('Hovering over a row in the users list will display action links that allow you to manage users. You can perform the following actions:') . '</p>' .
+	'<ul>' .
+	'<li>' . __('Edit takes you to the editable profile screen for that user. You can also reach that screen by clicking on the username.') . '</li>';
+
+if ( is_multisite() )
+	$help .= '<li>' . __( 'Remove allows you to remove a user from your site. It does not delete their posts. You can also remove multiple users at once by using Bulk Actions.' ) . '</li>';
+else
+	$help .= '<li>' . __( 'Delete brings you to the Delete Users screen for confirmation, where you can permanently remove a user from your site and delete their posts. You can also delete multiple users at once by using Bulk Actions.' ) . '</li>';
+
+$help .= '</ul>';
+
+get_current_screen()->add_help_tab( array(
+	'id'      => 'actions',
+	'title'   => __('Actions'),
+	'content' => $help,
+) );
+unset( $help );
+
+get_current_screen()->set_help_sidebar(
     '<p><strong>' . __('For more information:') . '</strong></p>' .
-    '<p>' . __('<a href="http://codex.wordpress.org/Users_Users_SubPanel" target="_blank">Documentation on Managing Users</a>') . '</p>' .
+    '<p>' . __('<a href="http://codex.wordpress.org/Users_Screen" target="_blank">Documentation on Managing Users</a>') . '</p>' .
     '<p>' . __('<a href="http://codex.wordpress.org/Roles_and_Capabilities" target="_blank">Descriptions of Roles and Capabilities</a>') . '</p>' .
     '<p>' . __('<a href="http://wordpress.org/support/" target="_blank">Support Forums</a>') . '</p>'
 );
@@ -67,8 +100,8 @@ case 'promote':
 
 		if ( ! current_user_can('promote_user', $id) )
 			wp_die(__('You can&#8217;t edit that user.'));
-		// The new role of the current user must also have promote_users caps
-		if ( $id == $current_user->ID && !$wp_roles->role_objects[$_REQUEST['new_role']]->has_cap('promote_users') ) {
+		// The new role of the current user must also have the promote_users cap or be a super admin
+		if ( $id == $current_user->ID && ! is_super_admin() && ! $wp_roles->role_objects[ $_REQUEST['new_role'] ]->has_cap('promote_users') ) {
 			$update = 'err_admin_role';
 			continue;
 		}
@@ -150,7 +183,7 @@ case 'delete':
 	if ( empty($_REQUEST['users']) )
 		$userids = array(intval($_REQUEST['user']));
 	else
-		$userids = $_REQUEST['users'];
+		$userids = (array) $_REQUEST['users'];
 
 	include ('admin-header.php');
 ?>
@@ -161,24 +194,24 @@ case 'delete':
 <div class="wrap">
 <?php screen_icon(); ?>
 <h2><?php _e('Delete Users'); ?></h2>
-<p><?php _e('You have specified these users for deletion:'); ?></p>
+<p><?php echo _n( 'You have specified this user for deletion:', 'You have specified these users for deletion:', count( $userids ) ); ?></p>
 <ul>
 <?php
-	$go_delete = false;
-	foreach ( (array) $userids as $id ) {
+	$go_delete = 0;
+	foreach ( $userids as $id ) {
 		$id = (int) $id;
 		$user = new WP_User($id);
 		if ( $id == $current_user->ID ) {
 			echo "<li>" . sprintf(__('ID #%1s: %2s <strong>The current user will not be deleted.</strong>'), $id, $user->user_login) . "</li>\n";
 		} else {
 			echo "<li><input type=\"hidden\" name=\"users[]\" value=\"" . esc_attr($id) . "\" />" . sprintf(__('ID #%1s: %2s'), $id, $user->user_login) . "</li>\n";
-			$go_delete = true;
+			$go_delete++;
 		}
 	}
 	?>
 	</ul>
 <?php if ( $go_delete ) : ?>
-	<fieldset><p><legend><?php _e('What should be done with posts and links owned by this user?'); ?></legend></p>
+	<fieldset><p><legend><?php echo _n( 'What should be done with posts and links owned by this user?', 'What should be done with posts and links owned by these users?', $go_delete ); ?></legend></p>
 	<ul style="list-style:none;">
 		<li><label><input type="radio" id="delete_option0" name="delete_option" value="delete" checked="checked" />
 		<?php _e('Delete all posts and links.'); ?></label></li>
@@ -216,7 +249,7 @@ case 'doremove':
 	$update = 'remove';
  	foreach ( $userids as $id ) {
 		$id = (int) $id;
-		if ( $id == $current_user->id && !is_super_admin() ) {
+		if ( $id == $current_user->ID && !is_super_admin() ) {
 			$update = 'err_admin_remove';
 			continue;
 		}
@@ -269,7 +302,7 @@ case 'remove':
  	foreach ( $userids as $id ) {
 		$id = (int) $id;
  		$user = new WP_User($id);
-		if ( $id == $current_user->id && !is_super_admin() ) {
+		if ( $id == $current_user->ID && !is_super_admin() ) {
 			echo "<li>" . sprintf(__('ID #%1s: %2s <strong>The current user will not be removed.</strong>'), $id, $user->user_login) . "</li>\n";
 		} elseif ( !current_user_can('remove_user', $id) ) {
 			echo "<li>" . sprintf(__('ID #%1s: %2s <strong>You don\'t have permission to remove this user.</strong>'), $id, $user->user_login) . "</li>\n";
@@ -360,9 +393,9 @@ if ( ! empty($messages) ) {
 <?php
 echo esc_html( $title );
 if ( current_user_can( 'create_users' ) ) { ?>
-	<a href="user-new.php" class="button add-new-h2"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
+	<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
 <?php } elseif ( is_multisite() && current_user_can( 'promote_users' ) ) { ?>
-	<a href="user-new.php" class="button add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user' ); ?></a>
+	<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user' ); ?></a>
 <?php }
 
 if ( $usersearch )
@@ -377,16 +410,6 @@ if ( $usersearch )
 
 <?php $wp_list_table->display(); ?>
 </form>
-
-<?php
-if ( is_multisite() ) {
-	foreach ( array('user_login' => 'user_login', 'first_name' => 'user_firstname', 'last_name' => 'user_lastname', 'email' => 'user_email', 'url' => 'user_uri', 'role' => 'user_role') as $formpost => $var ) {
-		$var = 'new_' . $var;
-		$$var = isset($_REQUEST[$formpost]) ? esc_attr(stripslashes($_REQUEST[$formpost])) : '';
-	}
-	unset($name);
-}
-?>
 
 <br class="clear" />
 </div>

@@ -82,11 +82,7 @@ if ( isset($_GET['action']) ) {
 		if ( isset($_GET['failure']) ){
 			echo '<p>' . __('Plugin failed to reactivate due to a fatal error.') . '</p>';
 
-			if ( defined('E_RECOVERABLE_ERROR') )
-				error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
-			else
-				error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING);
-
+			error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 			@ini_set('display_errors', true); //Ensure that Fatal errors are displayed.
 			include(WP_PLUGIN_DIR . '/' . $plugin);
 		}
@@ -138,11 +134,14 @@ if ( isset($_GET['action']) ) {
 
 		$title = sprintf( __('Installing Plugin from uploaded file: %s'), basename( $file_upload->filename ) );
 		$nonce = 'plugin-upload';
-		$url = add_query_arg(array('package' => $file_upload->filename ), 'update.php?action=upload-plugin');
+		$url = add_query_arg(array('package' => $file_upload->id), 'update.php?action=upload-plugin');
 		$type = 'upload'; //Install plugin type, From Web or an Upload.
 
 		$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( compact('type', 'title', 'nonce', 'url') ) );
-		$upgrader->install( $file_upload->package );
+		$result = $upgrader->install( $file_upload->package );
+
+		if ( $result || is_wp_error($result) )
+			$file_upload->cleanup();
 
 		include(ABSPATH . 'wp-admin/admin-footer.php');
 
@@ -240,11 +239,14 @@ if ( isset($_GET['action']) ) {
 
 		$title = sprintf( __('Installing Theme from uploaded file: %s'), basename( $file_upload->filename ) );
 		$nonce = 'theme-upload';
-		$url = add_query_arg(array('package' => $file_upload->filename), 'update.php?action=upload-theme');
+		$url = add_query_arg(array('package' => $file_upload->id), 'update.php?action=upload-theme');
 		$type = 'upload'; //Install plugin type, From Web or an Upload.
 
 		$upgrader = new Theme_Upgrader( new Theme_Installer_Skin( compact('type', 'title', 'nonce', 'url') ) );
-		$upgrader->install( $file_upload->package );
+		$result = $upgrader->install( $file_upload->package );
+
+		if ( $result || is_wp_error($result) )
+			$file_upload->cleanup();
 
 		include(ABSPATH . 'wp-admin/admin-footer.php');
 

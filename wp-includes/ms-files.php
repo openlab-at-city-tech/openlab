@@ -23,7 +23,7 @@ if ( $current_blog->archived == '1' || $current_blog->spam == '1' || $current_bl
 	die( '404 &#8212; File not found.' );
 }
 
-$file = BLOGUPLOADDIR . str_replace( '..', '', $_GET[ 'file' ] );
+$file = rtrim( BLOGUPLOADDIR, '/' ) . '/' . str_replace( '..', '', $_GET[ 'file' ] );
 if ( !is_file( $file ) ) {
 	status_header( 404 );
 	die( '404 &#8212; File not found.' );
@@ -38,7 +38,7 @@ if( $mime[ 'type' ] )
 else
 	$mimetype = 'image/' . substr( $file, strrpos( $file, '.' ) + 1 );
 
-header( 'Content-type: ' . $mimetype ); // always send this
+header( 'Content-Type: ' . $mimetype ); // always send this
 if ( false === strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) )
 	header( 'Content-Length: ' . filesize( $file ) );
 

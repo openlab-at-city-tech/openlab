@@ -1,6 +1,6 @@
 <?php
 /**
- * Options Management Administration Panel.
+ * Options Management Administration Screen.
  *
  * If accessed directly in a browser this page shows a list of all saved options
  * along with editable fields for their values. Serialized data is not supported
@@ -24,10 +24,14 @@ $parent_file = 'options-general.php';
 
 wp_reset_vars(array('action', 'option_page'));
 
+$capability = 'manage_options';
+
 if ( empty($option_page) ) // This is for back compat and will eventually be removed.
 	$option_page = 'options';
+else
+	$capability = apply_filters( "option_page_capability_{$option_page}", $capability );
 
-if ( !current_user_can('manage_options') )
+if ( !current_user_can( $capability ) )
 	wp_die(__('Cheatin&#8217; uh?'));
 
 // Handle admin email change requests
@@ -106,7 +110,7 @@ if ( 'update' == $action ) {
 	}
 
 	if ( !isset( $whitelist_options[ $option_page ] ) )
-		wp_die( __( 'Error: options page not found.' ) );
+		wp_die( __( '<strong>ERROR</strong>: options page not found.' ) );
 
 	if ( 'options' == $option_page ) {
 		if ( is_multisite() && ! is_super_admin() )
