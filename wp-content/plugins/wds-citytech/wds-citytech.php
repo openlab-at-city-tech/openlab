@@ -117,43 +117,6 @@ function wds_bp_complete_signup(){
 	$update_user_last = update_user_meta($user_id,'last_name',$last_name);
 }
 
-
-/**
- * Add members to wpms website if attached to bp group and they are a group member
- *
- * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
- *       overhead, and should be rewritten to avoid PHP warnings.
- */
-add_action('init','wds_add_group_members_2_blog');
-function wds_add_group_members_2_blog(){
-	global $wpdb, $user_ID, $bp;
-	if ( bp_get_current_group_id() ) {
-	     $group_id = $bp->groups->current_group->id;
-	     $blog_id = groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-	}
-	if($user_ID!=0 && !empty( $group_id ) && !empty( $blog_id ) ){
-		switch_to_blog($blog_id);
-		if(!is_user_member_of_blog($blog_id)){
-		      $sql="SELECT user_title FROM {$bp->groups->table_name}_members WHERE group_id = $group_id and user_id=$user_ID AND is_confirmed='1'";
-		      $rs = $wpdb->get_results( $sql );
-		      if ( count( $rs ) > 0 ) {
-			      foreach( $rs as $r ) {
-				      $user_title = $r->user_title;
-			      }
-			      if($user_title=="Group Admin"){
-				      $role="administrator";
-			      }elseif($user_title=="Group Mod"){
-				      $role="editor";
-			      }else{
-				      $role="author";
-			      }
-			      add_user_to_blog( $blog_id, $user_ID, $role );
-		      }
-		}
-		restore_current_blog();
-	}
-}
-
 //child theme privacy - if corresponding group is private or hidden restrict access to site
 /*add_action('init','wds_check_blog_privacy');
 function wds_check_blog_privacy(){
@@ -898,7 +861,7 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 	if ( !empty( $populate_extras ) ) {
 		foreach ( (array)$paged_groups as $group ) $group_ids[] = $group->id;
 		$group_ids = $wpdb->escape( join( ',', (array)$group_ids ) );
-		$paged_groups = BP_Groups_Group::get_group_extras( &$paged_groups, $group_ids, 'newest' );
+		$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
 	}
 
 	return array( 'groups' => $paged_groups, 'total' => $total_groups );
