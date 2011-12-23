@@ -76,12 +76,12 @@ function wds_forum_topic_next_prev () {
  $next_topic = $wpdb->get_results("SELECT * FROM wp_bb_topics
 				                 WHERE forum_id='$forum_id' AND topic_id > '$topic_id' AND topic_status='0'
 						 ORDER BY topic_id ASC LIMIT 1","ARRAY_A");
- $next_topic_slug = $next_topic[0]['topic_slug'];
+ $next_topic_slug = isset( $next_topic[0]['topic_slug'] ) ? $next_topic[0]['topic_slug'] : '';
  //echo "<br />Next Topic ID: " . $next_topic[0]['topic_id'];
  $previous_topic = $wpdb->get_results("SELECT * FROM wp_bb_topics
 				                 WHERE forum_id='$forum_id' AND topic_id < '$topic_id' AND topic_status='0'
 						 ORDER BY topic_id DESC LIMIT 1","ARRAY_A");
- $previous_topic_slug = $previous_topic[0]['topic_slug'];
+ $previous_topic_slug = isset( $previous_topic[0]['topic_slug'] ) ? $previous_topic[0]['topic_slug'] : '';
  if ($previous_topic_slug != "") {
   echo "<a href='" . site_url() . "/groups/$group_slug/forum/topic/$previous_topic_slug'><<< Previous Topic &nbsp;&nbsp;&nbsp&nbsp;</a>";
  }
