@@ -151,6 +151,7 @@ global $wpdb, $bp;
 		$class = "yellow-canary-ribbon";
 	}
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->user_id;
+	$x = 0;
 	if ( bp_has_members( 'type=active&include=' . $ids ) ) : 
 		$x+=1;?>
 			<div class="avatar-block">
