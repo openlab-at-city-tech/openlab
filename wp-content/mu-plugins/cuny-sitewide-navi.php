@@ -99,9 +99,13 @@ function cuny_bp_admin_menu() {
 		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">My Profile</a>
     	<ul>
         <?php
+        	$sub_counter = 0;
 		foreach( (array)$bp->bp_options_nav['profile'] as $subnav_item ) {
-			$link = str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] );
-			$name = str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] );
+
+			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
+				
+			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
+			
 			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
 			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
 			$sub_counter++;
@@ -242,9 +246,10 @@ function cuny_bp_admin_menu() {
 	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">My Messages</a>
     	<ul>
         <?php
+        	$sub_counter = 0;
 		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
-			$link = str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] );
-			$name = str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] );
+			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
+			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
 			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
 			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
 			$sub_counter++;

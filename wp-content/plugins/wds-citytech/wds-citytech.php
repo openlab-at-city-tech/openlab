@@ -570,6 +570,8 @@ function wds_load_group_type($group_type){
 		$wds_group_featured=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_featured' );
 		if($wds_group_featured){
 			$checked="checked";
+		} else {
+			$checked = '';
 		}
 		$return.='<input type="checkbox" id="wds_group_featured" name="wds_group_featured" value="yes" '.$checked.'> Featured '.$group_type;
 	}
@@ -632,7 +634,8 @@ function wds_load_group_type($group_type){
             $return.='<td>Semester:';
             $return.='<td><select name="wds_semester">';
                 $return.='<option value="">--select one--';
-				$checked="";
+				$checked = $Spring = $Summer = $Fall = $Winter = "";
+				
 				if($wds_semester=="Spring"){
 					$Spring="selected";
 				}elseif($wds_semester=="Summer"){
@@ -686,13 +689,10 @@ function wds_bp_group_meta(){
 	?>
     <div class="ct-group-meta">
       <?php
-	  $type=$_GET['type'];
+	  $type= isset( $_GET['type'] ) ? $_GET['type'] : groups_get_groupmeta( bp_get_new_group_id(), 'wds_group_type' );
+	
 	  if(!$type){
-		  $type=groups_get_groupmeta(bp_get_new_group_id(), 'wds_group_type' );
-	  }
-
-	  if(!$type){
-		  $type=$_COOKIE["wds_bp_group_type"];
+		  $type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
 	  }
 
 	  if(!$type || !in_array($type,array("club","project","course","school"))){
@@ -907,8 +907,8 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 //Copy the group blog template
 function ra_copy_blog_page($group_id) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
-	$blog = $_POST['blog'];
-	if($blog[ 'domain' ] && $group_id){
+	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
+	if( !empty( $blog['domain'] ) && $group_id){
 	  $wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 	  if(!defined('SUNRISE') || $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->dmtable}'") != $wpdb->dmtable) {
 		  $join = $where = '';
