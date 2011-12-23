@@ -337,7 +337,7 @@ function cuny_site_wide_header() {
 <div id="cuny-sw-header">
 	<div id="cuny-sw-header-wrap">
 	<?php switch_to_blog(1) ?>
-		<a href="<?php echo get_bloginfo('home') ?>" id="cuny-sw-logo"></a>
+		<a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo"></a>
 	<?php restore_current_blog() ?>
 		<div class="alignright">
 		<div>
