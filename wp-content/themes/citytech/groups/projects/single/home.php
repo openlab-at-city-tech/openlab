@@ -354,7 +354,7 @@ function show_site_posts() {
 					  the_title();
 					  echo '</h5>';
 					  ?>
-					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php the_permalink();?>" class="read-more">Read More</a>)</p>
+					  <p><?php echo wds_content_excerpt(strip_tags(get_the_content()), 135);?> (<a href="<?php the_permalink();?>" class="read-more">Read More</a>)</p>
 					  <?php
 					  echo '</li>';
 				  endwhile;
