@@ -56,6 +56,8 @@ function cuny_home_login() {
 
 		<?php do_action( 'bp_before_sidebar_login_form' ) ?>
 
+		<?php if ( !isset( $user_login ) ) $user_login = ''; ?>
+
 		<form name="login-form" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( 'wp-login.php', 'login_post' ) ?>" method="post">
 			<label><?php _e( 'Username', 'buddypress' ) ?>
 			<input type="text" name="log" id="sidebar-user-login" class="input" value="<?php echo esc_attr(stripslashes($user_login)); ?>" tabindex="97" /></label>
