@@ -362,7 +362,7 @@ add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_d
  * See http://openlab.citytech.cuny.edu/redmine/issues/172
  */
 function openlab_redirect_to_profile_edit_group() {
-	if ( bp_is_profile_edit() ) {
+	if ( bp_is_user_profile_edit() ) {
 		if ( !bp_action_variables( 1 ) ) {
 			 $account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
 			  if($account_type=="Student"){
