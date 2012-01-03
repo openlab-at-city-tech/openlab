@@ -1,7 +1,10 @@
 <?php 
 function cuny_member_profile_header() { 
 global $site_members_template, $ribbonclass, $user_ID, $bp;
-$account_type = xprofile_get_field_data( 'Account Type', $site_members_template->member->id);
+
+$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+
+$account_type = xprofile_get_field_data( 'Account Type', $this_user_id );
 
 //
 //     whenever profile is viewed, update user meta for first name and last name so this shows up
