@@ -54,12 +54,13 @@ global $wpdb, $bp, $members_template;
 		$display_type = "Students";
 	}
 
-	if($_POST['people_search']){
+	$search_terms = '';
+	if(!empty($_POST['people_search'])){
 		$search_terms="search_terms=".$_POST['people_search']."&";
 	}
-	if($_GET['search']){
+	if(!empty($_GET['search'])){
 		$search_terms="search_terms=".$_GET['search']."&";
-	}						
+	}		
 	$avatar_args = array (
 			'type' => 'full',
 			'width' => 75,
