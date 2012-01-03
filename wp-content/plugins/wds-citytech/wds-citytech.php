@@ -352,15 +352,17 @@ function wds_registration_ajax(){
 add_action('bp_after_registration_submit_buttons' , 'wds_load_default_account_type');
 function wds_load_default_account_type() {
  		    $return = '<script type="text/javascript">';
-		    if ($_POST['field_7'] == "Student" || $_POST['field_7'] == "") {
+		    
+		    $account_type = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
+		    if ($account_type == "Student" || $account_type == "") {
 			$type = "Student";
 			$selected_index = 1;
 		    }
-		    if ($_POST['field_7'] == "Faculty") {
+		    if ($account_type == "Faculty") {
 			$type = "Faculty";
 			$selected_index = 2;
 		    }
-		    if ($_POST['field_7'] == "Staff") {
+		    if ($account_type == "Staff") {
 			$type = "Staff";
 			$selected_index = 3;
 		    }
