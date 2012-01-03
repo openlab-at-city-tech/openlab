@@ -2,9 +2,9 @@
 Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, docs, wiki, documents, collaboration
-Requires at least: WordPress 3.1, BuddyPress 1.3
-Tested up to: WordPress 3.2 beta, BuddyPress 1.3
-Stable tag: 1.1.7
+Requires at least: WordPress 3.1, BuddyPress 1.5
+Tested up to: WordPress 3.3-bleeding, BuddyPress 1.5
+Stable tag: 1.1.19
  
 Adds collaborative Docs to BuddyPress.
 
@@ -34,6 +34,62 @@ This plugin is in active development. For feature requests and bug reports, visi
 1. Sit back and watch the jack roll in
 
 == Changelog ==
+
+= 1.1.20 =
+* Improves data passed to filters
+* Fixes potential PHP warnings on the Dashboard
+
+= 1.1.19 =
+* Improved WP 3.3 support
+* Ensure that groups' can-delete setting defaults to 'member' when not present, to account for legacy groups
+* Moved to groups_get_group() for greater efficiency under BP 1.6
+* Fixed bug that redirected users to wp-admin when comparing a revision to itself
+
+= 1.1.18 =
+* Adds filters to allow site admins and plugin authors to force-enable Docs at group creation, or to remove the Docs step from the group creation process
+
+= 1.1.17 =
+* Forced BP Docs activity items to respect bp-disable-blogforum-comments in BP 1.5+
+* Added Portuguese translation (pt_PT)
+
+= 1.1.16 =
+* Fixed bug that caused comments to be posted to the incorrect blog when using parent and child Docs
+
+= 1.1.15 =
+* Fixed bug that allowed doc content to be loaded by slug in the incorrect group
+* Limit wikitext linking to docs in the same group
+* Fixed bug that prevented group admins from creating a Doc when minimum role was set to Moderators
+* Disables buggy fullscreen word count for the moment
+
+= 1.1.14 =
+* Fixed bug that prevented users from editing docs when no default settings were provided
+
+= 1.1.13 =
+* Switches default setting during group creation so that Docs are enabled
+* Adds a filter to default group settings so that plugin authors can modify
+
+= 1.1.12 =
+* Adds wiki-like bracket linking
+* Improves distraction-free editing JS
+* Updates tabindent plugin for better browser support
+
+= 1.1.11 =
+* Replaces deprecated function calls
+* Internationalizes some missing gettext calls
+* Adds an error message when a non-existent Doc is requested
+
+= 1.1.10 =
+* Fixes bug that made BP Docs break WP commenting on some setups
+
+= 1.1.9 =
+* Closes code tag on Edit page.
+
+= 1.1.8 =
+* Filters get_post_permalink() so that Doc permalinks in the Admin point to the proper place
+* Ensures that a group's last activity is updated when a Doc is created, edited, or deleted
+* Modifies Recent Comments dashboard widget in order to prevent non-allowed people from seeing certain Doc comments
+* Adds Print button to TinyMCE
+* Adds Brazilian Portuguese localization.
 
 = 1.1.7 =
 * Fixes Tab name bug in 1.1.6 that may cause tab to disappear

@@ -196,5 +196,25 @@ function wds_add_group_members_2_blog(){
 	}
 }
 
+/**
+ * Allow super admins to edit any BuddyPress Doc
+ */
+function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
+	global $bp;
+	
+	if ( 'edit' == $action ) {
+		if ( is_super_admin() || bp_loggedin_user_id() == get_the_author_meta( 'ID' ) || $user_can ) {
+			$user_can = true;
+			$bp->bp_docs->current_user_can[$action] = 'yes';
+		} else {
+			$user_can = false;
+			$bp->bp_docs->current_user_can[$action] = 'no';
+		}
+	}
+	
+	return $user_can;
+}
+add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
+
 
 ?>

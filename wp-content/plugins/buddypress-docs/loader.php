@@ -1,25 +1,20 @@
 <?php
 /*
-Plugin Name: BuddyPress Docs [WDS MODIFIED - DO NOT UPGRADE]
+Plugin Name: BuddyPress Docs
 Plugin URI: http://github.com/boonebgorges/buddypress-docs
 Description: Adds collaborative Docs to BuddyPress
-Version: 1.1.7
+Version: 1.1.19
 Author: Boone B Gorges
-Author URI: http://boonebgorges.com
+Author URI: http://boone.gorg.es
 Licence: GPLv3
 Network: true
 */
-/*
- WDS Modifications
- File: includes/templatetags.php
- Function: bp_docs_current_user_can()
- Change: Added code to allow only super admin OR the author of the document to edit it
-*/
+
 /*
 It's on like Donkey Kong
 */
 
-define( 'BP_DOCS_VERSION', '1.1.7' );
+define( 'BP_DOCS_VERSION', '1.1.19' );
 
 // BuddyPress Docs introduces a lot of overhead. Unless otherwise specified, 
 // don't load the plugin on subsites of an MS install
