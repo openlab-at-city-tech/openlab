@@ -3,12 +3,12 @@ Contributors: dwenaus, boonebgorges
 Description: This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 3.1
-Stable tag: 2.8.5
+Tested up to: 3.2.1 (BP 1.5.1)
+Stable tag: 2.9.8
 
 == Description ==
 
-This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available. Each user can choose how they want to subscribe to their groups. The plugin works for hundreds of groups and users. Tested up to BuddyPress 1.2.8
+This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available. Each user can choose how they want to subscribe to their groups. The plugin works for hundreds of groups and users. Tested up to BuddyPress 1.5.1.
 
 EMAIL SUBSCRIPTION LEVELS
 There are 5 levels of email subscription options: 
@@ -50,7 +50,7 @@ The plugin is fully internationalized (thanks to chestnut_jp) Please send langua
 
 TRANSLATORS
 - japanese - http://buddypress.org/community/members/chestnut_jp/
-- spanish - Williams Castillo
+- spanish - Williams Castillo, Gregor Gimmy
 - italian - Stefano Russo
 - french - http://www.claudegagne-photo.com
 - brazilian portuguese - www.about.me/dennisaltermann (or www.congregacao.net)
@@ -58,6 +58,7 @@ TRANSLATORS
 - swedish - Thomas Schneider
 - german - Peter Peterson
 - russian - http://www.viaestvita.net/groups/
+- farsi - Vahid Masoomi http://www.AzUni.ir
 
 NOTE TO PLUGIN AUTHORS
 If your plugin posts updates to the standard BuddyPress activity stream, then group members who are subscribed via 3. Daily Digest and 5. All Email will get your updates automatically. However people subscribed as 2. Weekly Summary and 4. New Topic will not. If you feel some of your plugin's updates are very important and want to make sure all subscribed members them, then you can filter  'ass_this_activity_is_important' and return TRUE when $type matches your activity. See the ass_this_activity_is_important() function in bp-activity-subscription-functions.php for code you can copy and use. An example: adding a new wiki page would be considered important and should be filtered in, whereas a comment on a wiki page would be less important and should not be hooked in.
@@ -85,8 +86,47 @@ Other supporters: bluedotproductions.com
 7. Admin Settings
 
 == Changelog ==
+
+= 2.9.8 =
+Fixes bug that prevented admin/manage-members/ action links from working
+
+= 2.9.7 =
+More fixes for 1.5+ compatibility. Props king76
+
+= 2.9.6 =
+Fixed a number of PHP notices
+Fixed the admin Send To Group functionality in BP 1.5+
+
+= 2.9.5 =
+Added Farsi translation. Thanks, Vahid!
+
+= 2.9.4 =
+Added additional filters to digest builder
+
+= 2.9.3 =
+Added updated Spanish translation
+
+= 2.9.2 =
+Fixed some syntax errors that may have caused problems with digest formatting
+
+= 2.9.1 =
+Fixed bug that may have caused scripts and styles not to be loaded on BP 1.2.x
+Fixed some PHP notices
+Fixed bug that might have caused BPGES javascript to load before jQuery in some cases
+
+= 2.9 =
+Full support for BuddyPress 1.5
+Code cleanup and normalization
+
+= 2.8.7 =
+Tweaked email text so that contentless notifications don't get empty quotation marks
+
+= 2.8.6 =
+Added simple activity item caching to digests to reduce database queries at digest time
+Fixed bug that caused hidden items not to be sent in digests
+
 = 2.8.5 =
-addeded better brazilian portugues translation, improved error checking to see if user has email before emailing them
+added better brazilian portuguese translation, improved error checking to see if user has email before emailing them
 
 = 2.8.5 =
 fixed bug introduced in latest BP version where when an group admin manually removes a group member in Group Admin -> Manage Members -> Remove from group, the user kept getting emails, 

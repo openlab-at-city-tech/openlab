@@ -106,13 +106,20 @@ class buddypress_Translation_Mangler {
   * So we bail in cases where neither of those things is present, by checking $groups_template
   */
  function filter_gettext($translation, $text, $domain) {
-   global $groups_template;
+   global $bp, $groups_template;
    
    if ( empty( $groups_template->group ) ) {
    	return $translation;
    }
    
-   $group_id = bp_get_group_id();
+   if ( !empty( $groups_template->group->id ) ) {
+   	$group_id = $groups_template->group->id;
+   } else if ( !empty( $bp->groups->current_group->id ) ) {
+   	$group_id = $bp->groups->current_group->id;	
+   } else {
+   	return $translation;
+   }
+   
    $grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
    $uc_grouptype = ucfirst($grouptype);
    $translations = &get_translations_for_domain( 'buddypress' );
@@ -159,6 +166,139 @@ class buddypress_Translation_Mangler {
 }
 add_filter('gettext', array('buddypress_Translation_Mangler', 'filter_gettext'), 10, 4);
 
+//Change "Group" to something else
+class bpass_Translation_Mangler {
+ /*
+  * Filter the translation string before it is displayed.
+  * 
+  * This function will choke if we try to load it when not viewing a group page or in a group loop
+  * So we bail in cases where neither of those things is present, by checking $groups_template
+  */
+ function filter_gettext($translation, $text, $domain) {
+   global $bp, $groups_template;
+   
+   if ( empty( $groups_template->group ) && empty( $bp->groups->current_group ) ) {
+   	return $translation;
+   }
+
+   if ( !empty( $groups_template->group->id ) ) {
+   	$group_id = $groups_template->group->id;
+   } else if ( !empty( $bp->groups->current_group->id ) ) {
+   	$group_id = $bp->groups->current_group->id;	
+   } else {
+   	return $translation;
+   }
+ 	
+   
+   if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
+   	$grouptype = $_COOKIE['wds_bp_group_type'];
+   } else {
+   	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
+   }
+   
+   $uc_grouptype = ucfirst($grouptype);
+   $plural_grouptype = $grouptype . 's';
+   $translations = &get_translations_for_domain( 'bp-ass' );
+   
+   switch($text){
+	case "How do you want to read this group?":
+	     return $translations->translate( "How do you want to read this $grouptype?" );
+	     break;
+	case "I will read this group on the web":
+	     return $translations->translate( "I will read this $grouptype on the web" );
+	     break;
+	case "Send all group activity as it arrives":
+	     return $translations->translate( "Send all $grouptype activity as it arrives" );
+	     break;
+	case "Your email notifications are set to %s for this group.":
+	     return $translations->translate( "Your email notifications are set to %s for this $grouptype." );
+	     break;
+	case "When new users join this group, their default email notification settings will be:":
+	     return $translations->translate( "When new users join this $grouptype, their default email notification settings will be:" );
+	     break;
+	case "No Email (users will read this group on the web - good for any group - the default)":
+	     return $translations->translate( "No Email (users will read this $grouptype on the web - good for any $grouptype - the default)" );
+	     break;
+	case "Weekly Summary Email (the week's topics - good for large groups)":
+	     return $translations->translate( "Weekly Summary Email (the week\'s topics - good for large $plural_grouptype)" );
+	     break;
+	case "Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)":
+	     return $translations->translate( "Daily Digest Email (all daily activity bundles in one email - good for medium-size $plural_grouptype)" );
+	     break;
+	case "New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)":
+	     return $translations->translate( "New Topics Email (new topics are sent as they arrive, but not replies - good for small $plural_grouptype)" );
+	     break;
+	case "All Email (send emails about everything - recommended only for working groups)":
+	     return $translations->translate( "All Email (send emails about everything - recommended only for working $plural_grouptype)" );
+	     break;
+	case "Group Email Settings":
+		return $translations->translate( "$uc_grouptype Email Settings" );
+	     	break;
+	case "To change the email notification settings for your groups go to %s and click change for each group.":
+	     return $translations->translate( "To change the email notification settings for your $plural_grouptype go to %s and click change for each $grouptype." );
+	     break;
+	case "Send an email notice to everyone in the group":
+		return $translations->translate( "Send an email notice to everyone in the $grouptype" );
+		break;
+	case "You can use the form below to send an email notice to all group members.":
+		return $translations->translate( "You can use the form below to send an email notice to all $grouptype members." );
+		break;
+	case "Everyone in the group will receive the email -- regardless of their email settings -- so use with caution":
+		return $translations->translate( "Everyone in the $grouptype will receive the email -- regardless of their email settings -- so use with caution" );
+		break;
+	case " - sent from the group ":
+		return $translations->translate( " - sent from the $grouptype " );
+		break;
+	case "This is a notice from the group '%s':
+
+\"%s\"
+
+
+To view this group log in and follow the link below:
+%s
+
+---------------------
+":
+		return $translations->translate( "This is a notice from the $grouptype '%s':
+
+\"%s\"
+
+
+To view this $grouptype log in and follow the link below:
+%s
+
+---------------------
+" );
+		break;
+  }
+  return $translation;
+ }
+}
+add_filter('gettext', array('bpass_Translation_Mangler', 'filter_gettext'), 10, 4);
+
+/**
+ * Put the group type in email notification subject lines
+ */
+function openlab_group_type_in_notification_subject( $subject ) {
+	
+   if ( !empty( $groups_template->group->id ) ) {
+   	$group_id = $groups_template->group->id;
+   } else if ( !empty( $bp->groups->current_group->id ) ) {
+   	$group_id = $bp->groups->current_group->id;	
+   } else {
+   	return $translation;
+   }
+ 	
+   
+   if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
+   	$grouptype = $_COOKIE['wds_bp_group_type'];
+   } else {
+   	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
+   }
+   
+   return str_replace( 'in the group', 'in the ' . $grouptype, $subject );
+}
+add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
 
 /**
  * Add members to wpms website if attached to bp group and they are a group member

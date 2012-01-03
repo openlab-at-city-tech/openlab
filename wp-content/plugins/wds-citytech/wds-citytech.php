@@ -809,7 +809,7 @@ function wds_bp_group_meta_save($group) {
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
 }
-//add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
+add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
 function wds_bp_group_site_pages(){
