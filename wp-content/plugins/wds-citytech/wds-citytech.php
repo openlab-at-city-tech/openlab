@@ -532,7 +532,7 @@ function wds_load_group_type($group_type){
 	}
 
 	if(is_super_admin( $user_ID )){
-		$wds_group_featured=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_featured' );
+		$wds_group_featured=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_featured' );
 		if($wds_group_featured){
 			$checked="checked";
 		} else {
@@ -541,26 +541,29 @@ function wds_load_group_type($group_type){
 		$return.='<input type="checkbox" id="wds_group_featured" name="wds_group_featured" value="yes" '.$checked.'> Featured '.$group_type;
 	}
 	$return.='<table>';
-	$wds_group_school=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_school' );
+	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school=explode(",",$wds_group_school);
 		$return.='<tr>';
             $return.='<td>School(s):';
             $return.='<td>';
 			$checked="";
-			if($bp->groups->current_group->id && in_array("tech",$wds_group_school)){
+			if(bp_get_current_group_id() && in_array("tech",$wds_group_school)){
 				$checked="checked";
 			}
+			
 			if($group_type=="course"){
 				$onclick='onclick="wds_load_group_departments();"';
+			} else {
+				$onclick = '';
 			}
 			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' '.$checked.'> Technology & Design ';
 			$checked="";
-			if($bp->groups->current_group->id &&in_array("studies",$wds_group_school)){
+			if(bp_get_current_group_id() &&in_array("studies",$wds_group_school)){
 				$checked="checked";
 			}
 			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '.$checked.'> Professional Studies ';
 			$checked="";
-			if($bp->groups->current_group->id &&in_array("arts",$wds_group_school)){
+			if(bp_get_current_group_id() &&in_array("arts",$wds_group_school)){
 				$checked="checked";
 			}
 			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '.$checked.'> Arts & Sciences ';
@@ -648,9 +651,12 @@ add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta');
 add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
 function wds_bp_group_meta(){
 	global $wpdb, $bp, $current_site, $base;
-	$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
-	$group_school=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_school' );
-	$group_project_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_project_type' );
+	
+	$the_group_id = bp_is_group() ? bp_get_current_group_id() : 0;
+	
+	$group_type=groups_get_groupmeta($the_group_id, 'wds_group_type' );
+	$group_school=groups_get_groupmeta($the_group_id, 'wds_group_school' );
+	$group_project_type=groups_get_groupmeta($the_group_id, 'wds_group_project_type' );
 	?>
     <div class="ct-group-meta">
       <?php
@@ -688,7 +694,7 @@ function wds_bp_group_meta(){
       <?php } ?>
       <div id="wds-group-type"></div>
       <?php //Copy Site
-	  $wds_bp_group_site_id=groups_get_groupmeta($bp->groups->current_group->id, 'wds_bp_group_site_id' );
+	  $wds_bp_group_site_id=groups_get_groupmeta( bp_get_current_group_id(), 'wds_bp_group_site_id' );
 	  if(!$wds_bp_group_site_id){
 		$template="template-".strtolower($group_type);
 		$blog_details = get_blog_details($template);
@@ -921,6 +927,9 @@ function ra_copy_blog_page($group_id) {
 		  $id=$new_id;
 		  $wpdb->show_errors();
 		  if( !is_wp_error($id) ) { //if it dont already exists then move over everything
+			  
+			  $current_user = get_userdata( bp_loggedin_user_id() );
+			  
 			  groups_update_groupmeta( $group_id, 'wds_bp_group_site_id', $id);
 			  /*if( get_user_option( $user_id, 'primary_blog' ) == 1 )
 				  update_user_option( $user_id, 'primary_blog', $id, true );*/

@@ -1,7 +1,7 @@
 <?php get_header() ?>
 <?php global $bp; 
 
-$group_type=$_GET['type'];
+$group_type= isset( $_GET['type'] ) ? $_GET['type'] : '';
 if(!$group_type){
 	$group_type=groups_get_groupmeta(bp_get_new_group_id(), 'wds_group_type' );
 }
