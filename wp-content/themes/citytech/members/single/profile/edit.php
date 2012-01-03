@@ -18,6 +18,10 @@ if(is_super_admin( $user_ID )){
 	  $pgroup="1";
   }
 }
+
+$pgroup = "5";
+$account_type = "Staff";
+
 $first_name=bp_get_profile_field_data( 'field=First Name' );
 $last_name=bp_get_profile_field_data( 'field=Last Name' );
 $update_user_first = update_user_meta($user_ID,'first_name',$first_name);

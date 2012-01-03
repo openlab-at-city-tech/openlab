@@ -356,5 +356,31 @@ function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 }
 add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
+/**
+ * Redirect profile edit to the correct field group
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/172
+ */
+function openlab_redirect_to_profile_edit_group() {
+	if ( bp_is_profile_edit() ) {
+		if ( !bp_action_variables( 1 ) ) {
+			 $account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
+			  if($account_type=="Student"){
+				  $pgroup="2";
+			  }elseif($account_type=="Faculty"){
+				  $pgroup="3";
+			  }elseif($account_type=="Alumni"){
+				  $pgroup="4";
+			  }elseif($account_type=="Staff"){
+				  $pgroup="5";
+			  }else{
+				  $pgroup="1";
+			  }
+			  
+			bp_core_redirect( bp_displayed_user_domain() . 'profile/edit/group/' . $pgroup . '/' );
+		}
+	}
+}
+add_action( 'bp_actions', 'openlab_redirect_to_profile_edit_group', 1 );
 
 ?>

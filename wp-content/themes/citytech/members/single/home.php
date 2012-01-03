@@ -1,7 +1,7 @@
 <?php 
 function cuny_member_profile_header() { 
-
-$account_type = xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
+global $site_members_template, $ribbonclass, $user_ID, $bp;
+$account_type = xprofile_get_field_data( 'Account Type', $site_members_template->member->id);
 
 //
 //     whenever profile is viewed, update user meta for first name and last name so this shows up
@@ -64,32 +64,33 @@ if ( $account_type == 'Staff' )
 		</div><!-- #item-meta -->
         
         <div class="profile-fields">
-        	<?php if ( bp_has_profile() ) : ?>
+        	<?php if ( bp_has_profile() ) : /* global $profile_template; echo '<pre>'; print_r( $profile_template ); echo '</pre>'; */ ?>
 			<?php while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
     
                 <?php if ( bp_profile_group_has_fields() ) : ?>
     					<table class="profile-fields">
                             <?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
-    
+
                                 <?php if ( bp_field_has_data() ) : 
-									if( (bp_get_the_profile_field_name()!="Name"
-									                 &&
-									     bp_get_the_profile_field_name()!="Account Type"
-									                  &&
-									     bp_get_the_profile_field_name()!="First Name"
-									                  &&
-									     bp_get_the_profile_field_name()!="Last Name" )  ){?>
-                                    <tr>
-    									<td class="label" nowrap="nowrap">
-                                            <?php bp_the_profile_field_name() ?>
-                                        </td>
-    
-                                        <td>
-                                            <?php bp_the_profile_field_value() ?>
-                                        </td>
-    								</tr>
-                                <?php }
-								endif; ?>
+					if( bp_get_the_profile_field_name() != "Name"
+				                &&
+						bp_get_the_profile_field_name() != "Account Type"
+						&&
+						bp_get_the_profile_field_name() != "First Name"
+						&&
+						bp_get_the_profile_field_name()!="Last Name" ) : ?>
+
+						<tr>
+							<td class="label" nowrap="nowrap">
+								<?php bp_the_profile_field_name() ?>
+							</td>
+	    
+							<td>
+							    <?php bp_the_profile_field_value() ?>
+							</td>
+    						</tr>
+					<?php endif;
+				endif; ?>
     
                              <?php endwhile; ?>
                         </table>
@@ -381,11 +382,12 @@ get_currentuserinfo();
 		} else if ( bp_displayed_user_id() ) {
 			$button_user_id = bp_displayed_user_id();
 		}
-		
+			       
 		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
 	?>
-	
-		<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+		
+	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+
 		
 <?php if ( !bp_is_user_messages() ) { ?>
 	<?php if ( bp_is_user_friends() ) { ?>
