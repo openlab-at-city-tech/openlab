@@ -1009,6 +1009,8 @@ function ra_copy_blog_page($group_id) {
 							  update_option('blog_public', '-2');
 						  }
 						  //creaTE UPLOAD DOCS PAGE
+						  // Psyche!
+						  /*
 						  $args = array (
 							  'post_title'	=>	'Upload Documents',
 							  'post_content'	=>	'[lab-docs]',
@@ -1017,6 +1019,7 @@ function ra_copy_blog_page($group_id) {
 							  'post_type'		=>	'page'
 						  );
 						  wp_insert_post( $args );
+						  */
 
 						  restore_current_blog();
 						  $msg = __('Blog Copied');
