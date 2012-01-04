@@ -1,4 +1,13 @@
-<?php global $options; foreach ($options as $value) { if (get_settings( $value['id'] ) === FALSE) { $$value['id'] = $value['std']; } else { $$value['id'] = get_settings( $value['id'] ); } } ?>
+<?php 
+	global $options;
+	foreach ($options as $value) { 
+		if ( get_option( $value['id'] ) === FALSE && isset( $value['std'] ) ) { 
+			$$value['id'] = $value['std']; 
+		} else { 
+			$$value['id'] = get_option( $value['id'] ); 
+		} 
+	} 
+?>
 
 <?php get_header() ?>
 <?php the_post(); ?>

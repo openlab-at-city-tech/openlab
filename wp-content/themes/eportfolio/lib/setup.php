@@ -1,7 +1,10 @@
 <?php
 if (!is_admin()) {
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('ahsjquery', get_bloginfo('stylesheet_directory') . '/js/jquery.ahs.js', array('jquery'));
+	function ahstheme_enqueue_frontend_scripts() {
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('ahsjquery', get_bloginfo('stylesheet_directory') . '/js/jquery.ahs.js', array('jquery'));
+	}
+	add_action( 'admin_enqueue_scripts', 'ahstheme_enqueue_frontend_scripts' );
 }
 
 add_action( 'after_setup_theme', 'ahstheme_setup' );
