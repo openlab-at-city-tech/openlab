@@ -1073,3 +1073,15 @@ function ra_copy_blog_page($group_id) {
 	  }
 	}
 }
+
+/**
+ * Don't let anyone access the Create A Site page
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/160
+ */
+function openlab_redirect_from_site_creation() {
+	if ( bp_is_create_blog() ) {
+		bp_core_redirect( bp_get_root_domain() );
+	}
+}
+add_action( 'bp_actions', 'openlab_redirect_from_site_creation' );

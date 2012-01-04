@@ -239,8 +239,6 @@ function cuny_bp_admin_menu() {
 	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit-comments.php">Manage Comments</a></li></ul></li>
 			  <?php endwhile;
 			endif; ?>
-        	<hr />
-	     	<a href="<?php echo bp_get_root_domain() . '/sites/create/'; ?>">+ <?php _e( 'New Site', 'buddypress' ) ?></a>
         </ul>
     </li>
 	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">My Messages</a>
