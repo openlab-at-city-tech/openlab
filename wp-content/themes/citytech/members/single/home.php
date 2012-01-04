@@ -315,10 +315,44 @@ function cuny_profile_activty_block($type,$title,$last) {
 		<?php
 		endif;
 	} else {
-	?>
+		// BLOGS
+		global $bp, $wpdb;
+		
+		// bp_has_blogs() doesn't let us narrow our options enough
+		// Get all group blog ids, so we can exclude them
+		$gblogs = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+		
+		$gblogs = implode( ',', $gblogs );
+		
+		$blogs_query = $wpdb->prepare( "
+			SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name 
+			FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u 
+			WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND b.user_id = {$bp->displayed_user->id} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 AND wb.public = 1 AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND b.blog_id NOT IN ({$gblogs}) LIMIT 3" );
+		
+		$myblogs = $wpdb->get_results( $blogs_query );
+		
+		?>
+		
+		
+		
 		<ul id="<?php echo $type ?>-activity-stream" class="activity-list item-list<?php echo $last ?>">
-          <div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="<?php echo $ribbonclass ?>"><?php echo $title ?></h4></div>    
-          <?php if ( bp_has_blogs('user_id='.$bp->displayed_user->id.'&per_page=3&max=3') ) { 
+		<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="<?php echo $ribbonclass ?>"><?php echo $title ?></h4></div>    
+		
+		<?php if ( !empty( $myblogs ) ) : ?>
+			<?php foreach( (array)$myblogs as $myblog ) : ?>
+				<li>
+					<a href="http://<?php echo trailingslashit( $myblog->domain . $myblog->path ) ?>"><?php echo $myblog->name ?></a>
+				</li>
+			<?php endforeach ?>
+		<?php else : ?>
+			 <?php if( bp_is_my_profile() ) : ?>
+				 You haven't created or joined any sites yet.
+			 <?php else : ?> 
+				<?php echo $bp->displayed_user->fullname ?> hasn't created or joined any sites yet.
+			<?php endif ?>		
+		
+		<?php endif ?>
+		<?php /* if ( bp_has_blogs('user_id='.$bp->displayed_user->id.'&per_page=3&max=3') ) { 
 			while ( bp_blogs() ) : bp_the_blog();
 			  echo '<li>';?>
 				  <a href="<?php bp_blog_permalink() ?>"><?php bp_blog_name() ?></a>
@@ -328,11 +362,11 @@ function cuny_profile_activty_block($type,$title,$last) {
 			 if($bp->loggedin_user->id==$bp->displayed_user->id){?>
 					 You haven't created or joined any sites yet.
 			 <?php }else{ 
-                echo $bp->displayed_user->fullname;?>
-                hasn't created or joined any sites yet.
-             <?php } 
-		  }?>
-        </ul>
+		echo $bp->displayed_user->fullname;?>
+		hasn't created or joined any sites yet.
+		<?php } 
+		  } */ ?>
+		</ul>
     <?php
 	}
 }
