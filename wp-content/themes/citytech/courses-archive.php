@@ -11,7 +11,7 @@ add_action('genesis_post_content', 'cuny_course_archive' );
 function cuny_course_archive() {
 global $wpdb,$bp,$groups_template;
 if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "alphabetical";
+	$_GET['group_sequence'] = "active";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":

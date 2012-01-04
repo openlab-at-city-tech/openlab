@@ -18,7 +18,7 @@ function cuny_club_archive() {
 <?php */
 global $wpdb,$bp;
 if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "alphabetical";
+	$_GET['group_sequence'] = "active";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":
