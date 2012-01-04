@@ -281,6 +281,8 @@ class BP_Friends_Friendship {
 
 		$sql = $wpdb->prepare( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} WHERE (friend_user_id = %d || initiator_user_id = %d) && is_confirmed = 1 ORDER BY rand() LIMIT %d", $user_id, $user_id, $total_friends );
 		$results = $wpdb->get_results($sql);
+		
+		$fids = array();
 
 		for ( $i = 0, $count = count( $results ); $i < $count; ++$i ) {
 			$fids[] = ( $results[$i]->friend_user_id == $user_id ) ? $results[$i]->initiator_user_id : $results[$i]->friend_user_id;
