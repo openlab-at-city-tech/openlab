@@ -159,6 +159,12 @@ function my_page_menu_filter( $menu ) {
 	}
 	$menu = str_replace("Site Site Home","Site Home",$menu);
 	
+	// Only say 'Home' on the ePortfolio theme
+	// @todo: This will probably get extended to all sites
+	if ( 'eportfolio' == get_template() ) {
+		$menu = str_replace( 'Site Home', 'Home', $menu );
+	}
+	
 	$wds_bp_group_id=get_option('wds_bp_group_id');
 	
 	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
