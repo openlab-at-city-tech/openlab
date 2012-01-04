@@ -20,6 +20,7 @@
 
 <div class="hr"></div>
 
+<?php /*
 <h2>Recent Projects</h2>
 
 <ul id="sp" class="fourcol">
@@ -40,6 +41,8 @@
 <div class="read_more"><a href="<?php echo esc_url(home_url('/')); ?>?cat=<?php echo $ahstheme_projectscat ?>">See More Projects</a></div>
 
 <div class="hr"></div>
+
+*/ ?>
 
 <ul id="lastrow" class="twocol">
 	<li>
