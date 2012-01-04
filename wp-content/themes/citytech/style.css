@@ -932,6 +932,20 @@ dd p{line-height:120%}
     width: 210px;
 }
 
+/* Misc group admin */
+#active-toggle {
+	margin: 10px 0;
+}
+
+form.standard-form #active-toggle label {
+	display: inline;
+	padding-right: 10px;
+}
+
+#active-toggle input {
+	margin-left: 10px;
+}
+
 /* Messages
 -------------*/
 
