@@ -119,7 +119,7 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 				
                 	<?php do_action( 'bp_before_group_avatar_creation_step' ); ?>
 
-					<?php if ( !bp_get_avatar_admin_step() ) : ?>
+					<?php if ( !bp_get_avatar_admin_step() || 'upload-image' == bp_get_avatar_admin_step() ) : ?>
 
 						<div class="left-menu">
 							<?php bp_new_group_avatar() ?>
