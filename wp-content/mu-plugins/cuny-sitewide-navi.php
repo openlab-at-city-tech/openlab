@@ -51,24 +51,32 @@ function cuny_site_wide_navi_styles() {
 	wp_enqueue_style( 'SW_Navi_styles' );
 }
 
-add_action('wp_footer', 'cuny_login_popup_script');
+add_action('wp_head', 'cuny_login_popup_script');
 function cuny_login_popup_script() {
+	?>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var cpl = jQuery('#cuny-popup-login');
+		jQuery("#popup-login-link").show();
+		jQuery(cpl).hide();
+		
+		jQuery("#popup-login-link").click(function(){
+			if ( 'none' == jQuery(cpl).css('display') ) {
+				jQuery(cpl).show();
+				jQuery("#sidebar-user-login").focus();
+			} else {
+				jQuery(cpl).hide();
+			}
+			
+			return false;
+		});
 
-		echo '<script type="text/javascript">';
-		echo 'jQuery(document).ready(function(){';
-
-				echo 'jQuery("#popup-login-link").show();';
-				echo 'jQuery("#cuny-popup-login").hide();';
-
-				echo 'jQuery("#popup-login-link").click(function(){';
-					echo 'jQuery("#cuny-popup-login").slideToggle();';
-					echo 'jQuery("#sidebar-user-login").focus();';
-				echo '});';
-				echo 'jQuery(".close-popup-login").click(function(){';
-					echo 'jQuery("#cuny-popup-login").hide();';
-				echo '});';
-			echo '});';
-		echo '</script>';
+		jQuery(".close-popup-login").click(function(){
+			jQuery(cpl).hide();
+		});
+	});
+	</script>
+	<?php
 
 }
 
