@@ -286,7 +286,7 @@ function openlab_group_type_in_notification_subject( $subject ) {
    } else if ( !empty( $bp->groups->current_group->id ) ) {
    	$group_id = $bp->groups->current_group->id;	
    } else {
-   	return $translation;
+   	return $subject;
    }
  	
    
