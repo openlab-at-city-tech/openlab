@@ -388,7 +388,7 @@ function invite_anyone_catch_clear() {
 	$bp->invite_anyone->returned_data = ! empty( $_COOKIE['invite-anyone-error-data'] ) ? maybe_unserialize( stripslashes( $_COOKIE['invite-anyone-error-data'] ) ) : array();
 
 	// Unset the cookie right away so that you don't get old data when returning to the page
-	setcookie( 'invite-anyone-error-data', ' ', time() - 360000, COOKIEPATH, COOKIE_DOMAIN );
+	//setcookie( 'invite-anyone-error-data', ' ', time() - 360000, COOKIEPATH, COOKIE_DOMAIN );
 
 	if ( isset( $_GET['clear'] ) ) {
 		$clear_id = $_GET['clear'];

@@ -198,6 +198,8 @@ function cuny_group_menu_items() {
 
 		$tab = '<li><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Home</a></li>';
 		$tabs = $tab;
+	} else {
+		$tabs = '';
 	}
 
 	return $tabs;
