@@ -15,8 +15,10 @@ class CACFeaturedContentHelper {
 	function getBlogByDomain($domain) {
 		global $wpdb;
 		$row = $wpdb->get_results("SELECT blog_id FROM wp_blogs WHERE domain = '".mysql_real_escape_string($domain)."'");
-		if($row[0]->blog_id) {
+		if(!empty($row[0]->blog_id)) {
 			$blog_id = $row[0]->blog_id;
+		} else {
+			$blog_id = 0;
 		}
 		$blog_data = get_blog_details($blog_id);
 		return (object) $blog_data;

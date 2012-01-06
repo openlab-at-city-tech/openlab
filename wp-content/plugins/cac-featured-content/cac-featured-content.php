@@ -934,6 +934,9 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		$cacfc = new CACFeaturedContentHelper();
 		$blog = $cacfc->getBlogByDomain($this->blog_domain, true);
 
+		if ( empty( $blog->blog_id ) )
+			return;
+
 		$description = get_blog_option($blog->blog_id,'blogdescription');
 		$blog_id = $blog->blog_id;
 		$public = $blog->public;
