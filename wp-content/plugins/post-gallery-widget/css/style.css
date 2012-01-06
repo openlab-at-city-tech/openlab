@@ -1,0 +1,179 @@
+/*
+CSS for the gallery widget
+*/
+#pgw-gallery-medium {
+	float: left;
+	margin: 0px 0 0;
+	position: relative;
+}
+#pgw-gallery-large {
+	float: left;
+	margin: 0px 0 0;
+	position: relative;
+}
+#pgw-gallery-full {
+	float: left;
+	margin: 0px 0 0;
+	position: relative;
+}
+
+.slideshow {
+/*	position: relative;
+	overflow: hidden;
+/**/	margin: auto;
+	text-align: left;
+	width: 100%;
+}
+
+.slideshow .slide{
+	border: 5px solid #ddd;
+	display:none;
+}
+
+.slideshow div.first_slide {
+	display:block;
+}
+
+.slideshow div span {
+	position: absolute;
+	background:  url(../images/bg-trans.png) repeat 0 0;
+	color: #fff;
+	bottom: 0;
+	z-index: 99;
+	display: block;
+}
+
+#pgw-gallery-medium .slideshow div span {
+	padding: 3px 5px 5px;
+}
+
+#pgw-gallery-large .slideshow div span {
+	padding: 6px 10px 10px;
+}
+
+#pgw-gallery-full .slideshow div span {
+	padding: 10px 15px 15px;
+}
+
+.slideshow img {
+	position: relative;
+	z-index: 1;
+}
+
+
+#pgw-prev, #pgw-next {
+	background: none;
+	display: block;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	text-indent: -9999em;
+	outline: none;
+	top: 0;
+	z-index: 5;
+	width: 40px;
+}
+
+#pgw-next {
+	left: auto;
+	right: 0;
+}
+
+#pgw-next:hover {
+	background: #000 url(../images/next.png) no-repeat 50% 50%;
+	filter:alpha(opacity=40);
+ 	opacity:0.40;
+}
+
+#pgw-prev:hover {
+	background: #000 url(../images/prev.png) no-repeat 50% 50%;
+	filter:alpha(opacity=40);
+ 	opacity:0.40;
+}
+
+#pgw-gallery-medium h2 {
+	border-bottom: 1px solid #666;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px 0px 3px;
+	padding: 0px 0 2px;
+	color: #fff;
+	font-weight: normal;
+}
+
+#pgw-gallery-large h2 {
+	border-bottom: 1px solid #666;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0px 0px 4px;
+	padding: 0px 0 3px;
+	color: #fff;
+	font-weight: normal;
+}
+
+#pgw-gallery-full h2 {
+	border-bottom: 1px solid #666;
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0px 0px 5px;
+	padding: 0px 0 3px;
+	color: #fff;
+	font-weight: normal;
+}
+
+#pgw-gallery-medium h2 a,
+	#pgw-gallery-large h2 a,
+	#pgw-gallery-full h2 a {
+		color: #fff;
+		text-decoration: none;
+}
+
+#pgw-gallery-medium h2 a:hover,
+	#pgw-gallery-large h2 a:hover,
+	#pgw-gallery-full h2 a:hover {
+		color: #eee;
+		text-decoration: none;
+}
+
+#pgw-gallery-medium p {
+	color: #fff;
+	font-size: 11px;
+	line-height: 14px;
+	margin: 0;
+}
+
+#pgw-gallery-large p {
+	color: #fff;
+	font-size: 13px;
+	line-height: 16px;
+	margin: 0;
+}
+
+#pgw-gallery-full p {
+	color: #fff;
+	font-size: 15px;
+	line-height: 21px;
+	margin: 0;
+}
+
+#pgw-gallery-medium a,
+	#pgw-gallery-large a,
+	#pgw-gallery-full a {
+		color: #f58d59;
+		text-decoration: none;
+}
+
+#pgw-gallery-medium a:hover,
+	#pgw-gallery-large a:hover,
+	#pgw-gallery-full a:hover {
+	color: #fff;
+/*	color: #fff !important;
+/**/	text-decoration: underline;
+}
+
+#pgw-gallery-medium a strong,
+	#pgw-gallery-large a strong,
+	#pgw-gallery-full a strong {
+	font-weight: normal;
+	font-size: 1.2em;
+}

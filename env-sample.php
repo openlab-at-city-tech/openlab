@@ -23,7 +23,7 @@ define( 'BBDB_HOST', '' );
  */
 define( 'IS_LOCAL_ENV', true ); // Leave this as true, except on staging and production environments
 define( 'WP_DEBUG', false );
-define( 'DOMAIN_CURRENT_SITE', 'openlab.citytech.cuny.edu' );
+define( 'DOMAIN_CURRENT_SITE', 'openlabdev.org' );
 define( 'PATH_CURRENT_SITE', '/' );
 
 @ini_set('log_errors','On');

@@ -26,7 +26,7 @@ function wds_featured_slider_script() { ?>
 				btnNext: ".next",
 				btnPrev: ".prev",
 				vertical: false,
-				visible: 1,
+				visible: 2,
 				auto:4000,
 				speed:200
 			});
@@ -82,7 +82,7 @@ function easy_accordion_slider() {
 		
 	<?php } /* end is_home */
 }
-add_action('genesis_before_loop', 'easy_accordion_slider' );
+//add_action('genesis_before_loop', 'easy_accordion_slider' );
 
 /* Accordion Slider Custom Post Type */
 add_action('init', 'slider_register');
