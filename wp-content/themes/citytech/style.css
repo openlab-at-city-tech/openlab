@@ -74,7 +74,7 @@ textarea {
 	font-family: Arial, Helvetica, Tahoma, sans-serif;
 	font-size: 11px;
 	font-weight: normal;
-	line-height: 17px;
+	line-height: 15px;
 	margin: 0;
 	padding: 0;
 	text-decoration: none;
@@ -114,12 +114,22 @@ hr {
     border-style: solid none none;
     border-width: 1px 0 0;
 }
+.clearfloat {
+	clear:both;
+    height:0;
+    font-size: 1px;
+    line-height: 0px;
+}
+.bold
+{
+	font-weight: bold;
+}
 /* Hyperlinks
 ------------------------------------------------------------ */
 
 a,
 a:visited {
-	color: #63dfd2;
+	color: #000;
 	text-decoration: none;
 }
 
@@ -190,17 +200,21 @@ a img {
 ------------------------------------------------------------ */
 
 .header-image #title-area,
-.header-image #title,
-.header-image #title a {
-    background: url("images/logo.png") repeat scroll 0 0 transparent;
-    display: block;
+.header-image #title
+{
     float: left;
-    height: 140px;
-    overflow: hidden;
+	border-bottom: none;
     padding: 0;
-    margin: 0;
-    text-indent: -9999px;
-    width: 325px;
+}
+.header-image #title a
+{
+	background: url("images/logo.png") no-repeat scroll 0 0 transparent;
+    display: block;
+	height: 0;
+	overflow: hidden;
+	width: 336px;
+	padding-top: 112px;
+	margin: 0 0 28px;
 }
 
 .header-image #description {
@@ -242,7 +256,7 @@ li.sfHover {
 	font-family: 'Arvo', arial, serif;
 	clear: both;
 	display: block;
-	text-align: right;
+	text-align: left;
 	width: 960px;
 	margin: 0 auto;
 }
@@ -382,9 +396,9 @@ li.sfHover {
 }
 
 #header #search-form {
-	margin: 45px 0 32px 0;
+	margin: 18px 0 32px 0;
 	float: right;
-	width: 250px;
+	width: 255px;
 }
 #header label {
 	font-family: 'Arvo',arial,serif;
@@ -394,7 +408,9 @@ li.sfHover {
 }
 
 #header .searchsubmit, #header .searchsubmit:hover,
-#header #search-submit, #header #search-submit:hover {
+#header #search-submit, #header #search-submit:hover,
+#sidebar #search-submit, #sidebar #seach-submit:hover
+{
     background: url("images/icon-sprite.png") no-repeat scroll -5px -7px transparent;
     border: 0 none;
     cursor: pointer;
@@ -408,11 +424,23 @@ li.sfHover {
     text-transform: uppercase;
 	color:#63dfd2;
 	height:24px;
-	width:25px;
+	width:21px;
 	vertical-align:middle;
+	padding: 3px 0 3px 5px;
 }
-
-
+#search-terms
+{
+	height: 15px;
+	padding: 2px 2px 1px;
+	width: 138px;
+}
+#search-which
+{
+	height: 21px;
+	padding: 1px 2px;
+	width: 75px;
+	font-size: 12px;
+}
 #header ul.nav li#menu-item-people ul, #header ul.menu li#menu-item-people ul, #header .main-nav li#menu-item-people ul {
     background: url("images/icon-sprite.png") no-repeat scroll 20px -172px #222;
     width: 83px;
@@ -428,6 +456,11 @@ li.sfHover {
 
 #header ul.nav li#menu-item-help ul, #header ul.menu li#menu-item-help ul, #header .main-nav li#menu-item-help ul {
     background: url("images/icon-sprite.png") no-repeat scroll 15px -172px #222;
+}
+#header .nav .current-menu-item a,
+#header .nav .current-page-item a
+{
+	color: #C84C35;
 }
 
 /* Mega Drop down
@@ -471,6 +504,69 @@ li.sfHover {
 	width: 200px;
 	border: 0 none;
 }
+/*My Bar*/
+#wp-admin-bar
+{
+	background-color: #f0f0f0;
+	width: 100%;
+	height: 40px;
+}
+#wp-admin-bar-menus
+{
+	width: 954px;
+	margin: 0 auto;
+}
+#wp-admin-bar a
+{
+	color: #fff;
+}
+#wp-admin-bar .user-links a
+{
+	color: #444444;
+}
+#wp-admin-bar #openlab-menu
+{
+	text-transform: uppercase;
+	color: #c84c35; 
+}
+#wp-admin-bar ul .sub-menu
+{
+	float: right;
+	list-style: none;
+	text-align: center;
+	width: 110px;
+	cursor: pointer;
+	font-size: 12px;
+	font-family: 'Arvo',arial,serif;
+	margin-top: 15px;
+	border-right: 2px solid #cfcfcf;
+}
+#wp-admin-bar ul .admin-bar-last
+{
+	border: none;
+}
+#wp-admin-bar ul .sub-menu:hover ul
+{
+	display: block;
+	z-index: 200;
+}
+#wp-admin-bar ul li ul
+{
+	display: none;
+	position: absolute;
+	background: url('images/admin-bar-arrow.png') no-repeat top center #838383;
+	opacity: 0.90;
+	padding: 22px 0 0 15px;
+	width: 95px;
+	text-transform: none;
+}
+#wp-admin-bar ul li ul li
+{
+	list-style: none;
+	padding-bottom: 10px;
+	text-align: left;
+}
+
 /* Primary Navigation
 ------------------------------------------------------------ */
 
@@ -668,42 +764,66 @@ dd p{line-height:120%}
 
 .home #home-left {
 	float: left;
-	width: 567px;
+	width: 290px;
 }
 
 .home #home-right {
 	float: right;
-	width: 378px;
+	width: 655px;
 }
-
+/*home - post gallery styles*/
+.home #pgw-gallery
+{
+	background-color: #929292;
+	padding: 3px;
+	height: 215px;
+	width: 649px;
+	margin-bottom: 10px;
+}
+.home #pgw-gallery-full h2
+{
+	border: none;
+	font-size: 18px;
+}
+.home #pgw-gallery-full p
+{
+	font-family: 'Arvo',arial,serif;
+	font-size: 13px;
+}
+/*home login styles*/
+.home #cuny_openlab_jump_start .red-box
+{
+	background-color: #de5b4a;
+	width: 259px;
+	padding: 10px;
+	color: #fff;
+	font-size: 10px;
+	margin-bottom: 10px;
+}
+.home #cuny_openlab_jump_start .red-box .title,
+.home #cuny_openlab_jump_start .red-box p,
+.home #cuny_openlab_jump_start .red-box a
+{
+	color: #fff;
+	margin-bottom: 7px;
+}
 .home #open-lab-login {
-	background-color: #63dfd2;
-	width: 185px;
-	float: left;
-	min-height: 212px;
+	background-color: #e1e1e1;
+	width: 259px;
 	color: #000;
 	font-size: 10px;
 }
-
-.home #open-lab-login .title {
-	color: #fff;
-}
 .home #open-lab-login form.standard-form label { 
     display: block;
-    margin: 10px 0;
+    margin: 7px 0;
     font-weight: normal;
 }
-.home #open-lab-login input[type="text"] {
+.home #open-lab-login label input {
 	padding: 1px;
-	margin-left:2px;
-	width: auto;	
+	margin-left:10px;
+	width: 195px;	
 	vertical-align: text-top;
-}
-.home #open-lab-login input[type="password"] {
-	padding: 1px;
-	margin-left:5px;
-	width: auto;	
-	vertical-align: text-top;
+	float: right;
 }
 .home #open-lab-login input[type="submit"] {
 	background: #000;
@@ -711,6 +831,7 @@ dd p{line-height:120%}
 	border: 0 none;
 	padding: 2px 5px;
 	margin-left:10px;
+	float: right;
 }
 .home #open-lab-login p {
 	margin: 10px 0 0;
@@ -726,47 +847,65 @@ dd p{line-height:120%}
 	margin: 0 2px 0 0;
 	vertical-align:middle;
 }
-
+.home #open-lab-login #below-login-form a
+{
+	margin-left: 60px;
+}
+.home #open-lab-login #keep-logged-in
+{
+	padding-left: 60px;
+}
+/*logged-in specific*/
+.logged-in #home-left #open-lab-login
+{
+	background-color: #f0f0f0;
+}
+#sidebar-me .avatar
+{
+	border: 1px #fff solid;
+	float: left;
+}
+#sidebar-me #user-info
+{
+	float: left;
+}
+#open-lab-login #user-info h4
+{
+	margin-bottom: 24px;
+}
+#open-lab-login #user-info h4 a
+{
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #c84c35;
+}
+#open-lab-login #user-info p
+{
+	margin: 5px 0;
+}
 .home #need-support {
 	width: 125px;
 	float: left;
 	min-height: 212px;
 }
 
-.home #new-members {
-	width: 165px;
-	float: left;
-	min-height: 212px;
-}
-
 .home .box-1 {
-	border: 2px solid #f5f6f7;
 	padding: 10px;
 	margin: 0px 10px 10px 0;
-	min-height: 212px;
 }
-
-#whos-online {
-	border: 2px solid #f5f6f7;
-	padding: 10px;
-	margin: 10px 0px 10px 15px;
-	clear: both;
-}
-
-.home #home-right .box-1 {
-	width: 160px;
-	float: left;
-	margin: 0 5px 10px 0;
-}
-
 .home .box-1.last {
 	margin-right: 0;
 }
-.home .box-1 .title {
+.home .box-1 .title,
+.home .home-box .title,
+#cac-featured h3{
     border-bottom: 1px solid;
-    color: #717171;
+    color: #000;
+	font-weight: bold;
     font-size: 13px;
-    padding: 0 0 10px;
+    padding: 0 0 7px;
+	margin: 0 0 10px;
+	width: 253px;
 }
 .home .box-1 .title a {
 	color: #717171;
@@ -778,30 +917,215 @@ dd p{line-height:120%}
 	font-weight: bold;
 	font-size:13px;
 	line-height: 13px;
-	color: #0fceba;
 	font-family: Arial;
 }
-.home .box-1 .byline {
-	color: #aaa;
+/*In the Spotlight styles*/
+#cac-featured
+{
+	border: 2px solid #F5F6F7;
+	padding: 10px;
+	margin-top: 25px;
+    width: 255px;
+}
+#cac-featured .avatar
+{
+	float: left;
+	margin: 0 12px 0 0;
+}
+#cac-featured .cac-content
+{
+	float: left;
+	width: 116px;
+}
+#cac-featured h4
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+}
+/*Who's Online? styles*/
+#whos-online {
+    border: 2px solid #F5F6F7;
+    padding: 10px;
+    width: 255px;
+	margin-top: 25px;
 }
 
-/* Copy paste everything in this file into style.css before lunch */
-.home #new-members { position: relative; }
-.home .home-new-member-avatar { height: 127px; overflow: hidden }
-.home .home-new-member-avatar img { border: none; height: 127px!important; width: 127px!important;}
-#home-new-member-wrap { width: 163px; }
+#whos-online .avatar-block .item-avatar {
+	margin: 0 3px 0 0!important;
+}
+#whos-online .avatar-block {
+	position: relative;
+	margin: 0;
+}
+#whos-online .avatar-block .item-avatar {
+	margin: 0 3px 3px 0;
+	display: inline;
+}
+
+#whos-online .cuny-member {
+	position: relative;
+	display: inline;
+}
+#whos-online .avatar-block .cuny-member-info {
+  	background-color: #000000;
+    top: 0;
+    color: #aaa;
+    display: none;
+    font-size: 11px;
+    padding: 5px;
+    position: absolute;
+    right: -15px;
+    width: 115px;
+    z-index: 10;
+}
+#whos-online .avatar-block .cuny-member-info a {
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+}
+#whos-online .cuny-member:hover .cuny-member-info {
+	display:block;
+}
+/*New members styles*/
+.home #new-members {
+	border: 2px solid #F5F6F7;
+    margin-top: 25px;
+    padding: 10px;
+    width: 255px;
+	position: relative; 
+}
+#new-members #new-members-text
+{
+	width: 190px;
+	float: left;
+}
+.new-member-navigation 
+{ 
+	width: 40px; 
+	height: 16px;
+	float: right;
+	z-index: 1000 
+}
+.home-new-member
+{
+	margin-right: 12px;
+}
+.home-new-member a
+{
+	display: block;
+}
+.home-new-member h2
+{
+	 font-size: 12px;
+	 font-family: Arial, Helvetica, sans-serif;
+	 font-weight: bold;
+	 border: none;
+}
+.home .home-new-member-avatar { height: 121px; overflow: hidden }
+.home .home-new-member-avatar img { border: none; height: 121px; width: 121px;}
 .home-new-member-info { width: 115px; margin: 5px 0 0 0; }
 .registered { color: #c1c1c1; line-height: 12px; }
-.new-member-navigation { position: absolute; bottom: 10px; right: 10px; width: 40px; height: 16px; z-index: 1000 }
 .new-member-navigation button { border: none; width: 17px; height: 16px; display: block; cursor: pointer; text-indent: -9999px;}
 .new-member-navigation button.prev { background: url(images/new-members-arrow-left.png) no-repeat; float: left; }
 .new-member-navigation button.next { background: url(images/new-members-arrow-right.png) no-repeat; float: right; } 
 
-
 /* Group Archives
 ------------------------------------------------------------ */
+/*General*/
 .item-list .alignleft {
 	margin: 0;
+}
+.page #sidebar p
+{
+	padding: 0 7px;
+	margin-bottom: 20px;
+}
+.red-square
+{
+	display: block;
+	height: 12px;
+	width: 12px;
+	background: #c84c35;
+	float: left;
+	margin: 4px 10px 2px 7px;
+}
+.gray-square
+{
+	display: block;
+	height: 12px;
+	width: 12px;
+	background: #838383;
+	float: left;
+	margin: 5px 10px 2px 7px;
+}
+.page #sidebar select
+{
+	height: 20px;
+	padding: 1px 2px;
+	width: 168px;
+	color: #c84c35;
+	font-size: 12px;
+} 
+.page #sidebar .filter
+{
+	padding-bottom: 22px;
+	border-bottom: 1px solid #f0f0f0;
+	margin-bottom: 22px;
+}
+/*Home*/
+.see-all
+{
+	float: right;
+}
+.home-group-list
+{
+	border: 2px solid #F5F6F7;
+    margin-top: 22px;
+    padding: 10px;
+    position: relative;
+}
+.home-group-list .title-wrapper
+{
+	border-bottom: 1px solid;
+	margin: 0 0 10px;
+}
+.home-group-list .title
+{
+    color: #000;
+	font-weight: bold;
+    font-size: 13px;
+    padding: 0 0 7px;
+	width: 250px;
+	float: left;
+	margin: 0;
+}
+.home #home-right .box-1 {
+	width: 141px;
+	float: left;
+	margin: 0 20px 0 0;
+	padding: 0;
+}
+.home #home-right .box-1 h2 a
+{
+	font-size: 12px;
+	text-decoration: none;
+}
+.home #home-right .box-1 h2
+{
+	margin-top: 11px;
+}
+.home #home-right .last-column
+{
+	margin: 0;
+}
+.home .box-1 .byline {
+	color: #aaa;
+	margin-bottom: 17px;
+}
+.home .box-1 a
+{
+	text-decoration: underline;
 }
 /* Clubs
 -------------*/
@@ -1052,7 +1376,7 @@ dd p{line-height:120%}
 }
 
 .full-width-content #content-sidebar-wrap {
-	width: 954px;
+	width: 960px;
 }
 
 
@@ -1115,8 +1439,6 @@ blockquote {
 	clear: both;
 	margin: 0 0 15px;
 }
-
-
 /* Column Classes
 ------------------------------------------------------------ */
 
@@ -1240,7 +1562,7 @@ h2 a:visited {
 h1 {
     border-bottom: 1px solid;
     color: #717171;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     margin: 0 0 5px;
     padding: 0 0 5px;
@@ -1293,7 +1615,19 @@ h4 span.small {
 	font-size: 11px;
 	color: #838383;
 }
-
+.page #wrap h1
+{
+	padding-left: 7px;
+}
+#sidebar h2
+{
+	border-bottom: 1px solid #717171;
+    color: #c84c35;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0 0 5px;
+    padding: 0 0 5px 7px;
+}
 /* Unordered / Ordered Lists
 ------------------------------------------------------------ */
 
@@ -1768,7 +2102,8 @@ div.gform_footer input.button:hover,
 	background: none;
 	border: none;
 	color: #fff;
-	font-size: 12px;
+	font-family: 'Arvo', arial, serif;
+	font-size: 14px;
 	margin: 0 0 5px;
 	padding: 0;
 }
@@ -1832,7 +2167,7 @@ div.gform_footer input.button:hover,
 .footer-widgets-3,
 .footer-widgets-4 {
 	float: left;
-    border-right: 1px solid #FFFFFF;
+    border-right: 1px solid #929292;
     padding: 0 15px;
     height: 100px;
 }
@@ -2416,22 +2751,6 @@ h2.member-name-title {
 	clear: none!important;
 }
 
-.whos-online .ribbon-case {
-	margin: 0 !important;
-}
-
-#whos-online .ribbon-case {
-	position: static !important;
-}
-
-#whos-online .avatar-block .item-avatar {
-	margin: 0 3px 0 0!important;
-}
-
-#whos-online {
-	padding: 10px 10px 3px 10px !important;
-}
-
 #blog-dir-search { 
 	margin-top: 0; 
 	margin-bottom: 10px;
@@ -2459,142 +2778,6 @@ h2.member-name-title {
 	position: relative;
 	 clear: both;
 }
-
-#whos-online .avatar-block {
-	position: relative;
-	margin: 0 0 0 26px;
-}
-#whos-online .avatar-block .item-avatar {
-	margin: 0 3px 3px 0;
-	display: inline;
-}
-
-#whos-online .cuny-member {
-	position: relative;
-	display: inline;
-}
-#whos-online .avatar-block .cuny-member-info {
-  	background-color: #000000;
-    top: 0;
-    color: #aaa;
-    display: none;
-    font-size: 11px;
-    padding: 5px;
-    position: absolute;
-    right: -15px;
-    width: 115px;
-    z-index: 10;
-}
-#whos-online .avatar-block .cuny-member-info a {
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-}
-#whos-online .cuny-member:hover .cuny-member-info {
-	display:block;
-}
-.ribbon-case { position: relative; margin: 0 0 15px;}
-#whos-online .ribbon-fold {
-    background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;
-    display: block;
-    height: 20px;
-    left: -57px;
-    position: absolute;
-    top: 51px;
-    width: 20px;
-}
-.ribbon-fold {
-    background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;
-    display: block;
-    height: 20px;
-    left: -31px;
-    position: absolute;
-    top: 20px;
-    width: 20px;
-}
-.robin-egg-ribbon:before,
-.watermelon-ribbon:before {
-	background: url('images/icon-sprite.png') no-repeat transparent;
-	display: block;
-	position: relative;
-	height: 20px;
-	width: 15px;
-}
-#whos-online h4.robin-egg-ribbon {
-	background-color: #63dfd2;
-	text-align: center;
-	width: 72px;
-	color: #fff;
-	position: absolute;
-	left: -47px;
-	top: 22px;
-	font-size: 11px;
-	padding: 1px 0;
-	z-index: 9;
-}
-h4.robin-egg-ribbon {
-	background-color: #63dfd2;
-	color: #fff;
-	display: inline;
-    font-size: 11px;
-    left: -21px;
-    padding: 5px 22px;
-    position: relative;
-    text-align: center;
-    z-index: 9;
-    margin-top: 10px;
-}
-#whos-online h4.watermelon-ribbon {
-	background-color: #ff5959;
-	text-align: center;
-	width: 72px;
-	color: #fff;
-	position: absolute;
-	left: -47px;
-	top: 22px;
-	font-size: 11px;
-	padding: 1px 0;
-	z-index: 9;
-}
-
-h4.watermelon-ribbon {
-	background-color: #ff5959;
-	color: #fff;
-	display: inline;
-    font-size: 11px;
-    left: -21px;
-    padding: 5px 22px;
-    position: relative;
-    text-align: center;
-    z-index: 9;
-    margin-top: 10px;
-}
-#whos-online h4.yellow-canary-ribbon {
-	background-color: #faf763;
-	text-align: center;
-	width: 72px;
-	color: #000;
-	position: absolute;
-	left: -47px;
-	top: 22px;
-	font-size: 11px;
-	padding: 1px 0;
-	z-index: 9;
-}
-
-h4.yellow-canary-ribbon {
-	background-color: #faf763;
-	color: #000;
-	display: inline;
-    font-size: 11px;
-    left: -21px;
-    padding: 5px 22px;
-    position: relative;
-    text-align: center;
-    z-index: 9;
-    margin-top: 10px;
-}
-
 .info-line {
     color: #AAAAAA;
     font-size: 11px;
