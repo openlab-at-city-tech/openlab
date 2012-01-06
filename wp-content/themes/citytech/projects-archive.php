@@ -11,39 +11,6 @@ add_action('genesis_post_content', 'cuny_project_archive' );
 function cuny_project_archive() {
 
 	global $wpdb,$bp;
-if ($_GET['group_sequence'] == "") {
-	$_GET['group_sequence'] = "alphabetical";
-}
-switch ($_GET['group_sequence']) {
-	case "alphabetical":
-		$display_option = "Alphabetical";
-		$option_value = "alphabetical";
-		break;
-	case "newest":
-		$display_option = "Newest";
-		$option_value = "newest";
-		break;
-	case "active":
-		$display_option = "Last Active";
-		$option_value = "active";
-		break;
-	default: 
-		$display_option = "Select Desired Sequence";
-		$option_value = "";
-		break;
-}
-?>
-<form id="group_seq_form" name="group_seq_form" action="#" method="get">
-	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();">
-		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
-		<option value='alphabetical'>Alphabetical</option>
-		<option value='newest'>Newest</option>
-		<option value='active'>Last Active</option>
-	</select>
-	<input type="submit" name="group_seq_submit" value="Sequence">
-</form>
-<?php
-
 	$ids="9999999";
 	if ($_GET['group_sequence'] != "") {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
@@ -58,7 +25,8 @@ switch ($_GET['group_sequence']) {
 	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12&max=' . $instance['max_groups'] ) ) : ?>
-
+	
+    <p class="group-count"><?php bp_groups_pagination_count(); ?></p>
 	<ul id="project-list" class="item-list">
 	<?php $count = 1; ?>
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
@@ -104,15 +72,56 @@ switch ($_GET['group_sequence']) {
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
 	<?php global $bp;
-	if($bp->loggedin_user->id > 0){?>
-    <div class="generic-button"><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>"><?php _e( 'Create a Project', 'buddypress' ) ?></a></div>
-    <?php } ?>
+	//if($bp->loggedin_user->id > 0){?>
+    <!--<div class="generic-button"><a href="<?php //echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>"><?php //_e( 'Create a Project', 'buddypress' ) ?></a></div>-->
+    <?php //} ?>
+    
+    <h2 class="sidebar-title">Find a Club</h2>
+    <p>Narrow down your search using the filters or search box below.</p>
+    
+    <?php if ($_GET['group_sequence'] == "") {
+	$_GET['group_sequence'] = "alphabetical";
+}
+switch ($_GET['group_sequence']) {
+	case "alphabetical":
+		$display_option = "Alphabetical";
+		$option_value = "alphabetical";
+		break;
+	case "newest":
+		$display_option = "Newest";
+		$option_value = "newest";
+		break;
+	case "active":
+		$display_option = "Last Active";
+		$option_value = "active";
+		break;
+	default: 
+		$display_option = "Select Desired Sequence";
+		$option_value = "";
+		break;
+}
+?>
+<div class="filter">
+<div class="red-square"></div>
+<form id="group_seq_form" name="group_seq_form" action="#" method="get">
+	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select">
+		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
+		<option value='alphabetical'>Alphabetical</option>
+		<option value='newest'>Newest</option>
+		<option value='active'>Last Active</option>
+	</select>
+</form>
+<div class="clearfloat"></div>
+</div><!--filter-->
+
     <div class="archive-search">
+    <div class="gray-square"></div>
     <form method="post">
-    <input type="text" name="group_search" value="<?php echo $_POST['group_search'];?>" />
-    <input type="submit" name="group_search_go" value="Search" />
+    <input id="search-terms" type="text" name="group_search" value="<?php echo $_POST['group_search'];?>" />
+    <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
-    </div>
+    <div class="clearfloat"></div>
+    </div><!--archive search-->
 <?php 
 }
 

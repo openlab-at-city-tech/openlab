@@ -12,49 +12,65 @@ function cuny_build_homepage() {
 	echo '<div id="home-left">';
 		echo '<div id="cuny_openlab_jump_start">';
 			cuny_home_login();
-			cuny_home_support();
-			cuny_home_new_members();
-		echo '</div>';
-		echo '<div class="box-1" id="whos-online">';
+		echo '</div>'; 
+			dynamic_sidebar('cac-featured');
+			echo '<div class="box-1" id="whos-online">';
 			echo '<h3 class="title">Who\'s Online?</h3>';
-		    cuny_whos_online('faculty');
-		    cuny_whos_online('student');
-		    cuny_whos_online('staff');
-		echo '</div>';
-	echo '</div>';
-	
+		    cuny_whos_online();
+		echo '</div>'; ?>
+			<?php cuny_home_new_members(); ?>        
+	<?php echo '</div>';
 	echo '<div id="home-right">';
-		cuny_home_four_square();
+		dynamic_sidebar('pgw-gallery');
+		cuny_home_square('course');
+		cuny_home_square('club');
+		cuny_home_square('project');
 	echo '</div>';
 }
 
 function cuny_home_login() {
-	echo '<div id="open-lab-login" class="box-1">';
-		echo '<h3 class="title">Log in to OpenLab</h3>';
-		 if ( is_user_logged_in() ) : ?>
-
-		<?php do_action( 'bp_before_sidebar_me' ) ?>
+		
+		 if ( is_user_logged_in() ) :
+		
+        echo '<div id="open-lab-login" class="box-1">';
+        echo '<h3 class="title">Welcome...</h3>';
+		do_action( 'bp_before_sidebar_me' ) ?>
 
 		<div id="sidebar-me">
-			<a class="alignleft" href="<?php echo bp_loggedin_user_domain() ?>">
-				<?php bp_loggedin_user_avatar( 'type=thumb&width=40&height=40' ) ?>
+			<a class="alignleft avatar" href="<?php echo bp_loggedin_user_domain() ?>">
+				<?php bp_loggedin_user_avatar( 'type=thumb&width=80&height=80' ) ?>
 			</a>
 
-			<h4><?php echo bp_core_get_userlink( bp_loggedin_user_id() ); ?></h4>
-			<a class="button logout" href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
+			<div id="user-info">
+            <h4><?php echo bp_core_get_userlink( bp_loggedin_user_id() ); ?></h4>
+            <p><a class="button logout" href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></p>
+			<p><a class="button logout" href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a></p>
+            </div><!--user-info-->
+            <div class="clearfloat"></div>
 
 			<?php do_action( 'bp_sidebar_me' ) ?>
-		</div>
+		</div><!--sidebar-me-->
 
 		<?php do_action( 'bp_after_sidebar_me' ) ?>
-
-		<?php if ( function_exists( 'bp_message_get_notices' ) ) : ?>
-			<?php bp_message_get_notices(); /* Site wide notices to all users */ ?>
-		<?php endif; ?>
+        
+        <?php echo '</div>'; ?>
+        
+        <div id="login-help" class="home-box red-box">
+        	 <h3 class="title">Need HELP?</h3>
+		<p>Visit the <a href='"<?php echo site_url(); ?>"/support/help/'>Help</a> section or <a href='"<?php site_url(); ?>"/support/contact-us/'>contact us</a> with a question.</p>
+        </div><!--login-help-->
 
 	<?php else : ?>
-
-		<?php do_action( 'bp_before_sidebar_login_form' ) ?>
+    	<?php echo '<div id="open-lab-join" class="home-box red-box">'; ?>
+    	<?php echo '<h3 class="title">JOIN OpenLab</h3>'; ?>
+		<?php _e( 'Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!', 'buddypress' ) ?>
+        <?php echo '</div>'; ?>
+        
+		<?php echo '<div id="open-lab-login" class="box-1">'; ?>
+		<?php do_action( 'bp_after_sidebar_login_form' ) ?>
+		
+		<?php echo '<h3 class="title">Log in to OpenLab</h3>'; ?>
+		 <?php do_action( 'bp_before_sidebar_login_form' ) ?>
 
 		<form name="login-form" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( 'wp-login.php', 'login_post' ) ?>" method="post">
 			<label><?php _e( 'Username', 'buddypress' ) ?>
@@ -63,37 +79,39 @@ function cuny_home_login() {
 			<label><?php _e( 'Password', 'buddypress' ) ?>
 			<input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" tabindex="98" /></label>
 
-			<div><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /> <?php _e( 'Keep me logged in', 'buddypress' ) ?>
+			<div id="below-login-form">
+            <a class="forgot-password-link" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
 			<input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" /></div>
+            <div id="keep-logged-in">
+            <input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /> <?php _e( 'Keep me logged in', 'buddypress' ) ?>
+            </div>
 
 			<?php do_action( 'bp_sidebar_login_form' ) ?>
 			<input type="hidden" name="testcookie" value="1" />
 		</form>
-		<a class="forgot-password-link" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-
-		<p>
-		<?php _e( 'Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member of the New York City College of Technology OpenLab community.', 'buddypress' ) ?>
-		</p>
-		<?php do_action( 'bp_after_sidebar_login_form' ) ?>
-
+        <?php echo '</div>'; ?>
 	<?php endif;
-	echo '</div>';
-}
-function cuny_home_support() {
-	echo '<div id="need-support" class="box-1">';
-		echo '<h3 class="title">Need Help?</h3>';
-		echo "<p>Visit our <a href='".site_url()."/support/help/'>help page</a>, or check out our <a href='".site_url()."/support/faq/'>FAQ</a>. If you still have questions or can't find what you're looking for, you can also <a href='".site_url()."/support/contact-us/'>contact us</a>.</p>";
-	echo '</div>';
+	
 }
 function cuny_home_new_members() {
 	global $wpdb, $bp;
 	echo '<div id="new-members" class="box-1 last">';
-		echo '<h3 class="title">New OpenLab Members</h3>';
-		if ( bp_has_members( 'type=newest&max=5' ) ) :
+		echo '<h3 class="title">New OpenLab Members</h3>'; ?>
+        	<div id="new-members-top-wrapper">
+            <div id="new-members-text">
+            	<p>Browse through and say "Hello!" to the newest members of OpenLab.</p>
+            </div>
+        	<div class="new-member-navigation">
+				<button class="prev">&lt;&lt;</button>
+				<button class="next">&gt;&gt;</button>
+			</div>
+            <div class="clearfloat"></div>
+            </div><!--members-top-wrapper-->
+		<?php if ( bp_has_members( 'type=newest&max=5' ) ) :
 			$avatar_args = array (
 				'type' => 'full',
-				'width' => 163,
-				'height' => 163,
+				'width' => 121,
+				'height' => 121,
 				'class' => 'avatar',
 				'id' => false,
 				'alt' => __( 'Member avatar', 'buddypress' )
@@ -108,26 +126,22 @@ function cuny_home_new_members() {
 								<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
 						</div>
 		                <div class="home-new-member-info">
-		                    <?php echo "<h2 class='green-title'>" . $firstname ."</h2>"; ?>
+		                    <?php echo "<h2>" . $firstname ."</h2>"; ?>
 		                    <div class="registered"><?php bp_member_registered() ?></div>
 		                </div>
 		            </li>
 	        	<?php endwhile;
         	echo '</ul></div>';
-        	echo '<div class="new-member-navigation">';
-			echo '<button class="prev">&lt;&lt;</button>';
-			echo '<button class="next">&gt;&gt;</button>';
-			echo '</div>';
 		endif;
 	echo '</div>';
 }
 
-function cuny_whos_online( $type ) {
+function cuny_whos_online() {
 global $wpdb, $bp;
 	$avatar_args = array (
 			'type' => 'full',
-			'width' => 75,
-			'height' => 75,
+			'width' => 45,
+			'height' => 45,
 			'class' => 'avatar',
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
@@ -135,26 +149,15 @@ global $wpdb, $bp;
 
 	//$sql="SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$type."' limit 6";
 	//if($_GET['test']=="yes"){
-		$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.value='".$type."' and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 6";
+		$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 6";
 		//echo $sql;
 	//}
 	$rs = $wpdb->get_results( $sql );
 	$ids="9999999";
-	if ( $type == "faculty" ) {
-		$title = "Faculty";
-		$class = "watermelon-ribbon";
-	}else if ( $type == "student" ) {
-		$title = "Students";
-		$class = "robin-egg-ribbon";
-	} else if ( $type == "staff" ) {
-		$title = "Staff";
-		$class = "yellow-canary-ribbon";
-	}
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->user_id;
 	if ( bp_has_members( 'type=active&include=' . $ids ) ) : 
 		$x+=1;?>
 			<div class="avatar-block">
-				<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="<?php echo $class ?>"><?php echo $title ?></h4></div>
 				<?php while ( bp_members() ) : bp_the_member(); ?>
 					<div class="cuny-member">
 						<div class="item-avatar">
@@ -172,13 +175,13 @@ global $wpdb, $bp;
 
 }
 
-function cuny_home_square($type,$last){
+function cuny_home_square($type){
+
 	global $wpdb, $bp;
 	$ids="9999999";
-	if($type!="blog"){
 	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
 	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
+	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 12";
 	  //echo $sql;
 	  $rs = $wpdb->get_results($sql);
 	  foreach ( (array)$rs as $r ){
@@ -187,14 +190,28 @@ function cuny_home_square($type,$last){
 	  }
 	  //echo $ids;
 	  
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=' . $instance['max_groups'] . '&max=' . $instance['max_groups'] ) ) : 
-		  while ( bp_groups() ) : bp_the_group();
+	  $i = 1;
+	  $column_class = "column";
+	  if ( bp_has_groups( 'include='.$ids.'&max=4' ) ) : ?>
+      <div class="home-group-list">
+      	<div class="title-wrapper">
+	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
+		<div class="see-all"><a href="<?php echo site_url().'/'.strtolower($type); ?>s">See All</a></div>
+        <div class="clearfloat"></div>
+        </div><!--title-wrapper-->
+		<?php while ( bp_groups() ) : bp_the_group();
 		global $groups_template;
 		$group = $groups_template->group;
- 
-			 echo '<div class="box-1 '.$last.'" >';
-			  echo '<h3 class="title"><a href="'.site_url().'/'.strtolower($type).'s/">'.ucfirst($type).'s</a></h3>';
-			  echo '<h2 class="green-title"><a href="'.bp_get_group_permalink().'">'.bp_get_group_name().'</a></h2>';
+		$column_check = $i%4;
+		if ($column_check == 0)
+		{
+			$column_class="last-column";
+		}
+			 echo '<div class="box-1 '.$column_class.'">'; ?>
+			 <div class="item-avatar">
+					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 141, 'height' => 141 )) ?></a>
+				</div>
+			  <?php echo '<h2 class="green-title"><a href="'.bp_get_group_permalink().'">'.bp_get_group_name().'</a></h2>';
 			  ?>
               <div class="byline"><?php printf( __( 'active %s ago', 'buddypress' ), bp_get_group_last_active() ) ?></div>
               <?php
@@ -203,43 +220,15 @@ function cuny_home_square($type,$last){
 				 $activity=stripslashes($group->description); 
 			  }
 			  
-			  echo substr($activity, 0, 135).'&hellip; (<a href="'.bp_get_group_permalink().'">View More</a>)';
+			  echo substr($activity, 0, 125).'<p><a href="'.bp_get_group_permalink().'">See More</a></p>';
 			  echo '</div>';
-		  endwhile; 
-	  endif;
-	}else{
-		if ( bp_has_blogs( 'max=1' ) ) :
-			while ( bp_blogs() ) : bp_the_blog();
-			global $blogs_template;
-				echo '<div class="box-1 '.$last.'" >';
-				echo '<h3 class="title"><a href="'.site_url().'/sites/">Sites</a></h3>';
-				echo '<h2 class="green-title"><a href="'.bp_get_blog_permalink().'">'.bp_get_blog_name().'</a></h2>';
-				//echo '<div class="byline">Author Name | Date</div>';
-				?>
-                <div class="byline"><?php bp_blog_last_active() ?></div>
-                <?php
-             	switch_to_blog($blogs_template->blog->blog_id);
-             	global $post;
-				$query = new WP_Query( array('posts_per_page' => 1) );
-				  while ( $query->have_posts() ) : $query->the_post();
+			  $i++;
+		  endwhile; ?>
+	  	<div class="clearfloat"></div>
+        </div><!--home-group-list-->
+      		
+      <?php endif;
 
-					 echo '<p>'.substr(strip_tags($post->post_content),  0, 135).'&hellip; (<a href="'.bp_get_blog_permalink().'">View More</a>)</p>';
+} ?>
 
-				endwhile;	
-
-				restore_current_blog();
-
-				echo '</div>';
-			endwhile;
-		endif;	
-	}
-}
-
-function cuny_home_four_square() {
-	cuny_home_square('course','');
-	cuny_home_square('club','last');
-	cuny_home_square('project','');
-	cuny_home_square('blog','last');
-}
-
-genesis();
+<?php genesis();
