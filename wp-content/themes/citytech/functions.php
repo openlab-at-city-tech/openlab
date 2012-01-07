@@ -102,7 +102,24 @@ function cuny_bp_adminbar_menu(){ ?>
                 	<a href="<?php echo wp_login_url( bp_get_root_domain() ) ?>"><?php _e( 'Log In', 'buddypress' ) ?></a>
                 <?php } ?>
             </li>
-        	<?php global $bp; ?>
+            <?php cuny_myopenlab_menu(); ?>
+        	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
+            	<?php $args = array(
+				'theme_location' => 'main',
+				'container' => '',
+				'menu_class' => 'nav',
+			);
+			//main menu for top bar
+			wp_nav_menu( $args ); ?>
+            </li><!--openlab-menu-->
+            <li class="clearfloat"></li>
+        </ul><!--wp-admin-bar-menus--> 
+    </div><!--wp-admin-bar-->
+<?php }//end cuny_adminbar_menu
+
+//myopenlab menu function
+function cuny_myopenlab_menu(){
+    global $bp; ?>
         	<?php if ( is_user_logged_in() ) { ?>
         	<li id="myopenlab-menu" class="sub-menu">My OpenLab          
 			<ul id="my-bar">
@@ -119,20 +136,8 @@ function cuny_bp_adminbar_menu(){ ?>
             	<li id="register" class="sub-menu user-links">
             		<a href="<?php site_url(); ?>/register/">Register</a>
            		</li>
-            <?php } ?>
-        	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
-            	<?php $args = array(
-				'theme_location' => 'main',
-				'container' => '',
-				'menu_class' => 'nav',
-			);
-			//main menu for top bar
-			wp_nav_menu( $args ); ?>
-            </li><!--openlab-menu-->
-            <li class="clearfloat"></li>
-        </ul><!--wp-admin-bar-menus--> 
-    </div><!--wp-admin-bar-->
-<?php }
+            <?php }
+}
 
 //header mods
 add_action('genesis_header','cuny_admin_bar', 10);
