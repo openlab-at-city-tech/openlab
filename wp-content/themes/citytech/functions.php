@@ -38,8 +38,8 @@ function wds_cuny_ie_styles() {
       <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
     <![endif]-->
     
-    <?php 
-}
+
+    <?php }
 
 function cuny_no_bp_default_styles() {
 	wp_dequeue_style( 'gconnect-bp' );
@@ -132,9 +132,9 @@ function cuny_bp_adminbar_menu(){ ?>
             <li class="clearfloat"></li>
         </ul><!--wp-admin-bar-menus--> 
     </div><!--wp-admin-bar-->
-<?php }
 
-//header mods
+<?php }//header mods
+
 add_action('genesis_header','cuny_admin_bar', 10);
 function cuny_admin_bar() { 
 
@@ -258,3 +258,5 @@ function cuny_widgets_init() {
 }
 
 add_action( 'widgets_init', 'cuny_widgets_init' );
+
+?>
