@@ -115,11 +115,11 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { 
 //school filter
-if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "active";
+if ( empty( $_GET['school'] ) ) {
+	$_GET['school'] = "active";
 }
-switch ($_GET['group_sequence']) {
-	case "alphabetical":
+switch ($_GET['school']) {
+	case "tech":
 		$display_option_school = "School of Technology & Design";
 		$option_value_school = "tech";
 		break;
@@ -135,28 +135,61 @@ switch ($_GET['group_sequence']) {
 		$display_option_school = "Select Desired Sequence";
 		$option_value_school = "";
 		break;
-} ?>
-<div class="filter">
-<div class="red-square"></div>
-<form id="school_form" name="school_form" action="#" method="get">
-	<select name="school" onchange="document.forms['school_form'].submit();" class="last-select">
-		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
-		<option value='tech'>School of Technology & Design</option>
-		<option value='studies'>School of Professional Studies</option>
-		<option value='arts'>School of Arts & Sciencesoption</option>
-	</select>
-</form>
-<div class="clearfloat"></div>
-</div><!--filter-->
-    
-    
-   <?php 
-    //sequence filter
-if ( empty( $_GET['school'] ) ) {
-	$_GET['school'] = "active";
+} 
+    //departments
+      if ( empty( $_GET['department'] ) ) {
+	$_GET['department'] = "active";
 }
-switch ($_GET['school']) {
-	case "tech":
+switch ($_GET['department']) {
+    //School of Technology and Design
+	case "advertising-design-and-graphic-arts":
+		$display_option_dept = "Advertising Design and Graphic Arts";
+		$option_value_dept = "advertising-design-and-graphic-arts";
+		break;
+	case "architectural-technology":
+		$display_option_dept = "Architectural Technology";
+		$option_value_dept = "architectural-technology";
+		break;
+	case "computer-engineering-technology":
+		$display_option_dept = "Computer Engineering Technology";
+		$option_value_dept = "computer-engineering-technology";
+		break;
+	case "computer-systems-technology":
+		$display_option_dept = "Computer Systems Technology";
+		$option_value_dept = "computer-systems-technology";
+		break;
+	case "construction-management-and-civil-engineering-technology":
+		$display_option_dept = "Construction Management and Civil Engineering Technology";
+		$option_value_dept = "construction-management-and-civil-engineering-technology";
+		break;
+	case "electrical-and-telecommunications-engineering-technology":
+		$display_option_dept = "Electrical and Telecommunications Engineering Technology";
+		$option_value_dept = "electrical-and-telecommunications-engineering-technology";
+		break;
+	case "entertainment-technology":
+		$display_option_dept = "Entertainment Technology";
+		$option_value_dept = "entertainment-technology";
+		break;
+	case "environmental-control-technology":
+		$display_option_dept = "Environmental Control Technology";
+		$option_value_dept = "environmental-control-technology";
+		break;
+	case "mechanical-engineering-technology":
+		$display_option_dept = "Mechanical Engineering Technology";
+		$option_value_dept = "mechanical-engineering-technology";
+		break;
+	default: 
+		$display_option_dept = "Select Desired Sequence";
+		$option_value_dept = "";
+		break;
+} 
+	
+	//sequence filter
+if ( empty( $_GET['group_sequence'] ) ) {
+	$_GET['group_sequence'] = "active";
+}
+switch ($_GET['group_sequence']) {
+	case "alphabetical":
 		$display_option = "Alphabetical";
 		$option_value = "alphabetical";
 		break;
@@ -176,14 +209,38 @@ switch ($_GET['school']) {
     
 ?>
 <div class="filter">
-<div class="red-square"></div>
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select">
+<div class="red-square"></div>
+	<select name="school" class="last-select">
+		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
+		<option value='tech'>School of Technology & Design</option>
+		<option value='studies'>School of Professional Studies</option>
+		<option value='arts'>School of Arts & Sciencesoption</option>
+	</select>
+	<?php if ($option_value_school == "tech")
+	{?>
+	<div class="red-square"></div>
+	<select name="department" class="last-select">
+		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
+		<option value='advertising-design-and-graphic-arts'>Advertising Design and Graphic Arts</option>
+		<option value='architectural-technology'>Architectural Technology</option>
+		<option value='computer-engineering-technology'>Computer Engineering Technology</option>
+		<option value='computer-systems-technology'>Computer Systems Technology</option>
+		<option value='construction-management-and-civil-engineering-technology'>Construction Management and Civil Engineering Technology</option>
+		<option value='electrical-and-telecommunications-engineering-technology'>Electrical and Telecommunications Engineering Technology</option>
+		<option value='entertainment-technology'>Entertainment Technology</option>
+		<option value='environmental-control-technology'>Environmental Control Technology</option>
+		<option value='mechanical-engineering-technology'>Mechanical Engineering Technology</option>
+	</select>
+	<?php } ?>
+	<div class="red-square"></div>
+	<select name="group_sequence" class="last-select">
 		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
 		<option value='alphabetical'>Alphabetical</option>
 		<option value='newest'>Newest</option>
 		<option value='active'>Last Active</option>
 	</select>
+	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>
 </div><!--filter-->
@@ -196,6 +253,14 @@ switch ($_GET['school']) {
     <div class="clearfloat"></div>
     </div><!--archive search-->
 <?php
+
+function slug_maker($full_string)
+{
+ $slug_val = str_replace(" ","-",$full_string);
+ $slug_val = strtolower($slug_val);
+ return $slug_val;
+}
+
 }
 
 genesis();
