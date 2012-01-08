@@ -38,8 +38,8 @@ function wds_cuny_ie_styles() {
       <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
     <![endif]-->
     
-    <?php 
-}
+
+    <?php }
 
 function cuny_no_bp_default_styles() {
 	wp_dequeue_style( 'gconnect-bp' );
@@ -137,10 +137,10 @@ function cuny_myopenlab_menu(){
             	<li id="register" class="sub-menu user-links">
             		<a href="<?php site_url(); ?>/register/">Register</a>
            		</li>
-            <?php }
-}
+            <?php } ?>
 
-//header mods
+<?php }//header mods
+
 add_action('genesis_header','cuny_admin_bar', 10);
 function cuny_admin_bar() { 
 
@@ -264,3 +264,5 @@ function cuny_widgets_init() {
 }
 
 add_action( 'widgets_init', 'cuny_widgets_init' );
+
+?>
