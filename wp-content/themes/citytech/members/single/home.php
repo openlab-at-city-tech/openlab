@@ -380,7 +380,7 @@ get_currentuserinfo();
 ?>
 
 	<div id="item-buttons">
-		<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
+		<?php do_action( 'cuny_bp_profile_menus' ); ?>
 	
 	</div><!-- #item-buttons -->
 	
