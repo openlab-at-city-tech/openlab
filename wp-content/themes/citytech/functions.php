@@ -111,6 +111,7 @@ function cuny_bp_adminbar_menu(){ ?>
 			);
 			//main menu for top bar
 			wp_nav_menu( $args ); ?>
+			<?php  ?>
             </li><!--openlab-menu-->
             <li class="clearfloat"></li>
         </ul><!--wp-admin-bar-menus--> 
