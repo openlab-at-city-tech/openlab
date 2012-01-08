@@ -380,6 +380,7 @@ get_currentuserinfo();
 ?>
 
 	<div id="item-buttons">
+		<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
 
 			<?php // do_action( 'bp_member_header_actions' ); ?>
 		<?php if ( bp_is_user_messages() ) { ?>

@@ -105,23 +105,14 @@ function cuny_bp_admin_menu() {
 			                      &&
 		              !strpos($_SERVER['REQUEST_URI'],"messages")) {
 		                    echo ' selected-page'; }
-		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">My Profile</a>
+		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
         <?php
-        	$sub_counter = 0;
-		foreach( (array)$bp->bp_options_nav['profile'] as $subnav_item ) {
-
-			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
-				
-			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
-			
-			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
-			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
-			$sub_counter++;
-		}
-		$link = $bp->loggedin_user->domain."settings/";
-		echo '<li' . $alt . '><a id="bp-admin-settings" href="' . $link . '">Settings</a></li>';
-		?>
+        $link = $bp->loggedin_user->domain."settings/";
+		echo '<li' . $alt . '><a id="bp-admin-settings" href="' . $link . '">Settings</a>'; ?>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/general">General</a></li>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/notifications">Notifications</a></li>
+		<?php echo '</li>'; ?>
         </ul>
 
     </li>
