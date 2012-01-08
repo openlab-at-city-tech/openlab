@@ -105,27 +105,130 @@ function cuny_bp_admin_menu() {
 			                      &&
 		              !strpos($_SERVER['REQUEST_URI'],"messages")) {
 		                    echo ' selected-page'; }
-		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">My Profile</a>
+		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
         <?php
-        	$sub_counter = 0;
-		foreach( (array)$bp->bp_options_nav['profile'] as $subnav_item ) {
-
-			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
-				
-			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
-			
-			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
-			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
-			$sub_counter++;
-		}
-		$link = $bp->loggedin_user->domain."settings/";
-		echo '<li' . $alt . '><a id="bp-admin-settings" href="' . $link . '">Settings</a></li>';
-		?>
+        $link = $bp->loggedin_user->domain."settings/"; ?>
+		<li><a id="bp-admin-settings" href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug(); ?>">Settings</a>
+			<ul>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/general">General</a></li>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/notifications">Notifications</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/delete-account/'; ?>">Delete Account</a></li>
+			</ul>
+		<?php echo '</li>'; ?>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'profile/edit/'; ?>">Edit Profile</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'profile/change-avatar/'; ?>">Change Avatar</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/'; ?>">Send Invites</a>
+			<ul>
+				<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/sent-invites/'; ?>">Sent</a></li>
+			</ul>		
+		</li>
         </ul>
 
     </li>
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">My Friends</a>
+	
+	<li class="<?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">Courses</a><ul>
+<?php
+        /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
+	      }
+
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
+	       if(count( $course_info )>0){
+	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
+	      		echo '<li>';
+	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
+	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
+	      		echo '</li>';
+	      	}
+		 }else{
+			 echo "<li>You do not have any courses.</li>";
+		  }*/ ?>
+          
+          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Active</a></li>
+          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Inactive</a></li>
+          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
+		
+		  <li>	
+	      <?php $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+			  ?>
+			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'New Course', 'buddypress' ) ?></a>
+	      <?php } ?>
+          </ul></li>
+
+	<li class="<?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">Projects</a><ul>
+<?php
+        /*if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $project_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
+            wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
+		}
+
+	      $project_info = isset( $project_info['groups'] ) ? $project_info['groups'] : array();
+	      if(count( $project_info )>0){
+		  //print_r($project_info);
+	      	for ( $i = 0; $i < count( $project_info ); $i++ ) {
+	      		echo '<li>';
+	      			$project_slug = groups_get_group(array( 'group_id' => $project_info[$i]->id))->slug;
+	      			$project_name = groups_get_group(array( 'group_id' => $project_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $project_slug .'">' . $project_name .'</a>';
+	      		echo '</li>';
+	      	}
+	      }else{
+			 echo "<li>You do not have any projects.</li>";
+		  }
+	      */ ?>
+      
+	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Active', 'buddypress' ) ?></a></li>
+	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Inactive', 'buddypress' ) ?></a></li>
+	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'All', 'buddypress' ) ?></a></li>
+          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'Create a Project', 'buddypress' ) ?></a></li>
+	      </ul></li>
+	<li class="<?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
+<?php
+        /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
+		}
+
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
+	      if(count( $course_info )>0){
+	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
+	      		echo '<li>';
+	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
+	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
+	      		echo '</li>';
+	      	}
+	      }else{
+				echo "<li>You do not have any clubs.</li>";
+		  }*/
+	      ?>
+	      
+	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Active', 'buddypress' ) ?></a></li>
+	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Inactive', 'buddypress' ) ?></a></li>
+	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'All', 'buddypress' ) ?></a></li>
+          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'Create a Club', 'buddypress' ) ?></a></li>
+	      </ul></li>
+	      
+	      <?php if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) { ?>
+			 <li class="<?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">Sites</a>
+    	<ul>
+        	<?php /*if ( bp_has_blogs('user_id='.$bp->loggedin_user->id) ) :
+			  while ( bp_blogs() ) : bp_the_blog(); ?>
+			  	<li>
+	      			<a href="<?php bp_blog_permalink() ?>"><?php bp_blog_name() ?></a>
+	      		<ul><li><a href="<?php bp_blog_permalink() ?>wp-admin">Dashboard</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/post-new.php">New Post</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit.php">Manage Posts</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit-comments.php">Manage Comments</a></li></ul></li>
+			  <?php endwhile;
+			endif; */?>
+        </ul>
+    </li>
+    	 <li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
 <!--	<ul> -->
 <?php
 /*
@@ -159,112 +262,12 @@ function cuny_bp_admin_menu() {
 
 <!-- </ul> -->
 	</li>
-	<li class="<?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">My Courses</a><ul>
-<?php
-        if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
-	      }
-
-	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
-	       if(count( $course_info )>0){
-	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
-	      		echo '<li>';
-	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
-	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
-	      		echo '</li>';
-	      	}
-		 }else{
-			 echo "<li>You do not have any courses.</li>";
-		  }
-
-	      $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
-			  ?>
-			  <hr />
-			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'New Course', 'buddypress' ) ?></a>
 	      <?php } ?>
-          </ul></li>
-
-	<li class="<?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">My Projects</a><ul>
-<?php
-        if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $project_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
-            wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
-		}
-
-	      $project_info = isset( $project_info['groups'] ) ? $project_info['groups'] : array();
-	      if(count( $project_info )>0){
-		  //print_r($project_info);
-	      	for ( $i = 0; $i < count( $project_info ); $i++ ) {
-	      		echo '<li>';
-	      			$project_slug = groups_get_group(array( 'group_id' => $project_info[$i]->id))->slug;
-	      			$project_name = groups_get_group(array( 'group_id' => $project_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $project_slug .'">' . $project_name .'</a>';
-	      		echo '</li>';
-	      	}
-	      }else{
-			 echo "<li>You do not have any projects.</li>";
-		  }
-	      ?>
-	      <hr />
-	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Join Projects', 'buddypress' ) ?></a></li>
-          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'New Project', 'buddypress' ) ?></a></li>
-	      </ul></li>
-	<li class="<?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">My Clubs</a><ul>
-<?php
-        if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
-		}
-
-	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
-	      if(count( $course_info )>0){
-	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
-	      		echo '<li>';
-	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
-	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
-	      		echo '</li>';
-	      	}
-	      }else{
-				echo "<li>You do not have any clubs.</li>";
-		  }
-	      ?>
-	      <hr />
-	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Join Clubs', 'buddypress' ) ?></a></li>
-          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'New Club', 'buddypress' ) ?></a></li>
-	      </ul></li>
-	<li class="<?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">My Sites</a>
+	      
+	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
-        	<?php if ( bp_has_blogs('user_id='.$bp->loggedin_user->id) ) :
-			  while ( bp_blogs() ) : bp_the_blog(); ?>
-			  	<li>
-	      			<a href="<?php bp_blog_permalink() ?>"><?php bp_blog_name() ?></a>
-	      		<ul><li><a href="<?php bp_blog_permalink() ?>wp-admin">Dashboard</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/post-new.php">New Post</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit.php">Manage Posts</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit-comments.php">Manage Comments</a></li></ul></li>
-			  <?php endwhile;
-			endif; ?>
-        </ul>
-    </li>
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">My Messages</a>
-    	<ul>
-        <?php
-        	$sub_counter = 0;
-		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
-			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
-			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
-			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
-			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
-			$sub_counter++;
-		}
-		?>
-
-		<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
-		<?php echo '<li>Notifications<span>(' . count( $notifications ) ?>)</span><ul><?php
+    	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
+		<?php echo '<li>Notices<span>(' . count( $notifications ) ?>)</span><ul><?php
 
 			if ( $notifications ) {
 				$counter = 0;
@@ -278,15 +281,31 @@ function cuny_bp_admin_menu() {
 				?> </ul></li>
 			<?php } else { ?>
 
-				<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'No new notifications', 'buddypress' ); ?></a></li>
+				<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
 
 			<?php
 			} ?>
 
 		<?php
 			} else { ?>
-			<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'No new notifications', 'buddypress' ); ?></a></li>
+			<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
 			<?php } ?>
+        <?php
+        	/*$sub_counter = 0;
+		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
+			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
+			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
+			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
+			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
+			$sub_counter++;
+		}*/
+		?>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Inbox</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Unread</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Read</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li>
         </ul>
     </li>
 

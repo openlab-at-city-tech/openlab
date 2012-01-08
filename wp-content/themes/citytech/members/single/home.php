@@ -380,33 +380,7 @@ get_currentuserinfo();
 ?>
 
 	<div id="item-buttons">
-
-			<?php // do_action( 'bp_member_header_actions' ); ?>
-		<?php if ( bp_is_user_messages() ) { ?>
-			<h4 class="sidebar-header">Check My Messages</h4>
-			<ul>
-				<li id="inbox-personal-li"><a id="inbox" href="<?php echo bp_loggedin_user_domain() ?>messages/inbox/">Inbox</a><ul>
-					<li id="inbox-personal-li"><a id="inbox" href="<?php echo bp_loggedin_user_domain() ?>messages/inbox/?status=unread">Unread</a></li>
-					<li id="inbox-personal-li"><a id="inbox" href="<?php echo bp_loggedin_user_domain() ?>messages/inbox/?status=read">Read</a></li>
-				</ul></li>
-				<li id="sentbox-personal-li"><a id="sentbox" href="<?php echo bp_loggedin_user_domain() ?>messages/sentbox/">Sent Messages</a></li>
-				<li id="compose-personal-li"><a id="compose" href="<?php echo bp_loggedin_user_domain() ?>messages/compose/">Compose</a></li>
-			</ul>
-			<?php } else { ?>
-		
-			<hr />
-			<ul>
-				<?php if ( is_super_admin( get_current_user_id() ) ) { ?>
-						<li><a href="<?php echo $bp->displayed_user->domain ?>profile/edit">Edit Profile Info</a></li>
-				<?php } ?>
-				<?php if( $bp->displayed_user->id == $user_ID) : ?>			
-					<li><a href="<?php echo bp_loggedin_user_domain() ?>profile/edit">Edit Profile Info</a></li>
-					<li><a href="<?php echo bp_loggedin_user_domain() ?>profile/change-avatar">Change Avatar</a></li>						
-					<li><a href="<?php echo bp_loggedin_user_domain() ?>settings/general">Settings</a></li>				
-				<?php endif; ?>
-			</ul>
-			<hr />
-		<?php } ?>
+		<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
 	
 	</div><!-- #item-buttons -->
 	
