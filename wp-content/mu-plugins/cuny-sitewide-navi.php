@@ -87,7 +87,6 @@ function cuny_site_wide_google_font() {
 }
 
 add_action('cuny_bp_adminbar_menus', 'cuny_bp_admin_menu');
-/*<<<<<<< Updated upstream */
 function cuny_bp_admin_menu() {
 	 global $bp;
 	 //print_r($bp);
@@ -309,56 +308,9 @@ function cuny_bp_admin_menu() {
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li>
         </ul>
     </li>
-=======
 
-function cuny_bp_admin_menu() {?>
-	<div id="wp-admin-bar">
-	<?php switch_to_blog(1) ?>
-			<h1><a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo">CityTech OpenLab</a></h1>
-		<?php restore_current_blog() ?>
-    	<ul id="wp-admin-bar-menus">
-        	<?php //the admin bar items are in "reverse" order due to the right float ?>
-        	<li id="login-logout" class="sub-menu user-links admin-bar-last">
-            	<?php if ( is_user_logged_in() ) { ?>
-                	<a href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
-                <?php } else { ?>
-                	<a href="<?php echo wp_login_url( bp_get_root_domain() ) ?>"><?php _e( 'Log In', 'buddypress' ) ?></a>
-                <?php } ?>
-            </li>
-        	<?php global $bp; ?>
-        	<?php if ( is_user_logged_in() ) { ?>
-        	<li id="myopenlab-menu" class="sub-menu">My OpenLab          
-			<ul id="my-bar">
-            	<li><a href="<?php echo $bp->loggedin_user->domain; ?>">My Profile</a></li>
-                <li><a href="my-courses">My Courses</a></li>
-                <li><a href="my-projects">My Projects</a></li>
-                <li><a href="my-clubs">My Clubs</a></li>
-                <li><a href="my-blogs">My Blogs</a></li>
-                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/friends">My Friends</a></li>
-                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/messages">My Messages</a></li>
-            </ul><!--my-bar-->
-            </li><!--myopenlab-menu-->
-            <?php } else { ?>
-            	<li id="register" class="sub-menu user-links">
-            		<a href="<?php site_url(); ?>/register/">Register</a>
-           		</li>
-            <?php } ?>
-            <?php switch_to_blog(1) ?>
-        	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
-            	<?php $args = array(
-				'theme_location' => 'main',
-				'container' => '',
-				'menu_class' => 'nav',
-				'depth'      => 1,
-			);
-			//main menu for top bar
-			wp_nav_menu( $args ); ?>
-            </li><!--openlab-menu-->
-            <?php restore_current_blog() ?>
-            <li class="clearfloat"></li>
-        </ul><!--wp-admin-bar-menus--> 
-    </div><!--wp-admin-bar-->
-
+	</ul></li>
+	</ul>
 <?php }
 
 add_action('init','wds_search_override',1);
@@ -407,18 +359,27 @@ function cuny_site_wide_header() {
 
 
 ?>
-<div id="cuny-sw-header-wrap">
-	<div id="cuny-sw-header">
-		
-		
-			
-					
-						<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
-					
-				<!-- </div>
-			</div>-->
-		</div> 
+
+<div id="cuny-sw-header">
+	<div id="cuny-sw-header-wrap">
+	<?php switch_to_blog(1) ?>
+		<a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo"></a>
+	<?php restore_current_blog() ?>
+		<div class="alignright">
+		<div>
+			<?php cuny_site_wide_bp_search() ?>
+		</div>
+		<div>
+		<ul class="cuny-navi">
+			<?php cuny_site_wide_navi(); ?>
+		</ul>
+		<ul class="main-nav">
+			<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
+		</ul>
+		</div>
+		</div>
 	</div>
+</div>
 <?php }
 
 
