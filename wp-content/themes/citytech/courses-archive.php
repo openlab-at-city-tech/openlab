@@ -10,38 +10,6 @@ remove_action('genesis_post_content', 'genesis_do_post_content');
 add_action('genesis_post_content', 'cuny_course_archive' );
 function cuny_course_archive() {
 global $wpdb,$bp,$groups_template;
-if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "active";
-}
-switch ($_GET['group_sequence']) {
-	case "alphabetical":
-		$display_option = "Alphabetical";
-		$option_value = "alphabetical";
-		break;
-	case "newest":
-		$display_option = "Newest";
-		$option_value = "newest";
-		break;
-	case "active":
-		$display_option = "Last Active";
-		$option_value = "active";
-		break;
-	default: 
-		$display_option = "Select Desired Sequence";
-		$option_value = "";
-		break;
-}
-?>
-<form id="group_seq_form" name="group_seq_form" action="#" method="get">
-	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();">
-		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
-		<option value='alphabetical'>Alphabetical</option>
-		<option value='newest'>Newest</option>
-		<option value='active'>Last Active</option>
-	</select>
-	<input type="submit" name="group_seq_submit" value="Sequence">
-</form>
-<?php
 if ( !empty( $_GET['group_sequence'] ) ) {
 	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 }
@@ -85,6 +53,7 @@ $ids="9999999";
 $rs = $wpdb->get_results( $sql );
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
+	<p class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></p>
 	<ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;
@@ -145,17 +114,87 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { 
-$faculty=xprofile_get_field_data( 'Account Type', get_current_user_id() );
-if ( is_super_admin( get_current_user_id() ) || $faculty=="Faculty" ) {?>
-	<div class="generic-button"><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>"><?php _e( 'Create a Course', 'buddypress' ) ?></a></div>
-<?php } ?>
-     <div class="archive-search">
+//school filter
+if ( empty( $_GET['group_sequence'] ) ) {
+	$_GET['group_sequence'] = "active";
+}
+switch ($_GET['group_sequence']) {
+	case "alphabetical":
+		$display_option_school = "School of Technology & Design";
+		$option_value_school = "tech";
+		break;
+	case "studies":
+		$display_option_school = "School of Professional Studies";
+		$option_value_school = "studies";
+		break;
+	case "arts":
+		$display_option_school = "School of Arts & Sciences";
+		$option_value_school = "arts";
+		break;
+	default: 
+		$display_option_school = "Select Desired Sequence";
+		$option_value_school = "";
+		break;
+} ?>
+<div class="filter">
+<div class="red-square"></div>
+<form id="school_form" name="school_form" action="#" method="get">
+	<select name="school" onchange="document.forms['school_form'].submit();" class="last-select">
+		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
+		<option value='tech'>School of Technology & Design</option>
+		<option value='studies'>School of Professional Studies</option>
+		<option value='arts'>School of Arts & Sciencesoption</option>
+	</select>
+</form>
+<div class="clearfloat"></div>
+</div><!--filter-->
+    
+    
+   <?php 
+    //sequence filter
+if ( empty( $_GET['school'] ) ) {
+	$_GET['school'] = "active";
+}
+switch ($_GET['school']) {
+	case "tech":
+		$display_option = "Alphabetical";
+		$option_value = "alphabetical";
+		break;
+	case "newest":
+		$display_option = "Newest";
+		$option_value = "newest";
+		break;
+	case "active":
+		$display_option = "Last Active";
+		$option_value = "active";
+		break;
+	default: 
+		$display_option = "Select Desired Sequence";
+		$option_value = "";
+		break;
+}
+    
+?>
+<div class="filter">
+<div class="red-square"></div>
+<form id="group_seq_form" name="group_seq_form" action="#" method="get">
+	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select">
+		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
+		<option value='alphabetical'>Alphabetical</option>
+		<option value='newest'>Newest</option>
+		<option value='active'>Last Active</option>
+	</select>
+</form>
+<div class="clearfloat"></div>
+</div><!--filter-->
+    <div class="archive-search">
+    <div class="gray-square"></div>
     <form method="post">
-    <?php $group_search = isset( $_POST['group_search'] ) ? $_POST['group_search'] : '' ?>
-    <input type="text" name="group_search" value="<?php echo $group_search ?>" />
-    <input type="submit" name="group_search_go" value="Search" />
+    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
-    </div>
+    <div class="clearfloat"></div>
+    </div><!--archive search-->
 <?php
 }
 
