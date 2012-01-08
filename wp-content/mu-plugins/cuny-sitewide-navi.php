@@ -86,8 +86,8 @@ function cuny_site_wide_google_font() {
 	echo "<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>";
 }
 
-add_action('cuny_bp_profile_menus', 'cuny_bp_admin_menu');
-function cuny_bp_admin_menu() {
+add_action('cuny_bp_profile_menus', 'cuny_bp_profile_menu');
+function cuny_bp_profile_menu() {
 	 global $bp;
 	 //print_r($bp);
 	 	if ( !is_user_logged_in() )
