@@ -182,7 +182,7 @@ function cuny_add_group_menu_items($items) {
 	    $items = str_replace("Site Home","Home",$items);
 	    //$items = str_replace("Home","Site Home",$items);
 	} else if((strpos($items,"Contact"))) {
-	  //a quick and dirty solution to keep "Site Home off About sidebar menu
+	  //a quick and dirty solution to keep "Site Home" off About and Help pages sidebar menu
 	} else {
 		$items = '<li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>' . $items;
 	}

@@ -26,7 +26,20 @@ function cuny_about_menu() {
 			);
 
 	wp_nav_menu( $args );
-}
+}//add the help-page sidebar to just the help page and any child help page
+  }else if ($postID == "43" || $parent == "43")
+  {
+    add_action('genesis_before_sidebar_widget_area', 'cuny_help_menu');
+    function cuny_help_menu() { 
+    $args = array(
+				'theme_location' => 'helpmenu',
+				'container' => 'div',
+                'container_id' => 'help-menu',
+				'menu_class' => 'sidbar-nav'
+			);
+
+	wp_nav_menu( $args );
   }
+ }
 
 genesis();
