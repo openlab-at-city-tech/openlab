@@ -1059,6 +1059,47 @@ dd p{line-height:120%}
 	float: left;
 	margin: 5px 10px 2px 7px;
 }
+
+li.sq-bullet {
+	list-style-image: url(images/sidebar-bullet-gray.png);
+	padding: 0 0 5px 0;
+}
+
+#sidebar a:hover {
+	a:hover: #0fceba 
+}
+
+li.sq-bullet.selected-page {
+	list-style-image: url(images/sidebar_bullet_orange.png);
+}
+
+#sidebar #item-buttons li.selected-page > a {
+	color: #c84c35;
+	height: 12px;
+	line-height: 12px;
+	padding: 0 0 2px 0;
+}
+
+#sidebar #item-buttons ul.main-nav {
+	margin: 0 0 0 21px;
+	padding: 0 0 30px 0;
+	
+}
+
+#sidebar #item-buttons {
+	border-bottom: 1px solid #f0f0f0;
+	margin: 0 0 18px 0;
+}
+
+li.sq-bullet ul {
+	list-style-image: none;
+	display:none;
+}
+
+li.sq-bullet.selected-page > ul {
+	display:block;
+}
+
 .page #sidebar select
 {
 	height: 20px;
@@ -1333,7 +1374,7 @@ form.standard-form #active-toggle label {
 }
 
 #sidebar #item-buttons ul ul {
-	margin: 0 0 0 15px;
+	/*margin: 0 0 0 15px;*/
 }
 /* Breadcrumb
 ------------------------------------------------------------ */
@@ -1705,9 +1746,9 @@ h4 {
 }
 
 .widget-area h4 {
-    border-bottom: 1px solid;
+    /*border-bottom: 1px solid;*/
     color: #717171;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     margin: 0 0 5px;
     padding: 0 0 5px;
@@ -2750,7 +2791,8 @@ h2.member-name-title {
 /* Sidebar */
 #sidebar #item-buttons ul { list-style-type: none; margin: 0; padding: 0; }
 #sidebar #item-buttons li { list-style-type: none; }
-#sidebar #item-buttons li a { font-family: 'Arvo',arial,serif; font-size: 13px; color: #666; text-decoration: none; line-height: 18px; padding: 0 5px; }
+#sidebar #item-buttons li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; /*padding: 0 5px;*/ }
+#sidebar #item-buttons li a:hover { color:#0fceba }
 #sidebar #item-buttons li.current { background: #f0f0f0; }
 
 /* Recent Course Stuff */

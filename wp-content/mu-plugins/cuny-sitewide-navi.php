@@ -99,7 +99,7 @@ function cuny_bp_profile_menu() {
 	 ?>
 <ul class="main-nav">
 
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"members")
+	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"members")
 			                      &&
 		              !strpos($_SERVER['REQUEST_URI'],"friends")
 			                      &&
@@ -127,7 +127,7 @@ function cuny_bp_profile_menu() {
 
     </li>
 	
-	<li class="<?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">Courses</a><ul>
+	<li class="sq-bullet <?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">Courses</a><ul>
 <?php
         /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
             $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
@@ -159,7 +159,7 @@ function cuny_bp_profile_menu() {
 	      <?php } ?>
           </ul></li>
 
-	<li class="<?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">Projects</a><ul>
+	<li class="sq-bullet <?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">Projects</a><ul>
 <?php
         /*if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
             $project_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
@@ -186,7 +186,7 @@ function cuny_bp_profile_menu() {
 	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'Create a Project', 'buddypress' ) ?></a></li>
 	      </ul></li>
-	<li class="<?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
+	<li class="sq-bullet <?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
 <?php
         /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
             $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
@@ -214,7 +214,7 @@ function cuny_bp_profile_menu() {
 	      </ul></li>
 	      
 	      <?php if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) { ?>
-			 <li class="<?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">Sites</a>
+			 <li class="sq-bullet <?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">Sites</a>
     	<ul>
         	<?php /*if ( bp_has_blogs('user_id='.$bp->loggedin_user->id) ) :
 			  while ( bp_blogs() ) : bp_the_blog(); ?>
@@ -228,7 +228,7 @@ function cuny_bp_profile_menu() {
 			endif; */?>
         </ul>
     </li>
-    	 <li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
+    	 <li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
 <!--	<ul> -->
 <?php
 /*
@@ -264,7 +264,7 @@ function cuny_bp_profile_menu() {
 	</li>
 	      <?php } ?>
 	      
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
+	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
     	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
 		<?php echo '<li>Notices<span>(' . count( $notifications ) ?>)</span><ul><?php
