@@ -13,14 +13,15 @@ global $wpdb,$bp;
 $ids="9999999";
 $rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='club'" );
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
-if ($_GET['group_sequence'] != "") {
+
+$sequence_type = $search_terms = '';
+if ( !empty( $_GET['group_sequence'] ) ) {
 	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 }
 if( !empty( $_POST['group_search'] ) ){
 	$search_terms="search_terms=".$_POST['group_search']."&";
 }
 
-$search_terms = '';
 if( !empty( $_GET['search'] ) ){
 	$search_terms="search_terms=".$_GET['search']."&";
 }
@@ -89,7 +90,7 @@ function cuny_buddypress_courses_actions() { ?>
     <h2 class="sidebar-title">Find a Club</h2>
     <p>Narrow down your search using the filters or search box below.</p>
     
-    <?php if ($_GET['group_sequence'] == "") {
+    <?php if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {

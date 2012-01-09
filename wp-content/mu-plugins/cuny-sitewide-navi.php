@@ -371,14 +371,8 @@ function cuny_site_wide_header() {
 	<?php restore_current_blog() ?>
 		<div class="alignright">
 		<div>
-			<?php cuny_site_wide_bp_search() ?>
-		</div>
-		<div>
 		<ul class="cuny-navi">
-			<?php cuny_site_wide_navi(); ?>
-		</ul>
-		<ul class="main-nav">
-			<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
+			<?php cuny_bp_adminbar_menu(); ?>
 		</ul>
 		</div>
 		</div>
@@ -386,9 +380,57 @@ function cuny_site_wide_header() {
 </div>
 <?php }
 
+function cuny_bp_adminbar_menu(){ ?>
+	<div id="wp-admin-bar">
+    	<ul id="wp-admin-bar-menus">
+        	<?php //the admin bar items are in "reverse" order due to the right float ?>
+        	<li id="login-logout" class="sub-menu user-links admin-bar-last">
+            	<?php if ( is_user_logged_in() ) { ?>
+                	<a href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
+                <?php } else { ?>
+                	<a href="<?php echo wp_login_url( bp_get_root_domain() ) ?>"><?php _e( 'Log In', 'buddypress' ) ?></a>
+                <?php } ?>
+            </li>
+            <?php cuny_myopenlab_menu(); ?>
+        	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
+            	<?php $args = array(
+				'theme_location' => 'main',
+				'container' => '',
+				'menu_class' => 'nav',
+			);
+			//main menu for top bar
+			wp_nav_menu( $args ); ?>
+			<?php  ?>
+            </li><!--openlab-menu-->
+            <li class="clearfloat"></li>
+        </ul><!--wp-admin-bar-menus--> 
+    </div><!--wp-admin-bar-->
+<?php }//end cuny_adminbar_menu
 
+//myopenlab menu function
+function cuny_myopenlab_menu(){
+    global $bp; ?>
+        	<?php if ( is_user_logged_in() ) { ?>
+        	<li id="myopenlab-menu" class="sub-menu">My OpenLab          
+			<ul id="my-bar">
+            	<li><a href="<?php echo $bp->loggedin_user->domain; ?>">My Profile</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-courses">My Courses</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-projects">My Projects</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-clubs">My Clubs</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-blogs">My Blogs</a></li>
+                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/friends">My Friends</a></li>
+                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/messages">My Messages</a></li>
+            </ul><!--my-bar-->
+            </li><!--myopenlab-menu-->
+            <?php } else { ?>
+            	<li id="register" class="sub-menu user-links">
+            		<a href="<?php site_url(); ?>/register/">Register</a>
+           		</li>
+            <?php } ?>
 
+<?php }//header mods
 
+//we may be able to deprecate this function - need to look into it
 function cuny_site_wide_navi($args = '') {
 global $bp, $wpdb;
 
@@ -486,6 +528,15 @@ if (!($pos === false)) {
 add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
 function add_group_sidebar()
 {
+  global $bp;
+  $component =  $bp->current_component;
+  $action =  $bp->current_action;
+  
+  if ($component == "groups" && $action = "create")
+  { ?>
+     <h2 class="sidebar-title">My Open Lab</h2>
+     <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
+  <?php }
 }
 
 add_action('wp_footer', 'cuny_site_wide_footer');
@@ -536,3 +587,6 @@ restore_current_blog();
 
 </script>
 <?php }
+
+remove_action( 'init', 'maybe_add_existing_user_to_blog' );
+add_action( 'init', 'maybe_add_existing_user_to_blog', 90 );

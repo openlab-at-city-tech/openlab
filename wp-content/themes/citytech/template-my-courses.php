@@ -94,6 +94,9 @@ get_currentuserinfo();
 			$button_user_id = $members_template->member->user_id;
 		} else if ( bp_displayed_user_id() ) {
 			$button_user_id = bp_displayed_user_id();
+		} else {
+			// No need for a button
+			return;
 		}
 			       
 		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
