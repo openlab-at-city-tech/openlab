@@ -481,6 +481,12 @@ if (!($pos === false)) {
 
 <?php }
 
+//adds the profile sidebar to the add <group> pages
+
+add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
+function add_group_sidebar()
+{
+}
 
 add_action('wp_footer', 'cuny_site_wide_footer');
 function cuny_site_wide_footer() {
