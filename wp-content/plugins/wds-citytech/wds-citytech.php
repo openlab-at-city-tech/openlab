@@ -211,7 +211,7 @@ function cuny_group_menu_items() {
 add_action('wp_footer','wds_footer_breadcrumbs');
 function wds_footer_breadcrumbs(){
 	global $bp,$bp_current;
-	if($bp->current_component=="groups"){
+	if( bp_is_group() ){
 		$group_id=$bp->groups->current_group->id;
 		$b2=$bp->groups->current_group->name;
 		$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
@@ -226,7 +226,7 @@ function wds_footer_breadcrumbs(){
 		}
 
 	}
-	if($bp->displayed_user->id){
+	if( !empty( $bp->displayed_user->id ) ){
 		$account_type = xprofile_get_field_data( 'Account Type', $bp->displayed_user->id);
 		if($account_type=="Staff"){
 			$b1='<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/staff/">Staff</a>';
@@ -240,7 +240,7 @@ function wds_footer_breadcrumbs(){
 		$last_name= xprofile_get_field_data( 'Last Name', $bp->displayed_user->id);
 		$b2=ucfirst($bp->displayed_user->fullname).' '.ucfirst($last_name);
 	}
-	if($bp->current_component=="groups" || $bp->displayed_user->id){
+	if( bp_is_group() || !empty( $bp->displayed_user->id ) ){
 		$breadcrumb='<div class="breadcrumb">You are here:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="View Home" href="http://openlab.citytech.cuny.edu/">Home</a> / '.$b1.' / '.$b2.'</div>';
 		$breadcrumb=str_replace("'","\'",$breadcrumb);?>
     	<script>document.getElementById('breadcrumb-container').innerHTML='<?php echo $breadcrumb; ?>';</script>
