@@ -413,7 +413,8 @@ xmlhttp.onreadystatechange=function()
     document.getElementById("dept-select").innerHTML=xmlhttp.responseText;
     }
   }
-xmlhttp.open("GET","http://openlabdev.org/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
+  var $dom = document.domain;
+xmlhttp.open("GET","http://"+$dom+"/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
 xmlhttp.send();
 }
 function clear_form(){
