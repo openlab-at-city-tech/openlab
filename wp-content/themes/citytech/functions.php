@@ -256,7 +256,7 @@ function cuny_members_pagination_count($member_name)
 //custom menu locations for OpenLab
 register_nav_menus( array(
 	'main' => __('Main Menu', 'cuny'),
-	'mymenu' => __('My Menu', 'cuny')
+	'aboutmenu' => __('About Menu', 'cuny')
 ) );
 
 //custom widgets for OpenLab
