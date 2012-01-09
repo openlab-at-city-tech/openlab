@@ -2795,9 +2795,11 @@ h2.member-name-title {
 /* Sidebar */
 #sidebar #item-buttons ul { list-style-type: none; margin: 0; padding: 0; }
 #sidebar #item-buttons li { list-style-type: none; }
+#sidebar #item-buttons li.active-submenu { display:inline }
 #sidebar #item-buttons li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; /*padding: 0 5px;*/ }
 #sidebar #item-buttons li a:hover { color:#0fceba }
 #sidebar #item-buttons li.current { background: #f0f0f0; }
+
 
 /* Recent Course Stuff */
 #recent-course { margin: 0 0 10px 0; }
