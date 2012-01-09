@@ -125,10 +125,10 @@ function cuny_myopenlab_menu(){
         	<li id="myopenlab-menu" class="sub-menu">My OpenLab          
 			<ul id="my-bar">
             	<li><a href="<?php echo $bp->loggedin_user->domain; ?>">My Profile</a></li>
-                <li><a href="my-courses">My Courses</a></li>
-                <li><a href="my-projects">My Projects</a></li>
-                <li><a href="my-clubs">My Clubs</a></li>
-                <li><a href="my-blogs">My Blogs</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-courses">My Courses</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-projects">My Projects</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-clubs">My Clubs</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-blogs">My Blogs</a></li>
                 <li><a href="<?php echo $bp->loggedin_user->domain; ?>/friends">My Friends</a></li>
                 <li><a href="<?php echo $bp->loggedin_user->domain; ?>/messages">My Messages</a></li>
             </ul><!--my-bar-->

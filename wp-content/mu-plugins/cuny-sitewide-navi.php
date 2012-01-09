@@ -108,6 +108,9 @@ function cuny_bp_profile_menu() {
 		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
         <?php
+        //check to see if the user is viewing their own profile while logged in
+        //if so - profile edit controls are displayed
+        if ( is_user_logged_in() && bp_is_my_profile() ){
         $link = $bp->loggedin_user->domain."settings/"; ?>
 		<li><a id="bp-admin-settings" href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug(); ?>">Settings</a>
 			<ul>
@@ -123,6 +126,7 @@ function cuny_bp_profile_menu() {
 				<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/sent-invites/'; ?>">Sent</a></li>
 			</ul>		
 		</li>
+		<?php }//if user_logged_in ?>
         </ul>
 
     </li>
@@ -155,7 +159,7 @@ function cuny_bp_profile_menu() {
 	      <?php $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
 		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
 			  ?>
-			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'New Course', 'buddypress' ) ?></a>
+			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'Create a Course', 'buddypress' ) ?></a>
 	      <?php } ?>
           </ul></li>
 
