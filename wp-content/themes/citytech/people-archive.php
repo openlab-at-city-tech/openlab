@@ -5,7 +5,7 @@ add_action('genesis_post_title', 'cuny_members_title' );
 function cuny_members_title() {
 	global $wp_query;
 	$post_obj = $wp_query->get_queried_object();
-	echo '<h1 class="entry-title">'.$post_obj->post_title.' In Our Community</h1>';
+	echo '<h1 class="entry-title">'.$post_obj->post_title.' On the OpenLab</h1>';
 }
 
 remove_action('genesis_post_content', 'genesis_do_post_content');
@@ -15,45 +15,29 @@ function cuny_members_index() {
 	$post_obj = $wp_query->get_queried_object();
 	$type=$post_obj->post_title;
 	echo '<div id="people-listing">';
-		if ( $type=="People" ) {
-		  echo '<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="watermelon-ribbon">Faculty</h4></div>';
-		  cuny_list_members( 'Faculty', 'more' );
-		  echo '<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="robin-egg-ribbon">Students</h4></div>';
-		  cuny_list_members( 'Student', 'more' );
-		  echo '<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="yellow-canary-ribbon">Staff</h4></div>';
-		  cuny_list_members( 'Staff', 'more' );
-		}else{
-			if ( $type == "Students" ) { $type = "Student"; }
-			cuny_list_members( $type, 'page' );
-		}
+		  cuny_list_members('more' );
 	echo '</div>';
 }
 //
 //     New parameter "view" - 'more' - tells it to format a "View More" link for that member type
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
 //
-function cuny_list_members( $type, $view) {
+function cuny_list_members($view) {
 global $wpdb, $bp, $members_template;
-	switch ($type) {
-		case "Faculty":
-			$link_type = "faculty";
-			break;
-		case "Student":
-		case "Students":
-			$link_type = "student";
-			break;
-		case "Staff":
-			$link_type = "staff";
-			break;
-		default:
-		        $link_type = "faculty";
+   if ( !empty( $_GET['usertype'] ) ) {
+    	$user_type=$_GET['usertype'];
+    	$user_type=ucwords($user_type);
+    }
+    if( !empty( $_GET['usertype'] ) ) {
+    	echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
+    	$rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$user_type."'" );
+    } else {
+        $rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7" ); 
+    }
 
+    if ($_GET['group_sequence'] != "") {
+		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
-	$display_type = $type;
-	if ($display_type == "Student") {
-		$display_type = "Students";
-	}
-
 	$search_terms = '';
 	if(!empty($_POST['people_search'])){
 		$search_terms="search_terms=".$_POST['people_search']."&";
@@ -63,36 +47,26 @@ global $wpdb, $bp, $members_template;
 	}		
 	$avatar_args = array (
 			'type' => 'full',
-			'width' => 75,
-			'height' => 75,
+			'width' => 72,
+			'height' => 62,
 			'class' => 'avatar',
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
 
-
-
-	$rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$type."'" );
 	$ids="9999999";
-	foreach ( (array)$rs as $r ) $ids.= ",".$r->user_id;
-	if ( bp_has_members( $search_terms.'include=' . $ids ) ) : ?>
-	<?php	if($view == "page") { ?>
-			<div id="pag-top" class="pagination">
-		
-				<div class="pag-count" id="member-dir-count-top">
-					<?php bp_members_pagination_count() ?>
-				</div>
-		
-				<div class="pagination-links" id="member-dir-pag-top">
-					<?php bp_members_pagination_links() ?>
-				</div>
-		
-			</div>
-
-	<?php	} ?>
+	foreach ( (array)$rs as $r ){ $ids.= ",".$r->user_id ;}
+	//bp_has_members was not playing nice with both include and type, so I left in type - then $ids are checked against the array
+	if ( bp_has_members( $sequence_type.$search_terms.'&per_page=48') ) : ?>
+	<p class="group-count"><?php cuny_members_pagination_count('members'); ?></p>
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); 
-					$registered=$members_template->member->user_registered;?>
+               //the following checks the current $id agains the passed list from the query
+               $member_id = $members_template->member->id;
+	            $is_listed = strpos($ids,$member_id);
+	            if ($is_listed === false)
+	            {}else{
+					$registered=$members_template->member->user_registered; ?>
 					<div class="person-block">
 						<div class="item-avatar">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
@@ -105,13 +79,9 @@ global $wpdb, $bp, $members_template;
 							<?php endif; ?>
 						</div>
 					</div>
+					<?php } //end if for is_listed ?>
 				<?php endwhile; ?>
 			</div>
-			<?php	if ($view == "more") { ?>
-					<div class="view-more"><a href="<?php site_url(); ?>/people/<?php echo $link_type; ?>"> View All <?php echo $display_type; ?></a></div>
-					<div class="clear"><p>&nbsp;</p></div>
-			<?php	}  ?>
-			<?php	if($view == "page") { ?>
 					<div id="pag-top" class="pagination">
 				
 						<div class="pag-count" id="member-dir-count-top">
@@ -123,8 +93,6 @@ global $wpdb, $bp, $members_template;
 						</div>
 				
 					</div>
-		
-			<?php	} ?>
 
 		<?php else: 
 			if($type=="Student"){
@@ -142,12 +110,85 @@ global $wpdb, $bp, $members_template;
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
-  <div class="archive-search">
-  <form method="post">
-  <input type="text" name="people_search" value="<?php echo $_POST['people_search'];?>" />
-  <input type="submit" name="people_search_go" value="Search" />
-  </form>
-  </div>
+<h2 class="sidebar-title">Find People</h2>
+    <p>Narrow down your search using the filters or search box below.</p>
+    
+    <?php 
+    //user type
+if ( empty( $_GET['semester'] ) ) {
+	$_GET['semester'] = "active";
+}
+switch ($_GET['semester']) {
+	case "student":
+		$user_display_option = "Student";
+		$user_option_value = "student";
+		break;
+	case "faculty":
+		$user_isplay_option = "Faculty";
+		$user_option_value = "faculty";
+		break;
+	case "staff":
+		$user_display_option = "Faculty";
+		$user_option_value = "faculty";
+		break;
+	default: 
+		$user_display_option = "Select User Type";
+		$user_option_value = "";
+		break;
+} 
+    
+    //sequencing
+    if ($_GET['group_sequence'] == "") {
+	$_GET['group_sequence'] = "alphabetical";
+}
+switch ($_GET['group_sequence']) {
+	case "alphabetical":
+		$display_option = "Alphabetical";
+		$option_value = "alphabetical";
+		break;
+	case "newest":
+		$display_option = "Newest";
+		$option_value = "newest";
+		break;
+	case "active":
+		$display_option = "Last Active";
+		$option_value = "active";
+		break;
+	default: 
+		$display_option = "Select Desired Sequence";
+		$option_value = "";
+		break;
+}
+?>
+<div class="filter">
+<form id="group_seq_form" name="group_seq_form" action="#" method="get">
+	<div class="red-square"></div>
+	<select name="usertype" class="last-select">
+		<option value="<?php echo $user_option_value; ?>"><?php echo $user_display_option; ?></option>
+		<option value='student'>Student</option>
+		<option value='faculty'>Faculty</option>
+		<option value='staff'>Staff</option>
+	</select>
+    <div class="red-square"></div>
+	<select name="group_sequence" class="last-select">
+		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
+		<option value='alphabetical'>Alphabetical</option>
+		<option value='newest'>Newest</option>
+		<option value='active'>Last Active</option>
+	</select>
+	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+</form>
+<div class="clearfloat"></div>
+</div><!--filter-->
+
+    <div class="archive-search">
+    <div class="gray-square"></div>
+    <form method="post">
+    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-submit" type="submit" name="group_search_go" value="Search" />
+    </form>
+    <div class="clearfloat"></div>
+    </div><!--archive search-->
 <?php
 }
 genesis();

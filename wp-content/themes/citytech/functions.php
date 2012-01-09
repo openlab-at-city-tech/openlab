@@ -237,6 +237,22 @@ function cuny_groups_pagination_count($group_name)
 	echo sprintf( __( '%1$s to %2$s (of %3$s '.$group_name.')', 'buddypress' ), $from_num, $to_num, $total ); ?> &nbsp;
 	<span class="ajax-loader"></span><?php
 }
+//a variation on bp_members_pagination_count() to match design
+function cuny_members_pagination_count($member_name)
+{
+	global $bp, $members_template;
+
+		if ( empty( $members_template->type ) )
+			$members_template->type = '';
+
+		$start_num = intval( ( $members_template->pag_page - 1 ) * $members_template->pag_num ) + 1;
+		$from_num  = bp_core_number_format( $start_num );
+		$to_num    = bp_core_number_format( ( $start_num + ( $members_template->pag_num - 1 ) > $members_template->total_member_count ) ? $members_template->total_member_count : $start_num + ( $members_template->pag_num - 1 ) );
+		$total     = bp_core_number_format( $members_template->total_member_count );
+
+		$pag = sprintf( __( '%1$s to %2$s (of %3$s members)', 'buddypress' ), $from_num, $to_num, $total );
+		echo $pag;
+}
 //custom menu locations for OpenLab
 register_nav_menus( array(
 	'main' => __('Main Menu', 'cuny'),
