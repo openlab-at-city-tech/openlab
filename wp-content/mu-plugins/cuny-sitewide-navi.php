@@ -151,15 +151,15 @@ function cuny_bp_profile_menu() {
 			 echo "<li>You do not have any courses.</li>";
 		  }*/ ?>
           
-          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Active</a></li>
-          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Inactive</a></li>
-          <li><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Active</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Inactive</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
 		
 		  <li>	
 	      <?php $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
 		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
 			  ?>
-			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'Create a Course', 'buddypress' ) ?></a>
+			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>"><?php _e( '+ Create a Course', 'buddypress' ) ?></a>
 	      <?php } ?>
           </ul></li>
 
@@ -185,9 +185,9 @@ function cuny_bp_profile_menu() {
 		  }
 	      */ ?>
       
-	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Active', 'buddypress' ) ?></a></li>
-	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Inactive', 'buddypress' ) ?></a></li>
-	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'All', 'buddypress' ) ?></a></li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'Create a Project', 'buddypress' ) ?></a></li>
 	      </ul></li>
 	<li class="sq-bullet <?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
@@ -211,9 +211,9 @@ function cuny_bp_profile_menu() {
 		  }*/
 	      ?>
 	      
-	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Active', 'buddypress' ) ?></a></li>
-	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Inactive', 'buddypress' ) ?></a></li>
-	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'All', 'buddypress' ) ?></a></li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'Create a Club', 'buddypress' ) ?></a></li>
 	      </ul></li>
 	      
@@ -271,7 +271,7 @@ function cuny_bp_profile_menu() {
 	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
     	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
-		<?php echo '<li>Notices<span>(' . count( $notifications ) ?>)</span><ul><?php
+		<?php echo '<li>Notices <span>(' . count( $notifications ) ?>)</span><ul><?php
 
 			if ( $notifications ) {
 				$counter = 0;
@@ -305,8 +305,8 @@ function cuny_bp_profile_menu() {
 		}*/
 		?>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Inbox</a></li>
-			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Unread</a></li>
-			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Read</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">&nbsp;&nbsp;Unread</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">&nbsp;&nbsp;Read</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li>

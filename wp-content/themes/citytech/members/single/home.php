@@ -377,8 +377,11 @@ global $bp, $user_ID, $user_identity, $userdata;
 get_currentuserinfo();
 //print_r($userdata);
 
+// JOE, need to add conditional here to change headline depending on whether this is user's own profile or not
 ?>
+<h2 class="sidebar-title">My Open Lab</h2>
 
+    
 	<div id="item-buttons">
 		<?php do_action( 'cuny_bp_profile_menus' ); ?>
 	
