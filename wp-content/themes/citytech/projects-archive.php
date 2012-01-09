@@ -78,7 +78,7 @@ function cuny_buddypress_courses_actions() { ?>
     <!--<div class="generic-button"><a href="<?php //echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>"><?php //_e( 'Create a Project', 'buddypress' ) ?></a></div>-->
     <?php //} ?>
     
-    <h2 class="sidebar-title">Find a Club</h2>
+    <h2 class="sidebar-title">Find a Project</h2>
     <p>Narrow down your search using the filters or search box below.</p>
     
     <?php if ($_GET['group_sequence'] == "") {

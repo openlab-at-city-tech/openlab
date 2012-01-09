@@ -1107,12 +1107,14 @@ li.sq-bullet.selected-page > ul {
 	width: 168px;
 	color: #c84c35;
 	font-size: 12px;
+	margin-bottom:16px;
 } 
 .page #sidebar .filter
 {
 	padding-bottom: 22px;
 	border-bottom: 1px solid #f0f0f0;
 	margin-bottom: 22px;
+	padding-right: 10px;
 }
 /*Home*/
 .see-all
@@ -2153,14 +2155,16 @@ div.gform_footer input.button:hover,
 	text-decoration: none;
 }
 
-input.wpcf7-submit {
+input.wpcf7-submit, .filter input[type="submit"] {
 	background-color:#717171;
 	border: 1px solid #cccccc;
 	color:#fefefe;
 	font-weight: bold;
-	padding: 1px 7px;
-	
-	
+	padding: 1px 7px;	
+}
+
+.filter input[type="submit"] {
+	float:right;
 }
 
 

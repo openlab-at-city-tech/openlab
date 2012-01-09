@@ -133,7 +133,11 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
-function cuny_buddypress_courses_actions() { 
+function cuny_buddypress_courses_actions() { ?>
+
+<h2 class="sidebar-title">Find a Course</h2>
+    <p>Narrow down your search using the filters or search box below.</p>
+<?php    
 //school filter
 if ( empty( $_GET['school'] ) ) {
 	$_GET['school'] = "active";
