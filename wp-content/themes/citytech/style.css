@@ -1487,6 +1487,15 @@ blockquote {
 	line-height: 18px;
 }
 
+.entry-content a {
+	text-decoration:underline;
+	color: #444444;
+}
+
+.entry-content a:hover {
+	color: #0fceba;
+}
+
 .clear {
 	clear: both;
 }
