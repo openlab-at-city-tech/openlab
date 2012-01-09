@@ -12,21 +12,23 @@ function cuny_project_archive() {
 
 	global $wpdb,$bp;
 	$ids="9999999";
-	if ($_GET['group_sequence'] != "") {
+	
+	$sequence_type = $search_terms = '';
+	
+	if ( !empty( $_GET['group_sequence'] ) ) {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
 	if( !empty( $_POST['group_search'] ) ){
 		$search_terms="search_terms=".$_POST['group_search']."&";
 	}
 	
-	$search_terms = '';
 	if( !empty( $_GET['search'] ) ){
 		$search_terms="search_terms=".$_GET['search']."&";
 	}
 	
 	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
-	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12&max=' . $instance['max_groups'] ) ) : ?>
+	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 	
     <p class="group-count"><?php cuny_groups_pagination_count('Projects'); ?></p>
 	<ul id="project-list" class="item-list">
@@ -81,7 +83,7 @@ function cuny_buddypress_courses_actions() { ?>
     <h2 class="sidebar-title">Find a Project</h2>
     <p>Narrow down your search using the filters or search box below.</p>
     
-    <?php if ($_GET['group_sequence'] == "") {
+    <?php if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {
