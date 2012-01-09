@@ -600,13 +600,16 @@ function wds_load_group_type($group_type){
 
 		$return.='</tr>';
 	if($group_type=="course"){
-		if($bp->groups->current_group->id){
-		  $wds_faculty=groups_get_groupmeta($bp->groups->current_group->id, 'wds_faculty' );
-		  $wds_course_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_code' );
-		  $wds_section_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_section_code' );
-		  $wds_semester=groups_get_groupmeta($bp->groups->current_group->id, 'wds_semester' );
-		  $wds_year=groups_get_groupmeta($bp->groups->current_group->id, 'wds_year' );
-		  $wds_course_html=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_html' );
+		// For the love of Pete, it's not that hard to cast variables
+		$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
+		
+		if( !empty( $bp->groups->current_group->id ) ){
+			$wds_faculty=groups_get_groupmeta($bp->groups->current_group->id, 'wds_faculty' );
+			$wds_course_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_code' );
+			$wds_section_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_section_code' );
+			$wds_semester=groups_get_groupmeta($bp->groups->current_group->id, 'wds_semester' );
+			$wds_year=groups_get_groupmeta($bp->groups->current_group->id, 'wds_year' );
+			$wds_course_html=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_html' );
 		}
         //$return.='<tr>';
            //$return.=' <td>Faculty:';
