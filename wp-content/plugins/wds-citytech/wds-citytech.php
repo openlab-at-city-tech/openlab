@@ -454,7 +454,7 @@ function wds_groups_ajax(){
 		}
 
 		function wds_load_group_departments(id){
-			<?php $group=$bp->groups->current_group->id;
+			<?php $group= bp_get_current_group_id();
 			echo $sack;?>
 			var schools="0";
 			if(document.getElementById('school_tech').checked){
@@ -1047,7 +1047,7 @@ function ra_copy_blog_page($group_id) {
 								  update_option($o->option_name, maybe_unserialize($o->option_value));
 							  }
 						  }
-						  if(version_compare( $GLOBALS['wpmu_version'], '2.8', '>')) {
+						  if(version_compare( $GLOBALS['wp_version'], '2.8', '>')) {
 							  set_transient('rewrite_rules', '');
 						  } else {
 							  update_option('rewrite_rules', '');

@@ -587,3 +587,6 @@ restore_current_blog();
 
 </script>
 <?php }
+
+remove_action( 'init', 'maybe_add_existing_user_to_blog' );
+add_action( 'init', 'maybe_add_existing_user_to_blog', 90 );
