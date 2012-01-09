@@ -73,4 +73,87 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 }
 
+add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_member_actions');
+function cuny_buddypress_member_actions() { 
+global $bp, $user_ID, $user_identity, $userdata;
+get_currentuserinfo();
+//print_r($userdata);
+
+?>
+
+	<div id="item-buttons">
+		<?php do_action( 'cuny_bp_profile_menus' ); ?>
+	
+	</div><!-- #item-buttons -->
+	
+	<?php
+		global $members_template;
+		
+		// Not really sure where this function appears, so I'll make a cascade
+		if ( isset( $members_template->member->user_id ) ) {
+			$button_user_id = $members_template->member->user_id;
+		} else if ( bp_displayed_user_id() ) {
+			$button_user_id = bp_displayed_user_id();
+		}
+			       
+		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
+	?>
+		
+	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+
+		
+<?php if ( !bp_is_user_messages() ) { ?>
+	<?php if ( bp_is_user_friends() ) { ?>
+		<?php $friends_true = "&scope=friends"; ?>
+		<h4 class="sidebar-header">Recent Friend Activity</h4>
+	<?php } else { ?>
+		<?php $friends_true = NULL; ?>
+		<h4 class="sidebar-header">Recent Account Activity</h4>
+	<?php } ?>
+		
+		<?php if ( bp_has_activities( 'per_page=3'.$friends_true ) ) : ?>
+	
+			<ul id="activity-stream" class="activity-list item-list">
+				<div>
+				<?php while ( bp_activities() ) : bp_the_activity(); ?>
+			
+					<div class="activity-avatar">
+						<a href="<?php bp_activity_user_link() ?>">
+							<?php bp_activity_avatar( 'type=full&width=100&height=100' ) ?>
+						</a>
+					</div>
+				
+					<div class="activity-content">
+					
+						<div class="activity-header">
+							<?php bp_activity_action() ?>
+						</div>
+				
+						<?php if ( bp_activity_has_content() ) : ?>
+							<div class="activity-inner">
+								<?php bp_activity_content_body() ?>
+							</div>
+						<?php endif; ?>
+				
+						<?php do_action( 'bp_activity_entry_content' ) ?>
+						
+					</div>
+					<hr style="clear:both" />
+	
+				<?php endwhile; ?>
+				</div>
+			</ul>
+	
+		<?php else : ?>
+		<ul id="activity-stream" class="activity-list item-list">
+			<div>
+			<div id="message" class="info">
+				<p><?php _e( 'No recent activity.', 'buddypress' ) ?></p>
+			</div>
+			</div>
+		</ul>
+<?php endif; ?>
+<?php }
+}
+
 genesis();
