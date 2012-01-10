@@ -393,14 +393,16 @@ function cuny_bp_adminbar_menu(){ ?>
             </li>
             <?php cuny_myopenlab_menu(); ?>
         	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
-            	<?php $args = array(
+            <?php //switch to the root site to get the wp-nav menu
+                  switch_to_blog(1) ?>	
+            <?php $args = array(
 				'theme_location' => 'main',
 				'container' => '',
 				'menu_class' => 'nav',
 			);
 			//main menu for top bar
 			wp_nav_menu( $args ); ?>
-			<?php  ?>
+			<?php restore_current_blog();  ?>
             </li><!--openlab-menu-->
             <li class="clearfloat"></li>
         </ul><!--wp-admin-bar-menus--> 
