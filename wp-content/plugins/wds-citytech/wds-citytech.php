@@ -925,10 +925,12 @@ function wds_bp_group_meta_save($group) {
 	}*/
 
 	//copy blog function
-	if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
-		ra_copy_blog_page($group->id);
-	} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
-		groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+	if ( isset( $_POST['wds_website_check'] ) ) {
+		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+			ra_copy_blog_page($group->id);
+		} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
+			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+		}
 	}
 }
 
