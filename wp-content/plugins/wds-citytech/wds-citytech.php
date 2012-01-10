@@ -925,10 +925,12 @@ function wds_bp_group_meta_save($group) {
 	}*/
 
 	//copy blog function
-	if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
-		ra_copy_blog_page($group->id);
-	} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
-		groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+	if ( isset( $_POST['wds_website_check'] ) ) {
+		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+			ra_copy_blog_page($group->id);
+		} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
+			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+		}
 	}
 }
 
@@ -1178,3 +1180,9 @@ function openlab_redirect_from_site_creation() {
 	}
 }
 add_action( 'bp_actions', 'openlab_redirect_from_site_creation' );
+
+/**
+ * Load custom language file for BP Group Documents
+ */
+load_textdomain( 'bp-group-documents', WP_CONTENT_DIR . '/languages/buddypress-group-documents-en_CAC.mo' );
+
