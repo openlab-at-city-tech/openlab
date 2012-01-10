@@ -359,17 +359,17 @@ function cuny_site_wide_header() {
 
 ?>
 
-<div id="cuny-sw-header">
-	<div id="cuny-sw-header-wrap">
+<div id="cuny-sw-header-wrap">
+	<div id="cuny-sw-header">
+		<div class="cuny-navi">
 	<?php switch_to_blog(1) ?>
 		<a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo"></a>
 	<?php restore_current_blog() ?>
-		<div class="alignright">
-		<div>
-		<ul class="cuny-navi">
-			<?php cuny_bp_adminbar_menu(); ?>
-		</ul>
-		</div>
+		
+			<ul class="alignright">
+				<?php cuny_bp_adminbar_menu(); ?>
+			</ul>
+
 		</div>
 	</div>
 </div>

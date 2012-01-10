@@ -43,6 +43,11 @@ a#cuny-sw-logo {
     top: 0;
 }
 
+.cuny-navi {
+	width:950px;
+	margin: 0 auto;
+}
+
 /*#cuny-sw-header ul.cuny-navi,
 #cuny-sw-header ul.main-nav {
     clear: both;
@@ -248,19 +253,15 @@ a#cuny-sw-logo {
 /*My Bar*/
 #wp-admin-bar
 {
-	/*background-color: #f0f0f0;*/
-	width: 950px;
-	height: 35px;
-	z-index: 0;
-	margin: 0 auto;
-	text-align: center;
-	/*position:relative;*/
+	position:relative !important;
 }
+
 #wp-admin-bar-menus
 {
 	margin: 0 auto;
 	height:35px;
 }
+
 #wp-admin-bar a
 {
 	color: #fff;
@@ -288,6 +289,15 @@ a#cuny-sw-logo {
 	margin-top: 10px;
 	border-right: 2px solid #cfcfcf;
 }
+
+#wp-admin-bar ul li {
+	background:none;
+}
+
+#wp-admin-bar ul li a {
+	display:inline;
+}
+
 #wp-admin-bar ul .admin-bar-last
 {
 	border: none;
