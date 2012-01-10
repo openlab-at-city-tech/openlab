@@ -1186,3 +1186,63 @@ add_action( 'bp_actions', 'openlab_redirect_from_site_creation' );
  */
 load_textdomain( 'bp-group-documents', WP_CONTENT_DIR . '/languages/buddypress-group-documents-en_CAC.mo' );
 
+/**
+ * Allow super admins to change user type on Dashboard
+ */
+class OpenLab_Change_User_Type {
+	function init() {
+		static $instance;
+		
+		if ( !is_super_admin() ) {
+			return;
+		}
+		
+		if ( empty( $instance ) ) {
+			$instance = new OpenLab_Change_User_Type;
+		}
+	}
+	
+	function __construct() {
+		add_action( 'show_user_profile', array( $this, 'markup' ) );
+		add_action( 'edit_user_profile', array( $this, 'markup' ) );
+		
+		add_action( 'personal_options_update', array( $this, 'save' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save' ) );
+	}
+	
+	function markup( $user ) {
+		$account_type = xprofile_get_field_data( 'Account Type', $user->ID );
+		
+		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
+		$field = new BP_XProfile_Field( $field_id );
+		$options = $field->get_children();
+		
+		?>
+		
+		<h3>OpenLab Account Type</h3>
+
+		<table class="form-table">
+			<tr>
+				<th>
+					<label for="openlab_account_type">Account Type</label>
+				</th>
+
+				<td>
+					<?php foreach( $options as $option ) : ?>
+						<input type="radio" name="openlab_account_type" value="<?php echo $option->name ?>" <?php checked( $account_type, $option->name ) ?>> <?php echo $option->name ?><br />
+					<?php endforeach ?>
+				</td>
+			</tr>
+		</table>
+		
+		<?php
+	}
+	
+	function save( $user_id ) {
+		if ( isset( $_POST['openlab_account_type'] ) ) {			
+			xprofile_set_field_data( 'Account Type', $user_id, $_POST['openlab_account_type'] );
+		}
+	}
+	
+}
+add_action( 'admin_init', array( 'OpenLab_Change_User_Type', 'init' ) );
