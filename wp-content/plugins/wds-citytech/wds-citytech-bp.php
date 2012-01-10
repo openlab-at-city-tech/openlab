@@ -1,6 +1,5 @@
 <?php
 
-
 //show blog and pages on menu
 class WDS_Group_Extension extends BP_Group_Extension {
 
