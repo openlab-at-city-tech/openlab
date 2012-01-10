@@ -288,6 +288,7 @@ a#cuny-sw-logo {
 	font-family: 'Arvo',arial,serif;
 	margin-top: 10px;
 	border-right: 2px solid #cfcfcf;
+	padding: 0;
 }
 
 #wp-admin-bar ul li {
