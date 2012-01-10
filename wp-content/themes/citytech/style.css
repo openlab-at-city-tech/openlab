@@ -1362,6 +1362,14 @@ table.groupblog-setup tr th {
 	text-align: left;
 }
 
+/* Parentheses around doc counts */
+div#item-buttons ul li a span:before {
+	content: '(';
+}
+div#item-buttons ul li a span:after {
+	content: ')';
+}
+
 /* Messages
 -------------*/
 
