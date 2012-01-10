@@ -1110,6 +1110,17 @@ dd p{line-height:120%}
 	padding: 0 0 5px 0;
 }
 
+.sidbar-nav ul.sub-menu li {
+	list-style-type: none;
+	list-style-image: none;
+	padding: 5px 0 0 0;
+	display:none;
+}
+
+.sidbar-nav li.current_page_item li {
+	display:block;
+}
+
 #sidebar a:hover {
 	a:hover: #0fceba 
 }
@@ -1118,7 +1129,7 @@ dd p{line-height:120%}
 	list-style-image: url(images/sidebar_bullet_orange.png);
 }
 
-#sidebar #item-buttons li.selected-page > a, .sidbar-nav li.current_page_item a {
+#sidebar #item-buttons li.selected-page > a, .sidbar-nav > li.current_page_item > a {
 	color: #c84c35;
 	height: 12px;
 	line-height: 12px;
