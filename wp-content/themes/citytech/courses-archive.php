@@ -373,7 +373,7 @@ switch ($_GET['group_sequence']) {
 		<option value='newest'>Newest</option>
 		<option value='active'>Last Active</option>
 	</select>
-	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Filter">
 	<!--<input type="reset" onchange="clear_form" value="Reset">-->
 </form>
 <div class="clearfloat"></div>
