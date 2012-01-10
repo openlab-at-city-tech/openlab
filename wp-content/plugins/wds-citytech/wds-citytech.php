@@ -856,6 +856,11 @@ function wds_bp_group_meta(){
 
 
 		</table>
+   	<?php } else { ?>
+   		<?php $blog_url = get_blog_option( $wds_bp_group_site_id, 'siteurl' ) ?>
+   		<?php $blog_name = get_blog_option( $wds_bp_group_site_id, 'blogname' ) ?>
+   		
+   		<p>This <?php echo $group_type ?> is currently associated with the site <strong><?php echo $blog_name ?></strong> (<?php echo $blog_url ?>).</p>
    	<?php } ?>
     </div>
     <?php
