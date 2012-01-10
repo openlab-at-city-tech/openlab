@@ -107,58 +107,65 @@ class buddypress_Translation_Mangler {
  function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
    
-   if ( empty( $groups_template->group ) ) {
-   	return $translation;
+   $group_id = 0;
+   if ( !bp_is_group_create() ) {
+	   if ( !empty( $groups_template->group->id ) ) {
+		$group_id = $groups_template->group->id;
+	   } else if ( !empty( $bp->groups->current_group->id ) ) {
+		$group_id = $bp->groups->current_group->id;	
+	   }
    }
    
-   if ( !empty( $groups_template->group->id ) ) {
-   	$group_id = $groups_template->group->id;
-   } else if ( !empty( $bp->groups->current_group->id ) ) {
-   	$group_id = $bp->groups->current_group->id;	
+   if ( $group_id ) {
+	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
+   } else if ( isset( $_GET['type'] ) ) {
+   	$grouptype = $_GET['type'];
    } else {
    	return $translation;
    }
-   
-   $grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
+
    $uc_grouptype = ucfirst($grouptype);
    $translations = &get_translations_for_domain( 'buddypress' );
    switch($text){
 	case "Forum":
-     return $translations->translate( "Discussion" );
-     break;
+		return $translations->translate( "Discussion" );
+		break;
 	case "Group Forum":
-     return $translations->translate( "$uc_grouptype Discussion" );
-     break;
+		return $translations->translate( "$uc_grouptype Discussion" );
+		break;
 	case "Group Forum Directory":
-     return $translations->translate( "" );
-     break;
+		return $translations->translate( "" );
+		break;
 	case "Group Forums Directory":
-     return $translations->translate( "Group Discussions Directory" );
-     break;
+		return $translations->translate( "Group Discussions Directory" );
+		break;
 	case "Join Group":
-     return $translations->translate( "Join Now!" );
-     break;
+		return $translations->translate( "Join Now!" );
+		break;
 	case "You successfully joined the group.":
-     return $translations->translate( "You successfully joined!" );
-     break;
+		return $translations->translate( "You successfully joined!" );
+		break;
 	case "Recent Discussion":
-     return $translations->translate( "Recent Forum Discussion" );
-     break;
-    case "This is a hidden group and only invited members can join.":
-     return $translations->translate( "This is a hidden " . $grouptype . " and only invited members can join." );
-     break;
-    case "This is a private group and you must request group membership in order to join.":
-     return $translations->translate( "This is a private " . $grouptype . " and you must request " . $grouptype . " membership in order to join." );
-     break;
-    case "This is a private group. To join you must be a registered site member and request group membership.":
-     return $translations->translate( "This is a private " . $grouptype . ". To join you must be a registered site member and request " . $grouptype . " membership." );
-     break;
-    case "This is a private group. Your membership request is awaiting approval from the group administrator.":
-     return $translations->translate( "This is a private " . $grouptype . ". Your membership request is awaiting approval from the " . $grouptype . " administrator." );
-     break;
-    case "said ":
-     return $translations->translate( "" );
-     break;
+		return $translations->translate( "Recent Forum Discussion" );
+		break;
+	case "This is a hidden group and only invited members can join.":
+		return $translations->translate( "This is a hidden " . $grouptype . " and only invited members can join." );
+		break;
+	case "This is a private group and you must request group membership in order to join.":
+		return $translations->translate( "This is a private " . $grouptype . " and you must request " . $grouptype . " membership in order to join." );
+		break;
+	case "This is a private group. To join you must be a registered site member and request group membership.":
+		return $translations->translate( "This is a private " . $grouptype . ". To join you must be a registered site member and request " . $grouptype . " membership." );
+		break;
+	case "This is a private group. Your membership request is awaiting approval from the group administrator.":
+		return $translations->translate( "This is a private " . $grouptype . ". Your membership request is awaiting approval from the " . $grouptype . " administrator." );
+		break;
+	case "said ":
+		return $translations->translate( "" );
+		break;
+	case "Create a Group":
+		return $translations->translate( "Create a " . $uc_grouptype );
+		break;
   }
   return $translation;
  }
