@@ -1,0 +1,91 @@
+/*
+// This file is part of the Carrington Blog Theme for WordPress
+// http://carringtontheme.com
+//
+// Copyright (c) 2008-2009 Crowd Favorite, Ltd. All rights reserved.
+// http://crowdfavorite.com
+//
+// Released under the GPL license
+// http://www.opensource.org/licenses/gpl-license.php
+//
+// **********************************************************************
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// **********************************************************************
+*/
+
+@import url(typography.css);
+
+#gallery-header{
+	background:#e9eaea;
+}
+
+#gallery-header a{
+	border-bottom:1px solid #cecfd1;
+	display:block;
+	font-size:11.5px;
+	font-weight: normal;
+	padding:10px;
+	text-transform:uppercase;
+}
+
+#gallery-content {
+	margin:40px auto;
+	position:relative;
+	width:90%;
+}
+
+.entry-attachment img {
+	border:1px solid #cecfd1;
+}
+.figure-info {
+	margin:20px auto 0;
+	padding:25px 40px;
+	width:33em;
+}
+.figure-info .title {
+ 	margin:0;
+	word-wrap: break-word; /* works in IE, Safari and FF 3 */
+}
+.figure-info .caption {
+	color:#777;
+}
+.figure-info .caption p {
+	font:italic 1.16666667em/1.28571429 georgia, serif;
+	margin-bottom:1.28571429em;
+	margin-top:.25em;
+}
+
+.entry-attachment {
+	text-align:center;
+}
+
+.previous-attachment,
+.next-attachment {
+	position:absolute;
+	top:0px;
+}
+.next-attachment{
+	right:0;
+}
+
+.previous-attachment a,
+.next-attachment a{
+	border:1px solid #cecfd1;
+	display:block;
+	width:50px;
+	height:50px;
+	overflow:hidden;
+}
+.previous-attachment a:hover,
+.next-attachment a:hover {
+	width:auto;
+	height:auto;
+}
+.next-attachment a:hover img {
+	float:none;
+}
+.next-attachment img {
+	float:right; /* incremental gain in FF: image is right aligned against top-right corner. Less of a visual jump */
+}
