@@ -1313,6 +1313,10 @@ form.standard-form #active-toggle label {
 	margin-left: 10px;
 }
 
+table.groupblog-setup tr th {
+	text-align: left;
+}
+
 /* Messages
 -------------*/
 
