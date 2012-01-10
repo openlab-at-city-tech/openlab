@@ -298,7 +298,7 @@
 <?php do_action( 'bp_after_group_home_content' ) ?>
 <?php
 function show_site_posts() {
-	global $first_displayed;
+	global $first_displayed, $post;
 		$group_id = bp_get_group_id(); 
 		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 		if ( $wds_bp_group_site_id != "") {

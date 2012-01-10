@@ -306,7 +306,7 @@ add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
  * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
  *       overhead, and should be rewritten to avoid PHP warnings.
  */
-add_action('init','wds_add_group_members_2_blog');
+add_action('bp_actions','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
 	if ( bp_get_current_group_id() ) {
@@ -335,6 +335,30 @@ function wds_add_group_members_2_blog(){
 		restore_current_blog();
 	}
 }
+
+/**
+ * Add user to the group blog when joining the group
+ */
+function openlab_add_user_to_groupblog( $group_id, $user_id ) {
+	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	
+	if ( $blog_id ) {
+		if ( groups_is_user_admin( $user_id, $group_id ) ) {
+		      $role = "administrator";
+		} else if ( groups_is_user_mod( $user_id, $group_id ) ){
+		      $role = "editor";
+		} else {
+		      $role = "author";
+		}
+		add_user_to_blog( $blog_id, $user_id, $role );
+	}
+}
+add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
+
+function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
+	openlab_add_user_to_groupblog( $group_id, $user_id );
+}
+add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 
 /**
  * Allow super admins to edit any BuddyPress Doc

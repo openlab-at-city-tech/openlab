@@ -80,7 +80,7 @@ get_currentuserinfo();
 //print_r($userdata);
 
 ?>
-
+	<h2 class="sidebar-title">My Open Lab</h2>
 	<div id="item-buttons">
 		<?php do_action( 'cuny_bp_profile_menus' ); ?>
 	
