@@ -727,10 +727,17 @@ function wds_bp_group_meta(){
       <div id="wds-group-type"></div>
       <?php //Copy Site
 	  $wds_bp_group_site_id=groups_get_groupmeta( bp_get_current_group_id(), 'wds_bp_group_site_id' );
+	  
 	  if(!$wds_bp_group_site_id){
 		$template="template-".strtolower($group_type);
 		$blog_details = get_blog_details($template);
 		?>
+		<style type="text/css">
+		.disabled-opt {
+			opacity: .4;
+		}
+		</style>
+		
 		<script>
 		function showHide(id)
 		{
@@ -740,45 +747,120 @@ function wds_bp_group_meta(){
 		   else
 			style.display = "none";
 		}
+		
+		jQuery(document).ready(function($){			
+			function new_old_switch( noo ) {
+				var radioid = '#new_or_old_' + noo;
+				$(radioid).prop('checked','checked');
+				
+				var thisid = '#noo_' + ( noo == 'old' ? 'new' : 'old' ) + '_options';
+				$(thisid).removeClass('disabled-opt');
+				$(thisid).find('input').each(function(index,element){
+					$(element).removeProp('disabled').removeClass('disabled');
+				});
+				$(thisid).find('select').each(function(index,element){
+					$(element).removeProp('disabled').removeClass('disabled');
+				});			
+			
+				var otherid = '#noo_' + noo + '_options';
+				$(otherid).addClass('disabled-opt');
+				$(otherid).find('input').each(function(index,element){
+					$(element).prop('disabled','disabled').addClass('disabled');
+				});
+				$(otherid).find('select').each(function(index,element){
+					$(element).prop('disabled','disabled').addClass('disabled');
+				});
+			}
+			
+			$('.noo_radio').click(function(el){
+				var whichid = $(el.target).prop('id').split('_').pop();
+				new_old_switch(whichid);
+			});
+			
+			// setup
+			new_old_switch( 'new' );
+		},(jQuery));
 		</script>
-        <input type="hidden" name="action" value="copy_blog" />
+        
+        	<input type="hidden" name="action" value="copy_blog" />
 		<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
-		<table class="form-table">
-			<?php
-			/*if($bp->current_action=="create"){?>
-            <tr class="form-field form-required">
-				<td>
-            		<input type="checkbox" name="wds_bp_docs_wiki" value="yes" checked="checked" /> Setup a <?php echo $group_type;?> Wiki?
-				</td>
-            </tr>
-			<?php }*/
-			if($group_type!="course"){
-				$show_website="none"?>
-            <tr class="form-field form-required">
-				<th style="text-align:center;" scope='row'>
-            		<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');" /> Setup a Site?
+		
+		<table class="form-table groupblog-setup">
+			<?php if ( $group_type != "course" ) : ?>
+				<?php $show_website = "none" ?>
+				<tr class="form-field form-required">
+					<th scope='row'>
+						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');" /> Setup a Site?
+					</th>
+				</tr>
+			<?php else : ?>
+		    		<?php $show_website = 'block' ?>
+		    		<tr class="form-field form-required">
+		    			<th>Site Details</th>
+		    		</tr>
+			<?php endif ?>
+			
+			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
+				<th valign="top" scope='row'>
+					
+					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" /> 
+					Create a new site: 
 				</th>
-            </tr>
-            <?php }else{
-			 	$show_website="";
-			}?>
-            <tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
-				<td valign="top" scope='row'><?php _e('Site Address') ?><br /></td>
-				<td>
+				
+				<td id="noo_old_options">
 				<?php
 				if( constant( "VHOST" ) == 'yes' ) : ?>
 					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>.<?php echo $current_site->domain;?>
 				<?php else:
 					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
 				<?php endif; ?>
-
-                <select name="wds_group_privacy">
-                    	<option value="">Public
-                        <option value="private">Private
-                    </select>
-                </td>
+				
+				<select name="wds_group_privacy">
+				<option value="">Public
+				<option value="private">Private
+				</select>
+				</td>
 			</tr>
+			
+			<tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
+				<th valign="top" scope='row'>
+					<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" /> 
+					Use an existing site:
+				</th>
+				
+				<td id="noo_new_options">
+					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
+
+					<?php 
+						global $wpdb, $bp;
+						$current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+						
+						foreach( $user_blogs as $ubid => $ub ) {
+							if ( in_array( $ubid, $current_groupblogs ) ) {
+								unset( $user_blogs[$ubid] );
+							}
+						}
+						$user_blogs = array_values( $user_blogs );
+					?>
+
+					<select name="groupblog-blogid" id="groupblog-blogid">
+						<option value="0">- Choose a site -</option>
+						<?php
+						
+						foreach( (array)$user_blogs as $user_blog ) { ?>							
+							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+						<?php } ?>
+					</select>
+				</td>
+			</tr>
+
+
 		</table>
+   	<?php } else { ?>
+   		<?php $blog_url = get_blog_option( $wds_bp_group_site_id, 'siteurl' ) ?>
+   		<?php $blog_name = get_blog_option( $wds_bp_group_site_id, 'blogname' ) ?>
+   		
+   		<p>This <?php echo $group_type ?> is currently associated with the site <strong><?php echo $blog_name ?></strong> (<?php echo $blog_url ?>).</p>
    	<?php } ?>
     </div>
     <?php
@@ -843,7 +925,11 @@ function wds_bp_group_meta_save($group) {
 	}*/
 
 	//copy blog function
-	ra_copy_blog_page($group->id);
+	if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+		ra_copy_blog_page($group->id);
+	} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+	}
 }
 
 /**
