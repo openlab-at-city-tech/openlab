@@ -106,7 +106,16 @@ function cuny_admin_bar() {
 
 	wp_nav_menu( $args );
 	//do_action( 'cuny_bp_adminbar_menus' );
-}
+	if ( is_user_logged_in() ){?>
+	<div id="extra-border"></div>
+	<ul id="openlab-link">
+		<li>
+			<a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
+		</li>
+	</ul>
+	<?php } ?>
+		<div class="clearfloat"></div>
+<?php }
 
 add_action('genesis_after_content', 'cuny_the_clear_div');
 function cuny_the_clear_div() {

@@ -58,7 +58,8 @@ global $wpdb, $bp, $members_template;
 	foreach ( (array)$rs as $r ){ $ids.= ",".$r->user_id ;}
 	//bp_has_members was not playing nice with both include and type, so I left in type - then $ids are checked against the array
 	if ( bp_has_members( $sequence_type.$search_terms.'&per_page=48') ) : ?>
-	<p class="group-count"><?php cuny_members_pagination_count('members'); ?></p>
+	<div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
+	<div class="clearfloat"></div>
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); 
                //the following checks the current $id agains the passed list from the query

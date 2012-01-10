@@ -377,16 +377,18 @@ global $bp, $user_ID, $user_identity, $userdata;
 get_currentuserinfo();
 //print_r($userdata);
 
-// JOE, need to add conditional here to change headline depending on whether this is user's own profile or not
-?>
-<h2 class="sidebar-title">My Open Lab</h2>
-
-    
-	<div id="item-buttons">
-		<?php do_action( 'cuny_bp_profile_menus' ); ?>
-	
-	</div><!-- #item-buttons -->
-	
+		//check to see if the user is viewing their own profile while logged in
+        //if so - profile edit controls are displayed
+        if ( is_user_logged_in() && bp_is_my_profile() ){ ?>
+        <h2 class="sidebar-title">My Open Lab</h2>
+        <div id="item-buttons">
+		<?php do_action( 'cuny_bp_profile_menus' ); 
+		      $activity_num = 2; ?>
+		</div><!-- #item-buttons -->
+		<?php }else{ ?>
+		<h2 class="sidebar-title">People</h2>
+		<?php $activity_num = 4; ?>
+		<?php } ?>
 	<?php
 		global $members_template;
 		
@@ -412,7 +414,7 @@ get_currentuserinfo();
 		<h4 class="sidebar-header">Recent Account Activity</h4>
 	<?php } ?>
 		
-		<?php if ( bp_has_activities( 'per_page=2'.$friends_true ) ) : ?>
+		<?php if ( bp_has_activities( 'per_page='.$activity_num.$friends_true ) ) : ?>
 	
 			<ul id="activity-stream" class="activity-list item-list">
 				<div>

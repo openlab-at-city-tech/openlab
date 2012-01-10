@@ -23,7 +23,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 		  $ids.= ",".$r->group_id;
 	  }
 	  
-	  echo  '<h1 class="entry-title">My Projects</h1>';
+	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
 if ( !empty( $_GET['status'] ) ) {
 	    $status = $_GET['status'];
 	    $status = ucwords($status);
@@ -33,7 +33,8 @@ if ( !empty( $_GET['status'] ) ) {
 	  }
 	  
 	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) : ?>
-	  <p class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></p>
+	  <div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
+	  <div class="clearfloat"></div>
 <ul id="project-list" class="item-list">
 		<?php 
 		$count = 1;

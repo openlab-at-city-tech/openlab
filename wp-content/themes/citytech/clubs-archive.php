@@ -27,7 +27,8 @@ if( !empty( $_GET['search'] ) ){
 }
 if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 
-	<p class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></p>
+	<div class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></div>
+	<div class="clearfloat"></div>
 	<ul id="club-list" class="item-list">
 	<?php $count = 1 ?>
 		<?php while ( bp_groups() ) : bp_the_group(); ?>

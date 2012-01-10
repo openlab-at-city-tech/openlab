@@ -73,7 +73,8 @@ $ids="9999999";
 $rs = $wpdb->get_results( $sql );
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
-	<p class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></p>
+	<div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
+	<div class="clearfloat"></div>
 	<ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;

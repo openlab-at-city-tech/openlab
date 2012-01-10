@@ -246,8 +246,19 @@ li:hover,
 li.sfHover {
 	position: static;
 }
-
-
+h3#bread-crumb
+{
+    color: #C84C35;
+    font-size: 14px;
+	padding-left: 7px;
+	float: left;
+}
+.group-count
+{
+	font-size: 14px;
+	font-family: 'Arvo',arial,serif;
+	float: right;
+}
 /* Header Right Navigation
 ------------------------------------------------------------ */
 
@@ -255,13 +266,46 @@ li.sfHover {
 #header ul.menu,
 #header .main-nav {
 	font-family: 'Arvo', arial, serif;
-	clear: both;
 	display: block;
 	text-align: left;
 	width: 960px;
 	margin: 0 auto;
 }
-
+#header ul.nav
+{
+	width: auto;
+}
+#header ul.nav,
+#extra-border,
+#openlab-link
+{
+	float: left;
+}
+#openlab-link li
+{
+	list-style: none;
+	padding-left: 15px;
+	margin-left: 2px;
+	border-left: 2px solid #F0F0F0;
+	font-size: 13px;
+	line-height: 15px;
+	height: 19px;
+	font-family: 'Arvo',arial,serif;
+}
+#openlab-link li a
+{
+	color: #8db9ac;
+	padding: 2px 20px;
+	text-decoration: none;
+	line-height: 15px;
+}
+#extra-border
+{
+	display: block;
+	border-right: 2px solid #F0F0F0;
+	height: 19px;
+	width: 2px;
+}
 #header ul.nav ul,
 #header ul.menu ul {
 	float: right;
@@ -1482,10 +1526,6 @@ blockquote {
 	margin: 0 0 40px;
 }
 
-.entry-content {
-	padding-left: 7px;
-}
-
 .entry-content p {
 	padding: 0 0 15px;
 	font-size: 12px;
@@ -1792,6 +1832,7 @@ h4 span.small {
 .page #wrap h1
 {
 	padding-left: 7px;
+	margin: 0 0 7px;
 }
 #sidebar h2
 {

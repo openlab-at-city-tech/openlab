@@ -30,7 +30,8 @@ function cuny_project_archive() {
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 	
-    <p class="group-count"><?php cuny_groups_pagination_count('Projects'); ?></p>
+    <div class="group-count"><?php cuny_groups_pagination_count('Projects'); ?></div>
+    <div class="clearfloat"></div>
 	<ul id="project-list" class="item-list">
 	<?php $count = 1; ?>
 		<?php while ( bp_groups() ) : bp_the_group(); ?>

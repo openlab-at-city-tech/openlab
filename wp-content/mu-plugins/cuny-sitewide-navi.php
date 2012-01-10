@@ -95,8 +95,7 @@ function cuny_bp_profile_menu() {
 
 	      //echo '<pre>';
 	      	//print_r($bp);
-	      //echo '</pre>';
-	 ?>
+	      //echo '</pre>'; ?>
 <ul class="main-nav">
 
 	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"members")
@@ -108,9 +107,6 @@ function cuny_bp_profile_menu() {
 		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
         <?php
-        //check to see if the user is viewing their own profile while logged in
-        //if so - profile edit controls are displayed
-        if ( is_user_logged_in() && bp_is_my_profile() ){
         $link = $bp->loggedin_user->domain."settings/"; ?>
 		<li><a id="bp-admin-settings" href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug(); ?>">Settings</a>
 			<ul>
@@ -126,7 +122,6 @@ function cuny_bp_profile_menu() {
 				<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/sent-invites/'; ?>">Sent</a></li>
 			</ul>		
 		</li>
-		<?php }//if user_logged_in ?>
         </ul>
 
     </li>
@@ -440,8 +435,8 @@ function add_group_sidebar()
   global $bp;
   $component =  $bp->current_component;
   $action =  $bp->current_action;
-  
-  if ($component == "groups" && $action = "create")
+
+  if (($component == "groups" && $action = "create") || $component=="settings" || $component == "invite-anyone")
   { ?>
      <h2 class="sidebar-title">My Open Lab</h2>
      <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>

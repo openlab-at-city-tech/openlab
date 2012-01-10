@@ -24,7 +24,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 		  $ids.= ",".$r->group_id;
 	  }
 	  
-	  echo  '<h1 class="entry-title">My Courses</h1>';
+	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
 	  
 	  if ( !empty( $_GET['status'] ) ) {
 	    $status = $_GET['status'];
@@ -35,7 +35,8 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  }
 	  
 	  if ( bp_has_groups( 'include='.$ids ) ) : ?>
-	  <p class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></p>
+	  <div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
+	  <div class="clearfloat"></div>
 <ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;
