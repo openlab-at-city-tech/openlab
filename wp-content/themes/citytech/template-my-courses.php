@@ -10,10 +10,15 @@ function cuny_my_courses() {
 
 function cuny_profile_activty_block($type,$title,$last) { 
 	global $wpdb,$bp, $ribbonclass;
+	//this is for filter by active/inactive status
+    if ( !empty( $_GET['status'] ) ) {
+    $sql="SELECT a.group_id,c.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->activity->table_name} c where a.group_id=b.group_id and a.group_id=c.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.meta_key='openlab_group_active_status' and b.meta_value='".$_GET['status']."' and c.user_id=".$bp->loggedin_user->id." ORDER BY c.date_recorded desc";
+    } else {
+      $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->loggedin_user->id." ORDER BY b.date_recorded desc";
+    }
 
 	$ids="9999999";
-	  $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->loggedin_user->id." ORDER BY b.date_recorded desc";
-	  $rs = $wpdb->get_results($sql);
+	$rs = $wpdb->get_results($sql);
 	  foreach ( (array)$rs as $r ){
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;
@@ -21,7 +26,16 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  
 	  echo  '<h1 class="entry-title">My Courses</h1>';
 	  
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=6' ) ) : ?>
+	  if ( !empty( $_GET['status'] ) ) {
+	    $status = $_GET['status'];
+	    $status = ucwords($status);
+	    echo '<h3 id="bread-crumb">Courses<span class="sep"> | </span>'.$status.'</h3>';
+	  }else {
+	    echo '<h3 id="bread-crumb">Courses</h3>';
+	  }
+	  
+	  if ( bp_has_groups( 'include='.$ids ) ) : ?>
+	  <p class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></p>
 <ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;

@@ -151,8 +151,8 @@ function cuny_bp_profile_menu() {
 			 echo "<li>You do not have any courses.</li>";
 		  }*/ ?>
           
-          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Active</a> | </li>
-          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">Inactive</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=active'; ?>">Active</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=inactive'; ?>">Inactive</a> | </li>
           <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
 		
 		  <li>	
@@ -185,9 +185,9 @@ function cuny_bp_profile_menu() {
 		  }
 	      */ ?>
       
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/projects/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'Create a Project', 'buddypress' ) ?></a></li>
 	      </ul></li>
 	<li class="sq-bullet <?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
@@ -211,9 +211,9 @@ function cuny_bp_profile_menu() {
 		  }*/
 	      ?>
 	      
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
-	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'Create a Club', 'buddypress' ) ?></a></li>
 	      </ul></li>
 	      
@@ -432,6 +432,22 @@ function cuny_myopenlab_menu(){
 
 <?php }//header mods
 
+//adds the profile sidebar to the add <group> pages
+
+add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
+function add_group_sidebar()
+{
+  global $bp;
+  $component =  $bp->current_component;
+  $action =  $bp->current_action;
+  
+  if ($component == "groups" && $action = "create")
+  { ?>
+     <h2 class="sidebar-title">My Open Lab</h2>
+     <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
+  <?php }
+}
+
 //we may be able to deprecate this function - need to look into it
 function cuny_site_wide_navi($args = '') {
 global $bp, $wpdb;
@@ -524,22 +540,6 @@ if (!($pos === false)) {
 </ul>
 
 <?php }
-
-//adds the profile sidebar to the add <group> pages
-
-add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
-function add_group_sidebar()
-{
-  global $bp;
-  $component =  $bp->current_component;
-  $action =  $bp->current_action;
-  
-  if ($component == "groups" && $action = "create")
-  { ?>
-     <h2 class="sidebar-title">My Open Lab</h2>
-     <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
-  <?php }
-}
 
 add_action('wp_footer', 'cuny_site_wide_footer');
 function cuny_site_wide_footer() {

@@ -412,7 +412,7 @@ get_currentuserinfo();
 		<h4 class="sidebar-header">Recent Account Activity</h4>
 	<?php } ?>
 		
-		<?php if ( bp_has_activities( 'per_page=3'.$friends_true ) ) : ?>
+		<?php if ( bp_has_activities( 'per_page=2'.$friends_true ) ) : ?>
 	
 			<ul id="activity-stream" class="activity-list item-list">
 				<div>

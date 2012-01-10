@@ -185,8 +185,7 @@ function cuny_groups_pagination_count($group_name)
 	$to_num = bp_core_number_format( ( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ) );
 	$total = bp_core_number_format( $groups_template->total_group_count );
 
-	echo sprintf( __( '%1$s to %2$s (of %3$s '.$group_name.')', 'buddypress' ), $from_num, $to_num, $total ); ?> &nbsp;
-	<span class="ajax-loader"></span><?php
+	echo sprintf( __( '%1$s to %2$s (of %3$s '.$group_name.')', 'buddypress' ), $from_num, $to_num, $total );
 }
 //a variation on bp_members_pagination_count() to match design
 function cuny_members_pagination_count($member_name)
