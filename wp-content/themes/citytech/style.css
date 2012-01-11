@@ -127,8 +127,7 @@ hr {
 /* Hyperlinks
 ------------------------------------------------------------ */
 
-a,
-a:visited {
+a {
 	color: #6d6d6d;
 	text-decoration: none;
 }
@@ -2843,32 +2842,25 @@ h2.member-name-title {
 	list-style-image: url(images/sidebar_bullet_orange.png);
 }
 
-#sidebar #item-buttons li.selected-page > a, #sidebar #item-buttons li.current > a, .sidbar-nav > li.current_page_item > a {
+/* #sidebar #item-buttons li.selected-page > a, #sidebar #item-buttons li.current > a, .sidbar-nav > li.current_page_item > a {
 	color: #c84c35;
 	height: 12px;
 	line-height: 12px;
 	padding: 0 0 2px 0;
-}
+} */
 
-#sidebar #item-buttons ul.main-nav, #sidebar ul.sidbar-nav {
+/* #sidebar #item-buttons ul.main-nav, #sidebar ul.sidbar-nav {
 	margin: 0 0 0 21px;
 	padding: 0 0 30px 0;
 	
-}
+} */
 
 #sidebar #item-buttons {
 	border-bottom: 1px solid #f0f0f0;
 	margin: 0 0 18px 0;
 }
 
-/* li.sq-bullet ul {
-	list-style-image: none;
-	display:none;
-} */
-
-
-
-/* Sidebar */
+/* Global Right Sidebar */
 #sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 30px;}
 #sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); line-height: 18px;} 
 #sidebar li { list-style-type: none; } 
@@ -2878,10 +2870,14 @@ h2.member-name-title {
 #sidebar li a:hover { color:#0fceba }
 #sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
-#sidebar li.selected-page > a, #sidebar li.current > a, # sidebarli.current_page_item > a { color: #c84c35; }
+#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 
+/* Group Right Sidebar */
+#sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid; padding: 0; margin: 0; border-color: #f0f0f0 }
+#sidebar ul.website-links li { list-style-image: none; padding: 12px 0 0 0; font-size: 14px; }
+#sidebar ul.website-links li a:after { content: url(images/site-sidebar-icon.png); padding: 0 0 0 10px }
 
 
 /* Recent Course Stuff */
