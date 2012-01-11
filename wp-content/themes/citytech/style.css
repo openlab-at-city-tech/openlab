@@ -1105,56 +1105,11 @@ dd p{line-height:120%}
 	margin: 5px 10px 2px 7px;
 }
 
-.sidbar-nav li, li.sq-bullet {
-	list-style-image: url(images/sidebar-bullet-gray.png);
-	padding: 0 0 5px 0;
-}
-
-.sidbar-nav ul.sub-menu li {
-	list-style-type: none;
-	list-style-image: none;
-	padding: 5px 0 0 0;
-	display:none;
-}
-
-.sidbar-nav li.current_page_item li {
-	display:block;
-}
-
 #sidebar a:hover {
 	a:hover: #0fceba 
 }
 
-.sidbar-nav li.current_page_item, li.sq-bullet.selected-page {
-	list-style-image: url(images/sidebar_bullet_orange.png);
-}
 
-#sidebar #item-buttons li.selected-page > a, .sidbar-nav > li.current_page_item > a {
-	color: #c84c35;
-	height: 12px;
-	line-height: 12px;
-	padding: 0 0 2px 0;
-}
-
-#sidebar #item-buttons ul.main-nav, #sidebar ul.sidbar-nav {
-	margin: 0 0 0 21px;
-	padding: 0 0 30px 0;
-	
-}
-
-#sidebar #item-buttons {
-	border-bottom: 1px solid #f0f0f0;
-	margin: 0 0 18px 0;
-}
-
-li.sq-bullet ul {
-	list-style-image: none;
-	display:none;
-}
-
-li.sq-bullet.selected-page > ul {
-	display:block;
-}
 
 .page #sidebar select
 {
@@ -2870,12 +2825,63 @@ h2.member-name-title {
 #single-course-header p { color: #6d6d6d; line-height: 16px; font-size: 11px; }
 
 /* Sidebar */
-#sidebar #item-buttons ul { list-style-type: none; margin: 0; padding: 0; }
+/*#sidebar > div > ul { list-style-image: url(images/sidebar-bullet-gray.png); margin: 0 0 0 21px; padding: 0 0 30px;}
 #sidebar #item-buttons li { list-style-type: none; }
 #sidebar #item-buttons li.active-submenu { display:inline }
-#sidebar #item-buttons li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; /*padding: 0 5px;*/ }
+#sidebar #item-buttons li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; }
 #sidebar #item-buttons li a:hover { color:#0fceba }
+#sidebar #item-buttons li.current { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar #item-buttons li.current { background: #f0f0f0; }
+#sidebar #item-buttons ul.sub-menu li {
+	list-style-type: none;
+	list-style-image: none;
+	padding: 5px 0 0 0;
+	display:none;
+}*/
+
+#sidebar #item-buttons > ul > li.current, .sidbar-nav li.current_page_item, li.sq-bullet.selected-page {
+	list-style-image: url(images/sidebar_bullet_orange.png);
+}
+
+#sidebar #item-buttons li.selected-page > a, #sidebar #item-buttons li.current > a, .sidbar-nav > li.current_page_item > a {
+	color: #c84c35;
+	height: 12px;
+	line-height: 12px;
+	padding: 0 0 2px 0;
+}
+
+#sidebar #item-buttons ul.main-nav, #sidebar ul.sidbar-nav {
+	margin: 0 0 0 21px;
+	padding: 0 0 30px 0;
+	
+}
+
+#sidebar #item-buttons {
+	border-bottom: 1px solid #f0f0f0;
+	margin: 0 0 18px 0;
+}
+
+/* li.sq-bullet ul {
+	list-style-image: none;
+	display:none;
+} */
+
+
+
+/* Sidebar */
+#sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 30px;}
+#sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); line-height: 18px;} 
+#sidebar li { list-style-type: none; } 
+#sidebar ul.sub-menu, #sidebar ul ul { display:none }
+#sidebar ul.sub-menu li { list-style-image: none };
+#sidebar li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; }
+#sidebar li a:hover { color:#0fceba }
+#sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
+#sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
+#sidebar li.selected-page > a, #sidebar li.current > a, # sidebarli.current_page_item > a { color: #c84c35; }
+li.sq-bullet ul { list-style-image: none; }
+#sidebar li.active-submenu { display:inline }
+
 
 
 /* Recent Course Stuff */
