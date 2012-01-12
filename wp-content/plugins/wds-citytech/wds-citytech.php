@@ -1244,3 +1244,31 @@ class OpenLab_Change_User_Type {
 	
 }
 add_action( 'admin_init', array( 'OpenLab_Change_User_Type', 'init' ) );
+
+/**
+ * Only allow the site's faculty admin to see full names on the Dashboard
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/165
+ */
+function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
+	global $wpdb, $bp;
+	
+	if ( is_admin() && in_array( $meta_key, array( 'first_name', 'last_name' ) ) ) {
+	
+		// Faculty only
+		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		if ( 'faculty' != strtolower( $account_type ) ) {
+			return '';
+		}
+		
+		// Make sure it's the right faculty member
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = '%d' LIMIT 1", get_current_blog_id() ) );
+		
+		if ( !empty( $group_id ) && !groups_is_user_admin( get_current_user_id(), (int)$group_id ) ) { 
+			return '';
+		}
+	}
+		
+	return $check;
+}
+add_filter( 'get_user_metadata', 'openlab_hide_fn_ln', 9999, 4 );
