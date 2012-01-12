@@ -39,7 +39,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 body {
 	background: #fff;
 	line-height: 1;
-	margin-top: 115px; /* to account for sitewide nav */
+	margin-top: 65px; /* to account for sitewide nav */
 }
 ol, ul {
 	list-style: none;
