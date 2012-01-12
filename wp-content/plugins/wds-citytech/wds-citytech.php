@@ -161,16 +161,14 @@ function my_page_menu_filter( $menu ) {
 	
 	// Only say 'Home' on the ePortfolio theme
 	// @todo: This will probably get extended to all sites
-	if ( 'eportfolio' == get_template() ) {
-		$menu = str_replace( 'Site Home', 'Home', $menu );
-	}
+	$menu = str_replace( 'Site Home', 'Home', $menu );
 	
 	$wds_bp_group_id=get_option('wds_bp_group_id');
 	
 	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
-		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
+		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Home</a></li>',$menu);
+		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
 	}
 	return $menu;
 }

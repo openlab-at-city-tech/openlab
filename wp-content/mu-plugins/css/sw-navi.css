@@ -562,3 +562,9 @@ a.close-popup-login {
     margin: 10px 0 0;
     padding: 0;
 }
+
+#group-profile-link {
+	padding-right: 10px;
+	margin-right: 10px;
+	background: transparent url( "/wp-content/themes/citytech/images/site-sidebar-icon.png" ) no-repeat right center;
+}
