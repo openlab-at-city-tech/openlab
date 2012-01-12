@@ -953,11 +953,9 @@ function wds_bp_group_site_pages(){
 	  switch_to_blog($wds_bp_group_site_id);
 	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
 	  echo "<ul class='website-links'>";
-	  echo "<li><a href='".site_url()."'>Site</a><ul>";
-	  foreach ($pages as $pagg) {
-		echo "<li><a href='".get_page_link($pagg->ID)."'>".$pagg->post_title."</li>";
-	  }
-	  echo "</ul></ul>";
+	  echo "<li><a href='".site_url()."'>Site</a></li>";
+	 
+	  echo '</ul>';
 	  restore_current_blog();
 	}
 }
