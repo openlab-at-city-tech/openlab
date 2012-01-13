@@ -161,16 +161,14 @@ function my_page_menu_filter( $menu ) {
 	
 	// Only say 'Home' on the ePortfolio theme
 	// @todo: This will probably get extended to all sites
-	if ( 'eportfolio' == get_template() ) {
-		$menu = str_replace( 'Site Home', 'Home', $menu );
-	}
+	$menu = str_replace( 'Site Home', 'Home', $menu );
 	
 	$wds_bp_group_id=get_option('wds_bp_group_id');
 	
 	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
-		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
+		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Home</a></li>',$menu);
+		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
 	}
 	return $menu;
 }
@@ -955,11 +953,9 @@ function wds_bp_group_site_pages(){
 	  switch_to_blog($wds_bp_group_site_id);
 	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
 	  echo "<ul class='website-links'>";
-	  echo "<li><a href='".site_url()."'>Site</a><ul>";
-	  foreach ($pages as $pagg) {
-		echo "<li><a href='".get_page_link($pagg->ID)."'>".$pagg->post_title."</li>";
-	  }
-	  echo "</ul></ul>";
+	  echo "<li><a href='".site_url()."'>Site</a></li>";
+	 
+	  echo '</ul>';
 	  restore_current_blog();
 	}
 }
@@ -1246,3 +1242,31 @@ class OpenLab_Change_User_Type {
 	
 }
 add_action( 'admin_init', array( 'OpenLab_Change_User_Type', 'init' ) );
+
+/**
+ * Only allow the site's faculty admin to see full names on the Dashboard
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/165
+ */
+function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
+	global $wpdb, $bp;
+	
+	if ( is_admin() && in_array( $meta_key, array( 'first_name', 'last_name' ) ) ) {
+	
+		// Faculty only
+		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		if ( 'faculty' != strtolower( $account_type ) ) {
+			return '';
+		}
+		
+		// Make sure it's the right faculty member
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = '%d' LIMIT 1", get_current_blog_id() ) );
+		
+		if ( !empty( $group_id ) && !groups_is_user_admin( get_current_user_id(), (int)$group_id ) ) { 
+			return '';
+		}
+	}
+		
+	return $check;
+}
+add_filter( 'get_user_metadata', 'openlab_hide_fn_ln', 9999, 4 );
