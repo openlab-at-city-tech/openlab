@@ -1275,3 +1275,8 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 	return $check;
 }
 add_filter( 'get_user_metadata', 'openlab_hide_fn_ln', 9999, 4 );
+
+/**
+ * No access redirects should happen from wp-login.php
+ */
+add_filter( 'bp_no_access_mode', create_function( '', 'return 2;' ) ); 
