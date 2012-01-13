@@ -1280,3 +1280,9 @@ add_filter( 'get_user_metadata', 'openlab_hide_fn_ln', 9999, 4 );
  * No access redirects should happen from wp-login.php
  */
 add_filter( 'bp_no_access_mode', create_function( '', 'return 2;' ) ); 
+
+/**
+ * Don't auto-link items in profiles
+ * Hooked to bp_screens so that it gets fired late enough
+ */
+add_action( 'bp_screens', create_function( '', "remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );" ) );
