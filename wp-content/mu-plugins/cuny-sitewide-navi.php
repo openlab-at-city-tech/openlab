@@ -414,7 +414,6 @@ function cuny_myopenlab_menu(){
                 <li><a href="<?php echo bp_get_root_domain(); ?>/my-courses">My Courses</a></li>
                 <li><a href="<?php echo bp_get_root_domain(); ?>/my-projects">My Projects</a></li>
                 <li><a href="<?php echo bp_get_root_domain(); ?>/my-clubs">My Clubs</a></li>
-                <li><a href="<?php echo bp_get_root_domain(); ?>/my-blogs">My Blogs</a></li>
                 <li><a href="<?php echo $bp->loggedin_user->domain; ?>/friends">My Friends</a></li>
                 <li><a href="<?php echo $bp->loggedin_user->domain; ?>/messages">My Messages</a></li>
             </ul><!--my-bar-->
@@ -500,8 +499,8 @@ if (!($pos === false)) {
 	<ul class="sub-menu">
 		<li class="menu-item"><a href="<?php echo $site;?>/support/about-city-tech-elab/">About City Tech OpenLab</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/contact-us/">Contact Us</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/privacy-policy/">Privacy Policy</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/terms-of-service/">Terms of Service</a></li>
+		<li class="menu-item"><a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a></li>
+		<li class="menu-item"><a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/image-credits/">Image Credits</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/help/">Help</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/faq/">FAQ</a></li>
@@ -552,7 +551,7 @@ restore_current_blog();
 			<div class="textwidget"><p>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p></div>
 		</div></div>
 </div><div class="footer-widgets-3 widget-area"><div class="widget menupages" id="menu-pages-4"><div class="widget-wrap"><h4 class="widgettitle">Support</h4>
-<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="<?php echo $site;?>/support/privacy-policy/">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Service</a> | <a href="<?php echo $site;?>/support/credits/">Credits</a></div></div>
+<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/support/credits/">Credits</a></div></div>
 </div><div class="footer-widgets-4 widget-area"><div class="widget widget_text" id="text-6"><div class="widget-wrap"><h4 class="widgettitle">Share</h4>
 			<div class="textwidget"><ul class="nav"><li class="rss"><a href="<?php echo $site."/activity/feed/" ?>">RSS</a></li>
             <li>

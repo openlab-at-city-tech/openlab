@@ -5,7 +5,7 @@ add_action('genesis_post_title', 'cuny_members_title' );
 function cuny_members_title() {
 	global $wp_query;
 	$post_obj = $wp_query->get_queried_object();
-	echo '<h1 class="entry-title">'.$post_obj->post_title.' On the OpenLab</h1>';
+	echo '<h1 class="entry-title">'.$post_obj->post_title.' on the OpenLab</h1>';
 }
 
 remove_action('genesis_post_content', 'genesis_do_post_content');
