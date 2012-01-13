@@ -23,8 +23,8 @@ function cuny_build_homepage() {
 	echo '<div id="home-right">';
 		dynamic_sidebar('pgw-gallery');
 		cuny_home_square('course');
-		cuny_home_square('club');
 		cuny_home_square('project');
+		cuny_home_square('club');
 	echo '</div>';
 }
 
