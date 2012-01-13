@@ -14,7 +14,7 @@ $ids="9999999";
 $rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='club'" );
 
 // Hack to fix pagination
-add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'global $wpdb; return "SELECT ID FROM $wpdb->users WHERE ID=' . count($rs) . '";' ) );
+add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );
 
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 
