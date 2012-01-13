@@ -48,6 +48,8 @@ function openlab_registration_avatars() {
 		/* Reset the avatar step so we can show the upload form again if needed */
 		$bp->signup->step = 'completed-confirmation';
 		$bp->avatar_admin->step = 'upload-image';
+		$bp->signup->key = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $_POST[ 'signup_username' ], $_POST[ 'signup_email' ] ) );
+		$bp->signup->avatar_dir = wp_hash( $bp->signup->key );
 
 		if ( !bp_core_avatar_handle_crop( array( 'original_file' => $_POST['image_src'], 'crop_x' => $_POST['x'], 'crop_y' => $_POST['y'], 'crop_w' => $_POST['w'], 'crop_h' => $_POST['h'] ) ) )
 			bp_core_add_message( __( 'There was a problem cropping your avatar, please try uploading it again', 'buddypress' ), 'error' );

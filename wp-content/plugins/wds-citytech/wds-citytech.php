@@ -6,13 +6,7 @@
  Author: WebDevStudios
  Author URI: http://webdevstudios.com
  */
-//
-//  IMPORTANT !!!! BUDDYPRESS CORE HACKS  !!!!!
-// bp-broups/bp-groups-classes.php - contains function added to the class called wds_get_by_meta()
-//    (copy of code stored as bp-groups-classes-wds.php in same directory - to be used after a BP upgrade)
-// buddypress/bp-core.php - changed function bp_core_time_since to call mktime instead of gmmktime to fix last activity calculation
-//    (copy of code stored as bp-core-wds.php in same directory - to be used after a BP upgrade)
-//
+
 include "wds-register.php";
 include "wds-docs.php";
 global $wpdb;
@@ -24,10 +18,14 @@ add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
 function wds_add_default_member_avatar ($url) {
  return site_url() . "/wp-content/uploads/2011/08/avatar.jpg";
 }
+
 add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 function wds_default_signup_avatar ($img) {
-// return "<img src='http://openlab.citytech.cuny.edu/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
- return "<img src='" . site_url() . "/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
+	if ( false !== strpos( $img, 'mystery-man' ) ) {
+		$img = "<img src='" . site_url() . "/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
+	}
+	
+	return $img;
 }
 
 //
