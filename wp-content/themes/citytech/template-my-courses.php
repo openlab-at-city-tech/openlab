@@ -41,7 +41,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	    echo '<h3 id="bread-crumb">Courses</h3>';
 	  }
 	  
-	  if ( bp_has_groups( 'include='.$ids ) ) : ?>
+	  if ( bp_has_groups( 'show_hidden=true&include='.$ids ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="course-list" class="item-list">

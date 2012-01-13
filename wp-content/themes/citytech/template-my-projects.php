@@ -38,7 +38,7 @@ if ( !empty( $_GET['status'] ) ) {
 	    echo '<h3 id="bread-crumb">Projects</h3>';
 	  }
 	  
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) : ?>
+	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3&show_hidden=true' ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="project-list" class="item-list">
