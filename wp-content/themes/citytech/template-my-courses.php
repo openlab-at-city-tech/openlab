@@ -19,11 +19,19 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 	$ids="9999999";
 	$rs = $wpdb->get_results($sql);
+	
 	  foreach ( (array)$rs as $r ){
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;
 	  }
-	  
+
+	// So stupid. Gets rid of 9999999 group.
+	$unique_group_count = count( array_unique( explode( ',', $ids ) ) ) - 1;
+	
+	// Hack to fix pagination
+	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'global $wpdb; return "SELECT ID FROM $wpdb->users WHERE ID=' . $unique_group_count . '";' ) );
+
+	
 	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
 	  
 	  if ( !empty( $_GET['status'] ) ) {
@@ -40,6 +48,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 <ul id="course-list" class="item-list">
 		<?php 
 		$count = 1;
+		
 		while ( bp_groups() ) : bp_the_group(); 
 			$group_id=bp_get_group_id();?>
 			<li class="course<?php echo cuny_o_e_class($count) ?>">
