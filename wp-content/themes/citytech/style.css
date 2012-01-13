@@ -2876,7 +2876,7 @@ li.sq-bullet ul { list-style-image: none; }
 
 /* Group Right Sidebar */
 #sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid; padding: 0; margin: 0; border-color: #f0f0f0 }
-#sidebar ul.website-links li { list-style-image: none; padding: 12px 0 0 0; font-size: 14px; }
+#sidebar ul.website-links li { list-style-image: none; padding: 12px 0; font-size: 14px; }
 #sidebar ul.website-links li a:after { content: url(images/site-sidebar-icon.png); padding: 0 0 0 10px }
 
 
