@@ -12,6 +12,10 @@ function cuny_club_archive() {
 global $wpdb,$bp;
 $ids="9999999";
 $rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='club'" );
+
+// Hack to fix pagination
+add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'global $wpdb; return "SELECT ID FROM $wpdb->users WHERE ID=' . count($rs) . '";' ) );
+
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 
 $sequence_type = $search_terms = '';
@@ -56,7 +60,10 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 		<?php $count++ ?>
 		<?php endwhile; ?>
 	</ul>
-
+		
+	<div class="pagination-links" id="group-dir-pag-top">            
+		<?php bp_groups_pagination_links() ?>
+	</div>
 <?php else: ?>
 
 	<div class="widget-error">
@@ -65,16 +72,7 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 
 <?php endif; ?>
 
-		
-<?php if (get_next_posts_link()) : ?>
-
-		<div class="pagination-links" id="group-dir-pag-top">            
-			<?php bp_groups_pagination_links() ?>
-		</div>
-
-<?php else : ?>
-
-<?php endif; ?>            
+         
 
 
 <?php

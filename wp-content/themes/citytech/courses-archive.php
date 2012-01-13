@@ -10,6 +10,7 @@ remove_action('genesis_post_content', 'genesis_do_post_content');
 add_action('genesis_post_content', 'cuny_course_archive' );
 function cuny_course_archive() {
 global $wpdb,$bp,$groups_template;
+$sequence_type = '';
 if ( !empty( $_GET['group_sequence'] ) ) {
 	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 }
@@ -71,6 +72,10 @@ else if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) ) {
 }
 $ids="9999999";
 $rs = $wpdb->get_results( $sql );
+
+// Hack to fix pagination
+add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'global $wpdb; return "SELECT ID FROM $wpdb->users WHERE ID=' . count($rs) . '";' ) );
+
 foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 	<div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
