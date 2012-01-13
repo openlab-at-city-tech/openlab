@@ -1265,6 +1265,13 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 		if ( !empty( $group_id ) && !groups_is_user_admin( get_current_user_id(), (int)$group_id ) ) { 
 			return '';
 		}
+		
+		// Make sure it's a course
+		$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
+		
+		if ( 'course' != strtolower( $group_type ) ) {
+			return '';
+		}
 	}
 		
 	return $check;
