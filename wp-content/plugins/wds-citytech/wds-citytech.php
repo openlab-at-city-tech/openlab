@@ -946,12 +946,13 @@ function wds_bp_group_site_pages(){
 	//print_r($bp);
 	$site=site_url();
 	$group_id=$bp->groups->current_group->id;
+	$group_name=$bp->groups->current_group->type;
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	if($wds_bp_group_site_id!=""){
 	  switch_to_blog($wds_bp_group_site_id);
 	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
 	  echo "<ul class='website-links'>";
-	  echo "<li><a href='".site_url()."'>Site</a></li>";
+	  echo "<li><a href='".site_url()."'>".ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ))." Site</a></li>";
 	 
 	  echo '</ul>';
 	  restore_current_blog();
