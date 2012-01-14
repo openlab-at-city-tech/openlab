@@ -27,6 +27,10 @@ function cuny_project_archive() {
 	}
 	
 	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
+	
+	// Hack to fix pagination
+	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );	
+
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 	
