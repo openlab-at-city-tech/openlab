@@ -234,7 +234,7 @@ function wds_footer_breadcrumbs(){
 			$b1='<a href="'.site_url().'/people/">People</a>';
 		}
 		$last_name= xprofile_get_field_data( 'Last Name', $bp->displayed_user->id);
-		$b2=ucfirst($bp->displayed_user->fullname).' '.ucfirst($last_name);
+		$b2=ucfirst($bp->displayed_user->fullname);//.''.ucfirst($last_name)
 	}
 	if( bp_is_group() || !empty( $bp->displayed_user->id ) ){
 		$breadcrumb='<div class="breadcrumb">You are here:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="View Home" href="http://openlab.citytech.cuny.edu/">Home</a> / '.$b1.' / '.$b2.'</div>';
