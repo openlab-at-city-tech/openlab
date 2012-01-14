@@ -40,7 +40,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  }
 	  
 
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) : ?>
+	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3&show_hidden=true' ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="club-list" class="item-list">

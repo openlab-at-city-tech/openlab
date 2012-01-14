@@ -3,7 +3,7 @@
 remove_action('genesis_post_title', 'genesis_do_post_title');
 add_action('genesis_post_title', 'cuny_do_course_archive_title');
 function cuny_do_course_archive_title() {
-	echo '<h1 class="entry-title">Projects in Our Community</h1>';
+	echo '<h1 class="entry-title">Projects on the OpenLab</h1>';
 }
 
 remove_action('genesis_post_content', 'genesis_do_post_content');

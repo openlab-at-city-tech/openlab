@@ -6,13 +6,7 @@
  Author: WebDevStudios
  Author URI: http://webdevstudios.com
  */
-//
-//  IMPORTANT !!!! BUDDYPRESS CORE HACKS  !!!!!
-// bp-broups/bp-groups-classes.php - contains function added to the class called wds_get_by_meta()
-//    (copy of code stored as bp-groups-classes-wds.php in same directory - to be used after a BP upgrade)
-// buddypress/bp-core.php - changed function bp_core_time_since to call mktime instead of gmmktime to fix last activity calculation
-//    (copy of code stored as bp-core-wds.php in same directory - to be used after a BP upgrade)
-//
+
 include "wds-register.php";
 include "wds-docs.php";
 global $wpdb;
@@ -24,10 +18,14 @@ add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
 function wds_add_default_member_avatar ($url) {
  return site_url() . "/wp-content/uploads/2011/08/avatar.jpg";
 }
+
 add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 function wds_default_signup_avatar ($img) {
-// return "<img src='http://openlab.citytech.cuny.edu/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
- return "<img src='" . site_url() . "/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
+	if ( false !== strpos( $img, 'mystery-man' ) ) {
+		$img = "<img src='" . site_url() . "/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
+	}
+	
+	return $img;
 }
 
 //
@@ -168,7 +166,7 @@ function my_page_menu_filter( $menu ) {
 	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
+		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
 	}
 	return $menu;
 }
@@ -1278,3 +1276,14 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 	return $check;
 }
 add_filter( 'get_user_metadata', 'openlab_hide_fn_ln', 9999, 4 );
+
+/**
+ * No access redirects should happen from wp-login.php
+ */
+add_filter( 'bp_no_access_mode', create_function( '', 'return 2;' ) ); 
+
+/**
+ * Don't auto-link items in profiles
+ * Hooked to bp_screens so that it gets fired late enough
+ */
+add_action( 'bp_screens', create_function( '', "remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );" ) );
