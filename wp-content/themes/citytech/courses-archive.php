@@ -27,11 +27,11 @@ if ( !empty( $_GET['search'] ) ){
 if ( !empty( $_GET['school'] ) ) {
 	$school=$_GET['school'];
 	if($school=="tech"){
-		$school="School of Technology & Design";
+		$school="Technology & Design";
 	}elseif($school=="studies"){
-		$school="School of Professional Studies";
+		$school="Professional Studies";
 	}elseif($school=="arts"){
-		$school="School of Arts & Sciences";
+		$school="Arts & Sciences";
 	}
 }
 
@@ -48,17 +48,17 @@ if ( !empty( $_GET['semester'] ) ) {
 }
 
 if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) && !empty($_GET['semester']) ) {
-	echo '<h3 id="bread-crumb">'.$school.'<span class="sep"> | </span>';
+	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp; </span>';
 	echo $department.'<span class="sep"> | </span>'.$semester.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c, {$bp->groups->table_name_groupmeta} d, {$bp->groups->table_name_groupmeta} e where a.group_id=b.group_id and a.group_id=c.group_id and a.group_id=d.group_id and a.group_id=e.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%' and d.meta_key='wds_semester' and d.meta_value like '%".$semester_season."%' and e.meta_key='wds_year' and e.meta_value like '%".$semester_year."%'";
 }
 else if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) ) {
-	echo '<h3 id="bread-crumb">'.$school.'<span class="sep"> | </span>';
+	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>';
 	echo $department.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%'";
 
 }else if( !empty( $_GET['school'] ) && !empty( $_GET['semester'] ) ) {
-	echo '<h3 id="bread-crumb">'.$school.'<span class="sep"> | </span>';
+	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>';
 	echo $semester.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c, {$bp->groups->table_name_groupmeta} d where a.group_id=b.group_id and a.group_id=c.group_id and a.group_id=d.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and c.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_semester' and b.meta_value like '%".$semester_season."%' and d.meta_key='wds_year' and d.meta_value like '%".$semester_year."%'";
 } elseif( !empty( $_GET['school'] ) ) {
@@ -150,15 +150,15 @@ if ( empty( $_GET['school'] ) ) {
 }
 switch ($_GET['school']) {
 	case "tech":
-		$display_option_school = "School of Technology & Design";
+		$display_option_school = "Technology & Design";
 		$option_value_school = "tech";
 		break;
 	case "studies":
-		$display_option_school = "School of Professional Studies";
+		$display_option_school = "Professional Studies";
 		$option_value_school = "studies";
 		break;
 	case "arts":
-		$display_option_school = "School of Arts & Sciences";
+		$display_option_school = "Arts & Sciences";
 		$option_value_school = "arts";
 		break;
 	default: 
@@ -354,9 +354,9 @@ switch ($_GET['group_sequence']) {
 <div class="red-square"></div>
 	<select name="school" class="last-select" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
-		<option value='tech'>School of Technology & Design</option>
-		<option value='studies'>School of Professional Studies</option>
-		<option value='arts'>School of Arts & Sciences</option>
+		<option value='tech'>Technology & Design</option>
+		<option value='studies'>Professional Studies</option>
+		<option value='arts'>Arts & Sciences</option>
 	</select>
 	<div class="red-square"></div>
 	<select name="department" class="last-select" id="dept-select">

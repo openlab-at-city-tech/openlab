@@ -252,6 +252,11 @@ h3#bread-crumb
 	padding-left: 7px;
 	float: left;
 }
+
+h3#bread-crumb .sep
+{
+	color: #6D6D6D;
+}
 .group-count
 {
 	font-size: 14px;
@@ -564,10 +569,12 @@ h3#bread-crumb
 {
 	color: #fff;
 }
+
 #wp-admin-bar .user-links a
 {
 	color: #444444;
 }
+
 #wp-admin-bar #openlab-menu
 {
 	text-transform: uppercase;
@@ -811,6 +818,10 @@ dd p{line-height:120%}
 	width: 290px;
 }
 
+.home #home-left a, .home #home-right a  {
+	text-decoration: underline;
+}
+
 .home #home-right {
 	float: right;
 	width: 655px;
@@ -835,6 +846,15 @@ dd p{line-height:120%}
 	font-size: 13px;
 }
 /*home login styles*/
+
+.home a {
+	text-decoration: none;
+	}
+
+.home #home-right .home-group-list .title a {
+	text-decoration: none;
+}
+
 .home #cuny_openlab_jump_start .red-box
 {
 	background-color: #de5b4a;
@@ -922,6 +942,7 @@ dd p{line-height:120%}
 	font-size: 14px;
 	font-family: Arial, Helvetica, sans-serif;
 	color: #c84c35;
+	text-decoration: none;
 }
 #open-lab-login #user-info p
 {
@@ -1204,6 +1225,7 @@ dd p{line-height:120%}
 	font-size: 12px;
 	font-weight: bold;
     line-height: 12px;
+    text-decoration: none;
 }
 
 #club-list.item-list li .created {
@@ -1254,6 +1276,7 @@ dd p{line-height:120%}
 	font-size: 12px;
 	font-weight: bold;
     line-height: 12px;
+    text-decoration: none;
 }
 
 #project-list.item-list li .info-line {
@@ -1296,6 +1319,7 @@ dd p{line-height:120%}
 	font-size: 12px;
 	font-weight: bold;
     line-height: 12px;
+    text-decoration: none;
 }
 
 #course-list.item-list li .info-line {
@@ -2319,6 +2343,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
 #footer-widgets a,
 #footer-widgets a:visited {
 	color: #000;
+	text-decoration: none;
 }
 
 #footer-widgets a:hover {
@@ -2397,6 +2422,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
 #footer a,
 #footer a:visited {
 	color: #fff;
+	text-decoration: none;
 }
 
 #footer .gototop {
@@ -2806,6 +2832,7 @@ h2.member-name-title {
 	color: #6d6d6d;
     font-size: 12px;
     font-weight: bold;
+    text-decoration: none;
 }
 #people-listing .person-block .cuny-member-info .member-since-line {
     color: #aaa;
@@ -3202,4 +3229,9 @@ a.close-popup-login {
 #header .main-nav li.selected-page ul li a{
 	color: white;
 	font-weight:normal;
+}
+
+.widget-error {
+	clear:both;
+	padding-left: 7px;
 }
