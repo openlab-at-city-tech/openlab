@@ -172,7 +172,7 @@ function cuny_buddypress_group_actions() { ?>
 			<?php 
 			do_action( 'bp_group_header_actions' ); ?>
 			<ul>
-				<?php bp_get_options_nav();?>
+				<?php cuny_get_options_nav();?>
 			</ul>
 			<?php do_action( 'bp_group_options_nav' ) ?>
 

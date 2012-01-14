@@ -212,6 +212,55 @@ function cuny_members_pagination_count($member_name)
 		$pag = sprintf( __( '%1$s to %2$s (of %3$s members)', 'buddypress' ), $from_num, $to_num, $total );
 		echo $pag;
 }
+
+//a variation on bp_get_options_nav to match the design
+//main change here at the moment - changing "home" to "profile"
+function cuny_get_options_nav() {
+	global $bp;
+
+	// If we are looking at a member profile, then the we can use the current component as an
+	// index. Otherwise we need to use the component's root_slug
+	$component_index = !empty( $bp->displayed_user ) ? $bp->current_component : bp_get_root_slug( $bp->current_component );
+
+	if ( !bp_is_single_item() ) {
+		if ( !isset( $bp->bp_options_nav[$component_index] ) || count( $bp->bp_options_nav[$component_index] ) < 1 ) {
+			return false;
+		} else {
+			$the_index = $component_index;
+		}
+	} else {
+		if ( !isset( $bp->bp_options_nav[$bp->current_item] ) || count( $bp->bp_options_nav[$bp->current_item] ) < 1 ) {
+			return false;
+		} else {
+			$the_index = $bp->current_item;
+		}
+	}
+
+	// Loop through each navigation item
+	foreach ( (array)$bp->bp_options_nav[$the_index] as $subnav_item ) {
+		if ( !$subnav_item['user_has_access'] )
+			continue;
+
+		// If the current action or an action variable matches the nav item id, then add a highlight CSS class.
+		if ( $subnav_item['slug'] == $bp->current_action ) {
+			$selected = ' class="current selected"';
+		} else {
+			$selected = '';
+		}
+		
+		if ($subnav_item['name'] == 'Home')
+		{
+			$subnav_item['name'] = 'Profile';
+		}
+
+		// List type depends on our current component
+		$list_type = bp_is_group() ? 'groups' : 'personal';
+
+		// echo out the final list item
+		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
+	}
+}//end cuny_get_options_nav
+
 //custom menu locations for OpenLab
 register_nav_menus( array(
 	'main' => __('Main Menu', 'cuny'),
