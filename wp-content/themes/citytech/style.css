@@ -2865,6 +2865,10 @@ h2.member-name-title {
 	display:none;
 }*/
 
+#sidebar #item-buttons h2.sidebar-header {
+	color: #c84c35;
+}
+
 #sidebar #item-buttons > ul > li.current, .sidbar-nav li.current_page_item, li.sq-bullet.selected-page {
 	list-style-image: url(images/sidebar_bullet_orange.png);
 }
