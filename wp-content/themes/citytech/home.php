@@ -153,22 +153,29 @@ global $wpdb, $bp;
 		//echo $sql;
 	//}
 	$rs = $wpdb->get_results( $sql );
+	//print_r($rs);
 	$ids="9999999";
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->user_id;
 	$x = 0;
 	if ( bp_has_members( 'type=active&include=' . $ids ) ) : 
 		$x+=1;?>
+		
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); ?>
+					
+					<?php  
+					 ?>
 					<div class="cuny-member">
 						<div class="item-avatar">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
 						</div>
 						<div class="cuny-member-info">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />
+							<?php do_action( 'bp_directory_members_item' ); bp_member_profile_data( 'field=Account Type' ); ?>, 
 							<?php bp_member_last_active() ?>
 						</div>
 					</div>
+					
 				<?php endwhile; ?>
 					<div style="clear:both"></div>
 			</div>
