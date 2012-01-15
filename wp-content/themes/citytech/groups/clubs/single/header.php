@@ -1,5 +1,5 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<h1 class="title">Club on the OpenLab</h1>
+<h1 class="entry-title">Club on the OpenLab</h1>
 <div id="club-header">
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">

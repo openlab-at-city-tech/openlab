@@ -23,7 +23,7 @@ if ( $account_type == 'Staff' )
 	$ribbonclass = 'yellow-canary-ribbon';
 ?>
 
-<h1 class="title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 <div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="<?php echo $ribbonclass ?>"><?php echo $account_type ?> Profile</h4></div>
 <div id="member-header">
 <?php do_action( 'bp_before_member_header' ) ?>

@@ -161,7 +161,7 @@ a img {
 
 #header {
     clear: both;
-    margin: 5px auto 10px;
+    margin: 0px auto 10px;
     overflow: hidden;
     width: 954px;
 }
@@ -214,7 +214,7 @@ a img {
 	overflow: hidden;
 	width: 336px;
 	padding-top: 112px;
-	margin: 0 0 28px;
+	margin: 0 0 13px;
 }
 
 .header-image #description {
@@ -245,23 +245,28 @@ li:hover,
 li.sfHover {
 	position: static;
 }
-h3#bread-crumb
-{
+
+h3#bread-crumb {
     color: #C84C35;
+    float: left;
     font-size: 14px;
-	padding-left: 7px;
-	float: left;
+    padding-left: 7px;
+    position: relative;
+    top: -10px;
 }
 
 h3#bread-crumb .sep
 {
 	color: #6D6D6D;
 }
-.group-count
-{
-	font-size: 14px;
-	font-family: 'Arvo',arial,serif;
-	float: right;
+
+.group-count {
+    float: right;
+    font-family: 'Arvo',arial,serif;
+    font-size: 12px;
+    padding-right: 5px;
+    position: relative;
+    top: -10px;
 }
 /* Header Right Navigation
 ------------------------------------------------------------ */
@@ -273,8 +278,10 @@ h3#bread-crumb .sep
 	display: block;
 	text-align: left;
 	width: 960px;
-	margin: 0 auto;
+	margin: 0 auto 21px;
+	padding: 0 0 0 9px;
 }
+
 #header ul.nav
 {
 	width: auto;
@@ -310,19 +317,12 @@ h3#bread-crumb .sep
 	height: 19px;
 	width: 2px;
 }
-#header ul.nav ul,
-#header ul.menu ul {
-	float: right;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-}
 
 #header ul.nav li,
 #header ul.menu li,
 #header .main-nav li {
 	list-style-type: none;
-	margin: 0 0 10px;
+	margin: 0;
 	border-right: 2px solid #F0F0F0;
 	font-size: 13px;
 	display: inline-block;
@@ -334,9 +334,16 @@ h3#bread-crumb .sep
 #header .main-nav li a {
 	color: #6d6d6d;
 	display: block;
-	padding: 2px 20px;
+	padding: 2px 21px;
 	position: relative;
 	text-decoration: none;
+}
+
+
+#header ul.nav li:first-child a,
+#header ul.menu li:first-child a,
+#header ul.main-nav li:first-child a {
+	padding-left: 0;
 }
 
 #header ul.nav li a:hover,
@@ -445,9 +452,10 @@ h3#bread-crumb .sep
 }
 
 #header #search-form {
-	margin: 18px 0 32px 0;
 	float: right;
-	width: 255px;
+    margin: 9px 0 32px;
+    width: 258px;
+
 }
 #header label {
 	font-family: 'Arvo',arial,serif;
@@ -562,7 +570,7 @@ h3#bread-crumb .sep
 }
 #wp-admin-bar-menus
 {
-	width: 954px;
+	width: 940px;
 	margin: 0 auto;
 }
 #wp-admin-bar a
@@ -587,15 +595,22 @@ h3#bread-crumb .sep
 	text-align: center;
 	width: 110px;
 	cursor: pointer;
-	font-size: 12px;
+	font-size: 11px;
 	font-family: 'Arvo',arial,serif;
-	margin-top: 15px;
+	margin-top: 10px;
 	border-right: 2px solid #cfcfcf;
+	border-left: 2px solid #cfcfcf;
 }
-#wp-admin-bar ul .admin-bar-last
+#wp-admin-bar ul #openlab-menu, #wp-admin-bar ul #login-logout
 {
 	border: none;
 }
+
+#wp-admin-bar ul #login-logout {
+	text-align: right;
+	width: 60px;
+}
+
 #wp-admin-bar ul .sub-menu:hover ul
 {
 	display: block;
@@ -1104,7 +1119,7 @@ dd p{line-height:120%}
 .page #sidebar p
 {
 	padding: 0 7px;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 }
 .red-square
 {
@@ -1131,22 +1146,22 @@ dd p{line-height:120%}
 
 
 
-.page #sidebar select
-{
-	height: 20px;
-	padding: 1px 2px;
-	width: 168px;
-	color: #c84c35;
-	font-size: 12px;
-	margin-bottom:16px;
-} 
-.page #sidebar .filter
-{
-	padding-bottom: 22px;
-	border-bottom: 1px solid #f0f0f0;
-	margin-bottom: 22px;
-	padding-right: 10px;
+.page #sidebar select {
+    color: #C84C35;
+    font-size: 12px;
+    height: 20px;
+    margin-bottom: 13px;
+    padding: 1px 2px;
+    width: 168px;
 }
+
+.page #sidebar .filter {
+    border-bottom: 1px solid #F0F0F0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
 /*Home*/
 .see-all
 {
@@ -1461,13 +1476,13 @@ div#item-buttons ul li a span:after {
 
 .home .content-sidebar #content-sidebar-wrap,
 .home .sidebar-content #content-sidebar-wrap {
-	width: 954px;
+	width: 952px;
 	border: 0 none;
 }
 
 .content-sidebar #content-sidebar-wrap,
 .sidebar-content #content-sidebar-wrap {
-	width: 952px;
+	width: 942px;
 	border: 1px solid #EDEEEF;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -1776,7 +1791,7 @@ h1 {
     font-size: 14px;
     font-weight: normal;
     margin: 0 0 20px;
-    padding: 0 0 5px;
+    padding: 0 0 3px;
 }
 
 h2 a:hover {
@@ -1826,19 +1841,19 @@ h4 span.small {
 	font-size: 11px;
 	color: #838383;
 }
-.page #wrap h1
+.page #wrap h1, h1.entry-title
 {
 	padding-left: 7px;
-	margin: 0 0 7px;
+	margin: 0 0 20px;
 }
-#sidebar h2
-{
-	border-bottom: 1px solid #717171;
-    color: #c84c35;
+
+#sidebar h2 {
+    border-bottom: 1px solid #717171;
+    color: #C84C35;
     font-size: 14px;
     font-weight: normal;
-    margin: 0 0 5px;
-    padding: 0 0 5px 7px;
+    margin: 0 0 7px;
+    padding: 0 0 3px 7px;
 }
 /* Unordered / Ordered Lists
 ------------------------------------------------------------ */
@@ -2058,9 +2073,8 @@ p.wp-caption-text {
     float: right;
     font-family: 'Arvo',arial,serif;
     font-size: 12px;
-    padding: 0 10px 0 15px;
-    width: 220px;
-
+    padding: 0 12px;
+    width: 217px;
 }
 
 #sidebar-alt {
@@ -2842,7 +2856,7 @@ h2.member-name-title {
 
 /* Single Course */
 #single-course-header { margin: 0 0 10px 0 }
-#single-course-header h1.title, #sidebar #item-buttons h2.sidebar-header { font-size: 14px; line-height: 14px; padding: 0 0 10px; margin: 0 0 10px 0; border-bottom: 1px solid #242424; font-weight: normal; color: #666 }
+#single-course-header h1.title { font-size: 14px; line-height: 14px; padding: 0 0 10px; margin: 0 0 10px 0; border-bottom: 1px solid #242424; font-weight: normal; color: #666 }
 #single-course-header .header-image { margin: 0 0 10px; }
 #single-course-header h2.course-title { font-size:  24px; font-family: Arial; font-weight: bold; line-height: 24px; font-weight: bold; letter-spacing: 1px; margin: 0; padding: 0; }
 #single-course-header h2 a.rss { line-height: 24px; margin: 0 0 0 10px }
@@ -2892,8 +2906,8 @@ h2.member-name-title {
 }
 
 /* Global Right Sidebar */
-#sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 30px;}
-#sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); line-height: 18px;} 
+#sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 10px 5px;}
+#sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); padding: 0 0 6px;} 
 #sidebar li { list-style-type: none; } 
 #sidebar ul.sub-menu, #sidebar ul ul { display:none }
 #sidebar ul.sub-menu li { list-style-image: none };
@@ -2901,12 +2915,12 @@ h2.member-name-title {
 #sidebar li a:hover { color:#0fceba }
 #sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
-#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a { color: #c84c35; }
+#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 
 /* Group Right Sidebar */
-#sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid; padding: 0; margin: 0; border-color: #f0f0f0 }
+#sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid; padding: 0 0 0 5px; margin: 0; border-color: #f0f0f0 }
 #sidebar ul.website-links li { list-style-image: none; padding: 12px 0; font-size: 14px; }
 #sidebar ul.website-links li a:after { content: url(images/site-sidebar-icon.png); padding: 0 0 0 10px }
 

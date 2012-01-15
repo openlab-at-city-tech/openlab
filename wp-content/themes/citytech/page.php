@@ -17,15 +17,16 @@
   if ($postID == "49" || $parent == "49")
   {
 add_action('genesis_before_sidebar_widget_area', 'cuny_about_menu');
-function cuny_about_menu() { 
+function cuny_about_menu() {
+ 
   $args = array(
 				'theme_location' => 'aboutmenu',
 				'container' => 'div',
                 'container_id' => 'about-menu',
 				'menu_class' => 'sidbar-nav'
-			);
-
-	wp_nav_menu( $args );
+			);?>
+	<h2 class="sidebar-title">About</h2>
+	<?php wp_nav_menu( $args );
 }//add the help-page sidebar to just the help page and any child help page
   }else if ($postID == "43" || $parent == "43")
   {
@@ -37,7 +38,9 @@ function cuny_about_menu() {
                 'container_id' => 'help-menu',
 				'menu_class' => 'sidbar-nav'
 			);
-
+?>
+	<h2 class="sidebar-title">Help</h2>
+	<?php
 	wp_nav_menu( $args );
   }
  }

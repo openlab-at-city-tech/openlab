@@ -34,7 +34,7 @@ endif;
 $section = groups_get_groupmeta($group_id, 'wds_section_code');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="title">Course on the OpenLab</h1>
+	<h1 class="entry-title">Course on the OpenLab</h1>
 	 <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>

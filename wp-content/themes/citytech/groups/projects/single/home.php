@@ -9,7 +9,7 @@
        $first_class = "first";
 ?>
 <?php $group_slug = bp_get_group_slug(); ?>
-<h1 class="title">Project on the OpenLab</h1>
+<h1 class="entry-title">Project on the OpenLab</h1>
 <div id="club-header">
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
