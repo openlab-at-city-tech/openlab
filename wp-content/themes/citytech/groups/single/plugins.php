@@ -37,7 +37,7 @@ add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions'
 function cuny_buddypress_group_actions() { ?>
 <?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
-			<h2 class="sidebar-header">Dig A Little Deeper</h2>
+			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
 			<?php do_action( 'bp_group_header_actions' ); ?>
 			<ul>
 				<?php $menu=bp_get_options_nav();
