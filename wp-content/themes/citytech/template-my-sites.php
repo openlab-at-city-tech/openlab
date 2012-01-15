@@ -17,10 +17,10 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  foreach ( (array)$rs as $r ){
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;
-	  }
+	  }?>
 	  
-	  echo  '<h1 class="entry-title">My Sites</h1>';
-	  
+	  <h1 class="entry-title">My Sites</h1>
+	  <?php
 	  if ( bp_has_blogs( 'user_id='.$bp->loggedin_user->id ) ) : ?>
 <ul id="site-list" class="item-list">
 		<?php 

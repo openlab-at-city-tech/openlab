@@ -304,7 +304,7 @@ function cuny_bp_profile_menu() {
 			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">&nbsp;&nbsp;Read</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
-		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li>
+		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
         </ul>
     </li>
 

@@ -34,7 +34,7 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 <form action="<?php bp_the_profile_group_edit_form_action() ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
-
+	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 		<h4><?php printf( __( "Edit Profile Information", "buddypress" ), bp_get_the_profile_group_name() ); ?></h4>
 
 		<ul class="button-nav">
