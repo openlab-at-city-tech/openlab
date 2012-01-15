@@ -3253,3 +3253,11 @@ a.close-popup-login {
 	clear:both;
 	padding-left: 7px;
 }
+
+/* email options popup fix */
+
+.single-item .group-subscription-options {
+    float: left !important;
+    position: absolute;
+    z-index: 1000;
+}
