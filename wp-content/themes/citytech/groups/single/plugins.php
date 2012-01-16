@@ -40,7 +40,7 @@ function cuny_buddypress_group_actions() { ?>
 			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
 			<?php do_action( 'bp_group_header_actions' ); ?>
 			<ul>
-				<?php $menu=bp_get_options_nav();
+				<?php $menu=cuny_get_options_nav();
 				//echo $menu;
 				//echo "<xmp>".$menu."</xmp>";?>
 			</ul>
