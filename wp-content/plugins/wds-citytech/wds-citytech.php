@@ -949,7 +949,13 @@ function wds_bp_group_site_pages(){
 	  switch_to_blog($wds_bp_group_site_id);
 	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
 	  echo "<ul class='website-links'>";
-	  echo "<li><a href='".site_url()."'>".ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ))." Site</a></li>";
+	  
+	  echo "<li id='site-link'><a href='".site_url()."'>".ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ))." Site</a></li>";
+
+	  // Only show the admin link to group members
+	  if ( bp_group_is_member() ) {	  
+		  echo "<li><a href='" . admin_url() . "'>Dashboard</a></li>";
+	  }
 	 
 	  echo '</ul>';
 	  restore_current_blog();
