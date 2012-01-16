@@ -1,4 +1,3 @@
-<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 <h4><?php _e( 'Change Avatar', 'buddypress' ) ?></h4>
 
 <?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
