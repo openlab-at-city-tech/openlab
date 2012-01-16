@@ -573,7 +573,7 @@ restore_current_blog();
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '47613263']);
+  _gaq.push(['_setAccount', 'UA-24214531-1']);
   _gaq.push(['_trackPageview']);
 
   (function() {
