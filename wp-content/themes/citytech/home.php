@@ -189,8 +189,21 @@ function cuny_home_square($type){
 	$ids="9999999";
 	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
 	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and b.component = 'groups' AND a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 12";
-	  //echo $sql;
+	  $sql = "
+	   	SELECT 
+	   		a.group_id, b.content 
+	   	FROM 
+	   		{$bp->groups->table_name_groupmeta} a
+	   		INNER JOIN {$bp->activity->table_name} b ON ( a.group_id = b.item_id )
+	   		INNER JOIN {$bp->groups->table_name} c ON ( a.group_id = c.id )
+	   	WHERE 
+	   		c.status = 'public' AND 
+	   		a.meta_key = 'wds_group_type' AND
+	   		a.meta_value = '" . ucfirst($type) . "' OR a.meta_value = '" . strtolower( $type ) . "' 
+	   	ORDER BY 
+	   		b.date_recorded DESC 
+	   	LIMIT 12";
+	  echo $sql . '<br><br>';
 	  $rs = $wpdb->get_results($sql);
 	  
 	  $activity_items = array();
