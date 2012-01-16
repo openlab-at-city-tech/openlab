@@ -290,4 +290,12 @@ function cuny_widgets_init() {
 
 add_action( 'widgets_init', 'cuny_widgets_init' );
 
+/**
+ * Don't show the Request Membership nav item
+ */
+function openlab_remove_request_membership_item() {
+	return '';
+}
+add_action( 'bp_get_options_nav_request-membership', 'openlab_remove_request_membership_item', 99 );
+
 ?>
