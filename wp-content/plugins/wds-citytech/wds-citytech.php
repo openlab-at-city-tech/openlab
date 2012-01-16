@@ -818,7 +818,7 @@ function wds_bp_group_meta(){
 				</select>
 				</td>
 			</tr>
-			
+              			
 			<tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>
 					<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" /> 
@@ -1025,8 +1025,9 @@ function ra_copy_blog_page($group_id) {
 	  $src_id = intval( $_POST['source_blog'] );
 	  $blog_privacy=$_POST['wds_group_privacy'];
 
-	  $domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
-	  $domain=str_replace(".","",$domain);
+	  //$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
+	  //$domain=str_replace(".","",$domain);
+	  $domain = friendly_url($blog[ 'domain' ]);
 	  $email = sanitize_email( $user_email );
 	  $title = $_POST['group-name'];
 
@@ -1175,6 +1176,21 @@ function ra_copy_blog_page($group_id) {
 	  }
 	}
 }
+
+            //this is a function for sanitizing the website name
+			//source http://cubiq.org/the-perfect-php-clean-url-generator
+			function friendly_url($str, $replace=array(), $delimiter='-') {
+              	if( !empty($replace) ) {
+              		$str = str_replace((array)$replace, ' ', $str);
+              	}
+              
+              	$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+              	$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+              	$clean = strtolower(trim($clean, '-'));
+              	$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+              
+              	return $clean;
+              }
 
 /**
  * Don't let anyone access the Create A Site page
