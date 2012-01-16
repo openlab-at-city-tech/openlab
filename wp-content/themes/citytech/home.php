@@ -189,12 +189,18 @@ function cuny_home_square($type){
 	$ids="9999999";
 	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
 	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 12";
+	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and b.component = 'groups' AND a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 12";
 	  //echo $sql;
 	  $rs = $wpdb->get_results($sql);
+	  
+	  $activity_items = array();
+	  
 	  foreach ( (array)$rs as $r ){
-		  $activity=$r->content;
-		  $ids.= ",".$r->group_id;
+		  // Indexed by group id for easy lookup in the loop
+		  $activity_items[$r->group_id] = $r->content;
+		  
+		  // For the bp_has_groups include query
+		  $ids .= "," . $r->group_id;
 	  }
 	  //echo $ids;
 	  
@@ -211,6 +217,9 @@ function cuny_home_square($type){
 		global $groups_template;
 		$group = $groups_template->group;
 		$column_check = $i%4;
+		
+		$activity = !empty( $activity_items[$group->id] ) ? $activity_items[$group->id] : stripslashes( $group->description );
+		
 		if ($column_check == 0)
 		{
 			$column_class="last-column";
@@ -224,10 +233,7 @@ function cuny_home_square($type){
               <div class="byline"><?php printf( __( 'active %s ago', 'buddypress' ), bp_get_group_last_active() ) ?></div>
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
-			  if(!$activity){
-				 $activity=stripslashes($group->description); 
-			  }
-			  
+			 
 			  echo substr($activity, 0, 125).'<p><a href="'.bp_get_group_permalink().'">See More</a></p>';
 			  echo '</div>';
 			  $i++;
