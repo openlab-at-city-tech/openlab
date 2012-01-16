@@ -191,7 +191,7 @@ function cuny_group_menu_items() {
 		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$tab = '<li id="group-profile-link"><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>';
+		$tab = '<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>';
 		$tabs = $tab;
 	} else {
 		$tabs = '';
