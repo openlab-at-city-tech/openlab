@@ -174,8 +174,8 @@ function my_page_menu_filter( $menu ) {
 //child theme menu filter to link to website
 add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
 function cuny_add_group_menu_items($items) {
-	if((strpos($items,"Contact"))) {
-	  //a quick and dirty solution to keep "Site Home" off About and Help pages sidebar menu
+	if((strpos($items,"Contact"))|| is_front_page()) {
+	  //a quick and dirty solution to keep "Site Home" off About and Help pages sidebar menu and the main nav
 	} else {
 		$items = '<li><a title="Home" href="' . site_url() . '">Home</a></li>' . $items;
 	}
