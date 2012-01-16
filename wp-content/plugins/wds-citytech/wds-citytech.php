@@ -172,16 +172,16 @@ function my_page_menu_filter( $menu ) {
 }
 
 //child theme menu filter to link to website
-add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
+//taking out this function for now
+/*add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
 function cuny_add_group_menu_items($items) {
 	if((strpos($items,"Contact"))|| is_front_page()) {
-	  //a quick and dirty solution to keep "Site Home" off About and Help pages sidebar menu and the main nav
 	} else {
 		$items = '<li><a title="Home" href="' . site_url() . '">Home</a></li>' . $items;
 	}
 	$items = cuny_group_menu_items() . $items;
 	return $items;
-}
+}*/
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
