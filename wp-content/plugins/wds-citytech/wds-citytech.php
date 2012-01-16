@@ -867,6 +867,10 @@ function wds_bp_group_meta_save($group) {
 	global $wpdb, $user_ID;
 	if ( isset($_POST['group_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_type', $_POST['group_type']);
+		
+		if ( 'course' == $_POST['group_type'] ) {
+			$is_course = true;
+		}
 	}
 
 	if ( isset($_POST['wds_faculty']) ) {
@@ -917,8 +921,9 @@ function wds_bp_group_meta_save($group) {
 		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
 	}*/
 
-	//copy blog function
-	if ( isset( $_POST['wds_website_check'] ) ) {
+	// Site association. Non-courses have the option of not having associated sites (thus the
+	// wds_website_check value).
+	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
 			ra_copy_blog_page($group->id);
 		} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
