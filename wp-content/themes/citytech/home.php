@@ -197,13 +197,14 @@ function cuny_home_square($type){
 	   		INNER JOIN {$bp->activity->table_name} b ON ( a.group_id = b.item_id )
 	   		INNER JOIN {$bp->groups->table_name} c ON ( a.group_id = c.id )
 	   	WHERE 
-	   		c.status = 'public' AND 
+	   		c.status = 'public' AND
+	   		b.component = 'groups' AND
 	   		a.meta_key = 'wds_group_type' AND
 	   		a.meta_value = '" . ucfirst($type) . "' OR a.meta_value = '" . strtolower( $type ) . "' 
 	   	ORDER BY 
 	   		b.date_recorded DESC 
 	   	LIMIT 12";
-	  echo $sql . '<br><br>';
+	 // echo $sql . '<br><br>';
 	  $rs = $wpdb->get_results($sql);
 	  
 	  $activity_items = array();
@@ -219,7 +220,14 @@ function cuny_home_square($type){
 	  
 	  $i = 1;
 	  $column_class = "column";
-	  if ( bp_has_groups( 'include='.$ids.'&max=4' ) ) : ?>
+	  
+	  $groups_args = array(
+	  	'max' => 4,
+	  	'type' => 'active',
+	  	'user_id' => 0
+	  );
+	  
+	  if ( bp_has_groups( $groups_args ) ) : ?>
       <div class="home-group-list">
       	<div class="title-wrapper">
 	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
