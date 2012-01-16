@@ -174,13 +174,10 @@ function my_page_menu_filter( $menu ) {
 //child theme menu filter to link to website
 add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
 function cuny_add_group_menu_items($items) {
-	if (!(strpos($items,"Home") === false)) {
-	    $items = str_replace("Site Home","Home",$items);
-	    //$items = str_replace("Home","Site Home",$items);
-	} else if((strpos($items,"Contact"))) {
+	if((strpos($items,"Contact"))) {
 	  //a quick and dirty solution to keep "Site Home" off About and Help pages sidebar menu
 	} else {
-		$items = '<li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>' . $items;
+		$items = '<li><a title="Home" href="' . site_url() . '">Home</a></li>' . $items;
 	}
 	$items = cuny_group_menu_items() . $items;
 	return $items;
@@ -194,7 +191,7 @@ function cuny_group_menu_items() {
 		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$tab = '<li><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Home</a></li>';
+		$tab = '<li id="group-profile-link"><a title="Site" href="http://openlab.citytech.cuny.edu/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>';
 		$tabs = $tab;
 	} else {
 		$tabs = '';
