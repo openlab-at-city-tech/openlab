@@ -50,8 +50,10 @@ function cuny_list_members($view) {
 		$search_terms = $_POST['people_search'];
 	} else if( !empty($_GET['search'] ) ) {
 		$search_terms = $_GET['search'];
+	} else if ( !empty( $_POST['group_search'] ) ) {
+		$search_terms = $_POST['group_search'];
 	}
-    
+	
     	if ( $user_type ) {
     		echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
     	}
@@ -65,7 +67,7 @@ function cuny_list_members($view) {
 	}
 	
 	if ( $search_terms ) {
-		$args['search_terms'] = $_GET['search_terms'];
+		$args['search_terms'] = $search_terms;
 	}	
 	
 	// I don't love doing this
