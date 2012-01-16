@@ -108,13 +108,17 @@ get_currentuserinfo();
 	</div><!-- #item-buttons -->
 	
 	<?php
-		global $members_template;
+		global $members_template, $post;
 		
 		// Not really sure where this function appears, so I'll make a cascade
 		if ( isset( $members_template->member->user_id ) ) {
 			$button_user_id = $members_template->member->user_id;
 		} else if ( bp_displayed_user_id() ) {
 			$button_user_id = bp_displayed_user_id();
+		} else if ( !empty( $post->post_name ) && in_array( $post->post_name, array( 'my-projects', 'my-courses', 'my-clubs' ) ) ) {
+			$button_user_id = bp_loggedin_user_id();
+		} else {
+			$button_user_id = 0;
 		}
 			       
 		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
