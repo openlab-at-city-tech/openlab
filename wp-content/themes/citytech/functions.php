@@ -298,4 +298,26 @@ function openlab_remove_request_membership_item() {
 }
 add_action( 'bp_get_options_nav_request-membership', 'openlab_remove_request_membership_item', 99 );
 
+function openlab_displayed_user_account_type() {
+	echo openlab_get_displayed_user_account_type();
+}
+	function openlab_get_displayed_user_account_type() {
+		return xprofile_get_field_data( 'Account Type', bp_displayed_user_id() );
+	}
+
+function openlab_current_user_ribbonclass() {
+	$account_type = openlab_get_displayed_user_account_type();
+	
+	$ribbonclass = '';
+
+	if ( $account_type == 'Faculty' )
+		$ribbonclass = 'watermelon-ribbon';
+	if ( $account_type == 'Student' )
+		$ribbonclass = 'robin-egg-ribbon';
+	if ( $account_type == 'Staff' )
+		$ribbonclass = 'yellow-canary-ribbon';
+	
+	echo $ribbonclass;
+}
+
 ?>

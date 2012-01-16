@@ -23,7 +23,6 @@ if ( $account_type == 'Staff' )
 	$ribbonclass = 'yellow-canary-ribbon';
 ?>
 
-<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 <div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="<?php echo $ribbonclass ?>"><?php echo $account_type ?> Profile</h4></div>
 <div id="member-header">
 <?php do_action( 'bp_before_member_header' ) ?>
@@ -119,6 +118,9 @@ function cuny_student_profile() {
 global $bp, $ribbonclass;
 ?>
 <?php do_action( 'bp_before_member_home_content' ) ?>
+	
+	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+
 	<?php if ( bp_is_user_activity() || 'public' == bp_current_action() ) { ?>
 		<?php cuny_member_profile_header(); ?>
 	<?php } ?>
@@ -137,10 +139,8 @@ global $bp, $ribbonclass;
 		<?php do_action( 'bp_before_member_body' ) ?>
 
 	<?php } elseif ( 'view' == bp_current_action() ) { ?>
-		<h1 class="entry-title">My Messages</h1>
 		<?php locate_template( array( 'members/single/messages/single.php' ), true ) ?>
 	<?php } elseif ( bp_is_user_messages() ) { ?>
-		<h1 class="entry-title">My Messages</h1>
 		<?php locate_template( array( 'members/single/messages.php' ), true ) ?>
 	<?php } elseif ( bp_is_user_groups() ) { ?>
 		<?php locate_template( array( 'members/single/groups.php' ), true ) ?>

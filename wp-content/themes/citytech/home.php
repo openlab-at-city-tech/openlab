@@ -185,12 +185,28 @@ global $wpdb, $bp;
 
 function cuny_home_square($type){
 
-	global $wpdb, $bp;
-	$ids="9999999";
+	global $wpdb, $bp, $openlab_group_type;
+	
+	
+	/*$ids="9999999";
 	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
 	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	   $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b, {$bp->groups->table_name} c where a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=c.id and c.status='public' and a.group_id=b.item_id and a.meta_key='wds_group_type' and b.component = 'groups' AND a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc";
-	   //echo $sql;
+	  $sql = "
+	   	SELECT 
+	   		a.group_id, b.content 
+	   	FROM 
+	   		{$bp->groups->table_name_groupmeta} a
+	   		INNER JOIN {$bp->activity->table_name} b ON ( a.group_id = b.item_id )
+	   		INNER JOIN {$bp->groups->table_name} c ON ( a.group_id = c.id )
+	   	WHERE 
+	   		c.status = 'public' AND
+	   		b.component = 'groups' AND
+	   		a.meta_key = 'wds_group_type' AND
+	   		a.meta_value = '" . ucfirst($type) . "' OR a.meta_value = '" . strtolower( $type ) . "' 
+	   	ORDER BY 
+	   		b.date_recorded DESC 
+	   	LIMIT 12";
+	 // echo $sql . '<br><br>';
 	  $rs = $wpdb->get_results($sql);
 	  
 	  $activity_items = array();
@@ -203,10 +219,48 @@ function cuny_home_square($type){
 		  $ids .= "," . $r->group_id;
 	  }
 	  //echo $ids;
-	  
+	  */
 	  $i = 1;
 	  $column_class = "column";
-	  if ( bp_has_groups( 'include='.$ids.'&max=4' ) ) : ?>
+	  
+	  $groups_args = array(
+	  	'max' => 4,
+	  	'type' => 'active',
+	  	'user_id' => 0
+	  );
+	  
+	  $openlab_group_type = $type;
+	  add_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
+	  
+	  if ( bp_has_groups( $groups_args ) ) : ?>
+	  
+	  	<?php 
+	  	/* Let's save some queries and get the most recent activity in one fell swoop */ 
+	  	
+	  	global $groups_template;
+	  	
+	  	$group_ids = array();
+	  	foreach( $groups_template->groups as $g ) {
+	  		$group_ids[] = $g->id;
+	  	}
+	  	$group_ids_sql = implode( ',', $group_ids );
+	  	
+	  	$activity = $wpdb->get_results( $wpdb->prepare( "SELECT content, item_id FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$group_ids_sql}) ORDER BY date_recorded DESC" ) );
+	  	
+	  	// Now walk down the list and try to match with a group. Once one is found, remove
+	  	// that group from the stack
+	  	$group_activity_items = array();
+	  	foreach( (array)$activity as $act ) {
+	  		if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
+	  			$group_activity_items[$act->item_id] = $act->content;
+				$key = array_search( $act->item_id, $group_ids );
+				unset( $group_ids[$key] );
+	  		}
+	  	}
+	  	
+	  	?>
+	  	
+	  
       <div class="home-group-list">
       	<div class="title-wrapper">
 	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
@@ -218,7 +272,7 @@ function cuny_home_square($type){
 		$group = $groups_template->group;
 		$column_check = $i%4;
 		
-		$activity = !empty( $activity_items[$group->id] ) ? $activity_items[$group->id] : stripslashes( $group->description );
+		$activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
 		
 		if ($column_check == 0)
 		{
@@ -242,7 +296,27 @@ function cuny_home_square($type){
         </div><!--home-group-list-->
       		
       <?php endif;
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
+	  
 
-} ?>
+} 
+
+function openlab_groups_filter_clause( $sql ) {
+	global $openlab_group_type, $bp;
+	
+	// Join to groupmeta table for group type
+	$ex = explode( " WHERE ", $sql );
+	$ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
+	$ex = implode( " WHERE ", $ex );
+	
+	// Add the necessary where clause
+	$ex = explode( " AND ", $ex );
+	array_splice( $ex, 1, 0, "gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords( $openlab_group_type ) . "' OR gt.meta_value = '" . strtolower( $openlab_group_type ) . "' )" );
+	$ex = implode( " AND ", $ex );
+	
+	return $ex;
+}
+
+?>
 
 <?php genesis();
