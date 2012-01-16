@@ -35,16 +35,20 @@ global $wpdb, $bp, $members_template;
         $rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7" ); 
     }
 
-    if ($_GET['group_sequence'] != "") {
+	$sequence_type = '';
+	if ( !empty( $_GET['group_sequence'] ) ) {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
+	
 	$search_terms = '';
 	if(!empty($_POST['people_search'])){
 		$search_terms="search_terms=".$_POST['people_search']."&";
 	}
+	
 	if(!empty($_GET['search'])){
 		$search_terms="search_terms=".$_GET['search']."&";
-	}		
+	}
+	
 	$avatar_args = array (
 			'type' => 'full',
 			'width' => 72,
@@ -139,7 +143,7 @@ switch ($_GET['semester']) {
 } 
     
     //sequencing
-    if ($_GET['group_sequence'] == "") {
+if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "alphabetical";
 }
 switch ($_GET['group_sequence']) {
