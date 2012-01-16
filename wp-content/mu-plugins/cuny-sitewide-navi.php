@@ -263,7 +263,7 @@ function cuny_bp_profile_menu() {
 	</li>
 	      <?php } ?>
 	      
-	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
+	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/notices">Messages</a>
     	<ul>
     	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
 		<?php echo '<li>Notices <span>(' . count( $notifications ) ?>)</span><ul><?php
@@ -280,14 +280,14 @@ function cuny_bp_profile_menu() {
 				?> </ul></li>
 			<?php } else { ?>
 
-				<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
+				<li><a href="<?php echo $bp->loggedin_user->domain ?>messages/notices"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
 
 			<?php
 			} ?>
 
 		<?php
 			} else { ?>
-			<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
+			<li><a href="<?php echo $bp->loggedin_user->domain ?>messages/notices"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
 			<?php } ?>
         <?php
         	/*$sub_counter = 0;
@@ -300,8 +300,8 @@ function cuny_bp_profile_menu() {
 		}*/
 		?>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Inbox</a></li>
-			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">&nbsp;&nbsp;Unread</a></li>
-			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">&nbsp;&nbsp;Read</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/?status=unread'; ?>">&nbsp;&nbsp;Unread</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/?status=read'; ?>">&nbsp;&nbsp;Read</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
 		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
