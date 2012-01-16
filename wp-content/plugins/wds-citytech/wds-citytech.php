@@ -946,7 +946,7 @@ function wds_bp_group_site_pages(){
 	//print_r($bp);
 	$site=site_url();
 	$group_id=$bp->groups->current_group->id;
-	$group_name=$bp->groups->current_group->type;
+
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	if($wds_bp_group_site_id!=""){
 	  switch_to_blog($wds_bp_group_site_id);
