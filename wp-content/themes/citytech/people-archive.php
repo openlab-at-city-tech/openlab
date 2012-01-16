@@ -11,9 +11,6 @@ function cuny_members_title() {
 remove_action('genesis_post_content', 'genesis_do_post_content');
 add_action('genesis_post_content', 'cuny_members_index' );
 function cuny_members_index() {
-	global $wp_query;
-	$post_obj = $wp_query->get_queried_object();
-	$type=$post_obj->post_title;
 	echo '<div id="people-listing">';
 		  cuny_list_members('more' );
 	echo '</div>';
@@ -23,31 +20,86 @@ function cuny_members_index() {
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
 //
 function cuny_list_members($view) {
-global $wpdb, $bp, $members_template;
-   if ( !empty( $_GET['usertype'] ) ) {
-    	$user_type=$_GET['usertype'];
-    	$user_type=ucwords($user_type);
-    }
-    if( !empty( $_GET['usertype'] ) ) {
-    	echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
-    	$rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$user_type."'" );
-    } else {
-        $rs = $wpdb->get_results( "SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7" ); 
-    }
+	global $wpdb, $bp, $members_template, $wp_query;
+	
+	// Set up variables
+	
+	// There are two ways to specify user type: through the page name, or a URL param
+	$user_type = $sequence_type = $search_terms = '';
+	if ( !empty( $_GET['usertype'] ) ) {
+		$user_type = $_GET['usertype'];
+		$user_type = ucwords( $user_type );
+	} else {
+		$post_obj  = $wp_query->get_queried_object();
+		$post_title = !empty( $post_obj->post_title ) ? ucwords( $post_obj->post_title ) : '';
+		
+		if ( in_array( $post_title, array( 'Staff', 'Faculty', 'Students' ) ) ) {
+			if ( 'Students' == $post_title ) {
+				$user_type = 'Student';
+			} else {
+				$user_type = $post_title;
+			}
+		}
+	}
 
-	$sequence_type = '';
 	if ( !empty( $_GET['group_sequence'] ) ) {
-		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
+		$sequence_type = $_GET['group_sequence'];
 	}
 	
-	$search_terms = '';
-	if(!empty($_POST['people_search'])){
-		$search_terms="search_terms=".$_POST['people_search']."&";
+	if( !empty($_POST['people_search'] ) ){
+		$search_terms = $_POST['people_search'];
+	} else if( !empty($_GET['search'] ) ) {
+		$search_terms = $_GET['search'];
+	}
+    
+    	if ( $user_type ) {
+    		echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
+    	}
+
+	// Set up the bp_has_members() arguments
+	// Note that we're not taking user_type into account. We'll do that with a query filter
+	$args = array( 'per_page' => 48 );
+	
+	if ( $sequence_type ) {
+		$args['type'] = $sequence_type;
 	}
 	
-	if(!empty($_GET['search'])){
-		$search_terms="search_terms=".$_GET['search']."&";
-	}
+	if ( $search_terms ) {
+		$args['search_terms'] = $_GET['search_terms'];
+	}	
+	
+	// I don't love doing this
+	if ( $user_type ) {
+		// These are the same runtime-created functions, created separately so I don't have
+		// to toss globals around. If you change one, change them both!
+		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
+			// Join to profile table for user type
+			$ex = explode( " LEFT JOIN ", $sql );
+			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
+			$ex = implode( " LEFT JOIN ", $ex );
+			
+			// Add the necessary where clause
+			$ex = explode( " AND ", $ex );
+			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+		
+		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
+			// Join to profile table for user type
+			$ex = explode( " LEFT JOIN ", $sql );
+			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
+			$ex = implode( " LEFT JOIN ", $ex );
+			
+			// Add the necessary where clause
+			$ex = explode( " AND ", $ex );
+			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+    	}
 	
 	$avatar_args = array (
 			'type' => 'full',
@@ -57,20 +109,20 @@ global $wpdb, $bp, $members_template;
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
-
-	$ids="9999999";
-	foreach ( (array)$rs as $r ){ $ids.= ",".$r->user_id ;}
-	//bp_has_members was not playing nice with both include and type, so I left in type - then $ids are checked against the array
-	if ( bp_has_members( $sequence_type.$search_terms.'&per_page=48') ) : ?>
+	
+	
+	if ( bp_has_members( $args ) ) : 
+	
+	
+	?>
 	<div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
 	<div class="clearfloat"></div>
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); 
                //the following checks the current $id agains the passed list from the query
                $member_id = $members_template->member->id;
-	            $is_listed = strpos($ids,$member_id);
-	            if ($is_listed === false)
-	            {}else{
+	            
+	           
 					$registered=$members_template->member->user_registered; ?>
 					<div class="person-block">
 						<div class="item-avatar">
@@ -84,7 +136,7 @@ global $wpdb, $bp, $members_template;
 							<?php endif; ?>
 						</div>
 					</div>
-					<?php } //end if for is_listed ?>
+					
 				<?php endwhile; ?>
 			</div>
 					<div id="pag-top" class="pagination">
@@ -100,12 +152,12 @@ global $wpdb, $bp, $members_template;
 					</div>
 
 		<?php else: 
-			if($type=="Student"){
-				$type="students";
+			if($user_type=="Student"){
+				$user_type="students";
 			}?>
 
 			<div class="widget-error">
-				<p><?php _e( 'No '.strtolower($type).' were found.', 'buddypress' ) ?></p>
+				<p><?php _e( 'No '.strtolower($user_type).' were found.', 'buddypress' ) ?></p>
 			</div>
 
 		<?php endif;
