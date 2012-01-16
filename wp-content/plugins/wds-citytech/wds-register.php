@@ -4,6 +4,10 @@
 
 function openlab_registration_avatars() {
 	global $bp, $wpdb;
+
+	if ( !bp_is_register_page() ) {
+		return;
+	}
 	
 	$bp->avatar_admin->step = 'upload-image';
 
