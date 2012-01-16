@@ -574,6 +574,7 @@ restore_current_blog();
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-24214531-1']);
+  _gaq.push(['_setDomainName', 'openlab.citytech.cuny.edu']);
   _gaq.push(['_trackPageview']);
 
   (function() {
