@@ -2230,9 +2230,20 @@ input.wpcf7-submit, .filter input[type="submit"] {
 	color:#fefefe;
 	font-weight: bold;
 	padding: 1px 7px;	
+	cursor: pointer;
 }
+.filter input[type="button"]{
+	background-color:#fefefe;
+    border: 1px solid #cccccc;
+    color:#717171;
+    font-weight: bold;
+    padding: 1px 7px; 
+    cursor: pointer;
+    margin-left: 5px;
+	}
 
-.filter input[type="submit"] {
+.filter input[type="submit"],
+.filter input[type="button"]  {
 	float:right;
 }
 

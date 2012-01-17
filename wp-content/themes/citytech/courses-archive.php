@@ -47,24 +47,24 @@ if ( !empty( $_GET['semester'] ) ) {
 	$semester=ucwords($semester_season.' '.$semester_year);
 }
 
-if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) && !empty($_GET['semester']) ) {
+if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && (!empty( $_GET['department'] ) && $_GET['department']!='dept_all') && !empty($_GET['semester']) && $_GET['semester'] != 'semester_all' ) {
 	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp; </span>';
 	echo $department.'<span class="sep"> | </span>'.$semester.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c, {$bp->groups->table_name_groupmeta} d, {$bp->groups->table_name_groupmeta} e where a.group_id=b.group_id and a.group_id=c.group_id and a.group_id=d.group_id and a.group_id=e.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%' and d.meta_key='wds_semester' and d.meta_value like '%".$semester_season."%' and e.meta_key='wds_year' and e.meta_value like '%".$semester_year."%'";
 }
-else if( !empty( $_GET['school'] ) && !empty( $_GET['department'] ) ) {
+else if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && (!empty( $_GET['department'] ) && $_GET['department']!='dept_all')) {
 	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>';
-	echo $department.'</h3>';
+	echo $department.'</h3>'; 
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%'";
 
-}else if( !empty( $_GET['school'] ) && !empty( $_GET['semester'] ) ) {
+}else if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && !empty( $_GET['semester'] ) && $_GET['semester'] != 'semester_all' ) {
 	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>';
 	echo $semester.'</h3>';
-	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c, {$bp->groups->table_name_groupmeta} d where a.group_id=b.group_id and a.group_id=c.group_id and a.group_id=d.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and c.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_semester' and b.meta_value like '%".$semester_season."%' and d.meta_key='wds_year' and d.meta_value like '%".$semester_year."%'";
-} elseif( !empty( $_GET['school'] ) ) {
+	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_semester' and c.meta_value like '%".$semester_season."%'";
+} elseif( !empty( $_GET['school'] ) && $_GET['school'] != 'school_all' ) {
 	echo '<h3 id="bread-crumb">'.$school.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b where a.group_id=b.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%'";
-} elseif( !empty( $_GET['semester'] ) ) {
+} elseif( !empty( $_GET['semester'] ) && $_GET['semester'] != 'semester_all' ) {
 	echo '<h3 id="bread-crumb">'.$semester.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_semester' and b.meta_value like '%".$semester_season."%' and c.meta_key='wds_year' and c.meta_value like '%".$semester_year."%'";
 }else{
@@ -139,14 +139,17 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
-function cuny_buddypress_courses_actions() { ?>
+function cuny_buddypress_courses_actions() { 
+global $bp;?>
 
 <h2 class="sidebar-title">Find a Course</h2>
     <p>Narrow down your search using the filters or search box below.</p>
 <?php    
 //school filter
 if ( empty( $_GET['school'] ) ) {
-	$_GET['school'] = "active";
+	$_GET['school'] = "";
+} else if ($_GET['school']=='school_all'){
+  $_GET['school'] = "school_all";
 }
 switch ($_GET['school']) {
 	case "tech":
@@ -161,6 +164,10 @@ switch ($_GET['school']) {
 		$display_option_school = "Arts & Sciences";
 		$option_value_school = "arts";
 		break;
+	case "school_all":
+		$display_option_school = "All";
+		$option_value_school = "school_all";
+		break;
 	default: 
 		$display_option_school = "Select School";
 		$option_value_school = "";
@@ -168,7 +175,7 @@ switch ($_GET['school']) {
 } 
     //departments
       if ( empty( $_GET['department'] ) ) {
-	$_GET['department'] = "active";
+	$_GET['department'] = "";
 }
 switch ($_GET['department']) {
     //School of Technology and Design
@@ -270,7 +277,7 @@ switch ($_GET['department']) {
 		$display_option_dept = "English";
 		$option_value_dept = "english";
 		break;
-	case "library":
+	case "humanities":
 		$display_option_dept = "Humanities";
 		$option_value_dept = "humanities";
 		break;
@@ -290,6 +297,10 @@ switch ($_GET['department']) {
 		$display_option_dept = "Social Science";
 		$option_value_dept = "social-science";
 		break;
+    case "dept_all":
+		$display_option_dept = "All";
+		$option_value_dept = "dept_all";
+		break;
 	default: 
 		$display_option_dept = "Select Department";
 		$option_value_dept = "";
@@ -297,28 +308,32 @@ switch ($_GET['department']) {
 }
 	//semesters
 if ( empty( $_GET['semester'] ) ) {
-	$_GET['semester'] = "active";
+	$_GET['semester'] = "";
 }
 switch ($_GET['semester']) {
 	case "fall-2011":
 		$display_option_semester = "Fall 2011";
 		$option_value_semester = "fall-2011";
 		break;
-	case "winter-2011":
-		$display_option_semester = "Winter 2011";
-		$option_value_semester = "winter-2011";
+	case "winter-2012":
+		$display_option_semester = "Winter 2012";
+		$option_value_semester = "winter-2012";
 		break;
-	case "spring-2011":
-		$display_option_semester = "Spring 2011";
-		$option_value_semester = "spring-2011";
+	case "spring-2012":
+		$display_option_semester = "Spring 2012";
+		$option_value_semester = "spring-2012";
 		break;
-	case "summer-2011":
-		$display_option_semester = "Summer 2011";
-		$option_value_semester = "summer-2011";
+	case "summer-2012":
+		$display_option_semester = "Summer 2012";
+		$option_value_semester = "summer-2012";
 		break;
 	case "fall-2012":
 		$display_option_semester = "Fall 2012";
 		$option_value_semester = "fall-2012";
+		break;
+	case "semester_all":
+		$display_option_semester = "All";
+		$option_value_semester = "semester_all";
 		break;
 	default: 
 		$display_option_semester = "Select Semester";
@@ -354,20 +369,23 @@ switch ($_GET['group_sequence']) {
 <div class="red-square"></div>
 	<select name="school" class="last-select" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
-		<option value='tech'>Technology & Design</option>
+		<option value='school_all'>All</option>
+		<option value='tech'>Technology &amp; Design</option>
 		<option value='studies'>Professional Studies</option>
-		<option value='arts'>Arts & Sciences</option>
+		<option value='arts'>Arts &amp; Sciences</option>
 	</select>
 	<div class="red-square"></div>
 	<select name="department" class="last-select" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
-		<?php include '/wp-content/themes/citytech/includes/department_processing.php'; ?>
+        <?php $file_loc = dirname(__FILE__); ?>
+		<?php include $file_loc.'/includes/department_processing.php'; ?>
 	</select>
 	<div class="red-square"></div>
 	<select name="semester" class="last-select">
 		<option value="<?php echo $option_value_semester; ?>"><?php echo $display_option_semester; ?></option>
+		<option value='semester_all'>All</option>
 		<option value='fall-2011'>Fall 2011</option>
-		<option value='winter-2011'>Winter 2011</option>
+		<option value='winter-2012'>Winter 2012</option>
 		<option value='spring-2012'>Spring 2012</option>
 		<option value='summer-2012'>Summer 2012</option>
 		<option value='fall-2012'>Fall 2012</option>
@@ -379,8 +397,8 @@ switch ($_GET['group_sequence']) {
 		<option value='newest'>Newest</option>
 		<option value='active'>Last Active</option>
 	</select>
+	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/courses/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Filter">
-	<!--<input type="reset" onchange="clear_form" value="Reset">-->
 </form>
 <div class="clearfloat"></div>
 </div><!--filter-->

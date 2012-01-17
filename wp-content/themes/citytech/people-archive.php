@@ -26,7 +26,7 @@ function cuny_list_members($view) {
 	
 	// There are two ways to specify user type: through the page name, or a URL param
 	$user_type = $sequence_type = $search_terms = '';
-	if ( !empty( $_GET['usertype'] ) ) {
+	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'all' ) {
 		$user_type = $_GET['usertype'];
 		$user_type = ucwords( $user_type );
 	} else {
@@ -174,10 +174,10 @@ function cuny_buddypress_courses_actions() { ?>
     
     <?php 
     //user type
-if ( empty( $_GET['semester'] ) ) {
-	$_GET['semester'] = "active";
+if ( empty( $_GET['usertype'] ) ) {
+	$_GET['usertype'] = "";
 }
-switch ($_GET['semester']) {
+switch ($_GET['usertype']) {
 	case "student":
 		$user_display_option = "Student";
 		$user_option_value = "student";
@@ -190,6 +190,10 @@ switch ($_GET['semester']) {
 		$user_display_option = "Faculty";
 		$user_option_value = "faculty";
 		break;
+	case "all":
+		$user_display_option = "All";
+		$user_option_value = "all";
+		break;
 	default: 
 		$user_display_option = "Select User Type";
 		$user_option_value = "";
@@ -198,7 +202,7 @@ switch ($_GET['semester']) {
     
     //sequencing
 if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "alphabetical";
+	$_GET['group_sequence'] = "active";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":
@@ -227,6 +231,7 @@ switch ($_GET['group_sequence']) {
 		<option value='student'>Student</option>
 		<option value='faculty'>Faculty</option>
 		<option value='staff'>Staff</option>
+		<option value='all'>All</option>
 	</select>
     <div class="red-square"></div>
 	<select name="group_sequence" class="last-select">
