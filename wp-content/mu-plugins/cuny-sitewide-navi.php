@@ -263,7 +263,7 @@ function cuny_bp_profile_menu() {
 	</li>
 	      <?php } ?>
 	      
-	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/notices">Messages</a>
+	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
     	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
 		<?php echo '<li>Notices <span>(' . count( $notifications ) ?>)</span><ul><?php
