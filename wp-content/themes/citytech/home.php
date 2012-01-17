@@ -284,7 +284,7 @@ function cuny_home_square($type){
 				</div>
 			  <?php echo '<h2 class="green-title"><a href="'.bp_get_group_permalink().'">'.bp_get_group_name().'</a></h2>';
 			  ?>
-              <div class="byline"><?php printf( __( 'active %s ago', 'buddypress' ), bp_get_group_last_active() ) ?></div>
+              <div class="byline"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></div>
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
 			 
