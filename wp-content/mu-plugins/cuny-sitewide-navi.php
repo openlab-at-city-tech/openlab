@@ -314,18 +314,19 @@ function cuny_bp_profile_menu() {
 
 add_action('init','wds_search_override',1);
 function wds_search_override(){
+    global $bp;
 	if(isset($_POST['search-submit']) && $_POST['search-terms']){
 		if($_POST['search-which']=="members"){
-			wp_redirect('http://openlab.citytech.cuny.edu/people/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/people/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="courses"){
-			wp_redirect('http://openlab.citytech.cuny.edu/courses/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/courses/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="projects"){
-			wp_redirect('http://openlab.citytech.cuny.edu/projects/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/projects/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="clubs"){
-			wp_redirect('http://openlab.citytech.cuny.edu/clubs/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
 			exit();
 		}
 	}
