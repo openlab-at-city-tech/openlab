@@ -3249,7 +3249,7 @@ a.close-popup-login {
 }
 #header #menu-main-menu li.selected-page a,
 #header #bp-adminbar-account-menu li.selected-page a,
-#header .main-nav li.selected-page   a{
+#header .main-nav li.selected-page a {
 	color: #0fceba;
 	font-weight:bold;
 }
@@ -3272,3 +3272,20 @@ a.close-popup-login {
     position: absolute;
     z-index: 1000;
 }
+
+/* profile pages fix */
+
+.internal-page #item-header, .button-nav, #site-list, .friends, .messages, #send_message_form {
+	
+	clear:both;
+}
+
+.internal-page #content .padder, .widget .padder {
+    padding: 0 !important;
+}
+
+.internal-page .item-list-tabs {
+    border: none !important;
+    clear: both;
+}
+

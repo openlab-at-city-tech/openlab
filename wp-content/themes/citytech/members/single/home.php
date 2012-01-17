@@ -120,7 +120,7 @@ global $bp, $ribbonclass;
 <?php do_action( 'bp_before_member_home_content' ) ?>
 	
 	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
-
+	
 	<?php if ( bp_is_user_activity() || 'public' == bp_current_action() ) { ?>
 		<?php cuny_member_profile_header(); ?>
 	<?php } ?>
@@ -153,8 +153,9 @@ global $bp, $ribbonclass;
 	<?php } elseif ( bp_is_user_friends() ) { ?>
 
 		<?php do_action( 'bp_before_member_friends_content' ) ?>
-	
+		<h3 id="bread-crumb">Friends</h3>
 		<div class="members friends">
+		
 			<?php locate_template( array( 'members/members-loop.php' ), true ) ?>
 		</div><!-- .members.friends -->
 	
@@ -382,7 +383,7 @@ get_currentuserinfo();
 		//check to see if the user is viewing their own profile while logged in
         //if so - profile edit controls are displayed
         if ( is_user_logged_in() && bp_is_my_profile() ){ ?>
-        <h2 class="sidebar-title">My Open Lab</h2>
+        <h2 class="sidebar-title">My OpenLab</h2>
         <div id="item-buttons">
 		<?php do_action( 'cuny_bp_profile_menus' ); 
 		      $activity_num = 2; ?>
