@@ -438,7 +438,7 @@ function add_group_sidebar()
   if (($component == "groups" && $action == "create") || $component=="settings" || $component == "invite-anyone")
 
   { ?>
-     <h2 class="sidebar-title">My Open Lab</h2>
+     <h2 class="sidebar-title">My OpenLab</h2>
      <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
   <?php }
 }

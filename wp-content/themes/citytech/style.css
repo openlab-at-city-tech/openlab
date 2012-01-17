@@ -1841,7 +1841,8 @@ h4 span.small {
 	font-size: 11px;
 	color: #838383;
 }
-.page #wrap h1, h1.entry-title
+
+h1.entry-title
 {
 	padding-left: 7px;
 	margin: 0 0 20px;
