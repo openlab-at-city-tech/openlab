@@ -19,7 +19,8 @@ function cuny_profile_activty_block($type,$title,$last) {
 		  $ids.= ",".$r->group_id;
 	  }?>
 	  
-	  <h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Sites</h1>
+	  <h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+	  <h3 id="bread-crumb">Sites</h3>
 	  <?php
 	  if ( bp_has_blogs( 'user_id='.$bp->loggedin_user->id ) ) : ?>
 <ul id="site-list" class="item-list">

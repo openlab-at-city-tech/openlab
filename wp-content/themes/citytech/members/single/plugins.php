@@ -4,8 +4,9 @@ do_action( 'bp_before_member_plugin_template' );
 ?>
 
 	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
-
+	
 	<div id="item-header">
+		
 		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
 	</div><!-- #item-header -->
 	<div id="item-nav">
@@ -26,7 +27,7 @@ do_action( 'bp_before_member_plugin_template' );
 			<div class="clear"></div>
 		</div><!-- .item-list-tabs -->
 
-		<h3><?php do_action( 'bp_template_title' ); ?></h3>
+		
 
 		<?php do_action( 'bp_template_content' ); do_action( 'bp_after_member_body' ); ?>
 	</div><!-- #item-body -->

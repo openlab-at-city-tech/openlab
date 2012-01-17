@@ -4,7 +4,7 @@ gconnect_get_header();
 do_action( 'bp_before_member_settings_template' ); 
 ?>	
 	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
-
+	<h3 id="bread-crumb"><?php _e( 'General Settings', 'buddypress' ); ?></h3>
 	<div id="item-header">
 		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
 	</div><!-- #item-header -->

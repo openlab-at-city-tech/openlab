@@ -17,9 +17,11 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 ?>
 <div id="content-sidebar-wrap">
 	<div id="content">
+	<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+	<h3 id="bread-crumb">Create a <?php echo ucfirst($group_type);?> &nbsp;</h3>
 		<div id="single-course-body">
 		<form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
-			<h3>Create a <?php echo ucfirst($group_type);?> &nbsp;</h3>
+			
             <?php do_action( 'bp_before_create_group' ) ?>
 
 			<div class="item-list-tabs no-ajax" id="group-create-tabs">
