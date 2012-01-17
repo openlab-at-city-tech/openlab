@@ -320,4 +320,9 @@ function openlab_current_user_ribbonclass() {
 	echo $ribbonclass;
 }
 
+/**
+ * Don't show the New Topic link on the sidebar of a forum page
+ */
+add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
+
 ?>
