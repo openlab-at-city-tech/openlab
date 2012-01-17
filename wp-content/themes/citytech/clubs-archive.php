@@ -90,7 +90,7 @@ function cuny_buddypress_courses_actions() { ?>
     <p>Narrow down your search using the filters or search box below.</p>
     
     <?php if ( empty( $_GET['group_sequence'] ) ) {
-	$_GET['group_sequence'] = "alphabetical";
+	$_GET['group_sequence'] = "active";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":

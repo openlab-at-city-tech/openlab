@@ -95,9 +95,9 @@ add_action('genesis_before_header','cuny_bp_adminbar_menu');
 add_action('genesis_header','cuny_admin_bar', 10);
 function cuny_admin_bar() { 
 
-	cuny_site_wide_bp_search();
-	
-	//this adds the main menu, controlled through the WP menu interface
+	cuny_site_wide_bp_search(); ?>
+	<div class="clearfloat"></div>
+	<?php //this adds the main menu, controlled through the WP menu interface
 	$args = array(
 				'theme_location' => 'main',
 				'container' => '',
