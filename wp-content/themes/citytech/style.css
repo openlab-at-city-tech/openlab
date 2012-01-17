@@ -203,9 +203,14 @@ a img {
 .header-image #title
 {
     float: left;
+    display: block;
 	border-bottom: none;
     padding: 0;
 }
+.header-image #title-area
+{
+	    height: 140px;
+	}
 .header-image #title a
 {
 	background: url("images/logo.png") no-repeat scroll 0 0 transparent;
