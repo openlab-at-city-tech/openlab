@@ -125,7 +125,7 @@ function cuny_list_members($view) {
                $member_id = $members_template->member->id;
 	            
 	           
-					$registered=$members_template->member->user_registered; ?>
+					$registered = bp_format_time( strtotime( $members_template->member->user_registered ), true ) ?>
 					<div class="person-block">
 						<div class="item-avatar">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
