@@ -38,6 +38,20 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 				<?php if ( bp_is_group_creation_step( 'group-details' ) ) : ?>
 
 					<?php do_action( 'bp_before_group_details_creation_step' ); ?>
+					
+					<?php $group_type = isset( $_REQUEST['type'] ) && in_array( $_REQUEST['type'], array( 'course', 'club', 'project' ) ) ? $_REQUEST['type'] : 'club' ?>
+					
+					<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your Project profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
+					
+					<?php if ( 'project' == $group_type ) : ?>
+						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Please review the guidelines here before proceeding. We recommend that the name of your ePortfolio follow this format:</p>
+
+						<ul class="ol-tooltip">
+							<li>FirstName LastName's ePortfolio </li>
+							<li>Jane Smith's ePortfolio (Example)</li> 
+						</ul>
+
+					<?php endif ?>
 
 					<label for="group-name">* <?php echo ucfirst($group_type);?> Name <?php _e( '(required)', 'buddypress' )?></label>
 					<input type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />

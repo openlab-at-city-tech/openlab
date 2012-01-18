@@ -592,6 +592,7 @@ function wds_load_group_type($group_type){
 		$active_checked = ' checked="checked" ';
 	}
 	
+	$return .= '<p class="ol-tooltip">Will your ' . ucwords( $group_type ) . ' be in use this semester? This will help users find currently active '. ucwords( $group_type ) . 's.</p>';
 	$return .= '<div id="active-toggle">* ';
 	$return .= '<input type="radio" name="group_active_status" id="group_is_active" value="active" ' . $active_checked . ' /> <label for="group_is_active">Active</label>';
 	$return .= '<input type="radio" name="group_active_status" id="group_is_inactive" value="inactive" ' . $inactive_checked . ' /> <label for="group_is_inactive">Inactive</label>';
@@ -607,6 +608,14 @@ function wds_load_group_type($group_type){
 		}
 		$return.='<input type="checkbox" id="wds_group_featured" name="wds_group_featured" value="yes" '.$checked.'> Featured '.$group_type;
 	}
+	
+	// associated school/dept tooltip
+	switch ( $group_type ) {
+		case 'course' :
+			$return .= '<p class="oltooltip">If your course associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			break;
+	}
+	
 	$return.='<table>';
 	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school=explode(",",$wds_group_school);
@@ -660,6 +669,9 @@ function wds_load_group_type($group_type){
             $return.='<td>Department(s):';
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
+        
+        	$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
+        
 		$return.='<tr>';
            $return.=' <td>Course Code:';
             $return.='<td><input type="text" name="wds_course_code" value="'.$wds_course_code.'"></td>';
@@ -828,7 +840,7 @@ function wds_bp_group_meta(){
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
-						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');" /> Setup a Site?
+						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-tooltips');" /> Setup a Site?
 					</th>
 				</tr>
 			<?php else : ?>
@@ -837,6 +849,47 @@ function wds_bp_group_meta(){
 		    			<th>Site Details</th>
 		    		</tr>
 			<?php endif ?>
+			
+			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td>
+				<?php switch ( $group_type ) : 
+					case 'course' : ?>
+						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
+		
+						<ul class="ol-tooltip">
+							<li>FacultyLastNameCourseCode</li>
+							<li>smithadv1100</li>
+						</ul>
+						
+						<p class="ol-tooltip">If you plan to create a new course each semester, you may choose to add Semester and Year.</p>
+		
+						<ul class="ol-tooltip">
+							<li>FacultyLastNameCourseCodeSemYear</li>
+							<li>smithadv1100sp2012</li>
+						</ul>
+						
+						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information in the address.</p>
+						
+						<?php break;
+					case 'project' : ?>
+						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu</p>
+						
+						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Since the ePortfolio is designed to be a Career Portfolio, choose a site address that will appear professional. We recommend one of the following formats (enter in the gray box below):</p>
+						
+						<ul class="ol-tooltip">
+							<li>FirstNameLastName_eportfolio</li>
+							<li>JaneSmith_eportfolio (Example)</li>
+							<li>FirstInitialLastName_eportfolio</li>
+							<li>JSmith_eportfolio (Example)</li>
+						</ul>
+						
+						<?php break;
+					case 'club' : ?>
+						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+						
+						<?php break ?>
+						
+				<?php endswitch ?>
+			</td></tr>
 			
 			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>

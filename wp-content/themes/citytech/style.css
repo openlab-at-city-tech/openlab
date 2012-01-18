@@ -1371,6 +1371,16 @@ table.groupblog-setup tr th {
 	text-align: left;
 }
 
+p.ol-tooltip {
+	margin: 10px 0px;
+	padding-left: 20px;
+}
+
+ul.ol-tooltip {
+	list-style-type: bullet;
+	padding-left: 40px;
+}
+
 /* Parentheses around doc counts */
 div#item-buttons ul li a span:before {
 	content: '(';
