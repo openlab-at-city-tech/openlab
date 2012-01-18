@@ -338,7 +338,8 @@ function openlab_get_groups_of_user( $args = array() ) {
 		'user_id' 	=> bp_loggedin_user_id(),
 		'active_status' => 'active',
 		'show_hidden'   => true,
-		'group_type'	=> 'club'
+		'group_type'	=> 'club',
+		'get_activity'	=> true
 	);
 	$r = wp_parse_args( $args, $defaults );
 	
@@ -377,6 +378,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	}
 	
 	$sql = $select . ' ' . $where;
+
 	$group_ids = $wpdb->get_col( $sql );
 
 	$retval['group_ids'] = $group_ids;
@@ -385,14 +387,27 @@ function openlab_get_groups_of_user( $args = array() ) {
 	// whole shebang in the proper way
 	if ( !empty( $group_ids ) ) {
 		$retval['group_ids_sql'] = implode( ',', $group_ids );		
+	
+		if ( $r['get_activity'] ) {
+			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
+			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']})" ) );
+			
+			// Now walk down the list and try to match with a group. Once one is found, remove
+			// that group from the stack
+			$group_activity_items = array();
+			foreach( (array)$activities as $act ) {
+				if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
+					$group_activity_items[$act->item_id] = $act->content;
+					$key = array_search( $act->item_id, $group_ids );
+					unset( $group_ids[$key] );
+				}
+			}
+			
+			$retval['activity'] = $group_activity_items;
+		}
 	}
 	
-
-	
-	echo "<pre>";
-	echo $sql;
-	print_r( $retval );
-	echo '</pre>';
+	return $retval;
 }
 
 ?>
