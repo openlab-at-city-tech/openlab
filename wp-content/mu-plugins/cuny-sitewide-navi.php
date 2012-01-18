@@ -102,7 +102,9 @@ function cuny_bp_profile_menu() {
 			                      &&
 		              !strpos($_SERVER['REQUEST_URI'],"friends")
 			                      &&
-		              !strpos($_SERVER['REQUEST_URI'],"messages")) {
+		              !strpos($_SERVER['REQUEST_URI'],"messages")
+		              			&&
+		              !( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) ) {
 		                    echo ' selected-page'; }
 		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
@@ -227,7 +229,7 @@ function cuny_bp_profile_menu() {
 			endif; */?>
         </ul>
     </li>
-    	 <li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
+    	 <li class="sq-bullet <?php if ( bp_is_friends_component() && !bp_is_user_friend_requests() ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
 <!--	<ul> -->
 <?php
 /*
@@ -263,32 +265,9 @@ function cuny_bp_profile_menu() {
 	</li>
 	      <?php } ?>
 	      
-	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
+	<li class="sq-bullet <?php if ( bp_is_messages_component() || bp_is_user_friend_requests() || ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
-    	<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
-		<?php echo '<li>Notices <span>(' . count( $notifications ) ?>)</span><ul><?php
-
-			if ( $notifications ) {
-				$counter = 0;
-				for ( $i = 0; $i < count($notifications); $i++ ) {
-					$alt = ( 0 == $counter % 2 ) ? ' class="alt"' : ''; ?>
-
-					<li<?php echo $alt ?>><?php echo $notifications[$i] ?></li>
-
-					<?php $counter++;
-				}
-				?> </ul></li>
-			<?php } else { ?>
-
-				<li><a href="<?php echo $bp->loggedin_user->domain ?>messages/notices"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
-
-			<?php
-			} ?>
-
-		<?php
-			} else { ?>
-			<li><a href="<?php echo $bp->loggedin_user->domain ?>messages/notices"><?php _e( 'Notices(0)', 'buddypress' ); ?></a></li>
-			<?php } ?>
+    	
         <?php
         	/*$sub_counter = 0;
 		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
@@ -304,6 +283,9 @@ function cuny_bp_profile_menu() {
 			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/?status=read'; ?>">&nbsp;&nbsp;Read</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . 'friends/requests/' ?>">Friend Requests</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . 'groups/invites/' ?>">Invitations</a></li>
+		
 		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
         </ul>
     </li>
