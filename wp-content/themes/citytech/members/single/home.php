@@ -215,48 +215,22 @@ global $bp, $ribbonclass;
 
 function cuny_profile_activty_block($type,$title,$last) { 
 	global $wpdb,$bp, $ribbonclass;
+	
 	//echo $type."<hr>";
 	$ids="9999999";
 	$groups_found = Array();
 	if($type!="blog"){
-	  //$sql="SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 3";
-	  $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->displayed_user->id." ORDER BY b.date_recorded desc";
-//	  $sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->displayed_user->id." ORDER BY b.date_recorded desc LIMIT 3";
-	  $rs = $wpdb->get_results($sql);
-	  foreach ( (array)$rs as $r ){
-		  $activity[]=$r->content;
-		  if (!in_array($r->group_id,$groups_found)) {
-			$ids.= ",".$r->group_id;
-			$groups_found[] = $r->group_id;
-		  }
-	  }
-//    now check to see if they are a "member" of the group that isn't in the activity (like they created it)
-//    if so, and it isn't already in the list of groups found, then add it for use in the bp_has_groups loop
-//
- 	  $sql_mbr="SELECT a.group_id,b.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_members} b
-	    	    WHERE a.group_id=b.group_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->displayed_user->id.
-		    " AND is_confirmed='1' AND is_banned='0' ORDER BY b.id desc";
-/*
- 	  $sql_mbr="SELECT a.group_id,b.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_members} b
-	    	    WHERE a.group_id=b.group_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.user_id=".$bp->displayed_user->id.
-		    " AND is_confirmed='1' AND is_banned='0' ORDER BY b.id desc LIMIT 3";
-*/
-	  $rs_mbr = $wpdb->get_results($sql_mbr);
-	  foreach ( (array)$rs_mbr as $r_mbr ){
-	      if (!in_array($r_mbr->group_id,$groups_found)) {
-		   $activity[]="";
-		   $ids.= ",".$r_mbr->group_id;
-		   $groups_found[] = $r_mbr->group_id;
-	      }
-	   }
-/*
-	if ($_GET['test'] == "hvl") {
-		echo "<br />Displayed ID = " . $bp->displayed_user->id;
-		echo "<br />Groups = " . $ids;
-	}
-*/
+		 $get_group_args = array(
+			'user_id'       => bp_displayed_user_id(),
+			'show_hidden'   => false,
+			'active_status' => 'all',
+			'group_type'	=> $type
+		);
+		$groups = openlab_get_groups_of_user( $get_group_args );
+		
+	
 	  //echo $ids;
-	  if ( bp_has_groups( 'include='.$ids.'&per_page=20' ) ) : 
+	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='.$groups['group_ids_sql'].'&per_page=20' ) ) : 
 //	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) : 
 		 ?>
 		 <ul id="<?php echo $type ?>-activity-stream" class="activity-list item-list<?php echo $last ?>">
@@ -277,7 +251,8 @@ function cuny_profile_activty_block($type,$title,$last) {
                       </div>
               
                           <div class="activity-inner">
-                          	<?php echo $activity[$x].' <a class="read-more" href="'.bp_get_group_permalink().'">(View More)</a>'; ?>
+                          	<?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
+                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">(View More)</a>'; ?>
                           </div>
                       
                   </div>

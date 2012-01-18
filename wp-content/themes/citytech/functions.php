@@ -346,7 +346,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	$select = $where = '';
 	
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
-	$where  = $wpdb->prepare( "WHERE a.user_id = %d", $r['user_id'] );
+	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
 	
 	if ( 'all' != $r['active_status'] ) {
 		// For legacy reasons, not all active groups are marked 'active'
@@ -365,7 +365,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	}
 	
 	if ( !$r['show_hidden'] ) {
-		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groups} c ON (c.id = a.group_id) " );
+		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
 		$where  .= $wpdb->prepare( " AND c.status = 'public' " );
 	}
 	
