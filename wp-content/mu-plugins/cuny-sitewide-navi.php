@@ -286,6 +286,10 @@ function cuny_bp_profile_menu() {
 		<li><a href="<?php echo bp_displayed_user_domain() . 'friends/requests/' ?>">Friend Requests</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain() . 'groups/invites/' ?>">Invitations</a></li>
 		
+		<?php if ( is_super_admin() ) : ?>
+			<li><a href="<?php echo bp_displayed_user_domain() . 'messages/notices/' ?>">Notices</a></li>
+		<?php endif ?>
+		
 		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
         </ul>
     </li>
