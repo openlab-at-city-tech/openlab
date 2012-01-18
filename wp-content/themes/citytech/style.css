@@ -1372,13 +1372,23 @@ table.groupblog-setup tr th {
 }
 
 p.ol-tooltip {
-	margin: 10px 0px;
-	padding-left: 20px;
+	margin: 10px 0px 0px 15px;
+}
+
+p.ol-tooltip:before {
+	content: "\21A0 \0020";
+	width: 15px;
+	margin-left: -15px;
+	display: inline-block;
 }
 
 ul.ol-tooltip {
-	list-style-type: bullet;
+	list-style-type: none;
 	padding-left: 40px;
+}
+
+ul.ol-tooltip li:before {
+	content: "\21A0 \0020";
 }
 
 /* Parentheses around doc counts */
