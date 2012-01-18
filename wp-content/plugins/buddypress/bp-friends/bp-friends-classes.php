@@ -278,6 +278,8 @@ class BP_Friends_Friendship {
 
 	function get_random_friends( $user_id, $total_friends = 5 ) {
 		global $wpdb, $bp;
+		
+		$fids = array();
 
 		$sql = $wpdb->prepare( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} WHERE (friend_user_id = %d || initiator_user_id = %d) && is_confirmed = 1 ORDER BY rand() LIMIT %d", $user_id, $user_id, $total_friends );
 		$results = $wpdb->get_results($sql);
