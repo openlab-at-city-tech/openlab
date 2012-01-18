@@ -10,6 +10,19 @@ function cuny_my_clubs() {
 
 function cuny_profile_activty_block($type,$title,$last) { 
 	global $wpdb,$bp, $ribbonclass;
+	
+	// active vs inactive
+	// member of this group
+	// last activity for group
+	
+	$get_groups_args = array( 'group_type' => 'club' );
+	if ( !empty( $_GET['status'] ) ) {
+		// This is sanitized in the query function
+		$get_groups_args['active_status'] = $_GET['status'];
+	}
+	$rstest = openlab_get_groups_of_user( $get_groups_args );
+	var_dump( $rstest );
+	
     //this is for filter by active/inactive status
     if ( !empty( $_GET['status'] ) ) {
     $sql="SELECT a.group_id,c.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->activity->table_name} c where a.group_id=b.group_id and a.group_id=c.item_id and a.meta_key='wds_group_type' and a.meta_value='".$type."' and b.meta_key='openlab_group_active_status' and b.meta_value='".$_GET['status']."' and c.user_id=".$bp->loggedin_user->id." ORDER BY c.date_recorded desc";
@@ -19,6 +32,9 @@ function cuny_profile_activty_block($type,$title,$last) {
 	$ids="9999999";
 	  $rs = $wpdb->get_results($sql);
 	    
+	    echo '<pre>';
+	  //  print_r( $rs );
+	    echo '</pre>';
 	  foreach ( (array)$rs as $r ){
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;

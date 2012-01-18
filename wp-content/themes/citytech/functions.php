@@ -325,4 +325,74 @@ function openlab_current_user_ribbonclass() {
  */
 add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
 
+function openlab_get_groups_of_user( $args = array() ) {
+	global $bp, $wpdb;
+	
+	$retval = array(
+		'group_ids'     => array(),
+		'group_ids_sql' => '',
+		'activity'	=> array()
+	);
+	
+	$defaults = array(
+		'user_id' 	=> bp_loggedin_user_id(),
+		'active_status' => 'active',
+		'show_hidden'   => true,
+		'group_type'	=> 'club'
+	);
+	$r = wp_parse_args( $args, $defaults );
+	
+	$select = $where = '';
+	
+	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
+	$where  = $wpdb->prepare( "WHERE a.user_id = %d", $r['user_id'] );
+	
+	if ( 'all' != $r['active_status'] ) {
+		// For legacy reasons, not all active groups are marked 'active'
+		if ( 'inactive' == $r['active_status'] ) {
+			$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} b ON (a.group_id = b.group_id) " );
+			$where  .= $wpdb->prepare( " AND b.meta_key = 'openlab_group_active_status' AND b.meta_value = %s ", $r['active_status'] );
+		} else {
+			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
+			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
+			
+			if ( !empty( $inactive_groups ) ) {
+				$inactive_groups_sql = implode( ',', $inactive_groups );
+				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
+			}
+		}
+	}
+	
+	if ( !$r['show_hidden'] ) {
+		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groups} c ON (c.id = a.group_id) " );
+		$where  .= $wpdb->prepare( " AND c.status = 'public' " );
+	}
+	
+	if ( 'all' != $r['group_type'] ) {
+		// Sanitize
+		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
+		
+		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) " );
+		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
+	}
+	
+	$sql = $select . ' ' . $where;
+	$group_ids = $wpdb->get_col( $sql );
+
+	$retval['group_ids'] = $group_ids;
+	
+	// Now that we have group ids, get the associated activity items and format the 
+	// whole shebang in the proper way
+	if ( !empty( $group_ids ) ) {
+		$retval['group_ids_sql'] = implode( ',', $group_ids );		
+	}
+	
+
+	
+	echo "<pre>";
+	echo $sql;
+	print_r( $retval );
+	echo '</pre>';
+}
+
 ?>
