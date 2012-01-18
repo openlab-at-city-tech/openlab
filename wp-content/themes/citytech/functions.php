@@ -336,7 +336,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
-		'active_status' => 'active',
+		'active_status' => 'all',
 		'show_hidden'   => true,
 		'group_type'	=> 'club',
 		'get_activity'	=> true
