@@ -366,7 +366,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
-		$where  .= $wpdb->prepare( " AND c.status = 'public' " );
+		$where  .= $wpdb->prepare( " AND c.status != 'hidden' " );
 	}
 	
 	if ( 'all' != $r['group_type'] ) {
