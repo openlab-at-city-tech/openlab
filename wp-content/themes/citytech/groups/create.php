@@ -41,10 +41,14 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 					
 					<?php $group_type = isset( $_REQUEST['type'] ) && in_array( $_REQUEST['type'], array( 'course', 'club', 'project' ) ) ? $_REQUEST['type'] : 'club' ?>
 					
-					<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your Project profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
+					<?php if ( 'course' == $group_type ) : ?>
+						<p class="ol-tooltip">Please take a moment to consider the name of your Course. We recommend keeping your Course title name under 50 characters. You can always change the name of your course later.</p>
+					<?php else : ?>
+						<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
+					<?php endif ?>
 					
 					<?php if ( 'project' == $group_type ) : ?>
-						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Please review the guidelines here before proceeding. We recommend that the name of your ePortfolio follow this format:</p>
+						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Please review the guidelines <a href="<?php bp_root_domain() ?>/eportfolio">here</a> before proceeding. We recommend that the name of your ePortfolio follow this format:</p>
 
 						<ul class="ol-tooltip">
 							<li>FirstName LastName's ePortfolio </li>

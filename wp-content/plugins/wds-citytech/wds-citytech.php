@@ -612,7 +612,13 @@ function wds_load_group_type($group_type){
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
-			$return .= '<p class="oltooltip">If your course associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			break;
+		case 'project' :
+			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
+			break;
+		case 'club' :
+			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
 			break;
 	}
 	
@@ -840,7 +846,7 @@ function wds_bp_group_meta(){
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
-						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-tooltips');" /> Setup a Site?
+						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-tooltips');" /> Set up a site?
 					</th>
 				</tr>
 			<?php else : ?>
@@ -850,10 +856,10 @@ function wds_bp_group_meta(){
 		    		</tr>
 			<?php endif ?>
 			
-			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td>
+			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
 				<?php switch ( $group_type ) : 
 					case 'course' : ?>
-						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
+						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
 		
 						<ul class="ol-tooltip">
 							<li>FacultyLastNameCourseCode</li>
@@ -867,11 +873,11 @@ function wds_bp_group_meta(){
 							<li>smithadv1100sp2012</li>
 						</ul>
 						
-						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information in the address.</p>
+						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information to the URL.</p>
 						
 						<?php break;
 					case 'project' : ?>
-						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu</p>
+						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
 						
 						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Since the ePortfolio is designed to be a Career Portfolio, choose a site address that will appear professional. We recommend one of the following formats (enter in the gray box below):</p>
 						
