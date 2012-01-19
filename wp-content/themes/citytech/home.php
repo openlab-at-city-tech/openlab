@@ -311,7 +311,7 @@ function openlab_groups_filter_clause( $sql ) {
 	
 	// Add the necessary where clause
 	$ex = explode( " AND ", $ex );
-	array_splice( $ex, 1, 0, "gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords( $openlab_group_type ) . "' OR gt.meta_value = '" . strtolower( $openlab_group_type ) . "' )" );
+	array_splice( $ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords( $openlab_group_type ) . "' OR gt.meta_value = '" . strtolower( $openlab_group_type ) . "' )" );
 	$ex = implode( " AND ", $ex );
 	
 	return $ex;
