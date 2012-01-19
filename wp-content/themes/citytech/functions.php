@@ -390,7 +390,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	
 		if ( $r['get_activity'] ) {
 			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
-			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']})" ) );
+			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY date_recorded DESC" ) );
 			
 			// Now walk down the list and try to match with a group. Once one is found, remove
 			// that group from the stack
