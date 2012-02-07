@@ -71,7 +71,9 @@ if ( $account_type == 'Staff' )
         	<?php if ( bp_has_profile() ) : /* global $profile_template; echo '<pre>'; print_r( $profile_template ); echo '</pre>'; */ ?>
 			<?php while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
     
-                <?php if ( bp_profile_group_has_fields() ) : ?>
+                <?php global $profile_template ?>
+                <?php /* Don't show fields corresponding to other account types */ ?>
+                <?php if ( $account_type == $profile_template->group->name && bp_profile_group_has_fields() ) : ?>
     					<table class="profile-fields">
                             <?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
