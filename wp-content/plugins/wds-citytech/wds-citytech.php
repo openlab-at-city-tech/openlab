@@ -1048,6 +1048,18 @@ function openlab_load_custom_bp_functions() {
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
+/**
+ * Remove user from group blog when leaving group
+ */
+function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
+	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+
+	if ( $blog_id ) {
+		remove_user_from_blog( $user_id, $blog_id );
+	}
+}
+add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
+
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
 function wds_bp_group_site_pages(){
 	global $bp;

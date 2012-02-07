@@ -405,6 +405,11 @@ function openlab_hide_inactive_group_join_button( $button ) {
 			unset( $button['id'] );
 		}
 	}
+	
+	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'leave_group' ) ) {
+		$button['link_class'] = str_replace( 'group-button', '', $button['link_class'] );
+	}
+	
 	return $button;
 }
 add_action( 'bp_get_group_join_button', 'openlab_hide_inactive_group_join_button' );
