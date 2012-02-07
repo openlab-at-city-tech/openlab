@@ -128,7 +128,7 @@ function cuny_list_members($view) {
 	$avatar_args = array (
 			'type' => 'full',
 			'width' => 72,
-			'height' => 62,
+			'height' => 72,
 			'class' => 'avatar',
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
