@@ -204,7 +204,7 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 	
-	$wds_bp_group_id=get_option('wds_bp_group_id');
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 	
 	if( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
@@ -232,7 +232,7 @@ function cuny_add_group_menu_items($items) {
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
-	$wds_bp_group_id = get_option('wds_bp_group_id');
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
 	if($wds_bp_group_id){
 		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
