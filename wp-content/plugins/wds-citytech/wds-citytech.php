@@ -190,6 +190,8 @@ function wds_check_blog_privacy(){
 add_filter('wp_page_menu','my_page_menu_filter');
 function my_page_menu_filter( $menu ) {
 	global $bp, $wpdb;
+	
+	
 	if (!(strpos($menu,"Home") === false)) {
 	    $menu = str_replace("Site Home","Home",$menu);
 	    $menu = str_replace("Home","Site Home",$menu);
@@ -204,7 +206,7 @@ function my_page_menu_filter( $menu ) {
 	
 	$wds_bp_group_id=get_option('wds_bp_group_id');
 	
-	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
+	if( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
@@ -215,7 +217,7 @@ function my_page_menu_filter( $menu ) {
 //child theme menu filter to link to website
 add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
 function cuny_add_group_menu_items($items) {
-	if ( !bp_is_root_blog() && 'eportfolio' != get_stylesheet() ) {
+	if ( !bp_is_root_blog() ) {
 		
 		if((strpos($items,"Contact"))) {
 		} else {
