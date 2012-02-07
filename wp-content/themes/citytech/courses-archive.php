@@ -392,10 +392,9 @@ switch ($_GET['group_sequence']) {
 	</select>
 	<div class="red-square"></div>
 	<select name="group_sequence" class="last-select">
-		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
-		<option value='alphabetical'>Alphabetical</option>
-		<option value='newest'>Newest</option>
-		<option value='active'>Last Active</option>
+		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
+		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
+		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
 	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/courses/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Filter">
