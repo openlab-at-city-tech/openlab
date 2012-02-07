@@ -1526,3 +1526,27 @@ function openlab_launch_translator() {
 	add_filter('gettext', array('buddypress_Translation_Mangler', 'filter_gettext'), 10, 4);
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
+
+/**
+ * Add OpenLab links in the WP toolbar
+ */
+function openlab_link_in_toolbar( $wp_admin_bar ) {
+	$wp_admin_bar->add_node( array(
+		'id'     => 'openlab',
+		'title'  => 'OpenLab',
+		'href'   => bp_get_root_domain(),
+		'meta'	 => array(
+			'tabindex' => 90
+		)
+	) );
+	
+	$wp_admin_bar->add_node( array(
+		'id'     => 'myopenlab',
+		'title'  => 'MyOpenLab',
+		'href'   => bp_loggedin_user_domain(),
+		'meta'	 => array(
+			'tabindex' => 95
+		)
+	) );
+}
+add_action( 'admin_bar_menu', 'openlab_link_in_toolbar', 12 );
