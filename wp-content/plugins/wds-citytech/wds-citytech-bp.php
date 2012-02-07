@@ -312,6 +312,34 @@ function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
 /**
+ * When a Notice is sent, send an email to all members
+ */
+function openlab_send_notice_email( $subject, $message ) {
+	global $wpdb;
+	
+	$to = get_option( 'admin_email' );
+	//$to = 'boonebgorges@gmail.com'; // for testing
+	$subject = 'Message from OpenLab: ' . $subject;
+	
+	$emails = $wpdb->get_col( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE spam = 0" ) );
+	
+	// For testing - limits recipients to Boone
+	/*
+	foreach( $emails as $key => $e ) {
+		if ( false === strpos( $e, 'boonebgorges' ) ) {
+			unset( $emails[$key] );
+		}
+	}*/
+	
+	$emails = implode( ',', $emails );
+	
+	$headers = array( 'bcc:' . $emails );
+	
+	wp_mail( $to, $subject, $message, $headers );
+}
+add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
+
+/**
  * Redirect profile edit to the correct field group
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/172
