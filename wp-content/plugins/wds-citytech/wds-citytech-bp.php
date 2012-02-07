@@ -338,6 +338,34 @@ function openlab_redirect_to_profile_edit_group() {
 }
 add_action( 'bp_actions', 'openlab_redirect_to_profile_edit_group', 1 );
 
+/**
+ * Add the group type to the form action of the group creation forms
+ */
+function openlab_group_type_in_creation_form_action( $action ) {
+	if ( false === strpos( $action, '?type=' ) && isset( $_GET['type'] ) ) {
+		$action = add_query_arg( 'type', $_GET['type'], $action );
+	}
+	
+	return $action;
+}
+add_action( 'bp_get_group_creation_form_action', 'openlab_group_type_in_creation_form_action' );
+
+/**
+ * When creating a group, if you fill in the wrong details, you should be redirected with the
+ * correct group type appended to the URL.
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/326
+ */
+function openlab_group_creation_redirect( $redirect ) {
+	if ( bp_is_group_create() ) {
+		if ( false === strpos( $redirect, '?type=' ) && isset( $_GET['type'] ) ) {
+			$redirect = add_query_arg( 'type', $_GET['type'], $redirect );
+		}
+	}
+	
+	return $redirect;
+}
+add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
 
 /**
  * Don't show the Join Group button on an inactive group
