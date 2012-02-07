@@ -1125,8 +1125,7 @@ function ra_copy_blog_page($group_id) {
 	  }
 
 	  $src_id = intval( $_POST['source_blog'] );
-	  $blog_privacy=$_POST['wds_group_privacy'];
-
+	  
 	  //$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 	  //$domain=str_replace(".","",$domain);
 	  $domain = friendly_url($blog[ 'domain' ]);
@@ -1250,10 +1249,7 @@ function ra_copy_blog_page($group_id) {
 						  } else {
 							  update_option('rewrite_rules', '');
 						  }
-						  //update privacy
-						  if($blog_privacy=="private"){
-							  update_option('blog_public', '-2');
-						  }
+						 
 						  //creaTE UPLOAD DOCS PAGE
 						  // Psyche!
 						  /*
@@ -1278,6 +1274,26 @@ function ra_copy_blog_page($group_id) {
 	  }
 	}
 }
+
+/**
+ * On group creation, go back to see if a blog was created. If so, match its privacy setting.
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/318
+ */
+function openlab_sync_blog_privacy_at_group_creation() {
+	global $bp;
+	
+	$group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : '';
+	
+	if ( $group_id && $site_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' ) ) {
+		$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+		if ( 'private' == $group->status || 'hidden' == $group->status ) {
+			update_blog_option( $site_id, 'blog_public', '-2' );
+		}
+	}
+}
+add_action( 'groups_create_group_step_save_group-settings', 'openlab_sync_blog_privacy_at_group_creation' );
 
             //this is a function for sanitizing the website name
 			//source http://cubiq.org/the-perfect-php-clean-url-generator
