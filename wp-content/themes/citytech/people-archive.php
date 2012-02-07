@@ -67,6 +67,28 @@ function cuny_list_members($view) {
 	}
 	
 	if ( $search_terms ) {
+		// Filter the sql query so that we ignore the first name and last name fields
+		$first_name_field_id = xprofile_get_field_id_from_name( 'First Name' );
+		$last_name_field_id  = xprofile_get_field_id_from_name( 'Last Name' );
+		
+		// These are the same runtime-created functions, created separately so I don't have
+		// to toss globals around. If you change one, change them both!
+		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
+			$ex = explode( " AND ", $sql );
+			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+		
+		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
+			$ex = explode( " AND ", $sql );
+			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+		
 		$args['search_terms'] = $search_terms;
 	}	
 	
