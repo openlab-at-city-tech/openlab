@@ -383,6 +383,18 @@ get_currentuserinfo();
 	?>
 		
 	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+	
+	<?php echo bp_get_button( array(
+		'id'                => 'private_message',
+		'component'         => 'messages',
+		'must_be_logged_in' => true,
+		'block_self'        => true,
+		'wrapper_id'        => 'send-private-message',
+		'link_href'         => bp_get_send_private_message_link(),
+		'link_title'        => __( 'Send a private message to this user.', 'buddypress' ),
+		'link_text'         => __( 'Send a Message', 'buddypress' ),
+		'link_class'        => 'send-message',
+	) ) ?>
 
 		
 <?php if ( !bp_is_user_messages() ) { ?>
