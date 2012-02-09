@@ -485,7 +485,7 @@ function openlab_recent_account_activity_sidebar() {
  * Ensure that external links in the help menu get the external-link glyph
  */
 function openlab_help_menu_external_glyph( $items, $args ) {
-	if ( $args->theme_location == 'helpmenu' ) {
+	if ( false !== strpos( $args->theme_location, 'help' ) ) {
 		foreach( $items as $key => $item ) {
 			if ( false === strpos( $item->url, bp_get_root_domain() ) ) {
 				$items[$key]->classes[] = 'external-link';
