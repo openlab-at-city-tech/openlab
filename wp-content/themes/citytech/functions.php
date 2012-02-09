@@ -480,4 +480,19 @@ function openlab_recent_account_activity_sidebar() {
 	<?php } // if !is_user_messages
 
 }
+
+/**
+ * Ensure that external links in the help menu get the external-link glyph
+ */
+function openlab_help_menu_external_glyph( $items, $args ) {
+	if ( $args->theme_location == 'helpmenu' ) {
+		foreach( $items as $key => $item ) {
+			if ( false === strpos( $item->url, bp_get_root_domain() ) ) {
+				$items[$key]->classes[] = 'external-link';
+			}
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2 );
 ?>
