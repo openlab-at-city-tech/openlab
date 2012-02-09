@@ -157,32 +157,43 @@ function cuny_add_links_wp_trim_excerpt($text) {
 	return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
 
 }
-//
-//    This function switches to the group site, gets the blog_public option and determines if the site is public
-//    or not (private = value of "-2") and then, if it is private checks if the logged in user is registered on that blog and if so returns true
-//    otherwise (if private and not a registered member) returns false
-//
+
+/**
+ * This function checks the blog_public option of the group site, and depending on the result,
+ * returns whether the current user can view the site.
+ */
 function wds_site_can_be_viewed() {
 	global $user_ID;
 	$blog_public = false;
 	$group_id = bp_get_group_id(); 
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
+	
 	if($wds_bp_group_site_id!=""){
-		switch_to_blog($wds_bp_group_site_id);
-		$blog_private = get_option('blog_public');
-		if ($blog_private != "-2") {
-			$blog_public = true;
-		} else {
-			$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
-			if ($user_capabilities != "") {
+		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
+		
+		switch ( $blog_private ) {
+			case '-3' : // todo?
+			case '-2' :
+				if ( is_user_logged_in() ) {
+					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
+					if ($user_capabilities != "") {
+						$blog_public = true;
+					}
+				}
+				break;
+			
+			case '-1' :
+				if ( is_user_logged_in() ) {
+					$blog_public = true;
+				}
+				break;
+			
+			default :
 				$blog_public = true;
-			}
+				break;
 		}
-		restore_current_blog();
 	}
 	return $blog_public;
-		
-
 }
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name)
