@@ -1550,3 +1550,15 @@ function openlab_link_in_toolbar( $wp_admin_bar ) {
 	) );
 }
 add_action( 'admin_bar_menu', 'openlab_link_in_toolbar', 12 );
+
+/**
+ * Add a redirect_to param to the Log Out toolbar link
+ */
+function openlab_redirect_logout_link( $wp_admin_bar ) {
+	$wp_admin_bar->add_menu( array(
+		'id'     => 'logout',
+		'title'  => __( 'Log Out' ),
+		'href'   => add_query_arg( 'redirect_to', urlencode( bp_get_root_domain() ), wp_logout_url() ),
+	) );
+}
+add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
