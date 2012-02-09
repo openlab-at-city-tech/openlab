@@ -332,7 +332,7 @@ function show_site_posts() {
 					  endwhile;
 					  echo '</ul>';
 					  ?>
-						<div class="view-more"><a href="<?php echo site_url();?>">View More Blog Activities</a></div>
+						<div class="view-more"><a href="<?php echo site_url();?>">View More Club Posts</a></div>
 					  <?php
 					}else{?>
 						<div id="message" class="info">

@@ -365,7 +365,7 @@ function show_site_posts() {
 						<p><?php _e( 'Sorry, no blog posts exist.', 'buddypress' ) ?></p>
 					</div>
 				<?php }?>
-                <div class="view-more"><a href="<?php echo site_url();?>">View More Blog Activities</a></div>
+                <div class="view-more"><a href="<?php echo site_url();?>">View More Project Posts</a></div>
                 <?php
 				restore_current_blog();
 		?>
