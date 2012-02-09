@@ -3286,7 +3286,7 @@ a.close-popup-login {
 	font-weight:normal;
 }
 
-#help-menu .menu-item.external-link a:after {
+.menu-item.external-link a:after {
     content: url("images/site-sidebar-icon.png");
     padding: 0 0 0 7px;
 }
