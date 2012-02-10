@@ -1570,7 +1570,7 @@ function openlab_redirect_logout_link( $wp_admin_bar ) {
 add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
 
 /**
- * When a user attempts to visit a blog Dashboard, check to see if the user is a member of the
+ * When a user attempts to visit a blog, check to see if the user is a member of the
  * blog's associated group. If so, ensure that the member has access.
  *
  * This function should be deprecated when a more elegant solution is found.
@@ -1578,6 +1578,13 @@ add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
  */
 function openlab_sync_blog_members_to_group() {
 	global $wpdb, $bp;
+	
+	// No need to continue if the user is not logged in, if this is not an admin page, or if
+	// the current blog is not private
+	$blog_public = get_option( 'blog_public' );
+	if ( !is_user_logged_in() || !is_admin() || (int)$blog_public < 0 ) {
+		return;
+	}
 	
 	$user_id = get_current_user_id();
 	$userdata = get_userdata( $user_id );
@@ -1606,11 +1613,53 @@ function openlab_sync_blog_members_to_group() {
 				add_user_to_blog( get_current_blog_id(), $user_id, $status );
 				
 				// Redirect to avoid errors
-				echo '<script type="text/javascript">window.location="' . admin_url() . '";</script>';
+				echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
 			}
 		}
 	}
 }
-add_action( 'admin_menu', 'openlab_sync_blog_members_to_group' );
+//add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
+
+/**
+ * When a user visits a group blog, check to see whether the user should be an admin, based on
+ * membership in the corresponding group.
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
+ */
+function openlab_force_blog_role_sync() {
+	global $bp, $wpdb;
+	
+	if ( !is_user_logged_in() ) {
+		return;
+	}
+	
+	// Is this blog associated with a group?
+	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	
+	if ( $group_id ) {
+		
+		// Get the user's group status, if any
+		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
+		
+		if ( !empty( $member ) ) {
+			$status = 'author';
+			
+			if ( $member->is_admin ) {
+				$status = 'administrator';
+			} else if ( $member->is_mod ) {
+				$status = 'editor';
+			}
+			
+			$userdata = get_userdata( get_current_user_id() );
+			$role_is_correct = in_array( $status, $userdata->roles );
+			
+			if ( !$role_is_correct ) {
+				$user = new WP_User( get_current_user_id() );
+				$user->set_role( $status );
+			}
+		}		
+	}
+}
+add_action( 'init', 'openlab_force_blog_role_sync', 999 );
 
 ?>
