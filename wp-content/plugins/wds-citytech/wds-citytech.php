@@ -920,10 +920,6 @@ function wds_bp_group_meta(){
 					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
 				<?php endif; ?>
 				
-				<select name="wds_group_privacy">
-				<option value="">Public
-				<option value="private">Private
-				</select>
 				</td>
 			</tr>
               			
@@ -1640,6 +1636,8 @@ function openlab_force_blog_role_sync() {
 		
 		// Get the user's group status, if any
 		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
+				
+		$userdata = get_userdata( get_current_user_id() );
 		
 		if ( !empty( $member ) ) {
 			$status = 'author';
@@ -1650,14 +1648,24 @@ function openlab_force_blog_role_sync() {
 				$status = 'editor';
 			}
 			
-			$userdata = get_userdata( get_current_user_id() );
 			$role_is_correct = in_array( $status, $userdata->roles );
 			
 			if ( !$role_is_correct ) {
 				$user = new WP_User( get_current_user_id() );
 				$user->set_role( $status );
 			}
-		}		
+		} else {
+			$role_is_correct = empty( $userdata->roles );
+			
+			if ( !$role_is_correct ) {
+				remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
+			}
+		}
+		
+		if ( !$role_is_correct ) {				
+			// Redirect, just for good measure
+			echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
+		}
 	}
 }
 add_action( 'init', 'openlab_force_blog_role_sync', 999 );
