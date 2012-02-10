@@ -191,6 +191,9 @@ add_action( 'bp_screens', 'openlab_registration_avatars', 9 );
 						$onchange="";	
 					}
 					$return.='<select name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
+						 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
+						 	$return .= '<option selected="selected" value=""> ---- </option>';
+						 }
 						 $return.=bp_get_the_profile_field_options();
 					$return.='</select>';
 				

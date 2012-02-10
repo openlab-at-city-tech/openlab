@@ -406,7 +406,10 @@ function wds_load_default_account_type() {
  		    $return = '<script type="text/javascript">';
 		    
 		    $account_type = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
-		    if ($account_type == "Student" || $account_type == "") {
+		    $type = '';
+		    $selected_index = '';
+		    
+		    if ($account_type == "Student" ) {
 			$type = "Student";
 			$selected_index = 1;
 		    }
@@ -418,9 +421,12 @@ function wds_load_default_account_type() {
 			$type = "Staff";
 			$selected_index = 3;
 		    }
+		    
+		    if ( $type && $selected_index ) {
 			$return .=  'var select_box=document.getElementById(\'field_7\');';
 			$return .=  'select_box.selectedIndex = ' . $selected_index . ';';
-		    $return .= "wds_load_account_type('field_7','$type');";
+			$return .= "wds_load_account_type('field_7','$type');";
+		    }
 		    $return .= '</script>';
 		    echo $return;
 
