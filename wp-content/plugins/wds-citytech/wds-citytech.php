@@ -1568,3 +1568,49 @@ function openlab_redirect_logout_link( $wp_admin_bar ) {
 	) );
 }
 add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
+
+/**
+ * When a user attempts to visit a blog Dashboard, check to see if the user is a member of the
+ * blog's associated group. If so, ensure that the member has access.
+ *
+ * This function should be deprecated when a more elegant solution is found.
+ * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
+ */
+function openlab_sync_blog_members_to_group() {
+	global $wpdb, $bp;
+	
+	$user_id = get_current_user_id();
+	$userdata = get_userdata( $user_id );
+	
+	// Is the user already a member of the blog?
+	if ( empty( $userdata->caps ) ) {
+		
+		// Is this blog associated with a group?
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+		
+		if ( $group_id ) {
+			
+			// Is this user a member of the group?
+			if ( groups_is_user_member( $user_id, $group_id ) ) {
+				
+				// Figure out the status
+				if ( groups_is_user_admin( $user_id, $group_id ) ) {
+					$status = 'administrator';
+				} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
+					$status = 'editor';
+				} else {
+					$status = 'author';
+				}
+				
+				// Add the user to the blog
+				add_user_to_blog( get_current_blog_id(), $user_id, $status );
+				
+				// Redirect to avoid errors
+				echo '<script type="text/javascript">window.location="' . admin_url() . '";</script>';
+			}
+		}
+	}
+}
+add_action( 'admin_menu', 'openlab_sync_blog_members_to_group' );
+
+?>
