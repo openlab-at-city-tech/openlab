@@ -67,6 +67,28 @@ function cuny_list_members($view) {
 	}
 	
 	if ( $search_terms ) {
+		// Filter the sql query so that we ignore the first name and last name fields
+		$first_name_field_id = xprofile_get_field_id_from_name( 'First Name' );
+		$last_name_field_id  = xprofile_get_field_id_from_name( 'Last Name' );
+		
+		// These are the same runtime-created functions, created separately so I don't have
+		// to toss globals around. If you change one, change them both!
+		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
+			$ex = explode( " AND ", $sql );
+			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+		
+		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
+			$ex = explode( " AND ", $sql );
+			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
+			$ex = implode( " AND ", $ex );
+			
+			return $ex;
+		' ) );
+		
 		$args['search_terms'] = $search_terms;
 	}	
 	
@@ -106,7 +128,7 @@ function cuny_list_members($view) {
 	$avatar_args = array (
 			'type' => 'full',
 			'width' => 72,
-			'height' => 62,
+			'height' => 72,
 			'class' => 'avatar',
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
@@ -235,10 +257,9 @@ switch ($_GET['group_sequence']) {
 	</select>
     <div class="red-square"></div>
 	<select name="group_sequence" class="last-select">
-		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
-		<option value='alphabetical'>Alphabetical</option>
-		<option value='newest'>Newest</option>
-		<option value='active'>Last Active</option>
+		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
+		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
+		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>

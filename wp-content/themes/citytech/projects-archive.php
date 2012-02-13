@@ -114,10 +114,9 @@ switch ($_GET['group_sequence']) {
 <div class="red-square"></div>
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
 	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select">
-		<option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
-		<option value='alphabetical'>Alphabetical</option>
-		<option value='newest'>Newest</option>
-		<option value='active'>Last Active</option>
+		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
+		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
+		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
 </form>
 <div class="clearfloat"></div>

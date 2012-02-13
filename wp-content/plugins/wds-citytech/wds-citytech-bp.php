@@ -239,10 +239,11 @@ add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
 add_action('bp_actions','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
-	if ( bp_get_current_group_id() ) {
-	     $group_id = $bp->groups->current_group->id;
+
+	if ( $group_id = bp_get_current_group_id() ) {
 	     $blog_id = groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	}
+	
 	if($user_ID!=0 && !empty( $group_id ) && !empty( $blog_id ) ){
 		switch_to_blog($blog_id);
 		if(!is_user_member_of_blog($blog_id)){
@@ -311,6 +312,34 @@ function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
 /**
+ * When a Notice is sent, send an email to all members
+ */
+function openlab_send_notice_email( $subject, $message ) {
+	global $wpdb;
+	
+	$to = get_option( 'admin_email' );
+	//$to = 'boonebgorges@gmail.com'; // for testing
+	$subject = 'Message from OpenLab: ' . $subject;
+	
+	$emails = $wpdb->get_col( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE spam = 0" ) );
+	
+	// For testing - limits recipients to Boone
+	/*
+	foreach( $emails as $key => $e ) {
+		if ( false === strpos( $e, 'boonebgorges' ) ) {
+			unset( $emails[$key] );
+		}
+	}*/
+	
+	$emails = implode( ',', $emails );
+	
+	$headers = array( 'bcc:' . $emails );
+	
+	wp_mail( $to, $subject, $message, $headers );
+}
+add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
+
+/**
  * Redirect profile edit to the correct field group
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/172
@@ -336,5 +365,108 @@ function openlab_redirect_to_profile_edit_group() {
 	}
 }
 add_action( 'bp_actions', 'openlab_redirect_to_profile_edit_group', 1 );
+
+/**
+ * Add the group type to the form action of the group creation forms
+ */
+function openlab_group_type_in_creation_form_action( $action ) {
+	if ( false === strpos( $action, '?type=' ) && isset( $_GET['type'] ) ) {
+		$action = add_query_arg( 'type', $_GET['type'], $action );
+	}
+	
+	return $action;
+}
+add_action( 'bp_get_group_creation_form_action', 'openlab_group_type_in_creation_form_action' );
+
+/**
+ * When creating a group, if you fill in the wrong details, you should be redirected with the
+ * correct group type appended to the URL.
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/326
+ */
+function openlab_group_creation_redirect( $redirect ) {
+	if ( bp_is_group_create() ) {
+		if ( false === strpos( $redirect, '?type=' ) && isset( $_GET['type'] ) ) {
+			$redirect = add_query_arg( 'type', $_GET['type'], $redirect );
+		}
+	}
+	
+	return $redirect;
+}
+add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
+
+/**
+ * Don't show the Join Group button on an inactive group
+ */
+function openlab_hide_inactive_group_join_button( $button ) {
+	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'join' ) ) {
+		if ( openlab_group_is_inactive() ) {
+			// Unset the button id for a cheap way of deleting button
+			unset( $button['id'] );
+		}
+	}
+	
+	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'leave_group' ) ) {
+		$button['link_class'] = str_replace( 'group-button', '', $button['link_class'] );
+	}
+	
+	return $button;
+}
+add_action( 'bp_get_group_join_button', 'openlab_hide_inactive_group_join_button' );
+
+/**
+ * Don't let anyone visit the Join page of an inactive group
+ *
+ * This should never happen, thanks to the hidden buttons (see
+ * openlab_hide_inactive_group_join_button()) combined with the need for a nonce. But this is for
+ * backup.
+ */
+function openlab_disallow_inactive_group_join() {
+	if ( bp_is_group() && bp_is_current_action( 'join' ) ) {
+		// If a user is a member (shouldn't happen?) let BP handle it
+		if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
+			return;
+		}
+		
+		// If the group is inactive, redirect away
+		if ( openlab_group_is_inactive() ) {
+			bp_core_add_message( 'You cannot join an inactive group.', 'error' );
+			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) );
+		}
+	}
+}
+add_action( 'bp_actions', 'openlab_disallow_inactive_group_join', 1 );
+
+/**
+ * Is the given group inactive?
+ */
+function openlab_group_is_inactive( $group_id = false ) {
+	if ( !$group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+	
+	if ( !$group_id ) {
+		return false;
+	}
+	
+	$status = groups_get_groupmeta( $group_id, 'openlab_group_active_status' );
+	
+	$is_inactive = false;
+	
+	if ( 'inactive' == $status ) {
+		$is_inactive = true;
+	}
+	
+	return $is_inactive;
+}
+
+/**
+ * Is the given group active?
+ *
+ * For convenience.
+ */
+function openlab_group_is_active( $group_id = false ) {
+	return ! openlab_group_is_inactive( $group_id );
+}
 
 ?>

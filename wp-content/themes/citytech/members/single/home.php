@@ -71,7 +71,9 @@ if ( $account_type == 'Staff' )
         	<?php if ( bp_has_profile() ) : /* global $profile_template; echo '<pre>'; print_r( $profile_template ); echo '</pre>'; */ ?>
 			<?php while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
     
-                <?php if ( bp_profile_group_has_fields() ) : ?>
+                <?php global $profile_template ?>
+                <?php /* Don't show fields corresponding to other account types */ ?>
+                <?php if ( $account_type == $profile_template->group->name && bp_profile_group_has_fields() ) : ?>
     					<table class="profile-fields">
                             <?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
@@ -381,6 +383,18 @@ get_currentuserinfo();
 	?>
 		
 	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+	
+	<?php echo bp_get_button( array(
+		'id'                => 'private_message',
+		'component'         => 'messages',
+		'must_be_logged_in' => true,
+		'block_self'        => true,
+		'wrapper_id'        => 'send-private-message',
+		'link_href'         => bp_get_send_private_message_link(),
+		'link_title'        => __( 'Send a private message to this user.', 'buddypress' ),
+		'link_text'         => __( 'Send a Message', 'buddypress' ),
+		'link_class'        => 'send-message',
+	) ) ?>
 
 		
 <?php if ( !bp_is_user_messages() ) { ?>

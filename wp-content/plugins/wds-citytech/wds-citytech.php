@@ -190,6 +190,8 @@ function wds_check_blog_privacy(){
 add_filter('wp_page_menu','my_page_menu_filter');
 function my_page_menu_filter( $menu ) {
 	global $bp, $wpdb;
+	
+	
 	if (!(strpos($menu,"Home") === false)) {
 	    $menu = str_replace("Site Home","Home",$menu);
 	    $menu = str_replace("Home","Site Home",$menu);
@@ -202,9 +204,9 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 	
-	$wds_bp_group_id=get_option('wds_bp_group_id');
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 	
-	if( $wds_bp_group_id && 'eportfolio' != get_template() ){
+	if( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
@@ -215,7 +217,7 @@ function my_page_menu_filter( $menu ) {
 //child theme menu filter to link to website
 add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
 function cuny_add_group_menu_items($items) {
-	if ( !bp_is_root_blog() && 'eportfolio' != get_stylesheet() ) {
+	if ( !bp_is_root_blog() ) {
 		
 		if((strpos($items,"Contact"))) {
 		} else {
@@ -230,7 +232,7 @@ function cuny_add_group_menu_items($items) {
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
-	$wds_bp_group_id = get_option('wds_bp_group_id');
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
 	if($wds_bp_group_id){
 		$group_type=ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
@@ -404,7 +406,10 @@ function wds_load_default_account_type() {
  		    $return = '<script type="text/javascript">';
 		    
 		    $account_type = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
-		    if ($account_type == "Student" || $account_type == "") {
+		    $type = '';
+		    $selected_index = '';
+		    
+		    if ($account_type == "Student" ) {
 			$type = "Student";
 			$selected_index = 1;
 		    }
@@ -416,9 +421,12 @@ function wds_load_default_account_type() {
 			$type = "Staff";
 			$selected_index = 3;
 		    }
+		    
+		    if ( $type && $selected_index ) {
 			$return .=  'var select_box=document.getElementById(\'field_7\');';
 			$return .=  'select_box.selectedIndex = ' . $selected_index . ';';
-		    $return .= "wds_load_account_type('field_7','$type');";
+			$return .= "wds_load_account_type('field_7','$type');";
+		    }
 		    $return .= '</script>';
 		    echo $return;
 
@@ -912,10 +920,6 @@ function wds_bp_group_meta(){
 					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
 				<?php endif; ?>
 				
-				<select name="wds_group_privacy">
-				<option value="">Public
-				<option value="private">Private
-				</select>
 				</td>
 			</tr>
               			
@@ -1046,6 +1050,18 @@ function openlab_load_custom_bp_functions() {
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
+/**
+ * Remove user from group blog when leaving group
+ */
+function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
+	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+
+	if ( $blog_id ) {
+		remove_user_from_blog( $user_id, $blog_id );
+	}
+}
+add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
+
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
 function wds_bp_group_site_pages(){
 	global $bp;
@@ -1123,8 +1139,7 @@ function ra_copy_blog_page($group_id) {
 	  }
 
 	  $src_id = intval( $_POST['source_blog'] );
-	  $blog_privacy=$_POST['wds_group_privacy'];
-
+	  
 	  //$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 	  //$domain=str_replace(".","",$domain);
 	  $domain = friendly_url($blog[ 'domain' ]);
@@ -1248,10 +1263,7 @@ function ra_copy_blog_page($group_id) {
 						  } else {
 							  update_option('rewrite_rules', '');
 						  }
-						  //update privacy
-						  if($blog_privacy=="private"){
-							  update_option('blog_public', '-2');
-						  }
+						 
 						  //creaTE UPLOAD DOCS PAGE
 						  // Psyche!
 						  /*
@@ -1276,6 +1288,26 @@ function ra_copy_blog_page($group_id) {
 	  }
 	}
 }
+
+/**
+ * On group creation, go back to see if a blog was created. If so, match its privacy setting.
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/318
+ */
+function openlab_sync_blog_privacy_at_group_creation() {
+	global $bp;
+	
+	$group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : '';
+	
+	if ( $group_id && $site_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' ) ) {
+		$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+		if ( 'private' == $group->status || 'hidden' == $group->status ) {
+			update_blog_option( $site_id, 'blog_public', '-2' );
+		}
+	}
+}
+add_action( 'groups_create_group_step_save_group-settings', 'openlab_sync_blog_privacy_at_group_creation' );
 
             //this is a function for sanitizing the website name
 			//source http://cubiq.org/the-perfect-php-clean-url-generator
@@ -1496,3 +1528,146 @@ function openlab_launch_translator() {
 	add_filter('gettext', array('buddypress_Translation_Mangler', 'filter_gettext'), 10, 4);
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
+
+/**
+ * Add OpenLab links in the WP toolbar
+ */
+function openlab_link_in_toolbar( $wp_admin_bar ) {
+	$wp_admin_bar->add_node( array(
+		'id'     => 'openlab',
+		'title'  => 'OpenLab',
+		'href'   => bp_get_root_domain(),
+		'meta'	 => array(
+			'tabindex' => 90
+		)
+	) );
+	
+	$wp_admin_bar->add_node( array(
+		'id'     => 'myopenlab',
+		'title'  => 'MyOpenLab',
+		'href'   => bp_loggedin_user_domain(),
+		'meta'	 => array(
+			'tabindex' => 95
+		)
+	) );
+}
+add_action( 'admin_bar_menu', 'openlab_link_in_toolbar', 12 );
+
+/**
+ * Add a redirect_to param to the Log Out toolbar link
+ */
+function openlab_redirect_logout_link( $wp_admin_bar ) {
+	$wp_admin_bar->add_menu( array(
+		'id'     => 'logout',
+		'title'  => __( 'Log Out' ),
+		'href'   => add_query_arg( 'redirect_to', urlencode( bp_get_root_domain() ), wp_logout_url() ),
+	) );
+}
+add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
+
+/**
+ * When a user attempts to visit a blog, check to see if the user is a member of the
+ * blog's associated group. If so, ensure that the member has access.
+ *
+ * This function should be deprecated when a more elegant solution is found.
+ * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
+ */
+function openlab_sync_blog_members_to_group() {
+	global $wpdb, $bp;
+	
+	// No need to continue if the user is not logged in, if this is not an admin page, or if
+	// the current blog is not private
+	$blog_public = get_option( 'blog_public' );
+	if ( !is_user_logged_in() || !is_admin() || (int)$blog_public < 0 ) {
+		return;
+	}
+	
+	$user_id = get_current_user_id();
+	$userdata = get_userdata( $user_id );
+	
+	// Is the user already a member of the blog?
+	if ( empty( $userdata->caps ) ) {
+		
+		// Is this blog associated with a group?
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+		
+		if ( $group_id ) {
+			
+			// Is this user a member of the group?
+			if ( groups_is_user_member( $user_id, $group_id ) ) {
+				
+				// Figure out the status
+				if ( groups_is_user_admin( $user_id, $group_id ) ) {
+					$status = 'administrator';
+				} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
+					$status = 'editor';
+				} else {
+					$status = 'author';
+				}
+				
+				// Add the user to the blog
+				add_user_to_blog( get_current_blog_id(), $user_id, $status );
+				
+				// Redirect to avoid errors
+				echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
+			}
+		}
+	}
+}
+//add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
+
+/**
+ * When a user visits a group blog, check to see whether the user should be an admin, based on
+ * membership in the corresponding group.
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
+ */
+function openlab_force_blog_role_sync() {
+	global $bp, $wpdb;
+	
+	if ( !is_user_logged_in() ) {
+		return;
+	}
+	
+	// Is this blog associated with a group?
+	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	
+	if ( $group_id ) {
+		
+		// Get the user's group status, if any
+		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
+				
+		$userdata = get_userdata( get_current_user_id() );
+		
+		if ( !empty( $member ) ) {
+			$status = 'author';
+			
+			if ( $member->is_admin ) {
+				$status = 'administrator';
+			} else if ( $member->is_mod ) {
+				$status = 'editor';
+			}
+			
+			$role_is_correct = in_array( $status, $userdata->roles );
+			
+			if ( !$role_is_correct ) {
+				$user = new WP_User( get_current_user_id() );
+				$user->set_role( $status );
+			}
+		} else {
+			$role_is_correct = empty( $userdata->roles );
+			
+			if ( !$role_is_correct ) {
+				remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
+			}
+		}
+		
+		if ( !$role_is_correct ) {				
+			// Redirect, just for good measure
+			echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
+		}
+	}
+}
+add_action( 'init', 'openlab_force_blog_role_sync', 999 );
+
+?>

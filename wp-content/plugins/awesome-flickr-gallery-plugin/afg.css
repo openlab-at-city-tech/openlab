@@ -1,0 +1,93 @@
+/* Settings that apply to entire gallery */
+div.afg-gallery {
+    margin:auto;
+}
+
+/* Effect for thumbnails in gallery */
+img.afg-img {
+    margin-top:5%;
+    opacity:1;
+    filter:alpha(opacity=100);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+}
+
+img.afg-img:hover {
+    margin-top:5%;
+    opacity:0.7;
+    filter:alpha(opacity=70);
+    box-shadow: None;
+    -moz-box-shadow: None;
+    -webkit-box-shadow: None;
+}
+
+/* Gallery structure */
+div.afg-table {
+    display:table !important;
+    margin:auto;
+    border:none; 
+}
+
+/* Table row */
+div.afg-row {
+    display:table-row !important;
+}
+
+/* Individual image cell in the gallery */
+div.afg-cell {
+    display:table-cell !important;
+    text-align:left;
+    vertical-align:top;
+    margin:auto;
+    padding-bottom:10px;
+}
+/* Hover effect for pagination links */
+a.afg-page:hover {
+    background:royalblue;
+    color:white;
+    text-decoration:none;
+}
+
+/* Pagination */
+div.afg-pagination {
+    margin:auto;
+    border:0;
+    text-align:center;
+    font-size:0.9em; 
+}
+
+font.afg-page {
+    border:1px solid gray;
+}
+
+font.afg-cur-page {
+    border:1px solid gray;
+    background-color:gray;
+    color:white;
+}
+
+/* Text decoration for pagination links */
+a.afg-page:visited, a.afg-page:link {
+    text-decoration:none;
+    border:1px solid gray;
+}
+
+/* Credit Note */
+div.afg-credit {
+    text-align:right;
+    font-size:0.9em;
+}
+
+/* Photo title */
+div.afg-title {
+    margin-right:5%;
+    margin-bottom:5%;
+}
+
+/* Photo Description */
+div.afg-description {
+    font-size:85%;
+    margin-right:5%;
+    font-style:italic;
+}

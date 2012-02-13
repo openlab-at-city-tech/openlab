@@ -157,32 +157,43 @@ function cuny_add_links_wp_trim_excerpt($text) {
 	return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
 
 }
-//
-//    This function switches to the group site, gets the blog_public option and determines if the site is public
-//    or not (private = value of "-2") and then, if it is private checks if the logged in user is registered on that blog and if so returns true
-//    otherwise (if private and not a registered member) returns false
-//
+
+/**
+ * This function checks the blog_public option of the group site, and depending on the result,
+ * returns whether the current user can view the site.
+ */
 function wds_site_can_be_viewed() {
 	global $user_ID;
 	$blog_public = false;
 	$group_id = bp_get_group_id(); 
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
+	
 	if($wds_bp_group_site_id!=""){
-		switch_to_blog($wds_bp_group_site_id);
-		$blog_private = get_option('blog_public');
-		if ($blog_private != "-2") {
-			$blog_public = true;
-		} else {
-			$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
-			if ($user_capabilities != "") {
+		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
+		
+		switch ( $blog_private ) {
+			case '-3' : // todo?
+			case '-2' :
+				if ( is_user_logged_in() ) {
+					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
+					if ($user_capabilities != "") {
+						$blog_public = true;
+					}
+				}
+				break;
+			
+			case '-1' :
+				if ( is_user_logged_in() ) {
+					$blog_public = true;
+				}
+				break;
+			
+			default :
 				$blog_public = true;
-			}
+				break;
 		}
-		restore_current_blog();
 	}
 	return $blog_public;
-		
-
 }
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name)
@@ -410,4 +421,78 @@ function openlab_get_groups_of_user( $args = array() ) {
 	return $retval;
 }
 
+/**
+ * Get Recent Account Activity sidebar to show on the my-* templates
+ */
+function openlab_recent_account_activity_sidebar() {
+?>
+	<?php if ( !bp_is_user_messages() ) { ?>
+	<?php if ( bp_is_user_friends() ) { ?>
+		<?php $friends_true = "&scope=friends"; ?>
+		<h4 class="sidebar-header">Recent Friend Activity</h4>
+	<?php } else { ?>
+		<?php $friends_true = NULL; ?>
+		<h4 class="sidebar-header">Recent Account Activity</h4>
+	<?php } ?>
+		
+	<?php if ( bp_has_activities( 'per_page=3&show_hidden=true&user_id=' . bp_loggedin_user_id() . $friends_true ) ) : ?>
+	
+		<ul id="activity-stream" class="activity-list item-list">
+			<div>
+			<?php while ( bp_activities() ) : bp_the_activity(); ?>
+		
+				<div class="activity-avatar">
+					<a href="<?php bp_activity_user_link() ?>">
+						<?php bp_activity_avatar( 'type=full&width=100&height=100' ) ?>
+					</a>
+				</div>
+			
+				<div class="activity-content">
+				
+					<div class="activity-header">
+						<?php bp_activity_action() ?>
+					</div>
+			
+					<?php if ( bp_activity_has_content() ) : ?>
+						<div class="activity-inner">
+							<?php bp_activity_content_body() ?>
+						</div>
+					<?php endif; ?>
+			
+					<?php do_action( 'bp_activity_entry_content' ) ?>
+					
+				</div>
+				<hr style="clear:both" />
+
+			<?php endwhile; ?>
+			</div>
+		</ul>
+	
+	<?php else : ?>
+		<ul id="activity-stream" class="activity-list item-list">
+			<div>
+			<div id="message" class="info">
+				<p><?php _e( 'No recent activity.', 'buddypress' ) ?></p>
+			</div>
+			</div>
+		</ul>
+	<?php endif; ?>
+	<?php } // if !is_user_messages
+
+}
+
+/**
+ * Ensure that external links in the help menu get the external-link glyph
+ */
+function openlab_help_menu_external_glyph( $items, $args ) {
+	if ( false !== strpos( $args->theme_location, 'about' ) ) {
+		foreach( $items as $key => $item ) {
+			if ( false === strpos( $item->url, bp_get_root_domain() ) ) {
+				$items[$key]->classes[] = 'external-link';
+			}
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2 );
 ?>

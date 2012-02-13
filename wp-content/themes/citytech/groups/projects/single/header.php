@@ -13,7 +13,7 @@ $group_description = $bp->groups->current_group->description;
 $faculty = groups_get_groupmeta($group_id, 'wds_faculty');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="entry-title">Projects on the OpenLab</h1>
+	<h1 class="entry-title">Project on the OpenLab</h1>
 	 <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225&height=225') ?>

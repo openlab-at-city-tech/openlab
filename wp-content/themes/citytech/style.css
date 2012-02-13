@@ -1564,7 +1564,7 @@ blockquote {
 }
 
 .entry-content p {
-	padding: 0 0 15px;
+	padding: 0;
 	font-size: 12px;
 	line-height: 18px;
 }
@@ -3284,6 +3284,11 @@ a.close-popup-login {
 #header .main-nav li.selected-page ul li a{
 	color: white;
 	font-weight:normal;
+}
+
+.menu-item.external-link a:after {
+    content: url("images/site-sidebar-icon.png");
+    padding: 0 0 0 7px;
 }
 
 .widget-error {
