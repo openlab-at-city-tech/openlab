@@ -1,6 +1,6 @@
 <?php do_action( 'bp_before_profile_edit_content' ) ?>
 
-<?php 
+<?php
 global $bp,$user_ID;
 if(is_super_admin( $user_ID )){
 	$pgroup=bp_get_current_profile_group_id();
@@ -19,9 +19,6 @@ if(is_super_admin( $user_ID )){
   }
 }
 
-$pgroup = "5";
-$account_type = "Staff";
-
 $first_name=bp_get_profile_field_data( 'field=First Name' );
 $last_name=bp_get_profile_field_data( 'field=Last Name' );
 $update_user_first = update_user_meta($user_ID,'first_name',$first_name);
@@ -34,13 +31,13 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 <form action="<?php bp_the_profile_group_edit_form_action() ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
-	
+
 		<h3 id="bread-crumb"><?php printf( __( "Edit Profile Information", "buddypress" ), bp_get_the_profile_group_name() ); ?></h3>
 
 		<ul class="button-nav">
-			<?php 
+			<?php
 			if(is_super_admin( $user_ID )){
-				bp_profile_group_tabs(); 
+				bp_profile_group_tabs();
 			}
 			?>
 		</ul>
@@ -63,13 +60,13 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
           <p class="description"></p>
           </div>
         <?php } ?>
-        
+
 		<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
 			<div<?php bp_field_css_class( 'editfield' ) ?>>
-    
-                    
-				
+
+
+
 				<?php if ( 'textbox' == bp_get_the_profile_field_type() ) : ?>
 				<?php	if(bp_get_the_profile_field_name()=="Name"){ ?>
 					<label for="<?php bp_the_profile_field_input_name() ?>"><?php echo "Display Name"; ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
@@ -88,10 +85,10 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 
 				<?php endif; ?>
 
-				<?php if ( 'selectbox' == bp_get_the_profile_field_type() ) : 
-					$style="";	
+				<?php if ( 'selectbox' == bp_get_the_profile_field_type() ) :
+					$style="";
 					if(bp_get_the_profile_field_name()=="Account Type" && !is_super_admin( $user_ID ) || $account_type){
-						//$style="style='display:none;'";	
+						//$style="style='display:none;'";
 					}?>
 
 					<label <?php echo $style;?> for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
