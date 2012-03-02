@@ -12,28 +12,28 @@ function cuny_project_archive() {
 
 	global $wpdb,$bp;
 	$ids="9999999";
-	
+
 	$sequence_type = $search_terms = '';
-	
+
 	if ( !empty( $_GET['group_sequence'] ) ) {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
 	if( !empty( $_POST['group_search'] ) ){
 		$search_terms="search_terms=".$_POST['group_search']."&";
 	}
-	
+
 	if( !empty( $_GET['search'] ) ){
 		$search_terms="search_terms=".$_GET['search']."&";
 	}
-	
+
 	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
-	
+
 	// Hack to fix pagination
-	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );	
+	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );
 
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
 	if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
-	
+
     <div class="group-count"><?php cuny_groups_pagination_count('Projects'); ?></div>
     <div class="clearfloat"></div>
 	<ul id="project-list" class="item-list">
@@ -57,7 +57,7 @@ function cuny_project_archive() {
 					     }
 					?>
 				</div>
-				
+
 			</li>
 			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
 		<?php $count++; ?>
@@ -84,10 +84,10 @@ function cuny_buddypress_courses_actions() { ?>
 	//if($bp->loggedin_user->id > 0){?>
     <!--<div class="generic-button"><a href="<?php //echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>"><?php //_e( 'Create a Project', 'buddypress' ) ?></a></div>-->
     <?php //} ?>
-    
+
     <h2 class="sidebar-title">Find a Project</h2>
     <p>Narrow down your search using the filters or search box below.</p>
-    
+
     <?php if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
 }
@@ -104,7 +104,7 @@ switch ($_GET['group_sequence']) {
 		$display_option = "Last Active";
 		$option_value = "active";
 		break;
-	default: 
+	default:
 		$display_option = "Select Desired Sequence";
 		$option_value = "";
 		break;
@@ -125,12 +125,12 @@ switch ($_GET['group_sequence']) {
     <div class="archive-search">
     <div class="gray-square"></div>
     <form method="post">
-    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
     <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
     <div class="clearfloat"></div>
     </div><!--archive search-->
-<?php 
+<?php
 }
 
 genesis();
