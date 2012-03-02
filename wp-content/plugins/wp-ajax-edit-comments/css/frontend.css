@@ -1,0 +1,29 @@
+/*Expand icon*/
+#aec_edit_options {
+	position: relative;
+	z-index: 2;
+	margin-left: 10px;
+	height: 32px;
+}
+.aec_expand, .aec_retract {
+	width: 32px;
+    height: 32px;
+    display:block;
+    float:left;
+    margin-left: 5px;
+}
+.aec_retract { 
+	background-image: url('images/full_screen_close.png');
+}
+.aec_expand {
+	background-image: url('images/full_screen.png');
+}
+/*popup box*/
+#aec-popup { padding: 0 20px; }
+#aec-popup p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 22px;
+}
+#aec-popup textarea { width: 100%; padding: 5px; font-size: 18px; font-family: Verdana, Arial, Helvetica, sans-serif; }
+#aec-popup textarea, #aec-popup input { border: 1px solid #000;}
+#aec-popup input { padding: 5px; margin-top: 15px; margin-right: 10px; }

@@ -1,0 +1,1515 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjax Edit Comments V4 - 正體中文語系檔\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-24 22:57-0600\n"
+"PO-Revision-Date: 2010-05-30 21:42-0800\n"
+"Last-Translator: James Wu <blog@jameswublg.com>\n"
+"Language-Team: http://jameswublog.com <blog@jameswublog.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _c;_e;__;__ngettext:1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: plurals=2; plural=n==1?0:1;\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: TAIWAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wp-ajax-edit-comments.php:241
+#: wp-ajax-edit-comments.php:282
+msgid "Comment Editor"
+msgstr "回應編輯器"
+
+#: wp-ajax-edit-comments.php:244
+msgid "Click to Edit"
+msgstr "按此編輯回應"
+
+#: wp-ajax-edit-comments.php:250
+#: wp-ajax-edit-comments.php:253
+#: php/admin-panel.php:365
+#: php/request-deletion.php:57
+msgid "Request Deletion"
+msgstr "申請刪文"
+
+#: wp-ajax-edit-comments.php:258
+#: wp-ajax-edit-comments.php:261
+#: wp-ajax-edit-comments.php:2002
+#: wp-ajax-edit-comments.php:2023
+#: php/admin-panel.php:365
+msgid "Delete"
+msgstr "刪除"
+
+#: wp-ajax-edit-comments.php:285
+#: wp-ajax-edit-comments.php:2019
+msgid "Edit"
+msgstr "編輯"
+
+#: wp-ajax-edit-comments.php:291
+#: wp-ajax-edit-comments.php:294
+msgid "Restore"
+msgstr "還原"
+
+#: wp-ajax-edit-comments.php:300
+#: wp-ajax-edit-comments.php:303
+msgid "Delete Permanently"
+msgstr "永久刪除"
+
+#: wp-ajax-edit-comments.php:310
+#: wp-ajax-edit-comments.php:313
+#: wp-ajax-edit-comments.php:2005
+#: wp-ajax-edit-comments.php:2026
+#: php/comment-editor.php:135
+msgid "E-mail"
+msgstr "電子信箱"
+
+#: wp-ajax-edit-comments.php:322
+msgid "Move Comments"
+msgstr "搬移回應?"
+
+#: wp-ajax-edit-comments.php:325
+#: wp-ajax-edit-comments.php:2004
+#: wp-ajax-edit-comments.php:2025
+#: php/move-comment.php:82
+#: php/move-comment.php:107
+#: php/move-comment.php:132
+msgid "Move"
+msgstr "搬移"
+
+#: wp-ajax-edit-comments.php:332
+#: wp-ajax-edit-comments.php:335
+#: wp-ajax-edit-comments.php:2003
+#: wp-ajax-edit-comments.php:2024
+msgid "De-link"
+msgstr "刪除網址連結"
+
+#: wp-ajax-edit-comments.php:345
+#: wp-ajax-edit-comments.php:348
+#: wp-ajax-edit-comments.php:1999
+#: wp-ajax-edit-comments.php:2020
+msgid "Approve"
+msgstr "核准"
+
+#: wp-ajax-edit-comments.php:358
+#: wp-ajax-edit-comments.php:361
+#: wp-ajax-edit-comments.php:2000
+#: wp-ajax-edit-comments.php:2021
+msgid "Moderate"
+msgstr "待審核"
+
+#: wp-ajax-edit-comments.php:371
+#: wp-ajax-edit-comments.php:374
+#: wp-ajax-edit-comments.php:2001
+#: wp-ajax-edit-comments.php:2022
+#: php/comment-editor.php:185
+#: php/comment-editor.php:192
+msgid "Spam"
+msgstr "垃圾留言"
+
+#: wp-ajax-edit-comments.php:383
+#: wp-ajax-edit-comments.php:386
+#: wp-ajax-edit-comments.php:2006
+#: wp-ajax-edit-comments.php:2027
+#: php/blacklist-comment.php:136
+msgid "Blacklist"
+msgstr "加入黑名單"
+
+#: wp-ajax-edit-comments.php:383
+msgid "Blacklist Comment"
+msgstr "回應黑名單"
+
+#: wp-ajax-edit-comments.php:392
+#: wp-ajax-edit-comments.php:395
+#: php/comment-editor.php:186
+#: php/comment-editor.php:193
+msgid "Trash"
+msgstr "垃圾桶"
+
+#: wp-ajax-edit-comments.php:412
+#: wp-ajax-edit-comments.php:2289
+msgid "More Options"
+msgstr "更多選項"
+
+#: wp-ajax-edit-comments.php:563
+msgid "Undo"
+msgstr "取消"
+
+#: wp-ajax-edit-comments.php:949
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "已編輯過在文章 %s 裡面的回應"
+
+#: wp-ajax-edit-comments.php:950
+#, php-format
+msgid "Author: %s\n"
+msgstr "作者：%s\n"
+
+#: wp-ajax-edit-comments.php:951
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "作者的URL：%s\n"
+
+#: wp-ajax-edit-comments.php:952
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "作者的E-mail：%s\n"
+
+#: wp-ajax-edit-comments.php:953
+msgid "Comment:\n"
+msgstr "回應：\n"
+
+#: wp-ajax-edit-comments.php:954
+msgid "See all comments on this post here:\n"
+msgstr "檢示在此篇文章中的所有回應：\n"
+
+#: wp-ajax-edit-comments.php:956
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "新的已被編輯之回應在：%s"
+
+#: wp-ajax-edit-comments.php:1111
+msgid "Unknown error."
+msgstr "未知的錯誤。"
+
+#: wp-ajax-edit-comments.php:1222
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "在有其它回應發表之後，您無法編輯回應。"
+
+#: wp-ajax-edit-comments.php:1223
+msgid "The time to edit your comment has elapsed."
+msgstr "已超過您可以編輯回應的時間了。"
+
+#: wp-ajax-edit-comments.php:1224
+msgid "You do not have permission to edit this comment."
+msgstr "您沒有足夠的權限來編輯此回應。"
+
+#: wp-ajax-edit-comments.php:1226
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "此回應無法編輯，因為它已被標示為垃圾留言。"
+
+#: wp-ajax-edit-comments.php:1227
+msgid "Comment loading failed."
+msgstr "回應讀取失敗。"
+
+#: wp-ajax-edit-comments.php:1228
+msgid "Comment editing has been disabled."
+msgstr "編輯回應的功能已被取消。"
+
+#: wp-ajax-edit-comments.php:1229
+msgid "Could not mark as spam."
+msgstr "無法標示為垃圾留言。"
+
+#: wp-ajax-edit-comments.php:1230
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "您沒有足夠的權限來將此回應標示為垃圾留言。"
+
+#: wp-ajax-edit-comments.php:1231
+msgid "Could not delete comment."
+msgstr "無法刪除回應。"
+
+#: wp-ajax-edit-comments.php:1232
+msgid "You do not have permission to delete this comment."
+msgstr "您沒有足夠的權限來刪除此回應。"
+
+#: wp-ajax-edit-comments.php:1233
+msgid "You do not have permission to approve this comment."
+msgstr "您沒有足夠的權限來核准此回應。"
+
+#: wp-ajax-edit-comments.php:1234
+msgid "Could not approve comment."
+msgstr "無法核准回應。"
+
+#: wp-ajax-edit-comments.php:1235
+msgid "Could not mark this comment for moderation."
+msgstr "無法標示此回應為待審核。"
+
+#: wp-ajax-edit-comments.php:1236
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "您沒有足夠的權限，來將此回應標示為待審核。"
+
+#: wp-ajax-edit-comments.php:1237
+msgid "Please enter a valid email address."
+msgstr "請輸入正確的電子郵件地址"
+
+#: wp-ajax-edit-comments.php:1238
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "請填入必要的欄位 (姓名、E-mail)"
+
+#: wp-ajax-edit-comments.php:1239
+msgid "You cannot have an empty comment."
+msgstr "您無法留下空白回應。"
+
+#: wp-ajax-edit-comments.php:1240
+msgid "You do not have permission to delink this comment."
+msgstr "您沒有足夠的權限來刪除此回應。"
+
+#: wp-ajax-edit-comments.php:1241
+msgid "Your comment was marked for moderation"
+msgstr "無法標示此回應為待審核。"
+
+#: wp-ajax-edit-comments.php:1242
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "此回應無法編輯，因為它已被標示為垃圾留言。"
+
+#: wp-ajax-edit-comments.php:1243
+msgid "Request failed."
+msgstr "申請失敗。"
+
+#: wp-ajax-edit-comments.php:1244
+msgid "You have not selected anything to blacklist."
+msgstr "您並沒有把任何東西加入黑名單中"
+
+#: wp-ajax-edit-comments.php:1245
+msgid "Upgrade check failed."
+msgstr "升級檢查失敗"
+
+#: wp-ajax-edit-comments.php:1246
+msgid "You are using the latest version."
+msgstr "你在使用最新的版本"
+
+#: wp-ajax-edit-comments.php:1492
+#, php-format
+msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
+msgstr "有一位用戶，要申請刪除他的在您這篇文章中的留言 #%1$s \"%2$s\"。  此則回應已被歸入待審留言清單中。"
+
+#: wp-ajax-edit-comments.php:1493
+msgid "The reason given is: "
+msgstr "理由是："
+
+#: wp-ajax-edit-comments.php:1494
+#, php-format
+msgid "E-mail : %s"
+msgstr "信件： %s"
+
+#: wp-ajax-edit-comments.php:1495
+#, php-format
+msgid "URL    : %s"
+msgstr "URL    : %s"
+
+#: wp-ajax-edit-comments.php:1496
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: wp-ajax-edit-comments.php:1498
+#, php-format
+msgid "Delete it: %s"
+msgstr "刪除： %s"
+
+#: wp-ajax-edit-comments.php:1499
+#, php-format
+msgid "Approve it: %s"
+msgstr "核准?  %s"
+
+#: wp-ajax-edit-comments.php:1500
+#, php-format
+msgid "Spam it: %s"
+msgstr "加入垃圾留言： %s"
+
+#: wp-ajax-edit-comments.php:1508
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "申請刪除留言：  \"%2$s\""
+
+#: wp-ajax-edit-comments.php:1634
+msgid "Comment successfully saved"
+msgstr "回應已成功儲存。"
+
+#: wp-ajax-edit-comments.php:1700
+#, php-format
+msgid "An upgrade (Version %s) is available.  Please visit your"
+msgstr "已有更新版 (版本 %s). 請到您的"
+
+#: wp-ajax-edit-comments.php:1700
+msgid "member's section"
+msgstr "會員專區"
+
+#: wp-ajax-edit-comments.php:1710
+#: wp-ajax-edit-comments.php:1907
+msgid "There is a new version of WP Ajax Edit Comments available."
+msgstr "已有更新版的 WP Ajax Edit Comments 。"
+
+#: wp-ajax-edit-comments.php:1710
+msgid "Upgrade automatically"
+msgstr "自動更新"
+
+#: wp-ajax-edit-comments.php:1861
+msgid "Oops!! Something went wrong.<br/>Please try again or <a href='http://www.ajaxeditcomments.com/contact/'>contact us</a>."
+msgstr "糟糕!! 某些地方出了些問題。<br/>請重試一次，或 <a href='http://www.ajaxeditcomments.com/contact/'>與我們聯絡</a>。"
+
+#: wp-ajax-edit-comments.php:1907
+#, php-format
+msgid "View version %s Details"
+msgstr "查看 %s  版本詳情"
+
+#: wp-ajax-edit-comments.php:1910
+msgid "Check for upgrades"
+msgstr "檢查更新"
+
+#: wp-ajax-edit-comments.php:1946
+msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+msgstr "您編輯的回應已被標示為垃圾留言。如果這不應該發生，請您與管理者聯繫。"
+
+#: wp-ajax-edit-comments.php:1970
+msgid "Get your own comment editor for your WordPress website.  Try [url]Ajax Edit Comments[/url] today!"
+msgstr "您也想在WordPress 部落格裡，方便快速的的管理回應嗎？ 請今天就試用 [url]Ajax Edit Comments[/url] !"
+
+#: wp-ajax-edit-comments.php:2114
+msgid "Checking..."
+msgstr "檢查中..."
+
+#: wp-ajax-edit-comments.php:2114
+msgid "Check for Upgrades"
+msgstr "檢查更新"
+
+#: wp-ajax-edit-comments.php:2131
+#: php/admin-panel-support.php:109
+msgid "show"
+msgstr "顯示"
+
+#: wp-ajax-edit-comments.php:2131
+msgid "hide"
+msgstr "隱藏"
+
+#: wp-ajax-edit-comments.php:2201
+msgid "Comment Box"
+msgstr "回應欄位"
+
+#: wp-ajax-edit-comments.php:2270
+msgid "minutes"
+msgstr "分"
+
+#: wp-ajax-edit-comments.php:2271
+msgid "minute"
+msgstr "分"
+
+#: wp-ajax-edit-comments.php:2272
+msgid "and"
+msgstr "又"
+
+#: wp-ajax-edit-comments.php:2273
+msgid "seconds"
+msgstr "秒"
+
+#: wp-ajax-edit-comments.php:2274
+msgid "second"
+msgstr "秒"
+
+#: wp-ajax-edit-comments.php:2275
+msgid "Mark for Moderation?"
+msgstr "標示為待審核?"
+
+#: wp-ajax-edit-comments.php:2276
+msgid "Approve Comment?"
+msgstr "核准回應?"
+
+#: wp-ajax-edit-comments.php:2277
+msgid "Mark as Spam?"
+msgstr "標示為垃圾留言?"
+
+#: wp-ajax-edit-comments.php:2278
+msgid "Delete this comment?"
+msgstr "刪除此回應?"
+
+#: wp-ajax-edit-comments.php:2279
+msgid "Anonymous"
+msgstr "匿名"
+
+#: wp-ajax-edit-comments.php:2280
+msgid "Loading..."
+msgstr "讀取中..."
+
+#: wp-ajax-edit-comments.php:2281
+msgid "Ready"
+msgstr "待命中"
+
+#: wp-ajax-edit-comments.php:2282
+msgid "Sending..."
+msgstr "傳送中..."
+
+#: wp-ajax-edit-comments.php:2283
+msgid "Message Sent"
+msgstr "已傳送訊息"
+
+#: wp-ajax-edit-comments.php:2284
+msgid "Comment Loaded Successfully"
+msgstr "回應已成功讀取。"
+
+#: wp-ajax-edit-comments.php:2285
+msgid "Saving..."
+msgstr "儲存中..."
+
+#: wp-ajax-edit-comments.php:2286
+msgid "Blacklisting..."
+msgstr "加入黑名單中..."
+
+#: wp-ajax-edit-comments.php:2287
+msgid "Comment Successfully Saved"
+msgstr "回應已成功儲存"
+
+#: wp-ajax-edit-comments.php:2288
+msgid "De-link Successful"
+msgstr "已成功刪除連結"
+
+#: wp-ajax-edit-comments.php:2290
+msgid "Less Options"
+msgstr "較少選項"
+
+#: wp-ajax-edit-comments.php:2292
+msgid "Request has been sent successfully"
+msgstr "申請已成功送出"
+
+#: wp-ajax-edit-comments.php:2293
+msgid "Error sending request"
+msgstr "申請在傳送的過程中發生錯誤"
+
+#: wp-ajax-edit-comments.php:2294
+msgid "Approving..."
+msgstr "核准中..."
+
+#: wp-ajax-edit-comments.php:2295
+msgid "De-linking..."
+msgstr "刪除網址連結中..."
+
+#: wp-ajax-edit-comments.php:2296
+msgid "Moderating..."
+msgstr "審核中..."
+
+#: wp-ajax-edit-comments.php:2297
+msgid "Spamming..."
+msgstr "歸類為垃圾留言中..."
+
+#: wp-ajax-edit-comments.php:2298
+msgid "Deleting..."
+msgstr "刪除中..."
+
+#: wp-ajax-edit-comments.php:2299
+msgid "Restoring..."
+msgstr "還原中..."
+
+#: wp-ajax-edit-comments.php:2300
+msgid "Undoing..."
+msgstr "取消中..."
+
+#: wp-ajax-edit-comments.php:2301
+msgid "Undo Successful"
+msgstr "已成功取消"
+
+#: wp-ajax-edit-comments.php:2302
+msgid "Comment Deleted Permanently"
+msgstr "回應已被永久刪除"
+
+#: wp-ajax-edit-comments.php:2303
+msgid "Input Fields are Required"
+msgstr "輸入欄位為必填"
+
+#: wp-ajax-edit-comments.php:2304
+msgid "E-mail Address is Invalid"
+msgstr "無效的電子郵件地址"
+
+#: wp-ajax-edit-comments.php:2308
+#: php/admin-panel.php:307
+#: php/admin-panel.php:343
+#: php/admin-panel.php:355
+#: php/admin-panel.php:357
+#: php/admin-panel.php:359
+#: php/admin-panel.php:361
+#: php/admin-panel.php:363
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:389
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:407
+#: php/admin-panel.php:409
+#: php/admin-panel.php:558
+#: php/admin-panel.php:565
+#: php/admin-panel.php:572
+#: php/admin-panel.php:585
+#: php/admin-panel.php:587
+#: php/admin-panel.php:590
+#: php/admin-panel.php:598
+#: php/admin-panel.php:618
+#: php/admin-panel.php:620
+#: php/admin-panel.php:627
+#: php/admin-panel.php:629
+#: php/admin-panel.php:637
+#: php/admin-panel.php:645
+#: php/admin-panel.php:653
+#: php/admin-panel.php:681
+#: php/admin-panel.php:689
+#: php/admin-panel.php:704
+msgid "Yes"
+msgstr "是"
+
+#: wp-ajax-edit-comments.php:2309
+#: php/admin-panel.php:307
+#: php/admin-panel.php:343
+#: php/admin-panel.php:355
+#: php/admin-panel.php:357
+#: php/admin-panel.php:359
+#: php/admin-panel.php:361
+#: php/admin-panel.php:363
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:389
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:407
+#: php/admin-panel.php:409
+#: php/admin-panel.php:558
+#: php/admin-panel.php:565
+#: php/admin-panel.php:572
+#: php/admin-panel.php:585
+#: php/admin-panel.php:587
+#: php/admin-panel.php:590
+#: php/admin-panel.php:598
+#: php/admin-panel.php:618
+#: php/admin-panel.php:620
+#: php/admin-panel.php:627
+#: php/admin-panel.php:629
+#: php/admin-panel.php:637
+#: php/admin-panel.php:645
+#: php/admin-panel.php:653
+#: php/admin-panel.php:681
+#: php/admin-panel.php:689
+#: php/admin-panel.php:704
+msgid "No"
+msgstr "否"
+
+#: wp-ajax-edit-comments.php:2310
+msgid "Are you sure?"
+msgstr "您確定嗎？"
+
+#: php/admin-panel-support.php:65
+msgid "Support Request Sent."
+msgstr "支援申請已寄出。"
+
+#: php/admin-panel-support.php:71
+msgid "Support"
+msgstr "支援"
+
+#: php/admin-panel-support.php:74
+msgid "Support Request"
+msgstr "申請支援"
+
+#: php/admin-panel-support.php:75
+msgid "Support Forums"
+msgstr "支援討論區"
+
+#: php/admin-panel-support.php:76
+msgid "Documentation"
+msgstr "文件"
+
+#: php/admin-panel-support.php:84
+msgid "Your Name"
+msgstr "您的姓名"
+
+#: php/admin-panel-support.php:89
+msgid "Email"
+msgstr "您的電子信箱"
+
+#: php/admin-panel-support.php:94
+msgid "Description of Issue"
+msgstr "簡述問題"
+
+#: php/admin-panel-support.php:96
+msgid "Please state in detail what problems you are experiencing.  Details we need to know are:"
+msgstr "請詳述您所遇到的問題。我們需要知道的詳情是："
+
+#: php/admin-panel-support.php:98
+msgid "The problem"
+msgstr "問題"
+
+#: php/admin-panel-support.php:99
+msgid "Steps to duplicate the problem"
+msgstr "產生此問題的步驟"
+
+#: php/admin-panel-support.php:100
+msgid "Whether you are experiencing this problem on the front-end, the admin-panel, or both"
+msgstr "這個問題是在前臺、管理介面發生？還是兩者皆有？"
+
+#: php/admin-panel-support.php:101
+msgid "What browsers you are using to duplicate the problem"
+msgstr "問題發生時，您是使用何種瀏覽器？"
+
+#: php/admin-panel-support.php:107
+msgid "Information Collection"
+msgstr "資料收集"
+
+#: php/admin-panel-support.php:109
+msgid "By clicking Submit, you agree to send us the following information"
+msgstr "在您按下傳送的同時，您同意把以下的資料寄給我們"
+
+#: php/admin-panel-support.php:152
+msgid "Submit Support Request"
+msgstr "傳送支援申請"
+
+#: php/admin-panel-support.php:157
+#, php-format
+msgid "To receive help from AEC team members and the AEC community, please consider leaving a support request via our %sSupport Forums%s"
+msgstr "若要同時收到 AEC 開發團隊和 AEC 社群的協助，請考慮在官方的討論區中 %sSupport Forums%s，把您的問題提出討論"
+
+#: php/admin-panel-support.php:160
+#, php-format
+msgid "For in-depth documenation, including feature descriptions and how-to videos, please visit our %sDocumentation Section%s"
+msgstr "如要獲取更詳細的說明文件，包括功能簡介和教學影片，請訪問我們的 %sDocumentation Section%s"
+
+#: php/admin-panel.php:24
+msgid "Security keys deleted"
+msgstr "安全金鑰已刪除"
+
+#: php/admin-panel.php:38
+msgid "Comment time must be a numerical value"
+msgstr "可修改的回覆時間必需為「數值」"
+
+#: php/admin-panel.php:41
+msgid "Comment time must be greater than one minute."
+msgstr "回應的修改時間必需大於一分鐘。"
+
+#: php/admin-panel.php:60
+msgid "Authentication Key could not be validated."
+msgstr "無法驗證授權碼"
+
+#: php/admin-panel.php:60
+#: php/admin-panel.php:88
+msgid "Please try again later."
+msgstr "請稍後再重試一次。"
+
+#: php/admin-panel.php:65
+msgid "Invalid Authentication Key"
+msgstr "無效的授權驗證碼"
+
+#: php/admin-panel.php:71
+msgid "Number of Sites Exceeded"
+msgstr "可安裝此外掛的部落格數量，上限已經超過"
+
+#: php/admin-panel.php:77
+msgid "Authentication Key is valid"
+msgstr "有效的授權驗證碼"
+
+#: php/admin-panel.php:88
+#: php/admin-panel.php:92
+msgid "Site could not be removed."
+msgstr "網站不能被移除。"
+
+#: php/admin-panel.php:97
+msgid "Site removed."
+msgstr "網站已移除。"
+
+#: php/admin-panel.php:109
+msgid "Affiliate ID could not be validated.  Please try again later."
+msgstr "夥伴行銷編號 (Affiliate ID) "
+
+#: php/admin-panel.php:112
+msgid "Invalid Affiliate ID"
+msgstr "無效的夥伴行銷編號 (Affiliate ID)"
+
+#: php/admin-panel.php:267
+msgid "Settings successfully updated."
+msgstr "設定已成功更新。"
+
+#: php/admin-panel.php:275
+msgid "Your commentators have edited their comments "
+msgstr "您的回應者已編輯了其回應"
+
+#: php/admin-panel.php:275
+msgid "times"
+msgstr "次"
+
+#: php/admin-panel.php:281
+msgid "Global Options"
+msgstr "整體選項"
+
+#: php/admin-panel.php:282
+msgid "Individual Options"
+msgstr "個別選項"
+
+#: php/admin-panel.php:283
+msgid "Cleanup"
+msgstr "清除"
+
+#: php/admin-panel.php:290
+msgid "General"
+msgstr "一般"
+
+#: php/admin-panel.php:291
+#: php/admin-panel.php:340
+msgid "Affiliate Options"
+msgstr "夥伴行銷選項"
+
+#: php/admin-panel.php:292
+msgid "Anonymous Users"
+msgstr "未註冊用戶"
+
+#: php/admin-panel.php:293
+msgid "Registered Users"
+msgstr "已註冊用戶"
+
+#: php/admin-panel.php:294
+msgid "Styles"
+msgstr "樣式"
+
+#: php/admin-panel.php:295
+msgid "Icons"
+msgstr "圖示"
+
+#: php/admin-panel.php:296
+msgid "Other options"
+msgstr "其他選項"
+
+#: php/admin-panel.php:304
+msgid "Authentication Key:"
+msgstr "授權驗證碼(Authentication Key)："
+
+#: php/admin-panel.php:305
+msgid "Enter Your Authentication Key"
+msgstr "輸入您的授權驗證碼："
+
+#: php/admin-panel.php:305
+msgid "The Authentication Key enables automatic upgrades within the WordPress admin panel.  An Authentication Key is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "授權驗證碼(Authentication Key) 可以讓您在WordPress 的後台管理頁面中，開啟自動更新本外掛的功能。<a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments 技術支援論壇</a>的付費會員，皆會被授予一個 授權驗證碼。"
+
+#: php/admin-panel.php:306
+msgid "Remove Site?"
+msgstr "移除網站？"
+
+#: php/admin-panel.php:306
+msgid "Selecting \"Yes\" will remove the current site and allow you to use the Authentication Key on another site."
+msgstr "選擇 \"是\" 將會移除目前這個網站，並允許您在其他網站使用這組授權驗證碼。"
+
+#: php/admin-panel.php:312
+msgid "Set comment time (minutes):"
+msgstr "設定回應可被編輯的時間 (以分鐘為單位)："
+
+#: php/admin-panel.php:316
+msgid "Spam notification text:"
+msgstr "垃圾留言通知文字："
+
+#: php/admin-panel.php:318
+msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr "如果可能的話，請限制在一行，當被限制發表回應的用戶留言或編輯其回應時，將會看到這段文字。(允許的標籤：em, a, strong, blockquote)："
+
+#: php/admin-panel.php:329
+msgid "Affiliate ID:"
+msgstr "夥伴行銷編號 (Affiliate ID)："
+
+#: php/admin-panel.php:330
+msgid "The Affiliate ID allows you to make money from the Ajax Edit Comments plugin through referrals.  An Affiliate ID is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "夥伴行銷編號 (Affiliate ID) 可以讓您透過銷售 Ajax Edit Comments 外掛，來賺取介紹費。您只需成為 <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments 技術支援論壇</a> 的付費會員，即可得到一個夥伴行銷編號。"
+
+#: php/admin-panel.php:333
+msgid "Affiliate Text:"
+msgstr "夥伴行銷文字："
+
+#: php/admin-panel.php:335
+msgid "This text will show when an anonymous commenter sees the editing options. A valid Affiliate ID is required."
+msgstr "此段文字可以讓未註冊的用戶，看到編輯的選項。此功能需要有一個有效的夥伴行銷編號 (Affiliate ID)才可使用。"
+
+#: php/admin-panel.php:342
+msgid "Display for anonymous commenters?"
+msgstr "是否要顯示給未註冊的用戶?"
+
+#: php/admin-panel.php:342
+msgid "Selecting \"Yes\" will show the \"Affiliate Text\" above the editing options for each anonymous comment posted.  A valid Affiliate ID is required."
+msgstr "如選擇  \"是\"，則在未註冊的用戶的編輯選項中，顯示 \"夥伴行銷的文字\"。 此功能需要有一個有效的夥伴行銷編號 (Affiliate ID)才可使用。"
+
+#: php/admin-panel.php:354
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "允許未註冊用戶編輯其所發表的回應？"
+
+#: php/admin-panel.php:354
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr "選擇 \"否\"時，將會關閉未註冊用戶編輯其回應的功能。"
+
+#: php/admin-panel.php:356
+msgid "Allow editing after additional comments have been posted?"
+msgstr "允許在有其它回應發表之後編輯回應?"
+
+#: php/admin-panel.php:356
+msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+msgstr "選擇 \"否\"時，當有另一個回應已發表，將防止用戶編輯其之前的回應。"
+
+#: php/admin-panel.php:358
+msgid "Allow Users to Edit Their Name?"
+msgstr "允許用戶編輯其姓名?"
+
+#: php/admin-panel.php:358
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "如選擇 \"否\"時，將會關閉編輯其姓名。"
+
+#: php/admin-panel.php:360
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "允許用戶編輯其E-mail地址?"
+
+#: php/admin-panel.php:360
+msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+msgstr "如選擇 \"否\"時，將會關閉編輯其e-mail地址。您會需要此選項的其中一個原因，或許是您認為用戶有可能是 Avatars 的用戶。"
+
+#: php/admin-panel.php:362
+msgid "Allow Users to Edit Their URLs?"
+msgstr "允許用戶編輯其URL?"
+
+#: php/admin-panel.php:362
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "選擇 \"否\"時，將會關閉編輯其URL。"
+
+#: php/admin-panel.php:364
+msgid "Request Deletion Behavior"
+msgstr "申請刪除留言方式"
+
+#: php/admin-panel.php:364
+msgid "Determine if you want users to request deletion (comments are sent to moderation with admin notification) or delete comments (comments are deleted immediately with no admin notification).  Select Off if you would like to disable this feature."
+msgstr "此選項決定如果您要讓用戶請刪除留言的方式 (例如: 用戶刪除其留言時，需通知並經管理員核准)，或不需申請(例如: 用戶可直接刪除其留言，不需再通知管理員)。如果您要停用此項功能，請選擇關閉。"
+
+#: php/admin-panel.php:365
+msgid "Off"
+msgstr "關閉"
+
+#: php/admin-panel.php:376
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "允許已註冊的用戶編輯其回應?"
+
+#: php/admin-panel.php:376
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr "選擇 \"否\"時，將會關閉已註冊用戶編輯其回應的功能。"
+
+#: php/admin-panel.php:378
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "允許已註冊的用戶無限期的編輯回應?"
+
+#: php/admin-panel.php:379
+msgid "Selecting \"Yes\" will allow users registered on your website to edit comments without a time limit."
+msgstr "如選擇  \"是\"，將允許已註冊的用戶在您部落格上無限期的編輯回應。"
+
+#: php/admin-panel.php:381
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "允許已註冊的用戶編輯其姓名?"
+
+#: php/admin-panel.php:382
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their names.  This can prevent issues if a user wishes to impersonate others."
+msgstr "如選擇  \"是\"，將允許已註冊的用戶在您部落格上的用戶編輯其姓名，這可以防止用戶被冒名發表回應的問題。"
+
+#: php/admin-panel.php:384
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "允許已註冊的用戶編輯其E-mail地址?"
+
+#: php/admin-panel.php:385
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their e-mail address."
+msgstr "如選擇  \"是\"，將允許已註冊的用戶在您部落格上編輯其電子信箱l地址。"
+
+#: php/admin-panel.php:387
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "允許已註冊的用戶編輯其URL?"
+
+#: php/admin-panel.php:388
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their URL."
+msgstr "如選擇  \"是\"，將允許已註冊的用戶在您部落格上者編輯其網站地址。"
+
+#: php/admin-panel.php:400
+msgid "Use RTL StyleSheet?"
+msgstr "是否使用 RTL StyleSheet?"
+
+#: php/admin-panel.php:402
+msgid "Turn Off clearfix:after?"
+msgstr "關閉 clearfix:after?"
+
+#: php/admin-panel.php:403
+msgid "The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "使用 Clearfix 會啟用預設怖景主題的最大相容性。"
+
+#: php/admin-panel.php:405
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "關閉管理者的JavaScript捲軸?"
+
+#: php/admin-panel.php:406
+msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "如果您是管理者，外掛將會嘗試修正文章裡錯誤的間距。"
+
+#: php/admin-panel.php:408
+msgid "Comment Edit Interface On Bottom?"
+msgstr "將回應編輯介面置於底部?"
+
+#: php/admin-panel.php:419
+msgid "Icon Display"
+msgstr "顯示圖示"
+
+#: php/admin-panel.php:421
+msgid "Select an option below to determine how the icons are displayed on your website."
+msgstr "請選擇在您部落格中，您要如何顯示小圖示的方式。"
+
+#: php/admin-panel.php:423
+msgid "Text Only"
+msgstr "只能文字"
+
+#: php/admin-panel.php:424
+msgid "Classic"
+msgstr "傳統"
+
+#: php/admin-panel.php:425
+msgid "Dropdown"
+msgstr "下拉"
+
+#: php/admin-panel.php:426
+msgid "Icons Only"
+msgstr "只顯示圖示"
+
+#: php/admin-panel.php:430
+msgid "Icon Set"
+msgstr "圖示組"
+
+#: php/admin-panel.php:432
+msgid "Select an option below to display the icon set on your website."
+msgstr "請選擇您要使用哪一組小圖示，顯示在您的部落格中。"
+
+#: php/admin-panel.php:454
+msgid "Icon Drop Down Menu"
+msgstr "圖示下拉式選單"
+
+#: php/admin-panel.php:456
+msgid "Drag and drop between lists to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "在不同的清單間拖放，以調整圖示的順序。請按圖示來開啟或停用選項。"
+
+#: php/admin-panel.php:494
+#: php/admin-panel.php:534
+msgid "text"
+msgstr "文字"
+
+#: php/admin-panel.php:514
+msgid "Classic and Icons Only Vew"
+msgstr "傳統和只顯示圖示"
+
+#: php/admin-panel.php:516
+msgid "Drag and drop to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "使用拖放來調整圖示的順序。請按圖示來開啟或停用選項。"
+
+#: php/admin-panel.php:555
+msgid "Display Options"
+msgstr "顯示選項"
+
+#: php/admin-panel.php:557
+msgid "Display on pages?"
+msgstr "是否要顯示在網頁上?"
+
+#: php/admin-panel.php:557
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "選擇 \"否\"時，將會關閉編輯回應的功能。"
+
+#: php/admin-panel.php:562
+msgid "Countdown Timer"
+msgstr "倒數計時器"
+
+#: php/admin-panel.php:564
+msgid "Show a Countdown Timer?"
+msgstr "顯示倒數計時器?"
+
+#: php/admin-panel.php:564
+msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+msgstr "選擇 \"否\"時，將會將關閉非管理員回應者的倒數計時器。"
+
+#: php/admin-panel.php:569
+msgid "Edit E-mails"
+msgstr "編輯 E-mails"
+
+#: php/admin-panel.php:571
+msgid "Allow Edit E-mails?"
+msgstr "允許編輯 E-mails?"
+
+#: php/admin-panel.php:571
+msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+msgstr "選擇 \"是\"時，當每次有人編輯其回應時，將會寄一封電子郵件給您。"
+
+#: php/admin-panel.php:576
+msgid "Spam Protection"
+msgstr "垃圾留言保護制度"
+
+#: php/admin-panel.php:578
+msgid "Akismet"
+msgstr "Akismet ( 處理網站中的垃圾回應 ）服務"
+
+#: php/admin-panel.php:578
+msgid "Defensio"
+msgstr "Defensio ( 處理網站中的惡意程式 ）服務"
+
+#: php/admin-panel.php:578
+msgid "None"
+msgstr "無"
+
+#: php/admin-panel.php:582
+msgid "Performance"
+msgstr "執行效率"
+
+#: php/admin-panel.php:584
+msgid "Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)"
+msgstr "將 Scripts 放在 Footer? (此功能只支援 WordPress 2.8 以上的版本，並需有相容的主題) "
+
+#: php/admin-panel.php:586
+msgid "Use Compressed JavaScript Files?"
+msgstr "使用被壓縮的 JavaScript 檔?"
+
+#: php/admin-panel.php:588
+msgid "Load wp-load.php Directly?"
+msgstr "直接加載 wp-load.php ？"
+
+#: php/admin-panel.php:589
+msgid "Loading wp-load.php directly prevents most plugin conflicts.  It requires that the wp-content folder be in the default location."
+msgstr "直接加載 wp-load.php 可避免大多數外掛的衝突。wp-content 的資料夾必須要在預設的位置裡。"
+
+#: php/admin-panel.php:594
+msgid "Character Encoding"
+msgstr "字元編碼"
+
+#: php/admin-panel.php:596
+msgid "Enable mb_convert_encoding?"
+msgstr "開啟 mb_convert_encoding?"
+
+#: php/admin-panel.php:597
+msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+msgstr "某些伺服器並沒有安裝這個選項。如果您禁止此選項，請務必盡可能的測試各種字元。mb_convert_encoding 的作用，是將UTF-8的格式轉換為不同的字元集。"
+
+#: php/admin-panel.php:602
+msgid "After the Deadline"
+msgstr "After the Deadline 自動拼字文法校正功能"
+
+#: php/admin-panel.php:604
+msgid "Select After the Deadline Language"
+msgstr "使用 After the Deadline 自動拼字文法校正功能"
+
+#: php/admin-panel.php:617
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "關閉在文章中使用 After the Deadline 自動拼字文法校正功能"
+
+#: php/admin-panel.php:619
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "關閉在彈出選單中使用 After the Deadline 自動拼字文法校正功能"
+
+#: php/admin-panel.php:624
+msgid "Expand Options"
+msgstr "增加選項"
+
+#: php/admin-panel.php:626
+msgid "Disable the Expand Option on Posts?"
+msgstr "關閉在文章中使用延伸選項？"
+
+#: php/admin-panel.php:628
+msgid "Disable the Expand Option on the Popups?"
+msgstr "關閉在彈出選單中顯示延伸選項"
+
+#: php/admin-panel.php:633
+msgid "Disable Trackbacks"
+msgstr "停用引用功能"
+
+#: php/admin-panel.php:635
+msgid "Disable trackbacks from showing?"
+msgstr "關閉顯示引用？"
+
+#: php/admin-panel.php:636
+msgid "Enabling this option will prevent trackbacks from showing up on your blog.  Please note that this option will not prevent your site from receiving trackbacks."
+msgstr "開啟此功能，會讓您的部落格不顯示出引用通知。但請注意此選項並不會讓您的網站不被其他網站所引用。"
+
+#: php/admin-panel.php:641
+msgid "Disable No-follow"
+msgstr "停用 No-follow"
+
+#: php/admin-panel.php:643
+msgid "Disable no-follow in comment links?"
+msgstr "在回應的網址中關閉 no-follow 的功能？"
+
+#: php/admin-panel.php:644
+msgid "Enabling this option will remove no-follow from comment and author links."
+msgstr "開啟這個功能，將會在回應和回應者網址裡，移除 no-follow 。"
+
+#: php/admin-panel.php:649
+msgid "Disable Self Pings"
+msgstr "停用 Self Pings"
+
+#: php/admin-panel.php:651
+msgid "Disable self-pings to your site?"
+msgstr "在網站裡停用 Self-pings 功能？"
+
+#: php/admin-panel.php:652
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "開啟這個功能，可以避免您收到引用到自己網站文章的通知。"
+
+#: php/admin-panel.php:657
+msgid "De-link Behavior"
+msgstr "刪除網址連結功能"
+
+#: php/admin-panel.php:659
+msgid "Choose how the de-link function behaves."
+msgstr "選擇如何定義移除網址功能。"
+
+#: php/admin-panel.php:660
+msgid "You can choose to remove links from the comment content and comment author URL, or just the comment author URL."
+msgstr "您可選擇在回應內文和回應者網址裡移除連結，或是單獨在回應者的網址中移除連結。"
+
+#: php/admin-panel.php:661
+msgid "Content and comment author URL."
+msgstr "內文和回應作者的網址"
+
+#: php/admin-panel.php:661
+msgid "Comment author URL."
+msgstr "回應者的網址。"
+
+#: php/admin-panel.php:677
+msgid "Admin Panel Editing"
+msgstr "管理者編輯面板"
+
+#: php/admin-panel.php:679
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "在管理者面版中關閉編輯回應?"
+
+#: php/admin-panel.php:680
+msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "選擇 \"是\"時，將會關閉編輯回應在管理者回應面版中。"
+
+#: php/admin-panel.php:685
+msgid "Post Editing"
+msgstr "文章編輯"
+
+#: php/admin-panel.php:687
+msgid "Turn On Comment Editing?"
+msgstr "開啟編輯回應?"
+
+#: php/admin-panel.php:688
+msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr "選擇\"是\"，將會開啟讓您編輯用戶回應的功能。選擇\"否\"將會取消您編輯文章內回應的權力。"
+
+#: php/admin-panel.php:701
+msgid "Delete all security keys"
+msgstr "刪除所有安全金鑰"
+
+#: php/admin-panel.php:703
+msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+msgstr "每一次當用戶留下回應，安全性金鑰將會儲存為自定金鑰。您可能必需要定期刪除這些資訊。在這之前，請先備份您的資料庫。"
+
+#: php/admin-panel.php:711
+msgid "Update Settings"
+msgstr "更新設定"
+
+#: php/ajax-processor.php:72
+msgid "Comment Approved. "
+msgstr "留言審核通過。"
+
+#: php/ajax-processor.php:79
+msgid "Move Successful. "
+msgstr "回應已成功搬移。"
+
+#: php/ajax-processor.php:235
+msgid "Successfully blacklisted."
+msgstr "回應已成功加入黑名單。"
+
+#: php/ajax-processor.php:235
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "根據您的進階條件設定準則，留言已經歸類為垃圾留言。"
+
+#: php/ajax-processor.php:259
+msgid "Successfully Deleted"
+msgstr "回應已成功刪除。"
+
+#: php/ajax-processor.php:323
+msgid "Successfully Marked as Spam"
+msgstr "回應已成功加入垃圾留言。"
+
+#: php/ajax-processor.php:355
+msgid "Successfully Approved"
+msgstr "回應已核准成功。"
+
+#: php/ajax-processor.php:385
+msgid "Successfully Marked for Moderation"
+msgstr "回應已成功標示為待審核"
+
+#: php/ajax-processor.php:422
+msgid "Successfully De-linked"
+msgstr "回應已成功刪除網址連結"
+
+#: php/blacklist-comment.php:70
+#: php/comment-editor.php:110
+msgid "Main"
+msgstr "主要"
+
+#: php/blacklist-comment.php:71
+#: php/comment-editor.php:111
+msgid "Advanced"
+msgstr "進階選項"
+
+#: php/blacklist-comment.php:75
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "請從下方選項，擇一加入您黑名單中。"
+
+#: php/blacklist-comment.php:80
+#: php/blacklist-comment.php:110
+#: php/comment-editor.php:129
+msgid "Name"
+msgstr "姓名"
+
+#: php/blacklist-comment.php:87
+#: php/blacklist-comment.php:117
+#: php/comment-editor.php:141
+msgid "URL"
+msgstr "網址 (URL)"
+
+#: php/blacklist-comment.php:94
+#: php/blacklist-comment.php:124
+msgid "E-mail Address"
+msgstr "信件"
+
+#: php/blacklist-comment.php:98
+#: php/blacklist-comment.php:128
+msgid "IP Address"
+msgstr "IP 位置"
+
+#: php/blacklist-comment.php:104
+msgid "Spam Matching Comments"
+msgstr "垃圾留言與一般留言的配對功能"
+
+#: php/blacklist-comment.php:105
+msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+msgstr "例如: 選擇「電子郵件」和「名稱」，會把日後所有的留言中，與「電子郵件」和「名稱」相符的留言歸類成垃圾留言。   "
+
+#: php/blacklist-comment.php:105
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "本功能一經設定即無法取消，請小心使用。"
+
+#: php/blacklist-comment.php:137
+#: php/comment-editor.php:203
+#: php/email.php:94
+#: php/request-deletion.php:78
+msgid "Cancel"
+msgstr "取消"
+
+#: php/blacklist-comment.php:139
+#: php/comment-editor.php:206
+#: php/email.php:96
+#: php/move-comment.php:163
+#: php/request-deletion.php:80
+msgid "Close"
+msgstr "關閉"
+
+#: php/comment-editor.php:163
+#, php-format
+msgid "<b>%1$s</b> :on Submitted"
+msgstr "<b>%1$s</b> ：已傳送"
+
+#: php/comment-editor.php:166
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "已傳送於： <b>%1$s</b>"
+
+#: php/comment-editor.php:170
+msgid "Adjust Comment Time"
+msgstr "調整留言時間"
+
+#: php/comment-editor.php:172
+msgid "Adjust Comment Status"
+msgstr "調整留言狀態"
+
+#: php/comment-editor.php:183
+#: php/comment-editor.php:190
+msgid "Approved"
+msgstr "核准"
+
+#: php/comment-editor.php:184
+#: php/comment-editor.php:191
+msgid "Pending"
+msgstr "審核中"
+
+#: php/comment-editor.php:202
+msgid "Save"
+msgstr "儲存"
+
+#: php/comment-popup.php:37
+msgid "Please type out your comment below."
+msgstr "請在下面輸入您的回應"
+
+#: php/comment-popup.php:40
+msgid "Save and Return"
+msgstr "儲存並返回"
+
+#: php/comment-popup.php:40
+msgid "Submit Comment"
+msgstr "傳送回應"
+
+#: php/email.php:73
+msgid "To"
+msgstr "收件者"
+
+#: php/email.php:77
+msgid "From"
+msgstr "寄件者"
+
+#: php/email.php:81
+msgid "Site Admin"
+msgstr "網站管理"
+
+#: php/email.php:81
+msgid "Post Author"
+msgstr "文章作者"
+
+#: php/email.php:84
+msgid "Subject"
+msgstr "主旨"
+
+#: php/email.php:93
+msgid "Send"
+msgstr "傳送"
+
+#: php/move-comment.php:66
+msgid "Move by Post"
+msgstr "以文章搬移"
+
+#: php/move-comment.php:67
+msgid "Move by Title"
+msgstr "以文章標題搬移"
+
+#: php/move-comment.php:68
+msgid "Move by ID"
+msgstr "以ID搬移"
+
+#: php/move-comment.php:80
+msgid "Previous"
+msgstr "前一個"
+
+#: php/move-comment.php:80
+msgid "Next"
+msgstr "下一個"
+
+#: php/move-comment.php:91
+#: php/move-comment.php:99
+#: php/move-comment.php:116
+#: php/move-comment.php:124
+msgid "Search"
+msgstr "搜尋"
+
+#: php/move-comment.php:93
+#: php/move-comment.php:97
+msgid "Title"
+msgstr "標題"
+
+#: php/move-comment.php:118
+#: php/move-comment.php:122
+msgid "Post ID"
+msgstr "文章ID"
+
+#: php/move-comment.php:149
+#: php/move-comment.php:152
+msgid "Mark as Approved"
+msgstr "標示為核準回應"
+
+#: php/request-deletion.php:69
+msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+msgstr "請說明此則留言為什麼需要被刪除。在您傳送刪除申請後，您的留言會被歸類成尚未核準的留言，並且不會公開顯示。"
+
+#: php/request-deletion.php:77
+msgid "Send Request"
+msgstr "傳送申請"
+
+#~ msgid ""
+#~ "By subscribing to the <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments Forums</a>, you will get access to automatic upgrades and "
+#~ "support."
+#~ msgstr ""
+#~ "成為 <a href=\"http笨//www.ajaxeditcomments.com\">Ajax Edit Comments 論壇"
+#~ "的付費會員</a>，您將可以使用本外掛自動更新的功能，及得到我們的技術支援。."
+#~ msgid "Allow Users to Request Deletion of Comments?"
+#~ msgstr "是否允許所有人編輯其發表的回應?"
+#~ msgid "Selecting \"No\" will turn off the deletion option."
+#~ msgstr "選擇 \"否\"時，將會關閉刪除選項的功能。"
+#~ msgid "Post/Admin CSS URL"
+#~ msgstr "文章/管理者 CSS URL"
+#~ msgid "Leaving a style empty will revert back to the default plugin styles."
+#~ msgstr "如樣式欄位空白，則將會預設為原始的外掛樣式。"
+#~ msgid "The URL should be relative to: "
+#~ msgstr "URL 應該相對於： "
+#~ msgid "Editor CSS URL"
+#~ msgstr "編輯 CSS URL"
+#~ msgid ""
+#~ "Selecting \"No\" will turn off comment editing for everyone except admin "
+#~ "types who have post and page editing permissions."
+#~ msgstr ""
+#~ "選擇 \"否\"時， 將會關閉所有人編輯回應的功能，除了具有發表文章及頁面編輯權"
+#~ "限的管理員。"
+#~ msgid "Ajax Edit Comments"
+#~ msgstr "Ajax 編輯回應"
+#~ msgid "Global Options - These Options Affect Everyone"
+#~ msgstr "全域設定 - 這些選項將會影響到所有人"
+#~ msgid "The following affects the editing interface."
+#~ msgstr "下列選項將會影響編輯介面。"
+#~ msgid "Turn Off More Options?"
+#~ msgstr "關閉其它選項?"
+#~ msgid "Individual Options - These Options Only Affect You"
+#~ msgstr "個人選項 - 這些選項將只會影響到您本身"
+#~ msgid "Show Advanced Options in Editor?"
+#~ msgstr "在編輯器中選擇進階選項?"
+#~ msgid "Selecting \"Yes\" will show advanced options in the editor window"
+#~ msgstr "選擇 \"是\"時，將會在編輯器中顯示進階選項。"
+#~ msgid "Ajax Edit Comments Cleanup"
+#~ msgstr "Ajax Edit Comments 清除編輯回應"
+#~ msgid "Your readers have edited their comments "
+#~ msgstr "您的讀者已編輯了他的回應"
+#~ msgid ""
+#~ " times.\n"
+#~ "\n"
+#~ msgstr ""
+#~ " 次。\n"
+#~ "\n"
+#~ msgid ""
+#~ "The Ajax Edit Comments plugin has saved you and your readers a ton of "
+#~ "time. Please consider a small donation for our hard work and time spent "
+#~ "on the plugin.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Ajax Edit Comments 外掛對您和您的讀者來說，是個非常省時又便利的好工具。請"
+#~ "您考慮對辛勞的本外掛開發團隊，提供小額的捐助。\n"
+#~ "\n"
+#~ msgid "Donate: %s"
+#~ msgstr "贊助: %s"
+#~ msgid ""
+#~ "If you do not wish to receive these e-mails anymore, please unsubscribe "
+#~ "in the WordPress settings page for Ajax Edit Comments.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "如果您從今以後不想再收到這些電子郵件，請在Wordpress管理首頁的 Ajax Edit "
+#~ "Comments 設定區中，把訂閱取消。\n"
+#~ "\n"
+#~ msgid "Please"
+#~ msgstr "請"
+#~ msgid "Donate"
+#~ msgstr "贊助"
+#~ msgid "Unsubscribe"
+#~ msgstr "取消訂閱"
+#~ msgid "Unsubscribe from periodic reminder e-mails?"
+#~ msgstr "是否取消定期的提醒電子郵件通知?"
+#~ msgid "Not Spam"
+#~ msgstr "非垃圾留言"
+#~ msgid ""
+#~ "Tweaking the style options is recommended for advanced users only.  If "
+#~ "you choose to disable styles, you will have to provide your own styles in "
+#~ "your default WordPress stylesheet."
+#~ msgstr ""
+#~ "調整樣式選項只建議進階用戶使用。如果您選擇停用樣式，您必需在您所預設的 "
+#~ "WordPress 樣式表單裡自定樣式。"
+#~ msgid "Turn Off Icons?"
+#~ msgstr "關閉圖示?"
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "選擇 \"是\"時，將防止顯示外掛圖示。"
+#~ msgid "Gravatars"
+#~ msgstr "Gravatars 頭像功能"
+#~ msgid "Turning off Gravatars may solve some plugin compatibility issues."
+#~ msgstr "關閉 Gravatars 頭像功能可能會解決一些外掛程式的相容性問題。"
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "關閉 Gravatars頭像功能?"
+#~ msgid "Please leave as is if you wish to retain proper plugin credit."
+#~ msgstr "如果您希望保留適當的外掛著作權，請保留下列欄位。"
+#~ msgid "Editor Title"
+#~ msgstr "編輯名稱"
+
+#, fuzzy
+#~ msgid "Deleted"
+#~ msgstr "刪除"
+
