@@ -1686,4 +1686,28 @@ function openlab_enable_duplicate_comments_comment_post($comment_id) {
 }
 add_action('comment_post', 'openlab_enable_duplicate_comments_comment_post');
 
+/**
+ * Adds the URL of the user profile to the New User Registration admin emails
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/334
+ */
+function openlab_newuser_notify_siteadmin( $message ) {
+
+	// Due to WP lameness, we have to hack around to get the username
+	preg_match( "|New User: (.*)|", $message, $matches );
+
+	if ( !empty( $matches ) ) {
+		$user = get_user_by( 'login', $matches[1] );
+		$profile_url = bp_core_get_user_domain( $user->ID );
+
+		if ( $profile_url ) {
+			$message_a = explode( 'Remote IP', $message );
+			$message = $message_a[0] . 'Profile URL: ' . $profile_url . "\n" . 'Remote IP' . $message_a[1];
+		}
+	}
+
+	return $message;
+}
+add_filter( 'newuser_notify_siteadmin', 'openlab_newuser_notify_siteadmin' );
+
 ?>
