@@ -31,16 +31,16 @@ Author: michael@castironcoding.com, cuny-academic-commons
 
 * You'll need to edit the views for each content type in cac-featured-content.php. The view methods are in the form renderType\_CONTENT_TYPE_IN_ALL_CAPS(). The included view methods start at about line 815.
 
-
-
 == Frequently Asked Questions ==
 
 There is not currently a FAQ available for this plugin. Please check back later. 
 
 == Changelog ==
 
+= 0.9 =
+* For featured Blogs, attempt to get a recent post image instead of showing the blog owner's avatar
+
 = 0.8.4 =
-* Fixes code that pulls first image from WP posts when blog posts are featured
 * Fixes auto-height and width for BP avatars
 * Removes invalid WP_ADMIN constant reference
 * Fixes PHP notices
