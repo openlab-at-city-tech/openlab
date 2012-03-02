@@ -607,16 +607,6 @@ function wds_load_group_type($group_type){
 	$return .= ' (required)';
 	$return .= '</div>';
 
-	if(is_super_admin( $user_ID )){
-		$wds_group_featured=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_featured' );
-		if($wds_group_featured){
-			$checked="checked";
-		} else {
-			$checked = '';
-		}
-		$return.='<input type="checkbox" id="wds_group_featured" name="wds_group_featured" value="yes" '.$checked.'> Featured '.$group_type;
-	}
-
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
@@ -1017,13 +1007,6 @@ function wds_bp_group_meta_save($group) {
 	}
 
 
-	if(is_super_admin( $user_ID )){
-	  if ( isset($_POST['wds_group_featured']) ) {
-		  groups_update_groupmeta( $group->id, 'wds_group_featured', $_POST['wds_group_featured']);
-	  }else{
-		  groups_update_groupmeta( $group->id, 'wds_group_featured', '');
-	  }
-	}
 	/*//WIKI
 	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
 		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
