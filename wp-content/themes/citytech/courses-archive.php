@@ -367,6 +367,9 @@ switch ($_GET['group_sequence']) {
 <div class="filter">
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
 <div class="red-square"></div>
+	<div id="tester">
+
+	</div>
 	<select name="school" class="last-select" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
 		<option value='school_all'>All</option>
@@ -418,31 +421,35 @@ function slug_maker($full_string)
  return $slug_val;
 } ?>
 <script type="text/javascript">
-function showDept(str)
-{
-if (str=="")
-  {
-  document.getElementById("dept-select").innerHTML="";
-  return;
-  }
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("dept-select").innerHTML=xmlhttp.responseText;
-    }
-  }
-  var $dom = document.domain;
-xmlhttp.open("GET","http://"+$dom+"/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
-xmlhttp.send();
+
+function showDept(str) {
+	if (str=="") {
+	  document.getElementById("dept-select").innerHTML="";
+	  return;
+	}
+
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			if ( navigator.appName == 'Microsoft Internet Explorer' ) {
+				var dropdown = '<select name="department" class="last-select" id="dept-select">' + xmlhttp.responseText + '</select>';
+				document.getElementById('dept-select').outerHTML = dropdown;
+			} else {
+				document.getElementById("dept-select").innerHTML = "" + xmlhttp.responseText + "";
+			}
+		}
+	}
+
+	var dom = document.domain;
+	xmlhttp.open("GET","http://" + dom + "/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
+	xmlhttp.send();
 }
 function clear_form(){
 	document.getElementById('group_seq_form').reset();
