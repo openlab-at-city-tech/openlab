@@ -834,12 +834,14 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		******Switch Context******
 		**************************/
 		switch_to_blog($blog_id);
-		query_posts('p='.$post->ID);
+
+		$the_posts = new WP_Query( array( 'p' => $post->ID, 'posts_per_page' => 1 ) );
+
 		//Set the loop for this one post
-		while(have_posts()) : the_post();
+		if ( $the_posts->have_posts() ) { while( $the_posts->have_posts() ) : $the_posts->the_post();
 
 		// Ok, we're just going to go in search of an image in the post_content
-		$post_with_one_image = $this->getPostContentImage($post->post_content);
+		$post_with_one_image = $this->getPostContentImage(get_the_content());
 		$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post_with_one_image, $matches);
 
 		$first_img = isset( $matches[1][0] ) ? $this->get_fully_qualified_image_path($matches[1][0]) : '';
@@ -859,18 +861,18 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<?php else: ?>
 				<?php echo $avatar; ?>
 				<?php endif; ?>
-				<h4><a href="<?php echo the_permalink() ?>"><?php echo $post->post_title ?></a></h4>
+				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
 				<!-- <p>by&nbsp;<a style="display: block;" href="<?php echo bp_core_get_user_domain($author_id) ?>"><?php the_author() ?></a></p> -->
 				<!-- from the blog <a href="<?php echo $site_url ?>"><em style="line-height: 14px; display: block; margin-top: 10px;"><?php bloginfo('name') ?></em></a> -->
 				<!-- <div class="clear"></div> -->
-				<p><?php echo strip_tags($this->cacfc->cropHTML($post_excerpt, $this->crop_config)); ?></p>
+				<p><?php echo strip_tags($this->cacfc->cropHTML(get_the_excerpt(), $this->crop_config)); ?></p>
 				<p class="more">
 					<?php $moreLink = '<a href="'.get_permalink().'">'.$this->read_more_text.'</a>'; ?>
 					<?php echo $moreLink; ?>
 				</p>
 			</div>
 		<?php
-		endwhile;
+		endwhile; }
 		restore_current_blog();
 	}
 
