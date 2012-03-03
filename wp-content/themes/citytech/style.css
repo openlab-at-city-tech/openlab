@@ -1,9 +1,9 @@
 /*
 	Theme Name: CityTech
 	Theme URL: http://www.example.com
-	Description: 
-	Author: Your 
-	Author URI: 
+	Description:
+	Author: Your
+	Author URI:
 	Version: 1.0
 	Template: genesis
 */
@@ -361,7 +361,7 @@ h3#bread-crumb .sep
 #header ul.menu .current_page_item a,
 #header ul.menu .current-cat a,
 #header ul.menu .current-menu-item a {
-	
+
 }
 
 
@@ -591,7 +591,7 @@ h3#bread-crumb .sep
 #wp-admin-bar #openlab-menu
 {
 	text-transform: uppercase;
-	color: #c84c35; 
+	color: #c84c35;
 }
 #wp-admin-bar ul .sub-menu
 {
@@ -807,15 +807,15 @@ h3#bread-crumb .sep
 .easy-accordion dd.active{z-index:3}
 .easy-accordion dd.plus{z-index:4}
 .easy-accordion .slide-number{position:absolute;bottom:0;left:10px;font-weight:normal;font-size:1.1em;/* Safari */ -webkit-transform: rotate(90deg); /* Firefox */ -moz-transform: rotate(90deg);  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);}
- 
- 
+
+
 /* FEEL FREE TO CUSTOMIZE THE FOLLOWING RULES */
 
 dd p{line-height:120%}
 
 #wds-accordion-slider{width:950px;height:360px;padding:0; background: #929292}
 .slider-shadow { background: url(images/slider-shadow.png) no-repeat center; height: 25px; clear: both; }
-#wds-accordion-slider dl{width:950px;height:360px;background:#929292;}	
+#wds-accordion-slider dl{width:950px;height:360px;background:#929292;}
 #wds-accordion-slider dt{height:46px;line-height:44px;text-align:center;padding:0;font-size:18px;font-family: Georgia, sans-serif;text-transform:uppercase;letter-spacing:1px;background:#717171; color:#26526c; color: #fff; border-bottom: 5px solid #929292; }
 #wds-accordion-slider dt.active{cursor:pointer;color:#fff;background:#717171; border-bottom: 5px solid #717171; }
 #wds-accordion-slider dt.hover{color:#63DFD2;}
@@ -860,10 +860,16 @@ dd p{line-height:120%}
 	border: none;
 	font-size: 18px;
 }
+.home #pgw-gallery-full {
+	width: 100%;
+}
 .home #pgw-gallery-full p
 {
 	font-family: 'Arvo',arial,serif;
 	font-size: 13px;
+}
+a#pgw-prev, a#pgw-next {
+	height: 215px;
 }
 /*home login styles*/
 
@@ -897,7 +903,7 @@ dd p{line-height:120%}
 	color: #000;
 	font-size: 10px;
 }
-.home #open-lab-login form.standard-form label { 
+.home #open-lab-login form.standard-form label {
     display: block;
     margin: 7px 0;
     font-weight: normal;
@@ -905,7 +911,7 @@ dd p{line-height:120%}
 .home #open-lab-login label input {
 	padding: 1px;
 	margin-left:10px;
-	width: 195px;	
+	width: 195px;
 	vertical-align: text-top;
 	float: right;
 }
@@ -1078,19 +1084,19 @@ dd p{line-height:120%}
     margin-top: 25px;
     padding: 10px;
     width: 255px;
-	position: relative; 
+	position: relative;
 }
 #new-members #new-members-text
 {
 	width: 190px;
 	float: left;
 }
-.new-member-navigation 
-{ 
-	width: 40px; 
+.new-member-navigation
+{
+	width: 40px;
 	height: 16px;
 	float: right;
-	z-index: 1000 
+	z-index: 1000
 }
 .home-new-member
 {
@@ -1113,7 +1119,7 @@ dd p{line-height:120%}
 .registered { color: #c1c1c1; line-height: 12px; }
 .new-member-navigation button { border: none; width: 17px; height: 16px; display: block; cursor: pointer; text-indent: -9999px;}
 .new-member-navigation button.prev { background: url(images/new-members-arrow-left.png) no-repeat; float: left; }
-.new-member-navigation button.next { background: url(images/new-members-arrow-right.png) no-repeat; float: right; } 
+.new-member-navigation button.next { background: url(images/new-members-arrow-right.png) no-repeat; float: right; }
 
 /* Group Archives
 ------------------------------------------------------------ */
@@ -1146,7 +1152,7 @@ dd p{line-height:120%}
 }
 
 #sidebar a:hover {
-	a:hover: #0fceba 
+	a:hover: #0fceba
 }
 
 
@@ -1347,7 +1353,7 @@ dd p{line-height:120%}
 	font-size: 11px;
 	padding: 0 0 10px;
 }
-	
+
 #course-list.item-list li .item {
     float: left;
     width: 210px;
@@ -1436,7 +1442,7 @@ div#item-buttons ul li a span:after {
 	padding: 0 0 10px;
 	line-height: 14px;
 }
-	
+
 #content .messages .message .item {
     float: left;
     width: 210px;
@@ -2255,7 +2261,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
 	border: 1px solid #cccccc;
 	color:#fefefe;
 	font-weight: bold;
-	padding: 1px 7px;	
+	padding: 1px 7px;
 	cursor: pointer;
 }
 .filter input[type="button"]{
@@ -2263,7 +2269,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
     border: 1px solid #cccccc;
     color:#717171;
     font-weight: bold;
-    padding: 1px 7px; 
+    padding: 1px 7px;
     cursor: pointer;
     margin-left: 5px;
 	}
@@ -2644,7 +2650,7 @@ div.gform_wrapper .gform_footer {
     margin: 0;
     padding: 0;
 }
-    
+
 #club-header-content {
 	width: 425px;
 	margin: 0 0 0 15px;
@@ -2806,7 +2812,7 @@ h2.member-name-title {
 	font-family: arial;
 }
 
-#areas-of-activty {	
+#areas-of-activty {
 	border-top: #aaa solid 1px;
 	padding: 5px 0 0 0;
 }
@@ -2861,8 +2867,8 @@ h2.member-name-title {
 /* People Archive Template
 ------------------------------------------------------------ */
 
-#people-listing .item-avatar { 
-	float: left; 
+#people-listing .item-avatar {
+	float: left;
 }
 
 #people-listing .person-block {
@@ -2934,7 +2940,7 @@ h2.member-name-title {
 /* #sidebar #item-buttons ul.main-nav, #sidebar ul.sidbar-nav {
 	margin: 0 0 0 21px;
 	padding: 0 0 30px 0;
-	
+
 } */
 
 #sidebar #item-buttons {
@@ -2944,8 +2950,8 @@ h2.member-name-title {
 
 /* Global Right Sidebar */
 #sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 10px 5px;}
-#sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); padding: 0 0 6px;} 
-#sidebar li { list-style-type: none; } 
+#sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); padding: 0 0 6px;}
+#sidebar li { list-style-type: none; }
 #sidebar ul.sub-menu, #sidebar ul ul { display:none }
 #sidebar ul.sub-menu li { list-style-image: none };
 #sidebar li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; }
@@ -3061,7 +3067,7 @@ li.sq-bullet ul { list-style-image: none; }
 	padding: 3px 0;
 }
 
-.activity #content .activity { 
+.activity #content .activity {
 	overflow: hidden;
 	clear: both;
 	margin: 10px 0 0 0;
@@ -3087,10 +3093,10 @@ li.sq-bullet ul { list-style-image: none; }
 	clear: none!important;
 }
 
-#blog-dir-search { 
-	margin-top: 0; 
+#blog-dir-search {
+	margin-top: 0;
 	margin-bottom: 10px;
-	float: none; 
+	float: none;
 }
 
 .sites #sidebar .item-list-tabs {
@@ -3103,7 +3109,7 @@ li.sq-bullet ul { list-style-image: none; }
 	border-right: none;
 }
 
-.sites #sidebar .item-list-tabs li a { 
+.sites #sidebar .item-list-tabs li a {
 	font-size: 12px;
 	padding: 0;
 }
@@ -3149,7 +3155,7 @@ li.sq-bullet ul { list-style-image: none; }
 }
 
 #site-list li .item h2.item-title a {
-	color: #6d6d6d; 
+	color: #6d6d6d;
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 12px;
@@ -3201,7 +3207,7 @@ height: 1px;
 .activity #content #whats-new-content { margin-left: 0; }
 
 #whats-new-options {
-	margin: 10px 0; 	
+	margin: 10px 0;
 }
 
 #footer-widgets li.rss a {
@@ -3307,7 +3313,7 @@ a.close-popup-login {
 /* profile pages fix */
 
 .internal-page #item-header, .button-nav, #site-list, .friends, .messages, #send_message_form {
-	
+
 	clear:both;
 }
 
