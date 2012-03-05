@@ -23,11 +23,11 @@ add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
 
 // Enqueue Styles For Testimonials Page & sub-pages
 add_action('wp_print_styles', 'wds_cuny_ie_styles');
-function wds_cuny_ie_styles() { 
+function wds_cuny_ie_styles() {
   if ( is_admin() )
     return;
     ?>
-    
+
     <!--[if lte IE 7]>
       <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie7.css" type="text/css" media="screen" />
     <![endif]-->
@@ -37,7 +37,7 @@ function wds_cuny_ie_styles() {
     <!--[if IE 9]>
       <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
     <![endif]-->
-    
+
 
     <?php }
 
@@ -64,7 +64,7 @@ function cuny_third_end_class($num){
 }
 
 function cuny_default_avatar( $url ) {
-	return get_stylesheet_directory_uri() .'/images/avatar.jpg';
+	return WP_CONTENT_URL . '/themes/citytech/images/avatar.jpg';
 }
 add_filter( 'bp_core_mysteryman_src', 'cuny_default_avatar' );
 
@@ -93,7 +93,7 @@ add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
 add_action('genesis_header','cuny_admin_bar', 10);
-function cuny_admin_bar() { 
+function cuny_admin_bar() {
 
 	cuny_site_wide_bp_search(); ?>
 	<div class="clearfloat"></div>
@@ -165,12 +165,12 @@ function cuny_add_links_wp_trim_excerpt($text) {
 function wds_site_can_be_viewed() {
 	global $user_ID;
 	$blog_public = false;
-	$group_id = bp_get_group_id(); 
+	$group_id = bp_get_group_id();
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-	
+
 	if($wds_bp_group_site_id!=""){
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
-		
+
 		switch ( $blog_private ) {
 			case '-3' : // todo?
 			case '-2' :
@@ -181,13 +181,13 @@ function wds_site_can_be_viewed() {
 					}
 				}
 				break;
-			
+
 			case '-1' :
 				if ( is_user_logged_in() ) {
 					$blog_public = true;
 				}
 				break;
-			
+
 			default :
 				$blog_public = true;
 				break;
@@ -258,7 +258,7 @@ function cuny_get_options_nav() {
 		} else {
 			$selected = '';
 		}
-		
+
 		if ($subnav_item['name'] == 'Home')
 		{
 			$subnav_item['name'] = 'Profile';
@@ -318,7 +318,7 @@ function openlab_displayed_user_account_type() {
 
 function openlab_current_user_ribbonclass() {
 	$account_type = openlab_get_displayed_user_account_type();
-	
+
 	$ribbonclass = '';
 
 	if ( $account_type == 'Faculty' )
@@ -327,7 +327,7 @@ function openlab_current_user_ribbonclass() {
 		$ribbonclass = 'robin-egg-ribbon';
 	if ( $account_type == 'Staff' )
 		$ribbonclass = 'yellow-canary-ribbon';
-	
+
 	echo $ribbonclass;
 }
 
@@ -338,13 +338,13 @@ add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_act
 
 function openlab_get_groups_of_user( $args = array() ) {
 	global $bp, $wpdb;
-	
+
 	$retval = array(
 		'group_ids'     => array(),
 		'group_ids_sql' => '',
 		'activity'	=> array()
 	);
-	
+
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
 		'active_status' => 'all',
@@ -353,12 +353,12 @@ function openlab_get_groups_of_user( $args = array() ) {
 		'get_activity'	=> true
 	);
 	$r = wp_parse_args( $args, $defaults );
-	
+
 	$select = $where = '';
-	
+
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
-	
+
 	if ( 'all' != $r['active_status'] ) {
 		// For legacy reasons, not all active groups are marked 'active'
 		if ( 'inactive' == $r['active_status'] ) {
@@ -367,42 +367,42 @@ function openlab_get_groups_of_user( $args = array() ) {
 		} else {
 			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
 			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
-			
+
 			if ( !empty( $inactive_groups ) ) {
 				$inactive_groups_sql = implode( ',', $inactive_groups );
 				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
 			}
 		}
 	}
-	
+
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
 		$where  .= $wpdb->prepare( " AND c.status != 'hidden' " );
 	}
-	
+
 	if ( 'all' != $r['group_type'] ) {
 		// Sanitize
 		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
-		
+
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) " );
 		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
 	}
-	
+
 	$sql = $select . ' ' . $where;
 
 	$group_ids = $wpdb->get_col( $sql );
 
 	$retval['group_ids'] = $group_ids;
-	
-	// Now that we have group ids, get the associated activity items and format the 
+
+	// Now that we have group ids, get the associated activity items and format the
 	// whole shebang in the proper way
 	if ( !empty( $group_ids ) ) {
-		$retval['group_ids_sql'] = implode( ',', $group_ids );		
-	
+		$retval['group_ids_sql'] = implode( ',', $group_ids );
+
 		if ( $r['get_activity'] ) {
 			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
 			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" ) );
-			
+
 			// Now walk down the list and try to match with a group. Once one is found, remove
 			// that group from the stack
 			$group_activity_items = array();
@@ -413,11 +413,11 @@ function openlab_get_groups_of_user( $args = array() ) {
 					unset( $group_ids[$key] );
 				}
 			}
-			
+
 			$retval['activity'] = $group_activity_items;
 		}
 	}
-	
+
 	return $retval;
 }
 
@@ -434,40 +434,40 @@ function openlab_recent_account_activity_sidebar() {
 		<?php $friends_true = NULL; ?>
 		<h4 class="sidebar-header">Recent Account Activity</h4>
 	<?php } ?>
-		
+
 	<?php if ( bp_has_activities( 'per_page=3&show_hidden=true&user_id=' . bp_loggedin_user_id() . $friends_true ) ) : ?>
-	
+
 		<ul id="activity-stream" class="activity-list item-list">
 			<div>
 			<?php while ( bp_activities() ) : bp_the_activity(); ?>
-		
+
 				<div class="activity-avatar">
 					<a href="<?php bp_activity_user_link() ?>">
 						<?php bp_activity_avatar( 'type=full&width=100&height=100' ) ?>
 					</a>
 				</div>
-			
+
 				<div class="activity-content">
-				
+
 					<div class="activity-header">
 						<?php bp_activity_action() ?>
 					</div>
-			
+
 					<?php if ( bp_activity_has_content() ) : ?>
 						<div class="activity-inner">
 							<?php bp_activity_content_body() ?>
 						</div>
 					<?php endif; ?>
-			
+
 					<?php do_action( 'bp_activity_entry_content' ) ?>
-					
+
 				</div>
 				<hr style="clear:both" />
 
 			<?php endwhile; ?>
 			</div>
 		</ul>
-	
+
 	<?php else : ?>
 		<ul id="activity-stream" class="activity-list item-list">
 			<div>
