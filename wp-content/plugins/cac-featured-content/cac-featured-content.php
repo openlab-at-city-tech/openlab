@@ -862,6 +862,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<?php echo $avatar; ?>
 				<?php endif; ?>
 				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
+				<div class="cac-content">
 				<!-- <p>by&nbsp;<a style="display: block;" href="<?php echo bp_core_get_user_domain($author_id) ?>"><?php the_author() ?></a></p> -->
 				<!-- from the blog <a href="<?php echo $site_url ?>"><em style="line-height: 14px; display: block; margin-top: 10px;"><?php bloginfo('name') ?></em></a> -->
 				<!-- <div class="clear"></div> -->
@@ -870,6 +871,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 					<?php $moreLink = '<a href="'.get_permalink().'">'.$this->read_more_text.'</a>'; ?>
 					<?php echo $moreLink; ?>
 				</p>
+				</div>
 			</div>
 		<?php
 		endwhile; }
@@ -1037,6 +1039,8 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		    <h3><?php echo $header ?></h3>
 			<div style="display: inline-block; ">
 				<?php bp_group_avatar(array('width' => '50', 'height'=>'50')) ?>
+
+			        <div class="cac-content">
 			   	<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></h4>
 					<?php if($this->crop_length): ?>
 						<?php
@@ -1050,6 +1054,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 					<span class="extra"><?php bp_group_status() ?> | <?php bp_group_member_count() ?></span>
 					<?php echo $moreLink; ?>
 				</p>
+				</div>
 			</div>
 			<?php endwhile; ?>
 		<?php endif; ?>
@@ -1095,7 +1100,10 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 					    <h4><a href="<?php echo $link ?>"><?php echo $display_name ?></a></h4>
 					    <div class="item-meta"><span class="activity"><?php bp_member_last_active() ?></span></div>
 					</div>
+
 					<div class="clear"></div>
+
+					<div class="cac-content">
 					<p>
 						<strong>School: </strong><?php echo $college_name ?>
 						<br />
@@ -1114,6 +1122,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 						<?php $moreLink = '<a href="'.$link.'">'.$this->read_more_text.'</a>'; ?>
 						<?php echo $moreLink; ?>
 					</p>
+					</div>
 			    </div>
 			<?php endwhile; ?>
 		<?php endif; ?>
@@ -1138,6 +1147,8 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 			<?php endif; ?>
 		<h4 ><a style="padding: 0 15px; display: block;" href="<?php echo $this->resource_link ?>"><?php echo $this->resource_title ?></a></h4>
 		<div class="clear"></div>
+
+          	<div class="cac-content">
 		    <p>
 				<?php if($this->crop_length): ?>
 					<?php echo $this->cacfc->cropHTML($this->resource_text, $this->crop_config);?>
@@ -1149,6 +1160,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<?php $moreLink = '<a href="'. $this->resource_link.'">'.$this->read_more_text.'</a>'; ?>
 				<?php echo $moreLink; ?>
 			</p>
+		</div>
 	    </div>
 	<?php
 	}
