@@ -1002,6 +1002,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		<h3><?php echo $header ?></h3>
 		<div>
 		    <?php echo $avatar ?>
+		    <div class="cac-content">
 		    <h4><a href="<?php echo $site_url ?>"><?php echo $blog_name?></a></h4>
 			 <p>
 					<?php if($this->crop_length): ?>
@@ -1010,6 +1011,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 						<?php echo $description; ?>
 					<?php endif; ?>
 			    </p>
+		    </div>
 		</div>
 
 		<p class="more">

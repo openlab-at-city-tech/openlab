@@ -1016,7 +1016,8 @@ a#pgw-prev, a#pgw-next {
 	border: 2px solid #F5F6F7;
 	padding: 10px;
 	margin-top: 25px;
-    width: 255px;
+    	width: 255px;
+    	overflow: hidden;
 }
 #cac-featured .avatar
 {
