@@ -100,13 +100,13 @@ class WDS_Group_Extension extends BP_Group_Extension {
 class bpass_Translation_Mangler {
  /*
   * Filter the translation string before it is displayed.
-  * 
+  *
   * This function will choke if we try to load it when not viewing a group page or in a group loop
   * So we bail in cases where neither of those things is present, by checking $groups_template
   */
  function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
-   
+
    if ( empty( $groups_template->group ) && empty( $bp->groups->current_group ) ) {
    	return $translation;
    }
@@ -114,22 +114,22 @@ class bpass_Translation_Mangler {
    if ( !empty( $groups_template->group->id ) ) {
    	$group_id = $groups_template->group->id;
    } else if ( !empty( $bp->groups->current_group->id ) ) {
-   	$group_id = $bp->groups->current_group->id;	
+   	$group_id = $bp->groups->current_group->id;
    } else {
    	return $translation;
    }
- 	
-   
+
+
    if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
    	$grouptype = $_COOKIE['wds_bp_group_type'];
    } else {
    	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
    }
-   
+
    $uc_grouptype = ucfirst($grouptype);
    $plural_grouptype = $grouptype . 's';
    $translations = &get_translations_for_domain( 'bp-ass' );
-   
+
    switch($text){
 	case "How do you want to read this group?":
 	     return $translations->translate( "How do you want to read this $grouptype?" );
@@ -210,22 +210,22 @@ add_filter('gettext', array('bpass_Translation_Mangler', 'filter_gettext'), 10, 
  * Put the group type in email notification subject lines
  */
 function openlab_group_type_in_notification_subject( $subject ) {
-	
+
    if ( !empty( $groups_template->group->id ) ) {
    	$group_id = $groups_template->group->id;
    } else if ( !empty( $bp->groups->current_group->id ) ) {
-   	$group_id = $bp->groups->current_group->id;	
+   	$group_id = $bp->groups->current_group->id;
    } else {
    	return $subject;
    }
- 	
-   
+
+
    if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
    	$grouptype = $_COOKIE['wds_bp_group_type'];
    } else {
    	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
    }
-   
+
    return str_replace( 'in the group', 'in the ' . $grouptype, $subject );
 }
 add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
@@ -243,7 +243,7 @@ function wds_add_group_members_2_blog(){
 	if ( $group_id = bp_get_current_group_id() ) {
 	     $blog_id = groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
 	}
-	
+
 	if($user_ID!=0 && !empty( $group_id ) && !empty( $blog_id ) ){
 		switch_to_blog($blog_id);
 		if(!is_user_member_of_blog($blog_id)){
@@ -272,7 +272,7 @@ function wds_add_group_members_2_blog(){
  */
 function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-	
+
 	if ( $blog_id ) {
 		if ( groups_is_user_admin( $user_id, $group_id ) ) {
 		      $role = "administrator";
@@ -296,7 +296,7 @@ add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 
  */
 function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 	global $bp;
-	
+
 	if ( 'edit' == $action ) {
 		if ( is_super_admin() || bp_loggedin_user_id() == get_the_author_meta( 'ID' ) || $user_can ) {
 			$user_can = true;
@@ -306,7 +306,7 @@ function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 			$bp->bp_docs->current_user_can[$action] = 'no';
 		}
 	}
-	
+
 	return $user_can;
 }
 add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
@@ -316,13 +316,13 @@ add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_d
  */
 function openlab_send_notice_email( $subject, $message ) {
 	global $wpdb;
-	
+
 	$to = get_option( 'admin_email' );
 	//$to = 'boonebgorges@gmail.com'; // for testing
 	$subject = 'Message from OpenLab: ' . $subject;
-	
+
 	$emails = $wpdb->get_col( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE spam = 0" ) );
-	
+
 	// For testing - limits recipients to Boone
 	/*
 	foreach( $emails as $key => $e ) {
@@ -330,11 +330,11 @@ function openlab_send_notice_email( $subject, $message ) {
 			unset( $emails[$key] );
 		}
 	}*/
-	
+
 	$emails = implode( ',', $emails );
-	
+
 	$headers = array( 'bcc:' . $emails );
-	
+
 	wp_mail( $to, $subject, $message, $headers );
 }
 add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
@@ -359,7 +359,7 @@ function openlab_redirect_to_profile_edit_group() {
 			  }else{
 				  $pgroup="1";
 			  }
-			  
+
 			bp_core_redirect( bp_displayed_user_domain() . 'profile/edit/group/' . $pgroup . '/' );
 		}
 	}
@@ -373,7 +373,7 @@ function openlab_group_type_in_creation_form_action( $action ) {
 	if ( false === strpos( $action, '?type=' ) && isset( $_GET['type'] ) ) {
 		$action = add_query_arg( 'type', $_GET['type'], $action );
 	}
-	
+
 	return $action;
 }
 add_action( 'bp_get_group_creation_form_action', 'openlab_group_type_in_creation_form_action' );
@@ -390,7 +390,7 @@ function openlab_group_creation_redirect( $redirect ) {
 			$redirect = add_query_arg( 'type', $_GET['type'], $redirect );
 		}
 	}
-	
+
 	return $redirect;
 }
 add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
@@ -405,11 +405,11 @@ function openlab_hide_inactive_group_join_button( $button ) {
 			unset( $button['id'] );
 		}
 	}
-	
+
 	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'leave_group' ) ) {
 		$button['link_class'] = str_replace( 'group-button', '', $button['link_class'] );
 	}
-	
+
 	return $button;
 }
 add_action( 'bp_get_group_join_button', 'openlab_hide_inactive_group_join_button' );
@@ -427,7 +427,7 @@ function openlab_disallow_inactive_group_join() {
 		if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
 			return;
 		}
-		
+
 		// If the group is inactive, redirect away
 		if ( openlab_group_is_inactive() ) {
 			bp_core_add_message( 'You cannot join an inactive group.', 'error' );
@@ -444,19 +444,19 @@ function openlab_group_is_inactive( $group_id = false ) {
 	if ( !$group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
-	
+
 	if ( !$group_id ) {
 		return false;
 	}
-	
+
 	$status = groups_get_groupmeta( $group_id, 'openlab_group_active_status' );
-	
+
 	$is_inactive = false;
-	
+
 	if ( 'inactive' == $status ) {
 		$is_inactive = true;
 	}
-	
+
 	return $is_inactive;
 }
 
@@ -468,5 +468,26 @@ function openlab_group_is_inactive( $group_id = false ) {
 function openlab_group_is_active( $group_id = false ) {
 	return ! openlab_group_is_inactive( $group_id );
 }
+
+
+/**
+ * When getting a blog avatar in the context of the Featured Content widget, test to see whether
+ * the blog is associated with a group. If so, fetch the group avatar instead
+ */
+function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id ) {
+	global $wpdb, $bp;
+
+	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+
+	if ( $group_id ) {
+		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false ) );
+
+		if ( !empty( $group_avatar ) ) {
+			$avatar = preg_replace( '/(src=").*?(")/', "$1" . $group_avatar . "$2", $avatar );
+		}
+	}
+	return $avatar;
+}
+add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avatar_with_group_avatar', 10, 2 );
 
 ?>
