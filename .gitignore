@@ -3,6 +3,7 @@ wp-content/blogs.dir/
 wp-content/uploads/*
 wp-content/cache/*
 
+sql/*
 wiki/images/*
 
 # Exclude environment files
