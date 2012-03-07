@@ -480,7 +480,7 @@ function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id 
 	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
 	if ( $group_id ) {
-		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false ) );
+		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false, 'type' => 'full' ) );
 
 		if ( !empty( $group_avatar ) ) {
 			$avatar = preg_replace( '/(src=").*?(")/', "$1" . $group_avatar . "$2", $avatar );
