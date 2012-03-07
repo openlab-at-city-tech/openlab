@@ -335,8 +335,17 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		$this->image_width = empty($instance['image_width']) ? '&nbsp;' : apply_filters('widget_image_width', $instance['image_width']);
 		$this->image_height = empty($instance['image_height']) ? '&nbsp;' : apply_filters('widget_image_height', $instance['image_height']);
 		$this->imageurl = $this->get_fully_qualified_image_path($instance['imageurl']);
-		// Crop length needs to be forced to a number!
-		$this->crop_length = (int) empty($instance['crop_length']) ? '&nbsp;' : apply_filters('widget_crop_length', $instance['crop_length']);
+		
+		// Crop length fallback
+		if ( !empty( $instance['crop_length'] ) && (int) $instance['crop_length'] ) {
+			$this->crop_length = (int) $instance['crop_length'];
+		} else {
+			$this->crop_length = apply_filters( 'cacfc_default_crop_length', 100 );
+		}
+		
+		// Backward compatibility filter. Don't use it.
+		$this->crop_length = apply_filters( 'widget_crop_length', $this->crop_length );
+		
 		$this->image_crop_rule = empty($instance['image_crop_rule']) ? '&nbsp;' : apply_filters('widget_image_crop_rule', $instance['image_crop_rule']);
 		$this->read_more_text = empty($instance['read_more_text']) ? '&nbsp;' : apply_filters('widget_read_more_text', $instance['read_more_text']);
 		$type = empty($instance['type']) ? '&nbsp;' : apply_filters('widget_id', $instance['type']);
@@ -852,6 +861,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		} else {
 		    $header = $this->title;
 		}
+		
 		?>
 		<h3><?php echo $header ?></h3>
 			<div>
@@ -866,7 +876,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<!-- <p>by&nbsp;<a style="display: block;" href="<?php echo bp_core_get_user_domain($author_id) ?>"><?php the_author() ?></a></p> -->
 				<!-- from the blog <a href="<?php echo $site_url ?>"><em style="line-height: 14px; display: block; margin-top: 10px;"><?php bloginfo('name') ?></em></a> -->
 				<!-- <div class="clear"></div> -->
-				<p><?php echo strip_tags($this->cacfc->cropHTML(get_the_excerpt(), $this->crop_config)); ?></p>
+				<p><?php echo bp_create_excerpt( get_the_content(), $this->crop_length ); ?></p>
 				<p class="more">
 					<?php $moreLink = '<a href="'.get_permalink().'">'.$this->read_more_text.'</a>'; ?>
 					<?php echo $moreLink; ?>
@@ -1006,13 +1016,9 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		    <?php echo $avatar ?>
 		    <div class="cac-content">
 		    <h4><a href="<?php echo $site_url ?>"><?php echo $blog_name?></a></h4>
-			 <p>
-					<?php if($this->crop_length): ?>
-						<?php echo $this->cacfc->cropHTML($description, $this->crop_config);?>
-					<?php else: ?>
-						<?php echo $description; ?>
-					<?php endif; ?>
-			    </p>
+			<p>
+				<?php echo bp_create_excerpt( $description, $this->crop_length ); ?>
+			</p>
 		    </div>
 		</div>
 
@@ -1055,14 +1061,10 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 
 			        <div class="cac-content">
 			   	<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></h4>
-					<?php if($this->crop_length): ?>
-						<?php
-							$moreLink = '<a href="'.bp_get_group_permalink().'">'.$this->read_more_text.'</a>';
-							echo $this->cacfc->cropHTML(bp_get_group_description(), $this->crop_config);
-						?>
-					<?php else: ?>
-						<?php echo bp_get_group_description(); ?>
-					<?php endif; ?>
+					<?php
+						$moreLink = '<a href="'.bp_get_group_permalink().'">'.$this->read_more_text.'</a>';
+						echo bp_create_excerpt( bp_get_group_description(), $this->crop_length );
+					?>
 				<p class="more">
 					<span class="extra"><?php bp_group_status() ?> | <?php bp_group_member_count() ?></span>
 					<?php echo $moreLink; ?>
@@ -1163,11 +1165,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 
           	<div class="cac-content">
 		    <p>
-				<?php if($this->crop_length): ?>
-					<?php echo $this->cacfc->cropHTML($this->resource_text, $this->crop_config);?>
-				<?php else: ?>
-					<?php echo $this->resource_text; ?>
-				<?php endif; ?>
+			<?php echo bp_create_excerpt( $this->resource_text, $this->crop_length ); ?>
 		    </p>
 			<p class="more">
 				<?php $moreLink = '<a href="'. $this->resource_link.'">'.$this->read_more_text.'</a>'; ?>
