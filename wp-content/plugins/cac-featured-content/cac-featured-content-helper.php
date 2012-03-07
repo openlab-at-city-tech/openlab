@@ -51,12 +51,13 @@ class CACFeaturedContentHelper {
 		switch_to_blog($blog_id);
 
 	       	$posts = new WP_Query( array( 'name' => $slug ) );
-
+	       	
 		if ( $posts->have_posts() ) {
 			while ( $posts->have_posts() ) {
 				$posts->the_post();
-				if ( $post->post_title == $slug ) {
+				if ( $post->post_name == $slug ) {
 					$single_post = $post;
+					break;
 				}
 			}
 		}

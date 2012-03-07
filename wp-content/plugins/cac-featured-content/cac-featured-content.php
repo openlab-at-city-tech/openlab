@@ -831,6 +831,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		$blog_admin_id = get_user_id_from_string($blog_admin_email);
 		$blog_description = get_blog_option($blog->blog_id,'blogdescription');
 		$post = $cacfc->getPostBySlug($post_slug, $blog_id);
+		
 		$post_excerpt = bp_create_excerpt($post->post_content);
 		$author_id = $post->post_author;
 		$author_email = get_the_author_meta('user_email',$author_id);
@@ -841,7 +842,10 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		if ( !$width = (int)$this->image_width )
 			$width = '100';
 
+		// Avatar will default to blog avatar if there is no post image
 		$avatar = bp_core_fetch_avatar( array( 'item_id' => $author_id, 'type' => 'full', 'height' => $height , 'width' => $width, 'no_grav' => false ) );
+		
+		$avatar = apply_filters( 'cac_featured_content_blog_avatar', $avatar, $blog_id );
 
 		/*************************
 		******Switch Context******
