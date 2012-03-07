@@ -861,8 +861,8 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<?php else: ?>
 				<?php echo $avatar; ?>
 				<?php endif; ?>
-				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
 				<div class="cac-content">
+				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
 				<!-- <p>by&nbsp;<a style="display: block;" href="<?php echo bp_core_get_user_domain($author_id) ?>"><?php the_author() ?></a></p> -->
 				<!-- from the blog <a href="<?php echo $site_url ?>"><em style="line-height: 14px; display: block; margin-top: 10px;"><?php bloginfo('name') ?></em></a> -->
 				<!-- <div class="clear"></div> -->
