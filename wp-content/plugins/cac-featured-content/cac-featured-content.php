@@ -1152,10 +1152,11 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 			<?php else: ?>
 				<img src="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/cac-featured-content/timthumb.php?src=<?php echo $this->resource_image_source ?>&h=<?php echo $this->image_height ?>&w=<?php echo $this->image_width ?>&q=100&a=<?php echo $this->image_crop_rule ?>" class="avatar" />
 			<?php endif; ?>
-		<h4 ><a style="padding: 0 15px; display: block;" href="<?php echo $this->resource_link ?>"><?php echo $this->resource_title ?></a></h4>
-		<div class="clear"></div>
 
           	<div class="cac-content">
+          	
+		<h4 ><a href="<?php echo $this->resource_link ?>"><?php echo $this->resource_title ?></a></h4>
+		<div class="clear"></div>
 		    <p>
 			<?php echo bp_create_excerpt( $this->resource_text, $this->crop_length ); ?>
 		    </p>
