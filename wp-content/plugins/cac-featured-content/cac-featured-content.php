@@ -335,10 +335,23 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		$this->image_width = empty($instance['image_width']) ? '&nbsp;' : apply_filters('widget_image_width', $instance['image_width']);
 		$this->image_height = empty($instance['image_height']) ? '&nbsp;' : apply_filters('widget_image_height', $instance['image_height']);
 		$this->imageurl = $this->get_fully_qualified_image_path($instance['imageurl']);
-		// Crop length needs to be forced to a number!
-		$this->crop_length = (int) empty($instance['crop_length']) ? '&nbsp;' : apply_filters('widget_crop_length', $instance['crop_length']);
+		
+		// Crop length fallback
+		if ( !empty( $instance['crop_length'] ) && (int) $instance['crop_length'] ) {
+			$this->crop_length = (int) $instance['crop_length'];
+		} else {
+			$this->crop_length = apply_filters( 'cacfc_default_crop_length', 100 );
+		}
+		
+		// Backward compatibility filter. Don't use it.
+		$this->crop_length = apply_filters( 'widget_crop_length', $this->crop_length );
+		
+		// No longer used. Use bp_create_excerpt() instead
 		$this->image_crop_rule = empty($instance['image_crop_rule']) ? '&nbsp;' : apply_filters('widget_image_crop_rule', $instance['image_crop_rule']);
-		$this->read_more_text = empty($instance['read_more_text']) ? '&nbsp;' : apply_filters('widget_read_more_text', $instance['read_more_text']);
+		
+		// If no Read More text is provided, don't show a link at all
+		$this->read_more_text = empty($instance['read_more_text']) ? '' : apply_filters('widget_read_more_text', $instance['read_more_text']);
+		
 		$type = empty($instance['type']) ? '&nbsp;' : apply_filters('widget_id', $instance['type']);
 		$this->blog_id = empty($instance['blog_id']) ? '&nbsp;' : apply_filters('widget_id', $instance['blog_id']);
 		$this->blog_domain = empty($instance['blog_domain']) ? '&nbsp;' : apply_filters('widget_id', $instance['blog_domain']);
@@ -852,6 +865,7 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		} else {
 		    $header = $this->title;
 		}
+		
 		?>
 		<h3><?php echo $header ?></h3>
 			<div>
@@ -861,16 +875,20 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 				<?php else: ?>
 				<?php echo $avatar; ?>
 				<?php endif; ?>
-				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
 				<div class="cac-content">
+				<h4><a href="<?php echo the_permalink() ?>"><?php echo get_the_title() ?></a></h4>
 				<!-- <p>by&nbsp;<a style="display: block;" href="<?php echo bp_core_get_user_domain($author_id) ?>"><?php the_author() ?></a></p> -->
 				<!-- from the blog <a href="<?php echo $site_url ?>"><em style="line-height: 14px; display: block; margin-top: 10px;"><?php bloginfo('name') ?></em></a> -->
 				<!-- <div class="clear"></div> -->
-				<p><?php echo strip_tags($this->cacfc->cropHTML(get_the_excerpt(), $this->crop_config)); ?></p>
+				<p><?php echo bp_create_excerpt( get_the_content(), $this->crop_length ); ?></p>
+				
+				<?php if ( $this->read_more_text ) : ?>
 				<p class="more">
 					<?php $moreLink = '<a href="'.get_permalink().'">'.$this->read_more_text.'</a>'; ?>
 					<?php echo $moreLink; ?>
 				</p>
+				<?php endif ?>
+				
 				</div>
 			</div>
 		<?php
@@ -1006,20 +1024,19 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		    <?php echo $avatar ?>
 		    <div class="cac-content">
 		    <h4><a href="<?php echo $site_url ?>"><?php echo $blog_name?></a></h4>
-			 <p>
-					<?php if($this->crop_length): ?>
-						<?php echo $this->cacfc->cropHTML($description, $this->crop_config);?>
-					<?php else: ?>
-						<?php echo $description; ?>
-					<?php endif; ?>
-			    </p>
+			<p>
+				<?php echo bp_create_excerpt( $description, $this->crop_length ); ?>
+			</p>
 		    </div>
 		</div>
 
+		<?php if ( $this->read_more_text ) : ?>
 		<p class="more">
 			<?php $moreLink = '<a href="'.get_home_url().'">'.$this->read_more_text.'</a>'; ?>
 			<?php echo $moreLink; ?>
 		</p>
+		<?php endif ?>
+		
 		<?php
 		// Don't forget to restore current blog
 		restore_current_blog();
@@ -1033,26 +1050,38 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		} else {
 			$header = $this->title;
 		}
+		
+		if ( (int) $this->image_width ) {
+			$width = $this->image_width;
+		} else {
+			$width = '100';
+		}
+
+		if ( (int) $this->image_height ) {
+			$height = $this->image_height;
+		} else {
+			$height = '100';
+		}
+		
 		?>
 		<?php if(bp_has_groups('type=single-group&slug='.$this->group_slug)): ?>
 			<?php while(bp_groups()) : bp_the_group(); ?>
 		    <h3><?php echo $header ?></h3>
 			<div style="display: inline-block; ">
-				<?php bp_group_avatar(array('width' => '50', 'height'=>'50')) ?>
+				<?php bp_group_avatar(array('width' => $width, 'height'=> $height)) ?>
 
 			        <div class="cac-content">
 			   	<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></h4>
-					<?php if($this->crop_length): ?>
-						<?php
-							$moreLink = '<a href="'.bp_get_group_permalink().'">'.$this->read_more_text.'</a>';
-							echo $this->cacfc->cropHTML(bp_get_group_description(), $this->crop_config);
-						?>
-					<?php else: ?>
-						<?php echo bp_get_group_description(); ?>
-					<?php endif; ?>
+					<?php
+						$moreLink = '<a href="'.bp_get_group_permalink().'">'.$this->read_more_text.'</a>';
+						echo bp_create_excerpt( bp_get_group_description(), $this->crop_length );
+					?>
 				<p class="more">
 					<span class="extra"><?php bp_group_status() ?> | <?php bp_group_member_count() ?></span>
-					<?php echo $moreLink; ?>
+					
+					<?php if ( $this->read_more_text ) : ?>
+						<?php echo $moreLink; ?>
+					<?php endif ?>
 				</p>
 				</div>
 			</div>
@@ -1065,24 +1094,12 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 			$before = '<div>';
 			$after = '</div>';
 
-			$user_id = bp_core_get_userid($this->member_identifier);
-			$user_data = BP_XProfile_ProfileData::get_all_for_user($user_id);
-			$full_name = $user_data['Full Name']['field_data'];
-			$college_name = $user_data['College']['field_data'];
-			$academic_interests = $user_data['Academic Interests']['field_data'];
-			$first_name = explode(' ', $full_name);
-			$first_name = $first_name[0];
-			$link = bp_core_get_userlink($user_id, false, true);
-			$display_name = bp_core_get_user_displayname($user_id);
-			$avatar = bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => 'full', height => $this->image_height, width => $this->image_width, no_grav => false ) );
+			$user_id   = bp_core_get_userid( $this->member_identifier );
+			$link 	   = bp_core_get_userlink( $user_id, false, true );
+			$display_name = bp_core_get_user_displayname( $user_id );
+
+			$avatar = bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => 'full', 'height' => $this->image_height, 'width' => $this->image_width, 'no_grav' => false ) );
 			$blogs = bp_blogs_get_blogs_for_user($user_id);
-
-			$pattern = '/\[[A-Za-z0-9-,]*\]/';
-			preg_match_all($pattern, $academic_interests, $matches);
-
-			foreach($matches as $match) {
-				$interests[] = preg_replace('/[\[\]]/', '', $match);
-			}
 
 			if($this->title == '&nbsp;') {
 				$header = 'Featured Member';
@@ -1096,32 +1113,22 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 			    <h3><?php echo $header ?></h3>
 			    <div>
 					<?php echo $avatar ?>
+					
+					<div class="cac-content">
 					<div>
 					    <h4><a href="<?php echo $link ?>"><?php echo $display_name ?></a></h4>
 					    <div class="item-meta"><span class="activity"><?php bp_member_last_active() ?></span></div>
 					</div>
-
-					<div class="clear"></div>
-
-					<div class="cac-content">
-					<p>
-						<strong>School: </strong><?php echo $college_name ?>
-						<br />
-						<strong>Academic Interests: </strong>
-						<?php if(!$interests[0] ) : ?>
-							<?php echo $academic_interests ?>
-						<?php else : ?>
-								<?php $count = count($interests[0]);?>
-								<?php foreach($interests[0] as $i => $interest) : ?>
-									<?php $interest = ($i == $count-1) ? $interest : $interest.','; ?>
-									<?php echo $interest;?>
-								<?php endforeach ?>
-						<?php endif; ?>
-					</p>
+					
+					<?php do_action( 'cacfc_featured_member_additional_content' ) ?>
+					
+					<?php if ( $this->read_more_text ) : ?>
 					<p class="more">
 						<?php $moreLink = '<a href="'.$link.'">'.$this->read_more_text.'</a>'; ?>
 						<?php echo $moreLink; ?>
 					</p>
+					<?php endif ?>
+					
 					</div>
 			    </div>
 			<?php endwhile; ?>
@@ -1145,21 +1152,21 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 			<?php else: ?>
 				<img src="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/cac-featured-content/timthumb.php?src=<?php echo $this->resource_image_source ?>&h=<?php echo $this->image_height ?>&w=<?php echo $this->image_width ?>&q=100&a=<?php echo $this->image_crop_rule ?>" class="avatar" />
 			<?php endif; ?>
-		<h4 ><a style="padding: 0 15px; display: block;" href="<?php echo $this->resource_link ?>"><?php echo $this->resource_title ?></a></h4>
-		<div class="clear"></div>
 
           	<div class="cac-content">
+          	
+		<h4 ><a href="<?php echo $this->resource_link ?>"><?php echo $this->resource_title ?></a></h4>
+		<div class="clear"></div>
 		    <p>
-				<?php if($this->crop_length): ?>
-					<?php echo $this->cacfc->cropHTML($this->resource_text, $this->crop_config);?>
-				<?php else: ?>
-					<?php echo $this->resource_text; ?>
-				<?php endif; ?>
+			<?php echo bp_create_excerpt( $this->resource_text, $this->crop_length ); ?>
 		    </p>
+		    
+		    <?php if ( $this->read_more_text ) : ?>
 			<p class="more">
 				<?php $moreLink = '<a href="'. $this->resource_link.'">'.$this->read_more_text.'</a>'; ?>
 				<?php echo $moreLink; ?>
 			</p>
+		    <?php endif ?>
 		</div>
 	    </div>
 	<?php
