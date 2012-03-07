@@ -1033,12 +1033,25 @@ class Cac_Featured_Content_Widget extends WP_Widget {
 		} else {
 			$header = $this->title;
 		}
+		
+		if ( (int) $this->image_width ) {
+			$width = $this->image_width;
+		} else {
+			$width = '100';
+		}
+
+		if ( (int) $this->image_height ) {
+			$height = $this->image_height;
+		} else {
+			$height = '100';
+		}
+		
 		?>
 		<?php if(bp_has_groups('type=single-group&slug='.$this->group_slug)): ?>
 			<?php while(bp_groups()) : bp_the_group(); ?>
 		    <h3><?php echo $header ?></h3>
 			<div style="display: inline-block; ">
-				<?php bp_group_avatar(array('width' => '50', 'height'=>'50')) ?>
+				<?php bp_group_avatar(array('width' => $width, 'height'=> $height)) ?>
 
 			        <div class="cac-content">
 			   	<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></h4>
