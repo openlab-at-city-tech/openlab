@@ -3,6 +3,7 @@ wp-content/blogs.dir/
 wp-content/uploads/*
 wp-content/cache/*
 
+sql/*
 wiki/images/*
 
 # Exclude environment files
@@ -27,6 +28,8 @@ error_log
 LocalSettings.old*
 wp-content/plugins/custom-anti-spam/cas_*
 *.php.orig
+wp-content/plugins/cac-featured-content/cache/*
+!wp-content/plugins/cac-featured-content/cache/index.html
 
 .svn
 wp-admin/error_log

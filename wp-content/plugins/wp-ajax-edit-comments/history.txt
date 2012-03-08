@@ -1,0 +1,29 @@
+5.0.7.0 - 2012-1-25 - Josh Benham 
+	Fixed checking for updater in lib/class.js
+5.0.6.0 - 2012-1-20 - Josh Benham 
+	Fixed missing style sheets in full version 
+5.0.5.0 - 2011-11-28 - Josh Benham 
+	Fixed 3.3 issues
+	Fixed email. 
+5.0.4.0 - 2011-10-14 - Daniel Harzheim
+	Fixed problem with display_changelog not being loaded on init
+5.0.3.0 - 2011-09-22 - Ronald Huereca
+	Fixing updater issue
+5.0.2.0 - 2011-09-22 - Ronald Huereca
+	Fixing updater issue
+5.0.1.0 - 2011-09-15 - Bes Zain
+	Fixing an issue with automatic upgrades
+5.0.0.0 - 2011-08-23 - Ronald Huereca
+	Big version jump due to...
+	A complete re-structuring of the plugin code
+	JavaScript / Ajax completely re-written for JSON
+	Built-in style editor
+	More Icon themes
+	Colorbox options
+	Multisite support
+4.1.11.0 - 2011-07-28 - Ronald Huereca
+	Fixing a minor bug in the updater
+4.1.10.0 - 2011-07-27 - Ronald Huereca
+	Updated the updater
+4.1.9.9 - 2011-07-26 - Ronald Huereca
+	First iThemes Beta release

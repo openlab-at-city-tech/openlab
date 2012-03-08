@@ -60,7 +60,7 @@ function cuny_login_popup_script() {
 		var cpl = jQuery('#cuny-popup-login');
 		jQuery("#popup-login-link").show();
 		jQuery(cpl).hide();
-		
+
 		jQuery("#popup-login-link").click(function(){
 			if ( 'none' == jQuery(cpl).css('display') ) {
 				jQuery(cpl).show();
@@ -68,7 +68,7 @@ function cuny_login_popup_script() {
 			} else {
 				jQuery(cpl).hide();
 			}
-			
+
 			return false;
 		});
 
@@ -122,12 +122,12 @@ function cuny_bp_profile_menu() {
 		<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/'; ?>">Send Invites</a>
 			<ul>
 				<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/sent-invites/'; ?>">Sent</a></li>
-			</ul>		
+			</ul>
 		</li>
         </ul>
 
     </li>
-	
+
 	<li class="sq-bullet <?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">Courses</a><ul>
 <?php
         /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
@@ -147,12 +147,12 @@ function cuny_bp_profile_menu() {
 		 }else{
 			 echo "<li>You do not have any courses.</li>";
 		  }*/ ?>
-          
+
           <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=active'; ?>">Active</a> | </li>
           <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=inactive'; ?>">Inactive</a> | </li>
           <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
-		
-		  <li>	
+
+		  <li>
 	      <?php $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
 		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
 			  ?>
@@ -181,7 +181,7 @@ function cuny_bp_profile_menu() {
 			 echo "<li>You do not have any projects.</li>";
 		  }
 	      */ ?>
-      
+
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
@@ -207,13 +207,13 @@ function cuny_bp_profile_menu() {
 				echo "<li>You do not have any clubs.</li>";
 		  }*/
 	      ?>
-	      
+
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
 	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
           <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'Create a Club', 'buddypress' ) ?></a></li>
 	      </ul></li>
-	      
+
 	      <?php if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) { ?>
 			 <li class="sq-bullet <?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">Sites</a>
     	<ul>
@@ -264,10 +264,10 @@ function cuny_bp_profile_menu() {
 <!-- </ul> -->
 	</li>
 	      <?php } ?>
-	      
+
 	<li class="sq-bullet <?php if ( bp_is_messages_component() || bp_is_user_friend_requests() || ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
-    	
+
         <?php
         	/*$sub_counter = 0;
 		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
@@ -285,11 +285,11 @@ function cuny_bp_profile_menu() {
 		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain() . 'friends/requests/' ?>">Friend Requests</a></li>
 		<li><a href="<?php echo bp_displayed_user_domain() . 'groups/invites/' ?>">Invitations</a></li>
-		
+
 		<?php if ( is_super_admin() ) : ?>
 			<li><a href="<?php echo bp_displayed_user_domain() . 'messages/notices/' ?>">Notices</a></li>
 		<?php endif ?>
-		
+
 		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
         </ul>
     </li>
@@ -352,7 +352,7 @@ function cuny_site_wide_header() {
 	<?php switch_to_blog(1) ?>
 		<a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo"></a>
 	<?php restore_current_blog() ?>
-		
+
 			<ul class="alignright">
 				<?php cuny_bp_adminbar_menu(); ?>
 			</ul>
@@ -376,7 +376,7 @@ function cuny_bp_adminbar_menu(){ ?>
             <?php cuny_myopenlab_menu(); ?>
         	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
             <?php //switch to the root site to get the wp-nav menu
-                  switch_to_blog(1) ?>	
+                  switch_to_blog(1) ?>
             <?php $args = array(
 				'theme_location' => 'main',
 				'container' => '',
@@ -387,7 +387,7 @@ function cuny_bp_adminbar_menu(){ ?>
 			<?php restore_current_blog();  ?>
             </li><!--openlab-menu-->
             <li class="clearfloat"></li>
-        </ul><!--wp-admin-bar-menus--> 
+        </ul><!--wp-admin-bar-menus-->
     </div><!--wp-admin-bar-->
 <?php }//end cuny_adminbar_menu
 
@@ -395,7 +395,7 @@ function cuny_bp_adminbar_menu(){ ?>
 function cuny_myopenlab_menu(){
     global $bp; ?>
         	<?php if ( is_user_logged_in() ) { ?>
-        	<li id="myopenlab-menu" class="sub-menu">My OpenLab          
+        	<li id="myopenlab-menu" class="sub-menu">My OpenLab
 			<ul id="my-bar">
             	<li><a href="<?php echo $bp->loggedin_user->domain; ?>">My Profile</a></li>
                 <li><a href="<?php echo bp_get_root_domain(); ?>/my-courses">My Courses</a></li>
@@ -413,7 +413,7 @@ function cuny_myopenlab_menu(){
 
 <?php }//header mods
 
-//adds the profile sidebar to the add <group> pages 
+//adds the profile sidebar to the add <group> pages
 
 add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
 function add_group_sidebar()
@@ -489,7 +489,7 @@ if (!($pos === false)) {
 		<li class="menu-item"><a href="<?php echo $site;?>/support/contact-us/">Contact Us</a></li>
 		<li class="menu-item"><a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/image-credits/">Image Credits</a></li>
+		<li class="menu-item"><a href="<?php echo $site;?>/support/credits/">Image Credits</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/help/">Help</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/faq/">FAQ</a></li>
 	</ul>
@@ -539,7 +539,7 @@ restore_current_blog();
 			<div class="textwidget"><p>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p></div>
 		</div></div>
 </div><div class="footer-widgets-3 widget-area"><div class="widget menupages" id="menu-pages-4"><div class="widget-wrap"><h4 class="widgettitle">Support</h4>
-<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/support/credits/">Credits</a></div></div>
+<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/about/credits/">Credits</a></div></div>
 </div><div class="footer-widgets-4 widget-area"><div class="widget widget_text" id="text-6"><div class="widget-wrap"><h4 class="widgettitle">Share</h4>
 			<div class="textwidget"><ul class="nav"><li class="rss"><a href="<?php echo $site."/activity/feed/" ?>">RSS</a></li>
             <li>

@@ -1,0 +1,1544 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjaxEditComments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-15 18:30-0600\n"
+"PO-Revision-Date: 2010-08-08 13:44+0100\n"
+"Last-Translator: Øyvind Enger <enger@morsom.no>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wp-ajax-edit-comments.php:251
+#: wp-ajax-edit-comments.php:292
+msgid "Comment Editor"
+msgstr "Kommentargrensesnitt"
+
+#: wp-ajax-edit-comments.php:254
+msgid "Click to Edit"
+msgstr "Klikk for å endre"
+
+#: wp-ajax-edit-comments.php:260
+#: wp-ajax-edit-comments.php:263
+#: php/admin-panel.php:364
+#: php/request-deletion.php:57
+msgid "Request Deletion"
+msgstr "Be om sletting"
+
+#: wp-ajax-edit-comments.php:268
+#: wp-ajax-edit-comments.php:271
+#: wp-ajax-edit-comments.php:2037
+#: wp-ajax-edit-comments.php:2058
+#: php/admin-panel.php:364
+msgid "Delete"
+msgstr "Slett"
+
+#: wp-ajax-edit-comments.php:295
+#: wp-ajax-edit-comments.php:2054
+msgid "Edit"
+msgstr "Endre"
+
+#: wp-ajax-edit-comments.php:301
+#: wp-ajax-edit-comments.php:304
+msgid "Restore"
+msgstr "Gjør om"
+
+#: wp-ajax-edit-comments.php:310
+#: wp-ajax-edit-comments.php:313
+msgid "Delete Permanently"
+msgstr "Slett permanent"
+
+#: wp-ajax-edit-comments.php:320
+#: wp-ajax-edit-comments.php:323
+#: wp-ajax-edit-comments.php:2040
+#: wp-ajax-edit-comments.php:2061
+#: php/comment-editor.php:135
+msgid "E-mail"
+msgstr "E-post"
+
+#: wp-ajax-edit-comments.php:332
+msgid "Move Comments"
+msgstr "Flytt kommentarer"
+
+#: wp-ajax-edit-comments.php:335
+#: wp-ajax-edit-comments.php:2039
+#: wp-ajax-edit-comments.php:2060
+#: php/move-comment.php:82
+#: php/move-comment.php:107
+#: php/move-comment.php:132
+msgid "Move"
+msgstr "Flytt"
+
+#: wp-ajax-edit-comments.php:342
+#: wp-ajax-edit-comments.php:345
+#: wp-ajax-edit-comments.php:2038
+#: wp-ajax-edit-comments.php:2059
+msgid "De-link"
+msgstr "Fjern lenke"
+
+#: wp-ajax-edit-comments.php:355
+#: wp-ajax-edit-comments.php:358
+#: wp-ajax-edit-comments.php:2034
+#: wp-ajax-edit-comments.php:2055
+msgid "Approve"
+msgstr "Godkjenn"
+
+#: wp-ajax-edit-comments.php:368
+#: wp-ajax-edit-comments.php:371
+#: wp-ajax-edit-comments.php:2035
+#: wp-ajax-edit-comments.php:2056
+msgid "Moderate"
+msgstr "Moderer"
+
+#: wp-ajax-edit-comments.php:381
+#: wp-ajax-edit-comments.php:384
+#: wp-ajax-edit-comments.php:2036
+#: wp-ajax-edit-comments.php:2057
+#: php/comment-editor.php:185
+#: php/comment-editor.php:192
+msgid "Spam"
+msgstr "Useriøs"
+
+#: wp-ajax-edit-comments.php:393
+#: wp-ajax-edit-comments.php:396
+#: wp-ajax-edit-comments.php:2041
+#: wp-ajax-edit-comments.php:2062
+#: php/blacklist-comment.php:136
+msgid "Blacklist"
+msgstr "Svartelist"
+
+#: wp-ajax-edit-comments.php:393
+msgid "Blacklist Comment"
+msgstr "Svartelist kommentar"
+
+#: wp-ajax-edit-comments.php:402
+#: wp-ajax-edit-comments.php:405
+#: php/comment-editor.php:186
+#: php/comment-editor.php:193
+msgid "Trash"
+msgstr "Søppel"
+
+#: wp-ajax-edit-comments.php:422
+#: wp-ajax-edit-comments.php:2322
+msgid "More Options"
+msgstr "Flere valg"
+
+#: wp-ajax-edit-comments.php:573
+msgid "Undo"
+msgstr "Gjør om"
+
+#: wp-ajax-edit-comments.php:959
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "En kommentar er endret på innlegg %s"
+
+#: wp-ajax-edit-comments.php:960
+#, php-format
+msgid "Author: %s\n"
+msgstr "Forfatter: %s\n"
+
+#: wp-ajax-edit-comments.php:961
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "Forfatter URL: %s\n"
+
+#: wp-ajax-edit-comments.php:962
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "Forfatter e-post: %s\n"
+
+#: wp-ajax-edit-comments.php:963
+msgid "Comment:\n"
+msgstr "Kommentar:\n"
+
+#: wp-ajax-edit-comments.php:964
+msgid "See all comments on this post here:\n"
+msgstr "Se alle kommentarer til dette innlegget her:\n"
+
+#: wp-ajax-edit-comments.php:966
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "Endret kommentar på: %s"
+
+#: wp-ajax-edit-comments.php:1123
+#: wp-ajax-edit-comments.php:1128
+msgid "Unknown error."
+msgstr "Ukjent feil."
+
+#: wp-ajax-edit-comments.php:1239
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "Du kan ikke endre en kommentar etter at andre kommentarer er lagt til."
+
+#: wp-ajax-edit-comments.php:1240
+msgid "The time to edit your comment has elapsed."
+msgstr "Tidsfristen for å endre kommentaren er utløpt."
+
+#: wp-ajax-edit-comments.php:1241
+msgid "You do not have permission to edit this comment."
+msgstr "Du har ikke rettigheter til å endre denne kommentaren."
+
+#: wp-ajax-edit-comments.php:1243
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "Denne kommentaren kan ikke endres fordi den er merket som useriøs."
+
+#: wp-ajax-edit-comments.php:1244
+msgid "Comment loading failed."
+msgstr "Innhenting av kommentar mislyktes."
+
+#: wp-ajax-edit-comments.php:1245
+msgid "Comment editing has been disabled."
+msgstr "Endring av kommentarer er deaktivert."
+
+#: wp-ajax-edit-comments.php:1246
+msgid "Could not mark as spam."
+msgstr "Kunne ikke merke kommentaren som useriøs."
+
+#: wp-ajax-edit-comments.php:1247
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "Du har ikke rettigheter til å merke denne kommentaren som useriøs."
+
+#: wp-ajax-edit-comments.php:1248
+msgid "Could not delete comment."
+msgstr "Kunne ikke flytte kommentaren til søpledunken."
+
+#: wp-ajax-edit-comments.php:1249
+msgid "You do not have permission to delete this comment."
+msgstr "Du har ikke rettigheter til å flytte denne kommentaren til søpledunken."
+
+#: wp-ajax-edit-comments.php:1250
+msgid "You do not have permission to approve this comment."
+msgstr "Du har ikke rettigheter til å godkjenne denne kommentaren."
+
+#: wp-ajax-edit-comments.php:1251
+msgid "Could not approve comment."
+msgstr "Kunne ikke godkjenne kommentaren."
+
+#: wp-ajax-edit-comments.php:1252
+msgid "Could not mark this comment for moderation."
+msgstr "Kunne ikke merke kommentaren for moderering."
+
+#: wp-ajax-edit-comments.php:1253
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "Du har ikke rettigheter til å merke denne kommentaren for moderering."
+
+#: wp-ajax-edit-comments.php:1254
+msgid "Please enter a valid email address."
+msgstr "Vennligst legg inn en gyldig e-postadresse."
+
+#: wp-ajax-edit-comments.php:1255
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "Vennligst fyll inn de nødvendige feltene (Navn, E-post)"
+
+#: wp-ajax-edit-comments.php:1256
+msgid "You cannot have an empty comment."
+msgstr "Kommentaren kan ikke være blank."
+
+#: wp-ajax-edit-comments.php:1257
+msgid "You do not have permission to delink this comment."
+msgstr "Du har ikke rettigheter til å fjerne lenken fra denne kommentaren."
+
+#: wp-ajax-edit-comments.php:1258
+msgid "Your comment was marked for moderation"
+msgstr "Din kommentar ble merket for moderering"
+
+#: wp-ajax-edit-comments.php:1259
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "Denne kommentaren kan ikke endres fordi den er merket for moderering."
+
+#: wp-ajax-edit-comments.php:1260
+msgid "Request failed."
+msgstr "Forespørsel feilet."
+
+#: wp-ajax-edit-comments.php:1261
+msgid "You have not selected anything to blacklist."
+msgstr "Du har ikke valgt noe å svarteliste."
+
+#: wp-ajax-edit-comments.php:1262
+msgid "Upgrade check failed."
+msgstr "Oppgraderingssjekk feilet"
+
+#: wp-ajax-edit-comments.php:1263
+msgid "You are using the latest version."
+msgstr "Du bruker den nyeste versjonen"
+
+#: wp-ajax-edit-comments.php:1523
+#, php-format
+msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
+msgstr "En bruker har bett om å slette kommentaren på ditt innlegg #%1$s \"%2$s\". Kommentaren er flyttet til ventende kommentarer."
+
+#: wp-ajax-edit-comments.php:1524
+msgid "The reason given is: "
+msgstr "Grunnen som er oppgitt: "
+
+#: wp-ajax-edit-comments.php:1525
+#, php-format
+msgid "E-mail : %s"
+msgstr "E-post: %s"
+
+#: wp-ajax-edit-comments.php:1526
+#, php-format
+msgid "URL    : %s"
+msgstr "URL    : %s"
+
+#: wp-ajax-edit-comments.php:1527
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Hvem er  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: wp-ajax-edit-comments.php:1529
+#, php-format
+msgid "Delete it: %s"
+msgstr "Slett kommentaren: %s"
+
+#: wp-ajax-edit-comments.php:1530
+#, php-format
+msgid "Approve it: %s"
+msgstr "Godkjenn kommentaren: %s"
+
+#: wp-ajax-edit-comments.php:1531
+#, php-format
+msgid "Spam it: %s"
+msgstr "Mer som useriøs %s"
+
+#: wp-ajax-edit-comments.php:1539
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "Be om at kommentaren slettes: \"%2$s\""
+
+#: wp-ajax-edit-comments.php:1665
+msgid "Comment successfully saved"
+msgstr "Kommentaren er lagret"
+
+#: wp-ajax-edit-comments.php:1731
+#, php-format
+msgid "An upgrade (Version %s) is available.  Please visit your"
+msgstr "En oppgradering (versjon %s) er tilgjengelig. Vennglist besøk"
+
+#: wp-ajax-edit-comments.php:1731
+msgid "member's section"
+msgstr "\"members\"-delen"
+
+#: wp-ajax-edit-comments.php:1741
+#: wp-ajax-edit-comments.php:1940
+msgid "There is a new version of WP Ajax Edit Comments available."
+msgstr "En ny versjon av WP Ajax Edit Comments er tilgjengelig."
+
+#: wp-ajax-edit-comments.php:1741
+msgid "Upgrade automatically"
+msgstr "Oppgrader automatisk"
+
+#: wp-ajax-edit-comments.php:1894
+msgid "Oops!! Something went wrong.<br/>Please try again or <a href='http://www.ajaxeditcomments.com/contact/'>contact us</a>."
+msgstr "Hmmm!! Noe gikk galt.<br/>Vennligsts prøv på nytt eller <a href='http://www.ajaxeditcomments.com/contact/'>kontakt oss</a>."
+
+#: wp-ajax-edit-comments.php:1940
+#, php-format
+msgid "View version %s Details"
+msgstr "Se detaljer om versjon %s"
+
+#: wp-ajax-edit-comments.php:1943
+msgid "Check for upgrades"
+msgstr "Se etter oppgradering"
+
+#: wp-ajax-edit-comments.php:1979
+msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+msgstr "Din kommentar ble merket som useriøs. Ta kontakt med administratoren hvis dette er feil."
+
+#: wp-ajax-edit-comments.php:2003
+msgid "Get your own comment editor for your WordPress website.  Try [url]Ajax Edit Comments[/url] today!"
+msgstr "Gi dine brukere muligheten til å endre kommentarer på din WordPress nettside. Prøv [url]Ajax Edit Comments[/url] i dag!"
+
+#: wp-ajax-edit-comments.php:2149
+msgid "Checking..."
+msgstr "Sjekker..."
+
+#: wp-ajax-edit-comments.php:2149
+msgid "Check for Upgrades"
+msgstr "Se etter oppgradering"
+
+#: wp-ajax-edit-comments.php:2166
+#: php/admin-panel-support.php:109
+msgid "show"
+msgstr "vis"
+
+#: wp-ajax-edit-comments.php:2166
+msgid "hide"
+msgstr "skjul"
+
+#: wp-ajax-edit-comments.php:2234
+msgid "Comment Box"
+msgstr "Kommentarboks"
+
+#: wp-ajax-edit-comments.php:2303
+msgid "minutes"
+msgstr "minutter"
+
+#: wp-ajax-edit-comments.php:2304
+msgid "minute"
+msgstr "minutt"
+
+#: wp-ajax-edit-comments.php:2305
+msgid "and"
+msgstr "og"
+
+#: wp-ajax-edit-comments.php:2306
+msgid "seconds"
+msgstr "sekunder"
+
+#: wp-ajax-edit-comments.php:2307
+msgid "second"
+msgstr "sekund"
+
+#: wp-ajax-edit-comments.php:2308
+msgid "Mark for Moderation?"
+msgstr "Merk for moderering?"
+
+#: wp-ajax-edit-comments.php:2309
+msgid "Approve Comment?"
+msgstr "Godkjenn kommentar?"
+
+#: wp-ajax-edit-comments.php:2310
+msgid "Mark as Spam?"
+msgstr "Merk som useriøs?"
+
+#: wp-ajax-edit-comments.php:2311
+msgid "Delete this comment?"
+msgstr "Legg kommentaren i søppeldunken?"
+
+#: wp-ajax-edit-comments.php:2312
+msgid "Anonymous"
+msgstr "Anonymt"
+
+#: wp-ajax-edit-comments.php:2313
+msgid "Loading..."
+msgstr "Henter..."
+
+#: wp-ajax-edit-comments.php:2314
+msgid "Ready"
+msgstr "Klar"
+
+#: wp-ajax-edit-comments.php:2315
+msgid "Sending..."
+msgstr "Lagrer..."
+
+#: wp-ajax-edit-comments.php:2316
+msgid "Message Sent"
+msgstr "Melding sendt"
+
+#: wp-ajax-edit-comments.php:2317
+msgid "Comment Loaded Successfully"
+msgstr "Kommentaren er hentet inn"
+
+#: wp-ajax-edit-comments.php:2318
+msgid "Saving..."
+msgstr "Lagrer..."
+
+#: wp-ajax-edit-comments.php:2319
+msgid "Blacklisting..."
+msgstr "Svartelister..."
+
+#: wp-ajax-edit-comments.php:2320
+msgid "Comment Successfully Saved"
+msgstr "Kommentaren ble lagret"
+
+#: wp-ajax-edit-comments.php:2321
+msgid "De-link Successful"
+msgstr "Lenke fjernet"
+
+#: wp-ajax-edit-comments.php:2323
+msgid "Less Options"
+msgstr "Færre valg"
+
+#: wp-ajax-edit-comments.php:2325
+msgid "Request has been sent successfully"
+msgstr "Forespørsel sendt"
+
+#: wp-ajax-edit-comments.php:2326
+msgid "Error sending request"
+msgstr "Feil ved sending av forespørsel"
+
+#: wp-ajax-edit-comments.php:2327
+msgid "Approving..."
+msgstr "Godkjenner..."
+
+#: wp-ajax-edit-comments.php:2328
+msgid "De-linking..."
+msgstr "Fjerner lenke..."
+
+#: wp-ajax-edit-comments.php:2329
+msgid "Moderating..."
+msgstr "Modererer..."
+
+#: wp-ajax-edit-comments.php:2330
+msgid "Spamming..."
+msgstr "Setter som useriøs..."
+
+#: wp-ajax-edit-comments.php:2331
+msgid "Deleting..."
+msgstr "Sletter..."
+
+#: wp-ajax-edit-comments.php:2332
+msgid "Restoring..."
+msgstr "Henter tilbake..."
+
+#: wp-ajax-edit-comments.php:2333
+msgid "Undoing..."
+msgstr "Gjør om..."
+
+#: wp-ajax-edit-comments.php:2334
+msgid "Undo Successful"
+msgstr "Gjort om"
+
+#: wp-ajax-edit-comments.php:2335
+msgid "Comment Deleted Permanently"
+msgstr "Kommentar permanent slettet"
+
+#: wp-ajax-edit-comments.php:2336
+msgid "Input Fields are Required"
+msgstr "Data må fylles inn"
+
+#: wp-ajax-edit-comments.php:2337
+msgid "E-mail Address is Invalid"
+msgstr "E-postadressen er ugyldig"
+
+#: wp-ajax-edit-comments.php:2341
+#: php/admin-panel.php:308
+#: php/admin-panel.php:344
+#: php/admin-panel.php:356
+#: php/admin-panel.php:358
+#: php/admin-panel.php:360
+#: php/admin-panel.php:362
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:398
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:406
+#: php/admin-panel.php:555
+#: php/admin-panel.php:562
+#: php/admin-panel.php:569
+#: php/admin-panel.php:582
+#: php/admin-panel.php:584
+#: php/admin-panel.php:587
+#: php/admin-panel.php:595
+#: php/admin-panel.php:615
+#: php/admin-panel.php:617
+#: php/admin-panel.php:624
+#: php/admin-panel.php:626
+#: php/admin-panel.php:634
+#: php/admin-panel.php:642
+#: php/admin-panel.php:650
+#: php/admin-panel.php:677
+#: php/admin-panel.php:684
+#: php/admin-panel.php:692
+#: php/admin-panel.php:700
+#: php/admin-panel.php:708
+#: php/admin-panel.php:723
+msgid "Yes"
+msgstr "Ja"
+
+#: wp-ajax-edit-comments.php:2342
+#: php/admin-panel.php:308
+#: php/admin-panel.php:344
+#: php/admin-panel.php:356
+#: php/admin-panel.php:358
+#: php/admin-panel.php:360
+#: php/admin-panel.php:362
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:398
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:406
+#: php/admin-panel.php:555
+#: php/admin-panel.php:562
+#: php/admin-panel.php:569
+#: php/admin-panel.php:582
+#: php/admin-panel.php:584
+#: php/admin-panel.php:587
+#: php/admin-panel.php:595
+#: php/admin-panel.php:615
+#: php/admin-panel.php:617
+#: php/admin-panel.php:624
+#: php/admin-panel.php:626
+#: php/admin-panel.php:634
+#: php/admin-panel.php:642
+#: php/admin-panel.php:650
+#: php/admin-panel.php:677
+#: php/admin-panel.php:684
+#: php/admin-panel.php:692
+#: php/admin-panel.php:700
+#: php/admin-panel.php:708
+#: php/admin-panel.php:723
+msgid "No"
+msgstr "Nei"
+
+#: wp-ajax-edit-comments.php:2343
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: php/admin-panel-support.php:65
+msgid "Support Request Sent."
+msgstr "Supporthenvendelse sendt."
+
+#: php/admin-panel-support.php:71
+msgid "Support"
+msgstr "Support"
+
+#: php/admin-panel-support.php:74
+msgid "Support Request"
+msgstr "Send forespørsel"
+
+#: php/admin-panel-support.php:75
+msgid "Support Forums"
+msgstr "Supportforum"
+
+#: php/admin-panel-support.php:76
+msgid "Documentation"
+msgstr "Dokumentasjon"
+
+#: php/admin-panel-support.php:84
+msgid "Your Name"
+msgstr "Ditt navn"
+
+#: php/admin-panel-support.php:89
+msgid "Email"
+msgstr "E-post"
+
+#: php/admin-panel-support.php:94
+msgid "Description of Issue"
+msgstr "Beskrivelse av problemet"
+
+#: php/admin-panel-support.php:96
+msgid "Please state in detail what problems you are experiencing.  Details we need to know are:"
+msgstr "Vennligst forklar detaljert om hvilke problemer du har. Detaljer vi trenger er:"
+
+#: php/admin-panel-support.php:98
+msgid "The problem"
+msgstr "Problemet"
+
+#: php/admin-panel-support.php:99
+msgid "Steps to duplicate the problem"
+msgstr "Steg du gjør for å gjenskape problemet"
+
+#: php/admin-panel-support.php:100
+msgid "Whether you are experiencing this problem on the front-end, the admin-panel, or both"
+msgstr "Har du problemet på sidene besøkende ser, i kontrollpanelet eller begge steder"
+
+#: php/admin-panel-support.php:101
+msgid "What browsers you are using to duplicate the problem"
+msgstr "Hvilke nettlesere du bruker for å gjenskape problemet"
+
+#: php/admin-panel-support.php:107
+msgid "Information Collection"
+msgstr "Innsamling av informasjon"
+
+#: php/admin-panel-support.php:109
+msgid "By clicking Submit, you agree to send us the following information"
+msgstr "Ved å klikke send, godtar du at følgende informasjon sendes"
+
+#: php/admin-panel-support.php:152
+msgid "Submit Support Request"
+msgstr "Send supporthenvendelse"
+
+#: php/admin-panel-support.php:157
+#, php-format
+msgid "To receive help from AEC team members and the AEC community, please consider leaving a support request via our %sSupport Forums%s"
+msgstr "For å få hjelp fra AEC-utviklere og AEC-brukere ellers, kan du også vurdere å legge inn en supporthenvendelse via vårt %ssupportforum%s"
+
+#: php/admin-panel-support.php:160
+#, php-format
+msgid "For in-depth documenation, including feature descriptions and how-to videos, please visit our %sDocumentation Section%s"
+msgstr "For å se en grundig dokumentasjon som inkluderer både forklaringer om hva innstikket kan gjøre og videoer som viser hvordan det virker, besøk %sdokumentasjondelen vår%s"
+
+#: php/admin-panel.php:24
+msgid "Security keys deleted"
+msgstr "Sikkerhetsnøkler slettet"
+
+#: php/admin-panel.php:38
+msgid "Comment time must be a numerical value"
+msgstr "Tidsfristen må være et tall"
+
+#: php/admin-panel.php:41
+msgid "Comment time must be greater than one minute."
+msgstr "Tidsfristen må være lenger enn ett minutt."
+
+#: php/admin-panel.php:60
+msgid "Authentication Key could not be validated."
+msgstr "Autentiseringsnøkkelen kunne ikke valideres."
+
+#: php/admin-panel.php:60
+#: php/admin-panel.php:88
+msgid "Please try again later."
+msgstr "Vennligst prøv igjen senere."
+
+#: php/admin-panel.php:65
+msgid "Invalid Authentication Key"
+msgstr "Ugyldig autentiseringsnøkkel"
+
+#: php/admin-panel.php:71
+msgid "Number of Sites Exceeded"
+msgstr "For mange nettsteder i  bruk"
+
+#: php/admin-panel.php:77
+msgid "Authentication Key is valid"
+msgstr "Autentiseringsnøkkelen er gyldig"
+
+#: php/admin-panel.php:88
+#: php/admin-panel.php:92
+msgid "Site could not be removed."
+msgstr "Nettsiden kunne ikke fjernes."
+
+#: php/admin-panel.php:97
+msgid "Site removed."
+msgstr "Nettside fjernet."
+
+#: php/admin-panel.php:109
+msgid "Affiliate ID could not be validated.  Please try again later."
+msgstr "Din Partner-ID kunne ikke verifiseres. Vennligst prøv på nytt."
+
+#: php/admin-panel.php:112
+msgid "Invalid Affiliate ID"
+msgstr "Ugyldig partner-ID"
+
+#: php/admin-panel.php:268
+msgid "Settings successfully updated."
+msgstr "Innstillingene ble lagret."
+
+#: php/admin-panel.php:276
+msgid "Your commentators have edited their comments "
+msgstr "Dine brukere har endret sine kommentarer "
+
+#: php/admin-panel.php:276
+msgid "times"
+msgstr "ganger"
+
+#: php/admin-panel.php:282
+msgid "Global Options"
+msgstr "Globale innstillinger"
+
+#: php/admin-panel.php:283
+msgid "Editing Options"
+msgstr "Redigeringsvalg"
+
+#: php/admin-panel.php:284
+msgid "Cleanup"
+msgstr "Opprydding"
+
+#: php/admin-panel.php:291
+msgid "General"
+msgstr "Generelt"
+
+#: php/admin-panel.php:292
+#: php/admin-panel.php:341
+msgid "Affiliate Options"
+msgstr "Partnervalg"
+
+#: php/admin-panel.php:293
+msgid "Anonymous Users"
+msgstr "Anonyme brukere"
+
+#: php/admin-panel.php:294
+msgid "Registered Users"
+msgstr "Registrerte brukere"
+
+#: php/admin-panel.php:295
+msgid "Styles"
+msgstr "Stiler"
+
+#: php/admin-panel.php:296
+msgid "Icons"
+msgstr "Ikon"
+
+#: php/admin-panel.php:297
+msgid "Other options"
+msgstr "Andre innstillinger"
+
+#: php/admin-panel.php:305
+msgid "Authentication Key:"
+msgstr "Autentiseringssnøkkel:"
+
+#: php/admin-panel.php:306
+msgid "Enter Your Authentication Key"
+msgstr "Skriv inn autentiseringssnøkkelen din"
+
+#: php/admin-panel.php:306
+msgid "The Authentication Key enables automatic upgrades within the WordPress admin panel.  An Authentication Key is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Autentiseringsnøkkelen muliggjør automatiske oppgraderinger fra administrasjonspanelet i WordPress. En autentiseringsnøkkel gis til  brukere på <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forum</a>."
+
+#: php/admin-panel.php:307
+msgid "Remove Site?"
+msgstr "Fjern nettside?"
+
+#: php/admin-panel.php:307
+msgid "Selecting \"Yes\" will remove the current site and allow you to use the Authentication Key on another site."
+msgstr "Velger du \"Ja\", vil denne nettsiden fjernes og du kan bruke autentiseringsnøkkelen på en annen nettside."
+
+#: php/admin-panel.php:313
+msgid "Set comment time (minutes):"
+msgstr "Velg tidsfrist for endring av kommentarer (minutter):"
+
+#: php/admin-panel.php:317
+msgid "Spam notification text:"
+msgstr "Tekst for varsel om useriøs kommentar:"
+
+#: php/admin-panel.php:319
+msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr "Vennligst begrens til en linje, hvis mulig, siden denne teksten vil vises hver gang du endrer en kommentar (Tillatte tags: em, a, strong, blockquote):"
+
+#: php/admin-panel.php:330
+msgid "Affiliate ID:"
+msgstr "Partner-ID:"
+
+#: php/admin-panel.php:331
+msgid "The Affiliate ID allows you to make money from the Ajax Edit Comments plugin through referrals.  An Affiliate ID is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Partner-IDen gir deg muligheten til å tjene penger på Ajax Edit Comments-innstikket ved å henvise andre. En partner-ID gis til brukere på <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forum</a>."
+
+#: php/admin-panel.php:334
+msgid "Affiliate Text:"
+msgstr "Partnertekst:"
+
+#: php/admin-panel.php:336
+msgid "This text will show when an anonymous commenter sees the editing options. A valid Affiliate ID is required."
+msgstr "Denne teksten vil bli vist når en anonym bruker ser skrivevalgene. En gyldig partner-ID er nødvendig."
+
+#: php/admin-panel.php:343
+msgid "Display for anonymous commenters?"
+msgstr "Vis for anonyme brukere?"
+
+#: php/admin-panel.php:343
+msgid "Selecting \"Yes\" will show the \"Affiliate Text\" above the editing options for each anonymous comment posted.  A valid Affiliate ID is required."
+msgstr "Velger du \"Ja\", vil \"Partnerteksten\" vises over skrivevalgene for alle kommentarer skrevet av anonyme brukere. En gyldig partner-ID er nødvendig."
+
+#: php/admin-panel.php:355
+msgid "Allow editing after additional comments have been posted?"
+msgstr "Tillat endring av kommentar etter at det har kommet nye kommentarer?"
+
+#: php/admin-panel.php:355
+msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+msgstr "Velger du \"Nei\", kan ingen endre kommentarene sine etter at nye kommentarer er publisert på et innlegg."
+
+#: php/admin-panel.php:357
+msgid "Allow Users to Edit Their Name?"
+msgstr "Tillat brukere å endre navnet sitt?"
+
+#: php/admin-panel.php:357
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av navn"
+
+#: php/admin-panel.php:359
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "Tillat brukere å endre e-postadressen sin?"
+
+#: php/admin-panel.php:359
+msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av e-postadresser. En av grunnene til å ha det på er for brukere med avatarer."
+
+#: php/admin-panel.php:361
+msgid "Allow Users to Edit Their URLs?"
+msgstr "Tillat brukere å endre nettsted?"
+
+#: php/admin-panel.php:361
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av nettsted."
+
+#: php/admin-panel.php:363
+msgid "Request Deletion Behavior"
+msgstr "Hvordan skal \"Be om sletting\" virke"
+
+#: php/admin-panel.php:363
+msgid "Determine if you want users to request deletion (comments are sent to moderation with admin notification) or delete comments (comments are deleted immediately with no admin notification).  Select Off if you would like to disable this feature."
+msgstr "Velg om du ønsker at brukere skal be om sletting (kommentarer flyttes til moderasjonskøen og administrator varsles) eller at kommentarer slettes (kommentarer slettes umiddelbart uten at administrator varsles). Velg Av hvis du ikke ønsker denne funksjonaliteten."
+
+#: php/admin-panel.php:364
+msgid "Off"
+msgstr "Av"
+
+#: php/admin-panel.php:375
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "Tillat registrerte brukere å endre kommentarer for evig?"
+
+#: php/admin-panel.php:376
+msgid "Selecting \"Yes\" will allow users registered on your website to edit comments without a time limit."
+msgstr "Velger du \"Ja\", tillater du registrerte brukere på nettsiden din å endre kommentarer uten tidsfrist."
+
+#: php/admin-panel.php:378
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "Tillat registrerte brukere å endre navnet sitt?"
+
+#: php/admin-panel.php:379
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their names.  This can prevent issues if a user wishes to impersonate others."
+msgstr "Velger du \"Ja\", tillater du registrerte brukere på nettsiden din å endre navnet sitt. Dette kan forhinde tilfeller hvor en bruker ønsker å late som han er en annen."
+
+#: php/admin-panel.php:381
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "Tillat registrerte brukere å endre e-postadressen sin?"
+
+#: php/admin-panel.php:382
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their e-mail address."
+msgstr "Velger du \"Ja\", tillater du registrerte brukere på nettsiden din å endre e-postadressen sin."
+
+#: php/admin-panel.php:384
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "Tillat registrerte brukere å endre nettsted?"
+
+#: php/admin-panel.php:385
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their URL."
+msgstr "Velger du \"Ja\", tillater du registerte brukere på nettsiden din å endre nettadressen sin."
+
+#: php/admin-panel.php:397
+msgid "Use RTL StyleSheet?"
+msgstr "Bruk RTV stilsett?"
+
+#: php/admin-panel.php:399
+msgid "Turn Off clearfix:after?"
+msgstr "Skru av clearfix:after?"
+
+#: php/admin-panel.php:400
+msgid "The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "Clearfix er som standard skrudd på for å virke sammen med de fleste temaer."
+
+#: php/admin-panel.php:402
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "Skru av Javascript-scrolling for administratorer?"
+
+#: php/admin-panel.php:403
+msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "Innstikket forsøker å rette feilaktige offsets på innlegg dersom du er administrator."
+
+#: php/admin-panel.php:405
+msgid "Comment Edit Interface On Bottom?"
+msgstr "Vis grensesnitt for endring av kommentarer i bunn?"
+
+#: php/admin-panel.php:416
+msgid "Icon Display"
+msgstr "Hvordan ikon vises"
+
+#: php/admin-panel.php:418
+msgid "Select an option below to determine how the icons are displayed on your website."
+msgstr "Velg hvordan du ønsker å vise ikonene på nettsiden din."
+
+#: php/admin-panel.php:420
+msgid "Text Only"
+msgstr "Kun tekst"
+
+#: php/admin-panel.php:421
+msgid "Classic"
+msgstr "Klassisk"
+
+#: php/admin-panel.php:422
+msgid "Dropdown"
+msgstr "Nedtrekksmeny"
+
+#: php/admin-panel.php:423
+msgid "Icons Only"
+msgstr "Kun ikon"
+
+#: php/admin-panel.php:427
+msgid "Icon Set"
+msgstr "Velg ikon-sett"
+
+#: php/admin-panel.php:429
+msgid "Select an option below to display the icon set on your website."
+msgstr "Velg hvilken ikon-stil du ønsker å bruke på nettsiden din."
+
+#: php/admin-panel.php:451
+msgid "Icon Drop Down Menu"
+msgstr "Nedtrekksmeny for ikoner"
+
+#: php/admin-panel.php:453
+msgid "Drag and drop between lists to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "Dra og slipp mellom listene for å endre rekkefølgen på ikon. Klikk på bildet for å skru det aktuelle menyvalget av eller på."
+
+#: php/admin-panel.php:491
+#: php/admin-panel.php:531
+msgid "text"
+msgstr "tekst"
+
+#: php/admin-panel.php:511
+msgid "Classic and Icons Only Vew"
+msgstr "Gjelder \"klassisk\" og \"kun ikon\"-visning"
+
+#: php/admin-panel.php:513
+msgid "Drag and drop to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "Dra og slipp for å endre rekkefølgen på ikon. Klikk på bildet for å skru det aktuelle menyvalget av eller på."
+
+#: php/admin-panel.php:552
+msgid "Display Options"
+msgstr "Innstillinger for visning"
+
+#: php/admin-panel.php:554
+msgid "Display on pages?"
+msgstr "Vis på sider?"
+
+#: php/admin-panel.php:554
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av kommentarer på sider."
+
+#: php/admin-panel.php:559
+msgid "Countdown Timer"
+msgstr "Nedtelling"
+
+#: php/admin-panel.php:561
+msgid "Show a Countdown Timer?"
+msgstr "Vis nedtelling?"
+
+#: php/admin-panel.php:561
+msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+msgstr "Velger du \"Nei\", skrur du av nedtelling for alle utenom administratorer."
+
+#: php/admin-panel.php:566
+msgid "Edit E-mails"
+msgstr "E-post ved endring"
+
+#: php/admin-panel.php:568
+msgid "Allow Edit E-mails?"
+msgstr "Utsendelese av e-post ved endring?"
+
+#: php/admin-panel.php:568
+msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+msgstr "Velger du \"Ja\", vil du motta en e-post hver gang noen endrer kommentaren sin."
+
+#: php/admin-panel.php:573
+msgid "Spam Protection"
+msgstr "Beskyttelse mot useriøse kommentarer"
+
+#: php/admin-panel.php:575
+msgid "Akismet"
+msgstr "Akismet"
+
+#: php/admin-panel.php:575
+msgid "Defensio"
+msgstr "Defensio"
+
+#: php/admin-panel.php:575
+msgid "None"
+msgstr "Ingen"
+
+#: php/admin-panel.php:579
+msgid "Performance"
+msgstr "Ytelse"
+
+#: php/admin-panel.php:581
+msgid "Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)"
+msgstr "Last inn Scriptene i bunnen av siden? (Krever WordPress 2.8 eller nyere og et kompatibelt tema)"
+
+#: php/admin-panel.php:583
+msgid "Use Compressed JavaScript Files?"
+msgstr "Bruk komprimerte JavaScript-filer?"
+
+#: php/admin-panel.php:585
+msgid "Load wp-load.php Directly?"
+msgstr "Last inn wp-load.php direkte?"
+
+#: php/admin-panel.php:586
+msgid "Loading wp-load.php directly prevents most plugin conflicts.  It requires that the wp-content folder be in the default location."
+msgstr "Ved å laste inn wp-load.php direkte, unngår du de fleste konflikter med innstikk. Det krever imidlertid at mappen wp-content ikke er flyttet fra standardplasseringen."
+
+#: php/admin-panel.php:591
+msgid "Character Encoding"
+msgstr "Tegnsett"
+
+#: php/admin-panel.php:593
+msgid "Enable mb_convert_encoding?"
+msgstr "Skru på mb_convert_encoding?"
+
+#: php/admin-panel.php:594
+msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+msgstr "Noen servere har ikke installert dette. Skrur du av denne funksjonen, bør du teste diverse karakterer. mb_convert_encoding-funksjonen er nødvendig for å konvertere mellom UTF-8 til diverse andre tegnsett."
+
+#: php/admin-panel.php:599
+msgid "After the Deadline"
+msgstr "After the Deadline"
+
+#: php/admin-panel.php:601
+msgid "Select After the Deadline Language"
+msgstr "Velg språk for After the Deadline"
+
+#: php/admin-panel.php:614
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "Skru av After the Deadline stavekontroll på innlegg?"
+
+#: php/admin-panel.php:616
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "Skru av After the Deadline stavekontroll i popup-vinduer?"
+
+#: php/admin-panel.php:621
+msgid "Expand Options"
+msgstr "Utvidelse"
+
+#: php/admin-panel.php:623
+msgid "Disable the Expand Option on Posts?"
+msgstr "Skru av utvidelsesmulighet på innlegg?"
+
+#: php/admin-panel.php:625
+msgid "Disable the Expand Option on the Popups?"
+msgstr "Skru av utvidelsesmulighet på popup-vinduer?"
+
+#: php/admin-panel.php:630
+msgid "Disable Trackbacks"
+msgstr "Skru av tilbakesporinger"
+
+#: php/admin-panel.php:632
+msgid "Disable trackbacks from showing?"
+msgstr "Ikke vis tilbakesporinger?"
+
+#: php/admin-panel.php:633
+msgid "Enabling this option will prevent trackbacks from showing up on your blog.  Please note that this option will not prevent your site from receiving trackbacks."
+msgstr "Velger du dette, vil ikke tilbakesporinger vises på nettsiden din. Vær klar over at dette ikke gjør at nettsiden stopper å ta i mot tilbakesporinger."
+
+#: php/admin-panel.php:638
+msgid "Disable No-follow"
+msgstr "Skru av no-follow"
+
+#: php/admin-panel.php:640
+msgid "Disable no-follow in comment links?"
+msgstr "Skru av no-follow på linker i kommentarer?"
+
+#: php/admin-panel.php:641
+msgid "Enabling this option will remove no-follow from comment and author links."
+msgstr "Velger du dette, fjerner du no-follow fra kommentar- og forfatterlinker."
+
+#: php/admin-panel.php:646
+msgid "Disable Self Pings"
+msgstr "Skru av "
+
+#: php/admin-panel.php:648
+msgid "Disable self-pings to your site?"
+msgstr "Skru av tilbakeping på nettsiden din?"
+
+#: php/admin-panel.php:649
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "Velger du dette, vil ikke nettsiden din sende tilbakeping til seg selv."
+
+#: php/admin-panel.php:654
+msgid "De-link Behavior"
+msgstr "Funksjon for fjerning av lenker"
+
+#: php/admin-panel.php:656
+msgid "Choose how the de-link function behaves."
+msgstr "Velg hvordan funksjonen for fjerning av lenker skal virke."
+
+#: php/admin-panel.php:657
+msgid "You can choose to remove links from the comment content and comment author URL, or just the comment author URL."
+msgstr "Du kan velge å fjerne lenker fra kommentarinnholdet og forfatterens URL, eller bare forfatterens URL."
+
+#: php/admin-panel.php:658
+msgid "Content and comment author URL."
+msgstr "Kommentarinnhold og forfatterens URL."
+
+#: php/admin-panel.php:658
+msgid "Comment author URL."
+msgstr "Forfatterens URL."
+
+#: php/admin-panel.php:674
+msgid "Registered Comment Editing"
+msgstr "Registrerte brukere"
+
+#: php/admin-panel.php:676
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "Tillat registrerte brukere å endre sine egne kommentarer?"
+
+#: php/admin-panel.php:676
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av kommentarer for registrerte brukere."
+
+#: php/admin-panel.php:681
+msgid "Anonymous Commenter Editing"
+msgstr "Anonyme brukere"
+
+#: php/admin-panel.php:683
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "Tillat anonyme brukere å endre sine egne kommentarer?"
+
+#: php/admin-panel.php:683
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr "Velger du \"Nei\", skrur du av muligheten for endring av kommentarer for anonyme brukere."
+
+#: php/admin-panel.php:688
+msgid "Admin Users (Admin Panel)"
+msgstr "Administratorer (kontrollpanelet)"
+
+#: php/admin-panel.php:690
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "Skru av endring av kommentarer i kontrollpanelet?"
+
+#: php/admin-panel.php:691
+msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "Velger du \"Ja\", skrur du av muligheten for endring av kommentarer i kontrollpanelet."
+
+#: php/admin-panel.php:696
+msgid "Admin Users (Posts)"
+msgstr "Administratorer (innlegg)"
+
+#: php/admin-panel.php:698
+#: php/admin-panel.php:706
+msgid "Turn On Comment Editing?"
+msgstr "Skru på endring av kommentarer?"
+
+#: php/admin-panel.php:699
+msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr "Velger du \"Ja\", kan du endre brukeres kommentarer. Velger du \"Nei\", kan du ikke endre kommentarer på et innlegg."
+
+#: php/admin-panel.php:704
+msgid "Editors"
+msgstr "Forfattere"
+
+#: php/admin-panel.php:707
+msgid "Selecting \"Yes\" will allow Editors to see the AEC edit options on a post or in the admin panel."
+msgstr "Velger du \"Ja\", vil forfattere se AEC redigeringsvalgene på innlegg eller i kontrollpanelet."
+
+#: php/admin-panel.php:720
+msgid "Delete all security keys"
+msgstr "Slett alle sikkerhetsnøkler"
+
+#: php/admin-panel.php:722
+msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+msgstr "Hver gang en bruker skriver en kommentar, blir en sikkerhetsnøkkel lagres som en custom key. Innimellom kan du ønske å slette disse. Vennligst ta sikkerhetskopi av databasen først."
+
+#: php/admin-panel.php:730
+msgid "Update Settings"
+msgstr "Lagre innstillinger"
+
+#: php/ajax-processor.php:72
+msgid "Comment Approved. "
+msgstr "Kommentar godkjent."
+
+#: php/ajax-processor.php:79
+msgid "Move Successful. "
+msgstr "Kommentar flyttet."
+
+#: php/ajax-processor.php:235
+msgid "Successfully blacklisted."
+msgstr "Kommentar svartelistet."
+
+#: php/ajax-processor.php:235
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "kommentar(er) ble merket som useriøse ut fra dine avanserte kriterier."
+
+#: php/ajax-processor.php:259
+msgid "Successfully Deleted"
+msgstr "Kommentar slettet"
+
+#: php/ajax-processor.php:323
+msgid "Successfully Marked as Spam"
+msgstr "Kommentar merket som useriøs"
+
+#: php/ajax-processor.php:355
+msgid "Successfully Approved"
+msgstr "Kommentar godkjent"
+
+#: php/ajax-processor.php:385
+msgid "Successfully Marked for Moderation"
+msgstr "Kommentar merket for moderering"
+
+#: php/ajax-processor.php:422
+msgid "Successfully De-linked"
+msgstr "Lenke fjernet fra kommentar"
+
+#: php/blacklist-comment.php:70
+#: php/comment-editor.php:110
+msgid "Main"
+msgstr "Standardinnstillinger"
+
+#: php/blacklist-comment.php:71
+#: php/comment-editor.php:111
+msgid "Advanced"
+msgstr "Avanserte innstillinger"
+
+#: php/blacklist-comment.php:75
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "Velg fra innstillingene nedenfor for å legge til i din svarteliste."
+
+#: php/blacklist-comment.php:80
+#: php/blacklist-comment.php:110
+#: php/comment-editor.php:129
+msgid "Name"
+msgstr "Navn"
+
+#: php/blacklist-comment.php:87
+#: php/blacklist-comment.php:117
+#: php/comment-editor.php:141
+msgid "URL"
+msgstr "Nettsted"
+
+#: php/blacklist-comment.php:94
+#: php/blacklist-comment.php:124
+msgid "E-mail Address"
+msgstr "E-postadresse"
+
+#: php/blacklist-comment.php:98
+#: php/blacklist-comment.php:128
+msgid "IP Address"
+msgstr "IP-adresse"
+
+#: php/blacklist-comment.php:104
+msgid "Spam Matching Comments"
+msgstr "Merk kommentarer som gir treff"
+
+#: php/blacklist-comment.php:105
+msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+msgstr "Eksempel: Velger du \"e-post\" og \"navn\", vil alle kommentarer som gir treff på både navn og e-post merkes som useriøse."
+
+#: php/blacklist-comment.php:105
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "Vær forsiktig med denne funksjonaliteten. Det kan ikke gjøres om."
+
+#: php/blacklist-comment.php:137
+#: php/comment-editor.php:203
+#: php/email.php:94
+#: php/request-deletion.php:78
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: php/blacklist-comment.php:139
+#: php/comment-editor.php:206
+#: php/email.php:96
+#: php/move-comment.php:163
+#: php/request-deletion.php:80
+msgid "Close"
+msgstr "Lukk"
+
+#: php/comment-editor.php:163
+#, php-format
+msgid "<b>%1$s</b> :on Submitted"
+msgstr "<b>%1$s</b> :Sendt inn"
+
+#: php/comment-editor.php:166
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "Sendt inn: <b>%1$s</b>"
+
+#: php/comment-editor.php:170
+msgid "Adjust Comment Time"
+msgstr "Endre kommentar tidspunkt"
+
+#: php/comment-editor.php:172
+msgid "Adjust Comment Status"
+msgstr "Endre kommentarstatus"
+
+#: php/comment-editor.php:183
+#: php/comment-editor.php:190
+msgid "Approved"
+msgstr "Godkjent"
+
+#: php/comment-editor.php:184
+#: php/comment-editor.php:191
+msgid "Pending"
+msgstr "Venter"
+
+#: php/comment-editor.php:202
+msgid "Save"
+msgstr "Lagre"
+
+#: php/comment-popup.php:37
+msgid "Please type out your comment below."
+msgstr "Vennligst skriv inn kommentaren din nedenfor."
+
+#: php/comment-popup.php:40
+msgid "Save and Return"
+msgstr "Gå tilbake"
+
+#: php/comment-popup.php:40
+msgid "Submit Comment"
+msgstr "Lagre kommentar"
+
+#: php/email.php:73
+msgid "To"
+msgstr "Til"
+
+#: php/email.php:77
+msgid "From"
+msgstr "Fra"
+
+#: php/email.php:81
+msgid "Site Admin"
+msgstr "Administrator"
+
+#: php/email.php:81
+msgid "Post Author"
+msgstr "Innleggets forfatter"
+
+#: php/email.php:84
+msgid "Subject"
+msgstr "Emne"
+
+#: php/email.php:93
+msgid "Send"
+msgstr "Send"
+
+#: php/move-comment.php:66
+msgid "Move by Post"
+msgstr "Flytt til Innlegg"
+
+#: php/move-comment.php:67
+msgid "Move by Title"
+msgstr "Flytt til Tittel"
+
+#: php/move-comment.php:68
+msgid "Move by ID"
+msgstr "Flytt til ID"
+
+#: php/move-comment.php:80
+msgid "Previous"
+msgstr "Forrige"
+
+#: php/move-comment.php:80
+msgid "Next"
+msgstr "Neste"
+
+#: php/move-comment.php:91
+#: php/move-comment.php:99
+#: php/move-comment.php:116
+#: php/move-comment.php:124
+msgid "Search"
+msgstr "Søk"
+
+#: php/move-comment.php:93
+#: php/move-comment.php:97
+msgid "Title"
+msgstr "Tittel"
+
+#: php/move-comment.php:118
+#: php/move-comment.php:122
+msgid "Post ID"
+msgstr "Innleggs-ID"
+
+#: php/move-comment.php:149
+#: php/move-comment.php:152
+msgid "Mark as Approved"
+msgstr "Merk som godkjent?"
+
+#: php/request-deletion.php:69
+msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+msgstr "Vennligst forklar hvorfor kommentaren bør slettes. Etter at du har sendt forespørselen, vil kommentaren bli merket som useriøs og ikke være synlig for alle."
+
+#: php/request-deletion.php:77
+msgid "Send Request"
+msgstr "Send forespørsel"
+
+#~ msgid "Individual Options"
+#~ msgstr "Individuelle innstillinger"
+#~ msgid "Admin Panel Editing"
+#~ msgstr "Kontrollpanelet"
+#~ msgid "Post Editing"
+#~ msgstr "Endring av innlegg"
+#~ msgid ""
+#~ "By subscribing to the <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments Forums</a>, you will get access to automatic upgrades and "
+#~ "support."
+#~ msgstr ""
+#~ "Ved å melde deg inn på <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments Forumet</a>, vil du få tilgang på automatiske "
+#~ "oppgraderinger og support."
+#~ msgid "Allow Users to Request Deletion of Comments?"
+#~ msgstr "Tillat brukere å be om sletting av kommentarer?"
+#~ msgid "Selecting \"No\" will turn off the deletion option."
+#~ msgstr "Velger du \"Nei\", skrur du av muligheten for å be om sletting."
+#~ msgid "Post/Admin CSS URL"
+#~ msgstr "Innlegg/Admin CSS-adresse"
+#~ msgid "Leaving a style empty will revert back to the default plugin styles."
+#~ msgstr ""
+#~ "Lar du et stilvalg stå blankt, settes det tilbake til innstikkets "
+#~ "standardvalg."
+#~ msgid "The URL should be relative to: "
+#~ msgstr "Adressen bør være relativ til: "
+#~ msgid "Editor CSS URL"
+#~ msgstr "Grensesnittets CSS-adresse"
+#~ msgid ""
+#~ "Selecting \"No\" will turn off comment editing for everyone except admin "
+#~ "types who have post and page editing permissions."
+#~ msgstr ""
+#~ "Velger du \"Nei\", kan ingen endre kommentarer med unntak av "
+#~ "administratorer som har rettigheter til å endre innlegg og sider."
+#~ msgid "Ajax Edit Comments"
+#~ msgstr "Ajax Edit Comments"
+#~ msgid "Global Options - These Options Affect Everyone"
+#~ msgstr ""
+#~ "Globale innstillinger - Disse valgene har innvirkning på alle brukere."
+#~ msgid "The following affects the editing interface."
+#~ msgstr ""
+#~ "Følgende har innvirkning på grensesnittet for endring av kommentarer."
+#~ msgid "Turn Off More Options?"
+#~ msgstr "Skru av flere valg?"
+#~ msgid "Individual Options - These Options Only Affect You"
+#~ msgstr "Individuelle innstillinger - Disse vil ha innvirkning bare på deg"
+#~ msgid "Show Advanced Options in Editor?"
+#~ msgstr "Vis avanserte innstillinger i grensesnittet?"
+#~ msgid "Selecting \"Yes\" will show advanced options in the editor window"
+#~ msgstr "Velger du \"Ja\", vises avanserte innstillinger i grensesnittet"
+#~ msgid "Ajax Edit Comments Cleanup"
+#~ msgstr "Ajax Edit Comments opprydding"
+#~ msgid "Your readers have edited their comments "
+#~ msgstr "Dine brukere har endret sine kommentarer "
+#~ msgid ""
+#~ " times.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "ganger.\n"
+#~ "\n"
+#~ msgid ""
+#~ "The Ajax Edit Comments plugin has saved you and your readers a ton of "
+#~ "time. Please consider a small donation for our hard work and time spent "
+#~ "on the plugin.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Ajax Edit Comments har spart deg og dine lesere for masse tid. Vær så "
+#~ "snill og vurder en liten donasjon for det harde arbeidet og tiden som er "
+#~ "brukt på innstikket.\n"
+#~ msgid "Donate: %s"
+#~ msgstr "Donér: %s"
+#~ msgid ""
+#~ "If you do not wish to receive these e-mails anymore, please unsubscribe "
+#~ "in the WordPress settings page for Ajax Edit Comments.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Hvis du ikke lenger ønsker å motta disse e-postene, vennligst meld deg av "
+#~ "på siden med innstillinger for Ajax Edit Comments i WordPress.\n"
+#~ msgid "Please"
+#~ msgstr "Vær så snill."
+#~ msgid "Donate"
+#~ msgstr "Donér"
+#~ msgid "Unsubscribe"
+#~ msgstr "Meld av"
+#~ msgid "Unsubscribe from periodic reminder e-mails?"
+#~ msgstr "Meld deg av periodiske påminnelser på e-post?"
+#~ msgid "Not Spam"
+#~ msgstr "Ikke spam"
+#~ msgid ""
+#~ "Tweaking the style options is recommended for advanced users only.  If "
+#~ "you choose to disable styles, you will have to provide your own styles in "
+#~ "your default WordPress stylesheet."
+#~ msgstr ""
+#~ "Å endre stilvalgene anbefales kun for erfarne brukere. Om du velger å "
+#~ "skru av stiler, må du sette de nødvendige stiler i  ditt standard "
+#~ "WordPress-stilark."
+#~ msgid "Turn Off Icons?"
+#~ msgstr "Skru av ikon?"
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "Velger du \"Ja\", vil ikke innstikkets ikon vises."
+#~ msgid "Gravatars"
+#~ msgstr "Gravatarer"
+#~ msgid "Turning off Gravatars may solve some plugin compatibility issues."
+#~ msgstr ""
+#~ "Ved å skru av Gravatarer, kan du løse enkelte tilfeller der innstikk ikke "
+#~ "virker sammen."
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "Skru av Gravatarer?"
+#~ msgid "Please leave as is if you wish to retain proper plugin credit."
+#~ msgstr "Vennligst la dette stå for å gi ære til innstikket."
+#~ msgid "Editor Title"
+#~ msgstr "Editor-tittel"
+
+#, fuzzy
+#~ msgid "Deleted"
+#~ msgstr "Slett"
+

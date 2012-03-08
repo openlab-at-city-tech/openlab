@@ -1,0 +1,1073 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Ajax Edit Comments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-11-02 23:46-0600\n"
+"PO-Revision-Date: 2010-03-03 19:21-0600\n"
+"Last-Translator: Ronald Huereca <ron@ronalfy.com>\n"
+"Language-Team: Outshine Solutions <ashish@outshinesolutions.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Hindi\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Country: INDIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:269
+#: wp-ajax-edit-comments.php:213
+#: wp-ajax-edit-comments.php:234
+#: wp-ajax-edit-comments.php:281
+msgid "Ajax Edit Comments"
+msgstr "ऐजक्स एडिट कमेंट्स"
+
+#: wp-ajax-edit-comments.php:214
+msgid "Click to Edit"
+msgstr "संपादन के लिए क्लिक करें"
+
+#: wp-ajax-edit-comments.php:218
+#: wp-ajax-edit-comments.php:219
+#: php/request-deletion.php:49
+msgid "Request Deletion"
+msgstr "मिटाने के लिए अनुरोध करे "
+
+#: wp-ajax-edit-comments.php:235
+#: wp-ajax-edit-comments.php:282
+msgid "Edit"
+msgstr "संपादित करें"
+
+#: wp-ajax-edit-comments.php:241
+#: wp-ajax-edit-comments.php:288
+#: wp-ajax-edit-comments.php:1509
+#: php/comment-editor.php:125
+msgid "More Options"
+msgstr "अधिक विकल्प"
+
+#: wp-ajax-edit-comments.php:245
+#: wp-ajax-edit-comments.php:292
+msgid "Move Comments"
+msgstr "टिप्पणियाँ हटाये "
+
+#: wp-ajax-edit-comments.php:246
+#: wp-ajax-edit-comments.php:293
+#: php/move-comment.php:75
+#: php/move-comment.php:100
+#: php/move-comment.php:125
+msgid "Move"
+msgstr "हटाये "
+
+#: wp-ajax-edit-comments.php:250
+#: wp-ajax-edit-comments.php:297
+msgid "De-link"
+msgstr "डी-लिंक"
+
+#: wp-ajax-edit-comments.php:255
+#: wp-ajax-edit-comments.php:307
+msgid "Moderate"
+msgstr "मध्यम"
+
+#: wp-ajax-edit-comments.php:260
+#: wp-ajax-edit-comments.php:302
+msgid "Approve"
+msgstr "स्वीकृत"
+
+#: wp-ajax-edit-comments.php:265
+#: wp-ajax-edit-comments.php:312
+#: php/comment-editor.php:192
+#: php/comment-editor.php:198
+msgid "Spam"
+msgstr "स्पैम"
+
+#: wp-ajax-edit-comments.php:268
+#: wp-ajax-edit-comments.php:315
+#: php/blacklist-comment.php:68
+msgid "Blacklist Comment"
+msgstr "ब्लैकलिस्ट टिप्पणी"
+
+#: wp-ajax-edit-comments.php:269
+#: wp-ajax-edit-comments.php:316
+#: php/blacklist-comment.php:129
+msgid "Blacklist"
+msgstr "ब्लैकलिस्ट"
+
+#: wp-ajax-edit-comments.php:272
+#: wp-ajax-edit-comments.php:319
+msgid "Delete"
+msgstr "मिटाना"
+
+#: wp-ajax-edit-comments.php:332
+msgid "Undo"
+msgstr "पूर्ववत करें"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:587
+#: wp-ajax-edit-comments.php:696
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "एक टिप्पणी पद पर संपादित किया गया है% s"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:588
+#: wp-ajax-edit-comments.php:697
+#, php-format
+msgid "Author: %s\n"
+msgstr "लेखक:%s\n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:589
+#: wp-ajax-edit-comments.php:698
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "लेखक यू आर एल:%s\n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:588
+#: wp-ajax-edit-comments.php:699
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "लेखक ई मेल:%s\n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:590
+#: wp-ajax-edit-comments.php:700
+msgid "Comment:\n"
+msgstr "टिप्पणी: \n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:591
+#: wp-ajax-edit-comments.php:701
+msgid "See all comments on this post here:\n"
+msgstr "इस पोस्ट पर सभी टिप्पणियाँ यहाँ देखें:\n"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:593
+#: wp-ajax-edit-comments.php:703
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "नई संपादित टिप्पणी पर:%s"
+
+#: wp-ajax-edit-comments.php:831
+msgid "Unknown error."
+msgstr "अज्ञात त्रुटि."
+
+#: wp-ajax-edit-comments.php:946
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "अन्य टिप्पणियाँ पोस्ट होने के बाद ,तुम एक टिप्पणी को संपादित नहीं कर सकते "
+
+#: wp-ajax-edit-comments.php:947
+msgid "The time to edit your comment has elapsed."
+msgstr "अपनी टिप्पणी को संपादित करने समय गुजर चुका है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:948
+msgid "You do not have permission to edit this comment."
+msgstr "आपको इस टिप्पणी को संपादित करने की अनुमति नहीं है."
+
+#: wp-ajax-edit-comments.php:950
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "यह टिप्पणी संपादित नहीं किया जा सकता है ,क्योंकि यह स्पैम के रूप में चिह्नित है."
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:347
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:347
+#: wp-ajax-edit-comments.php:951
+msgid "Comment loading failed."
+msgstr "टिप्पणी लोड नाकाम रहा."
+
+#: wp-ajax-edit-comments.php:952
+msgid "Comment editing has been disabled."
+msgstr "टिप्पणी संपादन अक्षम कर दिया गया है."
+
+# C:\SVN\plugin/php-includes/AjaxEditComments.php:46
+# C:\SVN\plugin\php-includes/AjaxEditComments.php:46
+#: wp-ajax-edit-comments.php:953
+msgid "Could not mark as spam."
+msgstr "स्पैम के रूप में चिह्नित नहीं किया जा सका."
+
+#: wp-ajax-edit-comments.php:954
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "आपको इस टिप्पणी को स्पैम के रूप में चिह्नित करने की अनुमति नहीं है."
+
+# C:\SVN\plugin/php-includes/AjaxEditComments.php:39
+# C:\SVN\plugin\php-includes/AjaxEditComments.php:39
+#: wp-ajax-edit-comments.php:955
+msgid "Could not delete comment."
+msgstr "टिप्पणी हटाना नहीं कर सका."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:956
+msgid "You do not have permission to delete this comment."
+msgstr "आपको इस टिप्पणी को हटाने की अनुमति नहीं है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:957
+msgid "You do not have permission to approve this comment."
+msgstr "आपको इस टिप्पणी को अनुमोदित करने की अनुमति नहीं है."
+
+# C:\SVN\plugin/php-includes/AjaxEditComments.php:39
+# C:\SVN\plugin\php-includes/AjaxEditComments.php:39
+#: wp-ajax-edit-comments.php:958
+msgid "Could not approve comment."
+msgstr "टिप्पणी अनुमोदन नहीं कर सका."
+
+#: wp-ajax-edit-comments.php:959
+msgid "Could not mark this comment for moderation."
+msgstr "संचालन के लिए इस टिप्पणी को चिह्नित नहीं कर सका."
+
+#: wp-ajax-edit-comments.php:960
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "संचालन के लिए आपको इस टिप्पणी को चिह्नित करने की अनुमति नहीं है."
+
+#: wp-ajax-edit-comments.php:961
+msgid "Please enter a valid email address."
+msgstr "कृपया एक मान्य ईमेल पता दर्ज करें."
+
+#: wp-ajax-edit-comments.php:962
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "कृपया आवश्यकता के क्षेत्र में भरे (नाम, ई मेल)"
+
+#: wp-ajax-edit-comments.php:963
+msgid "You cannot have an empty comment."
+msgstr "आप एक खाली टिप्पणी नहीं कर सकते हैं."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:964
+msgid "You do not have permission to delink this comment."
+msgstr "आपको इस टिप्पणी को डी-लिंक करने की अनुमति नहीं है."
+
+#: wp-ajax-edit-comments.php:965
+msgid "Your comment was marked for moderation"
+msgstr "आपकी टिप्पणी मॉडरेशन के लिए चिह्नित किया गया है."
+
+#: wp-ajax-edit-comments.php:966
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "यह टिप्पणी संपादित नहीं किया जा सकता है क्योंकि यह संचालन के लिए चिह्नित किया गया है "
+
+#: wp-ajax-edit-comments.php:967
+msgid "Request failed."
+msgstr "अनुरोध विफल रहा."
+
+#: wp-ajax-edit-comments.php:968
+msgid "You have not selected anything to blacklist."
+msgstr "आपने कुछ भी काला सूची में डालने के लिए नहीं चुना है."
+
+#: wp-ajax-edit-comments.php:1093
+#, php-format
+msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
+msgstr "एक टिप्पणीकर्ता एक टिप्पणी के आपके पोस्ट से विलोपन करने का अनुरोध कर रहा है.#%1$s \"%2$s\". टिप्पणी मॉडरेशन कतार में स्थानांतरित कर दिया गया है."
+
+#: wp-ajax-edit-comments.php:1094
+msgid "The reason given is: "
+msgstr "कारण दिया गया है:"
+
+#: wp-ajax-edit-comments.php:1095
+#, php-format
+msgid "E-mail : %s"
+msgstr "ई मेल:%s"
+
+#: wp-ajax-edit-comments.php:1096
+#, php-format
+msgid "URL    : %s"
+msgstr "यू आर एल:%s"
+
+#: wp-ajax-edit-comments.php:1097
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois: http://ws.arin.net/cgi-bin/whois.pl?queryinput =%s"
+
+#: wp-ajax-edit-comments.php:1099
+#, php-format
+msgid "Delete it: %s"
+msgstr "इसे हटाएँ:%s"
+
+#: wp-ajax-edit-comments.php:1100
+#, php-format
+msgid "Approve it: %s"
+msgstr "यह स्वीकृत:%s"
+
+#: wp-ajax-edit-comments.php:1101
+#, php-format
+msgid "Spam it: %s"
+msgstr "यह स्पैम:%s"
+
+#: wp-ajax-edit-comments.php:1119
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "टिप्पणी हटाने के लिए अनुरोध: \"%2$s\""
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: wp-ajax-edit-comments.php:1241
+msgid "Comment successfully saved"
+msgstr "टिप्पणी सफलतापूर्वक बचाया गया"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:1275
+msgid "Your readers have edited their comments "
+msgstr "आपके पाठकों ने उनकी टिप्पणियाँ संपादित कर लिया है"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: wp-ajax-edit-comments.php:1276
+msgid ""
+" times.\n"
+"\n"
+msgstr ""
+"times.\n"
+"\n"
+
+#: wp-ajax-edit-comments.php:1277
+msgid ""
+"The Ajax Edit Comments plugin has saved you and your readers a ton of time. Please consider a small donation for our hard work and time spent on the plugin.\n"
+"\n"
+msgstr ""
+"ऐजक्स एडिट कमेंट्स प्लगइन ने आप और आपके पाठकों के एक टन समय बचाया है. कृपया हमारी मेहनत और प्लगइन में बिताए समय के लिए एक छोटा सा दान पर विचार करें.\n"
+"\n"
+
+#: wp-ajax-edit-comments.php:1278
+#, php-format
+msgid "Donate: %s"
+msgstr "Donate: %s"
+
+#: wp-ajax-edit-comments.php:1279
+msgid ""
+"If you do not wish to receive these e-mails anymore, please unsubscribe in the WordPress settings page for Ajax Edit Comments.\n"
+"\n"
+msgstr ""
+"यदि आप इन ई-मेल प्राप्त करने की इच्छा नहीं रखते है, तो कृपया WordPress सेटिंग्स पेज में ऐजक्स एडिट कमेंट्स के लिए सदस्यता समाप्त करें.\n"
+"\n"
+
+#: wp-ajax-edit-comments.php:1324
+msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+msgstr "आपके संपादित टिप्पणी को स्पैम के रूप में चिह्नित किया गया है.यदि यह त्रुटि है, तो कृपया व्यवस्थापक से संपर्क करें."
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:319
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:319
+#: wp-ajax-edit-comments.php:1490
+msgid "minutes"
+msgstr "मिनट"
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:319
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:319
+#: wp-ajax-edit-comments.php:1491
+msgid "minute"
+msgstr "मिनट"
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:320
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:320
+#: wp-ajax-edit-comments.php:1492
+msgid "and"
+msgstr "और"
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:323
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:323
+#: wp-ajax-edit-comments.php:1493
+msgid "seconds"
+msgstr "सेकंड"
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:323
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:323
+#: wp-ajax-edit-comments.php:1494
+msgid "second"
+msgstr "सेकंड"
+
+#: wp-ajax-edit-comments.php:1495
+msgid "Mark for Moderation?"
+msgstr "संचालन के लिए चिह्नित करे?"
+
+#: wp-ajax-edit-comments.php:1496
+msgid "Approve Comment?"
+msgstr "टिप्पणी स्वीकृत?"
+
+# C:\SVN\plugin/php-includes/AjaxEditComments.php:46
+# C:\SVN\plugin\php-includes/AjaxEditComments.php:46
+#: wp-ajax-edit-comments.php:1497
+msgid "Mark as Spam?"
+msgstr "स्पैम के रूप में चिह्नित करे?"
+
+# C:\SVN\plugin/js-includes/wp-ajax-edit-comments.js.php:90
+# C:\SVN\plugin\js-includes/wp-ajax-edit-comments.js.php:90
+#: wp-ajax-edit-comments.php:1498
+msgid "Delete this comment?"
+msgstr "यह टिप्पणी हटाएँ?"
+
+#: wp-ajax-edit-comments.php:1499
+msgid "Anonymous"
+msgstr "बेनामी"
+
+#: wp-ajax-edit-comments.php:1500
+msgid "Loading..."
+msgstr "लोड हो रहा है ..."
+
+#: wp-ajax-edit-comments.php:1501
+msgid "Ready"
+msgstr "तैयार"
+
+#: wp-ajax-edit-comments.php:1502
+msgid "Sending..."
+msgstr "भेजा जा रहा है ..."
+
+#: wp-ajax-edit-comments.php:1503
+msgid "Message Sent"
+msgstr "संदेश भेजा गया"
+
+#: wp-ajax-edit-comments.php:1504
+msgid "Comment Loaded Successfully"
+msgstr "टिप्पणी सफलतापूर्वक लोड हुआ "
+
+#: wp-ajax-edit-comments.php:1505
+msgid "Saving..."
+msgstr "सहेजा जा रहा है ..."
+
+#: wp-ajax-edit-comments.php:1506
+msgid "Blacklisting..."
+msgstr "काली सूची में जा रहा है ..."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: wp-ajax-edit-comments.php:1507
+msgid "Comment Successfully Saved"
+msgstr "टिप्पणी सफलतापूर्वक सहेजा गया"
+
+#: wp-ajax-edit-comments.php:1508
+msgid "De-link Successful"
+msgstr "डी-लिंक सफल "
+
+#: wp-ajax-edit-comments.php:1510
+msgid "Less Options"
+msgstr "कम विकल्प"
+
+#: wp-ajax-edit-comments.php:1512
+msgid "Request has been sent successfully"
+msgstr "अनुरोध सफलतापूर्वक भेज दिया गया है"
+
+#: wp-ajax-edit-comments.php:1513
+msgid "Error sending request"
+msgstr "त्रुटि भेजने का अनुरोध"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:220
+#: php/admin-panel.php:23
+msgid "Security keys deleted"
+msgstr "सुरक्षा कुंजी नष्ट कर दिया"
+
+#: php/admin-panel.php:37
+msgid "Comment time must be a numerical value"
+msgstr "टिप्पणी समय एक संख्यात्मक मान होना चाहिए"
+
+#: php/admin-panel.php:40
+msgid "Comment time must be greater than one minute."
+msgstr "टिप्पणी समय एक मिनट से अधिक होना चाहिए ."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/admin-panel.php:94
+msgid "Settings successfully updated."
+msgstr "सेटिंग्स सफलतापूर्वक नवीनीकृत."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: php/admin-panel.php:102
+msgid "Your commentators have edited their comments "
+msgstr "आपके टिप्पणीकर्ताओ ने अपनी टिप्पणियाँ संपादित कर दिया है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:270
+#: php/admin-panel.php:102
+msgid "times"
+msgstr "बार"
+
+#: php/admin-panel.php:102
+msgid "Please"
+msgstr "कृपया"
+
+#: php/admin-panel.php:102
+msgid "Donate"
+msgstr "दान"
+
+#: php/admin-panel.php:103
+msgid "Global Options - These Options Affect Everyone"
+msgstr "वैश्विक विकल्प - ये विकल्प सबको प्रभावित करेंगे "
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:271
+#: php/admin-panel.php:107
+msgid "Set comment time (minutes):"
+msgstr "टिप्पणी निर्धारित समय (मिनट):"
+
+#: php/admin-panel.php:111
+msgid "Spam notification text:"
+msgstr "स्पैम अधिसूचना पाठ:"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:273
+# 1. Translation is ignored.
+# 2. I think it should be something like: ... this text will be shown, when the comment is marked as SPAM ...
+#: php/admin-panel.php:113
+msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr "कृपया एक पंक्ति तक सीमित रखे यदि संभव हो ,क्योंकि यह पाठ दिखाई देगा जब टिप्पणी या लेखक का संपादन किया जायेगा(अनुमति टैग: em, a, strong, blockquote):"
+
+#: php/admin-panel.php:118
+msgid "Anonymous Users"
+msgstr "बेनामी उपयोगकर्ता"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:120
+msgid "Allow Anyone to Edit Their Own Comments?"
+msgstr "किसी को भी उनकी खुद की टिप्पणी को संपादित करने की अनुमति दें?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:275
+#: php/admin-panel.php:120
+msgid "Selecting \"No\" will turn off comment editing for everyone except admin types who have post and page editing permissions."
+msgstr "चयन \"नहीं,\" व्यवस्थापक प्रकार जिनके पास पोस्ट है और पृष्ठ संपादन अनुमतियां हैं, को छोड़कर टिप्पणी संपादन हर किसी के लिए बंद करेगा."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:343
+# C:\SVN\plugin/wp-ajax-edit-comments.php:346
+# C:\SVN\plugin/wp-ajax-edit-comments.php:352
+# C:\SVN\plugin/wp-ajax-edit-comments.php:355
+#: php/admin-panel.php:121
+#: php/admin-panel.php:123
+#: php/admin-panel.php:125
+#: php/admin-panel.php:127
+#: php/admin-panel.php:129
+#: php/admin-panel.php:131
+#: php/admin-panel.php:138
+#: php/admin-panel.php:141
+#: php/admin-panel.php:144
+#: php/admin-panel.php:147
+#: php/admin-panel.php:154
+#: php/admin-panel.php:161
+#: php/admin-panel.php:168
+#: php/admin-panel.php:208
+#: php/admin-panel.php:211
+#: php/admin-panel.php:214
+#: php/admin-panel.php:222
+#: php/admin-panel.php:230
+#: php/admin-panel.php:238
+#: php/admin-panel.php:257
+#: php/admin-panel.php:265
+#: php/admin-panel.php:273
+#: php/admin-panel.php:281
+#: php/admin-panel.php:296
+msgid "Yes"
+msgstr "हाँ"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:343
+# C:\SVN\plugin/wp-ajax-edit-comments.php:346
+# C:\SVN\plugin/wp-ajax-edit-comments.php:349
+# C:\SVN\plugin/wp-ajax-edit-comments.php:352
+# C:\SVN\plugin/wp-ajax-edit-comments.php:355
+#: php/admin-panel.php:121
+#: php/admin-panel.php:123
+#: php/admin-panel.php:125
+#: php/admin-panel.php:127
+#: php/admin-panel.php:129
+#: php/admin-panel.php:131
+#: php/admin-panel.php:138
+#: php/admin-panel.php:141
+#: php/admin-panel.php:144
+#: php/admin-panel.php:147
+#: php/admin-panel.php:154
+#: php/admin-panel.php:161
+#: php/admin-panel.php:168
+#: php/admin-panel.php:208
+#: php/admin-panel.php:211
+#: php/admin-panel.php:214
+#: php/admin-panel.php:222
+#: php/admin-panel.php:230
+#: php/admin-panel.php:238
+#: php/admin-panel.php:257
+#: php/admin-panel.php:265
+#: php/admin-panel.php:273
+#: php/admin-panel.php:281
+#: php/admin-panel.php:296
+msgid "No"
+msgstr "नहीं"
+
+#: php/admin-panel.php:122
+msgid "Allow editing after additional comments have been posted?"
+msgstr "संपादन की अनुमति के बाद अतिरिक्त टिप्पणियाँ पोस्ट किया गया है?"
+
+#: php/admin-panel.php:122
+msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+msgstr "चयन \"नहीं, \" उपयोगकर्ताओं को अपनी टिप्पणी संपादन करने नहीं देगा ,अगर एक और टिप्पणी एक पोस्ट पर किया गया है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:124
+msgid "Allow Users to Edit Their Name?"
+msgstr "अपने नाम को संपादित करने की ,उपयोगकर्ताओं को अनुमति दें ?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:278
+#: php/admin-panel.php:124
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "चयन नहीं \"नहीं, \" नाम का संपादन बंद हो जाएगा"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:126
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "अपने ई मेल पते को संपादित करने की ,उपयोगकर्ताओं को अनुमति दें ?"
+
+#: php/admin-panel.php:126
+msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+msgstr "चयन \"नहीं, \" ई-मेल पते का संपादन बंद करेगा.कारण जो तुम चाहते हो यह सक्रिय हो जाये में से एक यह है की यह अवतार के साथ उपयोगकर्ताओं के लिए है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:128
+msgid "Allow Users to Edit Their URLs?"
+msgstr "उपयोगकर्ताओं को अनुमति दें उनके यूआरएल को संपादित करने के लिए?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:278
+#: php/admin-panel.php:128
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "चयन \"No\" यू आर एल का संपादन बंद हो जाएगा"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:130
+msgid "Allow Users to Request Deletion of Comments?"
+msgstr "टिप्पणी हटाने का अनुरोध करने के लिए उपयोगकर्ताओं को अनुमति दें?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:278
+#: php/admin-panel.php:130
+msgid "Selecting \"No\" will turn off the deletion option."
+msgstr "चयन \"No\" से हटाने का विकल्प बंद हो जाएगा."
+
+#: php/admin-panel.php:135
+msgid "Registered Users"
+msgstr "पंजीकृत उपयोगकर्ता"
+
+#: php/admin-panel.php:136
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "पंजीकृत उपयोगकर्ताओं को अनिश्चित काल तक टिप्पणी को संपादित करने की अनुमति दें ?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:354
+#: php/admin-panel.php:137
+msgid "Selecting \"Yes\" will allow users registered on your blog to edit comments without a time limit."
+msgstr "चयन \"Yes\"  उपयोगकर्ताओं को आपके ब्लॉग पर पंजीकृत कर एक समय सीमा के बिना टिप्पणी को संपादित करने की अनुमति होगी."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:274
+#: php/admin-panel.php:139
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "पंजीकृत उपयोगकर्ताओं को उनके नाम संपादित करने की अनुमति दे?"
+
+#: php/admin-panel.php:140
+msgid "Selecting \"Yes\" will allow users registered on your blog to edit their names.  This can prevent issues if a user wishes to impersonate others."
+msgstr "चयन \"Yes\"  उपयोगकर्ताओं को आपके ब्लॉग पर पंजीकृत कर उनके नाम को संपादित करने की अनुमति होगी. इस मुद्दे को रोकने के लिए यदि एक उपयोगकर्ता दूसरों को अभिनय करना चाहता है सकते हैं."
+
+#: php/admin-panel.php:142
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "पंजीकृत प्रयोक्ताओं को अपना ई मेल पता संपादित करने की अनुमति दे?"
+
+#: php/admin-panel.php:143
+msgid "Selecting \"Yes\" will allow users registered on your blog to edit their e-mail address."
+msgstr "चयन \"Yes\"  उपयोगकर्ताओं को आपके ब्लॉग पर पंजीकृत अपने ई मेल पते को संपादित कर सकेंगे."
+
+#: php/admin-panel.php:145
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "पंजीकृत उपयोगकर्ताओं को अपनी यू आर एल संपादित करने की अनुमति दें?"
+
+#: php/admin-panel.php:146
+msgid "Selecting \"Yes\" will allow users registered on your blog to edit their URL."
+msgstr "चयन \"Yes\" उपयोगकर्ताओं को आपके ब्लॉग पर पंजीकृत अपने यू आर एल को संपादित करने की अनुमति होगी."
+
+#: php/admin-panel.php:151
+msgid "Display Options"
+msgstr "प्रदर्शन विकल्प"
+
+#: php/admin-panel.php:153
+msgid "Diplay on pages?"
+msgstr "पन्नों पर प्रदर्शन?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:278
+#: php/admin-panel.php:153
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "चयन \"No\" पन्नों पर टिप्पणी संपादन बंद करेगा."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:277
+#: php/admin-panel.php:158
+msgid "Countdown Timer"
+msgstr "उलटी गिनती टाइमर"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:277
+#: php/admin-panel.php:160
+msgid "Show a Countdown Timer?"
+msgstr "उलटी गिनती टाइमर का प्रदर्शन?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:278
+#: php/admin-panel.php:160
+msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+msgstr "चयन \"No\" उलटी गिनती टाइमर बंद करेगा ,अव्यवस्थापक टिप्पणीकारों के लिए."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:280
+#: php/admin-panel.php:165
+msgid "Edit E-mails"
+msgstr "संपादित करें ई मेल"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:280
+#: php/admin-panel.php:167
+msgid "Allow Edit E-mails?"
+msgstr "अनुमति दे ई-मेल संपादित करने के लिए?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:281
+#: php/admin-panel.php:167
+msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+msgstr "चयन \"Yes\" आपको प्रत्येक बार एक ई-मेल भेज देगा ,जब कोई अपनी टिप्पणी संपादन करेगा."
+
+#: php/admin-panel.php:172
+msgid "Spam Protection"
+msgstr "स्पैम संरक्षण"
+
+#: php/admin-panel.php:174
+msgid "Akismet"
+msgstr "अकिस्मेट"
+
+#: php/admin-panel.php:174
+msgid "Defensio"
+msgstr "देफेंसियो"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:343
+# C:\SVN\plugin/wp-ajax-edit-comments.php:346
+# C:\SVN\plugin/wp-ajax-edit-comments.php:349
+# C:\SVN\plugin/wp-ajax-edit-comments.php:352
+# C:\SVN\plugin/wp-ajax-edit-comments.php:355
+#: php/admin-panel.php:174
+msgid "None"
+msgstr "कोई नहीं"
+
+#: php/admin-panel.php:178
+msgid "Styles"
+msgstr "शैली"
+
+#: php/admin-panel.php:180
+msgid "Determine Icon Display"
+msgstr "निर्धारित चिह्न प्रदर्शन"
+
+#: php/admin-panel.php:181
+msgid "Select an option below to determine how the icons are displayed on your blog."
+msgstr "नीचे से एक विकल्प का चयन करें ये निर्धारित करने के लिए की आप कैसे आइकंस को अपने ब्लॉग पर प्रदर्शित कर रहे हैं."
+
+#: php/admin-panel.php:187
+msgid "Determine Icon Set"
+msgstr "निर्धारित करें आइकन सेट "
+
+#: php/admin-panel.php:188
+msgid "Select an option below to display the icon set on your blog."
+msgstr "नीचे से एक विकल्प का चयन करें ,अपने ब्लॉग पर आइकन सेट प्रदर्शित करने के लिए."
+
+#: php/admin-panel.php:207
+msgid "Use RTL StyleSheet?"
+msgstr "RTL स्टाइलशीट का प्रयोग करें?"
+
+#: php/admin-panel.php:209
+msgid "Turn Off clearfix:after?"
+msgstr "बंद करें clearfix:after?"
+
+#: php/admin-panel.php:210
+msgid "The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "Clearfix थीम्स के साथ अधिकतम संगतता के लिए डिफ़ॉल्ट रूप से सक्षम है."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:344
+#: php/admin-panel.php:212
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "व्यवस्थापक जावास्क्रिप्ट स्क्रॉल बंद करें?"
+
+#: php/admin-panel.php:213
+msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "प्लगइन एक पोस्ट पर गलत ऑफसेट को सही करने की कोशिश करता है अगर आप व्यवस्थापक हैं."
+
+#: php/admin-panel.php:215
+msgid "Post/Admin CSS URL"
+msgstr "पद / व्यवस्थापक सी एस एस यू आर एल"
+
+#: php/admin-panel.php:216
+#: php/admin-panel.php:219
+msgid "Leaving a style empty will revert back to the default plugin styles."
+msgstr "एक शैली खाली छोरना ,डिफ़ॉल्ट प्लगइन शैलियों में वापस लोटा देगा."
+
+#: php/admin-panel.php:216
+#: php/admin-panel.php:219
+msgid "The URL should be relative to: "
+msgstr "यू आर एल के सापेक्ष किया जाना चाहिए:"
+
+#: php/admin-panel.php:218
+msgid "Editor CSS URL"
+msgstr "संपादक सी एस एस यू आर एल"
+
+#: php/admin-panel.php:221
+msgid "Comment Edit Interface On Bottom?"
+msgstr "टिप्पणी संपादन इंटरफ़ेस नीचे?"
+
+#: php/admin-panel.php:226
+msgid "Editor Options"
+msgstr "संपादक विकल्प"
+
+#: php/admin-panel.php:228
+msgid "The following affects the editing interface."
+msgstr "निम्नलिखित संपादन अंतरफलक को प्रभावित करता है."
+
+#: php/admin-panel.php:229
+msgid "Turn Off More Options?"
+msgstr "अधिक विकल्प बंद कर देते हैं?"
+
+#: php/admin-panel.php:234
+msgid "Character Encoding"
+msgstr "चरित्र एनकोडिंग"
+
+#: php/admin-panel.php:236
+msgid "Enable mb_convert_encoding?"
+msgstr "Mb_convert_encoding सक्षम करें?"
+
+#: php/admin-panel.php:237
+msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+msgstr "कुछ सर्वर पर यह नहीं बिठाया है. यदि आप इस विकल्प को निष्क्रिय करते है तो विभिन्न अक्षरों का परीक्षण ज़रूर करे. Mb_convert_encoding समारोह आवश्यक है UTF-8 से विभिन्न charsets में बदलने के लिए."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:287
+# C:\SVN\plugin/wp-ajax-edit-comments.php:358
+#: php/admin-panel.php:248
+#: php/admin-panel.php:287
+#: php/admin-panel.php:302
+msgid "Update Settings"
+msgstr "अद्यतन सेटिंग्स"
+
+#: php/admin-panel.php:250
+msgid "Individual Options - These Options Only Affect You"
+msgstr "व्यक्तिगत विकल्प - ये विकल्प केवल तुम्हें प्रभावित करेंगे"
+
+#: php/admin-panel.php:254
+msgid "Unsubscribe"
+msgstr "सदस्यता समाप्त"
+
+#: php/admin-panel.php:256
+msgid "Unsubscribe from periodic reminder e-mails?"
+msgstr "आवधिक अनुस्मारक ई मेल से सदस्यता रद्द करें?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:350
+#: php/admin-panel.php:261
+msgid "Admin Panel Editing"
+msgstr "व्यवस्थापक पैनल संपादन"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:341
+#: php/admin-panel.php:263
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "व्यवस्थापक पैनल में टिप्पणी का संपादन बंद कर देते हैं?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:342
+#: php/admin-panel.php:264
+msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "चयन \"Yes\"  व्यवस्थापक टिप्पणियाँ पैनल में टिप्पणी संपादन निष्क्रिय करेंगे."
+
+#: php/admin-panel.php:269
+msgid "Post Editing"
+msgstr "पोस्ट का संपादन"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:353
+#: php/admin-panel.php:271
+msgid "Turn On Comment Editing?"
+msgstr "टिप्पणी संपादन सक्रिय करें?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:354
+#: php/admin-panel.php:272
+msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr "चयन \"Yes\"  आपके लिए एक उपयोगकर्ता की टिप्पणी को संपादित करने की क्षमता कर सकेंगे. चयन \"No\" अपनी एक पोस्ट पर टिप्पणी को संपादित करने की क्षमता को निष्क्रिय करेगा"
+
+#: php/admin-panel.php:277
+msgid "Advanced Options"
+msgstr "उन्नत विकल्प"
+
+#: php/admin-panel.php:279
+msgid "Show Advanced Options in Editor?"
+msgstr "संपादक में उन्नत विकल्प दिखाएँ?"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:342
+#: php/admin-panel.php:280
+msgid "Selecting \"Yes\" will show advanced options in the editor window"
+msgstr "चयन \"Yes\"संपादक विंडो में उन्नत विकल्प दिखाई देंगे"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:269
+#: php/admin-panel.php:289
+msgid "Ajax Edit Comments Cleanup"
+msgstr "ऐजक्स एडिट कमेंट्स सफाई"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:297
+#: php/admin-panel.php:293
+msgid "Delete all security keys"
+msgstr "सभी सुरक्षा कुंजी हटाएँ 	"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:294
+#: php/admin-panel.php:295
+msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+msgstr "हर बार जब कोई उपयोगकर्ता एक टिप्पणी छोरता है, एक सुरक्षा कुंजी एक कस्टम कुंजी के रूप में जमा हो जाती है.समय समय पर आप इस जानकारी को नष्ट करना चाहते हो सकता है. कृपया पहले अपने डेटाबेस का बैकअप ले."
+
+#: php/AjaxEditComments.php:72
+msgid "Comment Approved. "
+msgstr "टिप्पणी स्वीकृत."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:79
+msgid "Move Successful. "
+msgstr "चाल सफल."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:226
+msgid "Successfully blacklisted."
+msgstr "सफलतापूर्वक काली सूची में डाला."
+
+#: php/AjaxEditComments.php:226
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "टिप्पणी (ओं) को स्पैम के रूप में अपने उन्नत मापदंड के अनुसार चिह्नित किया गया."
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:248
+msgid "Successfully Deleted"
+msgstr "सफलतापूर्वक नष्ट कर दिया गया"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:280
+msgid "Successfully Marked as Spam"
+msgstr "सफलतापूर्वक स्पैम के रूप में चिह्नित"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:312
+msgid "Successfully Approved"
+msgstr "सफलतापूर्वक स्वीकृत"
+
+#: php/AjaxEditComments.php:342
+msgid "Successfully Marked for Moderation"
+msgstr "सफलतापूर्वक संचालन के लिए चिह्नित"
+
+# C:\SVN\plugin/wp-ajax-edit-comments.php:262
+#: php/AjaxEditComments.php:373
+msgid "Successfully De-linked"
+msgstr "सफलतापूर्वक डी-लिंक"
+
+#: php/blacklist-comment.php:69
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "नीचे दिए गए विकल्पों में से चुनें अपनी टिप्पणी काला सूची में जोड़ने के लिए."
+
+#: php/blacklist-comment.php:74
+#: php/blacklist-comment.php:104
+#: php/comment-editor.php:133
+msgid "Name"
+msgstr "नाम"
+
+#: php/blacklist-comment.php:81
+#: php/blacklist-comment.php:111
+#: php/comment-editor.php:145
+msgid "URL"
+msgstr "यू आर एल"
+
+#: php/blacklist-comment.php:88
+#: php/blacklist-comment.php:118
+msgid "E-mail Address"
+msgstr "ई-मेल पता"
+
+#: php/blacklist-comment.php:92
+#: php/blacklist-comment.php:122
+msgid "IP Address"
+msgstr "आई पी पता"
+
+#: php/blacklist-comment.php:98
+msgid "Spam Matching Comments"
+msgstr "स्पैम मेल टिप्पणियाँ"
+
+#: php/blacklist-comment.php:99
+msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+msgstr "उदाहरण: 'ईमेल' और 'नाम' का चयन सभी टिप्पणियों स्पैम करेगा जो दोनों के नाम और ई मेल पते से मेल होगा."
+
+#: php/blacklist-comment.php:99
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "इस सुविधा के साथ कृपया सावधान रहना.यहाँ कोई समारोह पूर्ववत नहीं है."
+
+#: php/blacklist-comment.php:130
+#: php/comment-editor.php:208
+#: php/request-deletion.php:70
+msgid "Cancel"
+msgstr "रद्द करें"
+
+#: php/blacklist-comment.php:132
+#: php/comment-editor.php:211
+#: php/move-comment.php:154
+#: php/request-deletion.php:72
+msgid "Close"
+msgstr "बंद करना"
+
+#: php/comment-editor.php:139
+msgid "E-mail"
+msgstr "ई-मेल"
+
+#: php/comment-editor.php:170
+#, php-format
+msgid "<b>%1$s</b> :on Submitted"
+msgstr "<b>%1$s</b>: पर भेजी "
+
+#: php/comment-editor.php:173
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "पर भेजी गई:<b>%1$s</b>"
+
+#: php/comment-editor.php:177
+msgid "Adjust Comment Time"
+msgstr "टिप्पणी समय समायोजित करें"
+
+#: php/comment-editor.php:179
+msgid "Adjust Comment Status"
+msgstr "टिप्पणी स्तर समायोजित करें"
+
+#: php/comment-editor.php:190
+#: php/comment-editor.php:196
+msgid "Approved"
+msgstr "स्वीकृत"
+
+#: php/comment-editor.php:191
+#: php/comment-editor.php:197
+msgid "Pending"
+msgstr "लम्बित"
+
+#: php/comment-editor.php:207
+msgid "Save"
+msgstr "बचाना"
+
+#: php/move-comment.php:73
+msgid "Previous"
+msgstr "पिछला"
+
+#: php/move-comment.php:73
+msgid "Next"
+msgstr "अगला"
+
+#: php/move-comment.php:84
+#: php/move-comment.php:92
+#: php/move-comment.php:109
+#: php/move-comment.php:117
+msgid "Search"
+msgstr "खोज"
+
+#: php/move-comment.php:86
+#: php/move-comment.php:90
+msgid "Title"
+msgstr "शीर्षक"
+
+#: php/move-comment.php:111
+#: php/move-comment.php:115
+msgid "Post ID"
+msgstr "पोस्ट आई डी"
+
+# C:\SVN\plugin/php-includes/AjaxEditComments.php:46
+# C:\SVN\plugin\php-includes/AjaxEditComments.php:46
+#: php/move-comment.php:140
+#: php/move-comment.php:143
+msgid "Mark as Approved"
+msgstr "स्वीकृत रूप में चिह्नित करें"
+
+#: php/request-deletion.php:61
+msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+msgstr "कृपया स्पष्ट करे क्यों टिप्पणी नष्ट कर दिया जाना चाहिए. अनुरोध भेजने के बाद, आपकी टिप्पणी संचालित के रूप में चिह्नित किया जाएगा और अब सार्वजनिक रूप से देखा नहीं जा सकेगा."
+
+#: php/request-deletion.php:69
+msgid "Send Request"
+msgstr "अनुरोध भेजें"
+
+#~ msgid "Not Spam"
+#~ msgstr "Ikke spam"
+
+#, fuzzy
+#~ msgid "Turn Off Icons?"
+#~ msgstr "Slå grafiske knapper fra?"
+
+#, fuzzy
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "Vælg \"Ja\" for at slå grafiske knapper fra."
+
+# not used!
+#, fuzzy
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "Slå styles fra i editoren?"
+
+#, fuzzy
+#~ msgid "Deleted"
+#~ msgstr "Slet"
+

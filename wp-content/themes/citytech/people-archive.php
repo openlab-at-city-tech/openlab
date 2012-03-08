@@ -21,9 +21,9 @@ function cuny_members_index() {
 //
 function cuny_list_members($view) {
 	global $wpdb, $bp, $members_template, $wp_query;
-	
+
 	// Set up variables
-	
+
 	// There are two ways to specify user type: through the page name, or a URL param
 	$user_type = $sequence_type = $search_terms = '';
 	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'all' ) {
@@ -32,7 +32,7 @@ function cuny_list_members($view) {
 	} else {
 		$post_obj  = $wp_query->get_queried_object();
 		$post_title = !empty( $post_obj->post_title ) ? ucwords( $post_obj->post_title ) : '';
-		
+
 		if ( in_array( $post_title, array( 'Staff', 'Faculty', 'Students' ) ) ) {
 			if ( 'Students' == $post_title ) {
 				$user_type = 'Student';
@@ -45,7 +45,7 @@ function cuny_list_members($view) {
 	if ( !empty( $_GET['group_sequence'] ) ) {
 		$sequence_type = $_GET['group_sequence'];
 	}
-	
+
 	if( !empty($_POST['people_search'] ) ){
 		$search_terms = $_POST['people_search'];
 	} else if( !empty($_GET['search'] ) ) {
@@ -53,7 +53,7 @@ function cuny_list_members($view) {
 	} else if ( !empty( $_POST['group_search'] ) ) {
 		$search_terms = $_POST['group_search'];
 	}
-	
+
     	if ( $user_type ) {
     		echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
     	}
@@ -61,37 +61,37 @@ function cuny_list_members($view) {
 	// Set up the bp_has_members() arguments
 	// Note that we're not taking user_type into account. We'll do that with a query filter
 	$args = array( 'per_page' => 48 );
-	
+
 	if ( $sequence_type ) {
 		$args['type'] = $sequence_type;
 	}
-	
+
 	if ( $search_terms ) {
 		// Filter the sql query so that we ignore the first name and last name fields
 		$first_name_field_id = xprofile_get_field_id_from_name( 'First Name' );
 		$last_name_field_id  = xprofile_get_field_id_from_name( 'Last Name' );
-		
+
 		// These are the same runtime-created functions, created separately so I don't have
 		// to toss globals around. If you change one, change them both!
 		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
 			$ex = explode( " AND ", $sql );
 			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
 			$ex = implode( " AND ", $ex );
-			
+
 			return $ex;
 		' ) );
-		
+
 		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
 			$ex = explode( " AND ", $sql );
 			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
 			$ex = implode( " AND ", $ex );
-			
+
 			return $ex;
 		' ) );
-		
+
 		$args['search_terms'] = $search_terms;
-	}	
-	
+	}
+
 	// I don't love doing this
 	if ( $user_type ) {
 		// These are the same runtime-created functions, created separately so I don't have
@@ -101,30 +101,30 @@ function cuny_list_members($view) {
 			$ex = explode( " LEFT JOIN ", $sql );
 			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
 			$ex = implode( " LEFT JOIN ", $ex );
-			
+
 			// Add the necessary where clause
 			$ex = explode( " AND ", $ex );
 			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
 			$ex = implode( " AND ", $ex );
-			
+
 			return $ex;
 		' ) );
-		
+
 		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
 			// Join to profile table for user type
 			$ex = explode( " LEFT JOIN ", $sql );
 			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
 			$ex = implode( " LEFT JOIN ", $ex );
-			
+
 			// Add the necessary where clause
 			$ex = explode( " AND ", $ex );
 			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
 			$ex = implode( " AND ", $ex );
-			
+
 			return $ex;
 		' ) );
     	}
-	
+
 	$avatar_args = array (
 			'type' => 'full',
 			'width' => 72,
@@ -133,20 +133,20 @@ function cuny_list_members($view) {
 			'id' => false,
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
-	
-	
-	if ( bp_has_members( $args ) ) : 
-	
-	
+
+
+	if ( bp_has_members( $args ) ) :
+
+
 	?>
 	<div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
 	<div class="clearfloat"></div>
 			<div class="avatar-block">
-				<?php while ( bp_members() ) : bp_the_member(); 
+				<?php while ( bp_members() ) : bp_the_member();
                //the following checks the current $id agains the passed list from the query
                $member_id = $members_template->member->id;
-	            
-	           
+
+
 					$registered = bp_format_time( strtotime( $members_template->member->user_registered ), true ) ?>
 					<div class="person-block">
 						<div class="item-avatar">
@@ -160,22 +160,22 @@ function cuny_list_members($view) {
 							<?php endif; ?>
 						</div>
 					</div>
-					
+
 				<?php endwhile; ?>
 			</div>
 					<div id="pag-top" class="pagination">
-				
+
 						<div class="pag-count" id="member-dir-count-top">
 							<?php bp_members_pagination_count() ?>
 						</div>
-				
+
 						<div class="pagination-links" id="member-dir-pag-top">
 							<?php bp_members_pagination_links() ?>
 						</div>
-				
+
 					</div>
 
-		<?php else: 
+		<?php else:
 			if($user_type=="Student"){
 				$user_type="students";
 			}?>
@@ -193,8 +193,8 @@ add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_action
 function cuny_buddypress_courses_actions() { ?>
 <h2 class="sidebar-title">Find People</h2>
     <p>Narrow down your search using the filters or search box below.</p>
-    
-    <?php 
+
+    <?php
     //user type
 if ( empty( $_GET['usertype'] ) ) {
 	$_GET['usertype'] = "";
@@ -216,12 +216,12 @@ switch ($_GET['usertype']) {
 		$user_display_option = "All";
 		$user_option_value = "all";
 		break;
-	default: 
+	default:
 		$user_display_option = "Select User Type";
 		$user_option_value = "";
 		break;
-} 
-    
+}
+
     //sequencing
 if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
@@ -239,7 +239,7 @@ switch ($_GET['group_sequence']) {
 		$display_option = "Last Active";
 		$option_value = "active";
 		break;
-	default: 
+	default:
 		$display_option = "Select Desired Sequence";
 		$option_value = "";
 		break;
@@ -269,7 +269,7 @@ switch ($_GET['group_sequence']) {
     <div class="archive-search">
     <div class="gray-square"></div>
     <form method="post">
-    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
     <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
     <div class="clearfloat"></div>

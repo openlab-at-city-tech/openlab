@@ -39,6 +39,9 @@ function cuny_registration_page() {
 					<?php do_action( 'bp_signup_email_errors' ) ?>
 					<input type="text" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
 
+					<label for="signup_email_confirm">Confirm Email Address (required)</label>
+					<input type="text" name="signup_email_confirm" id="signup_email_confirm" value="" />
+
 					<label for="signup_password"><?php _e( 'Choose a Password', 'buddypress' ) ?> <?php _e( '(required)', 'buddypress' ) ?></label>
 					<?php do_action( 'bp_signup_password_errors' ) ?>
 					<input type="password" name="signup_password" id="signup_password" value="" />
@@ -60,21 +63,21 @@ function cuny_registration_page() {
 					<div class="register-section" id="profile-details-section">
 
 						<h4><?php _e( 'Public Profile Details', 'buddypress' ) ?></h4>
-						
+
 						<p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
 						<?php echo wds_get_register_fields();?>
-                        
+
                         <?php do_action( 'bp_after_signup_profile_fields' ) ?>
 
 					</div><!-- #profile-details-section -->
 
-					
+
 
 				<?php endif; ?>
 
 				<?php do_action( 'bp_before_registration_submit_buttons' ) ?>
-				
+
 				<div class="submit">
 					<input style="display:none;" type="submit" name="signup_submit" id="signup_submit" value="<?php _e( 'Complete Sign Up', 'buddypress' ) ?> &rarr;" />
 				</div>

@@ -1,24 +1,38 @@
 <?php
 
 class CACFeaturedContentHelper {
-	
+
 	/**
-	 * Somewhat surprisingly, this function doesn't (or at least, this functionality) doesn't seem to exist in the core. 
-	 * So here it is! A fast and efficient way to get data for a particular blog by providing the blog's domain. I imagine this
-	 * would work in a set-up where the blog is at a subdirectory (yourwpmusite.com/oneofmanyblogs) but I'm not sure because 
-	 * this hasn't been tested in that environment. If that's the case, this function should maybe be renamed, but until then...
-	 * 
+	 * Somewhat surprisingly, this function doesn't (or at least, this functionality) doesn't seem to exist in the core.
+	 *
 	 * @param string $domain The domain of the blog you're looking for info on, e.g. mygreatblog.wordpress.com. Don't include
 	 * a trailing slash nor the leading protocol string (i.e. 'http://')
-	 * @return object An object containing information about and data related to the blog. 
+	 * @return object An object containing information about and data related to the blog.
 	 */
 	function getBlogByDomain($domain) {
 		global $wpdb;
-		$row = $wpdb->get_results("SELECT blog_id FROM wp_blogs WHERE domain = '".mysql_real_escape_string($domain)."'");
-		if(!empty($row[0]->blog_id)) {
-			$blog_id = $row[0]->blog_id;
+
+		if ( is_subdomain_install() ) {
+			$blog_id = $wpdb->get_var( $wpdb->prepare( "SELECT blog_id FROM $wpdb->blogs WHERE domain = %s", $domain ) );
 		} else {
-			$blog_id = 0;
+			// Gotta be funky here
+			$blogs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, path FROM $wpdb->blogs WHERE path LIKE '%%" . like_escape( $domain ) . "%%'" ) );
+
+			// If there's just one, it's the one. Otherwise go fish
+			if ( 1 == count( $blogs ) ) {
+				$blog_id = $blogs[0]->blog_id;
+			} else {
+				// Gotta do it this way bc of installs that are themselves inside
+				// subdomains
+				foreach( $blogs as $blog ) {
+					$path_a = explode( '/', $blog->path );
+					$last_path = array_pop( $path_a );
+					if ( $blog->path == $domain || $last_path == $domain ) {
+						$blog_id = $blog->blog_id;
+						break;
+					}
+				}
+			}
 		}
 		$blog_data = get_blog_details($blog_id);
 		return (object) $blog_data;
@@ -26,19 +40,25 @@ class CACFeaturedContentHelper {
 
 
 	/**
-	 * Given a post slug and a blog id, this function retrieves a post object. 
+	 * Given a post slug and a blog id, this function retrieves a post object.
 	 * @param string $slug The post url slug
-	 * @param int $blog_id Id of the blog you the post is part of. 
-	 * @return object 
+	 * @param int $blog_id Id of the blog you the post is part of.
+	 * @return object
 	 */
 	function getPostBySlug($slug, $blog_id) {
+		global $post;
+
 		switch_to_blog($blog_id);
-	       
+
 	       	$posts = new WP_Query( array( 'name' => $slug ) );
-	       
-	       	foreach($posts as $post) {
-			if ( $post->post_name == $slug ) {
-				$single_post = $post;
+	       	
+		if ( $posts->have_posts() ) {
+			while ( $posts->have_posts() ) {
+				$posts->the_post();
+				if ( $post->post_name == $slug ) {
+					$single_post = $post;
+					break;
+				}
 			}
 		}
 
@@ -51,8 +71,8 @@ class CACFeaturedContentHelper {
 	 * @param string $arrays An array of arrays, like what is returned by the WP function get_blog_list()
 	 * @param string $value The key for the value that you want be placed int he 'value' attribute of the option
 	 * @param string $display The key for the value that is displayed to the user.
-	 * @dropDown string $dropDown An HTML select element, populated with options. 
-	 * @return string 
+	 * @dropDown string $dropDown An HTML select element, populated with options.
+	 * @return string
 	 */
 	function blogDropDown($arrays, $value, $display) {
 		$options = array();
@@ -61,15 +81,15 @@ class CACFeaturedContentHelper {
 			$displayValue = get_blog_details($attrValue, true)->$display;
 
 			$options[(string) $attrValue] = $displayValue;
-		}	
+		}
 		natcasesort($options);
 		return $options;
 	}
-	
+
 	/**
 	* This method comes from typo3 v4.4.2
 	* Original source file: typo3_src-4.4.2/typo3/sysext/cms/tslib/class.tslib_content.php
-	* 
+	*
 	*
 	*  Copyright notice
 	*
