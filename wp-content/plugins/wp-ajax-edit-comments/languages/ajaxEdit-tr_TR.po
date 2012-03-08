@@ -1,0 +1,1415 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjaxEditComments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-22 01:56-0600\n"
+"PO-Revision-Date: 2010-03-23 09:25+0530\n"
+"Last-Translator: Ajay D'Souza <me@ajaydsouza.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Language: Turkish\n"
+"X-Poedit-Country: TURKEY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wp-ajax-edit-comments.php:299
+#: wp-ajax-edit-comments.php:332
+msgid "Comment Editor"
+msgstr "Yorum Düzenleyici"
+
+#: wp-ajax-edit-comments.php:302
+msgid "Click to Edit"
+msgstr "Düzenlemek İçin Tıklayın"
+
+#: wp-ajax-edit-comments.php:308
+#: wp-ajax-edit-comments.php:311
+#: php/request-deletion.php:60
+msgid "Request Deletion"
+msgstr "Silme İsteği Yolla"
+
+#: wp-ajax-edit-comments.php:335
+#: wp-ajax-edit-comments.php:1951
+msgid "Edit"
+msgstr "Düzenle"
+
+#: wp-ajax-edit-comments.php:341
+#: wp-ajax-edit-comments.php:344
+msgid "Restore"
+msgstr "Geri Al"
+
+#: wp-ajax-edit-comments.php:350
+#: wp-ajax-edit-comments.php:353
+msgid "Delete Permanently"
+msgstr "Kalıcı Olarak Sil"
+
+#: wp-ajax-edit-comments.php:360
+#: wp-ajax-edit-comments.php:363
+#: wp-ajax-edit-comments.php:1937
+#: wp-ajax-edit-comments.php:1958
+#: php/comment-editor.php:130
+msgid "E-mail"
+msgstr "E-Posta"
+
+#: wp-ajax-edit-comments.php:372
+msgid "Move Comments"
+msgstr "Yorumu Taşı"
+
+#: wp-ajax-edit-comments.php:375
+#: wp-ajax-edit-comments.php:1936
+#: wp-ajax-edit-comments.php:1957
+#: php/move-comment.php:75
+#: php/move-comment.php:101
+#: php/move-comment.php:127
+msgid "Move"
+msgstr "Taşı"
+
+#: wp-ajax-edit-comments.php:382
+#: wp-ajax-edit-comments.php:385
+#: wp-ajax-edit-comments.php:1935
+#: wp-ajax-edit-comments.php:1956
+msgid "De-link"
+msgstr "De-link"
+
+#: wp-ajax-edit-comments.php:395
+#: wp-ajax-edit-comments.php:398
+#: wp-ajax-edit-comments.php:1931
+#: wp-ajax-edit-comments.php:1952
+msgid "Approve"
+msgstr "Onayla"
+
+#: wp-ajax-edit-comments.php:408
+#: wp-ajax-edit-comments.php:411
+#: wp-ajax-edit-comments.php:1932
+#: wp-ajax-edit-comments.php:1953
+msgid "Moderate"
+msgstr "Denetle"
+
+#: wp-ajax-edit-comments.php:421
+#: wp-ajax-edit-comments.php:424
+#: wp-ajax-edit-comments.php:1933
+#: wp-ajax-edit-comments.php:1954
+#: php/comment-editor.php:181
+#: php/comment-editor.php:188
+msgid "Spam"
+msgstr "Spam"
+
+#: wp-ajax-edit-comments.php:433
+#: wp-ajax-edit-comments.php:436
+#: wp-ajax-edit-comments.php:1938
+#: wp-ajax-edit-comments.php:1959
+#: php/blacklist-comment.php:133
+msgid "Blacklist"
+msgstr "Karaliste"
+
+#: wp-ajax-edit-comments.php:433
+#: php/blacklist-comment.php:71
+msgid "Blacklist Comment"
+msgstr "Yorumu Karalisteye Al"
+
+#: wp-ajax-edit-comments.php:442
+#: wp-ajax-edit-comments.php:445
+#: php/comment-editor.php:182
+#: php/comment-editor.php:189
+msgid "Trash"
+msgstr "Çöp"
+
+#: wp-ajax-edit-comments.php:462
+#: wp-ajax-edit-comments.php:2209
+msgid "More Options"
+msgstr "Daha Fazla Seçenek"
+
+#: wp-ajax-edit-comments.php:613
+msgid "Undo"
+msgstr "Geri Al"
+
+#: wp-ajax-edit-comments.php:999
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "%s'de bir yorum düzenlendi."
+
+#: wp-ajax-edit-comments.php:1000
+#, php-format
+msgid "Author: %s\n"
+msgstr "Yazar: %s\n"
+
+#: wp-ajax-edit-comments.php:1001
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "Yazar URL: %s\n"
+
+#: wp-ajax-edit-comments.php:1002
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "Yazar E-posta: %s\n"
+
+#: wp-ajax-edit-comments.php:1003
+msgid "Comment:\n"
+msgstr "Yorum:\n"
+
+#: wp-ajax-edit-comments.php:1004
+msgid "See all comments on this post here:\n"
+msgstr "Yazıya gönderilen bütün yorumları göster:\n"
+
+#: wp-ajax-edit-comments.php:1006
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "Yeni Düzenlenmiş Yorumlar: %s"
+
+#: wp-ajax-edit-comments.php:1161
+msgid "Unknown error."
+msgstr "Bilinmeyen hata."
+
+#: wp-ajax-edit-comments.php:1272
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "Başka yorumlar gönderildikten sonra yorumunuz üzerinde değişiklik yapamazsınız."
+
+#: wp-ajax-edit-comments.php:1273
+msgid "The time to edit your comment has elapsed."
+msgstr "Yorumunuzu düzenlemeniz için verilen zaman bitti."
+
+#: wp-ajax-edit-comments.php:1274
+msgid "You do not have permission to edit this comment."
+msgstr "Bu yorumu düzenleme hakkına sahip değilsiniz."
+
+#: wp-ajax-edit-comments.php:1276
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "Bu yorum spam olarak işaretlendiğinden üzerinde değişiklik yapılamaz."
+
+#: wp-ajax-edit-comments.php:1277
+msgid "Comment loading failed."
+msgstr "Yorum yüklenirken hata oluştu."
+
+#: wp-ajax-edit-comments.php:1278
+msgid "Comment editing has been disabled."
+msgstr "Yorum düzenleme engellendi."
+
+#: wp-ajax-edit-comments.php:1279
+msgid "Could not mark as spam."
+msgstr "Spam olarak işaretlenemedi."
+
+#: wp-ajax-edit-comments.php:1280
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "Bu yorumu Spam olarak işaretleme hakkına sahip değilsiniz."
+
+#: wp-ajax-edit-comments.php:1281
+msgid "Could not delete comment."
+msgstr "Yorum silinemedi."
+
+#: wp-ajax-edit-comments.php:1282
+msgid "You do not have permission to delete this comment."
+msgstr "Bu yorumu silme hakkına sahip değilsiniz."
+
+#: wp-ajax-edit-comments.php:1283
+msgid "You do not have permission to approve this comment."
+msgstr "Bu yorumu onaylama hakkına sahip değilsiniz."
+
+#: wp-ajax-edit-comments.php:1284
+msgid "Could not approve comment."
+msgstr "Yorum onaylanamadı."
+
+#: wp-ajax-edit-comments.php:1285
+msgid "Could not mark this comment for moderation."
+msgstr "Yorum denetleme için işaretlenemedi."
+
+#: wp-ajax-edit-comments.php:1286
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "Bu yorumu denetlenme için işaretleme hakıkınız yok."
+
+#: wp-ajax-edit-comments.php:1287
+msgid "Please enter a valid email address."
+msgstr "Lütfen doğru bir e-posta adresi girin."
+
+#: wp-ajax-edit-comments.php:1288
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "Lütfen zorunlu alanları doldurun (İsim, E-Posta)"
+
+#: wp-ajax-edit-comments.php:1289
+msgid "You cannot have an empty comment."
+msgstr "Boş bir yorum gönderemezsiniz."
+
+#: wp-ajax-edit-comments.php:1290
+msgid "You do not have permission to delink this comment."
+msgstr "Bu yorumun bağlantısını silmek (De-Link) için yetkiniz yok."
+
+#: wp-ajax-edit-comments.php:1291
+msgid "Your comment was marked for moderation"
+msgstr "Yorumunuz denetlenmek üzere bekliyor."
+
+#: wp-ajax-edit-comments.php:1292
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "Bu yorum spam olarak işaretlendiğinden üzerinde değişiklik yapılamaz."
+
+#: wp-ajax-edit-comments.php:1293
+msgid "Request failed."
+msgstr "İstek başarısız oldu."
+
+#: wp-ajax-edit-comments.php:1294
+msgid "You have not selected anything to blacklist."
+msgstr "Karalisteye almak için herhangi bir şey seçmediniz."
+
+#: wp-ajax-edit-comments.php:1472
+#, php-format
+msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
+msgstr "Bir kullanıcı #%1$s \"%2$s\" yazısındaki yorumunuzun silinmesini istedi. Yorumunuz denetlenmek üzere sıraya alındı."
+
+#: wp-ajax-edit-comments.php:1473
+msgid "The reason given is: "
+msgstr "Neden:"
+
+#: wp-ajax-edit-comments.php:1474
+#, php-format
+msgid "E-mail : %s"
+msgstr "E-Posta: %s"
+
+#: wp-ajax-edit-comments.php:1475
+#, php-format
+msgid "URL    : %s"
+msgstr "URL    : %s"
+
+#: wp-ajax-edit-comments.php:1476
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: wp-ajax-edit-comments.php:1478
+#, php-format
+msgid "Delete it: %s"
+msgstr "Sil: %s"
+
+#: wp-ajax-edit-comments.php:1479
+#, php-format
+msgid "Approve it: %s"
+msgstr "Onayla: %s"
+
+#: wp-ajax-edit-comments.php:1480
+#, php-format
+msgid "Spam it: %s"
+msgstr "Spam: %s"
+
+#: wp-ajax-edit-comments.php:1488
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "Yorum Silme İsteği: \"%2$s\""
+
+#: wp-ajax-edit-comments.php:1614
+msgid "Comment successfully saved"
+msgstr "Yorum Başarıyla Kaydedildi"
+
+#: wp-ajax-edit-comments.php:1799
+msgid "Oops!! Something went wrong.<br/>Please try again or <a href='http://www.ajaxeditcomments.com/contact/'>contact us</a>."
+msgstr "Oops! Bir şeyler yanluş. <br />Lütfen tekrar deneyin veya bizimle <a href='http://www.ajaxeditcomments.com/contact/'>iletişime</a> geçin."
+
+#: wp-ajax-edit-comments.php:1845
+msgid "There is a new version of WP Ajax Edit Comments available."
+msgstr "WP Ajax Edit Comments'in yeni bir sürümü var."
+
+#: wp-ajax-edit-comments.php:1845
+#, php-format
+msgid "View version %s Details"
+msgstr "Sürüm %s Ayrıntılarını Görün"
+
+#: wp-ajax-edit-comments.php:1846
+msgid "By subscribing to the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Forums</a>, you will get access to automatic upgrades and support."
+msgstr "<a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Forums</a>'a üye olarak otomatik güncelleme desteğine erişebilirsiniz."
+
+#: wp-ajax-edit-comments.php:1877
+msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+msgstr "Düzenlediğiniz yorum Spam olarak işaretlendi. Eğer bu bir hataysa lütfen site yöneticisiyle bağlantıya geçin."
+
+#: wp-ajax-edit-comments.php:1904
+msgid "Get your own comment editor for your WordPress website.  Try [url]Ajax Edit Comments[/url] today!"
+msgstr "Wordpress siteniz için kendi yorum düzenleyiciniz olsun. [url]Ajax Edit Comments[/url] eklentisini deneyin!"
+
+#: wp-ajax-edit-comments.php:1934
+#: wp-ajax-edit-comments.php:1955
+msgid "Delete"
+msgstr "Sil"
+
+#: wp-ajax-edit-comments.php:2121
+msgid "Comment Box"
+msgstr "Yorum Kutusu"
+
+#: wp-ajax-edit-comments.php:2190
+msgid "minutes"
+msgstr "dakika"
+
+#: wp-ajax-edit-comments.php:2191
+msgid "minute"
+msgstr "dakika"
+
+#: wp-ajax-edit-comments.php:2192
+msgid "and"
+msgstr "ve"
+
+#: wp-ajax-edit-comments.php:2193
+msgid "seconds"
+msgstr "saniye"
+
+#: wp-ajax-edit-comments.php:2194
+msgid "second"
+msgstr "saniye"
+
+#: wp-ajax-edit-comments.php:2195
+msgid "Mark for Moderation?"
+msgstr "Denetleme İçin İşaretle?"
+
+#: wp-ajax-edit-comments.php:2196
+msgid "Approve Comment?"
+msgstr "Yorumu Onayla?"
+
+#: wp-ajax-edit-comments.php:2197
+msgid "Mark as Spam?"
+msgstr "Spam olarak İşaretle?"
+
+#: wp-ajax-edit-comments.php:2198
+msgid "Delete this comment?"
+msgstr "Bu yorumu sil?"
+
+#: wp-ajax-edit-comments.php:2199
+msgid "Anonymous"
+msgstr "Ziyaretçi"
+
+#: wp-ajax-edit-comments.php:2200
+msgid "Loading..."
+msgstr "Yükleniyor..."
+
+#: wp-ajax-edit-comments.php:2201
+msgid "Ready"
+msgstr "Hazır"
+
+#: wp-ajax-edit-comments.php:2202
+msgid "Sending..."
+msgstr "Kaydediliyor..."
+
+#: wp-ajax-edit-comments.php:2203
+msgid "Message Sent"
+msgstr "İleti Gönderildi"
+
+#: wp-ajax-edit-comments.php:2204
+msgid "Comment Loaded Successfully"
+msgstr "Yorum Başarıyla Yüklendi"
+
+#: wp-ajax-edit-comments.php:2205
+msgid "Saving..."
+msgstr "Kaydediliyor..."
+
+#: wp-ajax-edit-comments.php:2206
+msgid "Blacklisting..."
+msgstr "Karalisteye alınıyor..."
+
+#: wp-ajax-edit-comments.php:2207
+msgid "Comment Successfully Saved"
+msgstr "Yorum Başarıyla Kaydedildi"
+
+#: wp-ajax-edit-comments.php:2208
+msgid "De-link Successful"
+msgstr "De-link Başarılı"
+
+#: wp-ajax-edit-comments.php:2210
+msgid "Less Options"
+msgstr "Daha Az Seçenek"
+
+#: wp-ajax-edit-comments.php:2212
+msgid "Request has been sent successfully"
+msgstr "İstek başarıyla yerine getirildi"
+
+#: wp-ajax-edit-comments.php:2213
+msgid "Error sending request"
+msgstr "İstek gönderilirken hata oluştu"
+
+#: wp-ajax-edit-comments.php:2214
+msgid "Approving..."
+msgstr "Onaylanıyor..."
+
+#: wp-ajax-edit-comments.php:2215
+msgid "De-linking..."
+msgstr "De-link Ediliyor..."
+
+#: wp-ajax-edit-comments.php:2216
+msgid "Moderating..."
+msgstr "Düzenleniyor..."
+
+#: wp-ajax-edit-comments.php:2217
+msgid "Spamming..."
+msgstr "Spam Olarak İşaretleniyor..."
+
+#: wp-ajax-edit-comments.php:2218
+msgid "Deleting..."
+msgstr "Siliniyor..."
+
+#: wp-ajax-edit-comments.php:2219
+msgid "Restoring..."
+msgstr "Geri Yükleniyor..."
+
+#: wp-ajax-edit-comments.php:2220
+msgid "Undoing..."
+msgstr "Geri Alınıyor..."
+
+#: wp-ajax-edit-comments.php:2221
+msgid "Undo Successful"
+msgstr "Geri Alma Başarılı."
+
+#: wp-ajax-edit-comments.php:2222
+msgid "Comment Deleted Permanently"
+msgstr "Yorum Kalıcı Olarak Silindi"
+
+#: wp-ajax-edit-comments.php:2223
+msgid "Input Fields are Required"
+msgstr "Giriş Alanları Gerekli"
+
+#: wp-ajax-edit-comments.php:2224
+msgid "E-mail Address is Invalid"
+msgstr "E-Posta Adresi Yanlış"
+
+#: php/admin-panel.php:24
+msgid "Security keys deleted"
+msgstr "Güvenlik anahtarları silindi"
+
+#: php/admin-panel.php:38
+msgid "Comment time must be a numerical value"
+msgstr "Yorum süresi sayısal bir değer olmalı"
+
+#: php/admin-panel.php:41
+msgid "Comment time must be greater than one minute."
+msgstr "Yorum süresi bir dakikadan uzun olmalı."
+
+#: php/admin-panel.php:60
+msgid "Authentication Key could not be validated."
+msgstr "Kimlik Denetleme Anahtarı doğrulanamadı."
+
+#: php/admin-panel.php:60
+#: php/admin-panel.php:88
+msgid "Please try again later."
+msgstr "Lütfen daha sonra tekrar deneyin."
+
+#: php/admin-panel.php:65
+msgid "Invalid Authentication Key"
+msgstr "Yanlış Kimlik Denetleme Anahtarı"
+
+#: php/admin-panel.php:71
+msgid "Number of Sites Exceeded"
+msgstr "Site Sayısı Aşıldı"
+
+#: php/admin-panel.php:77
+msgid "Authentication Key is valid"
+msgstr "Kimlik Denetleme Anahtarı doğru"
+
+#: php/admin-panel.php:88
+#: php/admin-panel.php:92
+msgid "Site could not be removed."
+msgstr "Site kaldırılamıyor."
+
+#: php/admin-panel.php:97
+msgid "Site removed."
+msgstr "Site kaldırıldı."
+
+#: php/admin-panel.php:109
+msgid "Affiliate ID could not be validated.  Please try again later."
+msgstr "Affiliate ID doğrulanamıyor. Lütfen daha sonra tekrar deneyin."
+
+#: php/admin-panel.php:112
+msgid "Invalid Affiliate ID"
+msgstr "Yanlış Affiliate ID"
+
+#: php/admin-panel.php:267
+msgid "Settings successfully updated."
+msgstr "Ayarlar başarıyla kaydedildi."
+
+#: php/admin-panel.php:275
+msgid "Your commentators have edited their comments "
+msgstr "Okuyucularınız yorumları üzerinde değişiklik yaptı"
+
+#: php/admin-panel.php:275
+msgid "times"
+msgstr "kere"
+
+#: php/admin-panel.php:278
+msgid "Global Options"
+msgstr "Genel Ayarlar"
+
+#: php/admin-panel.php:280
+msgid "General"
+msgstr "Genel"
+
+#: php/admin-panel.php:284
+msgid "Authentication Key:"
+msgstr "Kimlik Denetleme Anahtarı:"
+
+#: php/admin-panel.php:285
+msgid "Enter Your Authentication Key"
+msgstr "Kimlik Denetleme Anahtarını Girin"
+
+#: php/admin-panel.php:285
+msgid "The Authentication Key enables automatic upgrades within the WordPress admin panel.  An Authentication Key is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Kimlik Denetim Anahtarı, Wordpress yönetim paneli üzerinden otomatik güncellemeleri etkin hale getirir.  <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Destek Forumuna</a> üye olanlara Kimlik Denetim Anahtarı verilir."
+
+#: php/admin-panel.php:286
+msgid "Remove Site?"
+msgstr "Site Kaldırılsın mı?"
+
+#: php/admin-panel.php:286
+msgid "Selecting \"Yes\" will remove the current site and allow you to use the Authentication Key on another site."
+msgstr "\"Evet\" seçtiğinizde bu site kaldırılacaktır ve Kimlik Denetim Anahtarınız başka bir sitede kullanılabilecektir."
+
+#: php/admin-panel.php:287
+#: php/admin-panel.php:323
+#: php/admin-panel.php:335
+#: php/admin-panel.php:337
+#: php/admin-panel.php:339
+#: php/admin-panel.php:341
+#: php/admin-panel.php:343
+#: php/admin-panel.php:345
+#: php/admin-panel.php:357
+#: php/admin-panel.php:360
+#: php/admin-panel.php:363
+#: php/admin-panel.php:366
+#: php/admin-panel.php:369
+#: php/admin-panel.php:381
+#: php/admin-panel.php:384
+#: php/admin-panel.php:387
+#: php/admin-panel.php:395
+#: php/admin-panel.php:544
+#: php/admin-panel.php:551
+#: php/admin-panel.php:558
+#: php/admin-panel.php:571
+#: php/admin-panel.php:573
+#: php/admin-panel.php:576
+#: php/admin-panel.php:584
+#: php/admin-panel.php:591
+#: php/admin-panel.php:593
+#: php/admin-panel.php:600
+#: php/admin-panel.php:602
+#: php/admin-panel.php:610
+#: php/admin-panel.php:618
+#: php/admin-panel.php:626
+#: php/admin-panel.php:658
+#: php/admin-panel.php:666
+#: php/admin-panel.php:683
+msgid "Yes"
+msgstr "Evet"
+
+#: php/admin-panel.php:287
+#: php/admin-panel.php:323
+#: php/admin-panel.php:335
+#: php/admin-panel.php:337
+#: php/admin-panel.php:339
+#: php/admin-panel.php:341
+#: php/admin-panel.php:343
+#: php/admin-panel.php:345
+#: php/admin-panel.php:357
+#: php/admin-panel.php:360
+#: php/admin-panel.php:363
+#: php/admin-panel.php:366
+#: php/admin-panel.php:369
+#: php/admin-panel.php:381
+#: php/admin-panel.php:384
+#: php/admin-panel.php:387
+#: php/admin-panel.php:395
+#: php/admin-panel.php:544
+#: php/admin-panel.php:551
+#: php/admin-panel.php:558
+#: php/admin-panel.php:571
+#: php/admin-panel.php:573
+#: php/admin-panel.php:576
+#: php/admin-panel.php:584
+#: php/admin-panel.php:591
+#: php/admin-panel.php:593
+#: php/admin-panel.php:600
+#: php/admin-panel.php:602
+#: php/admin-panel.php:610
+#: php/admin-panel.php:618
+#: php/admin-panel.php:626
+#: php/admin-panel.php:658
+#: php/admin-panel.php:666
+#: php/admin-panel.php:683
+msgid "No"
+msgstr "Hayır"
+
+#: php/admin-panel.php:292
+msgid "Set comment time (minutes):"
+msgstr "Yorum süresi belirle (dakika):"
+
+#: php/admin-panel.php:296
+msgid "Spam notification text:"
+msgstr "Spam uyarı yazısı:"
+
+#: php/admin-panel.php:298
+msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr "Yorum yazılırken veya düzenlenirken görüntüleneceğinden lütfen bir satır ile sınırlandırın (İzin verilen etiketler: em, a, strong, blockquote):"
+
+#: php/admin-panel.php:305
+#: php/admin-panel.php:320
+msgid "Affiliate Options"
+msgstr "Affiliate Seçenekleri"
+
+#: php/admin-panel.php:309
+msgid "Affiliate ID:"
+msgstr "Affiliate ID:"
+
+#: php/admin-panel.php:310
+msgid "The Affiliate ID allows you to make money from the Ajax Edit Comments plugin through referrals.  An Affiliate ID is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Affiliate ID ile Ajax Edit Comments eklentisi üzerinden para kazanabilirsiniz. Affiliate ID <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forumuna</a> üye olanlara verilir."
+
+#: php/admin-panel.php:313
+msgid "Affiliate Text:"
+msgstr "Affiliate Yazısı:"
+
+#: php/admin-panel.php:315
+msgid "This text will show when an anonymous commenter sees the editing options. A valid Affiliate ID is required."
+msgstr "Anonim yorumcular düzenleme seçeneklerini gördüğünde bu yazı gösterilecektir. Geçerli bir Affiliate ID gerekir."
+
+#: php/admin-panel.php:322
+msgid "Diplay for anonymous commenters?"
+msgstr "Anonim yorumculara gösterilsin mi?"
+
+#: php/admin-panel.php:322
+msgid "Selecting \"Yes\" will show the \"Affiliate Text\" above the editing options for each anonymous comment posted.  A valid Affiliate ID is required."
+msgstr "\"Evet\" seçildiğinde \"Affliate Yazısı\" anonim yorumların düzenleme seçeneği üstünde görünecektir. Geçerli bir Affiliate ID gerekir."
+
+#: php/admin-panel.php:329
+msgid "Anonymous Users"
+msgstr "Ziyaretçiler"
+
+#: php/admin-panel.php:334
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "Anonim kullanıcılara kendi yorumlarını değiştirme hakkı ver?"
+
+#: php/admin-panel.php:334
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr "\"Hayır\" seçtiğinizde yorumların düzenlenmesi özelliği anonim kullanıcılar için kapanır."
+
+#: php/admin-panel.php:336
+msgid "Allow editing after additional comments have been posted?"
+msgstr "Yeni yorumlar yazıldıktan sonra da düzenlemeye izin ver?"
+
+#: php/admin-panel.php:336
+msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+msgstr "\"Hayır\" seçtiğinizde cevap olarak bir yorum yazıldıktan sonra kullanıcıların yorumlarını düzenlemesine izin vermez."
+
+#: php/admin-panel.php:338
+msgid "Allow Users to Edit Their Name?"
+msgstr "Kullanıcıların İsimlerini Değiştirmelerine İzin Ver?"
+
+#: php/admin-panel.php:338
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "\"Hayır\" seçtiğinizde kullanıcıların isimlerini değiştirmelerine izin verilmez."
+
+#: php/admin-panel.php:340
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "Kullanıcıların E-Posta Adreslerini Değiştirmelerine İzin Ver?"
+
+#: php/admin-panel.php:340
+msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+msgstr "\"Hayır\" seçtiğinizde e-posta adreslerinin değiştirilmesine izin verilmez. Bu seçeneği açmanız için nedenlerden birisi Avatar'a sahip olan kullanıcılar olabilir."
+
+#: php/admin-panel.php:342
+msgid "Allow Users to Edit Their URLs?"
+msgstr "Kullanıcıların URL Adreslerini Değiştirmelerine İzin Ver?"
+
+#: php/admin-panel.php:342
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "\"Hayır\" seçtiğinizde kullanıcılar URL adreslerini değiştiremezler."
+
+#: php/admin-panel.php:344
+msgid "Allow Users to Request Deletion of Comments?"
+msgstr "Kullanıcılara Silme İsteği Gönderme hakkı ver?"
+
+#: php/admin-panel.php:344
+msgid "Selecting \"No\" will turn off the deletion option."
+msgstr "\"Hayır\" seçtiğinizde silme seçeneği kapanır."
+
+#: php/admin-panel.php:351
+msgid "Registered Users"
+msgstr "Kayıtlı Kullanıcılar"
+
+#: php/admin-panel.php:356
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "Kayıtlı Kullanıcılara Kendi Yorumlarını Değiştirme Hakkı Ver?"
+
+#: php/admin-panel.php:356
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr "\"Hayır\" seçtiğinizde yorumların düzenlenmesi özelliği kayıtlı kullanıcılar için kapanır."
+
+#: php/admin-panel.php:358
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "Kayıtlı Kullanıcılara Yorumlarını Sınırsız Olarak Değiştirme Hakkı Ver?"
+
+#: php/admin-panel.php:359
+msgid "Selecting \"Yes\" will allow users registered on your website to edit comments without a time limit."
+msgstr "\"Evet\" seçtiğinizde kayıtlı kullanıcılar süre sınırlaması olmada yorumlarını değiştirebilirler."
+
+#: php/admin-panel.php:361
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "Kayıtlı Kullanıcılara İsimlerini Değiştirme Hakkı Ver?"
+
+#: php/admin-panel.php:362
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their names.  This can prevent issues if a user wishes to impersonate others."
+msgstr "\"Evet\" seçtiğinizde kayıtlı olan kullanıcılar isimlerini değiştirebilirler. Diğerlerini taklit etmek isteyen bir kullanıcıya engel olmak için kullanılabilir."
+
+#: php/admin-panel.php:364
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "Kayıtlı Kullanıcılara E-Posta Adreslerini Değiştirme Hakkı Ver?"
+
+#: php/admin-panel.php:365
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their e-mail address."
+msgstr "\"Evet\" seçtiğinizde kayıtlı kullanıcılar e-posta adreslerini değiştirebilirler."
+
+#: php/admin-panel.php:367
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "Kayıtlı Kullanıcılara URL Adreslerini Değiştirme Hakkı Ver?"
+
+#: php/admin-panel.php:368
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their URL."
+msgstr "\"Evet\" seçtiğinizde kayıtlı kullanıcılar URL adreslerini değiştirebilirler."
+
+#: php/admin-panel.php:375
+msgid "Styles"
+msgstr "Stiller"
+
+#: php/admin-panel.php:380
+msgid "Use RTL StyleSheet?"
+msgstr "RTL StyleSheet kullanılsın mı?"
+
+#: php/admin-panel.php:382
+msgid "Turn Off clearfix:after?"
+msgstr "Clearfix:after Özelliğini Kapat?"
+
+#: php/admin-panel.php:383
+msgid "The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "Temalarla en yüksek uyumluluğu sağlamak için clearfix özelliği varsayılan olarak etkinleştirilmiştir."
+
+#: php/admin-panel.php:385
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "Yönetici JavaScript Kaydırma Özelliğini Aç?"
+
+#: php/admin-panel.php:386
+msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "Eğer yöneticiyseniz eklenti yanlış offsetleri düzeltmeye çalışır."
+
+#: php/admin-panel.php:388
+msgid "Post/Admin CSS URL"
+msgstr "Yorum/Yönetici CSS URL"
+
+#: php/admin-panel.php:389
+#: php/admin-panel.php:392
+msgid "Leaving a style empty will revert back to the default plugin styles."
+msgstr "Stili boş bıraktğınızda varsayılan stile geri dönülür."
+
+#: php/admin-panel.php:389
+#: php/admin-panel.php:392
+msgid "The URL should be relative to: "
+msgstr "URL Şu Adrese Göre Tannımlanmalıdır:"
+
+#: php/admin-panel.php:391
+msgid "Editor CSS URL"
+msgstr "Yazar CSS URL"
+
+#: php/admin-panel.php:394
+msgid "Comment Edit Interface On Bottom?"
+msgstr "Yorum Düzenleme Arayüzü Altta?"
+
+#: php/admin-panel.php:401
+msgid "Icons"
+msgstr "İkonlar"
+
+#: php/admin-panel.php:405
+msgid "Icon Display"
+msgstr "İkon Görünümü"
+
+#: php/admin-panel.php:407
+msgid "Select an option below to determine how the icons are displayed on your website."
+msgstr "Aşağıdaki seçenekler arasından blogunuzda ikonların nasıl görüneceğini seçin."
+
+#: php/admin-panel.php:409
+msgid "Text Only"
+msgstr "Sadece Yazı"
+
+#: php/admin-panel.php:410
+msgid "Classic"
+msgstr "Klasik"
+
+#: php/admin-panel.php:411
+msgid "Dropdown"
+msgstr "Açılan"
+
+#: php/admin-panel.php:412
+msgid "Icons Only"
+msgstr "Sadece İkon"
+
+#: php/admin-panel.php:416
+msgid "Icon Set"
+msgstr "İkon Seti"
+
+#: php/admin-panel.php:418
+msgid "Select an option below to display the icon set on your website."
+msgstr "Aşağıdaki seçenekler arasından blogunuzda görünecek ikon setini seçin."
+
+#: php/admin-panel.php:440
+msgid "Icon Drop Down Menu"
+msgstr "İkon Açılan Menü"
+
+#: php/admin-panel.php:442
+msgid "Drag and drop between lists to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "Liste içinde sürükleyerek ikon sırası düzenlenebilir. Özelliği açmak/kapatmak için resme tıklayın."
+
+#: php/admin-panel.php:480
+#: php/admin-panel.php:520
+msgid "text"
+msgstr "Yazı"
+
+#: php/admin-panel.php:500
+msgid "Classic and Icons Only Vew"
+msgstr "Klasik ve Sadece İkon Görünümü"
+
+#: php/admin-panel.php:502
+msgid "Drag and drop to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "İkon sırasını düzenlemek için sürükle bırak yöntemini kullanabilirsiniz. Seçeneği açmak/kapatmak için resme tıklayın."
+
+#: php/admin-panel.php:537
+msgid "Other options"
+msgstr "Diğer Ayarlar"
+
+#: php/admin-panel.php:541
+msgid "Display Options"
+msgstr "Görünüm Ayarları"
+
+#: php/admin-panel.php:543
+msgid "Diplay on pages?"
+msgstr "Sayfada gösterilsin mi?"
+
+#: php/admin-panel.php:543
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "\"Hayır\" seçtiğinizde yorumların sayfa içerisinden düzenlenmesi özelliği kapanır."
+
+#: php/admin-panel.php:548
+msgid "Countdown Timer"
+msgstr "Geri Sayım"
+
+#: php/admin-panel.php:550
+msgid "Show a Countdown Timer?"
+msgstr "Geri Sayımı Göster?"
+
+#: php/admin-panel.php:550
+msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+msgstr "\"Hayır\" seçtiğinizde yönetici olmayan kullanıcılara geri sayım gösterilmeyecektir."
+
+#: php/admin-panel.php:555
+msgid "Edit E-mails"
+msgstr "E-Postaları Düzenle"
+
+#: php/admin-panel.php:557
+msgid "Allow Edit E-mails?"
+msgstr "Yorum Değiştirme Bildirimi Açık?"
+
+#: php/admin-panel.php:557
+msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+msgstr "\"Evet\" seçtiğinizde birisi yorumu üzerinde değişiklik yaptığında size e-posta gönderilir."
+
+#: php/admin-panel.php:562
+msgid "Spam Protection"
+msgstr "Spam Koruması"
+
+#: php/admin-panel.php:564
+msgid "Akismet"
+msgstr "Akismet"
+
+#: php/admin-panel.php:564
+msgid "Defensio"
+msgstr "Defensio"
+
+#: php/admin-panel.php:564
+msgid "None"
+msgstr "Yok"
+
+#: php/admin-panel.php:568
+msgid "Performance"
+msgstr "Performans"
+
+#: php/admin-panel.php:570
+msgid "Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)"
+msgstr "Betikleri Footer'da yükle (WordPress 2.8 veya üstü ve tema uyumluluğu gerekir)"
+
+#: php/admin-panel.php:572
+msgid "Use Compressed JavaScript Files?"
+msgstr "Sıkıştırılmış JavaScript Dosyaları Kullan?"
+
+#: php/admin-panel.php:574
+msgid "Load wp-load.php Directly?"
+msgstr "wp-load.php doğrudan yüklensin mi?"
+
+#: php/admin-panel.php:575
+msgid "Loading wp-load.php directly prevents most plugin conflicts.  It requires that the wp-content folder be in the default location."
+msgstr "wp-load.php doğrudan yüklendiğinde çoğu eklentiyle çakışmaları önler. Bunun için wp-content dizininin varsayılan konumunda olması gerekir."
+
+#: php/admin-panel.php:580
+msgid "Character Encoding"
+msgstr "Karakter Kodlaması"
+
+#: php/admin-panel.php:582
+msgid "Enable mb_convert_encoding?"
+msgstr "mb_convert_encoding Etkinleştir?"
+
+#: php/admin-panel.php:583
+msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+msgstr "Bazı sucunular bu özelliği desteklemeyebilir. Bu seçeneği iptal ettiğinizde özel karakterleri denediğinizde emin olun. UTF-8'den bazı diğer karakter kodlamalarına dönüşüm için mb_convert_encoding gerekir."
+
+#: php/admin-panel.php:588
+msgid "After the Deadline"
+msgstr "After the Deadline"
+
+#: php/admin-panel.php:590
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "Konular için After the Deadline Yazım Denetimini Devredışı Bırak?"
+
+#: php/admin-panel.php:592
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "Açılan iletiler için After the Deadline Yazım Denetimini Devredışı Bırak?"
+
+#: php/admin-panel.php:597
+msgid "Expand Options"
+msgstr "Seçenekleri Genişlet"
+
+#: php/admin-panel.php:599
+msgid "Disable the Expand Option on Posts?"
+msgstr "Yazılarda Seçeneklerin Genişletilmesini devredışı bırak?"
+
+#: php/admin-panel.php:601
+msgid "Disable the Expand Option on the Popups?"
+msgstr "Açılan İletilerde Seçeneklerin Genişletilmesi özelliğini devredışı bırak?"
+
+#: php/admin-panel.php:606
+msgid "Disable Trackbacks"
+msgstr "Geri İzlemeler Devredışı"
+
+#: php/admin-panel.php:608
+msgid "Disable trackbacks from showing?"
+msgstr "Geri İzlemelerin görünmesini engelle?"
+
+#: php/admin-panel.php:609
+msgid "Enabling this option will prevent trackbacks from showing up on your blog.  Please note that this option will not prevent your site from receiving trackbacks."
+msgstr "Bu seçeneği açtığınızda geri izlemeler sitenizde görünmeyecektir. Bu özelliğin sitenize geri izleme bildirimlerinin gelmesini engelleyeceğini unutmayın."
+
+#: php/admin-panel.php:614
+msgid "Disable No-follow"
+msgstr "No-follow Devredışı"
+
+#: php/admin-panel.php:616
+msgid "Disable no-follow in comment links?"
+msgstr "Yorum bağlantılarındaki no-follow devredışı?"
+
+#: php/admin-panel.php:617
+msgid "Enabling this option will remove no-follow from comment and author links."
+msgstr "Bu seçeneği açtığınızda yazar bağlantılarındaki no-follow etiketi kaldırılacaktır."
+
+#: php/admin-panel.php:622
+msgid "Disable Self Pings"
+msgstr "Self Ping'ler Devre Dışı"
+
+#: php/admin-panel.php:624
+msgid "Disable self-pings to your site?"
+msgstr "Siteniz için Self Ping'ler devredışı bırakılsın mı?"
+
+#: php/admin-panel.php:625
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "Bu seçeneği işaretlediğinizde siteniz kendini pinglemez."
+
+#: php/admin-panel.php:630
+msgid "De-link Behavior"
+msgstr "De-link Davranışı"
+
+#: php/admin-panel.php:632
+msgid "Choose how the de-link function behaves."
+msgstr "De-link özelliğinin nasıl davranacağını belirleyin."
+
+#: php/admin-panel.php:633
+msgid "You can choose to remove links from the comment content and comment author URL, or just the comment author URL."
+msgstr "Yorum içeriği ve yorum yazarı URL'sindeki veya sadece yorum yazarı URL'sindeki bağlantıların kaldırılmasını seçebilirsiniz."
+
+#: php/admin-panel.php:634
+msgid "Content and comment author URL."
+msgstr "İçerik ve yorum yazarı URL'si."
+
+#: php/admin-panel.php:634
+msgid "Comment author URL."
+msgstr "Yorum yazarı URL'si."
+
+#: php/admin-panel.php:646
+#: php/admin-panel.php:672
+#: php/admin-panel.php:689
+msgid "Update Settings"
+msgstr "Ayarları Kaydet"
+
+#: php/admin-panel.php:650
+msgid "Individual Options"
+msgstr "Kişisel Seçenekler"
+
+#: php/admin-panel.php:654
+msgid "Admin Panel Editing"
+msgstr "Yönetici Paneli Düzenleme"
+
+#: php/admin-panel.php:656
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "Yönetici Panelinden Yorum Düzenlemeyi Kapat?"
+
+#: php/admin-panel.php:657
+msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "\"Evet\" seçtiğinizde Yönetici Yorumlar Panelinden yorum düzenleme yapılamaz."
+
+#: php/admin-panel.php:662
+msgid "Post Editing"
+msgstr "Yorum Düzenleme"
+
+#: php/admin-panel.php:664
+msgid "Turn On Comment Editing?"
+msgstr "Yorum Düzenlemeyi Etkinleştir?"
+
+#: php/admin-panel.php:665
+msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr "\"Evet\" seçtiğinizde kullanıcıların yorumlarını düzenleyebilirsiniz. \"Hayır\" seçtiğinizde kullanıcıların yorumlarını düzenleyemezsiniz."
+
+#: php/admin-panel.php:676
+msgid "Cleanup"
+msgstr "Temizle"
+
+#: php/admin-panel.php:680
+msgid "Delete all security keys"
+msgstr "Bütün güvenlik anahtarlarını temizle"
+
+#: php/admin-panel.php:682
+msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+msgstr "Bir kullanıcı her yorum yazdığında otomatik olarak bir güvenlik anahtarı oluşturulur. Belirli aralıklarla bu bilgiyi silmek isteyebilirsiniz. Lütfen önce veritabanı yedeği alın."
+
+#: php/ajax-processor.php:72
+msgid "Comment Approved. "
+msgstr "Yorum Onaylandı."
+
+#: php/ajax-processor.php:79
+msgid "Move Successful. "
+msgstr "Taşıma Başarılı."
+
+#: php/ajax-processor.php:235
+msgid "Successfully blacklisted."
+msgstr "Başarıyla karalisteye alındı."
+
+#: php/ajax-processor.php:235
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "Gelişmiş kriterlerinize göre yorum(lar) spam olarak işaretlendi."
+
+#: php/ajax-processor.php:259
+msgid "Successfully Deleted"
+msgstr "Başarıyla Silindi"
+
+#: php/ajax-processor.php:319
+msgid "Successfully Marked as Spam"
+msgstr "Başarıyla Spam Olarak İşaretlendi"
+
+#: php/ajax-processor.php:351
+msgid "Successfully Approved"
+msgstr "Başarıyla Onaylandı"
+
+#: php/ajax-processor.php:381
+msgid "Successfully Marked for Moderation"
+msgstr "Başarıyla Denetim Listesi İçin İşaretlendi"
+
+#: php/ajax-processor.php:418
+msgid "Successfully De-linked"
+msgstr "Başarıyla Bağlantısı Kaldırıldı"
+
+#: php/blacklist-comment.php:70
+#: php/comment-editor.php:109
+msgid "Main"
+msgstr "Ana"
+
+#: php/blacklist-comment.php:72
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "Aşağıdaki seçenekler arasından yorum karalistesine eklenecek olanları seçin."
+
+#: php/blacklist-comment.php:77
+#: php/blacklist-comment.php:108
+#: php/comment-editor.php:124
+msgid "Name"
+msgstr "İsim"
+
+#: php/blacklist-comment.php:84
+#: php/blacklist-comment.php:115
+#: php/comment-editor.php:136
+msgid "URL"
+msgstr "URL"
+
+#: php/blacklist-comment.php:91
+#: php/blacklist-comment.php:122
+msgid "E-mail Address"
+msgstr "E-Posta Adresi"
+
+#: php/blacklist-comment.php:95
+#: php/blacklist-comment.php:126
+msgid "IP Address"
+msgstr "IP Adresi"
+
+#: php/blacklist-comment.php:101
+#: php/comment-editor.php:153
+msgid "Advanced"
+msgstr "Gelişmiş"
+
+#: php/blacklist-comment.php:102
+msgid "Spam Matching Comments"
+msgstr "Spam Olabilecek Yorumlar"
+
+#: php/blacklist-comment.php:103
+msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+msgstr "Örnek: 'e-posta' ve 'name' seçenekleri bu isimle ve e-posta adresiyle birlikte yapılan yorumları spam olarak işaretler."
+
+#: php/blacklist-comment.php:103
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "Bu özelliği kullanırken dikkatli olun. BU özelliğin geri alma işlevi yoktur."
+
+#: php/blacklist-comment.php:134
+#: php/comment-editor.php:198
+#: php/email.php:98
+#: php/request-deletion.php:81
+msgid "Cancel"
+msgstr "İptal"
+
+#: php/blacklist-comment.php:136
+#: php/comment-editor.php:201
+#: php/email.php:100
+#: php/move-comment.php:157
+#: php/request-deletion.php:83
+msgid "Close"
+msgstr "Kapat"
+
+#: php/comment-editor.php:159
+#, php-format
+msgid "<b>%1$s</b> :on Submitted"
+msgstr "<b>%1$s</b> :Gönderilme Tarihi"
+
+#: php/comment-editor.php:162
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "Gönderilme Tarihi: <b>%1$s</b>"
+
+#: php/comment-editor.php:166
+msgid "Adjust Comment Time"
+msgstr "Yorum Zamanını Ayarla"
+
+#: php/comment-editor.php:168
+msgid "Adjust Comment Status"
+msgstr "Yorum Durumunu Ayarla"
+
+#: php/comment-editor.php:179
+#: php/comment-editor.php:186
+msgid "Approved"
+msgstr "Onaylandı"
+
+#: php/comment-editor.php:180
+#: php/comment-editor.php:187
+msgid "Pending"
+msgstr "Beklemede"
+
+#: php/comment-editor.php:197
+msgid "Save"
+msgstr "Kaydet"
+
+#: php/comment-popup.php:36
+msgid "Please type out your comment below."
+msgstr "Lütfen yorumunuzu aşağıya yazın."
+
+#: php/comment-popup.php:39
+msgid "Save and Return"
+msgstr "Kaydet ve Geri Dön"
+
+#: php/comment-popup.php:39
+msgid "Submit Comment"
+msgstr "Yorum Gönder"
+
+#: php/email.php:77
+msgid "To"
+msgstr "Kime"
+
+#: php/email.php:81
+msgid "From"
+msgstr "Kimden"
+
+#: php/email.php:85
+msgid "Site Admin"
+msgstr "Site Yöneticisi"
+
+#: php/email.php:85
+msgid "Post Author"
+msgstr "Konu Yazarı"
+
+#: php/email.php:88
+msgid "Subject"
+msgstr "Knu"
+
+#: php/email.php:97
+msgid "Send"
+msgstr "Gönder"
+
+#: php/move-comment.php:64
+msgid "Move by Post"
+msgstr "Konuya göre taşı"
+
+#: php/move-comment.php:73
+msgid "Previous"
+msgstr "Önceki"
+
+#: php/move-comment.php:73
+msgid "Next"
+msgstr "Sonraki"
+
+#: php/move-comment.php:79
+msgid "Move by Title"
+msgstr "Başlığa göre taşı"
+
+#: php/move-comment.php:85
+#: php/move-comment.php:93
+#: php/move-comment.php:111
+#: php/move-comment.php:119
+msgid "Search"
+msgstr "Ara"
+
+#: php/move-comment.php:87
+#: php/move-comment.php:91
+msgid "Title"
+msgstr "Başlık"
+
+#: php/move-comment.php:105
+msgid "Move by ID"
+msgstr "ID'ye göre taşı"
+
+#: php/move-comment.php:113
+#: php/move-comment.php:117
+msgid "Post ID"
+msgstr "Yazı Numarası"
+
+#: php/move-comment.php:143
+#: php/move-comment.php:146
+msgid "Mark as Approved"
+msgstr "Onaylandı Olarak İşaretle"
+
+#: php/request-deletion.php:72
+msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+msgstr "Yorumun neden silinmesi gerektiğini açıklayın. İsteğinizi gönderdikten sonra yorum denetim listesine alınacak ve yayından kaldırılacaktır."
+
+#: php/request-deletion.php:80
+msgid "Send Request"
+msgstr "İstek Gönder"
+
+#~ msgid ""
+#~ "Selecting \"No\" will turn off comment editing for everyone except admin "
+#~ "types who have post and page editing permissions."
+#~ msgstr ""
+#~ "\"Hayır\" seçeneğini seçtiğinizde yorum düzenleme sayfa ve yorum "
+#~ "düzenleme yetkisi olan yöneticiler dışında herkes için kapatılır."
+
+#~ msgid "Ajax Edit Comments"
+#~ msgstr "Ajax Edit Comments"
+
+#~ msgid "Your readers have edited their comments "
+#~ msgstr "Okuyucularınız yorumları üzerinde değişiklik yaptı"
+
+#~ msgid ""
+#~ " times.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "kere \n"
+#~ "\n"
+
+#~ msgid ""
+#~ "The Ajax Edit Comments plugin has saved you and your readers a ton of "
+#~ "time. Please consider a small donation for our hard work and time spent "
+#~ "on the plugin.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Ajax Edit Comments sizi ve okuyucularınızı birçok gereksiz işten "
+#~ "kurtarır. Bu eklentiye harcanan emeği takdir etmek için küçük bir bağış "
+#~ "yapabilirsiniz. \n"
+
+#~ msgid "Donate: %s"
+#~ msgstr "Bağış Yapın: %s"
+
+#~ msgid ""
+#~ "If you do not wish to receive these e-mails anymore, please unsubscribe "
+#~ "in the WordPress settings page for Ajax Edit Comments.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Eğer bu e-postaları almak istemiyorsanız lütfen Wordpress ayarlar "
+#~ "sayfasından Ajax Edit Comments üyeliğinizi iptal edin. \n"
+
+#~ msgid "Please"
+#~ msgstr "Lütfen"
+
+#~ msgid "Donate"
+#~ msgstr "Bağış Yapın"
+
+#~ msgid "Global Options - These Options Affect Everyone"
+#~ msgstr "Genel Ayarlar - Bu Ayarlar Herkesi Etkiler"
+
+#~ msgid "The following affects the editing interface."
+#~ msgstr "Aşağıdakiler yazım arayüzünü etkiler."
+
+#~ msgid "Turn Off More Options?"
+#~ msgstr "Daha Fazla Seçeneğini Kapat?"
+
+#~ msgid "Individual Options - These Options Only Affect You"
+#~ msgstr "Özel Ayarlar - Bu Ayarlar Sadece Sizi Etkiler"
+
+#~ msgid "Unsubscribe"
+#~ msgstr "Üyelik Sil"
+
+#~ msgid "Unsubscribe from periodic reminder e-mails?"
+#~ msgstr ""
+#~ "Belirli aralıklarla gelen hatırlatma e-postası üyeliğinden çıkmak istiyor "
+#~ "musunuz?"
+
+#~ msgid "Show Advanced Options in Editor?"
+#~ msgstr "Gelişmiş ayarlar editörde gösterilsin mi?"
+
+#~ msgid "Selecting \"Yes\" will show advanced options in the editor window"
+#~ msgstr ""
+#~ "\"Evet\" seçtiğinizde gelişmiş ayarlar editör penceresinde gösterilir."
+
+#~ msgid "Ajax Edit Comments Cleanup"
+#~ msgstr "Ajax Edit Comment Temizlik"
+
+#~ msgid "Not Spam"
+#~ msgstr "Spam Değil"
+
+#~ msgid ""
+#~ "Tweaking the style options is recommended for advanced users only.  If "
+#~ "you choose to disable styles, you will have to provide your own styles in "
+#~ "your default WordPress stylesheet."
+#~ msgstr ""
+#~ "Stil ayarları üzerinde değişiklik sadece tecrübeli kullanıcılara "
+#~ "önerilir. Eğer stilleri kapatmayı seçerseniz kendi stilinizi WordPress "
+#~ "stylesheet üzerinden girmeniz gerekir."
+
+#~ msgid "Turn Off Icons?"
+#~ msgstr "İkonları Kapat?"
+
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "\"Evet\" seçtiğinizde eklenti ikonları gösterilmez."
+
+#~ msgid "Gravatars"
+#~ msgstr "Gravatar"
+
+#~ msgid "Turning off Gravatars may solve some plugin compatibility issues."
+#~ msgstr "Gravatarların kapatılması bazı uyumluluk sorunlarını çözebilir."
+
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "Gravatarları Kapat?"
+
+#~ msgid "Please leave as is if you wish to retain proper plugin credit."
+#~ msgstr "Bu eklentinin devamlılığı için lütfen olduğu gibi bırakın."
+
+#~ msgid "Editor Title"
+#~ msgstr "Yazar İsmi"
+
+#, fuzzy
+#~ msgid "Deleted"
+#~ msgstr "Sil"

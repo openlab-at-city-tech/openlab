@@ -54,14 +54,14 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 					     }
 					?>
 				</div>
-				
+
 			</li>
 				<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
 		<?php $count++ ?>
 		<?php endwhile; ?>
 	</ul>
-		
-	<div class="pagination-links" id="group-dir-pag-top">            
+
+	<div class="pagination-links" id="group-dir-pag-top">
 		<?php bp_groups_pagination_links() ?>
 	</div>
 <?php else: ?>
@@ -72,7 +72,7 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 
 <?php endif; ?>
 
-         
+
 
 
 <?php
@@ -85,10 +85,10 @@ function cuny_buddypress_courses_actions() { ?>
 	//if($bp->loggedin_user->id > 0){?>
     <!--<div class="generic-button"><a href="<?php //echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>"><?php //_e( 'Create a Club', 'buddypress' ) ?></a></div>-->
     <?php // } ?>
-    
+
     <h2 class="sidebar-title">Find a Club</h2>
     <p>Narrow down your search using the filters or search box below.</p>
-    
+
     <?php if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
 }
@@ -105,7 +105,7 @@ switch ($_GET['group_sequence']) {
 		$display_option = "Last Active";
 		$option_value = "active";
 		break;
-	default: 
+	default:
 		$display_option = "Select Desired Sequence";
 		$option_value = "";
 		break;
@@ -122,16 +122,16 @@ switch ($_GET['group_sequence']) {
 </form>
 <div class="clearfloat"></div>
 </div><!--filter-->
-    
+
     <div class="archive-search">
     <div class="gray-square"></div>
     <form method="post">
-    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
     <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
     <div class="clearfloat"></div>
     </div><!--archive search-->
-<?php 
+<?php
 }
 
 genesis();

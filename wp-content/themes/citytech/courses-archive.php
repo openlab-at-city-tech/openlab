@@ -54,7 +54,7 @@ if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && (!empty( $_G
 }
 else if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && (!empty( $_GET['department'] ) && $_GET['department']!='dept_all')) {
 	echo '<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>';
-	echo $department.'</h3>'; 
+	echo $department.'</h3>';
 	$sql="SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a, {$bp->groups->table_name_groupmeta} b, {$bp->groups->table_name_groupmeta} c where a.group_id=b.group_id and a.group_id=c.group_id and a.meta_key='wds_group_type' and a.meta_value='course' and b.meta_key='wds_group_school' and b.meta_value like '%".$_GET['school']."%' and c.meta_key='wds_departments' and c.meta_value like '%".$department."%'";
 
 }else if( (!empty( $_GET['school'] ) && $_GET['school']!='school_all') && !empty( $_GET['semester'] ) && $_GET['semester'] != 'semester_all' ) {
@@ -81,9 +81,9 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 	<div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
 	<div class="clearfloat"></div>
 	<ul id="course-list" class="item-list">
-		<?php 
+		<?php
 		$count = 1;
-		while ( bp_groups() ) : bp_the_group(); 
+		while ( bp_groups() ) : bp_the_group();
 			$group_id=bp_get_group_id();?>
 			<li class="course<?php echo cuny_o_e_class($count) ?>">
 				<div class="item-avatar alignleft">
@@ -117,7 +117,7 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 					     }
 					?>
 				</div>
-				
+
 			</li>
 			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
 			<?php $count++ ?>
@@ -139,12 +139,12 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
-function cuny_buddypress_courses_actions() { 
+function cuny_buddypress_courses_actions() {
 global $bp;?>
 
 <h2 class="sidebar-title">Find a Course</h2>
     <p>Narrow down your search using the filters or search box below.</p>
-<?php    
+<?php
 //school filter
 if ( empty( $_GET['school'] ) ) {
 	$_GET['school'] = "";
@@ -168,11 +168,11 @@ switch ($_GET['school']) {
 		$display_option_school = "All";
 		$option_value_school = "school_all";
 		break;
-	default: 
+	default:
 		$display_option_school = "Select School";
 		$option_value_school = "";
 		break;
-} 
+}
     //departments
       if ( empty( $_GET['department'] ) ) {
 	$_GET['department'] = "";
@@ -301,7 +301,7 @@ switch ($_GET['department']) {
 		$display_option_dept = "All";
 		$option_value_dept = "dept_all";
 		break;
-	default: 
+	default:
 		$display_option_dept = "Select Department";
 		$option_value_dept = "";
 		break;
@@ -335,11 +335,11 @@ switch ($_GET['semester']) {
 		$display_option_semester = "All";
 		$option_value_semester = "semester_all";
 		break;
-	default: 
+	default:
 		$display_option_semester = "Select Semester";
 		$option_value_semester = "";
 		break;
-} 
+}
 	//sequence filter
 if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
@@ -357,16 +357,19 @@ switch ($_GET['group_sequence']) {
 		$display_option = "Last Active";
 		$option_value = "active";
 		break;
-	default: 
+	default:
 		$display_option = "Order By";
 		$option_value = "";
 		break;
 }
-    
+
 ?>
 <div class="filter">
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
 <div class="red-square"></div>
+	<div id="tester">
+
+	</div>
 	<select name="school" class="last-select" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
 		<option value='school_all'>All</option>
@@ -404,7 +407,7 @@ switch ($_GET['group_sequence']) {
     <div class="archive-search">
     <div class="gray-square"></div>
     <form method="post">
-    <input id="search-terms" type="text" name="group_search" value="Search" />
+    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
     <input id="search-submit" type="submit" name="group_search_go" value="Search" />
     </form>
     <div class="clearfloat"></div>
@@ -418,31 +421,35 @@ function slug_maker($full_string)
  return $slug_val;
 } ?>
 <script type="text/javascript">
-function showDept(str)
-{
-if (str=="")
-  {
-  document.getElementById("dept-select").innerHTML="";
-  return;
-  }
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("dept-select").innerHTML=xmlhttp.responseText;
-    }
-  }
-  var $dom = document.domain;
-xmlhttp.open("GET","http://"+$dom+"/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
-xmlhttp.send();
+
+function showDept(str) {
+	if (str=="") {
+	  document.getElementById("dept-select").innerHTML="";
+	  return;
+	}
+
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			if ( navigator.appName == 'Microsoft Internet Explorer' ) {
+				var dropdown = '<select name="department" class="last-select" id="dept-select">' + xmlhttp.responseText + '</select>';
+				document.getElementById('dept-select').outerHTML = dropdown;
+			} else {
+				document.getElementById("dept-select").innerHTML = "" + xmlhttp.responseText + "";
+			}
+		}
+	}
+
+	var dom = document.domain;
+	xmlhttp.open("GET","http://" + dom + "/wp-content/themes/citytech/includes/department_processing.php?q="+str,true);
+	xmlhttp.send();
 }
 function clear_form(){
 	document.getElementById('group_seq_form').reset();
