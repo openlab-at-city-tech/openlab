@@ -887,7 +887,7 @@ a#pgw-prev, a#pgw-next {
 	width: 259px;
 	padding: 10px;
 	color: #fff;
-	font-size: 10px;
+	/*font-size: 10px;*/
 	margin-bottom: 10px;
 }
 .home #cuny_openlab_jump_start .red-box .title,
@@ -902,6 +902,7 @@ a#pgw-prev, a#pgw-next {
 	width: 259px;
 	color: #000;
 	font-size: 10px;
+	height: 118px;
 }
 .home #open-lab-login form.standard-form label {
     display: block;

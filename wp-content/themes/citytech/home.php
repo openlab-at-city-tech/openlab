@@ -63,7 +63,7 @@ function cuny_home_login() {
 	<?php else : ?>
     	<?php echo '<div id="open-lab-join" class="home-box red-box">'; ?>
     	<?php echo '<h3 class="title">JOIN OpenLab</h3>'; ?>
-		<?php _e( 'Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!', 'buddypress' ) ?>
+		<?php _e( '<p>Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!</p>', 'buddypress' ) ?>
         <?php echo '</div>'; ?>
         
 		<?php echo '<div id="open-lab-login" class="box-1">'; ?>
