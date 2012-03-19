@@ -245,7 +245,19 @@ function cuny_home_square($type){
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
 	  	
-	  	$activity = $wpdb->get_results( $wpdb->prepare( "SELECT content, item_id FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$group_ids_sql}) ORDER BY date_recorded DESC" ) );
+	  	$activity = $wpdb->get_results( $wpdb->prepare( "
+	  		SELECT 
+	  			content, item_id 
+	  		FROM 
+	  			{$bp->activity->table_name} 
+	  		WHERE 
+	  			component = 'groups' 
+	  			AND 
+	  			type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
+	  			AND
+	  			item_id IN ({$group_ids_sql}) 
+	  		ORDER BY 
+	  			date_recorded DESC" ) );
 	  	
 	  	// Now walk down the list and try to match with a group. Once one is found, remove
 	  	// that group from the stack
