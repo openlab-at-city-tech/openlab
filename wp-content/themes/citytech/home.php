@@ -147,11 +147,9 @@ global $wpdb, $bp;
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
 
-	//$sql="SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$type."' limit 6";
-	//if($_GET['test']=="yes"){
-		$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 6";
-		//echo $sql;
-	//}
+	// Todo: this should be optimized
+	$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 20";
+
 	$rs = $wpdb->get_results( $sql );
 	//print_r($rs);
 	$ids="9999999";

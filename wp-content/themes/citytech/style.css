@@ -1038,14 +1038,14 @@ a#pgw-prev, a#pgw-next {
 }
 /*Who's Online? styles*/
 #whos-online {
-    border: 2px solid #F5F6F7;
-    padding: 10px;
-    width: 255px;
+	border: 2px solid #F5F6F7;
+	padding: 10px;
+	width: 255px;
 	margin-top: 25px;
 }
 
 #whos-online .avatar-block .item-avatar {
-	margin: 0 3px 0 0!important;
+	margin: 0 1px 0 0!important;
 }
 #whos-online .avatar-block {
 	position: relative;
