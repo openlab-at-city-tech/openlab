@@ -13,20 +13,24 @@ function cuny_project_archive() {
 	global $wpdb,$bp;
 	$ids="9999999";
 
-	$sequence_type = $search_terms = '';
+	$sequence_type = $search_terms = $search_terms_raw = '';
 
 	if ( !empty( $_GET['group_sequence'] ) ) {
 		$sequence_type = "type=" . $_GET['group_sequence'] . "&";
 	}
 	if( !empty( $_POST['group_search'] ) ){
-		$search_terms="search_terms=".$_POST['group_search']."&";
+		$search_terms_raw = $_POST['group_search'];
+		$search_terms     = "search_terms=" . $search_terms_raw . "&";
 	}
 
 	if( !empty( $_GET['search'] ) ){
-		$search_terms="search_terms=".$_GET['search']."&";
+		$search_terms_raw = $_GET['search'];
+		$search_terms     = "search_terms=" . $search_terms_raw . "&";
 	}
 
-	$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='project'" );
+	$in_sql = openlab_get_groups_in_sql( $search_terms_raw );
+
+	$rs = $wpdb->get_results( "SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a where a.meta_key = 'wds_group_type' and a.meta_value='project' {$in_sql}" );
 
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );
@@ -64,6 +68,9 @@ function cuny_project_archive() {
 		<?php endwhile; ?>
 	</ul>
 
+	<div class="pagination-links" id="group-dir-pag-top">
+		<?php bp_groups_pagination_links() ?>
+	</div>
 <?php else: ?>
 
 	<div class="widget-error">
@@ -72,10 +79,7 @@ function cuny_project_archive() {
 
 <?php endif; ?>
 
-		<div class="pagination-links" id="group-dir-pag-top">
-			<?php bp_groups_pagination_links() ?>
-		</div><?php
-
+<?php
 }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
@@ -124,9 +128,9 @@ switch ($_GET['group_sequence']) {
 
     <div class="archive-search">
     <div class="gray-square"></div>
-    <form method="post">
-    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
-    <input id="search-submit" type="submit" name="group_search_go" value="Search" />
+    <form method="get">
+    <input id="search-terms" type="text" name="search" placeholder="Search" />
+    <input id="search-submit" type="submit" value="Search" />
     </form>
     <div class="clearfloat"></div>
     </div><!--archive search-->
