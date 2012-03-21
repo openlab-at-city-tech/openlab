@@ -273,6 +273,7 @@ function cuny_home_square($type){
 		$column_check = $i%4;
 		
 		$activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
+		$activity = strip_tags( $activity );
 		
 		if ($column_check == 0)
 		{
