@@ -1,7 +1,7 @@
 <?php
 add_filter('genesis_pre_get_option_site_layout', 'cuny_home_layout');
 function cuny_home_layout($opt) {
-    $opt = 'full-width-content';
+    $opt = 'content-sidebar';
     return $opt;
 }
 
@@ -17,7 +17,7 @@ function cuny_registration_page() {
 
 			<?php if ( 'request-details' == bp_get_current_signup_step() ) : ?>
 
-				<h2><?php _e( 'Create an Account', 'buddypress' ) ?></h2>
+				<h1 class="entry-title"><?php _e( 'Create an Account', 'buddypress' ) ?></h2>
 
 				<?php do_action( 'template_notices' ) ?>
 
