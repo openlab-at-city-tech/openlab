@@ -16,7 +16,7 @@ function cuny_members_index() {
 	echo '</div>';
 }
 //
-//     New parameter "view" - 'more' - tells it to format a "View More" link for that member type
+//     New parameter "view" - 'more' - tells it to format a "See More" link for that member type
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
 //
 function cuny_list_members($view) {

@@ -45,17 +45,16 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 			<li class="club<?php echo cuny_o_e_class($count) ?>">
 				<div class="item-avatar alignleft">
-					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 135, 'height' => 135 )) ?></a>
+					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<div class="created">Club Since: <?php bp_group_date_created(); ?></div>
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {
 						$this_description = substr(bp_get_group_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">View More</a></p>';
+						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">See More</a></p>';
 					     } else {
 						bp_group_description();
 					     }

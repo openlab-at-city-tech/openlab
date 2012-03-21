@@ -193,7 +193,7 @@ global $bp, $ribbonclass;
               <?php } ?>
 
               </ul>
-  				<span><a href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php _e('View More Friends', 'buddypress') ?> &rarr;</a></span>
+  				<span><a href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php _e('See More Friends', 'buddypress') ?> &rarr;</a></span>
           <?php } else { ?>
 
               <div id="message" class="info">
@@ -254,7 +254,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 
                           <div class="activity-inner">
                           	<?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
-                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">(View More)</a>'; ?>
+                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">(See More)</a>'; ?>
                           </div>
 
                   </div>

@@ -49,13 +49,12 @@ function cuny_project_archive() {
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<div class="info-line">Project Information:</div>
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {
 						$this_description = substr(bp_get_group_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">View More</a>)</p>';
+						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">See More</a>)</p>';
 					     } else {
 						bp_group_description();
 					     }

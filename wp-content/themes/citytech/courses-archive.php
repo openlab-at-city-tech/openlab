@@ -116,7 +116,7 @@ if ( bp_has_groups( $sequence_type . $search_terms . 'include=' . $ids . '&per_p
 					     if ($len > 135) {
 						$this_description = substr(bp_get_group_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">View More</a>)</p>';
+						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">See More</a>)</p>';
 					     } else {
 						bp_group_description();
 					     }
@@ -405,7 +405,7 @@ switch ($_GET['group_sequence']) {
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
 	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/courses/'">
-	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Filter">
+	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>
 </div><!--filter-->

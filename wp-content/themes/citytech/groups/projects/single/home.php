@@ -165,7 +165,7 @@
                         </li>
                     <?php endwhile; ?>
                 </ul>
-                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">View More Project Discussion</a></div>
+                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See More Project Discussion</a></div>
             <?php else: ?>
             	<div id="message" class="info">
 					<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -208,7 +208,7 @@
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">View More Docs</a></p></div>
+				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See More Docs</a></p></div>
 				<?php
 				}else{
 					echo "<div><p>No Recent Docs</p></div>";
@@ -365,7 +365,7 @@ function show_site_posts() {
 						<p><?php _e( 'Sorry, no blog posts exist.', 'buddypress' ) ?></p>
 					</div>
 				<?php }?>
-                <div class="view-more"><a href="<?php echo site_url();?>">View More Project Posts</a></div>
+                <div class="view-more"><a href="<?php echo site_url();?>">See More Project Posts</a></div>
                 <?php
 				restore_current_blog();
 		?>
