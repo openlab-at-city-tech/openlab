@@ -71,7 +71,7 @@
 							echo $last_topic_content;
 						?>
 						
-                        			(<a href="<?php bp_the_topic_permalink();?>" class="read-more">Read&nbsp;More</a>)
+                        			(<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>)
 									</li>
 								<?php endwhile; ?>
 							</ul></p>
@@ -112,7 +112,7 @@
 							  the_title(); 
 							  echo '</h5>';
 							  ?>
-							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">Read&nbsp;More</a>)</p>
+							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
 							  <?php
 							  echo '</li>';
 						  endwhile;
@@ -245,7 +245,7 @@ function show_site_posts_and_comments() {
 								  the_title();
 								  echo '</h5>';
 								  ?>
-								  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php the_permalink();?>" class="read-more">Read&nbsp;More</a>)</p>
+								  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php the_permalink();?>" class="read-more">See&nbsp;More</a></p>
 								  <?php
 								  echo '</li>';
 							  endwhile;
@@ -285,7 +285,7 @@ function show_site_posts_and_comments() {
 										$permalink = get_permalink($post_id);
 										echo "<li>";
 										echo wds_content_excerpt($comment->comment_content,135);
-										echo " (<a href='$permalink'>Read More</a>)";
+										echo " <a href='$permalink' class='read-more'>See&nbsp;More</a>";
 										echo "</li>";
 									endforeach;
 									if (!$comments_found) {
