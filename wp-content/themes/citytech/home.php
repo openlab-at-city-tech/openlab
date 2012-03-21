@@ -147,8 +147,7 @@ global $wpdb, $bp;
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
 
-	// Todo: this should be optimized
-	$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 20";
+	$sql = "SELECT user_id FROM wp_usermeta where meta_key='last_activity' and meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL 1 HOUR ) order by meta_value desc limit 20";
 
 	$rs = $wpdb->get_results( $sql );
 	//print_r($rs);
