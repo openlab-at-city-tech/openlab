@@ -284,11 +284,13 @@ a#cuny-sw-logo {
 	text-align: center;
 	width: 110px;
 	cursor: pointer;
-	font-size: 12px;
+	font-size: 11px;
 	font-family: 'Arvo',arial,serif;
 	margin-top: 10px;
 	border-right: 2px solid #cfcfcf;
 	padding: 0;
+	line-height:15px;
+	
 }
 
 #wp-admin-bar ul li {
@@ -310,6 +312,7 @@ a#cuny-sw-logo {
 }
 #wp-admin-bar ul li ul
 {
+	border:none;
 	display: none;
 	position: absolute;
 	background: url('images/admin-bar-arrow.png') no-repeat top center #838383;
@@ -317,15 +320,18 @@ a#cuny-sw-logo {
 	padding: 22px 0 0 15px;
 	width: 95px;
 	text-transform: none;
-	margin: 0;
 }
 #wp-admin-bar ul li ul li
 {
 	list-style: none;
 	padding-bottom: 10px;
 	text-align: left;
+	line-height: 15px;
 }
 
+#wp-admin-bar li a {
+	padding: 0;
+}
 
 
 /* Forms
@@ -345,7 +351,11 @@ a#cuny-sw-logo {
 
 /* Footer Widgets
 ------------------------------------------------------------ */
+#cuny-sw-footer {
 
+}
+	
+	
 #cuny-sw-footer #footer-widgets {
 	background-color: #666;
 	clear: both;
@@ -355,6 +365,8 @@ a#cuny-sw-logo {
 	width: 100%;
 	color: #000;
 	font-family: arial;
+	line-height: 15px;
+	vertical-align: baseline;
 }
 
 #cuny-sw-footer #footer-widgets .wrap {
@@ -381,19 +393,24 @@ a#cuny-sw-logo {
 	border: none;
 	font-family: 'Arvo',arial,serif;
 	color: #fff;
-	font-size: 12px;
+	font-size: 14px;
 	margin: 0 0 5px;
 	padding: 0;
+	background: none;
+	line-height: 24px;
 }
 
 #cuny-sw-footer #footer-widgets p {
 	padding: 0 0 10px;
 	color: #000;
+	font-size: 11px;
+	margin: 0 0 10px;
 }
 
 #cuny-sw-footer #footer-widgets a,
 #cuny-sw-footer #footer-widgets a:visited {
 	color: #000;
+	font-size: 11px;
 }
 
 #cuny-sw-footer #footer-widgets a:hover {
@@ -445,9 +462,14 @@ a#cuny-sw-logo {
 #cuny-sw-footer .footer-widgets-3,
 #cuny-sw-footer .footer-widgets-4 {
 	float: left;
-    border-right: 1px solid #FFFFFF;
+	border-right: 1px solid #929292;
     padding: 0 15px;
     height: 100px;
+}
+
+#footer-widgets li.rss a {
+	padding-left: 20px;
+	background: url(/wp-content/themes/citytech/images/rss.png) no-repeat left;
 }
 
 /* Footer
