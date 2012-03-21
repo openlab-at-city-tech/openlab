@@ -949,7 +949,7 @@ a#pgw-prev, a#pgw-next {
 /*logged-in specific*/
 .logged-in #home-left #open-lab-login
 {
-	background-color: #f0f0f0;
+	background-color: #e1e1e1;
 }
 #sidebar-me .avatar
 {
@@ -3326,5 +3326,11 @@ a.close-popup-login {
 .internal-page .item-list-tabs {
     border: none !important;
     clear: both;
+}
+
+/* Register page styles to override Buddypress */
+
+#basic-details-section, #profile-details-section {
+	float: none !important;
 }
 
