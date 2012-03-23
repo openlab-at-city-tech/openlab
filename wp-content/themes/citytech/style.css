@@ -1580,9 +1580,9 @@ blockquote {
 	margin: 0 0 40px;
 }
 
-.entry-content {
+/* .entry-content {
 	padding-left: 7px;
-}
+} */
 
 .entry-content p, .entry-content ol, .entry-content ul {
 	padding: 0;

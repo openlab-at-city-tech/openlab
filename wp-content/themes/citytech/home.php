@@ -281,8 +281,9 @@ function cuny_home_square($type){
 		$group = $groups_template->group;
 		$column_check = $i%4;
 		
-		$activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
-		$activity = strip_tags( $activity );
+		// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
+		// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
+		$activity = stripslashes( $group->description );
 		
 		if ($column_check == 0)
 		{
@@ -298,7 +299,7 @@ function cuny_home_square($type){
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
 			 
-			  echo substr($activity, 0, 125).'<p><a href="'.bp_get_group_permalink().'">See More</a></p>';
+			  echo bp_create_excerpt( $activity, 125, array( 'html' => false ) ) . '<p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
 			  echo '</div>';
 			  $i++;
 		  endwhile; ?>
