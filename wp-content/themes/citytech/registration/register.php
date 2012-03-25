@@ -22,7 +22,8 @@ function cuny_registration_page() {
 				<?php do_action( 'template_notices' ) ?>
 
 				<p><?php _e( 'Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress' ) ?></p>
-				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site. <strong>Please use your City Tech email address to register</strong>. You may change your preferred email address after registering if you'd like.</p>
+				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p> 
+				<p><strong>Please use your City Tech email address to register</strong>. You may change your preferred email address after registering if you'd like.</p>
 				<?php do_action( 'bp_before_account_details_fields' ) ?>
 
 				<div class="register-section" id="basic-details-section">
@@ -162,7 +163,24 @@ function cuny_registration_page() {
 		<?php do_action( 'bp_after_register_page' ) ?>
 
 	<?php do_action( 'bp_after_directory_activity_content' ) ?>
-
+	
+	<!-- add blank sidebar -->
+	<?php
+		add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_register_actions');
+	
+	function cuny_buddypress_register_actions() {
+		global $bp;?>
+		<h2 class="sidebar-title">&nbsp;</h2>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+	<?php
+	}
+	?>
 	<script type="text/javascript">
 		jQuery(document).ready( function() {
 			if ( jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show') )

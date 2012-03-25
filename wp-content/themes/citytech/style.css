@@ -3361,6 +3361,7 @@ a.close-popup-login {
 
 #basic-details-section, #profile-details-section {
 	float: none !important;
+	width: 100% !important;
 }
 
 /* global styles */
