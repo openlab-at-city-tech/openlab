@@ -876,7 +876,7 @@ a#pgw-prev, a#pgw-next {
 }
 
 #pgw-gallery-medium a, #pgw-gallery-large a, #pgw-gallery-full a {
-    color: #FFF;
+    color: #FFF !important;
     text-decoration: underline;
 }
 
@@ -1908,7 +1908,7 @@ h1.entry-title
 
 .entry-content ol,
 .entry-content ul {
-	margin: 0 0 0 20px;
+	margin: 0 0 0 0;
 	padding: 0 0 15px;
 	font-size: 12px;
 	line-height: 18px;

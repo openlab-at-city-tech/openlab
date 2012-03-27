@@ -161,7 +161,7 @@
 				$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 				echo $last_topic_content;
 			?>
-                        (<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>)
+                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
                         </li>
                     <?php endwhile; ?>
                 </ul>
@@ -405,7 +405,7 @@ function show_site_comments() {
 								$permalink = get_permalink($post_id);
 								echo "<li>";
 								echo wds_content_excerpt($comment->comment_content,135);
-								echo "(<a href='$permalink' class='read-more'>See&nbsp;More</a>)";
+								echo "<a href='$permalink' class='read-more'>See&nbsp;More</a>";
 								echo "</li>";
 							endforeach;
 							if (!$comments_found) {

@@ -54,7 +54,7 @@ function cuny_project_archive() {
 					     if ($len > 135) {
 						$this_description = substr(bp_get_group_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">See More</a>)</p>';
+						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">See&nbsp;More</a></p>';
 					     } else {
 						bp_group_description();
 					     }

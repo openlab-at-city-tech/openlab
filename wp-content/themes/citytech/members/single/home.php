@@ -254,7 +254,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 
                           <div class="activity-inner">
                           	<?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
-                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">(See More)</a>'; ?>
+                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">See More</a>'; ?>
                           </div>
 
                   </div>
