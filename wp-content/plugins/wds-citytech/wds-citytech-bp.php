@@ -477,7 +477,7 @@ function openlab_group_is_active( $group_id = false ) {
 function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id ) {
 	global $wpdb, $bp;
 
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
 	if ( $group_id ) {
 		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false, 'type' => 'full' ) );
@@ -489,5 +489,94 @@ function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id 
 	return $avatar;
 }
 add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avatar_with_group_avatar', 10, 2 );
+
+/**
+ * Utility function for fetching the group id for a blog
+ */
+function openlab_get_group_id_by_blog_id( $blog_id ) {
+	global $wpdb, $bp;
+	
+	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+	
+	return (int) $group_id;
+}
+
+
+/**
+ * Blogs must be public in order for BP to record their activity. Only at save time
+ */
+add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
+
+/**
+ * Make sure the comment-dupe data doesn't get saved in the comments activity
+ */
+function openlab_pre_save_comment_activity( $content ) {
+	return preg_replace( "/disabledupes\{.*\}disabledupes/", "", $content );
+}
+add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
+
+
+/**
+ * Get blog posts into group streams
+ */
+function openlab_group_blog_activity( $activity ) {
+
+	if ( $activity->type != 'new_blog_post' && $activity->type != 'new_blog_comment' ) 
+		return $activity;
+
+	$blog_id = $activity->item_id;
+	
+	if ( 'new_blog_post' == $activity->type ) {		
+		$post_id = $activity->secondary_item_id;
+		$post    = get_post( $post_id );
+	} else if ( 'new_blog_comment' == $activity->type ) {
+		$comment = get_comment( $activity->secondary_item_id );
+		$post_id = $comment->comment_post_ID;
+		$post    = get_post( $post_id );
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+	
+	if ( !$group_id ) 
+		return $activity;
+	
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+	// Verify if we already have the modified activity for this blog post
+	$id = bp_activity_get_activity_id( array(
+		'user_id'           => $activity->user_id,
+		'type'              => $activity->type,
+		'item_id'           => $group_id,
+		'secondary_item_id' => $activity->secondary_item_id
+	) );
+
+	// if we don't have, verify if we have an original activity
+	if ( !$id ) {
+		$id = bp_activity_get_activity_id( array(
+			'user_id'           => $activity->user_id,
+			'type'              => $activity->type,
+			'item_id'           => $activity->item_id,
+			'secondary_item_id' => $activity->secondary_item_id
+		) );
+	}
+
+	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
+	if ( $id ) {
+		$activity->id = $id;
+	}
+
+	// Replace the necessary values to display in group activity stream
+	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . attribute_escape( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>' );
+	
+	$activity->item_id       = (int)$group_id;
+	$activity->component     = 'groups';
+	$activity->hide_sitewide = 0;
+
+	// prevent infinite loops
+	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
+	
+	return $activity;
+}
+add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
 ?>

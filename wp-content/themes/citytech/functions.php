@@ -495,4 +495,40 @@ function openlab_help_menu_external_glyph( $items, $args ) {
 	return $items;
 }
 add_filter( 'wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2 );
+
+/**
+ * Pagination links in group directories cannot contain the 's' URL parameter for search
+ */
+function openlab_group_pagination_search_key( $pag ) {
+	if ( false !== strpos( $pag, 'grpage' ) ) {
+		$pag = remove_query_arg( 's', $pag );
+	}
+	
+	return $pag;
+}
+add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );
+
+/**
+ * Utility function for getting the IN sql corresponding to search terms in a groups directory
+ */
+function openlab_get_groups_in_sql( $search_terms ) {
+	global $wpdb, $bp;
+	
+	// Due to the incredibly crappy way this was originally built, I will implement search by
+	// using a separate query + IN
+	$in_sql = '';
+	if ( !empty( $search_terms ) ) {
+		$search_terms_sql = like_escape( $search_terms );
+		
+		// Don't get hidden groups. Important to keep counts in line with bp_has_groups()
+		$matched_group_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE (name LIKE '%%{$search_terms_sql}%%' OR description LIKE '%%{$search_terms_sql}%%') AND status != 'hidden'" ) );
+		
+		if ( !empty( $matched_group_ids ) ) {
+			$in_sql = " AND a.group_id IN (" . implode(',', wp_parse_id_list( $matched_group_ids ) ) . ") ";
+		}
+	}
+	
+	return $in_sql;
+}
+
 ?>

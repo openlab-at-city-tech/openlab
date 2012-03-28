@@ -63,7 +63,7 @@ function cuny_home_login() {
 	<?php else : ?>
     	<?php echo '<div id="open-lab-join" class="home-box red-box">'; ?>
     	<?php echo '<h3 class="title">JOIN OpenLab</h3>'; ?>
-		<?php _e( 'Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!', 'buddypress' ) ?>
+		<?php _e( '<p>Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!</p>', 'buddypress' ) ?>
         <?php echo '</div>'; ?>
         
 		<?php echo '<div id="open-lab-login" class="box-1">'; ?>
@@ -147,11 +147,8 @@ global $wpdb, $bp;
 			'alt' => __( 'Member avatar', 'buddypress' )
 		);
 
-	//$sql="SELECT user_id FROM {$bp->profile->table_name_data} where field_id=7 and value='".$type."' limit 6";
-	//if($_GET['test']=="yes"){
-		$sql="SELECT a.user_id FROM {$bp->profile->table_name_data} a, wp_usermeta b where a.field_id=7 and a.user_id=b.user_id and b.meta_key='last_activity' and DATE_ADD( b.meta_value, INTERVAL 50 DAY ) >= UTC_TIMESTAMP() order by b.meta_value desc limit 6";
-		//echo $sql;
-	//}
+	$sql = "SELECT user_id FROM wp_usermeta where meta_key='last_activity' and meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL 1 HOUR ) order by meta_value desc limit 20";
+
 	$rs = $wpdb->get_results( $sql );
 	//print_r($rs);
 	$ids="9999999";
@@ -245,7 +242,19 @@ function cuny_home_square($type){
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
 	  	
-	  	$activity = $wpdb->get_results( $wpdb->prepare( "SELECT content, item_id FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$group_ids_sql}) ORDER BY date_recorded DESC" ) );
+	  	$activity = $wpdb->get_results( $wpdb->prepare( "
+	  		SELECT 
+	  			content, item_id 
+	  		FROM 
+	  			{$bp->activity->table_name} 
+	  		WHERE 
+	  			component = 'groups' 
+	  			AND 
+	  			type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
+	  			AND
+	  			item_id IN ({$group_ids_sql}) 
+	  		ORDER BY 
+	  			date_recorded DESC" ) );
 	  	
 	  	// Now walk down the list and try to match with a group. Once one is found, remove
 	  	// that group from the stack
@@ -272,7 +281,9 @@ function cuny_home_square($type){
 		$group = $groups_template->group;
 		$column_check = $i%4;
 		
-		$activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
+		// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
+		// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
+		$activity = stripslashes( $group->description );
 		
 		if ($column_check == 0)
 		{
@@ -288,7 +299,7 @@ function cuny_home_square($type){
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
 			 
-			  echo substr($activity, 0, 125).'<p><a href="'.bp_get_group_permalink().'">See More</a></p>';
+			  echo bp_create_excerpt( $activity, 125, array( 'html' => false ) ) . '<p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
 			  echo '</div>';
 			  $i++;
 		  endwhile; ?>

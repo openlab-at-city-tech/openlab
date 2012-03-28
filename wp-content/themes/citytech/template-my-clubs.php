@@ -60,7 +60,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 					     if ($len > 135) {
 						$this_description = substr($description,0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">View More</a>)</p>';
+						echo $this_description.'&hellip; (<a href="'.bp_get_group_permalink().'">See More</a>)</p>';
 					     } else {
 						bp_group_description();
 					     }

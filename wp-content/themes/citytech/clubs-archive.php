@@ -10,25 +10,32 @@ function cuny_do_course_archive_title() { ?>
 add_action('genesis_post_content', 'cuny_club_archive' );
 function cuny_club_archive() {
 global $wpdb,$bp;
+
+$sequence_type = $search_terms = $search_terms_raw = '';
+if ( !empty( $_GET['group_sequence'] ) ) {
+	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
+}
+if ( !empty( $_POST['group_search'] ) ) {
+	$search_terms_raw = $_POST['group_search'];
+	$search_terms     = "search_terms=" . $search_terms_raw . "&";
+}
+if ( !empty( $_GET['search'] ) ){
+	$search_terms_raw = $_GET['search'];
+	$search_terms     = "search_terms=" . $search_terms_raw . "&";
+}
+
+$in_sql = openlab_get_groups_in_sql( $search_terms_raw );
+
 $ids="9999999";
-$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='club'" );
+$rs = $wpdb->get_results( "SELECT a.group_id FROM {$bp->groups->table_name_groupmeta} a where a.meta_key='wds_group_type' and a.meta_value='club' {$in_sql}" );
 
 // Hack to fix pagination
 add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . count($rs) . ' AS value;";' ) );
 
-foreach ( (array)$rs as $r ) $ids.= ",".$r->group_id;
-
-$sequence_type = $search_terms = '';
-if ( !empty( $_GET['group_sequence'] ) ) {
-	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
-}
-if( !empty( $_POST['group_search'] ) ){
-	$search_terms="search_terms=".$_POST['group_search']."&";
+foreach ( (array)$rs as $r ) {
+	$ids .= "," . $r->group_id;
 }
 
-if( !empty( $_GET['search'] ) ){
-	$search_terms="search_terms=".$_GET['search']."&";
-}
 if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' ) ) : ?>
 
 	<div class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></div>
@@ -38,17 +45,16 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 			<li class="club<?php echo cuny_o_e_class($count) ?>">
 				<div class="item-avatar alignleft">
-					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 135, 'height' => 135 )) ?></a>
+					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<div class="created">Club Since: <?php bp_group_date_created(); ?></div>
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {
 						$this_description = substr(bp_get_group_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">View More</a></p>';
+						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">See More</a></p>';
 					     } else {
 						bp_group_description();
 					     }
@@ -125,9 +131,9 @@ switch ($_GET['group_sequence']) {
 
     <div class="archive-search">
     <div class="gray-square"></div>
-    <form method="post">
-    <input id="search-terms" type="text" name="group_search" placeholder="Search" />
-    <input id="search-submit" type="submit" name="group_search_go" value="Search" />
+    <form method="get">
+    <input id="search-terms" type="text" name="search" placeholder="Search" />
+    <input id="search-submit" type="submit" value="Search" />
     </form>
     <div class="clearfloat"></div>
     </div><!--archive search-->

@@ -69,7 +69,7 @@
 						  echo '</h5>';
 						  $read_more = "";
 						  if (strlen($post->post_content) > 135) {
-							$read_more = "(Read More)";
+							$read_more = "See&nbsp;More";
 						  }
 						  ?>
 						  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php the_permalink();?>" class="read-more"><?php echo $read_more; ?></a></p>
@@ -124,11 +124,11 @@
 					$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 					echo $last_topic_content;
 				?>
-							(<a href="<?php bp_the_topic_permalink();?>" class="read-more">Read More</a>)
+							<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
 							</li>
 						<?php endwhile; ?>
 					</ul>
-					<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">View More Club Discussion</a></div>
+					<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See More Club Discussion</a></div>
 				<?php else: ?>
 					<div id="message" class="info">
 						<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -165,13 +165,13 @@
 					  the_title(); 
 					  echo '</h5>';
 					  ?>
-					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">Read More</a>)</p>
+					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
 					  <?php
 					  echo '</li>';
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">View More Docs</a></p></div>
+				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See More Docs</a></p></div>
 				<?php
 				}else{
 					echo '<div id="message" class="info"><p>No Recent Docs</p></div>';
@@ -323,7 +323,7 @@ function show_site_posts() {
 						  echo '</h5>';
 						  $read_more = "";
 						  if (strlen($post->post_content) > 135) {
-							$read_more = "(Read More)";
+							$read_more = "See&nbsp;More";
 						  }
 						  ?>
 						  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php the_permalink();?>" class="read-more"><?php echo $read_more;?></a></p>
@@ -332,7 +332,7 @@ function show_site_posts() {
 					  endwhile;
 					  echo '</ul>';
 					  ?>
-						<div class="view-more"><a href="<?php echo site_url();?>">View More Club Posts</a></div>
+						<div class="view-more"><a href="<?php echo site_url();?>">See More Club Posts</a></div>
 					  <?php
 					}else{?>
 						<div id="message" class="info">
@@ -384,7 +384,7 @@ function show_site_comments() {
 								$permalink = get_permalink($post_id);
 								echo "<li>";
 								echo wds_content_excerpt($comment->comment_content,135);
-								echo "(<a href='$permalink'>Read More</a>)";
+								echo "<a href='$permalink' class='read-more'>See&nbsp;More</a>";
 								echo "<br />&nbsp;<br />";
 								echo "</li>";
 							endforeach;

@@ -327,7 +327,6 @@ function cuny_site_wide_bp_search() { ?>
         <option value="courses">Courses</option>
         <option value="projects">Projects</option>
         <option value="clubs">Clubs</option>
-        <option value="blogs">Sites</option>
         </select>
 
 		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />

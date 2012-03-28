@@ -1684,7 +1684,7 @@ function openlab_enable_duplicate_comments_comment_post($comment_id) {
 		$wpdb->query("UPDATE $wpdb->comments SET comment_content = '" . $wpdb->escape($comment_content) . "' WHERE comment_ID = '$comment_id' LIMIT 1");
 	}
 }
-add_action('comment_post', 'openlab_enable_duplicate_comments_comment_post');
+add_action('comment_post', 'openlab_enable_duplicate_comments_comment_post', 1);
 
 /**
  * Adds the URL of the user profile to the New User Registration admin emails

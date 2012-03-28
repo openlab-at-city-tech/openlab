@@ -16,7 +16,7 @@ function cuny_members_index() {
 	echo '</div>';
 }
 //
-//     New parameter "view" - 'more' - tells it to format a "View More" link for that member type
+//     New parameter "view" - 'more' - tells it to format a "See More" link for that member type
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
 //
 function cuny_list_members($view) {
@@ -178,10 +178,16 @@ function cuny_list_members($view) {
 		<?php else:
 			if($user_type=="Student"){
 				$user_type="students";
-			}?>
+			}
+			
+			if ( empty( $user_type ) ) {
+				$user_type = 'people';
+			}
+			
+			?>
 
 			<div class="widget-error">
-				<p><?php _e( 'No '.strtolower($user_type).' were found.', 'buddypress' ) ?></p>
+				<p><?php _e( 'There are no '.strtolower($user_type).' to display.', 'buddypress' ) ?></p>
 			</div>
 
 		<?php endif;
@@ -261,6 +267,7 @@ switch ($_GET['group_sequence']) {
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
+    <input type="button" value="Reset" onClick="window.location.href = '<?php bp_root_domain() ?>/people/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>
