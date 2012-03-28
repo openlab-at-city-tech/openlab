@@ -71,7 +71,7 @@
 							echo $last_topic_content;
 						?>
 						
-                        			(<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>)
+                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
 									</li>
 								<?php endwhile; ?>
 							</ul></p>
