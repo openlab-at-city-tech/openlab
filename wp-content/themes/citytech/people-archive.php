@@ -178,10 +178,16 @@ function cuny_list_members($view) {
 		<?php else:
 			if($user_type=="Student"){
 				$user_type="students";
-			}?>
+			}
+			
+			if ( empty( $user_type ) ) {
+				$user_type = 'people';
+			}
+			
+			?>
 
 			<div class="widget-error">
-				<p><?php _e( 'No '.strtolower($user_type).' were found.', 'buddypress' ) ?></p>
+				<p><?php _e( 'There are no '.strtolower($user_type).' to display.', 'buddypress' ) ?></p>
 			</div>
 
 		<?php endif;
