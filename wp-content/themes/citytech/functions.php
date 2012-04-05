@@ -64,7 +64,7 @@ function cuny_third_end_class($num){
 }
 
 function cuny_default_avatar( $url ) {
-	return WP_CONTENT_URL . '/themes/citytech/images/avatar.jpg';
+	return wds_add_default_member_avatar();
 }
 add_filter( 'bp_core_mysteryman_src', 'cuny_default_avatar' );
 
