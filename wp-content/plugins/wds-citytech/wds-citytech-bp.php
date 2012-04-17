@@ -495,9 +495,9 @@ add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avat
  */
 function openlab_get_group_id_by_blog_id( $blog_id ) {
 	global $wpdb, $bp;
-	
+
 	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
-	
+
 	return (int) $group_id;
 }
 
@@ -521,12 +521,12 @@ add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_a
  */
 function openlab_group_blog_activity( $activity ) {
 
-	if ( $activity->type != 'new_blog_post' && $activity->type != 'new_blog_comment' ) 
+	if ( $activity->type != 'new_blog_post' && $activity->type != 'new_blog_comment' )
 		return $activity;
 
 	$blog_id = $activity->item_id;
-	
-	if ( 'new_blog_post' == $activity->type ) {		
+
+	if ( 'new_blog_post' == $activity->type ) {
 		$post_id = $activity->secondary_item_id;
 		$post    = get_post( $post_id );
 	} else if ( 'new_blog_comment' == $activity->type ) {
@@ -536,10 +536,10 @@ function openlab_group_blog_activity( $activity ) {
 	}
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
-	
-	if ( !$group_id ) 
+
+	if ( !$group_id )
 		return $activity;
-	
+
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	// Verify if we already have the modified activity for this blog post
@@ -566,15 +566,15 @@ function openlab_group_blog_activity( $activity ) {
 	}
 
 	// Replace the necessary values to display in group activity stream
-	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . attribute_escape( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>' );
-	
+	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>' );
+
 	$activity->item_id       = (int)$group_id;
 	$activity->component     = 'groups';
 	$activity->hide_sitewide = 0;
 
 	// prevent infinite loops
-	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
-	
+	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+
 	return $activity;
 }
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
