@@ -50,6 +50,7 @@ body.adminbar #wrap {
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder #submit,
 	.internal-page #content .padder .submit input[type=button],
+	#submit_topic_cancel,
 	.button {
 	background: url(images/btn-more-bg.png) repeat-x top;
 	color: #334366 !important;
@@ -83,6 +84,7 @@ body.adminbar #wrap {
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder #submit:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
+	#submit_topic_cancel:hover,
 	.button:hover {
 	background: url(images/btn-more-bg.png) repeat-x 0px -30px;
 	border-left: 1px solid #D0D9E0;

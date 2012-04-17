@@ -1330,13 +1330,13 @@ function vote_poll() {
 			printf(__('Invalid Poll ID. Poll ID #%s', 'wp-polls'), $poll_id);
 			exit();
 		} // End if($poll_id > 0 && $poll_aid > 0)
-	} elseif (intval($_GET['pollresult']) > 0) {
+	} elseif (isset( $_GET['pollresult'] ) && intval($_GET['pollresult']) > 0) {
 		polls_textdomain();
 		header('Content-Type: text/html; charset='.get_option('blog_charset').'');
 		$poll_id = intval($_GET['pollresult']);
 		echo display_pollresult($poll_id, 0, false);
 		exit();
-	} elseif (intval($_GET['pollbooth']) > 0) {
+	} elseif (isset( $_GET['pollbooth'] ) && intval($_GET['pollbooth']) > 0) {
 		polls_textdomain();
 		header('Content-Type: text/html; charset='.get_option('blog_charset').'');
 		$poll_id = intval($_GET['pollbooth']);

@@ -32,12 +32,12 @@ inlineEditPost = {
 			return inlineEditPost.revert();
 		});
 
-		$('#inline-edit .inline-edit-private input[value=private]').click( function(){
+		$('#inline-edit .inline-edit-private input[value="private"]').click( function(){
 			var pw = $('input.inline-edit-password-input');
-			if ( $(this).attr('checked') ) {
-				pw.val('').attr('disabled', 'disabled');
+			if ( $(this).prop('checked') ) {
+				pw.val('').prop('disabled', true);
 			} else {
-				pw.attr('disabled', '');
+				pw.prop('disabled', false);
 			}
 		});
 
@@ -74,9 +74,9 @@ inlineEditPost = {
 			}
 		});
 
-		$('#post-query-submit').click(function(e){
-			if ( $('form#posts-filter tr.inline-editor').length > 0 )
-				t.revert();
+		$('#post-query-submit').mousedown(function(e){
+			t.revert();
+			$('select[name^="action"]').val('-1');
 		});
 	},
 
@@ -94,7 +94,7 @@ inlineEditPost = {
 		$('#bulk-edit').addClass('inline-editor').show();
 
 		$('tbody th.check-column input[type="checkbox"]').each(function(i){
-			if ( $(this).attr('checked') ) {
+			if ( $(this).prop('checked') ) {
 				c = false;
 				var id = $(this).val(), theTitle;
 				theTitle = $('#inline_'+id+' .post_title').text() || inlineEditL10n.notitle;
@@ -109,7 +109,7 @@ inlineEditPost = {
 		$('#bulk-titles a').click(function(){
 			var id = $(this).attr('id').substr(1);
 
-			$('table.widefat input[value="'+id+'"]').attr('checked', '');
+			$('table.widefat input[value="' + id + '"]').prop('checked', false);
 			$('#ttle'+id).remove();
 		});
 
@@ -117,18 +117,19 @@ inlineEditPost = {
 		if ( 'post' == type ) {
 			// support multi taxonomies?
 			tax = 'post_tag';
-			$('tr.inline-editor textarea[name="tags_input"]').suggest( 'admin-ajax.php?action=ajax-tag-search&tax='+tax, { delay: 500, minchars: 2, multiple: true, multipleSep: ", " } );
+			$('tr.inline-editor textarea[name="tax_input['+tax+']"]').suggest( 'admin-ajax.php?action=ajax-tag-search&tax='+tax, { delay: 500, minchars: 2, multiple: true, multipleSep: ", " } );
 		}
+		$('html, body').animate( { scrollTop: 0 }, 'fast' );
 	},
 
 	edit : function(id) {
-		var t = this, fields, editRow, rowData, cats, status, pageOpt, pageLevel, nextPage, pageLoop = true, nextLevel, tax;
+		var t = this, fields, editRow, rowData, status, pageOpt, pageLevel, nextPage, pageLoop = true, nextLevel, cur_format, f;
 		t.revert();
 
 		if ( typeof(id) == 'object' )
 			id = t.getId(id);
 
-		fields = ['post_title', 'post_name', 'post_author', '_status', 'jj', 'mm', 'aa', 'hh', 'mn', 'ss', 'post_password'];
+		fields = ['post_title', 'post_name', 'post_author', '_status', 'jj', 'mm', 'aa', 'hh', 'mn', 'ss', 'post_password', 'post_format'];
 		if ( t.type == 'page' )
 			fields.push('post_parent', 'menu_order', 'page_template');
 
@@ -142,7 +143,7 @@ inlineEditPost = {
 
 		// populate the data
 		rowData = $('#inline_'+id);
-		if ( !$(':input[name="post_author"] option[value=' + $('.post_author', rowData).text() + ']', editRow).val() ) {
+		if ( !$(':input[name="post_author"] option[value="' + $('.post_author', rowData).text() + '"]', editRow).val() ) {
 			// author no longer has edit caps, so we need to add them to the list of authors
 			$(':input[name="post_author"]', editRow).prepend('<option value="' + $('.post_author', rowData).text() + '">' + $('#' + t.type + '-' + id + ' .author').text() + '</option>');
 		}
@@ -150,16 +151,24 @@ inlineEditPost = {
 			$('label.inline-edit-author', editRow).hide();
 		}
 
-		for ( var f = 0; f < fields.length; f++ ) {
-			$(':input[name="'+fields[f]+'"]', editRow).val( $('.'+fields[f], rowData).text() );
+		// hide unsupported formats, but leave the current format alone
+		cur_format = $('.post_format', rowData).text();
+		$('option.unsupported', editRow).each(function() {
+			var $this = $(this);
+			if ( $this.val() != cur_format )
+				$this.remove();
+		});
+
+		for ( f = 0; f < fields.length; f++ ) {
+			$(':input[name="' + fields[f] + '"]', editRow).val( $('.'+fields[f], rowData).text() );
 		}
 
 		if ( $('.comment_status', rowData).text() == 'open' )
-			$('input[name="comment_status"]', editRow).attr("checked", "checked");
+			$('input[name="comment_status"]', editRow).prop("checked", true);
 		if ( $('.ping_status', rowData).text() == 'open' )
-			$('input[name="ping_status"]', editRow).attr("checked", "checked");
+			$('input[name="ping_status"]', editRow).prop("checked", true);
 		if ( $('.sticky', rowData).text() == 'sticky' )
-			$('input[name="sticky"]', editRow).attr("checked", "checked");
+			$('input[name="sticky"]', editRow).prop("checked", true);
 
 		// hierarchical taxonomies
 		$('.post_category', rowData).each(function(){
@@ -170,17 +179,18 @@ inlineEditPost = {
 				$('ul.'+taxname+'-checklist :checkbox', editRow).val(term_ids.split(','));
 			}
 		});
+
 		//flat taxonomies
 		$('.tags_input', rowData).each(function(){
-			var terms = $(this).text();
+			var terms = $(this).text(),
+				taxname = $(this).attr('id').replace('_' + id, ''),
+				textarea = $('textarea.tax_input_' + taxname, editRow);
 
-			if ( terms ) {
-				taxname = $(this).attr('id').replace('_'+id, '');
-				$('textarea.tax_input_'+taxname, editRow).val(terms);
-				$('textarea.tax_input_'+taxname, editRow).suggest( 'admin-ajax.php?action=ajax-tag-search&tax='+taxname, { delay: 500, minchars: 2, multiple: true, multipleSep: ", " } );
-			}
+			if ( terms )
+				textarea.val(terms);
+
+			textarea.suggest( 'admin-ajax.php?action=ajax-tag-search&tax='+taxname, { delay: 500, minchars: 2, multiple: true, multipleSep: ", " } );
 		});
-
 
 		// handle the post status
 		status = $('._status', rowData).text();
@@ -188,12 +198,12 @@ inlineEditPost = {
 			$('select[name="_status"] option[value="future"]', editRow).remove();
 
 		if ( 'private' == status ) {
-			$('input[name="keep_private"]', editRow).attr("checked", "checked");
-			$('input.inline-edit-password-input').val('').attr('disabled', 'disabled');
+			$('input[name="keep_private"]', editRow).prop("checked", true);
+			$('input.inline-edit-password-input').val('').prop('disabled', true);
 		}
 
 		// remove the current page and children from the parent dropdown
-		pageOpt = $('select[name="post_parent"] option[value="'+id+'"]', editRow);
+		pageOpt = $('select[name="post_parent"] option[value="' + id + '"]', editRow);
 		if ( pageOpt.length > 0 ) {
 			pageLevel = pageOpt[0].className.split('-')[1];
 			nextPage = pageOpt;
@@ -248,10 +258,10 @@ inlineEditPost = {
 						$(inlineEditPost.what+id).hide().fadeIn();
 					} else {
 						r = r.replace( /<.[^<>]*?>/g, '' );
-						$('#edit-'+id+' .inline-edit-save').append('<span class="error">'+r+'</span>');
+						$('#edit-'+id+' .inline-edit-save .error').html(r).show();
 					}
 				} else {
-					$('#edit-'+id+' .inline-edit-save').append('<span class="error">'+inlineEditL10n.error+'</span>');
+					$('#edit-'+id+' .inline-edit-save .error').html(inlineEditL10n.error).show();
 				}
 			}
 		, 'html');

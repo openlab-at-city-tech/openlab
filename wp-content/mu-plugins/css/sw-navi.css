@@ -1,34 +1,54 @@
 body {
-    padding: 125px 0 0 0;
+    /*padding: 35px 0 0 0;*/
+}
+
+.bold {
+    font-weight: bold;
 }
 
 /* =SiteWide Header
 -------------------------------------------------------------- */
 #cuny-sw-header {
     background: none repeat scroll 0 0 #FFFFFF;
-    position: fixed;
-    top: 0;
     width: 100%;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     display: block;
-}
-a#cuny-sw-logo {
-    background: url("images/cuny-sw-logo.png") no-repeat scroll 0 0 transparent;
-    bottom: 25px;
-    display: block;
-    float: left;
-    height: 42px;
-    position: absolute;
-    width: 160px;
-}
-#cuny-sw-header-wrap {
-    border-bottom: 2px solid #E9E9E9;
-    margin: 0 auto;
-    overflow: hidden;
-    width: 950px;
+    background-color: #f0f0f0;
+    height: 38px;
 }
 
-#cuny-sw-header ul.cuny-navi,
+#cuny-sw-header li {
+	list-style-type: none;
+}
+
+a#cuny-sw-logo {
+    background: url("images/cuny-sw-logo.png") no-repeat scroll 0 0 transparent;
+    /*bottom: 25px;*/
+    display: block;
+    float: left;
+    height: 29px;
+    /*position: absolute;*/
+    overflow: hidden;
+    width: 109px;
+    text-indent: -1000px;
+    margin:5px 0 0 0;
+}
+#cuny-sw-header-wrap {
+	background-color:#FFF;
+    border-bottom: 2px solid #E9E9E9;
+    margin: 0 auto;
+    height:42px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
+
+.cuny-navi {
+	width:950px;
+	margin: 0 auto;
+}
+
+/*#cuny-sw-header ul.cuny-navi,
 #cuny-sw-header ul.main-nav {
     clear: both;
     float: right;
@@ -187,10 +207,10 @@ a#cuny-sw-logo {
 	float: left;
 	margin: 0 5px 0 0;
 	width: auto;
-}
+}*/
 /* Mega Drop down
 ------------------------------------------------------------ */
-#cuny-sw-header #menu-item-40 ul {
+/*#cuny-sw-header #menu-item-40 ul {
 	width: 790px;
 	margin: 0 0 0 -400px;
     background: url("images/icon-sprite.png") no-repeat scroll 420px -171px #222;
@@ -228,6 +248,89 @@ a#cuny-sw-logo {
 #cuny-sw-header #menu-item-40 ul li#menu-item-93 {
 	width: 200px;
 	border: 0 none;
+}*/
+
+/*My Bar*/
+#wp-admin-bar
+{
+	position:relative !important;
+}
+
+#wp-admin-bar-menus
+{
+	margin: 0 auto;
+	height:35px;
+}
+
+#wp-admin-bar a
+{
+	color: #fff;
+	text-decoration: none;
+}
+#wp-admin-bar .user-links a
+{
+	color: #717171;
+	
+}
+#wp-admin-bar #openlab-menu
+{
+	text-transform: uppercase;
+	color: #c84c35; 
+}
+#wp-admin-bar ul .sub-menu
+{
+	float: right;
+	list-style: none;
+	text-align: center;
+	width: 110px;
+	cursor: pointer;
+	font-size: 11px;
+	font-family: 'Arvo',arial,serif;
+	margin-top: 10px;
+	border-right: 2px solid #cfcfcf;
+	padding: 0;
+	line-height:15px;
+	
+}
+
+#wp-admin-bar ul li {
+	background:none;
+}
+
+#wp-admin-bar ul li a {
+	display:inline;
+}
+
+#wp-admin-bar ul .admin-bar-last
+{
+	border: none;
+}
+#wp-admin-bar ul .sub-menu:hover ul
+{
+	display: block;
+	z-index: 200;
+}
+#wp-admin-bar ul li ul
+{
+	border:none;
+	display: none;
+	position: absolute;
+	background: url('images/admin-bar-arrow.png') no-repeat top center #838383;
+	opacity: 0.90;
+	padding: 22px 0 0 15px;
+	width: 95px;
+	text-transform: none;
+}
+#wp-admin-bar ul li ul li
+{
+	list-style: none;
+	padding-bottom: 10px;
+	text-align: left;
+	line-height: 15px;
+}
+
+#wp-admin-bar li a {
+	padding: 0;
 }
 
 
@@ -248,7 +351,11 @@ a#cuny-sw-logo {
 
 /* Footer Widgets
 ------------------------------------------------------------ */
+#cuny-sw-footer {
 
+}
+	
+	
 #cuny-sw-footer #footer-widgets {
 	background-color: #666;
 	clear: both;
@@ -258,6 +365,8 @@ a#cuny-sw-logo {
 	width: 100%;
 	color: #000;
 	font-family: arial;
+	line-height: 15px;
+	vertical-align: baseline;
 }
 
 #cuny-sw-footer #footer-widgets .wrap {
@@ -284,19 +393,24 @@ a#cuny-sw-logo {
 	border: none;
 	font-family: 'Arvo',arial,serif;
 	color: #fff;
-	font-size: 12px;
+	font-size: 14px;
 	margin: 0 0 5px;
 	padding: 0;
+	background: none;
+	line-height: 24px;
 }
 
 #cuny-sw-footer #footer-widgets p {
 	padding: 0 0 10px;
 	color: #000;
+	font-size: 11px;
+	margin: 0 0 10px;
 }
 
 #cuny-sw-footer #footer-widgets a,
 #cuny-sw-footer #footer-widgets a:visited {
 	color: #000;
+	font-size: 11px;
 }
 
 #cuny-sw-footer #footer-widgets a:hover {
@@ -348,9 +462,14 @@ a#cuny-sw-logo {
 #cuny-sw-footer .footer-widgets-3,
 #cuny-sw-footer .footer-widgets-4 {
 	float: left;
-    border-right: 1px solid #FFFFFF;
+	border-right: 1px solid #929292;
     padding: 0 15px;
     height: 100px;
+}
+
+#footer-widgets li.rss a {
+	padding-left: 20px;
+	background: url(/wp-content/themes/citytech/images/rss.png) no-repeat left;
 }
 
 /* Footer
@@ -464,4 +583,10 @@ a.close-popup-login {
     font-size: 11px;
     margin: 10px 0 0;
     padding: 0;
+}
+
+#group-profile-link {
+	padding-right: 10px;
+	margin-right: 10px;
+	background: transparent url( "/wp-content/themes/citytech/images/site-sidebar-icon.png" ) no-repeat right center;
 }

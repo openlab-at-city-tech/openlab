@@ -184,7 +184,7 @@ class Rotating_Post_Widget extends WP_Widget {
 		$widget_ops = array( 'description' => __( 'Rotating Post Gallery Widget', 'post-gallery-widget' ) );
 		$this->WP_Widget( $this->id, __( 'Rotating Post Gallery Widget', 'post-gallery-widget' ), $widget_ops );
 		add_action( 'wp_head', array( &$this, 'wp_head' ), 1 );
-		add_action( 'wp_footer', array( &$this, 'wp_footer' ), 2 );
+		//add_action( 'wp_footer', array( &$this, 'wp_footer' ), 2 );
 	}
 
 	function widget( $args, $instance ) {

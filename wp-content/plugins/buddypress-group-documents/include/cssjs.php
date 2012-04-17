@@ -11,8 +11,14 @@ function bp_group_documents_front_cssjs() {
 
 	//if we're on a group page
 	if ( $bp->current_component == $bp->groups->slug ) {
-		wp_enqueue_script( 'bp-group-documents', plugins_url( '/buddypress-group-documents/js/general.js' ),array('jquery') );
+
+		wp_enqueue_script( 'bp-group-documents', WP_PLUGIN_URL . '/buddypress-group-documents/js/general.js',array('jquery') );
 		wp_enqueue_style('bp-group-documents',WP_PLUGIN_URL . '/buddypress-group-documents/css/style.css');
+
+		//if we're on the group forums page and the admin has enabled documents as forum attachments
+		if( $bp->current_action == 'forum' && get_option('bp_group_documents_forum_attachments') ) {
+			wp_enqueue_script('bp-group-documents-forums', WP_PLUGIN_URL . '/buddypress-group-documents/js/forum.js');
+		}
 
 		switch( BP_GROUP_DOCUMENTS_THEME_VERSION ){
 			case '1.1':
@@ -24,7 +30,7 @@ function bp_group_documents_front_cssjs() {
 		}
 	}
 }
-add_action( 'template_redirect', 'bp_group_documents_front_cssjs', 1 );
+add_action( 'bp_setup_nav', 'bp_group_documents_front_cssjs', 1 );
 
 /**
  * bp_group_documents_admin_cssjs()

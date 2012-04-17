@@ -1,4 +1,12 @@
 /* buddypress.css for Bee Crafty */
+
+body {
+    padding-top: 0;
+}
+body.adminbar {
+    padding-top: 2.1em;
+}
+
 .directory #content ul li {
 	background:none;
 	list-style-type:none;
@@ -118,6 +126,7 @@
 	div.ac-reply-content input,
 	.internal-page #content .padder .submit input[type=button],
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	input[type=submit] {
 		background: #829497;
 		color: #FFFFFF;
@@ -147,6 +156,7 @@
 	.internal-page #content .padder .submit input[type=button]:hover,
 	.dir-search input:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 	background: #DA5C00 !important;
 	border: 1px solid #DA5C00;
@@ -201,7 +211,8 @@ input.searchsubmit:hover {
 	background: #FFFFFF !important;
 	color: #252525 !important;
 }
-.item-list-tabs ul li.filter select {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:#FFFFFF;
 	border: 1px solid #E0E0E0;
 	color: #252525;

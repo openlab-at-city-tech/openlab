@@ -40,9 +40,9 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 			$group = new BP_Groups_Group( $document->group_id );
 			echo '<li>';
 			if( $instance['group_filter'] ) { 
-				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . attribute_escape( $document->name ) . '</a>';
+				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . esc_attr( $document->name ) . '</a>';
 			} else {
-				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . attribute_escape( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>');
+				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>');
 			}
 			echo '</li>';
 		}
@@ -99,7 +99,7 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 			<label><?php _e('Show featured documents only','bp-group-documents'); ?></label></p>
 		<?php } ?>
 
-		<p><label><?php _e( 'Number of items to show:', 'bp-group-documents' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id( 'num_items' ); ?>" name="<?php echo $this->get_field_name( 'num_items' ); ?>" type="text" value="<?php echo attribute_escape( $num_items ); ?>" style="width: 30%" /></p>
+		<p><label><?php _e( 'Number of items to show:', 'bp-group-documents' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id( 'num_items' ); ?>" name="<?php echo $this->get_field_name( 'num_items' ); ?>" type="text" value="<?php echo esc_attr( $num_items ); ?>" style="width: 30%" /></p>
 
 	<?php
 	}
@@ -140,9 +140,9 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 			$group = new BP_Groups_Group( $document->group_id );
 			echo '<li>';
 			if( $instance['group_filter'] ) { 
-				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . attribute_escape( $document->name ) . '</a>';
+				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . esc_attr( $document->name ) . '</a>';
 			} else {
-				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . attribute_escape( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>');
+				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>');
 			}
 			echo '</li>';
 		}
@@ -199,7 +199,7 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 			<label><?php _e('Show featured documents only','bp-group-documents'); ?></label></p>
 		<?php } ?>
 
-		<p><label><?php _e( 'Number of items to show:', 'bp-group-documents' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id( 'num_items' ); ?>" name="<?php echo $this->get_field_name( 'num_items' ); ?>" type="text" value="<?php echo attribute_escape( $num_items ); ?>" style="width: 30%" /></p>
+		<p><label><?php _e( 'Number of items to show:', 'bp-group-documents' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id( 'num_items' ); ?>" name="<?php echo $this->get_field_name( 'num_items' ); ?>" type="text" value="<?php echo esc_attr( $num_items ); ?>" style="width: 30%" /></p>
 	<?php
 	}
 }

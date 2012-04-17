@@ -6,7 +6,7 @@
 
 		<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 
-		<title><?php bp_page_title() ?></title>
+		<title><?php wp_title() ?></title>
 
 		<?php do_action( 'bp_head' ) ?>
 
@@ -18,7 +18,7 @@
 			<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> | <?php _e('Site Wide Activity RSS Feed', 'buddypress' ) ?>" href="<?php bp_sitewide_activity_feed_link() ?>" />
 		<?php endif; ?>
 
-		<?php if ( function_exists( 'bp_member_activity_feed_link' ) && bp_is_member() ) : ?>
+		<?php if ( function_exists( 'bp_member_activity_feed_link' ) && bp_is_user() ) : ?>
 			<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> | <?php bp_displayed_user_fullname() ?> | <?php _e( 'Activity RSS Feed', 'buddypress' ) ?>" href="<?php bp_member_activity_feed_link() ?>" />
 		<?php endif; ?>
 
@@ -44,7 +44,7 @@
 			<h1 id="logo"><a href="<?php bp_root_domain() ?>" title="<?php _e( 'Home', 'buddypress' ) ?>"><?php bp_site_name() ?></a></h1>
 
 			<ul id="nav">
-				<li<?php if ( bp_is_front_page() ) : ?> class="selected"<?php endif; ?>>
+				<li<?php if ( is_front_page() ) : ?> class="selected"<?php endif; ?>>
 					<a href="<?php bp_root_domain() ?>" title="<?php _e( 'Home', 'buddypress' ) ?>"><?php _e( 'Home', 'buddypress' ) ?></a>
 				</li>
 
@@ -54,7 +54,7 @@
 					</li>
 				<?php endif; ?>
 
-				<li<?php if ( bp_is_page( BP_MEMBERS_SLUG ) || bp_is_member() ) : ?> class="selected"<?php endif; ?>>
+				<li<?php if ( bp_is_page( BP_MEMBERS_SLUG ) || bp_is_user() ) : ?> class="selected"<?php endif; ?>>
 					<a href="<?php bp_root_domain() ?>/<?php echo BP_MEMBERS_SLUG ?>/" title="<?php _e( 'Members', 'buddypress' ) ?>"><?php _e( 'Members', 'buddypress' ) ?></a>
 				</li>
 
@@ -70,7 +70,7 @@
 					<?php endif; ?>
 				<?php endif; ?>
 
-				<?php if ( bp_is_active( 'blogs' ) && bp_core_is_multisite() ) : ?>
+				<?php if ( bp_is_active( 'blogs' ) && is_multisite() ) : ?>
 					<li<?php if ( bp_is_page( BP_BLOGS_SLUG ) ) : ?> class="selected"<?php endif; ?>>
 						<a href="<?php bp_root_domain() ?>/<?php echo BP_BLOGS_SLUG ?>/" title="<?php _e( 'Blogs', 'buddypress' ) ?>"><?php _e( 'Blogs', 'buddypress' ) ?></a>
 					</li>

@@ -204,7 +204,7 @@ function load_image_to_edit($post_id, $mime_type, $size = 'full') {
 		if ( 'full' != $size && ( $data = image_get_intermediate_size($post_id, $size) ) ) {
 			$filepath = apply_filters('load_image_to_edit_filesystempath', path_join( dirname($filepath), $data['file'] ), $post_id, $size);
 		}
-	} elseif ( WP_Http_Fopen::test() ) {
+	} elseif ( function_exists('fopen') && function_exists('ini_get') && true == ini_get('allow_url_fopen') ) {
 		$filepath = apply_filters('load_image_to_edit_attachmenturl', wp_get_attachment_url($post_id) , $post_id, $size);
 	}
 
@@ -391,7 +391,7 @@ function image_edit_apply_changes($img, $changes) {
 
 function stream_preview_image($post_id) {
 	$post = get_post($post_id);
-	@ini_set('memory_limit', '256M');
+	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 	$img = load_image_to_edit( $post_id, $post->post_mime_type, array(400, 400) );
 
 	if ( !is_resource($img) )
@@ -431,7 +431,7 @@ function wp_restore_image($post_id) {
 
 	$parts = pathinfo($file);
 	$suffix = time() . rand(100, 999);
-	$default_sizes = apply_filters( 'intermediate_image_sizes', array('large', 'medium', 'thumbnail') );
+	$default_sizes = get_intermediate_image_sizes();
 
 	if ( isset($backup_sizes['full-orig']) && is_array($backup_sizes['full-orig']) ) {
 		$data = $backup_sizes['full-orig'];
@@ -496,7 +496,7 @@ function wp_save_image($post_id) {
 	$return = new stdClass;
 	$success = $delete = $scaled = $nocrop = false;
 	$post = get_post($post_id);
-	@ini_set('memory_limit', '256M');
+	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 	$img = load_image_to_edit($post_id, $post->post_mime_type);
 
 	if ( !is_resource($img) ) {
@@ -551,7 +551,7 @@ function wp_save_image($post_id) {
 
 	// generate new filename
 	$path = get_attached_file($post_id);
-	$path_parts = pathinfo52( $path );
+	$path_parts = pathinfo( $path );
 	$filename = $path_parts['filename'];
 	$suffix = time() . rand(100, 999);
 
@@ -603,7 +603,7 @@ function wp_save_image($post_id) {
 		$meta['hwstring_small'] = "height='$uheight' width='$uwidth'";
 
 		if ( $success && ('nothumb' == $target || 'all' == $target) ) {
-			$sizes = apply_filters( 'intermediate_image_sizes', array('large', 'medium', 'thumbnail') );
+			$sizes = get_intermediate_image_sizes();
 			if ( 'nothumb' == $target )
 				$sizes = array_diff( $sizes, array('thumbnail') );
 		}

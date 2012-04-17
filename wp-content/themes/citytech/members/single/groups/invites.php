@@ -1,3 +1,4 @@
+
 <?php do_action( 'bp_before_group_invites_content' ) ?>
 
 <?php if ( bp_has_groups( 'type=invites&user_id=' . bp_loggedin_user_id() ) ) : ?>
@@ -5,7 +6,7 @@
 	<ul id="group-list" class="invites item-list">
 
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
-
+			
 			<li>
 				<?php bp_group_avatar_thumb() ?>
 				<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a><span class="small"> ( <?php printf( __( '%s members', 'buddypress' ), bp_group_total_members( false ) ) ?> )</span></h4>

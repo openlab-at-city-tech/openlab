@@ -128,7 +128,7 @@ function wds_docs_shortcode( $atts ) {
 
 
 //form action
-add_action('init','wds_docs_action',50);
+//add_action('init','wds_docs_action',50);
 function wds_docs_action(){
 	global $wpdb, $user_ID;
 	//if(is_page('upload-documents')){

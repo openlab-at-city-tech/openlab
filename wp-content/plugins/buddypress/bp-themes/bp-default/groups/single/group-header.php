@@ -1,32 +1,64 @@
-<?php do_action( 'bp_before_group_home_content' ) ?>
-<div id="single-course-header">
 <?php
-/* Populate Fields */
-global $bp;
-$group_id = $bp->groups->current_group->id;
-$faculty = groups_get_groupmeta($group_id, 'wds_faculty');
-$html = groups_get_groupmeta($group_id, 'wds_course_html');
+
+do_action( 'bp_before_group_header' );
+
 ?>
-	<h1 class="title">Courses Offered</h1>
-	<div class="header-image"><img src="<?php bloginfo('stylesheet_directory') ?>/images/sample/headerImage.jpg" alt="<?php bp_group_name() ?>"></div><!-- .header-image -->
-	<div class="header-content">
-		<h2 class="course-title"><?php bp_group_name() ?><a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a></h2>
-		<div class="course-byline">
-			<span class="faculty-name"><b>Faculty:</b> <?php echo $faculty ?></span> | 
-			<span class="days-offered"><?php printf( __( '%s Days offered', 'buddypress' ), bp_get_group_last_active() ) ?></span>
-		</div><!-- .course-info -->
-		<?php //do_action( 'bp_before_group_header_meta' ) ?>
-		<div class="course-description">
-		<?php bp_group_description() ?>
-		</div>
-		<?php //do_action( 'bp_group_header_meta' ) ?>
-		<div class="course-html-block">
-			<?php echo $html ?>
-		</div>
-	</div><!-- .header-content -->
-	
-	<?php do_action( 'bp_after_group_header' ) ?>
-	
-	<?php do_action( 'template_notices' ) ?>
-	
-</div><!-- #single-course-header -->
+
+<div id="item-actions">
+
+	<?php if ( bp_group_is_visible() ) : ?>
+
+		<h3><?php _e( 'Group Admins', 'buddypress' ); ?></h3>
+
+		<?php bp_group_list_admins();
+
+		do_action( 'bp_after_group_menu_admins' );
+
+		if ( bp_group_has_moderators() ) :
+			do_action( 'bp_before_group_menu_mods' ); ?>
+
+			<h3><?php _e( 'Group Mods' , 'buddypress' ) ?></h3>
+
+			<?php bp_group_list_mods();
+
+			do_action( 'bp_after_group_menu_mods' );
+
+		endif;
+
+	endif; ?>
+
+</div><!-- #item-actions -->
+
+<div id="item-header-avatar">
+	<a href="<?php bp_group_permalink(); ?>" title="<?php bp_group_name(); ?>">
+
+		<?php bp_group_avatar(); ?>
+
+	</a>
+</div><!-- #item-header-avatar -->
+
+<div id="item-header-content">
+	<h2><a href="<?php bp_group_permalink(); ?>" title="<?php bp_group_name(); ?>"><?php bp_group_name(); ?></a></h2>
+	<span class="highlight"><?php bp_group_type(); ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ); ?></span>
+
+	<?php do_action( 'bp_before_group_header_meta' ); ?>
+
+	<div id="item-meta">
+
+		<?php bp_group_description(); ?>
+
+		<div id="item-buttons">
+
+			<?php do_action( 'bp_group_header_actions' ); ?>
+
+		</div><!-- #item-buttons -->
+
+		<?php do_action( 'bp_group_header_meta' ); ?>
+
+	</div>
+</div><!-- #item-header-content -->
+
+<?php
+do_action( 'bp_after_group_header' );
+do_action( 'template_notices' );
+?>

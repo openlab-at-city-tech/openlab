@@ -1,5 +1,5 @@
-<h4><?php _e( 'Change Avatar', 'buddypress' ) ?></h4>
-
+<h3 id="bread-crumb"><?php _e( 'Change Avatar', 'buddypress' ) ?></h3>
+<div id="item-body" role="main">
 <?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
 
 <?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
@@ -56,5 +56,5 @@
 	<p><?php _e( 'Your avatar will be used on your profile and throughout the site. To change your avatar, please create an account with <a href="http://gravatar.com">Gravatar</a> using the same email address as you used to register with this site.', 'buddypress' ) ?></p>
 
 <?php endif; ?>
-
+</div>
 <?php do_action( 'bp_after_profile_avatar_upload_content' ) ?>

@@ -1,5 +1,5 @@
 <?php
-// Last sync [WP10712]
+// Last sync [WP10712] - Refactored into a class from wp-incldues/pluggable.php
 
 class WP_Pass {
 	/**

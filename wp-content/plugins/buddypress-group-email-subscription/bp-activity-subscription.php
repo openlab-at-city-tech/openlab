@@ -1,14 +1,35 @@
 <?php
 /*
-Plugin Name: BuddyPress Group Email Subscription [NO NOT UPGADE- WDS MODIFIED]
+Plugin Name: BuddyPress Group Email Subscription
 Plugin URI: http://wordpress.org/extend/plugins/buddypress-group-email-subscription/
 Description: Allows group members to receive email notifications for group activity and forum posts instantly or as daily digest or weekly summary.
 Author: Deryk Wenaus, boonebgorges
-Revision Date: June 13, 2011
-Version: 2.8.6
+Revision Date: November 29, 2011
+Version: 2.9.8
 */
 
-/*WDS- Changed group ref to group type on bp-activity-subscription-main.php*/
+/**
+ * Main loader for the plugin.
+ *
+ * This function is hooked to bp_include, which is the recommended method for loading BP plugins
+ * since BP 1.2.5 or so. When this function is loaded properly, it will unhook 
+ * activitysub_load_buddypress(). If bp_include is not fired (because you are running a legacy
+ * version of BP), the legacy function will load the plugin normally.
+ */
+function ass_loader() {
+	if ( bp_is_active( 'groups' ) && bp_is_active( 'activity' ) ) {
+		require_once( dirname( __FILE__ ) . '/bp-activity-subscription-main.php' );
+	}
+	
+	remove_action( 'plugins_loaded', 'activitysub_load_buddypress', 11 );
+}
+add_action( 'bp_include', 'ass_loader' );
+
+/**
+ * Legacy loader for BP < 1.2
+ *
+ * This function will be unhooked by ass_loader() when possible
+ */
 function activitysub_load_buddypress() {
 	global $ass_activities;
 	if ( function_exists( 'bp_core_setup_globals' ) ) {
@@ -37,7 +58,7 @@ function activitysub_load_buddypress() {
 
 	return false;
 }
-add_action( 'plugins_loaded', 'activitysub_load_buddypress', 1 );
+add_action( 'plugins_loaded', 'activitysub_load_buddypress', 11 );
 
 
 function activitysub_textdomain() {

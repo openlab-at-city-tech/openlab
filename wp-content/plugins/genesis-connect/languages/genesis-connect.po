@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-10 13:26-0400\n"
+"POT-Creation-Date: 2011-08-15 19:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,137 +16,120 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/ajax.php:39
-msgid "Search anything..."
-msgstr ""
-
-#: lib/ajax.php:107
+#: lib/ajax.php:147
 msgid "Please enter some content to post."
 msgstr ""
 
-#: lib/ajax.php:120
+#: lib/ajax.php:164
 msgid "There was a problem posting your update, please try again."
 msgstr ""
 
-#: lib/ajax.php:146
+#: lib/ajax.php:190
 msgid "Please do not leave the comment area blank."
 msgstr ""
 
-#: lib/ajax.php:151 lib/ajax.php:162
+#: lib/ajax.php:195 lib/ajax.php:206
 msgid "There was an error posting that reply, please try again."
 msgstr ""
 
-#: lib/ajax.php:175
-#, php-format
-msgid "%s ago"
-msgstr ""
-
-#: lib/ajax.php:176
-msgid "Reply"
-msgstr ""
-
-#: lib/ajax.php:177
-msgid "Delete"
-msgstr ""
-
-#: lib/ajax.php:214 lib/ajax.php:247
+#: lib/ajax.php:249 lib/ajax.php:284
 msgid "There was a problem when deleting. Please try again."
 msgstr ""
 
-#: lib/ajax.php:260
+#: lib/ajax.php:299
 msgid "Remove Favorite"
 msgstr ""
 
-#: lib/ajax.php:269
+#: lib/ajax.php:308
 msgid "Favorite"
 msgstr ""
 
-#: lib/ajax.php:300
+#: lib/ajax.php:364
 msgid "Remove Invite"
 msgstr ""
 
-#: lib/ajax.php:326
+#: lib/ajax.php:387
 msgid "Friendship could not be canceled."
 msgstr ""
 
-#: lib/ajax.php:328
+#: lib/ajax.php:389
 msgid "Add Friend"
 msgstr ""
 
-#: lib/ajax.php:336
+#: lib/ajax.php:397
 msgid "Friendship could not be requested."
 msgstr ""
 
-#: lib/ajax.php:338
+#: lib/ajax.php:399
 msgid "Friendship Requested"
 msgstr ""
 
-#: lib/ajax.php:341
+#: lib/ajax.php:402
 msgid "Request Pending"
 msgstr ""
 
-#: lib/ajax.php:353
+#: lib/ajax.php:414
 msgid "There was a problem accepting that request. Please try again."
 msgstr ""
 
-#: lib/ajax.php:364
+#: lib/ajax.php:425
 msgid "There was a problem rejecting that request. Please try again."
 msgstr ""
 
-#: lib/ajax.php:390
+#: lib/ajax.php:448
 msgid "Error joining group"
 msgstr ""
 
-#: lib/ajax.php:392
+#: lib/ajax.php:450
 msgid "Leave Group"
 msgstr ""
 
-#: lib/ajax.php:400
+#: lib/ajax.php:458
 msgid "Error requesting membership"
 msgstr ""
 
-#: lib/ajax.php:402
+#: lib/ajax.php:460
 msgid "Membership Requested"
 msgstr ""
 
-#: lib/ajax.php:411
+#: lib/ajax.php:469
 msgid "Error leaving group"
 msgstr ""
 
-#: lib/ajax.php:414
+#: lib/ajax.php:472
 msgid "Join Group"
 msgstr ""
 
-#: lib/ajax.php:416
+#: lib/ajax.php:474
 msgid "Request Membership"
 msgstr ""
 
-#: lib/ajax.php:428
+#: lib/ajax.php:486
 msgid "There was a problem closing the notice."
 msgstr ""
 
-#: lib/ajax.php:453
+#: lib/ajax.php:511
 #, php-format
-msgid "Sent %s ago"
+msgid "Sent %s"
 msgstr ""
 
-#: lib/ajax.php:470
+#: lib/ajax.php:528
 msgid "There was a problem sending that reply. Please try again."
 msgstr ""
 
-#: lib/ajax.php:480
+#: lib/ajax.php:538
 msgid "There was a problem marking messages as unread."
 msgstr ""
 
-#: lib/ajax.php:496
+#: lib/ajax.php:554
 msgid "There was a problem marking messages as read."
 msgstr ""
 
-#: lib/ajax.php:512
+#: lib/ajax.php:570
 msgid "There was a problem deleting messages."
 msgstr ""
 
-#: lib/ajax.php:519
+#: lib/ajax.php:577
 msgid "Messages deleted."
 msgstr ""
 
@@ -179,38 +162,34 @@ msgid "Close"
 msgstr ""
 
 #: lib/class.front.php:59
-#, php-format
-msgid ""
-"%s is a unique identifier for %s that you can type into any message on this "
-"site. %s will be sent a notification and a link to your message any time you "
-"use it."
+msgid "View"
 msgstr ""
 
-#: lib/class.front.php:169
+#: lib/class.front.php:174
 msgid "Log Out"
 msgstr ""
 
-#: lib/class.front.php:177
+#: lib/class.front.php:182
 msgid "Username"
 msgstr ""
 
-#: lib/class.front.php:180
+#: lib/class.front.php:185
 msgid "Password"
 msgstr ""
 
-#: lib/class.front.php:183
+#: lib/class.front.php:188
 msgid "Remember Me"
 msgstr ""
 
-#: lib/class.front.php:185 lib/class.visitor.php:126
+#: lib/class.front.php:190 lib/class.visitor.php:126
 msgid "Log In"
 msgstr ""
 
-#: lib/class.front.php:330
+#: lib/class.front.php:337
 msgid "Before BuddyPress (Optional)"
 msgstr ""
 
-#: lib/class.front.php:332
+#: lib/class.front.php:339
 msgid ""
 "This is an optional widgeted area which is called Before BuddyPress. To get "
 "started, log into your WordPress dashboard, and then go to the Genesis > "
@@ -220,58 +199,58 @@ msgid ""
 "right hand side. "
 msgstr ""
 
-#: lib/class.front.php:347 lib/class.front.php:379
+#: lib/class.front.php:354
 msgid "Members"
 msgstr ""
 
-#: lib/class.front.php:351 lib/class.front.php:383
+#: lib/class.front.php:358
 msgid "Groups"
 msgstr ""
 
-#: lib/class.front.php:355 lib/class.front.php:387
+#: lib/class.front.php:362
 msgid "Forums"
 msgstr ""
 
-#: lib/class.front.php:361 lib/class.front.php:393
+#: lib/class.front.php:368
 msgid "Blogs"
 msgstr ""
 
-#: lib/class.front.php:451
+#: lib/class.front.php:436
 msgid "Groups Directory"
 msgstr ""
 
-#: lib/class.front.php:452
+#: lib/class.front.php:437
 msgid "Create a Group"
 msgstr ""
 
-#: lib/class.front.php:455
-msgid "Groups Forums Directory"
+#: lib/class.front.php:440
+msgid "Group Forums Directory"
 msgstr ""
 
-#: lib/class.front.php:456
+#: lib/class.front.php:441
 msgid "New Topic"
 msgstr ""
 
-#: lib/class.front.php:460
+#: lib/class.front.php:445
 msgid "Blogs Directory"
 msgstr ""
 
-#: lib/class.front.php:461
+#: lib/class.front.php:446
 msgid "Create a Blog"
 msgstr ""
 
-#: lib/class.options.php:27
+#: lib/class.options.php:28
 #, php-format
 msgid ""
 "Please <a href=\"%s\">deactivate</a> the BP Template Pack plugin to enable "
 "the BuddyPress features in GenesisBuddy."
 msgstr ""
 
-#: lib/class.options.php:35
+#: lib/class.options.php:36
 msgid "Connect Settings"
 msgstr ""
 
-#: lib/class.options.php:38
+#: lib/class.options.php:39
 msgid "BuddyPress"
 msgstr ""
 
@@ -295,149 +274,132 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: lib/class.options.php:115 lib/class.options.php:150
-#: lib/class.options.php:178
-msgid "None"
+#: lib/class.options.php:113
+msgid "BuddyPress Adminbar Navigation:"
 msgstr ""
 
-#: lib/class.options.php:116
-msgid "Primary Navigation"
+#: lib/class.options.php:115
+msgid " -- None -- "
 msgstr ""
 
-#: lib/class.options.php:117
-msgid "Secondary Navigation"
-msgstr ""
-
-#: lib/class.options.php:118
-msgid "Below Navigation"
-msgstr ""
-
-#: lib/class.options.php:120
-msgid "BuddyPress Navigation:"
-msgstr ""
-
-#: lib/class.options.php:128
-msgid "Add BuddyPress navigation to the adminbar"
-msgstr ""
-
-#: lib/class.options.php:130
+#: lib/class.options.php:123
 msgid "Show the adminbar on the home page"
 msgstr ""
 
-#: lib/class.options.php:132
+#: lib/class.options.php:125
 msgid "Show the login form at the top of the main sidebar"
 msgstr ""
 
-#: lib/class.options.php:134
+#: lib/class.options.php:127
 msgid "Show the login link in the adminbar"
 msgstr ""
 
-#: lib/class.options.php:140
+#: lib/class.options.php:133
 msgid "Visitors"
 msgstr ""
 
-#: lib/class.options.php:140
+#: lib/class.options.php:133
 msgid "Logged in Users"
 msgstr ""
 
-#: lib/class.options.php:143
-msgid "On front page show:"
+#: lib/class.options.php:137
+msgid "Show activity on the front page"
 msgstr ""
 
-#: lib/class.options.php:145
-msgid "Blog Posts"
+#: lib/class.options.php:140
+msgid "Full Width Content for Forum layout"
 msgstr ""
 
-#: lib/class.options.php:146
-msgid "Activity Stream"
-msgstr ""
-
-#: lib/class.options.php:148
+#: lib/class.options.php:142
 msgid "BuddyPress Before Content:"
 msgstr ""
 
-#: lib/class.options.php:151
+#: lib/class.options.php:144 lib/class.options.php:172
+msgid "None"
+msgstr ""
+
+#: lib/class.options.php:145
 msgid "Widget Area"
 msgstr ""
 
-#: lib/class.options.php:152
+#: lib/class.options.php:146
 msgid "Genesis Before Content"
 msgstr ""
 
-#: lib/class.options.php:162
+#: lib/class.options.php:156
 msgid "Primary Sidebar"
 msgstr ""
 
-#: lib/class.options.php:162
+#: lib/class.options.php:156
 msgid "Secondary Sidebar"
 msgstr ""
 
-#: lib/class.options.php:169
+#: lib/class.options.php:163
 msgid "Registration is currently disabled"
 msgstr ""
 
-#: lib/class.options.php:176
+#: lib/class.options.php:170
 msgid "Custom Registration Permalink:"
 msgstr ""
 
-#: lib/class.options.php:179
+#: lib/class.options.php:173
 msgid "Before Pages"
 msgstr ""
 
-#: lib/class.options.php:180
+#: lib/class.options.php:174
 msgid "After Pages"
 msgstr ""
 
-#: lib/class.options.php:181
+#: lib/class.options.php:175
 msgid "On the Adminbar"
 msgstr ""
 
-#: lib/class.options.php:183
+#: lib/class.options.php:177
 msgid "Custom Permalink:"
 msgstr ""
 
-#: lib/class.options.php:185
+#: lib/class.options.php:179
 #, php-format
 msgid "Don't include the %s"
 msgstr ""
 
-#: lib/class.options.php:187
+#: lib/class.options.php:181
 msgid "Custom Title:"
 msgstr ""
 
-#: lib/class.options.php:189
+#: lib/class.options.php:183
 msgid "The title for the link"
 msgstr ""
 
-#: lib/class.options.php:191
+#: lib/class.options.php:185
 msgid "Registration Time:"
 msgstr ""
 
-#: lib/class.options.php:193
+#: lib/class.options.php:187
 msgid "Minimum number of seconds for a human signup"
 msgstr ""
 
-#: lib/class.options.php:199
+#: lib/class.options.php:193
 msgid "Use this for the Recent Activity Page"
 msgstr ""
 
-#: lib/class.options.php:209
+#: lib/class.options.php:203
 msgid "Default"
 msgstr ""
 
-#: lib/class.theme.php:58
+#: lib/class.theme.php:53
 msgid "This is above the BuddyPress content"
 msgstr ""
 
-#: lib/class.theme.php:108 lib/class.theme.php:109
+#: lib/class.theme.php:103 lib/class.theme.php:104
 msgid "Genesis Connect Login Widget"
 msgstr ""
 
-#: lib/class.theme.php:226
+#: lib/class.theme.php:222
 msgid "Sign Up"
 msgstr ""
 
-#: lib/class.theme.php:258
+#: lib/class.theme.php:254
 #, php-format
 msgid ""
 "Please <a href=\"%s\">switch</a> to a non-GenesisBuddy child theme to enable "

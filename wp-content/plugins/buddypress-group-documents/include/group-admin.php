@@ -9,11 +9,11 @@ function bp_group_documents_group_admin_nav() {
 	global $bp;
 
 	/* Add the "documents" option to the group moderator "Admin" tab */
-	add_action( 'groups_admin_tabs', create_function( '$current, $group_slug', 'if ( "' . attribute_escape( $bp->group_documents->slug ) . '" == $current ) $selected = " class=\"current\""; echo "<li{$selected}><a href=\"' . $bp->root_domain . '/' . $bp->groups->slug . '/{$group_slug}/admin/' . attribute_escape( $bp->group_documents->slug ) . '\">' . __('Documents','bp-group-documents') . '</a></li>";' ), 10, 2 );
+	add_action( 'groups_admin_tabs', create_function( '$current, $group_slug', 'if ( "' . esc_attr( $bp->group_documents->slug ) . '" == $current ){ $selected="class=\"current\""; }else{$selected="";} echo "<li $selected ><a href=\"' . $bp->root_domain . '/' . $bp->groups->slug . '/{$group_slug}/admin/' . esc_attr( $bp->group_documents->slug ) . '\">' . __('Documents','bp-group-documents') . '</a></li>";' ), 10, 2 );
 
 	do_action('bp_group_documents_group_admin_nav');
 }
-add_action( 'wp', 'bp_group_documents_group_admin_nav', 2 );
+add_action( 'bp_setup_nav', 'bp_group_documents_group_admin_nav', 2 );
 add_action( 'admin_menu', 'bp_group_documents_group_admin_nav', 2 );
 
 
@@ -28,7 +28,7 @@ function bp_group_documents_group_admin_settings() {
 	global $bp;
 
 	//only continue of we're viewing Group Docs Settings
-	if( bp_is_group_admin_screen($bp->group_documents->slug)) {
+	if( function_exists('bp_is_group_admin_screen') && bp_is_group_admin_screen($bp->group_documents->slug)) {
 
 		if ( !$bp->is_item_admin )
 			return false;
@@ -93,6 +93,18 @@ function bp_group_documents_group_admin_edit() {
 	//useful ur for submits & links
 	$action_link = get_bloginfo('url') . '/' . $bp->current_component . '/' . $bp->current_item . '/' . $bp->current_action . '/' . $bp->group_documents->slug;
 
+	//only show enable/disable if the site admin allows this to be changed at group-level
+	if( !get_option( 'bp_group_documents_enable_all_groups' ) ) {
+		//we use 'disabled' rather than 'enabled' because it will not be set by default. (enabled by default)
+		//this way we don't need to distinguish between not set or false, which could be problematic.
+		$documents_disabled = groups_get_groupmeta( $bp->groups->current_group->id, 'group_documents_documents_disabled' ); ?>
+		<p><label><?php _e('Enable documents for this group:','bp-group-documents'); ?></label>
+		<input type="radio" name="group_documents_documents_disabled" value="0" <?php if( !$documents_disabled ) echo 'checked="checked"' ?> /><?php _e('Yes','bp-group-documents') ?><br /> 
+		<input type="radio" name="group_documents_documents_disabled" value="1" <?php if( $documents_disabled ) echo 'checked="checked"' ?> /><?php _e('No','bp-group-documents') ?>
+		</p>
+
+<?php	}
+
 	//only show the upload persmissions if the site admin allows this to be changed at group-level
 	if( 'mods_decide' == get_option( 'bp_group_documents_upload_permission' ) ) {
 		$upload_permission = groups_get_groupmeta( $bp->groups->current_group->id, 'group_documents_upload_permission'); ?>
@@ -108,7 +120,7 @@ function bp_group_documents_group_admin_edit() {
 		$group_categories = get_terms( 'group-documents-category', array('parent'=>$parent_id,'hide_empty'=>false ) ); ?>
 
 		<div id="group-documents-group-admin-categories">
-		<label><?php _e('Category List:','bp-group-documents'); ?></label>
+		<label><?php _e('Document Category List:','bp-group-documents'); ?></label>
 		<div>
 			<ul>
 			<?php foreach( $group_categories as $category ) {
@@ -120,7 +132,7 @@ function bp_group_documents_group_admin_edit() {
 				$edit_link = wp_nonce_url($action_link . '?edit=' . $category->term_id,'group-documents-category-edit');
 				$delete_link = wp_nonce_url($action_link . '?delete=' . $category->term_id,'group-documents-category-delete');
 					 ?>
-				<li id="category-<?php echo $category->term_id; ?>"><strong><?php echo $category->name; ?></strong>
+				<li id="category-<?php echo $category->term_id; ?>"><?php echo $category->name; ?>
 				 &nbsp; <a class="group-documents-category-edit" href="<?php echo $edit_link; ?>">Edit</a>
 				  | <a class="group-documents-category-delete" href="<?php echo $delete_link; ?>">Delete</a></li>
 				<?php } ?>
@@ -153,7 +165,7 @@ function bp_group_documents_group_admin_save() {
 	//check if category was updated
 	if( $_POST['group_documents_category_edit'] &&
 		ctype_digit( $_POST['group_documents_category_edit_id'] ) &&
-		is_term( (int)$_POST['group_documents_category_edit_id'], 'group-documents-category') ) {
+		term_exists( (int)$_POST['group_documents_category_edit_id'], 'group-documents-category') ) {
 
 		check_admin_referer('groups-edit-group-documents');
 	
@@ -165,7 +177,7 @@ function bp_group_documents_group_admin_save() {
 	//check if category was deleted
 	if( isset($_GET['delete'] ) && 
 		ctype_digit( $_GET['delete']) && 
-		is_term( (int)$_GET['delete'],'group-documents-category' ) ) {
+		term_exists( (int)$_GET['delete'],'group-documents-category' ) ) {
 
 		check_admin_referer('group-documents-category-delete');
 
@@ -178,10 +190,15 @@ function bp_group_documents_group_admin_save() {
 
 		$parent_id = BP_Group_Documents_Template::get_parent_category_id();
 
-		if( !is_term( $_POST['bp_group_documents_new_category'], 'group-documents-category',$parent_id ) )
+		if( !term_exists( $_POST['bp_group_documents_new_category'], 'group-documents-category',$parent_id ) )
 			$success = wp_insert_term( $_POST['bp_group_documents_new_category'],'group-documents-category',array('parent'=>$parent_id));
 	}
 
+	//Update whether documents are enabled
+	if( isset( $_POST['group_documents_documents_disabled'] ) && ctype_digit( $_POST['group_documents_documents_disabled'] ) ) {
+		check_admin_referer( 'groups-edit-group-documents' );
+		$success = groups_update_groupmeta( $bp->groups->current_group->id, 'group_documents_documents_disabled', $_POST['group_documents_documents_disabled'] );
+	}
 
 	//Update permissions
 	$valid_permissions = array( 'members','mods_only' );
@@ -189,7 +206,7 @@ function bp_group_documents_group_admin_save() {
 
 		check_admin_referer( 'groups-edit-group-documents' );
 
-		$success = groups_update_groupmeta( $bp->groups->current_group->id, 'group_documents_upload_permission', $_POST['group_documents_upload_permission']);
+		$success = $success || groups_update_groupmeta( $bp->groups->current_group->id, 'group_documents_upload_permission', $_POST['group_documents_upload_permission']);
 
 	}
 

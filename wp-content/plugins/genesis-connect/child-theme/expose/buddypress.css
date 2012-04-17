@@ -84,7 +84,7 @@ border:0px;
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	input[type=submit],
-	.button {
+	#submit_topic_cancel {
 	background: #333333 ;
 	color: #FFFFFF;
 	font-family: Arial, Tahoma, Verdana;
@@ -108,6 +108,7 @@ border:0px;
 	#members_search_submit:hover,
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 	background: #0088B3 ;
 	border: 1px solid #0088B3;

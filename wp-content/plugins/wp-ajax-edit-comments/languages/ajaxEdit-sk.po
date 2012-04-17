@@ -1,0 +1,1512 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjaxEditComments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-15 18:30-0600\n"
+"PO-Revision-Date: 2010-07-20 11:05+0100\n"
+"Last-Translator: Martin Mikláš <plugins [at] rozhladna.sk>\n"
+"Language-Team: www.rozhladna.sk <preklady@rozhladna.sk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Language: Slovak\n"
+"X-Poedit-Country: SLOVAKIA\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wp-ajax-edit-comments.php:251
+#: wp-ajax-edit-comments.php:292
+msgid "Comment Editor"
+msgstr "Editor komentárov"
+
+#: wp-ajax-edit-comments.php:254
+msgid "Click to Edit"
+msgstr "Kliknite pre úpravy"
+
+#: wp-ajax-edit-comments.php:260
+#: wp-ajax-edit-comments.php:263
+#: php/admin-panel.php:364
+#: php/request-deletion.php:57
+msgid "Request Deletion"
+msgstr "Vyžiadať zmazanie"
+
+#: wp-ajax-edit-comments.php:268
+#: wp-ajax-edit-comments.php:271
+#: wp-ajax-edit-comments.php:2037
+#: wp-ajax-edit-comments.php:2058
+#: php/admin-panel.php:364
+msgid "Delete"
+msgstr "Zmazať"
+
+#: wp-ajax-edit-comments.php:295
+#: wp-ajax-edit-comments.php:2054
+msgid "Edit"
+msgstr "Upraviť"
+
+#: wp-ajax-edit-comments.php:301
+#: wp-ajax-edit-comments.php:304
+msgid "Restore"
+msgstr "Obnoviť"
+
+#: wp-ajax-edit-comments.php:310
+#: wp-ajax-edit-comments.php:313
+msgid "Delete Permanently"
+msgstr "Zmazať natrvalo"
+
+#: wp-ajax-edit-comments.php:320
+#: wp-ajax-edit-comments.php:323
+#: wp-ajax-edit-comments.php:2040
+#: wp-ajax-edit-comments.php:2061
+#: php/comment-editor.php:135
+msgid "E-mail"
+msgstr "E-mail"
+
+#: wp-ajax-edit-comments.php:332
+msgid "Move Comments"
+msgstr "Presunúť komentáre"
+
+#: wp-ajax-edit-comments.php:335
+#: wp-ajax-edit-comments.php:2039
+#: wp-ajax-edit-comments.php:2060
+#: php/move-comment.php:82
+#: php/move-comment.php:107
+#: php/move-comment.php:132
+msgid "Move"
+msgstr "Presunúť"
+
+#: wp-ajax-edit-comments.php:342
+#: wp-ajax-edit-comments.php:345
+#: wp-ajax-edit-comments.php:2038
+#: wp-ajax-edit-comments.php:2059
+msgid "De-link"
+msgstr "Vymazať odkaz"
+
+#: wp-ajax-edit-comments.php:355
+#: wp-ajax-edit-comments.php:358
+#: wp-ajax-edit-comments.php:2034
+#: wp-ajax-edit-comments.php:2055
+msgid "Approve"
+msgstr "Schváliť"
+
+#: wp-ajax-edit-comments.php:368
+#: wp-ajax-edit-comments.php:371
+#: wp-ajax-edit-comments.php:2035
+#: wp-ajax-edit-comments.php:2056
+msgid "Moderate"
+msgstr "Moderovať"
+
+#: wp-ajax-edit-comments.php:381
+#: wp-ajax-edit-comments.php:384
+#: wp-ajax-edit-comments.php:2036
+#: wp-ajax-edit-comments.php:2057
+#: php/comment-editor.php:185
+#: php/comment-editor.php:192
+msgid "Spam"
+msgstr "Spam"
+
+#: wp-ajax-edit-comments.php:393
+#: wp-ajax-edit-comments.php:396
+#: wp-ajax-edit-comments.php:2041
+#: wp-ajax-edit-comments.php:2062
+#: php/blacklist-comment.php:136
+msgid "Blacklist"
+msgstr "Blacklist"
+
+#: wp-ajax-edit-comments.php:393
+msgid "Blacklist Comment"
+msgstr "Dať komentár na blacklist"
+
+#: wp-ajax-edit-comments.php:402
+#: wp-ajax-edit-comments.php:405
+#: php/comment-editor.php:186
+#: php/comment-editor.php:193
+msgid "Trash"
+msgstr "Kôš"
+
+#: wp-ajax-edit-comments.php:422
+#: wp-ajax-edit-comments.php:2322
+msgid "More Options"
+msgstr "Viac možností"
+
+#: wp-ajax-edit-comments.php:573
+msgid "Undo"
+msgstr "Späť"
+
+#: wp-ajax-edit-comments.php:959
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "Komentár bol upravený pri príspevku %s"
+
+#: wp-ajax-edit-comments.php:960
+#, php-format
+msgid "Author: %s\n"
+msgstr "Autor: %s\n"
+
+#: wp-ajax-edit-comments.php:961
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "Autorova URL: %s\n"
+
+#: wp-ajax-edit-comments.php:962
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "Autorov e-mail: %s\n"
+
+#: wp-ajax-edit-comments.php:963
+msgid "Comment:\n"
+msgstr "Komentár:\n"
+
+#: wp-ajax-edit-comments.php:964
+msgid "See all comments on this post here:\n"
+msgstr "Tu si prezriete všetky komentáre k príspevku:\n"
+
+#: wp-ajax-edit-comments.php:966
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "Novoupravený komentár na: %s"
+
+#: wp-ajax-edit-comments.php:1123
+#: wp-ajax-edit-comments.php:1128
+msgid "Unknown error."
+msgstr "Neznáma chyba."
+
+#: wp-ajax-edit-comments.php:1239
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "Nemôžete upravovať komentár po tom, čom komentoval niekto iný."
+
+#: wp-ajax-edit-comments.php:1240
+msgid "The time to edit your comment has elapsed."
+msgstr "Čas na úpravu Vašeho komentára vypršal."
+
+#: wp-ajax-edit-comments.php:1241
+msgid "You do not have permission to edit this comment."
+msgstr "Nemáte povolenie upravovať tento komentár."
+
+#: wp-ajax-edit-comments.php:1243
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "Tento komentár nemôže byť upravený, pretože bol označený ako spam."
+
+#: wp-ajax-edit-comments.php:1244
+msgid "Comment loading failed."
+msgstr "Nahrávanie komentárov zlyhalo."
+
+#: wp-ajax-edit-comments.php:1245
+msgid "Comment editing has been disabled."
+msgstr "Úpravy komentárov sú deaktivované"
+
+#: wp-ajax-edit-comments.php:1246
+msgid "Could not mark as spam."
+msgstr "Nemožno označiť ako spam."
+
+#: wp-ajax-edit-comments.php:1247
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "Nemáte oprávnenie označiť tento komentár ako spam."
+
+#: wp-ajax-edit-comments.php:1248
+msgid "Could not delete comment."
+msgstr "Nemožno zmazať komentár."
+
+#: wp-ajax-edit-comments.php:1249
+msgid "You do not have permission to delete this comment."
+msgstr "Nemáte povovlenie zmazať tento komentár."
+
+#: wp-ajax-edit-comments.php:1250
+msgid "You do not have permission to approve this comment."
+msgstr "Nemáte oprávnenie schváliť tento komentár."
+
+#: wp-ajax-edit-comments.php:1251
+msgid "Could not approve comment."
+msgstr "Nemožno schváliť komentár."
+
+#: wp-ajax-edit-comments.php:1252
+msgid "Could not mark this comment for moderation."
+msgstr "Tento komentár nie je možné dať na moderáciu."
+
+#: wp-ajax-edit-comments.php:1253
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "Nemáte oprávnenie označiť tento komentár na moderáciu."
+
+#: wp-ajax-edit-comments.php:1254
+msgid "Please enter a valid email address."
+msgstr "Prosím vložte platný e-mail."
+
+#: wp-ajax-edit-comments.php:1255
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "Prosím vyplňte požadované políčka (meno, e-mail)"
+
+#: wp-ajax-edit-comments.php:1256
+msgid "You cannot have an empty comment."
+msgstr "Nemôžete zanechať prázdny komentár."
+
+#: wp-ajax-edit-comments.php:1257
+msgid "You do not have permission to delink this comment."
+msgstr "Nemáte oprávnenie na zmazanie odkazu z tohoto komentára."
+
+#: wp-ajax-edit-comments.php:1258
+msgid "Your comment was marked for moderation"
+msgstr "Váš komentár bol zaslaný na moderáciu."
+
+#: wp-ajax-edit-comments.php:1259
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "Tento komentár nemôže byť upravovaný, pretože čaká na schválenie."
+
+#: wp-ajax-edit-comments.php:1260
+msgid "Request failed."
+msgstr "Vyžiadanie zlyhalo"
+
+#: wp-ajax-edit-comments.php:1261
+msgid "You have not selected anything to blacklist."
+msgstr "Nič ste nevybrali pre pridanie do blacklistu."
+
+#: wp-ajax-edit-comments.php:1262
+msgid "Upgrade check failed."
+msgstr "Zlyhalo overenie aktualizácie."
+
+#: wp-ajax-edit-comments.php:1263
+msgid "You are using the latest version."
+msgstr "Používate najnovšiu verziu."
+
+#: wp-ajax-edit-comments.php:1523
+#, php-format
+msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
+msgstr "Komentátor žiada vymazanie komentára k príspevku #%1$s \"%2$s\". Komentár bol presunutý k čakajúcim na schválenie."
+
+#: wp-ajax-edit-comments.php:1524
+msgid "The reason given is: "
+msgstr "Uvedený dôvod:"
+
+#: wp-ajax-edit-comments.php:1525
+#, php-format
+msgid "E-mail : %s"
+msgstr "E-mail : %s"
+
+#: wp-ajax-edit-comments.php:1526
+#, php-format
+msgid "URL    : %s"
+msgstr "URL    : %s"
+
+#: wp-ajax-edit-comments.php:1527
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: wp-ajax-edit-comments.php:1529
+#, php-format
+msgid "Delete it: %s"
+msgstr "Zmazať: %s"
+
+#: wp-ajax-edit-comments.php:1530
+#, php-format
+msgid "Approve it: %s"
+msgstr "Schváliť komentár: %s"
+
+#: wp-ajax-edit-comments.php:1531
+#, php-format
+msgid "Spam it: %s"
+msgstr "Označiť ako spam: %s"
+
+#: wp-ajax-edit-comments.php:1539
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "Požiadať o vymazanie komentára: \"%2$s\""
+
+#: wp-ajax-edit-comments.php:1665
+msgid "Comment successfully saved"
+msgstr "Komentár úspešne uložený"
+
+#: wp-ajax-edit-comments.php:1731
+#, php-format
+msgid "An upgrade (Version %s) is available.  Please visit your"
+msgstr "Aktualizácia (verzia %s) je dostupná. Prosím navštívte"
+
+#: wp-ajax-edit-comments.php:1731
+msgid "member's section"
+msgstr "členskú časť"
+
+#: wp-ajax-edit-comments.php:1741
+#: wp-ajax-edit-comments.php:1940
+msgid "There is a new version of WP Ajax Edit Comments available."
+msgstr "Je dostupná nová verzia WP Ajax Edit Comments."
+
+#: wp-ajax-edit-comments.php:1741
+msgid "Upgrade automatically"
+msgstr "Aktualizovať automaticky"
+
+#: wp-ajax-edit-comments.php:1894
+msgid "Oops!! Something went wrong.<br/>Please try again or <a href='http://www.ajaxeditcomments.com/contact/'>contact us</a>."
+msgstr "Ups!! Niečo sa pokazilo.<br/>Prosím skúste znova alebo <a href='http://www.ajaxeditcomments.com/contact/'>kontaktujte</a> (po anglicky)."
+
+#: wp-ajax-edit-comments.php:1940
+#, php-format
+msgid "View version %s Details"
+msgstr "Pozrite si detaily verzie %s"
+
+#: wp-ajax-edit-comments.php:1943
+msgid "Check for upgrades"
+msgstr "Overiť aktualizácie"
+
+#: wp-ajax-edit-comments.php:1979
+msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+msgstr "Váš upravený komentár bol označený ako spam. Ak sa jedná o chybu, kontaktujte prosím správcu stránky."
+
+#: wp-ajax-edit-comments.php:2003
+msgid "Get your own comment editor for your WordPress website.  Try [url]Ajax Edit Comments[/url] today!"
+msgstr "Získajte vlastný editor komentárov pre vašu stránku na WordPresse.  Vyskúšajte [url]Ajax Edit Comments[/url] dnes!"
+
+#: wp-ajax-edit-comments.php:2149
+msgid "Checking..."
+msgstr "Overujem..."
+
+#: wp-ajax-edit-comments.php:2149
+msgid "Check for Upgrades"
+msgstr "Overiť aktualizácie"
+
+#: wp-ajax-edit-comments.php:2166
+#: php/admin-panel-support.php:109
+msgid "show"
+msgstr "ukázať"
+
+#: wp-ajax-edit-comments.php:2166
+msgid "hide"
+msgstr "skryť"
+
+#: wp-ajax-edit-comments.php:2234
+msgid "Comment Box"
+msgstr "Okno komentára"
+
+#: wp-ajax-edit-comments.php:2303
+msgid "minutes"
+msgstr "minút"
+
+#: wp-ajax-edit-comments.php:2304
+msgid "minute"
+msgstr "minúta"
+
+#: wp-ajax-edit-comments.php:2305
+msgid "and"
+msgstr "a"
+
+#: wp-ajax-edit-comments.php:2306
+msgid "seconds"
+msgstr "sekúnd"
+
+#: wp-ajax-edit-comments.php:2307
+msgid "second"
+msgstr "sekunda"
+
+#: wp-ajax-edit-comments.php:2308
+msgid "Mark for Moderation?"
+msgstr "Označiť na schválenie?"
+
+#: wp-ajax-edit-comments.php:2309
+msgid "Approve Comment?"
+msgstr "Schváliť komentár?"
+
+#: wp-ajax-edit-comments.php:2310
+msgid "Mark as Spam?"
+msgstr "Označiť ako spam?"
+
+#: wp-ajax-edit-comments.php:2311
+msgid "Delete this comment?"
+msgstr "Zmazať tento komentár?"
+
+#: wp-ajax-edit-comments.php:2312
+msgid "Anonymous"
+msgstr "Anonym"
+
+#: wp-ajax-edit-comments.php:2313
+msgid "Loading..."
+msgstr "Nahrávam..."
+
+#: wp-ajax-edit-comments.php:2314
+msgid "Ready"
+msgstr "Pripravený"
+
+#: wp-ajax-edit-comments.php:2315
+msgid "Sending..."
+msgstr "Odosielam..."
+
+#: wp-ajax-edit-comments.php:2316
+msgid "Message Sent"
+msgstr "Správa odoslaná"
+
+#: wp-ajax-edit-comments.php:2317
+msgid "Comment Loaded Successfully"
+msgstr "Komentár úspešne nahraný"
+
+#: wp-ajax-edit-comments.php:2318
+msgid "Saving..."
+msgstr "Ukladám..."
+
+#: wp-ajax-edit-comments.php:2319
+msgid "Blacklisting..."
+msgstr "Blacklisting..."
+
+#: wp-ajax-edit-comments.php:2320
+msgid "Comment Successfully Saved"
+msgstr "Komentár úspešne uložený"
+
+#: wp-ajax-edit-comments.php:2321
+msgid "De-link Successful"
+msgstr "Odstránenie odkazu úspešné"
+
+#: wp-ajax-edit-comments.php:2323
+msgid "Less Options"
+msgstr "Menej možností"
+
+#: wp-ajax-edit-comments.php:2325
+msgid "Request has been sent successfully"
+msgstr "Požiadavka bola úspešne zaslaná"
+
+#: wp-ajax-edit-comments.php:2326
+msgid "Error sending request"
+msgstr "Chyba pri zasielaní požiadavku"
+
+#: wp-ajax-edit-comments.php:2327
+msgid "Approving..."
+msgstr "Schvaľujem..."
+
+#: wp-ajax-edit-comments.php:2328
+msgid "De-linking..."
+msgstr "Vymazávam odkaz..."
+
+#: wp-ajax-edit-comments.php:2329
+msgid "Moderating..."
+msgstr "Moderujem..."
+
+#: wp-ajax-edit-comments.php:2330
+msgid "Spamming..."
+msgstr "Označujem ako spam..."
+
+#: wp-ajax-edit-comments.php:2331
+msgid "Deleting..."
+msgstr "Mažem..."
+
+#: wp-ajax-edit-comments.php:2332
+msgid "Restoring..."
+msgstr "Obnovujem..."
+
+#: wp-ajax-edit-comments.php:2333
+msgid "Undoing..."
+msgstr "Robím Späť..."
+
+#: wp-ajax-edit-comments.php:2334
+msgid "Undo Successful"
+msgstr "Krok späť úspešný"
+
+#: wp-ajax-edit-comments.php:2335
+msgid "Comment Deleted Permanently"
+msgstr "Komentár permanentne vymazaný"
+
+#: wp-ajax-edit-comments.php:2336
+msgid "Input Fields are Required"
+msgstr "Vstupné políčka sú potrebné"
+
+#: wp-ajax-edit-comments.php:2337
+msgid "E-mail Address is Invalid"
+msgstr "E-mailová adresa je nesprávna"
+
+#: wp-ajax-edit-comments.php:2341
+#: php/admin-panel.php:308
+#: php/admin-panel.php:344
+#: php/admin-panel.php:356
+#: php/admin-panel.php:358
+#: php/admin-panel.php:360
+#: php/admin-panel.php:362
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:398
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:406
+#: php/admin-panel.php:555
+#: php/admin-panel.php:562
+#: php/admin-panel.php:569
+#: php/admin-panel.php:582
+#: php/admin-panel.php:584
+#: php/admin-panel.php:587
+#: php/admin-panel.php:595
+#: php/admin-panel.php:615
+#: php/admin-panel.php:617
+#: php/admin-panel.php:624
+#: php/admin-panel.php:626
+#: php/admin-panel.php:634
+#: php/admin-panel.php:642
+#: php/admin-panel.php:650
+#: php/admin-panel.php:677
+#: php/admin-panel.php:684
+#: php/admin-panel.php:692
+#: php/admin-panel.php:700
+#: php/admin-panel.php:708
+#: php/admin-panel.php:723
+msgid "Yes"
+msgstr "Áno"
+
+#: wp-ajax-edit-comments.php:2342
+#: php/admin-panel.php:308
+#: php/admin-panel.php:344
+#: php/admin-panel.php:356
+#: php/admin-panel.php:358
+#: php/admin-panel.php:360
+#: php/admin-panel.php:362
+#: php/admin-panel.php:377
+#: php/admin-panel.php:380
+#: php/admin-panel.php:383
+#: php/admin-panel.php:386
+#: php/admin-panel.php:398
+#: php/admin-panel.php:401
+#: php/admin-panel.php:404
+#: php/admin-panel.php:406
+#: php/admin-panel.php:555
+#: php/admin-panel.php:562
+#: php/admin-panel.php:569
+#: php/admin-panel.php:582
+#: php/admin-panel.php:584
+#: php/admin-panel.php:587
+#: php/admin-panel.php:595
+#: php/admin-panel.php:615
+#: php/admin-panel.php:617
+#: php/admin-panel.php:624
+#: php/admin-panel.php:626
+#: php/admin-panel.php:634
+#: php/admin-panel.php:642
+#: php/admin-panel.php:650
+#: php/admin-panel.php:677
+#: php/admin-panel.php:684
+#: php/admin-panel.php:692
+#: php/admin-panel.php:700
+#: php/admin-panel.php:708
+#: php/admin-panel.php:723
+msgid "No"
+msgstr "Nie"
+
+#: wp-ajax-edit-comments.php:2343
+msgid "Are you sure?"
+msgstr "Ste si istí?"
+
+#: php/admin-panel-support.php:65
+msgid "Support Request Sent."
+msgstr "Požiadavka na podporu odoslaná"
+
+#: php/admin-panel-support.php:71
+msgid "Support"
+msgstr "Podpora"
+
+#: php/admin-panel-support.php:74
+msgid "Support Request"
+msgstr "Požiadavka podpory"
+
+#: php/admin-panel-support.php:75
+msgid "Support Forums"
+msgstr "Podporné fórum"
+
+#: php/admin-panel-support.php:76
+msgid "Documentation"
+msgstr "Dokumentácia"
+
+#: php/admin-panel-support.php:84
+msgid "Your Name"
+msgstr "Vaše meno"
+
+#: php/admin-panel-support.php:89
+msgid "Email"
+msgstr "E-mail"
+
+#: php/admin-panel-support.php:94
+msgid "Description of Issue"
+msgstr "Popis problému"
+
+#: php/admin-panel-support.php:96
+msgid "Please state in detail what problems you are experiencing.  Details we need to know are:"
+msgstr "Prosím detailne opíšte, aký problém máte. Detaily, ktoré potrebujeme vedieť sú:"
+
+#: php/admin-panel-support.php:98
+msgid "The problem"
+msgstr "Problém"
+
+#: php/admin-panel-support.php:99
+msgid "Steps to duplicate the problem"
+msgstr "Kroky pre opätovné navodenie problému"
+
+#: php/admin-panel-support.php:100
+msgid "Whether you are experiencing this problem on the front-end, the admin-panel, or both"
+msgstr "Vyskytuje sa problém na stránke samotnej, v administrácii alebo aj tam aj tam"
+
+#: php/admin-panel-support.php:101
+msgid "What browsers you are using to duplicate the problem"
+msgstr "Aké prehliadače ste použili na navodenie problému"
+
+#: php/admin-panel-support.php:107
+msgid "Information Collection"
+msgstr "Zber informácií"
+
+#: php/admin-panel-support.php:109
+msgid "By clicking Submit, you agree to send us the following information"
+msgstr "Kliknutím na odoslať súhlasíte so zaslaním nasledovných informácií"
+
+#: php/admin-panel-support.php:152
+msgid "Submit Support Request"
+msgstr "Odoslať požiadavku na podporu"
+
+#: php/admin-panel-support.php:157
+#, php-format
+msgid "To receive help from AEC team members and the AEC community, please consider leaving a support request via our %sSupport Forums%s"
+msgstr "Pre podporu od členov tímu AEC a od komunity, prosím pouvažujte nad zanechaním požiadavku cez %sFórum podpory%s"
+
+#: php/admin-panel-support.php:160
+#, php-format
+msgid "For in-depth documenation, including feature descriptions and how-to videos, please visit our %sDocumentation Section%s"
+msgstr "Pre detailnú dokumentáciu, včetne popisu vlastností a videí \"ako na to\", prosím navštívte %sČasť s dokumentami%s"
+
+#: php/admin-panel.php:24
+msgid "Security keys deleted"
+msgstr "Bezpečnosté kľúče zmazané"
+
+#: php/admin-panel.php:38
+msgid "Comment time must be a numerical value"
+msgstr "Čas komentára musí byť číselná hodnota"
+
+#: php/admin-panel.php:41
+msgid "Comment time must be greater than one minute."
+msgstr "Čas komentu musí byť väčší ako jedna minúta."
+
+#: php/admin-panel.php:60
+msgid "Authentication Key could not be validated."
+msgstr "Autorizačný kľúč nemôže byť overený"
+
+#: php/admin-panel.php:60
+#: php/admin-panel.php:88
+msgid "Please try again later."
+msgstr "Prosím skúste to neskôr."
+
+#: php/admin-panel.php:65
+msgid "Invalid Authentication Key"
+msgstr "Nesprávny autorizačný kľúč"
+
+#: php/admin-panel.php:71
+msgid "Number of Sites Exceeded"
+msgstr "Počet stránok vyčerpaný"
+
+#: php/admin-panel.php:77
+msgid "Authentication Key is valid"
+msgstr "Autorizačný kľúč je neplatný"
+
+#: php/admin-panel.php:88
+#: php/admin-panel.php:92
+msgid "Site could not be removed."
+msgstr "Stránka nemohla byť odstránená."
+
+#: php/admin-panel.php:97
+msgid "Site removed."
+msgstr "Stránka odstránená"
+
+#: php/admin-panel.php:109
+msgid "Affiliate ID could not be validated.  Please try again later."
+msgstr "Partnerské číslo nemohlo byť overené. Prosím skúste to znova neskôr."
+
+#: php/admin-panel.php:112
+msgid "Invalid Affiliate ID"
+msgstr "Nesprávne partnerské číslo"
+
+#: php/admin-panel.php:268
+msgid "Settings successfully updated."
+msgstr "Nastavenia úspešne aktualizované."
+
+#: php/admin-panel.php:276
+msgid "Your commentators have edited their comments "
+msgstr "Vaši komentátori upravili svoje komentáre "
+
+#: php/admin-panel.php:276
+msgid "times"
+msgstr "ráz"
+
+#: php/admin-panel.php:282
+msgid "Global Options"
+msgstr "Celkové nastavenia"
+
+#: php/admin-panel.php:283
+msgid "Editing Options"
+msgstr "Možnosti úprav"
+
+#: php/admin-panel.php:284
+msgid "Cleanup"
+msgstr "Odstránenie"
+
+#: php/admin-panel.php:291
+msgid "General"
+msgstr "Všeobecné"
+
+#: php/admin-panel.php:292
+#: php/admin-panel.php:341
+msgid "Affiliate Options"
+msgstr "Partnerské možnosti"
+
+#: php/admin-panel.php:293
+msgid "Anonymous Users"
+msgstr "Anonymní používatelia"
+
+#: php/admin-panel.php:294
+msgid "Registered Users"
+msgstr "Registrovaní používatelia"
+
+#: php/admin-panel.php:295
+msgid "Styles"
+msgstr "Štýly"
+
+#: php/admin-panel.php:296
+msgid "Icons"
+msgstr "Ikony"
+
+#: php/admin-panel.php:297
+msgid "Other options"
+msgstr "Iné možnosti"
+
+#: php/admin-panel.php:305
+msgid "Authentication Key:"
+msgstr "Autorizačný kľúč"
+
+#: php/admin-panel.php:306
+msgid "Enter Your Authentication Key"
+msgstr "Vložte váš autorizačný kľúč"
+
+#: php/admin-panel.php:306
+msgid "The Authentication Key enables automatic upgrades within the WordPress admin panel.  An Authentication Key is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Autorizačný kľúč umožňuje automatické aktualizácie cez administračný panel WordPressu. Autorizačný kľúč sa dáva prihláseným do <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+
+#: php/admin-panel.php:307
+msgid "Remove Site?"
+msgstr "Odstrániť stránku?"
+
+#: php/admin-panel.php:307
+msgid "Selecting \"Yes\" will remove the current site and allow you to use the Authentication Key on another site."
+msgstr "Vybraním \"Áno\" odoberiete aktuálnu stránku a povolíte použitie autorizačného kľúča na stránke inej."
+
+#: php/admin-panel.php:313
+msgid "Set comment time (minutes):"
+msgstr "Nastaviť čas komentára (minúty):"
+
+#: php/admin-panel.php:317
+msgid "Spam notification text:"
+msgstr "Oznámenie o spame:"
+
+#: php/admin-panel.php:319
+msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr "Prosím obmedzte sa na jeden riadok ak je to možné, pretože tento text sa objaví pri úprave komentára alebo autora (Povolený kód: em, a, strong, blockquote):"
+
+#: php/admin-panel.php:330
+msgid "Affiliate ID:"
+msgstr "Partnerské ID:"
+
+#: php/admin-panel.php:331
+msgid "The Affiliate ID allows you to make money from the Ajax Edit Comments plugin through referrals.  An Affiliate ID is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+msgstr "Partnerské ID vám umožňuje zarábať peniaze z pluginu Ajax Edit Comments cez referovanie. Partnerské ID sa dáva prihláseným do <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
+
+#: php/admin-panel.php:334
+msgid "Affiliate Text:"
+msgstr "Partnerský text:"
+
+#: php/admin-panel.php:336
+msgid "This text will show when an anonymous commenter sees the editing options. A valid Affiliate ID is required."
+msgstr "Tento text sa objaví keď anonymný komentátor uvidí nastavenia editácie. Platné partnerské číslo je potrebné."
+
+#: php/admin-panel.php:343
+msgid "Display for anonymous commenters?"
+msgstr "Zobraziť anonymným komentátorom?"
+
+#: php/admin-panel.php:343
+msgid "Selecting \"Yes\" will show the \"Affiliate Text\" above the editing options for each anonymous comment posted.  A valid Affiliate ID is required."
+msgstr "Výberom \"Áno\" sa ukáže \"Partnerský text\" nad nastaveniami pre každý anonymne odoslaný komentár. Platné partnerské číslo je potrebné."
+
+#: php/admin-panel.php:355
+msgid "Allow editing after additional comments have been posted?"
+msgstr "Umožniť úpravy po tom, čo odošle komentár niekto iný?"
+
+#: php/admin-panel.php:355
+msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+msgstr "Vybraním \"Nie\" zabránite používateľom upravovanie ich komentárov v prípade, ak bol odoslaný ďalší komentár k danému článku."
+
+#: php/admin-panel.php:357
+msgid "Allow Users to Edit Their Name?"
+msgstr "Umožniť užívateľom upravovať si meno?"
+
+#: php/admin-panel.php:357
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "Vybraním \"Nie\" sa vypne možnosť úpravy mien"
+
+#: php/admin-panel.php:359
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "Umožniť užívateľom upravovať ich e-mail adresy?"
+
+#: php/admin-panel.php:359
+msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+msgstr "Vybraním možnosti \"Nie\" sa vypne možnosť upravovať e-mail adresu. Príčinou k povoleniu tejto voľby môžu byť užívatelia s Gravatarmi."
+
+#: php/admin-panel.php:361
+msgid "Allow Users to Edit Their URLs?"
+msgstr "Umožniť užívateľom upravovať ich URL?"
+
+#: php/admin-panel.php:361
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "Vybraním \"Nie\" znemožníte dodatočné úpravy URL."
+
+#: php/admin-panel.php:363
+msgid "Request Deletion Behavior"
+msgstr "Správanie pri požiadavke o vymazanie"
+
+#: php/admin-panel.php:363
+msgid "Determine if you want users to request deletion (comments are sent to moderation with admin notification) or delete comments (comments are deleted immediately with no admin notification).  Select Off if you would like to disable this feature."
+msgstr "Rozhodnite, či chcete, aby používatelia žiadali o vymazania (komentáre sú zaslané do fronty na moderovanie) alebo mazali komentáre (komentáre sú mazané automaticky bez toho, aby bol administrátor upozornený). Vypnite pre deaktiváciu tejto vlastnosti."
+
+#: php/admin-panel.php:364
+msgid "Off"
+msgstr "Vypnuté"
+
+#: php/admin-panel.php:375
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "Umožniť registrovaným užívateľom upravovať komentáre do nekonečna?"
+
+#: php/admin-panel.php:376
+msgid "Selecting \"Yes\" will allow users registered on your website to edit comments without a time limit."
+msgstr "Vybraním možnosti \"Áno\" budú môcť užívatelia registrovaní na stránke upravovať komentáre bez obmedzenia."
+
+#: php/admin-panel.php:378
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "Umožniť registrovaným užívateľom upravovať svoje meno?"
+
+#: php/admin-panel.php:379
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their names.  This can prevent issues if a user wishes to impersonate others."
+msgstr "Vybraním \"Áno\" budú môcť registrovaní užívatelia upravovať svoje mená.  Toto môže zamedziť problémom keď sa užívateľ vydáva za niekoho iného."
+
+#: php/admin-panel.php:381
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "Umožniť registrovaným užívateľom upravovať svoje e-mail adresy?"
+
+#: php/admin-panel.php:382
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their e-mail address."
+msgstr "Vybraním \"Áno\" budú môcť registrovaní užívatelia upravovať svoje e-mail adresy."
+
+#: php/admin-panel.php:384
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "Umožniť registrovaným užívateľom upravovať svoje URL?"
+
+#: php/admin-panel.php:385
+msgid "Selecting \"Yes\" will allow users registered on your website to edit their URL."
+msgstr "Vybraním \"Áno\" budú môcť registrovaní užívatelia upravovať svoje URL."
+
+#: php/admin-panel.php:397
+msgid "Use RTL StyleSheet?"
+msgstr "Použiť RTL StyleSheet?"
+
+#: php/admin-panel.php:399
+msgid "Turn Off clearfix:after?"
+msgstr "Vypnúť clearfix:after?"
+
+#: php/admin-panel.php:400
+msgid "The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "Táto možnosť je normálne zapnutá kvôli zvýšeniu kompatibility s rôznymi témami."
+
+#: php/admin-panel.php:402
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "Vypnúť skrolovanie cez JavaScript?"
+
+#: php/admin-panel.php:403
+msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "Plugin sa pokúša opraviť nesprávne zarovnanie, ak ste administrátor."
+
+#: php/admin-panel.php:405
+msgid "Comment Edit Interface On Bottom?"
+msgstr "Rozhranie pre úpravu komentárov na spodu?"
+
+#: php/admin-panel.php:416
+msgid "Icon Display"
+msgstr "Zobrazenie ikon"
+
+#: php/admin-panel.php:418
+msgid "Select an option below to determine how the icons are displayed on your website."
+msgstr "Vyberte voľbu nižšie, aby ste vybrali štýl, ktorým sa budú zobrazovať ikony na stránke."
+
+#: php/admin-panel.php:420
+msgid "Text Only"
+msgstr "Iba text"
+
+#: php/admin-panel.php:421
+msgid "Classic"
+msgstr "Klasické"
+
+#: php/admin-panel.php:422
+msgid "Dropdown"
+msgstr "Menu s výberom"
+
+#: php/admin-panel.php:423
+msgid "Icons Only"
+msgstr "Iba ikonky"
+
+#: php/admin-panel.php:427
+msgid "Icon Set"
+msgstr "Sada ikoniek"
+
+#: php/admin-panel.php:429
+msgid "Select an option below to display the icon set on your website."
+msgstr "Vyberte voľbu nižšie pre sadu ikoniek na stránke."
+
+#: php/admin-panel.php:451
+msgid "Icon Drop Down Menu"
+msgstr "Menu s výberom a ikonkami"
+
+#: php/admin-panel.php:453
+msgid "Drag and drop between lists to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "Chyťte a presuňte medzi zoznamami pre úpravu poradia ikoniek. Kliknite na obrázok pre aktiváciu a deaktiváciu možnosti."
+
+#: php/admin-panel.php:491
+#: php/admin-panel.php:531
+msgid "text"
+msgstr "text"
+
+#: php/admin-panel.php:511
+msgid "Classic and Icons Only Vew"
+msgstr "Klasický pohľad a len ikonky"
+
+#: php/admin-panel.php:513
+msgid "Drag and drop to adjust the icon order.  Click on the image to disable or enable the option."
+msgstr "Chyťte a presuňte pre úpravu poradia ikoniek. Kliknite na obrázok pre aktiváciu a deaktiváciu možnosti."
+
+#: php/admin-panel.php:552
+msgid "Display Options"
+msgstr "Zobraz možnosti"
+
+#: php/admin-panel.php:554
+msgid "Display on pages?"
+msgstr "Zobraziť plugin okrem článkov aj na statických stránkach?"
+
+#: php/admin-panel.php:554
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "Vybraním \"Nie\" znemožníte úpravy komentárov na stránkach."
+
+#: php/admin-panel.php:559
+msgid "Countdown Timer"
+msgstr "Odpočítavanie"
+
+#: php/admin-panel.php:561
+msgid "Show a Countdown Timer?"
+msgstr "Ukázať odpočítavania?"
+
+#: php/admin-panel.php:561
+msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+msgstr "Vybraním \"Nie\" vypnete odpočítavač pre nesprávcovských komentátorov."
+
+#: php/admin-panel.php:566
+msgid "Edit E-mails"
+msgstr "Upraviť e-maily"
+
+#: php/admin-panel.php:568
+msgid "Allow Edit E-mails?"
+msgstr "Umožniť úpravy e-mailov?"
+
+#: php/admin-panel.php:568
+msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+msgstr "Ak vyberiete \"Áno\", budete dostávať e-mail vždy ak niekto upraví svoj komentár."
+
+#: php/admin-panel.php:573
+msgid "Spam Protection"
+msgstr "Ochrana pred spamom"
+
+#: php/admin-panel.php:575
+msgid "Akismet"
+msgstr "Akismet"
+
+#: php/admin-panel.php:575
+msgid "Defensio"
+msgstr "Defensio"
+
+#: php/admin-panel.php:575
+msgid "None"
+msgstr "Žiadna"
+
+#: php/admin-panel.php:579
+msgid "Performance"
+msgstr "Výkon"
+
+#: php/admin-panel.php:581
+msgid "Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)"
+msgstr "Nahrávať skripty v pätičke? (Vyžaduje WordPress 2.8 alebo vyšší pre kompatibilitu)"
+
+#: php/admin-panel.php:583
+msgid "Use Compressed JavaScript Files?"
+msgstr "Použiť komprimované súbory JavaScriptu?"
+
+#: php/admin-panel.php:585
+msgid "Load wp-load.php Directly?"
+msgstr "Nahrať wp-load.php napriamo?"
+
+#: php/admin-panel.php:586
+msgid "Loading wp-load.php directly prevents most plugin conflicts.  It requires that the wp-content folder be in the default location."
+msgstr "Nahratie wp-load.php napriamo zamedzuje väčšinu konfliktov s pluginmi. Vyžaduje umiestnenie adresára wp-content na predvolenej ceste."
+
+#: php/admin-panel.php:591
+msgid "Character Encoding"
+msgstr "Znaková sada"
+
+#: php/admin-panel.php:593
+msgid "Enable mb_convert_encoding?"
+msgstr "Aktivovať mb_convert_encoding?"
+
+#: php/admin-panel.php:594
+msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+msgstr "Niektoré servery toto nemajú nainštalované. Ak túto možnosť vypnete, overte si zadávanie rôznych znakov. Funkcia mb_convert_encoding je potrebná pre konverziu z UTF-8 do rôznych znakových sád."
+
+#: php/admin-panel.php:599
+msgid "After the Deadline"
+msgstr "After the Deadline"
+
+#: php/admin-panel.php:601
+msgid "Select After the Deadline Language"
+msgstr "Vyberte jazyk pre funkciu After the Deadline"
+
+#: php/admin-panel.php:614
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "Deaktivovať službu After the Deadline na príspevkoch? (V čase vydania verzie AEC 4.0 sú podporované len jazyky: angličtina, nemčina, francúzština, portugalčina a španielčina)"
+
+#: php/admin-panel.php:616
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "Deaktivovať službu After the Deadline na vyskakovacích oknách?"
+
+#: php/admin-panel.php:621
+msgid "Expand Options"
+msgstr "Možnosti rozšírenia"
+
+#: php/admin-panel.php:623
+msgid "Disable the Expand Option on Posts?"
+msgstr "Deaktivovať možnosť zväčšenia na príspevkoch?"
+
+#: php/admin-panel.php:625
+msgid "Disable the Expand Option on the Popups?"
+msgstr "Deaktivovať možnosť zväčšenia na vyskakovacích oknách?"
+
+#: php/admin-panel.php:630
+msgid "Disable Trackbacks"
+msgstr "Deaktivovať trackbacky"
+
+#: php/admin-panel.php:632
+msgid "Disable trackbacks from showing?"
+msgstr "Deaktivovať trackbacky od ukazovania?"
+
+#: php/admin-panel.php:633
+msgid "Enabling this option will prevent trackbacks from showing up on your blog.  Please note that this option will not prevent your site from receiving trackbacks."
+msgstr "Aktiváciou tejto funkcie zamedzíte zobrazovaniu trackbackov na vašom blogu. Prosím uvedomte si tiež, že táto funkcia nezamedzuje vášmu blogu prijímanie trackbackov."
+
+#: php/admin-panel.php:638
+msgid "Disable No-follow"
+msgstr "Deaktivovať no-follow"
+
+#: php/admin-panel.php:640
+msgid "Disable no-follow in comment links?"
+msgstr "Deaktivovať no-follow v odkazoch komentárov?"
+
+#: php/admin-panel.php:641
+msgid "Enabling this option will remove no-follow from comment and author links."
+msgstr "Aktiváciou tejto možnosti odstránite no-follow z komentárov a odkazov na stránky autorov."
+
+#: php/admin-panel.php:646
+msgid "Disable Self Pings"
+msgstr "Deaktivovať pingy na seba"
+
+#: php/admin-panel.php:648
+msgid "Disable self-pings to your site?"
+msgstr "Deaktivovať pingnutia na vlastnú stránku?"
+
+#: php/admin-panel.php:649
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "Aktiváciou tejto voľby zabránite zasielanie pingov vrámci stránky."
+
+#: php/admin-panel.php:654
+msgid "De-link Behavior"
+msgstr "Správanie vymazávania odkazov"
+
+#: php/admin-panel.php:656
+msgid "Choose how the de-link function behaves."
+msgstr "Vyberte, ako sa správa funkcia odlinkovania."
+
+#: php/admin-panel.php:657
+msgid "You can choose to remove links from the comment content and comment author URL, or just the comment author URL."
+msgstr "Môžete si vybrať odstránenie odkazov z obsahu komentárov a odkazu na stránku autora, alebo len odstránenie odkazu na stránku autora."
+
+#: php/admin-panel.php:658
+msgid "Content and comment author URL."
+msgstr "Obsah a stránka autora."
+
+#: php/admin-panel.php:658
+msgid "Comment author URL."
+msgstr "Stránka autora."
+
+#: php/admin-panel.php:674
+msgid "Registered Comment Editing"
+msgstr "Úprava komentárov registrovanými"
+
+#: php/admin-panel.php:676
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "Umožniť registrovaným užívateľom upravovať svoje komentáre?"
+
+#: php/admin-panel.php:676
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr "Vybraním \"Nie\" znemožníte úpravy komentárov registrovaným používateľom."
+
+#: php/admin-panel.php:681
+msgid "Anonymous Commenter Editing"
+msgstr "Úprava komentárov anonymnými"
+
+#: php/admin-panel.php:683
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "Umožniť anonymným komentátorom úpravu ich vlastných komentárov?"
+
+#: php/admin-panel.php:683
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr "Vybraním \"Nie\" znemožníte úpravy komentárov od anonymných používateľov."
+
+#: php/admin-panel.php:688
+msgid "Admin Users (Admin Panel)"
+msgstr "Správa používateľov (Panel správy)"
+
+#: php/admin-panel.php:690
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "Vypnúť editovanie komentárov v administrátorskom paneli?"
+
+#: php/admin-panel.php:691
+msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "Vybraním \"Áno\" deaktivujete môžnosť úpravy komentárov v administrátorskom rozhraní."
+
+#: php/admin-panel.php:696
+msgid "Admin Users (Posts)"
+msgstr "Správa používateľov (Príspevky)"
+
+#: php/admin-panel.php:698
+#: php/admin-panel.php:706
+msgid "Turn On Comment Editing?"
+msgstr "Zapnúť možnosť upravovať komentáre?"
+
+#: php/admin-panel.php:699
+msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr "Vybraním \"Áno\" si aktivujete môžnosť úpravy komentárov iných používateľov. Vybraním \"Nie\" si znemožníte možnosť upravovať komentáre pod príspevkami."
+
+#: php/admin-panel.php:704
+msgid "Editors"
+msgstr "Editory"
+
+#: php/admin-panel.php:707
+msgid "Selecting \"Yes\" will allow Editors to see the AEC edit options on a post or in the admin panel."
+msgstr "Vybraním \"Áno\" umožníte editorom vidieť možnosti úpravy komentárov cez AEC v príspevkoch alebo administrátorskom rozhraní."
+
+#: php/admin-panel.php:720
+msgid "Delete all security keys"
+msgstr "Vymazať všetky bezpečnostné kľúče"
+
+#: php/admin-panel.php:722
+msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+msgstr "Vždy, keď užívateľ zanechá komentár, je uložený bezpečnostný reťazec ako náhodný kľúč. Pravidelne by ste mali mazať túto informáciu. Prosím zozálohujte si databázu pred pokračovaním."
+
+#: php/admin-panel.php:730
+msgid "Update Settings"
+msgstr "Uložiť nastavenia"
+
+#: php/ajax-processor.php:72
+msgid "Comment Approved. "
+msgstr "Komentár schválený"
+
+#: php/ajax-processor.php:79
+msgid "Move Successful. "
+msgstr "Presunutie úspešné"
+
+#: php/ajax-processor.php:235
+msgid "Successfully blacklisted."
+msgstr "Úspešne dané na blacklist."
+
+#: php/ajax-processor.php:235
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "komentár(e) boli označené ako spam podľa vašich rozšírených kritérií."
+
+#: php/ajax-processor.php:259
+msgid "Successfully Deleted"
+msgstr "Úspešne zmazané"
+
+#: php/ajax-processor.php:323
+msgid "Successfully Marked as Spam"
+msgstr "Úspešne označené za spam"
+
+#: php/ajax-processor.php:355
+msgid "Successfully Approved"
+msgstr "Úspešne schválené"
+
+#: php/ajax-processor.php:385
+msgid "Successfully Marked for Moderation"
+msgstr "Úspešne označené na moderáciu"
+
+#: php/ajax-processor.php:422
+msgid "Successfully De-linked"
+msgstr "Odkaz úspešne zmazaný"
+
+#: php/blacklist-comment.php:70
+#: php/comment-editor.php:110
+msgid "Main"
+msgstr "Hlavné"
+
+#: php/blacklist-comment.php:71
+#: php/comment-editor.php:111
+msgid "Advanced"
+msgstr "Rozšírené"
+
+#: php/blacklist-comment.php:75
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "Vyberte z možností nižšie pre pridanie do blacklistu komentárov."
+
+#: php/blacklist-comment.php:80
+#: php/blacklist-comment.php:110
+#: php/comment-editor.php:129
+msgid "Name"
+msgstr "Meno"
+
+#: php/blacklist-comment.php:87
+#: php/blacklist-comment.php:117
+#: php/comment-editor.php:141
+msgid "URL"
+msgstr "URL"
+
+#: php/blacklist-comment.php:94
+#: php/blacklist-comment.php:124
+msgid "E-mail Address"
+msgstr "E-mailová adresa"
+
+#: php/blacklist-comment.php:98
+#: php/blacklist-comment.php:128
+msgid "IP Address"
+msgstr "IP adresa"
+
+#: php/blacklist-comment.php:104
+msgid "Spam Matching Comments"
+msgstr "Komentáre zhodujúce sa so spamom"
+
+#: php/blacklist-comment.php:105
+msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+msgstr "Príklad: Vybraním 'email' a 'meno' označí za spam všetky komentáre, kde sa zhodujú meno aj e-mail."
+
+#: php/blacklist-comment.php:105
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "Prosím buďte opatrní s touto funkciou. Nie je tu možnosť Späť."
+
+#: php/blacklist-comment.php:137
+#: php/comment-editor.php:203
+#: php/email.php:94
+#: php/request-deletion.php:78
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: php/blacklist-comment.php:139
+#: php/comment-editor.php:206
+#: php/email.php:96
+#: php/move-comment.php:163
+#: php/request-deletion.php:80
+msgid "Close"
+msgstr "Zatvoriť"
+
+#: php/comment-editor.php:163
+#, php-format
+msgid "<b>%1$s</b> :on Submitted"
+msgstr "<b>%1$s</b> :v Odoslané"
+
+#: php/comment-editor.php:166
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "Zaslané: <b>%1$s</b>"
+
+#: php/comment-editor.php:170
+msgid "Adjust Comment Time"
+msgstr "Zmeniť čas komentára"
+
+#: php/comment-editor.php:172
+msgid "Adjust Comment Status"
+msgstr "Zmeniť stav komentára"
+
+#: php/comment-editor.php:183
+#: php/comment-editor.php:190
+msgid "Approved"
+msgstr "Schválené"
+
+#: php/comment-editor.php:184
+#: php/comment-editor.php:191
+msgid "Pending"
+msgstr "Čaká..."
+
+#: php/comment-editor.php:202
+msgid "Save"
+msgstr "Uložiť"
+
+#: php/comment-popup.php:37
+msgid "Please type out your comment below."
+msgstr "Prosím vpíšte váš komentár nižšie"
+
+#: php/comment-popup.php:40
+msgid "Save and Return"
+msgstr "Uložiť a vrátiť sa"
+
+#: php/comment-popup.php:40
+msgid "Submit Comment"
+msgstr "Odoslať komentár"
+
+#: php/email.php:73
+msgid "To"
+msgstr "Komu"
+
+#: php/email.php:77
+msgid "From"
+msgstr "Od"
+
+#: php/email.php:81
+msgid "Site Admin"
+msgstr "Administrátor stránky"
+
+#: php/email.php:81
+msgid "Post Author"
+msgstr "Autor príspevku"
+
+#: php/email.php:84
+msgid "Subject"
+msgstr "Predmet"
+
+#: php/email.php:93
+msgid "Send"
+msgstr "Odoslať"
+
+#: php/move-comment.php:66
+msgid "Move by Post"
+msgstr "Presunúť podľa príspevku"
+
+#: php/move-comment.php:67
+msgid "Move by Title"
+msgstr "Presunúť podľa titulky"
+
+#: php/move-comment.php:68
+msgid "Move by ID"
+msgstr "Presunúť podľa identifikátora"
+
+#: php/move-comment.php:80
+msgid "Previous"
+msgstr "Predchádzajúci"
+
+#: php/move-comment.php:80
+msgid "Next"
+msgstr "Ďalší"
+
+#: php/move-comment.php:91
+#: php/move-comment.php:99
+#: php/move-comment.php:116
+#: php/move-comment.php:124
+msgid "Search"
+msgstr "Hľadať"
+
+#: php/move-comment.php:93
+#: php/move-comment.php:97
+msgid "Title"
+msgstr "Titulok"
+
+#: php/move-comment.php:118
+#: php/move-comment.php:122
+msgid "Post ID"
+msgstr "ID príspevku"
+
+#: php/move-comment.php:149
+#: php/move-comment.php:152
+msgid "Mark as Approved"
+msgstr "Označ ako schválené"
+
+#: php/request-deletion.php:69
+msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+msgstr "Prosím vysvetlite, prečo by mal byť komentár zmazaný. Po zaslaní požiadavky bude váš komentár zaslaný na moderáciu a nebude verejne viditeľný."
+
+#: php/request-deletion.php:77
+msgid "Send Request"
+msgstr "Zaslať požiadavku"
+
+#~ msgid "Individual Options"
+#~ msgstr "Individuálne možnosti"
+#~ msgid "Admin Panel Editing"
+#~ msgstr "Editovanie cez panel administrátora"
+#~ msgid "Post Editing"
+#~ msgstr "Úpravy príspevkov"
+#~ msgid ""
+#~ "By subscribing to the <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments Forums</a>, you will get access to automatic upgrades and "
+#~ "support."
+#~ msgstr ""
+#~ "Prihlásením sa do <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit "
+#~ "Comments Forums</a> získate prístup k automatickým aktualizáciám a "
+#~ "podpore."
+#~ msgid "Allow Users to Request Deletion of Comments?"
+#~ msgstr "Umožniť užívateľom žiadať o vymazávanie komentárov?"
+#~ msgid "Selecting \"No\" will turn off the deletion option."
+#~ msgstr "Vybraním \"Nie\" vypnete možnosť vymazávania."
+#~ msgid "Post/Admin CSS URL"
+#~ msgstr "URL pre CSS k článku pre administrátora"
+#~ msgid "Leaving a style empty will revert back to the default plugin styles."
+#~ msgstr "Ak necháte prázdne, použijú sa prednastavené štýly pluginu."
+#~ msgid "The URL should be relative to: "
+#~ msgstr "URL by mala byť relatívna k: "
+#~ msgid "Editor CSS URL"
+#~ msgstr "URL pre CSS editora"
+#~ msgid ""
+#~ "Selecting \"No\" will turn off comment editing for everyone except admin "
+#~ "types who have post and page editing permissions."
+#~ msgstr ""
+#~ "Vybraním \"Nie\" sa vypne úprava komentárov pre každého okrem správcov "
+#~ "majúcich povolenie upravovať príspevky."
+#~ msgid "Ajax Edit Comments"
+#~ msgstr "Ajax Edit Comments"
+#~ msgid "Global Options - These Options Affect Everyone"
+#~ msgstr "Všeobecné nastavenia - týkajúce sa každého"
+#~ msgid "The following affects the editing interface."
+#~ msgstr "Nasledujúce má vplyv na rozhranie pre úpravu."
+#~ msgid "Turn Off More Options?"
+#~ msgstr "Vypnúť \"Viac možností\"?"
+#~ msgid "Individual Options - These Options Only Affect You"
+#~ msgstr "Individuálne nastavenia - tieto sa týkajú len vás"
+#~ msgid "Show Advanced Options in Editor?"
+#~ msgstr "Ukázať rozšírené možnosti v editore?"
+#~ msgid "Selecting \"Yes\" will show advanced options in the editor window"
+#~ msgstr "Vybraním \"Áno\" ukážete rozšírené môžnosti úprav v okne úprav."
+#~ msgid "Ajax Edit Comments Cleanup"
+#~ msgstr "Údržba pluginu Ajax Edit Comments"
+#~ msgid "Not Spam"
+#~ msgstr "Nie je spam"
+#~ msgid "Please"
+#~ msgstr "Prosím"
+#~ msgid "Donate"
+#~ msgstr "Prispejte"
+#~ msgid ""
+#~ "Tweaking the style options is recommended for advanced users only.  If "
+#~ "you choose to disable styles, you will have to provide your own styles in "
+#~ "your default WordPress stylesheet."
+#~ msgstr ""
+#~ "Upravovanie možností štýlov je odporúčané len skúseným používateľom. Ak "
+#~ "zneaktívnite štýly, budete musieť poskytnúť vlastné štýly v predvolenom "
+#~ "WordPress stylesheete."
+#~ msgid "Turn Off Icons?"
+#~ msgstr "Vypnúť ikony?"
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "Vybraním \"Áno\" sa nebudú zobrazovať ikonky tohoto pluginu."
+#~ msgid "Gravatars"
+#~ msgstr "Gravatary"
+#~ msgid "Turning off Gravatars may solve some plugin compatibility issues."
+#~ msgstr ""
+#~ "Vypnutím Gravatarov môžete vyriešiť niektoré problémy s kompatibilitou "
+#~ "pluginu."
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "Vypnúť Gravatary?"
+#~ msgid "Please leave as is if you wish to retain proper plugin credit."
+#~ msgstr "Prosím neupravujte, ak chcete zachovať správneho autora pluginu."
+#~ msgid "Editor Title"
+#~ msgstr "Titulok editora"
+#~ msgid "Title URL"
+#~ msgstr "URL titulku"
+#~ msgid "Deleted"
+#~ msgstr "Zmazané"
+

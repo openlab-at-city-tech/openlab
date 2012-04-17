@@ -1,4 +1,4 @@
-<div class="item-list-tabs" id="bpsubnav">
+<div class="item-list-tabs" id="bpsubnav" role="navigation">
 	<ul>
 		<?php bp_get_options_nav() ?>
 

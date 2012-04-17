@@ -9,120 +9,167 @@
  * the 3.0 WordPress version merge takes place.
  */
 
-if ( !bp_core_is_multisite() ) {
-	$wpdb->base_prefix = $wpdb->prefix;
-	$wpdb->blogid = 1;
-}
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
 
-function bp_core_is_multisite() {
-	if ( function_exists( 'is_multisite' ) )
-		return is_multisite();
-
-	if ( !function_exists( 'wpmu_signup_blog' ) )
-		return false;
-
-	return true;
+/**
+ * Parso the WordPress core version number into the major release
+ *
+ * @since BuddyPress (1.5.2)
+ * @global string $wp_version
+ * @return string 
+ */
+function bp_get_major_wp_version() {
+	global $wp_version;
+	
+	return (float) $wp_version;
 }
 
 /**
- * bp_core_is_main_site
- *
- * Checks if current blog is root blog of site
- *
- * @since 1.2.6
- * @package BuddyPress
- *
- * @param int $blog_id optional blog id to test (default current blog)
- * @return bool True if not multisite or $blog_id is main site
+ * Only add abstraction functions if WordPress is not in multisite mode
  */
-function bp_core_is_main_site( $blog_id = '' ) {
-	global $current_site, $current_blog;
+if ( !is_multisite() ) {
+	global $wpdb;
 
-	if ( !bp_core_is_multisite() )
-		return true;
+	$wpdb->base_prefix = $wpdb->prefix;
+	$wpdb->blogid      = BP_ROOT_BLOG;
 
-	if ( empty( $blog_id ) )
-		$blog_id = $current_blog->blog_id;
+	if ( !function_exists( 'get_blog_option' ) ) {
+		function get_blog_option( $blog_id, $option_name, $default = false ) {
+			return get_option( $option_name, $default );
+		}
+	}
 
-	return $blog_id == $current_site->blog_id;
+	if ( !function_exists( 'update_blog_option' ) ) {
+		function update_blog_option( $blog_id, $option_name, $value ) {
+			return update_option( $option_name, $value );
+		}
+	}
+
+	if ( !function_exists( 'delete_blog_option' ) ) {
+		function delete_blog_option( $blog_id, $option_name ) {
+			return delete_option( $option_name );
+		}
+	}
+
+	if ( !function_exists( 'switch_to_blog' ) ) {
+		function switch_to_blog() {
+			return bp_get_root_blog_id();
+		}
+	}
+
+	if ( !function_exists( 'restore_current_blog' ) ) {
+		function restore_current_blog() {
+			return bp_get_root_blog_id();
+		}
+	}
+
+	if ( !function_exists( 'get_blogs_of_user' ) ) {
+		function get_blogs_of_user() {
+			return false;
+		}
+	}
+
+	if ( !function_exists( 'update_blog_status' ) ) {
+		function update_blog_status() {
+			return true;
+		}
+	}
+
+	if ( !function_exists( 'is_subdomain_install' ) ) {
+		function is_subdomain_install() {
+			if ( ( defined( 'VHOST' ) && 'yes' == VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) )
+				return true;
+
+			return false;
+		}
+	}
 }
 
 function bp_core_get_status_sql( $prefix = false ) {
-	if ( !bp_core_is_multisite() )
+	if ( !is_multisite() )
 		return "{$prefix}user_status = 0";
 	else
 		return "{$prefix}spam = 0 AND {$prefix}deleted = 0 AND {$prefix}user_status = 0";
 }
 
-if ( !function_exists( 'get_blog_option' ) ) {
-	function get_blog_option( $blog_id, $option_name, $default = false ) {
-		return get_option( $option_name, $default );
-	}
-}
-
-if ( !function_exists( 'add_blog_option' ) ) {
-	function add_blog_option( $blog_id, $option_name, $option_value ) {
-		return add_option( $option_name, $option_value );
-	}
-}
-
-if ( !function_exists( 'update_blog_option' ) ) {
-	function update_blog_option( $blog_id, $option_name, $option_value ) {
-		return update_option( $option_name, $option_value );
-	}
-}
-
-if ( !function_exists( 'switch_to_blog' ) ) {
-	function switch_to_blog() {
-		return 1;
-	}
-}
-
-if ( !function_exists( 'restore_current_blog' ) ) {
-	function restore_current_blog() {
-		return 1;
-	}
-}
-
-if ( !function_exists( 'get_blogs_of_user' ) ) {
-	function get_blogs_of_user() {
-		return false;
-	}
-}
-
-if ( !function_exists( 'update_blog_status' ) ) {
-	function update_blog_status() {
-		return true;
-	}
-}
-
-if ( !function_exists( 'is_subdomain_install' ) ) {
-	function is_subdomain_install() {
-		if ( ( defined( 'VHOST' ) && 'yes' == VHOST ) || ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) )
-			return true;
-
-		return false;
-	}
-}
-
-// Deprecated - 1.2.6
-if ( !function_exists( 'is_site_admin' ) ) {
-	function is_site_admin( $user_id = false ) {
-		return is_super_admin( $user_id );
-	}
-}
-
-// Added for WordPress 3.1 support
-if ( !function_exists( 'get_dashboard_url' ) ) {
-
+/**
+ * Multibyte encoding fallback functions
+ *
+ * The PHP multibyte encoding extension is not enabled by default. In cases where it is not enabled,
+ * these functions provide a fallback.
+ *
+ * Borrowed from MediaWiki, under the GPLv2. Thanks!
+ */
+if ( !function_exists( 'mb_strlen' ) ) {
 	/**
-	 * Make sure the 'network_admin_menu' hook (which is new to 3.1) fires
-	 * on our reliable friend 'admin_menu'
+	 * Fallback implementation of mb_strlen, hardcoded to UTF-8.
+	 * @param string $str
+	 * @param string $enc optional encoding; ignored
+	 * @return int
 	 */
-	function bp_network_admin_menu() {
-		do_action( 'network_admin_menu' );
+	function mb_strlen( $str, $enc = '' ) {
+		$counts = count_chars( $str );
+		$total = 0;
+
+		// Count ASCII bytes
+		for( $i = 0; $i < 0x80; $i++ ) {
+			$total += $counts[$i];
+		}
+
+		// Count multibyte sequence heads
+		for( $i = 0xc0; $i < 0xff; $i++ ) {
+			$total += $counts[$i];
+		}
+		return $total;
 	}
-	add_action( 'admin_menu', 'bp_network_admin_menu' );
+}
+
+if ( !function_exists( 'mb_strpos' ) ) {
+	/**
+	 * Fallback implementation of mb_strpos, hardcoded to UTF-8.
+	 * @param $haystack String
+	 * @param $needle String
+	 * @param $offset String: optional start position
+	 * @param $encoding String: optional encoding; ignored
+	 * @return int
+	 */
+	function mb_strpos( $haystack, $needle, $offset = 0, $encoding = '' ) {
+		$needle = preg_quote( $needle, '/' );
+
+		$ar = array();
+		preg_match( '/' . $needle . '/u', $haystack, $ar, PREG_OFFSET_CAPTURE, $offset );
+
+		if( isset( $ar[0][1] ) ) {
+			return $ar[0][1];
+		} else {
+			return false;
+		}
+	}
+}
+
+if ( !function_exists( 'mb_strrpos' ) ) {
+	/**
+	 * Fallback implementation of mb_strrpos, hardcoded to UTF-8.
+	 * @param $haystack String
+	 * @param $needle String
+	 * @param $offset String: optional start position
+	 * @param $encoding String: optional encoding; ignored
+	 * @return int
+	 */
+	function mb_strrpos( $haystack, $needle, $offset = 0, $encoding = '' ) {
+		$needle = preg_quote( $needle, '/' );
+
+		$ar = array();
+		preg_match_all( '/' . $needle . '/u', $haystack, $ar, PREG_OFFSET_CAPTURE, $offset );
+
+		if( isset( $ar[0] ) && count( $ar[0] ) > 0 &&
+			isset( $ar[0][count( $ar[0] ) - 1][1] ) ) {
+			return $ar[0][count( $ar[0] ) - 1][1];
+		} else {
+			return false;
+		}
+	}
 }
 
 ?>

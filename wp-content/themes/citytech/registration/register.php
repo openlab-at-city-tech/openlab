@@ -1,7 +1,7 @@
 <?php
 add_filter('genesis_pre_get_option_site_layout', 'cuny_home_layout');
 function cuny_home_layout($opt) {
-    $opt = 'full-width-content';
+    $opt = 'content-sidebar';
     return $opt;
 }
 
@@ -17,12 +17,13 @@ function cuny_registration_page() {
 
 			<?php if ( 'request-details' == bp_get_current_signup_step() ) : ?>
 
-				<h2><?php _e( 'Create an Account', 'buddypress' ) ?></h2>
+				<h1 class="entry-title"><?php _e( 'Create an Account', 'buddypress' ) ?></h2>
 
 				<?php do_action( 'template_notices' ) ?>
 
 				<p><?php _e( 'Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress' ) ?></p>
-				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site. <strong>Please use your City Tech email address to register</strong>. You may change your preferred email address after registering if you'd like.</p>
+				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p> 
+				<p><strong>Please use your City Tech email address to register</strong>. You may change your preferred email address after registering if you'd like.</p>
 				<?php do_action( 'bp_before_account_details_fields' ) ?>
 
 				<div class="register-section" id="basic-details-section">
@@ -38,6 +39,9 @@ function cuny_registration_page() {
 					<label for="signup_email"><?php _e( 'Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress' ) ?> </label>
 					<?php do_action( 'bp_signup_email_errors' ) ?>
 					<input type="text" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
+
+					<label for="signup_email_confirm">Confirm Email Address (required)</label>
+					<input type="text" name="signup_email_confirm" id="signup_email_confirm" value="" />
 
 					<label for="signup_password"><?php _e( 'Choose a Password', 'buddypress' ) ?> <?php _e( '(required)', 'buddypress' ) ?></label>
 					<?php do_action( 'bp_signup_password_errors' ) ?>
@@ -60,21 +64,21 @@ function cuny_registration_page() {
 					<div class="register-section" id="profile-details-section">
 
 						<h4><?php _e( 'Public Profile Details', 'buddypress' ) ?></h4>
-						
+
 						<p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
 						<?php echo wds_get_register_fields();?>
-                        
+
                         <?php do_action( 'bp_after_signup_profile_fields' ) ?>
 
 					</div><!-- #profile-details-section -->
 
-					
+
 
 				<?php endif; ?>
 
 				<?php do_action( 'bp_before_registration_submit_buttons' ) ?>
-				
+
 				<div class="submit">
 					<input style="display:none;" type="submit" name="signup_submit" id="signup_submit" value="<?php _e( 'Complete Sign Up', 'buddypress' ) ?> &rarr;" />
 				</div>
@@ -97,7 +101,7 @@ function cuny_registration_page() {
 					<p><?php _e( 'You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress' ) ?></p>
 				<?php endif; ?>
 
-				<?php if ( bp_is_active( 'xprofile' ) && !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
+				<!--<?php if ( bp_is_active( 'xprofile' ) && !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
 
 					<?php if ( 'upload-image' == bp_get_avatar_admin_step() ) : ?>
 
@@ -146,7 +150,7 @@ function cuny_registration_page() {
 
 					<?php endif; ?>
 
-				<?php endif; ?>
+				<?php endif; ?> -->
 
 			<?php endif; // completed-confirmation signup step ?>
 
@@ -159,7 +163,24 @@ function cuny_registration_page() {
 		<?php do_action( 'bp_after_register_page' ) ?>
 
 	<?php do_action( 'bp_after_directory_activity_content' ) ?>
-
+	
+	<!-- add blank sidebar -->
+	<?php
+		add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_register_actions');
+	
+	function cuny_buddypress_register_actions() {
+		global $bp;?>
+		<h2 class="sidebar-title">&nbsp;</h2>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+	<?php
+	}
+	?>
 	<script type="text/javascript">
 		jQuery(document).ready( function() {
 			if ( jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show') )

@@ -25,7 +25,7 @@ function cuny_group_single() { ?>
 			
 				<div id="club-header-content" class="alignleft">
 					<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s ago', 'buddypress' ), bp_get_group_last_active() ) ?></span>
+					<span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span>
 				
 					<?php do_action( 'bp_before_group_header_meta' ) ?>
 				
@@ -168,11 +168,11 @@ add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions'
 function cuny_buddypress_group_actions() { ?>
 <?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
-			<h2 class="sidebar-header">Dig A Little Deeper</h2>
+			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
 			<?php 
 			do_action( 'bp_group_header_actions' ); ?>
 			<ul>
-				<?php bp_get_options_nav();?>
+				<?php cuny_get_options_nav();?>
 			</ul>
 			<?php do_action( 'bp_group_options_nav' ) ?>
 

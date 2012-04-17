@@ -4,8 +4,9 @@
 /* Members Slider */
 function my_init_method() {
     if (!is_admin()) {
-        wp_deregister_script( 'jquery' );
-        wp_register_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js');
+       // wp_deregister_script( 'jquery' );
+      //  wp_register_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js');
+        //moved jquery call here so that the following functions would work
         wp_enqueue_script( 'jquery' );
         wp_register_script( 'jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
         wp_enqueue_script( 'jcarousellite' );
@@ -142,12 +143,16 @@ function slider_meta(){
 
 /* Save Post */
 add_action('save_post', 'save_details');
-
 function save_details(){
-  global $post;
- 
-  update_post_meta($post->ID, "tab_title", $_POST["tab_title"]);
-  update_post_meta($post->ID, "slide_url", $_POST["slide_url"]);
+	global $post;
+	
+	if ( isset( $_POST['tab_title'] ) ) {
+		update_post_meta($post->ID, "tab_title", $_POST["tab_title"]);
+	}
+
+	if ( isset( $_POST['slide_url'] ) ) {	
+		update_post_meta($post->ID, "slide_url", $_POST["slide_url"]);
+	}		
 }
 
 /* Slider Columns */

@@ -114,50 +114,56 @@ ul.item-list li {
 }
 /* buttons */
 #search-submit, 
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	input[type=submit],
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	#sidebar-me a.button,
-	.button {
-		background: #2C343F;
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Arial, Tahoma, Verdana;
-		text-decoration: none;
-		text-transform: uppercase;
-		margin: 0;
-		padding: 2px 5px 2px 5px;
-		border: 1px solid #2C343F;
-		-moz-border-radius: 5px;
-		-khtml-border-radius: 5px;
-		-webkit-border-radius: 5px;
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+input[type=submit],
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+#sidebar-me a.button,
+#submit_topic_cancel,
+.button {
+	background: #2C343F;
+	border: 1px solid #2C343F;
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	margin: 0;
+	padding: 2px 5px 2px 5px;
+	text-decoration: none;
+	text-transform: uppercase;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 #search-submit:hover, 
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	#sidebar-me a.button:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-form h3 a:hover,
-	input[type=submit]:hover {
-		background: #753E0D;
-		border: 1px solid #1B1003;
-		cursor: pointer;
-		color: #FFFFFF;
-		text-decoration: none;
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+#sidebar-me a.button:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form h3 a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #753E0D;
+	border: 1px solid #1B1003;
+	cursor: pointer;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#content .padder #submit {
+	background: #2C343F;
+	border: 1px solid #2C343F;
 }
 #content .dir-search label input[type=text] {
 	text-transform: none;

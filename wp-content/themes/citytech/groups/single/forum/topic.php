@@ -18,7 +18,7 @@
 
 		<div id="topic-meta">
 			<h3><?php bp_the_topic_title() ?> (<?php bp_the_topic_total_post_count() ?>)</h3>
-			<a class="button" href="<?php bp_forum_permalink() ?>/">&larr; <?php _e( 'Group Forum', 'buddypress' ) ?></a> &nbsp; <a class="button" href="<?php bp_forum_directory_permalink() ?>/"><?php _e( 'Group Forum Directory', 'buddypress') ?></a>
+			<a class="button" href="<?php bp_forum_permalink() ?>">&larr; <?php _e( 'Group Forum', 'buddypress' ) ?></a>
 
 			<div class="admin-links">
 				<?php if ( bp_group_is_admin() || bp_group_is_mod() || bp_get_the_topic_is_mine() ) : ?>
@@ -39,7 +39,7 @@
 						<a href="<?php bp_the_topic_post_poster_link() ?>">
 							<?php bp_the_topic_post_poster_avatar( 'width=40&height=40' ) ?>
 						</a>
-						<?php echo sprintf( __( '%s said %s ago:', 'buddypress' ), bp_get_the_topic_post_poster_name(), bp_get_the_topic_post_time_since() ) ?>
+						<?php echo sprintf( __( '%s said %s:', 'buddypress' ), bp_get_the_topic_post_poster_name(), bp_get_the_topic_post_time_since() ) ?>
 					</div>
 
 					<div class="post-content">

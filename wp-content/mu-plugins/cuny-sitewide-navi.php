@@ -52,24 +52,32 @@ function cuny_site_wide_navi_styles() {
 	wp_enqueue_style( 'SW_Navi_styles' );
 }
 
-add_action('wp_footer', 'cuny_login_popup_script');
+add_action('wp_head', 'cuny_login_popup_script');
 function cuny_login_popup_script() {
+	?>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var cpl = jQuery('#cuny-popup-login');
+		jQuery("#popup-login-link").show();
+		jQuery(cpl).hide();
 
-		echo '<script type="text/javascript">';
-		echo 'jQuery(document).ready(function(){';
+		jQuery("#popup-login-link").click(function(){
+			if ( 'none' == jQuery(cpl).css('display') ) {
+				jQuery(cpl).show();
+				jQuery("#sidebar-user-login").focus();
+			} else {
+				jQuery(cpl).hide();
+			}
 
-				echo 'jQuery("#popup-login-link").show();';
-				echo 'jQuery("#cuny-popup-login").hide();';
+			return false;
+		});
 
-				echo 'jQuery("#popup-login-link").click(function(){';
-					echo 'jQuery("#cuny-popup-login").slideToggle();';
-					echo 'jQuery("#sidebar-user-login").focus();';
-				echo '});';
-				echo 'jQuery(".close-popup-login").click(function(){';
-					echo 'jQuery("#cuny-popup-login").hide();';
-				echo '});';
-			echo '});';
-		echo '</script>';
+		jQuery(".close-popup-login").click(function(){
+			jQuery(cpl).hide();
+		});
+	});
+	</script>
+	<?php
 
 }
 
@@ -78,8 +86,8 @@ function cuny_site_wide_google_font() {
 	echo "<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>";
 }
 
-add_action('cuny_bp_adminbar_menus', 'cuny_bp_admin_menu');
-function cuny_bp_admin_menu() {
+add_action('cuny_bp_profile_menus', 'cuny_bp_profile_menu');
+function cuny_bp_profile_menu() {
 	 global $bp;
 	 //print_r($bp);
 	 	if ( !is_user_logged_in() )
@@ -87,33 +95,141 @@ function cuny_bp_admin_menu() {
 
 	      //echo '<pre>';
 	      	//print_r($bp);
-	      //echo '</pre>';
-	 ?>
+	      //echo '</pre>'; ?>
 <ul class="main-nav">
 
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"members")
+	<li class="sq-bullet <?php if ( strpos($_SERVER['REQUEST_URI'],"members")
 			                      &&
 		              !strpos($_SERVER['REQUEST_URI'],"friends")
 			                      &&
-		              !strpos($_SERVER['REQUEST_URI'],"messages")) {
+		              !strpos($_SERVER['REQUEST_URI'],"messages")
+		              			&&
+		              !( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) ) {
 		                    echo ' selected-page'; }
-		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">My Profile</a>
+		    ?>" id="bp-adminbar-account-menu"><a href="<?php echo bp_loggedin_user_domain() ?>">Profile</a>
     	<ul>
         <?php
-		foreach( (array)$bp->bp_options_nav['profile'] as $subnav_item ) {
-			$link = str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] );
-			$name = str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] );
-			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
-			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
-			$sub_counter++;
-		}
-		$link = $bp->loggedin_user->domain."settings/";
-		echo '<li' . $alt . '><a id="bp-admin-settings" href="' . $link . '">Settings</a></li>';
-		?>
+        $link = $bp->loggedin_user->domain."settings/"; ?>
+		<li><a id="bp-admin-settings" href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug(); ?>">Settings</a>
+			<ul>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/general">General</a></li>
+		<li><a href="<?php echo $bp->loggedin_user->domain; ?>settings/notifications">Notifications</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/delete-account/'; ?>">Delete Account</a></li>
+			</ul>
+		<?php echo '</li>'; ?>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'profile/edit/'; ?>">Edit Profile</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'profile/change-avatar/'; ?>">Change Avatar</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/'; ?>">Send Invites</a>
+			<ul>
+				<li><a href="<?php echo bp_displayed_user_domain(). 'invite-anyone/sent-invites/'; ?>">Sent</a></li>
+			</ul>
+		</li>
         </ul>
 
     </li>
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"friends") ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">My Friends</a>
+
+	<li class="sq-bullet <?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">Courses</a><ul>
+<?php
+        /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
+	      }
+
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
+	       if(count( $course_info )>0){
+	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
+	      		echo '<li>';
+	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
+	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
+	      		echo '</li>';
+	      	}
+		 }else{
+			 echo "<li>You do not have any courses.</li>";
+		  }*/ ?>
+
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=active'; ?>">Active</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/?status=inactive'; ?>">Inactive</a> | </li>
+          <li class="active-submenu"><a href="<?php echo bp_displayed_user_domain(). 'my-courses/'; ?>">All</a></li>
+
+		  <li>
+	      <?php $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+			  ?>
+			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>"><?php _e( '+ Create a Course', 'buddypress' ) ?></a>
+	      <?php } ?>
+          </ul></li>
+
+	<li class="sq-bullet <?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">Projects</a><ul>
+<?php
+        /*if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $project_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
+            wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
+		}
+
+	      $project_info = isset( $project_info['groups'] ) ? $project_info['groups'] : array();
+	      if(count( $project_info )>0){
+		  //print_r($project_info);
+	      	for ( $i = 0; $i < count( $project_info ); $i++ ) {
+	      		echo '<li>';
+	      			$project_slug = groups_get_group(array( 'group_id' => $project_info[$i]->id))->slug;
+	      			$project_name = groups_get_group(array( 'group_id' => $project_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $project_slug .'">' . $project_name .'</a>';
+	      		echo '</li>';
+	      	}
+	      }else{
+			 echo "<li>You do not have any projects.</li>";
+		  }
+	      */ ?>
+
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-projects/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
+          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'Create a Project', 'buddypress' ) ?></a></li>
+	      </ul></li>
+	<li class="sq-bullet <?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">Clubs</a><ul>
+<?php
+        /*if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
+            $course_info = wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
+            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_info, 'bp' );
+		}
+
+	      $course_info = isset( $course_info['groups'] ) ? $course_info['groups'] : array();
+	      if(count( $course_info )>0){
+	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
+	      		echo '<li>';
+	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
+	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
+	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
+	      		echo '</li>';
+	      	}
+	      }else{
+				echo "<li>You do not have any clubs.</li>";
+		  }*/
+	      ?>
+
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=active' ?>"><?php _e( 'Active', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/?status=inactive' ?>"><?php _e( 'Inactive', 'buddypress' ) ?></a> | </li>
+	      <li class="active-submenu"><a href="<?php echo bp_get_root_domain() . '/my-clubs/' ?>"><?php _e( 'All', 'buddypress' ) ?></a></li>
+          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'Create a Club', 'buddypress' ) ?></a></li>
+	      </ul></li>
+
+	      <?php if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) { ?>
+			 <li class="sq-bullet <?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">Sites</a>
+    	<ul>
+        	<?php /*if ( bp_has_blogs('user_id='.$bp->loggedin_user->id) ) :
+			  while ( bp_blogs() ) : bp_the_blog(); ?>
+			  	<li>
+	      			<a href="<?php bp_blog_permalink() ?>"><?php bp_blog_name() ?></a>
+	      		<ul><li><a href="<?php bp_blog_permalink() ?>wp-admin">Dashboard</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/post-new.php">New Post</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit.php">Manage Posts</a></li>
+	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit-comments.php">Manage Comments</a></li></ul></li>
+			  <?php endwhile;
+			endif; */?>
+        </ul>
+    </li>
+    	 <li class="sq-bullet <?php if ( bp_is_friends_component() && !bp_is_user_friend_requests() ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->loggedin_user->domain . $bp->friends->slug ?>">Friends</a>
 <!--	<ul> -->
 <?php
 /*
@@ -147,135 +263,34 @@ function cuny_bp_admin_menu() {
 
 <!-- </ul> -->
 	</li>
-	<li class="<?php if ( is_page('my-courses') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-courses/">My Courses</a><ul>
-<?php
-        if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Course');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
-	      }
-
-	      $course_info = $course_info[groups];
-	       if(count( $course_info )>0){
-	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
-	      		echo '<li>';
-	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
-	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
-	      		echo '</li>';
-	      	}
-		 }else{
-			 echo "<li>You do not have any courses.</li>";
-		  }
-
-	      $faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		  if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
-			  ?>
-			  <hr />
-			 <a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=course&new=true' ?>">+ <?php _e( 'New Course', 'buddypress' ) ?></a>
 	      <?php } ?>
-          </ul></li>
 
-	<li class="<?php if ( is_page('my-projects') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-projects/">My Projects</a><ul>
-<?php
-        if ( !$project_ids = wp_cache_get( 'cuny_project_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $project_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'Project');
-            wp_cache_set( 'cuny_project_ids_' . $bp->loggedin_user->id, $project_ids, 'bp' );
-		}
-
-	      $project_info = $project_info[groups];
-	      if(count( $project_info )>0){
-		  //print_r($project_info);
-	      	for ( $i = 0; $i < count( $project_info ); $i++ ) {
-	      		echo '<li>';
-	      			$project_slug = groups_get_group(array( 'group_id' => $project_info[$i]->id))->slug;
-	      			$project_name = groups_get_group(array( 'group_id' => $project_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $project_slug .'">' . $project_name .'</a>';
-	      		echo '</li>';
-	      	}
-	      }else{
-			 echo "<li>You do not have any projects.</li>";
-		  }
-	      ?>
-	      <hr />
-	      <li><a href="<?php echo bp_get_root_domain() . '/projects/' ?>">+ <?php _e( 'Join Projects', 'buddypress' ) ?></a></li>
-          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=project&new=true' ?>">+ <?php _e( 'New Project', 'buddypress' ) ?></a></li>
-	      </ul></li>
-	<li class="<?php if ( is_page('my-clubs') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-clubs/">My Clubs</a><ul>
-<?php
-        if ( !$friend_ids = wp_cache_get( 'cuny_course_ids_' . $bp->loggedin_user->id, 'bp' ) ) {
-            $course_info = BP_Groups_Group::wds_get_by_meta( 5, null, $bp->loggedin_user->id, false, false, 'wds_group_type', 'club');
-            wp_cache_set( 'cuny_course_ids_' . $bp->loggedin_user->id, $course_ids, 'bp' );
-		}
-
-	      $course_info = $course_info[groups];
-	      if(count( $course_info )>0){
-	      	for ( $i = 0; $i < count( $course_info ); $i++ ) {
-	      		echo '<li>';
-	      			$groups_slug = groups_get_group(array( 'group_id' => $course_info[$i]->id))->slug;
-	      			$groups_name = groups_get_group(array( 'group_id' => $course_info[$i]->id))->name;
-	      			echo '<a href="' . $bp->root_domain .'/groups/' . $groups_slug .'">' . $groups_name .'</a>';
-	      		echo '</li>';
-	      	}
-	      }else{
-				echo "<li>You do not have any clubs.</li>";
-		  }
-	      ?>
-	      <hr />
-	      <li><a href="<?php echo bp_get_root_domain() . '/clubs/' ?>">+ <?php _e( 'Join Clubs', 'buddypress' ) ?></a></li>
-          <li><a href="<?php echo bp_get_root_domain() . '/' . BP_GROUPS_SLUG . '/create/step/group-details/?type=club&new=true' ?>">+ <?php _e( 'New Club', 'buddypress' ) ?></a></li>
-	      </ul></li>
-	<li class="<?php if ( is_page('my-sites') ) { echo ' selected-page'; } ?>"><a href="<?php echo $bp->root_domain ?>/my-sites/">My Sites</a>
+	<li class="sq-bullet <?php if ( bp_is_messages_component() || bp_is_user_friend_requests() || ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">Messages</a>
     	<ul>
-        	<?php if ( bp_has_blogs('user_id='.$bp->loggedin_user->id) ) :
-			  while ( bp_blogs() ) : bp_the_blog(); ?>
-			  	<li>
-	      			<a href="<?php bp_blog_permalink() ?>"><?php bp_blog_name() ?></a>
-	      		<ul><li><a href="<?php bp_blog_permalink() ?>wp-admin">Dashboard</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/post-new.php">New Post</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit.php">Manage Posts</a></li>
-	      			<li><a href="<?php bp_blog_permalink() ?>wp-admin/edit-comments.php">Manage Comments</a></li></ul></li>
-			  <?php endwhile;
-			endif; ?>
-        	<hr />
-	     	<a href="<?php echo bp_get_root_domain() . '/sites/create/'; ?>">+ <?php _e( 'New Site', 'buddypress' ) ?></a>
-        </ul>
-    </li>
-	<li class="<?php if ( strpos($_SERVER['REQUEST_URI'],"messages") ) { echo ' selected-page'; } ?>"><a href="<?php echo bp_loggedin_user_domain() ?>messages/">My Messages</a>
-    	<ul>
+
         <?php
+        	/*$sub_counter = 0;
 		foreach( (array)$bp->bp_options_nav['messages'] as $subnav_item ) {
-			$link = str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] );
-			$name = str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] );
+			$link = bp_displayed_user_id() ? str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] ) : $subnav_item['link'];
+			$name = bp_displayed_user_id() ? str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] ) : $subnav_item['name'];
 			$alt = ( 0 == $sub_counter % 2 ) ? ' class="alt"' : '';
 			echo '<li' . $alt . '><a id="bp-admin-' . $subnav_item['css_id'] . '" href="' . $link . '">' . $name . '</a></li>';
 			$sub_counter++;
-		}
+		}*/
 		?>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/'; ?>">Inbox</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/?status=unread'; ?>">&nbsp;&nbsp;Unread</a></li>
+			<li><a href="<?php echo bp_displayed_user_domain(). 'messages/inbox/?status=read'; ?>">&nbsp;&nbsp;Read</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/sentbox/'; ?>">Sent</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain(). 'messages/compose/'; ?>">Compose</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . 'friends/requests/' ?>">Friend Requests</a></li>
+		<li><a href="<?php echo bp_displayed_user_domain() . 'groups/invites/' ?>">Invitations</a></li>
 
-		<?php 	if ( $notifications = bp_core_get_notifications_for_user( $bp->loggedin_user->id ) ) { ?>
-		<?php echo '<li>Notifications<span>(' . count( $notifications ) ?>)</span><ul><?php
+		<?php if ( is_super_admin() ) : ?>
+			<li><a href="<?php echo bp_displayed_user_domain() . 'messages/notices/' ?>">Notices</a></li>
+		<?php endif ?>
 
-			if ( $notifications ) {
-				$counter = 0;
-				for ( $i = 0; $i < count($notifications); $i++ ) {
-					$alt = ( 0 == $counter % 2 ) ? ' class="alt"' : ''; ?>
-
-					<li<?php echo $alt ?>><?php echo $notifications[$i] ?></li>
-
-					<?php $counter++;
-				}
-				?> </ul></li>
-			<?php } else { ?>
-
-				<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'No new notifications', 'buddypress' ); ?></a></li>
-
-			<?php
-			} ?>
-
-		<?php
-			} else { ?>
-			<li><a href="<?php echo $bp->loggedin_user->domain ?>"><?php _e( 'No new notifications', 'buddypress' ); ?></a></li>
-			<?php } ?>
+		<!-- <li><a href="<?php echo bp_displayed_user_domain(). 'messages/trash/'; ?>">Trash</a></li> -->
         </ul>
     </li>
 
@@ -285,18 +300,19 @@ function cuny_bp_admin_menu() {
 
 add_action('init','wds_search_override',1);
 function wds_search_override(){
-	if($_POST['search-submit'] && $_POST['search-terms']){
+    global $bp;
+	if(isset($_POST['search-submit']) && $_POST['search-terms']){
 		if($_POST['search-which']=="members"){
-			wp_redirect('http://openlab.citytech.cuny.edu/people/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/people/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="courses"){
-			wp_redirect('http://openlab.citytech.cuny.edu/courses/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/courses/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="projects"){
-			wp_redirect('http://openlab.citytech.cuny.edu/projects/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/projects/?search='.$_POST['search-terms']);
 			exit();
 		}elseif($_POST['search-which']=="clubs"){
-			wp_redirect('http://openlab.citytech.cuny.edu/clubs/?search='.$_POST['search-terms']);
+			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
 			exit();
 		}
 	}
@@ -311,7 +327,6 @@ function cuny_site_wide_bp_search() { ?>
         <option value="courses">Courses</option>
         <option value="projects">Projects</option>
         <option value="clubs">Clubs</option>
-        <option value="blogs">Sites</option>
         </select>
 
 		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
@@ -330,31 +345,91 @@ function cuny_site_wide_header() {
 
 ?>
 
-<div id="cuny-sw-header">
-	<div id="cuny-sw-header-wrap">
+<div id="cuny-sw-header-wrap">
+	<div id="cuny-sw-header">
+		<div class="cuny-navi">
 	<?php switch_to_blog(1) ?>
-		<a href="<?php echo get_bloginfo('home') ?>" id="cuny-sw-logo"></a>
+		<a href="<?php echo get_bloginfo('url') ?>" id="cuny-sw-logo"></a>
 	<?php restore_current_blog() ?>
-		<div class="alignright">
-		<div>
-			<?php cuny_site_wide_bp_search() ?>
-		</div>
-		<div>
-		<ul class="cuny-navi">
-			<?php cuny_site_wide_navi(); ?>
-		</ul>
-		<ul class="main-nav">
-			<?php do_action( 'cuny_bp_adminbar_menus' ); ?>
-		</ul>
-		</div>
+
+			<ul class="alignright">
+				<?php cuny_bp_adminbar_menu(); ?>
+			</ul>
+
 		</div>
 	</div>
 </div>
 <?php }
 
+function cuny_bp_adminbar_menu(){ ?>
+	<div id="wp-admin-bar">
+    	<ul id="wp-admin-bar-menus">
+        	<?php //the admin bar items are in "reverse" order due to the right float ?>
+        	<li id="login-logout" class="sub-menu user-links admin-bar-last">
+            	<?php if ( is_user_logged_in() ) { ?>
+                	<a href="<?php echo wp_logout_url( bp_get_root_domain() ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
+                <?php } else { ?>
+                	<a href="<?php echo wp_login_url( bp_get_root_domain() ) ?>"><?php _e( 'Log In', 'buddypress' ) ?></a>
+                <?php } ?>
+            </li>
+            <?php cuny_myopenlab_menu(); ?>
+        	<li id="openlab-menu" class="sub-menu"><span class="bold">Open</span>Lab
+            <?php //switch to the root site to get the wp-nav menu
+                  switch_to_blog(1) ?>
+            <?php $args = array(
+				'theme_location' => 'main',
+				'container' => '',
+				'menu_class' => 'nav',
+			);
+			//main menu for top bar
+			wp_nav_menu( $args ); ?>
+			<?php restore_current_blog();  ?>
+            </li><!--openlab-menu-->
+            <li class="clearfloat"></li>
+        </ul><!--wp-admin-bar-menus-->
+    </div><!--wp-admin-bar-->
+<?php }//end cuny_adminbar_menu
 
+//myopenlab menu function
+function cuny_myopenlab_menu(){
+    global $bp; ?>
+        	<?php if ( is_user_logged_in() ) { ?>
+        	<li id="myopenlab-menu" class="sub-menu">My OpenLab
+			<ul id="my-bar">
+            	<li><a href="<?php echo $bp->loggedin_user->domain; ?>">My Profile</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-courses">My Courses</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-projects">My Projects</a></li>
+                <li><a href="<?php echo bp_get_root_domain(); ?>/my-clubs">My Clubs</a></li>
+                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/friends">My Friends</a></li>
+                <li><a href="<?php echo $bp->loggedin_user->domain; ?>/messages">My Messages</a></li>
+            </ul><!--my-bar-->
+            </li><!--myopenlab-menu-->
+            <?php } else { ?>
+            	<li id="register" class="sub-menu user-links">
+            		<a href="<?php site_url(); ?>/register/">Register</a>
+           		</li>
+            <?php } ?>
 
+<?php }//header mods
 
+//adds the profile sidebar to the add <group> pages
+
+add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
+function add_group_sidebar()
+{
+  global $bp;
+  $component =  $bp->current_component;
+  $action =  $bp->current_action;
+
+  if (($component == "groups" && $action == "create") || $component=="settings" || $component == "invite-anyone")
+
+  { ?>
+     <h2 class="sidebar-title">My OpenLab</h2>
+     <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
+  <?php }
+}
+
+//we may be able to deprecate this function - need to look into it
 function cuny_site_wide_navi($args = '') {
 global $bp, $wpdb;
 
@@ -411,9 +486,9 @@ if (!($pos === false)) {
 	<ul class="sub-menu">
 		<li class="menu-item"><a href="<?php echo $site;?>/support/about-city-tech-elab/">About City Tech OpenLab</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/contact-us/">Contact Us</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/privacy-policy/">Privacy Policy</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/terms-of-service/">Terms of Service</a></li>
-		<li class="menu-item"><a href="<?php echo $site;?>/support/image-credits/">Image Credits</a></li>
+		<li class="menu-item"><a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a></li>
+		<li class="menu-item"><a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a></li>
+		<li class="menu-item"><a href="<?php echo $site;?>/support/credits/">Image Credits</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/help/">Help</a></li>
 		<li class="menu-item"><a href="<?php echo $site;?>/support/faq/">FAQ</a></li>
 	</ul>
@@ -427,6 +502,7 @@ if (!($pos === false)) {
 
 						<form name="login-form" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( 'wp-login.php', 'login_post' ) ?>" method="post">
 							<label><?php _e( 'Username', 'buddypress' ) ?>
+							<?php $user_login = '' ?>
 							<input type="text" name="log" id="sidebar-user-login" class="input" value="<?php echo esc_attr(stripslashes($user_login)); ?>" tabindex="1" /></label>
 
 							<label><?php _e( 'Password', 'buddypress' ) ?>
@@ -446,7 +522,6 @@ if (!($pos === false)) {
 
 <?php }
 
-
 add_action('wp_footer', 'cuny_site_wide_footer');
 function cuny_site_wide_footer() {
 global $blog_id;
@@ -463,7 +538,7 @@ restore_current_blog();
 			<div class="textwidget"><p>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p></div>
 		</div></div>
 </div><div class="footer-widgets-3 widget-area"><div class="widget menupages" id="menu-pages-4"><div class="widget-wrap"><h4 class="widgettitle">Support</h4>
-<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="<?php echo $site;?>/support/privacy-policy/">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Service</a> | <a href="<?php echo $site;?>/support/image-credits/">Credits</a></div></div>
+<a href="<?php echo $site;?>/support/help/">Help</a> | <a href="<?php echo $site;?>/support/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/support/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/about/credits/">Credits</a></div></div>
 </div><div class="footer-widgets-4 widget-area"><div class="widget widget_text" id="text-6"><div class="widget-wrap"><h4 class="widgettitle">Share</h4>
 			<div class="textwidget"><ul class="nav"><li class="rss"><a href="<?php echo $site."/activity/feed/" ?>">RSS</a></li>
             <li>
@@ -484,7 +559,8 @@ restore_current_blog();
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '47613263']);
+  _gaq.push(['_setAccount', 'UA-24214531-1']);
+  _gaq.push(['_setDomainName', 'openlab.citytech.cuny.edu']);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -495,3 +571,6 @@ restore_current_blog();
 
 </script>
 <?php }
+
+remove_action( 'init', 'maybe_add_existing_user_to_blog' );
+add_action( 'init', 'maybe_add_existing_user_to_blog', 90 );

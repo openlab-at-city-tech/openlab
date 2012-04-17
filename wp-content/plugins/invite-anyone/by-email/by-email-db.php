@@ -100,7 +100,7 @@ class Invite_Anyone_Schema {
 			'not_found' 		=>  __( 'No Invitations found', 'bp-invite-anyone' ),
 			'not_found_in_trash' 	=> __( 'No Invitations found in Trash', 'bp-invite-anyone' ),
 			'parent_item_colon' 	=> ''
-		), &$this );
+		), $this );
 	
 		// Register the invitation post type
 		register_post_type( $this->post_type_name, apply_filters( 'invite_anyone_post_type_args', array(
@@ -112,7 +112,7 @@ class Invite_Anyone_Schema {
 			'hierarchical' 	=> false,
 			'menu_icon'	=> WP_PLUGIN_URL . '/invite-anyone/images/smallest_buddypress_icon_ev.png',
 			'supports' 	=> array( 'title', 'editor', 'custom-fields' )
-		), &$this ) );
+		), $this ) );
 		
 		// Define the labels to be used by the invitee taxonomy
 		$invitee_labels = apply_filters( 'invite_anyone_invitee_labels', array(
@@ -125,7 +125,7 @@ class Invite_Anyone_Schema {
 			'add_new_item' 	=> __( 'Add New Invitee', 'bp-invite-anyone' ),
 			'new_item_name' => __( 'New Invitee Name', 'bp-invite-anyone' ),
 			'menu_name' 	=> __( 'Invitee' ),
-		), &$this );
+		), $this );
 		
 		// Register the invitee taxonomy
 		register_taxonomy( $this->invitee_tax_name, $this->post_type_name, apply_filters( 'invite_anyone_invitee_tax_args', array(
@@ -133,7 +133,7 @@ class Invite_Anyone_Schema {
 			'labels' 	=> $invitee_labels,
 			'hierarchical' 	=> false,
 			'show_ui' 	=> true,
-		), &$this ) );
+		), $this ) );
 		
 		// Define the labels to be used by the invited groups taxonomy
 		$invited_groups_labels = apply_filters( 'invite_anyone_invited_groups_labels', array(
@@ -146,7 +146,7 @@ class Invite_Anyone_Schema {
 			'add_new_item' 	=> __( 'Add New Invited Group', 'bp-invite-anyone' ),
 			'new_item_name' => __( 'New Invited Group Name', 'bp-invite-anyone' ),
 			'menu_name' 	=> __( 'Invited Group' ),
-		), &$this );
+		), $this );
 		
 		// Register the invited groups taxonomy
 		register_taxonomy( $this->invited_groups_tax_name, $this->post_type_name, apply_filters( 'invite_anyone_invited_group_tax_args', array(
@@ -154,7 +154,7 @@ class Invite_Anyone_Schema {
 			'labels' 	=> $invited_groups_labels,
 			'hierarchical' 	=> false,
 			'show_ui' 	=> true,
-		), &$this ) );
+		), $this ) );
 		
 		// Stash in $bp because of template tags that need it
 		$bp->invite_anyone->invitee_tax_name = $this->invitee_tax_name;
@@ -670,6 +670,13 @@ function invite_anyone_clear_sent_invite( $args ) {
 		'clear_id' => id number of the item to be cleared,
 		'type' => accepted, unaccepted, or all
 	); */
+	
+	$defaults = array(
+		'inviter_id' => false,
+		'clear_id' => false,
+		'type' => false
+	);
+	$args = wp_parse_args( $args, $defaults );
 	
 	extract( $args );
 	

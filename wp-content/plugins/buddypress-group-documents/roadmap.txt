@@ -2,14 +2,34 @@ Ideas.
 -Not neccessarily all of these will be implemented.  There is also no set timeframe :-)  The ones near the top are more likely/sooner, and near the bottom are less likely/farther out. Feel free to email me to vote these up or down.  I can also be commissioned to include any of these or other features you have in mind in a more timely manner.  peter@studio66design.com
 
 
+Update Activity screen descriptions
+----------------------------------
+Currently, when a document is updated, a new activity item is created.  People may have commented on the original activity item, thus it makes sense to update the description of the original item as well.
+
+
 Misc UI Improvments
 ---------------------------
 Find a way to keep Add/Edit form from being buried below long lists, add ajax to "add catagory", few other nitpicks.
 
 
+Debug Ajax Category Add/Delete
+---------------------------
+Adding and Deleting categories can be buggy, especially if you try to do multiple operations (such as add, then delete the same category) between refreshes. Also, Add error handling if new category isn't created.
+
+
+Category Auto-complete
+---------------------------
+Use the jQuery autocomplete to give users direction when picking new categories.
+
+
 Activity Stream Tie-In
 ----------------------------
 Add something like an "Attach document" checkbox to the "What's New" area.  If checked, a document form would swoop in all jquery-like and save the day.
+
+
+Site Wide document View
+----------------------------
+Add a top-level navigation tab for a page that displays all documents site-wide across groups.  It would be a list that also shows the respective groups and authors for the documents.  Care would have to be given to documents in private groups.
 
 
 Reporting
@@ -47,19 +67,24 @@ Improved Sorting
 Expand the sorting functionality.  Include more options (such as changing order), and use ajax instead of page refresh.
 
 
+Field Flexibility
+-------------------------
+Add the ability to add additional fields, eg. Author, Abstract, etc.
+
+
 SEARCHING!
 --------------------------
 Yeah, it could use this. I'm worried about the top right section getting cluttered, perhaps this could be put in a widget.  Most searches for other stuff are in widgets.  The problem with using a widget, is that users would likely expect a site-wide document search.  There's currently not a way to view documents from multiple groups at once.
 
 
-Per-group activation option
----------------------------
-Create a group level option of whether to use documents, similar to the option of whether to use a forum.
-
-
 Document Previewing
 ----------------------------
 Generate a preview of the document.  Perhaps using the gview/google doc embedder plugin as a starting point. This would need some UI brainstorming, my current thinking is that a semi-transparent div can appear on hover (and follow the mouse) and have the preview inside.  Either that, or display document previews as large icons themselves and give the whole thing a more visual browsing experience.  The problem with the latter is that it falls apart for media types that can't be previewed.
+
+
+Limit number of documents
+---------------------------
+Have either the site or group administrator be able to limit the number of documents any one user or group can upload.
 
 
 Tags
@@ -80,6 +105,11 @@ Currently the widgets only shows documents for public groups.  This is to keep d
 Comments
 ----------------------------
 Add the ability for users to comment on documents.
+
+
+Versioning
+-------------------------------
+Allow users to upload updated versions of the docs.  Keep past versions of docs and meta to select as well.
 
 
 Flash Uploader

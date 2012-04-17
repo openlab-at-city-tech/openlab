@@ -30,7 +30,7 @@
 							<span class="activity"><?php bp_message_thread_last_post_date() ?></span>
 						<?php endif; ?>
 					</div>
-					<p class="thread-excerpt"><?php bp_message_thread_excerpt() ?>... <a href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><i><b>(View More)</b></i></a></p>
+					<p class="thread-excerpt"><?php bp_message_thread_excerpt() ?>... <a href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><i><b>(See More)</b></i></a></p>
 	
 	
 					<?php do_action( 'bp_messages_inbox_list_item' ) ?>

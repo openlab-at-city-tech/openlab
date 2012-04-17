@@ -54,43 +54,47 @@ body {
 
 /* buttons */
 #search-submit, 
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	#groups_search_submit,
-	#forums_search_submit,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	#members_search_submit,
-	input[type=submit] {
-		background: #333333;
-		color: #FFFFFF;
-		padding: 4px;
-		margin: 0;
-		-moz-border-radius: 5px;
-		-khtml-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border: 1px solid #111111;
-		text-transform: none;
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+#groups_search_submit,
+#forums_search_submit,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+#members_search_submit,
+#submit_topic_cancel,
+#content .padder #submit,
+input[type=submit] {
+	background: #333333;
+	color: #FFFFFF;
+	padding: 4px;
+	margin: 0;
+	font-size: 12px;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #111111;
+	text-transform: none;
 }
 #search-submit:hover,
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	input[type=submit]:hover {
-		background: #000000;
-		border: 1px solid #000000;
-		text-decoration: none;
-	}
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #000000;
+	border: 1px solid #000000;
+	text-decoration: none;
+}
 
 #content .dir-search label input[type=text] {
 	-moz-border-radius: 0px;
@@ -110,7 +114,8 @@ body {
 	padding:4px 0 4px 5px;
 }
 .button {
-	background: #EEE;
+	background: transparent;
+	border: none;
 	padding: 2px;
 }
 div.generic-button {

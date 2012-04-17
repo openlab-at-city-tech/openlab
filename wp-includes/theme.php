@@ -79,7 +79,7 @@ function get_stylesheet_directory_uri() {
  */
 function get_stylesheet_uri() {
 	$stylesheet_dir_uri = get_stylesheet_directory_uri();
-	$stylesheet_uri = $stylesheet_dir_uri . "/style.css";
+	$stylesheet_uri = $stylesheet_dir_uri . '/style.css';
 	return apply_filters('stylesheet_uri', $stylesheet_uri, $stylesheet_dir_uri);
 }
 
@@ -396,12 +396,14 @@ function get_themes() {
 		// Check for theme name collision.  This occurs if a theme is copied to
 		// a new theme directory and the theme header is not updated.  Whichever
 		// theme is first keeps the name.  Subsequent themes get a suffix applied.
-		// The Twenty Ten, Default and Classic themes always trump their pretenders.
+		// The Twenty Eleven, Twenty Ten, Default and Classic themes always trump
+		// their pretenders.
 		if ( isset($wp_themes[$name]) ) {
 			$trump_cards = array(
-				'classic'   => 'WordPress Classic',
-				'default'   => 'WordPress Default',
-				'twentyten' => 'Twenty Ten',
+				'classic'      => 'WordPress Classic',
+				'default'      => 'WordPress Default',
+				'twentyten'    => 'Twenty Ten',
+				'twentyeleven' => 'Twenty Eleven',
 			);
 			if ( isset( $trump_cards[ $stylesheet ] ) && $name == $trump_cards[ $stylesheet ] ) {
 				// If another theme has claimed to be one of our default themes, move
@@ -467,7 +469,7 @@ function get_themes() {
  *
  * @since 2.9.0
  *
- * @return array|string An arry of theme roots keyed by template/stylesheet or a single theme root if all themes have the same root.
+ * @return array|string An array of theme roots keyed by template/stylesheet or a single theme root if all themes have the same root.
  */
 function get_theme_roots() {
 	global $wp_theme_directories;
@@ -494,7 +496,7 @@ function get_theme_roots() {
 function get_theme($theme) {
 	$themes = get_themes();
 
-	if ( array_key_exists($theme, $themes) )
+	if ( is_array( $themes ) && array_key_exists( $theme, $themes ) )
 		return $themes[$theme];
 
 	return null;
@@ -516,12 +518,13 @@ function get_current_theme() {
 		return $theme;
 
 	$themes = get_themes();
-	$theme_names = array_keys($themes);
-	$current_template = get_option('template');
-	$current_stylesheet = get_option('stylesheet');
-	$current_theme = 'Twenty Ten';
+	$current_theme = 'Twenty Eleven';
 
 	if ( $themes ) {
+		$theme_names = array_keys( $themes );
+		$current_template = get_option( 'template' );
+		$current_stylesheet = get_option( 'stylesheet' );
+
 		foreach ( (array) $theme_names as $theme_name ) {
 			if ( $themes[$theme_name]['Stylesheet'] == $current_stylesheet &&
 					$themes[$theme_name]['Template'] == $current_template ) {
@@ -827,7 +830,7 @@ function get_category_template() {
 
 	$templates[] = "category-{$category->slug}.php";
 	$templates[] = "category-{$category->term_id}.php";
-	$templates[] = "category.php";
+	$templates[] = 'category.php';
 
 	return get_query_template( 'category', $templates );
 }
@@ -851,7 +854,7 @@ function get_tag_template() {
 
 	$templates[] = "tag-{$tag->slug}.php";
 	$templates[] = "tag-{$tag->term_id}.php";
-	$templates[] = "tag.php";
+	$templates[] = 'tag.php';
 
 	return get_query_template( 'tag', $templates );
 }
@@ -881,7 +884,7 @@ function get_taxonomy_template() {
 
 	$templates[] = "taxonomy-$taxonomy-{$term->slug}.php";
 	$templates[] = "taxonomy-$taxonomy.php";
-	$templates[] = "taxonomy.php";
+	$templates[] = 'taxonomy.php';
 
 	return get_query_template( 'taxonomy', $templates );
 }
@@ -963,7 +966,7 @@ function get_page_template() {
 		$templates[] = "page-$pagename.php";
 	if ( $id )
 		$templates[] = "page-$id.php";
-	$templates[] = "page.php";
+	$templates[] = 'page.php';
 
 	return get_query_template( 'page', $templates );
 }
@@ -1244,21 +1247,31 @@ function preview_theme_ob_filter_callback( $matches ) {
  * @param string $stylesheet Stylesheet name.
  */
 function switch_theme($template, $stylesheet) {
-	global $wp_theme_directories;
+	global $wp_theme_directories, $sidebars_widgets;
+
+	if ( is_array( $sidebars_widgets ) )
+		set_theme_mod( 'sidebars_widgets', array( 'time' => time(), 'data' => $sidebars_widgets ) );
+
+	$old_theme = get_current_theme();
 
 	update_option('template', $template);
 	update_option('stylesheet', $stylesheet);
+
 	if ( count($wp_theme_directories) > 1 ) {
 		update_option('template_root', get_raw_theme_root($template, true));
 		update_option('stylesheet_root', get_raw_theme_root($stylesheet, true));
 	}
+
 	delete_option('current_theme');
 	$theme = get_current_theme();
+
 	if ( is_admin() && false === get_option( "theme_mods_$stylesheet" ) ) {
 		$default_theme_mods = (array) get_option( "mods_$theme" );
 		add_option( "theme_mods_$stylesheet", $default_theme_mods );
 	}
-	do_action('switch_theme', $theme);
+
+	update_option( 'theme_switched', $old_theme );
+	do_action( 'switch_theme', $theme );
 }
 
 /**
@@ -1427,8 +1440,13 @@ function header_textcolor() {
  */
 function get_header_image() {
 	$default = defined( 'HEADER_IMAGE' ) ? HEADER_IMAGE : '';
-
 	$url = get_theme_mod( 'header_image', $default );
+
+	if ( 'remove-header' == $url )
+		return false;
+
+	if ( is_random_header_image() )
+		$url = get_random_header_image();
 
 	if ( is_ssl() )
 		$url = str_replace( 'http://', 'https://', $url );
@@ -1439,12 +1457,104 @@ function get_header_image() {
 }
 
 /**
+ * Get random header image from registered images in theme.
+ *
+ * @since 3.2.0
+ *
+ * @return string Path to header image
+ */
+function get_random_header_image() {
+	global $_wp_default_headers;
+
+	$header_image_mod = get_theme_mod( 'header_image', '' );
+	$headers = array();
+
+	if ( 'random-uploaded-image' == $header_image_mod )
+		$headers = get_uploaded_header_images();
+	elseif ( ! empty( $_wp_default_headers ) ) {
+		if ( 'random-default-image' == $header_image_mod ) {
+			$headers = $_wp_default_headers;
+		} else {
+			$is_random = get_theme_support( 'custom-header' );
+			if ( isset( $is_random[ 0 ] ) && !empty( $is_random[ 0 ][ 'random-default' ] ) )
+				$headers = $_wp_default_headers;
+		}
+	}
+
+	if ( empty( $headers ) )
+		return '';
+
+	$random_image = array_rand( $headers );
+	$header_url = sprintf( $headers[$random_image]['url'], get_template_directory_uri(), get_stylesheet_directory_uri() );
+
+	return $header_url;
+}
+
+/**
+ * Check if random header image is in use.
+ *
+ * Always true if user expressly chooses the option in Appearance > Header.
+ * Also true if theme has multiple header images registered, no specific header image
+ * is chosen, and theme turns on random headers with add_theme_support().
+ *
+ * @since 3.2.0
+ * @uses HEADER_IMAGE
+ *
+ * @param string $type The random pool to use. any|default|uploaded
+ * @return boolean
+ */
+function is_random_header_image( $type = 'any' ) {
+	$default = defined( 'HEADER_IMAGE' ) ? HEADER_IMAGE : '';
+	$header_image_mod = get_theme_mod( 'header_image', $default );
+
+	if ( 'any' == $type ) {
+		if ( 'random-default-image' == $header_image_mod || 'random-uploaded-image' == $header_image_mod || ( '' != get_random_header_image() && empty( $header_image_mod ) ) )
+			return true;
+	} else {
+		if ( "random-$type-image" == $header_image_mod )
+			return true;
+		elseif ( 'default' == $type && empty( $header_image_mod ) && '' != get_random_header_image() )
+			return true;
+	}
+
+	return false;
+}
+
+/**
  * Display header image path.
  *
  * @since 2.1.0
  */
 function header_image() {
 	echo get_header_image();
+}
+
+/**
+ * Get the header images uploaded for the current theme.
+ *
+ * @since 3.2.0
+ *
+ * @return array
+ */
+function get_uploaded_header_images() {
+	$header_images = array();
+
+	// @todo caching
+	$headers = get_posts( array( 'post_type' => 'attachment', 'meta_key' => '_wp_attachment_is_custom_header', 'meta_value' => get_option('stylesheet'), 'orderby' => 'none', 'nopaging' => true ) );
+
+	if ( empty( $headers ) )
+		return array();
+
+	foreach ( (array) $headers as $header ) {
+		$url = esc_url_raw( $header->guid );
+		$header = basename($url);
+		$header_images[$header] = array();
+		$header_images[$header]['url'] =  $url;
+		$header_images[$header]['thumbnail_url'] =  $url;
+		$header_images[$header]['uploaded'] = true;
+	}
+
+	return $header_images;
 }
 
 /**
@@ -1466,7 +1576,11 @@ function add_custom_image_header( $header_callback, $admin_header_callback, $adm
 	if ( ! empty( $header_callback ) )
 		add_action('wp_head', $header_callback);
 
-	add_theme_support( 'custom-header', array( 'callback' => $header_callback ) );
+	$support = array( 'callback' => $header_callback );
+	$theme_support = get_theme_support( 'custom-header' );
+	if ( ! empty( $theme_support ) && is_array( $theme_support[ 0 ] ) )
+		$support = array_merge( $theme_support[ 0 ], $support );
+	add_theme_support( 'custom-header',  $support );
 	add_theme_support( 'custom-header-uploads' );
 
 	if ( ! is_admin() )
@@ -1615,7 +1729,7 @@ function add_custom_background( $header_callback = '', $admin_header_callback = 
 	if ( ! is_admin() )
 		return;
 	require_once( ABSPATH . 'wp-admin/custom-background.php' );
-	$GLOBALS['custom_background'] =& new Custom_Background( $admin_header_callback, $admin_image_div_callback );
+	$GLOBALS['custom_background'] = new Custom_Background( $admin_header_callback, $admin_image_div_callback );
 	add_action( 'admin_menu', array( &$GLOBALS['custom_background'], 'init' ) );
 }
 
@@ -1680,7 +1794,7 @@ function _custom_background_cb() {
 	}
 ?>
 <style type="text/css">
-body { <?php echo trim( $style ); ?> }
+body.custom-background { <?php echo trim( $style ); ?> }
 </style>
 <?php
 }
@@ -1833,10 +1947,14 @@ function current_theme_supports( $feature ) {
 			if ( true === $_wp_theme_features[$feature] )  // Registered for all types
 				return true;
 			$content_type = $args[0];
-			if ( in_array($content_type, $_wp_theme_features[$feature][0]) )
-				return true;
-			else
-				return false;
+			return in_array( $content_type, $_wp_theme_features[$feature][0] );
+			break;
+
+		case 'post-formats':
+			// specific post formats can be registered by passing an array of types to
+			// add_theme_support()
+			$post_format = $args[0];
+			return in_array( $post_format, $_wp_theme_features[$feature][0] );
 			break;
 	}
 
@@ -1879,4 +1997,14 @@ function _delete_attachment_theme_mod( $id ) {
 
 add_action( 'delete_attachment', '_delete_attachment_theme_mod' );
 
-?>
+/**
+ * Checks if a theme has been changed and runs 'after_switch_theme' hook on the next WP load
+ *
+ * @since 3.3
+ */
+function check_theme_switched() {
+	if ( false !== ( $old_theme = get_option( 'theme_switched' ) ) && !empty( $old_theme ) ) {
+		do_action( 'after_switch_theme', $old_theme );
+		update_option( 'theme_switched', false );
+	}
+}

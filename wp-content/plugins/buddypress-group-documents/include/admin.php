@@ -50,17 +50,38 @@ function bp_group_documents_admin() {
 		if( ctype_digit( $_POST['items_per_page'] ) )
 			update_option( 'bp_group_documents_items_per_page', $_POST['items_per_page'] );
 
+		if( ctype_digit( $_POST['all_groups'] ) )
+			update_option( 'bp_group_documents_enable_all_groups', $_POST['all_groups'] );
+
+		//turn absense of true into an explicit false
+		if( isset( $_POST['progress_bar'] ) && $_POST['progress_bar'] ) {
+			$progress_bar = 1;
+		} else {
+			$progress_bar = 0;
+		}
+		update_option( 'bp_group_documents_progress_bar', $progress_bar );
+
+		if( isset( $_POST['forum_attachments'] ) && $_POST['forum_attachments'] ) {
+			$forum_attachments = 1;
+		} else {
+			$forum_attachments = 0;
+		}
+		update_option( 'bp_group_documents_forum_attachments', $forum_attachments );
+
 		$updated = true;
 	}
 	
 	$valid_file_formats = get_option( 'bp_group_documents_valid_file_formats');
 	//add consistant whitepace for readability
 	$valid_file_formats = str_replace( ',',', ',$valid_file_formats);
+	$all_groups = get_option('bp_group_documents_enable_all_groups');
 	$display_file_size = get_option( 'bp_group_documents_display_file_size' );
 	$display_icons = get_option( 'bp_group_documents_display_icons' );
 	$use_categories = get_option( 'bp_group_documents_use_categories' );
 	$items_per_page = get_option( 'bp_group_documents_items_per_page' );
 	$upload_permission = get_option( 'bp_group_documents_upload_permission' );
+	$progress_bar = get_option('bp_group_documents_progress_bar' );
+	$forum_attachments = get_option('bp_group_documents_forum_attachments');
 ?>
 	<div class="wrap">
 		<h2><?php _e( 'Group Documents Admin', 'bp-group-documents' ) ?></h2>
@@ -75,7 +96,7 @@ function bp_group_documents_admin() {
 				<tr valign="top">
 					<th scope="row"><label for="target_uri"><?php _e( 'Valid File Formats', 'bp-group-documents' ) ?></label></th>
 					<td>
-						<textarea style="width:95%" cols="45" rows="5" name="valid_file_formats" id="valid_file_formats"><?php echo attribute_escape( $valid_file_formats ); ?></textarea>
+						<textarea style="width:95%" cols="45" rows="5" name="valid_file_formats" id="valid_file_formats"><?php echo esc_attr( $valid_file_formats ); ?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -84,25 +105,43 @@ function bp_group_documents_admin() {
 						<input type="text" name="items_per_page" id="items_per_page" value="<?php echo $items_per_page; ?>" /></td>
 				</tr>
 				<tr>
-					<th><label><?php _e('Upload Permission:','bp-group-documents'); ?></label></th>
+					<th><label><?php _e('Upload Permission','bp-group-documents'); ?></label></th>
 					<td><input type="radio" name="upload_permission" value="members" <?php if( 'members' == $upload_permission ) echo 'checked="checked"'; ?> /><?php _e('Members &amp; Moderators','bp-group-documents'); ?><br />
 					<input type="radio" name="upload_permission" value="mods_only" <?php if( 'mods_only' == $upload_permission ) echo 'checked="checked"'; ?> /><?php _e('Moderators Only','bp-group-documents'); ?><br />
 					<input type="radio" name="upload_permission" value="mods_decide" <?php if( 'mods_decide' == $upload_permission ) echo 'checked="checked"'; ?> /><?php _e('Let individual moderators decide','bp-group-documents'); ?><br />
 				</tr>
 				<tr>
+					<th><label><?php _e('Documents enabled for all groups:','bp-group-documents'); ?></label></th>
+					<td><input type="radio" name="all_groups" value="1" <?php if( $all_groups ) echo 'checked="checked"'; ?> /><?php _e('Yes','bp-group-documents'); ?><br />
+					<input type="radio" name="all_groups" value="0" <?php if( !$all_groups ) echo 'checked="checked"'; ?> /><?php _e('No, Let moderators decide','bp-group-documents'); ?>
+					</td>
+				</tr>
+				<tr>
 					<th><label><?php _e('Use Categories','bp-group-documents') ?></label></th>
 					<td>
-						<input type="checkbox" name="use_categories" id="use_categories" <?php if( $use_categories ) echo 'checked="checked"'; ?> value="1" /></td>
+						<input type="checkbox" name="use_categories" id="use_categories" <?php if( $use_categories ) echo 'checked="checked"' ?> value="1" /></td>
 				</tr>
 				<tr>
 					<th><label><?php _e('Display Icons','bp-group-documents') ?></label></th>
 					<td>
-						<input type="checkbox" name="display_icons" id="display_icons" <?php if( $display_icons ) echo 'checked="checked"'; ?> value="1" /></td>
+						<input type="checkbox" name="display_icons" id="display_icons" <?php if( $display_icons ) echo 'checked="checked"' ?> value="1" /></td>
 				</tr>
 				<tr>
 					<th><label><?php _e('Display File Size','bp-group-documents') ?></label></th>
 					<td>
-						<input type="checkbox" name="display_file_size" id="display_file_size" <?php if( $display_file_size ) echo 'checked="checked"'; ?> value="1" /></td>
+						<input type="checkbox" name="display_file_size" id="display_file_size" <?php if( $display_file_size ) echo 'checked="checked"' ?> value="1" /></td>
+				</tr>
+				<!--tr>
+					<th><label><?php _e('Use Flash Upload Progress Bar','bp-group-documents') ?></label></th>
+					<td><input type="checkbox" name="progress_bar" id="progress_bar" <?php if( $progress_bar ) echo 'checked="checked"' ?> value="1" /></td>
+				</tr-->
+				<tr>
+					<th><label><?php _e('Use documents as forum attachments (beta)','bp-group-documents') ?></label></th>
+					<td><input type="checkbox" name="forum_attachments" id="forum_attachments" <?php if( $forum_attachments ) echo 'checked="checked"' ?> value="1" /></td>
+				</tr>
+				<tr>
+					<th><label><?php _e('Upload size limit','bp-group-documents') ?></label></th>
+					<td><strong><?php echo ini_get('post_max_size') ?></strong> <?php _e('(Not editable, set in php.ini configuration)','bp-group-documnets') ?></td>
 				</tr>
 			</table>
 			<p class="submit">

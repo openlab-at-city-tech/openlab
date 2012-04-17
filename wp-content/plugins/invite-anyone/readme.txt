@@ -2,9 +2,9 @@
 Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
-Requires at least: WP 2.8, BuddyPress 1.1
-Tested up to: WP 3.1.3, BuddyPress 1.2.8
-Stable tag: 0.9.3
+Requires at least: WP 3.2, BuddyPress 1.2.9
+Tested up to: WP 3.3, BuddyPress 1.5.2
+Stable tag: 1.0.8
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -37,8 +37,47 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 * Italian: Luca Camellini
 * Norwegian: Stig Ulfsby
 * Russian: Jettochkin
+* Spanish: Mauricio Camayo, Gregor Gimmy
+* Belarussian: Alexander Ovsov (<a href="http://webhostinggeeks.com/science">Web Geek Science</a>)
 
 == Changelog ==
+
+= 1.0.8 =
+* Yet another attempt at fixing activation problem
+* Adds Belarussian translation. Props Alexander Ovsov
+
+= 1.0.7 =
+* Another attempt at fixing problem that some users are having when activating plugin
+
+= 1.0.6 =
+* Fixes bug that showed invitation message on registration screen when no invitation was found
+* Fixes bug that allowed users to bypass registration lock on some setups
+* Fixes some PHP notices
+
+= 1.0.5 =
+* Adds filters to some settings fields
+* Removes repeated sent_email_invite action
+* Adds updated Spanish translation
+
+= 1.0.4 =
+* Fixes errant autocomplete for group invitations
+* Prevents 404s for shadow image in autocomplet. Props defunctl
+* Fixes issue with Remove Invite link for items added with AJAX. Props defunctl
+
+= 1.0.3 =
+* Removes unneeded code block. Props defunctl
+
+= 1.0.2 =
+* Fixes syntax error that caused "invalid header" errors when activated on some setups
+
+= 1.0.1 =
+* Fixes problem that prevented settings from being saved properly on 1.2.x
+* Fixes Settings link on Plugins page
+
+= 1.0 =
+* Compatibility with BuddyPress 1.5
+* Rewritten autocomplete script for group invitations
+* Adds Spanish translation
 
 = 0.9.3 =
 * Fixed some PHP warnings on Manage Invitations and Stats panels

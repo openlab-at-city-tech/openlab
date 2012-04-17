@@ -82,6 +82,7 @@ function bb_admin_menu_generator()
 		$bb_submenu['plugins.php'][5]  = array( __( 'Installed' ), 'manage_plugins', 'plugins.php' );
 	$bb_menu[310] = array( __( 'Users' ), 'moderate', 'users.php', '', 'bb-menu-users' );
 		$bb_submenu['users.php'][5]  = array( __( 'Users' ), 'moderate', 'users.php' );
+		$bb_submenu['users.php'][10]  = array( __( 'Add New' ), 'manage_options', 'user-add-new.php' );
 	$bb_menu[315] = array( __( 'Tools' ), 'recount', 'tools-recount.php', '', 'bb-menu-tools' );
 		$bb_submenu['tools-recount.php'][5] = array( __( 'Re-count' ), 'recount', 'tools-recount.php' );
 	$bb_menu[320] = array( __( 'Settings' ), 'manage_options', 'options-general.php', '', 'bb-menu-settings' );
@@ -289,6 +290,9 @@ function bb_admin_menu()
 			$sr .= "\t\t\t\t\t\t" . '<ul>' . "\n";
 			$sc = 0;
 			foreach ( $bb_submenu[$m[2]] as $skey => $sm ) {
+				if ( !bb_current_user_can( $sm[1] ) ) {
+					continue;
+				}
 				if ( $sc === 0 && $sm[2] === $m[2] ) {
 					$no_submenu = true;
 				}
@@ -374,6 +378,263 @@ function bb_get_recently_moderated_objects( $num = 5 ) {
 
 /* Users */
 
+function bb_manage_user_fields( $edit_user = '' ) {
+	global $wp_roles, $wp_users_object, $bbdb;
+
+	// Cap checks
+	$user_roles    = $wp_roles->role_names;
+	$can_keep_gate = bb_current_user_can( 'keep_gate' );
+
+	if ( 'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
+
+		bb_check_admin_referer( 'user-manage' );
+
+		// Instantiate required vars
+		$_POST                   = stripslashes_deep( $_POST );
+		$create_user_errors      = new WP_Error;
+
+		// User login
+		$trimmed_user_login      = str_replace( ' ', '', $_POST['user_login'] );
+		$user_login              = sanitize_user( $_POST['user_login'], true );
+		$user_meta['first_name'] = $_POST['first_name'];
+		$user_meta['last_name']  = $_POST['last_name'];
+		$user_display_name       = $_POST['display_name'];
+		$user_email              = $_POST['user_email'];
+		$user_url                = $_POST['user_url'];
+		$user_meta['from']       = $_POST['from'];
+		$user_meta['occ']        = $_POST['occ'];
+		$user_meta['interest']   = $_POST['interest'];
+		$user_role               = $_POST['userrole'];
+		$user_meta['throttle']   = $_POST['throttle'];
+		$user_pass1              = $_POST['pass1'];
+		$user_pass2              = $_POST['pass2'];
+		$user_status             = 0;
+		$user_pass               = false;
+		$user_url                = $user_url ? bb_fix_link( $user_url ) : '';
+
+		// Check user_login
+		if ( !isset( $_GET['action'] ) && empty( $user_login ) ) {
+			$create_user_errors->add( 'user_login', __( 'Username is a required field.' ) );
+		} else {
+			if ( $user_login !== $trimmed_user_login ) {
+				$create_user_errors->add( 'user_login', sprintf( __( '%s is an invalid username. How\'s this one?' ), esc_html( $_POST['user_login'] ) ) );
+				$user_login = $trimmed_user_login;
+			}
+		}
+
+		// Check email
+		if ( isset( $user_email ) && empty( $user_email ) )
+			$create_user_errors->add( 'user_email', __( 'Email address is a required field.' ) );
+
+		// Password Sanity Check
+		if ( ( !empty( $user_pass1 ) || !empty( $user_pass2 ) ) && $user_pass1 !== $user_pass2 )
+			$create_user_errors->add( 'pass', __( 'You must enter the same password twice.' ) );
+		elseif ( !isset( $_GET['action'] ) && ( empty( $user_pass1 ) && empty( $user_pass2 ) ) )
+			$create_user_errors->add( 'pass', __( 'You must enter a password.' ) );
+		elseif ( isset( $_GET['action'] ) && ( empty( $user_pass1 ) && empty( $user_pass2 ) ) )
+			$user_pass = '';
+		else
+			$user_pass = $user_pass1;
+
+		// No errors
+		if ( !$create_user_errors->get_error_messages() ) {
+
+			// Create or udpate
+			switch ( $_POST['action'] ) {
+				case 'create' :
+					$goback = bb_get_uri( 'bb-admin/users.php', array( 'created' => 'true' ), BB_URI_CONTEXT_FORM_ACTION + BB_URI_CONTEXT_BB_ADMIN );
+					$user   = $wp_users_object->new_user( compact( 'user_login', 'user_email', 'user_url', 'user_nicename', 'user_status', 'user_pass' ) );
+
+					// Error handler
+					if ( is_wp_error( $user ) ) {
+						bb_admin_notice( $user );
+						unset( $goback );
+
+					// Update additional user data
+					} else {
+						// Update caps
+						bb_update_usermeta( $user['ID'], $bbdb->prefix . 'capabilities', array( $user_role => true ) );
+
+						// Update all user meta
+						foreach ( $user_meta as $key => $value )
+							bb_update_usermeta( $user['ID'], $key, $value );
+
+						// Don't send email if empty
+						if ( !empty( $user_pass ) )
+							bb_send_pass( $user['ID'], $user_pass );
+
+						do_action( 'bb_new_user',    $user['ID'], $user_pass );
+					}
+
+					break;
+
+				case 'update' :
+					$goback = bb_get_uri( 'bb-admin/users.php', array( 'updated' => 'true' ), BB_URI_CONTEXT_FORM_ACTION + BB_URI_CONTEXT_BB_ADMIN );
+					$user   = $wp_users_object->get_user( $_GET['user_id'], array( 'output' => ARRAY_A ) );
+					bb_update_user( $user['ID'], $user_email, $user_url, $user_display_name );
+
+					// Don't change PW if empty
+					if ( !empty( $user_pass ) )
+						bb_update_user_password( $user['ID'], $user_pass );
+
+					// Error handler
+					if ( is_wp_error( $user ) ) {
+						bb_admin_notice( $user );
+						unset( $goback );
+
+					// Update additional user data
+					} else {
+						// Update caps
+						bb_update_usermeta( $user['ID'], $bbdb->prefix . 'capabilities', array( $user_role => true ) );
+
+						// Update all user meta
+						foreach ( $user_meta as $key => $value )
+							bb_update_usermeta( $user['ID'], $key, $value );
+
+						// Don't send email if empty
+						if ( !empty( $user_pass ) )
+							bb_send_pass( $user['ID'], $user_pass );
+
+						do_action( 'bb_update_user', $user['ID'], $user_pass );
+					}
+
+					break;
+			}
+
+			// Redirect
+			if ( isset( $goback ) && !empty( $goback ) )
+				bb_safe_redirect( $goback );
+
+		// Error handler
+		} else {
+			bb_admin_notice( $create_user_errors );
+		}
+	} elseif ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) {
+		if ( isset( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
+			$disabled = true;
+
+			// Get the user
+			if ( empty( $edit_user ) )
+				$edit_user = bb_get_user( bb_get_user_id( $_GET['user_id'] ) );
+
+			// Instantiate required vars
+			$user_login              = $edit_user->user_login;
+			$user_meta['first_name'] = $edit_user->first_name;
+			$user_meta['last_name']  = $edit_user->last_name;
+			$user_display_name       = $edit_user->display_name;
+			$user_email              = $edit_user->user_email;
+			$user_url                = $edit_user->user_url;
+			$user_meta['from']       = $edit_user->from;
+			$user_meta['occ']        = $edit_user->occ;
+			$user_meta['interest']   = $edit_user->interest;
+			$user_role               = array_search( 'true', $edit_user->capabilities );
+			$user_meta['throttle']   = $edit_user->throttle;
+
+			// Keymasters can't demote themselves
+			if ( ( $edit_user->ID == bb_get_current_user_info( 'id' ) && $can_keep_gate ) || ( isset( $edit_user->capabilities ) && is_array( $edit_user->capabilities ) && array_key_exists( 'keymaster', $edit_user->capabilities ) && !$can_keep_gate ) )
+				$user_roles = array( 'keymaster' => $user_roles['keymaster'] );
+
+			// only keymasters can promote others to keymaster status
+			elseif ( !$can_keep_gate )
+				unset( $user_roles['keymaster'] );
+		}
+	}
+
+	// Load password strength checker
+	wp_enqueue_script( 'password-strength-meter' );
+	wp_enqueue_script( 'profile-edit' );
+
+	// Generate a few PW hints
+	$some_pass_hints = '';
+	for ( $l = 3; $l != 0; $l-- )
+		$some_pass_hints .= '<p>' . bb_generate_password() . '</p>';
+
+	// Create  the user fields
+	$user_fields = array(
+		'user_login' => array(
+			'title'    => __( 'Username' ),
+			'note'     => __( 'Required! Unique identifier for new user.' ),
+			'value'    => $user_login,
+			'disabled' => $disabled
+		),
+		'first_name' => array(
+			'title'    => __( 'First Name' ),
+			'value'    => $user_meta['first_name']
+		),
+		'last_name' => array(
+			'title'    => __( 'Last Name' ),
+			'value'    => $user_meta['last_name']
+		),
+		'display_name' => array(
+			'title'    => __( 'Display Name' ),
+			'value'    => $user_display_name
+		),
+		'user_email' => array(
+			'title'    => __( 'Email' ),
+			'note'     => __( 'Required! Will be used for notifications and profile settings changes.' ),
+			'value'    => $user_email
+		),
+		'user_url' => array(
+			'title'    => __( 'Website' ),
+			'class'    => array( 'long', 'code' ),
+			'note'     => __( 'The full URL of user\'s homepage or blog.' ),
+			'value'    => $user_url
+		),
+		'from' => array(
+			'title'    => __( 'Location' ),
+			'class'    => array( 'long' ),
+			'value'    => $user_meta['from']
+		),
+		'occ' => array(
+			'title'    => __( 'Occupation' ),
+			'class'    => array( 'long' ),
+			'value'    => $user_meta['occ']
+		),
+		'interest' => array(
+			'title'    => __( 'Interests' ),
+			'class'    => array( 'long' ),
+			'value'    => $user_meta['interest']
+		),
+		'userrole' => array(
+			'title'    => __( 'User Role' ),
+			'type'     => 'select',
+			'options'  => $user_roles,
+			'note'     => __( 'Allow user the above privileges.' ),
+			'value'    => $user_role,
+		),
+		'pass1' => array(
+			'title'    => __( 'New Password' ),
+			'type'     => 'password',
+			'class'    => array( 'short', 'text', 'code' ),
+			'note'     => __( 'Hints: ' ) . $some_pass_hints,
+			'value'    => $user_pass1,
+		),
+		'pass2' => array(
+			'title'    => __( 'Repeat New Password' ),
+			'type'     => 'password',
+			'class'    => array( 'short', 'text', 'code' ),
+			'note'     => __( 'If you ignore hints, remember: the password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).' ),
+			'value'    => $user_pass2,
+		),
+		'email_pass' => array(
+			'title'    => '',
+			'type'     => 'checkbox',
+			'options'  => array(
+				'1' => array(
+					'label'      => __( 'Email the new password.' ),
+					'attributes' => array( 'checked' => true )
+				)
+			),
+		),
+		'pass-strength-fake-input' => array(
+			'title' => __( 'Password Strength' ),
+			'type'  => 'hidden',
+		),
+	);
+
+	return apply_filters( 'bb_manage_user_fields', $user_fields );
+}
+
 // Not bbdb::prepared
 function bb_get_ids_by_role( $role = 'moderator', $sort = 0, $page = 1, $limit = 50 ) {
 	global $bbdb, $bb_last_countable_query;
@@ -415,7 +676,7 @@ function bb_user_row( $user, $role = '', $email = false ) {
 	$actions = "<a href='" . esc_attr( get_user_profile_link( $user->ID ) ) . "'>" . __('View') . "</a>";
 	$title = '';
 	if ( bb_current_user_can( 'edit_user', $user_id ) ) {
-		$actions .= " | <a href='" . esc_attr( get_profile_tab_link( $user->ID, 'edit' ) ) . "'>" . __('Edit') . "</a>";
+		$actions .= " | <a href='" . esc_attr( bb_get_user_admin_link( $user->ID ) ) . "'>" . __('Edit') . "</a>";
 		$title = " title='" . esc_attr( sprintf( __( 'User ID: %d' ), $user->ID ) ) . "'";
 	}
 	$r  = "\t<tr id='user-$user->ID'" . get_alt_class("user-$role") . ">\n";
@@ -603,7 +864,7 @@ class BB_User_Search {
 			$r .= "<div>\n";
 			$r .= "\t\t<label for='userrole'>" . __('Role') . "</label>";
 			$r .= "\t\t<div><select name='userrole[]' id='userrole'>\n";
-			$r .= "\t\t\t<option value=''>All</option>\n";
+			$r .= "\t\t\t<option value=''>" . _x( 'All', 'user roles' ) . "</option>\n";
 			
 			foreach ( $roles as $role => $display ) {
 				$selected = '';
@@ -707,7 +968,6 @@ class BB_Users_By_Role extends BB_User_Search {
 		if ( is_wp_error( $this->search_errors ) )
 			bb_admin_notice( $this->search_errors );
 	}
-
 }
 
 /* Forums */
@@ -909,7 +1169,7 @@ function bb_forum_form( $forum_id = 0 ) {
 
 	if ( $forum_id ) {
 		$forum_name = get_forum_name( $forum_id );
-		$forum_slug = $forum->forum_slug;
+	    	$forum_slug = apply_filters('editable_slug', $forum->forum_slug); 
 		$forum_description = get_forum_description( $forum_id );
 		$forum_position = get_forum_position( $forum_id );
 		$legend = __( 'Edit Forum' );
@@ -979,14 +1239,15 @@ foreach ( $forum_options as $option => $args ) {
 	bb_option_form_element( $option, $args );
 }
 ?>
-	<fieldset class="submit">
+		<fieldset class="submit">
 <?php if ( $forum_id ) : ?>
-		<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
+			<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
 <?php endif; ?>
-		<?php bb_nonce_field( 'order-forums', 'order-nonce' ); ?>
-		<?php bb_nonce_field( $action . '-forum' ); ?>
-		<input type="hidden" name="action" value="<?php echo $action; ?>" />
-		<input class="submit" type="submit" name="submit" value="<?php echo $submit; ?>" />
+			<?php bb_nonce_field( 'order-forums', 'order-nonce' ); ?>
+			<?php bb_nonce_field( $action . '-forum' ); ?>
+			<input type="hidden" name="action" value="<?php echo $action; ?>" />
+			<input class="submit" type="submit" name="submit" value="<?php echo $submit; ?>" />
+		</fieldset>
 	</fieldset>
 </form>
 <?php
@@ -1078,6 +1339,7 @@ function bb_admin_list_posts() {
 <table id="posts-list" class="widefat" cellspacing="0" cellpadding="0">
 <thead>
 	<tr>
+		<th scope="col" class="check-column"><input type="checkbox" /></th>
 		<th scope="col"><?php _e( 'Post' ); ?></th>
 		<th scope="col"><?php _e( 'Author' ); ?></th>
 		<th scope="col"><?php _e( 'Topic' ); ?></th>
@@ -1086,6 +1348,7 @@ function bb_admin_list_posts() {
 </thead>
 <tfoot>
 	<tr>
+		<th scope="col" class="check-column"><input type="checkbox" /></th>
 		<th scope="col"><?php _e( 'Post' ); ?></th>
 		<th scope="col"><?php _e( 'Author' ); ?></th>
 		<th scope="col"><?php _e( 'Topic' ); ?></th>
@@ -1097,6 +1360,7 @@ function bb_admin_list_posts() {
 		foreach ( $bb_posts as $bb_post ) {
 ?>
 	<tr id="post-<?php post_id(); ?>"<?php alt_class('post', post_del_class()); ?>>
+		<td class="check-column"><input type="checkbox" name="post[]" value="<?php post_id(); ?>" /></td>
 		<td class="post">
 			<?php post_text(); ?>
 			<div>
@@ -1120,10 +1384,21 @@ function bb_admin_list_posts() {
 		</td>
 
 		<td class="author">
-			<a href="<?php user_profile_link( get_post_author_id() ); ?>">
-				<?php post_author_avatar( '16' ); ?>
-				<?php post_author(); ?>
-			</a>
+			<?php if ( get_post_author_id() ) : ?>
+
+				<a href="<?php user_profile_link( get_post_author_id() ); ?>">
+					<?php post_author_avatar( '16' ); ?>
+					<?php post_author(); ?>
+				</a>
+
+			<?php else : ?>
+
+				<span>
+					<?php post_author_avatar( '16' ); ?>
+					<?php post_author(); ?>
+				</span>
+
+			<?php endif; ?>
 		</td>
 
 		<td class="topic">
@@ -1307,6 +1582,7 @@ function bb_option_form_element( $name = 'name', $args = null ) {
 		'after' => '',
 		'note' => false,
 		'attributes' => false,
+		'disabled' => false,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -1324,7 +1600,11 @@ function bb_option_form_element( $name = 'name', $args = null ) {
 
 	$class = $args['class'] ? (array) $args['class'] : array();
 	array_unshift( $class, $args['type'] );
-	$disabled = $hardcoded ? ' disabled="disabled"' : '';
+
+	if ( $hardcoded || $args['disabled'] )
+		$disabled = ' disabled="disabled"';
+	else
+		$disabled = false;
 
 	if ( $args['attributes'] ) {
 		$attributes = array();
@@ -1337,7 +1617,7 @@ function bb_option_form_element( $name = 'name', $args = null ) {
 
 ?>
 
-		<div id="option-<?php echo $id; ?>"<?php if ( $hardcoded ) echo ' class="disabled"'; ?>>
+		<div id="option-<?php echo $id; ?>"<?php if ( !empty( $disabled ) ) echo ' class="disabled"'; ?>>
 <?php
 			switch ( $args['type'] ) {
 				case 'radio' :

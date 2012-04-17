@@ -13,14 +13,14 @@ function bp_group_documents_screen_notification_settings() {
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group you belong to', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="yes" <?php if ( !get_usermeta( $current_user->id,'notification_group_documents_upload_member') || 'yes' == get_usermeta( $current_user->id,'notification_group_documents_upload_member') ) { ?>checked="checked" <?php } ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="no" <?php if ( get_usermeta( $current_user->id,'notification_group_documents_upload_member') == 'no' ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="yes" <?php if ( !get_user_meta( $current_user->id,'notification_group_documents_upload_member') || 'yes' == get_user_meta( $current_user->id,'notification_group_documents_upload_member') ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="no" <?php if ( get_user_meta( $current_user->id,'notification_group_documents_upload_member') == 'no' ) { ?>checked="checked" <?php } ?>/></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group for which you are an moderator/admin', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php if ( !get_usermeta( $current_user->id,'notification_group_documents_upload_mod') || 'yes' == get_usermeta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="no" <?php if ( 'no' == get_usermeta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php if ( !get_user_meta( $current_user->id,'notification_group_documents_upload_mod') || 'yes' == get_user_meta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="no" <?php if ( 'no' == get_user_meta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
 		</tr>
 		
 		<?php do_action( 'bp_group_documents_notification_settings' ); ?>
@@ -53,43 +53,30 @@ function bp_group_documents_email_notification( $document ) {
 	//'user_id' => 'user_email
 	$emails = array();
 
-	//group users were handled differently in 1.1
-	if( '1.1' == substr( BP_VERSION, 0, 3 ) ) {
-		foreach ( $bp->groups->current_group->user_dataset as $user ) {
-			if( $user->is_admin || $user->is_mod ) {
-				if ( 'no' == get_usermeta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
-			} else {
-				if ( 'no' == get_usermeta( $user->user_id, 'notification_group_documents_upload_member' ) ) continue;
-			}
-			$ud = get_userdata( $user->user_id );
-			$emails[$user->user_id]=$ud->user_email;
+	//first get the admin & moderator emails
+	if( count( $bp->groups->current_group->admins ) ) {
+		foreach( $bp->groups->current_group->admins as $user ) {
+			if( 'no' == get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
+			$emails[$user->user_id] = $user->user_email;
 		}
-	} else { //1.2 and later
-		//first get the admin & moderator emails
-		if( count( $bp->groups->current_group->admins ) ) {
-			foreach( $bp->groups->current_group->admins as $user ) {
-				if( 'no' == get_usermeta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
+	}
+	if( count( $bp->groups->current_group->mods ) ) {
+		foreach( $bp->groups->current_group->mods as $user ) {
+			if( 'no' == get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
+			if( !in_array( $user->user_email, $emails ) ) {
 				$emails[$user->user_id] = $user->user_email;
 			}
 		}
-		if( count( $bp->groups->current_group->mods ) ) {
-			foreach( $bp->groups->current_group->mods as $user ) {
-				if( 'no' == get_usermeta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
-				if( !in_array( $user->user_email, $emails ) ) {
-					$emails[$user->user_id] = $user->user_email;
-				}
-			}
-		}
+	}
 
-		//now get all member emails, checking to make sure not to send any emails twice
-		$user_ids = BP_Groups_Member::get_group_member_ids( $bp->groups->current_group->id );
-		foreach ( (array)$user_ids as $user_id ) {
-			if ( 'no' == get_usermeta( $user_id, 'notification_group_documents_upload_member' ) ) continue;
+	//now get all member emails, checking to make sure not to send any emails twice
+	$user_ids = BP_Groups_Member::get_group_member_ids( $bp->groups->current_group->id );
+	foreach ( (array)$user_ids as $user_id ) {
+		if ( 'no' == get_user_meta( $user_id, 'notification_group_documents_upload_member' ) ) continue;
 
-			$ud = bp_core_get_core_userdata( $user_id );
-			if( !in_array( $ud->user_email, $emails ) ) {
-				$emails[$user_id] = $ud->user_email;
-			}
+		$ud = bp_core_get_core_userdata( $user_id );
+		if( !in_array( $ud->user_email, $emails ) ) {
+			$emails[$user_id] = $ud->user_email;
 		}
 	}
 

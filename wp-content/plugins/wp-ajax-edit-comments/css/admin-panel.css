@@ -1,0 +1,32 @@
+/*BEGIN ICON OPTIONS*/
+#sort0, #sort1, #sort2 {
+	min-width: 200px;
+}
+#sort0 {
+	background-color: #CCCCCC;
+}
+#sort1 { 
+	background-color: #FFFFCC;
+}
+#sort2 {
+	background-color: #CCFFCC;
+}
+.connectedSortable { width: 100%; min-height: 50px;}
+.enabled, .disabled{
+	background:url(../images/themes/circular/sprite.png) -80px 0px no-repeat;
+	display: block;
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+.disabled{
+	background:url(../images/themes/circular/sprite.png) -160px 0px no-repeat;
+}
+#iconpreview {
+	margin: 10px 0;
+}
+#iconpreview img{
+	border: 1px solid #45759B;
+	padding: 3px;
+}

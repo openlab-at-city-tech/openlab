@@ -91,6 +91,7 @@ ul.item-list li {
 }
 /* dropdowns */
 .item-list-tabs ul li.filter select,
+#topic_group_id,
 	#search-which,
 	#content li#forums-order-select select,
 	#content li#groups-order-select select,
@@ -123,6 +124,7 @@ ul.item-list li {
 	.internal-page #content .padder .submit input[type=button],
 	input[type=submit],
 	input[type=file],
+	#submit_topic_cancel,
 	#sidebar-me a.button,
 	.button {
 		-moz-border-radius: 5px;
@@ -152,6 +154,7 @@ ul.item-list li {
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#content .dir-form h3 a:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 		background: url(images/nav.png);
 		border: none;

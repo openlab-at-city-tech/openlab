@@ -26,7 +26,7 @@ function get_preferred_from_update_core() {
  * Get available core updates
  *
  * @param array $options Set $options['dismissed'] to true to show dismissed upgrades too,
- * 	set $options['available'] to false to skip not-dimissed updates.
+ * 	set $options['available'] to false to skip not-dismissed updates.
  * @return array Array of the update objects
  */
 function get_core_updates( $options = array() ) {
@@ -82,9 +82,6 @@ function find_core_update( $version, $locale ) {
 }
 
 function core_update_footer( $msg = '' ) {
-	if ( is_multisite() && !current_user_can('update_core') )
-		return false;
-
 	if ( !current_user_can('update_core') )
 		return sprintf( __( 'Version %s' ), $GLOBALS['wp_version'] );
 
@@ -140,15 +137,13 @@ add_action( 'admin_notices', 'update_nag', 3 );
 
 // Called directly from dashboard
 function update_right_now_message() {
-	if ( is_multisite() && !current_user_can('update_core') )
-		return false;
-
-	$cur = get_preferred_from_update_core();
-
 	$msg = sprintf( __('You are using <span class="b">WordPress %s</span>.'), $GLOBALS['wp_version'] );
 
-	if ( isset( $cur->response ) && $cur->response == 'upgrade' && current_user_can('update_core') ) {
-		$msg .= " <a href='" . network_admin_url( 'update-core.php' ) . "' class='button'>" . sprintf( __('Update to %s'), $cur->current ? $cur->current : __( 'Latest' ) ) . '</a>';
+	if ( current_user_can('update_core') ) {
+		$cur = get_preferred_from_update_core();
+
+		if ( isset( $cur->response ) && $cur->response == 'upgrade'  )
+			$msg .= " <a href='" . network_admin_url( 'update-core.php' ) . "' class='button'>" . sprintf( __('Update to %s'), $cur->current ? $cur->current : __( 'Latest' ) ) . '</a>';
 	}
 
 	echo "<span id='wp-version-message'>$msg</span>";
@@ -198,17 +193,18 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 
 	if ( is_network_admin() || !is_multisite() ) {
 		echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
+
 		if ( ! current_user_can('update_plugins') )
 			printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>.'), $plugin_name, esc_url($details_url), esc_attr($plugin_name), $r->new_version );
 		else if ( empty($r->package) )
 			printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>'), $plugin_name, esc_url($details_url), esc_attr($plugin_name), $r->new_version );
 		else
 			printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a> or <a href="%5$s">update automatically</a>.'), $plugin_name, esc_url($details_url), esc_attr($plugin_name), $r->new_version, wp_nonce_url( self_admin_url('update.php?action=upgrade-plugin&plugin=') . $file, 'upgrade-plugin_' . $file) );
+
+		do_action( "in_plugin_update_message-$file", $plugin_data, $r );
+
+		echo '</div></td></tr>';
 	}
-
-	do_action( "in_plugin_update_message-$file", $plugin_data, $r );
-
-	echo '</div></td></tr>';
 }
 
 function wp_update_plugin($plugin, $feedback = '') {

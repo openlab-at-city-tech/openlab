@@ -1,9 +1,15 @@
 <?php
+
 /**
  * RSS2 Feed Template for displaying a member's group's activity
  *
  * @package BuddyPress
+ * @subpackage ActivityFeeds
  */
+
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 header('Status: 200 OK');
 ?>
@@ -18,9 +24,9 @@ header('Status: 200 OK');
 >
 
 <channel>
-	<title><?php echo bp_site_name() ?> | <?php echo $bp->displayed_user->fullname; ?> | <?php _e( 'Mentions', 'buddypress' ) ?></title>
+	<title><?php bp_site_name() ?> | <?php echo $bp->displayed_user->fullname; ?> | <?php _e( 'Mentions', 'buddypress' ) ?></title>
 	<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
-	<link><?php echo site_url( BP_ACTIVITY_SLUG . '/#mentions/' ) ?></link>
+	<link><?php echo home_url( bp_get_activity_root_slug() . '/#mentions/' ) ?></link>
 	<description><?php echo $bp->displayed_user->fullname; ?> - <?php _e( 'Mentions', 'buddypress' ) ?></description>
 	<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_activity_get_last_updated(), false); ?></pubDate>
 	<generator>http://buddypress.org/?v=<?php echo BP_VERSION ?></generator>
@@ -31,7 +37,7 @@ header('Status: 200 OK');
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
 			<item>
 				<guid><?php bp_activity_thread_permalink() ?></guid>
-				<title><![CDATA[<?php bp_activity_feed_item_title() ?>]]></title>
+				<title><?php bp_activity_feed_item_title() ?></title>
 				<link><?php echo bp_activity_thread_permalink() ?></link>
 				<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_get_activity_feed_item_date(), false); ?></pubDate>
 

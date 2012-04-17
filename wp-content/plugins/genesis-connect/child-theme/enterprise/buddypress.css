@@ -1,8 +1,4 @@
-/* 
-    Description: buddypress.css for enterprise
-    Created on : 17-May-2010
-    Author     : ron & andrea
-*/
+/* buddypress.css for enterprise */
 #wrap {
 	width: 100%;
 }
@@ -45,36 +41,40 @@
 }
 
 #content ul.item-list li {
-	background: #F4F4F4 !important;
-	padding: 3px 0 3px 3px;
+	clear:left;
 	margin: 5px 0 5px 0;
+	padding: 3px 0 3px 3px;
+}
+.directory #content ul.item-list ul {
+	margin-left:20px;
 }
 .internal-page #content ul.item-list li li {
 	width: 98%;
 }
 
 #content .bp-content-top .widget h4 {
+	background:transparent url(images/sidebar-headline.png) no-repeat;
+	border-bottom: 1px dotted #CCCCCC;
 	color: #333333;
 	font-size: 16px;
-	font-family: Arial, Tahoma, Verdana;
 	font-weight: normal;
-	margin: 0 0 5px 0;
-	padding: 0 0 5px 15px;
-	border-bottom: 1px dotted #CCCCCC;
-	text-transform: none;
-	background:transparent url(images/sidebar-headline.png) no-repeat;
+	margin: 0 0 10px;
+	padding: 0 0 4px 15px;
+	text-transform: uppercase;
 }
 
 #content .bp-content-top .widget {
+	border:0px;
 	padding: 10px;
-border:0px;
 }
 #header .widget {
-     background:transparent;
-     border: none;
+	background:transparent;
+	border: none;
 }
 
 /* buttons */
+.internal-page #submit,
+.directory #submit,
 #search-submit, 
 	#sidebar-me a.button,
 	#aw-whats-new-submit,
@@ -90,6 +90,7 @@ border:0px;
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder #submit,
 	.internal-page #content .padder .submit input[type=button],
+	#submit_topic_cancel,
 	.button {
 		background: #FFFFFF url(images/button.png);
 		color: #FFFFFF;
@@ -108,6 +109,8 @@ border:0px;
 		-webkit-border-radius: 5px;
 	}
 
+.internal-page #submit:hover,
+.directory #submit:hover,
 #search-submit:hover,
 	#sidebar-me a.button:hover,
 	#aw-whats-new-submit:hover,
@@ -123,12 +126,23 @@ border:0px;
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder #submit:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
+	#submit_topic_cancel:hover,
 	.button:hover {
 		background: #FFFFFF url(images/button-hover.png);
 		border: 1px solid #2BC2F7;
 		color: #FFFFFF;
 		text-decoration: none;
 	}
+.directory #content .padder .dir-search input[type=text] {
+	background: url(images/gradient.png);
+	color: #999;
+	font-family: 'Droid Sans', arial, serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-shadow: none;
+	text-transform: none;
+}
 /*.button {
 	background: #EEE;
 	padding: 2px;
@@ -142,7 +156,8 @@ div.generic-button {
 		border:0px;
 		background:transparent;
 }
-#wrap #content .dir-search label input {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:transparent url(images/search.png) repeat scroll 0 0;
 	text-transform: none;
 	font-weight: normal;
@@ -172,7 +187,9 @@ div.generic-button {
 		width: 10em;
 }
 .directory #content ul li {
+	background: transparent;
 	padding:0 0 10px 5px;
+	min-height: 50px;
 }
 #content .padder #item-body a.accept,
 	#content .padder #item-body a.reject {

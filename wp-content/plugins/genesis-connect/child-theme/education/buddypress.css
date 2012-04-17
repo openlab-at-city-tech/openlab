@@ -65,6 +65,7 @@ body.adminbar #wrap {
 	.internal-page #content .padder a.button,
 	.internal-page #content .padder .submit input[type=button],
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	input[type=submit] {
 		background: #004679;
 		color: #FFFFFF;
@@ -91,6 +92,7 @@ body.adminbar #wrap {
 	.internal-page #content .padder a.button:hover,
 	.internal-page #content .padder .submit input[type=button]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	input[type=submit]:hover {
 		background: #00294B;
 		border: 1px solid #00294B;
@@ -112,7 +114,8 @@ body.adminbar #wrap {
 	color: #666666;
 	text-transform: none;
 }
-.item-list-tabs ul li.filter select {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:#F7F7F7;
 	border:1px solid #E6E6E6;
 	color:#000000;

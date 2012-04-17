@@ -39,7 +39,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 body {
 	background: #fff;
 	line-height: 1;
-	margin-top: 115px; /* to account for sitewide nav */
+	margin-top: 65px; /* to account for sitewide nav */
 }
 ol, ul {
 	list-style: none;
@@ -167,7 +167,7 @@ a:hover {
 	padding-left: 5px;
 }
 
-#mainnav li:first-child { background: none; }
+#mainnav li:first-child { background-position: right 23px; }
 
 #mainnav li ul { /* second-level lists */
 	position: absolute;

@@ -6,7 +6,7 @@ Description: Inserts blog comments from non-logged-in users into the activity st
 Version: 1.2.1
 Author: Boone Gorges
 Author URI: http://teleogistic.net
-Site Wide Only: true
+Network: true
 */
 
 /* Comment out the following two lines to run in BP 1.1.3 */

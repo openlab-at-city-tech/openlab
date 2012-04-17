@@ -6,14 +6,30 @@ function bb_block_current_user() {
 	global $bbdb;
 	if ( $id = bb_get_current_user_info( 'id' ) )
 		bb_update_usermeta( $id, $bbdb->prefix . 'been_blocked', 1 ); // Just for logging.
+	bb_logout();
 	bb_die(__("You've been blocked.  If you think a mistake has been made, contact this site's administrator."));
 }
 
 function bb_get_user( $user_id, $args = null ) {
-	global $wp_users_object;
+	global $bbdb, $wp_users_object;
+
+	// Get user
 	$user = $wp_users_object->get_user( $user_id, $args );
-	if ( is_wp_error($user) )
+
+	// Return on no user or error object
+	if ( !is_object( $user ) || is_wp_error( $user ) )
 		return false;
+
+	// Re calculate the user's meta in case we're pulling from a value cached on another site
+	if ( $user_vars = get_object_vars( $user ) ) {
+		$prefix_length = strlen( $bbdb->prefix );
+		foreach ( $user_vars as $k => $v ) {
+			if ( 0 === strpos( $k, $bbdb->prefix ) ) {
+				$user->{substr( $k, $prefix_length )} = $v;
+			}
+		}
+	}
+
 	return $user;
 }
 
@@ -449,11 +465,12 @@ function bb_add_user_favorite( $user_id, $topic_id ) {
 	if ( !$user || !$topic )
 		return false;
 
-	$fav = $user->favorites ? explode(',', $user->favorites) : array();
+	$favorites_key = $bbdb->prefix . 'favorites';
+	$fav = $user->$favorites_key ? explode(',', $user->$favorites_key) : array();
 	if ( ! in_array( $topic_id, $fav ) ) {
 		$fav[] = $topic_id;
 		$fav = implode(',', $fav);
-		bb_update_usermeta( $user->ID, $bbdb->prefix . 'favorites', $fav);
+		bb_update_usermeta( $user->ID, $favorites_key, $fav );
 	}
 	do_action('bb_add_user_favorite', $user_id, $topic_id);
 	return true;
@@ -467,11 +484,12 @@ function bb_remove_user_favorite( $user_id, $topic_id ) {
 	if ( !$user )
 		return false;
 
-	$fav = explode(',', $user->favorites);
+	$favorites_key = $bbdb->prefix . 'favorites';
+	$fav = explode(',', $user->$favorites_key);
 	if ( is_int( $pos = array_search($topic_id, $fav) ) ) {
 		array_splice($fav, $pos, 1);
 		$fav = implode(',', $fav);
-		bb_update_usermeta( $user->ID, $bbdb->prefix . 'favorites', $fav);
+		bb_update_usermeta( $user->ID, $favorites_key, $fav);
 	}
 	do_action('bb_remove_user_favorite', $user_id, $topic_id);
 	return true;

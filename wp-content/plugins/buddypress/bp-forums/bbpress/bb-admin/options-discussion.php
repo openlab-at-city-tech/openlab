@@ -7,17 +7,25 @@ if ( 'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) && $_POST['action'] == '
 	bb_check_admin_referer( 'options-discussion-update' );
 	
 	// Deal with pingbacks checkbox when it isn't checked
-	if (!isset($_POST['enable_pingback'])) {
+	if ( !isset( $_POST['enable_pingback'] ) ) {
 		$_POST['enable_pingback'] = false;
+	}
+
+	if ( !isset( $_POST['enable_loginless'] ) ) {
+		$_POST['enable_loginless'] = false;
+	}
+	
+	if ( !isset( $_POST['enable_subscriptions'] ) ) {
+		$_POST['enable_subscriptions'] = false;
 	}
 	
 	// Deal with avatars checkbox when it isn't checked
-	if (!isset($_POST['avatars_show'])) {
+	if ( !isset( $_POST['avatars_show'] ) ) {
 		$_POST['avatars_show'] = false;
 	}
 	
 	foreach ( (array) $_POST as $option => $value ) {
-		if ( !in_array( $option, array('_wpnonce', '_wp_http_referer', 'action', 'submit') ) ) {
+		if ( !in_array( $option, array( '_wpnonce', '_wp_http_referer', 'action', 'submit' ) ) ) {
 			$option = trim( $option );
 			$value = is_array( $value ) ? $value : trim( $value );
 			$value = stripslashes_deep( $value );
@@ -38,13 +46,29 @@ if ( !empty($_GET['updated']) ) {
 	bb_admin_notice( __( '<strong>Settings saved.</strong>' ) );
 }
 
-$remote_options = array(
+$general_options = array(
 	'enable_pingback' => array(
 		'title' => __( 'Enable Pingbacks' ),
 		'type' => 'checkbox',
 		'options' => array(
 			1 => __( 'Allow link notifications from other sites.' )
 		)
+	),
+
+	'enable_loginless' => array(
+		'title' => __( 'Enable Login-less Posting' ),
+		'type' => 'checkbox',
+		'options' => array(
+			1 => __( 'Allow users to create topics and posts without logging in.' )
+		),
+	),
+	
+	'enable_subscriptions' => array(
+		'title' => __( 'Enable Subscriptions' ),
+		'type' => 'checkbox',
+		'options' => array(
+			1 => __( 'Allow users to subscribe to topics and receive new posts via email.' )
+		),
 	),
 );
 
@@ -78,10 +102,11 @@ $avatar_options = array(
 			'logo'      => bb_get_avatar( '',             32, 'logo' )      . ' ' . __( 'Gravatar Logo' ),
 			'identicon' => bb_get_avatar( rand( 0, 999 ), 32, 'identicon' ) . ' ' . __( 'Identicon (Generated)' ),
 			'wavatar'   => bb_get_avatar( rand( 0, 999 ), 32, 'wavatar' )   . ' ' . __( 'Wavatar (Generated)' ),
-			'monsterid' => bb_get_avatar( rand( 0, 999 ), 32, 'monsterid' ) . ' ' . __( 'MonsterID  (Generated)' )
+			'monsterid' => bb_get_avatar( rand( 0, 999 ), 32, 'monsterid' ) . ' ' . __( 'MonsterID  (Generated)' ),
+			'retro'     => bb_get_avatar( rand( 0, 999 ), 32, 'retro' )     . ' ' . __( 'Retro  (Generated)' )
 		),
 		'note' => array(
-			__( 'For users without a custom avatar of their own, you can either display a generic logo or a generated one based on their e-mail address.' )
+			__( 'For users without a custom avatar of their own, you can either display a generic logo or a generated one based on their email address.' )
 		),
 	)
 );
@@ -101,7 +126,7 @@ bb_get_admin_header();
 <form class="settings" method="post" action="<?php bb_uri( 'bb-admin/options-discussion.php', null, BB_URI_CONTEXT_FORM_ACTION + BB_URI_CONTEXT_BB_ADMIN ); ?>">
 	<fieldset>
 <?php
-foreach ( $remote_options as $option => $args ) {
+foreach ( $general_options as $option => $args ) {
 	bb_option_form_element( $option, $args );
 }
 ?>

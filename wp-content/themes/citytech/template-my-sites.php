@@ -17,10 +17,11 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  foreach ( (array)$rs as $r ){
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;
-	  }
+	  }?>
 	  
-	  echo  '<h1 class="entry-title">My Sites</h1>';
-	  
+	  <h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+	  <h3 id="bread-crumb">Sites</h3>
+	  <?php
 	  if ( bp_has_blogs( 'user_id='.$bp->loggedin_user->id ) ) : ?>
 <ul id="site-list" class="item-list">
 		<?php 
@@ -39,7 +40,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 					     if ($len > 135) {
 						$this_description = substr(bp_get_blog_description(),0,135);
 						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; (<a href="'.bp_get_blog_permalink().'">View More</a>)</p>';
+						echo $this_description.'&hellip; (<a href="'.bp_get_blog_permalink().'">See More</a>)</p>';
 					     } else {
 						bp_blog_description();
 					     }
@@ -64,6 +65,42 @@ function cuny_profile_activty_block($type,$title,$last) {
 			<?php bp_blogs_pagination_links() ?>
 		</div><?php
 
+}
+
+add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_member_actions');
+function cuny_buddypress_member_actions() { 
+global $bp, $user_ID, $user_identity, $userdata;
+get_currentuserinfo();
+//print_r($userdata);
+
+?>
+	<h2 class="sidebar-title">My Open Lab</h2>
+	<div id="item-buttons">
+		<?php do_action( 'cuny_bp_profile_menus' ); ?>
+	
+	</div><!-- #item-buttons -->
+	
+	
+	<?php
+		global $members_template, $post;
+		
+		// Not really sure where this function appears, so I'll make a cascade
+		if ( isset( $members_template->member->user_id ) ) {
+			$button_user_id = $members_template->member->user_id;
+		} else if ( bp_displayed_user_id() ) {
+			$button_user_id = bp_displayed_user_id();
+		} else if ( !empty( $post->post_name ) && in_array( $post->post_name, array( 'my-projects', 'my-courses', 'my-clubs' ) ) ) {
+			$button_user_id = bp_loggedin_user_id();
+		} else {
+			$button_user_id = 0;
+		}
+			       
+		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
+	?>
+		
+	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
+
+<?php openlab_recent_account_activity_sidebar();
 }
 
 genesis();

@@ -9,6 +9,7 @@
        $first_class = "first";
 ?>
 <?php $group_slug = bp_get_group_slug(); ?>
+<h1 class="entry-title">Project on the OpenLab</h1>
 <div id="club-header">
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
@@ -19,7 +20,7 @@
 
 	<div id="club-header-content" class="alignleft">
 		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-		<span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s ago', 'buddypress' ), bp_get_group_last_active() ) ?></span>
+		<span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span>
 	
 		<?php do_action( 'bp_before_group_header_meta' ) ?>
 	
@@ -160,11 +161,11 @@
 				$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 				echo $last_topic_content;
 			?>
-                        (<a href="<?php bp_the_topic_permalink();?>" class="read-more">Read More</a>)
+                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
                         </li>
                     <?php endwhile; ?>
                 </ul>
-                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">View More Project Discussion</a></div>
+                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See More Project Discussion</a></div>
             <?php else: ?>
             	<div id="message" class="info">
 					<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -201,13 +202,13 @@
 					  the_title(); 
 					  echo '</h5>';
 					  ?>
-					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">Read More</a>)</p>
+					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
 					  <?php
 					  echo '</li>';
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">View More Docs</a></p></div>
+				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See More Docs</a></p></div>
 				<?php
 				}else{
 					echo "<div><p>No Recent Docs</p></div>";
@@ -354,7 +355,7 @@ function show_site_posts() {
 					  the_title();
 					  echo '</h5>';
 					  ?>
-					  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> (<a href="<?php the_permalink();?>" class="read-more">Read More</a>)</p>
+					  <p><?php echo wds_content_excerpt(strip_tags(get_the_content()), 135);?> <a href="<?php the_permalink();?>" class="read-more">See&nbsp;More</a></p>
 					  <?php
 					  echo '</li>';
 				  endwhile;
@@ -364,7 +365,7 @@ function show_site_posts() {
 						<p><?php _e( 'Sorry, no blog posts exist.', 'buddypress' ) ?></p>
 					</div>
 				<?php }?>
-                <div class="view-more"><a href="<?php echo site_url();?>">View More Blog Activities</a></div>
+                <div class="view-more"><a href="<?php echo site_url();?>">See More Project Posts</a></div>
                 <?php
 				restore_current_blog();
 		?>
@@ -404,7 +405,7 @@ function show_site_comments() {
 								$permalink = get_permalink($post_id);
 								echo "<li>";
 								echo wds_content_excerpt($comment->comment_content,135);
-								echo "(<a href='$permalink' class='read-more'>Read More</a>)";
+								echo "<a href='$permalink' class='read-more'>See&nbsp;More</a>";
 								echo "</li>";
 							endforeach;
 							if (!$comments_found) {

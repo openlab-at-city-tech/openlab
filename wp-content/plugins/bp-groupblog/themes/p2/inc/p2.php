@@ -26,7 +26,7 @@ class P2 {
 			die();
 		}
 
-		if ( function_exists( 'is_site_admin' ) && !is_site_admin() ) return;
+		if ( function_exists( 'is_super_admin' ) && !is_super_admin() ) return;
 
 		$is_media_upload = isset( $_REQUEST['p2-upload'] );
 

@@ -34,7 +34,6 @@ interface BP_Options_Interface
 	 * - application_id     : An id for the application, use this when running multiple applications from the same code
 	 * - application_uri    : The base URI of the application
 	 * - cron_uri           : The URI that processes cron jobs
-	 * - cron_check         : A unique hash to check that the cron call is valid
 	 * - wp_http_version    : This is the version sent when making remote HTTP requests
 	 * - hash_function_name : The function used to create unique hashes ( see wp_hash() )
 	 * - language_locale    : The current locale

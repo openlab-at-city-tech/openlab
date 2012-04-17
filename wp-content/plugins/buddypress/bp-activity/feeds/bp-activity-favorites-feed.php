@@ -1,13 +1,19 @@
 <?php
+
 /**
  * RSS2 Feed Template for displaying a member's favorite activity
  *
  * @package BuddyPress
+ * @subpackage ActivityFeeds
  */
-header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
+
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
+header('Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 header('Status: 200 OK');
 ?>
-<?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
+<?php echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?'.'>'; ?>
 
 <rss version="2.0"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -18,13 +24,14 @@ header('Status: 200 OK');
 >
 
 <channel>
-	<title><?php echo bp_site_name() ?> | <?php echo $bp->displayed_user->fullname; ?> | <?php _e( 'Favorite Activity', 'buddypress' ) ?></title>
+	<title><?php bp_site_name() ?> | <?php echo $bp->displayed_user->fullname; ?> | <?php _e( 'Favorite Activity', 'buddypress' ) ?></title>
 	<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
-	<link><?php echo site_url( BP_ACTIVITY_SLUG . '/#my-favorites/' ) ?></link>
+	<link><?php echo home_url( bp_get_activity_root_slug() . '/#my-favorites/' ) ?></link>
 	<description><?php echo $bp->displayed_user->fullname; ?> - <?php _e( 'Favorite Activity', 'buddypress' ) ?></description>
 	<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_activity_get_last_updated(), false); ?></pubDate>
 	<generator>http://buddypress.org/?v=<?php echo BP_VERSION ?></generator>
 	<language><?php echo get_option('rss_language'); ?></language>
+
 	<?php do_action('bp_activity_favorites_feed_head'); ?>
 
 	<?php
@@ -34,9 +41,10 @@ header('Status: 200 OK');
 
 	<?php if ( bp_has_activities( 'include=' . $fav_ids . '&max=50&display_comments=stream' ) ) : ?>
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
+
 			<item>
 				<guid><?php bp_activity_thread_permalink() ?></guid>
-				<title><![CDATA[<?php bp_activity_feed_item_title() ?>]]></title>
+				<title><?php bp_activity_feed_item_title() ?></title>
 				<link><?php echo bp_activity_thread_permalink() ?></link>
 				<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_get_activity_feed_item_date(), false); ?></pubDate>
 
@@ -54,10 +62,13 @@ header('Status: 200 OK');
 					<?php endif; ?>
 					]]>
 				</description>
-				<?php do_action('bp_activity_favorites_feed_item'); ?>
-			</item>
-		<?php endwhile; ?>
 
+				<?php do_action('bp_activity_favorites_feed_item'); ?>
+
+			</item>
+
+		<?php endwhile; ?>
 	<?php endif; ?>
+
 </channel>
 </rss>

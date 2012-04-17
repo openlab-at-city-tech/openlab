@@ -9,17 +9,19 @@
 require_once('../../../wp-load.php');
 header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 <head>
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php echo get_option('blog_charset'); ?>" />
 <title><?php _e('Rich Editor Help') ?></title>
-<script type="text/javascript" src="tiny_mce_popup.js?ver=3223"></script>
+<script type="text/javascript" src="tiny_mce_popup.js?ver=342"></script>
 <?php
-wp_admin_css( 'global', true );
 wp_admin_css( 'wp-admin', true );
 ?>
 <style type="text/css">
+	body {
+		min-width: 0;
+	}
 	#wphead {
 		font-size: 80%;
 		border-top: 0;
@@ -36,6 +38,7 @@ wp_admin_css( 'wp-admin', true );
 		padding: 15px 15px 3px;
 		background-color: #f1f1f1;
 		border-bottom: 1px solid #dfdfdf;
+		margin: 0;
 	}
 	#tabs li {
 		display: inline;
@@ -127,6 +130,20 @@ wp_admin_css( 'wp-admin', true );
 	#buttoncontainer a, #buttoncontainer a:hover {
 		border-bottom: 0px;
 	}
+
+	.mac,
+	.macos .win {
+		display: none;
+	}
+
+	.macos span.mac {
+		display: inline;
+	}
+
+	.macwebkit tr.mac {
+		display: table-row;
+	}
+
 </style>
 <?php if ( is_rtl() ) : ?>
 <style type="text/css">
@@ -159,22 +176,34 @@ wp_admin_css( 'wp-admin', true );
 		}
 	}
 
-    function init() {
-        document.getElementById('version').innerHTML = tinymce.majorVersion + "." + tinymce.minorVersion;
+    tinyMCEPopup.onInit.add(function() {
+        var win = tinyMCEPopup.getWin();
+
+		document.getElementById('version').innerHTML = tinymce.majorVersion + "." + tinymce.minorVersion;
         document.getElementById('date').innerHTML = tinymce.releaseDate;
-    }
-    tinyMCEPopup.onInit.add(init);
+
+		if ( win.fullscreen && win.fullscreen.settings.visible ) {
+			d('content1').className = 'hidden';
+			d('tabs').className = 'hidden';
+			d('content3').className = 'dfw';
+		}
+
+		if ( tinymce.isMac )
+			document.body.className = 'macos';
+
+		if ( tinymce.isMac && tinymce.isWebKit )
+			document.body.className = 'macos macwebkit';
+
+    });
 </script>
 </head>
 <body>
 
-<div id="wphead"><h1><?php echo get_bloginfo('blogtitle'); ?></h1></div>
-
 <ul id="tabs">
-	<li><a id="tab1" href="javascript:flipTab(1)" title="<?php _e('Basics of Rich Editing') ?>" accesskey="1" tabindex="1" class="current"><?php _e('Basics') ?></a></li>
-	<li><a id="tab2" href="javascript:flipTab(2)" title="<?php _e('Advanced use of the Rich Editor') ?>" accesskey="2" tabindex="2"><?php _e('Advanced') ?></a></li>
-	<li><a id="tab3" href="javascript:flipTab(3)" title="<?php _e('Hotkeys') ?>" accesskey="3" tabindex="3"><?php _e('Hotkeys') ?></a></li>
-	<li><a id="tab4" href="javascript:flipTab(4)" title="<?php _e('About the software') ?>" accesskey="4" tabindex="4"><?php _e('About') ?></a></li>
+	<li><a id="tab1" href="javascript:flipTab(1)" title="<?php esc_attr_e('Basics of Rich Editing') ?>" accesskey="1" tabindex="1" class="current"><?php _e('Basics') ?></a></li>
+	<li><a id="tab2" href="javascript:flipTab(2)" title="<?php esc_attr_e('Advanced use of the Rich Editor') ?>" accesskey="2" tabindex="2"><?php _e('Advanced') ?></a></li>
+	<li><a id="tab3" href="javascript:flipTab(3)" title="<?php esc_attr_e('Hotkeys') ?>" accesskey="3" tabindex="3"><?php _e('Hotkeys') ?></a></li>
+	<li><a id="tab4" href="javascript:flipTab(4)" title="<?php esc_attr_e('About the software') ?>" accesskey="4" tabindex="4"><?php _e('About') ?></a></li>
 </ul>
 
 <div id="flipper" class="wrap">
@@ -202,28 +231,25 @@ wp_admin_css( 'wp-admin', true );
 <div id="content3" class="hidden">
 	<h2><?php _e('Writing at Full Speed') ?></h2>
     <p><?php _e('Rather than reaching for your mouse to click on the toolbar, use these access keys. Windows and Linux use Ctrl + letter. Macintosh uses Command + letter.') ?></p>
+
 	<table class="keys" width="100%" style="border: 0 none;">
 		<tr class="top"><th class="key center"><?php _e('Letter') ?></th><th class="left"><?php _e('Action') ?></th><th class="key center"><?php _e('Letter') ?></th><th class="left"><?php _e('Action') ?></th></tr>
 		<tr><th>c</th><td><?php _e('Copy') ?></td><th>v</th><td><?php _e('Paste') ?></td></tr>
 		<tr><th>a</th><td><?php _e('Select all') ?></td><th>x</th><td><?php _e('Cut') ?></td></tr>
 		<tr><th>z</th><td><?php _e('Undo') ?></td><th>y</th><td><?php _e('Redo') ?></td></tr>
-		<script type="text/javascript">
-		if ( ! tinymce.isWebKit )
-			document.write("<tr><th>b</th><td><?php _e('Bold') ?></td><th>i</th><td><?php _e('Italic') ?></td></tr>"+
-			"<tr><th>u</th><td><?php _e('Underline') ?></td><th>1</th><td><?php _e('Heading 1') ?></td></tr>"+
-			"<tr><th>2</th><td><?php _e('Heading 2') ?></td><th>3</th><td><?php _e('Heading 3') ?></td></tr>"+
-			"<tr><th>4</th><td><?php _e('Heading 4') ?></td><th>5</th><td><?php _e('Heading 5') ?></td></tr>"+
-			"<tr><th>6</th><td><?php _e('Heading 6') ?></td><th>9</th><td><?php _e('Address') ?></td></tr>")
-		</script>
+
+		<tr class="win"><th>b</th><td><?php _e('Bold') ?></td><th>i</th><td><?php _e('Italic') ?></td></tr>
+		<tr class="win"><th>u</th><td><?php _e('Underline') ?></td><th>1</th><td><?php _e('Heading 1') ?></td></tr>
+		<tr class="win"><th>2</th><td><?php _e('Heading 2') ?></td><th>3</th><td><?php _e('Heading 3') ?></td></tr>
+		<tr class="win"><th>4</th><td><?php _e('Heading 4') ?></td><th>5</th><td><?php _e('Heading 5') ?></td></tr>
+		<tr class="win"><th>6</th><td><?php _e('Heading 6') ?></td><th>9</th><td><?php _e('Address') ?></td></tr>
 	</table>
 
 	<p><?php _e('The following shortcuts use different access keys: Alt + Shift + letter.') ?></p>
 	<table class="keys" width="100%" style="border: 0 none;">
 		<tr class="top"><th class="key center"><?php _e('Letter') ?></th><th class="left"><?php _e('Action') ?></th><th class="key center"><?php _e('Letter') ?></th><th class="left"><?php _e('Action') ?></th></tr>
-		<script type="text/javascript">
-		if ( tinymce.isWebKit )
-			document.write("<tr><th>b</th><td><?php _e('Bold') ?></td><th>i</th><td><?php _e('Italic') ?></td></tr>")
-		</script>
+		<tr class="mac"><th>b</th><td><?php _e('Bold') ?></td><th>i</th><td><?php _e('Italic') ?></td></tr>
+
 		<tr><th>n</th><td><?php _e('Check Spelling') ?></td><th>l</th><td><?php _e('Align Left') ?></td></tr>
 		<tr><th>j</th><td><?php _e('Justify Text') ?></td><th>c</th><td><?php _e('Align Center') ?></td></tr>
 		<tr><th>d</th><td><span style="text-decoration: line-through;"><?php _e('Strikethrough') ?></span></td><th>r</th><td><?php _e('Align Right') ?></td></tr>
@@ -233,6 +259,11 @@ wp_admin_css( 'wp-admin', true );
 		<tr><th>g</th><td><?php _e('Full Screen') ?></td><th>t</th><td><?php _e('Insert More Tag') ?></td></tr>
 		<tr><th>p</th><td><?php _e('Insert Page Break tag') ?></td><th>h</th><td><?php _e('Help') ?></td></tr>
 		<tr><th>e</th><td colspan="3"><?php _e('Switch to HTML mode') ?></td></tr>
+
+		<tr><th colspan="4" style="font-weight: normal;padding: 15px 10px 10px;"><?php _e('Editor width in Distraction-free writing mode:'); ?></th></tr>
+		<tr><th><span class="win">Alt +</span><span class="mac">Ctrl +</span></th><td><?php _e('Wider') ?></td>
+			<th><span class="win">Alt -</span><span class="mac">Ctrl -</span></th><td><?php _e('Narrower') ?></td></tr>
+		<tr><th><span class="win">Alt 0</span><span class="mac">Ctrl 0</span></th><td><?php _e('Default width') ?></td><th></th><td></td></tr>
 	</table>
 </div>
 
@@ -240,14 +271,12 @@ wp_admin_css( 'wp-admin', true );
 	<h2><?php _e('About TinyMCE'); ?></h2>
 
     <p><?php _e('Version:'); ?> <span id="version"></span> (<span id="date"></span>)</p>
-	<p><?php printf(__('TinyMCE is a platform independent web based Javascript HTML WYSIWYG editor control released as Open Source under %sLGPL</a>	by Moxiecode Systems AB. It has the ability to convert HTML TEXTAREA fields or other HTML elements to editor instances.'), '<a href="'.home_url('/wp-includes/js/tinymce/license.txt').'" target="_blank" title="'.esc_attr__('GNU Library General Public Licence').'">') ?></p>
-	<p><?php _e('Copyright &copy; 2003-2007, <a href="http://www.moxiecode.com" target="_blank">Moxiecode Systems AB</a>, All rights reserved.') ?></p>
+	<p><?php printf(__('TinyMCE is a platform independent web based Javascript HTML WYSIWYG editor released as Open Source under %sLGPL</a>	by Moxiecode Systems AB. It has the ability to convert HTML TEXTAREA fields or other HTML elements to editor instances.'), '<a href="'.home_url('/wp-includes/js/tinymce/license.txt').'" target="_blank" title="'.esc_attr__('GNU Library General Public Licence').'">') ?></p>
+	<p><?php _e('Copyright &copy; 2003-2011, <a href="http://www.moxiecode.com" target="_blank">Moxiecode Systems AB</a>, All rights reserved.') ?></p>
 	<p><?php _e('For more information about this software visit the <a href="http://tinymce.moxiecode.com" target="_blank">TinyMCE website</a>.') ?></p>
 
 	<div id="buttoncontainer">
-		<a href="http://www.moxiecode.com" target="_blank"><img src="themes/advanced/img/gotmoxie.png" alt="<?php _e('Got Moxie?') ?>" style="border: none;" /></a>
-		<a href="http://sourceforge.net/projects/tinymce/" target="_blank"><img src="themes/advanced/img/sflogo.png" alt="<?php _e('Hosted By Sourceforge') ?>" style="border: none;" /></a>
-		<a href="http://www.freshmeat.net/projects/tinymce" target="_blank"><img src="themes/advanced/img/fm.gif" alt="<?php _e('Also on freshmeat') ?>" style="border: none;" /></a>
+		<a href="http://www.moxiecode.com" target="_blank"><img src="themes/advanced/img/gotmoxie.png" alt="<?php esc_attr_e('Got Moxie?') ?>" style="border: 0" /></a>
 	</div>
 
 </div>
@@ -255,7 +284,7 @@ wp_admin_css( 'wp-admin', true );
 
 <div class="mceActionPanel">
 	<div style="margin: 8px auto; text-align: center;padding-bottom: 10px;">
-		<input type="button" id="cancel" name="cancel" value="<?php _e('Close'); ?>" title="<?php _e('Close'); ?>" onclick="tinyMCEPopup.close();" />
+		<input type="button" id="cancel" name="cancel" value="<?php esc_attr_e('Close'); ?>" title="<?php esc_attr_e('Close'); ?>" onclick="tinyMCEPopup.close();" />
 	</div>
 </div>
 

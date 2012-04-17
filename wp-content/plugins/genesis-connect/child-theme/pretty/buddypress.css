@@ -36,21 +36,22 @@ background: url(images/headline-sidebar.png) left;
 
 /* buttons */
 #search-submit, 
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	input[type=submit],
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder #submit,
-	.internal-page #content .padder .submit input[type=button],
-	.button {
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+input[type=submit],
+.internal-page #content .padder a.button,
+.internal-page #content .padder #submit,
+.internal-page #content .padder .submit input[type=button],
+#submit_topic_cancel,
+.button {
 	background-color: #79cdc1;
 	border: 1px solid #79cdc1;
 	color: #fff; !important
@@ -61,29 +62,30 @@ background: url(images/headline-sidebar.png) left;
 	text-decoration: none;
 	text-transform: uppercase;
 	-moz-border-radius: 0px;
-	}
+}
 
 #search-submit:hover,
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.dir-search input[type=submit]:hover,
-	#profile-group-edit-submit:hover,
-	#send:hover,
-	div.ac-reply-content input:hover,
-	input[type=submit]:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder #submit:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.button:hover {
-border: 1px solid #6db9ae;
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.dir-search input[type=submit]:hover,
+#profile-group-edit-submit:hover,
+#send:hover,
+div.ac-reply-content input:hover,
+input[type=submit]:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder #submit:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+#submit_topic_cancel:hover,
+.button:hover {
+	border: 1px solid #6db9ae;
 	background-color: #6db9ae;
 	color: #fff;
 	text-decoration: none;
-	}
+}
 div.generic-button {
 	background: transparent;
 	border: none;

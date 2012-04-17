@@ -19,9 +19,9 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	/**
 	 * constructor
 	 *
-	 * @param mixed $arg ingored argument
+	 * @param mixed $arg ignored argument
 	 */
-	function WP_Filesystem_Direct($arg) {
+	function __construct($arg) {
 		$this->method = 'direct';
 		$this->errors = new WP_Error();
 	}
@@ -89,7 +89,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 *
 	 * @param string $file Path to the file.
 	 * @param mixed $group A group name or number.
-	 * @param bool $recursive (optional) If set True changes file group recursivly. Defaults to False.
+	 * @param bool $recursive (optional) If set True changes file group recursively. Defaults to False.
 	 * @return bool Returns true on success or false on failure.
 	 */
 	function chgrp($file, $group, $recursive = false) {
@@ -112,7 +112,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 *
 	 * @param string $file Path to the file.
 	 * @param int $mode (optional) The permissions as octal number, usually 0644 for files, 0755 for dirs.
-	 * @param bool $recursive (optional) If set True changes file group recursivly. Defaults to False.
+	 * @param bool $recursive (optional) If set True changes file group recursively. Defaults to False.
 	 * @return bool Returns true on success or false on failure.
 	 */
 	function chmod($file, $mode = false, $recursive = false) {
@@ -140,7 +140,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 *
 	 * @param string $file Path to the file.
 	 * @param mixed $owner A user name or number.
-	 * @param bool $recursive (optional) If set True changes file owner recursivly. Defaults to False.
+	 * @param bool $recursive (optional) If set True changes file owner recursively. Defaults to False.
 	 * @return bool Returns true on success or false on failure.
 	 */
 	function chown($file, $owner, $recursive = false) {
@@ -193,11 +193,14 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		return $grouparray['name'];
 	}
 
-	function copy($source, $destination, $overwrite = false) {
+	function copy($source, $destination, $overwrite = false, $mode = false) {
 		if ( ! $overwrite && $this->exists($destination) )
 			return false;
 
-		return copy($source, $destination);
+		$rtval = copy($source, $destination);
+		if ( $mode )
+			$this->chmod($destination, $mode);
+		return $rtval;
 	}
 
 	function move($source, $destination, $overwrite = false) {
@@ -216,12 +219,12 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		}
 	}
 
-	function delete($file, $recursive = false) {
+	function delete($file, $recursive = false, $type = false) {
 		if ( empty($file) ) //Some filesystems report this as /, which can cause non-expected recursive deletion of all files in the filesystem.
 			return false;
-		$file = str_replace('\\', '/', $file); //for win32, occasional problems deleteing files otherwise
+		$file = str_replace('\\', '/', $file); //for win32, occasional problems deleting files otherwise
 
-		if ( $this->is_file($file) )
+		if ( 'f' == $type || $this->is_file($file) )
 			return @unlink($file);
 		if ( ! $recursive && $this->is_dir($file) )
 			return @rmdir($file);
@@ -233,7 +236,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		$retval = true;
 		if ( is_array($filelist) ) //false if no files, So check first.
 			foreach ($filelist as $filename => $fileinfo)
-				if ( ! $this->delete($file . $filename, $recursive) )
+				if ( ! $this->delete($file . $filename, $recursive, $fileinfo['type']) )
 					$retval = false;
 
 		if ( file_exists($file) && ! @rmdir($file) )
@@ -284,7 +287,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		// safe mode fails with a trailing slash under certain PHP versions.
 		$path = untrailingslashit($path);
 		if ( empty($path) )
-			$path = '/';
+			return false;
 
 		if ( ! $chmod )
 			$chmod = FS_CHMOD_DIR;

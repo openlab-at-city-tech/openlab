@@ -291,6 +291,7 @@ function post_form( $args = array() ) {
 	do_action( 'pre_post_form' );
 
 	if (
+		( false === bb_is_login_required() ) ||
 		( bb_is_topic() && bb_current_user_can( 'write_post', $topic->topic_id ) && ( $page == $last_page || !$last_page_only ) ) ||
 		( !bb_is_topic() && bb_current_user_can( 'write_topic', isset( $forum->forum_id ) ? $forum->forum_id : 0 ) )
 	) {
@@ -329,6 +330,11 @@ function edit_form() {
 		echo "\n" . '<input type="hidden" name="view" value="all" />';
 	echo "\n" . '</fieldset>' . "\n" . '</form>' . "\n";
 	do_action('post_edit_form');
+}
+
+function bb_anonymous_post_form() {
+	if ( !bb_is_user_logged_in() && !bb_is_login_required() )
+		bb_load_template( 'post-form-anonymous.php' );
 }
 
 function alt_class( $key, $others = '' ) {
@@ -427,6 +433,14 @@ function bb_is_forum() {
 	return 'forum-page' == bb_get_location();
 }
 
+/**
+ * Whether a user is required to log in in order to create posts and forums.
+ * @return bool Whether a user must be logged in.
+ */
+function bb_is_login_required() {
+	return ! (bool) bb_get_option('enable_loginless');
+}
+
 function bb_is_tags() {
 	return 'tag-page' == bb_get_location();
 }
@@ -475,7 +489,7 @@ function bb_is_admin() {
 }
 
 function bb_title( $args = '' ) {
-	echo apply_filters( 'bb_title', bb_get_title( $args ) );
+	echo apply_filters( 'bb_title', bb_get_title( $args ), $args );
 }
 
 function bb_get_title( $args = '' ) {
@@ -488,6 +502,12 @@ function bb_get_title( $args = '' ) {
 	$title = array();
 	
 	switch ( bb_get_location() ) {
+		case 'search-page':
+			if ( !$q = trim( @$_GET['search'] ) )
+				if ( !$q = trim( @$_GET['q'] ) )
+					break;
+			$title[] = sprintf( __( 'Search for %s' ), esc_html( $q ) );
+			break;
 		case 'front-page':
 			if ( !empty( $args['front'] ) )
 				$title[] = $args['front'];
@@ -506,7 +526,7 @@ function bb_get_title( $args = '' ) {
 			if ( bb_is_tag() )
 				$title[] = esc_html( bb_get_tag_name() );
 			
-			$title[] = __('Tags');
+			$title[] = __( 'Tags' );
 			break;
 		
 		case 'profile-page':
@@ -526,7 +546,7 @@ function bb_get_title( $args = '' ) {
 	if ( 'reversed' == $args['order'] )
 		$title = array_reverse( $title );
 	
-	return apply_filters( 'bb_get_title', implode( $args['separator'], $title ) );
+	return apply_filters( 'bb_get_title', implode( $args['separator'], $title ), $args, $title );
 }
 
 function bb_feed_head() {
@@ -663,7 +683,7 @@ function bb_latest_topics_pages( $args = null )
 	static $bb_latest_topics_count;
 	if ( !$bb_latest_topics_count) {
 		global $bbdb;
-		$bb_latest_topics_count = $bbdb->get_var('SELECT COUNT(`topic_id`) FROM `' . $bbdb->topics . '` WHERE `topic_open` = 1 AND `topic_status` = 0 AND `topic_sticky` != 2;');
+		$bb_latest_topics_count = $bbdb->get_var('SELECT COUNT(`topic_id`) FROM `' . $bbdb->topics . '` WHERE `topic_status` = 0 AND `topic_sticky` != 2;');
 	}
 	if ( $pages = apply_filters( 'bb_latest_topics_pages', get_page_number_links( $page, $bb_latest_topics_count ), $bb_latest_topics_count ) ) {
 		echo $args['before'] . $pages . $args['after'];
@@ -1120,12 +1140,13 @@ function get_topic_page_links( $id = 0, $args = null ) {
 
 	$links = $_links;
 
+	$r = '';
+
 	if ( $links ) {
 		if ( !$show_first ) {
 			unset( $links[0] );
 		}
 
-		$r = '';
 		if ( $args['before'] ) {
 			$r .= $args['before'];
 		}
@@ -1186,7 +1207,7 @@ function topic_last_poster( $id = 0 ) {
 
 function get_topic_last_poster( $id = 0 ) {
 	$topic = get_topic( get_topic_id( $id ) );
-	$user_display_name = get_user_display_name($topic->topic_last_poster);
+	$user_display_name = get_post_author( $topic->topic_last_post_id );
 	return apply_filters( 'get_topic_last_poster', $user_display_name, $topic->topic_last_poster, $topic->topic_id ); // $topic->topic_last_poster = user ID
 }
 
@@ -1197,7 +1218,8 @@ function topic_author( $id = 0 ) {
 
 function get_topic_author( $id = 0 ) {
 	$topic = get_topic( get_topic_id( $id ) );
-	$user_display_name = get_user_display_name($topic->topic_poster);
+	$first_post = bb_get_first_post( $topic );
+	$user_display_name = get_post_author( $first_post->post_id );
 	return apply_filters( 'get_topic_author', $user_display_name, $topic->topic_poster, $topic->topic_id ); // $topic->topic_poster = user ID
 }
 
@@ -1356,8 +1378,7 @@ function get_page_number_links( $args ) {
 	return $links;
 }
 
-function bb_topic_admin( $args = '' )
-{
+function bb_topic_admin( $args = '' ) {
 	$parts = array(
 		'delete' => bb_get_topic_delete_link( $args ),
 		'close'  => bb_get_topic_close_link( $args ),
@@ -1365,7 +1386,7 @@ function bb_topic_admin( $args = '' )
 		'move'   => bb_get_topic_move_dropdown( $args )
 	);
 
-	echo join( "\n", apply_filters( 'bb_topic_admin', $parts ) );
+	echo join( "\n", apply_filters( 'bb_topic_admin', $parts, $args ) );
 }
 
 function topic_delete_link( $args = '' ) {
@@ -1382,16 +1403,19 @@ function bb_get_topic_delete_link( $args = '' ) {
 	if ( !$topic || !bb_current_user_can( 'delete_topic', $topic->topic_id ) )
 		return;
 
-	if ( true === $redirect )
-		$redirect = $_SERVER['REQUEST_URI'];
-
 	if ( 0 == $topic->topic_status ) {
+		if ( true === $redirect )
+			$redirect = add_query_arg( bb_is_admin() ? array() : array( 'view' => 'all'  ) );
+
 		$query   = array( 'id' => $topic->topic_id, '_wp_http_referer' => $redirect ? rawurlencode( $redirect ) : false );
-		$confirm = __('Are you sure you wanna delete that?');
+		$confirm = __('Are you sure you want to delete that?');
 		$display = esc_html( $delete_text ? $delete_text : __('Delete entire topic') );
 	} else {
+		if ( true === $redirect )
+			$redirect = remove_query_arg( bb_is_admin() ? array() : 'view' );
+
 		$query   = array('id' => $topic->topic_id, 'view' => 'all', '_wp_http_referer' => $redirect ? rawurlencode( $redirect ) : false );
-		$confirm = __('Are you sure you wanna undelete that?');
+		$confirm = __('Are you sure you want to undelete that?');
 		$display = esc_html( $undelete_text ? $undelete_text : __('Undelete entire topic') );
 	}
 	$uri = bb_get_uri('bb-admin/delete-topic.php', $query, BB_URI_CONTEXT_A_HREF + BB_URI_CONTEXT_BB_ADMIN);
@@ -1545,7 +1569,7 @@ function topic_class( $class = '', $key = 'topic', $id = 0 ) {
 		$class[] = 'closed';
 	if ( 1 == $topic->topic_sticky && ( bb_is_forum() || bb_is_view() ) )
 		$class[] = 'sticky';
-	elseif ( 2 == $topic->topic_sticky && ( bb_is_front() || bb_is_forum() ) )
+	elseif ( 2 == $topic->topic_sticky && ( bb_is_front() || bb_is_forum() || bb_is_view() ) )
 		$class[] = 'sticky super-sticky';
 	$class = apply_filters( 'topic_class', $class, $topic->topic_id );
 	$class = join(' ', $class);
@@ -1582,8 +1606,8 @@ function bb_get_new_topic_link( $args = null ) {
 	elseif ( bb_is_front() )
 		$url = bb_get_uri(null, array('new' => 1));
 
-	if ( !bb_is_user_logged_in() )
-		$url = bb_get_uri('bb-login.php', array('re' => $url), BB_URI_CONTEXT_A_HREF + BB_URI_CONTEXT_BB_USER_FORMS);
+	if ( !bb_is_user_logged_in() && bb_is_login_required() )
+		$url = bb_get_uri('bb-login.php', array('redirect_to' => $url), BB_URI_CONTEXT_A_HREF + BB_URI_CONTEXT_BB_USER_FORMS);
 	elseif ( bb_is_forum() || bb_is_topic() ) {
 		if ( !bb_current_user_can( 'write_topic', get_forum_id() ) )
 			return;
@@ -1622,6 +1646,16 @@ function bb_topic_search_form( $args = null, $query_obj = null ) {
 		$query_obj =& $bb_query_form;
 
 	$query_obj->form( $args );
+}
+
+function bb_search_pages( $args = null ) {
+	global $page, $search_count, $per_page;
+	
+	$defaults = array( 'before' => '', 'after' => '' );
+ 	$args = wp_parse_args( $args, $defaults );
+	
+	if ( $pages = apply_filters( 'bb_search_pages', get_page_number_links( array( 'page' => $page, 'total' => $search_count, 'per_page' => $per_page, 'mod_rewrite' => false ) ) ) )
+		echo $args['before'] . $pages . $args['after'];
 }
 
 /**
@@ -1733,16 +1767,20 @@ function post_author( $post_id = 0 ) {
 function get_post_author( $post_id = 0 ) {
 	if ( $user = bb_get_user( get_post_author_id( $post_id ) ) )
 		return apply_filters( 'get_post_author', $user->display_name, $user->ID, $post_id );
-	elseif ( $title = bb_get_post_meta( 'pingback_title' ) )
+	elseif ( $title = bb_get_post_meta( 'pingback_title', $post_id ) )
 		return apply_filters( 'bb_get_pingback_title', $title, $post_id );
+	elseif ( $title = bb_get_post_meta( 'post_author', $post_id ) )
+		return apply_filters( 'get_post_author', $title, 0, $post_id );
 	else
 		return apply_filters( 'get_post_author', __('Anonymous'), 0, $post_id );
 }
 
 function post_author_link( $post_id = 0 ) {
-	if ( $link = get_user_link( get_post_author_id( $post_id ) ) ) {
+	if ( $link = ( bb_get_option( 'name_link_profile' ) ? get_user_profile_link( get_post_author_id( $post_id ) ) : get_user_link( get_post_author_id( $post_id ) ) ) ) {
 		echo '<a href="' . esc_attr( $link ) . '">' . get_post_author( $post_id ) . '</a>';
 	} elseif ( $link = bb_get_post_meta( 'pingback_uri' )) {
+		echo '<a href="' . esc_attr( $link ) . '">' . get_post_author( $post_id ) . '</a>';
+	} elseif ( $link = bb_get_post_meta( 'post_url' ) ) {
 		echo '<a href="' . esc_attr( $link ) . '">' . get_post_author( $post_id ) . '</a>';
 	} else {
 		post_author( $post_id );
@@ -2124,8 +2162,12 @@ function get_post_author_title_link( $post_id = 0 ) {
 			$r = __('PingBack');
 		else
 			$r = __('Unregistered'); // This should never happen
-	} else
-		$r = '<a href="' . esc_attr( get_user_profile_link( get_post_author_id( $post_id ) ) ) . '">' . $title . '</a>';
+	} else {
+		if ( $link = bb_get_option( 'name_link_profile' ) ? get_user_link( get_post_author_id( $post_id ) ) : get_user_profile_link( get_post_author_id( $post_id ) ) )
+			$r = '<a href="' . esc_attr( $link ) . '">' . $title . '</a>';
+		else
+			$r = $title;
+	}
 
 	return apply_filters( 'get_post_author_title_link', $r, get_post_id( $post_id ) );
 }
@@ -2220,6 +2262,11 @@ function get_user_profile_link( $id = 0, $page = 1, $context = BB_URI_CONTEXT_A_
 
 function user_delete_button() {
 	global $user;
+	
+	$user_obj = new BP_User( $user->ID );
+	if ( !bb_current_user_can( 'keep_gate' ) && 'keymaster' == $user_obj->roles[0] )
+		return;
+	
 	if ( bb_current_user_can( 'edit_users' ) && bb_get_current_user_info( 'id' ) != (int) $user->ID )
 		echo apply_filters( 'user_delete_button', get_user_delete_button() );
 }
@@ -2399,6 +2446,8 @@ function bb_profile_data_form( $id = 0 ) {
 	$error_codes = $errors->get_error_codes();
 	$profile_info_keys = bb_get_profile_info_keys();
 	$required = false;
+	if ( in_array( 'delete', $error_codes ) )
+		echo '<div class="form-invalid error">' . $errors->get_error_message( 'delete' ) . '</div>';
 ?>
 <table id="userinfo">
 <?php
@@ -2532,7 +2581,7 @@ function bb_profile_admin_form( $id = 0 ) {
 	$can_keep_gate = bb_current_user_can( 'keep_gate' );
 
 	// Keymasters can't demote themselves
-	if ( ( $bb_current_id == $user->ID && $can_keep_gate ) || ( isset( $user->capabilities ) && is_array( $user->capabilities ) && array_key_exists('keymaster', $user->capabilities) && !$can_keep_gate ) ) {
+	if ( ( $bb_current_id == $user->ID && $can_keep_gate ) || ( isset( $user->capabilities ) && is_array( $user->capabilities ) && array_key_exists( 'keymaster', $user->capabilities ) && !$can_keep_gate ) ) {
 		$roles = array( 'keymaster' => $roles['keymaster'] );
 	} elseif ( !$can_keep_gate ) { // only keymasters can promote others to keymaster status
 		unset($roles['keymaster']);
@@ -2705,7 +2754,7 @@ function bb_profile_password_form( $id = 0 ) {
 			if (typeof jQuery != 'undefined') {
 				document.writeln('<div id="pass-strength-result">' + pwsL10n.short + '</div>');
 			} else {
-				document.writeln('<?php echo str_replace("'", "\'", __('Disabled (requires jQuery)')); ?>')
+				document.writeln('<?php echo str_replace("'", "\'", __('Disabled.')); ?>')
 			}
 		</script>
 	</td>
@@ -2730,9 +2779,9 @@ function bb_get_logout_link( $args = '' ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract($args, EXTR_SKIP);
 
-	$query = array( 'logout' => 1 );
+	$query = array( 'action' => 'logout' );
 	if ( $redirect ) {
-		$query['re'] = $redirect;
+		$query['redirect_to'] = $redirect;
 	}
 
 	$uri = esc_attr( bb_get_uri('bb-login.php', $query, BB_URI_CONTEXT_A_HREF + BB_URI_CONTEXT_BB_USER_FORMS) );
@@ -2759,6 +2808,18 @@ function bb_get_admin_link( $args = '' ) {
 	$uri = esc_attr( bb_get_uri('bb-admin/', null, BB_URI_CONTEXT_A_HREF + BB_URI_CONTEXT_BB_ADMIN) );
 
 	return apply_filters( 'bb_get_admin_link', $before . '<a href="' . $uri . '">' . $text . '</a>' . $after, $args );
+}
+
+function bb_get_user_admin_link( $user_id = null ) { 
+	if( !$user_id || !bb_current_user_can( 'edit_user', $user_id ) )
+		return;
+
+	if( !bb_get_user_id( $user_id ) )
+		return;
+
+	$uri = bb_get_uri( 'bb-admin/users.php', array( 'action' => 'edit', 'user_id' => $user_id ) );
+
+	return apply_filters( 'bb_get_user_admin_link', $uri, $user_id );
 }
 
 function bb_profile_link( $args = '' ) {
@@ -3280,7 +3341,7 @@ function bb_get_forum_dropdown( $args = '' ) {
 		} else {
 			$tab = '';
 		}
-		$r .= '<select name="' . $name . '" id="' . $id . '"' . $tab . '">' . "\n";
+		$r .= '<select name="' . $name . '" id="' . $id . '"' . $tab . '>' . "\n";
 	}
 	if ( $none )
 		$r .= "\n" . '<option value="0">' . $none . '</option>' . "\n";
@@ -3427,6 +3488,105 @@ function favorites_pages( $args = null )
 	}
 }
 
+//SUBSCRIPTION
+
+/** 
+ * Checks if subscription is enabled.
+ * 
+ * @since 1.1 
+ *  
+ * @return bool is subscription enabled or not 
+ */
+function bb_is_subscriptions_active() { 
+	return (bool) bb_get_option( 'enable_subscriptions' ); 
+}
+
+/**
+ * Checks if user is subscribed to current topic.
+ *
+ * @since 1.1
+ *
+ * @return bool is user subscribed or not
+ */
+function bb_is_user_subscribed( $args = null ) {
+	global $bbdb;
+	
+	$defaults = array(
+		'user_id'  => bb_is_topic_edit() ? bb_get_user_id( get_post_author_id() ) : bb_get_current_user_info( 'id' ),
+		'topic_id' => get_topic_id()
+	);
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args, EXTR_SKIP );
+	
+	$there = $bbdb->get_var( $bbdb->prepare( "SELECT `$bbdb->term_relationships`.`object_id`
+				FROM $bbdb->term_relationships, $bbdb->term_taxonomy, $bbdb->terms
+				WHERE `$bbdb->term_relationships`.`object_id` = %d
+				AND `$bbdb->term_relationships`.`term_taxonomy_id` = `$bbdb->term_taxonomy`.`term_taxonomy_id`
+				AND `$bbdb->term_taxonomy`.`term_id` = `$bbdb->terms`.`term_id`
+				AND `$bbdb->term_taxonomy`.`taxonomy` = 'bb_subscribe'
+				AND `$bbdb->terms`.`slug` = 'topic-%d'",
+				$user_id, $topic_id ) );
+	
+	$there = apply_filters( 'bb_is_user_subscribed', $there, $args );
+	
+	if ( $there )
+		return true;
+	
+	return false;
+}
+
+/**
+ * Outputs the subscribe/unsubscibe link.
+ *
+ * Checks if user is subscribed and outputs link based on status.
+ *
+ * @since 1.1
+ */
+function bb_user_subscribe_link() {
+	$topic_id = get_topic_id();
+
+	if ( !bb_is_user_logged_in() )
+		return false;
+
+	if ( bb_is_user_subscribed() )
+		echo '<li id="subscription-toggle"><a href="'. bb_nonce_url( bb_get_uri( null, array( 'doit' => 'bb-subscribe', 'topic_id' => $topic_id, 'and' => 'remove' ) ), 'toggle-subscribe_' . $topic_id ) .'">' . apply_filters( 'bb_user_subscribe_link_unsubscribe', __( 'Unsubscribe from Topic' ) ) . '</a></li>';
+	else
+		echo '<li id="subscription-toggle"><a href="'. bb_nonce_url( bb_get_uri( null, array( 'doit' => 'bb-subscribe', 'topic_id' => $topic_id, 'and' => 'add' ) ), 'toggle-subscribe_' . $topic_id ) .'">' . apply_filters( 'bb_user_subscribe_link_subscribe', __( 'Subscribe to Topic' ) ) . '</a></li>';
+
+}
+
+/**
+ * Outputs the post form subscription checkbox.
+ *
+ * Checks if user is subscribed and outputs checkbox based on status.
+ *
+ * @since 1.1
+ */
+function bb_user_subscribe_checkbox( $args = null ) {
+	
+	if ( !bb_is_user_logged_in() )
+		return false;
+
+	$is_current = false;
+	$defaults   = array( 'tab' => false );
+	$args       = wp_parse_args( $args, $defaults );
+	$tab        = $args['tab'] !== false ? ' tabindex="' . $args['tab'] . '"' : '';
+	$is_current = bb_get_user_id( get_post_author_id() ) == bb_get_current_user_info( 'id' );
+
+	// Change subscription checkbox message if current or moderating
+	if ( bb_is_topic_edit() && !$is_current )
+		$text = __( 'This user should be notified of follow-up posts via email' );
+	else
+		$text = __( 'Notify me of follow-up posts via email' );
+
+	echo '
+	<label for="subscription_checkbox">
+		<input name="subscription_checkbox" id="subscription_checkbox" type="checkbox" value="subscribe" ' . checked( true, bb_is_user_subscribed(), false ) . $tab . ' />
+		' .  apply_filters( 'bb_user_subscribe_checkbox_label', $text, (bool) $is_current ) . '
+	</label>';
+
+}
+
 //VIEWS
 function view_name( $view = '' ) { // Filtration should be done at bb_register_view()
 	echo get_view_name( $view );
@@ -3507,11 +3667,7 @@ function _bb_time_function_return( $time, $args ) {
 		break;
 	endswitch;
 
-	if ( $args['localize'] ) {
-		return bb_gmdate_i18n( $format, $time );
-	} else {
-		return gmdate( $format, $time );
-	}
+	return $args['localize'] ? bb_gmdate_i18n( $format, $time ) : gmdate( $format, $time );
 }
 
 function bb_template_scripts() {
@@ -3524,3 +3680,85 @@ function bb_template_scripts() {
 		}
 	}
 }
+
+if ( !function_exists( 'checked' ) ) :
+/**
+ * Outputs the html checked attribute.
+ *
+ * Compares the first two arguments and if identical marks as checked
+ *
+ * @since 1.1
+ *
+ * @param mixed $checked One of the values to compare
+ * @param mixed $current (true) The other value to compare if not just true
+ * @param bool $echo Whether to echo or just return the string
+ * @return string html attribute or empty string
+ */
+function checked( $checked, $current = true, $echo = true ) {
+	return __checked_selected_helper( $checked, $current, $echo, 'checked' );
+}
+endif;
+
+if ( !function_exists( 'selected' ) ) :
+/**
+ * Outputs the html selected attribute.
+ *
+ * Compares the first two arguments and if identical marks as selected
+ *
+ * @since 1.1
+ *
+ * @param mixed selected One of the values to compare
+ * @param mixed $current (true) The other value to compare if not just true
+ * @param bool $echo Whether to echo or just return the string
+ * @return string html attribute or empty string
+ */
+function selected( $selected, $current = true, $echo = true ) {
+	return __checked_selected_helper( $selected, $current, $echo, 'selected' );
+}
+endif;
+
+if ( !function_exists( 'disabled' ) ) :
+/**
+ * Outputs the html disabled attribute.
+ *
+ * Compares the first two arguments and if identical marks as disabled
+ *
+ * @since 1.1
+ *
+ * @param mixed $disabled One of the values to compare
+ * @param mixed $current (true) The other value to compare if not just true
+ * @param bool $echo Whether to echo or just return the string
+ * @return string html attribute or empty string
+ */
+function disabled( $disabled, $current = true, $echo = true ) {
+	return __checked_selected_helper( $disabled, $current, $echo, 'disabled' );
+}
+endif;
+
+if ( !function_exists( '__checked_selected_helper' ) ) :
+/**
+ * Private helper function for checked, selected, and disabled.
+ *
+ * Compares the first two arguments and if identical marks as $type
+ *
+ * @since 1.1
+ * @access private
+ *
+ * @param any $helper One of the values to compare
+ * @param any $current (true) The other value to compare if not just true
+ * @param bool $echo Whether to echo or just return the string
+ * @param string $type The type of checked|selected|disabled we are doing
+ * @return string html attribute or empty string
+ */
+function __checked_selected_helper( $helper, $current, $echo, $type ) {
+	if ( (string) $helper === (string) $current )
+		$result = " $type='$type'";
+	else
+		$result = '';
+
+	if ( $echo )
+		echo $result;
+
+	return $result;
+}
+endif;

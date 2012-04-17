@@ -38,7 +38,7 @@ function get_the_author($deprecated = '') {
  * still use the old behavior will also pass the value from get_the_author().
  *
  * The normal, expected behavior of this function is to echo the author and not
- * return it. However, backwards compatiability has to be maintained.
+ * return it. However, backwards compatibility has to be maintained.
  *
  * @since 0.71
  * @see get_the_author()
@@ -203,8 +203,10 @@ function the_author_posts_link($deprecated = '') {
 		_deprecated_argument( __FUNCTION__, '2.1' );
 
 	global $authordata;
+	if ( !is_object( $authordata ) )
+		return false;
 	$link = sprintf(
-		'<a href="%1$s" title="%2$s">%3$s</a>',
+		'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
 		get_author_posts_url( $authordata->ID, $authordata->user_nicename ),
 		esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
 		get_the_author()
@@ -365,5 +367,35 @@ function wp_list_authors($args = '') {
 
 	echo $return;
 }
+
+/**
+ * Does this site have more than one author
+ *
+ * Checks to see if more than one author has published posts.
+ *
+ * @since 3.2.0
+ * @return bool Whether or not we have more than one author
+ */
+function is_multi_author() {
+	global $wpdb;
+
+	if ( false === ( $is_multi_author = wp_cache_get('is_multi_author', 'posts') ) ) {
+		$rows = (array) $wpdb->get_col("SELECT DISTINCT post_author FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' LIMIT 2");
+		$is_multi_author = 1 < count( $rows ) ? 1 : 0;
+		wp_cache_set('is_multi_author', $is_multi_author, 'posts');
+	}
+
+	return apply_filters( 'is_multi_author', (bool) $is_multi_author );
+}
+
+/**
+ * Helper function to clear the cache for number of authors.
+ *
+ * @private
+ */
+function __clear_multi_author_cache() {
+	wp_cache_delete('is_multi_author', 'posts');
+}
+add_action('transition_post_status', '__clear_multi_author_cache');
 
 ?>

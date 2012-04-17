@@ -91,7 +91,7 @@ if ( $user = bb_login( @$_POST['log'], @$_POST['pwd'], @$_POST['rememberme'] ) )
 	} else {
 		$bb_login_error =& $user;
 	}
-
+	
 // No login so prepare the error
 } else {
 	$bb_login_error = new WP_Error;
@@ -110,7 +110,7 @@ else
 
 // Check for errors on post method
 if ( 'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
-
+	
 	// If the user doesn't exist then add that error
 	if ( empty( $user_exists ) ) {
 		if ( !empty( $_POST['log'] ) ) {

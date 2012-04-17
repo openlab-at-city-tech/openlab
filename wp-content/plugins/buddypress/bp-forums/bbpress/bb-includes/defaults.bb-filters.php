@@ -29,6 +29,7 @@ foreach ( $filters as $filter ) {
 
 // Slugs
 add_filter( 'pre_term_slug', 'bb_pre_term_slug' );
+add_filter( 'editable_slug', 'urldecode');
 
 // DB truncations
 add_filter( 'pre_topic_title', 'bb_trim_for_db_150', 9999 );
@@ -115,16 +116,23 @@ if ( !bb_get_option( 'mod_rewrite' ) ) {
 function bb_filter_feed_content()
 {
 	if ( bb_is_feed() ) {
-		add_filter( 'bb_title_rss', 'ent2ncr' );
-		add_filter( 'topic_title', 'ent2ncr' );
+		add_filter( 'bb_title_rss', 'strip_tags' );
+		add_filter( 'bb_title_rss', 'ent2ncr', 8 );
+		add_filter( 'bb_title_rss', 'esc_html' );
+
+		add_filter( 'bb_description_rss', 'strip_tags' );
+		add_filter( 'bb_description_rss', 'ent2ncr', 8 );
+		add_filter( 'bb_description_rss', 'esc_html' );
+
+		add_filter( 'post_author', 'ent2ncr', 8 );
 		add_filter( 'post_link', 'esc_html' );
-		add_filter( 'post_text', 'htmlspecialchars' ); // encode_bad should not be overruled by esc_html
-		add_filter( 'post_text', 'ent2ncr' );
+		add_filter( 'post_text', 'ent2ncr', 8 );
+		add_filter( 'post_text', 'bb_convert_chars' );
 	}
 }
 add_action( 'bb_init', 'bb_filter_feed_content' );
 
-add_filter( 'init_roles', 'bb_init_roles' );
+add_action( 'init_roles', 'bb_init_roles' );
 add_filter( 'map_meta_cap', 'bb_map_meta_cap', 1, 4 );
 
 // Actions
@@ -151,5 +159,17 @@ add_action( 'bb_init', 'bb_register_default_views' );
 add_action( 'set_current_user', 'bb_apply_wp_role_map_to_user' );
 
 add_filter( 'bb_pre_get_option_gmt_offset', 'wp_timezone_override_offset' );
+
+// Subscriptions
+
+if ( bb_is_subscriptions_active() ) {
+	add_action( 'bb_new_post', 'bb_notify_subscribers' );
+	add_action( 'bb_insert_post', 'bb_user_subscribe_checkbox_update' );
+	add_action( 'topicmeta', 'bb_user_subscribe_link' );
+	add_action( 'edit_form', 'bb_user_subscribe_checkbox' ); 
+	add_action( 'post_form', 'bb_user_subscribe_checkbox' );
+}
+
+add_action( 'bb_post-form.php', 'bb_anonymous_post_form' );
 
 unset( $filters, $filter );

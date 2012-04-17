@@ -64,8 +64,6 @@ jQuery(document).ready( function($) {
 		$.post( ajaxurl ,{
 			action:'bp_group_documents_increment_downloads',
 			document_id:document_num
-		},function(response){
-			alert(reposnse);
 		});
 
 	});

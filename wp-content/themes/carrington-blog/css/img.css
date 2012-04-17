@@ -1,0 +1,147 @@
+/*
+// This file is part of the Carrington Blog Theme for WordPress
+// http://carringtontheme.com
+//
+// Copyright (c) 2008-2009 Crowd Favorite, Ltd. All rights reserved.
+// http://crowdfavorite.com
+//
+// Released under the GPL license
+// http://www.opensource.org/licenses/gpl-license.php
+//
+// **********************************************************************
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// **********************************************************************
+*/
+
+.rule,
+.rule-major,
+.rule-minor {
+	background-color:#fff;
+	background-repeat:no-repeat;
+	background-position:center;
+	border:0;
+}
+.rule {
+	background-image:url(../img/divider-ornament.gif);
+
+}
+.rule-major {
+	background-image:url(../img/comments-divider.gif);
+}
+.rule-minor {
+	background-image:url(../img/divider-ornament.gif);
+}
+.nav li li {
+	background:url(../img/dropdown-divider.gif) no-repeat center top;
+}
+.nav li li:first-child,
+.nav li li.first-child {
+	background:transparent;
+}
+.pagination,
+.pagination-single {
+	background-image:url(../img/grey-to-white-gradient.png);
+	background-repeat:repeat-x;
+	background-position:left top;
+}
+.close {
+	background-image: url(../img/header/texture-light.png) top center;
+}
+
+.full .comments-link a,
+.full .comments-link a:visited,
+.full .comments-link span,
+.excerpt .comments-link a,
+.excerpt .comments-link a:visited,
+.excerpt .comments-link span{
+	background: url(../img/comment.gif) no-repeat left center;
+	padding: 1px 0 0 20px;
+}
+.excerpt .comments-link a,
+.excerpt .comments-link a:visited,
+.excerpt .comments-link span{
+	width:120px;
+}
+.commentlist .bypostauthor {
+	background-image: url(../img/watermark-light.gif);
+	background-repeat:no-repeat;
+	background-position:left top;
+}
+
+form.comment-form {
+	background-image: url(../img/watermark-light.gif);
+	background-repeat:repeat-x;
+	background-position:left top;
+}
+
+#header {
+	background-image:url(../img/header/gradient-dark.png);
+}
+#header .wrapper {
+	background-image:url(../img/header/texture-dark.png);
+}
+#sub-header {
+	background-image: url(../img/sub-header-border-bottom.gif);
+	background-repeat:repeat-x;
+	background-position:left bottom;
+}
+#sidebar {
+	background:url(../img/sidebar-background.gif) no-repeat left top;
+	background-color: #fff !important;
+}
+#footer {
+	background-image: url(../img/footer/gradient-dark.png);
+}
+#footer .wrapper {
+	background: url(../img/footer/divider-ornament-wide-light.png) no-repeat center bottom;
+}
+#carrington-subscribe {
+	background: url(../img/divider-ornament.gif) no-repeat center bottom;
+}
+
+#carrington-subscribe a{
+	background:url(../img/rss-button.gif) no-repeat left top;
+}
+
+#carrington-about {
+	background: url(../img/divider-ornament.gif) no-repeat center bottom;
+}
+#carrington-about .about{
+	background:url(../img/watermark-light.gif) repeat-x left top;
+}
+
+/* Gallery
+=================================== */
+
+body#attachment #header {
+	background-image:url(../img/header/gradient-dark.png);
+	background-repeat:repeat-x;
+	background-position:center bottom;
+}
+body#attachment #header .wrapper {
+	background-position:center bottom;
+}
+.figure-info {
+	background:transparent url(../img/divider-ornament-wide-dark.png) no-repeat scroll center top;
+}
+.previous-attachment,
+.next-attachment {
+	padding-bottom:13px;
+}
+.previous-attachment {
+	background:url(../img/attachment/150px-flourish-left-dark.png) no-repeat right bottom;
+}
+.next-attachment{
+	background:url(../img/attachment/150px-flourish-right-dark.png) no-repeat left bottom;
+}
+
+/* Misc
+=================================== */
+
+#TB_title{
+	background-image: url(../img/header/texture-dark.png);
+	background-repeat:no-repeat;
+	background-position:center bottom;
+}

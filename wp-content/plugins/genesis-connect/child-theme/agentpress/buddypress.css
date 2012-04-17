@@ -50,6 +50,7 @@
 	.internal-page #content .padder .submit input[type=button],
 	input[type=submit],
 	#sidebar-me a.button,
+	#submit_topic_cancel,
 	.button {
 		background: #2F4E6E;
 		color: #FFFFFF;
@@ -80,6 +81,7 @@
 	.internal-page #content .padder .submit input[type=button]:hover,
 	input[type=submit]:hover,
 	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
 	.button:hover {
 		background: #072C53;
 		border: 1px solid #072C53;
@@ -101,7 +103,8 @@
 	font-size: 11px;
 	text-transform: none;
 }
-.item-list-tabs ul li.filter select {
+.item-list-tabs ul li.filter select,
+#topic_group_id {
 	background:#F7F7F7;
 	border:1px solid #E6E6E6;
 	color:#000000;

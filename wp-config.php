@@ -73,6 +73,7 @@ define( 'SITE_ID_CURRENT_SITE', 1 );
 define( 'BLOG_ID_CURRENT_SITE', 1 );
 define ( 'BP_BLOGS_SLUG', 'sites' );
 define ( 'BP_FORUMS_SLUG', 'discussion' );
+define( 'BP_GROUP_DOCUMENTS_SLUG', 'files' );
 
 /* That's all, stop editing! Happy blogging. */
 

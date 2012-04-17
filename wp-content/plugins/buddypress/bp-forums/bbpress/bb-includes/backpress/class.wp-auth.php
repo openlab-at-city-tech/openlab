@@ -32,6 +32,13 @@ class WP_Auth
 	 * 	logged_in: whether or not a user is logged in.  Send everywhere.
 	 *	auth: used to authorize user's actions.  Send only to domains/paths that need it (e.g. wp-admin/)
 	 *	secure_auth: used to authorize user's actions.  Send only to domains/paths that need it and only over HTTPS
+	 *
+	 * You should be very careful when setting cookie domain to ensure that it always follows the rules set out in
+	 * the {@link http://curl.haxx.se/rfc/cookie_spec.html Set Cookie spec}.  In most cases it is best to leave cookie
+	 * set to false and allow for user configuration to define a cookie domain in a configuration file when
+	 * cross subdomain cookies are required.
+	 * 
+	 * @link 
 	 */
 	function __construct( &$db, &$users, $cookies )
 	{
@@ -270,10 +277,10 @@ class WP_Auth
 
 			// Set httponly if the php version is >= 5.2.0
 			if ( version_compare( phpversion(), '5.2.0', 'ge' ) ) {
-				setcookie( $_cookie['name'], $cookie, $expire, $_cookie['path'], $domain, $secure, true );
+				backpress_set_cookie( $_cookie['name'], $cookie, $expire, $_cookie['path'], $domain, $secure, true );
 			} else {
 				$domain = ( empty( $domain ) ) ? $domain : $domain . '; HttpOnly';
-				setcookie( $_cookie['name'], $cookie, $expire, $_cookie['path'], $domain, $secure );
+				backpress_set_cookie( $_cookie['name'], $cookie, $expire, $_cookie['path'], $domain, $secure );
 			}
 		}
 		unset( $_cookie );
@@ -289,7 +296,7 @@ class WP_Auth
 		do_action( 'clear_auth_cookie' );
 		foreach ( $this->cookies as $_scheme => $_scheme_cookies ) {
 			foreach ( $_scheme_cookies as $_cookie ) {
-				setcookie( $_cookie['name'], ' ', time() - 31536000, $_cookie['path'], $_cookie['domain'] );
+				backpress_set_cookie( $_cookie['name'], ' ', time() - 31536000, $_cookie['path'], $_cookie['domain'] );
 			}
 			unset( $_cookie );
 		}

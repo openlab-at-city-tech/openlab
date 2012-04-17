@@ -1,8 +1,4 @@
-/* 
-    Document   : Pixel Happy CSS for BuddyPress
-    Created on : 29 March 2010
-    Author     : Andrea
-*/
+/* Pixel Happy CSS for BuddyPress */
 #nav .padder,
 	#subnav .padder {
 		padding:7px;
@@ -114,49 +110,51 @@ ul.item-list li div.meta {
 }	
 /* buttons */
 #search-submit,
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	input[type=submit],
-	div.generic-button,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	.dir-form h3 a,
-	.button {
-		background: #60B5BF;
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Century Gothic, Verdana, Arial;
-		text-decoration: none;
-		text-transform: uppercase;
-		margin: 0;
-		padding: 3px 5px 3px 5px;
-		border: none;
-		-moz-border-radius: 5px;
-		-khtml-border-radius: 5px;
-		-webkit-border-radius: 5px;
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+input[type=submit],
+div.generic-button,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+.dir-form h3 a,
+#submit_topic_cancel,
+.button {
+	background: #60B5BF;
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Century Gothic, Verdana, Arial;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 3px 5px 3px 5px;
+	border: none;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 #search-submit:hover,
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	div.generic-button:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-form h3 a:hover,
-	input[type=submit]:hover {
-		background: #B0C077;
-		border: none;
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+div.generic-button:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form h3 a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #B0C077;
+	border: none;
 }
 .dir-search, .dir-search label input {
 	background: #f7f7f7;

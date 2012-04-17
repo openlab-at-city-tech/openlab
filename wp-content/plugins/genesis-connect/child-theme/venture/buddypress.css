@@ -28,47 +28,49 @@
 }	
 /* buttons */
 #search-submit, 
-	#sidebar-me a.button,
-	#aw-whats-new-submit,
-	#ac-form-submit,
-	#groups_search_submit,
-	#forums_search_submit,
-	#members_search_submit,
-	.dir-search input,
-	#profile-group-edit-submit,
-	#send,
-	div.ac-reply-content input,
-	.internal-page #content .padder a.button,
-	.internal-page #content .padder .submit input[type=button],
-	input[type=submit],
-	.button {
-		background: #333;
-		color: #FFFFFF;
-		font-size: 11px;
-		font-family: Arial, Tahoma, Verdana;
-		text-decoration: none;
-		text-transform: uppercase;
-		margin: 0;
-		padding: 2px 5px 2px 5px;
-		border: 1px solid #333;
-		-moz-border-radius:3px;
-		-khtml-border-radius:3px;
-		-webkit-border-radius:3px;
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+input[type=submit],
+#submit_topic_cancel,
+.button {
+	background: #333;
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 3px 5px;
+	border: 1px solid #333;
+	-moz-border-radius:3px;
+	-khtml-border-radius:3px;
+	-webkit-border-radius:3px;
 }
 #search-submit:hover, 
-	#sidebar-me a.button:hover,
-	#aw-whats-new-submit:hover,
-	#ac-form-submit:hover,
-	#groups_search_submit:hover,
-	#forums_search_submit:hover,
-	#members_search_submit:hover,
-	.internal-page #content .padder a.button:hover,
-	.internal-page #content .padder .submit input[type=button]:hover,
-	.dir-form a:hover,
-	input[type=submit]:hover {
-		background: #000;
-		color: #FFF;
-		text-decoration: none;
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background: #000;
+	color: #FFF;
+	text-decoration: none;
 }
 #content .dir-search label input[type=text] {
 	text-transform: none;

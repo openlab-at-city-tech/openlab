@@ -17,7 +17,7 @@ class BP_SQL_Schema_Parser
 		}
 
 		$null = '';
-		if ( $column_data['Null'] == 'NO' ) {
+		if ( $column_data['Null'] != 'YES' ) {
 			$null = 'NOT NULL';
 		}
 
@@ -440,7 +440,7 @@ class BP_SQL_Schema_Parser
 
 						if (
 							$_new_column_data['Type'] !== $_existing_table_columns[$_new_column_name]['Type'] ||
-							$_new_column_data['Null'] !== $_existing_table_columns[$_new_column_name]['Null'] ||
+							( 'YES' === $_new_column_data['Null'] xor 'YES' === $_existing_table_columns[$_new_column_name]['Null'] ) ||
 							$_new_column_data['Extra'] !== $_existing_table_columns[$_new_column_name]['Extra']
 						) {
 							// Change the structure for the column

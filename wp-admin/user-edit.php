@@ -36,25 +36,28 @@ if ( current_user_can('edit_users') && !is_user_admin() )
 else
 	$parent_file = 'profile.php';
 
-// contextual help - choose Help on the top right of admin panel to preview this.
-add_contextual_help($current_screen,
-    '<p>' . __('Your profile contains information about you (your &#8220;account&#8221;) as well as some personal options related to using WordPress.') . '</p>' .
-    '<p>' . __('You can change your password, turn on keyboard shortcuts, change the color scheme of your WordPress administration screens, and turn off the WYSIWYG (Visual) editor, among other things.') . '</p>' .
-    '<p>' . __('Your username cannot be changed, but you can use other fields to enter your real name or a nickname, and change which name to display on your posts.') . '</p>' .
-    '<p>' . __('Required fields are indicated; the rest are optional. Profile information will only be displayed if your theme is set up to do so.') . '</p>' .
-    '<p>' . __('Remember to click the Update Profile button when you are finished.') . '</p>' .
+
+$profile_help = '<p>' . __('Your profile contains information about you (your &#8220;account&#8221;) as well as some personal options related to using WordPress.') . '</p>' .
+	'<p>' . __('You can change your password, turn on keyboard shortcuts, change the color scheme of your WordPress administration screens, and turn off the WYSIWYG (Visual) editor, among other things. You can hide the Toolbar (formerly called the Admin Bar) from the front end of your site, however it cannot be disabled on the admin screens.') . '</p>' .
+	'<p>' . __('Your username cannot be changed, but you can use other fields to enter your real name or a nickname, and change which name to display on your posts.') . '</p>' .
+	'<p>' . __('Required fields are indicated; the rest are optional. Profile information will only be displayed if your theme is set up to do so.') . '</p>' .
+	'<p>' . __('Remember to click the Update Profile button when you are finished.') . '</p>';
+
+get_current_screen()->add_help_tab( array(
+	'id'      => 'overview',
+	'title'   => __('Overview'),
+	'content' => $profile_help,
+) );
+
+get_current_screen()->set_help_sidebar(
     '<p><strong>' . __('For more information:') . '</strong></p>' .
-    '<p>' . __('<a href="http://codex.wordpress.org/Users_Your_Profile_SubPanel" target="_blank">Documentation on User Profiles</a>') . '</p>' .
+    '<p>' . __('<a href="http://codex.wordpress.org/Users_Your_Profile_Screen" target="_blank">Documentation on User Profiles</a>') . '</p>' .
     '<p>' . __('<a href="http://wordpress.org/support/" target="_blank">Support Forums</a>') . '</p>'
 );
 
-
 $wp_http_referer = remove_query_arg(array('update', 'delete_count'), stripslashes($wp_http_referer));
 
-$all_post_caps = array('posts', 'pages');
-$user_can_edit = false;
-foreach ( $all_post_caps as $post_cap )
-	$user_can_edit |= current_user_can("edit_$post_cap");
+$user_can_edit = current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' );
 
 /**
  * Optional SSL preference that can be turned on by hooking to the 'personal_options' action.
@@ -159,9 +162,13 @@ include (ABSPATH . 'wp-admin/admin-header.php');
 <?php } ?>
 <?php if ( isset($_GET['updated']) ) : ?>
 <div id="message" class="updated">
+	<?php if ( IS_PROFILE_PAGE ) : ?>
+	<p><strong><?php _e('Profile updated.') ?></strong></p>
+	<?php else: ?>
 	<p><strong><?php _e('User updated.') ?></strong></p>
+	<?php endif; ?>
 	<?php if ( $wp_http_referer && !IS_PROFILE_PAGE ) : ?>
-	<p><a href="<?php echo esc_url( $wp_http_referer ); ?>"><?php _e('&larr; Back to Authors and Users'); ?></a></p>
+	<p><a href="<?php echo esc_url( $wp_http_referer ); ?>"><?php _e('&larr; Back to Users'); ?></a></p>
 	<?php endif; ?>
 </div>
 <?php endif; ?>
@@ -171,7 +178,17 @@ include (ABSPATH . 'wp-admin/admin-header.php');
 
 <div class="wrap" id="profile-page">
 <?php screen_icon(); ?>
-<h2><?php echo esc_html( $title ); ?></h2>
+<h2>
+<?php
+echo esc_html( $title );
+if ( ! IS_PROFILE_PAGE ) {
+	if ( current_user_can( 'create_users' ) ) { ?>
+		<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
+	<?php } elseif ( is_multisite() && current_user_can( 'promote_users' ) ) { ?>
+		<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user' ); ?></a>
+	<?php }
+} ?>
+</h2>
 
 <form id="your-profile" action="<?php echo esc_url( self_admin_url( IS_PROFILE_PAGE ? 'profile.php' : 'user-edit.php' ) ); ?>" method="post"<?php do_action('user_edit_form_tag'); ?>>
 <?php wp_nonce_field('update-user_' . $user_id) ?>
@@ -206,14 +223,12 @@ if ( !( IS_PROFILE_PAGE && !$user_can_edit ) ) : ?>
 </tr>
 <?php endif; ?>
 <tr class="show-admin-bar">
-<th scope="row"><?php _e('Show Admin Bar')?></th>
-<td><fieldset><legend class="screen-reader-text"><span><?php _e('Show Admin Bar') ?></span></legend>
+<th scope="row"><?php _e('Toolbar')?></th>
+<td><fieldset><legend class="screen-reader-text"><span><?php _e('Toolbar') ?></span></legend>
 <label for="admin_bar_front">
-<input name="admin_bar_front" type="checkbox" id="admin_bar_front" value="1" <?php checked( _get_admin_bar_pref( 'front', $profileuser->ID ) ); ?> />
-<?php /* translators: Show admin bar when viewing site */ _e( 'when viewing site' ); ?></label><br />
-<label for="admin_bar_admin">
-<input name="admin_bar_admin" type="checkbox" id="admin_bar_admin" value="1" <?php checked( _get_admin_bar_pref( 'admin', $profileuser->ID ) ); ?> />
-<?php /* translators: Show admin bar in dashboard */ _e( 'in dashboard' ); ?></label>
+<input name="admin_bar_front" type="checkbox" id="admin_bar_front" value="1"<?php checked( _get_admin_bar_pref( 'front', $profileuser->ID ) ); ?> />
+<?php _e( 'Show Toolbar when viewing site' ); ?></label><br />
+</fieldset>
 </td>
 </tr>
 <?php do_action('personal_options', $profileuser); ?>
@@ -249,7 +264,7 @@ if ( $user_role )
 else
 	echo '<option value="" selected="selected">' . __('&mdash; No role for this site &mdash;') . '</option>';
 ?>
-</select>
+</select></td></tr>
 <?php endif; //!IS_PROFILE_PAGE
 
 if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_can( 'manage_network_options' ) && !isset($super_admins) ) { ?>
@@ -284,23 +299,29 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 		<select name="display_name" id="display_name">
 		<?php
 			$public_display = array();
-			$public_display['display_username']  = $profileuser->user_login;
 			$public_display['display_nickname']  = $profileuser->nickname;
+			$public_display['display_username']  = $profileuser->user_login;
+
 			if ( !empty($profileuser->first_name) )
 				$public_display['display_firstname'] = $profileuser->first_name;
+
 			if ( !empty($profileuser->last_name) )
 				$public_display['display_lastname'] = $profileuser->last_name;
+
 			if ( !empty($profileuser->first_name) && !empty($profileuser->last_name) ) {
 				$public_display['display_firstlast'] = $profileuser->first_name . ' ' . $profileuser->last_name;
 				$public_display['display_lastfirst'] = $profileuser->last_name . ' ' . $profileuser->first_name;
 			}
+
 			if ( !in_array( $profileuser->display_name, $public_display ) ) // Only add this if it isn't duplicated elsewhere
 				$public_display = array( 'display_displayname' => $profileuser->display_name ) + $public_display;
+
 			$public_display = array_map( 'trim', $public_display );
 			$public_display = array_unique( $public_display );
+
 			foreach ( $public_display as $id => $item ) {
 		?>
-			<option id="<?php echo $id; ?>" value="<?php echo esc_attr($item); ?>"<?php selected( $profileuser->display_name, $item ); ?>><?php echo $item; ?></option>
+			<option id="<?php echo $id; ?>"<?php selected( $profileuser->display_name, $item ); ?>><?php echo $item; ?></option>
 		<?php
 			}
 		?>

@@ -7,13 +7,14 @@
  *
  */
 class WP_HTTP_IXR_Client extends IXR_Client {
-	function WP_HTTP_IXR_Client($server, $path = false, $port = 80, $timeout = 15) {
+
+	function __construct($server, $path = false, $port = false, $timeout = 15) {
 		if ( ! $path ) {
 			// Assume we have been given a URL instead
 			$bits = parse_url($server);
 			$this->scheme = $bits['scheme'];
 			$this->server = $bits['host'];
-			$this->port = isset($bits['port']) ? $bits['port'] : 80;
+			$this->port = isset($bits['port']) ? $bits['port'] : $port;
 			$this->path = !empty($bits['path']) ? $bits['path'] : '/';
 
 			// Make absolutely sure we have a path
@@ -35,7 +36,8 @@ class WP_HTTP_IXR_Client extends IXR_Client {
 		$request = new IXR_Request($method, $args);
 		$xml = $request->getXml();
 
-		$url = $this->scheme . '://' . $this->server . ':' . $this->port . $this->path;
+		$port = $this->port ? ":$this->port" : '';
+		$url = $this->scheme . '://' . $this->server . $port . $this->path;
 		$args = array(
 			'headers'    => array('Content-Type' => 'text/xml'),
 			'user-agent' => $this->useragent,
@@ -62,16 +64,16 @@ class WP_HTTP_IXR_Client extends IXR_Client {
 			return false;
 		}
 
-		if ( $response['response']['code'] != 200 ) {
-			$this->error = new IXR_Error(-32301, "transport error - HTTP status code was not 200 ({$response['response']['code']})");
+		if ( 200 != wp_remote_retrieve_response_code( $response ) ) {
+			$this->error = new IXR_Error(-32301, 'transport error - HTTP status code was not 200 (' . wp_remote_retrieve_response_code( $response ) . ')');
 			return false;
 		}
 
 		if ( $this->debug )
-			echo '<pre class="ixr_response">' . htmlspecialchars($response['body']) . "\n</pre>\n\n";
+			echo '<pre class="ixr_response">' . htmlspecialchars( wp_remote_retrieve_body( $response ) ) . "\n</pre>\n\n";
 
 		// Now parse what we've got back
-		$this->message = new IXR_Message( $response['body'] );
+		$this->message = new IXR_Message( wp_remote_retrieve_body( $response ) );
 		if ( ! $this->message->parse() ) {
 			// XML error
 			$this->error = new IXR_Error(-32700, 'parse error. not well formed');

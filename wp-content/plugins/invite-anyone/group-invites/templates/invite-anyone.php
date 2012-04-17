@@ -24,7 +24,7 @@ if ( function_exists( 'bp_post_get_permalink' ) ) { // ugly ugly ugly hack to ch
 
 				<div class="left-menu">
 
-					<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?> &nbsp; <span class="ajax-loader"></span></p>
+					<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></span></p>
 
 					<ul class="first acfb-holder">
 						<li>
@@ -32,7 +32,7 @@ if ( function_exists( 'bp_post_get_permalink' ) ) { // ugly ugly ugly hack to ch
 						</li>
 					</ul>
 
-					<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?> <span class="ajax-loader"></span></p>
+					<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?> </p>
 
 					<div id="invite-anyone-member-list">
 						<ul>
@@ -108,11 +108,11 @@ if ( function_exists( 'bp_post_get_permalink' ) ) { // ugly ugly ugly hack to ch
 	<?php endif; ?>
 
 	<?php if ( !bp_get_new_group_id() ) : ?>
-			<form action="send" method="post" id="send-invite-form">
+			<form action="<?php bp_group_permalink( groups_get_current_group() ) ?>/invite-anyone/send/" method="post" id="send-invite-form">
 	<?php endif; ?>
 
 	<div class="left-menu">
-		<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?> &nbsp; <span class="ajax-loader"></span></p>
+		<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></p>
 
 		<ul class="first acfb-holder">
 			<li>
@@ -120,7 +120,7 @@ if ( function_exists( 'bp_post_get_permalink' ) ) { // ugly ugly ugly hack to ch
 			</li>
 		</ul>
 
-		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?> <span class="ajax-loader"></span></p>
+		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
 
 		<div id="invite-anyone-member-list">
 			<ul>

@@ -1,6 +1,6 @@
 <?php
 // Modify error reporting levels
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING);
 
 // Let everyone know we are installing
 define('BB_INSTALLING', true);
@@ -82,12 +82,12 @@ switch ($bb_install->step) {
 					$bb_install->input_text('bbdb_name');
 					$bb_install->input_text('bbdb_user');
 					$bb_install->input_text('bbdb_password');
+					$bb_install->input_text('bbdb_host');
 					$bb_install->select_language();
 					$bb_install->input_toggle('toggle_1');
 ?>
 						<div class="toggle" id="toggle_1_target" style="<?php echo esc_attr( 'display:' . $bb_install->data[$bb_install->step]['form']['toggle_1']['display'] ); ?>;">
 <?php
-					$bb_install->input_text('bbdb_host');
 					$bb_install->input_text('bbdb_charset');
 					$bb_install->input_text('bbdb_collate');
 					//$bb_install->input_text('bb_auth_key');

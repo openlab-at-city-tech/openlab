@@ -3,19 +3,19 @@
 Plugin Name: BP Group Documents
 PLugin URI: http://wordpress.org/extend/plugins/buddypress-group-documents/
 Description: This BuddyPress component creates a document storage area within each group
-Version: 0.3.5
-Revision Date: May 6, 2010
-Requires at least: WPMU 2.8, BuddyPress 1.1
-Tested up to: WP 3.0-beta2 , BuddyPress 1.2.3
+Version: 0.4.0
+Revision Date: Sept 28, 2011
+Requires at least: WPMU 3.0, BuddyPress 1.5
+Tested up to: WP 3.2.1, BuddyPress 1.5
 License: Example: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html
 Author: Peter Anselmo, Studio66
-Author URI: http://www.studio66design.com
-Site Wide Only: true
+Author URI: http://code-zen.net/
+Network: true
 */
 
 //some constants that can be checked when extending this plugin
 define ( 'BP_GROUP_DOCUMENTS_IS_INSTALLED', 1 );
-define ( 'BP_GROUP_DOCUMENTS_VERSION', '0.3.5' );
+define ( 'BP_GROUP_DOCUMENTS_VERSION', '0.4.0' );
 define ( 'BP_GROUP_DOCUMENTS_DB_VERSION', '3' );
 
 //allow override of URL slug
@@ -47,24 +47,31 @@ function bp_group_documents_set_constants() {
 add_action('plugins_loaded','bp_group_documents_set_constants');
 
 //load i18n files if present
-if ( file_exists( dirname( __FILE__ ) . '/languages/' . get_locale() . '.mo' ) )
+if ( file_exists( dirname( __FILE__ ) . '/languages/' . get_locale() . '.mo' ) ) {
 	load_textdomain( 'bp-group-documents', dirname( __FILE__ ) . '/languages/' . get_locale() . '.mo' );
+	load_plugin_textdomain( 'bp-group-documents', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
 
 //Go get me some files!
-require ( dirname( __FILE__ ) . '/include/classes.php' );
-require ( dirname( __FILE__ ) . '/include/cssjs.php' );
-require ( dirname( __FILE__ ) . '/include/widgets.php' );
-require ( dirname( __FILE__ ) . '/include/notifications.php' );
-require ( dirname( __FILE__ ) . '/include/activity.php' );
-require ( dirname( __FILE__ ) . '/include/templatetags.php' );
-require ( dirname( __FILE__ ) . '/include/admin-uploads.php' );
-require ( dirname( __FILE__ ) . '/include/filters.php' );
-require ( dirname( __FILE__ ) . '/include/ajax.php' );
+require (dirname(__FILE__) . '/include/classes.php');
+require (dirname(__FILE__) . '/include/cssjs.php');
+require (dirname(__FILE__) . '/include/widgets.php');
+require (dirname(__FILE__) . '/include/notifications.php');
+require (dirname(__FILE__) . '/include/activity.php');
+require (dirname(__FILE__) . '/include/templatetags.php');
+require (dirname(__FILE__) . '/include/admin-uploads.php');
+require (dirname(__FILE__) . '/include/filters.php');
+require (dirname(__FILE__) . '/include/ajax.php');
 
 //only get the group admin page if they have options to edit
-if( get_option('bp_group_documents_use_categories') || 
+if( get_option('bp_group_documents_use_categories') ||
 	('mods_decide' == get_option( 'bp_group_documents_upload_permission' ) ) ) {
-	require ( dirname( __FILE__ ) . '/include/group-admin.php' );
+	require (dirname(__FILE__) . '/include/group-admin.php');
+}
+
+//only get the forum extension if it's been specified by the admin
+if( get_option('bp_group_documents_forum_attachments') ) {
+	require( dirname( __FILE__ ) . '/include/group-forum-attachments.php' );
 }
 
 /*************************************************************************
@@ -80,10 +87,10 @@ if( get_option('bp_group_documents_use_categories') ||
  */
 function bp_group_documents_install() {
 	global $wpdb, $bp;
-	
+
 	if ( !empty($wpdb->charset) )
 		$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
-	
+
 	$sql[] = "CREATE TABLE {$bp->group_documents->table_name} (
 		  		id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		  		user_id bigint(20) NOT NULL,
@@ -102,9 +109,9 @@ function bp_group_documents_install() {
 				KEY download_count (download_count)
 		 	   ) {$charset_collate};";
 
-	require_once( ABSPATH . 'wp-admin/upgrade-functions.php' );
+	require_once(ABSPATH . 'wp-admin/upgrade-functions.php');
 	dbDelta($sql);
-	
+
 	update_site_option( 'bp-group-documents-db-version', BP_GROUP_DOCUMENTS_DB_VERSION );
 }
 
@@ -122,26 +129,18 @@ function bp_group_documents_setup_globals() {
 	$bp->group_documents->table_name = $wpdb->base_prefix . 'bp_group_documents';
 	$bp->group_documents->format_notification_function = 'bp_group_documents_format_notifications';
 	$bp->group_documents->slug = BP_GROUP_DOCUMENTS_SLUG;
-	
+
 	/* Register this in the active components array */
 	$bp->active_components[$bp->group_documents->slug] = $bp->group_documents->id;
-	
-	switch( substr( BP_VERSION, 0, 3 ) ) {
-		case '1.2':
-			if( 'BuddyPress Classic' == get_current_theme() ) {
-				define( 'BP_GROUP_DOCUMENTS_THEME_VERSION', '1.1' );
-			} else {
-				define( 'BP_GROUP_DOCUMENTS_THEME_VERSION', '1.2' );
-			}
-		break;
-		case '1.1':
-			define( 'BP_GROUP_DOCUMENTS_THEME_VERSION', '1.1' );
-		break;
+
+	if( !defined( 'BP_GROUP_DOCUMENTS_THEME_VERSION' ) ) {
+		$bp_group_documents_theme_version = substr( BP_VERSION, 0, 3 );
+		define( 'BP_GROUP_DOCUMENTS_THEME_VERSION',$bp_group_documents_theme_version);
 	}
 
 	do_action('bp_group_documents_globals_loaded');
 }
-add_action( 'plugins_loaded', 'bp_group_documents_setup_globals', 5 );	
+add_action( 'plugins_loaded', 'bp_group_documents_setup_globals', 5 );
 add_action( 'admin_menu', 'bp_group_documents_setup_globals', 2 );
 
 
@@ -153,16 +152,16 @@ add_action( 'admin_menu', 'bp_group_documents_setup_globals', 2 );
  * of the component. If the value has increased, it will run the installation function.
  * Also sets defaults for site admin options
  */
-function bp_group_documents_check_installed() {	
+function bp_group_documents_check_installed() {
 	global $wpdb, $bp;
 
 	if ( !current_user_can('manage_options') )
 		return false;
 
 	//Add the component's administration tab under the "BuddyPress" menu for site administrators
-	require ( dirname( __FILE__ ) . '/include/admin.php' );
+	require (dirname(__FILE__) . '/include/admin.php');
 
-	add_submenu_page( 'bp-general-settings', __( 'Group Documents Admin', 'bp-group-documents' ), __( 'Group Documents', 'bp-group-documents' ), 'manage_options', 'bp-group-documents-settings', 'bp_group_documents_admin' );	
+	add_submenu_page( 'bp-general-settings', __( 'Group Documents Admin', 'bp-group-documents' ), __( 'Group Documents', 'bp-group-documents' ), 'manage_options', 'bp-group-documents-settings', 'bp_group_documents_admin' );
 
 
 	/* Need to check db tables are current */
@@ -175,40 +174,11 @@ function bp_group_documents_check_installed() {
 	add_option('bp_group_documents_upload_permission','members');
 	add_option('bp_group_documents_display_icons', true );
 	add_option('bp_group_documents_use_categories', false );
+	add_option('bp_group_documents_enable_all_groups',true);
+	add_option('bp_group_documents_progress_bar',true);
+	add_option('bp_group_documents_forum_attachments',false);
 }
 add_action( 'admin_menu', 'bp_group_documents_check_installed',50);
-
-
-/** bp_group_documents_check_legacy_paths()
- *
- * checks if there are any documents in the old location (documents folder in plugin)
- * and if so, moves them to the new location (wp-content/blogs.dir)
- *
- * This will only fire when the admin page is viewed to save on overhead
- */
-function bp_group_documents_check_legacy_paths() {
-
-	if( defined( 'BP_GROUP_DOCUMENTS_PATH' ) ) {
-		$legacy_path = BP_GROUP_DOCUMENTS_PATH;
-	}else {
-		$legacy_path = WP_PLUGIN_DIR . '/buddypress-group-documents/documents/';
-	}
-	
-	if( $dh = @opendir( $legacy_path ) ) {
-		$moved_count = 0;
-		while( false !== ($file = readdir( $dh ) ) ) {
-
-			if( $file != "." && $file != ".." ) {
-				$document = new BP_Group_Documents();
-				if( $document->populate_by_file($file) ) {
-					rename($legacy_path . $file, $document->get_path(0,1));
-					++$moved_count;
-				}
-			}
-		}
-	}
-}
-add_action('bp_group_documents_admin','bp_group_documents_check_legacy_paths');
 
 
 /**************************************************************************
@@ -221,24 +191,24 @@ add_action('bp_group_documents_admin','bp_group_documents_check_legacy_paths');
  *
  * Sets up the navigation items for the component.  
  * Adds documents item under the group navigation
- * Also add options item under group "admin" 
  */
 function bp_group_documents_setup_nav() {
 	global $bp,$current_blog,$group_object;
 
-	if( !class_exists('BP_Groups_Group') ) {
-		return;
+	if( !class_exists('BP_Groups_Group') )
+		return false;
+
+	if ( !isset($bp->groups->current_group->id) ) {
+		return false;
 	}
 
-	if ( $group_id = BP_Groups_Group::group_exists($bp->current_action) ) {
+	//if documents have been explicitly deactivated for this group, do not show menu
+	if( !get_option('bp_group_documents_enable_all_groups') && groups_get_groupmeta($bp->groups->current_group->id, 'group_documents_documents_disabled'))
+		return false;
 
-		/* This is a single group page. */
-		$bp->is_single_item = true;
-		$bp->groups->current_group = &new BP_Groups_Group( $group_id );
-
-	}	
-
-	$groups_link = $bp->root_domain . '/' . $bp->groups->slug . '/' . $bp->groups->current_group->slug . '/';
+	$groups_link = $bp->root_domain . '/' . $bp->groups->slug . '/';
+    if ( isset( $bp->groups->current_group->slug ) )
+        $groups_link .= $bp->groups->current_group->slug . '/';
 
 	/* Add the subnav item only to the single group nav item*/
 	if ( $bp->is_single_item )
@@ -246,7 +216,7 @@ function bp_group_documents_setup_nav() {
 		'name' => __( 'Documents', 'bp-group-documents' ), 
 		'slug' => $bp->group_documents->slug, 
 		'parent_url' => $groups_link, 
-		'parent_slug' => $bp->groups->slug, 
+		'parent_slug' => bp_get_current_group_slug(),
 		'screen_function' => 'bp_group_documents_display', 
 		'position' => 35, 
 		'user_has_access' => $bp->groups->current_group->user_has_access,
@@ -254,7 +224,7 @@ function bp_group_documents_setup_nav() {
 
 	do_action('bp_group_documents_nav_setup');
 }
-add_action( 'wp', 'bp_group_documents_setup_nav', 2 );
+add_action( 'bp_setup_nav', 'bp_group_documents_setup_nav', 2 );
 add_action( 'admin_menu', 'bp_group_documents_setup_nav', 2 );
 
 
@@ -297,7 +267,7 @@ function bp_group_documents_display() {
 	global $bp;
 
 	do_action( 'bp_group_documents_display' );
-	
+
 	add_action( 'bp_template_content_header', 'bp_group_documents_display_header' );
 	add_action( 'bp_template_title', 'bp_group_documents_display_title' );
 	add_action( 'bp_template_content', 'bp_group_documents_display_content' );
@@ -398,14 +368,13 @@ function bp_group_documents_display_content() {
 			$document = new BP_Group_Documents($document_params['id'], $document_params); ?>
 
 			<li <?php if( ++$count%2 ) echo 'class="alt"';?> >
-
 			<?php if( get_option( 'bp_group_documents_display_icons' )) $document->icon(); ?>
 
 			<a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo $document->name; ?>
 
 			<?php if( get_option( 'bp_group_documents_display_file_size' )) { echo ' <span class="group-documents-filesize">(' . get_file_size( $document ) . ')</span>'; } ?></a> &nbsp;
 			
-			<span class="group-documents-meta"><?php printf( __( 'Uploaded by %s on %s', 'bp-group-documents'),bp_core_get_userlink($document->user_id),date( 'n/j/Y', $document->created_ts )); ?></span>
+			<span class="group-documents-meta"><?php printf( __( 'Uploaded by %s on %s', 'bp-group-documents'),bp_core_get_userlink($document->user_id),date( get_option('date_format'), $document->created_ts )); ?></span>
 
 			<?php if( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ){ echo '<br /><span class="group-documents-description">' . nl2br($document->description) . '</span>'; }
 
@@ -421,7 +390,7 @@ function bp_group_documents_display_content() {
 			}
 
 			echo '</div>';
-			echo '</li>';		
+			echo '</li>';
 		} ?>
 		</ul>
 
@@ -450,6 +419,8 @@ function bp_group_documents_display_content() {
 	<input type="hidden" name="bp_group_documents_id" value="<?php echo $template->id; ?>" />
 
 		<?php if( $template->operation == 'add' ) { ?>
+
+		<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo return_bytes(ini_get('post_max_size')) ?>"
 		<label><?php _e('Choose File:','bp-group-documents'); ?></label>
 		<input type="file" name="bp_group_documents_file" class="bp-group-documents-file" />
 		<?php } ?>
@@ -478,7 +449,7 @@ function bp_group_documents_display_content() {
 			<?php foreach( $template->get_group_categories(false) as $category ) { ?>
 				<li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo $category->term_id; ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /><?php echo $category->name; ?></li>
 			<?php } ?>
-			</ul>	
+			</ul>
 		</div>
 		<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-category" />
 		</div><!-- .bp-group-documents-category-wrapper -->
@@ -492,7 +463,7 @@ function bp_group_documents_display_content() {
 	<?php } ?>
 
 	<?php } ?>
-		
+
 	</div><!--end #group-documents-->
 <?php }
 
@@ -519,7 +490,7 @@ function bp_group_documents_delete( $id ) {
 	  bp_core_add_message( __('There was a security problem', 'bp-group-documents'), 'error' );
 	  return false;
 	}
-	
+
 	$document = new BP_Group_Documents($id);
 	if( $document->current_user_can('delete') ){
 		if( $document->delete() ){
@@ -573,8 +544,29 @@ function get_file_size( $document, $precision = 1 ) {
     $bytes /= pow(1024, $pow);
   
     return round($bytes, $precision) .  $units[$pow];
-} 
+}
 
+/**
+ * return_bytes()
+ *
+ * taken from the PHP manual examples.  Returns the number of bites
+ * when given an abrevition (eg, max_upload_size)
+ */
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+
+    return $val;
+}
 
 /**
  * bp_group_documents_remove_data()
@@ -582,7 +574,7 @@ function get_file_size( $document, $precision = 1 ) {
  * Cleans out both the files and the database records when a group is deleted
  */
 function bp_group_documents_remove_data( $group_id ) {
-	
+
 	$results = BP_Group_Documents::get_list_by_group( $group_id );
 	if( count( $results ) >= 1 ) {
 		foreach($results as $document_params) {

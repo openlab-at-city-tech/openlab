@@ -42,7 +42,7 @@ header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
       <api name="Movable Type" blogID="1" preferred="false" apiLink="<?php echo site_url('xmlrpc.php', 'rpc') ?>" />
       <api name="MetaWeblog" blogID="1" preferred="false" apiLink="<?php echo site_url('xmlrpc.php', 'rpc') ?>" />
       <api name="Blogger" blogID="1" preferred="false" apiLink="<?php echo site_url('xmlrpc.php', 'rpc') ?>" />
-      <api name="Atom" blogID="" preferred="false" apiLink="<?php echo apply_filters('atom_service_url', site_url('wp-app.php/service', 'rpc') ) ?>" />
+      <api name="Atom" blogID="" preferred="false" apiLink="<?php echo site_url('wp-app.php/service', 'rpc') ?>" />
     </apis>
   </service>
 </rsd>
@@ -97,6 +97,9 @@ function logIO($io,$msg) {
 
 if ( isset($HTTP_RAW_POST_DATA) )
 	logIO("I", $HTTP_RAW_POST_DATA);
+
+// Make sure wp_die output is XML
+add_filter( 'wp_die_handler', '_xmlrpc_wp_die_filter' );
 
 // Allow for a plugin to insert a different class to handle requests.
 $wp_xmlrpc_server_class = apply_filters('wp_xmlrpc_server_class', 'wp_xmlrpc_server');
