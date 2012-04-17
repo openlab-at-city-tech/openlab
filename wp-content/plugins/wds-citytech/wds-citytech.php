@@ -12,41 +12,26 @@ include "wds-docs.php";
 global $wpdb;
 date_default_timezone_set('America/New_York');
 
-//update_option('timezone_string', 'America/New_York');
-//$time_zone = $wpdb->query("SET `time_zone` = '".date('P')."'");
-add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
-function wds_add_default_member_avatar ($url) {
- return site_url() . "/wp-content/uploads/2011/08/avatar.jpg";
+function wds_add_default_member_avatar( $url = false ) {
+	return WP_CONTENT_URL . "/img/bubbleavatar.jpg";
 }
+add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
 
-add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 function wds_default_signup_avatar ($img) {
 	if ( false !== strpos( $img, 'mystery-man' ) ) {
-		$img = "<img src='" . site_url() . "/wp-content/uploads/2011/08/avatar.jpg' width='200' height='200'>";
+		$img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
 	}
 
 	return $img;
 }
+add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 
 //
 //   This function creates an excerpt of the string passed to the length specified and
 //   breaks on a word boundary
 //
-function wds_content_excerpt($text,$text_length) {
-	$full_text = $text;
-	$text_length_1 = $text_length + 1;
-	if (strlen($full_text) > $text_length) {
-	    $text_plus_1 = substr($full_text,0,$text_length_1);
-	    $last_space = strrpos($text_plus_1," ");
-	    if ($last_space === false) {
-		$text = $text_plus_1;
-	    } else {
-		$text = substr($text_plus_1,0,$last_space);
-	    }
-	} else {
-	    $text = $full_text;
-	}
-	return $text;
+function wds_content_excerpt( $text, $text_length ) {
+	return bp_create_excerpt( $text, $text_length );
 }
 
 /**
