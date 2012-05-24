@@ -570,7 +570,14 @@ function openlab_group_blog_activity( $activity ) {
 
 	$activity->item_id       = (int)$group_id;
 	$activity->component     = 'groups';
-	$activity->hide_sitewide = 0;
+
+	$public = get_blog_option( $blog_id, 'blog_public' );
+
+	if ( 0 > (float) $public ) {
+		$activity->hide_sitewide = 1;
+	} else {
+		$activity->hide_sitewide = 0;
+	}
 
 	// prevent infinite loops
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
