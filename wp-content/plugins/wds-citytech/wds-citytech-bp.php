@@ -586,4 +586,84 @@ function openlab_group_blog_activity( $activity ) {
 }
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
+/**
+ * The following function overrides the BP_Blogs_Blog::get() in function bp_blogs_get_blogs(),
+ * when looking at the my-sites page, so that the only blogs shown are those without a group
+ * attached to them.
+ */
+function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
+
+	// Note: It may be desirable to expand the locations where this filtering happens
+	// I'm just playing it safe for the time being
+	if ( !is_page( 'my-sites' ) ) {
+		return $blogs;
+	}
+
+	global $bp, $wpdb;
+
+	// return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
+	//  get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false )
+
+	// Set up the necessary variables for the rest of the function, out of $params
+	$type         = $params['type'];
+	$limit        = $params['per_page'];
+	$page         = $params['page'];
+	$user_id      = $params['user_id'];
+	$search_terms = $params['search_terms'];
+
+	// The magic: Pull up a list of blogs that have associated groups, and exclude them
+	$exclude_blogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+
+	if ( !empty( $exclude_blogs ) ) {
+		$exclude_sql = $wpdb->prepare( " AND b.blog_id NOT IN (" . implode( ',', $exclude_blogs ) . ") " );
+	} else {
+		$exclude_sql = '';
+	}
+
+	if ( !is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
+		$hidden_sql = "AND wb.public = 1";
+	else
+		$hidden_sql = '';
+
+	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) ) : '';
+
+	$user_sql = !empty( $user_id ) ? $wpdb->prepare( " AND b.user_id = %d", $user_id ) : '';
+
+	switch ( $type ) {
+		case 'active': default:
+			$order_sql = "ORDER BY bm.meta_value DESC";
+			break;
+		case 'alphabetical':
+			$order_sql = "ORDER BY bm2.meta_value ASC";
+			break;
+		case 'newest':
+			$order_sql = "ORDER BY wb.registered DESC";
+			break;
+		case 'random':
+			$order_sql = "ORDER BY RAND()";
+			break;
+	}
+
+	if ( !empty( $search_terms ) ) {
+		$filter = like_escape( $wpdb->escape( $search_terms ) );
+		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
+		$total_blogs = $wpdb->get_var( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
+	} else {
+		$paged_blogs = $wpdb->get_results( $wpdb->prepare( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" ) );
+		$total_blogs = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" ) );
+	}
+
+	$blog_ids = array();
+	foreach ( (array)$paged_blogs as $blog ) {
+		$blog_ids[] = $blog->blog_id;
+	}
+
+	$blog_ids = $wpdb->escape( join( ',', (array)$blog_ids ) );
+	$paged_blogs = BP_Blogs_Blog::get_blog_extras( $paged_blogs, $blog_ids, $type );
+
+	return array( 'blogs' => $paged_blogs, 'total' => $total_blogs );
+}
+add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10, 2 );
+
+
 ?>
