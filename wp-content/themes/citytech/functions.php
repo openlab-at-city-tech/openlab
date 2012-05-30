@@ -548,4 +548,18 @@ function openlab_get_blog_avatar( $args = array() ) {
 	}
 }
 
+/**
+ * Add the group type to the Previous Step button during group creation
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/397
+ */
+function openlab_previous_step_type( $url ) {
+	if ( !empty( $_GET['type'] ) ) {
+		$url = add_query_arg( 'type', $_GET['type'], $url );
+	}
+
+	return $url;
+}
+add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
+
 ?>
