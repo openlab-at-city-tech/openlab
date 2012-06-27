@@ -124,13 +124,13 @@ class OpenLab_Admin_Bar {
  	}
 
 	/**
-	 * Change 'Howdy' message to 'My Commons', and move it out of the secondary menu
+	 * Change 'Howdy' message to 'Hi'
 	 */
 	function change_howdy_to_my_commons( $wp_admin_bar ) {
+		global $bp;
 		$wp_admin_bar->add_node( array(
 			'id'        => 'my-account',
-			'title'     => 'My Commons',
-			'parent'    => '',
+			'title'     => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
 			'meta'	    => array()
 		) );
 	}
