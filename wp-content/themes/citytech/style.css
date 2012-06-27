@@ -3439,3 +3439,8 @@ a:hover.read-more {
 	display: inline;
 	height: auto;
 }
+
+#wp-admin-bar-messages-default > li.nav-message {
+	overflow: visible;
+	min-height: 200px; /* Temp */
+}

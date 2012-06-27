@@ -415,6 +415,74 @@ class OpenLab_Admin_Bar {
 			'id' => 'messages',
 			'title' => 'Messages',
 		) );
+
+		// Only show the first 5
+		$messages_counter = 0;
+
+		$messages_args = array(
+			'type' => 'unread'
+		);
+		if ( bp_has_message_threads( $messages_args ) ) {
+			global $messages_template;
+
+			while ( bp_message_threads() ) {
+				bp_message_thread();
+
+				if ( $messages_counter < 5 ) {
+					// avatar
+					$title = '<div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_get_message_thread_avatar() . '</a></div>';
+
+					$title .= '<div class="item">';
+
+					// subject
+					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_get_message_thread_subject() . '</a></div>';
+
+					// last sender
+					$title .= '<div class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></div>';
+
+					// date and time
+					$last_time_unix = strtotime( $messages_template->thread->last_message_date );
+					$last_date = date( 'M n', $last_time_unix ); // 'Apr 6'
+					$last_time = date( 'g:i a', $last_time_unix ); // '3:40 pm'
+					$title .= sprintf( '%1$s at %2$s', $last_date, $last_time );
+
+					// Message excerpt
+					$title .= '<p class="message-excerpt">' . strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p>';
+
+					$title .= '</div>'; // .item
+
+					$wp_admin_bar->add_node( array(
+						'parent' => 'messages',
+						'id'     => 'message-' . bp_get_message_thread_id(),
+						'title'  => $title,
+						'meta'   => array(
+							'class' => 'nav-content-item nav-message'
+						)
+					) );
+				}
+
+				$messages_counter++;
+			}
+
+		} else {
+			// The user has no unread messages
+			$wp_admin_bar->add_node( array(
+				'parent' => 'messages',
+				'id'     => 'messages-none',
+				'title'  => 'None', // @todo - What should this say?
+				'meta'   => array(
+					'class' => 'nav-no-items'
+				)
+			) );
+		}
+
+		// "Go to Inbox" Makes sense that users should always see this
+		$wp_admin_bar->add_node( array(
+			'parent' => 'messages',
+			'id'     => 'messages-more',
+			'title'  => 'Go to Inbox',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
+		) );
 	}
 
 	/**
@@ -487,7 +555,6 @@ class OpenLab_Admin_Bar {
 				'tabindex' => 100
 			)
 		) );
-
 	}
 }
 
