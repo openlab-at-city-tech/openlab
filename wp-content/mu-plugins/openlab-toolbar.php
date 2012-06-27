@@ -493,6 +493,41 @@ class OpenLab_Admin_Bar {
 			'id' => 'activity',
 			'title' => 'Activity',
 		) );
+
+		$activity_args = array(
+			'user_id' => bp_loggedin_user_id(),
+			'scope'   => 'groups',
+			'max'     => 5
+		);
+
+		if ( bp_has_activities( $activity_args ) ) {
+			while ( bp_activities() ) {
+				bp_the_activity();
+
+				// avatar
+				$title = '<div class="item-avatar"><a href="' . bp_get_activity_user_link() . '">' . bp_get_activity_avatar() . '</a></div>';
+
+				// action
+				$title .= '<div class="item">' . bp_get_activity_action() . '</div>';
+
+				$wp_admin_bar->add_node( array(
+					'parent' => 'activity',
+					'id'     => 'activity-' . bp_get_message_thread_id(),
+					'title'  => $title,
+					'meta'   => array(
+						'class' => 'nav-content-item nav-activity'
+					)
+				) );
+			}
+		}
+
+		// "Go to Inbox" Makes sense that users should always see this
+		$wp_admin_bar->add_node( array(
+			'parent' => 'activity',
+			'id'     => 'activity-more',
+			'title'  => 'See all group activity',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() )
+		) );
 	}
 
 	/**
