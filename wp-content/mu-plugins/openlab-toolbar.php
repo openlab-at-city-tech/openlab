@@ -56,8 +56,9 @@ class OpenLab_Admin_Bar {
  	 */
  	function add_network_menu( $wp_admin_bar ) {
  		$wp_admin_bar->add_node( array(
+ 			'parent' => 'top-secondary',
 			'id'     => 'openlab',
-			'title'  => '<span class="openlab-open">Open</span>Lab',
+			'title'  => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
 			'href'   => bp_get_root_domain(),
 			'meta'	 => array(
 				'tabindex' => 90
@@ -218,6 +219,10 @@ class OpenLab_Admin_Bar {
 
 		// Change the title of the signup node
 		$signup->title = 'Sign Up';
+
+		// Move them both to top-secondary, to appear at the right
+		$signup->parent = 'top-secondary';
+		$login->parent  = 'top-secondary';
 
 		// Re-add
 		$wp_admin_bar->add_node( (array) $signup );

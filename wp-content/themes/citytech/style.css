@@ -3378,6 +3378,6 @@ a:hover.read-more {
 }
 
 /* Toolbar / Top Nav */
-#wpadminbar .quicklinks {
-	float: right;
+#wpadminbar .quicklinks .ab-top-secondary > li {
+	float: left; /* Annoying that WP floats right */
 }
