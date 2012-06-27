@@ -65,14 +65,14 @@ function cuny_home_login() {
     	<?php echo '<h3 class="title">JOIN OpenLab</h3>'; ?>
 		<?php _e( '<p>Need an account? <b><a href="'.site_url().'/register/">Sign Up</a></b> to become a member!</p>', 'buddypress' ) ?>
         <?php echo '</div>'; ?>
-        
+
 		<?php echo '<div id="open-lab-login" class="box-1">'; ?>
 		<?php do_action( 'bp_after_sidebar_login_form' ) ?>
-		
+
 		<?php echo '<h3 class="title">Log in to OpenLab</h3>'; ?>
 		 <?php do_action( 'bp_before_sidebar_login_form' ) ?>
 
-		<form name="login-form" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( 'wp-login.php', 'login_post' ) ?>" method="post">
+		<form name="login-form" class="standard-form" action="<?php echo site_url( 'wp-login.php', 'login_post' ) ?>" method="post">
 			<label><?php _e( 'Username', 'buddypress' ) ?>
 			<input type="text" name="log" id="sidebar-user-login" class="input" value="" tabindex="97" /></label>
 

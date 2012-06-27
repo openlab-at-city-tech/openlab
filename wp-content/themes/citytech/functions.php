@@ -108,7 +108,7 @@ function cuny_creds_footer() {
 remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 
 //before header mods
-add_action('genesis_before_header','cuny_bp_adminbar_menu');
+//add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
 add_action('genesis_header','cuny_admin_bar', 10);
@@ -522,7 +522,7 @@ function openlab_group_pagination_search_key( $pag ) {
 	if ( false !== strpos( $pag, 'grpage' ) ) {
 		$pag = remove_query_arg( 's', $pag );
 	}
-	
+
 	return $pag;
 }
 add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );

@@ -70,7 +70,7 @@ ul#bpauto {
 	.internal-page #content ul li.last {
 		float:right;
 }
-#bpnav ul#nav li.selected, 
+#bpnav ul#nav li.selected,
 	.internal-page #object-nav ul li.current,
 	.internal-page #bpsubnav ul li.current {
 		background: #F0F0F0;
@@ -106,7 +106,7 @@ ul#bpauto {
 	background: #EAEAEA;
 }
 .internal-page #content .padder,
-	.widget .padder { 
+	.widget .padder {
 	    padding: 15px;
 	}
 .internal-page #content ul li p a,
@@ -158,7 +158,7 @@ ul#bpauto {
 .internal-page #item-body .item-list li { width: 100% }
 .internal-page #item-body ul li div { float: left; } */
 .internal-page #item-body div.action {
-	float: right; 
+	float: right;
 }
 .internal-page #item-body .radio ul { margin-bottom: 1.5em; }
 .internal-page #content #item-body .radio ul li,
@@ -193,7 +193,7 @@ ul#bpauto {
 .internal-page .item-list-tabs ul li {
 	float: left;
 }
-.internal-page .item-list-tabs ul li.last { 
+.internal-page .item-list-tabs ul li.last {
 	margin: 4px 5px 4px 0;
 }
 .internal-page .activity {
@@ -206,7 +206,7 @@ ul#bpauto {
 		display: inline;
 }
 .internal-page #content .activity ul li .acomment-avatar a { padding: 0px; }
-.internal-page #content .activity ul li .activity-content { 
+.internal-page #content .activity ul li .activity-content {
 	margin-left: 80px;
 	float: none;
 }
@@ -272,7 +272,7 @@ ul#bpauto {
 	padding-top: 5px;
 	clear: left;
 }
-.widget ul.item-list li .item { 
+.widget ul.item-list li .item {
 	clear: none;
 }
 .widget .item-avatar img.avatar {
@@ -299,7 +299,7 @@ div.bp-widget {
                 /* "See All" links in widget headers */
                 div.bp-widget h4 span { float: right; }
 #content .bp-widget ul li h5 a { display: inline; }
-		
+
 	/* Horizonal listing of content, for example random friends or groups on the profile page */
 	ul.horiz-gallery {
 		list-style: none;
@@ -316,7 +316,7 @@ div.bp-widget {
 			ul.horiz-gallery li h5 { font-size: 1em; }
 
 	/* All buttons contain this class */
-	div.generic-button { 
+	div.generic-button {
 		background: none repeat scroll 0 0 #EEEEEE;
 		margin: 5px 0;
 		padding: 2px 5px;
@@ -324,7 +324,7 @@ div.bp-widget {
 	div.generic-button a {
 		color: #838383;
 	}
-	
+
 	/* All pagination is contained within a div.pagination */
 	div.pagination {
 		overflow: auto;
@@ -342,7 +342,7 @@ div.bp-widget {
 		/* Pagination status text - "Viewing X to X of X" */
 		div.pagination div.pag-count {
 			float: left;
-			
+
 		}
 
 div#item-header div#item-actions {
@@ -367,12 +367,12 @@ width:96%;
 			float: left;
 			margin: 0 10px 10px 0;
 		}
-		
+
 		ul.item-list li h4 a {
 			padding: 0;
 			display: inline;
 		}
-			
+
 		ul.item-list li div.item-title, ul.item-list li h4 {
 			font-weight: normal;
 			font-size: 1.2em;
@@ -430,14 +430,14 @@ width:96%;
 
 	/* .standard-form -- Most forms contain this class */
 	form.standard-form {
-		
+
 	}
 		form.standard-form label {
 			display: block;
 			font-weight: bold;
 			margin: 10px 0 5px 0;
 		}
-		
+
 		form.standard-form input[type=text] {
 
 		}
@@ -457,7 +457,7 @@ width:96%;
 			margin: 0;
 			padding: 0;
 		}
-		
+
 		div#invite-list input { width: auto; }
 
 	/* .ajax-loader -- All ajax loading indicators carry this class */
@@ -473,7 +473,7 @@ div.activity-meta, div.activity-comments {
 	clear: left;
 }
 div.acomment-content .comment-header { display:none; }
-.internal-page div.activity-comments { 
+.internal-page div.activity-comments {
 	width:auto;
 	margin:0 0 0 75px;
 	overflow:hidden;
@@ -490,7 +490,7 @@ div.activity-comments ul li ul {
 }
 
 /***********************************************************************************
- * Component specific styles 
+ * Component specific styles
  */
 
 /*** Activity Streams ****************/
@@ -510,7 +510,7 @@ ul#activity-list, ul#site-wide-stream, ul#activity-filter-links {
 		ul#activity-list li blockquote p, ul#site-wide-stream li blockquote p {
 			margin: 0;
 		}
-	
+
 	ul#activity-list span.time-since, ul#site-wide-stream span.time-since {
 		font-size: 0.9em;
 		color: #888;
@@ -545,7 +545,7 @@ div#profile-name h1, #group-name h1 {
 }
 
 /* Profile Field Display */
-table.profile-fields { 
+table.profile-fields {
 	width: 100%;
 }
 
@@ -555,7 +555,7 @@ table.profile-fields td {
 }
 	table.profile-fields td p {
 		margin: 0;
-	}	
+	}
 
 	table.profile-fields td.label {
 		width: 20%;
@@ -564,7 +564,7 @@ table.profile-fields td {
 	table.profile-fields tr.alt {  }
 
 /* Profile Field Edit */
-div.editfield label { 
+div.editfield label {
 	display: block;
 	font-weight: bold;
 }
@@ -574,8 +574,8 @@ div.editfield input, div.editfield textarea {
 }
 
 div.checkbox input, div.radio input { width: auto; }
-div.checkbox label, div.radio label { 
-	display: inline; 
+div.checkbox label, div.radio label {
+	display: inline;
 	font-weight: normal;
 }
 
@@ -615,16 +615,16 @@ div.message-box {
 
 	}
 		div.message-box .message-metadata a {
-			
+
 		}
-		
+
 		div.message-box .message-metadata .avatar {
 			float: left;
 			margin-bottom: 10px;
 			margin-right: 10px;
 			width: 30px;
 		}
-		
+
 		div.message-box .message-metadata h3 {
 			font-size: 1.1em;
 		}
@@ -636,7 +636,7 @@ div.message-box {
 .register-section {
 	margin: 0 0 30px 0;
 }
-	#basic-details-section input, #basic-details-section textarea, 
+	#basic-details-section input, #basic-details-section textarea,
 	#profile-details-section input, #profile-details-section textarea,
 	input#signup_blog_title {
 		width: 50% !important;
@@ -650,7 +650,7 @@ div.message-box {
 	.register-section span.label {
 		margin-top: 20px;
 	}
-	
+
 	.register-section div.error {
 		border: 1px solid #dc7e7e;
 		background: #ffc9c9;
@@ -675,24 +675,24 @@ div.message-box {
 		font-size: 0.9em;
 		color: #888;
 	}
-	
-	#user-status a#status-clear-status { 
-		color: red; 
+
+	#user-status a#status-clear-status {
+		color: red;
 		font-size: 0.9em;
 	}
-	
+
 /*** Forums *************************************/
 table.forum {
 	width: 100%;
 }
-table.forum td { 
-	text-align: center; 
+table.forum td {
+	text-align: center;
 }
 .internal-page table tr td, .internal-page table tr th, .directory table tr td, .directory table tr th {
 	padding: 8px;
 	vertical-align: middle;
 }
-.forum #content ul li .poster-meta a { 
+.forum #content ul li .poster-meta a {
 	display: inline;
 	background:#F7F7F7 none repeat scroll 0%;
 	border:1px solid #E6E6E6;
@@ -720,17 +720,17 @@ ul#forum-topic-list li {
 	ul#forum-topic-list li.sticky {
 		background: #ffffdd;
 	}
-	
+
 	ul#forum-topic-list li.closed a.topic-title {
 		background: url( ../images/closed_topic.png ) no-repeat center left;
 		padding: 0 0 0 20px;
 	}
-	
-	ul#forum-topic-list li span.latest { 
+
+	ul#forum-topic-list li span.latest {
 		display: block;
 		margin-left: 50px;
 	}
-	
+
 	ul#forum-topic-list li div.admin-links, ul#topic-post-list li div.admin-links {
 		position: absolute;
 		top: 1em;
@@ -771,7 +771,7 @@ ul#topic-post-list .post-content {
 		margin: 5px 0 0 0;
 		font-size: 20px;
 	}
-	
+
 ul#topic-post-list li input#submit_reply, input#submit_topic {
 	width: auto;
 }
@@ -786,7 +786,7 @@ div.latest-post {
 		display: block;
 		margin: 10px 0 3px 0;
 	}
-	
+
 	div#edit-post textarea {
 		height: 150px;
 		width: 98%;
@@ -802,17 +802,17 @@ div.latest-post {
 	}
 
 /* Form Styling */
-	
+
 /** boxes **/
 
-#search-terms, #search-which, #whats-new-post-in, 
+#search-terms, #search-which, #whats-new-post-in,
 #activity-filter-select select, .ac-input,
 .dir-search label input, .item-list-tabs ul li.filter select,
 #field_ids, #message_content, #subject, #send-notice, #send-to-input, #pass1, #pass2
  {
 	background: #f7f7f7;
 	color: #000;
-	font-family: Arial, Tahoma, Verdana;	
+	font-family: Arial, Tahoma, Verdana;
 	font-size: 12px;
 	padding: 2px 0 1px 5px;
 	border: 1px solid #e6e6e6;
@@ -823,7 +823,7 @@ div.latest-post {
 }
 /* buttons */
 
-form .submit { 
+form .submit {
     float: right;
     margin: 15px;
 }
@@ -831,7 +831,7 @@ form .submit {
 	margin:0;
 	padding:0;
 }
-#search-submit, 
+#search-submit,
 #aw-whats-new-submit, #ac-form-submit, #groups_search_submit, #forums_search_submit, #members_search_submit,
 #profile-group-edit-submit,
 #send, .submit input, #ass-save {
@@ -845,7 +845,7 @@ form .submit {
     text-decoration: none;
     text-transform: uppercase;
 	}
-#search-submit:hover, 
+#search-submit:hover,
 #aw-whats-new-submit:hover, #ac-form-submit:hover, #groups_search_submit:hover, #forums_search_submit:hover, #members_search_submit:hover,
 #profile-group-edit-submit:hover,
 #send:hover, .submit input:hover, #ass-save:hover {
