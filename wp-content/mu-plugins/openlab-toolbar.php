@@ -46,7 +46,7 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 		} else {
-			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 9 );
+			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 11 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
@@ -209,14 +209,19 @@ class OpenLab_Admin_Bar {
 	 * Adds the Sign Up item
 	 */
 	function add_signup_item( $wp_admin_bar ) {
-		// Sign up
-		if ( bp_get_signup_allowed() ) {
-			$wp_admin_bar->add_menu( array(
-				'id'    => 'bp-register',
-				'title' => __( 'Sign Up', 'buddypress' ),
-				'href'  => bp_get_signup_page()
-			) );
-		}
+		// Remove so we can replace in the right order
+		$signup = $wp_admin_bar->get_node( 'bp-register' );
+		$login  = $wp_admin_bar->get_node( 'bp-login' );
+
+		$wp_admin_bar->remove_node( 'bp-register' );
+		$wp_admin_bar->remove_node( 'bp-login' );
+
+		// Change the title of the signup node
+		$signup->title = 'Sign Up';
+
+		// Re-add
+		$wp_admin_bar->add_node( (array) $signup );
+		$wp_admin_bar->add_node( (array) $login );
 	}
 
 	function fix_tabindex( $wp_admin_bar ) {
