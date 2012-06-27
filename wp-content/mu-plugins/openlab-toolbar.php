@@ -35,9 +35,9 @@ class OpenLab_Admin_Bar {
 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
-
-			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_my_commons' ), 7 );
-			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_commons_items' ), 99 );
+			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 1 );
+			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
+			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'move_notifications_hook' ), 5 );
 
@@ -114,8 +114,7 @@ class OpenLab_Admin_Bar {
 			'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' )
  		) );
 
-
- 		$wp_admin_bar->add_node( array(
+		$wp_admin_bar->add_node( array(
 			'parent' => 'openlab',
 			'id'     => 'help',
 			'title'  => 'Help',
@@ -123,33 +122,125 @@ class OpenLab_Admin_Bar {
  		) );
  	}
 
+ 	/**
+ 	 * Adds 'My OpenLab' menu
+ 	 */
+ 	function add_my_openlab_menu( $wp_admin_bar ) {
+ 		$wp_admin_bar->add_node( array(
+			'id'    => 'my-openlab',
+			'title' => 'My OpenLab',
+		) );
+ 	}
+
 	/**
 	 * Change 'Howdy' message to 'Hi'
 	 */
-	function change_howdy_to_my_commons( $wp_admin_bar ) {
+	function change_howdy_to_hi( $wp_admin_bar ) {
 		global $bp;
 		$wp_admin_bar->add_node( array(
-			'id'        => 'my-account',
-			'title'     => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
-			'meta'	    => array()
+			'id'    => 'my-account',
+			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
+			'meta'	=> array()
 		) );
 	}
 
 	/**
-	 * Add 'My' to the front of the My Commons items
+	 * Removes BP default "My" items, and builds our own
 	 */
-	function prepend_my_to_my_commons_items( $wp_admin_bar ) {
+	function prepend_my_to_my_openlab_items( $wp_admin_bar ) {
 		$nodes = $wp_admin_bar->get_nodes();
-		$my_commons_node_ids = array();
+		$my_openlab_nodes = array();
 
 		foreach( $nodes as $id => $node ) {
 			if ( 'my-account-buddypress' == $node->parent ) {
-				$wp_admin_bar->add_node( array(
-					'id'    => $id,
-					'title' => 'My ' . $node->title
-				) );
+				$wp_admin_bar->remove_node( $id );
+				$my_openlab_nodes[] = $id;
 			}
 		}
+
+		// Loop through one more time and remove submenus (those with a parent that is a
+		// child of my-openlab)
+		unset( $nodes );
+		$nodes = $wp_admin_bar->get_nodes();
+		foreach( $nodes as $id => $node ) {
+			if ( in_array( $node->parent, $my_openlab_nodes ) ) {
+				$wp_admin_bar->remove_node( $id );
+			}
+		}
+
+		// Now add our menus
+		// profile, courses, projects, clubs, portfolio, friends, messages, invitations, dashboard
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-profile',
+			'title'  => 'My Profile',
+			'href'   => bp_loggedin_user_domain()
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-courses',
+			'title'  => 'My Courses',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' )
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-projects',
+			'title'  => 'My Projects',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-projects' )
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-clubs',
+			'title'  => 'My Clubs',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-clubs' )
+		) );
+
+		// @todo This will need to be conditional, and we'll need to be dynamic about
+		// href generation. But not strategicially dynamic
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-portfolio',
+			'title'  => 'My Portfolio',
+			'href'   => bp_loggedin_user_domain()
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-friends',
+			'title'  => 'My Friends',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-messages', // @todo Unread message count
+			'title'  => 'My Messages',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-invitations', // @todo Invitations count
+			'title'  => 'My Invitations',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+		) );
+
+		// @todo Do we really want this kind of separator?
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-openlab-separator',
+			'title'  => '-----------'
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-dashboard',
+			'title'  => 'My Dashboard',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' ) // @todo Where does this go?
+		) );
 	}
 
 	/**
