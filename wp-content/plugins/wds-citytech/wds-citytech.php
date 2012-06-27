@@ -1498,42 +1498,6 @@ function openlab_launch_translator() {
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
 
 /**
- * Add OpenLab links in the WP toolbar
- */
-function openlab_link_in_toolbar( $wp_admin_bar ) {
-	$wp_admin_bar->add_node( array(
-		'id'     => 'openlab',
-		'title'  => 'OpenLab',
-		'href'   => bp_get_root_domain(),
-		'meta'	 => array(
-			'tabindex' => 90
-		)
-	) );
-
-	$wp_admin_bar->add_node( array(
-		'id'     => 'myopenlab',
-		'title'  => 'MyOpenLab',
-		'href'   => bp_loggedin_user_domain(),
-		'meta'	 => array(
-			'tabindex' => 95
-		)
-	) );
-}
-add_action( 'admin_bar_menu', 'openlab_link_in_toolbar', 12 );
-
-/**
- * Add a redirect_to param to the Log Out toolbar link
- */
-function openlab_redirect_logout_link( $wp_admin_bar ) {
-	$wp_admin_bar->add_menu( array(
-		'id'     => 'logout',
-		'title'  => __( 'Log Out' ),
-		'href'   => add_query_arg( 'redirect_to', urlencode( bp_get_root_domain() ), wp_logout_url() ),
-	) );
-}
-add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
-
-/**
  * When a user attempts to visit a blog, check to see if the user is a member of the
  * blog's associated group. If so, ensure that the member has access.
  *

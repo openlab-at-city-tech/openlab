@@ -3376,3 +3376,8 @@ a.read-more {
 a:hover.read-more {
     color: #0fceba;
 }
+
+/* Toolbar / Top Nav */
+#wpadminbar .quicklinks {
+	float: right;
+}
