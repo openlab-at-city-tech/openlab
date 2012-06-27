@@ -242,22 +242,18 @@ class OpenLab_Admin_Bar {
 // added by r-a-y (05.16.11)
 function cac_adminbar_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'jquery.columnizer', WP_PLUGIN_URL . '/cac-bp-admin-bar-mods/js/jquery.columnizer/jquery.columnizer.js', array( 'jquery' ) );
-	wp_enqueue_script( 'cac-admin-bar', WP_PLUGIN_URL . '/cac-bp-admin-bar-mods/js/admin-bar.js', array( 'jquery', 'jquery.columnizer' ) );
-
-	wp_enqueue_style( 'cac-admin-bar', '/wp-content/plugins/cac-bp-admin-bar-mods/css/admin-bar.css' );
-
 }
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 
-// JS to toggle adminbar login form
-// JS is inline to reduce a server request
-// added by r-a-y (05.16.11)
+/**
+ * JS to toggle adminbar login form
+ *
+ * JS is inline to reduce a server request
+ */
 function cac_adminbar_js() {
 	$request_uri = $_SERVER['REQUEST_URI'];
-	if($request_uri == '/pbnavslug/') $request_uri = '/wiki/';
 ?>
-	<script type="text/javascript">//<![CDATA[
+	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
 		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Remember Me", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><input type="hidden" name="testcookie" value="1" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a><input type="hidden" name="redirect_to" value="<?php echo wp_guess_url() ?>" /></form>';
@@ -265,10 +261,49 @@ function cac_adminbar_js() {
 		$("#wp-admin-bar-bp-login").append(loginform);
 
 		$("#wp-admin-bar-bp-login > a").click(function(){
-			$("#sidebar-login-form").toggle(); $("#sidebar-user-login").focus(); $(this).toggleClass("login-click"); return false;
+			$("#sidebar-login-form").toggle();
+			$("#sidebar-user-login").focus();
+			$(this).toggleClass("login-click");
+			return false;
 		});
 	});
-	//]]></script>
+	</script>
+
+	<style type="text/css">
+/* adminbar login form
+----------------------------------------------------------------------------------------
+- adding some default BP form styles so the form will look accurate across all WP blogs */
+li.wp-admin-bar-bp-login {position:relative;}
+
+#wpadminbar ul li#wp-admin-bar-bp-login {
+	width: 70px;
+}
+
+form#sidebar-login-form {position:absolute; background:url(<?php echo get_stylesheet_directory_uri() . '/images/bg_trans.png' ?>) repeat 0 0 !important; width:200px; padding:10px; border-radius:0 8px 8px 8px; -moz-border-radius:0 8px 8px 8px; -webkit-border-radius:0 8px 8px 8px; box-shadow:0px 3px 3px #999; display:none; margin-left: -155px; text-align: left;}
+	li.bp-login:hover form {display:block; cursor:default;}
+
+form#sidebar-login-form label, form#sidebar-login-form span.label {display:block; color:#fff; margin:5px 0;}
+
+#wpadminbar form#sidebar-login-form textarea, #wpadminbar form#sidebar-login-form input[type="text"],
+#wpadminbar form#sidebar-login-form select, #wpadminbar form#sidebar-login-form input[type="password"],
+#wpadminbar form#sidebar-login-form input[type="submit"]
+	{border:1px inset #ccc; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; color: #888; text-shadow: none;}
+
+#sidebar-login-form input[type="text"], #sidebar-login-form input[type="password"] {padding:4px; width:95%;}
+
+form#sidebar-login-form input[type="submit"] {padding:3px 10px; text-decoration:none; vertical-align:bottom; border:1px solid #ddd; cursor:pointer; text-shadow: none;}
+
+input#sidebar-rememberme {margin-left:0;}
+
+form#sidebar-login-form p.forgetmenot {float:none;}
+
+form#sidebar-login-form a.lost-pw {padding-right:2px !important; float:right; font-size:.9em !important; background:none !important;}
+	#wp-admin-bar li a.lost-pw:hover {text-decoration:underline !important; background:none !important;}
+
+form#sidebar-login-form #sidebar-wp-submit {background:#fff;}
+
+.login-click {background:#000 !important;}
+	</style>
 <?php
 }
 add_action( 'wp_footer', 'cac_adminbar_js', 999 );
