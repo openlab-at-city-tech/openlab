@@ -3391,6 +3391,10 @@ a:hover.read-more {
 	width: 50px;
 }
 
+#wpadminbar .item-avatar img {
+	width: 50px;
+}
+
 #wpadminbar a.button {
 	background: #fff; /* Old browsers */
 	background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%); /* FF3.6+ */

@@ -352,13 +352,59 @@ class OpenLab_Admin_Bar {
 			'title'  => 'Invitations'
 		) );
 
-		// "See More"
-		$wp_admin_bar->add_node( array(
-			'parent' => 'invites',
-			'id'     => 'invitations-more',
-			'title'  => 'See More',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
-		) );
+		$groups_args = array(
+			'type'    => 'invites',
+			'user_id' => bp_loggedin_user_id()
+		);
+		if ( bp_has_groups( $groups_args ) ) {
+			$group_counter = 0;
+			while ( bp_groups() ) {
+				bp_the_group();
+
+				if ( $group_counter < 3 ) {
+					// avatar
+					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_avatar( 'type=thumb&width=50&height=50' ) . '</a></div>';
+
+					// name link
+					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></div></div>';
+
+					// accept/reject buttons
+					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+
+					$wp_admin_bar->add_node( array(
+						'parent' => 'invites',
+						'id'     => 'invitation-' . bp_get_group_id(),
+						'title'  => $title,
+						'meta'   => array(
+							'class' => 'nav-content-item nav-invitation'
+						)
+					) );
+				}
+
+				$group_counter++;
+			}
+
+			if ( 3 < $group_counter ) {
+				// "See More"
+				$wp_admin_bar->add_node( array(
+					'parent' => 'invites',
+					'id'     => 'invitations-more',
+					'title'  => 'See More',
+					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+				) );
+			}
+		} else {
+			// The user has no friend requests
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'friend-requests-none',
+				'title'  => 'None', // @todo - What should this say?
+				'meta'   => array(
+					'class' => 'nav-no-items'
+				)
+			) );
+		}
+
 	}
 
 	/**
