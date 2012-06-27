@@ -39,7 +39,15 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
-			add_action( 'admin_bar_menu', array( $this, 'move_notifications_hook' ), 5 );
+			add_action( 'admin_bar_menu', array( $this, 'remove_notifications_hook' ), 5 );
+
+			// Don't show the My Sites menu
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_sites_menu', 20 );
+
+			// Add the notification menus
+			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
+			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
+			add_action( 'admin_bar_menu', array( $this, 'add_activity_menu' ), 26 );
 
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
@@ -244,26 +252,13 @@ class OpenLab_Admin_Bar {
 	}
 
 	/**
-	 * Move the Notifications menu to a different hook
+	 * Remove the Notifications menu
 	 *
 	 * We have to do it in a function like this because of the way BP adds the menu in the first
 	 * place
 	 */
-	function move_notifications_hook( $wp_admin_bar ) {
+	function remove_notifications_hook( $wp_admin_bar ) {
 		remove_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_notifications_menu', 5 );
-		add_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 999 );
-
-		add_action( 'admin_bar_menu', array( $this, 'move_notifications_from_secondary' ), 998 );
-	}
-
-	/**
-	 * Move the Notifications menu out of the secondary section
-	 */
-	function move_notifications_from_secondary( $wp_admin_bar ) {
-		$wp_admin_bar->add_menu( array(
-			'parent' => '',
-			'id'     => 'bp-notifications',
-		) );
 	}
 
 	/**
@@ -273,6 +268,117 @@ class OpenLab_Admin_Bar {
 		if ( !current_user_can( 'publish_posts' ) ) {
 			$wp_admin_bar->remove_node( 'site-name' );
 		}
+	}
+
+	/**
+	 * Add the Invites menu (Friend Requests + Group Invitations)
+	 */
+	function add_invites_menu( $wp_admin_bar ) {
+		$wp_admin_bar->add_menu( array(
+			'id' => 'invites',
+			'title' => 'Invitations',
+		) );
+
+		/**
+		 * FRIEND REQUESTS
+		 */
+
+		// "Friend Requests" title
+		$wp_admin_bar->add_node( array(
+			'parent' => 'invites',
+			'id'     => 'friend-requests-title',
+			'title'  => 'Friend Requests'
+		) );
+
+		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+		$members_args = array(
+			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
+			'max'     => 0
+		);
+
+		if ( bp_has_members( $members_args ) ) {
+			while ( bp_members() ) {
+				bp_the_member();
+
+				// avatar
+				$title = '<div class="item-avatar"><a href="' . bp_get_member_link() . '">' . bp_get_member_avatar() . '</a></div>';
+
+				// name link
+				$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_member_link() . '">' . bp_get_member_name() . '</a></div></div>';
+
+				// accept/reject buttons
+				$title .= '<div class="action"><a class="button accept" href="' . bp_get_friend_accept_request_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_friend_reject_request_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+
+				$wp_admin_bar->add_node( array(
+					'parent' => 'invites',
+					'id'     => 'friendship-' . bp_get_friend_friendship_id(),
+					'title'  => $title,
+					'meta'   => array(
+						'class' => 'nav-content-item nav-friendship-request'
+					)
+				) );
+			}
+
+			if ( 3 < count( $request_ids ) ) {
+				// "See More"
+				$wp_admin_bar->add_node( array(
+					'parent' => 'invites',
+					'id'     => 'friend-requests-more',
+					'title'  => 'See More',
+					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
+				) );
+			}
+
+		} else {
+			// The user has no friend requests
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'friend-requests-none',
+				'title'  => 'None', // @todo - What should this say?
+				'meta'   => array(
+					'class' => 'nav-no-items'
+				)
+			) );
+		}
+
+		/**
+		 * INVITATIONS
+		 */
+
+		// "Invitations" title
+		$wp_admin_bar->add_node( array(
+			'parent' => 'invites',
+			'id'     => 'invitations-title',
+			'title'  => 'Invitations'
+		) );
+
+		// "See More"
+		$wp_admin_bar->add_node( array(
+			'parent' => 'invites',
+			'id'     => 'invitations-more',
+			'title'  => 'See More',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+		) );
+	}
+
+	/**
+	 * Add the Messages menu
+	 */
+	function add_messages_menu( $wp_admin_bar ) {
+		$wp_admin_bar->add_menu( array(
+			'id' => 'messages',
+			'title' => 'Messages',
+		) );
+	}
+
+	/**
+	 * Add the Activity menu (My Group activity)
+	 */
+	function add_activity_menu( $wp_admin_bar ) {
+		$wp_admin_bar->add_menu( array(
+			'id' => 'activity',
+			'title' => 'Activity',
+		) );
 	}
 
 	/**
