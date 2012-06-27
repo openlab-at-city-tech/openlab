@@ -3,6 +3,25 @@
 require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
+/**
+ * Don't use the Genesis genesis_meta action to load the stylesheet
+ *
+ * Instead, load it as the very last item in the document head, so that we can override plugin
+ * styles.
+ *
+ * We're manually outputting the <link> tag instead of enqueuing, because we must ensure that we
+ * come last, last, last.
+ *
+ * Kids, do not try this at home!
+ *
+ * @link http://openlab.citytech.cuny.edu/redmine/issues/422
+ */
+remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
+function openlab_load_stylesheet() {
+	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="screen" />';
+}
+add_action( 'wp_head', 'openlab_load_stylesheet', 999999 );
+
 define('BP_DISABLE_ADMIN_BAR', true);
 
 /** Add support with .wrap inside #inner */
