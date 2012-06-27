@@ -513,22 +513,53 @@ add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );
  */
 function openlab_get_groups_in_sql( $search_terms ) {
 	global $wpdb, $bp;
-	
+
 	// Due to the incredibly crappy way this was originally built, I will implement search by
 	// using a separate query + IN
 	$in_sql = '';
 	if ( !empty( $search_terms ) ) {
 		$search_terms_sql = like_escape( $search_terms );
-		
+
 		// Don't get hidden groups. Important to keep counts in line with bp_has_groups()
 		$matched_group_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE (name LIKE '%%{$search_terms_sql}%%' OR description LIKE '%%{$search_terms_sql}%%') AND status != 'hidden'" ) );
-		
+
 		if ( !empty( $matched_group_ids ) ) {
 			$in_sql = " AND a.group_id IN (" . implode(',', wp_parse_id_list( $matched_group_ids ) ) . ") ";
 		}
 	}
-	
+
 	return $in_sql;
 }
+
+/**
+ * Get blog avatar (group avatar when available, otherwise user)
+ */
+function openlab_get_blog_avatar( $args = array() ) {
+	global $blogs_template;
+
+	$group_id = openlab_get_group_id_by_blog_id( $blogs_template->blog->blog_id );
+
+	if ( $group_id ) {
+		$args['object']  = 'group';
+		$args['item_id'] = $group_id;
+		return bp_core_fetch_avatar( $args );
+	} else {
+		return bp_get_blog_avatar( $args );
+	}
+}
+
+/**
+ * Add the group type to the Previous Step button during group creation
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/397
+ */
+function openlab_previous_step_type( $url ) {
+	if ( !empty( $_GET['type'] ) ) {
+		$url = add_query_arg( 'type', $_GET['type'], $url );
+	}
+
+	return $url;
+}
+add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
 
 ?>
