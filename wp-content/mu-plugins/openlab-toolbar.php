@@ -25,6 +25,14 @@ class OpenLab_Admin_Bar {
 	}
 
 	function __construct() {
+		// Bail if BP is not present
+		if ( !class_exists( 'BP_Core' ) ) {
+			return;
+		}
+
+		// Enqueue styles
+		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
+
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
 
@@ -590,6 +598,10 @@ class OpenLab_Admin_Bar {
 				'tabindex' => 100
 			)
 		) );
+	}
+
+	function enqueue_styles() {
+		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css' );
 	}
 }
 
