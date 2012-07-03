@@ -3,6 +3,10 @@
 require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
+/**this is for the post type declarations - they are done on the function side instead of through 
+a plugin, to make git tracking easier**/
+require_once(STYLESHEETPATH.'/lib/post-types.php');
+
 /**
  * Don't use the Genesis genesis_meta action to load the stylesheet
  *
