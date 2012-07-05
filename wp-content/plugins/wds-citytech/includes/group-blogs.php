@@ -240,7 +240,7 @@ function wds_bp_group_site_pages(){
 		echo '</ul>';
 	}
 }
-add_action("bp_group_options_nav","wds_bp_group_site_pages");
+add_action( 'bp_group_options_nav', 'wds_bp_group_site_pages' );
 
 
 /**
