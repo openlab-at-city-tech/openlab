@@ -9,6 +9,18 @@
 
 include "wds-register.php";
 include "wds-docs.php";
+
+/**
+ * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
+ * Ensure that it's only loaded when BP is present.
+ * See http://openlab.citytech.cuny.edu/redmine/issues/31
+ */
+function openlab_load_custom_bp_functions() {
+	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+}
+add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
+
 global $wpdb;
 date_default_timezone_set('America/New_York');
 
@@ -1008,28 +1020,6 @@ function wds_bp_group_meta_save($group) {
 	}
 }
 
-/**
- * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
- * Ensure that it's only loaded when BP is present.
- * See http://openlab.citytech.cuny.edu/redmine/issues/31
- */
-function openlab_load_custom_bp_functions() {
-	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
-}
-add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
-
-/**
- * Remove user from group blog when leaving group
- */
-function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-
-	if ( $blog_id ) {
-		remove_user_from_blog( $user_id, $blog_id );
-	}
-}
-add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
-
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
 function wds_bp_group_site_pages(){
 	global $bp;
@@ -1547,60 +1537,6 @@ function openlab_sync_blog_members_to_group() {
 	}
 }
 //add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
-
-/**
- * When a user visits a group blog, check to see whether the user should be an admin, based on
- * membership in the corresponding group.
- *
- * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
- */
-function openlab_force_blog_role_sync() {
-	global $bp, $wpdb;
-
-	if ( !is_user_logged_in() ) {
-		return;
-	}
-
-	// Is this blog associated with a group?
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-
-	if ( $group_id ) {
-
-		// Get the user's group status, if any
-		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
-
-		$userdata = get_userdata( get_current_user_id() );
-
-		if ( !empty( $member ) ) {
-			$status = 'author';
-
-			if ( $member->is_admin ) {
-				$status = 'administrator';
-			} else if ( $member->is_mod ) {
-				$status = 'editor';
-			}
-
-			$role_is_correct = in_array( $status, $userdata->roles );
-
-			if ( !$role_is_correct ) {
-				$user = new WP_User( get_current_user_id() );
-				$user->set_role( $status );
-			}
-		} else {
-			$role_is_correct = empty( $userdata->roles );
-
-			if ( !$role_is_correct ) {
-				remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
-			}
-		}
-
-		if ( !$role_is_correct ) {
-			// Redirect, just for good measure
-			echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
-		}
-	}
-}
-add_action( 'init', 'openlab_force_blog_role_sync', 999 );
 
 /**
  * Interfere in the comment posting process to allow for duplicates on the same post
