@@ -15,6 +15,17 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 	return (int) $group_id;
 }
 
+/**
+ * Utility function for fetching the site id for a group
+ */
+function openlab_get_site_id_by_group_id( $group_id = 0 ) {
+	if ( !$group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	return (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+}
+
 
 ////////////////////////
 /// MEMBERSHIP SYNC ////

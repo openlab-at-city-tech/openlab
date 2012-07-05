@@ -777,7 +777,7 @@ function wds_bp_group_meta(){
       <?php } ?>
       <div id="wds-group-type"></div>
       <?php //Copy Site
-	  $wds_bp_group_site_id=groups_get_groupmeta( bp_get_current_group_id(), 'wds_bp_group_site_id' );
+	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
 	  if(!$wds_bp_group_site_id){
 		$template="template-".strtolower($group_type);
@@ -804,23 +804,29 @@ function wds_bp_group_meta(){
 				var radioid = '#new_or_old_' + noo;
 				$(radioid).prop('checked','checked');
 
-				var thisid = '#noo_' + ( noo == 'old' ? 'new' : 'old' ) + '_options';
-				$(thisid).removeClass('disabled-opt');
-				$(thisid).find('input').each(function(index,element){
-					$(element).removeProp('disabled').removeClass('disabled');
-				});
-				$(thisid).find('select').each(function(index,element){
-					$(element).removeProp('disabled').removeClass('disabled');
+				$('input.noo_radio').each(function(i,v) {
+					var thisval = $(v).val();
+					var thisid = '#noo_' + thisval + '_options';
+					console.log($(thisid));
+					if ( noo == thisval ) {
+						$(thisid).removeClass('disabled-opt');
+						$(thisid).find('input').each(function(index,element){
+							$(element).removeProp('disabled').removeClass('disabled');
+						});
+						$(thisid).find('select').each(function(index,element){
+							$(element).removeProp('disabled').removeClass('disabled');
+						});
+					} else {
+						$(thisid).addClass('disabled-opt');
+						$(thisid).find('input').each(function(index,element){
+							$(element).prop('disabled','disabled').addClass('disabled');
+						});
+						$(thisid).find('select').each(function(index,element){
+							$(element).prop('disabled','disabled').addClass('disabled');
+						});
+					}
 				});
 
-				var otherid = '#noo_' + noo + '_options';
-				$(otherid).addClass('disabled-opt');
-				$(otherid).find('input').each(function(index,element){
-					$(element).prop('disabled','disabled').addClass('disabled');
-				});
-				$(otherid).find('select').each(function(index,element){
-					$(element).prop('disabled','disabled').addClass('disabled');
-				});
 			}
 
 			$('.noo_radio').click(function(el){
@@ -899,7 +905,7 @@ function wds_bp_group_meta(){
 					Create a new site:
 				</th>
 
-				<td id="noo_old_options">
+				<td id="noo_new_options">
 				<?php
 				if( constant( "VHOST" ) == 'yes' ) : ?>
 					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>.<?php echo $current_site->domain;?>
@@ -916,7 +922,7 @@ function wds_bp_group_meta(){
 					Use an existing site:
 				</th>
 
-				<td id="noo_new_options">
+				<td id="noo_old_options">
 					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
 					<?php
@@ -939,6 +945,17 @@ function wds_bp_group_meta(){
 							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
 						<?php } ?>
 					</select>
+				</td>
+			</tr>
+
+			<tr id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website;?>">
+				<th valign="top" scope='row'>
+					<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
+					Use an external site:
+				</th>
+
+				<td id="noo_external_options">
+					<input type="text" name="external-site-url" id="external-site-url" />
 				</td>
 			</tr>
 
