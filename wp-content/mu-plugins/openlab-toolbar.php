@@ -520,7 +520,7 @@ class OpenLab_Admin_Bar {
 
 				$wp_admin_bar->add_node( array(
 					'parent' => 'activity',
-					'id'     => 'activity-' . bp_get_message_thread_id(),
+					'id'     => 'activity-' . bp_get_activity_id(),
 					'title'  => $title,
 					'meta'   => array(
 						'class' => 'nav-content-item nav-activity'
