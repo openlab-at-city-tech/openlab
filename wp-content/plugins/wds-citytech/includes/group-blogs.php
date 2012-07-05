@@ -325,6 +325,51 @@ function wds_site_can_be_viewed() {
 	return $blog_public;
 }
 
+////////////////////////
+///  EXTERNAL SITES  ///
+////////////////////////
+
+/**
+ * Markup for the External Blog feed URL stuff on group creation/admin
+ */
+function openlab_feed_url_markup() {
+	$group_id = bp_get_current_group_id();
+
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	$external_site_url = groups_get_groupmeta( $group_id, 'external_site_url' );
+
+	if ( empty( $external_site_url ) ) {
+		// No need to go on if you're using a local site
+		return;
+	}
+
+	?>
+
+	<p>RSS feeds are used to pull new post and comment activity from your external site into your activity stream.</p>
+
+	<?php $posts_feed_url = groups_get_groupmeta( $group_id, 'external_site_posts_feed' ) ?>
+	<?php $comments_feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' ) ?>
+
+	<?php if ( $posts_feed_url || $comments_feed_url ) : ?>
+		<p>We located the following RSS feed URLs for your external site. Correct errors or provide missing feed addresses in the fields below.</p>
+	<?php else : ?>
+		<p>We weren't able to auto-locate your RSS feeds. If your site has RSS feeds, enter their addresses below.</p>
+	<?php endif ?>
+
+	<p><label for="external-site-posts-feed">Posts:</label> <input id="external-site-posts-feed" name="external-site-posts-feed" value="<?php echo esc_attr( $posts_feed_url ) ?>" /></p>
+
+	<p><label for="external-site-comments-feed">Comments:</label> <input id="external-site-comments-feed" name="external-site-comments-feed" value="<?php echo esc_attr( $comments_feed_url ) ?>" /></p>
+
+	<br />
+	<hr>
+
+	<?php
+}
+add_action( 'bp_before_group_settings_creation_step', 'openlab_feed_url_markup' );
+
 /**
  * Validate a URL format
  */

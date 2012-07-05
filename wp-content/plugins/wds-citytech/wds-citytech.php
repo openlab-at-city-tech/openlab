@@ -1065,6 +1065,12 @@ function wds_bp_group_meta_save($group) {
 			}
 		}
 	}
+
+	// Feed URLs (step two of group creation)
+	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {
+		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );
+		groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-site-comments-feed'] );
+	}
 }
 
 add_action("bp_group_options_nav","wds_bp_group_site_pages");
