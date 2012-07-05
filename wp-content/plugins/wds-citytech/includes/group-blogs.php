@@ -207,6 +207,41 @@ add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 ///  MISCELLANEOUS   ///
 ////////////////////////
 
+/**
+ * Displays a link to the group's site on the sidebar
+ */
+function wds_bp_group_site_pages(){
+	global $bp;
+
+	$group_id = bp_get_current_group_id();
+
+	// Set up data. Look for local site first. Fall back on external site.
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+
+	if ( $site_id ) {
+		$site_url = get_blog_option( $site_id, 'siteurl' );
+		$is_local = true;
+	} else {
+		$site_url = groups_get_groupmeta( $group_id, 'external_site_url' );
+		$is_local = false;
+	}
+
+	if ( !empty( $site_url ) ) {
+
+		echo "<ul class='website-links'>";
+
+		echo "<li id='site-link'><a href='" . trailingslashit( esc_attr( $site_url ) ) . "'>" . ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) . " Site</a></li>";
+
+		// Only show the local admin link. Group members only
+		if ( $is_local && bp_group_is_member() ) {
+			echo "<li><a href='" . esc_attr( trailingslashit( $site_url ) ) . "wp-admin/'>Dashboard</a></li>";
+		}
+
+		echo '</ul>';
+	}
+}
+add_action("bp_group_options_nav","wds_bp_group_site_pages");
+
 
 /**
  * The following function overrides the BP_Blogs_Blog::get() in function bp_blogs_get_blogs(),

@@ -1073,31 +1073,6 @@ function wds_bp_group_meta_save($group) {
 	}
 }
 
-add_action("bp_group_options_nav","wds_bp_group_site_pages");
-function wds_bp_group_site_pages(){
-	global $bp;
-	//print_r($bp);
-	$site=site_url();
-	$group_id=$bp->groups->current_group->id;
-
-	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-	if($wds_bp_group_site_id!=""){
-	  switch_to_blog($wds_bp_group_site_id);
-	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
-	  echo "<ul class='website-links'>";
-
-	  echo "<li id='site-link'><a href='".site_url()."'>".ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ))." Site</a></li>";
-
-	  // Only show the admin link to group members
-	  if ( bp_group_is_member() ) {
-		  echo "<li><a href='" . admin_url() . "'>Dashboard</a></li>";
-	  }
-
-	  echo '</ul>';
-	  restore_current_blog();
-	}
-}
-
 function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search_terms = false, $populate_extras = true, $meta_key = null, $meta_value = null ) {
 	global $wpdb, $bp;
 
