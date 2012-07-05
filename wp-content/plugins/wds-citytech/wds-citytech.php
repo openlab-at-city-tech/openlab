@@ -976,7 +976,8 @@ function wds_bp_group_meta(){
 //Save Group Meta
 add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
 function wds_bp_group_meta_save($group) {
-	global $wpdb, $user_ID;
+	global $wpdb, $user_ID, $bp;
+
 	if ( isset($_POST['group_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_type', $_POST['group_type']);
 
@@ -1029,10 +1030,39 @@ function wds_bp_group_meta_save($group) {
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
 	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
+
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+
+			// Create a new site
 			ra_copy_blog_page($group->id);
-		} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
+
+		} elseif ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
+
+			// Associate an existing site
 			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+
+		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
+
+			// External site
+
+			// Some validation
+			$url = openlab_validate_url( $_POST['external-site-url'] );
+			groups_update_groupmeta( $group->id, 'external_site_url', $url );
+
+			// Try to get a feed URL
+			$feed_urls = openlab_find_feed_urls( $url );
+
+			if ( isset( $feed_urls['type'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_type', $feed_urls['type'] );
+			}
+
+			if ( isset( $feed_urls['posts'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $feed_urls['posts'] );
+			}
+
+			if ( isset( $feed_urls['comments'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $feed_urls['comments'] );
+			}
 		}
 	}
 }

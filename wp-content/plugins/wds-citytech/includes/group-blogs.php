@@ -325,5 +325,65 @@ function wds_site_can_be_viewed() {
 	return $blog_public;
 }
 
+/**
+ * Validate a URL format
+ */
+function openlab_validate_url( $url ) {
+	if ( 0 !== strpos( $url, 'http' ) ) {
+		// Let's guess that http was left off
+		$url = 'http://' . $url;
+	}
+
+	$url = trailingslashit( $url );
+
+	return $url;
+}
+
+/**
+ * Given a site URL, try to get feed URLs
+ */
+function openlab_find_feed_urls( $url ) {
+
+	// Supported formats
+	$formats = array(
+		'wordpress' => array(
+			'posts'    => '{{URL}}feed',
+			'comments' => '{{URL}}feed/comments'
+		),
+		'blogger' => array(
+			'posts'    => '{{URL}}feeds/posts/default?alt=rss',
+			'comments' => '{{URL}}feeds/comments/default?alt=rss'
+		),
+		'drupal' => array(
+			'posts'    => '{{URL}}posts/feed'
+		)
+	);
+
+	$feed_urls = array();
+
+	foreach( $formats as $ftype => $f ) {
+		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
+		$maybe_feed = wp_remote_get( $maybe_feed_url );
+		if ( 200 == $maybe_feed['response']['code'] ) {
+			$feed_urls['posts'] = $maybe_feed_url;
+			$feed_urls['type']  = $ftype;
+
+			// Test the comment feed
+			if ( isset( $f['comments'] ) ) {
+				$maybe_comments_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['comments'] );
+				$maybe_comments_feed = wp_remote_get( $maybe_comments_feed_url );
+
+				if ( 200 == $maybe_comments_feed['response']['code'] ) {
+					$feed_urls['comments'] = $maybe_comments_feed_url;
+				}
+			}
+
+			break;
+		}
+
+	}
+
+	return $feed_urls;
+}
 
 ?>
