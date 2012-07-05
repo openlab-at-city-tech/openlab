@@ -177,43 +177,6 @@ function cuny_add_links_wp_trim_excerpt($text) {
 
 }
 
-/**
- * This function checks the blog_public option of the group site, and depending on the result,
- * returns whether the current user can view the site.
- */
-function wds_site_can_be_viewed() {
-	global $user_ID;
-	$blog_public = false;
-	$group_id = bp_get_group_id();
-	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-
-	if($wds_bp_group_site_id!=""){
-		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
-
-		switch ( $blog_private ) {
-			case '-3' : // todo?
-			case '-2' :
-				if ( is_user_logged_in() ) {
-					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
-					if ($user_capabilities != "") {
-						$blog_public = true;
-					}
-				}
-				break;
-
-			case '-1' :
-				if ( is_user_logged_in() ) {
-					$blog_public = true;
-				}
-				break;
-
-			default :
-				$blog_public = true;
-				break;
-		}
-	}
-	return $blog_public;
-}
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name)
 {
