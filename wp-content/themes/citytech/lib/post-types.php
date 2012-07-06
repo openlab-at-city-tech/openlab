@@ -4,9 +4,9 @@
 
 
 //help post type
-add_action( 'init', 'citytech_register_help' );
+add_action( 'init', 'openlab_register_help' );
 
-function citytech_register_help() {
+function openlab_register_help() {
 
     $labels = array( 
         'name' => _x( 'Help', 'help' ),
@@ -41,7 +41,6 @@ function citytech_register_help() {
         'query_var' => true,
 		'menu_icon' => get_stylesheet_directory_uri() . '/images/help_icon.png',
         'can_export' => true,
-        'rewrite' => array('slug' => 'help','with_front'=>false),
         'capability_type' => 'post'
     );
 
@@ -49,9 +48,9 @@ function citytech_register_help() {
 }
 
 //custom taxonomy to organize help
-add_action( 'init', 'citytech_help_taxonomies', 0 );
+add_action( 'init', 'openlab_help_taxonomies', 0 );
 
-function citytech_help_taxonomies() 
+function openlab_help_taxonomies() 
 {
   $labels = array(
     'name' => _x( 'Help Categories', 'taxonomy general name' ),
@@ -67,7 +66,7 @@ function citytech_help_taxonomies()
     'menu_name' => __( 'Help Category' ),
   ); 	
 
-  register_taxonomy('genre',array('help'), array(
+  register_taxonomy('help_category',array('help'), array(
     'hierarchical' => true,
     'labels' => $labels,
 	'show_in_nav_menus' => true,
@@ -75,4 +74,34 @@ function citytech_help_taxonomies()
     'query_var' => true,
     'rewrite' => array( 'slug' => 'help-category' ),
   ));
+}
+
+//add some information to the Help overview page
+add_filter("manage_edit-help_columns", "help_edit_columns");
+add_action("manage_help_posts_custom_column",  "help_custom_columns");
+
+function help_edit_columns($columns){
+  $columns = array(
+    "cb" => "<input type=\"checkbox\" />",
+    "title" => "Title",
+	"author" => "Author",
+    "help_categories" => "Help Categories",
+	"date" => "Date",
+  );
+ 
+  return $columns;
+}
+function help_custom_columns($column){
+  global $post;
+ 
+  switch ($column) {
+    case "help_categories":
+	 if (get_the_term_list($post->ID, 'help_category'))
+	 {
+     	echo get_the_term_list($post->ID, 'help_category', '', ', ','');
+	 } else {
+		echo "None";
+	 }
+      break;
+  }
 }
