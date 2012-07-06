@@ -263,9 +263,25 @@ add_action( 'bp_screens', 'openlab_registration_avatars', 9 );
 				$return.='<p class="description">'.bp_get_the_profile_field_description().'</p>';
 				$return.='</div>';
 			endwhile;
-			if($group_id!=1){
-				$return.='<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="3,7,241,'.bp_get_the_profile_group_field_ids().'" />';
+
+			/**
+			 * Left over from WDS, we need to hardcode 3,7,241 in some cases.
+			 * @todo Investigate
+			 */
+			$profile_field_ids = bp_get_the_profile_group_field_ids();
+
+			$pfids_a = explode( ',', $profile_field_ids );
+			if ( !in_array( 1, $pfids_a ) ) {
+				$pfids_a[] = 1;
+				$profile_field_ids = implode( ',', $pfids_a );
 			}
+
+			if ( 1 != $group_id ) {
+				$profile_field_ids = '3,7,241,' . $profile_field_ids;
+			}
+
+			$return .= '<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="3,7,241,' . $profile_field_ids . '" />';
+
 			endwhile; endif; endif;
 			return $return;
 	}

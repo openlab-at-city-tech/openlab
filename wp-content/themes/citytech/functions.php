@@ -3,6 +3,25 @@
 require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
+/**
+ * Don't use the Genesis genesis_meta action to load the stylesheet
+ *
+ * Instead, load it as the very last item in the document head, so that we can override plugin
+ * styles.
+ *
+ * We're manually outputting the <link> tag instead of enqueuing, because we must ensure that we
+ * come last, last, last.
+ *
+ * Kids, do not try this at home!
+ *
+ * @link http://openlab.citytech.cuny.edu/redmine/issues/422
+ */
+remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
+function openlab_load_stylesheet() {
+	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="screen" />';
+}
+add_action( 'wp_head', 'openlab_load_stylesheet', 999999 );
+
 define('BP_DISABLE_ADMIN_BAR', true);
 
 /** Add support with .wrap inside #inner */
@@ -89,7 +108,7 @@ function cuny_creds_footer() {
 remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 
 //before header mods
-add_action('genesis_before_header','cuny_bp_adminbar_menu');
+//add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
 add_action('genesis_header','cuny_admin_bar', 10);
@@ -158,43 +177,6 @@ function cuny_add_links_wp_trim_excerpt($text) {
 
 }
 
-/**
- * This function checks the blog_public option of the group site, and depending on the result,
- * returns whether the current user can view the site.
- */
-function wds_site_can_be_viewed() {
-	global $user_ID;
-	$blog_public = false;
-	$group_id = bp_get_group_id();
-	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-
-	if($wds_bp_group_site_id!=""){
-		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
-
-		switch ( $blog_private ) {
-			case '-3' : // todo?
-			case '-2' :
-				if ( is_user_logged_in() ) {
-					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
-					if ($user_capabilities != "") {
-						$blog_public = true;
-					}
-				}
-				break;
-
-			case '-1' :
-				if ( is_user_logged_in() ) {
-					$blog_public = true;
-				}
-				break;
-
-			default :
-				$blog_public = true;
-				break;
-		}
-	}
-	return $blog_public;
-}
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name)
 {
@@ -503,7 +485,7 @@ function openlab_group_pagination_search_key( $pag ) {
 	if ( false !== strpos( $pag, 'grpage' ) ) {
 		$pag = remove_query_arg( 's', $pag );
 	}
-	
+
 	return $pag;
 }
 add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );
@@ -513,22 +495,182 @@ add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );
  */
 function openlab_get_groups_in_sql( $search_terms ) {
 	global $wpdb, $bp;
-	
+
 	// Due to the incredibly crappy way this was originally built, I will implement search by
 	// using a separate query + IN
 	$in_sql = '';
 	if ( !empty( $search_terms ) ) {
 		$search_terms_sql = like_escape( $search_terms );
-		
+
 		// Don't get hidden groups. Important to keep counts in line with bp_has_groups()
 		$matched_group_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE (name LIKE '%%{$search_terms_sql}%%' OR description LIKE '%%{$search_terms_sql}%%') AND status != 'hidden'" ) );
-		
+
 		if ( !empty( $matched_group_ids ) ) {
 			$in_sql = " AND a.group_id IN (" . implode(',', wp_parse_id_list( $matched_group_ids ) ) . ") ";
 		}
 	}
-	
+
 	return $in_sql;
+}
+
+/**
+ * Get blog avatar (group avatar when available, otherwise user)
+ */
+function openlab_get_blog_avatar( $args = array() ) {
+	global $blogs_template;
+
+	$group_id = openlab_get_group_id_by_blog_id( $blogs_template->blog->blog_id );
+
+	if ( $group_id ) {
+		$args['object']  = 'group';
+		$args['item_id'] = $group_id;
+		return bp_core_fetch_avatar( $args );
+	} else {
+		return bp_get_blog_avatar( $args );
+	}
+}
+
+/**
+ * Add the group type to the Previous Step button during group creation
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/397
+ */
+function openlab_previous_step_type( $url ) {
+	if ( !empty( $_GET['type'] ) ) {
+		$url = add_query_arg( 'type', $_GET['type'], $url );
+	}
+
+	return $url;
+}
+add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
+
+/**
+ * Get a group's recent posts and comments, and display them in two widgets
+ */
+function show_site_posts_and_comments() {
+	global $first_displayed;
+
+	$group_id = bp_get_group_id();
+
+	$site_type = false;
+
+	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+		$site_type = 'local';
+	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
+		$site_type = 'external';
+	}
+
+	$posts = array();
+	$comments = array();
+
+	switch ( $site_type ) {
+		case 'local':
+			switch_to_blog( $site_id );
+
+			// Set up posts
+			$wp_posts = get_posts( array(
+				'posts_per_page' => 3
+			) );
+
+			foreach( $wp_posts as $wp_post ) {
+				$posts[] = array(
+					'title' => $wp_post->post_title,
+					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
+					'permalink' => get_permalink( $wp_post->ID )
+				);
+			}
+
+			// Set up comments
+			$comment_args = array(
+				"status" => "approve",
+				"number" => "3"
+			);
+
+			$wp_comments = get_comments( $comment_args );
+
+			foreach( $wp_comments as $wp_comment ) {
+				// Skip the crummy "Hello World" comment
+				if ( $wp_comment->comment_ID == "1" ) {
+					continue;
+				}
+				$post_id = $wp_comment->comment_post_ID;
+
+				$comments[] = array(
+					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
+					'permalink' => get_permalink( $post_id )
+				);
+			}
+
+			$site_url = get_option( 'siteurl' );
+
+			restore_current_blog();
+
+			break;
+
+		case 'external':
+			$posts = openlab_get_external_posts_by_group_id();
+			$comments = openlab_get_external_comments_by_group_id();
+
+			break;
+	}
+
+	// If we have either, show both
+	if ( !empty( $posts ) || !empty( $comments ) ) {
+		?>
+		<div class="one-half first">
+			<div id="recent-course">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
+					</div>
+
+					<ul>
+					<?php foreach( $posts as $post ) : ?>
+						<li>
+						<p>
+							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
+						</p>
+						</li>
+					<?php endforeach ?>
+					</ul>
+
+					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
+
+
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-course -->
+		</div><!-- .one-half -->
+
+		<div class="one-half">
+			<div id="recent-site-comments">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
+					</div>
+
+
+
+						<ul>
+						<?php if ( !empty( $comments ) ) : ?>
+							<?php foreach( $comments as $comment ) : ?>
+								<li>
+									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
+								</li>
+							<?php endforeach ?>
+						<?php else : ?>
+							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
+						<?php endif ?>
+
+						</ul>
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-site-comments -->
+		</div><!-- .one-half -->
+		<?php
+	}
 }
 
 ?>

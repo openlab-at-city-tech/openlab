@@ -402,7 +402,7 @@ h3#bread-crumb .sep
 #header ul.nav li li a:active,
 #header ul.menu li li a:hover,
 #header ul.menu li li a:active {
-	
+
 }
 
 #header ul.nav li li a .sf-sub-indicator,
@@ -3016,7 +3016,7 @@ li.sq-bullet ul { list-style-image: none; }
 .recent-discussions li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 .recent-discussions h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 .recent-discussions p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
-/*.recent-discussions a.read-more, .recent-discussions .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; } 
+/*.recent-discussions a.read-more, .recent-discussions .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; }
 .recent-discussions a.read-more:hover, .recent-discussions .view-more a:hover { color: #63DFD2; text-decoration:underline; } */
 .recent-discussions .view-more a { float: right; }
 

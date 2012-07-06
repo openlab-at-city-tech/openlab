@@ -18,19 +18,19 @@ function cuny_profile_activty_block($type,$title,$last) {
 		  $activity[]=$r->content;
 		  $ids.= ",".$r->group_id;
 	  }?>
-	  
+
 	  <h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
 	  <h3 id="bread-crumb">Sites</h3>
 	  <?php
 	  if ( bp_has_blogs( 'user_id='.$bp->loggedin_user->id ) ) : ?>
 <ul id="site-list" class="item-list">
-		<?php 
+		<?php
 		$count = 1;
-		while ( bp_blogs() ) : bp_the_blog(); 
+		while ( bp_blogs() ) : bp_the_blog();
 			?>
 			<li class="site<?php echo cuny_o_e_class($count) ?>">
 				<div class="item-avatar alignleft">
-					<a href="<?php bp_blog_permalink() ?>"><?php echo bp_get_blog_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
+					<a href="<?php bp_blog_permalink() ?>"><?php echo openlab_get_blog_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_blog_permalink() ?>" title="<?php bp_blog_name() ?>"><?php bp_blog_name() ?></a></h2>

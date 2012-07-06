@@ -9,6 +9,18 @@
 
 include "wds-register.php";
 include "wds-docs.php";
+
+/**
+ * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
+ * Ensure that it's only loaded when BP is present.
+ * See http://openlab.citytech.cuny.edu/redmine/issues/31
+ */
+function openlab_load_custom_bp_functions() {
+	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+}
+add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
+
 global $wpdb;
 date_default_timezone_set('America/New_York');
 
@@ -765,7 +777,7 @@ function wds_bp_group_meta(){
       <?php } ?>
       <div id="wds-group-type"></div>
       <?php //Copy Site
-	  $wds_bp_group_site_id=groups_get_groupmeta( bp_get_current_group_id(), 'wds_bp_group_site_id' );
+	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
 	  if(!$wds_bp_group_site_id){
 		$template="template-".strtolower($group_type);
@@ -792,23 +804,29 @@ function wds_bp_group_meta(){
 				var radioid = '#new_or_old_' + noo;
 				$(radioid).prop('checked','checked');
 
-				var thisid = '#noo_' + ( noo == 'old' ? 'new' : 'old' ) + '_options';
-				$(thisid).removeClass('disabled-opt');
-				$(thisid).find('input').each(function(index,element){
-					$(element).removeProp('disabled').removeClass('disabled');
-				});
-				$(thisid).find('select').each(function(index,element){
-					$(element).removeProp('disabled').removeClass('disabled');
+				$('input.noo_radio').each(function(i,v) {
+					var thisval = $(v).val();
+					var thisid = '#noo_' + thisval + '_options';
+					console.log($(thisid));
+					if ( noo == thisval ) {
+						$(thisid).removeClass('disabled-opt');
+						$(thisid).find('input').each(function(index,element){
+							$(element).removeProp('disabled').removeClass('disabled');
+						});
+						$(thisid).find('select').each(function(index,element){
+							$(element).removeProp('disabled').removeClass('disabled');
+						});
+					} else {
+						$(thisid).addClass('disabled-opt');
+						$(thisid).find('input').each(function(index,element){
+							$(element).prop('disabled','disabled').addClass('disabled');
+						});
+						$(thisid).find('select').each(function(index,element){
+							$(element).prop('disabled','disabled').addClass('disabled');
+						});
+					}
 				});
 
-				var otherid = '#noo_' + noo + '_options';
-				$(otherid).addClass('disabled-opt');
-				$(otherid).find('input').each(function(index,element){
-					$(element).prop('disabled','disabled').addClass('disabled');
-				});
-				$(otherid).find('select').each(function(index,element){
-					$(element).prop('disabled','disabled').addClass('disabled');
-				});
 			}
 
 			$('.noo_radio').click(function(el){
@@ -829,7 +847,7 @@ function wds_bp_group_meta(){
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
-						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-tooltips');" /> Set up a site?
+						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-external');showHide('wds-website-tooltips');" /> Set up a site?
 					</th>
 				</tr>
 			<?php else : ?>
@@ -887,7 +905,7 @@ function wds_bp_group_meta(){
 					Create a new site:
 				</th>
 
-				<td id="noo_old_options">
+				<td id="noo_new_options">
 				<?php
 				if( constant( "VHOST" ) == 'yes' ) : ?>
 					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>.<?php echo $current_site->domain;?>
@@ -904,7 +922,7 @@ function wds_bp_group_meta(){
 					Use an existing site:
 				</th>
 
-				<td id="noo_new_options">
+				<td id="noo_old_options">
 					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
 					<?php
@@ -930,6 +948,17 @@ function wds_bp_group_meta(){
 				</td>
 			</tr>
 
+			<tr id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website;?>">
+				<th valign="top" scope='row'>
+					<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
+					Use an external site:
+				</th>
+
+				<td id="noo_external_options">
+					<input type="text" name="external-site-url" id="external-site-url" />
+				</td>
+			</tr>
+
 
 		</table>
    	<?php } else { ?>
@@ -947,7 +976,8 @@ function wds_bp_group_meta(){
 //Save Group Meta
 add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
 function wds_bp_group_meta_save($group) {
-	global $wpdb, $user_ID;
+	global $wpdb, $user_ID, $bp;
+
 	if ( isset($_POST['group_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_type', $_POST['group_type']);
 
@@ -1000,58 +1030,46 @@ function wds_bp_group_meta_save($group) {
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
 	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
+
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+
+			// Create a new site
 			ra_copy_blog_page($group->id);
-		} elseif ( isset( $_POST['groupblog-blogid'] ) ) {
+
+		} elseif ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
+
+			// Associate an existing site
 			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
+
+		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
+
+			// External site
+
+			// Some validation
+			$url = openlab_validate_url( $_POST['external-site-url'] );
+			groups_update_groupmeta( $group->id, 'external_site_url', $url );
+
+			// Try to get a feed URL
+			$feed_urls = openlab_find_feed_urls( $url );
+
+			if ( isset( $feed_urls['type'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_type', $feed_urls['type'] );
+			}
+
+			if ( isset( $feed_urls['posts'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $feed_urls['posts'] );
+			}
+
+			if ( isset( $feed_urls['comments'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $feed_urls['comments'] );
+			}
 		}
 	}
-}
 
-/**
- * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
- * Ensure that it's only loaded when BP is present.
- * See http://openlab.citytech.cuny.edu/redmine/issues/31
- */
-function openlab_load_custom_bp_functions() {
-	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
-}
-add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
-
-/**
- * Remove user from group blog when leaving group
- */
-function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-
-	if ( $blog_id ) {
-		remove_user_from_blog( $user_id, $blog_id );
-	}
-}
-add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
-
-add_action("bp_group_options_nav","wds_bp_group_site_pages");
-function wds_bp_group_site_pages(){
-	global $bp;
-	//print_r($bp);
-	$site=site_url();
-	$group_id=$bp->groups->current_group->id;
-
-	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-	if($wds_bp_group_site_id!=""){
-	  switch_to_blog($wds_bp_group_site_id);
-	  $pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
-	  echo "<ul class='website-links'>";
-
-	  echo "<li id='site-link'><a href='".site_url()."'>".ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ))." Site</a></li>";
-
-	  // Only show the admin link to group members
-	  if ( bp_group_is_member() ) {
-		  echo "<li><a href='" . admin_url() . "'>Dashboard</a></li>";
-	  }
-
-	  echo '</ul>';
-	  restore_current_blog();
+	// Feed URLs (step two of group creation)
+	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {
+		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );
+		groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-site-comments-feed'] );
 	}
 }
 
@@ -1498,42 +1516,6 @@ function openlab_launch_translator() {
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
 
 /**
- * Add OpenLab links in the WP toolbar
- */
-function openlab_link_in_toolbar( $wp_admin_bar ) {
-	$wp_admin_bar->add_node( array(
-		'id'     => 'openlab',
-		'title'  => 'OpenLab',
-		'href'   => bp_get_root_domain(),
-		'meta'	 => array(
-			'tabindex' => 90
-		)
-	) );
-
-	$wp_admin_bar->add_node( array(
-		'id'     => 'myopenlab',
-		'title'  => 'MyOpenLab',
-		'href'   => bp_loggedin_user_domain(),
-		'meta'	 => array(
-			'tabindex' => 95
-		)
-	) );
-}
-add_action( 'admin_bar_menu', 'openlab_link_in_toolbar', 12 );
-
-/**
- * Add a redirect_to param to the Log Out toolbar link
- */
-function openlab_redirect_logout_link( $wp_admin_bar ) {
-	$wp_admin_bar->add_menu( array(
-		'id'     => 'logout',
-		'title'  => __( 'Log Out' ),
-		'href'   => add_query_arg( 'redirect_to', urlencode( bp_get_root_domain() ), wp_logout_url() ),
-	) );
-}
-add_action( 'admin_bar_menu', 'openlab_redirect_logout_link', 99 );
-
-/**
  * When a user attempts to visit a blog, check to see if the user is a member of the
  * blog's associated group. If so, ensure that the member has access.
  *
@@ -1583,60 +1565,6 @@ function openlab_sync_blog_members_to_group() {
 	}
 }
 //add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
-
-/**
- * When a user visits a group blog, check to see whether the user should be an admin, based on
- * membership in the corresponding group.
- *
- * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
- */
-function openlab_force_blog_role_sync() {
-	global $bp, $wpdb;
-
-	if ( !is_user_logged_in() ) {
-		return;
-	}
-
-	// Is this blog associated with a group?
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-
-	if ( $group_id ) {
-
-		// Get the user's group status, if any
-		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
-
-		$userdata = get_userdata( get_current_user_id() );
-
-		if ( !empty( $member ) ) {
-			$status = 'author';
-
-			if ( $member->is_admin ) {
-				$status = 'administrator';
-			} else if ( $member->is_mod ) {
-				$status = 'editor';
-			}
-
-			$role_is_correct = in_array( $status, $userdata->roles );
-
-			if ( !$role_is_correct ) {
-				$user = new WP_User( get_current_user_id() );
-				$user->set_role( $status );
-			}
-		} else {
-			$role_is_correct = empty( $userdata->roles );
-
-			if ( !$role_is_correct ) {
-				remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
-			}
-		}
-
-		if ( !$role_is_correct ) {
-			// Redirect, just for good measure
-			echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
-		}
-	}
-}
-add_action( 'init', 'openlab_force_blog_role_sync', 999 );
 
 /**
  * Interfere in the comment posting process to allow for duplicates on the same post

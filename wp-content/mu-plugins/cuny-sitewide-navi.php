@@ -11,7 +11,7 @@ function cuny_local_env_flag() {
 			#local-env-flag {
 				position: fixed;
 				left: 0;
-				top: 5px;
+				top: 35px;
 				width: 150px;
 				padding: 10px 15px;
 				text-align: center;
@@ -52,7 +52,7 @@ function cuny_site_wide_navi_styles() {
 	wp_enqueue_style( 'SW_Navi_styles' );
 }
 
-add_action('wp_head', 'cuny_login_popup_script');
+//add_action('wp_head', 'cuny_login_popup_script');
 function cuny_login_popup_script() {
 	?>
 	<script type="text/javascript">
@@ -335,7 +335,7 @@ function cuny_site_wide_bp_search() { ?>
 <?php }
 
 
-add_action('wp_footer', 'cuny_site_wide_header');
+//add_action('wp_footer', 'cuny_site_wide_header');
 function cuny_site_wide_header() {
 	global $blog_id;
 
