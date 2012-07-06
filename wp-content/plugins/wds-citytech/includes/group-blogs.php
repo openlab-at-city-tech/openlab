@@ -444,6 +444,9 @@ function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
 		if ( $feed_url ) {
 			$posts = openlab_format_rss_items( $feed_url );
 			set_transient( 'openlab_external_posts_' . $group_id, $posts, 60*10 );
+
+			// Translate the feed items into activity items
+			openlab_convert_feed_to_activity( $posts, 'posts' );
 		}
 	}
 
@@ -461,14 +464,17 @@ function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
 	}
 
 	// Check transients first
-	$comments = get_transient( 'openlab_external_comments_' . $group_id );
-
+	//$comments = get_transient( 'openlab_external_comments_' . $group_id );
+$comments = false;
 	if ( false === $comments ) {
 		$feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' );
 
 		if ( $feed_url ) {
-			$posts = openlab_format_rss_items( $feed_url );
-			set_transient( 'openlab_external_comments_' . $group_id, $posts, 60*10 );
+			$comments = openlab_format_rss_items( $feed_url );
+			set_transient( 'openlab_external_comments_' . $group_id, $comments, 60*10 );
+
+			// Translate the feed items into activity items
+			openlab_convert_feed_to_activity( $comments, 'comments' );
 		}
 	}
 
@@ -487,11 +493,86 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 		$items[] = array(
 			'permalink' => $feed_item->get_link(),
 			'title'     => $feed_item->get_title(),
-			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) )
+			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
+			'author'    => $feed_item->get_author(),
+			'date'      => $feed_item->get_date()
 		);
 	}
 
 	return $items;
+}
+
+/**
+ * Convert RSS items to activity items
+ */
+function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts' ) {
+	$type = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
+
+	$hide_sitewide = false;
+	if ( $group = groups_get_current_group() && isset( $group->status ) && 'public' != $group->status ) {
+		$hide_sitewide = true;
+	}
+
+	foreach( (array) $items as $item ) {
+		// Make sure we don't have duplicates
+		// We'll check based on content + time of publication
+		if ( !openlab_external_activity_item_exists( $item['date'], $item['content'], $type ) ) {
+			$action = '';
+
+			$group = groups_get_current_group();
+			$group_name = $group->name;
+			$group_permalink = bp_get_group_permalink( $group );
+
+			if ( 'posts' == $item_type ) {
+				$action = sprintf( 'A new post %s was published in the group %s',
+					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
+					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
+				);
+			} else if ( 'comments' == $item_type ) {
+				$action = sprintf( 'A new comment was posted on the post %s in the group %s',
+					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
+					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
+				);
+			}
+
+			$args = array(
+				'action'            => $action,
+				'content'           => $item['content'],
+				'component'         => 'groups',
+				'type'              => $type,				'primary_link'      => $item['permalink'],
+				'user_id'           => 0, // todo
+				'item_id'           => bp_get_current_group_id(), // improve?
+				'recorded_time'     => date( 'Y-m-d H:i:s', strtotime( $item['date'] ) ),
+				'hide_sitewide'     => $hide_sitewide
+			);
+
+			remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+			bp_activity_add( $args );
+		}
+	}
+}
+
+/**
+ * Check to see whether an external blog post activity item exists for this item already
+ *
+ * We do this manually because BP doesn't allow for easy querying by exact time
+ *
+ * @param str Date of original post
+ * @param str Content of original post
+ * @return bool
+ */
+function openlab_external_activity_item_exists( $date = '', $content = '', $type = 'new_blog_post' ) {
+	global $wpdb, $bp;
+
+	if ( !is_numeric( $date ) ) {
+		$date = strtotime( $date );
+	}
+
+	$date = date( 'Y-m-d H:i:s', $date );
+
+	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE date_recorded = %s AND type = %s AND content = %s", $date, $type, $content );
+
+	return (bool) $wpdb->get_var( $sql );
 }
 
 /**
