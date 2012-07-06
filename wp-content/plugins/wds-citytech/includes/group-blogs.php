@@ -328,6 +328,12 @@ add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10,
  */
 function wds_site_can_be_viewed() {
 	global $user_ID;
+
+	// External sites can always be viewed
+	if ( openlab_get_external_site_url_by_group_id() ) {
+		return true;
+	}
+
 	$blog_public = false;
 	$group_id = bp_get_group_id();
 	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
@@ -404,6 +410,19 @@ function openlab_feed_url_markup() {
 	<?php
 }
 add_action( 'bp_before_group_settings_creation_step', 'openlab_feed_url_markup' );
+
+/**
+ * Wrapper function to get the URL of an external site, if it exists
+ */
+function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
+	if ( 0 == (int) $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	$external_site_url = groups_get_groupmeta( $group_id, 'external_site_url' );
+
+	return $external_site_url;
+}
 
 /**
  * Validate a URL format

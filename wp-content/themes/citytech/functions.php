@@ -544,4 +544,132 @@ function openlab_previous_step_type( $url ) {
 }
 add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
 
+/**
+ * Get a group's recent posts and comments, and display them in two widgets
+ */
+function show_site_posts_and_comments() {
+	global $first_displayed;
+
+	$group_id = bp_get_group_id();
+
+	$site_type = false;
+
+	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+		$site_type = 'local';
+	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
+		$site_type = 'external';
+	}
+
+	$posts = array();
+	$comments = array();
+
+	switch ( $site_type ) {
+		case 'local':
+			switch_to_blog( $site_id );
+
+			// Set up posts
+			$wp_posts = get_posts( array(
+				'posts_per_page' => 3
+			) );
+
+			foreach( $wp_posts as $wp_post ) {
+				$posts[] = array(
+					'title' => $wp_post->post_title,
+					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => false ) ) ),
+					'permalink' => get_permalink( $wp_post->ID )
+				);
+			}
+
+			// Set up comments
+			$comment_args = array(
+				"status" => "approve",
+				"number" => "3"
+			);
+
+			$wp_comments = get_comments( $comment_args );
+
+			foreach( $wp_comments as $wp_comment ) {
+				// Skip the crummy "Hello World" comment
+				if ( $wp_comment->comment_ID == "1" ) {
+					continue;
+				}
+				$post_id = $wp_comment->comment_post_ID;
+
+				$comments[] = array(
+					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
+					'permalink' => get_permalink( $post_id )
+				);
+			}
+
+			$site_url = get_option( 'siteurl' );
+
+			restore_current_blog();
+
+			break;
+
+		case 'external':
+
+
+			break;
+	}
+
+	// If we have either, show both
+	if ( !empty( $posts ) || !empty( $comments ) ) {
+		?>
+		<div class="one-half first">
+			<div id="recent-course">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
+					</div>
+
+					<ul>
+					<?php foreach( $posts as $post ) : ?>
+						<li>
+						<p>
+							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
+						</p>
+						</li>
+					<?php endforeach ?>
+					</ul>
+
+					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
+
+
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-course -->
+		</div><!-- .one-half -->
+
+		<div class="one-half">
+			<div id="recent-site-comments">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
+					</div>
+
+
+
+						<ul>
+						<?php if ( !empty( $comments ) ) : ?>
+							<?php foreach( $comments as $comment ) : ?>
+								<li>
+									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
+								</li>
+							<?php endforeach ?>
+						<?php else : ?>
+							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
+						<?php endif ?>
+
+						</ul>
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-site-comments -->
+		</div><!-- .one-half -->
+		<?php
+	}
+}
+
 ?>
