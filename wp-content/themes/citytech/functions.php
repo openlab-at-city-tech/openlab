@@ -575,7 +575,7 @@ function show_site_posts_and_comments() {
 			foreach( $wp_posts as $wp_post ) {
 				$posts[] = array(
 					'title' => $wp_post->post_title,
-					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => false ) ) ),
+					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
 					'permalink' => get_permalink( $wp_post->ID )
 				);
 			}
@@ -608,7 +608,8 @@ function show_site_posts_and_comments() {
 			break;
 
 		case 'external':
-
+			$posts = openlab_get_external_posts_by_group_id();
+			$comments = openlab_get_external_comments_by_group_id();
 
 			break;
 	}

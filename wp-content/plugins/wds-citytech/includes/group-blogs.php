@@ -424,6 +424,76 @@ function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
 	return $external_site_url;
 }
 
+
+/**
+ * Given a group id, fetch its external posts
+ *
+ * Attempts to fetch from a transient before refreshing
+ */
+function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
+	if ( 0 == (int) $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Check transients first
+	$posts = get_transient( 'openlab_external_posts_' . $group_id );
+
+	if ( false === $posts ) {
+		$feed_url = groups_get_groupmeta( $group_id, 'external_site_posts_feed' );
+
+		if ( $feed_url ) {
+			$posts = openlab_format_rss_items( $feed_url );
+			set_transient( 'openlab_external_posts_' . $group_id, $posts, 60*10 );
+		}
+	}
+
+	return $posts;
+}
+
+/**
+ * Given a group id, fetch its external comments
+ *
+ * Attempts to fetch from a transient before refreshing
+ */
+function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
+	if ( 0 == (int) $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Check transients first
+	$comments = get_transient( 'openlab_external_comments_' . $group_id );
+
+	if ( false === $comments ) {
+		$feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' );
+
+		if ( $feed_url ) {
+			$posts = openlab_format_rss_items( $feed_url );
+			set_transient( 'openlab_external_comments_' . $group_id, $posts, 60*10 );
+		}
+	}
+
+	return $comments;
+}
+
+/**
+ * Given an RSS feed URL, fetch the items and parse into an array containing permalink, title,
+ * and content
+ */
+function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
+	$feed_posts = fetch_feed( $feed_url );
+	$items = array();
+
+	foreach( $feed_posts->get_items( 0, $num_items ) as $key => $feed_item ) {
+		$items[] = array(
+			'permalink' => $feed_item->get_link(),
+			'title'     => $feed_item->get_title(),
+			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) )
+		);
+	}
+
+	return $items;
+}
+
 /**
  * Validate a URL format
  */
