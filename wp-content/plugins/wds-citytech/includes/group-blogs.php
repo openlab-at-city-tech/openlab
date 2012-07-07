@@ -409,7 +409,7 @@ function openlab_feed_url_markup() {
 
 	<?php
 }
-add_action( 'bp_before_group_settings_creation_step', 'openlab_feed_url_markup' );
+//add_action( 'bp_before_group_settings_creation_step', 'openlab_feed_url_markup' );
 
 /**
  * Wrapper function to get the URL of an external site, if it exists
@@ -599,7 +599,7 @@ function openlab_find_feed_urls( $url ) {
 	$formats = array(
 		'wordpress' => array(
 			'posts'    => '{{URL}}feed',
-			'comments' => '{{URL}}feed/comments'
+			'comments' => '{{URL}}/comments/feed'
 		),
 		'blogger' => array(
 			'posts'    => '{{URL}}feeds/posts/default?alt=rss',
@@ -615,7 +615,7 @@ function openlab_find_feed_urls( $url ) {
 	foreach( $formats as $ftype => $f ) {
 		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
 		$maybe_feed = wp_remote_get( $maybe_feed_url );
-		if ( 200 == $maybe_feed['response']['code'] ) {
+		if ( !is_wp_error( $maybe_feed ) && 200 == $maybe_feed['response']['code'] ) {
 			$feed_urls['posts'] = $maybe_feed_url;
 			$feed_urls['type']  = $ftype;
 
@@ -637,4 +637,14 @@ function openlab_find_feed_urls( $url ) {
 	return $feed_urls;
 }
 
+/**
+ * AJAX handler for feed detection
+ */
+function openlab_detect_feeds_handler() {
+	$url = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
+	$feeds = openlab_find_feed_urls( $url );
+
+	die( json_encode( $feeds ) );
+}
+add_action( 'wp_ajax_openlab_detect_feeds', 'openlab_detect_feeds_handler' );
 ?>

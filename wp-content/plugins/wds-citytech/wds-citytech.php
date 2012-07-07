@@ -10,6 +10,7 @@
 include "wds-register.php";
 include "wds-docs.php";
 
+
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
@@ -999,19 +1000,16 @@ function wds_bp_group_meta_save($group) {
 			$url = openlab_validate_url( $_POST['external-site-url'] );
 			groups_update_groupmeta( $group->id, 'external_site_url', $url );
 
-			// Try to get a feed URL
-			$feed_urls = openlab_find_feed_urls( $url );
-
-			if ( isset( $feed_urls['type'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_type', $feed_urls['type'] );
+			if ( !empty( $_POST['external-site-type'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_type', $_POST['external-site-type'] );
 			}
 
-			if ( isset( $feed_urls['posts'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $feed_urls['posts'] );
+			if ( !empty( $_POST['external-posts-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-posts-url'] );
 			}
 
-			if ( isset( $feed_urls['comments'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $feed_urls['comments'] );
+			if ( !empty( $_POST['external-comments-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
 			}
 		}
 	}
