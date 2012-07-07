@@ -1649,7 +1649,7 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
 	else if ( !$group_id && $group_id = bp_get_new_group_id() ) {}     // new group
 	else if ( !$group_id && $group_id = bp_get_group_id() ) {}         // group in loop
 
-	$group_type = groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' );
+	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
 	if ( empty( $group_type ) ) {
 		return '';
