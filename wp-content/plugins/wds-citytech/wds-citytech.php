@@ -1623,4 +1623,63 @@ function openlab_newuser_notify_siteadmin( $message ) {
 }
 add_filter( 'newuser_notify_siteadmin', 'openlab_newuser_notify_siteadmin' );
 
+/**
+ * Get the word for a group type
+ *
+ * Groups fall into three categories: Project, Club, and Course. Use this function to get the word
+ * corresponding to the group type, with the appropriate case and count.
+ *
+ * @param $case 'lower' (course), 'title' (Course), 'upper' (COURSE)
+ * @param $count 'single' (course), 'plural' (courses)
+ * @param $group_id Will default to the current group id
+ */
+function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 ) {
+	if ( !$case || !in_array( $case, array( 'lower', 'title', 'upper' ) ) ) {
+		$case = 'lower';
+	}
+
+	if ( !$count || !in_array( $count, array( 'single', 'plural' ) ) ) {
+		$case = 'single';
+	}
+
+	// Set a group id. The elseif statements allow for cascading logic; if the first is not
+	// found, fall to the second, etc.
+	$group_id = (int) $group_id;
+	if      ( !$group_id && $group_id = bp_get_current_group_id() ) {} // current group
+	else if ( !$group_id && $group_id = bp_get_new_group_id() ) {}     // new group
+	else if ( !$group_id && $group_id = bp_get_group_id() ) {}         // group in loop
+
+	$group_type = groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' );
+
+	if ( empty( $group_type ) ) {
+		return '';
+	}
+
+	switch ( $case ) {
+		case 'lower' :
+			$group_type = strtolower( $group_type );
+			break;
+
+		case 'title' :
+			$group_type = ucwords( $group_type );
+			break;
+
+		case 'upper' :
+			$group_type = strtoupper( $group_type );
+			break;
+	}
+
+	switch ( $count ) {
+		case 'single' :
+			break;
+
+		case 'plural' :
+			$group_type .= 's';
+			break;
+	}
+
+	return $group_type;
+}
+
+
 ?>
