@@ -519,17 +519,18 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 		if ( !openlab_external_activity_item_exists( $item['date'], $item['content'], $type ) ) {
 			$action = '';
 
-			$group = groups_get_current_group();
-			$group_name = $group->name;
+			$group           = groups_get_current_group();
+			$group_name      = $group->name;
 			$group_permalink = bp_get_group_permalink( $group );
+			$group_type      = openlab_group_type( 'lower', 'single', $group->id );
 
 			if ( 'posts' == $item_type ) {
-				$action = sprintf( 'A new post %s was published in the group %s',
+				$action = sprintf( 'A new post %s was published in the ' . $group_type . ' %s',
 					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
 					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
 				);
 			} else if ( 'comments' == $item_type ) {
-				$action = sprintf( 'A new comment was posted on the post %s in the group %s',
+				$action = sprintf( 'A new comment was posted on the post %s in the ' . $group_type . ' %s',
 					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
 					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
 				);
