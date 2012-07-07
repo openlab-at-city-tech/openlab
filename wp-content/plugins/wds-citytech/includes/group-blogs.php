@@ -464,8 +464,8 @@ function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
 	}
 
 	// Check transients first
-	//$comments = get_transient( 'openlab_external_comments_' . $group_id );
-$comments = false;
+	$comments = get_transient( 'openlab_external_comments_' . $group_id );
+
 	if ( false === $comments ) {
 		$feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' );
 
