@@ -197,21 +197,21 @@ class OpenLab_Admin_Bar {
 			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
 			'title'  => 'My Courses',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-projects',
 			'title'  => 'My Projects',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-projects' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-clubs',
 			'title'  => 'My Clubs',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-clubs' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' )
 		) );
 
 		// @todo This will need to be conditional, and we'll need to be dynamic about
