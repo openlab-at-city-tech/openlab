@@ -69,6 +69,16 @@ function cuny_no_bp_default_styles() {
 	wp_dequeue_style( 'gconnect-adminbar' );
 }
 
+/**
+ * Enqueue our front-end scripts
+ */
+function openlab_enqueue_frontend_scripts() {
+	if ( bp_is_group_create() ) {
+		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
+
 add_action( 'genesis_meta', 'cuny_google_font');
 function cuny_google_font() {
 	echo "<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>";
