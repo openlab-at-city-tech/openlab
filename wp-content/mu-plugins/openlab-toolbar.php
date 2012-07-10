@@ -282,9 +282,19 @@ class OpenLab_Admin_Bar {
 	 * Add the Invites menu (Friend Requests + Group Invitations)
 	 */
 	function add_invites_menu( $wp_admin_bar ) {
+
+		// We need this data up front so we can provide counts
+		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+		$request_count = count( (array) $request_ids );
+
+		$invites = groups_get_invites_for_user();
+		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+
+		$total_count = $request_count + $invite_count;
+
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => 'Invitations',
+			'title' => '<span class="toolbar-item-name">Invitations </span><span class="toolbar-item-count">' . $total_count . '</span>',
 		) );
 
 		/**
@@ -298,7 +308,6 @@ class OpenLab_Admin_Bar {
 			'title'  => 'Friend Requests'
 		) );
 
-		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
 		$members_args = array(
 			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
 			'max'     => 0
@@ -364,24 +373,23 @@ class OpenLab_Admin_Bar {
 			'type'    => 'invites',
 			'user_id' => bp_loggedin_user_id()
 		);
-		if ( bp_has_groups( $groups_args ) ) {
-			$group_counter = 0;
-			while ( bp_groups() ) {
-				bp_the_group();
 
+		if ( !empty( $invites['groups'] ) ) {
+			$group_counter = 0;
+			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_avatar( 'type=thumb&width=50&height=50' ) . '</a></div>';
+					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false ) );
 
 					// name link
-					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></div></div>';
+					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></div></div>';
 
 					// accept/reject buttons
-					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'invites',
-						'id'     => 'invitation-' . bp_get_group_id(),
+						'id'     => 'invitation-' . $group->id,
 						'title'  => $title,
 						'meta'   => array(
 							'class' => 'nav-content-item nav-invitation'
@@ -390,16 +398,6 @@ class OpenLab_Admin_Bar {
 				}
 
 				$group_counter++;
-			}
-
-			if ( 3 < $group_counter ) {
-				// "See More"
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'invitations-more',
-					'title'  => 'See More',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
-				) );
 			}
 		} else {
 			// The user has no friend requests
