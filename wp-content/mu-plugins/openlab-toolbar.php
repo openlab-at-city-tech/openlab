@@ -419,7 +419,7 @@ class OpenLab_Admin_Bar {
 	function add_messages_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => 'Messages',
+			'title' => '<span class="toolbar-item-name">Messages </span><span class="toolbar-item-count">' . bp_get_total_unread_messages_count() . '</span>',
 		) );
 
 		// Only show the first 5
