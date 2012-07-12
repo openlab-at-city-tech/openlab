@@ -1,34 +1,29 @@
 <?php get_header() ?>
 <?php global $bp;
 
-$group_type= isset( $_GET['type'] ) ? $_GET['type'] : '';
-if(!$group_type){
-	$group_type=groups_get_groupmeta(bp_get_new_group_id(), 'wds_group_type' );
+$group_type = openlab_get_current_group_type();
+
+// Set a group label. The (e)Portfolio logic means we have to do an extra step
+if ( 'portfolio' == $group_type ) {
+	$group_label = openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() );
+	$page_title  = 'Create ' . openlab_get_portfolio_label( 'case=upper&leading_a=1&user_id=' . bp_loggedin_user_id() );
+} else {
+	$group_label = $group_type;
+	$page_title  = 'Create a ' . ucwords( $group_type );
 }
 
-//print_r($_COOKIE);
-if(!$group_type){
-	$group_type=$_COOKIE["wds_bp_group_type"];
-}
-$group_type=strtolower($group_type);
-if(!$group_type || !in_array($group_type,array("club","project","course","school"))){
-	$group_type="group";
-}
 ?>
 <div id="content-sidebar-wrap">
 	<div id="content">
-	<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
-	<h3 id="bread-crumb">Create a <?php echo ucfirst($group_type);?> &nbsp;</h3>
+		<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+
+		<h3 id="bread-crumb"><?php echo $page_title ?> &nbsp;</h3>
+
 		<div id="single-course-body">
-		<form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
 
-            <?php do_action( 'bp_before_create_group' ) ?>
+			<form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
 
-			<div class="item-list-tabs no-ajax" id="group-create-tabs">
-				<ul>
-					<?php //bp_group_creation_tabs(); ?>
-				</ul>
-			</div>
+			<?php do_action( 'bp_before_create_group' ) ?>
 
 			<?php do_action( 'template_notices' ) ?>
 
@@ -39,31 +34,29 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 
 					<?php do_action( 'bp_before_group_details_creation_step' ); ?>
 
-					<?php $group_type = isset( $_REQUEST['type'] ) && in_array( $_REQUEST['type'], array( 'course', 'club', 'project' ) ) ? $_REQUEST['type'] : 'club' ?>
-
 					<?php if ( 'course' == $group_type ) : ?>
 						<p class="ol-tooltip">Please take a moment to consider the name of your Course. We recommend keeping your Course title name under 50 characters. You can always change the name of your course later.</p>
 					<?php else : ?>
 						<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
 					<?php endif ?>
 
-					<?php if ( 'project' == $group_type ) : ?>
-						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Please review the guidelines <a href="<?php bp_root_domain() ?>/eportfolio">here</a> before proceeding. We recommend that the name of your ePortfolio follow this format:</p>
+					<?php if ( 'portfolio' == $group_type ) : ?>
+						<p class="ol-tooltip">Please review the guidelines for <?php echo $group_label ?> naming <a href="<?php bp_root_domain() ?>/eportfolio">here</a> before proceeding. We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
 
 						<ul class="ol-tooltip">
-							<li>FirstName LastName's ePortfolio </li>
-							<li>Jane Smith's ePortfolio (Example)</li>
+							<li>FirstName LastName's <?php echo $group_label ?> </li>
+							<li>Jane Smith's <?php echo $group_label ?> (Example)</li>
 						</ul>
 
 					<?php endif ?>
 
-					<label for="group-name">* <?php echo ucfirst($group_type);?> Name <?php _e( '(required)', 'buddypress' )?></label>
+					<label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
 					<input type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
 
 					<label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 					<textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
 
-					<?php do_action( 'bp_after_group_details_creation_step' ); /* Deprecated -> */ do_action( 'groups_custom_group_fields_editable' ); ?>
+					<?php do_action( 'bp_after_group_details_creation_step' ) ?>
 
 					<?php wp_nonce_field( 'groups_create_save_group-details' ) ?>
 

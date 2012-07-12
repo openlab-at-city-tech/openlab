@@ -19,6 +19,7 @@ include "wds-docs.php";
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
@@ -1656,6 +1657,31 @@ function openlab_fallback_user() {
 	}
 
 	return (int) $user_id;
+}
+
+/**
+ * Utility function for getting a default group id when none has been passed to the function
+ *
+ * The logic is this: If this is a group page, return the current group id. If this is the group
+ * creation process, return the new_group_id. If this is a group loop, return the id of the group
+ * show during this iteration
+ *
+ * @return int
+ */
+function openlab_fallback_group() {
+	global $groups_template;
+
+	$group_id = bp_get_current_group_id();
+
+	if ( !$group_id && bp_is_group_create() ) {
+		$group_id = bp_get_new_group_id();
+	}
+
+	if ( !$group_id && !empty( $groups_template ) && isset( $groups_template->group ) ) {
+		$group_id = $groups_template->group->id;
+	}
+
+	return (int) $group_id;
 }
 
 /**
