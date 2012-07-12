@@ -65,6 +65,13 @@ jQuery(document).ready(function($){
 		$(loader).remove();
 	}
 
+	function showHideAll() {
+		showHide('wds-website');
+		showHide('wds-website-existing');
+		showHide('wds-website-external');
+		showHide('wds-website-tooltips');
+	}
+
 	function do_external_site_query(e) {
 		var euf = $('#external-site-url');
 		//var euf = e.target;
@@ -127,4 +134,11 @@ jQuery(document).ready(function($){
 
 	/* AJAX validation for external RSS feeds */
 	$('#find-feeds').on( 'click', function(e) { do_external_site_query(e); } );
+
+	/* "Set up a site" toggle */
+	var setuptoggle = $('input[name="wds_website_check"]');
+	$(setuptoggle).on( 'click', function(){ showHideAll(); } );
+	if ( $(setuptoggle).is(':checked') ) {
+		showHideAll();
+	};
 },(jQuery));

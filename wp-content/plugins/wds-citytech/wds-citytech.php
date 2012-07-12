@@ -798,7 +798,7 @@ function wds_bp_group_meta(){
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
-						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-external');showHide('wds-website-tooltips');" /> Set up a site?
+						<input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?
 					</th>
 				</tr>
 			<?php else : ?>
