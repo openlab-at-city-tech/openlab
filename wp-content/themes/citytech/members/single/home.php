@@ -396,6 +396,18 @@ get_currentuserinfo();
 		'link_class'        => 'send-message',
 	) ) ?>
 
+	<?php /* Portfolio links */ ?>
+	<div class="sidebar-widget" id="portfolio-sidebar-widget">
+		<h4 class="sidebar-header">
+			<?php if ( openlab_user_has_portfolio() ) : ?>
+				<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
+			<?php elseif ( bp_is_my_profile() ) : ?>
+				<a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper' ) ?></a>
+			<?php endif ?>
+		</h4>
+	</div>
+
+	<?php /* End portfolio links */ ?>
 
 <?php if ( !bp_is_user_messages() ) { ?>
 	<?php if ( bp_is_user_friends() ) { ?>

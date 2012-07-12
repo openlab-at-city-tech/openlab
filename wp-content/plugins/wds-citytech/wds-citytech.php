@@ -19,6 +19,7 @@ include "wds-docs.php";
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
@@ -1627,6 +1628,29 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
 	}
 
 	return $group_type;
+}
+
+/**
+ * Utility function for getting a default user id when none has been passed to the function
+ *
+ * The logic is this: If there is a displayed user, return it. If not, check to see whether we're
+ * in a members loop; if so, return the current member. Otherwise return 0.
+ *
+ * Note that we have to manually check the $members_template variable, because
+ * bp_get_member_user_id() doesn't do it properly.
+ *
+ * @return int
+ */
+function openlab_fallback_user() {
+	global $members_template;
+
+	$user_id = bp_displayed_user_id();
+
+	if ( !$user_id && !empty( $members_template ) && isset( $members_template->member ) ) {
+		$user_id = bp_get_member_user_id();
+	}
+
+	return (int) $user_id;
 }
 
 
