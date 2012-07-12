@@ -8,7 +8,7 @@ function cuny_my_courses() {
 <?php }
 
 
-function cuny_profile_activty_block($type,$title,$last) { 
+function cuny_profile_activty_block($type,$title,$last) {
 	global $wpdb,$bp, $ribbonclass;
 
 	$get_groups_args = array( 'group_type' => 'course', 'get_activity' => false );
@@ -17,14 +17,14 @@ function cuny_profile_activty_block($type,$title,$last) {
 		$get_groups_args['active_status'] = $_GET['status'];
 	}
 	$groups = openlab_get_groups_of_user( $get_groups_args );
-	
+
 	$unique_group_count = count( $groups['group_ids'] );
-	
+
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) );
-	
+
 	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
-	  
+
 	  if ( !empty( $_GET['status'] ) ) {
 	    $status = $_GET['status'];
 	    $status = ucwords($status);
@@ -32,15 +32,15 @@ function cuny_profile_activty_block($type,$title,$last) {
 	  }else {
 	    echo '<h3 id="bread-crumb">Courses</h3>';
 	  }
-	  
+
 	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'per_page=48&show_hidden=true&include='.$groups['group_ids_sql'] ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="course-list" class="item-list">
-		<?php 
+		<?php
 		$count = 1;
-		
-		while ( bp_groups() ) : bp_the_group(); 
+
+		while ( bp_groups() ) : bp_the_group();
 			$group_id=bp_get_group_id();?>
 			<li class="course<?php echo cuny_o_e_class($count) ?>">
 				<div class="item-avatar alignleft">
@@ -48,7 +48,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<?php 
+					<?php
 					$wds_faculty=groups_get_groupmeta($group_id, 'wds_faculty' );
 					$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
 					$wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );
@@ -67,7 +67,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 					     }
 					?>
 				</div>
-				
+
 			</li>
 			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
 			<?php $count++ ?>
@@ -90,40 +90,10 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_member_actions');
-function cuny_buddypress_member_actions() { 
-global $bp, $user_ID, $user_identity, $userdata;
-get_currentuserinfo();
-//print_r($userdata);
 
-?>
-	<h2 class="sidebar-title">My Open Lab</h2>
-	<div id="item-buttons">
-		<?php do_action( 'cuny_bp_profile_menus' ); ?>
-	
-	</div><!-- #item-buttons -->
-	
-	<?php
-		global $members_template, $post;
-		
-		// Not really sure where this function appears, so I'll make a cascade
-		if ( isset( $members_template->member->user_id ) ) {
-			$button_user_id = $members_template->member->user_id;
-		} else if ( bp_displayed_user_id() ) {
-			$button_user_id = bp_displayed_user_id();
-		} else if ( !empty( $post->post_name ) && in_array( $post->post_name, array( 'my-projects', 'my-courses', 'my-clubs' ) ) ) {
-			$button_user_id = bp_loggedin_user_id();
-		} else {
-			$button_user_id = 0;
-		}
-			       
-		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
-	?>
-		
-	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
-
-		
-<?php openlab_recent_account_activity_sidebar();
-}
+/**
+ * @todo - Unhook from the genesis action
+ */
+add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
 
 genesis();

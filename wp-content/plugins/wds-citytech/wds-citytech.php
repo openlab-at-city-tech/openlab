@@ -1634,7 +1634,8 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
  * Utility function for getting a default user id when none has been passed to the function
  *
  * The logic is this: If there is a displayed user, return it. If not, check to see whether we're
- * in a members loop; if so, return the current member. Otherwise return 0.
+ * in a members loop; if so, return the current member. If it's still 0, check to see whether
+ * we're on a my-* page; if so, return the loggedin user id. Otherwise, return 0.
  *
  * Note that we have to manually check the $members_template variable, because
  * bp_get_member_user_id() doesn't do it properly.
@@ -1650,8 +1651,35 @@ function openlab_fallback_user() {
 		$user_id = bp_get_member_user_id();
 	}
 
+	if ( !$user_id && ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' ) ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
 	return (int) $user_id;
 }
 
+/**
+ * Is this my profile?
+ *
+ * We need a specialized function that returns true when bp_is_my_profile() does, or in addition,
+ * when on a my-* page
+ *
+ * @return bool
+ */
+function openlab_is_my_profile() {
+	if ( !is_user_logged_in() ) {
+		return false;
+	}
+
+	if ( bp_is_my_profile() ) {
+		return true;
+	}
+
+	if ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' )  ) {
+		return true;
+	}
+
+	return false;
+}
 
 ?>
