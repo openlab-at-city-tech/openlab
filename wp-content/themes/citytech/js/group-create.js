@@ -56,27 +56,27 @@ jQuery(document).ready(function($){
 		$(gc_submit).fadeTo( 500, 1.0 );
 	}
 
-	$('.noo_radio').click(function(el){
-		var whichid = $(el.target).prop('id').split('_').pop();
-		new_old_switch(whichid);
-	});
+	function mark_loading( obj ) {
+		$(obj).before('<span class="loading" id="group-create-ajax-loader"></span>');
+	}
 
-	// setup
-	new_old_switch( 'new' );
+	function unmark_loading( obj ) {
+		var loader = $(obj).siblings('.loading');
+		$(loader).remove();
+	}
 
-	/* AJAX validation for external RSS feeds */
-	var esu = $('#external-site-url');
-
-	$(esu).on( 'focus', function() { disable_gc_form() } );
-
-	$(esu).on( 'blur', function(e) {
-		var euf = e.target;
+	function do_external_site_query(e) {
+		var euf = $('#external-site-url');
+		//var euf = e.target;
 		var eu = $(euf).val();
 
 		if ( 0 == eu.length ) {
 			enable_gc_form();
 			return;
 		}
+
+		disable_gc_form();
+		mark_loading( $(e.target) );
 
 		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
 			{
@@ -112,7 +112,19 @@ jQuery(document).ready(function($){
 				$(efr).append( '<input name="external-site-type" id="external-site-type" type="hidden" value="' + type + '" />' );
 
 				enable_gc_form();
+				unmark_loading( $(e.target) );
 			}
 		);
-	} );
+	}
+
+	$('.noo_radio').click(function(el){
+		var whichid = $(el.target).prop('id').split('_').pop();
+		new_old_switch(whichid);
+	});
+
+	// setup
+	new_old_switch( 'new' );
+
+	/* AJAX validation for external RSS feeds */
+	$('#find-feeds').on( 'click', function(e) { do_external_site_query(e); } );
 },(jQuery));

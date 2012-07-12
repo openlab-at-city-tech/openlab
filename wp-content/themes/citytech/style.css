@@ -1408,6 +1408,13 @@ ul.ol-tooltip li:before {
 	content: "\21A0 \0020";
 }
 
+#group-create-ajax-loader {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	background: url("/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif") no-repeat scroll left center transparent;
+}
+
 /* Parentheses around doc counts */
 div#item-buttons ul li a span:before {
 	content: '(';
