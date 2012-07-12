@@ -579,12 +579,14 @@ function wds_new_group_type(){
 
 add_action('wp_ajax_wds_load_group_type', 'wds_load_group_type');
 add_action('wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type');
-function wds_load_group_type($group_type){
+function wds_load_group_type( $group_type ){
 	global $wpdb, $bp, $user_ID;
+
 	$return='';
-	if($group_type){
-		$echo=true;
-		$return='<input type="hidden" name="group_type" value="'.ucfirst($group_type).'">';
+
+	if ( $group_type ) {
+		$echo = true;
+		$return = '<input type="hidden" name="group_type" value="' . ucfirst($group_type) . '">';
 	}else{
 		$group_type = $_POST['group_type'];
 	}
@@ -610,6 +612,7 @@ function wds_load_group_type($group_type){
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
+		case 'portfolio' :
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
 		case 'project' :
@@ -650,17 +653,17 @@ function wds_load_group_type($group_type){
 			$return.='</td>';
 
 		$return.='</tr>';
-	if($group_type=="course"){
+	if( 'course' == $group_type || 'portfolio' == $group_type ){
 		// For the love of Pete, it's not that hard to cast variables
 		$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
-		if( !empty( $bp->groups->current_group->id ) ){
-			$wds_faculty=groups_get_groupmeta($bp->groups->current_group->id, 'wds_faculty' );
-			$wds_course_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_code' );
-			$wds_section_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_section_code' );
-			$wds_semester=groups_get_groupmeta($bp->groups->current_group->id, 'wds_semester' );
-			$wds_year=groups_get_groupmeta($bp->groups->current_group->id, 'wds_year' );
-			$wds_course_html=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_html' );
+		if ( bp_get_current_group_id() ){
+			$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
+			$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(),  'wds_course_code' );
+			$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
+			$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
+			$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
+			$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 		}
         //$return.='<tr>';
            //$return.=' <td>Faculty:';
@@ -674,46 +677,54 @@ function wds_load_group_type($group_type){
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
 
-        	$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
+		if ( 'course' == $group_type ) {
 
-		$return.='<tr>';
-           $return.=' <td>Course Code:';
-            $return.='<td><input type="text" name="wds_course_code" value="'.$wds_course_code.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Section Code:';
-            $return.='<td><input type="text" name="wds_section_code" value="'.$wds_section_code.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Semester:';
-            $return.='<td><select name="wds_semester">';
-                $return.='<option value="">--select one--';
-				$checked = $Spring = $Summer = $Fall = $Winter = "";
+			$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
-				if($wds_semester=="Spring"){
-					$Spring="selected";
-				}elseif($wds_semester=="Summer"){
-					$Summer="selected";
-				}elseif($wds_semester=="Fall"){
-					$Fall="selected";
-				}elseif($wds_semester=="Winter"){
-					$Winter="selected";
-				}
-				$return.='<option value="Spring" '.$Spring.'>Spring';
-                $return.='<option value="Summer" '.$Summer.'>Summer';
-                $return.='<option value="Fall" '.$Fall.'>Fall';
-                $return.='<option value="Winter" '.$Winter.'>Winter';
-            $return.='</select></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Year:';
-            $return.='<td><input type="text" name="wds_year" value="'.$wds_year.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Additional Description/HTML:';
-            $return.='<td><textarea name="wds_course_html">'.$wds_course_html.'</textarea></td>';
-        $return.='</tr>';
+			$return .= '<tr>';
+			$return .= '<td>Course Code:</td>';
+			$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+			$return .= '</tr>';
 
+			$return .= '<tr>';
+			$return .= '<td>Section Code:';
+			$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Semester:';
+			$return .= '<td><select name="wds_semester">';
+			$return .= '<option value="">--select one--';
+
+			$checked = $Spring = $Summer = $Fall = $Winter = "";
+
+			if ( $wds_semester=="Spring" ){
+				$Spring = "selected";
+			} elseif ( $wds_semester == "Summer" ) {
+				$Summer = "selected";
+			} elseif ( $wds_semester=="Fall" ) {
+				$Fall   = "selected";
+			} elseif ( $wds_semester == "Winter" ) {
+				$Winter = "selected";
+			}
+
+			$return .= '<option value="Spring" ' . $Spring . '>Spring';
+			$return .= '<option value="Summer" ' . $Summer . '>Summer';
+			$return .= '<option value="Fall" ' . $Fall . '>Fall';
+			$return .= '<option value="Winter" ' . $Winter . '>Winter';
+			$return .= '</select></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Year:';
+			$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Additional Description/HTML:';
+			$return .= '<td><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td>';
+			$return.='</tr>';
+		}
 	}elseif($group_type=="project"){
 
 	}elseif($group_type=="club"){
@@ -721,7 +732,9 @@ function wds_load_group_type($group_type){
 	}else{
 		$return="Please select a Group Type.";
 	}
+
 	$return.='</table>';
+
 	if($group_type=="course"){
 		$return.='<script>wds_load_group_departments();</script>';
 	}
@@ -740,51 +753,72 @@ function wds_bp_group_meta(){
 
 	$the_group_id = bp_is_group() ? bp_get_current_group_id() : 0;
 
-	$group_type=groups_get_groupmeta($the_group_id, 'wds_group_type' );
+	$group_type = openlab_get_group_type( $the_group_id );
+
+	if ( 'group' == $group_type && isset( $_GET['type'] ) ) {
+		$group_type = $_GET['type'];
+	}
+
+	if ( 'group' == $group_type ) {
+		$type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
+	}
+
 	$group_school=groups_get_groupmeta($the_group_id, 'wds_group_school' );
 	$group_project_type=groups_get_groupmeta($the_group_id, 'wds_group_project_type' );
+
+	if ( 'portfolio' == $group_type ) {
+		$group_label = openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() );
+	} else {
+		$group_label = $group_type;
+	}
+
 	?>
+
     <div class="ct-group-meta">
-      <?php
-	  $type= isset( $_GET['type'] ) ? $_GET['type'] : groups_get_groupmeta( bp_get_new_group_id(), 'wds_group_type' );
 
-	  if(!$type){
-		  $type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
-	  }
+	<?php
 
-	  if(!$type || !in_array($type,array("club","project","course","school"))){
-		  $type="group";
-	  }
-	  if($group_type!="group" && $group_type){
-		  echo wds_load_group_type($group_type);?>
-           <input type="hidden" name="group_type" value="<?php echo $group_type;?>" />
-          <?php
-		}elseif($type!="group"){
-		  $group_type=$type;
-		  echo wds_load_group_type($type);?>
-           <input type="hidden" name="group_type" value="<?php echo $group_type;?>" />
-          <?php
-	  }else{?>
+	if ( !empty( $group_type ) && $group_type != "group" ) {
+		  echo wds_load_group_type( $group_type ); ?>
+                  <input type="hidden" name="group_type" value="<?php echo $group_type;?>" />
+                  <?php
+	}
+	?>
+
         <table>
         <tr>
         <td>Type:</td>
         <td><select id="group_type" name="group_type" onchange="wds_load_group_type('group_type');">
-            <option value="" <?php if($group_type==""){echo "selected";}?>>--select one--
+            <option value="" <?php if ( $group_type=="" ) { echo "selected"; } ?> >--select one--</option>
+
             <option value="club" <?php if($group_type=="club"){echo "selected";}?>>Club
-            <option value="project" <?php if($group_type=="project"){echo "selected";}?>>Project
-            <?php if(is_super_admin(get_current_user_id())){?><option value="course" <?php if($group_type=="course"){echo "selected";}?>>Course
-            <option value="school" <?php if($group_type=="school"){echo "selected";}?>>School<?php } ?>
+
+            <option value="project" <?php selected( 'project', $group_type ) ?>>Project</option>
+
+            <option value="portfolio" <?php selected( 'portfolio', $group_type ) ?>><?php echo $group_label ?></option>
+
+            <?php if ( is_super_admin() ) : ?>
+            	<option value="course" <?php selected( 'course', $group_type ) ?>>Course</option>
+                <option value="school" <?php selected( 'school', $group_type ) ?>>School</option>
+            <?php endif ?>
         </select></td>
         </tr>
         </table>
-      <?php } ?>
+
       <div id="wds-group-type"></div>
       <?php //Copy Site
 	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
 	  if(!$wds_bp_group_site_id){
-		$template="template-".strtolower($group_type);
-		$blog_details = get_blog_details($template);
+		$template = "template-" . strtolower( $group_type );
+		$blog_details = get_blog_details( $template );
+
+		/* Temp until I have a Portfolio template site */
+		if ( empty( $blog_details ) ) {
+			$blog_details = new stdClass;
+			$blog_details->blog_id = 0;
+		}
+
 		?>
 		<style type="text/css">
 		.disabled-opt {

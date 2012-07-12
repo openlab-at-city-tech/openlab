@@ -36,18 +36,15 @@ if ( 'portfolio' == $group_type ) {
 
 					<?php if ( 'course' == $group_type ) : ?>
 						<p class="ol-tooltip">Please take a moment to consider the name of your Course. We recommend keeping your Course title name under 50 characters. You can always change the name of your course later.</p>
-					<?php else : ?>
-						<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
-					<?php endif ?>
-
-					<?php if ( 'portfolio' == $group_type ) : ?>
-						<p class="ol-tooltip">Please review the guidelines for <?php echo $group_label ?> naming <a href="<?php bp_root_domain() ?>/eportfolio">here</a> before proceeding. We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
+					<?php elseif ( 'portfolio' == $group_type ) : ?>
+						<p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
 
 						<ul class="ol-tooltip">
 							<li>FirstName LastName's <?php echo $group_label ?> </li>
 							<li>Jane Smith's <?php echo $group_label ?> (Example)</li>
 						</ul>
-
+					<?php else : ?>
+						<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
 					<?php endif ?>
 
 					<label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
