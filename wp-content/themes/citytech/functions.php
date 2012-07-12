@@ -73,7 +73,7 @@ function cuny_no_bp_default_styles() {
  * Enqueue our front-end scripts
  */
 function openlab_enqueue_frontend_scripts() {
-	if ( bp_is_group_create() ) {
+	if ( bp_is_group_create() || bp_is_group_admin_page() ) {
 		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
 	}
 }
