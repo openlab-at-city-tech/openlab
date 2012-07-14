@@ -39,12 +39,16 @@
 	font-family: 'Arvo',arial,serif;
 	margin-top: 12.5px;
 	border-right: 2px solid #CFCFCF;
-	height:15px;
+	height:16px;
 	/*border-left: 2px solid #CFCFCF;*/
 }
 
 #wpadminbar .quicklinks #wp-admin-bar-openlab, #wpadminbar .quicklinks #wp-admin-bar-my-openlab {
 	width: 110px;
+}
+
+#wpadminbar .quicklinks #wp-admin-bar-my-openlab { 
+	border-right: none;
 }
 
 #wpadminbar .quicklinks > ul > li > a, #wpadminbar .quicklinks > ul > li > .ab-empty-item {
@@ -67,9 +71,9 @@
 }
 
 #wpadminbar .quicklinks a, #wpadminbar .quicklinks .ab-empty-item, #wpadminbar .shortlink-input {
-	height: 15px;
+	height: 16px;
 	display: block;
-	padding: 0 12px;
+	padding: 0 12px 0 0;
 	margin: 0;	
 }
 
@@ -135,12 +139,33 @@
 	width: 20px;
 }
 
-/* notifications counts */
+/* notification icons */
+
+#wpadminbar #wp-admin-bar-invites, #wpadminbar #wp-admin-bar-messages, #wpadminbar #wp-admin-bar-activity {
+	border:none;
+	background: url('images/admin-bar-sprites.png') no-repeat;
+	width: 25px;
+	margin: 12.5px 5px;
+	height: 22px;
+	padding-right: 4px;
+	position: relative;
+	top: -5px;
+}
+
+#wpadminbar #wp-admin-bar-messages {
+	background-position: -28px 0;
+}
+
+#wpadminbar #wp-admin-bar-activity {
+	background-position: -55px 0;
+}
+
+/* notification counts */
 
 #wpadminbar .quicklinks .toolbar-item-count {
 	position:absolute;
-	top: -9px;
-	right: 5px;
+	top: -5px;
+	right: 0px;
 	color: #FFF;
 	background-color: #0fceba;
 	border-radius: 9px;
@@ -153,13 +178,15 @@
 	text-align: center;
 }
 
+
+
 /* Dropdown menus */
 
 #wpadminbar .menupop .ab-sub-wrapper {
 	display: none;
 	position: absolute;
-	background: url('images/admin-bar-arrow.png') no-repeat #838383;
-	background-position: left top;
+	background: url('images/admin-bar-arrow.png') no-repeat center top #838383;
+	margin-top: 2px;
 	opacity: 0.90;
 	padding: 10px 0 10px 10px;
 	/*width: 100px;*/
@@ -177,11 +204,16 @@
 }
 
 #wpadminbar .menupop #wp-admin-bar-my-openlab-default {
-	width: 125px;
+	width: 105px;
 }
 
-#wpadminbar .menupop #wp-admin-bar-invites, #wpadminbar .menupop #wp-admin-bar-messages-default, #wpadminbar .menupop #wp-admin-bar-activity-default {
- min-width: 25px;
+#wpadminbar #wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar #wp-admin-bar-messages .ab-sub-wrapper,#wpadminbar #wp-admin-bar-activity .ab-sub-wrapper {
+	background-position: 5px top;
+	margin-top: 8px;
+}
+
+#wpadminbar .menupop #wp-admin-bar-invites-default, #wpadminbar .menupop #wp-admin-bar-messages-default, #wpadminbar .menupop #wp-admin-bar-activity-default {
+
 }
 
 
