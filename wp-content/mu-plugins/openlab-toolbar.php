@@ -72,7 +72,7 @@ class OpenLab_Admin_Bar {
  	 */
  	function add_network_menu( $wp_admin_bar ) {
  		$wp_admin_bar->add_node( array(
- 			'parent' => 'top-secondary',
+ 			/*'parent' => 'top-secondary',*/
 			'id'     => 'openlab',
 			'title'  => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
 			'href'   => bp_get_root_domain(),
@@ -667,7 +667,7 @@ form#sidebar-login-form a.lost-pw {padding-right:2px !important; float:right; fo
 
 form#sidebar-login-form #sidebar-wp-submit {background:#fff;}
 
-.login-click {background:#000 !important;}
+.login-click {background:none !important;}
 	</style>
 <?php
 }
