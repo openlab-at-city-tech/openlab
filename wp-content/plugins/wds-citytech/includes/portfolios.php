@@ -142,4 +142,15 @@ function openlab_portfolio_creation_url() {
 		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=portfolio&new=true';
 	}
 
+/**
+ * Remove BPGES settings from portfolio group admin and creation screens
+ */
+function openlab_remove_bpges_settings_for_portfolios() {
+	if ( openlab_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+		remove_action( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
+		remove_action( 'bp_after_group_settings_creation_step' ,'ass_default_subscription_settings_form' );
+	}
+}
+add_action( 'bp_actions', 'openlab_remove_bpges_settings_for_portfolios', 1 );
+
 ?>
