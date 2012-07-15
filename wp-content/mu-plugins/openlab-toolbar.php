@@ -512,7 +512,7 @@ class OpenLab_Admin_Bar {
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => '<span class="toolbar-item-name">Activity </span>', // @todo Do we have a count here? What would it count?
+			'title' => '<span class="toolbar-item-name">Activity </span>'
 		) );
 
 		$activity_args = array(
