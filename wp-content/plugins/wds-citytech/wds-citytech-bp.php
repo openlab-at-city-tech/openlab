@@ -404,5 +404,9 @@ function openlab_pre_save_comment_activity( $content ) {
 }
 add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
 
+/**
+ * Auto-enable BuddyPress Docs for all group types
+ */
+add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
 
 ?>
