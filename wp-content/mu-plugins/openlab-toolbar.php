@@ -32,6 +32,7 @@ class OpenLab_Admin_Bar {
 
 		// Enqueue styles
 		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
+		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
 
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
