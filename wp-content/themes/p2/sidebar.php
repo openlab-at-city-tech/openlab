@@ -1,11 +1,13 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Sidebar template.
+ *
+ * @package P2
  */
 ?>
 <?php if ( !p2_get_hide_sidebar() ) : ?>
 	<div id="sidebar">
+	<?php do_action( 'before_sidebar' ); ?>
 
 		<ul>
 			<?php

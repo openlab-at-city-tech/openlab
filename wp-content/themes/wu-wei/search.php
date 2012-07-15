@@ -5,38 +5,42 @@
 		<div class="pagetitle">Search results for: <span>"<?php the_search_query(); ?>"</span></div>
 
 			<div class="navigation">
-				<div class="alignleft"><?php next_posts_link('&laquo; Older Entries') ?></div>
-				<div class="alignright"><?php previous_posts_link('Newer Entries &raquo;') ?></div>
+				<div class="alignleft"><?php next_posts_link( __( '&laquo; Older Entries', 'wu-wei' ) ); ?></div>
+				<div class="alignright"><?php previous_posts_link( __( 'Newer Entries &raquo;', 'wu-wei' ) ); ?></div>
 				<div class="clearboth"><!-- --></div>
 			</div>
 
 		<?php while (have_posts()) : the_post(); ?>
 
-			<div <?php post_class() ?>>
+			<div <?php post_class(); ?>>
 
 			<div class="post-info">
 
-				<h1 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-				<div class="timestamp"><?php the_time('F j, y') ?> <!-- by <?php the_author() ?> --> //</div> <div class="comment-bubble"><?php comments_popup_link('0', '1', '%'); ?></div>
+				<h1 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'wu-wei' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h1>
+				<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?> <!-- by <?php the_author(); ?> --> //</div> <?php if ( comments_open() ) : ?><div class="comment-bubble"><?php comments_popup_link( '0', '1', '%' ); ?></div><?php endif; ?>
 				<div class="clearboth"><!-- --></div>
 
-				<p><?php edit_post_link('Edit this entry', '', ''); ?></p>
+				<?php edit_post_link( __( 'Edit this entry', 'wu-wei' ), '<p>', '</p>' ); ?>
 
 			</div>
 
 			<div class="post-content">
-				<?php the_content() ?>
+				<?php the_content(); ?>
 			</div>
 
 			<div class="clearboth"><!-- --></div>
+			
+			<?php the_tags( '<div class="post-meta-data">' . __( 'Tags', 'wu-wei' ) . ' <span>', ', ', '</span></div>' ); ?>
+
+			<div class="post-meta-data"><?php _e( 'Categories', 'wu-wei' ); ?> <span><?php the_category(', '); ?></span></div>			
 
 		</div>
 
 		<?php endwhile; ?>
 
 			<div class="navigation">
-				<div class="alignleft"><?php next_posts_link('&laquo; Older Entries') ?></div>
-				<div class="alignright"><?php previous_posts_link('Newer Entries &raquo;') ?></div>
+				<div class="alignleft"><?php next_posts_link('&laquo; Older Entries'); ?></div>
+				<div class="alignright"><?php previous_posts_link('Newer Entries &raquo;'); ?></div>
 				<div class="clearboth"><!-- --></div>
 			</div>
 

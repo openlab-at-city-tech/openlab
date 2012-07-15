@@ -1,9 +1,16 @@
 <?php
+/**
+ * Template tags.
+ *
+ * @package P2
+ * @since unknown
+ */
 
 function p2_body_class( $classes ) {
 	if ( is_tax( P2_MENTIONS_TAXONOMY ) )
 		$classes[] = 'mentions';
-
+	if ( p2_is_iphone() )
+		$classes[] = 'iphone';
 	return $classes;
 }
 add_filter( 'body_class', 'p2_body_class' );
@@ -34,14 +41,6 @@ function p2_is_ajax_request() {
 	return ( $post_request_ajax ) ? $post_request_ajax : false;
 }
 
-function p2_posting_type() {
-	echo p2_get_posting_type();
-}
-function p2_get_posting_type() {
-	$p = isset( $_GET['p'] ) ? $_GET['p'] : 'status';
-	return $p;
-}
-
 function p2_media_upload_form() {
 	require( ABSPATH . '/wp-admin/includes/template.php' );
 	media_upload_form();
@@ -52,57 +51,56 @@ function p2_media_upload_form() {
 function p2_user_display_name() {
 	echo p2_get_user_display_name();
 }
-	function p2_get_user_display_name() {
-		$current_user = wp_get_current_user();
 
-		return apply_filters( 'p2_get_user_display_name', isset( $current_user->first_name ) && $current_user->first_name ? $current_user->first_name : $current_user->display_name );
-	}
+function p2_get_user_display_name() {
+	$current_user = wp_get_current_user();
+
+	return apply_filters( 'p2_get_user_display_name', isset( $current_user->first_name ) && $current_user->first_name ? $current_user->first_name : $current_user->display_name );
+}
 
 function p2_discussion_links() {
 	echo p2_get_discussion_links();
 }
-	function p2_get_discussion_links() {
-		global $post;
-		$content = '';
-		$unique_commentors = array();
 
-		$comments = get_comments( array( 'post_id' => $post->ID ) );
+function p2_get_discussion_links() {
+	$comments = get_comments( array( 'post_id' => get_the_ID() ) );
 
-		foreach ( $comments as $comment )
-			if ( '1' == $comment->comment_approved )
-				$unique_commentors[$comment->comment_author_email] = $comment;
-
-		$total_unique_commentors = count( $unique_commentors );
-
-		$counter = 1;
-		foreach ( $unique_commentors as $comment ) {
-			if ( $counter > 3 )
-				break;
-
-			if ( 1 != $counter && $total_unique_commentors == $counter )
-				$content .= __( ', and ', 'p2' );
-			else if ( 1 != $counter )
-				$content .= ', ';
-
-			$content .= get_avatar( $comment, 16 ) . ' ' . get_comment_author_link( $comment->comment_ID );
-
-			$counter++;
-		}
-
-		if ( $total_unique_commentors > 3 )
-			if ( ( $total_unique_commentors - 3 ) != 1 )
-				$content .= sprintf( __( ' and %s others are discussing.', 'p2' ), ( $total_unique_commentors - 3 ) );
-			else
-				$content .= __( ' and one other person are discussing.', 'p2' );
-		else {
-			if ( $total_unique_commentors == 1 )
-				$content .= __( ' is discussing.', 'p2' );
-			else
-				$content .= __( ' are discussing.', 'p2' );
-		}
-
-		return $content;
+	$unique_commentors = array();
+	foreach ( $comments as $comment ) {
+		if ( '1' == $comment->comment_approved )
+			$unique_commentors[$comment->comment_author_email] = get_avatar( $comment, 16 ) . ' ' . get_comment_author_link( $comment->comment_ID );
 	}
+
+	$unique_commentors = array_values( $unique_commentors );
+	$total_unique_commentors = count( $unique_commentors );
+
+	$content = '';
+
+	if ( 1 == $total_unique_commentors ) {
+		$content = sprintf( __( '%1$s is discussing.', 'p2' ), $unique_commentors[0] );
+	} else if ( 2 == $total_unique_commentors ) {
+		$content = sprintf( __( '%1$s and %2$s are discussing.', 'p2' ),
+			$unique_commentors[0],
+			$unique_commentors[1]
+		);
+	} else if ( 3 == $total_unique_commentors ) {
+		$content = sprintf( __( '%1$s, %2$s, and %3$s are discussing.', 'p2' ),
+			$unique_commentors[0],
+			$unique_commentors[1],
+			$unique_commentors[2]
+		);
+	} else if ( 3 < $total_unique_commentors ) {
+		$others = $total_unique_commentors - 3;
+		$content .= sprintf( _n( '%1$s, %2$s, %3$s, and %4$d other are discussing.', '%1$s, %2$s, %3$s, and %4$d others are discussing.', $others, 'p2' ),
+			$unique_commentors[0],
+			$unique_commentors[1],
+			$unique_commentors[2],
+			$others
+		);
+	}
+
+	return $content;
+}
 
 function p2_quote_content() {
 	echo p2_get_quote_content();
@@ -127,14 +125,46 @@ function p2_quote_content() {
 		return wp_kses( $content, $quote_allowedtags );
 	}
 
-function p2_the_category() {
-	echo p2_get_the_category();
-}
-	function p2_get_the_category() {
-		$categories = get_the_category();
-		$slug = ( isset( $categories[0] ) ) ? $categories[0]->slug : '';
-		return apply_filters( 'p2_get_the_category', $slug );
+/**
+ * Get post format for current post object.
+ *
+ * The value should be a valid post format or one of the back compat categories.
+ *
+ * @since P2 1.3.4
+ * @uses p2_get_the_category for back compat category check
+ * @uses p2_get_supported_post_formats for accepted values
+ *
+ * @param object post_id Uses global post if in the loop; required for use outside the loop
+ * @return string
+ */
+function p2_get_post_format( $post_id = null ) {
+	if ( is_null( $post_id ) ) {
+		global $post;
+		$post_id = $post->ID;
 	}
+
+	if ( empty( $post_id ) )
+		return '';
+
+	// 1- try to get post format, first
+	$post_format = get_post_format( $post_id );
+
+	// 2- try back compat category, next
+	if ( false === $post_format )
+		$post_format = p2_get_the_category( $post_id );
+
+	// Check against accepted values
+	if ( empty( $post_format ) || ! in_array( $post_format, p2_get_supported_post_formats() ) )
+		$post_format = 'standard';
+
+	return $post_format;
+}
+
+function p2_get_the_category( $post_id = null ) {
+	$categories = get_the_category( $post_id );
+	$slug = ( isset( $categories[0] ) ) ? $categories[0]->slug : '';
+	return apply_filters( 'p2_get_the_category', $slug );
+}
 
 function p2_user_prompt() {
 	echo p2_get_user_prompt();
@@ -176,14 +206,11 @@ function p2_archive_author() {
 }
 
 function p2_get_archive_author() {
+	$author = '';
+	if ( is_author() )
+		$author = get_the_author_meta( 'display_name', get_queried_object_id() );
 
-	if ( get_query_var( 'author_name' ) )
-	 		$curauth = get_userdatabylogin( get_query_var( 'author_name' ) );
-	else
-	 		$curauth = get_userdata( get_query_var( 'author' ) );
-
-	if ( isset( $curauth->display_name ) )
-		return apply_filters( 'p2_get_archive_author', $curauth->display_name );
+	return apply_filters( 'p2_get_archive_author', $author );
 }
 
 function p2_author_feed_link() {
@@ -191,13 +218,10 @@ function p2_author_feed_link() {
 }
 	function p2_get_author_feed_link() {
 
-		if ( get_query_var( 'author_name' ) )
-	   		$curauth = get_userdatabylogin( get_query_var( 'author_name' ) );
-		else
-	   		$curauth = get_userdata( get_query_var( 'author' ) );
+		$author_id = get_queried_object_id();
 
-		if ( isset( $curauth->ID ) )
-			return apply_filters( 'p2_get_author_feed_link', get_author_feed_link( $curauth->ID ) );
+		if ( isset( $author_id ) )
+			return apply_filters( 'p2_get_author_feed_link', get_author_feed_link( $author_id ) );
 	}
 
 function p2_user_identity() {

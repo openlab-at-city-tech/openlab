@@ -60,6 +60,7 @@
 <body <?php body_class(); ?>>
 <?php do_action( 'pilcrow_before' ); ?>
 <div id="container" class="hfeed">
+<?php do_action( 'before' ); ?>
 	<div id="page" class="blog">
 		<div id="header">
 			<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>

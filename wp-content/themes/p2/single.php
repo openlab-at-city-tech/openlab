@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Single post template.
+ *
+ * @package P2
  */
 ?>
 <?php get_header(); ?>
@@ -16,8 +17,9 @@
 
 				<div class="controls">
 					<a href="#" id="togglecomments"><?php _e( 'Hide threads', 'p2' ); ?></a>
-					&nbsp;|&nbsp;
+					<span class="sep">&nbsp;|&nbsp;</span>
 					<a href="#directions" id="directions-keyboard"><?php  _e( 'Keyboard Shortcuts', 'p2' ); ?></a>
+					<span class="single-action-links"><?php do_action( 'p2_action_links' ); ?></span>
 				</div>
 
 				<ul id="postlist">

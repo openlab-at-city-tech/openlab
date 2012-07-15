@@ -15,17 +15,17 @@
 		 * and adds a containing div around the main sidebars for the content-sidebar-sidebar
 		 * and sidebar-sidebar-layouts so the layout holds together with a short content area and long featured widget area
 		 */
-		$options = get_option( 'pilcrow_theme_options' );
+		$options = pilcrow_get_theme_options();
 		$current_layout = $options['theme_layout'];
 		$feature_widget_area_layouts = array( 'content-sidebar-sidebar', 'sidebar-sidebar-content' );
-		
+
 		if ( 'no-sidebar' == $current_layout )
 			return;
 
 		if ( in_array( $current_layout, $feature_widget_area_layouts ) ) :
 	?>
 	<div id="main-sidebars">
-
+	
 		<?php if ( is_active_sidebar( 'sidebar-3' ) ) : ?>
 
 		<div id="feature" class="widget-area" role="complementary">
@@ -39,6 +39,7 @@
 		<?php endif; // ends the check for the current layout that determines the #main-sidebars markup ?>
 
 		<div id="sidebar" class="widget-area" role="complementary">
+	<?php do_action( 'before_sidebar' ); ?>
 			<ul class="xoxo sidebar-list">
 
 <?php
@@ -53,6 +54,17 @@
 				<h3 class="widget-title"><?php _e( 'Search', 'pilcrow' ); ?></h3>
 				<?php get_search_form(); ?>
 			</li>
+
+			<?php
+				$title = __( 'RSS', 'pilcrow' );
+				$before_widget = '<li class="widget widget_rss_links">';
+				$after_widget = '</li>';
+				$before_title = '<h3 class="widget-title">';
+				$after_title = '</h3>';
+				the_widget( 'RSS_Links_Widget',
+							"title=$title&display=posts&format=text-image&imagesize=medium&imagecolor=orange",
+							"before_widget=$before_widget&after_widget=$after_widget&before_title=$before_title&after_title=$after_title" );
+			?>
 
 			<li class="widget widget_recent_entries">
 				<h3 class="widget-title"><?php _e( 'Recent Entries', 'pilcrow' ); ?></h3>

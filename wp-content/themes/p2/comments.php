@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Template part for displaying comments.
+ *
+ * @package P2
  */
 ?>
 
@@ -9,11 +10,11 @@
 	return;
 ?>
 
+<ul id="comments-<?php the_id(); ?>" class="commentlist inlinecomments">
 <?php if ( get_comments_number() > 0 ) : ?>
-<ul class="commentlist inlinecomments">
 	<?php wp_list_comments( array( 'callback' => 'p2_comments' ) ); ?>
-</ul>
 <?php endif; ?>
+</ul>
 
 <?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : ?>
 <div class="navigation">

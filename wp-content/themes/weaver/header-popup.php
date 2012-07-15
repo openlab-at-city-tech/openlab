@@ -46,7 +46,6 @@ padding: 0 0px; !important;
     if (!weaver_use_inline_css(weaver_get_css_filename())) { // use file
 	    $vers = weaver_getopt('ttw_style_version');
 	    if (!$vers) $vers = '0';
-	    echo "<-- CSS VERSION $vers -->\n";
 	    else $vers = sprintf("%d",$vers);
 		wp_register_style('weaver-style-sheet',weaver_get_css_url(),array(),$vres);
 		wp_enqueue_style('weaver-style-sheet');

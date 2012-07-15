@@ -1,9 +1,8 @@
 <?php
 /**
- * Author template
+ * Author template.
  *
- * @package WordPress
- * @subpackage P2
+ * @package P2
  */
 ?>
 <?php get_header(); ?>

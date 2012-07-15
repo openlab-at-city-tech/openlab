@@ -325,7 +325,7 @@ div.entry {
 	float: right;
 }
 #wrapper {
-	background: url( i/sidebar_back-rtl.gif ) top left repeat-y;
+	background: #fff url( i/sidebar_back-rtl.gif ) top left repeat-y;
 }
 
 /*
@@ -342,9 +342,11 @@ h1, h2, h3, #postbox label, #help dd {
 code, pre {
 	font-family: Monaco, Consolas, "Courier New", monospace;
 }
-.category-quote blockquote cite {
+.category-quote blockquote cite,
+.format-quote blockquote cite {
 	text-align: left;
 }
+.format-quote blockquote cite:before,
 .category-quote blockquote cite:before {
 	content: "— ";
 }

@@ -6,10 +6,10 @@ add_action( 'admin_menu', 'pilcrow_theme_options_add_page' );
 /**
  * Add theme options page styles
  */
-wp_register_style( 'pilcrow', get_bloginfo( 'template_directory' ) . '/theme-options.css', '', '0.1' );
-if ( isset( $_GET['page'] ) && $_GET['page'] == 'theme_options' ) {
-	wp_enqueue_style( 'pilcrow' );
+function pilcrow_admin_enqueue_scripts( $hook_suffix ) {
+	wp_enqueue_style( 'pilcrow', get_template_directory_uri() . '/inc/theme-options.css', '', '20110801' );
 }
+add_action( 'admin_print_styles-appearance_page_theme_options', 'pilcrow_admin_enqueue_scripts' );
 
 /**
  * Init plugin options to white list our options
@@ -22,7 +22,7 @@ function pilcrow_theme_options_init(){
  * Load up the menu page
  */
 function pilcrow_theme_options_add_page() {
-	add_theme_page( __( 'Theme Options' ), __( 'Theme Options' ), 'edit_theme_options', 'theme_options', 'pilcrow_theme_options_do_page' );
+	add_theme_page( __( 'Theme Options', 'pilcrow' ), __( 'Theme Options', 'pilcrow' ), 'edit_theme_options', 'theme_options', 'pilcrow_theme_options_do_page' );
 }
 
 /**
@@ -32,19 +32,19 @@ function pilcrow_color_schemes() {
 	$color_schemes = array(
 		'light' => array(
 			'value' =>	'light',
-			'label' => __( 'Light' )
+			'label' => __( 'Light', 'pilcrow' )
 		),
 		'dark' => array(
 			'value' =>	'dark',
-			'label' => __( 'Dark' )
+			'label' => __( 'Dark', 'pilcrow' )
 		),
 		'red' => array(
 			'value' =>	'red',
-			'label' => __( 'Red' )
+			'label' => __( 'Red', 'pilcrow' )
 		),
 		'brown' => array(
 			'value' =>	'brown',
-			'label' => __( 'Brown' )
+			'label' => __( 'Brown', 'pilcrow' )
 		),
 	);
 
@@ -58,27 +58,27 @@ function pilcrow_layouts() {
 	$theme_layouts = array(
 		'content-sidebar' => array(
 			'value' => 'content-sidebar',
-			'label' => __( 'Content-Sidebar' ),
+			'label' => __( 'Content-Sidebar', 'pilcrow' ),
 		),
 		'sidebar-content' => array(
 			'value' => 'sidebar-content',
-			'label' => __( 'Sidebar-Content' )
+			'label' => __( 'Sidebar-Content', 'pilcrow' )
 		),
 		'content-sidebar-sidebar' => array(
 			'value' => 'content-sidebar-sidebar',
-			'label' => __( 'Content-Sidebar-Sidebar' )
+			'label' => __( 'Content-Sidebar-Sidebar', 'pilcrow' )
 		),
 		'sidebar-sidebar-content' => array(
 			'value' => 'sidebar-sidebar-content',
-			'label' => __( 'Sidebar-Sidebar-Content' )
+			'label' => __( 'Sidebar-Sidebar-Content', 'pilcrow' )
 		),
 		'sidebar-content-sidebar' => array(
 			'value' => 'sidebar-content-sidebar',
-			'label' => __( 'Sidebar-Content-Sidebar' )
+			'label' => __( 'Sidebar-Content-Sidebar', 'pilcrow' )
 		),
 		'no-sidebar' => array(
 			'value' => 'no-sidebar',
-			'label' => __( 'Full-Width, No Sidebar' )
+			'label' => __( 'Full-Width, No Sidebar', 'pilcrow' )
 		),
 	);
 
@@ -86,42 +86,24 @@ function pilcrow_layouts() {
 }
 
 /**
- * Set default options
- */
-function pilcrow_default_options() {
-	$options = get_option( 'pilcrow_theme_options' );
-
-	if ( ! isset( $options['color_scheme'] ) ) {
-		$options['color_scheme'] = 'light';
-		update_option( 'pilcrow_theme_options', $options );
-	}
-
-	if ( ! isset( $options['theme_layout'] ) ) {
-		$options['theme_layout'] = 'content-sidebar';
-		update_option( 'pilcrow_theme_options', $options );
-	}
-}
-add_action( 'init', 'pilcrow_default_options' );
-
-/**
  * Create the options page
  */
 function pilcrow_theme_options_do_page() {
 
-	if ( ! isset( $_REQUEST['updated'] ) )
-		$_REQUEST['updated'] = false;
+	if ( ! isset( $_REQUEST['settings-updated'] ) )
+		$_REQUEST['settings-updated'] = false;
 
 	?>
 	<div class="wrap">
-		<?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options' ) . "</h2>"; ?>
+		<?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options', 'pilcrow' ) . "</h2>"; ?>
 
-		<?php if ( false !== $_REQUEST['updated'] ) : ?>
+		<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
 		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'pilcrow' ); ?></strong></p></div>
 		<?php endif; ?>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'pilcrow_options' ); ?>
-			<?php $options = get_option( 'pilcrow_theme_options' ); ?>
+			<?php $options = pilcrow_get_theme_options(); ?>
 
 			<table class="form-table">
 
@@ -179,7 +161,7 @@ function pilcrow_theme_options_do_page() {
 								<label class="description">
 									<input type="radio" name="pilcrow_theme_options[theme_layout]" value="<?php echo esc_attr( $option['value'] ); ?>" <?php echo $checked; ?> />
 									<span>
-										<img src="<?php bloginfo( 'template_directory' ); ?>/images/<?php echo $option['value']; ?>.png"/>
+										<img src="<?php echo get_template_directory_uri(); ?>/images/<?php echo $option['value']; ?>.png"/>
 										<?php echo $option['label']; ?>
 									</span>
 								</label>

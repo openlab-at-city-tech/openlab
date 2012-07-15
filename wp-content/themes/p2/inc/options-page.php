@@ -1,4 +1,10 @@
 <?php
+/**
+ * Theme options page.
+ *
+ * @package P2
+ * @since unknown
+ */
 
 add_action( 'admin_menu', array( 'P2_Options', 'init' ) );
 
@@ -116,7 +122,7 @@ class P2_Options {
 							  	$msg = __( 'Allow any registered member to post', 'p2' );
 						 ?>
 
-						<label for="p2_allow_users_publish"><?php _e( $msg, 'p2' ); ?></label>
+						<label for="p2_allow_users_publish"><?php echo $msg; ?></label>
 
 						</td>
 					</tr>
@@ -143,8 +149,8 @@ class P2_Options {
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Custom Background Color:', 'p2' ); ?></th>
 						<td>
-							<input id="pickcolor" type="button" class="button" name="pickcolor" value="<?php _e( 'Pick a Color', 'p2' ); ?> "/>
-							<input name="p2_background_color_hex" id="p2_background_color_hex" type="text" value="<?php esc_attr_e( $p2_background_color ); ?>" />
+							<input id="pickcolor" type="button" class="button" name="pickcolor" value="<?php esc_attr_e( 'Pick a Color', 'p2' ); ?> "/>
+							<input name="p2_background_color_hex" id="p2_background_color_hex" type="text" value="<?php echo esc_attr( $p2_background_color ); ?>" />
 							<div id="colorPickerDiv" style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"> </div>
 						</td>
 					</tr>
@@ -156,7 +162,8 @@ class P2_Options {
 							<input type="radio" id="bi_polka" name="p2_background_image" value="dots"<?php if ( 'dots' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_polka"><?php _e( 'Polka Dots', 'p2' ); ?></label><br />
 							<input type="radio" id="bi_squares" name="p2_background_image" value="squares"<?php if ( 'squares' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_squares"><?php _e( 'Squares', 'p2' ); ?></label><br />
 							<input type="radio" id="bi_plaid" name="p2_background_image" value="plaid"<?php if ( 'plaid' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_plaid"><?php _e( 'Plaid', 'p2' ); ?></label><br />
-							<input type="radio" id="bi_stripes" name="p2_background_image" value="stripes"<?php if ( 'stripes' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Stripes', 'p2' ); ?></label>
+							<input type="radio" id="bi_stripes" name="p2_background_image" value="stripes"<?php if ( 'stripes' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Stripes', 'p2' ); ?></label><br />
+							<input type="radio" id="bi_santa" name="p2_background_image" value="santa"<?php if ( 'santa' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Santa', 'p2' ); ?></label>
 						</td>
 					</tr>
 					<tr valign="top">

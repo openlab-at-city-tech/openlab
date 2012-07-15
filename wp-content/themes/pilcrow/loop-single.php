@@ -24,6 +24,13 @@
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<div class="entry-meta">
+						<?php if ( is_multi_author() ) {
+							printf( __( '<span class="by-author"><span class="sep">by</span> <span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a></span> | </span>', 'pilcrow' ),
+								esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
+								esc_attr( sprintf( __( 'View all posts by %s', 'pilcrow' ), get_the_author_meta( 'display_name' ) ) ),
+								esc_attr( get_the_author_meta( 'display_name' ) )
+							);
+						} ?>
 						<?php the_date(); ?> &middot; <?php the_time(); ?>
 						<?php edit_post_link( __( 'Edit', 'pilcrow' ), '<span class="edit-link"> | ', '</span>' ); ?>
 					</div><!-- .entry-meta -->
@@ -40,9 +47,9 @@
 					</div><!-- .entry-content -->
 
 					<div class="entry-links">
-						<p class="comment-number"><?php comments_popup_link( __( 'Leave a Comment' ), __( '1 Comment' ), __( '% Comments' ) ); ?></p>
-						<p class="entry-categories tagged"><?php printf( __( 'Filed under %s' ), get_the_category_list( ', ' ) ); ?></p>
-						<p class="entry-tags tagged"><?php the_tags( __( 'Tagged as' ).' ', ', ', '<br />' ); ?></p>
+						<p class="comment-number"><?php comments_popup_link( __( 'Leave a Comment', 'pilcrow' ), __( '1 Comment', 'pilcrow' ), __( '% Comments', 'pilcrow' ) ); ?></p>
+						<p class="entry-categories tagged"><?php printf( __( 'Filed under %s', 'pilcrow' ), get_the_category_list( ', ' ) ); ?></p>
+						<p class="entry-tags tagged"><?php the_tags( __( 'Tagged as', 'pilcrow' ).' ', ', ', '<br />' ); ?></p>
 					</div><!-- .entry-links -->
 				</div><!-- #post-## -->
 

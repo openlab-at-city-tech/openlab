@@ -67,6 +67,7 @@ if ( ! function_exists( 'weaver_setup' ) ):
  * @uses register_default_headers() To register the default custom header images provided with the theme.
  * @uses set_post_thumbnail_size() To set a custom post thumbnail size.
  *
+ * @uses add_theme_support( 'custom-header', $weaverii_header ) for WP 3.4+ custom header
  */
 
 function weaver_setup() {
@@ -97,9 +98,6 @@ function weaver_setup() {
 		'primary' => __( 'Primary Navigation', WEAVER_TRANSADMIN ),
 		'secondary' => __( 'Secondary Navigation', WEAVER_TRANSADMIN ),
 	) );
-
-	// This theme allows users to set a custom background
-	add_custom_background();
 
 	global $content_width;
 	if ( ! isset( $content_width ) ) {
@@ -311,26 +309,53 @@ function weaver_setup() {
 	    $width = 940; $height = 198;
 	}
 
-	// Your changeable header business starts here
-	define( 'HEADER_TEXTCOLOR', '' );
-	// No CSS, just IMG call. The %s is a placeholder for the theme template directory URI.
-	define( 'HEADER_IMAGE', '%s/images/headers/wheat.jpg' );
+	global $weaverii_header;
+	$weaverii_header = array(
+	    'default-image' => '%s/images/headers/wheat.jpg',
+	    'random-default' => true,
+	    'width' => $width,
+	    'height' => $height,
+	    'flex-height' => true,
+	    'flex-width' => true,
+	    'default-text-color' => '',
+	    'header-text' => false,
+	    'uploads' => true,
+	    'wp-head-callback' => '',
+	    'admin-head-callback' => 'weaver_admin_header_style',
+	    'admin-preview-callback' => '',
+	);
 
-	define( 'HEADER_IMAGE_WIDTH', $width );
-	define( 'HEADER_IMAGE_HEIGHT', $height );
+	if (function_exists('get_custom_header')) {
+	    add_theme_support( 'custom-header', $weaverii_header );
+	    add_theme_support( 'custom-background' );
+	} else {
+	    // WordPress 3.3 backward compatibility here
+	    // Add support for custom backgrounds
+	    add_custom_background();
 
+	    // The default header text color
+	    define('NO_HEADER_TEXT', !$weaverii_header['header-text']);	// don't include text info in the Headers admin
+	    define( 'HEADER_TEXTCOLOR', $weaverii_header['default-text-color'] );
+
+	    // By leaving empty, we allow for random image rotation.
+	    // No CSS, just IMG call. The %s is a placeholder for the theme template directory URI.
+	    define( 'HEADER_IMAGE', $weaverii_header['default-image'] );
+	    define( 'HEADER_IMAGE_WIDTH', $weaverii_header['width'] );
+	    define( 'HEADER_IMAGE_HEIGHT', $weaverii_header['height'] );
+	    // Turn on random header image rotation by default.
+	    add_theme_support( 'custom-header');
+
+	    // Add a way for the custom header to be styled in the admin panel that controls
+	    // custom headers. See weaverii_admin_header_style(), below.
+	    add_custom_image_header( 'weaver_admin_header_style', // WP 3.3 compatibility
+		'weaver_admin_header_style' );
+
+	}
 
 	// We'll be using post thumbnails for custom header images on posts and pages.
 	// We want them to be 940 pixels wide by 198 pixels tall.
 	// Larger images will be auto-cropped to fit, smaller ones will be ignored. See header.php.
-	set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
-
-	// Don't support text inside the header image.
-	define( 'NO_HEADER_TEXT', true );
-
-	// Add a way for the custom header to be styled in the admin panel that controls
-	// custom headers. See weaver_admin_header_style(), below.
-	add_custom_image_header( '', 'weaver_admin_header_style' );
+	set_post_thumbnail_size( $weaverii_header['width'], $weaverii_header['height'], true );
 
 	// ... and thus ends the changeable header business.
 }

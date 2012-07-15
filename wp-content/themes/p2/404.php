@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * 404 Post not found template.
+ *
+ * @package P2
  */
 ?>
 <?php get_header(); ?>

@@ -126,7 +126,7 @@ function weaver_page_extras() {
 	<?php _e("<em>Posts per Page</em> - Enter maximum number of posts per page.", WEAVER_TRANSADMIN); ?> <br />
 
 	<input type="text" size="30" id="ttw_author" name="ttw_author"
-	value="<?php echo weaver_esc_textarea(get_post_meta($post->ID, "ttw_advanced_selection", true)); ?>" />
+	value="<?php echo weaver_esc_textarea(get_post_meta($post->ID, "ttw_author", true)); ?>" />
 	<?php _e('<em>Author</em> - Enter author (use username, including spaces)', WEAVER_TRANSADMIN); ?> <br />
 
 	<?php weaver_page_checkbox('ttw_hide_sticky',__('Hide Sticky Posts', WEAVER_TRANSADMIN)); ?>

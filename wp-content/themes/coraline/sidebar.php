@@ -12,7 +12,7 @@
 			 * and adds a containing div around the main sidebars for the content-sidebar-sidebar
 			 * and sidebar-sidebar-layouts so the layout holds together with a short content area and long featured widget area
 			 */
-			$options = get_option( 'coraline_theme_options' );
+			$options = coraline_get_theme_options();
 			$current_layout = $options['theme_layout'];
 			$feature_widget_area_layouts = array( 'content-sidebar-sidebar', 'sidebar-sidebar-content' );
 
@@ -33,13 +33,14 @@
 		<?php endif; // ends the check for the current layout that determines the #main-sidebars markup ?>
 
 		<div id="primary" class="widget-area" role="complementary">
+		<?php do_action( 'before_sidebar' ); ?>
 			<ul class="xoxo">
 
 			<?php // The primary sidebar used in all layouts
 			if ( ! dynamic_sidebar( 'sidebar-1' ) ) : ?>
 
 				<li id="search" class="widget-container widget_search">
-					<h3 class="widget-title"><?php _e( 'Search It!', 'coraline' ); ?></h3>					
+					<h3 class="widget-title"><?php _e( 'Search It!', 'coraline' ); ?></h3>
 					<?php get_search_form(); ?>
 				</li>
 
@@ -54,7 +55,7 @@
 								?>
 								<li><a href="<?php the_permalink() ?>"><?php the_title() ?></a></li>
 								<?php
-							endwhile;							
+							endwhile;
 							?>
 						</ul>
 				</li>

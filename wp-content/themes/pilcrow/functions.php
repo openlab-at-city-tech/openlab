@@ -42,7 +42,7 @@ if ( ! function_exists( 'pilcrow_setup' ) ):
 function pilcrow_setup() {
 
 	// This theme has some pretty cool theme options
-	require( dirname( __FILE__ ) . '/theme-options.php' );
+	require( dirname( __FILE__ ) . '/inc/theme-options.php' );
 
 	// This theme uses post thumbnails
 	add_theme_support( 'post-thumbnails' );
@@ -52,10 +52,10 @@ function pilcrow_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'pilcrow', TEMPLATEPATH . '/languages' );
+	load_theme_textdomain( 'pilcrow', get_template_directory() . '/languages' );
 
 	$locale = get_locale();
-	$locale_file = TEMPLATEPATH . "/languages/$locale.php";
+	$locale_file = get_template_directory() . "/languages/$locale.php";
 	if ( is_readable( $locale_file ) )
 		require_once( $locale_file );
 
@@ -75,7 +75,7 @@ function pilcrow_setup() {
 
 	// The height and width of your custom header. You can hook into the theme's own filters to change these values.
 	// Add a filter to pilcrow_header_image_width and pilcrow_header_image_height to change these values.
-	$options = get_option( 'pilcrow_theme_options' );
+	$options = pilcrow_get_theme_options();
 	$current_layout = $options['theme_layout'];
 	$two_columns = array( 'content-sidebar', 'sidebar-content' );
 
@@ -221,7 +221,7 @@ function pilcrow_admin_header_image() { ?>
 			else
 				$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
 			?>
-			<h1 id="site-title"><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+			<h1 id="site-title"><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 			<img src="<?php esc_url ( header_image() ); ?>" alt="" />
 	</div>
 <?php }
@@ -455,9 +455,23 @@ add_action( 'widgets_init', 'pilcrow_widgets_init' );
  * @since pilcrow 1.0
  */
 function pilcrow_current_color_scheme() {
-	$options = get_option( 'pilcrow_theme_options' );
-
+	$options = pilcrow_get_theme_options();
 	return $options['color_scheme'];
+}
+
+/**
+ *  Returns the current pilcrow theme options, with default values as fallback
+ *
+ * @since pilcrow 1.0
+ */
+function pilcrow_get_theme_options() {
+	$defaults = array(
+		'color_scheme' => 'light',
+		'theme_layout' => 'content-sidebar',
+	);
+	$options = get_option( 'pilcrow_theme_options', $defaults );
+
+	return $options;
 }
 
 /**
@@ -466,20 +480,24 @@ function pilcrow_current_color_scheme() {
 function pilcrow_color_registrar() {
 	$color_scheme = pilcrow_current_color_scheme();
 
-	if ( 'dark' == pilcrow_current_color_scheme() ) {
-		wp_register_style( 'dark', get_template_directory_uri() . '/colors/dark.css', null, null );
-		wp_enqueue_style( 'dark' );
-	}
-	if ( 'brown' == pilcrow_current_color_scheme() ) {
-		wp_register_style( 'brown', get_template_directory_uri() . '/colors/brown.css', null, null );
-		wp_enqueue_style( 'brown' );
-	}
-	if ( 'red' == pilcrow_current_color_scheme() ) {
-		wp_register_style( 'red', get_template_directory_uri() . '/colors/red.css', null, null );
-		wp_enqueue_style( 'red' );
+	switch ( $color_scheme ) {
+		case 'dark':
+			wp_register_style( 'dark', get_template_directory_uri() . '/colors/dark.css', null, null );
+			wp_enqueue_style( 'dark' );
+			break;
+		case 'brown':
+			wp_register_style( 'brown', get_template_directory_uri() . '/colors/brown.css', null, null );
+			wp_enqueue_style( 'brown' );
+			break;
+		case 'red':
+			wp_register_style( 'red', get_template_directory_uri() . '/colors/red.css', null, null );
+			wp_enqueue_style( 'red' );
+			break;
+		default:
+			break;
 	}
 }
-add_action( 'wp_print_styles', 'pilcrow_color_registrar' );
+add_action( 'wp_enqueue_scripts', 'pilcrow_color_registrar' );
 
 /**
  *  Returns the current pilcrow layout as selected in the theme options
@@ -487,7 +505,7 @@ add_action( 'wp_print_styles', 'pilcrow_color_registrar' );
  * @since pilcrow 1.0
  */
 function pilcrow_current_layout() {
-	$options = get_option( 'pilcrow_theme_options' );
+	$options = pilcrow_get_theme_options();
 	$current_layout = $options['theme_layout'];
 
 	$two_columns = array( 'content-sidebar', 'sidebar-content' );

@@ -48,7 +48,7 @@
 	wp_list_pages(array('title_li' => false));
 	echo("</ul>\n");
 
-	echo("<h3>" ._('Posts', WEAVER_TRANS) . "</h3><ul class='xoxo sitemap-pages-month'>\n");
+	echo("<h3>" . __('Posts', WEAVER_TRANS) . "</h3><ul class='xoxo sitemap-pages-month'>\n");
 	wp_get_archives(array('type' => 'monthly', 'show_post_count' => true));
 	echo("</ul>\n");
 
