@@ -234,15 +234,18 @@ class OpenLab_Admin_Bar {
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-messages', // @todo Unread message count
-			'title'  => 'My Messages',
+			'id'     => 'my-messages',
+			'title'  => sprintf( 'My Messages (%d)', bp_get_total_unread_messages_count() ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 
+		$invites = groups_get_invites_for_user();
+		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-invitations', // @todo Invitations count
-			'title'  => 'My Invitations',
+			'id'     => 'my-invitations',
+			'title'  => sprintf( 'My Invitations (%d)', $invite_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
 		) );
 
