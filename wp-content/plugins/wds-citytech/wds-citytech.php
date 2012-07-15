@@ -616,7 +616,7 @@ function wds_load_group_type( $group_type ){
 				$checked="checked";
 			}
 
-			if($group_type=="course"){
+			if( $group_type=="course" || $group_type == 'portfolio' ){
 				$onclick='onclick="wds_load_group_departments();"';
 			} else {
 				$onclick = '';
@@ -767,6 +767,9 @@ function wds_bp_group_meta(){
 	}
 	?>
 
+	<?php /* @todo - Who should see this? Anyone? */ ?>
+	<?php /*
+
         <table>
         <tr>
         <td>Type:</td>
@@ -786,6 +789,8 @@ function wds_bp_group_meta(){
         </select></td>
         </tr>
         </table>
+
+        */ ?>
 
       <div id="wds-group-type"></div>
       <?php //Copy Site
@@ -812,7 +817,7 @@ function wds_bp_group_meta(){
 		<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 
 		<table class="form-table groupblog-setup">
-			<?php if ( $group_type != "course" ) : ?>
+			<?php if ( $group_type != "course" && $group_type != 'portfolio' ) : ?>
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
@@ -821,9 +826,12 @@ function wds_bp_group_meta(){
 				</tr>
 			<?php else : ?>
 		    		<?php $show_website = 'block' ?>
-		    		<tr class="form-field form-required">
-		    			<th>Site Details</th>
-		    		</tr>
+
+		    		<?php if ( 'course' == $group_type ) : ?>
+					<tr class="form-field form-required">
+						<th>Site Details</th>
+					</tr>
+				<?php endif ?>
 			<?php endif ?>
 
 			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
