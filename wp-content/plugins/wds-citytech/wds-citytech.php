@@ -591,24 +591,6 @@ function wds_load_group_type( $group_type ){
 		$group_type = $_POST['group_type'];
 	}
 
-	/**
-	 * Active/inactive toggle
-	 */
-	if ( groups_get_groupmeta( bp_get_current_group_id(), 'openlab_group_active_status' ) == 'inactive' ) {
-		$active_checked = '';
-		$inactive_checked = ' checked="checked" ';
-	} else {
-		$inactive_checked = '';
-		$active_checked = ' checked="checked" ';
-	}
-
-	$return .= '<p class="ol-tooltip">Will your ' . ucwords( $group_type ) . ' be in use this semester? This will help users find currently active '. ucwords( $group_type ) . 's.</p>';
-	$return .= '<div id="active-toggle">* ';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_active" value="active" ' . $active_checked . ' /> <label for="group_is_active">Active</label>';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_inactive" value="inactive" ' . $inactive_checked . ' /> <label for="group_is_inactive">Inactive</label>';
-	$return .= ' (required)';
-	$return .= '</div>';
-
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
@@ -1002,12 +984,6 @@ function wds_bp_group_meta_save($group) {
 	if ( isset($_POST['group_project_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type']);
 	}
-
-	if ( isset( $_POST['group_active_status'] ) ) {
-		$status = 'inactive' == $_POST['group_active_status'] ? 'inactive' : 'active';
-		groups_update_groupmeta( $group->id, 'openlab_group_active_status', $status );
-	}
-
 
 	/*//WIKI
 	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {

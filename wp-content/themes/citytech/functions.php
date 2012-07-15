@@ -339,7 +339,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
-		'active_status' => 'all',
 		'show_hidden'   => true,
 		'group_type'	=> 'club',
 		'get_activity'	=> true
@@ -350,22 +349,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
-
-	if ( 'all' != $r['active_status'] ) {
-		// For legacy reasons, not all active groups are marked 'active'
-		if ( 'inactive' == $r['active_status'] ) {
-			$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} b ON (a.group_id = b.group_id) " );
-			$where  .= $wpdb->prepare( " AND b.meta_key = 'openlab_group_active_status' AND b.meta_value = %s ", $r['active_status'] );
-		} else {
-			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
-			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
-
-			if ( !empty( $inactive_groups ) ) {
-				$inactive_groups_sql = implode( ',', $inactive_groups );
-				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
-			}
-		}
-	}
 
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
