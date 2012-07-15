@@ -214,14 +214,16 @@ class OpenLab_Admin_Bar {
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' )
 		) );
 
-		// @todo This will need to be conditional, and we'll need to be dynamic about
-		// href generation. But not strategicially dynamic
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-portfolio',
-			'title'  => 'My Portfolio',
-			'href'   => bp_loggedin_user_domain()
-		) );
+		// Only show a My Portfolio link for users who actually have one
+		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
+		if ( !empty( $portfolio_url ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-portfolio',
+				'title'  => 'My Portfolio',
+				'href'   => $portfolio_url
+			) );
+		}
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
