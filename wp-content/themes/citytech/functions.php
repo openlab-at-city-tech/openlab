@@ -606,4 +606,41 @@ function show_site_posts_and_comments() {
 	}
 }
 
+
+/**
+ * Markup for groupblog privacy settings
+ */
+function openlab_site_privacy_settings_markup( $site_id = 0 ) {
+	global $blogname, $current_site;
+
+	if ( !$site_id ) {
+		$site_id = get_current_blog_id();
+	}
+
+	$blog_name   = get_blog_option( $site_id, 'blogname' );
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+	$group_type  = openlab_get_current_group_type( 'case=upper' );
+?>
+
+<br/>
+	<input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private1"><?php _e('Allow search engines to index this site'); ?></label>
+<br/>
+	<input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />
+	<label for="blog-private0"><?php _e('Ask search engines not to index this site'); ?></label>
+
+<p class="description tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
+<br/>
+	<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private-1"><?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+<br/>
+	<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> />
+	<label for="blog-private-2"><?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
+<br/>
+	<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> />
+	<label for="blog-private-3">I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+	<?php
+}
+
+
 ?>

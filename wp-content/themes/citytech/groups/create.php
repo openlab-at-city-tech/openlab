@@ -135,6 +135,11 @@ if ( 'portfolio' == $group_type ) {
 
 					<?php do_action( 'bp_after_group_settings_creation_step' ); ?>
 
+					<?php if ( $groupblog_id = openlab_get_site_id_by_group_id() ) : ?>
+						<h5>Portfolio Site</h5>
+						<?php openlab_site_privacy_settings_markup( $groupblog_id ) ?>
+					<?php endif ?>
+
 					<?php wp_nonce_field( 'groups_create_save_group-settings' ) ?>
 
 				<?php endif; ?>

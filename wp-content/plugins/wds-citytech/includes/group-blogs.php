@@ -26,6 +26,29 @@ function openlab_get_site_id_by_group_id( $group_id = 0 ) {
 	return (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 }
 
+/**
+ * Use this function to get the URL of a group's site. It'll work whether the site is internal
+ * or external
+ *
+ * @param int $group_id
+ */
+function openlab_get_group_site_url( $group_id = 0 ) {
+	if ( !$group_id ) {
+		$group_id = openlab_fallback_group();
+	}
+
+	$site_url = '';
+
+	// First check for an internal site, then external
+	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+		$site_url = get_blog_option( $site_id, 'siteurl' );
+	} else {
+		$site_url = openlab_get_external_site_url_by_group_id( $group_id );
+	}
+
+	return $site_url;
+}
+
 
 ////////////////////////
 /// MEMBERSHIP SYNC ////

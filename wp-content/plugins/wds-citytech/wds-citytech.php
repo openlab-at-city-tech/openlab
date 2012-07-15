@@ -800,12 +800,6 @@ function wds_bp_group_meta(){
 		$template = "template-" . strtolower( $group_type );
 		$blog_details = get_blog_details( $template );
 
-		/* Temp until I have a Portfolio template site */
-		if ( empty( $blog_details ) ) {
-			$blog_details = new stdClass;
-			$blog_details->blog_id = 0;
-		}
-
 		?>
 		<style type="text/css">
 		.disabled-opt {
@@ -1000,7 +994,11 @@ function wds_bp_group_meta_save($group) {
 
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
-	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
+	if ( isset( $_POST['wds_website_check'] ) ||
+	     openlab_is_course( $group->id ) ||
+	     !empty( $is_course ) ||
+	     openlab_is_portfolio( $group->id )
+	) {
 
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
 
@@ -1031,6 +1029,10 @@ function wds_bp_group_meta_save($group) {
 			if ( !empty( $_POST['external-comments-url'] ) ) {
 				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
 			}
+		}
+
+		if ( openlab_is_portfolio( $group->id ) ) {
+			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
 		}
 	}
 
@@ -1083,6 +1085,7 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 function ra_copy_blog_page($group_id) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
+
 	if( !empty( $blog['domain'] ) && $group_id){
 	  $wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 	  if(!defined('SUNRISE') || $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->dmtable}'") != $wpdb->dmtable) {
@@ -1217,19 +1220,6 @@ function ra_copy_blog_page($group_id) {
 						  } else {
 							  update_option('rewrite_rules', '');
 						  }
-
-						  //creaTE UPLOAD DOCS PAGE
-						  // Psyche!
-						  /*
-						  $args = array (
-							  'post_title'	=>	'Upload Documents',
-							  'post_content'	=>	'[lab-docs]',
-							  'post_status'	=>	'publish',
-							  'post_author'	=>	$user_ID,
-							  'post_type'		=>	'page'
-						  );
-						  wp_insert_post( $args );
-						  */
 
 						  restore_current_blog();
 						  $msg = __('Blog Copied');
