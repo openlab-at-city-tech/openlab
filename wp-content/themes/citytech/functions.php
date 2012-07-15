@@ -35,7 +35,7 @@ function cuny_remove_default_widget_areas() {
 	unregister_sidebar('sidebar-alt');
 }
 /** Add support for custom background **/
-add_custom_background();
+add_theme_support( 'custom-background', array() );
 //add_theme_support( 'genesis-footer-widgets', 5 );
 
 add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
