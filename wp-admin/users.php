@@ -33,7 +33,7 @@ get_current_screen()->add_help_tab( array(
 	'content' => '<p>' . __('You can customize the display of this screen in a number of ways:') . '</p>' .
 					'<ul>' .
 					'<li>' . __('You can hide/display columns based on your needs and decide how many users to list per screen using the Screen Options tab.') . '</li>' .
-					'<li>' . __('You can filter the list of users by User Role using the text links in the upper left to show All, Administrator, Editor, Author, Contributor, or Subscriber. The default view is to show all users.  Unused User Roles are not listed.') . '</li>' .
+					'<li>' . __('You can filter the list of users by User Role using the text links in the upper left to show All, Administrator, Editor, Author, Contributor, or Subscriber. The default view is to show all users. Unused User Roles are not listed.') . '</li>' .
 					'<li>' . __('You can view all posts made by a user by clicking on the number under the Posts column.') . '</li>' .
 					'</ul>'
 ) );
@@ -100,10 +100,11 @@ case 'promote':
 
 		if ( ! current_user_can('promote_user', $id) )
 			wp_die(__('You can&#8217;t edit that user.'));
-		// The new role of the current user must also have the promote_users cap or be a super admin
-		if ( $id == $current_user->ID && ! is_super_admin() && ! $wp_roles->role_objects[ $_REQUEST['new_role'] ]->has_cap('promote_users') ) {
-			$update = 'err_admin_role';
-			continue;
+		// The new role of the current user must also have the promote_users cap or be a multisite super admin
+		if ( $id == $current_user->ID && ! $wp_roles->role_objects[ $_REQUEST['new_role'] ]->has_cap('promote_users')
+			&& ! ( is_multisite() && is_super_admin() ) ) {
+				$update = 'err_admin_role';
+				continue;
 		}
 
 		// If the user doesn't already belong to the blog, bail.
@@ -337,6 +338,7 @@ default:
 		wp_redirect( add_query_arg( 'paged', $total_pages ) );
 		exit;
 	}
+
 	include('./admin-header.php');
 
 	$messages = array();
@@ -345,10 +347,16 @@ default:
 		case 'del':
 		case 'del_many':
 			$delete_count = isset($_GET['delete_count']) ? (int) $_GET['delete_count'] : 0;
-			$messages[] = '<div id="message" class="updated"><p>' . sprintf(_n('%s user deleted', '%s users deleted', $delete_count), $delete_count) . '</p></div>';
+			$messages[] = '<div id="message" class="updated"><p>' . sprintf( _n( 'User deleted.', '%s users deleted.', $delete_count ), number_format_i18n( $delete_count ) ) . '</p></div>';
 			break;
 		case 'add':
-			$messages[] = '<div id="message" class="updated"><p>' . __('New user created.') . '</p></div>';
+			if ( isset( $_GET['id'] ) && ( $user_id = $_GET['id'] ) && current_user_can( 'edit_user', $user_id ) ) {
+				$messages[] = '<div id="message" class="updated"><p>' . sprintf( __( 'New user created. <a href="%s">Edit user</a>' ),
+					esc_url( add_query_arg( 'wp_http_referer', urlencode( stripslashes( $_SERVER['REQUEST_URI'] ) ),
+						self_admin_url( 'user-edit.php?user_id=' . $user_id ) ) ) ) . '</p></div>';
+			} else {
+				$messages[] = '<div id="message" class="updated"><p>' . __( 'New user created.' ) . '</p></div>';
+			}
 			break;
 		case 'promote':
 			$messages[] = '<div id="message" class="updated"><p>' . __('Changed roles.') . '</p></div>';
