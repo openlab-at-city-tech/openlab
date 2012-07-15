@@ -249,19 +249,28 @@ class OpenLab_Admin_Bar {
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
 		) );
 
-		// @todo Do we really want this kind of separator?
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-openlab-separator',
-			'title'  => '-----------'
-		) );
+		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
+		// this panel only works if looking at a site where the user has Dashboard-level
+		// permissions. So we have to find a valid site for the logged in user.
+		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
+		$primary_site_url = get_blog_option( $primary_site_id, 'siteurl' );
 
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-dashboard',
-			'title'  => 'My Dashboard',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' ) // @todo Where does this go?
-		) );
+		if ( !empty( $primary_site_id ) && !empty( $primary_site_url ) ) {
+
+			// @todo Do we really want this kind of separator?
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-openlab-separator',
+				'title'  => '-----------'
+			) );
+
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-dashboard',
+				'title'  => 'My Dashboard',
+				'href'   => $primary_site_url . '/wp-admin/my-sites.php'
+			) );
+		}
 	}
 
 	/**
