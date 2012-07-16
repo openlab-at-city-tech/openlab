@@ -67,6 +67,9 @@
 		<?php endif; ?>
 
 	<?php } else {
+
+		locate_template( array( 'groups/single/wds-bp-action-logics.php' ), true );
+
 	} ?>
 
 	<?php do_action( 'bp_after_group_body' ) ?>

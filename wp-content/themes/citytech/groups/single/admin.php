@@ -1,4 +1,4 @@
-<?php global $bp; 
+<?php global $bp;
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );?>
 
 <div class="item-list-tabs no-ajax" id="subnav">
@@ -24,11 +24,15 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
 
-	<p>
-		<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
-		<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
-		<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
-	</p>
+	<?php if ( !openlab_is_portfolio() ) : ?>
+
+		<p>
+			<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
+			<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
+			<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
+		</p>
+
+	<?php endif ?>
 
 	<?php do_action( 'bp_after_group_details_admin' ); ?>
 
@@ -202,13 +206,13 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 						<h5>
 							<?php bp_group_member_link() ?>
-							
+
 							<?php if ( bp_get_group_member_is_banned() ) _e( '(banned)', 'buddypress'); ?>
 
-							<span class="small"> - 
-							
+							<span class="small"> -
+
 							<?php if ( bp_get_group_member_is_banned() ) : ?>
-								
+
 								<a href="<?php bp_group_member_unban_link() ?>" class="confirm" title="<?php _e( 'Unban this member', 'buddypress' ) ?>"><?php _e( 'Remove Ban', 'buddypress' ); ?></a>
 
 							<?php else : ?>

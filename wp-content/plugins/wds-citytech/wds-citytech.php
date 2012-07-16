@@ -717,7 +717,7 @@ function wds_load_group_type( $group_type ){
 
 	$return.='</table>';
 
-	if($group_type=="course"){
+	if($group_type=="course" || 'portfolio' == $group_type ){
 		$return.='<script>wds_load_group_departments();</script>';
 	}
 	if($echo){
