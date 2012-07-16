@@ -133,7 +133,10 @@ jQuery(document).ready(function($){
 	new_old_switch( 'new' );
 
 	/* AJAX validation for external RSS feeds */
-	$('#find-feeds').on( 'click', function(e) { do_external_site_query(e); } );
+	$('#find-feeds').on( 'click', function(e) {
+		e.preventDefault();
+		do_external_site_query(e);
+	} );
 
 	/* "Set up a site" toggle */
 	var setuptoggle = $('input[name="wds_website_check"]');
