@@ -167,9 +167,13 @@ function cuny_buddypress_group_actions() { ?>
 			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
 			<?php
 			do_action( 'bp_group_header_actions' ); ?>
+
+			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
 			<ul>
 				<?php cuny_get_options_nav();?>
 			</ul>
+			<?php endif ?>
+
 			<?php do_action( 'bp_group_options_nav' ) ?>
 
 		</div><!-- #item-buttons -->

@@ -178,4 +178,11 @@ function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
 	bp_update_user_meta( $user_id, 'portfolio_group_id', $group_id );
 }
 
+/**
+ * Is this my portfolio?
+ */
+function openlab_is_my_portfolio() {
+	return bp_is_group() && openlab_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) == bp_loggedin_user_id();
+}
+
 ?>
