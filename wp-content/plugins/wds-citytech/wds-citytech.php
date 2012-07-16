@@ -1044,6 +1044,16 @@ function wds_bp_group_meta_save($group) {
 		}
 	}
 
+	// Site privacy
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
+		}
+	}
+
 	// Feed URLs (step two of group creation)
 	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {
 		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );

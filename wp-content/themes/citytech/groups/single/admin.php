@@ -46,15 +46,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php do_action( 'bp_before_group_settings_admin' ); ?>
 
-	<?php if ( function_exists('bp_wire_install') ) : ?>
-
-		<div class="checkbox">
-			<label><input type="checkbox" name="group-show-wire" id="group-show-wire" value="1"<?php bp_group_show_wire_setting() ?>/> <?php _e( 'Enable comment wire', 'buddypress' ) ?></label>
-		</div>
-
-	<?php endif; ?>
-
-	<?php if ( function_exists('bp_forums_is_installed_correctly') ) : ?>
+	<?php if ( function_exists('bp_forums_is_installed_correctly') && !openlab_is_portfolio() ) : ?>
 
 		<?php if ( bp_forums_is_installed_correctly() ) : ?>
 
@@ -68,7 +60,9 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<hr />
 
-	<h4><?php _e( 'Privacy Options', 'buddypress' ); ?></h4>
+	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
+
+	<h5>Portfolio Profile</h5>
 
 	<div class="radio">
 		<label>
@@ -101,6 +95,13 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</ul>
 		</label>
 	</div>
+
+	<?php /* Site privacy markup */ ?>
+
+	<h5>Portfolio Site</h5>
+	<?php if ( $site_id = openlab_get_site_id_by_group_id() ) : ?>
+		<?php openlab_site_privacy_settings_markup( $site_id ) ?>
+	<?php endif ?>
 
 	<?php do_action( 'bp_after_group_settings_admin' ); ?>
 
