@@ -216,8 +216,12 @@ function cuny_members_pagination_count($member_name)
 		echo $pag;
 }
 
-//a variation on bp_get_options_nav to match the design
-//main change here at the moment - changing "home" to "profile"
+/**
+ * a variation on bp_get_options_nav to match the design
+ * main change here at the moment - changing "home" to "profile"
+ *
+ * @todo Clean up this godawful mess. There are filters for this stuff - bbg
+ */
 function cuny_get_options_nav() {
 	global $bp;
 
@@ -263,6 +267,29 @@ function cuny_get_options_nav() {
 		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
 	}
 }//end cuny_get_options_nav
+
+/**
+ * Reach into the item nav menu and remove stuff as necessary
+ *
+ * Hooked to bp_screens at 1 because apparently BP is broken??
+ */
+function openlab_modify_options_nav() {
+	global $bp;
+
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		foreach( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+			if ( 'home' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
+			} else if ( 'admin' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
+			} else {
+				unset( $bp->bp_options_nav[$bp->current_item][$key] );
+			}
+
+		}
+	}
+}
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 //custom menu locations for OpenLab
 register_nav_menus( array(

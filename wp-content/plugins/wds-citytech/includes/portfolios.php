@@ -61,6 +61,17 @@ function openlab_user_portfolio_url( $user_id = 0 ) {
 	}
 
 /**
+ * Get the user id of a portfolio user from the portfolio group's id
+ */
+function openlab_get_user_id_from_portfolio_group_id( $group_id = 0 ) {
+	global $wpdb;
+
+	$user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'portfolio_group_id' AND meta_value = %s", $group_id ) );
+
+	return $user_id;
+}
+
+/**
  * Echoes the output of openlab_get_portfolio_label()
  */
 function openlab_portfolio_label( $args = array() ) {
@@ -90,15 +101,21 @@ function openlab_portfolio_label( $args = array() ) {
 	 */
 	function openlab_get_portfolio_label( $args = array() ) {
 		$default_user_id   = openlab_fallback_user();
+		$default_group_id  = openlab_fallback_group();
 
 		$defaults = array(
 			'user_id'      => $default_user_id,
+			'group_id'     => $default_group_id,
 			'user_type'    => '',
 			'case'         => 'lower',
 			'leading_a'    => false
 		);
 
 		$r = wp_parse_args( $args, $defaults );
+
+		if ( empty( $r['user_id'] ) && !empty( $r['group_id'] ) ) {
+			$r['user_id'] = openlab_get_user_id_from_portfolio_group_id( $r['group_id'] );
+		}
 
 		if ( empty( $r['user_type'] ) ) {
 			$r['user_type'] = xprofile_get_field_data( 'Account Type', $r['user_id'] );
