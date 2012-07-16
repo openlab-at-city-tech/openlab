@@ -64,7 +64,8 @@ if ( 'portfolio' == $group_type ) {
 
 					<?php do_action( 'bp_before_group_settings_creation_step' ); ?>
 
-					<?php if ( function_exists('bp_forums_is_installed_correctly') ) : ?>
+					<?php /* Don't show Discussion toggle for portfolios */ ?>
+					<?php if ( !openlab_is_portfolio() && function_exists( 'bp_forums_is_installed_correctly' ) ) : ?>
 						<?php if ( bp_forums_is_installed_correctly() ) : ?>
 							<div class="checkbox">
 								<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php if ( bp_get_new_group_enable_forum() ) { ?> checked="checked"<?php } ?> /> <?php _e('Enable discussion', 'buddypress') ?></label>
@@ -82,36 +83,62 @@ if ( 'portfolio' == $group_type ) {
 
 					<h4><?php _e( 'Privacy Options', 'buddypress' ); ?></h4>
 
+					<?php /* @todo This should probably be modded for all group types */ ?>
+					<?php if ( openlab_is_portfolio() ) : ?>
+						<h5>Portfolio Profile</h5>
+					<?php endif ?>
+
 					<div class="radio">
 						<label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
 							<strong><?php _e( 'This is a public '.$group_type, 'buddypress' ) ?></strong>
 							<ul>
-								<li><?php _e( 'Any site member can join this '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php if ( openlab_is_portfolio() ) : ?>
+									<li>Anyone can see this Portfolio.</li>
+								<?php else : ?>
+									<li><?php _e( 'Any site member can join this ' . $group_type . '.', 'buddypress' ) ?></li>
+								<?php endif ?>
+
 								<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
 								<li><?php _e( ucfirst($group_type).' content and activity will be visible to any site member.', 'buddypress' ) ?></li>
 							</ul>
 						</label>
 
-						<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
-							<ul>
-								<li><?php _e( 'Only users who request membership and are accepted can join the '.$group_type.'.', 'buddypress' ) ?></li>
-								<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
-								<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
-							</ul>
-						</label>
+						<?php /* Portfolios don't have a Private setting */ ?>
+						<?php if ( !openlab_is_portfolio() ) : ?>
+
+							<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
+								<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
+								<ul>
+									<li><?php _e( 'Only users who request membership and are accepted can join the '.$group_type.'.', 'buddypress' ) ?></li>
+									<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
+									<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+								</ul>
+							</label>
+
+						<?php endif ?>
 
 						<label><input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e('This is a hidden '.$group_type, 'buddypress') ?></strong>
+							<strong><?php _e('This is a hidden ' . $group_type, 'buddypress') ?></strong>
 							<ul>
-								<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php if ( !openlab_is_portfolio() ) : ?>
+									<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php endif ?>
+
 								<li><?php _e( 'This '.$group_type.' will not be listed in the '.$group_type.'s directory or search results.', 'buddypress' ) ?></li>
-								<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+
+								<?php if ( !openlab_is_portfolio() ) : ?>
+									<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php endif ?>
 							</ul>
 						</label>
 					</div>
 
 					<?php do_action( 'bp_after_group_settings_creation_step' ); ?>
+
+					<?php if ( $groupblog_id = openlab_get_site_id_by_group_id() ) : ?>
+						<h5>Portfolio Site</h5>
+						<?php openlab_site_privacy_settings_markup( $groupblog_id ) ?>
+					<?php endif ?>
 
 					<?php wp_nonce_field( 'groups_create_save_group-settings' ) ?>
 

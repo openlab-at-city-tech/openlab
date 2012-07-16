@@ -9,20 +9,20 @@ edCanvas = document.getElementById('posttext');
 
 // Overload global send_to_editor media function.
 send_to_editor = function( media ) {
-	if ( jQuery('textarea#posttext').length ) {
-		jQuery('textarea#posttext').val( jQuery('textarea#posttext').val() + media );
+	if ( $( 'textarea#posttext' ).length ) {
+		$( 'textarea#posttext' ).val( $( 'textarea#posttext' ).val() + media );
 		tb_remove();
 	}
 };
 
 // Live events can be bound before $(document).ready fires.
-jQuery('#comment-submit').live( 'click', function() {
+$( '#comment-submit' ).live( 'click', function() {
 	if (loggedin == true)
 		window.onbeforeunload = null;
 });
 
 window.onbeforeunload = function (e) {
-	if (jQuery('#posttext').val() || jQuery('#comment').val()) {
+	if ( $( '#posttext' ).val() || $( '#comment' ).val() ) {
 		var e = e || window.event;
 		if (e) { // For IE and Firefox
 			e.returnValue = p2txt.unsaved_changes;
@@ -277,10 +277,14 @@ function newPost(trigger) {
 
 	var submitProgress = thisForm.find('span.progress');
 
-	var post_subscribe = ( $('#post_subscribe').prop('checked') ) ? 'post_subscribe' : 'false';
+	var post_subscribe = 'false';
+	if ( $( '#post_subscribe' ).attr( 'checked' ) ) // WP3.1 Compat: Best to use .prop()
+		post_subscribe = 'post_subscribe';
+
 	var posttext = $.trim($('#posttext').val());
 
-	if(jQuery('.no-posts')) jQuery('.no-posts').hide();
+	if ( $( '.no-posts' ) )
+		$( '.no-posts' ).hide();
 
 	if ("" == posttext) {
 		$("label#posttext_error").text('This field is required').show().focus();
@@ -291,7 +295,13 @@ function newPost(trigger) {
 	if (typeof ajaxCheckPosts != "undefined")
 		ajaxCheckPosts.abort();
 	$("label#posttext_error").hide();
-	thisFormElements.prop('disabled', true);
+
+	// WP3.1 Compat: Best to use only .prop()
+	if ( 'prop' in thisFormElements )
+		thisFormElements.prop( 'disabled', true );
+	else
+		thisFormElements.attr( 'disabled', 'disabled' );
+
 	thisFormElements.addClass('disabled');
 
 	submitProgress.show();
@@ -299,18 +309,25 @@ function newPost(trigger) {
 	// Only continue if we have authorization and a working connection to the server.
 	if ( isUserLoggedIn && 'logged_in' != loggedInOut() ) {
 		submitProgress.hide();
-		thisFormElements.prop( 'disabled', false );
+
+		// WP3.1 Compat: Best to use only .prop()
+		if ( 'prop' in thisFormElements )
+			thisFormElements.prop( 'disabled', false );
+		else
+			thisFormElements.removeAttr( 'disabled' );
+
 		thisFormElements.removeClass( 'disabled' );
 		return false;
 	}
 
 	var tags = $('#tags').val();
-	if (tags == p2txt.tagit) tags = '';
-	var post_cat = $('#post_cat').val();
+	if (tags == p2txt.tagit)
+		tags = '';
+	var post_format = $('#post_format').val();
 	var post_title = $('#posttitle').val();
 	var post_citation = $('#postcitation').val();
 
-	var args = {action: 'new_post', _ajax_post:nonce, posttext: posttext, tags: tags, post_cat: post_cat, post_title: post_title, post_citation: post_citation, post_subscribe: post_subscribe };
+	var args = {action: 'new_post', _ajax_post:nonce, posttext: posttext, tags: tags, post_format: post_format, post_title: post_title, post_citation: post_citation, post_subscribe: post_subscribe };
 	var errorMessage = '';
 	$.ajax({
 		type: "POST",
@@ -327,8 +344,13 @@ function newPost(trigger) {
 			if(errorMessage != '')
 				newNotification(errorMessage);
 
-			if ( post_subscribe == "post_subscribe" )
-				$('#post_subscribe').prop('checked', false);
+			if ( post_subscribe == "post_subscribe" ) {
+				// WP3.1 Compat: Best to use only .prop()
+				if ( 'prop' in thisFormElements )
+					$( '#post_subscribe' ).prop( 'checked', false );
+				else
+					$( '#post_subscribe' ).removeAttr( 'checked' );
+			}
 
 			//if ($.suggest)
 			//	$('ul.ac_results').css('display', 'none'); // Hide tag suggestion box if displayed
@@ -340,12 +362,24 @@ function newPost(trigger) {
 			}
 			$('#posttext').height('auto');
 			submitProgress.fadeOut();
-			thisFormElements.prop('disabled', false);
+
+			// WP3.1 Compat: Best to use only .prop()
+			if ( 'prop' in thisFormElements )
+				thisFormElements.prop( 'disabled', false );
+			else
+				thisFormElements.removeAttr( 'disabled' );
+
 			thisFormElements.removeClass('disabled');
 		  },
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			submitProgress.fadeOut();
-			thisFormElements.prop('disabled', false);
+
+			// WP3.1 Compat: Best to use only .prop()
+			if ( 'prop' in thisFormElements )
+				thisFormElements.prop( 'disabled', false );
+			else
+				thisFormElements.removeAttr( 'disabled' );
+
 			thisFormElements.removeClass('disabled');
 		},
 		timeout: 60000
@@ -397,7 +431,12 @@ function newComment(trigger) {
 	if ('inline' == $("label#commenttext_error").css('display'))
 		$("label#commenttext_error").hide();
 
-	thisFormElements.prop('disabled', true);
+	// WP3.1 Compat: Best to use only .prop()
+	if ( 'prop' in thisFormElements )
+		thisFormElements.prop( 'disabled', true );
+	else
+		thisFormElements.attr( 'disabled', 'disabled' );
+
 	thisFormElements.addClass('disabled');
 
 	submitProgress.show();
@@ -406,15 +445,28 @@ function newComment(trigger) {
 	// and check for a working connection to the server, to avoid hanging comments.
 	if ( isUserLoggedIn && ( 'logged_in' != loggedInOut() ) ) {
 		submitProgress.hide();
-		thisFormElements.prop('disabled', false);
+
+		// WP3.1 Compat: Best to use only .prop()
+		if ( 'prop' in thisFormElements )
+			thisFormElements.prop( 'disabled', false );
+		else
+			thisFormElements.removeAttr( 'disabled', 'disabled' );
+
 		thisFormElements.removeClass('disabled');
 		return false;
 	}
 
 	var comment_post_ID = $('#comment_post_ID').val();
 	var comment_parent = $('#comment_parent').val();
-	var subscribe_blog = ( $('#subscribe_blog').prop('checked') ) ? 'subscribe' : 'false';
-	var subscribe = ( $('#subscribe').prop('checked') ) ? 'subscribe' : 'false';
+
+	var subscribe = 'false';
+	if ( $( '#subscribe' ).attr( 'checked' ) ) // WP3.1 Compat: Best to use .prop()
+		subscribe = 'subscribe';
+
+	var subscribe_blog = 'false';
+	if ( $( '#subscribe_blog' ).attr( 'checked' ) ) // WP3.1 Compat: Best to use .prop()
+		subscribe_blog = 'subscribe';
+
 	var dataString = {action: 'new_comment' , _ajax_post: nonce, comment: commenttext,  comment_parent: comment_parent, comment_post_ID: comment_post_ID, subscribe: subscribe, subscribe_blog: subscribe_blog};
 	if (!isUserLoggedIn) {
 		dataString['author'] = $('#author').val();
@@ -440,7 +492,12 @@ function newComment(trigger) {
 				if (!isPage)
 					toggleUpdates('unewcomments');
 
-				thisFormElements.prop('disabled', false);
+				// WP3.1 Compat: Best to use only .prop()
+				if ( 'prop' in thisFormElements )
+					thisFormElements.prop( 'disabled', false );
+				else
+					thisFormElements.removeAttr( 'disabled' );
+
 				thisFormElements.removeClass('disabled');
 			});
 
@@ -566,9 +623,8 @@ function fluidBadge(value) {
  * Sets up a jQuery-collection of textareas to expand vertically based
  * on their content.
  */
-function autgrow(textareas, min) {
+function autgrow(textareas) {
 	function sizeToContent(textarea) {
-		textarea.style.height = min + 'em';
 		if (textarea.scrollHeight > textarea.clientHeight) {
 			textarea.style.height = textarea.scrollHeight + 'px';
 		}
@@ -605,24 +661,24 @@ function inlineEditPost(postId, element) {
 				this.value = text;
 			}
 		}
-		jQuery(input).focus(onFocus).blur(onBlur);
+		$( input ).focus( onFocus ).blur( onBlur );
 		onBlur.call(input);
 	}
 
-	jQuery.getJSON(ajaxUrl, {action: 'get_post', _inline_edit: nonce, post_ID: 'content-' + postId}, function(post) {
-		var jqe = jQuery(element);
+	$.getJSON( ajaxUrl, { action: 'get_post', _inline_edit: nonce, post_ID: 'content-' + postId }, function( post ) {
+		var jqe = $( element );
 		jqe.addClass('inlineediting');
 		jqe.find('.tags').css({display: 'none'});
 		jqe.find('.postcontent > *').hide();
-		if (post.type == 'page') {
-			jQuery('#main h2').first().hide();
+		if (post.post_type == 'page') {
+			$( '#main h2' ).first().hide();
 		}
 
 		var postContent = jqe.find('.postcontent');
 
 		var titleDiv = document.createElement('div');
 
-		if (post.type == 'post' || post.type == 'page') {
+		if (post.post_format == 'standard' || post.post_type == 'page') {
 			var titleInput = titleDiv.appendChild(
 				document.createElement('input'));
 			titleInput.type = 'text';
@@ -633,7 +689,7 @@ function inlineEditPost(postId, element) {
 		}
 
 		var cite = '';
-		if (post.type == 'quote') {
+		if (post.post_format == 'quote') {
 			var tmpDiv = document.createElement('div');
 			tmpDiv.innerHTML = post.content;
 			var cite = $(tmpDiv).find('cite').remove().html();
@@ -649,11 +705,11 @@ function inlineEditPost(postId, element) {
 		var editor = document.createElement('textarea');
 		editor.className = 'posttext';
 		editor.value = post.content;
-		autgrow($(editor), 3);
+		autgrow($(editor));
 		jqe.find('.postcontent').append(editor);
 
 		var citationDiv = document.createElement('div');
-		if (post.type == 'quote') {
+		if (post.post_format == 'quote') {
 			var citationInput = citationDiv.appendChild(
 				document.createElement('input'));
 			citationInput.type = 'text';
@@ -665,7 +721,7 @@ function inlineEditPost(postId, element) {
 		var bottomDiv = document.createElement('div');
 		bottomDiv.className = 'row2';
 
-		if ( post.type != 'page' ) {
+		if ( post.post_type != 'page' ) {
 			var tagsInput = document.createElement('input');
 			tagsInput.name = 'tags';
 			tagsInput.className = 'tags';
@@ -685,15 +741,15 @@ function inlineEditPost(postId, element) {
 			jqe.find('.tags').css({display: ''});
 			jqe.find('.postcontent > *').show();
 			jqe.removeClass('inlineediting');
-			if (post.type == 'page') {
-				jQuery('#main h2').first().show();
+			if (post.post_type == 'page') {
+				$( '#main h2' ).first().show();
 			}
 		}
 		var buttonsDiv = document.createElement('div');
 		buttonsDiv.className = 'buttons';
 		var saveButton = document.createElement('button');
 		saveButton.innerHTML = p2txt.save;
-		jQuery(saveButton).click(function() {
+		$( saveButton ).click( function() {
 			var tags = ! tagsInput || tagsInput.value == p2txt.tagit ? '' : tagsInput.value;
 			var args = {
 				action:'save_post',
@@ -703,27 +759,27 @@ function inlineEditPost(postId, element) {
 				tags: tags
 			};
 
-			if (post.type == 'post' || post.type == 'page') {
+			if (post.post_format == 'standard' || post.post_type == 'page') {
 				args.title = titleInput.value == p2txt.title ? '' : titleInput.value;
-			} else if (post.type == 'quote') {
+			} else if (post.post_format == 'quote') {
 				args.citation = citationInput.value == p2txt.citation ? '' : citationInput.value;
 			}
 
-			jQuery.post(
+			$.post(
 				ajaxUrl,
 				args,
 				function(result) {
 					// Preserve existing H2 for posts
 					jqe.find('.postcontent').html(
-						(post.type == 'post') ? jqe.find('h2').first() : ''
+						(post.post_format == 'standard') ? jqe.find('h2').first() : ''
 					);
-					if (post.type == 'quote') {
+					if (post.post_format == 'quote') {
 						jqe.find('.postcontent').append('<blockquote>' + result.content + '</blockquote>');
 					} else {
 						jqe.find('.postcontent').append(result.content);
 					}
-					if (post.type == 'page') {
-						jQuery('#main h2').first().html(result.title);
+					if (post.post_type == 'page') {
+						$( '#main h2' ).first().html( result.title );
 					} else {
 						jqe.find('span.tags').html(result.tags);
 						if (!isSingle) {
@@ -739,7 +795,7 @@ function inlineEditPost(postId, element) {
 		});
 		var cancelButton = document.createElement('button');
 		cancelButton.innerHTML = p2txt.cancel;
-		jQuery(cancelButton).click(tearDownEditor);
+		$( cancelButton ).click( tearDownEditor );
 		buttonsDiv.appendChild(saveButton);
 		buttonsDiv.appendChild(cancelButton);
 		bottomDiv.appendChild(buttonsDiv);
@@ -792,7 +848,7 @@ function bindActions(element, type) {
 			var thisPostEditArea;
 			if (inlineEditPosts != 0 && isUserLoggedIn) {
 				thisPostEditArea = $(element).children('div.postcontent').eq(0);
-				jQuery(element).find('a.edit-post-link:first').click(
+				$( element ).find( 'a.edit-post-link:first' ).click(
 					function(e) {
 						var postId = this.rel;
 						inlineEditPost(postId, element);
@@ -925,7 +981,7 @@ $( document ).ready( function() {
 				return(textarea);
 			},
 			plugin : function(settings, original) {
-				autgrow($('textarea', this), 3);
+				autgrow($('textarea', this));
 			}
 		});
 	}
@@ -954,7 +1010,7 @@ $( document ).ready( function() {
 	}
 
 	// Check which posts are visibles and add to array and comment querystring
-	$("#main > ul > li").each(function() {
+	$("#main > ul > li[id]").each(function() {
 		var thisId = $(this).attr('id');
 		vpostId = thisId.substring(thisId.indexOf('-') + 1);
 		postsOnPage.push(thisId);
@@ -962,8 +1018,8 @@ $( document ).ready( function() {
 	});
 
 	// Bind actions to comments and posts
-	jQuery('body .post, body .page').each(function() { bindActions(this, 'post'); });
-	jQuery('body .comment').each(function() { bindActions(this, 'comment'); });
+	$( 'body .post, body .page' ).each( function() { bindActions( this, 'post' ); } );
+	$( 'body .comment' ).each( function() { bindActions( this, 'comment' ); } );
 
 
 	$('#cancel-comment-reply-link').click(function() {
@@ -1220,7 +1276,7 @@ $( document ).ready( function() {
 
 	// Activate autgrow on textareas
 	if (isFrontPage) {
-		autgrow($('#posttext, #comment'), 4);
+		autgrow($('#posttext, #comment'));
 	}
 
 	// Activate tooltips on recent-comments widget
@@ -1228,6 +1284,9 @@ $( document ).ready( function() {
 
 	// Catch new posts submit
 	$("#new_post").submit(function(trigger) {
+		if ( $( 'ul.ui-autocomplete' ).is( ':visible' ) )
+			return false;
+
 		newPost(trigger);
 		trigger.preventDefault();
 	});

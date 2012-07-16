@@ -20,3 +20,16 @@
 #coraline-layouts img {
 	margin: 0 0 0 -2px;
 }
+.update-msg {
+	background-color: #ffffe0;
+	border: 1px solid #e6db55;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin: 15px 0 0;
+	padding: 0 .6em;
+}
+.update-msg p {
+	margin: .5em 0;
+	padding: 2px;
+}

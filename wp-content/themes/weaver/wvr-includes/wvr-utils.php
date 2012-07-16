@@ -39,9 +39,10 @@ function weaver_page_content() {
     // display page content with featured image thumbnail
     /* Check if it has a thumbnail,  and if it's a small one */
     global $post;
-    if (has_post_thumbnail()
+    global $weaverii_header;
+    if (has_post_thumbnail() && !weaver_getopt_checked('ttw_hide_page_featured')
 	&& (  $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'post-thumbnail' ) )  /* $src, $width, $height */
-	&& $image[1] < HEADER_IMAGE_WIDTH) {
+	&& $image[1] < $weaverii_header['width']) {
 	the_post_thumbnail( 'thumbnail' );
     }
     weaver_the_content();
@@ -131,7 +132,7 @@ function weaver_get_page_posts_per() {
 function weaver_get_page_author() {
     $author = weaver_get_per_page_value('ttw_author');
     if (empty($author)) return '';
-    return $adv;
+    return $author;
 }
 
 function weaver_get_per_page_value($name) {
@@ -364,6 +365,11 @@ function weaver_check_perpage_exists($area,$styleid) {
 	return false;
     }
     return true;
+}
+
+function weaver_relative_url($subpath){
+    // generate a relative URL from the site's root
+    return parse_url(trailingslashit(get_template_directory_uri()) . $subpath,PHP_URL_PATH);
 }
 
 function weaver_use_inline_css($css_file) {

@@ -1,14 +1,15 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Displays the content and meta information for a post object.
+ *
+ * @package P2
  */
 ?>
 <li id="prologue-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php
 
-	/**
-	 * POST META
+	/*
+	 * Post meta
 	 */
 
 	if ( ! is_page() ):
@@ -19,7 +20,7 @@
 			get_the_author_meta( 'user_nicename' )
 		); ?>
 
-		<a href="<?php echo esc_attr( $author_posts_url ); ?>" title="<?php echo esc_attr( $posts_by_title ); ?>">
+		<a href="<?php echo esc_attr( $author_posts_url ); ?>" title="<?php echo esc_attr( $posts_by_title ); ?>" class="post-avatar">
 			<?php echo get_avatar( get_the_author_meta('user_email'), 48 ); ?>
 		</a>
 	<?php endif; ?>
@@ -35,7 +36,7 @@
 			<span class="actions">
 				<?php if ( ! is_singular() ) : ?>
 					<?php $before_reply_link = ' | '; ?>
-					<a href="<?php the_permalink(); ?>" class="thepermalink"><?php _e( 'Permalink', 'p2' ); ?></a>
+					<a href="<?php the_permalink(); ?>" class="thepermalink" title="<?php esc_attr_e( 'Permalink', 'p2' ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
 				<?php endif;
 
 				if ( comments_open() && ! post_password_required() ) {
@@ -43,11 +44,11 @@
 							'before'        => isset( $before_reply_link ) ? $before_reply_link : '',
 							'after'         => '',
 							'reply_text'    => __( 'Reply', 'p2' ),
-							'add_below'     => 'prologue'
+							'add_below'     => 'comments'
 						), get_the_ID() );
 				}
 
-				if ( current_user_can( 'edit_post', get_the_ID() ) ) : ?> | <a href="<?php echo ( get_edit_post_link( get_the_ID() ) ); ?>" class="edit-post-link" rel="<?php the_ID(); ?>"><?php _e( 'Edit', 'p2' ); ?></a>
+				if ( current_user_can( 'edit_post', get_the_ID() ) ) : ?> | <a href="<?php echo ( get_edit_post_link( get_the_ID() ) ); ?>" class="edit-post-link" rel="<?php the_ID(); ?>" title="<?php esc_attr_e( 'Edit', 'p2' ); ?>"><?php _e( 'Edit', 'p2' ); ?></a>
 				<?php endif; ?>
 
 				<?php do_action( 'p2_action_links' ); ?>
@@ -61,40 +62,44 @@
 	</h4>
 
 	<?php
-	/**
-	 * CONTENT
+	/*
+	 * Content
 	 */
 	?>
 
 	<div id="content-<?php the_ID(); ?>" class="postcontent">
-		<?php
-		if ( 'status' == p2_get_the_category() || 'link' == p2_get_the_category() ) :
+	<?php
+	/*
+	 * Check the post format and display content accordingly.
+	 * The value should be a valid post format or one of the back compat categories.
+	 */
+	switch ( p2_get_post_format( $post->ID ) ) {
+		case 'status':
+		case 'link':
 			the_content( __( '(More ...)' , 'p2' ) );
-
-		elseif ( 'quote' == p2_get_the_category() ) :
+			break;
+		case 'quote':
 			echo "<blockquote>";
 			p2_quote_content();
 			echo "</blockquote>";
-
-		elseif ( 'post' == p2_get_the_category() ) :
+			break;
+		case 'post':
+		case 'standard':
+		default:
 			p2_title();
 			the_content( __( '(More ...)' , 'p2' ) );
-
-		else :
-			p2_title();
-			the_content( __( '(More ...)' , 'p2' ) );
-
-		endif; ?>
+			break;
+	} ?>
 	</div>
 
 	<?php
-	/**
-	 * COMMENTS
+	/*
+	 * Comments
 	 */
 
 	$comment_field = '<div class="form"><textarea id="comment" class="expand50-100" name="comment" cols="45" rows="3"></textarea></div> <label class="post-error" for="comment" id="commenttext_error"></label>';
 
-	$comment_notes_before = '<p class="comment-notes">' . ( get_option( 'require_name_email' ) ? sprintf( ' ' . __('Required fields are marked %s'), '<span class="required">*</span>' ) : '' ) . '</p>';
+	$comment_notes_before = '<p class="comment-notes">' . ( get_option( 'require_name_email' ) ? sprintf( ' ' . __( 'Required fields are marked %s', 'p2' ), '<span class="required">*</span>' ) : '' ) . '</p>';
 
 	$comment_notes_after = sprintf(
 		'<span class="progress"><img src="%1$s" alt="%2$s" title="%2$s" /></span>',

@@ -376,7 +376,12 @@ function bp_core_activation_notice() {
 	 */
 
 	// Get current theme info
-	$ct = current_theme_info();
+	// Backward-compatibility with WP < 3.4 will be removed in a future release
+	if ( function_exists( 'wp_get_theme' ) ) {
+		$ct = wp_get_theme();
+	} else {
+		$ct = current_theme_info();
+	}
 
 	// The best way to remove this notice is to add a "buddypress" tag to
 	// your active theme's CSS header.

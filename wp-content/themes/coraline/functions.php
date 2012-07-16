@@ -1,15 +1,14 @@
 <?php
 /**
+ * @package WordPress
+ * @subpackage Coraline
+ */
+
+/**
  * Set the content width based on the theme's design and stylesheet.
  */
 if ( ! isset( $content_width ) )
 	$content_width = 500;
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '000000',
-	'link' => '0060ff'
-);
 
 /** Tell WordPress to run coraline_setup() when the 'after_setup_theme' hook is run. */
 add_action( 'after_setup_theme', 'coraline_setup' );
@@ -40,6 +39,9 @@ function coraline_setup() {
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
 
+	// Post Format support. Legacy category chooser will display in Theme Options for sites that set a category before post formats were added.
+	add_theme_support( 'post-formats', array( 'aside', 'gallery' ) );
+
 	// This theme uses post thumbnails
 	add_theme_support( 'post-thumbnails' );
 
@@ -48,10 +50,10 @@ function coraline_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'coraline', TEMPLATEPATH . '/languages' );
+	load_theme_textdomain( 'coraline', get_template_directory() . '/languages' );
 
 	$locale = get_locale();
-	$locale_file = TEMPLATEPATH . "/languages/$locale.php";
+	$locale_file = get_template_directory() . "/languages/$locale.php";
 	if ( is_readable( $locale_file ) )
 		require_once( $locale_file );
 
@@ -449,26 +451,34 @@ add_action( 'widgets_init', 'coraline_remove_recent_comments_style' );
 
 if ( ! function_exists( 'coraline_posted_on' ) ) :
 /**
- * Prints HTML with meta information for the current post—date/time and author.
+ * Prints HTML with meta information for the current post—date/time.
  *
  * @since Coraline 1.0
  */
 function coraline_posted_on() {
-	// use the "byline" class to hide the author name and link. We should make this appear automatically with a multi-author conditional tag in the future
-	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="%4$s"><span class="meta-sep">by</span> %3$s</span>', 'coraline' ),
+	printf( __( '<span class="%1$s">Posted on</span> %2$s ', 'coraline' ),
 		'meta-prep meta-prep-author',
 		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
 			get_permalink(),
 			esc_attr( get_the_time() ),
 			get_the_date()
-		),
-		sprintf( '<span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
-			get_author_posts_url( get_the_author_meta( 'ID' ) ),
-			sprintf( esc_attr__( 'View all posts by %s', 'coraline' ), get_the_author() ),
-			get_the_author()
-		),
-		'byline'
+		)
 	);
+}
+endif;
+
+if ( ! function_exists( 'coraline_posted_by' ) ) :
+/**
+ * Prints HTML with meta information for the current author on multi-author blogs
+ */
+function coraline_posted_by() {
+	if ( is_multi_author() && ! is_author() ) {
+		printf( __( '<span class="by-author"><span class="sep">by</span> <span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a></span> </span>', 'coraline' ),
+			esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
+			esc_attr( sprintf( __( 'View all posts by %s', 'coraline' ), get_the_author_meta( 'display_name' ) ) ),
+			esc_attr( get_the_author_meta( 'display_name' ) )
+		);
+	}
 }
 endif;
 
@@ -500,26 +510,33 @@ function coraline_posted_in() {
 endif;
 
 /**
- *  Returns the current Coraline color scheme as selected in the theme options
+ *  Returns the Coraline options with defaults as fallback
  *
- * @since Coraline 1.0
+ * @since Coraline 1.0.2
  */
-function coraline_current_color_scheme() {
-	$options = get_option( 'coraline_theme_options' );
+function coraline_get_theme_options() {
+	$defaults = array(
+		'color_scheme' => 'light',
+		'theme_layout' => 'content-sidebar',
+	);
+	$options = get_option( 'coraline_theme_options', $defaults );
 
-	return $options['color_scheme'];
+	return $options;
 }
 
 /**
  * Register our color schemes and add them to the queue
  */
 function coraline_color_registrar() {
-	if ( 'dark' == coraline_current_color_scheme() ) {
-		wp_register_style( 'dark', get_template_directory_uri() . '/colors/dark.css', null, null );
-		wp_enqueue_style( 'dark' );
+	$options = coraline_get_theme_options();
+	$color_scheme = $options['color_scheme'];
+
+	if ( ! empty( $color_scheme ) && $color_scheme != 'light' ) {
+		wp_register_style( $color_scheme, get_template_directory_uri() . '/colors/' . $color_scheme . '.css', null, null );
+		wp_enqueue_style( $color_scheme );
 	}
 }
-add_action( 'wp_print_styles', 'coraline_color_registrar' );
+add_action( 'wp_enqueue_scripts', 'coraline_color_registrar' );
 
 /**
  *  Returns the current Coraline layout as selected in the theme options
@@ -527,15 +544,18 @@ add_action( 'wp_print_styles', 'coraline_color_registrar' );
  * @since Coraline 1.0
  */
 function coraline_current_layout() {
-	$options = get_option( 'coraline_theme_options' );
+	$options = coraline_get_theme_options();
 	$current_layout = $options['theme_layout'];
 
 	$two_columns = array( 'content-sidebar', 'sidebar-content' );
+	$three_columns = array( 'content-sidebar-sidebar', 'sidebar-content-sidebar', 'sidebar-sidebar-content' );
 
 	if ( in_array( $current_layout, $two_columns ) )
 		return 'two-column ' . $current_layout;
-	else
+	elseif ( in_array( $current_layout, $three_columns ) )
 		return 'three-column ' . $current_layout;
+	else
+		return 'no-sidebars';
 }
 
 /**
@@ -545,7 +565,96 @@ function coraline_current_layout() {
  */
 function coraline_body_class($classes) {
 	$classes[] = coraline_current_layout();
-		
+
 	return $classes;
 }
 add_filter( 'body_class', 'coraline_body_class' );
+
+/**
+ * WP.com: Check the current color scheme and set the correct themecolors array
+ */
+$options = coraline_get_theme_options();
+
+$color_scheme = 'light';
+if ( isset( $options['color_scheme'] ) )
+	$color_scheme = $options['color_scheme'];
+
+if ( 'light' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => 'ffffff',
+		'border' => 'cccccc',
+		'text' => '333333',
+		'link' => '0060ff',
+		'url' => 'df0000',
+	);
+}
+if ( 'dark' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => '151515',
+		'border' => '333333',
+		'text' => 'bbbbbb',
+		'link' => '80b0ff',
+		'url' => 'e74040',
+	);
+}
+if ( 'pink' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => 'faccd6',
+		'border' => 'c59aa4',
+		'text' => '222222',
+		'link' => 'd6284d',
+		'url' => 'd6284d',
+	);
+}
+if ( 'purple' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => 'e1ccfa',
+		'border' => 'c5b2de',
+		'text' => '333333',
+		'link' => '7728d6',
+		'url' => '7728d6',
+	);
+}
+if ( 'brown' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => '9a7259',
+		'border' => 'b38970',
+		'text' => 'ffecd0',
+		'link' => 'ffd2b7',
+		'url' => 'ffd2b7',
+	);
+}
+if ( 'red' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => 'a20013',
+		'border' => 'b92523',
+		'text' => 'e68d77',
+		'link' => 'ffd2b7',
+		'url' => 'ffd2b7',
+	);
+}
+if ( 'blue' == $color_scheme ) {
+	$themecolors = array(
+		'bg' => 'ccddfa',
+		'border' => 'b2c3de',
+		'text' => '333333',
+		'link' => '2869d6',
+		'url' => '2869d6',
+	);
+}
+
+/**
+ * Adjust the content_width value based on layout option and current template.
+ *
+ * @since Coraline 1.0.2
+ * @param int content_width value
+ */
+function coraline_set_full_content_width() {
+	global $content_width;
+	$content_width = 770;
+
+	// Override for 3-column layouts
+	$layout = coraline_current_layout();
+	if ( strstr( $layout, 'three-column' ) )
+		$content_width = 990;
+}

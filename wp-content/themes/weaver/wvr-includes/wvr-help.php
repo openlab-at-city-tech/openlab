@@ -15,7 +15,7 @@ function weaver_help_admin() {
     next to many options and option sections on the Weaver Admin tabs. Clicking the ? will open the Weaver Help
     file to the appropriate place.</p>
 
-    <p>More help is available at the <a href="http://wpweaver.info" target="_blank"><strong>WP Weaver web site</strong></a>, which includes
+    <p>More help is available at the <a href="http://weavertheme.com" target="_blank"><strong>Weaver Theme web site</strong></a>, which includes
     a support forum.</p>
 
     <h4>Weaver Help</h4>

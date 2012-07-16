@@ -156,3 +156,22 @@ Known Incompatibilities
 * Weaver Admin menus display issue revealed by IE9. Moved Clear All Settings to Save/Restore tab to fix.
 * fixed one column iframe style.css rule
 * added a version number to weaver-style.css enqueue to (hopefully) force cache refresh after save changes
+
+= Changes 2.2.5
+* Changed url()'s in generatecss to relative paths (for https compatibility)
+* Added Hide Page Featured Image option
+* trim spaces from Per Page Widget Areas textarea
+
+= Changed 2.2.6
+* fixed typo/bug introduced into site-map
+* fixed [weaver_show_posts] - now works in posts
+
+= Changed 2.2.8
+* Messages and description revised due to release of Weaver II
+* Updated PIE version
+* Updated version check code
+* Changed references to wpweaver.info to weavertheme.com
+
+= Changed 2.2.9
+* Fixed bug with tag archives and hide sidebar
+* Added WP 3.4 header changes

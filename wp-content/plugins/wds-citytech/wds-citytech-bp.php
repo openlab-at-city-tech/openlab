@@ -372,81 +372,6 @@ function openlab_group_creation_redirect( $redirect ) {
 add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
 
 /**
- * Don't show the Join Group button on an inactive group
- */
-function openlab_hide_inactive_group_join_button( $button ) {
-	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'join' ) ) {
-		if ( openlab_group_is_inactive() ) {
-			// Unset the button id for a cheap way of deleting button
-			unset( $button['id'] );
-		}
-	}
-
-	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'leave_group' ) ) {
-		$button['link_class'] = str_replace( 'group-button', '', $button['link_class'] );
-	}
-
-	return $button;
-}
-add_action( 'bp_get_group_join_button', 'openlab_hide_inactive_group_join_button' );
-
-/**
- * Don't let anyone visit the Join page of an inactive group
- *
- * This should never happen, thanks to the hidden buttons (see
- * openlab_hide_inactive_group_join_button()) combined with the need for a nonce. But this is for
- * backup.
- */
-function openlab_disallow_inactive_group_join() {
-	if ( bp_is_group() && bp_is_current_action( 'join' ) ) {
-		// If a user is a member (shouldn't happen?) let BP handle it
-		if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
-			return;
-		}
-
-		// If the group is inactive, redirect away
-		if ( openlab_group_is_inactive() ) {
-			bp_core_add_message( 'You cannot join an inactive group.', 'error' );
-			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) );
-		}
-	}
-}
-add_action( 'bp_actions', 'openlab_disallow_inactive_group_join', 1 );
-
-/**
- * Is the given group inactive?
- */
-function openlab_group_is_inactive( $group_id = false ) {
-	if ( !$group_id ) {
-		$group_id = bp_get_current_group_id();
-	}
-
-	if ( !$group_id ) {
-		return false;
-	}
-
-	$status = groups_get_groupmeta( $group_id, 'openlab_group_active_status' );
-
-	$is_inactive = false;
-
-	if ( 'inactive' == $status ) {
-		$is_inactive = true;
-	}
-
-	return $is_inactive;
-}
-
-/**
- * Is the given group active?
- *
- * For convenience.
- */
-function openlab_group_is_active( $group_id = false ) {
-	return ! openlab_group_is_inactive( $group_id );
-}
-
-
-/**
  * When getting a blog avatar in the context of the Featured Content widget, test to see whether
  * the blog is associated with a group. If so, fetch the group avatar instead
  */
@@ -479,5 +404,9 @@ function openlab_pre_save_comment_activity( $content ) {
 }
 add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
 
+/**
+ * Auto-enable BuddyPress Docs for all group types
+ */
+add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
 
 ?>

@@ -6,9 +6,10 @@
  * @since Coraline 1.0
  */
 
+coraline_set_full_content_width();
 get_header(); ?>
 
-		<div id="container" class="full-width">
+		<div id="content-container" class="full-width">
 			<div id="content" role="main">
 
 			<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>

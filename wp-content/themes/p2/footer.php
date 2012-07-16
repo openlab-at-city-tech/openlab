@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Footer template.
+ *
+ * @package P2
  */
 ?>
 	<div class="clear"></div>

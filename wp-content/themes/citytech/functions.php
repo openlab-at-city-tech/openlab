@@ -35,7 +35,7 @@ function cuny_remove_default_widget_areas() {
 	unregister_sidebar('sidebar-alt');
 }
 /** Add support for custom background **/
-add_custom_background();
+add_theme_support( 'custom-background', array() );
 //add_theme_support( 'genesis-footer-widgets', 5 );
 
 add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
@@ -339,7 +339,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
-		'active_status' => 'all',
 		'show_hidden'   => true,
 		'group_type'	=> 'club',
 		'get_activity'	=> true
@@ -350,22 +349,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
-
-	if ( 'all' != $r['active_status'] ) {
-		// For legacy reasons, not all active groups are marked 'active'
-		if ( 'inactive' == $r['active_status'] ) {
-			$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} b ON (a.group_id = b.group_id) " );
-			$where  .= $wpdb->prepare( " AND b.meta_key = 'openlab_group_active_status' AND b.meta_value = %s ", $r['active_status'] );
-		} else {
-			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
-			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
-
-			if ( !empty( $inactive_groups ) ) {
-				$inactive_groups_sql = implode( ',', $inactive_groups );
-				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
-			}
-		}
-	}
 
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
@@ -622,5 +605,42 @@ function show_site_posts_and_comments() {
 		<?php
 	}
 }
+
+
+/**
+ * Markup for groupblog privacy settings
+ */
+function openlab_site_privacy_settings_markup( $site_id = 0 ) {
+	global $blogname, $current_site;
+
+	if ( !$site_id ) {
+		$site_id = get_current_blog_id();
+	}
+
+	$blog_name   = get_blog_option( $site_id, 'blogname' );
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+	$group_type  = openlab_get_current_group_type( 'case=upper' );
+?>
+
+<br/>
+	<input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private1"><?php _e('Allow search engines to index this site'); ?></label>
+<br/>
+	<input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />
+	<label for="blog-private0"><?php _e('Ask search engines not to index this site'); ?></label>
+
+<p class="description tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
+<br/>
+	<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private-1"><?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+<br/>
+	<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> />
+	<label for="blog-private-2"><?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
+<br/>
+	<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> />
+	<label for="blog-private-3">I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+	<?php
+}
+
 
 ?>

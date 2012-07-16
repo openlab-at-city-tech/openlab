@@ -591,24 +591,6 @@ function wds_load_group_type( $group_type ){
 		$group_type = $_POST['group_type'];
 	}
 
-	/**
-	 * Active/inactive toggle
-	 */
-	if ( groups_get_groupmeta( bp_get_current_group_id(), 'openlab_group_active_status' ) == 'inactive' ) {
-		$active_checked = '';
-		$inactive_checked = ' checked="checked" ';
-	} else {
-		$inactive_checked = '';
-		$active_checked = ' checked="checked" ';
-	}
-
-	$return .= '<p class="ol-tooltip">Will your ' . ucwords( $group_type ) . ' be in use this semester? This will help users find currently active '. ucwords( $group_type ) . 's.</p>';
-	$return .= '<div id="active-toggle">* ';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_active" value="active" ' . $active_checked . ' /> <label for="group_is_active">Active</label>';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_inactive" value="inactive" ' . $inactive_checked . ' /> <label for="group_is_inactive">Inactive</label>';
-	$return .= ' (required)';
-	$return .= '</div>';
-
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
@@ -634,7 +616,7 @@ function wds_load_group_type( $group_type ){
 				$checked="checked";
 			}
 
-			if($group_type=="course"){
+			if( $group_type=="course" || $group_type == 'portfolio' ){
 				$onclick='onclick="wds_load_group_departments();"';
 			} else {
 				$onclick = '';
@@ -785,6 +767,9 @@ function wds_bp_group_meta(){
 	}
 	?>
 
+	<?php /* @todo - Who should see this? Anyone? */ ?>
+	<?php /*
+
         <table>
         <tr>
         <td>Type:</td>
@@ -805,6 +790,8 @@ function wds_bp_group_meta(){
         </tr>
         </table>
 
+        */ ?>
+
       <div id="wds-group-type"></div>
       <?php //Copy Site
 	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
@@ -812,12 +799,6 @@ function wds_bp_group_meta(){
 	  if(!$wds_bp_group_site_id){
 		$template = "template-" . strtolower( $group_type );
 		$blog_details = get_blog_details( $template );
-
-		/* Temp until I have a Portfolio template site */
-		if ( empty( $blog_details ) ) {
-			$blog_details = new stdClass;
-			$blog_details->blog_id = 0;
-		}
 
 		?>
 		<style type="text/css">
@@ -830,7 +811,7 @@ function wds_bp_group_meta(){
 		<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 
 		<table class="form-table groupblog-setup">
-			<?php if ( $group_type != "course" ) : ?>
+			<?php if ( $group_type != "course" && $group_type != 'portfolio' ) : ?>
 				<?php $show_website = "none" ?>
 				<tr class="form-field form-required">
 					<th scope='row'>
@@ -839,9 +820,12 @@ function wds_bp_group_meta(){
 				</tr>
 			<?php else : ?>
 		    		<?php $show_website = 'block' ?>
-		    		<tr class="form-field form-required">
-		    			<th>Site Details</th>
-		    		</tr>
+
+		    		<?php if ( 'course' == $group_type ) : ?>
+					<tr class="form-field form-required">
+						<th>Site Details</th>
+					</tr>
+				<?php endif ?>
 			<?php endif ?>
 
 			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
@@ -1003,12 +987,6 @@ function wds_bp_group_meta_save($group) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type']);
 	}
 
-	if ( isset( $_POST['group_active_status'] ) ) {
-		$status = 'inactive' == $_POST['group_active_status'] ? 'inactive' : 'active';
-		groups_update_groupmeta( $group->id, 'openlab_group_active_status', $status );
-	}
-
-
 	/*//WIKI
 	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
 		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
@@ -1016,7 +994,11 @@ function wds_bp_group_meta_save($group) {
 
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
-	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
+	if ( isset( $_POST['wds_website_check'] ) ||
+	     openlab_is_course( $group->id ) ||
+	     !empty( $is_course ) ||
+	     openlab_is_portfolio( $group->id )
+	) {
 
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
 
@@ -1047,6 +1029,10 @@ function wds_bp_group_meta_save($group) {
 			if ( !empty( $_POST['external-comments-url'] ) ) {
 				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
 			}
+		}
+
+		if ( openlab_is_portfolio( $group->id ) ) {
+			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
 		}
 	}
 
@@ -1099,6 +1085,7 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 function ra_copy_blog_page($group_id) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
+
 	if( !empty( $blog['domain'] ) && $group_id){
 	  $wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 	  if(!defined('SUNRISE') || $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->dmtable}'") != $wpdb->dmtable) {
@@ -1233,19 +1220,6 @@ function ra_copy_blog_page($group_id) {
 						  } else {
 							  update_option('rewrite_rules', '');
 						  }
-
-						  //creaTE UPLOAD DOCS PAGE
-						  // Psyche!
-						  /*
-						  $args = array (
-							  'post_title'	=>	'Upload Documents',
-							  'post_content'	=>	'[lab-docs]',
-							  'post_status'	=>	'publish',
-							  'post_author'	=>	$user_ID,
-							  'post_type'		=>	'page'
-						  );
-						  wp_insert_post( $args );
-						  */
 
 						  restore_current_blog();
 						  $msg = __('Blog Copied');

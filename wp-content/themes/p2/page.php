@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Static page template.
+ *
+ * @package P2
  */
 ?>
 <?php get_header(); ?>

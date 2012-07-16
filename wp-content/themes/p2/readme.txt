@@ -25,6 +25,49 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 
 == Changelog ==
 
+= 1.4.0 - April 2012 =
+* Todo list creation: use lowercase "o" and "x".
+* Add support for custom menus.
+* Allow mentions to work with default permalink setting.
+* Multiple updates to iPhone stylesheet.
+* Ensure that mentions get recorded in post/comment meta.
+* Remove call to get_users_of_blogs().
+* Multiple textdomain fixes.
+* RTL style fixes.
+* Fix textarea resizing for front-end editing.
+* Use dollar sign to reference the jQuery object.
+* Better i18n for strings in p2_get_discussion_links().
+* Add styling for abbr element.
+* CSS Cleanup.
+* Better support for Latex images.
+* Replace call to deprecated function get_userdatabylogin().
+
+= 1.3.4 - Dec 2011 =
+* Add support for post formats: link, quote, status (keeping back compat with categories)
+* Fix bug where front-end editor didn't ignore sourcecode shortcode content
+* Action links: add title and class attributes for easier styling
+* Highlight current user's mentions a bit more than the rest
+* Auto-complete UI improvements
+* Add new Santa Hat background for the holidays
+* New feature: task lists with states (checked, unchecked)
+* Huge improvements to list creator: allow nesting, allow ordered lists
+* Style fixes for iPhone
+* Pinking shears! Trim whitespace from all line endings, all files
+* Updated FR translation from ms-studio
+* Updated pt_PT translation from vanillalounge
+
+= 1.3.3 - Oct 4 2011 =
+* Hide the actions bar when using inline editing tool for post or page
+* Before adding links to mention names, make sure the name only appears in the list once; this fixes the case where names mentioned more than once in a post were getting additional anchors added
+* When you have the tag list open, hitting Return shouldn't submit the post, it should do nothing
+* Set svn:eol-style on JS and TXT files
+* Escape get_comment_link() properly
+* Escape translatable attribute values with esc_attr_e()
+* Allow toggling comment threads on tag archives, props westi
+* Improve mentions.php for backcompat with older versions of WP (< 3.1).
+* Updates to Italian translation by daxeel@gmail.com
+* Added Kurdish translation by brwa.osman
+
 = 1.3.2 - Jul 21 2011 =
 * Resubmit to WP.org because Theme Check didn't allow 'comment-reply' being enqueued as a dependency
 
@@ -47,7 +90,6 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 * Take domain mapping into account when generating the Ajax URL
 * Change 'Cancel reply' hotkey to shift+esc and add an 'are you sure' dialog
 * Add 'p2_found_mentions' filter to allow plugins to alter which mentions are attached to a post/comment
-* Kurdish translation by brwa.osman
 
 = 1.2.3 - Mar 1 2011 =
 * Add two new action hooks: p2_post_form and p2_action_links

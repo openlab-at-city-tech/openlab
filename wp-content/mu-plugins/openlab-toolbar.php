@@ -32,6 +32,7 @@ class OpenLab_Admin_Bar {
 
 		// Enqueue styles
 		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
+		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
 
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
@@ -214,14 +215,16 @@ class OpenLab_Admin_Bar {
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' )
 		) );
 
-		// @todo This will need to be conditional, and we'll need to be dynamic about
-		// href generation. But not strategicially dynamic
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-portfolio',
-			'title'  => 'My Portfolio',
-			'href'   => bp_loggedin_user_domain()
-		) );
+		// Only show a My Portfolio link for users who actually have one
+		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
+		if ( !empty( $portfolio_url ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-portfolio',
+				'title'  => 'My Portfolio',
+				'href'   => $portfolio_url
+			) );
+		}
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
@@ -232,31 +235,43 @@ class OpenLab_Admin_Bar {
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-messages', // @todo Unread message count
-			'title'  => 'My Messages',
+			'id'     => 'my-messages',
+			'title'  => sprintf( 'My Messages (%d)', bp_get_total_unread_messages_count() ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 
+		$invites = groups_get_invites_for_user();
+		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-invitations', // @todo Invitations count
-			'title'  => 'My Invitations',
+			'id'     => 'my-invitations',
+			'title'  => sprintf( 'My Invitations (%d)', $invite_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
 		) );
 
-		// @todo Do we really want this kind of separator?
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-openlab-separator',
-			'title'  => '-----------'
-		) );
+		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
+		// this panel only works if looking at a site where the user has Dashboard-level
+		// permissions. So we have to find a valid site for the logged in user.
+		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
+		$primary_site_url = get_blog_option( $primary_site_id, 'siteurl' );
 
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-dashboard',
-			'title'  => 'My Dashboard',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' ) // @todo Where does this go?
-		) );
+		if ( !empty( $primary_site_id ) && !empty( $primary_site_url ) ) {
+
+			// @todo Do we really want this kind of separator?
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-openlab-separator',
+				'title'  => '-----------'
+			) );
+
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-dashboard',
+				'title'  => 'My Dashboard',
+				'href'   => $primary_site_url . '/wp-admin/my-sites.php'
+			) );
+		}
 	}
 
 	/**
@@ -497,7 +512,7 @@ class OpenLab_Admin_Bar {
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => '<span class="toolbar-item-name">Activity </span>', // @todo Do we have a count here? What would it count?
+			'title' => '<span class="toolbar-item-name">Activity </span>'
 		) );
 
 		$activity_args = array(

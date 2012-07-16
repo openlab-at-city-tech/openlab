@@ -1,10 +1,9 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * @package P2
  */
 
-require_once( 'inc/utils.php' );
+require_once( get_template_directory() . '/inc/utils.php' );
 
 p2_maybe_define( 'P2_INC_PATH', get_template_directory()     . '/inc' );
 p2_maybe_define( 'P2_INC_URL',  get_template_directory_uri() . '/inc' );
@@ -63,8 +62,10 @@ class P2 {
 		}
 
 		// Add the default P2 components
-		$this->add( 'mentions',         'P2_Mentions'         );
-		$this->add( 'search',           'P2_Search'           );
+		$this->add( 'mentions',             'P2_Mentions'             );
+		$this->add( 'search',               'P2_Search'               );
+		$this->add( 'post-list-creator',    'P2_Post_List_Creator'    );
+		$this->add( 'comment-list-creator', 'P2_Comment_List_Creator' );
 
 		// Bind actions
 		add_action( 'init',       array( &$this, 'init'             ) );
@@ -156,46 +157,95 @@ function p2_save_options() {
  * ----------------------------------------------------------------------------
  */
 
-
-
-
-$content_width = 632;
+if ( ! isset( $content_width ) )
+	$content_width = 632;
 
 $themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '555555',
-	'link' => '3478e3',
+	'bg'     => 'ffffff',
+	'text'   => '555555',
+	'link'   => '3478e3',
 	'border' => 'f1f1f1',
-	'url' => 'd54e21',
+	'url'    => 'd54e21',
 );
 
-register_sidebar( array(
-	'name' => __( 'Sidebar', 'p2' ),
-) );
+/**
+ * Setup P2 Theme.
+ *
+ * Hooks into the after_setup_theme action.
+ *
+ * @uses p2_get_supported_post_formats()
+ */
+function p2_setup() {
+	require_once( get_template_directory() . '/inc/custom-header.php' );
+	p2_setup_custom_header();
 
-// Run make_clickable later to avoid shortcode conflicts
-add_filter( 'the_content', 'make_clickable', 12 );
+	add_theme_support( 'automatic-feed-links' );
+	add_theme_support( 'post-formats', p2_get_supported_post_formats( 'post-format' ) );
+
+	$args = apply_filters( 'p2_custom_background_args', array( 'default-color' => 'f1f1f1' ) );
+	if ( function_exists( 'get_custom_header' ) ) {
+		add_theme_support( 'custom-background', $args );
+	} else {
+		// Compat: Versions of WordPress prior to 3.4.
+		define( 'BACKGROUND_COLOR', $args['default-color'] );
+		add_custom_background();
+	}
+
+	add_filter( 'the_content', 'make_clickable', 12 ); // Run later to avoid shortcode conflicts
+
+	register_nav_menus( array(
+		'primary' => __( 'Primary Menu', 'p2' ),
+	) );
+
+	if ( is_admin() && false === get_option( 'prologue_show_titles' ) )
+		add_option( 'prologue_show_titles', 1 );
+}
+add_filter( 'after_setup_theme', 'p2_setup' );
+
+function p2_register_sidebar() {
+	register_sidebar( array(
+		'name' => __( 'Sidebar', 'p2' ),
+	) );
+}
+add_filter( 'widgets_init', 'p2_register_sidebar' );
+
+function p2_background_color() {
+	$background_color = get_option( 'p2_background_color' );
+
+	if ( '' != $background_color ) :
+	?>
+	<style type="text/css">
+		body {
+			background-color: <?php echo esc_attr( $background_color ); ?>;
+		}
+	</style>
+	<?php endif;
+}
+add_action( 'wp_head', 'p2_background_color' );
+
+function p2_background_image() {
+	$p2_background_image = get_option( 'p2_background_image' );
+
+	if ( 'none' == $p2_background_image || '' == $p2_background_image )
+		return false;
+
+?>
+	<style type="text/css">
+		body {
+			background-image: url( <?php echo get_template_directory_uri() . '/i/backgrounds/pattern-' . sanitize_key( $p2_background_image ) . '.png' ?> );
+		}
+	</style>
+<?php
+}
+add_action( 'wp_head', 'p2_background_image' );
 
 // Content Filters
-
-// Filter to be ran on the_content, calls the do_list function from our class
-function p2_list_creator( $content ) {
-	$list_creator = new P2_List_Creator;
-
-	return $list_creator->do_list( $content );
-}
-
-// Call the filter on normal, non admin calls (this code exists in ajax.php for the special p2 instances)
-if ( ! is_admin() )
-	add_filter( 'pre_kses', 'p2_list_creator', 1 );
-add_filter( 'pre_comment_content', 'p2_list_creator', 1 );
-
 function p2_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
 	if ( is_page() )
 		return;
 
 	if ( is_single() && false === p2_the_title( '', '', false ) ) { ?>
-		<h2 class="transparent-title"><?php echo the_title(); ?></h2><?php
+		<h2 class="transparent-title"><?php the_title(); ?></h2><?php
 		return true;
 	} else {
 		p2_the_title( $before, $after, $echo );
@@ -298,7 +348,7 @@ function p2_comments( $comment, $args ) {
 			<span class="meta">
 				<?php echo p2_date_time_with_microformat( 'comment' ); ?>
 				<span class="actions">
-					<a href="<?php echo esc_url( get_comment_link() ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
+					<a class="thepermalink" href="<?php echo esc_url( get_comment_link() ); ?>" title="<?php esc_attr_e( 'Permalink', 'p2' ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
 					<?php
 					echo $reply_link;
 
@@ -310,7 +360,7 @@ function p2_comments( $comment, $args ) {
 			</span>
 		</h4>
 		<div id="commentcontent-<?php comment_ID(); ?>" class="<?php echo esc_attr( $content_class ); ?>"><?php
-				echo apply_filters( 'comment_text', $comment->comment_content );
+				echo apply_filters( 'comment_text', $comment->comment_content, $comment );
 
 				if ( $comment->comment_approved == '0' ): ?>
 					<p><em><?php esc_html_e( 'Your comment is awaiting moderation.', 'p2' ); ?></em></p>
@@ -360,10 +410,6 @@ function p2_title_from_content( $content ) {
 	return $title;
 }
 
-if ( is_admin() && ( false === get_option( 'prologue_show_titles' ) ) ) {
-	add_option( 'prologue_show_titles', 1);
-}
-
 function p2_excerpted_title( $content, $word_count ) {
 	$content = strip_tags( $content );
 	$words = preg_split( '/([\s_;?!\/\(\)\[\]{}<>\r\n\t"]|\.$|(?<=\D)[:,.\-]|[:,.\-](?=\D))/', $content, $word_count + 1, PREG_SPLIT_NO_EMPTY );
@@ -380,6 +426,11 @@ function p2_excerpted_title( $content, $word_count ) {
 
 	return $content;
 }
+
+function p2_add_reply_title_attribute( $link ) {
+	return str_replace( "rel='nofollow'", "rel='nofollow' title='" . __( 'Reply', 'p2' ) . "'", $link );
+}
+add_filter( 'post_comments_link', 'p2_add_reply_title_attribute' );
 
 function p2_fix_empty_titles( $post_ID, $post ) {
 
@@ -434,23 +485,51 @@ function p2_new_post_noajax() {
 		'post_status'   => 'publish'
 	) );
 
+	$post_format = 'status';
+	if ( in_array( $_POST['post_format'], p2_get_supported_post_formats() ) )
+		$post_format = $_POST['post_format'];
+
+	set_post_format( $post_id, $post_format );
+
 	wp_redirect( home_url( '/' ) );
 
 	exit;
 }
 add_filter( 'template_redirect', 'p2_new_post_noajax' );
 
-function iphone_css() {
-if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) or isset($_GET['iphone']) && $_GET['iphone'] ) { ?>
-<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
-<style type="text/css">
-/* <![CDATA[ */
-/* iPhone CSS */
-<?php $iphonecss = dirname( __FILE__ ) . '/style-iphone.css'; if ( is_file( $iphonecss ) ) require $iphonecss; ?>
-/* ]]> */
-</style>
-<?php } }
-add_action( 'wp_head', 'iphone_css' );
+/**
+ * iPhone viewport meta tag.
+ *
+ * Hooks into the wp_head action late.
+ *
+ * @uses p2_is_iphone()
+ * @since P2 1.4
+ */
+function p2_viewport_meta_tag() {
+	if ( p2_is_iphone() )
+		echo '<meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"/>';
+}
+add_action( 'wp_head', 'p2_viewport_meta_tag', 1000 );
+
+/**
+ * iPhone Stylesheet.
+ *
+ * Hooks into the wp_enqueue_styles action late.
+ *
+ * @uses p2_is_iphone()
+ * @since P2 1.4
+ */
+function p2_iphone_style() {
+	if ( p2_is_iphone() ) {
+		wp_enqueue_style(
+			'p2-iphone-style',
+			get_template_directory_uri() . '/style-iphone.css',
+			array(),
+			'20120402'
+		);
+	}
+}
+add_action( 'wp_enqueue_scripts', 'p2_iphone_style', 1000 );
 
 /*
 	Modified to replace query string with blog url in output string
@@ -461,7 +540,7 @@ function prologue_get_comment_reply_link( $args = array(), $comment = null, $pos
 	if ( post_password_required() )
 		return;
 
-	$defaults = array( 'add_below' => 'comment', 'respond_id' => 'respond', 'reply_text' => __( 'Reply', 'p2' ),
+	$defaults = array( 'add_below' => 'commentcontent', 'respond_id' => 'respond', 'reply_text' => __( 'Reply', 'p2' ),
 		'login_text' => __( 'Log in to Reply', 'p2' ), 'depth' => 0, 'before' => '', 'after' => '' );
 
 	$args = wp_parse_args($args, $defaults);
@@ -483,7 +562,7 @@ function prologue_get_comment_reply_link( $args = array(), $comment = null, $pos
 	if ( get_option( 'comment_registration' ) && !$user_ID )
 		$link = '<a rel="nofollow" href="' . site_url( 'wp-login.php?redirect_to=' . urlencode( get_permalink() ) ) . '">' . esc_html( $login_text ) . '</a>';
 	else
-		$link = "<a rel='nofollow' class='comment-reply-link' href='". get_permalink($post). "#" . urlencode( $respond_id ) . "' onclick='return addComment.moveForm(\"" . esc_js( "$add_below-$comment->comment_ID" ) . "\", \"$comment->comment_ID\", \"" . esc_js( $respond_id ) . "\", \"$post->ID\")'>$reply_text</a>";
+		$link = "<a rel='nofollow' class='comment-reply-link' href='". get_permalink($post). "#" . urlencode( $respond_id ) . "' title='". __( 'Reply', 'p2' )."' onclick='return addComment.moveForm(\"" . esc_js( "$add_below-$comment->comment_ID" ) . "\", \"$comment->comment_ID\", \"" . esc_js( $respond_id ) . "\", \"$post->ID\")'>$reply_text</a>";
 	return apply_filters( 'comment_reply_link', $before . $link . $after, $args, $comment, $post);
 }
 
@@ -504,143 +583,9 @@ function prologue_comment_depth( $comment_id ) {
 	echo prologue_get_comment_depth( $comment_id );
 }
 
-
 function prologue_poweredby_link() {
 	return apply_filters( 'prologue_poweredby_link', sprintf( '<a href="%1$s" rel="generator">%2$s</a>', esc_url( __('http://wordpress.org/', 'p2') ), sprintf( __('Proudly powered by %s.', 'p2'), 'WordPress' ) ) );
 }
-
-/* Custom Header Code */
-define( 'HEADER_TEXTCOLOR', '3478E3' );
-define( 'HEADER_IMAGE', '' ); // %s is theme dir uri
-define( 'HEADER_IMAGE_WIDTH', 980);
-define( 'HEADER_IMAGE_HEIGHT', 120);
-
-function p2_admin_header_style() {
-?>
-	<style type="text/css">
-	#headimg {
-		background: url(<?php header_image(); ?>) repeat;
-		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
-		width:<?php echo HEADER_IMAGE_WIDTH; ?>px;
-		padding:0 0 0 18px;
-	}
-	#headimg a {
-		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
-		width:<?php echo HEADER_IMAGE_WIDTH; ?>px;
-	}
-
-	#headimg h1{
-		padding-top:40px;
-		margin: 0;
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-weight: 200;
-	}
-	#headimg h1 a {
-		color:#<?php header_textcolor(); ?>;
-		text-decoration: none;
-		border-bottom: none;
-		font-size: 1.4em;
-		margin: -0.4em 0 0 0;
-	}
-	#headimg #desc{
-		color:#<?php header_textcolor(); ?>;
-		font-size:1.1em;
-		margin-top:1em;
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-weight: 200;
-	}
-
-	<?php if ( 'blank' == get_header_textcolor() ) { ?>
-	#headimg h1, #headimg #desc {
-		display: none;
-	}
-	#headimg h1 a, #headimg #desc {
-		color:#<?php echo HEADER_TEXTCOLOR ?>;
-	}
-	<?php } ?>
-
-	</style>
-<?php
-}
-
-function p2_header_style() {
-?>
-	<style type="text/css">
-		<?php if ( '' != get_header_image() ) : ?>
-		#header {
-			background: url(<?php header_image(); ?>) repeat;
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
-		}
-		#header a.secondary {
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
-			width:<?php echo HEADER_IMAGE_WIDTH; ?>px;
-			display: block;
-			position: absolute;
-			top: 0;
-		}
-		#header a.secondary:hover {
-			border: 0;
-		}
-		#header .sleeve {
-			position: relative;
-			margin-top: 0;
-			margin-right: 0;
-			background-color: transparent;
-			box-shadow: none !important;
-			-webkit-box-shadow: none !important;
-			-moz-box-shadow: none !important;
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
-		}
-		#header {
-			box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) !important;
-			-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) !important;
-			-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) !important;
-		}
-		<?php endif; ?>
-		<?php if ( 'blank' == get_header_textcolor() ) { ?>
-		#header h1, #header small {
-			padding: 0;
-			text-indent: -1000em;
-		}
-		<?php } else { ?>
-		#header h1 a, #header small {
-			color: #<?php header_textcolor(); ?>;
-		}
-		<?php } ?>
-	</style>
-<?php
-}
-add_custom_image_header( 'p2_header_style', 'p2_admin_header_style' );
-
-function p2_background_color() {
-	$background_color = get_option( 'p2_background_color' );
-
-	if ( '' != $background_color ) :
-	?>
-	<style type="text/css">
-		body {
-			background-color: <?php esc_attr_e( $background_color ); ?>;
-		}
-	</style>
-	<?php endif;
-}
-add_action( 'wp_head', 'p2_background_color' );
-
-function p2_background_image() {
-	$p2_background_image = get_option( 'p2_background_image' );
-
-	if ( 'none' == $p2_background_image || '' == $p2_background_image )
-		return false;
-
-?>
-	<style type="text/css">
-		body {
-			background-image: url( <?php echo get_template_directory_uri() . '/i/backgrounds/pattern-' . $p2_background_image . '.png' ?> );
-		}
-	</style>
-<?php
-}
-add_action( 'wp_head', 'p2_background_image' );
 
 function p2_hidden_sidebar_css() {
 	$hide_sidebar = get_option( 'p2_hide_sidebar' );
@@ -667,8 +612,52 @@ function p2_after_signup_form() {
 }
 add_action( 'after_signup_form', 'p2_after_signup_form' );
 
-// Enable background
-add_custom_background();
+/**
+ * Returns accepted post formats.
+ *
+ * The value should be a valid post format registered for P2, or one of the back compat categories.
+ * post formats: link, quote, standard, status
+ * categories: link, post, quote, status
+ *
+ * @since P2 1.3.4
+ *
+ * @param string type Which data to return (all|category|post-format)
+ * @return array
+ */
+function p2_get_supported_post_formats( $type = 'all' ) {
+	$post_formats = array( 'link', 'quote', 'status' );
 
-// Feed me
-add_theme_support( 'automatic-feed-links' );
+	switch ( $type ) {
+		case 'post-format':
+			break;
+		case 'category':
+			$post_formats[] = 'post';
+			break;
+		case 'all':
+		default:
+			array_push( $post_formats, 'post', 'standard' );
+			break;
+	}
+
+	return apply_filters( 'p2_get_supported_post_formats', $post_formats );
+}
+
+/**
+ * Is site being viewed on an iPhone or iPod Touch?
+ *
+ * For testing you can modify the output with a filter:
+ * add_filter( 'p2_is_iphone', '__return_true' );
+ *
+ * @return bool
+ * @since P@ 1.4
+ */
+function p2_is_iphone() {
+	$output = false;
+
+	if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) or isset( $_GET['iphone'] ) && $_GET['iphone'] )
+		$output = true;
+
+	$output = (bool) apply_filters( 'p2_is_iphone', $output );
+
+	return $output;
+}

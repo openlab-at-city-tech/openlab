@@ -5,9 +5,12 @@
  */
 
     get_header();
+    if (weaver_getopt('ttw_hide_special_post_sidebars'))
+	    echo('<div id="container" class="one-column container-category tag-page">' . "\n");
+	else
+	    echo('<div id="container" class="container-category tag-page">' . "\n");
 ?>
 
-    <div id="container" class="tag-page">
 	<?php weaver_put_wvr_widgetarea('sitewide-top-widget-area','ttw-site-top-widget'); ?>
 	<?php weaver_put_wvr_widgetarea('postpages-widget-area','ttw-top-widget','ttw_hide_special_posts'); ?>
 	<div id="content" role="main">
@@ -28,5 +31,5 @@
 	    <?php weaver_put_wvr_widgetarea('sitewide-bottom-widget-area','ttw-site-bot-widget'); ?>
 	</div><!-- #container -->
 
-<?php get_sidebar(); ?>
+<?php if (!weaver_getopt('ttw_hide_special_post_sidebars')) get_sidebar(); ?>
 <?php get_footer(); ?>

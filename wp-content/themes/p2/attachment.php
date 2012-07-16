@@ -1,7 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage P2
+ * Displays a single attachment.
+ *
+ * @package P2
  */
 ?>
 <?php get_header(); ?>

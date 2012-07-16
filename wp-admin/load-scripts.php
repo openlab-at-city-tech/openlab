@@ -21,7 +21,6 @@ function __() {}
  */
 function _x() {}
 
-
 /**
  * @ignore
  */
@@ -51,6 +50,11 @@ function is_lighttpd_before_150() {}
  * @ignore
  */
 function add_action() {}
+
+/**
+ * @ignore
+ */
+function did_action() {}
 
 /**
  * @ignore
@@ -91,6 +95,13 @@ function includes_url() {}
  * @ignore
  */
 function wp_guess_url() {}
+
+if ( ! function_exists( 'json_encode' ) ) :
+/**
+ * @ignore
+ */
+function json_encode() {}
+endif;
 
 function get_file($path) {
 

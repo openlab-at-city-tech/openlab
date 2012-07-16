@@ -8,12 +8,11 @@ function weaver_show_posts_shortcode($args = '') {
     /* implement [weaver_get_posts opt1="val1" opt2="value"] shortcode */
 
 /* DOC NOTES:
-CSS styling: The group of posts will be wrapped with a <div>  with called .wvr-show-posts. (You
-provide a CSS rule in the <HEAD> Section of Advanced Options called .wvr-show-posts.) You can
-add a class to that by providing a 'class=classname' option, where you use the name with a
-period in the CSS in the <HEAD> Section, but just the classname for the [weaver-show-posts] option.
-You can also provide inline styling by providing a 'style=value' option where value is whatever styling
-you need, each terminated with a semi-colon (;).
+CSS styling: The group of posts will be wrapped with a <div> with a class called
+.wvr-show-posts. You can add an additional class to that by providing a 'class=classname' option
+(without the leading '.' used in the actual CSS definition). You can also provide inline styling
+by providing a 'style=value' option where value is whatever styling you need, each terminated
+with a semi-colon (;).
 
 The optional header is in a <div> called .wvr_show_posts_header. You can add an additional class
 name with 'header_class=classname'. You can provide inline styling with 'header_style=value'.
@@ -22,7 +21,7 @@ name with 'header_class=classname'. You can provide inline styling with 'header_
 .widget-area .wvr-show-posts .hentry {margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;}
 */
 
-    global $id, $post, $wp_query, $more;
+    global $more;
     global $weaver_cur_post_id;
 
     extract(shortcode_atts(array(
@@ -52,13 +51,7 @@ name with 'header_class=classname'. You can provide inline styling with 'header_
 
     ), $args));
 
-    if (get_post_type($weaver_cur_post_id) == 'post' && !have_posts() /*in_the_loop()*/) {
-	return "<h3>[weaver_show_posts]: Sorry, this shortcode doesn't work on Posts - just Pages and Sidebar Widgets.</h3>";
-    }
-
     $save_cur_post = $weaver_cur_post_id;
-    $save_post = $post;        	/* save state */
-    $save_q = $wp_query;  // assign original query to temp variable for later use
     $save_excerpt_length = weaver_getopt('ttw_excerpt_length');
     if (!empty($excerpt_length)) weaver_setopt('ttw_excerpt_length',$excerpt_length);
     $save_more_msg = weaver_getopt('ttw_excerpt_more_msg');
@@ -77,7 +70,7 @@ name with 'header_class=classname'. You can provide inline styling with 'header_
     if (!empty($single_post)) $qargs['name'] = $single_post;
     if (!empty($author)) $qargs['author_name'] = $author;
 
-    $wp_query = new WP_Query($qargs);
+    $ourposts = new WP_Query($qargs);
 	// now modify the query using custom fields for this page
 
     /* now start the content */
@@ -95,8 +88,8 @@ name with 'header_class=classname'. You can provide inline styling with 'header_
 
     ob_start();	// use built-in weaver code to generate a weaver standard post
 
-    while ( have_posts() ) {
-	the_post();
+    while ( $ourposts->have_posts() ) {
+	$ourposts->the_post();
 	$weaver_cur_post_id = get_the_ID();
 	weaver_per_post_style();
 
@@ -146,23 +139,21 @@ name with 'header_class=classname'. You can provide inline styling with 'header_
 	<?php
 	} // end !sticky
 
-	} // end loop
+    } // end loop
 
-	$content .= ob_get_clean();	// get the output
+    $content .= ob_get_clean();	// get the output
 
-	// get posts
+    // get posts
 
-	$content .= '</div><!-- #wvr-show-posts -->';
+    $content .= '</div><!-- #wvr-show-posts -->';
+    wp_reset_query();
 
-	$weaver_cur_post_id = $save_cur_post;
-	$post = $save_post;            //restore current page/post settings
-	unset($wp_query);		// be nice, clean up
-	$wp_query = $save_q;		// restore query
+    $weaver_cur_post_id = $save_cur_post;
 
-	weaver_setopt('ttw_excerpt_length',$save_excerpt_length);
-	weaver_setopt('ttw_excerpt_more_msg',$save_more_msg);
-	return $content;
-    }
+    weaver_setopt('ttw_excerpt_length',$save_excerpt_length);
+    weaver_setopt('ttw_excerpt_more_msg',$save_more_msg);
+    return $content;
+}
 
 add_shortcode('weaver_show_posts', 'weaver_show_posts_shortcode');
 

@@ -27,7 +27,7 @@
 					</div><!-- #site-info -->
 
 					<div id="site-generator">
-						<a href="http://wordpress.org/" rel="generator">Proudly powered by WordPress</a> &middot; <?php printf( __( 'Theme: <em>%1$s</em> by %2$s', 'pilcrow' ), 'Pilcrow', '<a href="http://automattic.com/" rel="designer">Automattic</a>' ); ?>				
+						<a href="http://wordpress.org/" rel="generator">Proudly powered by WordPress</a> &middot; <?php printf( __( 'Theme: %1$s by %2$s.', 'pilcrow' ), 'Pilcrow', '<a href="http://automattic.com/" rel="designer">Automattic</a>' ); ?>
 					</div><!-- #site-generator -->
 
 				</div><!-- #colophon -->

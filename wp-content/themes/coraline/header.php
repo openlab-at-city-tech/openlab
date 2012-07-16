@@ -8,9 +8,13 @@
 <!--[if IE 6]>
 <html id="ie6" <?php language_attributes(); ?>>
 <![endif]-->
-<!--[if (gt IE 6) | (!IE)]><!-->
+<!--[if IE 8]>
+<html id="ie8" <?php language_attributes(); ?>>
+<![endif]-->
+<!--[if (!IE)]><!-->
 <html <?php language_attributes(); ?>>
 <!--<![endif]-->
+
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <title><?php
@@ -55,6 +59,7 @@
 
 <body <?php body_class(); ?>>
 <div id="container" class="hfeed">
+<?php do_action( 'before' ); ?>
 	<div id="header">
 		<div id="masthead" role="banner">
 			<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>

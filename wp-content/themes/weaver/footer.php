@@ -34,7 +34,7 @@
  <td id='ttw_ftdr'><div id="site-generator">
  <?php do_action('weaver_credits' ); ?>
  <a href="http://wordpress.org/" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', WEAVER_TRANS ); ?>" rel="generator"><?php printf( __( 'Proudly powered by %s.', WEAVER_TRANS ), 'WordPress' ); ?></a>
- <?php echo(WEAVER_THEMENAME); ?> by WPWeaver.info
+ <?php echo(WEAVER_THEMENAME); ?> by WeaverTheme.com
  </div></td> <?php } ?>
 </tr></table>
 		</div><!-- #colophon -->

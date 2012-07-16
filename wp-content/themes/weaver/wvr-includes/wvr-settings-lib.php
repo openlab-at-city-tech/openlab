@@ -303,7 +303,7 @@ function weaver_validate_advanced_cb($in) {	/* a no-op for now */
 
 	    case 'ttw_perpagewidgets':       	// Add widget areas for per page - names must be lower case
 		if (!empty($value)) {
-		    $in[$key] = strtolower(weaver_filter_code($value));
+		    $in[$key] = strtolower(str_replace(' ', '' , weaver_filter_code($value)));
 		}
 		break;
 
@@ -1377,7 +1377,7 @@ function weaver_submitted($submit_name) {
 	if (isset($_POST[$nonce_name]) && wp_verify_nonce($_POST[$nonce_name],$nonce_act)) {
 	    return true;
 	} else {
-	    die("WARNING: invalid form submit detected ($submit_name). Possibly caused by session time-out, or, rarely, a failed security check. Please contact wpweaver.info if you continue to receive this message.");
+	    die("WARNING: invalid form submit detected ($submit_name). Possibly caused by session time-out, or, rarely, a failed security check. Please contact weavertheme.com if you continue to receive this message.");
 	}
     } else {
 	return false;

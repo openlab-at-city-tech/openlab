@@ -16,19 +16,19 @@
 /////////////////////////
 
 /**
- * Get a user's portfolio site id
+ * Get a user's portfolio *group* id
  *
  * @param int $user_id Defaults to displayed user, then to current member loop user
- * @return bool
+ * @return int
  */
 function openlab_get_user_portfolio_id( $user_id = 0 ) {
 	if ( !$user_id ) {
 		$user_id = openlab_fallback_user();
 	}
 
-	$site_id = bp_get_user_meta( $user_id, 'portfolio_site_id', true );
+	$group_id = bp_get_user_meta( $user_id, 'portfolio_group_id', true );
 
-	return (int) $site_id;
+	return (int) $group_id;
 }
 
 /**
@@ -54,9 +54,10 @@ function openlab_user_portfolio_url( $user_id = 0 ) {
 	 * @return string URL of the portfolio
 	 */
 	function openlab_get_user_portfolio_url( $user_id = 0 ) {
-		$site_id = openlab_get_user_portfolio_id( $user_id );
+		$group_id = openlab_get_user_portfolio_id( $user_id );
+		$site_url = openlab_get_group_site_url( $group_id );
 
-		return get_blog_option( $site_id, 'blogurl' );
+		return $site_url;
 	}
 
 /**
@@ -141,5 +142,23 @@ function openlab_portfolio_creation_url() {
 	function openlab_get_portfolio_creation_url() {
 		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=portfolio&new=true';
 	}
+
+/**
+ * Remove BPGES settings from portfolio group admin and creation screens
+ */
+function openlab_remove_bpges_settings_for_portfolios() {
+	if ( openlab_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+		remove_action( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
+		remove_action( 'bp_after_group_settings_creation_step' ,'ass_default_subscription_settings_form' );
+	}
+}
+add_action( 'bp_actions', 'openlab_remove_bpges_settings_for_portfolios', 1 );
+
+/**
+ * Mark a group as being a user's portfolio
+ */
+function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
+	bp_update_user_meta( $user_id, 'portfolio_group_id', $group_id );
+}
 
 ?>

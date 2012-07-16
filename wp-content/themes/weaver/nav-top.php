@@ -5,13 +5,20 @@
 if (!weaver_getopt('ttw_hide_menu') && !weaver_is_checked_page_opt('ttw-hide-menus')) {
 		    if (weaver_getopt('ttw_move_menu')) { 	/* TTW: move menu */ ?>
 			<div id="nav-top-menu"><div id="access" role="navigation">
-		    	<?php
+<?php			/* add html to menu left */
+			$add_html = weaver_getopt('ttw_menu_addhtml-left');
+			if (!empty($add_html)) {
+			    echo('<div class="menu-add-left">');
+			    echo(do_shortcode($add_html));
+			    echo('</div>');
+			}
+
 			/*  NAVIGATION MENUS:  If one isn't filled out, wp_nav_menu falls back to wp_page_menu.
 			    The menu assiged to the primary position is the one used.  If none is assigned, the menu with the lowest ID is used.  */
 			if (weaver_getopt('ttw_use_superfish'))
-				wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary', 'menu_class' => 'sf-menu', 'fallback_cb' => 'weaver_page_menu' ) );
+				wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'primary', 'menu_class' => 'sf-menu', 'fallback_cb' => 'weaver_page_menu' ) );
 			else
-				wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) );
+				wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'primary' ) );
 
 			/* add html/search to menu */
 			$add_div = true;
@@ -59,9 +66,9 @@ if (!weaver_getopt('ttw_hide_menu') && !weaver_is_checked_page_opt('ttw-hide-men
 			<div id="nav-top-menu"><div id="access2" role="navigation">
 		        <?php
 			if (weaver_getopt('ttw_use_superfish'))
-			    wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'secondary', 'fallback_cb' => '', 'menu_class' => 'sf-menu' ) );
+			    wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'secondary', 'fallback_cb' => '', 'menu_class' => 'sf-menu' ) );
 			else
-			    wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'secondary', 'fallback_cb' => '' ) );
+			    wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'secondary', 'fallback_cb' => '' ) );
 			?>
 
 			</div></div><!-- #access2 -->

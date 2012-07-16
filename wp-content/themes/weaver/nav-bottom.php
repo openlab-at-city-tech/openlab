@@ -15,9 +15,9 @@ if (!weaver_getopt('ttw_hide_menu') && !weaver_is_checked_page_opt('ttw-hide-men
 		    }
 
 		    if (weaver_getopt('ttw_use_superfish'))
-				wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary', 'menu_class' => 'sf-menu', 'fallback_cb' => 'weaver_page_menu' ) );
+				wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'primary', 'menu_class' => 'sf-menu', 'fallback_cb' => 'weaver_page_menu' ) );
 			else
-				wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) );
+				wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'primary' ) );
 
 		    /* add html/search to menu */
 		    $add_div = true;
@@ -68,9 +68,9 @@ if (!weaver_getopt('ttw_hide_menu') && !weaver_is_checked_page_opt('ttw-hide-men
 		<div id="nav-bottom-menu"><div id="access2" role="navigation">
 		<?php
 		if (weaver_getopt('ttw_use_superfish'))
-		    wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'secondary', 'fallback_cb' => '', 'menu_class' => 'sf-menu' ) );
+		    wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'secondary', 'fallback_cb' => '', 'menu_class' => 'sf-menu' ) );
 		else
-		    wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'secondary', 'fallback_cb' => '' ) );
+		    wp_nav_menu( array( 'container_class' => 'menu', 'theme_location' => 'secondary', 'fallback_cb' => '' ) );
 		?>
 		</div></div><!-- #access2 -->
 	    <?php

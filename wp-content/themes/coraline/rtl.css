@@ -187,6 +187,9 @@ code {
 .entry-meta {
 	font-family: Arial, sans-serif;
 }
+.byline {
+	display:none;
+}
 .entry-content h4 {
 	font-style: normal;
 	font-weight: bold;
