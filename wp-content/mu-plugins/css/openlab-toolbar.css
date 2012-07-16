@@ -20,6 +20,7 @@
 #wpadminbar {
 	background: #f0f0f0;
 	height: 40px;
+	border-bottom: 1px solid #E1E1E1;
 
 }
 
@@ -234,6 +235,20 @@ margin: 0;
 /* notification counts */
 
 #wpadminbar .quicklinks .toolbar-item-count {
+	color: #FFF;
+	background-color: #0fceba;
+	border-radius: 12px;
+	font-size: 10px;
+	font-weight: bold;
+	min-width: 11px;
+	height: 11px;
+	display:inline-block;
+	padding: 1px;
+	text-align: center;
+	margin-left: 3px;
+}
+
+#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count {
 	position:absolute;
 	top: -5px;
 	right: 0px;
@@ -247,14 +262,19 @@ margin: 0;
 	display:block;
 	padding: 1px;
 	text-align: center;
-	border: 1px solid #f0f0f0
+	border: 1px solid #f0f0f0;
+	margin-left: 0px;
 }
+
+
+
+
 
 
 
 /* Dropdown menus */
 
-#wpadminbar .menupop .ab-sub-wrapper {
+#wpadminbar .menupop .ab-sub-wrapper, #wpadminbar #sidebar-login-form {
 	display: none;
 	position: absolute;
 	background: url('images/admin-bar-arrow.png') no-repeat center top #838383;
@@ -270,6 +290,9 @@ margin: 0;
 	overflow: visible;
 }
 
+#wpadminbar .ab-top-menu > .menupop > .ab-sub-wrapper {
+	min-width: 0;
+}
 
 
 #wpadminbar .menupop #wp-admin-bar-openlab-default {
@@ -277,7 +300,7 @@ margin: 0;
 }
 
 #wpadminbar .menupop #wp-admin-bar-my-openlab-default {
-	width: 105px;
+	width: 110px;
 	
 }
 
@@ -287,7 +310,13 @@ margin: 0;
 
 #wpadminbar #wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar #wp-admin-bar-messages .ab-sub-wrapper,#wpadminbar #wp-admin-bar-activity .ab-sub-wrapper, #wpadminbar #wp-admin-bar-my-account .ab-sub-wrapper {
 	left: -105px;
-	padding:12px 1px;
+	padding:12px 1px 0 1px;
+}
+
+#wpadminbar #wp-admin-bar-my-account .ab-sub-wrapper {
+	width: 225px;
+	left: -118px;
+	background-position: 75% top;
 }
 
 #wpadminbar #wp-admin-bar-new-content .ab-sub-wrapper {
@@ -300,7 +329,7 @@ margin: 0;
 }
 
 #wpadminbar .menupop #wp-admin-bar-invites-default, #wpadminbar .menupop #wp-admin-bar-messages-default, #wpadminbar .menupop #wp-admin-bar-activity-default {
-	width: 235px;
+	width: 100%;
 	
 }
 
@@ -308,7 +337,7 @@ margin: 0;
 	padding: 0;
 }
 
-#wpadminbar #wp-admin-bar-friend-requests-title .ab-item, #wpadminbar #wp-admin-bar-invitations-title .ab-item, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:hover, #wpadminbar #wp-admin-bar-invitations-title .ab-item:hover {
+#wpadminbar #wp-admin-bar-friend-requests-title .ab-item, #wpadminbar #wp-admin-bar-invitations-title .ab-item, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:hover, #wpadminbar #wp-admin-bar-invitations-title .ab-item:hover, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:focus, #wpadminbar #wp-admin-bar-invitations-title .ab-item:focus {
 	color: #FFF;
 	text-decoration: none;
 	line-height: 26px;
@@ -326,8 +355,10 @@ margin: 0;
 }
 
 #wpadminbar #wp-admin-bar-user-actions {
- 	width: 220px;
+ 	width: 215px;
 }
+
+
 
 #wpadminbar #wp-admin-bar-friend-requests-none *, #wpadminbar #wp-admin-bar-group-invites-none *, #wpadminbar #wp-admin-bar-messages-none .ab-item *, #wpadminbar #wp-admin-bar-messages-default .nav-message *, #wpadminbar #wp-admin-bar-activity-default .nav-activity *, #wp-admin-bar-user-actions * {
 	font-family: Arial, Verdana, sans-serif;
@@ -389,7 +420,7 @@ margin: 0;
 }
 
 
-#wpadminbar  #wp-admin-bar-messages-default #wp-admin-bar-messages-more {
+#wpadminbar  #wp-admin-bar-messages-default #wp-admin-bar-messages-more, #wpadminbar #wp-admin-bar-activity-default #wp-admin-bar-activity-more {
 	text-align: right;
 	width:223px;
 }
@@ -419,4 +450,77 @@ margin: 0;
 
 #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-edit-profile, #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-logout {
 	float:left;
+}
+
+
+/* login form
+----------------------------------------------------------------------------------------*/
+
+li.wp-admin-bar-bp-login {position:relative;}
+
+#wpadminbar ul li#wp-admin-bar-bp-login {
+	width: 70px;
+}
+
+#wpadminbar ul li#wp-admin-bar-bp-login form * {
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 11px;
+	line-height: 15px;
+}
+
+
+
+#wpadminbar ul li#wp-admin-bar-bp-login form {
+	width: 200px;
+	padding: 10px;
+	background-position: 87% top;
+}
+
+#wpadminbar ul li#wp-admin-bar-bp-login form a {
+	color:#FFF;
+	text-decoration: underline;
+}
+
+#wpadminbar form#sidebar-login-form textarea, #wpadminbar form#sidebar-login-form input[type="text"],
+#wpadminbar form#sidebar-login-form select, #wpadminbar form#sidebar-login-form input[type="password"],
+#wpadminbar form#sidebar-login-form input[type="submit"] { 
+	color: #444;
+	text-shadow: none; line-height: 11px;
+}
+
+#sidebar-login-form input[type="text"], #sidebar-login-form input[type="password"] {padding:4px; width:190px}
+
+form#sidebar-login-form input[type="submit"] {padding:3px 10px; text-decoration:none; vertical-align:bottom; border:1px solid #ddd; cursor:pointer; text-shadow: none;}
+
+input#sidebar-rememberme {margin-left:0;}
+
+form#sidebar-login-form p.forgetmenot {float:none;}
+
+form#sidebar-login-form a.lost-pw {padding-right:2px !important; float:right; font-size:.9em !important; background:none !important;}
+	#wp-admin-bar li a.lost-pw:hover {text-decoration:underline !important; background:none !important;}
+
+form#sidebar-login-form #sidebar-wp-submit {
+	background:#fff; 
+	text-transform: uppercase;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-image: -o-linear-gradient(bottom, rgb(207,207,207) 16%, rgb(240,240,240) 65%, rgb(207,207,207) 91%);
+	background-image: -moz-linear-gradient(bottom, rgb(207,207,207) 16%, rgb(240,240,240) 65%, rgb(207,207,207) 91%);
+	background-image: -webkit-linear-gradient(bottom, rgb(207,207,207) 16%, rgb(240,240,240) 65%, rgb(207,207,207) 91%);
+	background-image: -ms-linear-gradient(bottom, rgb(207,207,207) 16%, rgb(240,240,240) 65%, rgb(207,207,207) 91%);
+	background-image: linear-gradient(bottom, rgb(207,207,207) 16%, rgb(240,240,240) 65%, rgb(207,207,207) 91%);
+}
+
+form#sidebar-login-form {
+	position:absolute; background:url(<?php echo get_stylesheet_directory_uri() . '/images/bg_trans.png' ?>) repeat 0 0 !important; width:200px; padding:10px; display:none; margin-left: -155px; text-align: left;}
+	li.bp-login:hover form {display:block; cursor:default;}
+
+form#sidebar-login-form label, form#sidebar-login-form span.label {display:block; color:#fff; margin:5px 0;}
+
+/* dashboard override */
+
+body.wp-admin #wpbody {
+position: relative;
+margin-top: 13px;
 }
