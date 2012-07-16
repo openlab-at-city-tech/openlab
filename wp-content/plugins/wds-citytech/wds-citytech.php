@@ -794,9 +794,10 @@ function wds_bp_group_meta(){
 
       <div id="wds-group-type"></div>
       <?php //Copy Site
-	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
-	  if(!$wds_bp_group_site_id){
+	  $group_site_url = openlab_get_group_site_url( $the_group_id );
+
+	  if( empty( $group_site_url ) ){
 		$template = "template-" . strtolower( $group_type );
 		$blog_details = get_blog_details( $template );
 
@@ -932,11 +933,18 @@ function wds_bp_group_meta(){
 
 
 		</table>
-   	<?php } else { ?>
-   		<?php $blog_url = get_blog_option( $wds_bp_group_site_id, 'siteurl' ) ?>
-   		<?php $blog_name = get_blog_option( $wds_bp_group_site_id, 'blogname' ) ?>
+   	<?php } else {
+   		$maybe_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
-   		<p>This <?php echo $group_type ?> is currently associated with the site <strong><?php echo $blog_name ?></strong> (<?php echo $blog_url ?>).</p>
+   		if ( $maybe_site_id ) {
+   			$group_site_name = get_blog_option( $maybe_site_id, 'blogname' );
+   			$group_site_text = '<strong>' . $group_site_name . '</strong> (<a href="' . $group_site_url . '">' . $group_site_url . '</a>)';
+   		} else {
+   			$group_site_text = '<strong><a href="' . $group_site_url . '">' . $group_site_url . '</a></strong>';
+   		}
+
+   		?>
+   		<p>This <?php echo $group_type ?> is currently associated with the site <?php echo $group_site_text ?>.</p>
    	<?php } ?>
     </div>
     <?php
