@@ -927,7 +927,7 @@ function wds_bp_group_meta(){
 				</th>
 
 				<td id="noo_external_options">
-					<input type="text" name="external-site-url" id="external-site-url" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
+					<input type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
 				</td>
 			</tr>
 
