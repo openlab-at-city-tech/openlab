@@ -3,7 +3,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <div class="item-list-tabs no-ajax" id="subnav">
 	<ul>
-		<?php bp_group_admin_tabs(); ?>
+		<?php openlab_group_admin_tabs(); ?>
 	</ul>
 </div><!-- .item-list-tabs -->
 
