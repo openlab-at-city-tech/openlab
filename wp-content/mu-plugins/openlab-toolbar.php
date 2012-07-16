@@ -351,7 +351,7 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
 				'id'     => 'friend-requests-none',
-				'title'  => 'None', // @todo - What should this say?
+				'title'  => 'No new friendship requests.',
 				'meta'   => array(
 					'class' => 'nav-no-items'
 				)
@@ -400,11 +400,11 @@ class OpenLab_Admin_Bar {
 				$group_counter++;
 			}
 		} else {
-			// The user has no friend requests
+			// The user has no group invites
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
-				'id'     => 'friend-requests-none',
-				'title'  => 'None', // @todo - What should this say?
+				'id'     => 'group-invites-none',
+				'title'  => 'No new invitations', // @todo - This isn't showing up
 				'meta'   => array(
 					'class' => 'nav-no-items'
 				)
