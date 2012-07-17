@@ -1,14 +1,6 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<?php
-//
-//     control the formatting of left and right side by use of variable $first_class.
-//     when it is "first" it places it on left side, when it is "" it places it on right side
-//
-//     Initialize it to left side to start with
-//
-       $first_class = "first";
-?>
 <?php $group_slug = bp_get_group_slug(); ?>
+
 <h1 class="entry-title"><?php echo openlab_portfolio_label( 'case=upper' ) ?> on the OpenLab</h1>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">

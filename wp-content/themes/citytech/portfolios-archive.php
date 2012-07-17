@@ -128,7 +128,7 @@ if ( bp_has_groups( $group_args ) ) : ?>
 <?php else: ?>
 
 	<div class="widget-error">
-		<?php _e('There are no courses to display.', 'buddypress') ?>
+		There are no portfolios to display.
 	</div>
 
 <?php endif; ?>
