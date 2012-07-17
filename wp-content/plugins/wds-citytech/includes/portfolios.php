@@ -162,7 +162,7 @@ function openlab_suggest_portfolio_path() {
 	$fname = xprofile_get_field_data( 'First Name', bp_loggedin_user_id() );
 	$lname = xprofile_get_field_data( 'Last Name', bp_loggedin_user_id() );
 
-	$slug = strtolower( substr( $fname, 0, 1 ) . $lname . '-portfolio' );
+	$slug = strtolower( substr( $fname, 0, 1 ) . $lname . '-' . strtolower( openlab_get_portfolio_label( 'user_id=' . bp_loggedin_user_id() ) ) );
 	$slug = sanitize_title( $slug );
 
 	return $slug;

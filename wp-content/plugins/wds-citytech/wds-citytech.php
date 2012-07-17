@@ -1077,6 +1077,11 @@ function openlab_require_school_and_department_for_groups() {
 		return;
 	}
 
+	// Don't check at deletion time (groan)
+	if ( bp_is_group_admin_page( 'delete-group' ) ) {
+		return;
+	}
+
 	// No payload, no check
 	if ( empty( $_POST ) ) {
 		return;
