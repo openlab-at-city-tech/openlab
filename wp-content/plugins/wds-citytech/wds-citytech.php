@@ -1072,17 +1072,29 @@ function openlab_is_school_required_for_group_type( $group_type = '' ) {
 function openlab_require_school_and_department_for_groups() {
 	global $bp;
 
+	// Only check at group creation and group admin
+	if ( !bp_is_group_admin_page() && !bp_is_group_create() ) {
+		return;
+	}
+
+	// No payload, no check
 	if ( empty( $_POST ) ) {
 		return;
 	}
 
-	$group_type = isset( $_GET['type'] ) ? $_GET['type'] : '';
+	if ( bp_is_group_create() ) {
+		$group_type = isset( $_GET['type'] ) ? $_GET['type'] : '';
+		$redirect = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
+	} else {
+		$group_type = openlab_get_current_group_type();
+		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
+	}
 
 	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
 
 		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
-			bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/' );
+			bp_core_redirect( $redirect );
 		}
 
 	}
