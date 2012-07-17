@@ -126,6 +126,8 @@ function openlab_portfolio_label( $args = array() ) {
 			$r['user_type'] = 'student';
 		}
 
+		$r['user_type'] = strtolower( $r['user_type'] );
+
 		if ( 'student' == $r['user_type'] ) {
 			$label = 'ePortfolio';
 
@@ -142,6 +144,42 @@ function openlab_portfolio_label( $args = array() ) {
 
 		return $label;
 	}
+
+/**
+ * Suggest a name for a portfolio, based on the user's FN + LN
+ */
+function openlab_suggest_portfolio_name() {
+	$fname = xprofile_get_field_data( 'First Name', bp_loggedin_user_id() );
+	$lname = xprofile_get_field_data( 'Last Name', bp_loggedin_user_id() );
+
+	return sprintf( "%s %s's %s", $fname, $lname, openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) );
+}
+
+/**
+ * Suggest a path for a portfolio, based on the user's FN + LN
+ */
+function openlab_suggest_portfolio_path() {
+	$fname = xprofile_get_field_data( 'First Name', bp_loggedin_user_id() );
+	$lname = xprofile_get_field_data( 'Last Name', bp_loggedin_user_id() );
+
+	$slug = strtolower( substr( $fname, 0, 1 ) . $lname . '-portfolio' );
+	$slug = sanitize_title( $slug );
+
+	return $slug;
+}
+
+/**
+ * Ensure that a suggested name is included in the Name input of the creation screen
+ */
+function openlab_bp_get_new_group_name( $name ) {
+	if ( '' == $name ) {
+		$name = openlab_suggest_portfolio_name();
+	}
+
+	return $name;
+}
+add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
+
 
 /////////////////////////
 //     ACCESS LIST     //

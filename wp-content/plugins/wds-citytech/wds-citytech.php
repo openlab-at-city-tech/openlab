@@ -687,7 +687,7 @@ function wds_load_group_type( $group_type ){
 	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school=explode(",",$wds_group_school);
 		$return.='<tr>';
-            $return.='<td>School(s):';
+            $return.='<td>School(s) <span class="required">(required)</span></td>:';
             $return.='<td>';
 
             		// If this is a Portfolio, we'll pre-check the school and department
@@ -749,7 +749,7 @@ function wds_load_group_type( $group_type ){
 		$return.='<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
 
 		$return.='<tr>';
-            $return.='<td>Department(s):';
+            $return.='<td>Department(s) <span class="required">(required)</span></td>:';
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
 
@@ -974,9 +974,9 @@ function wds_bp_group_meta(){
 				<td id="noo_new_options">
 				<?php
 				if( constant( "VHOST" ) == 'yes' ) : ?>
-					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>.<?php echo $current_site->domain;?>
+					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo openlab_suggest_portfolio_path() ?>" />.<?php echo $current_site->domain;?>
 				<?php else:
-					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
+					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo openlab_suggest_portfolio_path() ?>" />
 				<?php endif; ?>
 
 				</td>
