@@ -316,4 +316,39 @@ function openlab_is_my_portfolio() {
 	return bp_is_group() && openlab_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) == bp_loggedin_user_id();
 }
 
+/**
+ * On portfolio group deletion, also do the following:
+ *  - Mark blog as deleted
+ *  - Delete user metadata regarding portfolio affiliation
+ */
+function openlab_delete_portfolio( $group_id ) {
+	if ( !openlab_is_portfolio( $group_id ) ) {
+		return;
+	}
+
+	// This'll only find internal blogs, of course
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+
+	if ( $site_id ) {
+		if ( !function_exists( 'wpmu_delete_blog' ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/ms.php' );
+		}
+		wpmu_delete_blog( $site_id );
+	}
+
+	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
+	bp_delete_user_meta( $user_id, 'portfolio_group_id' );
+
+	// Reconfigure the redirect
+	add_filter( 'groups_group_deleted', 'openlab_delete_portfolio_redirect' );
+}
+add_action( 'groups_before_delete_group', 'openlab_delete_portfolio' );
+
+/**
+ * After portfolio delete, redirect to user profile page
+ */
+function openlab_delete_portfolio_redirect() {
+	bp_core_redirect( bp_loggedin_user_domain() );
+}
+
 ?>
