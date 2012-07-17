@@ -144,6 +144,134 @@ function openlab_portfolio_label( $args = array() ) {
 	}
 
 /////////////////////////
+//     ACCESS LIST     //
+/////////////////////////
+
+/**
+ * Template loader
+ */
+function openlab_groups_screen_group_admin_access_list() {
+	global $bp;
+
+	if ( bp_is_groups_component() && bp_is_action_variable( 'access-list', 0 ) ) {
+
+		if ( $bp->is_item_admin || $bp->is_item_mod  ) {
+
+			// If the edit form has been submitted, save the edited details
+			if ( isset( $_POST['save'] ) ) {
+				// Check the nonce
+				if ( !check_admin_referer( 'groups_edit_group_details' ) )
+					return false;
+
+				if ( !groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], (int)$_POST['group-notify-members'] ) ) {
+					bp_core_add_message( __( 'There was an error updating group details, please try again.', 'buddypress' ), 'error' );
+				} else {
+					bp_core_add_message( __( 'Group details were successfully updated.', 'buddypress' ) );
+				}
+
+				do_action( 'groups_group_details_edited', $bp->groups->current_group->id );
+
+				bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/' );
+			}
+
+			do_action( 'groups_screen_group_admin_edit_details', $bp->groups->current_group->id );
+
+			bp_core_load_template( apply_filters( 'groups_template_group_admin', 'groups/single/home' ) );
+		}
+	}
+}
+add_action( 'bp_screens', 'openlab_groups_screen_group_admin_access_list' );
+
+/**
+ * Load the necessary JS and CSS from Invite Anyone // lazy
+ */
+function openlab_portfolio_access_list_enqueues() {
+	if ( bp_is_groups_component() && bp_is_action_variable( 'access-list', 0 ) ) {
+		wp_enqueue_script( 'invite-anyone-autocomplete-js', WP_PLUGIN_URL . '/invite-anyone/group-invites/jquery.autocomplete/jquery.autocomplete-min.js', array( 'jquery' ) );
+
+		wp_register_script( 'invite-anyone-js', WP_PLUGIN_URL . '/wds-citytech/assets/js/access-list.js', array( 'invite-anyone-autocomplete-js' ) );
+		wp_enqueue_script( 'invite-anyone-js' );
+
+		$style_url = WP_PLUGIN_URL . '/invite-anyone/group-invites/group-invites-css.css';
+		$style_file = WP_PLUGIN_DIR . '/invite-anyone/group-invites/group-invites-css.css';
+
+		if (file_exists($style_file)) {
+			wp_register_style('invite-anyone-group-invites-style', $style_url);
+			wp_enqueue_style('invite-anyone-group-invites-style');
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'openlab_portfolio_access_list_enqueues' );
+
+function openlab_ajax_invite_user() {
+	global $bp;
+
+	check_ajax_referer( 'groups_invite_uninvite_user' );
+
+	if ( !$_POST['friend_id'] || !$_POST['friend_action'] || !$_POST['group_id'] )
+		return false;
+
+	if ( 'invite' == $_POST['friend_action'] ) {
+
+		// Add the user to the group, silently
+		$new_member                = new BP_Groups_Member;
+		$new_member->group_id      = (int) $_POST['group_id'];
+		$new_member->user_id       = (int) $_POST['friend_id'];
+		$new_member->inviter_id    = 0;
+		$new_member->is_admin      = 0;
+		$new_member->user_title    = '';
+		$new_member->date_modified = bp_core_current_time();
+		$new_member->is_confirmed  = 1;
+
+		$new_member->save();
+
+		$user = new BP_Core_User( $_POST['friend_id'] );
+
+		$group_slug = isset( $bp->groups->root_slug ) ? $bp->groups->root_slug : $bp->groups->slug;
+
+		echo '<li id="uid-' . $user->id . '">';
+		echo bp_core_fetch_avatar( array( 'item_id' => $user->id ) );
+		echo '<h4>' . bp_core_get_userlink( $user->id ) . '</h4>';
+		echo '<span class="activity">' . esc_html( $user->last_active ) . '</span>';
+		echo '<div class="action">
+				<a class="remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . $group_slug . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_html( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
+			  </div>';
+		echo '</li>';
+
+		die();
+
+	} else if ( 'uninvite' == $_POST['friend_action'] ) {
+
+		// Remove the user from the group, silently
+		if ( !groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] ) )
+			die();
+
+		die();
+
+	} else {
+		die();
+	}
+}
+add_action( 'wp_ajax_openlab_ajax_invite_user', 'openlab_ajax_invite_user' );
+
+function openlab_access_remove_link( $user_id = 0 ) {
+	global $members_template;
+
+	if ( !$user_id )
+		$user_id = $members_template->member->user_id;
+
+	echo bp_get_group_member_remove_link( $user_id );
+}
+	function openlab_get_access_remove_link( $user_id = 0, $group = false ) {
+		global $members_template, $groups_template;
+
+		if ( !$group )
+			$group =& $groups_template->group;
+
+		return apply_filters( 'bp_get_group_member_remove_link', wp_nonce_url( bp_get_group_permalink( $group ) . 'admin/access-list/remove/' . $user_id, 'groups_remove_member' ) );
+	}
+
+/////////////////////////
 //    MISCELLANEOUS    //
 /////////////////////////
 
