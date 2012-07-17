@@ -5,16 +5,20 @@
  * meta_query parameter (or even an 'in' parameter). Usage:
  *
  * 1) Just before you fire up your bp_has_groups() loop, instantiate the BP_Groups_Meta_Filter
- *    class, with parameters $key and $value
+ *    class, passing a parameter that's an array of keys/values to filter by
  * 2) Do your groups loop as normal
  * 3) When you've closed the bp_has_groups() loop (endif;), call the method remove_filters() just
  *    to be safe.
  *
  * EXAMPLE
  * Here's how you would run a bp_has_groups() loop that would only show groups that had the meta
- * key/value: 'favorite_gum' => 'Juicy Fruit'
+ * key/value pairs: 'favorite_gum' => 'Juicy Fruit' & 'favorite_turtle' => 'Donatello'
  *
- *     $meta_filter = new BP_Groups_Meta_Filter( 'favorite_gum', 'Juicy Fruit' );
+ *     $filters = array(
+ *         'favorite_gum' => 'Juicy Fruit',
+ *         'favorite_turtle' => 'Donatello'
+ *     );
+ *     $meta_filter = new BP_Groups_Meta_Filter( $filters );
  *
  *     // Note that you can pass whatever arguments you want to bp_has_groups(), as usual
  *     if ( bp_has_groups() ) :
