@@ -221,7 +221,7 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-portfolio',
-				'title'  => 'My Portfolio',
+				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper' ) ),
 				'href'   => $portfolio_url
 			) );
 		}
