@@ -18,6 +18,7 @@ include "wds-docs.php";
  */
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require ( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
@@ -717,7 +718,7 @@ function wds_load_group_type( $group_type ){
 
 	$return.='</table>';
 
-	if($group_type=="course"){
+	if($group_type=="course" || 'portfolio' == $group_type ){
 		$return.='<script>wds_load_group_departments();</script>';
 	}
 	if($echo){
@@ -794,9 +795,10 @@ function wds_bp_group_meta(){
 
       <div id="wds-group-type"></div>
       <?php //Copy Site
-	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
-	  if(!$wds_bp_group_site_id){
+	  $group_site_url = openlab_get_group_site_url( $the_group_id );
+
+	  if( empty( $group_site_url ) ){
 		$template = "template-" . strtolower( $group_type );
 		$blog_details = get_blog_details( $template );
 
@@ -926,17 +928,24 @@ function wds_bp_group_meta(){
 				</th>
 
 				<td id="noo_external_options">
-					<input type="text" name="external-site-url" id="external-site-url" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
+					<input type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
 				</td>
 			</tr>
 
 
 		</table>
-   	<?php } else { ?>
-   		<?php $blog_url = get_blog_option( $wds_bp_group_site_id, 'siteurl' ) ?>
-   		<?php $blog_name = get_blog_option( $wds_bp_group_site_id, 'blogname' ) ?>
+   	<?php } else {
+   		$maybe_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
-   		<p>This <?php echo $group_type ?> is currently associated with the site <strong><?php echo $blog_name ?></strong> (<?php echo $blog_url ?>).</p>
+   		if ( $maybe_site_id ) {
+   			$group_site_name = get_blog_option( $maybe_site_id, 'blogname' );
+   			$group_site_text = '<strong>' . $group_site_name . '</strong> (<a href="' . $group_site_url . '">' . $group_site_url . '</a>)';
+   		} else {
+   			$group_site_text = '<strong><a href="' . $group_site_url . '">' . $group_site_url . '</a></strong>';
+   		}
+
+   		?>
+   		<p>This <?php echo $group_type ?> is currently associated with the site <?php echo $group_site_text ?>.</p>
    	<?php } ?>
     </div>
     <?php
@@ -987,11 +996,6 @@ function wds_bp_group_meta_save($group) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type']);
 	}
 
-	/*//WIKI
-	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
-		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
-	}*/
-
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
 	if ( isset( $_POST['wds_website_check'] ) ||
@@ -1033,6 +1037,16 @@ function wds_bp_group_meta_save($group) {
 
 		if ( openlab_is_portfolio( $group->id ) ) {
 			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
+		}
+	}
+
+	// Site privacy
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
 		}
 	}
 

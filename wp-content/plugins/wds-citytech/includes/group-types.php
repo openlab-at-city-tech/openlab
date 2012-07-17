@@ -88,6 +88,10 @@ function openlab_current_group_type( $case = 'lower' ) {
  * @return string
  */
 function openlab_get_group_type( $group_id = 0 ) {
+	if ( !$group_id ) {
+		$group_id = openlab_fallback_group();
+	}
+
 	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
 	if ( !in_array( $group_type, openlab_group_types() ) ) {
@@ -102,10 +106,6 @@ function openlab_get_group_type( $group_id = 0 ) {
 ///////////////////////////
 
 function openlab_is_group_type( $group_id = 0, $type = 'group' ) {
-	if ( !$group_id ) {
-		$group_id = openlab_fallback_group();
-	}
-
 	return $type == openlab_get_group_type( $group_id );
 }
 

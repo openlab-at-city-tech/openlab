@@ -309,7 +309,7 @@ class OpenLab_Admin_Bar {
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => '<span class="toolbar-item-name">Invitations </span><span class="toolbar-item-count">' . $total_count . '</span>',
+			'title' => '<span class="toolbar-item-name">Invitations </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		/**
@@ -432,9 +432,10 @@ class OpenLab_Admin_Bar {
 	 * Add the Messages menu
 	 */
 	function add_messages_menu( $wp_admin_bar ) {
+		$total_count = bp_get_total_unread_messages_count();
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => '<span class="toolbar-item-name">Messages </span><span class="toolbar-item-count">' . bp_get_total_unread_messages_count() . '</span>',
+			'title' => '<span class="toolbar-item-name">Messages </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		// Only show the first 5

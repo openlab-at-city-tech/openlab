@@ -216,8 +216,12 @@ function cuny_members_pagination_count($member_name)
 		echo $pag;
 }
 
-//a variation on bp_get_options_nav to match the design
-//main change here at the moment - changing "home" to "profile"
+/**
+ * a variation on bp_get_options_nav to match the design
+ * main change here at the moment - changing "home" to "profile"
+ *
+ * @todo Clean up this godawful mess. There are filters for this stuff - bbg
+ */
 function cuny_get_options_nav() {
 	global $bp;
 
@@ -263,6 +267,29 @@ function cuny_get_options_nav() {
 		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
 	}
 }//end cuny_get_options_nav
+
+/**
+ * Reach into the item nav menu and remove stuff as necessary
+ *
+ * Hooked to bp_screens at 1 because apparently BP is broken??
+ */
+function openlab_modify_options_nav() {
+	global $bp;
+
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		foreach( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+			if ( 'home' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
+			} else if ( 'admin' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
+			} else {
+				unset( $bp->bp_options_nav[$bp->current_item][$key] );
+			}
+
+		}
+	}
+}
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 //custom menu locations for OpenLab
 register_nav_menus( array(
@@ -478,136 +505,6 @@ function openlab_previous_step_type( $url ) {
 add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
 
 /**
- * Get a group's recent posts and comments, and display them in two widgets
- */
-function show_site_posts_and_comments() {
-	global $first_displayed;
-
-	$group_id = bp_get_group_id();
-
-	$site_type = false;
-
-	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
-		$site_type = 'local';
-	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
-		$site_type = 'external';
-	}
-
-	$posts = array();
-	$comments = array();
-
-	switch ( $site_type ) {
-		case 'local':
-			switch_to_blog( $site_id );
-
-			// Set up posts
-			$wp_posts = get_posts( array(
-				'posts_per_page' => 3
-			) );
-
-			foreach( $wp_posts as $wp_post ) {
-				$posts[] = array(
-					'title' => $wp_post->post_title,
-					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
-					'permalink' => get_permalink( $wp_post->ID )
-				);
-			}
-
-			// Set up comments
-			$comment_args = array(
-				"status" => "approve",
-				"number" => "3"
-			);
-
-			$wp_comments = get_comments( $comment_args );
-
-			foreach( $wp_comments as $wp_comment ) {
-				// Skip the crummy "Hello World" comment
-				if ( $wp_comment->comment_ID == "1" ) {
-					continue;
-				}
-				$post_id = $wp_comment->comment_post_ID;
-
-				$comments[] = array(
-					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
-					'permalink' => get_permalink( $post_id )
-				);
-			}
-
-			$site_url = get_option( 'siteurl' );
-
-			restore_current_blog();
-
-			break;
-
-		case 'external':
-			$posts = openlab_get_external_posts_by_group_id();
-			$comments = openlab_get_external_comments_by_group_id();
-
-			break;
-	}
-
-	// If we have either, show both
-	if ( !empty( $posts ) || !empty( $comments ) ) {
-		?>
-		<div class="one-half first">
-			<div id="recent-course">
-				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
-					</div>
-
-					<ul>
-					<?php foreach( $posts as $post ) : ?>
-						<li>
-						<p>
-							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
-						</p>
-						</li>
-					<?php endforeach ?>
-					</ul>
-
-					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
-
-
-
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-course -->
-		</div><!-- .one-half -->
-
-		<div class="one-half">
-			<div id="recent-site-comments">
-				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
-					</div>
-
-
-
-						<ul>
-						<?php if ( !empty( $comments ) ) : ?>
-							<?php foreach( $comments as $comment ) : ?>
-								<li>
-									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
-								</li>
-							<?php endforeach ?>
-						<?php else : ?>
-							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
-						<?php endif ?>
-
-						</ul>
-
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-site-comments -->
-		</div><!-- .one-half -->
-		<?php
-	}
-}
-
-
-/**
  * Markup for groupblog privacy settings
  */
 function openlab_site_privacy_settings_markup( $site_id = 0 ) {
@@ -642,5 +539,60 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	<?php
 }
 
+/**
+ * Markup for group admin tabs
+ */
+function openlab_group_admin_tabs( $group = false ) {
+	global $bp, $groups_template;
+
+	if ( !$group )
+		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+
+	$current_tab = bp_action_variable( 0 );
+
+	// Portfolio tabs look different from other groups
+?>
+
+	<?php if ( openlab_is_portfolio() ) : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li>
+		<?php } ?>
+
+		<?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
+			<li<?php if ( 'group-avatar'   == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li>
+		<?php endif; ?>
+
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Privacy Settings</a></li>
+
+		<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+
+	<?php else : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Details', 'buddypress' ); ?></a></li>
+		<?php } ?>
+
+		<?php
+			if ( !$bp->is_item_admin )
+				return false;
+		?>
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
+
+		<li<?php if ( 'manage-members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/manage-members"><?php _e( 'Members', 'buddypress' ); ?></a></li>
+
+		<?php if ( $groups_template->group->status == 'private' ) : ?>
+			<li<?php if ( 'membership-requests' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Requests', 'buddypress' ); ?></a></li>
+		<?php endif; ?>
+
+		<?php do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete', 'buddypress' ); ?></a></li>
+
+	<?php endif ?>
+<?php
+}
 
 ?>

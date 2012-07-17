@@ -1,9 +1,9 @@
-<?php global $bp; 
+<?php global $bp;
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );?>
 
 <div class="item-list-tabs no-ajax" id="subnav">
 	<ul>
-		<?php bp_group_admin_tabs(); ?>
+		<?php openlab_group_admin_tabs(); ?>
 	</ul>
 </div><!-- .item-list-tabs -->
 
@@ -24,11 +24,15 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
 
-	<p>
-		<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
-		<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
-		<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
-	</p>
+	<?php if ( !openlab_is_portfolio() ) : ?>
+
+		<p>
+			<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
+			<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
+			<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
+		</p>
+
+	<?php endif ?>
 
 	<?php do_action( 'bp_after_group_details_admin' ); ?>
 
@@ -37,20 +41,88 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <?php endif; ?>
 
+<?php /* Edit Access List (Portfolios only) */ ?>
+<?php if ( bp_is_group_admin_screen( 'access-list' ) ) : ?>
+	<p><?php printf( 'Want to grant access to your %s to someone who is not yet a member of the site?', openlab_get_portfolio_label() ) ?> <a href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Send invitations by email.', 'bp-invite-anyone' ) ?></a></p>
+
+	<div class="left-menu">
+		<p>Search for members to grant access to:</p>
+
+		<ul class="first acfb-holder">
+			<li>
+				<input type="text" name="send-to-input" class="send-to-input" id="send-to-input" />
+			</li>
+		</ul>
+
+		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
+
+		<div id="invite-anyone-member-list">
+			<ul>
+				<?php bp_new_group_invite_member_list() ?>
+			</ul>
+
+			<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
+		</div>
+	</div>
+
+	<div class="main-column">
+
+		<div id="message" class="info">
+			<p><?php _e('Select people to invite from your friends list.', 'buddypress'); ?></p>
+		</div>
+
+		<?php do_action( 'bp_before_group_send_invites_list' ) ?>
+
+		<?php /* The ID 'friend-list' is important for AJAX support. */ ?>
+		<ul id="invite-anyone-invite-list" class="item-list">
+		<?php if ( bp_group_has_members() ) : ?>
+
+			<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
+
+				<li id="uid-<?php bp_group_member_id() ?>">
+					<?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_group_member_id(), 'type' => 'thumb', 'alt' => __( 'Profile picture of %s', 'buddypress' ) ) ) ?>
+
+					<h4><?php bp_group_member_link() ?></h4>
+
+					<div class="action">
+						<a class="remove" href="<?php echo openlab_access_remove_link() ?>" id="member-<?php bp_group_member_id() ?>"><?php _e( 'Remove Access', 'buddypress' ) ?></a>
+					</div>
+				</li>
+
+			<?php endwhile; ?>
+
+		<?php endif; ?>
+		</ul>
+
+	</div>
+
+	<div class="clear"></div>
+
+	<?php if ( !bp_get_new_group_id() ) : ?>
+	<div class="submit">
+		<input type="submit" name="submit" id="submit" value="<?php _e( 'Send Invites', 'buddypress' ) ?>" />
+	</div>
+	<?php endif; ?>
+
+	<?php wp_nonce_field( 'groups_send_invites', '_wpnonce_send_invites') ?>
+
+		<!-- Don't leave out this sweet field -->
+	<?php
+	if ( !bp_get_new_group_id() ) {
+		?><input type="hidden" name="group_id" id="group_id" value="<?php bp_group_id() ?>" /><?php
+	} else {
+		?><input type="hidden" name="group_id" id="group_id" value="<?php bp_new_group_id() ?>" /><?php
+	}
+	?>
+
+<?php endif ?>
+
 <?php /* Manage Group Settings */ ?>
 <?php if ( bp_is_group_admin_screen( 'group-settings' ) ) : ?>
 
 	<?php do_action( 'bp_before_group_settings_admin' ); ?>
 
-	<?php if ( function_exists('bp_wire_install') ) : ?>
-
-		<div class="checkbox">
-			<label><input type="checkbox" name="group-show-wire" id="group-show-wire" value="1"<?php bp_group_show_wire_setting() ?>/> <?php _e( 'Enable comment wire', 'buddypress' ) ?></label>
-		</div>
-
-	<?php endif; ?>
-
-	<?php if ( function_exists('bp_forums_is_installed_correctly') ) : ?>
+	<?php if ( function_exists('bp_forums_is_installed_correctly') && !openlab_is_portfolio() ) : ?>
 
 		<?php if ( bp_forums_is_installed_correctly() ) : ?>
 
@@ -64,7 +136,9 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<hr />
 
-	<h4><?php _e( 'Privacy Options', 'buddypress' ); ?></h4>
+	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
+
+	<h5>Portfolio Profile</h5>
 
 	<div class="radio">
 		<label>
@@ -97,6 +171,13 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</ul>
 		</label>
 	</div>
+
+	<?php /* Site privacy markup */ ?>
+
+	<h5>Portfolio Site</h5>
+	<?php if ( $site_id = openlab_get_site_id_by_group_id() ) : ?>
+		<?php openlab_site_privacy_settings_markup( $site_id ) ?>
+	<?php endif ?>
 
 	<?php do_action( 'bp_after_group_settings_admin' ); ?>
 
@@ -202,13 +283,13 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 						<h5>
 							<?php bp_group_member_link() ?>
-							
+
 							<?php if ( bp_get_group_member_is_banned() ) _e( '(banned)', 'buddypress'); ?>
 
-							<span class="small"> - 
-							
+							<span class="small"> -
+
 							<?php if ( bp_get_group_member_is_banned() ) : ?>
-								
+
 								<a href="<?php bp_group_member_unban_link() ?>" class="confirm" title="<?php _e( 'Unban this member', 'buddypress' ) ?>"><?php _e( 'Remove Ban', 'buddypress' ); ?></a>
 
 							<?php else : ?>
@@ -295,10 +376,10 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 	<?php do_action( 'bp_before_group_delete_admin' ); ?>
 
 	<div id="message" class="info">
-		<p><?php _e( 'WARNING: Deleting this group will completely remove ALL content associated with it. There is no way back, please be careful with this option.', 'buddypress' ); ?></p>
+		<p><?php printf( 'WARNING: Deleting this %s will completely remove ALL content associated with it. There is no way back, please be careful with this option.', openlab_get_group_type() ); ?></p>
 	</div>
 
-	<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if(this.checked) { document.getElementById('delete-group-button').disabled = ''; } else { document.getElementById('delete-group-button').disabled = 'disabled'; }" /> <?php _e( 'I understand the consequences of deleting this group.', 'buddypress' ); ?>
+	<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if(this.checked) { document.getElementById('delete-group-button').disabled = ''; } else { document.getElementById('delete-group-button').disabled = 'disabled'; }" /> <?php printf( 'I understand the consequences of deleting this %s.', openlab_get_group_type() ); ?>
 
 	<?php do_action( 'bp_after_group_delete_admin' ); ?>
 
