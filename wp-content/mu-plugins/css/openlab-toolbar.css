@@ -270,6 +270,7 @@ margin: 0;
 
 /* notification counts */
 
+
 #wpadminbar .quicklinks .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count {
 	color: #FFF;
 	background-color: #0fceba;
@@ -294,11 +295,9 @@ margin: 0;
 	margin-left: 0px;
 }
 
-
-
-
-
-
+#wpadminbar .quicklinks  #wp-admin-bar-invites .toolbar-item-count.count-0, #wpadminbar #wp-admin-bar-comments .pending-count.count-0 {
+	display:none;
+}
 
 /* Dropdown menus */
 
