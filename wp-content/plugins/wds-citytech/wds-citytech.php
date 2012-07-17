@@ -564,6 +564,68 @@ function wds_load_group_departments(){
 	die("document.getElementById('departments_html').innerHTML='$return'");
 }
 
+/**
+ * Get a list of schools
+ */
+function openlab_get_school_list() {
+	return array(
+		'tech'       => 'Technology & Design',
+		'studies'    => 'Professional Studies',
+		'arts'       => 'Arts & Sciences'
+	);
+}
+
+/**
+ * Get a list of departments
+ *
+ * @param str Optional. Leave out to get all departments
+ */
+function openlab_get_department_list( $school = '' ) {
+
+	// Sanitize school name
+	$schools = openlab_get_school_list();
+	if ( isset( $schools[$school] ) ) {
+		$school = $school;
+	} else if ( in_array( $school, $schools ) ) {
+		$school = array_search( $school, $schools );
+	}
+
+	$all_departments = array(
+		'tech' => array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology'),
+		'studies' => array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology'),
+		'arts' => array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science')
+	);
+
+	// Lazy - I didn't feel like manually converting to key-value structure
+	$departments_sorted = array();
+	foreach( $schools as $s_key => $s_label ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		$departments_sorted[$s_key] = array();
+	}
+
+	foreach( $all_departments as $s_key => $depts ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		foreach( $depts as $dept ) {
+			$d_key = strtolower( str_replace( ' ', '-', $dept ) );
+			$departments_sorted[$s_key][$d_key] = $dept;
+		}
+	}
+
+	if ( $school ) {
+		$departments_sorted = $departments_sorted[$school];
+	}
+
+	return $departments_sorted;
+}
+
 add_action('init', 'wds_new_group_type');
 function wds_new_group_type(){
   if( isset( $_GET['new'] ) && $_GET['new']=="true" && isset( $_GET['type'] ) ){

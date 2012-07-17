@@ -74,6 +74,14 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 	$group_args['type'] = $_GET['group_sequence'];
 }
 
+?>
+
+<div class="current-group-filters current-portfolio-filters">
+	<?php openlab_current_directory_filters() ?>
+</div>
+
+<?php
+
 if ( bp_has_groups( $group_args ) ) : ?>
 
 	<div class="group-count"><?php cuny_groups_pagination_count( "Portfolios" ); ?></div>
@@ -89,21 +97,9 @@ if ( bp_has_groups( $group_args ) ) : ?>
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-					<?php
-					$admins = groups_get_group_admins( $group_id );
-//					echo "<br />Admins: <pre>";print_r($admins);echo "</pre>";
-					$faculty_id = $admins[0]->user_id;
-//					$faculty_id = $bp->groups->current_group->admins[0]->user_id;
-					$first_name= ucfirst(xprofile_get_field_data( 'First Name', $faculty_id));
-					$last_name= ucfirst(xprofile_get_field_data( 'Last Name', $faculty_id));
-					$wds_faculty= $first_name . " " . $last_name;;
-//					$wds_faculty=groups_get_groupmeta($group_id, 'wds_faculty' );
-					$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
-					$wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );
-		  			$wds_year=groups_get_groupmeta($group_id, 'wds_year' );
-		  			$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
-					?>
-                    <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo $wds_departments;?> | <?php echo $wds_course_code;?><br /> <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
+
+					<div class="info-line"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ) ?></div>
+
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {

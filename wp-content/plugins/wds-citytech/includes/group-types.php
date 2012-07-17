@@ -117,4 +117,102 @@ function openlab_is_portfolio( $group_id = 0 ) { return openlab_is_group_type( $
 
 function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'club' ); }
 
+////////////////////////////
+//    DIRECTORY FILTERS   //
+////////////////////////////
+
+/**
+ * Get an array describing some details about filters
+ *
+ * This is the master function where filter data should be stored
+ */
+function openlab_get_directory_filter( $filter_type ) {
+	$filter_array = array(
+		'type' => $filter_type,
+		'label' => '',
+		'options' => array()
+	);
+
+	switch ( $filter_type ) {
+		case 'school' :
+			$filter_array['label']   = 'School';
+			$filter_array['options'] = array(
+				'school_all' => 'All',
+			);
+
+			foreach( openlab_get_school_list() as $school_key => $school_label ) {
+				$filter_array['options'][$school_key] = $school_label;
+			}
+
+			break;
+
+		case 'department' :
+			$filter_array['label']   = 'Department';
+			$filter_array['options'] = array(
+				'dept_all' => 'All'
+			);
+
+			foreach( openlab_get_department_list() as $depts ) {
+				foreach( $depts as $dept_key => $dept_label ) {
+					$filter_array['options'][$dept_key] = $dept_label;
+				}
+			}
+
+			break;
+
+		case 'user_type' :
+			$filter_array['label']   = 'User Type';
+			$filter_array['options'] = array(
+				'user_type_all' => 'All',
+				'student'       => 'Student',
+				'faculty'       => 'Faculty',
+				'staff'         => 'Staff'
+			);
+			break;
+	}
+
+	return $filter_array;
+}
+
+/**
+ * Gets the current directory filters, and spits out some markup
+ */
+function openlab_current_directory_filters() {
+	$filters = array();
+
+	switch ( openlab_get_current_group_type() ) {
+		case 'portfolio' :
+			$filters = array( 'school', 'department', 'user_type' );
+			break;
+
+		default :
+
+			break;
+	}
+
+	$active_filters = array();
+	foreach( $filters as $f ) {
+		if ( !empty( $_GET[$f] ) ) {
+			$active_filters[$f] = $_GET[$f];
+		}
+	}
+
+
+	$markup = '';
+	if ( !empty( $active_filters ) ) {
+		$markup .= '<ul>';
+		foreach( $active_filters as $ftype => $fvalue ) {
+			$filter_data = openlab_get_directory_filter( $ftype );
+
+			$label = $filter_data['label'];
+			$value = isset( $filter_data['options'][$fvalue] ) ? $filter_data['options'][$fvalue] : ucwords( $fvalue );
+
+			$markup .= sprintf( '<li>%s: %s</li>', $label, $value );
+		}
+		$markup .= '</ul>';
+	}
+
+	echo $markup;
+}
+
 ?>
