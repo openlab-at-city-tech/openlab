@@ -501,7 +501,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'messages',
 			'id'     => 'messages-more',
-			'title'  => 'Go to Inbox',
+			'title'  => 'See All Messages',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 	}
@@ -546,7 +546,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'activity',
 			'id'     => 'activity-more',
-			'title'  => 'See all group activity',
+			'title'  => 'See All Activity',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() )
 		) );
 	}

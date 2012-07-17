@@ -32,6 +32,10 @@
 	background:none;
 }
 
+#wpadminbar .quicklinks {
+	margin: 0 10px;
+}
+
 #wpadminbar .quicklinks > ul > li {
 	list-style: none;
 	text-align: center;
@@ -53,11 +57,35 @@
 }
 
 #wpadminbar .quicklinks #wp-admin-bar-openlab, #wpadminbar .quicklinks #wp-admin-bar-my-openlab,  #wpadminbar .quicklinks #wp-admin-bar-my-account, #wpadminbar .quicklinks #wp-admin-bar-top-logout, #wpadminbar #wp-admin-bar-site-name {
-	min-width: 110px;
+	/* min-width: 110px; */
+	padding: 0 10px;
 }
+
+#wpadminbar .quicklinks #wp-admin-bar-openlab {
+	padding-right: 0;
+	margin-right: 0;
+	width: 109px;
+}
+
+#wpadminbar .quicklinks #wp-admin-bar-openlab > a {
+	padding-right: 0;
+	margin-right: 0;
+}
+
+/*#wpadminbar .quicklinks #wp-admin-bar-openlab > a {
+	background:url(images/cuny-sw-logo.png) no-repeat;
+	text-indent: -9999px;
+	
+	height: 29px;
+	margin: -10px 0 0 0;
+	padding: 0;
+	
+}*/
 
 #wpadminbar .quicklinks #wp-admin-bar-my-openlab { 
 	border-right: none;
+	padding-left: 0;
+	width:109px;
 }
 
 #wpadminbar .quicklinks > ul > li > a, #wpadminbar .quicklinks > ul > li > .ab-empty-item {
@@ -101,10 +129,12 @@
 
 #wpadminbar .item-avatar img {
 	width: 50px;
+	height: 50px;
 }
 
 #wp-admin-bar-user-info .avatar {
 	width: 50px;
+	height: 50px;
 	position: relative;
 	float:left;
 	left: 0;
@@ -220,12 +250,18 @@
 	background: none;
 }
 
+#wpadminbar #wp-admin-bar-my-account {
+	
+}
+
 #wpadminbar #wp-admin-bar-my-account, #wpadminbar #wp-admin-bar-bp-register {
 	border-left: none;
 }
 
 #wpadminbar #wp-admin-bar-my-account > a {
 	color: #C84C35;
+	text-align: right;
+	padding:0;
 }
 
 #wpadminbar #wp-admin-bar-my-account.with-avatar #wp-admin-bar-user-actions > li {
@@ -301,7 +337,6 @@ margin: 0;
 
 #wpadminbar .menupop #wp-admin-bar-my-openlab-default {
 	width: 110px;
-	
 }
 
 #wpadminbar .menupop #wp-admin-bar-site-name-default {
@@ -315,7 +350,7 @@ margin: 0;
 
 #wpadminbar #wp-admin-bar-my-account .ab-sub-wrapper {
 	width: 225px;
-	left: -118px;
+	left: -122px;
 	background-position: 75% top;
 }
 
