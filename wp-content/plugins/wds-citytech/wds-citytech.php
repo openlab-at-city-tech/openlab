@@ -513,11 +513,13 @@ function wds_groups_ajax(){
 			if(document.getElementById('school_arts').checked){
 				schools=schools+","+document.getElementById('school_arts').value;
 			}
+			var group_type = jQuery('input[name="group_type"]').val();
 			isack.execute = 1;
 			isack.method = 'POST';
 			isack.setVar( "action", "wds_load_group_departments" );
 			isack.setVar( "schools", schools );
 			isack.setVar( "group", "<?php echo $group;?>" );
+			isack.setVar( "group_type", group_type );
 			isack.runAJAX();
 			return true;
 		}
@@ -532,12 +534,14 @@ function wds_load_group_departments(){
 	global $wpdb, $bp;
 	$group = $_POST['group'];
 	$schools = $_POST['schools'];
+	$group_type = $_POST['group_type'];
 	$schools=str_replace("0,","",$schools);
 	$schools=explode(",",$schools);
 
-	$departments_tech=array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology');
-	$departments_studies=array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology');
-	$departments_arts=array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science');
+	$departments_tech    = openlab_get_department_list( 'tech' );
+	$departments_studies = openlab_get_department_list( 'studies' );
+	$departments_arts    = openlab_get_department_list( 'arts' );
+
 	$departments=array();
 	if(in_array("tech",$schools)){
 		$departments=array_merge_recursive($departments, $departments_tech);
@@ -549,8 +553,17 @@ function wds_load_group_departments(){
 		$departments=array_merge_recursive($departments, $departments_arts);
 	}
 	sort($departments);
-	$wds_departments=groups_get_groupmeta($group, 'wds_departments' );
-	$wds_departments=explode(",",$wds_departments);
+
+	if ( 'portfolio' == strtolower( $group_type ) ) {
+		$wds_departments = (array) bp_get_profile_field_data( array(
+			'field' => 'Department',
+			'user_id' => bp_loggedin_user_id()
+		) );
+	} else {
+		$wds_departments=groups_get_groupmeta($group, 'wds_departments' );
+		$wds_departments=explode(",",$wds_departments);
+	}
+
 	$return="<div style='height:100px;overflow:scroll;'>";
 	foreach ($departments as $i => $value) {
 		$checked="";
@@ -657,8 +670,10 @@ function wds_load_group_type( $group_type ){
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
-		case 'portfolio' :
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			break;
+		case 'portfolio' :
+			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label( 'user_id=' . bp_loggedin_user_id() ) . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
 		case 'project' :
 			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
@@ -674,9 +689,30 @@ function wds_load_group_type( $group_type ){
 		$return.='<tr>';
             $return.='<td>School(s):';
             $return.='<td>';
-			$checked="";
-			if(bp_get_current_group_id() && in_array("tech",$wds_group_school)){
-				$checked="checked";
+
+            		// If this is a Portfolio, we'll pre-check the school and department
+            		// of the logged-in user
+			$checked_array = array( 'schools' => array(), 'departments' => array() );
+			if ( 'portfolio' == $group_type ) {
+				$user_department = bp_get_profile_field_data( array(
+					'field'   => 'Department',
+					'user_id' => bp_loggedin_user_id()
+				) );
+
+				if ( $user_department ) {
+					$all_departments = openlab_get_department_list();
+					foreach( $all_departments as $school => $depts ) {
+						if ( in_array( $user_department, $depts ) ) {
+							$checked_array['schools'][] = $school;
+							$checked_array['departments'][] = array_search( $user_department, $depts );
+							break;
+						}
+					}
+				}
+			} else {
+				foreach( (array) $wds_group_school as $school ) {
+					$checked_array['schools'][] = $school;
+				}
 			}
 
 			if( $group_type=="course" || $group_type == 'portfolio' ){
@@ -684,17 +720,12 @@ function wds_load_group_type( $group_type ){
 			} else {
 				$onclick = '';
 			}
-			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' '.$checked.'> Technology & Design ';
-			$checked="";
-			if(bp_get_current_group_id() &&in_array("studies",$wds_group_school)){
-				$checked="checked";
-			}
-			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '.$checked.'> Professional Studies ';
-			$checked="";
-			if(bp_get_current_group_id() &&in_array("arts",$wds_group_school)){
-				$checked="checked";
-			}
-			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '.$checked.'> Arts & Sciences ';
+
+			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
+
+			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
+
+			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
 			$return.='</td>';
 
 		$return.='</tr>';

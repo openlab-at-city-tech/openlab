@@ -4,6 +4,7 @@
 global $bp,$user_ID;
 if(is_super_admin( $user_ID )){
 	$pgroup=bp_get_current_profile_group_id();
+	$account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
 }else{
   $account_type=bp_get_profile_field_data( 'field=Account Type' );
   if($account_type=="Student"){
