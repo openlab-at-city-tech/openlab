@@ -1,8 +1,8 @@
 <?php
 gconnect_get_header();
 
-do_action( 'bp_before_member_settings_template' ); 
-?>	
+do_action( 'bp_before_member_settings_template' );
+?>
 	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 	<h3 id="bread-crumb"><?php _e( 'General Settings', 'buddypress' ); ?></h3>
 	<div id="item-header">
@@ -34,14 +34,42 @@ do_action( 'bp_before_member_settings_template' );
 		<?php do_action( 'bp_template_content' ) ?>
 
 		<form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/general'; ?>" method="post" class="standard-form" id="settings-form">
+			<div class="settings-section username-section">
+				<label for="username">Username (required)</label>
+				<input type="text" id="username" disabled="disabled" value="<?php bp_displayed_user_username() ?>" />
+				<p class="description">Your username cannot be changed</p>
+			</div>
 
-			<label for="pwd"><?php _e( 'Current Password <span>(required to update email or change current password)</span>', 'buddypress' ); ?></label>
-			<input type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" /> &nbsp;<a href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a>
-			<label for="email"><?php _e( 'Account Email', 'buddypress' ); ?></label>
-			<input type="text" name="email" id="email" value="<?php echo bp_get_displayed_user_email(); ?>" class="settings-input" />
-			<label for="pass1"><?php _e( 'Change Password <span>(leave blank for no change)</span>', 'buddypress' ); ?></label>
-			<input type="password" name="pass1" id="pass1" size="16" value="" class="settings-input small" /> &nbsp;<?php _e( 'New Password', 'buddypress' ); ?><br />
-			<input type="password" name="pass2" id="pass2" size="16" value="" class="settings-input small" /> &nbsp;<?php _e( 'Repeat New Password', 'buddypress' ); ?>
+			<div class="settings-section email-section">
+				<label for="email_visible">Account Email Address (required)</label>
+				<input type="text" name="email_visible" id="email_visible" value="<?php echo bp_get_displayed_user_email(); ?>" class="settings-input" disabled="disabled" />
+				<input type="hidden" name="email" value="<?php echo bp_get_displayed_user_email() ?>" />
+				<p class="description">Your email address cannot be changed. If your City Tech email address has changed, contact us for assistance.</p>
+			</div>
+
+			<div class="settings-section current-pw-section">
+				<label for="pwd">Current Password</label>
+				<input type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
+				<p class="description">Required to update email or change current password. <a href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a></p>
+			</div>
+
+			<div class="settings-section change-pw-section">
+				<label for="pass1">Change Password</label>
+				<input type="password" name="pass1" id="pass1" size="16" value="" class="settings-input small" />
+
+				<label for="pass1">Confirm Change Password</label>
+				<input type="password" name="pass2" id="pass2" size="16" value="" class="settings-input small" />
+
+				<p class="description">Leave blank for no change</p>
+			</div>
+
+			<div class="settings-section name-section">
+				<label for="fname">First Name (required)</label>
+				<input type="text" name="fname" id="fname" value="<?php echo bp_get_profile_field_data( array( 'field' => 'First Name' ) ) ?>" />
+
+				<label for="lname">Last Name (required)</label>
+				<input type="text" name="lname" id="lname" value="<?php echo bp_get_profile_field_data( array( 'field' => 'Last Name' ) ) ?>" />
+			</div>
 
 			<?php do_action( 'bp_core_general_settings_before_submit' ); ?>
 
@@ -53,7 +81,7 @@ do_action( 'bp_before_member_settings_template' );
 		</form>
 		<?php do_action( 'bp_after_member_body' ); ?>
 	</div><!-- #item-body -->
-<?php 
+<?php
 do_action( 'bp_after_member_settings_template' );
 
 gconnect_get_footer();
