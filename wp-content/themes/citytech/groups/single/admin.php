@@ -98,12 +98,6 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<div class="clear"></div>
 
-	<?php if ( !bp_get_new_group_id() ) : ?>
-	<div class="submit">
-		<input type="submit" name="submit" id="submit" value="<?php _e( 'Send Invites', 'buddypress' ) ?>" />
-	</div>
-	<?php endif; ?>
-
 	<?php wp_nonce_field( 'groups_send_invites', '_wpnonce_send_invites') ?>
 
 		<!-- Don't leave out this sweet field -->
