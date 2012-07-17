@@ -18,6 +18,7 @@ include "wds-docs.php";
  */
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require ( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
@@ -994,11 +995,6 @@ function wds_bp_group_meta_save($group) {
 	if ( isset($_POST['group_project_type']) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type']);
 	}
-
-	/*//WIKI
-	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
-		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
-	}*/
 
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
