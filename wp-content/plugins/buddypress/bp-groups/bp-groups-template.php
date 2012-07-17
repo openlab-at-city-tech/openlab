@@ -2203,7 +2203,7 @@ function bp_is_first_group_creation_step() {
 
 	$first_step = array_shift( array_keys( $bp->groups->group_creation_steps ) );
 
-	if ( $first_step == $bp->groups->current_create_step )
+	if ( isset( $bp->groups->current_create_step ) && $first_step == $bp->groups->current_create_step )
 		return true;
 
 	return false;

@@ -687,7 +687,13 @@ function wds_load_group_type( $group_type ){
 	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school=explode(",",$wds_group_school);
 		$return.='<tr>';
-            $return.='<td>School(s) <span class="required">(required)</span></td>:';
+
+		$return .= '<td>School(s)';
+		if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+			$return .= ' <span class="required">(required)</span>';
+		}
+		$return .= '</td>:';
+
             $return.='<td>';
 
             		// If this is a Portfolio, we'll pre-check the school and department
@@ -749,7 +755,12 @@ function wds_load_group_type( $group_type ){
 		$return.='<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
 
 		$return.='<tr>';
-            $return.='<td>Department(s) <span class="required">(required)</span></td>:';
+
+		$return .= '<td>Department(s)';
+		if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+			$return .= ' <span class="required">(required)</span>';
+		}
+		$return .= '</td>:';
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
 
@@ -1044,6 +1055,40 @@ function wds_bp_group_meta(){
     <?php
 }
 
+/**
+ * Are School and Department required for this group type?
+ */
+function openlab_is_school_required_for_group_type( $group_type = '' ) {
+	$req_types = array( 'course', 'portfolio' );
+
+	return in_array( $group_type, $req_types );
+}
+
+/**
+ * School and Department are required for courses and portfolios
+ *
+ * Hook in before BP's core function, so we get first dibs on returning errors
+ */
+function openlab_require_school_and_department_for_groups() {
+	global $bp;
+
+	if ( empty( $_POST ) ) {
+		return;
+	}
+
+	$group_type = isset( $_GET['type'] ) ? $_GET['type'] : '';
+
+	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+
+		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) ) {
+			bp_core_add_message( 'You must provide a school and department.', 'error' );
+			bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/' );
+		}
+
+	}
+
+}
+add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
 
 //Save Group Meta
