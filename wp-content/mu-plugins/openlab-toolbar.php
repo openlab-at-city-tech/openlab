@@ -30,6 +30,10 @@ class OpenLab_Admin_Bar {
 			return;
 		}
 
+		// Add a body style to distinguish between sites
+		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
+		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
+
 		// Enqueue styles
 		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
 		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
@@ -612,6 +616,26 @@ class OpenLab_Admin_Bar {
 				'tabindex' => 100
 			)
 		) );
+	}
+
+	function body_class( $body_class ) {
+		if ( bp_is_root_blog() ) {
+			$body_class[] = 'openlab-main';
+		} else {
+			$body_class[] = 'openlab-member';
+		}
+
+		return $body_class;
+	}
+
+	function admin_body_class( $body_class ) {
+		if ( bp_is_root_blog() ) {
+			$body_class .= ' openlab-main ';
+		} else {
+			$body_class .= ' openlab-member ';
+		}
+
+		return $body_class;
 	}
 
 	function enqueue_styles() {
