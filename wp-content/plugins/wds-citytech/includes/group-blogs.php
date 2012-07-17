@@ -231,6 +231,135 @@ add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 ////////////////////////
 
 /**
+ * Get a group's recent posts and comments, and display them in two widgets
+ */
+function show_site_posts_and_comments() {
+	global $first_displayed;
+
+	$group_id = bp_get_group_id();
+
+	$site_type = false;
+
+	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+		$site_type = 'local';
+	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
+		$site_type = 'external';
+	}
+
+	$posts = array();
+	$comments = array();
+
+	switch ( $site_type ) {
+		case 'local':
+			switch_to_blog( $site_id );
+
+			// Set up posts
+			$wp_posts = get_posts( array(
+				'posts_per_page' => 3
+			) );
+
+			foreach( $wp_posts as $wp_post ) {
+				$posts[] = array(
+					'title' => $wp_post->post_title,
+					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
+					'permalink' => get_permalink( $wp_post->ID )
+				);
+			}
+
+			// Set up comments
+			$comment_args = array(
+				"status" => "approve",
+				"number" => "3"
+			);
+
+			$wp_comments = get_comments( $comment_args );
+
+			foreach( $wp_comments as $wp_comment ) {
+				// Skip the crummy "Hello World" comment
+				if ( $wp_comment->comment_ID == "1" ) {
+					continue;
+				}
+				$post_id = $wp_comment->comment_post_ID;
+
+				$comments[] = array(
+					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
+					'permalink' => get_permalink( $post_id )
+				);
+			}
+
+			$site_url = get_option( 'siteurl' );
+
+			restore_current_blog();
+
+			break;
+
+		case 'external':
+			$posts = openlab_get_external_posts_by_group_id();
+			$comments = openlab_get_external_comments_by_group_id();
+
+			break;
+	}
+
+	// If we have either, show both
+	if ( !empty( $posts ) || !empty( $comments ) ) {
+		?>
+		<div class="one-half first">
+			<div id="recent-course">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
+					</div>
+
+					<ul>
+					<?php foreach( $posts as $post ) : ?>
+						<li>
+						<p>
+							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
+						</p>
+						</li>
+					<?php endforeach ?>
+					</ul>
+
+					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
+
+
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-course -->
+		</div><!-- .one-half -->
+
+		<div class="one-half">
+			<div id="recent-site-comments">
+				<div class="recent-posts">
+					<div class="ribbon-case">
+						<span class="ribbon-fold"></span>
+						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
+					</div>
+
+
+
+						<ul>
+						<?php if ( !empty( $comments ) ) : ?>
+							<?php foreach( $comments as $comment ) : ?>
+								<li>
+									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
+								</li>
+							<?php endforeach ?>
+						<?php else : ?>
+							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
+						<?php endif ?>
+
+						</ul>
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-site-comments -->
+		</div><!-- .one-half -->
+		<?php
+	}
+}
+
+/**
  * Displays a link to the group's site on the sidebar
  */
 function wds_bp_group_site_pages(){
@@ -461,7 +590,7 @@ function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
 	// Check transients first
 	$posts = get_transient( 'openlab_external_posts_' . $group_id );
 
-	if ( false === $posts ) {
+	if ( empty( $posts ) ) {
 		$feed_url = groups_get_groupmeta( $group_id, 'external_site_posts_feed' );
 
 		if ( $feed_url ) {
@@ -489,7 +618,7 @@ function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
 	// Check transients first
 	$comments = get_transient( 'openlab_external_comments_' . $group_id );
 
-	if ( false === $comments ) {
+	if ( empty( $comments ) ) {
 		$feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' );
 
 		if ( $feed_url ) {
@@ -644,6 +773,13 @@ function openlab_find_feed_urls( $url ) {
 		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
 		$maybe_feed = wp_remote_get( $maybe_feed_url );
 		if ( !is_wp_error( $maybe_feed ) && 200 == $maybe_feed['response']['code'] ) {
+
+			// Check to make sure this is actually a feed
+			$feed_items = fetch_feed( $maybe_feed_url );
+			if ( is_wp_error( $feed_items ) ) {
+				continue;
+			}
+
 			$feed_urls['posts'] = $maybe_feed_url;
 			$feed_urls['type']  = $ftype;
 
