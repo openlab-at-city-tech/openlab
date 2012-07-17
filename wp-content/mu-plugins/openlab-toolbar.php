@@ -233,20 +233,20 @@ class OpenLab_Admin_Bar {
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
 		) );
 
+		$messages_count = bp_get_total_unread_messages_count();
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-messages',
-			'title'  => sprintf( 'My Messages <span class="toolbar-item-count">%d</span>', bp_get_total_unread_messages_count() ),
+			'title'  => sprintf( 'My Messages <span class="toolbar-item-count count-' . $messages_count . '">%d</span>', $messages_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 
 		$invites = groups_get_invites_for_user();
 		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
-
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-invitations',
-			'title'  => sprintf( 'My Invitations <span class="toolbar-item-count">%d</span>', $invite_count ),
+			'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . '">%d</span>', $invite_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
 		) );
 
