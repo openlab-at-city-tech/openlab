@@ -1831,7 +1831,7 @@ function openlab_addl_settings_fields() {
 
 	$fname = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
 	$lname = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
-//var_dump( $_POST ); die();
+
 	// Don't let this continue if a password error was recorded
 	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
 		return;
@@ -1849,5 +1849,17 @@ function openlab_addl_settings_fields() {
 	bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
 }
 add_action( 'bp_core_general_settings_after_save', 'openlab_addl_settings_fields' );
+
+/**
+ * A small hack to ensure that the 'Create A New Site' option is disabled on my-sites.php
+ */
+function openlab_disable_new_site_link( $registration ) {
+	if ( '/wp-admin/my-sites.php' == $_SERVER['SCRIPT_NAME'] ) {
+		$registration = 'none';
+	}
+
+	return $registration;
+}
+add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
 
 ?>
