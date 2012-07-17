@@ -270,7 +270,7 @@ margin: 0;
 
 /* notification counts */
 
-#wpadminbar .quicklinks .toolbar-item-count {
+#wpadminbar .quicklinks .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count {
 	color: #FFF;
 	background-color: #0fceba;
 	border-radius: 12px;
@@ -284,20 +284,12 @@ margin: 0;
 	margin-left: 3px;
 }
 
-#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count {
+#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count {
 	position:absolute;
 	top: -5px;
 	right: 0px;
 	color: #FFF;
-	background-color: #0fceba;
-	border-radius: 12px;
-	font-size: 10px;
-	font-weight: bold;
-	min-width: 11px;
-	height: 11px;
 	display:block;
-	padding: 1px;
-	text-align: center;
 	border: 1px solid #f0f0f0;
 	margin-left: 0px;
 }
