@@ -362,4 +362,14 @@ function openlab_enforce_one_portfolio_per_person() {
 }
 add_action( 'bp_actions', 'openlab_enforce_one_portfolio_per_person', 1 );
 
+/**
+ * Don't display Email settings on portfolio profile headers
+ */
+function openlab_remove_email_settings_from_portfolios() {
+	if ( openlab_is_portfolio() ) {
+		remove_action ( 'bp_group_header_meta', 'ass_group_subscribe_button' );
+	}
+}
+add_action( 'bp_group_header_meta', 'openlab_remove_email_settings_from_portfolios', 1 );
+
 ?>
