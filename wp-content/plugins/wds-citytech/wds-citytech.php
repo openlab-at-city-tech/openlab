@@ -1862,4 +1862,12 @@ function openlab_disable_new_site_link( $registration ) {
 }
 add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
 
+/**
+ * Default subscription level for group emails should be All
+ */
+function openlab_default_group_subscription() {
+	return 'supersub';
+}
+add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
+
 ?>
