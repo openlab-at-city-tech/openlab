@@ -945,7 +945,7 @@ function wds_bp_group_meta_save($group) {
 			// Create a new site
 			ra_copy_blog_page($group->id);
 
-		} elseif ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
+		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
 
 			// Associate an existing site
 			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
