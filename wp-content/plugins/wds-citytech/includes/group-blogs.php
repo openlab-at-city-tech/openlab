@@ -586,9 +586,9 @@ function wds_bp_group_meta(){
 				$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 
 				if( constant( "VHOST" ) == 'yes' ) : ?>
-					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain;?>
+					<input size="40" name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain;?>
 				<?php else:
-					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
+					echo $current_site->domain . $current_site->path ?><input size="40" name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
 				<?php endif; ?>
 
 				</td>
@@ -604,11 +604,24 @@ function wds_bp_group_meta(){
 					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
 					<?php
+						// Exclude blogs already used as groupblogs
 						global $wpdb, $bp;
 						$current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
 
 						foreach( $user_blogs as $ubid => $ub ) {
 							if ( in_array( $ubid, $current_groupblogs ) ) {
+								unset( $user_blogs[$ubid] );
+							}
+						}
+						$user_blogs = array_values( $user_blogs );
+					?>
+
+					<?php
+						// Exclude blogs where the user is not an Admin
+						foreach( $user_blogs as $ubid => $ub ) {
+							$role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
+
+							if ( !array_key_exists( 'administrator', (array) $role ) ) {
 								unset( $user_blogs[$ubid] );
 							}
 						}
@@ -633,7 +646,7 @@ function wds_bp_group_meta(){
 				</th>
 
 				<td id="noo_external_options">
-					<input type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
+					<input size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
 				</td>
 			</tr>
 		</table>

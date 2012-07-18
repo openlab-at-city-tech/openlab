@@ -40,6 +40,13 @@ jQuery(document).ready(function($){
 				});
 			}
 		});
+
+		var efr = $('#external-feed-results');
+		if ( 'external' == noo ) {
+			$(efr).show();
+		} else {
+			$(efr).hide();
+		}
 	}
 
 	function disable_gc_form() {

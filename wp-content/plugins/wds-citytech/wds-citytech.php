@@ -663,7 +663,7 @@ function wds_load_group_type( $group_type ){
 	if ( $group_type ) {
 		$echo = true;
 		$return = '<input type="hidden" name="group_type" value="' . ucfirst($group_type) . '">';
-	}else{
+	} else {
 		$group_type = $_POST['group_type'];
 	}
 
@@ -683,59 +683,62 @@ function wds_load_group_type( $group_type ){
 			break;
 	}
 
-	$return.='<table>';
-	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
-	$wds_group_school=explode(",",$wds_group_school);
-		$return.='<tr>';
+	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
+	$wds_group_school = explode( ",", $wds_group_school );
 
-		$return .= '<td>School(s)';
-		if ( openlab_is_school_required_for_group_type( $group_type ) ) {
-			$return .= ' <span class="required">(required)</span>';
-		}
-		$return .= '</td>:';
+	$return .= '<table>';
 
-            $return.='<td>';
+	$return .= '<tr>';
 
-            		// If this is a Portfolio, we'll pre-check the school and department
-            		// of the logged-in user
-			$checked_array = array( 'schools' => array(), 'departments' => array() );
-			if ( 'portfolio' == $group_type ) {
-				$user_department = bp_get_profile_field_data( array(
-					'field'   => 'Department',
-					'user_id' => bp_loggedin_user_id()
-				) );
+	$return .= '<td>School(s)';
+	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+		$return .= ' <span class="required">(required)</span>';
+	}
+	$return .= '</td>';
 
-				if ( $user_department ) {
-					$all_departments = openlab_get_department_list();
-					foreach( $all_departments as $school => $depts ) {
-						if ( in_array( $user_department, $depts ) ) {
-							$checked_array['schools'][] = $school;
-							$checked_array['departments'][] = array_search( $user_department, $depts );
-							break;
-						}
-					}
-				}
-			} else {
-				foreach( (array) $wds_group_school as $school ) {
+        $return .= '<td>';
+
+	// If this is a Portfolio, we'll pre-check the school and department
+	// of the logged-in user
+	$checked_array = array( 'schools' => array(), 'departments' => array() );
+	if ( 'portfolio' == $group_type ) {
+		$user_department = bp_get_profile_field_data( array(
+			'field'   => 'Department',
+			'user_id' => bp_loggedin_user_id()
+		) );
+
+		if ( $user_department ) {
+			$all_departments = openlab_get_department_list();
+			foreach( $all_departments as $school => $depts ) {
+				if ( in_array( $user_department, $depts ) ) {
 					$checked_array['schools'][] = $school;
+					$checked_array['departments'][] = array_search( $user_department, $depts );
+					break;
 				}
 			}
+		}
+	} else {
+		foreach( (array) $wds_group_school as $school ) {
+			$checked_array['schools'][] = $school;
+		}
+	}
 
-			if( $group_type=="course" || $group_type == 'portfolio' ){
-				$onclick='onclick="wds_load_group_departments();"';
-			} else {
-				$onclick = '';
-			}
+	if ( $group_type=="course" || $group_type == 'portfolio' ) {
+		$onclick = 'onclick="wds_load_group_departments();"';
+	} else {
+		$onclick = '';
+	}
 
-			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
+	$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
 
-			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
+	$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
 
-			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
-			$return.='</td>';
+	$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
 
-		$return.='</tr>';
-	if( 'course' == $group_type || 'portfolio' == $group_type ){
+	$return .= '</td>';
+	$return .= '</tr>';
+
+	if( 'course' == $group_type || 'portfolio' == $group_type ) {
 		// For the love of Pete, it's not that hard to cast variables
 		$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
@@ -760,7 +763,7 @@ function wds_load_group_type( $group_type ){
 		if ( openlab_is_school_required_for_group_type( $group_type ) ) {
 			$return .= ' <span class="required">(required)</span>';
 		}
-		$return .= '</td>:';
+		$return .= '</td>';
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
 

@@ -48,7 +48,7 @@ if ( 'portfolio' == $group_type ) {
 					<?php endif ?>
 
 					<label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
-					<input type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
+					<input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
 
 					<label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 					<textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
