@@ -874,6 +874,7 @@ dd p{line-height:120%}
 }
 a#pgw-prev, a#pgw-next {
 	height: 215px;
+	z-index: 9999;
 }
 
 #pgw-gallery-medium a, #pgw-gallery-large a, #pgw-gallery-full a {
