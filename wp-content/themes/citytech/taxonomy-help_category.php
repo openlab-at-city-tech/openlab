@@ -5,14 +5,16 @@ Template Name: Help
 
 remove_action('genesis_loop', 'genesis_do_loop');
 add_action('genesis_loop', 'openlab_help_cats_loop');
-function openlab_help_cats_loop() {
+function openlab_help_cats_loop() { ?>
 	
+	<div id="help-top"></div>
+    
+	<?php 
 	//first display the parent category
 	global $post;
 	$parent_cat_name = single_term_title('',false);
 	$term = get_query_var('term');
 	$parent_term = get_term_by( 'slug' , $term , 'help_category' );
-
 	
     $args = array(	'tax_query' => array(
 									  array(
@@ -24,52 +26,65 @@ function openlab_help_cats_loop() {
 									  )
 								  ),
 				  	'post_type' => 'help',
+					'order' => 'ASC',
 					);
 	
 	
 	$temp = $wp_query; 
 	$wp_query = null;
-	$wp_query = new WP_Query($args); ?> 	
+	$wp_query = query_posts($args);//new WP_Query($args); ?> 	
     
-    <h2 class="parent-cat"><?php echo $parent_cat_name; ?></h2>
+    <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
 	
-<?php	while ( have_posts() ) : the_post(); 
+<?php	while ( have_posts() ) : the_post();
 	
 		$post_id = get_the_ID(); 
 		?>
     	
-        <h1 class="entry-title"><?php the_title(); ?></h1>
-        <div class="help-tags"><?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
+        <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <div class="help-tags">tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
     
     <?php endwhile; // end of the loop. 
-		  wp_reset_query();
+		  wp_reset_query(); ?>
 		  
+          <a href="#help-top">Go To Top</a>
+          
+		  <?php 
 		  //now iterate through each child category
 		  $child_cats = get_categories( array('child_of' => $parent_term -> term_id, 'taxonomy' => 'help_category') );
 		  foreach ($child_cats as $child)
 		  {
 			  $child_cat_id = $child->cat_ID;
-			  echo '<h3 class="child-cat">'.$child->name.'</h3>';
+			  echo '<h2 class="child-cat">'.$child->name.'</h2>';
 			  
-				$tax_args = array(
-					  'taxonomy' => 'help_category',
-					  'field' => 'slug',
-					  'terms' => $child -> slug,
-					  'include_children' => false
-					  );
-    			$args = array(	'post_type' => 'help',
-				  	'tax_query' => array($tax_args)
+				$args = array(	'tax_query' => array(
+									  array(
+										  'taxonomy' => 'help_category',
+										  'field' => 'slug',
+										  'include_children' => false,
+										  'terms' => array($child->slug),
+										  'operator' => 'IN'
+									  )
+								  ),
+				  	'post_type' => 'help',
 					);
-
+				$temp = $wp_query; 
+				$wp_query = null;
+				$wp_query = query_posts($args);//new WP_Query($args);
+				
 			  while ( have_posts() ) : the_post(); 
 			  ?>
 			  
-			  <h1 class="entry-title"><?php //the_title(); ?></h1>
+			  <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+              <div class="help-tags"><?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
 		  
 		<?php endwhile; // end of the loop. 
-			  wp_reset_query();
-
-		  } ?>
+			  wp_reset_query(); ?>
+			  
+              <a href="#help-top">Go To Top</a>
+			  
+		  <?php
+		  }//ecnd child_cats for each ?>
 
 <?php }//end openlab_help_loop() ?>
 

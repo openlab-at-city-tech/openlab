@@ -17,6 +17,8 @@ function openlab_help_loop() {
 	while ( have_posts() ) : the_post(); ?>
     	
         <h1 class="entry-title"><?php the_title(); ?></h1>
+        <div class="cat-list">category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ',''); ?></div>
+        <div class="help-tags">tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
         
         <div class="entry-content"><?php the_content(); ?></div>
     
