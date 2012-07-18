@@ -228,7 +228,6 @@ function openlab_group_blog_activity( $activity ) {
 }
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
-
 ////////////////////////
 ///  MISCELLANEOUS   ///
 ////////////////////////

@@ -903,7 +903,28 @@ function wds_bp_group_meta(){
 	  $group_site_url = openlab_get_group_site_url( $the_group_id );
 
 	  if( empty( $group_site_url ) ){
-		$template = "template-" . strtolower( $group_type );
+	  	switch ( $group_type ) {
+			case 'portfolio' :
+	  			$account_type = strtolower( xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() ) );
+
+				switch ( $account_type ) {
+					case 'faculty' :
+						$template = 'template-portfolio';
+						break;
+					case 'staff' :
+						$template = 'template-portfolio-staff';
+						break;
+					case 'student' :
+						$template = 'template-eportfolio';
+						break;
+				}
+				break;
+
+			default :
+				$template = "template-" . strtolower( $group_type );
+				break;
+		}
+
 		$blog_details = get_blog_details( $template );
 
 		?>
