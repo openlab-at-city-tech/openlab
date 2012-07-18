@@ -124,6 +124,31 @@ jQuery(document).ready(function($){
 		);
 	}
 
+	function validate_url() {
+		var domain = $('input[name="blog[domain]"]');
+
+		var warn = $(domain).siblings('.ajax-warning');
+		if ( warn.length > 0 ) {
+			$(warn).remove();
+		}
+
+		var path = $(domain).val();
+		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
+			{
+				action: 'openlab_validate_groupblog_url_handler',
+				'path': path
+			},
+			function(response) {
+				if ( 'exists' == response ) {
+					$(domain).after('<span class="ajax-warning">Sorry, that URL is already taken.</span>');
+					return false;
+				} else {
+					return true;
+				}
+			}
+		);
+	}
+
 	$('.noo_radio').click(function(el){
 		var whichid = $(el.target).prop('id').split('_').pop();
 		new_old_switch(whichid);
@@ -144,4 +169,39 @@ jQuery(document).ready(function($){
 	if ( $(setuptoggle).is(':checked') ) {
 		showHideAll();
 	};
+
+	/* AJAX validation for blog URLs */
+	$('input[name="blog[domain]"]').on('blur',function(e){
+	//	validate_url();
+	});
+
+	/* AJAX validation for blog URLs */
+	$('form input[type="submit"]').click(function(e){
+		e.preventDefault();
+		var domain = $('input[name="blog[domain]"]');
+
+		var warn = $(domain).siblings('.ajax-warning');
+		if ( warn.length > 0 ) {
+			$(warn).remove();
+		}
+
+		var path = $(domain).val();
+		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
+			{
+				action: 'openlab_validate_groupblog_url_handler',
+				'path': path
+			},
+			function(response) {
+				if ( 'exists' == response ) {
+					$(domain).after('<span class="ajax-warning">Sorry, that URL is already taken.</span>');
+					return false;
+				} else {
+					var theform = $('form');
+					$(theform).append('<input type="hidden" name="save" value="1" />');
+					$('form').submit();
+					return true;
+				}
+			}
+		);
+	});
 },(jQuery));

@@ -394,6 +394,40 @@ function wds_bp_group_site_pages(){
 }
 add_action( 'bp_group_options_nav', 'wds_bp_group_site_pages' );
 
+/**
+ * Server side group blog URL validation
+ *
+ * When you attempt to create a groupblog, this function catches the request and checks to make sure
+ * that the URL is not used. If it is, an error is sent back.
+ */
+function openlab_validate_groupblog_url() {
+	global $current_blog;
+
+	if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+		$path = isset( $_POST['blog']['domain'] ) ? $_POST['blog']['domain'] : '';
+		if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
+			bp_core_add_message( 'That site URL is already taken. Please try another.', 'error' );
+			bp_core_redirect( wp_guess_url() );
+		}
+	}
+}
+add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
+
+/**
+ * Handler for AJAX group blog URL validation
+ */
+function openlab_validate_groupblog_url_handler() {
+	global $current_blog;
+
+	$path = isset( $_POST['path'] ) ? $_POST['path'] : '';
+	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
+		$retval = 'exists';
+	} else {
+		$retval = '';
+	}
+	die( $retval );
+}
+add_action( 'wp_ajax_openlab_validate_groupblog_url_handler', 'openlab_validate_groupblog_url_handler' );
 
 /**
  * The following function overrides the BP_Blogs_Blog::get() in function bp_blogs_get_blogs(),
