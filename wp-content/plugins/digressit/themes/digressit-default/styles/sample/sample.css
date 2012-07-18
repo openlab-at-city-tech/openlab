@@ -1,0 +1,52 @@
+/*
+	CSS files kept in the 'styles' directory can be used to
+	customize your K2 installation without having to mess
+	with the core K2 files. This in turn makes it easier to
+	upgrade to new K2 version as well as debug any problems
+	that might occur.
+
+	You select styles from the K2 Options page in the
+	'Presentation' section of your WordPress administration.
+
+	For more information on how to use custom styles:
+		http://code.google.com/p/kaytwo/wiki/K2CSSandCustomCSS
+	
+	Author Name	:
+	Author Site	:
+	Style Name	:
+	Style URI	:
+	Version		:
+	Comments	:
+*/
+
+#page {
+	/* The entire design is contained within the 'page' id */
+	}
+	
+#header {
+	/* Contains the H1 and menu */
+	}
+	
+#primary {
+	/* Contains the main column */
+	}
+
+.hentry {
+	/* Each entry is contained within the 'hentry' class */
+	}
+
+.entry-content {
+	/* The meat and potatoes of every entry */
+	}
+
+#sidebar-1 {
+	/* The first sidebar */
+	}
+
+#sidebar-2 {
+	/* The second sidebar */
+	}
+
+.secondary {
+	/* Contains both sidebars */
+	}

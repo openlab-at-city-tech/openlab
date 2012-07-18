@@ -1,0 +1,15 @@
+/*
+	Style Name	: Dueling Sidebars
+	Style URI	: http://getk2.com/
+	Comments	: Sidebars on both sides of content
+*/
+
+
+body.columns-three #primary {
+	margin-left: 195px;
+}
+
+body.columns-three #sidebar-1 {
+	left: -520px;
+	margin-left: -195px;
+}

@@ -1,0 +1,1096 @@
+/*	
+Theme Name: Digress.it
+Theme URI: http://digress.it
+Description: Digress.it allows readers to comment paragraph by paragraph in the margins of a text. You can use it to comment, gloss, workshop, debate and more!
+Author: Eddie A Tejeda
+Version: 3.0
+Author URI: http://www.visudo.com
+License: GPLv2 (http://creativecommons.org/licenses/GPL/2.0/)
+Tags: buddypress, comments, annotation, discussion, commenting, paragraph, education, transparency
+
+Special thanks to:	
+The developers of JQuery @ www.jquery.com
+Joss Winn and Tony Hirst @ writetoreply.com
+Jesse Wilbur, Ben Vershbow, Dan Visel and Bob Stein @ futureofthebook.org
+Cynthia Farina, Mary Newhart, and Austin Austice at Cornell University
+*/
+
+
+body{
+	font-family: "Times New Roman PS MT","Times New Roman",Times,serif;
+	font-size: 100%;
+	background-color:#E6E6E6;
+}
+
+
+
+
+#header{
+	height:auto;
+	min-height:80px;
+	position:relative;
+	text-align:left;
+}
+
+#live-content-search, #live-comment-search{
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+}
+
+#instant-content-search, #instant-comment-search{
+    float: left;
+    left: 20px;
+    position: relative;
+    top: 5px;
+	margin-right: 10px;
+}
+
+#live-content-search-result, #live-comment-search-result{
+    background-color: white;
+    position: absolute;
+    z-index: 100;
+}
+
+
+#menu-primary .children{
+	display: none;
+}
+
+.search-result{
+    border-color: -moz-use-text-color #AAAAAA #AAAAAA;
+    border-right: 1px solid #AAAAAA;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+    font-size: 75%;
+    padding: 5px;
+	min-width: 149px;
+}
+.search-result a{
+	text-decoration: none;
+	
+}
+.search-result:hover{
+	background-color: #FEFF9B;
+}
+
+#wrapper{
+	background: transparent repeat scroll 0 0;
+}
+
+.frontpage .widget-digressit-block h3{
+}
+
+h1, h2, h3, h4, h5, h6{
+	text-transform: uppercase;
+	padding-bottom: 10px;
+	font-weight: normal;
+}
+
+
+.content a{
+	color: #00a6dc;
+	text-decoration: none;
+	border-bottom: 1px dashed #00a6dc;
+}
+
+.home #content {
+	background-color: white;
+}
+
+.previews{
+	position: relative;
+}
+
+.float-bubblearrow {
+	background:url("./images/bubblearrow.png") no-repeat scroll 0 0 transparent;
+	height:22px;
+	left:100px;
+	position:absolute;
+	top:20px;
+	width:10px;
+}
+
+.bubblearrow {
+	background:url("./images/bubblearrow.png") no-repeat scroll 0 0 transparent;
+	height:22px;
+	left:-8px;
+	position:absolute;
+	top:20px;
+	width:10px;
+}
+
+.comment-browser .comment-goto{
+	display:none;
+	font-size:10px;
+	font-weight:bold;
+}
+
+.comment-browser .comment-goto a{
+	border: 0 !important;
+	text-decoration:none;
+}
+
+
+.navigation li {
+
+}
+
+.previews{
+	right: 0;
+}
+
+.lightbox-submit, .lightbox-button, .button, .submit {
+  -moz-box-shadow: 0 0 1px #AAAAAA;
+  -webkit-box-shadow:0 0 1px #AAAAAA;
+  box-shadow: 0 0 1px #AAAAAA;
+
+
+
+}
+
+
+
+
+#respond p{
+	text-align: left;
+	
+}
+
+
+.single .post{
+	padding: 0;
+	padding-right: 65px;
+	width: 55%;
+}
+
+.lightbox-close-icon{
+	background:url("images/close.png") no-repeat scroll center center #409DD7;
+	height:0;
+	position:absolute;
+	right:0;
+	top:0;
+	width:0;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	-moz-box-shadow: 1px 2px 3px #AAAAAA;
+	-webkit-box-shadow:1px 2px 3px #AAAAAA;
+	box-shadow: 1px 2px 3px #AAAAAA;
+}
+
+#live-content-search, #live-comment-search, .search-result{
+	width: 150px;
+}
+
+
+.commenticonbox{
+    border: 0 none;
+    right: -35px;
+    top: 10px;
+}
+
+.selected-textblock .commenticonbox{
+	background-color: transparent;
+	border: 0px
+}
+
+.selected-textblock {
+	border: 1px solid #ddd !important;
+	background-color: #feff9b;
+}
+
+.site-home  .description{
+	float:right;
+	font-size:200%;
+	padding:15px;
+	width:580px;
+
+}
+
+
+.site-home  .description{
+	float:right;
+	font-size:200%;
+	line-height:30px;
+	padding:0 10px;
+	width:575px;
+}
+
+
+ h2 {
+	border-width:0 0;
+	padding:20px;
+}
+
+ h3 {
+	border-color:#EEEEEE;
+	border-style:solid;
+	border-width:0 0;
+	padding:10px 0 10px;
+}
+
+h4 {
+	border-color:#EEEEEE;
+	border-style:solid;
+	border-width:0 0;
+	padding:10px 0 0 0;
+}
+
+
+.page{
+
+}
+
+
+.the_title {
+	border:0 solid #BDBDBD;
+	height:auto;
+	min-height:50px;
+	z-index:1;
+	
+}
+
+
+.frontpage .the_title, .site-home .the_title{
+	display:none;
+}
+.single #content{
+	background-color:white;
+	border-color:#BDBDBD;
+	border-style:solid;
+	border-width:0 1px;
+}
+
+#respond{
+	text-align: center;
+}
+
+#comments-sort-all{
+	padding: 10px;
+}
+
+.menu{
+	padding: 20px;
+}
+
+#comment{
+	border:1px solid #DDDDDD;
+	color:#3D9DDD;
+	height:80px;
+	margin-left:0;
+	padding:10px;
+}
+
+.comment-field-area{
+	border:1px solid #DDDDDD;
+	color:#3D9DDD;
+	margin-left:0;
+	padding:10px;
+	width: 95%;
+}
+
+.lightbox-close{
+	background-image:url("images/close-icon.png");
+	right:-20px;
+	top:-20px;
+	padding: 17px;
+}
+
+#menu-primary{
+
+padding:12px 0 14px;
+position:absolute;
+right:5%;
+text-align:right;
+top:0;
+width:500px;
+z-index:0;
+}
+
+
+#menu-primary {
+	padding: 5px 0 5px;
+}
+#respond{
+	border-top: 1px solid #B4BDBD;
+}
+
+#submit-wrapper{
+	position: relative;
+	height:20px;
+}
+#submit-wrapper .submit{
+
+}
+#footer {
+	top: 0px;
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+#mainpage .toc{
+	float: left;
+	padding-top: 0;
+}
+
+
+#action-button a:hover{
+	background-color: transparent !important;
+}
+#mainpage{
+	padding-top: 50px;
+}
+
+#footer .foot {
+	background-color:#F8F8F8;
+	border-style:solid;
+	border-width:0;
+	height:35px;
+	padding:15px 0 0;
+	width:1000px;
+}
+
+.home #content{
+	border: 0px;
+}
+
+.page .menu, .post .menu{
+	padding:30px 20px;
+}
+
+#cancel-response{
+	background:none repeat scroll 0 0 #409DD7;
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	letter-spacing:1px;
+	margin-left:0;
+	padding:5px 30px;
+	position:absolute;
+	text-align:right;
+	width:40px;
+}
+
+.single #content, .page #content{
+	background-color:white;
+	border-color:#BDBDBD;
+	border-style:solid;
+	border-width:0;
+	margin:0 auto;
+	width:1000px;
+
+	-moz-box-shadow: 0 -25px 30px #AAAAAA;
+	-webkit-box-shadow:0 -25px 30px #AAAAAA;
+	box-shadow: 0 -25px 30px #AAAAAA;
+
+}
+
+.site-home #content, .frontpage #content{
+	background-color:white;
+	border-color:#BDBDBD;
+	border-style:solid;
+	border-width:0;
+	margin:0 auto;
+	width:1000px;	
+	-moz-box-shadow:0 25px 30px #AAAAAA;
+	-webkit-box-shadow:0 25px 30px #AAAAAA;
+	box-shadow: 0 25px 30px #AAAAAA;
+}
+.paragraph-block{
+}
+
+#footer .foot {
+	background-color:#F8F8F8;
+	border-style:solid;
+	border-top:1px solid #BDBDBD;
+	border-width:0px 0 0;
+	height:35px;
+	padding:15px 0 0;
+	width:1000px;
+}
+
+
+.commentcount1 {
+	background:url("images/comment_blue_1digit.png") no-repeat scroll 1px 2px transparent;
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	height:18px;
+	padding:0 9px;
+	position:absolute;
+	width:15px;
+}
+
+.commentcount2 {
+	background:url("images/comment_blue_2digit.png") no-repeat scroll 1px 2px transparent;
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	height:18px;
+	padding:0 1px 0 7px;
+	position:absolute;
+	width:17px;
+}
+
+.commentcount3 {
+	background:url("images/comment_blue_3digit.png") no-repeat scroll 1px 1px transparent;
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	height:15px;
+	padding:0 10px 0 8px;
+	position:absolute;
+	width:22px;
+}
+
+#content a{
+	text-decoration: none;
+	border-bottom:1px dotted #409DD7;
+	color:#409DD7;
+	text-decoration:none;
+}
+
+.textblock p{
+	padding: 0px;
+	margin:0px;
+	line-height: 24px;
+}
+
+p, li{
+	line-height: 24px;
+}
+
+
+
+.paragraphnumber{
+	font-size:60%;
+	left:-11px;
+	position:absolute;
+	top:10px;
+	display: block;	
+}
+
+#menu-primary > div{
+	display: inline;
+}
+.textblock {
+	min-height: 0;
+	border-color: white;
+}
+
+.entry{
+	padding:25px;
+}
+
+.small-button{
+	background:none repeat scroll 0 0 #409DD7;
+	color:white;
+	float:right;
+	font-size:75%;
+	font-weight:bold;
+	margin-right:5px;
+	padding:0 3px 0 2px;
+}
+
+.previews img{
+	border:0 none;
+	height:auto;
+	max-width:475px;
+}
+
+.comment-browser .comment{
+	display: block;
+	border: 1px solid #bbbcbd;
+}
+/* DIGRESS IT WEBSITE */
+
+
+
+.column .project-icon{
+	float: left;
+	padding: 0px 10px 10px 0px ;
+}
+.column .organization{
+	font-size: 18px;
+}
+
+.column .project-name{
+	color: #fe5a5a;
+	font-size: 16px;
+	text-transform: uppercase;
+	padding: 7px 0;
+	
+}
+
+.column .visit{
+	text-align: right;
+	position: relative;
+	clear: both;
+	font-size: 20px;	
+}
+
+.column .visit a{
+	color: #f00;
+	text-decoration: none;
+	font-style: italic;
+}
+.column .text{
+	
+}
+.frontpage #frontpage {
+	background-color:white;
+	min-height:550px;
+}
+
+
+.frontpage #container {
+	
+	border-color:#BDBDBD;
+	border-style:solid;
+	border-width:0 1px;
+	margin:0 auto;
+	width:1000px;
+	-moz-box-shadow:0 25px 30px #AAAAAA;
+	-webkit-box-shadow:0 25px 30px #AAAAAA;
+	box-shadow:0 25px 30px #AAAAAA;
+
+
+
+}
+
+#header{
+	background:none repeat scroll 0 0 white;
+	-moz-box-shadow:0 30px 20px 0 #999999;
+	-webkit-box-shadow:0 30px 20px 0 #999999;
+	box-shadow:0 30px 20px 0 #999999;
+}
+
+.image-shadow{
+	-moz-box-shadow:-3px 4px 4px #ddd;
+	-webkit-box-shadow:-3px 4px 4px #ddd;
+	box-shadow:-3px 4px 4px #ddd;
+	
+	
+}
+
+
+.frontpage .widget-digressit-block {
+}
+.frontpage .widget-digressit-block .column{
+	float:left;
+	margin:10px 25px 20px 0;
+}
+
+
+.frontpage .widget-digressit-block .featured-projects .column{
+	width:325px;
+}
+
+.frontpage .widget-digressit-block .uses h3{
+	display: none;
+}
+.frontpage .widget-digressit-block .uses .column{
+	width:210px;
+}
+.frontpage .widget-digressit-block .uses .header{
+	padding-bottom: 10px;
+}
+
+
+
+.site-title {
+	clear:both;
+	display:block;
+	width:100%;
+}
+
+.site-title .description{
+	display: none;
+	margin-left: 15px;
+	font-size: 90%;
+}
+
+
+.widget_text a{
+	border-bottom:1px dotted #409DD7;
+	color:#409DD7;
+	text-decoration:none;
+}
+
+
+
+.scrollable-widgets{
+	padding-top: 20px;
+}
+
+
+
+.single .entry{
+	border: 0px;
+}
+
+.scrollable-widgets {
+
+	/* required settings */
+	position:relative;
+	overflow:hidden;
+	width: 660px;
+	height:90px;
+}
+
+
+.scrollable-widgets .items {
+	/* this cannot be too large */
+	width:20000em;
+	position:absolute;
+}
+
+
+.scrollable-widgets .items div {
+	float:left;
+}
+
+
+
+
+
+#footer .foot span{
+	margin: 20px;
+}
+
+.site-title h1{
+	font-size:275%;
+	line-height:45px;
+	padding:15px 10px 0 20px;
+	position:relative;
+	line-height: 1.22em;
+	letter-spacing:0.05em;
+}
+
+.site-title a{
+	color: #409DD7;
+	text-decoration: none;
+
+}
+
+.entry .clear{
+
+}
+a{
+	color: #409DD7;
+	
+}
+
+#no-comments{
+	display: none !important;
+}
+.twitter-icon{
+	background:url("/wp-content/plugins/digressit-website/images/twitter.png") no-repeat scroll -3px 12px transparent;
+	padding:10px 20px;
+	font-size: 12px;
+}
+
+
+
+
+#comments-sort-all{
+	display: none !important;
+}
+
+#respond{
+	display: none;
+	margin-top:15px;
+	padding: 5px 0 0px;
+}
+
+
+.paragraph-block{
+	background:url("images/comment-background.png") repeat-x;
+	border:1px solid #CCCCCC;
+	font-size:15px;
+	margin:1px;
+	padding:10px;	
+}
+.paragraph-label{
+	font-size: 150%;
+}
+.comment{
+	display: none;
+	clear: both;
+}
+
+.paragraph-block-button:hover{
+	cursor: hand;
+	cursor: pointer;
+}
+
+.comment-date a{
+	color: black;
+	text-decoration: none;
+}
+
+
+
+.comment{
+	margin: 10px 2px 15px;
+}
+
+
+#mainpage .navigation a {
+	color:black !important;
+	text-decoration:none !important;
+	border: 0 !important;
+}
+
+
+#mainpage .navigation a:hover {
+	text-decoration:none !important;
+	border: 0 !important;
+}
+
+
+a:hover{
+	background-color: #FEFF9B;
+}
+#searchform{
+	padding:2px 7px 5px 0;
+}
+
+
+
+#searchform input['text']{
+	font-size: 110%;
+}
+
+
+
+
+#live-post-search{
+	width: 95%;
+}
+
+
+#content {
+
+	background-color:white;
+	border-color:#BDBDBD;
+	border-style:solid;
+	border-width:0 0;
+	margin:0 auto;
+	width:1000px;
+	z-index:90;
+	min-height: 500px;
+	-moz-box-shadow:0 30px 30px #AAAAAA;
+	-webkit-box-shadow:0 30px 30px #AAAAAA;
+	box-shadow:0 30px 30px #AAAAAA;
+
+}
+
+h2 a{
+	color: black;
+	text-decoration: none;
+}
+
+
+.lightbox-content .ribbon{
+	display: none;
+}
+
+#footer .foot{
+	background-color: white;
+}
+
+.edit-this{
+	position: relative;
+	left: 25px;
+}
+
+.single .entry{
+	padding-top: 0;
+}
+
+h2{
+	line-height: 35px;
+	padding: 15px 25px 30px;
+}
+
+.entry h2{
+	line-height:30px;
+	padding:0 0 10px;	
+}
+
+
+.lightbox-close {
+
+}
+
+
+.menu {
+	padding:30px 20px;
+	position:absolute;
+	right:0;
+	width:600px;
+}
+
+
+.preview .comment-count{
+	bottom:0;
+	padding:0 10px;
+	position:absolute;
+	right:10px;
+}
+
+
+#item-header, #item-nav, #item-body{
+	padding: 20px;
+}
+
+.tdc-element:hover{
+	cursor: pointer;
+	cursor: hand;
+}
+
+.comment-browser{
+	padding-bottom: 50px !important;
+}
+.comment-browser .commentlist{
+	float:left;
+	width:60%;
+}
+
+.paragraph-block {
+	overflow-x:hidden;
+}
+
+.comment-browser .comment{
+	border:0px;
+	float:left;
+	margin:10px;
+	padding:5px 10px 20px 15px;
+	width:100%;
+	-moz-box-shadow:3px 3px 7px #bbbcbd;
+	border:1px solid #bbbcbd;	
+}
+
+
+
+.comment-browser .navigation {
+	float:left;
+	min-width:200px;
+	padding-left:20px;
+	position:relative;
+	top:0;
+}
+
+
+
+.comment-reply {
+
+	float:right;
+	font-size:75%;
+	font-weight:bold;
+}
+
+
+.depth-1{
+	margin-left: 0;
+}
+.depth-2{
+	margin-left: 20px;
+}
+.depth-3{
+	margin-left: 40px;	
+}
+.depth-4{
+	margin-left: 60px;	
+}
+.depth-5{
+	margin-left: 80px;	
+}
+.depth-6{
+	margin-left: 100px;	
+}
+.depth-7{
+	margin-left: 120px;	
+}
+
+
+#menu-primary {
+	display:block;
+	left:0;
+	text-align:left;
+	width:100%;
+	z-index:0;
+	position: relative;
+	clear: both;
+	font-size: 90%;
+}
+
+.container{
+	position: static;
+}
+
+.comment-count-in-book{
+	font-size: 80%;
+	clear: left;
+}
+.comment-browser{
+	padding-top: 0 !important;
+}
+#menu-primary ul:first-child{
+	margin-left: 20px;
+}
+#menu-primary ul{
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+#menu-primary li {
+	display:inline;
+	list-style:none outside none;
+	padding-right:15px;
+}
+
+
+/* buddypress */
+div#item-header{
+	clear: both;
+}
+
+.item-body .submit {
+	background:auto;
+	color:auto;
+	font-size:auto;
+	font-weight:auto;
+	letter-spacing:auto;
+	padding:auto;
+	position:relative;
+	right:auto;
+	text-align:auto;
+}
+
+
+#menu-primary li{
+	display: inline;
+	list-style: none;
+}
+
+#menu-primary li a{
+	text-decoration: none;
+	color: #333;
+	font-style: italic;
+}
+
+
+#lightbox-login{
+	padding: 25px 50px 0;
+}
+
+.rule-dashboard{
+	display: none;
+}
+
+
+.mu_register{
+	line-height: 45px;
+
+}
+
+.mu_register h2{
+	padding-left : 0;
+}
+
+.mu_register input[type=text]{
+	width: 100% !important;
+	position: relative !important;
+	font-size:14px !important;
+	margin:5px 0;
+}
+
+.mu_register input[type=submit]{
+	width: 50% !important;
+	position: relative !important;
+}
+
+
+.mu_register .submit {
+	background: none !important;
+	color: black !important;
+	font-size: auto !important;
+	font-weight: normal !important;
+	letter-spacing: auto !important;
+	padding: auto !important;
+	position:relative !important;
+	right: auto !important;
+	left: 0 !important;
+	text-align: left !important;
+	-moz-box-shadow: none!important;
+}
+
+.site-home #content, .frontpage #content{
+	min-height:800px;
+}
+
+.widecolumn{
+	-moz-box-shadow:0 25px 30px #AAAAAA !important;
+}
+
+
+#commentbox{
+	background-color: #D5E8F1;	
+}
+
+.single .entry {
+	border-bottom: 0px solid #B4BDBD;
+}
+
+
+#signup-welcome, .mu_register .view{
+	padding-left: 20px;
+}
+
+.error404 #header,.error404 #footer{
+	width: 1000px;
+	margin:0 auto;
+	-moz-box-shadow:none;
+}
+
+.lead-in{
+	padding: 0 25px;
+}
+
+#debug-message{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	border: 1px;
+	background-color: red;
+	
+}
+#item-header, #item-nav, #item-body {
+	float:left;
+	padding:20px;
+}
+
+.sidebar-widget-auto-hide {
+	display:block;
+}
+
+
+.wp-caption-text{
+    font-size: 80%;
+    font-style: inherit;
+    text-align: center;
+}
+
+#content  .wp-caption a{
+	border-bottom: none !important;
+}
+#content .wp-caption a:hover{
+	background-color: transparent;
+}
+
+
+#lightbox-login {
+    margin: 0;
+}

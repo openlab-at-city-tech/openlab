@@ -1,0 +1,183 @@
+/*
+	CSS files kept in the 'styles' directory can be used to
+	costumize your K2 installation without having to mess
+	with the core K2 files. This in turn makes it easier to
+	upgrade to new K2 versions as well as debug any potential
+	problems.
+
+	You select schemes from the K2 Options page in the
+	'Presentation' section of your WordPress administration.
+	
+	Author Name		: 	Michael Heilemann
+	Author Site		: 	http://binarybonsai.com
+	Style Name		: 	Vader2
+	Style URI		:	http://getk2.com
+	Version			:	1.0
+	Header Height	:	260
+	Comments		:	I made Vader as a tribute to Star Wars for use on my own blog.
+						The header image was painted by my friend Rasmus (http://no-go-dk)
+						License: http://creativecommons.org/licenses/by-nc-sa/2.5/
+*/
+
+body {
+	background: #111;
+	color: #bbb;
+	margin: 0;
+	}
+
+#header {
+	background: black url('mustafar.jpg') center center no-repeat;
+	height: 260px;
+	}
+
+h1 {
+	position: absolute;
+	top: 25px;
+	left: 50px;
+	padding: 0;
+	}
+
+.description {
+	position: absolute;
+	top: 55px;
+	left: 50px;
+	margin: 0 !important;
+	}
+
+#page {
+	border: none;
+	}
+
+.primary {
+	padding-left: 25px;
+	}
+
+#page, ul.menu li.current_page_item a, ul.menu li.current_page_item a:hover {
+	background: black;
+	}
+	
+ul.menu li.current_page_item a, ul.menu li.current_page_item a:hover {
+	color: white !important;
+	text-decoration: none;
+	}
+	
+ul.menu li a:hover {
+	background: #111;
+	}
+	
+h2, h2 a, h2 a:hover, h2 a:visited, h3, h3 a, h3 a:hover, h3 a:visited, h4, h4 a, h4 a:hover, h4 a:visited {
+	color: #AC0E0F !important;
+	}
+
+h2 span a, 
+h2 span a:visited,
+h3 span a,
+h3 span a:visited {
+	color: #555 !important;
+	font-weight: normal !important;
+	}
+
+.primary .entry-meta a, .primary .entry-meta a:visited, /* The Metalink class takes care of the comments, edit, rss and trackback links next to the titles */
+.secondary .metalink a, .secondary .metalink a:visited,
+.secondary span a, .secondary span a:visited {
+	color: #444;
+	font-weight: normal;
+	}
+	
+.counter a {
+	color: #222;
+	}
+	
+.commentlist li {
+	color: #666;
+	}
+
+.commentlist li:hover {
+	background: none;
+	}
+	
+blockquote, #weightedcategories, .authorcomment {
+	background: #111;
+	border-color: #222;
+	}
+	
+.primary img {
+	border-color: #222;
+	background: #111;
+	}
+
+.inputcontainer {
+	margin-bottom: 6px;
+	}
+
+/* Gray Color */
+#footer, small, .sidebar ul ul li, .sidebar ul ol li, .nocomments, ul#activity li small a, ul#activity li, .LSRow small, #searchcontrols small  {
+	color: #555;
+	}
+
+a, a:visited, .sidebar a:visited {
+	color: #4CA4B8;
+	}
+	
+.post p a:visited {
+	color: #4CA4B8;
+	}
+
+#af-ela-menu li {
+	border: none;
+	background: #161616;
+	}
+
+
+#af-ela-menu, #af-ela-menu li {
+	border-bottom: 1px solid #333;
+	}
+
+#af-ela-menu li.selected {
+	background: #333;
+	}
+
+/* Hovering state of the table items */
+#af-ela-year li:hover, #af-ela-month li:hover, #af-ela-post li:hover, #af-ela-category li:hover {
+	background: #222;
+	border-top: 1px solid #444;
+	border-bottom: 1px solid #444;
+	}
+
+/* Active or hovered item in list */
+#af-ela-year li.selected, #af-ela-month li.selected, #af-ela-post li.selected, #af-ela-category li.selected, #af-ela-post li:hover {
+	background: #222;
+	border-top: 1px solid #444;
+	border-bottom: 1px solid #444;
+	}
+
+#af-ela-post {
+	border-left: 1px solid #333;
+	border-right: none;
+	}
+
+/* Rolling Archives Slider */
+#dynamic-content #pagetrack {
+	height: 18px;
+	background: url('sliderbgleft.png') no-repeat center left;
+	}
+
+#dynamic-content #pagetrackwrap {
+	height: 18px;
+	padding-right: 4px;
+	top: 0px;
+	background: url('sliderbgright.png') no-repeat center right;
+	}
+
+#dynamic-content #pagehandle {
+	width: 18px;
+	height: 18px;
+	top: 0px;
+	background: url('sliderhandle.png') no-repeat center center;
+	cursor: e-resize;
+	}
+
+body.smartposition #rollingarchives {
+	background-color: black;
+	border-bottom: 1px solid #444;
+	}

@@ -1,0 +1,16 @@
+#mainpage .navigation{
+	margin-left: 0;
+}
+
+
+
+#mainpage .navigation {
+    float: left;
+    min-height: 1000px;
+    padding-left: 35px;
+    padding-right: 15px;
+    top: 0;
+    width: 30%;
+    margin-left: -10px;
+}
+

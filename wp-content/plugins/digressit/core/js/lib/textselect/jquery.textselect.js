@@ -1,0 +1,36 @@
+/**
+ * .disableTextSelect - Disable Text Select Plugin
+ *
+ * Version: 1.0
+ * Updated: 2007-08-11
+ *
+ * Used to stop users from selecting text
+ *
+ * Copyright (c) 2007 James Dempster (letssurf@gmail.com, http://www.jdempster.com/category/jquery/disabletextselect/)
+ *
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ **/
+
+/**
+ * Requirements:
+ * - jQuery (John Resig, http://www.jquery.com/)
+ **/
+
+jQuery.fn.extend({
+  textSelect: function() {
+    return this.each(function() {
+	
+	 $("p").mouseup(function(){
+		alert($(this).text().split());
+		//$(this).append('<span style="color:#F00;">Mouse up.</span>');
+	 }).mousedown(function(){
+	   //$(this).append('<span style="color:#00F;">Mouse down.</span>');
+	 });
+	
+	});
+  },
+});
+
+
+
