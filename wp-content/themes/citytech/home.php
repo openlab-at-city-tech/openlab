@@ -181,59 +181,32 @@ global $wpdb, $bp;
 }
 
 function cuny_home_square($type){
+	global $wpdb, $bp;
 
-	global $wpdb, $bp, $openlab_group_type;
-	
-	
-	/*$ids="9999999";
-	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
-	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	  $sql = "
-	   	SELECT 
-	   		a.group_id, b.content 
-	   	FROM 
-	   		{$bp->groups->table_name_groupmeta} a
-	   		INNER JOIN {$bp->activity->table_name} b ON ( a.group_id = b.item_id )
-	   		INNER JOIN {$bp->groups->table_name} c ON ( a.group_id = c.id )
-	   	WHERE 
-	   		c.status = 'public' AND
-	   		b.component = 'groups' AND
-	   		a.meta_key = 'wds_group_type' AND
-	   		a.meta_value = '" . ucfirst($type) . "' OR a.meta_value = '" . strtolower( $type ) . "' 
-	   	ORDER BY 
-	   		b.date_recorded DESC 
-	   	LIMIT 12";
-	 // echo $sql . '<br><br>';
-	  $rs = $wpdb->get_results($sql);
-	  
-	  $activity_items = array();
-	  
-	  foreach ( (array)$rs as $r ){
-		  // Indexed by group id for easy lookup in the loop
-		  $activity_items[$r->group_id] = $r->content;
-		  
-		  // For the bp_has_groups include query
-		  $ids .= "," . $r->group_id;
-	  }
-	  //echo $ids;
-	  */
-	  $i = 1;
-	  $column_class = "column";
-	  
-	  $groups_args = array(
-	  	'max' => 4,
-	  	'type' => 'active',
-	  	'user_id' => 0
-	  );
-	  
-	  $openlab_group_type = $type;
-	  add_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
-	  
-	  if ( bp_has_groups( $groups_args ) ) : ?>
-	  
-	  	<?php 
-	  	/* Let's save some queries and get the most recent activity in one fell swoop */ 
-	  	
+	$meta_filter = new BP_Groups_Meta_Filter( array(
+		'wds_group_type' => $type
+	) );
+
+	$i = 1;
+	$column_class = "column";
+
+	// Work up a list of groups to exclude for the current user
+	// Exclude groups that are hidden & the user does not have access to
+	$exclude = openlab_get_unavailable_groups();
+
+	$groups_args = array(
+		'max'         => 4,
+		'type'        => 'active',
+		'user_id'     => 0,
+		'exclude'     => $exclude,
+		'show_hidden' => true // we're rolling our own
+	);
+
+	if ( bp_has_groups( $groups_args ) ) : ?>
+
+	  	<?php
+	  	/* Let's save some queries and get the most recent activity in one fell swoop */
+
 	  	global $groups_template;
 	  	
 	  	$group_ids = array();
@@ -307,10 +280,9 @@ function cuny_home_square($type){
         </div><!--home-group-list-->
       		
       <?php endif;
-	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
-	  
 
-} 
+      $meta_filter->remove_filters();
+}
 
 function openlab_groups_filter_clause( $sql ) {
 	global $openlab_group_type, $bp;

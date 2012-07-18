@@ -218,6 +218,9 @@ function openlab_group_blog_activity( $activity ) {
 		$activity->hide_sitewide = 0;
 	}
 
+	// Mark the group as having been active
+	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
+
 	// prevent infinite loops
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 

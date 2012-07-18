@@ -215,4 +215,51 @@ function openlab_current_directory_filters() {
 	echo $markup;
 }
 
+/**
+ * Get all the groups that a given user is NOT allowed to see, for a given group type
+ *
+ * Note that this only returns hidden groups. Private groups can be seen by all users, at least
+ * in directories.
+ *
+ * We stash some of the direct queries in the cache so that we can get them later in the page load
+ */
+function openlab_get_unavailable_groups( $user_id = 0 ) {
+	global $bp, $wpdb;
+
+	// Super admins see everything
+	if ( is_super_admin() ) {
+		return array();
+	}
+
+	if ( !isset( $bp->hidden_groups ) ) {
+		$bp->hidden_groups = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE status = 'hidden' ORDER BY id DESC" ) );
+	}
+
+	// Non-logged-in users can't see any hidden groups. For logged-in users, we check to see
+	// whether they're members of any
+	if ( is_user_logged_in() ) {
+		$my_groups_args = array(
+			'user_id'         => $user_id,
+			'populate_extras' => false,
+			'page'            => null,
+			'per_page'        => null,
+			'type'            => 'newest',
+			'show_hidden'     => true
+		);
+
+		if ( bp_has_groups( $my_groups_args ) ) {
+			while ( bp_groups() ) {
+				bp_the_group();
+
+				$key = array_search( bp_get_group_id(), $bp->hidden_groups );
+				if ( false !== $key ) {
+					unset( $bp->hidden_groups[$key] );
+				}
+			}
+		}
+	}
+
+	return $bp->hidden_groups;
+}
+
 ?>
