@@ -296,13 +296,6 @@ function openlab_modify_options_nav() {
 }
 add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
-//custom menu locations for OpenLab
-register_nav_menus( array(
-	'main' => __('Main Menu', 'cuny'),
-	'aboutmenu' => __('About Menu', 'cuny'),
-	'helpmenu' => __('Help Menu', 'cuny')
-) );
-
 //custom widgets for OpenLab
 function cuny_widgets_init() {
 	//add widget for Rotating Post Gallery Widget - will be placed on the homepage

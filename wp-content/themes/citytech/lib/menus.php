@@ -1,5 +1,13 @@
 <?php //menu functions
 
+//custom menu locations for OpenLab
+register_nav_menus( array(
+	'main' => __('Main Menu', 'cuny'),
+	'aboutmenu' => __('About Menu', 'cuny'),
+	'helpmenu' => __('Help Menu', 'cuny'),
+	'helpmenusec' => __('Help Menu Secondary', 'cuny')
+) );
+
 //adding help categories (custom taxonomy) to menu for help page
 function help_categories_menu($items, $args) {
 	global $post;
