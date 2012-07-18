@@ -1,0 +1,376 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: captcha\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-10 09:56+0300\n"
+"PO-Revision-Date: 2012-07-10 09:57+0300\n"
+"Last-Translator: zos <zos@bestwebsoft.com>\n"
+"Language-Team: NDT Solutions <admin@ndtan.net>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Language: Vietnamese\n"
+"X-Poedit-Country: VIET NAM\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: captcha.php:31
+msgid "Login form"
+msgstr "Khung đăng nhập"
+
+#: captcha.php:32
+msgid "Register form"
+msgstr "Khung đăng ký"
+
+#: captcha.php:33
+msgid "Lost password form"
+msgstr "Khung quên mật khẩu"
+
+#: captcha.php:34
+msgid "Comments form"
+msgstr "Khung comment"
+
+#: captcha.php:35
+msgid "Hide CAPTCHA for registered users"
+msgstr "Ẩn CAPTCHA đối với thành viên đã đăng ký"
+
+#: captcha.php:40
+msgid "Plus (&#43;)"
+msgstr "Cộng (&#43;)"
+
+#: captcha.php:40
+msgid "Plus"
+msgstr "Cộng"
+
+#: captcha.php:41
+msgid "Minus (&minus;)"
+msgstr "Trừ (&minus;)"
+
+#: captcha.php:41
+msgid "Minus"
+msgstr "Trừ"
+
+#: captcha.php:42
+msgid "Multiply (&times;)"
+msgstr "Nhân (&times;)"
+
+#: captcha.php:42
+msgid "Increase"
+msgstr "Tăng thêm"
+
+#: captcha.php:47
+msgid "Numbers"
+msgstr "Số"
+
+#: captcha.php:48
+msgid "Words"
+msgstr "Từ"
+
+#: captcha.php:100
+msgid "Activated plugins"
+msgstr "Kích hoạt các plugin"
+
+#: captcha.php:102
+#: captcha.php:110
+#: captcha.php:118
+msgid "Read more"
+msgstr "Xem thêm"
+
+#: captcha.php:102
+#: captcha.php:221
+#: captcha.php:230
+msgid "Settings"
+msgstr "Cấu hình"
+
+#: captcha.php:108
+msgid "Installed plugins"
+msgstr "Các plugin đã cài"
+
+#: captcha.php:116
+msgid "Recommended plugins"
+msgstr "Các plugin được khuyến cáo"
+
+#: captcha.php:118
+msgid "Download"
+msgstr "Tải về"
+
+#: captcha.php:118
+#, php-format
+msgid "Install %s"
+msgstr "Cài đặt %s"
+
+#: captcha.php:118
+msgid "Install now from wordpress.org"
+msgstr "Cài đặt ngay từ wordpress.org"
+
+#: captcha.php:120
+msgid "If you have any questions, please contact us via plugin@bestwebsoft.com or fill in our contact form on our site"
+msgstr "Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua plugin@bestwebsoft.com hoặc điền vào mẫu liên hệ của chúng tôi trên trang web của chúng tôi"
+
+#: captcha.php:130
+#: captcha.php:294
+msgid "Captcha Options"
+msgstr "Tùy chọn CAPTCHA"
+
+#: captcha.php:130
+msgid "Captcha"
+msgstr "Captcha"
+
+#: captcha.php:231
+msgid "FAQ"
+msgstr "Câu hỏi thường gặp (FAQ)"
+
+#: captcha.php:232
+msgid "Support"
+msgstr "Hỗ trợ"
+
+#: captcha.php:276
+msgid "Please select one point in the blocks Arithmetic actions and Difficulty for CAPTCHA"
+msgstr "Hãy chọn một thời điểm trong các hành động số học khối và khó cho CAPTCHA"
+
+#: captcha.php:280
+msgid "Options saved."
+msgstr "Tùy chọn đã được lưu"
+
+#: captcha.php:300
+msgid "Enable CAPTCHA on the:"
+msgstr "Kích hoạt tính năng CAPTCHA trên:"
+
+#: captcha.php:309
+#: captcha.php:312
+#: captcha.php:316
+msgid "Contact form"
+msgstr "Khung liên hệ"
+
+#: captcha.php:309
+#: captcha.php:312
+#: captcha.php:316
+msgid "(power by bestwebsoft.com)"
+msgstr "(Xây dựng bởi  bestwebsoft.com & dịch bởi ndtan.net)"
+
+#: captcha.php:312
+msgid "Activate contact form"
+msgstr "Kích hoạt Contact Form"
+
+#: captcha.php:316
+msgid "Download contact form"
+msgstr "Tải contact form về"
+
+#: captcha.php:318
+msgid "If you would like to customize this plugin for a custom form, please contact us via <a href=\"Mailto:plugin@bestwebsoft.com\">plugin@bestwebsoft.com</a> or fill in our contact form on our site"
+msgstr "Nếu bạn muốn tùy chỉnh plugin này cho một hình thức tùy chỉnh, xin vui lòng liên hệ với chúng tôi qua <a href=\"Mailto:plugin@bestwebsoft.com\"> plugin@bestwebsoft.com</a> hoặc điền vào mẫu liên hệ của chúng tôi trên trang web của chúng tôi."
+
+#: captcha.php:322
+msgid "Label for CAPTCHA in form"
+msgstr "Nhãn cho CAPTCHA trong form"
+
+#: captcha.php:326
+msgid "Arithmetic actions for CAPTCHA"
+msgstr "Hành động số học cho CAPTCHA"
+
+#: captcha.php:335
+msgid "Difficulty for CAPTCHA"
+msgstr "Độ khó cho CAPTCHA"
+
+#: captcha.php:345
+msgid "Save Changes"
+msgstr "Lưu thay đổi"
+
+#: captcha.php:388
+#: captcha.php:394
+#: captcha.php:542
+#: captcha.php:549
+#: captcha.php:559
+#: captcha.php:566
+msgid "ERROR"
+msgstr "XẢY RA LỖI"
+
+#: captcha.php:388
+#: captcha.php:410
+#: captcha.php:509
+#: captcha.php:542
+#: captcha.php:559
+#: captcha.php:582
+msgid "Please complete the CAPTCHA."
+msgstr "Vui lòng nhập mã xác nhận!"
+
+#: captcha.php:394
+#: captcha.php:421
+#: captcha.php:549
+#: captcha.php:566
+msgid "That CAPTCHA was incorrect."
+msgstr "Mã xác nhận không chính xác!"
+
+#: captcha.php:515
+#: captcha.php:589
+msgid "Error: You entered in the wrong CAPTCHA phrase. Press your browser's back button and try again."
+msgstr "Lỗi: Bạn nhập vào cụm từ của mã xác nhận sai. Bấm nút quay lại trình duyệt của bạn và thử lại."
+
+#: captcha.php:604
+#: captcha.php:838
+msgid "zero"
+msgstr "không"
+
+#: captcha.php:605
+#: captcha.php:839
+#: captcha.php:1029
+msgid "one"
+msgstr "một"
+
+#: captcha.php:606
+#: captcha.php:840
+msgid "two"
+msgstr "hai"
+
+#: captcha.php:607
+#: captcha.php:841
+msgid "three"
+msgstr "ba"
+
+#: captcha.php:608
+#: captcha.php:842
+msgid "four"
+msgstr "bốn"
+
+#: captcha.php:609
+#: captcha.php:843
+msgid "five"
+msgstr "năm"
+
+#: captcha.php:610
+#: captcha.php:844
+#: captcha.php:1029
+msgid "six"
+msgstr "sáu"
+
+#: captcha.php:611
+#: captcha.php:845
+#: captcha.php:1017
+#: captcha.php:1023
+msgid "seven"
+msgstr "bảy"
+
+#: captcha.php:612
+#: captcha.php:846
+#: captcha.php:1020
+msgid "eight"
+msgstr "tám"
+
+#: captcha.php:613
+#: captcha.php:847
+msgid "nine"
+msgstr "chín"
+
+#: captcha.php:616
+#: captcha.php:850
+msgid "eleven"
+msgstr "mười một"
+
+#: captcha.php:617
+#: captcha.php:851
+msgid "twelve"
+msgstr "mười hai"
+
+#: captcha.php:618
+#: captcha.php:852
+msgid "thirteen"
+msgstr "mười ba"
+
+#: captcha.php:619
+#: captcha.php:853
+msgid "fourteen"
+msgstr "mười bốn"
+
+#: captcha.php:620
+#: captcha.php:854
+msgid "fifteen"
+msgstr "mười lăm"
+
+#: captcha.php:621
+#: captcha.php:855
+msgid "sixteen"
+msgstr "mười sáu"
+
+#: captcha.php:622
+#: captcha.php:856
+msgid "seventeen"
+msgstr "mười bảy"
+
+#: captcha.php:623
+#: captcha.php:857
+msgid "eighteen"
+msgstr "mười tám"
+
+#: captcha.php:624
+#: captcha.php:858
+msgid "nineteen"
+msgstr "mười chín"
+
+#: captcha.php:627
+#: captcha.php:861
+msgid "ten"
+msgstr "mười"
+
+#: captcha.php:628
+#: captcha.php:862
+msgid "twenty"
+msgstr "hai mươi"
+
+#: captcha.php:629
+#: captcha.php:863
+msgid "thirty"
+msgstr "ba mươi"
+
+#: captcha.php:630
+#: captcha.php:864
+msgid "forty"
+msgstr "bốn mươi"
+
+#: captcha.php:631
+#: captcha.php:865
+msgid "fifty"
+msgstr "năm mươi"
+
+#: captcha.php:632
+#: captcha.php:866
+msgid "sixty"
+msgstr "sáu mươi"
+
+#: captcha.php:633
+#: captcha.php:867
+msgid "seventy"
+msgstr "bảy mươi"
+
+#: captcha.php:634
+#: captcha.php:868
+msgid "eighty"
+msgstr "tám mươi"
+
+#: captcha.php:635
+#: captcha.php:869
+msgid "ninety"
+msgstr "chín mươi"
+
+#: captcha.php:722
+#: captcha.php:956
+msgid "and"
+msgstr "và"
+
+#: captcha.php:741
+msgid "The password of encryption is not set"
+msgstr "Mật khẩu mã hóa không được thiết lập"
+
+#: captcha.php:760
+msgid "The password of decoding is not set"
+msgstr "Mật khẩu giải mã không được thiết lập"
+
+#~ msgid "null"
+#~ msgstr "rỗng"
+#~ msgid "BWS Plugins"
+#~ msgstr "BWS Plugins"
+#~ msgid "Install Now"
+#~ msgstr "Cài đặt ngay"
+
