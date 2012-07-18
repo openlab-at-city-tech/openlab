@@ -268,30 +268,6 @@ function wds_add_group_members_2_blog(){
 }
 
 /**
- * Add user to the group blog when joining the group
- */
-function openlab_add_user_to_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-
-	if ( $blog_id ) {
-		if ( groups_is_user_admin( $user_id, $group_id ) ) {
-		      $role = "administrator";
-		} else if ( groups_is_user_mod( $user_id, $group_id ) ){
-		      $role = "editor";
-		} else {
-		      $role = "author";
-		}
-		add_user_to_blog( $blog_id, $user_id, $role );
-	}
-}
-add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
-
-function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
-	openlab_add_user_to_groupblog( $group_id, $user_id );
-}
-add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
-
-/**
  * Allow super admins to edit any BuddyPress Doc
  */
 function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
@@ -396,81 +372,6 @@ function openlab_group_creation_redirect( $redirect ) {
 add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
 
 /**
- * Don't show the Join Group button on an inactive group
- */
-function openlab_hide_inactive_group_join_button( $button ) {
-	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'join' ) ) {
-		if ( openlab_group_is_inactive() ) {
-			// Unset the button id for a cheap way of deleting button
-			unset( $button['id'] );
-		}
-	}
-
-	if ( isset( $button['id'] ) && false !== strpos( $button['id'], 'leave_group' ) ) {
-		$button['link_class'] = str_replace( 'group-button', '', $button['link_class'] );
-	}
-
-	return $button;
-}
-add_action( 'bp_get_group_join_button', 'openlab_hide_inactive_group_join_button' );
-
-/**
- * Don't let anyone visit the Join page of an inactive group
- *
- * This should never happen, thanks to the hidden buttons (see
- * openlab_hide_inactive_group_join_button()) combined with the need for a nonce. But this is for
- * backup.
- */
-function openlab_disallow_inactive_group_join() {
-	if ( bp_is_group() && bp_is_current_action( 'join' ) ) {
-		// If a user is a member (shouldn't happen?) let BP handle it
-		if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
-			return;
-		}
-
-		// If the group is inactive, redirect away
-		if ( openlab_group_is_inactive() ) {
-			bp_core_add_message( 'You cannot join an inactive group.', 'error' );
-			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) );
-		}
-	}
-}
-add_action( 'bp_actions', 'openlab_disallow_inactive_group_join', 1 );
-
-/**
- * Is the given group inactive?
- */
-function openlab_group_is_inactive( $group_id = false ) {
-	if ( !$group_id ) {
-		$group_id = bp_get_current_group_id();
-	}
-
-	if ( !$group_id ) {
-		return false;
-	}
-
-	$status = groups_get_groupmeta( $group_id, 'openlab_group_active_status' );
-
-	$is_inactive = false;
-
-	if ( 'inactive' == $status ) {
-		$is_inactive = true;
-	}
-
-	return $is_inactive;
-}
-
-/**
- * Is the given group active?
- *
- * For convenience.
- */
-function openlab_group_is_active( $group_id = false ) {
-	return ! openlab_group_is_inactive( $group_id );
-}
-
-
-/**
  * When getting a blog avatar in the context of the Featured Content widget, test to see whether
  * the blog is associated with a group. If so, fetch the group avatar instead
  */
@@ -491,18 +392,6 @@ function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id 
 add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avatar_with_group_avatar', 10, 2 );
 
 /**
- * Utility function for fetching the group id for a blog
- */
-function openlab_get_group_id_by_blog_id( $blog_id ) {
-	global $wpdb, $bp;
-
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
-
-	return (int) $group_id;
-}
-
-
-/**
  * Blogs must be public in order for BP to record their activity. Only at save time
  */
 add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
@@ -515,155 +404,9 @@ function openlab_pre_save_comment_activity( $content ) {
 }
 add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
 
-
 /**
- * Get blog posts into group streams
+ * Auto-enable BuddyPress Docs for all group types
  */
-function openlab_group_blog_activity( $activity ) {
-
-	if ( $activity->type != 'new_blog_post' && $activity->type != 'new_blog_comment' )
-		return $activity;
-
-	$blog_id = $activity->item_id;
-
-	if ( 'new_blog_post' == $activity->type ) {
-		$post_id = $activity->secondary_item_id;
-		$post    = get_post( $post_id );
-	} else if ( 'new_blog_comment' == $activity->type ) {
-		$comment = get_comment( $activity->secondary_item_id );
-		$post_id = $comment->comment_post_ID;
-		$post    = get_post( $post_id );
-	}
-
-	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
-
-	if ( !$group_id )
-		return $activity;
-
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
-
-	// Verify if we already have the modified activity for this blog post
-	$id = bp_activity_get_activity_id( array(
-		'user_id'           => $activity->user_id,
-		'type'              => $activity->type,
-		'item_id'           => $group_id,
-		'secondary_item_id' => $activity->secondary_item_id
-	) );
-
-	// if we don't have, verify if we have an original activity
-	if ( !$id ) {
-		$id = bp_activity_get_activity_id( array(
-			'user_id'           => $activity->user_id,
-			'type'              => $activity->type,
-			'item_id'           => $activity->item_id,
-			'secondary_item_id' => $activity->secondary_item_id
-		) );
-	}
-
-	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
-	if ( $id ) {
-		$activity->id = $id;
-	}
-
-	// Replace the necessary values to display in group activity stream
-	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>' );
-
-	$activity->item_id       = (int)$group_id;
-	$activity->component     = 'groups';
-
-	$public = get_blog_option( $blog_id, 'blog_public' );
-
-	if ( 0 > (float) $public ) {
-		$activity->hide_sitewide = 1;
-	} else {
-		$activity->hide_sitewide = 0;
-	}
-
-	// prevent infinite loops
-	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-
-	return $activity;
-}
-add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-
-/**
- * The following function overrides the BP_Blogs_Blog::get() in function bp_blogs_get_blogs(),
- * when looking at the my-sites page, so that the only blogs shown are those without a group
- * attached to them.
- */
-function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
-
-	// Note: It may be desirable to expand the locations where this filtering happens
-	// I'm just playing it safe for the time being
-	if ( !is_page( 'my-sites' ) ) {
-		return $blogs;
-	}
-
-	global $bp, $wpdb;
-
-	// return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
-	//  get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false )
-
-	// Set up the necessary variables for the rest of the function, out of $params
-	$type         = $params['type'];
-	$limit        = $params['per_page'];
-	$page         = $params['page'];
-	$user_id      = $params['user_id'];
-	$search_terms = $params['search_terms'];
-
-	// The magic: Pull up a list of blogs that have associated groups, and exclude them
-	$exclude_blogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
-
-	if ( !empty( $exclude_blogs ) ) {
-		$exclude_sql = $wpdb->prepare( " AND b.blog_id NOT IN (" . implode( ',', $exclude_blogs ) . ") " );
-	} else {
-		$exclude_sql = '';
-	}
-
-	if ( !is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
-		$hidden_sql = "AND wb.public = 1";
-	else
-		$hidden_sql = '';
-
-	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) ) : '';
-
-	$user_sql = !empty( $user_id ) ? $wpdb->prepare( " AND b.user_id = %d", $user_id ) : '';
-
-	switch ( $type ) {
-		case 'active': default:
-			$order_sql = "ORDER BY bm.meta_value DESC";
-			break;
-		case 'alphabetical':
-			$order_sql = "ORDER BY bm2.meta_value ASC";
-			break;
-		case 'newest':
-			$order_sql = "ORDER BY wb.registered DESC";
-			break;
-		case 'random':
-			$order_sql = "ORDER BY RAND()";
-			break;
-	}
-
-	if ( !empty( $search_terms ) ) {
-		$filter = like_escape( $wpdb->escape( $search_terms ) );
-		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
-		$total_blogs = $wpdb->get_var( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
-	} else {
-		$paged_blogs = $wpdb->get_results( $wpdb->prepare( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" ) );
-		$total_blogs = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" ) );
-	}
-
-	$blog_ids = array();
-	foreach ( (array)$paged_blogs as $blog ) {
-		$blog_ids[] = $blog->blog_id;
-	}
-
-	$blog_ids = $wpdb->escape( join( ',', (array)$blog_ids ) );
-	$paged_blogs = BP_Blogs_Blog::get_blog_extras( $paged_blogs, $blog_ids, $type );
-
-	return array( 'blogs' => $paged_blogs, 'total' => $total_blogs );
-}
-add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10, 2 );
-
+add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
 
 ?>

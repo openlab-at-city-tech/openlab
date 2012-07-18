@@ -101,6 +101,10 @@ function groupblog_group_id( $blog_id ) {
 		if ( !isset( $blog_id ) )
 			return;
 		
+		// table_name_groupmeta is not defined on first install
+		if ( !isset( $bp->groups->table_name_groupmeta ) )
+			return;
+		
 		if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %d", $blog_id ) ) ) {
 			return $row->group_id;
 		}	
@@ -132,7 +136,7 @@ function bp_groupblog_slug() {
 }
 	function bp_get_groupblog_slug() {
 
-		$group = new BP_Groups_Group( bp_get_groupblog_id(), false, false );		
+		$group = groups_get_group( array( 'group_id' => bp_get_groupblog_id() ) );	
 		return apply_filters( 'bp_get_groupblog_slug', $group->slug );
 	}
 

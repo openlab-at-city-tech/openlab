@@ -1,34 +1,29 @@
 <?php get_header() ?>
-<?php global $bp; 
+<?php global $bp;
 
-$group_type= isset( $_GET['type'] ) ? $_GET['type'] : '';
-if(!$group_type){
-	$group_type=groups_get_groupmeta(bp_get_new_group_id(), 'wds_group_type' );
+$group_type = openlab_get_current_group_type();
+
+// Set a group label. The (e)Portfolio logic means we have to do an extra step
+if ( 'portfolio' == $group_type ) {
+	$group_label = openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() );
+	$page_title  = 'Create ' . openlab_get_portfolio_label( 'case=upper&leading_a=1&user_id=' . bp_loggedin_user_id() );
+} else {
+	$group_label = $group_type;
+	$page_title  = 'Create a ' . ucwords( $group_type );
 }
 
-//print_r($_COOKIE);
-if(!$group_type){
-	$group_type=$_COOKIE["wds_bp_group_type"];
-}
-$group_type=strtolower($group_type);
-if(!$group_type || !in_array($group_type,array("club","project","course","school"))){
-	$group_type="group";
-}
 ?>
 <div id="content-sidebar-wrap">
 	<div id="content">
-	<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
-	<h3 id="bread-crumb">Create a <?php echo ucfirst($group_type);?> &nbsp;</h3>
-		<div id="single-course-body">
-		<form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
-			
-            <?php do_action( 'bp_before_create_group' ) ?>
+		<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
 
-			<div class="item-list-tabs no-ajax" id="group-create-tabs">
-				<ul>
-					<?php //bp_group_creation_tabs(); ?>
-				</ul>
-			</div>
+		<h3 id="bread-crumb"><?php echo $page_title ?> &nbsp;</h3>
+
+		<div id="single-course-body">
+
+			<form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
+
+			<?php do_action( 'bp_before_create_group' ) ?>
 
 			<?php do_action( 'template_notices' ) ?>
 
@@ -38,32 +33,27 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 				<?php if ( bp_is_group_creation_step( 'group-details' ) ) : ?>
 
 					<?php do_action( 'bp_before_group_details_creation_step' ); ?>
-					
-					<?php $group_type = isset( $_REQUEST['type'] ) && in_array( $_REQUEST['type'], array( 'course', 'club', 'project' ) ) ? $_REQUEST['type'] : 'club' ?>
-					
+
 					<?php if ( 'course' == $group_type ) : ?>
 						<p class="ol-tooltip">Please take a moment to consider the name of your Course. We recommend keeping your Course title name under 50 characters. You can always change the name of your course later.</p>
+					<?php elseif ( 'portfolio' == $group_type ) : ?>
+						<p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
+
+						<ul class="ol-tooltip">
+							<li>FirstName LastName's <?php echo $group_label ?> </li>
+							<li>Jane Smith's <?php echo $group_label ?> (Example)</li>
+						</ul>
 					<?php else : ?>
 						<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
 					<?php endif ?>
-					
-					<?php if ( 'project' == $group_type ) : ?>
-						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Please review the guidelines <a href="<?php bp_root_domain() ?>/eportfolio">here</a> before proceeding. We recommend that the name of your ePortfolio follow this format:</p>
 
-						<ul class="ol-tooltip">
-							<li>FirstName LastName's ePortfolio </li>
-							<li>Jane Smith's ePortfolio (Example)</li> 
-						</ul>
-
-					<?php endif ?>
-
-					<label for="group-name">* <?php echo ucfirst($group_type);?> Name <?php _e( '(required)', 'buddypress' )?></label>
+					<label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
 					<input type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
 
 					<label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 					<textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
 
-					<?php do_action( 'bp_after_group_details_creation_step' ); /* Deprecated -> */ do_action( 'groups_custom_group_fields_editable' ); ?>
+					<?php do_action( 'bp_after_group_details_creation_step' ) ?>
 
 					<?php wp_nonce_field( 'groups_create_save_group-details' ) ?>
 
@@ -74,13 +64,8 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 
 					<?php do_action( 'bp_before_group_settings_creation_step' ); ?>
 
-					<?php if ( function_exists('bp_wire_install') ) : ?>
-					<div class="checkbox">
-						<label><input type="checkbox" name="group-show-wire" id="group-show-wire" value="1"<?php if ( bp_get_new_group_enable_wire() ) { ?> checked="checked"<?php } ?> /> <?php _e('Enable comment wire', 'buddypress') ?></label>
-					</div>
-					<?php endif; ?>
-
-					<?php if ( function_exists('bp_forums_is_installed_correctly') ) : ?>
+					<?php /* Don't show Discussion toggle for portfolios */ ?>
+					<?php if ( !openlab_is_portfolio() && function_exists( 'bp_forums_is_installed_correctly' ) ) : ?>
 						<?php if ( bp_forums_is_installed_correctly() ) : ?>
 							<div class="checkbox">
 								<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php if ( bp_get_new_group_enable_forum() ) { ?> checked="checked"<?php } ?> /> <?php _e('Enable discussion', 'buddypress') ?></label>
@@ -98,45 +83,71 @@ if(!$group_type || !in_array($group_type,array("club","project","course","school
 
 					<h4><?php _e( 'Privacy Options', 'buddypress' ); ?></h4>
 
+					<?php /* @todo This should probably be modded for all group types */ ?>
+					<?php if ( openlab_is_portfolio() ) : ?>
+						<h5>Portfolio Profile</h5>
+					<?php endif ?>
+
 					<div class="radio">
 						<label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
 							<strong><?php _e( 'This is a public '.$group_type, 'buddypress' ) ?></strong>
 							<ul>
-								<li><?php _e( 'Any site member can join this '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php if ( openlab_is_portfolio() ) : ?>
+									<li>Anyone can see this Portfolio.</li>
+								<?php else : ?>
+									<li><?php _e( 'Any site member can join this ' . $group_type . '.', 'buddypress' ) ?></li>
+								<?php endif ?>
+
 								<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
 								<li><?php _e( ucfirst($group_type).' content and activity will be visible to any site member.', 'buddypress' ) ?></li>
 							</ul>
 						</label>
 
-						<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
-							<ul>
-								<li><?php _e( 'Only users who request membership and are accepted can join the '.$group_type.'.', 'buddypress' ) ?></li>
-								<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
-								<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
-							</ul>
-						</label>
+						<?php /* Portfolios don't have a Private setting */ ?>
+						<?php if ( !openlab_is_portfolio() ) : ?>
+
+							<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
+								<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
+								<ul>
+									<li><?php _e( 'Only users who request membership and are accepted can join the '.$group_type.'.', 'buddypress' ) ?></li>
+									<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
+									<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+								</ul>
+							</label>
+
+						<?php endif ?>
 
 						<label><input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e('This is a hidden '.$group_type, 'buddypress') ?></strong>
+							<strong><?php _e('This is a hidden ' . $group_type, 'buddypress') ?></strong>
 							<ul>
-								<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php if ( !openlab_is_portfolio() ) : ?>
+									<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php endif ?>
+
 								<li><?php _e( 'This '.$group_type.' will not be listed in the '.$group_type.'s directory or search results.', 'buddypress' ) ?></li>
-								<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+
+								<?php if ( !openlab_is_portfolio() ) : ?>
+									<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+								<?php endif ?>
 							</ul>
 						</label>
 					</div>
 
 					<?php do_action( 'bp_after_group_settings_creation_step' ); ?>
 
+					<?php if ( $groupblog_id = openlab_get_site_id_by_group_id() ) : ?>
+						<h5>Portfolio Site</h5>
+						<?php openlab_site_privacy_settings_markup( $groupblog_id ) ?>
+					<?php endif ?>
+
 					<?php wp_nonce_field( 'groups_create_save_group-settings' ) ?>
 
 				<?php endif; ?>
 
 				<?php /* Group creation step 3: Avatar Uploads */?>
-				
+
 				<?php if ( bp_is_group_creation_step( 'group-avatar' ) ) : ?>
-				
+
                 	<?php do_action( 'bp_before_group_avatar_creation_step' ); ?>
 
 					<?php if ( !bp_get_avatar_admin_step() || 'upload-image' == bp_get_avatar_admin_step() ) : ?>

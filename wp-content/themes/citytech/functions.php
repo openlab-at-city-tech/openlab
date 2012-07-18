@@ -40,7 +40,7 @@ function cuny_remove_default_widget_areas() {
 	unregister_sidebar('sidebar-alt');
 }
 /** Add support for custom background **/
-add_custom_background();
+add_theme_support( 'custom-background', array() );
 //add_theme_support( 'genesis-footer-widgets', 5 );
 
 add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
@@ -73,6 +73,16 @@ function cuny_no_bp_default_styles() {
 	wp_enqueue_style( 'cuny-bp', get_stylesheet_directory_uri() . '/css/buddypress.css' );
 	wp_dequeue_style( 'gconnect-adminbar' );
 }
+
+/**
+ * Enqueue our front-end scripts
+ */
+function openlab_enqueue_frontend_scripts() {
+	if ( bp_is_group_create() || bp_is_group_admin_page() ) {
+		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
 
 add_action( 'genesis_meta', 'cuny_google_font');
 function cuny_google_font() {
@@ -182,43 +192,6 @@ function cuny_add_links_wp_trim_excerpt($text) {
 
 }
 
-/**
- * This function checks the blog_public option of the group site, and depending on the result,
- * returns whether the current user can view the site.
- */
-function wds_site_can_be_viewed() {
-	global $user_ID;
-	$blog_public = false;
-	$group_id = bp_get_group_id();
-	$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-
-	if($wds_bp_group_site_id!=""){
-		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
-
-		switch ( $blog_private ) {
-			case '-3' : // todo?
-			case '-2' :
-				if ( is_user_logged_in() ) {
-					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
-					if ($user_capabilities != "") {
-						$blog_public = true;
-					}
-				}
-				break;
-
-			case '-1' :
-				if ( is_user_logged_in() ) {
-					$blog_public = true;
-				}
-				break;
-
-			default :
-				$blog_public = true;
-				break;
-		}
-	}
-	return $blog_public;
-}
 //a variation on bp_groups_pagination_count() to match design
 function cuny_groups_pagination_count($group_name)
 {
@@ -248,8 +221,12 @@ function cuny_members_pagination_count($member_name)
 		echo $pag;
 }
 
-//a variation on bp_get_options_nav to match the design
-//main change here at the moment - changing "home" to "profile"
+/**
+ * a variation on bp_get_options_nav to match the design
+ * main change here at the moment - changing "home" to "profile"
+ *
+ * @todo Clean up this godawful mess. There are filters for this stuff - bbg
+ */
 function cuny_get_options_nav() {
 	global $bp;
 
@@ -295,6 +272,29 @@ function cuny_get_options_nav() {
 		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
 	}
 }//end cuny_get_options_nav
+
+/**
+ * Reach into the item nav menu and remove stuff as necessary
+ *
+ * Hooked to bp_screens at 1 because apparently BP is broken??
+ */
+function openlab_modify_options_nav() {
+	global $bp;
+
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		foreach( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+			if ( 'home' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
+			} else if ( 'admin' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
+			} else {
+				unset( $bp->bp_options_nav[$bp->current_item][$key] );
+			}
+
+		}
+	}
+}
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 //custom menu locations for OpenLab
 register_nav_menus( array(
@@ -371,7 +371,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
-		'active_status' => 'all',
 		'show_hidden'   => true,
 		'group_type'	=> 'club',
 		'get_activity'	=> true
@@ -382,22 +381,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
-
-	if ( 'all' != $r['active_status'] ) {
-		// For legacy reasons, not all active groups are marked 'active'
-		if ( 'inactive' == $r['active_status'] ) {
-			$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} b ON (a.group_id = b.group_id) " );
-			$where  .= $wpdb->prepare( " AND b.meta_key = 'openlab_group_active_status' AND b.meta_value = %s ", $r['active_status'] );
-		} else {
-			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
-			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
-
-			if ( !empty( $inactive_groups ) ) {
-				$inactive_groups_sql = implode( ',', $inactive_groups );
-				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
-			}
-		}
-	}
 
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
@@ -443,66 +426,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 	}
 
 	return $retval;
-}
-
-/**
- * Get Recent Account Activity sidebar to show on the my-* templates
- */
-function openlab_recent_account_activity_sidebar() {
-?>
-	<?php if ( !bp_is_user_messages() ) { ?>
-	<?php if ( bp_is_user_friends() ) { ?>
-		<?php $friends_true = "&scope=friends"; ?>
-		<h4 class="sidebar-header">Recent Friend Activity</h4>
-	<?php } else { ?>
-		<?php $friends_true = NULL; ?>
-		<h4 class="sidebar-header">Recent Account Activity</h4>
-	<?php } ?>
-
-	<?php if ( bp_has_activities( 'per_page=3&show_hidden=true&user_id=' . bp_loggedin_user_id() . $friends_true ) ) : ?>
-
-		<ul id="activity-stream" class="activity-list item-list">
-			<div>
-			<?php while ( bp_activities() ) : bp_the_activity(); ?>
-
-				<div class="activity-avatar">
-					<a href="<?php bp_activity_user_link() ?>">
-						<?php bp_activity_avatar( 'type=full&width=100&height=100' ) ?>
-					</a>
-				</div>
-
-				<div class="activity-content">
-
-					<div class="activity-header">
-						<?php bp_activity_action() ?>
-					</div>
-
-					<?php if ( bp_activity_has_content() ) : ?>
-						<div class="activity-inner">
-							<?php bp_activity_content_body() ?>
-						</div>
-					<?php endif; ?>
-
-					<?php do_action( 'bp_activity_entry_content' ) ?>
-
-				</div>
-				<hr style="clear:both" />
-
-			<?php endwhile; ?>
-			</div>
-		</ul>
-
-	<?php else : ?>
-		<ul id="activity-stream" class="activity-list item-list">
-			<div>
-			<div id="message" class="info">
-				<p><?php _e( 'No recent activity.', 'buddypress' ) ?></p>
-			</div>
-			</div>
-		</ul>
-	<?php endif; ?>
-	<?php } // if !is_user_messages
-
 }
 
 /**
@@ -585,5 +508,96 @@ function openlab_previous_step_type( $url ) {
 	return $url;
 }
 add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
+
+/**
+ * Markup for groupblog privacy settings
+ */
+function openlab_site_privacy_settings_markup( $site_id = 0 ) {
+	global $blogname, $current_site;
+
+	if ( !$site_id ) {
+		$site_id = get_current_blog_id();
+	}
+
+	$blog_name   = get_blog_option( $site_id, 'blogname' );
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+	$group_type  = openlab_get_current_group_type( 'case=upper' );
+?>
+
+<br/>
+	<input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private1"><?php _e('Allow search engines to index this site'); ?></label>
+<br/>
+	<input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />
+	<label for="blog-private0"><?php _e('Ask search engines not to index this site'); ?></label>
+
+<p class="description tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
+<br/>
+	<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> />
+	<label for="blog-private-1"><?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+<br/>
+	<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> />
+	<label for="blog-private-2"><?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
+<br/>
+	<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> />
+	<label for="blog-private-3">I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+	<?php
+}
+
+/**
+ * Markup for group admin tabs
+ */
+function openlab_group_admin_tabs( $group = false ) {
+	global $bp, $groups_template;
+
+	if ( !$group )
+		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+
+	$current_tab = bp_action_variable( 0 );
+
+	// Portfolio tabs look different from other groups
+?>
+
+	<?php if ( openlab_is_portfolio() ) : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li>
+		<?php } ?>
+
+		<?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
+			<li<?php if ( 'group-avatar'   == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li>
+		<?php endif; ?>
+
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Privacy Settings</a></li>
+
+		<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+
+	<?php else : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Details', 'buddypress' ); ?></a></li>
+		<?php } ?>
+
+		<?php
+			if ( !$bp->is_item_admin )
+				return false;
+		?>
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
+
+		<li<?php if ( 'manage-members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/manage-members"><?php _e( 'Members', 'buddypress' ); ?></a></li>
+
+		<?php if ( $groups_template->group->status == 'private' ) : ?>
+			<li<?php if ( 'membership-requests' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Requests', 'buddypress' ); ?></a></li>
+		<?php endif; ?>
+
+		<?php do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete', 'buddypress' ); ?></a></li>
+
+	<?php endif ?>
+<?php
+}
 
 ?>

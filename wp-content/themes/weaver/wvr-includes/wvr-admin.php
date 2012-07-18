@@ -34,7 +34,7 @@ function weaver_do_admin() {
       if (! weaver_f_check_WP_Filesystem() && !weaver_getopt('ftp_hide_check_message')) {			// let's get a working FS first
 	    weaver_ftp_form();
       } else {
-      if (!function_exists( 'weaver_plus_plugin' ) ) { ?>
+      if (false && !function_exists( 'weaver_plus_plugin' ) ) { ?>
 <div style="float:right;padding-right:30px;"><small><strong>Like Weaver? Please</strong></small>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -117,10 +117,11 @@ function weaver_do_admin() {
 
 function weaver_check_version() {
   if (weaver_getopt('ttw_hide_updatemsg')) return;
-  $latest = weaver_latest_version();     // check if newer version is available
+    $version = WEAVER_VERSION;
+    $latest = weaver_latest_version();     // check if newer version is available
     if (stripos($latest,'announcement') !== false) {
       weaver_save_msg( $latest . ' - Please check <a href="http://wpweaver.info" target="_blank">WPWeaver.info</a>.');
-    } else if ($latest != WEAVER_VERSION && $latest != 'unavailable') {
+    } else if ($latest != 'unavailable' && version_compare($version,$latest,'<') ) {
        weaver_save_msg('Current Weaver version is ' . WEAVER_VERSION . '. A newer version (' . $latest .
             ') is available now or very soon from WordPress.org. <br />The latest version is always available at <a href="http://wpweaver.info" target="_blank">WPWeaver.info</a>.');
     }

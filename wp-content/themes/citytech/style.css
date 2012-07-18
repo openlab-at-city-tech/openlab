@@ -147,6 +147,7 @@ a img {
 #wrap {
 	background-color: #fff;
 	width: 100% !important;
+	padding: 40px 0 0 0;
 }
 
 .wrap {
@@ -873,6 +874,7 @@ dd p{line-height:120%}
 }
 a#pgw-prev, a#pgw-next {
 	height: 215px;
+	z-index: 9999;
 }
 
 #pgw-gallery-medium a, #pgw-gallery-large a, #pgw-gallery-full a {
@@ -1406,6 +1408,13 @@ ul.ol-tooltip {
 
 ul.ol-tooltip li:before {
 	content: "\21A0 \0020";
+}
+
+#group-create-ajax-loader {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	background: url("/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif") no-repeat scroll left center transparent;
 }
 
 /* Parentheses around doc counts */

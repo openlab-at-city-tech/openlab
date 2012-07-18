@@ -34,6 +34,7 @@ function ass_digest_fire( $type ) {
 	// HTML emails only work with inline CSS styles. Here we setup the styles to be used in various functions below.
 	$ass_email_css['wrapper'] = 		'style="color:#333;clear:both;'; // use this to style the body
 	$ass_email_css['title'] = 			'style="font-size:130%;"';
+	$ass_email_css['summary']	      = '';
 	$ass_email_css['summary_ul'] = 		'style="padding:12px 0 5px; list-style-type:circle; list-style-position:inside;"';
 	//$ass_email_css['summary'] = 		'style="display:list-item;"';
 	$ass_email_css['follow_topic'] = 	'style="padding:15px 0 0; color: #888;clear:both;"';
@@ -45,6 +46,9 @@ function ass_digest_fire( $type ) {
 	$ass_email_css['item_content'] = 	'style="color:#333;"';
 	$ass_email_css['item_weekly'] = 	'style="color:#888; padding:4px 10px 0"'; // used in weekly in place of other item_ above
 	$ass_email_css['footer'] = 			'class="ass-footer" style="margin:25px 0 0; padding-top:5px; border-top:1px #bbb solid;"';
+
+	// Allow plugins to filter the CSS
+	$ass_email_css = apply_filters( 'ass_email_css', $ass_email_css );
 
 	if ( $type == 'dig' )
 		$title = sprintf( __( 'Your daily digest of group activity', 'bp-ass' ) );
@@ -69,12 +73,44 @@ function ass_digest_fire( $type ) {
 
 	$user_subscriptions = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_value FROM $wpdb->usermeta WHERE meta_key = 'ass_digest_items' AND meta_value != ''" ) );
 
+	// Do all activity lookups in one single query, and cache the results
+	// Todo: in_array() is slow; isset( array_flip( $array[$id] ) ) is better
+	// but it will take a flip every time
+	$all_activity_items = array();
+	foreach( (array)$user_subscriptions as $us ) {
+		$subs = maybe_unserialize( $us->meta_value );
+		foreach( (array)$subs as $digest_type => $group_subs ) {
+			foreach( (array)$group_subs as $group_id => $sub_ids ) {
+				foreach( (array)$sub_ids as $sid ) {
+					if ( !in_array( $sid, $all_activity_items ) ) {
+						$all_activity_items[] = $sid;
+					}
+				}
+			}
+		}
+	}
+
+	$items = bp_activity_get_specific( array(
+		'sort' 		=> 'ASC',
+		'activity_ids' 	=> $all_activity_items,
+		'show_hidden' 	=> true
+	) );
+
+	foreach( (array)$items['activities'] as $activity ) {
+		$key = 'bp_activity_' . $activity->id;
+		if ( !wp_cache_get( $key, 'bp' ) ) {
+			wp_cache_set( $key, $activity, 'bp', 60*60 );
+		}
+	}
+
 	foreach ( (array)$user_subscriptions as $user ) {
 		$user_id = $user->user_id;
-		$group_activity_ids_array = maybe_unserialize( $user->meta_value );
+
+		$group_activity_ids_array = unserialize( $user->meta_value );
+		$summary = $activity_message = '';
 
 		// We only want the weekly or daily ones
-		if ( !$group_activity_ids = (array)$group_activity_ids_array[$type] )
+		if ( empty( $group_activity_ids_array[$type] ) || !$group_activity_ids = (array)$group_activity_ids_array[$type] )
 			continue;
 
 		// Get the details for the user
@@ -99,7 +135,7 @@ function ass_digest_fire( $type ) {
 			if ( 'dig' == $type ) // might be nice here to link to anchor tags in the message
 				$summary .= apply_filters( 'ass_digest_summary', "<li {$ass_email_css['summary']}><a href='#{$group_slug}'>$group_name</a> " . sprintf( __( '(%s items)', 'bp-ass' ), count( $activity_ids ) ) ."</li>\n", $ass_email_css['summary'], $group_slug, $group_name, $activity_ids );
 
-			$activity_message .= ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug );
+			$activity_message .= ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug, $user_id );
 			unset( $group_activity_ids[ $group_id ] );
 		}
 
@@ -117,13 +153,20 @@ function ass_digest_fire( $type ) {
 
 		$message .= $footer;
 
-		$message .= apply_filters( 'ass_digest_disable_notifications', "\n\n<br><br>" . sprintf( __( "To disable these notifications please login and go to: %s where you can change your email settings for each group.", 'bp-ass' ), "<a href=\"{$userdomain}{$bp->groups->slug}/\">" . __( 'My Groups', 'bp-ass' ) . "</a>" ), $userdomain . $bp->groups->slug );
-		
+		$unsubscribe_message = "\n\n<br><br>" . sprintf( __( "To disable these notifications per group please login and go to: %s where you can change your email settings for each group.", 'bp-ass' ), "<a href=\"{$userdomain}{$bp->groups->slug}/\">" . __( 'My Groups', 'bp-ass' ) . "</a>" );
+
+		if ( get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) {
+			$unsubscribe_link = "$userdomain?bpass-action=unsubscribe&access_key=" . md5( $user_id . 'unsubscribe' . wp_salt() );
+			$unsubscribe_message .= "\n\n<br><br><a href=\"$unsubscribe_link\">" . __( 'Disable these notifications for all my groups at once.', 'bp_ass' ) . '</a>';
+		}
+
+		$message .= apply_filters( 'ass_digest_disable_notifications', $unsubscribe_message, $userdomain . $bp->groups->slug );
+
 		$message .= "</div>";
 
 		$message_plaintext = ass_convert_html_to_plaintext( $message );
 
-		if ( $_GET['sum'] ) {
+		if ( isset( $_GET['sum'] ) ) {
 			// test mode run from the browser, dont send the emails, just show them on screen using domain.com?sum=1
 			echo '<div style="background-color:white; width:75%;padding:20px 10px;">';
 			echo '<p>======================== to: <b>'.$to.'</b> ========================</p>';
@@ -131,11 +174,10 @@ function ass_digest_fire( $type ) {
 			//echo '<br>PLAIN TEXT PART:<br><pre>'; echo $message_plaintext ; echo '</pre>';
 			echo '</div>';
 		} else {
-
 			// send out the email
 			ass_send_multipart_email( $to, $subject, $message_plaintext, $message );
 			// update the subscriber's digest list
-			update_usermeta( $user_id, 'ass_digest_items', $group_activity_ids_array );
+			update_user_meta( $user_id, 'ass_digest_items', $group_activity_ids_array );
 
 		}
 
@@ -168,10 +210,14 @@ function ass_digest_fire_test() {
 		ass_digest_fire( 'dig' );
 		echo "<h2 style='margin-top:150px'>".__('WEEKLY DIGEST:','bp-ass')."</h2>";
 		ass_digest_fire( 'sum' );
+
+		//global $wpdb;
+		//echo '<pre>';print_r( $wpdb->queries );
 		die();
 	}
+
 }
-add_action( 'wp', 'ass_digest_fire_test' );
+add_action( 'bp_actions', 'ass_digest_fire_test' );
 
 
 
@@ -186,11 +232,14 @@ add_action( 'wp', 'ass_digest_fire_test' );
  * terms of the possibility that activity items could be associated with more than one group, and
  * the possibility that users within a single group would want more highly-filtered digests.
  */
-function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug ) {
-	global $bp, $ass_email_css, $ass_activity_cache;
+function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug, $user_id ) {
+	global $bp, $ass_email_css;
 
-	$group_permalink = $bp->root_domain.'/'.$bp->groups->slug.'/'.$group_slug. '/';
+	$group_permalink = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group_slug . '/';
 	$group_name_link = '<a href="'.$group_permalink.'" name="'.$group_slug.'">'.$group_name.'</a>';
+
+	$userdomain = bp_core_get_user_domain( $user_id );
+	$unsubscribe_link = "$userdomain?bpass-action=unsubscribe&group=$group_id&access_key=" . md5( "{$group_id}{$user_id}unsubscribe" . wp_salt() );
 
 	// add the group title bar
 	if ( $type == 'dig' ) {
@@ -200,40 +249,34 @@ function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_n
 	}
 
 	// add change email settings link
-	$group_message .= "\n<div {$ass_email_css['change_email']}>".__('change ', 'bp-ass')."<a href=\"". $group_permalink . "notifications/\">".__( 'email options', 'bp-ass' )."</a> ".__('for this group', 'bp-ass')."</div>\n\n";
+	$group_message .= "\n<div {$ass_email_css['change_email']}>";
+	$group_message .= __('To disable these notifications for this group click ', 'bp-ass'). " <a href=\"$unsubscribe_link\">" . __( 'unsubscribe', 'bp-ass' ) . '</a> - ';
+	$group_message .=  __('change ', 'bp-ass')."<a href=\"". $group_permalink . "notifications/\">".__( 'email options', 'bp-ass' )."</a> ";
+	$group_message .= "</div>\n\n";
 
 	$group_message = apply_filters( 'ass_digest_group_message_title', $group_message, $group_id, $type );
 
-	// Loop through the activity items to check whether we've already fetched it
-	$activity_ids_to_fetch = array();
-	foreach ( $activity_ids as $activity_id ) {
-		// Is it in the cache?
-		if ( !isset( $ass_activity_cache[$activity_id] ) ) {
-			// Sanity check: Don't fetch a single item more than once
-			if ( !isset( $activity_ids_to_fetch[$activity_id] ) )
-				$activity_ids_to_fetch[] = $activity_id;
-		}
-	}
-
-	// Get the activity items that we need to fetch. Note that we want to show hidden items
-	// because the user has already been verified a member of the group.
-	$items = bp_activity_get_specific( array(
-		'sort' 		=> 'ASC',
-		'activity_ids' 	=> $activity_ids_to_fetch,
-		'show_hidden' 	=> true
-	) );
-
-	// Loop through each fetched item, create its markup, and stash it in the cache
-	foreach ( (array)$items['activities'] as $item ) {
-		$ass_activity_cache[$item->id] = array(
-			'data' 	 => $item, // Stored for the convenience of other potential plugins
-			'markup' => ass_digest_format_item( $item, $type )
-		);
-	}
-
 	// Finally, add the markup to the digest
 	foreach ( $activity_ids as $activity_id ) {
-		$group_message .= $ass_activity_cache[$activity_id]['markup'];
+		// Cache is set earlier in ass_digest_fire()
+		$activity_item = wp_cache_get( 'bp_activity_' . $activity_id, 'bp' );
+
+		if ( !$activity_item ) {
+			// Try fetching it manually
+			$activity_items = bp_activity_get_specific( array(
+				'sort' 		=> 'ASC',
+				'activity_ids' 	=> array( $activity_item ),
+				'show_hidden' 	=> true
+			) );
+
+			if ( !empty( $activity_items ) ) {
+				$activity_item = $activity_items[0];
+			}
+		}
+
+		if ( !empty( $activity_item ) ) {
+			$group_message .= ass_digest_format_item( $activity_item, $type );
+		}
 		//$group_message .= '<pre>'. $item->id .'</pre>';
 	}
 
@@ -245,6 +288,8 @@ function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_n
 // displays each item in a group
 function ass_digest_format_item( $item, $type ) {
 	global $ass_email_css;
+
+	$replies = '';
 
 	//load from the cache if it exists
 	if ( $item_cached = wp_cache_get( 'digest_item_' . $type . '_' . $item->id, 'ass' ) ) {
@@ -293,8 +338,8 @@ function ass_digest_format_item( $item, $type ) {
 			$item_message .= ' - <a href="' . $item->primary_link .'">'.__('View', 'bp-ass').'</a>';
 
 		if ( $item->type == 'activity_update' || $item->type == 'activity_comment' )
-			$item_message .= ' - <a href="' . bp_activity_get_permalink($item->id).'">'.__('View', 'bp-ass').'</a>';
-			
+			$item_message .= ' - <a href="' . bp_activity_get_permalink( $item->id, $item ).'">'.__('View', 'bp-ass').'</a>';
+
 		/* Cleanup */
 		$item_message .= "</div>\n\n";
 
@@ -339,13 +384,15 @@ function ass_digest_filter( $item ) {
 // convert the email to plain text, and fancy it up a bit. these conversion only work in English, but it's ok.
 function ass_convert_html_to_plaintext( $message ) {
 	// convert view links to http:// links
-	$message = preg_replace( "/<a href=\"(.*)\">View<\/a>/i", "\\1", $message );
+	$message = preg_replace( "/<a href=\"(.[^\"]*)\">View<\/a>/i", "\\1", $message );
 	// convert group div to two lines encasing the group name
-	$message = preg_replace( "/<div.*>Group: <a href=\"(.*)\">(.*)<\/a>.*<\/div>/i", "------\n\\2 - \\1\n------", $message );
+	$message = preg_replace( "/<div.*>Group: <a href=\"(.[^\"]*)\">(.*)<\/a>.*<\/div>/i", "------\n\\2 - \\1\n------", $message );
 	// convert footer line to two dashes
 	$message = preg_replace( "/\n<div class=\"ass-footer\"/i", "--\n<div", $message );
 	// convert My Groups links to http:// links
-	$message = preg_replace( "/<a href=\"(.*)\">My Groups<\/a>/i", "\\1", $message );
+	$message = preg_replace( "/<a href=\"(.[^\"]*)\">My Groups<\/a>/i", "\\1", $message );
+
+	$message = preg_replace( "/<a href=\"(.[^\"]*)\">(.*)<\/a>/i", "\\2 (\\1)", $message );
 
 	$message = strip_tags( stripslashes( $message ) );
 	// remove uneccesary lines
@@ -355,46 +402,32 @@ function ass_convert_html_to_plaintext( $message ) {
 	return $message;
 }
 
-// formats and sends a MIME multipart email with both HTML and plaintext using PHPMailer to get better control
+/**
+ * Formats and sends a MIME multipart email with both HTML and plaintext
+ *
+ * We have to use some fancy filters from the wp_mail function to configure the $phpmailer object
+ * properly
+ */
 function ass_send_multipart_email( $to, $subject, $message_plaintext, $message ) {
-	global $phpmailer;
-
-	// (Re)create it, if it's gone missing
-	if ( !is_object( $phpmailer ) || !is_a( $phpmailer, 'PHPMailer' ) ) {
-		require_once ABSPATH . WPINC . '/class-phpmailer.php';
-		require_once ABSPATH . WPINC . '/class-smtp.php';
-		$phpmailer = new PHPMailer();
-	}
-
-	// clear up stuff
-	$phpmailer->ClearAddresses();$phpmailer->ClearAllRecipients();$phpmailer->ClearAttachments();
-	$phpmailer->ClearBCCs();$phpmailer->ClearCCs();$phpmailer->ClearCustomHeaders();
-	$phpmailer->ClearReplyTos();
 
 	$admin_email = get_site_option( 'admin_email' );
 	if ( $admin_email == '' )
 		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
 	$from_name = get_site_option( 'site_name' ) == '' ? 'WordPress' : esc_html( get_site_option( 'site_name' ) );
-	$phpmailer->From     = apply_filters( 'wp_mail_from'     , $admin_email );
-	$phpmailer->FromName = apply_filters( 'wp_mail_from_name', $from_name  );
 
-	foreach ( (array) $to as $recipient ) {
-		$phpmailer->AddAddress( trim( $recipient ) );
-	}
+	add_filter( 'wp_mail_from',      create_function( '$admin_email', 'return $admin_email;' ) );
+	add_filter( 'wp_mail_from_name', create_function( '$from_name', 'return $from_name;' ) );
 
-	$phpmailer->Subject = $subject;
-	$phpmailer->Body    = "<html><body>\n".$message."\n</body></html>";
-	$phpmailer->AltBody	= $message_plaintext;
-	$phpmailer->IsHTML( true );
-	$phpmailer->IsMail();
-	$charset = get_bloginfo( 'charset' );
+	add_action( 'phpmailer_init', create_function( '$phpmailer', '
+		$phpmailer->Body = "<html><body>' . addslashes( $message ) . '</body></html>";
+		$phpmailer->AltBody = "' . $message_plaintext . '";
+	' ) );
 
-	$phpmailer->CharSet = apply_filters( 'wp_mail_charset', $charset );
+	$headers = array(
+		'content_type' => 'text/html'
+	);
 
-	//do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
-
-	// Send!
-	$result = @$phpmailer->Send();
+	$result = wp_mail( $to, $subject, $message_plaintext, $headers );
 
 	return $result;
 }
@@ -407,13 +440,13 @@ function ass_digest_record_activity( $activity_id, $user_id, $group_id, $type = 
 		return;
 
 	// get the digest/summary items for all groups for this user
-	$group_activity_ids = get_usermeta( $user_id, 'ass_digest_items' );
+	$group_activity_ids = get_user_meta( $user_id, 'ass_digest_items', true );
 
 	// update multi-dimensional array with the current activity_id
 	$group_activity_ids[$type][$group_id][] = $activity_id;
 
 	// re-save it
-	update_usermeta( $user_id, 'ass_digest_items', $group_activity_ids );
+	update_user_meta( $user_id, 'ass_digest_items', $group_activity_ids );
 }
 
 

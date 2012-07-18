@@ -37,7 +37,7 @@ class Walker_Nav_Menu extends Walker {
 	 * @param string $output Passed by reference. Used to append additional content.
 	 * @param int $depth Depth of page. Used for padding.
 	 */
-	function start_lvl(&$output, $depth) {
+	function start_lvl( &$output, $depth = 0, $args = array() ) {
 		$indent = str_repeat("\t", $depth);
 		$output .= "\n$indent<ul class=\"sub-menu\">\n";
 	}
@@ -49,7 +49,7 @@ class Walker_Nav_Menu extends Walker {
 	 * @param string $output Passed by reference. Used to append additional content.
 	 * @param int $depth Depth of page. Used for padding.
 	 */
-	function end_lvl(&$output, $depth) {
+	function end_lvl( &$output, $depth = 0, $args = array() ) {
 		$indent = str_repeat("\t", $depth);
 		$output .= "$indent</ul>\n";
 	}
@@ -64,7 +64,7 @@ class Walker_Nav_Menu extends Walker {
 	 * @param int $current_page Menu item ID.
 	 * @param object $args
 	 */
-	function start_el(&$output, $item, $depth, $args) {
+	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 		global $wp_query;
 		$indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
 
@@ -74,10 +74,10 @@ class Walker_Nav_Menu extends Walker {
 		$classes[] = 'menu-item-' . $item->ID;
 
 		$class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
-		$class_names = ' class="' . esc_attr( $class_names ) . '"';
+		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
 
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
-		$id = strlen( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
+		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
 		$output .= $indent . '<li' . $id . $value . $class_names .'>';
 
@@ -103,7 +103,7 @@ class Walker_Nav_Menu extends Walker {
 	 * @param object $item Page data object. Not used.
 	 * @param int $depth Depth of page. Not Used.
 	 */
-	function end_el(&$output, $item, $depth) {
+	function end_el( &$output, $item, $depth = 0, $args = array() ) {
 		$output .= "</li>\n";
 	}
 }
@@ -113,7 +113,7 @@ class Walker_Nav_Menu extends Walker {
  *
  * Optional $args contents:
  *
- * menu - The menu that is desired.  Accepts (matching in order) id, slug, name. Defaults to blank.
+ * menu - The menu that is desired. Accepts (matching in order) id, slug, name. Defaults to blank.
  * menu_class - CSS class to use for the ul element which forms the menu. Defaults to 'menu'.
  * menu_id - The ID that is applied to the ul element which forms the menu. Defaults to the menu slug, incremented.
  * container - Whether to wrap the ul, and what to wrap it with. Defaults to 'div'.
@@ -125,9 +125,9 @@ class Walker_Nav_Menu extends Walker {
  * link_before - Text before the link.
  * link_after - Text after the link.
  * echo - Whether to echo the menu or return it. Defaults to echo.
- * depth - how many levels of the hierarchy are to be included.  0 means all.  Defaults to 0.
+ * depth - how many levels of the hierarchy are to be included. 0 means all. Defaults to 0.
  * walker - allows a custom walker to be specified.
- * theme_location - the location in the theme to be used.  Must be registered with register_nav_menu() in order to be selectable by the user.
+ * theme_location - the location in the theme to be used. Must be registered with register_nav_menu() in order to be selectable by the user.
  * items_wrap - How the list items should be wrapped. Defaults to a ul with an id and class. Uses printf() format with numbered placeholders.
  *
  * @since 3.0.0
@@ -362,10 +362,11 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 		} elseif ( 'custom' == $menu_item->object ) {
 			$_root_relative_current = untrailingslashit( $_SERVER['REQUEST_URI'] );
 			$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_root_relative_current;
-			$item_url = untrailingslashit( strpos( $menu_item->url, '#' ) ? substr( $menu_item->url, 0, strpos( $menu_item->url, '#' ) ) : $menu_item->url );
+			$raw_item_url = strpos( $menu_item->url, '#' ) ? substr( $menu_item->url, 0, strpos( $menu_item->url, '#' ) ) : $menu_item->url;
+			$item_url = untrailingslashit( $raw_item_url );
 			$_indexless_current = untrailingslashit( preg_replace( '/index.php$/', '', $current_url ) );
 
-			if ( in_array( $item_url, array( $current_url, $_indexless_current, $_root_relative_current ) ) ) {
+			if ( $raw_item_url && in_array( $item_url, array( $current_url, $_indexless_current, $_root_relative_current ) ) ) {
 				$classes[] = 'current-menu-item';
 				$menu_items[$key]->current = true;
 				$_anc_id = (int) $menu_item->db_id;

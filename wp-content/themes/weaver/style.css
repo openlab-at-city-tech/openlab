@@ -1,9 +1,10 @@
 /*
 Theme Name: Weaver
-Theme URI: http://wpweaver.info
-Description: The Easiest Way to Customize Your Theme! Weaver 2.2 puts you in control. Start with one of over 20 attractive predefined themes, then make it your own. Use the simple "check-box" interface to easily change colors, fonts, header and footer, menus, sidebars, theme width, and much more. Then, take control of your content using powerful Per Page and Per Post options, including unlimited custom widget areas. Over 15 page templates, including "Page with Posts" to show posts and content where and how you want. Easy for the newcomer, comprehensive for the expert. Context sensitive help; translations available for nearly every language; IE support; WP Multisite features; PageNavi plugin supported; active support forum.
+Theme URI: http://weavertheme.com
+Description: This version on Weaver is essentially OBSOLETE. Now, a new, even better version, called Weaver II, is available. Weaver II has many new features, including second-to-none automatic mobile device support. The new version is available right here at http://wordpress.org/extend/themes/weaver-ii, or you can get more information at http://weavertheme.com. For a long time Weaver 2.2.x has been one of the highest rated themes on WordPress.org. This version will remain available until the next major version of WP (probably 3.5), but, we highly recommend that you use Weaver II rather than Weaver 2.2.x. Thank you.
+
 Author: Bruce Wampler
-Version: 2.2.4
+Version: 2.2.9
 License: GNU General Public License (GPL), v2 (or newer)
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -1058,12 +1059,14 @@ body.page .edit-link
 	margin-bottom: 12px;
 }
 
-#content .wp-caption p.wp-caption-text {
+#content .wp-caption p,
+.wp-caption-text {
 	background-color:#F1F1F1;
 	color:#333;
 	margin-top:-20px;
 	margin-right:-2px;
 	margin-bottom:0px;
+	max-width: 636px;
 	font-size: 85%;
 	padding:8px;
 	text-align:center;

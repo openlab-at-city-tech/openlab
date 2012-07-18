@@ -1,76 +1,207 @@
 <?php
+/**
+ * @package WordPress
+ * @subpackage Wu Wei
+ */
 
-if ( function_exists('register_sidebar') )
-    register_sidebar();
+$themecolors = array(
+	'bg' => 'ffffff',
+	'border' => 'd1d9dc',
+	'text' => '516064',
+	'link' => 'ff8a00',
+	'url' => 'feb925',
+);
+$content_width = 460; // pixels
 
-/*
-File Name: Wordpress Theme Toolkit
-Version: 1.0
-Author: Ozh
-Author URI: http://planetOzh.com/
-*/
+// Wu Wei has a small post title area so we need to remove the widont filter
+function wuwei_wido() {
+    remove_filter( 'the_title', 'widont' );
+}
+add_action( 'init', 'wuwei_wido' );
 
-/************************************************************************************
- * THEME USERS : don't touch anything !! Or don't ask the theme author for support :)
- ************************************************************************************/
+// Grab the theme options
+require_once ( get_template_directory() . '/theme-options.php' );
 
-include(dirname(__FILE__).'/themetoolkit.php');
+// Add default posts and comments RSS feed links to head
+add_theme_support( 'automatic-feed-links' );
 
-/************************************************************************************
- * THEME AUTHOR : edit the following function call :
- ************************************************************************************/
+// Make theme available for translation
+// Translations can be filed in the /languages/ directory
+load_theme_textdomain( 'wu-wei', get_template_directory() . '/languages' );
 
-themetoolkit(
-	'WuWei', /* Make yourself at home :
-			* Name of the variable that will contain all the options of
-			* your theme admin menu (in the form of an array)
-			* Name it according to PHP naming rules (http://php.net/variables) */
+$locale = get_locale();
+$locale_file = TEMPLATEPATH . "/languages/$locale.php";
+if ( is_readable( $locale_file ) )
+	require_once( $locale_file );
 
-	array(     /* Variables used by your theme features (i.e. things the end user will
-			* want to customize through the admin menu)
- 			* Syntax :
-			* 'option_variable' => 'Option Title ## optionnal explanations',
-			* 'option_variable' => 'Option Title {radio|value1|Text1|value2|Text2} ## optionnal explanations',
-			* 'option_variable' => 'Option Title {textarea|rows|cols} ## optionnal explanations',
-			* 'option_variable' => 'Option Title {checkbox|option_varname1|value1|Text1|option_varname2|value2|Text2} ## optionnal explanations',
-			* Examples :
-			* 'your_age' => 'Your Age',
-			* 'cc_number' => 'Credit Card Number ## I can swear I will not misuse it :P',
-			* 'gender' => 'Gender {radio|girl|You are a female|boy|You are a male} ## What is your gender ?'
-			* Dont forget the comma at the end of each line ! */
-	'colour' => 'Colour scheme {radio|default|Light (default)|dark|Dark} ## Chose one.',
-	),
-	__FILE__	 /* Parent. DO NOT MODIFY THIS LINE !
-			  * This is used to check which file (and thus theme) is calling
-			  * the function (useful when another theme with a Theme Toolkit
-			  * was installed before */
+// Register nav menu locations
+register_nav_menus( array(
+	'primary' => __( 'Primary Navigation', 'wu-wei' ),
+) );
+
+// Add a home link to the default menu fallback wp_page_menu and change the menu class
+function wuwei_page_menu_args( $args ) {
+	$args['show_home'] = true;
+	$args['menu_class'] = 'menu menu-main';
+	return $args;
+}
+add_filter( 'wp_page_menu_args', 'wuwei_page_menu_args' );
+
+// Register sidebar 1
+register_sidebar( array (
+		'name' => __( 'Footer Left', 'wu-wei' ),
+		'id' => 'widget-area-1',
+		'description' => __( 'Widgets in this area will be shown on the left side your blog footer.', 'wu-wei' ),
+	)
 );
 
-/************************************************************************************
- * THEME AUTHOR : Congratulations ! The hard work is all done now :)
- *
- * From now on, you can create functions for your theme that will use the array
- * of variables $mytheme->option. For example there will be now a variable
- * $mytheme->option['your_age'] with value as set by theme end-user in the admin menu.
- ************************************************************************************/
+// Register sidebar 2
+register_sidebar( array (
+		'name' => __( 'Footer Middle', 'wu-wei' ),
+		'id' => 'widget-area-2',
+		'description' => __( 'Widgets in this area will be shown in the middle of your blog footer.', 'wu-wei' ),
+	)
+);
 
-/***************************************
- * Additionnal Features and Functions
- *
- * Create your own functions using the array
- * of user defined variables $mytheme->option.
- *
- **************************************/
+// Register sidebar 3
+register_sidebar( array (
+		'name' => __( 'Footer Right', 'wu-wei' ),
+		'id' => 'widget-area-3',
+		'description' => __( 'Widgets in this area will be shown on the right side of your blog footer.', 'wu-wei' ),
+	)
+);
 
-function setColourScheme() {
+// Enable custom backgrounds
+add_custom_background();
 
-	global $WuWei;
+// Your changeable header business starts … NOW
+// Set some default values
+define('HEADER_TEXTCOLOR', 'D1D9DC'); // Default text color
+define('HEADER_IMAGE_WIDTH', 700); // Default image width is actually the div's height
+define('HEADER_IMAGE_HEIGHT', 144); // Same for height
 
-	$default    = "1";
-	$colour	 	= $WuWei->option['colour'];
-
-	echo $colour;
-
+function wuwei_header_style() {
+// This function defines the style for the theme
+// You can change these selectors to match your theme
+?>
+<style type="text/css">
+#header img {
+	margin: 2em 0 0 0;
+}
+<?php
+// Has the text been hidden?
+if ( 'blank' == get_header_textcolor() && get_header_image() != '' ) { ?>
+	#header img {
+		margin: -<?php echo HEADER_IMAGE_HEIGHT; ?>px 0 0 0;
+	}	
+	.blog-name a {
+		display: block;
+		text-indent: -9000px;
+		width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
+		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+	}
+	.description {
+		position: absolute;
+		left: -9999px;
+	}
+<?php } elseif ( 'blank' == get_header_textcolor() && get_header_image() == '' ) {
+// No text, no image
+?>
+.blog-name a, .description {
+	position: absolute;
+	left: -9999px;
+}	
+<?php } elseif ( get_header_textcolor() != HEADER_TEXTCOLOR ) {
+// If the user has set a custom color for the text use that
+?>
+.blog-name a:link, .blog-name a:visited, .description {
+	color: #<?php echo header_textcolor(); ?>
+}
+<?php } ?>
+</style>
+<?php
 }
 
+function wuwei_admin_header_style() {
 ?>
+<style type="text/css">
+#headimg {
+	font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+	<?php if ( 'blank' != get_header_textcolor() ) : ?>
+	<?php endif; ?>
+	border: none;
+}
+.appearance_page_custom-header #headimg {
+	border: none;
+	min-height: 1px;
+}
+#headimg h1 {
+	font-size: 60px;
+	line-height: 1em;
+	margin: 0;
+	padding-bottom:0.25em;
+}
+#headimg, #headimg h1 a {
+	text-decoration: none;
+}
+#headimg #desc {
+	color: #6A797D;
+	font-size: 18px;
+	padding-bottom: 30px;
+}
+<?php if ( 'blank' == get_header_textcolor() ) { ?>
+#header h1 a {
+	display: none;
+}
+#header, #header h1 a {
+	color: <?php echo HEADER_TEXTCOLOR ?>;
+}
+<?php } ?>
+</style>
+<?php
+}
+
+function wuwei_admin_header_image() { ?>
+	<div id="headimg" style="max-width:<?php echo HEADER_IMAGE_WIDTH; ?>px;">
+		<?php
+		if ( 'blank' == get_theme_mod('header_textcolor', HEADER_TEXTCOLOR) || '' == get_theme_mod('header_textcolor', HEADER_TEXTCOLOR) )
+			$style = ' style="display:none;"';
+		else
+			$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
+		?>
+		<h1><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo home_url(); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+		<div id="desc"<?php echo $style; ?>><?php bloginfo( 'description' ); ?></div>
+		<img src="<?php esc_url ( header_image() ); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
+	</div>
+<?php }
+
+add_custom_image_header('wuwei_header_style', 'wuwei_admin_header_style', 'wuwei_admin_header_image');
+// and thus ends the changeable header business
+
+function wuwei_sidebars(){
+	// Register sidebar 1
+	register_sidebar( array (
+			'name' => __( 'Footer Left', 'wu-wei' ),
+			'id' => 'widget-area-1',
+			'description' => __( 'Widgets in this area will be shown on the left side your blog footer.', 'wu-wei' ),
+		)
+	);
+
+	// Register sidebar 2
+	register_sidebar( array (
+			'name' => __( 'Footer Middle', 'wu-wei' ),
+			'id' => 'widget-area-2',
+			'description' => __( 'Widgets in this area will be shown in the middle of your blog footer.', 'wu-wei' ),
+
+		)
+	);
+
+	// Register sidebar 3
+	register_sidebar( array (
+			'name' => __( 'Footer Right', 'wu-wei' ),
+			'id' => 'widget-area-3',
+			'description' => __( 'Widgets in this area will be shown on the right side of your blog footer.', 'wu-wei' ),
+		)
+	);
+}
+add_action( 'widgets_init', 'wuwei_sidebars'  );

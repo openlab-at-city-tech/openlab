@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Recent Comments widget.
+ *
+ * @package P2
+ * @since unknown
+ */
 class P2_Recent_Comments extends WP_Widget {
 	function P2_Recent_Comments() {
 		$this->WP_Widget( false, __( 'P2 Recent Comments', 'p2' ), array( 'description' => __( 'Recent comments with avatars.', 'p2' ) ) );
@@ -114,7 +119,7 @@ class P2_Recent_Comments extends WP_Widget {
 		}
 
 		$comments = $wpdb->get_results( "SELECT * FROM $wpdb->comments WHERE comment_approved = '1' ORDER BY comment_date_gmt DESC LIMIT $num_to_show" );
-		
+
 		$cache[$num_to_show] = $comments;
 		wp_cache_add( 'p2_recent_comments', $cache, 'widget' );
 		return $comments;
@@ -155,7 +160,7 @@ class P2_Recent_Comments extends WP_Widget {
 
 		$comment_url = P2_Recent_Comments::comment_url_maybe_local( $comment );
 
-		$row .= sprintf( '<td class="text">'.__( "%s on <a href='%s' class='tooltip' title='%s'>%s</a>" , 'p2' ) . '</td></tr>', $author_html, $comment_url, esc_attr($comment_content), $post_title );
+		$row .= sprintf( '<td class="text">'.__( "%s on <a href='%s' class='tooltip' title='%s'>%s</a>" , 'p2' ) . '</td></tr>', $author_html, esc_url( $comment_url ), esc_attr($comment_content), $post_title );
 		return $row;
 	}
 }

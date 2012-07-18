@@ -1,11 +1,13 @@
 /*
 Theme Name: Pilcrow
 Theme URI: http://wordpress.org/extend/themes/pilcrow/
-Description: Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, four default color schemes, custom header images, and a customizable background, make personalizing your blog a snap.
-Version: 1.0
+Description: Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, four default color schemes, custom header images (using featured images in posts and pages), and a customizable background, make personalizing your blog a snap.
+Version: 1.3
 Author: Automattic
 Author URI: http://automattic.com/
-Tags: custom-header, custom-background, custom-menu, threaded-comments, sticky-post, microformats, rtl-language-support, translation-ready
+License: GNU General Public License
+License URI: license.txt
+Tags: custom-header, custom-background, custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, featured-image-header, featured-images
 */
 
 
@@ -20,7 +22,6 @@ small, strike, strong, sub, sup, tt, var,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label {
 	border: 0;
-	font-family: inherit;
 	font-style: inherit;
 	font-weight: inherit;
 	margin: 0;
@@ -129,7 +130,7 @@ body {
 	max-width: 990px;
 }
 .three-column #wrapper #container {
-	margin: 0 3.9%;
+	margin: 0 3.7625%;
 }
 .three-column #content {
 	overflow: hidden;
@@ -245,7 +246,7 @@ body {
 	margin: 0 3.9%;
 }
 .no-sidebar #content,
-.full-width #content,
+.one-column #content,
 .image-attachment #content {
 	margin: 0 auto;
 	width: 100%;
@@ -287,7 +288,6 @@ hr {
 	background-color: #ccc;
 	border: 0;
 	height: 1px;
-	margin-bottom: 1.7em;
 }
 
 /* Text elements */
@@ -340,6 +340,7 @@ pre {
 	margin-bottom: 1.7em;
 	overflow-x: auto;
 	padding: 0.75em 1.7em;
+	overflow-x: scroll;
 }
 code, kbd {
 	color: #009900;
@@ -381,7 +382,7 @@ input[type=text] {
 
 /* Links */
 a {
-	color:#1c9bdc;
+	color: #1c9bdc;
 	text-decoration: none;
 }
 a:focus,
@@ -406,7 +407,7 @@ a:hover {
 	margin-bottom: 30px;
 }
 #site-title {
-	text-align: right;	
+	text-align: right;
 }
 #site-title a {
 	color: #000;
@@ -497,7 +498,7 @@ a:hover {
 	color: #000;
 	font-size: 24px;
 	margin-bottom: 30px;
-	padding: 4px 8px;	
+	padding: 4px 8px;
 }
 .page-title span {
 	color: #999;
@@ -627,6 +628,9 @@ a:hover {
 	background: url(images/icons/cabinet.png) no-repeat 0 2px;
 	padding: 0 0 0 24px;
 }
+#author-description {
+	margin: 0 0 10px;
+}
 
 /* Sticky Posts */
 .sticky .entry-meta {
@@ -667,6 +671,9 @@ a:hover {
 	padding: 10px 10px 0;
 	text-align: center;
 }
+.image-attachment .entry-attachment img {
+	height: auto;
+}
 
 
 /* =Images
@@ -676,13 +683,25 @@ img.size-auto,
 img.size-large,
 img.size-full,
 img.size-medium,
-img.size-thumbnail,
 .attachment img {
+	height: auto;
 	max-width: 100%;
+}
+.entry img.left_off {
+	float: left;
+	margin: 0 10px 5px 0;
+}
+.entry img.right_off {
+	float: right;
+	margin: 0 0 5px 10px;
+}
+.entry img.center_off {
+	display: block;
+	margin: 0 auto 15px;
 }
 object,
 embed {
-	width: 100%;
+	max-width: 100%;
 }
 p img.wp-smiley {
 	margin-bottom: 0;
@@ -701,6 +720,7 @@ p img,
 }
 .wp-caption img {
 	border: 0 none;
+	height: auto;
 	margin: 0;
 	max-width: 98%;
 	padding: 0;
@@ -712,7 +732,6 @@ p img,
 	padding: 0 4px 8px 0;
 }
 .gallery-caption {
-	
 }
 
 
@@ -720,6 +739,7 @@ p img,
 -------------------------------------------------------------- */
 
 .navigation {
+	clear: both;
 	overflow: hidden;
 }
 .nav-previous {
@@ -764,7 +784,7 @@ p img,
 .widget-title {
 	color: #999;
 	font-size: 24px;
-	line-height: 18px;
+	line-height: 21px;
 	margin: 0;
 }
 .sidebar-list h2 {
@@ -828,6 +848,45 @@ p img,
 	vertical-align: middle;
 }
 
+/* Calendar Widget */
+#wp-calendar {
+	width: 100%;
+}
+#wp-calendar caption {
+	color: #888;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 6px 0;
+	text-align: left;
+	padding: 0 2px 6px;
+}
+#wp-calendar th {
+	color: #888;
+	text-align: center;
+}
+#wp-calendar tbody td {
+	text-align: center;
+}
+#wp-calendar tfoot td {
+	padding-top: .2em;
+}
+#wp-calendar tfoot #next {
+	text-align: right;
+}
+#wp-calendar tbody a {
+	text-decoration: underline;
+}
+#wp-calendar a:visited {
+	color: #0060ff;
+}
+#wp-calendar a:visited:hover {
+	color: #df0000;
+}
+#wp-calendar tbody #today {
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	padding: 3px 0;
+}
 
 /* Footer Widgets */
 #footer-widget-area {
@@ -952,7 +1011,7 @@ cite.fn {
 }
 .form-allowed-tags {
 	color: #999;
-	font-size: 12px;	
+	font-size: 12px;
 }
 .form-allowed-tags code {
 	color: #999;
@@ -1001,17 +1060,24 @@ cite.fn {
 ----------------------------------------------- */
 
 @media print {
+	* {
+		overflow: visible !important;
+		float: none !important;
+	}
 	body {
 		background: none !important;
 		color: #000;
 		font: 12px Georgia, "Bitstream Charter", serif;
 		line-height: 1.7;
-	}	
+	}
 	#container {
 		clear: both !important;
 		display: block !important;
 		float: none !important;
 		position: relative !important;
+	}
+	#content-container {
+		float: none !important;
 	}
 	#content {
 		width: 100% !important;
@@ -1020,6 +1086,7 @@ cite.fn {
 		text-align: left;
 	}
 	.entry-meta {
+		border: none;
 		padding: 0;
 	}
 	#nav,
@@ -1028,9 +1095,22 @@ cite.fn {
 	.jump,
 	#wpl-likebox,
 	.entry-links,
+	#sidebar,
 	.widget-area,
+	#respond,
 	#footer {
 		display: none !important;
 	}
+
 }
 
+
+/* =WP.com
+-------------------------------------------------------------- */
+
+body.typekit-enabled #site-info {
+	width: 40%;
+}
+body.typekit-enabled #site-generator {
+	width: 60%;
+}

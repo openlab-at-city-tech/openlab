@@ -1,4 +1,10 @@
 <?php
+/**
+ * Search and highlight.
+ *
+ * @package P2
+ * @since unknown
+ */
 
 class P2_Search {
 

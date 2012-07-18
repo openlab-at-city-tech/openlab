@@ -1,0 +1,184 @@
+/*
+Theme Name:Wu Wei
+RTL: yoav@automattic.com
+*/
+
+body {
+	direction:rtl;
+	unicode-bidi:embed;
+}
+/*** General ***/
+body {
+	font-family: sans-serif;
+}
+.center-column {
+	text-align:right;
+}
+.navigation {
+	padding:0.333em 0;
+	font-size:1.5em;
+	border-top:1px solid #d1d9dc;
+}
+.image-attachment .navigation .alignleft a:before {
+	content:' »'
+}
+.image-attachment .navigation .alignright a:after {
+	content:'« '
+}
+.pagetitle span {
+	position:absolute;
+	right:240px;
+	left:auto;
+}
+.navigation .alignleft {
+	float:right;
+}
+.navigation .alignright {
+	float:left;
+}
+/*** Header ***/
+.menu-main {
+	float:right;
+}
+.menu-main li {
+	float:right;
+}
+.menu-main a {
+	margin-left:1.819em;
+	margin-right:0
+}
+.menu-main ul ul {
+	float:right;
+	right:0;
+	left:auto;
+}
+.menu-main ul ul ul {
+	right:180px;
+	left:auto
+}
+
+/*** Posts and Pages ***/
+.post-info {
+	float:right;
+	margin:0 0 0 1.667em;
+}
+.timestamp {
+	float:right;
+}
+.comment-bubble {
+	float:right;
+	margin-right:0.5em;
+	margin-left:0
+}
+.comment-bubble a:link,.comment-bubble a:visited {
+	background-position: 100% 2px;
+}
+.sticky .comment-bubble {
+	margin-right:0;
+}
+.post-content {
+	float:right;
+}
+blockquote {
+	background:#fff url(images/blockquote-rtl.png) no-repeat top right;
+	margin-right:7em;
+	margin-left:0;
+	padding-right:3em;
+	padding-left:0;
+	font-style:normal;
+}
+.pull-1 {
+	margin-right:-8.571em;
+	margin-left:0;
+}
+.pull-2 {
+	margin-right:-17.143em;
+	margin-left:-0;
+}
+.post-content ul li,.post-content ol li {
+	margin-right:3em;
+	margin-left:0;
+	padding-right:0em;
+	padding-left:0;
+}
+dd {
+	margin-right:8.571em;
+	margin-left:0
+}
+.post-meta-data {
+	margin:0 10em 0 0;
+}
+.post-meta-data span {
+	float:left;
+}
+.gallery-item {
+	float:right;
+	text-align:right;
+}
+/*** Comments ****/
+#comment-wrapper {
+	padding-right:10em;
+	padding-left:0
+}
+h3#comments span.comment-message {
+	right: 6.667em;
+	left: auto;
+}
+ol.commentlist li {
+	padding:0.333em 10em 0 0;
+}
+ol.commentlist li.comment div.vcard img.avatar {
+	right:0em;
+	left:auto
+}
+* html ol.commentlist li.comment div.vcard img.avatar {
+	right: -10em;
+	left:auto
+}
+ol.commentlist li.comment div.reply {
+	left:3px;
+	right:auto
+}
+ol.commentlist li.pingback div.reply {
+	left:3px;
+	right:auto
+}
+#respond p input {
+	right:8.571em;
+	left:auto
+}
+#respond .comment-form-comment textarea {
+	right:6.70em;
+	left:auto;
+	font-family:sans-serif;
+}
+.cancel-comment-reply {
+	left:3px;
+	right:auto
+}
+.nocomments {
+	padding:1em 8.571em 0 0;
+}
+.form-field span {
+	right:8.571em;
+	left:auto
+}
+.form-field span textarea#comment {
+	font-family:sans-serif;
+}
+/*** Sidebar+Widgets ***/
+.center-column-sidebar {
+	text-align:right;
+}
+#footer-widgets .widget-area {
+	float:right;
+	margin-left:1.429em;
+	margin-right:0
+}
+/*** Footer ***/
+.credits {
+	float:right;
+}
+.bottom-link {
+	float: left;
+}

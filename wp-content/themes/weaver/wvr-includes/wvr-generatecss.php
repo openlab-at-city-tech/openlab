@@ -90,21 +90,24 @@ function weaver_output_style($sout) {
 /*  ttw_fadebody_bg  */
 
     if (weaver_getopt('ttw_fadebody_bg')) {
-	weaver_f_write($sout, sprintf("body {background-image: url(%s/images/gr.png); background-attachment: scroll; background-repeat: repeat-x;}\n",
-	       get_template_directory_uri()));
+	$url = weaver_relative_url('images/gr.png');
+	weaver_f_write($sout, sprintf("body {background-image: url(%s); background-attachment: scroll; background-repeat: repeat-x;}\n",
+	       $url));
     }
 
 /*  ttw_gradient_menu  */
 
     if (weaver_getopt('ttw_gradient_menu')) {
-	weaver_f_write($sout, sprintf("#access, #access2, #access3 { background-image: url(%s/images/weaver/fade.png);}\n",
-	       get_template_directory_uri()));
-	weaver_f_write($sout, sprintf("#access ul ul a, #access li:hover > a, #access ul ul :hover > a { background-image: url(%s/images/weaver/fadeup.png);}\n",
-	       get_template_directory_uri()));
-	weaver_f_write($sout, sprintf("#access2 ul ul a, #access2 li:hover > a, #access2 ul ul :hover > a { background-image: url(%s/images/weaver/fadeup.png);}\n",
-	       get_template_directory_uri()));
-	weaver_f_write($sout, sprintf("#access3 ul ul a, #access3 li:hover > a, #access3 ul ul :hover > a { background-image: url(%s/images/weaver/fadeup.png);}\n",
-	       get_template_directory_uri()));
+	$url = weaver_relative_url('images/weaver/fade.png');
+	$urlup = weaver_relative_url('images/weaver/fadeup.png');
+	weaver_f_write($sout, sprintf("#access, #access2, #access3 { background-image: url(%s);}\n",
+	       $url));
+	weaver_f_write($sout, sprintf("#access ul ul a, #access li:hover > a, #access ul ul :hover > a { background-image: url(%s);}\n",
+	       $urlup));
+	weaver_f_write($sout, sprintf("#access2 ul ul a, #access2 li:hover > a, #access2 ul ul :hover > a { background-image: url(%s);}\n",
+	       $urlup));
+	weaver_f_write($sout, sprintf("#access3 ul ul a, #access3 li:hover > a, #access3 ul ul :hover > a { background-image: url(%s);}\n",
+	       $urlup));
    }
 
 /*  ttw_hide_post_fill  (also used in post icons) */
@@ -126,18 +129,21 @@ function weaver_output_style($sout) {
     if ($val && $val != '' && $val != 'default') {
 	if ($val == 'none' || $val == 'circle' || $val == 'disc' || $val == 'square')
 	    weaver_f_write($sout, sprintf(".widget-area ul ul {list-style:%s;}\n",$val));
-	else
-	    weaver_f_write($sout, sprintf(".widget-area ul ul {list-style:none; list-style-position:inside; list-style-image: url(%s/images/bullets/%s.gif);}\n",
-	       get_template_directory_uri(),$val));
+	else {
+	    $url = weaver_relative_url('images/bullets/' . $val . '.gif');
+	    weaver_f_write($sout, sprintf(".widget-area ul ul {list-style:none; list-style-position:inside; list-style-image: url(%s);}\n",
+	       $url));
+	}
     }
 
 /*  ttw_post_icons  */
 
    if (weaver_getopt('ttw_post_icons')) {
 	$leftm = '8';
+	$url = weaver_relative_url('images/icons/edit-1.png');
 	if (!weaver_getopt('ttw_hide_post_fill')) $leftm = '0';	// no left margin if not hiding fill in
-	weaver_f_write($sout, sprintf(".edit-link{ background: url(%s/images/icons/edit-1.png) no-repeat 1px;padding-top:3px;padding-left:21px;margin-left:%spx;}\n",
-	       get_template_directory_uri(),$leftm));
+	weaver_f_write($sout, sprintf(".edit-link{ background: url(%s) no-repeat 1px;padding-top:3px;padding-left:21px;margin-left:%spx;}\n",
+	       $url,$leftm));
    }
 
 
