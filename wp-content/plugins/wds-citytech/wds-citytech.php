@@ -984,10 +984,13 @@ function wds_bp_group_meta(){
 
 				<td id="noo_new_options">
 				<?php
+
+				$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+
 				if( constant( "VHOST" ) == 'yes' ) : ?>
-					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo openlab_suggest_portfolio_path() ?>" />.<?php echo $current_site->domain;?>
+					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain;?>
 				<?php else:
-					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo openlab_suggest_portfolio_path() ?>" />
+					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
 				<?php endif; ?>
 
 				</td>
