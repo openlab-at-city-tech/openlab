@@ -58,7 +58,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 		<div id="invite-anyone-member-list">
 			<ul>
-				<?php bp_new_group_invite_member_list() ?>
+				<?php openlab_access_list_checkboxes() ?>
 			</ul>
 
 			<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>

@@ -21,11 +21,11 @@ jQuery(document).ready( function() {
 		delimiter: /(,|;)\s*/,
 		onSelect: ia_on_autocomplete_select,
 		deferRequestBy: 0, //miliseconds
-		params: { action: 'invite_anyone_autocomplete_ajax_handler' },
+		params: { action: 'openlab_ajax_autocomplete', group_id: jQuery('input#group_id').val() },
 		noCache: true //set to true, to disable caching
 	};
 
-	a = j('#send-invite-form #send-to-input').autocomplete(options);
+	a = j('#send-to-input').autocomplete(options);
 
 	j("div#invite-anyone-member-list input").click(function() {
 		var friend_id = j(this).val();

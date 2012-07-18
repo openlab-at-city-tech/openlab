@@ -1417,6 +1417,15 @@ ul.ol-tooltip li:before {
 	background: url("/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif") no-repeat scroll left center transparent;
 }
 
+.group-admin .left-menu {
+	float: left;
+	width: 250px;
+}
+
+.group-admin .main-column {
+	padding-left: 250px;
+}
+
 /* Parentheses around doc counts */
 div#item-buttons ul li a span:before {
 	content: '(';

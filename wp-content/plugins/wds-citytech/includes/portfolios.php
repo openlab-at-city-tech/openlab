@@ -222,6 +222,49 @@ function openlab_groups_screen_group_admin_access_list() {
 }
 add_action( 'bp_screens', 'openlab_groups_screen_group_admin_access_list' );
 
+/* Creates the list of members on the Sent Invite screen */
+function openlab_access_list_checkboxes() {
+	echo openlab_get_access_list_checkboxes();
+}
+	function openlab_get_access_list_checkboxes( $args = '' ) {
+		global $bp;
+
+		$defaults = array(
+			'group_id' => false,
+			'separator' => 'li'
+		);
+
+		$r = wp_parse_args( $args, $defaults );
+		extract( $r, EXTR_SKIP );
+
+		if ( !$group_id )
+			$group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : $bp->groups->current_group->id;
+
+		$friends = get_users();
+
+		if ( $friends ) {
+			$group_members = BP_Groups_Member::get_all_for_group( $group_id, false, false, false ); // last param - exclude_admins_mods
+			$gms = array();
+			foreach( (array) $group_members['members'] as $gm ) {
+				$gms[] = $gm->user_id;
+			}
+
+			for ( $i = 0; $i < count( $friends ); $i++ ) {
+				$checked = '';
+				if ( $gms ) {
+					if ( in_array( $friends[$i]->ID, $gms ) ) {
+						$checked = ' checked="checked"';
+					}
+				}
+
+				$items[] = '<' . $separator . '><input' . $checked . ' type="checkbox" name="friends[]" id="f-' . $friends[$i]->ID . '" value="' . esc_html( $friends[$i]->ID ) . '" /> ' . $friends[$i]->display_name . '</' . $separator . '>';
+			}
+		}
+
+		return implode( "\n", (array)$items );
+	}
+
+
 /**
  * Load the necessary JS and CSS from Invite Anyone // lazy
  */
@@ -293,6 +336,34 @@ function openlab_ajax_invite_user() {
 	}
 }
 add_action( 'wp_ajax_openlab_ajax_invite_user', 'openlab_ajax_invite_user' );
+
+function openlab_ajax_autocomplete() {
+	global $bp;
+
+	$return = array(
+		'query' 	=> $_REQUEST['query'],
+		'data' 		=> array(),
+		'suggestions' 	=> array()
+	);
+
+	$users = invite_anyone_invite_query( $_REQUEST['group_id'], $_REQUEST['query'] );
+
+	if ( $users ) {
+		$suggestions = array();
+		$data 	     = array();
+
+		foreach ( $users as $user ) {
+			$suggestions[] 	= $user->display_name . ' (' . $user->user_login . ')';
+			$data[] 	= $user->ID;
+		}
+
+		$return['suggestions'] = $suggestions;
+		$return['data']	       = $data;
+	}
+
+	die( json_encode( $return ) );
+}
+add_action( 'wp_ajax_openlab_ajax_autocomplete', 'openlab_ajax_autocomplete' );
 
 function openlab_access_remove_link( $user_id = 0 ) {
 	global $members_template;

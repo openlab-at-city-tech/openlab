@@ -197,19 +197,26 @@ function openlab_current_directory_filters() {
 		}
 	}
 
-
+//<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp; </span>
 	$markup = '';
 	if ( !empty( $active_filters ) ) {
-		$markup .= '<ul>';
+		$markup .= '<h3 id="bread-crumb">';
+
+		$filter_words = array();
 		foreach( $active_filters as $ftype => $fvalue ) {
 			$filter_data = openlab_get_directory_filter( $ftype );
 
-			$label = $filter_data['label'];
-			$value = isset( $filter_data['options'][$fvalue] ) ? $filter_data['options'][$fvalue] : ucwords( $fvalue );
+			$word = isset( $filter_data['options'][$fvalue] ) ? $filter_data['options'][$fvalue] : ucwords( $fvalue );
 
-			$markup .= sprintf( '<li>%s: %s</li>', $label, $value );
+			// Leave out the 'All's
+			if ( 'All' != $word ) {
+				$filter_words[] = $word;
+			}
 		}
-		$markup .= '</ul>';
+
+		$markup .= implode( '<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>', $filter_words );
+
+		$markup .= '</h3>';
 	}
 
 	echo $markup;

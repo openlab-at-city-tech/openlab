@@ -3,7 +3,7 @@
 require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
-/**this is for the post type declarations - they are done on the function side instead of through 
+/**this is for the post type declarations - they are done on the function side instead of through
 a plugin, to make git tracking easier**/
 require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
@@ -517,23 +517,25 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	$group_type  = openlab_get_current_group_type( 'case=upper' );
 ?>
 
-<br/>
-	<input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />
-	<label for="blog-private1"><?php _e('Allow search engines to index this site'); ?></label>
-<br/>
-	<input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />
-	<label for="blog-private0"><?php _e('Ask search engines not to index this site'); ?></label>
+<div class="radio">
 
-<p class="description tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
 <br/>
-	<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> />
-	<label for="blog-private-1"><?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+
+	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site'); ?></label>
 <br/>
-	<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> />
-	<label for="blog-private-2"><?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
+
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site'); ?></label>
+
+<p class="description ol-tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
+
+<br />
+	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> /> <?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
 <br/>
-	<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> />
-	<label for="blog-private-3">I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+	<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> /> <?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
+<br/>
+	<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> /> I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+
+</div>
 	<?php
 }
 

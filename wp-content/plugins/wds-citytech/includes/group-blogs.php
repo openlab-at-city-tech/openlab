@@ -323,9 +323,9 @@ function show_site_posts_and_comments() {
 					<?php endforeach ?>
 					</ul>
 
-					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
-
-
+					<?php if ( openlab_is_course() ) : ?>
+						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
+					<?php endif ?>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-course -->
