@@ -32,6 +32,10 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
 		</p>
 
+	<?php else : ?>
+
+		<input type="hidden" name="group-notify-members" value="0" />
+
 	<?php endif ?>
 
 	<?php do_action( 'bp_after_group_details_admin' ); ?>
