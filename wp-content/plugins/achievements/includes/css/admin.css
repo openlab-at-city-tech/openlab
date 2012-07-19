@@ -1,0 +1,126 @@
+/* add/edit page */
+form.achievement-edit-form fieldset.mandatory-advanced, form.achievement-edit-form fieldset.mandatory-about {
+	margin-top: 20px;
+}
+form.achievement-edit-form fieldset {
+	height: auto;
+	padding: 20px;
+	border: 1px solid #EAEAEA;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+form.achievement-edit-form fieldset div.container:nth-child(even) {
+	background-color: #F4F4F4;
+}
+form.achievement-edit-form input[type="submit"] {
+	width: auto !important;
+}
+form.achievement-edit-form input[type="checkbox"] {
+	margin-left: 0 !important;
+	padding-left: 0 !important;
+}
+#achievement-edit, #achievement-create {
+	margin-top: 20px;
+}
+form.achievement-edit-form input[type="text"], form.achievement-edit-form input[type="number"], form.achievement-edit-form textarea {
+	width: 97% !important;
+}
+form.achievement-edit-form label {
+	text-align: right;
+	float: left;
+}
+form.achievement-edit-form legend {
+	font-weight: bold;
+}
+form.achievement-edit-form p.error {
+	float: right;
+	color: #e41717;
+	font-weight: bold;
+}
+form.achievement-edit-form p.hint {
+	color: #888;
+}
+form.achievement-edit-form select {
+	width: 100%;
+}
+form.standard-form input[type=number] {
+	border: 1px inset #ccc;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 6px;
+	font: inherit;
+	font-size: 14px;
+	color: #888;
+}
+
+textarea#description {
+	height: 180px;
+}
+
+/* from BP-Default */
+.hidden_initially {
+	display: none;
+}
+form.achievement-edit-form div.achievement_type label {
+	margin-top: 0;
+	margin-right: 20px;
+}
+form.achievement-edit-form div.achievement_type p {
+	clear: left;
+}
+form.achievement-edit-form div.item-body {
+	margin-bottom: 0;
+}
+
+form.achievement-edit-form div.container {
+	width: 100%;
+}
+form.achievement-edit-form div.container div.label, div.container div.data {
+	float: left;
+	padding: 8px;
+}
+form.achievement-edit-form div.container div.label {
+	font-weight: bold;
+	width: 22%;
+}
+form.achievement-edit-form div.container div.data {
+	width: 73%;
+}
+
+/* change picture page */
+form.achievement-changepicture-form div.avatar-preview {
+	margin-top: 20px;
+}
+form.achievement-changepicture-form img.avatar-preview {
+	float: left;
+	margin: 0 16px 16px 0;
+	border: 1px solid #EAEAEA;
+	padding: 3px;
+}
+form.achievement-changepicture-form img.avatar-preview:hover {
+	cursor: pointer;
+}
+form.achievement-changepicture-form img.avatar-preview-selected {
+	-moz-box-shadow: 1px 3px 3px rgba(119, 111, 111, 0.5);
+	-webkit-box-shadow: 1px 3px 3px rgba(119, 111, 111, 0.5);
+	box-shadow: 1px 3px 3px rgba(119, 111, 111, 0.5);
+	border: 1px solid #888;
+	padding: 3px;
+}
+
+/* grant page */
+#grant-invite-list {
+	height: 400px;
+	overflow: scroll;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 5px;
+	background: #f5f5f5;
+	width: 160px;
+	border: 1px solid #e4e4e4;
+	margin: 10px 0;
+}

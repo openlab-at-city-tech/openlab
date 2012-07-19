@@ -1,0 +1,157 @@
+.acInput {
+	width: 400px;
+}
+.acResults {
+	padding: 0px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.acResults ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.acResults li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	font: menu;
+	font-size: 12px;
+	overflow: hidden;
+	border-bottom:1px solid #eee;
+}
+
+.acLoading {
+	background : url('indicator.gif') right center no-repeat;
+}
+
+.acSelect {
+	background-color: #eee;
+	color: #000;
+}
+
+.cp_add_points_user_suggest_result{
+	padding: 5px 33px;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+
+.cp_add_points_user_suggest_name{
+	font-size:11px;
+	font-weight:bold;
+}
+
+.cp_add_points_user_suggest_email{
+	font-size:10px;
+}
+
+#cp_add_points_user_label{
+	font-size:13px;
+	font-weight:bold;
+}
+
+#cp_add_points_user_label input{
+	padding: 5px;
+	color:#555;
+}
+
+#cp_add_points_loading{
+	background: url('indicator.gif') left center no-repeat;
+	padding-left:25px;
+	font-weight:bold;
+	display:none;
+}
+
+#cp_add_points_error{
+	display:none;
+}
+
+#cp_add_points_modify_details{
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding:15px 60px;
+}
+
+#cp_add_points_results{
+	border-top:1px solid #ccc;
+	padding-top:10px;
+}
+
+#cp_add_points_modify{
+	display:none;
+	line-height:24px;
+}
+
+#cp_add_points_modify_userid{
+	font-size:25px;
+	margin-top:3px;
+}
+
+#cp_add_points_modify_email{
+	font-size:11px;
+}
+
+.cp_add_points_field_container{
+	margin-top:12px;
+	font-size:17px;
+}
+
+.cp_add_points_field_container  input{
+	color:#888;
+	font-size:17px;
+}
+
+.cp_add_points_submit_container{
+	margin-top:25px;
+}
+
+.cp_add_points_submit_container input{
+	padding:10px 25px;
+}
+
+#cp_add_points_update_error{
+	background:#FFEBE8;
+	border:1px solid #CC0000;
+	padding:5px 10px;
+	width:700px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	margin:15px 0px;
+	display:none;
+}
+
+#cp_add_points_update_error_points{
+	display:none;
+}
+
+#cp_add_points_update_error_description{
+	display:none;
+}
+
+#cp_add_points_update_success{
+	background:#E8FFED;
+	border:1px solid #8BCC00;
+	padding:5px 10px;
+	width:700px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	margin:15px 0px;
+	display:none;
+}
+
+#cp_add_points_update_form_description{
+	width:400px;
+}
+
+#cp_add_points_modify_points{
+	color:#888;
+}
