@@ -1,0 +1,222 @@
+/*
+ * timeline-admin.css
+ * Description: CSS for the SIMILE Timline Plugin options panel
+ * Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/
+ * Author: Tim Isenheim
+ * 
+	===========================================================================
+	SIMILE Timeline for WordPress
+	Copyright (C) 2006 Tim Isenheim
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	===========================================================================
+*/
+#stl-timeline-option-container{ padding: 18px 0; }
+
+#stl-timeline-option-container a.submitdelete:hover{ color: #fff; background: #f00; border-bottom: 1px solid #f00; }
+#stl-timeline-option-container a.submitdelete{ color: #f00; border-bottom: 1px solid #f00; text-decoration: none;}
+
+/*
+ * Option Page UI Tabs
+ * ===================================================*/
+#stl-timeline-options-tabs li{
+	background: #f1f1f1;
+	-moz-border-radius:3px;
+	padding:5px 8px;
+	display: inline;
+}
+
+#stl-timeline-options-tabs.ui-tabs-nav a{ text-decoration: none; }
+
+#stl-timeline-options-tabs li.ui-tabs-selected{
+	background: #6D6D6D;
+}
+
+#stl-timeline-options-tabs li.ui-tabs-selected a{ color: #fff; font-weight: bold; }
+
+/* Option page elements */
+#stl-timeline-option-container h4{
+	border-bottom: 1px solid #ccc;
+	padding: 2px 0 4px 0;
+	margin: 18px 0 4px 0;
+}
+
+#stl-timeline-option-container dl dd{
+	padding: 2px 0 6px 0;
+}
+
+/* Post interface input fields */
+input.stl_timeline_2di{
+	width: 25px;
+}
+
+input.stl_timeline_4di{
+	width: 40px;
+}
+
+/*
+ * Tables
+ * ===================================================*/
+.wrap table td{ clear: left;}
+
+.wrap fieldset.options{ text-align: left; }
+.wrap fieldset.options h4{
+	background: #464646;
+	color: #ccc;
+	padding: 3px 6px;
+	font-weight: normal;
+	font-size: 0.9em;
+	margin: 0 0 10px 0;
+}
+
+table small{ color: #888; font-weight: normal }
+
+#stl-timeline-event-data table thead th,
+
+#wp_simile_timeline_options table.widefat{ margin-bottom: 16px; }
+#wp_simile_timeline_options div.inside table{ margin-bottom: 8px; }
+
+fieldset.options div.inside table thead th{
+	background: #f1f1f1;
+	padding: 4px 8px;
+}
+fieldset.options div.inside table thead th h3{
+	font-size: 100%;
+}
+
+fieldset.options div.inside table tr.nofoot td,
+table td.nofoot{
+	border: 0 none;
+}
+
+table td.bandoptions{
+	padding: 8px 8px 0 8px;
+}
+
+table div.suboptions{
+	padding: 8px 0 0 0;
+	clear: both;
+}
+
+table div.suboptions label{
+	display: block;
+	float: left;
+	width: 200px;
+}
+
+.stl-collapsible-handle,
+.stl-suboption-handle{
+	cursor: pointer;
+}
+
+h3.stl-collapsible-handle{
+	margin: 0px; font-size: 110%;
+	background:transparent url(arrows.gif) no-repeat 0px -27px;
+	padding-left: 20px;
+}
+h3.stl-collapsible-handle.active,
+#stl-timeline-option-container h4.stl-suboption-handle.active{
+	background:transparent url(arrows.gif) no-repeat 0px 0;
+}
+
+#stl-timeline-option-container h4.stl-suboption-handle{
+	background:transparent url(arrows.gif) no-repeat 0px -27px;
+	padding: 0 0 0 20px;
+	float: left;
+	width: 85%;
+	margin-left: 1px;
+}
+
+.stl-delete-link{
+	float: right;
+	text-align: right;
+	width: 100px;
+}
+
+.stl-newentry.inactive{
+	display: none;
+}
+
+tr.stl-addrow{ text-align: center; }
+
+#stl-timeline-option-container h4{
+	background-color: transparent;
+	color: #333;
+	font-size: 100%;
+	font-weight: bold;
+	border: 0 none;
+	margin: 0;
+	padding: 0 0 6px 0;
+}
+
+table.inactive .stl-collapsible,
+div.suboptions.inactive{ display: none;}
+
+table.inactive th{
+	border: 0 none;
+}
+
+#stl-timeline-event-data h4{
+	margin: 0 0 8px 0;
+}
+#stl-timeline-event-data table,
+fieldset.options div.inside table{
+	background: #f9f9f9;
+	border: 1px solid #dfdfdf;
+	width: 100%;
+	-moz-border-radius: 3px;
+}
+
+#stl-timeline-event-data table td{
+	font-size: 1.0em;
+	padding: 8px;
+}
+
+#stl-timeline-event-data table td small{
+	color: #999;
+	display: block;
+	padding: 2px 0;
+}
+
+/*
+ * Colorpicker
+ * ===================================================*/
+a.stl-colorfield, a.stl-colorfield:visited{
+	display: block;
+	float: left;
+	width: 18px;
+	height: 18px;
+	border: 1px solid #666;
+	margin: 1px 8px 0 2px;
+}
+
+a.stl-colorfield:hover, a.stl-colorfield:visited:hover{
+	display: block;
+	border: 1px solid #000;
+	margin: 1px 8px 0 2px;
+}
+
+.stl-colorfield span{ display: none;}
+.widefat th input.stl-colorvalue{ padding: 4px; }
+
+#colorPickerDiv{
+	background: #666 !important;
+	padding: 10px;
+	margin: 0 0 0 -150px;
+	top: 50%;
+}
+#colorPickerDiv a{
+	border: 0 none;
+	text-decoration: none;
+}
