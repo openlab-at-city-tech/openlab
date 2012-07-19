@@ -353,6 +353,16 @@ function openlab_current_user_ribbonclass() {
  */
 add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
 
+/**
+ * Don't show the Join Group button on the sidebar of a portfolio
+ */
+function openlab_no_join_on_portfolios() {
+	if ( openlab_is_portfolio() ) {
+		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
+	}
+}
+add_action( 'wp_head', 'openlab_no_join_on_portfolios', 999 );
+
 function openlab_get_groups_of_user( $args = array() ) {
 	global $bp, $wpdb;
 
