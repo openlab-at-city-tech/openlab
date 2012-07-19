@@ -64,7 +64,7 @@
 #wpadminbar .quicklinks #wp-admin-bar-openlab {
 	padding-right: 0;
 	margin-right: 0;
-	width: 109px;
+	min-width: 109px;
 }
 
 #wpadminbar .quicklinks #wp-admin-bar-openlab > a {
@@ -72,15 +72,15 @@
 	margin-right: 0;
 }
 
-/*#wpadminbar .quicklinks #wp-admin-bar-openlab > a {
+.openlab-member #wpadminbar .quicklinks #wp-admin-bar-openlab > a {
 	background:url(images/cuny-sw-logo.png) no-repeat;
 	text-indent: -9999px;
-	
 	height: 29px;
-	margin: -10px 0 0 0;
+	margin: -10px 10px 0 0;
 	padding: 0;
+	width:109px;
 	
-}*/
+}
 
 #wpadminbar .quicklinks #wp-admin-bar-my-openlab { 
 	border-right: none;
@@ -266,6 +266,11 @@
 
 #wpadminbar #wp-admin-bar-my-account.with-avatar #wp-admin-bar-user-actions > li {
 margin: 0;
+}
+
+/* hiding the edit group menu for now until usability issues can be explored */
+#wpadminbar #wp-admin-bar-group-admin {
+	display:none;
 }
 
 /* notification counts */
