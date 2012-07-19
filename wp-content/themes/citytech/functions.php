@@ -575,7 +575,10 @@ function openlab_group_admin_tabs( $group = false ) {
 
 		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Privacy Settings</a></li>
 
-		<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
+		<?php /* Only show the Edit Access List tab for non-public groups */ ?>
+		<?php if ( 'public' != $group->status ) : ?>
+			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
+		<?php endif ?>
 
 		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
 
