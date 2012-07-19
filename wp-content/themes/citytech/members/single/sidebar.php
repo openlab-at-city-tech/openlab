@@ -28,13 +28,32 @@
 
 <?php /* Portfolio links */ ?>
 <div class="sidebar-widget" id="portfolio-sidebar-widget">
-	<h4 class="sidebar-header">
-		<?php if ( openlab_user_has_portfolio() ) : ?>
+	<?php if ( openlab_user_has_portfolio() ) : ?>
+		<h4 class="sidebar-header">
 			<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
-		<?php elseif ( openlab_is_my_profile() ) : ?>
+		</h4>
+
+		<ul class="sidebar-sublinks portfolio-sublinks">
+			<li class="portfolio-site-link">
+				<a href="<?php openlab_user_portfolio_url() ?>">Site</a>
+			</li>
+
+			<li class="portfolio-profile-link">
+				<a href="<?php openlab_user_portfolio_profile_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?></a>
+			</li>
+
+			<?php if ( openlab_is_my_profile() && openlab_user_portfolio_site_is_local() ) : ?>
+				<li class="portfolio-dashboard-link">
+					<a href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
+				</li>
+			<?php endif ?>
+		</ul>
+
+	<?php else : ?>
+		<h4 class="sidebar-header">
 			<a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper' ) ?></a>
-		<?php endif ?>
-	</h4>
+		</h4>
+	<?php endif ?>
 </div>
 <?php /* End portfolio links */ ?>
 

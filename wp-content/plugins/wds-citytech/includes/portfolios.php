@@ -42,7 +42,7 @@ function openlab_user_has_portfolio( $user_id = 0 ) {
 }
 
 /**
- * Echo a user's portfolio URL
+ * Echo a user's portfolio site URL
  */
 function openlab_user_portfolio_url( $user_id = 0 ) {
 	echo openlab_get_user_portfolio_url( $user_id );
@@ -59,6 +59,35 @@ function openlab_user_portfolio_url( $user_id = 0 ) {
 
 		return $site_url;
 	}
+
+/**
+ * Echo a user's portfolio profile URL
+ */
+function openlab_user_portfolio_profile_url( $user_id = 0 ) {
+	echo openlab_get_user_portfolio_profile_url( $user_id );
+}
+	/**
+	 * Get a user's portfolio profile URL
+	 *
+	 * @param int $user_id
+	 * @return string
+	 */
+	function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
+		$group_id = openlab_get_user_portfolio_id( $user_id );
+		$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
+		return bp_get_group_permalink( $profile_obj );
+	}
+
+/**
+ * Is a user's portfolio site local (vs external)?
+ *
+ * @param int $user_id
+ * @return bool
+ */
+function openlab_user_portfolio_site_is_local( $user_id = 0 ) {
+	$group_id = openlab_get_user_portfolio_id( $user_id );
+	return (bool) openlab_get_site_id_by_group_id( $group_id );
+}
 
 /**
  * Get the user id of a portfolio user from the portfolio group's id
