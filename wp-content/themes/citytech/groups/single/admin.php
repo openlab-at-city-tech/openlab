@@ -71,9 +71,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<div class="main-column">
 
-		<div id="message" class="info">
-			<p><?php _e('Select people to invite from your friends list.', 'buddypress'); ?></p>
-		</div>
+		<p>Members who have access to your <?php openlab_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ?></p>
 
 		<?php do_action( 'bp_before_group_send_invites_list' ) ?>
 
