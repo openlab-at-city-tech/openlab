@@ -227,7 +227,7 @@ function openlab_access_list_checkboxes() {
 	echo openlab_get_access_list_checkboxes();
 }
 	function openlab_get_access_list_checkboxes( $args = '' ) {
-		global $bp;
+		global $bp, $wpdb;
 
 		$defaults = array(
 			'group_id' => false,
@@ -240,7 +240,8 @@ function openlab_access_list_checkboxes() {
 		if ( !$group_id )
 			$group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : $bp->groups->current_group->id;
 
-		$friends = get_users();
+		// No good way to get this through an api function
+		$friends = $wpdb->get_results( $wpdb->prepare( "SELECT ID, display_name FROM {$wpdb->users} WHERE user_status = 0 AND ID != %d", get_current_user_id() ) );
 
 		if ( $friends ) {
 			$group_members = BP_Groups_Member::get_all_for_group( $group_id, false, false, false ); // last param - exclude_admins_mods
