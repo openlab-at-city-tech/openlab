@@ -386,9 +386,11 @@ function wds_bp_group_site_pages(){
 
 		echo "<li id='site-link'><a href='" . trailingslashit( esc_attr( $site_url ) ) . "'>" . ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) . " Site</a></li>";
 
-		// Only show the local admin link. Group members only
-		if ( $is_local && bp_group_is_member() ) {
-			echo "<li><a href='" . esc_attr( trailingslashit( $site_url ) ) . "wp-admin/'>Dashboard</a></li>";
+		// Only show the local admin link. Group members only for non-portfolios
+		if ( ( openlab_is_portfolio() && ( is_super_admin() || openlab_is_my_portfolio() ) || !openlab_is_portfolio() ) ) {
+			if ( $is_local && bp_group_is_member() ) {
+				echo "<li><a href='" . esc_attr( trailingslashit( $site_url ) ) . "wp-admin/'>Dashboard</a></li>";
+			}
 		}
 
 		echo '</ul>';
