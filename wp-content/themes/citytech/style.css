@@ -848,7 +848,7 @@ dd p{line-height:120%}
 
 .home #home-right {
 	float: right;
-	width: 655px;
+	width: 657px;
 }
 /*home - post gallery styles*/
 .home #pgw-gallery
@@ -856,7 +856,7 @@ dd p{line-height:120%}
 	background-color: #929292;
 	padding: 3px;
 	height: 215px;
-	width: 649px;
+	width: 651px;
 	margin-bottom: 10px;
 }
 .home #pgw-gallery-full h2
@@ -1191,12 +1191,17 @@ a#pgw-prev, a#pgw-next {
 {
 	float: right;
 }
+.home-group-list-wrapper
+{
+	display: table;
+}
 .home-group-list
 {
-	border: 2px solid #F5F6F7;
     margin-top: 22px;
-    padding: 10px;
+    padding: 8px 11px;
     position: relative;
+	float: left;
+	width: 141px;
 }
 .home-group-list .title-wrapper
 {
@@ -1208,16 +1213,13 @@ a#pgw-prev, a#pgw-next {
     color: #000;
 	font-weight: bold;
     font-size: 13px;
-    padding: 0 0 7px;
-	width: 250px;
-	float: left;
 	margin: 0;
+	padding: 0;
+	float: left;
 }
 .home #home-right .box-1 {
-	width: 141px;
-	float: left;
-	margin: 0 20px 0 0;
 	padding: 0;
+	margin: 0;
 }
 .home #home-right .box-1 h2 a
 {

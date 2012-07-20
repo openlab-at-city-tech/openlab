@@ -22,10 +22,15 @@ function cuny_build_homepage() {
 	<?php echo '</div>';
 	echo '<div id="home-right">';
 		dynamic_sidebar('pgw-gallery');
-		cuny_home_square('course');
-		cuny_home_square('project');
-		cuny_home_square('club');
-	echo '</div>';
+		echo '<div id="home-group-list-wrapper">';
+			cuny_home_square('course');
+			cuny_home_square('project');
+			cuny_home_square('club');
+			cuny_home_square('portfolio');
+			echo '<div class="clearfloat"></div>';
+		echo '</div>';
+		echo "<script type='text/javascript'>(function($){ $('#home-group-list-wrapper').css('visibility','hidden'); })(jQuery);</script>";
+ 	echo '</div>';
 }
 
 function cuny_home_login() {
@@ -243,7 +248,7 @@ function cuny_home_square($type){
 	  	?>
 
 
-      <div class="home-group-list">
+      <div class="home-group-list <?php echo $type; ?>-list">
       	<div class="title-wrapper">
 	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
 		<div class="see-all"><a href="<?php echo site_url().'/'.strtolower($type); ?>s">See All</a></div>
@@ -252,17 +257,11 @@ function cuny_home_square($type){
 		<?php while ( bp_groups() ) : bp_the_group();
 		global $groups_template;
 		$group = $groups_template->group;
-		$column_check = $i%4;
 
 		// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
 		// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
 		$activity = stripslashes( $group->description );
-
-		if ($column_check == 0)
-		{
-			$column_class="last-column";
-		}
-			 echo '<div class="box-1 '.$column_class.'">'; ?>
+			 echo '<div class="box-1 row-'.$i.' type-'.$type.'">'; ?>
 			 <div class="item-avatar">
 					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 141, 'height' => 141 )) ?></a>
 				</div>
