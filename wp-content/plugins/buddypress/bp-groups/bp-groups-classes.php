@@ -329,6 +329,7 @@ Class BP_Groups_Group {
 
 		/* Get paginated results */
 		$paged_groups_sql = apply_filters( 'bp_groups_get_paged_groups_sql', join( ' ', (array)$sql ), $sql );
+
 		$paged_groups     = $wpdb->get_results( $paged_groups_sql );
 
 		$total_sql['select'] = "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name} g, {$bp->groups->table_name_members} gm1, {$bp->groups->table_name_groupmeta} gm2";
