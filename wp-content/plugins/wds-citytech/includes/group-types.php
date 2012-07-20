@@ -269,4 +269,29 @@ function openlab_get_unavailable_groups( $user_id = 0 ) {
 	return $bp->hidden_groups;
 }
 
+/**
+ * Is this group hidden?
+ */
+function openlab_group_is_hidden( $group_id = 0 ) {
+	$is_hidden = false;
+
+	if ( !$group_id ) {
+		if ( bp_is_group() ) {
+			$group = groups_get_current_group();
+		} else {
+			$group_id = openlab_fallback_group();
+		}
+	}
+
+	if ( empty( $group ) ) {
+		$group = groups_get_group( array( 'group_id' => $group_id ) );
+	}
+
+	if ( empty( $group ) ) {
+		return $is_hidden;
+	} else {
+		return isset( $group->status ) && 'hidden' == $group->status;
+	}
+}
+
 ?>

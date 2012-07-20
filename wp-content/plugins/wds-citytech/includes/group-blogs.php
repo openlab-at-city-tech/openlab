@@ -382,18 +382,39 @@ function wds_bp_group_site_pages(){
 
 	if ( !empty( $site_url ) ) {
 
-		echo "<ul class='website-links'>";
+		if ( openlab_is_portfolio() ) { ?>
+			<div class="sidebar-widget" id="portfolio-sidebar-widget">
+				<h4 class="sidebar-header">
+					<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
+				</h4>
 
-		echo "<li id='site-link'><a href='" . trailingslashit( esc_attr( $site_url ) ) . "'>" . ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) . " Site</a></li>";
+				<?php if ( openlab_is_my_portfolio() || is_super_admin() ) : ?>
+					<ul class="sidebar-sublinks portfolio-sublinks">
+						<li class="portfolio-site-link">
+							<a href="<?php openlab_user_portfolio_url() ?>">Site</a>
+						</li>
 
-		// Only show the local admin link. Group members only for non-portfolios
-		if ( ( openlab_is_portfolio() && ( is_super_admin() || openlab_is_my_portfolio() ) || !openlab_is_portfolio() ) ) {
+						<?php if ( openlab_user_portfolio_site_is_local() ) : ?>
+							<li class="portfolio-dashboard-link">
+								<a href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
+							</li>
+						<?php endif ?>
+					</ul>
+				<?php endif ?>
+			</div>
+		<?php } else {
+
+			echo "<ul class='website-links'>";
+
+			echo "<li id='site-link'><a href='" . trailingslashit( esc_attr( $site_url ) ) . "'>" . ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) . " Site</a></li>";
+
+			// Only show the local admin link. Group members only
 			if ( $is_local && bp_group_is_member() ) {
 				echo "<li><a href='" . esc_attr( trailingslashit( $site_url ) ) . "wp-admin/'>Dashboard</a></li>";
 			}
-		}
 
-		echo '</ul>';
+			echo '</ul>';
+		}
 	}
 }
 add_action( 'bp_group_options_nav', 'wds_bp_group_site_pages' );
