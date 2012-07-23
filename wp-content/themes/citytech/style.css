@@ -991,11 +991,6 @@ a#pgw-prev, a#pgw-next {
 	float: left;
 	min-height: 212px;
 }
-
-.home .box-1 {
-	padding: 10px;
-	margin: 0px 10px 10px 0;
-}
 .home .box-1.last {
 	margin-right: 0;
 }
@@ -1195,7 +1190,7 @@ a#pgw-prev, a#pgw-next {
 {
 	display: table;
 }
-.home-group-list
+.home .activity-list
 {
     margin-top: 22px;
     padding: 8px 11px;
@@ -2866,13 +2861,18 @@ h2.member-name-title {
 }
 
 #member-item-body .activity-list {
-	width: 300px;
-	border-left: 1px solid #EDEEEF;
+	width: 212px;
 	position: relative;
-	left: -10px;
-	padding: 10px;
+	padding: 0 11px;
 	float: left;
-	clear: left;
+}
+#member-item-body #course-activity-stream
+{
+	padding-left: 0;
+}
+#member-item-body #club-activity-stream
+{
+	padding-right: 0;
 }
 #member-item-body .activity-list .activity-avatar,
 #sidebar .activity-list .activity-avatar{
@@ -2890,16 +2890,17 @@ h2.member-name-title {
 	float: left;
 	width: 145px;
 }
-#member-item-body .activity-list.last {
-	float: right;
-	clear: right;
-}
 
 #member-list li {
 	float: left;
 }
 #content ul#member-list li a {
 	padding: 3px;
+}
+#member-item-body .row
+{
+	border-bottom: 1px solid #f2f2f2;
+	margin: 0 0 12px;
 }
 
 /*.read-more {
