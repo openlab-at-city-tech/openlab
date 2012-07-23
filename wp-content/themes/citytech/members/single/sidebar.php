@@ -73,48 +73,44 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 <?php endif ?>
 
-<div id="item-buttons">
-
-</div><!-- #item-buttons -->
 
 <?php /* Portfolio links */ ?>
-<div class="sidebar-widget" id="portfolio-sidebar-widget">
 
-	<?php if ( openlab_user_has_portfolio() ) : ?>
+<?php if ( openlab_user_has_portfolio() && !openlab_group_is_hidden( openlab_get_user_portfolio_id() ) ) : ?>
+
+	<div class="sidebar-widget" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
 			<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
 		</h4>
 
-		<?php if ( openlab_is_my_profile() || is_super_admin() ) : ?>
+		<ul class="sidebar-sublinks portfolio-sublinks">
 
-			<ul class="sidebar-sublinks portfolio-sublinks">
+			<li class="portfolio-profile-link">
+				<a href="<?php openlab_user_portfolio_profile_url() ?>">Profile</a>
+			</li>
 
-				<li class="portfolio-profile-link">
-					<a href="<?php openlab_user_portfolio_profile_url() ?>">Profile</a>
+			<li class="portfolio-site-link">
+				<a href="<?php openlab_user_portfolio_url() ?>">Site</a>
+			</li>
+
+			<?php if ( openlab_is_my_profile() && openlab_user_portfolio_site_is_local() ) : ?>
+				<li class="portfolio-dashboard-link">
+					<a href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
 				</li>
+			<?php endif ?>
+		</ul>
+	</div>
 
-				<li class="portfolio-site-link">
-					<a href="<?php openlab_user_portfolio_url() ?>">Site</a>
-				</li>
+<?php elseif ( openlab_is_my_profile() ) : ?>
 
-				<?php if ( openlab_user_portfolio_site_is_local() ) : ?>
-					<li class="portfolio-dashboard-link">
-						<a href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
-					</li>
-				<?php endif ?>
-			</ul>
-
-		<?php endif ?>
-
-	<?php else : ?>
-
+	<div class="sidebar-widget" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
 			<a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper' ) ?></a>
 		</h4>
+	</div>
 
-	<?php endif ?>
+<?php endif ?>
 
-</div>
 <?php /* End portfolio links */ ?>
 
 <?php /* Recent Account Activity / Recent Friend Activity */ ?>
