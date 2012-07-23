@@ -156,6 +156,42 @@ global $bp;
 
 <div id="member-item-body">
 
+		<?php if ( bp_is_user_blogs() ) { ?>
+			  <?php do_action( 'bp_before_member_blogs_content' ) ?>
+      
+              <div class="blogs myblogs">
+                  <?php locate_template( array( 'blogs/blogs-loop.php' ), true ) ?>
+              </div><!-- .blogs.myblogs -->
+      
+              <?php do_action( 'bp_after_member_blogs_content' ) ?>
+      
+              <?php do_action( 'bp_before_member_body' ) ?>
+      
+          <?php } elseif ( 'view' == bp_current_action() ) { ?>
+              <?php locate_template( array( 'members/single/messages/single.php' ), true ) ?>
+          <?php } elseif ( bp_is_user_messages() ) { ?>
+              <?php locate_template( array( 'members/single/messages.php' ), true ) ?>
+          <?php } elseif ( bp_is_user_groups() ) { ?>
+              <?php locate_template( array( 'members/single/groups.php' ), true ) ?>
+          <?php } elseif ( 'edit' == bp_current_action() ) { ?>
+               <?php locate_template( array( 'members/single/profile/edit.php' ), true ); ?>
+          <?php } elseif ( 'change-avatar' == bp_current_action() ) { ?>
+              <?php locate_template( array( 'members/single/profile/change-avatar.php' ), true ) ?>
+          <?php } elseif ( 'requests' == bp_current_action() ) { ?>
+              <?php locate_template( array( 'members/single/friends/requests.php' ), true ) ?>
+          <?php } elseif ( bp_is_user_friends() ) { ?>
+      
+              <?php do_action( 'bp_before_member_friends_content' ) ?>
+              <h3 id="bread-crumb">Friends</h3>
+              <div class="members friends">
+      
+                  <?php locate_template( array( 'members/members-loop.php' ), true ) ?>
+              </div><!-- .members.friends -->
+      
+              <?php do_action( 'bp_after_member_friends_content' ) ?>
+      
+          <?php } else { ?>
+
 		<?php echo cuny_profile_activty_block('course', 'My Courses', ''); ?>
 		<?php echo cuny_profile_activty_block('project', 'My Projects', ' last'); ?>
 		<?php echo cuny_profile_activty_block('club', 'My Clubs', ' last'); ?>
@@ -164,7 +200,7 @@ global $bp;
         <script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>
 <?php
         if ( !$friend_ids = wp_cache_get( 'friends_friend_ids_' . $bp->displayed_user->id, 'bp' ) ) {
-            $friend_ids = BP_Friends_Friendship::get_random_friends( $bp->displayed_user->id );
+            $friend_ids = BP_Friends_Friendship::get_random_friends( $bp->displayed_user->id, 20);
             wp_cache_set( 'friends_friend_ids_' . $bp->displayed_user->id, $friend_ids, 'bp' );
 	      } ?>
 
@@ -184,7 +220,7 @@ global $bp;
               <?php } ?>
 
               </ul>
-  				<span><a href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php _e('See More Friends', 'buddypress') ?> &rarr;</a></span>
+  				<span><a href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php _e('See All Friends', 'buddypress') ?></a></span>
           <?php } else { ?>
 
               <div id="message" class="info">
@@ -194,7 +230,7 @@ global $bp;
           <?php } ?>
           <div class="clear"></div>
       </div>
-      
+      <?php } ?>   
 	<?php do_action( 'bp_after_member_body' ) ?>
 
 </div><!-- #item-body -->
@@ -251,6 +287,8 @@ function cuny_profile_activty_block($type,$title,$last) {
                   <div class="clearfloat"></div>
 
               </div>
+              
+              <a class="group-see-all" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
 
               <?php $x+=1;
 //
