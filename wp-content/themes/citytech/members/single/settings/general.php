@@ -4,32 +4,11 @@ gconnect_get_header();
 do_action( 'bp_before_member_settings_template' );
 ?>
 	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
-	<h3 id="bread-crumb"><?php _e( 'General Settings', 'buddypress' ); ?></h3>
-	<div id="item-header">
-		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
-	</div><!-- #item-header -->
-
-	<div id="item-nav">
-		<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
-			<ul>
-				<?php bp_get_displayed_user_nav(); do_action( 'bp_member_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div><!-- #item-nav -->
+	<div class="submenu">My Settings: <?php echo openlab_profile_settings_submenu(); ?></div>
 
 	<div id="item-body" role="main">
 
 		<?php do_action( 'bp_before_member_body' ); ?>
-
-		<div class="item-list-tabs no-ajax" id="bpsubnav">
-			<ul>
-				<?php bp_get_options_nav(); do_action( 'bp_member_plugin_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div><!-- .item-list-tabs -->
-
-		<h3><?php _e( 'General Settings', 'buddypress' ); ?></h3>
 
 		<?php do_action( 'bp_template_content' ) ?>
 

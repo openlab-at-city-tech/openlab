@@ -1,4 +1,8 @@
-<?php //menu functions
+<?php /*menu functions - current includes
+-register_nav_menus for custom menu locations
+-help pages menu - adding categories
+-profile pages sub menus
+*/
 
 //custom menu locations for OpenLab
 register_nav_menus( array(
@@ -44,3 +48,40 @@ function help_categories_menu($items, $args) {
     	return $items;
 }
 add_filter( 'wp_nav_menu_items', 'help_categories_menu', 10, 2 );
+
+//sub-menus for profile pages - a series of functions, but all here in one place
+function openlab_profile_settings_submenu()
+{
+	$settings_slug = bp_get_settings_slug();
+	$menu_list = array(
+					   'profile/edit'=> 'Edit Profile',
+					   'profile/change-avatar' => 'Change Avatar',
+					   $settings_slug => 'Account Settings', 
+					   'settings/notifications' => 'Email Notifications',
+					   'settings/delete-account' => 'Delete Account',
+					   );
+	return openlab_submenu_gen($menu_list);
+} 
+
+function openlab_submenu_gen($items)
+{
+	if ( !$dud = bp_displayed_user_domain() ) {
+	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+	
+	$submenu = '<ul>';
+		
+		foreach ($items as $item => $title)
+		{
+			$submenu .= '<li class="submenu-item">';
+				$submenu .= '<a href="'.$dud.$item.'">';
+				$submenu .= $title;
+				$submenu .= '</a>';
+			$submenu .= '</li>';
+		}	
+	$submenu .= '</ul>';
+	
+	return $submenu;
+}
+
+?>

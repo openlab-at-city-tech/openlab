@@ -29,11 +29,11 @@ $display_name=bp_get_profile_field_data( 'field=Name' );
 
 if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
+<div class="submenu">My Settings: <?php echo openlab_profile_settings_submenu(); ?></div>
+
 <form action="<?php bp_the_profile_group_edit_form_action() ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
-
-		<h3 id="bread-crumb"><?php printf( __( "Edit Profile Information", "buddypress" ), bp_get_the_profile_group_name() ); ?></h3>
 
 		<ul class="button-nav">
 			<?php
