@@ -3,28 +3,14 @@ gconnect_get_header();
 
 do_action( 'bp_before_member_settings_template' ); 
 ?>
-	<div id="item-header">
-		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
-	</div><!-- #item-header -->
-	<div id="item-nav">
-		<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
-			<ul>
-				<?php bp_get_displayed_user_nav(); do_action( 'bp_member_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div><!-- #item-nav -->
+	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+    <div class="submenu">My Settings: <?php echo openlab_profile_settings_submenu(); ?></div>
+
 	<div id="item-body" role="main">
+
 		<?php do_action( 'bp_before_member_body' ); ?>
 
-		<div class="item-list-tabs no-ajax" id="bpsubnav">
-			<ul>
-				<?php bp_get_options_nav(); do_action( 'bp_member_plugin_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div><!-- .item-list-tabs -->
-
-		<h3><?php _e( 'Delete Account', 'buddypress' ); ?></h3>
+		<?php do_action( 'bp_template_content' ) ?>
 
 		<form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/delete-account'; ?>" name="account-delete-form" id="account-delete-form" class="standard-form" method="post">
 			<div id="message" class="info">

@@ -17,7 +17,7 @@ function cuny_registration_page() {
 
 			<?php if ( 'request-details' == bp_get_current_signup_step() ) : ?>
 
-				<h1 class="entry-title"><?php _e( 'Create an Account', 'buddypress' ) ?></h2>
+				<h1 class="entry-title"><?php _e( 'Create an Account', 'buddypress' ) ?></h1>
 
 				<?php do_action( 'template_notices' ) ?>
 
