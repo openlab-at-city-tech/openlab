@@ -58,17 +58,6 @@ function openlab_profile_settings_submenu()
 	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
 	}
 	
-	$action = $bp->current_action;
-	$item = $bp->current_item;
-	$component = $bp->current_component;
-	
-	if ($action)
-	{
-		$page_identify = $action;
-	} else {
-		$page_identify = $component;
-	}
-	
 	$settings_slug = bp_get_settings_slug();
 	$menu_list = array(
 					   $dud.'profile/edit'=> 'Edit Profile',
@@ -76,7 +65,6 @@ function openlab_profile_settings_submenu()
 					   $settings_slug => 'Account Settings', 
 					   $dud.'settings/notifications' => 'Email Notifications',
 					   $dud.'settings/delete-account' => 'Delete Account',
-					   '#' => $page_identify,
 					   );
 	return openlab_submenu_gen($menu_list);
 } 
@@ -91,6 +79,40 @@ function openlab_my_groups_submenu($group)
 	$menu_list = array(
 					   $group_link => 'My '.ucfirst($group),
 					   $create_link => 'Create '.ucfirst($group),
+					   );
+	return openlab_submenu_gen($menu_list);
+} 
+
+//sub-menus for my-friends pages
+function openlab_my_friends_submenu()
+{
+	global $bp;
+	if ( !$dud = bp_displayed_user_domain() ) {
+	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+	$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+	$request_count = intval( count( (array) $request_ids ) );
+	
+	$my_friends = $dud.'friends/';
+	$friend_requests = $dud.'friends/requests/';
+	
+	$action = $bp->current_action;
+	$item = $bp->current_item;
+	$component = $bp->current_component;
+	
+	if ($action)
+	{
+		$page_identify = $action."-action";
+	} else if ($component) {
+		$page_identify = $component."-componenet";
+	} else {
+		$page_identify = $item."-item";
+	}
+
+	$menu_list = array(
+					   $my_friends => 'My Friends',
+					   $friend_requests => 'Requests Received <span class="mol-count count-'.$request_count.'">'.$request_count.'</span>',
+					   //'#' => $page_identify,
 					   );
 	return openlab_submenu_gen($menu_list);
 } 
