@@ -117,6 +117,38 @@ function openlab_my_friends_submenu()
 	return openlab_submenu_gen($menu_list);
 } 
 
+//sub-menus for my-messages pages
+function openlab_my_messages_submenu()
+{
+	global $bp;
+	if ( !$dud = bp_displayed_user_domain() ) {
+	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+
+	$menu_list = array(
+					   $dud.'messages/inbox/' => 'Inbox',
+					   $dud.'messages/sentbox/' => 'Sent',
+					   $dud.'messages/compose' => 'Compose',
+					   );
+	return openlab_submenu_gen($menu_list);
+} 
+
+//sub-menus for my-invites pages
+function openlab_my_invitations_submenu()
+{
+	global $bp;
+	if ( !$dud = bp_displayed_user_domain() ) {
+	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+
+	$menu_list = array(
+					   $dud.'groups/invites/' => 'Invitations Received',
+					   $dud.'invite-anyone/' => 'Invite New Members',
+					   $dud.'invite-anyone/sent-invites/' => 'Sent Invitations',
+					   );
+	return openlab_submenu_gen($menu_list);
+}
+
 function openlab_submenu_gen($items)
 {
 	global $bp, $post;
@@ -139,8 +171,10 @@ function openlab_submenu_gen($items)
 		
 		foreach ($items as $item => $title)
 		{
+			$slug = strtolower($title);
+			$slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $slug);
 			//class variable for each item
-			$item_classes = "submenu-item";
+			$item_classes = "submenu-item item-".$slug;
 				
 				//now search the slug for this item to see if the page identifier is there - if it is, this is the current page
 				$current_check = false;
