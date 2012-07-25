@@ -23,17 +23,11 @@ function cuny_profile_activty_block($type,$title,$last) {
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) );
 
-	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
+	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
+	  
+	  <div class="submenu"><?php echo openlab_my_groups_submenu('courses'); ?></div>
 
-	  if ( !empty( $_GET['status'] ) ) {
-	    $status = $_GET['status'];
-	    $status = ucwords($status);
-	    echo '<h3 id="bread-crumb">Courses<span class="sep"> | </span>'.$status.'</h3>';
-	  }else {
-	    echo '<h3 id="bread-crumb">Courses</h3>';
-	  }
-
-	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'per_page=48&show_hidden=true&include='.$groups['group_ids_sql'] ) ) : ?>
+	  <?php if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'per_page=48&show_hidden=true&include='.$groups['group_ids_sql'] ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Courses"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="course-list" class="item-list">

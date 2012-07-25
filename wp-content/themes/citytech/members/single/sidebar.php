@@ -4,7 +4,7 @@
 // point of view
 if ( !$dud = bp_displayed_user_domain() ) {
 	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
-}
+} 
 ?>
 
 <?php if ( is_user_logged_in() && openlab_is_my_profile() ) : ?>

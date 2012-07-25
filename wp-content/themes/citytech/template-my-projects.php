@@ -22,16 +22,11 @@ function cuny_profile_activty_block($type,$title,$last) {
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) );
 
-	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>';
-if ( !empty( $_GET['status'] ) ) {
-	    $status = $_GET['status'];
-	    $status = ucwords($status);
-	    echo '<h3 id="bread-crumb">Projects<span class="sep"> | </span>'.$status.'</h3>';
-	  }else {
-	    echo '<h3 id="bread-crumb">Projects</h3>';
-	  }
+	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
+	  
+	  <div class="submenu"><?php echo openlab_my_groups_submenu('projects'); ?></div>
 
-	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='. $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
+<?php	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='. $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
 	  <div class="clearfloat"></div>
 <ul id="project-list" class="item-list">

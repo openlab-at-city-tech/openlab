@@ -52,29 +52,93 @@ add_filter( 'wp_nav_menu_items', 'help_categories_menu', 10, 2 );
 //sub-menus for profile pages - a series of functions, but all here in one place
 function openlab_profile_settings_submenu()
 {
+	global $bp;
+	
+	if ( !$dud = bp_displayed_user_domain() ) {
+	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+	
+	$action = $bp->current_action;
+	$item = $bp->current_item;
+	$component = $bp->current_component;
+	
+	if ($action)
+	{
+		$page_identify = $action;
+	} else {
+		$page_identify = $component;
+	}
+	
 	$settings_slug = bp_get_settings_slug();
 	$menu_list = array(
-					   'profile/edit'=> 'Edit Profile',
-					   'profile/change-avatar' => 'Change Avatar',
+					   $dud.'profile/edit'=> 'Edit Profile',
+					   $dud.'profile/change-avatar' => 'Change Avatar',
 					   $settings_slug => 'Account Settings', 
-					   'settings/notifications' => 'Email Notifications',
-					   'settings/delete-account' => 'Delete Account',
+					   $dud.'settings/notifications' => 'Email Notifications',
+					   $dud.'settings/delete-account' => 'Delete Account',
+					   '#' => $page_identify,
+					   );
+	return openlab_submenu_gen($menu_list);
+} 
+
+//sub-menus for my-<groups> pages
+function openlab_my_groups_submenu($group)
+{
+	global $bp;
+	$group_link = $bp->root_domain.'/my-'.$group.'/';
+	$create_link = BP_GROUPS_SLUG . '/create/step/group-details/?type='.$group.'&new=true';
+
+	$menu_list = array(
+					   $group_link => 'My '.ucfirst($group),
+					   $create_link => 'Create '.ucfirst($group),
 					   );
 	return openlab_submenu_gen($menu_list);
 } 
 
 function openlab_submenu_gen($items)
 {
-	if ( !$dud = bp_displayed_user_domain() ) {
-	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	global $bp, $post;
+	
+	//determining if this is the current page or not - checks to see if this is an action page first; if not, checks the component of the page
+	$action = $bp->current_action;
+	$component = $bp->current_component;
+	$page_slug = $post->post_name;
+	
+	if ($action)
+	{
+		$page_identify = $action;
+	} else if ($component) {
+		$page_identify = $component;
+	} else if ($page_slug) {
+		$page_identify = $page_slug;
 	}
 	
 	$submenu = '<ul>';
 		
 		foreach ($items as $item => $title)
 		{
-			$submenu .= '<li class="submenu-item">';
-				$submenu .= '<a href="'.$dud.$item.'">';
+			//class variable for each item
+			$item_classes = "submenu-item";
+				
+				//now search the slug for this item to see if the page identifier is there - if it is, this is the current page
+				$current_check = false;
+				
+				if ($page_identify)
+				{
+				$current_check = strpos($item,$page_identify);
+				}
+				
+				if ($current_check !== false)
+				{
+					$item_classes .= " selected-page";
+				} else if ($page_identify == "general" && $title == "Account Settings")
+				{
+					//special case just for account settings page
+					$item_classes .= " selected-page";
+				}
+			
+			$submenu .= '<li class="'.$item_classes.'">';
+				$submenu .= '<a href="'.$item.'">';
 				$submenu .= $title;
 				$submenu .= '</a>';
 			$submenu .= '</li>';
