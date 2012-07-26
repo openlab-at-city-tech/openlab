@@ -23,7 +23,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) ); ?>
 
-	<div class="submenu"><?php echo openlab_my_groups_submenu('clubs'); ?></div>
+	<div class="submenu"><?php echo openlab_my_groups_submenu('club'); ?></div>
 
 <?php 	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Clubs"); ?></div>

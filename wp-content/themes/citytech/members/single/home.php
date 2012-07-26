@@ -182,7 +182,11 @@ global $bp;
           <?php } elseif ( bp_is_user_friends() ) { ?>
       
               <?php do_action( 'bp_before_member_friends_content' ) ?>
+              
+			  <?php if ( is_user_logged_in() && openlab_is_my_profile() ): ?>
               <div class="submenu"><?php echo openlab_my_friends_submenu(); ?></div>
+              <?php endif; ?>
+              
               <div class="members friends">
       
                   <?php locate_template( array( 'members/members-loop.php' ), true ) ?>

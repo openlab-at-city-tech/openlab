@@ -1,6 +1,6 @@
 <?php include "header.php";?>
 <div id="single-course-body">
-<?php
+<?php 
 //
 //     control the formatting of left and right side by use of variable $first_class.
 //     when it is "first" it places it on left side, when it is "" it places it on right side
