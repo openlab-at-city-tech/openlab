@@ -14,6 +14,8 @@ $faculty = groups_get_groupmeta($group_id, 'wds_faculty');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
 	<h1 class="entry-title">Project on the OpenLab</h1>
+    
+    <?php if ($bp->current_action == "home"): ?>
 	 <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225&height=225') ?>
@@ -40,5 +42,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 	<?php do_action( 'bp_after_group_header' ) ?>
 	
 	<?php do_action( 'template_notices' ) ?>
+    
+    <?php endif; ?>
 	
 </div><!-- #single-course-header -->

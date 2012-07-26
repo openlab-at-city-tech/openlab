@@ -24,7 +24,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
 	  
-	  <div class="submenu"><?php echo openlab_my_groups_submenu('projects'); ?></div>
+	  <div class="submenu"><?php echo openlab_my_groups_submenu('project'); ?></div>
 
 <?php	  if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='. $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
 	  <div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
@@ -47,7 +47,29 @@ function cuny_profile_activty_block($type,$title,$last) {
 		  			$wds_year=groups_get_groupmeta($group_id, 'wds_year' );
 		  			$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
 					?>
-                    <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo $wds_departments;?> | <?php echo $wds_project_code;?><br /> <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
+                    <div class="info-line">
+					<?php if ($wds_faculty){
+						echo $wds_faculty.' | ';
+					}
+					if ($wds_departments){
+						echo $wds_departments.' | ';
+					}
+					if ($wds_project_code){
+						echo $wds_project_code;
+					}
+					if ($wds_semester || $wds_year)
+					{
+						echo '<br />';
+						if ($wds_semester)
+						{
+							echo $wds_semester.' ';
+						}
+						if ($wds_year)
+						{
+							echo $wds_year;
+						}
+					} ?>
+                    </div>
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {

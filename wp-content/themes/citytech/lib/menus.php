@@ -73,11 +73,11 @@ function openlab_profile_settings_submenu()
 function openlab_my_groups_submenu($group)
 {
 	global $bp;
-	$group_link = $bp->root_domain.'/my-'.$group.'/';
+	$group_link = $bp->root_domain.'/my-'.$group.'s/';
 	$create_link = BP_GROUPS_SLUG . '/create/step/group-details/?type='.$group.'&new=true';
 
 	$menu_list = array(
-					   $group_link => 'My '.ucfirst($group),
+					   $group_link => 'My '.ucfirst($group).'s',
 					   $create_link => 'Create '.ucfirst($group),
 					   );
 	return openlab_submenu_gen($menu_list);
@@ -99,15 +99,6 @@ function openlab_my_friends_submenu()
 	$action = $bp->current_action;
 	$item = $bp->current_item;
 	$component = $bp->current_component;
-	
-	if ($action)
-	{
-		$page_identify = $action."-action";
-	} else if ($component) {
-		$page_identify = $component."-componenet";
-	} else {
-		$page_identify = $item."-item";
-	}
 
 	$menu_list = array(
 					   $my_friends => 'My Friends',

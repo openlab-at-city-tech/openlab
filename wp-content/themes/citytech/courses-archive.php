@@ -110,7 +110,7 @@ if ( bp_has_groups( $sequence_type . $search_terms . 'include=' . $ids . '&per_p
 		  			$wds_year=groups_get_groupmeta($group_id, 'wds_year' );
 		  			$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
 					?>
-                    <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo $wds_departments;?> | <?php echo $wds_course_code;?><br /> <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
+                    <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments,20);?> | <?php echo $wds_course_code;?><br /> <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {

@@ -8,7 +8,6 @@ function cuny_group_single() { ?>
 			locate_template( array( 'groups/' . $group_type . 's/single/home.php' ), true );
 		} else {
 			?>
-
 			<?php do_action( 'bp_before_group_home_content' ) ?>
 
 			<div id="club-header">
@@ -16,7 +15,7 @@ function cuny_group_single() { ?>
 					<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 						<?php bp_group_avatar('type=full&width=225&height=225') ?>
 					</a>
-					<?php if(1==2){?><p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p><?php } ?>
+					<?php if(1==2){?><p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p><?php } //what? ?>
 				</div><!-- #club-header-avatar -->
 
 				<div id="club-header-content" class="alignleft">
@@ -165,8 +164,6 @@ function cuny_buddypress_group_actions() { ?>
 <?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
 			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
-			<?php
-			do_action( 'bp_group_header_actions' ); ?>
 
 			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
 			<ul>

@@ -1,6 +1,11 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
 <h1 class="entry-title">Club on the OpenLab</h1>
+
 <div id="club-header">
+<?php
+	global $bp;
+	
+	if ($bp->current_action == "home"): ?>
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
@@ -25,4 +30,6 @@
 	
 	<?php do_action( 'template_notices' ) ?>
 	
+    <?php endif; ?>
+    
 </div><!-- #item-header -->
