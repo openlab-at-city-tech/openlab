@@ -454,6 +454,16 @@ function wds_bp_group_meta(){
 		$group_type = $_GET['type'];
 	}
 
+        // Sanitization for the group type. We'll check plurals too, in case
+        // the $_GET param gets messed up
+        if ( 's' == substr( $group_type, -1 ) ) {
+                $group_type = substr( $group_type, 0, strlen( $group_type ) - 1 ); 
+        }
+        
+        if ( !in_array( $group_type, openlab_group_types() ) ) {
+                $group_type = 'group';
+        }
+
 	if ( 'group' == $group_type ) {
 		$type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
 	}
@@ -691,7 +701,7 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
 function openlab_validate_groupblog_url() {
 	global $current_blog;
 
-	if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+	if ( isset( $_POST['wds_website_check'] ) ) {
 		$path = isset( $_POST['blog']['domain'] ) ? $_POST['blog']['domain'] : '';
 
 		if ( empty( $path ) ) {
