@@ -1,7 +1,12 @@
-<?php get_header() ?>
-<?php global $bp;
+<?php remove_action('genesis_loop', 'genesis_do_loop');
+add_action('genesis_loop', 'cuny_create_group' );
 
-$group_type = openlab_get_current_group_type();
+function cuny_create_group(){
+
+global $bp;
+
+//this function doesn't work - explore for deprecation or fixing
+/*$group_type = openlab_get_current_group_type();*/
 
 // Set a group label. The (e)Portfolio logic means we have to do an extra step
 if ( 'portfolio' == $group_type ) {
@@ -12,12 +17,15 @@ if ( 'portfolio' == $group_type ) {
 	$page_title  = 'Create a ' . ucwords( $group_type );
 }
 
+//get group type
+if ( !empty( $_GET['type'] ) ) {
+		$group_type = $_GET['type'];
+	}
+
 ?>
-<div id="content-sidebar-wrap">
-	<div id="content">
 		<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
 
-		<h3 id="bread-crumb"><?php echo $page_title ?> &nbsp;</h3>
+		<div class="submenu"><?php echo openlab_my_groups_submenu($group_type); ?></div>
 
 		<div id="single-course-body">
 
@@ -300,8 +308,6 @@ if ( 'portfolio' == $group_type ) {
 
 		</form>
 		</div>
-	</div><!-- #content -->
-
-	<?php locate_template( array( 'sidebar.php' ), true ) ?>
-</div>
-<?php get_footer() ?>
+        <?php add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) ); ?>
+<?php } ?>
+<?php genesis() ?>

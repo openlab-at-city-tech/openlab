@@ -200,23 +200,6 @@ function cuny_myopenlab_menu(){
 
 <?php }//header mods
 
-//adds the profile sidebar to the add <group> pages
-
-add_action('genesis_before_sidebar_widget_area', 'add_group_sidebar');
-function add_group_sidebar()
-{
-  global $bp;
-  $component =  $bp->current_component;
-  $action =  $bp->current_action;
-
-  if (($component == "groups" && $action == "create") || $component=="settings" || $component == "invite-anyone")
-
-  { ?>
-     <h2 class="sidebar-title">My OpenLab</h2>
-     <div id="item-buttons"><?php do_action( 'cuny_bp_profile_menus' ); ?></div>
-  <?php }
-}
-
 //we may be able to deprecate this function - need to look into it
 function cuny_site_wide_navi($args = '') {
 global $bp, $wpdb;
