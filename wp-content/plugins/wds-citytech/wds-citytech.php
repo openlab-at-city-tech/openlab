@@ -1721,4 +1721,32 @@ function openlab_strip_brackets_from_pw_reset_email( $message ) {
 }
 add_filter( 'retrieve_password_message', 'openlab_strip_brackets_from_pw_reset_email' );
 
+/**
+ * Don't allow non-super-admins to Add New Users on user-new.php
+ * 
+ * This is a hack. user-new.php shows the Add New User section for any user
+ * who has the 'create_users' cap. For some reason, Administrators have the
+ * 'create_users' cap even on Multisite. Instead of doing a total removal
+ * of this cap for Administrators (which may break something), I'm just
+ * removing it on the user-new.php page.
+ *
+ */
+function openlab_block_add_new_user( $allcaps, $cap, $args ) {
+        if ( !in_array( 'create_users', $cap ) ) {
+                return $allcaps;
+        }
+       
+        if ( !is_admin() || false === strpos( $_SERVER['SCRIPT_NAME'], 'user-new.php' ) ) {
+                return $allcaps;
+        }
+        
+        if ( is_super_admin() ) {
+               return $allcaps;
+        }
+        
+        unset( $allcaps['create_users'] );
+
+        return $allcaps;
+}
+add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
 ?>
