@@ -127,6 +127,17 @@
 	
 }
 
+/* this line can be removed after fix is made to html for this section */
+/*#wpadminbar li.nav-invitation .item-avatar {
+width:210px;
+
+}
+
+#wpadminbar li.nav-invitation .item-avatar a {
+float:left;
+margin-right:5px;
+}*/
+
 #wpadminbar .item-avatar img {
 	width: 50px;
 	height: 50px;
@@ -300,7 +311,7 @@ margin: 0;
 	margin-left: 0px;
 }
 
-#wpadminbar .quicklinks  #wp-admin-bar-invites .toolbar-item-count.count-0, #wpadminbar #wp-admin-bar-comments .pending-count.count-0 {
+#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count.count-0, #wpadminbar .quicklinks #wp-admin-bar-messages span.toolbar-item-count.count-0, #wpadminbar #wp-admin-bar-comments .pending-count.count-0 {
 	display:none;
 }
 
@@ -355,6 +366,10 @@ margin: 0;
 	left: -45px;
 }
 
+#wpadminbar li#wp-admin-bar-invites div.ab-sub-wrapper {
+width:232px;
+}
+
 #wpadminbar #wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar #wp-admin-bar-messages .ab-sub-wrapper,#wpadminbar #wp-admin-bar-activity .ab-sub-wrapper, #wpadminbar #wp-admin-bar-comments .ab-sub-wrapper, #wpadminbar #wp-admin-bar-new-content .ab-sub-wrapper {
 	margin-top: 8px;
 }
@@ -368,6 +383,8 @@ margin: 0;
 	padding: 0;
 }
 
+
+
 #wpadminbar #wp-admin-bar-friend-requests-title .ab-item, #wpadminbar #wp-admin-bar-invitations-title .ab-item, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:hover, #wpadminbar #wp-admin-bar-invitations-title .ab-item:hover, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:focus, #wpadminbar #wp-admin-bar-invitations-title .ab-item:focus {
 	color: #FFF;
 	text-decoration: none;
@@ -375,6 +392,60 @@ margin: 0;
 	height: auto;
 	padding: 0 0 0 5px;
 }
+
+#wpadminbar  div.ab-sub-wrapper li.nav-content-item.nav-friendship-request,  #wpadminbar  div.ab-sub-wrapper li.nav-content-item.nav-invitation {
+background-color:#f0f0f0;
+font-family: Arial, Verdana, sans-serif;
+padding:6px;
+height:50px;
+margin-bottom:1px;
+/*-moz-box-shadow:    3px 0px 3px 3px #ccc;
+/-webkit-box-shadow: 3px 0px 3px 3px #ccc;
+box-shadow:         3px 0px 3px 3px #ccc; */
+border-bottom: 1px solid #666666;
+
+
+}
+
+#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action {
+width: 125px;
+float:right;
+font-family: Arial, Verdana, sans-serif;
+
+
+}
+
+
+#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button {
+font-family: Arial, Verdana, sans-serif;
+-moz-border-radius: 5px;
+border-radius: 5px;
+border:1px solid #aaaaaa;
+color: #999999;
+padding:4px 10px 0px 10px;
+float:left;
+margin:7px 3px 0 0;
+background-color:#dcdcdc;
+font-size:10px;
+
+ /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
+ /* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
+  /* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
+  /* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
+   /* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
+}
+
+#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button:hover, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button:hover 
+{
+text-decoration:none;
+}
+
+#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.item div.item-title a, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.item div.item-title a {
+color: #464646;
+font-size:11px;
+font-weight:bold;
+}
+
 
 #wpadminbar #wp-admin-bar-friend-requests-none .ab-item, #wpadminbar #wp-admin-bar-group-invites-none .ab-item, #wpadminbar #wp-admin-bar-messages-none .ab-item, #wpadminbar #wp-admin-bar-messages-default .nav-message, #wpadminbar #wp-admin-bar-activity-default .nav-activity, #wpadminbar #wp-admin-bar-user-actions {
 	float:left;
