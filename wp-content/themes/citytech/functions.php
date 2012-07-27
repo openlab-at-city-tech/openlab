@@ -251,6 +251,19 @@ function cuny_get_options_nav() {
 
 	// Loop through each navigation item
 	foreach ( (array)$bp->bp_options_nav[$the_index] as $subnav_item ) {
+		
+		//name changes
+		$group_type = openlab_get_group_type( bp_get_current_group_id());
+		if ($subnav_item['name'] == 'Home')
+		{
+			$subnav_item['name'] = 'Profile';
+			
+		}else if ($subnav_item['name'] == 'Admin')
+		{
+			$subnav_item['name'] = ucfirst($group_type).' Settings';
+		}
+		
+		
 		if ( !$subnav_item['user_has_access'] )
 			continue;
 
@@ -261,17 +274,45 @@ function cuny_get_options_nav() {
 			$selected = '';
 		}
 
-		if ($subnav_item['name'] == 'Home')
-		{
-			$subnav_item['name'] = 'Profile';
-		}
-
 		// List type depends on our current component
 		$list_type = bp_is_group() ? 'groups' : 'personal';
 
 		// echo out the final list item
-		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
+		$menu_output[$subnav_item['css_id']] =  apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
 	}
+	
+	//re-orders menu
+	foreach ($menu_output as $name => &$menu_item)
+	{
+		if ($name == "home")
+		{
+			$menu_final[0] = $menu_item;
+		} else if ($name == "admin")
+		{
+			$menu_final[1] = $menu_item;
+		} else if ($name == "members")
+		{
+			$menu_final[2] = $menu_item;
+		} else if ($name == "forums")
+		{
+			$menu_final[3] = $menu_item;
+		}
+		else if ($name == "nav-docs")
+		{
+			$menu_final[4] = $menu_item;
+		}
+	}
+	
+	//add the file link
+	$menu_final[] = 
+	
+	ksort($menu_final);
+	
+	foreach ($menu_final as $final_menu_item)
+	{
+		echo $final_menu_item;
+	}
+	
 }//end cuny_get_options_nav
 
 /**
