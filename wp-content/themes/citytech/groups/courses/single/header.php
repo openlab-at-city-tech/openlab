@@ -64,9 +64,12 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 		<?php echo apply_filters('the_content', $group_description ); ?>
 		</div>
 		<?php //do_action( 'bp_group_header_meta' ) ?>
-		<div class="course-html-block">
-			<?php echo $html ?>
+		
+        <?php if ($html): ?>
+        <div class="course-html-block">
+			<?php echo $html; ?>
 		</div>
+        <?php endif; ?>
 	</div><!-- .header-content -->
 	
 	<?php do_action( 'bp_after_group_header' ) ?>
