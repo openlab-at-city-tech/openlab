@@ -127,17 +127,6 @@
 	
 }
 
-/* this line can be removed after fix is made to html for this section */
-/*#wpadminbar li.nav-invitation .item-avatar {
-width:210px;
-
-}
-
-#wpadminbar li.nav-invitation .item-avatar a {
-float:left;
-margin-right:5px;
-}*/
-
 #wpadminbar .item-avatar img {
 	width: 50px;
 	height: 50px;
@@ -153,9 +142,6 @@ margin-right:5px;
 	margin: 0 5px 5px 0;
 }
 
-#wpadminbar a.button {
-	
-}
 
 #wpadminbar a.button:hover, #wpadminbar a.button:focus, #wpadminbar .quicklinks a:hover, #wpadminbar .quicklinks .ab-top-secondary > li > a:hover, #wpadminbar .quicklinks .ab-top-menu > li > a:hover {
 	background: none;
@@ -208,6 +194,10 @@ margin-right:5px;
 	padding: 0 15px;
 }
 
+#wpadminbar #wp-admin-bar-site-name {
+	padding:0;
+}
+
 
 /* notification icons */
 
@@ -218,7 +208,7 @@ margin-right:5px;
 	width: 20px;
 }
 
-#wpadminbar #wp-admin-bar-invites, #wpadminbar #wp-admin-bar-messages, #wpadminbar #wp-admin-bar-activity, #wpadminbar #wp-admin-bar-comments, #wpadminbar #wp-admin-bar-new-content  {
+#wpadminbar #wp-admin-bar-invites, #wpadminbar #wp-admin-bar-messages, #wpadminbar #wp-admin-bar-activity, #wpadminbar #wp-admin-bar-comments, #wpadminbar #wp-admin-bar-new-content, #wpadminbar #wp-admin-bar-updates  {
 	border:none;
 	background: url('images/admin-bar-sprites.png') no-repeat;
 	opacity: .75;
@@ -250,20 +240,20 @@ margin-right:5px;
 #wpadminbar #wp-admin-bar-comments {
 	background-position: -106px 0;
 	width: 20px;
-	margin-left:20px;
 }
 
 #wpadminbar #wp-admin-bar-new-content {
 	background-position: -138px 0;
 }
 
-#wpadminbar #wp-admin-bar-comments  > .ab-item .ab-icon, #wpadminbar #wp-admin-bar-new-content > .ab-item .ab-icon {
+#wpadminbar #wp-admin-bar-updates {
+background-position: -158px 0;
+}
+
+#wpadminbar #wp-admin-bar-comments  > .ab-item .ab-icon, #wpadminbar #wp-admin-bar-new-content > .ab-item .ab-icon, #wpadminbar #wp-admin-bar-updates > .ab-item .ab-icon {
 	background: none;
 }
 
-#wpadminbar #wp-admin-bar-my-account {
-	
-}
 
 #wpadminbar #wp-admin-bar-my-account, #wpadminbar #wp-admin-bar-bp-register {
 	border-left: none;
@@ -287,7 +277,7 @@ margin: 0;
 /* notification counts */
 
 
-#wpadminbar .quicklinks .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count {
+#wpadminbar .toolbar-item-count, #wpadminbar .pending-count, #wpadminbar .ab-label {
 	color: #FFF;
 	background-color: #0fceba;
 	border-radius: 12px;
@@ -301,7 +291,7 @@ margin: 0;
 	margin-left: 3px;
 }
 
-#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count {
+#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count, #wpadminbar #wp-admin-bar-updates .ab-label {
 	position:absolute;
 	top: -5px;
 	right: 0px;
@@ -333,6 +323,10 @@ margin: 0;
 	overflow: visible;
 }
 
+#wpadminbar #wp-admin-bar-invites-default .nav-content-item .item-title a {
+	font-family: Arial, Verdana, sans-serif;
+}
+
 #wpadminbar .ab-top-menu > .menupop > .ab-sub-wrapper {
 	min-width: 0;
 }
@@ -348,6 +342,10 @@ margin: 0;
 
 #wpadminbar .menupop #wp-admin-bar-site-name-default {
 	width: 100px;
+}
+
+#wpadminbar #wp-admin-bar-site-name .ab-sub-wrapper {
+	width:100px;
 }
 
 #wpadminbar #wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar #wp-admin-bar-messages .ab-sub-wrapper,#wpadminbar #wp-admin-bar-activity .ab-sub-wrapper, #wpadminbar #wp-admin-bar-my-account .ab-sub-wrapper {
@@ -366,9 +364,10 @@ margin: 0;
 	left: -45px;
 }
 
-#wpadminbar li#wp-admin-bar-invites div.ab-sub-wrapper {
-width:232px;
+#wpadminbar li#wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar li#wp-admin-bar-messages .ab-sub-wrapper, #wpadminbar li#wp-admin-bar-activity .ab-sub-wrapper {
+	width:220px;
 }
+
 
 #wpadminbar #wp-admin-bar-invites .ab-sub-wrapper, #wpadminbar #wp-admin-bar-messages .ab-sub-wrapper,#wpadminbar #wp-admin-bar-activity .ab-sub-wrapper, #wpadminbar #wp-admin-bar-comments .ab-sub-wrapper, #wpadminbar #wp-admin-bar-new-content .ab-sub-wrapper {
 	margin-top: 8px;
@@ -383,8 +382,6 @@ width:232px;
 	padding: 0;
 }
 
-
-
 #wpadminbar #wp-admin-bar-friend-requests-title .ab-item, #wpadminbar #wp-admin-bar-invitations-title .ab-item, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:hover, #wpadminbar #wp-admin-bar-invitations-title .ab-item:hover, #wpadminbar #wp-admin-bar-friend-requests-title .ab-item:focus, #wpadminbar #wp-admin-bar-invitations-title .ab-item:focus {
 	color: #FFF;
 	text-decoration: none;
@@ -393,18 +390,13 @@ width:232px;
 	padding: 0 0 0 5px;
 }
 
-#wpadminbar  div.ab-sub-wrapper li.nav-content-item.nav-friendship-request,  #wpadminbar  div.ab-sub-wrapper li.nav-content-item.nav-invitation {
-background-color:#f0f0f0;
-font-family: Arial, Verdana, sans-serif;
-padding:6px;
-height:50px;
-margin-bottom:1px;
-/*-moz-box-shadow:    3px 0px 3px 3px #ccc;
-/-webkit-box-shadow: 3px 0px 3px 3px #ccc;
-box-shadow:         3px 0px 3px 3px #ccc; */
-border-bottom: 1px solid #666666;
-
-
+#wpadminbar  div.ab-sub-wrapper li.nav-content-item.nav-friendship-request,  #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation {
+	background-color:#f0f0f0;
+	font-family: Arial, Verdana, sans-serif;
+	padding:6px;
+	height:50px;
+	margin-bottom:1px;
+	border-bottom: 1px solid #666666;
 }
 
 #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action {
@@ -417,33 +409,33 @@ font-family: Arial, Verdana, sans-serif;
 
 
 #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button {
-font-family: Arial, Verdana, sans-serif;
--moz-border-radius: 5px;
-border-radius: 5px;
-border:1px solid #aaaaaa;
-color: #999999;
-padding:4px 10px 0px 10px;
-float:left;
-margin:7px 3px 0 0;
-background-color:#dcdcdc;
-font-size:10px;
-
- /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
- /* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
-  /* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
-  /* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
-   /* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
+	font-family: Arial, Verdana, sans-serif;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border:1px solid #aaaaaa;
+	color: #444444;
+	padding:4px 10px 0px 10px;
+	float:left;
+	margin:7px 3px 0 0;
+	background-color:#dcdcdc;
+	font-size:10px;
+	
+	/* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
+	/* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
+	/* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
+	/* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
+	/* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
 }
 
 #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button:hover, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button:hover 
 {
-text-decoration:none;
+	text-decoration:none;
 }
 
 #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.item div.item-title a, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.item div.item-title a {
-color: #464646;
-font-size:11px;
-font-weight:bold;
+	color: #464646;
+	font-size:11px;
+	font-weight:bold;
 }
 
 
@@ -453,7 +445,7 @@ font-weight:bold;
 	background: #f0f0f0;
 	margin-bottom: 1px;
 	padding: 5px;
-	width:218px;
+	width:210px;
 }
 
 #wpadminbar #wp-admin-bar-user-actions {
