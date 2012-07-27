@@ -20,6 +20,7 @@ jQuery(document).ready(function($){
                 }
 
                 if ( 'fs' == emailtype ) {
+                        newtypes += '<option value="">----</option>';
                         newtypes += '<option value="Faculty">Faculty</option>';
                         newtypes += '<option value="Staff">Staff</option>';
                 }
