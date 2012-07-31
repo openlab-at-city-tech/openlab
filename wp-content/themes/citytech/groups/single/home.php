@@ -166,15 +166,9 @@ global $bp;
 <?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
 			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
-
 			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
-			<ul>
+            <ul>
 				<?php bp_get_options_nav(); ?>
-                <?php /*foreach ($bp->bp_options_nav as $option)
-				{
-					echo var_dump($option);
-					echo '<br /><br />';
-				}*/ ?>
 			</ul>
 			<?php endif ?>
 

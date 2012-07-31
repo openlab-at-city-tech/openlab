@@ -10,6 +10,14 @@
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
+         <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+					<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Club</a></div>
+            		<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+		<?php else:
+					$group = groups_get_group( array( 'group_id' => $group_id ) );
+					bp_get_group_join_button($group);
+			  endif;
+		?>
 		<?php /* <p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p> */ ?>
 	</div><!-- #club-header-avatar -->
 

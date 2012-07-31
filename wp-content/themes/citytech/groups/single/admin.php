@@ -2,6 +2,7 @@
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );?>
 
 <div class="item-list-tabs no-ajax" id="subnav">
+	<div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
 	<ul>
 		<?php openlab_group_admin_tabs(); ?>
 	</ul>

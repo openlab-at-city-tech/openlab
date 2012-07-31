@@ -41,7 +41,15 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
-        <?php do_action( 'bp_group_header_actions' ); ?>
+        
+        <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+					<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Course</a></div>
+            		<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+		<?php else:
+					$group = groups_get_group( array( 'group_id' => $group_id ) );
+					bp_get_group_join_button($group);
+			  endif;
+		?>
 	</div><!-- #course-header-avatar -->	
 	<div id="course-header-content" class="alignleft">
 		<h2 class="course-title"><?php echo $group_name; ?><a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>

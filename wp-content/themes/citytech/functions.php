@@ -513,6 +513,8 @@ function openlab_group_admin_tabs( $group = false ) {
 		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
 
 	$current_tab = bp_action_variable( 0 );
+	
+	$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
 
 	// Portfolio tabs look different from other groups
 ?>
@@ -539,7 +541,7 @@ function openlab_group_admin_tabs( $group = false ) {
 	<?php else : ?>
 
 		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
-			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Details', 'buddypress' ); ?></a></li>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Edit Profile', 'buddypress' ); ?></a></li>
 		<?php } ?>
 
 		<?php
@@ -556,7 +558,7 @@ function openlab_group_admin_tabs( $group = false ) {
 
 		<?php do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
 
-		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
 
 	<?php endif ?>
 <?php
