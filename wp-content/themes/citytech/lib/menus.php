@@ -324,22 +324,15 @@ function openlab_group_membership_tabs( $group = false ) {
 	$current_tab = bp_action_variable( 0 );
 	
 	$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' ); ?>
-	
-	<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
-			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Edit Profile', 'buddypress' ); ?></a></li>
-		<?php } ?>
-
-		<?php
-			if ( !$bp->is_item_admin )
-				return false;
-		?>
         
-        <li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
+        <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
+        <li<?php if ( 'members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
         
-		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
-
-		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
-
-		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+		<li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Member Requests', 'buddypress' ); ?></a></li>
+        <?php endif; ?>
         
+        <li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite Anyone', 'buddypress' ); ?></a></li>
+        
+        <li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e( 'Your Email Options', 'buddypress' ); ?></a></li>
+                
 <?php }
