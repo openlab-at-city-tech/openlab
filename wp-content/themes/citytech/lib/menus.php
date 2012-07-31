@@ -195,4 +195,49 @@ function openlab_submenu_gen($items)
 	return $submenu;
 }
 
-?>
+/**
+ * a variation on bp_get_options_nav to match the design
+ * main change here at the moment - changing "home" to "profile" - now deprecated
+ *
+ * @todo Clean up this godawful mess. There are filters for this stuff - bbg
+ * @todo attempting to remedy - jwu
+ */
+
+add_filter('bp_get_options_nav_home','openlab_filter_subnav_home');
+ 
+function openlab_filter_subnav_home($subnav_item)
+{
+	$new_item = str_replace("Home","Profile",$subnav_item);
+	return $new_item;
+}
+
+add_filter('bp_get_options_nav_admin','openlab_filter_subnav_admin');
+
+function openlab_filter_subnav_admin($subnav_item)
+{
+	$group_type = openlab_get_group_type( bp_get_current_group_id());
+	$new_item = str_replace("Admin",ucfirst($group_type)." Settings",$subnav_item);
+	return $new_item;
+}
+
+add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
+
+function openlab_filter_subnav_members($subnav_item)
+{
+	$new_item = str_replace("Members","Membership",$subnav_item);
+	return $new_item;
+}
+
+add_filter('bp_get_options_nav_nav-invite-anyone','openlab_filter_subnav_nav_invite_anyone');
+
+function openlab_filter_subnav_nav_invite_anyone($suvbnav_item)
+{
+	return "";
+}
+
+add_filter('bp_get_options_nav_nav-notifications','openlab_filter_subnav_nav_notifications');
+
+function openlab_filter_subnav_nav_notifications($suvbnav_item)
+{
+	return "";
+}
