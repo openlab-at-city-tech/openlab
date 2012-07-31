@@ -45,7 +45,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
         <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
 					<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Course</a></div>
             		<div id="action-edit-profile"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
-		<?php else:
+		<?php elseif (is_user_logged_in()):
 					$group = groups_get_group( array( 'group_id' => $group_id ) );
 					bp_get_group_join_button($group);
 			  endif;

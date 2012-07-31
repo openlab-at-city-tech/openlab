@@ -1,6 +1,14 @@
 <?php if ( bp_group_has_members( 'exclude_admins_mods=0' ) ) : ?>
 
 	<?php do_action( 'bp_before_group_members_content' ) ?>
+    <div class="item-list-tabs no-ajax" id="subnav">
+		<div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
+		<ul>
+			<?php openlab_group_membership_tabs(); ?>
+		</ul>
+	</div><!-- .item-list-tabs -->
+    
+    
 
 	<div class="pagination no-ajax">
 

@@ -203,6 +203,7 @@ function openlab_submenu_gen($items)
  * @todo attempting to remedy - jwu
  */
 
+//submenu nav renaming
 add_filter('bp_get_options_nav_home','openlab_filter_subnav_home');
  
 function openlab_filter_subnav_home($subnav_item)
@@ -241,3 +242,104 @@ function openlab_filter_subnav_nav_notifications($suvbnav_item)
 {
 	return "";
 }
+
+//submenu navigation re-ordering
+function openlab_group_submenu_nav() {
+    global $bp;
+	
+    $nav_items = $bp->bp_options_nav;
+	
+    $bp->bp_options_nav = $nav_items;
+}
+
+add_action( 'bp_actions', 'openlab_group_submenu_nav', 1 );
+
+/**
+ * Markup for group admin tabs
+ */
+function openlab_group_admin_tabs( $group = false ) {
+	global $bp, $groups_template;
+
+	if ( !$group )
+		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+
+	$current_tab = bp_action_variable( 0 );
+	
+	$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
+
+	// Portfolio tabs look different from other groups
+?>
+
+	<?php if ( openlab_is_portfolio() ) : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li>
+		<?php } ?>
+
+		<?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
+			<li<?php if ( 'group-avatar'   == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li>
+		<?php endif; ?>
+
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Privacy Settings</a></li>
+
+		<?php /* Only show the Edit Access List tab for non-public groups */ ?>
+		<?php if ( 'public' != $group->status ) : ?>
+			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
+		<?php endif ?>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+
+	<?php else : ?>
+
+		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Edit Profile', 'buddypress' ); ?></a></li>
+		<?php } ?>
+
+		<?php
+			if ( !$bp->is_item_admin )
+				return false;
+		?>
+        
+        <li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
+        
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
+
+		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+
+	<?php endif ?>
+<?php
+}
+
+/**
+ * Markup for Member Tabs
+ */
+function openlab_group_membership_tabs( $group = false ) {
+	global $bp, $groups_template;
+
+	if ( !$group )
+		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+
+	$current_tab = bp_action_variable( 0 );
+	
+	$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' ); ?>
+	
+	<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Edit Profile', 'buddypress' ); ?></a></li>
+		<?php } ?>
+
+		<?php
+			if ( !$bp->is_item_admin )
+				return false;
+		?>
+        
+        <li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
+        
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
+
+		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
+
+		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+        
+<?php }
