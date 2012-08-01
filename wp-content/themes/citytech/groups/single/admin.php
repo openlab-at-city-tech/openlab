@@ -149,6 +149,8 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</ul>
 		</label>
 
+                <?php /* Portfolios don't get Private settings */ ?>
+                <?php if ( !openlab_is_portfolio() ) : ?>
 		<label>
 			<input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting('private') ?> />
 			<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
@@ -158,10 +160,11 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 				<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
 			</ul>
 		</label>
+                <?php endif ?>
 
 		<label>
 			<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-			<strong><?php _e( 'This is a hidden group', 'buddypress' ) ?></strong>
+			<strong><?php _e( 'This is a hidden ' . $group_type, 'buddypress' ) ?></strong>
 			<ul>
 				<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
 				<li><?php _e( 'This '.$group_type.' will not be listed in the '.$group_type.'s directory or search results.', 'buddypress' ) ?></li>

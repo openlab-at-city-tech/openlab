@@ -32,12 +32,16 @@ function openlab_get_site_id_by_group_id( $group_id = 0 ) {
  *
  * @param int $group_id
  */
-function openlab_get_group_site_url( $group_id = 0 ) {
-	if ( !$group_id ) {
+function openlab_get_group_site_url( $group_id = false ) {
+	if ( false === $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
 
 	$site_url = '';
+
+        if ( !$group_id ) {
+                return $site_url;
+        }
 
 	// First check for an internal site, then external
 	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
@@ -457,9 +461,9 @@ function wds_bp_group_meta(){
         // Sanitization for the group type. We'll check plurals too, in case
         // the $_GET param gets messed up
         if ( 's' == substr( $group_type, -1 ) ) {
-                $group_type = substr( $group_type, 0, strlen( $group_type ) - 1 ); 
+                $group_type = substr( $group_type, 0, strlen( $group_type ) - 1 );
         }
-        
+
         if ( !in_array( $group_type, openlab_group_types() ) ) {
                 $group_type = 'group';
         }
