@@ -195,16 +195,11 @@ function cuny_home_square($type){
 	$i = 1;
 	$column_class = "column";
 
-	// Work up a list of groups to exclude for the current user
-	// Exclude groups that are hidden & the user does not have access to
-	$exclude = openlab_get_unavailable_groups();
-
 	$groups_args = array(
 		'max'         => 4,
 		'type'        => 'active',
 		'user_id'     => 0,
-		'exclude'     => $exclude,
-		'show_hidden' => true // we're rolling our own
+		'show_hidden' => false
 	);
 
 	if ( bp_has_groups( $groups_args ) ) : ?>

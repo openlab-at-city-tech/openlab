@@ -229,6 +229,10 @@ function openlab_current_directory_filters() {
  * in directories.
  *
  * We stash some of the direct queries in the cache so that we can get them later in the page load
+ *
+ * NOTE: This function is not currently in use. See:
+ *   - https://github.com/livinglab/openlab/commit/7525ae11d2550f5c6fc95ce50ec6fda256da239e
+ *   - http://openlab.citytech.cuny.edu/redmine/issues/396
  */
 function openlab_get_unavailable_groups( $user_id = 0 ) {
 	global $bp, $wpdb;
