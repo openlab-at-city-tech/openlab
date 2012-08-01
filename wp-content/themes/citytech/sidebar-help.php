@@ -23,5 +23,5 @@
 				   foreach ( $terms as $term ) {
 					 echo '<a href="'.get_term_link($term).'">' . $term->name . '</a> ';
 				   }
-			   } ?>   
+			   } ?>
         </div>
