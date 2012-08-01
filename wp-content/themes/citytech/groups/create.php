@@ -112,7 +112,7 @@ if ( !empty( $_GET['type'] ) ) {
 						</label>
 
 						<?php /* Portfolios don't have a Private setting */ ?>
-						<?php if ( !openlab_is_portfolio() ) : ?>
+						<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
 							<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
 								<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
