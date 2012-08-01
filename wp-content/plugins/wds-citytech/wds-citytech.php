@@ -1718,6 +1718,7 @@ add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscriptio
  */
 function openlab_strip_brackets_from_pw_reset_email( $message ) {
 	$message = preg_replace( '/<(http\S*?)>/', '$1', $message );
+        return $message;
 }
 add_filter( 'retrieve_password_message', 'openlab_strip_brackets_from_pw_reset_email' );
 
