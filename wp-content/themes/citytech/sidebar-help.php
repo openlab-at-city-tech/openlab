@@ -13,14 +13,6 @@
 			);
 		wp_nav_menu( $args ); 
 		?>
-        <?php $args = array(
-				'theme_location' => 'helpmenusec',
-				'container' => 'div',
-                'container_id' => 'help-menu-secondary',
-				'menu_class' => 'sidebar-nav',
-			);
-		wp_nav_menu( $args ); 
-		?>
 		
         <h2 class="help-tags-title">Find a Help Topic With Tags</h2>
         <div id="help-tags-copy"><p>Fing answers throughout Help that correspond to the tags below:</p></div>

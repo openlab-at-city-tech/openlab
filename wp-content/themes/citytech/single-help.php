@@ -16,9 +16,20 @@ function openlab_help_loop() {
 	
 	while ( have_posts() ) : the_post(); ?>
     	
-        <h1 class="entry-title"><?php the_title(); ?></h1>
-        <div class="cat-list">category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ',''); ?></div>
-        <div class="help-tags">tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
+        <?php $help_cats = get_the_term_list($post_id, 'help_category', '', ', ',''); ?>
+        
+        <?php if ($help_cats): ?>
+        <h1 class="entry-title"><?php echo $help_cats; ?></h1>
+        <div id="help-title"><h2 class="page-title"><?php the_title(); ?></h2></div>
+        <?php else: ?>
+        <h1 class="entry-title"><?php echo the_title();?></h1>
+        <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
+        <?php endif; ?>
+        
+        <div id="help-identity">
+        	<div class="cat-list">Category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ',''); ?></div>
+        	<div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
+        </div>
         
         <div class="entry-content"><?php the_content(); ?></div>
     
