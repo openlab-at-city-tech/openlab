@@ -50,6 +50,7 @@ function help_categories_menu($items, $args) {
 add_filter( 'wp_nav_menu_items', 'help_categories_menu', 10, 2 );
 
 //sub-menus for profile pages - a series of functions, but all here in one place
+//sub-menu for profile pages
 function openlab_profile_settings_submenu()
 {
 	global $bp;
@@ -328,7 +329,9 @@ function openlab_group_membership_tabs( $group = false ) {
         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         <li<?php if ( 'members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
         
-		<li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Member Requests', 'buddypress' ); ?></a></li>
+        <?php if ($group->status == "private"): ?>
+          <li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Member Requests', 'buddypress' ); ?></a></li>
+          <?php endif; ?>
         <?php endif; ?>
         
         <li<?php if ( 'membership-request' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite Anyone', 'buddypress' ); ?></a></li>
