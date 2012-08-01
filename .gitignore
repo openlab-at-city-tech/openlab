@@ -6,6 +6,8 @@ wp-content/cache/*
 sql/*
 wiki/images/*
 
+nbproject/*
+
 # Exclude environment files
 env.php
 
@@ -38,3 +40,7 @@ wp-admin/error_log
 # vim files
 *.swp
 
+env-sample.php
+
+
+/nbproject/private/
