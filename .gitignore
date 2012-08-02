@@ -3,37 +3,16 @@ wp-content/blogs.dir/
 wp-content/uploads/*
 wp-content/cache/*
 
-sql/*
-wiki/images/*
-
 # Exclude environment files
 env.php
 
 # Don't include .htaccess, which causes problems with the dev site
 .htaccess
 
-# Don't include the dev site
-openlabdev
-
-# Don't include the error log
-php_error.log
-
 # Misc exclusions
 *.bak
-PHP_errors.log
-error_log
 .DS_store
 .DS_Store
-#maintenance.html
-LocalSettings.old*
-wp-content/plugins/custom-anti-spam/cas_*
-*.php.orig
-wp-content/plugins/cac-featured-content/cache/*
-!wp-content/plugins/cac-featured-content/cache/index.html
-
-.svn
-wp-admin/error_log
-.fseventsd/
 
 # vim files
 *.swp
