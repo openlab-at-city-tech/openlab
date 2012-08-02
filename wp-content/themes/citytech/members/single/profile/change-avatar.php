@@ -1,4 +1,4 @@
-<div class="submenu">My Settings: <?php echo openlab_profile_settings_submenu(); ?></div>
+<div class="submenu"><div class="submenu-text">My Settings: </div><?php echo openlab_profile_settings_submenu(); ?></div>
 <div id="item-body" role="main">
 <?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
 
