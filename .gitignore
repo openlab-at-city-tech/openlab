@@ -3,6 +3,9 @@ wp-content/blogs.dir/
 wp-content/uploads/*
 wp-content/cache/*
 
+# vim ctags
+tags
+
 sql/*
 wiki/images/*
 
