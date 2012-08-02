@@ -23,7 +23,7 @@ if ( !empty( $_GET['type'] ) ) {
 	}
 
 ?>
-		<h1 class="entry-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+		<h1 class="entry-title mol-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
 
 		<div class="submenu"><?php echo openlab_my_groups_submenu($group_type); ?></div>
 

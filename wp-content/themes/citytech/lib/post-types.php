@@ -139,3 +139,48 @@ function help_custom_columns($column){
       break;
   }
 }
+
+//custom post type - help glossary
+add_action( 'init', 'openlab_register_help_glossary' );
+
+function openlab_register_help_glossary() {
+
+    $labels = array( 
+        'name' => _x( 'Help Glossary', 'help glossary' ),
+        'singular_name' => _x( 'Help Glossary', 'help glossary' ),
+        'add_new' => _x( 'Add New', 'help glossary' ),
+        'add_new_item' => _x( 'Add New Help Glossary', 'help glossary' ),
+        'edit_item' => _x( 'Edit Help Glossary', 'help glossary' ),
+        'new_item' => _x( 'New Help Glossary', 'help glossary' ),
+        'view_item' => _x( 'View Help Glossary', 'help glossary' ),
+        'search_items' => _x( 'Search Help Glossary', 'help glossary' ),
+        'not_found' => _x( 'No help glossary found', 'help glossary' ),
+        'not_found_in_trash' => _x( 'No help glossary found in Trash', 'help glossary' ),
+        'parent_item_colon' => _x( 'Parent Help Glossary:', 'help glossary' ),
+        'menu_name' => _x( 'Help Glossary', 'help glossary' ),
+    );
+
+    $args = array( 
+        'labels' => $labels,
+        'hierarchical' => true,
+        'description' => 'Help Glossary Pages',
+        'supports' => array( 'title', 'editor', 'excerpt', 'author', 'revisions', 'page-attributes' ),
+        'taxonomies' => array( '' ),
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_position' => 20,
+        
+        'show_in_nav_menus' => true,
+        'publicly_queryable' => true,
+        'exclude_from_search' => false,
+        'has_archive' => false,
+		'rewrite' => false,
+        'query_var' => true,
+		'menu_icon' => get_stylesheet_directory_uri() . '/images/glossary_icon.png',
+        'can_export' => true,
+        'capability_type' => 'post'
+    );
+
+    register_post_type( 'help glossary', $args );
+}

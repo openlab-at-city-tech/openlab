@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Exclude user generated content
 wp-content/blogs.dir/
 wp-content/uploads/*
@@ -41,3 +42,23 @@ wp-admin/error_log
 # vim files
 *.swp
 
+=======
+# Exclude user generated content
+wp-content/blogs.dir/
+wp-content/uploads/*
+wp-content/cache/*
+
+# Exclude environment files
+env.php
+
+# Don't include .htaccess, which causes problems with the dev site
+.htaccess
+
+# Misc exclusions
+*.bak
+.DS_store
+.DS_Store
+
+# vim files
+*.swp
+>>>>>>> d1127f8e531d89addb031b095dff449e6930895b

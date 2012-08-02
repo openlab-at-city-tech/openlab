@@ -145,6 +145,9 @@ function openlab_submenu_gen($items)
 {
 	global $bp, $post;
 	
+	//get $items length so we know how many menu items there are (for tagging the "last-item" class)
+	$item_count = count($items);
+	
 	//determining if this is the current page or not - checks to see if this is an action page first; if not, checks the component of the page
 	$action = $bp->current_action;
 	$component = $bp->current_component;
@@ -158,6 +161,9 @@ function openlab_submenu_gen($items)
 	} else if ($page_slug) {
 		$page_identify = $page_slug;
 	}
+	
+	//counter
+	$i = 1;
 	
 	$submenu = '<ul>';
 		
@@ -184,12 +190,33 @@ function openlab_submenu_gen($items)
 					//special case just for account settings page
 					$item_classes .= " selected-page";
 				}
+				
+				//checks to see if this is the last item or first item
+				if ($item_count == $i)
+				{
+					$item_classes .= " last-item";
+				} else if ($i == 1)
+				{
+					$item_classes .= " first-item";
+				}
+				
+				//this is just to make styling the "delete" and "create" buttons easier
+				if (strpos($item_classes,"delete"))
+				{
+					$item_classes .= " delete-button";
+				} else if (strpos($item_classes,"create"))
+				{
+					$item_classes .= " create-button";
+				}
 			
 			$submenu .= '<li class="'.$item_classes.'">';
 				$submenu .= '<a href="'.$item.'">';
 				$submenu .= $title;
 				$submenu .= '</a>';
 			$submenu .= '</li>';
+			
+			//increment counter
+			$i++;
 		}	
 	$submenu .= '</ul>';
 	

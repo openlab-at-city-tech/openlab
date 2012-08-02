@@ -147,7 +147,7 @@ global $bp;
 ?>
 <?php do_action( 'bp_before_member_home_content' ) ?>
 
-	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+	<h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 
 	<?php if ( bp_is_user_activity() || 'public' == bp_current_action() ) { ?>
 		<?php cuny_member_profile_header(); ?>
