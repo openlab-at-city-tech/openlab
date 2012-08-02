@@ -22,7 +22,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	// Hack to fix pagination
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) );
 
-	  echo  '<h1 class="entry-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
+	  echo  '<h1 class="entry-title mol-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
 	  
 	  <div class="submenu"><?php echo openlab_my_groups_submenu('project'); ?></div>
 

@@ -9,7 +9,7 @@ function cuny_plugin_loop(){
 do_action( 'bp_before_member_plugin_template' );
 ?>
 
-	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+	<h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 	
     <div class="submenu">My Invitations: <?php echo openlab_my_invitations_submenu(); ?></div>
     

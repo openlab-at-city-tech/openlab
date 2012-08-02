@@ -7,7 +7,7 @@ function cuny_delete_profile(){
 
 do_action( 'bp_before_member_settings_template' ); 
 ?>
-    <div class="submenu">My Settings: <?php echo openlab_profile_settings_submenu(); ?></div>
+    <div class="submenu"><div class="submenu-text">My Settings: </div> <?php echo openlab_profile_settings_submenu(); ?></div>
 
 	<div id="item-body" role="main">
 
