@@ -843,12 +843,12 @@ dd p{line-height:120%}
 }
 
 .home #home-left a, .home #home-right a  {
-	text-decoration: underline;
+	/*text-decoration: underline;*/
 }
 
 .home #home-right {
 	float: right;
-	width: 655px;
+	width: 657px;
 }
 /*home - post gallery styles*/
 .home #pgw-gallery
@@ -856,7 +856,7 @@ dd p{line-height:120%}
 	background-color: #929292;
 	padding: 3px;
 	height: 215px;
-	width: 649px;
+	width: 651px;
 	margin-bottom: 10px;
 }
 .home #pgw-gallery-full h2
@@ -1004,7 +1004,7 @@ a#pgw-prev, a#pgw-next {
 }
 .home .box-1 .title,
 .home .home-box .title,
-#cac-featured h3{
+#cac-featured h3 {
     border-bottom: 1px solid;
     color: #000;
 	font-weight: bold;
@@ -1013,6 +1013,17 @@ a#pgw-prev, a#pgw-next {
 	margin: 0 0 10px;
 	width: 253px;
 }
+
+.home .title-wrapper .title{
+    border-bottom: 1px solid;
+    color: #000;
+	font-weight: bold;
+    font-size: 13px;
+    padding: 0 0 7px;
+	margin: 0 0 10px;
+	width: 141px;
+}
+
 .home .box-1 .title a {
 	color: #717171;
     font-size: 13px;
@@ -1193,14 +1204,43 @@ a#pgw-prev, a#pgw-next {
 .see-all
 {
 	float: right;
+	margin-top: -33px;
 }
-.home-group-list
+
+.see-all a
 {
-	border: 2px solid #F5F6F7;
-    margin-top: 22px;
-    padding: 10px;
-    position: relative;
+	color: #6d6d6d;
+	text-decoration: underline;
 }
+
+.see-all a:hover
+{
+	color: #0fceba; 
+}
+
+#home-group-list-wrapper
+{
+	display: table;
+    border: 2px solid #F5F6F7;
+    margin-top: 25px;
+    padding: 8px 0;
+    /*width: 255px;*/
+}
+.home .activity-list
+{
+    /*margin-top: 22px;*/
+    padding: 0px 11px 0 10px;
+	border-right: 1px solid #F0F0F0;
+    position: relative;
+	float: left;
+	width: 141px;
+}
+
+.home .portfolio-list
+{
+	border-right: none;
+}
+
 .home-group-list .title-wrapper
 {
 	border-bottom: 1px solid;
@@ -1211,17 +1251,22 @@ a#pgw-prev, a#pgw-next {
     color: #000;
 	font-weight: bold;
     font-size: 13px;
-    padding: 0 0 7px;
-	width: 250px;
-	float: left;
 	margin: 0;
+	padding: 0;
+	float: left;
 }
 .home #home-right .box-1 {
-	width: 141px;
-	float: left;
-	margin: 0 20px 0 0;
 	padding: 0;
+	border-bottom: 2px solid #F5F6F7;
+	margin: 0 0 10px;
 }
+
+.home #home-right .box-1.row-4 {
+	padding: 0;
+	border-bottom: none;
+	margin: 0;
+}
+
 .home #home-right .box-1 h2 a
 {
 	font-size: 12px;
@@ -1617,7 +1662,20 @@ blockquote {
     font-family: 'Arvo';
     padding-left: 5px;
 }
+#help-title{
+    margin-top: -10px;
+}
 
+#help-identity{
+    display: none;
+}
+
+#help-title h2{
+    color: #C84C35;
+    font-size: 15px;
+    font-family: 'Arvo';
+    padding-left: 5px;
+}
 .cat-list{
     /*display: none;*/
 }
@@ -1751,7 +1809,7 @@ h4.watermelon-ribbon {
     margin-top: 10px;
 }
 #whos-online h4.yellow-canary-ribbon {
-	background-color: #faf763;
+	/*background-color: #faf763;*/
 	text-align: center;
 	width: 72px;
 	color: #000;
@@ -1761,6 +1819,28 @@ h4.watermelon-ribbon {
 	font-size: 11px;
 	padding: 1px 0;
 	z-index: 9;        
+}
+
+div#item-buttons ul li a span::before{
+    content: "";
+}
+
+div#item-buttons ul li a span::after{
+    content: "";
+}
+
+.mol-count{
+    color: #fff;
+    background-color: #0FCEBA;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    text-align: center;
+    padding-right: 1px;
+    padding-bottom: 2px;
+    font-weight: bold;
+    
 }
 
 h4.yellow-canary-ribbon {
@@ -3064,6 +3144,11 @@ h2.member-name-title {
 #content ul#member-list li a {
 	padding: 3px;
 }
+#member-item-body .row
+{
+	border-bottom: 1px solid #f2f2f2;
+	margin: 0 0 12px;
+}
 
 /*.read-more {
     color: #6D6D6D;
@@ -3641,4 +3726,53 @@ li .mol-count
 	color: #fff;
 	background: url('images/submenu_sprite.png') no-repeat -1px -71px;
 	padding: 0 6px 2px;
+}
+
+.activity-list h4{
+    border-bottom: 2px solid #717171;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.activity-list .group-see-all{
+    visibility: hidden;
+}
+
+.activity-list .group-see-all:last-child{
+    visibility: visible;    
+    float: right;
+    text-decoration: underline;
+}
+
+.profile-header{
+    color: #C84C35;
+    font-size: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table tr td.label{
+    border: none;
+}
+
+.activity-content a{
+    text-decoration: underline;
+}
+
+.activity-content a:last-child{
+    text-decoration: none;
+}
+
+#support-team{
+    margin-top: 30px;    
+}
+
+#support-team h2{
+    border-top: 1px solid #717171;
+    border-bottom: none;
+    color: #717171;
+    font-size: 15px;
+    font-weight: normal;
+    margin: 0 0 7px;
+    padding: 15px 0 3px 0px;
 }
