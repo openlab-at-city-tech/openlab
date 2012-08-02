@@ -1657,6 +1657,60 @@ blockquote {
 	line-height: 18px;
 }
 
+#help-title{
+    margin-top: -10px;
+}
+
+#help-identity{
+    display: none;
+}
+
+#help-title h2{
+    color: #C84C35;
+    font-size: 15px;
+    font-family: 'Arvo';
+    padding-left: 5px;
+}
+
+
+.cat-list{
+    /*display: none;*/
+}
+
+.help-tags{
+    /*display: none;*/
+    font-size: 16px;
+    font-family: Arial;
+    font-weight: noraml;
+    margin-bottom: 40px;
+}
+
+#content > a{
+    float: right;
+    font-size: 15px;
+    z-index: 1500;
+    border-top: 1px solid #d4d4d4;
+    width: 100%;
+    text-align: right;
+    padding-top: 20px;
+}
+
+#content > h2{
+    float: left;
+    margin-top: -25px;   
+    padding-top: 5px;
+    font-weight: normal;
+    font-size: 15px;
+    margin-bottom: 30px;
+    z-index: -1;
+}
+
+.help-tags a{
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: underline;    
+}
+
 .entry-content a {
 	text-decoration:underline;
 	color: #444444;
@@ -1676,7 +1730,7 @@ blockquote {
 	margin: 0 0 15px;
 }
 /* Ribbons*/
-.ribbon-case { position: relative; margin: 0 0 15px;}
+.ribbon-case { position: relative; margin: 0 0 15px;padding-left: 20px}
 #whos-online .ribbon-fold {
     background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;
     display: block;
@@ -1687,7 +1741,7 @@ blockquote {
     width: 20px;
 }
 .ribbon-fold {
-    background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;
+    /*background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;*/
     display: block;
     height: 20px;
     left: -31px;
@@ -1741,7 +1795,7 @@ h4.robin-egg-ribbon {
 }
 
 h4.watermelon-ribbon {
-	background-color: #ff5959;
+	/*background-color: #ff5959;*/
 	color: #fff;
 	display: inline;
     font-size: 11px;
@@ -1753,7 +1807,7 @@ h4.watermelon-ribbon {
     margin-top: 10px;
 }
 #whos-online h4.yellow-canary-ribbon {
-	background-color: #faf763;
+	/*background-color: #faf763;*/
 	text-align: center;
 	width: 72px;
 	color: #000;
@@ -1762,21 +1816,74 @@ h4.watermelon-ribbon {
 	top: 22px;
 	font-size: 11px;
 	padding: 1px 0;
-	z-index: 9;
+	z-index: 9;        
+}
+
+div#item-buttons ul li a span::before{
+    content: "";
+}
+
+div#item-buttons ul li a span::after{
+    content: "";
+}
+
+.mol-count{
+    color: #fff;
+    background-color: #0FCEBA;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    text-align: center;
+    padding-right: 1px;
+    padding-bottom: 2px;
+    font-weight: bold;
+    
 }
 
 h4.yellow-canary-ribbon {
-	background-color: #faf763;
-	color: #000;
+    /*background-color: #faf763;*/
+	color: #C84C35;
 	display: inline;
-    font-size: 11px;
+    font-size: 14px;
     left: -21px;
     padding: 5px 22px;
     position: relative;
     text-align: center;
     z-index: 9;
     margin-top: 10px;
+   
 }
+
+#member-item-body h4.yellow-canary-ribbon{    
+    border-bottom: 1px solid #666; 
+    color: #888;
+    text-align: left;
+    left: -20px;
+    padding-left: 0px;
+    display: block;
+    width: 100%;
+    font-weight: bold;
+}
+
+#member-item-body .info-group .ribbon-case h4.yellow-canary-ribbon:last-child{
+    border-bottom:none;
+}
+
+.info-group span{
+    float: right;
+    text-decoration: underline;
+}
+
+#blog-activity-stream {
+    display: none;
+}
+
+#member-item-body .ribbon-fold{
+    left: 0px;
+   
+}
+
 
 /* Column Classes
 ------------------------------------------------------------ */
@@ -1909,7 +2016,7 @@ h1 {
 
 h2 a:hover {
 	/*color: #25a;*/
-	color:#0fceba
+	color:#0fceba;
 	text-decoration: none;
 }
 
@@ -1962,13 +2069,51 @@ h1.entry-title
 	margin: 0 0 20px;
 }
 
+h3.entry-title{
+    font-size: 15px;
+    margin-bottom: 1px;    
+}
+
 #sidebar h2 {
     border-bottom: 1px solid #717171;
     color: #C84C35;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: normal;
     margin: 0 0 7px;
-    padding: 0 0 3px 7px;
+    padding: 0 0 3px 0px;
+}
+
+
+#help-tags-copy p{
+    font-family: sans-serif;
+    font-size: 12px; 
+    padding-bottom: 10px;
+}
+
+div #help-tags a{
+     border: 1px solid transparent;
+     padding: 5px 10px 5px 10px;
+     border-radius: 4px;
+     margin-left: 3px;
+     background-color:  rgba(113,113,113,0.6);
+     color: #FFF;
+     font-weight: bold;
+     font-family: tahoma;
+}
+
+div #help-tags a:last-child{
+    background-color:  rgba(113,113,113,0.9);
+}
+
+div #help-tags a:nth-child(2n){
+    background-color:  rgba(113,113,113,0.3);
+}
+
+#sidebar h2.help-tags-title {
+    border-bottom: 0px;
+    border-top: 1px solid #717171;
+    color: #717171;   
+    padding-top: 15px;
 }
 /* Unordered / Ordered Lists
 ------------------------------------------------------------ */
@@ -2913,19 +3058,25 @@ h2.member-name-title {
 }
 
 #member-item-body .activity-list {
-	width: 212px;
+	width: 205px;
+	border-left: 1px solid #EDEEEF;
 	position: relative;
-	padding: 0 11px;
+	left: 0px;
+	padding: 10px;
 	float: left;
+	clear: right;
+        display: inline;
+        
 }
-#member-item-body #course-activity-stream
-{
-	padding-left: 0;
+
+#member-item-body #course-activity-stream{
+    border-left: 0px;
 }
-#member-item-body #club-activity-stream
-{
-	padding-right: 0;
+
+#member-item-body #blog-activity-stream{
+    display: none;
 }
+
 #member-item-body .activity-list .activity-avatar,
 #sidebar .activity-list .activity-avatar{
 	float: left;
@@ -2933,14 +3084,57 @@ h2.member-name-title {
 }
 
 #member-item-body .activity-list .activity-content {
-	margin: 0 0 0 10px;
+	margin: 0 0 0 0px;
 	float: left;
-	width: 170px;
+	width: 110px;
+        height: 30px;
+        overflow: hidden;
+        height: 100px;
 }
+
+#member-item-body .activity-list .activity-content .activity-header {
+	line-height: 13px;      
+        font-weight: bold;        
+}
+
+#member-item-body .activity-list .activity-content .activity-header a{	
+    color: #8f8f8f;
+}
+
+#member-item-body .activity-list .activity-avatar a img{
+    margin: 0 5px 0px 0;
+    width: 80px;
+    height: 80px;
+    color: #838383;
+}
+
+#member-item-body .activity-list .activity-content .activity-inner{
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #676767;
+    font-weight: bold;
+}
+
+#member-item-body .activity-list .activity-content .activity-inner p{
+    line-height: 13px; 
+    margin-bottom: 0px;
+    color: #676767;
+    font-weight: bold;
+}
+
+#member-item-body .activity-list .activity-content .activity-inner a{
+    margin: 0;
+}
+
 #sidebar .activity-list .activity-content {
 	margin: 0 0 0 10px;
 	float: left;
 	width: 145px;
+}
+#member-item-body .activity-list.last {
+	/*float: right;
+	clear: right;*/
 }
 
 #member-list li {
@@ -3054,14 +3248,16 @@ a:hover.activity-time-since {
 /* Global Right Sidebar */
 #sidebar > div > ul { margin: 0 0 0 21px; padding: 0 0 10px 5px;}
 #sidebar > div > ul > li { list-style-image: url(images/sidebar-bullet-gray.png); padding: 0 0 6px;}
+#sidebar > div > ul > .current-menu-item { list-style-image: url(images/sidebar_bullet_orange.png); padding: 0 0 6px;}
 #sidebar li { list-style-type: none; }
 #sidebar ul.sub-menu, #sidebar ul ul { display:none }
-#sidebar ul.sub-menu li { list-style-image: none };
+#sidebar ul.sub-menu li { list-style-image: none; }
 #sidebar li a { font-family: 'Arvo',arial,serif; font-size: 12px; color: #666; text-decoration: none; line-height: 18px; }
+#sidebar li.current-menu-item a {color: #C84C35;}
 #sidebar li a:hover { color:#0fceba }
 #sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
-#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a, .submenu li.selected-page > a { color: #c84c35; }
+#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 .widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; }
@@ -3515,4 +3711,54 @@ h1.mol-title
 {
 	margin-left: 30px;
 	padding-right: 0;
+}
+
+.activity-list h4{
+    border-bottom: 2px solid #717171;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.activity-list .group-see-all{
+    visibility: hidden;
+}
+
+.activity-list .group-see-all:last-child{
+    visibility: visible;    
+    float: right;
+    text-decoration: underline;
+}
+
+.profile-header{
+    color: #C84C35;
+    font-size: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table tr td.label{
+    border: none;
+}
+
+.activity-content a{
+    text-decoration: underline;
+}
+
+.activity-content a:last-child{
+    text-decoration: none;
+}
+
+#support-team{
+    margin-top: 30px;    
+}
+
+#support-team h2{
+    border-top: 1px solid #717171;
+    border-bottom: none;
+    color: #717171;
+    font-size: 15px;
+    font-weight: normal;
+    margin: 0 0 7px;
+    padding: 15px 0 3px 0px;
+
 }
