@@ -7,7 +7,7 @@ remove_action('genesis_loop', 'genesis_do_loop');
 add_action('genesis_loop', 'openlab_help_loop');
 function openlab_help_loop() {
 
-    global $paged;
+    global $paged, $post;
     $args = array(	'post_type' => 'help', 
 				  	'p' => get_the_ID() );
 	$temp = $wp_query; 
@@ -15,6 +15,8 @@ function openlab_help_loop() {
 	$wp_query = new WP_Query($args); 	
 	
 	while ( have_posts() ) : the_post(); ?>
+    
+    <?php var_dump($post); ?>
     	
         <?php $help_cats = get_the_term_list($post_id, 'help_category', '', ', ',''); ?>
         

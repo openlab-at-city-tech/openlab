@@ -119,6 +119,10 @@ hr {
     font-size: 1px;
     line-height: 0px;
 }
+.clear-right
+{
+	clear: right;
+}
 .bold
 {
 	font-weight: bold;
@@ -271,7 +275,6 @@ h3#bread-crumb .sep
     font-size: 12px;
     padding-right: 5px;
     position: relative;
-    top: -10px;
 }
 /* Header Right Navigation
 ------------------------------------------------------------ */
@@ -1646,21 +1649,14 @@ blockquote {
 	margin: 0 0 40px;
 }
 
-/* .entry-content {
+ .entry-content {
 	padding-left: 7px;
-} */
+} 
 
 .entry-content p, .entry-content ol, .entry-content ul {
 	padding: 0;
 	font-size: 12px;
 	line-height: 18px;
-}
-
-.entry-content p:first-child{
-    color: #C84C35;
-    font-size: 15px;
-    font-family: 'Arvo';
-    padding-left: 5px;
 }
 #help-title{
     margin-top: -10px;
@@ -1675,6 +1671,7 @@ blockquote {
     font-size: 15px;
     font-family: 'Arvo';
     padding-left: 5px;
+	margin: 0 0 30px;
 }
 .cat-list{
     /*display: none;*/
@@ -1687,7 +1684,16 @@ blockquote {
     font-weight: noraml;
     margin-bottom: 40px;
 }
-
+#sidebar #support-team #team-thumbs
+{
+	padding: 0;
+	margin: 0;
+}
+#sidebar #support-team #team-thumbs .thumb-wrapper
+{
+	padding: 0;
+	list-style-image: none;
+}
 #content > a{
     float: right;
     font-size: 15px;
@@ -3026,11 +3032,21 @@ div.gform_wrapper .gform_footer {
 
 #member-header-avatar {
 	display: block;
-	background: #eee;
+}
+
+#avatar-wrapper {
+padding:0;
+margin:0;
+}
+
+#avatar-wrapper a {
+margin:0;
+padding:0;
 }
 
 .activity #content #member-header-avatar img.avatar {
 	margin: 0;
+	padding:0;
 }
 
 #member-header-avatar p {
@@ -3161,6 +3177,53 @@ h2.member-name-title {
 a:hover.activity-time-since {
 	color: #BBB !important;
 }
+
+div#member-header div#profile-action-wrapper {
+height:20px;
+padding:4px 0 2px 0;
+margin-top:5px;
+background: #eee;
+
+}
+
+div#member-header div#profile-action-wrapper div#action-edit-profile {
+width:100px;
+    float:left;
+    border-right:1px solid #666666;
+    height:19px;
+}
+div#member-header div#profile-action-wrapper div#action-edit-avatar {
+    width:120px;
+    float:right;
+    border-right:none;
+    height:19px;
+    
+}
+
+div#member-header div#profile-action-wrapper div#action-edit-avatar a { 
+display:block;
+width:80px;
+padding:0px 0px 4px 30px;
+margin:0;
+background-image:url('images/mol-sprites.png');
+background-position: 5px -30px;
+background-repeat:no-repeat;
+height:15px;
+font-family: 'Arvo',arial,serif; 
+ }
+ 
+ div#member-header div#profile-action-wrapper div#action-edit-profile a { 
+display:block;
+width:70px;
+padding:0px 0px 4px 30px;
+margin:0;
+background-image:url('images/mol-sprites.png');
+background-position: 5px 0px;
+background-repeat:no-repeat;
+height:15px;
+font-family: 'Arvo',arial,serif; 
+
+ }
 
 /* People Archive Template
 ------------------------------------------------------------ */
@@ -3654,17 +3717,25 @@ a:hover.read-more {
     color: #0fceba;
 }
 /**MOL and Group submenu styles**/
-h1.mol-title
+h1.mol-title,
+#single-course-header h1,
+#content h1.group-title
 {
 	margin-bottom: 5px;
 }
-.submenu
+.submenu,
+#subnav,
+#bpsubnav
 {
 	margin: 0 0 25px;
 	height: 17px;
 }
 .submenu .submenu-text,
-.submenu ul li a
+.submenu ul li a,
+#subnav #group-settings-label,
+#subnav ul li a,
+#bpsubnav ul li a,
+#bpsubnav ul li
 {
 	font-family: 'Arvo',arial,serif;
 	font-size: 12px;
@@ -3672,20 +3743,30 @@ h1.mol-title
 	color: #717171;
 }
 .submenu ul,
-.submenu-text
+.submenu-text,
+#group-settings-label
 {
 	float: left;
 }
-.submenu-text
+.submenu-text,
+#subnav #group-settings-label,
+#bpsubnav li:first-child
 {
-	margin: 0 7px 0;
+	margin: 1px 7px 0;
 }
-.submenu ul li
+.submenu ul li,
+#subnav ul li
 {
 	display: inline-block;
 	border-right: 1px solid #717171;
 }
-.submenu ul li.last-item
+#bpsubnav ul li
+{
+	display: inline-block;
+	border-right: none;
+}
+.submenu ul li.last-item,
+#subnav ul li:last-child
 {
 	border-right: none;
 }
@@ -3721,13 +3802,26 @@ h1.mol-title
 	margin-left: 30px;
 	padding-right: 0;
 }
+.submenu .selected-page a,
+#subnav ul .current,
+#subnav .current a,
+#bpsubnav .selected-page
+{
+	color: #c84c35;
+	background-color: #fff;
+}
 li .mol-count
 {
-	color: #fff;
-	background: url('images/submenu_sprite.png') no-repeat -1px -71px;
-	padding: 0 6px 2px;
+	background-color: #0FCEBA;
+    border-radius: 12px 12px 12px 12px;
+    font-size: 10px;
+    font-weight: bold;
+    height: 11px;
+    width: 11px;
+    padding: 1px;
+	line-height: 11px;
+    text-align: center;
 }
-
 .activity-list h4{
     border-bottom: 2px solid #717171;
     padding-bottom: 5px;
