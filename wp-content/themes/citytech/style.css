@@ -271,7 +271,6 @@ h3#bread-crumb .sep
     font-size: 12px;
     padding-right: 5px;
     position: relative;
-    top: -10px;
 }
 /* Header Right Navigation
 ------------------------------------------------------------ */
@@ -3258,7 +3257,7 @@ a:hover.activity-time-since {
 #sidebar li a:hover { color:#0fceba }
 #sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
-#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
+#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a, .submenu .selected-page a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 .widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; }
@@ -3678,7 +3677,7 @@ h1.mol-title
 }
 .submenu-text
 {
-	margin: 0 7px 0;
+	margin: 1px 7px 0;
 }
 .submenu ul li
 {
@@ -3723,11 +3722,16 @@ h1.mol-title
 }
 li .mol-count
 {
-	color: #fff;
-	background: url('images/submenu_sprite.png') no-repeat -1px -71px;
-	padding: 0 6px 2px;
+	background-color: #0FCEBA;
+    border-radius: 12px 12px 12px 12px;
+    font-size: 10px;
+    font-weight: bold;
+    height: 11px;
+    width: 11px;
+    padding: 1px;
+	line-height: 11px;
+    text-align: center;
 }
-
 .activity-list h4{
     border-bottom: 2px solid #717171;
     padding-bottom: 5px;
