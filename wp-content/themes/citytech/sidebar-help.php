@@ -53,17 +53,21 @@
 									echo '<ul id="team-thumbs">';
 									foreach ($attachments as $attachment) {
 										$thumb_class = "thumb-wrapper";
-										if ( $i%2 ) { $thumb_class .= " clear-right"; };
+										if ( $i%3 == 2 ) { $thumb_class .= " clear-right"; };
 										
 										echo '<li class="'.$thumb_class.'">';
-											echo '<div class="team-thumb">';
-											echo wp_get_attachment_link($attachment->ID, 'thumbnail');
-											echo '</div>';
-											
-											echo '<div class="team-name">';
-											echo $attachment->post_excerpt;
-											echo '</div>';
-										
+											$contact_link = esc_url( get_permalink( get_page_by_title( 'Contact Us' ) ) ); 
+											echo '<a href="'.$contact_link.'">';
+											  echo '<div class="team-thumb">';
+												  //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
+												  $src = wp_get_attachment_image_src($attachment->ID, 'thumbnail');
+												  echo '<img src="'.$src[0].'" width="51" height="51" >';
+											  echo '</div>';
+											  
+											  echo '<div class="team-name">';
+											  echo $attachment->post_excerpt;
+											  echo '</div>';
+											echo '</a>';
 										echo '</li>';
 										$i++;
 										}//end for each

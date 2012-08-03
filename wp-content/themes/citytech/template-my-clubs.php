@@ -95,7 +95,8 @@ function cuny_profile_activty_block($type,$title,$last) {
 	</div>
 
 <?php else: ?>
-
+	<div class="clearfloat"></div>
+      </div><!--submenu-->
 	<div class="widget-error">
 		<?php _e('There are no groups to display.', 'buddypress') ?>
 	</div>

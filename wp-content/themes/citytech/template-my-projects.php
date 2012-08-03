@@ -24,13 +24,14 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 	  echo  '<h1 class="entry-title mol-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
 	  
-	  <div class="submenu">
+      	<div class="submenu">
 	  	<?php echo openlab_my_groups_submenu('project'); ?>
-		<?php if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='. $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
-	  	<div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
+        
+	<?php if ( !empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include='. $groups['group_ids_sql'] .'&per_page=48&show_hidden=true' ) ) : ?>
+        <div class="group-count"><?php cuny_groups_pagination_count("Projects"); ?></div>
 	  	<div class="clearfloat"></div>
       </div><!--submenu-->
-<ul id="project-list" class="item-list">
+	<ul id="project-list" class="item-list">
 		<?php
 		$count = 1;
 		while ( bp_groups() ) : bp_the_group();
@@ -94,7 +95,8 @@ function cuny_profile_activty_block($type,$title,$last) {
 	</div>
 
 <?php else: ?>
-
+	<div class="clearfloat"></div>
+      </div><!--submenu-->
 	<div class="widget-error">
 		<?php _e('There are no projects to display.', 'buddypress') ?>
 	</div>
@@ -104,8 +106,6 @@ function cuny_profile_activty_block($type,$title,$last) {
 		<?php
 
 }
-
-
 /**
  * @todo - Unhook from the genesis action
  */

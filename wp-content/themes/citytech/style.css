@@ -119,6 +119,10 @@ hr {
     font-size: 1px;
     line-height: 0px;
 }
+.clear-right
+{
+	clear: right;
+}
 .bold
 {
 	font-weight: bold;
@@ -1645,21 +1649,14 @@ blockquote {
 	margin: 0 0 40px;
 }
 
-/* .entry-content {
+ .entry-content {
 	padding-left: 7px;
-} */
+} 
 
 .entry-content p, .entry-content ol, .entry-content ul {
 	padding: 0;
 	font-size: 12px;
 	line-height: 18px;
-}
-
-.entry-content p:first-child{
-    color: #C84C35;
-    font-size: 15px;
-    font-family: 'Arvo';
-    padding-left: 5px;
 }
 #help-title{
     margin-top: -10px;
@@ -1674,6 +1671,7 @@ blockquote {
     font-size: 15px;
     font-family: 'Arvo';
     padding-left: 5px;
+	margin: 0 0 30px;
 }
 .cat-list{
     /*display: none;*/
@@ -1686,7 +1684,16 @@ blockquote {
     font-weight: noraml;
     margin-bottom: 40px;
 }
-
+#sidebar #support-team #team-thumbs
+{
+	padding: 0;
+	margin: 0;
+}
+#sidebar #support-team #team-thumbs .thumb-wrapper
+{
+	padding: 0;
+	list-style-image: none;
+}
 #content > a{
     float: right;
     font-size: 15px;
