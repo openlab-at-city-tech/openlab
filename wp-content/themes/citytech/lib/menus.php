@@ -182,12 +182,27 @@ function openlab_submenu_gen($items)
 				$current_check = strpos($item,$page_identify);
 				}
 				
+				//special case for send invitations page hitting the same time as invitations received
+				if ($page_identify == "invites" && $title=="Sent Invitations")
+				{
+					$current_check = false;
+				}
+				
+				//adding the selected-page class - also includes special cases, parsed out to make them easier to identify
 				if ($current_check !== false)
 				{
 					$item_classes .= " selected-page";
 				} else if ($page_identify == "general" && $title == "Account Settings")
 				{
 					//special case just for account settings page
+					$item_classes .= " selected-page";
+				} else if ($page_identify == "my-friends" && $title == "My Friends")
+				{
+					//special case just for my friends page
+					$item_classes .= " selected-page";
+				} else if ($page_identify == "invite-new-members" && $title == "Invite New Members")
+				{
+					//special case just for Invite New Members page
 					$item_classes .= " selected-page";
 				}
 				
