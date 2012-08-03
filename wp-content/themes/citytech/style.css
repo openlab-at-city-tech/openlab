@@ -1649,17 +1649,19 @@ blockquote {
 	margin: 0 0 40px;
 }
 
- .entry-content {
-	padding-left: 7px;
-} 
+.entry-content {
+  padding-left: 8px;
+}
 
 .entry-content p, .entry-content ol, .entry-content ul {
 	padding: 0;
 	font-size: 12px;
 	line-height: 18px;
 }
+
 #help-title{
     margin-top: -10px;
+    margin-left: 2px;
 }
 
 #help-identity{
@@ -1739,7 +1741,7 @@ blockquote {
     width: 20px;
 }
 .ribbon-fold {
-    /*background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;*/
+    background: url("images/icon-sprite.png") no-repeat scroll 0 -80px transparent;
     display: block;
     height: 20px;
     left: -31px;
@@ -1829,14 +1831,19 @@ div#item-buttons ul li a span::after{
     color: #fff;
     background-color: #0FCEBA;
     border-radius: 50%;
-    width: 15px;
-    height: 15px;
+    width: 19px;
+    height: 19px;
     display: inline-block;
     text-align: center;
     padding-right: 1px;
-    padding-bottom: 2px;
-    font-weight: bold;
-    
+    padding-bottom: 0px;
+    font-weight: bold;    
+}
+
+.submenu-item .mol-count{
+    padding-top: 2px;    
+    width: 19px;
+    height: 19px;
 }
 
 h4.yellow-canary-ribbon {
@@ -1871,6 +1878,10 @@ h4.yellow-canary-ribbon {
 .info-group span{
     float: right;
     text-decoration: underline;
+}
+
+.info-group h4{
+    margin-bottom: 10px;
 }
 
 #blog-activity-stream {
@@ -3024,16 +3035,7 @@ div.gform_wrapper .gform_footer {
 
 #member-header-avatar {
 	display: block;
-}
-
-#avatar-wrapper {
-padding:0;
-margin:0;
-}
-
-#avatar-wrapper a {
-margin:0;
-padding:0;
+	background: #eee;
 }
 
 .activity #content #member-header-avatar img.avatar {
@@ -3047,7 +3049,7 @@ padding:0;
 }
 
 #member-header-content {
-	width: 425px;
+	width: 420px;
 	margin: 0 0 0 15px;
 }
 
@@ -3065,6 +3067,14 @@ h2.member-name-title {
 
 #areas-of-activty a {
 	color: #666;
+}
+
+#member-item-body{
+    margin-left: 0px;
+}
+
+#member-item-body .submenu{
+    font-size: 12px; 
 }
 
 #member-item-body .activity-list {
@@ -3089,7 +3099,7 @@ h2.member-name-title {
 #member-item-body .activity-list .activity-avatar,
 #sidebar .activity-list .activity-avatar{
 	float: left;
-	margin: 0 0 8px;
+	margin: 0 0 0px;
 }
 
 #member-item-body .activity-list .activity-content {
@@ -3769,6 +3779,7 @@ h1.mol-title,
 .submenu ul li.first-item a
 {
 	padding-left: 7px;
+        color: #C84C35;
 }
 .submenu ul li.delete-button a
 {
@@ -3835,6 +3846,11 @@ li .mol-count
     font-size: 15px;
     margin-top: 15px;
     margin-bottom: 15px;
+    margin-left: 6px;
+}
+
+#member-header-avatar{
+     margin-left: 6px;
 }
 
 table tr td.label{
@@ -3859,11 +3875,12 @@ table tr td.label{
 }
 
 #support-team h2{
+    border-top: 1px solid #717171;
     border-bottom: none;
     color: #717171;
     font-size: 15px;
     font-weight: normal;
-    margin: 0 0 25px;
+    margin: 0 0 7px;
     padding: 15px 0 3px 0px;
 }
 #sidebar #support-team
