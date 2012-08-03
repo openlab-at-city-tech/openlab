@@ -3890,6 +3890,28 @@ table tr td.label{
 	border-top: 1px solid #d0d0d0;
 	border-bottom: 1px solid #d0d0d0;
 }
+#sidebar #help-contact-us a #mail-icon
+{
+	background: url('images/submenu_sprite.png') no-repeat -1px -72px;
+	padding: 12px 16px 0 0;
+	display: inline-block;
+	margin: 2px 0 0 8px;
+}
+#creative-commons
+{
+	width: 186px;
+}
+#creative-commons a
+{
+	background: url('images/cc_license.gif') no-repeat;
+	padding-top: 35px;
+	width: 101px;
+	overflow: hidden;
+	display: block;
+	height: 0;
+	float: right;
+}
+
 /**glossary page**/
 .glossary-description p,
 .glossary-entry p

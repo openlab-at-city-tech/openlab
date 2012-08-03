@@ -76,9 +76,9 @@
 								} //end if ?>
                                 <div class="clearfloat"></div>
         </div><!--support team-->
-        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); ?>">Contact Us</a></h3>
+        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); ?>">Contact Us <div id="mail-icon"></div></a></h3>
         
         <div id="creative-commons">
         	<p>Help Content:
-            <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a></p>
+            <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a></p>
         </div>
