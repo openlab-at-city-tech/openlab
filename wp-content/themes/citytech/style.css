@@ -3691,7 +3691,7 @@ h1.mol-title,
 	margin: 1px 7px 0;
 }
 .submenu ul li,
-#subnav ul li,
+#subnav ul li
 {
 	display: inline-block;
 	border-right: 1px solid #717171;
