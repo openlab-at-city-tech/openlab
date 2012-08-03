@@ -39,7 +39,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
         <div id="profile-action-wrapper">
         	<?php if ( is_user_logged_in() && openlab_is_my_profile() ) : ?>
             	<div id="action-edit-profile"><a href="<?php echo $dud. 'profile/edit/'; ?>">Edit Profile</a></div>
-                <div id="action-edit-profile"><a href="<?php echo $dud. 'profile/change-avatar/'; ?>">Change Avatar</a></div>
+                <div id="action-edit-avatar"><a href="<?php echo $dud. 'profile/change-avatar/'; ?>">Change Avatar</a></div>
             <?php elseif ( is_user_logged_in() && !openlab_is_my_profile() ) : ?>
             	<?php bp_add_friend_button( openlab_fallback_user(), bp_loggedin_user_id() ) ?>
 
