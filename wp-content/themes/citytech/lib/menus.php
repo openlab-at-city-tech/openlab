@@ -40,6 +40,12 @@ function help_categories_menu($items, $args) {
 					$help_classes .= " current-menu-item";
 				}
 				
+				//a special case just for the glossary page
+				if ($help_cat->name == "Help Glossary")
+				{
+					$help_cat->name = "Glossary";
+				}
+				
 				$help_cat_list .=  '<li class="'.$help_classes.'"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a></li>';
 			}
 		}

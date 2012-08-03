@@ -26,16 +26,19 @@ function openlab_help_cats_loop() { ?>
 	$wp_query = query_posts($args);//new WP_Query($args); ?> 	
     
     <h1 class="parent-cat">Glossary</h1>
-    <div class="glossary-description"><?php echo $parent_term->description; ?> </div>
+    <div class="glossary-description"><p><?php echo $parent_term->description; ?></p></div>
 	
 <?php	while ( have_posts() ) : the_post();
 	
 		$post_id = get_the_ID(); 
 		?>
     	
-        <h3 class="glossary-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <div class="glossary-entry"><?php the_content(); ?></div>
-    
+        <div class="glossary-wrapper">
+        	<h3 class="glossary-title"><?php the_title(); ?></h3>
+        	<div class="glossary-entry"><?php the_content(); ?></div>
+    		<div class="clearfloat"></div>
+        </div><!--glossary-wrapper-->
+        
     <?php endwhile; // end of the loop. 
 		  wp_reset_query(); ?>
 		  

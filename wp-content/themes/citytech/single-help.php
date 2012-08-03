@@ -15,18 +15,18 @@ function openlab_help_loop() {
 	$wp_query = new WP_Query($args); 	
 	
 	while ( have_posts() ) : the_post(); ?>
-    
-    <?php var_dump($post); ?>
     	
         <?php $help_cats = get_the_term_list($post_id, 'help_category', '', ', ',''); ?>
         
         <?php if ($help_cats): ?>
         <h1 class="entry-title"><?php echo $help_cats; ?></h1>
         <div id="help-title"><h2 class="page-title"><?php the_title(); ?></h2></div>
-        <?php else: ?>
+        <?php elseif ($post->post_name == "openlab-help"): ?>
         <h1 class="entry-title"><?php echo the_title();?></h1>
         <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
-        <?php endif; ?>
+		<?php else: ?>
+         <h1 class="entry-title"><?php echo the_title();?></h1>       
+		<?php endif; ?>
         
         <div id="help-identity">
         	<div class="cat-list">Category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ',''); ?></div>

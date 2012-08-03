@@ -24,9 +24,10 @@
 					 echo '<a href="'.get_term_link($term).'" class="tag-count-'.$term->count.'">' . $term->name . '</a> ';
 				   }
 			   } ?>
+               <div class="clearfloat"></div>
         </div>
         <div id="support-team">
-        <h2 class="sidebar-help-title support-team-title">Support Team</h2>
+        <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
         <?php 
 					$args=array(
 					  'name' => 'contact-us',
@@ -56,7 +57,7 @@
 										if ( $i%3 == 2 ) { $thumb_class .= " clear-right"; };
 										
 										echo '<li class="'.$thumb_class.'">';
-											$contact_link = esc_url( get_permalink( get_page_by_title( 'Contact Us' ) ) ); 
+											$contact_link = esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); 
 											echo '<a href="'.$contact_link.'">';
 											  echo '<div class="team-thumb">';
 												  //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
@@ -73,4 +74,11 @@
 										}//end for each
 										echo '</ul>';
 								} //end if ?>
+                                <div class="clearfloat"></div>
+        </div><!--support team-->
+        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); ?>">Contact Us</a></h3>
+        
+        <div id="creative-commons">
+        	<p>Help Content:
+            <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a></p>
         </div>
