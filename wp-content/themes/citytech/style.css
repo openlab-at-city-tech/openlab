@@ -3025,11 +3025,21 @@ div.gform_wrapper .gform_footer {
 
 #member-header-avatar {
 	display: block;
-	background: #eee;
+}
+
+#avatar-wrapper {
+padding:0;
+margin:0;
+}
+
+#avatar-wrapper a {
+margin:0;
+padding:0;
 }
 
 .activity #content #member-header-avatar img.avatar {
 	margin: 0;
+	padding:0;
 }
 
 #member-header-avatar p {
@@ -3160,6 +3170,53 @@ h2.member-name-title {
 a:hover.activity-time-since {
 	color: #BBB !important;
 }
+
+div#member-header div#profile-action-wrapper {
+height:20px;
+padding:4px 0 2px 0;
+margin-top:5px;
+background: #eee;
+
+}
+
+div#member-header div#profile-action-wrapper div#action-edit-profile {
+width:100px;
+    float:left;
+    border-right:1px solid #666666;
+    height:19px;
+}
+div#member-header div#profile-action-wrapper div#action-edit-avatar {
+    width:120px;
+    float:right;
+    border-right:none;
+    height:19px;
+    
+}
+
+div#member-header div#profile-action-wrapper div#action-edit-avatar a { 
+display:block;
+width:80px;
+padding:0px 0px 4px 30px;
+margin:0;
+background-image:url('images/mol-sprites.png');
+background-position: 5px -30px;
+background-repeat:no-repeat;
+height:15px;
+font-family: 'Arvo',arial,serif; 
+ }
+ 
+ div#member-header div#profile-action-wrapper div#action-edit-profile a { 
+display:block;
+width:70px;
+padding:0px 0px 4px 30px;
+margin:0;
+background-image:url('images/mol-sprites.png');
+background-position: 5px 0px;
+background-repeat:no-repeat;
+height:15px;
+font-family: 'Arvo',arial,serif; 
+
+ }
 
 /* People Archive Template
 ------------------------------------------------------------ */
