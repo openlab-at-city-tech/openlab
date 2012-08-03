@@ -3257,7 +3257,7 @@ a:hover.activity-time-since {
 #sidebar li a:hover { color:#0fceba }
 #sidebar li.current, #sidebar li.selected-page, #sidebar li.current_page_item { list-style-image: url(images/sidebar_bullet_orange.png); }
 #sidebar li.current_page_item ul, #sidebar li.selected-page > ul { display:block; }
-#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a, .submenu .selected-page a { color: #c84c35; }
+#sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 .widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; }
@@ -3653,17 +3653,25 @@ a:hover.read-more {
     color: #0fceba;
 }
 /**MOL and Group submenu styles**/
-h1.mol-title
+h1.mol-title,
+#single-course-header h1,
+#content h1.group-title
 {
 	margin-bottom: 5px;
 }
-.submenu
+.submenu,
+#subnav,
+#bpsubnav
 {
 	margin: 0 0 25px;
 	height: 17px;
 }
 .submenu .submenu-text,
-.submenu ul li a
+.submenu ul li a,
+#subnav #group-settings-label,
+#subnav ul li a,
+#bpsubnav ul li a,
+#bpsubnav ul li
 {
 	font-family: 'Arvo',arial,serif;
 	font-size: 12px;
@@ -3671,20 +3679,30 @@ h1.mol-title
 	color: #717171;
 }
 .submenu ul,
-.submenu-text
+.submenu-text,
+#group-settings-label
 {
 	float: left;
 }
-.submenu-text
+.submenu-text,
+#subnav #group-settings-label,
+#bpsubnav li:first-child
 {
 	margin: 1px 7px 0;
 }
-.submenu ul li
+.submenu ul li,
+#subnav ul li,
 {
 	display: inline-block;
 	border-right: 1px solid #717171;
 }
-.submenu ul li.last-item
+#bpsubnav ul li
+{
+	display: inline-block;
+	border-right: none;
+}
+.submenu ul li.last-item,
+#subnav ul li:last-child
 {
 	border-right: none;
 }
@@ -3719,6 +3737,14 @@ h1.mol-title
 {
 	margin-left: 30px;
 	padding-right: 0;
+}
+.submenu .selected-page a,
+#subnav ul .current,
+#subnav .current a,
+#bpsubnav .selected-page
+{
+	color: #c84c35;
+	background-color: #fff;
 }
 li .mol-count
 {

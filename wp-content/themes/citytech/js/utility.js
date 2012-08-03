@@ -8,6 +8,18 @@
 	});
 	
 	equal_row_height();
+	
+	//this add an onclick event to the "New Topic" button while preserving the original event; this is so "New Topic" can have a "current" class
+	$('.show-hide-new').click (function (){
+            var origOnClick = $('.show-hide-new').onclick;
+            return function (e) {
+                if (origOnClick != null && !origOnClick()) {
+                    return false;
+                }
+                alert('some work');
+                return true;
+			}
+			});
 
 	});//end document.ready
 	
