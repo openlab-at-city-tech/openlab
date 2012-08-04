@@ -38,3 +38,5 @@ wp-admin/error_log
 # vim files
 *.swp
 tags
+
+nbproject/*
