@@ -15,7 +15,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 		<ul class="main-nav">
 
-			<li class="sq-bullet <?php if ( bp_is_user_activity() ) : ?>selected-page<?php endif ?>" class="mol-profile my-profile"><a href="<?php echo $dud ?>/">My Profile</a></li>
+			<li class="sq-bullet <?php if ( bp_is_user_activity() ) : ?>selected-page<?php endif ?>" class="mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
 
 			<li class="sq-bullet <?php if ( bp_is_user_settings() ) : ?>selected-page<?php endif ?>" class="mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
 
