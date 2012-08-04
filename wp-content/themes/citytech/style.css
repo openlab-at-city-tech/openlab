@@ -1615,6 +1615,7 @@ div#item-buttons ul li a span:after {
 #content {
 	float: left;
 	width: 470px;
+	position: relative;
 }
 
 .content-sidebar #content,
@@ -3932,4 +3933,20 @@ table tr td.label{
 {
 	width: 590px;
 	float: left;
+}
+/**print page button**/
+.print-page
+{
+	position: absolute;
+	top: 3px;
+	right: 10px;
+}
+.print-page input
+{
+	background: url('images/submenu_sprite.png') no-repeat 0 -87px #fff;
+	font-family: 'Arvo',arial,serif;
+	font-size: 13px;
+	padding: 0 0 0 23px;
+	border: none;
+	cursor: pointer;
 }

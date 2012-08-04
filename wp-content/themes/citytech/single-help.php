@@ -28,6 +28,10 @@ function openlab_help_loop() {
          <h1 class="entry-title"><?php echo the_title();?></h1>       
 		<?php endif; ?>
         
+        <?php //print this page button - this is going to be absolutely positioned for now ?>
+        <div class="print-page"><input type="button" value="Print this page"
+onclick="window.print();return false;" /></div>
+        
         <div id="help-identity">
         	<div class="cat-list">Category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ',''); ?></div>
         	<div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>

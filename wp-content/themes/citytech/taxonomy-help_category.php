@@ -42,7 +42,7 @@ function openlab_help_cats_loop() { ?>
 		?>
     	
         <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <div class="help-tags">tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
+        <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
     
     <?php endwhile; // end of the loop. 
 		  wp_reset_query(); ?>
@@ -76,7 +76,7 @@ function openlab_help_cats_loop() { ?>
 			  ?>
 			  
 			  <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-              <div class="help-tags"><?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
+              <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
 		  
 		<?php endwhile; // end of the loop. 
 			  wp_reset_query(); ?>
