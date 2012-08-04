@@ -493,7 +493,7 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 <p class="description ol-tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
 
 <br />
-	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> /> <?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?> /> <?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
 <br/>
 	<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> /> <?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
 <br/>
