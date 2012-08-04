@@ -4,27 +4,28 @@
  * bp_group_documents_screen_notification_settings()
  *
  * Adds notification settings for the component, so that a user can turn off email
- * notifications set on specific component actions.  These will be added to the 
+ * notifications set on specific component actions.  These will be added to the
  * bottom of the existing "Group" settings
  */
-function bp_group_documents_screen_notification_settings() { 
-	global $current_user; ?>
-	
+function bp_group_documents_screen_notification_settings() {
+        $upload_member = 'no' == get_user_meta( bp_loggedin_user_id(), 'notification_group_documents_upload_member', true ) ? false : true;
+        $upload_mod    = 'no' == get_user_meta( bp_loggedin_user_id(), 'notification_group_documents_upload_mod', true ) ? false : true;
+        ?>
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group you belong to', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="yes" <?php if ( !get_user_meta( $current_user->id,'notification_group_documents_upload_member') || 'yes' == get_user_meta( $current_user->id,'notification_group_documents_upload_member') ) { ?>checked="checked" <?php } ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="no" <?php if ( get_user_meta( $current_user->id,'notification_group_documents_upload_member') == 'no' ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="yes" <?php checked( $upload_member, true ) ?>/></td>
+			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="no" <?php checked( $upload_member, false ) ?>/></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group for which you are an moderator/admin', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php if ( !get_user_meta( $current_user->id,'notification_group_documents_upload_mod') || 'yes' == get_user_meta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="no" <?php if ( 'no' == get_user_meta( $current_user->id,'notification_group_documents_upload_mod') ) { ?>checked="checked" <?php } ?>/></td>
+			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php checked( $upload_mod, true ) ?>/></td>
+			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="no" <?php checked( $upload_mod, false ) ?>/></td>
 		</tr>
-		
+
 		<?php do_action( 'bp_group_documents_notification_settings' ); ?>
-<?php	
+<?php
 }
 add_action( 'groups_screen_notification_settings', 'bp_group_documents_screen_notification_settings' );
 
