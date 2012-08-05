@@ -5,9 +5,7 @@
 		<ul>
 			<?php openlab_group_membership_tabs(); ?>
 		</ul>
-	</div><!-- .item-list-tabs -->
-    
-    
+	</div><!-- .item-list-tabs -->   
 
 	<div class="pagination no-ajax">
 

@@ -2,7 +2,8 @@
 remove_action('genesis_loop', 'genesis_do_loop');
 add_action('genesis_loop', 'cuny_group_single' );
 
-function cuny_group_single() { ?>
+function cuny_group_single() { 
+	global $bp; ?>
 	
 	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 
@@ -10,13 +11,23 @@ function cuny_group_single() { ?>
 			
 			<?php locate_template( array( 'groups/single/group-header.php' ), true ); ?>
 			
-			<div id="item-nav">
-				<div class="item-list-tabs no-ajax" id="object-nav">
-					<ul>
-						<?php do_action( 'bp_group_plugin_options_nav' ) ?>
-					</ul>
-				</div>
-			</div><!-- #item-nav -->
+            <?php if ($bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications'): ?>
+				<?php do_action( 'bp_before_group_members_content' ) ?>
+            	<div class="item-list-tabs no-ajax" id="subnav">
+                	<ul>
+                    	<?php openlab_group_membership_tabs(); ?>
+                	</ul>
+            	</div><!-- .item-list-tabs -->
+            
+            <?php else: ?>
+              <div id="item-nav">
+                  <div class="item-list-tabs no-ajax" id="object-nav">
+                      <ul>         	
+                          <?php do_action( 'bp_group_plugin_options_nav' ) ?>
+                      </ul>
+                  </div>
+              </div><!-- #item-nav -->
+            <?php endif; ?>
 
 			<div id="item-body">
 

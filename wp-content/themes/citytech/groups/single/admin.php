@@ -2,14 +2,28 @@
 
 <?php global $bp;
 
-$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );?>
+$group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
+?>
 
-<div class="item-list-tabs no-ajax" id="subnav">
-	<div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
-	<ul>
-		<?php openlab_group_admin_tabs(); ?>
-	</ul>
-</div><!-- .item-list-tabs -->
+<?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages
+
+	if ($bp->action_variables[0] == 'membership-requests' || $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' ): ?>
+    <?php do_action( 'bp_before_group_members_content' ) ?>
+    <div class="item-list-tabs no-ajax" id="subnav">
+		<ul>
+			<?php openlab_group_membership_tabs(); ?>
+		</ul>
+	</div><!-- .item-list-tabs -->
+    
+    <?php else: ?>
+    <div class="item-list-tabs no-ajax" id="subnav">
+        <div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
+        <ul>
+            <?php openlab_group_admin_tabs(); ?>
+        </ul>
+    </div><!-- .item-list-tabs -->
+    
+    <?php endif; ?>
 
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
 
