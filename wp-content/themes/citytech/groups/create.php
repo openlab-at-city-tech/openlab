@@ -168,7 +168,7 @@ if ( !empty( $_GET['type'] ) ) {
 								<input type="hidden" name="action" id="action" value="bp_avatar_upload" />
 							</p>
 
-							<p><?php _e( 'To skip the avatar upload process, hit the "Next Step" button.', 'buddypress' ) ?></p>
+							<p><?php _e( 'To skip the avatar upload process, hit the "Finish" button.', 'buddypress' ) ?></p>
 						</div><!-- .main-column -->
 
 					<?php endif; ?>
