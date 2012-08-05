@@ -7,6 +7,13 @@
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
+        <div id="group-action-wrapper">
+        <?php global $bp;
+			  if (is_user_logged_in() && $bp->is_item_admin): ?>
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Project</a></div>
+            		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+        <?php endif; ?>
+        </div>
 		<?php /* <p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p> */ ?>
 	</div><!-- #club-header-avatar -->
 
