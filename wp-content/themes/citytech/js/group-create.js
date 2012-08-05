@@ -159,6 +159,11 @@ jQuery(document).ready(function($){
                         return true;
                 }
 
+                /* Don't validate if a different radio button is selected */
+                if ( $('input[name="new_or_old"]').val() != 'new' ) {
+                        return true;
+                }
+
 		e.preventDefault();
 		var domain = $('input[name="blog[domain]"]');
 
