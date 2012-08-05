@@ -1490,6 +1490,39 @@ div#item-buttons ul li a span:after {
 	content: ')';
 }
 
+#noo_external_options {
+	white-space: nowrap;
+}
+
+#external-site-url {
+}
+
+a#find-feeds {
+
+	font-family: Arial, Verdana, sans-serif;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border:1px solid #aaaaaa;
+	color: #444444;
+	padding:3px 6px;
+	background-color:#dcdcdc;
+	font-size:8px;
+	text-transform: uppercase;
+	
+	/* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
+	/* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
+	/* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
+	/* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
+	/* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
+	
+}
+
+a#find-feeds:hover {
+
+text-decoration: none;
+
+}
+
 /* Messages
 -------------*/
 
@@ -1549,7 +1582,11 @@ div#item-buttons ul li a span:after {
 	color: #F9515D;
 }
 #content .messages .unread p {
-	font-weight: bold;
+	/*font-weight: bold;*/
+}
+
+#content .messages a.see-more {
+	text-decoration: underline;
 }
 
 #sidebar #item-buttons ul ul {
@@ -1849,6 +1886,7 @@ div#item-buttons ul li a span::after{
     width: 12px;
     height: 12px;
 }
+
 
 h4.yellow-canary-ribbon {
     /*background-color: #faf763;*/
@@ -2992,7 +3030,7 @@ div.gform_wrapper .gform_footer {
 } */
 
 
-/* Memeber Profile
+/* Member Profile
 ------------------------------------------------------------ */
 
 #club-item-body #recent-project-work h5{
@@ -3145,7 +3183,7 @@ h2.member-name-title {
     margin-top: 0px;
     margin-bottom: 0px;
     color: #676767;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 #member-item-body .activity-list .activity-content .activity-inner p{
@@ -3399,7 +3437,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 /* Group Right Sidebar */
 #sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid;  border-color: #f0f0f0 }
 #sidebar ul.website-links li:first-child { list-style-image: none; margin: 0 0 0 -24px; padding: 12px 0; font-size: 14px; }
-#sidebar ul.website-links li#site-link a:after { content: url(images/site-sidebar-icon.png); padding: 0 0 0 10px }
+#sidebar ul.website-links li#site-link > a:after, #portfolio-sidebar-widget h4 a:after { content: url(images/site-sidebar-icon.png); padding: 0 0 0 10px }
 
 
 /* Recent Course Stuff */
@@ -3811,18 +3849,20 @@ h1.mol-title,
 #group-settings-label
 {
 	float: left;
+	display: inline;
 }
 .submenu-text,
 #subnav #group-settings-label,
 #bpsubnav li:first-child
 {
-	margin: 1px 7px 0;
+	margin: 1px 6px 0;
 }
 .submenu ul li,
 #subnav ul li
 {
 	display: inline-block;
 	border-right: 1px solid #717171;
+	margin: 1px 0;
 }
 #bpsubnav ul li
 {
@@ -3877,8 +3917,9 @@ h1.mol-title,
 li .mol-count
 {
 	background-color: #0FCEBA;
-    border-radius: 12px 12px 12px 12px;
+    border-radius: 12px;
     font-size: 10px;
+    line-height:10px;
     font-weight: bold;
     height: 11px;
     width: 11px;
@@ -3886,8 +3927,13 @@ li .mol-count
 	line-height: 11px;
     text-align: center;
 }
-.activity-list h4{
-    border-bottom: 2px solid #717171;
+
+.count-0 {
+	display:none;
+}
+
+.activity-list h4 {
+    border-bottom: 1px solid #717171;
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
@@ -4025,4 +4071,9 @@ table tr td.label{
 	padding: 0 0 0 23px;
 	border: none;
 	cursor: pointer;
+}
+
+/* Overide plugin css for invite new members */
+#welcome-message, #sent-invites-intro {
+font-size: 11px;
 }
