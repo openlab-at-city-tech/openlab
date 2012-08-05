@@ -6,7 +6,12 @@
  */
 
 function showHide(id) {
-  var style = document.getElementById(id).style
+  var elem = document.getElementById(id);
+  if ( !elem ){
+          return;
+  }
+
+  var style = elem.style
    if (style.display == "none")
 	style.display = "";
    else

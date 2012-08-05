@@ -631,50 +631,50 @@ function wds_bp_group_meta(){
 				</td>
 			</tr>
 
-			<tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
-				<th valign="top" scope='row'>
-					<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-					Use an existing site:
-				</th>
+                        <?php /* Existing blogs - only display if some are available */ ?>
+                        <?php
+                        $user_blogs = get_blogs_of_user( get_current_user_id() );
 
-				<td id="noo_old_options">
-					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
+                        // Exclude blogs already used as groupblogs
+                        global $wpdb, $bp;
+                        $current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
 
-					<?php
-						// Exclude blogs already used as groupblogs
-						global $wpdb, $bp;
-						$current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+                        foreach( $user_blogs as $ubid => $ub ) {
+                                if ( in_array( $ubid, $current_groupblogs ) ) {
+                                        unset( $user_blogs[$ubid] );
+                                }
+                        }
+                        $user_blogs = array_values( $user_blogs );
 
-						foreach( $user_blogs as $ubid => $ub ) {
-							if ( in_array( $ubid, $current_groupblogs ) ) {
-								unset( $user_blogs[$ubid] );
-							}
-						}
-						$user_blogs = array_values( $user_blogs );
-					?>
+                        // Exclude blogs where the user is not an Admin
+                        foreach( $user_blogs as $ubid => $ub ) {
+                                $role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
 
-					<?php
-						// Exclude blogs where the user is not an Admin
-						foreach( $user_blogs as $ubid => $ub ) {
-							$role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
+                                if ( !array_key_exists( 'administrator', (array) $role ) ) {
+                                        unset( $user_blogs[$ubid] );
+                                }
+                        }
+                        $user_blogs = array_values( $user_blogs );
 
-							if ( !array_key_exists( 'administrator', (array) $role ) ) {
-								unset( $user_blogs[$ubid] );
-							}
-						}
-						$user_blogs = array_values( $user_blogs );
-					?>
+                        ?>
 
-					<select name="groupblog-blogid" id="groupblog-blogid">
-						<option value="0">- Choose a site -</option>
-						<?php
+                        <?php if ( !empty( $user_blogs ) ) : ?>
+                                <tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
+                                        <th valign="top" scope='row'>
+                                                <input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
+                                                Use an existing site:
+                                        </th>
 
-						foreach( (array)$user_blogs as $user_blog ) { ?>
-							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-						<?php } ?>
-					</select>
-				</td>
-			</tr>
+                                        <td id="noo_old_options">
+                                                <select name="groupblog-blogid" id="groupblog-blogid">
+                                                        <option value="0">- Choose a site -</option>
+                                                        <?php foreach( (array)$user_blogs as $user_blog ) : ?>
+                                                                <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+                                                        <?php endforeach ?>
+                                                </select>
+                                        </td>
+                                </tr>
+                        <?php endif ?>
 
 			<tr id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>
