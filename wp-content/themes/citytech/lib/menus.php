@@ -65,7 +65,7 @@ function openlab_profile_settings_submenu()
 	$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
 	}
 	
-	$settings_slug = bp_get_settings_slug();
+	$settings_slug = $dud.bp_get_settings_slug();
 	$menu_list = array(
 					   $dud.'profile/edit'=> 'Edit Profile',
 					   $dud.'profile/change-avatar' => 'Change Avatar',
