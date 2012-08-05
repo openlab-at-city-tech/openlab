@@ -485,19 +485,20 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 
 <br/>
 
-	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site'); ?></label>
+	<strong><?php _e('Public', 'buddypress') ?></strong>
+	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 <br/>
 
-	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site'); ?></label>
-
-<p class="description ol-tooltip">Note: Neither of these options blocks access to your site&emdash;it is up to search engines to honor your request</p>
-
-<br />
-	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> /> <?php printf( __('I would like my %s to be visible only to registered users of '), $group_type ); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.
+Note: This option will NOT block access to your site. It is up to search engines to honor your request.'); ?></label>
+<br /><br />
+<strong><?php _e('Private', 'buddypress') ?></strong>
+	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '1', $blog_public ); ?> /> <?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
 <br/>
-	<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> /> <?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
-<br/>
-	<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> /> I would like "<?php echo $blog_name; ?>" to be visible only to me.</label>
+	<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> /> <?php _e('I would like my site to be visible to registered users of this '.$group_type); ?></label>
+<br /><br />
+<strong><?php _e('Hidden', 'buddypress') ?></strong>
+	<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> /><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
 
 </div>
 	<?php

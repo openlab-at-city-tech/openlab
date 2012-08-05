@@ -82,11 +82,30 @@ function openlab_my_groups_submenu($group)
 	global $bp;
 	$group_link = $bp->root_domain.'/my-'.$group.'s/';
 	$create_link = BP_GROUPS_SLUG . '/create/step/group-details/?type='.$group.'&new=true';
-
-	$menu_list = array(
+	
+	//get account type to see if they're faculty
+	$faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+	
+	//if the current user is faculty or a super admin, they can create a course, otherwise no dice
+	if ($group == "course")
+	{
+		if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+			$menu_list = array(
 					   $group_link => 'My '.ucfirst($group).'s',
-					   $create_link => 'Create '.ucfirst($group),
+					   $create_link => 'Create a '.ucfirst($group),
 					   );
+		} else {
+			$menu_list = array(
+					   $group_link => 'My '.ucfirst($group).'s',
+					   );
+		}
+	} else {
+	  $menu_list = array(
+						 $group_link => 'My '.ucfirst($group).'s',
+						 $create_link => 'Create a '.ucfirst($group),
+						 );
+	}
+	
 	return openlab_submenu_gen($menu_list);
 } 
 
