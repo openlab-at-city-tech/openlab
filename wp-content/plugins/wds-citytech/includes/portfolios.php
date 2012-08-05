@@ -26,6 +26,12 @@ function openlab_get_user_portfolio_id( $user_id = 0 ) {
 		$user_id = openlab_fallback_user();
 	}
 
+        // Extra fallback for the case of portfolios: get the user associated
+        // with the current group
+        if ( !$user_id ) {
+                $user_id = openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() );
+        }
+
 	$group_id = bp_get_user_meta( $user_id, 'portfolio_group_id', true );
 
 	return (int) $group_id;
