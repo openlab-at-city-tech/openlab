@@ -488,7 +488,6 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	<strong><?php _e('Public', 'buddypress') ?></strong>
 	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 <br/>
-
 	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.
 Note: This option will NOT block access to your site. It is up to search engines to honor your request.'); ?></label>
 <br /><br />

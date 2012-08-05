@@ -876,7 +876,7 @@ function openlab_require_school_and_department_for_groups() {
 		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
 	}
 
-	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+	if ( openlab_is_school_required_for_group_type( $group_type ) && bp_is_action_variable( 'group-details', 1 ) ) {
 
 		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
