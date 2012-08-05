@@ -20,11 +20,6 @@ if(is_super_admin( $user_ID )){
   }
 }
 
-$first_name=bp_get_profile_field_data( 'field=First Name' );
-$last_name=bp_get_profile_field_data( 'field=Last Name' );
-$update_user_first = update_user_meta($user_ID,'first_name',$first_name);
-$update_user_last = update_user_meta($user_ID,'last_name',$last_name);
-
 $display_name=bp_get_profile_field_data( 'field=Name' );
 
 if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
@@ -48,16 +43,6 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
           <div class="editfield field_1 field_name alt">
           <label for="field_1">Display Name (required)</label>
           <input type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
-          <p class="description"></p>
-          </div>
-          <div class="editfield field_241 field_first-name alt">
-          <label for="field_241">First Name (required)</label>
-          <input type="text" value="<?php echo $first_name;?>" id="field_241" name="field_241">
-          <p class="description"></p>
-          </div>
-          <div class="editfield field_3 field_last-name alt">
-          <label for="field_3">Last Name (required)</label>
-          <input type="text" value="<?php echo $last_name;?>" id="field_3" name="field_3">
           <p class="description"></p>
           </div>
         <?php } ?>
