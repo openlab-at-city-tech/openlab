@@ -1,3 +1,5 @@
+<?php do_action( 'template_notices' ) ?>
+
 <?php global $bp;
 
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );?>
