@@ -136,16 +136,16 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
 
-	<h5>Portfolio Profile</h5>
-
+	<h5><?php _e( ucfirst($group_type).' Profile')?></h5>
+	<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Profile.') ?></p>
 	<div class="radio">
 		<label>
 			<input type="radio" name="group-status" value="public"<?php bp_group_show_status_setting('public') ?> />
-			<strong><?php _e( 'This is a public '.$group_type, 'buddypress' ) ?></strong>
+			<strong><?php _e( 'This is a public '.ucfirst($group_type), 'buddypress' ) ?></strong>
 			<ul>
-				<li><?php _e( 'Any site member can join this '.$group_type.'.', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
-				<li><?php _e( ucfirst($group_type).' content and activity will be visible to any site member.', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress' ) ?></li>
+				<li><?php _e( 'Any OpenLab member may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
 			</ul>
 		</label>
 
@@ -153,29 +153,31 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
                 <?php if ( !openlab_is_portfolio() ) : ?>
 		<label>
 			<input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting('private') ?> />
-			<strong><?php _e( 'This is a private '.$group_type, 'buddypress' ) ?></strong>
+			<strong><?php _e( 'This is a private '.ucfirst($group_type), 'buddypress' ) ?></strong>
 			<ul>
-				<li><?php _e( 'Only users who request membership and are accepted can join the '.$group_type.'.', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.$group_type.' will be listed in the '.$group_type.'s directory and in search results.', 'buddypress' ) ?></li>
-				<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will only be visible to members of the group..', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the ' .ucfirst($group_type).' directory and in search results.', 'buddypress' ) ?></li>
+				<li><?php _e( 'Only OpenLab members who request membership and are accepted may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
 			</ul>
 		</label>
                 <?php endif ?>
 
 		<label>
 			<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-			<strong><?php _e( 'This is a hidden ' . $group_type, 'buddypress' ) ?></strong>
+			<strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
 			<ul>
-				<li><?php _e( 'Only users who are invited can join the '.$group_type.'.', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.$group_type.' will not be listed in the '.$group_type.'s directory or search results.', 'buddypress' ) ?></li>
-				<li><?php _e( ucfirst($group_type).' content and activity will only be visible to members of the '.$group_type.'.', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				<li><?php _e( 'This '.ucfirst($group_type).' Profile will NOT be listed in the '.ucfirst($group_type).' directory, search results, or OpenLab home page.', 'buddypress' ) ?></li>
+				<li><?php _e( 'Only OpenLab members who are invited may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
 			</ul>
 		</label>
 	</div>
 
 	<?php /* Site privacy markup */ ?>
 
-	<h5>Portfolio Site</h5>
+	<h4><?php _e( ucfirst($group_type).' Site')?></h4>
+	<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Site.') ?></p>
+
 	<?php if ( $site_id = openlab_get_site_id_by_group_id() ) : ?>
 		<?php openlab_site_privacy_settings_markup( $site_id ) ?>
 	<?php endif ?>
