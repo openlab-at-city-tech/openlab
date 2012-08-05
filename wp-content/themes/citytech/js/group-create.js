@@ -154,6 +154,16 @@ jQuery(document).ready(function($){
 
 	/* AJAX validation for blog URLs */
 	$('form input[type="submit"]').click(function(e){
+                /* Don't hijack the wrong clicks */
+                if ( $(e.target).attr('name') != 'save' ) {
+                        return true;
+                }
+
+                /* Don't validate if a different radio button is selected */
+                if ( $('input[name="new_or_old"]').val() != 'new' ) {
+                        return true;
+                }
+
 		e.preventDefault();
 		var domain = $('input[name="blog[domain]"]');
 

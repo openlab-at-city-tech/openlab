@@ -1651,6 +1651,8 @@ function openlab_fallback_group() {
  * @return bool
  */
 function openlab_is_my_profile() {
+	global $bp;
+	
 	if ( !is_user_logged_in() ) {
 		return false;
 	}
@@ -1660,6 +1662,12 @@ function openlab_is_my_profile() {
 	}
 
 	if ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' )  ) {
+		return true;
+	}
+	
+	//for the group creating pages
+	if ($bp->current_action == "create")
+	{
 		return true;
 	}
 

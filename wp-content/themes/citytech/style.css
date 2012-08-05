@@ -3193,7 +3193,8 @@ a:hover.activity-time-since {
 	color: #BBB !important;
 }
 
-div#member-header div#profile-action-wrapper {
+div#member-header div#profile-action-wrapper,
+div#group-action-wrapper{
 height:20px;
 padding:4px 0 2px 0;
 margin-top:5px;
@@ -3201,13 +3202,17 @@ background: #eee;
 
 }
 
-div#member-header div#profile-action-wrapper div#action-edit-profile, div#member-header div#profile-action-wrapper div.friendship-button {
+div#member-header div#profile-action-wrapper div#action-edit-profile, 
+div#member-header div#profile-action-wrapper div.friendship-button,
+div#group-action-wrapper div#action-edit-group{
     width:100px;
     float:left;
     border-right:1px solid #666666;
     height:19px;
 }
-div#member-header div#profile-action-wrapper div#action-edit-avatar {
+div#member-header div#profile-action-wrapper div#action-edit-avatar,
+#group-action-wrapper #action-edit-avatar
+{
     width:120px;
     float:right;
     border-right:none;
@@ -3233,7 +3238,9 @@ font-family: 'Arvo',arial,serif;
  }
  
 
-div#member-header div#profile-action-wrapper div#action-edit-avatar a { 
+div#member-header div#profile-action-wrapper div#action-edit-avatar a,
+#group-action-wrapper #action-edit-avatar a
+{ 
 display:block;
 width:80px;
 padding:0px 0px 4px 30px;
@@ -3245,13 +3252,12 @@ height:15px;
 font-family: 'Arvo',arial,serif; 
  }
  
- div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover {
+div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover {
  background-position: 5px -135px
  }
- 
- 
-  
- div#member-header div#profile-action-wrapper div.friendship-button a { 
+
+div#member-header div#profile-action-wrapper div.friendship-button a,
+#group-action-wrapper .group-button a{ 
 display:block;
 width:70px;
 padding:0px 0px 4px 30px;
@@ -3261,16 +3267,14 @@ background-position: -115px 0px;
 background-repeat:no-repeat;
 height:15px;
 font-family: 'Arvo',arial,serif; 
-
- }
- 
-  div#member-header div#profile-action-wrapper div.friendship-button a:hover {
+}
+div#member-header div#profile-action-wrapper div.friendship-button a:hover {
   background-position:-115px -105px;
   color:#0fceb9;
-  }
- 
- 
- div#member-header div#profile-action-wrapper div#action-edit-profile a { 
+}
+div#member-header div#profile-action-wrapper div#action-edit-profile a,
+#group-action-wrapper #action-edit-group a
+{ 
 display:block;
 width:70px;
 padding:0px 0px 4px 30px;
@@ -3280,12 +3284,10 @@ background-position: 5px 0px;
 background-repeat:no-repeat;
 height:15px;
 font-family: 'Arvo',arial,serif; 
-
- }
- 
-  div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
+}
+div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
   background-position:5px -105px;
-  }
+}
 
 /* People Archive Template
 ------------------------------------------------------------ */
