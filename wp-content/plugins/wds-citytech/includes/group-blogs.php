@@ -399,26 +399,26 @@ function wds_bp_group_site_pages(){
 				<?php endif ?>
 			</div>
 		<?php } else { ?>
-        	
+
             <div class="sidebar-widget" id="portfolio-sidebar-widget">
-				<h4 class="sidebar-header">
-					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
-				</h4>
-                
+		<h4 class="sidebar-header">
+			<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
+		</h4>
+
                 <?php if ( $bp->is_item_admin || is_super_admin() ) : ?>
                 	<ul class="sidebar-sublinks portfolio-sublinks">
-						<li class="portfolio-site-link">
-							<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
-						</li>
+				<li class="portfolio-site-link">
+					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
+				</li>
 
-                        <li class="portfolio-dashboard-link">
-                            <?php echo '<a href="' . esc_attr( trailingslashit( $site_url ) ) . 'wp-admin/">Dashboard</a>'; ?>
-                        </li>
-					</ul>
-                <? endif; ?>
+				<li class="portfolio-dashboard-link">
+				    <?php echo '<a href="' . esc_attr( trailingslashit( $site_url ) ) . 'wp-admin/">Dashboard</a>'; ?>
+				</li>
+			</ul>
+                <?php endif; ?>
              </div>
-<?php	}
-	}
+	<?php	} // openlab_is_portfolio()
+	} // !empty( $site_url )
 }
 add_action( 'bp_group_options_nav', 'wds_bp_group_site_pages' );
 
@@ -686,7 +686,7 @@ function wds_bp_group_meta(){
 				</td>
 			</tr>
 		</table>
-        
+
         <p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <Group> Profile page. If no feeds are detected, you may type in the Post and Comment feed URL's directly or just leave blank.</p>
 
 	<?php endif ?>
