@@ -253,8 +253,6 @@
         			<?php else: ?>
        					<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
        				 <?php endif; ?>
-                    
-                    </div>
 				</div>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>

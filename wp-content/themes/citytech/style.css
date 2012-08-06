@@ -2975,6 +2975,7 @@ div.gform_wrapper .gform_footer {
     float: left;
     margin: 0 39px 0 0;
     width: 315px;
+	position: relative;
 }
 
 #club-item-body #recent-blogs {
@@ -3440,8 +3441,8 @@ h4.group-activity-title.activity-members-title
 #sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
-.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; }
-#portfolio-sidebar-widget { border-bottom: 1px solid #F0F0F0; margin: 0 0 18px; }
+.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; border-bottom:  }
+#portfolio-sidebar-widget { border-bottom: none; margin: 0 0 18px; }
 #sidebar > div > ul.portfolio-sublinks { margin-left: 0; padding-left: 0; }
 ul.portfolio-sublinks li { list-style-type: none; display: inline; }
 ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
@@ -3466,17 +3467,15 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Recent Discussions */
 .recent-discussions { margin: 0 0 10px 0; }
-.recent-discussions .recent-posts { float: left; width: 315px; margin: 0 39px 0 0 }
+.recent-discussions .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
 .recent-discussions  { float: left; width: 315px; margin: 0; position: relative; }
 .recent-discussions li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 .recent-discussions h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 .recent-discussions p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
 /*.recent-discussions a.read-more, .recent-discussions .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; }
 .recent-discussions a.read-more:hover, .recent-discussions .view-more a:hover { color: #63DFD2; text-decoration:underline; } */
-.recent-discussions .view-more, 
-#recent-course .view-more,
-#recent-docs .view-more,
-#recent-site-comments .view-more 
+#club-item-body .view-more,
+#single-course-body .view-more
 {	
 	position: absolute;
 	right: 0;

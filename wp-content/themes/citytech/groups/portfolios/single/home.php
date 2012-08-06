@@ -2,6 +2,8 @@
 <?php $group_slug = bp_get_group_slug(); ?>
 
 <h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
+
+<?php if ( bp_is_group_home() ): ?>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
@@ -35,6 +37,8 @@
 	<?php do_action( 'template_notices' ) ?>
 
 </div><!-- #item-header -->
+
+<?php endif; ?>
 
 <div id="club-item-body">
 

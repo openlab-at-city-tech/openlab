@@ -324,9 +324,7 @@ function show_site_posts_and_comments() {
 					<?php endforeach ?>
 					</ul>
 
-					<?php if ( openlab_is_course() ) : ?>
 						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
-					<?php endif ?>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-course -->
@@ -351,10 +349,6 @@ function show_site_posts_and_comments() {
 						<?php endif ?>
 
 						</ul>
-                        
-                        <?php if ( openlab_is_course() ) : ?>
-						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
-					<?php endif ?>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-site-comments -->
