@@ -706,7 +706,7 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
 function openlab_validate_groupblog_url() {
 	global $current_blog;
 
-	if ( isset( $_POST['wds_website_check'] ) ) {
+	if ( isset( $_POST['wds_website_check'] ) && isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
 		$path = isset( $_POST['blog']['domain'] ) ? $_POST['blog']['domain'] : '';
 
 		if ( empty( $path ) ) {

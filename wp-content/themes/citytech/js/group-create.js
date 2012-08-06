@@ -165,7 +165,7 @@ jQuery(document).ready(function($){
                 }
 
                 /* Don't validate if a different radio button is selected */
-                if ( $('input[name="new_or_old"]').val() != 'new' ) {
+                if ( 'new' != $('input[name=new_or_old]:checked').val() ) {
                         return true;
                 }
 
