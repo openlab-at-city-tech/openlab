@@ -1652,7 +1652,7 @@ function openlab_fallback_group() {
  */
 function openlab_is_my_profile() {
 	global $bp;
-	
+
 	if ( !is_user_logged_in() ) {
 		return false;
 	}
@@ -1664,7 +1664,7 @@ function openlab_is_my_profile() {
 	if ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' )  ) {
 		return true;
 	}
-	
+
 	//for the group creating pages
 	if ($bp->current_action == "create")
 	{
@@ -1732,7 +1732,7 @@ add_filter( 'retrieve_password_message', 'openlab_strip_brackets_from_pw_reset_e
 
 /**
  * Don't allow non-super-admins to Add New Users on user-new.php
- * 
+ *
  * This is a hack. user-new.php shows the Add New User section for any user
  * who has the 'create_users' cap. For some reason, Administrators have the
  * 'create_users' cap even on Multisite. Instead of doing a total removal
@@ -1744,18 +1744,36 @@ function openlab_block_add_new_user( $allcaps, $cap, $args ) {
         if ( !in_array( 'create_users', $cap ) ) {
                 return $allcaps;
         }
-       
+
         if ( !is_admin() || false === strpos( $_SERVER['SCRIPT_NAME'], 'user-new.php' ) ) {
                 return $allcaps;
         }
-        
+
         if ( is_super_admin() ) {
                return $allcaps;
         }
-        
+
         unset( $allcaps['create_users'] );
 
         return $allcaps;
 }
 add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
+
+/**
+ * Hack alert! Allow group avatars to be deleted
+ *
+ * There is a bug in BuddyPress Docs that blocks group avatar deletion, because
+ * BP Docs is too greedy about setting its current view, and thinks that you're
+ * trying to delete a Doc instead. Instead of fixing that, which I have no
+ * patience for at the moment, I'm just going to override BP Docs's current
+ * view in the case of deleting an avatar.
+ */
+function openlab_fix_avatar_delete( $view ) {
+	if ( bp_is_group_admin_page() ) {
+		$view = '';
+	}
+
+	return $view;
+}
+add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
 ?>
