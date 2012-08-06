@@ -409,7 +409,7 @@ function openlab_group_membership_tabs( $group = false ) {
         <li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
         <?php endif; ?>
         
-        <li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite Anyone', 'buddypress' ); ?></a></li>
+        <li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Members', 'buddypress' ); ?></a></li>
         
         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         <li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e( 'Email Members', 'buddypress' ); ?></a></li>

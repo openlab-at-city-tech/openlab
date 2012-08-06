@@ -398,19 +398,26 @@ function wds_bp_group_site_pages(){
 					</ul>
 				<?php endif ?>
 			</div>
-		<?php } else {
+		<?php } else { ?>
+        	
+            <div class="sidebar-widget" id="portfolio-sidebar-widget">
+				<h4 class="sidebar-header">
+					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
+				</h4>
+                
+                <?php if ( $bp->is_item_admin || is_super_admin() ) : ?>
+                	<ul class="sidebar-sublinks portfolio-sublinks">
+						<li class="portfolio-site-link">
+							<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
+						</li>
 
-			echo "<ul class='website-links'>";
-
-			echo "<li id='site-link'><a href='" . trailingslashit( esc_attr( $site_url ) ) . "'>" . ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) . " Site</a></li>";
-
-			// Only show the local admin link. Group members only
-			if ( $is_local && bp_group_is_member() ) {
-				echo "<li><a href='" . esc_attr( trailingslashit( $site_url ) ) . "wp-admin/'>Dashboard</a></li>";
-			}
-
-			echo '</ul>';
-		}
+                        <li class="portfolio-dashboard-link">
+                            <?php echo '<a href="' . esc_attr( trailingslashit( $site_url ) ) . 'wp-admin/">Dashboard</a>'; ?>
+                        </li>
+					</ul>
+                <? endif; ?>
+             </div>
+<?php	}
 	}
 }
 add_action( 'bp_group_options_nav', 'wds_bp_group_site_pages' );
