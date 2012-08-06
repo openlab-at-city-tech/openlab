@@ -14,7 +14,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			<?php openlab_group_membership_tabs(); ?>
 		</ul>
 	</div><!-- .item-list-tabs -->
-    
+
     <?php else: ?>
     <div class="item-list-tabs no-ajax" id="subnav">
         <div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
@@ -22,7 +22,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
             <?php openlab_group_admin_tabs(); ?>
         </ul>
     </div><!-- .item-list-tabs -->
-    
+
     <?php endif; ?>
 
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
@@ -155,38 +155,59 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 	<h5><?php _e( ucfirst($group_type).' Profile')?></h5>
 	<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Profile.') ?></p>
 	<div class="radio">
-		<label>
-			<input type="radio" name="group-status" value="public"<?php bp_group_show_status_setting('public') ?> />
-			<strong><?php _e( 'This is a public '.ucfirst($group_type), 'buddypress' ) ?></strong>
-			<ul>
-				<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress' ) ?></li>
-				<li><?php _e( 'Any OpenLab member may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
-			</ul>
-		</label>
 
-                <?php /* Portfolios don't get Private settings */ ?>
-                <?php if ( !openlab_is_portfolio() ) : ?>
-		<label>
-			<input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting('private') ?> />
-			<strong><?php _e( 'This is a private '.ucfirst($group_type), 'buddypress' ) ?></strong>
-			<ul>
-				<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will only be visible to members of the group..', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the ' .ucfirst($group_type).' directory and in search results.', 'buddypress' ) ?></li>
-				<li><?php _e( 'Only OpenLab members who request membership and are accepted may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
-			</ul>
-		</label>
-                <?php endif ?>
+		<?php /* Portfolios get different copy */ ?>
+		<?php if ( openlab_is_portfolio() ) : ?>
+			<label>
+				<input type="radio" name="group-status" value="public"<?php bp_group_show_status_setting('public') ?> />
+				<strong><?php _e( 'This is a public '.ucfirst($group_type), 'buddypress' ) ?></strong>
+				<ul>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
+					<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress' ) ?></li>
+					<li><?php _e( 'Any OpenLab member may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				</ul>
+			</label>
 
-		<label>
-			<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-			<strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
-			<ul>
-				<li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
-				<li><?php _e( 'This '.ucfirst($group_type).' Profile will NOT be listed in the '.ucfirst($group_type).' directory, search results, or OpenLab home page.', 'buddypress' ) ?></li>
-				<li><?php _e( 'Only OpenLab members who are invited may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
-			</ul>
-		</label>
+			<label>
+				<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
+				<strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
+				<ul>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile will NOT be listed in the '.ucfirst($group_type).' directory, search results, or OpenLab home page.', 'buddypress' ) ?></li>
+					<li><?php _e( 'Only OpenLab members who are invited may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				</ul>
+			</label>
+		<?php else : /* All other group types */ ?>
+			<label>
+				<input type="radio" name="group-status" value="public"<?php bp_group_show_status_setting('public') ?> />
+				<strong><?php _e( 'This is a public '.ucfirst($group_type), 'buddypress' ) ?></strong>
+				<ul>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
+					<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress' ) ?></li>
+					<li><?php _e( 'Any OpenLab member may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				</ul>
+			</label>
+
+			<label>
+				<input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting('private') ?> />
+				<strong><?php _e( 'This is a private '.ucfirst($group_type), 'buddypress' ) ?></strong>
+				<ul>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will only be visible to members of the group..', 'buddypress' ) ?></li>
+					<li><?php _e( 'This '.ucfirst($group_type).' will be listed in the ' .ucfirst($group_type).' directory and in search results.', 'buddypress' ) ?></li>
+					<li><?php _e( 'Only OpenLab members who request membership and are accepted may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				</ul>
+			</label>
+
+			<label>
+				<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
+				<strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
+				<ul>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+					<li><?php _e( 'This '.ucfirst($group_type).' Profile will NOT be listed in the '.ucfirst($group_type).' directory, search results, or OpenLab home page.', 'buddypress' ) ?></li>
+					<li><?php _e( 'Only OpenLab members who are invited may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
+				</ul>
+			</label>
+		<?php endif ?>
 	</div>
 
 	<?php /* Site privacy markup */ ?>
