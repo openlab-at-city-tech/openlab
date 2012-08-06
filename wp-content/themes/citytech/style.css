@@ -786,7 +786,6 @@ h3#bread-crumb .sep
     clear: both;
     display: block;
     margin: 0 0 15px;
-    overflow: hidden;
 }
 
 /* Inner
@@ -3457,39 +3456,47 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Recent Course Stuff */
 #recent-course { margin: 0 0 10px 0; }
-#recent-course .recent-posts { float: left; width: 315px; margin: 0 39px 0 0 }
-#recent-course .recent-discussions { float: left; width: 315px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px }
-#recent-course li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
+#recent-course .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
+#recent-course .recent-discussions { float: left; width: 315px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px; position: relative; }
+#recent-course li, #recent-site-comments li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 #recent-course h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
-#recent-course p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
+#recent-course p, #recent-site-comments p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
 /*#recent-course a.read-more, #recent-course .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; }
 #recent-course a.read-more:hover, #recent-course .view-more a:hover { color: #63DFD2; text-decoration:underline;  } */
-#recent-course .view-more a { float: right; }
 
 /* Recent Discussions */
 .recent-discussions { margin: 0 0 10px 0; }
 .recent-discussions .recent-posts { float: left; width: 315px; margin: 0 39px 0 0 }
-.recent-discussions  { float: left; width: 315px; margin: 0; }
+.recent-discussions  { float: left; width: 315px; margin: 0; position: relative; }
 .recent-discussions li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 .recent-discussions h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 .recent-discussions p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
 /*.recent-discussions a.read-more, .recent-discussions .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; }
 .recent-discussions a.read-more:hover, .recent-discussions .view-more a:hover { color: #63DFD2; text-decoration:underline; } */
-.recent-discussions .view-more a { float: right; }
-
+.recent-discussions .view-more, 
+#recent-course .view-more,
+#recent-docs .view-more,
+#recent-site-comments .view-more 
+{	
+	position: absolute;
+	right: 0;
+	top: 10px;
+	border-bottom: 1px solid #000;
+}
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
-#recent-docs .recent-posts { float: left; width: 315px; margin: 0 39px 0 0 }
+#recent-docs .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
 #recent-docs .recent-discussions { float: left; width: 315px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px }
 #recent-docs li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 #recent-docs h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 #recent-docs p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
 /*#recent-docs a.read-more, #recent-docs .view-more a { color: #63DFD2!important; font-size: 11px!important; text-decoration: none; padding: 0!important; margin: 0; } */
 /* #recent-docs a.read-more:hover, #recent-docs .view-more a:hover { color: color: #63DFD2; text-decoration:underline;   } */
-#recent-docs .view-more a { float: right; }
 
 #recent-site-comments {
 	float: left;
+	width: 315px;
+	position: relative;
 }
 .recent-discussions li {
 	border-bottom: 1px solid #EDEEEF;
@@ -3846,6 +3853,7 @@ h1.mol-title,
 {
 	margin: 0 0 25px;
 	height: 17px;
+	position: relative;
 }
 .submenu .submenu-text,
 .submenu ul li a,
@@ -3861,7 +3869,8 @@ h1.mol-title,
 }
 .submenu ul,
 .submenu-text,
-#group-settings-label
+#group-settings-label,
+#subnav ul
 {
 	float: left;
 	display: inline;
@@ -3877,7 +3886,7 @@ h1.mol-title,
 {
 	display: inline-block;
 	border-right: 1px solid #717171;
-	margin: 1px 0;
+	margin: 0;
 }
 #bpsubnav ul li
 {
@@ -3897,14 +3906,17 @@ h1.mol-title,
 {
 	padding-left: 7px;
 }
-.submenu ul li.delete-button a
+.submenu ul li.delete-button a,
+#subnav li.delete-button a
 {
-	background: url('images/submenu_sprite.png') no-repeat -1px -1px;
-	padding-left: 18px;
+	background: url('images/submenu_sprite.png') no-repeat -1px 0px;
+	padding: 2px 0 0 18px;
+	height: 18px;
 }
-.submenu ul li.delete-button.selected-page a
+.submenu ul li.delete-button.selected-page a,
+#subnav li.delete-button.current a
 {
-	background-position: -1px -36px;
+	background-position: -1px -34px;
 }
 .submenu ul li.create-button a
 {
@@ -3916,10 +3928,12 @@ h1.mol-title,
 {
 	background-position: -1px -53px;
 }
-.submenu ul li.item-delete-account a
+.submenu ul li.item-delete-account,
+#subnav li.delete-button
 {
-	margin-left: 30px;
-	padding-right: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 .submenu .selected-page a,
 #subnav ul .current,
@@ -3927,6 +3941,10 @@ h1.mol-title,
 #bpsubnav .selected-page
 {
 	color: #c84c35;
+	background-color: #fff;
+}
+.internal-page #content ul li.current
+{
 	background-color: #fff;
 }
 li .mol-count

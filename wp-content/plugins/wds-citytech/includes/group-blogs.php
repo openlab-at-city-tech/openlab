@@ -240,7 +240,7 @@ add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
  * Get a group's recent posts and comments, and display them in two widgets
  */
 function show_site_posts_and_comments() {
-	global $first_displayed;
+	global $first_displayed, $bp;
 
 	$group_id = bp_get_group_id();
 
@@ -325,7 +325,7 @@ function show_site_posts_and_comments() {
 					</ul>
 
 					<?php if ( openlab_is_course() ) : ?>
-						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
+						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
 					<?php endif ?>
 
 				</div><!-- .recent-posts -->
@@ -347,10 +347,14 @@ function show_site_posts_and_comments() {
 								</li>
 							<?php endforeach ?>
 						<?php else : ?>
-							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
+							<li><p>No Comments Found</p></li>
 						<?php endif ?>
 
 						</ul>
+                        
+                        <?php if ( openlab_is_course() ) : ?>
+						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
+					<?php endif ?>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-site-comments -->

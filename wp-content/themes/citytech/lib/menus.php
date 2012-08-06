@@ -361,7 +361,7 @@ function openlab_group_admin_tabs( $group = false ) {
 			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
 		<?php endif ?>
 
-		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?> current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
 
 	<?php else : ?>
 
@@ -380,7 +380,7 @@ function openlab_group_admin_tabs( $group = false ) {
 
 		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
 
-		<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
 
 	<?php endif ?>
 <?php

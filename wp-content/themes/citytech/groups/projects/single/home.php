@@ -172,7 +172,7 @@
                         </li>
                     <?php endwhile; ?>
                 </ul>
-                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See More Project Discussion</a></div>
+                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></div>
             <?php else: ?>
             	<div id="message" class="info">
 					<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -212,7 +212,7 @@
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See More Docs</a></p></div>
+				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></div>
 				<?php
 				}else{
 					echo "<div><p>No Recent Docs</p></div>";
@@ -224,7 +224,7 @@
 	</div>
 
 	</div>
-				<div class="info-group">
+				<div id="members-list" class="info-group">
 
 					<h4 class="group-activity-title activity-members-title">Members</h4>
 					<?php $member_arg = Array("exclude_admins_mods"=>false); ?>
@@ -247,6 +247,14 @@
 					  </div>
 
 					<?php endif;?>
+                    
+                    <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
+        				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
+        			<?php else: ?>
+       					<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
+       				 <?php endif; ?>
+                    
+                    </div>
 				</div>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>
