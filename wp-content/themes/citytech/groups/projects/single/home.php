@@ -9,7 +9,7 @@
        $first_class = "first";
 ?>
 <?php $group_slug = bp_get_group_slug(); ?>
-<h1 class="entry-title group-title">Project on the OpenLab</h1>
+<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 
 <?php if ( bp_is_group_home() ): ?>
 <?php global $bp;

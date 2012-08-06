@@ -1,5 +1,5 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<h1 class="entry-title group-title">Club on the OpenLab</h1>
+<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 
 <?php
 	global $bp;

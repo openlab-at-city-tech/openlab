@@ -13,7 +13,7 @@ $group_description = $bp->groups->current_group->description;
 $faculty = groups_get_groupmeta($group_id, 'wds_faculty');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="entry-title">Project on the OpenLab</h1>
+	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
     
     <?php if ($bp->current_action == "home"): ?>
 	 <div id="course-header-avatar" class="alignleft">

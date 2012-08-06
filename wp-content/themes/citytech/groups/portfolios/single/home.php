@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
 <?php $group_slug = bp_get_group_slug(); ?>
 
-<h1 class="entry-title"><?php echo openlab_portfolio_label( 'case=upper' ) ?> on the OpenLab</h1>
+<h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
