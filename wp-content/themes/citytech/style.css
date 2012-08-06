@@ -1762,7 +1762,10 @@ blockquote {
 }
 
 .clear {
-	clear: both;
+	clear:both;
+    height:0;
+    font-size: 1px;
+    line-height: 0px;
 }
 
 .clear-line {
@@ -1811,12 +1814,10 @@ blockquote {
 	z-index: 9;
 }
 h4.robin-egg-ribbon {
-	background-color: #63dfd2;
-	color: #fff;
+	color: #000;
 	display: inline;
     font-size: 11px;
-    left: -21px;
-    padding: 5px 22px;
+    padding: 5px 0;
     position: relative;
     text-align: center;
     z-index: 9;
@@ -3370,6 +3371,20 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
 #single-course-header .course-description, #single-course-header .course-html-block { margin: 0 0 10px; padding: 0 0 10px; border-bottom: 1px solid #eee; }
 #single-course-header p { color: #6d6d6d; line-height: 16px; font-size: 11px; }
 
+h4.group-activity-title
+{
+	margin: 15px 0;
+	font-size: 15px;
+	border-bottom: 1px solid #000;
+}
+h4.group-activity-title.activity-members-title
+{
+	border-bottom: none;
+}
+#message.updated
+{
+	margin-top: 10px;
+}
 /* Sidebar */
 /*#sidebar > div > ul { list-style-image: url(images/sidebar-bullet-gray.png); margin: 0 0 0 21px; padding: 0 0 30px;}
 #sidebar #item-buttons li { list-style-type: none; }

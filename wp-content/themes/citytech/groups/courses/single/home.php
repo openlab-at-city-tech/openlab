@@ -52,10 +52,7 @@
 			<div class="one-half <?php echo $first_class; ?>">
 				<div class="recent-discussions">
 					<div class="recent-posts">
-						<div class="ribbon-case">
-							<span class="ribbon-fold"></span>
-							<h4 class="robin-egg-ribbon">Recent Discussions</h4>
-						</div>
+						<h4 class="group-activity-title">Recent Discussions</h4>
 						<?php if ( bp_has_forum_topics('per_page=3') ) : ?>
 							<ul>
 								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
@@ -88,10 +85,7 @@
 			<div class="one-half <?php echo $first_class; ?>">
 				<div id="recent-docs">
 				   <div class="recent-posts">
-						<div class="ribbon-case">
-							<span class="ribbon-fold"></span>
-							<h4 class="robin-egg-ribbon">Recent Docs</h4>
-						</div>
+						<h4 class="group-activity-title">Recent Docs</h4>
 <?php
 //*********************************************************************
 
@@ -131,10 +125,7 @@
 			</div>
 			<div class="info-group">
 
-				<div class="ribbon-case">
-					<span class="ribbon-fold"></span>
-					<h4 class="robin-egg-ribbon">Members</h4>
-				</div>
+				<h4 class="group-activity-title activity-members-title">Members</h4>
 				<?php $member_arg = Array("exclude_admins_mods"=>false); ?>
 				<?php if ( bp_group_has_members($member_arg) ) : ?>
 

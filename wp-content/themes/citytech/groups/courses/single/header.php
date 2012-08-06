@@ -41,15 +41,16 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
-       <div id="group-action-wrapper"> 
-        <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
-					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Course</a></div>
+       <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+         <div id="group-action-wrapper">
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Project</a></div>
             		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
-		<?php elseif (is_user_logged_in()):
-					do_action( 'bp_group_header_actions' );
-			  endif;
-		?>
+         </div>
+		<?php elseif (is_user_logged_in()): ?>
+		<div id="group-action-wrapper">
+				<?php do_action( 'bp_group_header_actions' ); ?>
         </div>
+	 	<?php endif; ?>
 	</div><!-- #course-header-avatar -->	
 	<div id="course-header-content" class="alignleft">
 		<h2 class="course-title"><?php echo $group_name; ?><a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>

@@ -312,10 +312,7 @@ function show_site_posts_and_comments() {
 		<div class="one-half first">
 			<div id="recent-course">
 				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
-					</div>
+					<h4 class="group-activity-title">Recent Site Posts</h4>
 
 					<ul>
 					<?php foreach( $posts as $post ) : ?>
@@ -338,10 +335,7 @@ function show_site_posts_and_comments() {
 		<div class="one-half">
 			<div id="recent-site-comments">
 				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
-					</div>
+					<h4 class="group-activity-title">Recent Site Comments</h4>
 
 
 

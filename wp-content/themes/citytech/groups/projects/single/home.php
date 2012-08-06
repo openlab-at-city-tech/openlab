@@ -19,15 +19,16 @@
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
-        <div id="group-action-wrapper">
          <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+         <div id="group-action-wrapper">
 					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Project</a></div>
             		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
-		<?php elseif (is_user_logged_in()):
-					do_action( 'bp_group_header_actions' );
-			  endif;
-		?>
+         </div>
+		<?php elseif (is_user_logged_in()): ?>
+		<div id="group-action-wrapper">
+				<?php do_action( 'bp_group_header_actions' ); ?>
         </div>
+	 	<?php endif; ?>
 		<?php /* <p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p> */ ?>
 	</div><!-- #club-header-avatar -->
 
@@ -88,7 +89,7 @@
 				<?php //if ( bp_has_activities( 'per_page=3' ) ) : ?>
 				<div>
 					<ul id="activity-stream" class="activity-list item-list">
-						<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="robin-egg-ribbon">Recent Activity</h4></div>
+						<h4 class="group-activity-title">Recent Activity</h4>
 						<div>
 						<?php while ( bp_activities() ) : bp_the_activity(); ?>
 
@@ -153,10 +154,7 @@
     <div class="one-half <?php echo $first_class; ?>">
 	<div id="recent-forum">
 		<div class="recent-posts">
-			<div class="ribbon-case">
-				<span class="ribbon-fold"></span>
-				<h4 class="robin-egg-ribbon">Recent Discussions</h4>
-			</div>
+			<h4 class="group-activity-title">Recent Discussions</h4>
             <?php if ( bp_has_forum_topics('per_page=3') ) : ?>
             	<ul>
                 	<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
@@ -188,10 +186,7 @@
    <div class="one-half <?php echo $first_class; ?>">
 		<div id="recent-docs">
 		   <div class="recent-posts">
-				<div class="ribbon-case">
-					<span class="ribbon-fold"></span>
-					<h4 class="robin-egg-ribbon">Recent Docs</h4>
-				</div>
+				<h4 class="group-activity-title">Recent Docs</h4>
 <?php
 //*********************************************************************
 				$docs_arg = Array("posts_per_page"=>"3",
@@ -231,7 +226,7 @@
 	</div>
 				<div class="info-group">
 
-					<div class="ribbon-case"><span class="ribbon-fold"></span><h4 class="robin-egg-ribbon">Members</h4></div>
+					<h4 class="group-activity-title activity-members-title">Members</h4>
 					<?php $member_arg = Array("exclude_admins_mods"=>false); ?>
 					<?php if ( bp_group_has_members($member_arg) ) : ?>
 
