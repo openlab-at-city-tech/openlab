@@ -1290,22 +1290,34 @@ a#pgw-prev, a#pgw-next {
 {
     text-decoration: underline;
 }
+
+/* Groups */
+
+.internal-page #content .item-list li {
+	width: 308px;
+}
+
+.internal-page #content .item-list li.odd {
+	border-right: 1px solid #EAEAEA;
+}
+
 /* Clubs
 -------------*/
 
 #club-list.item-list li {
     border-bottom: 0 none;
-    border-right: 2px solid #F4F5F6;
+    border-right: 1px solid #EAEAEA;
     float: left;
     list-style-type: none;
     margin: 15px 15px 15px 0;
-    padding: 0 15px 0 0;
-    width: 312px;
+    padding: 0;
+    width: 308px;
 }
 
 #club-list.item-list li p {
     font-size: 11px;
     line-height: 17px;
+    margin-right: 10px;
 }
 
 #club-list.item-list li h2.item-title,
@@ -1351,12 +1363,13 @@ a#pgw-prev, a#pgw-next {
     list-style-type: none;
     margin: 15px 15px 15px 0;
     padding: 0;
-    width: 328px;
+    width: 308px;
 }
 
 #project-list.item-list li p {
     font-size: 11px;
     line-height: 17px;
+    margin-right: 10px;
 }
 
 #project-list.item-list li h2.item-title,
@@ -1380,32 +1393,28 @@ a#pgw-prev, a#pgw-next {
 }
 #project-list.item-list li .item {
     float: left;
-    width: 210px;
+    width: 196px;
 }
 /* Courses
 -------------*/
 
-#course-list {
-    padding-top:15px;
-
-}
-
 #course-list.item-list li {
-    width: 328px;
+    width: 308px;
     float: left;
     list-style-type: none;
-    margin: 0px 15px 15px 0;
-    border: 0 none;
+    margin: 15px 15px 15px 0;
+    border-bottom: 0;
+    border-right: 1px solid #EAEAEA;
 }
 
 #course-list.item-list li p {
     font-size: 11px;
     line-height: 17px;
+    margin-right: 10px;
 }
 
 #course-list.item-list li.even {
     border: 0 none;
-    margin: 0;
 }
 #course-list.item-list li h2.item-title,
 #course-list.item-list li h2.item-title a {
@@ -1424,7 +1433,7 @@ a#pgw-prev, a#pgw-next {
 
 #course-list.item-list li .item {
     float: left;
-    width: 210px;
+    width: 195px;
 }
 
 /* Misc group admin */
@@ -2961,13 +2970,13 @@ div.gform_wrapper .gform_footer {
 #club-item-body #recent-announcement{
     float: left;
     margin: 0 39px 0 0;
-    width: 315px;
+    width: 312px;
     position: relative;
 }
 
 #club-item-body #recent-blogs {
     margin: 0;
-    width: 315px;
+    width: 312px;
 }
 
 #club-item-body #recent-blogs h5,
@@ -3444,8 +3453,8 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Recent Course Stuff */
 #recent-course { margin: 0 0 10px 0; }
-#recent-course .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
-#recent-course .recent-discussions { float: left; width: 315px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px; position: relative; }
+#recent-course .recent-posts { float: left; width: 312px; margin: 0 39px 0 0; position: relative; }
+#recent-course .recent-discussions { float: left; width: 312px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px; position: relative; }
 #recent-course li, #recent-site-comments li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 #recent-course h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 #recent-course p, #recent-site-comments p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
@@ -3454,8 +3463,8 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Recent Discussions */
 .recent-discussions { margin: 0 0 10px 0; }
-.recent-discussions .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
-.recent-discussions  { float: left; width: 315px; margin: 0; position: relative; }
+.recent-discussions .recent-posts { float: left; width: 312px; margin: 0 39px 0 0; position: relative; }
+.recent-discussions  { float: left; width: 312px; margin: 0; position: relative; }
 .recent-discussions li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 .recent-discussions h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 .recent-discussions p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
@@ -3471,8 +3480,8 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 }
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
-#recent-docs .recent-posts { float: left; width: 315px; margin: 0 39px 0 0; position: relative; }
-#recent-docs .recent-discussions { float: left; width: 315px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px }
+#recent-docs .recent-posts { float: left; width: 312px; margin: 0 39px 0 0; position: relative; }
+#recent-docs .recent-discussions { float: left; width: 312px; margin: 0; border-left: 1px solid #EDEEEF; padding-left: 10px }
 #recent-docs li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 #recent-docs h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 #recent-docs p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
@@ -3481,7 +3490,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 #recent-site-comments {
     float: left;
-    width: 315px;
+    width: 312px;
     position: relative;
 }
 .recent-discussions li {
@@ -3621,7 +3630,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
     float: left;
     margin: 15px 15px 15px 0;
     padding: 0 15px 0 0;
-    width: 315px;
+    width: 312px;
 }
 
 #site-list li.even {
@@ -3934,10 +3943,12 @@ h1.mol-title,
 {
     background-color: #fff;
 }
+
 li .mol-count
 {
     background-color: #0FCEBA;
-    font-size: 12px;
+    font-size: 10px;
+    font-family: arial,sans-serif;
     line-height:10px;
     font-weight: bold;
     display: inline-block;
@@ -3947,6 +3958,7 @@ li .mol-count
     width: 15px;
     height: 15px;
     text-align: center;
+    margin-left: .25em;
 }
 
 li.submenu-item .mol-count{
