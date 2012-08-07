@@ -228,6 +228,7 @@ function cuny_members_pagination_count($member_name)
 		echo $pag;
 }
 
+
 /**
  * Reach into the item nav menu and remove stuff as necessary
  *

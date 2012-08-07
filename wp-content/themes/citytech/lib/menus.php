@@ -293,17 +293,21 @@ add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
 
 function openlab_filter_subnav_members($subnav_item)
 {
-	global $bp, $members_template;
+	global $members_template, $bp;
 	
-	if ( $bp->is_item_admin || $bp->is_item_mod ):
-		$subnav_item = str_replace("/members/","/admin/manage-members",$subnav_item);
-	endif; 
-	
+	//string replace menu name
 	$new_item = str_replace("Members","Membership",$subnav_item);
 	
+	//switch slugs based on user role
+	if ( $bp->is_item_admin || $bp->is_item_mod ):
+		$new_item = str_replace("/members/","/admin/manage-members",$new_item);
+	endif;
+	
+	//get total member count
 	$total_mem = bp_core_number_format( $members_template->total_member_count );
 	
-	$new_item = str_replace('<span>'.$total_mem.'</span>','<span class="mol-count count-'.$total_mem.'">'.$total_mem.'</span>',$subnav_item);
+	//added classes to span
+	$new_item = str_replace('<span>'.$total_mem.'</span>','<span class="mol-count count-'.$total_mem.'">'.$total_mem.'</span>',$new_item);
 	
 	return $new_item;
 }
