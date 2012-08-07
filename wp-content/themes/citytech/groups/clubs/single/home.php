@@ -158,23 +158,7 @@
 				//   case show site posts and comments even though this group is private
 				//
 
-					if (wds_site_can_be_viewed()) {
-					?>
-					<div class="one-half first">
-					<?php
-						show_site_posts();
-					?>
-					</div>
-					<div class="one-half">
-					<?php
-						show_site_comments();
-					?>
-					</div>
-					<?php
-						echo "<div class='clear'></div>";
-					}
-
-			?>
+					show_site_posts_and_comments() ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 
@@ -196,23 +180,7 @@
 				//   case show site posts and comments even though this group is private
 				//
 
-					if (wds_site_can_be_viewed()) {
-					?>
-					<div class="one-half first">
-					<?php
-						show_site_posts();
-					?>
-					</div>
-					<div class="one-half">
-					<?php
-						show_site_comments();
-					?>
-					</div>
-					<?php
-						echo "<div class='clear'></div>";
-					}
-
-			?>
+					show_site_posts_and_comments() ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 
