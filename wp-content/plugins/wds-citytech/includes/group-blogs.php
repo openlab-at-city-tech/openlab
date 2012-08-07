@@ -683,11 +683,10 @@ function wds_bp_group_meta(){
 
 				<td id="noo_external_options">
 					<input size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
+                    <p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst($group_type); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p>
 				</td>
 			</tr>
 		</table>
-
-        <p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <Group> Profile page. If no feeds are detected, you may type in the Post and Comment feed URL's directly or just leave blank.</p>
 
 	<?php endif ?>
 	</div>

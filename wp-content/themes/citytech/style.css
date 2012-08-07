@@ -4158,6 +4158,19 @@ table tr td.label{
     font-size: 12px;
     line-height: 18px;
 }
-
-
-
+.groupblog-setup
+{
+	position: relative;
+	margin-bottom: 45px;
+}
+#check-note
+{
+	color: #717171;
+	position: absolute;
+	bottom: -45px;
+	left: 0;
+	width: 477px;
+	padding-left: 15px; 
+	display: block;
+	white-space: normal;
+}

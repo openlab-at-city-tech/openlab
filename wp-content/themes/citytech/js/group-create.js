@@ -23,7 +23,7 @@ jQuery(document).ready(function($){
 		var radioid = '#new_or_old_' + noo;
 		$(radioid).prop('checked','checked');
 
-		$('input.noo_radio').each(function(i,v) {
+		$('.noo_radio').each(function(i,v) {
 			var thisval = $(v).val();
 			var thisid = '#noo_' + thisval + '_options';
 
@@ -34,7 +34,7 @@ jQuery(document).ready(function($){
 				});
 				$(thisid).find('select').each(function(index,element){
 					$(element).removeProp('disabled').removeClass('disabled');
-				});
+				});			
 			} else {
 				$(thisid).addClass('disabled-opt');
 				$(thisid).find('input').each(function(index,element){
