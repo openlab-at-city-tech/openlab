@@ -317,6 +317,7 @@ function show_site_posts_and_comments() {
 					<ul>
 					<?php foreach( $posts as $post ) : ?>
 						<li>
+                        <h5><?php echo $post['title']; ?></h5>
 						<p>
 							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
 						</p>

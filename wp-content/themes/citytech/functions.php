@@ -499,10 +499,12 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 
 	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.<br /><em>Note: This option will NOT block access to your site. It is up to search engines to honor your request.</em>'); ?></label>
 
-	<em><?php _e('<em>Private</em>', 'buddypress') ?></em>
+	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
+    <em><?php _e('<em>Private</em>', 'buddypress') ?></em>
 	<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?> /> <?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
 
 	<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?> /> <?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type)); ?></label>
+    <?php endif; ?>
 
 	<em><?php _e('<em>Hidden</em>', 'buddypress') ?></em>
 	<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?> /><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
