@@ -502,4 +502,38 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	<?php
 }
 
+/**
+ * Output the group subscription default settings
+ *
+ * This is a lazy way of fixing the fact that the BP Group Email Subscription
+ * plugin doesn't actually display the correct default sub level (even though it
+ * does *save* the correct level)
+ */
+function openlab_default_subscription_settings_form() {
+
+	$stored_setting = ass_get_default_subscription();
+	if ( !$stored_setting ) {
+		$stored_setting = 'supersub';
+	}
+
+	?>
+	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
+	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
+	<div class="radio">
+		<label><input type="radio" name="ass-default-subscription" value="no" <?php checked( $stored_setting, 'no' ) ?> />
+			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sum" <?php checked( $stored_setting, 'sum' ) ?> />
+			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="dig" <?php checked( $stored_setting, 'dig' ) ?> />
+			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sub" <?php checked( $stored_setting, 'sub' ) ?> />
+			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php checked( $stored_setting, 'supersub' ) ?> />
+			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'bp-ass' ) ?></label>
+	</div>
+	<hr />
+	<?php
+}
+remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
+add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
 ?>
