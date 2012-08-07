@@ -30,5 +30,12 @@ jQuery(document).ready(function($){
                 }
 
                 $(typedrop).html(newtypes);
+		
+		/* Because there is no alternative in the dropdown, the 'change' event never
+		 * fires. So we trigger it manually
+		 */
+		if ( 'student' == emailtype ) {
+			wds_load_account_type('field_7','');
+		}
         });
 },(jQuery));
