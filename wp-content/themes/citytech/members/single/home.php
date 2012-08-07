@@ -196,9 +196,9 @@ global $bp;
       
           <?php } else { ?>
 
-		<?php echo cuny_profile_activty_block('course', 'My Courses', ''); ?>
-		<?php echo cuny_profile_activty_block('project', 'My Projects', ' last'); ?>
-		<?php echo cuny_profile_activty_block('club', 'My Clubs', ' last'); ?>
+		<?php echo cuny_profile_activty_block('course', 'My Courses', '',25); ?>
+		<?php echo cuny_profile_activty_block('project', 'My Projects', ' last',25); ?>
+		<?php echo cuny_profile_activty_block('club', 'My Clubs', ' last',25); ?>
         
         <div class="clearfloat"></div>
         <script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>
@@ -244,7 +244,7 @@ global $bp;
 <?php }
 
 
-function cuny_profile_activty_block($type,$title,$last) {
+function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 	global $wpdb,$bp;
 
 	//echo $type."<hr>";
@@ -278,11 +278,14 @@ function cuny_profile_activty_block($type,$title,$last) {
                   <div class="activity-content">
 
                       <div class="activity-header">
-                          <a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_name();?></a>
+                          <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(),35);?></a>
                       </div>
 
                           <div class="activity-inner">
                           	<?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
+                            <?php //shorten the description if it's getting long
+							$activity = openlab_shortened_text($activity, 75); ?>
+                            
                           	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">See More</a>'; ?>
                           </div>
 

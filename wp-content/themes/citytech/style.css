@@ -3178,7 +3178,6 @@ h2.member-name-title {
     line-height: 13px; 
     margin-bottom: 0px;
     color: #676767;
-    font-weight: bold;
 }
 
 #member-item-body .activity-list .activity-content .activity-inner a{
@@ -3816,12 +3815,13 @@ a.close-popup-login {
 }
 
 /* global styles */
-a.read-more {
+a.read-more,
+.activity-inner a.read-more{
     color: #6D6D6D;
     font-size: 11px;
     margin: 0 0 0 5px;
+	text-decoration: underline;
     padding: 0;
-    text-decoration: underline;
 }
 
 a:hover.read-more {
@@ -3997,14 +3997,6 @@ li .count-0 {
 
 table tr td.label{
     border: none;
-}
-
-.activity-content a{
-    text-decoration: underline;
-}
-
-.activity-content a:last-child{
-    text-decoration: none;
 }
 /**help sidebar**/
 #help-tags
