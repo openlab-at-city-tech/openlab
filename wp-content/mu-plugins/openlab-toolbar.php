@@ -565,7 +565,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'top-secondary',
 			'id'     => 'top-logout',
-			'href'   => add_query_arg( 'redirect_to', wp_guess_url(), wp_logout_url() ),
+			'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
 			'title'  => 'Log Out'
 		) );
 	}
