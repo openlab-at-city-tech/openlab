@@ -14,6 +14,7 @@ $group_description = $bp->groups->current_group->description;
 $faculty_id = $bp->groups->current_group->admins[0]->user_id;
 $first_name= ucfirst(xprofile_get_field_data( 'First Name', $faculty_id));
 $last_name= ucfirst(xprofile_get_field_data( 'Last Name', $faculty_id));
+$group_type = openlab_get_group_type( bp_get_current_group_id());
 
 /*
 $member_arg = Array("exclude_admins_mods"=>false); 
@@ -35,8 +36,9 @@ $section = groups_get_groupmeta($group_id, 'wds_section_code');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
 	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
-	 
+     
      <?php if ($bp->current_action == "home"): ?>
+     <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
      <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
