@@ -293,13 +293,42 @@ add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
 
 function openlab_filter_subnav_members($subnav_item)
 {
-	global $bp;
+	global $bp, $members_template;
 	
 	if ( $bp->is_item_admin || $bp->is_item_mod ):
 		$subnav_item = str_replace("/members/","/admin/manage-members",$subnav_item);
 	endif; 
 	
 	$new_item = str_replace("Members","Membership",$subnav_item);
+	
+	$total_mem = bp_core_number_format( $members_template->total_member_count );
+	
+	$new_item = str_replace('<span>'.$total_mem.'</span>','<span class="mol-count count-'.$total_mem.'">'.$total_mem.'</span>',$subnav_item);
+	
+	return $new_item;
+}
+
+add_filter('bp_get_options_nav_nav-docs','openlab_filter_subnav_docs');
+
+function openlab_filter_subnav_docs($subnav_item)
+{
+	global $bp;
+	
+	$group_slug = bp_get_group_slug();
+	
+	$docs_arg = Array("posts_per_page"=>"3",
+						  "post_type"=>"bp_doc",
+						  "tax_query"=>
+						  Array(Array("taxonomy"=>"bp_docs_associated_item",
+							      "field"=>"slug",
+							      "terms"=>$group_slug)));
+	$query = new WP_Query( $docs_arg );
+	
+	$total_doc_count = !empty( $query->found_posts ) ? $query->found_posts : 0;
+	
+	wp_reset_query();
+	
+	$new_item = str_replace('<span>'.$total_doc_count.'</span>','<span class="mol-count count-'.$total_doc_count.'">'.$total_doc_count.'</span>',$subnav_item);
 	return $new_item;
 }
 
