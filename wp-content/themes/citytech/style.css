@@ -1300,7 +1300,7 @@ a#pgw-prev, a#pgw-next {
     list-style-type: none;
     margin: 15px 15px 15px 0;
     padding: 0 15px 0 0;
-    width: 315px;
+    width: 312px;
 }
 
 #club-list.item-list li p {
@@ -2115,7 +2115,7 @@ h3.entry-title{
 #sidebar h2 {
     border-bottom: 1px solid #717171;
     color: #C84C35;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: normal;
     margin: 0 0 7px;
     padding: 0 0 3px 0px;
@@ -3360,9 +3360,9 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
 
 h4.group-activity-title
 {
-    margin: 15px 0;
-    font-size: 15px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #717171;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
 }
 h4.group-activity-title.activity-members-title
 {
@@ -3467,7 +3467,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
     position: absolute;
     right: 0;
     top: 10px;
-    border-bottom: 1px solid #000;
+    /*border-bottom: 1px solid #000;*/
 }
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
@@ -3963,7 +3963,7 @@ li.submenu-item .mol-count{
     text-align: center;
 }
 
-.count-0 {
+li .count-0 {
     display:none;
 }
 
@@ -3985,7 +3985,7 @@ li.submenu-item .mol-count{
 
 .profile-header{
     color: #C84C35;
-    font-size: 15px;
+    font-size: 14px;
     margin-top: 15px;
     margin-bottom: 15px;
     margin-left: 6px;
