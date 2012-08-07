@@ -3245,9 +3245,7 @@ div#group-action-wrapper div#action-edit-group{
     border-right:1px solid #666666;
     height:19px;
 }
-div#member-header div#profile-action-wrapper div#action-edit-avatar,
-#group-action-wrapper #action-edit-avatar
-{
+div#member-header div#profile-action-wrapper div#action-edit-avatar, div#member-header-avatar div#profile-action-wrapper #send-private-message {
     width:120px;
     float:right;
     border-right:none;
