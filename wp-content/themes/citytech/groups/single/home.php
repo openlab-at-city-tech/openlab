@@ -162,6 +162,7 @@ function cuny_group_single() { ?>
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions');
 function cuny_buddypress_group_actions() { 
 global $bp;
+
 ?>
 <?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
