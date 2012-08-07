@@ -517,6 +517,11 @@ font-family: Arial, Verdana, sans-serif;
 #wpadminbar  #wp-admin-bar-messages-default #wp-admin-bar-messages-more, #wpadminbar #wp-admin-bar-activity-default #wp-admin-bar-activity-more {
 	text-align: right;
 	width:223px;
+	clear: both;
+}
+
+#wpadminbar  #wp-admin-bar-messages-default #wp-admin-bar-messages-more a {
+	
 }
 
 #wpadminbar #wp-admin-bar-activity-default .nav-activity .ab-item {
