@@ -76,7 +76,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 <?php /* Portfolio links */ ?>
 
-<?php if ( openlab_user_has_portfolio() && !openlab_group_is_hidden( openlab_get_user_portfolio_id() ) ) : ?>
+<?php if ( openlab_user_has_portfolio() && ( !openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() ) ) : ?>
 
 	<div class="sidebar-widget" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
