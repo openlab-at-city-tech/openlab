@@ -118,7 +118,12 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 	<?php
 
+	// The 'user_id' param is the displayed user, but displayed user is not set on
+	// my-* pages
+	$user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id();
+
 	$activity_args = array(
+		'user_id'     => $user_id,
 		'per_page'    => openlab_is_my_profile() ? 4 : 2, // Legacy. Not sure why
 		'scope'       => bp_is_user_friends() ? 'friends' : '',
 		'show_hidden' => openlab_is_my_profile()
