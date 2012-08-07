@@ -542,7 +542,7 @@ add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_sett
  * Filter the output of the Add Friend/Cancel Friendship button
  */
 function openlab_filter_friendship_button( $button ) {
-	if ( $button['id'] == 'not_friends' || $button['id'] == 'is_friend' ) {
+	if ( $button['id'] == 'not_friends' || $button['id'] == 'is_friend' || $button['id'] == 'pending' ) {
 		$button['link_text'] = 'Friend';
 	}
 	return $button;
