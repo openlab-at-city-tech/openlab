@@ -150,6 +150,7 @@ class OpenLab_Admin_Bar {
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
 			'title' => 'My OpenLab',
+			'href'  => bp_loggedin_user_domain()
 		) );
  	}
 
