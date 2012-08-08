@@ -407,11 +407,7 @@ function wds_bp_group_site_pages(){
                 <?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()) ) : ?>
                 	<ul class="sidebar-sublinks portfolio-sublinks">
 				<li class="portfolio-site-link">
-<<<<<<< HEAD
-					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.'Site</a>'; ?>
-=======
 					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">Site</a>'; ?>
->>>>>>> 85852ace6630498d5b9271d326e301be3b884ca4
 				</li>
 
 				<li class="portfolio-dashboard-link">
