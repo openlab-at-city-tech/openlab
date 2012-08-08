@@ -312,7 +312,7 @@ function show_site_posts_and_comments() {
 		<div class="one-half first">
 			<div id="recent-course">
 				<div class="recent-posts">
-					<h4 class="group-activity-title">Recent Site Posts</h4>
+					<h4 class="group-activity-title">Recent Site Posts<span class="view-more"><a class = "read-more" href="<?php echo esc_attr( $site_url ) ?>">See All</a></span></h4>
 
 					<ul>
 					<?php foreach( $posts as $post ) : ?>
@@ -323,8 +323,6 @@ function show_site_posts_and_comments() {
 						</li>
 					<?php endforeach ?>
 					</ul>
-
-						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-course -->
@@ -408,7 +406,7 @@ function wds_bp_group_site_pages(){
                 <?php if ( $bp->is_item_admin || is_super_admin() ) : ?>
                 	<ul class="sidebar-sublinks portfolio-sublinks">
 				<li class="portfolio-site-link">
-					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
+					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.'Site</a>'; ?>
 				</li>
 
 				<li class="portfolio-dashboard-link">
