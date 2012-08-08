@@ -3362,9 +3362,10 @@ div#member-header div#profile-action-wrapper div.friendship-button a {
 }
 
 #group-action-wrapper .group-button a.join-group{ 
-   background-position: -5px -5px; 
+   background-position: 0px -160px; 
    padding-left:0px;
    padding-right:20px;
+   
 }
 
 #group-action-wrapper .group-button a.join-group:hover { 
