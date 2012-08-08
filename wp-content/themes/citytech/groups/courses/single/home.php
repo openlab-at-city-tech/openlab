@@ -85,7 +85,7 @@
 			<div class="one-half <?php echo $first_class; ?>">
 				<div id="recent-docs">
 				   <div class="recent-posts">
-						<h4 class="group-activity-title">Recent Docs</h4>
+						<h4 class="group-activity-title">Recent Docs<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></span></h4>
 <?php
 //*********************************************************************
 
