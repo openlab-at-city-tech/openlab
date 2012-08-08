@@ -3340,13 +3340,58 @@ div#member-header div#profile-action-wrapper div.friendship-button a {
     width:70px;
     padding:0px 0px 4px 30px;
     margin:0;
-/* background-image:url('images/mol-sprites.png'); */
+background-image:url('images/mol-sprites.png');
 
-    background-position: -115px 0px;
+    
     background-repeat:no-repeat;
     height:15px;
     font-family: 'Arvo',arial,serif; 
 }
+
+/* add buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.add { 
+background-position: 0px -225px;
+   padding:0 20px 0 0;
+   margin:0;
+   width:50px;
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
+background-position: -176px -225px;
+   padding:0 20px 0 0;
+      color:#0fceb9;
+}
+
+/* pending friend buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
+background-position: 0px -160px;
+   padding:0px 15px 0 5px;
+   margin:0;
+   width:50px;
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a.pending:hover, div#member-header div#profile-action-wrapper div.friendship-button a.requested:hover { 
+background-position: -176px -160px;
+      color:#0fceb9;
+}
+
+/* cancel friend buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.remove { 
+background-position: 0px -192px;
+   padding:0px 15px 0 5px;
+   margin:0;
+   width:50px;
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
+background-position: -176px -192px;
+      color:#0fceb9;
+}
+
+
 
 /* group buttons */
 
@@ -3362,15 +3407,15 @@ div#member-header div#profile-action-wrapper div.friendship-button a {
 }
 
 #group-action-wrapper .group-button a.join-group{ 
-   background-position: 0px -160px; 
+   background-position: 10px -160px; 
    padding-left:0px;
    padding-right:20px;
    
 }
 
 #group-action-wrapper .group-button a.join-group:hover { 
-   background-position: -160px -120px;
-   background-attachment: 
+   background-position: -165px -160px;
+
 }
 
 
