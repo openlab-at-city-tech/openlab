@@ -3256,6 +3256,8 @@ div#member-header div#profile-action-wrapper div#action-edit-avatar, div#member-
     float:right;
     border-right:none;
     height:19px;
+    padding:0;
+    margin:0;
 }
 
 div#group-action-wrapper div#action-edit-avatar {
@@ -3339,18 +3341,43 @@ div#member-header div#profile-action-wrapper div.friendship-button,
     font-family: 'Arvo',arial,serif; 
 }
 
-div#member-header div#profile-action-wrapper div.friendship-button a,
+div#member-header div#profile-action-wrapper div.friendship-button a { 
+    display:block;
+    width:70px;
+    padding:0px 0px 4px 30px;
+    margin:0;
+/* background-image:url('images/mol-sprites.png'); */
+
+    background-position: -115px 0px;
+    background-repeat:no-repeat;
+    height:15px;
+    font-family: 'Arvo',arial,serif; 
+}
+
+/* group buttons */
+
 #group-action-wrapper .group-button a{ 
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
     margin:0;
     background-image:url('images/mol-sprites.png');
-    background-position: -115px 0px;
     background-repeat:no-repeat;
     height:15px;
     font-family: 'Arvo',arial,serif; 
 }
+
+#group-action-wrapper .group-button a.join-group{ 
+   background-position: -5px -5px; 
+   padding-left:0px;
+   padding-right:20px;
+}
+
+#group-action-wrapper .group-button a.join-group:hover { 
+   background-position: -160px -120px;
+   background-attachment: 
+}
+
 
 div#member-header div#profile-action-wrapper div.friendship-button a:hover {
     background-position:-115px -105px;
