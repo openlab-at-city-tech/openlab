@@ -11,7 +11,6 @@
 <?php $group_slug = bp_get_group_slug(); 
 $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
-<h4 class="profile-header">Project Profile</h4>
 <?php if ( bp_is_group_home() ): ?>
 <?php global $bp;
 	  $group_id = $bp->groups->current_group->id; ?>

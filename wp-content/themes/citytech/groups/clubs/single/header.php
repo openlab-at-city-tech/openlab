@@ -1,6 +1,6 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
 <h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
-<h4 class="profile-header">Club Profile</h4>
+
 <?php
 	global $bp;
 	
