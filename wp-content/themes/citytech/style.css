@@ -1881,12 +1881,6 @@ div#item-buttons ul li a span::after{
     content: "";
 }
 
-.submenu-item .mol-count{
-    padding-top: 2px;    
-    width: 12px;
-    height: 12px;
-}
-
 
 h4.yellow-canary-ribbon {
     /*background-color: #faf763;*/
@@ -3231,6 +3225,8 @@ a:hover.activity-time-since {
     color: #BBB !important;
 }
 
+/* action buttons under avatar in groups and in people */
+
 div#member-header div#profile-action-wrapper,
 div#group-action-wrapper{
     height:20px;
@@ -3240,6 +3236,8 @@ div#group-action-wrapper{
 
 }
 
+/* all left side buttons */
+
 div#member-header div#profile-action-wrapper div#action-edit-profile, 
 div#member-header div#profile-action-wrapper div.friendship-button,
 div#group-action-wrapper div#action-edit-group{
@@ -3248,66 +3246,46 @@ div#group-action-wrapper div#action-edit-group{
     border-right:1px solid #666666;
     height:19px;
 }
+
+/* all right side buttons */
+
 div#member-header div#profile-action-wrapper div#action-edit-avatar, div#member-header-avatar div#profile-action-wrapper #send-private-message {
     width:120px;
     float:right;
     border-right:none;
     height:19px;
-
+    padding:0;
+    margin:0;
 }
+
+div#group-action-wrapper div#action-edit-avatar {
+    width:120px;
+    float:right;
+    border-right:none;
+    height:19px;
+}
+
+/* send private messages gets envelope */
 
 div#member-header div#profile-action-wrapper div#send-private-message a { 
     display:block;
     width:80px;
     padding:0px 0px 4px 30px;
     margin:0;
-    background-image:url('images/mol-sprites.png');
     background-position: -115px -32px;
+   background-image:url('images/mol-sprites.png');
     background-repeat:no-repeat;
     height:15px;
     font-family: 'Arvo',arial,serif; 
 }
 
 div#member-header div#profile-action-wrapper div#send-private-message a:hover {
-    background-position: -115px -137px
-        color:#0fceb9
+    background-position: -115px -137px;
+        color:#0fceb9;
 }
 
+/* edit profile button gets pencil  */
 
-div#member-header div#profile-action-wrapper div#action-edit-avatar a,
-#group-action-wrapper #action-edit-avatar a
-{ 
-    display:block;
-    width:80px;
-    padding:0px 0px 4px 30px;
-    margin:0;
-    background-image:url('images/mol-sprites.png');
-    background-position: 5px -30px;
-    background-repeat:no-repeat;
-    height:15px;
-    font-family: 'Arvo',arial,serif; 
-}
-
-div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover {
-    background-position: 5px -135px
-}
-
-div#member-header div#profile-action-wrapper div.friendship-button a,
-#group-action-wrapper .group-button a{ 
-    display:block;
-    width:70px;
-    padding:0px 0px 4px 30px;
-    margin:0;
-    background-image:url('images/mol-sprites.png');
-    background-position: -115px 0px;
-    background-repeat:no-repeat;
-    height:15px;
-    font-family: 'Arvo',arial,serif; 
-}
-div#member-header div#profile-action-wrapper div.friendship-button a:hover {
-    background-position:-115px -105px;
-    color:#0fceb9;
-}
 div#member-header div#profile-action-wrapper div#action-edit-profile a,
 #group-action-wrapper #action-edit-group a
 { 
@@ -3324,6 +3302,147 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a,
 div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
     background-position:5px -105px;
 }
+
+/* edit avatar gets little person shape */
+
+div#member-header div#profile-action-wrapper div#action-edit-avatar a,
+#group-action-wrapper #action-edit-avatar a
+{ 
+    display:block;
+    width:80px;
+    padding:0px 0px 4px 30px;
+    margin:0;
+    background-image:url('images/mol-sprites.png');
+    background-position: 5px -30px;
+    background-repeat:no-repeat;
+    height:15px;
+    font-family: 'Arvo',arial,serif; 
+}
+
+div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover, 
+#group-action-wrapper #action-edit-avatar a:hover {
+    background-position: 5px -135px
+}
+
+/* friendship button anchor */
+
+div#member-header div#profile-action-wrapper div.friendship-button,
+#group-action-wrapper .group-button { 
+    display:block;
+    width:70px;
+    padding:0px 0px 4px 30px;
+    margin:0;
+    background-image:url('images/mol-sprites.png');
+    background-position: -115px 0px;
+    background-repeat:no-repeat;
+    height:15px;
+    font-family: 'Arvo',arial,serif; 
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a { 
+    display:block;
+    width:70px;
+    padding:0px 0px 4px 30px;
+    margin:0;
+background-image:url('images/mol-sprites.png');
+
+    
+    background-repeat:no-repeat;
+    height:15px;
+    font-family: 'Arvo',arial,serif; 
+}
+
+/* add buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.add { 
+background-position: 0px -225px;
+   padding:0 20px 0 0;
+   margin:0;
+   width:50px;
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
+background-position: -176px -225px;
+   padding:0 20px 0 0;
+      color:#0fceb9;
+}
+
+/* pending friend buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
+background-position: 0px -160px;
+   padding:0px 15px 0 5px;
+   margin:0;
+   width:50px;
+}
+
+
+div#member-header div#profile-action-wrapper div.friendship-button a:hover {
+    color:#0fceb9;
+}
+
+
+div#member-header div#profile-action-wrapper div.friendship-button a.pending:hover, div#member-header div#profile-action-wrapper div.friendship-button a.requested:hover { 
+background-position: -176px -160px;
+   
+}
+
+/* cancel friend buttons */
+
+div#member-header div#profile-action-wrapper div.friendship-button a.remove { 
+background-position: 0px -192px;
+   padding:0px 15px 0 5px;
+   margin:0;
+   width:50px;
+}
+
+div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
+background-position: -176px -192px;
+  
+}
+
+
+
+/* group buttons */
+
+#group-action-wrapper .group-button a{ 
+    display:block;
+    width:90px;
+    padding:0px 0px 4px 30px;
+    margin:0;
+    background-image:url('images/mol-sprites.png');
+    background-repeat:no-repeat;
+    height:15px;
+    font-family: 'Arvo',arial,serif; 
+}
+
+
+/* join group */
+#group-action-wrapper .group-button a.join-group{ 
+   background-position:  10px -225px;
+   padding-left:0px;
+   padding-right:20px;
+   
+}
+
+#group-action-wrapper .group-button a.join-group:hover { 
+   background-position: -166px -225px;
+
+}
+
+/* leave group */
+#group-action-wrapper .group-button a.leave-group{ 
+   background-position:  25px -192px; 
+   padding-left:0px;
+   padding-right:20px;
+   
+}
+
+#group-action-wrapper .group-button a.leave-group:hover { 
+   background-position: -151px -192px;
+
+}
+
 
 /* People Archive Template
 ------------------------------------------------------------ */
@@ -3438,13 +3557,13 @@ h4.group-activity-title.activity-members-title
 #sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
-.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; border-bottom:  }
-#portfolio-sidebar-widget { border-bottom: none; margin: 0 0 18px; }
+.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; padding-top: 10px  }
+#portfolio-sidebar-widget { border-bottom: none; border-top: 1px solid #F0F0F0; margin: 0 0 18px; }
 #sidebar > div > ul.portfolio-sublinks { margin-left: 0; padding-left: 0; }
-ul.portfolio-sublinks li { list-style-type: none; display: inline; }
-ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
-ul.portfolio-sublinks li:first-child a { padding-left: 0; }
-ul.portfolio-sublinks li:last-child a { border-right: 0; }
+#item-buttons ul.portfolio-sublinks li { list-style-type: none; display: inline; margin:0; }
+#item-buttons ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
+#item-buttons ul.portfolio-sublinks li:first-child a { /*padding-left: 0;*/ padding-right:6px }
+#item-buttons ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Group Right Sidebar */
 #sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid;  border-color: #f0f0f0 }
@@ -3474,10 +3593,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 #club-item-body .view-more,
 #single-course-body .view-more
 {	
-    position: absolute;
-    right: 0;
-    top: 10px;
-    /*border-bottom: 1px solid #000;*/
+   float:right;
 }
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
@@ -3833,6 +3949,11 @@ a.read-more,
     margin: 0 0 0 5px;
 	text-decoration: underline;
     padding: 0;
+<<<<<<< HEAD
+    text-decoration: underline;
+    font-family: Arial,Helvetica,Tahoma, sans-serif;
+=======
+>>>>>>> 85852ace6630498d5b9271d326e301be3b884ca4
 }
 
 a:hover.read-more {
@@ -3946,38 +4067,23 @@ h1.mol-title,
     background-color: #fff;
 }
 
-li .mol-count
+li .mol-count, li.submenu-item .mol-count
 {
     background-color: #0FCEBA;
     font-size: 10px;
     font-family: arial,sans-serif;
-    line-height:10px;
     font-weight: bold;
     display: inline-block;
     line-height: 15px;
     color: #fff;
     border-radius: 50%;
-    width: 15px;
+    min-width: 15px;
     height: 15px;
     text-align: center;
     margin-left: .25em;
 }
 
-li.submenu-item .mol-count{
-     background-color: #0FCEBA;
-    font-size: 12px;
-    line-height:10px;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 15px;
-    color: #fff;
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    text-align: center;
-}
-
-li .count-0 {
+li .count-0, li.submenu-item .count-0 {
     display:none;
 }
 

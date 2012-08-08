@@ -11,7 +11,6 @@
 <?php $group_slug = bp_get_group_slug(); 
 $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
-
 <?php if ( bp_is_group_home() ): ?>
 <?php global $bp;
 	  $group_id = $bp->groups->current_group->id; ?>
@@ -156,7 +155,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
     <div class="one-half <?php echo $first_class; ?>">
 	<div id="recent-forum">
 		<div class="recent-posts">
-			<h4 class="group-activity-title">Recent Discussions</h4>
+			<h4 class="group-activity-title">Recent Discussions<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></span></h4>
             <?php if ( bp_has_forum_topics('per_page=3') ) : ?>
             	<ul>
                 	<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
@@ -174,7 +173,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
                         </li>
                     <?php endwhile; ?>
                 </ul>
-                <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></div>
+                
             <?php else: ?>
             	<div id="message" class="info">
 					<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -188,7 +187,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
    <div class="one-half <?php echo $first_class; ?>">
 		<div id="recent-docs">
 		   <div class="recent-posts">
-				<h4 class="group-activity-title">Recent Docs</h4>
+				<h4 class="group-activity-title">Recent Docs<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></span></h4>
 <?php
 //*********************************************************************
 				$docs_arg = Array("posts_per_page"=>"3",
@@ -214,7 +213,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></div>
+				
 				<?php
 				}else{
 					echo "<div><p>No Recent Docs</p></div>";

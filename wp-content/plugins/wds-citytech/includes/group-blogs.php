@@ -312,7 +312,7 @@ function show_site_posts_and_comments() {
 		<div class="one-half first">
 			<div id="recent-course">
 				<div class="recent-posts">
-					<h4 class="group-activity-title">Recent Site Posts</h4>
+					<h4 class="group-activity-title">Recent Site Posts<span class="view-more"><a class = "read-more" href="<?php echo esc_attr( $site_url ) ?>">See All</a></span></h4>
 
 					<ul>
 					<?php foreach( $posts as $post ) : ?>
@@ -324,8 +324,6 @@ function show_site_posts_and_comments() {
 						</li>
 					<?php endforeach ?>
 					</ul>
-
-						<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See All</a></div>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-course -->
@@ -409,7 +407,11 @@ function wds_bp_group_site_pages(){
                 <?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()) ) : ?>
                 	<ul class="sidebar-sublinks portfolio-sublinks">
 				<li class="portfolio-site-link">
+<<<<<<< HEAD
+					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.'Site</a>'; ?>
+=======
 					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">Site</a>'; ?>
+>>>>>>> 85852ace6630498d5b9271d326e301be3b884ca4
 				</li>
 
 				<li class="portfolio-dashboard-link">
