@@ -592,8 +592,6 @@ function wds_bp_group_meta(){
 					case 'project' : ?>
 						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
 
-						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Since the ePortfolio is designed to be a Career Portfolio, choose a site address that will appear professional. We recommend one of the following formats (enter in the gray box below):</p>
-
 						<ul class="ol-tooltip">
 							<li>FirstNameLastName_eportfolio</li>
 							<li>JaneSmith_eportfolio (Example)</li>
