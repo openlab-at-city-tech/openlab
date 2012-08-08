@@ -2,7 +2,7 @@
 <?php $group_slug = bp_get_group_slug(); ?>
 
 <h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
-
+<h4 class="profile-header">Portfolio Profile</h4>
 <?php if ( bp_is_group_home() ): ?>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">

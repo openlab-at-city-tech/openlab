@@ -1877,12 +1877,6 @@ div#item-buttons ul li a span::after{
     content: "";
 }
 
-.submenu-item .mol-count{
-    padding-top: 2px;    
-    width: 12px;
-    height: 12px;
-}
-
 
 h4.yellow-canary-ribbon {
     /*background-color: #faf763;*/
@@ -3435,13 +3429,13 @@ h4.group-activity-title.activity-members-title
 #sidebar li.selected-page > a, #sidebar li.current > a, #sidebar li.current-menu-parent > a, li.current_page_item > a { color: #c84c35; }
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
-.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; border-bottom:  }
-#portfolio-sidebar-widget { border-bottom: none; margin: 0 0 18px; }
+.widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; padding-top: 10px  }
+#portfolio-sidebar-widget { border-bottom: none; border-top: 1px solid #F0F0F0; margin: 0 0 18px; }
 #sidebar > div > ul.portfolio-sublinks { margin-left: 0; padding-left: 0; }
-ul.portfolio-sublinks li { list-style-type: none; display: inline; }
-ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
-ul.portfolio-sublinks li:first-child a { padding-left: 0; }
-ul.portfolio-sublinks li:last-child a { border-right: 0; }
+#item-buttons ul.portfolio-sublinks li { list-style-type: none; display: inline; margin:0; }
+#item-buttons ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
+#item-buttons ul.portfolio-sublinks li:first-child a { /*padding-left: 0;*/ padding-right:6px }
+#item-buttons ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Group Right Sidebar */
 #sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid;  border-color: #f0f0f0 }
@@ -3471,10 +3465,7 @@ ul.portfolio-sublinks li:last-child a { border-right: 0; }
 #club-item-body .view-more,
 #single-course-body .view-more
 {	
-    position: absolute;
-    right: 0;
-    top: 10px;
-    /*border-bottom: 1px solid #000;*/
+   float:right;
 }
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
@@ -3829,6 +3820,7 @@ a.read-more {
     margin: 0 0 0 5px;
     padding: 0;
     text-decoration: underline;
+    font-family: Arial,Helvetica,Tahoma, sans-serif;
 }
 
 a:hover.read-more {
@@ -3942,38 +3934,23 @@ h1.mol-title,
     background-color: #fff;
 }
 
-li .mol-count
+li .mol-count, li.submenu-item .mol-count
 {
     background-color: #0FCEBA;
     font-size: 10px;
     font-family: arial,sans-serif;
-    line-height:10px;
     font-weight: bold;
     display: inline-block;
     line-height: 15px;
     color: #fff;
     border-radius: 50%;
-    width: 15px;
+    min-width: 15px;
     height: 15px;
     text-align: center;
     margin-left: .25em;
 }
 
-li.submenu-item .mol-count{
-     background-color: #0FCEBA;
-    font-size: 12px;
-    line-height:10px;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 15px;
-    color: #fff;
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    text-align: center;
-}
-
-li .count-0 {
+li .count-0, li.submenu-item .count-0 {
     display:none;
 }
 

@@ -14,7 +14,7 @@ $faculty = groups_get_groupmeta($group_id, 'wds_faculty');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
 	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
-    
+    <h4 class="profile-header">Project Profile</h4>
     <?php if ($bp->current_action == "home"): ?>
 	 <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
