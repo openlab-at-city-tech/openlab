@@ -3213,6 +3213,31 @@ h2.member-name-title {
     margin: 0 0 12px;
 }
 
+/* club creation */
+
+form#create-group-form div#group-create-body div.ct-group-meta {
+margin-top:20px;
+}
+
+p#invitenonmembers {
+float:left;
+clear:left;
+position:relative;
+left: -264px;
+}
+
+div#searchinvitemembersdescription {
+width:400px;
+font-size:10px;
+float:right;
+top:-25px;
+position:relative;
+}
+
+p#selectmemberslabel {
+margin-top:15px;
+}
+
 /*.read-more {
     color: #6D6D6D;
     font-size: 11px;
