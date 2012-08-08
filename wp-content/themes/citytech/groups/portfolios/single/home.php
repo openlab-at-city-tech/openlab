@@ -4,6 +4,8 @@
 <h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
 <h4 class="profile-header">Portfolio Profile</h4>
 <?php if ( bp_is_group_home() ): ?>
+<?php $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
+<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
@@ -12,7 +14,7 @@
         <?php global $bp;
 			  if (is_user_logged_in() && $bp->is_item_admin): ?>
               <div id="group-action-wrapper">
-					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Project</a></div>
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>
             		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
               </div>
         <?php endif; ?>

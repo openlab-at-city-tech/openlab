@@ -40,7 +40,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 			<?php $invites = groups_get_invites_for_user();
 			      $invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0; ?>
 
-			<li class="sq-bullet <?php if ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invites <span class="mol-count count-<?php echo $invite_count ?>"><?php echo $invite_count ?></span></a></li>
+			<li class="sq-bullet <?php if ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <span class="mol-count count-<?php echo $invite_count ?>"><?php echo $invite_count ?></span></a></li>
 
 		</ul>
 
@@ -73,14 +73,13 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 <?php endif ?>
 
-
 <?php /* Portfolio links */ ?>
 
-<?php if ( openlab_user_has_portfolio() && ( !openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() ) ) : ?>
+<?php if ( openlab_user_has_portfolio(bp_loggedin_user_id()) && ( !openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() ) ) : ?>
 
 	<div class="sidebar-widget" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
-			<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
+			<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'user_id='.bp_loggedin_user_id().'&case=upper' ) ?> Site</a>
 		</h4>
 
 		<ul class="sidebar-sublinks portfolio-sublinks">

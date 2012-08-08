@@ -317,6 +317,7 @@ function show_site_posts_and_comments() {
 					<ul>
 					<?php foreach( $posts as $post ) : ?>
 						<li>
+                        <h5><?php echo $post['title']; ?></h5>
 						<p>
 							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
 						</p>
@@ -403,10 +404,14 @@ function wds_bp_group_site_pages(){
 			<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
 		</h4>
 
-                <?php if ( $bp->is_item_admin || is_super_admin() ) : ?>
+                <?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()) ) : ?>
                 	<ul class="sidebar-sublinks portfolio-sublinks">
 				<li class="portfolio-site-link">
+<<<<<<< HEAD
 					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.'Site</a>'; ?>
+=======
+					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">Site</a>'; ?>
+>>>>>>> 85852ace6630498d5b9271d326e301be3b884ca4
 				</li>
 
 				<li class="portfolio-dashboard-link">
@@ -681,11 +686,10 @@ function wds_bp_group_meta(){
 
 				<td id="noo_external_options">
 					<input size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
+                    <p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst($group_type); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p>
 				</td>
 			</tr>
 		</table>
-
-        <p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <Group> Profile page. If no feeds are detected, you may type in the Post and Comment feed URL's directly or just leave blank.</p>
 
 	<?php endif ?>
 	</div>

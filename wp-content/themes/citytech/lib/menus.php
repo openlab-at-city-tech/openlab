@@ -293,7 +293,7 @@ add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
 
 function openlab_filter_subnav_members($subnav_item)
 {
-	global $members_template, $bp;
+	global $bp;
 	
 	//string replace menu name
 	$new_item = str_replace("Members","Membership",$subnav_item);
@@ -304,7 +304,7 @@ function openlab_filter_subnav_members($subnav_item)
 	endif;
 	
 	//get total member count
-	$total_mem = bp_core_number_format( $members_template->total_member_count );
+	$total_mem = bp_core_number_format( groups_get_groupmeta( bp_get_current_group_id(), 'total_member_count') );
 	
 	//added classes to span
 	$new_item = str_replace('<span>'.$total_mem.'</span>','<span class="mol-count count-'.$total_mem.'">'.$total_mem.'</span>',$new_item);
