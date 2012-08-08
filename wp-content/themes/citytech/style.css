@@ -3372,9 +3372,15 @@ background-position: 0px -160px;
    width:50px;
 }
 
+
+div#member-header div#profile-action-wrapper div.friendship-button a:hover {
+    color:#0fceb9;
+}
+
+
 div#member-header div#profile-action-wrapper div.friendship-button a.pending:hover, div#member-header div#profile-action-wrapper div.friendship-button a.requested:hover { 
 background-position: -176px -160px;
-      color:#0fceb9;
+   
 }
 
 /* cancel friend buttons */
@@ -3388,7 +3394,7 @@ background-position: 0px -192px;
 
 div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
 background-position: -176px -192px;
-      color:#0fceb9;
+  
 }
 
 
@@ -3397,7 +3403,7 @@ background-position: -176px -192px;
 
 #group-action-wrapper .group-button a{ 
     display:block;
-    width:70px;
+    width:90px;
     padding:0px 0px 4px 30px;
     margin:0;
     background-image:url('images/mol-sprites.png');
@@ -3406,23 +3412,33 @@ background-position: -176px -192px;
     font-family: 'Arvo',arial,serif; 
 }
 
+
+/* join group */
 #group-action-wrapper .group-button a.join-group{ 
-   background-position: 10px -160px; 
+   background-position:  10px -225px;
    padding-left:0px;
    padding-right:20px;
    
 }
 
 #group-action-wrapper .group-button a.join-group:hover { 
-   background-position: -165px -160px;
+   background-position: -166px -225px;
 
 }
 
-
-div#member-header div#profile-action-wrapper div.friendship-button a:hover {
-    background-position:-115px -105px;
-    color:#0fceb9;
+/* leave group */
+#group-action-wrapper .group-button a.leave-group{ 
+   background-position:  25px -192px; 
+   padding-left:0px;
+   padding-right:20px;
+   
 }
+
+#group-action-wrapper .group-button a.leave-group:hover { 
+   background-position: -151px -192px;
+
+}
+
 
 /* People Archive Template
 ------------------------------------------------------------ */
