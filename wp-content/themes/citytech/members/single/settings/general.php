@@ -19,22 +19,22 @@ do_action( 'bp_before_member_settings_template' );
 
 		<form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/general'; ?>" method="post" class="standard-form" id="settings-form">
 			<div class="settings-section username-section">
-				<label for="username">Username (required)</label>
+				<label for="username">Username</label>
 				<input type="text" id="username" disabled="disabled" value="<?php bp_displayed_user_username() ?>" />
-				<p class="description">Your username cannot be changed</p>
+				<p class="description">Your username cannot be changed.</p>
 			</div>
 
 			<div class="settings-section email-section">
-				<label for="email_visible">Account Email Address (required)</label>
+				<label for="email_visible">Account Email Address</label>
 				<input type="text" name="email_visible" id="email_visible" value="<?php echo bp_get_displayed_user_email(); ?>" class="settings-input" disabled="disabled" />
 				<input type="hidden" name="email" value="<?php echo bp_get_displayed_user_email() ?>" />
-				<p class="description">Your email address cannot be changed. If your City Tech email address has changed, contact us for assistance.</p>
+				<p class="description">Your email address cannot be changed. If your City Tech email address has changed, <a class="underline" href="mailto:openlab@citytech.cuny.edu">contact us</a> for assistance.</p>
 			</div>
 
 			<div class="settings-section current-pw-section">
 				<label for="pwd">Current Password</label>
 				<input type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
-				<p class="description">Required to update email or change current password. <a href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a></p>
+				<p class="description">Required to change current password, first name, or last name.<a href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a></p>
 			</div>
 
 			<div class="settings-section change-pw-section">
