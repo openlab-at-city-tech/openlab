@@ -294,8 +294,6 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
                   <div class="clearfloat"></div>
 
               </div>
-              
-              <a class="group-see-all" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
 
               <?php $x+=1;
 //
@@ -305,6 +303,17 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 				break;
 			}
 		  endwhile; ?>
+          
+		  <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
+          
+          <a class="group-see-all" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
+
+		  <?php else: ?>
+          
+          <a class="group-see-all" href="<?php echo $bp->displayed_user->domain ?>groups/?type=<?php echo $type; ?>">See All</a>
+          
+          <?php endif; ?>
+        	
           </div>
 	  <?php else : ?>
 	   <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
