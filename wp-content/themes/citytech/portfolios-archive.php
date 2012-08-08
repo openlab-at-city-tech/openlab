@@ -384,7 +384,7 @@ switch ($_GET['group_sequence']) {
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
-	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/courses/'">
+	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/portfolios/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>

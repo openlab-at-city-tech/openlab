@@ -21,7 +21,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 		</a>
         <div id="group-action-wrapper">
          <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
-					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Project</a></div>
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>
             		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
 		<?php elseif (is_user_logged_in()):
 					do_action( 'bp_group_header_actions' );
