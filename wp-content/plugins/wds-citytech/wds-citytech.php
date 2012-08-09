@@ -554,7 +554,7 @@ function wds_load_group_departments(){
 	}
 	sort($departments);
 
-	if ( 'portfolio' == strtolower( $group_type ) ) {
+	if ( 'portfolio' == strtolower( $group_type ) && bp_is_group_create() ) {
 		$wds_departments = (array) bp_get_profile_field_data( array(
 			'field' => 'Department',
 			'user_id' => bp_loggedin_user_id()
@@ -686,12 +686,14 @@ function wds_load_group_type( $group_type ){
 	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
 	$wds_group_school = explode( ",", $wds_group_school );
 
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+
 	$return .= '<table>';
 
 	$return .= '<tr>';
 
 	$return .= '<td>School(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td>';
@@ -701,7 +703,7 @@ function wds_load_group_type( $group_type ){
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
 	$checked_array = array( 'schools' => array(), 'departments' => array() );
-	if ( 'portfolio' == $group_type ) {
+	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
 		$user_department = bp_get_profile_field_data( array(
 			'field'   => 'Department',
 			'user_id' => bp_loggedin_user_id()
@@ -760,7 +762,7 @@ function wds_load_group_type( $group_type ){
 		$return.='<tr>';
 
 		$return .= '<td>Department(s)';
-		if ( openlab_is_school_required_for_group_type( $group_type ) ) {
+		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 			$return .= ' <span class="required">(required)</span>';
 		}
 		$return .= '</td>';
@@ -876,7 +878,8 @@ function openlab_require_school_and_department_for_groups() {
 		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
 	}
 
-	if ( openlab_is_school_required_for_group_type( $group_type ) && bp_is_action_variable( 'group-details', 1 ) ) {
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+	if ( openlab_is_school_required_for_group_type( $group_type ) && bp_is_action_variable( 'group-details', 1 ) && 'staff' != strtolower( $account_type ) ) {
 
 		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
