@@ -3654,10 +3654,10 @@ li.sq-bullet ul { list-style-image: none; }
 #portfolio-sidebar-widget { border-bottom: none; border-top: 1px solid #F0F0F0; margin: 0 0 18px; }
 #sidebar > div > ul.portfolio-sublinks { margin-left: 0; padding-left: 0; }
 #item-buttons ul.portfolio-sublinks li, .portfolio-profile-link, .portfolio-site-link, .portfolio-dashboard-link { list-style-type: none; display: inline; margin:0; }
-#item-buttons ul.portfolio-sublinks li a, #portfolio-sidebar-widget .portfolio-profile-link, #portfolio-sidebar-widget .portfolio-site-link { padding: 0 4px; border-right: 1px solid #717171; } 
+#portfolio-sidebar-widget ul.portfolio-sublinks li a { padding: 0 4px; border-right: 1px solid #717171; }
 .portfolio-site-link a, .portfolio-dashboard-link  a{ padding: 0 12px; }
-#item-buttons ul.portfolio-sublinks li:first-child a, .portfolio-profile-link a{ /*padding-left: 0;*/ padding-right:6px }
-#item-buttons ul.portfolio-sublinks li:last-child a { border-right: 0; }
+#portfolio-sidebar-widget ul.portfolio-sublinks li:first-child a, .portfolio-profile-link a{ /*padding-left: 0;*/ padding-right:6px }
+#portfolio-sidebar-widget ul.portfolio-sublinks li:last-child a { border-right: 0; }
 
 /* Group Right Sidebar */
 #sidebar ul.website-links { border-width: 1px 0 0 0; border-style: solid;  border-color: #f0f0f0 }
