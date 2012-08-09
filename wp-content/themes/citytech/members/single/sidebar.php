@@ -100,8 +100,8 @@ if ( !$dud = bp_displayed_user_domain() ) {
 		</ul>
 	</div>
 
-<?php elseif ( openlab_is_my_profile() ) : ?>
-
+<?php elseif ( openlab_is_my_profile() && !bp_is_group_create() ) : ?>
+	<?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
 	<div class="sidebar-widget" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
 			<a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper' ) ?></a>
