@@ -158,15 +158,15 @@ global $bp;
 
 		<?php if ( bp_is_user_blogs() ) { ?>
 			  <?php do_action( 'bp_before_member_blogs_content' ) ?>
-      
+
               <div class="blogs myblogs">
                   <?php locate_template( array( 'blogs/blogs-loop.php' ), true ) ?>
               </div><!-- .blogs.myblogs -->
-      
+
               <?php do_action( 'bp_after_member_blogs_content' ) ?>
-      
+
               <?php do_action( 'bp_before_member_body' ) ?>
-      
+
           <?php } elseif ( 'view' == bp_current_action() ) { ?>
               <?php locate_template( array( 'members/single/messages/single.php' ), true ) ?>
           <?php } elseif ( bp_is_user_messages() ) { ?>
@@ -180,26 +180,26 @@ global $bp;
           <?php } elseif ( 'requests' == bp_current_action() ) { ?>
               <?php locate_template( array( 'members/single/friends/requests.php' ), true ) ?>
           <?php } elseif ( bp_is_user_friends() ) { ?>
-      
+
               <?php do_action( 'bp_before_member_friends_content' ) ?>
-              
+
 			  <?php if ( is_user_logged_in() && openlab_is_my_profile() ): ?>
               <div class="submenu"><?php echo openlab_my_friends_submenu(); ?></div>
               <?php endif; ?>
-              
+
               <div class="members friends">
-      
+
                   <?php locate_template( array( 'members/members-loop.php' ), true ) ?>
               </div><!-- .members.friends -->
-      
+
               <?php do_action( 'bp_after_member_friends_content' ) ?>
-      
+
           <?php } else { ?>
 
 		<?php echo cuny_profile_activty_block('course', 'My Courses', '',25); ?>
 		<?php echo cuny_profile_activty_block('project', 'My Projects', ' last',25); ?>
 		<?php echo cuny_profile_activty_block('club', 'My Clubs', ' last',25); ?>
-        
+
         <div class="clearfloat"></div>
         <script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>
 <?php
@@ -234,7 +234,7 @@ global $bp;
           <?php } ?>
           <div class="clear"></div>
       </div>
-      <?php } ?>   
+      <?php } ?>
 	<?php do_action( 'bp_after_member_body' ) ?>
 
 </div><!-- #item-body -->
@@ -265,61 +265,56 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 //	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
 		 ?>
 		 <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
-          <h4><?php echo $title ?></h4>
-		 <?php $x=0;
-		 while ( bp_groups() ) : bp_the_group();
-		 ?>
+                        <h4><?php echo $title ?></h4>
+                        <?php $x=0; ?>
+                        <?php while ( bp_groups() ) : bp_the_group(); ?>
 
-              <div class="row row-<?php echo $x+1; ?>">
-                  <div class="activity-avatar">
-      				<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'width' => 76, 'height' => 76 )) ?></a>
-                  </div>
+                                <div class="row row-<?php echo $x+1; ?>">
+                                        <div class="activity-avatar">
+                                                <a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'width' => 76, 'height' => 76 )) ?></a>
+                                        </div>
 
-                  <div class="activity-content">
+                                        <div class="activity-content">
 
-                      <div class="activity-header">
-                          <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(),35);?></a>
-                      </div>
+                                                <div class="activity-header">
+                                                        <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(),35);?></a>
+                                                </div>
 
-                          <div class="activity-inner">
-                          	<?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
-                            <?php //shorten the description if it's getting long
-							$activity = openlab_shortened_text($activity, 75); ?>
-                            
-                          	<?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">See More</a>'; ?>
-                          </div>
+                                                <div class="activity-inner">
+                                                        <?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
+                                                        <?php /* shorten the description if it's getting long */ ?>
+                                                        <?php $activity = openlab_shortened_text( $activity, 75 ); ?>
 
-                  </div>
-                  
-                  <div class="clearfloat"></div>
+                                                        <?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">See More</a>'; ?>
+                                                </div>
 
-              </div>
+                                        </div>
 
-              <?php $x+=1;
-//
-//    Only show 5 items max
-//
-			if ($x == 5) {
-				break;
-			}
-		  endwhile; ?>
-          
-		  <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
-          
-          <a class="group-see-all" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
+                                        <div class="clearfloat"></div>
 
-		  <?php else: ?>
-          
-          <a class="group-see-all" href="<?php echo $bp->displayed_user->domain ?>groups/?type=<?php echo $type; ?>">See All</a>
-          
-          <?php endif; ?>
-        	
-          </div>
+                                </div>
+
+                        <?php /* Increment */ ?>
+                        <?php $x += 1; ?>
+
+                        <?php /* Only show 5 items max */ ?>
+			<?php if ( $x == 5 ) { break; } ?>
+
+                        <?php endwhile; ?>
+
+                        <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
+                                <a class="group-see-all" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
+                        <?php else: ?>
+                                <a class="group-see-all" href="<?php echo $bp->displayed_user->domain ?>groups/?type=<?php echo $type; ?>">See All</a>
+                        <?php endif; ?>
+
+                </div>
 	  <?php else : ?>
-	   <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
-          <h4><?php echo $title ?></h4>
-              <div>
-                <?php if($type!="course"){
+                <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
+                        <h4><?php echo $title ?></h4>
+
+                        <div>
+                        <?php if($type!="course"){
 				  if($bp->loggedin_user->id==$bp->displayed_user->id){?>
 					  You aren't participating in any <?php echo $type; ?>s on the OpenLab yet. Why not <a href="<?php echo site_url();?>/groups/create/step/group-details/?type=<?php echo $type; ?>&new=true">create a <?php echo $type; ?></a>?
 				   <?php }else{
@@ -334,11 +329,10 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 					  hasn't joined any <?php echo $type ?>s yet.
 				   <?php }
 				}?>
-              </div>
-        </div>
-		<?php
-		endif;
-	} else {
+                      </div>
+                </div>
+        <?php endif; ?>
+<?php } else {
 		// BLOGS
 		global $bp, $wpdb;
 
