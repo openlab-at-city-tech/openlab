@@ -702,7 +702,20 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
 function openlab_validate_groupblog_url() {
 	global $current_blog;
 
-	if ( isset( $_POST['wds_website_check'] ) && isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+	/**
+	 * This is terrifying.
+	 * We check for a groupblog in the following cases:
+	 * a) 'new' == $_POST['new_or_old'], and either
+	 * b1) the 'Set up a site?' checkbox has been checked, OR
+	 * b2) the group type is Course or Portfolio, each of which requires blogs
+	 */
+	if (
+		isset( $_POST['new_or_old'] )
+		&&
+		'new' == $_POST['new_or_old']
+		&&
+		( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'course', 'portfolio' ) ) )
+	) {
 		$path = isset( $_POST['blog']['domain'] ) ? $_POST['blog']['domain'] : '';
 
 		if ( empty( $path ) ) {
