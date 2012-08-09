@@ -3238,6 +3238,15 @@ p#selectmemberslabel {
 margin-top:15px;
 }
 
+form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity {
+display:block;
+}
+
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
+float:none;
+display:block;
+}
+
 /*.read-more {
     color: #6D6D6D;
     font-size: 11px;
