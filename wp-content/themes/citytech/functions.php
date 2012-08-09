@@ -319,8 +319,8 @@ function openlab_no_join_on_portfolios() {
 		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 	}
 	
-	//fix for files and docs pages in group profile - hiding join button
-	if ($bp->current_action == 'files' || $bp->current_action == 'docs' )
+	//fix for files, docs, and membership pages in group profile - hiding join button
+	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
 		{
 			remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 		}
