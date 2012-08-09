@@ -519,6 +519,7 @@ function wds_groups_ajax(){
 			isack.setVar( "action", "wds_load_group_departments" );
 			isack.setVar( "schools", schools );
 			isack.setVar( "group", "<?php echo $group;?>" );
+			isack.setVar( "is_group_create", "<?php echo intval( bp_is_group_create() ) ?>" );
 			isack.setVar( "group_type", group_type );
 			isack.runAJAX();
 			return true;
@@ -535,12 +536,40 @@ function wds_load_group_departments(){
 	$group = $_POST['group'];
 	$schools = $_POST['schools'];
 	$group_type = $_POST['group_type'];
+	$is_group_create = (bool) $_POST['is_group_create'];
 	$schools=str_replace("0,","",$schools);
 	$schools=explode(",",$schools);
+
 
 	$departments_tech    = openlab_get_department_list( 'tech' );
 	$departments_studies = openlab_get_department_list( 'studies' );
 	$departments_arts    = openlab_get_department_list( 'arts' );
+
+	// We want to prefill the School and Dept fields, which means we have
+	// to prefetch the dept field and figure out School backward
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
+		$account_type = strtolower( bp_get_profile_field_data( array(
+			'field' => 'Account Type',
+			'user_id' => bp_loggedin_user_id()
+		) ) );
+		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+
+		$wds_departments = (array) bp_get_profile_field_data( array(
+			'field' => $dept_field,
+			'user_id' => bp_loggedin_user_id()
+		) );
+
+		foreach( $wds_departments as $d ) {
+			if ( in_array( $d, $departments_tech ) )
+				$schools[] = 'tech';
+
+			if ( in_array( $d, $departments_studies ) )
+				$schools[] = 'studies';
+
+			if ( in_array( $d, $departments_arts ) )
+				$schools[] = 'art';
+		}
+	}
 
 	$departments=array();
 	if(in_array("tech",$schools)){
@@ -554,9 +583,9 @@ function wds_load_group_departments(){
 	}
 	sort($departments);
 
-	if ( 'portfolio' == strtolower( $group_type ) && bp_is_group_create() ) {
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
 		$wds_departments = (array) bp_get_profile_field_data( array(
-			'field' => 'Department',
+			'field' => $dept_field,
 			'user_id' => bp_loggedin_user_id()
 		) );
 	} else {
@@ -704,8 +733,14 @@ function wds_load_group_type( $group_type ){
 	// of the logged-in user
 	$checked_array = array( 'schools' => array(), 'departments' => array() );
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
+		$account_type = strtolower( bp_get_profile_field_data( array(
+			'field' => 'Account Type',
+			'user_id' => bp_loggedin_user_id()
+		) ) );
+		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+
 		$user_department = bp_get_profile_field_data( array(
-			'field'   => 'Department',
+			'field'   => $dept_field,
 			'user_id' => bp_loggedin_user_id()
 		) );
 
