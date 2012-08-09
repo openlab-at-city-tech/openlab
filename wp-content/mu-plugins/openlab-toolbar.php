@@ -104,7 +104,7 @@ class OpenLab_Admin_Bar {
 			'parent' => 'openlab',
 			'id'     => 'people',
 			'title'  => 'People',
-			'href'   => trailingslashit( bp_get_root_domain() . '/' . bp_get_members_root_slug() )
+			'href'   => trailingslashit( bp_get_root_domain() . '/people' )
  		) );
 
  		$wp_admin_bar->add_node( array(
