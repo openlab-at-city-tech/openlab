@@ -106,7 +106,7 @@ function cuny_create_group(){
                         <div class="radio">
                         	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
                             <label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-                                <strong><?php _e( 'Public ', 'buddypress' ) ?></strong>
+                                <strong><?php _e( 'This is a public ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
                                 <ul>
                                     <li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
                                     <li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).'s directory, search results, and may be displayed on the OpenLab home page.', 'buddypress' ) ?></li>
@@ -117,7 +117,7 @@ function cuny_create_group(){
 							<?php else: ?>
                             
                             <label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-                                <strong><?php _e( 'Public ', 'buddypress' ) ?></strong>
+                                <strong><?php _e( 'This is a public ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
                                 <ul>
                                     <li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
                                     <li><?php _e( 'This '.ucfirst($group_type).' will be listed in the '.ucfirst($group_type).'s directory, search results, or OpenLab home page.', 'buddypress' ) ?></li>
@@ -130,10 +130,10 @@ function cuny_create_group(){
                             <?php /* Portfolios don't have a Private setting */ ?>
                             <?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
                                 <label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-                                <strong><?php _e( 'Private', 'buddypress' ) ?></strong>
+                                <strong><?php _e( 'This is a private ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
                                 <ul>
                                     <li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will only be visible to members of the group.', 'buddypress' ) ?></li>
-                                    <li><?php _e( 'This '.ucfirst($group_type).' will be listed in the ' .ucfirst($group_type).' directory and in search results.', 'buddypress' ) ?></li>
+                                    <li><?php _e( 'This '.ucfirst($group_type).' will be listed in the ' .ucfirst($group_type).' directory, search results, and may be displayed on the OpenLab home page', 'buddypress' ) ?></li>
                                     <li><?php _e( 'Only OpenLab members who request membership and are accepted may join this '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
                                 </ul>
                                 </label>
@@ -141,7 +141,7 @@ function cuny_create_group(){
                             <?php endif; ?>
     
                             <label><input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-                                <strong><?php _e('Hidden', 'buddypress') ?></strong>
+                                <strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
                                 <ul>
                                  <?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
                                         <li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
