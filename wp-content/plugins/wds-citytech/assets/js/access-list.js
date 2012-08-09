@@ -122,14 +122,16 @@ jQuery(document).ready( function() {
 function ia_on_autocomplete_select( value, data ) {
 	var j = jQuery;
 
+	var altajaxurl = '/wp-admin/admin-ajax.php';
+	
 	// Check the right checkbox
 	j('#invite-anyone-member-list input#f-' + data).prop('checked',true);
 
 	// Put the item in the invite list
 	j('div.item-list-tabs li.selected').addClass('loading');
 
-	j.post( ajaxurl, {
-		action: 'invite_anyone_groups_invite_user',
+	j.post( altajaxurl, {
+		action: 'openlab_ajax_invite_user',
 		'friend_action': 'invite',
 		'cookie': encodeURIComponent(document.cookie),
 		'_wpnonce': j("input#_wpnonce_invite_uninvite_user").val(),

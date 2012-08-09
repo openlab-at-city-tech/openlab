@@ -328,7 +328,7 @@ function openlab_ajax_invite_user() {
 	check_ajax_referer( 'groups_invite_uninvite_user' );
 
 	if ( !$_POST['friend_id'] || !$_POST['friend_action'] || !$_POST['group_id'] )
-		return false;
+		die();
 
 	if ( 'invite' == $_POST['friend_action'] ) {
 
