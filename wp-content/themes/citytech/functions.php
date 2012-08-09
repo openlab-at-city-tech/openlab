@@ -521,6 +521,9 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
  * does *save* the correct level)
  */
 function openlab_default_subscription_settings_form() {
+	if ( openlab_is_portfolio() || ( isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+		return;
+	}
 
 	$stored_setting = ass_get_default_subscription();
 	if ( !$stored_setting ) {
