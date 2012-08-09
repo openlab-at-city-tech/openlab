@@ -1426,6 +1426,25 @@ function openlab_launch_translator() {
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
 
+class buddypress_ajax_Translation_Mangler {
+ /*
+  * Filter the translation string before it is displayed.
+  */
+ function filter_gettext($translation, $text, $domain) {
+   $translations = &get_translations_for_domain( 'buddypress' );
+   switch($text){
+	case "Friendship Requested":
+	case "Add Friend":
+		return $translations->translate( "Friend" );
+		break;
+  }
+  return $translation;
+ }
+}
+function openlab_launch_ajax_translator() {
+	add_filter('gettext', array('buddypress_ajax_Translation_Mangler', 'filter_gettext'), 10, 4);
+}
+add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
 /**
  * When a user attempts to visit a blog, check to see if the user is a member of the
  * blog's associated group. If so, ensure that the member has access.
