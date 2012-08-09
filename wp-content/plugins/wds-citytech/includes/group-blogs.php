@@ -590,13 +590,6 @@ function wds_bp_group_meta(){
 					case 'project' : ?>
 						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
 
-						<ul class="ol-tooltip">
-							<li>FirstNameLastName_eportfolio</li>
-							<li>JaneSmith_eportfolio (Example)</li>
-							<li>FirstInitialLastName_eportfolio</li>
-							<li>JSmith_eportfolio (Example)</li>
-						</ul>
-
 						<?php break;
 					case 'club' : ?>
 						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
