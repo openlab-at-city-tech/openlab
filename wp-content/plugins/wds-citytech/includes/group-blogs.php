@@ -725,6 +725,33 @@ function openlab_validate_groupblog_url() {
 add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
 
 /**
+ * For groupblog types other than 'Create a new site', perform basic validation
+ */
+function openlab_validate_groupblog_selection() {
+	if ( isset( $_POST['new_or_old'] ) ) {
+		switch ( $_POST['new_or_old'] ) {
+			case 'old' :
+				if ( empty( $_POST['groupblog-blogid'] ) ) {
+					$error_message = 'You must select an existing site from the dropdown menu.';
+				}
+				break;
+
+			case 'external' :
+				if ( empty( $_POST['external-site-url'] ) || !openlab_validate_url( $_POST['external-site-url'] ) || 'http://' == trim( $_POST['external-site-url'] ) ) {
+					$error_message = 'You must provide a valid external site URL.';
+				}
+				break;
+		}
+
+		if ( isset( $error_message ) ) {
+			bp_core_add_message( $error_message, 'error' );
+			bp_core_redirect( wp_guess_url() );
+		}
+	}
+}
+add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
+
+/**
  * Handler for AJAX group blog URL validation
  */
 function openlab_validate_groupblog_url_handler() {
