@@ -3413,7 +3413,7 @@ background-image:url('images/mol-sprites.png');
     font-family: 'Arvo',arial,serif; 
 }
 
-/* add buttons */
+/* add buttons get plus signn*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add { 
 background-position: 0px -225px;
@@ -3428,7 +3428,22 @@ background-position: -176px -225px;
       color:#0fceb9;
 }
 
-/* pending friend buttons */
+div#club-header div#group-action-wrapper a.request-membership {
+background-position: 0px -251px;
+   padding:0 20px 0 0;
+   margin:0;
+   width:120px;
+}
+
+/* REQUEST MEMBERSHIP GETS PLUS */
+
+div#club-header div#group-action-wrapper a.request-membership:hover {
+background-position: -100px -224px;
+   padding:0 20px 0 0;
+      color:#0fceb9;
+}
+
+/* pending friend buttons get checkmark*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
 background-position: 0px -160px;
@@ -3447,6 +3462,23 @@ div#member-header div#profile-action-wrapper div.friendship-button a.pending:hov
 background-position: -176px -160px;
    
 }
+
+/* pending membership gets checkmark */
+
+div#content.hfeed div#club-header div#group-action-wrapper a.pending {
+background-position: -43px -273px;
+   padding:0px 15px 0 5px;
+   margin:0;
+   width:120px;
+}
+
+div#content.hfeed div#club-header div#group-action-wrapper a.pending:hover {
+background-position: -142px -160px;
+    color:#0fceb9;
+
+}
+
+
 
 /* cancel friend buttons */
 
