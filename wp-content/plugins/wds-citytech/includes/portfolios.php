@@ -353,7 +353,7 @@ function openlab_ajax_invite_user() {
 		echo '<h4>' . bp_core_get_userlink( $user->id ) . '</h4>';
 		echo '<span class="activity">' . esc_html( $user->last_active ) . '</span>';
 		echo '<div class="action">
-				<a class="remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . $group_slug . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_html( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
+				<a class="remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . $group_slug . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_html( $user->id ) . '">' . __( 'Remove Access', 'buddypress' ) . '</a>
 			  </div>';
 		echo '</li>';
 
