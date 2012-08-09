@@ -212,10 +212,10 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php /* Site privacy markup */ ?>
 
-	<h4><?php _e( ucfirst($group_type).' Site')?></h4>
-	<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Site.') ?></p>
 
 	<?php if ( $site_id = openlab_get_site_id_by_group_id() ) : ?>
+		<h4><?php _e( ucfirst($group_type).' Site')?></h4>
+		<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Site.') ?></p>
 		<?php openlab_site_privacy_settings_markup( $site_id ) ?>
 	<?php endif ?>
 
