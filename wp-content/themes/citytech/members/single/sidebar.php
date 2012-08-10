@@ -50,7 +50,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 	<h2 class="sidebar-title">People</h2>
 
-	<div id="item-buttons">
+	<div id="item-buttons" class="mol-menu">
 
 		<ul class="main-nav">
 
