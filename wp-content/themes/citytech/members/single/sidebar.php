@@ -80,7 +80,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 	<?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
 	<?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
-	<div class="sidebar-widget" id="portfolio-sidebar-widget">
+	<div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
 		<h4 class="sidebar-header">
 			<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'user_id=' . $displayed_user_id . '&case=upper' ) ?> Site</a>
 		</h4>

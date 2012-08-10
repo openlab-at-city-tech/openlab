@@ -2391,7 +2391,7 @@ p.wp-caption-text {
     width: 217px;
 }
 
-div#sidebar.sidebar div#portfolio-sidebar-widget {
+div#sidebar.sidebar div#portfolio-sidebar-widget.mol-menu {
   border-bottom: 1px solid #F0F0F0;
 margin-bottom:15px; 
 }
@@ -3657,7 +3657,7 @@ h4.group-activity-title.activity-members-title
 li.sq-bullet ul { list-style-image: none; }
 #sidebar li.active-submenu { display:inline }
 .widget-area #portfolio-sidebar-widget h4 { padding-bottom: 0; padding-top: 10px  }
-#portfolio-sidebar-widget { border-bottom: none; border-top: 1px solid #F0F0F0; margin: 0 0 18px; }
+#portfolio-sidebar-widget.mol-menu { border-bottom: none; border-top: 1px solid #F0F0F0; margin: 0 0 18px; }
 #sidebar #item-buttons.mol-menu{ border-bottom: none; }
 #sidebar > div > ul.portfolio-sublinks { margin-left: 0; padding-left: 0; }
 #item-buttons ul.portfolio-sublinks li, .portfolio-profile-link, .portfolio-site-link, .portfolio-dashboard-link { list-style-type: none; display: inline; margin:0; }
