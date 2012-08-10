@@ -1,0 +1,34 @@
+.search-results #content > h2{
+	color:#539BD5;
+	font-family:Helvetica;
+}
+
+.search-no-results  .content-wrapper, .search-results .content-wrapper{
+	padding-left:240px;
+	padding-top:50px;
+
+}
+
+
+.search-no-results .post_ribbon, .search-results .post_ribbon{
+	left: 5px;
+
+}
+
+.search .post, .search .page {
+	padding:20px 65px;
+	margin-left: 0;
+}
+
+.search-results .post_title, .search-no-results .post_title{
+	margin-left: 60px;
+}
+
+
+.search-results .hentry{
+	margin-top: 21px !important;
+	padding-top:0px !important;
+	margin-bottom: 40px;
+	
+}
+

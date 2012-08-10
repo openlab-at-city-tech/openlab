@@ -1,6 +1,6 @@
 <?php include "header.php";?>
 <div id="single-course-body">
-<?php
+<?php 
 //
 //     control the formatting of left and right side by use of variable $first_class.
 //     when it is "first" it places it on left side, when it is "" it places it on right side
@@ -52,10 +52,7 @@
 			<div class="one-half <?php echo $first_class; ?>">
 				<div class="recent-discussions">
 					<div class="recent-posts">
-						<div class="ribbon-case">
-							<span class="ribbon-fold"></span>
-							<h4 class="robin-egg-ribbon">Recent Discussions</h4>
-						</div>
+						<h4 class="group-activity-title">Recent Discussions</h4>
 						<?php if ( bp_has_forum_topics('per_page=3') ) : ?>
 							<ul>
 								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
@@ -71,11 +68,11 @@
 							echo $last_topic_content;
 						?>
 
-                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
+                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See All</a>
 									</li>
 								<?php endwhile; ?>
 							</ul></p>
-							<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See More Course Discussion</a></div>
+							<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></div>
 						<?php else: ?>
 							<div id="message" class="info">
 								<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -88,10 +85,7 @@
 			<div class="one-half <?php echo $first_class; ?>">
 				<div id="recent-docs">
 				   <div class="recent-posts">
-						<div class="ribbon-case">
-							<span class="ribbon-fold"></span>
-							<h4 class="robin-egg-ribbon">Recent Docs</h4>
-						</div>
+						<h4 class="group-activity-title">Recent Docs<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></span></h4>
 <?php
 //*********************************************************************
 
@@ -118,7 +112,7 @@
 						  endwhile;
 						  echo '</ul>';
 						  ?>
-						<div class="view-more"><p><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See More Docs</a></p></div>
+						<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></div>
 						<?php
 						}else{
 							echo "<div><p>No Recent Docs</p></div>";
@@ -129,12 +123,9 @@
 				  	</div>
 				</div>
 			</div>
-			<div class="info-group">
+			<div id="members-list" class="info-group">
 
-				<div class="ribbon-case">
-					<span class="ribbon-fold"></span>
-					<h4 class="robin-egg-ribbon">Members</h4>
-				</div>
+				<h4 class="group-activity-title activity-members-title">Members</h4>
 				<?php $member_arg = Array("exclude_admins_mods"=>false); ?>
 				<?php if ( bp_group_has_members($member_arg) ) : ?>
 
@@ -155,6 +146,13 @@
 				  </div>
 
 				<?php endif;?>
+                
+                <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
+        				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
+				<?php else: ?>
+                    <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
+                <?php endif; ?>
+                
 			</div>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>

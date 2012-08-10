@@ -39,6 +39,12 @@
 				</div>
 
 				<div class="item-meta"><span class="activity"><?php bp_member_last_active() ?></span></div>
+                
+                <div class="action">
+
+				<?php do_action( 'bp_directory_members_actions' ); ?>
+
+				</div>
 
 				<?php do_action( 'bp_directory_members_item' ) ?>
 
@@ -51,12 +57,6 @@
 				  * bp_member_profile_data( 'field=the field name' );
 				  */
 				?>
-			</div>
-
-			<div class="action">
-
-				<?php do_action( 'bp_directory_members_actions' ); ?>
-
 			</div>
 
 			<div class="clear"></div>

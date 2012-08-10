@@ -1,37 +1,28 @@
 <?php
-gconnect_get_header();
+remove_action('genesis_loop', 'genesis_do_loop');
+add_action('genesis_loop', 'cuny_plugin_loop' );
+
+function cuny_plugin_loop(){
+	
+	global $bp;
+
 do_action( 'bp_before_member_plugin_template' );
 ?>
 
-	<h1 class="entry-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
+	<h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 	
-	<div id="item-header">
-		
-		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
-	</div><!-- #item-header -->
-	<div id="item-nav">
-		<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
-			<ul>
-				<?php bp_get_displayed_user_nav(); do_action( 'bp_member_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div><!-- #item-nav -->
+    <div class="submenu"><div class="submenu-text">My Invitations: </div><?php echo openlab_my_invitations_submenu(); ?></div>
+    
 	<div id="item-body" role="main">
 		<?php do_action( 'bp_before_member_body' ); ?>
-
-		<div class="item-list-tabs no-ajax" id="bpsubnav">
-			<ul>
-				<?php bp_get_options_nav(); do_action( 'bp_member_plugin_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div><!-- .item-list-tabs -->
-
-		
-
-		<?php do_action( 'bp_template_content' ); do_action( 'bp_after_member_body' ); ?>
+		<?php do_action( 'bp_template_content' ); 
+			  do_action( 'bp_after_member_body' ); ?>
 	</div><!-- #item-body -->
-<?php 
+<?php
 do_action( 'bp_after_member_plugin_template' );
-gconnect_get_footer();
+}
+
+add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
+
+genesis();
 ?>

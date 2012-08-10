@@ -3,6 +3,12 @@
 require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
+/**this is for the post type declarations - they are done on the function side instead of through
+a plugin, to make git tracking easier**/
+require_once(STYLESHEETPATH.'/lib/post-types.php');
+require_once(STYLESHEETPATH.'/lib/menus.php');
+require_once(STYLESHEETPATH.'/lib/content-processing.php');
+
 /**
  * Don't use the Genesis genesis_meta action to load the stylesheet
  *
@@ -35,7 +41,7 @@ function cuny_remove_default_widget_areas() {
 	unregister_sidebar('sidebar-alt');
 }
 /** Add support for custom background **/
-add_custom_background();
+add_theme_support( 'custom-background', array() );
 //add_theme_support( 'genesis-footer-widgets', 5 );
 
 add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
@@ -68,6 +74,22 @@ function cuny_no_bp_default_styles() {
 	wp_enqueue_style( 'cuny-bp', get_stylesheet_directory_uri() . '/css/buddypress.css' );
 	wp_dequeue_style( 'gconnect-adminbar' );
 }
+
+/**
+ * Enqueue our front-end scripts
+ */
+function openlab_enqueue_frontend_scripts() {
+	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
+             ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
+		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+	}
+
+        if ( bp_is_register_page() ) {
+                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery' ) );
+        }
+
+}
+add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
 
 add_action( 'genesis_meta', 'cuny_google_font');
 function cuny_google_font() {
@@ -206,60 +228,29 @@ function cuny_members_pagination_count($member_name)
 		echo $pag;
 }
 
-//a variation on bp_get_options_nav to match the design
-//main change here at the moment - changing "home" to "profile"
-function cuny_get_options_nav() {
+
+/**
+ * Reach into the item nav menu and remove stuff as necessary
+ *
+ * Hooked to bp_screens at 1 because apparently BP is broken??
+ */
+function openlab_modify_options_nav() {
 	global $bp;
 
-	// If we are looking at a member profile, then the we can use the current component as an
-	// index. Otherwise we need to use the component's root_slug
-	$component_index = !empty( $bp->displayed_user ) ? $bp->current_component : bp_get_root_slug( $bp->current_component );
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		foreach( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+			if ( 'home' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
+			} else if ( 'admin' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
+			} else {
+				unset( $bp->bp_options_nav[$bp->current_item][$key] );
+			}
 
-	if ( !bp_is_single_item() ) {
-		if ( !isset( $bp->bp_options_nav[$component_index] ) || count( $bp->bp_options_nav[$component_index] ) < 1 ) {
-			return false;
-		} else {
-			$the_index = $component_index;
-		}
-	} else {
-		if ( !isset( $bp->bp_options_nav[$bp->current_item] ) || count( $bp->bp_options_nav[$bp->current_item] ) < 1 ) {
-			return false;
-		} else {
-			$the_index = $bp->current_item;
 		}
 	}
-
-	// Loop through each navigation item
-	foreach ( (array)$bp->bp_options_nav[$the_index] as $subnav_item ) {
-		if ( !$subnav_item['user_has_access'] )
-			continue;
-
-		// If the current action or an action variable matches the nav item id, then add a highlight CSS class.
-		if ( $subnav_item['slug'] == $bp->current_action ) {
-			$selected = ' class="current selected"';
-		} else {
-			$selected = '';
-		}
-
-		if ($subnav_item['name'] == 'Home')
-		{
-			$subnav_item['name'] = 'Profile';
-		}
-
-		// List type depends on our current component
-		$list_type = bp_is_group() ? 'groups' : 'personal';
-
-		// echo out the final list item
-		echo apply_filters( 'bp_get_options_nav_' . $subnav_item['css_id'], '<li id="' . $subnav_item['css_id'] . '-' . $list_type . '-li" ' . $selected . '><a id="' . $subnav_item['css_id'] . '" href="' . $subnav_item['link'] . '">' . $subnav_item['name'] . '</a></li>', $subnav_item );
-	}
-}//end cuny_get_options_nav
-
-//custom menu locations for OpenLab
-register_nav_menus( array(
-	'main' => __('Main Menu', 'cuny'),
-	'aboutmenu' => __('About Menu', 'cuny'),
-	'helpmenu' => __('Help Menu', 'cuny')
-) );
+}
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 //custom widgets for OpenLab
 function cuny_widgets_init() {
@@ -318,6 +309,24 @@ function openlab_current_user_ribbonclass() {
  */
 add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
 
+/**
+ * Don't show the Join Group button on the sidebar of a portfolio
+ */
+function openlab_no_join_on_portfolios() {
+	global $bp;
+	
+	if ( openlab_is_portfolio() ) {
+		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
+	}
+	
+	//fix for files, docs, and membership pages in group profile - hiding join button
+	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
+		{
+			remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
+		}
+}
+add_action( 'wp_head', 'openlab_no_join_on_portfolios', 999 );
+
 function openlab_get_groups_of_user( $args = array() ) {
 	global $bp, $wpdb;
 
@@ -329,7 +338,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$defaults = array(
 		'user_id' 	=> bp_loggedin_user_id(),
-		'active_status' => 'all',
 		'show_hidden'   => true,
 		'group_type'	=> 'club',
 		'get_activity'	=> true
@@ -340,22 +348,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
-
-	if ( 'all' != $r['active_status'] ) {
-		// For legacy reasons, not all active groups are marked 'active'
-		if ( 'inactive' == $r['active_status'] ) {
-			$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} b ON (a.group_id = b.group_id) " );
-			$where  .= $wpdb->prepare( " AND b.meta_key = 'openlab_group_active_status' AND b.meta_value = %s ", $r['active_status'] );
-		} else {
-			// Gotta do a double query to calculate active groups (NOT IN 'inactive')
-			$inactive_groups = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'openlab_group_active_status' AND meta_value = 'inactive'" ) );
-
-			if ( !empty( $inactive_groups ) ) {
-				$inactive_groups_sql = implode( ',', $inactive_groups );
-				$where .= $wpdb->prepare( " AND a.group_id NOT IN ({$inactive_groups_sql}) " );
-			}
-		}
-	}
 
 	if ( !$r['show_hidden'] ) {
 		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
@@ -401,66 +393,6 @@ function openlab_get_groups_of_user( $args = array() ) {
 	}
 
 	return $retval;
-}
-
-/**
- * Get Recent Account Activity sidebar to show on the my-* templates
- */
-function openlab_recent_account_activity_sidebar() {
-?>
-	<?php if ( !bp_is_user_messages() ) { ?>
-	<?php if ( bp_is_user_friends() ) { ?>
-		<?php $friends_true = "&scope=friends"; ?>
-		<h4 class="sidebar-header">Recent Friend Activity</h4>
-	<?php } else { ?>
-		<?php $friends_true = NULL; ?>
-		<h4 class="sidebar-header">Recent Account Activity</h4>
-	<?php } ?>
-
-	<?php if ( bp_has_activities( 'per_page=3&show_hidden=true&user_id=' . bp_loggedin_user_id() . $friends_true ) ) : ?>
-
-		<ul id="activity-stream" class="activity-list item-list">
-			<div>
-			<?php while ( bp_activities() ) : bp_the_activity(); ?>
-
-				<div class="activity-avatar">
-					<a href="<?php bp_activity_user_link() ?>">
-						<?php bp_activity_avatar( 'type=full&width=100&height=100' ) ?>
-					</a>
-				</div>
-
-				<div class="activity-content">
-
-					<div class="activity-header">
-						<?php bp_activity_action() ?>
-					</div>
-
-					<?php if ( bp_activity_has_content() ) : ?>
-						<div class="activity-inner">
-							<?php bp_activity_content_body() ?>
-						</div>
-					<?php endif; ?>
-
-					<?php do_action( 'bp_activity_entry_content' ) ?>
-
-				</div>
-				<hr style="clear:both" />
-
-			<?php endwhile; ?>
-			</div>
-		</ul>
-
-	<?php else : ?>
-		<ul id="activity-stream" class="activity-list item-list">
-			<div>
-			<div id="message" class="info">
-				<p><?php _e( 'No recent activity.', 'buddypress' ) ?></p>
-			</div>
-			</div>
-		</ul>
-	<?php endif; ?>
-	<?php } // if !is_user_messages
-
 }
 
 /**
@@ -545,132 +477,95 @@ function openlab_previous_step_type( $url ) {
 add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
 
 /**
- * Get a group's recent posts and comments, and display them in two widgets
+ * Markup for groupblog privacy settings
  */
-function show_site_posts_and_comments() {
-	global $first_displayed;
+function openlab_site_privacy_settings_markup( $site_id = 0 ) {
+	global $blogname, $current_site;
 
-	$group_id = bp_get_group_id();
-
-	$site_type = false;
-
-	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
-		$site_type = 'local';
-	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
-		$site_type = 'external';
+	if ( !$site_id ) {
+		$site_id = get_current_blog_id();
 	}
 
-	$posts = array();
-	$comments = array();
+	$blog_name   = get_blog_option( $site_id, 'blogname' );
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+	$group_type  = openlab_get_current_group_type( 'case=upper' );
+?>
 
-	switch ( $site_type ) {
-		case 'local':
-			switch_to_blog( $site_id );
+<div class="radio">
 
-			// Set up posts
-			$wp_posts = get_posts( array(
-				'posts_per_page' => 3
-			) );
+	<em><?php _e('Public', 'buddypress') ?></em>
 
-			foreach( $wp_posts as $wp_post ) {
-				$posts[] = array(
-					'title' => $wp_post->post_title,
-					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
-					'permalink' => get_permalink( $wp_post->ID )
-				);
-			}
+	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 
-			// Set up comments
-			$comment_args = array(
-				"status" => "approve",
-				"number" => "3"
-			);
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.<br /><em>Note: This option will NOT block access to your site. It is up to search engines to honor your request.</em>'); ?></label>
 
-			$wp_comments = get_comments( $comment_args );
+	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
-			foreach( $wp_comments as $wp_comment ) {
-				// Skip the crummy "Hello World" comment
-				if ( $wp_comment->comment_ID == "1" ) {
-					continue;
-				}
-				$post_id = $wp_comment->comment_post_ID;
+		<em><?php _e('<em>Private</em>', 'buddypress') ?></em>
+		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>> <?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
 
-				$comments[] = array(
-					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
-					'permalink' => get_permalink( $post_id )
-				);
-			}
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>> <?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type)); ?></label>
 
-			$site_url = get_option( 'siteurl' );
+		<em><?php _e('<em>Hidden</em>', 'buddypress') ?></em>
+		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
 
-			restore_current_blog();
+	<?php else : ?>
 
-			break;
+		<?php /* Portfolios */ ?>
+		<em>Hidden</em>
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ) ?>> I would like my site to be visible only to members of my Access List.</label>
 
-		case 'external':
-			$posts = openlab_get_external_posts_by_group_id();
-			$comments = openlab_get_external_comments_by_group_id();
-
-			break;
-	}
-
-	// If we have either, show both
-	if ( !empty( $posts ) || !empty( $comments ) ) {
-		?>
-		<div class="one-half first">
-			<div id="recent-course">
-				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Posts</h4>
-					</div>
-
-					<ul>
-					<?php foreach( $posts as $post ) : ?>
-						<li>
-						<p>
-							<?php echo $post['content'] ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
-						</p>
-						</li>
-					<?php endforeach ?>
-					</ul>
-
-					<div class="view-more"><a href="<?php echo esc_attr( $site_url ) ?>">See More Course Posts</a></div>
-
-
-
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-course -->
-		</div><!-- .one-half -->
-
-		<div class="one-half">
-			<div id="recent-site-comments">
-				<div class="recent-posts">
-					<div class="ribbon-case">
-						<span class="ribbon-fold"></span>
-						<h4 class="robin-egg-ribbon">Recent Site Comments</h4>
-					</div>
-
-
-
-						<ul>
-						<?php if ( !empty( $comments ) ) : ?>
-							<?php foreach( $comments as $comment ) : ?>
-								<li>
-									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
-								</li>
-							<?php endforeach ?>
-						<?php else : ?>
-							<li>&nbsp;&nbsp;&nbsp;No Comments Found</li>
-						<?php endif ?>
-
-						</ul>
-
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-site-comments -->
-		</div><!-- .one-half -->
-		<?php
-	}
+	<?php endif; ?>
+</div>
+	<?php
 }
 
+/**
+ * Output the group subscription default settings
+ *
+ * This is a lazy way of fixing the fact that the BP Group Email Subscription
+ * plugin doesn't actually display the correct default sub level (even though it
+ * does *save* the correct level)
+ */
+function openlab_default_subscription_settings_form() {
+	if ( openlab_is_portfolio() || ( isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+		return;
+	}
+
+	$stored_setting = ass_get_default_subscription();
+	if ( !$stored_setting ) {
+		$stored_setting = 'supersub';
+	}
+
+	?>
+	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
+	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
+	<div class="radio">
+		<label><input type="radio" name="ass-default-subscription" value="no" <?php checked( $stored_setting, 'no' ) ?> />
+			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sum" <?php checked( $stored_setting, 'sum' ) ?> />
+			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="dig" <?php checked( $stored_setting, 'dig' ) ?> />
+			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sub" <?php checked( $stored_setting, 'sub' ) ?> />
+			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php checked( $stored_setting, 'supersub' ) ?> />
+			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'bp-ass' ) ?></label>
+	</div>
+	<hr />
+	<?php
+}
+remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
+add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
+
+/**
+ * Filter the output of the Add Friend/Cancel Friendship button
+ */
+function openlab_filter_friendship_button( $button ) {
+	if ( $button['id'] == 'not_friends' || $button['id'] == 'is_friend' || $button['id'] == 'pending' ) {
+		$button['link_text'] = 'Friend';
+	}
+	return $button;
+}
+add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
 ?>

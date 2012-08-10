@@ -30,8 +30,13 @@ class OpenLab_Admin_Bar {
 			return;
 		}
 
+		// Add a body style to distinguish between sites
+		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
+		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
+
 		// Enqueue styles
 		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
+		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
 
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
@@ -72,7 +77,7 @@ class OpenLab_Admin_Bar {
  	 */
  	function add_network_menu( $wp_admin_bar ) {
  		$wp_admin_bar->add_node( array(
- 			'parent' => 'top-secondary',
+ 			/*'parent' => 'top-secondary',*/
 			'id'     => 'openlab',
 			'title'  => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
 			'href'   => bp_get_root_domain(),
@@ -99,7 +104,7 @@ class OpenLab_Admin_Bar {
 			'parent' => 'openlab',
 			'id'     => 'people',
 			'title'  => 'People',
-			'href'   => trailingslashit( bp_get_root_domain() . '/' . bp_get_members_root_slug() )
+			'href'   => trailingslashit( bp_get_root_domain() . '/people' )
  		) );
 
  		$wp_admin_bar->add_node( array(
@@ -145,6 +150,7 @@ class OpenLab_Admin_Bar {
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
 			'title' => 'My OpenLab',
+			'href'  => bp_loggedin_user_domain()
 		) );
  	}
 
@@ -197,66 +203,82 @@ class OpenLab_Admin_Bar {
 			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
 			'title'  => 'My Courses',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-projects',
 			'title'  => 'My Projects',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-projects' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-clubs',
 			'title'  => 'My Clubs',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-clubs' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' )
 		) );
 
-		// @todo This will need to be conditional, and we'll need to be dynamic about
-		// href generation. But not strategicially dynamic
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-portfolio',
-			'title'  => 'My Portfolio',
-			'href'   => bp_loggedin_user_domain()
-		) );
+		// Only show a My Portfolio link for users who actually have one
+		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
+		if ( !empty( $portfolio_url ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-portfolio',
+				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
+				'href'   => $portfolio_url
+			) );
+		}
 
+                $request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+                $request_count = count( $request_ids );
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-friends',
-			'title'  => 'My Friends',
+			'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . '">%d</span>', $request_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
 		) );
 
+		$messages_count = bp_get_total_unread_messages_count();
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-messages', // @todo Unread message count
-			'title'  => 'My Messages',
+			'id'     => 'my-messages',
+			'title'  => sprintf( 'My Messages <span class="toolbar-item-count count-' . $messages_count . '">%d</span>', $messages_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 
+		$invites = groups_get_invites_for_user();
+		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
-			'id'     => 'my-invitations', // @todo Invitations count
-			'title'  => 'My Invitations',
+			'id'     => 'my-invitations',
+			'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . '">%d</span>', $invite_count ),
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
 		) );
 
-		// @todo Do we really want this kind of separator?
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-openlab-separator',
-			'title'  => '-----------'
-		) );
+		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
+		// this panel only works if looking at a site where the user has Dashboard-level
+		// permissions. So we have to find a valid site for the logged in user.
+		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
+		$primary_site_url = get_blog_option( $primary_site_id, 'siteurl' );
 
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-dashboard',
-			'title'  => 'My Dashboard',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . 'my-courses' ) // @todo Where does this go?
-		) );
+		if ( !empty( $primary_site_id ) && !empty( $primary_site_url ) ) {
+
+			// @todo Do we really want this kind of separator?
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-openlab-separator',
+				'title'  => '-----------'
+			) );
+
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-dashboard',
+				'title'  => 'My Dashboard',
+				'href'   => $primary_site_url . '/wp-admin/my-sites.php'
+			) );
+		}
 	}
 
 	/**
@@ -282,9 +304,19 @@ class OpenLab_Admin_Bar {
 	 * Add the Invites menu (Friend Requests + Group Invitations)
 	 */
 	function add_invites_menu( $wp_admin_bar ) {
+
+		// We need this data up front so we can provide counts
+		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+		$request_count = count( (array) $request_ids );
+
+		$invites = groups_get_invites_for_user();
+		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+
+		$total_count = $request_count + $invite_count;
+
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => 'Invitations',
+			'title' => '<span class="toolbar-item-name">Invitations </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		/**
@@ -298,7 +330,6 @@ class OpenLab_Admin_Bar {
 			'title'  => 'Friend Requests'
 		) );
 
-		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
 		$members_args = array(
 			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
 			'max'     => 0
@@ -342,7 +373,7 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
 				'id'     => 'friend-requests-none',
-				'title'  => 'None', // @todo - What should this say?
+				'title'  => 'No new friendship requests.',
 				'meta'   => array(
 					'class' => 'nav-no-items'
 				)
@@ -364,24 +395,23 @@ class OpenLab_Admin_Bar {
 			'type'    => 'invites',
 			'user_id' => bp_loggedin_user_id()
 		);
-		if ( bp_has_groups( $groups_args ) ) {
-			$group_counter = 0;
-			while ( bp_groups() ) {
-				bp_the_group();
 
+		if ( !empty( $invites['groups'] ) ) {
+			$group_counter = 0;
+			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_avatar( 'type=thumb&width=50&height=50' ) . '</a></div>';
+					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</div>' ;
 
 					// name link
-					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></div></div>';
+					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></div></div>';
 
 					// accept/reject buttons
-					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'invites',
-						'id'     => 'invitation-' . bp_get_group_id(),
+						'id'     => 'invitation-' . $group->id,
 						'title'  => $title,
 						'meta'   => array(
 							'class' => 'nav-content-item nav-invitation'
@@ -391,22 +421,12 @@ class OpenLab_Admin_Bar {
 
 				$group_counter++;
 			}
-
-			if ( 3 < $group_counter ) {
-				// "See More"
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'invitations-more',
-					'title'  => 'See More',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
-				) );
-			}
 		} else {
-			// The user has no friend requests
+			// The user has no group invites
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
-				'id'     => 'friend-requests-none',
-				'title'  => 'None', // @todo - What should this say?
+				'id'     => 'group-invites-none',
+				'title'  => 'No new invitations',
 				'meta'   => array(
 					'class' => 'nav-no-items'
 				)
@@ -419,9 +439,10 @@ class OpenLab_Admin_Bar {
 	 * Add the Messages menu
 	 */
 	function add_messages_menu( $wp_admin_bar ) {
+		$total_count = bp_get_total_unread_messages_count();
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => 'Messages',
+			'title' => '<span class="toolbar-item-name">Messages </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		// Only show the first 5
@@ -477,7 +498,7 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'messages',
 				'id'     => 'messages-none',
-				'title'  => 'None', // @todo - What should this say?
+				'title'  => 'No new messages.',
 				'meta'   => array(
 					'class' => 'nav-no-items'
 				)
@@ -488,7 +509,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'messages',
 			'id'     => 'messages-more',
-			'title'  => 'Go to Inbox',
+			'title'  => 'See All Messages',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
 		) );
 	}
@@ -499,7 +520,7 @@ class OpenLab_Admin_Bar {
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => 'Activity',
+			'title' => '<span class="toolbar-item-name">Activity </span>'
 		) );
 
 		$activity_args = array(
@@ -533,7 +554,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'activity',
 			'id'     => 'activity-more',
-			'title'  => 'See all group activity',
+			'title'  => 'See All Activity',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() )
 		) );
 	}
@@ -545,7 +566,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'top-secondary',
 			'id'     => 'top-logout',
-			'href'   => add_query_arg( 'redirect_to', wp_guess_url(), wp_logout_url() ),
+			'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
 			'title'  => 'Log Out'
 		) );
 	}
@@ -600,6 +621,26 @@ class OpenLab_Admin_Bar {
 		) );
 	}
 
+	function body_class( $body_class ) {
+		if ( bp_is_root_blog() ) {
+			$body_class[] = 'openlab-main';
+		} else {
+			$body_class[] = 'openlab-member';
+		}
+
+		return $body_class;
+	}
+
+	function admin_body_class( $body_class ) {
+		if ( bp_is_root_blog() ) {
+			$body_class .= ' openlab-main ';
+		} else {
+			$body_class .= ' openlab-member ';
+		}
+
+		return $body_class;
+	}
+
 	function enqueue_styles() {
 		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css' );
 	}
@@ -636,41 +677,6 @@ function cac_adminbar_js() {
 	});
 	</script>
 
-	<style type="text/css">
-/* adminbar login form
-----------------------------------------------------------------------------------------
-- adding some default BP form styles so the form will look accurate across all WP blogs */
-li.wp-admin-bar-bp-login {position:relative;}
-
-#wpadminbar ul li#wp-admin-bar-bp-login {
-	width: 70px;
-}
-
-form#sidebar-login-form {position:absolute; background:url(<?php echo get_stylesheet_directory_uri() . '/images/bg_trans.png' ?>) repeat 0 0 !important; width:200px; padding:10px; border-radius:0 8px 8px 8px; -moz-border-radius:0 8px 8px 8px; -webkit-border-radius:0 8px 8px 8px; box-shadow:0px 3px 3px #999; display:none; margin-left: -155px; text-align: left;}
-	li.bp-login:hover form {display:block; cursor:default;}
-
-form#sidebar-login-form label, form#sidebar-login-form span.label {display:block; color:#fff; margin:5px 0;}
-
-#wpadminbar form#sidebar-login-form textarea, #wpadminbar form#sidebar-login-form input[type="text"],
-#wpadminbar form#sidebar-login-form select, #wpadminbar form#sidebar-login-form input[type="password"],
-#wpadminbar form#sidebar-login-form input[type="submit"]
-	{border:1px inset #ccc; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; color: #888; text-shadow: none;}
-
-#sidebar-login-form input[type="text"], #sidebar-login-form input[type="password"] {padding:4px; width:95%;}
-
-form#sidebar-login-form input[type="submit"] {padding:3px 10px; text-decoration:none; vertical-align:bottom; border:1px solid #ddd; cursor:pointer; text-shadow: none;}
-
-input#sidebar-rememberme {margin-left:0;}
-
-form#sidebar-login-form p.forgetmenot {float:none;}
-
-form#sidebar-login-form a.lost-pw {padding-right:2px !important; float:right; font-size:.9em !important; background:none !important;}
-	#wp-admin-bar li a.lost-pw:hover {text-decoration:underline !important; background:none !important;}
-
-form#sidebar-login-form #sidebar-wp-submit {background:#fff;}
-
-.login-click {background:#000 !important;}
-	</style>
 <?php
 }
 add_action( 'wp_footer', 'cac_adminbar_js', 999 );

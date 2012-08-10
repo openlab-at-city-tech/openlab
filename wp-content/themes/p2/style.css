@@ -4,8 +4,8 @@ Theme URI: http://p2theme.com/
 Author: Automattic
 Author URI: http://automattic.com/
 Description: A group blog theme for short update messages, inspired by Twitter. Featuring: Hassle-free posting from the front page. Perfect for group blogging, or as a liveblog theme. Dynamic page updates. Threaded comment display on the front page. In-line editing for posts and comments. Live tag suggestion based on previously used tags. A show/hide feature for comments, to keep things tidy. Real-time notifications when a new comment or update is posted. Super-handy keyboard shortcuts. Helvetica Neue for you modern font lovers.
-Version: 1.3.2
-Tags: blue, two-columns, fixed-width, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready
+Version: 1.4.0
+Tags: blue, two-columns, fixed-width, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, custom-background, custom-header, custom-menu, post-formats, theme-options, light
 License: GNU General Public License v2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,8 @@ Use it to make something cool, have fun, and share what you've learned with othe
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,
 h6,pre,form,fieldset,input,p,blockquote,table,
 th,td { margin: 0; padding: 0; }
-fieldset,img,abbr { border: 0; }
+fieldset,img { border: 0; }
+abbr { border-bottom: 1px dotted #555; cursor: help; outline: none; }
 address,caption,code,dfn,h1,h2,h3,h4,h5,h6,th,var { font-style: normal; font-weight: normal; }
 caption,th { text-align: left; }
 q:before,q:after { content: ''; }
@@ -44,6 +45,7 @@ pre, code {
 }
 #header {
 	min-height: 120px;
+	position: relative;
 }
 #header .sleeve {
 	display: inline-block;
@@ -62,12 +64,14 @@ blockquote {
 blockquote + blockquote {
 	margin-top: 10px;
 }
-.category-quote blockquote {
+.category-quote blockquote,
+.format-quote blockquote {
 	margin-bottom: 8px;
 	background: transparent;
 	padding: 0;
 }
-.category-quote blockquote p {
+.category-quote blockquote p,
+.format-quote blockquote p {
 	padding: 10px;
 	-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
 	-moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
@@ -75,6 +79,18 @@ blockquote + blockquote {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+}
+.category-link .postcontent p,
+.format-link .postcontent p {
+	background: #e4f2fd;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+	font-size: 1.2em !important;
+	padding: 10px;
 }
 #header small {
 	display: block;
@@ -106,6 +122,7 @@ blockquote + blockquote {
 	/* this is #sidebar bg */
 	border: solid;
 	border-width: 1px;
+	clear: both;
 	width: 978px;
 	margin: 0 auto;
 	position: relative;
@@ -158,11 +175,13 @@ textarea.posttext {
 	border-width: 1px;
 	font-size: 13px;
 	margin-bottom: 6px;
+	max-width: 97.6%;
 	padding: 5px 7px;
 	width: 97.6%;
 	height: 4em;
 }
-#wrapper form input[type="text"], .inlineediting input[type="text"] {
+#wrapper form input[type="text"],
+.inlineediting input[type="text"] {
 	border: solid;
 	border-width: 1px;
 	padding: 5px 7px;
@@ -173,11 +192,11 @@ textarea.posttext {
 form#new_post {
 	margin-top: 20px;
 }
-#postbox label {
+#postbox label#post-prompt {
 	display: block;
+	float: none;
 	font-weight: normal;
 	font-size: 1.6em;
-	/*margin-bottom: 6px;*/
 }
 #postbox input#tags {
 	width: 75%;
@@ -280,6 +299,7 @@ position: static;
 	border-top-width: 1px;
 	display: block;
 }
+
 #main h4 {
 	position: relative;
 }
@@ -287,6 +307,9 @@ position: static;
 	position: absolute;
 	right: 2px;
 	top: 0;
+}
+.single-action-links {
+	display: none;
 }
 .bottom-of-entry {
 	display: block;
@@ -319,6 +342,9 @@ h2 img {
 }
 .discussion p img {
 	display: inline !important;
+}
+#main p img.latex {
+	display: inline-block;
 }
 #main p {
 	margin: .7em 0;
@@ -405,10 +431,8 @@ h2 img {
 #main .commentlist #respond.replying {
 	margin-left: 44px;
 }
-#main .commentlist li #respond.replying {
-	margin-left: 93px;
-}
 #respond textarea, .textedit textarea {
+	max-width: 94%;
 	width: 94%;
 	padding: 6px;
 	border-width: 1px;
@@ -979,7 +1003,8 @@ acronym {
 code {
 	background: #f1f1f1;
 }
-.category-quote blockquote p {
+.category-quote blockquote p,
+.format-quote blockquote p {
 	color: #888;
 	background: #eee;
 	text-shadow: 0 1px 0 #fff;
@@ -998,6 +1023,9 @@ h3 {
 }
 #main #postlist li {
 	border-top-color: #bbb;
+}
+#main #postlist li.inlineediting {
+	border-top: 0;
 }
 #main #postlist .commentlist li {
 	border-top-color: #ddd;
@@ -1030,7 +1058,8 @@ h3 {
 	border-color: #d1d1d1;
 	color: #666;
 }
-#wrapper form input[type="text"], .inlineediting input[type="text"] {
+#wrapper form input[type="text"],
+.inlineediting input[type="text"] {
 	border-color: #d1d1d1;
 	background: #fafafa;
 	color: #666;
@@ -1074,6 +1103,8 @@ h3 {
 }
 #main p img {
 	border-color: #eee;
+	max-width: 98%;
+	height: auto;
 }
 #main p, #main ul, #main ol {
 	color: #555;
@@ -1180,7 +1211,12 @@ li.newupdates, li.newcomment {
 body, form *, #respond #cancel-comment-reply-link, input, textarea {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-h1, h2, h3, #postbox label, #help dd, .inlineediting input.title {
+h1,
+h2,
+h3,
+#postbox label,
+#help dd,
+.inlineediting input.title {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: 200;
 }
@@ -1205,14 +1241,17 @@ code, pre {
 dt {
 	font-weight: bold;
 }
-.category-quote blockquote p {
+.category-quote blockquote p,
+.format-quote blockquote p {
 	font-size: 1.2em !important;
 }
-.category-quote blockquote cite {
+.category-quote blockquote cite,
+.format-quote blockquote cite {
 	display: block;
 	text-align: right;
 }
-.category-quote blockquote cite:before {
+.category-quote blockquote cite:before,
+.format-quote blockquote cite:before {
 	content: "— ";
 }
 h1 {
@@ -1252,7 +1291,8 @@ h4, h5, h6 {
 #postbox textarea#posttext, textarea.posttext {
 	font-size: 13px;
 }
-#wrapper form input[type="text"], .inlineediting input[type="text"] {
+#wrapper form input[type="text"],
+.inlineediting input[type="text"] {
 	font-size: 13px;
 	line-height: 16px;
 }
@@ -1287,13 +1327,17 @@ h4, h5, h6 {
 #main h4 span a {
 	font-weight: normal;
 }
+#main .inlineediting h4 {
+	display: none;
+}
 .postcontent h1 {
 	display: block;
 	font-size: 2em;
 	font-weight: 500;
 	padding: 10px 0 5px;
 }
-#main .postcontent h2, .inlineediting input.title {
+#main .postcontent h2,
+.inlineediting input.title {
 	font-size: 1.8em;
 	font-weight: 500;
 }
@@ -1334,6 +1378,10 @@ h4, h5, h6 {
 }
 #main span.meta {
 	font-size: 0.85em;
+}
+#main .meta abbr {
+	border: none;
+	cursor: default;
 }
 #main .meta em {
 	font-style: normal;
@@ -1428,6 +1476,25 @@ form.textedit textarea {
 .mention-highlight {
 	background-color: #DEEE66;
 }
+a.mention-current-user {
+	background: #efefef;
+	border: 1px solid #ddd;
+	border-top: none;
+	border-left: none;
+	border-radius: 4px;
+	color: #3478e3;
+	font-weight: bold;
+	margin: 0 2px;
+	padding: 0 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+a.mention-current-user:hover {
+	background: #3478e3;
+	border-color: #3478e3;
+	box-shadow: 0 1px 1px #ddd;
+	color: #fff;
+	text-shadow: 0 1px 0 #333;
+}
 .wp-caption {
 	border: 1px solid #ddd;
 	text-align: center;
@@ -1455,6 +1522,9 @@ div.possibly-related {
 #main #wpl-likebox {
 	padding-left: 60px !important;
 }
+#wpl-mustlogin {
+	margin-left: -60px !important;
+}
 .sticky {
 	background-color: #e4f2fd;
 	border: 1px solid #d9e1e7 !important;
@@ -1467,10 +1537,14 @@ div.possibly-related {
 	margin: 10px 0;
 	padding: 10px !important;
 }
+/* Text meant only for screen readers */
+.assistive-text,
 .screen-reader-text {
-	position: absolute;
-	left: -1000em;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
 }
+
 
 /* =Network signup form
 -------------------------------------------------------------- */
@@ -1486,4 +1560,203 @@ div.possibly-related {
 	display: block;
 	font-weight: normal;
 	margin: 15px 0 0;
+}
+
+/* Santa completeness */
+
+.ui-menu.ui-autocomplete {
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-o-border-bottom-left-radius: 4px;
+	-o-border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-webkit-border-bottom-right-radius: 4px;
+	border-radius: 0 0 4px 4px;
+	border-top: none;
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,.15);
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.15);
+	box-shadow: 0 1px 3px rgba(0,0,0,.15);
+}
+
+.ui-menu.ui-autocomplete .avatar {
+	margin: 0 .3em 0 0;
+	width: 22px;
+	height: 22px;
+	vertical-align: middle;
+}
+
+.ui-menu .ui-menu-item a {
+	padding: 3px 4px !important;
+	position: relative;
+	background: none !important;
+}
+
+.ui-menu .ui-menu-item:last-child .ui-state-hover,
+.ui-menu .ui-menu-item:last-child {
+	border-radius: 0 0 3px 3px;
+}
+
+.ui-menu li.ui-menu-item {
+	background: none !important; /* Overriding inline nth-child(2n+1) rule */
+}
+
+.ui-menu .ui-menu-item:nth-child(2n+1) a {
+	background: #D9E8FF !important; /* Applies rule again */
+	border-color: #D9E8FF;
+}
+
+.ui-menu .ui-menu-item a.ui-state-hover {
+	padding: 6px 7px !important;
+	margin: -3px;
+	-moz-transition: all .1s ease-in-out;
+	-webkit-transition: all .1s ease-in-out;
+	transition: all .1s ease-in-out;
+	background: #fff;
+	-moz-box-shadow: 0 1px 5px rgba(0,0,0,.45);
+	-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.45);
+	box-shadow: 0 1px 5px rgba(0,0,0,.45);
+	background: #3478E3 !important; /* !important needed - overules previous changes on hover/focus */
+	z-index: 5;
+	color: #fff !important;
+}
+
+.ui-menu-item strong {
+	font-weight: normal;
+	background: #F5E749;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	padding: 1px 2px 2px;
+	-moz-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+}
+
+.ui-menu .ui-menu-item a.ui-state-hover strong {
+	background: #fff;
+	color: #000;
+}
+/* end Santa carnage */
+
+
+/* =WP.com Specific Styles
+--------------------------------------------------------- */
+
+.milestone-widget .milestone-content {
+	max-width: 210px;
+}
+.milestone-widget .milestone-countdown {
+	border-color: #ccc;
+}
+.milestone-widget .difference {
+	padding-top: 15px;
+}
+
+
+/* =Menu
+----------------------------------------------- */
+
+.main-navigation {
+	clear: both;
+	float: left;
+	margin: 10px 0;
+	width: 100%;
+}
+.main-navigation a:hover {
+	border: none;
+}
+.main-navigation .menu {
+	float: left;
+	font-size: 14px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+.main-navigation .menu > ul {
+	top: 40px;
+	left: 0;
+}
+.main-navigation .menu li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	white-space: nowrap;
+}
+.main-navigation .menu li:hover {
+	background: #fff;
+}
+.main-navigation .menu li:hover > ul {
+	display: block;
+}
+.main-navigation .menu li a {
+	color: #666;
+	display: block;
+	line-height: 40px;
+	padding: 0 10px;
+	text-decoration: none;
+}
+.main-navigation .menu li li {
+	border-top: 1px solid #ddd;
+	font-size: 12px;
+	white-space: normal;
+	width: 200px;
+}
+.main-navigation .menu li li:hover {
+	background: #eee;
+	background: #f2f8fd;
+}
+.main-navigation .menu li li a {
+	line-height: 1.6;
+	padding: 6px 10px;
+}
+.main-navigation .menu li li a:hover {
+	color: #333;
+}
+.main-navigation .menu ul {
+	-moz-box-shadow: 3px 3px 3px rgba( 0, 0, 0, 0.2 );
+	-webkit-box-shadow: 3px 3px 3px rgba( 0, 0, 0, 0.2 );
+	box-shadow: 3px 3px 3px rgba( 0, 0, 0, 0.2 );
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	background: #fff;
+	display: none;
+	position: absolute;
+	width: 200px;
+	z-index: 99999;
+}
+.main-navigation .menu ul ul {
+	top: -1px;
+	left: 100%;
+}
+.main-navigation .current-menu-item > a,
+.main-navigation .current-menu-ancestor > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_ancestor > a {
+	background: #ddd;
+	color: #000;
+}
+.main-navigation li.current-menu-item > a,
+.main-navigation li.current-menu-ancestor > a,
+.main-navigation li.current-menu-item:hover > a,
+.main-navigation li.current-menu-ancestor:hover > a {
+	background: transparent;
+	color: #3478e3;
+}
+.main-navigation ul ul .current-menu-item > a,
+.main-navigation ul ul .current-menu-ancestor > a {
+	background: #e4f2fd;
+	color: #000;
+}
+.main-navigation ul ul .current-menu-item:hover > a,
+.main-navigation ul ul .current-menu-ancestor:hover > a,
+.main-navigation ul ul .current-menu-item > a:hover,
+.main-navigation ul ul .current-menu-ancestor > a:hover {
+	background: #d8edfd;
+	color: #000;
+}
+.iphone .main-navigation .menu {
+	display: none;
 }

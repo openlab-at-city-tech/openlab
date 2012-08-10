@@ -27,17 +27,17 @@
 
 <?php
 	// Start the Loop.
-	$options = get_option( 'coraline_theme_options' ); while ( have_posts() ) : the_post(); ?>
+	$options = coraline_get_theme_options(); while ( have_posts() ) : the_post(); ?>
 
 <?php /* How to display posts in the Gallery category. */ ?>
 
-	<?php if ( isset( $options['gallery_category'] ) && '0' != $options['gallery_category'] && in_category( $options['gallery_category'] ) ) : ?>
+	<?php if ( ( isset( $options['gallery_category'] ) && '0' != $options['gallery_category'] && in_category( $options['gallery_category'] ) ) || 'gallery' == get_post_format( $post->ID ) ) : ?>
 
-		<div id="post-<?php the_ID(); ?>" <?php post_class( 'category-gallery' ); ?>>
+		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'coraline' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 			<div class="entry-meta">
-				<?php coraline_posted_on(); ?>
+				<?php coraline_posted_on(); coraline_posted_by(); ?>
 			</div><!-- .entry-meta -->
 
 			<div class="entry-content">
@@ -65,15 +65,23 @@
 
 			<div class="entry-info">
 				<span class="comments-link"><?php comments_popup_link( __( '&rarr; Leave a comment', 'coraline' ), __( '&rarr; 1 Comment', 'coraline' ), __( '&rarr; % Comments', 'coraline' ) ); ?></span>
-				<p><a href="<?php echo get_term_link( $options['gallery_category'], 'category' ); ?>" title="<?php esc_attr_e( 'View posts in the Gallery category', 'coraline' ); ?>"><?php _e( 'More Galleries', 'coraline' ); ?></a></p>
+
+			<?php
+				if ( isset( $options['gallery_category'] ) ) :
+					$cat_slug = sanitize_title( $options['gallery_category'] );
+					if ( in_category( $cat_slug ) ) :
+			?>
+				<p><a href="<?php echo get_term_link( $cat_slug, 'category' ); ?>" title="<?php esc_attr_e( 'View posts in the Gallery category', 'coraline' ); ?>"><?php _e( 'More Galleries', 'coraline' ); ?></a></p>
+			<?php endif; endif; ?>
+
 				<p><?php edit_post_link( __( 'Edit', 'coraline' ), '', '' ); ?></p>
 			</div><!-- .entry-info -->
 		</div><!-- #post-## -->
 
 <?php /* How to display posts in the asides category */ ?>
 
-	<?php elseif ( isset( $options['aside_category'] ) && '0' != $options['aside_category'] && in_category( $options['aside_category'] ) ) : ?>
-		<div id="post-<?php the_ID(); ?>" <?php post_class( 'category-asides' ); ?>>
+	<?php elseif ( isset( $options['aside_category'] ) && '0' != $options['aside_category'] && in_category( $options['aside_category'] ) || 'aside' == get_post_format( $post->ID ) ) : ?>
+		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<?php if ( is_archive() || is_search() ) : // Display excerpts for archives and search. ?>
 			<div class="entry-summary aside">
@@ -87,7 +95,7 @@
 
 			<div class="entry-info">
 				<p class="comments-link"><?php comments_popup_link( __( '&rarr; Leave a comment', 'coraline' ), __( '&rarr; 1 Comment', 'coraline' ), __( '&rarr; % Comments', 'coraline' ) ); ?></p>
-				<p><?php coraline_posted_on(); ?></p>
+				<p><?php coraline_posted_on(); coraline_posted_by(); ?></p>
 				<?php edit_post_link( __( 'Edit', 'coraline' ), '', '' ); ?>
 			</div><!-- .entry-info -->
 		</div><!-- #post-## -->
@@ -99,7 +107,7 @@
 			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'coraline' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 			<div class="entry-meta">
-				<?php coraline_posted_on(); ?><span class="comments-link"><span class="meta-sep">|</span> <?php comments_popup_link( __( 'Leave a comment', 'coraline' ), __( '1 Comment', 'coraline' ), __( '% Comments', 'coraline' ) ); ?></span>
+				<?php coraline_posted_on(); coraline_posted_by(); ?><span class="comments-link"><span class="meta-sep">|</span> <?php comments_popup_link( __( 'Leave a comment', 'coraline' ), __( '1 Comment', 'coraline' ), __( '% Comments', 'coraline' ) ); ?></span>
 			</div><!-- .entry-meta -->
 
 	<?php if ( is_search() ) : // Display excerpts for search. ?>

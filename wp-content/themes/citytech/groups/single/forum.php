@@ -9,12 +9,9 @@ if ( bp_is_group_forum_topic_edit() ) {
 	<div class="item-list-tabs no-ajax" id="bpsubnav" role="navigation">
 		<ul>
 			<?php if ( is_user_logged_in() ) : ?>
-				<li><a href="#post-new" class="show-hide-new"><?php _e( 'New Topic', 'buddypress' ) ?></a></li>
+            	<li class="selected-page">Discussion:</li>
+				<li class="new-topic"><a href="#post-new" class="show-hide-new"><?php _e( 'New Topic', 'buddypress' ) ?></a></li>
 			<?php endif ?>
-
-			<?php if ( bp_forums_has_directory() ) : ?>
-				<li><a href="<?php bp_forums_directory_permalink() ?>"><?php _e( 'Forum Directory', 'buddypress') ?></a></li>
-			<?php endif; ?>
 
 			<?php do_action( 'bp_forums_directory_group_sub_types' ); ?>
 

@@ -1,7 +1,10 @@
 <?php
-
-add_action( 'init', array( 'P2_JS', 'init' ) );
-
+/**
+ * Script handler.
+ *
+ * @package P2
+ * @since P2 1.1
+ */
 class P2_JS {
 
 	function init() {
@@ -69,7 +72,7 @@ class P2_JS {
 			'scrollit',
 			P2_JS_URL .'/jquery.scrollTo-min.js',
 			array( 'jquery' ),
-			'1.4' );
+			'20120402' );
 
 		wp_register_script(
 			'wp-locale',
@@ -122,7 +125,7 @@ class P2_JS {
 		wp_enqueue_script( 'p2js',
 			P2_JS_URL . '/p2.js',
 			$depends,
-			'20110712'
+			'20120220'
 		);
 
 		wp_localize_script( 'p2js', 'p2txt', array(
@@ -150,11 +153,21 @@ class P2_JS {
 			'l10n_print_after'      => 'try{convertEntities(p2txt);}catch(e){};',
 			'autocomplete_prompt'   => __( 'After typing @, type a name or username to find a member of this site', 'p2' ),
 			'no_matches'            => __( 'No matches.', 'p2' ),
-			'comment_cancel_ays'    => __( 'Are you sure you would like to clear this comment? Its contents will be deleted.' ),
-			'oops_not_logged_in'    => __( 'Oops! Looks like you are not logged in.' ),
-			'please_log_in'         => __( 'Please log in again' ),
-			'whoops_maybe_offline'  => __( 'Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress.' ),
+			'comment_cancel_ays'    => __( 'Are you sure you would like to clear this comment? Its contents will be deleted.', 'p2' ),
+			'oops_not_logged_in'    => __( 'Oops! Looks like you are not logged in.', 'p2' ),
+			'please_log_in'         => __( 'Please log in again', 'p2' ),
+			'whoops_maybe_offline'  => __( 'Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress.', 'p2' ),
 		) );
+
+		if ( p2_is_iphone() ) {
+			wp_enqueue_script(
+				'iphone',
+				get_template_directory_uri() . '/js/iphone.js',
+				array( 'jquery' ),
+				'20120402',
+				true
+			);
+		}
 
 		add_action( 'wp_head', array( 'P2_JS', 'locale_script_data' ), 2 );
 	}
@@ -170,8 +183,18 @@ class P2_JS {
 		<?php
 	}
 
-	function print_options() {
+	function ajax_url() {
 		global $current_blog;
+
+		// Generate the ajax url based on the current scheme
+		$admin_url = admin_url( 'admin-ajax.php?p2ajax=true', is_ssl() ? 'https' : 'http' );
+		// If present, take domain mapping into account
+		if ( isset( $current_blog->primary_redirect ) )
+			$admin_url = preg_replace( '|https?://' . preg_quote( $current_blog->domain ) . '|', 'http://' . $current_blog->primary_redirect, $admin_url );
+		return $admin_url;
+	}
+
+	function print_options() {
 		$mentions = p2_get( 'mentions' );
 
 		get_currentuserinfo();
@@ -187,17 +210,12 @@ class P2_JS {
 		$page_options['is_first_front_page'] = (int)(is_front_page() && !is_paged() );
 		$page_options['is_user_logged_in'] = (int)is_user_logged_in();
 		$page_options['login_url'] = wp_login_url( ( ( !empty($_SERVER['HTTPS'] ) && strtolower($_SERVER['HTTPS']) == 'on' ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-		// Generate the ajax url based on the current scheme
-		$admin_url = admin_url( 'admin-ajax.php?p2ajax=true', is_ssl() ? 'https' : 'http' );
-		// If present, take domain mapping into account
-		if ( isset( $current_blog->primary_redirect ) )
-			$admin_url = preg_replace( '|https?://' . preg_quote( $current_blog->domain ) . '|', 'http://' . $current_blog->primary_redirect, $admin_url );
 ?>
 		<script type="text/javascript">
 			// <![CDATA[
 
 			// P2 Configuration
-			var ajaxUrl                 = "<?php echo $admin_url; ?>";
+			var ajaxUrl                 = "<?php echo esc_js( esc_url_raw( P2_JS::ajax_url() ) ); ?>";
 			var updateRate              = "30000"; // 30 seconds
 			var nonce                   = "<?php echo esc_js( $page_options['nonce'] ); ?>";
 			var login_url               = "<?php echo $page_options['login_url'] ?>";
@@ -233,27 +251,28 @@ class P2_JS {
 		</script>
 <?php }
 }
+add_action( 'init', array( 'P2_JS', 'init' ) );
 
 function p2_toggle_threads() {
 	$hide_threads = get_option( 'p2_hide_threads' ); ?>
 
 	<script type="text/javascript">
 	/* <![CDATA[ */
-		jQuery(document).ready( function() {
+		jQuery( document ).ready( function( $ ) {
 			function hideComments() {
-				jQuery('.commentlist').hide();
-				jQuery('.discussion').show();
+				$('.commentlist').hide();
+				$('.discussion').show();
 			}
 			function showComments() {
-				jQuery('.commentlist').show();
-				jQuery('.discussion').hide();
+				$('.commentlist').show();
+				$('.discussion').hide();
 			}
 			<?php if ( (int) $hide_threads ) : ?>
 				hideComments();
 			<?php endif; ?>
 
-			jQuery("#togglecomments").click( function(){
-				if (jQuery('.commentlist').css('display') == 'none') {
+			$( "#togglecomments" ).click( function() {
+				if ( $( '.commentlist' ).css( 'display' ) == 'none' ) {
 					showComments();
 				} else {
 					hideComments();

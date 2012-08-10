@@ -1,0 +1,418 @@
+# Copyright (C) 2010 Pilcrow
+# This file is distributed under the same license as the Pilcrow package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pilcrow 1.3\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/pilcrow\n"
+"POT-Creation-Date: 2012-01-06 21:31:52+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: 404.php:16 loop.php:33
+msgid "Not Found"
+msgstr ""
+
+#: 404.php:18
+msgid ""
+"Apologies, but the page you requested could not be found. Perhaps searching "
+"will help."
+msgstr ""
+
+#: archive.php:33
+msgid "Daily Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:35
+msgid "Monthly Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:37
+msgid "Yearly Archives: <span>%s</span>"
+msgstr ""
+
+#: archive.php:39
+msgid "Blog Archives"
+msgstr ""
+
+#: archives.php:25
+msgid "Browse by Month:"
+msgstr ""
+
+#: archives.php:30
+msgid "Browse by Category:"
+msgstr ""
+
+#: author.php:27
+msgid "Author Archives: %s"
+msgstr ""
+
+#: author.php:37
+msgid "About %s"
+msgstr ""
+
+#: category.php:16
+msgid "Category Archives: %s"
+msgstr ""
+
+#: comments.php:18
+msgid ""
+"This post is password protected. Enter the password to view any comments."
+msgstr ""
+
+#: comments.php:35
+msgid "One Response to %2$s"
+msgid_plural "%1$s Responses to %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:41 comments.php:60
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr ""
+
+#: comments.php:42 comments.php:61
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: comments.php:72
+msgid "Comments are closed."
+msgstr ""
+
+#: footer.php:30
+msgid "Theme: %1$s by %2$s."
+msgstr ""
+
+#: functions.php:64
+msgid "Primary Navigation"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:109
+msgid "Books"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:115
+msgid "Record"
+msgstr ""
+
+#. translators: header image description
+#: functions.php:121
+msgid "Pattern"
+msgstr ""
+
+#: functions.php:295 loop-image.php:95 loop.php:79
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: functions.php:349
+msgid "%s"
+msgstr ""
+
+#: functions.php:353
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#. translators: 1: date, 2: time
+#: functions.php:360
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: functions.php:360 functions.php:377
+msgid "(Edit)"
+msgstr ""
+
+#: functions.php:377
+msgid "Pingback:"
+msgstr ""
+
+#: functions.php:396
+msgid "Sidebar"
+msgstr ""
+
+#: functions.php:398
+msgid "The main sidebar"
+msgstr ""
+
+#: functions.php:407
+msgid "Secondary Sidebar"
+msgstr ""
+
+#: functions.php:409
+msgid "The secondary sidebar in three-column layouts"
+msgstr ""
+
+#: functions.php:418
+msgid "Feature Area"
+msgstr ""
+
+#: functions.php:420
+msgid ""
+"The feature widget area above the sidebars in Content-Sidebar-Sidebar and "
+"Sidebar-Sidebar-Content layouts"
+msgstr ""
+
+#: functions.php:429
+msgid "First Footer Area"
+msgstr ""
+
+#: functions.php:431
+msgid "The first footer widget area"
+msgstr ""
+
+#: functions.php:440
+msgid "Second Footer Area"
+msgstr ""
+
+#: functions.php:442
+msgid "The second footer widget area"
+msgstr ""
+
+#: header.php:38
+msgid "Page %s"
+msgstr ""
+
+#: header.php:75
+msgid "Skip to content"
+msgstr ""
+
+#: inc/theme-options.php:25
+msgid "Theme Options"
+msgstr ""
+
+#: inc/theme-options.php:35
+msgid "Light"
+msgstr ""
+
+#: inc/theme-options.php:39
+msgid "Dark"
+msgstr ""
+
+#: inc/theme-options.php:43
+msgid "Red"
+msgstr ""
+
+#: inc/theme-options.php:47
+msgid "Brown"
+msgstr ""
+
+#: inc/theme-options.php:61
+msgid "Content-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:65
+msgid "Sidebar-Content"
+msgstr ""
+
+#: inc/theme-options.php:69
+msgid "Content-Sidebar-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:73
+msgid "Sidebar-Sidebar-Content"
+msgstr ""
+
+#: inc/theme-options.php:77
+msgid "Sidebar-Content-Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:81
+msgid "Full-Width, No Sidebar"
+msgstr ""
+
+#: inc/theme-options.php:98
+msgid " Theme Options"
+msgstr ""
+
+#: inc/theme-options.php:101
+msgid "Options saved"
+msgstr ""
+
+#: inc/theme-options.php:115
+msgid "Color Scheme"
+msgstr ""
+
+#: inc/theme-options.php:134
+msgid "Select a default color scheme"
+msgstr ""
+
+#: inc/theme-options.php:143 inc/theme-options.php:145
+msgid "Default Layout"
+msgstr ""
+
+#: inc/theme-options.php:178
+msgid "Save Options"
+msgstr ""
+
+#: links.php:28 loop-image.php:53 loop-page.php:30 loop-single.php:35
+#: loop.php:68
+msgid "Edit"
+msgstr ""
+
+#: loop-image.php:23
+msgid "Published %1$s"
+msgstr ""
+
+#: loop-image.php:32
+msgid " in %1$s"
+msgstr ""
+
+#: loop-image.php:35
+msgid "Return to %s"
+msgstr ""
+
+#: loop-image.php:44
+msgid "Full size is %s pixels"
+msgstr ""
+
+#: loop-image.php:47
+msgid "Link to full-size image"
+msgstr ""
+
+#: loop-image.php:58
+msgid "&larr; Previous"
+msgstr ""
+
+#: loop-image.php:59
+msgid "Next &rarr;"
+msgstr ""
+
+#: loop-image.php:96 loop-page.php:29 loop-single.php:46 loop.php:80
+msgid "Pages:"
+msgstr ""
+
+#: loop-single.php:21 loop-single.php:57
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr ""
+
+#: loop-single.php:22 loop-single.php:58
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr ""
+
+#: loop-single.php:28 loop.php:61
+msgid ""
+"<span class=\"by-author\"><span class=\"sep\">by</span> <span class=\"author "
+"vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3"
+"$s</a></span> | </span>"
+msgstr ""
+
+#: loop-single.php:30 loop.php:63
+msgid "View all posts by %s"
+msgstr ""
+
+#: loop-single.php:39
+msgid "<span class=\"meta-nav\">&darr; </span>Jump to Comments"
+msgstr ""
+
+#: loop-single.php:50 loop.php:85
+msgid "Leave a Comment"
+msgstr ""
+
+#: loop-single.php:50 loop.php:85
+msgid "1 Comment"
+msgstr ""
+
+#: loop-single.php:50 loop.php:85
+msgid "% Comments"
+msgstr ""
+
+#: loop-single.php:51 loop.php:86
+msgid "Filed under %s"
+msgstr ""
+
+#: loop-single.php:52 loop.php:87
+msgid "Tagged as"
+msgstr ""
+
+#: loop.php:25 loop.php:99
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr ""
+
+#: loop.php:26 loop.php:100
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: loop.php:35
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr ""
+
+#: loop.php:67 loop.php:71
+msgid "Permalink to %s"
+msgstr ""
+
+#: search.php:16
+msgid "Search Results for: %s"
+msgstr ""
+
+#: search.php:26
+msgid "Nothing Found"
+msgstr ""
+
+#: search.php:28
+msgid ""
+"Sorry, but nothing matched your search criteria. Please try again with some "
+"different keywords."
+msgstr ""
+
+#: sidebar.php:54
+msgid "Search"
+msgstr ""
+
+#: sidebar.php:59
+msgid "RSS"
+msgstr ""
+
+#: sidebar.php:70
+msgid "Recent Entries"
+msgstr ""
+
+#: sidebar.php:86
+msgid "Links"
+msgstr ""
+
+#: sidebar.php:109
+msgid "Meta"
+msgstr ""
+
+#: tag.php:16
+msgid "Tag Archives: %s"
+msgstr ""
+
+#. Theme Name of the plugin/theme
+msgid "Pilcrow"
+msgstr ""
+
+#. Theme URI of the plugin/theme
+msgid "http://wordpress.org/extend/themes/pilcrow/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, "
+"four default color schemes, custom header images (using featured images in "
+"posts and pages), and a customizable background, make personalizing your "
+"blog a snap."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Automattic"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://automattic.com/"
+msgstr ""
+
+#. Tags of the plugin/theme
+msgid ""
+"custom-header, custom-background, custom-menu, sticky-post, microformats, "
+"rtl-language-support, translation-ready, featured-image-header, featured-"
+"images, blog, education, photography, bright, clean, conservative, formal, "
+"generic, light, minimal, simple"
+msgstr ""

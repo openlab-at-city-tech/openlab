@@ -1,0 +1,15 @@
+span.cubepoints_buddypress, span.cupepoints_buddypress_rank, span.cupepoints_buddypress_donate {
+display: inline-block;
+font-size: 11px;
+opacitiy: 0.8;
+-moz-border-radius: 3px 3px 3px 3px;
+background: -moz-linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)) repeat scroll 0 0 #FFEAA6;
+border: 1px solid #E1CA82;
+font-weight: normal;
+margin-top: 3px;
+margin-bottom: 7px;
+padding: 1px 8px;
+line-height: 170%;
+vertical-align: middle;
+}
+table.bppoints tr th{text-align:left;background:#f2f2f2;padding:8px;}div.points-pagination{float:right;}#cpbpleft{float:left;width:50%;}#cpbpright{float:right;width:50%;}img.cbbpimgawards{height:75px;width:75px;vertical-align:middle;margin:10px;}p.cbbpimgawards{font-size:20px;text-shadow:#999 2px 3px 4px;border:solid 1px #CCC;-moz-box-shadow:1px 1px 5px #999;-webkit-box-shadow:1px 1px 5px #999;box-shadow:1px 1px 5px #999;margin:10px;}a.cbawardslnk{text-decoration:none;border:solid 1px #CCC;-moz-box-shadow:1px 1px 5px #999;-webkit-box-shadow:1px 1px 5px #999;box-shadow:1px 1px 5px #999;padding:5px;}table.bppoints,#cpbpawards{float:left;width:100%;}

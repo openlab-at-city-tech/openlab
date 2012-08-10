@@ -1,0 +1,108 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables features
+ */
+ 
+.dataTables_wrapper {
+	position: relative;
+	min-height: 302px;
+	clear: both;
+	_height: 302px;
+	zoom: 1; /* Feeling sorry for IE */
+}
+
+.cp_manage_form_points span{
+	font-size:15px;
+}
+
+.cp_manage_form_update input[type=text]{
+	text-align:center;
+	font-size:14px;
+	width:100px;
+	margin-right:10px;
+}
+
+#cp_modules_table td{
+	vertical-align:top;
+}
+
+.dataTables_wrapper td{
+	padding-top:7px;
+	padding-bottom:7px;
+	vertical-align:middle;
+}
+
+.dataTables_processing {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 250px;
+	height: 30px;
+	margin-left: -125px;
+	margin-top: -15px;
+	padding: 14px 0 2px 0;
+	border: 1px solid #ddd;
+	text-align: center;
+	color: #999;
+	font-size: 14px;
+	background-color: white;
+}
+
+.dataTables_length {
+	width: 40%;
+	float: left;
+	margin-bottom:10px;
+}
+
+.dataTables_filter {
+	width: 50%;
+	float: right;
+	text-align: right;
+	margin-bottom:10px;
+}
+
+.dataTables_info {
+	width: 60%;
+	float: left;
+	font-size:11px;
+	margin-top:3px;
+}
+
+.dataTables_paginate {
+	width: 44px;
+	* width: 50px;
+	float: right;
+	text-align: right;
+	margin-top:3px;
+}
+
+/* Pagination nested */
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+	height: 19px;
+	width: 19px;
+	margin-left: 3px;
+	float: left;
+}
+
+.paginate_disabled_previous {
+	background-image: url('../images/back_disabled.jpg');
+}
+
+.paginate_enabled_previous {
+	background-image: url('../images/back_enabled.jpg');
+}
+
+.paginate_disabled_next {
+	background-image: url('../images/forward_disabled.jpg');
+}
+
+.paginate_enabled_next {
+	background-image: url('../images/forward_enabled.jpg');
+}
+
+tr.even {
+	background-color: #f8f8f8;
+}
+
+tr.odd {
+	background-color: #fcfcfc;
+}

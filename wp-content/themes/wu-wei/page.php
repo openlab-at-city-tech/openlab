@@ -6,23 +6,22 @@
 
 			<div class="post-info">
 
-				<h1><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
+				<h1><?php the_title(); ?></h1>
 
-				<div class="timestamp"><?php the_time('F j, Y'); ?> <!-- by <?php the_author() ?> --> //</div> <div class="comment-bubble"><a href="<?php comments_link(); ?>"><?php comments_number('0', '1', '%'); ?></a></div>
 				<div class="clearboth"><!-- --></div>
 
-				<?php edit_post_link('Edit this entry.', '<p>', '</p>'); ?>
+				<?php edit_post_link( __( 'Edit this entry', 'wu-wei' ), '<p>', '</p>' ); ?>
 			</div>
 
 			<div class="post-content">
-					<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
+					<?php the_content(); ?>
 
 					<?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
 			</div>
 
 			<div class="clearboth"><!-- --></div>
 
-			<?php comments_template(); ?>
+			<?php if ( comments_open() ) { comments_template(); } ?>
 
 		</div>
 

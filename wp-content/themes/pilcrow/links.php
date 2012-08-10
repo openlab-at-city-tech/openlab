@@ -10,10 +10,10 @@
 get_header(); ?>
 
 		<div id="content-container">
-			<div id="content" role="main">				
+			<div id="content" role="main">
 
-					<?php the_post(); ?>
-					
+				<?php while ( have_posts() ) : the_post(); ?>
+
 					<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 						<?php if ( is_front_page() ) { ?>
 							<h2 class="entry-title"><?php the_title(); ?></h2>
@@ -29,7 +29,9 @@ get_header(); ?>
 						</div><!-- .entry-content -->
 					</div><!-- #post-## -->
 
-					<?php comments_template( '', true ); ?>					
+					<?php comments_template( '', true ); ?>
+
+				<?php endwhile; // end of the loop. ?>
 
 			</div><!-- #content -->
 		</div><!-- #container -->

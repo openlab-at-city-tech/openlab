@@ -1,0 +1,575 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP SIMILE Timeline\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-13 17:14+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Tim Isenheim\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: timeline.php:215
+#: timeline.php:216
+msgid "SIMILE Timeline"
+msgstr "SIMILE Timeline"
+
+#: timeline.php:225
+msgid "Plugin Documentation"
+msgstr "Plugin Dokumentation"
+
+#: timeline.php:226
+msgid "WP SIMILE Timeline Support Group"
+msgstr "WP SIMILE Timeline Support Forum"
+
+#: timeline.php:227
+msgid "SIMILE Widgets Timeline Documentation"
+msgstr "SIMILE Widgets Timeline Dokumentation"
+
+#: inc/WPSimileTimelineAdmin.class.php:136
+msgid "Event Start Date"
+msgstr "Event-Beginn"
+
+#: inc/WPSimileTimelineAdmin.class.php:137
+msgid "Event End Date"
+msgstr "Event-Ende"
+
+#: inc/WPSimileTimelineAdmin.class.php:143
+#: inc/WPSimileTimelineAdmin.class.php:645
+#: inc/WPSimileTimelineAdmin.class.php:676
+#: inc/WPSimileTimelineAdmin.class.php:743
+#: inc/WPSimileTimelineAdmin.class.php:792
+msgid "Start Date"
+msgstr "Datum Beginn"
+
+#: inc/WPSimileTimelineAdmin.class.php:147
+#: inc/WPSimileTimelineAdmin.class.php:648
+#: inc/WPSimileTimelineAdmin.class.php:679
+#: inc/WPSimileTimelineAdmin.class.php:747
+#: inc/WPSimileTimelineAdmin.class.php:796
+msgid "End Date"
+msgstr "Datum Ende"
+
+#: inc/WPSimileTimelineAdmin.class.php:153
+msgid "Latest Start Date"
+msgstr "Sp&auml;tester Beginn"
+
+#: inc/WPSimileTimelineAdmin.class.php:157
+msgid "Earliest End Date"
+msgstr "Fr&uuml;hestes Ende"
+
+#: inc/WPSimileTimelineAdmin.class.php:179
+msgid "Edit timestamp"
+msgstr "Datum bearbeiten"
+
+#: inc/WPSimileTimelineAdmin.class.php:181
+msgid "Reset timestamp"
+msgstr "Datum zur&uuml;cksetzen"
+
+#: inc/WPSimileTimelineAdmin.class.php:207
+msgid "Existing timestamp"
+msgstr "Vorhandenes Datum"
+
+#: inc/WPSimileTimelineAdmin.class.php:237
+msgid "Millisecond"
+msgstr "Millisekunde"
+
+#: inc/WPSimileTimelineAdmin.class.php:238
+msgid "Second"
+msgstr "Sekunde"
+
+#: inc/WPSimileTimelineAdmin.class.php:239
+msgid "Minute"
+msgstr "Minute"
+
+#: inc/WPSimileTimelineAdmin.class.php:240
+msgid "Hour"
+msgstr "Stunde"
+
+#: inc/WPSimileTimelineAdmin.class.php:241
+msgid "Day"
+msgstr "Tag"
+
+#: inc/WPSimileTimelineAdmin.class.php:242
+msgid "Week"
+msgstr "Woche"
+
+#: inc/WPSimileTimelineAdmin.class.php:243
+msgid "Month"
+msgstr "Monat"
+
+#: inc/WPSimileTimelineAdmin.class.php:244
+msgid "Year"
+msgstr "Jahr"
+
+#: inc/WPSimileTimelineAdmin.class.php:245
+msgid "Decade"
+msgstr "Dekade"
+
+#: inc/WPSimileTimelineAdmin.class.php:246
+msgid "Century"
+msgstr "Jahrhundert"
+
+#: inc/WPSimileTimelineAdmin.class.php:247
+msgid "Millenium"
+msgstr "Millenium"
+
+#: inc/WPSimileTimelineAdmin.class.php:262
+msgid "Point in time"
+msgstr "Zeitpunkt"
+
+#: inc/WPSimileTimelineAdmin.class.php:263
+msgid "Period in time"
+msgstr "Zeitspanne"
+
+#: inc/WPSimileTimelineAdmin.class.php:274
+msgid "Pick color"
+msgstr "Farbe w&auml;hlen"
+
+#: inc/WPSimileTimelineAdmin.class.php:284
+msgid "Show in Timeline?"
+msgstr "In Timeline anzeigen?"
+
+#: inc/WPSimileTimelineAdmin.class.php:285
+msgid "ID"
+msgstr "ID"
+
+#: inc/WPSimileTimelineAdmin.class.php:286
+#: inc/WPSimileTimelineAdmin.class.php:563
+#: inc/WPSimileTimelineAdmin.class.php:639
+#: inc/WPSimileTimelineAdmin.class.php:669
+#: inc/WPSimileTimelineAdmin.class.php:735
+#: inc/WPSimileTimelineAdmin.class.php:784
+msgid "Name"
+msgstr "Name"
+
+#: inc/WPSimileTimelineAdmin.class.php:287
+#: inc/WPSimileTimelineAdmin.class.php:763
+#: inc/WPSimileTimelineAdmin.class.php:812
+msgid "Color"
+msgstr "Farbe"
+
+#: inc/WPSimileTimelineAdmin.class.php:324
+msgid "SIMILE Timeline Options"
+msgstr "SIMILE Timeline Optionen"
+
+#: inc/WPSimileTimelineAdmin.class.php:328
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: inc/WPSimileTimelineAdmin.class.php:329
+msgid "Content"
+msgstr "Inhalt"
+
+#: inc/WPSimileTimelineAdmin.class.php:330
+msgid "Design"
+msgstr "Design"
+
+#: inc/WPSimileTimelineAdmin.class.php:331
+msgid "Uninstall"
+msgstr "Deinstallieren"
+
+#: inc/WPSimileTimelineAdmin.class.php:344
+msgid "Timeline Configuration"
+msgstr "Timeline Konfiguration"
+
+#: inc/WPSimileTimelineAdmin.class.php:347
+msgid "Pages with a timeline:"
+msgstr "Seiten mit einer Timeline:"
+
+#: inc/WPSimileTimelineAdmin.class.php:347
+msgid "Enter the page or post IDs, seperated by comma. Set to 0 or all to include the Timeline script on all pages (default)."
+msgstr "Gib die Seiten- oder Artikel-ID ein. Trenne mehrere durch Kommata. Setze diesen Wert auf 0, um das Timeline-Skript auf allen Seiten einzubinden (Standard)"
+
+#: inc/WPSimileTimelineAdmin.class.php:353
+#: inc/WPSimileTimelineAdmin.class.php:358
+msgid "Display future posts"
+msgstr "Zuk&uuml;nftige Artikel anzeigen"
+
+#: inc/WPSimileTimelineAdmin.class.php:353
+msgid "Select this option if you want to show future posts in the timeline."
+msgstr "W&auml;hle diese Option, um zuk&uuml;ftige Artikel in der Timeline anzuzeigen."
+
+#: inc/WPSimileTimelineAdmin.class.php:364
+msgid "Timeline start and end"
+msgstr "Timeline Anfang und Ende"
+
+#: inc/WPSimileTimelineAdmin.class.php:364
+msgid "Sets start and end date for the scroll boundaries of the timeline."
+msgstr "Definiert Anfangs- und Enddatum als Scrollgrenzen"
+
+#: inc/WPSimileTimelineAdmin.class.php:369
+msgid "Activate"
+msgstr "Aktivieren"
+
+#: inc/WPSimileTimelineAdmin.class.php:370
+msgid "Start"
+msgstr "Start"
+
+#: inc/WPSimileTimelineAdmin.class.php:372
+msgid "Stop"
+msgstr "Stop"
+
+#: inc/WPSimileTimelineAdmin.class.php:379
+msgid "Center timeline"
+msgstr "Timeline Fokus"
+
+#: inc/WPSimileTimelineAdmin.class.php:379
+msgid "Define where the timeline should be focused on load.<br />The default publish date will be used if the start or end date isn't set."
+msgstr "Definiert das Startdatum der Timeline bei der Initialisierung.<br />Das Standard-Datum eines Posts wird verwendet wenn kein Start- oder End-Datum gesetzt ist."
+
+#: inc/WPSimileTimelineAdmin.class.php:384
+msgid "Current date"
+msgstr "Aktuelles Datum"
+
+#: inc/WPSimileTimelineAdmin.class.php:387
+msgid "Start date of first post"
+msgstr "Anfangsdatum des ersten Eintrags"
+
+#: inc/WPSimileTimelineAdmin.class.php:390
+msgid "End date of last post"
+msgstr "End-Datum des letzten Eintrags"
+
+#: inc/WPSimileTimelineAdmin.class.php:393
+msgid "Center between first and last post"
+msgstr "In der Mitte des ersten und letzten Eintrags"
+
+#: inc/WPSimileTimelineAdmin.class.php:404
+msgid "Image attachments (experimental)"
+msgstr "Bildanh&auml;nge"
+
+#: inc/WPSimileTimelineAdmin.class.php:404
+msgid "Select how images that are attached to posts should be handled. Makes experimental use of the CompactPainter"
+msgstr "W&auml;hle wie Bildanh&auml;nge von Artikeln gehandhabt werden sollen. Bindet experimentell den Compact Painter ein."
+
+#: inc/WPSimileTimelineAdmin.class.php:409
+msgid "Do nothing"
+msgstr "Nichts tun"
+
+#: inc/WPSimileTimelineAdmin.class.php:412
+msgid "Display attached image in timeline"
+msgstr "Bildanh&auml;nge in der Timeline anzeigen"
+
+#: inc/WPSimileTimelineAdmin.class.php:415
+msgid "Display attached image in bubble"
+msgstr "Bildanh&auml;nge in der Popup-Bubble anzeigen"
+
+#: inc/WPSimileTimelineAdmin.class.php:421
+msgid "Link Handling"
+msgstr "Link-Verhalten"
+
+#: inc/WPSimileTimelineAdmin.class.php:421
+msgid "Sets whether clicking links from the timeline will open an info bubble or jump directly to the linked post."
+msgstr "Definiert ob das Klicken auf Links in der Timeline eine Info-Popup &ouml;ffnet oder direkt zum verlinkten Eintrag springt."
+
+#: inc/WPSimileTimelineAdmin.class.php:426
+msgid "Show info bubble"
+msgstr "Popup-Bubble zeigen"
+
+#: inc/WPSimileTimelineAdmin.class.php:429
+msgid "Jump to link location"
+msgstr "Link direkt laden"
+
+#: inc/WPSimileTimelineAdmin.class.php:434
+msgid "Localization:"
+msgstr "Landeseinstellung:"
+
+#: inc/WPSimileTimelineAdmin.class.php:434
+msgid "Timeline language. Still partially implemented at SIMILE."
+msgstr "Sprache der Zeitleiste. Derzeit noch unvollst&auml;ndig implementiert."
+
+#: inc/WPSimileTimelineAdmin.class.php:444
+#: inc/WPSimileTimelineAdmin.class.php:457
+#: inc/WPSimileTimelineAdmin.class.php:463
+#: inc/WPSimileTimelineAdmin.class.php:478
+msgid "Update Options"
+msgstr "&Auml;nderungen speichern"
+
+#: inc/WPSimileTimelineAdmin.class.php:454
+msgid "Timeline Categories"
+msgstr "Timeline Kategorien"
+
+#: inc/WPSimileTimelineAdmin.class.php:455
+msgid "Select the categories the Timeline should display."
+msgstr "W&auml;hle die Kategorien, aus denen Artikel in der Timeline erscheinen sollen."
+
+#: inc/WPSimileTimelineAdmin.class.php:460
+msgid "Timeline Link Categories"
+msgstr "Timeline Link-Kategorien"
+
+#: inc/WPSimileTimelineAdmin.class.php:461
+msgid "Select the link-categories that hold your desired RSS links. The Timeline will display the feed content."
+msgstr "W&auml;hle die Link-Kategorien, aus denen die RSS-Links als Feed in der Timeline erscheinen sollen."
+
+#: inc/WPSimileTimelineAdmin.class.php:473
+msgid "Timeline Appearance"
+msgstr "Timeline Erscheinungsbild"
+
+#: inc/WPSimileTimelineAdmin.class.php:474
+#, php-format
+msgid "These options define the default timeline theme. To use a custom theme, use the parameter %s with the shortcode or template tag."
+msgstr "Diese Optionen definieren die Gestaltung des Standard-Themes der Timeline. Um ein eigenes Stylesheet einzubinden benutze den Parameter %s mit dem Shortcode oder dem Template Tag."
+
+#: inc/WPSimileTimelineAdmin.class.php:491
+msgid "Uninstall plugin"
+msgstr "Plugin deinstallieren"
+
+#: inc/WPSimileTimelineAdmin.class.php:494
+msgid "With this option you can remove all database entries related to this plugin."
+msgstr "Mit dieser Option kannst Du die WordPress Datenbank von Eintr&auml;gen, die dieses Plugin get&auml;tigt hat, entfernen."
+
+#: inc/WPSimileTimelineAdmin.class.php:496
+msgid "This might also work as re-initialization in case of unexpected behavior."
+msgstr "Die Deinstallation k&ouml;nnte auch Probleme bei unerwarteten Fehlern beseitigen."
+
+#: inc/WPSimileTimelineAdmin.class.php:498
+msgid "The plugin will be deactivated after all plugin-related data has been removed."
+msgstr "Das Plugin wird deaktiviert werden nachdem Plugin-spezifische Datenbankeintr&auml;ge entfernt wurden."
+
+#: inc/WPSimileTimelineAdmin.class.php:500
+msgid "Sorry to hear that you have to do that for whatever reasons."
+msgstr "Tut mir leid zu h&ouml;ren, dass dies notwendig ist."
+
+#: inc/WPSimileTimelineAdmin.class.php:503
+msgid "Delete Plugin Data"
+msgstr "Plugin-Eintr&auml;ge l&ouml;schen"
+
+#: inc/WPSimileTimelineAdmin.class.php:504
+msgid "Yes, please purge plugin database entries"
+msgstr "Ja, bitte entferne alle Plugin-Datenbankeintr&auml;ge"
+
+#: inc/WPSimileTimelineAdmin.class.php:511
+msgid ""
+"You are about to delete all timeline settings and selected categories.\\n"
+"Do you really want that?"
+msgstr ""
+"Achtung! Es werden alle Timeline-Einstellungen gelöscht.\\n"
+"Willst Du das wirklich?"
+
+#: inc/WPSimileTimelineAdmin.class.php:516
+msgid "For security reasons, you have to confirm the deletion of plugin-related database entries."
+msgstr "Bitte markiere die Checkbox zum endgültigen Löschen der Plugin-Datenbankeinträge."
+
+#: inc/WPSimileTimelineAdmin.class.php:557
+msgid "Attributes"
+msgstr "Darstellungsoptionen"
+
+#: inc/WPSimileTimelineAdmin.class.php:568
+#, php-format
+msgid "Height in % or px (add unit)"
+msgstr "H&ouml;he in % oder px"
+
+#: inc/WPSimileTimelineAdmin.class.php:572
+#: inc/WPSimileTimelineAdmin.class.php:642
+#: inc/WPSimileTimelineAdmin.class.php:672
+msgid "Resolution"
+msgstr "Aufl&ouml;sung"
+
+#: inc/WPSimileTimelineAdmin.class.php:578
+msgid "Interval size"
+msgstr "Intervallgr&ouml;sse"
+
+#: inc/WPSimileTimelineAdmin.class.php:582
+msgid "Marker color"
+msgstr "Farbe des Markers"
+
+#: inc/WPSimileTimelineAdmin.class.php:586
+msgid "Background color"
+msgstr "Hintergrundfarbe"
+
+#: inc/WPSimileTimelineAdmin.class.php:590
+msgid "Interval line color"
+msgstr "Intervall Linien-Farbe"
+
+#: inc/WPSimileTimelineAdmin.class.php:594
+msgid "Label color for Highlight Decorator"
+msgstr "Label Farbe f&uuml;r Highlight Decorator"
+
+#: inc/WPSimileTimelineAdmin.class.php:598
+msgid "Show Labels"
+msgstr "Beschriftungen anzeigen"
+
+#: inc/WPSimileTimelineAdmin.class.php:612
+msgid "Hotzones"
+msgstr "Hotzones"
+
+#: inc/WPSimileTimelineAdmin.class.php:624
+#: inc/WPSimileTimelineAdmin.class.php:718
+msgid "Delete"
+msgstr "L&ouml;schen"
+
+#: inc/WPSimileTimelineAdmin.class.php:628
+msgid "Do you really want to delete this hotzone?"
+msgstr "Willst Du diese Hotzone wirklich löschen?"
+
+#: inc/WPSimileTimelineAdmin.class.php:651
+#: inc/WPSimileTimelineAdmin.class.php:682
+msgid "Magnify"
+msgstr "Vergr&ouml;ssern"
+
+#: inc/WPSimileTimelineAdmin.class.php:654
+#: inc/WPSimileTimelineAdmin.class.php:685
+msgid "Multiple"
+msgstr "Multiple"
+
+#: inc/WPSimileTimelineAdmin.class.php:656
+#: inc/WPSimileTimelineAdmin.class.php:687
+msgid "show every n-th unit marker"
+msgstr "zeige jeden x-ten Marker"
+
+#: inc/WPSimileTimelineAdmin.class.php:666
+msgid "New Hotzone"
+msgstr "Neue Hotzone"
+
+#: inc/WPSimileTimelineAdmin.class.php:693
+msgid "Add new Hotzone"
+msgstr "Neue Hotzone anlegen"
+
+#: inc/WPSimileTimelineAdmin.class.php:706
+msgid "Highlight Decorators"
+msgstr "Highlight Decorators"
+
+#: inc/WPSimileTimelineAdmin.class.php:722
+msgid "Do you really want to delete this decorator?"
+msgstr "Willst Du diesen Decorator wirklich löschen?"
+
+#: inc/WPSimileTimelineAdmin.class.php:739
+#: inc/WPSimileTimelineAdmin.class.php:788
+msgid "Type"
+msgstr "Typ"
+
+#: inc/WPSimileTimelineAdmin.class.php:751
+#: inc/WPSimileTimelineAdmin.class.php:800
+msgid "Start Label"
+msgstr "Label links"
+
+#: inc/WPSimileTimelineAdmin.class.php:755
+#: inc/WPSimileTimelineAdmin.class.php:804
+msgid "End Label"
+msgstr "Label rechts"
+
+#: inc/WPSimileTimelineAdmin.class.php:759
+#: inc/WPSimileTimelineAdmin.class.php:808
+msgid "CSS class"
+msgstr "CSS Klasse"
+
+#: inc/WPSimileTimelineAdmin.class.php:767
+#: inc/WPSimileTimelineAdmin.class.php:816
+msgid "Opacity"
+msgstr "Deckkraft"
+
+#: inc/WPSimileTimelineAdmin.class.php:780
+msgid "New Highlight Decorator"
+msgstr "Neuer Highlight Decorator"
+
+#: inc/WPSimileTimelineAdmin.class.php:824
+msgid "Add new Decorator"
+msgstr "Neuen Decorator anlegen"
+
+#: inc/WPSimileTimelineTerm.class.php:205
+msgid "enable"
+msgstr "aktivieren"
+
+#~ msgid "Documentation"
+#~ msgstr "Dokumentation"
+
+#~ msgid "Shortcode and Template Tag"
+#~ msgstr "Shortcode und Template Tag"
+
+#~ msgid ""
+#~ "The simple part first: There is just one template tag/shortcode. Both "
+#~ "functions output the standard timeline for the categories and visuals set "
+#~ "in the options panel."
+#~ msgstr ""
+#~ "Das Einfache zuerst: Es gibt nur ein Template Tag bzw. Shortcode. Beide "
+#~ "Funktionen geben die Standard-Timeline f&uuml;r die Kategorien und Design-"
+#~ "Optionen aus, die in den Einstellungen definiert wurden."
+
+#~ msgid "Overriding automatic options"
+#~ msgstr "Automatische Optionen überschreiben"
+
+#~ msgid ""
+#~ "If you want to display additional timelines with different content and "
+#~ "design you can override the settings form the options panel by using "
+#~ "parameters"
+#~ msgstr ""
+#~ "Wenn Du zus&auml;tzliche Timelines mit unterschiedlichem Inhalt und "
+#~ "Design einbinden willst, kannst Du die Einstellungen aus dem Admin-Panel "
+#~ "mit Parametern umgehen"
+
+#~ msgid ""
+#~ "E.g. %s gives you the timeline with the DOM-ID %s and loads content from "
+#~ "categories 20, 38 and 50."
+#~ msgstr ""
+#~ "Beispielsweise erzeugt %s die Timeline mit der DOM-ID %s und l&auml;dt "
+#~ "Content aus den Kategorien 20, 38 und 50."
+
+#~ msgid "Template Tag parameters"
+#~ msgstr "Template Tag Parameter"
+
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#~ msgid ""
+#~ "Array of categories that you want to show in the timeline. Use comma-"
+#~ "separated category-IDs for shortcode and an array for the PHP function."
+#~ msgstr ""
+#~ "Array von Kategorien die in der Timeline dargestellt werden sollen. Gib "
+#~ "hier die Kategorie-IDs mit Kommata getrennt (f&uuml;r den Shortcode) bzw. "
+#~ "als Array (f&uuml;r die PHP-Funktion) ein."
+
+#~ msgid "DOM-ID for the timeline container. E.g. \"my-timeline\""
+#~ msgstr "DOM-ID f&uuml;r den Timeline-Container. Z.B. \"my-timeline\""
+
+#~ msgid ""
+#~ "Custom init file for the timeline JavaScript. Use the filename for the "
+#~ "file in %s here."
+#~ msgstr ""
+#~ "Eigene Datei zur JavaScript-Initialisierung der Timeline. Gib hier den "
+#~ "Dateinamen der Datei in %s an."
+
+#~ msgid ""
+#~ "This will set the CSS class for the timeline container, allowing you to "
+#~ "set colors, fonts etc. in the timeline.css file. See the CSS file for a "
+#~ "sample theme."
+#~ msgstr ""
+#~ "Definiert die CSS-Klasse f&uuml;r den Timeline-Container. Damit k&ouml;"
+#~ "nnen Farben und Schriften &uuml;ber ein Theme-Stylesheet angepasst "
+#~ "werden. In der CSS-Datei ist ein Beispiel-Theme enthalten."
+
+#~ msgid "Event attributes (Custom post fields)"
+#~ msgstr "Event Attribute (Custom Fields)"
+
+#~ msgid ""
+#~ "You can use these custom post fields to define individual attributes to a "
+#~ "post"
+#~ msgstr ""
+#~ "Du kannst diese Schl&uuml;ssel f&uuml;r Custom-Fields in einem Artikel "
+#~ "verwenden, um Eintr&auml;ge auf der Timeline hervorzuheben"
+
+#~ msgid "URL to icon to be displayed in front of the timeline bar"
+#~ msgstr "URL f&uuml;r ein Icon dass vor dem Timeline-Balken angezeigt wird"
+
+#~ msgid "URL to image to be displayed inside the info bubble"
+#~ msgstr "URL eines Bildes das in der Popup-Bubble angezeigt wird"
+
+#~ msgid "Defines a custom link for the title inside the timeline info bubble"
+#~ msgstr ""
+#~ "Definiert einen individuellen Link f&uuml;r den Titel innerhalb der Popup-"
+#~ "Bubble"
+
+#~ msgid "URL to image for a repeating background image on event tapes"
+#~ msgstr "URL zur Grafik die auf Timeline-Balken gekachelt wird"
+
+#~ msgid "Hover info text for event tapes"
+#~ msgstr "Mouseover Info-Text f&uuml;r Timeline-Balken"
+
+#~ msgid "CSS class name to highlight special events with custom CSS rules"
+#~ msgstr "CSS Klasse zum Hervorheben von Spezial-Events"

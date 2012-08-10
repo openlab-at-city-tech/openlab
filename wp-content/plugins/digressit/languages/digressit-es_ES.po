@@ -1,0 +1,1747 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: core/comments-functions.php:731
+#: core/comments-functions.php:762
+#: core/header-functions.php:8
+#@ digressit
+msgid "comments_by_section_label"
+msgstr ""
+
+#: core/comments-functions.php:732
+#: core/comments-functions.php:776
+#: core/header-functions.php:9
+#@ digressit
+msgid "comments_by_users_label"
+msgstr ""
+
+#: core/comments-functions.php:733
+#: core/comments-functions.php:802
+#: core/header-functions.php:10
+#@ digressit
+msgid "general_comments_label"
+msgstr ""
+
+#: core/header-functions.php:7
+#@ digressit
+msgid "table_of_contents_label"
+msgstr ""
+
+#: core/lightboxes-functions.php:80
+#@ default
+msgid "Register account"
+msgstr ""
+
+#: core/lightboxes-functions.php:81
+#@ default
+msgid "Lost Password?"
+msgstr ""
+
+#: core/sidebar-functions.php:187
+#: themes/digressit-default/forums/index.php:28
+#: themes/digressit-default/groups/single/forum/edit.php:24
+#: themes/digressit-default/groups/single/forum.php:31
+#: themes/digressit-wireframe/groups/single/forum/edit.php:24
+#: themes/digressit-wireframe/groups/single/forum.php:31
+#@ digressit
+#@ buddypress
+msgid "Title:"
+msgstr ""
+
+#: core/sidebar-functions.php:192
+#@ digressit
+msgid "Categorize?"
+msgstr ""
+
+#: digressit.php:293
+#@ default
+msgid "No write permission on: "
+msgstr ""
+
+#: digressit.php:293
+#@ default
+msgid ". Please give the server write permission on this directory"
+msgstr ""
+
+#: digressit.php:352
+#@ default
+msgid "Digress.it Options"
+msgstr ""
+
+#: digressit.php:372
+#@ default
+msgid "Front page content"
+msgstr ""
+
+#: digressit.php:382
+#@ default
+msgid "Table of Contents Label"
+msgstr ""
+
+#: digressit.php:387
+#@ default
+msgid "Comments by Section Label"
+msgstr ""
+
+#: digressit.php:392
+#@ default
+msgid "Comments by Users Label"
+msgstr ""
+
+#: digressit.php:398
+#@ default
+msgid "General Comments Label"
+msgstr ""
+
+#: digressit.php:403
+#@ default
+msgid "Frontpage List Style"
+msgstr ""
+
+#: digressit.php:419
+#@ default
+msgid "Allow General Comments"
+msgstr ""
+
+#: digressit.php:424
+#@ default
+msgid "Enable Sidebar"
+msgstr ""
+
+#: digressit.php:430
+#@ default
+msgid "Sidebar Position"
+msgstr ""
+
+#: digressit.php:436
+#@ default
+msgid "Auto-hide Sidebar"
+msgstr ""
+
+#: digressit.php:441
+#@ default
+msgid "In Sidebar Show"
+msgstr ""
+
+#: digressit.php:447
+#@ default
+msgid "Custom Header Image URL"
+msgstr ""
+
+#: digressit.php:458
+#@ default
+msgid "Custom Style Sheet"
+msgstr ""
+
+#: digressit.php:476
+#@ default
+msgid "Debug Mode"
+msgstr ""
+
+#: digressit.php:481
+#@ default
+msgid "Use CDN"
+msgstr ""
+
+#: digressit.php:491
+#@ default
+msgid "CDN"
+msgstr ""
+
+#: digressit.php:501
+#@ default
+msgid "Content Parsing Function"
+msgstr ""
+
+#: digressit.php:506
+#@ default
+msgid "Comments Parsing Function"
+msgstr ""
+
+#: digressit.php:511
+#@ default
+msgid "Comment Box Parsing Function"
+msgstr ""
+
+#: digressit.php:517
+#@ default
+msgid "Allow Comments Search"
+msgstr ""
+
+#: digressit.php:529
+#: themes/digressit-default/groups/single/admin.php:32
+#: themes/digressit-default/groups/single/admin.php:100
+#: themes/digressit-default/groups/single/forum/edit.php:32
+#: themes/digressit-default/groups/single/forum/edit.php:50
+#: themes/digressit-default/members/single/profile/edit.php:107
+#: themes/digressit-wireframe/groups/single/admin.php:32
+#: themes/digressit-wireframe/groups/single/admin.php:100
+#: themes/digressit-wireframe/groups/single/forum/edit.php:32
+#: themes/digressit-wireframe/groups/single/forum/edit.php:50
+#: themes/digressit-wireframe/members/single/profile/edit.php:107
+#@ default
+#@ buddypress
+msgid "Save Changes"
+msgstr ""
+
+#: digressit.php:530
+#@ default
+msgid "Reset Options"
+msgstr ""
+
+#: themes/digressit-default/activity/activity-loop.php:27
+#: themes/digressit-wireframe/activity/activity-loop.php:27
+#@ buddypress
+msgid "Load More"
+msgstr ""
+
+#: themes/digressit-default/activity/activity-loop.php:37
+#: themes/digressit-wireframe/activity/activity-loop.php:37
+#@ buddypress
+msgid "Sorry, there was no activity found. Please try a different filter."
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:28
+#: themes/digressit-wireframe/activity/entry.php:28
+#@ buddypress
+msgid "Reply"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:33
+#: themes/digressit-wireframe/activity/entry.php:33
+#@ buddypress
+msgid "Mark as Favorite"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:33
+#: themes/digressit-wireframe/activity/entry.php:33
+#@ buddypress
+msgid "Favorite"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:35
+#: themes/digressit-wireframe/activity/entry.php:35
+#@ buddypress
+msgid "Remove Favorite"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:45
+#: themes/digressit-wireframe/activity/entry.php:45
+#@ buddypress
+msgid "In reply to"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:46
+#: themes/digressit-wireframe/activity/entry.php:46
+#@ buddypress
+msgid "View Thread / Permalink"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:46
+#: themes/digressit-wireframe/activity/entry.php:46
+#@ buddypress
+msgid "View"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:63
+#: themes/digressit-wireframe/activity/entry.php:63
+#@ buddypress
+msgid "Post"
+msgstr ""
+
+#: themes/digressit-default/activity/entry.php:63
+#: themes/digressit-wireframe/activity/entry.php:63
+#@ buddypress
+msgid "or press esc to cancel."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:7
+#: themes/digressit-wireframe/activity/index.php:7
+#@ buddypress
+msgid "Site Activity"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:22
+#: themes/digressit-wireframe/activity/index.php:22
+#@ buddypress
+msgid "The public activity for everyone on this site."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:22
+#: themes/digressit-default/members/index.php:18
+#: themes/digressit-wireframe/activity/index.php:22
+#: themes/digressit-wireframe/members/index.php:18
+#, php-format
+#@ buddypress
+msgid "All Members (%s)"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:30
+#: themes/digressit-wireframe/activity/index.php:30
+#@ buddypress
+msgid "The activity of my friends only."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:30
+#: themes/digressit-default/members/index.php:21
+#: themes/digressit-wireframe/activity/index.php:30
+#: themes/digressit-wireframe/members/index.php:21
+#, php-format
+#@ buddypress
+msgid "My Friends (%s)"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:38
+#: themes/digressit-wireframe/activity/index.php:38
+#@ buddypress
+msgid "The activity of groups I am a member of."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:38
+#: themes/digressit-default/groups/index.php:20
+#: themes/digressit-wireframe/activity/index.php:38
+#: themes/digressit-wireframe/groups/index.php:20
+#, php-format
+#@ buddypress
+msgid "My Groups (%s)"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:45
+#: themes/digressit-wireframe/activity/index.php:45
+#@ buddypress
+msgid "The activity I've marked as a favorite."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:45
+#: themes/digressit-wireframe/activity/index.php:45
+#, php-format
+#@ buddypress
+msgid "My Favorites (<span>%s</span>)"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:50
+#: themes/digressit-wireframe/activity/index.php:50
+#@ buddypress
+msgid "Activity that I have been mentioned in."
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:50
+#: themes/digressit-wireframe/activity/index.php:50
+#, php-format
+#@ buddypress
+msgid "@%s Mentions"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:50
+#: themes/digressit-wireframe/activity/index.php:50
+#, php-format
+#@ buddypress
+msgid "(%s new)"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:60
+#: themes/digressit-default/groups/single/activity.php:3
+#: themes/digressit-wireframe/activity/index.php:60
+#: themes/digressit-wireframe/groups/single/activity.php:3
+#@ buddypress
+msgid "RSS"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:66
+#: themes/digressit-default/groups/single/activity.php:9
+#: themes/digressit-default/members/single/activity.php:7
+#: themes/digressit-wireframe/activity/index.php:66
+#: themes/digressit-wireframe/groups/single/activity.php:9
+#: themes/digressit-wireframe/members/single/activity.php:7
+#@ buddypress
+msgid "No Filter"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:67
+#: themes/digressit-default/groups/single/activity.php:10
+#: themes/digressit-default/members/single/activity.php:8
+#: themes/digressit-wireframe/activity/index.php:67
+#: themes/digressit-wireframe/groups/single/activity.php:10
+#: themes/digressit-wireframe/members/single/activity.php:8
+#@ buddypress
+msgid "Show Updates"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:68
+#: themes/digressit-default/members/single/activity.php:11
+#: themes/digressit-wireframe/activity/index.php:68
+#: themes/digressit-wireframe/members/single/activity.php:11
+#@ buddypress
+msgid "Show Blog Posts"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:69
+#: themes/digressit-default/members/single/activity.php:12
+#: themes/digressit-wireframe/activity/index.php:69
+#: themes/digressit-wireframe/members/single/activity.php:12
+#@ buddypress
+msgid "Show Blog Comments"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:72
+#: themes/digressit-default/groups/single/activity.php:13
+#: themes/digressit-default/members/single/activity.php:20
+#: themes/digressit-wireframe/activity/index.php:72
+#: themes/digressit-wireframe/groups/single/activity.php:13
+#: themes/digressit-wireframe/members/single/activity.php:20
+#@ buddypress
+msgid "Show New Forum Topics"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:73
+#: themes/digressit-default/groups/single/activity.php:14
+#: themes/digressit-default/members/single/activity.php:21
+#: themes/digressit-wireframe/activity/index.php:73
+#: themes/digressit-wireframe/groups/single/activity.php:14
+#: themes/digressit-wireframe/members/single/activity.php:21
+#@ buddypress
+msgid "Show Forum Replies"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:77
+#: themes/digressit-default/members/single/activity.php:25
+#: themes/digressit-wireframe/activity/index.php:77
+#: themes/digressit-wireframe/members/single/activity.php:25
+#@ buddypress
+msgid "Show New Groups"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:78
+#: themes/digressit-default/groups/single/activity.php:17
+#: themes/digressit-default/members/single/activity.php:26
+#: themes/digressit-wireframe/activity/index.php:78
+#: themes/digressit-wireframe/groups/single/activity.php:17
+#: themes/digressit-wireframe/members/single/activity.php:26
+#@ buddypress
+msgid "Show New Group Memberships"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:82
+#: themes/digressit-default/members/single/activity.php:15
+#: themes/digressit-wireframe/activity/index.php:82
+#: themes/digressit-wireframe/members/single/activity.php:15
+#@ buddypress
+msgid "Show Friendship Connections"
+msgstr ""
+
+#: themes/digressit-default/activity/index.php:85
+#: themes/digressit-wireframe/activity/index.php:85
+#@ buddypress
+msgid "Show New Members"
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:7
+#: themes/digressit-wireframe/activity/post-form.php:7
+#, php-format
+#@ buddypress
+msgid "You are mentioning %s in a new update, this user will be sent a notification of your message."
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:19
+#: themes/digressit-wireframe/activity/post-form.php:19
+#, php-format
+#@ buddypress
+msgid "What's new in %s, %s?"
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:21
+#: themes/digressit-wireframe/activity/post-form.php:21
+#, php-format
+#@ buddypress
+msgid "What's new %s?"
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:33
+#: themes/digressit-wireframe/activity/post-form.php:33
+#@ buddypress
+msgid "Post Update"
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:38
+#: themes/digressit-wireframe/activity/post-form.php:38
+#@ buddypress
+msgid "Post in"
+msgstr ""
+
+#: themes/digressit-default/activity/post-form.php:41
+#: themes/digressit-wireframe/activity/post-form.php:41
+#@ buddypress
+msgid "My Profile"
+msgstr ""
+
+#: themes/digressit-default/author-feed.php:46
+#, php-format
+#@ default
+msgid "Comment on %1$s by %2$s"
+msgstr ""
+
+#: themes/digressit-default/author.php:70
+#@ default
+msgid "No posts by this author."
+msgstr ""
+
+#: themes/digressit-default/blogs/blogs-loop.php:36
+#@ buddypress
+msgid "Visit Blog"
+msgstr ""
+
+#: themes/digressit-default/blogs/blogs-loop.php:59
+#@ buddypress
+msgid "Sorry, there were no blogs found."
+msgstr ""
+
+#: themes/digressit-default/blogs/create.php:10
+#: themes/digressit-default/blogs/index.php:8
+#@ buddypress
+msgid "Create a Blog"
+msgstr ""
+
+#: themes/digressit-default/blogs/create.php:10
+#: themes/digressit-default/blogs/index.php:8
+#@ buddypress
+msgid "Blogs Directory"
+msgstr ""
+
+#: themes/digressit-default/blogs/create.php:21
+#@ buddypress
+msgid "Blog registration is currently disabled"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:18
+#, php-format
+#@ buddypress
+msgid "All Blogs (%s)"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:21
+#, php-format
+#@ buddypress
+msgid "My Blogs (%s)"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:28
+#: themes/digressit-default/forums/index.php:82
+#: themes/digressit-default/groups/index.php:27
+#: themes/digressit-default/members/index.php:28
+#: themes/digressit-default/members/single/blogs.php:6
+#: themes/digressit-default/members/single/friends.php:9
+#: themes/digressit-default/members/single/groups.php:10
+#: themes/digressit-wireframe/groups/index.php:27
+#: themes/digressit-wireframe/members/index.php:28
+#: themes/digressit-wireframe/members/single/blogs.php:6
+#: themes/digressit-wireframe/members/single/friends.php:9
+#: themes/digressit-wireframe/members/single/groups.php:10
+#@ buddypress
+msgid "Order By:"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:30
+#: themes/digressit-default/forums/index.php:84
+#: themes/digressit-default/groups/index.php:29
+#: themes/digressit-default/members/index.php:30
+#: themes/digressit-default/members/single/blogs.php:8
+#: themes/digressit-default/members/single/friends.php:11
+#: themes/digressit-default/members/single/groups.php:12
+#: themes/digressit-wireframe/groups/index.php:29
+#: themes/digressit-wireframe/members/index.php:30
+#: themes/digressit-wireframe/members/single/blogs.php:8
+#: themes/digressit-wireframe/members/single/friends.php:11
+#: themes/digressit-wireframe/members/single/groups.php:12
+#@ buddypress
+msgid "Last Active"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:31
+#: themes/digressit-default/members/single/blogs.php:9
+#: themes/digressit-wireframe/members/single/blogs.php:9
+#@ buddypress
+msgid "Newest"
+msgstr ""
+
+#: themes/digressit-default/blogs/index.php:32
+#: themes/digressit-default/groups/index.php:32
+#: themes/digressit-default/members/index.php:34
+#: themes/digressit-default/members/single/blogs.php:10
+#: themes/digressit-default/members/single/friends.php:13
+#: themes/digressit-default/members/single/groups.php:15
+#: themes/digressit-wireframe/groups/index.php:32
+#: themes/digressit-wireframe/members/index.php:34
+#: themes/digressit-wireframe/members/single/blogs.php:10
+#: themes/digressit-wireframe/members/single/friends.php:13
+#: themes/digressit-wireframe/members/single/groups.php:15
+#@ buddypress
+msgid "Alphabetical"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:7
+#: themes/digressit-default/forums/index.php:9
+#@ buddypress
+msgid "New Topic"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:24
+#@ buddypress
+msgid "Topic Title"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:25
+#@ buddypress
+msgid "Latest Poster"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:28
+#@ buddypress
+msgid "Posted In Group"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:31
+#@ buddypress
+msgid "Posts"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:32
+#@ buddypress
+msgid "Freshness"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:39
+#@ buddypress
+msgid "Permalink"
+msgstr ""
+
+#: themes/digressit-default/forums/forums-loop.php:76
+#@ buddypress
+msgid "Sorry, there were no forum topics found."
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:9
+#@ buddypress
+msgid "Group Forums Directory"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:26
+#: themes/digressit-default/groups/single/forum.php:29
+#: themes/digressit-wireframe/groups/single/forum.php:29
+#@ buddypress
+msgid "Post a New Topic:"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:31
+#: themes/digressit-default/groups/single/forum/edit.php:27
+#: themes/digressit-default/groups/single/forum.php:34
+#: themes/digressit-wireframe/groups/single/forum/edit.php:27
+#: themes/digressit-wireframe/groups/single/forum.php:34
+#@ buddypress
+msgid "Content:"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:34
+#: themes/digressit-default/groups/single/forum.php:37
+#: themes/digressit-wireframe/groups/single/forum.php:37
+#@ buddypress
+msgid "Tags (comma separated):"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:37
+#@ buddypress
+msgid "Post In Group Forum:"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:49
+#: themes/digressit-default/groups/single/forum.php:43
+#: themes/digressit-wireframe/groups/single/forum.php:43
+#@ buddypress
+msgid "Post Topic"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:50
+#@ buddypress
+msgid "Cancel"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:60
+#, php-format
+#@ buddypress
+msgid "You are not a member of any groups so you don't have any group forums you can post in. To start posting, first find a group that matches the topic subject you'd like to start. If this group does not exist, why not <a href='%s'>create a new group</a>? Once you have joined or created the group you can post your topic in that group's forum."
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:72
+#, php-format
+#@ buddypress
+msgid "All Topics (%s)"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:75
+#, php-format
+#@ buddypress
+msgid "My Topics (%s)"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:85
+#@ buddypress
+msgid "Most Posts"
+msgstr ""
+
+#: themes/digressit-default/forums/index.php:86
+#@ buddypress
+msgid "Unreplied"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:7
+#: themes/digressit-default/groups/index.php:7
+#: themes/digressit-wireframe/groups/create.php:7
+#: themes/digressit-wireframe/groups/index.php:7
+#@ buddypress
+msgid "Create a Group"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:7
+#: themes/digressit-default/groups/index.php:7
+#: themes/digressit-wireframe/groups/create.php:7
+#: themes/digressit-wireframe/groups/index.php:7
+#@ buddypress
+msgid "Groups Directory"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:26
+#: themes/digressit-wireframe/groups/create.php:26
+#@ buddypress
+msgid "* Group Name"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:26
+#: themes/digressit-default/groups/create.php:29
+#: themes/digressit-default/members/single/profile/edit.php:23
+#: themes/digressit-default/members/single/profile/edit.php:30
+#: themes/digressit-default/members/single/profile/edit.php:37
+#: themes/digressit-default/members/single/profile/edit.php:46
+#: themes/digressit-default/members/single/profile/edit.php:56
+#: themes/digressit-default/members/single/profile/edit.php:70
+#: themes/digressit-default/members/single/profile/edit.php:80
+#: themes/digressit-default/registration/register.php:28
+#: themes/digressit-default/registration/register.php:32
+#: themes/digressit-default/registration/register.php:36
+#: themes/digressit-default/registration/register.php:40
+#: themes/digressit-default/registration/register.php:67
+#: themes/digressit-default/registration/register.php:75
+#: themes/digressit-default/registration/register.php:83
+#: themes/digressit-default/registration/register.php:93
+#: themes/digressit-default/registration/register.php:104
+#: themes/digressit-default/registration/register.php:119
+#: themes/digressit-default/registration/register.php:130
+#: themes/digressit-default/registration/register.php:179
+#: themes/digressit-default/registration/register.php:188
+#: themes/digressit-wireframe/groups/create.php:26
+#: themes/digressit-wireframe/groups/create.php:29
+#: themes/digressit-wireframe/members/single/profile/edit.php:23
+#: themes/digressit-wireframe/members/single/profile/edit.php:30
+#: themes/digressit-wireframe/members/single/profile/edit.php:37
+#: themes/digressit-wireframe/members/single/profile/edit.php:46
+#: themes/digressit-wireframe/members/single/profile/edit.php:56
+#: themes/digressit-wireframe/members/single/profile/edit.php:70
+#: themes/digressit-wireframe/members/single/profile/edit.php:80
+#: themes/digressit-wireframe/registration/register.php:28
+#: themes/digressit-wireframe/registration/register.php:32
+#: themes/digressit-wireframe/registration/register.php:36
+#: themes/digressit-wireframe/registration/register.php:40
+#: themes/digressit-wireframe/registration/register.php:67
+#: themes/digressit-wireframe/registration/register.php:75
+#: themes/digressit-wireframe/registration/register.php:83
+#: themes/digressit-wireframe/registration/register.php:93
+#: themes/digressit-wireframe/registration/register.php:104
+#: themes/digressit-wireframe/registration/register.php:119
+#: themes/digressit-wireframe/registration/register.php:130
+#: themes/digressit-wireframe/registration/register.php:179
+#: themes/digressit-wireframe/registration/register.php:188
+#@ buddypress
+msgid "(required)"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:29
+#: themes/digressit-wireframe/groups/create.php:29
+#@ buddypress
+msgid "* Group Description"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:45
+#: themes/digressit-default/groups/single/admin.php:45
+#: themes/digressit-wireframe/groups/create.php:45
+#: themes/digressit-wireframe/groups/single/admin.php:45
+#@ buddypress
+msgid "Enable comment wire"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:52
+#: themes/digressit-default/groups/single/admin.php:55
+#: themes/digressit-wireframe/groups/create.php:52
+#: themes/digressit-wireframe/groups/single/admin.php:55
+#@ buddypress
+msgid "Enable discussion forum"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:57
+#: themes/digressit-wireframe/groups/create.php:57
+#, php-format
+#@ buddypress
+msgid "<strong>Attention Site Admin:</strong> Group forums require the <a href=\"%s\">correct setup and configuration</a> of a bbPress installation."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:65
+#: themes/digressit-default/groups/single/admin.php:64
+#: themes/digressit-wireframe/groups/create.php:65
+#: themes/digressit-wireframe/groups/single/admin.php:64
+#@ buddypress
+msgid "Privacy Options"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:69
+#: themes/digressit-default/groups/single/admin.php:69
+#: themes/digressit-wireframe/groups/create.php:69
+#: themes/digressit-wireframe/groups/single/admin.php:69
+#@ buddypress
+msgid "This is a public group"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:71
+#: themes/digressit-default/groups/single/admin.php:71
+#: themes/digressit-wireframe/groups/create.php:71
+#: themes/digressit-wireframe/groups/single/admin.php:71
+#@ buddypress
+msgid "Any site member can join this group."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:72
+#: themes/digressit-default/groups/create.php:81
+#: themes/digressit-default/groups/single/admin.php:72
+#: themes/digressit-default/groups/single/admin.php:82
+#: themes/digressit-wireframe/groups/create.php:72
+#: themes/digressit-wireframe/groups/create.php:81
+#: themes/digressit-wireframe/groups/single/admin.php:72
+#: themes/digressit-wireframe/groups/single/admin.php:82
+#@ buddypress
+msgid "This group will be listed in the groups directory and in search results."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:73
+#: themes/digressit-default/groups/single/admin.php:73
+#: themes/digressit-wireframe/groups/create.php:73
+#: themes/digressit-wireframe/groups/single/admin.php:73
+#@ buddypress
+msgid "Group content and activity will be visible to any site member."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:78
+#: themes/digressit-default/groups/single/admin.php:79
+#: themes/digressit-wireframe/groups/create.php:78
+#: themes/digressit-wireframe/groups/single/admin.php:79
+#@ buddypress
+msgid "This is a private group"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:80
+#: themes/digressit-default/groups/single/admin.php:81
+#: themes/digressit-wireframe/groups/create.php:80
+#: themes/digressit-wireframe/groups/single/admin.php:81
+#@ buddypress
+msgid "Only users who request membership and are accepted can join the group."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:82
+#: themes/digressit-default/groups/create.php:91
+#: themes/digressit-default/groups/single/admin.php:83
+#: themes/digressit-default/groups/single/admin.php:93
+#: themes/digressit-wireframe/groups/create.php:82
+#: themes/digressit-wireframe/groups/create.php:91
+#: themes/digressit-wireframe/groups/single/admin.php:83
+#: themes/digressit-wireframe/groups/single/admin.php:93
+#@ buddypress
+msgid "Group content and activity will only be visible to members of the group."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:87
+#: themes/digressit-default/groups/single/admin.php:89
+#: themes/digressit-wireframe/groups/create.php:87
+#: themes/digressit-wireframe/groups/single/admin.php:89
+#@ buddypress
+msgid "This is a hidden group"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:89
+#: themes/digressit-default/groups/single/admin.php:91
+#: themes/digressit-wireframe/groups/create.php:89
+#: themes/digressit-wireframe/groups/single/admin.php:91
+#@ buddypress
+msgid "Only users who are invited can join the group."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:90
+#: themes/digressit-default/groups/single/admin.php:92
+#: themes/digressit-wireframe/groups/create.php:90
+#: themes/digressit-wireframe/groups/single/admin.php:92
+#@ buddypress
+msgid "This group will not be listed in the groups directory or search results."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:114
+#: themes/digressit-default/groups/single/admin.php:110
+#: themes/digressit-wireframe/groups/create.php:114
+#: themes/digressit-wireframe/groups/single/admin.php:110
+#@ buddypress
+msgid "Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:118
+#: themes/digressit-default/groups/single/admin.php:114
+#: themes/digressit-default/members/single/profile/change-avatar.php:17
+#: themes/digressit-default/registration/register.php:243
+#: themes/digressit-wireframe/groups/create.php:118
+#: themes/digressit-wireframe/groups/single/admin.php:114
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:17
+#: themes/digressit-wireframe/registration/register.php:243
+#@ buddypress
+msgid "Upload Image"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:122
+#: themes/digressit-wireframe/groups/create.php:122
+#@ buddypress
+msgid "To skip the avatar upload process, hit the \"Next Step\" button."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:129
+#: themes/digressit-wireframe/groups/create.php:129
+#@ buddypress
+msgid "Crop Group Avatar"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:131
+#: themes/digressit-default/groups/single/admin.php:134
+#: themes/digressit-default/members/single/profile/change-avatar.php:34
+#: themes/digressit-default/registration/register.php:257
+#: themes/digressit-wireframe/groups/create.php:131
+#: themes/digressit-wireframe/groups/single/admin.php:134
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:34
+#: themes/digressit-wireframe/registration/register.php:257
+#@ buddypress
+msgid "Avatar to crop"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:134
+#: themes/digressit-default/groups/single/admin.php:137
+#: themes/digressit-default/members/single/profile/change-avatar.php:37
+#: themes/digressit-default/registration/register.php:260
+#: themes/digressit-wireframe/groups/create.php:134
+#: themes/digressit-wireframe/groups/single/admin.php:137
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:37
+#: themes/digressit-wireframe/registration/register.php:260
+#@ buddypress
+msgid "Avatar preview"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:137
+#: themes/digressit-default/groups/single/admin.php:140
+#: themes/digressit-default/members/single/profile/change-avatar.php:40
+#: themes/digressit-default/registration/register.php:263
+#: themes/digressit-wireframe/groups/create.php:137
+#: themes/digressit-wireframe/groups/single/admin.php:140
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:40
+#: themes/digressit-wireframe/registration/register.php:263
+#@ buddypress
+msgid "Crop Image"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:175
+#: themes/digressit-default/groups/single/send-invites.php:22
+#: themes/digressit-wireframe/groups/create.php:175
+#: themes/digressit-wireframe/groups/single/send-invites.php:22
+#@ buddypress
+msgid "Select people to invite from your friends list."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:191
+#: themes/digressit-default/groups/single/send-invites.php:42
+#: themes/digressit-wireframe/groups/create.php:191
+#: themes/digressit-wireframe/groups/single/send-invites.php:42
+#@ buddypress
+msgid "Remove Invite"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:206
+#: themes/digressit-default/groups/single/send-invites.php:72
+#: themes/digressit-wireframe/groups/create.php:206
+#: themes/digressit-wireframe/groups/single/send-invites.php:72
+#@ buddypress
+msgid "Once you have built up friend connections you will be able to invite others to your group. You can send invites any time in the future by selecting the \"Send Invites\" option when viewing your new group."
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:224
+#: themes/digressit-wireframe/groups/create.php:224
+#@ buddypress
+msgid "Previous Step"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:229
+#: themes/digressit-wireframe/groups/create.php:229
+#@ buddypress
+msgid "Next Step"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:234
+#: themes/digressit-wireframe/groups/create.php:234
+#@ buddypress
+msgid "Create Group and Continue"
+msgstr ""
+
+#: themes/digressit-default/groups/create.php:239
+#: themes/digressit-wireframe/groups/create.php:239
+#@ buddypress
+msgid "Finish"
+msgstr ""
+
+#: themes/digressit-default/groups/groups-loop.php:29
+#: themes/digressit-default/groups/single/group-header.php:31
+#: themes/digressit-wireframe/groups/groups-loop.php:29
+#: themes/digressit-wireframe/groups/single/group-header.php:31
+#, php-format
+#@ buddypress
+msgid "active %s ago"
+msgstr ""
+
+#: themes/digressit-default/groups/groups-loop.php:57
+#: themes/digressit-wireframe/groups/groups-loop.php:57
+#@ buddypress
+msgid "There were no groups found."
+msgstr ""
+
+#: themes/digressit-default/groups/index.php:17
+#: themes/digressit-wireframe/groups/index.php:17
+#, php-format
+#@ buddypress
+msgid "All Groups (%s)"
+msgstr ""
+
+#: themes/digressit-default/groups/index.php:30
+#: themes/digressit-default/members/single/groups.php:13
+#: themes/digressit-wireframe/groups/index.php:30
+#: themes/digressit-wireframe/members/single/groups.php:13
+#@ buddypress
+msgid "Most Members"
+msgstr ""
+
+#: themes/digressit-default/groups/index.php:31
+#: themes/digressit-default/members/single/groups.php:14
+#: themes/digressit-wireframe/groups/index.php:31
+#: themes/digressit-wireframe/members/single/groups.php:14
+#@ buddypress
+msgid "Newly Created"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:16
+#: themes/digressit-wireframe/groups/single/admin.php:16
+#@ buddypress
+msgid "Group Name"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:19
+#: themes/digressit-wireframe/groups/single/admin.php:19
+#@ buddypress
+msgid "Group Description"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:25
+#: themes/digressit-wireframe/groups/single/admin.php:25
+#@ buddypress
+msgid "Notify group members of changes via email"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:26
+#: themes/digressit-default/registration/register.php:195
+#: themes/digressit-wireframe/groups/single/admin.php:26
+#: themes/digressit-wireframe/registration/register.php:195
+#@ buddypress
+#@ default
+msgid "Yes"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:27
+#: themes/digressit-default/registration/register.php:196
+#: themes/digressit-wireframe/groups/single/admin.php:27
+#: themes/digressit-wireframe/registration/register.php:196
+#@ buddypress
+#@ default
+msgid "No"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:119
+#: themes/digressit-wireframe/groups/single/admin.php:119
+#@ buddypress
+msgid "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button."
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:122
+#: themes/digressit-default/members/single/profile/change-avatar.php:23
+#: themes/digressit-wireframe/groups/single/admin.php:122
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:23
+#@ buddypress
+msgid "Delete Avatar"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:132
+#: themes/digressit-wireframe/groups/single/admin.php:132
+#@ buddypress
+msgid "Crop Avatar"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:160
+#: themes/digressit-wireframe/groups/single/admin.php:160
+#@ buddypress
+msgid "Administrators"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:167
+#: themes/digressit-wireframe/groups/single/admin.php:167
+#@ buddypress
+msgid "Moderators"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:174
+#: themes/digressit-wireframe/groups/single/admin.php:174
+#@ buddypress
+msgid "Members"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:202
+#: themes/digressit-wireframe/groups/single/admin.php:202
+#@ buddypress
+msgid "(banned)"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:202
+#: themes/digressit-default/groups/single/admin.php:208
+#: themes/digressit-wireframe/groups/single/admin.php:202
+#: themes/digressit-wireframe/groups/single/admin.php:208
+#@ buddypress
+msgid "Kick and ban this member"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:202
+#: themes/digressit-wireframe/groups/single/admin.php:202
+#@ buddypress
+msgid "Remove Ban"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:208
+#: themes/digressit-wireframe/groups/single/admin.php:208
+#@ buddypress
+msgid "Kick &amp; Ban"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:208
+#: themes/digressit-wireframe/groups/single/admin.php:208
+#@ buddypress
+msgid "Promote to Mod"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:208
+#: themes/digressit-wireframe/groups/single/admin.php:208
+#@ buddypress
+msgid "Promote to Admin"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:221
+#: themes/digressit-default/groups/single/members.php:51
+#: themes/digressit-wireframe/groups/single/admin.php:221
+#: themes/digressit-wireframe/groups/single/members.php:51
+#@ buddypress
+msgid "This group has no members."
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:252
+#: themes/digressit-default/members/single/friends/requests.php:21
+#: themes/digressit-default/members/single/groups/invites.php:20
+#: themes/digressit-wireframe/groups/single/admin.php:252
+#: themes/digressit-wireframe/members/single/friends/requests.php:21
+#: themes/digressit-wireframe/members/single/groups/invites.php:20
+#@ buddypress
+msgid "Accept"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:258
+#: themes/digressit-default/members/single/friends/requests.php:22
+#: themes/digressit-default/members/single/groups/invites.php:21
+#: themes/digressit-wireframe/groups/single/admin.php:258
+#: themes/digressit-wireframe/members/single/friends/requests.php:22
+#: themes/digressit-wireframe/members/single/groups/invites.php:21
+#@ buddypress
+msgid "Reject"
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:272
+#: themes/digressit-wireframe/groups/single/admin.php:272
+#@ buddypress
+msgid "There are no pending membership requests."
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:289
+#: themes/digressit-wireframe/groups/single/admin.php:289
+#@ buddypress
+msgid "WARNING: Deleting this group will completely remove ALL content associated with it. There is no way back, please be careful with this option."
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:292
+#: themes/digressit-wireframe/groups/single/admin.php:292
+#@ buddypress
+msgid "I understand the consequences of deleting this group."
+msgstr ""
+
+#: themes/digressit-default/groups/single/admin.php:297
+#: themes/digressit-wireframe/groups/single/admin.php:297
+#@ buddypress
+msgid "Delete Group"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/edit.php:7
+#: themes/digressit-default/groups/single/forum/topic.php:19
+#: themes/digressit-wireframe/groups/single/forum/edit.php:7
+#: themes/digressit-wireframe/groups/single/forum/topic.php:19
+#@ buddypress
+msgid "Group Forum"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/edit.php:7
+#: themes/digressit-default/groups/single/forum/topic.php:19
+#: themes/digressit-wireframe/groups/single/forum/edit.php:7
+#: themes/digressit-wireframe/groups/single/forum/topic.php:19
+#@ buddypress
+msgid "Group Forum Directory"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/edit.php:22
+#: themes/digressit-wireframe/groups/single/forum/edit.php:22
+#@ buddypress
+msgid "Edit Topic:"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/edit.php:44
+#: themes/digressit-wireframe/groups/single/forum/edit.php:44
+#@ buddypress
+msgid "Edit Post:"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/edit.php:65
+#: themes/digressit-wireframe/groups/single/forum/edit.php:65
+#@ buddypress
+msgid "This topic does not exist."
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:34
+#: themes/digressit-wireframe/groups/single/forum/topic.php:34
+#, php-format
+#@ buddypress
+msgid "%s said %s ago:"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:45
+#: themes/digressit-wireframe/groups/single/forum/topic.php:45
+#@ buddypress
+msgid "Permanent link to this post"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:74
+#: themes/digressit-wireframe/groups/single/forum/topic.php:74
+#@ buddypress
+msgid "You will auto join this group when you reply to this topic."
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:79
+#: themes/digressit-wireframe/groups/single/forum/topic.php:79
+#@ buddypress
+msgid "Add a reply:"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:84
+#: themes/digressit-wireframe/groups/single/forum/topic.php:84
+#@ buddypress
+msgid "Post Reply"
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:95
+#: themes/digressit-wireframe/groups/single/forum/topic.php:95
+#@ buddypress
+msgid "This topic is closed, replies are no longer accepted."
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum/topic.php:108
+#: themes/digressit-wireframe/groups/single/forum/topic.php:108
+#@ buddypress
+msgid "There are no posts for this topic."
+msgstr ""
+
+#: themes/digressit-default/groups/single/forum.php:25
+#: themes/digressit-wireframe/groups/single/forum.php:25
+#@ buddypress
+msgid "You will auto join this group when you start a new topic."
+msgstr ""
+
+#: themes/digressit-default/groups/single/group-header.php:6
+#: themes/digressit-wireframe/groups/single/group-header.php:6
+#@ buddypress
+msgid "Group Admins"
+msgstr ""
+
+#: themes/digressit-default/groups/single/group-header.php:14
+#: themes/digressit-wireframe/groups/single/group-header.php:14
+#@ buddypress
+msgid "Group Mods"
+msgstr ""
+
+#: themes/digressit-default/groups/single/request-membership.php:4
+#: themes/digressit-wireframe/groups/single/request-membership.php:4
+#, php-format
+#@ buddypress
+msgid "You are requesting to become a member of the group '%s'."
+msgstr ""
+
+#: themes/digressit-default/groups/single/request-membership.php:7
+#: themes/digressit-wireframe/groups/single/request-membership.php:7
+#@ buddypress
+msgid "Comments (optional)"
+msgstr ""
+
+#: themes/digressit-default/groups/single/request-membership.php:12
+#: themes/digressit-wireframe/groups/single/request-membership.php:12
+#@ buddypress
+msgid "Send Request"
+msgstr ""
+
+#: themes/digressit-default/groups/single/send-invites.php:60
+#: themes/digressit-wireframe/groups/single/send-invites.php:60
+#@ buddypress
+msgid "Send Invites"
+msgstr ""
+
+#: themes/digressit-default/header.php:57
+#: themes/digressit-wireframe/header.php:56
+#@ default
+msgid "My Account"
+msgstr ""
+
+#: themes/digressit-default/header.php:58
+#: themes/digressit-wireframe/header.php:57
+#@ default
+msgid "Logout"
+msgstr ""
+
+#: themes/digressit-default/header.php:61
+#: themes/digressit-wireframe/header.php:60
+#@ default
+msgid "Register"
+msgstr ""
+
+#: themes/digressit-default/header.php:63
+#: themes/digressit-wireframe/header.php:62
+#@ default
+msgid "Login"
+msgstr ""
+
+#: themes/digressit-default/members/index.php:8
+#: themes/digressit-wireframe/members/index.php:8
+#@ buddypress
+msgid "Members Directory"
+msgstr ""
+
+#: themes/digressit-default/members/index.php:31
+#: themes/digressit-default/members/single/friends.php:12
+#: themes/digressit-wireframe/members/index.php:31
+#: themes/digressit-wireframe/members/single/friends.php:12
+#@ buddypress
+msgid "Newest Registered"
+msgstr ""
+
+#: themes/digressit-default/members/members-loop.php:70
+#: themes/digressit-wireframe/members/members-loop.php:70
+#@ buddypress
+msgid "Sorry, no members were found."
+msgstr ""
+
+#: themes/digressit-default/members/single/friends/requests.php:36
+#: themes/digressit-wireframe/members/single/friends/requests.php:36
+#@ buddypress
+msgid "You have no pending friendship requests."
+msgstr ""
+
+#: themes/digressit-default/members/single/groups/invites.php:11
+#: themes/digressit-wireframe/members/single/groups/invites.php:11
+#, php-format
+#@ buddypress
+msgid "%s members"
+msgstr ""
+
+#: themes/digressit-default/members/single/groups/invites.php:34
+#: themes/digressit-wireframe/members/single/groups/invites.php:34
+#@ buddypress
+msgid "You have no outstanding group invites."
+msgstr ""
+
+#: themes/digressit-default/members/single/member-header.php:30
+#: themes/digressit-wireframe/members/single/member-header.php:30
+#@ buddypress
+msgid "Mention this user in a new public message, this will send the user a notification to get their attention."
+msgstr ""
+
+#: themes/digressit-default/members/single/member-header.php:30
+#: themes/digressit-wireframe/members/single/member-header.php:30
+#@ buddypress
+msgid "Mention this User"
+msgstr ""
+
+#: themes/digressit-default/members/single/member-header.php:36
+#: themes/digressit-wireframe/members/single/member-header.php:36
+#@ buddypress
+msgid "Send a private message to this user."
+msgstr ""
+
+#: themes/digressit-default/members/single/member-header.php:36
+#: themes/digressit-wireframe/members/single/member-header.php:36
+#@ buddypress
+msgid "Send Private Message"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/compose.php:5
+#: themes/digressit-wireframe/members/single/messages/compose.php:5
+#@ buddypress
+msgid "Send To (Username or Friend's Name)"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/compose.php:14
+#: themes/digressit-wireframe/members/single/messages/compose.php:14
+#@ buddypress
+msgid "This is a notice to all users."
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/compose.php:17
+#: themes/digressit-wireframe/members/single/messages/compose.php:17
+#@ buddypress
+msgid "Subject"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/compose.php:20
+#: themes/digressit-wireframe/members/single/messages/compose.php:20
+#@ buddypress
+msgid "Message"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/compose.php:28
+#: themes/digressit-wireframe/members/single/messages/compose.php:28
+#@ buddypress
+msgid "Send Message"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/messages-loop.php:31
+#: themes/digressit-wireframe/members/single/messages/messages-loop.php:31
+#@ buddypress
+msgid "From:"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/messages-loop.php:36
+#: themes/digressit-wireframe/members/single/messages/messages-loop.php:36
+#@ buddypress
+msgid "To:"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/messages-loop.php:42
+#: themes/digressit-wireframe/members/single/messages/messages-loop.php:42
+#@ buddypress
+msgid "View Message"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/messages-loop.php:50
+#: themes/digressit-default/members/single/messages/notices-loop.php:38
+#: themes/digressit-wireframe/members/single/messages/messages-loop.php:50
+#: themes/digressit-wireframe/members/single/messages/notices-loop.php:38
+#@ buddypress
+msgid "Delete Message"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/messages-loop.php:68
+#: themes/digressit-wireframe/members/single/messages/messages-loop.php:68
+#@ buddypress
+msgid "Sorry, no messages were found."
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/notices-loop.php:31
+#: themes/digressit-wireframe/members/single/messages/notices-loop.php:31
+#@ buddypress
+msgid "Sent:"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/notices-loop.php:49
+#: themes/digressit-wireframe/members/single/messages/notices-loop.php:49
+#@ buddypress
+msgid "Sorry, no notices were found."
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/single.php:11
+#: themes/digressit-wireframe/members/single/messages/single.php:11
+#, php-format
+#@ buddypress
+msgid "Sent between %s and %s"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/single.php:63
+#: themes/digressit-wireframe/members/single/messages/single.php:63
+#@ buddypress
+msgid "Send a Reply"
+msgstr ""
+
+#: themes/digressit-default/members/single/messages/single.php:79
+#: themes/digressit-wireframe/members/single/messages/single.php:79
+#@ buddypress
+msgid "Send Reply"
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:1
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:1
+#@ buddypress
+msgid "Change Avatar"
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:7
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:7
+#@ buddypress
+msgid "Your avatar will be used on your profile and throughout the site. If there is a <a href=\"http://gravatar.com\">Gravatar</a> associated with your account email we will use that, or you can upload an image from your computer."
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:13
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:13
+#@ buddypress
+msgid "Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed."
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:22
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:22
+#@ buddypress
+msgid "If you'd like to delete your current avatar but not upload a new one, please use the delete avatar button."
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:23
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:23
+#@ buddypress
+msgid "Delete My Avatar"
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:32
+#: themes/digressit-default/registration/register.php:255
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:32
+#: themes/digressit-wireframe/registration/register.php:255
+#@ buddypress
+msgid "Crop Your New Avatar"
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/change-avatar.php:56
+#: themes/digressit-wireframe/members/single/profile/change-avatar.php:56
+#@ buddypress
+msgid "Your avatar will be used on your profile and throughout the site. To change your avatar, please create an account with <a href=\"http://gravatar.com\">Gravatar</a> using the same email address as you used to register with this site."
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/edit.php:9
+#: themes/digressit-wireframe/members/single/profile/edit.php:9
+#, php-format
+#@ buddypress
+msgid "Editing '%s' Profile Group"
+msgstr ""
+
+#: themes/digressit-default/members/single/profile/edit.php:61
+#: themes/digressit-default/registration/register.php:110
+#: themes/digressit-wireframe/members/single/profile/edit.php:61
+#: themes/digressit-wireframe/registration/register.php:110
+#@ buddypress
+msgid "Clear"
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:16
+#: themes/digressit-wireframe/registration/activate.php:16
+#@ buddypress
+msgid "Account Activated"
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:21
+#: themes/digressit-wireframe/registration/activate.php:21
+#@ buddypress
+msgid "Your account was activated successfully! Your account details have been sent to you in a separate email."
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:23
+#: themes/digressit-wireframe/registration/activate.php:23
+#@ buddypress
+msgid "Your account was activated successfully! You can now log in with the username and password you provided when you signed up."
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:28
+#: themes/digressit-wireframe/registration/activate.php:28
+#@ buddypress
+msgid "Activate your Account"
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:32
+#: themes/digressit-wireframe/registration/activate.php:32
+#@ buddypress
+msgid "Please provide a valid activation key."
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:36
+#: themes/digressit-wireframe/registration/activate.php:36
+#@ buddypress
+msgid "Activation Key:"
+msgstr ""
+
+#: themes/digressit-default/registration/activate.php:40
+#: themes/digressit-wireframe/registration/activate.php:40
+#@ buddypress
+msgid "Activate"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:14
+#: themes/digressit-wireframe/registration/register.php:14
+#@ buddypress
+msgid "Create an Account"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:18
+#: themes/digressit-wireframe/registration/register.php:18
+#@ buddypress
+msgid "Registering for this site is easy, just fill in the fields below and we'll get a new account set up for you in no time."
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:26
+#: themes/digressit-wireframe/registration/register.php:26
+#@ buddypress
+msgid "Account Details"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:28
+#: themes/digressit-wireframe/registration/register.php:28
+#@ buddypress
+msgid "Username"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:32
+#: themes/digressit-wireframe/registration/register.php:32
+#@ buddypress
+msgid "Email Address"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:36
+#: themes/digressit-wireframe/registration/register.php:36
+#@ buddypress
+msgid "Choose a Password"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:40
+#: themes/digressit-wireframe/registration/register.php:40
+#@ buddypress
+msgid "Confirm Password"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:56
+#: themes/digressit-wireframe/registration/register.php:56
+#@ buddypress
+msgid "Profile Details"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:173
+#: themes/digressit-wireframe/registration/register.php:173
+#@ buddypress
+msgid "Blog Details"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:175
+#: themes/digressit-wireframe/registration/register.php:175
+#@ buddypress
+msgid "Yes, I'd like to create a new blog"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:179
+#: themes/digressit-wireframe/registration/register.php:179
+#@ buddypress
+msgid "Blog URL"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:188
+#: themes/digressit-wireframe/registration/register.php:188
+#@ buddypress
+msgid "Blog Title"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:192
+#: themes/digressit-wireframe/registration/register.php:192
+#@ buddypress
+msgid "I would like my blog to appear in search engines, and in public listings around this site"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:209
+#: themes/digressit-wireframe/registration/register.php:209
+#@ buddypress
+msgid "Complete Sign Up"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:220
+#: themes/digressit-wireframe/registration/register.php:220
+#@ buddypress
+msgid "Sign Up Complete!"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:225
+#: themes/digressit-wireframe/registration/register.php:225
+#@ buddypress
+msgid "You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address."
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:227
+#: themes/digressit-wireframe/registration/register.php:227
+#@ buddypress
+msgid "You have successfully created your account! Please log in using the username and password you have just created."
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:234
+#: themes/digressit-wireframe/registration/register.php:234
+#@ buddypress
+msgid "Your Current Avatar"
+msgstr ""
+
+#: themes/digressit-default/registration/register.php:235
+#: themes/digressit-wireframe/registration/register.php:235
+#@ buddypress
+msgid "We've fetched an avatar for your new account. If you'd like to change this, why not upload a new one?"
+msgstr ""
+
+#: themes/digressit-default/search-template.php:19
+#: themes/digressit-default/searchform.php:4
+#@ default
+#@ k2_domain
+msgid "Search"
+msgstr ""
+

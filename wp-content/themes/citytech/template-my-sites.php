@@ -8,7 +8,7 @@ function cuny_my_sites() {
 <?php }
 
 
-function cuny_profile_activty_block($type,$title,$last) { 
+function cuny_profile_activty_block($type,$title,$last) {
 	global $wpdb,$bp, $ribbonclass;
 
 	$ids="9999999";
@@ -46,7 +46,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 					     }
 					?>
 				</div>
-				
+
 			</li>
 			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
 			<?php $count++ ?>
@@ -67,40 +67,10 @@ function cuny_profile_activty_block($type,$title,$last) {
 
 }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_member_actions');
-function cuny_buddypress_member_actions() { 
-global $bp, $user_ID, $user_identity, $userdata;
-get_currentuserinfo();
-//print_r($userdata);
 
-?>
-	<h2 class="sidebar-title">My Open Lab</h2>
-	<div id="item-buttons">
-		<?php do_action( 'cuny_bp_profile_menus' ); ?>
-	
-	</div><!-- #item-buttons -->
-	
-	
-	<?php
-		global $members_template, $post;
-		
-		// Not really sure where this function appears, so I'll make a cascade
-		if ( isset( $members_template->member->user_id ) ) {
-			$button_user_id = $members_template->member->user_id;
-		} else if ( bp_displayed_user_id() ) {
-			$button_user_id = bp_displayed_user_id();
-		} else if ( !empty( $post->post_name ) && in_array( $post->post_name, array( 'my-projects', 'my-courses', 'my-clubs' ) ) ) {
-			$button_user_id = bp_loggedin_user_id();
-		} else {
-			$button_user_id = 0;
-		}
-			       
-		$is_friend = friends_check_friendship( $button_user_id, bp_loggedin_user_id() );
-	?>
-		
-	<?php bp_add_friend_button( $button_user_id, bp_loggedin_user_id() ) ?>
-
-<?php openlab_recent_account_activity_sidebar();
-}
+/**
+ * @todo - Unhook from the genesis action
+ */
+add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
 
 genesis();

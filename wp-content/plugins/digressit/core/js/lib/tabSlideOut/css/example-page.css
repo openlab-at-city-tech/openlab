@@ -1,0 +1,13 @@
+
+body{padding:0;margin:0;  background:#39424b; font-family: verdana;}
+h1, h2{padding:0;margin:10px 0 10px 0;}
+h1 {font-size: 150%;}
+h2 {font-size: 110%;}
+p{padding:0; margin:0 0 5px 0;}
+a {color:#176092; text-decoration:none;}
+a:hover {text-decoration:underline;}
+#wrap {width:960px; margin: 0 auto; background:#999;}
+#header, #footer {background: #0f1923; color:#fff; padding:10px 40px;}
+#footer p {font-size:80%; text-align:right;}
+#content {background:#ccc; padding:10px 40px;}
+pre {font-size:85%; background:#fff; border:1px #ccc solid; padding:5px}

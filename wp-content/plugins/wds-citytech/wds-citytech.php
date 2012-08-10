@@ -10,6 +10,7 @@
 include "wds-register.php";
 include "wds-docs.php";
 
+
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
@@ -17,7 +18,10 @@ include "wds-docs.php";
  */
 function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require ( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
+	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
@@ -509,11 +513,14 @@ function wds_groups_ajax(){
 			if(document.getElementById('school_arts').checked){
 				schools=schools+","+document.getElementById('school_arts').value;
 			}
+			var group_type = jQuery('input[name="group_type"]').val();
 			isack.execute = 1;
 			isack.method = 'POST';
 			isack.setVar( "action", "wds_load_group_departments" );
 			isack.setVar( "schools", schools );
 			isack.setVar( "group", "<?php echo $group;?>" );
+			isack.setVar( "is_group_create", "<?php echo intval( bp_is_group_create() ) ?>" );
+			isack.setVar( "group_type", group_type );
 			isack.runAJAX();
 			return true;
 		}
@@ -528,12 +535,42 @@ function wds_load_group_departments(){
 	global $wpdb, $bp;
 	$group = $_POST['group'];
 	$schools = $_POST['schools'];
+	$group_type = $_POST['group_type'];
+	$is_group_create = (bool) $_POST['is_group_create'];
 	$schools=str_replace("0,","",$schools);
 	$schools=explode(",",$schools);
 
-	$departments_tech=array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology');
-	$departments_studies=array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology');
-	$departments_arts=array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science');
+
+	$departments_tech    = openlab_get_department_list( 'tech' );
+	$departments_studies = openlab_get_department_list( 'studies' );
+	$departments_arts    = openlab_get_department_list( 'arts' );
+
+	// We want to prefill the School and Dept fields, which means we have
+	// to prefetch the dept field and figure out School backward
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
+		$account_type = strtolower( bp_get_profile_field_data( array(
+			'field' => 'Account Type',
+			'user_id' => bp_loggedin_user_id()
+		) ) );
+		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+
+		$wds_departments = (array) bp_get_profile_field_data( array(
+			'field' => $dept_field,
+			'user_id' => bp_loggedin_user_id()
+		) );
+
+		foreach( $wds_departments as $d ) {
+			if ( in_array( $d, $departments_tech ) )
+				$schools[] = 'tech';
+
+			if ( in_array( $d, $departments_studies ) )
+				$schools[] = 'studies';
+
+			if ( in_array( $d, $departments_arts ) )
+				$schools[] = 'art';
+		}
+	}
+
 	$departments=array();
 	if(in_array("tech",$schools)){
 		$departments=array_merge_recursive($departments, $departments_tech);
@@ -545,8 +582,17 @@ function wds_load_group_departments(){
 		$departments=array_merge_recursive($departments, $departments_arts);
 	}
 	sort($departments);
-	$wds_departments=groups_get_groupmeta($group, 'wds_departments' );
-	$wds_departments=explode(",",$wds_departments);
+
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
+		$wds_departments = (array) bp_get_profile_field_data( array(
+			'field' => $dept_field,
+			'user_id' => bp_loggedin_user_id()
+		) );
+	} else {
+		$wds_departments=groups_get_groupmeta($group, 'wds_departments' );
+		$wds_departments=explode(",",$wds_departments);
+	}
+
 	$return="<div style='height:100px;overflow:scroll;'>";
 	foreach ($departments as $i => $value) {
 		$checked="";
@@ -558,6 +604,68 @@ function wds_load_group_departments(){
 	$return.="</div>";
 	$return=str_replace("'","\'",$return);
 	die("document.getElementById('departments_html').innerHTML='$return'");
+}
+
+/**
+ * Get a list of schools
+ */
+function openlab_get_school_list() {
+	return array(
+		'tech'       => 'Technology & Design',
+		'studies'    => 'Professional Studies',
+		'arts'       => 'Arts & Sciences'
+	);
+}
+
+/**
+ * Get a list of departments
+ *
+ * @param str Optional. Leave out to get all departments
+ */
+function openlab_get_department_list( $school = '' ) {
+
+	// Sanitize school name
+	$schools = openlab_get_school_list();
+	if ( isset( $schools[$school] ) ) {
+		$school = $school;
+	} else if ( in_array( $school, $schools ) ) {
+		$school = array_search( $school, $schools );
+	}
+
+	$all_departments = array(
+		'tech' => array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology'),
+		'studies' => array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology'),
+		'arts' => array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science')
+	);
+
+	// Lazy - I didn't feel like manually converting to key-value structure
+	$departments_sorted = array();
+	foreach( $schools as $s_key => $s_label ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		$departments_sorted[$s_key] = array();
+	}
+
+	foreach( $all_departments as $s_key => $depts ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		foreach( $depts as $dept ) {
+			$d_key = strtolower( str_replace( ' ', '-', $dept ) );
+			$departments_sorted[$s_key][$d_key] = $dept;
+		}
+	}
+
+	if ( $school ) {
+		$departments_sorted = $departments_sorted[$school];
+	}
+
+	return $departments_sorted;
 }
 
 add_action('init', 'wds_new_group_type');
@@ -576,38 +684,25 @@ function wds_new_group_type(){
 
 add_action('wp_ajax_wds_load_group_type', 'wds_load_group_type');
 add_action('wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type');
-function wds_load_group_type($group_type){
+function wds_load_group_type( $group_type ){
 	global $wpdb, $bp, $user_ID;
+
 	$return='';
-	if($group_type){
-		$echo=true;
-		$return='<input type="hidden" name="group_type" value="'.ucfirst($group_type).'">';
-	}else{
+
+	if ( $group_type ) {
+		$echo = true;
+		$return = '<input type="hidden" name="group_type" value="' . ucfirst($group_type) . '">';
+	} else {
 		$group_type = $_POST['group_type'];
 	}
-
-	/**
-	 * Active/inactive toggle
-	 */
-	if ( groups_get_groupmeta( bp_get_current_group_id(), 'openlab_group_active_status' ) == 'inactive' ) {
-		$active_checked = '';
-		$inactive_checked = ' checked="checked" ';
-	} else {
-		$inactive_checked = '';
-		$active_checked = ' checked="checked" ';
-	}
-
-	$return .= '<p class="ol-tooltip">Will your ' . ucwords( $group_type ) . ' be in use this semester? This will help users find currently active '. ucwords( $group_type ) . 's.</p>';
-	$return .= '<div id="active-toggle">* ';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_active" value="active" ' . $active_checked . ' /> <label for="group_is_active">Active</label>';
-	$return .= '<input type="radio" name="group_active_status" id="group_is_inactive" value="inactive" ' . $inactive_checked . ' /> <label for="group_is_inactive">Inactive</label>';
-	$return .= ' (required)';
-	$return .= '</div>';
 
 	// associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			break;
+		case 'portfolio' :
+			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label( 'user_id=' . bp_loggedin_user_id() ) . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
 		case 'project' :
 			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
@@ -617,47 +712,80 @@ function wds_load_group_type($group_type){
 			break;
 	}
 
-	$return.='<table>';
-	$wds_group_school=groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school' );
-	$wds_group_school=explode(",",$wds_group_school);
-		$return.='<tr>';
-            $return.='<td>School(s):';
-            $return.='<td>';
-			$checked="";
-			if(bp_get_current_group_id() && in_array("tech",$wds_group_school)){
-				$checked="checked";
-			}
+	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
+	$wds_group_school = explode( ",", $wds_group_school );
 
-			if($group_type=="course"){
-				$onclick='onclick="wds_load_group_departments();"';
-			} else {
-				$onclick = '';
-			}
-			$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' '.$checked.'> Technology & Design ';
-			$checked="";
-			if(bp_get_current_group_id() &&in_array("studies",$wds_group_school)){
-				$checked="checked";
-			}
-			$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '.$checked.'> Professional Studies ';
-			$checked="";
-			if(bp_get_current_group_id() &&in_array("arts",$wds_group_school)){
-				$checked="checked";
-			}
-			$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '.$checked.'> Arts & Sciences ';
-			$return.='</td>';
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
 
-		$return.='</tr>';
-	if($group_type=="course"){
+	$return .= '<table>';
+
+	$return .= '<tr>';
+
+	$return .= '<td>School(s)';
+	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
+		$return .= ' <span class="required">(required)</span>';
+	}
+	$return .= '</td>';
+
+        $return .= '<td>';
+
+	// If this is a Portfolio, we'll pre-check the school and department
+	// of the logged-in user
+	$checked_array = array( 'schools' => array(), 'departments' => array() );
+	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
+		$account_type = strtolower( bp_get_profile_field_data( array(
+			'field' => 'Account Type',
+			'user_id' => bp_loggedin_user_id()
+		) ) );
+		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+
+		$user_department = bp_get_profile_field_data( array(
+			'field'   => $dept_field,
+			'user_id' => bp_loggedin_user_id()
+		) );
+
+		if ( $user_department ) {
+			$all_departments = openlab_get_department_list();
+			foreach( $all_departments as $school => $depts ) {
+				if ( in_array( $user_department, $depts ) ) {
+					$checked_array['schools'][] = $school;
+					$checked_array['departments'][] = array_search( $user_department, $depts );
+					break;
+				}
+			}
+		}
+	} else {
+		foreach( (array) $wds_group_school as $school ) {
+			$checked_array['schools'][] = $school;
+		}
+	}
+
+	if ( $group_type=="course" || $group_type == 'portfolio' ) {
+		$onclick = 'onclick="wds_load_group_departments();"';
+	} else {
+		$onclick = '';
+	}
+
+	$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
+
+	$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
+
+	$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
+
+	$return .= '</td>';
+	$return .= '</tr>';
+
+	if( 'course' == $group_type || 'portfolio' == $group_type ) {
 		// For the love of Pete, it's not that hard to cast variables
 		$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
-		if( !empty( $bp->groups->current_group->id ) ){
-			$wds_faculty=groups_get_groupmeta($bp->groups->current_group->id, 'wds_faculty' );
-			$wds_course_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_code' );
-			$wds_section_code=groups_get_groupmeta($bp->groups->current_group->id, 'wds_section_code' );
-			$wds_semester=groups_get_groupmeta($bp->groups->current_group->id, 'wds_semester' );
-			$wds_year=groups_get_groupmeta($bp->groups->current_group->id, 'wds_year' );
-			$wds_course_html=groups_get_groupmeta($bp->groups->current_group->id, 'wds_course_html' );
+		if ( bp_get_current_group_id() ){
+			$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
+			$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(),  'wds_course_code' );
+			$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
+			$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
+			$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
+			$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 		}
         //$return.='<tr>';
            //$return.=' <td>Faculty:';
@@ -667,50 +795,63 @@ function wds_load_group_type($group_type){
 		$return.='<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
 
 		$return.='<tr>';
-            $return.='<td>Department(s):';
+
+		$return .= '<td>Department(s)';
+		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
+			$return .= ' <span class="required">(required)</span>';
+		}
+		$return .= '</td>';
             $return.='<td id="departments_html"></td>';
         $return.='</tr>';
 
-        	$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
+		if ( 'course' == $group_type ) {
 
-		$return.='<tr>';
-           $return.=' <td>Course Code:';
-            $return.='<td><input type="text" name="wds_course_code" value="'.$wds_course_code.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Section Code:';
-            $return.='<td><input type="text" name="wds_section_code" value="'.$wds_section_code.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Semester:';
-            $return.='<td><select name="wds_semester">';
-                $return.='<option value="">--select one--';
-				$checked = $Spring = $Summer = $Fall = $Winter = "";
+			$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
-				if($wds_semester=="Spring"){
-					$Spring="selected";
-				}elseif($wds_semester=="Summer"){
-					$Summer="selected";
-				}elseif($wds_semester=="Fall"){
-					$Fall="selected";
-				}elseif($wds_semester=="Winter"){
-					$Winter="selected";
-				}
-				$return.='<option value="Spring" '.$Spring.'>Spring';
-                $return.='<option value="Summer" '.$Summer.'>Summer';
-                $return.='<option value="Fall" '.$Fall.'>Fall';
-                $return.='<option value="Winter" '.$Winter.'>Winter';
-            $return.='</select></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Year:';
-            $return.='<td><input type="text" name="wds_year" value="'.$wds_year.'"></td>';
-        $return.='</tr>';
-		$return.='<tr>';
-            $return.='<td>Additional Description/HTML:';
-            $return.='<td><textarea name="wds_course_html">'.$wds_course_html.'</textarea></td>';
-        $return.='</tr>';
+			$return .= '<tr>';
+			$return .= '<td>Course Code:</td>';
+			$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+			$return .= '</tr>';
 
+			$return .= '<tr>';
+			$return .= '<td>Section Code:';
+			$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Semester:';
+			$return .= '<td><select name="wds_semester">';
+			$return .= '<option value="">--select one--';
+
+			$checked = $Spring = $Summer = $Fall = $Winter = "";
+
+			if ( $wds_semester=="Spring" ){
+				$Spring = "selected";
+			} elseif ( $wds_semester == "Summer" ) {
+				$Summer = "selected";
+			} elseif ( $wds_semester=="Fall" ) {
+				$Fall   = "selected";
+			} elseif ( $wds_semester == "Winter" ) {
+				$Winter = "selected";
+			}
+
+			$return .= '<option value="Spring" ' . $Spring . '>Spring';
+			$return .= '<option value="Summer" ' . $Summer . '>Summer';
+			$return .= '<option value="Fall" ' . $Fall . '>Fall';
+			$return .= '<option value="Winter" ' . $Winter . '>Winter';
+			$return .= '</select></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Year:';
+			$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
+			$return .= '</tr>';
+
+			$return .= '<tr>';
+			$return .= '<td>Additional Description/HTML:';
+			$return .= '<td><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td>';
+			$return.='</tr>';
+		}
 	}elseif($group_type=="project"){
 
 	}elseif($group_type=="club"){
@@ -718,8 +859,10 @@ function wds_load_group_type($group_type){
 	}else{
 		$return="Please select a Group Type.";
 	}
+
 	$return.='</table>';
-	if($group_type=="course"){
+
+	if($group_type=="course" || 'portfolio' == $group_type ){
 		$return.='<script>wds_load_group_departments();</script>';
 	}
 	if($echo){
@@ -730,247 +873,58 @@ function wds_load_group_type($group_type){
 	}
 }
 
-add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta');
-add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta');
-function wds_bp_group_meta(){
-	global $wpdb, $bp, $current_site, $base;
+/**
+ * Are School and Department required for this group type?
+ */
+function openlab_is_school_required_for_group_type( $group_type = '' ) {
+	$req_types = array( 'course', 'portfolio' );
 
-	$the_group_id = bp_is_group() ? bp_get_current_group_id() : 0;
-
-	$group_type=groups_get_groupmeta($the_group_id, 'wds_group_type' );
-	$group_school=groups_get_groupmeta($the_group_id, 'wds_group_school' );
-	$group_project_type=groups_get_groupmeta($the_group_id, 'wds_group_project_type' );
-	?>
-    <div class="ct-group-meta">
-      <?php
-	  $type= isset( $_GET['type'] ) ? $_GET['type'] : groups_get_groupmeta( bp_get_new_group_id(), 'wds_group_type' );
-
-	  if(!$type){
-		  $type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
-	  }
-
-	  if(!$type || !in_array($type,array("club","project","course","school"))){
-		  $type="group";
-	  }
-	  if($group_type!="group" && $group_type){
-		  echo wds_load_group_type($group_type);?>
-           <input type="hidden" name="group_type" value="<?php echo $group_type;?>" />
-          <?php
-		}elseif($type!="group"){
-		  $group_type=$type;
-		  echo wds_load_group_type($type);?>
-           <input type="hidden" name="group_type" value="<?php echo $group_type;?>" />
-          <?php
-	  }else{?>
-        <table>
-        <tr>
-        <td>Type:</td>
-        <td><select id="group_type" name="group_type" onchange="wds_load_group_type('group_type');">
-            <option value="" <?php if($group_type==""){echo "selected";}?>>--select one--
-            <option value="club" <?php if($group_type=="club"){echo "selected";}?>>Club
-            <option value="project" <?php if($group_type=="project"){echo "selected";}?>>Project
-            <?php if(is_super_admin(get_current_user_id())){?><option value="course" <?php if($group_type=="course"){echo "selected";}?>>Course
-            <option value="school" <?php if($group_type=="school"){echo "selected";}?>>School<?php } ?>
-        </select></td>
-        </tr>
-        </table>
-      <?php } ?>
-      <div id="wds-group-type"></div>
-      <?php //Copy Site
-	  $wds_bp_group_site_id = openlab_get_site_id_by_group_id( $the_group_id );
-
-	  if(!$wds_bp_group_site_id){
-		$template="template-".strtolower($group_type);
-		$blog_details = get_blog_details($template);
-		?>
-		<style type="text/css">
-		.disabled-opt {
-			opacity: .4;
-		}
-		</style>
-
-		<script>
-		function showHide(id)
-		{
-		  var style = document.getElementById(id).style
-		   if (style.display == "none")
-			style.display = "";
-		   else
-			style.display = "none";
-		}
-
-		jQuery(document).ready(function($){
-			function new_old_switch( noo ) {
-				var radioid = '#new_or_old_' + noo;
-				$(radioid).prop('checked','checked');
-
-				$('input.noo_radio').each(function(i,v) {
-					var thisval = $(v).val();
-					var thisid = '#noo_' + thisval + '_options';
-					console.log($(thisid));
-					if ( noo == thisval ) {
-						$(thisid).removeClass('disabled-opt');
-						$(thisid).find('input').each(function(index,element){
-							$(element).removeProp('disabled').removeClass('disabled');
-						});
-						$(thisid).find('select').each(function(index,element){
-							$(element).removeProp('disabled').removeClass('disabled');
-						});
-					} else {
-						$(thisid).addClass('disabled-opt');
-						$(thisid).find('input').each(function(index,element){
-							$(element).prop('disabled','disabled').addClass('disabled');
-						});
-						$(thisid).find('select').each(function(index,element){
-							$(element).prop('disabled','disabled').addClass('disabled');
-						});
-					}
-				});
-
-			}
-
-			$('.noo_radio').click(function(el){
-				var whichid = $(el.target).prop('id').split('_').pop();
-				new_old_switch(whichid);
-			});
-
-			// setup
-			new_old_switch( 'new' );
-		},(jQuery));
-		</script>
-
-        	<input type="hidden" name="action" value="copy_blog" />
-		<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
-
-		<table class="form-table groupblog-setup">
-			<?php if ( $group_type != "course" ) : ?>
-				<?php $show_website = "none" ?>
-				<tr class="form-field form-required">
-					<th scope='row'>
-						<input type="checkbox" name="wds_website_check" value="yes" onclick="showHide('wds-website');showHide('wds-website-existing');showHide('wds-website-external');showHide('wds-website-tooltips');" /> Set up a site?
-					</th>
-				</tr>
-			<?php else : ?>
-		    		<?php $show_website = 'block' ?>
-		    		<tr class="form-field form-required">
-		    			<th>Site Details</th>
-		    		</tr>
-			<?php endif ?>
-
-			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
-				<?php switch ( $group_type ) :
-					case 'course' : ?>
-						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
-
-						<ul class="ol-tooltip">
-							<li>FacultyLastNameCourseCode</li>
-							<li>smithadv1100</li>
-						</ul>
-
-						<p class="ol-tooltip">If you plan to create a new course each semester, you may choose to add Semester and Year.</p>
-
-						<ul class="ol-tooltip">
-							<li>FacultyLastNameCourseCodeSemYear</li>
-							<li>smithadv1100sp2012</li>
-						</ul>
-
-						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information to the URL.</p>
-
-						<?php break;
-					case 'project' : ?>
-						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
-
-						<p class="ol-tooltip"><strong>Is this an ePortfolio?</strong> Since the ePortfolio is designed to be a Career Portfolio, choose a site address that will appear professional. We recommend one of the following formats (enter in the gray box below):</p>
-
-						<ul class="ol-tooltip">
-							<li>FirstNameLastName_eportfolio</li>
-							<li>JaneSmith_eportfolio (Example)</li>
-							<li>FirstInitialLastName_eportfolio</li>
-							<li>JSmith_eportfolio (Example)</li>
-						</ul>
-
-						<?php break;
-					case 'club' : ?>
-						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
-
-						<?php break ?>
-
-				<?php endswitch ?>
-			</td></tr>
-
-			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
-				<th valign="top" scope='row'>
-
-					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
-					Create a new site:
-				</th>
-
-				<td id="noo_new_options">
-				<?php
-				if( constant( "VHOST" ) == 'yes' ) : ?>
-					<input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>.<?php echo $current_site->domain;?>
-				<?php else:
-					echo $current_site->domain . $current_site->path ?><input name="blog[domain]" type="text" title="<?php _e('Domain') ?>"/>
-				<?php endif; ?>
-
-				</td>
-			</tr>
-
-			<tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
-				<th valign="top" scope='row'>
-					<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-					Use an existing site:
-				</th>
-
-				<td id="noo_old_options">
-					<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
-
-					<?php
-						global $wpdb, $bp;
-						$current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
-
-						foreach( $user_blogs as $ubid => $ub ) {
-							if ( in_array( $ubid, $current_groupblogs ) ) {
-								unset( $user_blogs[$ubid] );
-							}
-						}
-						$user_blogs = array_values( $user_blogs );
-					?>
-
-					<select name="groupblog-blogid" id="groupblog-blogid">
-						<option value="0">- Choose a site -</option>
-						<?php
-
-						foreach( (array)$user_blogs as $user_blog ) { ?>
-							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-						<?php } ?>
-					</select>
-				</td>
-			</tr>
-
-			<tr id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website;?>">
-				<th valign="top" scope='row'>
-					<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
-					Use an external site:
-				</th>
-
-				<td id="noo_external_options">
-					<input type="text" name="external-site-url" id="external-site-url" />
-				</td>
-			</tr>
-
-
-		</table>
-   	<?php } else { ?>
-   		<?php $blog_url = get_blog_option( $wds_bp_group_site_id, 'siteurl' ) ?>
-   		<?php $blog_name = get_blog_option( $wds_bp_group_site_id, 'blogname' ) ?>
-
-   		<p>This <?php echo $group_type ?> is currently associated with the site <strong><?php echo $blog_name ?></strong> (<?php echo $blog_url ?>).</p>
-   	<?php } ?>
-    </div>
-    <?php
+	return in_array( $group_type, $req_types );
 }
 
+/**
+ * School and Department are required for courses and portfolios
+ *
+ * Hook in before BP's core function, so we get first dibs on returning errors
+ */
+function openlab_require_school_and_department_for_groups() {
+	global $bp;
+
+	// Only check at group creation and group admin
+	if ( !bp_is_group_admin_page() && !bp_is_group_create() ) {
+		return;
+	}
+
+	// Don't check at deletion time (groan)
+	if ( bp_is_group_admin_page( 'delete-group' ) ) {
+		return;
+	}
+
+	// No payload, no check
+	if ( empty( $_POST ) ) {
+		return;
+	}
+
+	if ( bp_is_group_create() ) {
+		$group_type = isset( $_GET['type'] ) ? $_GET['type'] : '';
+		$redirect = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
+	} else {
+		$group_type = openlab_get_current_group_type();
+		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
+	}
+
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+	if ( openlab_is_school_required_for_group_type( $group_type ) && bp_is_action_variable( 'group-details', 1 ) && 'staff' != strtolower( $account_type ) ) {
+
+		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) ) {
+			bp_core_add_message( 'You must provide a school and department.', 'error' );
+			bp_core_redirect( $redirect );
+		}
+
+	}
+
+}
+add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
 
 //Save Group Meta
@@ -1016,27 +970,20 @@ function wds_bp_group_meta_save($group) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type']);
 	}
 
-	if ( isset( $_POST['group_active_status'] ) ) {
-		$status = 'inactive' == $_POST['group_active_status'] ? 'inactive' : 'active';
-		groups_update_groupmeta( $group->id, 'openlab_group_active_status', $status );
-	}
-
-
-	/*//WIKI
-	if ( isset($_POST['wds_bp_docs_wiki']) && $_POST['wds_bp_docs_wiki']=="yes" ) {
-		groups_update_groupmeta( $group->id, 'bpdocs', 'a:2:{s:12:"group-enable";s:1:"1";s:10:"can-create";s:6:"member";}');
-	}*/
-
 	// Site association. Non-courses have the option of not having associated sites (thus the
 	// wds_website_check value).
-	if ( isset( $_POST['wds_website_check'] ) || 'course' == groups_get_groupmeta( $group->id, 'wds_group_type' ) || !empty( $is_course ) ) {
+	if ( isset( $_POST['wds_website_check'] ) ||
+	     openlab_is_course( $group->id ) ||
+	     !empty( $is_course ) ||
+	     openlab_is_portfolio( $group->id )
+	) {
 
 		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
 
 			// Create a new site
 			ra_copy_blog_page($group->id);
 
-		} elseif ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
+		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
 
 			// Associate an existing site
 			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int)$_POST['groupblog-blogid'] );
@@ -1049,20 +996,31 @@ function wds_bp_group_meta_save($group) {
 			$url = openlab_validate_url( $_POST['external-site-url'] );
 			groups_update_groupmeta( $group->id, 'external_site_url', $url );
 
-			// Try to get a feed URL
-			$feed_urls = openlab_find_feed_urls( $url );
-
-			if ( isset( $feed_urls['type'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_type', $feed_urls['type'] );
+			if ( !empty( $_POST['external-site-type'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_type', $_POST['external-site-type'] );
 			}
 
-			if ( isset( $feed_urls['posts'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $feed_urls['posts'] );
+			if ( !empty( $_POST['external-posts-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-posts-url'] );
 			}
 
-			if ( isset( $feed_urls['comments'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $feed_urls['comments'] );
+			if ( !empty( $_POST['external-comments-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
 			}
+		}
+
+		if ( openlab_is_portfolio( $group->id ) ) {
+			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
+		}
+	}
+
+	// Site privacy
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
 		}
 	}
 
@@ -1115,6 +1073,7 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 function ra_copy_blog_page($group_id) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
+
 	if( !empty( $blog['domain'] ) && $group_id){
 	  $wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 	  if(!defined('SUNRISE') || $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->dmtable}'") != $wpdb->dmtable) {
@@ -1249,19 +1208,6 @@ function ra_copy_blog_page($group_id) {
 						  } else {
 							  update_option('rewrite_rules', '');
 						  }
-
-						  //creaTE UPLOAD DOCS PAGE
-						  // Psyche!
-						  /*
-						  $args = array (
-							  'post_title'	=>	'Upload Documents',
-							  'post_content'	=>	'[lab-docs]',
-							  'post_status'	=>	'publish',
-							  'post_author'	=>	$user_ID,
-							  'post_type'		=>	'page'
-						  );
-						  wp_insert_post( $args );
-						  */
 
 						  restore_current_blog();
 						  $msg = __('Blog Copied');
@@ -1515,6 +1461,25 @@ function openlab_launch_translator() {
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
 
+class buddypress_ajax_Translation_Mangler {
+ /*
+  * Filter the translation string before it is displayed.
+  */
+ function filter_gettext($translation, $text, $domain) {
+   $translations = &get_translations_for_domain( 'buddypress' );
+   switch($text){
+	case "Friendship Requested":
+	case "Add Friend":
+		return $translations->translate( "Friend" );
+		break;
+  }
+  return $translation;
+ }
+}
+function openlab_launch_ajax_translator() {
+	add_filter('gettext', array('buddypress_ajax_Translation_Mangler', 'filter_gettext'), 10, 4);
+}
+add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
 /**
  * When a user attempts to visit a blog, check to see if the user is a member of the
  * blog's associated group. If so, ensure that the member has access.
@@ -1623,4 +1588,264 @@ function openlab_newuser_notify_siteadmin( $message ) {
 }
 add_filter( 'newuser_notify_siteadmin', 'openlab_newuser_notify_siteadmin' );
 
+/**
+ * Get the word for a group type
+ *
+ * Groups fall into three categories: Project, Club, and Course. Use this function to get the word
+ * corresponding to the group type, with the appropriate case and count.
+ *
+ * @param $case 'lower' (course), 'title' (Course), 'upper' (COURSE)
+ * @param $count 'single' (course), 'plural' (courses)
+ * @param $group_id Will default to the current group id
+ */
+function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 ) {
+	if ( !$case || !in_array( $case, array( 'lower', 'title', 'upper' ) ) ) {
+		$case = 'lower';
+	}
+
+	if ( !$count || !in_array( $count, array( 'single', 'plural' ) ) ) {
+		$case = 'single';
+	}
+
+	// Set a group id. The elseif statements allow for cascading logic; if the first is not
+	// found, fall to the second, etc.
+	$group_id = (int) $group_id;
+	if      ( !$group_id && $group_id = bp_get_current_group_id() ) {} // current group
+	else if ( !$group_id && $group_id = bp_get_new_group_id() ) {}     // new group
+	else if ( !$group_id && $group_id = bp_get_group_id() ) {}         // group in loop
+
+	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
+
+	if ( empty( $group_type ) ) {
+		return '';
+	}
+
+	switch ( $case ) {
+		case 'lower' :
+			$group_type = strtolower( $group_type );
+			break;
+
+		case 'title' :
+			$group_type = ucwords( $group_type );
+			break;
+
+		case 'upper' :
+			$group_type = strtoupper( $group_type );
+			break;
+	}
+
+	switch ( $count ) {
+		case 'single' :
+			break;
+
+		case 'plural' :
+			$group_type .= 's';
+			break;
+	}
+
+	return $group_type;
+}
+
+/**
+ * Utility function for getting a default user id when none has been passed to the function
+ *
+ * The logic is this: If there is a displayed user, return it. If not, check to see whether we're
+ * in a members loop; if so, return the current member. If it's still 0, check to see whether
+ * we're on a my-* page; if so, return the loggedin user id. Otherwise, return 0.
+ *
+ * Note that we have to manually check the $members_template variable, because
+ * bp_get_member_user_id() doesn't do it properly.
+ *
+ * @return int
+ */
+function openlab_fallback_user() {
+	global $members_template;
+
+	$user_id = bp_displayed_user_id();
+
+	if ( !$user_id && !empty( $members_template ) && isset( $members_template->member ) ) {
+		$user_id = bp_get_member_user_id();
+	}
+
+	if ( !$user_id && ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' ) ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	return (int) $user_id;
+}
+
+/**
+ * Utility function for getting a default group id when none has been passed to the function
+ *
+ * The logic is this: If this is a group page, return the current group id. If this is the group
+ * creation process, return the new_group_id. If this is a group loop, return the id of the group
+ * show during this iteration
+ *
+ * @return int
+ */
+function openlab_fallback_group() {
+	global $groups_template;
+
+	$group_id = bp_get_current_group_id();
+
+	if ( !$group_id && bp_is_group_create() ) {
+		$group_id = bp_get_new_group_id();
+	}
+
+	if ( !$group_id && !empty( $groups_template ) && isset( $groups_template->group ) ) {
+		$group_id = $groups_template->group->id;
+	}
+
+	return (int) $group_id;
+}
+
+/**
+ * Is this my profile?
+ *
+ * We need a specialized function that returns true when bp_is_my_profile() does, or in addition,
+ * when on a my-* page
+ *
+ * @return bool
+ */
+function openlab_is_my_profile() {
+	global $bp;
+
+	if ( !is_user_logged_in() ) {
+		return false;
+	}
+
+	if ( bp_is_my_profile() ) {
+		return true;
+	}
+
+	if ( is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' )  ) {
+		return true;
+	}
+
+	//for the group creating pages
+	if ($bp->current_action == "create")
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * On saving settings, save our additional fields
+ */
+function openlab_addl_settings_fields() {
+	global $bp;
+
+	$fname = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
+	$lname = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
+
+	// Don't let this continue if a password error was recorded
+	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
+		return;
+	}
+
+	if ( empty( $fname ) || empty( $lname ) ) {
+		bp_core_add_message( 'First Name and Last Name are required fields', 'error' );
+	} else {
+		xprofile_set_field_data( 'First Name', bp_displayed_user_id(), $fname );
+		xprofile_set_field_data( 'Last Name', bp_displayed_user_id(), $lname );
+
+		bp_core_add_message( __( 'Your settings have been saved.', 'buddypress' ), 'success' );
+	}
+
+	bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
+}
+add_action( 'bp_core_general_settings_after_save', 'openlab_addl_settings_fields' );
+
+/**
+ * A small hack to ensure that the 'Create A New Site' option is disabled on my-sites.php
+ */
+function openlab_disable_new_site_link( $registration ) {
+	if ( '/wp-admin/my-sites.php' == $_SERVER['SCRIPT_NAME'] ) {
+		$registration = 'none';
+	}
+
+	return $registration;
+}
+add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
+
+/**
+ * Default subscription level for group emails should be All
+ */
+function openlab_default_group_subscription() {
+	return 'supersub';
+}
+add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
+
+/**
+ * Brackets in password reset emails cause problems in some clients. Remove them
+ */
+function openlab_strip_brackets_from_pw_reset_email( $message ) {
+	$message = preg_replace( '/<(http\S*?)>/', '$1', $message );
+        return $message;
+}
+add_filter( 'retrieve_password_message', 'openlab_strip_brackets_from_pw_reset_email' );
+
+/**
+ * Don't allow non-super-admins to Add New Users on user-new.php
+ *
+ * This is a hack. user-new.php shows the Add New User section for any user
+ * who has the 'create_users' cap. For some reason, Administrators have the
+ * 'create_users' cap even on Multisite. Instead of doing a total removal
+ * of this cap for Administrators (which may break something), I'm just
+ * removing it on the user-new.php page.
+ *
+ */
+function openlab_block_add_new_user( $allcaps, $cap, $args ) {
+        if ( !in_array( 'create_users', $cap ) ) {
+                return $allcaps;
+        }
+
+        if ( !is_admin() || false === strpos( $_SERVER['SCRIPT_NAME'], 'user-new.php' ) ) {
+                return $allcaps;
+        }
+
+        if ( is_super_admin() ) {
+               return $allcaps;
+        }
+
+        unset( $allcaps['create_users'] );
+
+        return $allcaps;
+}
+add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
+
+/**
+ * Hack alert! Allow group avatars to be deleted
+ *
+ * There is a bug in BuddyPress Docs that blocks group avatar deletion, because
+ * BP Docs is too greedy about setting its current view, and thinks that you're
+ * trying to delete a Doc instead. Instead of fixing that, which I have no
+ * patience for at the moment, I'm just going to override BP Docs's current
+ * view in the case of deleting an avatar.
+ */
+function openlab_fix_avatar_delete( $view ) {
+	if ( bp_is_group_admin_page() ) {
+		$view = '';
+	}
+
+	return $view;
+}
+add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
+
+/**
+ * Remove user from group blog when leaving group
+ *
+ * NOTE: This function should live in includes/group-blogs.php, but can't
+ * because of AJAX load order
+ */
+function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
+	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+
+	if ( $blog_id ) {
+		remove_user_from_blog( $user_id, $blog_id );
+	}
+}
+add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
 ?>

@@ -6,7 +6,7 @@ define ('WEAVER_DEFAULT_COLOR','default-style-color');
 
 /* need to set these for each indivitual distribution */
 
-define ('WEAVER_VERSION','2.2.4');
+define ('WEAVER_VERSION','2.2.9');
 define ('WEAVER_VERSION_ID',220);
 
 define ('WEAVER_THEMENAME', 'Weaver');

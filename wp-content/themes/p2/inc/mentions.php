@@ -1,5 +1,18 @@
 <?php
+/**
+ * Mentions.
+ *
+ * @package P2
+ * @since P2 1.3.1
+ */
 
+
+/**
+ * Handler for the mentions taxonomy.
+ *
+ * @package P2
+ * @since unknown
+ */
 class P2_Mentions extends P2_Terms_In_Comments {
 	var $names          = array();
 	var $users          = array();
@@ -18,8 +31,10 @@ class P2_Mentions extends P2_Terms_In_Comments {
 		parent::P2_Terms_In_Comments( P2_MENTIONS_TAXONOMY );
 	}
 
+	/**
+	 * Register P2 mentions taxonomy.
+	 */
 	function init() {
-		// Register P2 user taxonomy
 		$taxonomy_args = apply_filters( 'p2_mentions_taxonomy_args', array(
 			'show_ui'           => false,
 			'show_in_nav_menus' => false,
@@ -33,33 +48,18 @@ class P2_Mentions extends P2_Terms_In_Comments {
 	 * Generates array of users indexed by user ID, and
 	 * an array of user_nicenames, indexed by user ID.
 	 *
-	 * @compat < 3.1: Use $wpdb and get_users of blog.
+	 * @return array An array of user objects indexed by user ID.
 	 */
 	function load_users() {
-		global $wpdb; // < 3.1
 
 		// Cache the user information.
 		if ( ! empty( $this->users ) )
 	 		return $this->users;
 
-		if ( function_exists( 'get_users' ) ) { // >= 3.1
-			$users = get_users();
-			foreach ( $users as $user ) {
-				$this->users[ $user->ID ] = $user;
-				$this->names[ $user->ID ] = $user->user_nicename;
-			}
-		} else {                                //  < 3.1
-			$users      = get_users_of_blog();
-			$user_ids   = '';
-
-			foreach ( $users as $user ) {
-				$this->users[ $user->ID ] = $user;
-				$user_ids .= $user->ID;
-			}
-			foreach ( $wpdb->get_results( "SELECT ID, user_nicename from $wpdb->users WHERE ID IN($user_ids)" ) as $user ) {
-				$this->users[ $user->ID ]['user_nicename'] = $user->user_nicename;
-				$this->names[ $user->ID ] = $user->user_nicename;
-			}
+		$users = get_users();
+		foreach ( $users as $user ) {
+			$this->users[ $user->ID ] = $user;
+			$this->names[ $user->ID ] = $user->user_nicename;
 		}
 
 		return $this->users;
@@ -94,7 +94,10 @@ class P2_Mentions extends P2_Terms_In_Comments {
 	 * @return string The linked content.
 	 */
 	function mention_links( $content ) {
+		global $current_user;
+
 		$names  = $this->find_mentions( $content );
+		$names  = array_unique( $names );
 		$slug   = P2_MENTIONS_SLUG;
 		$search = is_search() ? substr( get_search_query( false ), 1 ) : '';
 
@@ -104,9 +107,16 @@ class P2_Mentions extends P2_Terms_In_Comments {
 			if ( $name === $search )
 				$classes .= ' mention-highlight';
 
-			$replacement    = "<a href='" . esc_url( home_url( "$slug/$name/" ) ) . "' class='$classes'>@$name</a>";
-			$replacement    = apply_filters( 'p2_mention_link', $replacement, $name );
-			$content        = preg_replace( "/@$name\b/i", $replacement, $content );
+			if ( is_user_logged_in() && $name === $current_user->user_login )
+				$classes .= ' mention-current-user';
+
+			$url = get_term_link( $name, P2_MENTIONS_TAXONOMY );
+			if ( is_wp_error( $url ) )
+				continue;
+
+			$replacement = "<a href='" . esc_url( $url ) . "' class='$classes'>@$name</a>";
+			$replacement = apply_filters( 'p2_mention_link', $replacement, $name );
+			$content     = preg_replace( "/@$name\b/i", $replacement, $content );
 		}
 
 		return $content;
@@ -135,12 +145,12 @@ class P2_Mentions extends P2_Terms_In_Comments {
 		foreach( $this->users as $user ) {
 			$js_users[] = array(
 				'name'      => $user->display_name,
-				'username'  => $user->user_nicename,
+				'username'  => ( isset( $user->user_nicename ) ? $user->user_nicename : $user->display_name ),
 				'gravatar'  => get_avatar( $user->user_email, 32 ),
 			);
 		}
 
-		return apply_filters( "p2_user_suggestion", $js_users );
+		return apply_filters( 'p2_user_suggestion', $js_users );
 	}
 }
 

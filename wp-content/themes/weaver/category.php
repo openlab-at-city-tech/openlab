@@ -4,9 +4,10 @@
  */
 	get_header();
 	if (weaver_getopt('ttw_hide_special_post_sidebars'))
-	    echo('<div id="container" class="one-column container-category">' . "\n");
+	    echo('<div id="container" class="one-column container-category category-page">' . "\n");
 	else
 	    echo('<div id="container" class="container-category category-page">' . "\n");
+
 	weaver_put_wvr_widgetarea('sitewide-top-widget-area','ttw-site-top-widget');
 	weaver_put_wvr_widgetarea('postpages-widget-area','ttw-top-widget','ttw_hide_special_posts'); ?>
 

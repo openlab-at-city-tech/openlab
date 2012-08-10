@@ -11,16 +11,29 @@ function weaver_pluspromo_admin() {
     $img = $tdir . '/images/weaver/weaver-plus-logo.jpg';
     ?>
 <div style="width:640px">
-<h2 style="color: blue;">Add Exciting Features to Weaver
-with the Weaver Plus Premium Plugin!</h2>
+<h2 style="color: blue;">Important Notice - Check out the new version of Weaver: Weaver II</h2>
+<p>
+    Weaver 2.2.x is now even better! A totally new version, Weaver II, has been released. Weaver II has even more features,
+    and includes complete automatic support for mobile devices. It also has a Pro version that has all the features of Weaver Plus,
+    and many more. You can download <strong><a href="http://wordpress.org/extend/themes/weaver-ii" target="_blank">Weaver II at WordPress.org</a></strong>, or visit <strong><a href="http://weavertheme.com" target="_blank">WeaverTheme.com</a></strong>
+    for more details.
+</p>
+<p>
+    You should seriously consider switching
+    to Weaver II - it is in active development, and includes many new, more up to date features that will make your site
+    better. Because Weaver II requires a small conversion process, support for Weaver 2.2.x will continue, although no
+    new features are planned.
+</p>
+
+<h3 style="color: blue;">Still available: the Weaver Plus Plugin!</h3>
 <br />
 <p>
-<a title="Weaver Plus Premium Plugin for Weaver" href="http://weaverplus.info" target="_blank">
-<img class="alignleft" style="padding-right:20px;" title="Weaver Plus" src="<?php echo $img; ?>" alt="Weaver Plus" width="171" height="50" /></a>
-<span style="color:blue; font-weight:bold;">Get Weaver Plus Now!</span>
-<br /></br />
-<strong>Visit <a title="Weaver Plus Premium Plugin for Weaver" href="http://weaverplus.info" target="_blank">WeaverPlus.info</a>
-now to get your copy of <em>Weaver Plus</em>.</strong>
+<a title="Weaver Plus / Weaver II Pro Premium Upgrade for Weaver" href="http://pro.weavertheme.com" target="_blank">
+<img class="alignleft" style="padding-right:20px;" title="Weaver Plus/Weaver II Pro" src="<?php echo $img; ?>" alt="Weaver Plus/Weaver II Pro" width="171" height="50" /></a>
+<span style="color:blue; font-weight:bold;">Get Weaver Plus or Weaver II Pro Now!</span>
+<br />
+<strong>Visit <a title="Weaver Plus Premium Plugin for Weaver" href="http://pro.weavertheme.com" target="_blank">pro.WeaverTheme.com</a>
+now for <em>Weaver Plus</em> for Weaver 2.2.x (still available), or learn about <em>Weaver II Pro</em> for the new version of Weaver (highly recommended).</strong>
 </p>
 <br />
 <h2>Weaver Plus Feature List</h2>
@@ -44,27 +57,8 @@ now to get your copy of <em>Weaver Plus</em>.</strong>
 	<li><strong>PHP</strong> - include PHP code where needed</li>
 	<li><strong>Plus Admin</strong> - selectively disable Weaver Plus features</li>
 </ol>
-<h3>Why  Weaver Plus?</h3>
-<p>The <em>Weaver</em> Word Press theme is one of the most flexible and easy to use free themes available on WordPress.org.
-I've spent countless hours perfecting <em>Weaver</em>, and remain committed to keeping the core Weaver theme up to date, and full featured.</p>
+<strong>Weaver II Pro includes these features, and more.</strong>
 
-<p><em>Weaver Plus</em> represents the next step. I've designed and added some extra features that will greatly enhance <em>Weaver's</em>
-capabilities. <em>Weaver Plus</em> contains features normally found only in premium themes, and is available for a reasonable cost.</p>
-
-<p>I hope that <em>Weaver</em> users will find the features useful enough to warrant the small expense. My goal is to get a small return
-for all my development efforts, yet continue to provide a great free core theme.</p>
-
-<p>Thanks so much for all the past support. I hope you find <em>Weaver Plus</em> to be a useful addition to your web design toolkit.</p>
-
-<p><em>Bruce Wampler</em>, WP Weaver</p>
-<p>
-<a title="Weaver Plus Premium Plugin for Weaver" href="http://weaverplus.info" target="_blank">
-<img class="alignleft" style="padding-right:20px;" title="Weaver Plus" src="<?php echo $img; ?>" alt="Weaver Plus" width="171" height="50" /></a>
-<span style="color:blue; font-weight:bold;">Get Weaver Plus Now!</span>
-<br /></br />
-<strong>Visit <a title="Weaver Plus Premium Plugin for Weaver" href="http://weaverplus.info" target="_blank">WeaverPlus.info</a>
-now to get your copy of <em>Weaver Plus</em>.</strong>
-</p>
     </div>
 <?php
 }

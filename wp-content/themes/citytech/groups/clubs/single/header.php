@@ -1,10 +1,29 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<h1 class="entry-title">Club on the OpenLab</h1>
-<div id="club-header">
-	 <div id="club-header-avatar" class="alignleft">
+<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
+
+<?php
+	global $bp;
+	
+	$group_type = openlab_get_group_type( bp_get_current_group_id());
+	
+	if ($bp->current_action == "home"): ?>
+    
+    <div id="club-header">
+    <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
+	  <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
+        <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+         <div id="group-action-wrapper">
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>
+            		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+         </div>
+		<?php elseif (is_user_logged_in()): ?>
+		<div id="group-action-wrapper">
+				<?php do_action( 'bp_group_header_actions' ); ?>
+        </div>
+	 	<?php endif; ?>
 		<?php /* <p>Descriptive Tags associated with their profile, School, Etc, Tag, Tag, Tag, Tag, Tag, Tag, Tag</p> */ ?>
 	</div><!-- #club-header-avatar -->
 
@@ -25,4 +44,6 @@
 	
 	<?php do_action( 'template_notices' ) ?>
 	
-</div><!-- #item-header -->
+    </div><!-- #item-header -->
+    
+    <?php endif; ?>

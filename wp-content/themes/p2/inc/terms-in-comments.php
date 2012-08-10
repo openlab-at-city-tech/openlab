@@ -1,4 +1,10 @@
 <?php
+/**
+ * Terms in comments.
+ *
+ * @package P2
+ * @since unknown
+ */
 
 class P2_Terms_In_Comments {
 	var $taxonomy;
@@ -16,12 +22,13 @@ class P2_Terms_In_Comments {
 	function update_comment( $comment_id ) {
 		$comment = get_comment( $comment_id );
 
-		$terms = $this->update_comment_terms( $comment_id, $comment );
-
 		delete_comment_meta( $comment_id, $this->meta_key );
+
+		$terms = $this->update_comment_terms( $comment_id, $comment );
 		foreach( $terms as $term ) {
-			update_comment_meta( $comment_id, $this->meta_key, $term );
+			add_comment_meta( $comment_id, $this->meta_key, $term );
 		}
+
 		$this->update_terms( $comment->comment_post_ID );
 	}
 
@@ -36,12 +43,13 @@ class P2_Terms_In_Comments {
 	function update_comment_terms( $comment_id, $comment ) {}
 
 	function update_post( $post_id, $post ) {
-		$terms = $this->update_post_terms( $post_id, $post );
-
 		delete_post_meta( $post_id, $this->meta_key );
+
+		$terms = $this->update_post_terms( $post_id, $post );
 		foreach( $terms as $term ) {
-			update_post_meta( $post_id, $this->meta_key, $term );
+			add_post_meta( $post_id, $this->meta_key, $term );
 		}
+
 		$this->update_terms( $post_id );
 	}
 

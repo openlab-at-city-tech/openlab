@@ -1,30 +1,19 @@
 <?php
-gconnect_get_header();
+
+remove_action('genesis_loop', 'genesis_do_loop');
+add_action('genesis_loop', 'cuny_delete_profile' );
+
+function cuny_delete_profile(){
 
 do_action( 'bp_before_member_settings_template' ); 
 ?>
-	<div id="item-header">
-		<?php gconnect_locate_template( array( 'members/single/member-header.php' ), true ); ?>
-	</div><!-- #item-header -->
-	<div id="item-nav">
-		<div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
-			<ul>
-				<?php bp_get_displayed_user_nav(); do_action( 'bp_member_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div><!-- #item-nav -->
+    <div class="submenu"><div class="submenu-text">My Settings: </div> <?php echo openlab_profile_settings_submenu(); ?></div>
+
 	<div id="item-body" role="main">
+
 		<?php do_action( 'bp_before_member_body' ); ?>
 
-		<div class="item-list-tabs no-ajax" id="bpsubnav">
-			<ul>
-				<?php bp_get_options_nav(); do_action( 'bp_member_plugin_options_nav' ); ?>
-			</ul>
-			<div class="clear"></div>
-		</div><!-- .item-list-tabs -->
-
-		<h3><?php _e( 'Delete Account', 'buddypress' ); ?></h3>
+		<?php do_action( 'bp_template_content' ) ?>
 
 		<form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/delete-account'; ?>" name="account-delete-form" id="account-delete-form" class="standard-form" method="post">
 			<div id="message" class="info">
@@ -44,5 +33,9 @@ do_action( 'bp_before_member_settings_template' );
 <?php 
 do_action( 'bp_after_member_settings_template' );
 
-gconnect_get_footer();
+}
+
+add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
+
+genesis();
 ?>

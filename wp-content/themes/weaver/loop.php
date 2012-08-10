@@ -70,4 +70,5 @@
 	    <div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', WEAVER_TRANS ) ); ?></div>
 	<?php } ?>
 	</div><!-- #nav-below -->
-<?php } ?>
+<?php }
+?>

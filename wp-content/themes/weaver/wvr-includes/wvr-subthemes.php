@@ -17,12 +17,15 @@ function weaver_themes_admin() {
 <small style="font-weight:normal;font-size:10px;">&nbsp;&larr; You can click the ?'s found throughout Weaver admin pages for context specific help.</small></h3>
 <b>Welcome to Weaver</b>
 
-<p>Weaver gives you extreme control of your WordPress blog appearance using the
-different admin panels here. This page lets you get a quick start by picking one of the many
+<p>For a long time, Weaver 2.2.x has given you extreme control of your WordPress blog appearance.
+This page lets you get a quick start by picking one of the many
 predefined sub-themes. Once you've picked a starter theme, use the <em>Main Options</em> and <em>Advanced Options</em>
 panels to tweak the theme to be whatever you like. After you have a theme you're happy with,
 you can save it from the Save/Restore tab. The <em>Snippets</em> tab has
 some hints for additional fine tuning, and the <em>Help</em> tab has much more <b>useful</b> information.</p>
+<p>Support for Weaver 2.2.x will continue, but please note that a new version, Weaver II, is now available with
+many new features, including automatic mobile device support. You can download <strong><a href="http://wordpress.org/extend/themes/weaver-ii" target="_blank">Weaver II at WordPress.org</a></strong>, or visit <strong><a href="http://weavertheme.com" target="_blank">WeaverTheme.com</a></strong> for more details.
+</p>
 
 <h4>Get started by trying one of the predefined sub-themes!</h4>
 <?php
@@ -152,7 +155,8 @@ function weaver_saverestore_admin() {
     <ol style="font-size: 85%">
    <li>Picking "My Saved Theme" backup from the standard themes list. -or-</li>
    <li>Restoring a theme/backup that you saved in a file on your site (to current settings). -or-</li>
-   <li>Uploading a theme/backup from a file saved on your own computer (to current settings). -or-</li>
+   <li>Uploading a theme/backup from a file saved on your own computer (to current settings).</li>
+    </ol>
 <?php endif; ?>
 <?php if (!weaver_allow_multisite()) : ?>
     <h4>You will be unable to restore your saved file directly</h4>

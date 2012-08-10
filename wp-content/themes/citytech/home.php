@@ -12,26 +12,31 @@ function cuny_build_homepage() {
 	echo '<div id="home-left">';
 		echo '<div id="cuny_openlab_jump_start">';
 			cuny_home_login();
-		echo '</div>'; 
+		echo '</div>';
 			dynamic_sidebar('cac-featured');
 			echo '<div class="box-1" id="whos-online">';
 			echo '<h3 class="title">Who\'s Online?</h3>';
 		    cuny_whos_online();
 		echo '</div>'; ?>
-			<?php cuny_home_new_members(); ?>        
+			<?php cuny_home_new_members(); ?>
 	<?php echo '</div>';
 	echo '<div id="home-right">';
 		dynamic_sidebar('pgw-gallery');
-		cuny_home_square('course');
-		cuny_home_square('project');
-		cuny_home_square('club');
-	echo '</div>';
+		echo '<div id="home-group-list-wrapper">';
+			cuny_home_square('course');
+			cuny_home_square('project');
+			cuny_home_square('club');
+			cuny_home_square('portfolio');
+			echo '<div class="clearfloat"></div>';
+			echo "<script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>";
+		echo '</div>';
+ 	echo '</div>';
 }
 
 function cuny_home_login() {
-		
+
 		 if ( is_user_logged_in() ) :
-		
+
         echo '<div id="open-lab-login" class="box-1">';
         echo '<h3 class="title">Welcome...</h3>';
 		do_action( 'bp_before_sidebar_me' ) ?>
@@ -52,9 +57,9 @@ function cuny_home_login() {
 		</div><!--sidebar-me-->
 
 		<?php do_action( 'bp_after_sidebar_me' ) ?>
-        
+
         <?php echo '</div>'; ?>
-        
+
         <div id="login-help" class="home-box red-box">
         	 <h3 class="title">Need HELP?</h3>
 		<p>Visit the <a href='"<?php echo site_url(); ?>"/support/help/'>Help</a> section or <a href='"<?php site_url(); ?>"/support/contact-us/'>contact us</a> with a question.</p>
@@ -91,7 +96,7 @@ function cuny_home_login() {
 		</form>
         <?php echo '</div>'; ?>
 	<?php endif;
-	
+
 }
 function cuny_home_new_members() {
 	global $wpdb, $bp;
@@ -117,7 +122,7 @@ function cuny_home_new_members() {
 				'alt' => __( 'Member avatar', 'buddypress' )
 			);
 			echo '<div id="home-new-member-wrap"><ul>';
-				while ( bp_members() ) : bp_the_member(); 
+				while ( bp_members() ) : bp_the_member();
 					$user_id=bp_get_member_user_id();
 					$firstname = xprofile_get_field_data( 'Name' , $user_id);
 //					$lastname = xprofile_get_field_data( 'Last Name' , $user_id);?>
@@ -154,13 +159,13 @@ global $wpdb, $bp;
 	$ids="9999999";
 	foreach ( (array)$rs as $r ) $ids.= ",".$r->user_id;
 	$x = 0;
-	if ( bp_has_members( 'type=active&include=' . $ids ) ) : 
+	if ( bp_has_members( 'type=active&include=' . $ids ) ) :
 		$x+=1;?>
-		
+
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); ?>
-					
-					<?php  
+
+					<?php
 					 ?>
 					<div class="cuny-member">
 						<div class="item-avatar">
@@ -168,11 +173,11 @@ global $wpdb, $bp;
 						</div>
 						<div class="cuny-member-info">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />
-							<?php do_action( 'bp_directory_members_item' ); bp_member_profile_data( 'field=Account Type' ); ?>, 
+							<?php do_action( 'bp_directory_members_item' ); bp_member_profile_data( 'field=Account Type' ); ?>,
 							<?php bp_member_last_active() ?>
 						</div>
 					</div>
-					
+
 				<?php endwhile; ?>
 					<div style="clear:both"></div>
 			</div>
@@ -181,81 +186,49 @@ global $wpdb, $bp;
 }
 
 function cuny_home_square($type){
+	global $wpdb, $bp;
 
-	global $wpdb, $bp, $openlab_group_type;
-	
-	
-	/*$ids="9999999";
-	 //$rs = $wpdb->get_results( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} where meta_key='wds_group_type' and meta_value='".$type."' ORDER BY RAND() LIMIT 1" );
-	  //$sql="SELECT a.group_id,b.content FROM {$bp->groups->table_name_groupmeta} a, {$bp->activity->table_name} b where a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".ucfirst($type)."' or a.group_id=b.item_id and a.meta_key='wds_group_type' and a.meta_value='".strtolower($type)."' ORDER BY b.date_recorded desc LIMIT 1";
-	  $sql = "
-	   	SELECT 
-	   		a.group_id, b.content 
-	   	FROM 
-	   		{$bp->groups->table_name_groupmeta} a
-	   		INNER JOIN {$bp->activity->table_name} b ON ( a.group_id = b.item_id )
-	   		INNER JOIN {$bp->groups->table_name} c ON ( a.group_id = c.id )
-	   	WHERE 
-	   		c.status = 'public' AND
-	   		b.component = 'groups' AND
-	   		a.meta_key = 'wds_group_type' AND
-	   		a.meta_value = '" . ucfirst($type) . "' OR a.meta_value = '" . strtolower( $type ) . "' 
-	   	ORDER BY 
-	   		b.date_recorded DESC 
-	   	LIMIT 12";
-	 // echo $sql . '<br><br>';
-	  $rs = $wpdb->get_results($sql);
-	  
-	  $activity_items = array();
-	  
-	  foreach ( (array)$rs as $r ){
-		  // Indexed by group id for easy lookup in the loop
-		  $activity_items[$r->group_id] = $r->content;
-		  
-		  // For the bp_has_groups include query
-		  $ids .= "," . $r->group_id;
-	  }
-	  //echo $ids;
-	  */
-	  $i = 1;
-	  $column_class = "column";
-	  
-	  $groups_args = array(
-	  	'max' => 4,
-	  	'type' => 'active',
-	  	'user_id' => 0
-	  );
-	  
-	  $openlab_group_type = $type;
-	  add_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
-	  
-	  if ( bp_has_groups( $groups_args ) ) : ?>
-	  
-	  	<?php 
-	  	/* Let's save some queries and get the most recent activity in one fell swoop */ 
-	  	
+	$meta_filter = new BP_Groups_Meta_Filter( array(
+		'wds_group_type' => $type
+	) );
+
+	$i = 1;
+	$column_class = "column";
+
+	$groups_args = array(
+		'max'         => 4,
+		'type'        => 'active',
+		'user_id'     => 0,
+		'show_hidden' => false
+	);
+
+	if ( bp_has_groups( $groups_args ) ) : ?>
+
+	  	<?php
+	  	/* Let's save some queries and get the most recent activity in one fell swoop */
+
 	  	global $groups_template;
-	  	
+
 	  	$group_ids = array();
 	  	foreach( $groups_template->groups as $g ) {
 	  		$group_ids[] = $g->id;
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
-	  	
+
 	  	$activity = $wpdb->get_results( $wpdb->prepare( "
-	  		SELECT 
-	  			content, item_id 
-	  		FROM 
-	  			{$bp->activity->table_name} 
-	  		WHERE 
-	  			component = 'groups' 
-	  			AND 
+	  		SELECT
+	  			content, item_id
+	  		FROM
+	  			{$bp->activity->table_name}
+	  		WHERE
+	  			component = 'groups'
+	  			AND
 	  			type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
 	  			AND
-	  			item_id IN ({$group_ids_sql}) 
-	  		ORDER BY 
+	  			item_id IN ({$group_ids_sql})
+	  		ORDER BY
 	  			date_recorded DESC" ) );
-	  	
+
 	  	// Now walk down the list and try to match with a group. Once one is found, remove
 	  	// that group from the stack
 	  	$group_activity_items = array();
@@ -266,11 +239,11 @@ function cuny_home_square($type){
 				unset( $group_ids[$key] );
 	  		}
 	  	}
-	  	
+
 	  	?>
-	  	
-	  
-      <div class="home-group-list">
+
+
+      <div class="activity-list <?php echo $type; ?>-list">
       	<div class="title-wrapper">
 	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
 		<div class="see-all"><a href="<?php echo site_url().'/'.strtolower($type); ?>s">See All</a></div>
@@ -279,17 +252,11 @@ function cuny_home_square($type){
 		<?php while ( bp_groups() ) : bp_the_group();
 		global $groups_template;
 		$group = $groups_template->group;
-		$column_check = $i%4;
-		
+
 		// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
 		// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
 		$activity = stripslashes( $group->description );
-		
-		if ($column_check == 0)
-		{
-			$column_class="last-column";
-		}
-			 echo '<div class="box-1 '.$column_class.'">'; ?>
+			 echo '<div class="box-1 row row-'.$i.' type-'.$type.'">'; ?>
 			 <div class="item-avatar">
 					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 141, 'height' => 141 )) ?></a>
 				</div>
@@ -298,33 +265,32 @@ function cuny_home_square($type){
               <div class="byline"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></div>
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
-			 
+
 			  echo bp_create_excerpt( $activity, 125, array( 'html' => false ) ) . '<p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
 			  echo '</div>';
 			  $i++;
 		  endwhile; ?>
 	  	<div class="clearfloat"></div>
-        </div><!--home-group-list-->
-      		
-      <?php endif;
-	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_groups_filter_clause' );
-	  
+        </div><!--activity-list-->
 
-} 
+      <?php endif;
+
+      $meta_filter->remove_filters();
+}
 
 function openlab_groups_filter_clause( $sql ) {
 	global $openlab_group_type, $bp;
-	
+
 	// Join to groupmeta table for group type
 	$ex = explode( " WHERE ", $sql );
 	$ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
 	$ex = implode( " WHERE ", $ex );
-	
+
 	// Add the necessary where clause
 	$ex = explode( " AND ", $ex );
 	array_splice( $ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords( $openlab_group_type ) . "' OR gt.meta_value = '" . strtolower( $openlab_group_type ) . "' )" );
 	$ex = implode( " AND ", $ex );
-	
+
 	return $ex;
 }
 

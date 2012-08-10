@@ -1,0 +1,18 @@
+/*	
+Theme Name: Digress.it Wireframe
+Theme URI: http://digress.it
+Description: Digress.it allows readers to comment paragraph by paragraph in the margins of a text. You can use it to comment, gloss, workshop, debate and more!
+Author: Eddie A Tejeda
+Version: 3.0
+Author URI: http://www.visudo.com
+License: GPLv2 (http://creativecommons.org/licenses/GPL/2.0/)
+Tags: buddypress, annotation, comments, discussion, documents
+*/
+
+
+body{
+	font-family: "Times New Roman PS MT","Times New Roman",Times,serif;
+	font-size: 100%;
+	background-color:#E6E6E6;
+}
+

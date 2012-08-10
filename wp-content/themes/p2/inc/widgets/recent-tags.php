@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Recent Tags widget.
+ *
+ * @package P2
+ * @since unknown
+ */
 class P2_Recent_Tags extends WP_Widget {
 	function P2_Recent_Tags() {
 		$this->WP_Widget( false, __( 'P2 Recent Tags', 'p2' ), array( 'description' => __( 'The tags from the latest posts.', 'p2' )));

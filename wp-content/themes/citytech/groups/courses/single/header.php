@@ -14,6 +14,7 @@ $group_description = $bp->groups->current_group->description;
 $faculty_id = $bp->groups->current_group->admins[0]->user_id;
 $first_name= ucfirst(xprofile_get_field_data( 'First Name', $faculty_id));
 $last_name= ucfirst(xprofile_get_field_data( 'Last Name', $faculty_id));
+$group_type = openlab_get_group_type( bp_get_current_group_id());
 
 /*
 $member_arg = Array("exclude_admins_mods"=>false); 
@@ -34,11 +35,23 @@ endif;
 $section = groups_get_groupmeta($group_id, 'wds_section_code');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="entry-title">Course on the OpenLab</h1>
-	 <div id="course-header-avatar" class="alignleft">
+	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
+     <?php if ($bp->current_action == "home"): ?>
+     <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
+     <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
+       <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
+         <div id="group-action-wrapper">
+					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>
+            		<div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+         </div>
+		<?php elseif (is_user_logged_in()): ?>
+		<div id="group-action-wrapper">
+				<?php do_action( 'bp_group_header_actions' ); ?>
+        </div>
+	 	<?php endif; ?>
 	</div><!-- #course-header-avatar -->	
 	<div id="course-header-content" class="alignleft">
 		<h2 class="course-title"><?php echo $group_name; ?><a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>
@@ -61,13 +74,18 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 		<?php echo apply_filters('the_content', $group_description ); ?>
 		</div>
 		<?php //do_action( 'bp_group_header_meta' ) ?>
-		<div class="course-html-block">
-			<?php echo $html ?>
+		
+        <?php if ($html): ?>
+        <div class="course-html-block">
+			<?php echo $html; ?>
 		</div>
+        <?php endif; ?>
 	</div><!-- .header-content -->
 	
 	<?php do_action( 'bp_after_group_header' ) ?>
 	
 	<?php do_action( 'template_notices' ) ?>
+    
+    <?php endif; ?>
 	
 </div><!-- #single-course-header -->

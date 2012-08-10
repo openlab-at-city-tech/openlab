@@ -22,7 +22,7 @@ get_header(); ?>
 		<div id="primary" class="showcase">
 			<div id="content" role="main">
 
-				<?php the_post(); ?>
+				<?php while ( have_posts() ) : the_post(); ?>
 
 				<?php
 					/**
@@ -32,6 +32,8 @@ get_header(); ?>
 					if ( '' != get_the_content() )
 						get_template_part( 'content', 'intro' );
 				?>
+
+				<?php endwhile; ?>
 
 				<?php
 					/**
@@ -64,7 +66,12 @@ get_header(); ?>
 					 */
 					$counter_slider = 0;
 
-					?>
+					// Compatibility with versions of WordPress prior to 3.4.
+					if ( function_exists( 'get_custom_header' ) )
+						$header_image_width = get_theme_support( 'custom-header', 'width' );
+					else
+						$header_image_width = HEADER_IMAGE_WIDTH;
+				?>
 
 				<div class="featured-posts">
 					<h1 class="showcase-heading"><?php _e( 'Featured Post', 'twentyeleven' ); ?></h1>
@@ -87,10 +94,10 @@ get_header(); ?>
 						$feature_class = 'feature-image small';
 
 						// Hang on. Let's check this here image out.
-						$image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), array( HEADER_IMAGE_WIDTH, HEADER_IMAGE_WIDTH ) );
+						$image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), array( $header_image_width, $header_image_width ) );
 
 						// Is it bigger than or equal to our header?
-						if ( $image[1] >= HEADER_IMAGE_WIDTH ) {
+						if ( $image[1] >= $header_image_width ) {
 							// If bigger, let's add a BIGGER class. It's EXTRA classy now.
 							$feature_class = 'feature-image large';
 						}
@@ -105,7 +112,7 @@ get_header(); ?>
 							 * make it a large featured post, otherwise render it small
 							 */
 							if ( has_post_thumbnail() ) {
-								if ( $image[1] >= HEADER_IMAGE_WIDTH )
+								if ( $image[1] >= $header_image_width )
 									$thumbnail_size = 'large-feature';
 								else
 									$thumbnail_size = 'small-feature';

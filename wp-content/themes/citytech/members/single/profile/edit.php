@@ -1,9 +1,11 @@
+<?php do_action( 'template_notices' ) ?>
 <?php do_action( 'bp_before_profile_edit_content' ) ?>
 
 <?php
 global $bp,$user_ID;
 if(is_super_admin( $user_ID )){
 	$pgroup=bp_get_current_profile_group_id();
+	$account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
 }else{
   $account_type=bp_get_profile_field_data( 'field=Account Type' );
   if($account_type=="Student"){
@@ -19,20 +21,15 @@ if(is_super_admin( $user_ID )){
   }
 }
 
-$first_name=bp_get_profile_field_data( 'field=First Name' );
-$last_name=bp_get_profile_field_data( 'field=Last Name' );
-$update_user_first = update_user_meta($user_ID,'first_name',$first_name);
-$update_user_last = update_user_meta($user_ID,'last_name',$last_name);
-
 $display_name=bp_get_profile_field_data( 'field=Name' );
 
 if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
+<div class="submenu"><div class="submenu-text">My Settings: </div><?php echo openlab_profile_settings_submenu(); ?></div>
+
 <form action="<?php bp_the_profile_group_edit_form_action() ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
-
-		<h3 id="bread-crumb"><?php printf( __( "Edit Profile Information", "buddypress" ), bp_get_the_profile_group_name() ); ?></h3>
 
 		<ul class="button-nav">
 			<?php
@@ -47,16 +44,6 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
           <div class="editfield field_1 field_name alt">
           <label for="field_1">Display Name (required)</label>
           <input type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
-          <p class="description"></p>
-          </div>
-          <div class="editfield field_241 field_first-name alt">
-          <label for="field_241">First Name (required)</label>
-          <input type="text" value="<?php echo $first_name;?>" id="field_241" name="field_241">
-          <p class="description"></p>
-          </div>
-          <div class="editfield field_3 field_last-name alt">
-          <label for="field_3">Last Name (required)</label>
-          <input type="text" value="<?php echo $last_name;?>" id="field_3" name="field_3">
           <p class="description"></p>
           </div>
         <?php } ?>
@@ -167,7 +154,7 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 	<div class="submit">
 		<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> " />
 	</div>
-	<input type="hidden" name="field_ids" id="field_ids" value="1,3,241,<?php bp_the_profile_group_field_ids() ?>" />
+	<input type="hidden" name="field_ids" id="field_ids" value="1,<?php bp_the_profile_group_field_ids() ?>" />
 	<?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
 
 </form>
