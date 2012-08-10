@@ -57,8 +57,7 @@
 										if ( $i%3 == 2 ) { $thumb_class .= " clear-right"; };
 										
 										echo '<li class="'.$thumb_class.'">';
-											$contact_link = esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); 
-											echo '<a href="'.$contact_link.'">';
+											echo '<a href="'.get_permalink( get_page_by_path('/help/contact-us') ).'">';
 											  echo '<div class="team-thumb">';
 												  //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
 												  $src = wp_get_attachment_image_src($attachment->ID, 'thumbnail');
@@ -76,7 +75,7 @@
 								} //end if ?>
                                 <div class="clearfloat"></div>
         </div><!--support team-->
-        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('help/contact-us') ) ); ?>">Contact Us <div id="mail-icon"></div></a></h3>
+        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('/help/contact-us') ) ); ?>">Contact Us <div id="mail-icon"></div></a></h3>
         
         <div id="creative-commons">
         	<p>Help Content:

@@ -9,15 +9,17 @@
 			
 			<li>
 				<?php bp_group_avatar_thumb() ?>
-				<h4><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a><span class="small"> ( <?php printf( __( '%s members', 'buddypress' ), bp_group_total_members( false ) ) ?> )</span></h4>
-
+				<h4><a href="<?php bp_group_permalink() ?>"><?php openlab_shortened_text(bp_get_group_name(),25); ?></a></h4>
+                <p class="members">
+                	<span class="small"> ( <?php printf( __( '%s members', 'buddypress' ), bp_group_total_members( false ) ) ?> )</span>
+                </p>
 				<p class="desc">
 					<?php bp_group_description_excerpt() ?>
 				</p>
 
 				<?php do_action( 'bp_group_invites_item' ) ?>
 
-				<div class="action">
+				<div class="action invite-member-actions">
 					<a class="button accept" href="<?php bp_group_accept_invite_link() ?>"><?php _e( 'Accept', 'buddypress' ) ?></a> &nbsp;
 					<a class="button reject confirm" href="<?php bp_group_reject_invite_link() ?>"><?php _e( 'Reject', 'buddypress' ) ?></a>
 
