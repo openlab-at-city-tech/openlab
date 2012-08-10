@@ -65,15 +65,26 @@ function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 
 	if ( $blog_id ) {
-		if ( groups_is_user_admin( $user_id, $group_id ) ) {
-		      $role = "administrator";
-		} else if ( groups_is_user_mod( $user_id, $group_id ) ){
-		      $role = "editor";
+		$blog_public = get_blog_option( $blog_id, 'blog_public' );
+
+		if ( "-3" == $blog_public ) {
+			if ( groups_is_user_admin( $user_id, $group_id ) ) {
+				$role = 'administrator';
+			}
 		} else {
-		      // Default role is lower for portfolios
-		      $role = openlab_is_portfolio() ? "subscriber" : "author";
+			if ( groups_is_user_admin( $user_id, $group_id ) ) {
+			      $role = "administrator";
+			} else if ( groups_is_user_mod( $user_id, $group_id ) ){
+			      $role = "editor";
+			} else {
+			      // Default role is lower for portfolios
+			      $role = openlab_is_portfolio() ? "subscriber" : "author";
+			}
 		}
-		add_user_to_blog( $blog_id, $user_id, $role );
+
+		if ( isset( $role ) ) {
+			add_user_to_blog( $blog_id, $user_id, $role );
+		}
 	}
 }
 add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
@@ -125,17 +136,32 @@ function openlab_force_blog_role_sync() {
 		$userdata = get_userdata( get_current_user_id() );
 
 		if ( !empty( $member ) ) {
-			$status = openlab_is_portfolio( $group_id ) ? 'subscriber' : 'author';
+			$blog_public = get_blog_option( get_current_blog_id(), 'blog_public' );
+			if ( "-3" == $blog_public ) {
+				$status = $member->is_admin ? 'administrator' : '';
+			} else {
+				$status = openlab_is_portfolio( $group_id ) ? 'subscriber' : 'author';
 
-			if ( $member->is_admin ) {
-				$status = 'administrator';
-			} else if ( $member->is_mod ) {
-				$status = 'editor';
+				if ( $member->is_admin ) {
+					$status = 'administrator';
+				} else if ( $member->is_mod ) {
+					$status = 'editor';
+				}
 			}
 
 			$role_is_correct = in_array( $status, $userdata->roles );
 
-			if ( !$role_is_correct ) {
+			// If the status is a null string, we should remove the user and redirect away
+			if ( '' === $status ) {
+				if ( current_user_can( 'edit_posts' ) ) {
+					remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
+					bp_core_redirect( get_option( 'siteurl' ) );
+				} else {
+					return;
+				}
+			}
+
+			if ( $status && !$role_is_correct ) {
 				$user = new WP_User( get_current_user_id() );
 				$user->set_role( $status );
 			}
@@ -149,11 +175,12 @@ function openlab_force_blog_role_sync() {
 
 		if ( !$role_is_correct ) {
 			// Redirect, just for good measure
-			echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
+			echo '<script type="text/javascript">window.location="' . get_option( 'siteurl' ) . '";</script>';
 		}
 	}
 }
 add_action( 'init', 'openlab_force_blog_role_sync', 999 );
+add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
 
 
 ////////////////////////
@@ -371,12 +398,21 @@ function wds_bp_group_site_pages(){
 	if ( $site_id ) {
 		$site_url = get_blog_option( $site_id, 'siteurl' );
 		$is_local = true;
+
+		$blog_public = get_blog_option( $site_id, 'blog_public' );
+		if ( "-3" == $blog_public ) {
+			$caps = get_user_meta( get_current_user_id(), 'wp_' . $site_id . '_capabilities', true );
+			$is_visible = isset( $caps['administrator'] );
+		} else {
+			$is_visible = true;
+		}
 	} else {
 		$site_url = groups_get_groupmeta( $group_id, 'external_site_url' );
 		$is_local = false;
+		$is_visible = true;
 	}
 
-	if ( !empty( $site_url ) ) {
+	if ( !empty( $site_url ) && $is_visible ) {
 
 		if ( openlab_is_portfolio() ) { ?>
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
