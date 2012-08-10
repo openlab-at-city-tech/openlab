@@ -2391,6 +2391,12 @@ p.wp-caption-text {
     width: 217px;
 }
 
+div#sidebar.sidebar div#portfolio-sidebar-widget {
+  border-bottom: 1px solid #F0F0F0;
+margin-bottom:15px; 
+}
+
+
 #sidebar-alt {
     float: left;
     width: 150px;

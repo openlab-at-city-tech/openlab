@@ -75,7 +75,11 @@
 								} //end if ?>
                                 <div class="clearfloat"></div>
         </div><!--support team-->
+<<<<<<< HEAD
         <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('/help/contact-us') ) ); ?>">Contact Us <div id="mail-icon"></div></a></h3>
+=======
+        <h3 id="help-contact-us"><a href="/about-city-tech-elab/contact-us/">Contact Us <div id="mail-icon"></div></a></h3>
+>>>>>>> d5863c979b7edbbd5ba1b996fc4835ffdcea9e64
         
         <div id="creative-commons">
         	<p>Help Content:
