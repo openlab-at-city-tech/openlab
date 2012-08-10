@@ -28,7 +28,7 @@
         </div>
         <div id="support-team">
         <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
-        <?php 
+        <?php	
 					$args=array(
 					  'name' => 'contact-us',
 					  'post_type' => 'help',
@@ -57,7 +57,7 @@
 										if ( $i%3 == 2 ) { $thumb_class .= " clear-right"; };
 										
 										echo '<li class="'.$thumb_class.'">';
-											echo '<a href="'.get_permalink( get_page_by_path('/help/contact-us') ).'">';
+											echo '<a href="'.bp_get_root_domain().'/blog/help/contact-us">';
 											  echo '<div class="team-thumb">';
 												  //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
 												  $src = wp_get_attachment_image_src($attachment->ID, 'thumbnail');
@@ -75,12 +75,7 @@
 								} //end if ?>
                                 <div class="clearfloat"></div>
         </div><!--support team-->
-<<<<<<< HEAD
-        <h3 id="help-contact-us"><a href="<?php echo esc_url( get_permalink( get_page_by_path('/help/contact-us') ) ); ?>">Contact Us <div id="mail-icon"></div></a></h3>
-=======
-        <h3 id="help-contact-us"><a href="/about-city-tech-elab/contact-us/">Contact Us <div id="mail-icon"></div></a></h3>
->>>>>>> d5863c979b7edbbd5ba1b996fc4835ffdcea9e64
-        
+        <h3 id="help-contact-us"><a href="<?php echo bp_get_root_domain().'/blog/help/contact-us'; ?>">Contact Us <div id="mail-icon"></div></a></h3>     
         <div id="creative-commons">
         	<p>Help Content:
             <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a></p>
