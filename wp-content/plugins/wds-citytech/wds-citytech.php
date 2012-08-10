@@ -1833,4 +1833,19 @@ function openlab_fix_avatar_delete( $view ) {
 	return $view;
 }
 add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
+
+/**
+ * Remove user from group blog when leaving group
+ *
+ * NOTE: This function should live in includes/group-blogs.php, but can't
+ * because of AJAX load order
+ */
+function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
+	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+
+	if ( $blog_id ) {
+		remove_user_from_blog( $user_id, $blog_id );
+	}
+}
+add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
 ?>
