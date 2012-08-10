@@ -9,7 +9,7 @@
 			
 			<li>
 				<?php bp_group_avatar_thumb() ?>
-				<h4><a href="<?php bp_group_permalink() ?>"><?php openlab_shortened_text(bp_get_group_name(),25); ?></a></h4>
+				<h4><a href="<?php bp_group_permalink() ?>"><?php openlab_shortened_text(bp_get_group_name(),15); ?></a></h4>
                 <p class="members">
                 	<span class="small"> ( <?php printf( __( '%s members', 'buddypress' ), bp_group_total_members( false ) ) ?> )</span>
                 </p>
