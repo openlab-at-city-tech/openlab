@@ -25,6 +25,40 @@ function help_categories_menu($items, $args) {
 						   'orderby' => 'id'
 						   );
 		$help_cats = get_terms('help_category', $help_args);
+		
+		// Temp: We have to reorder the cats to be in our desired order
+		// This worked out accidentally on the staging site, because of
+		// the order created in the database
+		$ordered_cats = array();
+		$cat_order = array(
+			'OpenLab Help',
+			'Getting Started',
+			'People on the OpenLab',
+			'Courses, Projects, and Clubs',
+			'Sites on the OpenLab',
+			'Best Practices',
+			'Troubleshooting',
+			'Portfolios and ePortfolios'
+		);
+
+		foreach( $help_cats as $hc_key => $hc ) {
+			$ordered_key = array_search( $hc->name, $cat_order );
+
+			if ( false !== $ordered_key ) {
+				$ordered_cats[$ordered_key] = $hc;
+
+				// Unset from the main $help_cats array, so we
+				// know which have been used
+				unset( $help_cats[$hc_key] );
+			}
+		}
+		ksort( $ordered_cats );
+
+		// Whatever's left should get tacked onto the end, so we don't
+		// lose cats added in the future
+		$help_cats = array_merge( $ordered_cats, $help_cats );
+		// END Boone's temp sort code
+
 		$help_cat_list = "";
 		foreach ($help_cats as $help_cat)
 		{
