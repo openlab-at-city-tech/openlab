@@ -256,7 +256,6 @@ function groups_leave_group( $group_id, $user_id = 0 ) {
 			return false;
 		}
 	}
-
 	$membership = new BP_Groups_Member( $user_id, $group_id );
 
 	// This is exactly the same as deleting an invite, just is_confirmed = 1 NOT 0.

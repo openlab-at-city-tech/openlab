@@ -99,18 +99,11 @@ function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
 }
 add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 
-
 /**
- * Remove user from group blog when leaving group
+ * Placeholder docs for openlab_remove_user_from_groupblog()
+ * I had to move that function to wds-citytech/wds-citytech.php because of
+ * the order in which AJAX functions are loaded
  */
-function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-
-	if ( $blog_id ) {
-		remove_user_from_blog( $user_id, $blog_id );
-	}
-}
-add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
 
 /**
  * When a user visits a group blog, check to see whether the user should be an admin, based on
