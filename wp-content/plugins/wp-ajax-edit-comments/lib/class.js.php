@@ -91,8 +91,8 @@ class AECJS {
 					}	
 					$aec_frontend = 	$aecomments->get_admin_option( 'use_wpload' ) == 'true' ? $aecomments->get_plugin_url( '/views/comment-popup.php' ) : site_url( '/?aec_page=comment-popup.php' );
 					AECUtility::js_localize('aec_frontend', array('atdlang' => $atdlang, 'atd' => $aecomments->get_admin_option( 'after_deadline_posts' ),'expand' => $aecomments->get_admin_option( 'expand_posts' ),'url' => $aec_frontend, 'title' => __('Comment Box', 'ajaxEdit')), true );
-					include( $aecomments->get_plugin_dir( 'js/jquery.atd.textarea.js' ) );
-					include( $aecomments->get_plugin_dir( 'js/frontend.js' ) );
+					//include( $aecomments->get_plugin_dir( 'js/jquery.atd.textarea.js' ) );
+					//include( $aecomments->get_plugin_dir( 'js/frontend.js' ) );
 					break;
 				case "popups":
 					$atdlang = "true";
