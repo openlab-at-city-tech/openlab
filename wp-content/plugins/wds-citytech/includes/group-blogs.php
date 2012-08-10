@@ -867,7 +867,15 @@ function wds_site_can_be_viewed() {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
 
 		switch ( $blog_private ) {
-			case '-3' : // todo?
+			case '-3' :
+				if ( is_user_logged_in() ) {
+					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
+					if ( isset( $user_capabalities['administrator'] ) ) {
+						$blog_public = true;
+					}
+				}
+				break;
+
 			case '-2' :
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta($user_ID,'wp_' . $wds_bp_group_site_id . '_capabilities',true);
