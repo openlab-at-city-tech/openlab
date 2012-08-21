@@ -269,11 +269,6 @@ background-position: -158px 0;
 margin: 0;
 }
 
-/* hiding the edit group menu for now until usability issues can be explored */
-#wpadminbar #wp-admin-bar-group-admin {
-	display:none;
-}
-
 /* notification counts */
 
 

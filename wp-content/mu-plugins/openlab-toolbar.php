@@ -57,6 +57,9 @@ class OpenLab_Admin_Bar {
 			// Don't show the My Sites menu
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_sites_menu', 20 );
 
+			// Don't show the Edit Group or Edit Member menus
+			add_action( 'admin_bar_menu', array( $this, 'remove_item_admin_menus' ), 5000 );
+
 			// Add the notification menus
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
@@ -164,6 +167,14 @@ class OpenLab_Admin_Bar {
 			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
 			'meta'	=> array()
 		) );
+	}
+
+	/**
+	 * Remove the Edit Group and Edit Member dropdowns
+	 */
+	function remove_item_admin_menus( $wp_admin_bar ) {
+		remove_action( 'admin_bar_menu', 'bp_groups_group_admin_menu', 400 );
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 400 );
 	}
 
 	/**
