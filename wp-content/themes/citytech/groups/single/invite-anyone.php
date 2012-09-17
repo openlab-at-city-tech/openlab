@@ -20,7 +20,7 @@
 <h3>Invite OpenLab members to your <?php echo ucfirst($group_type); ?></h3>
 	<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></p>
 <div id="searchinvitemembersdescription">Start typing a few letters of member's display name.<br/>
-When a drop downlist appears, select from teh list. <br/>
+When a drop downlist appears, select from the list. <br/>
 the member will appear in your access list.
 	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
     
