@@ -120,6 +120,10 @@
 	clear:both;
 }
 
+#wpadminbar .ab-empty-item {
+	float:none;
+}
+
 
 #wpadminbar .item-avatar, #wp-admin-bar-user-info img {
 	float:left;

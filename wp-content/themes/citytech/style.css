@@ -1185,7 +1185,8 @@ a#pgw-prev, a#pgw-next {
 }
 
 #sidebar a:hover {
-    color: #0fceba
+    color: #0fceba !important; 
+    background: none !important;
 }
 
 
@@ -1298,7 +1299,7 @@ a#pgw-prev, a#pgw-next {
 /* Groups */
 
 .internal-page #content .item-list li {
-	width: 308px;
+	width: 100%;
 }
 
 .internal-page #content .item-list li.odd {
@@ -3030,6 +3031,12 @@ div.gform_wrapper .gform_footer {
         text-align:right;
 } */
 
+/* Portfolio Profile 
+------------------------------------------------------------ */
+
+#portfolio-header {
+margin: 0 0 10px 0;
+}
 
 /* Member Profile
 ------------------------------------------------------------ */
@@ -3202,12 +3209,36 @@ h2.member-name-title {
     float: left;
     width: 145px;
 }
+
+#sidebar .activity-list .activity-content a {
+	text-decoration: underline;
+}
+
+#sidebar .activity-list .activity-content a.activity-time-since {
+	text-decoration: none;
+}
+
+
 #member-item-body .activity-list.last {
     /*float: right;
     clear: right;*/
 }
 
-#member-list li {
+.internal-page #content ul#members-list li {
+	float: left;
+	margin: 10px 14px 10px 0;
+	overflow: hidden;
+	width: 210px;
+	border-bottom: 0;
+}
+
+
+.internal-page #content ul#members-list li div.action {
+position: static;
+float: right;
+}
+
+.internal-page #content ul#members-list li {
     float: left;
 }
 #content ul#member-list li a {
@@ -3218,6 +3249,8 @@ h2.member-name-title {
     border-bottom: 1px solid #f2f2f2;
     margin: 0 0 12px;
 }
+
+
 
 /* club creation */
 
@@ -4387,4 +4420,14 @@ table tr td.label{
 #item-body h5.invite-title
 {
 	font-size: 12px;
+}
+
+/* Errors and Warnings */
+.ajax-warning {
+	border-color:;
+	background: #FFC9C9;
+	border: 1px solid #DC7E7E;
+	font-weight: bold;
+	padding: 10px;
+	margin: 0 0 0 10px;
 }
