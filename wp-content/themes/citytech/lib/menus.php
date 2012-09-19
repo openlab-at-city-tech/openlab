@@ -22,14 +22,16 @@ function help_categories_menu($items, $args) {
 		
 		$help_args = array(
 						   'hide_empty' => false,
-						   'orderby' => 'id'
+						   'orderby'    =>  'none',
 						   );
 		$help_cats = get_terms('help_category', $help_args);
+		
+		//using a plugin now - if it works out, will deprecate this nifty little snippet
 		
 		// Temp: We have to reorder the cats to be in our desired order
 		// This worked out accidentally on the staging site, because of
 		// the order created in the database
-		$ordered_cats = array();
+		/*$ordered_cats = array();
 		$cat_order = array(
 			'OpenLab Help',
 			'Getting Started',
@@ -57,7 +59,7 @@ function help_categories_menu($items, $args) {
 		// Whatever's left should get tacked onto the end, so we don't
 		// lose cats added in the future
 		$help_cats = array_merge( $ordered_cats, $help_cats );
-		// END Boone's temp sort code
+		// END Boone's temp sort code*/
 
 		$help_cat_list = "";
 		foreach ($help_cats as $help_cat)
