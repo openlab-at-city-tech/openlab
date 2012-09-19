@@ -38,6 +38,11 @@ onclick="window.print();return false;" /></div>
         </div>
         
         <div class="entry-content"><?php the_content(); ?></div>
+        
+        <nav id="nav-single">
+						<span class="nav-previous"><?php previous_post('&larr; %', '', 'yes'); ?></span>
+						<span class="nav-next"><?php next_post('% &rarr; ', '', 'yes'); ?></span>
+					</nav><!-- #nav-single -->
     
     <?php endwhile; // end of the loop. ?>
 

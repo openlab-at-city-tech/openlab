@@ -26,6 +26,7 @@ function openlab_help_cats_loop() { ?>
 									  )
 								  ),
 				  	'post_type' => 'help',
+					'orderby' => 'menu_order',
 					'order' => 'ASC',
 					);
 	
@@ -67,6 +68,8 @@ function openlab_help_cats_loop() { ?>
 									  )
 								  ),
 				  	'post_type' => 'help',
+					'orderby' => 'menu_order',
+					'order' => 'ASC',
 					);
 				$temp = $wp_query; 
 				$wp_query = null;

@@ -104,6 +104,7 @@ function openlab_register_help() {
 //add some information to the Help overview page
 add_filter("manage_edit-help_columns", "help_edit_columns");
 add_action("manage_help_posts_custom_column",  "help_custom_columns");
+add_filter("manage_edit-help_sortable_columns","help_column_register_sortable");
 
 function help_edit_columns($columns){
   $columns = array(
@@ -112,6 +113,7 @@ function help_edit_columns($columns){
 	"author" => "Author",
     "help_categories" => "Help Categories",
 	"help_tags" => "Help Tags",
+	"menu_order" => 'Menu Order',
 	"date" => "Date",
   );
  
@@ -137,7 +139,16 @@ function help_custom_columns($column){
 		echo "None";
 	 }
       break;
+	  case 'menu_order':
+      $order = $post->menu_order;
+      echo $order;
+      break;
   }
+}
+
+function help_column_register_sortable($columns){
+  $columns['menu_order'] = 'menu_order';
+  return $columns;
 }
 
 //custom post type - help glossary
@@ -182,5 +193,37 @@ function openlab_register_help_glossary() {
         'capability_type' => 'post'
     );
 
-    register_post_type( 'help glossary', $args );
+    register_post_type( 'help_glossary', $args );
+}
+
+//add some information to the Glossary overview page
+add_filter("manage_edit-help_glossary_columns", "help_glossary_edit_columns");
+add_action("manage_help_glossary_posts_custom_column",  "help_glossary_custom_columns");
+add_filter("manage_edit-help_glossary_sortable_columns","help_glossary_column_register_sortable");
+
+function help_glossary_edit_columns($columns){
+  $columns = array(
+    "cb" => "<input type=\"checkbox\" />",
+    "title" => "Title",
+	"author" => "Author",
+	"menu_order" => 'Menu Order',
+	"date" => "Date",
+  );
+ 
+  return $columns;
+}
+function help_glossary_custom_columns($column){
+  global $post;
+ 
+  switch ($column) {
+	  case 'menu_order':
+      $order = $post->menu_order;
+      echo $order;
+      break;
+  }
+}
+
+function help_glossary_column_register_sortable($columns){
+  $columns['menu_order'] = 'menu_order';
+  return $columns;
 }
