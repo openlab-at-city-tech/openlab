@@ -475,7 +475,7 @@ class OpenLab_Admin_Bar {
 					$title .= '<div class="item">';
 
 					// subject
-					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_get_message_thread_subject() . '</a></div>';
+					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt(bp_get_message_thread_subject(), 30) . '</a></div>';
 
 					// last sender
 					$title .= '<div class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></div>';
