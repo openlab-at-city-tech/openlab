@@ -173,10 +173,10 @@ global $bp;
 			</ul>
 			<?php endif ?>
 
-			<?php do_action( 'bp_group_options_nav' ) ?>
+			
 
 		</div><!-- #item-buttons -->
-
+<?php do_action( 'bp_group_options_nav' ) ?>
 <?php endwhile; endif; ?>
 <?php }
 
