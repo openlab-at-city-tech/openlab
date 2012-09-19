@@ -263,9 +263,7 @@ h3#bread-crumb {
     color: #C84C35;
     float: left;
     font-size: 14px;
-    padding-left: 7px;
     position: relative;
-    top: -10px;
 }
 
 h3#bread-crumb .sep
@@ -279,6 +277,7 @@ h3#bread-crumb .sep
     font-size: 12px;
     padding-right: 5px;
     position: relative;
+    margin: 0 0 15px;
 }
 /* Header Right Navigation
 ------------------------------------------------------------ */
