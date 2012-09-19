@@ -1187,9 +1187,6 @@ a#pgw-prev, a#pgw-next {
     color: #0fceba !important; 
     background: none !important;
 }
-
-
-
 .page #sidebar select {
     color: #C84C35;
     font-size: 12px;
@@ -1198,7 +1195,14 @@ a#pgw-prev, a#pgw-next {
     padding: 1px 2px;
     width: 168px;
 }
-
+.page #sidebar select.red-text
+{
+	color: #C84C35;
+}
+.page #sidebar select.gray-text
+{
+	color: #838383;
+}
 .page #sidebar .filter {
     border-bottom: 1px solid #F0F0F0;
     margin-bottom: 15px;
