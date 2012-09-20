@@ -21,7 +21,7 @@
 	<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></p>
 <div id="searchinvitemembersdescription">Start typing a few letters of member's display name.<br/>
 When a drop downlist appears, select from the list. <br/>
-the member will appear in your access list.
+The member will appear in your access list.
 	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
     
     <p class="invite-copy"><?php _e('These members will be sent an invitation to your '.ucfirst($group_type).'. Click the "Send Invites" button to continue.'); ?></p>

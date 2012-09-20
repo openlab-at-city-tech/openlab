@@ -120,7 +120,7 @@
 	clear:both;
 }
 
-#wpadminbar .ab-empty-item {
+#wpadminbar .quicklinks #wp-admin-bar-friend-requests-none .ab-empty-item, #wpadminbar .quicklinks #wp-admin-bar-group-invites-none .ab-empty-item, #wpadminbar .quicklinks #wp-admin-bar-messages-none .ab-empty-item {
 	float:none;
 }
 
