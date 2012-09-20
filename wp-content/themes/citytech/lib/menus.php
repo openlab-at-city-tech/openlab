@@ -22,14 +22,16 @@ function help_categories_menu($items, $args) {
 		
 		$help_args = array(
 						   'hide_empty' => false,
-						   'orderby' => 'id'
+						   'orderby'    =>  'none',
 						   );
 		$help_cats = get_terms('help_category', $help_args);
+		
+		//using a plugin now - if it works out, will deprecate this nifty little snippet
 		
 		// Temp: We have to reorder the cats to be in our desired order
 		// This worked out accidentally on the staging site, because of
 		// the order created in the database
-		$ordered_cats = array();
+		/*$ordered_cats = array();
 		$cat_order = array(
 			'OpenLab Help',
 			'Getting Started',
@@ -57,7 +59,7 @@ function help_categories_menu($items, $args) {
 		// Whatever's left should get tacked onto the end, so we don't
 		// lose cats added in the future
 		$help_cats = array_merge( $ordered_cats, $help_cats );
-		// END Boone's temp sort code
+		// END Boone's temp sort code*/
 
 		$help_cat_list = "";
 		foreach ($help_cats as $help_cat)
@@ -476,12 +478,16 @@ function openlab_group_membership_tabs( $group = false ) {
         <li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
         <?php endif; ?>
         
+        <?php if (bp_group_is_member()): ?>
         <li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Members', 'buddypress' ); ?></a></li>
+        <?php endif; ?>
         
         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         <li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e( 'Email Members', 'buddypress' ); ?></a></li>
         <?php endif; ?>
         
+        <?php if (bp_group_is_member()): ?>
         <li<?php if ( $bp->current_action == 'notifications' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e( 'Your Email Options', 'buddypress' ); ?></a></li>
+        <?php endif; ?>
                 
 <?php }

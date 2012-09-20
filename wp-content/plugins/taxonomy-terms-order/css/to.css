@@ -1,0 +1,37 @@
+
+h2.subtitle {font-size: 15px; font-style: italic; font-weight: bold}
+
+#order-terms img {vertical-align: middle}
+#order-terms #tto_sortable { list-style-type: none; margin: 20px 0 0; padding: 0; width: 100%; }
+#order-terms ul {list-style: none;}
+#order-terms ul.children {margin-left: 25px} 
+.term_type_li .item {border: 1px solid #DDDDDD;    border-radius: 6px 6px 6px 6px;    cursor: move;    margin: 4px 0;    padding: 2px 0;line-height: 140%;margin-bottom: 6px;}
+.term_type_li .item span { background: none repeat scroll 0 0 #F7F7F7;    color: #808080;    display: block;    font-weight: bold;    padding: 5px;}
+.term_type_li .item span.edit {position: absolute; right: 10px; top: 6px; padding: 0px; margin: 0px}
+#order-terms .placeholder{border-color:#bbb;background-color:#f5f5f5; height:30px; background-image: none; -moz-border-radius: 6px 6px 6px 6px; border: 1px solid #E6E6E6;}
+.term_type_li ul {margin-top: 6px}
+#dragHelper li, #dragHelper ul {background: transparent !important;}
+#dragHelper ul {list-style: none;}
+
+.wp-list-taxonomy {width: 100%}
+.wp-list-taxonomy thead tr th{padding-bottom: 7px}
+.wp-list-taxonomy tr {background-color: #FCFCFC;}
+.wp-list-taxonomy tbody th.check-column {    padding: 9px 0 22px;}
+.wp-list-taxonomy td {    color: #555555;}
+.wp-list-taxonomy td, .wp-list-taxonomy th {    border-bottom-color: #DFDFDF;    border-top-color: #FFFFFF;}
+.wp-list-taxonomy th, .wp-list-taxonomy td {    overflow: hidden;}
+.wp-list-taxonomy td {    font-size: 12px;    padding: 9px 7px 4px 7px;    vertical-align: top;}
+.wp-list-taxonomy td, .wp-list-taxonomy th {    border-style: solid;    border-width: 1px 0;}
+.wp-list-taxonomy * {    word-wrap: break-word;}
+
+#cpt_info_box {padding: 0 10px; border: 1px dashed #21759B; background-color: #F1F1F1; margin-top: 10px}
+#cpt_info_box p {font-size: 12px}
+#cpt_info_box #donate_form {float: right; padding: 10px 0 10px 10px}
+#icon-settings {background-image:url("../images/admin-icon-settings.gif");background-repeat:no-repeat;}
+#p_right {float: right; width: 200px; }
+.p_s_item {float: left; padding: 0px 5px; margin-top: 15px; margin-bottom: 5px}
+.p_s_item.s_gp {padding-top: 2px; margin-left: 10px}
+
+.clear {clear: both}
+
+
