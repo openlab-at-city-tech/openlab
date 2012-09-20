@@ -3232,6 +3232,10 @@ h2.member-name-title {
 	border-bottom: 0;
 }
 
+.internal-page #content ul#member-list li {
+ 	float: left;
+}
+
 
 .internal-page #content ul#members-list li div.action {
 position: static;
@@ -3820,6 +3824,10 @@ padding: 0 0 10px 5px; }
     /*width: 50px!important;
     height: 50px!important;*/
     margin: 0 15px 0 0;
+}
+
+.activity #content #member-list img.avatar {
+	margin:0;
 }
 
 .activity #content .activity-avatar {
