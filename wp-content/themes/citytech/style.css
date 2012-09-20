@@ -3239,11 +3239,11 @@ h2.member-name-title {
 }
 
 .internal-page #content ul#members-list li {
-	float: left;
+	/* float: left;*/
 	margin: 10px 14px 10px 0;
 	overflow: hidden;
-	width: 210px;
-	border-bottom: 0;
+	/* width: 210px; */
+	/* border-bottom: 0; */
 }
 
 .internal-page #content ul#member-list li {
@@ -3251,10 +3251,10 @@ h2.member-name-title {
 }
 
 
-.internal-page #content ul#members-list li div.action {
+/*.internal-page #content ul#members-list li div.action {
 position: static;
 float: right;
-}
+}*/
 
 .internal-page #content ul#members-list li {
     float: left;
