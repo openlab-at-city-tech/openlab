@@ -1709,38 +1709,39 @@ blockquote {
 }
 
 .entry-content {
-    padding-left: 8px;
+    padding-left: 7px;
 }
 
 .entry-content p, .entry-content ol, .entry-content ul {
     padding: 0;
     font-size: 12px;
     line-height: 18px;
+    width: 100%;
 }
-#help-title{
+#help-title {
     margin-top: -10px;
 }
 
-#help-identity{
+#help-identity {
     display: none;
 }
 
-#help-title h2{
+#help-title h2 {
     color: #C84C35;
-    font-size: 15px;
+    font-size: 13px;
     font-family: 'Arvo';
     padding-left: 5px;
     margin: 0 0 30px;
 }
-.cat-list{
+.cat-list {
     /*display: none;*/
 }
 
 .help-tags{
     /*display: none;*/
-    font-size: 16px;
+    font-size: 12px;
     font-family: Arial;
-    font-weight: noraml;
+    font-weight: normal;
     margin-bottom: 40px;
 }
 #content > a{
@@ -1763,9 +1764,7 @@ blockquote {
     z-index: -1;
 }
 
-.help-tags a{
-    font-size: 14px;
-    font-weight: normal;
+.help-tags a {
     text-decoration: underline;    
 }
 .entry-content a {
@@ -2119,7 +2118,7 @@ h1.entry-title
 }
 
 h3.entry-title{
-    font-size: 15px;
+    font-size: 13px;
     margin-bottom: 1px;    
 }
 
@@ -2133,23 +2132,30 @@ h3.entry-title{
 }
 
 
-#help-tags-copy p{
+#help-tags-copy p {
     font-family: sans-serif;
     font-size: 12px; 
     padding-bottom: 10px;
 }
 
-div #help-tags a{
+div #help-tags a {
     float: left;
     display: inline-block;
     border: 1px solid transparent;
-    padding: 5px 10px 5px 10px;
-    border-radius: 4px;
-    margin-left: 3px;
+    padding: 3px 6px;
+    border-radius: 2px;
+    margin-right: 4px;
     background-color:  rgba(113,113,113,0.6);
     color: #FFF;
-    font-weight: bold;
-    font-family: tahoma;
+    font-weight: normal;
+    font-family: Arial;
+    font-size: 11px;
+}
+
+div #help-tags a:hover {
+	background-color: #0FCEBA !important;
+	color: #FFF !important;
+	text-decoration: none;
 }
 
 div #help-tags a:last-child{
@@ -2162,9 +2168,13 @@ div #help-tags a:nth-child(2n){
 
 #sidebar h2.help-tags-title {
     border-bottom: 0px;
-    border-top: 1px solid #717171;
+    border-top: 1px solid #f0f0f0;
     color: #717171;   
-    padding-top: 15px;
+    padding: 15px 0 0 7px;
+}
+
+div #help-tags-copy, div #help-tags {
+	padding-left: 7px;
 }
 /* Unordered / Ordered Lists
 ------------------------------------------------------------ */
@@ -4263,6 +4273,8 @@ li .count-0, li.submenu-item .count-0 {
 table tr td.label{
     border: none;
 }
+
+
 /**help sidebar**/
 #help-tags
 {
@@ -4270,16 +4282,16 @@ table tr td.label{
 }
 #support-team{
     margin-top: 30px;
-    border-top: 1px solid #717171;
+    border-top: 1px solid #F0F0F0;
 }
 
 #support-team h2{
     border-bottom: none;
     color: #717171;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: normal;
     margin: 0 0 25px;
-    padding: 15px 0 3px 0px;
+    padding: 15px 0 3px 7px;
 }
 #sidebar #support-team
 {
@@ -4302,8 +4314,8 @@ table tr td.label{
 {
     display: block;
     padding: 20px 10px;
-    border-top: 1px solid #d0d0d0;
-    border-bottom: 1px solid #d0d0d0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
 }
 #sidebar #help-contact-us a #mail-icon
 {
@@ -4315,17 +4327,57 @@ table tr td.label{
 #creative-commons
 {
     width: 186px;
+    padding-left: 7px;
 }
-#creative-commons a
+#creative-commons a, #creative-commons a:hover
 {
-    background: url('images/cc_license.gif') no-repeat;
+    background: url('images/cc_license.gif') no-repeat !important;
     padding-top: 35px;
+    padding-left: 7px;
     width: 101px;
     overflow: hidden;
     display: block;
     height: 0;
     float: right;
 }
+
+/* General Help Styles */
+.single-help #nav-single {
+ 	border-top: 1px solid #f0f0f0;
+ 	padding: 10px 7px;
+}
+
+.single-help .nav-previous {
+	float:left;
+}
+
+.single-help .nav-next {
+ 	float:right;
+}
+
+h1.parent-cat {
+	padding-left: 7px;
+	margin: 0 0 20px;
+}
+
+#content h2.child-cat {
+	font-size:13px;
+}
+
+.tax-help_category #content > a {
+	font-size:12px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.tax-help_category #content > a[href="#help-top"]:after {
+	content:" \2191";
+}
+
+.tax-help_category #content h2, .tax-help_category #content h3, .tax-help_category #content div {
+padding-left: 7px;
+}
+
+
 
 /**glossary page**/
 .glossary-description p,
@@ -4359,7 +4411,7 @@ table tr td.label{
 {
     background: url('images/submenu_sprite.png') no-repeat 0 -87px #fff;
     font-family: 'Arvo',arial,serif;
-    font-size: 13px;
+    font-size: 12px;
     padding: 0 0 0 23px;
     border: none;
     cursor: pointer;
