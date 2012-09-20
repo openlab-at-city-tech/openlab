@@ -3457,7 +3457,7 @@ div#member-header div#profile-action-wrapper div.friendship-button,
     font-family: 'Arvo',arial,serif; 
 }
 
-div#member-header div#profile-action-wrapper div.friendship-button a { 
+div#member-header div#profile-action-wrapper div.friendship-button a, .action .generic-button.friendship-button a { 
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
@@ -3470,7 +3470,7 @@ background-image:url('images/mol-sprites.png');
     font-family: 'Arvo',arial,serif; 
 }
 
-/* add buttons get plus signn*/
+/* add buttons get plus sign*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add { 
 background-position: 0px -225px;
@@ -3523,14 +3523,14 @@ background-position: -176px -160px;
 /* pending membership gets checkmark */
 
 div#content.hfeed div#club-header div#group-action-wrapper a.pending {
-background-position: -43px -273px;
+background-position: -30px -273px;
    padding:0px 15px 0 5px;
    margin:0;
    width:120px;
 }
 
 div#content.hfeed div#club-header div#group-action-wrapper a.pending:hover {
-background-position: -142px -160px;
+background-position: -130px -160px;
     color:#0fceb9;
 
 }
@@ -3539,7 +3539,7 @@ background-position: -142px -160px;
 
 /* cancel friend buttons */
 
-div#member-header div#profile-action-wrapper div.friendship-button a.remove { 
+div#member-header div#profile-action-wrapper div.friendship-button a.remove,  { 
 background-position: 0px -192px;
    padding:0px 15px 0 5px;
    margin:0;
@@ -3547,11 +3547,21 @@ background-position: 0px -192px;
 }
 
 div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
-background-position: -176px -192px;
-  
+	background-position: -176px -192px; 
 }
 
+.action .generic-button.friendship-button.is_friend a {
+	background-position: -45px -192px;
+	width: 40px;
+	height: 13px;
+	text-align: left;
+}
 
+.action .generic-button.friendship-button.is_friend a:hover {
+	background-position: -221px -192px;
+	color:#0fceb9;
+	text-decoration: none;
+}
 
 /* group buttons */
 
@@ -3577,6 +3587,7 @@ background-position: -176px -192px;
 
 #group-action-wrapper .group-button a.join-group:hover { 
    background-position: -166px -225px;
+   color:#0fceba;
 
 }
 
@@ -3590,6 +3601,7 @@ background-position: -176px -192px;
 
 #group-action-wrapper .group-button a.leave-group:hover { 
    background-position: -151px -192px;
+   color:#0fceba;
 
 }
 
