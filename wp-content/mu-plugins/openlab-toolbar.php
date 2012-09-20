@@ -340,6 +340,16 @@ class OpenLab_Admin_Bar {
 			'id'     => 'friend-requests-title',
 			'title'  => 'Friend Requests'
 		) );
+		
+		if ( 0 < count( $request_ids ) ) {
+				// "See More" - changed so it shows up for anything greater than 0
+				$wp_admin_bar->add_node( array(
+					'parent' => 'invites',
+					'id'     => 'friend-requests-more',
+					'title'  => 'See All Friends',
+					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
+				) );
+		}
 
 		$members_args = array(
 			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
@@ -369,16 +379,6 @@ class OpenLab_Admin_Bar {
 				) );
 			}
 
-			if ( 3 < count( $request_ids ) ) {
-				// "See More"
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'friend-requests-more',
-					'title'  => 'See More',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
-				) );
-			}
-
 		} else {
 			// The user has no friend requests
 			$wp_admin_bar->add_node( array(
@@ -401,6 +401,16 @@ class OpenLab_Admin_Bar {
 			'id'     => 'invitations-title',
 			'title'  => 'Invitations'
 		) );
+		
+		// "See More" - changed so it shows up for anything greater than 0
+		if ( !empty( $invites['groups'] )) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'invites-see-more',
+				'title'  => 'See All Invites',
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+			) );
+		}
 
 		$groups_args = array(
 			'type'    => 'invites',
