@@ -1186,6 +1186,7 @@ a#pgw-prev, a#pgw-next {
 #sidebar a:hover {
     color: #0fceba !important; 
     background: none !important;
+    text-decoration: none;
 }
 .page #sidebar select {
     color: #C84C35;
@@ -3398,8 +3399,9 @@ div#member-header div#profile-action-wrapper div#send-private-message a {
 }
 
 div#member-header div#profile-action-wrapper div#send-private-message a:hover {
-    background-position: -115px -137px;
-        color:#0fceb9;
+    background-position: -115px -138px;
+    color:#0fceb9;
+    text-decoration: none;
 }
 
 /* edit profile button gets pencil  */
@@ -3419,6 +3421,7 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a,
 }
 div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
     background-position:5px -105px;
+    text-decoration: none;
 }
 
 /* edit avatar gets little person shape */
@@ -3439,7 +3442,8 @@ div#member-header div#profile-action-wrapper div#action-edit-avatar a,
 
 div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover, 
 #group-action-wrapper #action-edit-avatar a:hover {
-    background-position: 5px -135px
+    background-position: 5px -135px;
+    text-decoration: none;
 }
 
 /* friendship button anchor */
@@ -3480,9 +3484,10 @@ background-position: 0px -225px;
 }
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
-background-position: -176px -225px;
-   padding:0 20px 0 0;
-      color:#0fceb9;
+	background-position: -176px -225px;
+	padding:0 20px 0 0;
+	color:#0fceb9;
+	text-decoration: none;
 }
 
 div#club-header div#group-action-wrapper a.request-membership {
@@ -3495,18 +3500,20 @@ background-position: 0px -251px;
 /* REQUEST MEMBERSHIP GETS PLUS */
 
 div#club-header div#group-action-wrapper a.request-membership:hover {
-background-position: -100px -224px;
-   padding:0 20px 0 0;
-      color:#0fceb9;
+	background-position: -100px -224px;
+   	padding:0 20px 0 0;
+    color:#0fceb9;
+    text-decoration: none;
 }
 
 /* pending friend buttons get checkmark*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
-background-position: 0px -160px;
-   padding:0px 15px 0 5px;
-   margin:0;
-   width:50px;
+	background-position: 0px -160px;
+	padding:0px 15px 0 5px;
+	margin:0;
+	width:50px;
+	text-decoration: none;
 }
 
 
