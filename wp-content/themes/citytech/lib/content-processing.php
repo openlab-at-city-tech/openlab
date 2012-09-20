@@ -16,3 +16,38 @@ function openlab_shortened_text($text,$limit = "55") {
 	if ($text_length > $limit) echo "...";
 
 }
+
+//truncate links in profile fields - I'm using $field->data->value to just truncate the link name (it was giving odd results when trying to truncate $value)
+add_filter('bp_get_the_profile_field_value','openlab_filter_profile_fields',10,2);
+ 
+function openlab_filter_profile_fields($value,$type)
+{
+	global $field;
+	$truncate_link_candidates = array('Website','LinkedIn Profile Link','Facebook Profile Link');
+	if (in_array($field->name,$truncate_link_candidates))
+	{
+		$args = array(
+		'ending'            => __( '&hellip;', 'buddypress' ),
+		'exact'             => true,
+		'html'              => false,
+		'filter_shortcodes' => $filter_shortcodes_default
+		);
+		$truncated_link = bp_create_excerpt($field->data->value, 40, $args);
+		$full_link = openlab_http_check($field->data->value);
+		$value = '<a href="'.$full_link.'">'.openlab_http_check($truncated_link).'</a>';
+	}
+	return $value;
+}
+
+function openlab_http_check($link)
+{
+	$http_check = strpos($link, "http");
+	
+	if ($http_check == false)
+	{
+		$link = "http://".$link;
+	}
+	
+	return $link;
+}
+

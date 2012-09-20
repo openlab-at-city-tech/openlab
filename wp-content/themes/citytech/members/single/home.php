@@ -118,11 +118,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 							</td>
 
 							<td>
-							    <?php if (bp_get_the_profile_field_name() == "Website"):?>
-                                Toots
-                                <?php else: ?>
-								<?php bp_the_profile_field_value() ?>
-                                <?php endif; ?>
+								<?php bp_the_profile_field_value(); ?>
 							</td>
     						</tr>
 					<?php endif;
