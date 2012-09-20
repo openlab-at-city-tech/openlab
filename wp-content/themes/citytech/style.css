@@ -4255,6 +4255,27 @@ li .count-0, li.submenu-item .count-0 {
 table tr td.label{
     border: none;
 }
+/**help navigation**/
+.single-help #content-sidebar-wrap
+{
+	position: relative;
+}
+#nav-single
+{
+	font-size: 12px;
+    line-height: 18px;
+    padding: 0;
+	border-top: 1px #dbdbdb solid;
+	padding-top: 8px;
+}
+.nav-previous
+{
+	float: left;
+}
+.nav-next
+{
+	float: right;
+}
 /**help sidebar**/
 #help-tags
 {

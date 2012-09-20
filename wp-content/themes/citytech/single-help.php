@@ -39,9 +39,12 @@ onclick="window.print();return false;" /></div>
         
         <div class="entry-content"><?php the_content(); ?></div>
         
-        <nav id="nav-single">
-						<span class="nav-previous"><?php previous_post('&larr; %', '', 'yes'); ?></span>
-						<span class="nav-next"><?php next_post('% &rarr; ', '', 'yes'); ?></span>
+        			<nav id="nav-single">
+                    <?php $next_post = get_next_post();
+						  $prev_post = get_previous_post(); ?>
+						<div class="nav-previous"><a href="<?php echo get_permalink( $prev_post->ID ); ?>">&larr; <?php echo $prev_post->post_title; ?></a></div>
+                        <div class="nav-next"><a href="<?php echo get_permalink( $next_post->ID ); ?>"><?php echo $next_post->post_title; ?> &rarr;</a></div>
+                        <div class="clearfloat"></div>
 					</nav><!-- #nav-single -->
     
     <?php endwhile; // end of the loop. ?>
