@@ -4497,3 +4497,9 @@ padding-left: 7px;
 	padding: 10px;
 	margin: 0 0 0 10px;
 }
+
+/* Discussions */
+
+ul#topic-post-list li div.post-content {
+	margin-left:0;
+}
