@@ -4,7 +4,6 @@
 <h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
 <?php if ( bp_is_group_home() ): ?>
 <?php $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
-<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 <div id="portfolio-header">
 	 <div id="portfolio-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
