@@ -324,7 +324,7 @@ function openlab_filter_subnav_admin($subnav_item)
 	$group_type = openlab_get_group_type( bp_get_current_group_id());
 	$new_item = str_replace("Admin",ucfirst($group_type)." Settings",$subnav_item);
 	//this is to stop the course settings menu item from gettin a current class on membership pages
-	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications')
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests')
 	{
 		$new_item = str_replace("current selected"," ",$new_item);
 	}
@@ -337,6 +337,7 @@ add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
 function openlab_filter_subnav_members($subnav_item)
 {
 	global $bp;
+	global $wp_query;
 	
 	//string replace menu name
 	$new_item = str_replace("Members","Membership",$subnav_item);
@@ -346,7 +347,8 @@ function openlab_filter_subnav_members($subnav_item)
 		$new_item = str_replace("/members/","/admin/manage-members",$new_item);
 	endif;
 	
-	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action = 'invite-anyone')
+	//filtering for current status on membership menu item when in membership submenu
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone')
 	{
 		$new_item = str_replace('id="members-groups-li"','id="members-groups-li" class="current selected"',$new_item);
 	}
