@@ -422,7 +422,7 @@ class OpenLab_Admin_Bar {
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</div>' ;
+					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</a></div>' ;
 
 					// name link
 					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></div></div>';
