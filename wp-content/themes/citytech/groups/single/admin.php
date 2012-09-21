@@ -422,9 +422,19 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 	<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if(this.checked) { document.getElementById('delete-group-button').disabled = ''; } else { document.getElementById('delete-group-button').disabled = 'disabled'; }" /> <?php printf( 'I understand the consequences of deleting this %s.', openlab_get_group_type() ); ?>
 
 	<?php do_action( 'bp_after_group_delete_admin' ); ?>
+    
+    <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id); 
+		  if ($account_type == 'Student' && openlab_get_group_type() == 'portfolio' )
+		  {
+			  $group_type = 'ePortfolio';
+		  } else {
+			  $group_type = openlab_get_group_type();
+		  }
+	
+	?>
 
 	<div class="submit">
-		<input type="submit" disabled="disabled" value="<?php _e( 'Delete Group', 'buddypress' ) ?> &rarr;" id="delete-group-button" name="delete-group-button" />
+		<input type="submit" disabled="disabled" value="<?php _e( 'Delete '.$group_type, 'buddypress' ) ?> &rarr;" id="delete-group-button" name="delete-group-button" />
 	</div>
 
 	<input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />
