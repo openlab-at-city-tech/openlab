@@ -1193,6 +1193,7 @@ a#pgw-prev, a#pgw-next {
 #sidebar a:hover {
     color: #0fceba !important; 
     background: none !important;
+    text-decoration: none;
 }
 .page #sidebar select {
     color: #C84C35;
@@ -3200,6 +3201,11 @@ h2.member-name-title {
     color: #8f8f8f;
 }
 
+.activity-list .activity-header a:first-child:hover {
+	background: none !important;
+	color: #0FCEBA !important;
+}
+
 #member-item-body .activity-list .activity-avatar a img{
     margin: 0 5px 0px 0;
     width: 80px;
@@ -3283,6 +3289,8 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 margin-top:20px;
 }
 
+/* invite new members */
+
 p#invitenonmembers {
 float:left;
 clear:left;
@@ -3290,53 +3298,123 @@ position:relative;
 left: -264px;
 }
 
-div#searchinvitemembersdescription {
-width:400px;
-font-size:10px;
-float:right;
-top:-25px;
-position:relative;
-}
+
 
 p#selectmemberslabel {
 margin-top:15px;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity {
-display:block;
-float:none;
-clear:none;
+	display:block;
+	float:left;
+	clear:none;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
-
-display:block;
-position:relative;
-text-align:left;
-padding-bottom:20px;
-top:0;
-width:245px;
-margin:6px 0 0 0;
-
-    
+	display:block;
+	text-align:left;
+	padding-bottom:20px;
+	width:200px;
+	margin:3px 0 0 0;
+	float: left;
+    clear:none;
+    position: static;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a {
-
-background: -moz-linear-gradient(center top , #E7E7E7, #DEDFDE) repeat scroll 0 0 transparent;
-    border: 1px solid #AAAAAA;
-    border-radius: 5px 5px 5px 5px;
-    color: #444444;
-    float: none;
-    font-family: Arial,Verdana,sans-serif;
-    font-size: 10px;
-    margin: 7px 0px 0 0;
-    padding: 2px 10px 0 10px;
-    text-align:left;
-    
-    
+	font-family: Arial, Verdana, sans-serif;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #AAA;
+	/*color: #444;*/
+	padding: 0px 10px;
+	float: left;
+	margin: 0;
+	background-color: gainsboro;
+	font-size: 10px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E7E7E7), to(#DEDFDE));  
 }
 
+#topgroupinvite {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+#topgroupinvite h3 {
+	width:100%;
+}
+
+#topgroupinvite h5 {
+	float:left;
+}
+
+.internal-page #content #invite-anyone-invite-list {
+	height: 360px;
+	width: 100%;
+	overflow: auto;
+	border: 1px solid #f0f0f0;
+}
+
+.internal-page #content #invite-anyone-invite-list li {
+	width: 90%;
+	margin: 3%;
+	padding:0;
+}
+
+.internal-page #content #invite-anyone-invite-list li h4 {
+	font-family: Arial,Helvetica,Tahoma, sans-serif;
+	float: left;
+	clear: none;
+}
+
+#invite-anyone-member-list {
+	background-color: #F0F0F0;
+	border: 1px solid #CCC;
+	height: 290px;
+	overflow: auto;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+#send-invite-form .send-to-input {
+	background-color: #F0F0F0;
+	border: 1px solid #CCC;
+	width: 100%
+}
+
+div#searchinvitemembersdescription {
+	width:320px;
+	font-size:10px;
+	float:right;
+	position: relative;
+	top: -15px;
+	
+}
+
+div#searchinvitemembersdescription p {
+
+	margin: 0px;
+}
+
+ul.invite-search {
+	float:left;
+	width: 320px;
+}
+
+.invite-anyone .left-menu {
+	float: left;
+	width: 320px;
+}
+
+.invite-anyone .main-column {
+	margin-left: 0px !important;
+	float: right;
+	width: 320px;
+}
 
 /*.read-more {
     color: #6D6D6D;
@@ -3405,8 +3483,9 @@ div#member-header div#profile-action-wrapper div#send-private-message a {
 }
 
 div#member-header div#profile-action-wrapper div#send-private-message a:hover {
-    background-position: -115px -137px;
-        color:#0fceb9;
+    background-position: -115px -138px;
+    color:#0fceb9;
+    text-decoration: none;
 }
 
 /* edit profile button gets pencil  */
@@ -3426,6 +3505,7 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a,
 }
 div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
     background-position:5px -105px;
+    text-decoration: none;
 }
 
 /* edit avatar gets little person shape */
@@ -3446,7 +3526,8 @@ div#member-header div#profile-action-wrapper div#action-edit-avatar a,
 
 div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover, 
 #group-action-wrapper #action-edit-avatar a:hover {
-    background-position: 5px -135px
+    background-position: 5px -135px;
+    text-decoration: none;
 }
 
 /* friendship button anchor */
@@ -3464,7 +3545,7 @@ div#member-header div#profile-action-wrapper div.friendship-button,
     font-family: 'Arvo',arial,serif; 
 }
 
-div#member-header div#profile-action-wrapper div.friendship-button a { 
+div#member-header div#profile-action-wrapper div.friendship-button a, .action .generic-button.friendship-button a { 
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
@@ -3477,7 +3558,7 @@ background-image:url('images/mol-sprites.png');
     font-family: 'Arvo',arial,serif; 
 }
 
-/* add buttons get plus signn*/
+/* add buttons get plus sign*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add { 
 background-position: 0px -225px;
@@ -3487,9 +3568,10 @@ background-position: 0px -225px;
 }
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
-background-position: -176px -225px;
-   padding:0 20px 0 0;
-      color:#0fceb9;
+	background-position: -176px -225px;
+	padding:0 20px 0 0;
+	color:#0fceb9;
+	text-decoration: none;
 }
 
 div#club-header div#group-action-wrapper a.request-membership {
@@ -3502,18 +3584,20 @@ background-position: 0px -251px;
 /* REQUEST MEMBERSHIP GETS PLUS */
 
 div#club-header div#group-action-wrapper a.request-membership:hover {
-background-position: -100px -224px;
-   padding:0 20px 0 0;
-      color:#0fceb9;
+	background-position: -100px -224px;
+   	padding:0 20px 0 0;
+    color:#0fceb9;
+    text-decoration: none;
 }
 
 /* pending friend buttons get checkmark*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
-background-position: 0px -160px;
-   padding:0px 15px 0 5px;
-   margin:0;
-   width:50px;
+	background-position: 0px -160px;
+	padding:0px 15px 0 5px;
+	margin:0;
+	width:50px;
+	text-decoration: none;
 }
 
 
@@ -3530,14 +3614,14 @@ background-position: -176px -160px;
 /* pending membership gets checkmark */
 
 div#content.hfeed div#club-header div#group-action-wrapper a.pending {
-background-position: -43px -273px;
+background-position: -30px -273px;
    padding:0px 15px 0 5px;
    margin:0;
    width:120px;
 }
 
 div#content.hfeed div#club-header div#group-action-wrapper a.pending:hover {
-background-position: -142px -160px;
+background-position: -130px -160px;
     color:#0fceb9;
 
 }
@@ -3546,7 +3630,7 @@ background-position: -142px -160px;
 
 /* cancel friend buttons */
 
-div#member-header div#profile-action-wrapper div.friendship-button a.remove { 
+div#member-header div#profile-action-wrapper div.friendship-button a.remove,  { 
 background-position: 0px -192px;
    padding:0px 15px 0 5px;
    margin:0;
@@ -3554,11 +3638,21 @@ background-position: 0px -192px;
 }
 
 div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
-background-position: -176px -192px;
-  
+	background-position: -176px -192px; 
 }
 
+.action .generic-button.friendship-button.is_friend a {
+	background-position: -45px -192px;
+	width: 40px;
+	height: 13px;
+	text-align: left;
+}
 
+.action .generic-button.friendship-button.is_friend a:hover {
+	background-position: -221px -192px;
+	color:#0fceb9;
+	text-decoration: none;
+}
 
 /* group buttons */
 
@@ -3584,6 +3678,7 @@ background-position: -176px -192px;
 
 #group-action-wrapper .group-button a.join-group:hover { 
    background-position: -166px -225px;
+   color:#0fceba;
 
 }
 
@@ -3597,6 +3692,7 @@ background-position: -176px -192px;
 
 #group-action-wrapper .group-button a.leave-group:hover { 
    background-position: -151px -192px;
+   color:#0fceba;
 
 }
 
@@ -4099,6 +4195,10 @@ a.close-popup-login {
     clear: both;
 }
 
+.internal-page #item-body {
+	padding-left: 7px;
+}
+
 /* Register page styles to override Buddypress */
 
 #basic-details-section, #profile-details-section {
@@ -4136,6 +4236,7 @@ h1.mol-title,
     height: 17px;
     position: relative;
 }
+
 .submenu .submenu-text,
 .submenu ul li a,
 #subnav #group-settings-label,
@@ -4148,6 +4249,7 @@ h1.mol-title,
     line-height: 13px;
     color: #717171;
 }
+
 .submenu ul,
 .submenu-text,
 #group-settings-label,
@@ -4511,7 +4613,8 @@ padding-left: 7px;
 }
 #item-body h5.invite-title
 {
-	font-size: 12px;
+	font-size: 11px;
+	padding: 10px 0 5px 0;
 }
 
 /* Errors and Warnings */
