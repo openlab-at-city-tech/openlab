@@ -202,7 +202,12 @@
 	padding:0;
 }
 
-
+#wpadminbar #wp-admin-bar-friend-requests-more,
+#wpadminbar #wp-admin-bar-invites-see-more
+{
+	text-align: right;
+	margin-top: -25px;
+}
 /* notification icons */
 
 #wpadminbar .quicklinks .toolbar-item-name,  #wpadminbar #wp-admin-bar-new-content > a {
