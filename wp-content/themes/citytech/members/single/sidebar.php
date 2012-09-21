@@ -116,7 +116,6 @@ if ( !$dud = bp_displayed_user_domain() ) {
 <?php /* End portfolio links */ ?>
 
 <?php /* Recent Account Activity / Recent Friend Activity */ ?>
-<?php if ( !bp_is_user_messages() ) : ?>
 
 	<?php
 
@@ -181,4 +180,3 @@ if ( !$dud = bp_displayed_user_domain() ) {
 			</div>
 		</ul>
 	<?php endif; ?>
-<?php endif ?>
