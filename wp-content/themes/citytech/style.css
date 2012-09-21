@@ -1775,11 +1775,13 @@ blockquote {
 .help-tags a {
     text-decoration: underline;    
 }
-.entry-content a {
+.entry-content a,
+#course-list a,
+#project-list a,
+#club-list a{
     text-decoration:underline;
     color: #444444;
 }
-
 .entry-content a:hover {
     color: #0fceba;
 }
