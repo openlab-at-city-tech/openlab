@@ -26,7 +26,7 @@ function help_categories_menu($items, $args) {
 						   );
 		$help_cats = get_terms('help_category', $help_args);
 		
-		//using a plugin now - if it works out, will deprecate this nifty little snippet
+		//using a plugin now - if it works out, will deprecate this
 		
 		// Temp: We have to reorder the cats to be in our desired order
 		// This worked out accidentally on the staging site, because of
@@ -320,8 +320,15 @@ add_filter('bp_get_options_nav_admin','openlab_filter_subnav_admin');
 
 function openlab_filter_subnav_admin($subnav_item)
 {
+	global $bp;
 	$group_type = openlab_get_group_type( bp_get_current_group_id());
 	$new_item = str_replace("Admin",ucfirst($group_type)." Settings",$subnav_item);
+	//this is to stop the course settings menu item from gettin a current class on membership pages
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications')
+	{
+		$new_item = str_replace("current selected"," ",$new_item);
+	}
+	
 	return $new_item;
 }
 
@@ -338,6 +345,11 @@ function openlab_filter_subnav_members($subnav_item)
 	if ( $bp->is_item_admin || $bp->is_item_mod ):
 		$new_item = str_replace("/members/","/admin/manage-members",$new_item);
 	endif;
+	
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action = 'invite-anyone')
+	{
+		$new_item = str_replace('id="members-groups-li"','id="members-groups-li" class="current selected"',$new_item);
+	}
 	
 	//get total member count
 	$total_mem = bp_core_number_format( groups_get_groupmeta( bp_get_current_group_id(), 'total_member_count') );
