@@ -429,8 +429,16 @@ function openlab_group_admin_tabs( $group = false ) {
 		<?php if ( 'public' != $group->status ) : ?>
 			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
 		<?php endif ?>
-
-		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?> current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+        
+              <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id); 
+			  if ($account_type == "Student")
+			  {
+				  $profile = "ePortfolio";
+			  } else {
+				  $profile = "Portfolio";
+			  } ?>
+        
+        <li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?> current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>
 
 	<?php else : ?>
 
