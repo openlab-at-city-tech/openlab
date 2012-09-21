@@ -3194,6 +3194,11 @@ h2.member-name-title {
     color: #8f8f8f;
 }
 
+.activity-list .activity-header a:first-child:hover {
+	background: none !important;
+	color: #0FCEBA !important;
+}
+
 #member-item-body .activity-list .activity-avatar a img{
     margin: 0 5px 0px 0;
     width: 80px;
@@ -3277,6 +3282,8 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 margin-top:20px;
 }
 
+/* invite new members */
+
 p#invitenonmembers {
 float:left;
 clear:left;
@@ -3284,53 +3291,123 @@ position:relative;
 left: -264px;
 }
 
-div#searchinvitemembersdescription {
-width:400px;
-font-size:10px;
-float:right;
-top:-25px;
-position:relative;
-}
+
 
 p#selectmemberslabel {
 margin-top:15px;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity {
-display:block;
-float:none;
-clear:none;
+	display:block;
+	float:left;
+	clear:none;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
-
-display:block;
-position:relative;
-text-align:left;
-padding-bottom:20px;
-top:0;
-width:245px;
-margin:6px 0 0 0;
-
-    
+	display:block;
+	text-align:left;
+	padding-bottom:20px;
+	width:200px;
+	margin:3px 0 0 0;
+	float: left;
+    clear:none;
+    position: static;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a {
-
-background: -moz-linear-gradient(center top , #E7E7E7, #DEDFDE) repeat scroll 0 0 transparent;
-    border: 1px solid #AAAAAA;
-    border-radius: 5px 5px 5px 5px;
-    color: #444444;
-    float: none;
-    font-family: Arial,Verdana,sans-serif;
-    font-size: 10px;
-    margin: 7px 0px 0 0;
-    padding: 2px 10px 0 10px;
-    text-align:left;
-    
-    
+	font-family: Arial, Verdana, sans-serif;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #AAA;
+	/*color: #444;*/
+	padding: 0px 10px;
+	float: left;
+	margin: 0;
+	background-color: gainsboro;
+	font-size: 10px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E7E7E7), to(#DEDFDE));  
 }
 
+#topgroupinvite {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+#topgroupinvite h3 {
+	width:100%;
+}
+
+#topgroupinvite h5 {
+	float:left;
+}
+
+.internal-page #content #invite-anyone-invite-list {
+	height: 360px;
+	width: 100%;
+	overflow: auto;
+	border: 1px solid #f0f0f0;
+}
+
+.internal-page #content #invite-anyone-invite-list li {
+	width: 90%;
+	margin: 3%;
+	padding:0;
+}
+
+.internal-page #content #invite-anyone-invite-list li h4 {
+	font-family: Arial,Helvetica,Tahoma, sans-serif;
+	float: left;
+	clear: none;
+}
+
+#invite-anyone-member-list {
+	background-color: #F0F0F0;
+	border: 1px solid #CCC;
+	height: 290px;
+	overflow: auto;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+#send-invite-form .send-to-input {
+	background-color: #F0F0F0;
+	border: 1px solid #CCC;
+	width: 100%
+}
+
+div#searchinvitemembersdescription {
+	width:320px;
+	font-size:10px;
+	float:right;
+	position: relative;
+	top: -15px;
+	
+}
+
+div#searchinvitemembersdescription p {
+
+	margin: 0px;
+}
+
+ul.invite-search {
+	float:left;
+	width: 320px;
+}
+
+.invite-anyone .left-menu {
+	float: left;
+	width: 320px;
+}
+
+.invite-anyone .main-column {
+	margin-left: 0px !important;
+	float: right;
+	width: 320px;
+}
 
 /*.read-more {
     color: #6D6D6D;
@@ -4111,6 +4188,10 @@ a.close-popup-login {
     clear: both;
 }
 
+.internal-page #item-body {
+	padding-left: 7px;
+}
+
 /* Register page styles to override Buddypress */
 
 #basic-details-section, #profile-details-section {
@@ -4148,6 +4229,7 @@ h1.mol-title,
     height: 17px;
     position: relative;
 }
+
 .submenu .submenu-text,
 .submenu ul li a,
 #subnav #group-settings-label,
@@ -4160,6 +4242,7 @@ h1.mol-title,
     line-height: 13px;
     color: #717171;
 }
+
 .submenu ul,
 .submenu-text,
 #group-settings-label,
@@ -4523,7 +4606,8 @@ padding-left: 7px;
 }
 #item-body h5.invite-title
 {
-	font-size: 12px;
+	font-size: 11px;
+	padding: 10px 0 5px 0;
 }
 
 /* Errors and Warnings */
