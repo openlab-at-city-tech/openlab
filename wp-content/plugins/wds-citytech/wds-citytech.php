@@ -1190,7 +1190,7 @@ function ra_copy_blog_page($group_id) {
 					  exec($cp_cmd);
 					  // update options
 					  $skip_options = array('admin_email','blogname','blogdescription','cron','db_version','doing_cron',
-						  'fileupload_url','home','nonce_salt','random_seed','rewrite_rules','secret','siteurl','upload_path',
+						  'fileupload_url','home','new_admin_email','nonce_salt','random_seed','rewrite_rules','secret','siteurl','upload_path',
 						  'upload_url_path', "{$wpdb->base_prefix}{$src_id}_user_roles");
 					  $options = $wpdb->get_results($option_query);
 					  //new blog stuff
