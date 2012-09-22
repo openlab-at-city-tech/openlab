@@ -361,7 +361,7 @@ function show_site_posts_and_comments() {
 						<?php if ( !empty( $comments ) ) : ?>
 							<?php foreach( $comments as $comment ) : ?>
 								<li>
-									<?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a>
+									<p><?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a></p>
 								</li>
 							<?php endforeach ?>
 						<?php else : ?>
