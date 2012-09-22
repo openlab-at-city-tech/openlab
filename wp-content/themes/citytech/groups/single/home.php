@@ -157,10 +157,10 @@ function cuny_group_single() { ?>
 			<?php
 		}
 	endwhile; endif; ?>
-<? }
+<?php }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions');
-function cuny_buddypress_group_actions() { 
+function cuny_buddypress_group_actions() {
 global $bp;
 
 ?>

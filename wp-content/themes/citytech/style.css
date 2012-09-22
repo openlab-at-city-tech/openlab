@@ -10,7 +10,7 @@
 
 /* Table of Contents
 
-* Defaults 
+* Defaults
 * Hyperlinks
 * Wrap
 * Header
@@ -1191,7 +1191,7 @@ a#pgw-prev, a#pgw-next {
 }
 
 #sidebar a:hover {
-    color: #0fceba !important; 
+    color: #0fceba !important;
     background: none !important;
     text-decoration: none;
 }
@@ -1233,7 +1233,7 @@ a#pgw-prev, a#pgw-next {
 
 .see-all a:hover
 {
-    color: #0fceba; 
+    color: #0fceba;
 }
 
 #home-group-list-wrapper
@@ -1521,7 +1521,7 @@ div#item-buttons ul li a span:after {
 #external-site-url {
 }
 
-a#find-feeds {
+a#find-feeds, a.refresh-feed {
 
     font-family: Arial, Verdana, sans-serif;
     -moz-border-radius: 5px;
