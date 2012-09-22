@@ -1414,7 +1414,7 @@ a#pgw-prev, a#pgw-next {
 /* Courses
 -------------*/
 
-#course-list.item-list li {
+#content #course-list.item-list li {
     width: 308px;
     float: left;
     list-style-type: none;
@@ -3434,7 +3434,7 @@ div#member-header div#profile-action-wrapper,
 div#group-action-wrapper{
     height:20px;
     padding:4px 0 2px 0;
-    margin-top:5px;
+    margin:5px 0 10px 0;
     background: #eee;
 
 }

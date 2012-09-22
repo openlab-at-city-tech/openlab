@@ -160,7 +160,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
                 	<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
                     	<li>
 						<h5><?php bp_the_topic_title() ?></h5>
-			<?php
+			<p><?php
 				$topic_id = bp_get_the_topic_id();
 				$last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
 								        WHERE topic_id='$topic_id'
@@ -168,7 +168,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 				echo $last_topic_content;
 			?>
-                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
+                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a></p>
                         </li>
                     <?php endwhile; ?>
                 </ul>
