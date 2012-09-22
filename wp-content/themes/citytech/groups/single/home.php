@@ -173,7 +173,7 @@ global $bp;
 			</ul>
 			<?php endif ?>
 
-			
+
 
 		</div><!-- #item-buttons -->
 <?php do_action( 'bp_group_options_nav' ) ?>
