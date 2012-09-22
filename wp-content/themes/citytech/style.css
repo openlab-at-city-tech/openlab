@@ -3550,22 +3550,24 @@ div#member-header div#profile-action-wrapper div.friendship-button a, .action .g
     width:70px;
     padding:0px 0px 4px 30px;
     margin:0;
-background-image:url('images/mol-sprites.png');
-
-    
+	background-image:url('images/mol-sprites.png');
     background-repeat:no-repeat;
     height:15px;
     font-family: 'Arvo',arial,serif; 
 }
 
+
 /* add buttons get plus sign*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add { 
-background-position: 0px -225px;
-   padding:0 20px 0 0;
-   margin:0;
-   width:50px;
+	background-position: 0px -225px;
+	padding:0 20px 0 0;
+	margin:0;
+	width:50px;
 }
+
+
+
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
 	background-position: -176px -225px;
@@ -3583,9 +3585,16 @@ background-position: 0px -251px;
 
 /* REQUEST MEMBERSHIP GETS PLUS */
 
-div#club-header div#group-action-wrapper a.request-membership:hover {
-	background-position: -100px -224px;
-   	padding:0 20px 0 0;
+#group-action-wrapper .group-button a.request-membership {
+	background-position: -5px -251px;
+	padding:0 20px 0 0;
+	width: 125px;
+	height: 16px;
+	line-height: 16px;
+}
+
+#group-action-wrapper .group-button a.request-membership:hover {
+	background-position: -104px -224px;
     color:#0fceb9;
     text-decoration: none;
 }
@@ -3613,17 +3622,16 @@ background-position: -176px -160px;
 
 /* pending membership gets checkmark */
 
-div#content.hfeed div#club-header div#group-action-wrapper a.pending {
-background-position: -30px -273px;
-   padding:0px 15px 0 5px;
-   margin:0;
-   width:120px;
+#group-action-wrapper .group-button a.pending {
+	background-position: -50px -273px;
+	padding:0px 15px 0 5px;
+	margin:0;
+	width:120px;
 }
 
-div#content.hfeed div#club-header div#group-action-wrapper a.pending:hover {
-background-position: -130px -160px;
+#group-action-wrapper .group-button a.pending:hover {
+	background-position: -149px -160px;
     color:#0fceb9;
-
 }
 
 
