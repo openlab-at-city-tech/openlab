@@ -1423,17 +1423,17 @@ a#pgw-prev, a#pgw-next {
     border-right: 1px solid #EAEAEA;
 }
 
-#course-list.item-list li p {
+#content #course-list.item-list li p {
     font-size: 11px;
     line-height: 17px;
     margin-right: 10px;
 }
 
-#course-list.item-list li.even {
+#content #course-list.item-list li.even {
     border: 0 none;
 }
-#course-list.item-list li h2.item-title,
-#course-list.item-list li h2.item-title a {
+#content #course-list.item-list li h2.item-title,
+#content #course-list.item-list li h2.item-title a {
     color: #6d6d6d;
     font-size: 12px;
     font-weight: bold;
@@ -1441,13 +1441,13 @@ a#pgw-prev, a#pgw-next {
     text-decoration: none;
 }
 
-#course-list.item-list li .info-line {
+#content #course-list.item-list li .info-line {
     color: #aaa;
     font-size: 11px;
     padding: 0 0 10px;
 }
 
-#course-list.item-list li .item {
+#content #course-list.item-list li .item {
     float: left;
     width: 195px;
 }
