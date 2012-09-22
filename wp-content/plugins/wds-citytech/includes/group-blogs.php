@@ -346,6 +346,9 @@ function show_site_posts_and_comments() {
 					<?php endforeach ?>
 					</ul>
 
+					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
+						<p class="description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'posts', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-posts-feed' ) ?>">Refresh now</a></p>
+					<?php endif ?>
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-course -->
 		</div><!-- .one-half -->
@@ -354,9 +357,6 @@ function show_site_posts_and_comments() {
 			<div id="recent-site-comments">
 				<div class="recent-posts">
 					<h4 class="group-activity-title">Recent Site Comments</h4>
-
-
-
 						<ul>
 						<?php if ( !empty( $comments ) ) : ?>
 							<?php foreach( $comments as $comment ) : ?>
@@ -369,6 +369,10 @@ function show_site_posts_and_comments() {
 						<?php endif ?>
 
 						</ul>
+
+					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
+						<p class="refresh-message description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'comments', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-comments-feed' ) ?>">Refresh now</a></p>
+					<?php endif ?>
 
 				</div><!-- .recent-posts -->
 			</div><!-- #recent-site-comments -->
@@ -1221,4 +1225,28 @@ function openlab_detect_feeds_handler() {
 	die( json_encode( $feeds ) );
 }
 add_action( 'wp_ajax_openlab_detect_feeds', 'openlab_detect_feeds_handler' );
-?>
+
+/**
+ * Catch feed refresh requests and processem
+ */
+function openlab_catch_refresh_feed_requests() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	if ( ! isset( $_GET['refresh_feed'] ) || ! in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
+		return;
+	}
+
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	$feed_type = $_GET['refresh_feed'];
+
+	check_admin_referer( 'refresh-' . $feed_type . '-feed' );
+
+	delete_transient( 'openlab_external_' . $feed_type . '_' . bp_get_current_group_id() );
+	call_user_func( 'openlab_get_external_' . $feed_type . '_by_group_id' );
+}
+add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );

@@ -10,7 +10,7 @@
 
 /* Table of Contents
 
-* Defaults 
+* Defaults
 * Hyperlinks
 * Wrap
 * Header
@@ -1191,7 +1191,7 @@ a#pgw-prev, a#pgw-next {
 }
 
 #sidebar a:hover {
-    color: #0fceba !important; 
+    color: #0fceba !important;
     background: none !important;
     text-decoration: none;
 }
@@ -1233,7 +1233,7 @@ a#pgw-prev, a#pgw-next {
 
 .see-all a:hover
 {
-    color: #0fceba; 
+    color: #0fceba;
 }
 
 #home-group-list-wrapper
@@ -1521,7 +1521,7 @@ div#item-buttons ul li a span:after {
 #external-site-url {
 }
 
-a#find-feeds {
+a#find-feeds, a.refresh-feed {
 
     font-family: Arial, Verdana, sans-serif;
     -moz-border-radius: 5px;
@@ -1533,9 +1533,9 @@ a#find-feeds {
     font-size:8px;
     text-transform: uppercase;
 
-    /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
+    /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde));
     /* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
-    /* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
+    /* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde);
     /* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
     /* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
 
@@ -1764,7 +1764,7 @@ blockquote {
 
 #content > h2{
     float: left;
-    margin-top: -25px;   
+    margin-top: -25px;
     padding-top: 5px;
     font-weight: normal;
     font-size: 15px;
@@ -1773,7 +1773,7 @@ blockquote {
 }
 
 .help-tags a {
-    text-decoration: underline;    
+    text-decoration: underline;
 }
 .entry-content a {
     text-decoration:underline;
@@ -1881,7 +1881,7 @@ h4.watermelon-ribbon {
     top: 22px;
     font-size: 11px;
     padding: 1px 0;
-    z-index: 9;        
+    z-index: 9;
 }
 
 div#item-buttons ul li a span::before{
@@ -1907,8 +1907,8 @@ h4.yellow-canary-ribbon {
 
 }
 
-#member-item-body h4.yellow-canary-ribbon{    
-    border-bottom: 1px solid #666; 
+#member-item-body h4.yellow-canary-ribbon{
+    border-bottom: 1px solid #666;
     color: #888;
     text-align: left;
     left: -20px;
@@ -2127,7 +2127,7 @@ h1.entry-title
 
 h3.entry-title{
     font-size: 13px;
-    margin-bottom: 1px;    
+    margin-bottom: 1px;
 }
 
 #sidebar h2 {
@@ -2142,7 +2142,7 @@ h3.entry-title{
 
 #help-tags-copy p {
     font-family: sans-serif;
-    font-size: 12px; 
+    font-size: 12px;
     padding-bottom: 10px;
 }
 
@@ -2177,7 +2177,7 @@ div #help-tags a:nth-child(2n){
 #sidebar h2.help-tags-title {
     border-bottom: 0px;
     border-top: 1px solid #f0f0f0;
-    color: #717171;   
+    color: #717171;
     padding: 15px 0 0 7px;
 }
 
@@ -2415,7 +2415,7 @@ p.wp-caption-text {
 
 div#sidebar.sidebar div#portfolio-sidebar-widget {
 	border-bottom: 1px solid #F0F0F0;
-	margin-bottom:15px; 
+	margin-bottom:15px;
 
 }
 
@@ -3053,7 +3053,7 @@ div.gform_wrapper .gform_footer {
         text-align:right;
 } */
 
-/* Portfolio Profile 
+/* Portfolio Profile
 ------------------------------------------------------------ */
 
 #portfolio-header {
@@ -3155,7 +3155,7 @@ h2.member-name-title {
 }
 
 #member-item-body .submenu{
-    font-size: 12px; 
+    font-size: 12px;
 }
 
 #member-item-body .activity-list {
@@ -3193,11 +3193,11 @@ h2.member-name-title {
 }
 
 #member-item-body .activity-list .activity-content .activity-header {
-    line-height: 13px;      
-    font-weight: bold;        
+    line-height: 13px;
+    font-weight: bold;
 }
 
-#member-item-body .activity-list .activity-content .activity-header a{	
+#member-item-body .activity-list .activity-content .activity-header a{
     color: #8f8f8f;
 }
 
@@ -3222,7 +3222,7 @@ h2.member-name-title {
 }
 
 #member-item-body .activity-list .activity-content .activity-inner p{
-    line-height: 13px; 
+    line-height: 13px;
     margin-bottom: 0px;
     color: #676767;
 }
@@ -3332,7 +3332,7 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a 
 	margin: 0;
 	background-color: gainsboro;
 	font-size: 10px;
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E7E7E7), to(#DEDFDE));  
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E7E7E7), to(#DEDFDE));
 }
 
 #topgroupinvite {
@@ -3392,7 +3392,7 @@ div#searchinvitemembersdescription {
 	float:right;
 	position: relative;
 	top: -15px;
-	
+
 }
 
 div#searchinvitemembersdescription p {
@@ -3441,7 +3441,7 @@ div#group-action-wrapper{
 
 /* all left side buttons */
 
-div#member-header div#profile-action-wrapper div#action-edit-profile, 
+div#member-header div#profile-action-wrapper div#action-edit-profile,
 div#member-header div#profile-action-wrapper div.friendship-button,
 div#group-action-wrapper div#action-edit-group{
     width:100px;
@@ -3470,7 +3470,7 @@ div#group-action-wrapper div#action-edit-avatar {
 
 /* send private messages gets envelope */
 
-div#member-header div#profile-action-wrapper div#send-private-message a { 
+div#member-header div#profile-action-wrapper div#send-private-message a {
     display:block;
     width:80px;
     padding:0px 0px 4px 30px;
@@ -3479,7 +3479,7 @@ div#member-header div#profile-action-wrapper div#send-private-message a {
    background-image:url('images/mol-sprites.png');
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 
 div#member-header div#profile-action-wrapper div#send-private-message a:hover {
@@ -3492,7 +3492,7 @@ div#member-header div#profile-action-wrapper div#send-private-message a:hover {
 
 div#member-header div#profile-action-wrapper div#action-edit-profile a,
 #group-action-wrapper #action-edit-group a
-{ 
+{
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
@@ -3501,7 +3501,7 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a,
     background-position: 5px 0px;
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
     background-position:5px -105px;
@@ -3512,7 +3512,7 @@ div#member-header div#profile-action-wrapper div#action-edit-profile a:hover {
 
 div#member-header div#profile-action-wrapper div#action-edit-avatar a,
 #group-action-wrapper #action-edit-avatar a
-{ 
+{
     display:block;
     width:80px;
     padding:0px 0px 4px 30px;
@@ -3521,10 +3521,10 @@ div#member-header div#profile-action-wrapper div#action-edit-avatar a,
     background-position: 5px -30px;
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 
-div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover, 
+div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover,
 #group-action-wrapper #action-edit-avatar a:hover {
     background-position: 5px -135px;
     text-decoration: none;
@@ -3533,7 +3533,7 @@ div#member-header div#profile-action-wrapper div#action-edit-avatar a:hover,
 /* friendship button anchor */
 
 div#member-header div#profile-action-wrapper div.friendship-button,
-#group-action-wrapper .group-button { 
+#group-action-wrapper .group-button {
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
@@ -3542,10 +3542,10 @@ div#member-header div#profile-action-wrapper div.friendship-button,
     background-position: -115px 0px;
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 
-div#member-header div#profile-action-wrapper div.friendship-button a, .action .generic-button.friendship-button a { 
+div#member-header div#profile-action-wrapper div.friendship-button a, .action .generic-button.friendship-button a {
     display:block;
     width:70px;
     padding:0px 0px 4px 30px;
@@ -3553,13 +3553,13 @@ div#member-header div#profile-action-wrapper div.friendship-button a, .action .g
 	background-image:url('images/mol-sprites.png');
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 
 
 /* add buttons get plus sign*/
 
-div#member-header div#profile-action-wrapper div.friendship-button a.add { 
+div#member-header div#profile-action-wrapper div.friendship-button a.add {
 	background-position: 0px -225px;
 	padding:0 20px 0 0;
 	margin:0;
@@ -3569,7 +3569,7 @@ div#member-header div#profile-action-wrapper div.friendship-button a.add {
 
 
 
-div#member-header div#profile-action-wrapper div.friendship-button a.add:hover { 
+div#member-header div#profile-action-wrapper div.friendship-button a.add:hover {
 	background-position: -176px -225px;
 	padding:0 20px 0 0;
 	color:#0fceb9;
@@ -3601,7 +3601,7 @@ background-position: 0px -251px;
 
 /* pending friend buttons get checkmark*/
 
-div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{ 
+div#member-header div#profile-action-wrapper div.friendship-button a.pending, div#member-header div#profile-action-wrapper div.friendship-button a.requested{
 	background-position: 0px -160px;
 	padding:0px 15px 0 5px;
 	margin:0;
@@ -3615,9 +3615,9 @@ div#member-header div#profile-action-wrapper div.friendship-button a:hover {
 }
 
 
-div#member-header div#profile-action-wrapper div.friendship-button a.pending:hover, div#member-header div#profile-action-wrapper div.friendship-button a.requested:hover { 
+div#member-header div#profile-action-wrapper div.friendship-button a.pending:hover, div#member-header div#profile-action-wrapper div.friendship-button a.requested:hover {
 background-position: -176px -160px;
-   
+
 }
 
 /* pending membership gets checkmark */
@@ -3638,15 +3638,15 @@ background-position: -176px -160px;
 
 /* cancel friend buttons */
 
-div#member-header div#profile-action-wrapper div.friendship-button a.remove,  { 
+div#member-header div#profile-action-wrapper div.friendship-button a.remove,  {
 background-position: 0px -192px;
    padding:0px 15px 0 5px;
    margin:0;
    width:50px;
 }
 
-div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover { 
-	background-position: -176px -192px; 
+div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover {
+	background-position: -176px -192px;
 }
 
 .action .generic-button.friendship-button.is_friend a {
@@ -3664,7 +3664,7 @@ div#member-header div#profile-action-wrapper div.friendship-button a.remove:hove
 
 /* group buttons */
 
-#group-action-wrapper .group-button a{ 
+#group-action-wrapper .group-button a{
     display:block;
     width:90px;
     padding:0px 0px 4px 30px;
@@ -3672,33 +3672,33 @@ div#member-header div#profile-action-wrapper div.friendship-button a.remove:hove
     background-image:url('images/mol-sprites.png');
     background-repeat:no-repeat;
     height:15px;
-    font-family: 'Arvo',arial,serif; 
+    font-family: 'Arvo',arial,serif;
 }
 
 
 /* join group */
-#group-action-wrapper .group-button a.join-group{ 
+#group-action-wrapper .group-button a.join-group{
    background-position:  10px -225px;
    padding-left:0px;
    padding-right:20px;
-   
+
 }
 
-#group-action-wrapper .group-button a.join-group:hover { 
+#group-action-wrapper .group-button a.join-group:hover {
    background-position: -166px -225px;
    color:#0fceba;
 
 }
 
 /* leave group */
-#group-action-wrapper .group-button a.leave-group{ 
-   background-position:  25px -192px; 
+#group-action-wrapper .group-button a.leave-group{
+   background-position:  25px -192px;
    padding-left:0px;
    padding-right:20px;
-   
+
 }
 
-#group-action-wrapper .group-button a.leave-group:hover { 
+#group-action-wrapper .group-button a.leave-group:hover {
    background-position: -151px -192px;
    color:#0fceba;
 
@@ -3857,7 +3857,7 @@ padding: 0 0 10px 5px; }
 .recent-discussions a.read-more:hover, .recent-discussions .view-more a:hover { color: #63DFD2; text-decoration:underline; } */
 #club-item-body .view-more,
 #single-course-body .view-more
-{	
+{
    float:right;
 }
 /* Recent Docs */
@@ -4370,7 +4370,7 @@ li .count-0, li.submenu-item .count-0 {
 }
 
 .activity-list .group-see-all:last-child{
-    visibility: visible;    
+    visibility: visible;
     float: right;
     text-decoration: underline;
 }
@@ -4615,7 +4615,7 @@ padding-left: 7px;
 	bottom: -45px;
 	left: 0;
 	width: 477px;
-	padding-left: 15px; 
+	padding-left: 15px;
 	display: block;
 	white-space: normal;
 }

@@ -142,7 +142,7 @@ class OpenLab_Admin_Bar {
 			'parent' => 'openlab',
 			'id'     => 'help',
 			'title'  => 'Help',
-			'href'   => trailingslashit( bp_get_root_domain() . '/help' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' )
  		) );
  	}
 
