@@ -3443,7 +3443,7 @@ div#group-action-wrapper{
 
 div#member-header div#profile-action-wrapper div#action-edit-profile,
 div#member-header div#profile-action-wrapper div.friendship-button,
-div#group-action-wrapper div#action-edit-group{
+div#group-action-wrapper div#action-edit-group {
     width:100px;
     float:left;
     border-right:1px solid #666666;
@@ -3638,15 +3638,16 @@ background-position: -176px -160px;
 
 /* cancel friend buttons */
 
-div#member-header div#profile-action-wrapper div.friendship-button a.remove,  {
-background-position: 0px -192px;
-   padding:0px 15px 0 5px;
-   margin:0;
-   width:50px;
+div#member-header div#profile-action-wrapper div.friendship-button a.remove  {
+	background-position: 0px -192px;
+	padding:0px 15px 0 5px;
+	margin:0;
+	width:50px;
 }
 
 div#member-header div#profile-action-wrapper div.friendship-button a.remove:hover {
 	background-position: -176px -192px;
+	text-decoration: none;
 }
 
 .action .generic-button.friendship-button.is_friend a {
