@@ -1,5 +1,5 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-
+     <div id="single-course-header">
 <?php
 /* Populate Fields */
 global $bp;
@@ -35,9 +35,8 @@ endif;
 $section = groups_get_groupmeta($group_id, 'wds_section_code');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
+<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
      <?php if ($bp->current_action == "home"): ?>
-     <div id="single-course-header">
      <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
@@ -85,7 +84,6 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 	<?php do_action( 'bp_after_group_header' ) ?>
 	
 	<?php do_action( 'template_notices' ) ?>
-    
+
     <?php endif; ?>
-	
-</div><!-- #single-course-header -->
+    </div><!-- #single-course-header -->	
