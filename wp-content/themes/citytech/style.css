@@ -4258,6 +4258,11 @@ h1.mol-title,
     font-size: 12px;
     line-height: 13px;
     color: #717171;
+    
+}
+
+#subnav ul li a {
+	padding: 2px 13px;
 }
 
 .submenu ul,
@@ -4274,6 +4279,7 @@ h1.mol-title,
 {
     margin: 1px 6px 0;
 }
+
 .submenu ul li,
 #subnav ul li
 {
@@ -4281,6 +4287,7 @@ h1.mol-title,
     border-right: 1px solid #717171;
     margin: 0;
 }
+
 #bpsubnav ul li
 {
     display: inline-block;
