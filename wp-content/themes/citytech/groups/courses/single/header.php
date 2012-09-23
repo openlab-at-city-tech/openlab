@@ -1,5 +1,5 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<div id="single-course-header">
+     <div id="single-course-header">
 <?php
 /* Populate Fields */
 global $bp;
@@ -35,7 +35,7 @@ endif;
 $section = groups_get_groupmeta($group_id, 'wds_section_code');
 $html = groups_get_groupmeta($group_id, 'wds_course_html');
 ?>
-	<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
+<h1 class="entry-title"><?php echo $group_name; ?> Profile</h1>
      <?php if ($bp->current_action == "home"): ?>
      <div id="course-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
@@ -53,7 +53,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 	 	<?php endif; ?>
 	</div><!-- #course-header-avatar -->	
 	<div id="course-header-content" class="alignleft">
-		<h2 class="course-title"><?php echo $group_name; ?><a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>
+		<h2 class="course-title"><?php echo $group_name; ?> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>
 		<div class="info-line"><span class="highlight"><?php if ($section != "") {echo "Section Code: $section";} ?></span></div>
 		<div class="info-line"><span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span></div>
 		<div class="course-byline">
@@ -84,7 +84,6 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 	<?php do_action( 'bp_after_group_header' ) ?>
 	
 	<?php do_action( 'template_notices' ) ?>
-    
+
     <?php endif; ?>
-	
-</div><!-- #single-course-header -->
+    </div><!-- #single-course-header -->	

@@ -157,10 +157,10 @@ function cuny_group_single() { ?>
 			<?php
 		}
 	endwhile; endif; ?>
-<? }
+<?php }
 
 add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions');
-function cuny_buddypress_group_actions() { 
+function cuny_buddypress_group_actions() {
 global $bp;
 
 ?>
@@ -173,7 +173,7 @@ global $bp;
 			</ul>
 			<?php endif ?>
 
-			
+
 
 		</div><!-- #item-buttons -->
 <?php do_action( 'bp_group_options_nav' ) ?>
