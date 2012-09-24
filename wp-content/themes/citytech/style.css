@@ -1317,6 +1317,11 @@ a#pgw-prev, a#pgw-next {
 	border-right: 1px solid #EAEAEA;
 }
 
+div.bp-widget {
+	padding: 0 7px;
+	
+}
+
 /* Clubs
 -------------*/
 
@@ -1727,7 +1732,7 @@ blockquote {
     width: 100%;
 }
 #help-title {
-    margin-top: -10px;
+    /*margin-top: -10px;*/
 }
 
 #help-identity {
@@ -2124,6 +2129,11 @@ h4 span.small {
 h1.entry-title
 {
     padding-left: 7px;
+    margin: 0 0 5px;
+}
+
+.page-template-default h1.entry-title
+{
     margin: 0 0 20px;
 }
 
@@ -3156,7 +3166,7 @@ h2.member-name-title {
     color: #666;
 }
 
-#member-item-body{
+#member-item-body {
     margin-left: 0px;
 }
 
@@ -3781,7 +3791,7 @@ div#member-header div#profile-action-wrapper div.friendship-button a.remove:hove
 }
 
 /* Single Course */
-#single-course-header { margin: 23px 0 15px; }
+.group-home #single-course-header { margin: 23px 0 15px; }*/
 #single-course-header h1.title { font-size: 14px; line-height: 14px; padding: 0 0 10px; margin: 0 0 10px 0; border-bottom: 1px solid #242424; font-weight: normal; color: #666 }
 #single-course-header .header-image { margin: 0 0 10px; }
 #single-course-header h2.course-title { font-size:  24px; font-family: Arial; font-weight: bold; line-height: 24px; font-weight: bold; letter-spacing: 1px; margin: 0; padding: 0; }
@@ -4301,8 +4311,16 @@ h1.mol-title,
     
 }
 
+#subnav ul {
+	padding-left: 7px;
+}
+
 #subnav ul li a {
-	padding: 2px 13px;
+	padding: 2px 12px;
+}
+
+#subnav ul li:first-child a {
+	padding-left: 0;
 }
 
 .submenu ul,
@@ -4346,6 +4364,7 @@ h1.mol-title,
 {
     padding-left: 7px;
 }
+
 .submenu ul li.delete-button a,
 #subnav li.delete-button a
 {
@@ -4374,7 +4393,9 @@ h1.mol-title,
     position: absolute;
     top: 0;
     right: 0;
+    border-right: none;
 }
+
 .submenu .selected-page a,
 #subnav ul .current,
 #subnav .current a,
@@ -4607,19 +4628,20 @@ padding-left: 7px;
     font-size: 11px;
 }
 
-#create-group-form h4,h5,
-#group-settings-form h4,h5{
+#create-group-form h4, #create-group-form h5,
+#group-settings-form h4, #group-settings-form h5 {
     font-family: arial,sans-serif;
     font-weight: bold;
     font-size: 13px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin: 5px 0px;
 }
 
-#create-group-form h5,
-#group-settings-form h5{
-    margin-bottom: 20px;
+#group-settings-form .bp-widget h5 {
+    clear:none;
+}
 
+#group-settings-form .bp-widget li {
+    list-style-type:none;
 }
 
 #create-group-form p,
