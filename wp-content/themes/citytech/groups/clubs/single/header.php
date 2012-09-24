@@ -27,7 +27,7 @@
 	</div><!-- #club-header-avatar -->
 
 	<div id="club-header-content" class="alignleft">
-		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>
 		<div class="info-line"><span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span></div>
 	
 		<?php do_action( 'bp_before_group_header_meta' ) ?>
