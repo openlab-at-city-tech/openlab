@@ -3561,8 +3561,43 @@ div#member-header div#profile-action-wrapper div.friendship-button a, .action .g
     height:15px;
     font-family: 'Arvo',arial,serif;
 }
-
-
+/*friendship buttons friend profile pages*/
+#members-list .friendship-button.not_friends a
+{
+	background-position: 0 0;
+	width: 40px;
+	height: 13px;
+	padding: 1px 0 3px 30px;
+}
+#members-list .friendship-button.not_friends a:hover
+{
+	background-position: 0 -104px;
+	color: #0FCEB9;
+}
+#members-list .friendship-button.pending a
+{
+	background-position: -47px -191px;
+	width: 40px;
+	height: 13px;
+	padding: 1px 0 3px 30px;
+}
+#members-list .friendship-button.pending a:hover
+{
+	background-position: -222px -191px;
+	color: #0FCEB9;
+}
+#members-list .friendship-button.is_friend a
+{
+	background-position: -47px -159px;
+	width: 40px;
+	height: 13px;
+	padding: 1px 0 3px 30px;
+}
+#members-list .friendship-button.is_friend a:hover
+{
+	background-position: -223px -159px;
+	color: #0FCEB9;
+}
 /* add buttons get plus sign*/
 
 div#member-header div#profile-action-wrapper div.friendship-button a.add {
