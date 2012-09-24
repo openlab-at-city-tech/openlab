@@ -2165,6 +2165,7 @@ div #help-tags a {
     padding: 3px 6px;
     border-radius: 2px;
     margin-right: 4px;
+	margin-bottom: 4px;
 	background-color: #aaaaaa;
     background-color: rgba(113,113,113,0.6);
     color: #FFF;
