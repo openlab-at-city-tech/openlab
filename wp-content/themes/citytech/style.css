@@ -3059,8 +3059,9 @@ div.gform_wrapper .gform_footer {
 ------------------------------------------------------------ */
 
 #portfolio-header {
-margin: 0 0 10px 0;
+    margin: 23px 0 15px;
 }
+
 
 /* Member Profile
 ------------------------------------------------------------ */
@@ -3742,7 +3743,7 @@ div#member-header div#profile-action-wrapper div.friendship-button a.remove:hove
 }
 
 /* Single Course */
-#single-course-header { margin: 0 0 10px 0 }
+#single-course-header { margin: 23px 0 15px; }
 #single-course-header h1.title { font-size: 14px; line-height: 14px; padding: 0 0 10px; margin: 0 0 10px 0; border-bottom: 1px solid #242424; font-weight: normal; color: #666 }
 #single-course-header .header-image { margin: 0 0 10px; }
 #single-course-header h2.course-title { font-size:  24px; font-family: Arial; font-weight: bold; line-height: 24px; font-weight: bold; letter-spacing: 1px; margin: 0; padding: 0; }
@@ -4259,6 +4260,11 @@ h1.mol-title,
     font-size: 12px;
     line-height: 13px;
     color: #717171;
+    
+}
+
+#subnav ul li a {
+	padding: 2px 13px;
 }
 
 .submenu ul,
@@ -4275,6 +4281,7 @@ h1.mol-title,
 {
     margin: 1px 6px 0;
 }
+
 .submenu ul li,
 #subnav ul li
 {
@@ -4282,6 +4289,7 @@ h1.mol-title,
     border-right: 1px solid #717171;
     margin: 0;
 }
+
 #bpsubnav ul li
 {
     display: inline-block;
@@ -4578,7 +4586,7 @@ padding-left: 7px;
 
 #create-group-form p,
 #group-settings-form p{
-    margin-top: -5px;
+    /*margin-top: -5px;*/
 }
 
 #create-group-form .radio,

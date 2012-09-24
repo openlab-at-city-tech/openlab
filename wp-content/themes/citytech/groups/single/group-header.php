@@ -1,5 +1,5 @@
 <?php
-$wds_group_meta = groups_get_groupmeta( $bp->groups->current_group->id, 'wds_group_type' );
+$wds_group_meta = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_type' );
 
 switch ( $wds_group_meta ) {
 	case 'course' :

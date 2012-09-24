@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
 <?php $group_slug = bp_get_group_slug(); ?>
 
-<h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
+<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 <?php if ( bp_is_group_home() ): ?>
 <?php $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <div id="portfolio-header">
