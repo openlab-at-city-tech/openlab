@@ -14,8 +14,8 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <?php if ( bp_is_group_home() ): ?>
 <?php global $bp;
 	  $group_id = $bp->groups->current_group->id; ?>
-      <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 <div id="club-header">
+	<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
