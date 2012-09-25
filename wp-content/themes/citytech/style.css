@@ -4712,3 +4712,9 @@ padding-left: 7px;
 ul#topic-post-list li div.post-content {
 	margin-left:0;
 }
+/**friendship extra styles**/
+ul#friend-list li
+{
+	clear: both;
+	padding: 10px 0 35px;
+}
