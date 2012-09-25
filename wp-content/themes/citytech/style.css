@@ -4712,9 +4712,22 @@ padding-left: 7px;
 ul#topic-post-list li div.post-content {
 	margin-left:0;
 }
-/**friendship extra styles**/
+/**extra styles**/
 ul#friend-list li
 {
 	clear: both;
 	padding: 10px 0 35px;
+}
+ul#topic-post-list li
+{
+	padding: 15px 5px;
+}
+.forum #content ul li .poster-meta a
+{
+	border: none;
+}
+.forum #content ul li .poster-meta a img
+{
+	border: 1px solid #E6E6E6;
+	padding: 5px;
 }
