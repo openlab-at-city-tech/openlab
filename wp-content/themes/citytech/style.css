@@ -1501,7 +1501,6 @@ ul.ol-tooltip li:before {
     float: left;
     width: 250px;
 }
-
 .group-admin .main-column {
     padding-left: 250px;
 }
@@ -3418,17 +3417,31 @@ ul.invite-search {
 	width: 320px;
 }
 
-.invite-anyone .left-menu {
+.invite-anyone .left-menu,
+#group-settings-form .access-menu-left
+{
 	float: left;
 	width: 320px;
 }
-
-.invite-anyone .main-column {
+#group-settings-form .access-menu-left #invite-anyone-member-list
+{
+	height: 305px;
+}
+.invite-anyone .main-column,
+#group-settings-form .access-menu-main
+{
 	margin-left: 0px !important;
 	float: right;
 	width: 320px;
 }
-
+#group-settings-form .access-menu-main
+{
+	padding: 0;
+}
+.group-admin #group-settings-form .access-menu ul.first
+{
+	margin-bottom: 10px;
+}
 /*.read-more {
     color: #6D6D6D;
     font-size: 11px;
