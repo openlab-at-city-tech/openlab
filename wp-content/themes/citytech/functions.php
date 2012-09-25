@@ -24,7 +24,7 @@ require_once(STYLESHEETPATH.'/lib/content-processing.php');
  */
 remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
 function openlab_load_stylesheet() {
-	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="screen" />';
+	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="all" />';
 }
 add_action( 'wp_head', 'openlab_load_stylesheet', 999999 );
 
