@@ -38,6 +38,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
 	<?php if ($bp->current_action == "home"): ?>
 	<div id="single-course-header">
+    <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 		<div id="course-header-avatar" class="alignleft">
 			<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
