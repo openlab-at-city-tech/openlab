@@ -886,14 +886,6 @@ a#pgw-prev, a#pgw-next {
     color: #FFF !important;
     text-decoration: underline;
 }
-#pgw-next {
-    background: url("images/next.png") no-repeat scroll 50% 50% #000000;
-    opacity: 0.4;
-}
-#pgw-prev {
-    background: url("images/prev.png") no-repeat scroll 50% 50% #000000;
-    opacity: 0.4;
-}
 /*home login styles*/
 
 .home a {
