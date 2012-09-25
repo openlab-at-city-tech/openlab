@@ -1311,6 +1311,8 @@ a#pgw-prev, a#pgw-next {
 
 .internal-page #content .item-list li {
 	width: 100%;
+	display: block;
+	clear: left;
 }
 
 .internal-page #content .item-list li.odd {
