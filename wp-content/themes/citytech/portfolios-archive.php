@@ -180,9 +180,9 @@ switch ($_GET['school']) {
     //departments
       if ( empty( $_GET['department'] ) ) {
 	$_GET['department'] = "";
-}else {
-  $dept_color = "red";
-}
+	  }else {
+  	$dept_color = "red";
+	}
 switch ($_GET['department']) {
     //School of Technology and Design
 	case "advertising-design-and-graphic-arts":
@@ -381,7 +381,7 @@ switch ($_GET['group_sequence']) {
 		<option value='arts'>Arts &amp; Sciences</option>
 	</select>
 	<div class="<?php echo $dept_color; ?>-square"></div>
-	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select ">
+	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
         <?php $file_loc = dirname(__FILE__); ?>
 		<?php include $file_loc.'/includes/department_processing.php'; ?>

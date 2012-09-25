@@ -73,9 +73,9 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 			<?php bp_groups_pagination_links() ?>
 		</div>
 <?php else: ?>
-
+	<?php $group_type = $filters['wds_group_type'].'s'; ?>
 	<div class="widget-error">
-		There are no portfolios to display.
+		<?php _e('There are no '.$group_type.' to display.', 'buddypress') ?>
 	</div>
 
 <?php endif; ?>

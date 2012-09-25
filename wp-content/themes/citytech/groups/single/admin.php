@@ -67,7 +67,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 <?php if ( bp_is_group_admin_screen( 'access-list' ) ) : ?>
 	<p><?php printf( 'Want to grant access to your %s to someone who is not yet a member of the site?', openlab_get_portfolio_label() ) ?> <a href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Send invitations by email.', 'bp-invite-anyone' ) ?></a></p>
 
-	<div class="left-menu">
+	<div class="left-menu access-menu-left">
 		<p>Search for members to grant access to:</p>
 
 		<ul class="first acfb-holder">
@@ -87,7 +87,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 		</div>
 	</div>
 
-	<div class="main-column">
+	<div class="main-column access-menu-main">
 
 		<p>Members who have access to your <?php openlab_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ?></p>
 
