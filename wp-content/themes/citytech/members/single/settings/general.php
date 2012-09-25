@@ -34,7 +34,7 @@ do_action( 'bp_before_member_settings_template' );
 			<div class="settings-section current-pw-section">
 				<label for="pwd">Current Password</label>
 				<input type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
-				<p class="description">Required to change current password, first name, or last name. <a href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a></p>
+				<p class="description">Required to change current password, first name, or last name. <a class="underline" href="<?php echo site_url( add_query_arg( array( 'action' => 'lostpassword' ), 'wp-login.php' ), 'login' ); ?>" title="<?php _e( 'Password Lost and Found', 'buddypress' ); ?>"><?php _e( 'Lost your password?', 'buddypress' ); ?></a></p>
 			</div>
 
 			<div class="settings-section change-pw-section">
