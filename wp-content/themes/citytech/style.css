@@ -3571,9 +3571,10 @@ div#group-action-wrapper div#action-edit-avatar {
     background-repeat:no-repeat;
     height:15px;
     font-family: 'Arvo',arial,serif;
+    text-align:left;
 }
 /*friendship buttons friend profile pages*/
-#members-list .friendship-button.not_friends a
+/*#members-list .friendship-button.not_friends a
 {
 	background-position: 0 0;
 	width: 40px;
@@ -3596,7 +3597,7 @@ div#group-action-wrapper div#action-edit-avatar {
 {
 	background-position: -222px -256px;
 	color: #0FCEB9;
-}
+}*/
 /* #members-list .friendship-button.is_friend a
 {
 	background-position: -47px -191px;
