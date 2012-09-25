@@ -1426,6 +1426,7 @@ div.bp-widget {
     margin: 15px 15px 15px 0;
     border-bottom: 0;
     border-right: 1px solid #EAEAEA;
+	padding : 0; 
 }
 
 #content #course-list.item-list li p {
