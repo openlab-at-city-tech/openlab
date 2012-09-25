@@ -4585,11 +4585,18 @@ h1.parent-cat {
 	font-size:13px;
 }
 
-.tax-help_category #content > a {
+.tax-help_category #content > a
+{
 	font-size:12px;
 	border-top: 1px solid #f0f0f0;
 }
-
+.help-cat-seperator
+{
+	border-top: 1px solid #f0f0f0;
+    padding-top: 35px;
+    text-align: right;
+    width: 100%;
+}
 .tax-help_category #content > a[href="#help-top"]:after {
 	content:" \2191";
 }

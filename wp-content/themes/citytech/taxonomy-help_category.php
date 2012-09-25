@@ -48,7 +48,7 @@ function openlab_help_cats_loop() { ?>
     <?php endwhile; // end of the loop. 
 		  wp_reset_query(); ?>
 		  
-          <a href="#help-top">Go To Top</a>
+          <div class="help-cat-seperator"></div>
           
 		  <?php 
 		  //now iterate through each child category
@@ -84,10 +84,10 @@ function openlab_help_cats_loop() { ?>
 		<?php endwhile; // end of the loop. 
 			  wp_reset_query(); ?>
 			  
-              <a href="#help-top">Go To Top</a>
-			  
 		  <?php
 		  }//ecnd child_cats for each ?>
+          
+          <a href="#help-top">Go To Top</a>
 
 <?php }//end openlab_help_loop() ?>
 
