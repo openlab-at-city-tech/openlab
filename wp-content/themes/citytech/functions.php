@@ -8,6 +8,7 @@ a plugin, to make git tracking easier**/
 require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
 require_once(STYLESHEETPATH.'/lib/content-processing.php');
+require_once(STYLESHEETPATH.'/lib/nav.php');
 
 /**
  * Don't use the Genesis genesis_meta action to load the stylesheet
