@@ -3337,7 +3337,8 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
     position: static;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action a {
 	font-family: Arial, Verdana, sans-serif;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -4651,11 +4652,15 @@ padding-left: 7px;
 }
 
 #create-group-form h4, #create-group-form h5,
-#group-settings-form h4, #group-settings-form h5 {
+ {
     font-family: arial,sans-serif;
     font-weight: bold;
     font-size: 13px;
     margin: 5px 0px;
+}
+
+#group-settings-form h4, #group-settings-form h5 {
+
 }
 
 #group-settings-form .bp-widget h5 {
