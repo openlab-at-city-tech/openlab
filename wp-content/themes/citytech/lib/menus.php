@@ -26,6 +26,27 @@ function help_categories_menu($items, $args) {
 						   );
 		$help_cats = get_terms('help_category', $help_args);
 		
+		//for post level identifying of current menu item
+		
+		$post_cats_array = array();
+
+		if ($post->post_type == 'help')
+		{
+		  $post_cats = get_the_terms($post->id,'help_category');
+		  
+		  if ($post_cats)
+		  {
+			foreach ($post_cats as $post_cat)
+			{
+				//no children cats in menu
+				if ($post_cat -> parent == 0)
+				{
+					$post_cats_array[] = $post_cat -> term_id;
+				}
+			}
+		  }
+		}
+		
 		//using a plugin now - if it works out, will deprecate this
 		
 		// Temp: We have to reorder the cats to be in our desired order
@@ -63,17 +84,24 @@ function help_categories_menu($items, $args) {
 
 		$help_cat_list = "";
 		foreach ($help_cats as $help_cat)
-		{
+		{	
 			//eliminate children cats from the menu list
 			if ($help_cat->parent == 0)
 			{
 			
 				$help_classes = "help-cat menu-item";
 				
-				//see if this is the current menu item
+				//see if this is the current menu item; if not, this could be a post, 
+				//so we'll check against an array of cat ids for this post
 				if ($help_cat->term_id == $parent_term->term_id)
 				{
 					$help_classes .= " current-menu-item";
+				} else if ($post->post_type == 'help')
+				{
+					if ( in_array($help_cat->term_id,$post_cats_array))
+					{
+					$help_classes .= " current-menu-item";
+					}
 				}
 				
 				//a special case just for the glossary page
