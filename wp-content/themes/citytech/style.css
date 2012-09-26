@@ -3320,13 +3320,15 @@ p#selectmemberslabel {
 margin-top:15px;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list span.activity {
 	display:block;
 	float:left;
 	clear:none;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action, 
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action {
 	display:block;
 	text-align:left;
 	padding-bottom:20px;
