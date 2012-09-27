@@ -817,6 +817,12 @@ div.latest-post {
 	padding: 2px 0 1px 5px;
 	border: 1px solid #e6e6e6;
 	}
+
+.acfb-holder #send-to-input /* this is for the search field on Portfolio > Settgins > Edit Access */
+{
+	margin-bottom: 10px;
+	}
+	
 .internal-page #content #item-body #invite-list ul li {
 	display: block;
 	float: none;

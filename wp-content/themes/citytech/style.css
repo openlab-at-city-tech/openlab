@@ -3320,13 +3320,15 @@ p#selectmemberslabel {
 margin-top:15px;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list span.activity {
 	display:block;
 	float:left;
 	clear:none;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action, 
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action {
 	display:block;
 	text-align:left;
 	padding-bottom:20px;
@@ -3337,7 +3339,8 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action {
     position: static;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action a {
 	font-family: Arial, Verdana, sans-serif;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -3440,7 +3443,7 @@ ul.invite-search {
 }
 #group-settings-form .access-menu-main
 {
-	padding: 0;
+	padding: 52px 0 0;
 }
 .group-admin #group-settings-form .access-menu ul.first
 {
@@ -4651,11 +4654,15 @@ padding-left: 7px;
 }
 
 #create-group-form h4, #create-group-form h5,
-#group-settings-form h4, #group-settings-form h5 {
+ {
     font-family: arial,sans-serif;
     font-weight: bold;
     font-size: 13px;
     margin: 5px 0px;
+}
+
+#group-settings-form h4, #group-settings-form h5 {
+
 }
 
 #group-settings-form .bp-widget h5 {
