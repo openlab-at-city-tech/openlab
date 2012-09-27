@@ -216,7 +216,7 @@ restore_current_blog();
 			<div class="textwidget"><p>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p></div>
 		</div></div>
 </div><div class="footer-widgets-3 widget-area"><div class="widget menupages" id="menu-pages-4"><div class="widget-wrap"><h4 class="widgettitle">Support</h4>
-<a href="<?php echo $site;?>/blog/help/openlab-help/">Help</a> | <a href="<?php echo $site;?>/about/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/about/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/about/credits/">Image Credits</a></div></div>
+<a href="<?php echo $site;?>/blog/help/openlab-help/">Help</a> | <a href="<?php echo $site;?>/about/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/about/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/about/credits/">Credits</a></div></div>
 </div><div class="footer-widgets-4 widget-area"><div class="widget widget_text" id="text-6"><div class="widget-wrap"><h4 class="widgettitle">Share</h4>
 			<div class="textwidget"><ul class="nav"><li class="rss"><a href="<?php echo $site."/activity/feed/" ?>">RSS</a></li>
             <li>
