@@ -1315,6 +1315,10 @@ a#pgw-prev, a#pgw-next {
 	border-right: 1px solid #EAEAEA;
 }
 
+.internal-page #content .item-list li.even {
+	clear:none;
+}
+
 div.bp-widget {
 	padding: 0 7px;
 	
