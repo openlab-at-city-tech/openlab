@@ -38,7 +38,8 @@ if ( !empty( $_GET['school'] ) ) {
 }
 
 if ( !empty( $_GET['department'] ) ) {
-	$department=str_replace("-"," ",$_GET['department']);
+	$department = str_replace('-and-','-&-',$_GET['department']);
+	$department=str_replace("-"," ",$department);
 	$department=ucwords($department);
 }
 if ( !empty( $_GET['semester'] ) ) {
