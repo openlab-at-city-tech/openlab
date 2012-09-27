@@ -1753,7 +1753,7 @@ blockquote {
     font-size: 12px;
     font-family: Arial;
     font-weight: normal;
-    margin-bottom: 40px;
+    margin-bottom: 26px;
 }
 #content > a{
     float: right;
@@ -1777,6 +1777,18 @@ blockquote {
 
 .help-tags a {
     text-decoration: underline;
+}
+#content h2.child-cat
+{
+	margin-bottom: 23px;
+	padding-top: 24px;
+	border-top: 1px solid #f0f0f0;
+	width: 673px;
+}
+#content h2.child-cat-num-0
+{
+	padding-top: 0;
+	border-top: none;
 }
 .entry-content a,
 #course-list a,
@@ -4581,7 +4593,7 @@ table tr td.label{
 
 h1.parent-cat {
 	padding-left: 7px;
-	margin: 0 0 20px;
+	margin: 0 0 42px;
 }
 
 #content h2.child-cat {
@@ -4593,13 +4605,6 @@ h1.parent-cat {
 	font-size:12px;
 	border-top: 1px solid #f0f0f0;
 }
-.help-cat-seperator
-{
-	border-top: 1px solid #f0f0f0;
-    padding-top: 35px;
-    text-align: right;
-    width: 100%;
-}
 .tax-help_category #content > a[href="#help-top"]:after {
 	content:" \2191";
 }
@@ -4608,8 +4613,21 @@ h1.parent-cat {
 padding-left: 7px;
 }
 
-
-
+.tax-help_category #content h2.child-cat
+{
+	margin-top: 0;
+}
+.tax-help_category #content h3.help-title,
+.tax-help_category #content .help-tags
+{
+	padding-left: 15px;
+}
+.tax-help_category #content h3.help-title a
+{
+	text-decoration: underline;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+}
 /**glossary page**/
 .glossary-description p,
 .glossary-entry p
