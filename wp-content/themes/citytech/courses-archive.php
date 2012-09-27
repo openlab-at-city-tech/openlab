@@ -38,7 +38,7 @@ if ( !empty( $_GET['school'] ) ) {
 }
 
 if ( !empty( $_GET['department'] ) ) {
-	$department = str_replace('-and-','-&-',$_GET['department']);
+	$department = $_GET['department'];
 	$department=str_replace("-"," ",$department);
 	$department=ucwords($department);
 }
@@ -197,7 +197,7 @@ switch ($_GET['school']) {
 switch ($_GET['department']) {
     //School of Technology and Design
 	case "advertising-design-and-graphic-arts":
-		$display_option_dept = "Advertising Design & Graphic Arts";
+		$display_option_dept = "Advertising Design &amp; Graphic Arts";
 		$option_value_dept = "advertising-design-and-graphic-arts";
 		break;
 	case "architectural-technology":
@@ -213,11 +213,11 @@ switch ($_GET['department']) {
 		$option_value_dept = "computer-systems-technology";
 		break;
 	case "construction-management-and-civil-engineering-technology":
-		$display_option_dept = "Construction Management & Civil Engineering Technology";
+		$display_option_dept = "Construction Management &amp; Civil Engineering Technology";
 		$option_value_dept = "construction-management-and-civil-engineering-technology";
 		break;
 	case "electrical-and-telecommunications-engineering-technology":
-		$display_option_dept = "Electrical & Telecommunications Engineering Technology";
+		$display_option_dept = "Electrical &amp; Telecommunications Engineering Technology";
 		$option_value_dept = "electrical-and-telecommunications-engineering-technology";
 		break;
 	case "entertainment-technology":
@@ -238,7 +238,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "business";
 		break;
 	case "career-and-technology-teacher-education":
-		$display_option_dept = "Career & Technology Teacher Education";
+		$display_option_dept = "Career &amp; Technology Teacher Education";
 		$option_value_dept = "career-and-technology-teacher-education";
 		break;
 	case "dental-hygiene":
@@ -258,7 +258,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "human-services";
 		break;
 	case "law-and-paralegal-studies":
-		$display_option_dept = "Law & Paralegal Studies";
+		$display_option_dept = "Law &amp; Paralegal Studies";
 		$option_value_dept = "law-and-paralegal-studies";
 		break;
 	case "nursing":
@@ -266,7 +266,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "nursing";
 		break;
 	case "radiologic-technology-and-medical-imaging":
-		$display_option_dept = "Radiologic Technology & Medical Imaging";
+		$display_option_dept = "Radiologic Technology &amp; Medical Imaging";
 		$option_value_dept = "radiologic-technology-and-medical-imaging";
 		break;
 	case "restorative-dentistry":
