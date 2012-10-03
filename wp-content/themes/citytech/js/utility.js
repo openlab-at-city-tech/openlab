@@ -20,6 +20,15 @@
                 return true;
 			}
 			});
+	
+	//this is for the filtering - changes the text class to a "red" state
+	$('#group_seq_form select').change(function(){
+												
+												$(this).removeClass('gray-text');
+												$(this).addClass('red-text');
+												$(this).prev('div.gray-square').addClass('red-square').removeClass('gray-square');
+
+												});
 
 	});//end document.ready
 	

@@ -120,6 +120,10 @@
 	clear:both;
 }
 
+#wpadminbar .quicklinks #wp-admin-bar-friend-requests-none .ab-empty-item, #wpadminbar .quicklinks #wp-admin-bar-group-invites-none .ab-empty-item, #wpadminbar .quicklinks #wp-admin-bar-messages-none .ab-empty-item {
+	float:none;
+}
+
 
 #wpadminbar .item-avatar, #wp-admin-bar-user-info img {
 	float:left;
@@ -198,7 +202,12 @@
 	padding:0;
 }
 
-
+#wpadminbar #wp-admin-bar-friend-requests-more,
+#wpadminbar #wp-admin-bar-invites-see-more
+{
+	text-align: right;
+	margin-top: -25px;
+}
 /* notification icons */
 
 #wpadminbar .quicklinks .toolbar-item-name,  #wpadminbar #wp-admin-bar-new-content > a {
@@ -267,11 +276,6 @@ background-position: -158px 0;
 
 #wpadminbar #wp-admin-bar-my-account.with-avatar #wp-admin-bar-user-actions > li {
 margin: 0;
-}
-
-/* hiding the edit group menu for now until usability issues can be explored */
-#wpadminbar #wp-admin-bar-group-admin {
-	display:none;
 }
 
 /* notification counts */

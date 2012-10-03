@@ -17,29 +17,26 @@
 		<form action="<?php bp_group_permalink( groups_get_current_group() ) ?>/invite-anyone/send/" method="post" id="send-invite-form">
 <?php endif; ?>
 <div id="topgroupinvite">
-<h3>Invite OpenLab members to your <?php echo ucfirst($group_type); ?></h3>
-	<p><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></p>
-<div id="searchinvitemembersdescription">Start typing a few letters of member's display name.<br/>
-When a drop downlist appears, select from teh list. <br/>
-the member will appear in your access list.
-	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
-    
-    <p class="invite-copy"><?php _e('These members will be sent an invitation to your '.ucfirst($group_type).'. Click the "Send Invites" button to continue.'); ?></p>
-</div>
-</div>
-<div class="left-menu">
-
-	<ul class="first acfb-holder">
+<h3>Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></h3>
+	<h5><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></h5>
+	<ul class="first acfb-holder invite-search">
 		<li>
 			<input type="text" name="send-to-input" class="send-to-input" id="send-to-input" />
 		</li>
 	</ul>
-    
+<div id="searchinvitemembersdescription">
+	<p>Start typing a few letters of member's display name. When a dropdown list appears, select from the list. The member will appear in your access list.</p>
+	
+</div>    
+
+</div>
+<div class="left-menu">
+	
     <h5 class="invite-title"><?php _e('Select members from the OpenLab directory:'); ?></h5>
     
     <p class="invite-copy"><?php _e("Select the checkbox next to the member's name. The member will appear in the list of invites."); ?></p>
 
-	<p id="t"><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
+	<!--<p id="t"><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p> -->
 
 	<div id="invite-anyone-member-list">
 		<ul>
@@ -60,7 +57,9 @@ the member will appear in your access list.
 </div>
 
 <div class="main-column">
-
+	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
+    <p class="invite-copy"><?php _e('These members will be sent an invitation to your '.ucfirst($group_type).'. Click the "Send Invites" button to continue.'); ?></p>
+ 
 	<?php do_action( 'bp_before_group_send_invites_list' ) ?>
 
 	<?php /* The ID 'friend-list' is important for AJAX support. */ ?>
@@ -92,7 +91,7 @@ the member will appear in your access list.
 
 </div>
 
-<div class="clear"></div>
+<!-- <div class="clear"></div> -->
 
 <?php if ( !bp_get_new_group_id() ) : ?>
 <div class="submit">

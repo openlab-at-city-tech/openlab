@@ -38,6 +38,8 @@ onclick="window.print();return false;" /></div>
         </div>
         
         <div class="entry-content"><?php the_content(); ?></div>
+        
+        			<?php openlab_help_navigation(); ?>
     
     <?php endwhile; // end of the loop. ?>
 

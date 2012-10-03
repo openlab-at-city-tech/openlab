@@ -62,7 +62,7 @@ function cuny_home_login() {
 
         <div id="login-help" class="home-box red-box">
         	 <h3 class="title">Need HELP?</h3>
-		<p>Visit the <a href='"<?php echo site_url(); ?>"/support/help/'>Help</a> section or <a href='"<?php site_url(); ?>"/support/contact-us/'>contact us</a> with a question.</p>
+		<p>Visit the <a href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a href='"<?php site_url(); ?>"/about/contact-us/'>contact us</a> with a question.</p>
         </div><!--login-help-->
 
 	<?php else : ?>

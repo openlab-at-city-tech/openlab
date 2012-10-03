@@ -57,6 +57,9 @@ class OpenLab_Admin_Bar {
 			// Don't show the My Sites menu
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_sites_menu', 20 );
 
+			// Don't show the Edit Group or Edit Member menus
+			add_action( 'admin_bar_menu', array( $this, 'remove_item_admin_menus' ), 5000 );
+
 			// Add the notification menus
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
@@ -139,7 +142,7 @@ class OpenLab_Admin_Bar {
 			'parent' => 'openlab',
 			'id'     => 'help',
 			'title'  => 'Help',
-			'href'   => trailingslashit( bp_get_root_domain() . '/help' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' )
  		) );
  	}
 
@@ -164,6 +167,14 @@ class OpenLab_Admin_Bar {
 			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
 			'meta'	=> array()
 		) );
+	}
+
+	/**
+	 * Remove the Edit Group and Edit Member dropdowns
+	 */
+	function remove_item_admin_menus( $wp_admin_bar ) {
+		remove_action( 'admin_bar_menu', 'bp_groups_group_admin_menu', 400 );
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 400 );
 	}
 
 	/**
@@ -329,6 +340,16 @@ class OpenLab_Admin_Bar {
 			'id'     => 'friend-requests-title',
 			'title'  => 'Friend Requests'
 		) );
+		
+		if ( 0 < count( $request_ids ) ) {
+				// "See More" - changed so it shows up for anything greater than 0
+				$wp_admin_bar->add_node( array(
+					'parent' => 'invites',
+					'id'     => 'friend-requests-more',
+					'title'  => 'See All Friends',
+					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
+				) );
+		}
 
 		$members_args = array(
 			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
@@ -358,16 +379,6 @@ class OpenLab_Admin_Bar {
 				) );
 			}
 
-			if ( 3 < count( $request_ids ) ) {
-				// "See More"
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'friend-requests-more',
-					'title'  => 'See More',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
-				) );
-			}
-
 		} else {
 			// The user has no friend requests
 			$wp_admin_bar->add_node( array(
@@ -390,6 +401,16 @@ class OpenLab_Admin_Bar {
 			'id'     => 'invitations-title',
 			'title'  => 'Invitations'
 		) );
+		
+		// "See More" - changed so it shows up for anything greater than 0
+		if ( !empty( $invites['groups'] )) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'invites-see-more',
+				'title'  => 'See All Invites',
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+			) );
+		}
 
 		$groups_args = array(
 			'type'    => 'invites',
@@ -401,7 +422,7 @@ class OpenLab_Admin_Bar {
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</div>' ;
+					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</a></div>' ;
 
 					// name link
 					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></div></div>';
@@ -464,7 +485,7 @@ class OpenLab_Admin_Bar {
 					$title .= '<div class="item">';
 
 					// subject
-					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_get_message_thread_subject() . '</a></div>';
+					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt(bp_get_message_thread_subject(), 30) . '</a></div>';
 
 					// last sender
 					$title .= '<div class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></div>';
@@ -664,7 +685,7 @@ function cac_adminbar_js() {
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
-		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Remember Me", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><input type="hidden" name="testcookie" value="1" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a><input type="hidden" name="redirect_to" value="<?php echo wp_guess_url() ?>" /></form>';
+		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><input type="hidden" name="testcookie" value="1" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a><input type="hidden" name="redirect_to" value="<?php echo wp_guess_url() ?>" /></form>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
 

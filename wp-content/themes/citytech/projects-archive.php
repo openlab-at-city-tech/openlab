@@ -90,10 +90,18 @@ function cuny_buddypress_courses_actions() { ?>
 
     <h2 class="sidebar-title">Find a Project</h2>
     <p>Narrow down your search using the filters or search box below.</p>
+    
+    <?php //determine class type for filtering
+	  $square_class = "gray-square";
+	  $select_class = "gray-text";
 
-    <?php if ( empty( $_GET['group_sequence'] ) ) {
+    if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
-}
+	} else {
+		//if filtering is active, change the classes on the select fields
+		$square_class = "red-square";
+	  	$select_class = "red-text";
+	}
 switch ($_GET['group_sequence']) {
 	case "alphabetical":
 		$display_option = "Alphabetical";
@@ -114,9 +122,9 @@ switch ($_GET['group_sequence']) {
 }
 ?>
 <div class="filter">
-<div class="red-square"></div>
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select">
+	<div class="<?php echo $square_class; ?>"></div>
+	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select <?php echo $select_class; ?>">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>

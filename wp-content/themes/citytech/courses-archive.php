@@ -38,7 +38,8 @@ if ( !empty( $_GET['school'] ) ) {
 }
 
 if ( !empty( $_GET['department'] ) ) {
-	$department=str_replace("-"," ",$_GET['department']);
+	$department = $_GET['department'];
+	$department=str_replace("-"," ",$department);
 	$department=ucwords($department);
 }
 if ( !empty( $_GET['semester'] ) ) {
@@ -150,11 +151,20 @@ global $bp;?>
 <h2 class="sidebar-title">Find a Course</h2>
     <p>Narrow down your search using the filters or search box below.</p>
 <?php
+//determine class type for filtering
+	  $school_color = "gray";
+	  $dept_color = "gray";
+	  $semester_color = "gray";
+	  $sort_color = "gray";
+
 //school filter
 if ( empty( $_GET['school'] ) ) {
 	$_GET['school'] = "";
 } else if ($_GET['school']=='school_all'){
   $_GET['school'] = "school_all";
+  $school_color = "red";
+} else {
+  $school_color = "red";
 }
 switch ($_GET['school']) {
 	case "tech":
@@ -181,11 +191,13 @@ switch ($_GET['school']) {
     //departments
       if ( empty( $_GET['department'] ) ) {
 	$_GET['department'] = "";
+	  }else {
+  $dept_color = "red";
 }
 switch ($_GET['department']) {
     //School of Technology and Design
 	case "advertising-design-and-graphic-arts":
-		$display_option_dept = "Advertising Design and Graphic Arts";
+		$display_option_dept = "Advertising Design &amp; Graphic Arts";
 		$option_value_dept = "advertising-design-and-graphic-arts";
 		break;
 	case "architectural-technology":
@@ -201,11 +213,11 @@ switch ($_GET['department']) {
 		$option_value_dept = "computer-systems-technology";
 		break;
 	case "construction-management-and-civil-engineering-technology":
-		$display_option_dept = "Construction Management and Civil Engineering Technology";
+		$display_option_dept = "Construction Management &amp; Civil Engineering Technology";
 		$option_value_dept = "construction-management-and-civil-engineering-technology";
 		break;
 	case "electrical-and-telecommunications-engineering-technology":
-		$display_option_dept = "Electrical and Telecommunications Engineering Technology";
+		$display_option_dept = "Electrical &amp; Telecommunications Engineering Technology";
 		$option_value_dept = "electrical-and-telecommunications-engineering-technology";
 		break;
 	case "entertainment-technology":
@@ -226,7 +238,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "business";
 		break;
 	case "career-and-technology-teacher-education":
-		$display_option_dept = "Career and Technology Teacher Education";
+		$display_option_dept = "Career &amp; Technology Teacher Education";
 		$option_value_dept = "career-and-technology-teacher-education";
 		break;
 	case "dental-hygiene":
@@ -246,7 +258,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "human-services";
 		break;
 	case "law-and-paralegal-studies":
-		$display_option_dept = "Law and Paralegal Studies";
+		$display_option_dept = "Law &amp; Paralegal Studies";
 		$option_value_dept = "law-and-paralegal-studies";
 		break;
 	case "nursing":
@@ -254,7 +266,7 @@ switch ($_GET['department']) {
 		$option_value_dept = "nursing";
 		break;
 	case "radiologic-technology-and-medical-imaging":
-		$display_option_dept = "Radiologic Technology and Medical Imaging";
+		$display_option_dept = "Radiologic Technology &amp; Medical Imaging";
 		$option_value_dept = "radiologic-technology-and-medical-imaging";
 		break;
 	case "restorative-dentistry":
@@ -314,6 +326,8 @@ switch ($_GET['department']) {
 	//semesters
 if ( empty( $_GET['semester'] ) ) {
 	$_GET['semester'] = "";
+}else {
+  $semester_color = "red";
 }
 switch ($_GET['semester']) {
 	case "fall-2011":
@@ -348,6 +362,8 @@ switch ($_GET['semester']) {
 	//sequence filter
 if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
+}else {
+  $sort_color = "red";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":
@@ -371,25 +387,25 @@ switch ($_GET['group_sequence']) {
 ?>
 <div class="filter">
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-<div class="red-square"></div>
 	<div id="tester">
 
 	</div>
-	<select name="school" class="last-select" onchange="showDept(this.value);">
+    <div class="<?php echo $school_color; ?>-square"></div>
+	<select name="school" class="last-select <?php echo $school_color; ?>-text" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
 		<option value='school_all'>All</option>
 		<option value='tech'>Technology &amp; Design</option>
 		<option value='studies'>Professional Studies</option>
 		<option value='arts'>Arts &amp; Sciences</option>
 	</select>
-	<div class="red-square"></div>
-	<select name="department" class="last-select" id="dept-select">
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
         <?php $file_loc = dirname(__FILE__); ?>
 		<?php include $file_loc.'/includes/department_processing.php'; ?>
 	</select>
-	<div class="red-square"></div>
-	<select name="semester" class="last-select">
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<select name="semester" class="last-select <?php echo $semester_color; ?>-text">
 		<option value="<?php echo $option_value_semester; ?>"><?php echo $display_option_semester; ?></option>
 		<option value='semester_all'>All</option>
 		<option value='fall-2011'>Fall 2011</option>
@@ -398,8 +414,8 @@ switch ($_GET['group_sequence']) {
 		<option value='summer-2012'>Summer 2012</option>
 		<option value='fall-2012'>Fall 2012</option>
 	</select>
-	<div class="red-square"></div>
-	<select name="group_sequence" class="last-select">
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>

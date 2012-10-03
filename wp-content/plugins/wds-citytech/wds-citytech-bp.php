@@ -179,6 +179,12 @@ class bpass_Translation_Mangler {
 	case " - sent from the group ":
 		return $translations->translate( " - sent from the $grouptype " );
 		break;
+	case "Send an email when a new member join the group.":
+		return $translations->translate( "Send an email when a new member joins the $grouptype." );
+		break;
+	case "Email this notice to everyone in the group":
+		return $translations->translate( "Email this notice to everyone in the $grouptype" );
+		break;
 	case "This is a notice from the group '%s':
 
 \"%s\"

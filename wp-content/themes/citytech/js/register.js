@@ -1,6 +1,6 @@
 jQuery(document).ready(function($){
         $('#signup_email').on('blur',function(e){
-                var email = $(e.target).val();
+                var email = $(e.target).val().toLowerCase();
                 var emailtype = '';
 
                 if ( 0 <= email.indexOf( 'mail.citytech.cuny.edu' ) ) {

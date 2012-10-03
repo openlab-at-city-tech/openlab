@@ -14,8 +14,8 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <?php if ( bp_is_group_home() ): ?>
 <?php global $bp;
 	  $group_id = $bp->groups->current_group->id; ?>
-      <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 <div id="club-header">
+	<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 	 <div id="club-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
@@ -34,7 +34,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 	</div><!-- #club-header-avatar -->
 
 	<div id="club-header-content" class="alignleft">
-		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a> <a href="<?php bp_group_permalink() ?>feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a></h2>
 		<span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span>
 
 		<?php do_action( 'bp_before_group_header_meta' ) ?>
@@ -161,7 +161,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
                 	<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
                     	<li>
 						<h5><?php bp_the_topic_title() ?></h5>
-			<?php
+			<p><?php
 				$topic_id = bp_get_the_topic_id();
 				$last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
 								        WHERE topic_id='$topic_id'
@@ -169,7 +169,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 				echo $last_topic_content;
 			?>
-                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a>
+                        <a href="<?php bp_the_topic_permalink();?>" class="read-more">See&nbsp;More</a></p>
                         </li>
                     <?php endwhile; ?>
                 </ul>
