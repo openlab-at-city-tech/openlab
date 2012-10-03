@@ -22,14 +22,37 @@ function help_categories_menu($items, $args) {
 		
 		$help_args = array(
 						   'hide_empty' => false,
-						   'orderby' => 'id'
+						   'orderby'    =>  'none',
 						   );
 		$help_cats = get_terms('help_category', $help_args);
+		
+		//for post level identifying of current menu item
+		
+		$post_cats_array = array();
+
+		if ($post->post_type == 'help')
+		{
+		  $post_cats = get_the_terms($post->id,'help_category');
+		  
+		  if ($post_cats)
+		  {
+			foreach ($post_cats as $post_cat)
+			{
+				//no children cats in menu
+				if ($post_cat -> parent == 0)
+				{
+					$post_cats_array[] = $post_cat -> term_id;
+				}
+			}
+		  }
+		}
+		
+		//using a plugin now - if it works out, will deprecate this
 		
 		// Temp: We have to reorder the cats to be in our desired order
 		// This worked out accidentally on the staging site, because of
 		// the order created in the database
-		$ordered_cats = array();
+		/*$ordered_cats = array();
 		$cat_order = array(
 			'OpenLab Help',
 			'Getting Started',
@@ -57,21 +80,28 @@ function help_categories_menu($items, $args) {
 		// Whatever's left should get tacked onto the end, so we don't
 		// lose cats added in the future
 		$help_cats = array_merge( $ordered_cats, $help_cats );
-		// END Boone's temp sort code
+		// END Boone's temp sort code*/
 
 		$help_cat_list = "";
 		foreach ($help_cats as $help_cat)
-		{
+		{	
 			//eliminate children cats from the menu list
 			if ($help_cat->parent == 0)
 			{
 			
 				$help_classes = "help-cat menu-item";
 				
-				//see if this is the current menu item
+				//see if this is the current menu item; if not, this could be a post, 
+				//so we'll check against an array of cat ids for this post
 				if ($help_cat->term_id == $parent_term->term_id)
 				{
 					$help_classes .= " current-menu-item";
+				} else if ($post->post_type == 'help')
+				{
+					if ( in_array($help_cat->term_id,$post_cats_array))
+					{
+					$help_classes .= " current-menu-item";
+					}
 				}
 				
 				//a special case just for the glossary page
@@ -318,8 +348,15 @@ add_filter('bp_get_options_nav_admin','openlab_filter_subnav_admin');
 
 function openlab_filter_subnav_admin($subnav_item)
 {
+	global $bp;
 	$group_type = openlab_get_group_type( bp_get_current_group_id());
 	$new_item = str_replace("Admin",ucfirst($group_type)." Settings",$subnav_item);
+	//this is to stop the course settings menu item from gettin a current class on membership pages
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests')
+	{
+		$new_item = str_replace("current selected"," ",$new_item);
+	}
+	
 	return $new_item;
 }
 
@@ -328,6 +365,7 @@ add_filter('bp_get_options_nav_members','openlab_filter_subnav_members');
 function openlab_filter_subnav_members($subnav_item)
 {
 	global $bp;
+	global $wp_query;
 	
 	//string replace menu name
 	$new_item = str_replace("Members","Membership",$subnav_item);
@@ -336,6 +374,12 @@ function openlab_filter_subnav_members($subnav_item)
 	if ( $bp->is_item_admin || $bp->is_item_mod ):
 		$new_item = str_replace("/members/","/admin/manage-members",$new_item);
 	endif;
+	
+	//filtering for current status on membership menu item when in membership submenu
+	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone')
+	{
+		$new_item = str_replace('id="members-groups-li"','id="members-groups-li" class="current selected"',$new_item);
+	}
 	
 	//get total member count
 	$total_mem = bp_core_number_format( groups_get_groupmeta( bp_get_current_group_id(), 'total_member_count') );
@@ -427,8 +471,16 @@ function openlab_group_admin_tabs( $group = false ) {
 		<?php if ( 'public' != $group->status ) : ?>
 			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
 		<?php endif ?>
-
-		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?> current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete Portfolio</a></li>
+        
+              <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id); 
+			  if ($account_type == "Student")
+			  {
+				  $profile = "ePortfolio";
+			  } else {
+				  $profile = "Portfolio";
+			  } ?>
+        
+        <li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?> current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>
 
 	<?php else : ?>
 
@@ -476,12 +528,16 @@ function openlab_group_membership_tabs( $group = false ) {
         <li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
         <?php endif; ?>
         
+        <?php if (bp_group_is_member()): ?>
         <li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Members', 'buddypress' ); ?></a></li>
+        <?php endif; ?>
         
         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         <li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e( 'Email Members', 'buddypress' ); ?></a></li>
         <?php endif; ?>
         
+        <?php if (bp_group_is_member()): ?>
         <li<?php if ( $bp->current_action == 'notifications' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e( 'Your Email Options', 'buddypress' ); ?></a></li>
+        <?php endif; ?>
                 
 <?php }

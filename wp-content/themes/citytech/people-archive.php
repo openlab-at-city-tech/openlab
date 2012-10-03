@@ -201,9 +201,15 @@ function cuny_buddypress_courses_actions() { ?>
     <p>Narrow down your search using the filters or search box below.</p>
 
     <?php
+	//determine class type for filtering
+	  $user_color = "gray";
+	  $sort_color = "gray";
+	
     //user type
 if ( empty( $_GET['usertype'] ) ) {
 	$_GET['usertype'] = "";
+} else {
+	$user_color = "red";
 }
 switch ($_GET['usertype']) {
 	case "student":
@@ -211,12 +217,12 @@ switch ($_GET['usertype']) {
 		$user_option_value = "student";
 		break;
 	case "faculty":
-		$user_isplay_option = "Faculty";
+		$user_display_option = "Faculty";
 		$user_option_value = "faculty";
 		break;
 	case "staff":
-		$user_display_option = "Faculty";
-		$user_option_value = "faculty";
+		$user_display_option = "Staff";
+		$user_option_value = "staff";
 		break;
 	case "all":
 		$user_display_option = "All";
@@ -231,6 +237,8 @@ switch ($_GET['usertype']) {
     //sequencing
 if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
+} else {
+	$sort_color = "red";
 }
 switch ($_GET['group_sequence']) {
 	case "alphabetical":
@@ -253,16 +261,16 @@ switch ($_GET['group_sequence']) {
 ?>
 <div class="filter">
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-	<div class="red-square"></div>
-	<select name="usertype" class="last-select">
+	<div class="<?php echo $user_color; ?>-square"></div>
+	<select name="usertype" class="last-select <?php echo $user_color; ?>-text">
 		<option value="<?php echo $user_option_value; ?>"><?php echo $user_display_option; ?></option>
 		<option value='student'>Student</option>
 		<option value='faculty'>Faculty</option>
 		<option value='staff'>Staff</option>
 		<option value='all'>All</option>
 	</select>
-    <div class="red-square"></div>
-	<select name="group_sequence" class="last-select">
+    <div class="<?php echo $sort_color; ?>-square"></div>
+	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>

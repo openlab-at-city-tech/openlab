@@ -58,7 +58,7 @@
 								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
 									<li>
 									<h5><?php bp_the_topic_title() ?></h5>
-                         <p>
+                         
 						<?php
 							$topic_id = bp_get_the_topic_id();
 							$last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
@@ -66,12 +66,12 @@
 												   ORDER BY post_id DESC LIMIT 1","ARRAY_A");
 							$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
 							echo $last_topic_content;
-						?>
+						?></p>
 
-                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See All</a>
+                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See More</a><p>
 									</li>
 								<?php endwhile; ?>
-							</ul></p>
+							</ul>
 							<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></div>
 						<?php else: ?>
 							<div id="message" class="info">

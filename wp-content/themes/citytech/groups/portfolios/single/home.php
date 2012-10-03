@@ -1,16 +1,24 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
-<?php $group_slug = bp_get_group_slug(); ?>
+<?php global $bp; 
+	  $group_slug = bp_get_group_slug(); ?>
 
-<h1 class="entry-title"><?php echo bp_group_name(); ?> Profile</h1>
+<h1 class="entry-title group-title"><?php echo bp_group_name().' '.$profile; ?></h1>
 <?php if ( bp_is_group_home() ): ?>
 <?php $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
-<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
 <div id="portfolio-header">
+	<?php	  if (strpos(bp_get_group_name(),'ePortfolio'))
+			  {
+				  $profile = "ePortfolio";
+			  } else {
+				  $profile = "Portfolio";
+			  } ?>
+		
+	<h4 class="profile-header"><?php echo $profile; ?> Profile</h4>
 	 <div id="portfolio-header-avatar" class="alignleft">
 		<a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
 			<?php bp_group_avatar('type=full&width=225') ?>
 		</a>
-        <?php global $bp;
+        <?php 
 			  if (is_user_logged_in() && $bp->is_item_admin): ?>
               <div id="group-action-wrapper">
 					<div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>

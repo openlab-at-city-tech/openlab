@@ -16,7 +16,8 @@ function openlab_help_cats_loop() { ?>
 	$parent_term = get_term_by( 'slug' , $term , 'help_category' );
 	
     $args = array(
-				  	'post_type' => 'help glossary',
+				  	'post_type' => 'help_glossary',
+					'orderby' => 'menu_order',
 					'order' => 'ASC',
 					);
 	

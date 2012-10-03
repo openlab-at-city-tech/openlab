@@ -26,6 +26,7 @@ function openlab_help_cats_loop() { ?>
 									  )
 								  ),
 				  	'post_type' => 'help',
+					'orderby' => 'menu_order',
 					'order' => 'ASC',
 					);
 	
@@ -41,21 +42,21 @@ function openlab_help_cats_loop() { ?>
 		$post_id = get_the_ID(); 
 		?>
     	
-        <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <h3 class="entry-title help-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
         <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
     
     <?php endwhile; // end of the loop. 
 		  wp_reset_query(); ?>
-		  
-          <a href="#help-top">Go To Top</a>
           
 		  <?php 
 		  //now iterate through each child category
 		  $child_cats = get_categories( array('child_of' => $parent_term -> term_id, 'taxonomy' => 'help_category') );
+		  $count = 0;
+		  
 		  foreach ($child_cats as $child)
 		  {
 			  $child_cat_id = $child->cat_ID;
-			  echo '<h2 class="child-cat">'.$child->name.'</h2>';
+			  echo '<h2 class="child-cat child-cat-num-'.$count.'">'.$child->name.'</h2>';
 			  
 				$args = array(	'tax_query' => array(
 									  array(
@@ -67,6 +68,8 @@ function openlab_help_cats_loop() { ?>
 									  )
 								  ),
 				  	'post_type' => 'help',
+					'orderby' => 'menu_order',
+					'order' => 'ASC',
 					);
 				$temp = $wp_query; 
 				$wp_query = null;
@@ -75,16 +78,17 @@ function openlab_help_cats_loop() { ?>
 			  while ( have_posts() ) : the_post(); 
 			  ?>
 			  
-			  <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+			  <h3 class="entry-title help-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
               <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ',''); ?></div>
 		  
 		<?php endwhile; // end of the loop. 
 			  wp_reset_query(); ?>
 			  
-              <a href="#help-top">Go To Top</a>
-			  
 		  <?php
+		  $count++;
 		  }//ecnd child_cats for each ?>
+          
+          <a href="#help-top">Go To Top</a>
 
 <?php }//end openlab_help_loop() ?>
 
