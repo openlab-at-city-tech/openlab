@@ -29,5 +29,3 @@ define( 'PATH_CURRENT_SITE', '/' );
 @ini_set('log_errors','On');
 @ini_set('display_errors','Off');
 @ini_set('error_log','/usr/home/openlab/public_html/php_error.log');
-
-?>
