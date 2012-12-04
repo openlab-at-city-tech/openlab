@@ -1,101 +1,14 @@
 <?php
 /** Start the engine **/
-require_once(TEMPLATEPATH.'/lib/init.php');
+//require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
-/**this is for the post type declarations - they are done on the function side instead of through
-a plugin, to make git tracking easier**/
+/**creating a library to organize functions**/
+require_once(STYLESHEETPATH.'/lib/header-funcs.php');
 require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
 require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
-
-/**
- * Don't use the Genesis genesis_meta action to load the stylesheet
- *
- * Instead, load it as the very last item in the document head, so that we can override plugin
- * styles.
- *
- * We're manually outputting the <link> tag instead of enqueuing, because we must ensure that we
- * come last, last, last.
- *
- * Kids, do not try this at home!
- *
- * @link http://openlab.citytech.cuny.edu/redmine/issues/422
- */
-remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
-function openlab_load_stylesheet() {
-	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="all" />';
-}
-add_action( 'wp_head', 'openlab_load_stylesheet', 999999 );
-
-define('BP_DISABLE_ADMIN_BAR', true);
-
-/** Add support with .wrap inside #inner */
-add_theme_support( 'genesis-structural-wraps', array( 'header', 'nav', 'subnav', 'inner', 'footer-widgets', 'footer' ) );
-
-remove_action('genesis_sidebar', 'genesis_do_sidebar');
-
-add_action( 'widgets_init', 'cuny_remove_default_widget_areas', 11 );
-function cuny_remove_default_widget_areas() {
-	unregister_sidebar('sidebar');
-	unregister_sidebar('sidebar-alt');
-}
-/** Add support for custom background **/
-add_theme_support( 'custom-background', array() );
-//add_theme_support( 'genesis-footer-widgets', 5 );
-
-add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
-
-// Enqueue Styles For Testimonials Page & sub-pages
-add_action('wp_print_styles', 'wds_cuny_ie_styles');
-function wds_cuny_ie_styles() {
-  if ( is_admin() )
-    return;
-    ?>
-
-    <!--[if lte IE 7]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie7.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 8]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie8.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 9]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
-    <![endif]-->
-
-
-    <?php }
-
-function cuny_no_bp_default_styles() {
-	wp_dequeue_style( 'gconnect-bp' );
-	wp_dequeue_script('superfish');
-	wp_dequeue_script('superfish-args');
-
-	wp_enqueue_style( 'cuny-bp', get_stylesheet_directory_uri() . '/css/buddypress.css' );
-	wp_dequeue_style( 'gconnect-adminbar' );
-}
-
-/**
- * Enqueue our front-end scripts
- */
-function openlab_enqueue_frontend_scripts() {
-	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
-             ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
-		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
-	}
-
-        if ( bp_is_register_page() ) {
-                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery' ) );
-        }
-
-}
-add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
-
-add_action( 'genesis_meta', 'cuny_google_font');
-function cuny_google_font() {
-	echo "<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>";
-}
 
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
@@ -134,10 +47,12 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 //add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
-add_action('genesis_header','cuny_admin_bar', 10);
-function cuny_admin_bar() {
+add_action('bp_header','cuny_admin_bar', 10);
+function cuny_admin_bar() { ?>
+	
+	<h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
 
-	cuny_site_wide_bp_search(); ?>
+	<?php cuny_site_wide_bp_search(); ?>
 	<div class="clearfloat"></div>
 	<?php //this adds the main menu, controlled through the WP menu interface
 	$args = array(
@@ -162,14 +77,6 @@ function cuny_admin_bar() {
 add_action('genesis_after_content', 'cuny_the_clear_div');
 function cuny_the_clear_div() {
 	echo '<div style="clear:both;"></div>';
-}
-
-add_filter( 'wp_title', 'test', 10, 2 );
-function test( $title ) {
-	$find = " &#124; Groups &#124; ";
-	$replace = " | ";
-	$title = str_replace( $find , $replace, $title);
-	return $title;
 }
 
 remove_filter('get_the_excerpt', 'wp_trim_excerpt');

@@ -1,20 +1,16 @@
-<?php /* Template Name: People Archive */
+<?php /* Template Name: People Archive */ ?>
 
-remove_action('genesis_post_title', 'genesis_do_post_title');
-add_action('genesis_post_title', 'cuny_members_title' );
-function cuny_members_title() {
-	global $wp_query;
-	$post_obj = $wp_query->get_queried_object();
-	echo '<h1 class="entry-title">'.$post_obj->post_title.' on the OpenLab</h1>';
-}
+<?php get_header(); ?>
 
-remove_action('genesis_post_content', 'genesis_do_post_content');
-add_action('genesis_post_content', 'cuny_members_index' );
-function cuny_members_index() {
-	echo '<div id="people-listing">';
-		  cuny_list_members('more' );
-	echo '</div>';
-}
+<?php	global $wp_query;
+		$post_obj = $wp_query->get_queried_object(); ?>
+	
+    <h1 class="entry-title"><?php echo $post_obj->post_title ?> on the OpenLab</h1>
+		<div id="people-listing">';
+		  <?php cuny_list_members('more' ); ?>
+        </div>
+	
+<?php get_footer();
 //
 //     New parameter "view" - 'more' - tells it to format a "See More" link for that member type
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
@@ -28,7 +24,7 @@ function cuny_list_members($view) {
 	$user_type = $sequence_type = $search_terms = '';
 	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'all' ) {
 		$user_type = $_GET['usertype'];
-		$user_type = ucwords( $user_type );
+		$user_type = ucwords( $user_type );Judi Diamond
 	} else {
 		$post_obj  = $wp_query->get_queried_object();
 		$post_title = !empty( $post_obj->post_title ) ? ucwords( $post_obj->post_title ) : '';
@@ -291,4 +287,3 @@ switch ($_GET['group_sequence']) {
     </div><!--archive search-->
 <?php
 }
-genesis();
