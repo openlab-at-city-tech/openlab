@@ -1,7 +1,17 @@
 <?php /* Template Name: My Sites */
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_my_sites' );
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_my_sites(); ?>
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+	<?php get_template_part('members/single/sidebar'); ?>
+    </div>
+	
+<?php get_footer();
+
 
 function cuny_my_sites() {
 	echo cuny_profile_activty_block('site', 'My Sites', ''); ?>
@@ -66,11 +76,3 @@ function cuny_profile_activty_block($type,$title,$last) {
 		</div><?php
 
 }
-
-
-/**
- * @todo - Unhook from the genesis action
- */
-add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
-
-genesis();

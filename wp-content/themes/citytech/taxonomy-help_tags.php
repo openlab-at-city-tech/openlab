@@ -1,10 +1,21 @@
 <?php
 /*
-Template Name: Help
+* Help tags template
+*
 */
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'openlab_help_cats_loop');
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+		<?php openlab_help_cats_loop(); ?>
+	</div>
+    <div id="sidebar" class="sidebar widget-area">
+		<?php get_sidebar('help'); ?>
+	</div>
+<?php get_footer(); 
+/**end layout**/
+
 function openlab_help_cats_loop() { ?>
 	
 	<div id="help-top"></div>
@@ -50,9 +61,3 @@ function openlab_help_cats_loop() { ?>
           <a href="#help-top">Go To Top</a>
 
 <?php }//end openlab_help_loop() ?>
-
-<?php add_action('genesis_before_sidebar_widget_area', 'cuny_help_menu');
-      function cuny_help_menu() {
-	  	get_sidebar('help');
-	  } ?>
-<?php genesis(); ?>

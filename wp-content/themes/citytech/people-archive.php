@@ -1,20 +1,22 @@
-<?php /* Template Name: People Archive */
+<?php /* Template Name: People Archive */ 
+get_header(); ?>
 
-remove_action('genesis_post_title', 'genesis_do_post_title');
-add_action('genesis_post_title', 'cuny_members_title' );
-function cuny_members_title() {
-	global $wp_query;
-	$post_obj = $wp_query->get_queried_object();
-	echo '<h1 class="entry-title">'.$post_obj->post_title.' on the OpenLab</h1>';
-}
-
-remove_action('genesis_post_content', 'genesis_do_post_content');
-add_action('genesis_post_content', 'cuny_members_index' );
-function cuny_members_index() {
-	echo '<div id="people-listing">';
-		  cuny_list_members('more' );
-	echo '</div>';
-}
+<?php	global $wp_query;
+		$post_obj = $wp_query->get_queried_object(); ?>
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+    		<h1 class="entry-title"><?php echo $post_obj->post_title; ?> on the OpenLab</h1>
+			<div id="people-listing">
+		  	<?php cuny_list_members('more' ); ?>
+        	</div>
+        </div><!--hentry-->
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+    	<?php cuny_buddypress_courses_actions(); ?>
+    </div><!--sidebar-->
+	
+<?php get_footer();
 //
 //     New parameter "view" - 'more' - tells it to format a "See More" link for that member type
 //                            'page' - tells it to perform normal member pagination so they can 'page' through the members
@@ -195,7 +197,6 @@ function cuny_list_members($view) {
 }
 
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
 <h2 class="sidebar-title">Find People</h2>
     <p>Narrow down your search using the filters or search box below.</p>
@@ -291,4 +292,3 @@ switch ($_GET['group_sequence']) {
     </div><!--archive search-->
 <?php
 }
-genesis();

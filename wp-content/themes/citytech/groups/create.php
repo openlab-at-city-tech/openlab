@@ -1,5 +1,22 @@
-<?php remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_create_group' );
+<?php
+/**
+* Create a group
+*
+*/
+
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_create_group(); ?>
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+	<?php get_template_part('members/single/sidebar'); ?>
+    </div>
+	
+<?php get_footer();
+/**end layout**/
 
 function cuny_create_group(){
 
@@ -327,8 +344,4 @@ function cuny_create_group(){
     
             </form>
             </div>
-		  
-		  <?php add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) ); ?>
-
 <?php } ?>
-<?php genesis() ?>

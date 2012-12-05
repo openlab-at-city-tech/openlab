@@ -1,13 +1,22 @@
 <?php /* Template Name: Projects Archive */
+/**begin layout**/
+get_header(); ?>
 
-remove_action('genesis_post_title', 'genesis_do_post_title');
-add_action('genesis_post_title', 'cuny_do_course_archive_title');
-function cuny_do_course_archive_title() {
-	echo '<h1 class="entry-title">Projects on the OpenLab</h1>';
-}
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+        	<h1 class="entry-title">Projects on the OpenLab</h1>
+            <div class="entry-content">
+				<?php cuny_project_archive(); ?>
+            </div><!--entry-content-->
+        </div><!--hentry-->
+    </div><!--content-->
+    <div id="sidebar" class="sidebar widget-area">
+		<?php cuny_buddypress_courses_actions(); ?>
+    </div>
 
-remove_action('genesis_post_content', 'genesis_do_post_content');
-add_action('genesis_post_content', 'cuny_project_archive' );
+<?php get_footer();
+/**end layout**/
+
 function cuny_project_archive() {
 
 	global $wpdb,$bp;
@@ -81,7 +90,6 @@ function cuny_project_archive() {
 <?php
 }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
 	<?php global $bp;
 	//if($bp->loggedin_user->id > 0){?>
@@ -143,5 +151,3 @@ switch ($_GET['group_sequence']) {
     </div><!--archive search-->
 <?php
 }
-
-genesis();
