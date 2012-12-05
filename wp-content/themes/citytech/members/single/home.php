@@ -1,4 +1,25 @@
+<?php 
+/**
+* Members - home
+*
+**/
+
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_student_profile(); ?>
+    </div><!--content-->
+
+	<div id="sidebar" class="sidebar widget-area">
+	<?php get_template_part('members/single/sidebar'); ?>
+    </div>
+
 <?php
+get_footer();
+
+/**end layout**/
+
 function cuny_member_profile_header() {
 global $site_members_template, $user_ID, $bp;
 
@@ -138,9 +159,6 @@ if ( !$dud = bp_displayed_user_domain() ) {
 
 </div><!-- #item-header -->
 <?php }
-
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_student_profile' );
 
 function cuny_student_profile() {
 global $bp;
@@ -374,10 +392,3 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
     <?php
 	}
 }
-
-/**
- * @todo - Unhook from the genesis action
- */
-add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
-
-genesis(); ?>

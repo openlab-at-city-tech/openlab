@@ -1,13 +1,22 @@
 <?php /* Template Name: Clubs Archive */
+/**begin layout**/
+get_header(); ?>
 
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+        	<h1 class="entry-title">Clubs on the OpenLab</h1>
+            <div class="entry-content">
+				<?php cuny_club_archive(); ?>
+            </div><!--entry-content-->
+        </div><!--hentry-->
+    </div><!--content-->
+    <div id="sidebar" class="sidebar widget-area">
+		<?php cuny_buddypress_courses_actions(); ?>
+    </div>
 
-remove_action('genesis_post_title', 'genesis_do_post_title');
-add_action('genesis_post_title', 'cuny_do_course_archive_title');
-function cuny_do_course_archive_title() { ?>
-	<h1 class="entry-title">Clubs on the OpenLab</h1>
-<?php } ?>
-<?php remove_action('genesis_post_content', 'genesis_do_post_content');
-add_action('genesis_post_content', 'cuny_club_archive' );
+<?php get_footer();
+/**end layout**/
+
 function cuny_club_archive() {
 global $wpdb,$bp;
 
@@ -85,7 +94,6 @@ if ( bp_has_groups( $sequence_type.$search_terms.'include='.$ids.'&per_page=12' 
 
 }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
 	<?php global $bp;
 	//if($bp->loggedin_user->id > 0){?>
@@ -148,5 +156,3 @@ switch ($_GET['group_sequence']) {
     </div><!--archive search-->
 <?php
 }
-
-genesis();

@@ -1,14 +1,20 @@
-<?php /* Template Name: People Archive */ ?>
-
-<?php get_header(); ?>
+<?php /* Template Name: People Archive */ 
+get_header(); ?>
 
 <?php	global $wp_query;
 		$post_obj = $wp_query->get_queried_object(); ?>
-	
-    <h1 class="entry-title"><?php echo $post_obj->post_title ?> on the OpenLab</h1>
-		<div id="people-listing">';
-		  <?php cuny_list_members('more' ); ?>
-        </div>
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+    		<h1 class="entry-title"><?php echo $post_obj->post_title; ?> on the OpenLab</h1>
+			<div id="people-listing">
+		  	<?php cuny_list_members('more' ); ?>
+        	</div>
+        </div><!--hentry-->
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+    	<?php cuny_buddypress_courses_actions(); ?>
+    </div><!--sidebar-->
 	
 <?php get_footer();
 //
@@ -24,7 +30,7 @@ function cuny_list_members($view) {
 	$user_type = $sequence_type = $search_terms = '';
 	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'all' ) {
 		$user_type = $_GET['usertype'];
-		$user_type = ucwords( $user_type );Judi Diamond
+		$user_type = ucwords( $user_type );
 	} else {
 		$post_obj  = $wp_query->get_queried_object();
 		$post_title = !empty( $post_obj->post_title ) ? ucwords( $post_obj->post_title ) : '';
@@ -191,7 +197,6 @@ function cuny_list_members($view) {
 }
 
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() { ?>
 <h2 class="sidebar-title">Find People</h2>
     <p>Narrow down your search using the filters or search box below.</p>

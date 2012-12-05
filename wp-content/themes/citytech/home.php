@@ -1,12 +1,20 @@
 <?php
-add_filter('genesis_pre_get_option_site_layout', 'cuny_home_layout');
-function cuny_home_layout($opt) {
-    $opt = 'full-width-content';
-    return $opt;
-}
+/**
+* front page
+*
+*/
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_build_homepage' );
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_build_homepage(); ?>
+    </div><!--content-->
+
+<?php
+get_footer();
+
+/**end layout**/
 
 function cuny_build_homepage() {
 	echo '<div id="home-left">';
@@ -293,7 +301,3 @@ function openlab_groups_filter_clause( $sql ) {
 
 	return $ex;
 }
-
-?>
-
-<?php genesis();

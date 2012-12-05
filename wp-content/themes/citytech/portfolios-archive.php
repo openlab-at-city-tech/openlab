@@ -1,13 +1,22 @@
 <?php /* Template Name: Portfolios Archive */
+/**begin layout**/
+get_header(); ?>
 
-remove_action('genesis_post_title', 'genesis_do_post_title');
-add_action('genesis_post_title', 'cuny_do_portfolio_archive_title');
-function cuny_do_portfolio_archive_title() {
-	echo '<h1 class="entry-title">Portfolios on the OpenLab</h1>';
-}
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+        	<h1 class="entry-title">Portfolios on the OpenLab</h1>
+            <div class="entry-content">
+				<?php cuny_portfolio_archive(); ?>
+            </div><!--entry-content-->
+        </div><!--hentry-->
+    </div><!--content-->
+    <div id="sidebar" class="sidebar widget-area">
+		<?php cuny_buddypress_courses_actions(); ?>
+    </div>
 
-remove_action('genesis_post_content', 'genesis_do_post_content');
-add_action('genesis_post_content', 'cuny_portfolio_archive' );
+<?php get_footer();
+/**end layout**/
+
 function cuny_portfolio_archive() {
 global $wpdb,$bp,$groups_template;
 $sequence_type = '';
@@ -133,7 +142,6 @@ if ( bp_has_groups( $group_args ) ) : ?>
 	$meta_filter->remove_filters();
 }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_courses_actions');
 function cuny_buddypress_courses_actions() {
 global $bp;?>
 
@@ -457,5 +465,3 @@ function clear_form(){
 }
 </script>
 <?php }
-
-genesis();

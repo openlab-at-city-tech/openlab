@@ -36,3 +36,4 @@
         
         <div id="inner">
         	<div class="wrap">
+            	<div id="content-sidebar-wrap">

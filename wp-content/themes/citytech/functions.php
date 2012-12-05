@@ -1,5 +1,7 @@
 <?php
 /** Start the engine **/
+add_theme_support( 'bbpress' );
+
 //require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
@@ -9,6 +11,7 @@ require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
 require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
+require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
@@ -22,17 +25,6 @@ function cuny_default_avatar( $url ) {
 	return wds_add_default_member_avatar();
 }
 add_filter( 'bp_core_mysteryman_src', 'cuny_default_avatar' );
-
-remove_action('genesis_before_loop' , 'genesis_do_breadcrumbs');
-add_action('genesis_before_footer' , 'genesis_do_breadcrumbs', 5);
-
-add_filter('genesis_breadcrumb_args', 'custom_breadcrumb_args');
-function custom_breadcrumb_args($args) {
-    $args['labels']['prefix'] = 'You are here:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $args['prefix']  = '<div id="breadcrumb-container"><div class="breadcrumb">';
-    $args['suffix'] = '</div></div>';
-    return $args;
-}
 
 remove_all_actions('genesis_footer');
 //add_action('genesis_footer', 'cuny_creds_footer');
@@ -74,10 +66,10 @@ function cuny_admin_bar() { ?>
 		<div class="clearfloat"></div>
 <?php }
 
-add_action('genesis_after_content', 'cuny_the_clear_div');
+/*add_action('genesis_after_content', 'cuny_the_clear_div');
 function cuny_the_clear_div() {
 	echo '<div style="clear:both;"></div>';
-}
+}*/
 
 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 add_filter('get_the_excerpt', 'cuny_add_links_wp_trim_excerpt');
