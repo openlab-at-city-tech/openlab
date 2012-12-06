@@ -340,7 +340,7 @@ class OpenLab_Admin_Bar {
 			'id'     => 'friend-requests-title',
 			'title'  => 'Friend Requests'
 		) );
-		
+
 		if ( 0 < count( $request_ids ) ) {
 				// "See More" - changed so it shows up for anything greater than 0
 				$wp_admin_bar->add_node( array(
@@ -401,7 +401,7 @@ class OpenLab_Admin_Bar {
 			'id'     => 'invitations-title',
 			'title'  => 'Invitations'
 		) );
-		
+
 		// "See More" - changed so it shows up for anything greater than 0
 		if ( !empty( $invites['groups'] )) {
 			$wp_admin_bar->add_node( array(

@@ -68,7 +68,7 @@
 							</li>
 						<?php endwhile; ?>
 					</ul>
-					
+
 				<?php else: ?>
 					<div id="message" class="info">
 						<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -108,7 +108,7 @@
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				
+
 				<?php
 				}else{
 					echo '<div id="message" class="info"><p>No Recent Docs</p></div>';
@@ -142,13 +142,13 @@
 			  </div>
 
 			<?php endif;?>
-            
+
             <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
 			<?php else: ?>
                 <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
             <?php endif; ?>
-            
+
 		</div>
   	</div>
 
