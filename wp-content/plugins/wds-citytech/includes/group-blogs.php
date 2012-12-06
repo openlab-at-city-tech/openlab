@@ -1078,16 +1078,19 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
  */
 function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts' ) {
 	$type = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
+	$group = groups_get_current_group();
 
 	$hide_sitewide = false;
-	if ( $group = groups_get_current_group() && isset( $group->status ) && 'public' != $group->status ) {
+	if ( ! empty( $group ) && isset( $group->status ) && 'public' != $group->status ) {
 		$hide_sitewide = true;
 	}
 
+	$group_id = ! empty( $group ) ? $group->id : '';
+
 	foreach( (array) $items as $item ) {
 		// Make sure we don't have duplicates
-		// We'll check based on content + time of publication
-		if ( !openlab_external_activity_item_exists( $item['date'], $item['content'], $type ) ) {
+		// We check based on the item's permalink
+		if ( !openlab_external_activity_item_exists( $item['permalink'], $group_id, $type ) ) {
 			$action = '';
 
 			$group           = groups_get_current_group();
@@ -1127,22 +1130,15 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 /**
  * Check to see whether an external blog post activity item exists for this item already
  *
- * We do this manually because BP doesn't allow for easy querying by exact time
- *
- * @param str Date of original post
- * @param str Content of original post
+ * @param str Permalink of original post
+ * @param int Associated group id
+ * @param str Activity type (new_blog_post, new_blog_comment)
  * @return bool
  */
-function openlab_external_activity_item_exists( $date = '', $content = '', $type = 'new_blog_post' ) {
+function openlab_external_activity_item_exists( $permalink, $group_id, $type ) {
 	global $wpdb, $bp;
 
-	if ( !is_numeric( $date ) ) {
-		$date = strtotime( $date );
-	}
-
-	$date = date( 'Y-m-d H:i:s', $date );
-
-	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE date_recorded = %s AND type = %s AND content = %s", $date, $type, $content );
+	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id );
 
 	return (bool) $wpdb->get_var( $sql );
 }
