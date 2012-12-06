@@ -70,7 +70,7 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 		} else {
-			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 11 );
+			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
