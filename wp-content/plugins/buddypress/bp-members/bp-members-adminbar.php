@@ -1,44 +1,22 @@
 <?php
+
 /**
- * BuddyPress Members Admin Bar
+ * BuddyPress Members Toolbar
  *
- * Handles the member functions related to the WordPress Admin Bar
+ * Handles the member functions related to the WordPress Toolbar
  *
  * @package BuddyPress
- * @subpackage Core
+ * @subpackage MembersAdminBar
  */
 
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Adjust the admin bar menus based on which WordPress version this is
- *
- * @since BuddyPress (1.5.2)
- */
-function bp_members_admin_bar_version_check() {
-	switch( bp_get_major_wp_version() ) {
-		case 3.2 :
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_my_account_menu',    4    );
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_notifications_menu', 5    );
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_user_admin_menu',    99   );
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_my_account_logout',  9999 );
-			break;
-		case 3.3 :
-		case 3.4 :
-		default  :
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_my_account_menu',    4   );
-			add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_notifications_menu', 5   );
-			add_action( 'admin_bar_menu',     'bp_members_admin_bar_user_admin_menu',    400 );
-			break;		
-	}
-}
-add_action( 'admin_bar_menu', 'bp_members_admin_bar_version_check', 4 );
-
-/**
  * Add the "My Account" menu and all submenus.
  *
- * @since BuddyPress (r4151)
+ * @since BuddyPress (1.6)
+ * @todo Deprecate WP 3.2 Toolbar compatibility when we drop 3.2 support
  */
 function bp_members_admin_bar_my_account_menu() {
 	global $bp, $wp_admin_bar;
@@ -50,40 +28,18 @@ function bp_members_admin_bar_my_account_menu() {
 	// Logged in user
 	if ( is_user_logged_in() ) {
 
-		if ( 3.2 == bp_get_major_wp_version() ) {
+		// Stored in the global so we can add menus easily later on
+		$bp->my_account_menu_id = 'my-account-buddypress';
 
-			// User avatar
-			$avatar = bp_core_fetch_avatar( array(
-				'item_id' => $bp->loggedin_user->id,
-				'email'   => $bp->loggedin_user->userdata->user_email,
-				'width'   => 16,
-				'height'  => 16
-			) );
-
-			// Unique ID for the 'My Account' menu
-			$bp->my_account_menu_id = ( ! empty( $avatar ) ) ? 'my-account-with-avatar' : 'my-account';
-
-			// Create the main 'My Account' menu
-			$wp_admin_bar->add_menu( array(
-				'id'    => $bp->my_account_menu_id,
-				'title' => $avatar . bp_get_loggedin_user_fullname(),
-				'href'  => $bp->loggedin_user->domain
-			) );
-
-		} else {
-
-			// Unique ID for the 'My Account' menu
-			$bp->my_account_menu_id = 'my-account-buddypress';
-
-			// Create the main 'My Account' menu
-			$wp_admin_bar->add_menu( array(
-				'parent' => 'my-account',
-				'id'     => $bp->my_account_menu_id,
-				'href'   => $bp->loggedin_user->domain,
-				'group'  => true,
-				'meta'   => array( 'class' => 'ab-sub-secondary' )
-			) );
-		}
+		// Create the main 'My Account' menu
+		$wp_admin_bar->add_menu( array(
+			'id'     => $bp->my_account_menu_id,
+			'group'  => true,
+			'title'  => __( 'Edit My Profile', 'buddypress' ),
+			'href'   => bp_loggedin_user_domain(),
+			'meta'   => array(
+			'class'  => 'ab-sub-secondary'
+		) ) );
 
 	// Show login and sign-up links
 	} elseif ( !empty( $wp_admin_bar ) ) {
@@ -107,12 +63,13 @@ function bp_members_admin_bar_my_account_menu() {
 		}
 	}
 }
+add_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_my_account_menu', 4 );
 
 /**
  * Adds the User Admin top-level menu to user pages
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_members_admin_bar_user_admin_menu() {
 	global $bp, $wp_admin_bar;
@@ -125,43 +82,20 @@ function bp_members_admin_bar_user_admin_menu() {
 	if ( !current_user_can( 'edit_users' ) || bp_is_my_profile() )
 		return false;
 
-	if ( 3.2 == bp_get_major_wp_version() ) {
+	// Unique ID for the 'My Account' menu
+	$bp->user_admin_menu_id = 'user-admin';
 
-		// User avatar
-		$avatar = bp_core_fetch_avatar( array(
-			'item_id' => $bp->displayed_user->id,
-			'email'   => $bp->displayed_user->userdata->user_email,
-			'width'   => 16,
-			'height'  => 16
-		) );
-
-		// Unique ID for the 'My Account' menu
-		$bp->user_admin_menu_id = ( ! empty( $avatar ) ) ? 'user-admin-with-avatar' : 'user-admin';
-
-		// Add the top-level User Admin button
-		$wp_admin_bar->add_menu( array(
-			'id'    => $bp->user_admin_menu_id,
-			'title' => $avatar . bp_get_displayed_user_fullname(),
-			'href'  => bp_displayed_user_domain()
-		) );
-
-	} elseif ( 3.3 <= bp_get_major_wp_version() ) {
-		
-		// Unique ID for the 'My Account' menu
-		$bp->user_admin_menu_id = 'user-admin';
-
-		// Add the top-level User Admin button
-		$wp_admin_bar->add_menu( array(
-			'id'    => $bp->user_admin_menu_id,
-			'title' => __( 'Edit Member', 'buddypress' ),
-			'href'  => bp_displayed_user_domain()
-		) );
-	}
+	// Add the top-level User Admin button
+	$wp_admin_bar->add_menu( array(
+		'id'    => $bp->user_admin_menu_id,
+		'title' => __( 'Edit Member', 'buddypress' ),
+		'href'  => bp_displayed_user_domain()
+	) );
 
 	// User Admin > Edit this user's profile
 	$wp_admin_bar->add_menu( array(
 		'parent' => $bp->user_admin_menu_id,
-		'id'     => 'edit-profile',
+		'id'     => $bp->user_admin_menu_id . '-edit-profile',
 		'title'  => __( "Edit Profile", 'buddypress' ),
 		'href'   => bp_get_members_component_link( 'profile', 'edit' )
 	) );
@@ -169,80 +103,56 @@ function bp_members_admin_bar_user_admin_menu() {
 	// User Admin > Edit this user's avatar
 	$wp_admin_bar->add_menu( array(
 		'parent' => $bp->user_admin_menu_id,
-		'id'     => 'change-avatar',
+		'id'     => $bp->user_admin_menu_id . '-change-avatar',
 		'title'  => __( "Edit Avatar", 'buddypress' ),
 		'href'   => bp_get_members_component_link( 'profile', 'change-avatar' )
 	) );
 
 	// User Admin > Spam/unspam
-	if ( !bp_core_is_user_spammer( bp_displayed_user_id() ) ) {
-		$wp_admin_bar->add_menu( array(
-			'parent' => $bp->user_admin_menu_id,
-			'id'     => 'spam-user',
-			'title'  => __( 'Mark as Spammer', 'buddypress' ),
-			'href'   => wp_nonce_url( bp_displayed_user_domain() . 'admin/mark-spammer/', 'mark-unmark-spammer' ),
-			'meta'   => array( 'onclick' => 'confirm(" ' . __( 'Are you sure you want to mark this user as a spammer?', 'buddypress' ) . '");' )
-		) );
-	} else {
-		$wp_admin_bar->add_menu( array(
-			'parent' => $bp->user_admin_menu_id,
-			'id'     => 'unspam-user',
-			'title'  => __( 'Not a Spammer', 'buddypress' ),
-			'href'   => wp_nonce_url( bp_displayed_user_domain() . 'admin/unmark-spammer/', 'mark-unmark-spammer' ),
-			'meta'   => array( 'onclick' => 'confirm(" ' . __( 'Are you sure you want to mark this user as not a spammer?', 'buddypress' ) . '");' )
-		) );
-	}
+	$wp_admin_bar->add_menu( array(
+		'parent' => $bp->user_admin_menu_id,
+		'id'     => $bp->user_admin_menu_id . '-user-capabilities',
+		'title'  => __( 'User Capabilities', 'buddypress' ),
+		'href'   => bp_displayed_user_domain() . 'settings/capabilities/'
+	) );
 
 	// User Admin > Delete Account
 	$wp_admin_bar->add_menu( array(
 		'parent' => $bp->user_admin_menu_id,
-		'id'     => 'delete-user',
+		'id'     => $bp->user_admin_menu_id . '-delete-user',
 		'title'  => __( 'Delete Account', 'buddypress' ),
-		'href'   => wp_nonce_url( bp_displayed_user_domain() . 'admin/delete-user/', 'delete-user' ),
-		'meta'   => array( 'onclick' => 'confirm(" ' . __( "Are you sure you want to delete this user's account?", 'buddypress' ) . '");' )
+		'href'   => bp_displayed_user_domain() . 'settings/delete-account/'
 	) );
 }
+add_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 99 );
 
 /**
  * Build the "Notifications" dropdown
  *
  * @package Buddypress
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_members_admin_bar_notifications_menu() {
-	global $bp, $wp_admin_bar;
+	global $wp_admin_bar;
 
 	if ( !is_user_logged_in() )
 		return false;
 
-	if ( $notifications = bp_core_get_notifications_for_user( bp_loggedin_user_id(), 'object' ) ) {
-		$menu_title = sprintf( __( 'Notifications <span id="ab-pending-notifications" class="pending-count">%s</span>', 'buddypress' ), count( $notifications ) );
-	} else {
-		$menu_title = __( 'Notifications', 'buddypress' );
-	}
+	$notifications = bp_core_get_notifications_for_user( bp_loggedin_user_id(), 'object' );
+	$count         = !empty( $notifications ) ? count( $notifications ) : 0;
+	$alert_class   = (int) $count > 0 ? 'pending-count alert' : 'count no-alert';
+	$menu_title    = '<span id="ab-pending-notifications" class="' . $alert_class . '">' . $count . '</span>';
 
-	if ( 3.2 == bp_get_major_wp_version() ) {
-
-		// Add the top-level Notifications button
-		$wp_admin_bar->add_menu( array(
-			'id'    => 'bp-notifications',
-			'title' => $menu_title,
-			'href'  => bp_loggedin_user_domain()
-		) );
-
-	} elseif ( 3.3 <= bp_get_major_wp_version() ) {
-		
-		// Add the top-level Notifications button
-		$wp_admin_bar->add_menu( array(
-			'parent' => 'top-secondary',
-			'id'     => 'bp-notifications',
-			'title'  => $menu_title,
-			'href'   => bp_loggedin_user_domain()
-		) );
-	}
+	// Add the top-level Notifications button
+	$wp_admin_bar->add_menu( array(
+		'parent'    => 'top-secondary',
+		'id'        => 'bp-notifications',
+		'title'     => $menu_title,
+		'href'      => bp_loggedin_user_domain(),
+	) );
 
 	if ( !empty( $notifications ) ) {
-		foreach ( (array)$notifications as $notification ) {
+		foreach ( (array) $notifications as $notification ) {
 			$wp_admin_bar->add_menu( array(
 				'parent' => 'bp-notifications',
 				'id'     => 'notification-' . $notification->id,
@@ -261,31 +171,18 @@ function bp_members_admin_bar_notifications_menu() {
 
 	return;
 }
+add_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 
 /**
- * Make sure the logout link is at the bottom of the "My Account" menu
+ * Remove rogue WP core edit menu when viewing a single user
  *
- * @since BuddyPress (r4151)
- *
- * @global obj $bp
- * @global obj $wp_admin_bar
+ * @since BuddyPress (1.6)
  */
-function bp_members_admin_bar_my_account_logout() {
-	global $bp, $wp_admin_bar;
-
-	// Bail if this is an ajax request
-	if ( defined( 'DOING_AJAX' ) )
-		return;
-
-	if ( is_user_logged_in() ) {
-		// Log out
-		$wp_admin_bar->add_menu( array(
-			'parent' => $bp->my_account_menu_id,
-			'id'     => $bp->my_account_menu_id . '-logout',
-			'title'  => __( 'Log Out', 'buddypress' ),
-			'href'   => wp_logout_url()
-		) );
+function bp_members_remove_edit_page_menu() {
+	if ( bp_is_user() ) {
+		remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
 	}
 }
+add_action( 'bp_init', 'bp_members_remove_edit_page_menu', 99 );
 
 ?>

@@ -148,7 +148,7 @@ add_filter( 'bp_get_the_topic_text', 'bp_forums_strip_mentions_on_post_edit' );
  * This filter is added in bp_has_forum_topics()
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @global object $wpdb The WordPress database global
  * @param string $sql
@@ -157,7 +157,7 @@ add_filter( 'bp_get_the_topic_text', 'bp_forums_strip_mentions_on_post_edit' );
 function bp_forums_add_replied_distinct_sql( $sql ) {
 	global $wpdb;
 
-	$sql = $wpdb->prepare( "DISTINCT t.topic_id, " );
+	$sql = "DISTINCT t.topic_id, ";
 
 	return $sql;
 }
@@ -168,7 +168,7 @@ function bp_forums_add_replied_distinct_sql( $sql ) {
  * This filter is added in bp_has_forum_topics()
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @global object $bbdb The bbPress database global
  * @global object $wpdb The WordPress database global
@@ -178,7 +178,7 @@ function bp_forums_add_replied_distinct_sql( $sql ) {
 function bp_forums_add_replied_join_sql( $sql ) {
 	global $bbdb, $wpdb;
 
-	$sql .= $wpdb->prepare( " LEFT JOIN $bbdb->posts p ON p.topic_id = t.topic_id " );
+	$sql .= " LEFT JOIN $bbdb->posts p ON p.topic_id = t.topic_id ";
 
 	return $sql;
 }
@@ -189,7 +189,7 @@ function bp_forums_add_replied_join_sql( $sql ) {
  * This filter is added in bp_has_forum_topics()
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @global object $wpdb The WordPress database global
  * @param string $sql

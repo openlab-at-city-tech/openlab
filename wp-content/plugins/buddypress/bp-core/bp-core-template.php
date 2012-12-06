@@ -1,4 +1,5 @@
 <?php
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -13,7 +14,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * or not to highlight a particular sub nav item.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  * @uses bp_get_user_nav() Renders the navigation for a profile of a currently viewed user.
  */
 function bp_get_options_nav() {
@@ -21,7 +22,7 @@ function bp_get_options_nav() {
 
 	// If we are looking at a member profile, then the we can use the current component as an
 	// index. Otherwise we need to use the component's root_slug
-	$component_index = !empty( $bp->displayed_user ) ? $bp->current_component : bp_get_root_slug( $bp->current_component );
+	$component_index = !empty( $bp->displayed_user ) ? bp_current_component() : bp_get_root_slug( bp_current_component() );
 
 	if ( !bp_is_single_item() ) {
 		if ( !isset( $bp->bp_options_nav[$component_index] ) || count( $bp->bp_options_nav[$component_index] ) < 1 ) {
@@ -30,20 +31,20 @@ function bp_get_options_nav() {
 			$the_index = $component_index;
 		}
 	} else {
-		if ( !isset( $bp->bp_options_nav[$bp->current_item] ) || count( $bp->bp_options_nav[$bp->current_item] ) < 1 ) {
+		if ( !isset( $bp->bp_options_nav[bp_current_item()] ) || count( $bp->bp_options_nav[bp_current_item()] ) < 1 ) {
 			return false;
 		} else {
-			$the_index = $bp->current_item;
+			$the_index = bp_current_item();
 		}
 	}
 
 	// Loop through each navigation item
-	foreach ( (array)$bp->bp_options_nav[$the_index] as $subnav_item ) {
+	foreach ( (array) $bp->bp_options_nav[$the_index] as $subnav_item ) {
 		if ( !$subnav_item['user_has_access'] )
 			continue;
 
 		// If the current action or an action variable matches the nav item id, then add a highlight CSS class.
-		if ( $subnav_item['slug'] == $bp->current_action ) {
+		if ( $subnav_item['slug'] == bp_current_action() ) {
 			$selected = ' class="current selected"';
 		} else {
 			$selected = '';
@@ -73,7 +74,7 @@ function bp_get_options_title() {
  * like a group, or a friend. Basically an avatar that appears in the sub nav options bar.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_has_options_avatar() {
 	global $bp;
@@ -94,7 +95,7 @@ function bp_comment_author_avatar() {
 	global $comment;
 
 	if ( function_exists( 'bp_core_fetch_avatar' ) )
-		echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $comment->user_id, 'type' => 'thumb' ) ) );
+		echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $comment->user_id, 'type' => 'thumb', 'alt' => sprintf( __( 'Avatar of %s', 'buddypress' ), bp_core_get_user_displayname( $comment->user_id ) ) ) ) );
 	else if ( function_exists('get_avatar') )
 		get_avatar();
 }
@@ -103,7 +104,7 @@ function bp_post_author_avatar() {
 	global $post;
 
 	if ( function_exists( 'bp_core_fetch_avatar' ) )
-		echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $post->post_author, 'type' => 'thumb' ) ) );
+		echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $post->post_author, 'type' => 'thumb', 'alt' => sprintf( __( 'Avatar of %s', 'buddypress' ), bp_core_get_user_displayname( $post->post_author ) ) ) ) );
 	else if ( function_exists('get_avatar') )
 		get_avatar();
 }
@@ -151,9 +152,20 @@ function bp_avatar_cropper() {
 	echo '<img id="avatar-to-crop" class="avatar" src="' . $bp->avatar_admin->image . '" />';
 }
 
+/**
+ * Echoes bp_get_site_name()
+ */
 function bp_site_name() {
-	echo apply_filters( 'bp_site_name', get_bloginfo( 'name', 'display' ) );
+	echo bp_get_site_name();
 }
+	/**
+	 * Returns the name of the BP site. Used in RSS headers
+	 *
+	 * @since 1.6
+	 */
+	function bp_get_site_name() {
+		return apply_filters( 'bp_site_name', get_bloginfo( 'name', 'display' ) );
+	}
 
 function bp_get_profile_header() {
 	locate_template( array( '/profile/profile-header.php' ), true );
@@ -194,23 +206,25 @@ function bp_format_time( $time, $just_date = false, $localize_time = true ) {
 }
 
 function bp_word_or_name( $youtext, $nametext, $capitalize = true, $echo = true ) {
-	global $bp;
 
-	if ( $capitalize )
-		$youtext = bp_core_ucfirst($youtext);
+	if ( !empty( $capitalize ) )
+		$youtext = bp_core_ucfirst( $youtext );
 
-	if ( $bp->displayed_user->id == $bp->loggedin_user->id ) {
-		if ( $echo )
+	if ( bp_displayed_user_id() == bp_loggedin_user_id() ) {
+		if ( true == $echo ) {
 			echo apply_filters( 'bp_word_or_name', $youtext );
-		else
+		} else {
 			return apply_filters( 'bp_word_or_name', $youtext );
+		}
 	} else {
-		$fullname = (array)explode( ' ', $bp->displayed_user->fullname );
+		$fullname = bp_get_displayed_user_fullname();
+		$fullname = (array) explode( ' ', $fullname );
 		$nametext = sprintf( $nametext, $fullname[0] );
-		if ( $echo )
+		if ( true == $echo ) {
 			echo apply_filters( 'bp_word_or_name', $nametext );
-		else
+		} else {
 			return apply_filters( 'bp_word_or_name', $nametext );
+		}
 	}
 }
 
@@ -226,18 +240,16 @@ function bp_styles() {
 /** Search Form ***************************************************************/
 
 function bp_search_form_action() {
-	return apply_filters( 'bp_search_form_action', bp_get_root_domain() . '/' . bp_get_search_slug() );
+	return apply_filters( 'bp_search_form_action', trailingslashit( bp_get_root_domain() . '/' . bp_get_search_slug() ) );
 }
 
 /**
  * Generates the basic search form as used in BP-Default's header.
  *
- * @global object $bp BuddyPress global settings
  * @return string HTML <select> element
  * @since 1.0
  */
 function bp_search_form_type_select() {
-	global $bp;
 
 	$options = array();
 
@@ -260,7 +272,7 @@ function bp_search_form_type_select() {
 	$selection_box .= '<select name="search-which" id="search-which" style="width: auto">';
 
 	$options = apply_filters( 'bp_search_form_type_select_options', $options );
-	foreach( (array)$options as $option_value => $option_title )
+	foreach( (array) $options as $option_value => $option_title )
 		$selection_box .= sprintf( '<option value="%s">%s</option>', $option_value, $option_title );
 
 	$selection_box .= '</select>';
@@ -273,7 +285,7 @@ function bp_search_form_type_select() {
  *
  * @global object $bp BuddyPress global settings
  * @return string
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_search_default_text( $component = '' ) {
 	echo bp_get_search_default_text( $component );
@@ -394,12 +406,12 @@ function bp_create_excerpt( $text, $length = 225, $options = array() ) {
 	$ending = apply_filters( 'bp_excerpt_append_text', $ending );
 
 	// Remove shortcodes if necessary
-	if ( $filter_shortcodes )
+	if ( !empty( $filter_shortcodes ) )
 		$text = strip_shortcodes( $text );
 
 	// When $html is true, the excerpt should be created without including HTML tags in the
 	// excerpt length
-	if ( $html ) {
+	if ( !empty( $html ) ) {
 		// The text is short enough. No need to truncate
 		if ( mb_strlen( preg_replace( '/<.*?>/', '', $text ) ) <= $length ) {
 			return $text;
@@ -459,7 +471,7 @@ function bp_create_excerpt( $text, $length = 225, $options = array() ) {
 	}
 
 	// If $exact is false, we can't break on words
-	if ( !$exact ) {
+	if ( empty( $exact ) ) {
 		$spacepos = mb_strrpos( $truncate, ' ' );
 		if ( isset( $spacepos ) ) {
 			if ( $html ) {
@@ -490,11 +502,25 @@ function bp_create_excerpt( $text, $length = 225, $options = array() ) {
 add_filter( 'bp_create_excerpt', 'stripslashes_deep' );
 add_filter( 'bp_create_excerpt', 'force_balance_tags' );
 
+/**
+ * Echoes the output of bp_get_total_member_count()
+ */
 function bp_total_member_count() {
 	echo bp_get_total_member_count();
 }
+	/**
+	 * Returns the total member count in your BP instance
+	 *
+	 * Since BuddyPress 1.6, this function has used bp_core_get_active_member_count(), which
+	 * counts non-spam, non-deleted users who have last_activity. This value will correctly
+	 * match the total member count number used for pagination on member directories.
+	 *
+	 * Before BuddyPress 1.6, this function used bp_core_get_total_member_count(), which did
+	 * not take into account last_activity, and thus often resulted in higher counts than
+	 * shown by member directory pagination.
+	 */
 	function bp_get_total_member_count() {
-		return apply_filters( 'bp_get_total_member_count', bp_core_get_total_member_count() );
+		return apply_filters( 'bp_get_total_member_count', bp_core_get_active_member_count() );
 	}
 	add_filter( 'bp_get_total_member_count', 'bp_core_number_format' );
 
@@ -555,7 +581,7 @@ function bp_current_component() {
 
 function bp_current_action() {
 	global $bp;
-	$current_action = !empty( $bp->current_action ) ? $bp->current_action : false;
+	$current_action = !empty( $bp->current_action ) ? $bp->current_action : '';
 	return apply_filters( 'bp_current_action', $current_action );
 }
 
@@ -582,7 +608,7 @@ function bp_action_variables() {
  * Return the value of a given action variable
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @param int $position The key of the action_variables array that you want
  * @return str $action_variable The value of that position in the array
@@ -614,7 +640,7 @@ function bp_root_domain() {
  * Echoes the output of bp_get_root_slug()
  *
  * @package BuddyPress Core
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_root_slug( $component = '' ) {
 	echo bp_get_root_slug( $component );
@@ -635,9 +661,9 @@ function bp_root_slug( $component = '' ) {
 	 * $bp->groups->root_slug.
 	 *
 	 * @package BuddyPress Core
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
-	 * @global object $bp Global BuddyPress settings object
+	 * @global BuddyPress $bp The one true BuddyPress instance
 	 * @param string $component Optional. Defaults to the current component
 	 * @return string $root_slug The root slug
 	 */
@@ -648,7 +674,7 @@ function bp_root_slug( $component = '' ) {
 
 		// Use current global component if none passed
 		if ( empty( $component ) )
-			$component = $bp->current_component;
+			$component = bp_current_component();
 
 		// Component is active
 		if ( !empty( $bp->active_components[$component] ) ) {
@@ -673,7 +699,7 @@ function bp_root_slug( $component = '' ) {
  * Return the component name based on the current root slug
  *
  * @since BuddyPress {r3923}
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  * @param str $root_slug Needle to our active component haystack
  * @return mixed False if none found, component name if found
  */
@@ -682,24 +708,24 @@ function bp_get_name_from_root_slug( $root_slug = '' ) {
 
 	// If no slug is passed, look at current_component
 	if ( empty( $root_slug ) )
-		$root_slug = $bp->current_component;
+		$root_slug = bp_current_component();
 
 	// No current component or root slug, so flee
 	if ( empty( $root_slug ) )
 		return false;
 
 	// Loop through active components and look for a match
-	foreach ( $bp->active_components as $component => $id )
-		if (	isset( $bp->{$component}->root_slug ) &&
-				!empty( $bp->{$component}->root_slug ) &&
-				$bp->{$component}->root_slug == $root_slug )
+	foreach ( $bp->active_components as $component => $id ) {
+		if ( !empty( $bp->{$component}->root_slug ) && ( $bp->{$component}->root_slug == $root_slug ) ) {
 			return $bp->{$component}->name;
+		}
+	}
 
 	return false;
 }
 
 function bp_user_has_access() {
-	$has_access = ( is_super_admin() || bp_is_my_profile() ) ? true : false;
+	$has_access = ( bp_current_user_can( 'bp_moderate' ) || bp_is_my_profile() ) ? true : false;
 
 	return apply_filters( 'bp_user_has_access', $has_access );
 }
@@ -708,7 +734,7 @@ function bp_user_has_access() {
  * Output the search slug
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @uses bp_get_search_slug()
  */
@@ -719,11 +745,47 @@ function bp_search_slug() {
 	 * Return the search slug
 	 *
 	 * @package BuddyPress
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_search_slug() {
 		return apply_filters( 'bp_get_search_slug', BP_SEARCH_SLUG );
 	}
+
+/**
+ * Get the id of the currently displayed user
+ *
+ * @uses apply_filters() Filter 'bp_displayed_user_id' to change this value
+ * @return int
+ */
+function bp_displayed_user_id() {
+
+	static $id = 0;
+
+	if ( empty( $id ) ) {
+		global $bp;
+		$id = !empty( $bp->displayed_user->id ) ? $bp->displayed_user->id : 0;
+	}
+
+	return apply_filters( 'bp_displayed_user_id', $id );
+}
+
+/**
+ * Get the id of the currently logged-in user
+ *
+ * @uses apply_filters() Filter 'bp_loggedin_user_id' to change this value
+ * @return int
+ */
+function bp_loggedin_user_id() {
+
+	static $id = 0;
+
+	if ( empty( $id ) ) {
+		global $bp;
+		$id = !empty( $bp->loggedin_user->id ) ? $bp->loggedin_user->id : 0;
+	}
+
+	return apply_filters( 'bp_loggedin_user_id', $id );
+}
 
 /** is_() functions to determine the current page *****************************/
 
@@ -737,7 +799,7 @@ function bp_search_slug() {
  * - the component's id, or 'canonical' name
  *
  * @package BuddyPress Core
- * @since 1.5
+ * @since BuddyPress (1.5)
  * @return bool Returns true if the component matches, or else false.
  */
 function bp_is_current_component( $component ) {
@@ -750,6 +812,7 @@ function bp_is_current_component( $component ) {
 		$component = 'profile';
 
 	if ( !empty( $bp->current_component ) ) {
+
 		// First, check to see whether $component_name and the current
 		// component are a simple match
 		if ( $bp->current_component == $component ) {
@@ -768,8 +831,9 @@ function bp_is_current_component( $component ) {
 		// non-translatable component name. If so, we can return its
 		// corresponding slug from $bp->active_components.
 		} else if ( $key = array_search( $component, $bp->active_components ) ) {
-			if ( strstr( $bp->current_component, $key ) )
+			if ( strstr( $bp->current_component, $key ) ) {
 				$is_current_component = true;
+			}
 
 		// If we haven't found a match yet, check against the root_slugs
 		// created by $bp->pages, as well as the regular slugs
@@ -777,8 +841,9 @@ function bp_is_current_component( $component ) {
 			foreach ( $bp->active_components as $id ) {
 				// If the $component parameter does not match the current_component,
 				// then move along, these are not the droids you are looking for
-				if ( empty( $bp->{$id}->root_slug ) || $bp->{$id}->root_slug != $bp->current_component )
+				if ( empty( $bp->{$id}->root_slug ) || $bp->{$id}->root_slug != $bp->current_component ) {
 					continue;
+				}
 
 				if ( $id == $component ) {
 					$is_current_component = true;
@@ -795,8 +860,9 @@ function bp_is_current_component( $component ) {
 		$page_template = $custom_fields[0];
 
 		// Component name is in the page template name
-		if ( !empty( $page_template ) && strstr( strtolower( $page_template ), strtolower( $component ) ) )
+		if ( !empty( $page_template ) && strstr( strtolower( $page_template ), strtolower( $component ) ) ) {
 			$is_current_component = true;
+		}
 	}
 
  	return apply_filters( 'bp_is_current_component', $is_current_component, $component );
@@ -814,15 +880,13 @@ function bp_is_current_component( $component ) {
  * the current_action is 'members'.
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @param str $action The action being tested against
  * @return bool True if the current action matches $action
  */
 function bp_is_current_action( $action = '' ) {
-	global $bp;
-
-	if ( $action == $bp->current_action )
+	if ( $action == bp_current_action() )
 		return true;
 
 	return false;
@@ -840,7 +904,7 @@ function bp_is_current_action( $action = '' ) {
  * $action_variables[0] is 'group-settings'.
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @param str $action_variable The action_variable being tested against
  * @param int $position The array key you're testing against. If you don't provide a $position,
@@ -939,11 +1003,11 @@ function bp_is_root_component( $component_name ) {
  * Checks if the site's front page is set to the specified BuddyPress component
  * page in wp-admin's Settings > Reading screen.
  *
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  * @global $current_blog WordPress global for the current blog
  * @param string $component Optional; Name of the component to check for.
  * @return bool True If the specified component is set to be the site's front page.
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_is_component_front_page( $component = '' ) {
 	global $bp, $current_blog;
@@ -969,7 +1033,6 @@ function bp_is_component_front_page( $component = '' ) {
  * @return bool True if it's a non-BP page, false otherwise
  */
 function bp_is_blog_page() {
-	global $wp_query;
 
 	$is_blog_page = false;
 
@@ -997,7 +1060,7 @@ function bp_is_page( $page ) {
 function bp_is_active( $component ) {
 	global $bp;
 
-	if ( isset( $bp->active_components[$component] ) )
+	if ( isset( $bp->active_components[$component] ) || 'core' == $component )
 		return true;
 
 	return false;
@@ -1069,9 +1132,7 @@ function bp_is_settings_component() {
 /** Activity ******************************************************************/
 
 function bp_is_single_activity() {
-	global $bp;
-
-	if ( bp_is_activity_component() && is_numeric( $bp->current_action ) )
+	if ( bp_is_activity_component() && is_numeric( bp_current_action() ) )
 		return true;
 
 	return false;
@@ -1080,9 +1141,7 @@ function bp_is_single_activity() {
 /** User **********************************************************************/
 
 function bp_is_my_profile() {
-	global $bp;
-
-	if ( is_user_logged_in() && $bp->loggedin_user->id == $bp->displayed_user->id )
+	if ( is_user_logged_in() && bp_loggedin_user_id() == bp_displayed_user_id() )
 		$my_profile = true;
 	else
 		$my_profile = false;
@@ -1091,9 +1150,7 @@ function bp_is_my_profile() {
 }
 
 function bp_is_user() {
-	global $bp;
-
-	if ( !empty( $bp->displayed_user->id ) )
+	if ( bp_displayed_user_id() && !is_404() )
 		return true;
 
 	return false;
@@ -1177,7 +1234,7 @@ function bp_is_user_forums() {
  * Is this a user's "Topics Started" page?
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return bool
  */
@@ -1192,7 +1249,7 @@ function bp_is_user_forums_started() {
  * Is this a user's "Replied To" page?
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return bool
  */
@@ -1263,7 +1320,7 @@ function bp_is_user_settings() {
  * Is this a user's General Settings page?
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return bool
  */
@@ -1278,7 +1335,7 @@ function bp_is_user_settings_general() {
  * Is this a user's Notification Settings page?
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return bool
  */
@@ -1293,7 +1350,7 @@ function bp_is_user_settings_notifications() {
  * Is this a user's Account Deletion page?
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return bool
  */
@@ -1445,6 +1502,12 @@ function bp_is_notices() {
 	return false;
 }
 
+function bp_is_messages_conversation() {
+	if ( bp_is_user_messages() && ( bp_is_current_action( 'view' ) ) )
+		return true;
+
+	return false;
+}
 
 function bp_is_single( $component, $callback ) {
 	if ( bp_is_current_component( $component ) && ( true === call_user_func( $callback ) ) )
@@ -1523,6 +1586,9 @@ function bp_the_body_class() {
 		endif;
 
 		/** User **************************************************************/
+
+		if ( bp_is_user() )
+			$bp_classes[] = 'bp-user';
 
 		if ( !bp_is_directory() ) :
 			if ( bp_is_user_blogs() )
@@ -1608,11 +1674,15 @@ function bp_the_body_class() {
 		if ( bp_is_group_forum() )
 			$bp_classes[] = 'group-forum';
 
-		if ( bp_is_group_admin_page() )
+		if ( bp_is_group_admin_page() ) {
 			$bp_classes[] = 'group-admin';
+			$bp_classes[] = bp_get_group_current_admin_tab();
+		}
 
-		if ( bp_is_group_create() )
+		if ( bp_is_group_create() ) {
 			$bp_classes[] = 'group-create';
+			$bp_classes[] = bp_get_groups_current_create_step();
+		}
 
 		if ( bp_is_group_home() )
 			$bp_classes[] = 'group-home';
@@ -1639,6 +1709,10 @@ function bp_the_body_class() {
 
 		// We don't want WordPress blog classes to appear on non-blog pages.
 		if ( !bp_is_blog_page() ) {
+
+			// Observe WP custom background body class
+			if ( in_array( 'custom-background', (array) $wp_classes ) )
+				$bp_classes[] = 'custom-background';
 
 			// Preserve any custom classes already set
 			if ( !empty( $custom_classes ) ) {

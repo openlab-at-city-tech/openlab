@@ -1,19 +1,24 @@
 <?php
-/*******************************************************************************
+
+/**
+ * BuddyPress Messages Functions
+ *
  * Business functions are where all the magic happens in BuddyPress. They will
  * handle the actual saving or manipulation of information. Usually they will
  * hand off to a database class for data access, then return
  * true or false on success or failure.
+ *
+ * @package BuddyPress
+ * @subpackage MessagesFunctions
  */
 
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
 function messages_new_message( $args = '' ) {
-	global $bp;
 
 	$defaults = array (
-		'sender_id'  => $bp->loggedin_user->id,
+		'sender_id'  => bp_loggedin_user_id(),
 		'thread_id'  => false, // false for a new message, thread id for a reply to a thread.
 		'recipients' => false, // Can be an array of usernames, user_ids or mixed.
 		'subject'    => false,
@@ -84,17 +89,17 @@ function messages_new_message( $args = '' ) {
 		}
 
 		// Strip the sender from the recipient list if they exist
-		if ( $key = array_search( $sender_id, (array)$recipient_ids ) )
+		if ( $key = array_search( $sender_id, (array) $recipient_ids ) )
 			unset( $recipient_ids[$key] );
 
 		// Remove duplicates
-		$recipient_ids = array_unique( (array)$recipient_ids );
+		$recipient_ids = array_unique( (array) $recipient_ids );
 
 		if ( empty( $recipient_ids ) )
 			return false;
 
 		// Format this to match existing recipients
-		foreach( (array)$recipient_ids as $i => $recipient_id ) {
+		foreach( (array) $recipient_ids as $i => $recipient_id ) {
 			$message->recipients[$i]          = new stdClass;
 			$message->recipients[$i]->user_id = $recipient_id;
 		}
@@ -103,7 +108,7 @@ function messages_new_message( $args = '' ) {
 	if ( $message->send() ) {
 
 		// Send screen notifications to the recipients
-		foreach ( (array)$message->recipients as $recipient )
+		foreach ( (array) $message->recipients as $recipient )
 			bp_core_add_notification( $message->id, $recipient->user_id, 'messages', 'new_message' );
 
 		// Send email notifications to the recipients
@@ -119,7 +124,7 @@ function messages_new_message( $args = '' ) {
 
 
 function messages_send_notice( $subject, $message ) {
-	if ( !is_super_admin() || empty( $subject ) || empty( $message ) ) {
+	if ( !bp_current_user_can( 'bp_moderate' ) || empty( $subject ) || empty( $message ) ) {
 		return false;
 
 	// Has access to send notices, lets do it.
@@ -143,8 +148,9 @@ function messages_delete_thread( $thread_ids ) {
 	if ( is_array( $thread_ids ) ) {
 		$error = 0;
 		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
-			if ( !$status = BP_Messages_Thread::delete( $thread_ids[$i]) )
+			if ( !$status = BP_Messages_Thread::delete( $thread_ids[$i]) ) {
 				$error = 1;
+			}
 		}
 
 		if ( !empty( $error ) )
@@ -164,10 +170,8 @@ function messages_delete_thread( $thread_ids ) {
 }
 
 function messages_check_thread_access( $thread_id, $user_id = 0 ) {
-	global $bp;
-
 	if ( empty( $user_id ) )
-		$user_id = $bp->loggedin_user->id;
+		$user_id = bp_loggedin_user_id();
 
 	return BP_Messages_Thread::check_access( $thread_id, $user_id );
 }
@@ -193,10 +197,8 @@ function messages_remove_callback_values() {
 }
 
 function messages_get_unread_count( $user_id = 0 ) {
-	global $bp;
-
 	if ( empty( $user_id ) )
-		$user_id = $bp->loggedin_user->id;
+		$user_id = bp_loggedin_user_id();
 
 	return BP_Messages_Thread::get_inbox_count( $user_id );
 }
@@ -213,13 +215,8 @@ function messages_is_valid_thread( $thread_id ) {
 	return BP_Messages_Thread::is_valid( $thread_id );
 }
 
-/*******************************************************************************
- * These functions handle the recording, deleting and formatting of activity and
- * notifications for the user and for this specific component.
- */
-
 /**
- * Format the BuddyBar/admin bar notifications for the Messages component
+ * Format the BuddyBar/Toolbar notifications for the Messages component
  *
  * @package BuddyPress
  *
@@ -227,35 +224,35 @@ function messages_is_valid_thread( $thread_id ) {
  * @param int $item_id The primary item id
  * @param int $secondary_item_id The secondary item id
  * @param int $total_items The total number of messaging-related notifications waiting for the user
- * @param str $format 'string' for BuddyBar-compatible notifications; 'array' for WP Admin Bar
+ * @param str $format 'string' for BuddyBar-compatible notifications; 'array' for WP Toolbar
  */
 function messages_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
-	global $bp;
 
 	if ( 'new_message' == $action ) {
-		$link  = bp_loggedin_user_domain() . bp_get_messages_slug() . '/inbox';
+		$link  = trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/inbox' );
 		$title = __( 'Inbox', 'buddypress' );
 
-		if ( (int)$total_items > 1 ) {
-			$text = sprintf( __('You have %d new messages', 'buddypress' ), (int)$total_items );
+		if ( (int) $total_items > 1 ) {
+			$text = sprintf( __('You have %d new messages', 'buddypress' ), (int) $total_items );
 			$filter = 'bp_messages_multiple_new_message_notification';
 		} else {
-			$text = sprintf( __('You have %d new message', 'buddypress' ), (int)$total_items );
+			$text = sprintf( __('You have %d new message', 'buddypress' ), (int) $total_items );
 			$filter = 'bp_messages_single_new_message_notification';
 		}
 	}
 
 	if ( 'string' == $format ) {
-		$return = apply_filters( $filter, '<a href="' . $link . '" title="' . $title . '">' . $text . '</a>', (int)$total_items, $text, $link );
+		$return = apply_filters( $filter, '<a href="' . $link . '" title="' . $title . '">' . $text . '</a>', (int) $total_items, $text, $link );
 	} else {
 		$return = apply_filters( $filter, array(
 			'text' => $text,
 			'link' => $link
-		), $link, (int)$total_items, $text, $link );
+		), $link, (int) $total_items, $text, $link );
 	}
 
 	do_action( 'messages_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
 
 	return $return;
 }
+
 ?>
