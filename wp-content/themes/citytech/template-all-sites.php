@@ -1,8 +1,23 @@
 <?php /* Template Name: All Sites */
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_my_sites' );
-add_action('genesis_before_sidebar_widget_area','all_sites_search');
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<div <?php post_class(); ?>>
+            <div class="entry-content">
+				<?php cuny_my_sites(); ?>
+            </div><!--entry-content-->
+        </div><!--hentry-->
+    </div><!--content-->
+    <div id="sidebar" class="sidebar widget-area">
+		<?php all_sites_search(); ?>
+    </div>
+
+<?php get_footer();
+/**end layout**/
+
+
 function all_sites_search() {
 	echo "<form method='post' action='" . get_bloginfo('siteurl') . "/search'>";
 	echo "<input name='search-terms' value=''>";
@@ -72,4 +87,3 @@ function cuny_profile_activty_block($type,$title,$last) {
 		</div><?php
 
 }
-genesis();

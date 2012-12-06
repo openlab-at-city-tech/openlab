@@ -1,6 +1,22 @@
 <?php
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_group_single' );
+/**
+* Group single page
+*
+*/
+
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_group_single(); ?>
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+	<?php cuny_buddypress_group_actions(); ?>
+    </div>
+	
+<?php get_footer();
+/**end layout**/
 
 function cuny_group_single() { ?>
 	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group();
@@ -159,7 +175,6 @@ function cuny_group_single() { ?>
 	endwhile; endif; ?>
 <?php }
 
-add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_group_actions');
 function cuny_buddypress_group_actions() {
 global $bp;
 
@@ -188,5 +203,3 @@ $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id)
 	if ( $account_type != 'Student' )
 		return $subnav_item;
 }
-
-genesis();

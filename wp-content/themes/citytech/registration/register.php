@@ -1,12 +1,19 @@
-<?php
-add_filter('genesis_pre_get_option_site_layout', 'cuny_home_layout');
-function cuny_home_layout($opt) {
-    $opt = 'content-sidebar';
-    return $opt;
-}
+<?php /**
+*  sign up form template
+*
+*/
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_registration_page' );
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_registration_page(); ?>
+    </div><!--content-->
+    
+    <div id="sidebar" class="sidebar widget-area">
+	<?php cuny_buddypress_register_actions(); ?>
+    </div>
+	
+<?php get_footer();
 
 function cuny_registration_page() {
 		do_action( 'bp_before_register_page' ) ?>
@@ -163,23 +170,6 @@ function cuny_registration_page() {
 
 	<?php do_action( 'bp_after_directory_activity_content' ) ?>
 	
-	<!-- add blank sidebar -->
-	<?php
-		add_action('genesis_before_sidebar_widget_area', 'cuny_buddypress_register_actions');
-	
-	function cuny_buddypress_register_actions() {
-		global $bp;?>
-		<h2 class="sidebar-title">&nbsp;</h2>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-	<?php
-	}
-	?>
 	<script type="text/javascript">
 		jQuery(document).ready( function() {
 			if ( jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show') )
@@ -192,4 +182,15 @@ function cuny_registration_page() {
 	</script>
 <?php }
 
-genesis();
+function cuny_buddypress_register_actions() {
+		global $bp;?>
+		<h2 class="sidebar-title">&nbsp;</h2>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+	<?php
+	}
