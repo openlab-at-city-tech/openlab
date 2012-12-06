@@ -262,7 +262,10 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				//   case show site posts and comments even though this group is private
 				//
 
-					show_site_posts_and_comments() ?>
+				if ( wds_site_can_be_viewed() ) {
+					show_site_posts_and_comments();
+					echo "<div class='clear'></div>";
+				} ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 
@@ -283,7 +286,10 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				//   case show site posts and comments even though this group is private
 				//
 
-					show_site_posts_and_comments() ?>
+				if ( wds_site_can_be_viewed() ) {
+					show_site_posts_and_comments();
+					echo "<div class='clear'></div>";
+				} ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 
