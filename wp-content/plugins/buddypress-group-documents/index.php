@@ -125,6 +125,7 @@ function bp_group_documents_setup_globals() {
 	global $bp, $wpdb;
 
 	/* For internal identification */
+	$bp->group_documents = new stdClass;
 	$bp->group_documents->id = 'group_documents';
 	$bp->group_documents->table_name = $wpdb->base_prefix . 'bp_group_documents';
 	$bp->group_documents->format_notification_function = 'bp_group_documents_format_notifications';
@@ -189,7 +190,7 @@ add_action( 'admin_menu', 'bp_group_documents_check_installed',50);
 /**
  * bp_group_documents_setup_nav()
  *
- * Sets up the navigation items for the component.  
+ * Sets up the navigation items for the component.
  * Adds documents item under the group navigation
  */
 function bp_group_documents_setup_nav() {
@@ -212,13 +213,13 @@ function bp_group_documents_setup_nav() {
 
 	/* Add the subnav item only to the single group nav item*/
 	if ( $bp->is_single_item )
-    bp_core_new_subnav_item( array( 
-		'name' => __( 'Documents', 'bp-group-documents' ), 
-		'slug' => $bp->group_documents->slug, 
-		'parent_url' => $groups_link, 
+    bp_core_new_subnav_item( array(
+		'name' => __( 'Documents', 'bp-group-documents' ),
+		'slug' => $bp->group_documents->slug,
+		'parent_url' => $groups_link,
 		'parent_slug' => bp_get_current_group_slug(),
-		'screen_function' => 'bp_group_documents_display', 
-		'position' => 35, 
+		'screen_function' => 'bp_group_documents_display',
+		'position' => 35,
 		'user_has_access' => $bp->groups->current_group->user_has_access,
 		'item_css_id' => 'group-documents' ) );
 
@@ -373,7 +374,7 @@ function bp_group_documents_display_content() {
 			<a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo $document->name; ?>
 
 			<?php if( get_option( 'bp_group_documents_display_file_size' )) { echo ' <span class="group-documents-filesize">(' . get_file_size( $document ) . ')</span>'; } ?></a> &nbsp;
-			
+
 			<span class="group-documents-meta"><?php printf( __( 'Uploaded by %s on %s', 'bp-group-documents'),bp_core_get_userlink($document->user_id),date( get_option('date_format'), $document->created_ts )); ?></span>
 
 			<?php if( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ){ echo '<br /><span class="group-documents-description">' . nl2br($document->description) . '</span>'; }
@@ -535,14 +536,14 @@ function bp_group_documents_check_ext( $filename ) {
 function get_file_size( $document, $precision = 1 ) {
 
     $units = array('b', 'k', 'm', 'g');
-  
+
 	$bytes = filesize( $document->get_path(1) );
     $bytes = max($bytes, 0);
     $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
     $pow = min($pow, count($units) - 1);
-  
+
     $bytes /= pow(1024, $pow);
-  
+
     return round($bytes, $precision) .  $units[$pow];
 }
 

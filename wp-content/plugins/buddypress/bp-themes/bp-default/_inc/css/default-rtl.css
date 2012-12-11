@@ -27,7 +27,7 @@ right to left for languages that support this method.
 	5.1 - Activity
 		5.1.1 - Activity Listing
 		5.1.2 - Activity Comments
-	5.2 - Admin Bar
+	5.2 - Toolbar
 	5.3 - Ajax Loading
 	5.4 - Directories - Members, Groups, Blogs, Forums
 	5.5 - Error / Success Messages
@@ -247,17 +247,6 @@ dl {
 	margin-left: auto;
 	margin-right: 0;
 }
-#nav ul,
-#nav .sfhover ul ul,
-#nav :hover ul ul {
-	left: auto;
-	right: -9999px;
-}
-#nav .sfhover ul,
-#nav :hover ul {
-	left: auto;
-	right: 0;
-}
 #nav .sfhover ul .sfhover > ul,
 #nav :hover ul :hover > ul {
 	left: auto;
@@ -267,6 +256,11 @@ dl {
 .paged-navigation,
 .comment-navigation {
 	font-family: sans-serif;
+}
+#nav .sfhover ul li a,
+#nav :hover ul li a {
+	padding-left: 0;
+	padding-right: 10px;
 }
 
 
@@ -558,7 +552,7 @@ body.activity-permalink div.activity-comments > ul {
 
 
 /*--------------------------------------------------------------
-5.2 - Admin Bar
+5.2 - Toolbar
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 5.3 - Ajax Loading
@@ -766,4 +760,7 @@ div#message-thread div.message-content {
 }
 div#message-thread div.message-options {
 	text-align: left;
+}
+div.message-search {
+	float: left;
 }

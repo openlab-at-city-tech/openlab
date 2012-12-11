@@ -1,40 +1,29 @@
 <?php
+
+/**
+ * BuddyPress Core Loader
+ *
+ * Core contains the commonly used functions, classes, and API's
+ *
+ * @package BuddyPress
+ * @subpackage Core
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-// Require all of the BuddyPress core libraries
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-cache.php'     );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-hooks.php'     );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-cssjs.php'     );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-classes.php'   );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-filters.php'   );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-avatars.php'   );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-widgets.php'   );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-template.php'  );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-buddybar.php'  );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-catchuri.php'  );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-component.php' );
-require( BP_PLUGIN_DIR . '/bp-core/bp-core-functions.php' );
-
-// Load deprecated functions
-require( BP_PLUGIN_DIR . '/bp-core/deprecated/1.5.php'    );
-
-// Load the WP admin bar.
-if ( !defined( 'BP_DISABLE_ADMIN_BAR' ) )
-	require( BP_PLUGIN_DIR . '/bp-core/bp-core-adminbar.php'  );
-
-// Move active components from sitemeta, if necessary
-// Provides backpat with earlier versions of BP
-if ( is_multisite() && $active_components = get_site_option( 'bp-active-components' ) )
-	bp_update_option( 'bp-active-components', $active_components );
-
-/** "And now for something completely different" ******************************/
-
 class BP_Core extends BP_Component {
 
+	/**
+	 * Start the members component creation process
+	 *
+	 * @since BuddyPress (1.5)
+	 *
+	 * @uses BP_Core::bootstrap()
+	 */
 	function __construct() {
 		parent::start(
-			'_core',
+			'core',
 			__( 'BuddyPress Core', 'buddypress' )
 			, BP_PLUGIN_DIR
 		);
@@ -42,6 +31,16 @@ class BP_Core extends BP_Component {
 		$this->bootstrap();
 	}
 
+	/**
+	 * Populate the global data needed before BuddyPress can continue
+	 *
+	 * This involves figuring out the currently required, active, deactive,
+	 * and optional components.
+	 *
+	 * @since BuddyPress (1.5)
+	 *
+	 * @global BuddyPress $bp
+	 */
 	private function bootstrap() {
 		global $bp;
 
@@ -69,6 +68,7 @@ class BP_Core extends BP_Component {
 
 		// Pre 1.5 Backwards compatibility
 		} elseif ( $deactivated_components = bp_get_option( 'bp-deactivated-components' ) ) {
+
 			// Trim off namespace and filename
 			foreach ( (array) $deactivated_components as $component => $value )
 				$trimmed[] = str_replace( '.php', '', str_replace( 'bp-', '', $component ) );
@@ -77,24 +77,19 @@ class BP_Core extends BP_Component {
 			$bp->deactivated_components = apply_filters( 'bp_deactivated_components', $trimmed );
 
 			// Setup the active components
-			$active_components     = array_flip( array_diff( array_values( array_merge( $bp->optional_components, $bp->required_components ) ), array_values( $bp->deactivated_components ) ) );
-
-			// Loop through active components and set the values
-			$bp->active_components = array_map( '__return_true', $active_components );
+			$active_components     = array_fill_keys( array_diff( array_values( array_merge( $optional_components, $required_components ) ), array_values( $deactivated_components ) ), '1' );
 
 			// Set the active component global
 			$bp->active_components = apply_filters( 'bp_active_components', $bp->active_components );
 
 		// Default to all components active
 		} else {
+
 			// Set globals
 			$bp->deactivated_components = array();
 
 			// Setup the active components
-			$active_components     = array_flip( array_values( array_merge( $bp->optional_components, $bp->required_components ) ) );
-
-			// Loop through active components and set the values
-			$bp->active_components = array_map( '__return_true', $active_components );
+			$active_components     = array_fill_keys( array_values( array_merge( $bp->optional_components, $bp->required_components ) ), '1' );
 
 			// Set the active component global
 			$bp->active_components = apply_filters( 'bp_active_components', $bp->active_components );
@@ -114,6 +109,26 @@ class BP_Core extends BP_Component {
 		$bp->required_components[] = 'core';
 	}
 
+	function includes() {
+
+		if ( !is_admin() )
+			return;
+
+		$includes = array(
+			'admin'
+		);
+
+		parent::includes( $includes );
+	}
+
+	/**
+	 * Sets up a majority of the BuddyPress globals that require a minimal
+	 * amount of processing, meaning they cannot be set in the BuddyPress class.
+	 *
+	 * @since BuddyPress (1.5)
+	 *
+	 * @global BuddyPress $bp
+	 */
 	function setup_globals() {
 		global $bp;
 
@@ -135,40 +150,19 @@ class BP_Core extends BP_Component {
 		if ( empty( $bp->pages ) )
 			$bp->pages = bp_core_get_directory_pages();
 
-		/** Admin Bar *********************************************************/
-
-		// Set the 'My Account' global to prevent debug notices
-		$bp->my_account_menu_id = false;
-
-		/** Component and Action **********************************************/
-
-		// Used for overriding the 2nd level navigation menu so it can be used to
-		// display custom navigation for an item (for example a group)
-		$bp->is_single_item = false;
-
-		// Sets up the array container for the component navigation rendered
-		// by bp_get_nav()
-		$bp->bp_nav            = array();
-
-		// Sets up the array container for the component options navigation
-		// rendered by bp_get_options_nav()
-		$bp->bp_options_nav    = array();
-
-		// Contains an array of all the active components. The key is the slug,
-		// value the internal ID of the component.
-		//$bp->active_components = array();
-
 		/** Basic current user data *******************************************/
 
 		// Logged in user is the 'current_user'
 		$current_user            = wp_get_current_user();
 
 		// The user ID of the user who is currently logged in.
-		$bp->loggedin_user->id   = $current_user->ID;
+		$bp->loggedin_user       = new stdClass;
+		$bp->loggedin_user->id   = isset( $current_user->ID ) ? $current_user->ID : 0;
 
 		/** Avatars ***********************************************************/
 
 		// Fetches the default Gravatar image to use if the user/group/blog has no avatar or gravatar
+		$bp->grav_default        = new stdClass;
 		$bp->grav_default->user  = apply_filters( 'bp_user_gravatar_default',  $bp->site_options['avatar_default'] );
 		$bp->grav_default->group = apply_filters( 'bp_group_gravatar_default', $bp->grav_default->user );
 		$bp->grav_default->blog  = apply_filters( 'bp_blog_gravatar_default',  $bp->grav_default->user );
@@ -192,14 +186,21 @@ class BP_Core extends BP_Component {
 		do_action( 'bp_core_setup_globals' );
 	}
 
+	/**
+	 * Setup BuddyBar navigation
+	 *
+	 * @since BuddyPress (1.5)
+	 *
+	 * @global BuddyPress $bp
+	 */
 	function setup_nav() {
 		global $bp;
 
-		/***
-		 * If the extended profiles component is disabled, we need to revert to using the
-		 * built in WordPress profile information
-		 */
+		 // If xprofile component is disabled, revert to WordPress profile
 		if ( !bp_is_active( 'xprofile' ) ) {
+
+			// Define local variable
+			$sub_nav = array();
 
 			// Fallback values if xprofile is disabled
 			$bp->core->profile->slug = 'profile';
@@ -214,7 +215,7 @@ class BP_Core extends BP_Component {
 				'default_subnav_slug' => 'public'
 			);
 
-			$profile_link = trailingslashit( $bp->loggedin_user->domain . '/' . $bp->core->profile->slug );
+			$profile_link = trailingslashit( bp_loggedin_user_domain() . '/' . $bp->core->profile->slug );
 
 			// Add the subnav items to the profile
 			$sub_nav[] = array(
@@ -224,11 +225,23 @@ class BP_Core extends BP_Component {
 				'parent_slug'     => $bp->core->profile->slug,
 				'screen_function' => 'bp_core_catch_profile_uri'
 			);
+
+			parent::setup_nav( $main_nav, $sub_nav );
 		}
 	}
 }
 
-// Initialize the BuddyPress Core
-$bp->core = new BP_Core();
+/**
+ * Setup the BuddyPress Core component
+ *
+ * @since BuddyPress (1.6)
+ *
+ * @global BuddyPress $bp
+ */
+function bp_setup_core() {
+	global $bp;
+	$bp->core = new BP_Core();
+}
+add_action( 'bp_setup_components', 'bp_setup_core', 2 );
 
 ?>

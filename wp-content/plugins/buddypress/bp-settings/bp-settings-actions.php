@@ -1,25 +1,40 @@
 <?php
+
+/**
+ * BuddyPress Settings Actions
+ *
+ * @todo split actions into separate screen functions
+ * @package BuddyPress
+ * @subpackage SettingsActions
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-/** General *******************************************************************/
-
 /**
  * Handles the changing and saving of user email addressos and passwords
- * 
+ *
  * We do quite a bit of logic and error handling here to make sure that users
  * do not accidentally lock themselves out of their accounts. We also try to
  * provide as accurate of feedback as possible without exposing anyone else's
  * inforation to them.
- * 
+ *
  * Special considerations are made for super admins that are able to edit any
  * users accounts already, without knowing their existing password.
  *
  * @global BuddyPress $bp
  * @return If no reason to proceed
  */
-function bp_core_screen_general_settings() {
+function bp_settings_action_general() {
 	global $bp;
+
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+		return;
+
+	// Bail if not in settings
+	if ( ! bp_is_settings_component() || ! bp_is_current_action( 'general' ) )
+		return;
 
 	// 404 if there are any additional action variables attached
 	if ( bp_action_variables() ) {
@@ -27,21 +42,16 @@ function bp_core_screen_general_settings() {
 		return;
 	}
 
-	/** Handle Form ***********************************************************/
+	// Define local defaults
+	$email_error   = false;   // invalid|blocked|taken|empty|nochange
+	$pass_error    = false;   // invalid|mismatch|empty|nochange
+	$pass_changed  = false;   // true if the user changes their password
+	$email_changed = false;   // true if the user changes their email
+	$feedback_type = 'error'; // success|error
+	$feedback      = array(); // array of strings for feedback
 
-	if ( 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 
-		// Bail if not in settings
-		if ( ! bp_is_settings_component() || ! bp_is_current_action( 'general' ) )
-			return;
-
-		// Define local defaults
-		$email_error   = false;   // invalid|blocked|taken|empty|false
-		$pass_error    = false;   // invalid|mismatch|empty|false
-		$pass_changed  = false;   // true if the user changes their password
-		$email_changed = false;   // true if the user changes their email
-		$feedback_type = 'error'; // success|error
-		$feedback      = array(); // array of strings for feedback
+	if ( isset( $_POST['submit'] ) ) {
 
 		// Nonce check
 		check_admin_referer('bp_settings_general');
@@ -202,63 +212,144 @@ function bp_core_screen_general_settings() {
 
 		// Redirect to prevent issues with browser back button
 		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
-		
-	// Load the template
-	} else {
-		bp_core_load_template( apply_filters( 'bp_core_screen_general_settings', 'members/single/settings/general' ) );
 	}
 }
+add_action( 'bp_actions', 'bp_settings_action_general' );
 
-/** Notifications *************************************************************/
+/**
+ * Handles the changing and saving of user notification settings
+ *
+ * @return If no reason to proceed
+ */
+function bp_settings_action_notifications() {
 
-function bp_core_screen_notification_settings() {
-	global $bp;
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+		return;
 
+	// Bail if not in settings
+	if ( ! bp_is_settings_component() || ! bp_is_current_action( 'notifications' ) )
+		return false;
+
+	// 404 if there are any additional action variables attached
 	if ( bp_action_variables() ) {
 		bp_do_404();
 		return;
 	}
 
 	if ( isset( $_POST['submit'] ) ) {
-		check_admin_referer('bp_settings_notifications');
+		check_admin_referer( 'bp_settings_notifications' );
 
 		if ( isset( $_POST['notifications'] ) ) {
-			foreach ( (array)$_POST['notifications'] as $key => $value ) {
-				if ( $meta_key = bp_get_user_meta_key( $key ) )
-					bp_update_user_meta( (int)$bp->displayed_user->id, $meta_key, $value );
+			foreach ( (array) $_POST['notifications'] as $key => $value ) {
+				if ( $meta_key = bp_get_user_meta_key( $key ) ) {
+					bp_update_user_meta( (int) bp_displayed_user_id(), $meta_key, $value );
+				}
 			}
 		}
 
-		bp_core_add_message( __( 'Changes saved.', 'buddypress' ), 'success' );
+		// Switch feedback for super admins
+		if ( bp_is_my_profile() ) {
+			bp_core_add_message( __( 'Your notification settings have been saved.',        'buddypress' ), 'success' );
+		} else {
+			bp_core_add_message( __( "This user's notification settings have been saved.", 'buddypress' ), 'success' );
+		}
 
 		do_action( 'bp_core_notification_settings_after_save' );
+
+		bp_core_redirect( bp_displayed_user_domain() . bp_get_settings_slug() . '/notifications/' );
+	}
+}
+add_action( 'bp_actions', 'bp_settings_action_notifications' );
+
+/**
+ * Handles the setting of user capabilities, spamming, hamming, role, etc...
+ *
+ * @return If no reason to proceed
+ */
+function bp_settings_action_capabilities() {
+
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+		return;
+
+	// Bail if not in settings
+	if ( ! bp_is_settings_component() || ! bp_is_current_action( 'capabilities' ) )
+		return false;
+
+	// 404 if there are any additional action variables attached
+	if ( bp_action_variables() ) {
+		bp_do_404();
+		return;
 	}
 
-	bp_core_load_template( apply_filters( 'bp_core_screen_notification_settings', 'members/single/settings/notifications' ) );
+	if ( isset( $_POST['capabilities-submit'] ) ) {
+
+		// Nonce check
+		check_admin_referer( 'capabilities' );
+
+		do_action( 'bp_settings_capabilities_before_save' );
+
+		/** Spam **************************************************************/
+
+		$is_spammer = !empty( $_POST['user-spammer'] ) ? true : false;
+
+		if ( bp_is_user_spammer( bp_displayed_user_id() ) != $is_spammer ) {
+			$status = ( true == $is_spammer ) ? 'spam' : 'ham';
+			bp_core_process_spammer_status( bp_displayed_user_id(), $status );
+			do_action( 'bp_core_action_set_spammer_status', bp_displayed_user_id(), $status );
+		}
+
+		/** Other *************************************************************/
+
+		do_action( 'bp_settings_capabilities_after_save' );
+
+		// Redirect to the root domain
+		bp_core_redirect( bp_displayed_user_domain() . bp_get_settings_slug() . '/capabilities/' );
+	}
 }
+add_action( 'bp_actions', 'bp_settings_action_capabilities' );
 
-/** Delete Account ************************************************************/
+/**
+ * Handles the deleting of a user
+ *
+ * @return If no reason to proceed
+ */
+function bp_settings_action_delete_account() {
 
-function bp_core_screen_delete_account() {
-	global $bp;
+	// Bail if not a POST action
+	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+		return;
 
+	// Bail if not in settings
+	if ( ! bp_is_settings_component() || ! bp_is_current_action( 'delete-account' ) )
+		return false;
+
+	// 404 if there are any additional action variables attached
 	if ( bp_action_variables() ) {
 		bp_do_404();
 		return;
 	}
 
 	if ( isset( $_POST['delete-account-understand'] ) ) {
+
 		// Nonce check
 		check_admin_referer( 'delete-account' );
 
+		// Get username now because it might be gone soon!
+		$username = bp_get_displayed_user_fullname();
+
 		// delete the users account
-		if ( bp_core_delete_account( $bp->displayed_user->id ) ) {
-			bp_core_redirect( home_url() );
+		if ( bp_core_delete_account( bp_displayed_user_id() ) ) {
+
+			// Add feedback ater deleting a user
+			bp_core_add_message( sprintf( __( '%s was successfully deleted.', 'buddypress' ), $username ), 'success' );
+
+			// Redirect to the root domain
+			bp_core_redirect( bp_get_root_domain() );
 		}
 	}
-
-	// Load the template
-	bp_core_load_template( apply_filters( 'bp_core_screen_delete_account', 'members/single/settings/delete-account' ) );
 }
+add_action( 'bp_actions', 'bp_settings_action_delete_account' );
 
 ?>

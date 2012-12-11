@@ -1,6 +1,6 @@
 <?php include "header.php";?>
 <div id="single-course-body">
-<?php 
+<?php
 //
 //     control the formatting of left and right side by use of variable $first_class.
 //     when it is "first" it places it on left side, when it is "" it places it on right side
@@ -38,7 +38,7 @@
 
 			<?php if ( bp_group_is_visible() && bp_is_active( 'activity' ) ) : ?>
 			<?php
-				if (wds_site_can_be_viewed()) {
+				if ( wds_site_can_be_viewed() ) {
 				     show_site_posts_and_comments();
 				}
 /*
@@ -58,7 +58,7 @@
 								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
 									<li>
 									<h5><?php bp_the_topic_title() ?></h5>
-                         
+
 						<?php
 							$topic_id = bp_get_the_topic_id();
 							$last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
@@ -146,13 +146,13 @@
 				  </div>
 
 				<?php endif;?>
-                
+
                 <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
 				<?php else: ?>
                     <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
                 <?php endif; ?>
-                
+
 			</div>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>
@@ -160,7 +160,7 @@
 				//   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
 				//   case show site posts and comments even though this group is private
 				//
-					if (wds_site_can_be_viewed()) {
+					if ( wds_site_can_be_viewed() ) {
 						show_site_posts_and_comments();
 						echo "<div class='clear'></div>";
 					}
@@ -184,7 +184,7 @@
 				//   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
 				//   case show site posts and comments even though this group is private
 				//
-					if (wds_site_can_be_viewed()) {
+					if ( wds_site_can_be_viewed() ) {
 						show_site_posts_and_comments();
 						echo "<div class='clear'></div>";
 					}

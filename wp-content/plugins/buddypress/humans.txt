@@ -33,7 +33,7 @@ Twitter: apeatling
 
 Name: John James Jacoby
 Title: Lead Developer
-Twitter: jjj
+Twitter: johnjamesjacoby
 Favorite Food: Pizza
 
 Name: Boone B. Gorges
@@ -47,7 +47,7 @@ Twitter: pgibbs
 Favourite Food: Pizza
 
 /* THANKS */
-r-a-y, hnla, mercime, modemlooper, cnorris23
+r-a-y, hnla, mercime, modemlooper, cnorris23, karmatosed
 
 /* META */
 Updated: 2011/08/29

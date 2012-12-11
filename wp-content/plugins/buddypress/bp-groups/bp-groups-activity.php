@@ -1,12 +1,13 @@
 <?php
+
 /**
- * BuddyPress Groups Activity & Notification Functions
+ * BuddyPress Groups Activity Functions
  *
- * These functions handle the recording, deleting and formatting of activity and
- * notifications for the user and for this specific component.
+ * These functions handle the recording, deleting and formatting of activity
+ * for the user and for this specific component.
  *
  * @package BuddyPress
- * @subpackage Groups
+ * @subpackage GroupsActivity
  */
 
 // Exit if accessed directly
@@ -33,15 +34,23 @@ function groups_record_activity( $args = '' ) {
 	if ( !bp_is_active( 'activity' ) )
 		return false;
 
-	// If the group is not public, hide the activity sitewide.
-	if ( isset( $bp->groups->current_group->status ) && 'public' == $bp->groups->current_group->status )
-		$hide_sitewide = false;
-	else
-		$hide_sitewide = true;
+	// Set the default for hide_sitewide by checking the status of the group
+	$hide_sitewide = false;
+	if ( !empty( $args['item_id'] ) ) {
+		if ( bp_get_current_group_id() == $args['item_id'] ) {
+			$group = groups_get_current_group();
+		} else {
+			$group = groups_get_group( array( 'group_id' => $args['item_id'] ) );
+		}
+
+		if ( isset( $group->status ) && 'public' != $group->status ) {
+			$hide_sitewide = true;
+		}
+	}
 
 	$defaults = array (
 		'id'                => false,
-		'user_id'           => $bp->loggedin_user->id,
+		'user_id'           => bp_loggedin_user_id(),
 		'action'            => '',
 		'content'           => '',
 		'primary_link'      => '',
@@ -62,35 +71,34 @@ function groups_record_activity( $args = '' ) {
 function groups_update_last_activity( $group_id = 0 ) {
 	global $bp;
 
-	if ( !$group_id )
+	if ( empty( $group_id ) )
 		$group_id = $bp->groups->current_group->id;
 
-	if ( !$group_id )
+	if ( empty( $group_id ) )
 		return false;
 
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 }
-add_action( 'groups_leave_group', 'groups_update_last_activity' );
-add_action( 'groups_created_group', 'groups_update_last_activity' );
-add_action( 'groups_new_forum_topic', 'groups_update_last_activity' );
+add_action( 'groups_leave_group',          'groups_update_last_activity' );
+add_action( 'groups_created_group',        'groups_update_last_activity' );
+add_action( 'groups_new_forum_topic',      'groups_update_last_activity' );
 add_action( 'groups_new_forum_topic_post', 'groups_update_last_activity' );
 
 function groups_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
-	global $bp;
 
 	switch ( $action ) {
 		case 'new_membership_request':
 			$group_id = $secondary_item_id;
 			$requesting_user_id = $item_id;
 
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
 			// Set up the string and the filter
 			// Because different values are passed to the filters, we'll return the
 			// values inline
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( '%1$d new membership requests for the group "%2$s"', 'buddypress' ), (int)$total_items, $group->name );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( '%1$d new membership requests for the group "%2$s"', 'buddypress' ), (int) $total_items, $group->name );
 				$filter = 'bp_groups_multiple_new_membership_requests_notification';
 				$notification_link = $group_link . 'admin/membership-requests/?n=1';
 
@@ -123,13 +131,13 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'membership_request_accepted':
 			$group_id = $item_id;
 
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( '%d accepted group membership requests', 'buddypress' ), (int)$total_items, $group->name );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( '%d accepted group membership requests', 'buddypress' ), (int) $total_items, $group->name );
 				$filter = 'bp_groups_multiple_membership_request_accepted_notification';
-				$notification_link = bp_loggedin_user_domain() . bp_get_groups_slug() . '/?n=1';
+				$notification_link = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) . '?n=1';
 
 				if ( 'string' == $format ) {
 					return apply_filters( $filter, '<a href="' . $notification_link . '" title="' . __( 'Groups', 'buddypress' ) . '">' . $text . '</a>', $total_items, $group->name, $text, $notification_link );
@@ -159,13 +167,13 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'membership_request_rejected':
 			$group_id = $item_id;
 
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( '%d rejected group membership requests', 'buddypress' ), (int)$total_items, $group->name );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( '%d rejected group membership requests', 'buddypress' ), (int) $total_items, $group->name );
 				$filter = 'bp_groups_multiple_membership_request_rejected_notification';
-				$notification_link = bp_loggedin_user_domain() . bp_get_groups_slug() . '/?n=1';
+				$notification_link = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) . '?n=1';
 
 				if ( 'string' == $format ) {
 					return apply_filters( $filter, '<a href="' . $notification_link . '" title="' . __( 'Groups', 'buddypress' ) . '">' . $text . '</a>', $total_items, $group->name );
@@ -195,13 +203,13 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'member_promoted_to_admin':
 			$group_id = $item_id;
 
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( 'You were promoted to an admin in %d groups', 'buddypress' ), (int)$total_items );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( 'You were promoted to an admin in %d groups', 'buddypress' ), (int) $total_items );
 				$filter = 'bp_groups_multiple_member_promoted_to_admin_notification';
-				$notification_link = bp_loggedin_user_domain() . bp_get_groups_slug() . '?n=1';
+				$notification_link = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) . '?n=1';
 
 				if ( 'string' == $format ) {
 					return apply_filters( $filter, '<a href="' . $notification_link . '" title="' . __( 'Groups', 'buddypress' ) . '">' . $text . '</a>', $total_items, $text, $notification_link );
@@ -231,13 +239,13 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'member_promoted_to_mod':
 			$group_id = $item_id;
 
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( 'You were promoted to a mod in %d groups', 'buddypress' ), (int)$total_items );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( 'You were promoted to a mod in %d groups', 'buddypress' ), (int) $total_items );
 				$filter = 'bp_groups_multiple_member_promoted_to_mod_notification';
-				$notification_link = bp_loggedin_user_domain() . bp_get_groups_slug() . '?n=1';
+				$notification_link = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) . '?n=1';
 
 				if ( 'string' == $format ) {
 					return apply_filters( $filter, '<a href="' . $notification_link . '" title="' . __( 'Groups', 'buddypress' ) . '">' . $text . '</a>', $total_items, $text, $notification_link );
@@ -266,13 +274,13 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 
 		case 'group_invite':
 			$group_id = $item_id;
-			$group = new BP_Groups_Group( $group_id );
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
 			$group_link = bp_get_group_permalink( $group );
 
 			$notification_link = bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites/?n=1';
 
-			if ( (int)$total_items > 1 ) {
-				$text = sprintf( __( 'You have %d new group invitations', 'buddypress' ), (int)$total_items );
+			if ( (int) $total_items > 1 ) {
+				$text = sprintf( __( 'You have %d new group invitations', 'buddypress' ), (int) $total_items );
 				$filter = 'bp_groups_multiple_group_invite_notification';
 
 				if ( 'string' == $format ) {
@@ -304,4 +312,5 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 
 	return false;
 }
+
 ?>
