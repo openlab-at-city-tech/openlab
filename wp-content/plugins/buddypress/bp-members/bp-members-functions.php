@@ -478,7 +478,7 @@ function bp_core_get_total_member_count() {
 
 	if ( !$count = wp_cache_get( 'bp_total_member_count', 'bp' ) ) {
 		$status_sql = bp_core_get_status_sql();
-		$count = $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE {$status_sql}" );
+		$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE {$status_sql}" ) );
 		wp_cache_set( 'bp_total_member_count', $count, 'bp' );
 	}
 
@@ -496,13 +496,13 @@ function bp_core_get_active_member_count() {
 	if ( !$count = get_transient( 'bp_active_member_count' ) ) {
 		// Avoid a costly join by splitting the lookup
 		if ( is_multisite() ) {
-			$sql = "SELECT ID FROM $wpdb->users WHERE (user_status != 0 OR deleted != 0 OR user_status != 0)";
+			$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE (user_status != 0 OR deleted != 0 OR user_status != 0)" );
 		} else {
-			$sql = "SELECT ID FROM $wpdb->users WHERE user_status != 0";
+			$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE user_status != 0" );
 		}
 
 		$exclude_users = $wpdb->get_col( $sql );
-		$exclude_users_sql = !empty( $exclude_users ) ? "AND user_id NOT IN (" . implode( ',', wp_parse_id_list( $exclude_users ) ) . ")" : '';
+		$exclude_users_sql = !empty( $exclude_users ) ? $wpdb->prepare( "AND user_id NOT IN (" . implode( ',', wp_parse_id_list( $exclude_users ) ) . ")" ) : '';
 
 		$count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(user_id) FROM $wpdb->usermeta WHERE meta_key = %s {$exclude_users_sql}", bp_get_user_meta_key( 'last_activity' ) ) );
 		set_transient( 'bp_active_member_count', $count );
@@ -970,57 +970,7 @@ function bp_core_get_illegal_names( $value = '', $oldvalue = '' ) {
 add_filter( 'pre_update_site_option_illegal_names', 'bp_core_get_illegal_names', 10, 2 );
 
 /**
- * Check that an email address is valid for use
- *
- * Performs the following checks:
- *   - Is the email address well-formed?
- *   - Is the email address already used?
- *   - If there's an email domain blacklist, is the current domain on it?
- *   - If there's an email domain whitelest, is the current domain on it?
- *
- * @since 1.6.2
- *
- * @param string $user_email The email being checked
- * @return bool|array True if the address passes all checks; otherwise an array
- *   of error codes
- */
-function bp_core_validate_email_address( $user_email ) {
-	$errors = array();
-
-	$user_email = sanitize_email( $user_email );
-
-	// Is the email well-formed?
-	if ( ! is_email( $user_email ) )
-		$errors['invalid'] = 1;
-
-	// Is the email on the Banned Email Domains list?
-	// Note: This check only works on Multisite
-	if ( function_exists( 'is_email_address_unsafe' ) && is_email_address_unsafe( $user_email ) )
-		$errors['domain_banned'] = 1;
-
-	// Is the email on the Limited Email Domains list?
-	// Note: This check only works on Multisite
-	$limited_email_domains = get_site_option( 'limited_email_domains' );
-	if ( is_array( $limited_email_domains ) && empty( $limited_email_domains ) == false ) {
-		$emaildomain = substr( $user_email, 1 + strpos( $user_email, '@' ) );
-		if ( ! in_array( $emaildomain, $limited_email_domains ) ) {
-			$errors['domain_not_allowed'] = 1;
-		}
-	}
-
-	// Is the email alreday in use?
-	if ( email_exists( $user_email ) )
-		$errors['in_use'] = 1;
-
-	$retval = ! empty( $errors ) ? $errors : true;
-
-	return apply_filters( 'bp_core_validate_email_address', $retval, $user_email );
-}
-
-/**
  * Validate a user name and email address when creating a new user.
- *
- * @todo Refactor to use bp_core_validate_email_address()
  *
  * @param string $user_name Username to validate
  * @param string $user_email Email address to validate

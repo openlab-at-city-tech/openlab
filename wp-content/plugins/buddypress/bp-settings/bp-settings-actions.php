@@ -71,21 +71,25 @@ function bp_settings_action_general() {
 				// User is changing email address
 				if ( $bp->displayed_user->userdata->user_email != $user_email ) {
 
-					// Run some tests on the email address
-					$email_checks = bp_core_validate_email_address( $user_email );
+					// Is email valid
+					if ( !is_email( $user_email ) )
+						$email_error = 'invalid';
 
-					if ( true !== $email_checks ) {
-						if ( isset( $email_checks['invalid'] ) ) {
-							$email_error = 'invalid';
-						}
+					// Get blocked email domains
+					$limited_email_domains = get_site_option( 'limited_email_domains', 'buddypress' );
 
-						if ( isset( $email_checks['domain_banned'] ) || isset( $email_checks['domain_not_allowed'] ) ) {
+					// If blocked email domains exist, see if this is one of them
+					if ( is_array( $limited_email_domains ) && empty( $limited_email_domains ) == false ) {
+						$emaildomain = substr( $user_email, 1 + strpos( $user_email, '@' ) );
+
+						if ( in_array( $emaildomain, (array) $limited_email_domains ) == false ) {
 							$email_error = 'blocked';
 						}
+					}
 
-						if ( isset( $email_checks['in_use'] ) ) {
-							$email_error = 'taken';
-						}
+					// No errors, and email address doesn't match
+					if ( ( false === $email_error ) && email_exists( $user_email ) ) {
+						$email_error = 'taken';
 					}
 
 					// Yay we made it!
@@ -238,7 +242,9 @@ function bp_settings_action_notifications() {
 
 		if ( isset( $_POST['notifications'] ) ) {
 			foreach ( (array) $_POST['notifications'] as $key => $value ) {
-				bp_update_user_meta( (int) bp_displayed_user_id(), $key, $value );
+				if ( $meta_key = bp_get_user_meta_key( $key ) ) {
+					bp_update_user_meta( (int) bp_displayed_user_id(), $meta_key, $value );
+				}
 			}
 		}
 

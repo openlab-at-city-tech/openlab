@@ -475,6 +475,7 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 	if ( !apply_filters( 'bp_core_pre_avatar_handle_upload', true, $file, $upload_dir_filter ) )
 		return true;
 
+	require_once( ABSPATH . '/wp-admin/includes/image.php' );
 	require_once( ABSPATH . '/wp-admin/includes/file.php' );
 
 	$uploadErrors = array(
@@ -513,46 +514,27 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 	}
 
 	// Get image size
-	$size  = @getimagesize( $bp->avatar_admin->original['file'] );
-	$error = false;
+	$size = @getimagesize( $bp->avatar_admin->original['file'] );
 
 	// Check image size and shrink if too large
 	if ( $size[0] > bp_core_avatar_original_max_width() ) {
-		$editor = wp_get_image_editor( $bp->avatar_admin->original['file'] );
+		$thumb = wp_create_thumbnail( $bp->avatar_admin->original['file'], bp_core_avatar_original_max_width() );
 
-		if ( ! is_wp_error( $editor ) ) {
-			$editor->set_quality( 100 );
-
-			$resized = $editor->resize( bp_core_avatar_original_max_width(), bp_core_avatar_original_max_width(), false );
-			if ( ! is_wp_error( $resized ) )
-				$thumb = $editor->save( $editor->generate_filename() );
-			else
-				$error = $resized;
-
-			// Check for thumbnail creation errors
-			if ( false === $error && is_wp_error( $thumb ) )
-				$error = $thumb;
-
-			if ( false === $error ) {
-				// Thumbnail is good so proceed
-				$bp->avatar_admin->resized = $thumb;
-			}
-
-		} else {
-			$error = $editor;
-		}
-
-		if ( false !== $error ) {
-			bp_core_add_message( sprintf( __( 'Upload Failed! Error was: %s', 'buddypress' ), $error->get_error_message() ), 'error' );
+		// Check for thumbnail creation errors
+		if ( is_wp_error( $thumb ) ) {
+			bp_core_add_message( sprintf( __( 'Upload Failed! Error was: %s', 'buddypress' ), $thumb->get_error_message() ), 'error' );
 			return false;
 		}
+
+		// Thumbnail is good so proceed
+		$bp->avatar_admin->resized = $thumb;
 	}
 
 	// We only want to handle one image after resize.
 	if ( empty( $bp->avatar_admin->resized ) )
 		$bp->avatar_admin->image->dir = str_replace( bp_core_avatar_upload_path(), '', $bp->avatar_admin->original['file'] );
 	else {
-		$bp->avatar_admin->image->dir = str_replace( bp_core_avatar_upload_path(), '', $bp->avatar_admin->resized['path'] );
+		$bp->avatar_admin->image->dir = str_replace( bp_core_avatar_upload_path(), '', $bp->avatar_admin->resized );
 		@unlink( $bp->avatar_admin->original['file'] );
 	}
 
