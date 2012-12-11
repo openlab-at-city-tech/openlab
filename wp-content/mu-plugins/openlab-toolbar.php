@@ -342,19 +342,20 @@ class OpenLab_Admin_Bar {
 		) );
 
 		if ( 0 < count( $request_ids ) ) {
-				// "See More" - changed so it shows up for anything greater than 0
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'friend-requests-more',
-					'title'  => 'See All Friends',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
-				) );
+			// "See More" - changed so it shows up for anything greater than 0
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'friend-requests-more',
+				'title'  => 'See All Friends',
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
+			) );
 		}
 
 		$members_args = array(
-			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
 			'max'     => 0
 		);
+
+		$members_args['include'] = ! empty( $request_ids ) ? implode( ',', array_slice( $request_ids, 0, 3 ) ) : '0';
 
 		if ( bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
