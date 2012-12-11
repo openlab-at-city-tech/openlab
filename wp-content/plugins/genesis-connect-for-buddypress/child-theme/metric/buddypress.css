@@ -1,0 +1,220 @@
+/*    Description: buddypress.css for metric */
+body {
+	padding-top: 0;
+}
+#wrap {
+	width: 100%;
+}
+#wp-admin-bar {
+	height: 2.2em;
+	width: 100%;
+}
+body.adminbar #header {
+	padding-top: 2.1em;
+}
+#nav .padder,
+	#subnav .padder {
+		padding: 6px;
+}
+#subnav .wrap {
+	margin: 0 auto;
+}
+#bpnav {
+	background: #E8E8E8;
+	height: 37px;
+	margin-bottom: 10px;
+	border: none;
+}
+#bpnav {
+	width: 960px;
+	margin: 0px auto;
+}
+#bpnav .wrap {
+	width: 960px;
+}
+#bpnav ul {
+	padding-left: 10px;
+}
+#bpnav ul li a {
+	padding: 9px 10px 8px;
+}
+.blog #wrap,
+.internal-page #wrap {
+	background: #F7F7F7 url(images/wrap-bg.png) repeat-x;
+}
+#wrap #inner {
+	margin-top: 20px;
+}
+.blog #inner, 
+.internal-page #inner {
+	padding:0;
+	width:960px;
+	margin:20px auto 0;
+	background: #F7F7F7;
+}
+#content ul.item-list li {
+	background: #F4F4F4 !important;
+	width: 98%;
+	padding: 3px 0 3px 3px;
+	margin: 5px 0 5px 0;
+}
+#content .bp-content-top .widget {
+	background: #E8E8E8;
+	padding: 10px;
+	border:0px;
+}
+#content .bp-content-top .widget h4 {
+	color: #444444;
+	font-size: 14px;
+	font-family: Arial, Tahoma, Verdana;
+	font-weight: bold;
+	margin: 0 0 5px;
+	padding: 0 0 5px;
+	text-transform: none;
+	background:transparent;
+}
+#header .widget {
+     background:transparent;
+     border: none;
+}
+/* buttons */
+#search-submit, 
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+input[type=submit],
+#submit_topic_cancel,
+a.button,
+.button {
+	background: #FFFFFF url(images/button.png);
+	color: #FFFFFF;
+	font-size: 11px;
+	font-family: Arial, Tahoma, Verdana;
+	font-weight: bold;
+	text-decoration: none;
+	text-shadow: #436D04 1px 1px;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 5px;
+	border: 1px solid #73AB00;
+	-moz-border-radius: 0px;
+	-khtml-border-radius: 0px;
+	-webkit-border-radius: 0px;
+}
+
+.searchsubmit:hover,
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.dir-search input:hover,
+#profile-group-edit-submit:hover,
+#send:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+div.ac-reply-content input:hover,
+input[type=submit]:hover,
+#submit_topic_cancel:hover,
+.button:hover {
+	background: #FFFFFF url(images/button-hover.png);
+	border: 1px solid #73AB00;
+	color: #FFFFFF;
+}
+#content .dir-search label input[type=text] {
+	font-size: 11px;
+	text-transform: none;
+	text-shadow: none;
+	color: #666666;
+}
+.activity-list div.activity-meta a,
+	.activity-list .activity-content a {
+		border:0px;
+		background: #FFFFFF url(images/button.png);
+		-moz-border-radius: none;
+		-khtml-border-radius: none;
+		-webkit-border-radius: none;
+}
+#wrap #content .dir-search label input {
+	background:transparent url(images/search.png) no-repeat scroll right center;
+	text-transform: none;
+	font-weight: normal;
+	font-size: 12px;
+}
+div.generic-button {
+	background: transparent;
+	padding: 2px 4px;
+}
+/* misc */
+#content div.pagination-links a {
+	background: transparent;
+}
+.sidebar-sidebar-content #item-header span.activity,
+	.sidebar-content-sidebar #item-header span.activity,
+	.content-sidebar-sidebar #item-header span.activity {
+		display: inline-block;
+}
+.sidebar-sidebar-content #content .padder h3,
+	.sidebar-content-sidebar #content .padder h3,
+	.content-sidebar-sidebar #content .padder h3 {
+		font-size: 14px;
+}
+.sidebar-sidebar-content .dir-search label input,
+	.sidebar-content-sidebar .dir-search label input,
+	.content-sidebar-sidebar .dir-search label input {
+		width: 10em;
+}
+
+#content .bp-content-top .textwidget p {
+	margin: 0;
+	padding: 10px 0 5px 0;
+}
+
+#content .bp-content-top ul,
+	#content .bp-content-top ol {
+		list-style-type: none;
+		margin: 10px 0 5px 0;
+		padding: 0;
+}
+
+#content .bp-content-top ul ul,
+	#content .bp-content-top ol ol {
+		margin: 0;
+		padding: 0 0 0 15px;
+}
+
+#content .bp-content-top li {
+	margin: 0;
+	padding: 0 0 0 18px;
+ 	word-wrap: break-word;
+}
+
+#content .bp-content-top embed,
+	#content .bp-content-top object {
+		width: 300px;
+		height: 225px;
+		margin: 0;
+		padding: 0;
+}
+.directory #content ul li {
+	padding-bottom: 10px;
+}
+ul.item-list li div.meta {
+	padding-right: 4px;
+}
+#content .padder #item-body a.accept,
+	#content .padder #item-body a.reject {
+		line-height: 1em;
+		margin-right: 4px;
+		padding: 4px;
+}
