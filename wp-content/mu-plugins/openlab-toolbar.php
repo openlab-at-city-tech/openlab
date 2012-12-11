@@ -299,7 +299,7 @@ class OpenLab_Admin_Bar {
 	 * place
 	 */
 	function remove_notifications_hook( $wp_admin_bar ) {
-		remove_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_notifications_menu', 5 );
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 	}
 
 	/**
