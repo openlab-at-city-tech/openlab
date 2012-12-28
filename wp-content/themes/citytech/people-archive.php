@@ -6,9 +6,11 @@ get_header(); ?>
 	<div id="content" class="hfeed">
     	<div <?php post_class(); ?>>
     		<h1 class="entry-title"><?php echo $post_obj->post_title; ?> on the OpenLab</h1>
-			<div id="people-listing">
-		  	<?php cuny_list_members('more' ); ?>
-        	</div>
+			<div class="entry-content">
+				<div id="people-listing">
+		  			<?php cuny_list_members('more' ); ?>
+        		</div><!--people-listing-->
+        	</div><!--entry-content-->
         </div><!--hentry-->
     </div><!--content-->
     

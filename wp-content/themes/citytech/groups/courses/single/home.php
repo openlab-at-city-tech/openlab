@@ -112,7 +112,6 @@
 						  endwhile;
 						  echo '</ul>';
 						  ?>
-						<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></div>
 						<?php
 						}else{
 							echo "<div><p>No Recent Docs</p></div>";
