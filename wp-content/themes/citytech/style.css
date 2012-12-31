@@ -859,7 +859,7 @@ h3#bread-crumb .sep {
     width: 790px;
 }
 
-.content-sidebar #content-sidebar-wrap, .sidebar-content #content-sidebar-wrap {
+#content-sidebar-wrap, .sidebar-content #content-sidebar-wrap {
     width: 942px;
     border: 1px solid #EDEEEF;
     padding-top: 10px;
@@ -883,7 +883,7 @@ h3#bread-crumb .sep {
     position: relative;
 }
 
-.content-sidebar #content {
+#content {
     width: 680px;
     padding: 0 0 0 10px;
 }
