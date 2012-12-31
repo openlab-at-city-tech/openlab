@@ -149,6 +149,11 @@ function openlab_modify_options_nav() {
 
 		}
 	}
+
+        if ( bp_is_group() ) {
+                $bp->bp_options_nav[ bp_get_current_group_slug() ]['admin']['position'] = 15;
+                return;
+        }
 }
 add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
