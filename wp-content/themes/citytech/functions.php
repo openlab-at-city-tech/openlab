@@ -2,6 +2,11 @@
 /** Start the engine **/
 add_theme_support( 'bbpress' );
 
+//dequeue buddypress default styles
+if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
+    function bp_dtheme_enqueue_styles() {}
+endif;
+
 //require_once(TEMPLATEPATH.'/lib/init.php');
 require_once(STYLESHEETPATH.'/marx_functions.php');
 
