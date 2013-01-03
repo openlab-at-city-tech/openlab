@@ -1,10 +1,14 @@
 <?php
-/*******************************************************************************
- * Action Functions
+
+/**
+ * BuddyPress Members Actions
  *
  * Action functions are exactly the same as screen functions, however they do not
  * have a template screen associated with them. Usually they will send the user
  * back to the default screen after execution.
+ *
+ * @package BuddyPress
+ * @subpackage MembersActions
  */
 
 // Exit if accessed directly
@@ -51,43 +55,44 @@ function bp_core_action_set_spammer_status( $user_id = 0 ) {
 		bp_core_redirect( wp_get_referer() );
 	}
 }
-add_action( 'bp_actions', 'bp_core_action_set_spammer_status' );
+// Unhooked in BuddyPress (1.6) - moved to settings
+//add_action( 'bp_actions', 'bp_core_action_set_spammer_status' );
 
 /**
  * Allows a site admin to delete a user from the adminbar menu.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
  */
 function bp_core_action_delete_user() {
-	global $bp;
 
-	if ( !is_super_admin() || bp_is_my_profile() || !$bp->displayed_user->id )
+	if ( !bp_current_user_can( 'bp_moderate' ) || bp_is_my_profile() || !bp_displayed_user_id() )
 		return false;
 
-	if ( 'admin' == $bp->current_component && 'delete-user' == $bp->current_action ) {
+	if ( bp_is_current_component( 'admin' ) && bp_is_current_action( 'delete-user' ) ) {
+
 		// Check the nonce
 		check_admin_referer( 'delete-user' );
 
 		$errors = false;
 		do_action( 'bp_core_before_action_delete_user', $errors );
 
-		if ( bp_core_delete_account( $bp->displayed_user->id ) ) {
-			bp_core_add_message( sprintf( __( '%s has been deleted from the system.', 'buddypress' ), $bp->displayed_user->fullname ) );
+		if ( bp_core_delete_account( bp_displayed_user_id() ) ) {
+			bp_core_add_message( sprintf( __( '%s has been deleted from the system.', 'buddypress' ), bp_get_displayed_user_fullname() ) );
 		} else {
-			bp_core_add_message( sprintf( __( 'There was an error deleting %s from the system. Please try again.', 'buddypress' ), $bp->displayed_user->fullname ), 'error' );
+			bp_core_add_message( sprintf( __( 'There was an error deleting %s from the system. Please try again.', 'buddypress' ), bp_get_displayed_user_fullname() ), 'error' );
 			$errors = true;
 		}
 
 		do_action( 'bp_core_action_delete_user', $errors );
 
 		if ( $errors )
-			bp_core_redirect( $bp->displayed_user->domain );
+			bp_core_redirect( bp_displayed_user_domain() );
 		else
-			bp_core_redirect( $bp->loggedin_user->domain );
+			bp_core_redirect( bp_loggedin_user_domain() );
 	}
 }
-add_action( 'bp_actions', 'bp_core_action_delete_user' );
+// Unhooked in BuddyPress (1.6) - moved to settings
+//add_action( 'bp_actions', 'bp_core_action_delete_user' );
 
 /**
  * Returns the user_id for a user based on their username.
@@ -98,12 +103,12 @@ add_action( 'bp_actions', 'bp_core_action_delete_user' );
  * @return int the user ID of the matched user.
  */
 function bp_core_get_random_member() {
-	global $bp;
+	if ( ! isset( $_GET['random-member'] ) )
+		return;
 
-	if ( isset( $_GET['random-member'] ) ) {
-		$user = bp_core_get_users( array( 'type' => 'random', 'per_page' => 1 ) );
-		bp_core_redirect( bp_core_get_user_domain( $user['users'][0]->id ) );
-	}
+	$user = bp_core_get_users( array( 'type' => 'random', 'per_page' => 1 ) );
+	bp_core_redirect( bp_core_get_user_domain( $user['users'][0]->id ) );
 }
 add_action( 'bp_actions', 'bp_core_get_random_member' );
+
 ?>

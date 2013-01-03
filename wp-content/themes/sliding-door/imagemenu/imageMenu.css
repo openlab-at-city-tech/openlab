@@ -1,0 +1,64 @@
+/*****
+Image Menu
+v 2.2
+	*****/
+
+#imageMenu {
+	height: 208px;
+	overflow: hidden;
+	border-style: none;
+	 margin: 0 auto;
+  width: 964px;
+	padding: 8px 0 20px 0px;
+}
+
+#imageMenu ul {
+	list-style: none;
+	margin: 0px;
+	display: block;
+	height: 200px;
+	padding: 0;
+	}
+
+#imageMenu ul li {
+	float: left;
+	padding-bottom: 12px;
+	padding-top: 12px;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+		border-color: white;
+
+
+}
+
+#imageMenu ul li a {
+	text-indent: -1000px;
+	background:#FFFFFF none repeat scroll 0%;
+	border-right: 2px solid #fff;
+	cursor:pointer;
+	display:block;
+	overflow:hidden;
+	width:133px;
+	height: 200px;
+		margin: 0;
+	padding: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+
+#imageMenu ul li.bk6 a {
+	border-right-style: none;
+}
+
+
+.clear {
+	clear: both;
+}
+
+

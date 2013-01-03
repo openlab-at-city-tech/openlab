@@ -259,6 +259,18 @@ function invite_anyone_invite_query( $group_id = false, $search_terms = false ) 
  * @since 1.0.4
  */
 class Invite_Anyone_User_Query extends WP_User_Query {
+	function __construct( $query = null ) {
+		add_action( 'pre_user_query', array( &$this, 'filter_registered_users_only' ) );
+		parent::__construct( $query );
+	}
+
+	/**
+	 * BuddyPress has different user statuses.  We need to filter the user list so only registered users are shown.
+	 */
+	function filter_registered_users_only( $query ) {
+		$query->query_where .= ' AND user_status = 0';
+	}
+
 	/**
 	 * @see WP_User_Query::get_search_sql()
 	 */
@@ -287,7 +299,7 @@ class Invite_Anyone_User_Query extends WP_User_Query {
 				$searches[] = "$col LIKE '$leading_wild" . like_escape($string) . "$trailing_wild'";
 		}
 
-		return ' AND (' . implode(' OR ', $searches) . ')';
+		return ' AND (' . implode(' OR ', $searches) . ') AND user_status = 0';
 	}
 }
 
@@ -345,14 +357,11 @@ function invite_anyone_ajax_invite_user() {
 
 	} else if ( 'uninvite' == $_POST['friend_action'] ) {
 
-		if ( !groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] ) )
-			return false;
+		groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] );
 
-		return true;
+        }
 
-	} else {
-		return false;
-	}
+        die();
 }
 add_action( 'wp_ajax_invite_anyone_groups_invite_user', 'invite_anyone_ajax_invite_user' );
 
@@ -380,7 +389,7 @@ function invite_anyone_ajax_autocomplete_results() {
 		$return['data']	       = $data;
 	}
 
-	echo json_encode( $return );
+	die( json_encode( $return ) );
 }
 add_action( 'wp_ajax_invite_anyone_autocomplete_ajax_handler', 'invite_anyone_ajax_autocomplete_results' );
 
@@ -425,7 +434,7 @@ function invite_anyone_group_invite_access_test() {
 		$iaoptions = array();
 
 	if ( bp_is_group_create() ) {
-		if ( $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
+		if ( empty( $iaoptions['group_invites_can_group_admin'] ) || $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_admin'] == 'friends' )
 			return 'friends';
@@ -437,28 +446,28 @@ function invite_anyone_group_invite_access_test() {
 		return 'noone';
 
 	if ( is_super_admin() ) {
-		if ( $iaoptions['group_invites_can_admin'] == 'anyone' || !$iaoptions['group_invites_can_admin'] )
+		if ( empty( $iaoptions['group_invites_can_admin'] ) || $iaoptions['group_invites_can_admin'] == 'anyone' || !$iaoptions['group_invites_can_admin'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_admin'] == 'friends' )
 			return 'friends';
 		if ( $iaoptions['group_invites_can_admin'] == 'noone' )
 			return 'noone';
 	} else if ( bp_group_is_admin() || bp_is_group_create() ) {
-		if ( $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
+		if ( empty( $iaoptions['group_invites_can_group_admin'] ) || $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_admin'] == 'friends' )
 			return 'friends';
 		if ( $iaoptions['group_invites_can_group_admin'] == 'noone' )
 			return 'noone';
 	} else if ( bp_group_is_mod() ) {
-		if ( $iaoptions['group_invites_can_group_mod'] == 'anyone' || !$iaoptions['group_invites_can_group_mod'] )
+		if ( empty( $iaoptions['group_invites_can_group_mod'] ) || $iaoptions['group_invites_can_group_mod'] == 'anyone' || !$iaoptions['group_invites_can_group_mod'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_mod'] == 'friends' )
 			return 'friends';
 		if ( $iaoptions['group_invites_can_group_mod'] == 'noone' )
 			return 'noone';
 	} else {
-		if ( $iaoptions['group_invites_can_group_member'] == 'anyone' || !$iaoptions['group_invites_can_group_member'] )
+		if ( empty( $iaoptions['group_invites_can_group_member'] ) || $iaoptions['group_invites_can_group_member'] == 'anyone' || !$iaoptions['group_invites_can_group_member'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_member'] == 'friends' )
 			return 'friends';

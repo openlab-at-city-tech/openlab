@@ -3,8 +3,8 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
 Requires at least: WP 3.2, BuddyPress 1.2.9
-Tested up to: WP 3.3, BuddyPress 1.5.2
-Stable tag: 1.0.8
+Tested up to: WP 3.5, BuddyPress 1.6.1
+Stable tag: 1.0.17
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -12,7 +12,7 @@ Makes BuddyPress's invitation features more powerful.
 
 Invite Anyone has two components:
 
-1) The ability to invite members to the site by email. The plugin creates a tab on each member's Profile page called "Send Invites", which contains a form where users can invite outsiders to join the site. There is a field for a custom message. Also, inviters can optionally select any number of their groups, and when the invitee accepts the invitation he or she automatically receive invitations to join those groups.
+1) The ability to invite members to your site by email. The plugin creates a tab on each member's Profile page called "Send Invites", which contains a form where users can invite outsiders to join the site. There is a field for a custom message. Also, inviters can optionally select any number of their groups, and when the invitee accepts the invitation he or she automatically receive invitations to join those groups.
 
 The email invitation part of the plugin is customizable by the BP administrator, via Dashboard > BuddyPress > Invite Anyone.
 
@@ -30,17 +30,50 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 
 == Translation credits ==
 
+* Belarussian: Alexander Ovsov (<a href="http://webhostinggeeks.com/science">Web Geek Science</a>)
+* Danish: Mort3n
 * Dutch: Jesper Popma
-* French: Guillaume Coulon
-* German: Lars Berning
+* French: Guillaume Coulon, Nicolas Mollet
+* German: Lars Berning, Thorsten Wollenhöfer
 * Greek: Lena Stergatou
 * Italian: Luca Camellini
 * Norwegian: Stig Ulfsby
 * Russian: Jettochkin
 * Spanish: Mauricio Camayo, Gregor Gimmy
-* Belarussian: Alexander Ovsov (<a href="http://webhostinggeeks.com/science">Web Geek Science</a>)
 
 == Changelog ==
+
+= 1.0.17 =
+* Moved admin menu to under Settings
+* Added a "maximum of x people" notice to the by-email form
+
+= 1.0.16 =
+* Added Danish translation
+* Fixed bug with total email invites toggle
+
+= 1.0.15 =
+* BuddyPress 1.6 compatibility
+* Better PHP 5.4+ compatibility
+
+= 1.0.14 =
+* Prevents call-by-reference errors on PHP 5.4 setups
+
+= 1.0.13 =
+* Prevents fatal errors on activation in some setups, by changing where the upgrade process is run
+
+= 1.0.12 =
+* Ensure that spammed/inactive users are not returned by group invite autocomplete
+* Updates German translation
+
+= 1.0.11 =
+* Adds per-user invitation limit option. Props Jeradin
+* Reworks the way that returned_data is returned, to avoid 'headers already sent' errors
+
+= 1.0.10 =
+* Updates French translation. Props Nicolas Mollet
+
+= 1.0.9 =
+* Fixes some annoying PHP notices
 
 = 1.0.8 =
 * Yet another attempt at fixing activation problem

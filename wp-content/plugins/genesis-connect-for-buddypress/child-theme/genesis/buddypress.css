@@ -1,0 +1,147 @@
+/* buddypress.css for Genesis */
+#nav .padder, 
+	#subnav .padder {
+}
+/** boxes **/
+#search-terms, 
+	#whats-new-post-in,
+	.dir-search label input,
+	#forums_search,
+	#forums_search select,
+	#members_search,
+	#members_search select,
+	#field_ids,
+	#message_content,
+	#subject,
+	#send-notice,
+	#send-to-input,
+	#pass1,
+	#pass2  {
+}	
+/* buttons */
+#search-submit, 
+#sidebar-me a.button,
+#aw-whats-new-submit,
+#ac-form-submit,
+#groups_search_submit,
+#forums_search_submit,
+#members_search_submit,
+.dir-search input,
+#profile-group-edit-submit,
+#send,
+div.ac-reply-content input,
+.internal-page #content .padder a.button,
+.internal-page #content .padder .submit input[type=button],
+input[type=submit],
+#submit_topic_cancel,
+a.button,
+.button {
+	background: #f5f5f5;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+	color: #333;
+	font-size: 1em;
+	text-decoration: none;
+	margin: 0;
+	padding: 3px 5px;
+}
+#search-submit:hover, 
+#sidebar-me a.button:hover,
+#aw-whats-new-submit:hover,
+#ac-form-submit:hover,
+#groups_search_submit:hover,
+#forums_search_submit:hover,
+#members_search_submit:hover,
+.internal-page #content .padder a.button:hover,
+.internal-page #content .padder .submit input[type=button]:hover,
+.dir-form a:hover,
+#submit_topic_cancel:hover,
+input[type=submit]:hover {
+	background-color: #fff;
+	color: #333;
+}
+#content .dir-search label input[type=text] {
+}
+.dir-form a:hover {
+}
+.activity-list div.activity-meta a,
+	.activity-list .activity-content a {
+}
+
+div.generic-button {
+}
+#content ul.item-list li {
+}
+.internal-page #content ul.item-list li li {
+}
+/* text areas */
+#whats-new, 
+	#reply_text,
+	#topic_text,
+	#topic_tags,
+	#topic_title {
+}
+/* misc */
+#content .padder ul, #content .padder ul li {
+	list-style-type: none;
+}
+#content div.pagination-links a {
+}
+.sidebar-sidebar-content #item-header span.activity,
+	.sidebar-content-sidebar #item-header span.activity,
+	.content-sidebar-sidebar #item-header span.activity {
+}
+.sidebar-sidebar-content #content .padder h3,
+	.sidebar-content-sidebar #content .padder h3,
+	.content-sidebar-sidebar #content .padder h3 {
+}
+.sidebar-sidebar-content .dir-search label input,
+	.sidebar-content-sidebar .dir-search label input,
+	.content-sidebar-sidebar .dir-search label input {
+}
+#inner .widget ul.item-list, #inner .widget ul.item-list li {
+	list-style-type: none;
+}
+#content .bp-content-top .widget {
+	border:none;
+	margin:0 0 10px;
+	padding:9px;
+}
+#content .bp-content-top .widget h4 {
+}
+#content .bp-content-top .textwidget p {
+	margin: 0;
+	padding: 10px 0 5px 0;
+}
+#content .bp-content-top ul,
+	#content .bp-content-top ol {
+		list-style-type: none;
+		margin: 10px 0 5px 0;
+		padding: 0;
+}
+#content .bp-content-top ul ul,
+	#content .bp-content-top ol ol {
+		margin: 0;
+		padding: 0 0 0 15px;
+}
+#content .bp-content-top li {
+}
+#content .bp-content-top embed,
+	#content .bp-content-top object {
+		width: 300px;
+		height: 225px;
+		margin: 0;
+		padding: 0;
+}
+.directory #content ul li {
+	padding-bottom: 10px;
+}
+ul.item-list li div.meta {
+	padding-right: 4px;
+}
+#content .padder #item-body a.accept,
+	#content .padder #item-body a.reject {
+		line-height: 1em;
+		margin-right: 4px;
+		padding: 4px;
+}

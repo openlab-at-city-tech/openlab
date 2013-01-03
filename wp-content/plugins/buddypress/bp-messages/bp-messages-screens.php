@@ -1,16 +1,20 @@
 <?php
-/*******************************************************************************
+
+/**
+ * BuddyPress Messages Screens
+ *
  * Screen functions are the controllers of BuddyPress. They will execute when their
  * specific URL is caught. They will first save or manipulate data using business
  * functions, then pass on the user to a template file.
+ *
+ * @package BuddyPress
+ * @subpackage MessagesScreens
  */
 
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
 function messages_screen_inbox() {
-	global $bp;
-
 	if ( bp_action_variables() ) {
 		bp_do_404();
 		return;
@@ -21,8 +25,6 @@ function messages_screen_inbox() {
 }
 
 function messages_screen_sentbox() {
-	global $bp;
-
 	if ( bp_action_variables() ) {
 		bp_do_404();
 		return;
@@ -57,7 +59,7 @@ function messages_screen_compose() {
 			if ( isset( $_POST['send-notice'] ) ) {
 				if ( messages_send_notice( $_POST['subject'], $_POST['content'] ) ) {
 					bp_core_add_message( __( 'Notice sent successfully!', 'buddypress' ) );
-					bp_core_redirect( $bp->loggedin_user->domain . $bp->messages->slug . '/inbox/' );
+					bp_core_redirect( bp_loggedin_user_domain() . $bp->messages->slug . '/inbox/' );
 				} else {
 					bp_core_add_message( __( 'There was an error sending that notice, please try again', 'buddypress' ), 'error' );
 				}
@@ -71,7 +73,7 @@ function messages_screen_compose() {
 				// Send the message
 				if ( $thread_id = messages_new_message( array( 'recipients' => $recipients, 'subject' => $_POST['subject'], 'content' => $_POST['content'] ) ) ) {
 					bp_core_add_message( __( 'Message sent successfully!', 'buddypress' ) );
-					bp_core_redirect( $bp->loggedin_user->domain . $bp->messages->slug . '/view/' . $thread_id . '/' );
+					bp_core_redirect( bp_loggedin_user_domain() . $bp->messages->slug . '/view/' . $thread_id . '/' );
 				} else {
 					bp_core_add_message( __( 'There was an error sending that message, please try again', 'buddypress' ), 'error' );
 				}
@@ -87,7 +89,7 @@ function messages_screen_compose() {
 function messages_screen_notices() {
 	global $notice_id;
 
-	if ( !is_super_admin() )
+	if ( !bp_current_user_can( 'bp_moderate' ) )
 		return false;
 
 	$notice_id = (int)bp_action_variable( 1 );
@@ -114,7 +116,7 @@ function messages_screen_notices() {
 				bp_core_add_message( __('Notice deleted.', 'buddypress') );
 			}
 		}
-		bp_core_redirect( bp_loggedin_user_domain() . bp_get_messages_slug() . '/notices' );
+		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/notices' ) );
 	}
 
 	if ( bp_action_variables() ) {
@@ -128,19 +130,16 @@ function messages_screen_notices() {
 }
 
 function messages_screen_notification_settings() {
-	global $bp;
-
 	if ( bp_action_variables() ) {
 		bp_do_404();
 		return;
 	}
 
-	if ( !$new_messages = bp_get_user_meta( $bp->displayed_user->id, 'notification_messages_new_message', true ) )
+	if ( !$new_messages = bp_get_user_meta( bp_displayed_user_id(), 'notification_messages_new_message', true ) )
 		$new_messages = 'yes';
 
-	if ( !$new_notices = bp_get_user_meta( $bp->displayed_user->id, 'notification_messages_new_notice', true ) )
-		$new_notices  = 'yes';
-?>
+	if ( !$new_notices = bp_get_user_meta( bp_displayed_user_id(), 'notification_messages_new_notice', true ) )
+		$new_notices  = 'yes'; ?>
 
 	<table class="notification-settings" id="messages-notification-settings">
 		<thead>

@@ -8,7 +8,7 @@
 //
        $first_class = "first";
 ?>
-<?php $group_slug = bp_get_group_slug(); 
+<?php $group_slug = bp_get_group_slug();
 $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 <h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 <?php if ( bp_is_group_home() ): ?>
@@ -173,7 +173,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
                         </li>
                     <?php endwhile; ?>
                 </ul>
-                
+
             <?php else: ?>
             	<div id="message" class="info">
 					<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
@@ -213,7 +213,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				  endwhile;
 				  echo '</ul>';
 				  ?>
-				
+
 				<?php
 				}else{
 					echo "<div><p>No Recent Docs</p></div>";
@@ -248,7 +248,7 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 					  </div>
 
 					<?php endif;?>
-                    
+
                     <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
         				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
         			<?php else: ?>
@@ -262,7 +262,10 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				//   case show site posts and comments even though this group is private
 				//
 
-					show_site_posts_and_comments() ?>
+				if ( wds_site_can_be_viewed() ) {
+					show_site_posts_and_comments();
+					echo "<div class='clear'></div>";
+				} ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 
@@ -283,7 +286,10 @@ $group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
 				//   case show site posts and comments even though this group is private
 				//
 
-					show_site_posts_and_comments() ?>
+				if ( wds_site_can_be_viewed() ) {
+					show_site_posts_and_comments();
+					echo "<div class='clear'></div>";
+				} ?>
 
 				<?php /* The group is not visible, show the status message */ ?>
 

@@ -58,7 +58,8 @@ class OpenLab_Admin_Bar {
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_sites_menu', 20 );
 
 			// Don't show the Edit Group or Edit Member menus
-			add_action( 'admin_bar_menu', array( $this, 'remove_item_admin_menus' ), 5000 );
+			remove_action( 'admin_bar_menu', 'bp_groups_group_admin_menu', 99 );
+			remove_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 99 );
 
 			// Add the notification menus
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
@@ -70,7 +71,7 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 		} else {
-			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 11 );
+			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
@@ -167,14 +168,6 @@ class OpenLab_Admin_Bar {
 			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
 			'meta'	=> array()
 		) );
-	}
-
-	/**
-	 * Remove the Edit Group and Edit Member dropdowns
-	 */
-	function remove_item_admin_menus( $wp_admin_bar ) {
-		remove_action( 'admin_bar_menu', 'bp_groups_group_admin_menu', 400 );
-		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 400 );
 	}
 
 	/**
@@ -299,7 +292,7 @@ class OpenLab_Admin_Bar {
 	 * place
 	 */
 	function remove_notifications_hook( $wp_admin_bar ) {
-		remove_action( 'bp_setup_admin_bar', 'bp_members_admin_bar_notifications_menu', 5 );
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 	}
 
 	/**
@@ -340,21 +333,22 @@ class OpenLab_Admin_Bar {
 			'id'     => 'friend-requests-title',
 			'title'  => 'Friend Requests'
 		) );
-		
+
 		if ( 0 < count( $request_ids ) ) {
-				// "See More" - changed so it shows up for anything greater than 0
-				$wp_admin_bar->add_node( array(
-					'parent' => 'invites',
-					'id'     => 'friend-requests-more',
-					'title'  => 'See All Friends',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
-				) );
+			// "See More" - changed so it shows up for anything greater than 0
+			$wp_admin_bar->add_node( array(
+				'parent' => 'invites',
+				'id'     => 'friend-requests-more',
+				'title'  => 'See All Friends',
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
+			) );
 		}
 
 		$members_args = array(
-			'include' => implode( ',', array_slice( $request_ids, 0, 3 ) ),
 			'max'     => 0
 		);
+
+		$members_args['include'] = ! empty( $request_ids ) ? implode( ',', array_slice( $request_ids, 0, 3 ) ) : '0';
 
 		if ( bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
@@ -401,7 +395,7 @@ class OpenLab_Admin_Bar {
 			'id'     => 'invitations-title',
 			'title'  => 'Invitations'
 		) );
-		
+
 		// "See More" - changed so it shows up for anything greater than 0
 		if ( !empty( $invites['groups'] )) {
 			$wp_admin_bar->add_node( array(

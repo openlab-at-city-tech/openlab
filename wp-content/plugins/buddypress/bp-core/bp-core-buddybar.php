@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Core BuddyPress Navigational Functions
+ *
+ * @package BuddyPress
+ * @subpackage Core
+ * @todo Deprecate BuddyBar functions
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -6,7 +15,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * Adds a navigation item to the main navigation array used in BuddyPress themes.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_core_new_nav_item( $args = '' ) {
 	global $bp;
@@ -30,7 +39,7 @@ function bp_core_new_nav_item( $args = '' ) {
 		return false;
 
 	// If this is for site admins only and the user is not one, don't create the subnav item
-	if ( $site_admin_only && !is_super_admin() )
+	if ( !empty( $site_admin_only ) && !bp_current_user_can( 'bp_moderate' ) )
 		return false;
 
 	if ( empty( $item_css_id ) )
@@ -39,22 +48,23 @@ function bp_core_new_nav_item( $args = '' ) {
 	$bp->bp_nav[$slug] = array(
 		'name'                    => $name,
 		'slug'                    => $slug,
-		'link'                    => $bp->loggedin_user->domain . $slug . '/',
+		'link'                    => trailingslashit( bp_loggedin_user_domain() . $slug ),
 		'css_id'                  => $item_css_id,
 		'show_for_displayed_user' => $show_for_displayed_user,
 		'position'                => $position,
-		'screen_function'         => &$screen_function
+		'screen_function'         => &$screen_function,
+		'default_subnav_slug'	  => $default_subnav_slug
 	);
 
- 	/***
+ 	/**
 	 * If this nav item is hidden for the displayed user, and
 	 * the logged in user is not the displayed user
 	 * looking at their own profile, don't create the nav item.
 	 */
-	if ( !$show_for_displayed_user && !bp_user_has_access() )
+	if ( empty( $show_for_displayed_user ) && !bp_user_has_access() )
 		return false;
 
-	/***
+	/**
  	 * If the nav item is visible, we are not viewing a user, and this is a root
 	 * component, don't attach the default subnav function so we can display a
 	 * directory or something else.
@@ -63,24 +73,21 @@ function bp_core_new_nav_item( $args = '' ) {
 		return;
 
 	// Look for current component
-	if ( bp_is_current_component( $slug ) && !bp_current_action() ) {
-		if ( !is_object( $screen_function[0] ) )
-			add_action( 'bp_screens', $screen_function );
-		else
-			add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ), 3 );
+	if ( bp_is_current_component( $slug ) || bp_is_current_item( $slug ) ) {
 
-		if ( !empty( $default_subnav_slug ) )
-			$bp->current_action = apply_filters( 'bp_default_component_subnav', $default_subnav_slug, $r );
+		// The requested URL has explicitly included the default subnav
+		// (eg: http://example.com/members/membername/activity/just-me/)
+		// The canonical version will not contain this subnav slug.
+		if ( !empty( $default_subnav_slug ) && bp_is_current_action( $default_subnav_slug ) && !bp_action_variable( 0 ) ) {
+			unset( $bp->canonical_stack['action'] );
+		} elseif ( ! bp_current_action() ) {
+			$func = is_object( $screen_function[0] ) ? array( &$screen_function[0], $screen_function[1] ) : $screen_function;
+			add_action( 'bp_screens', $func, 3 );
 
-	// Look for current item
-	} elseif ( bp_is_current_item( $slug ) && !bp_current_action() ) {
-		if ( !is_object( $screen_function[0] ) )
-			add_action( 'bp_screens', $screen_function );
-		else
-			add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ), 3 );
-
-		if ( !empty( $default_subnav_slug ) )
-			$bp->current_action = apply_filters( 'bp_default_component_subnav', $default_subnav_slug, $r );
+			if ( !empty( $default_subnav_slug ) ) {
+				$bp->current_action = apply_filters( 'bp_default_component_subnav', $default_subnav_slug, $r );
+			}
+		}
 	}
 
 	do_action( 'bp_core_new_nav_item', $r, $args, $defaults );
@@ -90,7 +97,7 @@ function bp_core_new_nav_item( $args = '' ) {
  * Modify the default subnav item to load when a top level nav item is clicked.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_core_new_nav_default( $args = '' ) {
 	global $bp;
@@ -105,23 +112,54 @@ function bp_core_new_nav_default( $args = '' ) {
 	extract( $r, EXTR_SKIP );
 
 	if ( $function = $bp->bp_nav[$parent_slug]['screen_function'] ) {
-		if ( !is_object( $function[0] ) )
-			remove_action( 'bp_screens', $function, 3 );
-		else
+		if ( is_object( $function[0] ) ) {
 			remove_action( 'bp_screens', array( &$function[0], $function[1] ), 3 );
+		} else {
+			remove_action( 'bp_screens', $function, 3 );
+		}
 	}
 
 	$bp->bp_nav[$parent_slug]['screen_function'] = &$screen_function;
 
-	if ( $bp->current_component == $parent_slug && !$bp->current_action ) {
-		if ( !is_object( $screen_function[0] ) )
-			add_action( 'bp_screens', $screen_function );
-		else
-			add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ) );
+	if ( bp_is_current_component( $parent_slug ) ) {
 
-		if ( $subnav_slug )
-			$bp->current_action = $subnav_slug;
+		// The only way to tell whether to set the subnav is to peek at the unfiltered_uri
+		// Find the component
+		$component_uri_key = array_search( $parent_slug, $bp->unfiltered_uri );
+
+		if ( false !== $component_uri_key ) {
+			if ( !empty( $bp->unfiltered_uri[$component_uri_key + 1] ) ) {
+				$unfiltered_action = $bp->unfiltered_uri[$component_uri_key + 1];
+			}
+		}
+
+		// No subnav item has been requested in the URL, so set a new nav default
+		if ( empty( $unfiltered_action ) ) {
+			if ( !bp_is_current_action( $subnav_slug ) ) {
+				if ( is_object( $screen_function[0] ) ) {
+					add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ), 3 );
+				} else {
+					add_action( 'bp_screens', $screen_function, 3 );
+				}
+
+				$bp->current_action = $subnav_slug;
+				unset( $bp->canonical_stack['action'] );
+			}
+
+		// The URL is explicitly requesting the new subnav item, but should be
+		// directed to the canonical URL
+		} elseif ( $unfiltered_action == $subnav_slug ) {
+			unset( $bp->canonical_stack['action'] );
+
+		// In all other cases (including the case where the original subnav item
+		// is explicitly called in the URL), the canonical URL will contain the
+		// subnav slug
+		} else {
+			$bp->canonical_stack['action'] = bp_current_action();
+		}
 	}
+
+	return;
 }
 
 /**
@@ -129,7 +167,7 @@ function bp_core_new_nav_default( $args = '' ) {
  * plugins have registered their navigation items.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_core_sort_nav_items() {
 	global $bp;
@@ -137,10 +175,12 @@ function bp_core_sort_nav_items() {
 	if ( empty( $bp->bp_nav ) || !is_array( $bp->bp_nav ) )
 		return false;
 
-	foreach ( (array)$bp->bp_nav as $slug => $nav_item ) {
-		if ( empty( $temp[$nav_item['position']]) )
+	$temp = array();
+
+	foreach ( (array) $bp->bp_nav as $slug => $nav_item ) {
+		if ( empty( $temp[$nav_item['position']]) ) {
 			$temp[$nav_item['position']] = $nav_item;
-		else {
+		} else {
 			// increase numbers here to fit new items in.
 			do {
 				$nav_item['position']++;
@@ -160,7 +200,7 @@ add_action( 'admin_head', 'bp_core_sort_nav_items' );
  * Adds a navigation item to the sub navigation array used in BuddyPress themes.
  *
  * @package BuddyPress Core
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_core_new_subnav_item( $args = '' ) {
 	global $bp;
@@ -185,11 +225,18 @@ function bp_core_new_subnav_item( $args = '' ) {
 	if ( empty( $name ) || empty( $slug ) || empty( $parent_slug ) || empty( $parent_url ) || empty( $screen_function ) )
 		return false;
 
-	if ( empty( $link ) )
+	// Link was not forced, so create one
+	if ( empty( $link ) ) {
 		$link = $parent_url . $slug;
 
+		// If this sub item is the default for its parent, skip the slug
+		if ( ! empty( $bp->bp_nav[$parent_slug]['default_subnav_slug'] ) && $slug == $bp->bp_nav[$parent_slug]['default_subnav_slug'] ) {
+			$link = $parent_url;
+		}
+	}
+
 	// If this is for site admins only and the user is not one, don't create the subnav item
-	if ( $site_admin_only && !is_super_admin() )
+	if ( !empty( $site_admin_only ) && !bp_current_user_can( 'bp_moderate' ) )
 		return false;
 
 	if ( empty( $item_css_id ) )
@@ -211,10 +258,10 @@ function bp_core_new_subnav_item( $args = '' ) {
 	 * subnav item. We figure out whether we're currently viewing this subnav by checking the
 	 * following two conditions:
 	 *   (1) Either:
-	 *	 (a) the parent slug matches the current_component, or
-	 *	 (b) the parent slug matches the current_item
+	 *	     (a) the parent slug matches the current_component, or
+	 *	     (b) the parent slug matches the current_item
 	 *   (2) And either:
-	 * 	 (a) the current_action matches $slug, or
+	 *	     (a) the current_action matches $slug, or
 	 *       (b) there is no current_action (ie, this is the default subnav for the parent nav)
 	 *	     and this subnav item is the default for the parent item (which we check by
 	 *	     comparing this subnav item's screen function with the screen function of the
@@ -223,30 +270,49 @@ function bp_core_new_subnav_item( $args = '' ) {
 	 */
 
 	// If we *don't* meet condition (1), return
-	if ( $bp->current_component != $parent_slug && $bp->current_item != $parent_slug )
+	if ( ! bp_is_current_component( $parent_slug ) && ! bp_is_current_item( $parent_slug ) )
 		return;
 
 	// If we *do* meet condition (2), then the added subnav item is currently being requested
-	if ( ( !empty( $bp->current_action ) && $slug == $bp->current_action ) || ( bp_is_user() && empty( $bp->current_action ) && $screen_function == $bp->bp_nav[$parent_slug]['screen_function'] ) ) {
+	if ( ( bp_current_action() && bp_is_current_action( $slug ) ) || ( bp_is_user() && ! bp_current_action() && ( $screen_function == $bp->bp_nav[$parent_slug]['screen_function'] ) ) ) {
 
 		// Before hooking the screen function, check user access
-		if ( $user_has_access ) {
-			if ( !is_object( $screen_function[0] ) )
-				add_action( 'bp_screens', $screen_function );
-			else
-				add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ) );
+		if ( !empty( $user_has_access ) ) {
+			if ( is_object( $screen_function[0] ) ) {
+				add_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ), 3 );
+			} else {
+				add_action( 'bp_screens', $screen_function, 3 );
+			}
 		} else {
-			// When the content is off-limits, we handle the situation differently
-			// depending on whether the current user is logged in
+
+			// When the content is off-limits, we handle the situation
+			// differently depending on whether the current user is logged in
 			if ( is_user_logged_in() ) {
+				if ( !bp_is_my_profile() && empty( $bp->bp_nav[$bp->default_component]['show_for_displayed_user'] ) ) {
+
+					// This covers the edge case where the default component is
+					// a non-public tab, like 'messages'
+					if ( bp_is_active( 'activity' ) && isset( $bp->pages->activity ) ) {
+						$redirect_to = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() );
+					} else {
+						$redirect_to = trailingslashit( bp_displayed_user_domain() . ( 'xprofile' == $bp->profile->id ? 'profile' : $bp->profile->id ) );
+					}
+
+					$message     = '';
+				} else {
+					$message     = __( 'You do not have access to this page.', 'buddypress' );
+					$redirect_to = bp_displayed_user_domain();
+				}
+
 				// Off-limits to this user. Throw an error and redirect to the displayed user's domain
 				bp_core_no_access( array(
-					'message'  => __( 'You do not have access to this page.', 'buddypress' ),
-					'root'     => bp_displayed_user_domain(),
+					'message'  => $message,
+					'root'     => $redirect_to,
 					'redirect' => false
 				) );
+
+			// Not logged in. Allow the user to log in, and attempt to redirect
 			} else {
-				// Not logged in. Allow the user to log in, and attempt to redirect
 				bp_core_no_access();
 			}
 		}
@@ -259,11 +325,11 @@ function bp_core_sort_subnav_items() {
 	if ( empty( $bp->bp_options_nav ) || !is_array( $bp->bp_options_nav ) )
 		return false;
 
-	foreach ( (array)$bp->bp_options_nav as $parent_slug => $subnav_items ) {
+	foreach ( (array) $bp->bp_options_nav as $parent_slug => $subnav_items ) {
 		if ( !is_array( $subnav_items ) )
 			continue;
 
-		foreach ( (array)$subnav_items as $subnav_item ) {
+		foreach ( (array) $subnav_items as $subnav_item ) {
 			if ( empty( $temp[$subnav_item['position']]) )
 				$temp[$subnav_item['position']] = $subnav_item;
 			else {
@@ -287,7 +353,7 @@ add_action( 'admin_head', 'bp_core_sort_subnav_items' );
  * Determines whether a given nav item has subnav items
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @param str $nav_item The id of the top-level nav item whose nav items you're checking
  * @return bool $has_subnav True if the nav item is found and has subnav items; false otherwise
@@ -315,16 +381,16 @@ function bp_core_remove_nav_item( $parent_id ) {
 
 	// Unset subnav items for this nav item
 	if ( isset( $bp->bp_options_nav[$parent_id] ) && is_array( $bp->bp_options_nav[$parent_id] ) ) {
-		foreach( (array)$bp->bp_options_nav[$parent_id] as $subnav_item ) {
+		foreach( (array) $bp->bp_options_nav[$parent_id] as $subnav_item ) {
 			bp_core_remove_subnav_item( $parent_id, $subnav_item['slug'] );
 		}
 	}
 
 	if ( $function = $bp->bp_nav[$parent_id]['screen_function'] ) {
-		if ( !is_object( $function[0] ) ) {
-			remove_action( 'bp_screens', $function );
+		if ( is_object( $function[0] ) ) {
+			remove_action( 'bp_screens', array( &$function[0], $function[1] ), 3 );
 		} else {
-			remove_action( 'bp_screens', array( &$function[0], $function[1] ) );
+			remove_action( 'bp_screens', $function, 3 );
 		}
 	}
 
@@ -341,13 +407,14 @@ function bp_core_remove_nav_item( $parent_id ) {
 function bp_core_remove_subnav_item( $parent_id, $slug ) {
 	global $bp;
 
-	$screen_function = ( isset( $bp->bp_options_nav[$parent_id][$slug]['screen_function'] ) ) ? $bp->bp_options_nav[$parent_id][$slug]['screen_function'] : false;
+	$screen_function = isset( $bp->bp_options_nav[$parent_id][$slug]['screen_function'] ) ? $bp->bp_options_nav[$parent_id][$slug]['screen_function'] : false;
 
-	if ( $screen_function ) {
-		if ( !is_object( $screen_function[0] ) )
-			remove_action( 'bp_screens', $screen_function );
-		else
-			remove_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ) );
+	if ( !empty( $screen_function ) ) {
+		if ( is_object( $screen_function[0] ) ) {
+			remove_action( 'bp_screens', array( &$screen_function[0], $screen_function[1] ), 3 );
+		} else {
+			remove_action( 'bp_screens', $screen_function, 3 );
+		}
 	}
 
 	unset( $bp->bp_options_nav[$parent_id][$slug] );
@@ -361,7 +428,7 @@ function bp_core_remove_subnav_item( $parent_id, $slug ) {
  *
  * @package BuddyPress Core
  * @param $parent_id The id of the parent navigation item.
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  */
 function bp_core_reset_subnav_items( $parent_slug ) {
 	global $bp;
@@ -377,7 +444,7 @@ function bp_core_admin_bar() {
 	if ( defined( 'BP_DISABLE_ADMIN_BAR' ) && BP_DISABLE_ADMIN_BAR )
 		return false;
 
-	if ( (int)bp_get_option( 'hide-loggedout-adminbar' ) && !is_user_logged_in() )
+	if ( (int) bp_get_option( 'hide-loggedout-adminbar' ) && !is_user_logged_in() )
 		return false;
 
 	$bp->doing_admin_bar = true;
@@ -398,21 +465,18 @@ function bp_core_admin_bar() {
 	$bp->doing_admin_bar = false;
 }
 
-// **** Default BuddyPress admin bar logo ********
+// **** Default BuddyPress Toolbar logo ********
 function bp_adminbar_logo() {
-	global $bp;
-
 	echo '<a href="' . bp_get_root_domain() . '" id="admin-bar-logo">' . get_blog_option( bp_get_root_blog_id(), 'blogname' ) . '</a>';
 }
 
 // **** "Log In" and "Sign Up" links (Visible when not logged in) ********
 function bp_adminbar_login_menu() {
-	global $bp;
 
 	if ( is_user_logged_in() )
 		return false;
 
-	echo '<li class="bp-login no-arrow"><a href="' . bp_get_root_domain() . '/wp-login.php?redirect_to=' . urlencode( bp_get_root_domain() ) . '">' . __( 'Log In', 'buddypress' ) . '</a></li>';
+	echo '<li class="bp-login no-arrow"><a href="' . wp_login_url() . '">' . __( 'Log In', 'buddypress' ) . '</a></li>';
 
 	// Show "Sign Up" link if user registrations are allowed
 	if ( bp_get_signup_allowed() )
@@ -433,7 +497,7 @@ function bp_adminbar_account_menu() {
 
 	// Loop through each navigation item
 	$counter = 0;
-	foreach( (array)$bp->bp_nav as $nav_item ) {
+	foreach( (array) $bp->bp_nav as $nav_item ) {
 		$alt = ( 0 == $counter % 2 ) ? ' class="alt"' : '';
 
 		if ( -1 == $nav_item['position'] )
@@ -446,12 +510,12 @@ function bp_adminbar_account_menu() {
 			echo '<ul>';
 			$sub_counter = 0;
 
-			foreach( (array)$bp->bp_options_nav[$nav_item['slug']] as $subnav_item ) {
+			foreach( (array) $bp->bp_options_nav[$nav_item['slug']] as $subnav_item ) {
 				$link = $subnav_item['link'];
 				$name = $subnav_item['name'];
 
-				if ( isset( $bp->displayed_user->domain ) )
-					$link = str_replace( $bp->displayed_user->domain, $bp->loggedin_user->domain, $subnav_item['link'] );
+				if ( bp_displayed_user_domain() )
+					$link = str_replace( bp_displayed_user_domain(), bp_loggedin_user_domain(), $subnav_item['link'] );
 
 				if ( isset( $bp->displayed_user->userdata->user_login ) )
 					$name = str_replace( $bp->displayed_user->userdata->user_login, $bp->loggedin_user->userdata->user_login, $subnav_item['name'] );
@@ -496,7 +560,7 @@ function bp_adminbar_thisblog_menu() {
 
 // **** "Random" Menu (visible when not logged in) ********
 function bp_adminbar_random_menu() {
-	global $bp; ?>
+?>
 
 	<li class="align-right" id="bp-adminbar-visitrandom-menu">
 		<a href="#"><?php _e( 'Visit', 'buddypress' ) ?></a>
@@ -524,18 +588,18 @@ function bp_adminbar_random_menu() {
 }
 
 /**
- * Retrieve the admin bar display preference of a user based on context.
+ * Retrieve the Toolbar display preference of a user based on context.
  *
  * This is a direct copy of WP's private _get_admin_bar_pref()
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @param string $context Context of this preference check, either 'admin' or 'front'.
  * @param int $user Optional. ID of the user to check, defaults to 0 for current user.
  *
  * @uses get_user_option()
  *
- * @return bool Whether the admin bar should be showing for this user.
+ * @return bool Whether the Toolbar should be showing for this user.
  */
 function bp_get_admin_bar_pref( $context, $user = 0 ) {
 	$pref = get_user_option( "show_admin_bar_{$context}", $user );
@@ -546,9 +610,9 @@ function bp_get_admin_bar_pref( $context, $user = 0 ) {
 }
 
 /**
- * Handle the Admin Bar/BuddyBar business
+ * Handle the Toolbar/BuddyBar business
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @global string $wp_version
  * @uses bp_get_option()
@@ -566,32 +630,32 @@ function bp_get_admin_bar_pref( $context, $user = 0 ) {
 function bp_core_load_admin_bar() {
 	global $wp_version;
 
-	// Don't show if admin bar is disabled for non-logged in users
-	if ( (int) bp_get_option( 'hide-loggedout-adminbar' ) && !is_user_logged_in() )
+	// Don't show if Toolbar is disabled for non-logged in users
+	if ( (int) bp_get_option( 'hide-loggedout-adminbar' ) && ! is_user_logged_in() )
 		return;
 
-	// Show the WordPress admin bar
+	// Show the WordPress Toolbar
 	if ( bp_use_wp_admin_bar() && $wp_version >= 3.1 ) {
-		// Respect user's admin bar display preferences
-		if ( bp_get_admin_bar_pref( 'front', bp_loggedin_user_id() ) || bp_get_admin_bar_pref( 'admin', bp_loggedin_user_id() ) )
+
+		// Respect user's Toolbar display preferences
+		if ( is_user_logged_in() && ( bp_get_admin_bar_pref( 'front', bp_loggedin_user_id() ) || bp_get_admin_bar_pref( 'admin', bp_loggedin_user_id() ) ) )
 			return;
 
 		show_admin_bar( true );
 
-	// Hide the WordPress admin bar
+	// Hide the WordPress Toolbar
 	} elseif ( !bp_use_wp_admin_bar() ) {
-
-		// Keep the WP admin bar from loading
+		// Keep the WP Toolbar from loading
 		show_admin_bar( false );
 
-		// Actions used to build the BP admin bar
+		// Actions used to build the BP Toolbar
 		add_action( 'bp_adminbar_logo',  'bp_adminbar_logo' );
 		add_action( 'bp_adminbar_menus', 'bp_adminbar_login_menu',         2   );
 		add_action( 'bp_adminbar_menus', 'bp_adminbar_account_menu',       4   );
 		add_action( 'bp_adminbar_menus', 'bp_adminbar_thisblog_menu',      6   );
 		add_action( 'bp_adminbar_menus', 'bp_adminbar_random_menu',        100 );
 
-		// Actions used to append BP admin bar to footer
+		// Actions used to append BP Toolbar to footer
 		add_action( 'wp_footer',    'bp_core_admin_bar', 8 );
 		add_action( 'admin_footer', 'bp_core_admin_bar'    );
 	}
@@ -607,21 +671,22 @@ function bp_core_load_buddybar_css() {
 	if ( file_exists( get_stylesheet_directory() . '/_inc/css/adminbar.css' ) ) // Backwards compatibility
 		$stylesheet = get_stylesheet_directory_uri() . '/_inc/css/adminbar.css';
 	elseif ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-		$stylesheet = BP_PLUGIN_URL . '/bp-core/css/buddybar.dev.css';
+		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/buddybar.dev.css';
 	else
-		$stylesheet = BP_PLUGIN_URL . '/bp-core/css/buddybar.css';
+		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/buddybar.css';
 
-	wp_enqueue_style( 'bp-admin-bar', apply_filters( 'bp_core_admin_bar_css', $stylesheet ), array(), '20110723' );
+	wp_enqueue_style( 'bp-admin-bar', apply_filters( 'bp_core_admin_bar_css', $stylesheet ), array(), bp_get_version() );
 
 	if ( !is_rtl() )
 		return;
 
 	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-		$stylesheet = BP_PLUGIN_URL . '/bp-core/css/buddybar-rtl.dev.css';
+		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/buddybar-rtl.dev.css';
 	else
-		$stylesheet = BP_PLUGIN_URL . '/bp-core/css/buddybar-rtl.css';
+		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/buddybar-rtl.css';
 
-	wp_enqueue_style( 'bp-admin-bar-rtl', apply_filters( 'bp_core_buddybar_rtl_css', $stylesheet ), array( 'bp-admin-bar' ), '20110723' );
+	wp_enqueue_style( 'bp-admin-bar-rtl', apply_filters( 'bp_core_buddybar_rtl_css', $stylesheet ), array( 'bp-admin-bar' ), bp_get_version() );
 }
 add_action( 'bp_init', 'bp_core_load_buddybar_css' );
+
 ?>

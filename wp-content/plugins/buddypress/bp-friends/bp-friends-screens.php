@@ -1,8 +1,14 @@
 <?php
+
 /**
+ * BuddyPress Friends Screen Functions
+ *
  * Screen functions are the controllers of BuddyPress. They will execute when their
  * specific URL is caught. They will first save or manipulate data using business
  * functions, then pass on the user to a template file.
+ *
+ * @package BuddyPress
+ * @subpackage FriendsScreens
  */
 
 // Exit if accessed directly
@@ -12,7 +18,7 @@ function friends_screen_my_friends() {
 	global $bp;
 
 	// Delete any friendship acceptance notifications for the user when viewing a profile
-	bp_core_delete_notifications_by_type( $bp->loggedin_user->id, $bp->friends->id, 'friendship_accepted' );
+	bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->friends->id, 'friendship_accepted' );
 
 	do_action( 'friends_screen_my_friends' );
 
@@ -29,7 +35,7 @@ function friends_screen_requests() {
 		else
 			bp_core_add_message( __( 'Friendship could not be accepted', 'buddypress' ), 'error' );
 
-		bp_core_redirect( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() );
+		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
 
 	} elseif ( bp_is_action_variable( 'reject', 0 ) && is_numeric( bp_action_variable( 1 ) ) ) {
 		// Check the nonce
@@ -40,7 +46,18 @@ function friends_screen_requests() {
 		else
 			bp_core_add_message( __( 'Friendship could not be rejected', 'buddypress' ), 'error' );
 
-		bp_core_redirect( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() );
+		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
+		
+	} elseif ( bp_is_action_variable( 'cancel', 0 ) && is_numeric( bp_action_variable( 1 ) ) ) {
+		// Check the nonce
+		check_admin_referer( 'friends_withdraw_friendship' );
+
+		if ( friends_withdraw_friendship( bp_loggedin_user_id(), bp_action_variable( 1 ) ) )
+			bp_core_add_message( __( 'Friendship request withdrawn', 'buddypress' ) );
+		else
+			bp_core_add_message( __( 'Friendship request could not be withdrawn', 'buddypress' ), 'error' );
+
+		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
 	}
 
 	do_action( 'friends_screen_requests' );
@@ -52,14 +69,12 @@ function friends_screen_requests() {
 }
 
 function friends_screen_notification_settings() {
-	global $bp;
 
-	if ( !$send_requests = bp_get_user_meta( $bp->displayed_user->id, 'notification_friends_friendship_request', true ) )
+	if ( !$send_requests = bp_get_user_meta( bp_displayed_user_id(), 'notification_friends_friendship_request', true ) )
 		$send_requests   = 'yes';
 
-	if ( !$accept_requests = bp_get_user_meta( $bp->displayed_user->id, 'notification_friends_friendship_accepted', true ) )
-		$accept_requests = 'yes';
-?>
+	if ( !$accept_requests = bp_get_user_meta( bp_displayed_user_id(), 'notification_friends_friendship_accepted', true ) )
+		$accept_requests = 'yes'; ?>
 
 	<table class="notification-settings" id="friends-notification-settings">
 		<thead>

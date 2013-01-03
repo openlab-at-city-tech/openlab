@@ -1,22 +1,29 @@
 <?php
+
+/**
+ * BuddyPress Blogs Classes
+ *
+ * @package BuddyPress
+ * @subpackage BlogsClasses
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-Class BP_Blogs_Blog {
+/**
+ * The main BuddyPress blog class
+ *
+ * @since BuddyPress (1.0)
+ * @package BuddyPress
+ * @subpackage BlogsClasses
+ */
+class BP_Blogs_Blog {
 	var $id;
 	var $user_id;
 	var $blog_id;
 
-	function bp_blogs_blog( $id = null ) {
-		$this->__construct( $id );
-	}
-
 	function __construct( $id = null ) {
-		global $bp, $wpdb;
-
-		$user_id = bp_displayed_user_id();
-
-		if ( $id ) {
+		if ( !empty( $id ) ) {
 			$this->id = $id;
 			$this->populate();
 		}
@@ -77,7 +84,7 @@ Class BP_Blogs_Blog {
 	function get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false ) {
 		global $bp, $wpdb;
 
-		if ( !is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
+		if ( !is_user_logged_in() || ( !bp_current_user_can( 'bp_moderate' ) && ( $user_id != bp_loggedin_user_id() ) ) )
 			$hidden_sql = "AND wb.public = 1";
 		else
 			$hidden_sql = '';
@@ -111,11 +118,11 @@ Class BP_Blogs_Blog {
 		}
 
 		$blog_ids = array();
-		foreach ( (array)$paged_blogs as $blog ) {
+		foreach ( (array) $paged_blogs as $blog ) {
 			$blog_ids[] = $blog->blog_id;
 		}
 
-		$blog_ids = $wpdb->escape( join( ',', (array)$blog_ids ) );
+		$blog_ids = $wpdb->escape( join( ',', (array) $blog_ids ) );
 		$paged_blogs = BP_Blogs_Blog::get_blog_extras( $paged_blogs, $blog_ids, $type );
 
 		return array( 'blogs' => $paged_blogs, 'total' => $total_blogs );
@@ -132,7 +139,7 @@ Class BP_Blogs_Blog {
 		global $wpdb, $bp;
 
 		if ( !$user_id )
-			$user_id = $bp->loggedin_user->id;
+			$user_id = bp_loggedin_user_id();
 
 		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->blogs->table_name} WHERE user_id = %d AND blog_id = %d", $user_id, $blog_id ) );
 	}
@@ -141,7 +148,7 @@ Class BP_Blogs_Blog {
 		global $wpdb, $bp;
 
 		if ( !$user_id )
-			$user_id = $bp->loggedin_user->id;
+			$user_id = bp_loggedin_user_id();
 
 		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->blogs->table_name} WHERE user_id = %d", $user_id ) );
 	}
@@ -150,7 +157,7 @@ Class BP_Blogs_Blog {
 		global $bp, $wpdb;
 
 		if ( !$user_id )
-			$user_id = $bp->displayed_user->id;
+			$user_id = bp_displayed_user_id();
 
 		// Show logged in users their hidden blogs.
 		if ( !bp_is_my_profile() && !$show_hidden )
@@ -161,7 +168,7 @@ Class BP_Blogs_Blog {
 		$total_blog_count = BP_Blogs_Blog::total_blog_count_for_user( $user_id );
 
 		$user_blogs = array();
-		foreach ( (array)$blogs as $blog ) {
+		foreach ( (array) $blogs as $blog ) {
 			$user_blogs[$blog->blog_id] = new stdClass;
 			$user_blogs[$blog->blog_id]->id = $blog->id;
 			$user_blogs[$blog->blog_id]->blog_id = $blog->blog_id;
@@ -176,7 +183,7 @@ Class BP_Blogs_Blog {
 		global $bp, $wpdb;
 
 		if ( !$user_id )
-			$user_id = $bp->displayed_user->id;
+			$user_id = bp_displayed_user_id();
 
 		return $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM {$bp->blogs->table_name} WHERE user_id = %d", $user_id ) );
 	}
@@ -191,10 +198,10 @@ Class BP_Blogs_Blog {
 		global $bp, $wpdb;
 
 		if ( !$user_id )
-			$user_id = $bp->displayed_user->id;
+			$user_id = bp_displayed_user_id();
 
 		// If the user is logged in return the blog count including their hidden blogs.
-		if ( ( is_user_logged_in() && $user_id == $bp->loggedin_user->id ) || is_super_admin() )
+		if ( ( is_user_logged_in() && $user_id == bp_loggedin_user_id() ) || bp_current_user_can( 'bp_moderate' ) )
 			return $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b LEFT JOIN {$wpdb->base_prefix}blogs wb ON b.blog_id = wb.blog_id WHERE wb.deleted = 0 AND wb.spam = 0 AND wb.mature = 0 AND wb.archived = '0' AND user_id = %d", $user_id) );
 		else
 			return $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b LEFT JOIN {$wpdb->base_prefix}blogs wb ON b.blog_id = wb.blog_id WHERE wb.public = 1 AND wb.deleted = 0 AND wb.spam = 0 AND wb.mature = 0 AND wb.archived = '0' AND user_id = %d", $user_id) );
@@ -205,7 +212,7 @@ Class BP_Blogs_Blog {
 
 		$filter = like_escape( $wpdb->escape( $filter ) );
 
-		if ( !is_super_admin() )
+		if ( !bp_current_user_can( 'bp_moderate' ) )
 			$hidden_sql = "AND wb.public = 1";
 
 		if ( $limit && $page )
@@ -220,7 +227,7 @@ Class BP_Blogs_Blog {
 	function get_all( $limit = null, $page = null ) {
 		global $bp, $wpdb;
 
-		$hidden_sql = !is_super_admin() ? "AND wb.public = 1" : '';
+		$hidden_sql = !bp_current_user_can( 'bp_moderate' ) ? "AND wb.public = 1" : '';
 		$pag_sql = ( $limit && $page ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) ) : '';
 
 		$paged_blogs = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT b.blog_id FROM {$bp->blogs->table_name} b LEFT JOIN {$wpdb->base_prefix}blogs wb ON b.blog_id = wb.blog_id WHERE wb.mature = 0 AND wb.spam = 0 AND wb.archived = '0' AND wb.deleted = 0 {$hidden_sql} {$pag_sql}" ) );
@@ -234,7 +241,7 @@ Class BP_Blogs_Blog {
 
 		$letter = like_escape( $wpdb->escape( $letter ) );
 
-		if ( !is_super_admin() )
+		if ( !bp_current_user_can( 'bp_moderate' ) )
 			$hidden_sql = "AND wb.public = 1";
 
 		if ( $limit && $page )
@@ -261,7 +268,7 @@ Class BP_Blogs_Blog {
 		$blog_descs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, meta_value as description FROM {$bp->blogs->table_name_blogmeta} WHERE meta_key = 'description' AND blog_id IN ( {$blog_ids} )" ) );
 
 		for ( $i = 0, $count = count( $paged_blogs ); $i < $count; ++$i ) {
-			foreach ( (array)$blog_descs as $desc ) {
+			foreach ( (array) $blog_descs as $desc ) {
 				if ( $desc->blog_id == $paged_blogs[$i]->blog_id )
 					$paged_blogs[$i]->description = $desc->description;
 			}
@@ -273,10 +280,11 @@ Class BP_Blogs_Blog {
 	function is_hidden( $blog_id ) {
 		global $wpdb;
 
-		if ( !(int)$wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT public FROM {$wpdb->base_prefix}blogs WHERE blog_id = %d", $blog_id ) ) )
+		if ( !(int) $wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT public FROM {$wpdb->base_prefix}blogs WHERE blog_id = %d", $blog_id ) ) )
 			return true;
 
 		return false;
 	}
 }
+
 ?>

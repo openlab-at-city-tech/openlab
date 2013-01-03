@@ -1,4 +1,5 @@
 <?php
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -14,11 +15,44 @@ function bp_core_set_charset() {
 	return '';
 }
 
-function bp_core_install_notifications() {
-	global $wpdb;
+function bp_core_install( $active_components = false ) {
 
+	if ( empty( $active_components ) )
+		$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
+
+	// Core DB Tables
+	bp_core_install_notifications();
+
+	// Activity Streams
+	if ( !empty( $active_components['activity'] ) )
+		bp_core_install_activity_streams();
+
+	// Friend Connections
+	if ( !empty( $active_components['friends'] ) )
+		bp_core_install_friends();
+
+	// Extensible Groups
+	if ( !empty( $active_components['groups'] ) )
+		bp_core_install_groups();
+
+	// Private Messaging
+	if ( !empty( $active_components['messages'] ) )
+		bp_core_install_private_messaging();
+
+	// Extended Profiles
+	if ( !empty( $active_components['xprofile'] ) )
+		bp_core_install_extended_profiles();
+
+	// Blog tracking
+	if ( !empty( $active_components['blogs'] ) )
+		bp_core_install_blog_tracking();
+}
+
+function bp_core_install_notifications() {
+
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_notifications (
 	  		    id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -38,29 +72,30 @@ function bp_core_install_notifications() {
 			    KEY useritem (user_id,is_new)
 		       ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }
 
 function bp_core_install_activity_streams() {
-	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_activity (
-		  		id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				user_id bigint(20) NOT NULL,
 				component varchar(75) NOT NULL,
 				type varchar(75) NOT NULL,
 				action text NOT NULL,
 				content longtext NOT NULL,
-				primary_link varchar(150) NOT NULL,
-				item_id varchar(75) NOT NULL,
-				secondary_item_id varchar(75) DEFAULT NULL,
+				primary_link varchar(255) NOT NULL,
+				item_id bigint(20) NOT NULL,
+				secondary_item_id bigint(20) DEFAULT NULL,
 				date_recorded datetime NOT NULL,
 				hide_sitewide bool DEFAULT 0,
 				mptt_left int(11) NOT NULL DEFAULT 0,
 				mptt_right int(11) NOT NULL DEFAULT 0,
+				is_spam tinyint(1) NOT NULL DEFAULT 0,
 				KEY date_recorded (date_recorded),
 				KEY user_id (user_id),
 				KEY item_id (item_id),
@@ -69,8 +104,9 @@ function bp_core_install_activity_streams() {
 				KEY type (type),
 				KEY mptt_left (mptt_left),
 				KEY mptt_right (mptt_right),
-				KEY hide_sitewide (hide_sitewide)
-		 	   ) {$charset_collate};";
+				KEY hide_sitewide (hide_sitewide),
+				KEY is_spam (is_spam)
+			) {$charset_collate};";
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_activity_meta (
 				id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -81,14 +117,14 @@ function bp_core_install_activity_streams() {
 				KEY meta_key (meta_key)
 		   	   ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }
 
 function bp_core_install_friends() {
-	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_friends (
 	  		    id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -101,14 +137,14 @@ function bp_core_install_friends() {
 		        KEY friend_user_id (friend_user_id)
 	 	       ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }
 
 function bp_core_install_groups() {
-	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_groups (
 		  		id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -153,14 +189,14 @@ function bp_core_install_groups() {
 				KEY meta_key (meta_key)
 			   ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }
 
 function bp_core_install_private_messaging() {
-	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_messages_messages (
 		  		id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -196,23 +232,24 @@ function bp_core_install_private_messaging() {
 			    KEY is_active (is_active)
 		 	   ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }
 
 function bp_core_install_extended_profiles() {
 	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
-	// These values should only be updated if they are not already present
-	if ( !$base_group_name = bp_get_option( 'bp-xprofile-base-group-name' ) ) {
-		bp_update_option( 'bp-xprofile-base-group-name', _x( 'Base', 'First XProfile group name', 'buddypress' ) );
-	}
+	// These values should only be updated if they are not already present 
+	if ( !$base_group_name = bp_get_option( 'bp-xprofile-base-group-name' ) ) { 
+		bp_update_option( 'bp-xprofile-base-group-name', _x( 'Base', 'First XProfile group name', 'buddypress' ) ); 
+	} 
 
-	if ( !$fullname_field_name = bp_get_option( 'bp-xprofile-fullname-field-name' ) ) {
-		bp_update_option( 'bp-xprofile-fullname-field-name', _x( 'Name', 'XProfile fullname field name', 'buddypress' ) );
-	}
+	if ( !$fullname_field_name = bp_get_option( 'bp-xprofile-fullname-field-name' ) ) { 
+		bp_update_option( 'bp-xprofile-fullname-field-name', _x( 'Name', 'XProfile fullname field name', 'buddypress' ) ); 
+	} 
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_xprofile_groups (
 			    id bigint(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -278,10 +315,10 @@ function bp_core_install_extended_profiles() {
 }
 
 function bp_core_install_blog_tracking() {
-	global $wpdb;
 
+	$sql             = array();
 	$charset_collate = bp_core_set_charset();
-	$bp_prefix = bp_core_get_table_prefix();
+	$bp_prefix       = bp_core_get_table_prefix();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_user_blogs (
 	  		    id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -300,7 +337,54 @@ function bp_core_install_blog_tracking() {
 				KEY meta_key (meta_key)
 		       ) {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
+}
+
+/**
+ * I don't appear to be used anymore, but I'm here anyways. I was originally
+ * used in olden days to update pre-1.1 schemas, but that was before we had
+ * a legitimate update process. Keep me around just incase.
+ *
+ * @global WPDB $wpdb
+ * @global BuddyPress $bp 
+ */
+function bp_update_db_stuff() {
+	global $wpdb, $bp;
+
+	$bp_prefix = bp_core_get_table_prefix();
+
+	// Rename the old user activity cached table if needed.
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '%{$bp_prefix}bp_activity_user_activity_cached%'" ) )
+		$wpdb->query( "RENAME TABLE {$bp_prefix}bp_activity_user_activity_cached TO {$bp->activity->table_name}" );
+
+	// Rename fields from pre BP 1.2
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '%{$bp->activity->table_name}%'" ) ) {
+		if ( $wpdb->get_var( "SHOW COLUMNS FROM {$bp->activity->table_name} LIKE 'component_action'" ) ) {
+			$wpdb->query( "ALTER TABLE {$bp->activity->table_name} CHANGE component_action type varchar(75) NOT NULL" );
+		}
+
+		if ( $wpdb->get_var( "SHOW COLUMNS FROM {$bp->activity->table_name} LIKE 'component_name'" ) ) {
+			$wpdb->query( "ALTER TABLE {$bp->activity->table_name} CHANGE component_name component varchar(75) NOT NULL" );
+		}
+	}
+
+	// On first installation - record all existing blogs in the system.
+	if ( !(int) $bp->site_options['bp-blogs-first-install'] ) {
+		bp_blogs_record_existing_blogs();
+		bp_update_option( 'bp-blogs-first-install', 1 );
+	}
+
+	if ( is_multisite() ) {
+		bp_core_add_illegal_names();
+	}
+
+	// Update and remove the message threads table if it exists
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '%{$bp_prefix}bp_messages_threads%'" ) ) {
+		if ( BP_Messages_Thread::update_tables() ) {
+			$wpdb->query( "DROP TABLE {$bp_prefix}bp_messages_threads" );
+		}
+	}
+
 }
 
 ?>

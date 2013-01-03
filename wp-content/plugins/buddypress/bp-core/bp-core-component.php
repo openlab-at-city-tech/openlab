@@ -14,7 +14,7 @@ if ( !class_exists( 'BP_Component' ) ) :
  * @package BuddyPress
  * @subpackage Component
  *
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 class BP_Component {
 
@@ -60,14 +60,30 @@ class BP_Component {
 	var $notification_callback;
 
 	/**
-	 * @var array WordPress admin bar links
+	 * @var array WordPress Toolbar links
 	 */
 	var $admin_menu;
 
 	/**
+	 * Search input box placeholder string for the component
+	 *
+	 * @since BuddyPress (1.5)
+	 * @var string
+	 */
+	public $search_string;
+
+	/**
+	 * Component's root slug
+	 *
+	 * @since BuddyPress (1.5)
+	 * @var string
+	 */
+	public $root_slug;
+
+	/**
 	 * Component loader
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @param mixed $args Required. Supports these args:
 	 *  - id: Unique ID (for internal identification). Letters, numbers, and underscores only
@@ -92,7 +108,7 @@ class BP_Component {
 	/**
 	 * Component global variables
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 * @access private
 	 *
 	 * @uses apply_filters() Calls 'bp_{@link bp_Component::name}_id'
@@ -130,10 +146,16 @@ class BP_Component {
 		// Notifications callback
 		$this->notification_callback = apply_filters( 'bp_' . $this->id . '_notification_callback', $r['notification_callback'] );
 
-		// Setup global table names
-		if ( !empty( $r['global_tables'] ) )
-			foreach ( $r['global_tables'] as $global_name => $table_name )
+		// Set up global table names
+		if ( !empty( $r['global_tables'] ) ) {
+			// This filter allows for component-specific filtering of table names
+			// To filter *all* tables, use the 'bp_core_get_table_prefix' filter instead
+			$r['global_tables'] = apply_filters( 'bp_' . $this->id . '_global_tables', $r['global_tables'] );
+
+			foreach ( $r['global_tables'] as $global_name => $table_name ) {
 				$this->$global_name = $table_name;
+			}
+                }
 
 		/** BuddyPress ********************************************************/
 
@@ -164,7 +186,7 @@ class BP_Component {
 	 *   - ./bp-my_component/actions
 	 *   - ./bp-my_component/bp-my_component-actions.php
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 * @access private
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}includes'
@@ -173,21 +195,30 @@ class BP_Component {
 		if ( empty( $includes ) )
 			return;
 
+		$slashed_path = trailingslashit( $this->path );
+
 		// Loop through files to be included
 		foreach ( $includes as $file ) {
 
-			// Check path + file
-			if ( @is_file( $this->path . '/' . $file ) )
-				require( $this->path . '/' . $file );
+			$paths = array(
 
-			// Check path + /bp-component/ + file
-			elseif ( @is_file( $this->path . '/bp-' . $this->id . '/' . $file ) )
-				require( $this->path . '/bp-' . $this->id . '/' . $file );
+				// Passed with no extension
+				'bp-' . $this->id . '/bp-' . $this->id . '-' . $file  . '.php',
+				'bp-' . $this->id . '-' . $file . '.php',
+				'bp-' . $this->id . '/' . $file . '.php',
 
-			// Check buddypress/bp-component/bp-component-$file.php
-			elseif ( @is_file( $this->path . '/bp-' . $this->id . '/bp-' . $this->id . '-' . $file  . '.php' ) )
-				require( $this->path . '/bp-' . $this->id . '/bp-' . $this->id . '-' . $file . '.php' );
+				// Passed with extension
+				$file,
+				'bp-' . $this->id . '-' . $file,
+				'bp-' . $this->id . '/' . $file,
+			);
 
+			foreach ( $paths as $path ) {
+				if ( @is_file( $slashed_path . $path ) ) {
+					require( $slashed_path . $path );
+					continue;
+				}
+			}
 		}
 
 		// Call action
@@ -197,7 +228,7 @@ class BP_Component {
 	/**
 	 * Setup the actions
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 * @access private
 	 *
 	 * @uses add_action() To add various actions
@@ -218,7 +249,7 @@ class BP_Component {
 		// Setup navigation
 		add_action( 'bp_setup_nav',              array ( $this, 'setup_nav'              ), 10 );
 
-		// Setup WP Admin Bar menus
+		// Setup WP Toolbar menus
 		add_action( 'bp_setup_admin_bar',        array ( $this, 'setup_admin_bar'        ), 10 );
 
 		// Setup component title
@@ -265,7 +296,7 @@ class BP_Component {
 	}
 
 	/**
-	 * Setup the admin bar
+	 * Setup the Toolbar
 	 *
 	 * @global obj $wp_admin_bar
 	 * @param array $wp_admin_menus
@@ -280,7 +311,7 @@ class BP_Component {
 		if ( !bp_use_wp_admin_bar() )
 			return;
 
-		// Do we have admin bar menus to add?
+		// Do we have Toolbar menus to add?
 		if ( !empty( $wp_admin_nav ) ) {
 
 			// Set this objects menus
@@ -301,7 +332,7 @@ class BP_Component {
 	/**
 	 * Setup the component title
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}setup_title'
 	 */
@@ -312,7 +343,7 @@ class BP_Component {
 	/**
 	 * Setup the component post types
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}_register_post_types'
 	 */
@@ -323,7 +354,7 @@ class BP_Component {
 	/**
 	 * Register component specific taxonomies
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}_register_taxonomies'
 	 */
@@ -334,7 +365,7 @@ class BP_Component {
 	/**
 	 * Add any additional rewrite tags
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}_add_rewrite_tags'
 	 */
@@ -345,7 +376,7 @@ class BP_Component {
 	/**
 	 * Generate any additional rewrite rules
 	 *
-	 * @since 1.5
+	 * @since BuddyPress (1.5)
 	 *
 	 * @uses do_action() Calls 'bp_{@link bp_Component::name}_generate_rewrite_rules'
 	 */

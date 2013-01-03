@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * BuddyPress Blogs Template Tags
+ *
+ * @package BuddyPress
+ * @subpackage BlogsTemplate
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -6,8 +14,8 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * Output the blogs component slug
  *
  * @package BuddyPress
- * @subpackage Blogs Template
- * @since BuddyPress (r4100)
+ * @subpackage BlogsTemplate
+ * @since BuddyPress (1.5)
  *
  * @uses bp_get_blogs_slug()
  */
@@ -18,8 +26,8 @@ function bp_blogs_slug() {
 	 * Return the blogs component slug
 	 *
 	 * @package BuddyPress
-	 * @subpackage Blogs Template
-	 * @since BuddyPress (r4100)
+	 * @subpackage BlogsTemplate
+	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_blogs_slug() {
 		global $bp;
@@ -30,8 +38,8 @@ function bp_blogs_slug() {
  * Output the blogs component root slug
  *
  * @package BuddyPress
- * @subpackage Blogs Template
- * @since BuddyPress (r4100)
+ * @subpackage BlogsTemplate
+ * @since BuddyPress (1.5)
  *
  * @uses bp_get_blogs_root_slug()
  */
@@ -42,8 +50,8 @@ function bp_blogs_root_slug() {
 	 * Return the blogs component root slug
 	 *
 	 * @package BuddyPress
-	 * @subpackage Blogs Template
-	 * @since BuddyPress (r4100)
+	 * @subpackage BlogsTemplate
+	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_blogs_root_slug() {
 		global $bp;
@@ -54,8 +62,8 @@ function bp_blogs_root_slug() {
  * Output blog directory permalink
  *
  * @package BuddyPress
- * @subpackage Blogs Template
- * @since 1.5
+ * @subpackage BlogsTemplate
+ * @since BuddyPress (1.5)
  * @uses bp_get_blogs_directory_permalink()
  */
 function bp_blogs_directory_permalink() {
@@ -65,8 +73,8 @@ function bp_blogs_directory_permalink() {
 	 * Return blog directory permalink
 	 *
 	 * @package BuddyPress
-	 * @subpackage Blogs Template
-	 * @since 1.5
+	 * @subpackage BlogsTemplate
+	 * @since BuddyPress (1.5)
 	 * @uses apply_filters()
 	 * @uses traisingslashit()
 	 * @uses bp_get_root_domain()
@@ -94,14 +102,9 @@ class BP_Blogs_Template {
 	var $pag_links;
 	var $total_blog_count;
 
-	function bp_blogs_template( $type, $page, $per_page, $max, $user_id, $search_terms ) {
-		$this->__construct( $type, $page, $per_page, $max, $user_id, $search_terms );
-	}
+	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg = 'bpage' ) {
 
-	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms ) {
-		global $bp;
-
-		$this->pag_page = isset( $_REQUEST['bpage'] ) ? intval( $_REQUEST['bpage'] ) : $page;
+		$this->pag_page = isset( $_REQUEST[$page_arg] ) ? intval( $_REQUEST[$page_arg] ) : $page;
 		$this->pag_num = isset( $_REQUEST['num'] ) ? intval( $_REQUEST['num'] ) : $per_page;
 
 		if ( isset( $_REQUEST['letter'] ) && '' != $_REQUEST['letter'] )
@@ -109,10 +112,10 @@ class BP_Blogs_Template {
 		else
 			$this->blogs = bp_blogs_get_blogs( array( 'type' => $type, 'per_page' => $this->pag_num, 'page' => $this->pag_page, 'user_id' => $user_id, 'search_terms' => $search_terms ) );
 
-		if ( !$max || $max >= (int)$this->blogs['total'] )
-			$this->total_blog_count = (int)$this->blogs['total'];
+		if ( !$max || $max >= (int) $this->blogs['total'] )
+			$this->total_blog_count = (int) $this->blogs['total'];
 		else
-			$this->total_blog_count = (int)$max;
+			$this->total_blog_count = (int) $max;
 
 		$this->blogs = $this->blogs['blogs'];
 
@@ -120,18 +123,18 @@ class BP_Blogs_Template {
 			if ( $max >= count($this->blogs) ) {
 				$this->blog_count = count( $this->blogs );
 			} else {
-				$this->blog_count = (int)$max;
+				$this->blog_count = (int) $max;
 			}
 		} else {
 			$this->blog_count = count( $this->blogs );
 		}
 
-		if ( (int)$this->total_blog_count && (int)$this->pag_num ) {
+		if ( (int) $this->total_blog_count && (int) $this->pag_num ) {
 			$this->pag_links = paginate_links( array(
-				'base'      => add_query_arg( 'bpage', '%#%' ),
+				'base'      => add_query_arg( $page_arg, '%#%' ),
 				'format'    => '',
-				'total'     => ceil( (int)$this->total_blog_count / (int)$this->pag_num ),
-				'current'   => (int)$this->pag_page,
+				'total'     => ceil( (int) $this->total_blog_count / (int) $this->pag_num ),
+				'current'   => (int) $this->pag_page,
 				'prev_text' => _x( '&larr;', 'Blog pagination previous text', 'buddypress' ),
 				'next_text' => _x( '&rarr;', 'Blog pagination next text', 'buddypress' ),
 				'mid_size'  => 1
@@ -174,7 +177,6 @@ class BP_Blogs_Template {
 	}
 
 	function the_blog() {
-		global $blog;
 
 		$this->in_the_loop = true;
 		$this->blog        = $this->next_blog();
@@ -191,7 +193,7 @@ function bp_rewind_blogs() {
 }
 
 function bp_has_blogs( $args = '' ) {
-	global $bp, $blogs_template;
+	global $blogs_template;
 
 	/***
 	 * Set the defaults based on the current page. Any of these will be overridden
@@ -202,9 +204,9 @@ function bp_has_blogs( $args = '' ) {
 	$user_id      = 0;
 	$search_terms = null;
 
-	/* User filtering */
-	if ( !empty( $bp->displayed_user->id ) )
-		$user_id = $bp->displayed_user->id;
+	// User filtering
+	if ( bp_displayed_user_id() )
+		$user_id = bp_displayed_user_id();
 
 	$defaults = array(
 		'type'         => $type,
@@ -212,8 +214,10 @@ function bp_has_blogs( $args = '' ) {
 		'per_page'     => 20,
 		'max'          => false,
 
-		'user_id'      => $user_id, // Pass a user_id to limit to only blogs this user has higher than subscriber access to
-		'search_terms' => $search_terms // Pass search terms to filter on the blog title or description.
+		'page_arg'     => 'bpage',        // See https://buddypress.trac.wordpress.org/ticket/3679
+
+		'user_id'      => $user_id,       // Pass a user_id to limit to only blogs this user has higher than subscriber access to
+		'search_terms' => $search_terms   // Pass search terms to filter on the blog title or description.
 	);
 
 	$r = wp_parse_args( $args, $defaults );
@@ -227,11 +231,12 @@ function bp_has_blogs( $args = '' ) {
 	}
 
 	if ( $max ) {
-		if ( $per_page > $max )
+		if ( $per_page > $max ) {
 			$per_page = $max;
+		}
 	}
 
-	$blogs_template = new BP_Blogs_Template( $type, $page, $per_page, $max, $user_id, $search_terms );
+	$blogs_template = new BP_Blogs_Template( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg );
 	return apply_filters( 'bp_has_blogs', $blogs_template->has_blogs(), $blogs_template );
 }
 
@@ -248,7 +253,7 @@ function bp_the_blog() {
 }
 
 function bp_blogs_pagination_count() {
-	global $bp, $blogs_template;
+	global $blogs_template;
 
 	$start_num = intval( ( $blogs_template->pag_page - 1 ) * $blogs_template->pag_num ) + 1;
 	$from_num  = bp_core_number_format( $start_num );
@@ -271,7 +276,7 @@ function bp_blog_avatar( $args = '' ) {
 	echo bp_get_blog_avatar( $args );
 }
 	function bp_get_blog_avatar( $args = '' ) {
-		global $blogs_template, $bp;
+		global $blogs_template;
 
 		$defaults = array(
 			'type'    => 'full',
@@ -279,7 +284,7 @@ function bp_blog_avatar( $args = '' ) {
 			'height'  => false,
 			'class'   => 'avatar',
 			'id'      => false,
-			'alt'     => __( 'Site authored by %s', 'buddypress' ),
+			'alt'     => sprintf( __( 'Profile picture of site author %s', 'buddypress' ), bp_core_get_user_displayname( $blogs_template->blog->admin_user_id ) ),
 			'no_grav' => true
 		);
 
@@ -401,8 +406,7 @@ function bp_blog_signup_enabled() {
 }
 
 function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = '') {
-	global $current_user, $current_site;
-	global $bp;
+	global $current_user;
 
 	if ( isset($_POST['submit']) ) {
 		bp_blogs_validate_blog_signup();
@@ -521,7 +525,7 @@ function bp_blogs_subdomain_base() {
 	 */
 	function bp_blogs_get_subdomain_base() {
 		global $current_site;
-		
+
 		return apply_filters( 'bp_blogs_subdomain_base', preg_replace( '|^www\.|', '', $current_site->domain ) . $current_site->path );
 	}
 
@@ -581,14 +585,11 @@ function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, 
 }
 
 function bp_create_blog_link() {
-	global $bp;
-
 	if ( bp_is_my_profile() )
 		echo apply_filters( 'bp_create_blog_link', '<a href="' . bp_get_root_domain() . '/' . bp_get_blogs_root_slug() . '/create/">' . __( 'Create a Site', 'buddypress' ) . '</a>' );
 }
 
 function bp_blogs_blog_tabs() {
-	global $bp, $groups_template;
 
 	// Don't show these tabs on a user's own profile
 	if ( bp_is_my_profile() )
@@ -607,13 +608,12 @@ function bp_blogs_blog_tabs() {
 }
 
 function bp_directory_blogs_search_form() {
-	global $bp;
 
 	$default_search_value = bp_get_search_default_text();
-	$search_value = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value; ?>
+	$search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value; ?>
 
 	<form action="" method="get" id="search-blogs-form">
-		<label><input type="text" name="s" id="blogs_search" value="<?php echo esc_attr( $search_value ) ?>"  onfocus="if (this.value == '<?php echo $default_search_value ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo $default_search_value ?>';}" /></label>
+		<label><input type="text" name="s" id="blogs_search" placeholder="<?php echo esc_attr( $search_value ) ?>" /></label>
 		<input type="submit" id="blogs_search_submit" name="blogs_search_submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
 	</form>
 
