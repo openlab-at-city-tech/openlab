@@ -1,4 +1,5 @@
 <?php
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -20,14 +21,14 @@ add_filter( 'bp_core_render_message_content', 'shortcode_unautop' );
  */
 function bp_core_exclude_pages( $pages ) {
 	global $bp;
-	
+
 	if ( bp_is_root_blog() ) {
 		if ( !empty( $bp->pages->activate ) )
 			$pages[] = $bp->pages->activate->id;
-	
+
 		if ( !empty( $bp->pages->register ) )
 			$pages[] = $bp->pages->register->id;
-	
+
 		if ( !empty( $bp->pages->forums ) && ( !bp_is_active( 'forums' ) || ( bp_is_active( 'forums' ) && bp_forums_has_directory() && !bp_forums_is_installed_correctly() ) ) )
 			$pages[] = $bp->pages->forums->id;
 	}
@@ -51,21 +52,6 @@ function bp_core_email_from_name_filter() {
 add_filter( 'wp_mail_from_name', 'bp_core_email_from_name_filter' );
 
 /**
- * bp_core_email_from_name_filter()
- *
- * Sets the "From" address in emails sent
- *
- * @package BuddyPress Core
- * @return noreply@sitedomain email address
- */
-function bp_core_email_from_address_filter() {
-	$domain = (array) explode( '/', site_url() );
-
-	return apply_filters( 'bp_core_email_from_address_filter', 'noreply@' . $domain[2] );
-}
-add_filter( 'wp_mail_from', 'bp_core_email_from_address_filter' );
-
-/**
  * bp_core_allow_default_theme()
  *
  * On multiblog installations you must first allow themes to be activated and show
@@ -76,9 +62,9 @@ add_filter( 'wp_mail_from', 'bp_core_email_from_address_filter' );
  * @package BuddyPress Core
  */
 function bp_core_allow_default_theme( $themes ) {
-	global $bp, $wpdb;
+	global $wpdb;
 
-	if ( !is_super_admin() )
+	if ( !bp_current_user_can( 'bp_moderate' ) )
 		return $themes;
 
 	if ( $wpdb->blogid == bp_get_root_blog_id() ) {
@@ -99,7 +85,7 @@ add_filter( 'allowed_themes', 'bp_core_allow_default_theme' );
 function bp_core_filter_comments( $comments, $post_id ) {
 	global $wpdb;
 
-	foreach( (array)$comments as $comment ) {
+	foreach( (array) $comments as $comment ) {
 		if ( $comment->user_id )
 			$user_ids[] = $comment->user_id;
 	}
@@ -112,10 +98,10 @@ function bp_core_filter_comments( $comments, $post_id ) {
 	if ( !$userdata = $wpdb->get_results( $wpdb->prepare( "SELECT ID as user_id, user_login, user_nicename FROM {$wpdb->users} WHERE ID IN ({$user_ids})" ) ) )
 		return $comments;
 
-	foreach( (array)$userdata as $user )
+	foreach( (array) $userdata as $user )
 		$users[$user->user_id] = bp_core_get_user_domain( $user->user_id, $user->user_nicename, $user->user_login );
 
-	foreach( (array)$comments as $i => $comment ) {
+	foreach( (array) $comments as $i => $comment ) {
 		if ( !empty( $comment->user_id ) ) {
 			if ( !empty( $users[$comment->user_id] ) )
 				$comments[$i]->comment_author_url = $users[$comment->user_id];
@@ -127,29 +113,50 @@ function bp_core_filter_comments( $comments, $post_id ) {
 add_filter( 'comments_array', 'bp_core_filter_comments', 10, 2 );
 
 /**
- * bp_core_login_redirect()
- *
- * When a user logs in, always redirect them back to the previous page. NOT the admin area.
+ * When a user logs in, redirect him in a logical way
  *
  * @package BuddyPress Core
+ *
+ * @uses apply_filters Filter bp_core_login_redirect to modify where users are redirected to on
+ *   login
+ * @param string $redirect_to The URL to be redirected to, sanitized in wp-login.php
+ * @param string $redirect_to_raw The unsanitized redirect_to URL ($_REQUEST['redirect_to'])
+ * @param obj $user The WP_User object corresponding to a successfully logged-in user. Otherwise
+ *   a WP_Error object
+ * @return string The redirect URL
  */
-function bp_core_login_redirect( $redirect_to ) {
-	global $bp, $wpdb;
+function bp_core_login_redirect( $redirect_to, $redirect_to_raw, $user ) {
 
-	// Don't mess with the redirect if this is not the root blog
-	if ( is_multisite() && $wpdb->blogid != bp_get_root_blog_id() )
+	// Only modify the redirect if we're on the main BP blog
+	if ( !bp_is_root_blog() ) {
 		return $redirect_to;
+	}
 
-	// If the redirect doesn't contain 'wp-admin', it's OK
-	if ( !empty( $_REQUEST['redirect_to'] ) && false === strpos( $_REQUEST['redirect_to'], 'wp-admin' ) )
+	// Only modify the redirect once the user is logged in
+	if ( !is_a( $user, 'WP_User' ) ) {
 		return $redirect_to;
+	}
 
-	if ( false === strpos( wp_get_referer(), 'wp-login.php' ) && false === strpos( wp_get_referer(), 'activate' ) && empty( $_REQUEST['nr'] ) )
+	// Allow plugins to allow or disallow redirects, as desired
+	$maybe_redirect = apply_filters( 'bp_core_login_redirect', false, $redirect_to, $redirect_to_raw, $user );
+	if ( false !== $maybe_redirect ) {
+		return $maybe_redirect;
+	}
+
+	// If a 'redirect_to' parameter has been passed that contains 'wp-admin', verify that the
+	// logged-in user has any business to conduct in the Dashboard before allowing the
+	// redirect to go through
+	if ( !empty( $redirect_to ) && ( false === strpos( $redirect_to, 'wp-admin' ) || user_can( $user, 'edit_posts' ) ) ) {
+		return $redirect_to;
+	}
+
+	if ( false === strpos( wp_get_referer(), 'wp-login.php' ) && false === strpos( wp_get_referer(), 'activate' ) && empty( $_REQUEST['nr'] ) ) {
 		return wp_get_referer();
+	}
 
 	return bp_get_root_domain();
 }
-add_filter( 'login_redirect', 'bp_core_login_redirect' );
+add_filter( 'login_redirect', 'bp_core_login_redirect', 10, 3 );
 
 /***
  * bp_core_filter_user_welcome_email()
@@ -162,7 +169,8 @@ add_filter( 'login_redirect', 'bp_core_login_redirect' );
  * @return string Filtered $welcome_email with 'PASSWORD' replaced by [User Set]
  */
 function bp_core_filter_user_welcome_email( $welcome_email ) {
-	/* Don't touch the email if we don't have a custom registration template */
+
+	// Don't touch the email if we don't have a custom registration template
 	if ( '' == locate_template( array( 'registration/register.php' ), false ) && '' == locate_template( array( 'register.php' ), false ) )
 		return $welcome_email;
 
@@ -186,7 +194,8 @@ if ( !is_admin() && empty( $_GET['e'] ) )
  * @return string Filtered $welcome_email with $password replaced by [User Set]
  */
 function bp_core_filter_blog_welcome_email( $welcome_email, $blog_id, $user_id, $password ) {
-	/* Don't touch the email if we don't have a custom registration template */
+
+	// Don't touch the email if we don't have a custom registration template
 	if ( '' == locate_template( array( 'registration/register.php' ), false ) && '' == locate_template( array( 'register.php' ), false ) )
 		return $welcome_email;
 
@@ -243,7 +252,7 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 
 	$from_name       = ( '' == get_site_option( 'site_name' ) ) ? 'WordPress' : esc_html( get_site_option( 'site_name' ) );
 	$message_headers = "MIME-Version: 1.0\n" . "From: \"{$from_name}\" <{$admin_email}>\n" . "Content-Type: text/plain; charset=\"" . get_option( 'blog_charset' ) . "\"\n";
-	$message         = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%s\n\n", 'buddypress' ), $activate_url . $email );
+	$message         = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%1\$s\n\n", 'buddypress' ), $activate_url . $email );
 	$subject         = '[' . $from_name . '] ' . __( 'Activate Your Account', 'buddypress' );
 
 	// Send the message
@@ -265,17 +274,15 @@ if ( !is_admin() || ( is_admin() && empty( $_POST['noconfirmation'] ) ) )
  * Filter the page title for BuddyPress pages
  *
  * @global object $bp BuddyPress global settings
- * @global unknown $post
- * @global WP_Query $wp_query WordPress query object
  * @param string $title Original page title
  * @param string $sep How to separate the various items within the page title.
  * @param string $seplocation Direction to display title
  * @return string new page title
  * @see wp_title()
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function bp_modify_page_title( $title, $sep, $seplocation ) {
-	global $bp, $post, $wp_query;
+	global $bp;
 
 	// If this is not a BP page, just return the title produced by WP
 	if ( bp_is_blog_page() )
@@ -288,27 +295,41 @@ function bp_modify_page_title( $title, $sep, $seplocation ) {
 	$title = '';
 
 	// Displayed user
-	if ( !empty( $bp->displayed_user->fullname ) && !is_404() ) {
+	if ( bp_get_displayed_user_fullname() && !is_404() ) {
+
+		// Get the component's ID to try and get it's name
+		$component_id = $component_name = bp_current_component();
+
+		// Use the actual component name
+		if ( !empty( $bp->{$component_id}->name ) ) {
+			$component_name = $bp->{$component_id}->name;
+
+		// Fall back on the component ID (probably same as current_component)
+		} elseif ( !empty( $bp->{$component_id}->id ) ) {
+			$component_name = $bp->{$component_id}->id;
+		}
+
 		// translators: "displayed user's name | canonicalised component name"
-		$title = strip_tags( sprintf( __( '%1$s | %2$s', 'buddypress' ), bp_get_displayed_user_fullname(), __( ucwords( bp_current_component() ), 'buddypress' ) ) );
+		$title = strip_tags( sprintf( __( '%1$s | %2$s', 'buddypress' ), bp_get_displayed_user_fullname(), ucwords( $component_name ) ) );
 
 	// A single group
 	} elseif ( bp_is_active( 'groups' ) && !empty( $bp->groups->current_group ) && !empty( $bp->bp_options_nav[$bp->groups->current_group->slug] ) ) {
-		$subnav = isset( $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] ) ? $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] : '';
+		$subnav = isset( $bp->bp_options_nav[$bp->groups->current_group->slug][bp_current_action()]['name'] ) ? $bp->bp_options_nav[$bp->groups->current_group->slug][bp_current_action()]['name'] : '';
 		// translators: "group name | group nav section name"
 		$title = sprintf( __( '%1$s | %2$s', 'buddypress' ), $bp->bp_options_title, $subnav );
 
 	// A single item from a component other than groups
 	} elseif ( bp_is_single_item() ) {
 		// translators: "component item name | component nav section name | root component name"
-		$title = sprintf( __( '%1$s | %2$s | %3$s', 'buddypress' ), $bp->bp_options_title, $bp->bp_options_nav[$bp->current_item][$bp->current_action]['name'], bp_get_name_from_root_slug( bp_get_root_slug() ) );
+		$title = sprintf( __( '%1$s | %2$s | %3$s', 'buddypress' ), $bp->bp_options_title, $bp->bp_options_nav[bp_current_item()][bp_current_action()]['name'], bp_get_name_from_root_slug( bp_get_root_slug() ) );
 
 	// An index or directory
 	} elseif ( bp_is_directory() ) {
-		if ( !bp_current_component() )
-			$title = sprintf( __( '%s Directory', 'buddypress' ), __( bp_get_name_from_root_slug(), 'buddypress' ) );
-		else
-			$title = sprintf( __( '%s Directory', 'buddypress' ), __( bp_get_name_from_root_slug(), 'buddypress' ) );
+		if ( !bp_current_component() ) {
+			$title = sprintf( __( '%s Directory', 'buddypress' ), bp_get_name_from_root_slug() );
+		} else {
+			$title = sprintf( __( '%s Directory', 'buddypress' ), bp_get_name_from_root_slug() );
+		}
 
 	// Sign up page
 	} elseif ( bp_is_register_page() ) {
@@ -330,7 +351,7 @@ function bp_modify_page_title( $title, $sep, $seplocation ) {
 	// Some BP nav items contain item counts. Remove them
 	$title = preg_replace( '|<span>[0-9]+</span>|', '', $title );
 
-	return apply_filters( 'bp_modify_page_title', $title . " $sep ", $title, $sep, $seplocation );
+	return apply_filters( 'bp_modify_page_title', $title . ' ' . $sep . ' ', $title, $sep, $seplocation );
 }
 add_filter( 'wp_title', 'bp_modify_page_title', 10, 3 );
 add_filter( 'bp_modify_page_title', 'wptexturize'     );

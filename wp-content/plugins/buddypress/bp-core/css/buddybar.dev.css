@@ -1,16 +1,14 @@
-body,
-body.wp-admin {
+body:not(.wp-admin) {
 	padding-top: 25px !important;
 }
 #wp-admin-bar {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 99;
 	height: 25px;
 	font-size: 11px;
 	width: 100%;
-	z-index: 1000;
+	z-index: 9999;
 }
 #wp-admin-bar .padder {
 	position: relative;

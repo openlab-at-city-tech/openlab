@@ -1,0 +1,229 @@
+/* buddypress.css for executive */
+
+body.internal-page #inner, body.blog #inner { width: 960px; margin: 0 auto; }
+#wrap { width: 100% }
+#nav .padder {
+	padding:10px;
+}
+#subnav #search-bar,
+	#nav #search-bar {
+		float:right;
+}
+#subnav .padder {
+	padding:5px;
+}
+#bpnav {
+	background: url(images/home-bottom.png) repeat-x;
+	width: 100%;
+	border: none;
+}
+#bpnav .wrap {
+	width: 960px;
+	height: 45px;
+	margin: 0 auto 0;
+	padding: 0;
+}
+
+#bpnav ul {
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#bpnav .padder { 
+	padding: 1em;
+}
+#bpnav ul li {
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#bpnav ul li a {
+	color: #FFFFFF;
+	display: block;
+	font-family: Georgia, Times New Roman, Trebuchet MS;
+	font-size: 12px;
+	margin: 0;
+	padding: 13px 15px 12px 15px;
+	text-decoration: none;
+	text-transform: uppercase;
+	position: relative;
+}
+#wp-admin-bar { 
+	width: 100%;
+}
+/** boxes **/
+#search-terms,
+	#whats-new-post-in,
+	.dir-search label input,
+	#forums_search,
+	#forums_search select,
+	#members_search,
+	#members_search select,
+	#field_ids,
+	#message_content,
+	#subject,
+	#send-notice,
+	#send-to-input,
+	#pass1,
+	#pass2  {
+		background: #F7F7F7 !important;
+		color: #333333;
+		font-family: Arial, Tahoma, Verdana;
+		font-size: 11px;
+		margin: 5px 5px 0 0;
+		padding: 4px 0 4px 5px;
+		border: 1px solid #DDDDDD;
+}
+/* buttons */
+#search-submit,
+	#aw-whats-new-submit,
+	#ac-form-submit,
+	#groups_search_submit,
+	#forums_search_submit,
+	#members_search_submit,
+	.dir-search input,
+	#profile-group-edit-submit,
+	#send,
+	div.ac-reply-content input,
+	.internal-page #content .padder a.button,
+	.internal-page #content .padder .submit input[type=button],
+	#sidebar-me a.button,
+	#submit_topic_cancel,
+	input[type=submit] {
+		background: #666666;
+		color: #FFFFFF;
+		font-size: 11px;
+		font-family: Arial, Tahoma, Verdana;
+		text-decoration: none;
+		text-transform: uppercase;
+		margin: 0;
+		padding: 2px 5px 2px 5px;
+		border: 1px solid #666666;
+		-moz-border-radius: 3px;
+		-khtml-border-radius: 3px;
+		-webkit-border-radius: 3px;
+}
+#search-submit:hover,
+	#aw-whats-new-submit:hover,
+	#ac-form-submit:hover,
+	#groups_search_submit:hover,
+	#forums_search_submit:hover,
+	#members_search_submit:hover,
+	.dir-search input[type=submit]:hover,
+	.internal-page #content .padder a.button:hover,
+	.internal-page #content .padder .submit input[type=button]:hover,
+	#sidebar-me a.button:hover,
+	#submit_topic_cancel:hover,
+	input[type=submit]:hover {
+		background: #333333;
+		border: 1px solid #333333;
+}
+#content .dir-search label input[type=text] {
+	font-size: 11px;
+	text-transform: none;
+}
+div.generic-button {
+	padding: 2px 4px;
+	background: transparent;
+}
+/* misc */
+#content div.pagination-links a {
+	background: transparent;
+}
+.sidebar-sidebar-content #item-header span.activity,
+	.sidebar-content-sidebar #item-header span.activity,
+	.content-sidebar-sidebar #item-header span.activity {
+		display: inline-block;
+}
+.sidebar-sidebar-content #content .padder h3,
+	.sidebar-content-sidebar #content .padder h3,
+	.content-sidebar-sidebar #content .padder h3 {
+		font-size: 14px;
+}
+.sidebar-sidebar-content .dir-search label input,
+	.sidebar-content-sidebar .dir-search label input,
+	.content-sidebar-sidebar .dir-search label input {
+		width: 10em;
+}
+/* BP widgets */
+.widget ul#groups-list {
+	padding: 0px 5px 20px;
+}
+#sidebar .widget ul.item-list li img.avatar,
+	#featured-top .widget ul.item-list li img.avatar,
+	#featured-bottom .widget ul.item-list li img.avatar,
+	#sidebar-alt .widget ul.item-list li img.avatar {
+		margin: 0px;
+}
+/* this is to give the featured widgets list items the same look as the sidebar */
+#featured-top .widget ul,
+	#featured-bottom .widget ul {
+		list-style-type:none;
+		margin:10px 0 5px;
+}
+#featured-top .widget ul li,
+	#featured-bottom .widget ul li {
+		list-style-type: none;
+		background: transparent url(images/arrow.png) no-repeat scroll left top;
+		padding-left: 15px;
+		margin-left: 0px;
+}
+/**/
+#content .bp-content-top .widget {
+	border: none;
+}
+#content .bp-content-top .widget h4 {
+	background: #FFFFFF;
+	color: #333333;
+	font-size: 16px;
+	font-family: Georgia,Times New Roman,Trebuchet MS;
+	text-transform: none;
+	font-weight: normal;
+	margin: 0 0 5px;
+	padding: 0 0 5px;
+	border-bottom: 1px dotted #CCCCCC;
+}
+
+#content .bp-content-top .textwidget p {
+	margin: 0;
+	padding: 10px 0 5px 0;
+}
+
+#content .bp-content-top ul,
+	#content .bp-content-top ol {
+		list-style-type: none;
+		margin: 10px 0 5px 0;
+		padding: 0;
+}
+
+#content .bp-content-top ul ul,
+	#content .bp-content-top ol ol {
+		margin: 0;
+		padding: 0 0 0 15px;
+}
+
+#content .bp-content-top li {
+	background: url(images/arrow.png) no-repeat top left;
+	margin: 0;
+	padding: 0 0 0 18px;
+ 	word-wrap: break-word;
+}
+
+#content .bp-content-top embed,
+	#content .bp-content-top object {
+		width: 300px;
+		height: 225px;
+		margin: 0;
+		padding: 0;
+}
+/* create groups/forums */
+#content #group-create-tabs,
+	#content #group-create-tabs ul li span {
+		background: #F7F7F7;
+}
+#content #group-create-tabs ul li a {
+   background: #FFFFFF;
+}

@@ -13,8 +13,8 @@ $no_link_fields = array( // Enter the field ID of any field that you want to app
 
 	'Skype ID ' 	,
 	'Phone' 	,
-	'IM'		
-	
+	'IM'
+
 	);
 
 $social_networking_fields = array( // Enter the field ID of any field that prompts for the username to a social networking site, followed by the URL format for profiles on that site, with *** in place of the user name. Thus, since the URL for the profile of awesometwitteruser is twitter.com/awesometwitteruser, you should enter 'Twitter' => 'twitter.com/***'. Don't forget: 1) Leave out the 'http://', 2) Separate items with commas
@@ -32,6 +32,6 @@ $social_networking_fields = array( // Enter the field ID of any field that promp
 function custom_profile_filters_for_buddypress_init() {
 	require( dirname( __FILE__ ) . '/custom-profile-filters-for-buddypress-bp-functions.php' );
 }
-add_action( 'bp_init', 'custom_profile_filters_for_buddypress_init' );
+add_action( 'bp_include', 'custom_profile_filters_for_buddypress_init' );
 
 ?>

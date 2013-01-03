@@ -1,0 +1,730 @@
+
+#access {
+
+	border-bottom: 1px solid white;
+}
+
+
+table, caption, tbody, tfoot, thead, tr, th, td {
+	
+}
+
+body {
+	background: url(images/background.jpg) no-repeat;
+}
+
+p  {
+	color: white;
+}
+
+.one-column #content {
+	
+}
+
+.single-attachment #content {
+	
+}
+
+input[type=submit] {
+	color: white;
+}
+
+#wrapper {
+	background-color: #000;
+	color: white;	
+}
+
+#site-info {
+	
+}
+
+#site-generator {
+	
+}
+
+body {
+	background-color: #000;
+}
+
+textarea {
+	color: #fff;
+}
+
+hr {
+	background-color: #555;
+}
+
+ins {
+	background: #333;
+}
+
+blockquote {
+	color: #ddd;
+	background: #000 url(images/blockquote.png) no-repeat 10px 1px;
+}
+
+pre {
+	background: #000;
+	color: #ddd;
+}
+
+acronym {
+	border-bottom: 1px dotted #666;
+}
+
+textarea {
+	background: #333;
+	border: 1px solid #ccc;
+}
+
+a:link {
+	color: #06c;
+}
+
+a:hover {
+	color: #fff;
+}
+
+#content .entry-title, {
+	color: white;
+}
+
+
+.screen-reader-text {
+	
+}
+
+#site-title {
+	
+}
+
+#site-title a {
+	color: #fff;
+}
+
+#site-description {
+	color: white;
+}
+
+#branding img {
+	border-top: 0px solid #000;
+	border-bottom: 1px solid #000;
+}
+
+
+
+
+#content textarea {
+	color: #fff;
+}
+
+#content th {
+	color: #000;
+}
+
+#content h6 {
+	color: #fff;
+}
+
+#content table {
+	border: 1px solid #e7e7e7;
+}
+
+#content thead th {
+	color: #888;
+}
+
+#content tr td {
+	border-top: 1px solid #e7e7e7;
+}
+
+#content tr.odd td {
+	background: #000;
+}
+
+.home .sticky {
+	background: #000;
+}
+
+.page-title {
+	color: #fff;
+}
+
+.page-title span {
+	color: #333;
+}
+
+.page-title a:visited {
+	color: #888;
+}
+
+.page-title a:hover {
+	color: #fff;
+}
+
+#content .entry-title {
+	color: #fff;
+}
+
+.entry-title a:visited {
+	color: white;
+}
+
+.entry-title a {
+	color: white;
+}
+
+
+.entry-title a:hover {
+	color: white;
+}
+
+.entry-meta {
+	color: #888;
+}
+
+.entry-utility abbr {
+	
+}
+
+.entry-utility abbr:hover {
+	border-bottom: 1px dotted #666;
+}
+
+.entry-summary {
+	
+}
+
+#content .entry-summary p:last-child {
+	
+}
+
+.entry-content fieldset {
+	border: 1px solid #e7e7e7;
+}
+
+.entry-content fieldset legend {
+	background: #fff;
+	color: #000;
+}
+
+.entry-content input {
+	
+}
+
+.entry-content input.button {
+	
+}
+
+.entry-content label {
+	color: #888;
+}
+
+.entry-content select {
+	
+}
+
+.entry-content sub {
+	
+}
+
+.entry-content blockquote.left {
+	
+}
+
+.entry-content blockquote.right {
+	
+}
+
+.page-link {
+	color: #eee;
+}
+
+.page-link a:visited {
+	background: #f1f1f1;
+	color: #333;
+}
+
+.home .sticky .page-link a {
+	background: #d9e8f7;
+}
+
+.page-link a:hover {
+	color: #fff;
+}
+
+body.page .edit-link {
+	
+}
+
+#entry-author-info {
+	background: #f2f7fc;
+	border-top: 4px solid #000;
+}
+
+#entry-author-info #author-avatar {
+	background: #fff;
+	border: 1px solid #e7e7e7;
+}
+
+#entry-author-info #author-description {
+	
+}
+
+#entry-author-info h2 {
+	color: #000;
+}
+
+.entry-utility {
+	color: #888;
+}
+
+.entry-utility a {
+	color: #888;
+}
+
+.entry-utility a:hover {
+	color: #fff;
+}
+
+#content .video-player {
+	
+}
+
+.home #content .category-asides p {
+	
+}
+
+.home .hentry.category-asides {
+	
+}
+
+.home #content .category-asides .entry-content {
+	
+}
+
+.category-gallery .size-thumbnail img {
+	border: 10px solid #333;
+}
+
+.category-gallery .gallery-thumb {
+	
+}
+
+.home #content .category-gallery .entry-utility {
+	
+}
+
+.attachment .entry-content .entry-caption {
+	
+}
+
+.attachment .entry-content .nav-previous a:before {
+	
+}
+
+.attachment .entry-content .nav-next a:after {
+	
+}
+
+#content .wp-caption {
+	background: #f1f1f1;
+}
+
+#content .wp-caption img {
+	
+}
+
+#content .wp-caption p.wp-caption-text {
+	color: #222;
+}
+
+#content .wp-smiley {
+	
+}
+
+#content .gallery .gallery-item {
+	
+}
+
+#content .gallery img {
+	border: 2px solid #cfcfcf;
+}
+
+#content .gallery .gallery-caption {
+	color: #888;
+}
+
+#content .gallery img {
+	border: 10px solid #f1f1f1;
+}
+
+#content .gallery br+br {
+	
+}
+
+#content .attachment img {
+
+
+}
+
+.navigation {
+	color: #888;
+}
+
+.navigation a:visited {
+	color: #888;
+}
+
+.navigation a:hover {
+	color: white;
+}
+
+.nav-previous {
+	
+}
+
+.nav-next {
+	
+}
+
+#nav-above {
+	
+}
+
+#nav-above {
+	
+}
+
+.single #nav-above {
+	
+}
+
+#nav-below {
+	
+}
+
+h3#reply-title {
+	color: #fff;
+}
+
+h3#comments-title {
+	
+}
+
+.commentlist li.comment {
+	border-bottom: 1px solid #666;
+}
+
+.commentlist li:last-child {
+	
+}
+
+#comments .comment-body ol {
+	
+}
+
+#comments .comment {
+	background: #333;
+}
+
+#comments .comment-body p:last-child {
+	
+}
+
+#comments .comment-body blockquote p:last-child {
+	
+}
+
+.comment-author {
+	
+}
+
+.comment-author cite {
+	color: #fff;
+}
+
+.comment-author .says {
+	
+}
+
+.comment-meta {
+	
+}
+
+.comment-meta a:visited {
+	color: #888;
+}
+
+.comment-meta a:hover {
+	color: silver;
+}
+
+a.comment-edit-link {
+	color: #888;
+}
+
+a.comment-edit-link:hover {
+	color: silver;
+}
+
+#comments .pingback {
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.commentlist li.comment+li.pingback {
+	
+}
+
+#comments .pingback p {
+	color: #888;
+}
+
+input[type=submit] {
+	color: #333;
+}
+
+#respond {
+	border-top: 1px solid #e7e7e7;
+}
+
+#respond .comment-notes {
+	
+}
+
+.form-allowed-tags {
+	
+}
+
+h3#reply-title {
+	
+}
+
+#comments-list #respond {
+	
+}
+
+#comments-list ul #respond {
+	
+}
+
+#cancel-comment-reply-link {
+	
+}
+
+#respond .required {
+	color: #ff4b33;
+}
+
+#respond label {
+	color: #888;
+}
+
+#respond .form-allowed-tags {
+	color: #888;
+}
+
+#respond .form-allowed-tags code {
+	
+}
+
+#respond .form-submit {
+	
+}
+
+#respond .form-submit input {
+	color: #000;
+}
+
+.widget-area ul {
+	
+}
+
+.widget-area ul ul {
+	
+}
+
+.widget_search #s {
+
+}
+
+.widget-container {
+	
+}
+
+.widget-title {
+	color: #ddd;
+}
+
+.widget-area a:visited {
+	
+}
+
+.widget-area a:hover {
+	
+}
+
+.widget-area .entry-meta {
+	
+}
+
+#wp-calendar {
+	
+}
+
+#wp-calendar caption {
+	color: #ddd;
+}
+
+#wp-calendar thead {
+	
+}
+
+#wp-calendar thead th {
+	
+}
+
+#wp-calendar tbody {
+	color: #aaa;
+}
+
+#wp-calendar tbody td {
+	background: #f5f5f5;
+	border: 1px solid #fff;
+}
+
+#wp-calendar tbody .pad {
+	
+}
+
+#wp-calendar tfoot #next {
+	
+}
+
+.widget_rss a.rsswidget {
+	color: #000;
+}
+
+.widget_rss a.rsswidget:hover {
+	color: silver;
+}
+
+.widget_rss .widget-title img {
+	
+}
+
+#main .widget-area ul {
+	color: white;
+}
+
+#main .widget-area ul ul {
+	
+}
+
+#main .widget-area ul ul a {
+	color: #999;
+}
+
+#main .widget-area a:hover {
+	color: #CCC;
+}
+
+#footer-widget-area {
+	
+}
+
+#colophon {
+	border-top: 4px solid #000;
+}
+
+#site-info {
+	
+}
+
+#site-info a {
+	color: #ddd;
+}
+
+#site-generator {
+	
+}
+
+#site-generator a {
+	color: #999;
+}
+
+#site-generator p {
+	
+}
+
+#site-generator a:hover {
+	
+}
+
+.widget-area {
+	
+}
+
+#site-description {
+	
+}
+
+@media print {
+
+body {
+	
+}
+
+#header {
+	border-bottom: 2pt solid #000;
+}
+
+#colophon {
+	border-top: 2pt solid #000;
+}
+
+#site-description {
+	
+}
+
+#site-title {
+	
+}
+
+.entry-content {
+	
+}
+
+.entry-title {
+	
+}
+
+.widget-area {
+	
+}
+
+.one-column #content {
+	
+}
+
+.wp-caption p {
+	
+}
+
+#site-generator {
+	
+}
+
+#site-generator a {
+	
+}
+
+#entry-author-info {
+	border: 1px solid #e7e7e7;
+}
+
+}
+
+.entry-content #facebook_like {
+	
+}

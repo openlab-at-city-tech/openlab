@@ -1,8 +1,25 @@
 <?php
+
+/**
+ * BuddyPress Blogs Activity
+ *
+ * @package BuddyPress
+ * @subpackage BlogsBuddyBar
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-// *** "My Blogs" Menu ********
+/**
+ * Add a Sites menu to the BuddyBar
+ *
+ * @since BuddyPress (1.0)
+ * @package BuddyPress
+ * @subpackage BlogsBuddyBar
+ * @global BuddyPress $bp
+ * @return boolean 
+ */
+	
 function bp_adminbar_blogs_menu() {
 	global $bp;
 
@@ -12,22 +29,23 @@ function bp_adminbar_blogs_menu() {
 	if ( !is_multisite() )
 		return false;
 
-	if ( !$blogs = wp_cache_get( 'bp_blogs_of_user_' . $bp->loggedin_user->id . '_inc_hidden', 'bp' ) ) {
-		$blogs = bp_blogs_get_blogs_for_user( $bp->loggedin_user->id, true );
-		wp_cache_set( 'bp_blogs_of_user_' . $bp->loggedin_user->id . '_inc_hidden', $blogs, 'bp' );
+	$blogs = wp_cache_get( 'bp_blogs_of_user_' . bp_loggedin_user_id() . '_inc_hidden', 'bp' );
+	if ( empty( $blogs ) ) {
+		$blogs = bp_blogs_get_blogs_for_user( bp_loggedin_user_id(), true );
+		wp_cache_set( 'bp_blogs_of_user_' . bp_loggedin_user_id() . '_inc_hidden', $blogs, 'bp' );
 	}
 
 	$counter = 0;
-	if ( is_array( $blogs['blogs'] ) && (int)$blogs['count'] ) {
+	if ( is_array( $blogs['blogs'] ) && (int) $blogs['count'] ) {
 
-		echo '<li id="bp-adminbar-blogs-menu"><a href="' . trailingslashit( $bp->loggedin_user->domain . bp_get_blogs_slug() ) . '">';
+		echo '<li id="bp-adminbar-blogs-menu"><a href="' . trailingslashit( bp_loggedin_user_domain() . bp_get_blogs_slug() ) . '">';
 
 		_e( 'My Sites', 'buddypress' );
 
 		echo '</a>';
 		echo '<ul>';
 
-		foreach ( (array)$blogs['blogs'] as $blog ) {
+		foreach ( (array) $blogs['blogs'] as $blog ) {
 			$alt      = ( 0 == $counter % 2 ) ? ' class="alt"' : '';
 			$site_url = esc_attr( $blog->siteurl );
 

@@ -1,15 +1,30 @@
 <?php
+
+/**
+ * BuddyPress Groups BuddyBar
+ *
+ * @package BuddyPress
+ * @subpackage GroupsBuddyBar
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Adds menu items to the BuddyBar
+ *
+ * @since BuddyPress (1.0)
+ * @global BuddyPress $bp
+ * @return False if no menu
+ */
 function bp_groups_adminbar_admin_menu() {
-	global $bp, $groups_template;
+	global $bp;
 
 	if ( empty( $bp->groups->current_group ) )
 		return false;
 
-	// Don't show this menu to non site admins or if you're viewing your own profile
-	if ( !current_user_can( 'edit_users' ) || !is_super_admin() || ( !$bp->is_item_admin && !$bp->is_item_mod ) )
+	// Only group admins and site admins can see this menu
+	if ( !current_user_can( 'edit_users' ) && !bp_current_user_can( 'bp_moderate' ) && !bp_is_item_admin() )
 		return false; ?>
 
 	<li id="bp-adminbar-adminoptions-menu">

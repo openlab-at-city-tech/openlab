@@ -26,7 +26,7 @@ Hello, this is the BuddyPress Default theme stylesheet.
 	6.1 - Activity
 		6.1.1 - Activity Listing
 		6.1.2 - Activity Comments
-	6.2 - Admin Bar
+	6.2 - Toolbar
 	6.3 - Directories - Members, Groups, Blogs, Forums
 	6.4 - Error / Success Messages
 	6.5 - Forms
@@ -34,6 +34,7 @@ Hello, this is the BuddyPress Default theme stylesheet.
 	6.7 - Topics and Tables - Forums and General
 	6.8 - Headers, Lists and Tabs - Activity, Groups, Blogs, Forums
 	6.9 - Private Messaging Threads
+	6.10 - Extended Profiles
 --------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
@@ -130,6 +131,9 @@ div#content .left-menu {
 }
 div#content .main-column {
 	margin-left: 190px;
+}
+textarea {
+	overflow: auto;
 }
 
 
@@ -512,16 +516,20 @@ a:focus {
 }
 #navigation {
 	position: relative;
-	text-align: right;
 	width: 100%;
+}
+#navigation:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 #nav {
 	margin: 40px 20px 0 0;
 	list-style: none;
 	padding: 0;
-	position: relative;
-	right: auto;
-	bottom: 0;
+	float: right;
 }
 #nav li a {
 	background: url( ../images/60pc_black.png );
@@ -534,6 +542,7 @@ a:focus {
 #nav li {
 	margin-left: 5px;
 	display: inline-block;
+	float: left;
 }
 #nav li li {
 	margin-left: 0;
@@ -588,12 +597,12 @@ a:focus {
 #nav ul,
 #nav .sfhover ul ul,
 #nav :hover ul ul {
-	left: -9999px;
+	display: none;
 	position: absolute;
 }
 #nav .sfhover ul,
 #nav :hover ul {
-	left: 0;
+	display: block;
 	top: 100%;
 	width: 128px;
 }
@@ -607,6 +616,7 @@ a:focus {
 	left: 125px;
 	top: -1px;
 	width: 128px;
+	display: block;
 }
 #nav ul li.sfhover > a,
 #nav ul li:hover > a {
@@ -615,14 +625,13 @@ a:focus {
 }
 #nav .sfhover ul li,
 #nav :hover ul li {
-	height: 30px;
-	line-height: 30px;
-	text-indent: 10px;
+	min-height: 30px;
+	line-height: 20px;
 	width: 128px;
 }
 #nav .sfhover ul li a,
 #nav :hover ul li a {
-	padding: 0 0;
+	padding: 5px 5px 5px 10px;
 }
 
 
@@ -652,6 +661,9 @@ div.pagination .pagination-links a {
 }
 div.pagination .pagination-links a:hover {
 	font-weight: bold;
+}
+noscript div.pagination {
+	margin-bottom: 15px;
 }
 div#pag-bottom {
 	margin-top: -1px;
@@ -1484,10 +1496,10 @@ div.activity-comments form div.ac-reply-content {
 
 
 /*--------------------------------------------------------------
-6.2 - Admin Bar
+6.2 - Toolbar
 --------------------------------------------------------------*/
 #wp-admin-bar .padder {
-	width: 95% !important; /* Line up the admin bar with the content body in this theme */
+	width: 95% !important; /* Line up the Toolbar with the content body in this theme */
 }
 
 
@@ -1850,8 +1862,6 @@ ul#topic-post-list li div.post-content {
 }
 div.topic-tags {
 	font-size: 11px;
-	float: right;
-	margin-top: -25px;
 }
 div.admin-links {
 	color: #888;
@@ -2016,9 +2026,9 @@ table.forum p.topic-meta {
 	margin: 5px 0 0 0;
 }
 
-/*--------------------------------------------------------------
-6.8 - Headers, Lists and Tabs - Activity, Groups, Blogs, Forums
---------------------------------------------------------------*/
+/*-------------------------------------------------------------------------
+6.8 - Headers, Lists and Tabs - Activity, Groups, Blogs, Forums, Profiles
+-------------------------------------------------------------------------*/
 .item-body {
 	margin: 20px 0;
 }
@@ -2288,7 +2298,9 @@ div.item-list-tabs ul li.feed a {
 	background: url( ../images/rss.png ) center left no-repeat;
 	padding-left: 20px;
 }
-#admins-list li {
+#admins-list li,
+#mods-list li,
+#members-list li {
 	overflow: auto;
 }
 
@@ -2356,4 +2368,56 @@ div#message-thread div.message-content {
 }
 div#message-thread div.message-options {
 	text-align: right;
+}
+
+div.message-search {
+	float: right;
+	margin: 0 20px;
+}
+
+/*--------------------------------------------------------------
+6.9 - Extended Profiles
+--------------------------------------------------------------*/
+
+div.profile h4 {
+	margin-bottom: auto;
+	margin-top: 15px;
+}
+#profile-edit-form ul.button-nav {
+	margin-top: 15px;
+}
+body.no-js .field-visibility-settings-toggle,
+body.no-js .field-visibility-settings-close {
+	display: none;
+}
+.field-visibility-settings {
+	display: none;
+	margin-top: 10px;
+}
+	body.no-js .field-visibility-settings {
+		display: block;
+	}
+.current-visibility-level {
+	font-weight: bold;
+	font-style: normal;
+}
+.field-visibility-settings,
+.field-visibility-settings-toggle,
+.field-visibility-settings-notoggle {
+	color: #888;
+}
+.field-visibility-settings-toggle a,
+.field-visibility-settings a {
+	font-size: .9em;
+}
+body.register div.page ul {
+	list-style: none;
+}
+.standard-form .field-visibility-settings label {
+	margin: 0;
+	font-weight: normal;
+}
+.field-visibility-settings legend,
+.field-visibility-settings-toggle {
+	font-style: italic;
 }

@@ -1,11 +1,15 @@
 <?php
-/********************************************************************************
- * Business Functions
+
+/**
+ * BuddyPress XProfile Filters
  *
  * Business functions are where all the magic happens in BuddyPress. They will
  * handle the actual saving or manipulation of information. Usually they will
  * hand off to a database class for data access, then return
  * true or false on success or failure.
+ *
+ * @package BuddyPress
+ * @subpackage XProfileFilters
  */
 
 // Exit if accessed directly
@@ -24,7 +28,7 @@ function xprofile_insert_field_group( $args = '' ) {
 	$r = wp_parse_args( $args, $defaults );
 	extract( $r, EXTR_SKIP );
 
-	if ( !$name )
+	if ( empty( $name ) )
 		return false;
 
 	$field_group              = new BP_XProfile_Group( $field_group_id );
@@ -78,7 +82,7 @@ function xprofile_insert_field( $args = '' ) {
 	 */
 
 	// Check we have the minimum details
-	if ( !$field_group_id )
+	if ( empty( $field_group_id ) )
 		return false;
 
 	// Check this is a valid field type
@@ -86,7 +90,7 @@ function xprofile_insert_field( $args = '' ) {
 		return false;
 
 	// Instantiate a new field object
-	if ( $field_id )
+	if ( !empty( $field_id ) )
 		$field = new BP_XProfile_Field( $field_id );
 	else
 		$field = new BP_XProfile_Field;
@@ -147,15 +151,15 @@ function xprofile_delete_field( $field_id ) {
  * @package BuddyPress Core
  * @param mixed $field The ID of the field, or the $name of the field.
  * @param int $user_id The ID of the user
- * @global object $bp Global BuddyPress settings object
+ * @param string $multi_format How should array data be returned? 'comma' if you want a
+ *   comma-separated string; 'array' if you want an array
  * @uses BP_XProfile_ProfileData::get_value_byid() Fetches the value based on the params passed.
  * @return mixed The profile field data.
  */
-function xprofile_get_field_data( $field, $user_id = 0 ) {
-	global $bp;
+function xprofile_get_field_data( $field, $user_id = 0, $multi_format = 'array' ) {
 
 	if ( empty( $user_id ) )
-		$user_id = $bp->displayed_user->id;
+		$user_id = bp_displayed_user_id();
 
 	if ( empty( $user_id ) )
 		return false;
@@ -172,8 +176,12 @@ function xprofile_get_field_data( $field, $user_id = 0 ) {
 
 	if ( is_array( $values ) ) {
 		$data = array();
-		foreach( (array)$values as $value ) {
+		foreach( (array) $values as $value ) {
 			$data[] = apply_filters( 'xprofile_get_field_data', $value, $field_id, $user_id );
+		}
+
+		if ( 'comma' == $multi_format ) {
+			$data = implode( ', ', $data );
 		}
 	} else {
 		$data = apply_filters( 'xprofile_get_field_data', $values, $field_id, $user_id );
@@ -189,7 +197,7 @@ function xprofile_get_field_data( $field, $user_id = 0 ) {
  * @param $field The ID of the field, or the $name of the field.
  * @param $user_id The ID of the user
  * @param $value The value for the field you want to set for the user.
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  * @uses xprofile_get_field_id_from_name() Gets the ID for the field based on the name.
  * @return true on success, false on failure.
  */
@@ -215,6 +223,8 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 		return true;
 	}
 
+	$possible_values = array();
+
 	// Check the value is an acceptable value
 	if ( 'checkbox' == $field->type || 'radio' == $field->type || 'selectbox' == $field->type || 'multiselectbox' == $field->type ) {
 		$options = $field->get_children();
@@ -224,7 +234,7 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 
 		if ( is_array( $value ) ) {
 			foreach( $value as $i => $single ) {
-				if ( !in_array( $single, (array)$possible_values ) ) {
+				if ( !in_array( $single, $possible_values ) ) {
 					unset( $value[$i] );
 				}
 			}
@@ -232,7 +242,7 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 			// Reset the keys by merging with an empty array
 			$value = array_merge( array(), $value );
 		} else {
-			if ( !in_array( $value, (array)$possible_values ) ) {
+			if ( !in_array( $value, $possible_values ) ) {
 				return false;
 			}
 		}
@@ -244,6 +254,37 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	$field->value    = maybe_serialize( $value );
 
 	return $field->save();
+}
+
+/**
+ * Set the visibility level for this field
+ *
+ * @param int $field_id The ID of the xprofile field
+ * @param int $user_id The ID of the user to whom the data belongs
+ * @param string $visibility_level
+ * @return bool True on success
+ */
+function xprofile_set_field_visibility_level( $field_id = 0, $user_id = 0, $visibility_level = '' ) {
+	if ( empty( $field_id ) || empty( $user_id ) || empty( $visibility_level ) ) {
+		return false;
+	}
+
+	// Check against a whitelist
+	$allowed_values = bp_xprofile_get_visibility_levels();
+	if ( !array_key_exists( $visibility_level, $allowed_values ) ) {
+		return false;
+	}
+
+	// Stored in an array in usermeta
+	$current_visibility_levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+
+	if ( !$current_visibility_levels ) {
+		$current_visibility_levels = array();
+	}
+
+	$current_visibility_levels[$field_id] = $visibility_level;
+
+	return bp_update_user_meta( $user_id, 'bp_xprofile_visibility_levels', $current_visibility_levels );
 }
 
 function xprofile_delete_field_data( $field, $user_id ) {
@@ -266,7 +307,7 @@ function xprofile_check_is_required_field( $field_id ) {
 	$retval = false;
 
 	// Super admins can skip required check
-	if ( is_super_admin() && !is_admin() )
+	if ( bp_current_user_can( 'bp_moderate' ) && !is_admin() )
 		$retval = false;
 
 	// All other users will use the field's setting
@@ -293,21 +334,21 @@ function xprofile_get_field_id_from_name( $field_name ) {
  * @package BuddyPress Core
  * @param $user_id User ID of the user to get random data for
  * @param $exclude_fullname whether or not to exclude the full name field as random data.
- * @global object $bp Global BuddyPress settings object
+ * @global BuddyPress $bp The one true BuddyPress instance
  * @global $wpdb WordPress DB access object.
  * @global $current_user WordPress global variable containing current logged in user information
  * @uses xprofile_format_profile_field() Formats profile field data so it is suitable for display.
  * @return $field_data The fetched random data for the user.
  */
 function xprofile_get_random_profile_data( $user_id, $exclude_fullname = true ) {
-	$field_data           = BP_XProfile_ProfileData::get_random( $user_id, $exclude_fullname );
+	$field_data = BP_XProfile_ProfileData::get_random( $user_id, $exclude_fullname );
 
-	if ( !$field_data )
+	if ( empty( $field_data ) )
 		return false;
 
 	$field_data[0]->value = xprofile_format_profile_field( $field_data[0]->type, $field_data[0]->value );
 
-	if ( !$field_data[0]->value || empty( $field_data[0]->value ) )
+	if ( empty( $field_data[0]->value ) )
 		return false;
 
 	return apply_filters( 'xprofile_get_random_profile_data', $field_data );
@@ -351,10 +392,9 @@ function xprofile_update_field_position( $field_id, $position, $field_group_id )
  * @return array() containing the path and URL plus some other settings.
  */
 function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
-	global $bp;
 
 	if ( empty( $user_id ) )
-		$user_id = $bp->displayed_user->id;
+		$user_id = bp_displayed_user_id();
 
 	if ( empty( $directory ) )
 		$directory = 'avatars';
@@ -387,11 +427,11 @@ function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
 function xprofile_sync_wp_profile( $user_id = 0 ) {
 	global $bp, $wpdb;
 
-	if ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int)$bp->site_options['bp-disable-profile-sync'] )
+	if ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int) $bp->site_options['bp-disable-profile-sync'] )
 		return true;
 
 	if ( empty( $user_id ) )
-		$user_id = $bp->loggedin_user->id;
+		$user_id = bp_loggedin_user_id();
 
 	if ( empty( $user_id ) )
 		return false;
@@ -407,9 +447,9 @@ function xprofile_sync_wp_profile( $user_id = 0 ) {
 		$lastname = trim( substr( $fullname, $space, strlen( $fullname ) ) );
 	}
 
-	update_user_meta( $user_id, 'nickname',   $fullname  );
-	update_user_meta( $user_id, 'first_name', $firstname );
-	update_user_meta( $user_id, 'last_name',  $lastname  );
+	bp_update_user_meta( $user_id, 'nickname',   $fullname  );
+	bp_update_user_meta( $user_id, 'first_name', $firstname );
+	bp_update_user_meta( $user_id, 'last_name',  $lastname  );
 
 	$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->users} SET display_name = %s WHERE ID = %d", $fullname, $user_id ) );
 }
@@ -426,7 +466,7 @@ add_action( 'bp_core_signup_user', 'xprofile_sync_wp_profile' );
 function xprofile_sync_bp_profile( &$errors, $update, &$user ) {
 	global $bp;
 
-	if ( ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int)$bp->site_options['bp-disable-profile-sync'] ) || !$update || $errors->get_error_codes() )
+	if ( ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int) $bp->site_options['bp-disable-profile-sync'] ) || !$update || $errors->get_error_codes() )
 		return;
 
 	xprofile_set_field_data( bp_xprofile_fullname_field_name(), $user->ID, $user->display_name );
@@ -436,27 +476,14 @@ add_action( 'user_profile_update_errors', 'xprofile_sync_bp_profile', 10, 3 );
 
 /**
  * When a user is deleted, we need to clean up the database and remove all the
- * profile data from each table. Also we need to clean anything up in the usermeta table
- * that this component uses.
+ * profile data from each table. Also we need to clean anything up in the
+ * usermeta table that this component uses.
  *
  * @package BuddyPress XProfile
  * @param $user_id The ID of the deleted user
- * @uses get_user_meta() Get a user meta value based on meta key from wp_usermeta
- * @uses delete_user_meta() Delete user meta value based on meta key from wp_usermeta
- * @uses delete_data_for_user() Removes all profile data from the xprofile tables for the user
  */
 function xprofile_remove_data( $user_id ) {
 	BP_XProfile_ProfileData::delete_data_for_user( $user_id );
-
-	// delete any avatar files.
-	@unlink( get_user_meta( $user_id, 'bp_core_avatar_v1_path', true ) );
-	@unlink( get_user_meta( $user_id, 'bp_core_avatar_v2_path', true ) );
-
-	// unset the usermeta for avatars from the usermeta table.
-	delete_user_meta( $user_id, 'bp_core_avatar_v1'      );
-	delete_user_meta( $user_id, 'bp_core_avatar_v1_path' );
-	delete_user_meta( $user_id, 'bp_core_avatar_v2'      );
-	delete_user_meta( $user_id, 'bp_core_avatar_v2_path' );
 }
 add_action( 'wpmu_delete_user',  'xprofile_remove_data' );
 add_action( 'delete_user',       'xprofile_remove_data' );
@@ -531,7 +558,7 @@ function bp_xprofile_get_meta( $object_id, $object_type, $meta_key = '') {
 		}
 	}
 
-	$metas = array_map( 'maybe_unserialize', (array)$metas );
+	$metas = array_map( 'maybe_unserialize', (array) $metas );
 
 	if ( 1 == count( $metas ) )
 		return $metas[0];
@@ -594,12 +621,127 @@ function bp_xprofile_update_fielddata_meta( $field_data_id, $meta_key, $meta_val
  * Return the field name for the Full Name xprofile field
  *
  * @package BuddyPress
- * @since 1.5
+ * @since BuddyPress (1.5)
  *
  * @return str The field name
  */
 function bp_xprofile_fullname_field_name() {
 	return apply_filters( 'bp_xprofile_fullname_field_name', BP_XPROFILE_FULLNAME_FIELD_NAME );
 }
+
+/**
+ * Get visibility levels out of the $bp global
+ *
+ * @return array
+ */
+function bp_xprofile_get_visibility_levels() {
+	global $bp;
+
+	return apply_filters( 'bp_xprofile_get_visibility_levels', $bp->profile->visibility_levels );
+}
+
+/**
+ * Get the ids of fields that are hidden for this displayed/loggedin user pair
+ *
+ * This is the function primarily responsible for profile field visibility. It works by determining
+ * the relationship between the displayed_user (ie the profile owner) and the current_user (ie the
+ * profile viewer). Then, based on that relationship, we query for the set of fields that should
+ * be excluded from the profile loop.
+ *
+ * @since 1.6
+ * @see BP_XProfile_Group::get()
+ * @uses apply_filters() Filter bp_xprofile_get_hidden_fields_for_user to modify visibility levels,
+ *   or if you have added your own custom levels
+ *
+ * @param int $displayed_user_id The id of the user the profile fields belong to
+ * @param int $current_user_id The id of the user viewing the profile
+ * @return array An array of field ids that should be excluded from the profile query
+ */
+function bp_xprofile_get_hidden_fields_for_user( $displayed_user_id = 0, $current_user_id = 0 ) {
+	if ( !$displayed_user_id ) {
+		$displayed_user_id = bp_displayed_user_id();
+	}
+
+	if ( !$displayed_user_id ) {
+		return array();
+	}
+
+	if ( !$current_user_id ) {
+		$current_user_id = bp_loggedin_user_id();
+	}
+
+	// @todo - This is where you'd swap out for current_user_can() checks
+
+	if ( $current_user_id ) {
+		// Current user is logged in
+		if ( $displayed_user_id == $current_user_id ) {
+			// If you're viewing your own profile, nothing's private
+			$hidden_fields = array();
+
+		} else if ( bp_is_active( 'friends' ) && friends_check_friendship( $displayed_user_id, $current_user_id ) ) {
+			// If the current user and displayed user are friends, show all
+			$hidden_fields = array();
+
+		} else {
+			// current user is logged-in but not friends, so exclude friends-only
+			$hidden_levels = array( 'friends' );
+			$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
+		}
+
+	} else {
+		// Current user is not logged in, so exclude friends-only and loggedin
+		$hidden_levels = array( 'friends', 'loggedin' );
+		$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
+	}
+
+	return apply_filters( 'bp_xprofile_get_hidden_fields_for_user', $hidden_fields, $displayed_user_id, $current_user_id );
+}
+
+/**
+ * Fetch an array of the xprofile fields that a given user has marked with certain visibility levels
+ *
+ * @since 1.6
+ * @see bp_xprofile_get_hidden_fields_for_user()
+ *
+ * @param int $user_id The id of the profile owner
+ * @param array $levels An array of visibility levels ('public', 'friends', 'loggedin', etc) to be
+ *    checked against
+ * @return array $field_ids The fields that match the requested visibility levels for the given user
+ */
+function bp_xprofile_get_fields_by_visibility_levels( $user_id, $levels = array() ) {
+	if ( !is_array( $levels ) ) {
+		$levels = (array)$levels;
+	}
+
+	$user_visibility_levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+
+	// Parse the user-provided visibility levels with the default levels, which may take
+	// precedence
+	$default_visibility_levels = BP_XProfile_Group::fetch_default_visibility_levels();
+
+	foreach( (array) $default_visibility_levels as $d_field_id => $defaults ) {
+		// If the admin has forbidden custom visibility levels for this field, replace
+		// the user-provided setting with the default specified by the admin
+		if ( isset( $defaults['allow_custom'] ) && isset( $defaults['default'] ) && 'disabled' == $defaults['allow_custom'] && isset( $user_visibility_levels[$d_field_id] ) ) {
+			$user_visibility_levels[$d_field_id] = $defaults['default'];
+		}
+	}
+
+	$field_ids = array();
+	foreach( (array) $user_visibility_levels as $field_id => $field_visibility ) {
+		if ( in_array( $field_visibility, $levels ) ) {
+			$field_ids[] = $field_id;
+		}
+	}
+
+	// Never allow the fullname field to be excluded
+	if ( in_array( 1, $field_ids ) ) {
+		$key = array_search( 1, $field_ids );
+		unset( $field_ids[$key] );
+	}
+
+	return $field_ids;
+}
+
 
 ?>

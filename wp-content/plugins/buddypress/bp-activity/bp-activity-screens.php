@@ -13,7 +13,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 /**
  * Activity screen index
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @uses bp_displayed_user_id()
  * @uses bp_is_activity_component()
@@ -37,7 +37,7 @@ add_action( 'bp_screens', 'bp_activity_screen_index' );
 /**
  * Activity screen 'my activity' index
  *
- * @since 1.0.0
+ * @since BuddyPress (1.0)
  *
  * @uses do_action() To call the 'bp_activity_screen_my_activity' hook
  * @uses bp_core_load_template()
@@ -51,11 +51,11 @@ function bp_activity_screen_my_activity() {
 /**
  * Activity screen 'friends' index
  *
- * @since 1.0.0
+ * @since BuddyPress (1.0)
  *
  * @uses bp_is_active()
  * @uses bp_update_is_item_admin()
- * @uses is_super_admin()
+ * @uses bp_current_user_can()
  * @uses do_action() To call the 'bp_activity_screen_friends' hook
  * @uses bp_core_load_template()
  * @uses apply_filters() To call the 'bp_activity_template_friends_activity' hook
@@ -64,7 +64,7 @@ function bp_activity_screen_friends() {
 	if ( !bp_is_active( 'friends' ) )
 		return false;
 
-	bp_update_is_item_admin( is_super_admin(), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
 	do_action( 'bp_activity_screen_friends' );
 	bp_core_load_template( apply_filters( 'bp_activity_template_friends_activity', 'members/single/home' ) );
 }
@@ -72,11 +72,11 @@ function bp_activity_screen_friends() {
 /**
  * Activity screen 'groups' index
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @uses bp_is_active()
  * @uses bp_update_is_item_admin()
- * @uses is_super_admin()
+ * @uses bp_current_user_can()
  * @uses do_action() To call the 'bp_activity_screen_groups' hook
  * @uses bp_core_load_template()
  * @uses apply_filters() To call the 'bp_activity_template_groups_activity' hook
@@ -85,7 +85,7 @@ function bp_activity_screen_groups() {
 	if ( !bp_is_active( 'groups' ) )
 		return false;
 
-	bp_update_is_item_admin( is_super_admin(), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
 	do_action( 'bp_activity_screen_groups' );
 	bp_core_load_template( apply_filters( 'bp_activity_template_groups_activity', 'members/single/home' ) );
 }
@@ -93,16 +93,16 @@ function bp_activity_screen_groups() {
 /**
  * Activity screen 'favorites' index
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @uses bp_update_is_item_admin()
- * @uses is_super_admin()
+ * @uses bp_current_user_can()
  * @uses do_action() To call the 'bp_activity_screen_favorites' hook
  * @uses bp_core_load_template()
  * @uses apply_filters() To call the 'bp_activity_template_favorite_activity' hook
  */
 function bp_activity_screen_favorites() {
-	bp_update_is_item_admin( is_super_admin(), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
 	do_action( 'bp_activity_screen_favorites' );
 	bp_core_load_template( apply_filters( 'bp_activity_template_favorite_activity', 'members/single/home' ) );
 }
@@ -110,16 +110,16 @@ function bp_activity_screen_favorites() {
 /**
  * Activity screen 'mentions' index
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @uses bp_update_is_item_admin()
- * @uses is_super_admin()
+ * @uses bp_current_user_can()
  * @uses do_action() To call the 'bp_activity_screen_mentions' hook
  * @uses bp_core_load_template()
  * @uses apply_filters() To call the 'bp_activity_template_mention_activity' hook
  */
 function bp_activity_screen_mentions() {
-	bp_update_is_item_admin( is_super_admin(), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
 	do_action( 'bp_activity_screen_mentions' );
 	bp_core_load_template( apply_filters( 'bp_activity_template_mention_activity', 'members/single/home' ) );
 }
@@ -128,7 +128,7 @@ function bp_activity_screen_mentions() {
  * Removes activity notifications from the notification menu when a user clicks on them and
  * is taken to a specific screen.
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @global object $bp BuddyPress global settings
  * @uses bp_core_delete_notifications_by_type()
@@ -136,7 +136,7 @@ function bp_activity_screen_mentions() {
 function bp_activity_remove_screen_notifications() {
 	global $bp;
 
-	bp_core_delete_notifications_by_type( $bp->loggedin_user->id, $bp->activity->id, 'new_at_mention' );
+	bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->activity->id, 'new_at_mention' );
 }
 add_action( 'bp_activity_screen_my_activity',               'bp_activity_remove_screen_notifications' );
 add_action( 'bp_activity_screen_single_activity_permalink', 'bp_activity_remove_screen_notifications' );
@@ -145,7 +145,7 @@ add_action( 'bp_activity_screen_mentions',                  'bp_activity_remove_
 /**
  * Reset the logged-in user's new mentions data when he visits his mentions screen
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @uses bp_is_my_profile()
  * @uses bp_activity_clear_new_mentions()
@@ -160,7 +160,7 @@ add_action( 'bp_activity_screen_mentions', 'bp_activity_reset_my_new_mentions' )
 /**
  * Reset the logged-in user's new mentions data when he visits his mentions screen
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @global object $bp BuddyPress global settings
  * @uses bp_is_activity_component()
@@ -190,11 +190,11 @@ function bp_activity_screen_single_activity_permalink() {
 	if ( !bp_is_activity_component() )
 		return false;
 
-	if ( empty( $bp->current_action ) || !is_numeric( $bp->current_action ) )
+	if ( ! bp_current_action() || !is_numeric( bp_current_action() ) )
 		return false;
 
 	// Get the activity details
-	$activity = bp_activity_get_specific( array( 'activity_ids' => bp_current_action(), 'show_hidden' => true ) );
+	$activity = bp_activity_get_specific( array( 'activity_ids' => bp_current_action(), 'show_hidden' => true, 'spam' => 'ham_only', ) );
 
 	// 404 if activity does not exist
 	if ( empty( $activity['activities'][0] ) || bp_action_variables() ) {
@@ -225,7 +225,7 @@ function bp_activity_screen_single_activity_permalink() {
 			if ( 'public' != $group->status ) {
 
 				// User is not a member of group
-				if ( !groups_is_user_member( $bp->loggedin_user->id, $group->id ) ) {
+				if ( !groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
 					$has_access = false;
 				}
 			}
@@ -246,8 +246,8 @@ function bp_activity_screen_single_activity_permalink() {
 
 		// Redirect based on logged in status
 		is_user_logged_in() ?
-			bp_core_redirect( $bp->loggedin_user->domain ) :
-			bp_core_redirect( site_url( 'wp-login.php?redirect_to=' . esc_url( bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $bp->current_action ) ) );
+			bp_core_redirect( bp_loggedin_user_domain() ) :
+			bp_core_redirect( site_url( 'wp-login.php?redirect_to=' . esc_url( bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . bp_current_action() . '/' ) ) );
 	}
 
 	bp_core_load_template( apply_filters( 'bp_activity_template_profile_activity_permalink', 'members/single/activity/permalink' ) );
@@ -257,20 +257,18 @@ add_action( 'bp_screens', 'bp_activity_screen_single_activity_permalink' );
 /**
  * Add activity notifications settings to the notifications settings page
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
- * @global object $bp BuddyPress global settings
  * @uses bp_get_user_meta()
  * @uses bp_core_get_username()
  * @uses do_action() To call the 'bp_activity_screen_notification_settings' hook
  */
 function bp_activity_screen_notification_settings() {
-	global $bp;
 
-	if ( !$mention = bp_get_user_meta( $bp->displayed_user->id, 'notification_activity_new_mention', true ) )
+	if ( !$mention = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_mention', true ) )
 		$mention = 'yes';
 
-	if ( !$reply = bp_get_user_meta( $bp->displayed_user->id, 'notification_activity_new_reply', true ) )
+	if ( !$reply = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_reply', true ) )
 		$reply = 'yes'; ?>
 
 	<table class="notification-settings" id="activity-notification-settings">
@@ -286,7 +284,7 @@ function bp_activity_screen_notification_settings() {
 		<tbody>
 			<tr id="activity-notification-settings-mentions">
 				<td>&nbsp;</td>
-				<td><?php printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_core_get_username( $bp->displayed_user->id, $bp->displayed_user->userdata->user_nicename, $bp->displayed_user->userdata->user_login ) ) ?></td>
+				<td><?php printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_core_get_username( bp_displayed_user_id() ) ) ?></td>
 				<td class="yes"><input type="radio" name="notifications[notification_activity_new_mention]" value="yes" <?php checked( $mention, 'yes', true ) ?>/></td>
 				<td class="no"><input type="radio" name="notifications[notification_activity_new_mention]" value="no" <?php checked( $mention, 'no', true ) ?>/></td>
 			</tr>

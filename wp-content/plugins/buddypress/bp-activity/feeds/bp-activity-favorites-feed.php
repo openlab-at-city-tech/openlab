@@ -24,10 +24,11 @@ header('Status: 200 OK');
 >
 
 <channel>
-	<title><?php bp_site_name() ?> | <?php echo $bp->displayed_user->fullname; ?> | <?php _e( 'Favorite Activity', 'buddypress' ) ?></title>
+	<?php /* translators: Favorited activity RSS title - "[Site Name] | [Displayed User Name] | Favorite Activity" */ ?>
+	<title><?php printf( '%1$s | %2$s | %3$s', bp_get_site_name(), bp_get_displayed_user_fullname(), __( 'Favorite Activity', 'buddypress' ) ) ?></title>
 	<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
 	<link><?php echo home_url( bp_get_activity_root_slug() . '/#my-favorites/' ) ?></link>
-	<description><?php echo $bp->displayed_user->fullname; ?> - <?php _e( 'Favorite Activity', 'buddypress' ) ?></description>
+	<description><?php printf( __( '%s - Favorite Activity', 'buddypress' ), bp_get_displayed_user_fullname() ) ?></description>
 	<pubDate><?php echo mysql2date('D, d M Y H:i:s O', bp_activity_get_last_updated(), false); ?></pubDate>
 	<generator>http://buddypress.org/?v=<?php echo BP_VERSION ?></generator>
 	<language><?php echo get_option('rss_language'); ?></language>
@@ -35,8 +36,8 @@ header('Status: 200 OK');
 	<?php do_action('bp_activity_favorites_feed_head'); ?>
 
 	<?php
-		$favs = bp_activity_get_user_favorites( $bp->displayed_user->id );
-		$fav_ids = implode( ',', (array)$favs );
+		$favs = bp_activity_get_user_favorites( bp_displayed_user_id() );
+		$fav_ids = implode( ',', (array) $favs );
 	?>
 
 	<?php if ( bp_has_activities( 'include=' . $fav_ids . '&max=50&display_comments=stream' ) ) : ?>

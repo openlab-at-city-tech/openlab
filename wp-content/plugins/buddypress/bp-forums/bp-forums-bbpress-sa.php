@@ -16,7 +16,7 @@ function bp_forums_load_bbpress() {
 
 	define( 'BB_PATH', BP_PLUGIN_DIR . '/bp-forums/bbpress/' );
 	define( 'BACKPRESS_PATH', BP_PLUGIN_DIR . '/bp-forums/bbpress/bb-includes/backpress/' );
-	define( 'BB_URL', BP_PLUGIN_URL . '/bp-forums/bbpress/' );
+	define( 'BB_URL', BP_PLUGIN_URL . 'bp-forums/bbpress/' );
 	define( 'BB_INC', 'bb-includes/' );
 
 	require( BB_PATH . BB_INC . 'class.bb-query.php' );
@@ -39,7 +39,7 @@ function bp_forums_load_bbpress() {
 	require( BB_PATH . 'bb-admin/includes/functions.bb-admin.php' );
 
 	$bb = new stdClass();
-	require( $bp->forums->bbconfig );
+	require( bp_get_option(	'bb-config-location' ) );
 
 	// Setup the global database connection
 	$bbdb = new BPDB ( BBDB_USER, BBDB_PASSWORD, BBDB_NAME, BBDB_HOST );
@@ -100,8 +100,8 @@ function bp_forums_load_bbpress() {
 
 		// Set the site admins as the keymasters
 		$site_admins = get_site_option( 'site_admins', array('admin') );
-		foreach ( (array)$site_admins as $site_admin )
-			update_user_meta( bp_core_get_userid( $site_admin ), $bb_table_prefix . 'capabilities', array( 'keymaster' => true ) );
+		foreach ( (array) $site_admins as $site_admin )
+			bp_update_user_meta( bp_core_get_userid( $site_admin ), $bb_table_prefix . 'capabilities', array( 'keymaster' => true ) );
 
 		// Create the first forum.
 		bb_new_forum( array( 'forum_name' => 'Default Forum' ) );
@@ -128,7 +128,7 @@ class BP_Forums_BB_Auth {
 		$args = wp_parse_args( $args, $defaults );
 		extract( $args, EXTR_SKIP );
 
-		return update_user_meta( $id, $meta_key, $meta_value );
+		return bp_update_user_meta( $id, $meta_key, $meta_value );
 	}
 }
 
@@ -143,10 +143,6 @@ class BP_Forums_BB_Auth {
 if ( ! class_exists( 'BPDB' ) ) :
 	class BPDB extends WPDB {
 		var $db_servers = array();
-
-		function BPDB( $dbuser, $dbpassword, $dbname, $dbhost ) {
-			$this->__construct( $dbuser, $dbpassword, $dbname, $dbhost );
-		}
 
 		function __construct( $dbuser, $dbpassword, $dbname, $dbhost ) {
 			parent::__construct( $dbuser, $dbpassword, $dbname, $dbhost );

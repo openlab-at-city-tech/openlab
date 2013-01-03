@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * BuddyPress Groups Filters
+ *
+ * @package BuddyPress
+ * @subpackage GroupsFilters
+ */
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -56,25 +64,26 @@ function bp_groups_filter_kses( $content ) {
 	$groups_allowedtags['img']['class']  = array();
 	$groups_allowedtags['img']['id']     = array();
 	$groups_allowedtags['code']          = array();
-
 	$groups_allowedtags = apply_filters( 'bp_groups_filter_kses', $groups_allowedtags );
+
 	return wp_kses( $content, $groups_allowedtags );
 }
 
-/**** Filters for group forums ****/
+/** Group forums **************************************************************/
 
+/**
+ * Only filter the forum SQL on group pages or on the forums directory 
+ */
 function groups_add_forum_privacy_sql() {
-	global $bp;
-
-	// Only filter the forum SQL on group pages or on the forums directory
-	add_filter( 'get_topics_fields',     'groups_add_forum_fields_sql' );
-	add_filter( 'get_topics_join', 	     'groups_add_forum_tables_sql' );
-	add_filter( 'get_topics_where',      'groups_add_forum_where_sql'  );
+	add_filter( 'get_topics_fields', 'groups_add_forum_fields_sql' );
+	add_filter( 'get_topics_join', 	 'groups_add_forum_tables_sql' );
+	add_filter( 'get_topics_where',  'groups_add_forum_where_sql'  );
 }
 add_filter( 'bbpress_init', 'groups_add_forum_privacy_sql' );
 
 function groups_add_forum_fields_sql( $sql = '' ) {
-	return 't.*, g.id as object_id, g.name as object_name, g.slug as object_slug';
+	$sql = 't.*, g.id as object_id, g.name as object_name, g.slug as object_slug';
+	return $sql;
 }
 
 function groups_add_forum_tables_sql( $sql = '' ) {
@@ -87,6 +96,9 @@ function groups_add_forum_tables_sql( $sql = '' ) {
 
 function groups_add_forum_where_sql( $sql = '' ) {
 	global $bp;
+
+	// Define locale variable
+	$parts = array();
 
 	// Set this for groups
 	$parts['groups'] = "(gm.meta_key = 'forum_id' AND gm.meta_value = t.forum_id)";
@@ -104,7 +116,7 @@ function groups_add_forum_where_sql( $sql = '' ) {
 		unset( $parts['private'] );
 
 	// Are we a super admin?
-	elseif ( is_super_admin() )
+	elseif ( bp_current_user_can( 'bp_moderate' ) )
 		unset( $parts['private'] );
 
 	// No need to filter on a single item
@@ -128,9 +140,9 @@ function groups_add_forum_where_sql( $sql = '' ) {
 function groups_filter_bbpress_caps( $value, $cap, $args ) {
 	global $bp;
 
-	if ( is_super_admin() )
+	if ( bp_current_user_can( 'bp_moderate' ) )
 		return true;
-
+	
 	if ( 'add_tag_to' == $cap )
 		if ( $bp->groups->current_group->user_has_access ) return true;
 
@@ -146,10 +158,11 @@ add_filter( 'bb_current_user_can', 'groups_filter_bbpress_caps', 10, 3 );
  * information we aren't going to use. This speeds up the query.
  *
  * @see BB_Query::_filter_sql()
- * @since 1.5
+ * @since BuddyPress (1.5)
  */
 function groups_filter_forums_root_page_sql( $sql ) {
 	return apply_filters( 'groups_filter_bbpress_root_page_sql', 't.topic_id' );
 }
 add_filter( 'get_latest_topics_fields', 'groups_filter_forums_root_page_sql' );
+
 ?>

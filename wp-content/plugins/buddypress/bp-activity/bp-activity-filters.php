@@ -10,6 +10,8 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/** Filters *******************************************************************/
+
 // Apply WordPress defined filters
 add_filter( 'bp_get_activity_action',                'bp_activity_filter_kses', 1 );
 add_filter( 'bp_get_activity_content_body',          'bp_activity_filter_kses', 1 );
@@ -20,6 +22,7 @@ add_filter( 'bp_get_activity_latest_update_excerpt', 'bp_activity_filter_kses', 
 add_filter( 'bp_get_activity_feed_item_description', 'bp_activity_filter_kses', 1 );
 add_filter( 'bp_activity_content_before_save',       'bp_activity_filter_kses', 1 );
 add_filter( 'bp_activity_action_before_save',        'bp_activity_filter_kses', 1 );
+add_filter( 'bp_activity_latest_update_content',     'wp_filter_kses', 1 );
 
 add_filter( 'bp_get_activity_action',                'force_balance_tags' );
 add_filter( 'bp_get_activity_content_body',          'force_balance_tags' );
@@ -73,6 +76,8 @@ add_filter( 'bp_get_activity_latest_update',         'stripslashes_deep' );
 add_filter( 'bp_get_activity_latest_update_excerpt', 'stripslashes_deep' );
 add_filter( 'bp_get_activity_feed_item_description', 'stripslashes_deep' );
 
+add_filter( 'bp_activity_primary_link_before_save',  'esc_url_raw' );
+
 // Apply BuddyPress defined filters
 add_filter( 'bp_get_activity_content',               'bp_activity_make_nofollow_filter' );
 add_filter( 'bp_get_activity_content_body',          'bp_activity_make_nofollow_filter' );
@@ -84,13 +89,78 @@ add_filter( 'bp_get_activity_feed_item_description', 'bp_activity_make_nofollow_
 add_filter( 'pre_comment_content',                   'bp_activity_at_name_filter' );
 add_filter( 'group_forum_topic_text_before_save',    'bp_activity_at_name_filter' );
 add_filter( 'group_forum_post_text_before_save',     'bp_activity_at_name_filter' );
+add_filter( 'the_content', 			     'bp_activity_at_name_filter' );
 
 add_filter( 'bp_get_activity_parent_content',        'bp_create_excerpt' );
+
+add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+add_filter( 'bp_get_activity_content',      'bp_activity_truncate_entry', 5 );
+
+/** Actions *******************************************************************/
+
+// At-name filter
+add_action( 'bp_activity_after_save', 'bp_activity_at_name_filter_updates' );
+
+// Activity stream moderation
+add_action( 'bp_activity_before_save', 'bp_activity_check_moderation_keys', 2, 1 );
+add_action( 'bp_activity_before_save', 'bp_activity_check_blacklist_keys',  2, 1 );
+
+/** Functions *****************************************************************/
+
+/**
+ * Types of activity stream items to check against
+ *
+ * @since BuddyPress (1.6)
+ */
+function bp_activity_get_moderated_activity_types() {
+	$types = array(
+		'activity_comment',
+		'activity_update'
+	);
+	return apply_filters( 'bp_activity_check_activity_types', $types );
+}
+
+/**
+ * Check activity stream for moderation keys
+ *
+ * @since BuddyPress (1.6)
+ * @param BP_Activity_Activity $activity
+ * @return If activity type is not an update or comment
+ */
+function bp_activity_check_moderation_keys( $activity ) {
+
+	// Only check specific types of activity updates
+	if ( !in_array( $activity->type, bp_activity_get_moderated_activity_types() ) )
+		return;
+
+	// Unset the activity component so activity stream update fails
+	// @todo This is temporary until some kind of moderation is built
+	if ( !bp_core_check_for_moderation( $activity->user_id, '', $activity->content ) )
+		$activity->component = false;
+}
+
+/**
+ * Check activity stream for blacklisted keys
+ *
+ * @since BuddyPress (1.6)
+ * @param BP_Activity_Activity $activity
+ * @return If activity type is not an update or comment
+ */
+function bp_activity_check_blacklist_keys( $activity ) {
+
+	// Only check specific types of activity updates
+	if ( ! in_array( $activity->type, bp_activity_get_moderated_activity_types() ) )
+		return;
+
+	// Mark as spam
+	if ( ! bp_core_check_for_blacklist( $activity->user_id, '', $activity->content ) )
+		bp_activity_mark_as_spam( $activity, 'by_blacklist' );
+}
 
 /**
  * Custom kses filtering for activity content
  *
- * @since 1.1.0
+ * @since BuddyPress (1.1)
  *
  * @param string $content The activity content
  *
@@ -105,9 +175,6 @@ function bp_activity_filter_kses( $content ) {
 	$activity_allowedtags = $allowedtags;
 	$activity_allowedtags['span']          = array();
 	$activity_allowedtags['span']['class'] = array();
-	$activity_allowedtags['div']           = array();
-	$activity_allowedtags['div']['class']  = array();
-	$activity_allowedtags['div']['id']     = array();
 	$activity_allowedtags['a']['class']    = array();
 	$activity_allowedtags['a']['id']       = array();
 	$activity_allowedtags['a']['rel']      = array();
@@ -129,7 +196,7 @@ function bp_activity_filter_kses( $content ) {
 /**
  * Finds and links @-mentioned users in the contents of activity items
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @param string $content The activity content
  * @param int $activity_id The activity id
@@ -144,9 +211,16 @@ function bp_activity_filter_kses( $content ) {
  * @return string $content Content filtered for mentions
  */
 function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
-	$usernames = bp_activity_find_mentions( $content );
+	if ( $activity_id & bp_is_active( 'activity' ) ) {
+		$activity = new BP_Activity_Activity( $activity_id );
+		
+		// If this activity has been marked as spam, don't do anything. This prevents @notifications being sent.
+		if ( !empty( $activity ) && $activity->is_spam )
+			return $content;
+	}
 
-	foreach( (array)$usernames as $username ) {
+	$usernames = bp_activity_find_mentions( $content );
+	foreach( (array) $usernames as $username ) {
 		if ( bp_is_username_compatibility_mode() )
 			$user_id = username_exists( $username );
 		else
@@ -156,7 +230,7 @@ function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
 			continue;
 
 		// If an activity_id is provided, we can send email and BP notifications
-		if ( $activity_id ) {
+		if ( $activity_id && apply_filters( 'bp_activity_at_name_do_notifications', true ) ) {
 			bp_activity_at_message_notification( $activity_id, $user_id );
 		}
 
@@ -173,7 +247,7 @@ function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
 /**
  * Catch mentions in saved activity items
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @param obj $activity
  *
@@ -191,12 +265,11 @@ function bp_activity_at_name_filter_updates( $activity ) {
 	// Resave the activity with the new content
 	$activity->save();
 }
-add_filter( 'bp_activity_after_save', 'bp_activity_at_name_filter_updates' );
 
 /**
  * Catches links in activity text so rel=nofollow can be added
  *
- * @since 1.2.0
+ * @since BuddyPress (1.2)
  *
  * @param string $text Activity text
  *
@@ -209,7 +282,7 @@ function bp_activity_make_nofollow_filter( $text ) {
 	/**
 	 * Adds rel=nofollow to a link
 	 *
-	 * @since 1.2.0
+	 * @since BuddyPress (1.2)
 	 *
 	 * @param array $matches
 	 *
@@ -224,7 +297,7 @@ function bp_activity_make_nofollow_filter( $text ) {
 /**
  * Truncates long activity entries when viewed in activity streams
  *
- * @since 1.5.0
+ * @since BuddyPress (1.5)
  *
  * @param $text The original activity entry text
  *
@@ -253,8 +326,9 @@ function bp_activity_truncate_entry( $text ) {
 	$excerpt        = bp_create_excerpt( $text, $excerpt_length, array( 'ending' => __( '&hellip;', 'buddypress' ) ) );
 
 	// If the text returned by bp_create_excerpt() is different from the original text (ie it's
-	// been truncated), add the "Read More" link.
-	if ( $excerpt != $text ) {
+	// been truncated), add the "Read More" link. Note that bp_create_excerpt() is stripping
+	// shortcodes, so we have strip them from the $text before the comparison
+	if ( $excerpt != strip_shortcodes( $text ) ) {
 		$id = !empty( $activities_template->activity->current_comment->id ) ? 'acomment-read-more-' . $activities_template->activity->current_comment->id : 'activity-read-more-' . bp_get_activity_id();
 
 		$excerpt = sprintf( '%1$s<span class="activity-read-more" id="%2$s"><a href="%3$s" rel="nofollow">%4$s</a></span>', $excerpt, $id, bp_get_activity_thread_permalink(), $append_text );
@@ -262,7 +336,5 @@ function bp_activity_truncate_entry( $text ) {
 
 	return apply_filters( 'bp_activity_truncate_entry', $excerpt, $text, $append_text );
 }
-add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
-add_filter( 'bp_get_activity_content', 'bp_activity_truncate_entry', 5 );
 
 ?>
