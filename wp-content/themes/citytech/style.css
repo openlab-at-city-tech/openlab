@@ -985,6 +985,10 @@ h1.mol-title, #single-course-header h1, #content h1.group-title {
 	padding-left: 0;
 }
 
+#bpnav ul li.last, .directory .item-list-tabs ul li.last, .forum ul li.last {
+float: right;
+}
+
 .submenu ul,.submenu-text,#group-settings-label,#subnav ul{
     float: left;
     display: inline;
@@ -4559,8 +4563,7 @@ width:100%;
 	max-width: none;
 }
 
-table.forum,
-#topic-post-list p {
+table.forum, #topic-post-list p {
     font-size: 12px;
     width: 100%;
 }
@@ -4577,12 +4580,17 @@ table.forum tr.closed td.td-title {
     background-image: url("../images/closed.png");
     background-position: 15px 50%;
     background-repeat: no-repeat;
-    padding-left: 35px;
 }
 table.forum td p.topic-text {
     color: #888888;
     font-size: 11px;
 }
+
+table.forum tr td, table.forum tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+
 table.forum tr > td:first-child, table.forum tr > th:first-child {
     padding-left: 15px;
 }
@@ -4643,39 +4651,41 @@ ul#forum-topic-list li {
 	overflow: hidden;
 	width: 100%;
 }
-	ul#forum-topic-list li.sticky {
-		background: #ffffdd;
-	}
 
-	ul#forum-topic-list li.closed a.topic-title {
-		background: url( ../images/closed_topic.png ) no-repeat center left;
-		padding: 0 0 0 20px;
-	}
+ul#forum-topic-list li.sticky {
+	background: #ffffdd;
+}
 
-	ul#forum-topic-list li span.latest {
-		display: block;
-		margin-left: 50px;
-	}
+ul#forum-topic-list li.closed a.topic-title {
+	background: url( ../images/closed_topic.png ) no-repeat center left;
+	padding: 0 0 0 20px;
+}
 
-	ul#forum-topic-list li div.admin-links, ul#topic-post-list li div.admin-links {
-		position: absolute;
-		top: 1em;
-		right: 1em;
-		background: #eee;
-		display: none;
-		padding: 0.1em 0.5em;
-		-moz-border-radius: 3px;
-		-webkit-border-radius: 3px;
-		border-radius: 3px;
-		margin-left: 50px;
-		margin-bottom: 15px;
-		font-size: 11px;
-		color: #888;
-	}
-	ul#forum-topic-list li div.admin-links a, ul#topic-post-list li div.admin-links a {
-		display: inline;
-	}
-		ul#forum-topic-list li:hover div.admin-links, ul#topic-post-list:hover li div.admin-links { display: inline-block; }
+ul#forum-topic-list li span.latest {
+	display: block;
+	margin-left: 50px;
+}
+
+ul#forum-topic-list li div.admin-links, ul#topic-post-list li div.admin-links {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	background: #eee;
+	display: none;
+	padding: 0.1em 0.5em;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin-left: 50px;
+	margin-bottom: 15px;
+	font-size: 11px;
+	color: #888;
+}
+ul#forum-topic-list li div.admin-links a, ul#topic-post-list li div.admin-links a {
+	display: inline;
+}
+
+ul#forum-topic-list li:hover div.admin-links, ul#topic-post-list:hover li div.admin-links { display: inline-block; }
 
 ul#topic-post-list li .poster-meta {
 	color: #888;
@@ -4718,20 +4728,18 @@ div.latest-post {
 		width: 98%;
 	}
 
-	input#topic_title { width: 80%; }
-	input#topic_tags { width: 60%; }
-	textarea#topic_text, textarea#reply_text { width: 98%; height: 150px; }
+input#topic_title { width: 80%; }
+input#topic_tags { width: 60%; }
+textarea#topic_text, textarea#reply_text { width: 98%; height: 150px; }
 
-	input#submit_topic, input#submit_reply {
+input#submit_topic, input#submit_reply {
 		display: block;
 		margin-top: 20px;
 	}
 	
-	.forum table thead tr {
+.forum table thead tr {
 background: none repeat scroll 0 0 #EAEAEA;
 }
-
-
 
 form.standard-form {
 }
@@ -4766,10 +4774,12 @@ form#signup_form.standard-form div.submit {
 div#signup-avatar img {
     margin: 0 15px 10px 0;
 }
+/* 
 form.standard-form textarea {
     height: 120px;
     width: 75%;
 }
+ */
 form.standard-form textarea#message_content {
     height: 200px;
 }
