@@ -6,6 +6,8 @@ add_filter('body_class','openlab_conditional_body_classes');
 function openlab_conditional_body_classes($classes)
 {
 	global $post;
+	$classes[] = 'header-image';
+	
 	if (is_front_page() || is_404())
 	{
 		$classes[] = 'full-width-content';

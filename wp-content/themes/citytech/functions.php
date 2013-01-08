@@ -18,14 +18,6 @@ require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 
-//body classes - genesis legacy
-add_filter('body_class', 'openlab_body_classes');
-
-function openlab_body_classes()
-{
-	$classes[] = 'header-image';
-	return $classes;
-}
 
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
