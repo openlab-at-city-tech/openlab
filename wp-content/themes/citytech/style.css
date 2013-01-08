@@ -9,7 +9,7 @@
 		Tags: buddypress
 */
 
-/* New TOC 
+/* TABLE OF CONTENTS
 * Note: This stylesheet is organized according to the site structure as detailed in the Functional Spec at
 https://www.dropbox.com/s/3pf9obh9o6y2pj2/OpenLab_FunctionSpec-1_1_v8.pdf. Global styles are in the top section, 
 followed by styles specific to each numbered section of the site. 
@@ -36,55 +36,8 @@ followed by styles specific to each numbered section of the site.
 ** 6.0 Group Profile
 
 * 8.0 HELP
-
-
 */
 
-/* Table of Contents
-
-* Defaults
-* Hyperlinks
-* Wrap
-* Header
-* Image Header - Partial Width
-* Image Header - Full Width
-* Navigation Constants
-* Header Right Navigation
-* Primary Navigation
-* Primary Navigation Extras
-* Secondary Navigation
-* Inner
-* Breadcrumb
-* Taxonomy Description
-* Content-Sidebar Wrap
-* Content
-* Column Classes
-* Featured Post Grid
-* Headlines
-* Unordered / Ordered Lists
-* Post Info
-* Post Meta
-* Author Box
-* Sticky Posts
-* Archive Page
-* Post Icons
-* Images
-* Post Navigation
-* Primary / Secondary Sidebars
-* Tag Cloud
-* Dropdowns
-* Featured Page / Post
-* User Profile
-* Buttons
-* Search Form
-* eNews & Updates Widget
-* Calendar Widget
-* Footer Widgets
-* Footer
-* Comments
-* Gravity Forms
-
-*/
 
 /* GLOBAL
 ------------------------------------------------------------ */
@@ -474,7 +427,7 @@ div.friendship-button a.add:hover, .action .generic-button.friendship-button.is_
 }
 
 
-/* REQUEST MEMBERSHIP GETS PLUS */
+/* request membership gets plus */
 
 #group-action-wrapper .group-button a.request-membership {
 	background-position: 70px -224px;
@@ -523,7 +476,6 @@ background-position: -176px -256px;
 	background-position: -149px -256px;
     color:#0fceb9;
 }
-
 
 
 /* cancel friend buttons */
@@ -672,7 +624,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
     font-size: 12px;
 }
 
-/* Wrap -- WOULD LIKE TO RENAME ONE OF THESE IN THE TEMPLATES TO DISTINGUISH THEM
+/* Wrap -- EVENTUALLY WOULD LIKE TO RENAME ONE OF THESE IN THE TEMPLATES TO DISTINGUISH THEM
 ------------------------------------------------------------ */
 
 /* This is the whole page wrap, is it necessary? Or could we use it to set the page width, and eliminate the other .wrap elements? */
@@ -819,26 +771,6 @@ input.wpcf7-submit, .filter input[type="submit"] {
 
 /* Content Area
 ------------------------------------------------------------ */
-/* MOVE THREE STYLES TO CONTENT AREA */
-h3#bread-crumb {
-    color: #C84C35;
-    float: left;
-    font-size: 14px;
-    position: relative;
-}
-
-h3#bread-crumb .sep {
-    color: #6D6D6D;
-}
-
-.group-count {
-    float: right;
-    font-family: 'Arvo',arial,serif;
-    font-size: 12px;
-    padding-right: 5px;
-    position: relative;
-    margin: 0 0 15px;
-} 
 
 
 /* Inner - ELIMINATE THIS DIV IN FAVOR OF A PAGE WRAP TO SET WIDTH?
@@ -859,7 +791,7 @@ h3#bread-crumb .sep {
     width: 790px;
 }
 
-.content-sidebar #content-sidebar-wrap, .sidebar-content #content-sidebar-wrap {
+#content-sidebar-wrap, .sidebar-content #content-sidebar-wrap {
     width: 942px;
     border: 1px solid #EDEEEF;
     padding-top: 10px;
@@ -883,7 +815,7 @@ h3#bread-crumb .sep {
     position: relative;
 }
 
-.content-sidebar #content {
+#content {
     width: 680px;
     padding: 0 0 0 10px;
 }
@@ -954,7 +886,28 @@ h3#bread-crumb .sep {
 
 /* Content Submenus */
 
+h3#bread-crumb {
+    color: #C84C35;
+    float: left;
+    font-size: 14px;
+    position: relative;
+}
+
+h3#bread-crumb .sep {
+    color: #6D6D6D;
+}
+
+.group-count {
+    float: right;
+    font-family: 'Arvo',arial,serif;
+    font-size: 12px;
+    padding-right: 5px;
+    position: relative;
+    margin: 0 0 15px;
+} 
+
 /**MOL and Group submenu styles**/
+
 h1.mol-title, #single-course-header h1, #content h1.group-title {
     margin-bottom: 5px;
 }
@@ -983,6 +936,10 @@ h1.mol-title, #single-course-header h1, #content h1.group-title {
 
 #subnav ul li:first-child a {
 	padding-left: 0;
+}
+
+#bpnav ul li.last, .directory .item-list-tabs ul li.last, .forum ul li.last {
+float: right;
 }
 
 .submenu ul,.submenu-text,#group-settings-label,#subnav ul{
@@ -1192,7 +1149,7 @@ ul.item-list li h5 span.small {
 	padding-left: 7px;
 }
 
-/* Sidebar Area
+/* Sidebar
 ------------------------------------------------------------ */
 
 .page #sidebar p {
@@ -1816,41 +1773,6 @@ div.activity-comments form div.ac-reply-content {
     padding: 0;
 }
 
-/* UNLESS YOU KNOW WHAT YOU'RE DOING, DO NOT CHANGE THE FOLLOWING RULES */
-
-.easy-accordion{display:block;position:relative;overflow:hidden;padding:0;margin:0}
-.easy-accordion dt,.easy-accordion dd{margin:0;padding:0}
-.easy-accordion dt,.easy-accordion dd{position:absolute}
-.easy-accordion dt{margin-bottom:0;margin-left:0;z-index:5;/* Safari */ -webkit-transform: rotate(-90deg); /* Firefox */ -moz-transform: rotate(-90deg);-moz-transform-origin: 20px 0px;  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);cursor:pointer;}
-.easy-accordion dd{z-index:1;opacity:0;overflow:hidden}
-.easy-accordion dd.active{opacity:1;}
-.easy-accordion dd.no-more-active{z-index:2;opacity:1}
-.easy-accordion dd.active{z-index:3}
-.easy-accordion dd.plus{z-index:4}
-.easy-accordion .slide-number{position:absolute;bottom:0;left:10px;font-weight:normal;font-size:1.1em;/* Safari */ -webkit-transform: rotate(90deg); /* Firefox */ -moz-transform: rotate(90deg);  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);}
-
-
-/* FEEL FREE TO CUSTOMIZE THE FOLLOWING RULES */
-
-dd p{line-height:120%}
-
-#wds-accordion-slider{width:950px;height:360px;padding:0; background: #929292}
-.slider-shadow { background: url(images/slider-shadow.png) no-repeat center; height: 25px; clear: both; }
-#wds-accordion-slider dl{width:950px;height:360px;background:#929292;}
-#wds-accordion-slider dt{height:46px;line-height:44px;text-align:center;padding:0;font-size:18px;font-family: Georgia, sans-serif;text-transform:uppercase;letter-spacing:1px;background:#717171; color:#26526c; color: #fff; border-bottom: 5px solid #929292; }
-#wds-accordion-slider dt.active{cursor:pointer;color:#fff;background:#717171; border-bottom: 5px solid #717171; }
-#wds-accordion-slider dt.hover{color:#63DFD2;}
-#wds-accordion-slider dt.active.hover{color:#fff}
-#wds-accordion-slider dd{background:#929292; position: relative; }
-#wds-accordion-slider .slide-number{color:#63DFD2;left:10px;font-weight:bold}
-#wds-accordion-slider .active .slide-number{color:#fff;}
-#wds-accordion-slider a{color:#63DFD2}
-#wds-accordion-slider a.image-link img, #wds-accordion-slider a.image-link{ position: absolute; top:0; }
-#wds-accordion-slider dd img{margin: 0; padding: 0; position: relative; z-index: 99999}
-#wds-accordion-slider .post-info { padding: 5px 15px; position: absolute; bottom: 0; background: url(images/transBlackBG.png) repeat; z-index: 999999; width: 716px; }
-#wds-accordion-slider .post-info h4.slide-title{font-size:18px; margin: 5px 0 5px 0; line-height: 18px; color: #fff; font-family: Arial; text-transform: none; }
-#wds-accordion-slider .post-info p { font-size: 12px; color: #fff; line-height: 14px; text-transform: none; }
-#wds-accordion-slider .more{padding-top:10px;display:block}
 
 .home-page #home-left {
     float: left;
@@ -2203,6 +2125,44 @@ a#pgw-prev, a#pgw-next {
 .home-page .box-1 a {
     text-decoration: underline;
 }
+
+/* accordion plug-in styles - NOT SURE THIS IS ACTUALLY IN USE ON THE HOMEPAGE, IF NOT, DELETE THESE */
+
+/* UNLESS YOU KNOW WHAT YOU'RE DOING, DO NOT CHANGE THE FOLLOWING RULES */
+
+.easy-accordion{display:block;position:relative;overflow:hidden;padding:0;margin:0}
+.easy-accordion dt,.easy-accordion dd{margin:0;padding:0}
+.easy-accordion dt,.easy-accordion dd{position:absolute}
+.easy-accordion dt{margin-bottom:0;margin-left:0;z-index:5;/* Safari */ -webkit-transform: rotate(-90deg); /* Firefox */ -moz-transform: rotate(-90deg);-moz-transform-origin: 20px 0px;  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);cursor:pointer;}
+.easy-accordion dd{z-index:1;opacity:0;overflow:hidden}
+.easy-accordion dd.active{opacity:1;}
+.easy-accordion dd.no-more-active{z-index:2;opacity:1}
+.easy-accordion dd.active{z-index:3}
+.easy-accordion dd.plus{z-index:4}
+.easy-accordion .slide-number{position:absolute;bottom:0;left:10px;font-weight:normal;font-size:1.1em;/* Safari */ -webkit-transform: rotate(90deg); /* Firefox */ -moz-transform: rotate(90deg);  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);}
+
+
+/* FEEL FREE TO CUSTOMIZE THE FOLLOWING RULES */
+
+dd p{line-height:120%}
+
+#wds-accordion-slider{width:950px;height:360px;padding:0; background: #929292}
+.slider-shadow { background: url(images/slider-shadow.png) no-repeat center; height: 25px; clear: both; }
+#wds-accordion-slider dl{width:950px;height:360px;background:#929292;}
+#wds-accordion-slider dt{height:46px;line-height:44px;text-align:center;padding:0;font-size:18px;font-family: Georgia, sans-serif;text-transform:uppercase;letter-spacing:1px;background:#717171; color:#26526c; color: #fff; border-bottom: 5px solid #929292; }
+#wds-accordion-slider dt.active{cursor:pointer;color:#fff;background:#717171; border-bottom: 5px solid #717171; }
+#wds-accordion-slider dt.hover{color:#63DFD2;}
+#wds-accordion-slider dt.active.hover{color:#fff}
+#wds-accordion-slider dd{background:#929292; position: relative; }
+#wds-accordion-slider .slide-number{color:#63DFD2;left:10px;font-weight:bold}
+#wds-accordion-slider .active .slide-number{color:#fff;}
+#wds-accordion-slider a{color:#63DFD2}
+#wds-accordion-slider a.image-link img, #wds-accordion-slider a.image-link{ position: absolute; top:0; }
+#wds-accordion-slider dd img{margin: 0; padding: 0; position: relative; z-index: 99999}
+#wds-accordion-slider .post-info { padding: 5px 15px; position: absolute; bottom: 0; background: url(images/transBlackBG.png) repeat; z-index: 999999; width: 716px; }
+#wds-accordion-slider .post-info h4.slide-title{font-size:18px; margin: 5px 0 5px 0; line-height: 18px; color: #fff; font-family: Arial; text-transform: none; }
+#wds-accordion-slider .post-info p { font-size: 12px; color: #fff; line-height: 14px; text-transform: none; }
+#wds-accordion-slider .more{padding-top:10px;display:block}
 
 
 /* 2.0 PEOPLE / My OpenLab
@@ -3407,7 +3367,22 @@ padding-left: 7px;
     float: left;
 }
 
-/* Column Classes
+/**print page button**/
+.print-page {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
+.print-page input {
+    background: url('images/submenu_sprite.png') no-repeat 0 -87px #fff;
+    font-family: 'Arvo',arial,serif;
+    font-size: 12px;
+    padding: 0 0 0 23px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Column Classes - THESE ARE LEFTOVER FROM GENESIS, MAY NOT BE IN USE
 ------------------------------------------------------------ */
 
 .five-sixths,.four-fifths,.four-sixths,.one-fifth,.one-fourth,.one-half,.one-sixth,.one-third,.three-fifths,.three-fourths,.three-sixths,.two-fifths,.two-fourths,.two-sixths,.two-thirds {
@@ -3693,7 +3668,7 @@ p.wp-caption-text {
  */
 
 
-/* Footer Widgets - Move to plugin css?
+/* Footer Widgets - MOVE TO FOOTER PLUGIN CSS?
 ------------------------------------------------------------ */
 
 
@@ -3795,6 +3770,24 @@ p.wp-caption-text {
     padding: 0 15px;
     height: 100px;
 }
+
+/* Footer Breadcrumb */
+
+#breadcrumb-container {
+    background: url('images/breadcrumb-bg.png') no-repeat -40px 0 #929292;
+    font-size: 14px;
+    color: #fff;
+    font-family: 'Arvo', arial, serif;
+    clear: both; !important
+}
+.breadcrumb {
+    background: url('images/breadcrumb-bg.png') no-repeat -240px 0 #929292;
+    padding: 10px;
+    width: 952px;
+    margin: 0 auto;
+    clear: both; !important
+}
+
  */
 
 
@@ -3917,7 +3910,7 @@ form .alt, form .depth-1,form .even {
 }
  */
 
-/* Gravity Forms
+/* Gravity Forms - ARE THESE BEING USED?
 ------------------------------------------------------------ */
 
 div.gform_wrapper input, div.gform_wrapper select, div.gform_wrapper textarea {
@@ -3945,10 +3938,6 @@ div.gform_wrapper .gform_footer {
     padding: 0;
 }
 
-
-
-
-
 a:hover.activity-time-since {
     color: #BBB !important;
 }
@@ -3966,6 +3955,7 @@ h4.group-activity-title.activity-members-title {
 }
 
 
+/* NOT SURE IF THESE STYLES ARE BEING USED ANYWHERE - DELETE? */
 /* Recent Course Stuff */
 #recent-course { margin: 0 0 10px 0; }
 #recent-course .recent-posts { float: left; width: 312px; margin: 0 39px 0 0; position: relative; }
@@ -3981,8 +3971,6 @@ h4.group-activity-title.activity-members-title {
 .recent-discussions li { border-bottom: 1px solid #EDEEEF; margin: 0 0 10px 0; }
 .recent-discussions h5 { font-family: Arial; font-size: 11px; font-weight: bold; line-height: 11px; color: #666; margin: 0 0 3px; }
 .recent-discussions p { font-family: Arial; font-size: 11px; color: #666; line-height: 15px;  }
-
-
 
 /* Recent Docs */
 #recent-docs { margin: 0 0 10px 0; }
@@ -4039,7 +4027,7 @@ h4.group-activity-title.activity-members-title {
 }
  */
 
-/* Misc
+/* NEED TO FIGURE WHERE AND IF THIS IS BEING USED AND PUT IN RIGHT SECTION
 ------------------------------------------------------------ */
 
 .info-line {
@@ -4128,6 +4116,7 @@ h4.group-activity-title.activity-members-title {
 
 .activity #content #whats-new-content { margin-left: 0; }
 
+/* IS THIS A HOMEPAGE STYLE? */
 #whats-new-options {
     margin: 10px 0;
 }
@@ -4146,8 +4135,6 @@ h4.group-activity-title.activity-members-title {
 }
 
 
-
-
 /* Register page styles to override Buddypress */
 
 #basic-details-section, #profile-details-section {
@@ -4156,23 +4143,6 @@ h4.group-activity-title.activity-members-title {
 }
 
 
-
-
-
-/**print page button**/
-.print-page {
-    position: absolute;
-    top: 3px;
-    right: 10px;
-}
-.print-page input {
-    background: url('images/submenu_sprite.png') no-repeat 0 -87px #fff;
-    font-family: 'Arvo',arial,serif;
-    font-size: 12px;
-    padding: 0 0 0 23px;
-    border: none;
-    cursor: pointer;
-}
 
 /* Overide plugin css for invite new members */
 #welcome-message, #sent-invites-intro {
@@ -4244,19 +4214,19 @@ ul#topic-post-list li {
 		list-style-type: none;
 }
 
- #content .item-list li { width: 100% }
+#content .item-list li { width: 100% }
 
- #content ul li {
+#content ul li {
 	list-style:none;
 }
 
- #item-buttons a,	.directory #item-buttons a {
-		padding: 0 3px;
+#item-buttons a, .directory #item-buttons a {
+	padding: 0 3px;
 }
 
- #item-body { clear: left; }
+#item-body { clear: left; }
 
- .item-list-tabs ul { list-style-type: none; }
+.item-list-tabs ul { list-style-type: none; }
 
 #forum-topic-form .submit, #forum-topic-form select#topic_group_id {
 	margin: 10px;
@@ -4280,10 +4250,6 @@ div.bp-widget h4 {
 /* "See All" links in widget headers */
 div.bp-widget h4 span { float: right; }
 #content .bp-widget ul li h5 a { display: inline; }
-
-
-
-
 
 
 /* #message -- This is used for all error/success message feedback */
@@ -4559,10 +4525,182 @@ width:100%;
 	max-width: none;
 }
 
-table.forum,
-#topic-post-list p {
+table.forum, #topic-post-list p {
     font-size: 12px;
     width: 100%;
+}
+
+table.forum {
+    width: auto;
+}
+table.forum tr.sticky td {
+    background: none repeat scroll 0 0 #FFF9DB;
+    border-bottom: 1px solid #FFE8C4;
+    border-top: 1px solid #FFE8C4;
+}
+table.forum tr.closed td.td-title {
+    background-image: url("../images/closed.png");
+    background-position: 15px 50%;
+    background-repeat: no-repeat;
+}
+table.forum td p.topic-text {
+    color: #888888;
+    font-size: 11px;
+}
+
+table.forum tr td, table.forum tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+
+table.forum tr > td:first-child, table.forum tr > th:first-child {
+    padding-left: 15px;
+}
+table.forum tr > td:last-child, table.forum tr > th:last-child {
+    padding-right: 15px;
+}
+table.forum tr th#th-title, table.forum tr th#th-poster, table.forum tr th#th-group, table.forum td.td-poster, table.forum td.td-group, table.forum td.td-title {
+    text-align: left;
+}
+table.forum td.td-freshness {
+    color: #888888;
+    font-size: 11px;
+}
+table.forum td img.avatar {
+    margin-right: 5px;
+}
+table.forum td.td-poster, table.forum td.td-group {
+    min-width: 130px;
+}
+table.forum th#th-title {
+    width: 40%;
+}
+table.forum th#th-postcount {
+    width: 1%;
+}/*** Forums *************************************/
+table.forum {
+	width: 100%;
+}
+table.forum td {
+	text-align: center;
+}
+.internal-page table tr td, .internal-page table tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+.forum #content ul li .poster-meta a {
+	display: inline;
+	background:#F7F7F7 none repeat scroll 0%;
+	border:1px solid #E6E6E6;
+	font-size: 1em;
+	padding: 3px 5px;
+	margin: 0 5px 0 0;
+}
+.forums #global-forum-topic-filters ul {
+	margin: 0.3em 0px 0.5em;
+	list-style-type: none;
+	height: 1.3em;
+}
+.forums #global-forum-topic-filters ul li {
+	float: left;
+	list-style-type: none;
+	padding: 0px 0.2em;
+}
+ul#forum-topic-list li {
+	position: relative;
+	min-height: 0;
+	padding-bottom: 0;
+	overflow: hidden;
+	width: 100%;
+}
+
+ul#forum-topic-list li.sticky {
+	background: #ffffdd;
+}
+
+ul#forum-topic-list li.closed a.topic-title {
+	background: url( ../images/closed_topic.png ) no-repeat center left;
+	padding: 0 0 0 20px;
+}
+
+ul#forum-topic-list li span.latest {
+	display: block;
+	margin-left: 50px;
+}
+
+ul#forum-topic-list li div.admin-links, ul#topic-post-list li div.admin-links {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	background: #eee;
+	display: none;
+	padding: 0.1em 0.5em;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin-left: 50px;
+	margin-bottom: 15px;
+	font-size: 11px;
+	color: #888;
+}
+ul#forum-topic-list li div.admin-links a, ul#topic-post-list li div.admin-links a {
+	display: inline;
+}
+
+ul#forum-topic-list li:hover div.admin-links, ul#topic-post-list:hover li div.admin-links { display: inline-block; }
+
+ul#topic-post-list li .poster-meta {
+	color: #888;
+}
+
+ul#topic-post-list li .poster-meta .avatar {
+	float: none;
+	margin: 0 0.3em 0 0;
+	vertical-align: middle;
+}
+
+ul#topic-post-list .post-content {
+	margin: 1em 0 0 14px;
+	border-left: 1px solid #ccc;
+	padding-left: 22px;
+}
+
+	ul#topic-post-list li#topic-meta h3 {
+		margin: 5px 0 0 0;
+		font-size: 20px;
+	}
+
+ul#topic-post-list li input#submit_reply, input#submit_topic {
+	width: auto;
+}
+
+div.latest-post {
+	font-size: 0.9em;
+	color: #888;
+	margin-left: 70px;
+}
+
+	div#post-new-topic label, div#edit-topic label, div#edit-post lable div#post-topic-reply label {
+		display: block;
+		margin: 10px 0 3px 0;
+	}
+
+	div#edit-post textarea {
+		height: 150px;
+		width: 98%;
+	}
+
+input#topic_title { width: 80%; }
+input#topic_tags { width: 60%; }
+textarea#topic_text, textarea#reply_text { width: 98%; height: 150px; }
+
+input#submit_topic, input#submit_reply {
+		display: block;
+		margin-top: 20px;
+	}
+	
+.forum table thead tr {
+background: none repeat scroll 0 0 #EAEAEA;
 }
 
 form.standard-form {
@@ -4598,10 +4736,12 @@ form#signup_form.standard-form div.submit {
 div#signup-avatar img {
     margin: 0 15px 10px 0;
 }
+/* 
 form.standard-form textarea {
     height: 120px;
     width: 75%;
 }
+ */
 form.standard-form textarea#message_content {
     height: 200px;
 }
@@ -5729,17 +5869,3 @@ a.close-popup-login {
  
  /* Breadcrumb - MOVE TO PLUGIN CSS?
 ------------------------------------------------------------ */
-#breadcrumb-container {
-    background: url('images/breadcrumb-bg.png') no-repeat -40px 0 #929292;
-    font-size: 14px;
-    color: #fff;
-    font-family: 'Arvo', arial, serif;
-    clear: both; !important
-}
-.breadcrumb {
-    background: url('images/breadcrumb-bg.png') no-repeat -240px 0 #929292;
-    padding: 10px;
-    width: 952px;
-    margin: 0 auto;
-    clear: both; !important
-}
