@@ -18,6 +18,15 @@ require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 
+//body classes - genesis legacy
+add_filter('body_class', 'openlab_body_classes');
+
+function openlab_body_classes()
+{
+	$classes[] = 'header-image';
+	return $classes;
+}
+
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
 }
@@ -47,28 +56,32 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 add_action('bp_header','cuny_admin_bar', 10);
 function cuny_admin_bar() { ?>
 	
-	<h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
-
-	<?php cuny_site_wide_bp_search(); ?>
-	<div class="clearfloat"></div>
-	<?php //this adds the main menu, controlled through the WP menu interface
-	$args = array(
-				'theme_location' => 'main',
-				'container' => '',
-				'menu_class' => 'nav',
-			);
-
-	wp_nav_menu( $args );
-	//do_action( 'cuny_bp_adminbar_menus' );
-	if ( is_user_logged_in() ){?>
-	<div id="extra-border"></div>
-	<ul id="openlab-link">
-		<li>
-			<a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
-		</li>
-	</ul>
-	<?php } ?>
-		<div class="clearfloat"></div>
+	<div id="wrap">
+      <div id="title-area">
+          <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
+      </div>
+  
+      <?php cuny_site_wide_bp_search(); ?>
+      <div class="clearfloat"></div>
+      <?php //this adds the main menu, controlled through the WP menu interface
+      $args = array(
+                  'theme_location' => 'main',
+                  'container' => '',
+                  'menu_class' => 'nav',
+              );
+  
+      wp_nav_menu( $args );
+      //do_action( 'cuny_bp_adminbar_menus' );
+      if ( is_user_logged_in() ){?>
+      <div id="extra-border"></div>
+      <ul id="openlab-link">
+          <li>
+              <a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
+          </li>
+      </ul>
+      <?php } ?>
+          <div class="clearfloat"></div>
+	</div><!--#wrap-->
 <?php }
 
 /*add_action('genesis_after_content', 'cuny_the_clear_div');
