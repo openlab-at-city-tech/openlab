@@ -41,3 +41,5 @@ wp-admin/error_log
 tags
 
 nbproject/*
+
+wp-config.php
