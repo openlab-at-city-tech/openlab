@@ -4157,13 +4157,12 @@ h4.group-activity-title.activity-members-title {
 #check-note {
 	color: #717171;
 	position: absolute;
-	bottom: -45px;
 	left: 0;
 	width: 477px;
 	padding-left: 15px;
 	display: block;
 	white-space: normal;
-	margin: 0 0 0 6px;
+	margin: 6px 0 0 6px;
 }
 #item-body h5.invite-title {
 	font-size: 11px;
