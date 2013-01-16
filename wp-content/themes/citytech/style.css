@@ -2851,6 +2851,11 @@ ul.invite-search {
 	margin-bottom: 10px;
 }
 
+/* Your Email Options */
+
+.ass-email-type label input {margin: 0 6px 0 0;}
+
+
 /* 3.0 COURSES
 -------------*/
 
