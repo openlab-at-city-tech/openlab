@@ -3136,7 +3136,6 @@ form#create-group-form div#group-create-body div.ct-group-meta {
     margin: 23px 0 15px;
 }
 
-
 /* 8.0 HELP 
 ------------------------------------------------------------ */
 
@@ -4250,6 +4249,62 @@ div.bp-widget h4 {
 		font-weight: bold;
 		margin: -14px -14px 15px -14px;
 		clear: both;
+}
+
+/* more copied over from buddypress.css */
+
+table {
+    width: 100%;
+}
+table thead tr {
+    background: none repeat scroll 0 0 #EAEAEA;
+}
+
+div#sidebar table {
+    margin: 0 -16px;
+    width: 117%;
+}
+ 
+table tr td, table tr th {
+    padding: 8px;
+    vertical-align: middle;
+}
+table tr td.label {
+    border-right: 1px solid #EAEAEA;
+    font-weight: bold;
+    width: 25%;
+}
+ 
+table tr td.thread-info p {
+    margin: 0;
+}
+table tr td.thread-info p.thread-excerpt {
+    color: #888888;
+    font-size: 11px;
+    margin-top: 3px;
+}
+ 
+div#sidebar table td, table.forum td {
+    text-align: center;
+}
+
+table tr.alt {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+ 
+table.notification-settings {
+    margin-bottom: 20px;
+    text-align: left;
+}
+table.notification-settings th.icon, table.notification-settings td:first-child {
+    display: none;
+}
+table.notification-settings th.title {
+    width: 80%;
+}
+table.notification-settings .yes, table.notification-settings .no {
+    text-align: center;
+    width: 40px;
 }
 
 /* "See All" links in widget headers */
