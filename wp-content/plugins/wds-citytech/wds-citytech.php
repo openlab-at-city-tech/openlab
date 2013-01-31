@@ -216,8 +216,14 @@ function my_page_menu_filter( $menu ) {
 }
 
 //child theme menu filter to link to website
-add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
-function cuny_add_group_menu_items($items) {
+add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items', 10, 2 );
+function cuny_add_group_menu_items( $items, $args ) {
+        // The Sliding Door theme shouldn't get any added items
+        // See http://openlab.citytech.cuny.edu/redmine/issues/772
+        if ( 'custom-sliding-menu' == $args->theme_location ) {
+                return $items;
+        }
+
 	if ( !bp_is_root_blog() ) {
 
 		if((strpos($items,"Contact"))) {
