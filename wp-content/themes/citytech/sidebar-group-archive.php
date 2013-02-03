@@ -1,157 +1,16 @@
-<?php /* Template Name: Portfolios Archive */
-/**begin layout**/
-get_header(); ?>
+<?php global $bp; 
+	  $group_type = openlab_page_slug_to_grouptype();
+	  ?>
 
-	<div id="content" class="hfeed">
-    	<div <?php post_class(); ?>>
-        	<h1 class="entry-title">Portfolios on the OpenLab</h1>
-            <div class="entry-content">
-				<?php cuny_portfolio_archive(); ?>
-            </div><!--entry-content-->
-        </div><!--hentry-->
-    </div><!--content-->
-    <div id="sidebar" class="sidebar widget-area">
-		<?php cuny_buddypress_courses_actions(); ?>
-    </div>
-
-<?php get_footer();
-/**end layout**/
-
-function cuny_portfolio_archive() {
-global $wpdb,$bp,$groups_template;
-$sequence_type = '';
-if ( !empty( $_GET['group_sequence'] ) ) {
-	$sequence_type = "type=" . $_GET['group_sequence'] . "&";
-}
-
-$search_terms = $search_terms_raw = '';
-
-if ( !empty( $_POST['group_search'] ) ) {
-	$search_terms_raw = $_POST['group_search'];
-	$search_terms     = "search_terms=" . $search_terms_raw . "&";
-}
-if ( !empty( $_GET['search'] ) ){
-	$search_terms_raw = $_GET['search'];
-	$search_terms     = "search_terms=" . $search_terms_raw . "&";
-}
-
-if ( !empty( $_GET['school'] ) ) {
-	$school=$_GET['school'];
-	/*if($school=="tech"){
-		$school="Technology & Design";
-	}elseif($school=="studies"){
-		$school="Professional Studies";
-	}elseif($school=="arts"){
-		$school="Arts & Sciences";
-	}*/
-}
-
-if ( !empty( $_GET['department'] ) ) {
-	$department=str_replace("-"," ",$_GET['department']);
-	$department=ucwords($department);
-}
-
-if ( !empty( $_GET['user_type'] ) ) {
-	$semester = str_replace( "-", " " , $_GET['user_type'] );
-}
-
-// Set up filters
-$filters = array(
-	'wds_group_type' => 'portfolio'
-);
-
-if ( !empty( $school ) && 'school_all' != strtolower( $school ) ) {
-	$filters['wds_group_school'] = $school;
-}
-
-if ( !empty( $department ) && 'dept_all' != strtolower( $department ) ) {
-	$filters['wds_departments'] = $department;
-}
-
-if ( !empty( $_GET['user_type'] ) && 'user_type_all' != $_GET['user_type'] ) {
-	$filters['portfolio_user_type'] = ucwords( $_GET['user_type'] );
-}
-
-$meta_filter = new BP_Groups_Meta_Filter( $filters );
-
-$group_args = array(
-	'search_terms' => $search_terms_raw,
-	'per_page'     => 12,
-);
-
-if ( !empty( $_GET['group_sequence'] ) ) {
-	$group_args['type'] = $_GET['group_sequence'];
-}
-
-?>
-<div class="current-group-filters current-portfolio-filters">
-	<?php openlab_current_directory_filters() ?>
-</div>
-
-<?php
-
-if ( bp_has_groups( $group_args ) ) : ?>
-
-	<div class="group-count"><?php cuny_groups_pagination_count( "Portfolios" ); ?></div>
-	<div class="clearfloat"></div>
-	<ul id="course-list" class="item-list">
-		<?php
-		$count = 1;
-		while ( bp_groups() ) : bp_the_group();
-			$group_id=bp_get_group_id();?>
-			<li class="course<?php echo cuny_o_e_class($count) ?>">
-				<div class="item-avatar alignleft">
-					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
-				</div>
-				<div class="item">
-					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-
-					<div class="info-line"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ) ?></div>
-
-					<?php
-					     $len = strlen(bp_get_group_description());
-					     if ($len > 135) {
-						$this_description = substr(bp_get_group_description(),0,135);
-						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">See&nbsp;More</a></p>';
-					     } else {
-						bp_group_description();
-					     }
-					?>
-				</div>
-
-			</li>
-			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
-			<?php $count++ ?>
-		<?php endwhile; ?>
-	</ul>
-
-		<div class="pagination-links" id="group-dir-pag-top">
-			<?php bp_groups_pagination_links() ?>
-		</div>
-<?php else: ?>
-
-	<div class="widget-error">
-		There are no portfolios to display.
-	</div>
-
-<?php endif; ?>
-		<?php
-
-	$meta_filter->remove_filters();
-}
-
-function cuny_buddypress_courses_actions() {
-global $bp;?>
-
-<h2 class="sidebar-title">Find a Portfolio</h2>
+<h2 class="sidebar-title">Find a <?php echo ucfirst($group_type); ?></h2>
     <p>Narrow down your search using the filters or search box below.</p>
 <?php
 //determine class type for filtering
 	  $school_color = "gray";
 	  $dept_color = "gray";
-	  $user_color = "gray";
+	  $semester_color = "gray";
 	  $sort_color = "gray";
+	  $user_color = "gray";
 
 //school filter
 if ( empty( $_GET['school'] ) ) {
@@ -188,8 +47,8 @@ switch ($_GET['school']) {
       if ( empty( $_GET['department'] ) ) {
 	$_GET['department'] = "";
 	  }else {
-  	$dept_color = "red";
-	}
+  $dept_color = "red";
+}
 switch ($_GET['department']) {
     //School of Technology and Design
 	case "advertising-design-and-graphic-arts":
@@ -320,6 +179,58 @@ switch ($_GET['department']) {
 		break;
 }
 	//semesters
+if ( empty( $_GET['semester'] ) ) {
+	$_GET['semester'] = "";
+}else {
+  $semester_color = "red";
+}
+switch ($_GET['semester']) {
+	case "fall-2011":
+		$display_option_semester = "Fall 2011";
+		$option_value_semester = "fall-2011";
+		break;
+	case "winter-2012":
+		$display_option_semester = "Winter 2012";
+		$option_value_semester = "winter-2012";
+		break;
+	case "spring-2012":
+		$display_option_semester = "Spring 2012";
+		$option_value_semester = "spring-2012";
+		break;
+	case "summer-2012":
+		$display_option_semester = "Summer 2012";
+		$option_value_semester = "summer-2012";
+		break;
+	case "fall-2012":
+		$display_option_semester = "Fall 2012";
+		$option_value_semester = "fall-2012";
+		break;
+	case "winter-2013":
+		$display_option_semester = "Winter 2013";
+		$option_value_semester = "winter-2013";
+		break;
+	case "spring-2013":
+		$display_option_semester = "Spring 2013";
+		$option_value_semester = "spring-2013";
+		break;
+	case "summer-2013":
+		$display_option_semester = "Summer 2013";
+		$option_value_semester = "summer-2013";
+		break;
+	case "fall-2013":
+		$display_option_semester = "Fall 2013";
+		$option_value_semester = "fall-2013";
+		break;
+	case "semester_all":
+		$display_option_semester = "All";
+		$option_value_semester = "semester_all";
+		break;
+	default:
+		$display_option_semester = "Select Semester";
+		$option_value_semester = "";
+		break;
+}
+//user types
 if ( empty( $_GET['user_type'] ) ) {
 	$_GET['user_type'] = "";
 }else {
@@ -347,7 +258,7 @@ switch ($_GET['user_type']) {
 		$option_value_user_type = "";
 		break;
 }
-	//sequence filter
+//sequence filter
 if ( empty( $_GET['group_sequence'] ) ) {
 	$_GET['group_sequence'] = "active";
 }else {
@@ -375,10 +286,10 @@ switch ($_GET['group_sequence']) {
 ?>
 <div class="filter">
 <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-
 	<div id="tester">
 
 	</div>
+    <?php if ($group_type == 'course' || $group_type == 'portfolio'): ?>
     <div class="<?php echo $school_color; ?>-square"></div>
 	<select name="school" class="last-select <?php echo $school_color; ?>-text" onchange="showDept(this.value);">
 		<option value="<?php echo $option_value_school; ?>"><?php echo $display_option_school; ?></option>
@@ -387,13 +298,31 @@ switch ($_GET['group_sequence']) {
 		<option value='studies'>Professional Studies</option>
 		<option value='arts'>Arts &amp; Sciences</option>
 	</select>
-	<div class="<?php echo $dept_color; ?>-square"></div>
+	<div class="<?php echo $school_color; ?>-square"></div>
 	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
         <?php $file_loc = dirname(__FILE__); ?>
 		<?php include $file_loc.'/includes/department_processing.php'; ?>
 	</select>
-	<div class="<?php echo $user_color; ?>-square"></div>
+    <?php endif; ?>
+    <?php if ($group_type == 'course'): ?>
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<select name="semester" class="last-select <?php echo $semester_color; ?>-text">
+		<option value="<?php echo $option_value_semester; ?>"><?php echo $display_option_semester; ?></option>
+		<option value='semester_all'>All</option>
+		<option value='fall-2011'>Fall 2011</option>
+		<option value='winter-2012'>Winter 2012</option>
+		<option value='spring-2012'>Spring 2012</option>
+		<option value='summer-2012'>Summer 2012</option>
+		<option value='fall-2012'>Fall 2012</option>
+        <option value='winter-2013'>Winter 2013</option>
+        <option value='spring-2013'>Spring 2013</option>
+        <option value='summer-2013'>Summer 2013</option>
+        <option value='fall-2013'>Fall 2013</option>
+	</select>
+    <?php endif; ?>
+    <?php if ($group_type == 'portfolio'): ?>
+    <div class="<?php echo $user_color; ?>-square"></div>
 	<select name="user_type" class="last-select <?php echo $user_color; ?>-text">
 		<option value="<?php echo $option_value_user_type; ?>"><?php echo $display_option_user_type; ?></option>
 		<option value='user_type_all'>All</option>
@@ -401,13 +330,14 @@ switch ($_GET['group_sequence']) {
 		<option value='faculty'>Faculty</option>
 		<option value='staff'>Staff</option>
 	</select>
-	<div class="<?php echo $sort_color; ?>-square"></div>
+    <?php endif; ?>
+	<div class="<?php echo $school_color; ?>-square"></div>
 	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
-	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/portfolios/'">
+	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_type; ?>s/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>
@@ -463,4 +393,3 @@ function clear_form(){
 	document.getElementById('group_seq_form').reset();
 }
 </script>
-<?php }

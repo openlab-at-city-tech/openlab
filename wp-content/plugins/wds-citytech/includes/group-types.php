@@ -41,7 +41,7 @@ function openlab_current_group_type( $case = 'lower' ) {
 	 * @return string
 	 */
 	function openlab_get_current_group_type( $case = 'lower' ) {
-		global $bp;
+		global $bp, $post;
 
 		// We stash in the $bp global for faster subsequent lookups
 		if ( isset( $bp->groups->current_group->group_type ) ) {
@@ -72,6 +72,12 @@ function openlab_current_group_type( $case = 'lower' ) {
 				$bp->groups->current_group = new stdClass;
 			}
 			$bp->groups->current_group->group_type = $group_type;
+		}
+		
+		//fix for archive pages, which are pages and don't return an actual group type
+		if ($group_type == 'group' && openlab_page_slug_to_grouptype()!= 'not-archive' )
+		{
+			$group_type = openlab_page_slug_to_grouptype();
 		}
 
 		if ( 'lower' !== $case ) {
@@ -180,9 +186,12 @@ function openlab_get_directory_filter( $filter_type ) {
 function openlab_current_directory_filters() {
 	$filters = array();
 
-	switch ( openlab_get_current_group_type() ) {
+	switch (openlab_get_current_group_type()) {
 		case 'portfolio' :
 			$filters = array( 'school', 'department', 'user_type' );
+			break;
+		case 'course' :
+			$filters = array( 'school', 'department', 'semester' );
 			break;
 
 		default :
@@ -192,7 +201,7 @@ function openlab_current_directory_filters() {
 
 	$active_filters = array();
 	foreach( $filters as $f ) {
-		if ( !empty( $_GET[$f] ) ) {
+		if ( !empty( $_GET[$f] ) && !(strpos($_GET[$f],'_all')) ) {
 			$active_filters[$f] = $_GET[$f];
 		}
 	}
@@ -297,5 +306,38 @@ function openlab_group_is_hidden( $group_id = 0 ) {
 		return isset( $group->status ) && 'hidden' == $group->status;
 	}
 }
-
+/**
+ * This function is for the group archive pages, which are currently literally pages with specified templates
+ * It attaches a group type to a specific page slug
+ * At some point these archive pages will be moved to the right location in the BP hierarchy, and this function won't be necessary
+ */
+function openlab_page_slug_to_grouptype()
+{
+	global $post;
+	
+	switch($post->post_name){
+		case 'courses':
+			$group_type = 'course';
+		break;
+		
+		case 'projects':
+			$group_type = 'project';
+		break;
+		
+		case 'clubs':
+			$group_type = 'club';
+		break;
+		
+		case 'portfolios':
+			$group_type = 'portfolio';
+		break;
+		
+		default :
+			$group_type = 'not-archive';
+		break;
+	}
+		
+	return $group_type;
+		
+}
 ?>
