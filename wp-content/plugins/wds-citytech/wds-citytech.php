@@ -9,6 +9,7 @@
 
 include "wds-register.php";
 include "wds-docs.php";
+include "includes/oembed.php";
 
 
 /**
