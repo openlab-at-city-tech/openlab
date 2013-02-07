@@ -320,11 +320,11 @@ add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_act
  */
 function openlab_no_join_on_portfolios() {
 	global $bp;
-	
+
 	if ( openlab_is_portfolio() ) {
 		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 	}
-	
+
 	//fix for files, docs, and membership pages in group profile - hiding join button
 	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
 		{
