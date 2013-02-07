@@ -720,7 +720,7 @@ input.wpcf7-submit, .filter input[type="submit"] {
     border-right: 2px solid #F0F0F0;
     font-size: 13px;
     display: inline-block;
-    zoom:1; *display: inline; _height: 20px;
+    zoom:1; /*display: inline; _height: 20px; */
 }
 
 #header ul.nav li a {
@@ -1424,7 +1424,7 @@ padding: 0 0 10px 5px; }
 }
 
 .activity #content div.activity-meta, div.activity-comments {
-    clear: none!important;
+    clear: none !important;
 }
 
 ul.activity-list li {
@@ -2133,7 +2133,7 @@ a#pgw-prev, a#pgw-next {
 .easy-accordion{display:block;position:relative;overflow:hidden;padding:0;margin:0}
 .easy-accordion dt,.easy-accordion dd{margin:0;padding:0}
 .easy-accordion dt,.easy-accordion dd{position:absolute}
-.easy-accordion dt{margin-bottom:0;margin-left:0;z-index:5;/* Safari */ -webkit-transform: rotate(-90deg); /* Firefox */ -moz-transform: rotate(-90deg);-moz-transform-origin: 20px 0px;  /* Internet Explorer */ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);cursor:pointer;}
+.easy-accordion dt{margin-bottom:0;margin-left:0;z-index:5;/* Safari */ -webkit-transform: rotate(-90deg); /* Firefox */ -moz-transform: rotate(-90deg);-moz-transform-origin: 20px 0px;  /* Internet Explorer */ filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=3);cursor:pointer;}
 .easy-accordion dd{z-index:1;opacity:0;overflow:hidden}
 .easy-accordion dd.active{opacity:1;}
 .easy-accordion dd.no-more-active{z-index:2;opacity:1}
@@ -2671,7 +2671,7 @@ a#find-feeds:hover {
     float: left!important;
 }
 
-#create-group-form h4, #create-group-form h5, {
+#create-group-form h4, #create-group-form h5 {
     font-family: arial,sans-serif;
     font-weight: bold;
     font-size: 13px;
@@ -3782,17 +3782,16 @@ p.wp-caption-text {
     font-size: 14px;
     color: #fff;
     font-family: 'Arvo', arial, serif;
-    clear: both; !important
+    clear: both!important;
 }
 .breadcrumb {
     background: url('images/breadcrumb-bg.png') no-repeat -240px 0 #929292;
     padding: 10px;
     width: 952px;
     margin: 0 auto;
-    clear: both; !important
+    clear: both!important;
 }
 
- */
 
 
 /* Footer
