@@ -350,6 +350,10 @@ switch ($_GET['semester']) {
 		$display_option_semester = "Fall 2012";
 		$option_value_semester = "fall-2012";
 		break;
+	case "spring-2013":
+		$display_option_semester = "Spring 2013";
+		$option_value_semester = "spring-2013";
+		break;
 	case "semester_all":
 		$display_option_semester = "All";
 		$option_value_semester = "semester_all";
@@ -408,11 +412,12 @@ switch ($_GET['group_sequence']) {
 	<select name="semester" class="last-select <?php echo $semester_color; ?>-text">
 		<option value="<?php echo $option_value_semester; ?>"><?php echo $display_option_semester; ?></option>
 		<option value='semester_all'>All</option>
-		<option value='fall-2011'>Fall 2011</option>
-		<option value='winter-2012'>Winter 2012</option>
-		<option value='spring-2012'>Spring 2012</option>
-		<option value='summer-2012'>Summer 2012</option>
+		<option value='spring-2013'>Spring 2013</option>
 		<option value='fall-2012'>Fall 2012</option>
+		<option value='summer-2012'>Summer 2012</option>
+		<option value='spring-2012'>Spring 2012</option>
+		<option value='winter-2012'>Winter 2012</option>
+		<option value='fall-2011'>Fall 2011</option>
 	</select>
 	<div class="<?php echo $school_color; ?>-square"></div>
 	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">

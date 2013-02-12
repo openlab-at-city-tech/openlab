@@ -320,11 +320,11 @@ add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_act
  */
 function openlab_no_join_on_portfolios() {
 	global $bp;
-	
+
 	if ( openlab_is_portfolio() ) {
 		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 	}
-	
+
 	//fix for files, docs, and membership pages in group profile - hiding join button
 	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
 		{
@@ -563,6 +563,18 @@ function openlab_default_subscription_settings_form() {
 }
 remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
+
+// Save the default group subscription setting in the group meta, if no, delete it
+function openlab_save_default_subscription( $group ) {
+	global $bp, $_POST;
+
+	if ( isset( $_POST['ass-default-subscription'] ) && $postval = $_POST['ass-default-subscription'] ) {
+		groups_update_groupmeta( $group->id, 'ass_default_subscription', $postval );
+	}
+}
+remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
+add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
+
 
 /**
  * Filter the output of the Add Friend/Cancel Friendship button

@@ -415,4 +415,9 @@ add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_a
  */
 add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
 
-?>
+/**
+ * Don't send friend requests when accepting Invite Anyone invitations
+ *
+ * @see #666
+ */
+add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false' );
