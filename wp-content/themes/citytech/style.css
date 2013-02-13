@@ -2859,7 +2859,7 @@ ul.invite-search {
 /* 3.0 COURSES
 -------------*/
 
-/* Courses Archive */
+/* Courses Archive (used for all groups) */
 
 #content ul#course-list.item-list li {
     width: 308px;
@@ -2880,6 +2880,7 @@ ul.invite-search {
 #content ul#course-list.item-list li.even {
     border: 0 none;
 }
+
 #content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
     color: #6d6d6d;
     font-size: 12px;
@@ -2887,11 +2888,13 @@ ul.invite-search {
     line-height: 12px;
     text-decoration: none;
 }
+
 #content ul#course-list.item-list li .info-line {
     color: #aaa;
     font-size: 11px;
     padding: 0 0 10px;
 }
+
 #content ul#course-list.item-list li .item {
     float: left;
     width: 195px;
@@ -2914,46 +2917,8 @@ ul.invite-search {
 
 
 /* 4.0 PROJECTS
--------------*/
+------------- */
 
-ul#project-list.item-list li {
-    border-bottom: 0 none;
-    border-right: 1px solid #EAEAEA;
-    float: left;
-    list-style-type: none;
-    margin: 15px 15px 15px 0;
-    padding: 0;
-    width: 308px;
-}
-
-ul#project-list.item-list li p {
-    font-size: 11px;
-    line-height: 17px;
-    margin-right: 10px;
-}
-
-ul#project-list.item-list li h2.item-title, ul#project-list.item-list li h2.item-title a {
-    color: #6d6d6d;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 12px;
-    text-decoration: none;
-}
-
-ul#project-list.item-list li .info-line {
-    color: #aaa;
-    font-size: 11px;
-    padding: 0 0 10px;
-}
-
-ul#project-list.item-list li.even {
-    border: 0 none;
-    margin: 15px 0;
-}
-ul#project-list.item-list li .item {
-    float: left;
-    width: 196px;
-}
 
 
 /* 5.0 CLUBS
@@ -2976,8 +2941,8 @@ ul#project-list.item-list li .item {
     font-style: italic;
     background: #eee;
 }
-#club-header-content h2,
-#club-header-content h2 a {
+
+#club-header-content h2, #club-header-content h2 a {
     font-family: Arial;
     font-size: 24px;
     font-weight: bold;
@@ -3072,46 +3037,7 @@ ul#project-list.item-list li .item {
 }
 
 
-
-ul#club-list.item-list li {
-    border-bottom: 0 none;
-    border-right: 1px solid #EAEAEA;
-    float: left;
-    list-style-type: none;
-    margin: 15px 15px 15px 0;
-    padding: 0;
-    width: 308px;
-}
-
-ul#club-list.item-list li p {
-    font-size: 11px;
-    line-height: 17px;
-    margin-right: 10px;
-}
-
-ul#club-list.item-list li h2.item-title, #club-list.item-list li h2.item-title a {
-    color: #6d6d6d;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 12px;
-    text-decoration: none;
-}
-
-ul#club-list.item-list li .created {
-    color: #aaa;
-    font-size: 11px;
-    padding: 0 0 10px;
-}
-
-ul#club-list.item-list li.even {
-    border: 0 none;
-    margin: 15px 0;
-}
-
-ul#club-list.item-list li .item {
-    float: left;
-    width: 155px;
-}
+/* Not sure about these two, if they are still being used… */
 
 #featured-club {
     background: #edeeef;
