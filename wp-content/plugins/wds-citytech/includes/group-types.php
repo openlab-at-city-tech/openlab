@@ -315,7 +315,10 @@ function openlab_page_slug_to_grouptype()
 {
 	global $post;
 	
-	switch($post->post_name){
+	$postname = $post->post_name;
+	$group_type = explode("-",$postname);
+	
+	switch($group_type[count($group_type) - 1]){
 		case 'courses':
 			$group_type = 'course';
 		break;

@@ -1,4 +1,4 @@
-<?php /* Template Name: My Group Template */ 
+<?php /* Template Name: MyGroup Template */ 
 get_header(); ?>
 
 	<div id="content" class="hfeed">
