@@ -162,5 +162,4 @@ if ( bp_has_groups( $group_args ) ) : ?>
 		<?php
 		
 		$meta_filter->remove_filters();
-
 }
