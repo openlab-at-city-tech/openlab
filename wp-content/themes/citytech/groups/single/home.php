@@ -153,6 +153,8 @@ function cuny_group_single() { ?>
 				}
 */
 			?>
+            
+            <?php if ($group_type != "portfolio"): ?>
 			<div class="one-half <?php echo $first_class; ?>">
 				<div class="recent-discussions">
 					<div class="recent-posts">
@@ -257,6 +259,8 @@ function cuny_group_single() { ?>
                 <?php endif; ?>
 
 			</div>
+            
+            <?php endif; //end of if $group != 'portfolio' ?>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>
 				<?php
