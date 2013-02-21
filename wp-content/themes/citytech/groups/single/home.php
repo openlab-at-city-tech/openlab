@@ -98,7 +98,8 @@ function cuny_group_single() { ?>
 	
 		<?php do_action( 'bp_after_group_header' ) ?>
 		<?php do_action( 'template_notices' ) ?>
-            
+       
+       <div class="clear"></div>     
        </div><!--<?php echo $group_type; ?>-header -->
             
             <?php endif; ?>
