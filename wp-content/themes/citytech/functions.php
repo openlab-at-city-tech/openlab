@@ -18,6 +18,23 @@ require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 
+/**
+ * Custom template loader for my-{grouptype}
+ */
+function openlab_mygroups_template_loader( $template ) {
+	if ( is_page() ) {
+		switch ( get_query_var( 'pagename' ) ) {
+			case 'my-courses' :
+			case 'my-clubs' :
+			case 'my-projects' :
+				bp_core_load_template( 'groups/index' );
+				break;
+		}
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'openlab_mygroups_template_loader' );
 
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
