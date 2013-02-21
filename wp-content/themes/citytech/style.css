@@ -81,7 +81,7 @@ hr {
     border-width: 1px 0 0;
 }
 
-.clearfloat {
+.clearfloat, .clear {
     clear:both;
     height:0;
     font-size: 1px;
@@ -94,13 +94,6 @@ hr {
 
 .underline {
 	text-decoration: underline;
-}
-
-.clear {
-    clear:both;
-    height:0;
-    font-size: 1px;
-    line-height: 0px;
 }
 
 p {
@@ -624,12 +617,11 @@ input.wpcf7-submit, .filter input[type="submit"] {
     font-size: 12px;
 }
 
-/* Wrap -- EVENTUALLY WOULD LIKE TO RENAME ONE OF THESE IN THE TEMPLATES TO DISTINGUISH THEM
+/* Wrap
 ------------------------------------------------------------ */
 
 /* This is the whole page wrap, is it necessary? Or could we use it to set the page width, and eliminate the other .wrap elements? */
-#content-wrap,
-#header-wrap{
+#content-wrap {
     background-color: #fff;
     width: 100% !important;
     padding: 40px 0 0 0;
