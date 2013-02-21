@@ -81,7 +81,7 @@ hr {
     border-width: 1px 0 0;
 }
 
-.clearfloat {
+.clearfloat, .clear {
     clear:both;
     height:0;
     font-size: 1px;
@@ -94,13 +94,6 @@ hr {
 
 .underline {
 	text-decoration: underline;
-}
-
-.clear {
-    clear:both;
-    height:0;
-    font-size: 1px;
-    line-height: 0px;
 }
 
 p {
