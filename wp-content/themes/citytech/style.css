@@ -628,7 +628,8 @@ input.wpcf7-submit, .filter input[type="submit"] {
 ------------------------------------------------------------ */
 
 /* This is the whole page wrap, is it necessary? Or could we use it to set the page width, and eliminate the other .wrap elements? */
-#wrap {
+#content-wrap,
+#header-wrap{
     background-color: #fff;
     width: 100% !important;
     padding: 40px 0 0 0;

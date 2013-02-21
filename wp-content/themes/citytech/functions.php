@@ -65,7 +65,7 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 add_action('bp_header','openlab_header_bar', 10);
 function openlab_header_bar() { ?>
 	
-	<div id="wrap">
+	<div id="header-wrap">
       <div id="title-area">
           <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
       </div>
