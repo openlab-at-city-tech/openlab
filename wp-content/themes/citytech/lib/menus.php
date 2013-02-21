@@ -293,6 +293,17 @@ function openlab_submenu_gen($items)
 				{
 					//special case just for Invite New Members page
 					$item_classes .= " selected-page";
+				} else if ($page_identify == 'my-groups')
+				{
+					//special case for my-<groups> pages
+					if ( isset( $_GET['type'] ) ) {
+						$type = $_GET['type'];
+						$type_title = 'My '.ucfirst(str_replace('-',' ',$type)).'s';					
+						if ($title == $type_title)
+						{
+							$item_classes .= " selected-page";
+						}
+					}
 				}
 
 				//checks to see if this is the last item or first item
