@@ -113,7 +113,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	<div class="clearfloat"></div>
       </div><!--submenu-->
 	<div class="widget-error">
-		<?php _e('There are no courses to display.', 'buddypress') ?>
+		<?php _e('There are no '.$type.'s to display.', 'buddypress') ?>
 	</div>
 
 <?php endif;
