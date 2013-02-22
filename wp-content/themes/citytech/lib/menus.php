@@ -444,8 +444,10 @@ function openlab_group_submenu_nav() {
 	$nav_items = $bp->bp_options_nav[$bp->current_item];
 	
 	//manual sorting of current item menu
-	foreach ($nav_items as $nav_item)
+	if ($nav_items)
 	{
+		foreach ($nav_items as $nav_item)
+		{
 		switch($nav_items){
 			case ($nav_item['slug'] == 'home'):
 				$nav_item['position'] = 10;
@@ -461,8 +463,9 @@ function openlab_group_submenu_nav() {
 				break;
 			default:
 				$nav_item['position'] = $nav_item['position'];
+			}
+			$final_nav[] = $nav_item;
 		}
-		$final_nav[] = $nav_item;
 	}
 
     $bp->bp_options_nav[$bp->current_item] = $final_nav;
