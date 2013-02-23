@@ -32,8 +32,15 @@ followed by styles specific to each numbered section of the site.
 
 * 2.0 PEOPLE / My OpenLab
 
-* 3.0 - 7.0 Group Archive
-** 6.0 Group Profile
+* 3.x - 7.x Groups (common to all types)
+
+	* 3.0 Courses
+	
+	* 4.0 Projects
+	
+	* 5.0 Clubs
+	
+	* 6.0 Portfolios
 
 * 8.0 HELP
 */
@@ -2560,17 +2567,15 @@ table#message-threads {
     width: auto;
 }
 
-/* 3.x - 7.x GROUPS */
-/* 3.0 - 7.0 Group Archive
+/* 3.x - 7.x GROUPS (Common to all group types: Courses, Projects, Clubs, Portfolios) */
 ------------------------------------------------------------ */
-/*General*/
 
-
+/* General  */
 
 div.bp-widget {
 	padding: 0 7px;
-	
 }
+
 
 /* Create & Admin Group */
 
@@ -2635,7 +2640,6 @@ ul.ol-tooltip li:before {
 }
 
 a#find-feeds, a.refresh-feed {
-
     font-family: Arial, Verdana, sans-serif;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -2645,19 +2649,15 @@ a#find-feeds, a.refresh-feed {
     background-color:#dcdcdc;
     font-size:8px;
     text-transform: uppercase;
-
     /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde));
     /* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
     /* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde);
     /* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
     /* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
-
 }
 
 a#find-feeds:hover {
-
     text-decoration: none;
-
 }
 
 #previous-next input {
@@ -2671,10 +2671,6 @@ a#find-feeds:hover {
     margin: 5px 0px;
 }
 
-#group-settings-form h4, #group-settings-form h5 {
-
-}
-
 #group-settings-form .bp-widget h5 {
     clear:none;
 }
@@ -2683,19 +2679,15 @@ a#find-feeds:hover {
     list-style-type:none;
 }
 
-#create-group-form p, #group-settings-form p{
-    /*margin-top: -5px;*/
-}
-
-#create-group-form .radio, #group-settings-form .radio{
+#create-group-form .radio, #group-settings-form .radio {
     padding-left: 30px;
 }
 
-.radio label strong{
+.radio label strong {
     font-size: 12px;
 }
 
-.radio label ul{
+.radio label ul {
     font-size: 12px;
     line-height: 12px;
 }
@@ -2711,17 +2703,18 @@ a#find-feeds:hover {
     line-height: 18px;
 }
 
-/* invite new members */
+
+/* Invite new members */
 
 p#invitenonmembers {
-float:left;
-clear:left;
-position:relative;
-left: -264px;
+	float:left;
+	clear:left;
+	position:relative;
+	left: -264px;
 }
 
 p#selectmemberslabel {
-margin-top:15px;
+	margin-top:15px;
 }
 
 form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity, form#group-settings-form div.main-column ul#invite-anyone-invite-list span.activity {
@@ -2783,7 +2776,7 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
 }
 
 #content #invite-anyone-invite-list li h4 {
-	font-family: Arial,Helvetica,Tahoma, sans-serif;
+	font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
 	float: left;
 	clear: none;
 }
@@ -2812,11 +2805,9 @@ div#searchinvitemembersdescription {
 	float:right;
 	position: relative;
 	top: -15px;
-
 }
 
 div#searchinvitemembersdescription p {
-
 	margin: 0px;
 }
 
@@ -2829,30 +2820,202 @@ ul.invite-search {
 	float: left;
 	width: 320px;
 }
+
 #group-settings-form .access-menu-left #invite-anyone-member-list {
 	height: 305px;
 }
+
 .invite-anyone .main-column, #group-settings-form .access-menu-main{
 	margin-left: 0px !important;
 	float: right;
 	width: 320px;
 }
+
 #group-settings-form .access-menu-main{
 	padding: 52px 0 0;
 }
+
 .group-admin #group-settings-form .access-menu ul.first{
 	margin-bottom: 10px;
 }
 
+
 /* Your Email Options */
 
-.ass-email-type label input {margin: 0 6px 0 0;}
+.ass-email-type label input {
+	margin: 0 6px 0 0;
+}
+
+
+/* Group profile pages */
+
+#course-header,
+#project-header,
+#club-header {
+    margin: 0px 0 20px;
+}
+
+#course-header-avatar,
+#project-header-avatar, 
+#club-header-avatar, 
+#portfolio-header-avatar {
+    display: block;
+    width: 227px;
+}
+
+#course-header-avatar p,
+#project-header-avatar p, 
+#club-header-avatar p, 
+#portfolio-header-avatar p {
+    padding: 5px 10px;
+    margin: 10px 0 0 0;
+    font-style: italic;
+    background: #eee;
+}
+ 
+#course-header-content h2, #course-header-content h2 a,
+#project-header-content h2, #project-header-content h2 a,
+#club-header-content h2, #club-header-content h2 a,
+#portfolio-header-content h2, #portfolio-header-content h2 a {
+    font-family: Arial;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+#course-header-content
+#project-header-content, 
+#club-header-content, 
+#portfolio-header-content {
+    width: 425px;
+    margin: 0 0 0 15px;
+}
+
+#course-item-body .activity-list, 
+#project-item-body .activity-list, 
+#club-item-body .activity-list, 
+#portfolio-item-body .activity-list {
+    width: 300px;
+    border: 1px solid #EDEEEF;
+    position: relative;
+    left: -10px;
+    padding: 10px;
+    float: left;
+    min-height: 400px;
+    margin: 0 0 15px 0;
+}
+
+#course-item-body .activity-list .activity-avatar, 
+#project-item-body .activity-list .activity-avatar, 
+#club-item-body .activity-list .activity-avatar, 
+#porfolio-item-body .activity-list .activity-avatar {
+    float: left;
+    margin: 0 0 8px;
+}
+
+#course-item-body .activity-list .activity-content, 
+#project-item-body .activity-list .activity-content, 
+#club-item-body .activity-list .activity-content, 
+#portfolio-item-body .activity-list .activity-content {
+    margin: 0 0 0 10px;
+    float: left;
+    width: 170px;
+}
+
+#course-item-body .activity-list.last,
+#project-item-body .activity-list.last, 
+#club-item-body .activity-list.last, 
+#portfolio-item-body .activity-list.last {
+    float: right;
+    clear: right;
+}
+
+#course-item-body #recent-forum, #course-item-body #recent-announcement, 
+#project-item-body #recent-forum, #project-item-body #recent-announcement, 
+#club-item-body #recent-forum, #club-item-body #recent-announcement, 
+#portfolio-item-body #recent-forum, #portfolio-item-body #recent-announcement {
+    float: left;
+    margin: 0 39px 0 0;
+    width: 312px;
+    position: relative;
+}
+
+#course-item-body #recent-blogs, 
+#project-item-body #recent-blogs, 
+#club-item-body #recent-blogs, 
+#portfolio-item-body #recent-blogs {
+    margin: 0;
+    width: 312px;
+}
+
+#course-item-body #recent-blogs h5, #course-item-body #recent-forum h5, #course-item-body #recent-announcement h5,
+#project-item-body #recent-blogs h5, #project-item-body #recent-forum h5, #project-item-body #recent-announcement h5,
+#club-item-body #recent-blogs h5, #club-item-body #recent-forum h5, #club-item-body #recent-announcement h5,
+#portfolio-item-body #recent-blogs h5, #portfolio-item-body #recent-forum h5, #portfolio-item-body #recent-announcement h5 {
+    color: #666666;
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 11px;
+    margin: 0 0 3px;
+}
+
+#course-item-body #recent-blogs li, #course-item-body #recent-forum li, #course-item-body #recent-announcement li,
+#project-item-body #recent-blogs li, #project-item-body #recent-forum li, #project-item-body #recent-announcement li,
+#club-item-body #recent-blogs li, #club-item-body #recent-forum li, #club-item-body #recent-announcement li,
+#portfolio-item-body #recent-blogs li, #portfolio-item-body #recent-forum li, #portfolio-item-body #recent-announcement li {
+    border-bottom: 1px solid #EDEEEF;
+    margin: 0 0 10px;
+}
+
+#course-item-body #recent-blogs p, #course-item-body #recent-forum p, #course-item-body #recent-announcement p,
+#project-item-body #recent-blogs p, #project-item-body #recent-forum p, #project-item-body #recent-announcement p,
+#club-item-body #recent-blogs p, #club-item-body #recent-forum p, #club-item-body #recent-announcement p,
+#portfolio-item-body #recent-blogs p, #portfolio-item-body #recent-forum p, #portfolio-item-body #recent-announcement p {
+    color: #666666;
+    font-family: Arial;
+    font-size: 11px;
+    line-height: 15px;
+}
+
+#course-item-body #recent-project-work h5,
+#project-item-body #recent-project-work h5,
+#club-item-body #recent-project-work h5,
+#portfolio-item-body #recent-project-work h5 {
+    color: #666666;
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 11px;
+    margin: 0 0 3px;
+}
+ 
+#course-item-body #recent-project-work li, 
+#project-item-body #recent-project-work li, 
+#club-item-body #recent-project-work li, 
+#portfolio-item-body #recent-project-work li {
+    border-bottom: 1px solid #EDEEEF;
+    margin: 0 0 10px;
+}
+
+#course-item-body #recent-project-work p, 
+#project-item-body #recent-project-work p, 
+#club-item-body #recent-project-work p, 
+#portfolio-item-body #recent-project-work p {
+    color: #666666;
+    font-family: Arial;
+    font-size: 11px;
+    line-height: 15px;
+}
 
 
 /* 3.0 COURSES
 -------------*/
 
-/* Courses Archive (used for all groups) */
+/* Courses Archive (used for all groups. Once this is changed in php--course to group-- then move to 3x-7x section above.) */
 
 #content ul#course-list.item-list li {
     width: 308px;
@@ -2893,154 +3056,15 @@ ul.invite-search {
     width: 195px;
 }
 
-/* Course Profile */
-
-#course-header-content {
-	margin: 0 0 0 15px;
-    width: 425px;
-}
-.group-home #single-course-header { margin: 0px 0 20px; }
-#single-course-header h1.title { font-size: 14px; line-height: 14px; padding: 0 0 10px; margin: 0 0 10px 0; border-bottom: 1px solid #242424; font-weight: normal; color: #666 }
-#single-course-header .header-image { margin: 0 0 10px; }
-#single-course-header h2.course-title { font-size:  24px; font-family: Arial; font-weight: bold; line-height: 24px; font-weight: bold; letter-spacing: 1px; margin: 0; padding: 0; }
-#single-course-header h2 a.rss { line-height: 24px; margin: 0 0 0 10px }
-#single-course-header .course-byline { color: #9d9d9d; font-size: 11px; line-height: 11px; margin: 0 0 15px 0 }
-#single-course-header .course-description, #single-course-header .course-html-block { margin: 0 0 10px; padding: 0 0 10px; border-bottom: 1px solid #eee; }
-#single-course-header p { color: #6d6d6d; line-height: 16px; font-size: 11px; }
-
 
 /* 4.0 PROJECTS
 ------------- */
 
 
-
 /* 5.0 CLUBS
 -------------*/
 
-/* Club Profile
------------------------------------------------------------- */
-#club-header {
-    margin: 0px 0 20px;
-}
-
-#club-header-avatar {
-    display: block;
-    width: 227px;
-}
-
-#club-header-avatar p {
-    padding: 5px 10px;
-    margin: 10px 0 0 0;
-    font-style: italic;
-    background: #eee;
-}
-
-#club-header-content h2, #club-header-content h2 a {
-    font-family: Arial;
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    line-height: 24px;
-    margin: 0;
-    padding: 0;
-}
-
-#club-header-content {
-    width: 425px;
-    margin: 0 0 0 15px;
-}
-
-#club-item-body .activity-list {
-    width: 300px;
-    border: 1px solid #EDEEEF;
-    position: relative;
-    left: -10px;
-    padding: 10px;
-    float: left;
-    min-height: 400px;
-    margin: 0 0 15px 0;
-}
-#club-item-body .activity-list .activity-avatar {
-    float: left;
-    margin: 0 0 8px;
-}
-
-#club-item-body .activity-list .activity-content {
-    margin: 0 0 0 10px;
-    float: left;
-    width: 170px;
-}
-
-#club-item-body .activity-list.last {
-    float: right;
-    clear: right;
-}
-
-#club-item-body #recent-forum, #club-item-body #recent-announcement{
-    float: left;
-    margin: 0 39px 0 0;
-    width: 312px;
-    position: relative;
-}
-
-#club-item-body #recent-blogs {
-    margin: 0;
-    width: 312px;
-}
-
-#club-item-body #recent-blogs h5, #club-item-body #recent-forum h5, #club-item-body #recent-announcement h5 {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
-
-#club-item-body #recent-blogs li, #club-item-body #recent-forum li, #club-item-body #recent-announcement li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-
-#club-item-body #recent-blogs p, #club-item-body #recent-forum p, #club-item-body #recent-announcement p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
-}
-
-#club-item-body #recent-project-work h5{
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
-
-#club-item-body #recent-project-work li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-#club-item-body #recent-project-work p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
-}
-
-
-/* Not sure about these two, if they are still being used… */
-
-#featured-club {
-    background: #edeeef;
-}
-
-#featured-club p {
-    padding: 15px;
-}
-
-/* Club Creation */
+/* Course and Club Creation */
 
 form#create-group-form div#group-create-body div.ct-group-meta {
 	margin-top:20px;
