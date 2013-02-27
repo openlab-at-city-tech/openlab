@@ -2571,48 +2571,7 @@ table#message-threads {
 /* 3.0 COURSES
 -------------*/
 
-/* Courses Archive (used for all groups. Once this is changed in php--course to group-- then move to section 7 GROUPS.) */
-
-#content ul#course-list.item-list li {
-    width: 308px;
-    float: left;
-    list-style-type: none;
-    margin: 15px 15px 15px 0;
-    border-bottom: 0;
-    border-right: 1px solid #EAEAEA;
-	padding : 0; 
-}
-
-#content ul#course-list.item-list li p {
-    font-size: 11px;
-    line-height: 17px;
-    margin-right: 10px;
-}
-
-#content ul#course-list.item-list li.even {
-    border: 0 none;
-}
-
-#content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
-    color: #6d6d6d;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 12px;
-    text-decoration: none;
-}
-
-#content ul#course-list.item-list li .info-line {
-    color: #aaa;
-    font-size: 11px;
-    padding: 0 0 10px;
-}
-
-#content ul#course-list.item-list li .item {
-    float: left;
-    width: 195px;
-}
-
-
+]
 /* 4.0 PROJECTS
 ------------- */
 
@@ -2632,6 +2591,52 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 ---------------*/
 
 /* Consolidated group styles in this section. */
+
+
+
+/* Group Archive */
+
+#content ul#group-list.item-list li {
+    width: 308px;
+    float: left;
+    list-style-type: none;
+    margin: 15px 15px 15px 0;
+    border-bottom: 0;
+    border-right: 1px solid #EAEAEA;
+	padding : 0; 
+}
+
+#content ul#group-list.item-list li p {
+    font-size: 11px;
+    line-height: 17px;
+    margin-right: 10px;
+}
+
+#content ul#group-list.item-list li.even {
+    border: 0 none;
+}
+
+#content ul#group-list.item-list li h2.item-title, #content ul#group-list.item-list li h2.item-title a {
+    color: #6d6d6d;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 12px;
+    text-decoration: none;
+}
+
+#content ul#group-list.item-list li .info-line {
+    color: #aaa;
+    font-size: 11px;
+    padding: 0 0 10px;
+}
+
+#content ul#group-list.item-list li .item {
+    float: left;
+    width: 195px;
+}
+
+
+
 
 /* General  */
 
