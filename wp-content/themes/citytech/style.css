@@ -32,16 +32,16 @@ followed by styles specific to each numbered section of the site.
 
 * 2.0 PEOPLE / My OpenLab
 
-* 3.x - 7.x Groups (common to all types)
+* 3.0 Courses
+	
+* 4.0 Projects
+	
+* 5.0 Clubs
 
-	* 3.0 Courses
+* 6.0 Groups (Consolidated)
 	
-	* 4.0 Projects
+* 7.0 Portfolios
 	
-	* 5.0 Clubs
-	
-	* 6.0 Portfolios
-
 * 8.0 HELP
 */
 
@@ -2567,8 +2567,71 @@ table#message-threads {
     width: auto;
 }
 
-/* 3.x - 7.x GROUPS (Common to all group types: Courses, Projects, Clubs, Portfolios) */
------------------------------------------------------------- */
+
+/* 3.0 COURSES
+-------------*/
+
+/* Courses Archive (used for all groups. Once this is changed in php--course to group-- then move to section 7 GROUPS.) */
+
+#content ul#course-list.item-list li {
+    width: 308px;
+    float: left;
+    list-style-type: none;
+    margin: 15px 15px 15px 0;
+    border-bottom: 0;
+    border-right: 1px solid #EAEAEA;
+	padding : 0; 
+}
+
+#content ul#course-list.item-list li p {
+    font-size: 11px;
+    line-height: 17px;
+    margin-right: 10px;
+}
+
+#content ul#course-list.item-list li.even {
+    border: 0 none;
+}
+
+#content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
+    color: #6d6d6d;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 12px;
+    text-decoration: none;
+}
+
+#content ul#course-list.item-list li .info-line {
+    color: #aaa;
+    font-size: 11px;
+    padding: 0 0 10px;
+}
+
+#content ul#course-list.item-list li .item {
+    float: left;
+    width: 195px;
+}
+
+
+/* 4.0 PROJECTS
+------------- */
+
+
+/* 5.0 CLUBS
+-------------*/
+
+/* Course and Club Creation */
+
+form#create-group-form div#group-create-body div.ct-group-meta {
+	margin-top:20px;
+}
+
+
+
+/* 6.0 GROUPS
+---------------*/
+
+/* Consolidated group styles in this section. */
 
 /* General  */
 
@@ -3012,65 +3075,8 @@ ul.invite-search {
 }
 
 
-/* 3.0 COURSES
--------------*/
 
-/* Courses Archive (used for all groups. Once this is changed in php--course to group-- then move to 3x-7x section above.) */
-
-#content ul#course-list.item-list li {
-    width: 308px;
-    float: left;
-    list-style-type: none;
-    margin: 15px 15px 15px 0;
-    border-bottom: 0;
-    border-right: 1px solid #EAEAEA;
-	padding : 0; 
-}
-
-#content ul#course-list.item-list li p {
-    font-size: 11px;
-    line-height: 17px;
-    margin-right: 10px;
-}
-
-#content ul#course-list.item-list li.even {
-    border: 0 none;
-}
-
-#content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
-    color: #6d6d6d;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 12px;
-    text-decoration: none;
-}
-
-#content ul#course-list.item-list li .info-line {
-    color: #aaa;
-    font-size: 11px;
-    padding: 0 0 10px;
-}
-
-#content ul#course-list.item-list li .item {
-    float: left;
-    width: 195px;
-}
-
-
-/* 4.0 PROJECTS
-------------- */
-
-
-/* 5.0 CLUBS
--------------*/
-
-/* Course and Club Creation */
-
-form#create-group-form div#group-create-body div.ct-group-meta {
-	margin-top:20px;
-}
-
-/* 6.0 PORTFOLIOS 
+/* 7.0 PORTFOLIOS 
 ------------------------------------------------------------ */
 
 /* Portfolio Profile */
@@ -3078,6 +3084,8 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 #portfolio-header {
     margin: 23px 0 15px;
 }
+
+
 
 /* 8.0 HELP 
 ------------------------------------------------------------ */
