@@ -942,6 +942,11 @@ h1.mol-title, #single-course-header h1, #content h1.group-title {
 float: right;
 }
 
+#bpnav ul li a, .directory .item-list-tabs ul li a, .item-list-tabs ul li a {
+    display: block;
+    position: relative;
+}
+
 .submenu ul,.submenu-text,#group-settings-label,#subnav ul{
     float: left;
     display: inline;
@@ -2917,34 +2922,23 @@ ul.invite-search {
 
 /* Group profile pages */
 
-#course-header,
-#project-header,
-#club-header {
+.group-header {
     margin: 0px 0 20px;
 }
 
-#course-header-avatar,
-#project-header-avatar, 
-#club-header-avatar, 
-#portfolio-header-avatar {
+.group-header-avatar {
     display: block;
     width: 227px;
 }
 
-#course-header-avatar p,
-#project-header-avatar p, 
-#club-header-avatar p, 
-#portfolio-header-avatar p {
+.group-header-avatar p {
     padding: 5px 10px;
     margin: 10px 0 0 0;
     font-style: italic;
     background: #eee;
 }
  
-#course-header-content h2, #course-header-content h2 a,
-#project-header-content h2, #project-header-content h2 a,
-#club-header-content h2, #club-header-content h2 a,
-#portfolio-header-content h2, #portfolio-header-content h2 a {
+.group-header-content h2, .group-header-content h2 a {
     font-family: Arial;
     font-size: 24px;
     font-weight: bold;
@@ -2954,12 +2948,9 @@ ul.invite-search {
     padding: 0;
 }
 
-#course-header-content
-#project-header-content, 
-#club-header-content, 
-#portfolio-header-content {
+.group-header-content {
     width: 425px;
-    margin: 0 0 0 15px;
+    margin: 0 0 0 15px!important;
 }
 
 #course-item-body .activity-list, 
