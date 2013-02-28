@@ -8,9 +8,6 @@ if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
     function bp_dtheme_enqueue_styles() {}
 endif;
 
-//require_once(TEMPLATEPATH.'/lib/init.php');
-require_once(STYLESHEETPATH.'/marx_functions.php');
-
 /**creating a library to organize functions**/
 require_once(STYLESHEETPATH.'/lib/header-funcs.php');
 require_once(STYLESHEETPATH.'/lib/post-types.php');
