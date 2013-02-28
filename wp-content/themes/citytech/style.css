@@ -32,15 +32,19 @@ followed by styles specific to each numbered section of the site.
 
 * 2.0 PEOPLE / My OpenLab
 
-* 3.0 Courses
+	* 2.1 People Profile
 	
-* 4.0 Projects
-	
-* 5.0 Clubs
+	* 2.2 My OpenLab Profile
 
-* 6.0 Groups (Consolidated)
+* 3.0 COURSES
 	
-* 7.0 Portfolios
+* 4.0 PROJECTS
+	
+* 5.0 CLUBS
+
+* 6.0 GROUPS (Consolidated)
+	
+* 7.0 PORTFOLIOS
 	
 * 8.0 HELP
 */
@@ -2173,7 +2177,7 @@ dd p{line-height:120%}
 /* 2.0 PEOPLE / My OpenLab
 ------------------------------------------------------------ */
 
-/* People Archive */
+/* 2.1 People Archive */
 
 #people-listing .item-avatar {
     float: left;
@@ -2205,7 +2209,7 @@ dd p{line-height:120%}
     padding: 0 0 10px;
 }
 
-/* People Profile */
+/* 2.2 People Profile */
 
 .profile-header{
     color: #C84C35;
@@ -2953,122 +2957,6 @@ ul.invite-search {
     margin: 0 0 0 15px!important;
 }
 
-#course-item-body .activity-list, 
-#project-item-body .activity-list, 
-#club-item-body .activity-list, 
-#portfolio-item-body .activity-list {
-    width: 300px;
-    border: 1px solid #EDEEEF;
-    position: relative;
-    left: -10px;
-    padding: 10px;
-    float: left;
-    min-height: 400px;
-    margin: 0 0 15px 0;
-}
-
-#course-item-body .activity-list .activity-avatar, 
-#project-item-body .activity-list .activity-avatar, 
-#club-item-body .activity-list .activity-avatar, 
-#porfolio-item-body .activity-list .activity-avatar {
-    float: left;
-    margin: 0 0 8px;
-}
-
-#course-item-body .activity-list .activity-content, 
-#project-item-body .activity-list .activity-content, 
-#club-item-body .activity-list .activity-content, 
-#portfolio-item-body .activity-list .activity-content {
-    margin: 0 0 0 10px;
-    float: left;
-    width: 170px;
-}
-
-#course-item-body .activity-list.last,
-#project-item-body .activity-list.last, 
-#club-item-body .activity-list.last, 
-#portfolio-item-body .activity-list.last {
-    float: right;
-    clear: right;
-}
-
-#course-item-body #recent-forum, #course-item-body #recent-announcement, 
-#project-item-body #recent-forum, #project-item-body #recent-announcement, 
-#club-item-body #recent-forum, #club-item-body #recent-announcement, 
-#portfolio-item-body #recent-forum, #portfolio-item-body #recent-announcement {
-    float: left;
-    margin: 0 39px 0 0;
-    width: 312px;
-    position: relative;
-}
-
-#course-item-body #recent-blogs, 
-#project-item-body #recent-blogs, 
-#club-item-body #recent-blogs, 
-#portfolio-item-body #recent-blogs {
-    margin: 0;
-    width: 312px;
-}
-
-#course-item-body #recent-blogs h5, #course-item-body #recent-forum h5, #course-item-body #recent-announcement h5,
-#project-item-body #recent-blogs h5, #project-item-body #recent-forum h5, #project-item-body #recent-announcement h5,
-#club-item-body #recent-blogs h5, #club-item-body #recent-forum h5, #club-item-body #recent-announcement h5,
-#portfolio-item-body #recent-blogs h5, #portfolio-item-body #recent-forum h5, #portfolio-item-body #recent-announcement h5 {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
-
-#course-item-body #recent-blogs li, #course-item-body #recent-forum li, #course-item-body #recent-announcement li,
-#project-item-body #recent-blogs li, #project-item-body #recent-forum li, #project-item-body #recent-announcement li,
-#club-item-body #recent-blogs li, #club-item-body #recent-forum li, #club-item-body #recent-announcement li,
-#portfolio-item-body #recent-blogs li, #portfolio-item-body #recent-forum li, #portfolio-item-body #recent-announcement li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-
-#course-item-body #recent-blogs p, #course-item-body #recent-forum p, #course-item-body #recent-announcement p,
-#project-item-body #recent-blogs p, #project-item-body #recent-forum p, #project-item-body #recent-announcement p,
-#club-item-body #recent-blogs p, #club-item-body #recent-forum p, #club-item-body #recent-announcement p,
-#portfolio-item-body #recent-blogs p, #portfolio-item-body #recent-forum p, #portfolio-item-body #recent-announcement p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
-}
-
-#course-item-body #recent-project-work h5,
-#project-item-body #recent-project-work h5,
-#club-item-body #recent-project-work h5,
-#portfolio-item-body #recent-project-work h5 {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
- 
-#course-item-body #recent-project-work li, 
-#project-item-body #recent-project-work li, 
-#club-item-body #recent-project-work li, 
-#portfolio-item-body #recent-project-work li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-
-#course-item-body #recent-project-work p, 
-#project-item-body #recent-project-work p, 
-#club-item-body #recent-project-work p, 
-#portfolio-item-body #recent-project-work p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
-}
 
 
 
@@ -4216,7 +4104,6 @@ table tr td, table tr th {
     vertical-align: middle;
 }
 table tr td.label {
-    border-right: 1px solid #EAEAEA;
     font-weight: bold;
     width: 25%;
 }
@@ -4594,6 +4481,13 @@ table.forum td {
 	padding: 8px;
 	vertical-align: middle;
 }
+
+/* this next rule only: eprofile edit details page, move to appropriate section. tm27feb2013 */
+.edit-details table tr td, .edit-details table tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+
 .forum #content ul li .poster-meta a {
 	display: inline;
 	background:#F7F7F7 none repeat scroll 0%;
@@ -4742,12 +4636,12 @@ form#signup_form.standard-form div.submit {
 div#signup-avatar img {
     margin: 0 15px 10px 0;
 }
-/* 
+
 form.standard-form textarea {
     height: 120px;
     width: 75%;
 }
- */
+
 form.standard-form textarea#message_content {
     height: 200px;
 }
