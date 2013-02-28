@@ -1,6 +1,7 @@
 <?php
 /** Start the engine **/
 add_theme_support( 'bbpress' );
+add_theme_support( 'post-thumbnails' );
 
 //dequeue buddypress default styles
 if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
@@ -18,6 +19,32 @@ require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 require_once(STYLESHEETPATH.'/lib/group-funcs.php');
+require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
+
+/**js calls**/
+function my_init_method() {
+    if (!is_admin()) {
+        wp_enqueue_script( 'jquery' );
+        wp_register_script( 'jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
+        wp_enqueue_script( 'jcarousellite' );
+        wp_register_script( 'easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
+        wp_enqueue_script( 'easyaccordion' );
+        wp_register_script( 'utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
+        wp_enqueue_script( 'utility' );
+    }
+}    
+ 
+add_action('init', 'my_init_method');
+
+// Custom Login
+function my_custom_logo() { ?>
+	<style type="text/css">
+		#login { margin: 50px auto 0 auto; width: 350px; }
+		#login h1 a { background: url(<?php bloginfo('stylesheet_directory') ?>/images/logo.png) center no-repeat; height:125px; width: 370px; }
+		body { background: #fff }
+	</style>
+<?php }
+add_action('login_head', 'my_custom_logo');
 
 /**
  * Custom template loader for my-{grouptype}
