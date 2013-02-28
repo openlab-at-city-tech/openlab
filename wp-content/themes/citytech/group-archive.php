@@ -98,7 +98,7 @@ if ( bp_has_groups( $group_args ) ) : ?>
 	</div>
 	<div class="group-count"><?php cuny_groups_pagination_count(ucfirst($group_type).'s'); ?></div>
 	<div class="clearfloat"></div>
-	<ul id="course-list" class="item-list">
+	<ul id="group-list" class="item-list">
 		<?php
 		$count = 1;
 		while ( bp_groups() ) : bp_the_group();

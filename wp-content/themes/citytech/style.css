@@ -32,16 +32,20 @@ followed by styles specific to each numbered section of the site.
 
 * 2.0 PEOPLE / My OpenLab
 
-* 3.x - 7.x Groups (common to all types)
+	* 2.1 People Profile
+	
+	* 2.2 My OpenLab Profile
 
-	* 3.0 Courses
+* 3.0 COURSES
 	
-	* 4.0 Projects
+* 4.0 PROJECTS
 	
-	* 5.0 Clubs
-	
-	* 6.0 Portfolios
+* 5.0 CLUBS
 
+* 6.0 GROUPS (Consolidated)
+	
+* 7.0 PORTFOLIOS
+	
 * 8.0 HELP
 */
 
@@ -940,6 +944,11 @@ h1.mol-title, #single-course-header h1, #content h1.group-title {
 
 #bpnav ul li.last, .directory .item-list-tabs ul li.last, .forum ul li.last {
 float: right;
+}
+
+#bpnav ul li a, .directory .item-list-tabs ul li a, .item-list-tabs ul li a {
+    display: block;
+    position: relative;
 }
 
 .submenu ul,.submenu-text,#group-settings-label,#subnav ul{
@@ -2168,7 +2177,7 @@ dd p{line-height:120%}
 /* 2.0 PEOPLE / My OpenLab
 ------------------------------------------------------------ */
 
-/* People Archive */
+/* 2.1 People Archive */
 
 #people-listing .item-avatar {
     float: left;
@@ -2200,7 +2209,7 @@ dd p{line-height:120%}
     padding: 0 0 10px;
 }
 
-/* People Profile */
+/* 2.2 People Profile */
 
 .profile-header{
     color: #C84C35;
@@ -2567,8 +2576,76 @@ table#message-threads {
     width: auto;
 }
 
-/* 3.x - 7.x GROUPS (Common to all group types: Courses, Projects, Clubs, Portfolios) */
------------------------------------------------------------- */
+
+/* 3.0 COURSES
+-------------*/
+
+]
+/* 4.0 PROJECTS
+------------- */
+
+
+/* 5.0 CLUBS
+-------------*/
+
+/* Course and Club Creation */
+
+form#create-group-form div#group-create-body div.ct-group-meta {
+	margin-top:20px;
+}
+
+
+
+/* 6.0 GROUPS
+---------------*/
+
+/* Consolidated group styles in this section. */
+
+
+
+/* Group Archive */
+
+#content ul#group-list.item-list li {
+    width: 308px;
+    float: left;
+    list-style-type: none;
+    margin: 15px 15px 15px 0;
+    border-bottom: 0;
+    border-right: 1px solid #EAEAEA;
+	padding : 0; 
+}
+
+#content ul#group-list.item-list li p {
+    font-size: 11px;
+    line-height: 17px;
+    margin-right: 10px;
+}
+
+#content ul#group-list.item-list li.even {
+    border: 0 none;
+}
+
+#content ul#group-list.item-list li h2.item-title, #content ul#group-list.item-list li h2.item-title a {
+    color: #6d6d6d;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 12px;
+    text-decoration: none;
+}
+
+#content ul#group-list.item-list li .info-line {
+    color: #aaa;
+    font-size: 11px;
+    padding: 0 0 10px;
+}
+
+#content ul#group-list.item-list li .item {
+    float: left;
+    width: 195px;
+}
+
+
+
 
 /* General  */
 
@@ -2849,34 +2926,23 @@ ul.invite-search {
 
 /* Group profile pages */
 
-#course-header,
-#project-header,
-#club-header {
+.group-header {
     margin: 0px 0 20px;
 }
 
-#course-header-avatar,
-#project-header-avatar, 
-#club-header-avatar, 
-#portfolio-header-avatar {
+.group-header-avatar {
     display: block;
     width: 227px;
 }
 
-#course-header-avatar p,
-#project-header-avatar p, 
-#club-header-avatar p, 
-#portfolio-header-avatar p {
+.group-header-avatar p {
     padding: 5px 10px;
     margin: 10px 0 0 0;
     font-style: italic;
     background: #eee;
 }
  
-#course-header-content h2, #course-header-content h2 a,
-#project-header-content h2, #project-header-content h2 a,
-#club-header-content h2, #club-header-content h2 a,
-#portfolio-header-content h2, #portfolio-header-content h2 a {
+.group-header-content h2, .group-header-content h2 a {
     font-family: Arial;
     font-size: 24px;
     font-weight: bold;
@@ -2886,191 +2952,15 @@ ul.invite-search {
     padding: 0;
 }
 
-#course-header-content
-#project-header-content, 
-#club-header-content, 
-#portfolio-header-content {
+.group-header-content {
     width: 425px;
-    margin: 0 0 0 15px;
-}
-
-#course-item-body .activity-list, 
-#project-item-body .activity-list, 
-#club-item-body .activity-list, 
-#portfolio-item-body .activity-list {
-    width: 300px;
-    border: 1px solid #EDEEEF;
-    position: relative;
-    left: -10px;
-    padding: 10px;
-    float: left;
-    min-height: 400px;
-    margin: 0 0 15px 0;
-}
-
-#course-item-body .activity-list .activity-avatar, 
-#project-item-body .activity-list .activity-avatar, 
-#club-item-body .activity-list .activity-avatar, 
-#porfolio-item-body .activity-list .activity-avatar {
-    float: left;
-    margin: 0 0 8px;
-}
-
-#course-item-body .activity-list .activity-content, 
-#project-item-body .activity-list .activity-content, 
-#club-item-body .activity-list .activity-content, 
-#portfolio-item-body .activity-list .activity-content {
-    margin: 0 0 0 10px;
-    float: left;
-    width: 170px;
-}
-
-#course-item-body .activity-list.last,
-#project-item-body .activity-list.last, 
-#club-item-body .activity-list.last, 
-#portfolio-item-body .activity-list.last {
-    float: right;
-    clear: right;
-}
-
-#course-item-body #recent-forum, #course-item-body #recent-announcement, 
-#project-item-body #recent-forum, #project-item-body #recent-announcement, 
-#club-item-body #recent-forum, #club-item-body #recent-announcement, 
-#portfolio-item-body #recent-forum, #portfolio-item-body #recent-announcement {
-    float: left;
-    margin: 0 39px 0 0;
-    width: 312px;
-    position: relative;
-}
-
-#course-item-body #recent-blogs, 
-#project-item-body #recent-blogs, 
-#club-item-body #recent-blogs, 
-#portfolio-item-body #recent-blogs {
-    margin: 0;
-    width: 312px;
-}
-
-#course-item-body #recent-blogs h5, #course-item-body #recent-forum h5, #course-item-body #recent-announcement h5,
-#project-item-body #recent-blogs h5, #project-item-body #recent-forum h5, #project-item-body #recent-announcement h5,
-#club-item-body #recent-blogs h5, #club-item-body #recent-forum h5, #club-item-body #recent-announcement h5,
-#portfolio-item-body #recent-blogs h5, #portfolio-item-body #recent-forum h5, #portfolio-item-body #recent-announcement h5 {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
-
-#course-item-body #recent-blogs li, #course-item-body #recent-forum li, #course-item-body #recent-announcement li,
-#project-item-body #recent-blogs li, #project-item-body #recent-forum li, #project-item-body #recent-announcement li,
-#club-item-body #recent-blogs li, #club-item-body #recent-forum li, #club-item-body #recent-announcement li,
-#portfolio-item-body #recent-blogs li, #portfolio-item-body #recent-forum li, #portfolio-item-body #recent-announcement li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-
-#course-item-body #recent-blogs p, #course-item-body #recent-forum p, #course-item-body #recent-announcement p,
-#project-item-body #recent-blogs p, #project-item-body #recent-forum p, #project-item-body #recent-announcement p,
-#club-item-body #recent-blogs p, #club-item-body #recent-forum p, #club-item-body #recent-announcement p,
-#portfolio-item-body #recent-blogs p, #portfolio-item-body #recent-forum p, #portfolio-item-body #recent-announcement p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
-}
-
-#course-item-body #recent-project-work h5,
-#project-item-body #recent-project-work h5,
-#club-item-body #recent-project-work h5,
-#portfolio-item-body #recent-project-work h5 {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 11px;
-    margin: 0 0 3px;
-}
- 
-#course-item-body #recent-project-work li, 
-#project-item-body #recent-project-work li, 
-#club-item-body #recent-project-work li, 
-#portfolio-item-body #recent-project-work li {
-    border-bottom: 1px solid #EDEEEF;
-    margin: 0 0 10px;
-}
-
-#course-item-body #recent-project-work p, 
-#project-item-body #recent-project-work p, 
-#club-item-body #recent-project-work p, 
-#portfolio-item-body #recent-project-work p {
-    color: #666666;
-    font-family: Arial;
-    font-size: 11px;
-    line-height: 15px;
+    margin: 0 0 0 15px!important;
 }
 
 
-/* 3.0 COURSES
--------------*/
-
-/* Courses Archive (used for all groups. Once this is changed in php--course to group-- then move to 3x-7x section above.) */
-
-#content ul#course-list.item-list li {
-    width: 308px;
-    float: left;
-    list-style-type: none;
-    margin: 15px 15px 15px 0;
-    border-bottom: 0;
-    border-right: 1px solid #EAEAEA;
-	padding : 0; 
-}
-
-#content ul#course-list.item-list li p {
-    font-size: 11px;
-    line-height: 17px;
-    margin-right: 10px;
-}
-
-#content ul#course-list.item-list li.even {
-    border: 0 none;
-}
-
-#content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
-    color: #6d6d6d;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 12px;
-    text-decoration: none;
-}
-
-#content ul#course-list.item-list li .info-line {
-    color: #aaa;
-    font-size: 11px;
-    padding: 0 0 10px;
-}
-
-#content ul#course-list.item-list li .item {
-    float: left;
-    width: 195px;
-}
 
 
-/* 4.0 PROJECTS
-------------- */
-
-
-/* 5.0 CLUBS
--------------*/
-
-/* Course and Club Creation */
-
-form#create-group-form div#group-create-body div.ct-group-meta {
-	margin-top:20px;
-}
-
-/* 6.0 PORTFOLIOS 
+/* 7.0 PORTFOLIOS 
 ------------------------------------------------------------ */
 
 /* Portfolio Profile */
@@ -3078,6 +2968,8 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 #portfolio-header {
     margin: 23px 0 15px;
 }
+
+
 
 /* 8.0 HELP 
 ------------------------------------------------------------ */
@@ -4212,7 +4104,6 @@ table tr td, table tr th {
     vertical-align: middle;
 }
 table tr td.label {
-    border-right: 1px solid #EAEAEA;
     font-weight: bold;
     width: 25%;
 }
@@ -4590,6 +4481,13 @@ table.forum td {
 	padding: 8px;
 	vertical-align: middle;
 }
+
+/* this next rule only: eprofile edit details page, move to appropriate section. tm27feb2013 */
+.edit-details table tr td, .edit-details table tr th, .directory table tr td, .directory table tr th {
+	padding: 8px;
+	vertical-align: middle;
+}
+
 .forum #content ul li .poster-meta a {
 	display: inline;
 	background:#F7F7F7 none repeat scroll 0%;
@@ -4738,12 +4636,12 @@ form#signup_form.standard-form div.submit {
 div#signup-avatar img {
     margin: 0 15px 10px 0;
 }
-/* 
+
 form.standard-form textarea {
     height: 120px;
     width: 75%;
 }
- */
+
 form.standard-form textarea#message_content {
     height: 200px;
 }
