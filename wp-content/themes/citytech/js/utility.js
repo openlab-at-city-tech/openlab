@@ -29,6 +29,36 @@
 												$(this).prev('div.gray-square').addClass('red-square').removeClass('gray-square');
 
 												});
+	
+	//ajax functionality for courses archive
+	$('#school-select').change(function(){
+	  var str = $(this).val();
+	  console.log(str);
+	  if (str=="") {
+		document.getElementById("dept-select").innerHTML="";
+		return;
+	  }
+	  
+	  $.ajax({
+			 type: 'POST',
+			 url: 'http://' + document.domain + '/wp-admin/admin-ajax.php',
+			 data:
+			  {
+				  action: 'openlab_ajax_return_course_list',
+				  str: str,
+			  },
+			  success: function(data, textStatus, XMLHttpRequest)
+			  {
+				  $('#dept-select').html(data);
+			  },
+			  error: function(MLHttpRequest, textStatus, errorThrown){  
+				  console.log(errorThrown);
+			  }
+			 });
+										});
+  function clear_form(){
+	  document.getElementById('group_seq_form').reset();
+  }
 
 	});//end document.ready
 	
