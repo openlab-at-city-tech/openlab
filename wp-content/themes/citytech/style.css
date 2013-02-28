@@ -35,6 +35,8 @@ followed by styles specific to each numbered section of the site.
 	* 2.1 People Profile
 	
 	* 2.2 My OpenLab Profile
+	
+	* 2.3 My Friends
 
 * 3.0 COURSES
 	
@@ -2270,7 +2272,7 @@ h2.member-name-title {
 
 #member-item-body {
     margin-left: 0px;
-    padding-left: 7px;
+    /* padding-left: 7px; Removed to match live site, but I think it looks better with it in. tm27feb2013 */
     clear:both;
 }
 
@@ -2434,6 +2436,52 @@ span.label {
 
 
 
+/* My Courses, My Projects, My Clubs archive pages use this. Don't know where to put it yet. tm28feb2013 */
+
+/* Group Archive */
+
+#content ul#course-list.item-list li {
+    width: 308px;
+    float: left;
+    list-style-type: none;
+    margin: 15px 15px 15px 0;
+    border-bottom: 0;
+    border-right: 1px solid #EAEAEA;
+	padding : 0; 
+}
+
+#content ul#course-list.item-list li p {
+    font-size: 11px;
+    line-height: 17px;
+    margin-right: 10px;
+}
+
+#content ul#course-list.item-list li.even {
+    border: 0 none;
+}
+
+#content ul#course-list.item-list li h2.item-title, #content ul#course-list.item-list li h2.item-title a {
+    color: #6d6d6d;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 12px;
+    text-decoration: none;
+}
+
+#content ul#course-list.item-list li .info-line {
+    color: #aaa;
+    font-size: 11px;
+    padding: 0 0 10px;
+}
+
+#content ul#course-list.item-list li .item {
+    float: left;
+    width: 195px;
+}
+
+
+
+
 /* Messages
 -------------*/
 
@@ -2575,6 +2623,35 @@ table#message-threads {
     margin: 0 -20px;
     width: auto;
 }
+
+
+/* 2.3 MY FRIENDS 
+-------------------*/
+
+.my-friends #item-header span.activity, .my-friends .item-meta span.activity {
+    font-size: 1em;
+    vertical-align: top;
+}
+
+.my-friends #content ul#members-list li {
+    float: left;
+}
+.my-friends #content ul#members-list li {
+    margin: 10px 14px 10px 0;
+    overflow: hidden;
+}
+.my-friends #content .item-list li {
+    clear: left;
+    display: block;
+    width: 100%;
+}
+.my-friends #content .item-list li {
+    width: 100%;
+}
+.my-friends #content ul li {
+    list-style: none outside none;
+}
+
 
 
 /* 3.0 COURSES
@@ -5523,10 +5600,10 @@ div#item-buttons ul li a span:after {
     text-decoration: none;
 } */
 
- #content ul#members-list li div.action {
+/*  #content ul#members-list li div.action {
 position: static;
 float: right;
-}
+} */
 
 /*.read-more {
     color: #6D6D6D;
