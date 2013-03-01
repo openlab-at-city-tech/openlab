@@ -2157,7 +2157,6 @@ div#sidebar.sidebar div#portfolio-sidebar-widget {
 
 .widget-area ul li {
 	list-style-type:square;
-	word-wrap:break-word;
 }
 
 .widget-area ol li {
@@ -4523,7 +4522,7 @@ div #help-tags a {
 	margin-right:4px;
 	margin-bottom:4px;
 	background-color:#aaa;
-	background-color:rgba(113,113,113,0.6);
+	/* background-color:rgba(113,113,113,0.6); */
 	color:#FFF;
 	font-weight:400;
 	font-family:Arial;
@@ -4538,12 +4537,12 @@ div #help-tags a:hover {
 
 div #help-tags a:last-child {
 	background-color:#7f7f7f;
-	background-color:rgba(113,113,113,0.9);
+	/* background-color:rgba(113,113,113,0.9); */
 }
 
 div #help-tags a:nth-child(2n) {
 	background-color:#d4d4d4;
-	background-color:rgba(113,113,113,0.3);
+	/* background-color:rgba(113,113,113,0.3); */
 }
 
 #sidebar h2.help-tags-title {
