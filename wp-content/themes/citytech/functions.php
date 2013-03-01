@@ -17,6 +17,9 @@ require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
 require_once(STYLESHEETPATH.'/lib/group-funcs.php');
 require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
+require_once(STYLESHEETPATH.'/lib/help-funcs.php');
+require_once(STYLESHEETPATH.'/lib/member-funcs.php');
+require_once(STYLESHEETPATH.'/lib/page-funcs.php');
 
 /**js calls**/
 function my_init_method() {

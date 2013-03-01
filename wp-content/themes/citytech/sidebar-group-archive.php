@@ -1,5 +1,15 @@
-<?php global $bp; 
+<?php global $bp, $wp_query;
+	  $post_obj = $wp_query->get_queried_object();
 	  $group_type = openlab_page_slug_to_grouptype();
+	  $group_slug = $group_type.'s';
+	  
+	  //conditional for people archive sidebar
+	  if ($group_type == 'not-archive' && $post_obj->post_title == "People")
+	  {
+		  $group_type = "people";
+		  $group_slug = $group_type;
+	  }
+	  
 	  ?>
 
 <h2 class="sidebar-title">Find a <?php echo ucfirst($group_type); ?></h2>
@@ -77,30 +87,31 @@ if ( empty( $_GET['semester'] ) ) {
   $option_value_dept =  $_GET['semester'];
 }
 
-//user types - currently not in use
-if ( empty( $_GET['user_type'] ) ) {
-	$_GET['user_type'] = "";
+//user types - for people archive page
+if ( empty( $_GET['usertype'] ) ) {
+	$_GET['usertype'] = "";
 }else {
   $user_color = "red";
 }
-switch ($_GET['user_type']) {
+switch ($_GET['usertype']) {
 
 	case "student" :
 		$display_option_user_type = "Student";
 		$option_value_user_type = "student";
 		break;
-
 	case "faculty" :
 		$display_option_user_type = "Faculty";
 		$option_value_user_type = "faculty";
 		break;
-
 	case "staff" :
 		$display_option_user_type = "Staff";
 		$option_value_user_type = "staff";
 		break;
-
-	default :
+	case "user_type_all":
+		$display_option_user_type = "All";
+		$option_value_user_type = "user_type_all";
+		break;
+	default:
 		$display_option_user_type = "Select User Type";
 		$option_value_user_type = "";
 		break;
@@ -169,23 +180,24 @@ switch ($_GET['group_sequence']) {
         <option value='winter-2013'>Winter 2013</option>
 	</select>
     <?php endif; ?>
-    <?php if ($group_type == 'portfolio'): ?>
+    <?php if ($group_type == 'portfolio' || $post_obj->post_title == 'People'): ?>
     <div class="<?php echo $user_color; ?>-square"></div>
-	<select name="user_type" class="last-select <?php echo $user_color; ?>-text">
+	<select name="usertype" class="last-select <?php echo $user_color; ?>-text">
 		<option value="<?php echo $option_value_user_type; ?>"><?php echo $display_option_user_type; ?></option>
-		<option value='user_type_all'>All</option>
 		<option value='student'>Student</option>
 		<option value='faculty'>Faculty</option>
 		<option value='staff'>Staff</option>
+        <option value='user_type_all'>All</option>
 	</select>
     <?php endif; ?>
 	<div class="<?php echo $school_color; ?>-square"></div>
 	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
+ 	    <option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
-	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_type; ?>s/'">
+	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
 	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 </form>
 <div class="clearfloat"></div>
