@@ -64,12 +64,12 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 
 add_action('bp_header','cuny_admin_bar', 10);
 function cuny_admin_bar() { ?>
-	
+
 	<div id="wrap">
       <div id="title-area">
           <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
       </div>
-  
+
       <?php cuny_site_wide_bp_search(); ?>
       <div class="clearfloat"></div>
       <?php //this adds the main menu, controlled through the WP menu interface
@@ -78,7 +78,7 @@ function cuny_admin_bar() { ?>
                   'container' => '',
                   'menu_class' => 'nav',
               );
-  
+
       wp_nav_menu( $args );
       //do_action( 'cuny_bp_adminbar_menus' );
       if ( is_user_logged_in() ){?>
@@ -246,11 +246,11 @@ add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_act
  */
 function openlab_no_join_on_portfolios() {
 	global $bp;
-	
+
 	if ( openlab_is_portfolio() ) {
 		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 	}
-	
+
 	//fix for files, docs, and membership pages in group profile - hiding join button
 	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
 		{

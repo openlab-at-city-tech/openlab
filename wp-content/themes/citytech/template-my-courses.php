@@ -1,22 +1,22 @@
-<?php /* Template Name: My Group Template */ 
+<?php /* Template Name: My Group Template */
 get_header(); ?>
 
 	<div id="content" class="hfeed">
     	<?php cuny_my_groups(); ?>
     </div><!--content-->
-    
+
     <div id="sidebar" class="sidebar widget-area">
 	<?php get_template_part('members/single/sidebar'); ?>
     </div>
-	
+
 <?php get_footer();
 
 function cuny_my_groups() {
-	
+
 	//geting the grouptype by slug - the archive pages are curently WP pages and don't have a specific grouptype associated with them - this function uses the curent page slug to assign a grouptype
 	//@to-do - get the archive page in the right spot to function correctly within the BP framework
 	$group_type = openlab_page_slug_to_grouptype();
-	
+
 	echo cuny_profile_activty_block($group_type, 'My '.ucfirst($group_type).'s', ''); ?>
 <?php }
 
@@ -37,7 +37,7 @@ function cuny_profile_activty_block($type,$title,$last) {
 	add_filter( 'bp_groups_get_total_groups_sql', create_function( '', 'return "SELECT ' . $unique_group_count . ' AS value;";' ) );
 
 	  echo  '<h1 class="entry-title mol-title">'.$bp->loggedin_user->fullname.'&rsquo;s Profile</h1>'; ?>
-	  
+
 	  <div class="submenu">
 	  	<?php echo openlab_my_groups_submenu($type); ?>
 
