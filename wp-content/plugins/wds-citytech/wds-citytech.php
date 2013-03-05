@@ -1399,6 +1399,10 @@ class buddypress_Translation_Mangler {
  function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
 
+   if ( 'buddypress' != $domain ) {
+	   return $translation;
+   }
+
    $group_id = 0;
    if ( !bp_is_group_create() ) {
 	   if ( !empty( $groups_template->group->id ) ) {
