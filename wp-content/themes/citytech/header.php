@@ -25,7 +25,7 @@
 
 <body <?php body_class(); ?>>
 
-	<div id="wrap">
+	<div id="content-wrap">
     <?php do_action( 'bp_before_header' ) ?>
     	<div id="header">
 				<?php do_action( 'bp_header' ) ?>

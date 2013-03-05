@@ -1,14 +1,12 @@
 <?php
 /** Start the engine **/
 add_theme_support( 'bbpress' );
+add_theme_support( 'post-thumbnails' );
 
 //dequeue buddypress default styles
 if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
     function bp_dtheme_enqueue_styles() {}
 endif;
-
-//require_once(TEMPLATEPATH.'/lib/init.php');
-require_once(STYLESHEETPATH.'/marx_functions.php');
 
 /**creating a library to organize functions**/
 require_once(STYLESHEETPATH.'/lib/header-funcs.php');
@@ -17,6 +15,36 @@ require_once(STYLESHEETPATH.'/lib/menus.php');
 require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
 require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
+require_once(STYLESHEETPATH.'/lib/group-funcs.php');
+require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
+require_once(STYLESHEETPATH.'/lib/help-funcs.php');
+require_once(STYLESHEETPATH.'/lib/member-funcs.php');
+require_once(STYLESHEETPATH.'/lib/page-funcs.php');
+
+/**js calls**/
+function my_init_method() {
+    if (!is_admin()) {
+        wp_enqueue_script( 'jquery' );
+        wp_register_script( 'jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
+        wp_enqueue_script( 'jcarousellite' );
+        wp_register_script( 'easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
+        wp_enqueue_script( 'easyaccordion' );
+        wp_register_script( 'utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
+        wp_enqueue_script( 'utility' );
+    }
+}
+
+add_action('init', 'my_init_method');
+
+// Custom Login
+function my_custom_logo() { ?>
+	<style type="text/css">
+		#login { margin: 50px auto 0 auto; width: 350px; }
+		#login h1 a { background: url(<?php bloginfo('stylesheet_directory') ?>/images/logo.png) center no-repeat; height:125px; width: 370px; }
+		body { background: #fff }
+	</style>
+<?php }
+add_action('login_head', 'my_custom_logo');
 
 /**
  * Custom template loader for my-{grouptype}
@@ -62,15 +90,15 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 //add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
-add_action('bp_header','cuny_admin_bar', 10);
-function cuny_admin_bar() { ?>
+add_action('bp_header','openlab_header_bar', 10);
+function openlab_header_bar() { ?>
 
-	<div id="wrap">
+	<div id="header-wrap">
       <div id="title-area">
           <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
       </div>
 
-      <?php cuny_site_wide_bp_search(); ?>
+      <?php openlab_site_wide_bp_search(); ?>
       <div class="clearfloat"></div>
       <?php //this adds the main menu, controlled through the WP menu interface
       $args = array(
@@ -92,6 +120,43 @@ function cuny_admin_bar() { ?>
           <div class="clearfloat"></div>
 	</div><!--#wrap-->
 <?php }
+
+//openlab search function
+function openlab_site_wide_bp_search() { ?>
+	<form action="<?php echo bp_search_form_action() ?>" method="post" id="search-form">
+		<input type="text" id="search-terms" name="search-terms" value="" />
+		<?php //echo bp_search_form_type_select() ?>
+        <select style="width: auto" id="search-which" name="search-which">
+        <option value="members">People</option>
+        <option value="courses">Courses</option>
+        <option value="projects">Projects</option>
+        <option value="clubs">Clubs</option>
+        </select>
+
+		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
+		<?php wp_nonce_field( 'bp_search_form' ) ?>
+	</form><!-- #search-form -->
+<?php }
+
+add_action('init','openlab_search_override',1);
+function openlab_search_override(){
+    global $bp;
+	if(isset($_POST['search-submit']) && $_POST['search-terms']){
+		if($_POST['search-which']=="members"){
+			wp_redirect($bp->root_domain.'/people/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="courses"){
+			wp_redirect($bp->root_domain.'/courses/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="projects"){
+			wp_redirect($bp->root_domain.'/projects/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="clubs"){
+			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
+			exit();
+		}
+	}
+}
 
 /*add_action('genesis_after_content', 'cuny_the_clear_div');
 function cuny_the_clear_div() {

@@ -293,6 +293,17 @@ function openlab_submenu_gen($items)
 				{
 					//special case just for Invite New Members page
 					$item_classes .= " selected-page";
+				} else if ($page_identify == 'my-groups')
+				{
+					//special case for my-<groups> pages
+					if ( isset( $_GET['type'] ) ) {
+						$type = $_GET['type'];
+						$type_title = 'My '.ucfirst(str_replace('-',' ',$type)).'s';					
+						if ($title == $type_title)
+						{
+							$item_classes .= " selected-page";
+						}
+					}
 				}
 
 				//checks to see if this is the last item or first item
@@ -328,11 +339,8 @@ function openlab_submenu_gen($items)
 }
 
 /**
- * a variation on bp_get_options_nav to match the design
- * main change here at the moment - changing "home" to "profile" - now deprecated
+ * bp_get_options_nav filtering 
  *
- * @todo Clean up this godawful mess. There are filters for this stuff - bbg
- * @todo attempting to remedy - jwu
  */
 
 //submenu nav renaming
@@ -351,7 +359,7 @@ function openlab_filter_subnav_admin($subnav_item)
 	global $bp;
 	$group_type = openlab_get_group_type( bp_get_current_group_id());
 	$new_item = str_replace("Admin",ucfirst($group_type)." Settings",$subnav_item);
-	//this is to stop the course settings menu item from gettin a current class on membership pages
+	//this is to stop the course settings menu item from getting a current class on membership pages
 	if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests')
 	{
 		$new_item = str_replace("current selected"," ",$new_item);
@@ -432,9 +440,35 @@ function openlab_filter_subnav_nav_notifications($suvbnav_item)
 function openlab_group_submenu_nav() {
     global $bp;
 
-    $nav_items = $bp->bp_options_nav;
+    //get the current item menu
+	$nav_items = $bp->bp_options_nav[$bp->current_item];
+	
+	//manual sorting of current item menu
+	if ($nav_items)
+	{
+		foreach ($nav_items as $nav_item)
+		{
+		switch($nav_items){
+			case ($nav_item['slug'] == 'home'):
+				$nav_item['position'] = 10;
+				break;
+			case ($nav_item['slug'] == 'admin'):
+				$nav_item['position'] = 15;
+				break;
+			case ($nav_item['slug'] == 'members'):
+				$nav_item['position'] = 35;
+				break;
+			case ($nav_item['slug'] == 'files'):
+				$nav_item['position'] = 60;
+				break;
+			default:
+				$nav_item['position'] = $nav_item['position'];
+			}
+			$final_nav[] = $nav_item;
+		}
+	}
 
-    $bp->bp_options_nav = $nav_items;
+    $bp->bp_options_nav[$bp->current_item] = $final_nav;
 }
 
 add_action( 'bp_actions', 'openlab_group_submenu_nav', 1 );
