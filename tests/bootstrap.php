@@ -8,7 +8,7 @@ $GLOBALS['wp_tests_options'] = array(
     ),
 );
 
-define( 'ABSPATH', dirname( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) . '/' );
+define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/' );
 
 require getenv( 'BP_TESTS_DIR' ) . '/includes/bootstrap.php';
 
