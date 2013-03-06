@@ -519,4 +519,3 @@ function openlab_remove_email_settings_from_portfolios() {
 }
 add_action( 'bp_group_header_meta', 'openlab_remove_email_settings_from_portfolios', 1 );
 
-?>

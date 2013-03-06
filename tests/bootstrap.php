@@ -10,6 +10,8 @@ $GLOBALS['wp_tests_options'] = array(
 
 define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/' );
 
+//$_SERVER['REQUEST_URI'] = '/';
+
 require getenv( 'BP_TESTS_DIR' ) . '/includes/bootstrap.php';
 
 // Let me run on BP < 1.7

@@ -563,27 +563,7 @@ function wds_bp_group_meta(){
 
 		<?php
 
-		switch ( $group_type ) {
-			case 'portfolio' :
-				$account_type = strtolower( xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() ) );
-
-				switch ( $account_type ) {
-					case 'faculty' :
-						$template = 'template-portfolio';
-						break;
-					case 'staff' :
-						$template = 'template-portfolio-staff';
-						break;
-					case 'student' :
-						$template = 'template-eportfolio';
-						break;
-				}
-				break;
-
-			default :
-				$template = "template-" . strtolower( $group_type );
-				break;
-		}
+		$template = openlab_get_groupblog_template( bp_loggedin_user_id() );
 
 		$blog_details = get_blog_details( $template );
 
@@ -1260,3 +1240,106 @@ function openlab_catch_refresh_feed_requests() {
 	call_user_func( 'openlab_get_external_' . $feed_type . '_by_group_id' );
 }
 add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
+
+function openlab_get_groupblog_template( $user_id ) {
+	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
+	return $tp->get_portfolio_template_for_user();
+}
+
+/**
+ * On portfolio creation, select the appropriate template for the user
+ */
+class OpenLab_GroupBlog_Template_Picker {
+	protected $user_id = 0;
+	protected $template = null;
+	protected $group_type = 'group';
+
+	public function __construct( $user_id = 0 ) {
+		$user_id = intval( $user_id );
+		if ( ! $user_id ) {
+			$user_id = bp_loggedin_user_id();
+		}
+		$this->user_id = $user_id;
+
+		// The apply_filters() is mainly for use in unit testing
+		$this->department_templates = apply_filters( 'openlab_department_templates', array() );
+	}
+
+	public function set_template( $template ) {
+		$this->template = $template;
+		return $template;
+	}
+
+	public function get_group_type() {
+		return $this->group_type;
+	}
+
+	public function set_group_type( $type ) {
+		if ( ! in_array( $type, openlab_group_types() ) ) {
+			$type = 'group';
+		}
+
+		$this->group_type = $type;
+	}
+
+	public function get_user_type() {
+		if ( ! $this->account_type ) {
+			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
+			$this->account_type = $account_type;
+		}
+
+		return $this->account_type;
+	}
+
+	public function set_user_type( $type ) {
+		$this->account_type = $type;
+	}
+
+	public function get_student_department() {
+		if ( ! isset( $this->student_department ) ) {
+			$dept_field = 'student' == $this->get_user_type() ? 'Major Program of Study' : 'Department';
+			$this->student_department = xprofile_get_field_data( $dept_field, $this->user_id );
+		}
+
+		return $this->student_department;
+	}
+
+	public function set_student_department( $department ) {
+		$this->student_department = $department;
+	}
+
+	public function get_template_from_group_type() {
+		return "template-" . strtolower( $this->group_type );
+	}
+
+	public function get_portfolio_template_for_user() {
+		$user_type = $this->get_user_type();
+
+		$template = '';
+		switch ( $user_type ) {
+			case 'faculty' :
+				$template = 'template-portfolio';
+				break;
+			case 'staff' :
+				$template = 'template-portfolio-staff';
+				break;
+			case 'student' :
+				$template = $this->get_portfolio_template_for_student();
+				break;
+		}
+
+		return $template;
+	}
+
+	public function get_portfolio_template_for_student() {
+		$department = $this->get_student_department();
+
+		if ( isset( $this->department_templates[ $department ] ) ) {
+			$template = $this->department_templates[ $department ];
+		} else {
+			$template = 'template-eportfolio';
+		}
+
+		return $template;
+	}
+}
