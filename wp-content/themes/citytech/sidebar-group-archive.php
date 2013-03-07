@@ -191,18 +191,32 @@ switch ($_GET['group_sequence']) {
         <option value='user_type_all'>All</option>
 	</select>
     <?php endif; ?>
+    
+    <?php //for clubs and projects pages, which will process the filter without a submit button
+		  $on_change = "";
+		  if ($group_type == 'project' || $group_type == 'club')
+		  {
+			  $on_change = 'onchange="document.forms[\'group_seq_form\'].submit();"';
+		  }
+	?>
+    
 	<div class="<?php echo $school_color; ?>-square"></div>
-	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
+	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text" <?php echo $on_change; ?>>
  	    <option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
-	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
-	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+	
+    <?php if ($group_type == 'portfolio' || $group_type == 'course'): ?>
+      <input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
+      <input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+    <?php endif; ?>
+    
 </form>
 <div class="clearfloat"></div>
 </div><!--filter-->
+
     <div class="archive-search">
     <div class="gray-square"></div>
     <form method="get">
