@@ -6,7 +6,12 @@
 */
 function openlab_ajax_return_course_list()
 {
-	$school = $_POST['str']; 
+	if ( !wp_verify_nonce( $_GET['nonce'], "dept_select_nonce")) {
+      exit("exit");
+    }
+	
+	$school = $_GET['school']; 
+	
 	if ($school == "tech" || $option_value_school == "tech")
 	{
 	  $tech_depts = openlab_get_department_list('tech');
@@ -50,5 +55,5 @@ function openlab_ajax_return_course_list()
 	}
 }
 
-add_action( 'wp_ajax_nopriv_ openlab_ajax_return_course_list', 'openlab_ajax_return_course_list' );  
+add_action( 'wp_ajax_nopriv_openlab_ajax_return_course_list', 'openlab_ajax_return_course_list' );  
 add_action( 'wp_ajax_openlab_ajax_return_course_list', 'openlab_ajax_return_course_list' );  

@@ -125,7 +125,10 @@ blockquote {
 	margin:5px 15px 15px;
 	padding:10px 20px 0 15px;
 }
-
+.hidden
+{
+	display: none;
+}
 /* Headlines
 ------------------------------------------------------------ */
 h1,h2,h3,h4,h5,h6 {
@@ -2085,7 +2088,10 @@ div#new-topic-post {
 	padding:1px 2px;
 	width:168px;
 }
-
+.page #sidebar select.processing
+{
+	background: url('images/dept-loader.gif') 50% 50% no-repeat #f0f0f0;
+}
 .page #sidebar select.red-text {
 	color:#C84C35;
 }

@@ -157,6 +157,7 @@ switch ($_GET['group_sequence']) {
 		<option value='arts'>Arts &amp; Sciences</option>
 	</select>
 	<div class="<?php echo $school_color; ?>-square"></div>
+    <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
 	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
 	</select>

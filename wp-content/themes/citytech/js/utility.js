@@ -44,23 +44,32 @@
 	
 	//ajax functionality for courses archive
 	$('#school-select').change(function(){
-	  var str = $(this).val();
-	  console.log(str);
-	  if (str=="") {
+	  var school = $(this).val();
+	  var nonce = $('#nonce-value').text();
+	  
+	  //disable the dept dropdown
+	  $('#dept-select').attr('disabled','disabled');
+	  $('#dept-select').addClass('processing');
+	  $('#dept-select').html('<option value=""></option>');
+	  
+	  if (school=="") {
 		document.getElementById("dept-select").innerHTML="";
 		return;
 	  }
 	  
 	  $.ajax({
-			 type: 'POST',
+			 type: 'GET',
 			 url: 'http://' + document.domain + '/wp-admin/admin-ajax.php',
 			 data:
 			  {
 				  action: 'openlab_ajax_return_course_list',
-				  str: str,
+				  school: school,
+				  nonce: nonce
 			  },
 			  success: function(data, textStatus, XMLHttpRequest)
 			  {
+				  $('#dept-select').removeAttr('disabled');
+				  $('#dept-select').removeClass('processing');
 				  $('#dept-select').html(data);
 			  },
 			  error: function(MLHttpRequest, textStatus, errorThrown){  
