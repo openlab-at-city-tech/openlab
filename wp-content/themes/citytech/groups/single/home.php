@@ -45,7 +45,17 @@ function cuny_group_single() { ?>
 			<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 			<?php if ( bp_is_group_home() ): ?>
 			<div id="<?php echo $group_type; ?>-header" class="group-header">
-            	<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
+            	<?php if ($group_type == 'portfolio'): ?>
+					<?php if (strpos(bp_get_group_name(),'ePortfolio'))
+                          {
+                              $profile = "ePortfolio";
+                          } else {
+                              $profile = "Portfolio";
+                          } ?>
+                    <h4 class="profile-header"><?php echo $profile; ?> Profile</h4>
+                <?php else: ?>        
+            		<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
+                <?php endif; ?>
 				 <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar">
                     <a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
                         <?php bp_group_avatar('type=full&width=225') ?>
