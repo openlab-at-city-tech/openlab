@@ -1181,7 +1181,7 @@ ul.item-list li h5 span.small {
 	padding-left:15px;
 	display:block;
 	white-space:normal;
-	margin:6px 0 0 6px;
+	bottom: -45px;
 }
 
 #item-body h5.invite-title {
