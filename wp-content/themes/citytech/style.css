@@ -1189,6 +1189,17 @@ ul.item-list li h5 span.small {
 	padding:10px 0 5px;
 }
 
+#content ul#group-list.invites li {
+	width: 100%!important;
+	clear: left!important;
+	display: block!important;
+	border-bottom: 1px solid #EAEAEA!important;
+	border-right: 0!important;
+    padding: 15px 0!important;
+    position: relative!important;
+    margin: 0!important;
+}
+
 /* Errors and Warnings */
 .ajax-warning {
 	background:#FFC9C9;
