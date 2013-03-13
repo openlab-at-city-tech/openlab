@@ -1814,6 +1814,11 @@ form.standard-form input[type="password"] {
 	margin-bottom:5px;
 }
 
+div.checkbox label,div.radio label {
+	display:inline;
+	font-weight:400;
+}
+
 form.standard-form label,form.standard-form span.label {
 	display:block;
 	font-weight:700;
@@ -3202,10 +3207,8 @@ div.checkbox input,div.radio input {
 	width:auto;
 }
 
-div.checkbox label,div.radio label {
-	display:inline;
-	font-weight:400;
-}
+
+
 
 span.label {
 	display:block;
