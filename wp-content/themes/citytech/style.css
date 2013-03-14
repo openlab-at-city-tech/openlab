@@ -1,17 +1,17 @@
 /*
-        Theme Name: CityTech
-        Theme URL: http://openlab.citytech.cuny.edu
-        Description:
-        Author: CityTech OpenLab Team
-        Author URI:
-        Version: 1.0
-		Template: bp-default
-		Tags: buddypress
+Theme Name: CityTech
+Theme URL: http://openlab.citytech.cuny.edu
+Description:
+Author: CityTech OpenLab Team
+Author URI:
+Version: 1.0
+Template: bp-default
+Tags: buddypress
 */
 /* TABLE OF CONTENTS
 * Note: This stylesheet is organized according to the site structure as detailed in the Functional Spec at
-https://www.dropbox.com/s/3pf9obh9o6y2pj2/OpenLab_FunctionSpec-1_1_v8.pdf. Global styles are in the top section, 
-followed by styles specific to each numbered section of the site. 
+https://www.dropbox.com/s/3pf9obh9o6y2pj2/OpenLab_FunctionSpec-1_1_v8.pdf. Global styles are in the top section,
+followed by styles specific to each numbered section of the site.
 
 * GLOBAL
 ** Resets and Global Defaults
@@ -49,9 +49,9 @@ followed by styles specific to each numbered section of the site.
 ** 2.6 Activity / My Activity
 
 * 3.0 COURSES / MY COURSES
-	
+
 * 4.0 PROJECTS / MY PROJECTS
-	
+
 * 5.0 CLUBS / MY CLUBS
 
 * 6.0 GROUPS (Consolidated)
@@ -60,9 +60,9 @@ followed by styles specific to each numbered section of the site.
 ** 6.3 Docs
 ** 6.4 Files
 ** 6.5 Group Site
-	
+
 * 7.0 PORTFOLIOS
-	
+
 * 8.0 HELP
 */
 
@@ -249,7 +249,7 @@ p a {
 	padding-top:20px;
 }
 
-/* See All, View More 
+/* See All, View More
 ------------------------------------------------------------ */
 .see-all {
 	float:right;
@@ -3225,7 +3225,7 @@ span.label {
 	margin-top:20px;
 }
 
-/* 2.3 Friends / My Friends 
+/* 2.3 Friends / My Friends
 ------------------------------------------------------------ */
 .my-friends #item-header span.activity,.my-friends .item-meta span.activity {
 	font-size:1em;
@@ -4573,14 +4573,14 @@ ul.invite-search {
 ------------------------------------------------------------ */
 /* 6.5 Group Site
 ------------------------------------------------------------ */
-/* 7.0 PORTFOLIOS 
+/* 7.0 PORTFOLIOS
 ------------------------------------------------------------ */
 /* Portfolio Profile */
 #portfolio-header {
 	margin:23px 0 15px;
 }
 
-/* 8.0 HELP 
+/* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
 	text-decoration:underline;

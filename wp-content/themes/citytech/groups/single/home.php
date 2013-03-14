@@ -10,11 +10,11 @@ get_header(); ?>
 	<div id="content" class="hfeed">
     	<?php cuny_group_single(); ?>
     </div><!--content-->
-    
+
     <div id="sidebar" class="sidebar widget-area">
 	<?php cuny_buddypress_group_actions(); ?>
     </div>
-	
+
 <?php get_footer();
 /**end layout**/
 
@@ -26,10 +26,10 @@ function cuny_group_single() { ?>
 		} else {
 			?>
 			<?php do_action( 'bp_before_group_home_content' ) ?>
-            
+
 			<?php $group_slug = bp_get_group_slug();
 			$group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
-            
+
 			<?php //group page vars
 				  global $bp, $wpdb;
 				  $group_id = $bp->groups->current_group->id;
@@ -41,7 +41,7 @@ function cuny_group_single() { ?>
 				  $group_type = openlab_get_group_type( bp_get_current_group_id());
 				  $section = groups_get_groupmeta($group_id, 'wds_section_code');
 				  $html = groups_get_groupmeta($group_id, 'wds_course_html');?>
-                  
+
 			<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 			<?php if ( bp_is_group_home() ): ?>
 			<div id="<?php echo $group_type; ?>-header" class="group-header">
@@ -53,7 +53,7 @@ function cuny_group_single() { ?>
                               $profile = "Portfolio";
                           } ?>
                     <h4 class="profile-header"><?php echo $profile; ?> Profile</h4>
-                <?php else: ?>        
+                <?php else: ?>
             		<h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
                 <?php endif; ?>
 				 <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar">
@@ -76,9 +76,9 @@ function cuny_group_single() { ?>
                     <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a></h2>
                     <div class="info-line"><span class="highlight"><?php if ($section != "") {echo "Section Code: $section";} ?></span></div>
 			<div class="info-line"><span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span></div>
-            
+
               <?php do_action( 'bp_before_group_header_meta' ) ?>
-            
+
               <?php if ($group_type == "course"): ?>
                   <div class="course-byline">
                     <span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>
@@ -89,39 +89,39 @@ function cuny_group_single() { ?>
                     $wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
                     ?>
                     <div class="info-line" style="margin-top:2px;"><?php echo $wds_course_code;?> | <?php echo $wds_departments;?> | <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
-                
+
                 </div><!-- .course-byline -->
                 <?php //do_action( 'bp_before_group_header_meta' ) ?>
                 <div class="course-description">
                     <?php echo apply_filters('the_content', $group_description ); ?>
                 </div>
                 <?php //do_action( 'bp_group_header_meta' ) ?>
-                
+
                 <?php if ($html): ?>
                 <div class="course-html-block">
                     <?php echo $html; ?>
                 </div>
                 <?php endif; //end courses block ?>
-            
+
 			<?php else: ?>
-            
+
             	<div id="item-meta">
 					<?php bp_group_description() ?>
-        
+
                     <?php do_action( 'bp_group_header_meta' ) ?>
                 </div>
-            
+
             <?php endif; ?>
 		</div><!-- .header-content -->
-	
+
 		<?php do_action( 'bp_after_group_header' ) ?>
 		<?php do_action( 'template_notices' ) ?>
-       
-       <div class="clear"></div>     
+
+       <div class="clear"></div>
        </div><!--<?php echo $group_type; ?>-header -->
-            
+
             <?php endif; ?>
-            
+
             <div id="single-course-body">
 <?php
 //
@@ -172,7 +172,7 @@ function cuny_group_single() { ?>
 				}
 */
 			?>
-            
+
             <?php if ($group_type != "portfolio"): ?>
 			<div class="one-half <?php echo $first_class; ?>">
 				<div class="recent-discussions">
@@ -278,7 +278,7 @@ function cuny_group_single() { ?>
                 <?php endif; ?>
 
 			</div>
-            
+
             <?php endif; //end of if $group != 'portfolio' ?>
 
 			<?php elseif ( !bp_group_is_visible() ) : ?>
@@ -353,7 +353,7 @@ global $bp;
 		<div id="item-buttons">
 			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
 			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
-            <ul>
+		    <ul>
 				<?php bp_get_options_nav(); ?>
 			</ul>
 			<?php endif ?>

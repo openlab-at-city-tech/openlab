@@ -298,7 +298,7 @@ function openlab_submenu_gen($items)
 					//special case for my-<groups> pages
 					if ( isset( $_GET['type'] ) ) {
 						$type = $_GET['type'];
-						$type_title = 'My '.ucfirst(str_replace('-',' ',$type)).'s';					
+						$type_title = 'My '.ucfirst(str_replace('-',' ',$type)).'s';
 						if ($title == $type_title)
 						{
 							$item_classes .= " selected-page";
@@ -339,7 +339,7 @@ function openlab_submenu_gen($items)
 }
 
 /**
- * bp_get_options_nav filtering 
+ * bp_get_options_nav filtering
  *
  */
 
@@ -442,7 +442,7 @@ function openlab_group_submenu_nav() {
 
     //get the current item menu
 	$nav_items = $bp->bp_options_nav[$bp->current_item];
-	
+
 	//manual sorting of current item menu
 	if ($nav_items)
 	{
