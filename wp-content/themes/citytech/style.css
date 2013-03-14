@@ -4102,6 +4102,43 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 	margin:0 0 0 15px!important;
 }
 
+h4.group-activity-title {
+    border-bottom: 1px solid #717171;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.recent-discussions h5 {
+    color: #666666;
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 11px;
+    margin: 0 0 3px;
+}
+
+a.read-more, .activity-inner a.read-more {
+    color: #6D6D6D;
+    font-family: Arial,Helvetica,Tahoma,sans-serif;
+    font-size: 11px;
+    margin: 0 0 0 5px;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.internal-page #content ul li {
+    list-style: none outside none;
+}
+
+.recent-discussions li {
+    border-bottom: 1px solid #EDEEEF;
+    margin: 0 0 10px;
+}
+
+h4.group-activity-title.activity-members-title {
+    border-bottom: medium none;
+}
+
 /* Create & Admin Group */
 #active-toggle {
 	margin:10px 0;
