@@ -199,18 +199,25 @@ switch ($_GET['group_sequence']) {
 			  $on_change = 'onchange="document.forms[\'group_seq_form\'].submit();"';
 		  }
 	?>
-    
-	<div class="<?php echo $school_color; ?>-square"></div>
-	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text" <?php echo $on_change; ?>>
- 	    <option value="<?php echo $option_value; ?>"><?php echo $display_option; ?></option>
+	
+    <?php if ($group_type == 'portfolio' || $group_type == 'course'): ?>
+      <div class="<?php echo $school_color; ?>-square"></div>
+	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
 		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
 		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
 	</select>
-	
-    <?php if ($group_type == 'portfolio' || $group_type == 'course'): ?>
       <input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
       <input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+    <?php else: ?>
+       <form id="group_seq_form" name="group_seq_form" action="#" method="get">
+	<div class="<?php echo $square_class; ?>"></div>
+	<select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select <?php echo $select_class; ?>">
+		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
+		<option <?php selected( $option_value, 'newest' ) ?>  value='newest'>Newest</option>
+		<option <?php selected( $option_value, 'active' ) ?> value='active'>Last Active</option>
+	</select>
+        </form>
     <?php endif; ?>
     
 </form>
