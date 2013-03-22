@@ -473,6 +473,27 @@ function openlab_group_submenu_nav() {
 
 add_action( 'bp_actions', 'openlab_group_submenu_nav', 1 );
 
+/*
+ * Hide "Join Group/Leave Group" button on Portfolios and select group profile pages
+ */
+
+function openlab_no_join_on_portfolios($button) {
+	global $bp;
+
+	if ( openlab_is_portfolio() ) {
+            $button = "";
+	}
+	//fix for files, docs, and membership pages in group profile - hiding join button
+	else if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
+	{
+            $button = "";
+	}
+        
+        return $button;
+}
+
+add_filter('bp_get_group_join_button','openlab_no_join_on_portfolios');
+
 /**
  * Markup for group admin tabs
  */
