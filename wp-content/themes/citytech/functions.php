@@ -547,4 +547,10 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
-?>
+
+/**
+ * Don't show secondary avatars from bp-default
+ *
+ * @see #809
+ */
+remove_filter( 'bp_get_activity_action_pre_meta', 'bp_dtheme_activity_secondary_avatars', 10, 2 );
