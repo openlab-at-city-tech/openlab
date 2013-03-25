@@ -224,9 +224,13 @@ function openlab_group_blog_activity( $activity ) {
 		) );
 	}
 
-	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
+	// If we found an activity for this blog post, then overwrite it to
+	// avoid have multiple activities for every blog post edit.
+	//
+	// Here we'll also prevent email notifications from being sent
 	if ( $id ) {
 		$activity->id = $id;
+		remove_action( 'bp_activity_after_save' , 'ass_group_notification_activity', 50 );
 	}
 
 	// Replace the necessary values to display in group activity stream
