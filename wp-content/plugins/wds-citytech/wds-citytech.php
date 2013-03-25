@@ -1863,4 +1863,31 @@ function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
 	}
 }
 add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
-?>
+
+/**
+ * Don't let Awesome Flickr plugin load colorbox if WP AJAX Edit Comments is active
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/363
+ */
+function openlab_fix_colorbox_conflict_1() {
+	if ( ! function_exists( 'enqueue_afg_scripts' ) ) {
+		return;
+	}
+
+	$is_wp_ajax_edit_comments_active = in_array( 'wp-ajax-edit-comments/wp-ajax-edit-comments.php', (array) get_option( 'active_plugins', array() ) );
+
+	remove_action( 'wp_print_scripts', 'enqueue_afg_scripts' );
+
+	if( ! get_option( 'afg_disable_slideshow' ) ) {
+		if (get_option('afg_slideshow_option') == 'highslide') {
+		    wp_enqueue_script('afg_highslide_js', BASE_URL . "/highslide/highslide-full.min.js");
+		}
+
+		if (get_option('afg_slideshow_option') == 'colorbox' && ! $is_wp_ajax_edit_comments_active ) {
+		    wp_enqueue_script('jquery');
+		    wp_enqueue_script('afg_colorbox_script', BASE_URL . "/colorbox/jquery.colorbox-min.js" , array('jquery'));
+		    wp_enqueue_script('afg_colorbox_js', BASE_URL . "/colorbox/mycolorbox.js" , array('jquery'));
+		}
+	}
+}
+add_action( 'wp_print_scripts', 'openlab_fix_colorbox_conflict_1', 1 );
