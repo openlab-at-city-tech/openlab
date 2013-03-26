@@ -2,9 +2,10 @@
 
 $GLOBALS['wp_tests_options'] = array(
     'active_plugins' => array(
-	'wds-citytech/wds-citytech.php',
+	'bp-include-non-member-comments/bp-include-non-member-comments.php',
 	'buddypress/bp-loader.php',
 	'genesis-connect-for-buddypress/genesis-connect.php',
+	'wds-citytech/wds-citytech.php',
     ),
 );
 
