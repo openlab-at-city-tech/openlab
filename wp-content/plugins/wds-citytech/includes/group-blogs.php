@@ -242,9 +242,15 @@ function openlab_group_blog_activity( $activity ) {
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
+		$userlink = '';
+		if ( $activity->user_id ) {
+			$userlink = bp_core_get_userlink( $activity->user_id );
+		} else {
+			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
+		}
 		$activity->action = sprintf(
 			__( '%s commented on %s in the group %s:', 'groupblog'),
-			bp_core_get_userlink( $activity->user_id ),
+			$userlink,
 			'<a href="' . get_permalink( $post->ID ) .'">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
@@ -264,8 +270,9 @@ function openlab_group_blog_activity( $activity ) {
 	// Mark the group as having been active
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
-	// prevent infinite loops
+	// prevent infinite loops, but let this function run on later activities (for unit tests)
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+	add_action( 'bp_activity_after_save', create_function( '', 'add_action( "bp_activity_before_save", "openlab_group_blog_activity" );' ) );
 
 	return $activity;
 }
