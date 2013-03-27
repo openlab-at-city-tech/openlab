@@ -1360,6 +1360,7 @@ div#message p {
 	border:1px solid #F5F6F7;
 	font-weight:700;
 	padding:10px;
+	clear: both;
 }
 
 /* #message.error -- When there is an error, there is a .error class appended */
