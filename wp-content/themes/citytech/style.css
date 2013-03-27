@@ -232,7 +232,7 @@ p a {
 
 .entry-content a,#course-list a,#project-list a,#club-list a {
 	text-decoration:underline;
-	color:#444;
+	color:#444!important;
 }
 
 .entry-content a:hover {
@@ -3661,8 +3661,8 @@ body.activity-permalink .activity-list li .activity-header > p {
 }
 
 .activity-list .activity-header a:first-child:hover {
-	background:none repeat scroll 0 0 #059AE7!important;
-	color:#FFF!important;
+    background: none repeat scroll 0 0 transparent !important;
+    color: #0FCEBA !important;
 }
 
 .activity-list .activity-content a:first-child:focus {
@@ -4119,7 +4119,6 @@ h4.group-activity-title {
 }
 
 a.read-more, .activity-inner a.read-more {
-    color: #6D6D6D;
     font-family: Arial,Helvetica,Tahoma,sans-serif;
     font-size: 11px;
     margin: 0 0 0 5px;
