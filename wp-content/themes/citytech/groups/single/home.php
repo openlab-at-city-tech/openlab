@@ -74,8 +74,10 @@ function cuny_group_single() { ?>
 
 				<div id="<?php echo $group_type; ?>-header-content" class="alignleft group-header-content">
                     <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a></h2>
-                    <div class="info-line"><span class="highlight"><?php if ($section != "") {echo "Section Code: $section";} ?></span></div>
+                    
+                        <?php if ($group_type != "portfolio"): ?>
 			<div class="info-line"><span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span></div>
+                        <?php endif; ?>
 
               <?php do_action( 'bp_before_group_header_meta' ) ?>
 
