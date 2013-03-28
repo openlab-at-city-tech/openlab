@@ -4579,7 +4579,10 @@ ul.invite-search {
 #portfolio-header {
 	margin:23px 0 15px;
 }
-
+.portfolio-displayname
+{
+    margin-bottom: 15px;
+}
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
