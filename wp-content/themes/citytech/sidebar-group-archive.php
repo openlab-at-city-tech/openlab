@@ -83,8 +83,8 @@ if ( empty( $_GET['semester'] ) ) {
   $option_value_semester = "semester_all";
 } else{
   $dept_color = "red";
-  $display_option_dept = ucfirst(str_replace('-',' ',$_GET['semester']));
-  $option_value_dept =  $_GET['semester'];
+  $display_option_semester = ucfirst(str_replace('-',' ',$_GET['semester']));
+  $option_value_semester =  $_GET['semester'];
 }
 
 //user types - for people archive page
@@ -160,6 +160,7 @@ switch ($_GET['group_sequence']) {
     <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
 	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<option value="<?php echo $option_value_dept; ?>"><?php echo $display_option_dept; ?></option>
+                <?php echo openlab_return_course_list($option_value_school); ?>
 	</select>
     <?php endif; ?>
     
