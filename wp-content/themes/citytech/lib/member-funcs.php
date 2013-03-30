@@ -16,7 +16,7 @@ function openlab_list_members($view) {
 
 	// There are two ways to specify user type: through the page name, or a URL param
 	$user_type = $sequence_type = $search_terms = '';
-	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'all' ) {
+	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'user_type_all' ) {
 		$user_type = $_GET['usertype'];
 		$user_type = ucwords( $user_type );
 	} else {

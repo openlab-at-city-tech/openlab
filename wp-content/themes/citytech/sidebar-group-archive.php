@@ -200,8 +200,8 @@ switch ($_GET['group_sequence']) {
 			  $on_change = 'onchange="document.forms[\'group_seq_form\'].submit();"';
 		  }
 	?>
-	
-    <?php if ($group_type == 'portfolio' || $group_type == 'course'): ?>
+    
+    <?php if ($group_type == 'portfolio' || $group_type == 'course' || $group_type == 'people'): ?>
       <div class="<?php echo $sort_color; ?>-square"></div>
 	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'>Alphabetical</option>
