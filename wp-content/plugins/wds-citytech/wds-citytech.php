@@ -1773,10 +1773,15 @@ add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
 /**
  * Default subscription level for group emails should be All
  */
-function openlab_default_group_subscription() {
-	return 'supersub';
+function openlab_default_group_subscription($level) {
+    if (!$level) {
+        $level = 'supersub';
+    }
+
+    return $level;
 }
-add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
+
+add_filter('ass_default_subscription_level', 'openlab_default_group_subscription');
 
 /**
  * Brackets in password reset emails cause problems in some clients. Remove them
