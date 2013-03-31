@@ -126,6 +126,13 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 		</div>
 <?php else: ?>
 	<?php $group_type = $filters['wds_group_type'].'s'; ?>
+        <div class="submenu">
+	  	<?php 
+		if (openlab_is_my_profile()) {
+			echo openlab_my_groups_submenu($filters['wds_group_type']);
+		}
+		?>
+    </div><!--submenu-->
 	<div class="widget-error">
 		<?php _e('There are no '.$group_type.' to display.', 'buddypress') ?>
 	</div>
