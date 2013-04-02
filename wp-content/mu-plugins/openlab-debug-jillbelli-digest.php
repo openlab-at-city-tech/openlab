@@ -10,6 +10,7 @@ function openlab_jb_digest_debug( $meta_id, $object_id, $meta_key, $meta_value )
 		$val = array();
 		$val[] = func_get_args();
 		$val[] = debug_backtrace();
+		$val[] = $_SERVER;
 		update_site_option( 'openlab_jb_debug_' . time(), json_encode( $val ) );
 	}
 }
