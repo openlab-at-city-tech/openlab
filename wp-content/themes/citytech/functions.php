@@ -553,4 +553,7 @@ add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
  *
  * @see #809
  */
-remove_filter( 'bp_get_activity_action_pre_meta', 'bp_dtheme_activity_secondary_avatars', 10, 2 );
+function openlab_remove_secondary_avatars() {
+        remove_filter( 'bp_get_activity_action_pre_meta', 'bp_dtheme_activity_secondary_avatars', 10, 2 );
+}
+add_action( 'after_setup_theme', 'openlab_remove_secondary_avatars' );
