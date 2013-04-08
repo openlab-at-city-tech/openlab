@@ -511,24 +511,19 @@ function openlab_default_subscription_settings_form() {
 		return;
 	}
 
-	$stored_setting = ass_get_default_subscription();
-	if ( !$stored_setting ) {
-		$stored_setting = 'supersub';
-	}
-
 	?>
 	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
 	<div class="radio">
-		<label><input type="radio" name="ass-default-subscription" value="no" <?php checked( $stored_setting, 'no' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
 			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="sum" <?php checked( $stored_setting, 'sum' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
 			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="dig" <?php checked( $stored_setting, 'dig' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
 			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="sub" <?php checked( $stored_setting, 'sub' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
 			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php checked( $stored_setting, 'supersub' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
 			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'bp-ass' ) ?></label>
 	</div>
 	<hr />
@@ -553,4 +548,7 @@ add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
  *
  * @see #809
  */
-remove_filter( 'bp_get_activity_action_pre_meta', 'bp_dtheme_activity_secondary_avatars', 10, 2 );
+function openlab_remove_secondary_avatars() {
+        remove_filter( 'bp_get_activity_action_pre_meta', 'bp_dtheme_activity_secondary_avatars', 10, 2 );
+}
+add_action( 'after_setup_theme', 'openlab_remove_secondary_avatars' );
