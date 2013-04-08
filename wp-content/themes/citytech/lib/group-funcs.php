@@ -242,7 +242,9 @@ if ( bp_has_groups( $group_args ) ) : ?>
 			<?php bp_groups_pagination_links() ?>
 		</div>
 <?php else: ?>
-
+        <div class="current-group-filters current-portfolio-filters">
+		<?php openlab_current_directory_filters(); ?>
+                </div>
 	<div class="widget-error">
 		<?php _e('There are no '.$group_type.'s to display.', 'buddypress') ?>
 	</div>
