@@ -533,6 +533,22 @@ remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_setti
 add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
 
 /**
+ * Save the group default email setting
+ *
+ * We override the way that GES does it, because we want to save the value even
+ * if it's 'no'. This should probably be fixed upstream
+ */
+function openlab_save_default_subscription( $group ) {
+	global $bp, $_POST;
+
+	if ( isset( $_POST['ass-default-subscription'] ) && $postval = $_POST['ass-default-subscription'] ) {
+		groups_update_groupmeta( $group->id, 'ass_default_subscription', $postval );
+	}
+}
+remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
+add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
+
+/**
  * Filter the output of the Add Friend/Cancel Friendship button
  */
 function openlab_filter_friendship_button( $button ) {
