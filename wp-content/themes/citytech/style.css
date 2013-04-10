@@ -1574,6 +1574,7 @@ form .submit {
 	padding:3px 5px;
 	text-decoration:none;
 	text-transform:uppercase;
+	display: block;
 }
 
 #search-submit:hover,#aw-whats-new-submit:hover,#ac-form-submit:hover,#groups_search_submit:hover,#forums_search_submit:hover,#members_search_submit:hover,#profile-group-edit-submit:hover,#send:hover,.submit input:hover,#ass-save:hover {
