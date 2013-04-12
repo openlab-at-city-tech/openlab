@@ -609,14 +609,7 @@ function wds_bp_group_meta(){
 			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
 				<?php switch ( $group_type ) :
 					case 'course' : ?>
-						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
-
-						<ul class="ol-tooltip">
-							<li>FacultyLastNameCourseCode</li>
-							<li>smithadv1100</li>
-						</ul>
-
-						<p class="ol-tooltip">If you plan to create a new course each semester, you may choose to add Semester and Year.</p>
+						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
 						<ul class="ol-tooltip">
 							<li>FacultyLastNameCourseCodeSemYear</li>
