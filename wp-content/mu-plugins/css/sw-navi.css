@@ -84,7 +84,7 @@ a#cuny-sw-logo {
 
 #cuny-sw-header ul.cuny-navi li a:hover,
 #cuny-sw-header ul.main-nav li a:hover {
-	
+
 }
 
 #cuny-sw-header ul.cuny-navi li li,
@@ -165,7 +165,7 @@ a#cuny-sw-logo {
     margin: 0 5px 0 0;
 }
 
-#cuny-sw-header .searchsubmit, #cuny-sw-header .searchsubmit:hover, 
+#cuny-sw-header .searchsubmit, #cuny-sw-header .searchsubmit:hover,
 #cuny-sw-header #search-submit, #cuny-sw-header #search-submit:hover {
     background: url("images/icon-sprite.png") no-repeat scroll -7px -5px transparent;
     border: 0 none;
@@ -193,7 +193,7 @@ a#cuny-sw-logo {
 #cuny-sw-header#subject, #send-notice,
 #cuny-sw-header#send-to-input,
 #cuny-sw-header#pass1,
-#cuny-sw-header#pass2 { 
+#cuny-sw-header#pass2 {
     background: none repeat scroll 0 0 #F7F7F7;
     border: 1px solid #E6E6E6;
     color: #000000;
@@ -270,12 +270,12 @@ a#cuny-sw-logo {
 #wp-admin-bar .user-links a
 {
 	color: #717171;
-	
+
 }
 #wp-admin-bar #openlab-menu
 {
 	text-transform: uppercase;
-	color: #c84c35; 
+	color: #c84c35;
 }
 #wp-admin-bar ul .sub-menu
 {
@@ -290,7 +290,7 @@ a#cuny-sw-logo {
 	border-right: 2px solid #cfcfcf;
 	padding: 0;
 	line-height:15px;
-	
+
 }
 
 #wp-admin-bar ul li {
@@ -336,11 +336,11 @@ a#cuny-sw-logo {
 
 /* Forms
 ------------------------------------------------------------ */
- 
+
 .wds-group-form-item label {
 	display:block;
 }
-	
+
 .wds-group-form-item textarea, input[type="text"] {
 	width:100%;
 }
@@ -354,8 +354,8 @@ a#cuny-sw-logo {
 #cuny-sw-footer {
 
 }
-	
-	
+
+
 #cuny-sw-footer #footer-widgets {
 	background-color: #666;
 	clear: both;
