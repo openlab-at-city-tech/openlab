@@ -346,30 +346,16 @@ function check_calendar()
   $wp_calendar_config_version_number_exists = false;
 
   // Determine the calendar version
-  $tables = $wpdb->get_results("show tables");
-  foreach ( $tables as $table )
-    {
-      foreach ( $table as $value )
-        {
-	  if ( $value == WP_CALENDAR_TABLE )
-	    {
-	      $wp_calendar_exists = true;
-	    }
-	  if ( $value == WP_CALENDAR_CONFIG_TABLE )
-            {
-              $wp_calendar_config_exists = true;
-              
-	      // We now try and find the calendar version number
-              // This will be a lot easier than finding other stuff 
-              // in the future.
-	      $version_number = $wpdb->get_var("SELECT config_value FROM " . WP_CALENDAR_CONFIG_TABLE . " WHERE config_item='calendar_version'"); 
-	      if ($version_number == "1.2")
-		{
-		  $wp_calendar_config_version_number_exists = true;
-		}
-            }
-        }
-    }
+  $wp_calendar_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", WP_CALENDAR_TABLE ) );
+  $wp_calendar_config_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", WP_CALENDAR_CONFIG_TABLE ) );
+
+  if ( $wp_calendar_config_exists ) {
+      $version_number = $wpdb->get_var("SELECT config_value FROM " . WP_CALENDAR_CONFIG_TABLE . " WHERE config_item='calendar_version'");
+  }
+
+  if ($version_number == "1.2") {
+    $wp_calendar_config_version_number_exists = true;
+  }
 
   if ($wp_calendar_exists == false && $wp_calendar_config_exists == false)
     {
