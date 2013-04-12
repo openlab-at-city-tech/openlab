@@ -1,0 +1,72 @@
+div#tp-options {
+	width: 760px;
+	padding-bottom: 40px;
+}
+#wpptopdf-options h1 {
+	font-family: Georgia, "Times New Roman", Times, Serif;
+	font-weight: normal;
+	font-size: 2.2em;
+}
+.form-table tr:hover{
+    background-color:#eeeeee;
+}
+#wpptopdf-options h1.v-trial {
+	float: left;
+	margin: 5px 0 0 0;
+}
+div.wpptopdf-option h3 {
+	margin: 15px 0 0 0;
+	padding: 15px 15px 15px 40px;
+	font-size: 1.2em;
+	color: #4e4c41;
+	background: #f1f1f1 url(../images/toggle.gif) no-repeat 10px 13px;
+	border: 1px solid #e6e6e6;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	cursor: pointer;
+}
+div.wpptopdf-option h3.open {
+	-moz-border-radius: 6px 6px 0 0;
+	-webkit-border-radius: 6px 6px 0 0;
+	background-position: 10px -27px;
+}
+div.wpptopdf-option h3 span {
+	font-size: .9em;
+	font-weight: normal;
+	float: right;
+	color: #aaa;
+}
+div.wpptopdf-option-body {
+	margin: 0;
+	padding: 15px;
+	background: #fbfbfa;
+	border: 1px solid #e6e6e6;
+	border-top: none;
+	-moz-border-radius: 0 0 6px 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+}
+
+#wpptopdf-options input[type=text], #wpptopdf-options textarea{
+    width: 500px;
+}
+
+div.wpptopdf-notice, div.wpptopdf-info {
+    margin:15px 0 0;
+	padding: 20px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;    
+    padding:10px 2em;
+}
+div.wpptopdf-notice{
+	background: #ffcccc;
+	border: 1px solid #ff3366;
+}
+div.wpptopdf-info{
+	background: #ccffcc;
+	border: 1px solid #33cc00;
+}
+span.wpptopdf-notice{
+	color:#ff0000;
+}
+
