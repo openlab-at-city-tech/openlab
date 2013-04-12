@@ -211,7 +211,14 @@ function my_page_menu_filter( $menu ) {
 	if( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
+		$menu_a = explode( '<ul>', $menu );
+		$menu_a = array(
+			$menu_a[0],
+			'<ul>',
+			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+			$menu_a[1],
+		);
+		$menu = implode( '', $menu_a );
 	}
 	return $menu;
 }
