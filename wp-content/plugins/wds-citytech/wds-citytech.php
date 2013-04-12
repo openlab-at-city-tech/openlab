@@ -188,15 +188,19 @@ function wds_check_blog_privacy(){
 
 
 
-//child theme menu filter to link to website
-add_filter('wp_page_menu','my_page_menu_filter');
+/**
+ * On secondary sites, add our additional buttons to the site nav
+ *
+ * This function filters wp_page_menu, which is what shows up when no custom
+ * menu has been selected. See cuny_add_group_menu_items() for the
+ * corresponding method for custom menus.
+ */
 function my_page_menu_filter( $menu ) {
 	global $bp, $wpdb;
 
-
-	if (!(strpos($menu,"Home") === false)) {
-	    $menu = str_replace("Site Home","Home",$menu);
-	    $menu = str_replace("Home","Site Home",$menu);
+	if ( strpos( $menu, "Home" ) !== false ) {
+		$menu = str_replace("Site Home","Home",$menu);
+		$menu = str_replace("Home","Site Home",$menu);
 	} else {
 		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>',$menu);
 	}
@@ -208,7 +212,7 @@ function my_page_menu_filter( $menu ) {
 
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
-	if( $wds_bp_group_id  ){
+	if ( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 		$menu_a = explode( '<ul>', $menu );
@@ -222,9 +226,9 @@ function my_page_menu_filter( $menu ) {
 	}
 	return $menu;
 }
+add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
-add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items', 10, 2 );
 function cuny_add_group_menu_items( $items, $args ) {
         // The Sliding Door theme shouldn't get any added items
         // See http://openlab.citytech.cuny.edu/redmine/issues/772
@@ -244,6 +248,8 @@ function cuny_add_group_menu_items( $items, $args ) {
 
 	return $items;
 }
+add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items', 10, 2 );
+
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
