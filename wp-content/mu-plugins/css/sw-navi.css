@@ -465,6 +465,17 @@ a#cuny-sw-logo {
 	border-right: 1px solid #929292;
     padding: 0 15px;
     height: 100px;
+		margin-top: 0;
+}
+
+/* Twenty Twelve override */
+#cuny-sw-footer .widget-area {
+	margin-top: 0
+}
+
+/* Twenty Twelve override */
+#cuny-sw-footer .widget-area .widget p {
+	line-height: 15px;
 }
 
 #footer-widgets li.rss a {
