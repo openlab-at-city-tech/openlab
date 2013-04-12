@@ -581,4 +581,3 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
-?>
