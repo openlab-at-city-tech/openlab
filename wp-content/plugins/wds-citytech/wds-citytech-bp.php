@@ -421,3 +421,14 @@ add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
  * @see #666
  */
 add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false' );
+
+/**
+ * Bust the home page activity transients when new items are posted
+ */
+function openlab_clear_home_page_transients() {
+	delete_site_transient( 'openlab_home_group_activity_items_course' );
+	delete_site_transient( 'openlab_home_group_activity_items_project' );
+	delete_site_transient( 'openlab_home_group_activity_items_club' );
+	delete_site_transient( 'openlab_home_group_activity_items_portfolio' );
+}
+add_action( 'bp_activity_after_save', 'openlab_clear_home_page_transients' );

@@ -209,38 +209,42 @@ function cuny_home_square($type){
 
 	  	global $groups_template;
 
-	  	$group_ids = array();
-	  	foreach( $groups_template->groups as $g ) {
-	  		$group_ids[] = $g->id;
-	  	}
-	  	$group_ids_sql = implode( ',', $group_ids );
+		if ( ! $group_activity_items = get_site_transient( 'openlab_home_group_activity_items_' . $type ) ) {
+			$group_ids = array();
+			foreach( $groups_template->groups as $g ) {
+				$group_ids[] = $g->id;
+			}
+			$group_ids_sql = implode( ',', $group_ids );
 
-	  	$activity = $wpdb->get_results( "
-	  		SELECT
-	  			content, item_id
-	  		FROM
-	  			{$bp->activity->table_name}
-	  		WHERE
-	  			component = 'groups'
-	  			AND
-	  			type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
-	  			AND
-	  			item_id IN ({$group_ids_sql})
-	  		ORDER BY
-	  			date_recorded DESC
-			LIMIT 100"
-		);
+			$activity = $wpdb->get_results( "
+				SELECT
+					content, item_id
+				FROM
+					{$bp->activity->table_name}
+				WHERE
+					component = 'groups'
+					AND
+					type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
+					AND
+					item_id IN ({$group_ids_sql})
+				ORDER BY
+					date_recorded DESC
+				LIMIT 100"
+			);
 
-	  	// Now walk down the list and try to match with a group. Once one is found, remove
-	  	// that group from the stack
-	  	$group_activity_items = array();
-	  	foreach( (array)$activity as $act ) {
-	  		if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
-	  			$group_activity_items[$act->item_id] = $act->content;
-				$key = array_search( $act->item_id, $group_ids );
-				unset( $group_ids[$key] );
-	  		}
-	  	}
+			// Now walk down the list and try to match with a group. Once one is found, remove
+			// that group from the stack
+			$group_activity_items = array();
+			foreach( (array)$activity as $act ) {
+				if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
+					$group_activity_items[$act->item_id] = $act->content;
+					$key = array_search( $act->item_id, $group_ids );
+					unset( $group_ids[$key] );
+				}
+			}
+
+			set_site_transient( 'openlab_home_group_activity_items_' . $type, $group_activity_items );
+		}
 
 	  	?>
 
