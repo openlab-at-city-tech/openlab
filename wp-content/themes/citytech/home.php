@@ -215,7 +215,7 @@ function cuny_home_square($type){
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
 
-	  	$activity = $wpdb->get_results( $wpdb->prepare( "
+	  	$activity = $wpdb->get_results( "
 	  		SELECT
 	  			content, item_id
 	  		FROM
@@ -227,7 +227,9 @@ function cuny_home_square($type){
 	  			AND
 	  			item_id IN ({$group_ids_sql})
 	  		ORDER BY
-	  			date_recorded DESC" ) );
+	  			date_recorded DESC
+			LIMIT 100"
+		);
 
 	  	// Now walk down the list and try to match with a group. Once one is found, remove
 	  	// that group from the stack
