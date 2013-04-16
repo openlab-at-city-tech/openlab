@@ -26,11 +26,11 @@ function openlab_get_user_portfolio_id( $user_id = 0 ) {
 		$user_id = openlab_fallback_user();
 	}
 
-        // Extra fallback for the case of portfolios: get the user associated
-        // with the current group
-        if ( !$user_id ) {
-                $user_id = openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() );
-        }
+	// Extra fallback for the case of portfolios: get the user associated
+	// with the current group
+	if ( !$user_id ) {
+		$user_id = openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() );
+	}
 
 	$group_id = bp_get_user_meta( $user_id, 'portfolio_group_id', true );
 
@@ -79,7 +79,7 @@ function openlab_user_portfolio_profile_url( $user_id = 0 ) {
 	 * @return string
 	 */
 	function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
-		$group_id = openlab_get_user_portfolio_id( $user_id );
+		$group_id    = openlab_get_user_portfolio_id( $user_id );
 		$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
 		return bp_get_group_permalink( $profile_obj );
 	}
@@ -135,15 +135,15 @@ function openlab_portfolio_label( $args = array() ) {
 	 *                 article: it's always lowercase.
 	 */
 	function openlab_get_portfolio_label( $args = array() ) {
-		$default_user_id   = openlab_fallback_user();
-		$default_group_id  = openlab_fallback_group();
+		$default_user_id  = openlab_fallback_user();
+		$default_group_id = openlab_fallback_group();
 
 		$defaults = array(
 			'user_id'      => $default_user_id,
 			'group_id'     => $default_group_id,
 			'user_type'    => '',
 			'case'         => 'lower',
-			'leading_a'    => false
+			'leading_a'    => false,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -229,9 +229,7 @@ function openlab_groups_screen_group_admin_access_list() {
 	global $bp;
 
 	if ( bp_is_groups_component() && bp_is_action_variable( 'access-list', 0 ) ) {
-
 		if ( $bp->is_item_admin || $bp->is_item_mod  ) {
-
 			// If the edit form has been submitted, save the edited details
 			if ( isset( $_POST['save'] ) ) {
 				// Check the nonce
@@ -266,7 +264,7 @@ function openlab_access_list_checkboxes() {
 
 		$defaults = array(
 			'group_id' => false,
-			'separator' => 'li'
+			'separator' => 'li',
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -281,7 +279,7 @@ function openlab_access_list_checkboxes() {
 		if ( $friends ) {
 			$group_members = BP_Groups_Member::get_all_for_group( $group_id, false, false, false ); // last param - exclude_admins_mods
 			$gms = array();
-			foreach( (array) $group_members['members'] as $gm ) {
+			foreach ( (array) $group_members['members'] as $gm ) {
 				$gms[] = $gm->user_id;
 			}
 
@@ -311,12 +309,12 @@ function openlab_portfolio_access_list_enqueues() {
 		wp_register_script( 'invite-anyone-js', WP_PLUGIN_URL . '/wds-citytech/assets/js/access-list.js', array( 'invite-anyone-autocomplete-js' ) );
 		wp_enqueue_script( 'invite-anyone-js' );
 
-		$style_url = WP_PLUGIN_URL . '/invite-anyone/group-invites/group-invites-css.css';
+		$style_url  = WP_PLUGIN_URL . '/invite-anyone/group-invites/group-invites-css.css';
 		$style_file = WP_PLUGIN_DIR . '/invite-anyone/group-invites/group-invites-css.css';
 
-		if (file_exists($style_file)) {
-			wp_register_style('invite-anyone-group-invites-style', $style_url);
-			wp_enqueue_style('invite-anyone-group-invites-style');
+		if ( file_exists( $style_file ) ) {
+			wp_register_style( 'invite-anyone-group-invites-style', $style_url );
+			wp_enqueue_style( 'invite-anyone-group-invites-style' );
 		}
 	}
 }
@@ -331,7 +329,6 @@ function openlab_ajax_invite_user() {
 		die();
 
 	if ( 'invite' == $_POST['friend_action'] ) {
-
 		// Add the user to the group, silently
 		$new_member                = new BP_Groups_Member;
 		$new_member->group_id      = (int) $_POST['group_id'];
@@ -358,15 +355,12 @@ function openlab_ajax_invite_user() {
 		echo '</li>';
 
 		die();
-
 	} else if ( 'uninvite' == $_POST['friend_action'] ) {
-
 		// Remove the user from the group, silently
 		if ( !groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] ) )
 			die();
 
 		die();
-
 	} else {
 		die();
 	}
@@ -389,12 +383,12 @@ function openlab_ajax_autocomplete() {
 		$data 	     = array();
 
 		foreach ( $users as $user ) {
-			$suggestions[] 	= $user->display_name . ' (' . $user->user_login . ')';
-			$data[] 	= $user->ID;
+			$suggestions[] = $user->display_name . ' (' . $user->user_login . ')';
+			$data[] = $user->ID;
 		}
 
 		$return['suggestions'] = $suggestions;
-		$return['data']	       = $data;
+		$return['data'] = $data;
 	}
 
 	die( json_encode( $return ) );
@@ -514,7 +508,7 @@ add_action( 'bp_actions', 'openlab_enforce_one_portfolio_per_person', 1 );
  */
 function openlab_remove_email_settings_from_portfolios() {
 	if ( openlab_is_portfolio() ) {
-		remove_action ( 'bp_group_header_meta', 'ass_group_subscribe_button' );
+		remove_action( 'bp_group_header_meta', 'ass_group_subscribe_button' );
 	}
 }
 add_action( 'bp_group_header_meta', 'openlab_remove_email_settings_from_portfolios', 1 );
