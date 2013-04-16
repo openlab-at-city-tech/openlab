@@ -1909,3 +1909,58 @@ function openlab_fix_colorbox_conflict_1() {
 	}
 }
 add_action( 'wp_print_scripts', 'openlab_fix_colorbox_conflict_1', 1 );
+
+/**
+ * Prevent More Privacy Options from displaying its -2 message, and replace with our own
+ *
+ * See #775
+ */
+function openlab_swap_private_blog_message() {
+	global $current_blog, $ds_more_privacy_options;
+
+	if ( '-2' == $current_blog->public ) {
+		remove_action( 'template_redirect', array( &$ds_more_privacy_options, 'ds_members_authenticator' ) );
+		add_action( 'template_redirect', 'openlab_private_blog_message', 1 );
+	}
+}
+add_action( 'wp', 'openlab_swap_private_blog_message' );
+
+/**
+ * Callback for our own "members only" blog message
+ *
+ * See #775
+ */
+function openlab_private_blog_message() {
+	global $ds_more_privacy_options;
+
+	$blog_id   = get_current_blog_id();
+	$group_id  = openlab_get_group_id_by_blog_id( $blog_id );
+	$group_url = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id, ) ) );
+	$user_id   = get_current_user_id();
+
+	if ( is_user_member_of_blog( $user_id, $blog_id ) || is_super_admin() ) {
+		return;
+	} else if ( is_user_logged_in() ) {
+		$ds_more_privacy_options->ds_login_header(); ?>
+		<form name="loginform" id="loginform" />
+			<p>Wait 8 seconds or <a href="<?php echo wp_login_url(); ?>">click</a> to continue.</p>
+			<p>To become a member of this site, please request membership on <a href="<?php echo esc_attr( $group_url ) ?>">the profile page</a>.</p>
+		</form>
+		</div>
+	</body>
+</html>
+	<?php
+		exit();
+	} else {
+		if ( is_feed() ) {
+			$ds_more_privacy_options->ds_feed_login();
+		} else {
+			nocache_headers();
+			header( 'HTTP/1.1 302 Moved Temporarily' );
+			header( 'Location: ' . wp_login_url() );
+			header( 'Status: 302 Moved Temporarily' );
+			exit();
+		}
+	}
+
+}
