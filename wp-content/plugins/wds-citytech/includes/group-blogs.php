@@ -278,6 +278,45 @@ function openlab_group_blog_activity( $activity ) {
 }
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
+/**
+ * When a blog post is deleted, remove the corresponding activity item
+ *
+ * We have to do this manually because the activity filter in
+ * bp_blogs_remove_post() does not align with the schema imposed by OL's
+ * groupblog hacks
+ *
+ * See #850
+ */
+function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 0 ) {
+	global $wpdb, $bp;
+
+	if ( empty( $wpdb->blogid ) )
+		return false;
+
+	$post_id = (int) $post_id;
+
+	if ( !$blog_id )
+		$blog_id = (int) $wpdb->blogid;
+
+	if ( !$user_id )
+		$user_id = bp_loggedin_user_id();
+
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+
+	if ( $group_id ) {
+		// Delete activity stream item
+		bp_blogs_delete_activity( array(
+			'item_id' => $group_id,
+			'secondary_item_id' => $post_id,
+			'component' => 'groups',
+			'type' => 'new_blog_post',
+		) );
+	}
+}
+add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
+add_action( 'trash_post', 'openlab_group_blog_remove_activity' );
+
+
 ////////////////////////
 ///  MISCELLANEOUS   ///
 ////////////////////////
