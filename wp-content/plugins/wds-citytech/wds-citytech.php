@@ -1811,6 +1811,11 @@ function openlab_default_group_subscription( $level ) {
 }
 add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
 
+function openlab_set_default_group_subscription_on_creation( $group_id ) {
+	groups_update_groupmeta( $group_id, 'ass_default_subscription', 'supersub' );
+}
+add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
+
 /**
  * Brackets in password reset emails cause problems in some clients. Remove them
  */
