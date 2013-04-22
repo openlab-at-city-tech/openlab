@@ -309,13 +309,46 @@ function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 
 			'item_id' => $group_id,
 			'secondary_item_id' => $post_id,
 			'component' => 'groups',
-			'type' => 'new_blog_post',
+			'type' => 'new_blog_comment',
 		) );
 	}
 }
 add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
 add_action( 'trash_post', 'openlab_group_blog_remove_activity' );
 
+/**
+ * When a blog comment is deleted, remove the corresponding activity item
+ *
+ * We have to do this manually because the activity filter in
+ * bp_blogs_remove_comment() does not align with the schema imposed by OL's
+ * groupblog hacks
+ *
+ * See #850
+ */
+function openlab_group_blog_remove_comment_activity( $comment_id ) {
+	global $wpdb, $bp;
+
+	if ( empty( $wpdb->blogid ) )
+		return false;
+
+	$comment_id = (int) $comment_id;
+	$blog_id = (int) $wpdb->blogid;
+
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+
+	if ( $group_id ) {
+		// Delete activity stream item
+		bp_blogs_delete_activity( array(
+			'item_id' => $group_id,
+			'secondary_item_id' => $post_id,
+			'component' => 'groups',
+			'type' => 'new_blog_comment',
+		) );
+	}
+}
+add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
+add_action( 'trash_comment', 'openlab_group_blog_remove_comment_activity' );
+add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
 
 ////////////////////////
 ///  MISCELLANEOUS   ///
