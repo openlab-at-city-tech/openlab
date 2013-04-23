@@ -432,3 +432,14 @@ function openlab_clear_home_page_transients() {
 	delete_site_transient( 'openlab_home_group_activity_items_portfolio' );
 }
 add_action( 'bp_activity_after_save', 'openlab_clear_home_page_transients' );
+
+/**
+ * Fix the busted redirect on group subscription settings
+ */
+function openlab_fix_group_sub_settings_redirect( $redirect ) {
+	if ( bp_get_root_domain() === $redirect && groups_get_current_group() && bp_is_current_action( 'notifications' ) && ! empty( $_POST ) ) {
+		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'notifications/';
+	}
+	return $redirect;
+}
+add_filter( 'wp_redirect', 'openlab_fix_group_sub_settings_redirect' );
