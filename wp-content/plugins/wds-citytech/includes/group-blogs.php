@@ -646,7 +646,7 @@ function wds_bp_group_meta(){
 
 		<?php
 
-		$template = openlab_get_groupblog_template( bp_loggedin_user_id() );
+		$template = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_type );
 
 		$blog_details = get_blog_details( $template );
 
@@ -1317,9 +1317,35 @@ function openlab_catch_refresh_feed_requests() {
 }
 add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
 
-function openlab_get_groupblog_template( $user_id ) {
-	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
-	return $tp->get_portfolio_template_for_user();
+/**
+ * Until we get the dynamic portfolio picker working properly, we manually fall
+ * back on old logic
+ */
+function openlab_get_groupblog_template( $user_id, $group_type ) {
+	switch ( $group_type ) {
+		case 'portfolio' :
+			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
+
+			switch ( $account_type ) {
+				case 'faculty' :
+					$template = 'template-portfolio';
+					break;
+				case 'staff' :
+					$template = 'template-portfolio-staff';
+					break;
+				case 'student' :
+					$template = 'template-eportfolio';
+					break;
+			}
+			break;
+
+		default :
+			$template = 'template-' . strtolower( $group_type );
+			break;
+	}
+	return $template;
+//	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
+//	return $tp->get_portfolio_template_for_user();
 }
 
 /**
