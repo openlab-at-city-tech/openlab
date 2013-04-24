@@ -1,5 +1,8 @@
 <?php do_action( 'bp_before_group_home_content' ) ?>
 <?php global $bp;
+
+$user_profile_url = bp_core_get_user_domain( openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) );
+
 	  $group_slug = bp_get_group_slug(); ?>
 
 <h1 class="entry-title group-title"><?php echo bp_group_name().' '.$profile; ?></h1>
@@ -30,7 +33,7 @@
 
 	<div id="club-header-content" class="alignleft">
 		<h2><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-		<span class="highlight"><a href="<?php openlab_user_portfolio_url( bp_displayed_user_id() ) ?>"><?php echo bp_core_get_user_displayname( openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) ) ?></a></span>
+		<span class="highlight"><a href="<?php echo $user_profile_url ?>"><?php echo bp_core_get_user_displayname( openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) ) ?></a></span>
 
 		<?php do_action( 'bp_before_group_header_meta' ) ?>
 
