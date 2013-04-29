@@ -1946,9 +1946,8 @@ function openlab_private_blog_message() {
 	if ( is_user_member_of_blog( $user_id, $blog_id ) || is_super_admin() ) {
 		return;
 	} else if ( is_user_logged_in() ) {
-		$ds_more_privacy_options->ds_login_header(); ?>
+		openlab_ds_login_header(); ?>
 		<form name="loginform" id="loginform" />
-			<p>Wait 8 seconds or <a href="<?php echo wp_login_url(); ?>">click</a> to continue.</p>
 			<p>To become a member of this site, please request membership on <a href="<?php echo esc_attr( $group_url ) ?>">the profile page</a>.</p>
 		</form>
 		</div>
@@ -1967,5 +1966,47 @@ function openlab_private_blog_message() {
 			exit();
 		}
 	}
-
 }
+
+/**
+ * A version of the More Privacy Options login header without the redirect
+ *
+ * @see openlab_private_blog_message()
+ */
+function openlab_ds_login_header() {
+	global $error, $is_iphone, $interim_login, $current_site;
+			nocache_headers();
+			header( 'Content-Type: text/html; charset=utf-8' );
+		?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+		<head>
+			<title><?php _e("Private Blog Message"); ?></title>
+				<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+		<?php
+		wp_admin_css( 'login', true );
+		wp_admin_css( 'colors-fresh', true );
+
+	if ( $is_iphone ) { ?>
+	<meta name="viewport" content="width=320; initial-scale=0.9; maximum-scale=1.0; user-scalable=0;" />
+	<style type="text/css" media="screen">
+	form { margin-left: 0px; }
+	#login { margin-top: 20px; }
+	</style>
+<?php
+	} elseif ( isset($interim_login) && $interim_login ) { ?>
+	<style type="text/css" media="all">
+	.login #login { margin: 20px auto; }
+	</style>
+<?php
+	}
+
+	do_action('login_head'); ?>
+</head>
+			<body class="login">
+				<div id="login">
+					<h1><a href="<?php echo apply_filters('login_headerurl', 'http://' . $current_site->domain . $current_site->path ); ?>" title="<?php echo apply_filters('login_headertitle', $current_site->site_name ); ?>"><span class="hide"><?php bloginfo('name'); ?></span></a></h1>
+	<?php
+	}
+
+
