@@ -1,0 +1,109 @@
+/*!
+ * tTooltip v0.1
+ *
+ * Copyright 2012 Takien, No Inc
+ * http://takien.com
+ * 
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * follow @cektkp and @perdanaweb
+ */
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+a.ttooltip{
+	text-decoration:none;
+	border-bottom:1px dotted #0079be;
+	color:#0079be
+}
+.ttooltip-wrap{
+	background:#f5f5f5;
+	border:1px solid #b3b3b3;
+	z-index:2000;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px; 
+	box-shadow: 0pt 2px 4px rgba(0, 0, 0, 0.2);
+}
+.ttooltip-inner{
+	position:relative;
+}
+.ttooltip-title{
+	font-size:1.1em;
+	font-weight:bold;
+	padding:10px;
+	background:#fff;
+	color:#333333;
+	margin:0;
+}
+.ttooltip-content{
+	padding:5px 10px;
+	background:#fff;
+	box-shadow: 0pt 2px 4px rgba(0, 0, 0, 0.12);
+}
+.ttooltip-content p{
+	margin:0 0 10px;
+}
+.ttooltip-arrow{
+	position:absolute;
+	background:transparent;
+	width:0;
+	height:0;
+	z-index:2001
+}
+.ttooltip-topleft .ttooltip-arrow{
+	left:20px;
+	top: -10px;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #fff;
+}
+.ttooltip-topright .ttooltip-arrow{
+	right:20px;
+	top: -10px;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #fff;
+}
+.ttooltip-topright .ttooltip-arrow-border,
+.ttooltip-topleft .ttooltip-arrow-border{
+	top:-11px;
+	border-bottom-color:#b3b3b3
+}
+.ttooltip-bottomleft .ttooltip-arrow{
+	left:20px;
+	bottom: -10px;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #fff;
+}
+.ttooltip-bottomright .ttooltip-arrow{
+	right:20px;
+	bottom: -10px;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #fff;
+}
+.ttooltip-bottomleft .ttooltip-arrow.tooltip-arrow-gray,
+.ttooltip-bottomright .ttooltip-arrow.tooltip-arrow-gray{
+	border-top-color:#f5f5f5
+}
+
+.ttooltip-bottomleft .ttooltip-arrow-border,
+.ttooltip-bottomright .ttooltip-arrow-border{
+	bottom:-11px;
+	border-top-color:#b3b3b3
+}
+
+.ttooltip-footer{
+	padding:10px;
+}

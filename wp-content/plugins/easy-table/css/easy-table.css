@@ -1,0 +1,16 @@
+table.tablesorter thead tr .easy-table-header {
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+table.tablesorter thead tr .easy-table-header:hover{
+	background-image: url(../images/bg.gif);
+}
+table.tablesorter thead tr .headerSortUp,
+table.tablesorter thead tr .headerSortDown:hover{
+	background-image: url(../images/asc.gif);
+}
+table.tablesorter thead tr .headerSortDown,
+table.tablesorter thead tr .headerSortUp:hover {
+	background-image: url(../images/desc.gif);
+}

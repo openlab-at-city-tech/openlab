@@ -1255,6 +1255,10 @@ a#pgw-prev, a#pgw-next {
     border-right: none;
 }
 
+.home #portfolio-header .highlight a {
+	text-decoration: underline;
+}
+
 .home-group-list .title-wrapper
 {
     border-bottom: 1px solid;

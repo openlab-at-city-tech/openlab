@@ -1,7 +1,7 @@
 <?php
 
 function bp_blogs_record_nonmember_comment_approved( $comment_id, $comment_status ) {
-	if ( $comment_status = 'approve' )
+	if ( $comment_status === 'approve' )
 		bp_blogs_record_nonmember_comment( $comment_id, 1 );
 }
 

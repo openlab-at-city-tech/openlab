@@ -1,0 +1,64 @@
+/* 
+* always include base css to get basic styling for header etc.
+*/
+@import url(../../css/easy-table.css);
+/* 
+	Cusco Sky table styles
+	written by Braulio Soncco http://www.buayacorp.com
+*/
+
+table.easy-table-cuscosky, .easy-table-cuscosky th, .easy-table-cuscosky td {
+	border: 1px solid #D4E0EE;
+	border-collapse: collapse;
+	font-family: "Trebuchet MS", Arial, sans-serif;
+	color: #555;
+}
+
+.easy-table-cuscosky caption {
+	font-size: 150%;
+	font-weight: bold;
+	margin: 5px;
+	padding-bottom:5px;
+}
+
+.easy-table-cuscosky td, .easy-table-cuscosky th {
+	padding: 4px;
+}
+
+.easy-table-cuscosky thead th,
+.easy-table-cuscosky tfoot th {
+	text-align: center;
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-size: 100% !important;
+}
+
+.easy-table-cuscosky tbody th {
+	font-weight: bold;
+}
+
+.easy-table-cuscosky tbody tr { background: #FCFDFE; }
+
+.easy-table-cuscosky tbody tr:nth-child(2n+1) td, 
+.easy-table-cuscosky tbody tr:nth-child(2n+1) th {
+	background: #F7F9FC; 
+}
+
+.easy-table-cuscosky table a:link {
+	color: #718ABE;
+	text-decoration: none;
+}
+
+.easy-table-cuscosky table a:visited {
+	color: #718ABE;
+	text-decoration: none;
+}
+
+.easy-table-cuscosky table a:hover {
+	color: #718ABE;
+	text-decoration: underline !important;
+}
+
+.easy-table-cuscosky tfoot th, .easy-table-cuscosky tfoot td {
+	font-size: 85%;
+}

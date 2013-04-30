@@ -224,9 +224,13 @@ function openlab_group_blog_activity( $activity ) {
 		) );
 	}
 
-	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
+	// If we found an activity for this blog post, then overwrite it to
+	// avoid have multiple activities for every blog post edit.
+	//
+	// Here we'll also prevent email notifications from being sent
 	if ( $id ) {
 		$activity->id = $id;
+		remove_action( 'bp_activity_after_save' , 'ass_group_notification_activity', 50 );
 	}
 
 	// Replace the necessary values to display in group activity stream
@@ -238,9 +242,15 @@ function openlab_group_blog_activity( $activity ) {
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
+		$userlink = '';
+		if ( $activity->user_id ) {
+			$userlink = bp_core_get_userlink( $activity->user_id );
+		} else {
+			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
+		}
 		$activity->action = sprintf(
 			__( '%s commented on %s in the group %s:', 'groupblog'),
-			bp_core_get_userlink( $activity->user_id ),
+			$userlink,
 			'<a href="' . get_permalink( $post->ID ) .'">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
@@ -260,12 +270,85 @@ function openlab_group_blog_activity( $activity ) {
 	// Mark the group as having been active
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
-	// prevent infinite loops
+	// prevent infinite loops, but let this function run on later activities (for unit tests)
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+	add_action( 'bp_activity_after_save', create_function( '', 'add_action( "bp_activity_before_save", "openlab_group_blog_activity" );' ) );
 
 	return $activity;
 }
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+
+/**
+ * When a blog post is deleted, remove the corresponding activity item
+ *
+ * We have to do this manually because the activity filter in
+ * bp_blogs_remove_post() does not align with the schema imposed by OL's
+ * groupblog hacks
+ *
+ * See #850
+ */
+function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 0 ) {
+	global $wpdb, $bp;
+
+	if ( empty( $wpdb->blogid ) )
+		return false;
+
+	$post_id = (int) $post_id;
+
+	if ( !$blog_id )
+		$blog_id = (int) $wpdb->blogid;
+
+	if ( !$user_id )
+		$user_id = bp_loggedin_user_id();
+
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+
+	if ( $group_id ) {
+		// Delete activity stream item
+		bp_blogs_delete_activity( array(
+			'item_id' => $group_id,
+			'secondary_item_id' => $post_id,
+			'component' => 'groups',
+			'type' => 'new_blog_comment',
+		) );
+	}
+}
+add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
+add_action( 'trash_post', 'openlab_group_blog_remove_activity' );
+
+/**
+ * When a blog comment is deleted, remove the corresponding activity item
+ *
+ * We have to do this manually because the activity filter in
+ * bp_blogs_remove_comment() does not align with the schema imposed by OL's
+ * groupblog hacks
+ *
+ * See #850
+ */
+function openlab_group_blog_remove_comment_activity( $comment_id ) {
+	global $wpdb, $bp;
+
+	if ( empty( $wpdb->blogid ) )
+		return false;
+
+	$comment_id = (int) $comment_id;
+	$blog_id = (int) $wpdb->blogid;
+
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+
+	if ( $group_id ) {
+		// Delete activity stream item
+		bp_blogs_delete_activity( array(
+			'item_id' => $group_id,
+			'secondary_item_id' => $post_id,
+			'component' => 'groups',
+			'type' => 'new_blog_comment',
+		) );
+	}
+}
+add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
+add_action( 'trash_comment', 'openlab_group_blog_remove_comment_activity' );
+add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
 
 ////////////////////////
 ///  MISCELLANEOUS   ///
@@ -563,27 +646,7 @@ function wds_bp_group_meta(){
 
 		<?php
 
-		switch ( $group_type ) {
-			case 'portfolio' :
-				$account_type = strtolower( xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() ) );
-
-				switch ( $account_type ) {
-					case 'faculty' :
-						$template = 'template-portfolio';
-						break;
-					case 'staff' :
-						$template = 'template-portfolio-staff';
-						break;
-					case 'student' :
-						$template = 'template-eportfolio';
-						break;
-				}
-				break;
-
-			default :
-				$template = "template-" . strtolower( $group_type );
-				break;
-		}
+		$template = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_type );
 
 		$blog_details = get_blog_details( $template );
 
@@ -618,14 +681,7 @@ function wds_bp_group_meta(){
 			<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website;?>"><td colspan="2">
 				<?php switch ( $group_type ) :
 					case 'course' : ?>
-						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If this Course site will be used again on the OpenLab, you may want to keep it simple. We recommend the following format:</p>
-
-						<ul class="ol-tooltip">
-							<li>FacultyLastNameCourseCode</li>
-							<li>smithadv1100</li>
-						</ul>
-
-						<p class="ol-tooltip">If you plan to create a new course each semester, you may choose to add Semester and Year.</p>
+						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
 						<ul class="ol-tooltip">
 							<li>FacultyLastNameCourseCodeSemYear</li>
@@ -1260,3 +1316,132 @@ function openlab_catch_refresh_feed_requests() {
 	call_user_func( 'openlab_get_external_' . $feed_type . '_by_group_id' );
 }
 add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
+
+/**
+ * Until we get the dynamic portfolio picker working properly, we manually fall
+ * back on old logic
+ */
+function openlab_get_groupblog_template( $user_id, $group_type ) {
+	switch ( $group_type ) {
+		case 'portfolio' :
+			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
+
+			switch ( $account_type ) {
+				case 'faculty' :
+					$template = 'template-portfolio';
+					break;
+				case 'staff' :
+					$template = 'template-portfolio-staff';
+					break;
+				case 'student' :
+					$template = 'template-eportfolio';
+					break;
+			}
+			break;
+
+		default :
+			$template = 'template-' . strtolower( $group_type );
+			break;
+	}
+	return $template;
+//	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
+//	return $tp->get_portfolio_template_for_user();
+}
+
+/**
+ * On portfolio creation, select the appropriate template for the user
+ */
+class OpenLab_GroupBlog_Template_Picker {
+	protected $user_id = 0;
+	protected $template = null;
+	protected $group_type = 'group';
+
+	public function __construct( $user_id = 0 ) {
+		$user_id = intval( $user_id );
+		if ( ! $user_id ) {
+			$user_id = bp_loggedin_user_id();
+		}
+		$this->user_id = $user_id;
+
+		// The apply_filters() is mainly for use in unit testing
+		$this->department_templates = apply_filters( 'openlab_department_templates', array() );
+	}
+
+	public function set_template( $template ) {
+		$this->template = $template;
+		return $template;
+	}
+
+	public function get_group_type() {
+		return $this->group_type;
+	}
+
+	public function set_group_type( $type ) {
+		if ( ! in_array( $type, openlab_group_types() ) ) {
+			$type = 'group';
+		}
+
+		$this->group_type = $type;
+	}
+
+	public function get_user_type() {
+		if ( ! $this->account_type ) {
+			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
+			$this->account_type = $account_type;
+		}
+
+		return $this->account_type;
+	}
+
+	public function set_user_type( $type ) {
+		$this->account_type = $type;
+	}
+
+	public function get_student_department() {
+		if ( ! isset( $this->student_department ) ) {
+			$dept_field = 'student' == $this->get_user_type() ? 'Major Program of Study' : 'Department';
+			$this->student_department = xprofile_get_field_data( $dept_field, $this->user_id );
+		}
+
+		return $this->student_department;
+	}
+
+	public function set_student_department( $department ) {
+		$this->student_department = $department;
+	}
+
+	public function get_template_from_group_type() {
+		return "template-" . strtolower( $this->group_type );
+	}
+
+	public function get_portfolio_template_for_user() {
+		$user_type = $this->get_user_type();
+
+		$template = '';
+		switch ( $user_type ) {
+			case 'faculty' :
+				$template = 'template-portfolio';
+				break;
+			case 'staff' :
+				$template = 'template-portfolio-staff';
+				break;
+			case 'student' :
+				$template = $this->get_portfolio_template_for_student();
+				break;
+		}
+
+		return $template;
+	}
+
+	public function get_portfolio_template_for_student() {
+		$department = $this->get_student_department();
+
+		if ( isset( $this->department_templates[ $department ] ) ) {
+			$template = $this->department_templates[ $department ];
+		} else {
+			$template = 'template-eportfolio';
+		}
+
+		return $template;
+	}
+}

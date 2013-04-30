@@ -47,7 +47,7 @@ if(!is_home() || isset($_GET['paged']))
         <div id="header">
           <h1 id="logo">
 			<?php if ( 0 === 1 && get_option('tbf2_logo_header') == "yes" && get_option('tbf2_logo')) { ?>
-                    <a href="<?php bloginfo('url'); ?>/"><img src="<?php echo get_option('tbf2_logo'); ?>" title="<?php bloginfo('name'); ?> - 
+                    <a href="<?php bloginfo('url'); ?>/"><img src="<?php echo get_option('tbf2_logo'); ?>" title="<?php bloginfo('name'); ?> -
 					<?php bloginfo('description'); ?>" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a>
             <?php } else { //If no logo, show the blog title and tagline by default ?>
             	<a href="<?php bloginfo('url'); ?>" id="blogname" style="background:none;text-indent:0;width:auto"><span class="blod"><?php bloginfo('name'); ?></span> <?php bloginfo('description'); ?></a>
