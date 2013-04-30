@@ -252,3 +252,22 @@ restore_current_blog();
 
 remove_action( 'init', 'maybe_add_existing_user_to_blog' );
 add_action( 'init', 'maybe_add_existing_user_to_blog', 90 );
+
+function bbg_debug_queries() {
+	if ( ! is_super_admin() ) {
+		return;
+	}
+
+	if ( empty( $_GET['debug_queries'] ) ) {
+		return;
+	}
+
+	global $wpdb;
+	echo '<pre>';
+	foreach ( $wpdb->queries as $q ) {
+		if ( $q[1] > 1 ) {
+			print_r( $q );
+		}
+	}
+}
+register_shutdown_function( 'bbg_debug_queries' );

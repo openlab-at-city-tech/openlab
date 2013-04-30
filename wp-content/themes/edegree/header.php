@@ -40,13 +40,13 @@ if(!is_home() || isset($_GET['paged']))
 </head>
 
 <body <?php echo (version_compare($wp_version, '2.8', '>=')) ? body_class($subclass) : 'class="'.$subclass .'"'?> <?php echo ($body_css) ? 'style="'.$body_css. '"' : ''?>>
-<div id="bg" <?php echo (get_option('tbf2_header_image_file')) ? 'style="background-image:url('.get_option('tbf2_header_image_file'). ')"' : ''?>>
+<div id="bg">
   <div id="wrapper">
     <div id="shadow">
      
         <div id="header">
           <h1 id="logo">
-			<?php if (get_option('tbf2_logo_header') == "yes" && get_option('tbf2_logo')) { ?>
+			<?php if ( 0 === 1 && get_option('tbf2_logo_header') == "yes" && get_option('tbf2_logo')) { ?>
                     <a href="<?php bloginfo('url'); ?>/"><img src="<?php echo get_option('tbf2_logo'); ?>" title="<?php bloginfo('name'); ?> - 
 					<?php bloginfo('description'); ?>" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a>
             <?php } else { //If no logo, show the blog title and tagline by default ?>
