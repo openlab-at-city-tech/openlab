@@ -1,0 +1,126 @@
+/* 
+* always include base css to get basic styling for header etc.
+*/
+@import url(easy-table.css);
+
+/* Use foundation zurb
+ * Requires: normalize.css */
+/* Global Reset & Standards ---------------------- */
+.easy-table-wrap *,.easy-table-wrap *:before,.easy-table-wrap *:after { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+/* The Grid ---------------------- */
+.row { width: 100%; max-width: 100%; min-width: 768px; margin: 0 auto; }
+.row .row { width: auto; max-width: none; min-width: 0; margin: 0 -15px; }
+.row.collapse .column, .row.collapse .columns { padding: 0; }
+.row .row { width: auto; max-width: none; min-width: 0; margin: 0 -15px; }
+.row .row.collapse { margin: 0; }
+
+.column, .columns { float: left; min-height: 1px; padding: 0 15px; position: relative; }
+.column.centered, .columns.centered { float: none; margin: 0 auto; }
+
+[class*="column"] + [class*="column"]:last-child { float: right; }
+
+[class*="column"] + [class*="column"].end { float: left; }
+
+.one, .row .one { width: 8.33333%; }
+.two, .row .two { width: 16.66667%; }
+.three, .row .three { width: 25%; }
+.four, .row .four { width: 33.33333%; }
+.five, .row .five { width: 41.66667%; }
+.six, .row .six { width: 50%; }
+.seven, .row .seven { width: 58.33333%; }
+.eight, .row .eight { width: 66.66667%; }
+.nine, .row .nine { width: 75%; }
+.ten, .row .ten { width: 83.33333%; }
+.eleven, .row .eleven { width: 91.66667%; }
+.twelve, .row .twelve { width: 100%; }
+
+/* Nicolas Gallagher's micro clearfix */
+.row { *zoom: 1; }
+.row:before, .row:after { content: " "; display: table; }
+.row:after { clear: both; }
+
+
+.toggledesc{
+	float:right;
+	margin-right:20px;
+}
+.help-btn {
+	text-decoration:none;
+	display:inline-block;
+	width:20px;
+	height:20px;
+	color:#666;
+	text-align:center;
+	border:1px solid #ccc;
+}
+.action-button{
+	margin-bottom:20px
+}
+.action-button a{
+	padding:10px;
+	border:1px solid #cccccc;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px; 
+	color:#fff;
+	font-weight:bold;
+	font-size:1.3em;
+	display: inline-block;
+	text-shadow: 0 -1px 1px rgba(19,65,88,.8);
+	text-decoration:none;
+}
+.action-button a.green{
+	background:#48b826;
+	border-color:#1d7003;
+	background: #b4e391;
+	background: -moz-linear-gradient(top, #b4e391 0%, #61c419 50%, #b4e391 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b4e391), color-stop(50%,#61c419), color-stop(100%,#b4e391));
+	background: -webkit-linear-gradient(top, #b4e391 0%,#61c419 50%,#b4e391 100%);
+	background: -o-linear-gradient(top, #b4e391 0%,#61c419 50%,#b4e391 100%);
+	background: -ms-linear-gradient(top, #b4e391 0%,#61c419 50%,#b4e391 100%);
+	background: linear-gradient(top, #b4e391 0%,#61c419 50%,#b4e391 100%);
+}
+.action-button a.red{
+	background: #f85032;
+	background: -moz-linear-gradient(top, #f85032 0%, #f16f5c 35%, #f02f17 71%, #e73827 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f85032), color-stop(35%,#f16f5c), color-stop(71%,#f02f17), color-stop(100%,#e73827));
+	background: -webkit-linear-gradient(top, #f85032 0%,#f16f5c 35%,#f02f17 71%,#e73827 100%);
+	background: -o-linear-gradient(top, #f85032 0%,#f16f5c 35%,#f02f17 71%,#e73827 100%);
+	background: -ms-linear-gradient(top, #f85032 0%,#f16f5c 35%,#f02f17 71%,#e73827 100%);
+	background: linear-gradient(top, #f85032 0%,#f16f5c 35%,#f02f17 71%,#e73827 100%);
+	border-color:#cf3100;
+}
+/*since 1.0
+
+*/
+.wrap .form-table tr.new label,
+.wrap .form-table tr.new .description,
+.wrap .form-table tr.new p,
+.wrap .new 
+ {
+	/* color:green !important */
+}
+#easy-table-theme-editor {
+	width:100%;
+	min-height:400px;
+	font-family: Consolas,Monaco,monospace;
+    font-size: 12px;
+	background: none repeat scroll 0% 0% rgb(249, 249, 249);
+    outline: 0px none;
+}
+
+
+
+@media (min-width:1024px) {
+	.left,
+	.right{
+		float:left;
+		width:49%
+	}
+}
+@media (max-width:800px) {
+	span.description {
+		display:block;
+	}
+}

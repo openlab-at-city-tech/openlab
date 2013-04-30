@@ -9,6 +9,7 @@
 
 include "wds-register.php";
 include "wds-docs.php";
+include "includes/oembed.php";
 
 
 /**
@@ -187,15 +188,19 @@ function wds_check_blog_privacy(){
 
 
 
-//child theme menu filter to link to website
-add_filter('wp_page_menu','my_page_menu_filter');
+/**
+ * On secondary sites, add our additional buttons to the site nav
+ *
+ * This function filters wp_page_menu, which is what shows up when no custom
+ * menu has been selected. See cuny_add_group_menu_items() for the
+ * corresponding method for custom menus.
+ */
 function my_page_menu_filter( $menu ) {
 	global $bp, $wpdb;
 
-
-	if (!(strpos($menu,"Home") === false)) {
-	    $menu = str_replace("Site Home","Home",$menu);
-	    $menu = str_replace("Home","Site Home",$menu);
+	if ( strpos( $menu, "Home" ) !== false ) {
+		$menu = str_replace("Site Home","Home",$menu);
+		$menu = str_replace("Home","Site Home",$menu);
 	} else {
 		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>',$menu);
 	}
@@ -207,17 +212,30 @@ function my_page_menu_filter( $menu ) {
 
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
-	if( $wds_bp_group_id  ){
+	if ( $wds_bp_group_id  ){
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu = str_replace('<div class="menu"><ul>','<div class="menu"><ul><li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>',$menu);
+		$menu_a = explode( '<ul>', $menu );
+		$menu_a = array(
+			$menu_a[0],
+			'<ul>',
+			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+			$menu_a[1],
+		);
+		$menu = implode( '', $menu_a );
 	}
 	return $menu;
 }
+add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
-add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items' );
-function cuny_add_group_menu_items($items) {
+function cuny_add_group_menu_items( $items, $args ) {
+        // The Sliding Door theme shouldn't get any added items
+        // See http://openlab.citytech.cuny.edu/redmine/issues/772
+        if ( 'custom-sliding-menu' == $args->theme_location ) {
+                return $items;
+        }
+
 	if ( !bp_is_root_blog() ) {
 
 		if((strpos($items,"Contact"))) {
@@ -230,6 +248,8 @@ function cuny_add_group_menu_items($items) {
 
 	return $items;
 }
+add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items', 10, 2 );
+
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
@@ -1241,20 +1261,25 @@ function openlab_sync_blog_privacy_at_group_creation() {
 }
 add_action( 'groups_create_group_step_save_group-settings', 'openlab_sync_blog_privacy_at_group_creation' );
 
-            //this is a function for sanitizing the website name
-			//source http://cubiq.org/the-perfect-php-clean-url-generator
-			function friendly_url($str, $replace=array(), $delimiter='-') {
-              	if( !empty($replace) ) {
-              		$str = str_replace((array)$replace, ' ', $str);
-              	}
+//this is a function for sanitizing the website name
+//source http://cubiq.org/the-perfect-php-clean-url-generator
+function friendly_url($str, $replace=array(), $delimiter='-') {
+	if( !empty($replace) ) {
+		$str = str_replace((array)$replace, ' ', $str);
+	}
 
-              	$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
-              	$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-              	$clean = strtolower(trim($clean, '-'));
-              	$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+	if ( function_exists( 'iconv' ) ) {
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+	} else {
+		$clean = $str;
+	}
 
-              	return $clean;
-              }
+	$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+	$clean = strtolower(trim($clean, '-'));
+	$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+
+	return $clean;
+}
 
 /**
  * Don't let anyone access the Create A Site page
@@ -1391,6 +1416,10 @@ class buddypress_Translation_Mangler {
   */
  function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
+
+   if ( 'buddypress' != $domain ) {
+	   return $translation;
+   }
 
    $group_id = 0;
    if ( !bp_is_group_create() ) {
@@ -1773,10 +1802,19 @@ add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
 /**
  * Default subscription level for group emails should be All
  */
-function openlab_default_group_subscription() {
-	return 'supersub';
+function openlab_default_group_subscription( $level ) {
+	if ( ! $level ) {
+		$level = 'supersub';
+	}
+
+	return $level;
 }
 add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
+
+function openlab_set_default_group_subscription_on_creation( $group_id ) {
+	groups_update_groupmeta( $group_id, 'ass_default_subscription', 'supersub' );
+}
+add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
 
 /**
  * Brackets in password reset emails cause problems in some clients. Remove them
@@ -1848,4 +1886,127 @@ function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
 	}
 }
 add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
-?>
+
+/**
+ * Don't let Awesome Flickr plugin load colorbox if WP AJAX Edit Comments is active
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/363
+ */
+function openlab_fix_colorbox_conflict_1() {
+	if ( ! function_exists( 'enqueue_afg_scripts' ) ) {
+		return;
+	}
+
+	$is_wp_ajax_edit_comments_active = in_array( 'wp-ajax-edit-comments/wp-ajax-edit-comments.php', (array) get_option( 'active_plugins', array() ) );
+
+	remove_action( 'wp_print_scripts', 'enqueue_afg_scripts' );
+
+	if( ! get_option( 'afg_disable_slideshow' ) ) {
+		if (get_option('afg_slideshow_option') == 'highslide') {
+		    wp_enqueue_script('afg_highslide_js', BASE_URL . "/highslide/highslide-full.min.js");
+		}
+
+		if (get_option('afg_slideshow_option') == 'colorbox' && ! $is_wp_ajax_edit_comments_active ) {
+		    wp_enqueue_script('jquery');
+		    wp_enqueue_script('afg_colorbox_script', BASE_URL . "/colorbox/jquery.colorbox-min.js" , array('jquery'));
+		    wp_enqueue_script('afg_colorbox_js', BASE_URL . "/colorbox/mycolorbox.js" , array('jquery'));
+		}
+	}
+}
+add_action( 'wp_print_scripts', 'openlab_fix_colorbox_conflict_1', 1 );
+
+/**
+ * Prevent More Privacy Options from displaying its -2 message, and replace with our own
+ *
+ * See #775
+ */
+function openlab_swap_private_blog_message() {
+	global $current_blog, $ds_more_privacy_options;
+
+	if ( '-2' == $current_blog->public ) {
+		remove_action( 'template_redirect', array( &$ds_more_privacy_options, 'ds_members_authenticator' ) );
+		add_action( 'template_redirect', 'openlab_private_blog_message', 1 );
+	}
+}
+add_action( 'wp', 'openlab_swap_private_blog_message' );
+
+/**
+ * Callback for our own "members only" blog message
+ *
+ * See #775
+ */
+function openlab_private_blog_message() {
+	global $ds_more_privacy_options;
+
+	$blog_id   = get_current_blog_id();
+	$group_id  = openlab_get_group_id_by_blog_id( $blog_id );
+	$group_url = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id, ) ) );
+	$user_id   = get_current_user_id();
+
+	if ( is_user_member_of_blog( $user_id, $blog_id ) || is_super_admin() ) {
+		return;
+	} else if ( is_user_logged_in() ) {
+		openlab_ds_login_header(); ?>
+		<form name="loginform" id="loginform" />
+			<p>To become a member of this site, please request membership on <a href="<?php echo esc_attr( $group_url ) ?>">the profile page</a>.</p>
+		</form>
+		</div>
+	</body>
+</html>
+	<?php
+		exit();
+	} else {
+		if ( is_feed() ) {
+			$ds_more_privacy_options->ds_feed_login();
+		} else {
+			nocache_headers();
+			header( 'HTTP/1.1 302 Moved Temporarily' );
+			header( 'Location: ' . wp_login_url() );
+			header( 'Status: 302 Moved Temporarily' );
+			exit();
+		}
+	}
+}
+
+/**
+ * A version of the More Privacy Options login header without the redirect
+ *
+ * @see openlab_private_blog_message()
+ */
+function openlab_ds_login_header() {
+	global $error, $is_iphone, $interim_login, $current_site;
+			nocache_headers();
+			header( 'Content-Type: text/html; charset=utf-8' );
+		?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+		<head>
+			<title><?php _e("Private Blog Message"); ?></title>
+				<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+		<?php
+		wp_admin_css( 'login', true );
+		wp_admin_css( 'colors-fresh', true );
+
+	if ( $is_iphone ) { ?>
+	<meta name="viewport" content="width=320; initial-scale=0.9; maximum-scale=1.0; user-scalable=0;" />
+	<style type="text/css" media="screen">
+	form { margin-left: 0px; }
+	#login { margin-top: 20px; }
+	</style>
+<?php
+	} elseif ( isset($interim_login) && $interim_login ) { ?>
+	<style type="text/css" media="all">
+	.login #login { margin: 20px auto; }
+	</style>
+<?php
+	}
+
+	do_action('login_head'); ?>
+</head>
+			<body class="login">
+				<div id="login">
+					<h1><a href="<?php echo apply_filters('login_headerurl', 'http://' . $current_site->domain . $current_site->path ); ?>" title="<?php echo apply_filters('login_headertitle', $current_site->site_name ); ?>"><span class="hide"><?php bloginfo('name'); ?></span></a></h1>
+	<?php
+	}
+
+

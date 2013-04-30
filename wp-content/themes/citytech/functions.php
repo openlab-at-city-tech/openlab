@@ -320,11 +320,11 @@ add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_act
  */
 function openlab_no_join_on_portfolios() {
 	global $bp;
-	
+
 	if ( openlab_is_portfolio() ) {
 		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
 	}
-	
+
 	//fix for files, docs, and membership pages in group profile - hiding join button
 	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
 		{
@@ -538,24 +538,19 @@ function openlab_default_subscription_settings_form() {
 		return;
 	}
 
-	$stored_setting = ass_get_default_subscription();
-	if ( !$stored_setting ) {
-		$stored_setting = 'supersub';
-	}
-
 	?>
 	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
 	<div class="radio">
-		<label><input type="radio" name="ass-default-subscription" value="no" <?php checked( $stored_setting, 'no' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
 			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="sum" <?php checked( $stored_setting, 'sum' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
 			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="dig" <?php checked( $stored_setting, 'dig' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
 			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="sub" <?php checked( $stored_setting, 'sub' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
 			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'bp-ass' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php checked( $stored_setting, 'supersub' ) ?> />
+		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
 			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'bp-ass' ) ?></label>
 	</div>
 	<hr />
@@ -563,6 +558,18 @@ function openlab_default_subscription_settings_form() {
 }
 remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
+
+// Save the default group subscription setting in the group meta, if no, delete it
+function openlab_save_default_subscription( $group ) {
+	global $bp, $_POST;
+
+	if ( isset( $_POST['ass-default-subscription'] ) && $postval = $_POST['ass-default-subscription'] ) {
+		groups_update_groupmeta( $group->id, 'ass_default_subscription', $postval );
+	}
+}
+remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
+add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
+
 
 /**
  * Filter the output of the Add Friend/Cancel Friendship button
@@ -574,4 +581,3 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
-?>

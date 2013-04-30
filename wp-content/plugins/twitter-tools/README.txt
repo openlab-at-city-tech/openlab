@@ -1,26 +1,30 @@
 === Twitter Tools ===
-Tags: twitter, tweet, integration, post, digest, notify, integrate, archive, widget
 Contributors: alexkingorg, crowdfavorite
-Requires at least: 2.9
-Tested up to: 3.0.1
-Stable tag: 2.4
+Tags: twitter, tweet, integration, post, notify, integrate, archive, widget, shortcode, social
+Requires at least: 3.4
+Tested up to: 3.4.2
+Stable tag: 3.0.3
+License: GPLv2
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Twitter Tools is a plugin that creates a complete integration between your WordPress blog and your Twitter account.
 
-== Details ==
+== Description ==
 
 Twitter Tools integrates with Twitter by giving you the following functionality:
 
-* Archive your Twitter tweets (downloaded every 10 minutes)
+* Connect multiple Twitter accounts (via Social)
+* Archive the tweets from your Twitter accounts (downloaded every 10 minutes)
 * Create a blog post from each of your tweets
-* Create a daily or weekly digest post of your tweets
-* Create a tweet on Twitter whenever you post in your blog, with a link to the blog post
-* Post a tweet from your sidebar
-* Post a tweet from the WP Admin screens
-* Pass your tweets along to another service (via API hook)
+* Create a tweet on Twitter whenever you post in your blog, with a link to the blog post (via Social)
+* Browse your tweets locally by @mention, #hashtag or user account (optionally display these publicly)
+
+Twitter Tools leverages Social's connection to Twitter so that you don't have to create an app and copy keys around. It supports multiple accounts (must be authorized as "global" accounts in Social) with settings on a per-account basis.
 
 
 == Installation ==
+
+_Twitter Tools relies on the <a href="http://wordpress.org/extend/plugins/social/">Social</a> plugin to connect to Twitter. If you aren't already using this plugin please install it before installing Twitter Tools._
 
 1. Download the plugin archive and expand it (you've likely already done this).
 2. Put the 'twitter-tools' directory into your wp-content/plugins/ directory.
@@ -28,198 +32,138 @@ Twitter Tools integrates with Twitter by giving you the following functionality:
 4. Go to the Twitter Tools Options page (Settings > Twitter Tools) to set up your Twitter information and preferences.
 
 
-== Configuration ==
+== Upgrading ==
 
-There are a number of configuration options for Twitter Tools. You can find these in Options > Twitter Tools.
+If you have upgraded from an older version of Twitter Tools, your data will need to be converted to the new Twitter Tools format. On the Twitter Tools Options page you will see a prompt to upgrade if appropriate. Follow the steps to convert your data.
 
-== Showing Your Tweets ==
+Twitter Tools now stores complete Twitter data along with your basic tweet content. Over time, Twitter Tools will request this data for upgraded tweets. This process make take a few days, as only 10 tweets are requested per hour (to avoid egatively impacting your rate limit).
 
-= Widget Friendly =
 
-If you are using widgets, you can drag Twitter Tools to your sidebar to display your latest tweets.
+== Connecting Accounts ==
 
+Any Twitter accounts connected on the Social settings page are available for Twitter Tools. You can enable them on a per-account account basis, as well as specifying per-account preferences for creating blog posts, etc. (on the Twitter Tools options screen).
+
+
+== Managing your Tweets ==
+
+You can view, edit and delete (or unpublish) the local copy of your Tweets right in your WordPress admin. Navigate the tweets from the "Tweets" menu item and manage them just as you would any other post type. Twitter Tools does not know if you've deleted a tweet on Twitter, so you'll need to also delete the copy of the tweet from the admin to remove it from your WordPress site.
+
+
+== Displaying your Tweets ==
+
+Twitter Tools include options to create URLs for your local tweets using the following scheme:
+
+- single tweet: http://alexking.org/tweets/253580615113400321
+- account archive: http://alexking.org/tweet-accounts/alexkingorg
+- @mention archive: http://alexking.org/tweet-mentions/sogrady
+- #hashtag archive: http://alexking.org/tweet-hashtags/monktoberfest
+
+You can enable public URLs for your tweets in your Twitter Tools settings. If you choose not to enable public URLs for your tweets, you can still vuew and manage them from within the admin screens.
 
 = Shortcode =
 
-Use:
+You can use a shortcode to display a list of tweets.
 
-`[aktt_tweets]`
+	[aktt_tweets account="alexkingorg"] 
 
-to show your latest tweets. This will show the number of tweets set in your Settings. If you want to control how many tweets are shown explicitly, you can do so by adding a 'count' parameter like this:
+If you want, you can specify some additional parameters to control how many tweets are displayed:
 
-`[aktt_tweets count=5]`
+	[aktt_tweets account="alexkingorg" count="5" offset="0"]
+
+You can also choose to explicitly include or exclude replies and retweets:
+
+	[aktt_tweets account="alexkingorg" include_rts="0" include_replies="1"]
+
+If you want to limit the tweets to specific @mentions or #hashtags, you can to that as well:
+
+	[aktt_tweets account="alexkingorg" mentions="crowdfavorite,twittertools" hashtags="wordpress,plugin,twittertools"]
+
+= Widget =
+
+The options for the shortcode are also available for the Twitter Tools widget via a few settings.
+
+= Create Blog Posts =
+
+Twitter Tools can create a blog post from each of your Tweets. This feature can be enabled on a per-account basis. If there is an image included in the media data of the tweet Twitter Tools will try to save that image as the featured image for the post and append it to the blog post content.
+
+Please note that this will take effect for all future tweets, it does not retroactively create posts for older tweets (though you could pretty easily script it to do so if you desired).
 
 
-= Template Tags =
+== Customization ==
 
-If you are not using widgest, you can use a template tag to add your latest tweets to your sidebar.
+Twitter Tools is designed to be customizable via the standard hook/filter API. If you find you need additional hooks (or to suggest other bug fixes and enhancements) please create a pull request on GitHub.
 
-`<?php aktt_sidebar_tweets(); ?>`
+https://github.com/crowdfavorite/wp-twitter-tools
 
+Get creative! Here are some examples of ways to use more of the full Twitter data to create links back into Twitter where appropriate:
 
-If you just want your latest tweet, use this template tag.
-
-`<?php aktt_latest_tweet(); ?>`
-
-
-== Plugins ==
-
-Twitter Tools supports plugins, several are included. You can find more here:
-
-http://delicious.com/alexkingorg/twitter-tools+plugin
-
-
-== Hooks/API ==
-
-Twitter Tools contains a hook that can be used to pass along your tweet data to another service (for example, some folks have wanted to be able to update their Facebook status). To use this hook, create a plugin and add an action to:
-
-`aktt_add_tweet` (action)
-
-Your plugin function will receive an `aktt_tweet` object as the first parameter.
-
-Example psuedo-code:
-
-`function my_status_update($tweet) { // do something here }`
-`add_action('aktt_add_tweet', 'my_status_update')`
-
----
-
-Twitter Tools also provides a filter on the URL sent to Twitter so that you can run it through an URL-shortening service if you like.
-
-`tweet_blog_post_url` (filter)
-
-Your plugin function will receive the URL as the first parameter.
-
-Example psuedo-code:
-
-`function my_short_url($long_url) {
-	// do something here - return the shortened URL 
-	$short_url = my_short_url_func($long_url);
-	return $short_url;
-}`
-`add_filter('tweet_blog_post_url', 'my_short_url')`
-
----
-
-`aktt_do_tweet` (filter)
-
-Returning false in this hook will prevent a tweet from being sent. One parameter is sent, the Tweet object to be sent to Twitter.
-
-Example psuedo-code:
-
-`function dont_tweet($tweet) {
-	if (some condition) {
-		// will not tweet
-		return false;
-	}
-	else {
-		// must return the $tweet to send it
-		return $tweet;
-	}
-}`
-`add_filter('aktt_do_tweet', 'dont_tweet')`
-
----
-
-`aktt_do_blog_post_tweet` (filter)
-
-Returning false in this hook will prevent a blog post Tweet from being sent. Two parameters are passed, the Tweet object to be sent to Twitter and the Post generating the Tweet.
-
-Example psuedo-code:
-
-`function dont_post_tweet($tweet, $post) {
-	if (some condition) {
-		// will not tweet
-		return false;
-	}
-	else {
-		// must return the $tweet to send it
-		return $tweet;
-	}
-}`
-`add_filter('aktt_do_blog_post_tweet', 'dont_post_tweet', 10, 2)`
-
----
-
-`aktt_do_tweet_post` (filter)
-
-Returning false in this hook will prevent a blog post from being created from a Tweet. Two parameters are passed, the data to be used in the post and the Tweet object.
-
-Example psuedo-code:
-
-`function dont_tweet_post($post, $data) {
-	if (some condition) {
-		// will not post
-		return false;
-	}
-	else {
-		// must return the $data for a post to be created
-		return $data;
-	}
-}`
-`add_filter('aktt_do_tweet_post', 'dont_tweet_post', 10, 2)`
-
----
-
-`aktt_tweets_to_digest_post` (filter)
-
-Allows you to make changes the tweets that will be included in a digest post.
-
----
-
-`aktt_options_form` (action)
-
-Allows you to add to the Twitter Tools settings page.
-
----
-
-`aktt_post_options` (action)
-
-Allows you to add to the Twitter Tools box on the New Post page (requires the option to tweet on blog posts to be enabled).
-
-== Known Issues ==
-
-* If you change your blog post notification tweet prefix, the previous blog post notification might not be correctly recognized as a blog post tweet. This is only under very rare conditions due to timing issues.
-* Only one Twitter account is supported (not one account per author).
-* Tweets are not deleted from the tweet table in your WordPress database when they are deleted from Twitter. To delete from your WordPress database, use a database admin tool like phpMyAdmin.
+- linking to the original tweet on Twitter
+- linking to "in reply to" tweets
 
 
 == Frequently Asked Questions ==
 
-= Who is allowed to post a Tweet from within WordPress? =
+= What if I don't want to use Social's comment display? =
 
-Anyone who has a 'publish_post' permission. Basically, if you can post to the blog, you can also post to Twitter (using the account info in the Twitter Tools configuration).
+All of Social's features (broadcasting, comment display, looking for responses on Twitter and Facebook and the ability to log in with Twitter or Facebook) can be disabled on Social's settings screen.
 
-= What happens if I have both my tweets posting to my blog as posts and my posts sent to Twitter? Will it cause the world to end in a spinning fireball of death? = 
+= Will Twitter Tools pull in my entire tweet archive from Twitter? =
 
-Actually, Twitter Tools has taken this into account and you can safely enable both creating posts from your tweets and tweets from your posts without duplicating them in either place.
+Twitter Tools starts archiving from the time you enable it. It does not try to download your entire tweet history. However, there is code in Twitter Tools that can be scripted to download and import tweets. You can put together the pieces with your own code to create the combination of features you desire. Here's an Gist to get you started:
 
-= Does Twitter Tools use a URL shortening service by default? =
+https://gist.github.com/3470627
 
-No, Twitter Tools sends your long URL to Twitter and Twitter chooses to shorten it or not.
+== Screenshots ==
 
-As of version 2.0 a plugin to do this with the Bit.ly service is included as an option.
+1. Show your tweets on your site (optional).
+2. Tweets can be viewed by account, @mention or #hashtag.
+3. Manage your tweets in the standard WordPress admin interface.
+4. View tweets by @mention, #hashtag, etc.
+5. Easy interface to for per-account settings.
 
-= Can Twitter Tools use a URL shortening service? =
 
-Yes, Twitter Tools includes a filter:
+== Upgrade Notice ==
 
-`tweet_blog_post_url`
+Version 3.0.3 is a recommended bug fix release.
 
-as of version 1.6. Plugins for this filter may already exist, or you can create your own. The plugin needs to attach to this filter using the standard WordPress `add_filter()` function and return a URL that will then be passed with your blog post tweet.
-
-As of version 2.0 a plugin to do this with the Bit.ly service is included as an option.
-
-= Is there any way to change the 'New Blog Post:' prefix when my new posts get tweeted? =
-
-Yes, as of version 2.0 you can change this on the Options page.
-
-= Can I remove the 'New Blog Post:' prefix entirely? =
-
-No, this is not a good idea. Twitter Tools needs to be able to look at the beginning of the tweet and identify if it's a notification from your blog or not. Otherwise, Twitter Tools and Twitter could keep passing the blog posts and resulting tweets back and forth resulting in the 'spinning fireball of death' mentioned above.
-
+Version 3.0 is a complete rewrite that utilizes <a href="http://wordpress.org/extend/plugins/social/">Social</a> to make connecting your Twitter account easy. It is compatibile with the latest Twitter API changes as of October 11, 2012. Please see the <a href="http://alexking.org/blog/2012/10/12/twitter-tools-3-0-faq">FAQ</a> for more details.
 
 == Changelog ==
+
+= 3.0.3 =
+
+* Fix a typo that could prevent proper backfilling of tweet data
+
+
+= 3.0.2 =
+
+* Add `aktt_tweet_create_blog_post` filter to allow other plugins/code to make programatic decisions about when to create blog posts from tweets
+* Add `aktt_tweet_create_blog_post_format` filter to allow post format to changed or omitted
+* Properly apply title prefix when creating blog posts
+* Address misc. multi-byte string issues
+* Fix GMT/local time issues and set time properly for tweets and posts
+* Properly enable featured image for tweet post type by merging with existing enabled post types
+
+
+= 3.0.1 =
+
+* Set categories and post tags properly on posts created from tweets
+* Set GMT date explicitly for blog posts created from tweets (fixes time offset issue)
+* Make enabled/disabled accounts more explicit visually
+
+
+= 3.0 =
+
+* Complete rewrite!
+* Integrates with Social (required) to provide a vastly improved set-up experience
+* Broadcasting features are now handled via the Social plugin
+* Tweets are stored as a custom post type, providing easy admin access to edit or delete tweets as needed
+* Tweets are cross-linked and browsable via custom taxonomies for accounts, @mentions and #hashtags
+* Full Twitter is now stored with each tweet
+* Comprehensive upgrade routine to migrate existing data and backfill upgraded tweets with full Twitter data
+* Additional control over which tweets are displayed via shortcode and widget
+* Daily and weekly digest functionality has been removed
+
 
 = 2.4 =
 

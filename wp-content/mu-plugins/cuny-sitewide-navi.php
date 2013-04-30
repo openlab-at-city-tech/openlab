@@ -4,7 +4,12 @@
  * Adds 'local environment' tab
  */
 function cuny_local_env_flag() {
+
 	if ( defined( 'IS_LOCAL_ENV' ) && IS_LOCAL_ENV ) {
+		$env_type = 'local';
+		if ( defined( 'ENV_TYPE' ) ) {
+			$env_type = ENV_TYPE;
+		}
 		?>
 
 		<style type="text/css">
@@ -26,7 +31,7 @@ function cuny_local_env_flag() {
 		</style>
 
 		<div id="local-env-flag">
-			LOCAL ENVIRONMENT
+			<?php echo esc_html( strtoupper( $env_type ) ) ?> ENVIRONMENT
 		</div>
 
 		<?php
@@ -50,6 +55,10 @@ function cuny_site_wide_navi_styles() {
 
 	wp_register_style( 'SW_Navi_styles', $sw_navi_styles );
 	wp_enqueue_style( 'SW_Navi_styles' );
+
+        //google fonts
+        wp_register_style('google-fonts','http://fonts.googleapis.com/css?family=Arvo',$sw_navi_styles);
+	wp_enqueue_style('google-fonts');
 }
 
 //add_action('wp_head', 'cuny_login_popup_script');
@@ -252,3 +261,22 @@ restore_current_blog();
 
 remove_action( 'init', 'maybe_add_existing_user_to_blog' );
 add_action( 'init', 'maybe_add_existing_user_to_blog', 90 );
+
+function bbg_debug_queries() {
+	if ( ! is_super_admin() ) {
+		return;
+	}
+
+	if ( empty( $_GET['debug_queries'] ) ) {
+		return;
+	}
+
+	global $wpdb;
+	echo '<pre>';
+	foreach ( $wpdb->queries as $q ) {
+		if ( $q[1] > 1 ) {
+			print_r( $q );
+		}
+	}
+}
+register_shutdown_function( 'bbg_debug_queries' );

@@ -415,4 +415,31 @@ add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_a
  */
 add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
 
-?>
+/**
+ * Don't send friend requests when accepting Invite Anyone invitations
+ *
+ * @see #666
+ */
+add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false' );
+
+/**
+ * Bust the home page activity transients when new items are posted
+ */
+function openlab_clear_home_page_transients() {
+	delete_site_transient( 'openlab_home_group_activity_items_course' );
+	delete_site_transient( 'openlab_home_group_activity_items_project' );
+	delete_site_transient( 'openlab_home_group_activity_items_club' );
+	delete_site_transient( 'openlab_home_group_activity_items_portfolio' );
+}
+add_action( 'bp_activity_after_save', 'openlab_clear_home_page_transients' );
+
+/**
+ * Fix the busted redirect on group subscription settings
+ */
+function openlab_fix_group_sub_settings_redirect( $redirect ) {
+	if ( bp_get_root_domain() === $redirect && groups_get_current_group() && bp_is_current_action( 'notifications' ) && ! empty( $_POST ) ) {
+		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'notifications/';
+	}
+	return $redirect;
+}
+add_filter( 'wp_redirect', 'openlab_fix_group_sub_settings_redirect' );
