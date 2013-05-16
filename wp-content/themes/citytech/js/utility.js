@@ -7,6 +7,18 @@
 			slideNum:false
 	});
 	
+	//this is for the new OpenLab members slider on the homepage
+	jQuery("#home-new-member-wrap").jCarouselLite({
+				btnNext: ".next",
+				btnPrev: ".prev",
+				vertical: false,
+				visible: 2,
+				auto:4000,
+				speed:200
+			});
+			
+	jQuery("#header #menu-item-40 ul li ul li a").prepend("+ ");
+	
 	equal_row_height();
 	
 	//this add an onclick event to the "New Topic" button while preserving the original event; this is so "New Topic" can have a "current" class
@@ -29,6 +41,45 @@
 												$(this).prev('div.gray-square').addClass('red-square').removeClass('gray-square');
 
 												});
+	
+	//ajax functionality for courses archive
+	$('#school-select').change(function(){
+	  var school = $(this).val();
+	  var nonce = $('#nonce-value').text();
+	  
+	  //disable the dept dropdown
+	  $('#dept-select').attr('disabled','disabled');
+	  $('#dept-select').addClass('processing');
+	  $('#dept-select').html('<option value=""></option>');
+	  
+	  if (school=="") {
+		document.getElementById("dept-select").innerHTML="";
+		return;
+	  }
+	  
+	  $.ajax({
+			 type: 'GET',
+			 url: 'http://' + document.domain + '/wp-admin/admin-ajax.php',
+			 data:
+			  {
+				  action: 'openlab_ajax_return_course_list',
+				  school: school,
+				  nonce: nonce
+			  },
+			  success: function(data, textStatus, XMLHttpRequest)
+			  {
+				  $('#dept-select').removeAttr('disabled');
+				  $('#dept-select').removeClass('processing');
+				  $('#dept-select').html(data);
+			  },
+			  error: function(MLHttpRequest, textStatus, errorThrown){  
+				  console.log(errorThrown);
+			  }
+			 });
+										});
+  function clear_form(){
+	  document.getElementById('group_seq_form').reset();
+  }
 
 	});//end document.ready
 	

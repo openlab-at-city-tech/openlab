@@ -1,7 +1,24 @@
-<?php
+<?php 
+/**
+* Members settings - email notifications settings
+*
+**/
 
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_delete_profile' );
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_delete_profile(); ?>
+    </div><!--content-->
+
+	<div id="sidebar" class="sidebar widget-area">
+	<?php get_template_part('members/single/sidebar'); ?>
+    </div>
+
+<?php
+get_footer();
+
+/**end layout**/
 
 function cuny_delete_profile(){
 
@@ -34,8 +51,4 @@ do_action( 'bp_before_member_settings_template' );
 do_action( 'bp_after_member_settings_template' );
 
 }
-
-add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
-
-genesis();
 ?>
