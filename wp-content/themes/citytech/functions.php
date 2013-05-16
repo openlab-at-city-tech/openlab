@@ -31,6 +31,7 @@ function my_init_method() {
         wp_enqueue_script( 'easyaccordion' );
         wp_register_script( 'utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
         wp_enqueue_script( 'utility' );
+        wp_enqueue_script( 'bp-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array( 'jquery' ) );
     }
 }
 
