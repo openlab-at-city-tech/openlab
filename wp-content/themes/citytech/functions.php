@@ -306,24 +306,6 @@ function openlab_current_user_ribbonclass() {
  */
 add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
 
-/**
- * Don't show the Join Group button on the sidebar of a portfolio
- */
-function openlab_no_join_on_portfolios() {
-	global $bp;
-
-	if ( openlab_is_portfolio() ) {
-		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
-	}
-
-	//fix for files, docs, and membership pages in group profile - hiding join button
-	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
-		{
-			remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
-		}
-}
-add_action( 'wp_head', 'openlab_no_join_on_portfolios', 999 );
-
 function openlab_get_groups_of_user( $args = array() ) {
 	global $bp, $wpdb;
 
@@ -550,18 +532,6 @@ function openlab_default_subscription_settings_form() {
 remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
 
-// Save the default group subscription setting in the group meta, if no, delete it
-function openlab_save_default_subscription( $group ) {
-	global $bp, $_POST;
-
-	if ( isset( $_POST['ass-default-subscription'] ) && $postval = $_POST['ass-default-subscription'] ) {
-		groups_update_groupmeta( $group->id, 'ass_default_subscription', $postval );
-	}
-}
-remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
-add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
-
-
 /**
  * Save the group default email setting
  *
@@ -588,4 +558,3 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
-=======
