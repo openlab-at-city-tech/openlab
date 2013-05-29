@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * Library of group-related functions
 *
@@ -10,20 +10,20 @@
 */
 
 function openlab_group_privacy_settings($group_type)
-{ 	
+{
 	global $bp;
 	?>
 	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
 	<?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
 	<h5><?php _e( ucfirst($group_type).' Profile')?></h5>
     <?php endif; ?>
-    
+
     <?php if ($bp->current_action == 'create'): ?>
     <p id="privacy-intro"><?php _e('To change these settings later, use the '.$group_type.' Profile Settings page.','buddypress'); ?></p>
     <?php else: ?>
 	<p><?php _e('These settings affect how others view your '.ucfirst($group_type).' Profile.') ?></p>
     <?php endif; ?>
-    
+
 	<div class="radio">
 
 		<?php /* Portfolios get different copy */ ?>
@@ -95,7 +95,7 @@ function openlab_group_privacy_settings($group_type)
 		<?php wp_nonce_field( 'groups_edit_group_settings' ); ?>
 	<?php elseif ($bp->current_action == 'create'): ?>
     	<?php wp_nonce_field( 'groups_create_save_group-settings' ) ?>
-    <?php endif; 
+    <?php endif;
 }
 
 /**
@@ -197,11 +197,11 @@ if ( bp_has_groups( $group_args ) ) : ?>
 					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
 				</div>
 				<div class="item">
-                
+
 				<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
 					<?php //course group type
 					if ($group_type == 'course'): ?>
-					
+
 					<?php
 					$admins = groups_get_group_admins( $group_id );
 					$faculty_id = $admins[0]->user_id;
@@ -215,11 +215,11 @@ if ( bp_has_groups( $group_args ) ) : ?>
 					?>
                     <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments,20);?> | <?php echo $wds_course_code;?><br /> <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
 					<?php elseif ($group_type == 'portfolio'): ?>
-					
+
                     <div class="info-line"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
-                    
+
 					<?php endif; ?>
-					
+
 					<?php
 					     $len = strlen(bp_get_group_description());
 					     if ($len > 135) {
@@ -272,13 +272,13 @@ function openlab_delete_group() {
 *
 */
 function openlab_return_course_list($school)
-{	
+{
 	if ($school == "tech" || $option_value_school == "tech")
 	{
 	  $tech_depts = openlab_get_department_list('tech');
-	  
+
 	  $tech_list = '<option value="dept_all">All</option>';
-	  
+
 		foreach ($tech_depts as $tech_dept)
 		{
 			$display_option_dept = str_replace('And','&amp;',$tech_dept);
@@ -287,11 +287,11 @@ function openlab_return_course_list($school)
 		}
 		return $tech_list;
 	} else if($school=="studies" || $option_value_school == "studies"){
-	  
+
 	  $tech_depts = openlab_get_department_list('studies');
-	  
+
 	  $tech_list = '<option value="dept_all">All</option>';
-	  
+
 		foreach ($tech_depts as $tech_dept)
 		{
 			$display_option_dept = str_replace('And','&amp;',$tech_dept);
@@ -301,11 +301,11 @@ function openlab_return_course_list($school)
 		return $tech_list;
 
 	}else if ($school=="arts" || $option_value_school == "arts"){
-	   
+
 	  $tech_depts = openlab_get_department_list('arts');
-	  
+
 	  $tech_list = '<option value="dept_all">All</option>';
-	  
+
 		foreach ($tech_depts as $tech_dept)
 		{
 			$display_option_dept = str_replace('And','&amp;',$tech_dept);
