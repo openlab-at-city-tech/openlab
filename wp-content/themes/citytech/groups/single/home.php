@@ -73,7 +73,11 @@ function cuny_group_single() { ?>
                 </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
 				<div id="<?php echo $group_type; ?>-header-content" class="alignleft group-header-content">
-                    <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a></h2>
+                    <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?>
+                        <?php if ($group_type != 'portfolio' && $group_type != 'club'): ?>
+                            <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a>
+                        <?php endif; ?>
+                    </h2>
                     
                         <?php if ($group_type == "portfolio"): ?>
                     <div class="portfolio-displayname"><span class="highlight"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></span></div>
