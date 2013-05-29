@@ -188,7 +188,7 @@ function openlab_current_directory_filters() {
 
 	switch (openlab_get_current_group_type()) {
 		case 'portfolio' :
-			$filters = array( 'school', 'department', 'user_type' );
+			$filters = array( 'school', 'department', 'usertype' );
 			break;
 		case 'course' :
 			$filters = array( 'school', 'department', 'semester' );
