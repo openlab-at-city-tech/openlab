@@ -185,7 +185,7 @@ function cuny_group_single() { ?>
 			<div class="one-half <?php echo $first_class; ?>">
 				<div class="recent-discussions">
 					<div class="recent-posts">
-						<h4 class="group-activity-title">Recent Discussions</h4>
+						<h4 class="group-activity-title">Recent Discussions<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></span></h4>
 						<?php if ( bp_has_forum_topics('per_page=3') ) : ?>
 							<ul>
 								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
@@ -205,7 +205,6 @@ function cuny_group_single() { ?>
 									</li>
 								<?php endwhile; ?>
 							</ul>
-							<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></div>
 						<?php else: ?>
 							<div id="message" class="info">
 								<p><?php _e( 'Sorry, there were no discussion topics found.', 'buddypress' ) ?></p>
