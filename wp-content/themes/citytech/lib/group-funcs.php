@@ -251,15 +251,14 @@ if ( bp_has_groups( $group_args ) ) : ?>
 
 <?php endif; ?>
 		<?php
-		
+
 		$meta_filter->remove_filters();
 }
 
 /*
  * Redirect to users profile after deleting a group
  */
-
-add_action( 'groups_before_delete_group', 'openlab_delete_group' );
+add_action( 'groups_group_deleted', 'openlab_delete_group', 20 );
 
 /**
  * After portfolio delete, redirect to user profile page
