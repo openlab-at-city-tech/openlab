@@ -280,9 +280,9 @@ function cuny_group_single() { ?>
 				<?php endif;?>
 
                 <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
-        				<div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
+        				<div class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
 				<?php else: ?>
-                    <div class="view-more"><a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
+                    <div class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
                 <?php endif; ?>
 
 			</div>
