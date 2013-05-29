@@ -65,10 +65,12 @@ function cuny_group_single() { ?>
                                 <div id="action-edit-group"><a href="<?php echo bp_group_permalink(). 'admin/edit-details/'; ?>">Edit Profile</a></div>
                                 <div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
                      </div>
-                    <?php elseif (is_user_logged_in() && $group_type != 'portfolio'): ?>
-                    <div id="group-action-wrapper">
-                            <?php do_action( 'bp_group_header_actions' ); ?>
-                    </div>
+                    <?php elseif (is_user_logged_in()): ?>
+                        <?php if ($group_type != 'portfolio'): ?>
+                            <div id="group-action-wrapper">
+                                    <?php do_action( 'bp_group_header_actions' ); ?>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
