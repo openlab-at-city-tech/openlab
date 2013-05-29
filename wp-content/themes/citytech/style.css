@@ -4587,6 +4587,9 @@ ul.invite-search {
 {
     margin-bottom: 15px;
 }
+.portfolio-displayname a{
+    text-decoration: underline;
+}
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
