@@ -74,7 +74,7 @@ function cuny_group_single() { ?>
                     <?php endif; ?>
                 </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
-				<div id="<?php echo $group_type; ?>-header-content" class="alignleft group-header-content">
+				<div id="<?php echo $group_type; ?>-header-content" class="alignleft group-header-content group-<?php echo $group_id; ?>">
                     <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?>
                         <?php if ($group_type != 'portfolio' && $group_type != 'club'): ?>
                             <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a>
