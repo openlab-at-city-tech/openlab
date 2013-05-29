@@ -68,7 +68,6 @@ function cuny_group_single() { ?>
                     <?php elseif (is_user_logged_in()): ?>
                         <?php if ($group_type != 'portfolio'): ?>
                             <div id="group-action-wrapper">
-                                    <?php echo bp_is_active( 'groups' ); ?>
                                     <?php do_action( 'bp_group_header_actions' ); ?>
                             </div>
                         <?php endif; ?>
