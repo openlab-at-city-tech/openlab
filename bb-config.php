@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * The base configurations of bbPress.
  *
  * This file has the following configurations: MySQL settings, Table Prefix,
@@ -11,12 +11,18 @@
  * @package bbPress
  */
 
-/**
- * Include environment-specific constants, such as DB connection data
- */
-if ( !defined( 'BBDB_NAME' ) ) {
-	include( dirname( __FILE__ ) . '/env.php' );
-}
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for bbPress */
+define( 'BBDB_NAME', 'openlab' );
+
+/** MySQL database username */
+define( 'BBDB_USER', 'root' );
+
+/** MySQL database password */
+define( 'BBDB_PASSWORD', '' );
+
+/** MySQL hostname */
+define( 'BBDB_HOST', 'localhost' );
 
 /** Database Charset to use in creating database tables. */
 define( 'BBDB_CHARSET', 'utf8' );
@@ -54,13 +60,12 @@ $bb_table_prefix = 'wp_bb_';
  * directory of bbPress. For example, install de.mo to "my-languages" and set
  * BB_LANG to 'de' to enable German language support.
  */
-define( 'BB_LANG', '' );
-
+define( 'BB_LANG', 'en_US' );
 $bb->custom_user_table = 'wp_users';
 $bb->custom_user_meta_table = 'wp_usermeta';
 
-$bb->uri = 'http://citytech.webdevstudios.com/wp-content/plugins/buddypress/bp-forums/bbpress/';
-$bb->name = ' Forums';
+$bb->uri = 'http://openlabdev.org/wp-content/plugins/buddypress//bp-forums/bbpress/';
+$bb->name = 'City Tech OpenLab Forums';
 $bb->wordpress_mu_primary_blog_id = 1;
 
 define('BB_AUTH_SALT', 'x.GH/h/NxLF+(a$|}@,@NgUJN-|[RB@,WoWz|sgh9(.yC>mNzUp`W_u){-Lz|xy~');

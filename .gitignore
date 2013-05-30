@@ -22,6 +22,7 @@ php_error.log
 *.bak
 PHP_errors.log
 error_log
+php_error.log
 .DS_store
 .DS_Store
 #maintenance.html
@@ -40,3 +41,5 @@ wp-admin/error_log
 tags
 
 nbproject/*
+
+wp-config.php

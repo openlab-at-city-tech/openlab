@@ -479,9 +479,6 @@ function openlab_delete_portfolio( $group_id ) {
 
 	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
 	bp_delete_user_meta( $user_id, 'portfolio_group_id' );
-
-	// Reconfigure the redirect
-	add_filter( 'groups_group_deleted', 'openlab_delete_portfolio_redirect' );
 }
 add_action( 'groups_before_delete_group', 'openlab_delete_portfolio' );
 

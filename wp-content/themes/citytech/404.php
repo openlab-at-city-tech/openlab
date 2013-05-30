@@ -1,14 +1,18 @@
 <?php
+/**
+ * 404 template
+ *
+ */
+ 
+  get_header(); ?>
+  
+  <div id="content" class="hfeed">
+  			<div <?php post_class(); ?>>
+            	<?php cuny_404(); ?>
+            </div><!--hentry-->
+  </div><!--#content-->
 
-add_filter('genesis_pre_get_option_site_layout', 'cuny_404_layout');
-function cuny_404_layout($opt) {
-    $opt = 'full-width-content';
-    return $opt;
-}
-
-remove_action( 'genesis_loop', 'genesis_do_loop' );
-
-add_action( 'genesis_loop', 'cuny_404' );
+ <?php get_footer();
 
 function cuny_404() { ?>
 
@@ -24,5 +28,3 @@ function cuny_404() { ?>
 
 <?php
 }
-
-genesis();

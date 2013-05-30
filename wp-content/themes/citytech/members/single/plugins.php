@@ -1,6 +1,24 @@
+<?php 
+/**
+* Plugins - template: for MOL Invitations
+*
+**/
+
+/**begin layout**/
+get_header(); ?>
+
+	<div id="content" class="hfeed">
+    	<?php cuny_plugin_loop(); ?>
+    </div><!--content-->
+
+	<div id="sidebar" class="sidebar widget-area">
+	<?php get_template_part('members/single/sidebar'); ?>
+    </div>
+
 <?php
-remove_action('genesis_loop', 'genesis_do_loop');
-add_action('genesis_loop', 'cuny_plugin_loop' );
+get_footer();
+
+/**end layout**/
 
 function cuny_plugin_loop(){
 	
@@ -21,8 +39,3 @@ do_action( 'bp_before_member_plugin_template' );
 <?php
 do_action( 'bp_after_member_plugin_template' );
 }
-
-add_action( 'genesis_before_sidebar_widget_area', create_function( '', 'include( get_stylesheet_directory() . "/members/single/sidebar.php" );' ) );
-
-genesis();
-?>

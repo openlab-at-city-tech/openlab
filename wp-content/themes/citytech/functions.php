@@ -1,101 +1,72 @@
 <?php
 /** Start the engine **/
-require_once(TEMPLATEPATH.'/lib/init.php');
-require_once(STYLESHEETPATH.'/marx_functions.php');
+add_theme_support( 'bbpress' );
+add_theme_support( 'post-thumbnails' );
 
-/**this is for the post type declarations - they are done on the function side instead of through
-a plugin, to make git tracking easier**/
+//dequeue buddypress default styles
+if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
+    function bp_dtheme_enqueue_styles() {}
+endif;
+
+/**buddypress ajax**/
+include( BP_PLUGIN_URL . '/_inc/ajax.php' );
+
+/**creating a library to organize functions**/
+require_once(STYLESHEETPATH.'/lib/header-funcs.php');
 require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
 require_once(STYLESHEETPATH.'/lib/content-processing.php');
 require_once(STYLESHEETPATH.'/lib/nav.php');
+require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
+require_once(STYLESHEETPATH.'/lib/group-funcs.php');
+require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
+require_once(STYLESHEETPATH.'/lib/help-funcs.php');
+require_once(STYLESHEETPATH.'/lib/member-funcs.php');
+require_once(STYLESHEETPATH.'/lib/page-funcs.php');
+
+/**js calls**/
+function my_init_method() {
+    if (!is_admin()) {
+        wp_enqueue_script( 'jquery' );
+        wp_register_script( 'jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
+        wp_enqueue_script( 'jcarousellite' );
+        wp_register_script( 'easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
+        wp_enqueue_script( 'easyaccordion' );
+        wp_register_script( 'utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
+        wp_enqueue_script( 'utility' );
+        wp_enqueue_script( 'bp-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array( 'jquery' ) );
+    }
+}
+
+add_action('init', 'my_init_method');
+
+// Custom Login
+function my_custom_logo() { ?>
+	<style type="text/css">
+		#login { margin: 50px auto 0 auto; width: 350px; }
+		#login h1 a { background: url(<?php bloginfo('stylesheet_directory') ?>/images/logo.png) center no-repeat; height:125px; width: 370px; }
+		body { background: #fff }
+	</style>
+<?php }
+add_action('login_head', 'my_custom_logo');
 
 /**
- * Don't use the Genesis genesis_meta action to load the stylesheet
- *
- * Instead, load it as the very last item in the document head, so that we can override plugin
- * styles.
- *
- * We're manually outputting the <link> tag instead of enqueuing, because we must ensure that we
- * come last, last, last.
- *
- * Kids, do not try this at home!
- *
- * @link http://openlab.citytech.cuny.edu/redmine/issues/422
+ * Custom template loader for my-{grouptype}
  */
-remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
-function openlab_load_stylesheet() {
-	echo '<link rel="stylesheet" href="' . get_bloginfo( 'stylesheet_url' ) . '" type="text/css" media="all" />';
-}
-add_action( 'wp_head', 'openlab_load_stylesheet', 999999 );
-
-define('BP_DISABLE_ADMIN_BAR', true);
-
-/** Add support with .wrap inside #inner */
-add_theme_support( 'genesis-structural-wraps', array( 'header', 'nav', 'subnav', 'inner', 'footer-widgets', 'footer' ) );
-
-remove_action('genesis_sidebar', 'genesis_do_sidebar');
-
-add_action( 'widgets_init', 'cuny_remove_default_widget_areas', 11 );
-function cuny_remove_default_widget_areas() {
-	unregister_sidebar('sidebar');
-	unregister_sidebar('sidebar-alt');
-}
-/** Add support for custom background **/
-add_theme_support( 'custom-background', array() );
-//add_theme_support( 'genesis-footer-widgets', 5 );
-
-add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
-
-// Enqueue Styles For Testimonials Page & sub-pages
-add_action('wp_print_styles', 'wds_cuny_ie_styles');
-function wds_cuny_ie_styles() {
-  if ( is_admin() )
-    return;
-    ?>
-
-    <!--[if lte IE 7]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie7.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 8]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie8.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 9]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
-    <![endif]-->
-
-
-    <?php }
-
-function cuny_no_bp_default_styles() {
-	wp_dequeue_style( 'gconnect-bp' );
-	wp_dequeue_script('superfish');
-	wp_dequeue_script('superfish-args');
-
-	wp_enqueue_style( 'cuny-bp', get_stylesheet_directory_uri() . '/css/buddypress.css' );
-	wp_dequeue_style( 'gconnect-adminbar' );
-}
-
-/**
- * Enqueue our front-end scripts
- */
-function openlab_enqueue_frontend_scripts() {
-	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
-             ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
-		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+function openlab_mygroups_template_loader( $template ) {
+	if ( is_page() ) {
+		switch ( get_query_var( 'pagename' ) ) {
+			case 'my-courses' :
+			case 'my-clubs' :
+			case 'my-projects' :
+				bp_core_load_template( 'groups/index' );
+				break;
+		}
 	}
 
-        if ( bp_is_register_page() ) {
-                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery' ) );
-        }
-
+	return $template;
 }
-add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
-
-add_action( 'genesis_meta', 'cuny_google_font');
-function cuny_google_font() {
-	echo "<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>";
-}
+add_filter( 'template_include', 'openlab_mygroups_template_loader' );
 
 function cuny_o_e_class($num){
  return $num % 2 == 0 ? " even":" odd";
@@ -110,17 +81,6 @@ function cuny_default_avatar( $url ) {
 }
 add_filter( 'bp_core_mysteryman_src', 'cuny_default_avatar' );
 
-remove_action('genesis_before_loop' , 'genesis_do_breadcrumbs');
-add_action('genesis_before_footer' , 'genesis_do_breadcrumbs', 5);
-
-add_filter('genesis_breadcrumb_args', 'custom_breadcrumb_args');
-function custom_breadcrumb_args($args) {
-    $args['labels']['prefix'] = 'You are here:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $args['prefix']  = '<div id="breadcrumb-container"><div class="breadcrumb">';
-    $args['suffix'] = '</div></div>';
-    return $args;
-}
-
 remove_all_actions('genesis_footer');
 //add_action('genesis_footer', 'cuny_creds_footer');
 function cuny_creds_footer() {
@@ -134,43 +94,78 @@ remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 //add_action('genesis_before_header','cuny_bp_adminbar_menu');
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
-add_action('genesis_header','cuny_admin_bar', 10);
-function cuny_admin_bar() {
+add_action('bp_header','openlab_header_bar', 10);
+function openlab_header_bar() { ?>
 
-	cuny_site_wide_bp_search(); ?>
-	<div class="clearfloat"></div>
-	<?php //this adds the main menu, controlled through the WP menu interface
-	$args = array(
-				'theme_location' => 'main',
-				'container' => '',
-				'menu_class' => 'nav',
-			);
+	<div id="header-wrap">
+      <div id="title-area">
+          <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></h1>
+      </div>
 
-	wp_nav_menu( $args );
-	//do_action( 'cuny_bp_adminbar_menus' );
-	if ( is_user_logged_in() ){?>
-	<div id="extra-border"></div>
-	<ul id="openlab-link">
-		<li>
-			<a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
-		</li>
-	</ul>
-	<?php } ?>
-		<div class="clearfloat"></div>
+      <?php openlab_site_wide_bp_search(); ?>
+      <div class="clearfloat"></div>
+      <?php //this adds the main menu, controlled through the WP menu interface
+      $args = array(
+                  'theme_location' => 'main',
+                  'container' => '',
+                  'menu_class' => 'nav',
+              );
+
+      wp_nav_menu( $args );
+      //do_action( 'cuny_bp_adminbar_menus' );
+      if ( is_user_logged_in() ){?>
+      <div id="extra-border"></div>
+      <ul id="openlab-link">
+          <li>
+              <a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
+          </li>
+      </ul>
+      <?php } ?>
+          <div class="clearfloat"></div>
+	</div><!--#wrap-->
 <?php }
 
-add_action('genesis_after_content', 'cuny_the_clear_div');
-function cuny_the_clear_div() {
-	echo '<div style="clear:both;"></div>';
+//openlab search function
+function openlab_site_wide_bp_search() { ?>
+	<form action="<?php echo bp_search_form_action() ?>" method="post" id="search-form">
+		<input type="text" id="search-terms" name="search-terms" value="" />
+		<?php //echo bp_search_form_type_select() ?>
+        <select style="width: auto" id="search-which" name="search-which">
+        <option value="members">People</option>
+        <option value="courses">Courses</option>
+        <option value="projects">Projects</option>
+        <option value="clubs">Clubs</option>
+        </select>
+
+		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
+		<?php wp_nonce_field( 'bp_search_form' ) ?>
+	</form><!-- #search-form -->
+<?php }
+
+add_action('init','openlab_search_override',1);
+function openlab_search_override(){
+    global $bp;
+	if(isset($_POST['search-submit']) && $_POST['search-terms']){
+		if($_POST['search-which']=="members"){
+			wp_redirect($bp->root_domain.'/people/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="courses"){
+			wp_redirect($bp->root_domain.'/courses/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="projects"){
+			wp_redirect($bp->root_domain.'/projects/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="clubs"){
+			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
+			exit();
+		}
+	}
 }
 
-add_filter( 'wp_title', 'test', 10, 2 );
-function test( $title ) {
-	$find = " &#124; Groups &#124; ";
-	$replace = " | ";
-	$title = str_replace( $find , $replace, $title);
-	return $title;
-}
+/*add_action('genesis_after_content', 'cuny_the_clear_div');
+function cuny_the_clear_div() {
+	echo '<div style="clear:both;"></div>';
+}*/
 
 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 add_filter('get_the_excerpt', 'cuny_add_links_wp_trim_excerpt');
@@ -314,24 +309,6 @@ function openlab_current_user_ribbonclass() {
  * Don't show the New Topic link on the sidebar of a forum page
  */
 add_action( 'wp_head', create_function( '', "remove_action( 'bp_group_header_actions', 'bp_group_new_topic_button' );" ), 999 );
-
-/**
- * Don't show the Join Group button on the sidebar of a portfolio
- */
-function openlab_no_join_on_portfolios() {
-	global $bp;
-
-	if ( openlab_is_portfolio() ) {
-		remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
-	}
-
-	//fix for files, docs, and membership pages in group profile - hiding join button
-	if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
-		{
-			remove_action( 'bp_group_header_actions', 'bp_group_join_button' );
-		}
-}
-add_action( 'wp_head', 'openlab_no_join_on_portfolios', 999 );
 
 function openlab_get_groups_of_user( $args = array() ) {
 	global $bp, $wpdb;
@@ -559,7 +536,12 @@ function openlab_default_subscription_settings_form() {
 remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
 
-// Save the default group subscription setting in the group meta, if no, delete it
+/**
+ * Save the group default email setting
+ *
+ * We override the way that GES does it, because we want to save the value even
+ * if it's 'no'. This should probably be fixed upstream
+ */
 function openlab_save_default_subscription( $group ) {
 	global $bp, $_POST;
 
@@ -569,7 +551,6 @@ function openlab_save_default_subscription( $group ) {
 }
 remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
 add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
-
 
 /**
  * Filter the output of the Add Friend/Cancel Friendship button

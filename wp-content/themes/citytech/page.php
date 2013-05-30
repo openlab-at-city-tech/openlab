@@ -1,48 +1,44 @@
 <?php
 /**
- * WARNING: This file is part of the core Genesis framework. DO NOT edit
- * this file under any circumstances. Please do all modifications
- * in the form of a child theme.
+ * Page template
  *
- * This file handles pages, but only exists for the sake of
- * child theme forward cchoompatibility.
- *
- * @package Genesis
  */
-  //add the about-page sidebar to just the about page and any child about page
-  global $wp_query;
+ 
+  get_header(); ?>
+  
+  <div id="content" class="hfeed">
+  
+  <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+  
+  			<div <?php post_class(); ?>>
+            	<h1 class="entry-title"><?php the_title(); ?></h1>
+                <div class="entry-content"><?php the_content(); ?></div>
+            </div><!--hentry-->
+  
+  <?php endwhile;
+  		endif; ?>
+  
+  </div><!--#content-->
+  
+  <?php global $wp_query;
   $post = $wp_query->post;
   $postID = $post->ID;
   $parent = $post->post_parent;
+  
+  //add the about-page sidebar to just the about page and any child about page
   if ($postID == "49" || $parent == "49")
   {
-add_action('genesis_before_sidebar_widget_area', 'cuny_about_menu');
-function cuny_about_menu() {
- 
-  $args = array(
-				'theme_location' => 'aboutmenu',
-				'container' => 'div',
-                'container_id' => 'about-menu',
-				'menu_class' => 'sidbar-nav'
-			);?>
-	<h2 class="sidebar-title">About</h2>
-	<?php wp_nav_menu( $args );
-}//add the help-page sidebar to just the help page and any child help page
-  }else if ($postID == "43" || $parent == "43")
-  {
-    add_action('genesis_before_sidebar_widget_area', 'cuny_help_menu');
-    function cuny_help_menu() { 
-    $args = array(
-				'theme_location' => 'helpmenu',
-				'container' => 'div',
-                'container_id' => 'help-menu',
-				'menu_class' => 'sidbar-nav'
-			);
-?>
-	<h2 class="sidebar-title">Help</h2>
-	<?php
-	wp_nav_menu( $args );
+	  echo '<div id="sidebar" class="sidebar widget-area">';
+	   
+		$args = array(
+					  'theme_location' => 'aboutmenu',
+					  'container' => 'div',
+					  'container_id' => 'about-menu',
+					  'menu_class' => 'sidbar-nav'
+				  );
+	    echo '<h2 class="sidebar-title">About</h2>';
+		wp_nav_menu( $args );
+	  echo '</div>';
   }
- }
-
-genesis();
+  
+  get_footer();

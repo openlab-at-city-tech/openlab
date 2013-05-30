@@ -1809,7 +1809,8 @@ function openlab_default_group_subscription( $level ) {
 
 	return $level;
 }
-add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
+
+add_filter('ass_default_subscription_level', 'openlab_default_group_subscription');
 
 function openlab_set_default_group_subscription_on_creation( $group_id ) {
 	groups_update_groupmeta( $group_id, 'ass_default_subscription', 'supersub' );

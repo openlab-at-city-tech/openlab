@@ -1,5 +1,24 @@
 <?php //content processing functions
 
+//body classes for specific pages - partly legacy from Genesis Connect
+add_filter('body_class','openlab_conditional_body_classes');
+
+function openlab_conditional_body_classes($classes)
+{
+	global $post;
+	$classes[] = 'header-image';
+	
+	if (is_front_page() || is_404())
+	{
+		$classes[] = 'full-width-content';
+	} else if ($post->post_name == 'register')
+	{
+		$classes[] = 'content-sidebar';
+	} 
+	
+	return $classes;
+}
+
 //limit text length
 // Note: In the future this should be swapped with bp_create_excerpt(),
 // which is smarter about stripping tags, etc
