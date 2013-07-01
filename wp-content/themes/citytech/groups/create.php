@@ -24,6 +24,8 @@ function cuny_create_group(){
 	//get group type
 	if ( !empty( $_GET['type'] ) ) {
 		$group_type = $_GET['type'];
+	} else {
+		$group_type = 'club';
 	}
 
 	//this function doesn't work - explore for deprecation or fixing
@@ -36,6 +38,11 @@ function cuny_create_group(){
 	} else {
 		$group_label = $group_type;
 		$page_title  = 'Create a ' . ucwords( $group_type );
+	}
+
+	$group_id_to_clone = 0;
+	if ( 'course' === $group_type && ! empty( $_GET['clone'] ) ) {
+		$group_id_to_clone = intval( $_GET['clone'] );
 	}
 
 	?>
@@ -66,8 +73,35 @@ function cuny_create_group(){
 
 				<?php do_action( 'bp_before_group_details_creation_step' ); ?>
 
+				<?php /* Create vs Clone for Courses */ ?>
 				<?php if ( 'course' == $group_type ) : ?>
-					<p class="ol-tooltip">Please take a moment to consider the name of your Course. We recommend keeping your Course title name under 50 characters. You can always change the name of your course later.</p>
+					<div class="create-or-clone-selector">
+						<p class="ol-tooltip">If you taught the same course in a previous semester or year, cloning can save you time. See the help topic Create / Clone a Course.</p>
+
+						<input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked( ! (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-create">Create a New Course</label>
+						<input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked( (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-clone">Clone an Existing Course</label>
+
+						<?php $user_groups = openlab_get_courses_owned_by_user( get_current_user_id() ) ?>
+
+						<select name="group-to-clone">
+							<option value="" <?php selected( $group_id_to_clone, 0 ) ?>>- choose a course -</option>
+
+							<?php foreach ( $user_groups['groups'] as $user_group ) : ?>
+								<option value="<?php echo esc_attr( $user_group->id ) ?>" <?php selected( $group_id_to_clone, $user_group->id ) ?>><?php echo esc_attr( $user_group->name ) ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+
+				<?php endif ?>
+
+				<?php /* Name/Description */ ?>
+				<?php if ( 'course' == $group_type ) : ?>
+					<p class="ol-tooltip">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
+
+					<ul class="ol-tooltip">
+						<li>CourseCode CourseName, Semester Year</li>
+						<li>ARCH3522 NYC Arch, FA2013</li>
+					</ul>
 				<?php elseif ( 'portfolio' == $group_type ) : ?>
 					<p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
 
@@ -267,6 +301,6 @@ function cuny_create_group(){
 
 	<?php do_action( 'bp_after_create_group' ) ?>
 
-</form>
+	</form>
 </div>
 <?php } ?>
