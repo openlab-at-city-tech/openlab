@@ -156,7 +156,7 @@ function openlab_my_groups_submenu($group)
 		if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
 			$menu_list = array(
 					   $group_link => 'My '.ucfirst($group).'s',
-					   $create_link => 'Create / Clone a '.ucfirst($group),
+					   $create_link => 'Create a '.ucfirst($group),
 					   );
 		} else {
 			$menu_list = array(
