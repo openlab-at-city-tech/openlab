@@ -488,7 +488,7 @@ function openlab_no_join_on_portfolios($button) {
 	{
             $button = "";
 	}
-        
+
         return $button;
 }
 
@@ -548,13 +548,19 @@ function openlab_group_admin_tabs( $group = false ) {
 				return false;
 		?>
 
-        <li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
 
 		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
 
 		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
 
-		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+		<div class="subnav-right-buttons">
+			<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
+				<li class="clone-button <?php if ( 'clone-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e( 'Clone '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+			<?php endif ?>
+
+			<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+		</div>
 
 	<?php endif ?>
 <?php

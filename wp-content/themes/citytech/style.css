@@ -916,13 +916,26 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
 	padding-left:7px;
 }
 
-.submenu ul li.delete-button a,#subnav li.delete-button a {
+#subnav li.clone-button a,
+.submenu ul li.delete-button a,
+#subnav li.delete-button a {
 	background:url(images/submenu_sprite.png) no-repeat -1px 0;
 	padding:2px 0 0 18px;
 	height:18px;
 }
 
-.submenu ul li.delete-button.selected-page a,#subnav li.delete-button.current a {
+#subnav li.clone-button a {
+	background-position: 0 -17px;
+}
+
+#subnav ul li.clone-button:first-child a {
+	padding-left: 18px;
+}
+
+.submenu ul li.clone-button.selected-page a,
+#subnav li.clone-button.current a,
+.submenu ul li.delete-button.selected-page a,
+#subnav li.delete-button.current a {
 	background-position:-1px -34px;
 }
 
@@ -936,10 +949,19 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
 	background-position:-1px -53px;
 }
 
-.submenu ul li.item-delete-account,#subnav li.delete-button {
-	position:absolute;
-	top:0;
-	right:0;
+.subnav-right-buttons {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#subnav ul .subnav-right-buttons > li {
+	display: block;
+}
+
+#subnav li.clone-button,
+.submenu ul li.item-delete-account,
+#subnav li.delete-button {
 	border-right:none;
 }
 
