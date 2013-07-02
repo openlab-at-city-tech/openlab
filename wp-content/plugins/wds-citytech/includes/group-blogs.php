@@ -669,11 +669,11 @@ function wds_bp_group_meta(){
 					</th>
 				</tr>
 			<?php else : ?>
-				<?php $show_website = 'block' ?>
+				<?php $show_website = 'auto' ?>
 
 				<?php if ( 'course' == $group_type ) : ?>
 					<tr class="form-field form-required">
-						<th>Site Details</th>
+						<th scope="row">Site Details</th>
 					</tr>
 				<?php endif ?>
 			<?php endif ?>
@@ -688,7 +688,7 @@ function wds_bp_group_meta(){
 							<li>smithadv1100sp2012</li>
 						</ul>
 
-						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information to the URL.</p>
+						<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
 						<?php break;
 					case 'project' : ?>
@@ -703,9 +703,20 @@ function wds_bp_group_meta(){
 				<?php endswitch ?>
 			</td></tr>
 
+			<tr id="wds-website-clone" class="form-field form-required">
+				<th valign="top" scope='row'>
+					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" />
+					Clone an existing site:
+				</th>
+
+				<td id="noo_clone_options">
+					<?php echo $current_site->domain . $current_site->path ?><input size="40" name="blog_to_clone[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
+				</td>
+
+			</tr>
+
 			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>
-
 					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
 					Create a new site:
 				</th>

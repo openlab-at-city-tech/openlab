@@ -4206,6 +4206,26 @@ ul.ol-tooltip li:before {
 	background:url(/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif) no-repeat scroll left center transparent;
 }
 
+body.group-create table.groupblog-setup th {
+	width: 200px;
+}
+
+form.standard-form .create-or-clone-options label {
+	display: inline;
+}
+
+.create-or-clone-options {
+	margin: 15px 0;
+}
+
+.create-or-clone-options li {
+	margin-bottom: 10px;
+}
+
+#group-to-clone {
+	margin-left: 10px;
+}
+
 .group-admin .left-menu {
 	float:left;
 	width:250px;

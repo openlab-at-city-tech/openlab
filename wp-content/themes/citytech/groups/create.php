@@ -78,18 +78,27 @@ function cuny_create_group(){
 					<div class="create-or-clone-selector">
 						<p class="ol-tooltip">If you taught the same course in a previous semester or year, cloning can save you time. See the help topic Create / Clone a Course.</p>
 
-						<input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked( ! (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-create">Create a New Course</label>
-						<input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked( (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-clone">Clone an Existing Course</label>
+						<ul class="create-or-clone-options">
+							<li>
+								<input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked( ! (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-create">Create a New Course</label>
+							</li>
 
-						<?php $user_groups = openlab_get_courses_owned_by_user( get_current_user_id() ) ?>
+							<li class="disable-if-js">
+								<input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked( (bool) $group_id_to_clone ) ?> /> <label for="create-or-clone-clone">Clone an Existing Course</label>
 
-						<select name="group-to-clone">
-							<option value="" <?php selected( $group_id_to_clone, 0 ) ?>>- choose a course -</option>
+								<?php $user_groups = openlab_get_courses_owned_by_user( get_current_user_id() ) ?>
 
-							<?php foreach ( $user_groups['groups'] as $user_group ) : ?>
-								<option value="<?php echo esc_attr( $user_group->id ) ?>" <?php selected( $group_id_to_clone, $user_group->id ) ?>><?php echo esc_attr( $user_group->name ) ?></option>
-							<?php endforeach ?>
-						</select>
+								<select id="group-to-clone" name="group-to-clone">
+									<option value="" <?php selected( $group_id_to_clone, 0 ) ?>>- choose a course -</option>
+
+									<?php foreach ( $user_groups['groups'] as $user_group ) : ?>
+										<option value="<?php echo esc_attr( $user_group->id ) ?>" <?php selected( $group_id_to_clone, $user_group->id ) ?>><?php echo esc_attr( $user_group->name ) ?></option>
+									<?php endforeach ?>
+								</select>
+							</li>
+						</ul>
+
+						<p class="ol-clone-description" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
 					</div>
 
 				<?php endif ?>

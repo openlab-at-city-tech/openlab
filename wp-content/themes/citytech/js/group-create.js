@@ -136,14 +136,75 @@ jQuery(document).ready(function($){
 		);
 	}
 
+	function toggle_clone_options( on_or_off ) {
+		var $group_to_clone, group_id_to_clone;
+		
+		$group_to_clone = $('#group-to-clone');
+
+		if ( 'on' == on_or_off ) {
+			$('#create-or-clone-clone').attr('checked', true);	
+			$group_to_clone.removeClass('disabled-opt');	
+			$group_to_clone.attr('disabled', false);	
+			$('#ol-clone-description').removeClass('disabled-opt');
+
+			group_id_to_clone = $group_to_clone.val();
+			if ( ! group_id_to_clone ) {
+				group_id_to_clone = $.urlParam( 'clone' );
+			}
+		} else {
+			$('#create-or-clone-create').attr('checked', true);	
+			$group_to_clone.addClass('disabled-opt');	
+			$group_to_clone.attr('disabled', true);	
+			$('#ol-clone-description').addClass('disabled-opt');
+
+			group_id_to_clone = 0;
+		}
+
+		fetch_clone_source_details( group_id_to_clone );
+	}
+
+	function fetch_clone_source_details( group_id ) {
+
+		console.log(group_id);
+	}
+
 	$('.noo_radio').click(function(el){
 		var whichid = $(el.target).prop('id').split('_').pop();
 		new_old_switch(whichid);
 	});
 
+	$.urlParam = function(name){
+	    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    return results === null ? 0 : results[1];
+	}
+
 	// setup
 	new_old_switch( 'new' );
 
+	/* Clone setup */
+	var group_type = $.urlParam( 'type' );
+
+	if ( 'course' === group_type ) {
+		var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
+
+		$create_or_clone = $('input[name="create-or-clone"]');
+		create_or_clone = $create_or_clone.val();
+		group_id_to_clone = $.urlParam( 'clone' );
+
+		if ( group_id_to_clone ) {
+			// Clone ID passed to URL
+
+		} else {
+			// No clone ID passed to URL		
+			toggle_clone_options( 'create' == create_or_clone ? 'off' : 'on' );
+		}
+
+		$create_or_clone.on( 'change', function() {
+			new_create_or_clone = 'create' == $(this).val() ? 'off' : 'on';
+			toggle_clone_options( new_create_or_clone );
+		} );
+	}
+	
 	/* AJAX validation for external RSS feeds */
 	$('#find-feeds').on( 'click', function(e) {
 		e.preventDefault();
