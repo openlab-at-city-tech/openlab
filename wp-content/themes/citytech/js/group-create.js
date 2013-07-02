@@ -164,8 +164,76 @@ jQuery(document).ready(function($){
 	}
 
 	function fetch_clone_source_details( group_id ) {
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'openlab_group_clone_fetch_details',
+				group_id: group_id
+			},
+			success: function( response ) {
+				var r = JSON.parse( response );
 
-		console.log(group_id);
+				// Description
+				$('#group-desc').val(r.description);
+				
+				// Schools and Departments
+				$('input[name="wds_group_school[]"]').each(function(){
+					$school_input = $(this);
+					if ( -1 < $.inArray( $school_input.val(), r.schools ) ) {
+						$school_input.attr('checked', true);
+						wds_load_group_departments();
+
+						// Departments are fetched via
+						// AJAX, so we do a lame delay
+						var foo = setTimeout( function() {
+							$('input[name="wds_departments[]"]').each(function(){
+								$dept_input = $(this);
+								if ( -1 < $.inArray( $dept_input.val(), r.departments ) ) {
+									$dept_input.attr('checked', true);
+								}
+							});
+						}, 2000 );
+					}
+				});
+
+				// Course Code
+				$('input[name="wds_course_code"]').val(r.course_code);
+
+				// Section Code
+				$('input[name="wds_section_code"]').val(r.section_code);
+
+				// Additional Description
+				$('textarea[name="wds_course_html"]').val(r.additional_description);
+
+				if ( r.site_id ) {
+					$('#new_or_old_clone').attr('checked', true);
+					$('#new_or_old_clone').trigger('click');
+
+					// Site ID
+					$('#blog-id-to-clone option').each(function(){
+						var $blog_opt = $(this);
+						if ( $blog_opt.val() == r.site_id ) {
+							$blog_opt.attr('selected', true);
+						}
+					});
+
+					// Site URL
+					$('#cloned-site-url').val( 'Your original address was: ' + r.site_url );
+				} else {
+					$('#new_or_old_new').attr('checked', true);
+					$('#new_or_old_new').trigger('click');
+					$('#blog-id-to-clone option').each(function(){
+						var $blog_opt = $(this);
+						if ( $blog_opt.val() == 0 ) {
+							$blog_opt.attr('selected', true);
+						}
+					});
+
+				}
+
+			}
+		});
 	}
 
 	$('.noo_radio').click(function(el){
@@ -204,6 +272,11 @@ jQuery(document).ready(function($){
 			toggle_clone_options( new_create_or_clone );
 		} );
 	}
+
+	// Switching between groups to clone
+	$('#group-to-clone').on('change', function() {
+		fetch_clone_source_details( this.value );
+	});
 	
 	/* AJAX validation for external RSS feeds */
 	$('#find-feeds').on( 'click', function(e) {

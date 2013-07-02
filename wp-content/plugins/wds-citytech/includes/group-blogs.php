@@ -650,6 +650,21 @@ function wds_bp_group_meta(){
 
 		$blog_details = get_blog_details( $template );
 
+		// Set up user blogs for fields below
+		$user_blogs = get_blogs_of_user( get_current_user_id() );
+
+		// Exclude blogs where the user is not an Admin
+		foreach( $user_blogs as $ubid => $ub ) {
+			$role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
+
+			if ( !array_key_exists( 'administrator', (array) $role ) ) {
+				unset( $user_blogs[$ubid] );
+			}
+		}
+		$user_blogs = array_values( $user_blogs );
+
+
+
 		?>
 		<style type="text/css">
 		.disabled-opt {
@@ -710,7 +725,14 @@ function wds_bp_group_meta(){
 				</th>
 
 				<td id="noo_clone_options">
-					<?php echo $current_site->domain . $current_site->path ?><input size="40" name="blog_to_clone[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
+					<select name="blog-id-to-clone" id="blog-id-to-clone">
+						<option value="0">- Choose a site -</option>
+						<?php foreach( (array) $user_blogs as $user_blog ) : ?>
+							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+						<?php endforeach ?>
+					</select>
+
+					<p id="cloned-site-url"></p>
 				</td>
 
 			</tr>
@@ -737,7 +759,6 @@ function wds_bp_group_meta(){
 
                         <?php /* Existing blogs - only display if some are available */ ?>
                         <?php
-                        $user_blogs = get_blogs_of_user( get_current_user_id() );
 
                         // Exclude blogs already used as groupblogs
                         global $wpdb, $bp;
@@ -745,16 +766,6 @@ function wds_bp_group_meta(){
 
                         foreach( $user_blogs as $ubid => $ub ) {
                                 if ( in_array( $ubid, $current_groupblogs ) ) {
-                                        unset( $user_blogs[$ubid] );
-                                }
-                        }
-                        $user_blogs = array_values( $user_blogs );
-
-                        // Exclude blogs where the user is not an Admin
-                        foreach( $user_blogs as $ubid => $ub ) {
-                                $role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
-
-                                if ( !array_key_exists( 'administrator', (array) $role ) ) {
                                         unset( $user_blogs[$ubid] );
                                 }
                         }
