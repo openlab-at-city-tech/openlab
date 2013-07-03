@@ -7,20 +7,20 @@ Version: 2.7.6
 Author: Ron Rennick
 Author URI: http://ronandandrea.com/
 Network: true
- 
+
 */
-/* Copyright:	(C) 2009 Ron Rennick, All rights reserved.  
+/* Copyright:	(C) 2009 Ron Rennick, All rights reserved.
 	Contributions by Luke Poland copyright:	(C) 2009 Luke Poland, All rights reserved.
-	
+
 */
 function shardb_get_ds_part_from_blog_id( $blog_id ) {
 	global $shardb_hash_length, $shardb_dataset, $shardb_num_db, $vip_db, $shardb_prefix, $enable_home_db, $db_ds_parts;
-	
+
 	if( !$enable_home_db && $blog_id < 2 && defined( 'MULTISITE' ) ) {
-		$dataset = 'global'; 
+		$dataset = 'global';
 		$partition = 0;
 	} elseif( isset( $shardb_hash_length ) ) {
-		$dataset = $shardb_dataset; 
+		$dataset = $shardb_dataset;
 		$hash = substr( md5( $blog_id ), 0, $shardb_hash_length );
 		$partition = hexdec( $hash );
 // VIP Blog Check.
@@ -49,7 +49,7 @@ add_filter( 'wpmu_blogs_columns', 'shardb_blog_columns' );
 
 function shardb_blog_field( $column, $blog_id ) {
 	global $wpdb, $db_servers;
-	
+
 	if ( $column == 'shardb' ) {
 		$ds_part = shardb_get_ds_part_from_blog_id( $blog_id );
 		echo $ds_part[ 'dataset' ] . ' / ' . $db_servers[ $ds_part[ 'dataset' ] ][ $ds_part[ 'partition' ] ][ 0 ][ 'name' ];
@@ -74,7 +74,8 @@ function shardb_migrate() {
 	echo '<h2>' . __( 'SharDB Migration', 'shardb' ) . '</h2>';
 
 	$action = isset($_GET['action']) ? $_GET['action'] : 'show';
-	$url = menu_page_url( __FUNCTION__, false );
+	//$url = menu_page_url( __FUNCTION__, false );
+        $url = network_admin_url( 'settings.php?page=shardb_migrate' );
 	$start_url = add_query_arg( array( 'action' => 'migrate' ), $url );
 	$global_url = add_query_arg( array( 'action' => 'global' ), $url );
 
@@ -229,12 +230,12 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 
 	if( empty( $db_servers['global'][0] ) )
 		return array();
-	
+
 	$db_server = current( $db_servers['global'][0] );
 	$column = 'Tables_in_' . $source_object->dbname;
 	$query = "SHOW TABLES WHERE {$column} LIKE '{$source_object->base_prefix}%' AND SUBSTR({$column}," . ( strlen( $source_object->base_prefix ) + 1 ) . ',1) NOT BETWEEN 1 AND 9';
 	$tables = $source_object->get_col( $query );
-	
+
 	$errors = array();
 	if( !empty( $tables ) ) {
 		$global = new wpdb( DB_USER, DB_PASSWORD, $db_server['name'], DB_HOST );
@@ -242,14 +243,14 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 		$blog_tables = array();
 		if( $enable_home_db && defined( 'MULTISITE' ) )
 			$blog_tables = $source_object->tables( 'blog', true, 1 );
-			
+
 		if( $display )
 			echo "<h4>Global Tables</h4><ul>\n";
-			
+
 		foreach( $tables as $t ) {
 			if( in_array( $t, $blog_tables ) )
 				continue;
-				
+
 			$msg = "<li>$t <strong>";
 			if( !in_array( $t, $new_tables ) ) {
 				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
@@ -271,7 +272,7 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 		}
 		if( $display )
 			echo '</ul>';
-		
+
 	}
 	return $errors;
 }

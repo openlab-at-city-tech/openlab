@@ -12,7 +12,6 @@ function add_slave($read, $host, $lhost = '', $user = DB_USER, $password = DB_PA
 
 /* Add your configuration here */
 $shardb_hash_length = 2;
-$shardb_dataset = 'abc';
 
 /* Use this configuration for a hexidecimal based hash
 
