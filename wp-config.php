@@ -21,6 +21,8 @@ if ( !defined( 'DB_NAME' ) ) {
 	include( dirname( __FILE__ ) . '/env.php' );
 }
 
+require __DIR__ . '/db-settings.php';
+
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
 
