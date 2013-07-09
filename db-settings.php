@@ -12,6 +12,7 @@ function add_slave($read, $host, $lhost = '', $user = DB_USER, $password = DB_PA
 
 /* Add your configuration here */
 $shardb_hash_length = 2;
+$shardb_local_db = true;
 
 /* Use this configuration for a hexidecimal based hash
 
@@ -96,7 +97,7 @@ add_db_server( 'global', 0,    '', 1, 1,    DB_HOST, DB_HOST, $shardb_prefix . '
 // build the shard dataset
 $have_slaves = is_array($slaves) && (count($slaves) > 0);
 if(isset($shardb_hash_length) && $shardb_hash_length > 0 && $shardb_hash_length < 4 ) {
-	$fmt = "{$shardb_prefix}%0{$shardb_hash_length}x";
+	$fmt = "{$shardb_prefix}%0{$shardb_hash_length}X";
 	$shardb_num_db = 1 << ($shardb_hash_length*4);
 	if(!$have_slaves || !isset( $shardb_master_read )) {
 		$shardb_master_read = 1;

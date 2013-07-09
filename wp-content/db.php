@@ -175,7 +175,7 @@ class SharDB extends wpdb {
 			return false;
 
 		$dataset = $shardb_dataset;
-		$hash = substr( md5( $matches[ 1 ] ), 0, $shardb_hash_length );
+		$hash = strtoupper( substr( md5( $matches[ 1 ] ), 0, $shardb_hash_length ) );
 		$partition = hexdec( $hash );
 		$table_blog_id = $matches[ 1 ];
 // VIP Blog Check.
