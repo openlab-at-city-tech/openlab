@@ -21,7 +21,7 @@ function shardb_get_ds_part_from_blog_id( $blog_id ) {
 		$partition = 0;
 	} elseif( isset( $shardb_hash_length ) ) {
 		$dataset = $shardb_dataset;
-		$hash = substr( md5( $blog_id ), 0, $shardb_hash_length );
+		$hash = strtoupper( substr( md5( $blog_id ), 0, $shardb_hash_length ) );
 		$partition = hexdec( $hash );
 // VIP Blog Check.
 // Added by: Luke Poland
