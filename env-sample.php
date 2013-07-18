@@ -26,6 +26,7 @@ define( 'ENV_TYPE', 'local' ); // You can change this string to whatever you'd l
 define( 'WP_DEBUG', false );
 define( 'DOMAIN_CURRENT_SITE', 'openlabdev.org' );
 define( 'PATH_CURRENT_SITE', '/' );
+define( 'DO_SHARDB', false );
 
 @ini_set('log_errors','On');
 @ini_set('display_errors','Off');
