@@ -196,6 +196,19 @@ function shardb_migrate_site_tables( $blog_id, $siteurl, &$source_object, $shard
 				$new_tables = $target_object->get_col( "SHOW TABLES LIKE '$t'" );
 			}
 			$msg = "<li>$t <strong>";
+			if ( in_array( $t, $new_tables ) ) {
+				$target_object->query( "TRUNCATE TABLE $t" );
+			} else {
+				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
+				$target_object->query( $create[1] );
+			}
+
+			$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
+			foreach( $data as $row )
+				$target_object->insert( $t, $row );
+
+			$msg .= 'copied to';
+			/*
 			if( !in_array( $t, $new_tables ) ) {
 				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
 				if( !empty( $create[1] ) ) {
@@ -210,7 +223,7 @@ function shardb_migrate_site_tables( $blog_id, $siteurl, &$source_object, $shard
 			} else {
 				$msg .= 'already exists';
 				$prep = 'in';
-			}
+			}*/
 			if( $display )
 				echo $msg . "</strong> $prep <strong>$db_name</strong></li>";
 		}
@@ -248,25 +261,47 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 			echo "<h4>Global Tables</h4><ul>\n";
 
 		foreach( $tables as $t ) {
-			if( in_array( $t, $blog_tables ) )
-				continue;
 
-			$msg = "<li>$t <strong>";
-			if( !in_array( $t, $new_tables ) ) {
+			// Skip wp_bp_activity - it's too big, and needs to
+			// be copied manually
+			var_dump( $t );
+			if ( 'wp_bp_activity' == $t || 'wp_bp_xprofile_data' == $t || 'wp_posts' == $t || 'wp_sitemeta' == $t || 'wp_bp_groups_groupmeta' == $t || 'wp_usermeta' == $t || 'wp_users' == $t ) {
+				continue;
+			}
+
+			if( in_array( $t, $blog_tables ) ) {
+				continue;
+				// This is here to prevent overwriting, but
+				// we want to be able to do that
+				$global->query( "TRUNCATE TABLE $t" );
 				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
-				if( !empty( $create[1] ) ) {
-					$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
+				$global->query( $create[1] );
+			//	continue;
+			}
+			
+			$msg = "<li>$t <strong>";
+			
+			$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
+			foreach( $data as $row )
+				$global->insert( $t, $row );
+			$msg .= 'copied';
+			/*
+			if( !in_array( $t, $new_tables ) ) {
+				//$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
+//				if( !empty( $create[1] ) ) {
+				//	$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
 					$global->query( $create[1] );
 					foreach( $data as $row )
 						$global->insert( $t, $row );
 					$msg .= 'copied';
-				} else
-					$msg .= 'was not copied';
+//				} else
+//					$msg .= 'was not copied';
 				$prep = 'to';
 			} else {
 				$msg .= 'already exists';
 				$prep = 'in';
 			}
+			*/
 			if( $display )
 				echo $msg . "</strong> $prep <strong>{$db_server['name']}</strong></li>";
 		}
