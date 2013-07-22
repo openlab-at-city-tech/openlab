@@ -23,6 +23,20 @@ function custom_breadcrumb_args($args) {
     return $args;
 }
 
+/**
+ * For the help page breadcrumb
+ */
+add_filter('openlab_single_crumb','openlab_specific_blog_breadcrumb',10,2);
+
+function openlab_specific_blog_breadcrumb($crumb,$args){
+    global $post;
+    
+    if ($post->post_type == 'help'){
+        $crumb = str_replace('/blog/help/', '/blog/help/openlab-help/', $crumb);
+    }
+    return $crumb;
+}
+
 
 /**
  * Class to control breadcrumbs display.
