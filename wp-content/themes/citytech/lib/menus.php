@@ -19,7 +19,16 @@ function help_categories_menu($items, $args) {
     if ($args->theme_location == 'helpmenu') {
         $term = get_query_var('term');
         $parent_term = get_term_by('slug', $term, 'help_category');
-
+        if ($parent_term == false) {
+            $child_terms = get_the_terms($post->ID,'help_category');
+            $term = array();
+            foreach($child_terms as $child_term){
+                $term[] = $child_term->parent;
+            }
+            
+            $parent_term = get_term_by('id',$term[0],'help_category');
+        }
+        
         $help_args = array(
             'hide_empty' => false,
             'orderby' => 'term_order',
@@ -553,7 +562,7 @@ function openlab_group_membership_tabs($group = false) {
 
     <?php if (bp_group_is_member()): ?>
         <li<?php if ($bp->current_action == 'notifications') : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e('Your Email Options', 'buddypress'); ?></a></li>
-    <?php endif; ?>
+        <?php endif; ?>
 
-<?php
+    <?php
 }
