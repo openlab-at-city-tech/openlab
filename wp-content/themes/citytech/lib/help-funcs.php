@@ -20,10 +20,19 @@ function openlab_help_loop() {
 	
 	while ( have_posts() ) : the_post(); ?>
     	
-        <?php $help_cats = get_the_term_list($post_id, 'help_category', '', ', ',''); ?>
+        <?php 
+        $help_cats = get_the_terms($post_id,'help_category');
+        sort($help_cats);
+        if($help_cats[0]->parent == 0){
+            $parent_cat_name = $help_cats[0]->name;
+        }else{
+            $parent_cat = get_term($help_cats[0]->parent, 'help_category');
+            $parent_cat_name = $parent_cat->name;
+        }
+        ?>
         
         <?php if ($help_cats): ?>
-        <h1 class="entry-title"><?php echo $help_cats; ?></h1>
+        <h1 class="entry-title"><?php echo $parent_cat_name; ?></h1>
         <div id="help-title"><h2 class="page-title"><?php the_title(); ?></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
         <h1 class="entry-title"><?php echo the_title();?></h1>
