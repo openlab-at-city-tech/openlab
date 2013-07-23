@@ -4573,6 +4573,12 @@ ul.invite-search {
 	line-height:15px;
 }
 
+body.docs #comment {
+  display: block;
+  margin: 5px 0;
+  width: 100%;
+}
+
 /* 6.4 Files
 ------------------------------------------------------------ */
 /* 6.5 Group Site
