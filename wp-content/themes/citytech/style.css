@@ -1016,12 +1016,19 @@ div.pagination div.pag-count {
 }
 
 .pagination-links {
-	background:#666;
-	color:#fff;
 	padding:0 5px;
 	float:left;
 	clear:both;
 	margin:5px 0;
+}
+
+.pagination-links a:link, .pagination-links a:visited {
+  text-decoration: none;
+}
+
+.pagination-links a:hover, .pagination-links a:active {
+  text-decoration: underline;
+  color: #0fceba!important;
 }
 
 .pagination-links .page-numbers {
@@ -1036,10 +1043,6 @@ div.pagination div.pag-count {
 
 .pagination-links .page-numbers.current {
 	text-decoration:underline;
-}
-
-.pagination-links a {
-	color:#fff;
 }
 
 .ac_results li img {
@@ -4573,6 +4576,12 @@ ul.invite-search {
 	line-height:15px;
 }
 
+body.docs #comment {
+  display: block;
+  margin: 5px 0;
+  width: 100%;
+}
+
 /* 6.4 Files
 ------------------------------------------------------------ */
 /* 6.5 Group Site
@@ -4594,6 +4603,10 @@ ul.invite-search {
 ------------------------------------------------------------ */
 .help-tags a {
 	text-decoration:underline;
+}
+
+body.single-help h1.entry-title a {
+  color: #6D6D6D;
 }
 
 #help-tags-copy p {
