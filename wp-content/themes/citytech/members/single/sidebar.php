@@ -127,7 +127,8 @@ if ( !$dud = bp_displayed_user_domain() ) {
 		'user_id'     => $user_id,
 		'per_page'    => openlab_is_my_profile() ? 4 : 2, // Legacy. Not sure why
 		'scope'       => bp_is_user_friends() ? 'friends' : '',
-		'show_hidden' => openlab_is_my_profile()
+		'show_hidden' => openlab_is_my_profile(),
+                'primary_id'  => false,
 	);
 
 	?>
