@@ -64,6 +64,7 @@ followed by styles specific to each numbered section of the site.
 * 7.0 PORTFOLIOS
 
 * 8.0 HELP
+** 8.1 Print Style
 */
 
 /* GLOBAL
@@ -4999,4 +5000,22 @@ p.wp-caption-text {
 
 .more-from-category {
 	padding:0 10px;
+}
+
+/* 8.1 Help Section Print Style
+------------------------------------------------------------ */
+
+@media print {
+  #header, #sidebar, #breadcrumb-container, #cuny-sw-footer, #nav-single, .print-page {
+    display: none;
+  }
+  #content-sidebar-wrap {
+    border: 0;
+  }
+  #content {
+    float: none;
+    position: fixed;
+    width: 100%;
+    padding: 0;
+  }
 }
