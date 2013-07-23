@@ -19,7 +19,7 @@
  *
  * @return WP_Http HTTP Transport object.
  */
-function &_wp_http_get_object() {
+function _wp_http_get_object() {
 	static $http;
 
 	if ( is_null($http) )
@@ -284,6 +284,10 @@ function is_allowed_http_origin( $origin = null ) {
  * Send Access-Control-Allow-Origin and related headers if the current request
  * is from an allowed origin.
  *
+ * If the request is an OPTIONS request, the script exits with either access
+ * control headers sent, or a 403 response if the origin is not allowed. For
+ * other request methods, you will receive a return value.
+ *
  * @since 3.4.0
  *
  * @return bool|string Returns the origin URL if headers are sent. Returns false
@@ -291,11 +295,80 @@ function is_allowed_http_origin( $origin = null ) {
  */
 function send_origin_headers() {
 	$origin = get_http_origin();
-	if ( ! is_allowed_http_origin( $origin ) )
+
+	if ( is_allowed_http_origin( $origin ) ) {
+		@header( 'Access-Control-Allow-Origin: ' .  $origin );
+		@header( 'Access-Control-Allow-Credentials: true' );
+		if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] )
+			exit;
+		return $origin;
+	}
+
+	if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
+		status_header( 403 );
+		exit;
+	}
+
+	return false;
+}
+
+/**
+ * Validate a URL for safe use in the HTTP API.
+ *
+ * @since 3.5.2
+ *
+ * @return mixed URL or false on failure.
+ */
+function wp_http_validate_url( $url ) {
+	$url = esc_url_raw( $url, array( 'http', 'https' ) );
+	if ( ! $url )
 		return false;
 
-	@header( 'Access-Control-Allow-Origin: ' .  $origin );
-	@header( 'Access-Control-Allow-Credentials: true' );
+	$parsed_url = @parse_url( $url );
+	if ( ! $parsed_url )
+		return false;
 
-	return $origin;
+	if ( isset( $parsed_url['user'] ) || isset( $parsed_url['pass'] ) )
+		return false;
+
+	if ( false !== strpos( $parsed_url['host'], ':' ) )
+		return false;
+
+	$parsed_home = @parse_url( get_option( 'home' ) );
+
+	$same_host = strtolower( $parsed_home['host'] ) === strtolower( $parsed_url['host'] );
+
+	if ( ! $same_host ) {
+		$host = trim( $parsed_url['host'], '.' );
+		if ( preg_match( '#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $host ) ) {
+			$ip = $host;
+		} else {
+			$ip = gethostbyname( $host );
+			if ( $ip === $host ) // Error condition for gethostbyname()
+				$ip = false;
+		}
+		if ( $ip ) {
+			if ( '127.0.0.1' === $ip )
+				return false;
+			$parts = array_map( 'intval', explode( '.', $ip ) );
+			if ( 10 === $parts[0] )
+				return false;
+			if ( 172 === $parts[0] && 16 <= $parts[1] && 31 >= $parts[1] )
+				return false;
+			if ( 192 === $parts[0] && 168 === $parts[1] )
+				return false;
+		}
+	}
+
+	if ( empty( $parsed_url['port'] ) )
+		return $url;
+
+	$port = $parsed_url['port'];
+	if ( 80 === $port || 443 === $port || 8080 === $port )
+		return $url;
+
+	if ( $parsed_home && $same_host && $parsed_home['port'] === $port )
+		return $url;
+
+	return false;
 }
