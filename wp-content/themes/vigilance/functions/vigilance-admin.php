@@ -51,7 +51,7 @@
 						die;
 					}
 				}
-				add_theme_page($this->themename." Options", $this->themename." Options", 'edit_themes', basename(__FILE__), array(&$this, 'adminPage' ));
+				add_theme_page($this->themename." Options", $this->themename." Options", 'manage_options', basename(__FILE__), array(&$this, 'adminPage' ));
 			}
 
 			/* Output of the Admin Page */
