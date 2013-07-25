@@ -3,18 +3,19 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, docs, wiki, documents, collaboration
 Requires at least: WordPress 3.3, BuddyPress 1.5
-Tested up to: WordPress 3.4.1, BuddyPress 1.5.6
-Stable tag: 1.1.24
+Tested up to: WordPress 3.5.1, BuddyPress 1.8
+Stable tag: 1.4.5
  
 Adds collaborative Docs to BuddyPress.
 
 == Description ==
 
-BuddyPress Docs adds collaborative work spaces to your BuddyPress community. Part wiki, part document editing, think of these Docs as a BuddyPress version of the Docs service offered by the Big G *ifyouknowwhatimean*
+BuddyPress Docs adds collaborative work spaces to your BuddyPress community. Part wiki, part document editing, part shared dropbox, think of these Docs as a BuddyPress version of the Docs service offered by the Big G *ifyouknowwhatimean*
 
 Features include:
 
-* Group-specific Docs
+* Docs that can be linked to groups or users, with a variety of privacy levels
+* Support for fully-private document uploads
 * Doc taxonomy, using tags
 * Fully sortable and filterable doc lists
 * TinyMCE front-end doc editing
@@ -22,21 +23,143 @@ Features include:
 * Full access to revision history
 * Dashboard access and management of Docs for the site admin
 
-<strong>NOTE</strong> This plugin <em>REQUIRES</em> WordPress 3.1 or higher. Lower versions of WP may appear to work, but <em>will</em> compromise the privacy of your Docs.
-
 This plugin is in active development. For feature requests and bug reports, visit http://github.com/boonebgorges/buddypress-docs. If you have translated the plugin and would like to provide your translation for distribution with BuddyPress Docs, please contact the plugin author.
 
 == Installation ==
 
 1. Install
 1. Activate
-1. For each group where you want Docs activated, visit Group Admin > Docs and check the checkbox
 1. Sit back and watch the jack roll in
 
 == Changelog ==
 
+= 1.4.5 =
+* Fixes bug in access filter for "logged-in users" setting
+* Removes stripslashes() on post content, which was causing problems with LaTeX plugins
+
+= 1.4.4 =
+* Fixes recursion problem that caused fatal errors when filtering by has-attachment on some setups
+* Fixes incorrect tag directory links at the bottom of individual Docs
+* Fixes CSS for hover actions in Docs directory
+* Fixes bug that may cause fatal errors when using private attachments on setups other than vanilla Apache
+* Removes incidental dependencies on Activity and Groups components
+* Makes the plugin dir slug customizable
+
+= 1.4.3 =
+* Fixes bug introduced in 1.4.2 that prevents certain sorts of Doc editing
+* Improved localization
+* Updates ru_RU
+
+= 1.4.2 =
+* Fixes problem where nested child Docs would not resolve properly in some cases
+* Improves tab navigation on Create Doc screen
+* Adds a filter that allows the Attachments component to be disabled
+* Removes Delete Attachment link from Read mode
+* Updates de_DE
+
+= 1.4.1 =
+* Fixes bug that caused fatal errors when using Docs with some upload-related plugins
+* Turns off attempts at auto-detecting upgrades, to get rid of erroneous admin notice
+* Prevents group affiliation from displaying when group is hidden and user is not a member
+
+= 1.4 =
+* Adds support for Doc Attachments, which obey Doc privacy levels
+* Directory filters redesigned and streamlined
+* Improves appearance across WP themes
+* Improves tab navigation on Edit screen
+* Adds cascading Doc permissions for new documents
+* Fixes bug that hid the Dashboard settings
+* Improves performance with custom bp_moderate capability maps
+* Reintroduces global directory tag clouds
+* Adds nl_NL language pack
+* Improves the appearance of edit mode dropdowns for fields with long text
+
+= 1.3.4 =
+* Updated italian translation
+
+= 1.3.3 =
+* Fixed bug that incorrectly approved some post comments
+
+= 1.3.2 =
+* Fixed bug with tab permalinks on some setups
+* Fixed bug in the way parent Doc is pre-selected on Edit screen dropdown
+
+= 1.3.1 =
+* Fixed issues with Doc creation when groups are disabled
+* Fixed several bugs occurring when group association was changed or deleted
+* Updated translations: Danish, Spanish
+
+= 1.3 =
+* Adds theme compatibility layer, for better formatting with all themes
+* Full compatibility with BuddyPress 1.7
+* Don't show permissions snapshot to non-logged-in users
+* Adds Docs link to My Account toolbar menu
+* Delete Doc activity when deleting Doc
+* Delete local Doc tags when deleting Doc from any location
+* Improved markup for Create New Docs button
+* Don't show History quicklink on directories when revisions are disabled
+
+= 1.2.10 =
+* Improved compatibility with BP Group Hierarchy
+* Fixes for global directory pagination
+
+= 1.2.9 =
+* Improved access protection, for better compatibility with bbPress 2.x and other plugins
+* Updated Russian translation
+
+= 1.2.8 =
+* Fixes problem with group associations and privacy levels of new docs
+* Improves access protection in WP searches and elsewhere
+* Sets hide_sitewide more carefully when posting Doc activity items
+* Prevents some errors related to wp_check_post_lock()
+* Adds Russian translation
+
+= 1.2.7 =
+* Updates German translation
+* Fixes rewrite problem when using custom BP_DOCS_SLUG
+* Fixes fatal error when upgrading BuddyPress
+
+= 1.2.6 =
+* Updates Danish translation
+* Fixes infinite loop bug in upgrader
+* Fixes html entity problem in permalinks
+
+= 1.2.5 =
+* Fixes comment posting
+* Fixes comment display and posting permissions
+* Don't show Tags: label when no tags are present
+
+= 1.2.4 =
+* Updates .pot file
+* Updates German translation
+* l18n improvements
+* Ensures that doc links are trailingslashed
+* Fixes bug that prevented front-end doc deletion
+* Removes temporarily non-functional doc counts from group tabs
+
+= 1.2.3 = 
+* Fixes bug with bp-pages
+
+= 1.2.2 =
+* Improves group-association auto-settings when creating via the Create New Doc link in a group
+* Fixes bug that erroneously required a directory page
+
+= 1.2.1 =
+* Fixes bug with overzealous Create New Doc button
+* Fixes some PHP warnings
+
+= 1.2 =
+* Major plugin rewrite
+* Moves Docs out of groups, making URLs cleaner, interface simpler, and making it possible to have Docs not linked to any group
+* Adds a sitewide Docs directory
+
+= 1.1.25 =
+* Fixes bug in Javascript that may have caused secondary editor rows not to
+  show in some cases
+* Fixes bug that broke comment moderation in some cases
+
 = 1.1.24 =
-* Maves Table buttons to second row of editor, for better fit on all themes
+* Moves Table buttons to third row of editor, for better fit on all themes
 * Adds Danish translation
 
 = 1.1.23 =
@@ -203,3 +326,8 @@ This plugin is in active development. For feature requests and bug reports, visi
 
 = 1.0-beta =
 * Initial public release
+
+== Upgrade Notice ==
+
+= 1.2 =
+* Major plugin rewrite. See http://dev.commons.gc.cuny.edu/2012/11/15/buddypress-docs-1-2/ for more details.
