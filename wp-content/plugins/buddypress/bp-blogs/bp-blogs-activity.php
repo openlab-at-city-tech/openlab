@@ -17,16 +17,20 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @package BuddyPress
  * @subpackage BlogsActivity
  * @global type $bp
- * @return boolean 
+ * @return boolean
  */
 function bp_blogs_register_activity_actions() {
 	global $bp;
 
 	// Bail if activity is not active
-	if ( ! bp_is_active( 'activity' ) )
+	if ( ! bp_is_active( 'activity' ) ) {
 		return false;
+	}
 
-	bp_activity_set_action( $bp->blogs->id, 'new_blog',         __( 'New site created',        'buddypress' ) );
+	if ( is_multisite() ) {
+		bp_activity_set_action( $bp->blogs->id, 'new_blog', __( 'New site created',        'buddypress' ) );
+	}
+
 	bp_activity_set_action( $bp->blogs->id, 'new_blog_post',    __( 'New post published',      'buddypress' ) );
 	bp_activity_set_action( $bp->blogs->id, 'new_blog_comment', __( 'New post comment posted', 'buddypress' ) );
 
@@ -42,7 +46,7 @@ add_action( 'bp_register_activity_actions', 'bp_blogs_register_activity_actions'
  * @subpackage BlogsActivity
  * @global BuddyPress $bp
  * @param array $args
- * @return boolean 
+ * @return boolean
  */
 function bp_blogs_record_activity( $args = '' ) {
 	global $bp;
@@ -69,7 +73,7 @@ function bp_blogs_record_activity( $args = '' ) {
 
 	// Remove large images and replace them with just one image thumbnail
  	if ( !empty( $content ) )
-		$content = bp_activity_thumbnail_content_images( $content, $primary_link );
+		$content = bp_activity_thumbnail_content_images( $content, $primary_link, $r );
 
 	if ( !empty( $action ) )
 		$action = apply_filters( 'bp_blogs_record_activity_action', $action );
@@ -97,7 +101,6 @@ function bp_blogs_record_activity( $args = '' ) {
  * @subpackage BlogsActivity
  * @global BuddyPress $bp
  * @param array $args
- * @return If activity is not active
  */
 function bp_blogs_delete_activity( $args = true ) {
 	global $bp;
@@ -125,5 +128,3 @@ function bp_blogs_delete_activity( $args = true ) {
 		'secondary_item_id' => $secondary_item_id
 	) );
 }
-
-?>

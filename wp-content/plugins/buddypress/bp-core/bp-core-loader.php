@@ -70,14 +70,15 @@ class BP_Core extends BP_Component {
 		} elseif ( $deactivated_components = bp_get_option( 'bp-deactivated-components' ) ) {
 
 			// Trim off namespace and filename
-			foreach ( (array) $deactivated_components as $component => $value )
+			foreach ( array_keys( (array) $deactivated_components ) as $component ) {
 				$trimmed[] = str_replace( '.php', '', str_replace( 'bp-', '', $component ) );
+			}
 
 			// Set globals
 			$bp->deactivated_components = apply_filters( 'bp_deactivated_components', $trimmed );
 
 			// Setup the active components
-			$active_components     = array_fill_keys( array_diff( array_values( array_merge( $optional_components, $required_components ) ), array_values( $deactivated_components ) ), '1' );
+			$active_components     = array_fill_keys( array_diff( array_values( array_merge( $bp->optional_components, $bp->required_components ) ), array_values( $bp->deactivated_components ) ), '1' );
 
 			// Set the active component global
 			$bp->active_components = apply_filters( 'bp_active_components', $bp->active_components );
@@ -109,7 +110,7 @@ class BP_Core extends BP_Component {
 		$bp->required_components[] = 'core';
 	}
 
-	function includes() {
+	public function includes( $includes = array() ) {
 
 		if ( !is_admin() )
 			return;
@@ -129,7 +130,7 @@ class BP_Core extends BP_Component {
 	 *
 	 * @global BuddyPress $bp
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		/** Database **********************************************************/
@@ -193,7 +194,7 @@ class BP_Core extends BP_Component {
 	 *
 	 * @global BuddyPress $bp
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		global $bp;
 
 		 // If xprofile component is disabled, revert to WordPress profile
@@ -203,6 +204,9 @@ class BP_Core extends BP_Component {
 			$sub_nav = array();
 
 			// Fallback values if xprofile is disabled
+			if ( ! isset( $bp->core->profile ) ) {
+				$bp->core->profile = new stdClass;
+			}
 			$bp->core->profile->slug = 'profile';
 			$bp->active_components[$bp->core->profile->slug] = $bp->core->profile->slug;
 
@@ -219,7 +223,7 @@ class BP_Core extends BP_Component {
 
 			// Add the subnav items to the profile
 			$sub_nav[] = array(
-				'name'            => __( 'Public', 'buddypress' ),
+				'name'            => __( 'View', 'buddypress' ),
 				'slug'            => 'public',
 				'parent_url'      => $profile_link,
 				'parent_slug'     => $bp->core->profile->slug,
@@ -243,5 +247,3 @@ function bp_setup_core() {
 	$bp->core = new BP_Core();
 }
 add_action( 'bp_setup_components', 'bp_setup_core', 2 );
-
-?>

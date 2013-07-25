@@ -161,22 +161,11 @@ function bp_site_name() {
 	/**
 	 * Returns the name of the BP site. Used in RSS headers
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function bp_get_site_name() {
 		return apply_filters( 'bp_site_name', get_bloginfo( 'name', 'display' ) );
 	}
-
-function bp_get_profile_header() {
-	locate_template( array( '/profile/profile-header.php' ), true );
-}
-
-function bp_exists( $component_name ) {
-	if ( function_exists( $component_name . '_install' ) )
-		return true;
-
-	return false;
-}
 
 function bp_format_time( $time, $just_date = false, $localize_time = true ) {
 	if ( !isset( $time ) || !is_numeric( $time ) )
@@ -228,9 +217,6 @@ function bp_word_or_name( $youtext, $nametext, $capitalize = true, $echo = true 
 	}
 }
 
-function bp_get_plugin_sidebar() {
-	locate_template( array( 'plugin-sidebar.php' ), true );
-}
 
 function bp_styles() {
 	do_action( 'bp_styles' );
@@ -247,7 +233,7 @@ function bp_search_form_action() {
  * Generates the basic search form as used in BP-Default's header.
  *
  * @return string HTML <select> element
- * @since 1.0
+ * @since BuddyPress (1.0)
  */
 function bp_search_form_type_select() {
 
@@ -553,6 +539,31 @@ function bp_registration_needs_activation() {
 }
 
 /**
+ * Retrieve a client friendly version of the root blog name, plus take care of
+ * the typical formatting bits and bobs.
+ *
+ * The blogname option is escaped with esc_html on the way into the database in
+ * sanitize_option, we want to reverse this for the plain text arena of emails.
+ *
+ * @link http://buddypress.trac.wordpress.org/ticket/4401
+ * @since BuddyPress (1.7)
+ * @return string
+ */
+function bp_get_email_subject( $args = array() ) {
+
+	$r = wp_parse_args( $args, array(
+		'before'  => '[',
+		'after'   => ']',
+		'default' => __( 'Community', 'buddypress' ),
+		'text'    => ''
+	) );
+
+	$subject = $r['before'] . wp_specialchars_decode( bp_get_option( 'blogname', $r['default'] ), ENT_QUOTES ) . $r['after'] . ' ' . $r['text'];
+
+	return apply_filters( 'bp_get_email_subject', $subject, $r );
+}
+
+/**
  * Allow templates to pass parameters directly into the template loops via AJAX
  *
  * For the most part this will be filtered in a theme's functions.php for example
@@ -611,7 +622,7 @@ function bp_action_variables() {
  * @since BuddyPress (1.5)
  *
  * @param int $position The key of the action_variables array that you want
- * @return str $action_variable The value of that position in the array
+ * @return string $action_variable The value of that position in the array
  */
 function bp_action_variable( $position = 0 ) {
 	$action_variables = bp_action_variables();
@@ -698,9 +709,9 @@ function bp_root_slug( $component = '' ) {
 /**
  * Return the component name based on the current root slug
  *
- * @since BuddyPress {r3923}
+ * @since BuddyPress (1.5)
  * @global BuddyPress $bp The one true BuddyPress instance
- * @param str $root_slug Needle to our active component haystack
+ * @param string $root_slug Needle to our active component haystack
  * @return mixed False if none found, component name if found
  */
 function bp_get_name_from_root_slug( $root_slug = '' ) {
@@ -715,8 +726,8 @@ function bp_get_name_from_root_slug( $root_slug = '' ) {
 		return false;
 
 	// Loop through active components and look for a match
-	foreach ( $bp->active_components as $component => $id ) {
-		if ( !empty( $bp->{$component}->root_slug ) && ( $bp->{$component}->root_slug == $root_slug ) ) {
+	foreach ( array_keys( $bp->active_components ) as $component ) {
+		if ( ( !empty( $bp->{$component}->slug ) && ( $bp->{$component}->slug == $root_slug ) ) || ( !empty( $bp->{$component}->root_slug ) && ( $bp->{$component}->root_slug == $root_slug ) ) ) {
 			return $bp->{$component}->name;
 		}
 	}
@@ -758,15 +769,10 @@ function bp_search_slug() {
  * @return int
  */
 function bp_displayed_user_id() {
+	$bp = buddypress();
+	$id = !empty( $bp->displayed_user->id ) ? $bp->displayed_user->id : 0;
 
-	static $id = 0;
-
-	if ( empty( $id ) ) {
-		global $bp;
-		$id = !empty( $bp->displayed_user->id ) ? $bp->displayed_user->id : 0;
-	}
-
-	return apply_filters( 'bp_displayed_user_id', $id );
+	return (int) apply_filters( 'bp_displayed_user_id', $id );
 }
 
 /**
@@ -776,15 +782,10 @@ function bp_displayed_user_id() {
  * @return int
  */
 function bp_loggedin_user_id() {
+	$bp = buddypress();
+	$id = !empty( $bp->loggedin_user->id ) ? $bp->loggedin_user->id : 0;
 
-	static $id = 0;
-
-	if ( empty( $id ) ) {
-		global $bp;
-		$id = !empty( $bp->loggedin_user->id ) ? $bp->loggedin_user->id : 0;
-	}
-
-	return apply_filters( 'bp_loggedin_user_id', $id );
+	return (int) apply_filters( 'bp_loggedin_user_id', $id );
 }
 
 /** is_() functions to determine the current page *****************************/
@@ -882,7 +883,7 @@ function bp_is_current_component( $component ) {
  * @package BuddyPress
  * @since BuddyPress (1.5)
  *
- * @param str $action The action being tested against
+ * @param string $action The action being tested against
  * @return bool True if the current action matches $action
  */
 function bp_is_current_action( $action = '' ) {
@@ -906,7 +907,7 @@ function bp_is_current_action( $action = '' ) {
  * @package BuddyPress
  * @since BuddyPress (1.5)
  *
- * @param str $action_variable The action_variable being tested against
+ * @param string $action_variable The action_variable being tested against
  * @param int $position The array key you're testing against. If you don't provide a $position,
  *   the function will return true if the $action_variable is found *anywhere* in the action
  *   variables array.
@@ -983,7 +984,7 @@ function bp_is_directory() {
  *   No:  http://domain.com/members/andy/groups/the-group
  *
  * @package BuddyPress Core
- * @return true if root component, else false.
+ * @return bool True if root component, else false.
  */
 function bp_is_root_component( $component_name ) {
 	global $bp;
@@ -1045,14 +1046,25 @@ function bp_is_blog_page() {
 	return apply_filters( 'bp_is_blog_page', $is_blog_page );
 }
 
-function bp_is_page( $page ) {
-	if ( !bp_is_user() && bp_is_current_component( $page )  )
-		return true;
+/**
+ * Is this a BuddyPress component?
+ *
+ * You can tell if a page is displaying BP content by whether the
+ * current_component has been defined
+ *
+ * Generally, we can just check to see that there's no current component.
+ * The one exception is single user home tabs, where $bp->current_component
+ * is unset. Thus the addition of the bp_is_user() check.
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @package BuddyPress
+ * @return bool True if it's a BuddyPress page, false otherwise
+ */
+function is_buddypress() {
+	$retval = (bool) ( bp_current_component() || bp_is_user() );
 
-	if ( 'home' == $page )
-		return is_front_page();
-
-	return false;
+	return apply_filters( 'is_buddypress', $retval );
 }
 
 /** Components ****************************************************************/
@@ -1129,6 +1141,32 @@ function bp_is_settings_component() {
 	return false;
 }
 
+/**
+ * Is the current component an active core component.
+ *
+ * Use this function when you need to check if the current component is an
+ * active core component of BuddyPress. If the current component is inactive, it
+ * will return false. If the current component is not part of BuddyPress core,
+ * it will return false. If the current component is active, and is part of
+ * BuddyPress core, it will return true.
+ *
+ * @since BuddyPress (1.7)
+ * @return boolean
+ */
+function bp_is_current_component_core() {
+	$retval            = false;
+	$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
+
+	foreach ( array_keys( $active_components ) as $active_component ) {
+		if ( bp_is_current_component( $active_component ) ) {
+			$retval = true;
+			break;
+		}
+	}
+
+	return $retval;
+}
+
 /** Activity ******************************************************************/
 
 function bp_is_single_activity() {
@@ -1150,7 +1188,7 @@ function bp_is_my_profile() {
 }
 
 function bp_is_user() {
-	if ( bp_displayed_user_id() && !is_404() )
+	if ( bp_displayed_user_id() )
 		return true;
 
 	return false;
@@ -1224,6 +1262,10 @@ function bp_is_user_change_avatar() {
  * @return bool
  */
 function bp_is_user_forums() {
+
+	if ( ! bp_is_active( 'forums' ) )
+		return false;
+
 	if ( bp_is_user() && bp_is_forums_component() )
 		return true;
 
@@ -1395,10 +1437,20 @@ function bp_is_group_admin_page() {
 }
 
 function bp_is_group_forum() {
-	if ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'forum' ) )
-		return true;
+	$retval = false;
 
-	return false;
+	// At a forum URL
+	if ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'forum' ) ) {
+		$retval = true;
+
+		// If at a forum URL, set back to false if forums are inactive, or not
+		// installed correctly.
+		if ( ! bp_is_active( 'forums' ) || ! bp_forums_is_installed_correctly() ) {
+			$retval = false;
+		}
+	}
+
+	return $retval;
 }
 
 function bp_is_group_activity() {
@@ -1545,7 +1597,7 @@ function bp_is_register_page() {
 function bp_the_body_class() {
 	echo bp_get_the_body_class();
 }
-	function bp_get_the_body_class( $wp_classes, $custom_classes = false ) {
+	function bp_get_the_body_class( $wp_classes = array(), $custom_classes = false ) {
 
 		$bp_classes = array();
 
@@ -1705,6 +1757,13 @@ function bp_the_body_class() {
 			$bp_classes[] = bp_current_action();
 		}
 
+		/** is_buddypress *****************************************************/
+
+		// Add BuddyPress class if we are within a BuddyPress page
+		if ( ! bp_is_blog_page() ) {
+			$bp_classes[] = 'buddypress';
+		}
+
 		/** Clean up***********************************************************/
 
 		// We don't want WordPress blog classes to appear on non-blog pages.
@@ -1722,14 +1781,228 @@ function bp_the_body_class() {
 			}
 		}
 
-		// Merge WP classes with BP classes
-		$classes = array_merge( (array) $bp_classes, (array) $wp_classes );
-
-		// Remove any duplicates
-		$classes = array_unique( $classes );
+		// Merge WP classes with BP classes and remove any duplicates
+		$classes = array_unique( array_merge( (array) $bp_classes, (array) $wp_classes ) );
 
 		return apply_filters( 'bp_get_the_body_class', $classes, $bp_classes, $wp_classes, $custom_classes );
 	}
 	add_filter( 'body_class', 'bp_get_the_body_class', 10, 2 );
 
-?>
+/**
+ * Sort BuddyPress nav menu items by their position property.
+ *
+ * This is an internal convenience function and it will probably be removed in a later release. Do not use.
+ *
+ * @access private
+ * @param array $a First item
+ * @param array $b Second item
+ * @return int Returns an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than, equal to, or greater than the second.
+ * @since BuddyPress (1.7)
+ */
+function _bp_nav_menu_sort( $a, $b ) {
+	if ( $a["position"] == $b["position"] )
+		return 0;
+
+	else if ( $a["position"] < $b["position"] )
+		return -1;
+
+	else
+		return 1;
+}
+
+/**
+ * Get an array of all the items registered in the primary and secondary BuddyPress navigation menus
+ *
+ * @return array
+ * @since BuddyPress (1.7)
+ */
+function bp_get_nav_menu_items() {
+	$menus = $selected_menus = array();
+
+	// Get the second level menus
+	foreach ( (array) buddypress()->bp_options_nav as $parent_menu => $sub_menus ) {
+
+		// The root menu's ID is "xprofile", but the Profile submenus are using "profile". See BP_Core::setup_nav().
+		if ( 'profile' == $parent_menu )
+			$parent_menu = 'xprofile';
+
+		// Sort the items in this menu's navigation by their position property
+		$second_level_menus = (array) $sub_menus;
+		usort( $second_level_menus, '_bp_nav_menu_sort' );
+
+		// Iterate through the second level menus
+		foreach( $second_level_menus as $sub_nav ) {
+
+			// Skip items we don't have access to
+			if ( ! $sub_nav['user_has_access'] )
+				continue;
+
+			// Add this menu
+			$menu         = new stdClass;
+			$menu->class  = array();
+			$menu->css_id = $sub_nav['css_id'];
+			$menu->link   = $sub_nav['link'];
+			$menu->name   = $sub_nav['name'];
+			$menu->parent = $parent_menu;  // Associate this sub nav with a top-level menu
+
+			// If we're viewing this item's screen, record that we need to mark its parent menu to be selected
+			if ( $sub_nav['slug'] == bp_current_action() ) {
+				$menu->class      = array( 'current-menu-item' );
+				$selected_menus[] = $parent_menu;
+			}
+
+			$menus[] = $menu;
+		}
+	}
+
+	// Get the top-level menu parts (Friends, Groups, etc) and sort by their position property
+	$top_level_menus = (array) buddypress()->bp_nav;
+	usort( $top_level_menus, '_bp_nav_menu_sort' );
+
+	// Iterate through the top-level menus
+	foreach ( $top_level_menus as $nav ) {
+
+		// Skip items marked as user-specific if you're not on your own profile
+		if ( ! $nav['show_for_displayed_user'] && ! bp_core_can_edit_settings()  )
+			continue;
+
+		// Get the correct menu link. See http://buddypress.trac.wordpress.org/ticket/4624
+		$link = bp_loggedin_user_domain() ? str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $nav['link'] ) : trailingslashit( bp_displayed_user_domain() . $nav['link'] );
+
+		// Add this menu
+		$menu         = new stdClass;
+		$menu->class  = array();
+		$menu->css_id = $nav['css_id'];
+		$menu->link   = $link;
+		$menu->name   = $nav['name'];
+		$menu->parent = 0;
+
+		// Check if we need to mark this menu as selected
+		if ( in_array( $nav['css_id'], $selected_menus ) )
+			$menu->class = array( 'current-menu-parent' );
+
+		$menus[] = $menu;
+	}
+
+	return apply_filters( 'bp_get_nav_menu_items', $menus );
+}
+
+/**
+ * Displays a navigation menu.
+ *
+ * @param string|array $args Optional arguments:
+ *  - before           Text before the link text.
+ *  - container        Whether to wrap the ul, and what to wrap it with.
+ *                     Defaults to div.
+ *  - container_class  The class that is applied to the container. Defaults to
+ *                     'menu-bp-container'.
+ *  - container_id     The ID that is applied to the container. Defaults to
+ *                     blank.
+ *  - depth            How many levels of the hierarchy are to be included. 0
+ *                     means all. Defaults to 0.
+ *  - echo             Whether to echo the menu or return it. Defaults to echo.
+ *  - fallback_cb      If the menu doesn't exists, a callback function will
+ *                     fire. Defaults to false (no fallback).
+ *  - items_wrap       How the list items should be wrapped. Defaults to a ul
+ *                     with an id and class. Uses printf() format with numbered
+ *                     placeholders.
+ *  - link_after       Text after the link.
+ *  - link_before      Text before the link.
+ *  - menu_class       CSS class to use for the ul element which forms the menu.
+ *                     Defaults to 'menu'.
+ *  - menu_id          The ID that is applied to the ul element which forms the
+ *                     menu. Defaults to 'menu-bp', incremented.
+ *  - walker           Allows a custom walker to be specified. Defaults to
+ *                     'BP_Walker_Nav_Menu'.
+ *
+ * @since BuddyPress (1.7)
+ */
+function bp_nav_menu( $args = array() ) {
+	static $menu_id_slugs = array();
+
+	$defaults = array(
+		'after'           => '',
+		'before'          => '',
+		'container'       => 'div',
+		'container_class' => '',
+		'container_id'    => '',
+		'depth'           => 0,
+		'echo'            => true,
+		'fallback_cb'     => false,
+		'items_wrap'      => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+		'link_after'      => '',
+		'link_before'     => '',
+		'menu_class'      => 'menu',
+		'menu_id'         => '',
+		'walker'          => '',
+	);
+	$args = wp_parse_args( $args, $defaults );
+	$args = apply_filters( 'bp_nav_menu_args', $args );
+	$args = (object) $args;
+
+	$items = $nav_menu = '';
+	$show_container = false;
+
+	// Create custom walker if one wasn't set
+	if ( empty( $args->walker ) )
+		$args->walker = new BP_Walker_Nav_Menu;
+
+	// Sanitise values for class and ID
+	$args->container_class = sanitize_html_class( $args->container_class );
+	$args->container_id    = sanitize_html_class( $args->container_id );
+
+	// Whether to wrap the ul, and what to wrap it with
+	if ( $args->container ) {
+		$allowed_tags = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav', ) );
+
+		if ( in_array( $args->container, $allowed_tags ) ) {
+			$show_container = true;
+
+			$class     = $args->container_class ? ' class="' . esc_attr( $args->container_class ) . '"' : ' class="menu-bp-container"';
+			$id        = $args->container_id    ? ' id="' . esc_attr( $args->container_id ) . '"'       : '';
+			$nav_menu .= '<' . $args->container . $id . $class . '>';
+		}
+	}
+
+	// Get the BuddyPress menu items
+	$menu_items = apply_filters( 'bp_nav_menu_objects', bp_get_nav_menu_items(), $args );
+	$items      = walk_nav_menu_tree( $menu_items, $args->depth, $args );
+	unset( $menu_items );
+
+	// Set the ID that is applied to the ul element which forms the menu.
+	if ( ! empty( $args->menu_id ) ) {
+		$wrap_id = $args->menu_id;
+
+	} else {
+		$wrap_id = 'menu-bp';
+
+		// If a specific ID wasn't requested, and there are multiple menus on the same screen, make sure the autogenerated ID is unique
+		while ( in_array( $wrap_id, $menu_id_slugs ) ) {
+			if ( preg_match( '#-(\d+)$#', $wrap_id, $matches ) )
+				$wrap_id = preg_replace('#-(\d+)$#', '-' . ++$matches[1], $wrap_id );
+			else
+				$wrap_id = $wrap_id . '-1';
+		}
+	}
+	$menu_id_slugs[] = $wrap_id;
+
+	// Allow plugins to hook into the menu to add their own <li>'s
+	$items = apply_filters( 'bp_nav_menu_items', $items, $args );
+
+	// Build the output
+	$wrap_class  = $args->menu_class ? $args->menu_class : '';
+	$nav_menu   .= sprintf( $args->items_wrap, esc_attr( $wrap_id ), esc_attr( $wrap_class ), $items );
+	unset( $items );
+
+	// If we've wrapped the ul, close it
+	if ( $show_container )
+		$nav_menu .= '</' . $args->container . '>';
+
+	// Final chance to modify output
+	$nav_menu = apply_filters( 'bp_nav_menu', $nav_menu, $args );
+
+	if ( $args->echo )
+		echo $nav_menu;
+	else
+		return $nav_menu;
+}

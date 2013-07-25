@@ -29,7 +29,7 @@ jq(document).ready( function() {
 			height:'50px'
 		});
 		jq.scrollTo( jq('textarea#whats-new'), 500, {
-			offset:-125, 
+			offset:-125,
 			easing:'easeOutQuad'
 		} );
 		jq('textarea#whats-new').focus();
@@ -46,12 +46,31 @@ jq(document).ready( function() {
 			height:'50px'
 		});
 		jq("#aw-whats-new-submit").prop("disabled", false);
+
+		var $whats_new_form = jq("form#whats-new-form");
+		if ( $whats_new_form.hasClass("submitted") ) {
+			$whats_new_form.removeClass("submitted");	
+		}
+	});
+
+	/* On blur, shrink if it's empty */
+	jq('#whats-new').blur( function(){
+		if (!this.value.match(/\S+/)) {
+			this.value = "";
+			jq("#whats-new-options").animate({
+				height:'40px'
+			});
+			jq("form#whats-new-form textarea").animate({
+				height:'20px'
+			});
+			jq("#aw-whats-new-submit").prop("disabled", true);
+		}
 	});
 
 	/* New posts */
 	jq("input#aw-whats-new-submit").click( function() {
 		var button = jq(this);
-		var form = button.parent().parent().parent().parent();
+		var form = button.closest("form#whats-new-form");
 
 		form.children().each( function() {
 			if ( jq.nodeName(this, "textarea") || jq.nodeName(this, "input") )
@@ -62,6 +81,7 @@ jq(document).ready( function() {
 		jq('div.error').remove();
 		button.addClass('loading');
 		button.prop('disabled', true);
+		form.addClass("submitted");
 
 		/* Default POST values */
 		var object = '';
@@ -75,7 +95,7 @@ jq(document).ready( function() {
 
 		jq.post( ajaxurl, {
 			action: 'post_update',
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'_wpnonce_post_update': jq("input#_wpnonce_post_update").val(),
 			'content': content,
 			'object': object,
@@ -102,7 +122,7 @@ jq(document).ready( function() {
 				}
 
 				jq("ul#activity-stream").prepend(response);
-				jq("ul#activity-stream li:first").addClass('new-update');
+				jq("ul#activity-stream li:first").addClass('new-update just-posted');
 
 				if ( 0 != jq("#latest-update").length ) {
 					var l = jq("ul#activity-stream li.new-update .activity-content .activity-inner p").html();
@@ -195,7 +215,7 @@ jq(document).ready( function() {
 
 			jq.post( ajaxurl, {
 				action: 'activity_mark_' + type,
-				'cookie': encodeURIComponent(document.cookie),
+				'cookie': bp_get_cookies(),
 				'id': parent_id
 			},
 			function(response) {
@@ -249,7 +269,7 @@ jq(document).ready( function() {
 
 			jq.post( ajaxurl, {
 				action: 'delete_activity',
-				'cookie': encodeURIComponent(document.cookie),
+				'cookie': bp_get_cookies(),
 				'id': id,
 				'_wpnonce': nonce
 			},
@@ -301,10 +321,17 @@ jq(document).ready( function() {
 
 			var oldest_page = ( jq.cookie('bp-activity-oldestpage') * 1 ) + 1;
 
+			var just_posted = [];
+			
+			jq('.activity-list li.just-posted').each( function(){
+				just_posted.push( jq(this).attr('id').replace( 'activity-','' ) );
+			});
+
 			jq.post( ajaxurl, {
 				action: 'activity_get_older_updates',
-				'cookie': encodeURIComponent(document.cookie),
-				'page': oldest_page
+				'cookie': bp_get_cookies(),
+				'page': oldest_page,
+				'exclude_just_posted': just_posted.join(',')
 			},
 			function(response)
 			{
@@ -322,7 +349,7 @@ jq(document).ready( function() {
 	});
 
 	// Activity "Read More" links
-	jq('.activity-read-more a').live('click', function(event) {
+	jq('.activity-read-more a').on('click', function(event) {
 		var target = jq(event.target);
 		var link_id = target.parent().attr('id').split('-');
 		var a_id = link_id[3];
@@ -389,7 +416,7 @@ jq(document).ready( function() {
 
 			form.slideDown( 200 );
 			jq.scrollTo( form, 500, {
-				offset:-100, 
+				offset:-100,
 				easing:'easeOutQuad'
 			} );
 			jq('#ac-form-' + ids[2] + ' textarea').focus();
@@ -399,9 +426,9 @@ jq(document).ready( function() {
 
 		/* Activity comment posting */
 		if ( target.attr('name') == 'ac_form_submit' ) {
-			var form = target.parent().parent();
+			var form        = target.parents( 'form' );
 			var form_parent = form.parent();
-			var form_id = form.attr('id').split('-');
+			var form_id     = form.attr('id').split('-');
 
 			if ( !form_parent.hasClass('activity-comments') ) {
 				var tmp_id = form_parent.attr('id').split('-');
@@ -411,12 +438,12 @@ jq(document).ready( function() {
 			}
 
 			/* Hide any error messages */
-			jq( 'form#' + form + ' div.error').hide();
+			jq( 'form#' + form.attr('id') + ' div.error').hide();
 			target.addClass('loading').prop('disabled', true);
 
 			var ajaxdata = {
 				action: 'new_activity_comment',
-				'cookie': encodeURIComponent(document.cookie),
+				'cookie': bp_get_cookies(),
 				'_wpnonce_new_activity_comment': jq("input#_wpnonce_new_activity_comment").val(),
 				'comment_id': comment_id,
 				'form_id': form_id[2],
@@ -429,37 +456,46 @@ jq(document).ready( function() {
 				ajaxdata['_bp_as_nonce_' + comment_id] = ak_nonce;
 			}
 
-			jq.post( ajaxurl, ajaxdata,
-				function(response)
-				{
-					target.removeClass('loading');
+			jq.post( ajaxurl, ajaxdata, function(response) {
+				target.removeClass('loading');
 
-					/* Check for errors and append if found. */
-					if ( response[0] + response[1] == '-1' ) {
-						form.append( response.substr( 2, response.length ) ).hide().fadeIn( 200 );
-					} else {
-						form.fadeOut( 200,
-							function() {
-								if ( 0 == form.parent().children('ul').length ) {
-									if ( form.parent().hasClass('activity-comments') )
-										form.parent().prepend('<ul></ul>');
-									else
-										form.parent().append('<ul></ul>');
-								}
-
-								form.parent().children('ul').append(response).hide().fadeIn( 200 );
-								form.children('textarea').val('');
-								form.parent().parent().addClass('has-comments');
+				/* Check for errors and append if found. */
+				if ( response[0] + response[1] == '-1' ) {
+					form.append( jq( response.substr( 2, response.length ) ).hide().fadeIn( 200 ) );
+				} else {
+					var activity_comments = form.parent();
+					form.fadeOut( 200, function() {
+						if ( 0 == activity_comments.children('ul').length ) {
+							if ( activity_comments.hasClass('activity-comments') ) {
+								activity_comments.prepend('<ul></ul>');
+							} else {
+								activity_comments.append('<ul></ul>');
 							}
-							);
-						jq( 'form#' + form + ' textarea').val('');
+						}
 
-						/* Increase the "Reply (X)" button count */
-						jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html( Number( jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html() ) + 1 );
+						/* Preceeding whitespace breaks output with jQuery 1.9.0 */
+						var the_comment = jq.trim( response );
+
+						activity_comments.children('ul').append( jq( the_comment ).hide().fadeIn( 200 ) );
+						form.children('textarea').val('');
+						activity_comments.parent().addClass('has-comments');
+					} );
+
+					jq( 'form#' + form.attr('id') + ' textarea').val('');
+
+					/* Increase the "Reply (X)" button count */
+					jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html( Number( jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html() ) + 1 );
+
+					// Increment the 'Show all x comments' string, if present
+					var show_all_a = activity_comments.find('.show-all').find('a');
+					if ( show_all_a ) {
+						var new_count = jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html();
+						show_all_a.html( BP_DTheme.show_x_comments.replace( '%d', new_count ) );
 					}
+				}
 
-					jq(target).prop("disabled", false);
-				});
+				jq(target).prop("disabled", false);
+			});
 
 			return false;
 		}
@@ -487,7 +523,7 @@ jq(document).ready( function() {
 
 			jq.post( ajaxurl, {
 				action: 'delete_activity_comment',
-				'cookie': encodeURIComponent(document.cookie),
+				'cookie': bp_get_cookies(),
 				'_wpnonce': nonce,
 				'id': comment_id
 			},
@@ -495,7 +531,7 @@ jq(document).ready( function() {
 			{
 				/* Check for errors and append if found. */
 				if ( response[0] + response[1] == '-1' ) {
-					comment_li.prepend( response.substr( 2, response.length ) ).hide().fadeIn( 200 );
+					comment_li.prepend( jq( response.substr( 2, response.length ) ).hide().fadeIn( 200 ) );
 				} else {
 					var children = jq( 'li#' + comment_li.attr('id') + ' ul' ).children('li');
 					var child_count = 0;
@@ -503,12 +539,20 @@ jq(document).ready( function() {
 						if ( !jq(this).is(':hidden') )
 							child_count++;
 					});
-					comment_li.fadeOut(200);
+					comment_li.fadeOut(200, function() {
+						comment_li.remove();
+					});
 
 					/* Decrease the "Reply (X)" button count */
 					var count_span = jq('li#' + comment_li.parents('ul#activity-stream > li').attr('id') + ' a.acomment-reply span');
 					var new_count = count_span.html() - ( 1 + child_count );
 					count_span.html(new_count);
+	
+					// Change the 'Show all x comments' text
+					var show_all_a = comment_li.siblings('.show-all').find('a');
+					if ( show_all_a ) {
+						show_all_a.html( BP_DTheme.show_x_comments.replace( '%d', new_count ) );
+					}
 
 					/* If that was the last comment for the item, remove the has-comments class to clean up the styling */
 					if ( 0 == new_count ) {
@@ -543,7 +587,7 @@ jq(document).ready( function() {
 			function ( response ) {
 				// Check for errors and append if found.
 				if ( response[0] + response[1] == '-1' ) {
-					comment_li.prepend( response.substr( 2, response.length ) ).hide().fadeIn( 200 );
+					comment_li.prepend( jq( response.substr( 2, response.length ) ).hide().fadeIn( 200 ) );
 
 				} else {
 					var children = jq( 'li#' + comment_li.attr( 'id' ) + ' ul' ).children( 'li' );
@@ -628,9 +672,9 @@ jq(document).ready( function() {
 		if ( jq(this).hasClass('no-ajax') )
 			return;
 
-		var target = jq(event.target).parent();
-
-		if ( 'LI' == event.target.parentNode.nodeName && !target.hasClass('last') ) {
+		var targetElem = ( event.target.nodeName == 'SPAN' ) ? event.target.parentNode : event.target;
+		var target     = jq( targetElem ).parent();
+		if ( 'LI' == target[0].nodeName && !target.hasClass('last') ) {
 			var css_id = target.attr('id').split( '-' );
 			var object = css_id[0];
 
@@ -759,7 +803,7 @@ jq(document).ready( function() {
 		jq.post( ajaxurl, {
 			action: 'groups_invite_user',
 			'friend_action': friend_action,
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'_wpnonce': jq("input#_wpnonce_invite_uninvite_user").val(),
 			'friend_id': friend_id,
 			'group_id': jq("input#group_id").val()
@@ -782,7 +826,7 @@ jq(document).ready( function() {
 	});
 
 	/* Remove a user from the list of users to invite to a group */
-	jq("#friend-list li a.remove").live('click', function() {
+	jq("#friend-list").on('click', 'li a.remove', function() {
 		jq('.ajax-loader').toggle();
 
 		var friend_id = jq(this).attr('id');
@@ -792,7 +836,7 @@ jq(document).ready( function() {
 		jq.post( ajaxurl, {
 			action: 'groups_invite_user',
 			'friend_action': 'uninvite',
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'_wpnonce': jq("input#_wpnonce_invite_uninvite_user").val(),
 			'friend_id': friend_id,
 			'group_id': jq("input#group_id").val()
@@ -811,24 +855,37 @@ jq(document).ready( function() {
 	jq('.field-visibility-settings').hide();
 	jq('.visibility-toggle-link').on( 'click', function() {
 		var toggle_div = jq(this).parent();
-		
+
 		jq(toggle_div).fadeOut( 600, function(){
 			jq(toggle_div).siblings('.field-visibility-settings').slideDown(400);
 		});
-		
+
 		return false;
 	} );
 
 	jq('.field-visibility-settings-close').on( 'click', function() {
 		var settings_div = jq(this).parent();
-		
+
 		jq(settings_div).slideUp( 400, function(){
 			jq(settings_div).siblings('.field-visibility-settings-toggle').fadeIn(800);
 		});
-		
+
 		return false;
 	} );
 
+	jq("#profile-edit-form input:not(:submit), #profile-edit-form textarea, #profile-edit-form select, #signup_form input:not(:submit), #signup_form textarea, #signup_form select").change( function() {
+		var shouldconfirm = true;
+
+		jq('#profile-edit-form input:submit, #signup_form input:submit').on( 'click', function() {
+			shouldconfirm = false;
+		});
+		
+		window.onbeforeunload = function(e) {
+			if ( shouldconfirm ) {
+				return BP_DTheme.unsaved_changes;
+			}
+		};
+	});
 
 	/** Friendship Requests **************************************/
 
@@ -859,7 +916,7 @@ jq(document).ready( function() {
 
 		jq.post( ajaxurl, {
 			action: action,
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'id': id,
 			'_wpnonce': nonce
 		},
@@ -873,12 +930,10 @@ jq(document).ready( function() {
 				button.fadeOut( 100, function() {
 					if ( jq(this).hasClass('accept') ) {
 						action_div.children('a.reject').hide();
-						jq(this).html( BP_DTheme.accepted ).fadeIn(50);
-						jq(this).addClass('accepted');
+						jq(this).html( BP_DTheme.accepted ).contents().unwrap();
 					} else {
 						action_div.children('a.accept').hide();
-						jq(this).html( BP_DTheme.rejected ).fadeIn(50);
-						jq(this).addClass('rejected');
+						jq(this).html( BP_DTheme.rejected ).contents().unwrap();
 					}
 				});
 			}
@@ -888,7 +943,7 @@ jq(document).ready( function() {
 	});
 
 	/* Add / Remove friendship buttons */
-	jq(".friendship-button a").live('click', function() {
+	jq('#members-dir-list').on('click', '.friendship-button a', function() {
 		jq(this).parent().addClass('loading');
 		var fid = jq(this).attr('id');
 		fid = fid.split('-');
@@ -903,7 +958,7 @@ jq(document).ready( function() {
 
 		jq.post( ajaxurl, {
 			action: 'addremove_friend',
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'fid': fid,
 			'_wpnonce': nonce
 		},
@@ -938,7 +993,7 @@ jq(document).ready( function() {
 
 	/** Group Join / Leave Buttons **************************************/
 
-	jq(".group-button a").live('click', function() {
+	jq('#groups-dir-list').on('click', '.group-button a', function() {
 		var gid = jq(this).parent().attr('id');
 		gid = gid.split('-');
 		gid = gid[1];
@@ -952,7 +1007,7 @@ jq(document).ready( function() {
 
 		jq.post( ajaxurl, {
 			action: 'joinleave_group',
-			'cookie': encodeURIComponent(document.cookie),
+			'cookie': bp_get_cookies(),
 			'gid': gid,
 			'_wpnonce': nonce
 		},
@@ -1009,7 +1064,7 @@ jq(document).ready( function() {
 
 			jq.post( ajaxurl, {
 				action: 'messages_send_reply',
-				'cookie': encodeURIComponent(document.cookie),
+				'cookie': bp_get_cookies(),
 				'_wpnonce': jq("input#send_message_nonce").val(),
 
 				'content': jq("#message_content").val(),
@@ -1290,7 +1345,7 @@ function bp_filter_request( object, filter, scope, target, search_terms, page, e
 
 	bp_ajax_request = jq.post( ajaxurl, {
 		action: object + '_filter',
-		'cookie': encodeURIComponent(document.cookie),
+		'cookie': bp_get_cookies(),
 		'object': object,
 		'filter': filter,
 		'search_terms': search_terms,
@@ -1338,7 +1393,7 @@ function bp_activity_request(scope, filter) {
 
 	bp_ajax_request = jq.post( ajaxurl, {
 		action: 'activity_widget_filter',
-		'cookie': encodeURIComponent(document.cookie),
+		'cookie': bp_get_cookies(),
 		'_wpnonce_activity_filter': jq("input#_wpnonce_activity_filter").val(),
 		'scope': scope,
 		'filter': filter
@@ -1389,7 +1444,7 @@ function bp_dtheme_hide_comments() {
 				jq(this).toggle();
 
 				if ( !i )
-					jq(this).before( '<li class="show-all"><a href="#' + parent_li.attr('id') + '/show-all/" title="' + BP_DTheme.show_all_comments + '">' + BP_DTheme.show_all + ' ' + comment_count + ' ' + BP_DTheme.comments + '</a></li>' );
+					jq(this).before( '<li class="show-all"><a href="#' + parent_li.attr('id') + '/show-all/" title="' + BP_DTheme.show_all_comments + '">' + BP_DTheme.show_x_comments.replace( '%d', comment_count ) + '</a></li>' );
 			}
 		});
 
@@ -1432,8 +1487,33 @@ function clear(container) {
 	return;
 }
 
+/* Returns a querystring of BP cookies (cookies beginning with 'bp-') */
+function bp_get_cookies() {
+	// get all cookies and split into an array
+	var allCookies   = document.cookie.split(";");
+
+	var bpCookies    = {};
+	var cookiePrefix = 'bp-';
+
+	// loop through cookies
+	for (var i = 0; i < allCookies.length; i++) {
+		var cookie    = allCookies[i];
+		var delimiter = cookie.indexOf("=");
+		var name      = unescape( cookie.slice(0, delimiter) ).trim();
+		var value     = unescape( cookie.slice(delimiter + 1) );
+
+		// if BP cookie, store it
+		if ( name.indexOf(cookiePrefix) == 0 ) {
+			bpCookies[name] = value;
+		}
+	}
+
+	// returns BP cookies as querystring
+	return encodeURIComponent( jq.param(bpCookies) );
+}
+
 /* ScrollTo plugin - just inline and minified */
-;(function(d){var k=d.scrollTo=function(a,i,e){d(window).scrollTo(a,i,e)};k.defaults={axis:'xy',duration:parseFloat(d.fn.jquery)>=1.3?0:1};k.window=function(a){return d(window)._scrollable()};d.fn._scrollable=function(){return this.map(function(){var a=this,i=!a.nodeName||d.inArray(a.nodeName.toLowerCase(),['iframe','#document','html','body'])!=-1;if(!i)return a;var e=(a.contentWindow||a).document||a.ownerDocument||a;return d.browser.safari||e.compatMode=='BackCompat'?e.body:e.documentElement})};d.fn.scrollTo=function(n,j,b){if(typeof j=='object'){b=j;j=0}if(typeof b=='function')b={onAfter:b};if(n=='max')n=9e9;b=d.extend({},k.defaults,b);j=j||b.speed||b.duration;b.queue=b.queue&&b.axis.length>1;if(b.queue)j/=2;b.offset=p(b.offset);b.over=p(b.over);return this._scrollable().each(function(){var q=this,r=d(q),f=n,s,g={},u=r.is('html,body');switch(typeof f){case'number':case'string':if(/^([+-]=)?\d+(\.\d+)?(px|%)?$/.test(f)){f=p(f);break}f=d(f,this);case'object':if(f.is||f.style)s=(f=d(f)).offset()}d.each(b.axis.split(''),function(a,i){var e=i=='x'?'Left':'Top',h=e.toLowerCase(),c='scroll'+e,l=q[c],m=k.max(q,i);if(s){g[c]=s[h]+(u?0:l-r.offset()[h]);if(b.margin){g[c]-=parseInt(f.css('margin'+e))||0;g[c]-=parseInt(f.css('border'+e+'Width'))||0}g[c]+=b.offset[h]||0;if(b.over[h])g[c]+=f[i=='x'?'width':'height']()*b.over[h]}else{var o=f[h];g[c]=o.slice&&o.slice(-1)=='%'?parseFloat(o)/100*m:o}if(/^\d+$/.test(g[c]))g[c]=g[c]<=0?0:Math.min(g[c],m);if(!a&&b.queue){if(l!=g[c])t(b.onAfterFirst);delete g[c]}});t(b.onAfter);function t(a){r.animate(g,j,b.easing,a&&function(){a.call(this,n,b)})}}).end()};k.max=function(a,i){var e=i=='x'?'Width':'Height',h='scroll'+e;if(!d(a).is('html,body'))return a[h]-d(a)[e.toLowerCase()]();var c='client'+e,l=a.ownerDocument.documentElement,m=a.ownerDocument.body;return Math.max(l[h],m[h])-Math.min(l[c],m[c])};function p(a){return typeof a=='object'?a:{top:a,left:a}}})(jQuery);
+;(function($){var h=$.scrollTo=function(a,b,c){$(window).scrollTo(a,b,c)};h.defaults={axis:'xy',duration:parseFloat($.fn.jquery)>=1.3?0:1,limit:true};h.window=function(a){return $(window)._scrollable()};$.fn._scrollable=function(){return this.map(function(){var a=this,isWin=!a.nodeName||$.inArray(a.nodeName.toLowerCase(),['iframe','#document','html','body'])!=-1;if(!isWin)return a;var b=(a.contentWindow||a).document||a.ownerDocument||a;return/webkit/i.test(navigator.userAgent)||b.compatMode=='BackCompat'?b.body:b.documentElement})};$.fn.scrollTo=function(e,f,g){if(typeof f=='object'){g=f;f=0}if(typeof g=='function')g={onAfter:g};if(e=='max')e=9e9;g=$.extend({},h.defaults,g);f=f||g.duration;g.queue=g.queue&&g.axis.length>1;if(g.queue)f/=2;g.offset=both(g.offset);g.over=both(g.over);return this._scrollable().each(function(){if(e==null)return;var d=this,$elem=$(d),targ=e,toff,attr={},win=$elem.is('html,body');switch(typeof targ){case'number':case'string':if(/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)){targ=both(targ);break}targ=$(targ,this);if(!targ.length)return;case'object':if(targ.is||targ.style)toff=(targ=$(targ)).offset()}$.each(g.axis.split(''),function(i,a){var b=a=='x'?'Left':'Top',pos=b.toLowerCase(),key='scroll'+b,old=d[key],max=h.max(d,a);if(toff){attr[key]=toff[pos]+(win?0:old-$elem.offset()[pos]);if(g.margin){attr[key]-=parseInt(targ.css('margin'+b))||0;attr[key]-=parseInt(targ.css('border'+b+'Width'))||0}attr[key]+=g.offset[pos]||0;if(g.over[pos])attr[key]+=targ[a=='x'?'width':'height']()*g.over[pos]}else{var c=targ[pos];attr[key]=c.slice&&c.slice(-1)=='%'?parseFloat(c)/100*max:c}if(g.limit&&/^\d+$/.test(attr[key]))attr[key]=attr[key]<=0?0:Math.min(attr[key],max);if(!i&&g.queue){if(old!=attr[key])animate(g.onAfterFirst);delete attr[key]}});animate(g.onAfter);function animate(a){$elem.animate(attr,f,g.easing,a&&function(){a.call(this,e,g)})}}).end()};h.max=function(a,b){var c=b=='x'?'Width':'Height',scroll='scroll'+c;if(!$(a).is('html,body'))return a[scroll]-$(a)[c.toLowerCase()]();var d='client'+c,html=a.ownerDocument.documentElement,body=a.ownerDocument.body;return Math.max(html[scroll],body[scroll])-Math.min(html[d],body[d])};function both(a){return typeof a=='object'?a:{top:a,left:a}}})(jQuery);
 
 /* jQuery Easing Plugin, v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/ */
 jQuery.easing.jswing=jQuery.easing.swing;jQuery.extend(jQuery.easing,{def:"easeOutQuad",swing:function(e,f,a,h,g){return jQuery.easing[jQuery.easing.def](e,f,a,h,g)},easeInQuad:function(e,f,a,h,g){return h*(f/=g)*f+a},easeOutQuad:function(e,f,a,h,g){return -h*(f/=g)*(f-2)+a},easeInOutQuad:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f+a}return -h/2*((--f)*(f-2)-1)+a},easeInCubic:function(e,f,a,h,g){return h*(f/=g)*f*f+a},easeOutCubic:function(e,f,a,h,g){return h*((f=f/g-1)*f*f+1)+a},easeInOutCubic:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f+a}return h/2*((f-=2)*f*f+2)+a},easeInQuart:function(e,f,a,h,g){return h*(f/=g)*f*f*f+a},easeOutQuart:function(e,f,a,h,g){return -h*((f=f/g-1)*f*f*f-1)+a},easeInOutQuart:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f*f+a}return -h/2*((f-=2)*f*f*f-2)+a},easeInQuint:function(e,f,a,h,g){return h*(f/=g)*f*f*f*f+a},easeOutQuint:function(e,f,a,h,g){return h*((f=f/g-1)*f*f*f*f+1)+a},easeInOutQuint:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f*f*f+a}return h/2*((f-=2)*f*f*f*f+2)+a},easeInSine:function(e,f,a,h,g){return -h*Math.cos(f/g*(Math.PI/2))+h+a},easeOutSine:function(e,f,a,h,g){return h*Math.sin(f/g*(Math.PI/2))+a},easeInOutSine:function(e,f,a,h,g){return -h/2*(Math.cos(Math.PI*f/g)-1)+a},easeInExpo:function(e,f,a,h,g){return(f==0)?a:h*Math.pow(2,10*(f/g-1))+a},easeOutExpo:function(e,f,a,h,g){return(f==g)?a+h:h*(-Math.pow(2,-10*f/g)+1)+a},easeInOutExpo:function(e,f,a,h,g){if(f==0){return a}if(f==g){return a+h}if((f/=g/2)<1){return h/2*Math.pow(2,10*(f-1))+a}return h/2*(-Math.pow(2,-10*--f)+2)+a},easeInCirc:function(e,f,a,h,g){return -h*(Math.sqrt(1-(f/=g)*f)-1)+a},easeOutCirc:function(e,f,a,h,g){return h*Math.sqrt(1-(f=f/g-1)*f)+a},easeInOutCirc:function(e,f,a,h,g){if((f/=g/2)<1){return -h/2*(Math.sqrt(1-f*f)-1)+a}return h/2*(Math.sqrt(1-(f-=2)*f)+1)+a},easeInElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k)==1){return e+l}if(!j){j=k*0.3}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}return -(g*Math.pow(2,10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j))+e},easeOutElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k)==1){return e+l}if(!j){j=k*0.3}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}return g*Math.pow(2,-10*h)*Math.sin((h*k-i)*(2*Math.PI)/j)+l+e},easeInOutElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k/2)==2){return e+l}if(!j){j=k*(0.3*1.5)}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}if(h<1){return -0.5*(g*Math.pow(2,10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j))+e}return g*Math.pow(2,-10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j)*0.5+l+e},easeInBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}return i*(f/=h)*f*((g+1)*f-g)+a},easeOutBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}return i*((f=f/h-1)*f*((g+1)*f+g)+1)+a},easeInOutBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}if((f/=h/2)<1){return i/2*(f*f*(((g*=(1.525))+1)*f-g))+a}return i/2*((f-=2)*f*(((g*=(1.525))+1)*f+g)+2)+a},easeInBounce:function(e,f,a,h,g){return h-jQuery.easing.easeOutBounce(e,g-f,0,h,g)+a},easeOutBounce:function(e,f,a,h,g){if((f/=g)<(1/2.75)){return h*(7.5625*f*f)+a}else{if(f<(2/2.75)){return h*(7.5625*(f-=(1.5/2.75))*f+0.75)+a}else{if(f<(2.5/2.75)){return h*(7.5625*(f-=(2.25/2.75))*f+0.9375)+a}else{return h*(7.5625*(f-=(2.625/2.75))*f+0.984375)+a}}}},easeInOutBounce:function(e,f,a,h,g){if(f<g/2){return jQuery.easing.easeInBounce(e,f*2,0,h,g)*0.5+a}return jQuery.easing.easeOutBounce(e,f*2-g,0,h,g)*0.5+h*0.5+a}});

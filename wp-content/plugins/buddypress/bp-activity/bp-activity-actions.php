@@ -45,14 +45,13 @@ add_action( 'bp_init', 'bp_register_activity_actions', 8 );
  * @return bool False on failure
  */
 function bp_activity_action_permalink_router() {
-	global $bp;
 
 	// Not viewing activity
-	if ( !bp_is_activity_component() || !bp_is_current_action( 'p' ) )
+	if ( ! bp_is_activity_component() || ! bp_is_current_action( 'p' ) )
 		return false;
 
 	// No activity to display
-	if ( !bp_action_variable( 0 ) || !is_numeric( bp_action_variable( 0 ) ) )
+	if ( ! bp_action_variable( 0 ) || ! is_numeric( bp_action_variable( 0 ) ) )
 		return false;
 
 	// Get the activity details
@@ -62,7 +61,6 @@ function bp_activity_action_permalink_router() {
 	if ( empty( $activity['activities'][0] ) ) {
 		bp_do_404();
 		return;
-
 	} else {
 		$activity = $activity['activities'][0];
 	}
@@ -71,10 +69,10 @@ function bp_activity_action_permalink_router() {
 	$redirect = false;
 
 	// Redirect based on the type of activity
-	if ( bp_is_active( 'groups' ) && $activity->component == $bp->groups->id ) {
+	if ( bp_is_active( 'groups' ) && $activity->component == buddypress()->groups->id ) {
 
 		// Activity is a user update
-		if ( !empty( $activity->user_id ) ) {
+		if ( ! empty( $activity->user_id ) ) {
 			$redirect = bp_core_get_user_domain( $activity->user_id, $activity->user_nicename, $activity->user_login ) . bp_get_activity_slug() . '/' . $activity->id . '/';
 
 		// Activity is something else
@@ -87,20 +85,21 @@ function bp_activity_action_permalink_router() {
 		}
 
 	// Set redirect to users' activity stream
-	} else {
+	} else if ( ! empty( $activity->user_id ) ) {
 		$redirect = bp_core_get_user_domain( $activity->user_id, $activity->user_nicename, $activity->user_login ) . bp_get_activity_slug() . '/' . $activity->id . '/';
 	}
 
 	// If set, add the original query string back onto the redirect URL
-	if ( !empty( $_SERVER['QUERY_STRING'] ) ) {
+	if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
 		$query_frags = array();
 		wp_parse_str( $_SERVER['QUERY_STRING'], $query_frags );
 		$redirect = add_query_arg( urlencode_deep( $query_frags ), $redirect );
 	}
 
 	// Allow redirect to be filtered
-	if ( !$redirect = apply_filters_ref_array( 'bp_activity_permalink_redirect_url', array( $redirect, &$activity ) ) )
+	if ( ! $redirect = apply_filters_ref_array( 'bp_activity_permalink_redirect_url', array( $redirect, &$activity ) ) ) {
 		bp_core_redirect( bp_get_root_domain() );
+	}
 
 	// Redirect to the actual activity permalink page
 	bp_core_redirect( $redirect );
@@ -147,7 +146,7 @@ function bp_activity_action_delete_activity( $activity_id = 0 ) {
 	$activity = new BP_Activity_Activity( $activity_id );
 
 	// Check access
-	if ( empty( $activity->user_id ) || !bp_activity_user_can_delete( $activity ) )
+	if ( ! bp_activity_user_can_delete( $activity ) )
 		return false;
 
 	// Call the action before the delete so plugins can still fetch information about it
@@ -175,7 +174,7 @@ add_action( 'bp_actions', 'bp_activity_action_delete_activity' );
  * @global object $bp BuddyPress global settings
  * @param int $activity_id Activity id to be deleted. Defaults to 0.
  * @return bool False on failure
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_action_spam_activity( $activity_id = 0 ) {
 	global $bp;
@@ -325,9 +324,9 @@ function bp_activity_action_post_comment() {
 	}
 
 	$comment_id = bp_activity_new_comment( array(
-		'content' => $content,
+		'content'     => $content,
 		'activity_id' => $activity_id,
-		'parent_id' => $parent_id
+		'parent_id'   => false
 	));
 
 	if ( !empty( $comment_id ) )
@@ -422,16 +421,22 @@ add_action( 'bp_actions', 'bp_activity_action_remove_favorite' );
  * @return bool False on failure
  */
 function bp_activity_action_sitewide_feed() {
-	global $bp, $wp_query;
+	global $bp;
 
-	if ( !bp_is_activity_component() || !bp_is_current_action( 'feed' ) || bp_is_user() || !empty( $bp->groups->current_group ) )
+	if ( ! bp_is_activity_component() || ! bp_is_current_action( 'feed' ) || bp_is_user() || ! empty( $bp->groups->current_group ) )
 		return false;
 
-	$wp_query->is_404 = false;
-	status_header( 200 );
+	// setup the feed
+	buddypress()->activity->feed = new BP_Activity_Feed( array(
+		'id'            => 'sitewide',
 
-	include_once( 'feeds/bp-activity-sitewide-feed.php' );
-	die;
+		/* translators: Sitewide activity RSS title - "[Site Name] | Site Wide Activity" */
+		'title'         => sprintf( __( '%s | Site Wide Activity', 'buddypress' ), bp_get_site_name() ),
+
+		'link'          => bp_get_activity_directory_permalink(),
+		'description'   => __( 'Activity feed for the entire site.', 'buddypress' ),
+		'activity_args' => 'display_comments=threaded'
+	) );
 }
 add_action( 'bp_actions', 'bp_activity_action_sitewide_feed' );
 
@@ -448,16 +453,21 @@ add_action( 'bp_actions', 'bp_activity_action_sitewide_feed' );
  * @return bool False on failure
  */
 function bp_activity_action_personal_feed() {
-	global $wp_query;
-
-	if ( !bp_is_user_activity() || !bp_is_current_action( 'feed' ) )
+	if ( ! bp_is_user_activity() || ! bp_is_current_action( 'feed' ) ) {
 		return false;
+	}
 
-	$wp_query->is_404 = false;
-	status_header( 200 );
+	// setup the feed
+	buddypress()->activity->feed = new BP_Activity_Feed( array(
+		'id'            => 'personal',
 
-	include_once( 'feeds/bp-activity-personal-feed.php' );
-	die;
+		/* translators: Personal activity RSS title - "[Site Name] | [User Display Name] | Activity" */
+		'title'         => sprintf( __( '%1$s | %2$s | Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+
+		'link'          => trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() ),
+		'description'   => sprintf( __( 'Activity feed for %s.', 'buddypress' ), bp_get_displayed_user_fullname() ),
+		'activity_args' => 'user_id=' . bp_displayed_user_id()
+	) );
 }
 add_action( 'bp_actions', 'bp_activity_action_personal_feed' );
 
@@ -477,16 +487,21 @@ add_action( 'bp_actions', 'bp_activity_action_personal_feed' );
  * @return bool False on failure
  */
 function bp_activity_action_friends_feed() {
-	global $wp_query;
-
-	if ( !bp_is_active( 'friends' ) || !bp_is_user_activity() || !bp_is_current_action( bp_get_friends_slug() ) || !bp_is_action_variable( 'feed', 0 ) )
+	if ( ! bp_is_active( 'friends' ) || ! bp_is_user_activity() || ! bp_is_current_action( bp_get_friends_slug() ) || ! bp_is_action_variable( 'feed', 0 ) ) {
 		return false;
+	}
 
-	$wp_query->is_404 = false;
-	status_header( 200 );
+	// setup the feed
+	buddypress()->activity->feed = new BP_Activity_Feed( array(
+		'id'            => 'friends',
 
-	include_once( 'feeds/bp-activity-friends-feed.php' );
-	die;
+		/* translators: Friends activity RSS title - "[Site Name] | [User Display Name] | Friends Activity" */
+		'title'         => sprintf( __( '%1$s | %2$s | Friends Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+
+		'link'          => trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/' . bp_get_friends_slug() ),
+		'description'   => sprintf( __( "Activity feed for %s's friends.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+		'activity_args' => 'scope=friends'
+	) );
 }
 add_action( 'bp_actions', 'bp_activity_action_friends_feed' );
 
@@ -506,16 +521,29 @@ add_action( 'bp_actions', 'bp_activity_action_friends_feed' );
  * @return bool False on failure
  */
 function bp_activity_action_my_groups_feed() {
-	global $wp_query;
-
-	if ( !bp_is_active( 'groups' ) || !bp_is_user_activity() || !bp_is_current_action( bp_get_groups_slug() ) || !bp_is_action_variable( 'feed', 0 ) )
+	if ( ! bp_is_active( 'groups' ) || ! bp_is_user_activity() || ! bp_is_current_action( bp_get_groups_slug() ) || ! bp_is_action_variable( 'feed', 0 ) ) {
 		return false;
+	}
 
-	$wp_query->is_404 = false;
-	status_header( 200 );
+	// get displayed user's group IDs
+	$groups    = groups_get_user_groups();
+	$group_ids = implode( ',', $groups['groups'] );
 
-	include_once( 'feeds/bp-activity-mygroups-feed.php' );
-	die;
+	// setup the feed
+	buddypress()->activity->feed = new BP_Activity_Feed( array(
+		'id'            => 'mygroups',
+
+		/* translators: Member groups activity RSS title - "[Site Name] | [User Display Name] | Groups Activity" */
+		'title'         => sprintf( __( '%1$s | %2$s | Group Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+
+		'link'          => trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() ),
+		'description'   => sprintf( __( "Public group activity feed of which %s is a member of.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+		'activity_args' => array(
+			'object'           => buddypress()->groups->id,
+			'primary_id'       => $group_ids,
+			'display_comments' => 'threaded'
+		)
+	) );
 }
 add_action( 'bp_actions', 'bp_activity_action_my_groups_feed' );
 
@@ -534,6 +562,10 @@ add_action( 'bp_actions', 'bp_activity_action_my_groups_feed' );
  */
 function bp_activity_action_mentions_feed() {
 	global $wp_query;
+
+	if ( ! bp_activity_do_mentions() ) {
+		return false;
+	}
 
 	if ( !bp_is_user_activity() || !bp_is_current_action( 'mentions' ) || !bp_is_action_variable( 'feed', 0 ) )
 		return false;
@@ -560,16 +592,25 @@ add_action( 'bp_actions', 'bp_activity_action_mentions_feed' );
  * @return bool False on failure
  */
 function bp_activity_action_favorites_feed() {
-	global $wp_query;
-
-	if ( !bp_is_user_activity() || !bp_is_current_action( 'favorites' ) || !bp_is_action_variable( 'feed', 0 ) )
+	if ( ! bp_is_user_activity() || ! bp_is_current_action( 'favorites' ) || ! bp_is_action_variable( 'feed', 0 ) ) {
 		return false;
+	}
 
-	$wp_query->is_404 = false;
-	status_header( 200 );
+	// get displayed user's favorite activity IDs
+	$favs = bp_activity_get_user_favorites( bp_displayed_user_id() );
+	$fav_ids = implode( ',', (array) $favs );
 
-	include_once( 'feeds/bp-activity-favorites-feed.php' );
-	die;
+	// setup the feed
+	buddypress()->activity->feed = new BP_Activity_Feed( array(
+		'id'            => 'favorites',
+
+		/* translators: User activity favorites RSS title - "[Site Name] | [User Display Name] | Favorites" */
+		'title'         => sprintf( __( '%1$s | %2$s | Favorites', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+
+		'link'          => bp_displayed_user_domain() . bp_get_activity_slug() . '/favorites/',
+		'description'   => sprintf( __( "Activity feed of %s's favorites.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+		'activity_args' => 'include=' . $fav_ids
+	) );
 }
 add_action( 'bp_actions', 'bp_activity_action_favorites_feed' );
 
@@ -577,7 +618,7 @@ add_action( 'bp_actions', 'bp_activity_action_favorites_feed' );
  * Loads Akismet
  *
  * @global object $bp BuddyPress global settings
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_setup_akismet() {
 	global $bp;
@@ -591,11 +632,9 @@ function bp_activity_setup_akismet() {
 		return;
 
 	// Bail if BuddyPress Activity Akismet support has been disabled by another plugin
-	if ( ! apply_filters( 'bp_activity_use_akismet', true ) )
+	if ( ! apply_filters( 'bp_activity_use_akismet', bp_is_akismet_active() ) )
 		return;
 
 	// Instantiate Akismet for BuddyPress
 	$bp->activity->akismet = new BP_Akismet();
 }
-
-?>

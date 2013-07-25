@@ -1207,7 +1207,11 @@ function topic_last_poster( $id = 0 ) {
 
 function get_topic_last_poster( $id = 0 ) {
 	$topic = get_topic( get_topic_id( $id ) );
-	$user_display_name = get_post_author( $topic->topic_last_post_id );
+	if ( isset( $topic->topic_last_post_id ) && ( 1 == $topic->topic_last_post_id ) ) {
+		$user_display_name = $topic->topic_poster_name;
+	} else {
+		$user_display_name = get_post_author( $topic->topic_last_post_id );
+	}
 	return apply_filters( 'get_topic_last_poster', $user_display_name, $topic->topic_last_poster, $topic->topic_id ); // $topic->topic_last_poster = user ID
 }
 
@@ -1219,7 +1223,11 @@ function topic_author( $id = 0 ) {
 function get_topic_author( $id = 0 ) {
 	$topic = get_topic( get_topic_id( $id ) );
 	$first_post = bb_get_first_post( $topic );
-	$user_display_name = get_post_author( $first_post->post_id );
+	if ( !empty( $first_post ) ) {
+		$user_display_name = get_post_author( $first_post->post_id );
+	} else {
+		$user_display_name = $topic->topic_poster_name;
+	}
 	return apply_filters( 'get_topic_author', $user_display_name, $topic->topic_poster, $topic->topic_id ); // $topic->topic_poster = user ID
 }
 

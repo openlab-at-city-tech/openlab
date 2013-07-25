@@ -144,9 +144,9 @@ class BP_Messages_Thread {
 			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
 
 		if ( $type == 'unread' )
-			$type_sql = $wpdb->prepare( " AND r.unread_count != 0 " );
+			$type_sql = " AND r.unread_count != 0 ";
 		elseif ( $type == 'read' )
-			$type_sql = $wpdb->prepare( " AND r.unread_count = 0 " );
+			$type_sql = " AND r.unread_count = 0 ";
 
 		if ( !empty( $search_terms ) ) {
 			$search_terms = like_escape( $wpdb->escape( $search_terms ) );
@@ -199,11 +199,11 @@ class BP_Messages_Thread {
 			$exclude_sender = ' AND sender_only != 1';
 
 		if ( $type == 'unread' )
-			$type_sql = $wpdb->prepare( " AND unread_count != 0 " );
+			$type_sql = " AND unread_count != 0 ";
 		else if ( $type == 'read' )
-			$type_sql = $wpdb->prepare( " AND unread_count = 0 " );
+			$type_sql = " AND unread_count = 0 ";
 
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(thread_id) FROM {$bp->messages->table_name_recipients} WHERE user_id = %d AND is_deleted = 0$exclude_sender $type_sql", $user_id ) );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(thread_id) FROM {$bp->messages->table_name_recipients} WHERE user_id = %d AND is_deleted = 0{$exclude_sender} {$type_sql}", $user_id ) );
 	}
 
 	function user_is_sender( $thread_id ) {
@@ -282,7 +282,7 @@ class BP_Messages_Thread {
 
 		$bp_prefix = bp_core_get_table_prefix();
 		$errors    = false;
-		$threads   = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp_prefix}bp_messages_threads" ) );
+		$threads   = $wpdb->get_results( "SELECT * FROM {$bp_prefix}bp_messages_threads" );
 
 		// Nothing to update, just return true to remove the table
 		if ( empty( $threads ) )
@@ -357,13 +357,15 @@ class BP_Messages_Message {
 
 		// If we have no thread_id then this is the first message of a new thread.
 		if ( empty( $this->thread_id ) ) {
-			$this->thread_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT MAX(thread_id) FROM {$bp->messages->table_name_messages}" ) ) + 1;
+			$this->thread_id = (int) $wpdb->get_var( "SELECT MAX(thread_id) FROM {$bp->messages->table_name_messages}" ) + 1;
 			$new_thread = true;
 		}
 
 		// First insert the message into the messages table
 		if ( !$wpdb->query( $wpdb->prepare( "INSERT INTO {$bp->messages->table_name_messages} ( thread_id, sender_id, subject, message, date_sent ) VALUES ( %d, %d, %s, %s, %s )", $this->thread_id, $this->sender_id, $this->subject, $this->message, $this->date_sent ) ) )
 			return false;
+
+		$this->id = $wpdb->insert_id;
 
 		$recipient_ids = array();
 
@@ -382,7 +384,6 @@ class BP_Messages_Message {
 			$wpdb->query( $wpdb->prepare( "UPDATE {$bp->messages->table_name_recipients} SET unread_count = unread_count + 1, sender_only = 0, is_deleted = 0 WHERE thread_id = %d AND user_id != %d", $this->thread_id, $this->sender_id ) );
 		}
 
-		$this->id = $wpdb->insert_id;
 		messages_remove_callback_values();
 
 		do_action_ref_array( 'messages_message_after_save', array( &$this ) );
@@ -538,7 +539,7 @@ class BP_Messages_Notice {
 			$limit_sql = $wpdb->prepare( "LIMIT %d, %d", (int) ( ( $pag_page - 1 ) * $pag_num ), (int) $pag_num );
 		}
 
-		$notices = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->messages->table_name_notices} ORDER BY date_sent DESC {$limit_sql}" ) );
+		$notices = $wpdb->get_results( "SELECT * FROM {$bp->messages->table_name_notices} ORDER BY date_sent DESC {$limit_sql}" );
 
 		return $notices;
 	}
@@ -546,7 +547,7 @@ class BP_Messages_Notice {
 	function get_total_notice_count() {
 		global $wpdb, $bp;
 
-		$notice_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM " . $bp->messages->table_name_notices ) );
+		$notice_count = $wpdb->get_var( "SELECT COUNT(id) FROM " . $bp->messages->table_name_notices );
 
 		return $notice_count;
 	}
@@ -554,9 +555,8 @@ class BP_Messages_Notice {
 	function get_active() {
 		global $wpdb, $bp;
 
-		$notice_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_notices} WHERE is_active = 1" ) );
+		$notice_id = $wpdb->get_var( "SELECT id FROM {$bp->messages->table_name_notices} WHERE is_active = 1" );
+
 		return new BP_Messages_Notice( $notice_id );
 	}
 }
-
-?>

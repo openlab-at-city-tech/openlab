@@ -20,12 +20,12 @@ add_filter( 'bp_get_the_profile_field_edit_value',      'wp_filter_kses',       
 add_filter( 'bp_get_the_profile_field_description',     'wp_filter_kses',       1 );
 
 add_filter( 'bp_get_the_profile_field_value',           'wptexturize'        );
-add_filter( 'bp_get_the_profile_field_value',           'convert_smilies', 2 );
 add_filter( 'bp_get_the_profile_field_value',           'convert_chars'      );
 add_filter( 'bp_get_the_profile_field_value',           'wpautop'            );
 add_filter( 'bp_get_the_profile_field_value',           'force_balance_tags' );
 add_filter( 'bp_get_the_profile_field_value',           'make_clickable'     );
 add_filter( 'bp_get_the_profile_field_value',           'esc_html',        8 );
+add_filter( 'bp_get_the_profile_field_value',           'convert_smilies', 9 );
 
 add_filter( 'bp_get_the_profile_field_edit_value',      'force_balance_tags' );
 add_filter( 'bp_get_the_profile_field_edit_value',      'esc_html'           );
@@ -191,26 +191,41 @@ function xprofile_filter_link_profile_data( $field_value, $field_type = 'textbox
 	return $values;
 }
 
+/**
+ * Ensures that BP data appears in comments array
+ *
+ * This filter loops through the comments return by a normal WordPress request
+ * and swaps out user data with BP xprofile data, where available
+ *
+ * @param array $comments
+ * @param int $post_id
+ * @return array $comments
+ */
 function xprofile_filter_comments( $comments, $post_id ) {
+	// Locate comment authors with WP accounts
 	foreach( (array) $comments as $comment ) {
 		if ( $comment->user_id ) {
 			$user_ids[] = $comment->user_id;
 		}
 	}
 
-	if ( empty( $user_ids ) )
+	// If none are found, just return the comments array
+	if ( empty( $user_ids ) ) {
 		return $comments;
+	}
 
+	// Pull up the xprofile fullname of each commenter
 	if ( $fullnames = BP_XProfile_ProfileData::get_value_byid( 1, $user_ids ) ) {
 		foreach( (array) $fullnames as $user ) {
-			$users[$user->user_id] = trim($user->value);
+			$users[ $user->user_id ] = trim( stripslashes( $user->value ) );
 		}
 	}
 
+	// Loop through and match xprofile fullname with commenters
 	foreach( (array) $comments as $i => $comment ) {
-		if ( !empty( $comment->user_id ) ) {
-			if ( !empty( $users[$comment->user_id] ) ) {
-				$comments[$i]->comment_author = $users[$comment->user_id];
+		if ( ! empty( $comment->user_id ) ) {
+			if ( ! empty( $users[ $comment->user_id ] ) ) {
+				$comments[ $i ]->comment_author = $users[ $comment->user_id ];
 			}
 		}
 	}
@@ -219,6 +234,29 @@ function xprofile_filter_comments( $comments, $post_id ) {
 }
 add_filter( 'comments_array', 'xprofile_filter_comments', 10, 2 );
 
+/**
+ * Filter BP_User_Query::populate_extras to override each queries users fullname
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @global BuddyPress $bp
+ * @global WPDB $wpdb
+ * @param BP_User_Query $user_query
+ * @param string $user_ids_sql
+ */
+function bp_xprofile_filter_user_query_populate_extras( BP_User_Query $user_query, $user_ids_sql ) {
+	global $bp, $wpdb;
 
+	if ( bp_is_active( 'xprofile' ) ) {
+		$fullname_field_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
+		$user_id_names     = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, value as fullname FROM {$bp->profile->table_name_data} WHERE user_id IN ({$user_ids_sql}) AND field_id = %d", $fullname_field_id ) );
 
-?>
+		// Loop through names and override each user's fullname
+		foreach ( $user_id_names as $user ) {
+			if ( isset( $user_query->results[ $user->user_id ] ) ) {
+				$user_query->results[ $user->user_id ]->fullname = $user->fullname;
+			}
+		}
+	}
+}
+add_filter( 'bp_user_query_populate_extras', 'bp_xprofile_filter_user_query_populate_extras', 2, 2 );

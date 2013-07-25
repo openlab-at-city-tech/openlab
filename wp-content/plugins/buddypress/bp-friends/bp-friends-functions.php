@@ -65,10 +65,14 @@ function friends_remove_friend( $initiator_userid, $friend_userid ) {
 	// Remove the activity stream item for the user who canceled the friendship
 	friends_delete_activity( array( 'item_id' => $friendship_id, 'type' => 'friendship_accepted', 'user_id' => bp_displayed_user_id() ) );
 
+	// This hook is misleadingly named - the friendship is not yet deleted.
+	// This is your last chance to do something while the friendship exists
 	do_action( 'friends_friendship_deleted', $friendship_id, $initiator_userid, $friend_userid );
 
 	if ( $friendship->delete() ) {
 		friends_update_friend_totals( $initiator_userid, $friend_userid, 'remove' );
+
+		do_action( 'friends_friendship_post_delete', $initiator_userid, $friend_userid );
 
 		return true;
 	}
@@ -144,7 +148,7 @@ function friends_withdraw_friendship( $initiator_userid, $friend_userid ) {
 
 	$friendship_id = BP_Friends_Friendship::get_friendship_id( $initiator_userid, $friend_userid );
 	$friendship    = new BP_Friends_Friendship( $friendship_id, true, false );
-	
+
 	if ( !$friendship->is_confirmed && BP_Friends_Friendship::withdraw( $friendship_id ) ) {
 		// Remove the friend request notice
 		bp_core_delete_notifications_by_item_id( $friendship->friend_user_id, $friendship->initiator_user_id, $bp->friends->id, 'friendship_request' );
@@ -226,11 +230,11 @@ function friends_get_bulk_last_active( $friend_ids ) {
 
 /**
  * Get a list of friends that a user can invite into this group.
- * 
+ *
  * Excludes friends that are already in the group, and banned friends if the
  * user is not a group admin.
  *
- * @since 1.0
+ * @since BuddyPress (1.0)
  * @param int $user_id User ID whose friends to see can be invited
  * @param int $group_id Group to check possible invitations against
  * @return mixed False if no friends, array of users if friends
@@ -354,5 +358,3 @@ function friends_remove_data( $user_id ) {
 add_action( 'wpmu_delete_user',  'friends_remove_data' );
 add_action( 'delete_user',       'friends_remove_data' );
 add_action( 'bp_make_spam_user', 'friends_remove_data' );
-
-?>

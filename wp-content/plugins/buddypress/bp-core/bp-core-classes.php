@@ -1,6 +1,603 @@
 <?php
+
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
+
+/**
+ * BuddyPress User Query class
+ *
+ * Used for querying users in a BuddyPress context, in situations where
+ * WP_User_Query won't do the trick: Member directories, the Friends component,
+ * etc.
+ *
+ * Accepted parameters:
+ *   type	     - Determines sort order. Select from 'newest', 'active',
+ *                     'online', 'random', 'popular', 'alphabetical'
+ *   per_page        - Number of results to return
+ *   page            - Page offset (together with per_page)
+ *   user_id         - Pass a single numeric user id to limit results to
+ *                     friends of that user. Requires the Friends component
+ *   search_terms    - Terms to search by. Search happens across xprofile
+ *                     fields. Requires XProfile component
+ *   include         - An array or comma-separated list of user ids. Results
+ *                     will be limited to users in this list
+ *   exclude         - An array or comma-separated list of user ids. Results
+ *                     will not include any users in this list
+ *   user_ids        - An array or comma-separated list of user ids. When
+ *                     this parameter is passed, it will override all other
+ *                     parameters; BP User objects will be constructed using
+ *                     these IDs only
+ *   meta_key        - Limit results to users that have usermeta associated
+ *                     with this meta_key. Usually used with meta_value
+ *   meta_value      - When used with meta_key, limits results to users whose
+ *                     usermeta value associated with meta_key matches
+ *                     meta_value
+ *   populate_extras - Boolean. True if you want to fetch extra metadata about
+ *                     returned users, such as total group and friend counts
+ *   count_total     - Determines how BP_User_Query will do a count of total
+ *                     users matching the other filter criteria. Default value
+ *                     is 'count_query', which does a separate SELECT COUNT
+ *                     query to determine the total. 'sql_count_found_rows'
+ *                     uses SQL_COUNT_FOUND_ROWS and SELECT FOUND_ROWS(). Pass
+ *                     an empty string to skip the total user count query.
+ *
+ * @since BuddyPress (1.7)
+ */
+class BP_User_Query {
+
+	/** Variables *************************************************************/
+
+	/**
+	 * Unaltered params as passed to the constructor
+	 *
+	 * @since BuddyPress (1.8)
+	 * @var array
+	 */
+	public $query_vars_raw = array();
+
+	/**
+	 * Array of variables to query with
+	 *
+	 * @since BuddyPress (1.7)
+	 * @var array
+	 */
+	public $query_vars = array();
+
+	/**
+	 * List of found users and their respective data
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access public To allow components to manipulate them
+	 * @var array
+	 */
+	public $results = array();
+
+	/**
+	 * Total number of found users for the current query
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access public To allow components to manipulate it
+	 * @var int
+	 */
+	public $total_users = 0;
+
+	/**
+	 * List of found user ID's
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access public To allow components to manipulate it
+	 * @var array
+	 */
+	public $user_ids = array();
+
+	/**
+	 * SQL clauses for the user ID query
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access public To allow components to manipulate it
+	 * @var array()
+	 */
+	public $uid_clauses = array();
+
+	/**
+	 * SQL database column name to order by
+	 *
+	 * @since BuddyPress (1.7)
+	 * @var string
+	 */
+	public $uid_name = '';
+
+	/**
+	 * Standard response when the query should not return any rows.
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access protected
+	 * @var string
+	 */
+	protected $no_results = array( 'join' => '', 'where' => '0 = 1' );
+
+
+	/** Methods ***************************************************************/
+
+	/**
+	 * Constructor
+	 *
+	 * @since BuddyPress (1.7)
+	 *
+	 * @param string|array $query The query variables
+	 */
+	public function __construct( $query = null ) {
+
+		// Store the raw query vars for later access
+		$this->query_vars_raw = $query;
+
+		// Allow extending classes to register action/filter hooks
+		$this->setup_hooks();
+
+		if ( ! empty( $this->query_vars_raw ) ) {
+			$this->query_vars = wp_parse_args( $this->query_vars_raw, array(
+				'type'            => 'newest',
+				'per_page'        => 0,
+				'page'            => 1,
+				'user_id'         => 0,
+				'search_terms'    => false,
+				'include'         => false,
+				'exclude'         => false,
+				'user_ids'        => false,
+				'meta_key'        => false,
+				'meta_value'      => false,
+				'populate_extras' => true,
+				'count_total'     => 'count_query'
+			) );
+
+			// Plugins can use this filter to modify query args
+			// before the query is constructed
+			do_action_ref_array( 'bp_pre_user_query_construct', array( &$this ) );
+
+			// Get user ids
+			// If the user_ids param is present, we skip the query
+			if ( false !== $this->query_vars['user_ids'] ) {
+				$this->user_ids = wp_parse_id_list( $this->query_vars['user_ids'] );
+			} else {
+				$this->prepare_user_ids_query();
+				$this->do_user_ids_query();
+			}
+		}
+
+		// Bail if no user IDs were found
+		if ( empty( $this->user_ids ) ) {
+			return;
+		}
+
+		// Fetch additional data. First, using WP_User_Query
+		$this->do_wp_user_query();
+
+		// Get BuddyPress specific user data
+		$this->populate_extras();
+	}
+
+	/**
+	 * Allow extending classes to set up action/filter hooks
+	 *
+	 * When extending BP_User_Query, you may need to use some of its
+	 * internal hooks to modify the output. It's not convenient to call
+	 * add_action() or add_filter() in your class constructor, because
+	 * BP_User_Query::__construct() contains a fair amount of logic that
+	 * you may not want to override in your class. Define this method in
+	 * your own class if you need a place where your extending class can
+	 * add its hooks early in the query-building process. See
+	 * BP_Group_Member_Query::setup_hooks() for an example.
+	 *
+	 * @since BuddyPress (1.8)
+	 */
+	public function setup_hooks() {}
+
+	/**
+	 * Prepare the query for user_ids
+	 *
+	 * @since BuddyPress (1.7)
+	 */
+	public function prepare_user_ids_query() {
+		global $wpdb, $bp;
+
+		// Default query variables used here
+		$type         = '';
+		$per_page     = 0;
+		$page         = 1;
+		$user_id      = 0;
+		$include      = false;
+		$search_terms = false;
+		$exclude      = false;
+		$meta_key     = false;
+		$meta_value   = false;
+
+		extract( $this->query_vars );
+
+		// Setup the main SQL query container
+		$sql = array(
+			'select'  => '',
+			'where'   => array(),
+			'orderby' => '',
+			'order'   => '',
+			'limit'   => ''
+		);
+
+		/** TYPE **************************************************************/
+
+		// Determines the sort order, which means it also determines where the
+		// user IDs are drawn from (the SELECT and WHERE statements)
+		switch ( $type ) {
+
+			// 'online' query happens against the last_activity usermeta key
+			// Filter 'bp_user_query_online_interval' to modify the
+			// number of minutes used as an interval
+			case 'online' :
+				$this->uid_name = 'user_id';
+				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
+				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'last_activity' ) );
+				$sql['where'][] = $wpdb->prepare( "u.meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL %d MINUTE )", apply_filters( 'bp_user_query_online_interval', 15 ) );
+				$sql['orderby'] = "ORDER BY u.meta_value";
+				$sql['order']   = "DESC";
+
+				break;
+
+			// 'active', 'newest', and 'random' queries
+			// all happen against the last_activity usermeta key
+			case 'active' :
+			case 'newest' :
+			case 'random' :
+				$this->uid_name = 'user_id';
+				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
+				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'last_activity' ) );
+
+				if ( 'newest' == $type ) {
+					$sql['orderby'] = "ORDER BY u.user_id";
+					$sql['order'] = "DESC";
+				} else if ( 'random' == $type ) {
+					$sql['orderby'] = "ORDER BY rand()";
+				} else {
+					$sql['orderby'] = "ORDER BY u.meta_value";
+					$sql['order'] = "DESC";
+				}
+
+				break;
+
+			// 'popular' sorts by the 'total_friend_count' usermeta
+			case 'popular' :
+				$this->uid_name = 'user_id';
+				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
+				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'total_friend_count' ) );
+				$sql['orderby'] = "ORDER BY CONVERT(u.meta_value, SIGNED)";
+				$sql['order']   = "DESC";
+
+				break;
+
+			// 'alphabetical' sorts depend on the xprofile setup
+			case 'alphabetical' :
+
+				// We prefer to do alphabetical sorts against the display_name field
+				// of wp_users, because the table is smaller and better indexed. We
+				// can do so if xprofile sync is enabled, or if xprofile is inactive.
+				//
+				// @todo remove need for bp_is_active() check
+				if ( ! bp_disable_profile_sync() || ! bp_is_active( 'xprofile' ) ) {
+					$this->uid_name = 'ID';
+					$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->users} u";
+					$sql['orderby'] = "ORDER BY u.display_name";
+					$sql['order']   = "ASC";
+
+				// When profile sync is disabled, alphabetical sorts must happen against
+				// the xprofile table
+				} else {
+					$fullname_field_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
+
+					$this->uid_name = 'user_id';
+					$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$bp->profile->table_name_data} u";
+					$sql['where'][] = "u.field_id = {$fullname_field_id}";
+					$sql['orderby'] = "ORDER BY u.value";
+					$sql['order']   = "ASC";
+				}
+
+				break;
+
+			// Any other 'type' falls through
+			default :
+				$this->uid_name = 'ID';
+				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->users} u";
+
+				// In this case, we assume that a plugin is
+				// handling order, so we leave those clauses
+				// blank
+
+				break;
+		}
+
+		/** WHERE *************************************************************/
+
+		// 'include' - User ids to include in the results
+		$include     = false !== $include ? wp_parse_id_list( $include ) : array();
+		$include_ids = $this->get_include_ids( $include );
+		if ( ! empty( $include_ids ) ) {
+			$include_ids    = implode( ',', wp_parse_id_list( $include_ids ) );
+			$sql['where'][] = "u.{$this->uid_name} IN ({$include_ids})";
+		}
+
+		// 'exclude' - User ids to exclude from the results
+		if ( false !== $exclude ) {
+			$exclude        = wp_parse_id_list( $exclude );
+			$exclude_ids    = $wpdb->escape( implode( ',', (array) $exclude ) );
+			$sql['where'][] = "u.{$this->uid_name} NOT IN ({$exclude_ids})";
+		}
+
+		// 'user_id' - When a user id is passed, limit to the friends of the user
+		// @todo remove need for bp_is_active() check
+		if ( ! empty( $user_id ) && bp_is_active( 'friends' ) ) {
+			$friend_ids = friends_get_friend_user_ids( $user_id );
+			$friend_ids = implode( ',', wp_parse_id_list( $friend_ids ) );
+
+			if ( ! empty( $friend_ids ) ) {
+				$sql['where'][] = "u.{$this->uid_name} IN ({$friend_ids})";
+
+			// If the user has no friends, the query should always
+			// return no users
+			} else {
+				$sql['where'][] = $this->no_results['where'];
+			}
+		}
+
+		/** Search Terms ******************************************************/
+
+		// 'search_terms' searches the xprofile fields
+		// To avoid global joins, do a separate query
+		// @todo remove need for bp_is_active() check
+		if ( false !== $search_terms && bp_is_active( 'xprofile' ) ) {
+			$search_terms_clean = mysql_real_escape_string( mysql_real_escape_string( $search_terms ) );
+			$search_terms_clean = like_escape( $search_terms_clean );
+			$found_user_ids_query = "SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE '%" . $search_terms_clean . "%'";
+			$found_user_ids = $wpdb->get_col( $found_user_ids_query );
+
+			if ( ! empty( $found_user_ids ) ) {
+				$sql['where'][] = "u.{$this->uid_name} IN (" . implode( ',', wp_parse_id_list( $found_user_ids ) ) . ")";
+			} else {
+				$sql['where'][] = $this->no_results['where'];
+			}
+		}
+
+		// 'meta_key', 'meta_value' allow usermeta search
+		// To avoid global joins, do a separate query
+		if ( false !== $meta_key ) {
+			$meta_sql = $wpdb->prepare( "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = %s", $meta_key );
+
+			if ( false !== $meta_value ) {
+				$meta_sql .= $wpdb->prepare( " AND meta_value = %s", $meta_value );
+			}
+
+			$found_user_ids = $wpdb->get_col( $meta_sql );
+
+			if ( ! empty( $found_user_ids ) ) {
+				$sql['where'][] = "u.{$this->uid_name} IN (" . implode( ',', wp_parse_id_list( $found_user_ids ) ) . ")";
+			}
+		}
+
+		// 'per_page', 'page' - handles LIMIT
+		if ( !empty( $per_page ) && !empty( $page ) ) {
+			$sql['limit'] = $wpdb->prepare( "LIMIT %d, %d", intval( ( $page - 1 ) * $per_page ), intval( $per_page ) );
+		} else {
+			$sql['limit'] = '';
+		}
+
+		// Assemble the query chunks
+		$this->uid_clauses['select']  = $sql['select'];
+		$this->uid_clauses['where']   = ! empty( $sql['where'] ) ? 'WHERE ' . implode( ' AND ', $sql['where'] ) : '';
+		$this->uid_clauses['orderby'] = $sql['orderby'];
+		$this->uid_clauses['order']   = $sql['order'];
+		$this->uid_clauses['limit']   = $sql['limit'];
+
+		do_action_ref_array( 'bp_pre_user_query', array( &$this ) );
+	}
+
+	/**
+	 * Perform a database query to specifically get only user IDs, using
+	 * existing query variables set previously in the constructor.
+	 *
+	 * Also used to quickly perform user total counts.
+	 *
+	 * @since BuddyPress (1.7)
+	 */
+	public function do_user_ids_query() {
+		global $wpdb;
+
+		// If counting using SQL_CALC_FOUND_ROWS, set it up here
+		if ( 'sql_calc_found_rows' == $this->query_vars['count_total'] ) {
+			$this->uid_clauses['select'] = str_replace( 'SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $this->uid_clauses['select'] );
+		}
+
+		// Get the specific user ids
+		$this->user_ids = $wpdb->get_col( "{$this->uid_clauses['select']} {$this->uid_clauses['where']} {$this->uid_clauses['orderby']} {$this->uid_clauses['order']} {$this->uid_clauses['limit']}" );
+
+		// Get the total user count
+		if ( 'sql_calc_found_rows' == $this->query_vars['count_total'] ) {
+			$this->total_users = $wpdb->get_var( apply_filters( 'bp_found_user_query', "SELECT FOUND_ROWS()", $this ) );
+		} elseif ( 'count_query' == $this->query_vars['count_total'] ) {
+			$count_select      = preg_replace( '/^SELECT.*?FROM (\S+) u/', "SELECT COUNT(DISTINCT u.{$this->uid_name}) FROM $1 u", $this->uid_clauses['select'] );
+			$this->total_users = $wpdb->get_var( apply_filters( 'bp_found_user_query', "{$count_select} {$this->uid_clauses['where']}", $this ) );
+		}
+	}
+
+	/**
+	 * Perform a database query using the WP_User_Query() object, using existing
+	 * fields, variables, and user ID's set previously in this class.
+	 *
+	 * @since BuddyPress (1.7)
+	 */
+	public function do_wp_user_query() {
+		$wp_user_query = new WP_User_Query( apply_filters( 'bp_wp_user_query_args', array(
+
+			// Relevant
+			'fields'      => array( 'ID', 'user_registered', 'user_login', 'user_nicename', 'display_name', 'user_email' ),
+			'include'     => $this->user_ids,
+
+			// Overrides
+			'blog_id'     => 0,    // BP does not require blog roles
+			'count_total' => false // We already have a count
+
+		), $this ) );
+
+		// Reindex for easier matching
+		$r = array();
+		foreach ( $wp_user_query->results as $u ) {
+			$r[ $u->ID ] = $u;
+		}
+
+		// Match up to the user ids from the main query
+		foreach ( $this->user_ids as $uid ) {
+			if ( isset( $r[ $uid ] ) ) {
+				$this->results[ $uid ] = $r[ $uid ];
+
+				// The BP template functions expect an 'id'
+				// (as opposed to 'ID') property
+				$this->results[ $uid ]->id = $uid;
+			}
+		}
+	}
+
+	/**
+	 * Fetches the ids of users to put in the IN clause of the main query
+	 *
+	 * By default, returns the value passed to it
+	 * ($this->query_vars['include']). Having this abstracted into a
+	 * standalone method means that extending classes can override the
+	 * logic, parsing together their own user_id limits with the 'include'
+	 * ids passed to the class constructor. See BP_Group_Member_Query for
+	 * an example.
+	 *
+	 * @since BuddyPress (1.8)
+	 * @param array Sanitized array of user ids, as passed to the 'include'
+	 *   parameter of the class constructor
+	 * @return array The list of users to which the main query should be
+	 *   limited
+	 */
+	public function get_include_ids( $include = array() ) {
+		return $include;
+	}
+
+	/**
+	 * Perform a database query to populate any extra metadata we might need.
+	 * Different components will hook into the 'bp_user_query_populate_extras'
+	 * action to loop in the things they want.
+	 *
+	 * @since BuddyPress (1.7)
+	 *
+	 * @global BuddyPress $bp
+	 * @global WPDB $wpdb
+	 * @return
+	 */
+	public function populate_extras() {
+		global $wpdb;
+
+		// Bail if no users
+		if ( empty( $this->user_ids ) || empty( $this->results ) ) {
+			return;
+		}
+
+		// Bail if the populate_extras flag is set to false
+		// In the case of the 'popular' sort type, we force
+		// populate_extras to true, because we need the friend counts
+		if ( 'popular' == $this->query_vars['type'] ) {
+			$this->query_vars['populate_extras'] = 1;
+		}
+
+		if ( ! (bool) $this->query_vars['populate_extras'] ) {
+			return;
+		}
+
+		// Turn user ID's into a query-usable, comma separated value
+		$user_ids_sql = implode( ',', wp_parse_id_list( $this->user_ids ) );
+
+		/**
+		 * Use this action to independently populate your own custom extras.
+		 *
+		 * Note that anything you add here should query using $user_ids_sql, to
+		 * avoid running multiple queries per user in the loop.
+		 *
+		 * Two BuddyPress components currently do this:
+		 * - XProfile: To override display names
+		 * - Friends:  To set whether or not a user is the current users friend
+		 *
+		 * @see bp_xprofile_filter_user_query_populate_extras()
+		 * @see bp_friends_filter_user_query_populate_extras()
+		 */
+		do_action_ref_array( 'bp_user_query_populate_extras', array( $this, $user_ids_sql ) );
+
+		// Fetch usermeta data
+		// We want the three following pieces of info from usermeta:
+		// - friend count
+		// - last activity
+		// - latest update
+		$total_friend_count_key = bp_get_user_meta_key( 'total_friend_count' );
+		$last_activity_key      = bp_get_user_meta_key( 'last_activity'      );
+		$bp_latest_update_key   = bp_get_user_meta_key( 'bp_latest_update'   );
+
+		// total_friend_count must be set for each user, even if its
+		// value is 0
+		foreach ( $this->results as $uindex => $user ) {
+			$this->results[$uindex]->total_friend_count = 0;
+		}
+
+		// Create, prepare, and run the seperate usermeta query
+		$user_metas = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_key, meta_value FROM {$wpdb->usermeta} WHERE meta_key IN (%s,%s,%s) AND user_id IN ({$user_ids_sql})", $total_friend_count_key, $last_activity_key, $bp_latest_update_key ) );
+
+		// The $members_template global expects the index key to be different
+		// from the meta_key in some cases, so we rejig things here.
+		foreach ( $user_metas as $user_meta ) {
+			switch ( $user_meta->meta_key ) {
+				case $total_friend_count_key :
+					$key = 'total_friend_count';
+					break;
+
+				case $last_activity_key :
+					$key = 'last_activity';
+					break;
+
+				case $bp_latest_update_key :
+					$key = 'latest_update';
+					break;
+			}
+
+			if ( isset( $this->results[ $user_meta->user_id ] ) ) {
+				$this->results[ $user_meta->user_id ]->{$key} = $user_meta->meta_value;
+			}
+		}
+
+		// When meta_key or meta_value have been passed to the query,
+		// fetch the resulting values for use in the template functions
+		if ( ! empty( $this->query_vars['meta_key'] ) ) {
+			$meta_sql = array(
+				'select' => "SELECT user_id, meta_key, meta_value",
+				'from'   => "FROM $wpdb->usermeta",
+				'where'  => $wpdb->prepare( "WHERE meta_key = %s", $this->query_vars['meta_key'] )
+			);
+
+			if ( false !== $this->query_vars['meta_value'] ) {
+				$meta_sql['where'] .= $wpdb->prepare( " AND meta_value = %s", $this->query_vars['meta_value'] );
+			}
+
+			$metas = $wpdb->get_results( "{$meta_sql['select']} {$meta_sql['from']} {$meta_sql['where']}" );
+
+			if ( ! empty( $metas ) ) {
+				foreach ( $metas as $meta ) {
+					if ( isset( $this->results[ $meta->user_id ] ) ) {
+						$this->results[ $meta->user_id ]->meta_key = $meta->meta_key;
+
+						if ( ! empty( $meta->meta_value ) ) {
+							$this->results[ $meta->user_id ]->meta_value = $meta->meta_value;
+						}
+					}
+				}
+			}
+		}
+	}
+}
 
 /**
  * BP_Core_User class can be used by any component. It will fetch useful
@@ -201,6 +798,8 @@ class BP_Core_User {
 	function get_users( $type, $limit = 0, $page = 1, $user_id = 0, $include = false, $search_terms = false, $populate_extras = true, $exclude = false, $meta_key = false, $meta_value = false ) {
 		global $wpdb, $bp;
 
+		_deprecated_function( __METHOD__, '1.7', 'BP_User_Query' );
+
 		$sql = array();
 
 		$sql['select_main'] = "SELECT DISTINCT u.ID as id, u.user_registered, u.user_nicename, u.user_login, u.display_name, u.user_email";
@@ -260,6 +859,7 @@ class BP_Core_User {
 		}
 
 		if ( !empty( $exclude ) ) {
+			$exclude              = implode( ',', wp_parse_id_list( $exclude ) );
 			$sql['where_exclude'] = "AND u.ID NOT IN ({$exclude})";
 		}
 
@@ -269,20 +869,13 @@ class BP_Core_User {
 			$sql['where_users'] = "AND 0 = 1";
 		} else {
 			if ( !empty( $include ) ) {
-				if ( is_array( $include ) ) {
-					$uids = $wpdb->escape( implode( ',', (array) $include ) );
-				} else {
-					$uids = $wpdb->escape( $include );
-				}
-
-				if ( !empty( $uids ) ) {
-					$sql['where_users'] = "AND u.ID IN ({$uids})";
-				}
+				$include = implode( ',',  wp_parse_id_list( $include ) );
+				$sql['where_users'] = "AND u.ID IN ({$include})";
 			} elseif ( !empty( $user_id ) && bp_is_active( 'friends' ) ) {
 				$friend_ids = friends_get_friend_user_ids( $user_id );
-				$friend_ids = $wpdb->escape( implode( ',', (array) $friend_ids ) );
 
 				if ( !empty( $friend_ids ) ) {
+					$friend_ids = implode( ',', wp_parse_id_list( $friend_ids ) );
 					$sql['where_friends'] = "AND u.ID IN ({$friend_ids})";
 
 				// User has no friends, return false since there will be no users to fetch.
@@ -293,7 +886,7 @@ class BP_Core_User {
 		}
 
 		if ( !empty( $search_terms ) && bp_is_active( 'xprofile' ) ) {
-			$search_terms             = like_escape( $wpdb->escape( $search_terms ) );
+			$search_terms             = esc_sql( like_escape( $search_terms ) );
 			$sql['where_searchterms'] = "AND spd.value LIKE '%%$search_terms%%'";
 		}
 
@@ -368,8 +961,6 @@ class BP_Core_User {
 				$user_ids[] = $user->id;
 			}
 
-			$user_ids = $wpdb->escape( join( ',', (array) $user_ids ) );
-
 			// Add additional data to the returned results
 			$paged_users = BP_Core_User::get_user_extras( $paged_users, $user_ids, $type );
 		}
@@ -410,13 +1001,18 @@ class BP_Core_User {
 			}
 		}
 
-		$letter     = like_escape( $wpdb->escape( $letter ) );
+		$letter     = esc_sql( like_escape( $letter ) );
 		$status_sql = bp_core_get_status_sql( 'u.' );
 
-		$exclude_sql = ( !empty( $exclude ) ) ? " AND u.ID NOT IN ({$exclude})" : "";
+		if ( !empty( $exclude ) ) {
+			$exclude     = implode( ',', wp_parse_id_list( $r['exclude'] ) );
+			$exclude_sql = " AND u.id NOT IN ({$exclude})";
+		} else {
+			$exclude_sql = '';
+		}
 
-		$total_users_sql = apply_filters( 'bp_core_users_by_letter_count_sql', $wpdb->prepare( "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id LEFT JOIN {$bp->profile->table_name_fields} pf ON pd.field_id = pf.id WHERE {$status_sql} AND pf.name = %s {$exclude_sql} AND pd.value LIKE '$letter%%'  ORDER BY pd.value ASC", bp_xprofile_fullname_field_name() ), $letter );
-		$paged_users_sql = apply_filters( 'bp_core_users_by_letter_sql', $wpdb->prepare( "SELECT DISTINCT u.ID as id, u.user_registered, u.user_nicename, u.user_login, u.user_email FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id LEFT JOIN {$bp->profile->table_name_fields} pf ON pd.field_id = pf.id WHERE {$status_sql} AND pf.name = %s {$exclude_sql} AND pd.value LIKE '$letter%%' ORDER BY pd.value ASC{$pag_sql}", bp_xprofile_fullname_field_name() ), $letter, $pag_sql );
+		$total_users_sql = apply_filters( 'bp_core_users_by_letter_count_sql', $wpdb->prepare( "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id LEFT JOIN {$bp->profile->table_name_fields} pf ON pd.field_id = pf.id WHERE {$status_sql} AND pf.name = %s {$exclude_sql} AND pd.value LIKE '{$letter}%%'  ORDER BY pd.value ASC", bp_xprofile_fullname_field_name() ) );
+		$paged_users_sql = apply_filters( 'bp_core_users_by_letter_sql',       $wpdb->prepare( "SELECT DISTINCT u.ID as id, u.user_registered, u.user_nicename, u.user_login, u.user_email FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id LEFT JOIN {$bp->profile->table_name_fields} pf ON pd.field_id = pf.id WHERE {$status_sql} AND pf.name = %s {$exclude_sql} AND pd.value LIKE '{$letter}%%' ORDER BY pd.value ASC{$pag_sql}", bp_xprofile_fullname_field_name() ) );
 
 		$total_users = $wpdb->get_var( $total_users_sql );
 		$paged_users = $wpdb->get_results( $paged_users_sql );
@@ -430,9 +1026,7 @@ class BP_Core_User {
 		 */
 		$user_ids = array();
 		foreach ( (array) $paged_users as $user )
-			$user_ids[] = $user->id;
-
-		$user_ids = $wpdb->escape( join( ',', (array) $user_ids ) );
+			$user_ids[] = (int) $user->id;
 
 		// Add additional data to the returned results
 		if ( $populate_extras ) {
@@ -460,12 +1054,11 @@ class BP_Core_User {
 		if ( $limit && $page )
 			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
 
-		// @todo remove? $user_sql is not used here
-		$user_sql   = " AND user_id IN ( " . $wpdb->escape( $user_ids ) . " ) ";
+		$user_ids   = implode( ',', wp_parse_id_list( $user_ids ) );
 		$status_sql = bp_core_get_status_sql();
 
-		$total_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ( " . $wpdb->escape( $user_ids ) . " ) " ), $wpdb->escape( $user_ids ) );
-		$paged_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', $wpdb->prepare( "SELECT DISTINCT ID as id, user_registered, user_nicename, user_login, user_email FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ( " . $wpdb->escape( $user_ids ) . " ) {$pag_sql}" ), $wpdb->escape( $user_ids ) );
+		$total_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT COUNT(DISTINCT ID) FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids})" );
+		$paged_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT DISTINCT ID as id, user_registered, user_nicename, user_login, user_email FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids}) {$pag_sql}" );
 
 		$total_users = $wpdb->get_var( $total_users_sql );
 		$paged_users = $wpdb->get_results( $paged_users_sql );
@@ -504,11 +1097,11 @@ class BP_Core_User {
 		$user_ids = array();
 		$pag_sql  = $limit && $page ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * intval( $limit ) ), intval( $limit ) ) : '';
 
-		$search_terms = like_escape( $wpdb->escape( $search_terms ) );
+		$search_terms = esc_sql( like_escape( $search_terms ) );
 		$status_sql   = bp_core_get_status_sql( 'u.' );
 
-		$total_users_sql = apply_filters( 'bp_core_search_users_count_sql', "SELECT COUNT(DISTINCT u.ID) as id FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id WHERE {$status_sql} AND pd.value LIKE '%%$search_terms%%' ORDER BY pd.value ASC", $search_terms );
-		$paged_users_sql = apply_filters( 'bp_core_search_users_sql', "SELECT DISTINCT u.ID as id, u.user_registered, u.user_nicename, u.user_login, u.user_email FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id WHERE {$status_sql} AND pd.value LIKE '%%$search_terms%%' ORDER BY pd.value ASC{$pag_sql}", $search_terms, $pag_sql );
+		$total_users_sql = apply_filters( 'bp_core_search_users_count_sql', "SELECT COUNT(DISTINCT u.ID) as id FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id WHERE {$status_sql} AND pd.value LIKE '%%{$search_terms}%%' ORDER BY pd.value ASC", $search_terms );
+		$paged_users_sql = apply_filters( 'bp_core_search_users_sql',       "SELECT DISTINCT u.ID as id, u.user_registered, u.user_nicename, u.user_login, u.user_email FROM {$wpdb->users} u LEFT JOIN {$bp->profile->table_name_data} pd ON u.ID = pd.user_id WHERE {$status_sql} AND pd.value LIKE '%%{$search_terms}%%' ORDER BY pd.value ASC{$pag_sql}", $search_terms, $pag_sql );
 
 		$total_users = $wpdb->get_var( $total_users_sql );
 		$paged_users = $wpdb->get_results( $paged_users_sql );
@@ -519,8 +1112,6 @@ class BP_Core_User {
 		 */
 		foreach ( (array) $paged_users as $user )
 			$user_ids[] = $user->id;
-
-		$user_ids = $wpdb->escape( join( ',', (array) $user_ids ) );
 
 		// Add additional data to the returned results
 		if ( $populate_extras )
@@ -547,6 +1138,9 @@ class BP_Core_User {
 
 		if ( empty( $user_ids ) )
 			return $paged_users;
+
+		// Sanitize user IDs
+		$user_ids = implode( ',', wp_parse_id_list( $user_ids ) );
 
 		// Fetch the user's full name
 		if ( bp_is_active( 'xprofile' ) && 'alphabetical' != $type ) {
@@ -625,7 +1219,7 @@ class BP_Core_User {
 	function get_core_userdata( $user_id ) {
 		global $wpdb;
 
-		if ( !$user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id ) ) )
+		if ( !$user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->users} WHERE ID = %d LIMIT 1", $user_id ) ) )
 			return false;
 
 		return $user;
@@ -775,14 +1369,14 @@ class BP_Core_Notification {
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 * @global wpdb $wpdb WordPress database object
 	 * @param integer $user_id User ID
-	 * @param str $status 'is_new' or 'all'
+	 * @param string $status 'is_new' or 'all'
 	 * @return array Associative array
 	 * @static
 	 */
 	function get_all_for_user( $user_id, $status = 'is_new' ) {
 		global $bp, $wpdb;
 
-		$is_new = 'is_new' == $status ? ' AND is_new = 1 ' : '';
+		$is_new = ( 'is_new' == $status ) ? ' AND is_new = 1 ' : '';
 
  		return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->core->table_name_notifications} WHERE user_id = %d {$is_new}", $user_id ) );
 	}
@@ -872,42 +1466,57 @@ class BP_Core_Notification {
  *
  * API to create BuddyPress buttons
  *
+ * component: Which component this button is for
+ * must_be_logged_in: Button only appears for logged in users
+ * block_self: Button will not appear when viewing your own profile.
+ * wrapper: div|span|p|li|false for no wrapper
+ * wrapper_id: The DOM ID of the button wrapper
+ * wrapper_class: The DOM class of the button wrapper
+ * link_href: The destination link of the button
+ * link_title: Title of the button
+ * link_id: The DOM ID of the button
+ * link_class: The DOM class of the button
+ * link_rel: The DOM rel of the button
+ * link_text: The text of the button
+ * contents: The contents of the button
+ *
  * @package BuddyPress Core
- * @since 1.2.6
+ * @since BuddyPress (1.2.6)
  */
 class BP_Button {
-	// Button properties
+
+	/** Button properties *****************************************************/
 
 	/**
 	 * The button ID
 	 *
 	 * @var integer
 	 */
-	var $id;
+	public $id = '';
 
 	/**
 	 * The component name that button belongs to.
 	 *
 	 * @var string
 	 */
-	var $component;
+	public $component = 'core';
 
 	/**
 	 * Does the user need to be logged in to see this button?
 	 *
 	 * @var boolean
 	 */
-	var $must_be_logged_in;
+	public $must_be_logged_in = true;
 
 	/**
-	 * True or false if the button should not be displayed while viewing your own profile.
+	 * True or false if the button should not be displayed while viewing your
+	 * own profile.
 	 *
 	 * @var boolean
 	 */
-	var $block_self;
+	public $block_self = true;
 
-
-	// Wrapper
+	/** Wrapper ***************************************************************/
 
 	/**
 	 * What type of DOM element to use for a wrapper.
@@ -915,158 +1524,129 @@ class BP_Button {
 	 *
 	 * @var mixed div|span|p|li, or false for no wrapper
 	 */
-	var $wrapper;
+	public $wrapper = 'div';
 
 	/**
 	 * The DOM class of the button wrapper
 	 *
 	 * @var string
 	 */
-	var $wrapper_class;
+	public $wrapper_class = '';
 
 	/**
 	 * The DOM ID of the button wrapper
 	 *
 	 * @var string
 	 */
-	var $wrapper_id;
+	public $wrapper_id = '';
 
-
-	// Button
+	/** Button ****************************************************************/
 
 	/**
 	 * The destination link of the button
 	 *
 	 * @var string
 	 */
-	var $link_href;
+	public $link_href = '';
 
 	/**
 	 * The DOM class of the button link
 	 *
 	 * @var string
 	 */
-	var $link_class;
+	public $link_class = '';
 
 	/**
 	 * The DOM ID of the button link
 	 *
 	 * @var string
 	 */
-	var $link_id;
+	public $link_id = '';
 
 	/**
 	 * The DOM rel value of the button link
 	 *
 	 * @var string
 	 */
-	var $link_rel;
+	public $link_rel = '';
 
 	/**
 	 * Title of the button link
 	 *
 	 * @var string
 	 */
-	var $link_title;
+	public $link_title = '';
 
 	/**
 	 * The contents of the button link
 	 *
 	 * @var string
 	 */
-	var $link_text;
+	public $link_text = '';
 
+	/** HTML result ***********************************************************/
 
-	// HTML result
+	public $contents = '';
 
-	var $contents;
+	/** Methods ***************************************************************/
 
 	/**
-	 * bp_button()
+	 * Builds the button based on class parameters:
 	 *
-	 * Builds the button based on passed parameters:
-	 *
-	 * component: Which component this button is for
-	 * must_be_logged_in: Button only appears for logged in users
-	 * block_self: Button will not appear when viewing your own profile.
-	 * wrapper: div|span|p|li|false for no wrapper
-	 * wrapper_id: The DOM ID of the button wrapper
-	 * wrapper_class: The DOM class of the button wrapper
-	 * link_href: The destination link of the button
-	 * link_title: Title of the button
-	 * link_id: The DOM ID of the button
-	 * link_class: The DOM class of the button
-	 * link_rel: The DOM rel of the button
-	 * link_text: The contents of the button
+	 * @since BuddyPress (1.2.6)
 	 *
 	 * @param array $args
 	 * @return bool False if not allowed
 	 */
-	function __construct( $args = '' ) {
+	public function __construct( $args = '' ) {
 
-		// Default arguments
-		$defaults = array(
-			'id'                => '',
-			'component'         => 'core',
-			'must_be_logged_in' => true,
-			'block_self'        => true,
-
-			'wrapper'           => 'div',
-			'wrapper_id'        => '',
-			'wrapper_class'     => '',
-
-			'link_href'         => '',
-			'link_title'        => '',
-			'link_id'           => '',
-			'link_class'        => '',
-			'link_rel'          => '',
-			'link_text'         => '',
-		);
-
-		$r = wp_parse_args( $args, $defaults );
-		extract( $r, EXTR_SKIP );
+		$r = wp_parse_args( $args, get_class_vars( __CLASS__ ) );
 
 		// Required button properties
-		$this->id                = $id;
-		$this->component         = $component;
-		$this->must_be_logged_in = (bool)$must_be_logged_in;
-		$this->block_self        = (bool)$block_self;
-		$this->wrapper           = $wrapper;
+		$this->id                = $r['id'];
+		$this->component         = $r['component'];
+		$this->must_be_logged_in = (bool) $r['must_be_logged_in'];
+		$this->block_self        = (bool) $r['block_self'];
+		$this->wrapper           = $r['wrapper'];
 
 		// $id and $component are required
-		if ( empty( $id ) || empty( $component ) )
+		if ( empty( $r['id'] ) || empty( $r['component'] ) )
 			return false;
 
 		// No button if component is not active
-		if ( !bp_is_active( $this->component ) )
+		if ( ! bp_is_active( $this->component ) )
 			return false;
 
 		// No button for guests if must be logged in
-		if ( true == $this->must_be_logged_in && !is_user_logged_in() )
+		if ( true == $this->must_be_logged_in && ! is_user_logged_in() )
 			return false;
 
 		// No button if viewing your own profile
 		if ( true == $this->block_self && bp_is_my_profile() )
 			return false;
 
+		// No button if you are the current user in a loop
+		if ( true === $this->block_self && is_user_logged_in() && bp_loggedin_user_id() === bp_get_member_user_id() )
+			return false;
+
 		// Wrapper properties
 		if ( false !== $this->wrapper ) {
 
 			// Wrapper ID
-			if ( !empty( $wrapper_id ) ) {
-				$this->wrapper_id    = ' id="' . $wrapper_id . '"';
+			if ( !empty( $r['wrapper_id'] ) ) {
+				$this->wrapper_id    = ' id="' . $r['wrapper_id'] . '"';
 			}
 
 			// Wrapper class
-			if ( !empty( $wrapper_class ) ) {
-				$this->wrapper_class = ' class="generic-button ' . $wrapper_class . '"';
+			if ( !empty( $r['wrapper_class'] ) ) {
+				$this->wrapper_class = ' class="generic-button ' . $r['wrapper_class'] . '"';
 			} else {
 				$this->wrapper_class = ' class="generic-button"';
 			}
 
 			// Set before and after
-			$before = '<' . $wrapper . $this->wrapper_class . $this->wrapper_id . '>';
-			$after  = '</' . $wrapper . '>';
+			$before = '<' . $r['wrapper'] . $this->wrapper_class . $this->wrapper_id . '>';
+			$after  = '</' . $r['wrapper'] . '>';
 
 		// No wrapper
 		} else {
@@ -1074,48 +1654,37 @@ class BP_Button {
 		}
 
 		// Link properties
-		if ( !empty( $link_id ) )
-			$this->link_id    = ' id="' . $link_id . '"';
-
-		if ( !empty( $link_href ) )
-			$this->link_href  = ' href="' . $link_href . '"';
-
-		if ( !empty( $link_title ) )
-			$this->link_title = ' title="' . $link_title . '"';
-
-		if ( !empty( $link_rel ) )
-			$this->link_rel   = ' rel="' . $link_rel . '"';
-
-		if ( !empty( $link_class ) )
-			$this->link_class = ' class="' . $link_class . '"';
-
-		if ( !empty( $link_text ) )
-			$this->link_text  = $link_text;
+		if ( !empty( $r['link_id']    ) ) $this->link_id    = ' id="' .    $r['link_id']    . '"';
+		if ( !empty( $r['link_href']  ) ) $this->link_href  = ' href="' .  $r['link_href']  . '"';
+		if ( !empty( $r['link_title'] ) ) $this->link_title = ' title="' . $r['link_title'] . '"';
+		if ( !empty( $r['link_rel']   ) ) $this->link_rel   = ' rel="' .   $r['link_rel']   . '"';
+		if ( !empty( $r['link_class'] ) ) $this->link_class = ' class="' . $r['link_class'] . '"';
+		if ( !empty( $r['link_text']  ) ) $this->link_text  =              $r['link_text'];
 
 		// Build the button
 		$this->contents = $before . '<a'. $this->link_href . $this->link_title . $this->link_id . $this->link_rel . $this->link_class . '>' . $this->link_text . '</a>' . $after;
 
 		// Allow button to be manipulated externally
-		$this->contents = apply_filters( 'bp_button_' . $component . '_' . $id, $this->contents, $this, $before, $after );
+		$this->contents = apply_filters( 'bp_button_' . $this->component . '_' . $this->id, $this->contents, $this, $before, $after );
 	}
 
 	/**
-	 * contents()
-	 *
 	 * Return contents of button
+	 *
+	 * @since BuddyPress (1.2.6)
 	 *
 	 * @return string
 	 */
-	function contents() {
+	public function contents() {
 		return $this->contents;
 	}
 
 	/**
-	 * display()
-	 *
 	 * Output contents of button
+	 *
+	 * @since BuddyPress (1.2.6)
 	 */
-	function display() {
+	public function display() {
 		if ( !empty( $this->contents ) )
 			echo $this->contents;
 	}
@@ -1285,4 +1854,154 @@ class BP_Embed extends WP_Embed {
 	}
 }
 
-?>
+/**
+ * Create HTML list of BP nav items
+ *
+ * @since BuddyPress (1.7)
+ */
+class BP_Walker_Nav_Menu extends Walker_Nav_Menu {
+	/**
+	 * @since BuddyPress (1.7)
+	 * @var array
+	 */
+	var $db_fields = array( 'id' => 'css_id', 'parent' => 'parent' );
+
+	/**
+	 * @since BuddyPress (1.7)
+	 * @var string
+	 */
+	var $tree_type = array();
+
+	/**
+	 * Display array of elements hierarchically.
+	 *
+	 * This method is almost identical to the version in {@link Walker::walk()}. The only change is on one line
+	 * which has been commented. An IF was comparing 0 to a non-empty string which was preventing child elements
+	 * being grouped under their parent menu element.
+	 *
+	 * This caused a problem for BuddyPress because our primary/secondary navigations doesn't have a unique numerical
+	 * ID that describes a hierarchy (we use a slug). Obviously, WordPress Menus use Posts, and those have ID/post_parent.
+	 *
+	 * @param array $elements
+	 * @param int $max_depth
+	 * @return string
+	 * @see Walker::walk()
+	 * @since BuddyPress (1.7)
+	 */
+	function walk( $elements, $max_depth ) {
+		$args   = array_slice( func_get_args(), 2 );
+		$output = '';
+
+		if ( $max_depth < -1 ) // invalid parameter
+			return $output;
+
+		if ( empty( $elements ) ) // nothing to walk
+			return $output;
+
+		$id_field     = $this->db_fields['id'];
+		$parent_field = $this->db_fields['parent'];
+
+		// flat display
+		if ( -1 == $max_depth ) {
+
+			$empty_array = array();
+			foreach ( $elements as $e )
+				$this->display_element( $e, $empty_array, 1, 0, $args, $output );
+
+			return $output;
+		}
+
+		/*
+		 * need to display in hierarchical order
+		 * separate elements into two buckets: top level and children elements
+		 * children_elements is two dimensional array, eg.
+		 * children_elements[10][] contains all sub-elements whose parent is 10.
+		 */
+		$top_level_elements = array();
+		$children_elements  = array();
+
+		foreach ( $elements as $e ) {
+			// BuddyPress: changed '==' to '==='. This is the only change from version in Walker::walk().
+			if ( 0 === $e->$parent_field )
+				$top_level_elements[] = $e;
+			else
+				$children_elements[$e->$parent_field][] = $e;
+		}
+
+		/*
+		 * when none of the elements is top level
+		 * assume the first one must be root of the sub elements
+		 */
+		if ( empty( $top_level_elements ) ) {
+
+			$first              = array_slice( $elements, 0, 1 );
+			$root               = $first[0];
+			$top_level_elements = array();
+			$children_elements  = array();
+
+			foreach ( $elements as $e ) {
+				if ( $root->$parent_field == $e->$parent_field )
+					$top_level_elements[] = $e;
+				else
+					$children_elements[$e->$parent_field][] = $e;
+			}
+		}
+
+		foreach ( $top_level_elements as $e )
+			$this->display_element( $e, $children_elements, $max_depth, 0, $args, $output );
+
+		/*
+		 * if we are displaying all levels, and remaining children_elements is not empty,
+		 * then we got orphans, which should be displayed regardless
+		 */
+		if ( ( $max_depth == 0 ) && count( $children_elements ) > 0 ) {
+			$empty_array = array();
+
+			foreach ( $children_elements as $orphans )
+				foreach ( $orphans as $op )
+					$this->display_element( $op, $empty_array, 1, 0, $args, $output );
+		 }
+
+		 return $output;
+	}
+
+	/**
+	 * Displays the current <li> that we are on.
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param object $item Menu item data object.
+	 * @param int $depth Depth of menu item. Used for padding. Optional, defaults to 0.
+	 * @param array $args Optional
+	 * @param int $current_page Menu item ID. Optional.
+	 * @since BuddyPress (1.7)
+	 */
+	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+		// If we're someway down the tree, indent the HTML with the appropriate number of tabs
+		$indent = $depth ? str_repeat( "\t", $depth ) : '';
+
+		// Add HTML classes
+		$class_names = join( ' ', apply_filters( 'bp_nav_menu_css_class', array_filter( $item->class ), $item, $args ) );
+		$class_names = ! empty( $class_names ) ? ' class="' . esc_attr( $class_names ) . '"' : '';
+
+		// Add HTML ID
+		$id = sanitize_html_class( $item->css_id . '-personal-li' );  // Backpat with BP pre-1.7
+		$id = apply_filters( 'bp_nav_menu_item_id', $id, $item, $args );
+		$id = ! empty( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
+
+		// Opening tag; closing tag is handled in Walker_Nav_Menu::end_el().
+		$output .= $indent . '<li' . $id . $class_names . '>';
+
+		// Add href attribute
+		$attributes = ! empty( $item->link ) ? ' href="' . esc_attr( esc_url( $item->link ) ) . '"' : '';
+
+		// Construct the link
+		$item_output = $args->before;
+		$item_output .= '<a' . $attributes . '>';
+		$item_output .= $args->link_before . apply_filters( 'the_title', $item->name, 0 ) . $args->link_after;
+		$item_output .= '</a>';
+		$item_output .= $args->after;
+
+		// $output is byref
+		$output .= apply_filters( 'bp_walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+	}
+}

@@ -38,7 +38,7 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Include files
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		// Files to include
 		$includes = array(
 			'cssjs',
@@ -64,7 +64,7 @@ class BP_Messages_Component extends BP_Component {
 	 * @since BuddyPress (1.5)
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		// Define a slug, if necessary
@@ -98,7 +98,7 @@ class BP_Messages_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
 		$sub_nav = array();
 		$name    = sprintf( __( 'Messages <span>%s</span>', 'buddypress' ), bp_get_total_unread_messages_count() );
@@ -114,8 +114,17 @@ class BP_Messages_Component extends BP_Component {
 			'item_css_id'             => $this->id
 		);
 
+		// Determine user to use
+		if ( bp_displayed_user_domain() ) {
+			$user_domain = bp_displayed_user_domain();
+		} elseif ( bp_loggedin_user_domain() ) {
+			$user_domain = bp_loggedin_user_domain();
+		} else {
+			return;
+		}
+
 		// Link to user messages
-		$messages_link = trailingslashit( bp_loggedin_user_domain() . $this->slug );
+		$messages_link = trailingslashit( $user_domain . $this->slug );
 
 		// Add the subnav items to the profile
 		$sub_nav[] = array(
@@ -125,7 +134,7 @@ class BP_Messages_Component extends BP_Component {
 			'parent_slug'     => $this->slug,
 			'screen_function' => 'messages_screen_inbox',
 			'position'        => 10,
-			'user_has_access' => bp_is_my_profile()
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		$sub_nav[] = array(
@@ -135,7 +144,7 @@ class BP_Messages_Component extends BP_Component {
 			'parent_slug'     => $this->slug,
 			'screen_function' => 'messages_screen_sentbox',
 			'position'        => 20,
-			'user_has_access' => bp_is_my_profile()
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		$sub_nav[] = array(
@@ -145,7 +154,7 @@ class BP_Messages_Component extends BP_Component {
 			'parent_slug'     => $this->slug,
 			'screen_function' => 'messages_screen_compose',
 			'position'        => 30,
-			'user_has_access' => bp_is_my_profile()
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
@@ -168,7 +177,7 @@ class BP_Messages_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_admin_bar() {
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		global $bp;
 
 		// Prevent debug notices
@@ -267,5 +276,3 @@ function bp_setup_messages() {
 	$bp->messages = new BP_Messages_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_messages', 6 );
-
-?>

@@ -36,7 +36,7 @@ class BP_Blogs_Component extends BP_Component {
 	 * @since BuddyPress (1.5)
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		if ( !defined( 'BP_BLOGS_SLUG' ) )
@@ -67,7 +67,7 @@ class BP_Blogs_Component extends BP_Component {
 	/**
 	 * Include files
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		// Files to include
 		$includes = array(
 			'cache',
@@ -93,7 +93,7 @@ class BP_Blogs_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		global $bp;
 
 		/**
@@ -115,9 +115,18 @@ class BP_Blogs_Component extends BP_Component {
 			'default_subnav_slug' => 'my-sites',
 			'item_css_id'         => $this->id
 		);
-		
-		$parent_url = trailingslashit( bp_displayed_user_domain() . bp_get_blogs_slug() );
-		
+
+		// Determine user to use
+		if ( bp_displayed_user_domain() ) {
+			$user_domain = bp_displayed_user_domain();
+		} elseif ( bp_loggedin_user_domain() ) {
+			$user_domain = bp_loggedin_user_domain();
+		} else {
+			return;
+		}
+
+		$parent_url = trailingslashit( $user_domain . bp_get_blogs_slug() );
+
 		$sub_nav[] = array(
 			'name'            => __( 'My Sites', 'buddypress' ),
 			'slug'            => 'my-sites',
@@ -136,7 +145,7 @@ class BP_Blogs_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_admin_bar() {
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		global $bp;
 
 		/**
@@ -171,6 +180,15 @@ class BP_Blogs_Component extends BP_Component {
 				'href'   => trailingslashit( $blogs_link )
 			);
 
+			// Create a Blog
+			if ( bp_blog_signup_enabled() ) {
+				$wp_admin_nav[] = array(
+					'parent' => 'my-account-' . $this->id,
+					'id'     => 'my-account-' . $this->id . '-create',
+					'title'  => __( 'Create a Blog', 'buddypress' ),
+					'href'   => trailingslashit( bp_get_blogs_directory_permalink() . 'create' )
+				);
+			}
 		}
 
 		parent::setup_admin_bar( $wp_admin_nav );
@@ -212,5 +230,3 @@ function bp_setup_blogs() {
 	$bp->blogs = new BP_Blogs_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_blogs', 6 );
-
-?>

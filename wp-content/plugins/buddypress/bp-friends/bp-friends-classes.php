@@ -84,14 +84,14 @@ class BP_Friends_Friendship {
 		global $wpdb, $bp;
 
 		if ( !empty( $friend_requests_only ) ) {
-			$oc_sql = $wpdb->prepare( "AND is_confirmed = 0" );
-			$friend_sql = $wpdb->prepare ( " WHERE friend_user_id = %d", $user_id );
+			$oc_sql = 'AND is_confirmed = 0';
+			$friend_sql = $wpdb->prepare( " WHERE friend_user_id = %d", $user_id );
 		} else {
-			$oc_sql = $wpdb->prepare( "AND is_confirmed = 1" );
-			$friend_sql = $wpdb->prepare ( " WHERE (initiator_user_id = %d OR friend_user_id = %d)", $user_id, $user_id );
+			$oc_sql = 'AND is_confirmed = 1';
+			$friend_sql = $wpdb->prepare( " WHERE (initiator_user_id = %d OR friend_user_id = %d)", $user_id, $user_id );
 		}
 
-		$friends = $wpdb->get_results( $wpdb->prepare( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} $friend_sql $oc_sql ORDER BY date_created DESC" ) );
+		$friends = $wpdb->get_results( "SELECT friend_user_id, initiator_user_id FROM {$bp->friends->table_name} {$friend_sql} {$oc_sql} ORDER BY date_created DESC" );
 		$fids = array();
 
 		for ( $i = 0, $count = count( $friends ); $i < $count; ++$i ) {
@@ -144,7 +144,7 @@ class BP_Friends_Friendship {
 		if ( empty( $user_id ) )
 			$user_id = bp_loggedin_user_id();
 
-		$filter = like_escape( $wpdb->escape( $filter ) );
+		$filter = esc_sql( like_escape( $filter ) );
 
 		if ( !empty( $limit ) && !empty( $page ) )
 			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
@@ -153,18 +153,18 @@ class BP_Friends_Friendship {
 			return false;
 
 		// Get all the user ids for the current user's friends.
-		$fids = implode( ',', $friend_ids );
+		$fids = implode( ',', wp_parse_id_list( $friend_ids ) );
 
 		if ( empty( $fids ) )
 			return false;
 
 		// filter the user_ids based on the search criteria.
 		if ( bp_is_active( 'xprofile' ) ) {
-			$sql = "SELECT DISTINCT user_id FROM {$bp->profile->table_name_data} WHERE user_id IN ($fids) AND value LIKE '$filter%%' {$pag_sql}";
-			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$bp->profile->table_name_data} WHERE user_id IN ($fids) AND value LIKE '$filter%%'";
+			$sql       = "SELECT DISTINCT user_id FROM {$bp->profile->table_name_data} WHERE user_id IN ({$fids}) AND value LIKE '{$filter}%%' {$pag_sql}";
+			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$bp->profile->table_name_data} WHERE user_id IN ({$fids}) AND value LIKE '{$filter}%%'";
 		} else {
-			$sql = "SELECT DISTINCT user_id FROM {$wpdb->usermeta} WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%' {$pag_sql}";
-			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$wpdb->usermeta} WHERE user_id IN ($fids) AND meta_key = 'nickname' AND meta_value LIKE '$filter%%'";
+			$sql       = "SELECT DISTINCT user_id FROM {$wpdb->usermeta} WHERE user_id IN ({$fids}) AND meta_key = 'nickname' AND meta_value LIKE '{$filter}%%' {$pag_sql}";
+			$total_sql = "SELECT COUNT(DISTINCT user_id) FROM {$wpdb->usermeta} WHERE user_id IN ({$fids}) AND meta_key = 'nickname' AND meta_value LIKE '{$filter}%%'";
 		}
 
 		$filtered_friend_ids = $wpdb->get_col( $sql );
@@ -198,6 +198,8 @@ class BP_Friends_Friendship {
 	function get_bulk_last_active( $user_ids ) {
 		global $wpdb;
 
+		$user_ids = implode( ',', wp_parse_id_list( $user_ids ) );
+
 		return $wpdb->get_results( $wpdb->prepare( "SELECT meta_value as last_activity, user_id FROM {$wpdb->usermeta} WHERE meta_key = %s AND user_id IN ( {$user_ids} ) ORDER BY meta_value DESC", bp_get_user_meta_key( 'last_activity' ) ) );
 	}
 
@@ -220,9 +222,9 @@ class BP_Friends_Friendship {
 	}
 
 	function search_users( $filter, $user_id, $limit = null, $page = null ) {
-		global $wpdb;
+		global $wpdb, $bp;
 
-		$filter = like_escape( $wpdb->escape( $filter ) );
+		$filter = esc_sql( like_escape( $filter ) );
 
 		$usermeta_table = $wpdb->base_prefix . 'usermeta';
 		$users_table    = $wpdb->base_prefix . 'users';
@@ -232,9 +234,9 @@ class BP_Friends_Friendship {
 
 		// filter the user_ids based on the search criteria.
 		if ( bp_is_active( 'xprofile' ) ) {
-			$sql = $wpdb->prepare( "SELECT DISTINCT d.user_id as id FROM {$bp->profile->table_name_data} d, $users_table u WHERE d.user_id = u.id AND d.value LIKE '$filter%%' ORDER BY d.value DESC $pag_sql" );
+			$sql = "SELECT DISTINCT d.user_id as id FROM {$bp->profile->table_name_data} d, {$users_table} u WHERE d.user_id = u.id AND d.value LIKE '{$filter}%%' ORDER BY d.value DESC {$pag_sql}";
 		} else {
-			$sql = $wpdb->prepare( "SELECT DISTINCT user_id as id FROM $usermeta_table WHERE meta_value LIKE '$filter%%' ORDER BY d.value DESC $pag_sql" );
+			$sql = "SELECT DISTINCT user_id as id FROM {$usermeta_table} WHERE meta_value LIKE '{$filter}%%' ORDER BY d.value DESC {$pag_sql}";
 		}
 
 		$filtered_fids = $wpdb->get_col($sql);
@@ -248,16 +250,16 @@ class BP_Friends_Friendship {
 	function search_users_count( $filter ) {
 		global $wpdb, $bp;
 
-		$filter = like_escape( $wpdb->escape( $filter ) );
+		$filter = esc_sql( like_escape( $filter ) );
 
 		$usermeta_table = $wpdb->prefix . 'usermeta';
 		$users_table    = $wpdb->base_prefix . 'users';
 
 		// filter the user_ids based on the search criteria.
 		if ( bp_is_active( 'xprofile' ) ) {
-			$sql = $wpdb->prepare( "SELECT COUNT(DISTINCT d.user_id) FROM {$bp->profile->table_name_data} d, $users_table u WHERE d.user_id = u.id AND d.value LIKE '$filter%%'" );
+			$sql = "SELECT COUNT(DISTINCT d.user_id) FROM {$bp->profile->table_name_data} d, {$users_table} u WHERE d.user_id = u.id AND d.value LIKE '{$filter}%%'";
 		} else {
-			$sql = $wpdb->prepare( "SELECT COUNT(DISTINCT user_id) FROM $usermeta_table WHERE meta_value LIKE '$filter%%'" );
+			$sql = "SELECT COUNT(DISTINCT user_id) FROM {$usermeta_table} WHERE meta_value LIKE '{$filter}%%'";
 		}
 
 		$user_count = $wpdb->get_col($sql);
@@ -273,6 +275,8 @@ class BP_Friends_Friendship {
 
 		if ( !bp_is_active( 'xprofile' ) )
 			return false;
+
+		$user_ids = implode( ',', wp_parse_id_list( $user_ids ) );
 
 		return $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM {$bp->profile->table_name_data} pd, {$bp->profile->table_name_fields} pf WHERE pf.id = pd.field_id AND pf.name = %s AND pd.user_id IN ( {$user_ids} ) ORDER BY pd.value ASC", bp_xprofile_fullname_field_name() ) );
 	}
@@ -346,5 +350,3 @@ class BP_Friends_Friendship {
 		}
 	}
 }
-
-?>

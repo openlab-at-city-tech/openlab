@@ -31,7 +31,7 @@ class BP_Members_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		$includes = array(
 			'actions',
 			'filters',
@@ -54,7 +54,7 @@ class BP_Members_Component extends BP_Component {
 	 * @since BuddyPress (1.5)
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		// Define a slug, if necessary
@@ -98,6 +98,7 @@ class BP_Members_Component extends BP_Component {
 		/** Profiles Fallback *************************************************/
 
 		if ( !bp_is_active( 'xprofile' ) ) {
+			$bp->profile       = new stdClass;
 			$bp->profile->slug = 'profile';
 			$bp->profile->id   = 'profile';
 		}
@@ -112,25 +113,25 @@ class BP_Members_Component extends BP_Component {
 		} else {
 			$bp->default_component = BP_DEFAULT_COMPONENT;
 		}
-		
+
 		if ( bp_displayed_user_id() ) {
 			$bp->canonical_stack['base_url'] = bp_displayed_user_domain();
-		
+
 			if ( bp_current_component() ) {
 				$bp->canonical_stack['component'] = bp_current_component();
 			}
-			
+
 			if ( bp_current_action() ) {
 				$bp->canonical_stack['action'] = bp_current_action();
 			}
-			
+
 			if ( !empty( $bp->action_variables ) ) {
 				$bp->canonical_stack['action_variables'] = bp_action_variables();
 			}
 
 			if ( !bp_current_component() ) {
 				$bp->current_component = $bp->default_component;
-			} else if ( bp_is_current_component( $bp->default_component ) && !bp_current_action() ) {			
+			} else if ( bp_is_current_component( $bp->default_component ) && !bp_current_action() ) {
 				// The canonical URL will not contain the default component
 				unset( $bp->canonical_stack['component'] );
 			}
@@ -142,7 +143,7 @@ class BP_Members_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		global $bp;
 
 		// Add 'Profile' to the main navigation
@@ -168,7 +169,7 @@ class BP_Members_Component extends BP_Component {
 
 			// Add the subnav items to the profile
 			$sub_nav[] = array(
-				'name'            => __( 'Public', 'buddypress' ),
+				'name'            => __( 'View', 'buddypress' ),
 				'slug'            => 'public',
 				'parent_url'      => $profile_link,
 				'parent_slug'     => $bp->profile->slug,
@@ -208,5 +209,3 @@ function bp_setup_members() {
 	$bp->members = new BP_Members_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_members', 1 );
-
-?>

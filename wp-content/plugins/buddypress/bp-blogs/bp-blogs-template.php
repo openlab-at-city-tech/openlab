@@ -30,8 +30,7 @@ function bp_blogs_slug() {
 	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_blogs_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_blogs_slug', $bp->blogs->slug );
+		return apply_filters( 'bp_get_blogs_slug', buddypress()->blogs->slug );
 	}
 
 /**
@@ -54,8 +53,7 @@ function bp_blogs_root_slug() {
 	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_blogs_root_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_blogs_root_slug', $bp->blogs->root_slug );
+		return apply_filters( 'bp_get_blogs_root_slug', buddypress()->blogs->root_slug );
 	}
 
 /**
@@ -332,6 +330,26 @@ function bp_blog_name() {
 		return apply_filters( 'bp_get_blog_name', $blogs_template->blog->name );
 	}
 
+/**
+ * Outputs the blog ID
+ *
+ * @since BuddyPress (1.7)
+ */
+function bp_blog_id() {
+	echo bp_get_blog_id();
+}
+	/**
+	 * Returns the blog ID
+	 *
+	 * @return int
+	 * @since BuddyPress (1.7)
+	 */
+	function bp_get_blog_id() {
+		global $blogs_template;
+
+		return apply_filters( 'bp_get_blog_id', $blogs_template->blog->blog_id );
+	}
+
 function bp_blog_description() {
 	echo apply_filters( 'bp_blog_description', bp_get_blog_description() );
 }
@@ -339,6 +357,41 @@ function bp_blog_description() {
 		global $blogs_template;
 
 		return apply_filters( 'bp_get_blog_description', $blogs_template->blog->description );
+	}
+
+
+/**
+ * Output the row class of a site
+ *
+ * @since BuddyPress (1.7)
+ */
+function bp_blog_class() {
+	echo bp_get_blog_class();
+}
+	/**
+	 * Return the row class of a site
+	 *
+	 * @global BP_Blogs_Template $blogs_template
+	 * @return string Row class of the site
+	 * @since BuddyPress (1.7)
+	 */
+	function bp_get_blog_class() {
+		global $blogs_template;
+
+		$classes     = array();
+		$pos_in_loop = (int) $blogs_template->current_blog;
+
+		// If we've only one site in the loop, don't bother with odd and even.
+		if ( $blogs_template->blog_count > 1 )
+			$classes[] = ( $pos_in_loop % 2 ) ? 'even' : 'odd';
+		else
+			$classes[] = 'bp-single-blog';
+
+		$classes = apply_filters( 'bp_get_blog_class', $classes );
+		$classes = array_merge( $classes, array() );
+
+		$retval = 'class="' . join( ' ', $classes ) . '"';
+		return $retval;
 	}
 
 function bp_blog_last_active() {
@@ -356,11 +409,142 @@ function bp_blog_latest_post() {
 	function bp_get_blog_latest_post() {
 		global $blogs_template;
 
-		if ( null == $blogs_template->blog->latest_post )
-			return false;
+		$retval = bp_get_blog_latest_post_title();
 
-		return apply_filters( 'bp_get_blog_latest_post', sprintf( __( 'Latest Post: %s', 'buddypress' ), '<a href="' . $blogs_template->blog->latest_post->guid . '">' . apply_filters( 'the_title', $blogs_template->blog->latest_post->post_title ) . '</a>' ) );
+		if ( ! empty( $retval ) )
+			$retval = sprintf( __( 'Latest Post: %s', 'buddypress' ), '<a href="' . $blogs_template->blog->latest_post->guid . '">' . apply_filters( 'the_title', $retval ) . '</a>' );
+
+		return apply_filters( 'bp_get_blog_latest_post', $retval );
 	}
+
+/**
+ * Prints this site's latest article's title
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @see bp_get_blog_latest_post_title()
+ */
+function bp_blog_latest_post_title() {
+	echo bp_get_blog_latest_post_title();
+}
+	/**
+	 * Returns this site's latest article's title
+	 *
+	 * @since BuddyPress (1.7)
+	 *
+	 * @global BP_Blogs_Template
+	 * @return string
+	 */
+	function bp_get_blog_latest_post_title() {
+		global $blogs_template;
+
+		$retval = '';
+
+		if ( ! empty( $blogs_template->blog->latest_post ) && ! empty( $blogs_template->blog->latest_post->post_title ) )
+			$retval = $blogs_template->blog->latest_post->post_title;
+
+		return apply_filters( 'bp_get_blog_latest_post_title', $retval );
+	}
+
+/**
+ * Prints this site's latest article's permalink
+ *
+ * @see bp_get_blog_latest_post_title()
+ * @since BuddyPress (1.7)
+ */
+function bp_blog_latest_post_permalink() {
+	echo bp_get_blog_latest_post_permalink();
+}
+	/**
+	 * Returns this site's latest article's permalink
+	 *
+	 * @global BP_Blogs_Template
+	 * @return string
+	 * @since BuddyPress (1.7)
+	 */
+	function bp_get_blog_latest_post_permalink() {
+		global $blogs_template;
+
+		$retval = '';
+
+		if ( ! empty( $blogs_template->blog->latest_post ) && ! empty( $blogs_template->blog->latest_post->ID ) )
+			$retval = add_query_arg( 'p', $blogs_template->blog->latest_post->ID, bp_get_blog_permalink() );
+
+		return apply_filters( 'bp_get_blog_latest_post_permalink', $retval );
+	}
+
+/**
+ * Prints this site's latest article's content
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @uses bp_get_blog_latest_post_content()
+ */
+function bp_blog_latest_post_content() {
+	echo bp_get_blog_latest_post_content();
+}
+	/**
+	 * Returns this site's latest article's content
+	 *
+	 * @since BuddyPress (1.7)
+	 *
+	 * @global BP_Blogs_Template
+	 * @return string
+	 */
+	function bp_get_blog_latest_post_content() {
+		global $blogs_template;
+
+		$retval = '';
+
+		if ( ! empty( $blogs_template->blog->latest_post ) && ! empty( $blogs_template->blog->latest_post->post_content ) )
+			$retval = $blogs_template->blog->latest_post->post_content;
+
+		return apply_filters( 'bp_get_blog_latest_post_content', $retval );
+	}
+
+/**
+ * Prints this site's latest article's featured image
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @param string $size Image version to return. Either "thumbnail", "medium", "large", "post-thumbnail".
+ * @see bp_get_blog_latest_post_content()
+ */
+function bp_blog_latest_post_featured_image( $size = 'thumbnail' ) {
+	echo bp_get_blog_latest_post_featured_image( $size );
+}
+	/**
+	 * Returns this site's latest article's featured image
+	 *
+	 * @since BuddyPress (1.7)
+	 *
+	 * @global BP_Blogs_Template
+	 * @param string $size Image version to return. Either "thumbnail", "medium", "large", "post-thumbnail".
+	 * @return string
+	 */
+	function bp_get_blog_latest_post_featured_image( $size = 'thumbnail' ) {
+		global $blogs_template;
+
+		$retval = '';
+
+		if ( ! empty( $blogs_template->blog->latest_post ) && ! empty( $blogs_template->blog->latest_post->images[$size] ) )
+			$retval = $blogs_template->blog->latest_post->images[$size];
+
+		return apply_filters( 'bp_get_blog_latest_post_featured_image', $retval );
+	}
+
+/**
+ * Does the latest blog post have a featured image?
+ *
+ * @param string $size Image version to check for. Either "thumbnail", "medium", "large", "post-thumbnail".
+ * @return bool
+ * @since BuddyPress (1.7)
+ */
+function bp_blog_latest_post_has_featured_image( $thumbnail = 'thumbnail' ) {
+	$image  = bp_get_blog_latest_post_featured_image( $thumbnail );
+
+	return apply_filters( 'bp_blog_latest_post_has_featured_image', ! empty( $image ), $thumbnail, $image );
+}
 
 function bp_blog_hidden_fields() {
 	if ( isset( $_REQUEST['s'] ) )
@@ -461,9 +645,9 @@ function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) 
 	<?php }
 
 	if ( !is_subdomain_install() )
-		echo '<span class="prefix_address">' . $current_site->domain . $current_site->path . '</span> <input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="50" /><br />';
+		echo '<span class="prefix_address">' . $current_site->domain . $current_site->path . '</span> <input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" /><br />';
 	else
-		echo '<input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="50" /> <span class="suffix_address">.' . bp_blogs_get_subdomain_base() . '</span><br />';
+		echo '<input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" /> <span class="suffix_address">.' . bp_blogs_get_subdomain_base() . '</span><br />';
 
 	if ( !is_user_logged_in() ) {
 		print '(<strong>' . __( 'Your address will be ' , 'buddypress');
@@ -511,7 +695,7 @@ function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) 
 /**
  * Echo the value of bp_blogs_get_subdomain_base()
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_blogs_subdomain_base() {
 	echo bp_blogs_get_subdomain_base();
@@ -520,8 +704,8 @@ function bp_blogs_subdomain_base() {
 	 * Return the base URL to be displayed when a user chooses an address for a new blog, on
 	 * a subdomain installation of WordPress MS
 	 *
-	 * @since 1.6
-	 * @return str The base URL - eg, 'example.com' for site_url() example.com or www.example.com
+	 * @since BuddyPress (1.6)
+	 * @return string The base URL - eg, 'example.com' for site_url() example.com or www.example.com
 	 */
 	function bp_blogs_get_subdomain_base() {
 		global $current_site;
@@ -604,7 +788,7 @@ function bp_blogs_blog_tabs() {
 	</ul>
 
 <?php
-	do_action( 'bp_blogs_blog_tabs', $current_tab );
+	do_action( 'bp_blogs_blog_tabs' );
 }
 
 function bp_directory_blogs_search_form() {
@@ -656,5 +840,3 @@ function bp_blogs_visit_blog_button( $args = '' ) {
 		// Filter and return the HTML button
 		return bp_get_button( apply_filters( 'bp_get_blogs_visit_blog_button', $button ) );
 	}
-
-?>

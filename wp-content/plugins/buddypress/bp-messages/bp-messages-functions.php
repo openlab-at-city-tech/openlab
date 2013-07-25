@@ -68,12 +68,25 @@ function messages_new_message( $args = '' ) {
 		// Loop the recipients and convert all usernames to user_ids where needed
 		foreach( (array) $recipients as $recipient ) {
 			$recipient = trim( $recipient );
+
 			if ( empty( $recipient ) )
 				continue;
 
+			$recipient_id = false;
+
+			// input was numeric
 			if ( is_numeric( $recipient ) ) {
+				// do a check against the user ID column first
 				if ( bp_core_get_core_userdata( (int) $recipient ) )
 					$recipient_id = (int) $recipient;
+
+				// if that fails, check against the user_login / user_nicename column
+				else {
+					if ( bp_is_username_compatibility_mode() )
+						$recipient_id = bp_core_get_userid( (int) $recipient );
+					else
+						$recipient_id = bp_core_get_userid_from_nicename( (int) $recipient );
+				}
 
 			} else {
 				if ( bp_is_username_compatibility_mode() )
@@ -220,11 +233,11 @@ function messages_is_valid_thread( $thread_id ) {
  *
  * @package BuddyPress
  *
- * @param str $action The kind of notification being rendered
+ * @param string $action The kind of notification being rendered
  * @param int $item_id The primary item id
  * @param int $secondary_item_id The secondary item id
  * @param int $total_items The total number of messaging-related notifications waiting for the user
- * @param str $format 'string' for BuddyBar-compatible notifications; 'array' for WP Toolbar
+ * @param string $format 'string' for BuddyBar-compatible notifications; 'array' for WP Toolbar
  */
 function messages_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 
@@ -254,5 +267,3 @@ function messages_format_notifications( $action, $item_id, $secondary_item_id, $
 
 	return $return;
 }
-
-?>
