@@ -1,10 +1,12 @@
-=== Plugin Name ===
+=== WordPress Importer ===
 Contributors: wordpressdotorg
 Donate link: 
 Tags: importer, wordpress
 Requires at least: 3.0
-Tested up to: 3.1
-Stable tag: 0.4
+Tested up to: 3.6
+Stable tag: 0.6
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Import posts, pages, comments, custom fields, categories, tags and more from a WordPress export file.
 
@@ -37,6 +39,18 @@ If you would prefer to do things manually then follow these instructions:
 
 == Changelog ==
 
+= 0.6 =
+* Support for WXR 1.2 and multiple CDATA sections
+* Post aren't duplicates if their post_type's are different
+
+= 0.5.2 =
+* Double check that the uploaded export file exists before processing it. This prevents incorrect error messages when
+an export file is uploaded to a server with bad permissions and WordPress 3.3 or 3.3.1 is being used.
+
+= 0.5 =
+* Import comment meta (requires export from WordPress 3.2)
+* Minor bugfixes and enhancements
+
 = 0.4 =
 * Map comment user_id where possible
 * Import attachments from `wp:attachment_url`
@@ -52,6 +66,15 @@ If you would prefer to do things manually then follow these instructions:
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.6 =
+Support for exports from WordPress 3.4.
+
+= 0.5.2 =
+Fix incorrect error message when the export file could not be uploaded.
+
+= 0.5 =
+Import comment meta and other minor bugfixes and enhancements.
 
 = 0.4 =
 Bug fixes for attachment importing and other small enhancements.

@@ -1,18 +1,18 @@
 <?php
 /*
 +----------------------------------------------------------------+
-|																							|
-|	WordPress 2.8 Plugin: WP-Polls 2.61										|
-|	Copyright (c) 2009 Lester "GaMerZ" Chan									|
-|																							|
-|	File Written By:																	|
-|	- Lester "GaMerZ" Chan															|
-|	- http://lesterchan.net															|
-|																							|
-|	File Information:																	|
-|	- Manage Your Polls																|
-|	- wp-content/plugins/wp-polls/polls-manager.php						|
-|																							|
+|																|
+|	WordPress Plugin: WP-Polls									|
+|	Copyright (c) 2012 Lester "GaMerZ" Chan						|
+|																|
+|	File Written By:											|
+|	- Lester "GaMerZ" Chan										|
+|	- http://lesterchan.net										|
+|																|
+|	File Information:											|
+|	- Manage Your Polls											|
+|	- wp-content/plugins/wp-polls/polls-manager.php				|
+|																|
 +----------------------------------------------------------------+
 */
 
@@ -22,14 +22,12 @@ if(!current_user_can('manage_polls')) {
 	die('Access Denied');
 }
 
-
 ### Variables Variables Variables
 $base_name = plugin_basename('wp-polls/polls-manager.php');
 $base_page = 'admin.php?page='.$base_name;
-$mode = trim($_GET['mode']);
-$poll_id = intval($_GET['id']);
-$poll_aid = intval($_GET['aid']);
-
+$mode = (isset($_GET['mode']) ? trim($_GET['mode']) : '');
+$poll_id = (isset($_GET['id']) ? intval($_GET['id']) : 0);
+$poll_aid = (isset($_GET['aid']) ? intval($_GET['aid']) : 0);
 
 ### Form Processing 
 if(!empty($_POST['do'])) {
@@ -148,15 +146,11 @@ if(!empty($_POST['do'])) {
 	}
 }
 
-
 ### Determines Which Mode It Is
 switch($mode) {
 	// Poll Logging
 	case 'logs':
 		require('polls-logs.php');
-		break;
-?>
-	<?php
 		break;
 	// Edit A Poll
 	case 'edit':
@@ -215,7 +209,7 @@ switch($mode) {
 								echo "<tr id=\"poll-answer-$polla_aid\">\n";
 								echo '<th width="20%" scope="row" valign="top">'.sprintf(__('Answer %s', 'wp-polls'), number_format_i18n($i)).'</th>'."\n";
 								echo "<td width=\"60%\"><input type=\"text\" size=\"50\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"".htmlspecialchars($polla_answers)."\" />&nbsp;&nbsp;&nbsp;";
-								echo "<input type=\"button\" value=\"".__('Delete', 'wp-polls')."\" onclick=\"delete_poll_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(js_escape(__('You are about to delete this poll\'s answer \'%s\'.', 'wp-polls')), js_escape(htmlspecialchars($polla_answers)))."', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" /></td>\n";
+								echo "<input type=\"button\" value=\"".__('Delete', 'wp-polls')."\" onclick=\"delete_poll_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'wp-polls')), esc_js(htmlspecialchars($polla_answers)))."', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" /></td>\n";
 								echo '<td width="20%" align="'.$last_col_align.'">'.number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"check_totalvotes();\" /></td>\n</tr>\n";
 								$poll_actual_totalvotes += $polla_votes;
 								$i++;
@@ -310,8 +304,8 @@ switch($mode) {
 					$poll_close_display = 'none';
 				}
 			?>
-				<input type="button" class="button" name="do" id="close_poll" value="<?php _e('Close Poll', 'wp-polls'); ?>" onclick="closing_poll(<?php echo $poll_id; ?>, '<?php printf(js_escape(__('You are about to CLOSE this poll \'%s\'.', 'wp-polls')), htmlspecialchars(js_escape($poll_question_text))); ?>', '<?php echo wp_create_nonce('wp-polls_close-poll'); ?>');" style="display: <?php echo $poll_close_display; ?>;" />
-				<input type="button" class="button" name="do" id="open_poll" value="<?php _e('Open Poll', 'wp-polls'); ?>" onclick="opening_poll(<?php echo $poll_id; ?>, '<?php printf(js_escape(__('You are about to OPEN this poll \'%s\'.', 'wp-polls')), htmlspecialchars(js_escape($poll_question_text))); ?>', '<?php echo wp_create_nonce('wp-polls_open-poll'); ?>');" style="display: <?php echo $poll_open_display; ?>;" />
+				<input type="button" class="button" name="do" id="close_poll" value="<?php _e('Close Poll', 'wp-polls'); ?>" onclick="closing_poll(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to CLOSE this poll \'%s\'.', 'wp-polls')), htmlspecialchars(esc_js($poll_question_text))); ?>', '<?php echo wp_create_nonce('wp-polls_close-poll'); ?>');" style="display: <?php echo $poll_close_display; ?>;" />
+				<input type="button" class="button" name="do" id="open_poll" value="<?php _e('Open Poll', 'wp-polls'); ?>" onclick="opening_poll(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to OPEN this poll \'%s\'.', 'wp-polls')), htmlspecialchars(esc_js($poll_question_text))); ?>', '<?php echo wp_create_nonce('wp-polls_open-poll'); ?>');" style="display: <?php echo $poll_open_display; ?>;" />
 				&nbsp;&nbsp;<input type="button" name="cancel" value="<?php _e('Cancel', 'wp-polls'); ?>" class="button" onclick="javascript:history.go(-1)" />
 			</p>
 		</div>
@@ -416,7 +410,7 @@ switch($mode) {
 								echo "</td>\n";
 								echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'wp-polls')."</a></td>\n";
 								echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'wp-polls')."</a></td>\n";
-								echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll($poll_id, '".sprintf(js_escape(__('You are about to delete this poll, \'%s\'.', 'wp-polls')), js_escape($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"delete\">".__('Delete', 'wp-polls')."</a></td>\n";
+								echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'wp-polls')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"delete\">".__('Delete', 'wp-polls')."</a></td>\n";
 								echo '</tr>';
 								$i++;
 								$total_votes+= $poll_totalvotes;
@@ -468,7 +462,7 @@ switch($mode) {
 			?>
 				<strong><?php _e('Are You Sure You Want To Delete All Polls Logs?', 'wp-polls'); ?></strong><br /><br />
 				<input type="checkbox" name="delete_logs_yes" id="delete_logs_yes" value="yes" />&nbsp;<label for="delete_logs_yes"><?php _e('Yes', 'wp-polls'); ?></label><br /><br />
-				<input type="button" value="<?php _e('Delete All Logs', 'wp-polls'); ?>" class="button" onclick="delete_poll_logs('<?php echo js_escape(__('You are about to delete all poll logs. This action is not reversible.', 'wp-polls')); ?>', '<?php echo wp_create_nonce('wp-polls_delete-polls-logs'); ?>');" />
+				<input type="button" value="<?php _e('Delete All Logs', 'wp-polls'); ?>" class="button" onclick="delete_poll_logs('<?php echo esc_js(__('You are about to delete all poll logs. This action is not reversible.', 'wp-polls')); ?>', '<?php echo wp_create_nonce('wp-polls_delete-polls-logs'); ?>');" />
 			<?php 
 				} else {
 					_e('No poll logs available.', 'wp-polls');
@@ -479,4 +473,3 @@ switch($mode) {
 		</div>
 <?php
 } // End switch($mode)
-?>

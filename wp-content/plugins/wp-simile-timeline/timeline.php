@@ -5,11 +5,11 @@ Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-si
 Description: Integrates the <a href="http://simile.mit.edu/timeline/">SIMILE Timeline</a> with WordPress and provides an option interface for the various timeline settings. With this plugin you can display posts from a specific category in the Timeline Widget. Simply include the <strong>[similetimeline]</strong> shortcode in your page or post and specify the category on the <a href="options-general.php?page=timeline.php">admin page</a>.
 Author: Tim Isenheim
 Author URI: http://www.freshlabs.de/journal
-Version: 0.4.8.5
+Version: 0.4.8.6
 */
 /*
 	SIMILE Timeline for WordPress
-    Copyright 2006-2011 Tim Isenheim
+    Copyright 2006-2013 Tim Isenheim
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ include('inc/WPSimileTimelineBand.class.php'); // class for timeline band
 include('inc/WPSimileTimelineHotzone.class.php'); // class for timeline hotzone
 include('inc/WPSimileTimelineDecorator.class.php'); // class for timeline decorator
 
-@define('STL_TIMELINE_PLUGIN_DATESTRING', '20120321');
-@define('STL_TIMELINE_PLUGIN_VERSION', '0.4.8.5');
+@define('STL_TIMELINE_PLUGIN_DATESTRING', '20130110');
+@define('STL_TIMELINE_PLUGIN_VERSION', '0.4.8.6');
 @define('STL_TIMELINE_FOLDER', WP_PLUGIN_URL.'/wp-simile-timeline');
 @define('STL_TIMELINE_DATA_FOLDER', STL_TIMELINE_FOLDER.'/data');
 @define('STL_TIMELINE_API_URL', 'http://api.simile-widgets.org/timeline/2.3.1/timeline-api.js?bundle=true'); // use &defaultLocale to override detected locale

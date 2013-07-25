@@ -1,18 +1,18 @@
-ul.s2_blogs { 
+ul.s2_blogs {
 	float: left;
 	width: 99%;
 }
 
 ul.s2_blogs li {
-	background-color: #E3E3E3;
-	border: 1px solid #E0E0E0;
+	position: relative;
 	display: block;
 	float: left;
 	margin: 3px;
 	padding: 0.5em;
-	position: relative;
-	white-space: nowrap;
 	width: 47%;
+	border: 1px solid #E0E0E0;
+	background-color: #E3E3E3;
+	white-space: nowrap;
 }
 
 ul.s2_blogs li: hover {
@@ -35,10 +35,10 @@ ul.s2_blogs li .buttons {
 ul.s2_blogs li .buttons a {
 	display: block;
 	float: left;
+	margin: 0 0 0 1em;
 	padding: .1em .5em;
 	background-color: #666;
 	color: white;
-	margin: 0 0 0 1em;
 }
 
 ul.s2_blogs li .buttons a:hover {
@@ -47,21 +47,21 @@ ul.s2_blogs li .buttons a:hover {
 }
 
 ul.s2_blogs div.additional_info {
-	display: none;
-	width: 75%;
-	padding: .5em 1em;
 	position: absolute;
-	left: -2px;
 	bottom: 2.4em;
-	margin-bottom: 2px;
+	left: -2px;
 	z-index: 9;
-	background-color: #666;
-	color: #fff;
+	display: none;
+	margin-bottom: 2px;
+	padding: .5em 1em;
+	width: 75%;
 	border: 1px solid white;
 	border-bottom: medium none;
-	font-style: italic; 
+	background-color: #666;
+	color: #fff;
+	font-style: italic;
 	-moz-border-radius-topright: .5em;
-	-moz-border-radius-topleft: .5em;	
+	-moz-border-radius-topleft: .5em;
 }
 
 ul.s2_blogs li:hover div.additional_info {

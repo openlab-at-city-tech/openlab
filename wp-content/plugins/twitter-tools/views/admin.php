@@ -205,10 +205,10 @@ function akttSetState(elem) {
 	var $enabled = $account.find('input.enabled');
 	var $createPosts = $account.find('input.create-posts');
 // toggle enabled icon
-		if ($enabled.is(':checked')) {
-			$account.addClass('aktt-account-enabled');
-		}
-		else {
+	if ($enabled.is(':checked')) {
+		$account.addClass('aktt-account-enabled');
+	}
+	else {
 		$account.removeClass('aktt-account-enabled');
 	}
 // toggle enabled/dimmed for enabled dependent fields

@@ -1,11 +1,32 @@
 <?php
-if( !defined('ABSPATH') && !defined('WP_UNINSTALL_PLUGIN') ) {
+if ( !defined('ABSPATH') && !defined('WP_UNINSTALL_PLUGIN') ) {
 	// Make sure not to call this file directly
 	exit();
 } else {
-	global $wpdb, $table_prefix;
+	// Is this WordPressMU or not?
+	if ( isset($wpmu_version) || strpos($wp_version, 'wordpress-mu') ) {
+		$s2_mu = true;
+	}
+	if ( function_exists('is_multisite') && is_multisite() ) {
+		$s2_mu = true;
+	}
+
+	if ( $s2_mu ) {
+		global $wpdb;
+		$blogs = $wpdb->get_col("SELECT blog_id FROM {$wpdb->blogs}");
+		foreach ( $blogs as $blog ) {
+			switch_to_blog($blog);
+			s2_uninstall();
+			restore_current_blog();
+		}
+	} else {
+		s2_uninstall();
+	}
+}
+function s2_uninstall() {
+	global $wpdb;
 	// get name of subscribe2 table
-	$public = $table_prefix . "subscribe2";
+	$public = $wpdb->prefix . "subscribe2";
 	// delete entry from wp_options table
 	delete_option('subscribe2_options');
 	// delete legacy entry from wp-options table
@@ -25,5 +46,5 @@ if( !defined('ABSPATH') && !defined('WP_UNINSTALL_PLUGIN') ) {
 	// drop the subscribe2 table
 	$sql = "DROP TABLE IF EXISTS `" . $public . "`";
 	$wpdb->query($sql);
-}
+} // end s2_uninstall()
 ?>

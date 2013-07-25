@@ -3,8 +3,8 @@ Contributors: freshlabs
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F9HV8RZH76SHU
 Tags: api, widget, visualization, javascript, simile, timeline, time, posts, post, ajax, integration, rss, feed, links, lifestream, twitter, xml
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 0.4.8.5
+Tested up to: 3.5
+Stable tag: 0.4.8.6
 
 Integrates the SIMILE Timeline into WordPress and provides an option interface for the various timeline settings.
 
@@ -89,6 +89,9 @@ call that file directly to see if posts show up there.
 
 == Upgrade Notice ==
 
+= 0.4.8.6 =
+Fixed wpdb::prepare() calls with second parameter
+
 = 0.4.8.5 =
 Fix for custom taxonomies with empty query_var
 Fixes 'insufficient permissions error' when deleting hotzones
@@ -113,6 +116,10 @@ Fixes initialization issues when prototype.js is used (empty timeline frame)
 Fixes missing argument error in template function & WordPress 3.0 compatibility
 
 == Changelog ==
+
+**0.4.8.6 (10/01/2013)**
+
+*	Fixed wpdb::prepare() calls with second parameter
 
 **0.4.8.5 (21/03/2012)**
 

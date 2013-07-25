@@ -7,7 +7,7 @@
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2009 Tim Isenheim
+	Copyright (C) 2006-2013 Tim Isenheim
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class WPSimileTimelineDatabase{
 		$terms_table = WPSimileTimelineTerm::getTableName();
 		$column_name = 'icon';
 		// Add column for icon in terms table
-		$wpdb->query($wpdb->prepare("ALTER TABLE $terms_table ADD COLUMN " . $column_name . " VARCHAR( 255 ) NOT NULL AFTER `color`"));
+		$wpdb->query($wpdb->prepare("ALTER TABLE %s ADD COLUMN %s VARCHAR( 255 ) NOT NULL AFTER `color`", array($terms_table, $column_name)));
 	}
 	
 	/* ---------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ class WPSimileTimelineDatabase{
 	function columnExists($col_name){
 		global $wpdb;
 		$column_exists = false;
-		$q = $wpdb->query($wpdb->prepare("SHOW COLUMNS FROM $wpdb->posts LIKE '$col_name'"));
+		$q = $wpdb->query($wpdb->prepare("SHOW COLUMNS FROM $wpdb->posts LIKE '%s'", $col_name));
 		if($q == 1){
 			$column_exists = true;
 		}
@@ -60,7 +60,7 @@ class WPSimileTimelineDatabase{
 	function addEventColumn($column_name){
 		global $wpdb;
 		if(!WPSimileTimelineDatabase::columnExists($column_name)) {
-			$wpdb->query($wpdb->prepare("ALTER TABLE $wpdb->posts ADD COLUMN " . $column_name . " datetime NOT NULL DEFAULT '0000-00-00 00:00:00'"));
+			$wpdb->query($wpdb->prepare("ALTER TABLE $wpdb->posts ADD COLUMN %s datetime NOT NULL DEFAULT '0000-00-00 00:00:00'", array($column_name)));
 		}
 	}
 	
@@ -74,7 +74,7 @@ class WPSimileTimelineDatabase{
 	function deleteTable($tn){		
 		global $wpdb;
 		$table_name = $wpdb->prefix . $tn;
-		$wpdb->query($wpdb->prepare("DROP TABLE " . $table_name));
+		$wpdb->query($wpdb->prepare("DROP TABLE %s", array($table_name)));
 	}
 
 	/*
@@ -84,7 +84,7 @@ class WPSimileTimelineDatabase{
 	function removeEventColumn($column_name) {
 		global $wpdb;
 		if(WPSimileTimelineDatabase::columnExists($column_name)) {
-			$wpdb->query($wpdb->prepare("ALTER TABLE $wpdb->posts DROP COLUMN $column_name"));
+			$wpdb->query($wpdb->prepare("ALTER TABLE $wpdb->posts DROP COLUMN %s", array($column_name)));
 		}
 	}
 	
@@ -124,11 +124,11 @@ class WPSimileTimelineDatabase{
 			$stl_ss = ($stl_ss > 59) ? $stl_ss -60 : $stl_ss;
 			$postdata = "$stl_aa-$stl_mm-$stl_jj $stl_hh:$stl_mn:$stl_ss";
 			$stl_tee = $postdata;
-			$wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET $column = '%s' WHERE ID = %d", $stl_tee, $pID));
+			$wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET $column = '%s' WHERE ID = %d", array($stl_tee, $pID)));
 		}
 		// Reset timestamp to 0
 		if ($reset==1) {
-			$wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET $column = '0000-00-00 00:00:00' WHERE ID = $pID"));
+			$wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET $column = '0000-00-00 00:00:00' WHERE ID = %d", $pID));
 		}
 	}
 	

@@ -5,7 +5,7 @@ class s2_admin extends s2class {
 	Hook the menu
 	*/
 	function admin_menu() {
-		add_menu_page (__('Subscribe2', 'subscribe2'), __('Subscribe2', 'subscribe2'), apply_filters('s2_capability', "read", 'user'), 's2', NULL, S2URL . 'include/email_edit.png');
+		add_menu_page(__('Subscribe2', 'subscribe2'), __('Subscribe2', 'subscribe2'), apply_filters('s2_capability', "read", 'user'), 's2', NULL, S2URL . 'include/email_edit.png');
 
 		$s2user = add_submenu_page('s2', __('Your Subscriptions', 'subscribe2'), __('Your Subscriptions', 'subscribe2'), apply_filters('s2_capability', "read", 'user'), 's2', array(&$this, 'user_menu'), S2URL . 'include/email_edit.png');
 		add_action("admin_print_scripts-$s2user", array(&$this, 'checkbox_form_js'));
@@ -35,7 +35,7 @@ class s2_admin extends s2class {
 	Insert Javascript and CSS into admin_header
 	*/
 	function checkbox_form_js() {
-		wp_register_script('s2_checkbox', S2URL . 'include/s2_checkbox' . $this->script_debug . '.js', array('jquery'), '1.1');
+		wp_register_script('s2_checkbox', S2URL . 'include/s2_checkbox' . $this->script_debug . '.js', array('jquery'), '1.2');
 		wp_enqueue_script('s2_checkbox');
 	} //end checkbox_form_js()
 
@@ -45,7 +45,7 @@ class s2_admin extends s2class {
 	} // end user_admin_css()
 
 	function option_form_js() {
-		wp_register_script('s2_edit', S2URL . 'include/s2_edit' . $this->script_debug . '.js', array('jquery'), '1.0');
+		wp_register_script('s2_edit', S2URL . 'include/s2_edit' . $this->script_debug . '.js', array('jquery'), '1.1');
 		wp_enqueue_script('s2_edit');
 	} // end option_form_js()
 
@@ -153,7 +153,7 @@ class s2_admin extends s2class {
 	*/
 	function s2_meta_box() {
 		global $post_ID;
-		$s2mail = get_post_meta($post_ID, 's2mail', true);
+		$s2mail = get_post_meta($post_ID, '_s2mail', true);
 		echo "<input type=\"hidden\" name=\"s2meta_nonce\" id=\"s2meta_nonce\" value=\"" . wp_create_nonce(wp_hash(plugin_basename(__FILE__))) . "\" />";
 		echo __("Check here to disable sending of an email notification for this post/page", 'subscribe2');
 		echo "&nbsp;&nbsp;<input type=\"checkbox\" name=\"s2_meta_field\" value=\"no\"";
@@ -176,9 +176,9 @@ class s2_admin extends s2class {
 		}
 
 		if ( isset($_POST['s2_meta_field']) && $_POST['s2_meta_field'] == 'no' ) {
-			update_post_meta($post_id, 's2mail', $_POST['s2_meta_field']);
+			update_post_meta($post_id, '_s2mail', $_POST['s2_meta_field']);
 		} else {
-			update_post_meta($post_id, 's2mail', 'yes');
+			update_post_meta($post_id, '_s2mail', 'yes');
 		}
 	} // end s2_meta_box_handler()
 
@@ -187,7 +187,7 @@ class s2_admin extends s2class {
 	Display a table of categories with checkboxes
 	Optionally pre-select those categories specified
 	*/
-	function display_category_form($selected = array(), $override = 1) {
+	function display_category_form($selected = array(), $override = 1, $compulsory = array(), $name = 'category') {
 		global $wpdb;
 
 		if ( $override == 0 ) {
@@ -199,14 +199,14 @@ class s2_admin extends s2class {
 		$half = (count($all_cats) / 2);
 		$i = 0;
 		$j = 0;
-		echo "<table width=\"100%\" cellspacing=\"2\" cellpadding=\"5\" class=\"editform\">\r\n";
-		echo "<tr><td align=\"left\" colspan=\"2\">\r\n";
-		echo "<label><input type=\"checkbox\" name=\"checkall\" value=\"checkall_cat\" /> " . __('Select / Unselect All', 'subscribe2') . "</label>\r\n";
+		echo "<table style=\"width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression('separate', cellSpacing = '2px');\" class=\"editform\">\r\n";
+		echo "<tr><td style=\"text-align: left;\" colspan=\"2\">\r\n";
+		echo "<label><input type=\"checkbox\" name=\"checkall\" value=\"checkall_" . $name . "\" /> " . __('Select / Unselect All', 'subscribe2') . "</label>\r\n";
 		echo "</td></tr>\r\n";
-		echo "<tr valign=\"top\"><td width=\"50%\" align=\"left\">\r\n";
+		echo "<tr style=\"vertical-align: top;\"><td style=\"width: 50%; text-align: left;\">\r\n";
 		foreach ( $all_cats as $cat ) {
-			if ( $i >= $half && 0 == $j ){
-				echo "</td><td width=\"50%\" align=\"left\">\r\n";
+			if ( $i >= $half && 0 == $j ) {
+				echo "</td><td style=\"width: 50%; text-align: left;\">\r\n";
 				$j++;
 			}
 			$catName = '';
@@ -220,19 +220,30 @@ class s2_admin extends s2class {
 			$catName .= $cat->name;
 
 			if ( 0 == $j ) {
-				echo "<label><input class=\"checkall_cat\" type=\"checkbox\" name=\"category[]\" value=\"" . $cat->term_id . "\"";
-				if ( in_array($cat->term_id, $selected) ) {
-						echo " checked=\"checked\"";
+				echo "<label><input class=\"checkall_" . $name . "\" type=\"checkbox\" name=\"" . $name . "[]\" value=\"" . $cat->term_id . "\"";
+				if ( in_array($cat->term_id, $selected) || in_array($cat->term_id, $compulsory) ) {
+					echo " checked=\"checked\"";
+				}
+				if ( in_array($cat->term_id, $compulsory) && $name === 'category' ) {
+					echo " DISABLED";
 				}
 				echo " /> <abbr title=\"" . $cat->slug . "\">" . $catName . "</abbr></label><br />\r\n";
 			} else {
-				echo "<label><input class=\"checkall_cat\" type=\"checkbox\" name=\"category[]\" value=\"" . $cat->term_id . "\"";
-				if ( in_array($cat->term_id, $selected) ) {
-							echo " checked=\"checked\"";
+				echo "<label><input class=\"checkall_" . $name . "\" type=\"checkbox\" name=\"" . $name . "[]\" value=\"" . $cat->term_id . "\"";
+				if ( in_array($cat->term_id, $selected) || in_array($cat->term_id, $compulsory) ) {
+					echo " checked=\"checked\"";
+				}
+				if ( in_array($cat->term_id, $compulsory) && $name === 'category' ) {
+					echo " DISABLED";
 				}
 				echo " /> <abbr title=\"" . $cat->slug . "\">" . $catName . "</abbr></label><br />\r\n";
 			}
 			$i++;
+		}
+		if ( !empty($compulsory) ) {
+			foreach ($compulsory as $cat) {
+				echo "<input type=\"hidden\" name=\"" . $name . "[]\" value=\"" . $cat . "\">\r\n";
+			}
 		}
 		echo "</td></tr>\r\n";
 		echo "</table>\r\n";
@@ -245,14 +256,14 @@ class s2_admin extends s2class {
 		$half = (count($formats[0]) / 2);
 		$i = 0;
 		$j = 0;
-		echo "<table width=\"100%\" cellspacing=\"2\" cellpadding=\"5\" class=\"editform\">\r\n";
-		echo "<tr><td align=\"left\" colspan=\"2\">\r\n";
+		echo "<table style=\"width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression('separate', cellSpacing = '2px');\" class=\"editform\">\r\n";
+		echo "<tr><td style=\"text-align: left;\" colspan=\"2\">\r\n";
 		echo "<label><input type=\"checkbox\" name=\"checkall\" value=\"checkall_format\" /> " . __('Select / Unselect All', 'subscribe2') . "</label>\r\n";
 		echo "</td></tr>\r\n";
-		echo "<tr valign=\"top\"><td width=\"50%\" align=\"left\">\r\n";
+		echo "<tr style=\"vertical-align: top;\"><td style=\"width: 50%; text-align: left\">\r\n";
 		foreach ( $formats[0] as $format ) {
-			if ( $i >= $half && 0 == $j ){
-				echo "</td><td width=\"50%\" align=\"left\">\r\n";
+			if ( $i >= $half && 0 == $j ) {
+				echo "</td><td style=\"width: 50%; text-align: left\">\r\n";
 				$j++;
 			}
 
@@ -285,14 +296,14 @@ class s2_admin extends s2class {
 		$half = (count($all_authors) / 2);
 		$i = 0;
 		$j = 0;
-		echo "<table width=\"100%\" cellspacing=\"2\" cellpadding=\"5\" class=\"editform\">\r\n";
-		echo "<tr><td align=\"left\" colspan=\"2\">\r\n";
+		echo "<table style=\"width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression('separate', cellSpacing = '2px');\" class=\"editform\">\r\n";
+		echo "<tr><td style=\"text-align: left;\" colspan=\"2\">\r\n";
 		echo "<label><input type=\"checkbox\" name=\"checkall\" value=\"checkall_author\" /> " . __('Select / Unselect All', 'subscribe2') . "</label>\r\n";
 		echo "</td></tr>\r\n";
-		echo "<tr valign=\"top\"><td width=\"50%\" align=\"left\">\r\n";
+		echo "<tr style=\"vertical-align: top;\"><td style=\"width: 50%; test-align: left;\">\r\n";
 		foreach ( $all_authors as $author ) {
 			if ( $i >= $half && 0 == $j ) {
-				echo "</td><td width=\"50%\" align=\"left\">\r\n";
+				echo "</td><td style=\"width: 50%; text-align: left;\">\r\n";
 				$j++;
 			}
 			if ( 0 == $j ) {
@@ -457,6 +468,7 @@ class s2_admin extends s2class {
 			echo "<strong><em style=\"color: red\">" . __('The WordPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2') . "</em></strong><br />\r\n";
 		}
 		$scheduled_time = wp_next_scheduled('s2_digest_cron');
+		$offset = get_option('gmt_offset') * 60 * 60;
 		$schedule = (array)wp_get_schedules();
 		$schedule = array_merge(array('never' => array('interval' => 0, 'display' => __('For each Post', 'subscribe2'))), $schedule);
 		$sort = array();
@@ -472,19 +484,18 @@ class s2_admin extends s2class {
 			echo "<label><input type=\"radio\" name=\"email_freq\" value=\"" . $key . "\"" . checked($this->subscribe2_options['email_freq'], $key, false) . " />";
 			echo " " . $value['display'] . "</label><br />\r\n";
 		}
-		echo "<br />" . __('Send Digest Notification at', 'subscribe2') . ": \r\n";
+		echo "<br />" . __('Send Digest Notification at UTC', 'subscribe2') . ": \r\n";
 		$hours = array('12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm');
 		echo "<select name=\"hour\">\r\n";
-		while ( $hour = current($hours) ) {
-			echo "<option value=\"" . key($hours) . "\"";
-			if ( key($hours) == date('H', $scheduled_time) && !empty($scheduled_time) ){
+		foreach ( $hours as $key => $value ) {
+			echo "<option value=\"" . $key . "\"";
+			if ( !empty($scheduled_time) && $key == date('H', $scheduled_time) ) {
 				echo " selected=\"selected\"";
 			}
-			echo ">" . $hour . "</option>\r\n";
-			next($hours);
+			echo ">" . $value . "</option>\r\n";
 		}
 		echo "</select>\r\n";
-		echo "<strong><em style=\"color: red\">" . __('This option will be ignored if the time selected is not in the future in relation to the current time', 'subscribe2') . "</em></strong>\r\n";
+		echo "<strong><em style=\"color: red\">" . __('Chosen time will be scheduled to a future date in relation to the current UTC time', 'subscribe2') . "</em></strong>\r\n";
 		if ( $scheduled_time ) {
 			$datetime = get_option('date_format') . ' @ ' . get_option('time_format');
 			echo "<p>" . __('Current UTC time is', 'subscribe2') . ": \r\n";
@@ -492,7 +503,7 @@ class s2_admin extends s2class {
 			echo "<p>" . __('Current blog time is', 'subscribe2') . ": \r\n";
 			echo "<strong>" . date_i18n($datetime) . "</strong></p>\r\n";
 			echo "<p>" . __('Next email notification will be sent when your blog time is after', 'subscribe2') . ": \r\n";
-			echo "<strong>" . date_i18n($datetime, $scheduled_time) . "</strong></p>\r\n";
+			echo "<strong>" . date_i18n($datetime, $scheduled_time + $offset) . "</strong></p>\r\n";
 			if ( !empty($this->subscribe2_options['previous_s2cron']) ) {
 				echo "<p>" . __('Attempt to resend the last Digest Notification email', 'subscribe2') . ": ";
 				echo "<input type=\"submit\" class=\"button-secondary\" name=\"resend\" value=\"" . __('Resend Digest', 'subscribe2') . "\" /></p>\r\n";
@@ -545,7 +556,7 @@ class s2_admin extends s2class {
 			} else {
 				$newcats = $cats;
 			}
-			if ( !empty($newcats) ) {
+			if ( !empty($newcats) && $newcats !== $old_cats) {
 				// add subscription to these cat IDs
 				foreach ( $newcats as $id ) {
 					update_user_meta($user_ID, $this->get_usermeta_keyname('s2_cat') . $id, $id);
@@ -572,7 +583,7 @@ class s2_admin extends s2class {
 		foreach ( $user_IDs as $user_ID ) {
 			$old_cats = explode(',', get_user_meta($user_ID, $this->get_usermeta_keyname('s2_subscribed'), true));
 			$remain = array_diff($old_cats, $cats);
-			if ( !empty($remain) ) {
+			if ( !empty($remain) && $remain !== $old_cats) {
 				// remove subscription to these cat IDs and update s2_subscribed
 				foreach ( $cats as $id ) {
 					delete_user_meta($user_ID, $this->get_usermeta_keyname('s2_cat') . $id);
@@ -592,22 +603,22 @@ class s2_admin extends s2class {
 	/**
 	Handles bulk changes to email format for Registered Subscribers
 	*/
-	function format_change($format, $subscribers_string) {
+	function format_change($emails, $format) {
 		if ( empty($format) ) { return; }
 
 		global $wpdb;
-		$subscribers = explode(",\r\n", $subscribers_string);
-		$emails = implode(", ", array_map(array($this,'prepare_in_data'), $subscribers));
-		$ids = $wpdb->get_col("SELECT ID FROM $wpdb->users WHERE user_email IN ($emails)");
+		$useremails = explode(",\r\n", $emails);
+		$useremails = implode(", ", array_map(array($this,'prepare_in_data'), $useremails));
+		$ids = $wpdb->get_col("SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)");
 		$ids = implode(',', array_map(array($this, 'prepare_in_data'), $ids));
 		$sql = "UPDATE $wpdb->usermeta SET meta_value='{$format}' WHERE meta_key='" . $this->get_usermeta_keyname('s2_format') . "' AND user_id IN ($ids)";
-		$wpdb->get_results($sql);
+		$wpdb->query($sql);
 	} // end format_change()
 
 	/**
 	Handles bulk update to digest preferences
 	*/
-	function digest_change($digest, $emails) {
+	function digest_change($emails, $digest) {
 		if ( empty($digest) ) { return; }
 
 		global $wpdb;
