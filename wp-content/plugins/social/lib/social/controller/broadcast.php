@@ -75,7 +75,7 @@ final class Social_Controller_Broadcast extends Social_Controller {
 							}
 							else {
 								$account_content[$key][$account_id[0]] = $account_content[$key][$account_id[0]];
-								if (strlen($account_content[$key][$account_id[0]]) > $service->max_broadcast_length()) {
+								if (social_strlen($account_content[$key][$account_id[0]]) > $service->max_broadcast_length()) {
 									$errors[$key][$account_id[0]] = sprintf(__('Content must not be longer than %s characters.', 'social'), $service->max_broadcast_length());
 								}
 								else {
@@ -107,7 +107,7 @@ final class Social_Controller_Broadcast extends Social_Controller {
 										}
 										else {
 											$account_content[$key][$page_id] = $account_content[$key][$page_id];
-											if (strlen($account_content[$key][$page_id]) > $service->max_broadcast_length()) {
+											if (social_strlen($account_content[$key][$page_id]) > $service->max_broadcast_length()) {
 												$errors[$key][$page_id] = sprintf(__('Content must not be longer than %s characters.', 'social'), $service->max_broadcast_length());
 											}
 											else {
@@ -462,6 +462,10 @@ final class Social_Controller_Broadcast extends Social_Controller {
 		$personal_accounts = null;
 		$errored_accounts = false;
 		$broadcast_accounts = get_post_meta($post->ID, '_social_broadcast_accounts', true);
+		if (empty($broadcast_accounts)) {
+			$broadcast_accounts = array();
+		}
+
 		$broadcasted_ids = get_post_meta($post->ID, '_social_broadcasted_ids', true);
 		if (empty($broadcasted_ids)) {
 			$broadcasted_ids = array();

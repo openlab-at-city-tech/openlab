@@ -4,20 +4,20 @@ Plugin Name: Resize Image After Upload
 Plugin URI: http://www.jepsonrae.com/?utm_campaign=plugins&utm_source=wp-resize-image-after-upload&utm_medium=plugin-url
 Description: This plugin resizes uploaded images to a given width or height (whichever is the largest) after uploading, discarding the original uploaded file in the process.
 Author: Jepson Rae
-Version: 1.1.1
+Version: 1.4.1
 Author URI: http://www.jepsonrae.com/?utm_campaign=plugins&utm_source=wp-resize-image-after-upload&utm_medium=author-url
 
 
 
 Copyright (C) 2008 A. Huizinga (original Resize at Upload plugin)
-Copyright (C) 2012 Jepson Rae Ltd
+Copyright (C) 2013 Jepson Rae Ltd
 
 
 
 Includes hints and code by:
 	Huiz.net (www.huiz.net)
-  Jacob Wyke (www.redvodkajelly.com)
-  Paolo Tresso / Pixline (http://pixline.net)  
+  	Jacob Wyke (www.redvodkajelly.com)
+  	Paolo Tresso / Pixline (http://pixline.net)  
 
 
 
@@ -36,52 +36,87 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-$PLUGIN_VERSION = '1.1.1';
+$PLUGIN_VERSION = '1.4.1';
 
 
-// Set the default plugin values
+// Default plugin values
 if(get_option('jr_resizeupload_version') != $PLUGIN_VERSION) {
 
-  add_option('jr_resizeupload_version', $PLUGIN_VERSION, '','yes');
-  add_option('jr_resizeupload_width', '1200', '', 'yes');
-  add_option('jr_resizeupload_height','1200', '', 'yes');
-  add_option('jr_resizeupload_resize_yesno', 'yes', '','yes');
-} // if
+  add_option('jr_resizeupload_version', 		$PLUGIN_VERSION, '','yes');
+  add_option('jr_resizeupload_width', 			'1200', '', 'yes');
+  add_option('jr_resizeupload_height',			'1200', '', 'yes');
+  add_option('jr_resizeupload_quality',			'90', '', 'yes');
+  add_option('jr_resizeupload_resize_yesno', 	'yes', '','yes');
+}
 
-  
-/* actions */
-add_action( 'admin_menu', 'jr_uploadresize_options_page' ); // add option page
+
+
+// Hook in the options page
+add_action('admin_menu', 'jr_uploadresize_options_page');  
+
+// Hook the function to the upload handler
 if (get_option('jr_resizeupload_resize_yesno') == 'yes') {
-  add_action('wp_handle_upload', 'jr_uploadresize_resize'); // apply our modifications
-} // if
+	add_action('wp_handle_upload', 'jr_uploadresize_resize'); // apply our modifications
+} 
+
+
+
+
 
   
-/* add option page */
+/**
+* Add the options page
+*/
 function jr_uploadresize_options_page(){
-  if(function_exists('add_options_page')){
-    add_options_page('Resize Image After Upload', 'Resize Image Upload', 'manage_options', 'resize-after-upload', 'jr_uploadresize_options');
-  } // if
-} // function
+	if(function_exists('add_options_page')){
+		add_options_page(
+			'Resize Image After Upload', 
+			'Resize Image Upload', 
+			'manage_options', 
+			'resize-after-upload', 
+			'jr_uploadresize_options'
+		);
+	} 
+} // function jr_uploadresize_options_page(){ 
 
 
-/* the real option page */
+
+/** 
+* Define the Options page for the plugin
+*/
 function jr_uploadresize_options(){
 
   if (isset($_POST['jr_options_update'])) {
+  
     $maxwidth = trim(mysql_real_escape_string($_POST['maxwidth']));
     $maxheight = trim(mysql_real_escape_string($_POST['maxheight']));
+    $quality = trim(mysql_real_escape_string($_POST['quality']));
     $yesno = $_POST['yesno'];
     
     // if input is empty or not an integer, use previous setting
-    if ($maxwidth == '' OR ctype_digit(strval($maxwidth)) == FALSE) {
-      $maxwidth = get_option('jr_resizeupload_width');
-    } // if
-    if ($maxheight == '' OR ctype_digit(strval($maxheight)) == FALSE) {
-      $maxheight = get_option('jr_resizeupload_height');
-    } // if
+    if ($maxwidth == '' || ctype_digit(strval($maxwidth)) == FALSE) {
+    	$maxwidth = get_option('jr_resizeupload_width');
+    } 
+    
+    if ($maxheight == '' || ctype_digit(strval($maxheight)) == FALSE) {
+    	$maxheight = get_option('jr_resizeupload_height');
+    } 
+    
+    if ($quality == '' || ctype_digit(strval($quality)) == FALSE) {
+		$quality = get_option('jr_resizeupload_quality');
+    }
+    
+    if($quality<0) {
+    	$quality=0;
+    }
+    else if($quality>100) {
+    	$quality=100;
+    }
+    
     
     update_option('jr_resizeupload_width',$maxwidth);
     update_option('jr_resizeupload_height',$maxheight);
+    update_option('jr_resizeupload_quality',$quality);
     
     if ($yesno == 'yes') {
       update_option('jr_resizeupload_resize_yesno','yes');
@@ -98,76 +133,107 @@ function jr_uploadresize_options(){
   // get options and show settings form
   $maxwidth = get_option('jr_resizeupload_width');
   $maxheight = get_option('jr_resizeupload_height');
+  $quality = get_option('jr_resizeupload_quality');
   $yesno = get_option('jr_resizeupload_resize_yesno');
-  
+?>
 
-  echo('<div class="wrap">');
-  echo('<form method="post" accept-charset="utf-8">');
-    
-  echo('<h2>Resize Image After Upload Options</h2>');
-  echo('<p>This plugin resizes uploaded images to  given maximum width and/or height after uploading, discarding the original uploaded file in the process.
-   You can set the max width and max height, and images (JPEG, PNG or GIF) will be resized automatically after they are uploaded.</p>');
+<div class="wrap">
+	<form method="post" accept-charset="utf-8">
 
-  echo('<p>Your file will be resized, there will not be a copy or backup with the original size.</p>');
-  
-  echo('<p>Set the option \'Resize\' to no if you want to disable resizing, this way you shouldn\'t need to deactivate the plugin 
-   if you don\'t want to resize for a while.</p>');
+		<h2>Resize Image After Upload Options</h2>
+		<p>This plugin resizes uploaded images to  given maximum width and/or height after uploading, discarding the original uploaded file in the process.
+	You can set the max width and max height, and images (JPEG, PNG or GIF) will be resized automatically after they are uploaded.</p>
 
-  echo('<h3>Settings</h3>
-    <table class="form-table">
-  
-    <tr>
-    <td>Resize:&nbsp;</td>
-    <td>
-    <select name="yesno" id="yesno">  
-    <option value="no" label="no"'); if ($yesno == 'no') echo(' selected=selected'); echo('>no</option>
-    <option value="yes" label="yes"'); if ($yesno == 'yes') echo(' selected=selected'); echo('>yes</option>
-    </select>
-    </td>
-    </tr>
-  
-    <tr>
-    <td>Max width x height:&nbsp;</td>
-    <td>
-    <input type="text" name="maxwidth" size="10" id="maxwidth" value="'.$maxwidth.'" />
-    x
-    <input type="text" name="maxheight" size="10" id="maxheight" value="'.$maxheight.'" />
-    <br />
-    <small>Enter valid max width and height in pixels (e.g. 1200).</small>
-    </td>
-    </tr>
-    
-    </table>');  
-  
-  echo('<p class="submit">
-  <input type="hidden" name="action" value="update" />  
-  <input id="submit" name="jr_options_update" class="button button-primary" type="submit" value="Update Options">
-  
-  </p>
-  </form>');
+		<p>Your file will be resized, there will not be a copy or backup with the original size.</p>
 
-  echo('</div>');
-}
+		<p>Set the option 'Resize' to no if you want to disable resizing, this way you shouldn&#8217;t need to deactivate the plugin if you don&#8217;t want to resize for a while.</p>
+
+		<h3 style="margin-top:20px;border-top:1px solid #eee;padding-top:20px;">Settings</h3>
+		<table class="form-table">
+			<tr>
+				<td valign="top">Resize images:&nbsp;</td>
+				<td valign="top">
+					<select name="yesno" id="yesno">  
+						<option value="no" label="no" <?php echo ($yesno == 'no') ? 'selected="selected"' : ''; ?>>No</option>
+						<option value="yes" label="yes" <?php echo ($yesno == 'yes') ? 'selected="selected"' : ''; ?>>Yes</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td valign="top">Maximum width and height (pixels):&nbsp;</td>
+				<td valign="top">
+					<input type="text" name="maxwidth" size="7" id="maxwidth" value="<?php echo $maxwidth; ?>" /> px-wide
+					<br /><input type="text" name="maxheight" size="7" id="maxheight" value="<?php echo $maxheight; ?>" /> px-high
+					<br /><small>Integer pixel value (e.g. 1200)</small>
+					<br /><small>Recommended value: 1200</small>
+				</td>
+			</tr>
+			
+			<tr>
+				<td valign="top">Compression quality (for JPEGs):&nbsp;</td>
+				<td valign="top">
+					<input type="text" name="quality" size="5" id="maxwidth" value="<?php echo $quality; ?>" />
+					<br /><small>Integer between 0 (low quality, smallest files) and 100 (best quality, largest files)</small>
+					<br /><small>Recommended value: 90</small>
+				</td>
+			</tr>
+
+		</table>
+
+		<p class="submit" style="margin-top:20px;border-top:1px solid #eee;padding-top:20px;">
+		  <input type="hidden" name="action" value="update" />  
+		  <input id="submit" name="jr_options_update" class="button button-primary" type="submit" value="Update Options">
+		</p>
+	</form>
+
+</div>
+<?php
+} // function jr_uploadresize_options(){
 
 
 
-/* This function will apply changes to the uploaded file */
+/**
+* This function will apply changes to the uploaded file 
+* @param $array - contains file, url, type
+*/
 function jr_uploadresize_resize($array){ 
-  // $array contains file, url, type
-  if ($array['type'] == 'image/jpeg' OR $array['type'] == 'image/gif' OR $array['type'] == 'image/png') {
-    // there is a file to handle, so include the class and get the variables
+
+  if(
+  	$array['type'] == 'image/jpeg' || 
+  	$array['type'] == 'image/gif' || 
+  	$array['type'] == 'image/png')	
+  {
+
+    // Include the file to carry out the resizing
     require_once('class.resize.php');
-    $maxwidth = get_option('jr_resizeupload_width');
-    $maxheight = get_option('jr_resizeupload_height');
-    //$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'W', $maxwidth);
-    $info=getimagesize($array['file']);
-    if ($info[0]>$info[1]) {
-    	//Resize by width
-    	$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'W', $maxwidth);
-    } else {
-    	//Resize by height
-    	$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'H', $maxheight);
-    }
-  } // if
+
+	// Get resizing limits
+    $max_width = get_option('jr_resizeupload_width');
+    $max_height = get_option('jr_resizeupload_height');
+    
+    $quality = get_option('jr_resizeupload_quality');
+
+	// Get original image sizes
+    $original_info = getimagesize($array['file']);
+    $original_width = $original_info[0];
+    $original_height = $original_info[1];
+	
+	// Perform the resize only if required, i.e. the image is larger than the max sizes
+	if($original_width > $max_width || $original_height > $max_height) {
+	
+		//Resize by width
+		if($original_width > $original_height) {
+			$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'W', $max_width, true, $quality);
+		
+		} 
+	
+		//Resize by height
+		else {
+			$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'H', $max_height, true, $quality);
+		}
+	}
+  } 
+  
   return $array;
-} // function
+} // function jr_uploadresize_resize($array){ 

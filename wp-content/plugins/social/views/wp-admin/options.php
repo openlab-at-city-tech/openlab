@@ -28,6 +28,20 @@ echo Social_View::factory(
 				</td>
 			</tr>
 			<tr>
+				<th><?php _e('Broadcasting enabled for', 'social'); ?></th>
+<?php
+$available_post_types = Social::broadcasting_available_post_types();
+$enabled_post_types = Social::broadcasting_enabled_post_types();
+?>
+				<td>
+<?php foreach ($available_post_types as $type) { ?>
+					<div>
+						<input type="checkbox" id="social_enabled_post_types[<?php echo esc_attr($type) ?>]" name="social_enabled_post_types[<?php echo esc_attr($type) ?>]" value="1" <?php echo checked(in_array($type, $enabled_post_types)) ?>/> <label for="social_enabled_post_types[<?php echo $type ?>]"><?php echo esc_html(ucwords(str_replace('_', ' ', $type))) ?></label>
+					</div>
+<?php } ?>
+				</td>
+			</tr>
+			<tr>
 				<th><?php _e('Broadcasting is on by default', 'social'); ?></th>
 				<td>
 					<input type="radio" name="social_broadcast_by_default" id="social-broadcast-by-default-yes" value="1"<?php checked('1', Social::option('broadcast_by_default'), true); ?>
@@ -58,7 +72,7 @@ echo Social_View::factory(
 					<div class="description">
 						<?php _e('Tokens:', 'social'); ?>
 						<ul>
-<?php 
+<?php
 foreach (Social::broadcast_tokens() as $token => $description) {
 	if (!empty($description)) {
 		$description = ' - '.$description;
@@ -83,7 +97,7 @@ foreach (Social::broadcast_tokens() as $token => $description) {
 					<div class="description">
 						<?php _e('Tokens:', 'social'); ?>
 						<ul>
-<?php 
+<?php
 foreach (Social::comment_broadcast_tokens() as $token => $description) {
 	if (!empty($description)) {
 		$description = ' - '.$description;
@@ -100,8 +114,8 @@ foreach (Social::comment_broadcast_tokens() as $token => $description) {
 			<tr>
 				<th><?php _e('Twitter @anywhere', 'social'); ?></th>
 				<td>
-					<p>Social Version 2.6 has removed @anywhere support to comply with <a href="https://dev.twitter.com/blog/sunsetting-anywhere">Twitter's decision to sunset the service</a>.</p>
-					<p>If you would like to continue to use @anywhere, <a href="https://www.google.com/search?q=WordPress+@anywhere+plugin" target="_blank">there are many plugins available to accomodate</a>.</p>
+					<p><?php printf(__('Social Version 2.6 has removed @anywhere support to comply with <a href="%s">Twitter\'s decision to sunset the service</a>.', 'social'), esc_url('https://dev.twitter.com/blog/sunsetting-anywhere')); ?></p>
+					<p><?php printf(__('If you would like to continue to use @anywhere, <a href="%s" target="_blank">there are many plugins available to accomodate</a>.', 'social'), esc_url('https://www.google.com/search?q=WordPress+@anywhere+plugin')); ?></p>
 				</td>
 			</tr>
 		</table>
@@ -144,7 +158,7 @@ $toggle = (
 										$selected_id = $social_api_accounts['twitter'];
 									?>
 									<div class="twitter-api-account">
-										<label>Twitter Default API Account</label>
+										<label><?php _e('Twitter Default API Account', 'social'); ?></label>
 										<select id="social_api_accounts-twitter" name="social_api_accounts[twitter]">
 											<?php foreach ($twitter_accounts as $account): $acct_id = $account->id() ?>
 												<?php if ($account->personal()) { continue; } ?>

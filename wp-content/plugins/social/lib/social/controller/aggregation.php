@@ -35,7 +35,7 @@ final class Social_Controller_Aggregation extends Social_Controller {
 		$default_urls = array(
 			home_url('?p='.$post->ID)
 		);
-		$url = wp_get_shortlink($post->ID);
+		$url = social_get_shortlink($post->ID);
 		if (strpos($url, '?p=') === false) {
 			$default_urls[] = $url;
 		}
@@ -85,7 +85,7 @@ final class Social_Controller_Aggregation extends Social_Controller {
 			$urls = array_unique($urls);
 			if (count($urls)) {
 				foreach ($urls as $key => $url) {
-					$urls[$key] = urlencode($url);
+					$urls[$key] = $url;
 				}
 				$service->aggregate_by_url($post, $urls);
 			}
