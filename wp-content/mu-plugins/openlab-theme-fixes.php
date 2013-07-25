@@ -10,6 +10,7 @@ function openlab_load_theme_fixes() {
 	switch ( $t ) {
 		case 'carrington-blog' :
 		case 'coraline' :
+		case 'wu-wei' :
 
 			echo '<link rel="stylesheet" id="' . $t . '-fixes" type="text/css" media="screen" href="' . get_home_url() . '/wp-content/mu-plugins/theme-fixes/' . $t . '.css" />
 ';
