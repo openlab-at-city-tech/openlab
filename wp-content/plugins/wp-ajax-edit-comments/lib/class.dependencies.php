@@ -27,12 +27,9 @@ class AECDependencies {
 		/* Private - Adds JavaScript in the admin panel if admin has enabled the option */
 		//public static class.dependencies
 		public static function add_admin_scripts() {
-			global $aecomments;
-			
-			wp_register_script('jquery-tools', $aecomments->get_plugin_url() . '/js/jquery.tools.min.js', array('jquery',"jquery-ui-sortable"), $aecomments->get_version(), true);
 
 			//Admin scripts here
-			AECJS::output_js( 'aec_admin', array( 'jquery-tools' ), true, 'aec/admin', 'admin' );
+			AECJS::output_js( 'aec_admin', array( 'jquery-ui-sortable' ), true );
 		} //end add_admin_scripts
 		
 		
@@ -48,13 +45,7 @@ class AECDependencies {
 					return;
 
 				//Output CSS or enqueue depending on if a file exists or not
-				$css_uri = AECCSS::get_main_css_url( );
-				if ( is_wp_error( $css_uri ) ) {
-					AECCSS::get_main_css( true ); //echo out
-				} else {
-					
-					wp_enqueue_style('aeceditcomments', $css_uri, array(), $aecomments->get_version());
-				}
+				AECCSS::get_main_css( true ); //echo out
 				
 				//Output clearfix - Saves a page request so it echoes out the entire CSS in the source
 				ob_start();
@@ -90,7 +81,7 @@ class AECDependencies {
 			if ( !is_admin() ) AECDependencies::load_frontend(false);
 			AECDependencies::queue_colorbox_script( $min, $load_footer );
 			//Output icon JS
-			AECJS::output_js( 'wp_ajax_edit_comments_script', array("jquery"), $load_footer, 'aec/ajax-edit-comments', 'icons ' );
+			AECJS::output_js( 'wp_ajax_edit_comments_script', array("jquery"), $load_footer );
 		} //end add_scripts
 		
 		public static function ajax_url() {
@@ -98,7 +89,7 @@ class AECDependencies {
 			?>
 <script type='text/javascript'>
 /*From Ajax Edit Comments*/
-if ( typeof( ajaxurl == 'undefined' ) ) { var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>'; }
+if ( typeof( ajaxurl ) == 'undefined' ) { var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>'; }
 </script>
             <?php
 		} //end ajax_url
@@ -188,7 +179,7 @@ if ( typeof( ajaxurl == 'undefined' ) ) { var ajaxurl = '<?php echo esc_js( admi
 					$deps[] = "colorbox";
 				}
 			}
-			AECJS::output_js( 'aec_frontend', $deps, true, 'aec/frontend', 'frontend' );
+			AECJS::output_js( 'aec_frontend', $deps, true );
 		} //end load_frontend
 		
 		//Loads the after-the-deadline scripts

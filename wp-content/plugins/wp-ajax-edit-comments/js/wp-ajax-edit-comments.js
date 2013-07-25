@@ -340,8 +340,8 @@ function ( response ) {
 		} catch(err) { }
 		var data = pre_process(obj);
 		remove_dropdown(data.cid);
-		$j("a#" + obj.attr("id")).colorbox({iframe:true, scrolling: false, width:wpajaxeditcomments.AEC_colorbox_width, height: wpajaxeditcomments.AEC_colorbox_height, opacity:0.6});
-		$j("a#" + obj.attr("id")).trigger("click.colorbox");
+		$j("a#" + obj.attr("id") ).colorbox({iframe:true, scrolling: false, width:wpajaxeditcomments.AEC_colorbox_width, height: wpajaxeditcomments.AEC_colorbox_height, opacity:0.6});
+		//$j("a#" + obj.attr("id") + ":first").trigger("click.colorbox"); //Getting rid of this stops the stack overflow issues
 		return false;
 	};
 	function _update_comment_interface( response, comment_id ) {

@@ -1,0 +1,13 @@
+/**
+ * This file defines overrides and common styles to make sure the 
+ * widget looks correct after initial install and activation.
+ */
+
+/* create a little space around the img */
+.cfcw-content img { margin-right: 10px; }
+
+/* beef up the inner title */
+.cfcw-content .cfcw-title {
+  font-size: 1.25em;
+  font-weight: bold;
+}

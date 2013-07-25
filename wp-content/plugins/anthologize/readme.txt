@@ -3,8 +3,8 @@ Contributors: oneweekonetool, boonebgorges, digitaleffie, gossettphd, janaremy, 
 Donate link: http://anthologize.org/
 Tags: book, pdf, tei, epub, publish, ebook
 Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 0.6.2-alpha
+Tested up to: 3.5
+Stable tag: 0.7
 
 Use the power of WordPress to transform your content into a book.
 
@@ -65,6 +65,7 @@ To add your own cover images, just upload them to the anthologize/templates/epub
 * Improvements to HTML export format
 * PHP 5.4+ compatibility
 * Improved adherence to WordPress coding standards
+* Added a Credits section
 
 = 0.6.2-alpha =
 * Improved compatibility with WP 3.3
@@ -126,4 +127,12 @@ To add your own cover images, just upload them to the anthologize/templates/epub
 
 == Who built this? ==
 
-Anthologize was built during [One Week | One Tool](http://oneweekonetool.org/ "One Week | One Tool"), an NEH Summer Institute at George Mason University's [Center for History and New Media](http://chnm.gmu.edu/ "CHNM")
+Anthologize was built during [One Week | One Tool](http://oneweekonetool.org/ "One Week | One Tool"), an NEH Summer Institute at George Mason University's [Center for History and New Media](http://chnm.gmu.edu/ "CHNM").
+
+Major sponsors of Anthologize:
+* <a href="http://www.neh.gov/divisions/odh">The Office of Digital Humanities of the National Endowment for the Humanties</a>
+* <a href="http://chnm.gmu.edu">The Roy Rosenzweig Center for History and New Media</a>
+* <a href="http://openlab.citytech.cuny.edu">City Tech OpenLab</a>
+* <a href="http://www.demokratie-dialog.de/">Demokratie & Dialog e.V.</a>
+
+See the Credits page in the Anthologize dashboard for more details.

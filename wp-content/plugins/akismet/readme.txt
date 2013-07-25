@@ -1,9 +1,9 @@
 === Akismet ===
-Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, automattic
+Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, automattic
 Tags: akismet, comments, spam
 Requires at least: 3.0
-Tested up to: 3.1
-Stable tag: 2.5.3
+Tested up to: 3.6
+Stable tag: 2.5.8
 License: GPLv2 or later
 
 Akismet checks your comments against the Akismet web service to see if they look like spam or not.
@@ -30,6 +30,43 @@ Upload the Akismet plugin to your blog, Activate it, then enter your [Akismet.co
 1, 2, 3: You're done!
 
 == Changelog ==
+
+= 2.5.8 =
+* Simplify the activation process for new users
+* Remove the reporter_ip parameter
+* Minor preventative security improvements
+
+= 2.5.7 =
+* FireFox Stats iframe preview bug
+* Fix mshots preview when using https
+* Add .htaccess to block direct access to files
+* Prevent some PHP notices
+* Fix Check For Spam return location when referrer is empty
+* Fix Settings links for network admins
+* Fix prepare() warnings in WP 3.5
+
+= 2.5.6 =
+* Prevent retry scheduling problems on sites where wp_cron is misbehaving
+* Preload mshot previews
+* Modernize the widget code
+* Fix a bug where comments were not held for moderation during an error condition
+* Improve the UX and display when comments are temporarily held due to an error
+* Make the Check For Spam button force a retry when comments are held due to an error
+* Handle errors caused by an invalid key
+* Don't retry comments that are too old
+* Improve error messages when verifying an API key
+
+= 2.5.5 =
+* Add nonce check for comment author URL remove action
+* Fix the settings link
+
+= 2.5.4 =
+* Limit Akismet CSS and Javascript loading in wp-admin to just the pages that need it
+* Added author URL quick removal functionality
+* Added mShot preview on Author URL hover
+* Added empty index.php to prevent directory listing
+* Move wp-admin menu items under Jetpack, if it is installed
+* Purge old Akismet comment meta data, default of 15 days
 
 = 2.5.3 = 
 * Specify the license is GPL v2 or later

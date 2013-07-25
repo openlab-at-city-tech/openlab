@@ -5,9 +5,9 @@
 jQuery(document).ready(function() {
 
   // cache some useful variables to make scripting a little easier
-  $dummyWidget = jQuery('div[id*="cac_featured_content_widget-__i__"]');
-  $dummyCheckbox = jQuery('.cfcw_checkbox', $dummyWidget);
-  $dummyPostInput = jQuery('.featured_post', $dummyWidget);
+  var $dummyWidget = jQuery('div[id*="cac_featured_content_widget-__i__"]');
+  var $dummyCheckbox = jQuery('.cfcw_checkbox', $dummyWidget);
+  var $dummyPostInput = jQuery('.featured_post', $dummyWidget);
 
   /**
    * We need the dummy (__i__) widget to make sure the "display images" checkbox
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
   });
 
   // delegate the select box change event so we can hide/show the appropriate input(s)
-  jQuery('#widgets-right').on('change', 'select', function(event) {
+  jQuery('#widgets-right').on('change', '.featured_select', function(event) {
     // only call typeChange() if we're getting an event from our widget
     if (event.target.id.match(/cac_featured_content/)) {
       cacFeaturedContent.typeChange(jQuery(this).closest('div.widget'));
@@ -52,9 +52,9 @@ jQuery(document).ready(function() {
   jQuery('#widgets-right').on('focusout', '.featured_blog', function() {
     // only call click() if we're getting an event from our widget
     if (event.target.id.match(/cac_featured_content/)) {
-      $widget = jQuery(this).closest('div.widget');
-      if ($widget.find(':selected').val() == 'post') {
-        $widget.find(':submit').click();
+      var $widget = jQuery(this).closest('div.widget');
+      if ($widget.find('.featured_select').val() == 'post') {
+        setTimeout(function() { $widget.find(':submit').click(); }, 500);
       }
     }
   });
@@ -64,7 +64,7 @@ jQuery(document).ready(function() {
   jQuery('#widgets-right').on('click', '.cfcw_checkbox', function(event) {
     // only toggleImageInputs() if we're getting an event from our widget
     if (event.target.id.match(/cac_featured_content/)) {
-      $widget = jQuery(this).closest('div.widget');
+      var $widget = jQuery(this).closest('div.widget');
       cacFeaturedContent.toggleImageInputs($widget);
     }
   });
@@ -84,15 +84,14 @@ var cacFeaturedContent = {
   init: function() {
 
     // gather all the widgets
-    $widgets = jQuery('[id*="_cac_featured_content_widget"]');
+    var $widgets = jQuery('[id*="_cac_featured_content_widget"]');
 
     // initialize all widgets except the dummy widget (we did that when the page loaded)
     $widgets.each(function() {
       
       // cache some variables to make scripting easier
-      $currentWidget = jQuery(this);
-      widgetID = $currentWidget.find('input[name="widget-id"]').val();
-      contentType = $currentWidget.find(':selected').val();
+      var $currentWidget = jQuery(this);
+      var widgetID = $currentWidget.find('input[name="widget-id"]').val();
 
       if (widgetID !== "cac_featured_content_widget-__i__") {
 
@@ -110,7 +109,8 @@ var cacFeaturedContent = {
 
   // this function runs when the content type select box changes
   typeChange: function($widget) {
-    contentType = $widget.find(':selected').val();
+
+    var contentType = $widget.find('.featured_select').val();
 
     // start by hiding all inputs
     cacFeaturedContent.hideAll($widget);
@@ -147,14 +147,22 @@ var cacFeaturedContent = {
 
   // this function initializes autocomplete for a given content type
   initAutocomplete: function($widget, type) {
+    // widget numbers are weird when you first drop a new widget in the admin
+    // so we have to use a different attr when a widget is first created
+    if ($widget.find('[name="multi_number"]').val()) {
+      var num = $widget.find('[name="multi_number"]').val();
+    } else {
+      var num = $widget.find('[name="widget_number"]').val();
+    }
+    
     $widget.find('input.featured_' + type + '_ac').autocomplete({
-      source: ajaxurl + '?action=cfcw_query_' + type,
+      source: ajaxurl + '?action=cfcw_query_' + type + '&num=' + num,
     });
   },
 
   // this function checks the value of the blog input and disables/enables post input
   togglePostInput: function($widget) {
-    $postInput = $widget.find('.featured_post');
+    var $postInput = $widget.find('.featured_post');
     if ($widget.find('.featured_blog').val() == '') {
       $postInput.val('').attr('disabled', true);
     } else {
@@ -164,7 +172,7 @@ var cacFeaturedContent = {
 
   // this function shows or hides the 3 'p' elements that come after the display images checkbox
   toggleImageInputs: function($widget) {
-    $checkbox = $widget.find('.cfcw_checkbox');
+    var $checkbox = $widget.find('.cfcw_checkbox');
     if ($checkbox.is(':checked')) {
       $checkbox.closest('p').next().show().next().show().next().show();
     } else {

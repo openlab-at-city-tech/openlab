@@ -46,7 +46,19 @@ class CAC_Featured_Content_Helper {
 				}
 			}
 		}
+
 		$blog_data = get_blog_details($blog_id);
+
+	  // update the blog domain on MS installs
+	  // this makes domain mapping plugin work
+	  if ( is_multisite() ) {
+	  	if ( $blog_data ) {
+		  	switch_to_blog( $blog_data->blog_id );
+		  	$blog_data->siteurl = home_url('/');
+		  	restore_current_blog();
+	  	}
+	  }
+
 		return $blog_data;
 	}
 
@@ -57,14 +69,19 @@ class CAC_Featured_Content_Helper {
 	 * @param int $blog_id - ID of the blog you're trying to get a post from
 	 * @return object
 	 */
-	public static function get_post_by_slug( $slug, $blog_id ) {
+	public static function get_post_by_slug( $slug, $blog_id = '' ) {
 		global $post;
 
 		$single_post = false;
 
-		switch_to_blog($blog_id);
-
-		$posts = new WP_Query( array( 'name' => $slug, 'post_type' => array( 'post', 'page' ) ) );
+		// setup $posts var
+		if ( is_multisite() ) {
+			switch_to_blog($blog_id);
+			$posts = new WP_Query( array( 'name' => $slug, 'post_type' => array( 'post', 'page' ) ) );
+			restore_current_blog();
+		} else {
+			$posts = new WP_Query( array( 'name' => $slug, 'post_type' => array( 'post', 'page' ) ) );
+		}
 
 		if ( $posts->have_posts() ) :
 			while ( $posts->have_posts() ) :
@@ -76,7 +93,11 @@ class CAC_Featured_Content_Helper {
 			endwhile;
 		endif;
 
-		restore_current_blog();
+	  // update the post guid on MS installs
+	  // this makes domain mapping plugin work
+	  if ( is_multisite() )
+	    $single_post->guid = get_blog_permalink( $blog_id, $single_post->ID );
+
 		return $single_post;
 	}
 
@@ -140,7 +161,7 @@ class CAC_Featured_Content_Helper {
 				  '" class="align-left thumbnail" />';
 			}
 		} else {
-      			$content = false;
+      $content = false;
 		}
 
 		return $content;
@@ -156,18 +177,44 @@ class CAC_Featured_Content_Helper {
 	 * @param array $params
 	 * @param array $sidebar
 	 */
-	public static function error( $msg = "" ) {
+	public static function error( $msg = '' ) {
 		?>
-		  <h3>Error</h3>
-      <div>
-        <div class="cac-content">
-        	<p><?php echo $msg ?></p>
-          <p>Please correct and reload.</p>
-        </div>
+		  <h3><?php _e( 'Error', 'cac-featured-content' ) ?></h3>
+      <div class="cfcw-content">
+      	<p><?php echo $msg ?></p>
+        <p><?php _e( 'Please correct and reload.', 'cac-featured-content' ) ?></p>
       </div>
 		<?php 
 	}
 
+} // end CAC_Featured_Content_Helper class
+
+/**
+ * Get a numeric user ID from either an email address or a login.
+ * This function has been copied from ms-functions.php to provide
+ * the same functionality when not running mulitsite
+ *
+ * @param string $string
+ * @return int
+ */
+if ( ! function_exists( 'get_user_id_from_string' ) ) {
+	function get_user_id_from_string( $string ) {
+		$user_id = 0;
+
+		if ( is_email( $string ) ) {
+			$user = get_user_by('email', $string);
+			if ( $user )
+				$user_id = $user->ID;
+		} elseif ( is_numeric( $string ) ) {
+			$user_id = $string;
+		} else {
+			$user = get_user_by('login', $string);
+			if ( $user )
+				$user_id = $user->ID;
+		}
+
+		return $user_id;
+	}
 }
 
 ?>

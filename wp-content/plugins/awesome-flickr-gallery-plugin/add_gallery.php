@@ -66,6 +66,7 @@ function afg_add_gallery() {
                 'captions' => afg_filter($_POST['afg_captions']),
                 'descr' => afg_filter($_POST['afg_descr']),
                 'columns' => afg_filter($_POST['afg_columns']),
+                'slideshow_option' => afg_filter($_POST['afg_slideshow_option']),
                 'credit_note' => afg_filter($_POST['afg_credit_note']),
                 'bg_color' => afg_filter($_POST['afg_bg_color']),
                 'width' => afg_filter($_POST['afg_width']),
@@ -118,7 +119,7 @@ function afg_add_gallery() {
                         <table class='form-table'>
                            <tr valign='top'>
                               <th scope='row'>Gallery Name</th>
-                              <td><input maxlength='30' type='text' id='afg_add_gallery_name' name='afg_add_gallery_name' onblur="verifyBlank()" value="" /><font size='3' color='red'>*</font></td>
+                              <td><input maxlength='30' type='text' id='afg_add_gallery_name' name='afg_add_gallery_name' onblur='verifyBlank()' value='' /><font size='3' color='red'>*</font></td>
                            </tr>
                            <tr valign='top'>
                               <th scope='row'>Gallery Description</th>

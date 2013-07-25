@@ -18,10 +18,10 @@ class AECAjax {
 			$postID = AECAjax::get_post_id();
 			$commentID = AECAjax::get_comment_id();
 			if (isset($_POST['post_offset'])) {
-				$response = AECAjax::get_posts( absint( $_POST['post_offset']) );
+				$response = AECAjax::get_posts( absint( $_POST['post_offset']), $postID );
 			}
 			if (isset($_POST['post_title'])) {
-				$response = AECAjax::get_posts_by_title($_POST['post_title']);
+				$response = AECAjax::get_posts_by_title($_POST['post_title'], $postID );
 			}
 			if (isset($_POST['post_id'])) {
 				$response = AECAjax::get_posts_by_id( absint( $_POST['post_id'] ) );
@@ -163,7 +163,7 @@ class AECAjax {
 			if (!empty($where)) {
 				$where = preg_replace('/and $/','',$where); //strip out excessive ands
 				$query .= "select * from $wpdb->comments where $where and comment_approved != 'spam'";
-				$results = $wpdb->get_results($wpdb->prepare($query),ARRAY_A);
+				$results = $wpdb->get_results($query, ARRAY_A);
 				if ($results) {
 					foreach ($results as $r) {
 						$spamCount += 1;
@@ -581,7 +581,7 @@ class AECAjax {
 		public static function get_time_left($commentID = 0) {
 			global $wpdb, $aecomments;
 			$adminMinutes = (int)$aecomments->get_admin_option( 'minutes' );
-			$query = $wpdb->prepare( "SELECT ($adminMinutes * 60 - (UNIX_TIMESTAMP('" . current_time('mysql') . "') - UNIX_TIMESTAMP(comment_date))) time, comment_author_email, user_id FROM $wpdb->comments where comment_ID = $commentID" );
+			$query = $wpdb->prepare( "SELECT ($adminMinutes * 60 - (UNIX_TIMESTAMP('" . current_time('mysql') . "') - UNIX_TIMESTAMP(comment_date))) time, comment_author_email, user_id FROM $wpdb->comments where comment_ID = %d", $commentID );
 			
 			//Get the Timestamp
 			$comment = $wpdb->get_row($query, ARRAY_A);
@@ -610,10 +610,11 @@ class AECAjax {
 		Returns five posts with an offset
 		*/
 		//public static class.ajax
-		public static function get_posts($offset = 0) {
+		public static function get_posts($offset = 0, $post_id = 0 ) {
 			global $wpdb;
 			$response_arr =  array();
-			$results = $wpdb->get_results( $wpdb->prepare( "select ID, post_title from $wpdb->posts where post_type = 'post' and post_status = 'publish' order by ID desc limit $offset,6" ), ARRAY_A);
+			$post_type = get_post_type( $post_id );
+			$results = $wpdb->get_results( $wpdb->prepare( "select ID, post_title from $wpdb->posts where post_type = %s and post_status = 'publish' order by ID desc limit %d,6", $post_type, $offset ), ARRAY_A);
 			foreach ($results as $r) {
 				$response_arr['posts'][] = array(
 					'post_id' => $r['ID'],
@@ -627,11 +628,12 @@ class AECAjax {
 		Returns five posts by title
 		*/
 		//public static class.ajax
-		public static function get_posts_by_title($title) {
+		public static function get_posts_by_title( $title, $post_id ) {
 			global $wpdb;
 			$title = '%' . $title . '%';
+			$post_type = get_post_type( $post_id );
 			$response_arr =  array();
-			$results = $wpdb->get_results( $wpdb->prepare( "select ID, post_title from $wpdb->posts where post_type = 'post' and post_status = 'publish' and post_title like '%s' limit 6", $title ), ARRAY_A);
+			$results = $wpdb->get_results( $wpdb->prepare( "select ID, post_title from $wpdb->posts where post_type = %s and post_status = 'publish' and post_title like '%s' limit 6", $post_type, $title ), ARRAY_A);
 			foreach ($results as $r) {
 				$response_arr['posts'][] = array(
 					'post_id' => $r['ID'],
@@ -648,7 +650,8 @@ class AECAjax {
 		//public static class.ajax
 		public static function get_posts_by_id($id) {
 			global $wpdb;
-			$results = $wpdb->get_row( $wpdb->prepare( "select * from $wpdb->posts where post_type = 'post' and post_status = 'publish' and ID = $id" ), ARRAY_A);
+			$post_type = get_post_type( $id );
+			$results = $wpdb->get_row( $wpdb->prepare( "select * from $wpdb->posts where post_type = %s and post_status = 'publish' and ID = %d", $post_type, $id ), ARRAY_A);
 			if ($results) {
 				$response_arr['posts'] = array(
 					'post_id' => $results['ID'],

@@ -10,10 +10,13 @@
 
 ?>
 
-<h3><?php esc_html_e( $cfcw_view->title ) ?></h3>
+<?php // echo out the widget title using the element selected in the widget admin
+  echo "<{$cfcw_view->title_element} class='widgettitle'>";
+  esc_html_e( $cfcw_view->title );
+  echo "</{$cfcw_view->title_element}>";
+?>
 
-<div>
-
+<div class="cfcw-content">
   <?php
     if ( $cfcw_view->display_images ) {
       if ( $cfcw_view->image_url )
@@ -21,20 +24,17 @@
       else
         echo $cfcw_view->avatar;
     }
-    
   ?>
+  
+  <p class="cfcw-title">
+    <a href="<?php echo esc_url( $cfcw_view->blog->siteurl ) ?>"><?php esc_html_e( $cfcw_view->blog->blogname ) ?></a>
+  </p>
 
-  <div class="cac-content">
-    <h4><a href="<?php echo esc_url( $cfcw_view->blog->siteurl ) ?>"><?php esc_html_e( $cfcw_view->blog->blogname ) ?></a></h4>
+  <p class="cfcw-description"><?php echo $cfcw_view->blog->description ?></p>
 
-    <p><?php echo $cfcw_view->blog->description ?></p>
-
-    <?php if ( $cfcw_view->read_more ) : ?>
-      <p class="more">
-        <a href="<?php echo esc_url( $cfcw_view->blog->siteurl ) ?>"><?php esc_html_e( $cfcw_view->read_more ) ?></a>
-      </p>
-    <?php endif ?>
-  </div>
-
+  <?php if ( $cfcw_view->read_more ) : ?>
+    <p class="more">
+      <a href="<?php echo esc_url( $cfcw_view->blog->siteurl ) ?>"><?php esc_html_e( $cfcw_view->read_more ) ?></a>
+    </p>
+  <?php endif ?>
 </div>
-

@@ -1,0 +1,1601 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjaxEditComments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-22 11:49+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. Description of the plugin
+msgid ""
+"Ajax Edit Comments allows users to edit their comments for a period of time. "
+"Administrators have a lot more features, such as the ability to edit "
+"comments directly on a post or page."
+msgstr ""
+"Ajax Edit Comments staat gebruikers toe hun reacties te wijzigen binnen een "
+"bepaalde periode. Administrators hebben veel meer mogelijkheden, "
+"bijvoorbeeld het bewerken van reacties direct op het bericht of pagina"
+
+#: ../wp-ajax-edit-comments.php:125
+msgid ""
+"Your edited comment was marked as spam.  If this is in error, please contact "
+"the admin."
+msgstr ""
+"Uw bewerkte reactie was gemarkeerd als spam. Als dit een fout is, neem dan "
+"contact op met de webmaster."
+
+#: ../wp-ajax-edit-comments.php:184 ../wp-ajax-edit-comments.php:205
+#: ../lib/class.core.php:173 ../lib/class.core.php:176
+msgid "Approve"
+msgstr "Goedkeuren"
+
+#: ../wp-ajax-edit-comments.php:185 ../wp-ajax-edit-comments.php:206
+#: ../lib/class.core.php:186 ../lib/class.core.php:189
+msgid "Moderate"
+msgstr "Modereren"
+
+#: ../wp-ajax-edit-comments.php:186 ../wp-ajax-edit-comments.php:207
+#: ../lib/class.core.php:199 ../lib/class.core.php:202
+#: ../views/comment-editor.php:170 ../views/comment-editor.php:177
+msgid "Spam"
+msgstr "Spam"
+
+#: ../wp-ajax-edit-comments.php:187 ../wp-ajax-edit-comments.php:208
+#: ../lib/class.core.php:85 ../lib/class.core.php:88
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: ../wp-ajax-edit-comments.php:188 ../wp-ajax-edit-comments.php:209
+#: ../lib/class.core.php:161 ../lib/class.core.php:164
+msgid "De-link"
+msgstr "Delinken"
+
+#: ../wp-ajax-edit-comments.php:189 ../wp-ajax-edit-comments.php:210
+#: ../lib/class.core.php:154 ../views/move-comment.php:62
+#: ../views/move-comment.php:87 ../views/move-comment.php:112
+msgid "Move"
+msgstr "Verplaatsen"
+
+#: ../wp-ajax-edit-comments.php:190 ../wp-ajax-edit-comments.php:211
+#: ../lib/class.core.php:139 ../lib/class.core.php:142
+#: ../views/comment-editor.php:124
+msgid "E-mail"
+msgstr "E-mail"
+
+#: ../wp-ajax-edit-comments.php:191 ../wp-ajax-edit-comments.php:212
+#: ../lib/class.core.php:211 ../lib/class.core.php:214
+#: ../views/blacklist-comment.php:116
+msgid "Blacklist"
+msgstr "Blacklist"
+
+#: ../wp-ajax-edit-comments.php:204 ../lib/class.core.php:114
+msgid "Edit"
+msgstr "Bewerken"
+
+#: ../wp-ajax-edit-comments.php:281 ../wp-ajax-edit-comments.php:286
+msgid "Unknown error."
+msgstr "Onbekende fout."
+
+#: ../lib/class.actions.php:141
+msgid "A comment has been edited on post %s"
+msgstr "Een reactie op bericht %s is aangepast"
+
+#: ../lib/class.actions.php:142
+msgid "Author: %s\n"
+msgstr "Auteur: %s\n"
+
+#: ../lib/class.actions.php:143
+msgid "Author URL: %s\n"
+msgstr "Auteur URL: %s\n"
+
+#: ../lib/class.actions.php:144
+msgid "Author E-mail: %s\n"
+msgstr "Auteur E-mail: %s\n"
+
+#: ../lib/class.actions.php:145
+msgid "Comment:\n"
+msgstr "Reactie:\n"
+
+#: ../lib/class.actions.php:146
+msgid "See all comments on this post here:\n"
+msgstr "Bekijk alle reacties op dit bericht hier:\n"
+
+#: ../lib/class.actions.php:148
+msgid "New Edited Comment On: %s"
+msgstr "Nieuw bewerkte reactie op: %s"
+
+#: ../lib/class.admin.php:9 ../views/admin-panel.php:213
+#: ../views/admin-panel/admin-panel.php:213
+#: ../views/admin-panel/behavior.php:73
+msgid "Behavior"
+msgstr "Gedrag"
+
+#: ../lib/class.admin.php:10 ../views/admin-panel.php:214
+#: ../views/admin-panel/admin-panel.php:214
+#: ../views/admin-panel/appearance.php:136
+msgid "Appearance"
+msgstr "Uiterlijk"
+
+#: ../lib/class.admin.php:11 ../views/admin-panel.php:215
+#: ../views/admin-panel/admin-panel.php:215
+#: ../views/admin-panel/permissions.php:36
+msgid "Permissions"
+msgstr "Rechten"
+
+#: ../lib/class.admin.php:12 ../views/admin-panel.php:216
+#: ../views/admin-panel/admin-panel.php:216
+#: ../views/admin-panel/cleanup.php:23
+msgid "Cleanup"
+msgstr "Opschonen"
+
+#: ../lib/class.ajax.php:47
+msgid "Move Successful. "
+msgstr "Verplaatsen succesvol"
+
+#: ../lib/class.ajax.php:181
+msgid "Successfully blacklisted."
+msgstr "Succesvol geblacklist."
+
+#: ../lib/class.ajax.php:181
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "Reactie(s) zijn gemarkeerd als spam volgens onze criteria."
+
+#: ../lib/class.ajax.php:230
+msgid "Successfully Deleted"
+msgstr "Succesvol verwijderd"
+
+#: ../lib/class.ajax.php:291
+msgid "Comment deleted."
+msgstr "Reactie verwijderd."
+
+#: ../lib/class.ajax.php:309
+msgid "Successfully Marked as Spam"
+msgstr "Succesvol gemarkeerd als spam"
+
+#: ../lib/class.ajax.php:337
+msgid "Successfully Approved"
+msgstr "Succesvol goedgekeurd"
+
+#: ../lib/class.ajax.php:362
+msgid "Successfully Marked for Moderation"
+msgstr "Succesvol gemarkeerd voor moderatie"
+
+#: ../lib/class.ajax.php:396
+msgid "Successfully De-linked"
+msgstr "Succesvol gedelinkt"
+
+#: ../lib/class.ajax.php:745
+msgid ""
+"A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The "
+"comment has been moved to the moderation queue."
+msgstr ""
+"Een reageerder verzoekt de verwijdering van een reactie op uw bericht #%1$s "
+"\"%2$s\". De reactie is verplaatst naar de moderatie wachtrij."
+
+#: ../lib/class.ajax.php:746
+msgid "The reason given is: "
+msgstr "De opgegeven reden is:"
+
+#: ../lib/class.ajax.php:747
+msgid "E-mail : %s"
+msgstr "E-mail : %s"
+
+#: ../lib/class.ajax.php:748
+msgid "URL    : %s"
+msgstr "URL    : %s"
+
+#: ../lib/class.ajax.php:749
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: ../lib/class.ajax.php:751
+msgid "Delete it: %s"
+msgstr "Verwijder: %s"
+
+#: ../lib/class.ajax.php:752
+msgid "Approve it: %s"
+msgstr "Keur goed: %s"
+
+#: ../lib/class.ajax.php:753
+msgid "Spam it: %s"
+msgstr "Spam: %s"
+
+#: ../lib/class.ajax.php:761
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "Verzoek op reactie te verwijderen: \"%2$s\""
+
+#: ../lib/class.ajax.php:862
+msgid "Comment successfully saved"
+msgstr "Reactie succesvol opgeslagen"
+
+#: ../lib/class.core.php:66 ../lib/class.core.php:111
+msgid "Comment Editor"
+msgstr "Reactie editor"
+
+#: ../lib/class.core.php:69
+msgid "Click to Edit"
+msgstr "Klik om aan te passen"
+
+#: ../lib/class.core.php:76 ../lib/class.core.php:79
+#: ../views/admin-panel.php:283 ../views/request-deletion.php:35
+#: ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Request Deletion"
+msgstr "Verzoek verwijderen"
+
+#: ../lib/class.core.php:120 ../lib/class.core.php:123
+msgid "Restore"
+msgstr "Herstellen"
+
+#: ../lib/class.core.php:129 ../lib/class.core.php:132
+msgid "Delete Permanently"
+msgstr "Definitief verwijderen"
+
+#: ../lib/class.core.php:151
+msgid "Move Comments"
+msgstr "Verplaats reactie"
+
+#: ../lib/class.core.php:211
+msgid "Blacklist Comment"
+msgstr "Blacklist reactie"
+
+#: ../lib/class.core.php:220 ../lib/class.core.php:223
+#: ../views/comment-editor.php:171 ../views/comment-editor.php:178
+msgid "Trash"
+msgstr "Prullemand"
+
+#: ../lib/class.core.php:244 ../lib/class.dependencies.php:125
+msgid "More Options"
+msgstr "Meer opties"
+
+#: ../lib/class.core.php:710
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "U kunt de reactie niet bewerken nadat andere reacties zijn gepost."
+
+#: ../lib/class.core.php:711
+msgid "The time to edit your comment has elapsed."
+msgstr "De tijd om de reactie te bewerken is verstreken."
+
+#: ../lib/class.core.php:712
+msgid "You do not have permission to edit this comment."
+msgstr "U heeft geen rechten om deze reactie aan te passen."
+
+#: ../lib/class.core.php:714
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr ""
+"Deze reactie kan niet worden aangepast, omdat deze is gemarkeerd als spam."
+
+#: ../lib/class.core.php:715
+msgid "Comment loading failed."
+msgstr "Reactie laden mislukt."
+
+#: ../lib/class.core.php:716
+msgid "Comment editing has been disabled."
+msgstr "Bewerken van reacties is uitgeschakeld."
+
+#: ../lib/class.core.php:717
+msgid "Could not mark as spam."
+msgstr "Kan niet markeren als spam."
+
+#: ../lib/class.core.php:718
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "U heeft geen rechten om deze reactie te markeren als spam."
+
+#: ../lib/class.core.php:719
+msgid "Could not delete comment."
+msgstr "Kan reactie niet verwijderen."
+
+#: ../lib/class.core.php:720
+msgid "You do not have permission to delete this comment."
+msgstr "U heeft geen rechten om deze reactie te verwijderen."
+
+#: ../lib/class.core.php:721
+msgid "You do not have permission to approve this comment."
+msgstr "U heeft geen rechten om deze reactie goed te keuren."
+
+#: ../lib/class.core.php:722
+msgid "Could not approve comment."
+msgstr "Kan reactie niet goedkeuren."
+
+#: ../lib/class.core.php:723
+msgid "Could not mark this comment for moderation."
+msgstr "Kan deze reactie niet markeren voor moderatie."
+
+#: ../lib/class.core.php:724
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "U heeft geen rechten om deze reactie te markeren voor moderatie."
+
+#: ../lib/class.core.php:725
+msgid "Please enter a valid email address."
+msgstr "Voer geldig e-mailadres is."
+
+#: ../lib/class.core.php:726
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "Vul de verplichte velden in (naam, e-mail)"
+
+#: ../lib/class.core.php:727
+msgid "You cannot have an empty comment."
+msgstr "U kunt geen lege reactie plaatsen."
+
+#: ../lib/class.core.php:728
+msgid "You do not have permission to delink this comment."
+msgstr "U heeft geen rechten om deze reactie te delinken."
+
+#: ../lib/class.core.php:729
+msgid "Your comment was marked for moderation"
+msgstr "Uw reactie is gemarkeerd voor moderatie"
+
+#: ../lib/class.core.php:730
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr ""
+"Deze reactie kan niet worden bewerkt, omdat deze is gemarkeerd voor "
+"moderatie."
+
+#: ../lib/class.core.php:731
+msgid "Request failed."
+msgstr "Verzoek mislukt."
+
+#: ../lib/class.core.php:732
+msgid "You have not selected anything to blacklist."
+msgstr "U heeft niets geselecteerd om te blacklisten."
+
+#: ../lib/class.core.php:733
+msgid "Upgrade check failed."
+msgstr "Upgrade check mislukt."
+
+#: ../lib/class.core.php:734
+msgid "You are using the latest version."
+msgstr "U gebruikt de laatste versie."
+
+#: ../lib/class.dependencies.php:106
+msgid "minutes"
+msgstr "minuten"
+
+#: ../lib/class.dependencies.php:107
+msgid "minute"
+msgstr "minuut"
+
+#: ../lib/class.dependencies.php:108
+msgid "and"
+msgstr "en"
+
+#: ../lib/class.dependencies.php:109
+msgid "seconds"
+msgstr "seconden"
+
+#: ../lib/class.dependencies.php:110
+msgid "second"
+msgstr "seconde"
+
+#: ../lib/class.dependencies.php:111
+msgid "Mark for Moderation?"
+msgstr "Markeer voor moderatie?"
+
+#: ../lib/class.dependencies.php:112
+msgid "Approve Comment?"
+msgstr "Reactie goedkeuren?"
+
+#: ../lib/class.dependencies.php:113
+msgid "Mark as Spam?"
+msgstr "Markeer als spam?"
+
+#: ../lib/class.dependencies.php:114
+msgid "Delete this comment?"
+msgstr "Verwijder deze reactie?"
+
+#: ../lib/class.dependencies.php:115
+msgid "Anonymous"
+msgstr "Anoniem"
+
+#: ../lib/class.dependencies.php:116
+msgid "Loading..."
+msgstr "Laden..."
+
+#: ../lib/class.dependencies.php:117
+msgid "Ready"
+msgstr "Klaar"
+
+#: ../lib/class.dependencies.php:118
+msgid "Sending..."
+msgstr "Zenden..."
+
+#: ../lib/class.dependencies.php:119
+msgid "Message Sent"
+msgstr "Bericht verzonden"
+
+#: ../lib/class.dependencies.php:120
+msgid "Comment Loaded Successfully"
+msgstr "Reactie succesvol geladen"
+
+#: ../lib/class.dependencies.php:121
+msgid "Saving..."
+msgstr "Opslaan..."
+
+#: ../lib/class.dependencies.php:122
+msgid "Blacklisting..."
+msgstr "Blacklisten..."
+
+#: ../lib/class.dependencies.php:123
+msgid "Comment Successfully Saved"
+msgstr "Reactie succesvol opgeslagen"
+
+#: ../lib/class.dependencies.php:124
+msgid "De-link Successful"
+msgstr "Delink succesvol"
+
+#: ../lib/class.dependencies.php:126
+msgid "Less Options"
+msgstr "Minder opties"
+
+#: ../lib/class.dependencies.php:128
+msgid "Request has been sent successfully"
+msgstr "Verzoek is succesvol verzonden"
+
+#: ../lib/class.dependencies.php:129
+msgid "Error sending request"
+msgstr "Fout in verzenden verzoek"
+
+#: ../lib/class.dependencies.php:130
+msgid "Approving..."
+msgstr "Goedkeuren..."
+
+#: ../lib/class.dependencies.php:131
+msgid "De-linking..."
+msgstr "Delinken..."
+
+#: ../lib/class.dependencies.php:132
+msgid "Moderating..."
+msgstr "Modereren..."
+
+#: ../lib/class.dependencies.php:133
+msgid "Spamming..."
+msgstr "Spammen..."
+
+#: ../lib/class.dependencies.php:134
+msgid "Deleting..."
+msgstr "Verwijderen..."
+
+#: ../lib/class.dependencies.php:135
+msgid "Restoring..."
+msgstr "Herstellen..."
+
+#: ../lib/class.dependencies.php:136
+msgid "Comment Restored."
+msgstr "Reactie hersteld."
+
+#: ../lib/class.dependencies.php:137
+msgid "Undoing..."
+msgstr "Ongedaan maken..."
+
+#: ../lib/class.dependencies.php:138
+msgid "Undo Successful"
+msgstr "Ongedaan maken succesvol"
+
+#: ../lib/class.dependencies.php:139
+msgid "Comment Deleted Permanently"
+msgstr "Reactie permanent verwijderd"
+
+#: ../lib/class.dependencies.php:140
+msgid "Input Fields are Required"
+msgstr "Invoervelden zijn verplicht"
+
+#: ../lib/class.dependencies.php:141
+msgid "E-mail Address is Invalid"
+msgstr "E-mailadres is ongeldig"
+
+#: ../lib/class.dependencies.php:145 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "Yes"
+msgstr "Ja"
+
+#: ../lib/class.dependencies.php:146 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "No"
+msgstr "Nee"
+
+#: ../lib/class.dependencies.php:147
+msgid "Are you sure?"
+msgstr "Weet u het zeker?"
+
+#: ../lib/class.filters.php:122
+msgid "Settings"
+msgstr "Instellingen"
+
+#: ../lib/class.js.php:32 ../lib/class.js.php:59
+msgid "Comment Box"
+msgstr "Reactie box"
+
+#: ../lib/class.utility.php:18
+msgid "Undo"
+msgstr "Ongedaan maken"
+
+#: ../views/admin-getting-started.php:65
+msgid "Getting Started with Ajax Edit Comments v%s"
+msgstr "Beginnen met Ajax Edit Comments v%s"
+
+#: ../views/admin-panel-support.php:13
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: ../views/admin-panel-support.php:18
+msgid "Support Forums"
+msgstr "Support forums"
+
+#: ../views/admin-panel-support.php:19
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: ../views/admin-panel-support.php:23
+msgid ""
+"To receive help from PluginBuddy support and the PluginBuddy community, "
+"please consider leaving a support request via our %sSupport Forums%s"
+msgstr ""
+"To receive help from PluginBuddy support and the PluginBuddy community, "
+"please consider leaving a support request via our %sSupport Forums%s"
+
+#: ../views/admin-panel-support.php:26
+msgid ""
+"For in-depth documenation, including feature descriptions and how-to videos, "
+"please visit our %sDocumentation Section%s"
+msgstr ""
+"For in-depth documenation, including feature descriptions and how-to videos, "
+"please visit our %sDocumentation Section%s"
+
+#: ../views/admin-panel.php:18 ../views/admin-panel/admin-panel.php:18
+#: ../views/admin-panel/cleanup.php:15
+msgid "Security keys deleted"
+msgstr "Security keys verwijderd"
+
+#: ../views/admin-panel.php:37 ../views/admin-panel/admin-panel.php:37
+#: ../views/admin-panel/behavior.php:20
+msgid "Comment time must be greater than one minute."
+msgstr "Reactie tijd moet meer dan een minuut zijn."
+
+#: ../views/admin-panel.php:199 ../views/admin-panel/admin-panel.php:199
+#: ../views/admin-panel/appearance.php:129
+#: ../views/admin-panel/behavior.php:66
+#: ../views/admin-panel/permissions.php:29
+msgid "Settings successfully updated."
+msgstr "Instellingen succesvol geupdatet."
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "Your commentators have edited their comments "
+msgstr "Uw reageerders hebben hun reacties gewijzigd"
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "times"
+msgstr "keren"
+
+#: ../views/admin-panel.php:223 ../views/admin-panel/admin-panel.php:223
+#: ../views/admin-panel/behavior.php:76
+msgid "General"
+msgstr "Algemeen"
+
+#: ../views/admin-panel.php:224 ../views/admin-panel.php:260
+#: ../views/admin-panel/admin-panel.php:224
+#: ../views/admin-panel/admin-panel.php:260
+#: ../views/admin-panel/behavior.php:95 ../views/admin-panel/behavior.php:107
+msgid "Advertising Options"
+msgstr "Advertising opties"
+
+#: ../views/admin-panel.php:225 ../views/admin-panel/admin-panel.php:225
+#: ../views/admin-panel/behavior.php:116
+msgid "Anonymous Users"
+msgstr "Anonieme gebruikers"
+
+#: ../views/admin-panel.php:226 ../views/admin-panel/admin-panel.php:226
+#: ../views/admin-panel/behavior.php:137
+msgid "Registered Users"
+msgstr "Geregistreerde gebruikers"
+
+#: ../views/admin-panel.php:227 ../views/admin-panel/admin-panel.php:227
+#: ../views/admin-panel/behavior.php:160
+msgid "Other Features"
+msgstr "Andere features"
+
+#: ../views/admin-panel.php:236 ../views/admin-panel/admin-panel.php:236
+#: ../views/admin-panel/behavior.php:82
+msgid "Set comment time (minutes):"
+msgstr "Zet de reactie tijd (minuten):"
+
+#: ../views/admin-panel.php:240 ../views/admin-panel/admin-panel.php:240
+#: ../views/admin-panel/behavior.php:86
+msgid "Spam notification text:"
+msgstr "Spam notificatie tekst:"
+
+#: ../views/admin-panel.php:242 ../views/admin-panel/admin-panel.php:242
+#: ../views/admin-panel/behavior.php:88
+msgid ""
+"Please limit to one line if possible since this text will show up when "
+"editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr ""
+"Gelieve alles op 1 regel, omdat de tekst wordt weergegeven tijdens het "
+"bewerken van de reactie of auteur (toegestane tags: em, a, strong, "
+"blockquote):"
+
+#: ../views/admin-panel.php:253 ../views/admin-panel/admin-panel.php:253
+#: ../views/admin-panel/behavior.php:100
+msgid "Advertising Text:"
+msgstr "Advertising tekst:"
+
+#: ../views/admin-panel.php:255 ../views/admin-panel/admin-panel.php:255
+#: ../views/admin-panel/behavior.php:102
+msgid ""
+"This text will show when an anonymous commenter sees the editing options.  "
+"WordPress shortcodes may be used here."
+msgstr ""
+"Deze tekst wordt getoond als anonieme reageerders de bewerkingsopties "
+"bekijken. Wordpress shortcodes mogen worden gebruikt."
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid "Enable comment advertising?"
+msgstr "Reactie advertising aanzetten?"
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid ""
+"Selecting \"Yes\" will show the \"Advertising Text\" above the editing "
+"options for each anonymous comment posted."
+msgstr ""
+"\"Ja\" selecteren laat de \"Advertising Tekst\" boven de bewerkingsopties "
+"zien bij iedere anonieme geposte reactie."
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid "Allow editing after additional comments have been posted?"
+msgstr ""
+"Bewerken van reacties toestaan als er additionele reacties zijn gepost?"
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid ""
+"Selecting \"No\" will prevent users from editing their comments if another "
+"comment has been made on a post."
+msgstr ""
+"\"Nee\" selecteren voorkomt dat gebruikers hun reacties kunnen aanpassen, "
+"nadat andere reacties op het bericht zijn geplaatst."
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Allow Users to Edit Their Name?"
+msgstr "Toestaan dat gebuikers hun naam kunnen aanpassen?"
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "\"Nee\" selecteren zet bewerken van namen uit"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "Toestaan dat gebruikers hun e-mailadres kunnen aanpassen?"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid ""
+"Selecting \"No\" will turn off editing of e-mail addresses.  One of the "
+"reasons you may want this on is for users with Avatars."
+msgstr "\"Nee\" selecteren zet bewerken van e-mailadres uit."
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Allow Users to Edit Their URLs?"
+msgstr "Toestaan dat gebruikers hun URL kunnen aanpassen?"
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "\"Nee\" selecteren zet bewerken van URLs uit"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid "Request Deletion Behavior"
+msgstr "Verwijder verzoek gedrag"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid ""
+"Determine if you want users to request deletion (comments are sent to "
+"moderation with admin notification) or delete comments (comments are deleted "
+"immediately with no admin notification).  Select Off if you would like to "
+"disable this feature."
+msgstr ""
+"Bepaal of u verwijderverzoeken van gebruikers (reacties worden naar de "
+"moderatie gestuurd met admin notificatie) of verwijderen van reacties "
+"(reacties worden onmiddellijk verwijderd zonder admin notificatie) toestaat. "
+"Selecteer Uit om deze feature uit te schakelen"
+
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Off"
+msgstr "Uit"
+
+#: ../views/admin-panel.php:294 ../views/admin-panel/admin-panel.php:294
+#: ../views/admin-panel/behavior.php:143
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr ""
+"Toestaan dat geregistreerde gebruikers hun reacties onbeperkt kunnen "
+"aanpassen?"
+
+#: ../views/admin-panel.php:295 ../views/admin-panel/admin-panel.php:295
+#: ../views/admin-panel/behavior.php:144
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit "
+"comments without a time limit."
+msgstr ""
+"\"Ja\" selecteren staat geregistreerde gebruikers toe hun reacties te "
+"bewerken zonder tijdslimiet."
+
+#: ../views/admin-panel.php:297 ../views/admin-panel/admin-panel.php:297
+#: ../views/admin-panel/behavior.php:146
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "Toestaan dat geregistreerde gebuikers hun naam kunnen aanpassen?"
+
+#: ../views/admin-panel.php:298 ../views/admin-panel/admin-panel.php:298
+#: ../views/admin-panel/behavior.php:147
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"names.  This can prevent issues if a user wishes to impersonate others."
+msgstr ""
+"\"Ja\" selecteren staat geregistreerde gebruikers toe hun naam aan te passen "
+"op uw site."
+
+#: ../views/admin-panel.php:300 ../views/admin-panel/admin-panel.php:300
+#: ../views/admin-panel/behavior.php:149
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr ""
+"Toestaan dat geregistreerde gebruikers hun e-mailadres kunnen aanpassen?"
+
+#: ../views/admin-panel.php:301 ../views/admin-panel/admin-panel.php:301
+#: ../views/admin-panel/behavior.php:150
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"e-mail address."
+msgstr ""
+"\"Ja\" selecteren staat geregistreerde gebruikers toe hun e-mail adres aan "
+"te passen op uw site."
+
+#: ../views/admin-panel.php:303 ../views/admin-panel/admin-panel.php:303
+#: ../views/admin-panel/behavior.php:152
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "Toestaan dat geregistreerde gebruikers hun URL kunnen aanpassen?"
+
+#: ../views/admin-panel.php:304 ../views/admin-panel/admin-panel.php:304
+#: ../views/admin-panel/behavior.php:153
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"URL."
+msgstr ""
+"\"Ja\" selecteren staat geregistreerde gebruikers toe hun URL aan te passen "
+"op uw site."
+
+#: ../views/admin-panel.php:317 ../views/admin-panel/admin-panel.php:317
+#: ../views/admin-panel/behavior.php:166
+msgid "Edit E-mails"
+msgstr "Bewerk e-mails"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid "Allow Edit E-mails?"
+msgstr "Toestaan dat e-mails kunnen worden aangepast?"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid ""
+"Selecting \"Yes\" will send you an email each time someone edits their "
+"comment."
+msgstr ""
+"\"Ja\" selecteren zorgt ervoor dat iedere keer als iemand zijn reactie "
+"aanpast dat u een e-mail krijgt."
+
+#: ../views/admin-panel.php:324 ../views/admin-panel/admin-panel.php:324
+#: ../views/admin-panel/behavior.php:173
+msgid "Spam Protection"
+msgstr "Spam bescherming"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Akismet"
+msgstr "Akismet"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Defensio"
+msgstr "Defensio"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "None"
+msgstr "Geen"
+
+#: ../views/admin-panel.php:330 ../views/admin-panel/admin-panel.php:330
+#: ../views/admin-panel/behavior.php:179
+msgid "Performance"
+msgstr "Performance"
+
+#: ../views/admin-panel.php:332 ../views/admin-panel/admin-panel.php:332
+#: ../views/admin-panel/behavior.php:181
+msgid ""
+"Load Scripts in Footer? (Requires WordPress 2.8 or above and theme "
+"compatibility)"
+msgstr ""
+"Scripts laden in Footer? (vereist WordPress 2.8 en hoger en thema "
+"compatibiliteit)"
+
+#: ../views/admin-panel.php:334 ../views/admin-panel/admin-panel.php:334
+#: ../views/admin-panel/behavior.php:183
+msgid "Use Compressed JavaScript Files?"
+msgstr "Gebruik Compressed JavaScript Files?"
+
+#: ../views/admin-panel.php:339 ../views/admin-panel/admin-panel.php:339
+#: ../views/admin-panel/behavior.php:188
+msgid "Character Encoding"
+msgstr "Character Encoding"
+
+#: ../views/admin-panel.php:341 ../views/admin-panel/admin-panel.php:341
+#: ../views/admin-panel/behavior.php:190
+msgid "Enable mb_convert_encoding?"
+msgstr "mb_convert_encoding inschakelen?"
+
+#: ../views/admin-panel.php:342 ../views/admin-panel/admin-panel.php:342
+#: ../views/admin-panel/behavior.php:191
+msgid ""
+"Some servers do not have this installed.  If you disable this option, be "
+"sure to test out various characters.  The mb_convert_encoding function is "
+"necessary to convert from UTF-8 to various charsets."
+msgstr ""
+"Sommige servers hebben dit niet geinstalleerd. Als u deze optie uitschakelt, "
+"zorg er wel voor dat u verschillende karakters test. De mb_convert_encoding "
+"functie is nodig om verschillende karakter sets naar UTF-8 te converteren"
+
+#: ../views/admin-panel.php:347 ../views/admin-panel/admin-panel.php:347
+#: ../views/admin-panel/behavior.php:196
+msgid "Spell Check"
+msgstr "Spellingscontrole"
+
+#: ../views/admin-panel.php:349 ../views/admin-panel/admin-panel.php:349
+#: ../views/admin-panel/behavior.php:198
+msgid "Select After the Deadline Language"
+msgstr "Selecteer 'After the Deadline' taal"
+
+#: ../views/admin-panel.php:362 ../views/admin-panel/admin-panel.php:362
+#: ../views/admin-panel/behavior.php:211
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "De 'After the Deadline' spellingscontrole op berichten uitschakelen?"
+
+#: ../views/admin-panel.php:364 ../views/admin-panel/admin-panel.php:364
+#: ../views/admin-panel/behavior.php:213
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "De 'After de Deadline' spellingscontrole voor pop-ups uitschakelen?"
+
+#: ../views/admin-panel.php:369 ../views/admin-panel/admin-panel.php:369
+#: ../views/admin-panel/behavior.php:218
+msgid "Expand Options"
+msgstr "Opties uitklappen"
+
+#: ../views/admin-panel.php:371 ../views/admin-panel/admin-panel.php:371
+#: ../views/admin-panel/behavior.php:220
+msgid "Disable the Expand Option on Posts?"
+msgstr "De uitklappen optie voor berichten uitschakelen?"
+
+#: ../views/admin-panel.php:373 ../views/admin-panel/admin-panel.php:373
+#: ../views/admin-panel/behavior.php:222
+msgid "Disable the Expand Option on the Popups?"
+msgstr "De uitklappen optie voor pop-ups uitschakelen?"
+
+#: ../views/admin-panel.php:378 ../views/admin-panel/admin-panel.php:378
+#: ../views/admin-panel/behavior.php:227
+msgid "Disable Trackbacks"
+msgstr "Trackbacks uitschakelen?"
+
+#: ../views/admin-panel.php:380 ../views/admin-panel/admin-panel.php:380
+#: ../views/admin-panel/behavior.php:229
+msgid "Disable trackbacks from showing?"
+msgstr "Trackbacks zichtbaar maken uitschakelen?"
+
+#: ../views/admin-panel.php:381 ../views/admin-panel/admin-panel.php:381
+#: ../views/admin-panel/behavior.php:230
+msgid ""
+"Enabling this option will prevent trackbacks from showing up on your blog.  "
+"Please note that this option will not prevent your site from receiving "
+"trackbacks."
+msgstr ""
+"Deze optie inschakelen voorkomt het zichtbaar maken van trackbacks op uw "
+"site. Let op! dit voorkomt niet dat uw site trackbacks ontvangt."
+
+#: ../views/admin-panel.php:386 ../views/admin-panel/admin-panel.php:386
+#: ../views/admin-panel/behavior.php:235
+msgid "Disable No-follow"
+msgstr "No-follow uitschakelen"
+
+#: ../views/admin-panel.php:388 ../views/admin-panel/admin-panel.php:388
+#: ../views/admin-panel/behavior.php:237
+msgid "Disable no-follow in comment links?"
+msgstr "No-follow in reactie links uitschakelen?"
+
+#: ../views/admin-panel.php:389 ../views/admin-panel/admin-panel.php:389
+#: ../views/admin-panel/behavior.php:238
+msgid ""
+"Enabling this option will remove no-follow from comment and author links."
+msgstr ""
+"Deze optie inschakelen verwijdert de no-follow van reacties en auteur links."
+
+#: ../views/admin-panel.php:394 ../views/admin-panel/admin-panel.php:394
+#: ../views/admin-panel/behavior.php:243
+msgid "Disable Self Pings"
+msgstr "Self Pings uitschakelen"
+
+#: ../views/admin-panel.php:396 ../views/admin-panel/admin-panel.php:396
+#: ../views/admin-panel/behavior.php:245
+msgid "Disable self-pings to your site?"
+msgstr "Self-pings uitschakelen op uw site?"
+
+#: ../views/admin-panel.php:397 ../views/admin-panel/admin-panel.php:397
+#: ../views/admin-panel/behavior.php:246
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "Deze optie inschakelen voorkomt dat uw site zichzelf pingt."
+
+#: ../views/admin-panel.php:402 ../views/admin-panel/admin-panel.php:402
+#: ../views/admin-panel/behavior.php:251
+msgid "De-link Behavior"
+msgstr "De-link gedrag"
+
+#: ../views/admin-panel.php:404 ../views/admin-panel/admin-panel.php:404
+#: ../views/admin-panel/behavior.php:253
+msgid "Choose how the de-link function behaves."
+msgstr "Kies hoe de de-link functie zich gedraagt."
+
+#: ../views/admin-panel.php:405 ../views/admin-panel/admin-panel.php:405
+#: ../views/admin-panel/behavior.php:254
+msgid ""
+"You can choose to remove links from the comment content and comment author "
+"URL, or just the comment author URL."
+msgstr ""
+"U kunt er voor kiezen om links uit reacties en de auteurs URL te "
+"verwijderen, of alleen de auteurs URL."
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Content and comment author URL."
+msgstr "Reactie en auteurs URL"
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Comment author URL."
+msgstr "Auteurs URL"
+
+#: ../views/admin-panel.php:416 ../views/admin-panel/admin-panel.php:416
+#: ../views/admin-panel/appearance.php:141
+msgid "Display"
+msgstr "Weergave"
+
+#: ../views/admin-panel.php:417 ../views/admin-panel/admin-panel.php:417
+#: ../views/admin-panel/appearance.php:184
+msgid "Icons"
+msgstr "Iconen"
+
+#: ../views/admin-panel.php:418 ../views/admin-panel/admin-panel.php:418
+#: ../views/admin-panel/appearance.php:321
+msgid "Colorbox"
+msgstr "Colorbox"
+
+#: ../views/admin-panel.php:425 ../views/admin-panel/admin-panel.php:425
+#: ../views/admin-panel/appearance.php:145
+msgid "Countdown Timer"
+msgstr "Countdown Timer"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid "Show a Countdown Timer?"
+msgstr "Laat een countdown timer zien?"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid ""
+"Selecting \"No\" will turn off the countdown timer for non-admin "
+"commentators."
+msgstr ""
+"\"Nee\" selecteren schakelt de countdown timer uit voor niet-administrators."
+
+#: ../views/admin-panel.php:432 ../views/admin-panel/admin-panel.php:432
+#: ../views/admin-panel/appearance.php:152
+msgid "Pages"
+msgstr "Pagina's"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Display on pages?"
+msgstr "Zichtbaar op pagina's?"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "\"Nee\" selecteren schakelt het bewerken van reacties op pagina's uit."
+
+#: ../views/admin-panel.php:439 ../views/admin-panel/admin-panel.php:439
+#: ../views/admin-panel/appearance.php:159
+msgid "Clearfix"
+msgstr "Clearfix"
+
+#: ../views/admin-panel.php:441 ../views/admin-panel/admin-panel.php:441
+#: ../views/admin-panel/appearance.php:161
+msgid "Turn Off clearfix:after?"
+msgstr "Clearfix:after uitschakelen?"
+
+#: ../views/admin-panel.php:442 ../views/admin-panel/admin-panel.php:442
+#: ../views/admin-panel/appearance.php:162
+msgid ""
+"The clearfix is enabled by default for maximum compatibility with themes."
+msgstr ""
+"De clearfix staat standaard aan voor maximale compatibiliteit met thema's."
+
+#: ../views/admin-panel.php:447 ../views/admin-panel/admin-panel.php:447
+#: ../views/admin-panel/appearance.php:167
+msgid "JavaScript Scrolling"
+msgstr "JavaScript Scrolling"
+
+#: ../views/admin-panel.php:449 ../views/admin-panel/admin-panel.php:449
+#: ../views/admin-panel/appearance.php:169
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "Admin JavaScript Scrolling uitschakelen?"
+
+#: ../views/admin-panel.php:450 ../views/admin-panel/admin-panel.php:450
+#: ../views/admin-panel/appearance.php:170
+msgid ""
+"The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr ""
+"De plugin probeert onjuiste offsets te corrigeren op een bericht als je "
+"admin bent."
+
+#: ../views/admin-panel.php:455 ../views/admin-panel/admin-panel.php:455
+#: ../views/admin-panel/appearance.php:175
+msgid "Edit Interface Location"
+msgstr "Edit Interface locatie "
+
+#: ../views/admin-panel.php:457 ../views/admin-panel/admin-panel.php:457
+#: ../views/admin-panel/appearance.php:177
+msgid "Comment Edit Interface On Bottom?"
+msgstr "Reactie Edit Interface op de bodem?"
+
+#: ../views/admin-panel.php:470 ../views/admin-panel/admin-panel.php:470
+#: ../views/admin-panel/appearance.php:188
+msgid "Icon Display"
+msgstr "Icoon weergave"
+
+#: ../views/admin-panel.php:472 ../views/admin-panel/admin-panel.php:472
+#: ../views/admin-panel/appearance.php:190
+msgid ""
+"Select an option below to determine how the icons are displayed on your "
+"website."
+msgstr ""
+"Selecteer hieronder een optie om te bepalen hoe de iconen op uw website "
+"worden weergegeven."
+
+#: ../views/admin-panel.php:474 ../views/admin-panel/admin-panel.php:474
+#: ../views/admin-panel/appearance.php:192
+msgid "Text Only"
+msgstr "Alleen tekst"
+
+#: ../views/admin-panel.php:475 ../views/admin-panel/admin-panel.php:475
+#: ../views/admin-panel/appearance.php:193
+msgid "Classic"
+msgstr "Klassiek"
+
+#: ../views/admin-panel.php:476 ../views/admin-panel/admin-panel.php:476
+#: ../views/admin-panel/appearance.php:194
+msgid "Dropdown"
+msgstr "Dropdown"
+
+#: ../views/admin-panel.php:477 ../views/admin-panel/admin-panel.php:477
+#: ../views/admin-panel/appearance.php:195
+msgid "Icons Only"
+msgstr "Alleen iconen"
+
+#: ../views/admin-panel.php:481 ../views/admin-panel/admin-panel.php:481
+#: ../views/admin-panel/appearance.php:199
+msgid "Icon Set"
+msgstr "Iconen set"
+
+#: ../views/admin-panel.php:483 ../views/admin-panel/admin-panel.php:483
+#: ../views/admin-panel/appearance.php:201
+msgid "Select an option below to display the icon set on your website."
+msgstr ""
+"Selecteer hieronder een optie op de iconen set op uw website weer te geven."
+
+#: ../views/admin-panel.php:506 ../views/admin-panel/admin-panel.php:506
+#: ../views/admin-panel/appearance.php:224
+msgid "Icon Drop Down Menu"
+msgstr "Iconen dropdown menu"
+
+#: ../views/admin-panel.php:508 ../views/admin-panel/admin-panel.php:508
+#: ../views/admin-panel/appearance.php:226
+msgid ""
+"Drag and drop between lists to adjust the icon order.  Click on the image to "
+"disable or enable the option."
+msgstr ""
+"Drag en drop tussen lijsten om de iconen orde aan te passen. Klik op het "
+"plaatje om de optie in- of uit te schakelen."
+
+#: ../views/admin-panel.php:566 ../views/admin-panel/admin-panel.php:566
+#: ../views/admin-panel/appearance.php:284
+msgid "Classic and Icons Only Vew"
+msgstr "Klassiek en Alleen Iconen weergave"
+
+#: ../views/admin-panel.php:568 ../views/admin-panel/admin-panel.php:568
+#: ../views/admin-panel/appearance.php:286
+msgid ""
+"Drag and drop to adjust the icon order.  Click on the image to disable or "
+"enable the option."
+msgstr ""
+"Drag en drop om de iconen orde aan te passen. Klik op het plaatje om de "
+"optie in- of uit te schakelen."
+
+#: ../views/admin-panel.php:605 ../views/admin-panel/admin-panel.php:605
+#: ../views/admin-panel/appearance.php:322
+msgid ""
+"%s is a lightbox script that is used for the various pop-ups within this "
+"plugin."
+msgstr ""
+"%s is een lightbox script dat wordt gebruikt voor verschillende pop-ups in "
+"deze plugin."
+
+#: ../views/admin-panel.php:609 ../views/admin-panel/admin-panel.php:609
+#: ../views/admin-panel/appearance.php:326
+msgid "Enable Colorbox on the front-end?"
+msgstr "Colorbox inschakelen op de front-end?"
+
+#: ../views/admin-panel.php:611 ../views/admin-panel/admin-panel.php:611
+#: ../views/admin-panel/appearance.php:328
+msgid ""
+"Disable this option if you would like to use another Colorbox WordPress "
+"plugin such as %s or %s."
+msgstr ""
+"Schakel deze optie uit als u een andere Colorbox of Wordpress plugin als %s "
+"of %s wilt gebruiken."
+
+#: ../views/admin-panel.php:616 ../views/admin-panel/admin-panel.php:616
+#: ../views/admin-panel/appearance.php:333
+msgid "Set the Colorbox Width"
+msgstr "Colorbox breedte"
+
+#: ../views/admin-panel.php:622 ../views/admin-panel/admin-panel.php:622
+#: ../views/admin-panel/appearance.php:339
+msgid "Set the Colorbox Height"
+msgstr "Colorbox hoogte"
+
+#: ../views/admin-panel.php:642 ../views/admin-panel/admin-panel.php:642
+#: ../views/admin-panel/permissions.php:48
+msgid "Registered Comment Editing"
+msgstr "Geregistreerde reactie bewerking"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr ""
+"Toestaan dat geregistreerde gebruikers hun eigen reacties kunnen bewerken?"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr ""
+"\"Nee\" selecteren schakelt bewerken van reacties uit voor geregistreerde "
+"gebruikers."
+
+#: ../views/admin-panel.php:649 ../views/admin-panel/admin-panel.php:649
+#: ../views/admin-panel/permissions.php:55
+msgid "Anonymous Commenter Editing"
+msgstr "Anonieme reageerder bewerking"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "Toestaan dat anonieme gebruikers hun eigen reacties kunnen bewerken?"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr ""
+"\"Nee\" selecteren schakelt bewerken van reacties uit voor anonieme "
+"gebruikers."
+
+#: ../views/admin-panel.php:656 ../views/admin-panel/admin-panel.php:656
+#: ../views/admin-panel/permissions.php:62
+msgid "Admin Users (Admin Panel)"
+msgstr "Admin gebruikers (admin panel)"
+
+#: ../views/admin-panel.php:658 ../views/admin-panel/admin-panel.php:658
+#: ../views/admin-panel/permissions.php:64
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "Reactie bewerking in admin panel uitschakelen?"
+
+#: ../views/admin-panel.php:659 ../views/admin-panel/admin-panel.php:659
+#: ../views/admin-panel/permissions.php:65
+msgid ""
+"Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr ""
+"\"Nee\" selecteren schakelt reactie bewerking uit in het reacties gedeelte "
+"van het admin panel."
+
+#: ../views/admin-panel.php:664 ../views/admin-panel/admin-panel.php:664
+#: ../views/admin-panel/permissions.php:70
+msgid "Admin Users (Posts)"
+msgstr "Admin gebruikers (berichten)"
+
+#: ../views/admin-panel.php:666 ../views/admin-panel.php:674
+#: ../views/admin-panel/admin-panel.php:666
+#: ../views/admin-panel/admin-panel.php:674
+#: ../views/admin-panel/permissions.php:72
+#: ../views/admin-panel/permissions.php:80
+msgid "Turn On Comment Editing?"
+msgstr "Reactie bewerking inschakelen?"
+
+#: ../views/admin-panel.php:667 ../views/admin-panel/admin-panel.php:667
+#: ../views/admin-panel/permissions.php:73
+msgid ""
+"Selecting \"Yes\" will enable your ability to edit a user's comment.  "
+"Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr ""
+"\"Ja\" selecteren schakelt het aanpassen van reacties in. \"Nee\" selecteren "
+"schakelt de mogelijkheid om reacties aan te passen in een bericht uit."
+
+#: ../views/admin-panel.php:672 ../views/admin-panel/admin-panel.php:672
+#: ../views/admin-panel/permissions.php:78
+msgid "Editors"
+msgstr "Editors"
+
+#: ../views/admin-panel.php:675 ../views/admin-panel/admin-panel.php:675
+#: ../views/admin-panel/permissions.php:81
+msgid ""
+"Selecting \"Yes\" will allow Editors to see the AEC edit options on a post "
+"or in the admin panel."
+msgstr ""
+"\"Ja\" selecteren staat Editors toe om de AEC edit opties te zien in een "
+"bericht of op het admin panel."
+
+#: ../views/admin-panel.php:688 ../views/admin-panel/admin-panel.php:688
+#: ../views/admin-panel/cleanup.php:29
+msgid "Delete all security keys"
+msgstr "Verwijder alle security keys"
+
+#: ../views/admin-panel.php:690 ../views/admin-panel/admin-panel.php:690
+#: ../views/admin-panel/cleanup.php:31
+msgid ""
+"Each time a user leaves a comment, a security key is stored as a custom "
+"key.  Periodically you may want to delete this information.  Please backup "
+"your database first."
+msgstr ""
+"Telkens wanneer een gebruiker een reactie plaatst, wordt een security key "
+"opgeslagen als een custom key. Van tijd tot tijd wilt u misschien deze "
+"informatie verwijderen. Maak eerst een backup van je database."
+
+#: ../views/admin-panel.php:698 ../views/admin-panel/admin-panel.php:698
+#: ../views/admin-panel/appearance.php:349
+#: ../views/admin-panel/behavior.php:262 ../views/admin-panel/cleanup.php:38
+#: ../views/admin-panel/permissions.php:88
+msgid "Update Settings"
+msgstr "Update instellingen"
+
+#: ../views/blacklist-comment.php:50 ../views/comment-editor.php:99
+msgid "Main"
+msgstr "Hoofd"
+
+#: ../views/blacklist-comment.php:51 ../views/comment-editor.php:100
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: ../views/blacklist-comment.php:55
+msgid "Select from the options below to add to your comment blacklist."
+msgstr ""
+"Selecteer uit onderstaande opties om toe te voegen aan uw reactie blacklist."
+
+#: ../views/blacklist-comment.php:60 ../views/blacklist-comment.php:90
+#: ../views/comment-editor.php:118
+msgid "Name"
+msgstr "Naam"
+
+#: ../views/blacklist-comment.php:67 ../views/blacklist-comment.php:97
+#: ../views/comment-editor.php:130
+msgid "URL"
+msgstr "URL"
+
+#: ../views/blacklist-comment.php:74 ../views/blacklist-comment.php:104
+msgid "E-mail Address"
+msgstr "E-mailadres"
+
+#: ../views/blacklist-comment.php:78 ../views/blacklist-comment.php:108
+msgid "IP Address"
+msgstr "IP-adres"
+
+#: ../views/blacklist-comment.php:84
+msgid "Spam Matching Comments"
+msgstr "Spam Matching Comments"
+
+#: ../views/blacklist-comment.php:85
+msgid ""
+" Example: Selecting 'email' and 'name' will spam all comments that match "
+"both the name and e-mail address."
+msgstr ""
+" Voorbeeld: 'E-mail' en 'Naam' selecteren spamt alle reacties die matchen "
+"met zowel het e-mailadres als de naam."
+
+#: ../views/blacklist-comment.php:85
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "Let op met deze feature. Er is geen 'undo' functie."
+
+#: ../views/blacklist-comment.php:117 ../views/comment-editor.php:188
+#: ../views/email.php:72 ../views/request-deletion.php:56
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: ../views/blacklist-comment.php:119 ../views/comment-editor.php:191
+#: ../views/email.php:74 ../views/move-comment.php:143
+#: ../views/request-deletion.php:58
+msgid "Close"
+msgstr "Sluiten"
+
+#: ../views/comment-editor.php:47
+msgid "%1$s%2$s, %3$s @ %4$s : %5$s"
+msgstr "%1$s%2$s, %3$s @ %4$s : %5$s"
+
+#: ../views/comment-editor.php:151
+msgid "M j, Y @ G:i"
+msgstr "j M Y @ G:i"
+
+#: ../views/comment-editor.php:152
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "Geplaatst op: <b>%1$s</b>"
+
+#: ../views/comment-editor.php:154
+msgid "Adjust Comment Time"
+msgstr "Pas reactie tijd aan"
+
+#: ../views/comment-editor.php:156
+msgid "Adjust Comment Status"
+msgstr "Pas reactie status aan"
+
+#: ../views/comment-editor.php:168 ../views/comment-editor.php:175
+msgid "Approved"
+msgstr "Goedgekeurd"
+
+#: ../views/comment-editor.php:169 ../views/comment-editor.php:176
+msgid "Pending"
+msgstr "In behandeling"
+
+#: ../views/comment-editor.php:187
+msgid "Save"
+msgstr "Opslaan"
+
+#: ../views/comment-popup.php:25
+msgid "Please type out your comment below."
+msgstr "Schrijf uw reactie hieronder."
+
+#: ../views/comment-popup.php:28
+msgid "Save and Return"
+msgstr "Opslaan en teruggaan"
+
+#: ../views/comment-popup.php:28
+msgid "Submit Comment"
+msgstr "Plaats reactie"
+
+#: ../views/email.php:51
+msgid "To"
+msgstr "Naar"
+
+#: ../views/email.php:55
+msgid "From"
+msgstr "Van"
+
+#: ../views/email.php:59
+msgid "Site Admin"
+msgstr "Site admin"
+
+#: ../views/email.php:59
+msgid "Post Author"
+msgstr "Reactie auteur"
+
+#: ../views/email.php:62
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: ../views/email.php:71
+msgid "Send"
+msgstr "Zenden"
+
+#: ../views/move-comment.php:46
+msgid "Move by Post"
+msgstr "Verplaats per reactie"
+
+#: ../views/move-comment.php:47
+msgid "Move by Title"
+msgstr "Verplaats per titel"
+
+#: ../views/move-comment.php:48
+msgid "Move by ID"
+msgstr "Verplaats per ID"
+
+#: ../views/move-comment.php:60
+msgid "Previous"
+msgstr "Vorige"
+
+#: ../views/move-comment.php:60
+msgid "Next"
+msgstr "Volgende"
+
+#: ../views/move-comment.php:71 ../views/move-comment.php:79
+#: ../views/move-comment.php:96 ../views/move-comment.php:104
+msgid "Search"
+msgstr "Zoeken"
+
+#: ../views/move-comment.php:73 ../views/move-comment.php:77
+msgid "Title"
+msgstr "Titel"
+
+#: ../views/move-comment.php:98 ../views/move-comment.php:102
+msgid "Post ID"
+msgstr "Reactie ID"
+
+#: ../views/move-comment.php:129 ../views/move-comment.php:132
+msgid "Mark as Approved"
+msgstr "Markeer als goedgekeurd"
+
+#: ../views/request-deletion.php:47
+msgid ""
+"Please explain why the comment should be deleted.  After sending the "
+"request, your comment will be marked as moderated and will no longer be "
+"viewable publicly."
+msgstr ""
+"Leg uit waarom de reactie moet worden verwijderd. Na het zenden van het "
+"verzoek, wordt u reactie gemarkeerd als gemodereerd en zal niet langer "
+"publiekelijk zichtbaar zijn."
+
+#: ../views/request-deletion.php:55
+msgid "Send Request"
+msgstr "Zend verzoek"

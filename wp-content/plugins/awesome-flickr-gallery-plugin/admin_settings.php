@@ -58,8 +58,9 @@ function afg_setup_options() {
     if (get_option('afg_credit_note') == '1' || get_option('afg_credit_note') == 'Yes') update_option('afg_credit_note', 'on');
     if (get_option('afg_credit_note') == '0') update_option('afg_credit_note', 'off');
     if (!get_option('afg_pagination')) update_option('afg_pagination', 'on');
-    if (get_option('afg_slideshow_option') == '') update_option('afg_slideshow_option', 'colorbox');
+    if (get_option('afg_slideshow_option') == '' || get_option('afg_slideshow_option') == 'highslide') update_option('afg_slideshow_option', 'colorbox');
     if (get_option('afg_custom_css') == '') update_option('afg_custom_css', '/* Start writing your custom CSS here */');
+    if (get_option('afg_disable_slideshow')) update_option('afg_slideshow_option', 'disable');
 
     $galleries = get_option('afg_galleries');
     if (!$galleries) {
@@ -71,6 +72,7 @@ function afg_setup_options() {
         );
         update_option('afg_galleries', $galleries);
     }
+
     if (!get_option('afg_sort_order')) update_option('afg_sort_order', 'flickr');
 
     update_option('afg_version', VERSION);
@@ -91,7 +93,7 @@ function afg_admin_init() {
     register_setting('afg_settings_group', 'afg_bg_color');
     register_setting('afg_settings_group', 'afg_version');
     register_setting('afg_settings_group', 'afg_galleries');
-    register_setting('afg_settings_group', 'afg_page_width');
+    register_setting('afg_settings_group', 'afg_width');
     register_setting('afg_settings_group', 'afg_pagination');
     register_setting('afg_settings_group', 'afg_users');
     register_setting('afg_settings_group', 'afg_include_private');
@@ -120,6 +122,8 @@ function afg_get_all_options() {
         'afg_photo_size' => get_option('afg_photo_size'),
         'afg_per_page' => get_option('afg_per_page'),
         'afg_sort_order' => get_option('afg_sort_order'),
+        'afg_custom_size' => get_option('afg_custom_size'),
+        'afg_custom_size_square' => get_option('afg_custom_size_square'),
         'afg_captions' => get_option('afg_captions'),
         'afg_descr' => get_option('afg_descr'),
         'afg_columns' => get_option('afg_columns'),
@@ -129,6 +133,7 @@ function afg_get_all_options() {
         'afg_pagination' => get_option('afg_pagination'),
         'afg_api_secret' => get_option('afg_api_secret'),
         'afg_flickr_token' => get_option('afg_flickr_token'),
+        'afg_slideshow_option' => get_option('afg_slideshow_option'),
     );
 }
 
@@ -164,7 +169,7 @@ create_afgFlickr_obj();
 function afg_admin_html_page() {
     global $afg_photo_size_map, $afg_on_off_map, $afg_descr_map, 
         $afg_columns_map, $afg_bg_color_map, $afg_width_map, $pf,
-        $afg_sort_order_map;
+        $afg_sort_order_map, $afg_slideshow_map;
 ?>
    <div class='wrap'>
    <h2><a href='http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin/'><img src="<?php
@@ -206,6 +211,7 @@ function afg_admin_html_page() {
             update_option('afg_captions', $_POST['afg_captions']);
             update_option('afg_descr', $_POST['afg_descr']);
             update_option('afg_columns', $_POST['afg_columns']);
+            update_option('afg_slideshow_option', $_POST['afg_slideshow_option']);
             update_option('afg_width', $_POST['afg_width']);
             update_option('afg_bg_color', $_POST['afg_bg_color']);
 
@@ -293,7 +299,7 @@ function afg_admin_html_page() {
                            <tr valign='top' id='afg_custom_size_block' style='display:none'>
                              <th>Custom Width</th>
                              <td><input type='text' size='3' maxlength='3' name='afg_custom_size' id='afg_custom_size' onblur='verifyCustomSizeBlank()' value="<?php echo get_option('afg_custom_size')?get_option('afg_custom_size'):100; ?>"><font color='red'>*</font> (in px)
-                             &nbsp;Square? <input type='checkbox' name='afg_custom_size_square' value='true' <?php if (get_option('afg_custom_size_square')) echo "checked=''"; ?>>
+                             &nbsp;Square? <input type='checkbox' name='afg_custom_size_square' value='true' <?php if (get_option('afg_custom_size_square') == 'true') echo "checked=''"; ?>>
                              </td>
                              <td><font size='2'>Fill in the exact width for the photos (min 50, max 500).  Height of the photos will be adjusted
                                                 accordingly to maintain aspect ratio of the photo. Enable <b>Square</b> to crop
@@ -317,11 +323,20 @@ function afg_admin_html_page() {
                               </tr>
 
                               <tr valign='top'>
-                                 <th scope='row'>No of Columns</th>
+                                 <th scope='row'>Number of Columns</th>
                                  <td><select name='afg_columns'>
                                        <?php echo afg_generate_options($afg_columns_map, get_option('afg_columns', '2')); ?>
                                  </select></td>
                               </tr>
+
+                              <tr valign='top'>
+                                 <th scope='row'>Slideshow Behavior</th>
+                                 <td><select name='afg_slideshow_option'>
+                                       <?php echo afg_generate_options($afg_slideshow_map, get_option('afg_slideshow_option', 'colorbox')); ?>
+                                 </select></td>
+                                 <td><font size='2'></font></td>
+                              </tr>
+
 
                               <tr valign='top'>
                                  <th scope='row'>Background Color</th>

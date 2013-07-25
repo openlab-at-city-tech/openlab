@@ -145,7 +145,7 @@ class CAC_Posts_Autocomplete {
 	function handler( $value = '' ) {
 
 		$cfcw_fields = get_option( 'widget_cac_featured_content_widget' );
-		$num = key( $cfcw_fields );
+		$num = urldecode( $_REQUEST['num'] );
 		$retval = array();
 
 		if ( empty( $value ) )
@@ -155,8 +155,8 @@ class CAC_Posts_Autocomplete {
 
 		if ( $q ) {
 
-			// if the user has entered a featured blog just list its posts
-			if ( $cfcw_fields[$num]['featured_blog'] != "" ) {
+			// if MS has been enabled and the user has entered a featured blog list its posts
+			if ( is_multisite() && $cfcw_fields[$num]['featured_blog'] != "" ) {
 				$blog = CAC_Featured_Content_Helper::get_blog_by_domain( $cfcw_fields[$num]['featured_blog'] );
 
 				// only return results if we have a valid blog
@@ -164,7 +164,7 @@ class CAC_Posts_Autocomplete {
 					
 					switch_to_blog( $blog->blog_id );
 
-					$query = new WP_Query("s={$q}&post_status=publish");
+					$query = new WP_Query("s={$q}&post_type=post&post_status=publish");
 
 					foreach ($query->posts as $post) {
 						$retval[] = array(
@@ -184,11 +184,15 @@ class CAC_Posts_Autocomplete {
 				}
 
 			} else {
-				// remind the user to enter a valid blog name first
-				$retval[] = array(
-					'label' => 'Please enter a valid blog name.',
-					'value' => ''
-				);
+				// we must not be running MS so we'll just list the site's blog posts
+				$query = new WP_Query("s={$q}&post_type=post&post_status=publish");
+				
+				foreach ($query->posts as $post) {
+					$retval[] = array(
+						'label' => $post->post_title,
+						'value' => $post->post_name
+					);
+				}
 			}
 			
 		}

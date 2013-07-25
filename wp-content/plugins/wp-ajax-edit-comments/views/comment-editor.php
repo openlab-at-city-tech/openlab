@@ -59,9 +59,8 @@ function aec_touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $commentID = 
 } //aec_touch_time
 global $aecomments;
 if (!isset($aecomments)) { //for wp-load.php
-	include( '../lib/plugin-checker.php' );
+	die( 'Access Denied' );
 }
-
 //Check the nonce
 check_admin_referer('editcomment_' . (int)$_GET['cid']);
 $commentID = (int)$_GET['cid'];
@@ -79,20 +78,19 @@ if ($aecomments->get_admin_option( 'compressed_scripts' ) == 'true') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php 
-wp_register_script('jquery-tools', $aecomments->get_plugin_url() . '/js/jquery.tools.min.js', array('jquery'), $aecomments->get_version(), true);
 AECCSS::output_interface_css();
-AECJS::output_js( 'aec_popups', array( 'jquery', 'jquery-tools' ), false, 'aec/popups', 'popups' );
-wp_print_scripts(array('aec_popups'));
+AECJS::register_popups_js( 'comment-editor' );
+wp_print_scripts( array( 'aec_popups', 'jquery-tools-tabs' ) );
 wp_print_styles( array( 'aeccommenteditor' ) );
 do_action('add_wp_ajax_comments_css_editor');
 ?>
 <title>WP Ajax Edit Comments Comment Editor</title>
 </head>
 <body class="hidden editor">
-<?php print_r( $commentAction ); ?>
+
 <div id="container">
 <?php
-if ( AECCore::is_comment_owner() ) : // Note:Josh Comment owner1234 
+if ( AECCore::is_comment_owner() ) : 
 ?>
 <div class="wrap">
 

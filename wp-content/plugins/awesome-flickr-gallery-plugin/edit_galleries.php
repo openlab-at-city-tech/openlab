@@ -3,7 +3,7 @@ include_once('afg_libs.php');
 $default_gallery_id = 0;
 $warning = false;
 
-if ($_POST && $_POST['afg_edit_gallery_name']) {
+if ($_POST && isset($_POST['afg_edit_gallery_name'])) {
     global $default_gallery_id;
     global $warning;
 
@@ -15,9 +15,10 @@ if ($_POST && $_POST['afg_edit_gallery_name']) {
         }
     }
 
+
     $gallery = array(
-        'name' => $_POST['afg_edit_gallery_name'],
-        'gallery_descr' => $_POST['afg_edit_gallery_descr'],
+        'name' => stripslashes($_POST['afg_edit_gallery_name']),
+        'gallery_descr' => stripslashes($_POST['afg_edit_gallery_descr']),
         'photo_source' => $_POST['afg_photo_source_type'],
         'per_page' => afg_filter($_POST['afg_per_page']),
         'sort_order' => afg_filter($_POST['afg_sort_order']),
@@ -25,6 +26,7 @@ if ($_POST && $_POST['afg_edit_gallery_name']) {
         'captions' => afg_filter($_POST['afg_captions']),
         'descr' => afg_filter($_POST['afg_descr']),
         'columns' => afg_filter($_POST['afg_columns']),
+        'slideshow_option' => afg_filter($_POST['afg_slideshow_option']),
         'credit_note' => afg_filter($_POST['afg_credit_note']),
         'width' => afg_filter($_POST['afg_width']),
         'pagination' => afg_filter($_POST['afg_pagination']),
@@ -162,7 +164,7 @@ function afg_edit_galleries() {
                            </select></td>
                            <tr valign='top'>
                               <th scope='row'>Gallery Name</th>
-                              <td><input maxlength='30' type='text' id='afg_edit_gallery_name' name='afg_edit_gallery_name' onblur="verifyEditBlank()" value="" /><font size='3' color='red'>*</font></td>
+                              <td><input maxlength='30' type='text' id='afg_edit_gallery_name' name='afg_edit_gallery_name' onblur='verifyEditBlank()' value="" /><font size='3' color='red'>*</font></td>
                            </tr>
                            <tr valign='top'>
                               <th scope='row'>Gallery Description</th>

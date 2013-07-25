@@ -1,99 +1,14 @@
 <?php
+/*
+Printing these out to screen instead of via file is not an ideal solution, but probably the best one.
+We attempted to store this locally to file, many it caused many issues with people with strict server permissions.  Earlier versions of the plugin had dynamic CSS, but this was a performance issue.
+Recommend people just use a good caching plugin that minifies the inline CSS has needed.
+
+*/
 class AECCSS {
 		public static function output_interface_css() {
-			global $aecomments;
-			//Output CSS or enqueue depending on if a file exists or not
-			$css_uri = AECCSS::get_interface_css_url( );
-			if ( is_wp_error( $css_uri ) ) {
-				AECCSS::get_interface_css( true ); //echo out
-			} else {
-				wp_enqueue_style('aeccommenteditor', $css_uri, array(), $aecomments->get_version());
-			}
+			AECCSS::get_interface_css( true ); //echo out
 		} //end output_interface_css
-		public static function update_css_file( $name, $type ) {
-			$path = AECCSS::create_css_file( $name, $type );
-			if ( is_wp_error( $path ) ) {
-				return $path;
-			}
-			if ( $type == "interface" ) 
-				AECFile::write( $path, AECCSS::get_interface_css() );
-			else
-				AECFile::write( $path, AECCSS::get_main_css() );
-		} //end update_css_file
-		public static function create_css_file( $name, $type ) {
-			$path = AECFile::get_writable_file( array( 'name' => $name, 'extension' => 'css' ) );
-			if ( is_wp_error( $path ) ) {
-				//File doesn't exist, try to create it
-				$args = array( 'name' => $name, 'extension' => 'css', 'create_new' => true );
-				$path = AECFile::create_writable_file( $args );
-				
-				//now try to write to it
-				if ( !is_wp_error( $path ) ) {
-					if ( $type == "interface" ) 
-						AECFile::write( $path, AECCSS::get_interface_css() );
-					else
-						AECFile::write( $path, AECCSS::get_main_css() );
-				}
-			}
-			//Check to see if there's still an error
-			if ( is_wp_error( $path ) ) {
-				//Generate wp_error and pass back CSS as a string
-				$error = new WP_Error( 'aec_css_file', 'Could not create or read CSS file', AECCSS::get_interface_css() );
-				return $error;
-			} 
-			return $path;
-		} //end create_css_file
-		public static function get_interface_css_url() {
-			global $aecomments;
-			if ( $aecomments->get_admin_option( 'overwrite_styles' ) == 'true' ) {
-				$path = AECFile::get_writable_file( array( 'name' => 'aec/comment-editor_custom' , 'extension' => 'css' ) );
-				if ( is_wp_error( $path ) ) 
-					$path = AECCSS::create_css_file( 'aec/comment-editor', 'interface' );
-			} else {
-				$path = AECCSS::create_css_file( 'aec/comment-editor', 'interface' );
-			}
-			if ( !is_wp_error( $path ) ) {
-				$css_url = AECFile::get_url_from_file( $path );
-				return $css_url;
-			} else {
-				return $path;
-			}
-		} //end get_comment_editor_url
-		public static function get_main_css_url() {
-			global $aecomments;
-			if ( $aecomments->get_admin_option( 'overwrite_styles' ) == 'true' ) {
-				$path = AECFile::get_writable_file( array( 'name' => 'aec/edit-comments_custom' , 'extension' => 'css' ) );
-				if ( is_wp_error( $path ) ) {
-					$path = AECCSS::create_css_file( 'aec/edit-comments', 'main' );
-				}
-			} else {
-				$path = AECCSS::create_css_file( 'aec/edit-comments', 'main' );
-			}
-			if ( !is_wp_error( $path ) ) {
-				$css_url = AECFile::get_url_from_file( $path );
-				return $css_url;
-			} else {
-				return $path;
-			}
-		} //end get_main_css_url
-		public static function update_css( $name = '', $content = '') {
-			global $aecomments;
-			$path = AECFile::get_writable_file( array( 'name' => $name , 'extension' => 'css' ) );
-			if ( is_wp_error( $path ) || empty( $content ) ) {
-				$error = new WP_Error( 'aec_save_css', 'Could not save CSS' );
-				return $error;
-			}
-			return AECFile::write( $path, $content );
-		}
-		public static function get_interface_css_to_edit() {
-			$path = AECCSS::create_css_file( 'aec/comment-editor_custom', 'interface' );
-			if ( is_wp_error( $path ) ) {
-				$error = new WP_Error( 'aec_load_css', 'Unable to load CSS' );
-				return $error;
-			} else {
-				return esc_html( file_get_contents( $path ) );
-			}
-		} //end get_interface_css_to_edit
 		public static function get_interface_css( $echo = false ) {
 			global $aecomments;
 			$content = '';
@@ -308,15 +223,6 @@ a.hidden, div.hidden, body.hidden {\n
 				return $content;
 			}	
 		} //end get_interface_css
-		public static function get_main_css_to_edit() {
-			$path = AECCSS::create_css_file( 'aec/edit-comments_custom', 'main' );
-			if ( is_wp_error( $path ) ) {
-				$error = new WP_Error( 'aec_load_css', 'Unable to load CSS' );
-				return $error;
-			} else {
-				return esc_html( file_get_contents( $path ) );
-			}
-		} //end get_main_css_to_edit
 		public static function get_main_css( $echo = false ) {
 			global $aecomments;
 			$return_content = '';

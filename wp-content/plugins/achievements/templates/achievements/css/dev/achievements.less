@@ -1,0 +1,199 @@
+/*! http://wordpress.org/extend/plugins/achievements/
+*/
+
+/**
+ * Achievements theme compatibility CSS
+ */
+
+// Mixins
+@import "../../../../includes/admin/css/dev/utility.less";
+@import "variables.less";
+
+.screen-reader-text {
+	height: 1px;
+	left: -1000em;
+	overflow: hidden;
+	position: absolute;
+	width: 1px;
+}
+
+
+/**
+ * This is the main wrapper ID for all Achievements.
+ */
+
+#dpa-achievements {
+	background: transparent;
+	.clearfix();
+
+	li {
+		list-style: none;
+		margin: 0;
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+}
+
+
+/**
+ * Achievement archive
+ */
+
+#dpa-achievements .dpa-archive-achievements {
+	margin-bottom: @themeCompatMargin;
+	width: 100%;
+}
+
+#dpa-archive-achievements-karma { width: 10%; }
+#dpa-archive-achievements-excerpt { width: 50%; }
+
+
+/**
+ * Single achievement
+ */
+
+.dpa-single-achievement { clear: both; }
+.dpa-single-progress-loop-heading { clear: left; }  // @todo RTL
+
+.dpa-single-progress-unlockedby {
+	.box-sizing(border-box);
+	.clearfix();
+	width: 100%;
+
+	li {
+		float: left;  // @todo RTL
+		width: 50%;
+
+		.avatar {
+			float: left;  // @todo RTL
+			margin: 0 @themeCompatMargin @themeCompatMargin 0;  // @todo RTL
+		}
+	}
+}
+
+
+/**
+ * Breadcrumb
+ */
+
+.dpa-breadcrumb {
+	float: left;  // @todo RTL
+	font-size: @smallFontSizePx;
+
+	a { text-decoration: none; }
+	span { font-weight: normal; }
+}
+
+div.dpa-breadcrumb p { margin-bottom: @themeCompatMargin; } // Specifity required
+
+
+/**
+ * Pagination
+ */
+
+.dpa-pagination-count { float: left; }  // @todo RTL
+
+.dpa-pagination-links {
+	display: inline;
+	float: right;  // @todo RTL
+	list-style: none;
+
+	a,
+	span.current {
+		border: 1px solid @themeCompatSubtleBorder;
+		display: block;
+		float: left;   // @todo RTL
+		margin-left: @themeCompatMargin/2;
+		padding: 0 @themeCompatMargin/2;
+	}
+
+	span.dots {
+		display: block;
+		float: left;  // @todo RTL
+		margin-left: @themeCompatMargin/2;
+	}
+
+	a:focus,
+	a:hover {
+		background: @themeCompatSubtleBorder;
+		opacity: 0.8;
+	}
+
+}
+
+.dpa-pagination {
+	float: right;  // @todo RTL
+	font-size: @smallFontSizePx;
+	margin-bottom: @themeCompatMargin;
+	width: 100%;
+
+	a { text-decoration: none; }
+}
+
+
+/**
+ * Notices
+ */
+
+div.dpa-template-notice {
+	.border-radius( @noticeBorderRadius );
+	background-color: @noticeBackgroundColour;
+	border-color: @noticeBorderColour;
+	border-style: solid;
+	border-width: 1px;
+	color: @noticeTextColour;
+	clear: both;
+	margin: @themeCompatMargin*0.5 0 1rem;
+	padding: 0 @themeCompatMargin;
+
+	a {
+		color: @noticeLinkColour;
+		&:hover { color: @noticeLinkHoverColour; }
+	}
+
+	p {
+		font-size: @smallFontSizePx;
+		line-height: 200%;
+		margin: @themeCompatMargin/2 0 @themeCompatMargin/2 0 !important;
+	}
+
+	&.info {
+		background-color: @noticeInfoBackgroundColour;
+		border: @noticeInfoBorderColour 1px solid;
+	}
+
+	&.important {
+		background-color: @noticeImportantBackgroundColour;
+		border: @noticeImportantBorderColour 1px solid;
+	}
+
+	&.error,
+	&.warning {
+		background-color: @noticeErrorBackgroundColour;
+		border-color: @noticeErrorBorderColour;
+
+		a { color: @noticeErrorBorderColour; }
+	}
+
+	.avatar {
+		border: 3px double @themeCompatSubtleBorder;
+		float: inherit;
+		margin-bottom: -6px;
+	}
+}
+
+
+/**
+ * Widgets
+ */
+
+.widget_dpa_available_achievements ul {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+
+	li { display: inline-block; }
+}
