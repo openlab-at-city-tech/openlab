@@ -562,3 +562,8 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
+
+/**
+ * Don't allow BuddyPress Docs to use its own theme compatibility layer
+ */
+add_filter( 'bp_docs_do_theme_compat', '__return_false' );
