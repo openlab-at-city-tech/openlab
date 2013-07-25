@@ -4,7 +4,7 @@ Tags: buddypress, comments, blogs, activity, non-members
 Requires at least: WPMU 2.8, BuddyPress 1.1
 Tested up to: WPMU 2.9.2, BuddyPress 1.2.3
 Donate link: http://teleogistic.net/donate/
-Stable tag: trunk
+Stable tag: 1.3
 
 Inserts blog comments from non-logged-in users into the activity stream
 
@@ -20,6 +20,11 @@ Please note: the latest version of this plugin (1.2) will NOT work with versions
 * If you're using a version of BP prior to 1.2, you'll need to uncomment lines 13 and 14 of the plugin in order to activate it.
 
 == Changelog ==
+
+= 1.3 =
+* Fixed some PHP warnings
+* Improved PHP 5.4 performance
+* Unit tests
 
 = 1.2.1 =
 * Added checks for spam status 

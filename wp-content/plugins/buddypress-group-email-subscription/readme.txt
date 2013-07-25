@@ -1,19 +1,14 @@
 === BuddyPress Group Email Subscription ===
-Contributors: dwenaus, boonebgorges
+Contributors: dwenaus, boonebgorges, r-a-y
 Description: This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 3.4.1 (BP 1.5.6)
-Stable tag: 3.2
+Tested up to: 3.5.1 (BP 1.6.5)
+Stable tag: 3.3.2
 
 == Description ==
 
-This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available. Each user can choose how they want to subscribe to their groups. The plugin works for hundreds of groups and users. Tested up to BuddyPress 1.5.6.
-
-NEW IN VERSION 3.1:
-* Added the ability to unsubscribe from single group notifications directly from the email without needing to be logged in (enabled by default).
-* Added the ability to unsubscribe from all group email notifications, this feature needs to be enabled in the plugin admin page.
-* Added a new group welcome email that gets sent out the moment someone joins a group - regardless of the email subscription setting. Set this message in the group admin -> email options page.
+This powerful plugin allows people to receive email notifications of group activity, especially forum posts. Weekly or daily digests available. Each user can choose how they want to subscribe to their groups. The plugin works for hundreds of groups and users. Tested up to BuddyPress 1.6.5.
 
 EMAIL SUBSCRIPTION LEVELS
 There are 5 levels of email subscription options:
@@ -59,12 +54,13 @@ TRANSLATORS
 - italian - Stefano Russo
 - french - http://www.claudegagne-photo.com
 - brazilian portuguese - www.about.me/dennisaltermann (or www.congregacao.net)
-- dutch - Anja werkgroepen.net/wordpress
+- dutch - Anja werkgroepen.net/wordpress, Tim de Hoog
 - swedish - Thomas Schneider
-- german - Peter Peterson
+- german - Peter Peterson, Thorsten Wollenhöfer
 - russian - http://www.viaestvita.net/groups/
 - farsi - Vahid Masoomi http://www.AzUni.ir
 - lithuanian - Vincent G http://www.Host1Free.com
+- danish - Morten Nalholm
 
 NOTE TO PLUGIN AUTHORS
 If your plugin posts updates to the standard BuddyPress activity stream, then group members who are subscribed via 3. Daily Digest and 5. All Email will get your updates automatically. However people subscribed as 2. Weekly Summary and 4. New Topic will not. If you feel some of your plugin's updates are very important and want to make sure all subscribed members them, then you can filter  'ass_this_activity_is_important' and return TRUE when $type matches your activity. See the ass_this_activity_is_important() function in bp-activity-subscription-functions.php for code you can copy and use. An example: adding a new wiki page would be considered important and should be filtered in, whereas a comment on a wiki page would be less important and should not be hooked in.
@@ -92,6 +88,36 @@ Other supporters: bluedotproductions.com
 7. Admin Settings
 
 == Changelog ==
+
+= 3.3.2 =
+Updated nl_NL translation
+Updated de_DE translation
+Fixed some textdomains
+
+= 3.3.1 =
+Fixes a bug that caused duplicate bbPress 2.x digest notifications
+Improved compatibility with PHP 5.4 and WP 3.5
+
+= 3.3 =
+Better support for bbPress 2.x group forums
+Fixes Weekly Summary emails
+Improves redirect behavior in View links related to forum topics in private/hidden groups
+Added filters to digest content for improved customizability
+Improved behavior with BP_ENABLE_MULTIBLOG mode
+
+= 3.2.3 = 
+Fixes lame duplicate bug reintroduced in 3.2.2
+Updates Danish translation
+
+= 3.2.2 =
+Fixes main site link in digest emails
+Breaks up email content cleanup for better control by plugins
+Abstracts activity_type checking into a separate function, for greater control by plugins and themes
+Disables topic subscription in bbPress 2.x when inside of a group, to avoid duplicate messages
+
+= 3.2.1 =
+Fixes bug in the implementation of forum post digests
+Fixes backward compatibility issue with filters in forum reply and topic functions
 
 = 3.2 =
 Rewrote digest emailer to use wp_mail(), for better compatibility with WP SMTP plugins
