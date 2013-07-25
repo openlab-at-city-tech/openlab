@@ -1,13 +1,13 @@
 /*
 Theme Name: Pilcrow
-Theme URI: http://wordpress.org/extend/themes/pilcrow/
+Theme URI: http://theme.wordpress.com/themes/pilcrow/
 Description: Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, four default color schemes, custom header images (using featured images in posts and pages), and a customizable background, make personalizing your blog a snap.
-Version: 1.3
+Version: 1.5.1
 Author: Automattic
 Author URI: http://automattic.com/
-License: GNU General Public License
-License URI: license.txt
-Tags: custom-header, custom-background, custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, featured-image-header, featured-images
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: custom-header, custom-background, custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, featured-image-header, featured-images, post-formats
 */
 
 
@@ -322,6 +322,10 @@ strong {
 cite, em, i {
 	font-style: italic;
 }
+img {
+	height: auto;
+	max-width: 100%;
+}
 blockquote {
 	background: #F5F5F5;
 	border: solid #bbb;
@@ -369,6 +373,7 @@ sub {
 	top: .5ex;
 }
 input[type=text],
+input[type=email],
 textarea {
 	border: 1px solid #bbb;
 }
@@ -376,7 +381,8 @@ textarea {
 	padding-left: 3px;
 	width: 98%;
 }
-input[type=text] {
+input[type=text],
+input[type=email] {
 	padding: 3px;
 }
 
@@ -492,6 +498,11 @@ a:hover {
 /* =Content
 ----------------------------------------------- */
 
+.hentry {
+	-ms-word-wrap: break-word;
+	word-wrap:     break-word;
+}
+
 .page-title {
 	background: #F5F5F5;
 	border-bottom: 1px solid #ddd;
@@ -511,6 +522,7 @@ a:hover {
 	float: left;
 	font-size: 11px;
 	line-height: 24px;
+	margin-bottom: 10px;
 	padding: 0 6px;
 	text-transform: uppercase;
 }
@@ -543,6 +555,9 @@ a:hover {
 .entry-title a:hover {
 	color: #1873a1;
 	text-decoration: none;
+}
+.entry-content {
+	clear: both;
 }
 .single .entry-content {
 	padding-top: 1.7em;
@@ -632,6 +647,14 @@ a:hover {
 	margin: 0 0 10px;
 }
 
+/* Post Formats */
+
+.format-link .entry-content a {
+	color: #000;
+	font-size: 28px;
+	text-decoration: none;
+}
+
 /* Sticky Posts */
 .sticky .entry-meta {
 	display: none;
@@ -671,22 +694,37 @@ a:hover {
 	padding: 10px 10px 0;
 	text-align: center;
 }
-.image-attachment .entry-attachment img {
-	height: auto;
+
+.mejs-container,
+.post-format-content {
+	margin-bottom: 15px;
 }
 
+/* Quotes */
+.quote {
+	background: #f5f5f5;
+	border-top: 1px solid #bbb;
+	border-bottom: 1px solid #bbb;
+	color: #666;
+	margin: 0 0 1.7em;
+	padding: 5px 10px 0;
+}
+
+.quote blockquote {
+	background: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+.quote-caption {
+	font-style: italic;
+	margin: 0 0 7px;
+}
 
 /* =Images
 ----------------------------------------------- */
 
-img.size-auto,
-img.size-large,
-img.size-full,
-img.size-medium,
-.attachment img {
-	height: auto;
-	max-width: 100%;
-}
 .entry img.left_off {
 	float: left;
 	margin: 0 10px 5px 0;
@@ -732,6 +770,7 @@ p img,
 	padding: 0 4px 8px 0;
 }
 .gallery-caption {
+	margin: 0 1.2em !important;
 }
 
 
@@ -1093,7 +1132,7 @@ cite.fn {
 	#pic,
 	.navigation,
 	.jump,
-	#wpl-likebox,
+	.wpl-likebox,
 	.entry-links,
 	#sidebar,
 	.widget-area,
@@ -1113,4 +1152,165 @@ body.typekit-enabled #site-info {
 }
 body.typekit-enabled #site-generator {
 	width: 60%;
+}
+.milestone-widget .milestone-header {
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #dcdcdc;
+	color: #333;
+}
+.milestone-widget .milestone-countdown,
+.milestone-widget .milestone-message {
+	background-color: #f5f5f5;
+	border: none;
+	border-top: 1px solid #fff;
+}
+.milestone-widget .milestone-content {
+	max-width: none;
+}
+.widget_twitter iframe {
+	margin-top: 10px;
+}
+
+
+/* =Jetpack: Infinite Scroll
+-------------------------------------------------------------- */
+.infinite-scroll #content-box:after {
+	clear: both;
+	content: '';
+	display: block;
+}
+.infinite-scroll #content {
+	margin-bottom: 50px;
+}
+.infinite-scroll #content .infinite-wrap {
+	border-top: none;
+	padding-top: 0;
+}
+/* Elements to hide */
+.infinite-scroll #nav-below,
+.infinite-scroll.neverending #footer {
+	display: none;
+}
+/* Loader */
+.infinite-loader {
+	margin: 10px auto 20px;
+	width: 24px;
+}
+/* Tweak the standard footer to match the theme style */
+.infinite-scroll #infinite-footer .container {
+	background: rgba( 245, 245, 245, 0.9);
+	border: none;
+	border-radius: 0;
+}
+.infinite-scroll #infinite-footer .blog-credits {
+	color: #333;
+}
+.infinite-scroll #infinite-footer .blog-info a,
+.infinite-scroll #infinite-footer .blog-credits a {
+	color: #1c9bdc;
+}
+.infinite-scroll #infinite-footer .blog-info a:hover,
+.infinite-scroll #infinite-footer .blog-credits a:hover {
+	color: #1873a1;
+}
+/* Load more posts button */
+.infinite-scroll #infinite-handle {
+	text-align: center;
+}
+.infinite-scroll #infinite-handle span {
+	background: rgb( 245, 245, 245 );
+	border-color: rgb( 245, 245, 245 );
+	border-radius: 2px;
+	color: #1c9bdc;
+	font-size: 14px;
+	line-height: 2.4285714285em;
+	padding: 8px 20px;
+}
+.infinite-scroll #infinite-handle span::before {
+	color: #1c9bdc;
+}
+.infinite-scroll #infinite-handle:hover span,
+.infinite-scroll #infinite-handle:hover span::before {
+	color: #1873a1;
+}
+/* Hooks to infinity-end body class to restore footer */
+.infinity-end.neverending #footer {
+	display: block;
+}
+/* Dark */
+.color-dark #infinite-footer .container {
+	background: rgba( 20, 20, 20, 0.9);
+}
+.color-dark #infinite-footer .blog-credits {
+	color: #d8d8cd;
+}
+.color-dark #infinite-footer .blog-info a,
+.color-dark #infinite-footer .blog-credits a {
+	color: #1c9bdc;
+}
+.color-dark #infinite-footer .blog-info a:hover,
+.color-dark #infinite-footer .blog-credits a:hover {
+	color: #1873a1;
+}
+.color-dark #infinite-handle span {
+	background: rgb( 20, 20, 20 );
+	border-color: rgb( 20, 20, 20 );
+	color: #1c9bdc;
+}
+.color-dark #infinite-handle span::before {
+	color: #1c9bdc;
+}
+.color-dark #infinite-handle:hover span,
+.color-dark #infinite-handle:hover span::before {
+	color: #1873a1;
+}
+/* Brown */
+.color-brown #infinite-footer .container {
+	background: rgba( 36, 31, 22, 0.9 );
+}
+.color-brown #infinite-footer .blog-credits {
+	color: #9f9c80;
+}
+.color-brown #infinite-footer .blog-info a,
+.color-brown #infinite-footer .blog-credits a {
+	color: #b58942;
+}
+.color-brown #infinite-footer .blog-info a:hover,
+.color-brown #infinite-footer .blog-credits a:hover {
+	color: #c5903b;
+}
+.color-brown #infinite-handle span {
+	background: rgb( 36, 31, 22 );
+	border-color: rgb( 36, 31, 22 );
+	color: #b58942;
+}
+.color-brown #infinite-handle span::before {
+	color: #b58942;
+}
+/* Red */
+.color-red #infinite-footer .container {
+	background: rgba( 125, 23, 13, 0.9 );
+}
+.color-red #infinite-footer .blog-credits {
+	color: #fae8e6;
+}
+.color-red #infinite-footer .blog-info a,
+.color-red #infinite-footer .blog-credits a {
+	color: #eb877b;
+}
+.color-red #infinite-footer .blog-info a:hover,
+.color-red #infinite-footer .blog-credits a:hover {
+	color: #f39a90;
+}
+.color-red #infinite-handle span {
+	background: rgb( 125, 23, 13 );
+	border-color: rgb( 125, 23, 13 );
+	color: #eb877b;
+}
+.color-red #infinite-handle span::before {
+	color: #eb877b;
+}
+.color-red #infinite-handle:hover span,
+.color-red #infinite-handle:hover span::before {
+	color: #f39a90;
 }

@@ -16,7 +16,7 @@ class P2 {
 	 *
 	 * @var int
 	 */
-	var $db_version = 1;
+	var $db_version = 3;
 
 	/**
 	 * Options.
@@ -50,11 +50,14 @@ class P2 {
 
 		// Include the P2 components
 		$includes = array( 'compat', 'terms-in-comments', 'js-locale',
-			'mentions', 'search', 'js', 'options-page',
-			'template-tags', 'widgets/recent-tags', 'widgets/recent-comments',
+			'mentions', 'search', 'js', 'options-page', 'widgets/recent-tags', 'widgets/recent-comments',
 			'list-creator' );
 
-		if ( defined('DOING_AJAX') && DOING_AJAX )
+		require_once( P2_INC_PATH . "/template-tags.php" );
+
+		// Logged-out/unprivileged users use the add_feed() + ::ajax_read() API rather than the /admin-ajax.php API
+		// current_user_can( 'read' ) should be equivalent to is_user_member_of_blog() || is_super_admin()
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( p2_user_can_post() || current_user_can( 'read' ) ) )
 			$includes[] = 'ajax';
 
 		foreach ( $includes as $name ) {
@@ -69,12 +72,25 @@ class P2 {
 
 		// Bind actions
 		add_action( 'init',       array( &$this, 'init'             ) );
-		add_action( 'admin_init', array( &$this, 'maybe_upgrade_db' ) );
+		add_action( 'admin_init', array( &$this, 'maybe_upgrade_db' ), 5 );
 	}
 
 	function init() {
 		// Load language pack
 		load_theme_textdomain( 'p2', get_template_directory() . '/languages' );
+
+		// Set up the AJAX read handler
+		add_feed( 'p2.ajax', array( $this, 'ajax_read' ) );
+	}
+
+	function ajax_read() {
+		if ( ! defined( 'DOING_AJAX' ) ) {
+			define( 'DOING_AJAX', true );
+		}
+
+		require_once( P2_INC_PATH . '/ajax-read.php' );
+
+		P2Ajax_Read::dispatch();
 	}
 
 	/**
@@ -182,14 +198,7 @@ function p2_setup() {
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'post-formats', p2_get_supported_post_formats( 'post-format' ) );
 
-	$args = apply_filters( 'p2_custom_background_args', array( 'default-color' => 'f1f1f1' ) );
-	if ( function_exists( 'get_custom_header' ) ) {
-		add_theme_support( 'custom-background', $args );
-	} else {
-		// Compat: Versions of WordPress prior to 3.4.
-		define( 'BACKGROUND_COLOR', $args['default-color'] );
-		add_custom_background();
-	}
+	add_theme_support( 'custom-background', apply_filters( 'p2_custom_background_args', array( 'default-color' => 'f1f1f1' ) ) );
 
 	add_filter( 'the_content', 'make_clickable', 12 ); // Run later to avoid shortcode conflicts
 
@@ -238,6 +247,29 @@ function p2_background_image() {
 <?php
 }
 add_action( 'wp_head', 'p2_background_image' );
+
+/**
+ * Add a custom class to the body tag for the background image theme option.
+ *
+ * This dynamic class is used to style the bundled background
+ * images for retina screens. Note: The background images that
+ * ship with P2 have been deprecated as of P2 1.5. For backwards
+ * compatibility, P2 will still recognize them if the option was
+ * set before upgrading.
+ *
+ * @since P2 1.5
+ */
+function p2_body_class_background_image( $classes ) {
+	$image = get_option( 'p2_background_image' );
+
+	if ( empty( $image ) || 'none' == $image )
+		return $classes;
+
+	$classes[] = esc_attr( 'p2-background-image-' . $image );
+
+	return $classes;
+}
+add_action( 'body_class', 'p2_body_class_background_image' );
 
 // Content Filters
 function p2_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
@@ -432,21 +464,18 @@ function p2_add_reply_title_attribute( $link ) {
 }
 add_filter( 'post_comments_link', 'p2_add_reply_title_attribute' );
 
-function p2_fix_empty_titles( $post_ID, $post ) {
+function p2_fix_empty_titles( $data, $postarr ) {
+	if ( 'post' != $data['post_type'] )
+		return $data;
 
-	// Don't call for anything but normal posts (avoid pages, custom taxonomy, nav menu items)
-	if ( ! is_object( $post ) || 'post' !== $post->post_type )
-		return;
+	if ( ! empty( $postarr['post_title'] ) )
+		return $data;
 
-	if ( empty( $post->post_title ) ) {
-		$post->post_title = p2_title_from_content( $post->post_content );
-		$post->post_modified = current_time( 'mysql' );
-		$post->post_modified_gmt = current_time( 'mysql', 1 );
-		return wp_update_post( $post );
-	}
+	$data['post_title'] = p2_title_from_content( $data['post_content'] );
 
+	return $data;
 }
-add_action( 'save_post', 'p2_fix_empty_titles', 10, 2 );
+add_filter( 'wp_insert_post_data', 'p2_fix_empty_titles', 10, 2 );
 
 function p2_add_head_content() {
 	if ( is_home() && is_user_logged_in() ) {
@@ -514,7 +543,7 @@ add_action( 'wp_head', 'p2_viewport_meta_tag', 1000 );
 /**
  * iPhone Stylesheet.
  *
- * Hooks into the wp_enqueue_styles action late.
+ * Hooks into the wp_enqueue_scripts action late.
  *
  * @uses p2_is_iphone()
  * @since P2 1.4
@@ -530,6 +559,22 @@ function p2_iphone_style() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'p2_iphone_style', 1000 );
+
+/**
+ * Print Stylesheet.
+ *
+ * Hooks into the wp_enqueue_scripts action.
+ *
+ * @since P2 1.5
+ */
+function p2_print_style() {
+	wp_enqueue_style( 'p2', get_stylesheet_uri() );
+	wp_enqueue_style( 'p2-print-style', get_template_directory_uri() . '/style-print.css', array( 'p2' ), '20120807', 'print' );
+
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) )
+		wp_enqueue_script( 'comment-reply' );
+}
+add_action( 'wp_enqueue_scripts', 'p2_print_style' );
 
 /*
 	Modified to replace query string with blog url in output string
@@ -649,15 +694,42 @@ function p2_get_supported_post_formats( $type = 'all' ) {
  * add_filter( 'p2_is_iphone', '__return_true' );
  *
  * @return bool
- * @since P@ 1.4
+ * @since P2 1.4
  */
 function p2_is_iphone() {
 	$output = false;
 
-	if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) or isset( $_GET['iphone'] ) && $_GET['iphone'] )
+	if ( ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'iPad' ) ) || isset( $_GET['iphone'] ) && $_GET['iphone'] )
 		$output = true;
 
 	$output = (bool) apply_filters( 'p2_is_iphone', $output );
 
 	return $output;
 }
+
+/**
+ * Filters wp_title to print a neat <title> tag based on what is being viewed.
+ *
+ * @since P2 1.5
+ */
+function p2_wp_title( $title, $sep ) {
+	global $page, $paged;
+
+	if ( is_feed() )
+		return $title;
+
+	// Add the blog name
+	$title .= get_bloginfo( 'name' );
+
+	// Add the blog description for the home/front page.
+	$site_description = get_bloginfo( 'description', 'display' );
+	if ( $site_description && ( is_home() || is_front_page() ) )
+		$title .= " $sep $site_description";
+
+	// Add a page number if necessary:
+	if ( $paged >= 2 || $page >= 2 )
+		$title .= " $sep " . sprintf( __( 'Page %s', 'p2' ), max( $paged, $page ) );
+
+	return $title;
+}
+add_filter( 'wp_title', 'p2_wp_title', 10, 2 );

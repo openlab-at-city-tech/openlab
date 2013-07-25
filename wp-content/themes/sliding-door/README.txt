@@ -57,6 +57,7 @@ v1.6	made the background of the slider the same as the page background (imagemen
 3.0.6   minor commenting changes as requested by wordpress.org
 3.0.7   WC3 compliance fixes
 3.0.8	Change footer link to theme URI
+3.0.9   Fix visited link color, footer URL.
 
 	
 

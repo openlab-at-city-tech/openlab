@@ -11,7 +11,7 @@
 <div class="sleeve_main">
 
 	<div id="main">
-		<h2><?php printf( __( 'Tagged: %s', 'p2' ), single_tag_title( '', false) ); ?> <a class="rss" href="<?php echo get_tag_feed_link( $tag_obj->term_id ); ?>">RSS</a>
+		<h2><?php printf( __( 'Tagged: %s', 'p2' ), single_tag_title( '', false) ); ?>
 			<span class="controls">
 				<a href="#" id="togglecomments"> <?php _e( 'Toggle Comment Threads', 'p2' ); ?></a> | <a href="#directions" id="directions-keyboard"><?php _e( 'Keyboard Shortcuts', 'p2' ); ?></a>
 			</span>

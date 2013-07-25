@@ -4,10 +4,10 @@ Theme URI: http://wordpress.org/extend/themes/coraline/
 Description: A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in "Asides" and "Gallery" categories, and has an optional full-width page template that removes the sidebar.
 Author: Automattic
 Author URI: http://automattic.com/
-Version: 1.2
+Version: 1.4.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: black, blue, brown, pink, purple, red, white, dark, light, one-column, two-columns, three-columns, left-sidebar, right-sidebar, flexible-width, custom-background, custom-header, custom-menu, editor-style, theme-options, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, featured-image-header, featured-images, post-formats
-License: GNU General Public License
-License URI: license.txt
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
@@ -319,7 +319,8 @@ strong {
 cite, em, i {
 	font-style: italic;
 }
-blockquote {
+blockquote,
+.quote-caption {
 	font-style: italic;
 	margin: 0 30px 1.7em;
 }
@@ -356,6 +357,7 @@ sub {
 	top: .5ex;
 }
 input[type=text],
+input[type=email],
 textarea {
 	border: 1px solid #888;
 }
@@ -363,7 +365,8 @@ textarea {
 	padding-left: 3px;
 	width: 98%;
 }
-input[type=text] {
+input[type=text],
+input[type=email] {
 	padding: 3px;
 }
 
@@ -618,27 +621,52 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-content .gallery {
 	margin: 0 auto 1.7em;
 }
-#content .gallery .gallery-item {
+#content .gallery dl.gallery-item {
 	float: left;
-	margin-top: 0;
+	margin: 0 2% 2%;
 	text-align: center;
-	width: 33.333%;
+}
+#content .gallery-columns-1 dl.gallery-item {
+	margin: 0 0 2%;
+	width: 100%;
+}
+#content .gallery-columns-2 .gallery-item {
+	width: 46%;
+}
+#content .gallery-columns-3 .gallery-item {
+	width: 29.33%;
+}
+#content .gallery-columns-4 .gallery-item {
+	width: 21%;
+}
+#content .gallery-columns-5 .gallery-item {
+	width: 16%;
+}
+#content .gallery-columns-6 .gallery-item {
+	width: 12.67%;
+}
+#content .gallery-columns-7 .gallery-item {
+	width: 10.29%;
+}
+#content .gallery-columns-8 .gallery-item {
+	width: 8.5%;
+}
+#content .gallery-columns-9 .gallery-item {
+	width: 7.11%;
+}
+#content .gallery-item img {
+	max-width: 100%;
+	height: auto;
 }
 #content .gallery .gallery-caption {
 	color: #888;
 	font-size: 12px;
 	margin: 0 0 0.7em 0;
 }
-#content .gallery dl {
-	margin: 0;
-}
-#content .gallery img {
-	padding: 4px;
-}
 #content .gallery br+br {
 	display: none;
 }
-#content .attachment img { /* single attachment images should be centered */
+#content .entry-attachment img { /* single attachment images should be centered */
 	display: block;
 	margin: 0 auto;
 }
@@ -729,7 +757,8 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #content img.size-full,
 #content img.size-medium,
 #content img.size-thumbnail,
-.attachment img {
+.entry-attachment img,
+.post-format-content img {
 	max-width: 100%;
 	width: auto;
 	height: auto;
@@ -761,7 +790,10 @@ img.aligncenter {
 	margin: .5em 0 0 0;
 }
 #content object,
-#content embed {
+#content embed,
+.post-format-content object,
+.post-format-content embed,
+.post-format-content iframe {
 	max-width: 100%;
 }
 
@@ -789,6 +821,29 @@ img.aligncenter {
 	margin-right: 0.85em;
 }
 .home #content .format-gallery .entry-info {
+}
+
+
+/* =Post Formats
+-------------------------------------------------------------- */
+
+.format-link .entry-title {
+	display: none;
+}
+a.entry-format,
+a.entry-format:visited,
+a.entry-format:hover {
+	color: rgba(0,0,0,.2);
+	display: inline-block;
+	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 0 0 10px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.format-audio .wp-audio-shortcode {
+	margin-bottom: 15px;
 }
 
 
@@ -1067,6 +1122,24 @@ img.aligncenter {
 }
 
 
+/* =Float Clearing
+-------------------------------------------------------------- */
+
+.contain:before,
+.contain:after {
+	content: "\0020";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+.contain:after {
+	clear: both;
+}
+.contain {
+	zoom: 1;
+}
+
+
 /* =Print Style
 -------------------------------------------------------------- */
 
@@ -1128,7 +1201,7 @@ img.aligncenter {
 	.page-link,
 	.widget-area,
 	.sharing,
-	#wpl-likebox {
+	.wpl-likebox {
 		display: none !important;
 	}
 	.sidebar-content #content-container {
@@ -1222,4 +1295,133 @@ img.aligncenter {
 }
 #ie8 .single #branding img {
 	width: 100%;
+}
+
+
+/* =Jetpack: Infinite Scroll
+-------------------------------------------------------------- */
+.infinite-scroll #wrapper {
+	margin-bottom: 40px;
+}
+.infinite-scroll #content {
+	margin-bottom: 50px;
+}
+.infinite-scroll #content .infinite-wrap {
+	border-top-width: 1px;
+	padding-top: 40px;
+}
+
+/**
+* Elements to hide:
+* (footer widgets, post navigation, regular footer)
+*/
+.infinite-scroll #nav-below,
+.infinite-scroll #nav-above,
+.infinite-scroll.neverending #footer-widget-area,
+.infinite-scroll.neverending #footer {
+	display: none;
+}
+/* Black */
+.infinite-scroll.neverending.color-dark #infinite-footer .container {
+	background: rgba( 0, 0, 0, 0.9);
+	border-color: #222;
+}
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-info a {
+	color: #999;
+}
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-credits a:hover {
+	color: #ccc;
+}
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-credits a {
+	color: #ccc;
+}
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-credits {
+	color: #aaa;
+}
+/* Purple */
+.infinite-scroll.neverending.color-purple #infinite-footer .container {
+	background: rgba( 225, 204, 250, 0.8);
+	border-color: #c3b1d9;
+}
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-info a {
+	color: #3a2c50;
+}
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits a:hover,
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits a {
+	color: #662fb9;
+}
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits {
+	color: #4b5071;
+}
+/* Red */
+.infinite-scroll.neverending.color-red #infinite-footer .container {
+	background: rgba( 162, 0, 19, 0.8);
+	border-color: #b92523;
+}
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-info a {
+	color: #ffa48c;
+}
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits a:hover,
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits a {
+	color: #dcb39b;
+}
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits {
+	color: #e68d77;
+}
+/* Pink */
+.infinite-scroll.neverending.color-pink #infinite-footer .container {
+	background: rgba( 250, 204, 214, 0.8);
+	border-color: #c59aa4;
+}
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-info a {
+	color: #502c36;
+}
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits a:hover,
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits a {
+	color: #d6284d;
+}
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits {
+	color: #333;
+}
+/* Blue */
+.infinite-scroll.neverending.color-blue #infinite-footer .container {
+	background: rgba( 204, 221, 250, 0.8);
+	border-color: #b2c3de;
+}
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-info a {
+	color: #2c3c50;
+}
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits a:hover,
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits a {
+	color: #2c3c50;
+}
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits {
+	color: #333;
+}
+/* Brown */
+.infinite-scroll.neverending.color-brown #infinite-footer .container {
+	background: rgba( 154, 114, 89, 0.8);
+	border-color: #b38970;
+}
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-info a {
+	color: #f2d6bb;
+}
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-info a:hover,
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits a:hover,
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits a {
+	color: #dcb39b;
+}
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits {
+	color: #ffecd0;
+}
+/**
+* Hooks to infinity-end body class to restore footer
+*/
+.infinity-end.neverending #footer {
+	display: block;
 }

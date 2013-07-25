@@ -54,7 +54,6 @@ class P2_Recent_Tags extends WP_Widget {
 		foreach( $recent_tags as $recent ):
 	?>
 		<li>
-			<a class="rss" href="<?php echo esc_url( $recent['feed_link'] ); ?>">RSS</a>&nbsp;
 			<a href="<?php echo esc_url( $recent['link'] ); ?>"><?php echo esc_html( $recent['tag']->name ); ?></a>&nbsp;
 			(&nbsp;<?php echo number_format_i18n( $recent['tag']->count ); ?>&nbsp;)
 		</li>
@@ -62,9 +61,6 @@ class P2_Recent_Tags extends WP_Widget {
 	    endforeach;
 	?>
 	</ul>
-	<p>
-		<a class="allrss" href="<?php bloginfo( 'rss2_url' ); ?>"><?php _e( 'All Updates RSS', 'p2' ); ?></a>
-	</p>
 	<?php
 		echo $after_widget;
 	}

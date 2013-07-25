@@ -10,7 +10,7 @@ http://p2theme.com/
 P2 is a theme for WordPress that transforms a mild-mannered blog into a super-blog with features like inline comments on the homepage, a posting form right on the homepage, inline editing of posts and comments, real-time updates so new posts and comments come in without reloading, and much more.
 
 P2 is available on WordPress.com: http://wordpress.com/signup/?ref=p2
-...or you can download it for WordPress.org: http://wordpress.org/extend/themes/p2
+...or you can download it for WordPress.org: http://wordpress.org/themes/p2
 
 You can also check out a demo of the theme in action: http://p2demo.wordpress.com/
 If you need P2 support or want to pitch in, drop a line on the forums: http://wordpress.org/tags/p2
@@ -24,6 +24,68 @@ Official announcement post on WordPress.com:
 http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 
 == Changelog ==
+
+= 1.5.1 - July 2013 =
+* Fix broken "Allow any registered member to post" feature.
+* Fix display of empty comments. Props nacin.
+* Remove deprecated functions for custom background support
+
+= 1.5 - June 2013 =
+* Added autofocus during the dropdown code so hitting enter selects the first entry.
+* Made minor adjustments to print stylesheet to fix formatting issues, and to increase the main font size slightly.
+* Updated license.
+* Logged in non-members need to be able to access the logged_in_out action as well.
+* Now calls P2's upgrade routine before dispatching AJAX requests.
+* Made sure that AJAX call has a random query string so that it isn't cached, when P2 upgrades itself via an AJAX call. May help an upgrade race condition.
+* Split AJAX calls into two groups. Public requests are handled by a new "feed" URL: /feed/p2.ajax/. Private requests are still handled by admin-ajax.php.
+* Added forward compat with 3.6.
+* Made error message translatable.
+* Avoids a warning when the comment is null.
+* Added Swedish (sv_SE) language files, props tdh (Thord Daniel Hedengren)
+
+= 1.4.4 - May 2013 =
+* Split AJAX calls into two groups: Public requests v. permissioned requests.
+* Public requests are handled by a new feed endpoint.
+* Permissioned requests are still handled by admin-ajax.php, but are delayed until `admin_init` instead of `init`.
+
+= 1.4.3 - April 2013 =
+* Fixed JS errors caused by the x-post autocomplete menu.
+* Enqueues scripts and styles via callback.
+* New screenshot at 600x450 for HiDPI support.
+* Restructured JS code in p2.js.
+* Uses a filter to modify the output of wp_title().
+* Removed unnecessary top margin for the blog title from the iPhone.
+* Cleanup of some formatting (whitespace) and strings (for i18n).
+* Allow comments to be temporarily highlighted.
+* Improvements to the front-end post form.
+* Removes infinite loop created by p2_fix_empty_titles().
+* Allows the comment form to appear below a newly published post.
+* Adds compat with new media.
+* Restored slideUp() animation in the comment form.
+* Enabled comments to be posted via iDevice.
+* Sends no-cache headers and 200 response when no results are returned
+* Uses is_object_in_taxonomy to check whether to display tags or not.
+* Allows tabbing from content box to tabs input on post form.
+* Allows autogrow textareas on any view (not just front page).
+* First pass at a custom print stylesheet.
+* More robust list creator logic.
+* Moved header link color into stylesheet.
+* Made spinner size and color match Instapost.
+* Styled tables in comments like they are styled in post content.
+* Allows tags to be edited from the front-end.
+* Fixed margin bug for the post post-format in Chrome nightlies.
+* Add Swedish language files, props tdh (Thord Daniel Hedengren)
+
+= 1.4.2 - July 2012 =
+* Fix a whitespace bug in the post form in Chrome Beta and Canary.
+
+= 1.4.1 - July 2012 =
+* Replace image usage with css where possible.
+* Add 2x versions of all icons for retina displays.
+* Replace the spinner gif with spin.js.
+* Remove all rss icons and links from the theme.
+* Fix double margin bug with the avatar in post form.
+* Fix jumpiness when comments are edited.
 
 = 1.4.0 - April 2012 =
 * Todo list creation: use lowercase "o" and "x".

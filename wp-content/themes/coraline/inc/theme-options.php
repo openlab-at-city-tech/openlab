@@ -6,10 +6,10 @@ add_action( 'admin_menu', 'coraline_theme_options_add_page' );
 /**
  * Add theme options page styles
  */
-wp_register_style( 'coraline', get_template_directory_uri() . '/inc/theme-options.css', '', '0.1' );
-if ( isset( $_GET['page'] ) && $_GET['page'] == 'theme_options' ) {
-	wp_enqueue_style( 'coraline' );
+function coraline_admin_enqueue_scripts( $hook_suffix ) {
+	wp_enqueue_style( 'coraline', get_template_directory_uri() . '/inc/theme-options.css', '', '20120106' );
 }
+add_action( 'admin_print_styles-appearance_page_theme_options', 'coraline_admin_enqueue_scripts' );
 
 /**
  * Init plugin options to white list our options
@@ -107,8 +107,8 @@ function coraline_theme_options_do_page() {
 
 	?>
 	<div class="wrap">
-		<?php screen_icon(); echo "<h2>" . sprintf( __( '%1$s Theme Options', 'coraline' ), get_current_theme() )
-		 . "</h2>"; ?>
+		<?php $theme_name = function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme(); ?>
+		<?php screen_icon(); echo "<h2>" . sprintf( __( '%1$s Theme Options', 'coraline' ), $theme_name ) . "</h2>"; ?>
 
 		<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
 		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'coraline' ); ?></strong></p></div>
@@ -172,7 +172,7 @@ function coraline_theme_options_do_page() {
 								?>
 								<div class="layout">
 								<label class="description">
-									<input type="radio" name="coraline_theme_options[theme_layout]" value="<?php esc_attr_e( $option['value'], 'coraline' ); ?>" <?php echo $checked; ?> />
+									<input type="radio" name="coraline_theme_options[theme_layout]" value="<?php echo esc_attr( $option['value'] ); ?>" <?php echo $checked; ?> />
 									<span>
 										<img src="<?php echo get_template_directory_uri(); ?>/images/<?php echo $option['value']; ?>.png"/>
 										<?php echo $option['label']; ?>

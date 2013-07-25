@@ -106,7 +106,7 @@ function p2_quote_content() {
 	echo p2_get_quote_content();
 }
 	function p2_get_quote_content() {
-		return apply_filters( 'p2_get_quote_content', get_the_content( __( '(More ...)' , 'p2' ) ) );
+		return sprintf( '<blockquote>%s</blockquote>', apply_filters( 'p2_get_quote_content', get_the_content( __( '(More ...)' , 'p2' ) ) ) );
 	}
 	add_filter( 'p2_get_quote_content', 'p2_quote_filter_kses', 1 );
 	add_filter( 'p2_get_quote_content', 'wptexturize' );
@@ -192,9 +192,15 @@ function p2_media_buttons() {
 	include_once( ABSPATH . '/wp-admin/includes/media.php' );
 	ob_start();
 	do_action( 'media_buttons' );
+	$buttons = ob_get_clean();
 
 	// Replace any relative paths to media-upload.php
-	echo preg_replace( '/([\'"])media-upload.php/', '${1}' . admin_url( 'media-upload.php' ), ob_get_clean() );
+	$buttons = preg_replace( '/([\'"])media-upload.php/', '${1}' . admin_url( 'media-upload.php' ), $buttons );
+
+	// Remove any images.
+	$buttons = preg_replace( '/<img [^>]*src=(\"|\')(.+?)(\1)[^>]*>/i', '', $buttons );
+
+	echo $buttons;
 }
 
 function p2_get_hide_sidebar() {

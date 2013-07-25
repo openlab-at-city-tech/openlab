@@ -1,7 +1,6 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Coraline
+ * @package Coraline
  * @since Coraline 1.0
  */
 ?>

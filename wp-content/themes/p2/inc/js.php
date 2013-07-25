@@ -7,7 +7,7 @@
  */
 class P2_JS {
 
-	function init() {
+	static function init() {
 		add_action( 'wp_enqueue_scripts', array( 'P2_JS', 'enqueue_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( 'P2_JS', 'enqueue_styles' ) );
 		add_action( 'wp_head', array( 'P2_JS', 'print_options' ), 1 );
@@ -26,12 +26,6 @@ class P2_JS {
 			P2_JS_URL . '/caret.js',
 			array('jquery'),
 			'20101025' );
-
-		wp_register_script(
-			'jquery-ui-autocomplete',
-			P2_JS_URL . '/jquery.ui.autocomplete.js',
-			array('jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-position'),
-			'1.8.11' );
 
 		wp_register_script(
 			'jquery-ui-autocomplete-html',
@@ -86,9 +80,16 @@ class P2_JS {
 			'/wp-admin/js/media-upload.js',
 			array( 'thickbox' ),
 			'20110113' );
+
+		wp_register_script(
+			'p2-spin',
+			P2_JS_URL .'/spin.js',
+			array( 'jquery' ),
+			'20120704'
+		);
 	}
 
-	function enqueue_styles() {
+	static function enqueue_styles() {
 		if ( is_home() && is_user_logged_in() )
 			wp_enqueue_style( 'thickbox' );
 
@@ -97,23 +98,18 @@ class P2_JS {
 		}
 	}
 
-	function enqueue_scripts() {
+	static function enqueue_scripts() {
 		global $wp_locale;
 
 		// Generate dependencies for p2
 		$depends = array( 'jquery', 'utils', 'jquery-color', 'comment-reply',
-			'scrollit', 'wp-locale' );
+			'scrollit', 'wp-locale', 'p2-spin' );
 
 		if ( is_user_logged_in() ) {
-			// Use a bundle of scripts if SCRIPT_DEBUG is not defined.
-			if ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) {
-				$depends[] = 'jeditable';
-				$depends[] = 'jquery-ui-autocomplete-html';
-				$depends[] = 'jquery-ui-autocomplete-multiValue';
-				$depends[] = 'jquery-ui-autocomplete-match';
-			} else {
-				$depends[] = 'p2-user-bundle';
-			}
+			$depends[] = 'jeditable';
+			$depends[] = 'jquery-ui-autocomplete-html';
+			$depends[] = 'jquery-ui-autocomplete-multiValue';
+			$depends[] = 'jquery-ui-autocomplete-match';
 
 			// media upload
 			if ( is_home() ) {
@@ -125,7 +121,7 @@ class P2_JS {
 		wp_enqueue_script( 'p2js',
 			P2_JS_URL . '/p2.js',
 			$depends,
-			'20120220'
+			'20130607'
 		);
 
 		wp_localize_script( 'p2js', 'p2txt', array(
@@ -157,6 +153,7 @@ class P2_JS {
 			'oops_not_logged_in'    => __( 'Oops! Looks like you are not logged in.', 'p2' ),
 			'please_log_in'         => __( 'Please log in again', 'p2' ),
 			'whoops_maybe_offline'  => __( 'Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress.', 'p2' ),
+			'required_filed'        => __( 'This field is required.', 'p2' ),
 		) );
 
 		if ( p2_is_iphone() ) {
@@ -172,7 +169,7 @@ class P2_JS {
 		add_action( 'wp_head', array( 'P2_JS', 'locale_script_data' ), 2 );
 	}
 
-	function locale_script_data() {
+	static function locale_script_data() {
 		global $wp_locale;
 		?>
 		<script type="text/javascript">
@@ -194,7 +191,11 @@ class P2_JS {
 		return $admin_url;
 	}
 
-	function print_options() {
+	function ajax_read_url() {
+		return add_query_arg( 'p2ajax', 'true', get_feed_link( 'p2.ajax' ) );
+	}
+
+	static function print_options() {
 		$mentions = p2_get( 'mentions' );
 
 		get_currentuserinfo();
@@ -216,6 +217,7 @@ class P2_JS {
 
 			// P2 Configuration
 			var ajaxUrl                 = "<?php echo esc_js( esc_url_raw( P2_JS::ajax_url() ) ); ?>";
+			var ajaxReadUrl             = "<?php echo esc_js( esc_url_raw( P2_JS::ajax_read_url() ) ); ?>";
 			var updateRate              = "30000"; // 30 seconds
 			var nonce                   = "<?php echo esc_js( $page_options['nonce'] ); ?>";
 			var login_url               = "<?php echo $page_options['login_url'] ?>";
@@ -247,6 +249,8 @@ class P2_JS {
 			var commentsLists           = '';
 			var newUnseenUpdates        = 0;
 			var mentionData             = <?php echo json_encode( $mentions->user_suggestion() ); ?>;
+			var p2CurrentVersion        = <?php echo (int) $GLOBALS['p2']->db_version; ?>;
+			var p2StoredVersion         = <?php echo (int) $GLOBALS['p2']->get_option( 'db_version' ); ?>;
 			// ]]>
 		</script>
 <?php }

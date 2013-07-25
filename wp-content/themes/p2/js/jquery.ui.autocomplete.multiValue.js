@@ -22,7 +22,7 @@ $.ui.autocomplete.prototype._create = function() {
 };
 
 // When an item is focused, prevent the contents of the field from being replaced.
-$( '.ui-autocomplete-input' ).live( 'autocompletefocus.multiValue', function( event ) {
+$( document ).on( 'autocompletefocus.multiValue', '.ui-autocomplete-input', function( event ) {
 	if ( $( this ).autocomplete( 'option', 'multiValue' ) )
 		event.preventDefault();
 });

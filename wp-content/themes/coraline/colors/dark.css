@@ -22,6 +22,7 @@ ins {
 	background: #333;
 }
 input[type=text],
+input[type=email],
 textarea {
 	border: none;
 }
@@ -73,7 +74,10 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #access ul ul a:hover {
 	background: #eee;
 }
-#access .current_page_item a {
+#access .current-menu-item a,
+#access .current-menu-ancestor a,
+#access .current_page_item a,
+#access .current_page_ancestor a {
 	background: #fff;
 	color: #000;
 }
@@ -86,6 +90,11 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .sticky {
 	background: #222;
 	border-color: #444;
+}
+a.entry-format,
+a.entry-format:visited,
+a.entry-format:hover {
+	color: rgba(255,255,255,.3);
 }
 .entry-title a {
 	color: #fff;
@@ -209,5 +218,5 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #e74040;
 }
 #colophon .generator-link {
-	background: url("images/wordpress.png") no-repeat left center;
+	background: url( "../images/wordpress.png" ) no-repeat left center;
 }

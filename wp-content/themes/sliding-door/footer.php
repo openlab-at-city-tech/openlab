@@ -20,7 +20,7 @@
 			
 			<!-- If you'd like to support WordPress, having the "powered by" link somewhere on your blog is the best way; it's our only promotion or advertising. -->
 			
-		<p>Powered by <a href="http://wordpress.org/">WordPress</a> and <a href="http://mac-host.com/support/">Sliding Door</a> theme.</p>
+		<p>Powered by <a href="http://wordpress.org/">WordPress</a> and <a href="http://dubbo.org/slidingdoor/">Sliding Door</a> theme.</p>
 			</div><!-- #site-generator -->
 
 		</div><!-- #colophon -->

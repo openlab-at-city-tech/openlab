@@ -21,27 +21,14 @@
  * @since P2 1.4
  */
 function p2_setup_custom_header() {
-	$args = array(
+	add_theme_support( 'custom-header', apply_filters( 'p2_custom_header_args', array(
 		'width'               => 980,
 		'height'              => 120,
 		'default-image'       => '',
 		'default-text-color'  => '3478e3',
 		'wp-head-callback'    => 'p2_header_style',
 		'admin-head-callback' => 'p2_admin_header_style',
-	);
-
-	$args = apply_filters( 'p2_custom_header_args', $args );
-
-	if ( function_exists( 'get_custom_header' ) ) {
-		add_theme_support( 'custom-header', $args );
-	} else {
-		// Compat: Versions of WordPress prior to 3.4.
-		define( 'HEADER_TEXTCOLOR',    $args['default-text-color'] );
-		define( 'HEADER_IMAGE',        $args['default-image'] );
-		define( 'HEADER_IMAGE_WIDTH',  $args['width'] );
-		define( 'HEADER_IMAGE_HEIGHT', $args['height'] );
-		add_custom_image_header( $args['wp-head-callback'], $args['admin-head-callback'] );
-	}
+	) ) );
 }
 
 /**
@@ -54,14 +41,14 @@ function p2_admin_header_style() {
 ?>
 	<style type="text/css">
 	#headimg {
-		background: url(<?php header_image(); ?>) repeat;
+		background: url('<?php echo esc_url( get_header_image() ); ?>') repeat;
 		padding: 0 0 0 10px;
-		width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
-		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+		width: <?php echo get_custom_header()->width; ?>px;
+		height: <?php echo get_custom_header()->height; ?>px;
 	}
 	#headimg a {
-		width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
-		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+		width: <?php echo get_custom_header()->width; ?>px;
+		height: <?php echo get_custom_header()->height; ?>px;
 	}
 	#headimg h1 {
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -91,7 +78,7 @@ function p2_admin_header_style() {
 	}
 	#headimg h1 a,
 	#headimg #desc {
-		color: #<?php echo HEADER_TEXTCOLOR ?>;
+		color: #<?php echo get_header_textcolor(); ?>;
 	}
 	<?php endif; ?>
 
@@ -107,19 +94,18 @@ function p2_admin_header_style() {
  */
 function p2_header_style() {
 ?>
-	<style type="text/css">
-
+	<style id="p2-header-style" type="text/css">
 	<?php if ( '' != get_header_image() ) : ?>
 		#header {
-			background: url(<?php header_image(); ?>) repeat;
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+			background: url('<?php echo esc_url( get_header_image() ); ?>') repeat;
+			height: <?php echo get_custom_header()->height; ?>px;
 		}
 		#header a.secondary {
 			display: block;
 			position: absolute;
 			top: 0;
-			width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+			width: <?php echo get_custom_header()->width; ?>px;
+			height: <?php echo get_custom_header()->height; ?>px;
 		}
 		#header a.secondary:hover {
 			border: 0;
@@ -129,7 +115,7 @@ function p2_header_style() {
 			margin-top: 0;
 			margin-right: 0;
 			position: relative;
-			height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
+			height: <?php echo get_custom_header()->height; ?>px;
 			-webkit-box-shadow: none !important;
 			-moz-box-shadow: none !important;
 			box-shadow: none !important;
@@ -139,21 +125,21 @@ function p2_header_style() {
 			-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 			box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 		}
-	<?php endif; ?>
+	<?php endif;
 
-	<?php if ( 'blank' == get_header_textcolor() ) : ?>
+	$text_color = get_header_textcolor();
+	if ( 'blank' == $text_color ) : ?>
 		#header h1,
 		#header small {
 			padding: 0;
 			text-indent: -1000em;
 		}
-	<?php else: ?>
+	<?php elseif ( $text_color != get_theme_support( 'custom-header', 'default-text-color' ) ) : ?>
 		#header h1 a,
 		#header small {
 			color: #<?php header_textcolor(); ?>;
 		}
 	<?php endif; ?>
-
 	</style>
 <?php
 }
