@@ -144,90 +144,26 @@ function my_bp_hide_group_create_button() {
  */
 function my_bp_admin_bar_points() {
  if ( is_user_logged_in() ) {
-	global $bp, $wpdb;
-	define('CUBEPTS3', $wpdb->prefix . 'cp');
-	$current_user = wp_get_current_user();
+	global $bp;
+	$user = wp_get_current_user();
 
 	if(cp_module_activated('donate')){ // Donate Module is Active
 	    
 		if(function_exists('cp_lottery_show_logs')){			
-		  // Lottery
-		  if(get_option('cp_lottery1_onoff')) { $cp_lottery1_pt_entries = get_user_meta($current_user->ID, 'lottery1_ticket', true); }
-		  if(get_option('cp_lottery2_onoff')) { $cp_lottery2_pt_entries = get_user_meta($current_user->ID, 'lottery2_ticket', true); }
-		  if(get_option('cp_lottery3_onoff')) { $cp_lottery3_pt_entries = get_user_meta($current_user->ID, 'lottery3_ticket', true); }
-		  if(get_option('cp_lottery4_onoff')) { $cp_lottery4_pt_entries = get_user_meta($current_user->ID, 'lottery4_ticket', true); }
-		  if(get_option('cp_lottery5_onoff')) { $cp_lottery5_pt_entries = get_user_meta($current_user->ID, 'lottery5_ticket', true); }
-		  // Gamble
-		  if(get_option('cp_gamble1_onoff')) { $cb_g1_all_ur_bets = get_user_meta($current_user->ID, 'gamble1_bet_pts', true); }
-		  if(get_option('cp_gamble2_onoff')) { $cb_g2_all_ur_bets = get_user_meta($current_user->ID, 'gamble2_bet_pts', true); }
-		  if(get_option('cp_gamble3_onoff')) { $cb_g3_all_ur_bets = get_user_meta($current_user->ID, 'gamble3_bet_pts', true); }
-		  if(get_option('cp_gamble4_onoff')) { $cb_g4_all_ur_bets = get_user_meta($current_user->ID, 'gamble4_bet_pts', true); }
-		  if(get_option('cp_gamble5_onoff')) { $cb_g5_all_ur_bets = get_user_meta($current_user->ID, 'gamble5_bet_pts', true); }
+		$cp_lottery1_user_entries = get_user_meta($user->ID, 'lottery1_entries', true);
+		$cp_lottery2_user_entries = get_user_meta($user->ID, 'lottery2_entries', true);
+		$cp_lottery3_user_entries = get_user_meta($user->ID, 'lottery3_entries', true);
+		$cp_lottery4_user_entries = get_user_meta($user->ID, 'lottery4_entries', true);
+		$cp_lottery5_user_entries = get_user_meta($user->ID, 'lottery5_entries', true);
+		$cp_bet1_pts = get_user_meta($user->ID, 'gamble1_bet_pts', true);
+		$cp_bet2_pts = get_user_meta($user->ID, 'gamble2_bet_pts', true);
+		$cp_bet3_pts = get_user_meta($user->ID, 'gamble3_bet_pts', true);
+		$cp_bet4_pts = get_user_meta($user->ID, 'gamble4_bet_pts', true);
+		$cp_bet5_pts = get_user_meta($user->ID, 'gamble5_bet_pts', true);
+		$all_lottery_n_bet_active = get_option('cp_lottery1_onoff') + get_option('cp_lottery2_onoff') + get_option('cp_lottery3_onoff') + get_option('cp_lottery4_onoff') + get_option('cp_lottery5_onoff') + get_option('cp_gamble1_onoff') + get_option('cp_gamble2_onoff') + get_option('cp_gamble3_onoff') + get_option('cp_gamble4_onoff') + get_option('cp_gamble5_onoff');
 		  
-		  // If $lottery1on is 1 then that means they have at least 1 point entry. 
-		  if(get_option('cp_lottery1_onoff')) {
-		    if($cp_lottery1_pt_entries > 0) { $lottery1on = 1; } else { $lottery1on = 0; $lottery1need2enter = 1; }
-		    $lottery1active = 1;
-		  } else { $lottery1active = 0; }
-		  
-		  if(get_option('cp_lottery2_onoff')) {
-		    if($cp_lottery2_pt_entries > 0) { $lottery2on = 1; } else { $lottery2on = 0; $lottery2need2enter = 1; }	 
-		    $lottery2active = 1;
-		  } else { $lottery2active = 0; }
-		  
-		  if(get_option('cp_lottery3_onoff')) {
-		    if($cp_lottery3_pt_entries > 0) { $lottery3on = 1; } else { $lottery3on = 0; $lottery3need2enter = 1; }	 
-		    $lottery3active = 1;
-		  } else { $lottery3active = 0; }
-		  
-		  if(get_option('cp_lottery4_onoff')) {
-		    if($cp_lottery4_pt_entries > 0) { $lottery4on = 1; } else { $lottery4on = 0; $lottery4need2enter = 1; }	 
-		    $lottery4active = 1;
-		  } else { $lottery4active = 0; }
-		  
-		  if(get_option('cp_lottery5_onoff')) {
-		    if($cp_lottery5_pt_entries > 0) { $lottery5on = 1; } else { $lottery5on = 0; $lottery5need2enter = 1; }	 
-		    $lottery5active = 1;
-		  } else { $lottery5active = 0; }
-		  
-		  $lotterieson = $lottery1on + $lottery2on + $lottery3on + $lottery4on + $lottery5on;
-		  $lotteriesneed2enter = $lottery1need2enter + $lottery2need2enter + $lottery3need2enter + $lottery4need2enter + $lottery5need2enter;
-		  $lotteriesactive = $lottery1active + $lottery2active + $lottery3active + $lottery4active + $lottery5active;
-		  
-		  // If $gamble1on is 1 then that means they have at least 1 bet 
-		  if(get_option('cp_gamble1_onoff')) {
-		    if($cb_g1_all_ur_bets > 0) { $gamble1on = 1; } else { $gamble1on = 0; $bet1need2enter = 1; }
-		    $gamble1active = 1;
-		  } else { $gamble1active = 0; }
-		  
-		  if(get_option('cp_gamble2_onoff')) {
-		    if($cb_g2_all_ur_bets > 0) { $gamble2on = 1; } else { $gamble2on = 0; $bet2need2enter = 1; }
-		    $gamble2active = 1;
-		  } else { $gamble2active = 0; }
-		  
-		  if(get_option('cp_gamble3_onoff')) {
-		    if($cb_g3_all_ur_bets > 0) { $gamble3on = 1; } else { $gamble3on = 0; $bet3need2enter = 1; }
-		    $gamble3active = 1;
-		  } else { $gamble3active = 0; }
-		  
-		  if(get_option('cp_gamble4_onoff')) {
-		    if($cb_g4_all_ur_bets > 0) { $gamble4on = 1; } else { $gamble4on = 0; $bet4need2enter = 1; }
-		    $gamble4active = 1;
-		  } else { $gamble4active = 0; }
-		  
-		  if(get_option('cp_gamble5_onoff')) {
-		    if($cb_g5_all_ur_bets > 0) { $gamble5on = 1; } else { $gamble5on = 0; $bet5need2enter = 1; }
-		    $gamble5active = 1;
-		  } else { $gamble5active = 0; }
-		  
-		  $bettingon = $gamble1on + $gamble2on + $gamble3on + $gamble4on + $gamble5on;
-		  $betneed2enter = $bet1need2enter + $bet2need2enter + $bet3need2enter + $bet4need2enter + $bet5need2enter;
-		  $betsactive = $gamble1active + $gamble2active + $gamble3active + $gamble4active + $gamble5active;
-		  
-		  $totalbetnlottos2enter = $lotteriesneed2enter + $betneed2enter;
-		  $totalbetnlottosactive = $lotteriesactive + $betsactive;
 			  
-		  if($totalbetnlottosactive > 0){
+		  if($all_lottery_n_bet_active > 0){
 		    echo '<li>';
 		    ?><a href="#" title="<?php _e('Donate', 'cp'); ?>" onclick="Javascript:cp_module_donate();" class="thickbox cp_donateLink">
 		    <?php echo cp_displayPoints();
@@ -247,164 +183,94 @@ function my_bp_admin_bar_points() {
 		}
 		
 		if(function_exists('cp_lottery_show_logs')) { // see if they have my plugin
-		 if($totalbetnlottos2enter > 0 OR $totalbetnlottos2enter < 1){ // Start Menu Items
-		  if($totalbetnlottos2enter > 0){echo '&nbsp;<span id="cblotobetson">'.$totalbetnlottos2enter.'</span>&nbsp;</a>';} else { echo '</a>'; }
-		  echo '<ul>';
-		  		  
-		  // They need to enter
-		  if (get_option('cp_lottery1_onoff')){
-		    if ($lottery1on < 1) { echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.get_option('bp_lottery1_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery2_onoff')){
-		    if ($lottery2on < 1) { echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.get_option('bp_lottery2_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery3_onoff')){
-		    if ($lottery3on < 1) { echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.get_option('bp_lottery3_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery4_onoff')){
-		    if ($lottery4on < 1) { echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.get_option('bp_lottery4_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery5_onoff')){
-		   if ($lottery5on < 1) { echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.get_option('bp_lottery5_open_cp_bp').'</a></li>'; }
-		  }
-		  
-		  // They need to bet
-		  if (get_option('cp_gamble1_onoff')){
-		    if ($gamble1on < 1) { echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.get_option('bp_bet1_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble2_onoff')){
-		    if ($gamble2on < 1) { echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.get_option('bp_bet2_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble3_onoff')){
-		    if ($gamble3on < 1) { echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.get_option('bp_bet3_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble4_onoff')){
-		    if ($gamble4on < 1) { echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.get_option('bp_bet4_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble5_onoff')){
-		    if ($gamble5on < 1) { echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.get_option('bp_bet5_open_cp_bp').'</a></li>'; }
-		  }
-		  
-				
-		 // They have entered
-		 if (get_option('cp_lottery1_onoff')){
-		  if ($lottery1on > 0) { echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.get_option('bp_lottery1_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery2_onoff')){
-		  if ($lottery2on > 0) { echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.get_option('bp_lottery2_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery3_onoff')){
-		  if ($lottery3on > 0) { echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.get_option('bp_lottery3_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery4_onoff')){
-		  if ($lottery4on > 0) { echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.get_option('bp_lottery4_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery5_onoff')){
-		 if ($lottery5on > 0) { echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.get_option('bp_lottery5_entered_cp_bp').'</a></li>'; }
-		 }
-			  
-		// They have bet points
-		if (get_option('cp_gamble1_onoff')){
-		  if ($gamble1on > 0) { echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.get_option('bp_bet1_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble2_onoff')){
-		  if ($gamble2on > 0) { echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.get_option('bp_bet2_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble3_onoff')){
-		  if ($gamble3on > 0) { echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.get_option('bp_bet3_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble4_onoff')){
-		  if ($gamble4on > 0) { echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.get_option('bp_bet4_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble5_onoff')){
-		  if ($gamble5on > 0) { echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.get_option('bp_bet5_entered_cp_bp').'</a></li>'; }
-		}
+		 if($all_lottery_n_bet_active > 0 ){ // Start Menu Items
+		  $totalbetnlottos2enter = 0;
+		  if($cp_lottery1_user_entries < 1 && get_option('cp_lottery1_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery2_user_entries < 1 && get_option('cp_lottery2_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery3_user_entries < 1 && get_option('cp_lottery3_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery4_user_entries < 1 && get_option('cp_lottery4_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery5_user_entries < 1 && get_option('cp_lottery5_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet1_pts < 1 && get_option('cp_gamble1_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet2_pts < 1 && get_option('cp_gamble2_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet3_pts < 1 && get_option('cp_gamble3_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet4_pts < 1 && get_option('cp_gamble4_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet5_pts < 1 && get_option('cp_gamble5_onoff') == 1){ $totalbetnlottos2enter++; }
+		 	 
+		   if($totalbetnlottos2enter > 0){echo '&nbsp;<span id="cblotobetson">'.$totalbetnlottos2enter.'</span>&nbsp;</a>';} else { echo '</a>'; }
+		   echo '<ul>';
+		  		
+		   if(get_option('cp_lottery1_onoff') == 1){
+			if($cp_lottery1_user_entries < 1){ $title = get_option('bp_lottery1_open_cp_bp'); }
+			if($cp_lottery1_user_entries > 0){ $title = get_option('bp_lottery1_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery2_onoff') == 1){
+			if($cp_lottery2_user_entries < 1){ $title = get_option('bp_lottery2_open_cp_bp'); }
+			if($cp_lottery2_user_entries > 0){ $title = get_option('bp_lottery2_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery3_onoff') == 1){
+			if($cp_lottery3_user_entries < 1){ $title = get_option('bp_lottery3_open_cp_bp'); }
+			if($cp_lottery3_user_entries > 0){ $title = get_option('bp_lottery3_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery4_onoff') == 1){
+			if($cp_lottery4_user_entries < 1){ $title = get_option('bp_lottery4_open_cp_bp'); }
+			if($cp_lottery4_user_entries > 0){ $title = get_option('bp_lottery4_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery5_onoff') == 1){
+			if($cp_lottery5_user_entries < 1){ $title = get_option('bp_lottery5_open_cp_bp'); }
+			if($cp_lottery5_user_entries > 0){ $title = get_option('bp_lottery5_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble1_onoff') == 1){
+		   	   if($cp_bet1_pts < 1){ $title = get_option('bp_bet1_open_cp_bp'); }
+		   	   if($cp_bet1_pts > 0){ $title = get_option('bp_bet1_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble2_onoff') == 1){
+		   	   if($cp_bet2_pts < 1){ $title = get_option('bp_bet2_open_cp_bp'); }
+		   	   if($cp_bet2_pts > 0){ $title = get_option('bp_bet2_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble3_onoff') == 1){
+		   	   if($cp_bet3_pts < 1){ $title = get_option('bp_bet3_open_cp_bp'); }
+		   	   if($cp_bet3_pts > 0){ $title = get_option('bp_bet3_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble4_onoff') == 1){
+		   	   if($cp_bet4_pts < 1){ $title = get_option('bp_bet4_open_cp_bp'); }
+		   	   if($cp_bet4_pts > 0){ $title = get_option('bp_bet4_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble5_onoff') == 1){
+		   	   if($cp_bet5_pts < 1){ $title = get_option('bp_bet5_open_cp_bp'); }
+		   	   if($cp_bet5_pts > 0){ $title = get_option('bp_bet5_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.$title.'</a></li>';
+		   }
 			
-	    } // End menu items
-	    if($totalbetnlottos2enter > 0 OR $totalbetnlottos2enter < 1){echo '</ul>';}
+		 } // if any giveaways / bet are active
+	      echo '</ul>';
 	   } // End check if they have giveaway plugin  	
 	     echo '</li>';
 		
 	} else { // Donate Module is NOT active
 		
-		if(function_exists('cp_lottery_show_logs')){			
-		  // Lottery
-		  if(get_option('cp_lottery1_onoff')) { $cp_lottery1_pt_entries = get_user_meta($current_user->ID, 'lottery1_ticket', true); }
-		  if(get_option('cp_lottery2_onoff')) { $cp_lottery2_pt_entries = get_user_meta($current_user->ID, 'lottery2_ticket', true); }
-		  if(get_option('cp_lottery3_onoff')) { $cp_lottery3_pt_entries = get_user_meta($current_user->ID, 'lottery3_ticket', true); }
-		  if(get_option('cp_lottery4_onoff')) { $cp_lottery4_pt_entries = get_user_meta($current_user->ID, 'lottery4_ticket', true); }
-		  if(get_option('cp_lottery5_onoff')) { $cp_lottery5_pt_entries = get_user_meta($current_user->ID, 'lottery5_ticket', true); }
-		  // Gamble
-		  if(get_option('cp_gamble1_onoff')) { $cb_g1_all_ur_bets = get_user_meta($current_user->ID, 'gamble1_bet_pts', true); }
-		  if(get_option('cp_gamble2_onoff')) { $cb_g2_all_ur_bets = get_user_meta($current_user->ID, 'gamble2_bet_pts', true); }
-		  if(get_option('cp_gamble3_onoff')) { $cb_g3_all_ur_bets = get_user_meta($current_user->ID, 'gamble3_bet_pts', true); }
-		  if(get_option('cp_gamble4_onoff')) { $cb_g4_all_ur_bets = get_user_meta($current_user->ID, 'gamble4_bet_pts', true); }
-		  if(get_option('cp_gamble5_onoff')) { $cb_g5_all_ur_bets = get_user_meta($current_user->ID, 'gamble5_bet_pts', true); }
-		  
-		  // If $lottery1on is 1 then that means they have at least 1 point entry. 
-		  if(get_option('cp_lottery1_onoff')) {
-		    if($cp_lottery1_pt_entries > 0) { $lottery1on = 1; } else { $lottery1on = 0; $lottery1need2enter = 1; }
-		    $lottery1active = 1;
-		  } else { $lottery1active = 0; }
-		  
-		  if(get_option('cp_lottery2_onoff')) {
-		    if($cp_lottery2_pt_entries > 0) { $lottery2on = 1; } else { $lottery2on = 0; $lottery2need2enter = 1; }	 
-		    $lottery2active = 1;
-		  } else { $lottery2active = 0; }
-		  
-		  if(get_option('cp_lottery3_onoff')) {
-		    if($cp_lottery3_pt_entries > 0) { $lottery3on = 1; } else { $lottery3on = 0; $lottery3need2enter = 1; }	 
-		    $lottery3active = 1;
-		  } else { $lottery3active = 0; }
-		  
-		  if(get_option('cp_lottery4_onoff')) {
-		    if($cp_lottery4_pt_entries > 0) { $lottery4on = 1; } else { $lottery4on = 0; $lottery4need2enter = 1; }	 
-		    $lottery4active = 1;
-		  } else { $lottery4active = 0; }
-		  
-		  if(get_option('cp_lottery5_onoff')) {
-		    if($cp_lottery5_pt_entries > 0) { $lottery5on = 1; } else { $lottery5on = 0; $lottery5need2enter = 1; }	 
-		    $lottery5active = 1;
-		  } else { $lottery5active = 0; }
-		  
-		  $lotterieson = $lottery1on + $lottery2on + $lottery3on + $lottery4on + $lottery5on;
-		  $lotteriesneed2enter = $lottery1need2enter + $lottery2need2enter + $lottery3need2enter + $lottery4need2enter + $lottery5need2enter;
-		  $lotteriesactive = $lottery1active + $lottery2active + $lottery3active + $lottery4active + $lottery5active;
-		  
-		  // If $gamble1on is 1 then that means they have at least 1 bet 
-		  if(get_option('cp_gamble1_onoff')) {
-		    if($cb_g1_all_ur_bets > 0) { $gamble1on = 1; } else { $gamble1on = 0; $bet1need2enter = 1; }
-		    $gamble1active = 1;
-		  } else { $gamble1active = 0; }
-		  
-		  if(get_option('cp_gamble2_onoff')) {
-		    if($cb_g2_all_ur_bets > 0) { $gamble2on = 1; } else { $gamble2on = 0; $bet2need2enter = 1; }
-		    $gamble2active = 1;
-		  } else { $gamble2active = 0; }
-		  
-		  if(get_option('cp_gamble3_onoff')) {
-		    if($cb_g3_all_ur_bets > 0) { $gamble3on = 1; } else { $gamble3on = 0; $bet3need2enter = 1; }
-		    $gamble3active = 1;
-		  } else { $gamble3active = 0; }
-		  
-		  if(get_option('cp_gamble4_onoff')) {
-		    if($cb_g4_all_ur_bets > 0) { $gamble4on = 1; } else { $gamble4on = 0; $bet4need2enter = 1; }
-		    $gamble4active = 1;
-		  } else { $gamble4active = 0; }
-		  
-		  if(get_option('cp_gamble5_onoff')) {
-		    if($cb_g5_all_ur_bets > 0) { $gamble5on = 1; } else { $gamble5on = 0; $bet5need2enter = 1; }
-		    $gamble5active = 1;
-		  } else { $gamble5active = 0; }
-		  
-		  $bettingon = $gamble1on + $gamble2on + $gamble3on + $gamble4on + $gamble5on;
-		  $betneed2enter = $bet1need2enter + $bet2need2enter + $bet3need2enter + $bet4need2enter + $bet5need2enter;
-		  $betsactive = $gamble1active + $gamble2active + $gamble3active + $gamble4active + $gamble5active;
-		  
-		  $totalbetnlottos2enter = $lotteriesneed2enter + $betneed2enter;
-		  $totalbetnlottosactive = $lotteriesactive + $betsactive;
+		if(function_exists('cp_lottery_show_logs')){	
+		$cp_lottery1_user_entries = get_user_meta($user->ID, 'lottery1_entries', true);
+		$cp_lottery2_user_entries = get_user_meta($user->ID, 'lottery2_entries', true);
+		$cp_lottery3_user_entries = get_user_meta($user->ID, 'lottery3_entries', true);
+		$cp_lottery4_user_entries = get_user_meta($user->ID, 'lottery4_entries', true);
+		$cp_lottery5_user_entries = get_user_meta($user->ID, 'lottery5_entries', true);
+		$cp_bet1_pts = get_user_meta($user->ID, 'gamble1_bet_pts', true);
+		$cp_bet2_pts = get_user_meta($user->ID, 'gamble2_bet_pts', true);
+		$cp_bet3_pts = get_user_meta($user->ID, 'gamble3_bet_pts', true);
+		$cp_bet4_pts = get_user_meta($user->ID, 'gamble4_bet_pts', true);
+		$cp_bet5_pts = get_user_meta($user->ID, 'gamble5_bet_pts', true);
+		$all_lottery_n_bet_active = get_option('cp_lottery1_onoff') + get_option('cp_lottery2_onoff') + get_option('cp_lottery3_onoff') + get_option('cp_lottery4_onoff') + get_option('cp_lottery5_onoff') + get_option('cp_gamble1_onoff') + get_option('cp_gamble2_onoff') + get_option('cp_gamble3_onoff') + get_option('cp_gamble4_onoff') + get_option('cp_gamble5_onoff');
 			  
-		  if($totalbetnlottosactive > 0){
+		  if($all_lottery_n_bet_active > 0){
 		    echo '<li>'; ?><a href="<?php bloginfo('url'); echo '/'.BP_MEMBERS_SLUG.'/'; echo bp_loggedin_user_username(); echo '/'.$bp->cubepoint->slug.'/'; ?>"><?php echo cp_displayPoints();
 		  } else {
 		    echo '<li class="no-arrow">'; ?><a href="<?php bloginfo('url'); echo '/'.BP_MEMBERS_SLUG.'/'; echo bp_loggedin_user_username(); echo '/'.$bp->cubepoint->slug.'/'; ?>"><?php echo cp_displayPoints().'</a>';
@@ -418,80 +284,75 @@ function my_bp_admin_bar_points() {
 		}
 		
 		if(function_exists('cp_lottery_show_logs')) { // see if they have my plugin
-		 if($totalbetnlottos2enter > 0 OR $totalbetnlottos2enter < 1){ // Start Menu Items
-		 	 if($totalbetnlottos2enter > 0){echo '&nbsp;<span id="cblotobetson">'.$totalbetnlottos2enter.'</span>&nbsp;</a>';} else { echo '</a>'; }
-		  echo '<ul>';
-		  		  
-		  // They need to enter
-		  if (get_option('cp_lottery1_onoff')){
-		    if ($lottery1on < 1) { echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.get_option('bp_lottery1_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery2_onoff')){
-		    if ($lottery2on < 1) { echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.get_option('bp_lottery2_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery3_onoff')){
-		    if ($lottery3on < 1) { echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.get_option('bp_lottery3_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery4_onoff')){
-		    if ($lottery4on < 1) { echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.get_option('bp_lottery4_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_lottery5_onoff')){
-		   if ($lottery5on < 1) { echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.get_option('bp_lottery5_open_cp_bp').'</a></li>'; }
-		  }
-		  
-		  // They need to bet
-		  if (get_option('cp_gamble1_onoff')){
-		    if ($gamble1on < 1) { echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.get_option('bp_bet1_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble2_onoff')){
-		    if ($gamble2on < 1) { echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.get_option('bp_bet2_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble3_onoff')){
-		    if ($gamble3on < 1) { echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.get_option('bp_bet3_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble4_onoff')){
-		    if ($gamble4on < 1) { echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.get_option('bp_bet4_open_cp_bp').'</a></li>'; }
-		  }
-		  if (get_option('cp_gamble5_onoff')){
-		    if ($gamble5on < 1) { echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.get_option('bp_bet5_open_cp_bp').'</a></li>'; }
-		  }
-	
-		 // They have entered
-		 if (get_option('cp_lottery1_onoff')){
-		  if ($lottery1on > 0) { echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.get_option('bp_lottery1_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery2_onoff')){
-		  if ($lottery2on > 0) { echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.get_option('bp_lottery2_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery3_onoff')){
-		  if ($lottery3on > 0) { echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.get_option('bp_lottery3_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery4_onoff')){
-		  if ($lottery4on > 0) { echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.get_option('bp_lottery4_entered_cp_bp').'</a></li>'; }
-		 }
-		 if (get_option('cp_lottery5_onoff')){
-		 if ($lottery5on > 0) { echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.get_option('bp_lottery5_entered_cp_bp').'</a></li>'; }
-		 }
-			  
-		// They have bet points
-		if (get_option('cp_gamble1_onoff')){
-		  if ($gamble1on > 0) { echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.get_option('bp_bet1_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble2_onoff')){
-		  if ($gamble2on > 0) { echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.get_option('bp_bet2_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble3_onoff')){
-		  if ($gamble3on > 0) { echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.get_option('bp_bet3_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble4_onoff')){
-		  if ($gamble4on > 0) { echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.get_option('bp_bet4_entered_cp_bp').'</a></li>'; }
-		}
-		if (get_option('cp_gamble5_onoff')){
-		  if ($gamble5on > 0) { echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.get_option('bp_bet5_entered_cp_bp').'</a></li>'; }
-		}
+		 if($all_lottery_n_bet_active > 0 ){ // Start Menu Items
+		  $totalbetnlottos2enter = 0;
+		  if($cp_lottery1_user_entries < 1 && get_option('cp_lottery1_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery2_user_entries < 1 && get_option('cp_lottery2_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery3_user_entries < 1 && get_option('cp_lottery3_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery4_user_entries < 1 && get_option('cp_lottery4_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_lottery5_user_entries < 1 && get_option('cp_lottery5_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet1_pts < 1 && get_option('cp_gamble1_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet2_pts < 1 && get_option('cp_gamble2_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet3_pts < 1 && get_option('cp_gamble3_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet4_pts < 1 && get_option('cp_gamble4_onoff') == 1){ $totalbetnlottos2enter++; }
+		  if($cp_bet5_pts < 1 && get_option('cp_gamble5_onoff') == 1){ $totalbetnlottos2enter++; }
+		 	 
+		   if($totalbetnlottos2enter > 0){echo '&nbsp;<span id="cblotobetson">'.$totalbetnlottos2enter.'</span>&nbsp;</a>';} else { echo '</a>'; }
+		   echo '<ul>';
+		  		
+		   if(get_option('cp_lottery1_onoff') == 1){
+			if($cp_lottery1_user_entries < 1){ $title = get_option('bp_lottery1_open_cp_bp'); }
+			if($cp_lottery1_user_entries > 0){ $title = get_option('bp_lottery1_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery1_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery2_onoff') == 1){
+			if($cp_lottery2_user_entries < 1){ $title = get_option('bp_lottery2_open_cp_bp'); }
+			if($cp_lottery2_user_entries > 0){ $title = get_option('bp_lottery2_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery2_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery3_onoff') == 1){
+			if($cp_lottery3_user_entries < 1){ $title = get_option('bp_lottery3_open_cp_bp'); }
+			if($cp_lottery3_user_entries > 0){ $title = get_option('bp_lottery3_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery3_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery4_onoff') == 1){
+			if($cp_lottery4_user_entries < 1){ $title = get_option('bp_lottery4_open_cp_bp'); }
+			if($cp_lottery4_user_entries > 0){ $title = get_option('bp_lottery4_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery4_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_lottery5_onoff') == 1){
+			if($cp_lottery5_user_entries < 1){ $title = get_option('bp_lottery5_open_cp_bp'); }
+			if($cp_lottery5_user_entries > 0){ $title = get_option('bp_lottery5_entered_cp_bp'); }
+			echo '<li><a href="'.get_option('bp_lottery5_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble1_onoff') == 1){
+		   	   if($cp_bet1_pts < 1){ $title = get_option('bp_bet1_open_cp_bp'); }
+		   	   if($cp_bet1_pts > 0){ $title = get_option('bp_bet1_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet1_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble2_onoff') == 1){
+		   	   if($cp_bet2_pts < 1){ $title = get_option('bp_bet2_open_cp_bp'); }
+		   	   if($cp_bet2_pts > 0){ $title = get_option('bp_bet2_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet2_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble3_onoff') == 1){
+		   	   if($cp_bet3_pts < 1){ $title = get_option('bp_bet3_open_cp_bp'); }
+		   	   if($cp_bet3_pts > 0){ $title = get_option('bp_bet3_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet3_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble4_onoff') == 1){
+		   	   if($cp_bet4_pts < 1){ $title = get_option('bp_bet4_open_cp_bp'); }
+		   	   if($cp_bet4_pts > 0){ $title = get_option('bp_bet4_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet4_url_cp_bp').'">'.$title.'</a></li>';
+		   }
+		   if(get_option('cp_gamble5_onoff') == 1){
+		   	   if($cp_bet5_pts < 1){ $title = get_option('bp_bet5_open_cp_bp'); }
+		   	   if($cp_bet5_pts > 0){ $title = get_option('bp_bet5_entered_cp_bp'); }
+		   	   echo '<li><a href="'.get_option('bp_bet5_url_cp_bp').'">'.$title.'</a></li>';
+		   }
 			
-	    } // End menu items
-	    if($totalbetnlottos2enter > 0 OR $totalbetnlottos2enter < 1){ echo '</ul>'; }
+		 } // if any giveaways / bet are active
+	    echo '</ul>';
 	   } // End check if they have giveaway plugin  
 	     echo '</li>';
 	} // End if donate module is active

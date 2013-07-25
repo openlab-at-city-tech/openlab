@@ -1,122 +1,138 @@
-﻿=== Captcha ===
+=== Captcha ===
 Contributors: bestwebsoft
 Donate link: https://www.2checkout.com/checkout/purchase?sid=1430388&quantity=10&product_id=13
-Tags: captcha, math captcha, text captcha, spam, antispam, login, registration, comment, lost password, capcha, catcha, captha
+Tags: captcha, match captcha, text captcha, spam, antispam, login, registration, comment, lost password, capcha, catcha, captha
 Requires at least: 2.9
-Tested up to: 3.4.1
-Stable tag: 2.31
+Tested up to: 3.5.2
+Stable tag: 3.7.4
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 This plugin allows you to implement super security captcha form into web forms.
 
 == Description ==
 
-Captcha plugin allows you to protect your website from spam using math logic which can be used for login, registration, reseting password, comments forms. Russian, German and Dutch languages are added.
+The Captcha plugin allows you to protect your website from spam by means of math logic and you can use this captcha for login, registration, password recovery, comments forms. The Russian, German and Dutch languages are added.
 
 <a href="http://wordpress.org/extend/plugins/captcha/faq/" target="_blank">FAQ</a>
-<a href="http://bestwebsoft.com/plugin/captcha-plugin/" target="_blank">Support</a>
+<a href="http://support.bestwebsoft.com" target="_blank">Support</a>
 
 = Features =
 
-* Display: It is possible to use letters and numbers in the captcha or just one of these two things - either letters or numbers.
-* Actions: The basic mathematical operations are used - add, subtract, multiply.
-* Label: There is a possibility to add a label when displaying captcha on the form.
+* Display: You can use letters and numbers in captcha or just one of these two things - either letters or numbers.
+* Actions: The basic math actions are used - add, subtract, multiply.
+* Label: You can add a label to display captcha in the form.
 
 = Translation =
 
-* Brazilian Portuguese (pt_BR) (thanks <a href="mailto:brenojac@gmail.com">Breno Jacinto</a>, www.iconis.org.br)
-* Czech (cs_CZ) (thanks to Tomas Vesely)
+* Arabic (ar_AR) (thanks to Albayan Design Hani Aladoli)
+* Bangla (bn_BD) (thanks to <a href="mailto:mehdi.akram@gmail.com">SM Mehdi Akram</a>, www.shamokaldarpon.com)
+* Brazilian Portuguese (pt_BR) (thanks to <a href="mailto:brenojac@gmail.com">Breno Jacinto</a>, www.iconis.org.br)
+* Bulgarian (bg_BG) (thanks to <a href="mailto:paharaman@gmail.com">Nick</a>)
+* Chinese (zh_CN) (thanks to Billy Jeans)
+* Czech (cs_CZ) (thanks to Tomas Vesely, <a href="mailto:crysman@seznam.cz">Crysman</a>)
 * Danish (da_DK) (thanks to Byrial Ole Jensed)
 * Dutch (nl_NL) (thanks to <a href="mailto:byrial@vip.cybercity.dk">Bart Duineveld</a>)
-* Greek (el) (thanks to Aris, <a href="http://paraxeno.net">paraxeno.net</a>)
-* Farsi/Persian (fa_IR) (thanks to <a href="mailto:info[at]mpspace[dot]zio[dot]ir">Meysam Parvizi</a>, <a href="http://mpspace.zio.ir">mpspace.zio.ir</a>)
+* Estonian (et) (thanks to <a href="mailto:ahto2@moonsoftware.com">Ahto Tanner</a>)
+* Greek (el) (thanks to Aris, www.paraxeno.net)
+* Farsi/Persian (fa_IR) (thanks to <a href="mailto:info[at]mpspace[dot]zio[dot]ir">Meysam Parvizi</a>, www.mpspace.zio.ir)
 * Finnish (fi) (thanks to Mikko Sederholm)
-* French (fr_FR) (thanks to Martel Benjamin)
+* French (fr_FR) (thanks to Martel Benjamin, <a href="mailto:lcapronnier@yahoo.com">Capronnier luc</a>)
 * German (de_DE) (thanks to Thomas Hartung)
 * Hebrew (he_IL) (thanks to Sagive SEO)
-* Hindi (hi_IN) (thanks to <a href="mailto:ash.pr@outshinesolutions.com">Outshine Solutions</a>)
+* Hindi (hi_IN) (thanks to <a href="mailto:ash.pr@outshinesolutions.com">Outshine Solutions</a>, www.outshinesolutions.com)
+* Hungarian (hu_HU) (thanks to Bőm Tamás)
+* Japanese (ja) (thanks to Foken)
 * Italian (it_IT) (thanks to Gianluca Di Carlo)
-* Norwegian (nb_NO)	(thanks to Tore Hjartland)
+* Latvian (lv) (thanks to <a href="mailto:juris.o@gmail.com">Juris O</a>)
+* Lithuanian (lt_LT) (thanks to <a href="mailto:arnas.metal@gmail.com">Arnas</a>)
+* Norwegian (nb_NO) (thanks to Tore Hjartland)
 * Polish (pl_PL) (thanks to Krzysztof Opuchlik)
+* Romanian (ro_RO) (thanks to Ciprian)
 * Russian (ru_RU)
+* Serbian (sr_RS) (thanks to Radovan Georgijevic)
+* Slovak (sk_SK) (thanks to Branco Radenovich)
 * Spain (es_ES) (thanks to Iván García Cubero)
-* Swedish (sv_SE) (thanks to Christer Rönningborg)
-* Turkish (tr_TR) (thanks to Can Atasever, <a href="http://www.candanblog.com">candanblog.com</a>)
+* Swedish (sv_SE) (thanks to Christer Rönningborg, <a href="mailto:blittan@xbmc.org">Blittan</a>)
+* Turkish (tr_TR) (thanks to Can Atasever, www.candanblog.com)
 * Ukrainian (uk_UA) (thanks to Oleg Bondarenko)
 * Vietnamese (vi_VN) (thanks to NDT Solutions)
 
-If you create your own language pack or update an existing one, you can send <a href="http://codex.wordpress.org/Translating_WordPress" target="_blank">the text of PO and MO files</a> for <a href="http://bestwebsoft.com/" target="_blank">BWS</a> and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO files  <a href="http://www.poedit.net/download.php" target="_blank">Poedit</a>.
+If you would like to create your own language pack or update the existing one, you can send <a href="http://codex.wordpress.org/Translating_WordPress" target="_blank">the text of PO and MO files</a> for <a href="http://support.bestwebsoft.com" target="_blank">BestWebSoft</a> and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO files  <a href="http://www.poedit.net/download.php" target="_blank">Poedit</a>.
 
 = Technical support =
 
-Dear users, our plugins are available for free download. If you have any questions or propositions regarding functionality of our plugins (current options, new options, current issues) please feel free to contact us. Please note that we accept requests in English language only. All messages on another languages wouldn't be accepted. 
+Dear users, our plugins are available for free download. If you have any questions or recommendations regarding the functionality of our plugins (existing options, new options, current issues), please feel free to contact us. Please note that we accept requests in English only. All messages in another languages won't be accepted.
 
-Also, emails which are reporting about plugin's bugs are accepted for investigation and fixing. Your request must contain URL of the website, issues description and WordPress admin panel access. Plugin customization based on your Wordpress theme is a paid service (standard price is $10, but it could be higer and depends on the complexity of requested changes). We will analize existing issue and make necessary changes after 100% pre-payment.All these paid changes and modifications could be included to the next version of plugin and will be shared for all users like an integral part of the plugin. Free fixing services will be provided for user who send translation on their native language (this should be a new translation of a certain plugin, and you can check available translations on the official plugin page).
+If you notice any bugs in the plugins, you can notify us about it and we'll investigate and fix the issue then. Your request should contain URL of the website, issues description and WordPress admin panel credentials.
+Moreover we can customize the plugin according to your requirements. It's a paid service (as a rule it costs $40, but the price can vary depending on the amount of the necessary changes and their complexity). Please note that we could also include this or that feature (developed for you) in the next release and share with the other users then. 
+We can fix some things for free for the users who provide translation of our plugin into their native language (this should be a new translation of a certain plugin, you can check available translations on the official plugin page).
 
 == Installation ==
 
-1. Upload `captcha` folder to the `/wp-content/plugins/` directory.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
+1. Upload the `captcha` folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin via the 'Plugins' menu in WordPress.
 3. Plugin settings are located in 'Settings', 'Captcha'.
 
 == Frequently Asked Questions ==
 
-= How to change captcha label =
+= How to change a captcha label =
 
-Go to the Settings page and change value for the 'Label for CAPTCHA in form' field.
+You should go to the Settings page and change the value in the 'CAPTCHA label in the form' field.
 
-= During saving of settings I got an error: 'Please select one point in the blocks Arithmetic actions and Difficulty for CAPTCHA'. What is this? =
+= During the settings saving I get the error: 'Please select one point in the blocks "Math actions" and "Complexity Level"'. What is this? =
 
-For correct work of Captcha plugin you need to choose at least one item from the 'Arithmetic actions' block and choose 'Difficulty' via Settings page, because math expression should be consisted minimum of 1 mathematical sign and parts of mathematical expression should be displayed like words or like numbers or both of them.
+For stable work of the Captcha plugin you should select at least one item in the 'Math actions' block and select 'Complexity Level' on the Settings page, because math expression should consist of at least 1 math sign and parts of math expression should be displayed like words or numbers or both of them.
 
-= Missing CAPTCHA on comment form? = 
+= Missing CAPTCHA on the comment form? = 
 
-You may have a theme that has not properly coded comments.php. 
+You might have a theme where comments.php is not coded properly. 
 
-The version of WP makes a difference...
+Wopdpress version matters. 
 
-(WP2 series) Your theme must have a `<?php do_action('comment_form', $post->ID); ?>` tag inside your `/wp-content/themes/[your_theme]/comments.php` file. 
-Most WP2 themes already do. The best place to locate the tag is before the comment textarea, you may want to move it up if it is below the comment textarea.
+(WP2 series) Your theme must have a tag `<?php do_action('comment_form', $post->ID); ?>` inside the file `/wp-content/themes/[your_theme]/comments.php`. 
+Most WP2 themes already have it. The best place to put this tag is before the comment textarea, you can move it up if it is below the comment textarea.
 
-(WP3 series) Since WP3 there is new function comment_form inside `/wp-includes/comment-template.php`. 
-Your theme is probably not up to current code to call that function from inside comments.php.
-WP3 theme does not need the `do_action('comment_form'`... code line inside `/wp-content/themes/[your_theme]/comments.php`.
-Instead, it uses a new function call inside comments.php: `<?php comment_form(); ?>`
-If you have WP3 and still have captcha missing, make sure your theme has `<?php comment_form(); ?>`
-inside `/wp-content/themes/[your_theme]/comments.php`. (look inside the Twenty Ten theme's comments.php for proper example)
+(WP3 series) WP3 has a new function comment_form inside of `/wp-includes/comment-template.php`. 
+Your theme is probably not up-to-date to call that function from comments.php.
+WP3 theme does not need the code line `do_action('comment_form'`... inside of `/wp-content/themes/[your_theme]/comments.php`.
+Instead it uses a new function call inside of comments.php: `<?php comment_form(); ?>`
+If you have WP3 and captcha is still missing, make sure your theme has `<?php comment_form(); ?>`
+inside of `/wp-content/themes/[your_theme]/comments.php` (please check the Twenty Ten theme's comments.php for proper example)
 
-= How to use the other language files with the CAPTCHA? = 
+= How to use the other language files with CAPTCHA? = 
 
 Here is an example for German language files.
 
-1. In order to use another language for WordPress it is necessary to set the WP version to the required language and in configuration wp file - `wp-config.php` in the line `define('WPLANG', '');` write `define('WPLANG', 'de_DE');`. If everything is done properly the admin panel will be in German.
+1. In order to use another language for WordPress it is necessary to set a WordPress version to the required language and in the configuration wp file - `wp-config.php` in the line `define('WPLANG', '');` you should enter `define('WPLANG', 'de_DE');`. If everything is done properly the admin panel will be in German.
 
-2. Make sure that there are files `de_DE.po` and `de_DE.mo` in the plugin (the folder languages in the root of the plugin).
+2. Make sure the files `de_DE.po` and `de_DE.mo` are present in the plugin (the folder "Languages" in the plugin root).
 
-3. If there are no such files it will be necessary to copy other files from this folder (for example, for Russian or Italian language) and rename them (you should write `de_DE` instead of `ru_RU` in the both files).
+3. If there are no such files you should copy the other files from this folder (for example, for Russian or Italian) and rename them (you should write `de_DE` instead of `ru_RU` in both files).
 
-4. The files are edited with the help of the program Poedit - http://www.poedit.net/download.php - please load this program, install it, open the file with the help of this program (the required language file) and for each line in English you should write translation in German.
+4. The files can be edited with the help of the program Poedit - http://www.poedit.net/download.php - please download this program, install it, open the file using this program (the required language file) and for each line in English you should write translation in German.
 
-5. If everything is done properly all lines will be in German in the admin panel and on frontend.
+5. If everything is done properly all lines will be in German in the admin panel and in the front-end.
 
-= I would like to add Captcha to custom form on my website. How can I do this? =
+= I would like to add Captcha to the custom form on my website. How can I do this? =
 
-1. Install Captcha plugin, activate it.
-2. Open file with the form (where it is necessary to implement captcha).
-3. Find the place where it is necessary to insert code to display captcha.
-4. Insert lines to display captcha
+1. Install the Captcha plugin and activate it.
+2. Open the file with the form (where you would like to add captcha to).
+3. Find a place to insert the code for the captcha output.
+4. Insert the necessary lines: 
 
 `if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom() } ;`
 
-If the form is html it will be necessary to insert the line with tags php
+If the form is HTML you should insert the line with the PHP tags:
 
 `<?php if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom(); } ?>`
 
-5. It is necessary to add the lines in the function of check of the entered data (where it is checked what the user enters and if everything is correct the mail will be sent) 
+5. Then you should add the lines to the function of the entered data checking  
 
 `if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA."`
 or
 `<?php if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA." ?>`
-It is possible to enter this line in variable and display this variable in required place instead of `echo "Please complete the CAPTCHA."`. If there is a variable (which is answered for the displaying of the errors) in the function of check so this phrase can be added to this variable. If the function returned true then you have entered captcha properly. In other cases the function will return false.
+You could add this line to the variable and display this variable in the required place instead of `echo "Please complete the CAPTCHA."`. If there is a variable (responsible for the errors output) in the check function, this phrase can be added to this variable. If the function returns 'true', it means that you have entered captcha properly. In all other cases the function will return 'false'.
 
 == Screenshots ==
 
@@ -127,6 +143,76 @@ It is possible to enter this line in variable and display this variable in requi
 5. Login form with Captcha.
 
 == Changelog ==
+
+= V3.7.4 - 24.07.2013 =
+* Bugfix : Added html-blocks and attributes in captcha displaying.
+* Update : The Czech language file is updated in the plugin.
+* Update : The Brazilian Portuguese language file is updated in the plugin.
+* Update : The Swedish language file is updated in the plugin.
+
+= V3.7.3 - 18.07.2013 =
+* NEW : Added an ability to view and send system information by mail.
+
+= V3.7.2 - 09.07.2013 =
+* NEW : The Bangla language file is added to the plugin.
+* Update : The French language file is updated in the plugin.
+* Update : We updated all functionality for wordpress 3.5.2.
+
+= V3.7.1 - 27.06.2013 =
+* NEW : The Latvian language file is added to the plugin.
+
+= V3.7 - 21.06.2013 =
+* NEW : Ability to use Captcha with Contact Form Pro.
+
+= V3.6 - 03.06.2013 =
+* Update : BWS plugins section is updated.
+
+= V3.5 - 07.05.2013 =
+* Update : The Bulgarian language file is updated in the plugin. 
+* Update : The Brazilian Portuguese language file is updated in the plugin.
+
+= V3.4 - 18.04.2013 =
+* Update : The French language file is updated in the plugin.
+
+= V3.3 - 08.04.2013 =
+* Update : The English language is updated in the plugin.
+
+= V3.2 - 22.03.2013 =
+* Bugfix : The bug related to add Captcha in Contact Form for multisiting is fixed.
+
+= V3.1 - 25.02.2013 =
+* NEW : The Bulgarian language file is added to the plugin.
+
+= V3.0 - 08.01.2013 =
+* Bugfix : Display bug is fixed.
+
+= V2.4.4 - 31.01.2013 =
+* Bugfix : The admin menu bugs are fixed.
+
+= V2.4.3 - 30.01.2013 =
+* NEW : The Estonian language file is added to the plugin.
+
+= V2.4.2 - 28.01.2013 =
+* NEW : The Lithuanian language file is added to the plugin.
+* Update : We updated all functionality for wordpress 3.5.1.
+
+= V2.4.1 - 02.01.2013 =
+* Bugfix : call_user_func_array() bug is fixed. 
+
+= V2.4 - 21.12.2012 =
+* NEW : Romanian and Serbian and Slovak language files are added to the plugin.
+* Update : We updated the coding logic of Captcha.
+* Update : We updated all functionality for wordpress 3.5.
+
+= V2.34 - 08.10.2012 =
+* NEW : Chinese and Greek language files are added to the plugin.
+
+= V2.33 - 25.07.2012 =
+* Bugfix : Change settings bug was fixed. 
+
+= V2.32 - 24.07.2012 =
+* NEW : Arabic, Hungarian, Japanese language files are added to the plugin.
+* Bugfix : Cross Site Request Forgery bug was fixed. 
 
 = V2.31 - 10.07.2012 =
 * NEW : Vietnamese language file is added to the plugin.
@@ -245,6 +331,66 @@ It is possible to enter this line in variable and display this variable in requi
 
 == Upgrade Notice ==
 
+= V3.7.4 =
+Added html-blocks and attributes in captcha displaying. The Czech language file is updated in the plugin. The Brazilian Portuguese language file is updated in the plugin. The Swedish language file is updated in the plugin.
+
+= V3.7.3 =
+Added an ability to view and send system information by mail.
+
+= V3.7.2 =
+The Bangla language file is added to the plugin. The French language file is updated in the plugin. We updated all functionality for wordpress 3.5.2
+
+= V3.7.1 =
+The Latvian language file is added to the plugin.
+
+= V3.7 =
+Ability to use Captcha with Contact Form Pro
+
+= V3.6 =
+BWS plugins section is updated.
+
+= V3.5 =
+The Bulgarian language file is updated in the plugin. The Brazilian Portuguese language file is updated in the plugin.
+
+= V3.4 =
+The French language file is updated in the plugin.
+
+= V3.3 =
+The English language is updated in the plugin.
+
+= V3.2 =
+The bug related to add Captcha in Contact Form for multisiting was fixed.
+
+= V3.1 =
+The Bulgarian language file ix added to the plugin.
+
+= V3.0 =
+Display bug was fixed.
+
+= V2.4.4 =
+Bugs in admin menu is fixed.
+
+= V2.4.3 =
+The Estonian language file is added to the plugin.
+
+= V2.4.2 =
+The Lithuanian language file was is to the plugin. We updated all functionality for wordpress 3.5.1.
+
+= V2.4.1 =
+call_user_func_array() bug was fixed. 
+
+= V2.4 =
+Romanian and Serbian and Slovak language files are added to the plugin. We updated the coding logic of Captcha. We updated all functionality for wordpress 3.5.
+
+= V2.34 =
+Chinese and Greek language files are added to the plugin.
+
+= V2.33 =
+Change settings bug was fixed. 
+
+= V2.32 =
+Arabic, Hungarian, Japanese language files are added to the plugin. Cross Site Request Forgery bug was fixed. 
+
 = V2.31 =
 Vietnamese language file is added to the plugin. We updated Hebrew language file. We updated all functionality for wordpress 3.4.1.
 
@@ -297,6 +443,7 @@ Polish language files are added to the plugin.
 Brazilian Portuguese and French language files are added to the plugin.
 
 = V2.14 =
+
 German language files are added to the plugin.
 
 = V2.13 =

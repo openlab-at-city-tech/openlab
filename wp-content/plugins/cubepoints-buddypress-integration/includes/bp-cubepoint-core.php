@@ -4,7 +4,7 @@
  * BUDDYPRESS CUBEPOINTS CORE
  * Handles the overall operations of the plugin
  *
- * @version 0.1.9.8
+ * @version 1.9.8.5
  * @since 1.0
  * @package BuddyPress CubePoints
  * @subpackage Main
@@ -18,9 +18,10 @@
 // ------------------------------------------------
 
 define ( 'BP_CUBEPOINT_IS_INSTALLED', 1 );
-define ( 'BP_CUBEPOINT_DB_VERSION', '1.9.8' );
+define ( 'BP_CUBEPOINT_DB_VERSION', '1.9.8.5' );
 
-load_textdomain( 'bp-cubepoint', dirname( __FILE__ ) . '/languages/bp-cubepoint-' . get_locale() . '.mo' );
+/** Loads the plugin's translated strings */
+load_plugin_textdomain('cp_buddypress', false, dirname(plugin_basename(__FILE__)).'/languages');
  
 // require ( dirname( __FILE__ ) . '/bp-cubepoint-classes.php' ); // This not being used at the moment. Maybe later..
 require ( dirname( __FILE__ ) . '/bp-cubepoint-screens.php' );
@@ -84,6 +85,80 @@ function bp_cubepoint_add_admin_menu() {
 add_action( 'admin_menu', 'bp_cubepoint_add_admin_menu' );
 add_action( 'network_admin_menu', 'bp_cubepoint_add_admin_menu' );
 
+/**
+ * add_bp_cubepoints_wp_menu()
+ *
+ * Adds the user point total to the wordpress admin bar
+ * Also adds the links to the public logs under the users account
+ * Also support the CubePoints Giveaway & Betting System
+ * 
+ *  @version 1.9.8.9
+ *  @since 1.0
+ */
+
+function add_bp_cubepoints_wp_menu() {
+   if ( is_user_logged_in() ) {
+	global $wp_admin_bar; $bp;
+	$user = wp_get_current_user();
+	$bp->cubepoint->slug = get_option( 'bp_slug_cp_bp' );
+	$points = cp_getPoints($user->ID);
+	$points_url = bp_core_get_user_domain( $user->id ) . $bp->cubepoint->slug .'/';
+	if(function_exists('cp_lottery_show_logs')){
+		$all_lottery_n_bet_active = get_option('cp_lottery1_onoff') + get_option('cp_lottery2_onoff') + get_option('cp_lottery3_onoff') + get_option('cp_lottery4_onoff') + get_option('cp_lottery5_onoff') + get_option('cp_gamble1_onoff') + get_option('cp_gamble2_onoff') + get_option('cp_gamble3_onoff') + get_option('cp_gamble4_onoff') + get_option('cp_gamble5_onoff');
+	} else { $all_lottery_n_bet_active = 0; }
+	if($all_lottery_n_bet_active > 0){$add_plus_icon = '<span class="ab-icon"></span>';} else { $add_plus_icon = ''; }	
+	
+	$wp_admin_bar->add_menu( array(
+	'id' => 'my-points',
+	'parent' => 'top-secondary', // in top menu, shows always
+	'title' => $add_plus_icon . get_option('cp_prefix') . $points . get_option('cp_suffix'),
+	'href' => $points_url,
+	));
+	
+	// Put next to other BP Menu Items
+	$wp_admin_bar->add_menu( array(
+	'id' => 'cb-points',
+	'parent' => 'my-account-buddypress',
+	'title' => __( 'Points','cp_buddypress'),
+	'href' => $points_url,
+	));
+		
+	$wp_admin_bar->add_menu( array(
+	'id' => 'cb-point_logs',
+	'parent' => 'cb-points',
+	'title' => __( 'Point Logs','cp_buddypress'),
+	'href' => $points_url,
+	));	
+			
+	if(get_option('bp_sitewide_menu_cp_bp') == 1) {
+		$wp_admin_bar->add_menu( array(
+		'id' => 'cb-point_global_logs',
+		'parent' => 'cb-points',
+		'title' => get_option('bp_sitewidemtitle_cp_bp'),
+		'href' => $points_url."/table/",
+		));
+	}
+			
+	if(get_option('bp_earnpoints_menu_cp_bp') == 1) {
+		$wp_admin_bar->add_menu( array(
+		'id' => 'cb-point_earn_pts',
+		'parent' => 'cb-points',
+		'title' => get_option('bp_earnpoints_menutitle_cp_bp'),
+		'href' => $points_url."/earnpoints/",
+		));
+	}
+			
+	if(get_option('bp_awards_menu_onoff_cp_bp') == 1) {
+		$wp_admin_bar->add_menu( array(
+		'id' => 'cb-point_awards',
+		'parent' => 'cb-points',
+		'title' => get_option('bp_awards_menutitle_cp_bp'),
+		'href' => $points_url."/awards/",
+		));
+	}
+   }	
+}
+add_action('admin_bar_menu', 'add_bp_cubepoints_wp_menu',25);
 
 /**
  * bp_cubepoint_setup_nav()

@@ -70,7 +70,7 @@ function cp_admin_manage()
 				jQuery('#cp_manage_form_points_'+user_id).hide(100);
 
 				jQuery.post(
-					'<?php echo bloginfo('url').'/wp-admin/admin-ajax.php'; ?>', 
+					ajaxurl, 
 					{ 
 						action: 'cp_manage_form_submit',
 						user_id: user_id, 

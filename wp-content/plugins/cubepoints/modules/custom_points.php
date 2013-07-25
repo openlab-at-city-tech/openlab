@@ -70,7 +70,7 @@ if(cp_module_activated('customp')){
 	}
 
 	/* Add CubePoints comment action hook */
-	add_action('cp_newComment', 'cp_module_customp_newComment');
+	add_action('cp_comment_add', 'cp_module_customp_newComment');
 		function cp_module_customp_newComment($cid) {
 			if (is_user_logged_in()) {
 				$cdata = get_comment($cid);

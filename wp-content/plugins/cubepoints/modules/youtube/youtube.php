@@ -93,22 +93,15 @@ if(cp_module_activated('youtube')){
 	
 	add_shortcode('cp_youtube','cp_module_youtube_shortcode');
 	
-	// enqueue swfobject
-	wp_enqueue_script("swfobject");
-
-	wp_register_script('cp_youtube_common',	WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)). 'cp_youtube.js', array('jquery'));
-	
-	function cp_youtube_scripts(){ 
+	function cp_module_youtube_scripts(){
+		wp_enqueue_script("swfobject");
+		wp_register_script('cp_youtube_common',	WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)). 'cp_youtube.js', array('jquery'));
 		wp_enqueue_script('cp_youtube_common');
+		wp_localize_script( 'cp_youtube_common', 'cp_youtube', array(
+			'ajax_url' =>  (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']
+		) );
 	}
-	
-	add_action('init', 'cp_youtube_scripts');
-
-	// ajax handling
-
-	wp_localize_script( 'cp_youtube_common', 'cp_youtube', array(
-	'ajax_url' =>  (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']
-	) );
+	add_action('init', 'cp_module_youtube_scripts');
 
 	/** YouTube Log Hook */
 	add_action('cp_logs_description','cp_admin_logs_desc_youtube', 10, 4);

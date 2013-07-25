@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: CubePoints Buddypress Integration
-Plugin URI: http://blog.slyspyder.com/2010/04/21/cubepoints-buddypress-integration-wordpress-plugin/
+Plugin URI: http://wordpress.org/extend/plugins/cubepoints-buddypress-integration/
 Description: Adds CubePoints support to Buddypress. Reward members using your BuddyPress portion of your website by giving them points and awards!
-Version: 1.9.8.4
-Revision Date: February 6, 2012
+Version: 1.9.8.9
+Revision Date: Sep 14, 2012
 Requires at least: WP 3.1, BuddyPress 1.2.5.2, Cubepoints 3.0.1
-Tested up to: WP 3.3.1, BuddyPress 1.5.3.1, CubePoints 3.1
+Tested up to: WP 3.4.1, BuddyPress 1.6.1, CubePoints 3.1.1
 License: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html
 Author: Tosh Hatch
 Author URI: http://www.SlySpyder.com
@@ -14,7 +14,7 @@ Contributors: @xberserker
 Network: false
 */
 
-define ( 'BP_CUBEPOINT_VERSION', '1.9.8.4' );
+define ( 'BP_CUBEPOINT_VERSION', '1.9.8.9' );
 
 define('CP_BUDDYPRESS_PATH', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)));
 
@@ -80,6 +80,7 @@ function bp_cubepoint_activate() {
 	add_option('bp_spammer_cp_bp', '');
 	add_option('bp_slug_cp_bp', 'cubepoints');
 	add_option('bp_points_logs_per_page_cp_bp', 20);
+	add_option('bp_tallyuserpoints_cp_bp', false);
 	add_option('bp_sitewidemtitle_cp_bp', 'Sitewide Points');
 	add_option('bp_earnpoints_menutitle_cp_bp', 'Point Legend');
 	add_option('bp_sitewide_menu_cp_bp', true);	

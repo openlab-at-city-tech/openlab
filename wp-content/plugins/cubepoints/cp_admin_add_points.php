@@ -58,7 +58,7 @@ function cp_admin_add_points()
 			return false;
 		});
 		jQuery("#cp_add_points_user").autocomplete({
-			url: "<?php echo bloginfo('url').'/wp-admin/admin-ajax.php'; ?>",
+			url: ajaxurl,
 			extraParams: { action: 'cp_add_points_user_suggest' },
 			matchSubset: 0,
 			showResult: function(value, data) {
@@ -90,7 +90,7 @@ function cp_admin_add_points()
 				this.cp_add_points_ajax_query.abort();
 			}
 			this.cp_add_points_ajax_query = jQuery.ajax({
-                url: "<?php echo bloginfo('url').'/wp-admin/admin-ajax.php'; ?>",
+                url: ajaxurl,
 				data: { 'q': q, 'action': 'cp_add_points_user_query' },
 				cache: false,
                 success: function(data){
@@ -153,7 +153,7 @@ function cp_admin_add_points()
 				jQuery('#cp_add_points_modify').hide(100);
 				jQuery('#cp_add_points_loading').show(100);
 				this.cp_add_points_ajax_query = jQuery.ajax({
-					url: "<?php echo bloginfo('url').'/wp-admin/admin-ajax.php'; ?>",
+					url: ajaxurl,
 					type: "POST",
 					data: { 'id': id, 'points': points, 'description': description, 'action': 'cp_add_points_user_update' },
 					success: function(data){

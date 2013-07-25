@@ -205,7 +205,7 @@ if(cp_module_activated('pcontent')){
 	
 	add_action('init', 'cp_module_pcontent_buy');
 	function cp_module_pcontent_buy(){
-		if($_POST['cp_module_pcontent_pay']=='') return;
+		if(!isset($_POST['cp_module_pcontent_pay'])) return;
 		$pcontent_enabled = (bool) get_post_meta($_POST['cp_module_pcontent_pay'],'cp_pcontent_points_enable', 1);
 		if(!$pcontent_enabled) return;
 		$uid = cp_currentUser();

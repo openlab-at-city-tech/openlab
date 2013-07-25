@@ -16,11 +16,11 @@
 	/*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
 	font-family: ;
 	font-size: px;
-	background: #ffffff;
+	background: #ffffff !important;
 	color: 333333;
 	border: 4px solid #cccccc;
 	position: relative;
-	overflow:hidden;
+	overflow: hidden;
 }
 .ui-resizable-handle {
 	position: absolute;

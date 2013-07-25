@@ -12,7 +12,7 @@ add_action('cp_module_ranks_activate','cp_module_ranks_data_install');
 if(cp_module_activated('ranks')){
 
 	function cp_module_ranks_data_add_admin_page(){
-		add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Ranks','cp'), __('Ranks','cp'), 8, 'cp_modules_ranks_admin', 'cp_modules_ranks_admin');
+		add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Ranks','cp'), __('Ranks','cp'), 'manage_options', 'cp_modules_ranks_admin', 'cp_modules_ranks_admin');
 	}
 	add_action('cp_admin_pages','cp_module_ranks_data_add_admin_page');
 

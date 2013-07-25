@@ -118,4 +118,33 @@ function wpcf7_sanitize_unit_tag( $tag ) {
 	return $tag;
 }
 
+function wpcf7_is_email( $email ) {
+	$result = is_email( $email );
+	return apply_filters( 'wpcf7_is_email', $result, $email );
+}
+
+function wpcf7_is_url( $url ) {
+	$result = ( false !== filter_var( $url, FILTER_VALIDATE_URL ) );
+	return apply_filters( 'wpcf7_is_url', $result, $url );
+}
+
+function wpcf7_is_tel( $tel ) {
+	$result = preg_match( '/^[+]?[0-9() -]*$/', $tel );
+	return apply_filters( 'wpcf7_is_tel', $result, $tel );
+}
+
+function wpcf7_is_number( $number ) {
+	$result = is_numeric( $number );
+	return apply_filters( 'wpcf7_is_number', $result, $number );
+}
+
+function wpcf7_is_date( $date ) {
+	$result = preg_match( '/^([0-9]{4,})-([0-9]{2})-([0-9]{2})$/', $date, $matches );
+
+	if ( $result )
+		$result = checkdate( $matches[2], $matches[3], $matches[1] );
+
+	return apply_filters( 'wpcf7_is_date', $result, $date );
+}
+
 ?>

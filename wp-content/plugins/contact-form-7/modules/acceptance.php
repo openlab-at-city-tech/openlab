@@ -5,61 +5,47 @@
 
 /* Shortcode handler */
 
-wpcf7_add_shortcode( 'acceptance', 'wpcf7_acceptance_shortcode_handler', true );
+add_action( 'init', 'wpcf7_add_shortcode_acceptance', 5 );
+
+function wpcf7_add_shortcode_acceptance() {
+	wpcf7_add_shortcode( 'acceptance',
+		'wpcf7_acceptance_shortcode_handler', true );
+}
 
 function wpcf7_acceptance_shortcode_handler( $tag ) {
-	if ( ! is_array( $tag ) )
+	$tag = new WPCF7_Shortcode( $tag );
+
+	if ( empty( $tag->name ) )
 		return '';
 
-	$type = $tag['type'];
-	$name = $tag['name'];
-	$options = (array) $tag['options'];
-	$values = (array) $tag['values'];
+	$validation_error = wpcf7_get_validation_error( $tag->name );
 
-	if ( empty( $name ) )
-		return '';
+	$class = wpcf7_form_controls_class( $tag->type );
 
-	$atts = '';
-	$id_att = '';
-	$class_att = '';
-	$tabindex_att = '';
+	if ( $validation_error )
+		$class .= ' wpcf7-not-valid';
 
-	$class_att .= ' wpcf7-acceptance';
+	if ( $tag->has_option( 'invert' ) )
+		$class .= ' wpcf7-invert';
 
-	foreach ( $options as $option ) {
-		if ( preg_match( '%^id:([-0-9a-zA-Z_]+)$%', $option, $matches ) ) {
-			$id_att = $matches[1];
+	$atts = array();
 
-		} elseif ( preg_match( '%^class:([-0-9a-zA-Z_]+)$%', $option, $matches ) ) {
-			$class_att .= ' ' . $matches[1];
+	$atts['class'] = $tag->get_class_option( $class );
+	$atts['id'] = $tag->get_option( 'id', 'id', true );
+	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
 
-		} elseif ( 'invert' == $option ) {
-			$class_att .= ' wpcf7-invert';
+	if ( $tag->has_option( 'default:on' ) )
+		$atts['checked'] = 'checked';
 
-		} elseif ( preg_match( '%^tabindex:(\d+)$%', $option, $matches ) ) {
-			$tabindex_att = (int) $matches[1];
+	$atts['type'] = 'checkbox';
+	$atts['name'] = $tag->name;
+	$atts['value'] = '1';
 
-		}
-	}
+	$atts = wpcf7_format_atts( $atts );
 
-	if ( $id_att )
-		$atts .= ' id="' . trim( $id_att ) . '"';
-
-	if ( $class_att )
-		$atts .= ' class="' . trim( $class_att ) . '"';
-
-	if ( '' !== $tabindex_att )
-		$atts .= sprintf( ' tabindex="%d"', $tabindex_att );
-
-	$default_on = (bool) preg_grep( '/^default:on$/i', $options );
-
-	$checked = $default_on ? ' checked="checked"' : '';
-
-	$html = '<input type="checkbox" name="' . $name . '" value="1"' . $atts . $checked . ' />';
-
-	$validation_error = wpcf7_get_validation_error( $name );
-
-	$html = '<span class="wpcf7-form-control-wrap ' . $name . '">' . $html . $validation_error . '</span>';
+	$html = sprintf(
+		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
+		$tag->name, $atts, $validation_error );
 
 	return $html;
 }
@@ -73,16 +59,12 @@ function wpcf7_acceptance_validation_filter( $result, $tag ) {
 	if ( ! wpcf7_acceptance_as_validation() )
 		return $result;
 
-	$name = $tag['name'];
+	$tag = new WPCF7_Shortcode( $tag );
 
-	if ( empty( $name ) )
-		return $result;
+	$name = $tag->name;
+	$value = ( ! empty( $_POST[$name] ) ? 1 : 0 );
 
-	$options = (array) $tag['options'];
-
-	$value = $_POST[$name] ? 1 : 0;
-
-	$invert = (bool) preg_grep( '%^invert$%', $options );
+	$invert = $tag->has_option( 'invert' );
 
 	if ( $invert && $value || ! $invert && ! $value ) {
 		$result['valid'] = false;
@@ -98,6 +80,9 @@ function wpcf7_acceptance_validation_filter( $result, $tag ) {
 add_filter( 'wpcf7_acceptance', 'wpcf7_acceptance_filter' );
 
 function wpcf7_acceptance_filter( $accepted ) {
+	if ( ! $accepted )
+		return $accepted;
+
 	$fes = wpcf7_scan_shortcode( array( 'type' => 'acceptance' ) );
 
 	foreach ( $fes as $fe ) {
@@ -107,7 +92,7 @@ function wpcf7_acceptance_filter( $accepted ) {
 		if ( empty( $name ) )
 			continue;
 
-		$value = $_POST[$name] ? 1 : 0;
+		$value = ( ! empty( $_POST[$name] ) ? 1 : 0 );
 
 		$invert = (bool) preg_grep( '%^invert$%', $options );
 
@@ -147,6 +132,9 @@ function wpcf7_acceptance_as_validation() {
 add_action( 'admin_init', 'wpcf7_add_tag_generator_acceptance', 35 );
 
 function wpcf7_add_tag_generator_acceptance() {
+	if ( ! function_exists( 'wpcf7_add_tag_generator' ) )
+		return;
+
 	wpcf7_add_tag_generator( 'acceptance', __( 'Acceptance', 'wpcf7' ),
 		'wpcf7-tg-pane-acceptance', 'wpcf7_tg_pane_acceptance' );
 }

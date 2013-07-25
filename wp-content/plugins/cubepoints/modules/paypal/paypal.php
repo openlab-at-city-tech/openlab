@@ -2,7 +2,7 @@
 
 /** PayPal Top-up Module */
 
-cp_module_register(__('PayPal Top-up', 'cp') , 'paypal' , '1.0', 'CubePoints', 'http://cubepoints.com', 'http://cubepoints.com' , __('Allow users to buy points using PayPal.', 'cp'), 1);
+cp_module_register(__('PayPal Top-up', 'cp') , 'paypal' , '1.2', 'CubePoints', 'http://cubepoints.com', 'http://cubepoints.com' , __('Allow users to buy points using PayPal.', 'cp'), 1);
 
 function cp_module_paypal_install(){
 		add_option('cp_module_paypal_account', '');
@@ -57,7 +57,7 @@ function cp_module_paypal_round_up($value, $precision = 0) {
 } 
 
 function cp_module_paypal_add_admin_page(){
-	add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('PayPal Top-up','cp'), __('PayPal Top-up','cp'), 8, 'cp_modules_paypal_admin', 'cp_modules_paypal_admin');
+	add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('PayPal Top-up','cp'), __('PayPal Top-up','cp'), 'manage_options', 'cp_modules_paypal_admin', 'cp_modules_paypal_admin');
 }
 add_action('cp_admin_pages','cp_module_paypal_add_admin_page');
 
@@ -66,17 +66,17 @@ function cp_modules_paypal_admin(){
 // handles form submissions
 if ($_POST['cp_module_paypal_form_submit'] == 'Y') {
 
-	update_option('cp_module_paypal_account', $_POST['cp_module_paypal_account']);
+	update_option('cp_module_paypal_account', trim($_POST['cp_module_paypal_account']));
 	update_option('cp_module_paypal_sandbox', (bool)$_POST['cp_module_paypal_sandbox']);
 	update_option('cp_module_paypal_currency', $_POST['cp_module_paypal_currency']);
-	update_option('cp_module_paypal_item', $_POST['cp_module_paypal_item']);
+	update_option('cp_module_paypal_item', trim($_POST['cp_module_paypal_item']));
 		if(trim($_POST['cp_module_paypal_cancel'])==''){ $_POST['cp_module_paypal_cancel'] = get_bloginfo('url').'/?cp_module_paypal_return=0'; }
-	update_option('cp_module_paypal_cancel', $_POST['cp_module_paypal_cancel']);
+	update_option('cp_module_paypal_cancel', trim($_POST['cp_module_paypal_cancel']));
 		if(trim($_POST['cp_module_paypal_thankyou'])==''){ $_POST['cp_module_paypal_thankyou'] = get_bloginfo('url').'/?cp_module_paypal_return=1'; }
 	update_option('cp_module_paypal_thankyou', trim($_POST['cp_module_paypal_thankyou']));   
 	update_option('cp_module_paypal_price', ((float)$_POST['cp_module_paypal_price']<=0)?1:(float)$_POST['cp_module_paypal_price']);
 	update_option('cp_module_paypal_min', ((int)$_POST['cp_module_paypal_min']<=0)?1:(int)$_POST['cp_module_paypal_min']);
-	update_option('cp_module_paypal_form', stripslashes($_POST['cp_module_paypal_form']));
+	update_option('cp_module_paypal_form', trim(stripslashes($_POST['cp_module_paypal_form'])));
 	
 
 
@@ -196,7 +196,7 @@ string4 = '<a href="<?php bloginfo('url'); ?>/?cp_module_paypal_pay=1&points=100
 }
 
 function cp_module_paypal_pay(){
-	if($_REQUEST['cp_module_paypal_pay']!=''){
+	if(isset($_REQUEST['cp_module_paypal_pay']) && $_REQUEST['cp_module_paypal_pay']!=''){
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 		
@@ -258,7 +258,7 @@ exit;
 add_action('init','cp_module_paypal_pay');
 	
 function cp_module_paypal_message(){
-		if($_REQUEST['cp_module_paypal_return']!=''){
+		if(isset($_REQUEST['cp_module_paypal_return']) && $_REQUEST['cp_module_paypal_return']!=''){
 		if($_REQUEST['cp_module_paypal_return']=='1'){
 			cp_module_paypal_showMessage(__('Thank you for your purchase!', 'cp'));
 		}
@@ -293,73 +293,81 @@ exit();
 add_action('init','cp_module_paypal_message');
 
 function cp_module_paypal_ipn(){
-	if($_GET['cp_module_paypal_ipn']!=''){
-	// read the post from PayPal system and add 'cmd'
-	$req = 'cmd=_notify-validate';
+	if(isset($_GET['cp_module_paypal_ipn']) && $_GET['cp_module_paypal_ipn']!=''){
 
-	foreach ($_POST as $key => $value) {
-	$value = urlencode(stripslashes($value));
-	$req .= "&$key=$value";
-	}
-
-	if(get_option('cp_module_paypal_sandbox')){
-		$loc = 'ssl://www.sandbox.paypal.com';
-	}
-	else{
-		$loc = 'ssl://www.paypal.com';
-	}
-	
-	// post back to PayPal system to validate
-	$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
-	$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-	$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-	$fp = fsockopen ($loc, 443, $errno, $errstr, 30);
-
-	// assign posted variables to local variables
-	$item_name = $_POST['item_name'];
-	$item_number = $_POST['item_number'];
-	$payment_status = $_POST['payment_status'];
-	$payment_amount = $_POST['mc_gross'];
-	$payment_currency = $_POST['mc_currency'];
-	$txn_id = $_POST['txn_id'];
-	$receiver_email = $_POST['receiver_email'];
-	$payer_email = $_POST['payer_email'];
-	$custom = $_POST['custom'];
-	list($points,$uid)=explode('|',$custom);
-
-	if (!$fp) {
-	// HTTP ERROR
-	} else {
-	fputs ($fp, $header . $req);
-	while (!feof($fp)) {
-	$res = fgets ($fp, 1024);
-	if (strcmp ($res, "VERIFIED") == 0) {
-	// check the payment_status is Completed
-		if($payment_status!='Completed'){ die(); }
-	// check that txn_id has not been previously processed
-		global $wpdb;
-		$results = $wpdb->get_results('SELECT * FROM `'.CP_DB.'` WHERE `type`=\'paypal\'');
-
-		foreach($results as $result){
-			$data = $result->data;
-			if($data['txn_id']==$txn_id){ die(); }
+		if(get_option('cp_module_paypal_sandbox')){
+			$host = 'www.sandbox.paypal.com';
 		}
-	// check that receiver_email is your Primary PayPal email
-		if($receiver_email!=get_option('cp_module_paypal_account')){ die(); }
-	// check that payment_amount/payment_currency are correct
-		if($payment_currency!=get_option('cp_module_paypal_currency')){ die(); }
-		if((float)$payment_amount!=(float)cp_module_paypal_round_up(get_option('cp_module_paypal_price') * (int)$points, 2)){ die(); }
-	// process payment
-		cp_points('paypal', $uid, (int)$points, serialize(array('txn_id'=>$txn_id,'payer_email'=>$payer_email,'amt'=>$payment_amount)));
-	}
-	else if (strcmp ($res, "INVALID") == 0) {
-	// invalid paypal return
-		die();
-	}
-	}
-	fclose ($fp);
-	}
-	exit();
+		else{
+			$host = 'www.paypal.com';
+		}
+
+		// read the post from PayPal system and add 'cmd'
+		$req = 'cmd=' . urlencode('_notify-validate');
+		 
+		foreach ($_POST as $key => $value) {
+			$value = urlencode(stripslashes($value));
+			$req .= "&$key=$value";
+		}
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://' . $host . '/cgi-bin/webscr');
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: ' . $host));
+		$res = curl_exec($ch);
+		curl_close($ch);
+
+		// assign posted variables to local variables
+		$item_name = $_POST['item_name'];
+		$item_number = $_POST['item_number'];
+		$payment_status = $_POST['payment_status'];
+		$payment_amount = $_POST['mc_gross'];
+		$payment_currency = $_POST['mc_currency'];
+		$txn_id = $_POST['txn_id'];
+		$receiver_email = $_POST['receiver_email'];
+		$payer_email = $_POST['payer_email'];
+		$custom = $_POST['custom'];
+		list($points,$uid)=explode('|',$custom);
+		
+		if (strcmp ($res, "VERIFIED") == 0) {
+			// check the payment_status is Completed
+			if($payment_status!='Completed'){
+				die();
+			}
+			// check that txn_id has not been previously processed
+			global $wpdb;
+			$results = $wpdb->get_results('SELECT * FROM `'.CP_DB.'` WHERE `type`=\'paypal\'');
+			foreach($results as $result){
+				$data = unserialize($result->data);
+				if($data['txn_id']==$txn_id){
+					die();
+				}
+			}
+			// check that receiver_email is your Primary PayPal email
+			if($receiver_email!=trim(get_option('cp_module_paypal_account'))){
+				die();
+			}
+			// check that payment_amount/payment_currency are correct
+			if($payment_currency!=get_option('cp_module_paypal_currency')){
+				die();
+			}
+			if((float)$payment_amount!=(float)cp_module_paypal_round_up(get_option('cp_module_paypal_price') * (int)$points, 2)){
+				die();
+			}
+			// process payment
+			cp_points('paypal', $uid, (int)$points, serialize(array('txn_id'=>$txn_id,'payer_email'=>$payer_email,'amt'=>$payment_amount)));
+		}
+		else if (strcmp ($res, "INVALID") == 0) {
+			// invalid IPN
+			die();
+		}
+		exit();
+
 	}
 }
 
