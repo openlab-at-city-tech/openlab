@@ -14,7 +14,21 @@
                     <?php if(get_option('tbf2_nav_hide_home') != 'yes') : ?>
                     <li<?php if(is_home()) echo ' class="current_page_item"';?>><a href="<?php echo get_option('home'); ?>" rel="nofollow"><?php _e('Home')?></a></li>
                     <?php endif; ?>
-                    
+
+                  <?php
+
+			// Lazy fix for the fact that this theme uses wp_list_pages() instead
+			// of the proper menu functions
+			global $wpdb, $bp;
+			$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+			if ( $wds_bp_group_id ) {
+				$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
+				$group = new BP_Groups_Group( $wds_bp_group_id, true );
+				echo '<li class="page_item"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>';
+			}
+
+		  ?>
+
                     <?php wp_list_pages('title_li=&sort_column=menu_order&exclude='.get_option('tbf2_exclude_pages')); ?>
                     
                     <?php /* Uncomment this if you want to show categories in the top navigation
