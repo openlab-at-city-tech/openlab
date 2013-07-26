@@ -1,0 +1,18 @@
+#footer {
+	margin-bottom: 2em;
+}
+
+#cuny-sw-footer {
+	width: 108.2%;
+	margin-left: -4.1%;
+}
+
+#cuny-sw-footer .widget ul {
+	background: none;
+	padding: 0;
+	border-bottom: none;
+}
+
+#cuny-sw-footer #footer {
+	border-top: 0;
+}
