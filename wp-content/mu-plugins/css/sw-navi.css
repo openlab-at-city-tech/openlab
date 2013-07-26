@@ -352,7 +352,7 @@ a#cuny-sw-logo {
 /* Footer Widgets
 ------------------------------------------------------------ */
 #cuny-sw-footer {
-
+	text-align: left;
 }
 
 
@@ -398,6 +398,8 @@ a#cuny-sw-logo {
 	padding: 0;
 	background: none;
 	line-height: 24px;
+	text-align: left;
+	font-weight: normal;
 }
 
 #cuny-sw-footer #footer-widgets p {
