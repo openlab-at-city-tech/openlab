@@ -135,6 +135,7 @@ function openlab_site_wide_bp_search() { ?>
         <option value="courses">Courses</option>
         <option value="projects">Projects</option>
         <option value="clubs">Clubs</option>
+        <option value="portfolios">Portfolios</option>
         </select>
 
 		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
@@ -157,6 +158,9 @@ function openlab_search_override(){
 			exit();
 		}elseif($_POST['search-which']=="clubs"){
 			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="portfolios"){
+			wp_redirect($bp->root_domain.'/portfolios/?search='.$_POST['search-terms']);
 			exit();
 		}
 	}
