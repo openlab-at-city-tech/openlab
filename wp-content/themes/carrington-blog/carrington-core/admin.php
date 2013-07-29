@@ -68,7 +68,7 @@ function cfct_settings_form() {
 	print('
 <div class="wrap">
 	<h2>'.__('Carrington Settings', 'carrington').'</h2>
-	<form action="options.php" method="post">
+	<form action="' . admin_url( 'themes.php?page=carrington-settings' ) . '" method="post">
 	');
 	do_action('cfct_settings_form_top');
 	print('
