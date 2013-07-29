@@ -443,3 +443,20 @@ function openlab_fix_group_sub_settings_redirect( $redirect ) {
 	return $redirect;
 }
 add_filter( 'wp_redirect', 'openlab_fix_group_sub_settings_redirect' );
+
+/**
+ * Remove the Sitewide Notices sitewide box added by BP theme compat
+ *
+ * @see #923
+ */
+function openlab_remove_sitewide_notices() {
+	global $wp_filter;
+
+	// hackkkkkkkkk
+	foreach ( $wp_filter['wp_footer'][9999] as $fname => $filter ) {
+		if ( false !== strpos( $fname, 'sitewide_notices' ) ) {
+			remove_action( 'wp_footer', $fname, 9999 );
+		}
+	}
+}
+add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
