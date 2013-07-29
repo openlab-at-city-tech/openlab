@@ -4610,6 +4610,10 @@ body.single-help h1.entry-title a {
   color: #6D6D6D;
 }
 
+body.single-help div#content ul li {
+	list-style-type: disc;
+}
+
 #help-tags-copy p {
 	font-family:sans-serif;
 	font-size:12px;
