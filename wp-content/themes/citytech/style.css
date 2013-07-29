@@ -4612,6 +4612,12 @@ body.single-help h1.entry-title a {
 
 body.single-help div#content ul li {
 	list-style-type: disc;
+
+}
+
+body.single-help div#content div.entry-content ul li,
+body.single-help div#content div.entry-content ol li {
+	margin: 0 0 5px 20px;
 }
 
 #help-tags-copy p {
