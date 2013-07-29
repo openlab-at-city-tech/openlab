@@ -2582,10 +2582,11 @@ a#pgw-prev,a#pgw-next {
 	width:116px;
 }
 
-#cac-featured h4 {
+#cac-featured p.cfcw-title {
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	font-weight:700;
+        margin-bottom: 0;
 }
 
 /* Who's Online? styles */
