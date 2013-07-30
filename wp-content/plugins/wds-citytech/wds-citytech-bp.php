@@ -468,7 +468,7 @@ add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
  */
 function openlab_force_doc_comments_open( $open, $post_id ) {
         $_post = get_post( $post_id );
-        if ( bp_docs_get_post_type_name() === $_post->post_type ) {
+        if ( 'bp_doc' === $_post->post_type ) {
                 $open = true;
         }
         return $open;
