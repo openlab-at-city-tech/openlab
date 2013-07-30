@@ -26,7 +26,7 @@ class BP_XProfile_Component extends BP_Component {
 	 * The acceptable visibility levels for xprofile fields.
 	 *
 	 * @see bp_xprofile_get_visibility_levels()
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	var $visibility_levels = array();
 
@@ -46,7 +46,7 @@ class BP_XProfile_Component extends BP_Component {
 	/**
 	 * Include files
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		$includes = array(
 			'cssjs',
 			'cache',
@@ -76,7 +76,7 @@ class BP_XProfile_Component extends BP_Component {
 	 * @since BuddyPress (1.5)
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		// Define a slug, if necessary
@@ -98,19 +98,23 @@ class BP_XProfile_Component extends BP_Component {
 			'multiselectbox',
 			'datebox'
 		) );
-		
-		// Register the visibility levels. See bp_xprofile_get_visibility_levels() to filter		
+
+		// Register the visibility levels. See bp_xprofile_get_visibility_levels() to filter
 		$this->visibility_levels = array(
-			'public'  => array(
-				'id'	=> 'public',
+			'public' => array(
+				'id'	  => 'public',
 				'label' => __( 'Anyone', 'buddypress' )
 			),
 			'loggedin' => array(
-				'id'	=> 'loggedin',
+				'id'	  => 'loggedin',
 				'label' => __( 'Logged In Users', 'buddypress' )
-			)
+			),
+			'adminsonly' => array(
+				'id'	  => 'adminsonly',
+				'label' => __( 'Admins Only', 'buddypress' )
+			),
 		);
-		
+
 		if ( bp_is_active( 'friends' ) ) {
 			$this->visibility_levels['friends'] = array(
 				'id'	=> 'friends',
@@ -141,7 +145,7 @@ class BP_XProfile_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
 		$sub_nav = array();
 
@@ -155,11 +159,20 @@ class BP_XProfile_Component extends BP_Component {
 			'item_css_id'         => $this->id
 		);
 
-		$profile_link = trailingslashit( bp_loggedin_user_domain() . $this->slug );
+		// Determine user to use
+		if ( bp_displayed_user_domain() ) {
+			$user_domain = bp_displayed_user_domain();
+		} elseif ( bp_loggedin_user_domain() ) {
+			$user_domain = bp_loggedin_user_domain();
+		} else {
+			return;
+		}
+
+		$profile_link = trailingslashit( $user_domain . $this->slug );
 
 		// Add the subnav items to the profile
 		$sub_nav[] = array(
-			'name'            => __( 'Public', 'buddypress' ),
+			'name'            => __( 'View', 'buddypress' ),
 			'slug'            => 'public',
 			'parent_url'      => $profile_link,
 			'parent_slug'     => $this->slug,
@@ -174,7 +187,8 @@ class BP_XProfile_Component extends BP_Component {
 			'parent_url'      => $profile_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => 'xprofile_screen_edit_profile',
-			'position'        => 20
+			'position'        => 20,
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		// Change Avatar
@@ -184,7 +198,8 @@ class BP_XProfile_Component extends BP_Component {
 			'parent_url'      => $profile_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => 'xprofile_screen_change_avatar',
-			'position'        => 30
+			'position'        => 30,
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		parent::setup_nav( $main_nav, $sub_nav );
@@ -195,7 +210,7 @@ class BP_XProfile_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_admin_bar() {
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		global $bp;
 
 		// Prevent debug notices
@@ -276,5 +291,3 @@ function bp_setup_xprofile() {
 		$bp->profile = new BP_XProfile_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_xprofile', 6 );
-
-?>

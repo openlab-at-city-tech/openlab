@@ -1,4 +1,15 @@
-jQuery(document).ready( function($) {		
+jQuery(document).ready( function($) {	
+	
+	if (!$('input[name=groupblog-enable-blog]').is(':checked')) {
+		$('input[name=groupblog-create-new]').attr('disabled','true');
+		$('select[name=groupblog-blogid]').attr('disabled','true');
+		$('input[name=groupblog-silent-add]').attr('disabled','true');
+		$('input[name=blog_title]').attr('disabled','true');
+		$('input[name=blogname]').attr('disabled','true');
+		$('#groupblog-layout-options input[type=radio]').attr('disabled','true');
+		$('#groupblog-member-options input[type=radio]').attr('disabled','true');
+	}
+	
 	$('input[name=groupblog-enable-blog]').click(function(){
 		bpgb_toggle_options(this);
 	});
@@ -25,6 +36,8 @@ jQuery(document).ready( function($) {
 		if ($(a).is(':checked')) {
 			$('input[name=groupblog-create-new]').removeAttr('disabled');
 			$('select[name=groupblog-blogid]').removeAttr('disabled');
+			$('input[name=blog_title]').removeAttr('disabled');
+			$('input[name=blogname]').removeAttr('disabled');
 			$('input[name=groupblog-silent-add]').removeAttr('disabled');
 			$('#groupblog-layout-options input[type=radio]').removeAttr('disabled');
 			if ($('input[name=groupblog-silent-add]').is(':checked')) {
@@ -35,6 +48,8 @@ jQuery(document).ready( function($) {
 		} else {
 			$('input[name=groupblog-create-new]').attr('disabled','true');
 			$('select[name=groupblog-blogid]').attr('disabled','true');
+			$('input[name=blog_title]').attr('disabled','true');
+			$('input[name=blogname]').attr('disabled','true');
 			$('input[name=groupblog-silent-add]').attr('disabled','true');
 			$('#groupblog-member-options input[type=radio]').attr('disabled','true');
 			$('#groupblog-layout-options input[type=radio]').attr('disabled','true');

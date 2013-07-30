@@ -29,10 +29,10 @@
 <?php $post_format = isset( $_GET['p'] ) ? $_GET['p'] : 'status'; ?>
 <div id="postbox">
 		<ul id="post-types">
-			<li><a id="status"<?php if ( 'status' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=status' ); ?>" title="<?php esc_attr_e( 'Status Update', 'p2' ); ?>"><?php _e( 'Status Update', 'p2' ); ?></a></li>
-			<li><a id="post"<?php if ( 'post' == $post_format || 'standard' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=post' ); ?>" title="<?php esc_attr_e( 'Blog Post', 'p2' ); ?>"><?php _e( 'Blog Post', 'p2' ); ?></a></li>
-			<li><a id="quote"<?php if ( 'quote' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=quote' ); ?>" title="<?php esc_attr_e( 'Quote', 'p2' ); ?>"><?php _e( 'Quote', 'p2' ); ?></a></li>
-			<li><a id="link"<?php if ( 'link' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=link' ); ?>" title="<?php esc_attr_e( 'Link', 'p2' ); ?>"><?php _e( 'Link', 'p2' ); ?></a></li>
+			<li><a id="status" class="post-format-button"<?php if ( 'status' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=status' ); ?>" title="<?php esc_attr_e( 'Status Update', 'p2' ); ?>"><?php _e( 'Status Update', 'p2' ); ?></a></li>
+			<li><a id="post" class="post-format-button"<?php if ( 'post' == $post_format || 'standard' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=post' ); ?>" title="<?php esc_attr_e( 'Blog Post', 'p2' ); ?>"><?php _e( 'Blog Post', 'p2' ); ?></a></li>
+			<li><a id="quote" class="post-format-button"<?php if ( 'quote' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=quote' ); ?>" title="<?php esc_attr_e( 'Quote', 'p2' ); ?>"><?php _e( 'Quote', 'p2' ); ?></a></li>
+			<li><a id="link" class="post-format-button"<?php if ( 'link' == $post_format ) : ?> class="selected"<?php endif; ?> href="<?php echo site_url( '?p=link' ); ?>" title="<?php esc_attr_e( 'Link', 'p2' ); ?>"><?php _e( 'Link', 'p2' ); ?></a></li>
 		</ul>
 
 		<div class="avatar">
@@ -49,7 +49,7 @@
 				<?php endif; ?>
 
 				<div id="postbox-type-post" class="post-input <?php if ( 'post' == $post_format || 'standard' == $post_format ) echo ' selected'; ?>">
-					<input type="text" name="posttitle" id="posttitle" tabindex="1" value=""
+					<input type="text" name="posttitle" id="posttitle" value=""
 						onfocus="this.value=(this.value=='<?php echo esc_js( __( 'Post Title', 'p2' ) ); ?>') ? '' : this.value;"
 						onblur="this.value=(this.value=='') ? '<?php echo esc_js( __( 'Post Title', 'p2' ) ); ?>' : this.value;" />
 				</div>
@@ -58,27 +58,24 @@
 					<?php p2_media_buttons(); ?>
 				</div>
 				<?php endif; ?>
-				<textarea class="expand70-200" name="posttext" id="posttext" tabindex="1" rows="4" cols="60"></textarea>
+				<textarea class="expand70-200" name="posttext" id="posttext" rows="4" cols="60"></textarea>
 				<div id="postbox-type-quote" class="post-input <?php if ( 'quote' == $post_format ) echo " selected"; ?>">
 					<label for="postcitation" class="invisible"><?php _e( 'Citation', 'p2' ); ?></label>
-						<input id="postcitation" name="postcitation" type="text" tabindex="2"
+						<input id="postcitation" name="postcitation" type="text"
 							value="<?php esc_attr_e( 'Citation', 'p2' ); ?>"
 							onfocus="this.value=(this.value=='<?php echo esc_js( __( 'Citation', 'p2' ) ); ?>') ? '' : this.value;"
 							onblur="this.value=(this.value=='') ? '<?php echo esc_js( __( 'Citation', 'p2' ) ); ?>' : this.value;" />
 				</div>
 				<label class="post-error" for="posttext" id="posttext_error"></label>
 				<div class="postrow">
-					<input id="tags" name="tags" type="text" tabindex="2" autocomplete="off"
+					<input id="tags" name="tags" type="text" autocomplete="off"
 						value="<?php esc_attr_e( 'Tag it', 'p2' ); ?>"
 						onfocus="this.value=(this.value=='<?php echo esc_js( __( 'Tag it', 'p2' ) ); ?>') ? '' : this.value;"
 						onblur="this.value=(this.value=='') ? '<?php echo esc_js( __( 'Tag it', 'p2' ) ); ?>' : this.value;" />
-					<input id="submit" type="submit" tabindex="3" value="<?php esc_attr_e( 'Post it', 'p2' ); ?>" />
+					<input id="submit" type="submit" value="<?php esc_attr_e( 'Post it', 'p2' ); ?>" />
 				</div>
 				<input type="hidden" name="post_format" id="post_format" value="<?php echo esc_attr( $post_format ); ?>" />
-				<span class="progress" id="ajaxActivity">
-					<img src="<?php echo str_replace( WP_CONTENT_DIR, content_url(), locate_template( array( 'i/indicator.gif' ) ) ); ?>"
-						alt="<?php esc_attr_e( 'Loading...', 'p2' ); ?>" title="<?php esc_attr_e( 'Loading...', 'p2' ); ?>"/>
-				</span>
+				<span class="progress spinner-post-new" id="ajaxActivity"></span>
 
 				<?php do_action( 'p2_post_form' ); ?>
 

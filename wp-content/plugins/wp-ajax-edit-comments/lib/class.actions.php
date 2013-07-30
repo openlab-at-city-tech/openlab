@@ -73,8 +73,8 @@ class AECActions {
 			//todo - update to update_post_meta or use comment meta instead
 			$query = "INSERT INTO " . $wpdb->postmeta .
 				"(post_id, meta_key, meta_value) " .
-				"VALUES (" . $comment['comment_post_ID'] . ",'_" . $comment['comment_ID'] . "','" . $rand . "')";
-			@$wpdb->query( $wpdb->prepare( $query ) );
+				"VALUES (%d,'_%d', %s)";
+			@$wpdb->query( $wpdb->prepare( $query, $comment['comment_post_ID'], $comment['comment_ID'], $rand ) );
 			
 			//Set the cookie
 			$cookieName = 'WPAjaxEditCommentsComment' . $commentID . $hash;
@@ -97,7 +97,7 @@ class AECActions {
 			//Delete keys if over a 100
 			if ($securityCount >= 100) {
 				$metakey = "_" . $comment['comment_ID'];
-				@$wpdb->query( $wpdb->prepare( "delete from $wpdb->postmeta where left(meta_value, 6) = 'wpAjax' and meta_key <> '$metakey'" ) );
+				@$wpdb->query( $wpdb->prepare( "delete from $wpdb->postmeta where left(meta_value, 6) = 'wpAjax' and meta_key <> '%s'", $metakey ) );
 				$securityCount = 0;
 			}
 			$securityCount += 1;
@@ -131,7 +131,7 @@ class AECActions {
 			$comment = get_comment($commentID, ARRAY_A);
 			if (empty($comment)) { return false; }
 			$query = "SELECT * FROM $wpdb->posts WHERE ID=$postID";
-			$post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE ID=$postID" ), ARRAY_A);
+			$post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE ID=%d", $postID ), ARRAY_A);
 			
 			if (!$post) { return false; }
 			if (AECCore::is_comment_owner($postID)) {  return false; }

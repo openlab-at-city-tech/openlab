@@ -39,8 +39,8 @@
 		<?php endif; ?>
 
 		<div class="navigation">
-			<p class="nav-older"><?php previous_post_link( '%link', __( '&larr;', 'Previous post link', 'p2' ) . ' %title' ); ?></p>
-			<p class="nav-newer"><?php next_post_link( '%link', '%title ' . __( '&rarr;', 'Next post link', 'p2' ) ); ?></p>
+			<p class="nav-older"><?php previous_post_link( '%link', _x( '&larr; %title', 'Previous post link', 'p2' ) ); ?></p>
+			<p class="nav-newer"><?php next_post_link( '%link', _x( '%title &rarr;', 'Next post link', 'p2' ) ); ?></p>
 		</div>
 
 	</div> <!-- main -->

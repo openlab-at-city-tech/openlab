@@ -24,7 +24,7 @@
  *
  * @package BuddyPress
  * @subpackage BP-Default
- * @since 1.2
+ * @since BuddyPress (1.2)
  */
 
 // Exit if accessed directly
@@ -62,7 +62,7 @@ if ( ! function_exists( 'bp_dtheme_setup' ) ) :
 function bp_dtheme_setup() {
 
 	// Load the AJAX functions for the theme
-	require( TEMPLATEPATH . '/_inc/ajax.php' );
+	require( get_template_directory() . '/_inc/ajax.php' );
 
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
@@ -112,14 +112,14 @@ function bp_dtheme_setup() {
 		add_theme_support( 'custom-header', $custom_header_args );
 	}
 
-	if ( !is_admin() ) {
+	if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 		// Register buttons for the relevant component templates
 		// Friends button
 		if ( bp_is_active( 'friends' ) )
 			add_action( 'bp_member_header_actions',    'bp_add_friend_button',           5 );
 
 		// Activity button
-		if ( bp_is_active( 'activity' ) )
+		if ( bp_is_active( 'activity' ) && bp_activity_do_mentions() )
 			add_action( 'bp_member_header_actions',    'bp_send_public_message_button',  20 );
 
 		// Messages button
@@ -159,12 +159,14 @@ function bp_dtheme_enqueue_scripts() {
 		'accepted'          => __( 'Accepted', 'buddypress' ),
 		'rejected'          => __( 'Rejected', 'buddypress' ),
 		'show_all_comments' => __( 'Show all comments for this thread', 'buddypress' ),
+		'show_x_comments'   => __( 'Show all %d comments', 'buddypress' ),
 		'show_all'          => __( 'Show all', 'buddypress' ),
 		'comments'          => __( 'comments', 'buddypress' ),
 		'close'             => __( 'Close', 'buddypress' ),
 		'view'              => __( 'View', 'buddypress' ),
 		'mark_as_fav'	    => __( 'Favorite', 'buddypress' ),
-		'remove_fav'	    => __( 'Remove Favorite', 'buddypress' )
+		'remove_fav'	    => __( 'Remove Favorite', 'buddypress' ),
+		'unsaved_changes'   => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
 	);
 	wp_localize_script( 'dtheme-ajax-js', 'BP_DTheme', $params );
 
@@ -226,7 +228,7 @@ if ( !function_exists( 'bp_dtheme_admin_header_style' ) ) :
  *
  * Referenced via add_custom_image_header() in bp_dtheme_setup().
  *
- * @since 1.2
+ * @since BuddyPress (1.2)
  */
 function bp_dtheme_admin_header_style() {
 ?>
@@ -334,7 +336,7 @@ if ( !function_exists( 'bp_dtheme_header_style' ) ) :
  * Referenced via add_custom_image_header() in bp_dtheme_setup().
  *
  * @global WP_Query $post The current WP_Query object for the current post or page
- * @since 1.2
+ * @since BuddyPress (1.2)
  */
 function bp_dtheme_header_style() {
 	global $post;
@@ -453,7 +455,7 @@ if ( !function_exists( 'bp_dtheme_blog_comments' ) ) :
  * @param array $args Arguments from wp_list_comments() call
  * @param int $depth Comment nesting level
  * @see wp_list_comments()
- * @since 1.2
+ * @since BuddyPress (1.2)
  */
 function bp_dtheme_blog_comments( $comment, $args, $depth ) {
 	$GLOBALS['comment'] = $comment;
@@ -519,8 +521,8 @@ if ( !function_exists( 'bp_dtheme_page_on_front' ) ) :
 /**
  * Return the ID of a page set as the home page.
  *
- * @return false|int ID of page set as the home page
- * @since 1.2
+ * @return int|bool ID of page set as the home page
+ * @since BuddyPress (1.2)
  */
 function bp_dtheme_page_on_front() {
 	if ( 'page' != get_option( 'show_on_front' ) )
@@ -538,7 +540,7 @@ if ( !function_exists( 'bp_dtheme_activity_secondary_avatars' ) ) :
  * @param BP_Activity_Activity $activity Activity object
  * @package BuddyPress Theme
  * @return string
- * @since 1.2.6
+ * @since BuddyPress (1.2.6)
  */
 function bp_dtheme_activity_secondary_avatars( $action, $activity ) {
 	switch ( $activity->component ) {
@@ -562,7 +564,7 @@ if ( !function_exists( 'bp_dtheme_show_notice' ) ) :
 /**
  * Show a notice when the theme is activated - workaround by Ozh (http://old.nabble.com/Activation-hook-exist-for-themes--td25211004.html)
  *
- * @since 1.2
+ * @since BuddyPress (1.2)
  */
 function bp_dtheme_show_notice() {
 	global $pagenow;
@@ -717,7 +719,7 @@ function bp_dtheme_sidebar_login_redirect_to() {
 	$redirect_to = !empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';
 	$redirect_to = apply_filters( 'bp_no_access_redirect', $redirect_to ); ?>
 
-	<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
+	<input type="hidden" name="redirect_to" value="<?php echo esc_url( $redirect_to ); ?>" />
 
 <?php
 }

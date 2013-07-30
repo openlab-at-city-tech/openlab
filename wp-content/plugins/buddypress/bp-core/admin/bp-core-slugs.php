@@ -29,7 +29,7 @@ function bp_core_admin_slugs_settings() {
 			<?php bp_core_admin_slugs_options(); ?>
 
 			<p class="submit clear">
-				<input class="button-primary" type="submit" name="bp-admin-pages-submit" id="bp-admin-pages-submit" value="<?php _e( 'Save All', 'buddypress' ) ?>"/>
+				<input class="button-primary" type="submit" name="bp-admin-pages-submit" id="bp-admin-pages-submit" value="<?php _e( 'Save Settings', 'buddypress' ) ?>"/>
 			</p>
 
 			<?php wp_nonce_field( 'bp-admin-pages-setup' ); ?>
@@ -42,9 +42,6 @@ function bp_core_admin_slugs_settings() {
 
 /**
  * Creates reusable markup for page setup on the Components and Pages dashboard panel.
- *
- * This markup has been abstracted so that it can be used both during the setup wizard as well as
- * when BP has been fully installed.
  *
  * @package BuddyPress
  * @since BuddyPress (1.6)
@@ -94,8 +91,8 @@ function bp_core_admin_slugs_options() {
 						</th>
 
 						<td>
-							<?php if ( !bp_is_root_blog() )
-								switch_to_blog( bp_get_root_blog_id() ) ?>
+
+							<?php if ( ! bp_is_root_blog() ) switch_to_blog( bp_get_root_blog_id() ); ?>
 
 							<?php echo wp_dropdown_pages( array(
 								'name'             => 'bp_pages[' . esc_attr( $name ) . ']',
@@ -113,8 +110,7 @@ function bp_core_admin_slugs_options() {
 
 							<?php endif; ?>
 
-							<?php if ( !bp_is_root_blog() )
-								restore_current_blog() ?>
+							<?php if ( ! bp_is_root_blog() ) restore_current_blog(); ?>
 
 						</td>
 					</tr>
@@ -138,9 +134,9 @@ function bp_core_admin_slugs_options() {
 		'register' => __( 'Register', 'buddypress' ),
 		'activate' => __( 'Activate', 'buddypress' ),
 	);
-	
+
 	$static_pages = apply_filters( 'bp_static_pages', $static_pages );
-	
+
 	if ( !empty( $static_pages ) ) : ?>
 
 		<h3><?php _e( 'Registration', 'buddypress' ); ?></h3>
@@ -158,6 +154,9 @@ function bp_core_admin_slugs_options() {
 						</th>
 
 						<td>
+
+							<?php if ( ! bp_is_root_blog() ) switch_to_blog( bp_get_root_blog_id() ); ?>
+
 							<?php echo wp_dropdown_pages( array(
 								'name'             => 'bp_pages[' . esc_attr( $name ) . ']',
 								'echo'             => false,
@@ -173,6 +172,8 @@ function bp_core_admin_slugs_options() {
 								<a href="<?php echo get_permalink( $existing_pages[$name] ); ?>" class="button-secondary" target="_bp"><?php _e( 'View', 'buddypress' ); ?></a>
 
 							<?php endif; ?>
+
+							<?php if ( ! bp_is_root_blog() ) restore_current_blog(); ?>
 
 						</td>
 					</tr>
@@ -193,7 +194,6 @@ function bp_core_admin_slugs_options() {
  *
  * @since BuddyPress (1.6)
  * @todo Use settings API
- * @return False if referer does not check out
  */
 function bp_core_admin_slugs_setup_handler() {
 
@@ -219,6 +219,4 @@ function bp_core_admin_slugs_setup_handler() {
 		wp_redirect( $base_url );
 	}
 }
-add_action( 'admin_init', 'bp_core_admin_slugs_setup_handler' );
-
-?>
+add_action( 'bp_admin_init', 'bp_core_admin_slugs_setup_handler' );

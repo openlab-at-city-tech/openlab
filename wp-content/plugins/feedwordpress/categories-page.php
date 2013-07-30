@@ -10,9 +10,9 @@ class FeedWordPressCategoriesPage extends FeedWordPressAdminPage {
 		FeedWordPressAdminPage::FeedWordPressAdminPage('feedwordpresscategories', $link);
 		$this->dispatch = 'feedwordpress_admin_page_categories';
 		$this->pagenames = array(
-			'default' => 'Categories'.FEEDWORDPRESS_AND_TAGS,
-			'settings-update' => 'Syndicated Categories'.FEEDWORDPRESS_AND_TAGS,
-			'open-sheet' => 'Categories'.FEEDWORDPRESS_AND_TAGS,
+			'default' => 'Categories & Tags',
+			'settings-update' => 'Syndicated Categories & Tags',
+			'open-sheet' => 'Categories & Tags',
 		);
 		$this->filename = __FILE__;
 	}
@@ -100,7 +100,7 @@ class FeedWordPressCategoriesPage extends FeedWordPressAdminPage {
 		endforeach;
 
 		if ($this->for_feed_settings()) :
-			$href = "admin.php?page={$GLOBALS['fwp_path']}/".basename(__FILE__);
+			$href = $this->admin_page_href(basename(__FILE__));
 
 			foreach ($unmatched as $what => $um) :
 				// Is the global default setting appropriate to this post type?
@@ -450,7 +450,8 @@ blank.</p></td>
 			
 			$globalDogs = SyndicatedPost::category_ids($globalCats, /*unfamiliar=*/ 'create:'.$tax, /*taxonomies=*/ array($tax));
 	
-			$siteWideHref = 'admin.php?page='.$GLOBALS['fwp_path'].'/'.basename(__FILE__);
+			$siteWideHref = $this->admin_page_href(basename(__FILE__));
+
 			if ($page->for_feed_settings()) :
 			?>
 			</td>
@@ -599,12 +600,9 @@ blank.</p></td>
 		////////////////////////////////////////////////
 	
 		$this->boxes_by_methods = array(
-			'feed_categories_box' => __('Feed Categories'.FEEDWORDPRESS_AND_TAGS),
+			'feed_categories_box' => __('Feed Categories & Tags'),
 			'categories_box' => array('title' => __('Categories'), 'id' => 'categorydiv'),
 		);
-		if (!FeedWordPressCompatibility::post_tags()) :
-			unset($this->boxes_by_methods['tags_box']);
-		endif;
 
 		parent::display();	
 	}

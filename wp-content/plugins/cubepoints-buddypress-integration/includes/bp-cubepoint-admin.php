@@ -28,6 +28,7 @@ function cubebp_admin() {
 		$bp_spammer_cp_bp = $_POST['bp_spammer_cp_bp'];
 		$bp_slug_cp_bp = $_POST['bp_slug_cp_bp'];
 		$bp_points_logs_per_page_cp_bp = (int)$_POST['bp_points_logs_per_page_cp_bp'];
+		$bp_tallyuserpoints_cp_bp = (bool)$_POST['bp_tallyuserpoints_cp_bp'];
 		$bp_sitewide_menu_cp_bp = (bool)$_POST['bp_sitewide_menu_cp_bp'];
 		$bp_sitewidemtitle_cp_bp = $_POST['bp_sitewidemtitle_cp_bp'];
 		$bp_earnpoints_menu_cp_bp = (bool)$_POST['bp_earnpoints_menu_cp_bp'];
@@ -327,6 +328,7 @@ function cubebp_admin() {
 		update_option('bp_spammer_cp_bp', $bp_spammer_cp_bp);
 		update_option('bp_slug_cp_bp', $bp_slug_cp_bp);
 		update_option('bp_points_logs_per_page_cp_bp', $bp_points_logs_per_page_cp_bp);
+		update_option('bp_tallyuserpoints_cp_bp', $bp_tallyuserpoints_cp_bp);
 		update_option('bp_sitewide_menu_cp_bp', $bp_sitewide_menu_cp_bp);
 		update_option('bp_sitewidemtitle_cp_bp', $bp_sitewidemtitle_cp_bp);
 		update_option('bp_earnpoints_menu_cp_bp', $bp_earnpoints_menu_cp_bp);		
@@ -846,6 +848,12 @@ document.getElementById("lotterynbets").style.display = "block";
 			<?php _e('This will change the slug in bold below.','cp_buddypress'); ?><br />yoursite.com/members/username/<b><?php echo get_option('bp_slug_cp_bp'); ?></b>/</small>
 			</td>
 			<td><input type="button" onclick="document.getElementById('bp_slug_cp_bp').value='cubepoints'" value="<?php _e('Set to default','cp_buddypress'); ?>" class="button" /></td>
+		</tr>	
+		<tr valign="top">
+			<th scope="row"><label for="bp_tallyuserpoints_cp_bp"><?php _e('Show community point grand total on points log page','cp_buddypress'); ?>:</label></th>
+			<td valign="middle" colspan="2">
+			<input id="bp_tallyuserpoints_cp_bp" name="bp_tallyuserpoints_cp_bp" type="checkbox" value="1" <?php if(get_option('bp_tallyuserpoints_cp_bp')) {echo 'checked="checked"';} ?> />
+			</td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="bp_sitewide_menu_cp_bp"><?php _e('Show Global Points Log Menu Item','cp_buddypress'); ?>:</label></th>
@@ -1669,63 +1677,69 @@ document.getElementById("lotterynbets").style.display = "block";
 		
 		<?php echo '<p align="center"><img src="'.CP_BUDDYPRESS_PATH.'includes/css/lottery2.0-tab1-n-admin1.png" /></p>'; ?>
 		
-		<h2><?php _e( 'This is the ultimate giveaway system for WordPress! If you need a plugin that can handle how you manage a giveaway / pick winners & have your users want to promote your giveaway on Twitter, Google+ & Facebook, then your search has ended! Plus it comes with a gambling / betting system!', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Your members can enter the CubePoints Giveaway System many different ways, including getting extra entries into the lottery for promoting your giveaway on Twitter, Google+, & Facebook!', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Admins can create a unique link, which you can put on your Facebook fan page. I highly recommend that you set it up to only be visible to people that like your page. Members that click that unique link on your Facebook fan page while logged into your site will get an entry into the lottery. You can also create a unique link that works the same way for your YouTube channel.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Plus, you can setup another unique url that you can promote however you would like, but only the first 10 people, for example, that click that link will get a bonus entry into the lottery. You can change the limit from 10 in this example to anything you wish in the admin area.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Video entries are supported as well. As a lottery admin, from the front end, you can manually add video entries. The video entry limit for a specific member is set in the admin. You can add bonus entries for a member if you wish as well.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'You can have up to 5 lotteries running at once! It is just a simple shortcode you use to place on any post or page you desire.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Here are all the various ways a member can enter the CubePoints Giveaway System:', 'cp_buddypress' ) ?></h3>
-		<div style="margin-left:25px;">
-		<h3><?php _e( 'Lottery Ticket (Points are taken away): They can "purchase" a lottery ticket using points they earned while being active on your website via <a href="http://cubepoints.com/">CubePoints</a>. Members are required to purchase a lottery ticket at least once to unlock all the social entries possible below.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Facebook (They earn points for this action): They get an entry for liking the giveaway post on Facebook and posting about it on their Facebook profile wall!', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Twitter (They earn points for this action): Tweet about the giveaway using a preset message and link you set in the admin.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Google (They earn points for this action): Using the Google +1 button, they get an entry for clicking that button, which gives a +1 to your giveaway post.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Facebook Fan Page (They earn points for this action): Set up a unique url that, when clicked, grants them an entry into the lottery. I highly recommend that you setup the unique link to only be visible to people that like your Facebook fan page. Make sure to tell them to be logged into your site before clicking the link.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'YouTube Channel (They earn points for this action): Set up a unique url that, when clicked, grants them an entry into the lottery. Make sure to tell them to be logged into your site before clicking the link.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Bonus URL (They earn points for this action): Set up a unique url that, when clicked, grants them a bonus entry into the lottery, but, by default (for example), only the first 10 that click that link will get a bonus entry. You can change the limit to whatever you wish. Make sure to tell them to be logged into your site before clicking the link.', 'cp_buddypress' ) ?></h3>
-		</div>
-		
-		<h2><?php _e( 'Twitter Follow & Google +1', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Give them points for following you on Twitter and having them +1 your website on Google!', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Giveaway Entries', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Your members can see their entries into the lottery, which are highlighted so they can easily see their entries stand out from everyone else\'s. It shows how they entered the lottery, as well as whether they earned or had points taken away.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Stats', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Your members can see how many more lottery tickets they can "purchase" to better their chances. It also shows how many possible entries are left, such as social entries.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'It even shows them their chance of winning. This is all displayed in a nice graph which changes color from red to orange to green, based on how many entries you have left to do or your chance of winning.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Pick your winners', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'This has a built-in feature for picking your winners that is pretty slick if I do say so myself! Here is a <a href="http://store.slyspyder.com/videos/CBLotteryPickWinner.swf">screen capture</a> of it in action!', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Click a button to shuffle all the entries as much as you\'d like. Then, click another button to pick a winner at random from the entries, which creates a new table with the winners (and removes them from the original table). Pick as many winners as needed.', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'If somebody is picked twice, just click the the red remove icon next to the name in the winners table to remove that entry. Don\'t worry, though. Nothing is saved when picking your winners. A refresh will bring everything back to the way it was.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Giveaway Admins', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Do not want to give somebody admin access to your WordPress site, but want them to help out with manually adding video/bonus entries or picking winners for you? Just enter their WordPress usernames in the admin and you are good to go! Add as many as you need.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Point Betting System Included!', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'You can set up bets so your users can bet their points against each other! You can have up to 5 options. Put it on any page with a simple shortcode! You can have up to 5 bets running at once too!', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'Once the betting is over and the winning bet is decided. As a betting admin you just simply select the bet that won from a drop down menu and press submit. Then it automatically awards points to all the users that bet on the winning bet. At the same time it clears the logs so it is ready for another bet.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Gamble / Betting Admins', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Do not want to give somebody admin access to your WordPress site, but want them to help out with awarding winning bets for you? Just enter their WordPress usernames in the admin and you are good to go! Add as many as you need.', 'cp_buddypress' ) ?></h3>
+		<h2><?php _e( 'Most Feature Rich Giveaway / Contest Plugin Available For WordPress!', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'I noticed that there are very few giveaway / contest plugins available for WordPress. None of came close to what I truly needed. I got tired of searching and built this plugin and decided to share it with the world.', 'cp_buddypress' ) ?></h3>
 
-		<h2><?php _e( 'Countdowns', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'For giveaways and bets you can set a end date & time. Then it will automatically close at that time. Even shows a countdown!', 'cp_buddypress' ) ?></h3>
+		<h2><?php _e( 'CubePoints Support', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'This ties directly into the <a href="http://www.cubepoints.com/">most popular points system</a> available for WordPress. It finally gives your users meaning behind the points they have earned. They value them more and want to keep earning more and more points. Which means more activity on your site.', 'cp_buddypress' ) ?></h3>
+		<h3><?php _e( 'To enter a giveaway they must purchase at least 1 ticket using points they have earned by being active on your site. Then other entry options are available to them.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Watch Your Social Sharing Soar', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Your users can get extra entries into your giveaway by sharing your post on Facebook, Google+ & Twitter. They also earn points, so even more incentive for them! Includes support for video & bonus entires.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Increase Your Followers On Your Social Networks', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Reward your users with points for following you On Twitter, Facebook, Google+ & YouTube.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Answer Trivia Questions For Entries', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'You have the option to set up a trivia question, when our users answer it correctly they are granted bonus entires into your giveaway and earn points in the process.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Flexible System', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Set how many points a ticket will cost and the max allowed. Change the text for the social entry steps and set the default twitter text when they click the tweet button. Or you can disable social entries if you wish. Change the word "ticket" to whatever you need it to be.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Giveaway Details', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Your users can see all their entires into the giveaway. Plus it shows them how many entries them have left to complete and their chance of winning. You can choose if you want your users to see entries from everyone else or just be able to see their own.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Pick Your Winners', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'You can easily and quickly shuffle all the entries and pick your winners at random with a couple clicks of a button.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Giveaway Stats', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Your members can see at a glance how many entries they need to complete. Plus their chance of winning as well. Which gives them more urgency to finish all the possible ways to enter your giveaway. Which means more activity on your site and social sharing.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Multiple Giveaways', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'You can run up to 5 active giveaways with ease.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Banner System', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Promote your giveaway on your site with a image banner. Just insert some simple PHP code into your theme files where you want it to show or just use a simple shortcode.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Gambling / Betting System', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Set up bets so your users can bet their points against each other. You can have up to 5 options per bet. Put it on any post or page with a simple shortcode! You can have up to 5 bets running at once too. Awards the points with a simple click when the bet is over.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Show Text If Giveaway Or Bet Is Open / Closed', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Using another simple shortcode you can display any basic html you want based on if any of your giveaways or bets are active or closed.', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Administrative', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Do not want to give somebody full admin access to your WordPress site? But want them to help out with managing your giveaway or award bets? Enter their usernames in the settings and you are good to go! Here is what they can do:', 'cp_buddypress' ) ?></h3>
+		<h3><?php _e( '<ul>
+				<li>Manually add video or bonus entries</li>
+				<li>Pick winners at random</li>
+				<li>Remove all entries for a user or just a specific type of entry. Useful when you have people that try to cheat the point system.</li>
+				<li>Retrieve user entry details so you can see how many entries they have & their chance of winning.</li>
+				<li>Retrieve all giveaways entry details.</li>
+				<li>Award Bets</li>
+				</ul>', 'cp_buddypress' ) ?></h3>
+		
+		<h2><?php _e( 'Built In Countdown', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Seeing a the seconds, minutes, hours & days tick away with give your users urgency to participate in your giveaway or bet. It will automatically close the giveaway or bet for you, so less for you to worry about.', 'cp_buddypress' ) ?></h3>
 		
 		<h2><?php _e( 'BuddyPress', 'cp_buddypress' ) ?></h2>
 		<h3><?php _e( '<img src="'.CP_BUDDYPRESS_PATH.'includes/css/cblottery-notify.png" align="right" style="margin:-10px 15px 15px 15px;" />Since your using my CubePoints Buddypress Integration already, then it will tie right into this system! It displays the number of lotteries or bets they have not entered, in the top BuddyPress admin bar.', 'cp_buddypress' ) ?></h3>
 		<h3><?php _e( 'In this example there are 2 lotteries & 2 bets available. This user has entered 1 lottery & 1 bet. Leaving 2 that they need to complete. The ones they need to enter are always at the top of the list. You can change the text and link to whatever you want in the admin area.', 'cp_buddypress' ) ?></h3>
 		
-		<h2><?php _e( 'Misc', 'cp_buddypress' ) ?></h3>
-		<h3><?php _e( 'I built this primarily for <a href="http://www.ps3blog.net" title="PS3 Blog & Community | PS3Blog.net | PS3 News, Reviews & Opinions">PS3Blog.net</a> (which I own) but I decided to share it with the world! I spend a lot of time building it and testing it meticulously. I would love to have other people enjoy this awesome system that I built.', 'cp_buddypress' ) ?></h3>
+		<h2><?php _e( 'Can I Try It Out?', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Sure! Here is a <a href="http://store.slyspyder.com/giveaway-demo/?utm_source=cb_buddypress_plugin&utm_medium=admin_page&utm_campaign=cb_buddypress_free_plugin">demo</a>, have at it.', 'cp_buddypress' ) ?></h3>
 		
-		<h2><?php _e( 'Can I try it out?', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'Sure! Here is a <a href="http://store.slyspyder.com/lottery-demo/">demo page</a>, have at it.', 'cp_buddypress' ) ?></h3>
-		
-		<h2><?php _e( 'Where can I get it?', 'cp_buddypress' ) ?></h2>
-		<h3><?php _e( 'You can <a href="http://store.slyspyder.com/slyspyder-membership-signup/" title="CubePoints Lottery Giveaway / Contest System for WordPress / BuddyPress">buy it here</a> via PayPal. You will get access to the plugin and all future updates. Plus access to the support forum.', 'cp_buddypress' ) ?></h3>
+		<h2><?php _e( 'Where Can I Get It?', 'cp_buddypress' ) ?></h2>
+		<h3><?php _e( 'Go <a href="http://store.slyspyder.com/?utm_source=cb_buddypress_plugin&utm_medium=admin_page&utm_campaign=cb_buddypress_free_plugin">here</a> for full details.', 'cp_buddypress' ) ?></h3>
 
 		</td>
 	  </tr>

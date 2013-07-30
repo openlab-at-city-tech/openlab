@@ -2,8 +2,8 @@
 /*
 +----------------------------------------------------------------+
 |																							|
-|	WordPress 2.8 Plugin: WP-Polls 2.61										|
-|	Copyright (c) 2009 Lester "GaMerZ" Chan									|
+|	WordPress Plugin: WP-Polls										|
+|	Copyright (c) 2012 Lester "GaMerZ" Chan									|
 |																							|
 |	File Written By:																	|
 |	- Lester "GaMerZ" Chan															|
@@ -22,11 +22,9 @@ if(!current_user_can('manage_polls')) {
 	die('Access Denied');
 }
 
-
 ### Poll Manager
 $base_name = plugin_basename('wp-polls/polls-manager.php');
 $base_page = 'admin.php?page='.$base_name;
-
 
 ### Form Processing 
 if(!empty($_POST['do'])) {

@@ -2,1574 +2,1510 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPAjaxEditComments\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-15 15:30-0600\n"
-"PO-Revision-Date: 2011-05-15 15:30-0600\n"
-"Last-Translator: Ronald Huereca <ron@ronalfy.com>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2013-01-22 11:49+0900\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _e;__\n"
-"X-Poedit-Basepath: ../\n"
-"X-Poedit-Language: English\n"
-"X-Poedit-SearchPath-0: .\n"
 
-#: wp-ajax-edit-comments.php:116
-msgid "Your edited comment was marked as spam.  If this is in error, please contact the admin."
+#. Description of the plugin
+msgid ""
+"Ajax Edit Comments allows users to edit their comments for a period of time. "
+"Administrators have a lot more features, such as the ability to edit "
+"comments directly on a post or page."
 msgstr ""
 
-#: wp-ajax-edit-comments.php:141
-msgid "Get your own comment editor for your WordPress website.  Try [url]Ajax Edit Comments[/url] today!"
+#: ../wp-ajax-edit-comments.php:125
+msgid ""
+"Your edited comment was marked as spam.  If this is in error, please contact "
+"the admin."
 msgstr ""
 
-#: wp-ajax-edit-comments.php:181
-#: wp-ajax-edit-comments.php:202
-#: lib/class.core.php:186
-#: lib/class.core.php:189
+#: ../wp-ajax-edit-comments.php:184 ../wp-ajax-edit-comments.php:205
+#: ../lib/class.core.php:173 ../lib/class.core.php:176
 msgid "Approve"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:182
-#: wp-ajax-edit-comments.php:203
-#: lib/class.core.php:199
-#: lib/class.core.php:202
+#: ../wp-ajax-edit-comments.php:185 ../wp-ajax-edit-comments.php:206
+#: ../lib/class.core.php:186 ../lib/class.core.php:189
 msgid "Moderate"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:183
-#: wp-ajax-edit-comments.php:204
-#: lib/class.core.php:212
-#: lib/class.core.php:215
-#: views/comment-editor.php:170
-#: views/comment-editor.php:177
+#: ../wp-ajax-edit-comments.php:186 ../wp-ajax-edit-comments.php:207
+#: ../lib/class.core.php:199 ../lib/class.core.php:202
+#: ../views/comment-editor.php:170 ../views/comment-editor.php:177
 msgid "Spam"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:184
-#: wp-ajax-edit-comments.php:205
-#: lib/class.core.php:98
-#: lib/class.core.php:101
-#: views/admin-panel.php:446
+#: ../wp-ajax-edit-comments.php:187 ../wp-ajax-edit-comments.php:208
+#: ../lib/class.core.php:85 ../lib/class.core.php:88
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
 msgid "Delete"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:185
-#: wp-ajax-edit-comments.php:206
-#: lib/class.core.php:174
-#: lib/class.core.php:177
+#: ../wp-ajax-edit-comments.php:188 ../wp-ajax-edit-comments.php:209
+#: ../lib/class.core.php:161 ../lib/class.core.php:164
 msgid "De-link"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:186
-#: wp-ajax-edit-comments.php:207
-#: lib/class.core.php:167
-#: views/move-comment.php:63
-#: views/move-comment.php:88
-#: views/move-comment.php:113
+#: ../wp-ajax-edit-comments.php:189 ../wp-ajax-edit-comments.php:210
+#: ../lib/class.core.php:154 ../views/move-comment.php:62
+#: ../views/move-comment.php:87 ../views/move-comment.php:112
 msgid "Move"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:187
-#: wp-ajax-edit-comments.php:208
-#: lib/class.core.php:152
-#: lib/class.core.php:155
-#: views/comment-editor.php:124
+#: ../wp-ajax-edit-comments.php:190 ../wp-ajax-edit-comments.php:211
+#: ../lib/class.core.php:139 ../lib/class.core.php:142
+#: ../views/comment-editor.php:124
 msgid "E-mail"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:188
-#: wp-ajax-edit-comments.php:209
-#: lib/class.core.php:224
-#: lib/class.core.php:227
-#: views/blacklist-comment.php:117
+#: ../wp-ajax-edit-comments.php:191 ../wp-ajax-edit-comments.php:212
+#: ../lib/class.core.php:211 ../lib/class.core.php:214
+#: ../views/blacklist-comment.php:116
 msgid "Blacklist"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:201
-#: lib/class.core.php:127
+#: ../wp-ajax-edit-comments.php:204 ../lib/class.core.php:114
 msgid "Edit"
 msgstr ""
 
-#: wp-ajax-edit-comments.php:283
-#: wp-ajax-edit-comments.php:288
+#: ../wp-ajax-edit-comments.php:281 ../wp-ajax-edit-comments.php:286
 msgid "Unknown error."
 msgstr ""
 
-#: lib/class.actions.php:141
-#, php-format
+#: ../lib/class.actions.php:141
 msgid "A comment has been edited on post %s"
 msgstr ""
 
-#: lib/class.actions.php:142
-#, php-format
+#: ../lib/class.actions.php:142
 msgid "Author: %s\n"
 msgstr ""
 
-#: lib/class.actions.php:143
-#, php-format
+#: ../lib/class.actions.php:143
 msgid "Author URL: %s\n"
 msgstr ""
 
-#: lib/class.actions.php:144
-#, php-format
+#: ../lib/class.actions.php:144
 msgid "Author E-mail: %s\n"
 msgstr ""
 
-#: lib/class.actions.php:145
+#: ../lib/class.actions.php:145
 msgid "Comment:\n"
 msgstr ""
 
-#: lib/class.actions.php:146
+#: ../lib/class.actions.php:146
 msgid "See all comments on this post here:\n"
 msgstr ""
 
-#: lib/class.actions.php:148
-#, php-format
+#: ../lib/class.actions.php:148
 msgid "New Edited Comment On: %s"
 msgstr ""
 
-#: lib/class.ajax.php:47
-msgid "Move Successful. "
-msgstr ""
-
-#: lib/class.ajax.php:181
-msgid "Successfully blacklisted."
-msgstr ""
-
-#: lib/class.ajax.php:181
-msgid "comment(s) were marked as spam according to your advanced criteria."
-msgstr ""
-
-#: lib/class.ajax.php:227
-msgid "Successfully Deleted"
-msgstr ""
-
-#: lib/class.ajax.php:288
-msgid "Comment deleted."
-msgstr ""
-
-#: lib/class.ajax.php:306
-msgid "Successfully Marked as Spam"
-msgstr ""
-
-#: lib/class.ajax.php:334
-msgid "Successfully Approved"
-msgstr ""
-
-#: lib/class.ajax.php:359
-msgid "Successfully Marked for Moderation"
-msgstr ""
-
-#: lib/class.ajax.php:393
-msgid "Successfully De-linked"
-msgstr ""
-
-#: lib/class.ajax.php:742
-#, php-format
-msgid "A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The comment has been moved to the moderation queue."
-msgstr ""
-
-#: lib/class.ajax.php:743
-msgid "The reason given is: "
-msgstr ""
-
-#: lib/class.ajax.php:744
-#, php-format
-msgid "E-mail : %s"
-msgstr ""
-
-#: lib/class.ajax.php:745
-#, php-format
-msgid "URL    : %s"
-msgstr ""
-
-#: lib/class.ajax.php:746
-#, php-format
-msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
-msgstr ""
-
-#: lib/class.ajax.php:748
-#, php-format
-msgid "Delete it: %s"
-msgstr ""
-
-#: lib/class.ajax.php:749
-#, php-format
-msgid "Approve it: %s"
-msgstr ""
-
-#: lib/class.ajax.php:750
-#, php-format
-msgid "Spam it: %s"
-msgstr ""
-
-#: lib/class.ajax.php:758
-#, php-format
-msgid "Request for Comment Deletion: \"%2$s\""
-msgstr ""
-
-#: lib/class.ajax.php:859
-msgid "Comment successfully saved"
-msgstr ""
-
-#: lib/class.core.php:79
-#: lib/class.core.php:124
-msgid "Comment Editor"
-msgstr ""
-
-#: lib/class.core.php:82
-msgid "Click to Edit"
-msgstr ""
-
-#: lib/class.core.php:89
-#: lib/class.core.php:92
-#: views/admin-panel.php:446
-#: views/request-deletion.php:35
-msgid "Request Deletion"
-msgstr ""
-
-#: lib/class.core.php:133
-#: lib/class.core.php:136
-msgid "Restore"
-msgstr ""
-
-#: lib/class.core.php:142
-#: lib/class.core.php:145
-msgid "Delete Permanently"
-msgstr ""
-
-#: lib/class.core.php:164
-msgid "Move Comments"
-msgstr ""
-
-#: lib/class.core.php:224
-msgid "Blacklist Comment"
-msgstr ""
-
-#: lib/class.core.php:233
-#: lib/class.core.php:236
-#: views/comment-editor.php:171
-#: views/comment-editor.php:178
-msgid "Trash"
-msgstr ""
-
-#: lib/class.core.php:257
-#: lib/class.dependencies.php:121
-msgid "More Options"
-msgstr ""
-
-#: lib/class.core.php:718
-msgid "You cannot edit a comment after other comments have been posted."
-msgstr ""
-
-#: lib/class.core.php:719
-msgid "The time to edit your comment has elapsed."
-msgstr ""
-
-#: lib/class.core.php:720
-msgid "You do not have permission to edit this comment."
-msgstr ""
-
-#: lib/class.core.php:722
-msgid "This comment cannot be edited because it is marked as spam."
-msgstr ""
-
-#: lib/class.core.php:723
-msgid "Comment loading failed."
-msgstr ""
-
-#: lib/class.core.php:724
-msgid "Comment editing has been disabled."
-msgstr ""
-
-#: lib/class.core.php:725
-msgid "Could not mark as spam."
-msgstr ""
-
-#: lib/class.core.php:726
-msgid "You do not have permission to mark this comment as Spam."
-msgstr ""
-
-#: lib/class.core.php:727
-msgid "Could not delete comment."
-msgstr ""
-
-#: lib/class.core.php:728
-msgid "You do not have permission to delete this comment."
-msgstr ""
-
-#: lib/class.core.php:729
-msgid "You do not have permission to approve this comment."
-msgstr ""
-
-#: lib/class.core.php:730
-msgid "Could not approve comment."
-msgstr ""
-
-#: lib/class.core.php:731
-msgid "Could not mark this comment for moderation."
-msgstr ""
-
-#: lib/class.core.php:732
-msgid "You do not have permission to mark this comment for moderation."
-msgstr ""
-
-#: lib/class.core.php:733
-msgid "Please enter a valid email address."
-msgstr ""
-
-#: lib/class.core.php:734
-msgid "Please fill in the required fields (Name, E-mail)"
-msgstr ""
-
-#: lib/class.core.php:735
-msgid "You cannot have an empty comment."
-msgstr ""
-
-#: lib/class.core.php:736
-msgid "You do not have permission to delink this comment."
-msgstr ""
-
-#: lib/class.core.php:737
-msgid "Your comment was marked for moderation"
-msgstr ""
-
-#: lib/class.core.php:738
-msgid "This comment cannot be edited because it is marked for moderation."
-msgstr ""
-
-#: lib/class.core.php:739
-msgid "Request failed."
-msgstr ""
-
-#: lib/class.core.php:740
-msgid "You have not selected anything to blacklist."
-msgstr ""
-
-#: lib/class.core.php:741
-msgid "Upgrade check failed."
-msgstr ""
-
-#: lib/class.core.php:742
-msgid "You are using the latest version."
-msgstr ""
-
-#: lib/class.dependencies.php:102
-msgid "minutes"
-msgstr ""
-
-#: lib/class.dependencies.php:103
-msgid "minute"
-msgstr ""
-
-#: lib/class.dependencies.php:104
-msgid "and"
-msgstr ""
-
-#: lib/class.dependencies.php:105
-msgid "seconds"
-msgstr ""
-
-#: lib/class.dependencies.php:106
-msgid "second"
-msgstr ""
-
-#: lib/class.dependencies.php:107
-msgid "Mark for Moderation?"
-msgstr ""
-
-#: lib/class.dependencies.php:108
-msgid "Approve Comment?"
-msgstr ""
-
-#: lib/class.dependencies.php:109
-msgid "Mark as Spam?"
-msgstr ""
-
-#: lib/class.dependencies.php:110
-msgid "Delete this comment?"
-msgstr ""
-
-#: lib/class.dependencies.php:111
-msgid "Anonymous"
-msgstr ""
-
-#: lib/class.dependencies.php:112
-msgid "Loading..."
-msgstr ""
-
-#: lib/class.dependencies.php:113
-msgid "Ready"
-msgstr ""
-
-#: lib/class.dependencies.php:114
-msgid "Sending..."
-msgstr ""
-
-#: lib/class.dependencies.php:115
-msgid "Message Sent"
-msgstr ""
-
-#: lib/class.dependencies.php:116
-msgid "Comment Loaded Successfully"
-msgstr ""
-
-#: lib/class.dependencies.php:117
-msgid "Saving..."
-msgstr ""
-
-#: lib/class.dependencies.php:118
-msgid "Blacklisting..."
-msgstr ""
-
-#: lib/class.dependencies.php:119
-msgid "Comment Successfully Saved"
-msgstr ""
-
-#: lib/class.dependencies.php:120
-msgid "De-link Successful"
-msgstr ""
-
-#: lib/class.dependencies.php:122
-msgid "Less Options"
-msgstr ""
-
-#: lib/class.dependencies.php:124
-msgid "Request has been sent successfully"
-msgstr ""
-
-#: lib/class.dependencies.php:125
-msgid "Error sending request"
-msgstr ""
-
-#: lib/class.dependencies.php:126
-msgid "Approving..."
-msgstr ""
-
-#: lib/class.dependencies.php:127
-msgid "De-linking..."
-msgstr ""
-
-#: lib/class.dependencies.php:128
-msgid "Moderating..."
-msgstr ""
-
-#: lib/class.dependencies.php:129
-msgid "Spamming..."
-msgstr ""
-
-#: lib/class.dependencies.php:130
-msgid "Deleting..."
-msgstr ""
-
-#: lib/class.dependencies.php:131
-msgid "Restoring..."
-msgstr ""
-
-#: lib/class.dependencies.php:132
-msgid "Comment Restored."
-msgstr ""
-
-#: lib/class.dependencies.php:133
-msgid "Undoing..."
-msgstr ""
-
-#: lib/class.dependencies.php:134
-msgid "Undo Successful"
-msgstr ""
-
-#: lib/class.dependencies.php:135
-msgid "Comment Deleted Permanently"
-msgstr ""
-
-#: lib/class.dependencies.php:136
-msgid "Input Fields are Required"
-msgstr ""
-
-#: lib/class.dependencies.php:137
-msgid "E-mail Address is Invalid"
-msgstr ""
-
-#: lib/class.dependencies.php:141
-#: views/admin-panel.php:384
-#: views/admin-panel.php:392
-#: views/admin-panel.php:426
-#: views/admin-panel.php:438
-#: views/admin-panel.php:440
-#: views/admin-panel.php:442
-#: views/admin-panel.php:444
-#: views/admin-panel.php:459
-#: views/admin-panel.php:462
-#: views/admin-panel.php:465
-#: views/admin-panel.php:468
-#: views/admin-panel.php:483
-#: views/admin-panel.php:496
-#: views/admin-panel.php:498
-#: views/admin-panel.php:501
-#: views/admin-panel.php:509
-#: views/admin-panel.php:529
-#: views/admin-panel.php:531
-#: views/admin-panel.php:538
-#: views/admin-panel.php:540
-#: views/admin-panel.php:548
-#: views/admin-panel.php:556
-#: views/admin-panel.php:564
-#: views/admin-panel.php:595
-#: views/admin-panel.php:602
-#: views/admin-panel.php:610
-#: views/admin-panel.php:618
-#: views/admin-panel.php:625
-#: views/admin-panel.php:831
-#: views/admin-panel.php:864
-#: views/admin-panel.php:871
-#: views/admin-panel.php:879
-#: views/admin-panel.php:887
-#: views/admin-panel.php:895
-#: views/admin-panel.php:910
-msgid "Yes"
-msgstr ""
-
-#: lib/class.dependencies.php:142
-#: views/admin-panel.php:384
-#: views/admin-panel.php:392
-#: views/admin-panel.php:426
-#: views/admin-panel.php:438
-#: views/admin-panel.php:440
-#: views/admin-panel.php:442
-#: views/admin-panel.php:444
-#: views/admin-panel.php:459
-#: views/admin-panel.php:462
-#: views/admin-panel.php:465
-#: views/admin-panel.php:468
-#: views/admin-panel.php:483
-#: views/admin-panel.php:496
-#: views/admin-panel.php:498
-#: views/admin-panel.php:501
-#: views/admin-panel.php:509
-#: views/admin-panel.php:529
-#: views/admin-panel.php:531
-#: views/admin-panel.php:538
-#: views/admin-panel.php:540
-#: views/admin-panel.php:548
-#: views/admin-panel.php:556
-#: views/admin-panel.php:564
-#: views/admin-panel.php:595
-#: views/admin-panel.php:602
-#: views/admin-panel.php:610
-#: views/admin-panel.php:618
-#: views/admin-panel.php:625
-#: views/admin-panel.php:831
-#: views/admin-panel.php:864
-#: views/admin-panel.php:871
-#: views/admin-panel.php:879
-#: views/admin-panel.php:887
-#: views/admin-panel.php:895
-#: views/admin-panel.php:910
-msgid "No"
-msgstr ""
-
-#: lib/class.dependencies.php:143
-msgid "Are you sure?"
-msgstr ""
-
-#: lib/class.filters.php:122
-msgid "Settings"
-msgstr ""
-
-#: lib/class.js.php:76
-msgid "Checking..."
-msgstr ""
-
-#: lib/class.js.php:76
-msgid "Check for Upgrades"
-msgstr ""
-
-#: lib/class.js.php:83
-msgid "show"
-msgstr ""
-
-#: lib/class.js.php:83
-msgid "hide"
-msgstr ""
-
-#: lib/class.js.php:93
-#: lib/class.js.php:104
-msgid "Comment Box"
-msgstr ""
-
-#: lib/class.upgrade.php:55
-#: views/admin-panel.php:136
-#, php-format
-msgid "Your support license has expired.  Please visit %s to re-new your license."
-msgstr ""
-
-#: lib/class.upgrade.php:61
-msgid "There is a new version of WP Ajax Edit Comments available."
-msgstr ""
-
-#: lib/class.upgrade.php:61
-#, php-format
-msgid "View version %s Details"
-msgstr ""
-
-#: lib/class.upgrade.php:64
-msgid "Check for upgrades"
-msgstr ""
-
-#: lib/class.upgrade.php:113
-#, php-format
-msgid "There is a new %sversion of WP Ajax Edit Comments available."
-msgstr ""
-
-#: lib/class.upgrade.php:113
-msgid "Upgrade automatically"
-msgstr ""
-
-#: lib/class.utility.php:18
-msgid "Undo"
-msgstr ""
-
-#: views/admin-panel-support.php:60
-msgid "Support Request Sent."
-msgstr ""
-
-#: views/admin-panel-support.php:66
-msgid "Support"
-msgstr ""
-
-#: views/admin-panel-support.php:71
-msgid "Support Request"
-msgstr ""
-
-#: views/admin-panel-support.php:72
-msgid "Forums"
-msgstr ""
-
-#: views/admin-panel-support.php:73
-msgid "Documentation"
-msgstr ""
-
-#: views/admin-panel-support.php:84
-msgid "Your Name"
-msgstr ""
-
-#: views/admin-panel-support.php:89
-msgid "Email"
-msgstr ""
-
-#: views/admin-panel-support.php:94
-msgid "Description of Issue"
-msgstr ""
-
-#: views/admin-panel-support.php:96
-msgid "Please state in detail what problems you are experiencing.  Details we need to know are:"
-msgstr ""
-
-#: views/admin-panel-support.php:98
-msgid "The problem"
-msgstr ""
-
-#: views/admin-panel-support.php:99
-msgid "Steps to duplicate the problem"
-msgstr ""
-
-#: views/admin-panel-support.php:100
-msgid "Whether you are experiencing this problem on the front-end, the admin-panel, or both"
-msgstr ""
-
-#: views/admin-panel-support.php:101
-msgid "What browsers you are using to duplicate the problem"
-msgstr ""
-
-#: views/admin-panel-support.php:107
-msgid "Information Collection"
-msgstr ""
-
-#: views/admin-panel-support.php:109
-msgid "For our support to be effective, we need certain information such as plugins installed, WordPress version information, and some other items.  By clicking Submit, you agree to send us the following information"
-msgstr ""
-
-#: views/admin-panel-support.php:109
-msgid "show this information"
-msgstr ""
-
-#: views/admin-panel-support.php:152
-msgid "Submit Support Request"
-msgstr ""
-
-#: views/admin-panel-support.php:158
-msgid "A Support Key is Needed"
-msgstr ""
-
-#: views/admin-panel-support.php:159
-#, php-format
-msgid "To access the plugin's built-in support, you must enter in a support key.  If you do not have a support key, your license may not allow support with its plan.  You may purchase a support license at <a href='%s'>%s</a>"
-msgstr ""
-
-#: views/admin-panel-support.php:165
-#, php-format
-msgid "To receive help from AEC team members and the AEC community, please consider leaving a support request via our %sSupport Forums%s"
-msgstr ""
-
-#: views/admin-panel-support.php:168
-#, php-format
-msgid "For in-depth documenation, including feature descriptions and how-to videos, please visit our %sDocumentation Section%s"
-msgstr ""
-
-#: views/admin-panel.php:12
-msgid "Styles may now be customized"
-msgstr ""
-
-#: views/admin-panel.php:15
-msgid "Styles editing has been disabled."
-msgstr ""
-
-#: views/admin-panel.php:33
-msgid "Could not save Edit Buttons styles"
-msgstr ""
-
-#: views/admin-panel.php:39
-msgid "Could not save Popup Interface styles"
-msgstr ""
-
-#: views/admin-panel.php:44
-msgid "Custom styles have been saved."
-msgstr ""
-
-#: views/admin-panel.php:59
-msgid "Could not reset Edit Buttons styles"
-msgstr ""
-
-#: views/admin-panel.php:65
-msgid "Could not reset Popup Interface styles"
-msgstr ""
-
-#: views/admin-panel.php:70
-msgid "Styles have been reset."
-msgstr ""
-
-#: views/admin-panel.php:84
-msgid "Security keys deleted"
-msgstr ""
-
-#: views/admin-panel.php:103
-msgid "Comment time must be greater than one minute."
-msgstr ""
-
-#: views/admin-panel.php:122
-msgid "Support Key could not be validated."
-msgstr ""
-
-#: views/admin-panel.php:122
-#: views/admin-panel.php:155
-msgid "Please try again later."
-msgstr ""
-
-#: views/admin-panel.php:126
-msgid "Invalid Authentication Key"
-msgstr ""
-
-#: views/admin-panel.php:131
-msgid "Number of Sites Exceeded"
-msgstr ""
-
-#: views/admin-panel.php:144
-msgid "Support Key is valid"
-msgstr ""
-
-#: views/admin-panel.php:155
-#: views/admin-panel.php:159
-msgid "Site could not be removed."
-msgstr ""
-
-#: views/admin-panel.php:164
-msgid "Site removed."
-msgstr ""
-
-#: views/admin-panel.php:176
-msgid "Affiliate ID could not be validated.  Please try again later."
-msgstr ""
-
-#: views/admin-panel.php:179
-msgid "Invalid Affiliate ID"
-msgstr ""
-
-#: views/admin-panel.php:338
-msgid "Settings successfully updated."
-msgstr ""
-
-#: views/admin-panel.php:342
-msgid "Styles have not been updated since they are currently being overwritten."
-msgstr ""
-
-#: views/admin-panel.php:353
-msgid "Your commentators have edited their comments "
-msgstr ""
-
-#: views/admin-panel.php:353
-msgid "times"
-msgstr ""
-
-#: views/admin-panel.php:359
+#: ../lib/class.admin.php:9 ../views/admin-panel.php:213
+#: ../views/admin-panel/admin-panel.php:213
+#: ../views/admin-panel/behavior.php:73
 msgid "Behavior"
 msgstr ""
 
-#: views/admin-panel.php:360
+#: ../lib/class.admin.php:10 ../views/admin-panel.php:214
+#: ../views/admin-panel/admin-panel.php:214
+#: ../views/admin-panel/appearance.php:136
 msgid "Appearance"
 msgstr ""
 
-#: views/admin-panel.php:361
+#: ../lib/class.admin.php:11 ../views/admin-panel.php:215
+#: ../views/admin-panel/admin-panel.php:215
+#: ../views/admin-panel/permissions.php:36
 msgid "Permissions"
 msgstr ""
 
-#: views/admin-panel.php:362
+#: ../lib/class.admin.php:12 ../views/admin-panel.php:216
+#: ../views/admin-panel/admin-panel.php:216
+#: ../views/admin-panel/cleanup.php:23
 msgid "Cleanup"
 msgstr ""
 
-#: views/admin-panel.php:369
+#: ../lib/class.ajax.php:47
+msgid "Move Successful. "
+msgstr ""
+
+#: ../lib/class.ajax.php:181
+msgid "Successfully blacklisted."
+msgstr ""
+
+#: ../lib/class.ajax.php:181
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr ""
+
+#: ../lib/class.ajax.php:230
+msgid "Successfully Deleted"
+msgstr ""
+
+#: ../lib/class.ajax.php:291
+msgid "Comment deleted."
+msgstr ""
+
+#: ../lib/class.ajax.php:309
+msgid "Successfully Marked as Spam"
+msgstr ""
+
+#: ../lib/class.ajax.php:337
+msgid "Successfully Approved"
+msgstr ""
+
+#: ../lib/class.ajax.php:362
+msgid "Successfully Marked for Moderation"
+msgstr ""
+
+#: ../lib/class.ajax.php:396
+msgid "Successfully De-linked"
+msgstr ""
+
+#: ../lib/class.ajax.php:745
+msgid ""
+"A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The "
+"comment has been moved to the moderation queue."
+msgstr ""
+
+#: ../lib/class.ajax.php:746
+msgid "The reason given is: "
+msgstr ""
+
+#: ../lib/class.ajax.php:747
+msgid "E-mail : %s"
+msgstr ""
+
+#: ../lib/class.ajax.php:748
+msgid "URL    : %s"
+msgstr ""
+
+#: ../lib/class.ajax.php:749
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr ""
+
+#: ../lib/class.ajax.php:751
+msgid "Delete it: %s"
+msgstr ""
+
+#: ../lib/class.ajax.php:752
+msgid "Approve it: %s"
+msgstr ""
+
+#: ../lib/class.ajax.php:753
+msgid "Spam it: %s"
+msgstr ""
+
+#: ../lib/class.ajax.php:761
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr ""
+
+#: ../lib/class.ajax.php:862
+msgid "Comment successfully saved"
+msgstr ""
+
+#: ../lib/class.core.php:66 ../lib/class.core.php:111
+msgid "Comment Editor"
+msgstr ""
+
+#: ../lib/class.core.php:69
+msgid "Click to Edit"
+msgstr ""
+
+#: ../lib/class.core.php:76 ../lib/class.core.php:79
+#: ../views/admin-panel.php:283 ../views/request-deletion.php:35
+#: ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Request Deletion"
+msgstr ""
+
+#: ../lib/class.core.php:120 ../lib/class.core.php:123
+msgid "Restore"
+msgstr ""
+
+#: ../lib/class.core.php:129 ../lib/class.core.php:132
+msgid "Delete Permanently"
+msgstr ""
+
+#: ../lib/class.core.php:151
+msgid "Move Comments"
+msgstr ""
+
+#: ../lib/class.core.php:211
+msgid "Blacklist Comment"
+msgstr ""
+
+#: ../lib/class.core.php:220 ../lib/class.core.php:223
+#: ../views/comment-editor.php:171 ../views/comment-editor.php:178
+msgid "Trash"
+msgstr ""
+
+#: ../lib/class.core.php:244 ../lib/class.dependencies.php:125
+msgid "More Options"
+msgstr ""
+
+#: ../lib/class.core.php:710
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr ""
+
+#: ../lib/class.core.php:711
+msgid "The time to edit your comment has elapsed."
+msgstr ""
+
+#: ../lib/class.core.php:712
+msgid "You do not have permission to edit this comment."
+msgstr ""
+
+#: ../lib/class.core.php:714
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr ""
+
+#: ../lib/class.core.php:715
+msgid "Comment loading failed."
+msgstr ""
+
+#: ../lib/class.core.php:716
+msgid "Comment editing has been disabled."
+msgstr ""
+
+#: ../lib/class.core.php:717
+msgid "Could not mark as spam."
+msgstr ""
+
+#: ../lib/class.core.php:718
+msgid "You do not have permission to mark this comment as Spam."
+msgstr ""
+
+#: ../lib/class.core.php:719
+msgid "Could not delete comment."
+msgstr ""
+
+#: ../lib/class.core.php:720
+msgid "You do not have permission to delete this comment."
+msgstr ""
+
+#: ../lib/class.core.php:721
+msgid "You do not have permission to approve this comment."
+msgstr ""
+
+#: ../lib/class.core.php:722
+msgid "Could not approve comment."
+msgstr ""
+
+#: ../lib/class.core.php:723
+msgid "Could not mark this comment for moderation."
+msgstr ""
+
+#: ../lib/class.core.php:724
+msgid "You do not have permission to mark this comment for moderation."
+msgstr ""
+
+#: ../lib/class.core.php:725
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: ../lib/class.core.php:726
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr ""
+
+#: ../lib/class.core.php:727
+msgid "You cannot have an empty comment."
+msgstr ""
+
+#: ../lib/class.core.php:728
+msgid "You do not have permission to delink this comment."
+msgstr ""
+
+#: ../lib/class.core.php:729
+msgid "Your comment was marked for moderation"
+msgstr ""
+
+#: ../lib/class.core.php:730
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr ""
+
+#: ../lib/class.core.php:731
+msgid "Request failed."
+msgstr ""
+
+#: ../lib/class.core.php:732
+msgid "You have not selected anything to blacklist."
+msgstr ""
+
+#: ../lib/class.core.php:733
+msgid "Upgrade check failed."
+msgstr ""
+
+#: ../lib/class.core.php:734
+msgid "You are using the latest version."
+msgstr ""
+
+#: ../lib/class.dependencies.php:106
+msgid "minutes"
+msgstr ""
+
+#: ../lib/class.dependencies.php:107
+msgid "minute"
+msgstr ""
+
+#: ../lib/class.dependencies.php:108
+msgid "and"
+msgstr ""
+
+#: ../lib/class.dependencies.php:109
+msgid "seconds"
+msgstr ""
+
+#: ../lib/class.dependencies.php:110
+msgid "second"
+msgstr ""
+
+#: ../lib/class.dependencies.php:111
+msgid "Mark for Moderation?"
+msgstr ""
+
+#: ../lib/class.dependencies.php:112
+msgid "Approve Comment?"
+msgstr ""
+
+#: ../lib/class.dependencies.php:113
+msgid "Mark as Spam?"
+msgstr ""
+
+#: ../lib/class.dependencies.php:114
+msgid "Delete this comment?"
+msgstr ""
+
+#: ../lib/class.dependencies.php:115
+msgid "Anonymous"
+msgstr ""
+
+#: ../lib/class.dependencies.php:116
+msgid "Loading..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:117
+msgid "Ready"
+msgstr ""
+
+#: ../lib/class.dependencies.php:118
+msgid "Sending..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:119
+msgid "Message Sent"
+msgstr ""
+
+#: ../lib/class.dependencies.php:120
+msgid "Comment Loaded Successfully"
+msgstr ""
+
+#: ../lib/class.dependencies.php:121
+msgid "Saving..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:122
+msgid "Blacklisting..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:123
+msgid "Comment Successfully Saved"
+msgstr ""
+
+#: ../lib/class.dependencies.php:124
+msgid "De-link Successful"
+msgstr ""
+
+#: ../lib/class.dependencies.php:126
+msgid "Less Options"
+msgstr ""
+
+#: ../lib/class.dependencies.php:128
+msgid "Request has been sent successfully"
+msgstr ""
+
+#: ../lib/class.dependencies.php:129
+msgid "Error sending request"
+msgstr ""
+
+#: ../lib/class.dependencies.php:130
+msgid "Approving..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:131
+msgid "De-linking..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:132
+msgid "Moderating..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:133
+msgid "Spamming..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:134
+msgid "Deleting..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:135
+msgid "Restoring..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:136
+msgid "Comment Restored."
+msgstr ""
+
+#: ../lib/class.dependencies.php:137
+msgid "Undoing..."
+msgstr ""
+
+#: ../lib/class.dependencies.php:138
+msgid "Undo Successful"
+msgstr ""
+
+#: ../lib/class.dependencies.php:139
+msgid "Comment Deleted Permanently"
+msgstr ""
+
+#: ../lib/class.dependencies.php:140
+msgid "Input Fields are Required"
+msgstr ""
+
+#: ../lib/class.dependencies.php:141
+msgid "E-mail Address is Invalid"
+msgstr ""
+
+#: ../lib/class.dependencies.php:145 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "Yes"
+msgstr ""
+
+#: ../lib/class.dependencies.php:146 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "No"
+msgstr ""
+
+#: ../lib/class.dependencies.php:147
+msgid "Are you sure?"
+msgstr ""
+
+#: ../lib/class.filters.php:122
+msgid "Settings"
+msgstr ""
+
+#: ../lib/class.js.php:32 ../lib/class.js.php:59
+msgid "Comment Box"
+msgstr ""
+
+#: ../lib/class.utility.php:18
+msgid "Undo"
+msgstr ""
+
+#: ../views/admin-getting-started.php:65
+msgid "Getting Started with Ajax Edit Comments v%s"
+msgstr ""
+
+#: ../views/admin-panel-support.php:13
+msgid "Support"
+msgstr ""
+
+#: ../views/admin-panel-support.php:18
+msgid "Support Forums"
+msgstr ""
+
+#: ../views/admin-panel-support.php:19
+msgid "Documentation"
+msgstr ""
+
+#: ../views/admin-panel-support.php:23
+msgid ""
+"To receive help from PluginBuddy support and the PluginBuddy community, "
+"please consider leaving a support request via our %sSupport Forums%s"
+msgstr ""
+
+#: ../views/admin-panel-support.php:26
+msgid ""
+"For in-depth documenation, including feature descriptions and how-to videos, "
+"please visit our %sDocumentation Section%s"
+msgstr ""
+
+#: ../views/admin-panel.php:18 ../views/admin-panel/admin-panel.php:18
+#: ../views/admin-panel/cleanup.php:15
+msgid "Security keys deleted"
+msgstr ""
+
+#: ../views/admin-panel.php:37 ../views/admin-panel/admin-panel.php:37
+#: ../views/admin-panel/behavior.php:20
+msgid "Comment time must be greater than one minute."
+msgstr ""
+
+#: ../views/admin-panel.php:199 ../views/admin-panel/admin-panel.php:199
+#: ../views/admin-panel/appearance.php:129
+#: ../views/admin-panel/behavior.php:66
+#: ../views/admin-panel/permissions.php:29
+msgid "Settings successfully updated."
+msgstr ""
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "Your commentators have edited their comments "
+msgstr ""
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "times"
+msgstr ""
+
+#: ../views/admin-panel.php:223 ../views/admin-panel/admin-panel.php:223
+#: ../views/admin-panel/behavior.php:76
 msgid "General"
 msgstr ""
 
-#: views/admin-panel.php:370
-#: views/admin-panel.php:423
+#: ../views/admin-panel.php:224 ../views/admin-panel.php:260
+#: ../views/admin-panel/admin-panel.php:224
+#: ../views/admin-panel/admin-panel.php:260
+#: ../views/admin-panel/behavior.php:95 ../views/admin-panel/behavior.php:107
 msgid "Advertising Options"
 msgstr ""
 
-#: views/admin-panel.php:371
+#: ../views/admin-panel.php:225 ../views/admin-panel/admin-panel.php:225
+#: ../views/admin-panel/behavior.php:116
 msgid "Anonymous Users"
 msgstr ""
 
-#: views/admin-panel.php:372
+#: ../views/admin-panel.php:226 ../views/admin-panel/admin-panel.php:226
+#: ../views/admin-panel/behavior.php:137
 msgid "Registered Users"
 msgstr ""
 
-#: views/admin-panel.php:373
+#: ../views/admin-panel.php:227 ../views/admin-panel/admin-panel.php:227
+#: ../views/admin-panel/behavior.php:160
 msgid "Other Features"
 msgstr ""
 
-#: views/admin-panel.php:381
-msgid "Support Key:"
-msgstr ""
-
-#: views/admin-panel.php:382
-msgid "Enter Your Support Key"
-msgstr ""
-
-#: views/admin-panel.php:382
-msgid "The Support Key enables automatic upgrades within the WordPress admin panel.  A Support Key is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
-msgstr ""
-
-#: views/admin-panel.php:383
-msgid "Remove Site?"
-msgstr ""
-
-#: views/admin-panel.php:383
-msgid "Selecting \"Yes\" will remove the current site and allow you to use the Support Key on another site."
-msgstr ""
-
-#: views/admin-panel.php:389
-msgid "Allow upgrade notifications for beta releases?"
-msgstr ""
-
-#: views/admin-panel.php:391
-msgid "Selecting \"Yes\" will enable automatic upgrades to beta versions of this plugin."
-msgstr ""
-
-#: views/admin-panel.php:395
+#: ../views/admin-panel.php:236 ../views/admin-panel/admin-panel.php:236
+#: ../views/admin-panel/behavior.php:82
 msgid "Set comment time (minutes):"
 msgstr ""
 
-#: views/admin-panel.php:399
+#: ../views/admin-panel.php:240 ../views/admin-panel/admin-panel.php:240
+#: ../views/admin-panel/behavior.php:86
 msgid "Spam notification text:"
 msgstr ""
 
-#: views/admin-panel.php:401
-msgid "Please limit to one line if possible since this text will show up when editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+#: ../views/admin-panel.php:242 ../views/admin-panel/admin-panel.php:242
+#: ../views/admin-panel/behavior.php:88
+msgid ""
+"Please limit to one line if possible since this text will show up when "
+"editing the comment or author (Tags allowed: em, a, strong, blockquote):"
 msgstr ""
 
-#: views/admin-panel.php:412
-msgid "Affiliate ID:"
-msgstr ""
-
-#: views/admin-panel.php:413
-msgid "The Affiliate ID allows you to make money from the Ajax Edit Comments plugin through referrals.  An Affiliate ID is given to subscribers of the <a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support Forums</a>."
-msgstr ""
-
-#: views/admin-panel.php:416
+#: ../views/admin-panel.php:253 ../views/admin-panel/admin-panel.php:253
+#: ../views/admin-panel/behavior.php:100
 msgid "Advertising Text:"
 msgstr ""
 
-#: views/admin-panel.php:418
-#, php-format
-msgid "This text will show when an anonymous commenter sees the editing options.  WordPress shortcodes may be used here <a href=\"%s\">as described in this post</a>."
+#: ../views/admin-panel.php:255 ../views/admin-panel/admin-panel.php:255
+#: ../views/admin-panel/behavior.php:102
+msgid ""
+"This text will show when an anonymous commenter sees the editing options.  "
+"WordPress shortcodes may be used here."
 msgstr ""
 
-#: views/admin-panel.php:425
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
 msgid "Enable comment advertising?"
 msgstr ""
 
-#: views/admin-panel.php:425
-msgid "Selecting \"Yes\" will show the \"Advertising Text\" above the editing options for each anonymous comment posted."
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid ""
+"Selecting \"Yes\" will show the \"Advertising Text\" above the editing "
+"options for each anonymous comment posted."
 msgstr ""
 
-#: views/admin-panel.php:437
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
 msgid "Allow editing after additional comments have been posted?"
 msgstr ""
 
-#: views/admin-panel.php:437
-msgid "Selecting \"No\" will prevent users from editing their comments if another comment has been made on a post."
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid ""
+"Selecting \"No\" will prevent users from editing their comments if another "
+"comment has been made on a post."
 msgstr ""
 
-#: views/admin-panel.php:439
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
 msgid "Allow Users to Edit Their Name?"
 msgstr ""
 
-#: views/admin-panel.php:439
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
 msgid "Selecting \"No\" will turn off editing of Names"
 msgstr ""
 
-#: views/admin-panel.php:441
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
 msgid "Allow Users to Edit Their E-mail Addresses?"
 msgstr ""
 
-#: views/admin-panel.php:441
-msgid "Selecting \"No\" will turn off editing of e-mail addresses.  One of the reasons you may want this on is for users with Avatars."
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid ""
+"Selecting \"No\" will turn off editing of e-mail addresses.  One of the "
+"reasons you may want this on is for users with Avatars."
 msgstr ""
 
-#: views/admin-panel.php:443
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
 msgid "Allow Users to Edit Their URLs?"
 msgstr ""
 
-#: views/admin-panel.php:443
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
 msgid "Selecting \"No\" will turn off editing of URLs"
 msgstr ""
 
-#: views/admin-panel.php:445
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
 msgid "Request Deletion Behavior"
 msgstr ""
 
-#: views/admin-panel.php:445
-msgid "Determine if you want users to request deletion (comments are sent to moderation with admin notification) or delete comments (comments are deleted immediately with no admin notification).  Select Off if you would like to disable this feature."
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid ""
+"Determine if you want users to request deletion (comments are sent to "
+"moderation with admin notification) or delete comments (comments are deleted "
+"immediately with no admin notification).  Select Off if you would like to "
+"disable this feature."
 msgstr ""
 
-#: views/admin-panel.php:446
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
 msgid "Off"
 msgstr ""
 
-#: views/admin-panel.php:457
+#: ../views/admin-panel.php:294 ../views/admin-panel/admin-panel.php:294
+#: ../views/admin-panel/behavior.php:143
 msgid "Allow Registered Users to Edit Comments Indefinitely?"
 msgstr ""
 
-#: views/admin-panel.php:458
-msgid "Selecting \"Yes\" will allow users registered on your website to edit comments without a time limit."
+#: ../views/admin-panel.php:295 ../views/admin-panel/admin-panel.php:295
+#: ../views/admin-panel/behavior.php:144
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit "
+"comments without a time limit."
 msgstr ""
 
-#: views/admin-panel.php:460
+#: ../views/admin-panel.php:297 ../views/admin-panel/admin-panel.php:297
+#: ../views/admin-panel/behavior.php:146
 msgid "Allow Registered Users to Edit Their Name?"
 msgstr ""
 
-#: views/admin-panel.php:461
-msgid "Selecting \"Yes\" will allow users registered on your website to edit their names.  This can prevent issues if a user wishes to impersonate others."
+#: ../views/admin-panel.php:298 ../views/admin-panel/admin-panel.php:298
+#: ../views/admin-panel/behavior.php:147
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"names.  This can prevent issues if a user wishes to impersonate others."
 msgstr ""
 
-#: views/admin-panel.php:463
+#: ../views/admin-panel.php:300 ../views/admin-panel/admin-panel.php:300
+#: ../views/admin-panel/behavior.php:149
 msgid "Allow Registered Users to Edit Their E-mail Address?"
 msgstr ""
 
-#: views/admin-panel.php:464
-msgid "Selecting \"Yes\" will allow users registered on your website to edit their e-mail address."
+#: ../views/admin-panel.php:301 ../views/admin-panel/admin-panel.php:301
+#: ../views/admin-panel/behavior.php:150
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"e-mail address."
 msgstr ""
 
-#: views/admin-panel.php:466
+#: ../views/admin-panel.php:303 ../views/admin-panel/admin-panel.php:303
+#: ../views/admin-panel/behavior.php:152
 msgid "Allow Registered Users to Edit Their URL?"
 msgstr ""
 
-#: views/admin-panel.php:467
-msgid "Selecting \"Yes\" will allow users registered on your website to edit their URL."
+#: ../views/admin-panel.php:304 ../views/admin-panel/admin-panel.php:304
+#: ../views/admin-panel/behavior.php:153
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"URL."
 msgstr ""
 
-#: views/admin-panel.php:480
+#: ../views/admin-panel.php:317 ../views/admin-panel/admin-panel.php:317
+#: ../views/admin-panel/behavior.php:166
 msgid "Edit E-mails"
 msgstr ""
 
-#: views/admin-panel.php:482
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
 msgid "Allow Edit E-mails?"
 msgstr ""
 
-#: views/admin-panel.php:482
-msgid "Selecting \"Yes\" will send you an email each time someone edits their comment."
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid ""
+"Selecting \"Yes\" will send you an email each time someone edits their "
+"comment."
 msgstr ""
 
-#: views/admin-panel.php:487
+#: ../views/admin-panel.php:324 ../views/admin-panel/admin-panel.php:324
+#: ../views/admin-panel/behavior.php:173
 msgid "Spam Protection"
 msgstr ""
 
-#: views/admin-panel.php:489
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
 msgid "Akismet"
 msgstr ""
 
-#: views/admin-panel.php:489
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
 msgid "Defensio"
 msgstr ""
 
-#: views/admin-panel.php:489
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
 msgid "None"
 msgstr ""
 
-#: views/admin-panel.php:493
+#: ../views/admin-panel.php:330 ../views/admin-panel/admin-panel.php:330
+#: ../views/admin-panel/behavior.php:179
 msgid "Performance"
 msgstr ""
 
-#: views/admin-panel.php:495
-msgid "Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)"
+#: ../views/admin-panel.php:332 ../views/admin-panel/admin-panel.php:332
+#: ../views/admin-panel/behavior.php:181
+msgid ""
+"Load Scripts in Footer? (Requires WordPress 2.8 or above and theme "
+"compatibility)"
 msgstr ""
 
-#: views/admin-panel.php:497
+#: ../views/admin-panel.php:334 ../views/admin-panel/admin-panel.php:334
+#: ../views/admin-panel/behavior.php:183
 msgid "Use Compressed JavaScript Files?"
 msgstr ""
 
-#: views/admin-panel.php:499
-msgid "Load wp-load.php Directly?"
-msgstr ""
-
-#: views/admin-panel.php:500
-msgid "Loading wp-load.php directly prevents most plugin conflicts.  It requires that the wp-content folder be in the default location."
-msgstr ""
-
-#: views/admin-panel.php:505
+#: ../views/admin-panel.php:339 ../views/admin-panel/admin-panel.php:339
+#: ../views/admin-panel/behavior.php:188
 msgid "Character Encoding"
 msgstr ""
 
-#: views/admin-panel.php:507
+#: ../views/admin-panel.php:341 ../views/admin-panel/admin-panel.php:341
+#: ../views/admin-panel/behavior.php:190
 msgid "Enable mb_convert_encoding?"
 msgstr ""
 
-#: views/admin-panel.php:508
-msgid "Some servers do not have this installed.  If you disable this option, be sure to test out various characters.  The mb_convert_encoding function is necessary to convert from UTF-8 to various charsets."
+#: ../views/admin-panel.php:342 ../views/admin-panel/admin-panel.php:342
+#: ../views/admin-panel/behavior.php:191
+msgid ""
+"Some servers do not have this installed.  If you disable this option, be "
+"sure to test out various characters.  The mb_convert_encoding function is "
+"necessary to convert from UTF-8 to various charsets."
 msgstr ""
 
-#: views/admin-panel.php:513
+#: ../views/admin-panel.php:347 ../views/admin-panel/admin-panel.php:347
+#: ../views/admin-panel/behavior.php:196
 msgid "Spell Check"
 msgstr ""
 
-#: views/admin-panel.php:515
+#: ../views/admin-panel.php:349 ../views/admin-panel/admin-panel.php:349
+#: ../views/admin-panel/behavior.php:198
 msgid "Select After the Deadline Language"
 msgstr ""
 
-#: views/admin-panel.php:528
+#: ../views/admin-panel.php:362 ../views/admin-panel/admin-panel.php:362
+#: ../views/admin-panel/behavior.php:211
 msgid "Disable the After the Deadline Spellchecker on Posts?"
 msgstr ""
 
-#: views/admin-panel.php:530
+#: ../views/admin-panel.php:364 ../views/admin-panel/admin-panel.php:364
+#: ../views/admin-panel/behavior.php:213
 msgid "Disable the After the Deadline Spellchecker on the Popups?"
 msgstr ""
 
-#: views/admin-panel.php:535
+#: ../views/admin-panel.php:369 ../views/admin-panel/admin-panel.php:369
+#: ../views/admin-panel/behavior.php:218
 msgid "Expand Options"
 msgstr ""
 
-#: views/admin-panel.php:537
+#: ../views/admin-panel.php:371 ../views/admin-panel/admin-panel.php:371
+#: ../views/admin-panel/behavior.php:220
 msgid "Disable the Expand Option on Posts?"
 msgstr ""
 
-#: views/admin-panel.php:539
+#: ../views/admin-panel.php:373 ../views/admin-panel/admin-panel.php:373
+#: ../views/admin-panel/behavior.php:222
 msgid "Disable the Expand Option on the Popups?"
 msgstr ""
 
-#: views/admin-panel.php:544
+#: ../views/admin-panel.php:378 ../views/admin-panel/admin-panel.php:378
+#: ../views/admin-panel/behavior.php:227
 msgid "Disable Trackbacks"
 msgstr ""
 
-#: views/admin-panel.php:546
+#: ../views/admin-panel.php:380 ../views/admin-panel/admin-panel.php:380
+#: ../views/admin-panel/behavior.php:229
 msgid "Disable trackbacks from showing?"
 msgstr ""
 
-#: views/admin-panel.php:547
-msgid "Enabling this option will prevent trackbacks from showing up on your blog.  Please note that this option will not prevent your site from receiving trackbacks."
+#: ../views/admin-panel.php:381 ../views/admin-panel/admin-panel.php:381
+#: ../views/admin-panel/behavior.php:230
+msgid ""
+"Enabling this option will prevent trackbacks from showing up on your blog.  "
+"Please note that this option will not prevent your site from receiving "
+"trackbacks."
 msgstr ""
 
-#: views/admin-panel.php:552
+#: ../views/admin-panel.php:386 ../views/admin-panel/admin-panel.php:386
+#: ../views/admin-panel/behavior.php:235
 msgid "Disable No-follow"
 msgstr ""
 
-#: views/admin-panel.php:554
+#: ../views/admin-panel.php:388 ../views/admin-panel/admin-panel.php:388
+#: ../views/admin-panel/behavior.php:237
 msgid "Disable no-follow in comment links?"
 msgstr ""
 
-#: views/admin-panel.php:555
-msgid "Enabling this option will remove no-follow from comment and author links."
+#: ../views/admin-panel.php:389 ../views/admin-panel/admin-panel.php:389
+#: ../views/admin-panel/behavior.php:238
+msgid ""
+"Enabling this option will remove no-follow from comment and author links."
 msgstr ""
 
-#: views/admin-panel.php:560
+#: ../views/admin-panel.php:394 ../views/admin-panel/admin-panel.php:394
+#: ../views/admin-panel/behavior.php:243
 msgid "Disable Self Pings"
 msgstr ""
 
-#: views/admin-panel.php:562
+#: ../views/admin-panel.php:396 ../views/admin-panel/admin-panel.php:396
+#: ../views/admin-panel/behavior.php:245
 msgid "Disable self-pings to your site?"
 msgstr ""
 
-#: views/admin-panel.php:563
+#: ../views/admin-panel.php:397 ../views/admin-panel/admin-panel.php:397
+#: ../views/admin-panel/behavior.php:246
 msgid "Enabling this option will prevent your site from pinging itself."
 msgstr ""
 
-#: views/admin-panel.php:568
+#: ../views/admin-panel.php:402 ../views/admin-panel/admin-panel.php:402
+#: ../views/admin-panel/behavior.php:251
 msgid "De-link Behavior"
 msgstr ""
 
-#: views/admin-panel.php:570
+#: ../views/admin-panel.php:404 ../views/admin-panel/admin-panel.php:404
+#: ../views/admin-panel/behavior.php:253
 msgid "Choose how the de-link function behaves."
 msgstr ""
 
-#: views/admin-panel.php:571
-msgid "You can choose to remove links from the comment content and comment author URL, or just the comment author URL."
+#: ../views/admin-panel.php:405 ../views/admin-panel/admin-panel.php:405
+#: ../views/admin-panel/behavior.php:254
+msgid ""
+"You can choose to remove links from the comment content and comment author "
+"URL, or just the comment author URL."
 msgstr ""
 
-#: views/admin-panel.php:572
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
 msgid "Content and comment author URL."
 msgstr ""
 
-#: views/admin-panel.php:572
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
 msgid "Comment author URL."
 msgstr ""
 
-#: views/admin-panel.php:582
+#: ../views/admin-panel.php:416 ../views/admin-panel/admin-panel.php:416
+#: ../views/admin-panel/appearance.php:141
 msgid "Display"
 msgstr ""
 
-#: views/admin-panel.php:583
-msgid "Styles"
-msgstr ""
-
-#: views/admin-panel.php:584
+#: ../views/admin-panel.php:417 ../views/admin-panel/admin-panel.php:417
+#: ../views/admin-panel/appearance.php:184
 msgid "Icons"
 msgstr ""
 
-#: views/admin-panel.php:585
+#: ../views/admin-panel.php:418 ../views/admin-panel/admin-panel.php:418
+#: ../views/admin-panel/appearance.php:321
 msgid "Colorbox"
 msgstr ""
 
-#: views/admin-panel.php:592
+#: ../views/admin-panel.php:425 ../views/admin-panel/admin-panel.php:425
+#: ../views/admin-panel/appearance.php:145
 msgid "Countdown Timer"
 msgstr ""
 
-#: views/admin-panel.php:594
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
 msgid "Show a Countdown Timer?"
 msgstr ""
 
-#: views/admin-panel.php:594
-msgid "Selecting \"No\" will turn off the countdown timer for non-admin commentators."
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid ""
+"Selecting \"No\" will turn off the countdown timer for non-admin "
+"commentators."
 msgstr ""
 
-#: views/admin-panel.php:599
+#: ../views/admin-panel.php:432 ../views/admin-panel/admin-panel.php:432
+#: ../views/admin-panel/appearance.php:152
 msgid "Pages"
 msgstr ""
 
-#: views/admin-panel.php:601
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
 msgid "Display on pages?"
 msgstr ""
 
-#: views/admin-panel.php:601
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
 msgid "Selecting \"No\" will turn off comment editing on pages."
 msgstr ""
 
-#: views/admin-panel.php:606
+#: ../views/admin-panel.php:439 ../views/admin-panel/admin-panel.php:439
+#: ../views/admin-panel/appearance.php:159
 msgid "Clearfix"
 msgstr ""
 
-#: views/admin-panel.php:608
+#: ../views/admin-panel.php:441 ../views/admin-panel/admin-panel.php:441
+#: ../views/admin-panel/appearance.php:161
 msgid "Turn Off clearfix:after?"
 msgstr ""
 
-#: views/admin-panel.php:609
-msgid "The clearfix is enabled by default for maximum compatibility with themes."
+#: ../views/admin-panel.php:442 ../views/admin-panel/admin-panel.php:442
+#: ../views/admin-panel/appearance.php:162
+msgid ""
+"The clearfix is enabled by default for maximum compatibility with themes."
 msgstr ""
 
-#: views/admin-panel.php:614
+#: ../views/admin-panel.php:447 ../views/admin-panel/admin-panel.php:447
+#: ../views/admin-panel/appearance.php:167
 msgid "JavaScript Scrolling"
 msgstr ""
 
-#: views/admin-panel.php:616
+#: ../views/admin-panel.php:449 ../views/admin-panel/admin-panel.php:449
+#: ../views/admin-panel/appearance.php:169
 msgid "Turn Off Admin JavaScript Scrolling?"
 msgstr ""
 
-#: views/admin-panel.php:617
-msgid "The plugin tries to correct incorrect offsets on a post if you are admin."
+#: ../views/admin-panel.php:450 ../views/admin-panel/admin-panel.php:450
+#: ../views/admin-panel/appearance.php:170
+msgid ""
+"The plugin tries to correct incorrect offsets on a post if you are admin."
 msgstr ""
 
-#: views/admin-panel.php:622
+#: ../views/admin-panel.php:455 ../views/admin-panel/admin-panel.php:455
+#: ../views/admin-panel/appearance.php:175
 msgid "Edit Interface Location"
 msgstr ""
 
-#: views/admin-panel.php:624
+#: ../views/admin-panel.php:457 ../views/admin-panel/admin-panel.php:457
+#: ../views/admin-panel/appearance.php:177
 msgid "Comment Edit Interface On Bottom?"
 msgstr ""
 
-#: views/admin-panel.php:645
-msgid "Could not create custom CSS files for editing.  Style editing has been disabled."
-msgstr ""
-
-#: views/admin-panel.php:653
-msgid "Style Customization"
-msgstr ""
-
-#: views/admin-panel.php:654
-msgid "Customize the styles?"
-msgstr ""
-
-#: views/admin-panel.php:656
-msgid "Update Style Override"
-msgstr ""
-
-#: views/admin-panel.php:663
-msgid "Edit Buttons"
-msgstr ""
-
-#: views/admin-panel.php:664
-msgid "The following styles control the appearance of the edit buttons."
-msgstr ""
-
-#: views/admin-panel.php:669
-msgid "Popup Interface"
-msgstr ""
-
-#: views/admin-panel.php:670
-msgid "The following styles control the appearance of the popups."
-msgstr ""
-
-#: views/admin-panel.php:679
-msgid "Save Styles"
-msgstr ""
-
-#: views/admin-panel.php:679
-msgid "Reset Styles"
-msgstr ""
-
-#: views/admin-panel.php:689
+#: ../views/admin-panel.php:470 ../views/admin-panel/admin-panel.php:470
+#: ../views/admin-panel/appearance.php:188
 msgid "Icon Display"
 msgstr ""
 
-#: views/admin-panel.php:691
-msgid "Select an option below to determine how the icons are displayed on your website."
+#: ../views/admin-panel.php:472 ../views/admin-panel/admin-panel.php:472
+#: ../views/admin-panel/appearance.php:190
+msgid ""
+"Select an option below to determine how the icons are displayed on your "
+"website."
 msgstr ""
 
-#: views/admin-panel.php:693
+#: ../views/admin-panel.php:474 ../views/admin-panel/admin-panel.php:474
+#: ../views/admin-panel/appearance.php:192
 msgid "Text Only"
 msgstr ""
 
-#: views/admin-panel.php:694
+#: ../views/admin-panel.php:475 ../views/admin-panel/admin-panel.php:475
+#: ../views/admin-panel/appearance.php:193
 msgid "Classic"
 msgstr ""
 
-#: views/admin-panel.php:695
+#: ../views/admin-panel.php:476 ../views/admin-panel/admin-panel.php:476
+#: ../views/admin-panel/appearance.php:194
 msgid "Dropdown"
 msgstr ""
 
-#: views/admin-panel.php:696
+#: ../views/admin-panel.php:477 ../views/admin-panel/admin-panel.php:477
+#: ../views/admin-panel/appearance.php:195
 msgid "Icons Only"
 msgstr ""
 
-#: views/admin-panel.php:700
+#: ../views/admin-panel.php:481 ../views/admin-panel/admin-panel.php:481
+#: ../views/admin-panel/appearance.php:199
 msgid "Icon Set"
 msgstr ""
 
-#: views/admin-panel.php:702
+#: ../views/admin-panel.php:483 ../views/admin-panel/admin-panel.php:483
+#: ../views/admin-panel/appearance.php:201
 msgid "Select an option below to display the icon set on your website."
 msgstr ""
 
-#: views/admin-panel.php:725
+#: ../views/admin-panel.php:506 ../views/admin-panel/admin-panel.php:506
+#: ../views/admin-panel/appearance.php:224
 msgid "Icon Drop Down Menu"
 msgstr ""
 
-#: views/admin-panel.php:727
-msgid "Drag and drop between lists to adjust the icon order.  Click on the image to disable or enable the option."
+#: ../views/admin-panel.php:508 ../views/admin-panel/admin-panel.php:508
+#: ../views/admin-panel/appearance.php:226
+msgid ""
+"Drag and drop between lists to adjust the icon order.  Click on the image to "
+"disable or enable the option."
 msgstr ""
 
-#: views/admin-panel.php:765
-#: views/admin-panel.php:805
-msgid "text"
-msgstr ""
-
-#: views/admin-panel.php:785
+#: ../views/admin-panel.php:566 ../views/admin-panel/admin-panel.php:566
+#: ../views/admin-panel/appearance.php:284
 msgid "Classic and Icons Only Vew"
 msgstr ""
 
-#: views/admin-panel.php:787
-msgid "Drag and drop to adjust the icon order.  Click on the image to disable or enable the option."
+#: ../views/admin-panel.php:568 ../views/admin-panel/admin-panel.php:568
+#: ../views/admin-panel/appearance.php:286
+msgid ""
+"Drag and drop to adjust the icon order.  Click on the image to disable or "
+"enable the option."
 msgstr ""
 
-#: views/admin-panel.php:824
-#, php-format
-msgid "%s is a lightbox script that is used for the various pop-ups within this plugin."
+#: ../views/admin-panel.php:605 ../views/admin-panel/admin-panel.php:605
+#: ../views/admin-panel/appearance.php:322
+msgid ""
+"%s is a lightbox script that is used for the various pop-ups within this "
+"plugin."
 msgstr ""
 
-#: views/admin-panel.php:828
+#: ../views/admin-panel.php:609 ../views/admin-panel/admin-panel.php:609
+#: ../views/admin-panel/appearance.php:326
 msgid "Enable Colorbox on the front-end?"
 msgstr ""
 
-#: views/admin-panel.php:830
-#, php-format
-msgid "Disable this option if you would like to use another Colorbox WordPress plugin such as %s or %s."
+#: ../views/admin-panel.php:611 ../views/admin-panel/admin-panel.php:611
+#: ../views/admin-panel/appearance.php:328
+msgid ""
+"Disable this option if you would like to use another Colorbox WordPress "
+"plugin such as %s or %s."
 msgstr ""
 
-#: views/admin-panel.php:835
+#: ../views/admin-panel.php:616 ../views/admin-panel/admin-panel.php:616
+#: ../views/admin-panel/appearance.php:333
 msgid "Set the Colorbox Width"
 msgstr ""
 
-#: views/admin-panel.php:841
+#: ../views/admin-panel.php:622 ../views/admin-panel/admin-panel.php:622
+#: ../views/admin-panel/appearance.php:339
 msgid "Set the Colorbox Height"
 msgstr ""
 
-#: views/admin-panel.php:861
+#: ../views/admin-panel.php:642 ../views/admin-panel/admin-panel.php:642
+#: ../views/admin-panel/permissions.php:48
 msgid "Registered Comment Editing"
 msgstr ""
 
-#: views/admin-panel.php:863
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
 msgid "Allow Registered Users to Edit Their Own Comments?"
 msgstr ""
 
-#: views/admin-panel.php:863
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
 msgid "Selecting \"No\" will turn off comment editing for registered users."
 msgstr ""
 
-#: views/admin-panel.php:868
+#: ../views/admin-panel.php:649 ../views/admin-panel/admin-panel.php:649
+#: ../views/admin-panel/permissions.php:55
 msgid "Anonymous Commenter Editing"
 msgstr ""
 
-#: views/admin-panel.php:870
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
 msgid "Allow Anonymous Users to Edit Their Own Comments?"
 msgstr ""
 
-#: views/admin-panel.php:870
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
 msgid "Selecting \"No\" will turn off comment editing for anonymous users."
 msgstr ""
 
-#: views/admin-panel.php:875
+#: ../views/admin-panel.php:656 ../views/admin-panel/admin-panel.php:656
+#: ../views/admin-panel/permissions.php:62
 msgid "Admin Users (Admin Panel)"
 msgstr ""
 
-#: views/admin-panel.php:877
+#: ../views/admin-panel.php:658 ../views/admin-panel/admin-panel.php:658
+#: ../views/admin-panel/permissions.php:64
 msgid "Turn Off Comment Editing in Admin Panel?"
 msgstr ""
 
-#: views/admin-panel.php:878
-msgid "Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+#: ../views/admin-panel.php:659 ../views/admin-panel/admin-panel.php:659
+#: ../views/admin-panel/permissions.php:65
+msgid ""
+"Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
 msgstr ""
 
-#: views/admin-panel.php:883
+#: ../views/admin-panel.php:664 ../views/admin-panel/admin-panel.php:664
+#: ../views/admin-panel/permissions.php:70
 msgid "Admin Users (Posts)"
 msgstr ""
 
-#: views/admin-panel.php:885
-#: views/admin-panel.php:893
+#: ../views/admin-panel.php:666 ../views/admin-panel.php:674
+#: ../views/admin-panel/admin-panel.php:666
+#: ../views/admin-panel/admin-panel.php:674
+#: ../views/admin-panel/permissions.php:72
+#: ../views/admin-panel/permissions.php:80
 msgid "Turn On Comment Editing?"
 msgstr ""
 
-#: views/admin-panel.php:886
-msgid "Selecting \"Yes\" will enable your ability to edit a user's comment.  Selecting \"No\" will disable your ability to edit comments on a post"
+#: ../views/admin-panel.php:667 ../views/admin-panel/admin-panel.php:667
+#: ../views/admin-panel/permissions.php:73
+msgid ""
+"Selecting \"Yes\" will enable your ability to edit a user's comment.  "
+"Selecting \"No\" will disable your ability to edit comments on a post"
 msgstr ""
 
-#: views/admin-panel.php:891
+#: ../views/admin-panel.php:672 ../views/admin-panel/admin-panel.php:672
+#: ../views/admin-panel/permissions.php:78
 msgid "Editors"
 msgstr ""
 
-#: views/admin-panel.php:894
-msgid "Selecting \"Yes\" will allow Editors to see the AEC edit options on a post or in the admin panel."
+#: ../views/admin-panel.php:675 ../views/admin-panel/admin-panel.php:675
+#: ../views/admin-panel/permissions.php:81
+msgid ""
+"Selecting \"Yes\" will allow Editors to see the AEC edit options on a post "
+"or in the admin panel."
 msgstr ""
 
-#: views/admin-panel.php:907
+#: ../views/admin-panel.php:688 ../views/admin-panel/admin-panel.php:688
+#: ../views/admin-panel/cleanup.php:29
 msgid "Delete all security keys"
 msgstr ""
 
-#: views/admin-panel.php:909
-msgid "Each time a user leaves a comment, a security key is stored as a custom key.  Periodically you may want to delete this information.  Please backup your database first."
+#: ../views/admin-panel.php:690 ../views/admin-panel/admin-panel.php:690
+#: ../views/admin-panel/cleanup.php:31
+msgid ""
+"Each time a user leaves a comment, a security key is stored as a custom "
+"key.  Periodically you may want to delete this information.  Please backup "
+"your database first."
 msgstr ""
 
-#: views/admin-panel.php:917
+#: ../views/admin-panel.php:698 ../views/admin-panel/admin-panel.php:698
+#: ../views/admin-panel/appearance.php:349
+#: ../views/admin-panel/behavior.php:262 ../views/admin-panel/cleanup.php:38
+#: ../views/admin-panel/permissions.php:88
 msgid "Update Settings"
 msgstr ""
 
-#: views/blacklist-comment.php:51
-#: views/comment-editor.php:99
+#: ../views/blacklist-comment.php:50 ../views/comment-editor.php:99
 msgid "Main"
 msgstr ""
 
-#: views/blacklist-comment.php:52
-#: views/comment-editor.php:100
+#: ../views/blacklist-comment.php:51 ../views/comment-editor.php:100
 msgid "Advanced"
 msgstr ""
 
-#: views/blacklist-comment.php:56
+#: ../views/blacklist-comment.php:55
 msgid "Select from the options below to add to your comment blacklist."
 msgstr ""
 
-#: views/blacklist-comment.php:61
-#: views/blacklist-comment.php:91
-#: views/comment-editor.php:118
+#: ../views/blacklist-comment.php:60 ../views/blacklist-comment.php:90
+#: ../views/comment-editor.php:118
 msgid "Name"
 msgstr ""
 
-#: views/blacklist-comment.php:68
-#: views/blacklist-comment.php:98
-#: views/comment-editor.php:130
+#: ../views/blacklist-comment.php:67 ../views/blacklist-comment.php:97
+#: ../views/comment-editor.php:130
 msgid "URL"
 msgstr ""
 
-#: views/blacklist-comment.php:75
-#: views/blacklist-comment.php:105
+#: ../views/blacklist-comment.php:74 ../views/blacklist-comment.php:104
 msgid "E-mail Address"
 msgstr ""
 
-#: views/blacklist-comment.php:79
-#: views/blacklist-comment.php:109
+#: ../views/blacklist-comment.php:78 ../views/blacklist-comment.php:108
 msgid "IP Address"
 msgstr ""
 
-#: views/blacklist-comment.php:85
+#: ../views/blacklist-comment.php:84
 msgid "Spam Matching Comments"
 msgstr ""
 
-#: views/blacklist-comment.php:86
-msgid " Example: Selecting 'email' and 'name' will spam all comments that match both the name and e-mail address."
+#: ../views/blacklist-comment.php:85
+msgid ""
+" Example: Selecting 'email' and 'name' will spam all comments that match "
+"both the name and e-mail address."
 msgstr ""
 
-#: views/blacklist-comment.php:86
+#: ../views/blacklist-comment.php:85
 msgid "Please be careful with this feature.  There is no undo function."
 msgstr ""
 
-#: views/blacklist-comment.php:118
-#: views/comment-editor.php:188
-#: views/email.php:72
-#: views/request-deletion.php:56
+#: ../views/blacklist-comment.php:117 ../views/comment-editor.php:188
+#: ../views/email.php:72 ../views/request-deletion.php:56
 msgid "Cancel"
 msgstr ""
 
-#: views/blacklist-comment.php:120
-#: views/comment-editor.php:191
-#: views/email.php:74
-#: views/move-comment.php:144
-#: views/request-deletion.php:58
+#: ../views/blacklist-comment.php:119 ../views/comment-editor.php:191
+#: ../views/email.php:74 ../views/move-comment.php:143
+#: ../views/request-deletion.php:58
 msgid "Close"
 msgstr ""
 
-#: views/comment-editor.php:47
-#, php-format
+#: ../views/comment-editor.php:47
 msgid "%1$s%2$s, %3$s @ %4$s : %5$s"
 msgstr ""
 
-#: views/comment-editor.php:151
+#: ../views/comment-editor.php:151
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: views/comment-editor.php:152
-#, php-format
+#: ../views/comment-editor.php:152
 msgid "Submitted on: <b>%1$s</b>"
 msgstr ""
 
-#: views/comment-editor.php:154
+#: ../views/comment-editor.php:154
 msgid "Adjust Comment Time"
 msgstr ""
 
-#: views/comment-editor.php:156
+#: ../views/comment-editor.php:156
 msgid "Adjust Comment Status"
 msgstr ""
 
-#: views/comment-editor.php:168
-#: views/comment-editor.php:175
+#: ../views/comment-editor.php:168 ../views/comment-editor.php:175
 msgid "Approved"
 msgstr ""
 
-#: views/comment-editor.php:169
-#: views/comment-editor.php:176
+#: ../views/comment-editor.php:169 ../views/comment-editor.php:176
 msgid "Pending"
 msgstr ""
 
-#: views/comment-editor.php:187
+#: ../views/comment-editor.php:187
 msgid "Save"
 msgstr ""
 
-#: views/comment-popup.php:23
+#: ../views/comment-popup.php:25
 msgid "Please type out your comment below."
 msgstr ""
 
-#: views/comment-popup.php:26
+#: ../views/comment-popup.php:28
 msgid "Save and Return"
 msgstr ""
 
-#: views/comment-popup.php:26
+#: ../views/comment-popup.php:28
 msgid "Submit Comment"
 msgstr ""
 
-#: views/email.php:51
+#: ../views/email.php:51
 msgid "To"
 msgstr ""
 
-#: views/email.php:55
+#: ../views/email.php:55
 msgid "From"
 msgstr ""
 
-#: views/email.php:59
+#: ../views/email.php:59
 msgid "Site Admin"
 msgstr ""
 
-#: views/email.php:59
+#: ../views/email.php:59
 msgid "Post Author"
 msgstr ""
 
-#: views/email.php:62
+#: ../views/email.php:62
 msgid "Subject"
 msgstr ""
 
-#: views/email.php:71
+#: ../views/email.php:71
 msgid "Send"
 msgstr ""
 
-#: views/move-comment.php:47
+#: ../views/move-comment.php:46
 msgid "Move by Post"
 msgstr ""
 
-#: views/move-comment.php:48
+#: ../views/move-comment.php:47
 msgid "Move by Title"
 msgstr ""
 
-#: views/move-comment.php:49
+#: ../views/move-comment.php:48
 msgid "Move by ID"
 msgstr ""
 
-#: views/move-comment.php:61
+#: ../views/move-comment.php:60
 msgid "Previous"
 msgstr ""
 
-#: views/move-comment.php:61
+#: ../views/move-comment.php:60
 msgid "Next"
 msgstr ""
 
-#: views/move-comment.php:72
-#: views/move-comment.php:80
-#: views/move-comment.php:97
-#: views/move-comment.php:105
+#: ../views/move-comment.php:71 ../views/move-comment.php:79
+#: ../views/move-comment.php:96 ../views/move-comment.php:104
 msgid "Search"
 msgstr ""
 
-#: views/move-comment.php:74
-#: views/move-comment.php:78
+#: ../views/move-comment.php:73 ../views/move-comment.php:77
 msgid "Title"
 msgstr ""
 
-#: views/move-comment.php:99
-#: views/move-comment.php:103
+#: ../views/move-comment.php:98 ../views/move-comment.php:102
 msgid "Post ID"
 msgstr ""
 
-#: views/move-comment.php:130
-#: views/move-comment.php:133
+#: ../views/move-comment.php:129 ../views/move-comment.php:132
 msgid "Mark as Approved"
 msgstr ""
 
-#: views/request-deletion.php:47
-msgid "Please explain why the comment should be deleted.  After sending the request, your comment will be marked as moderated and will no longer be viewable publicly."
+#: ../views/request-deletion.php:47
+msgid ""
+"Please explain why the comment should be deleted.  After sending the "
+"request, your comment will be marked as moderated and will no longer be "
+"viewable publicly."
 msgstr ""
 
-#: views/request-deletion.php:55
+#: ../views/request-deletion.php:55
 msgid "Send Request"
 msgstr ""
-

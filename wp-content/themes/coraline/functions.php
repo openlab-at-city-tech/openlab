@@ -1,7 +1,6 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Coraline
+ * @package Coraline
  */
 
 /**
@@ -9,6 +8,7 @@
  */
 if ( ! isset( $content_width ) )
 	$content_width = 500;
+
 
 /** Tell WordPress to run coraline_setup() when the 'after_setup_theme' hook is run. */
 add_action( 'after_setup_theme', 'coraline_setup' );
@@ -33,17 +33,17 @@ if ( ! function_exists( 'coraline_setup' ) ):
  */
 function coraline_setup() {
 
-	// This theme has some pretty cool theme options
-	require_once ( get_template_directory() . '/inc/theme-options.php' );
-
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
 
 	// Post Format support. Legacy category chooser will display in Theme Options for sites that set a category before post formats were added.
-	add_theme_support( 'post-formats', array( 'aside', 'gallery' ) );
+	add_theme_support( 'post-formats', array( 'aside', 'image', 'video', 'quote', 'link', 'gallery' ) );
 
 	// This theme uses post thumbnails
 	add_theme_support( 'post-thumbnails' );
+
+	$attachment_size = apply_filters( 'theme_attachment_size',  800 );
+	add_image_size( 'coraline-image-template', $attachment_size, $attachment_size, false );
 
 	// Add default posts and comments RSS feed links to head
 	add_theme_support( 'automatic-feed-links' );
@@ -52,176 +52,51 @@ function coraline_setup() {
 	// Translations can be filed in the /languages/ directory
 	load_theme_textdomain( 'coraline', get_template_directory() . '/languages' );
 
-	$locale = get_locale();
-	$locale_file = get_template_directory() . "/languages/$locale.php";
-	if ( is_readable( $locale_file ) )
-		require_once( $locale_file );
-
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
 		'primary' => __( 'Primary Navigation', 'coraline' ),
 	) );
-
-	// This theme allows users to set a custom background
-	add_custom_background();
-
-	// Your changeable header business starts here
-	define( 'HEADER_TEXTCOLOR', '000' );
-	// No CSS, just an IMG call. The %s is a placeholder for the theme template directory URI.
-	define( 'HEADER_IMAGE', '%s/images/headers/water-drops.jpg' );
-
-	// The height and width of your custom header. You can hook into the theme's own filters to change these values.
-	// Add a filter to coraline_header_image_width and coraline_header_image_height to change these values.
-	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'coraline_header_image_width', 990 ) );
-	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'coraline_header_image_height', 180 ) );
-
-	// We'll be using post thumbnails for custom header images on posts and pages.
-	// We want them to be 940 pixels wide by 198 pixels tall.
-	// Larger images will be auto-cropped to fit, smaller ones will be ignored. See header.php.
-	set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
-
-	// Add a way for the custom header to be styled in the admin panel that controls
-	// custom headers. See coraline_admin_header_style(), below.
-	add_custom_image_header( 'coraline_header_style', 'coraline_admin_header_style', 'coraline_admin_header_image' );
-
-	// ... and thus ends the changeable header business.
-
-	// Default custom headers packaged with the theme. %s is a placeholder for the theme template directory URI.
-	register_default_headers( array(
-		'water-drops' => array(
-			'url' => '%s/images/headers/water-drops.jpg',
-			'thumbnail_url' => '%s/images/headers/water-drops-thumbnail.jpg',
-			/* translators: header image description */
-			'description' => __( 'Water drops', 'coraline' )
-		),
-		'limestone-cave' => array(
-			'url' => '%s/images/headers/limestone-cave.jpg',
-			'thumbnail_url' => '%s/images/headers/limestone-cave-thumbnail.jpg',
-			/* translators: header image description */
-			'description' => __( 'Limestone cave', 'coraline' )
-		),
-		'Cactii' => array(
-			'url' => '%s/images/headers/cactii.jpg',
-			'thumbnail_url' => '%s/images/headers/cactii-thumbnail.jpg',
-			/* translators: header image description */
-			'description' => __( 'Cactii', 'coraline' )
-		)
-	) );
 }
 endif;
 
-if ( ! function_exists( 'coraline_header_style' ) ) :
 /**
- * Styles the header image and text displayed on the blog
+ * Setup the WordPress core custom background feature.
  *
- * @since Coraline 1.0
+ * Use add_theme_support to register support for WordPress 3.4+
+ * as well as provide backward compatibility for previous versions.
+ * Use feature detection of wp_get_theme() which was introduced
+ * in WordPress 3.4.
+ *
+ * Hooks into the after_setup_theme action.
  */
-function coraline_header_style() {
-	// If no custom options for text are set, let's bail
-	// get_header_textcolor() options: HEADER_TEXTCOLOR is default, hide text (returns 'blank') or any hex value
-	if ( HEADER_TEXTCOLOR == get_header_textcolor() )
-		return;
-	// If we get this far, we have custom styles. Let's do this.
-	?>
-	<style type="text/css">
-	<?php
-		// Has the text been hidden?
-		if ( 'blank' == get_header_textcolor() ) :
-	?>
-		#site-title,
-		#site-description {
-			position: absolute;
-			left: -9000px;
-		}
-	<?php
-		// If the user has set a custom color for the text use that
-		else :
-	?>
-		#site-title a,
-		#site-description {
-			color: #<?php echo get_header_textcolor(); ?> !important;
-		}
-	<?php endif; ?>
-	</style>
-	<?php
+function coraline_register_custom_background() {
+	$args = array(
+		'default-color' => '',
+		'default-image' => '',
+	);
+
+	$args = apply_filters( 'coraline_custom_background_args', $args );
+
+	if ( function_exists( 'wp_get_theme' ) ) {
+		add_theme_support( 'custom-background', $args );
+	} else {
+		define( 'BACKGROUND_COLOR', $args['default-color'] );
+		define( 'BACKGROUND_IMAGE', $args['default-image'] );
+		add_custom_background();
+	}
 }
-endif;
+add_action( 'after_setup_theme', 'coraline_register_custom_background' );
 
-
-if ( ! function_exists( 'coraline_admin_header_style' ) ) :
 /**
- * Styles the header image displayed on the Appearance > Header admin panel.
- *
- * Referenced via add_custom_image_header() in coraline_setup().
- *
- * @since Coraline 1.0
+ * Enqueue scripts and styles
  */
-function coraline_admin_header_style() {
-?>
-	<style type="text/css">
-	.appearance_page_custom-header #headimg {
-		background: #<?php echo get_background_color(); ?>;
-		border: none;
-		text-align: center;
-	}
-	#headimg h1,
-	#desc {
-		font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
-	}
-	#headimg h1 {
-		margin: 0;
-	}
-	#headimg h1 a {
-		font-size: 36px;
-		letter-spacing: -0.03em;
-		line-height: 42px;
-		text-decoration: none;
-	}
-	#desc {
-		font-size: 18px;
-		line-height: 31px;
-		padding: 0 0 9px 0;
-	}
-	<?php
-		// If the user has set a custom color for the text use that
-		if ( get_header_textcolor() != HEADER_TEXTCOLOR ) :
-	?>
-		#site-title a,
-		#site-description {
-			color: #<?php echo get_header_textcolor(); ?>;
-		}
-	<?php endif; ?>
-	#headimg img {
-		max-width: 990px;
-		width: 100%;
-	}
-	</style>
-<?php
+function coraline_scripts() {
+	wp_enqueue_style( 'coraline', get_stylesheet_uri() );
+
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) )
+		wp_enqueue_script( 'comment-reply' );
 }
-endif;
-
-if ( ! function_exists( 'coraline_admin_header_image' ) ) :
-/**
- * Custom header image markup displayed on the Appearance > Header admin panel.
- *
- * Referenced via add_custom_image_header() in coraline_setup().
- *
- * @since Coraline 1.0
- */
-function coraline_admin_header_image() { ?>
-	<div id="headimg">
-		<?php
-		if ( 'blank' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) || '' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) )
-			$style = ' style="display:none;"';
-		else
-			$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
-		?>
-		<h1><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
-		<div id="desc"<?php echo $style; ?>><?php bloginfo( 'description' ); ?></div>
-		<img src="<?php esc_url ( header_image() ); ?>" alt="" />
-	</div>
-<?php }
-endif;
+add_action( 'wp_enqueue_scripts', 'coraline_scripts' );
 
 /**
  * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
@@ -360,79 +235,79 @@ endif;
 function coraline_widgets_init() {
 	// Area 1, located at the top of the sidebar.
 	register_sidebar( array(
-		'name' => __( 'Primary Widget Area', 'coraline' ),
-		'id' => 'sidebar-1',
-		'description' => __( 'The primary widget area', 'coraline' ),
+		'name'          => __( 'Primary Widget Area', 'coraline' ),
+		'id'            => 'sidebar-1',
+		'description'   => __( 'The primary widget area', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 2, located below the Primary Widget Area in the sidebar. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Secondary Widget Area', 'coraline' ),
-		'id' => 'secondary-widget-area',
-		'description' => __( 'The secondary widget area appears in 3-column layouts', 'coraline' ),
+		'name'          => __( 'Secondary Widget Area', 'coraline' ),
+		'id'            => 'secondary-widget-area',
+		'description'   => __( 'The secondary widget area appears in 3-column layouts', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 3, located above the primary and secondary sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Feature Widget Area', 'coraline' ),
-		'id' => 'feature-widget-area',
-		'description' => __( 'The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts', 'coraline' ),
+		'name'          => __( 'Feature Widget Area', 'coraline' ),
+		'id'            => 'feature-widget-area',
+		'description'   => __( 'The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 4, located in the footer. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'First Footer Widget Area', 'coraline' ),
-		'id' => 'first-footer-widget-area',
-		'description' => __( 'The first footer widget area', 'coraline' ),
+		'name'          => __( 'First Footer Widget Area', 'coraline' ),
+		'id'            => 'first-footer-widget-area',
+		'description'   => __( 'The first footer widget area', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 5, located in the footer. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Second Footer Widget Area', 'coraline' ),
-		'id' => 'second-footer-widget-area',
-		'description' => __( 'The second footer widget area', 'coraline' ),
+		'name'          => __( 'Second Footer Widget Area', 'coraline' ),
+		'id'            => 'second-footer-widget-area',
+		'description'   => __( 'The second footer widget area', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 6, located in the footer. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Third Footer Widget Area', 'coraline' ),
-		'id' => 'third-footer-widget-area',
-		'description' => __( 'The third footer widget area', 'coraline' ),
+		'name'          => __( 'Third Footer Widget Area', 'coraline' ),
+		'id'            => 'third-footer-widget-area',
+		'description'   => __( 'The third footer widget area', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 
 	// Area 7, located in the footer. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Fourth Footer Widget Area', 'coraline' ),
-		'id' => 'fourth-footer-widget-area',
-		'description' => __( 'The fourth footer widget area', 'coraline' ),
+		'name'          => __( 'Fourth Footer Widget Area', 'coraline' ),
+		'id'            => 'fourth-footer-widget-area',
+		'description'   => __( 'The fourth footer widget area', 'coraline' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h3 class="widget-title">',
+		'after_title'   => '</h3>',
 	) );
 }
 /** Register sidebars by running coraline_widgets_init() on the widgets_init hook. */
@@ -528,10 +403,10 @@ function coraline_get_theme_options() {
  * Register our color schemes and add them to the queue
  */
 function coraline_color_registrar() {
-	$options = coraline_get_theme_options();
+	$options      = coraline_get_theme_options();
 	$color_scheme = $options['color_scheme'];
 
-	if ( ! empty( $color_scheme ) && $color_scheme != 'light' ) {
+	if ( ! empty( $color_scheme ) && 'light' != $color_scheme ) {
 		wp_register_style( $color_scheme, get_template_directory_uri() . '/colors/' . $color_scheme . '.css', null, null );
 		wp_enqueue_style( $color_scheme );
 	}
@@ -544,11 +419,10 @@ add_action( 'wp_enqueue_scripts', 'coraline_color_registrar' );
  * @since Coraline 1.0
  */
 function coraline_current_layout() {
-	$options = coraline_get_theme_options();
+	$options        = coraline_get_theme_options();
 	$current_layout = $options['theme_layout'];
-
-	$two_columns = array( 'content-sidebar', 'sidebar-content' );
-	$three_columns = array( 'content-sidebar-sidebar', 'sidebar-content-sidebar', 'sidebar-sidebar-content' );
+	$two_columns    = array( 'content-sidebar', 'sidebar-content' );
+	$three_columns  = array( 'content-sidebar-sidebar', 'sidebar-content-sidebar', 'sidebar-sidebar-content' );
 
 	if ( in_array( $current_layout, $two_columns ) )
 		return 'two-column ' . $current_layout;
@@ -559,102 +433,78 @@ function coraline_current_layout() {
 }
 
 /**
- *  Adds coraline_current_layout() to the array of body classes
+ *  Adds coraline_current_layout() and $color_scheme to the array of body classes
  *
  * @since Coraline 1.0
  */
-function coraline_body_class($classes) {
+function coraline_body_class( $classes ) {
 	$classes[] = coraline_current_layout();
+	$options   = coraline_get_theme_options();
+
+	if ( ! empty( $options['color_scheme'] ) && 'light' != $options['color_scheme'] )
+		$classes[] = 'color-' . $options['color_scheme'];
 
 	return $classes;
 }
 add_filter( 'body_class', 'coraline_body_class' );
 
 /**
- * WP.com: Check the current color scheme and set the correct themecolors array
- */
-$options = coraline_get_theme_options();
-
-$color_scheme = 'light';
-if ( isset( $options['color_scheme'] ) )
-	$color_scheme = $options['color_scheme'];
-
-if ( 'light' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'ffffff',
-		'border' => 'cccccc',
-		'text' => '333333',
-		'link' => '0060ff',
-		'url' => 'df0000',
-	);
-}
-if ( 'dark' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => '151515',
-		'border' => '333333',
-		'text' => 'bbbbbb',
-		'link' => '80b0ff',
-		'url' => 'e74040',
-	);
-}
-if ( 'pink' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'faccd6',
-		'border' => 'c59aa4',
-		'text' => '222222',
-		'link' => 'd6284d',
-		'url' => 'd6284d',
-	);
-}
-if ( 'purple' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'e1ccfa',
-		'border' => 'c5b2de',
-		'text' => '333333',
-		'link' => '7728d6',
-		'url' => '7728d6',
-	);
-}
-if ( 'brown' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => '9a7259',
-		'border' => 'b38970',
-		'text' => 'ffecd0',
-		'link' => 'ffd2b7',
-		'url' => 'ffd2b7',
-	);
-}
-if ( 'red' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'a20013',
-		'border' => 'b92523',
-		'text' => 'e68d77',
-		'link' => 'ffd2b7',
-		'url' => 'ffd2b7',
-	);
-}
-if ( 'blue' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'ccddfa',
-		'border' => 'b2c3de',
-		'text' => '333333',
-		'link' => '2869d6',
-		'url' => '2869d6',
-	);
-}
-
-/**
  * Adjust the content_width value based on layout option and current template.
  *
  * @since Coraline 1.0.2
- * @param int content_width value
  */
 function coraline_set_full_content_width() {
 	global $content_width;
-	$content_width = 770;
 
-	// Override for 3-column layouts
-	$layout = coraline_current_layout();
-	if ( strstr( $layout, 'three-column' ) )
-		$content_width = 990;
+	if ( is_attachment() || is_page_template( 'full-width-page.php' ) ) {
+		$content_width = 770;
+
+		// Override for 3-column layouts
+		$layout = coraline_current_layout();
+		if ( strstr( $layout, 'three-column' ) )
+			$content_width = 990;
+	}
 }
+add_action( 'template_redirect', 'coraline_set_full_content_width' );
+
+/**
+ * Filters wp_title to print a neat <title> tag based on what is being viewed.
+ *
+ * @since Coraline 1.0.2
+ */
+function coraline_wp_title( $title, $sep ) {
+	global $page, $paged;
+
+	if ( is_feed() )
+		return $title;
+
+	// Add the blog name
+	$title .= get_bloginfo( 'name' );
+
+	// Add the blog description for the home/front page.
+	$site_description = get_bloginfo( 'description', 'display' );
+	if ( $site_description && ( is_home() || is_front_page() ) )
+		$title .= " $sep $site_description";
+
+	// Add a page number if necessary:
+	if ( $paged >= 2 || $page >= 2 )
+		$title .= " $sep " . sprintf( __( 'Page %s', 'coraline' ), max( $paged, $page ) );
+
+	return $title;
+}
+add_filter( 'wp_title', 'coraline_wp_title', 10, 2 );
+
+/**
+ * Adds support for a custom header image.
+ */
+require( get_template_directory() . '/inc/custom-header.php' );
+
+/**
+ * This theme has some pretty cool theme options.
+ */
+require_once ( get_template_directory() . '/inc/theme-options.php' );
+
+/**
+ * Load Jetpack compatibility file.
+ */
+require( get_template_directory() . '/inc/jetpack.compat.php' );

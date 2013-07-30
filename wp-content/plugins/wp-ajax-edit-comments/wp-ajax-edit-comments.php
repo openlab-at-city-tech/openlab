@@ -1,13 +1,16 @@
 <?php
 /*
 Plugin Name: Ajax Edit Comments
-Plugin URI: http://www.pluginbuddy.com/purchase/ajax-edit-comments
+Plugin URI: http://wordpress.org/extend/plugins/wp-ajax-edit-comments/
 Description: Ajax Edit Comments allows users to edit their comments for a period of time. Administrators have a lot more features, such as the ability to edit comments directly on a post or page.
-Author: The PluginBuddy Team
-Version: 5.0.7.0
+Author: Ronald Huereca
+Version: 5.0.27.0
 Requires at least: 3.1
-Author URI: http://www.pluginbuddy.com
-Contributors:  Ronald Huereca
+Author URI: http://www.ronalfy.com
+Contributors:  Ronald Huereca, Ajay Dsouza, Josh Benham, and Glenn Ansley
+License: GPL2
+Text Domain: ajaxEdit
+Domain Path: /languages/
 */ 
 
 if (!class_exists('WPrapAjaxEditComments')) {
@@ -22,7 +25,7 @@ if (!class_exists('WPrapAjaxEditComments')) {
 		private $admin_options = array();
 		private $errors = '';
 		private $minutes = 5; 
-		private $version = "5.0.7.0"; 
+		private $version = "5.0.27";
 		private $colorbox_params = array();
 		private $plugin_url = '';
 		private $plugin_dir = '';
@@ -41,14 +44,6 @@ if (!class_exists('WPrapAjaxEditComments')) {
 			$this->plugin_url = rtrim( plugin_dir_url(__FILE__), '/' );
 			$this->plugin_dir = rtrim( plugin_dir_path(__FILE__), '/' );
 			$this->plugin_basename = plugin_basename( __FILE__  );
-			
-			//Variables for iThemes integration
-			$this->_defaults = array();
-			$this->_version = $this->version;
-			$this->_var = 'ajax-edit-comments';
-			$this->_pluginURL = $this->plugin_url;
-			$this->_pluginPath = $this->plugin_dir;
-			$this->_pluginBase = $this->plugin_basename;
 			
 			//Include Classes
 			include_once ('lib/class.file.php');
@@ -101,6 +96,7 @@ if (!class_exists('WPrapAjaxEditComments')) {
 , array("AECFilters", 'add_settings_link'), -10);
 			
 		} //end constructor
+		
 		//Returns a network or localized admin option
 		public function get_admin_option( $key = '' ) {			
 			$admin_options = $this->get_admin_options( apply_filters( 'aec_network_option', false ) );
@@ -232,9 +228,11 @@ if (!class_exists('WPrapAjaxEditComments')) {
 				$this->save_admin_options();								
 			}
 			//Serve uncompressed scripts when WP is in debug mode
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG == 'true' ) {
+			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG == true ) {
 				$this->admin_options['compressed_scripts'] = 'false';
 			}
+
+			
 			return $this->admin_options;
 		} //end get_admin_options
 		
@@ -268,13 +266,6 @@ if (!class_exists('WPrapAjaxEditComments')) {
 			return $this->user_options;
 		} //end get_all_user_options
 		
-		
-		public function get_aec_upgrade_url( $path = '') {
-			$url = $this->aec_url;
-			if ( !empty( $path ) && is_string( $path) )
-				$url .= '/' . ltrim( $url, '/' );
-			return $url;	
-		}
 		//Returns a colorbox variable
 		public function get_colorbox_param( $key = '' ) {
 			if ( array_key_exists( $key, $this->colorbox_params ) ) {
@@ -334,9 +325,6 @@ if (!class_exists('WPrapAjaxEditComments')) {
 		}
 		/* init - Run upon WordPress initialization */
 		public function init() {
-			if ( is_admin() ) {
-				add_action( 'init', array( &$this, 'display_changelog_load_on_init' ) );
-			}
 			//If registered users can only comment and user is not logged in, skip loading the plugin.
 			include_once(ABSPATH . WPINC . '/pluggable.php');
 			if (get_option('comment_registration') == '1'){
@@ -344,48 +332,12 @@ if (!class_exists('WPrapAjaxEditComments')) {
 					return;
 				}
 			}
-			
-			
-	
-			//Run internal upgrade code for scripts/styles
-			$plugin_version = $this->get_admin_option( "version" );
-			$lang = $this->get_admin_option( 'WPLANG' );
-			$wpdebug = $this->get_admin_option( 'WP_DEBUG' );
-			
-			$upgrade_dependencies = false;
-			if ( !$plugin_version ) {
-				$upgrade_dependencies = true;
-			} 
-			//Upgrade scripts if someone changes WPLANG or WP_DEBUG constants
-			if ( defined( 'WPLANG' ) && $lang != WPLANG ) {
-				$this->save_admin_option( 'WPLANG', WPLANG );		
-				$upgrade_dependencies = true;
-			}
-			if ( defined( 'WP_DEBUG' ) && $wpdebug != WP_DEBUG ) {
-				$this->save_admin_option( 'WP_DEBUG', WP_DEBUG );		
-				$upgrade_dependencies = true;
-			}
-			$upload_dir = wp_upload_dir();
-			$aec_upload_base = $upload_dir[ 'basedir' ] . '/aec/';
-			if ( !file_exists( $aec_upload_base ) ) {
-				$upgrade_dependencies = true;
-			}
-			//todo - store lang and debug variables and check to see if they've changed - if so, update as wel
-			if ( version_compare( $this->version,  $plugin_version, '>' ) || $upgrade_dependencies ) {
-				$this->save_admin_option( 'version', $this->version );
-				//Upgrade our scripts and styles
-				if ( is_admin() ) {
-					$this->upgrade_dependencies();
-				} //end if is_admin
-			} //end version script/style upgrading
-			
-			
+					
 			//Initialize Addons	
 			do_action('aec-addons-init');
 			
 			$this->plugin_url = apply_filters('aec-addons-plugin-directory', $this->get_plugin_url());
 			
-			//todo - code function get_colorbox_params
 			$this->colorbox_params['script_handler'] = apply_filters('aec-colorbox-script-name', 'colorbox');
 			$this->colorbox_params['style_handler'] = apply_filters('aec-colorbox-style-name', 'colorbox');
 			
@@ -415,19 +367,13 @@ if (!class_exists('WPrapAjaxEditComments')) {
 			add_action("wp_print_styles", array('AECDependencies',"load_frontend_css"));
 			add_action("wp_print_styles", array('AECDependencies',"add_css"));
 			add_action('admin_print_styles', array('AECDependencies',"add_css")); 
-			add_action('admin_print_styles-aec_page_wpaecsettings', array('AECDependencies', 'add_admin_panel_css'), 1000);
+			
 			//JavaScript
 			add_action('admin_print_scripts-index.php', array('AECDependencies','add_post_scripts'),1000); 
 			add_action('admin_print_scripts-edit-comments.php', array('AECDependencies','add_post_scripts'),1000); 
-			if ( !is_admin( ) ) add_action('wp_print_scripts', array('AECDependencies','add_post_scripts'),1000);
-			
-			//Admin exclusive JavaScript
-			add_action('admin_print_scripts-plugins.php', array('AECDependencies', 'add_admin_scripts'), 1000);
-			add_action('admin_print_scripts-aec_page_wpaecsettings', array('AECDependencies', 'add_admin_scripts'), 1000);
-			
+			if ( !is_admin( ) ) add_action('wp_print_scripts', array('AECDependencies','add_post_scripts'),1000);			
 			
 			//Ajax stuff
-			add_action( 'wp_ajax_upgradecheck', array( &$this->upgrade ,'ajax_upgrade_check' ) );
 			AECAjax::initialize_actions();
 			
 			
@@ -438,7 +384,6 @@ if (!class_exists('WPrapAjaxEditComments')) {
    			  add_action( 'admin_menu', array("AECAdmin",'add_admin_pages') );
 			}
 			
-     		//add_action('install_plugins_pre_plugin-information', array( &$this->upgrade, 'display_changelog' ) );
 			if (!is_feed()) {
 				//Yay, filters.
 				add_filter('comment_excerpt', array("AECFilters", 'add_edit_links'), '1000');
@@ -453,21 +398,15 @@ if (!class_exists('WPrapAjaxEditComments')) {
 			
 			
 			//* Localization Code */
-			load_plugin_textdomain('ajaxEdit', false, 'wp-ajax-edit-comments/languages');
+			load_plugin_textdomain( 'ajaxEdit', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 			
 		}//end function init
-		public function display_changelog_load_on_init() {
-			add_action('install_plugins_pre_plugin-information', array( &$this->upgrade, 'display_changelog' ) );
-		}
-		public function init_upgrades() {
-			//Instantiate upgrades
-			$this->upgrade = new AECUpgrade();
-		}
+		
 		public function is_multisite() {
 			global $aecomments;
 			$multisite_network = false;
-			if ( ! function_exists( 'is_plugin_active_for_network' ) )  require_once( ABSPATH . '/wp-admin/includes/plugin.php' );		
-			if ( is_plugin_active_for_network( $this->plugin_basename ) ) {
+			if ( ! function_exists( 'is_plugin_active_for_network' ) )  require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			if ( is_plugin_active_for_network( plugin_basename( __FILE__  ) ) ) {
 				$multisite_network = true;
 			}
 			return $multisite_network;
@@ -521,18 +460,6 @@ if (!class_exists('WPrapAjaxEditComments')) {
 			}
 		} //end save_admin_options
 		
-		public function upgrade_dependencies() {
-			//Upgrade CSS
-			AECCSS::update_css_file( 'aec/edit-comments', 'main' );
-			AECCSS::update_css_file( 'aec/comment-editor', 'interface' );
-			
-			//Upgrade JS
-			AECJS::update_js_file( 'aec/admin', 'admin' );
-			AECJS::update_js_file( 'aec/ajax-edit-comments', 'icons' );
-			AECJS::update_js_file( 'aec/frontend', 'frontend' );
-			AECJS::update_js_file( 'aec/popups', 'popups' );
-		} //end upgrade_dependencies
-		
     } //end class
 }
 //instantiate the class
@@ -545,7 +472,6 @@ if (class_exists('WPrapAjaxEditComments')) {
 function aec_instantiate() {
 	global $aecomments;
 	$aecomments = new WPrapAjaxEditComments();
-	//$aecomments->init_upgrades();
 }
 //Template redirection stuff
 add_action('template_redirect', 'aec_load_pages');

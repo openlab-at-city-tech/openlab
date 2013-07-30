@@ -76,8 +76,13 @@
 }
 
 .ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active {
 	color: #000;
 	border: 0;
 	background: #ddd;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
 }

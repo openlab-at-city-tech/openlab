@@ -71,28 +71,48 @@ add_action( 'bp_setup_globals', 'bp_core_define_slugs', 11 );
 /**
  * Return an array of users IDs based on the parameters passed.
  *
+ * Since BuddyPress 1.7, bp_core_get_users() uses BP_User_Query. If you
+ * need backward compatibility with BP_Core_User::get_users(), filter the
+ * bp_use_legacy_user_query value, returning true.
+ *
  * @package BuddyPress Core
  */
 function bp_core_get_users( $args = '' ) {
 
-	$defaults = array(
-		'type'            => 'active', // active, newest, alphabetical, random or popular
-		'user_id'         => false,    // Pass a user_id to limit to only friend connections for this user
-		'exclude'         => false,    // Users to exclude from results
-		'search_terms'    => false,    // Limit to users that match these search terms
-		'meta_key'        => false,    // Limit to users who have this piece of usermeta
-		'meta_value'      => false,    // With meta_key, limit to users where usermeta matches this value
+	// Parse the user query arguments
+	$params = wp_parse_args( $args, array(
+		'type'            => 'active',     // active, newest, alphabetical, random or popular
+		'user_id'         => false,        // Pass a user_id to limit to only friend connections for this user
+		'exclude'         => false,        // Users to exclude from results
+		'search_terms'    => false,        // Limit to users that match these search terms
+		'meta_key'        => false,        // Limit to users who have this piece of usermeta
+		'meta_value'      => false,        // With meta_key, limit to users where usermeta matches this value
+		'include'         => false,        // Pass comma separated list of user_ids to limit to only these users
+		'per_page'        => 20,           // The number of results to return per page
+		'page'            => 1,            // The page to return if limiting per page
+		'populate_extras' => true,         // Fetch the last active, where the user is a friend, total friend count, latest update
+		'count_total'     => 'count_query' // What kind of total user count to do, if any. 'count_query', 'sql_calc_found_rows', or false
+	) );
 
-		'include'         => false,    // Pass comma separated list of user_ids to limit to only these users
-		'per_page'        => 20,       // The number of results to return per page
-		'page'            => 1,        // The page to return if limiting per page
-		'populate_extras' => true,     // Fetch the last active, where the user is a friend, total friend count, latest update
-	);
+	// For legacy users. Use of BP_Core_User::get_users() is deprecated.
+	if ( apply_filters( 'bp_use_legacy_user_query', false, __FUNCTION__, $params ) ) {
+		extract( $params, EXTR_SKIP );
+		$retval = BP_Core_User::get_users( $type, $per_page, $page, $user_id, $include, $search_terms, $populate_extras, $exclude, $meta_key, $meta_value );
 
-	$params = wp_parse_args( $args, $defaults );
-	extract( $params, EXTR_SKIP );
+	// Default behavior as of BuddyPress 1.7
+	} else {
 
-	return apply_filters( 'bp_core_get_users', BP_Core_User::get_users( $type, $per_page, $page, $user_id, $include, $search_terms, $populate_extras, $exclude, $meta_key, $meta_value ), $params );
+		// Get users like we were asked to do...
+		$users = new BP_User_Query( $params );
+
+		// ...but reformat the results to match bp_core_get_users() behavior.
+		$retval = array(
+			'users' => array_values( $users->results ),
+			'total' => $users->total_users
+		);
+	}
+
+	return apply_filters( 'bp_core_get_users', $retval, $params );
 }
 
 /**
@@ -100,7 +120,7 @@ function bp_core_get_users( $args = '' ) {
  *
  * @package BuddyPress Core
  * @global $current_user WordPress global variable containing current logged in user information
- * @param user_id The ID of the user.
+ * @param int $user_id The ID of the user.
  */
 function bp_core_get_user_domain( $user_id, $user_nicename = false, $user_login = false ) {
 
@@ -130,7 +150,7 @@ function bp_core_get_user_domain( $user_id, $user_nicename = false, $user_login 
  * Fetch everything in the wp_users table for a user, without any usermeta.
  *
  * @package BuddyPress Core
- * @param user_id The ID of the user.
+ * @param int $user_id The ID of the user.
  * @uses BP_Core_User::get_core_userdata() Performs the query.
  */
 function bp_core_get_core_userdata( $user_id ) {
@@ -150,7 +170,7 @@ function bp_core_get_core_userdata( $user_id ) {
  *
  * @package BuddyPress Core
  * @uses bp_core_get_userid_from_user_login() Returns the user id for the username passed
- * @return The user id for the user that is currently being displayed, return zero if this is not a user home and just a normal blog.
+ * @return int The user id for the user that is currently being displayed, return zero if this is not a user home and just a normal blog.
  */
 function bp_core_get_displayed_userid( $user_login ) {
 	return apply_filters( 'bp_core_get_displayed_userid', bp_core_get_userid( $user_login ) );
@@ -160,10 +180,9 @@ function bp_core_get_displayed_userid( $user_login ) {
  * Returns the user_id for a user based on their username.
  *
  * @package BuddyPress Core
- * @param $username str Username to check.
+ * @param string $username Username to check.
  * @global $wpdb WordPress DB access object.
- * @return false on no match
- * @return int the user ID of the matched user.
+ * @return int|bool The ID of the matched user, or false.
  */
 function bp_core_get_userid( $username ) {
 	global $wpdb;
@@ -171,17 +190,16 @@ function bp_core_get_userid( $username ) {
 	if ( empty( $username ) )
 		return false;
 
-	return apply_filters( 'bp_core_get_userid', $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE user_login = %s", $username ) ) );
+	return apply_filters( 'bp_core_get_userid', $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->users} WHERE user_login = %s", $username ) ), $username );
 }
 
 /**
  * Returns the user_id for a user based on their user_nicename.
  *
  * @package BuddyPress Core
- * @param $username str Username to check.
+ * @param string $username Username to check.
  * @global $wpdb WordPress DB access object.
- * @return false on no match
- * @return int the user ID of the matched user.
+ * @return int|bool The ID of the matched user, or false.
  */
 function bp_core_get_userid_from_nicename( $user_nicename ) {
 	global $wpdb;
@@ -189,18 +207,17 @@ function bp_core_get_userid_from_nicename( $user_nicename ) {
 	if ( empty( $user_nicename ) )
 		return false;
 
-	return apply_filters( 'bp_core_get_userid_from_nicename', $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE user_nicename = %s", $user_nicename ) ) );
+	return apply_filters( 'bp_core_get_userid_from_nicename', $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->users} WHERE user_nicename = %s", $user_nicename ) ), $user_nicename );
 }
 
 /**
  * Returns the username for a user based on their user id.
  *
  * @package BuddyPress Core
- * @param $uid int User ID to check.
+ * @param int $uid User ID to check.
  * @global $userdata WordPress user data for the current logged in user.
  * @uses get_userdata() WordPress function to fetch the userdata for a user ID
- * @return false on no match
- * @return str the username of the matched user.
+ * @return string|bool The username of the matched user, or false.
  */
 function bp_core_get_username( $user_id, $user_nicename = false, $user_login = false ) {
 	global $bp;
@@ -270,11 +287,10 @@ function bp_core_get_username( $user_id, $user_nicename = false, $user_login = f
  * @since BuddyPress (1.5)
  *
  * @package BuddyPress Core
- * @param $uid int User ID to check.
+ * @param int $uid User ID to check.
  * @global $userdata WordPress user data for the current logged in user.
  * @uses get_userdata() WordPress function to fetch the userdata for a user ID
- * @return false on no match
- * @return str the username of the matched user.
+ * @return string|bool The username of the matched user, or false.
  */
 function bp_members_get_user_nicename( $user_id ) {
 	global $bp;
@@ -323,10 +339,9 @@ function bp_members_get_user_nicename( $user_id ) {
  * Returns the email address for the user based on user ID
  *
  * @package BuddyPress Core
- * @param $uid int User ID to check.
+ * @param int $uid User ID to check.
  * @uses get_userdata() WordPress function to fetch the userdata for a user ID
- * @return false on no match
- * @return str The email for the matched user.
+ * @return string The email for the matched user. Empty string if no user matched the $uid.
  */
 function bp_core_get_user_email( $uid ) {
 
@@ -351,10 +366,9 @@ function bp_core_get_user_email( $uid ) {
  * Optional parameters will return just the name or just the URL.
  *
  * @param int $user_id User ID to check.
- * @param $no_anchor bool Disable URL and HTML and just return full name. Default false.
- * @param $just_link bool Disable full name and HTML and just return the URL text. Default false.
- * @return false on no match
- * @return str The link text based on passed parameters.
+ * @param bool $no_anchor Disable URL and HTML and just return full name. Default false.
+ * @param bool $just_link Disable full name and HTML and just return the URL text. Default false.
+ * @return string|bool The link text based on passed parameters, or false on no match.
  * @todo This function needs to be cleaned up or split into separate functions
  */
 function bp_core_get_userlink( $user_id, $no_anchor = false, $just_link = false ) {
@@ -386,7 +400,7 @@ function bp_core_get_userlink( $user_id, $no_anchor = false, $just_link = false 
  * @uses get_userdata() Fetches the WP userdata for a specific user.
  * @uses xprofile_set_field_data() Will update the field data for a user based on field name and user id.
  * @uses wp_cache_set() Adds a value to the cache.
- * @return str The display name for the user in question.
+ * @return string|bool The display name for the user in question, or false if user not found.
  */
 function bp_core_get_user_displayname( $user_id_or_username ) {
 	global $bp;
@@ -442,10 +456,10 @@ add_filter( 'bp_core_get_user_displayname', 'esc_html'      );
  * Returns the user link for the user based on user email address
  *
  * @package BuddyPress Core
- * @param $email str The email address for the user.
+ * @param string $email The email address for the user.
  * @uses bp_core_get_userlink() BuddyPress function to get a userlink by user ID.
  * @uses get_user_by() WordPress function to get userdata via an email address
- * @return str The link to the users home base. False on no match.
+ * @return string The link to the users home base. False on no match.
  */
 function bp_core_get_userlink_by_email( $email ) {
 	$user = get_user_by( 'email', $email );
@@ -455,8 +469,8 @@ function bp_core_get_userlink_by_email( $email ) {
 /**
  * Returns the user link for the user based on the supplied identifier
  *
- * @param $username str If BP_ENABLE_USERNAME_COMPATIBILITY_MODE is set, this will be user_login, otherwise it will be user_nicename.
- * @return str The link to the users home base. False on no match.
+ * @param string $username If BP_ENABLE_USERNAME_COMPATIBILITY_MODE is set, this will be user_login, otherwise it will be user_nicename.
+ * @return string|bool The link to the users home base, false on no match.
  */
 function bp_core_get_userlink_by_username( $username ) {
 	if ( bp_is_username_compatibility_mode() )
@@ -478,7 +492,7 @@ function bp_core_get_total_member_count() {
 
 	if ( !$count = wp_cache_get( 'bp_total_member_count', 'bp' ) ) {
 		$status_sql = bp_core_get_status_sql();
-		$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE {$status_sql}" ) );
+		$count = $wpdb->get_var( "SELECT COUNT(ID) FROM {$wpdb->users} WHERE {$status_sql}" );
 		wp_cache_set( 'bp_total_member_count', $count, 'bp' );
 	}
 
@@ -496,15 +510,15 @@ function bp_core_get_active_member_count() {
 	if ( !$count = get_transient( 'bp_active_member_count' ) ) {
 		// Avoid a costly join by splitting the lookup
 		if ( is_multisite() ) {
-			$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE (user_status != 0 OR deleted != 0 OR user_status != 0)" );
+			$sql = "SELECT ID FROM {$wpdb->users} WHERE (user_status != 0 OR deleted != 0 OR user_status != 0)";
 		} else {
-			$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->users WHERE user_status != 0" );
+			$sql = "SELECT ID FROM {$wpdb->users} WHERE user_status != 0";
 		}
 
-		$exclude_users = $wpdb->get_col( $sql );
-		$exclude_users_sql = !empty( $exclude_users ) ? $wpdb->prepare( "AND user_id NOT IN (" . implode( ',', wp_parse_id_list( $exclude_users ) ) . ")" ) : '';
+		$exclude_users     = $wpdb->get_col( $sql );
+		$exclude_users_sql = !empty( $exclude_users ) ? "AND user_id NOT IN (" . implode( ',', wp_parse_id_list( $exclude_users ) ) . ")" : '';
+		$count             = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(user_id) FROM {$wpdb->usermeta} WHERE meta_key = %s {$exclude_users_sql}", bp_get_user_meta_key( 'last_activity' ) ) );
 
-		$count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(user_id) FROM $wpdb->usermeta WHERE meta_key = %s {$exclude_users_sql}", bp_get_user_meta_key( 'last_activity' ) ) );
 		set_transient( 'bp_active_member_count', $count );
 	}
 
@@ -634,11 +648,29 @@ function bp_is_user_spammer( $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		return false;
 
+	$bp = buddypress();
+
 	// Assume user is not spam
 	$is_spammer = false;
 
-	// Get user data
-	$user = get_userdata( $user_id );
+	// Setup our user
+	$user = false;
+
+	// Get locally-cached data if available
+	switch ( $user_id ) {
+		case bp_loggedin_user_id() :
+			$user = ! empty( $bp->loggedin_user->userdata ) ? $bp->loggedin_user->userdata : false;
+			break;
+
+		case bp_displayed_user_id() :
+			$user = ! empty( $bp->displayed_user->userdata ) ? $bp->displayed_user->userdata : false;
+			break;
+	}
+
+	// Manually get userdata if still empty
+	if ( empty( $user ) ) {
+		$user = get_userdata( $user_id );
+	}
 
 	// No user found
 	if ( empty( $user ) ) {
@@ -671,11 +703,29 @@ function bp_is_user_deleted( $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		return false;
 
+	$bp = buddypress();
+
 	// Assume user is not deleted
 	$is_deleted = false;
 
-	// Get user data
-	$user = get_userdata( $user_id );
+	// Setup our user
+	$user = false;
+
+	// Get locally-cached data if available
+	switch ( $user_id ) {
+		case bp_loggedin_user_id() :
+			$user = ! empty( $bp->loggedin_user->userdata ) ? $bp->loggedin_user->userdata : false;
+			break;
+
+		case bp_displayed_user_id() :
+			$user = ! empty( $bp->displayed_user->userdata ) ? $bp->displayed_user->userdata : false;
+			break;
+	}
+
+	// Manually get userdata if still empty
+	if ( empty( $user ) ) {
+		$user = get_userdata( $user_id );
+	}
 
 	// No user found
 	if ( empty( $user ) ) {
@@ -770,7 +820,7 @@ function bp_core_get_all_posts_for_user( $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		$user_id = bp_displayed_user_id();
 
-	return apply_filters( 'bp_core_get_all_posts_for_user', $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_author = %d AND post_status = 'publish' AND post_type = 'post'", $user_id ) ) );
+	return apply_filters( 'bp_core_get_all_posts_for_user', $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_author = %d AND post_status = 'publish' AND post_type = 'post'", $user_id ) ) );
 }
 
 /**
@@ -782,29 +832,44 @@ function bp_core_get_all_posts_for_user( $user_id = 0 ) {
  */
 function bp_core_delete_account( $user_id = 0 ) {
 
+	// Use logged in user ID if none is passed
 	if ( empty( $user_id ) )
 		$user_id = bp_loggedin_user_id();
 
-	// Make sure account deletion is not disabled
-	if ( !bp_current_user_can( 'delete_users' ) && bp_disable_account_deletion() )
+	// Bail if account deletion is disabled
+	if ( bp_disable_account_deletion() )
 		return false;
 
 	// Site admins cannot be deleted
 	if ( is_super_admin( $user_id ) )
 		return false;
 
+	// Extra checks if user is not deleting themselves
+	if ( bp_loggedin_user_id() !== absint( $user_id ) ) {
+
+		// Bail if current user cannot delete any users
+		if ( ! bp_current_user_can( 'delete_users' ) ) {
+			return false;
+		}
+
+		// Bail if current user cannot delete this user
+		if ( ! current_user_can_for_blog( bp_get_root_blog_id(), 'delete_user', $user_id ) ) {
+			return false;
+		}
+	}
+
 	do_action( 'bp_core_pre_delete_account', $user_id );
 
 	// Specifically handle multi-site environment
 	if ( is_multisite() ) {
-		require( ABSPATH . '/wp-admin/includes/ms.php'   );
-		require( ABSPATH . '/wp-admin/includes/user.php' );
+		require_once( ABSPATH . '/wp-admin/includes/ms.php'   );
+		require_once( ABSPATH . '/wp-admin/includes/user.php' );
 
 		$retval = wpmu_delete_user( $user_id );
 
 	// Single site user deletion
 	} else {
-		require( ABSPATH . '/wp-admin/includes/user.php' );
+		require_once( ABSPATH . '/wp-admin/includes/user.php' );
 		$retval = wp_delete_user( $user_id );
 	}
 
@@ -846,10 +911,10 @@ add_action( 'pre_user_login', 'bp_core_strip_username_spaces' );
  * When a user logs in, check if they have been marked as a spammer. If yes then simply
  * redirect them to the home page and stop them from logging in.
  *
- * @param obj $user Either the WP_User object or the WP_Error object
- * @return obj If the user is not a spammer, return the WP_User object. Otherwise a new WP_Error object.
+ * @param WP_User|WP_Error $user Either the WP_User object or the WP_Error object
+ * @return WP_User|WP_Error If the user is not a spammer, return the WP_User object. Otherwise a new WP_Error object.
  *
- * @since 1.1.2
+ * @since BuddyPress (1.1.2)
  */
 function bp_core_boot_spammer( $user ) {
 	// check to see if the $user has already failed logging in, if so return $user as-is
@@ -870,7 +935,7 @@ add_filter( 'authenticate', 'bp_core_boot_spammer', 30 );
  * Deletes usermeta for the user when the user is deleted.
  *
  * @package BuddyPress Core
- * @param $user_id The user id for the user to delete usermeta for
+ * @param int $user_id The user id for the user to delete usermeta for
  * @uses bp_delete_user_meta() deletes a row from the wp_usermeta table based on meta_key
  */
 function bp_core_remove_data( $user_id ) {
@@ -970,6 +1035,82 @@ function bp_core_get_illegal_names( $value = '', $oldvalue = '' ) {
 add_filter( 'pre_update_site_option_illegal_names', 'bp_core_get_illegal_names', 10, 2 );
 
 /**
+ * Check that an email address is valid for use
+ *
+ * Performs the following checks:
+ *   - Is the email address well-formed?
+ *   - Is the email address already used?
+ *   - If there's an email domain blacklist, is the current domain on it?
+ *   - If there's an email domain whitelest, is the current domain on it?
+ *
+ * @since BuddyPress (1.6.2)
+ *
+ * @param string $user_email The email being checked
+ * @return bool|array True if the address passes all checks; otherwise an array
+ *   of error codes
+ */
+function bp_core_validate_email_address( $user_email ) {
+	$errors = array();
+
+	$user_email = sanitize_email( $user_email );
+
+	// Is the email well-formed?
+	if ( ! is_email( $user_email ) )
+		$errors['invalid'] = 1;
+
+	// Is the email on the Banned Email Domains list?
+	// Note: This check only works on Multisite
+	if ( function_exists( 'is_email_address_unsafe' ) && is_email_address_unsafe( $user_email ) )
+		$errors['domain_banned'] = 1;
+
+	// Is the email on the Limited Email Domains list?
+	// Note: This check only works on Multisite
+	$limited_email_domains = get_site_option( 'limited_email_domains' );
+	if ( is_array( $limited_email_domains ) && empty( $limited_email_domains ) == false ) {
+		$emaildomain = substr( $user_email, 1 + strpos( $user_email, '@' ) );
+		if ( ! in_array( $emaildomain, $limited_email_domains ) ) {
+			$errors['domain_not_allowed'] = 1;
+		}
+	}
+
+	// Is the email alreday in use?
+	if ( email_exists( $user_email ) )
+		$errors['in_use'] = 1;
+
+	$retval = ! empty( $errors ) ? $errors : true;
+
+	return $retval;
+}
+
+/**
+ * Add the appropriate errors to a WP_Error object, given results of a validation test
+ *
+ * Functions like bp_core_validate_email_address() return a structured array
+ * of error codes. bp_core_add_validation_error_messages() takes this array and
+ * parses, adding the appropriate error messages to the WP_Error object.
+ *
+ * @since BuddyPress (1.7)
+ * @see bp_core_validate_email_address()
+ *
+ * @param WP_Error $errors WP_Error object
+ * @param array $validation_results The return value of a validation function
+ *   like bp_core_validate_email_address()
+ */
+function bp_core_add_validation_error_messages( WP_Error $errors, $validation_results ) {
+	if ( ! empty( $validation_results['invalid'] ) )
+		$errors->add( 'user_email', __( 'Please check your email address.', 'buddypress' ) );
+
+	if ( ! empty( $validation_results['domain_banned'] ) )
+		$errors->add( 'user_email',  __( 'Sorry, that email address is not allowed!', 'buddypress' ) );
+
+	if ( ! empty( $validation_results['domain_not_allowed'] ) )
+		$errors->add( 'user_email', __( 'Sorry, that email address is not allowed!', 'buddypress' ) );
+
+	if ( ! empty( $validation_results['in_use'] ) )
+		$errors->add( 'user_email', __( 'Sorry, that email address is already used!', 'buddypress' ) );
+}
+
+/**
  * Validate a user name and email address when creating a new user.
  *
  * @param string $user_name Username to validate
@@ -979,7 +1120,6 @@ add_filter( 'pre_update_site_option_illegal_names', 'bp_core_get_illegal_names',
 function bp_core_validate_user_signup( $user_name, $user_email ) {
 
 	$errors = new WP_Error();
-	$user_email = sanitize_email( $user_email );
 
 	// Apply any user_login filters added by BP or other plugins before validating
 	$user_name = apply_filters( 'pre_user_login', $user_name );
@@ -992,8 +1132,11 @@ function bp_core_validate_user_signup( $user_name, $user_email ) {
 
 	$illegal_names = get_site_option( 'illegal_names' );
 
-	if ( !validate_username( $user_name ) || in_array( $user_name, (array) $illegal_names ) )
-		$errors->add( 'user_name', __( 'Only lowercase letters and numbers allowed', 'buddypress' ) );
+	if ( in_array( $user_name, (array) $illegal_names ) )
+		$errors->add( 'user_name', __( 'That username is not allowed', 'buddypress' ) );
+
+	if ( ! validate_username( $user_name ) )
+		$errors->add( 'user_name', __( 'Usernames can contain only letters, numbers, ., -, *, and @', 'buddypress' ) );
 
 	if( strlen( $user_name ) < 4 )
 		$errors->add( 'user_name',  __( 'Username must be at least 4 characters', 'buddypress' ) );
@@ -1008,29 +1151,16 @@ function bp_core_validate_user_signup( $user_name, $user_email ) {
 	if ( $match[0] == $user_name )
 		$errors->add( 'user_name', __( 'Sorry, usernames must have letters too!', 'buddypress' ) );
 
-	if ( !is_email( $user_email ) )
-		$errors->add( 'user_email', __( 'Please check your email address.', 'buddypress' ) );
-
-	if ( function_exists( 'is_email_address_unsafe' ) && is_email_address_unsafe( $user_email ) )
-		$errors->add( 'user_email',  __( 'Sorry, that email address is not allowed!', 'buddypress' ) );
-
-	$limited_email_domains = get_site_option( 'limited_email_domains', 'buddypress' );
-
-	if ( is_array( $limited_email_domains ) && empty( $limited_email_domains ) == false ) {
-		$emaildomain = substr( $user_email, 1 + strpos( $user_email, '@' ) );
-
-		if ( in_array( $emaildomain, (array) $limited_email_domains ) == false )
-			$errors->add( 'user_email', __( 'Sorry, that email address is not allowed!', 'buddypress' ) );
-	}
-
 	// Check if the username has been used already.
 	if ( username_exists( $user_name ) )
 		$errors->add( 'user_name', __( 'Sorry, that username already exists!', 'buddypress' ) );
 
-	// Check if the email address has been used already.
-	if ( email_exists( $user_email ) )
-		$errors->add( 'user_email', __( 'Sorry, that email address is already used!', 'buddypress' ) );
+	// Validate the email address and process the validation results into
+	// error messages
+	$validate_email = bp_core_validate_email_address( $user_email );
+	bp_core_add_validation_error_messages( $errors, $validate_email );
 
+	// Assemble the return array
 	$result = array( 'user_name' => $user_name, 'user_email' => $user_email, 'errors' => $errors );
 
 	// Apply WPMU legacy filter
@@ -1073,7 +1203,7 @@ function bp_core_signup_user( $user_login, $user_password, $user_email, $usermet
 		}
 
 		// Update the user status to '2' which we will use as 'not activated' (0 = active, 1 = spam, 2 = not active)
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->users SET user_status = 2 WHERE ID = %d", $user_id ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->users} SET user_status = 2 WHERE ID = %d", $user_id ) );
 
 		// Set any profile data
 		if ( bp_is_active( 'xprofile' ) ) {
@@ -1163,13 +1293,13 @@ function bp_core_activate_signup( $key ) {
 	} else {
 
 		// Get the user_id based on the $key
-		$user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = 'activation_key' AND meta_value = %s", $key ) );
+		$user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'activation_key' AND meta_value = %s", $key ) );
 
 		if ( empty( $user_id ) )
 			return new WP_Error( 'invalid_key', __( 'Invalid activation key', 'buddypress' ) );
 
 		// Change the user's status so they become active
-		if ( !$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->users SET user_status = 0 WHERE ID = %d", $user_id ) ) )
+		if ( !$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->users} SET user_status = 0 WHERE ID = %d", $user_id ) ) )
 			return new WP_Error( 'invalid_key', __( 'Invalid activation key', 'buddypress' ) );
 
 		// Notify the site admin of a new user registration
@@ -1184,7 +1314,7 @@ function bp_core_activate_signup( $key ) {
 
 	// Set the password on multisite installs
 	if ( is_multisite() && !empty( $user['meta']['password'] ) )
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->users SET user_pass = %s WHERE ID = %d", $user['meta']['password'], $user_id ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->users} SET user_pass = %s WHERE ID = %d", $user['meta']['password'], $user_id ) );
 
 	do_action( 'bp_core_activated_user', $user_id, $key, $user );
 
@@ -1257,10 +1387,8 @@ function bp_core_signup_send_validation_email( $user_id, $user_email, $key ) {
 	$activate_url = bp_get_activation_page() ."?key=$key";
 	$activate_url = esc_url( $activate_url );
 
-	$from_name = ( '' == bp_get_option( 'blogname' ) ) ? __( 'BuddyPress', 'buddypress' ) : esc_html( bp_get_option( 'blogname' ) );
-
 	$message = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%1\$s\n\n", 'buddypress' ), $activate_url );
-	$subject = '[' . $from_name . '] ' . __( 'Activate Your Account', 'buddypress' );
+	$subject = bp_get_email_subject( array( 'text' => __( 'Activate Your Account', 'buddypress' ) ) );
 
 	// Send the message
 	$to      = apply_filters( 'bp_core_signup_send_validation_email_to',     $user_email, $user_id                );
@@ -1279,10 +1407,10 @@ function bp_core_signup_send_validation_email( $user_id, $user_email, $key ) {
  * Multisite has their own DB table - 'wp_signups' - dedicated for unactivated users.
  * See {@link wpmu_signup_user()} and {@link wpmu_validate_user_signup()}.
  *
- * @param obj $user Either the WP_User object or the WP_Error object
- * @return obj If the user is not a spammer, return the WP_User object. Otherwise a new WP_Error object.
+ * @param WP_User|WP_Error $user Either the WP_User object or the WP_Error object
+ * @return WP_User|WP_Error If the user is not a spammer, return the WP_User object. Otherwise a new WP_Error object.
  *
- * @since 1.2.2
+ * @since BuddyPress (1.2.2)
  */
 function bp_core_signup_disable_inactive( $user ) {
 	// check to see if the $user has already failed logging in, if so return $user as-is
@@ -1304,19 +1432,85 @@ add_filter( 'authenticate', 'bp_core_signup_disable_inactive', 30 );
  * Kill the wp-signup.php if custom registration signup templates are present
  */
 function bp_core_wpsignup_redirect() {
-	$action = !empty( $_GET['action'] ) ? $_GET['action'] : '';
 
-	if ( is_admin() || is_network_admin() )
+	// Bail in admin or if custom signup page is broken
+	if ( is_admin() || ! bp_has_custom_signup_page() )
 		return;
+
+	$action = !empty( $_GET['action'] ) ? $_GET['action'] : '';
 
 	// Not at the WP core signup page and action is not register
 	if ( ! empty( $_SERVER['SCRIPT_NAME'] ) && false === strpos( $_SERVER['SCRIPT_NAME'], 'wp-signup.php' ) && ( 'register' != $action ) )
 		return;
 
-	// Redirect to sign-up page
-	if ( locate_template( array( 'registration/register.php' ), false ) || locate_template( array( 'register.php' ), false ) )
-		bp_core_redirect( bp_get_signup_page() );
+	bp_core_redirect( bp_get_signup_page() );
 }
 add_action( 'bp_init', 'bp_core_wpsignup_redirect' );
 
-?>
+/**
+ * Stop a logged-in user who is marked as a spammer.
+ *
+ * When an admin marks a live user as a spammer, that user can still surf
+ * around and cause havoc on the site until that person is logged out.
+ *
+ * This code checks to see if a logged-in user is marked as a spammer.  If so,
+ * we redirect the user back to wp-login.php with the 'reauth' parameter.
+ *
+ * This clears the logged-in spammer's cookies and will ask the spammer to
+ * reauthenticate.
+ *
+ * Note: A spammer cannot log back in - {@see bp_core_boot_spammer()}.
+ *
+ * Runs on 'bp_init' at priority 5 so the members component globals are setup
+ * before we do our spammer checks.
+ *
+ * This is important as the $bp->loggedin_user object is setup at priority 4.
+ *
+ * @since BuddyPress (v1.8)
+ */
+function bp_stop_live_spammer() {
+	// if we're on the login page, stop now to prevent redirect loop
+	if ( strpos( $GLOBALS['pagenow'], 'wp-login.php' ) !== false ) {
+		return;
+	}
+
+	// user isn't logged in, so stop!
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	// if spammer, redirect to wp-login.php and reauthorize
+	if ( bp_is_user_spammer( bp_loggedin_user_id() ) ) {
+		// setup login args
+		$args = array(
+			// custom action used to throw an error message
+			'action' => 'bp-spam',
+
+			// reauthorize user to login
+			'reauth' => 1
+		);
+
+		// setup login URL
+		$login_url = apply_filters( 'bp_live_spammer_redirect', add_query_arg( $args, wp_login_url() ) );
+
+		// redirect user to login page
+		wp_redirect( $login_url );
+		die();
+	}
+}
+add_action( 'bp_init', 'bp_stop_live_spammer', 5 );
+
+/**
+ * Show a custom error message when a logged-in user is marked as a spammer.
+ *
+ * @since BuddyPress (v1.8)
+ */
+function bp_live_spammer_login_error() {
+	global $error;
+
+	$error = __( '<strong>ERROR</strong>: Your account has been marked as a spammer.', 'buddypress' );
+
+	// shake shake shake!
+	add_action( 'login_head', 'wp_shake_js', 12 );
+}
+add_action( 'login_form_bp-spam', 'bp_live_spammer_login_error' ); 

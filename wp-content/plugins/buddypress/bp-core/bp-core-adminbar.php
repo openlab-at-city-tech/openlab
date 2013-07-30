@@ -17,7 +17,6 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @since BuddyPress 1.6
  * @global WP_Admin_Bar $wp_admin_bar
- * @return If doing ajax
  */
 function bp_admin_bar_my_account_root() {
 	global $wp_admin_bar;
@@ -44,33 +43,68 @@ function bp_admin_bar_my_account_root() {
 add_action( 'admin_bar_menu', 'bp_admin_bar_my_account_root', 100 );
 
 /**
+ * Handle the Toolbar/BuddyBar business
+ *
+ * @since BuddyPress (1.2)
+ *
+ * @global string $wp_version
+ * @uses bp_get_option()
+ * @uses is_user_logged_in()
+ * @uses bp_use_wp_admin_bar()
+ * @uses show_admin_bar()
+ * @uses add_action() To hook 'bp_adminbar_logo' to 'bp_adminbar_logo'
+ * @uses add_action() To hook 'bp_adminbar_login_menu' to 'bp_adminbar_menus'
+ * @uses add_action() To hook 'bp_adminbar_account_menu' to 'bp_adminbar_menus'
+ * @uses add_action() To hook 'bp_adminbar_thisblog_menu' to 'bp_adminbar_menus'
+ * @uses add_action() To hook 'bp_adminbar_random_menu' to 'bp_adminbar_menus'
+ * @uses add_action() To hook 'bp_core_admin_bar' to 'wp_footer'
+ * @uses add_action() To hook 'bp_core_admin_bar' to 'admin_footer'
+ */
+function bp_core_load_admin_bar() {
+
+	// Show the Toolbar for logged out users
+	if ( ! is_user_logged_in() && (int) bp_get_option( 'hide-loggedout-adminbar' ) != 1 ) {
+		show_admin_bar( true );
+	}
+
+	// Hide the WordPress Toolbar and show the BuddyBar
+	if ( ! bp_use_wp_admin_bar() ) {
+
+		// Keep the WP Toolbar from loading
+		show_admin_bar( false );
+
+		// Actions used to build the BP Toolbar
+		add_action( 'bp_adminbar_logo',  'bp_adminbar_logo'               );
+		add_action( 'bp_adminbar_menus', 'bp_adminbar_login_menu',    2   );
+		add_action( 'bp_adminbar_menus', 'bp_adminbar_account_menu',  4   );
+		add_action( 'bp_adminbar_menus', 'bp_adminbar_thisblog_menu', 6   );
+		add_action( 'bp_adminbar_menus', 'bp_adminbar_random_menu',   100 );
+
+		// Actions used to append BP Toolbar to footer
+		add_action( 'wp_footer',    'bp_core_admin_bar', 8 );
+		add_action( 'admin_footer', 'bp_core_admin_bar'    );
+	}
+}
+add_action( 'init', 'bp_core_load_admin_bar', 9 );
+
+/**
  * Handle the Toolbar CSS
  *
  * @since BuddyPress 1.5
  */
 function bp_core_load_admin_bar_css() {
+	global $wp_styles;
 
 	if ( ! bp_use_wp_admin_bar() || ! is_admin_bar_showing() )
 		return;
 
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 	// Toolbar styles
-	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/admin-bar.dev.css';
-	else
-		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/admin-bar.css';
+	$stylesheet = BP_PLUGIN_URL . "bp-core/css/admin-bar{$min}.css";
 
 	wp_enqueue_style( 'bp-admin-bar', apply_filters( 'bp_core_admin_bar_css', $stylesheet ), array( 'admin-bar' ), bp_get_version() );
-
-	if ( !is_rtl() )
-		return;
-
-	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/admin-bar-rtl.dev.css';
-	else
-		$stylesheet = BP_PLUGIN_URL . 'bp-core/css/admin-bar-rtl.css';
-
-	wp_enqueue_style( 'bp-admin-bar-rtl', apply_filters( 'bp_core_admin_bar_rtl_css', $stylesheet ), array( 'bp-admin-bar' ), bp_get_version() );
+	$wp_styles->add_data( 'bp-admin-bar', 'rtl', true );
+	if ( $min )
+		$wp_styles->add_data( 'bp-admin-bar', 'suffix', $min );
 }
-add_action( 'bp_init', 'bp_core_load_admin_bar_css' );
-
-?>

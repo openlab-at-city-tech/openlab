@@ -64,6 +64,7 @@ class RVJ_ImageResize {
    var $arrResizedDetails;
    var $resOriginalImage; 
    var $resResizedImage;
+   var $numQuality = 95;
    var $boolProtect = true;  
   
    /*  
@@ -75,11 +76,12 @@ class RVJ_ImageResize {
    *   @Param-3:      strType - String - The type of resize you want to perform
    *   @Param-4:      value - Number/Array - The resize dimensions  
    *   @Param-5:      boolProect - Boolen - Protects the image so that it doesnt resize an image if its already smaller  
+   *   @Param-6:      numQuality - Number - The quality of compression if output is a JPEG
    *   @Description:   Calls the RVJ_Pagination method so its php 4 compatible  
    *  
    */
   
-   function __constructor($strPath, $strSavePath, $strType = "W", $value = "150", $boolProtect = true){
+   function __constructor($strPath, $strSavePath, $strType = "W", $value = "150", $boolProtect = true, $numQuality = 95){
       $this->RVJ_ImageResize($strPath, $strSavePath, $strType, $value); 
    }
   
@@ -91,15 +93,17 @@ class RVJ_ImageResize {
    *   @Param-2:      strSavePath - String - The path to save the new image to
    *   @Param-3:      strType - String - The type of resize you want to perform 
    *   @Param-4:      value - Number/Array - The resize dimensions  
-   *   @Param-5:      boolProect - Boolen - Protects the image so that it doesnt resize an image if its already smaller  
+   *   @Param-5:      boolProect - Boolen - Protects the image so that it doesnt resize an image if its already smaller 
+   *   @Param-6:      numQuality - Number - The quality of compression if output is a JPEG 
    *   @Description:   Calls the RVJ_Pagination method so its php 4 compatible  
    *  
    */
   
-   function RVJ_ImageResize($strPath, $strSavePath, $strType = "W", $value = "150", $boolProtect = true){
+   function RVJ_ImageResize($strPath, $strSavePath, $strType = "W", $value = "150", $boolProtect = true, $numQuality = 95){
       //save the image/path details
       $this->strOriginalImagePath = $strPath;
       $this->strResizedImagePath = $strSavePath; 
+      $this->numQuality = $numQuality;
       $this->boolProtect = $boolProtect;  
 
       //get the image dimensions
@@ -206,7 +210,7 @@ class RVJ_ImageResize {
             imagepng($this->resResizedImage, $this->strResizedImagePath, 7);
             break;
          case "image/gif":
-            imagegif($this->resResizedImage, $this->strResizedImagePath, $numQuality); 
+            imagegif($this->resResizedImage, $this->strResizedImagePath); 
             break;
       }
    }
@@ -258,11 +262,12 @@ class RVJ_ImageResize {
    *   @Parameters:   2  
    *   @Param-1:      numWidth - Number - The width of the image in pixels  
    *   @Param-2:      numHeight - Number - The height of the image in pixes  
+   *   @Param-3:      numQuality - Number - The quality of compression if output is a JPEG
    *   @Description:   Resizes the image by creatin a new canvas and copying the image over onto it. DONT CALL THIS METHOD DIRECTLY - USE THE METHODS BELOW  
    *  
    */ 
 
-   function _resize($numWidth, $numHeight){
+   function _resize($numWidth, $numHeight, $numQuality=95){
       //check for image protection  
       if($this->_imageProtect($numWidth, $numHeight)){     
          if($this->arrOriginalDetails['mime']=="image/gif"){
@@ -287,7 +292,7 @@ class RVJ_ImageResize {
            imagecopyresized($this->resResizedImage, $this->resOriginalImage, 0, 0, 0, 0, $numWidth, $numHeight, $this->arrOriginalDetails[0], $this->arrOriginalDetails[1]); 
          }
          //saves the image  
-         $this->saveImage();  
+         $this->saveImage($numQuality);  
       }  
    }
   
@@ -319,7 +324,7 @@ class RVJ_ImageResize {
   
    function resizeToWidth($numWidth){ 
       $numHeight=(int)(($numWidth*$this->arrOriginalDetails[1])/$this->arrOriginalDetails[0]);
-      $this->_resize($numWidth, $numHeight);   
+      $this->_resize($numWidth, $numHeight, $this->numQuality);   
    }
   
    /*  

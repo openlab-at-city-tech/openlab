@@ -326,12 +326,6 @@ function bp_message_thread_avatar() {
 		return apply_filters( 'bp_get_message_thread_avatar', bp_core_fetch_avatar( array( 'item_id' => $messages_template->thread->last_sender_id, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) ) ) ) );
 	}
 
-function bp_message_thread_view() {
-	global $thread_id;
-
-	messages_view_thread($thread_id);
-}
-
 function bp_total_unread_messages_count() {
 	echo bp_get_total_unread_messages_count();
 }
@@ -389,7 +383,7 @@ function bp_messages_form_action() {
 	 *
 	 * @package BuddyPress
 	 *
-	 * @return str The form action
+	 * @return string The form action
 	 */
 	function bp_get_messages_form_action() {
 		return apply_filters( 'bp_get_messages_form_action', trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/' . bp_current_action() . '/' . bp_action_variable( 0 ) ) );
@@ -635,7 +629,7 @@ function bp_send_private_message_link() {
  * Explicitly named function to avoid confusion with public messages.
  *
  * @uses bp_get_send_message_button()
- * @since 1.2.6
+ * @since BuddyPress (1.2.6)
  */
 function bp_send_private_message_button() {
 	echo bp_get_send_message_button();
@@ -645,8 +639,10 @@ function bp_send_message_button() {
 	echo bp_get_send_message_button();
 }
 	function bp_get_send_message_button() {
+		// Note: 'bp_get_send_message_button' is a legacy filter. Use
+		// 'bp_get_send_message_button_args' instead. See #4536
 		return apply_filters( 'bp_get_send_message_button',
-			bp_get_button( array(
+			bp_get_button( apply_filters( 'bp_get_send_message_button_args', array(
 				'id'                => 'private_message',
 				'component'         => 'messages',
 				'must_be_logged_in' => true,
@@ -656,7 +652,7 @@ function bp_send_message_button() {
 				'link_title'        => __( 'Send a private message to this user.', 'buddypress' ),
 				'link_text'         => __( 'Private Message', 'buddypress' ),
 				'link_class'        => 'send-message',
-			) )
+			) ) )
 		);
 	}
 
@@ -860,10 +856,11 @@ function bp_the_thread_message_alt_class() {
 	function bp_get_the_thread_message_alt_class() {
 		global $thread_template;
 
-		if ( $thread_template->current_message % 2 == 1 )
-			$class = ' alt';
-		else
-			$class = '';
+		if ( $thread_template->current_message % 2 == 1 ) {
+			$class = 'even alt';
+		} else {
+			$class = 'odd';
+		}
 
 		return apply_filters( 'bp_get_the_thread_message_alt_class', $class );
 	}
@@ -901,7 +898,12 @@ function bp_the_thread_message_sender_name() {
 	function bp_get_the_thread_message_sender_name() {
 		global $thread_template;
 
-		return apply_filters( 'bp_get_the_thread_message_sender_name', bp_core_get_user_displayname( $thread_template->message->sender_id ) );
+		$display_name = bp_core_get_user_displayname( $thread_template->message->sender_id );
+
+		if ( empty( $display_name ) )
+			$display_name = __( 'Deleted User', 'buddypress' );
+
+		return apply_filters( 'bp_get_the_thread_message_sender_name', $display_name );
 	}
 
 function bp_the_thread_delete_link() {
@@ -946,5 +948,3 @@ function bp_messages_embed() {
 	add_filter( 'embed_post_id', 'bp_get_message_thread_id' );
 }
 add_action( 'messages_box_loop_start', 'bp_messages_embed' );
-
-?>

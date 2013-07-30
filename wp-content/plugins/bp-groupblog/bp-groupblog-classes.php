@@ -33,6 +33,9 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 
 		$groupblog_create_screen = true;
 
+		// Attach the nonce fields in a hook. Mainly for backward compatibility
+		add_action( 'signup_blogform', array( &$this, 'nonce_fields_create' ) );
+
 		// Attaching the markup via a hook, so that plugins can unhook and replace with
 		// their own markup. This is a bit of a hack.
 		add_action( 'bp_groupblog_create_screen_markup', 'bp_groupblog_signup_blog' );
@@ -40,12 +43,11 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 
 		echo '<input type="hidden" name="groupblog-group-id" value="' . $bp->groups->current_group->id . '" />';
 		echo '<input type="hidden" name="groupblog-create-save" value="groupblog-create-save" />';
-
-		wp_nonce_field( 'groups_create_save_' . $this->slug );
 	}
 
 	function create_screen_save() {
 		if ( isset( $_POST['save'] ) ) {
+			check_admin_referer( 'groups_create_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
@@ -56,17 +58,32 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		if ( !bp_is_group_admin_screen( $this->slug ) )
 			return false;
 
+		// Attach the nonce fields in a hook. Mainly for backward compatibility
+		add_action( 'signup_blogform', array( &$this, 'nonce_fields_edit' ) );
+
 		// Attaching the markup via a hook, so that plugins can unhook and replace with
 		// their own markup. This is a bit of a hack.
 		add_action( 'bp_groupblog_edit_screen_markup', 'bp_groupblog_signup_blog' );
 		do_action( 'bp_groupblog_edit_screen_markup' );
-
 	}
 
 	function edit_screen_save() {
 		if ( isset( $_POST['save'] ) ) {
+			check_admin_referer( 'groups_edit_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
+	}
+
+	function nonce_fields_edit() {
+		$this->nonce_fields( 'edit' );
+	}
+
+	function nonce_fields_create() {
+		$this->nonce_fields( 'create' );
+	}
+
+	function nonce_fields( $type = 'edit' ) {
+		wp_nonce_field( 'groups_' . $type . '_save_' . $this->slug );
 	}
 
 	function display() {

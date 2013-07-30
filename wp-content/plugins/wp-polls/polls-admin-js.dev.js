@@ -1,8 +1,8 @@
 /*
 +----------------------------------------------------------------+
 |																							|
-|	WordPress 2.8 Plugin: WP-Polls 2.61										|
-|	Copyright (c) 2009 Lester "GaMerZ" Chan									|
+|	WordPress Plugin: WP-Polls										|
+|	Copyright © 2012 Lester "GaMerZ" Chan									|
 |																							|
 |	File Written By:																	|
 |	- Lester "GaMerZ" Chan															|
@@ -27,7 +27,7 @@ function delete_poll(poll_id, poll_confirm, nonce) {
 	delete_poll_confirm = confirm(poll_confirm);
 	if(delete_poll_confirm) {
 		global_poll_id = poll_id;
-		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll + '&pollq_id=' + poll_id + '&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll + '&pollq_id=' + poll_id + '&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 			jQuery('#message').html(data);
 			jQuery('#message').show();
 			jQuery('#poll-' + global_poll_id).remove();
@@ -40,7 +40,7 @@ function delete_poll_logs(poll_confirm, nonce) {
 	delete_poll_logs_confirm = confirm(poll_confirm);
 	if(delete_poll_logs_confirm) {
 		if(jQuery('#delete_logs_yes').is(':checked')) {
-			jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_all_logs + '&delete_logs_yes=yes&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+			jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_all_logs + '&delete_logs_yes=yes&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 				jQuery('#message').html(data);
 				jQuery('#message').show();
 				jQuery('#poll_logs').html(pollsAdminL10n.text_no_poll_logs);
@@ -57,7 +57,7 @@ function delete_this_poll_logs(poll_id, poll_confirm, nonce) {
 	if(delete_poll_logs_confirm) {
 		if(jQuery('#delete_logs_yes').is(':checked')) {
 			global_poll_id = poll_id;
-			jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll_logs + '&pollq_id=' + poll_id + '&delete_logs_yes=yes&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+			jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll_logs + '&pollq_id=' + poll_id + '&delete_logs_yes=yes&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 				jQuery('#message').html(data);
 				jQuery('#message').show();
 				jQuery('#poll_logs').html(pollsAdminL10n.text_no_poll_logs);
@@ -78,7 +78,7 @@ function delete_poll_ans(poll_id, poll_aid, poll_aid_vote, poll_confirm, nonce) 
 		global_poll_aid = poll_aid;
 		global_poll_aid_votes = poll_aid_vote;
 		temp_vote_count = 0;
-		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll_ans + '&pollq_id=' + poll_id + '&polla_aid=' + poll_aid + '&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll_ans + '&pollq_id=' + poll_id + '&polla_aid=' + poll_aid + '&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 			jQuery('#message').html(data);
 			jQuery('#message').show();
 			jQuery('#poll_total_votes').html((parseInt(jQuery('#poll_total_votes').html()) - parseInt(global_poll_aid_votes)));
@@ -95,7 +95,7 @@ function opening_poll(poll_id, poll_confirm, nonce) {
 	open_poll_confirm = confirm(poll_confirm);
 	if(open_poll_confirm) {
 		global_poll_id = poll_id;
-		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_open_poll + '&pollq_id=' + poll_id + '&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_open_poll + '&pollq_id=' + poll_id + '&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 			jQuery('#message').html(data);
 			jQuery('#message').show();
 			jQuery('#open_poll').hide();
@@ -109,7 +109,7 @@ function closing_poll(poll_id, poll_confirm, nonce) {
 	close_poll_confirm = confirm(poll_confirm);
 	if(close_poll_confirm) {
 		global_poll_id = poll_id;
-		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_close_poll + '&pollq_id=' + poll_id + '&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+		jQuery.ajax({type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_close_poll + '&pollq_id=' + poll_id + '&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 			jQuery('#message').html(data);
 			jQuery('#message').show();
 			jQuery('#open_poll').show();
@@ -120,11 +120,22 @@ function closing_poll(poll_id, poll_confirm, nonce) {
 
 // Reoder Answer Answer
 function reorder_answer_num() {
-	jQuery('#pollq_multiple').empty();
+	var pollq_multiple = jQuery('#pollq_multiple');
+	var selected = pollq_multiple.val();
+	var previous_size = jQuery('> option', pollq_multiple).size();
+	pollq_multiple.empty();
 	jQuery('#poll_answers tr > th').each(function (i) {
 		jQuery(this).text(pollsAdminL10n.text_answer + ' ' + (i+1));
-		jQuery('#pollq_multiple').append('<option value="' + (i+1) + '">' + (i+1) + '</option>');
+		jQuery(pollq_multiple).append('<option value="' + (i+1) + '">' + (i+1) + '</option>');
 	});
+	if(selected > 1)
+	{
+		var current_size = jQuery('> option', pollq_multiple).size();
+		if(selected <= current_size)
+			jQuery('> option', pollq_multiple).eq(selected - 1).attr('selected', 'selected');
+		else if(selected == previous_size)
+			jQuery('> option', pollq_multiple).eq(current_size - 1).attr('selected', 'selected');
+	}
 }
 
 // Calculate Total Votes

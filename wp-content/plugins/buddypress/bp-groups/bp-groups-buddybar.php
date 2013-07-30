@@ -15,7 +15,6 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @since BuddyPress (1.0)
  * @global BuddyPress $bp
- * @return False if no menu
  */
 function bp_groups_adminbar_admin_menu() {
 	global $bp;
@@ -65,5 +64,3 @@ function bp_groups_adminbar_admin_menu() {
 	<?php
 }
 add_action( 'bp_adminbar_menus', 'bp_groups_adminbar_admin_menu', 20 );
-
-?>

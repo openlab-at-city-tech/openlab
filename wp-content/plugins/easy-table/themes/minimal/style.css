@@ -1,0 +1,6 @@
+/* 
+* always include base css to get basic styling for header etc.
+*/
+@import url(../../css/easy-table.css);
+
+table.easy-table {max-width:100%;background-color:transparent;border-collapse:collapse;border-spacing:0;}

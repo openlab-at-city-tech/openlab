@@ -46,7 +46,8 @@ class GConnect_Front {
 			wp_enqueue_style( 'gconnect-adminbar', GENESISCONNECT_URL . 'css/adminbar.css', GENESISCONNECT_VERSION );
 		if( $this->theme->is_home() ) {
 			wp_enqueue_style( 'gconnect-bp', GENESISCONNECT_URL . 'css/buddypress.css', GENESISCONNECT_VERSION );
-			wp_enqueue_script( 'gconnect-ajax-js', GENESISCONNECT_URL . 'lib/global.js', array( 'jquery' ), GENESISCONNECT_VERSION );
+
+			wp_enqueue_script( 'bp-legacy-js', GENESISCONNECT_URL . 'lib/global.js', array( 'jquery' ), GENESISCONNECT_VERSION );
 			$params = array(
 				'my_favs'           => __( 'My Favorites', 'buddypress' ),
 				'accepted'          => __( 'Accepted', 'buddypress' ),
@@ -86,7 +87,6 @@ class GConnect_Front {
 			
 		add_action( 'bp_member_header_actions', 'gconnect_member_header' );
 		if ( bp_is_active( 'groups' ) ) {
-			add_action( 'bp_group_header_actions',     'bp_group_join_button' );
 			add_action( 'bp_group_header_actions',     'bp_group_new_topic_button' );
 			add_action( 'bp_directory_groups_actions', 'bp_group_join_button' );
 		}

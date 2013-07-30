@@ -1,10 +1,10 @@
 === BuddyPress Groupblog ===
-Contributors: MariusOoms, reblevins
+Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
-Tags: buddypress,groups,blogs,content
+Tags: buddypress, groups, blogs, content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 3.4.1 / BP 1.6
-Stable tag: 1.8
+Tested up to: WP 3.6 / BP 1.8
+Stable tag: 1.8.4
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -100,6 +100,24 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.8.4 =
+* Fixes duplicate activity items on some setups
+* Allows activity commenting based on global bp-disable-blogforum-comments setting
+* Corrects activity link URL for groupblog activity items
+
+= 1.8.3 =
+* Improved CSS for theme previews
+* Improves performance when setting up group with JS disabled
+
+= 1.8.2 =
+* Fixes problems with groupblog redirects
+* Ensures that blog roles are repaired when users are banned or removed from a group
+
+= 1.8.1 =
+* Security improvements
+* Fixes some markup, deprecated function calls, and PHP variable reference bugs
+* Fixes a number of bugs related to group member syncing and groupblog URLs on certain setups
 
 = 1.8 =
 * Fixes bug with blog autojoin

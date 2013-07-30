@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Reaches into the activity global and filters out items the user doesn't have access to
+ *
+ * Uses privacy settings from More Privacy Options
+ */
 function bp_mpo_activity_filter( $a, $activities ) {
 	global $bp;
 
@@ -7,9 +12,18 @@ function bp_mpo_activity_filter( $a, $activities ) {
 		return $activities;
 
 	foreach ( $activities->activities as $key => $activity ) {
-		if ( $activity->component == 'blogs' ) {
-			$blog_id = $activity->item_id;
+		if ( $activity->type == 'new_blog_post' || $activity->type == 'new_blog_comment' ) {
+
 			$current_user = $bp->loggedin_user->id;
+
+			// Account for bp-groupblog
+			if ( $activity->component == 'groups' ) {
+				$group_id = $activity->item_id;
+				$blog_id = groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
+			} else {
+				$blog_id = $activity->item_id;
+			}
+
 			$privacy = get_blog_option( $blog_id, 'blog_public' );
 
 			$remove_from_stream = false;
@@ -38,17 +52,15 @@ function bp_mpo_activity_filter( $a, $activities ) {
 					break;
 
 				case '-2':
-					if ( is_user_logged_in() ) {						
-						switch_to_blog( $blog_id );
-	
-						$user = new WP_User( $current_user );
-	
-						if ( !empty( $user->caps ) )
+					if ( is_user_logged_in() ) {
+						$meta_key = 'wp_' . $blog_id . '_capabilities';
+						$caps = get_user_meta( $current_user, $meta_key, true );
+
+						if ( !empty( $caps ) ) {
 							continue;
-						else {
+						} else {
 							$remove_from_stream = true;
 						}
-						restore_current_blog();
 					} else {
 						$remove_from_stream = true;
 					}
@@ -57,9 +69,9 @@ function bp_mpo_activity_filter( $a, $activities ) {
 				case '-3':
 					if ( is_user_logged_in() ) {
 						switch_to_blog( $blog_id );
-	
+
 						$user = new WP_User( $current_user );
-	
+
 						if ( in_array( 'administrator', $user->roles ) )
 							continue;
 						else {
@@ -72,18 +84,18 @@ function bp_mpo_activity_filter( $a, $activities ) {
 					break;
 
 			}
-			
+
 			if ( $remove_from_stream ) {
 				$activities->activity_count = $activities->activity_count - 1;
 				unset( $activities->activities[$key] );
+
 			}
 		}
 	}
-	/* Renumber the array keys to account for missing items */
-	$activities_new = array_values( $activities->activities );
 
+	$activities_new = array_values( $activities->activities );
 	$activities->activities = $activities_new;
-	//print "<pre>"; print_r($activities);
+
 	return $activities;
 }
 add_action( 'bp_has_activities', 'bp_mpo_activity_filter', 10, 2 );
@@ -94,4 +106,3 @@ function bp_mpo_activity_count() {
 	return '20';
 }
 add_action( 'bp_get_activity_count', 'bp_mpo_activity_count' );
-?>

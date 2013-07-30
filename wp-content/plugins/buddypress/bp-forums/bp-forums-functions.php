@@ -34,7 +34,7 @@ function bp_forums_is_bbpress_active() {
  * @return boolean True if option exists, false if not
  */
 function bp_forums_is_installed_correctly() {
-	global $bp;
+	$bp = buddypress();
 
 	if ( isset( $bp->forums->bbconfig ) && is_file( $bp->forums->bbconfig ) )
 		return true;
@@ -51,9 +51,7 @@ function bp_forums_is_installed_correctly() {
  * @return bool True if set, False if empty
  */
 function bp_forums_has_directory() {
-	global $bp;
-
-	return (bool) !empty( $bp->pages->forums->id );
+	return (bool) !empty( buddypress()->pages->forums->id );
 }
 
 /** Forum Functions ***********************************************************/
@@ -66,15 +64,13 @@ function bp_forums_get_forum( $forum_id ) {
 function bp_forums_new_forum( $args = '' ) {
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'forum_name'        => '',
 		'forum_desc'        => '',
 		'forum_parent_id'   => bp_forums_parent_forum_id(),
 		'forum_order'       => false,
 		'forum_is_category' => 0
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	return bb_new_forum( array( 'forum_name' => stripslashes( $forum_name ), 'forum_desc' => stripslashes( $forum_desc ), 'forum_parent' => $forum_parent_id, 'forum_order' => $forum_order, 'forum_is_category' => $forum_is_category ) );
@@ -83,7 +79,7 @@ function bp_forums_new_forum( $args = '' ) {
 function bp_forums_update_forum( $args = '' ) {
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'forum_id'          => '',
 		'forum_name'        => '',
 		'forum_desc'        => '',
@@ -91,9 +87,7 @@ function bp_forums_update_forum( $args = '' ) {
 		'forum_parent_id'   => bp_forums_parent_forum_id(),
 		'forum_order'       => false,
 		'forum_is_category' => 0
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	return bb_update_forum( array( 'forum_id' => (int) $forum_id, 'forum_name' => stripslashes( $forum_name ), 'forum_desc' => stripslashes( $forum_desc ), 'forum_slug' => stripslashes( $forum_slug ), 'forum_parent' => $forum_parent_id, 'forum_order' => $forum_order, 'forum_is_category' => $forum_is_category ) );
@@ -112,11 +106,9 @@ add_action( 'groups_delete_group', 'bp_forums_delete_group_forum' );
 /** Topic Functions ***********************************************************/
 
 function bp_forums_get_forum_topics( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'type'          => 'newest',
 		'forum_id'      => false,
 		'user_id'       => false,
@@ -127,9 +119,7 @@ function bp_forums_get_forum_topics( $args = '' ) {
 		'exclude'       => false,
 		'show_stickies' => 'all',
 		'filter'        => false // if $type = tag then filter is the tag name, otherwise it's terms to search on.
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	if ( class_exists( 'BB_Query' ) ) {
@@ -183,7 +173,7 @@ function bp_forums_new_topic( $args = '' ) {
 
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'topic_title'            => '',
 		'topic_slug'             => '',
 		'topic_text'             => '',
@@ -196,9 +186,7 @@ function bp_forums_new_topic( $args = '' ) {
 		'topic_open'             => 1,
 		'topic_tags'             => false, // accepts array or comma delim
 		'forum_id'               => 0      // accepts ids or slugs
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	$topic_title = strip_tags( $topic_title );
@@ -228,22 +216,18 @@ function bp_forums_new_topic( $args = '' ) {
 }
 
 function bp_forums_update_topic( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'topic_id'    => false,
 		'topic_title' => '',
 		'topic_text'  => '',
 		'topic_tags'  => false
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
-	// Check if the user is a spammer 
-	if ( bp_is_user_inactive( bp_loggedin_user_id() ) ) 
+	// Check if the user is a spammer
+	if ( bp_is_user_inactive( bp_loggedin_user_id() ) )
 		return false;
 
 	// bb_insert_topic() will append tags, but not remove them. So we remove all existing tags.
@@ -263,16 +247,12 @@ function bp_forums_update_topic( $args = '' ) {
 }
 
 function bp_forums_sticky_topic( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'topic_id' => false,
 		'mode'     => 'stick' // stick/unstick
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	if ( 'stick' == $mode )
@@ -284,16 +264,12 @@ function bp_forums_sticky_topic( $args = '' ) {
 }
 
 function bp_forums_openclose_topic( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'topic_id' => false,
 		'mode'     => 'close' // stick/unstick
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	if ( 'close' == $mode )
@@ -305,15 +281,11 @@ function bp_forums_openclose_topic( $args = '' ) {
 }
 
 function bp_forums_delete_topic( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'topic_id' => false
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	) );
 	extract( $r, EXTR_SKIP );
 
 	return bb_delete_topic( $topic_id, 1 );
@@ -332,7 +304,7 @@ function bp_forums_total_topic_count() {
 			$groups_table_sql = '';
 			$groups_where_sql = "t.topic_status = 0";
 		}
-		$count = $bbdb->get_results( $bbdb->prepare( "SELECT t.topic_id FROM {$bbdb->topics} AS t {$groups_table_sql} WHERE {$groups_where_sql}" ) );
+		$count = $bbdb->get_results( "SELECT t.topic_id FROM {$bbdb->topics} AS t {$groups_table_sql} WHERE {$groups_where_sql}" );
 		$count = count( (array) $count );
 	} else {
 		$count = 0;
@@ -345,33 +317,52 @@ function bp_forums_total_topic_count() {
  * Check to see whether a user has already left this particular reply on a given post.
  * Prevents dupes.
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  *
- * @param str $text The text of the comment
+ * @param string $text The text of the comment
  * @param int $topic_id The topic id
  * @param int $user_id The user id
  */
 function bp_forums_reply_exists( $text = '', $topic_id = 0, $user_id = 0 ) {
+
 	$reply_exists = false;
-	
+
 	if ( $text && $topic_id && $user_id ) {
 		do_action( 'bbpress_init' );
-		
+
 		$args = array(
 			'post_author_id' => $user_id,
 			'topic_id'       => $topic_id
 		);
-		
+
+		// Set the reply_exists_text so we can check it in the filter below
+		buddypress()->forums->reply_exists_text = $text;
+
 		// BB_Query's post_text parameter does a MATCH, while we need exact matches
-		add_filter( 'get_posts_where', create_function( '$q', 'return $q . " AND p.post_text = \'' . $text . '\'";' ) );
-		
+		add_filter( 'get_posts_where', '_bp_forums_reply_exists_posts_where' );
 		$query = new BB_Query( 'post', $args );
-		
-		$reply_exists = !empty( $query->results );
+		remove_filter( 'get_posts_where', '_bp_forums_reply_exists_posts_where' );
+
+		// Cleanup
+		unset( buddypress()->forums->reply_exists_text );
+
+		$reply_exists = (bool) !empty( $query->results );
 	}
-	
-	return apply_filters( 'bp_forums_reply_exists', $reply_exists, $text, $topic_id, $user_id );
+
+	return (bool) apply_filters( 'bp_forums_reply_exists', $reply_exists, $text, $topic_id, $user_id );
 }
+	/**
+	 * Private one-time-use function used in conjunction with bp_forums_reply_exists()
+	 *
+	 * @since BuddyPress (1.7)
+	 * @access private
+	 * @global WPDB $wpdb
+	 * @param string $where
+	 * @return string
+	 */
+	function _bp_forums_reply_exists_posts_where( $where = '' ) {
+		return $where . " AND p.post_text = '" . buddypress()->forums->reply_exists_text . "'";
+	}
 
 /**
  * Get a total "Topics Started" count for a given user
@@ -379,12 +370,10 @@ function bp_forums_reply_exists( $text = '', $topic_id = 0, $user_id = 0 ) {
  * @package BuddyPress
  *
  * @param int $user_id ID of the user being queried. Falls back on displayed user, then loggedin
- * @param str $type The current filter/sort type. 'active', 'popular', 'unreplied'
+ * @param string $type The current filter/sort type. 'active', 'popular', 'unreplied'
  * @return int $count The topic count
  */
 function bp_forums_total_topic_count_for_user( $user_id = 0, $type = 'active' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
 	if ( !$user_id )
@@ -423,8 +412,6 @@ function bp_forums_total_topic_count_for_user( $user_id = 0, $type = 'active' ) 
  * @return int $count
  */
 function bp_forums_total_replied_count_for_user( $user_id = 0, $type = 'active' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
 	if ( !$user_id )
@@ -460,17 +447,19 @@ function bp_forums_total_replied_count_for_user( $user_id = 0, $type = 'active' 
 }
 
 function bp_forums_get_topic_extras( $topics ) {
-	global $bp, $wpdb, $bbdb;
+	global $wpdb, $bbdb;
 
 	if ( empty( $topics ) )
 		return $topics;
+
+	$bp = buddypress();
 
 	// Get the topic ids
 	foreach ( (array) $topics as $topic ) $topic_ids[] = $topic->topic_id;
 	$topic_ids = $wpdb->escape( join( ',', (array) $topic_ids ) );
 
 	// Fetch the topic's last poster details
-	$poster_details = $wpdb->get_results( $wpdb->prepare( "SELECT t.topic_id, t.topic_last_poster, u.user_login, u.user_nicename, u.user_email, u.display_name FROM {$wpdb->users} u, {$bbdb->topics} t WHERE u.ID = t.topic_last_poster AND t.topic_id IN ( {$topic_ids} )" ) );
+	$poster_details = $wpdb->get_results( "SELECT t.topic_id, t.topic_last_poster, u.user_login, u.user_nicename, u.user_email, u.display_name FROM {$wpdb->users} u, {$bbdb->topics} t WHERE u.ID = t.topic_last_poster AND t.topic_id IN ( {$topic_ids} )" );
 	for ( $i = 0, $count = count( $topics ); $i < $count; ++$i ) {
 		foreach ( (array) $poster_details as $poster ) {
 			if ( $poster->topic_id == $topics[$i]->topic_id ) {
@@ -484,7 +473,7 @@ function bp_forums_get_topic_extras( $topics ) {
 
 	// Fetch fullname for the topic's last poster
 	if ( bp_is_active( 'xprofile' ) ) {
-		$poster_names = $wpdb->get_results( $wpdb->prepare( "SELECT t.topic_id, pd.value FROM {$bp->profile->table_name_data} pd, {$bbdb->topics} t WHERE pd.user_id = t.topic_last_poster AND pd.field_id = 1 AND t.topic_id IN ( {$topic_ids} )" ) );
+		$poster_names = $wpdb->get_results( "SELECT t.topic_id, pd.value FROM {$bp->profile->table_name_data} pd, {$bbdb->topics} t WHERE pd.user_id = t.topic_last_poster AND pd.field_id = 1 AND t.topic_id IN ( {$topic_ids} )" );
 		for ( $i = 0, $count = count( $topics ); $i < $count; ++$i ) {
 			foreach ( (array) $poster_names as $name ) {
 				if ( $name->topic_id == $topics[$i]->topic_id )
@@ -536,23 +525,18 @@ function bp_forums_get_post( $post_id ) {
 }
 
 function bp_forums_delete_post( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
-	$defaults = array(
+	$r = wp_parse_args( $args, array(
 		'post_id' => false
-	);
+	) );
 
-	$r = wp_parse_args( $args, $defaults );
 	extract( $r, EXTR_SKIP );
 
 	return bb_delete_post( $post_id, 1 );
 }
 
 function bp_forums_insert_post( $args = '' ) {
-	global $bp;
-
 	do_action( 'bbpress_init' );
 
 	$defaults = array(
@@ -609,7 +593,7 @@ function bp_forums_get_post_extras( $posts ) {
 	$user_ids = $wpdb->escape( join( ',', (array) $user_ids ) );
 
 	// Fetch the poster's user_email, user_nicename and user_login
-	$poster_details = $wpdb->get_results( $wpdb->prepare( "SELECT u.ID as user_id, u.user_login, u.user_nicename, u.user_email, u.display_name FROM {$wpdb->users} u WHERE u.ID IN ( {$user_ids} )" ) );
+	$poster_details = $wpdb->get_results( "SELECT u.ID as user_id, u.user_login, u.user_nicename, u.user_email, u.display_name FROM {$wpdb->users} u WHERE u.ID IN ( {$user_ids} )" );
 
 	for ( $i = 0, $count = count( $posts ); $i < $count; ++$i ) {
 		foreach ( (array) $poster_details as $poster ) {
@@ -624,7 +608,7 @@ function bp_forums_get_post_extras( $posts ) {
 
 	// Fetch fullname for each poster.
 	if ( bp_is_active( 'xprofile' ) ) {
-		$poster_names = $wpdb->get_results( $wpdb->prepare( "SELECT pd.user_id, pd.value FROM {$bp->profile->table_name_data} pd WHERE pd.user_id IN ( {$user_ids} )" ) );
+		$poster_names = $wpdb->get_results( "SELECT pd.user_id, pd.value FROM {$bp->profile->table_name_data} pd WHERE pd.user_id IN ( {$user_ids} )" );
 		for ( $i = 0, $count = count( $posts ); $i < $count; ++$i ) {
 			foreach ( (array) $poster_names as $name ) {
 				if ( isset( $topics[$i] ) && $name->user_id == $topics[$i]->user_id )
@@ -646,7 +630,7 @@ function bp_forums_get_forum_topicpost_count( $forum_id ) {
 }
 
 function bp_forums_filter_caps( $allcaps ) {
-	global $bp, $wp_roles, $bb_table_prefix;
+	global $wp_roles, $bb_table_prefix;
 
 	if ( !bp_loggedin_user_id() )
 		return $allcaps;
@@ -746,4 +730,3 @@ function bp_embed_forum_cache( $cache, $id, $cachekey ) {
 function bp_embed_forum_save_cache( $cache, $cachekey, $id ) {
 	bb_update_postmeta( $id, $cachekey, $cache );
 }
-?>

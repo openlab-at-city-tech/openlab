@@ -103,9 +103,9 @@ endif;
 if ( !function_exists( 'groups_get_current_group' ) ) :
 	function groups_get_current_group() {
 		global $bp;
-	
+
 		$current_group = isset( $bp->groups->current_group ) ? $bp->groups->current_group : false;
-	
+
 		return apply_filters( 'groups_get_current_group', $current_group );
 	}
 endif;
@@ -149,4 +149,18 @@ if ( !function_exists( 'bp_screens' ) ) :
 		do_action( 'bp_screens' );
 	}
 	add_action( 'wp', 'bp_screens', 3 );
+endif;
+
+if ( ! function_exists( 'bp_core_admin_hook' ) ) :
+	// This is a bit imprecise. Won't work properly when BP activated on
+	// a single site in a network
+	function bp_core_admin_hook() {
+		if ( is_multisite() ) {
+			$retval = defined( 'BP_ENABLE_MULTIBLOG' ) && BP_ENABLE_MULTIBLOG ? 'admin_menu' : 'network_admin_menu';
+		} else {
+			$retval = 'network_admin_menu';
+		}
+
+		return $retval;
+	}
 endif;

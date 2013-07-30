@@ -1,22 +1,22 @@
-# Copyright (C) 2010 Pilcrow
-# This file is distributed under the same license as the Pilcrow package.
+# Copyright (C) 2013 Automattic
+# This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pilcrow 1.3\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/pilcrow\n"
-"POT-Creation-Date: 2012-01-06 21:31:52+00:00\n"
+"Project-Id-Version: Pilcrow 1.5-wpcom\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tags/pilcrow\n"
+"POT-Creation-Date: 2013-07-09 02:05:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: 404.php:16 loop.php:33
+#: 404.php:15 loop.php:34
 msgid "Not Found"
 msgstr ""
 
-#: 404.php:18
+#: 404.php:17
 msgid ""
 "Apologies, but the page you requested could not be found. Perhaps searching "
 "will help."
@@ -38,145 +38,144 @@ msgstr ""
 msgid "Blog Archives"
 msgstr ""
 
-#: archives.php:25
+#: archives.php:20
 msgid "Browse by Month:"
 msgstr ""
 
-#: archives.php:30
+#: archives.php:25
 msgid "Browse by Category:"
 msgstr ""
 
-#: author.php:27
+#: author.php:28
 msgid "Author Archives: %s"
 msgstr ""
 
-#: author.php:37
+#: author.php:45
 msgid "About %s"
 msgstr ""
 
-#: category.php:16
+#: category.php:15
 msgid "Category Archives: %s"
 msgstr ""
 
-#: comments.php:18
-msgid ""
-"This post is password protected. Enter the password to view any comments."
-msgstr ""
-
-#: comments.php:35
+#: comments.php:23
 msgid "One Response to %2$s"
 msgid_plural "%1$s Responses to %2$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: comments.php:41 comments.php:60
+#: comments.php:30 comments.php:49
 msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
 msgstr ""
 
-#: comments.php:42 comments.php:61
+#: comments.php:31 comments.php:50
 msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
-#: comments.php:72
+#: comments.php:61
 msgid "Comments are closed."
 msgstr ""
 
 #: footer.php:30
+msgid "A Semantic Personal Publishing Platform"
+msgstr ""
+
+#: footer.php:30
+msgid "Proudly powered by %s"
+msgstr ""
+
+#: footer.php:32
 msgid "Theme: %1$s by %2$s."
 msgstr ""
 
-#: functions.php:64
+#: functions.php:61
 msgid "Primary Navigation"
 msgstr ""
 
-#. translators: header image description
-#: functions.php:109
-msgid "Books"
-msgstr ""
-
-#. translators: header image description
-#: functions.php:115
-msgid "Record"
-msgstr ""
-
-#. translators: header image description
-#: functions.php:121
-msgid "Pattern"
-msgstr ""
-
-#: functions.php:295 loop-image.php:95 loop.php:79
+#: functions.php:132 loop-image.php:70 loop.php:102
 msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
-#: functions.php:349
-msgid "%s"
+#: functions.php:183
+msgid "Pingback:"
 msgstr ""
 
-#: functions.php:353
+#: functions.php:183 functions.php:202
+msgid "(Edit)"
+msgstr ""
+
+#: functions.php:195
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
 #. translators: 1: date, 2: time
-#: functions.php:360
+#: functions.php:202
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: functions.php:360 functions.php:377
-msgid "(Edit)"
-msgstr ""
-
-#: functions.php:377
-msgid "Pingback:"
-msgstr ""
-
-#: functions.php:396
+#: functions.php:230
 msgid "Sidebar"
 msgstr ""
 
-#: functions.php:398
+#: functions.php:232
 msgid "The main sidebar"
 msgstr ""
 
-#: functions.php:407
+#: functions.php:241
 msgid "Secondary Sidebar"
 msgstr ""
 
-#: functions.php:409
+#: functions.php:243
 msgid "The secondary sidebar in three-column layouts"
 msgstr ""
 
-#: functions.php:418
+#: functions.php:252
 msgid "Feature Area"
 msgstr ""
 
-#: functions.php:420
+#: functions.php:254
 msgid ""
 "The feature widget area above the sidebars in Content-Sidebar-Sidebar and "
 "Sidebar-Sidebar-Content layouts"
 msgstr ""
 
-#: functions.php:429
+#: functions.php:263
 msgid "First Footer Area"
 msgstr ""
 
-#: functions.php:431
+#: functions.php:265
 msgid "The first footer widget area"
 msgstr ""
 
-#: functions.php:440
+#: functions.php:274
 msgid "Second Footer Area"
 msgstr ""
 
-#: functions.php:442
+#: functions.php:276
 msgid "The second footer widget area"
 msgstr ""
 
-#: header.php:38
+#: functions.php:469
 msgid "Page %s"
 msgstr ""
 
-#: header.php:75
+#: header.php:40
 msgid "Skip to content"
+msgstr ""
+
+#: inc/custom-header.php:43
+msgctxt "Header image description"
+msgid "Books"
+msgstr ""
+
+#: inc/custom-header.php:48
+msgctxt "Header image description"
+msgid "Record"
+msgstr ""
+
+#: inc/custom-header.php:53
+msgctxt "Header image description"
+msgid "Pattern"
 msgstr ""
 
 #: inc/theme-options.php:25
@@ -223,165 +222,155 @@ msgstr ""
 msgid "Full-Width, No Sidebar"
 msgstr ""
 
-#: inc/theme-options.php:98
-msgid " Theme Options"
+#: inc/theme-options.php:96
+msgid "%s Theme Options"
 msgstr ""
 
-#: inc/theme-options.php:101
-msgid "Options saved"
-msgstr ""
-
-#: inc/theme-options.php:115
+#: inc/theme-options.php:104
 msgid "Color Scheme"
 msgstr ""
 
-#: inc/theme-options.php:134
+#: inc/theme-options.php:111
 msgid "Select a default color scheme"
 msgstr ""
 
-#: inc/theme-options.php:143 inc/theme-options.php:145
+#: inc/theme-options.php:116 inc/theme-options.php:119
 msgid "Default Layout"
 msgstr ""
 
-#: inc/theme-options.php:178
-msgid "Save Options"
-msgstr ""
-
-#: links.php:28 loop-image.php:53 loop-page.php:30 loop-single.php:35
-#: loop.php:68
+#: links.php:23 loop-image.php:49 loop-page.php:29 loop-single.php:49
+#: loop.php:86
 msgid "Edit"
 msgstr ""
 
-#: loop-image.php:23
+#: loop-image.php:19
 msgid "Published %1$s"
 msgstr ""
 
-#: loop-image.php:32
-msgid " in %1$s"
+#: loop-image.php:19
+msgid "Published %1$s in %2$s"
 msgstr ""
 
-#: loop-image.php:35
+#: loop-image.php:33
 msgid "Return to %s"
 msgstr ""
 
-#: loop-image.php:44
+#: loop-image.php:40
 msgid "Full size is %s pixels"
 msgstr ""
 
-#: loop-image.php:47
+#: loop-image.php:43
 msgid "Link to full-size image"
 msgstr ""
 
-#: loop-image.php:58
+#: loop-image.php:54
 msgid "&larr; Previous"
 msgstr ""
 
-#: loop-image.php:59
+#: loop-image.php:55
 msgid "Next &rarr;"
 msgstr ""
 
-#: loop-image.php:96 loop-page.php:29 loop-single.php:46 loop.php:80
+#: loop-image.php:71 loop-page.php:25 loop-single.php:66 loop.php:103
 msgid "Pages:"
 msgstr ""
 
-#: loop-single.php:21 loop-single.php:57
+#: loop-single.php:24 loop-single.php:95
 msgctxt "Previous post link"
 msgid "&larr;"
 msgstr ""
 
-#: loop-single.php:22 loop-single.php:58
+#: loop-single.php:25 loop-single.php:96
 msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: loop-single.php:28 loop.php:61
+#: loop-single.php:34 loop-single.php:78 loop.php:70 loop.php:113
 msgid ""
 "<span class=\"by-author\"><span class=\"sep\">by</span> <span class=\"author "
-"vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3"
-"$s</a></span> | </span>"
+"vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">"
+"%3$s</a></span> | </span>"
 msgstr ""
 
-#: loop-single.php:30 loop.php:63
+#: loop-single.php:36 loop-single.php:80 loop.php:72 loop.php:115
 msgid "View all posts by %s"
 msgstr ""
 
-#: loop-single.php:39
+#: loop-single.php:44 loop.php:81
+msgid "All %s posts"
+msgstr ""
+
+#: loop-single.php:54
 msgid "<span class=\"meta-nav\">&darr; </span>Jump to Comments"
 msgstr ""
 
-#: loop-single.php:50 loop.php:85
+#: loop-single.php:73 loop.php:108
 msgid "Leave a Comment"
 msgstr ""
 
-#: loop-single.php:50 loop.php:85
+#: loop-single.php:73 loop.php:108
 msgid "1 Comment"
 msgstr ""
 
-#: loop-single.php:50 loop.php:85
+#: loop-single.php:73 loop.php:108
 msgid "% Comments"
 msgstr ""
 
-#: loop-single.php:51 loop.php:86
+#: loop-single.php:87 loop.php:122
 msgid "Filed under %s"
 msgstr ""
 
-#: loop-single.php:52 loop.php:87
+#: loop-single.php:88 loop.php:123
 msgid "Tagged as"
 msgstr ""
 
-#: loop.php:25 loop.php:99
+#: loop.php:25 loop.php:137
 msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
 msgstr ""
 
-#: loop.php:26 loop.php:100
+#: loop.php:26 loop.php:138
 msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
-#: loop.php:35
+#: loop.php:36
 msgid ""
 "Apologies, but no results were found for the requested archive. Perhaps "
 "searching will help find a related post."
-msgstr ""
-
-#: loop.php:67 loop.php:71
-msgid "Permalink to %s"
 msgstr ""
 
 #: search.php:16
 msgid "Search Results for: %s"
 msgstr ""
 
-#: search.php:26
+#: search.php:29
 msgid "Nothing Found"
 msgstr ""
 
-#: search.php:28
+#: search.php:31
 msgid ""
 "Sorry, but nothing matched your search criteria. Please try again with some "
 "different keywords."
 msgstr ""
 
-#: sidebar.php:54
+#: sidebar.php:51
 msgid "Search"
 msgstr ""
 
-#: sidebar.php:59
-msgid "RSS"
-msgstr ""
-
-#: sidebar.php:70
+#: sidebar.php:56
 msgid "Recent Entries"
 msgstr ""
 
-#: sidebar.php:86
+#. #-#-#-#-#  pilcrow.pot (Pilcrow 1.5-wpcom)  #-#-#-#-#
+#. Template Name of the plugin/theme
+#: sidebar.php:72
 msgid "Links"
 msgstr ""
 
-#: sidebar.php:109
+#: sidebar.php:95
 msgid "Meta"
 msgstr ""
 
-#: tag.php:16
+#: tag.php:15
 msgid "Tag Archives: %s"
 msgstr ""
 
@@ -390,7 +379,7 @@ msgid "Pilcrow"
 msgstr ""
 
 #. Theme URI of the plugin/theme
-msgid "http://wordpress.org/extend/themes/pilcrow/"
+msgid "http://theme.wordpress.com/themes/pilcrow/"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -409,10 +398,10 @@ msgstr ""
 msgid "http://automattic.com/"
 msgstr ""
 
-#. Tags of the plugin/theme
-msgid ""
-"custom-header, custom-background, custom-menu, sticky-post, microformats, "
-"rtl-language-support, translation-ready, featured-image-header, featured-"
-"images, blog, education, photography, bright, clean, conservative, formal, "
-"generic, light, minimal, simple"
+#. Template Name of the plugin/theme
+msgid "Archives"
+msgstr ""
+
+#. Template Name of the plugin/theme
+msgid "One column, no sidebar"
 msgstr ""

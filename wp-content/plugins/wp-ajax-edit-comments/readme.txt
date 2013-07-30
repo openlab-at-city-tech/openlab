@@ -1,19 +1,21 @@
 === WP Ajax Edit Comments ===
-Contributors: Ajay, ronalfy, Pluginbuddy Team
+Contributors: Ajay, ronalfy, joshben, blepoxp
 Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin
-Requires at least: 2.8
-Tested up to: 3.3
-Stable tag: 5.0.7.0
+Requires at least: 3.1
+Tested up to: 3.6
+License: GPLv2 or later
+Stable tag: 5.0.27.0
 
-Users can edit their own comments for a limited time, while admins can edit all comments.
+Allow users to edit comments for a limited time, while admins can edit all comments.
 
 == Description ==
 
-Users can edit their own comments for a limited time, while admins can edit all comments.
+Ajax Edit Comments allows users to edit their own comments for a limited time.  Administrators can edit all comments on the front-end.
 
 = Features =
 <h4>Admin Features</h4>
-Please watch this video demonstrating the <a href='http://www.youtube.com/watch?v=b5-ViKb4hfY&fmt=22'>new admin features</a>.
+Please watch this video demonstrating the <a href='http://www.youtube.com/watch?v=b5-ViKb4hfY&fmt=22'>new admin features</a>.  Alternatively, read about <a href="https://github.com/ronalfy/ajax-edit-comments/wiki">the features on Github</a>.
+
 <ul>
 <li>Can edit all comments.</li>
 <li>Can move comments.</li>
@@ -45,56 +47,97 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 5.0.27.0 =
+* Released 06 June 2013 by Ronald Huereca
+* Updated colorbox for WP 3.6 compatibility.
+
+= 5.0.26.0 = 
+* Released 26 February 2013 by Ronald Huereca
+* Added Dutch and French language files
+
+= 5.0.25.0 =
+* Released 25 February 2013 by Ronald Huereca
+* Fixing bug where options would not save in multisite.
+
+= 5.0.24.0 =
+* Released 22 January 2013 by Ronald Huereca
+* New feature - Move comments by post types (instead of just posts)
+* Improved internationalization
+
+= 5.0.21.0 =
+* Released 21 January 2013 by Ronald Huereca
+* Added respect for the `moderate_comments` capability.
+* Fixed internationalization issues.
+
+= 5.0.20.0 = 
+* Released 17 January 2013 by Ronald Huereca
+* Revised admin panel options into sub-pages instead of tabs.
+
+= 5.0.13.0 =
+* Released 11 January 2013 by Ronald Huereca
+* Removed file storage capabilities of the plugin for JavaScript and CSS.  This should resolve problems for a majority of the users who don't have write permissions to their server.
+* Updated After the Deadline JavaScript file.
+* Fixed output buffer problem.
+
+= 5.0.10.0 =
+* Released 08 January 2013 by Ronald Huereca
+* Fixed WP 3.5 anonymous editing being disabled.
+
+= 5.0.9.0 =
+* Released 07 January 2013 by Glenn Ansley
+* Fixed WP 3.5 warning notices
+
 = 5.0.7.0 =
-*Released 25 January 2012 by Josh Benham 
-*Fixed checking for updater in lib/class.js
+* Released 25 January 2012 by Josh Benham 
+* Fixed checking for updater in lib/class.js
 
 = 5.0.6.0 = 
-*Released 20 January 2012 by Josh Benham 
-Fixed missing styling sheets 
+* Released 20 January 2012 by Josh Benham 
+* Fixed missing styling sheets 
 
 = 5.0.5.0 = 
-*Released 28 November 2011 by Josh Benham 
-*Fixed 3.3 issues
-*Fixed email issues
+* Released 28 November 2011 by Josh Benham 
+* Fixed 3.3 issues
+* Fixed email issues
  
 = 5.0.4.0 = 
-*Released 14 October 2011 by Daniel Harzheim 
-*Fixed problem with display_changelog not being loaded on init
+* Released 14 October 2011 by Daniel Harzheim 
+* Fixed problem with display_changelog not being loaded on init
 
 = 5.0.3.0 =
-*Released 22 September 2011 by Ronald Huereca
-*Fixing updater issue
+* Released 22 September 2011 by Ronald Huereca
+* Fixing updater issue
 
 = 5.0.2.0 = 
-*Released 22 September 2011 by Ronald Huereca
-*Fixing updater issue
+* Released 22 September 2011 by Ronald Huereca
+* Fixing updater issue
 
 = 5.0.1.0 = 
-*Released 15 September 2011 by Bes Zain
-*Fixing an issue with automatic upgrades
+* Released 15 September 2011 by Bes Zain
+* Fixing an issue with automatic upgrades
 
 = 5.0.0.0 = 
-*Released 23 August 2011 by Ronald Huereca
-*Big version jump due to...
-*A complete re-structuring of the plugin code
-*JavaScript / Ajax completely re-written for JSON
-*Built-in style editor
-*More Icon themes
-*Colorbox options
-*Multisite support
+* Released 23 August 2011 by Ronald Huereca
+* Big version jump due to...
+* A complete re-structuring of the plugin code
+* JavaScript / Ajax completely re-written for JSON
+* Built-in style editor
+* More Icon themes
+* Colorbox options
+* Multisite support
 
 = 4.1.11.0 =  
-*Released 28 July 2011 by Ronald Huereca 
-*Fixing a minor bug in the updater
+* Released 28 July 2011 by Ronald Huereca 
+* Fixing a minor bug in the updater
 
 = 4.1.10.0 = 
-*Released 27 July 2011 by Ronald Huereca
-*Updated the updater
+* Released 27 July 2011 by Ronald Huereca
+* Updated the updater
 
 = 4.1.9.9 = 
-*Released 26 July 2011 by Ronald Huereca 
-*First iThemes Beta release
+* Released 26 July 2011 by Ronald Huereca 
+* First iThemes Beta release
 
 = 3.2.1.0 =
 * Released 29 May 2011 by Ronalfy
@@ -164,6 +207,29 @@ Fixed missing styling sheets
 
 == Upgrade Notice ==
 
+= 5.0.27.0 =
+Updated colorbox for WP 3.6 compatibility.
+
+= 5.0.26.0 =
+Added Dutch and French language files
+
+= 5.0.25.0 = 
+Fixing a bug where options wouldn't save in multisite.
+
+= 5.0.24.0 =
+Added a new feature for moving comments.  You can now move comments for all post types.
+
+= 5.0.21.0 =
+Added respect for the `moderate_comments` capability.  Fixed internationalization issues.
+
+= 5.0.20.0 =
+
+Revised admin panel options into sub-pages instead of tabs.
+
+= 5.0.13.0 = 
+
+A ton of bug fixes, and changing the way scripts and styles are loaded.
+
 = 3.2.0.0 = 
 
 Resolves a colorbox conflict with WordPress 3.1.
@@ -185,7 +251,7 @@ Resolves a colorbox conflict with WordPress 3.1.
 1. Just unzip and upload the "wp-ajax-edit-comments" folder to your '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-From there, you and your users should be able to edit comments.  This plugin has been tested successfully on Internet Explorer 6-8, Firefox 2,3, and Safari for Mac.
+From there, you and your users should be able to edit comments.  This plugin has been tested successfully on the base Twenty Twelve theme for Internet Explorer 6-9, Firefox, Chrome, and Safari for Mac.
 
 Advanced customization options are available through the admin panel options.  
 
@@ -237,7 +303,9 @@ We strive for backwards compatibility, but can only support the plugin for the l
 
 = Can I provide a translation? =
 
-Not for this version.
+Sure.  If you're familiar with Git, head to the <a href="https://github.com/ronalfy/ajax-edit-comments">Ajax Edit Comments Github</a> and add your translation there.
+
+Alternatively, leave a thread with a downloadable version of your translation (both .po and .mo files are required).
 
 = Will you provide support for older versions of Ajax Edit Comments (1.x)? =
 
@@ -249,4 +317,4 @@ Yes, the last stable version for WP versions 2.1 - 2.5 is:  <a href="http://down
 
 = Is support free? =
 
-Yes please go to our support forum here for our free plugin support. http://ithemes.com/forum/forum/132-support-for-free-plugins/
+We'll do our best to answer your support question.  Just leave the support question via the forums on WP.org.

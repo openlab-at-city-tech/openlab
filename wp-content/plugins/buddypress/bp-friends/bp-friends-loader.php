@@ -29,7 +29,7 @@ class BP_Friends_Component extends BP_Component {
 	/**
 	 * Include files
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		// Files to include
 		$includes = array(
 			'actions',
@@ -54,7 +54,7 @@ class BP_Friends_Component extends BP_Component {
 	 * @since BuddyPress (1.5)
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		define ( 'BP_FRIENDS_DB_VERSION', '1800' );
@@ -87,7 +87,7 @@ class BP_Friends_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 		global $bp;
 
 		$sub_nav = array();
@@ -102,7 +102,16 @@ class BP_Friends_Component extends BP_Component {
 			'item_css_id'         => $bp->friends->id
 		);
 
-		$friends_link = trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() );
+		// Determine user to use
+		if ( bp_displayed_user_domain() ) {
+			$user_domain = bp_displayed_user_domain();
+		} elseif ( bp_loggedin_user_domain() ) {
+			$user_domain = bp_loggedin_user_domain();
+		} else {
+			return;
+		}
+
+		$friends_link = trailingslashit( $user_domain . bp_get_friends_slug() );
 
 		// Add the subnav items to the friends nav item
 		$sub_nav[] = array(
@@ -122,7 +131,7 @@ class BP_Friends_Component extends BP_Component {
 			'parent_slug'     => bp_get_friends_slug(),
 			'screen_function' => 'friends_screen_requests',
 			'position'        => 20,
-			'user_has_access' => bp_is_my_profile()
+			'user_has_access' => bp_core_can_edit_settings()
 		);
 
 		parent::setup_nav( $main_nav, $sub_nav );
@@ -133,7 +142,7 @@ class BP_Friends_Component extends BP_Component {
 	 *
 	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
-	function setup_admin_bar() {
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		global $bp;
 
 		// Prevent debug notices
@@ -215,5 +224,3 @@ function bp_setup_friends() {
 	$bp->friends = new BP_Friends_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_friends', 6 );
-
-?>

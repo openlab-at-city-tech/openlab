@@ -3,8 +3,8 @@ Contributors: KieranOShea
 Donate link: http://www.kieranoshea.com
 Tags: calendar, dates, times, events
 Requires at least: 2.0
-Tested up to: 3.0
-Stable tag: 1.2.3
+Tested up to: 3.5.1
+Stable tag: 1.3.3
 
 A simple but effective Calendar plugin for WordPress that allows you to 
 manage your events and appointments and display them to the world.
@@ -148,3 +148,12 @@ Uninstalling:
 4. The category management screen of calendar
 
 5. The options screen of Calendar
+
+== Changelog ==
+
+= 1.3.3 =
+*   Fixed XSS security issue (thanks to Charlie Eriksen via Secunia SVCRP for the report)
+
+= 1.3.2 =
+*   Ensured manage calendar JavaScript only loads on manage calendar page in admin panel
+*   Switched to GPL compatible JavaScript date picker

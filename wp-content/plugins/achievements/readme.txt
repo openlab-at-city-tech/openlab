@@ -1,106 +1,140 @@
-=== Achievements for BuddyPress ===
+=== Achievements for WordPress ===
 Contributors: DJPaul
+Tags: achievements, badges, challenges, gaming, points, rewards
+Requires at least: 3.5.1
+Tested up to: 3.6
+Stable tag: 3.3.1
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=P3K7Z7NHWZ5CL&lc=GB&item_name=B%2eY%2eO%2eT%2eO%2eS%20%2d%20BuddyPress%20plugins&currency_code=GBP&bn=PP%2dDon
-Tags: buddypress,achievement,cubepoints,reward,points,score,rank,social,gaming,tokens,status,badge,WoW,Warcraft,games,challenges
-License: General Public License version 3
-Requires at least: WP 3.0.1, BuddyPress 1.5
-Tested up to: WP 3.3.1, BuddyPress 1.6
-Stable tag: 2.3
 
-Achievements gives your BuddyPress community fresh impetus by promoting and rewarding social interaction with challenges, badges and points.
+Achievements gamifies your WordPress site with challenges, badges, and points.
 
 == Description ==
-Inspired by [video game achievement systems](http://en.wikipedia.org/wiki/Achievement_(video_gaming)), Achievements for BuddyPress gives your community fresh impetus by promoting and rewarding social interaction with challenges, badges and points. For example, reward users for commenting on a blog post or uploading a picture to their profile.
 
-For information, support, premium enhancements and developer documentation, visit http://achievementsapp.com/.
+Achievements gamifies your WordPress site with challenges, badges, and points. Badges and points are the funnest way to reward and encourage members of your community to participate. Leaderboards and rankings bring friendly competition to your community.
 
-[vimeo http://vimeo.com/15782949]
+Simply by activating Achievements, any standard WordPress theme is suddenly capable of having achievements and tracking user progress; everything works out of the box. Achievements integrates seamlessly with your existing WordPress theme.
 
-(skip to the 6 minute mark to see the plugin in action)
+This plugin supports many of your favourite WordPress plugins, including [bbPress](http://wordpress.org/plugins/bbpress/), [BuddyPress](http://wordpress.org/plugins/buddypress/), [BuddyStream](http://wordpress.org/plugins/buddystream/), [coursewa.re](http://wordpress.org/plugins/buddypress-courseware/), [Invite Anyone](http://wordpress.org/plugins/invite-anyone/), and [WP e-Commerce](http://wordpress.org/plugins/wp-e-commerce/). For example, have you ever wanted to give your community members points when they contribute to a discussion, or buy items from your store? Now you can.
 
-== Installation ==
-1. Make sure you're running [BuddyPress](http://buddypress.org/about/story/).
-1. Install via WordPress Plugins administration page.
-1. Activate the plugin.
-1. To get started, visit your site, and select the "Achievements" in the main navigation.
+For information, support, and developer documentation, visit [achievementsapp.com](http://achievementsapp.com/).
+
+[vimeo http://vimeo.com/56058144]
 
 == Changelog ==
-= 2.3 =
-* Improves compatibility with some themes.
+= 3.3.1 =
+* Improves compatibility with [BuddyPress 1.8](http://buddypress.org/2013/07/buddypress-1-8-di-fara/).
 
-= 2.2 =
-* Fix error when unlocking achievement when not using any of achievements' widgets, and include up-to-date .pot file.
+= 3.3 =
+* NEW FEATURE: "Featured Achievement" widget!
+* NEW FEATURE: "Photo Grid" widget!
+* NEW FEATURE: Achievements can now be put into categories!
+* NEW FEATURE: WP-CLI commands added for server admins/developers!
+* Improvements to the achievements list in the WordPress admin; achievement images are now shown, and the table is easier to read.
+* Tweaked dpa_has_progress() to make it easier for other developers to make advanced customisations.
+* Add new dpa_achievement_image() template function for developers; use this like you would use the_post_thumbnail().
+* Updated author credits on the Supported Plugins admin screen for bbPress.
+* Props to Mike Bronner for working on the admin UI tweaks, API improvements, and category support.
 
-= 2.1 =
-* Requires BuddyPress 1.5. Compatibility release. Huge thanks to r-a-y for contributing 99% of the work.
+= 3.2.3 =
+* Fix bug where anonymous users weren't seeing the single achievement template load correctly.
+* Fix incorrect links on the "you unlocked an achievement!" popup in certain multisite configurations when the plugin has been activated network-wide.
+* Fix PHP Notices when the plugin is deactivated.
+* Fix custom capabilities not being set up on a new site (in multisite only).
+* Clear a user's pending unlock notifications if an admin un-rewards an achievement that the user has a pending notification for.
 
-= 2.0.8 -
-* Added a toggle to the all available achievements widget to optionally restore previous widget behaviour from pre-2.0.7 versions.
-* Add Mexican translation, courtesy of jdeltoro1973 - thanks!
-* Fixed malformed CSS class name.
+= 3.2.2 =
+* Fix incorrect BuddyPress Activity timestamps.
+* Fix problems with events and links when the plugin is activated network-wide on multisite.
+* Improve compatibility with BuddyPress 1.7.
 
-= 2.0.7 =
-* Fixed the "on this site" select box on the create/edit achievement screen so that it lists more than 20 sites.
-* Updated points box on the create/edit achievement screen to accept negative values.
-* Added another filter to the achievement unlock routine to allow developers to suppress activity stream updates and notification messages.
-* Fixed the all available achievements widget on multisite.
-* Fixed the all available achievements widget to also show non site-specific achievements.
-* Added toggle to the member achievement available/unlocked widgets to force display of logged in user's details, instead of the display user.
+= 3.2.1 =
+* Fix error when accessing Supported Plugins screen while BuddyPress is active
 
-= 2.0.6 =
-* Compatibility with WordPress 3.1 multisite.
+= 3.2 =
+* NEW FEATURE: Full integration with BuddyPress User Profiles and the Activity stream!
+* Localisation improvements and fixes; mo files are now loaded from wp-content/languages/plugins/achievements/??-dpa.mo
 
-= 2.0.5 =
-* Add new "on user log in" action.
-* Add support for GenesisConnect, until BuddyPress gets better template filtering.
-* Fixed using certain widgets on the "my achievements" page.
-* Fixed leaderboard widget score display; now respects site's number format.
-* Fixed "newest" ordering on the "my achievements" page.
-* Updated Portuguese Brazilian and French translations. Thanks to Arthur Freitas and Marc-Olivier Ouellet, respectively.
+= 3.1 =
+* NEW FEATURE: Achievement Redemption -- let your users unlock achievements by entering a code!
+* Added RTL CSS.
+* Added shortcodes for the user's achievement list and unlock notification templates.
+* Fix blog post achievements being attributed to wrong author for draft posts.
+* Fixes for some pagination problems.
+* The unlock notification popup now closes when you click outside its box.
 
-= 2.0.4 =
-* Add new 'appearance' option for the leaderboard widget; check it out! (New widget CSS styles.)
-* Fix certain widgets use of achievement pictures on WordPress multisite.
-* Modified CSS files formatted to meet WordPress CSS coding standards. No style changes.
-* Modified how achievement data is sanitised and stored in the database. (Template changes in _addedit.php, achievements-loop.php.)
+= 3.0 =
+* Massive new version; everything's new.
+* Achievements 3 no longer requires BuddyPress.
+* Visit [achievementsapp.com](http://achievementsapp.com/) for more information.
 
-= 2.0.3 =
-* Fix hidden/inactive achievements being listed on the directory when the filter is set to "event count."
-* Fix where 'unlocked by' page would interfere with other uses of the member loop on the same page (i.e. BuddyPress' members widget).
-* Fix inaccurate 'unlocked by' counts; properly remove all information when a user is marked as a spammer, or their account is deleted.
-* Notifications are now cleared when visiting the directory as well as on an individual achievement's page.
-
-= 2.0.2 =
-* Add support for 'Jet Event System for BuddyPress' plugin.
-* Add more support for 'BuddyPress Links' plugin.
-* Add "event count" option to directory filters; this sorts the list by the Achievements' action count.
-* Fix hidden Achievements not being unlocked.
-
-= 2.0.1 =
-* Add some support for 'BuddyPress Links'.
-* Fix users' points and counters being removed on Achievement deletion. Oops.
-* Fix "mystery man" avatar activity stream size.
-
-= 2.0 =
-* Everything is brand new for BuddyPress 1.2.6. For information, support, premium enhancements and developer documentation, visit http://achievementsapp.com/.
-
-= Pre-2.0 =
+= Pre-3.0 =
 * The historical release history has been moved to a better place.
 
-== Upgrade Notice ==
-= 2.3 =
-* Improves compatibility with some themes.
+== Installation ==
+1. Install via WordPress Plugins administration page.
+1. Activate the plugin.
+
+To get started, in your WordPress admin area, explore the "Achievements" menu in the main navigation.
+
+Note: in multisite, activating the plugin "network-wide" will give your entire network one shared instance of achievements. If you want each site to run their own achievements and have them be totally seperate, activate the plugin on individual sites.
 
 == Frequently Asked Questions ==
-For information, support, and developer documentation, visit http://achievementsapp.com/.
+For information, support, and developer documentation, visit [achievementsapp.com](http://achievementsapp.com/).
+
+== Upgrade Notice ==
+= 3.3.1 =
+* Improves compatibility with [BuddyPress 1.8](http://buddypress.org/2013/07/buddypress-1-8-di-fara/).
+
+= 3.3 =
+* NEW FEATURE: "Featured Achievement" widget!
+* NEW FEATURE: "Photo Grid" widget!
+* NEW FEATURE: Achievements can now be put into categories!
+* NEW FEATURE: WP-CLI commands added for server admins/developers!
+
+= 3.2.3 =
+* Fix bug where anonymous users weren't seeing the single achievement template load correctly.
+* Fix incorrect links on the "you unlocked an achievement!" popup in certain multisite configurations when the plugin has been activated network-wide.
+* Fix PHP Notices when the plugin is deactivated.
+* Fix custom capabilities not being set up on a new site (in multisite only).
+* Clear a user's pending unlock notifications if an admin un-rewards an achievement that the user has a pending notification for.
+
+= 3.2.2 =
+* Fix incorrect BuddyPress Activity timestamps.
+* Fix problems with events and links when the plugin is activated network-wide on multisite.
+* Improve compatibility with BuddyPress 1.7.
+
+= 3.2.1 =
+* Fixes error when accessing Supported Plugins screen while BuddyPress is active
+
+= 3.2 =
+* NEW FEATURE: Full integration with BuddyPress User Profiles and the Activity Stream!
+
+= 3.1 =
+* NEW FEATURE: Achievement Redemption -- let your users unlock achievements by entering a code!
+* Much more; see http://achievementsapp.com/updates/ for details
+
+= 3.0 =
+* IMPORTANT: Read http://achievementsapp.com/upgrading-from-old-versions/ before upgrading.
+
+== Screenshots ==
+
+1. Achievement notification
+2. List of user's unlocked achievements
+3. List of all available achievements
+4. Admin management screen showing a list of all achievements
+5. Crop of part of the "Supported Plugins" admin screen
+6. Crop of another part of the "Support Plugins" admin screen
 
 == License ==
-"Achievements for BuddyPress"
-Copyright (C) 2009-12 Paul Gibbs
+"Achievements"
+Copyright (C) 2009-13 Paul Gibbs
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 2 as published by
-the Free Software Foundation.
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -108,9 +142,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-== Screenshots ==
-1. Achievement detail page
-2. A few of the many Achievement action types
-3. Part of the create/edit Achievement page
+== Acknowledgements ==
+Achievements is distributed under GPLv3, but we've used some components from other sources:
+
+* /admin/images/select_arrow.gif, and some CSS styling, taken from "Formalize CSS" <http://formalize.me/>, under the MIT License (<http://www.opensource.org/licenses/mit-license.php>).
+* Some CSS styling taken from "Twitter Bootstrap" <http://twitter.github.com/bootstrap/> under the Apache License, Version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0.html>).
+* Uses the jquery-tablesorter-min.js library from "tablesorter" <http://tablesorter.com/> under the MIT License (<http://www.opensource.org/licenses/mit-license.php>).
+* Uses socialite-min.js from "Socialite" <https://github.com/dbushell/Socialite/> under the MIT License (<http://www.opensource.org/licenses/mit-license.php>).
+* Uses the "Chosen" jQuery library <https://github.com/harvesthq/chosen> under the MIT License (<http://harvesthq.github.com/chosen/>).

@@ -15,5 +15,3 @@ function p2_maybe_define( $constant, $value, $filter = '' ) {
 
 	define( $constant, $value );
 }
-
-?>

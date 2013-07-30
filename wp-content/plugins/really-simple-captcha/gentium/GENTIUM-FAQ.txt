@@ -1,6 +1,6 @@
 GENTIUM-FAQ
-Gentium Release 1.02
-28 November 2005
+Gentium Basic Release 1.1
+4 April 2008
 ========================
 
 Here are some answers to frequently asked questions about the Gentium fonts:
@@ -19,11 +19,11 @@ What is GentiumAlt?
 	It is a version of the font with redesigned diacritics (flatter
 	ones) to make it more suitable for use with stacking diacritics, and
 	for languages such as Vietnamese. The Greek glyphs also use the
-	Porsonic (single-curve) design for the circumflex. Since Gentium
-	does not currently include any 'smart' rendering routines, there is
-	no easy way to access these alternate diacritic shapes from within
-	the regular Gentium font. The encoding of the fonts are the same, so
-	the same text can be viewed with either one. There is also no
+	Porsonic (single-curve) design for the circumflex. Since the main
+	Gentium fonts do not currently include any 'smart' rendering routines,
+	there is no easy way to access these alternate diacritic shapes from
+	within the regular Gentium font. The encoding of the fonts are the same,
+	so the same text can be viewed with either one. There is also no
 	problem with having both font families installed at the same time.
 
 
@@ -119,13 +119,16 @@ I can't find the 'o with right hook' in the font. Where is it?
 	cases, we're not able to anticipate every possible combination.
 	Future versions of Gentium will include 'smart font' support for
 	technologies such as OpenType and SIL's Graphite. This will make
-	diacritic positioning much better.
+	diacritic positioning much better. The Gentium Basic fonts do,
+	however, include limited support for both OpenType and Graphite,
+	and demonstrate the type of support that will eventually be provided.
 	
 Some diacritics are not aligning well with base glyphs, and if I type more
 than one diacritic, they run into each other. Why is that?
 
 	Gentium currently has no 'smart font' code for automatic diacritic
-	positioning, but will in the near future.
+	positioning, but the Gentium Basic fonts do, and similar support will
+	appear in the main fonts in the near future.
 
 How do I type the Greek letters?
 
@@ -139,6 +142,49 @@ I'm having problems making PDFs -- why won't my document distill?
 	easiest way to avoid this is to have Acrobat/Distiller subset the
 	font. This is generally a good idea anyway (with any font) and can
 	reduce the size of your files.
+
+
+Basic
+=====
+
+How are the Basic fonts (Gentium Basic, Gentium Book Basic) different
+from Gentium?
+
+	These font families are based on the original Gentium design, but with
+	additional weights. Both families come with a complete regular, bold,
+	italic and bold italic set of fonts. The supported character set,
+	however, is much smaller than for the main Gentium fonts. These
+	'Basic' fonts support only the Basic Latin and Latin-1 Supplement
+	Unicode ranges, plus a selection of the more commonly used extended
+	Latin characters, with miscellaneous diacritical marks, symbols and
+	punctuation. In particular, these fonts do not support full extended
+	Latin IPA, complete support for Central European languages, Greek and
+	Cyrillic.
+
+What is the Book weight?
+
+	It is a complete second font family that is slightly heavier overall,
+	and more useful for some purposes. The main Gentium family will
+	eventually have a complete matching Book weight, along with matching
+	italics.
+
+Why is the line spacing greater for the Basic fonts?
+
+	In some environments, stacked diacritics in Gentium could display as
+	'chopped-off'. Gentium Basic has slightly wider default line spacing
+	in order to avoid this problem. Most applications do, however, let you
+	set the line spacing explicitly, so you can have the lines spaced
+	precisely as you wish.
+
+Will you be accepting requests for additions to the Basic character set?
+
+	No. We are now focusing our development efforts on the main Gentium
+	fonts, which already provide richer character set support.
+
+Is there an Alt version of the Basic fonts?
+
+	No, although you may notice that capitals and some tall lowercase
+	letters do use 'low-profile' versions. 
 
 
 Future
@@ -156,7 +202,7 @@ designer?
 Do you plan to include other typographic enhancements (small caps, old style
 figures, etc.)?
 
-	Those would be nice, wouldn't they. From a design point of view,
+	Those would be nice, wouldn't they? From a design point of view,
 	it would be great to have these refinements, and we haven't ruled
 	them out. But there are other needs that are much higher priority
 	(Bold, Cyrillic, etc.). If you think you could contribute some of
@@ -165,21 +211,18 @@ figures, etc.)?
 
 What about bold?
 
-	We hope to make a prototype of a Bold weight (and a few others,
-	including italic) available soon, but it will only cover basic Latin
-	glyphs at first. Once we are confident that the basic design is solid,
-	we will begin to design the bold versions of the other hundreds of
-	glyphs. Be patient, though, as Gentium has lots of glyphs!
+	The Gentium Basic fonts include Bold and Bold Italic versions. The
+	main Gentium fonts will also include them in the future.
 	
 Sans-serif?
 
 	There is a definite need for a sans-serif font that shares some of
-	Gentium’s strengths -- high readability, economy of space, etc. It
+	Gentiumís strengths -- high readability, economy of space, etc. It
 	would also be great if that font also harmonized well with Gentium.
 	We don't currently have any plans for a companion face, although one
 	of our other projects - Andika - may be useful. Andika is a sans-serif
 	font designed specifically for use in literacy programs around the
-	world. A prototype should be available in a few months.
+	world, and is available from our web site.
 	
 Will you be extending Gentium to cover other scripts, and Hebrew in
 particular?
@@ -195,8 +238,7 @@ When will Cyrillic be completed?
 I need a couple of ancient Greek glyphs, such as the digamma. When will
 those be ready?
 
-	These have already been designed and will be in the next release
-	(mid-2006).
+	These have already been designed and will be in the next main release.
 
 Will there be a Type 1 version? What about OpenType?
 

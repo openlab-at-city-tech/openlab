@@ -15,13 +15,15 @@
 #current-theme-info h4 {
 	margin-top: 6px;
 }
-/* screenshots in WP3.4+ are larger */
+/* fix layout of screenshots in WP3.4+ */
 #current-theme.current-theme-3point4plus img {
-	float: none;
 	margin-left: 0;
 }
 #current-theme.current-theme-3point4plus #current-theme-info {
 	margin-left: 0;
+}
+#current-theme.current-theme-has-screenshot #current-theme-info {
+	margin-left: 320px;
 }
 span.indent {
 	width: 170px;

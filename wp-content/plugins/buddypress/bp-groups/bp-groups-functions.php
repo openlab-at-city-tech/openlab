@@ -36,8 +36,8 @@ function bp_groups_has_directory() {
  * of instantiating BP_Groups_Group directly, so that you will inherit cache
  * support and pass through the groups_get_group filter.
  *
- * @param $args The load_users parameter is deprecated and does nothing.
- * @return obj $group The group object
+ * @param string $args The load_users parameter is deprecated and does nothing.
+ * @return BP_Groups_Group $group The group object
  */
 function groups_get_group( $args = '' ) {
 	$defaults = array(
@@ -123,6 +123,8 @@ function groups_create_group( $args = '' ) {
 		$member->date_modified = bp_core_current_time();
 		$member->save();
 
+		groups_update_groupmeta( $group->id, 'last_activity', bp_core_current_time() );
+
 		do_action( 'groups_create_group', $group->id, $member, $group );
 
 	} else {
@@ -195,7 +197,7 @@ function groups_edit_group_settings( $group_id, $enable_forum, $status, $invite_
  *
  * @global object $bp BuddyPress global settings
  * @param int $group_id
- * @since 1.0
+ * @since BuddyPress (1.0)
  */
 function groups_delete_group( $group_id ) {
 	global $bp;
@@ -204,12 +206,12 @@ function groups_delete_group( $group_id ) {
 	if ( ! bp_is_item_admin() )
 		return false;
 
+	do_action( 'groups_before_delete_group', $group_id );
+
 	// Get the group object
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 	if ( !$group->delete() )
 		return false;
-
-	do_action( 'groups_before_delete_group', $group_id );
 
 	// Delete all group activity from activity streams
 	if ( bp_is_active( 'activity' ) )
@@ -265,7 +267,7 @@ function groups_get_slug( $group_id ) {
 /**
  * Get a group ID by its slug
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  *
  * @param string $group_slug The group's slug
  * @return int The ID
@@ -295,12 +297,6 @@ function groups_leave_group( $group_id, $user_id = 0 ) {
 	// This is exactly the same as deleting an invite, just is_confirmed = 1 NOT 0.
 	if ( !groups_uninvite_user( $user_id, $group_id ) )
 		return false;
-
-	// Modify group member count
-	groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count') - 1 );
-
-	// Modify user's group memberhip count
-	bp_update_user_meta( $user_id, 'total_group_count', (int) bp_get_user_meta( $user_id, 'total_group_count', true ) - 1 );
 
 	/**
 	 * If the user joined this group less than five minutes ago, remove the
@@ -361,7 +357,6 @@ function groups_join_group( $group_id, $user_id = 0 ) {
 	) );
 
 	// Modify group meta
-	groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count') + 1 );
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
 	do_action( 'groups_join_group', $group_id, $user_id );
@@ -379,8 +374,66 @@ function groups_get_group_mods( $group_id ) {
 	return BP_Groups_Member::get_group_moderator_ids( $group_id );
 }
 
-function groups_get_group_members( $group_id, $limit = false, $page = false ) {
-	return BP_Groups_Member::get_all_for_group( $group_id, $limit, $page );
+/**
+ * Fetch the members of a group
+ *
+ * Since BuddyPress 1.8, a procedural wrapper for BP_Group_Member_Query.
+ * Previously called BP_Groups_Member::get_all_for_group().
+ *
+ * To use the legacy query, filter 'bp_use_legacy_group_member_query',
+ * returning true.
+ *
+ * @param int $group_id
+ * @param int $limit Maximum members to return
+ * @param int $page The page of results to return (requires $limit)
+ * @param bool $exclude_admins_mods Whether to exclude admins and mods
+ * @param bool $exclude_banned Whether to exclude banned users
+ * @param array|string $exclude Array or comma-sep list of users to exclude
+ * @return array Multi-d array of 'members' list and 'count'
+ */
+function groups_get_group_members( $group_id, $limit = false, $page = false, $exclude_admins_mods = true, $exclude_banned = true, $exclude = false, $group_role = false ) {
+
+	// For legacy users. Use of BP_Groups_Member::get_all_for_group()
+	// is deprecated. func_get_args() can't be passed to a function in PHP
+	// 5.2.x, so we create a variable
+	$func_args = func_get_args();
+	if ( apply_filters( 'bp_use_legacy_group_member_query', false, __FUNCTION__, $func_args ) ) {
+		$retval = BP_Groups_Member::get_all_for_group( $group_id, $limit, $page, $exclude_admins_mods, $exclude_banned, $exclude );
+	} else {
+
+		// exclude_admins_mods and exclude_banned are legacy arguments.
+		// Convert to group_role
+		if ( empty( $group_role ) ) {
+			$group_role = array( 'member' );
+
+			if ( ! $exclude_admins_mods ) {
+				$group_role[] = 'mod';
+				$group_role[] = 'admin';
+			}
+
+			if ( ! $exclude_banned ) {
+				$group_role[] = 'banned';
+			}
+		}
+
+		// Perform the group member query (extends BP_User_Query)
+		$members = new BP_Group_Member_Query( array(
+			'group_id'       => $group_id,
+			'per_page'       => $limit,
+			'page'           => $page,
+			'group_role'     => $group_role,
+			'exclude'        => $exclude,
+			'type'           => 'last_modified',
+		) );
+
+		// Structure the return value as expected by the template functions
+		$retval = array(
+			'members' => array_values( $members->results ),
+			'count'   => $members->total_users,
+		);
+	}
+
+	return $retval;
 }
 
 function groups_get_total_member_count( $group_id ) {
@@ -389,26 +442,49 @@ function groups_get_total_member_count( $group_id ) {
 
 /*** Group Fetching, Filtering & Searching  *************************************/
 
+/**
+ * Get a collection of groups, based on the parameters passed
+ *
+ * @uses apply_filters_ref_array() Filter 'groups_get_groups' to modify return value
+ * @uses BP_Groups_Group::get()
+ * @param array $args See inline documentation for details
+ * @return array
+ */
 function groups_get_groups( $args = '' ) {
 
 	$defaults = array(
-		'type'            => 'active', // active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts
+		'type'            => false,    // active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts
+		'order'           => 'DESC',   // 'ASC' or 'DESC'
+		'orderby'         => 'date_created', // date_created, last_activity, total_member_count, name, random
 		'user_id'         => false,    // Pass a user_id to limit to only groups that this user is a member of
 		'include'         => false,    // Only include these specific groups (group_ids)
 		'exclude'         => false,    // Do not include these specific groups (group_ids)
 		'search_terms'    => false,    // Limit to groups that match these search terms
+		'meta_query'      => false,    // Filter by groupmeta. See WP_Meta_Query for syntax
 		'show_hidden'     => false,    // Show hidden groups to non-admins
 		'per_page'        => 20,       // The number of results to return per page
 		'page'            => 1,        // The page to return if limiting per page
 		'populate_extras' => true,     // Fetch meta such as is_banned and is_member
 	);
 
-	$params = wp_parse_args( $args, $defaults );
-	extract( $params, EXTR_SKIP );
+	$r = wp_parse_args( $args, $defaults );
 
-	$groups = BP_Groups_Group::get( $type, $per_page, $page, $user_id, $search_terms, $include, $populate_extras, $exclude, $show_hidden );
+	$groups = BP_Groups_Group::get( array(
+		'type'            => $r['type'],
+		'user_id'         => $r['user_id'],
+		'include'         => $r['include'],
+		'exclude'         => $r['exclude'],
+		'search_terms'    => $r['search_terms'],
+		'meta_query'      => $r['meta_query'],
+		'show_hidden'     => $r['show_hidden'],
+		'per_page'        => $r['per_page'],
+		'page'            => $r['page'],
+		'populate_extras' => $r['populate_extras'],
+		'order'           => $r['order'],
+		'orderby'         => $r['orderby'],
+	) );
 
-	return apply_filters_ref_array( 'groups_get_groups', array( &$groups, &$params ) );
+	return apply_filters_ref_array( 'groups_get_groups', array( &$groups, &$r ) );
 }
 
 function groups_get_total_group_count() {
@@ -447,7 +523,7 @@ function groups_total_groups_for_user( $user_id = 0 ) {
  * @package BuddyPress
  * @since BuddyPress (1.5)
  *
- * @return obj The current group object
+ * @return BP_Groups_Group The current group object
  */
 function groups_get_current_group() {
 	global $bp;
@@ -501,7 +577,7 @@ function groups_is_user_banned( $user_id, $group_id ) {
  *
  * @param int $user_id
  * @param int $group_id
- * @since 1.2.6
+ * @since BuddyPress (1.2.6)
  * @uses BP_Groups_Member
  */
 function groups_is_user_creator( $user_id, $group_id ) {
@@ -640,7 +716,6 @@ function groups_accept_invite( $user_id, $group_id ) {
 		$member->delete_request( $user_id, $group_id );
 
 	// Modify group meta
-	groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count') + 1 );
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
 	bp_core_delete_notifications_by_item_id( $user_id, $group_id, $bp->groups->id, 'group_invite' );
@@ -706,7 +781,7 @@ function groups_get_invites_for_group( $user_id, $group_id ) {
  *
  * @param int $user_id Potential group member
  * @param int $group_id Potential group
- * @param str $type Optional. Use 'sent' to check for sent invites, 'all' to check for all
+ * @param string $type Optional. Use 'sent' to check for sent invites, 'all' to check for all
  * @return bool Returns true if an invitation is found
  */
 function groups_check_user_has_invite( $user_id, $group_id, $type = 'sent' ) {
@@ -838,9 +913,6 @@ function groups_accept_membership_request( $membership_id, $user_id = 0, $group_
 	if ( groups_check_user_has_invite( $membership->user_id, $membership->group_id ) )
 		groups_delete_invite( $membership->user_id, $membership->group_id );
 
-	// Modify group member count
-	groups_update_groupmeta( $membership->group_id, 'total_member_count', (int) groups_get_groupmeta( $membership->group_id, 'total_member_count') + 1 );
-
 	// Record this in activity streams
 	$group = groups_get_group( array( 'group_id' => $membership->group_id ) );
 
@@ -942,11 +1014,11 @@ function groups_get_groupmeta( $group_id, $meta_key = '') {
 
 		$metas = wp_cache_get( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, 'bp' );
 		if ( false === $metas ) {
-			$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s", $group_id, $meta_key) );
+			$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s", $group_id, $meta_key ) );
 			wp_cache_set( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, $metas, 'bp' );
 		}
 	} else {
-		$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d", $group_id) );
+		$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d", $group_id ) );
 	}
 
 	if ( empty( $metas ) ) {
@@ -1006,5 +1078,3 @@ function groups_remove_data_for_user( $user_id ) {
 add_action( 'wpmu_delete_user',  'groups_remove_data_for_user' );
 add_action( 'delete_user',       'groups_remove_data_for_user' );
 add_action( 'bp_make_spam_user', 'groups_remove_data_for_user' );
-
-?>

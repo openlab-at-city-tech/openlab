@@ -7,7 +7,7 @@
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2009 Tim Isenheim
+	Copyright (C) 2006-2013 Tim Isenheim
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ class WPSimileTimelineTerm{
 	 */
 	function updateTermStatus($cID, $status){
 		global $wpdb;
-		$wpdb->query($wpdb->prepare("UPDATE " . WPSimileTimelineTerm::getTableName()." SET active = '$status' WHERE term_id = $cID"));
+		$wpdb->query($wpdb->prepare("UPDATE " . WPSimileTimelineTerm::getTableName()." SET active = '%s' WHERE term_id = %d", array($status, $cID)));
 	}
 	
 	/**
@@ -176,8 +176,8 @@ class WPSimileTimelineTerm{
 	function deleteTerm($term_id) {
 		global $wpdb;
 		
-		$query = "DELETE FROM " . WPSimileTimelineTerm::getTableName() . " WHERE term_id= " . $term_id . "";
-		$results = $wpdb->query($wpdb->prepare($query));
+		$query = "DELETE FROM " . WPSimileTimelineTerm::getTableName() . " WHERE term_id= %d";
+		$results = $wpdb->query($wpdb->prepare($query, $term_id));
 	}
 	
 	/**

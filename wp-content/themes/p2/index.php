@@ -22,7 +22,6 @@
 			<?php if ( is_home() or is_front_page() ) : ?>
 
 				<?php _e( 'Recent Updates', 'p2' ); ?> <?php if ( p2_get_page_number() > 1 ) printf( __( 'Page %s', 'p2' ), p2_get_page_number() ); ?>
-				<a class="rss" href="<?php bloginfo( 'rss2_url' ); ?>">RSS</a>
 
 			<?php else : ?>
 

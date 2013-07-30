@@ -1,15 +1,17 @@
 === More Privacy Options ===
 Contributors: dsader
 Donate link: http://dsader.snowotherway.org
-Tags: privacy, private blog, multisite, members only
-Requires at least: 3.0
-Tested up to: 3.0.1
+Tags: visibility, privacy, private blog, multisite, members only, network visibility, site visibility
+Requires at least: 3.5
+Tested up to: 3.5
 Stable tag: Trunk
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WP3.0 multisite "mu-plugin" to add more privacy options to the options-privacy and ms-blogs pages. Just drop in mu-plugins.
+Add more privacy(visibility) options to a WordPress 3.5 Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
 
 == Description ==
-Adds three more levels of privacy to the Options--Privacy page.
+Adds three more levels of privacy(visibility) to the Settings-->Reading page.
 
 1. Blog visible to any logged in community member - "Network Users Only".
 
@@ -17,11 +19,11 @@ Adds three more levels of privacy to the Options--Privacy page.
 
 3. Blog visible only to administrators - "Admins Only".
 
-Mulitsite SuperAdmin can set an override on blog privacy at "Network Privacy Selector" on SuperAdmin-Options page
+Mulitsite Network Admin can set an override on blog privacy at "Network Visibility Selector" on Network Settings page
 
-Multisite SuperAdmin can set privacy options at SuperAdmin-Sites-Edit under "Misc Site Options" as well.
+Multisite Network Admin can set privacy options at Network-Sites-Edit under "Settings Tab" as well.
 
-SuperAdmin receives an email when blog privacy changes.
+Network Admin receives an email when blog privacy changes.
 
 RSS feeds require authentication.
 
@@ -29,72 +31,39 @@ robots.txt updates accordingly.
 
 Ping sites filters correctly.
 
-Privacy status reflected in Dashboard/Admin header.
+Privacy status reflected in Dashboard "Right Now" box.
 
-Uses WP3 functions network_home_url() and home_url() for SSL login redirects.
+Uses WP3+ functions auth_redirect(), network_home_url(), and home_url() for SSL login redirects.
 
 Login message has link to sign-up page of a "Network Users Only" blog or a link the blog admin email if user is logged in but not a member of a "Members Only" blog.
 
-Supports filters to the login_url and wp_signup_location. 
+WP svn via Aptana 3
 
 == Installation ==
 
 This section describes how to install the plugin and get it working.
 
 1. Upload `ds_wp3_private_blog.php` to the `/wp-content/mu-plugins/` directory
-2. Set multisite "Network Privacy" option at SuperAdmin-Options page
-3. Set individual blog privacy options at Settings-Privacy page, or...
-4. Set individual blog privacy options at SuperAdmin-Sites-Edit page
+2. Set multisite "Network Visibility" option at Network-Settings page
+3. Set individual blog visibility options at Settings-Privacy page, or...
+4. Set individual blog visibility options at Network Admin-Sites-Edit page
 
 == Frequently Asked Questions ==
 
 * Will this plugin also protect feeds? Yes.
 * Will this plugin protect uploaded files and images? No.
-* Will this plugin redirect to a custom signup page or login page? Yes I've added support for filters to the login_url and wp_signup_location. I've included a couple of sample functions of these hooks in the plugin's comment section in the plugin code.
 
 == Screenshots ==
 
-1. Settings Privacy: Site Visibility Settings
-2. SuperAdmin Option: Network Privacy Selector
-3. Sites Edit: Misc Site Options
+1. Settings Reading: Site Visibility Settings
+2. Network Settings: Network Visibility Selector
+3. Network Sites Edit: Site Settings(scroll way down to see)
 
 == Changelog ==
 
-= 3.0.1.3 =
-* fixed bug causing 404 from login_url: wp_login_url(urlencode($_SERVER['REQUEST_URI'])) to wp_login_url()
-modified authentication checks for feeds
-
-= 3.0.1.2 = 
-* Supports filters to the login_url and wp_signup_location. 
-
-= 3.0.1.1 =
-* SuperAdmin receives an email when blog privacy changes.
-* Privacy status reflected in Dashboard/Admin header.
-* Uses WP3 functions network_home_url() and home_url() for SSL login redirects.
-* Login message has link to signup page if visitor is not logged or a link the blog admin email if user is logged in but not a member of a members only blog.
-* noindex,nofollow correctly added to meta in wp_head and login_head
- 
-= 3.0.1 = 
-* deprecated $user_level check replaced with is_user_logged_in()
-
-= 3.0 =
-* WP3.0 Multisite enabled
-
-= 2.9.2 =
-* WPMU version no longer supported.
+= 3.5 =
+* Tested up to: WP 3.5
 
 == Upgrade Notice ==
-= 3.0.1.3 =
-* fixed bug causing 404 from login_url
-
-= 3.0.1.2 =
-* Supports filters to the login_url and wp_signup_location. 
-
-= 3.0.1 = 
-* deprecated $user_level check replaced with is_user_logged_in()
-
-= 3.0 =
-* WP3.0 Multisite enabled
-
-= 2.9.2 =
-* WPMU version no longer supported.
+= 3.5 =
+* Tested up to: WP 3.5

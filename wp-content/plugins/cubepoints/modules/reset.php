@@ -7,7 +7,7 @@ cp_module_register(__('Reset Data', 'cp') , 'resetdata' , '1.0', 'CubePoints', '
 if(cp_module_activated('resetdata')){
 
 function cp_module_resetdata_add_admin_page(){
-	add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Reset Data','cp'), __('Reset Data','cp'), 8, 'cp_modules_resetdata_admin', 'cp_modules_resetdata_admin');
+	add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Reset Data','cp'), __('Reset Data','cp'), 'manage_options', 'cp_modules_resetdata_admin', 'cp_modules_resetdata_admin');
 }
 add_action('cp_admin_pages','cp_module_resetdata_add_admin_page');
 

@@ -1,0 +1,25 @@
+// admin-forms.less
+// Form appearance/normalisation stuff.
+//
+// Taken from Formalize CSS http://formalize.me/, under the MIT License
+// http://www.opensource.org/licenses/mit-license.php.
+// ------------------------------------------------------------------
+
+.dpa-toolbar input,
+.dpa-toolbar select {
+	.background-clip(padding-box);
+	.ie7-inline-block();
+	box-shadow: none;
+	display: inline-block;
+	font-family: sans-serif;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+// Inputs within a label
+.dpa-toolbar label select { display: block; }
+.dpa-toolbar select { -webkit-appearance: textfield; }
+.dpa-toolbar select:focus { box-shadow: none; }
+.dpa-toolbar input[type="search"] {	-webkit-appearance: none; }

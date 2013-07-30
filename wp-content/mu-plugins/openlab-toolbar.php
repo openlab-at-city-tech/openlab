@@ -485,10 +485,7 @@ class OpenLab_Admin_Bar {
 					$title .= '<div class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></div>';
 
 					// date and time
-					$last_time_unix = strtotime( $messages_template->thread->last_message_date );
-					$last_date = date( 'M n', $last_time_unix ); // 'Apr 6'
-					$last_time = date( 'g:i a', $last_time_unix ); // '3:40 pm'
-					$title .= sprintf( '%1$s at %2$s', $last_date, $last_time );
+					$title .= bp_format_time( strtotime( $messages_template->thread->last_message_date ) );
 
 					// Message excerpt
 					$title .= '<p class="message-excerpt">' . strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p>';

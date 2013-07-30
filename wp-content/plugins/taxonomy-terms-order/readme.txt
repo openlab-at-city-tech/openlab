@@ -3,8 +3,8 @@ Contributors: Nsp Code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order
 Requires at least: 2.8
-Tested up to: 3.4.1
-Stable tag: 1.2.9
+Tested up to: 3.5.1
+Stable tag: 1.3.0
 
 Order Categories and all custom taxonomies terms and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
 
@@ -49,9 +49,13 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 
 == Change Log ==
 
+= 1.3.0 = 
+ - Headers already sent bug fix
+ - Slovak Language (Branco Slovak http://webhostinggeeks.com/user-reviews/)
+
 = 1.2.9 = 
  - Small updates
- - Germa and French.
+ - German and French languages.
 
 = 1.2.7 = 
  - Localisation Implement, Dutch and Romanian.
@@ -66,4 +70,4 @@ Make sure you get the latest version
 
 == Localization ==
 
-Currently available in English, Dutch, French, Deutch and Romanian
+Currently available in English, Dutch, French, Deutch, Slovak and Romanian

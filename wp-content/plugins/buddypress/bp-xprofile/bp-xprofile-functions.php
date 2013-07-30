@@ -194,12 +194,12 @@ function xprofile_get_field_data( $field, $user_id = 0, $multi_format = 'array' 
  * A simple function to set profile data for a specific field for a specific user.
  *
  * @package BuddyPress Core
- * @param $field The ID of the field, or the $name of the field.
- * @param $user_id The ID of the user
- * @param $value The value for the field you want to set for the user.
+ * @param int|string $field The ID of the field, or the $name of the field.
+ * @param int|$user_id The ID of the user
+ * @param mixed The value for the field you want to set for the user.
  * @global BuddyPress $bp The one true BuddyPress instance
  * @uses xprofile_get_field_id_from_name() Gets the ID for the field based on the name.
- * @return true on success, false on failure.
+ * @return bool True on success, false on failure.
  */
 function xprofile_set_field_data( $field, $user_id, $value, $is_required = false ) {
 
@@ -321,7 +321,7 @@ function xprofile_check_is_required_field( $field_id ) {
  * Returns the ID for the field based on the field name.
  *
  * @package BuddyPress Core
- * @param $field_name The name of the field to get the ID for.
+ * @param string $field_name The name of the field to get the ID for.
  * @return int $field_id on success, false on failure.
  */
 function xprofile_get_field_id_from_name( $field_name ) {
@@ -332,13 +332,13 @@ function xprofile_get_field_id_from_name( $field_name ) {
  * Fetches a random piece of profile data for the user.
  *
  * @package BuddyPress Core
- * @param $user_id User ID of the user to get random data for
- * @param $exclude_fullname whether or not to exclude the full name field as random data.
+ * @param int $user_id User ID of the user to get random data for
+ * @param bool $exclude_fullname Optional; whether or not to exclude the full name field as random data. Defaults to true.
  * @global BuddyPress $bp The one true BuddyPress instance
  * @global $wpdb WordPress DB access object.
  * @global $current_user WordPress global variable containing current logged in user information
  * @uses xprofile_format_profile_field() Formats profile field data so it is suitable for display.
- * @return $field_data The fetched random data for the user.
+ * @return string|bool The fetched random data for the user, or false if no data or no match.
  */
 function xprofile_get_random_profile_data( $user_id, $exclude_fullname = true ) {
 	$field_data = BP_XProfile_ProfileData::get_random( $user_id, $exclude_fullname );
@@ -358,10 +358,10 @@ function xprofile_get_random_profile_data( $user_id, $exclude_fullname = true ) 
  * Formats a profile field according to its type. [ TODO: Should really be moved to filters ]
  *
  * @package BuddyPress Core
- * @param $field_type The type of field: datebox, selectbox, textbox etc
- * @param $field_value The actual value
+ * @param string $field_type The type of field: datebox, selectbox, textbox etc
+ * @param string $field_value The actual value
  * @uses bp_format_time() Formats a time value based on the WordPress date format setting
- * @return $field_value The formatted value
+ * @return string|bool The formatted value, or false if value is empty
  */
 function xprofile_format_profile_field( $field_type, $field_value ) {
 	if ( !isset( $field_value ) || empty( $field_value ) )
@@ -387,8 +387,8 @@ function xprofile_update_field_position( $field_id, $position, $field_group_id )
  * Setup the avatar upload directory for a user.
  *
  * @package BuddyPress Core
- * @param $directory The root directory name
- * @param $user_id The user ID.
+ * @param string $directory The root directory name. Optional.
+ * @param int $user_id The user ID. Optional.
  * @return array() containing the path and URL plus some other settings.
  */
 function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
@@ -425,7 +425,8 @@ function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
  * @package BuddyPress Core
  */
 function xprofile_sync_wp_profile( $user_id = 0 ) {
-	global $bp, $wpdb;
+
+	$bp = buddypress();
 
 	if ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int) $bp->site_options['bp-disable-profile-sync'] )
 		return true;
@@ -451,16 +452,19 @@ function xprofile_sync_wp_profile( $user_id = 0 ) {
 	bp_update_user_meta( $user_id, 'first_name', $firstname );
 	bp_update_user_meta( $user_id, 'last_name',  $lastname  );
 
+	global $wpdb;
+
 	$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->users} SET display_name = %s WHERE ID = %d", $fullname, $user_id ) );
 }
 add_action( 'xprofile_updated_profile', 'xprofile_sync_wp_profile' );
-add_action( 'bp_core_signup_user', 'xprofile_sync_wp_profile' );
+add_action( 'bp_core_signup_user',      'xprofile_sync_wp_profile' );
+add_action( 'bp_core_activated_user',   'xprofile_sync_wp_profile' );
 
 
 /**
  * Syncs the standard built in WordPress profile data to XProfile.
  *
- * @since 1.2.4
+ * @since BuddyPress (1.2.4)
  * @package BuddyPress Core
  */
 function xprofile_sync_bp_profile( &$errors, $update, &$user ) {
@@ -480,7 +484,7 @@ add_action( 'user_profile_update_errors', 'xprofile_sync_bp_profile', 10, 3 );
  * usermeta table that this component uses.
  *
  * @package BuddyPress XProfile
- * @param $user_id The ID of the deleted user
+ * @param int $user_id The ID of the deleted user
  */
 function xprofile_remove_data( $user_id ) {
 	BP_XProfile_ProfileData::delete_data_for_user( $user_id );
@@ -507,17 +511,19 @@ function bp_xprofile_delete_meta( $object_id, $object_type, $meta_key = false, $
 
 	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
 
-	if ( is_array( $meta_value ) || is_object( $meta_value ) )
+	if ( is_array( $meta_value ) || is_object( $meta_value ) ) {
 		$meta_value = serialize( $meta_value );
+	}
 
 	$meta_value = trim( $meta_value );
 
-	if ( !$meta_key )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
-	else if ( $meta_value )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s AND meta_key = %s AND meta_value = %s", $object_id, $object_type, $meta_key, $meta_value ) );
-	else
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
+	if ( empty( $meta_key ) ) {
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
+	} elseif ( !empty( $meta_value ) ) {
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s AND meta_value = %s", $object_id, $object_type, $meta_key, $meta_value ) );
+	} else {
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
+	}
 
 	// Delete the cached object
 	wp_cache_delete( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, 'bp' );
@@ -543,11 +549,11 @@ function bp_xprofile_get_meta( $object_id, $object_type, $meta_key = '') {
 		$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
 
 		if ( !$metas = wp_cache_get( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, 'bp' ) ) {
-			$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
+			$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
 			wp_cache_set( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, $metas, 'bp' );
 		}
 	} else {
-		$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
+		$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
 	}
 
 	if ( empty( $metas ) ) {
@@ -590,12 +596,12 @@ function bp_xprofile_update_meta( $object_id, $object_type, $meta_key, $meta_val
 	if ( empty( $meta_value ) )
 		return bp_xprofile_delete_meta( $object_id, $object_type, $meta_key );
 
-	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $bp->profile->table_name_meta . " WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
+	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
 
 	if ( empty( $cur ) )
-		$wpdb->query( $wpdb->prepare( "INSERT INTO " . $bp->profile->table_name_meta . " ( object_id, object_type, meta_key, meta_value ) VALUES ( %d, %s, %s, %s )", $object_id, $object_type,  $meta_key, $meta_value ) );
+		$wpdb->query( $wpdb->prepare( "INSERT INTO {$bp->profile->table_name_meta} ( object_id, object_type, meta_key, meta_value ) VALUES ( %d, %s, %s, %s )", $object_id, $object_type,  $meta_key, $meta_value ) );
 	else if ( $cur->meta_value != $meta_value )
-		$wpdb->query( $wpdb->prepare( "UPDATE " . $bp->profile->table_name_meta . " SET meta_value = %s WHERE object_id = %d AND object_type = %s AND meta_key = %s", $meta_value, $object_id, $object_type, $meta_key ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE {$bp->profile->table_name_meta} SET meta_value = %s WHERE object_id = %d AND object_type = %s AND meta_key = %s", $meta_value, $object_id, $object_type, $meta_key ) );
 	else
 		return false;
 
@@ -623,7 +629,7 @@ function bp_xprofile_update_fielddata_meta( $field_data_id, $meta_key, $meta_val
  * @package BuddyPress
  * @since BuddyPress (1.5)
  *
- * @return str The field name
+ * @return string The field name
  */
 function bp_xprofile_fullname_field_name() {
 	return apply_filters( 'bp_xprofile_fullname_field_name', BP_XPROFILE_FULLNAME_FIELD_NAME );
@@ -648,7 +654,7 @@ function bp_xprofile_get_visibility_levels() {
  * profile viewer). Then, based on that relationship, we query for the set of fields that should
  * be excluded from the profile loop.
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  * @see BP_XProfile_Group::get()
  * @uses apply_filters() Filter bp_xprofile_get_hidden_fields_for_user to modify visibility levels,
  *   or if you have added your own custom levels
@@ -671,26 +677,34 @@ function bp_xprofile_get_hidden_fields_for_user( $displayed_user_id = 0, $curren
 	}
 
 	// @todo - This is where you'd swap out for current_user_can() checks
+	$hidden_levels = $hidden_fields = array();
 
+	// Current user is logged in
 	if ( $current_user_id ) {
-		// Current user is logged in
+
+		// If you're viewing your own profile, nothing's private
 		if ( $displayed_user_id == $current_user_id ) {
-			// If you're viewing your own profile, nothing's private
-			$hidden_fields = array();
 
-		} else if ( bp_is_active( 'friends' ) && friends_check_friendship( $displayed_user_id, $current_user_id ) ) {
-			// If the current user and displayed user are friends, show all
-			$hidden_fields = array();
+		// If the current user and displayed user are friends, show all
+		} elseif ( bp_is_active( 'friends' ) && friends_check_friendship( $displayed_user_id, $current_user_id ) ) {
+			if ( ! bp_current_user_can( 'bp_moderate' ) )
+				$hidden_levels[] = 'adminsonly';
 
+			$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
+
+		// current user is logged-in but not friends, so exclude friends-only
 		} else {
-			// current user is logged-in but not friends, so exclude friends-only
 			$hidden_levels = array( 'friends' );
+
+			if ( ! bp_current_user_can( 'bp_moderate' ) )
+				$hidden_levels[] = 'adminsonly';
+
 			$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
 		}
 
+	// Current user is not logged in, so exclude friends-only, loggedin, and adminsonly.
 	} else {
-		// Current user is not logged in, so exclude friends-only and loggedin
-		$hidden_levels = array( 'friends', 'loggedin' );
+		$hidden_levels = array( 'friends', 'loggedin', 'adminsonly', );
 		$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
 	}
 
@@ -700,11 +714,11 @@ function bp_xprofile_get_hidden_fields_for_user( $displayed_user_id = 0, $curren
 /**
  * Fetch an array of the xprofile fields that a given user has marked with certain visibility levels
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  * @see bp_xprofile_get_hidden_fields_for_user()
  *
  * @param int $user_id The id of the profile owner
- * @param array $levels An array of visibility levels ('public', 'friends', 'loggedin', etc) to be
+ * @param array $levels An array of visibility levels ('public', 'friends', 'loggedin', 'adminsonly' etc) to be
  *    checked against
  * @return array $field_ids The fields that match the requested visibility levels for the given user
  */
@@ -742,6 +756,3 @@ function bp_xprofile_get_fields_by_visibility_levels( $user_id, $levels = array(
 
 	return $field_ids;
 }
-
-
-?>

@@ -2,9 +2,9 @@
 Contributors: xberserker
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KPFWQ3GJDJ9BG
 Tags: cubepoints, buddypress, points, comments, reply, update, groups, creation, reward, friends, request, forum, avatar, buddypress links, message, vote, buddypress gifts, gifts, BP Gallery, photo, video, audio, upload, admin bar, awards, trophies, trophy, achievements, spam, ps3, xbox 360, xbox, sony, microsoft, lottery, giveaway, bet, betting, gamble, gambling, pick, winners, random, bbPress, bbPress 2.0
-Requires at least: 2.9.2 & Buddypress 1.2.5.2 & Cubepoints 3.0.1
-Tested up to: 3.2.1
-Stable tag: 1.9.8.4
+Requires at least: 3.1 & Buddypress 1.2.5.2 & Cubepoints 3.0.1
+Tested up to: 3.4.1
+Stable tag: 1.9.8.9
 
 Adds CubePoints support to Buddypress. Reward members using your BuddyPress portion of your website by giving them points and awards!
 
@@ -154,6 +154,32 @@ BuddyPress calls 2 functions when creating a forum topic. So think of how much y
 * CubePoints Buddypress Integration 1.9+ Requires at least CubePoints 3.0
 
 == Changelog ==
+
+**Version 1.9.8.9**
+
+* Fixed bug with points showing in the WP Admin bar when logged out.
+* Fixed bug with links in the WP Admin bar.
+* Fixed translation issue in the WP Admin bar.
+* Code optimization for compatibility with the Cubepoints Giveaway & Betting System
+
+**Version 1.9.8.8**
+
+* Added support for WordPress Admin Bar.
+* Updated German translation.
+
+**Version 1.9.8.7**
+
+* Updated German translation.
+
+**Version 1.9.8.6**
+
+* Added German translation.
+
+**Version 1.9.8.5**
+
+* Translation is now working properly.
+* Option of showing community point total on points logs page.
+* Code optimization
 
 **Version 1.9.8.4**
 

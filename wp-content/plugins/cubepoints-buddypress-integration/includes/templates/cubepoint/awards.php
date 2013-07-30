@@ -24,201 +24,21 @@
 				</div>
 				
 				<script type="text/javascript">
-				function groups() {
-				document.getElementById("Groups").style.display = "block";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function friends() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "block";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function postingupdate() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "block";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function Replies() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "block";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function GroupForumTopic() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "block";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function GroupForumReplies() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "block";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function Comments() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "block";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function Blogger() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "block";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function BloggerCat() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "block";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function Donation() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "block";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function Loggingin() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "block";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function PointLevels() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "block";
-				document.getElementById("SPFForum").style.display = "none";
-				}
-				function SPFForum() {
-				document.getElementById("Groups").style.display = "none";
-				document.getElementById("Friends").style.display = "none";
-				document.getElementById("PostingUpdate").style.display = "none";
-				document.getElementById("Replies").style.display = "none";
-				document.getElementById("GroupForumTopic").style.display = "none";
-				document.getElementById("GroupForumReplies").style.display = "none";
-				document.getElementById("Comments").style.display = "none";
-				document.getElementById("Blogger").style.display = "none";
-				document.getElementById("BloggerCat").style.display = "none";
-				document.getElementById("Donation").style.display = "none";
-				document.getElementById("Loggingin").style.display = "none";
-				document.getElementById("PointLevels").style.display = "none";
-				document.getElementById("SPFForum").style.display = "block";
-				}				
+				jQuery(document).ready(function($){
+				  jQuery('#cbgroups').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Groups').fadeIn("slow"); return false; })
+				  jQuery('#cbfriend').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Friends').fadeIn("slow"); return false; })
+				  jQuery('#cbupdate').click(function() { jQuery('.cbawardholder').hide(); jQuery('#PostingUpdate').fadeIn("slow"); return false; })
+				  jQuery('#cpreply').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Replies').fadeIn("slow"); return false; })
+				  jQuery('#cpgtopic').click(function() { jQuery('.cbawardholder').hide(); jQuery('#GroupForumTopic').fadeIn("slow"); return false; })
+				  jQuery('#cpgreply').click(function() { jQuery('.cbawardholder').hide(); jQuery('#GroupForumReplies').fadeIn("slow"); return false; })
+				  jQuery('#cpcomment').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Comments').fadeIn("slow"); return false; })
+				  jQuery('#cpbpost').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Blogger').fadeIn("slow"); return false; })
+				  jQuery('#cbbcpost').click(function() { jQuery('.cbawardholder').hide(); jQuery('#BloggerCat').fadeIn("slow"); return false; })
+				  jQuery('#cbdonation').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Donation').fadeIn("slow"); return false; })
+				  jQuery('#cblogin').click(function() { jQuery('.cbawardholder').hide(); jQuery('#Loggingin').fadeIn("slow"); return false; })
+				  jQuery('#cbpoints').click(function() { jQuery('.cbawardholder').hide(); jQuery('#PointLevels').fadeIn("slow"); return false; })
+				  jQuery('#cbspf').click(function() { jQuery('.cbawardholder').hide(); jQuery('#SPFForum').fadeIn("slow"); return false; })		
+				});			
 				</script>				
 				
 				<div id="cpbpawards">
@@ -278,24 +98,24 @@
 				
 				// NOT WORKING YET do_action( 'log_verifications_screen', 'cb_bp_awards_remove_screen_notifications' );				
 				
-				echo '<p align="center">';
-				echo '<a href="javascript:groups()" class="cbawardslnk">'.__( 'Groups', 'cp_buddypress' ).'</a> ';
-				echo '<a href="javascript:friends()" class="cbawardslnk">'.__('Friends','cp_buddypress').'</a> ';
-				echo '<a href="javascript:postingupdate()" class="cbawardslnk">'.__('Posting Updates','cp_buddypress').'</a> ';
-				echo '<a href="javascript:Replies()" class="cbawardslnk">'.__('Replies','cp_buddypress').'</a> ';
-				echo '<a href="javascript:GroupForumTopic()" class="cbawardslnk">'.__('Group Forum Topics','cp_buddypress').'</a><br /><br />';
-				echo '<a href="javascript:GroupForumReplies()" class="cbawardslnk">'.__('Group Forum Replies','cp_buddypress').'</a> ';
-				echo '<a href="javascript:Comments()" class="cbawardslnk">'.__('Comments','cp_buddypress').'</a> ';
-				echo '<a href="javascript:Blogger()" class="cbawardslnk">'.__('Blog Posts','cp_buddypress').'</a> ';
-				echo '<a href="javascript:BloggerCat()" class="cbawardslnk">'.__('Blog Posts in a Category','cp_buddypress').'</a><br /><br />';
-				echo '<a href="javascript:Donation()" class="cbawardslnk">'.__('Donations','cp_buddypress').'</a> ';
-				echo '<a href="javascript:Loggingin()" class="cbawardslnk">'.__('Logging In','cp_buddypress').'</a> ';
-				echo '<a href="javascript:PointLevels()" class="cbawardslnk">'.__('Points','cp_buddypress').'</a> ';
-				if(get_option('bp_spf_support_onoff_cp_bp')) { echo '<a href="javascript:SPFForum()" class="cbawardslnk">'.__('Main Forum','cp_buddypress').'</a> ';}
+				echo '<p align="center"><a name="cbawards"></a>';
+				echo '<a href="#cbawards" id="cbgroups" class="cbawardslnk">'.__( 'Groups', 'cp_buddypress' ).'</a> ';
+				echo '<a href="#cbawards" id="cbfriend" class="cbawardslnk">'.__('Friends','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cbupdate" class="cbawardslnk">'.__('Posting Updates','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cpreply" class="cbawardslnk">'.__('Replies','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cpgtopic" class="cbawardslnk">'.__('Group Forum Topics','cp_buddypress').'</a><br /><br />';
+				echo '<a href="#cbawards" id="cpgreply" class="cbawardslnk">'.__('Group Forum Replies','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cpcomment" class="cbawardslnk">'.__('Comments','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cpbpost" class="cbawardslnk">'.__('Blog Posts','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cbbcpost" class="cbawardslnk">'.__('Blog Posts in a Category','cp_buddypress').'</a><br /><br />';
+				echo '<a href="#cbawards" id="cbdonation" class="cbawardslnk">'.__('Donations','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cblogin" class="cbawardslnk">'.__('Logging In','cp_buddypress').'</a> ';
+				echo '<a href="#cbawards" id="cbpoints" class="cbawardslnk">'.__('Points','cp_buddypress').'</a> ';
+				if(get_option('bp_spf_support_onoff_cp_bp')) { echo '<a href="#cbawards" id="cbspf" class="cbawardslnk">'.__('Main Forum','cp_buddypress').'</a> ';}
 				echo '</p><br />';
 				
 				// Group Awards
-				echo '<div id="Groups" style="display:block;">';
+				echo '<div id="Groups" style="display:block;" class="cbawardholder">';
 				if (get_option('bp_award_groupvalue_cp_bp') > 0 ) { $bp_cp_groupcounttotal++; }
 				if (get_option('bp_award_group2value_cp_bp') > 0 ) { $bp_cp_groupcounttotal++; }
 				if (get_option('bp_award_group3value_cp_bp') > 0 ) { $bp_cp_groupcounttotal++; }
@@ -329,7 +149,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_groupcountearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_groupcounttotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Friends Awards
-				echo '<div id="Friends" style="display:none;">';
+				echo '<div id="Friends" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_friendvalue_cp_bp') > 0 ) { $bp_cp_friendtotal++; }
 				if (get_option('bp_award_friend2value_cp_bp') > 0 ) { $bp_cp_friendtotal++; }
 				if (get_option('bp_award_friend3value_cp_bp') > 0 ) { $bp_cp_friendtotal++; }
@@ -363,7 +183,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_friendearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_friendtotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Update Awards			
-				echo '<div id="PostingUpdate" style="display:none;">';
+				echo '<div id="PostingUpdate" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_updatevalue_cp_bp') > 0 ) { $bp_cp_updatetotal++; }
 				if (get_option('bp_award_update2value_cp_bp') > 0 ) { $bp_cp_updatetotal++; }
 				if (get_option('bp_award_update3value_cp_bp') > 0 ) { $bp_cp_updatetotal++; }
@@ -397,7 +217,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_updateearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_updatetotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Replies Awards
-				echo '<div id="Replies" style="display:none;">';
+				echo '<div id="Replies" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_replyvalue_cp_bp') > 0 ) { $bp_cp_repliestotal++; }
 				if (get_option('bp_award_reply2value_cp_bp') > 0 ) { $bp_cp_repliestotal++; }
 				if (get_option('bp_award_reply3value_cp_bp') > 0 ) { $bp_cp_repliestotal++; }
@@ -431,7 +251,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_repliesearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_repliestotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Forum Topic Awards
-				echo '<div id="GroupForumTopic" style="display:none;">';
+				echo '<div id="GroupForumTopic" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_forumtopicvalue_cp_bp') > 0 ) { $bp_cp_gforumtopictotal++; }
 				if (get_option('bp_award_forumtopic2value_cp_bp') > 0 ) { $bp_cp_gforumtopictotal++; }
 				if (get_option('bp_award_forumtopic3value_cp_bp') > 0 ) { $bp_cp_gforumtopictotal++; }
@@ -465,7 +285,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_gforumtopicearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_gforumtopictotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Forum Replies Awards
-				echo '<div id="GroupForumReplies" style="display:none;">';
+				echo '<div id="GroupForumReplies" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_forumreplyvalue_cp_bp') > 0 ) { $bp_cp_gforumreplytotal++; }
 				if (get_option('bp_award_forumreply2value_cp_bp') > 0 ) { $bp_cp_gforumreplytotal++; }
 				if (get_option('bp_award_forumreply3value_cp_bp') > 0 ) { $bp_cp_gforumreplytotal++; }
@@ -499,7 +319,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_gforumreplyearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_gforumreplytotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Blog Comments Awards
-				echo '<div id="Comments" style="display:none;">';
+				echo '<div id="Comments" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_blogcommentvalue_cp_bp') > 0 ) { $bp_cp_blogcommenttotal++; }
 				if (get_option('bp_award_blogcomment2value_cp_bp') > 0 ) { $bp_cp_blogcommenttotal++; }
 				if (get_option('bp_award_blogcomment3value_cp_bp') > 0 ) { $bp_cp_blogcommenttotal++; }
@@ -533,7 +353,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_blogcommentearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_blogcommenttotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Blog Posts Awards
-				echo '<div id="Blogger" style="display:none;">';
+				echo '<div id="Blogger" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_bloggervalue_cp_bp') > 0 ) { $bp_cp_bloggertotal++; }
 				if (get_option('bp_award_blogger2value_cp_bp') > 0 ) { $bp_cp_bloggertotal++; }
 				if (get_option('bp_award_blogger3value_cp_bp') > 0 ) { $bp_cp_bloggertotal++; }
@@ -567,7 +387,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_bloggerearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_bloggertotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Blogger per category Awards
-				echo '<div id="BloggerCat" style="display:none;">';
+				echo '<div id="BloggerCat" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_bloggercatvalue_cp_bp') > 0 ) { $bp_cp_blogcattotal++; }
 				if (get_option('bp_award_bloggercat2value_cp_bp') > 0 ) { $bp_cp_blogcattotal++; }
 				if (get_option('bp_award_bloggercat3value_cp_bp') > 0 ) { $bp_cp_blogcattotal++; }
@@ -601,7 +421,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_blogcatearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_blogcattotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				// Donation Awards
-				echo '<div id="Donation" style="display:none;">';
+				echo '<div id="Donation" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_donationsvalue_cp_bp') > 0 ) { $bp_cp_donationtotal++; }
 				if (get_option('bp_award_donations2value_cp_bp') > 0 ) { $bp_cp_donationtotal++; }
 				if (get_option('bp_award_donations3value_cp_bp') > 0 ) { $bp_cp_donationtotal++; }
@@ -635,7 +455,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_donationearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_donationtotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				/* Daily Login */
-				echo '<div id="Loggingin" style="display:none;">';
+				echo '<div id="Loggingin" style="display:none;" class="cbawardholder">';
 				if (get_option('bp_award_dailyloginvalue_cp_bp') > 0 ) { $bp_cp_dailylogintotal++; }
 				if (get_option('bp_award_dailylogin2value_cp_bp') > 0 ) { $bp_cp_dailylogintotal++; }
 				if (get_option('bp_award_dailylogin3value_cp_bp') > 0 ) { $bp_cp_dailylogintotal++; }
@@ -669,7 +489,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_dailyloginearn.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_dailylogintotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 				echo '</div>';
 				/* Point Levels */
-				echo '<div id="PointLevels" style="display:none;">';				
+				echo '<div id="PointLevels" style="display:none;" class="cbawardholder">';				
 				if (get_option('bp_award_points_1value_cp_bp') > 0 ) { $bp_cp_pointstotal++; }
 				if (get_option('bp_award_points_2value_cp_bp') > 0 ) { $bp_cp_pointstotal++; }
 				if (get_option('bp_award_points_3value_cp_bp') > 0 ) { $bp_cp_pointstotal++; }
@@ -734,7 +554,7 @@
 				echo '</div>';
 			
 				// Simple Press Forum Support
-				echo '<div id="SPFForum" style="display:none;">';
+				echo '<div id="SPFForum" style="display:none;" class="cbawardholder">';
 				if(get_option('bp_spf_support_onoff_cp_bp')) {
 				if (get_option('bp_award_spf_forumvalue_cp_bp') > 0 ) { $bp_cp_spfpoststotal++; }
 				if (get_option('bp_award_spf_forum2value_cp_bp') > 0 ) { $bp_cp_spfpoststotal++; }
@@ -769,6 +589,7 @@
 				echo '<p class="cbbpimgawards" align="center">'.$bp_cp_spfpostsearned.' '.__( 'of', 'cp_buddypress' ).' '.$bp_cp_spfpoststotal.' '.__( 'unlocked', 'cp_buddypress' ).'</p>';
 			}
 				echo '</div>';
+				
 				/* Add up Total Awards Possible if value is not zero */
 					if (get_option('bp_award_groupvalue_cp_bp') > 0 ) { $bp_cp_total_awardsNO++; }
 					if (get_option('bp_award_group2value_cp_bp') > 0 ) { $bp_cp_total_awardsNO++; }

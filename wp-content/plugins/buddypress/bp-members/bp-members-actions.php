@@ -98,9 +98,8 @@ function bp_core_action_delete_user() {
  * Returns the user_id for a user based on their username.
  *
  * @package BuddyPress Core
- * @param $username str Username to check.
- * @return false on no match
- * @return int the user ID of the matched user.
+ * @param string $username Username to check.
+ * @since BuddyPress (1.0)
  */
 function bp_core_get_random_member() {
 	if ( ! isset( $_GET['random-member'] ) )
@@ -110,5 +109,3 @@ function bp_core_get_random_member() {
 	bp_core_redirect( bp_core_get_user_domain( $user['users'][0]->id ) );
 }
 add_action( 'bp_actions', 'bp_core_get_random_member' );
-
-?>

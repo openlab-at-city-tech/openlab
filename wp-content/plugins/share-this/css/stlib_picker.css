@@ -1,0 +1,254 @@
+.stp_background {
+	/*-moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background: none repeat scroll 0 0 #dddddd;*/
+    font-family : Helvetica !important;
+    width: 80%;
+    margin-left : 100px;
+}
+
+.stp_pickerLeft, .stp_pickerArrow, .stp_pickerLeftArrow, .stp_pickerRight, .stp_pickerBottom {
+    float: left;
+    height: 174px;
+    margin: 0;
+    overflow: hidden;
+    width: 275px;
+}
+
+.stp_pickerLeftNative {
+	height : 193px;
+	margin-top : 10px;
+	text-align : left;
+}
+.stp_pickerRight
+{
+ display:none;
+}
+.stp_pickerBottom {
+	margin-right:80px;
+	float:right;
+	margin-top : 2px ;
+	display : block;
+}
+
+.stp_pickerArrow {
+	border: medium none;
+    width: 90px;
+}
+
+.stp_pickerLeftArrow {
+	border: medium none;
+    width: 80px;
+}
+
+.stp_pickerLeftArrowNative {
+	margin-top: 5px;
+	height : 210px;
+}
+
+.stp_pickerBottomArrow {
+	/*margin-left: 171px;*/
+}
+
+.stp_header {
+    /*color: #4D4D4D;
+    display: block;
+    padding: 5px;
+    text-align: center;
+    width: 100%;*/
+	cursor : pointer;
+	font-size : 18px;
+}
+
+.stp_ulLeft, .stp_ulRight, .stp_ulBottom  {
+	display:block;
+	overflow-y:scroll;	
+	height:171px;
+	margin:0px;
+	padding:0px;
+	list-style:none;
+	background-color: #eeeeee;
+	border: 1px solid grey;
+}
+
+.stp_ulLeftNative {
+	height : 171px;
+}
+
+.stp_ulRight, .stp_ulBottom  {
+	height:128px;
+}
+
+.stp_li {
+    background : url("http://sharethis.com/images/Gradient_Default.jpg") repeat scroll 0 0 transparent;
+    border-bottom : 1px solid grey !important;
+    color : gray !important;
+    display : block;
+    height : 32px !important;
+    padding : 5px !important;
+    margin : 0px !important;
+    position :relative;
+	text-align : left;
+	font-size : 16px !important;
+	/*border-bottom:1px solid black;	
+	padding:0px;
+	padding-top:5px;
+	background: #ffffee; 
+	vertical-align:center;*/
+}
+
+.stp_li img {
+	display:inline-	block;
+	margin:0px;
+	padding:0px;
+	margin-left:5px;
+}
+
+.stp_liText {
+	display:inline-block;
+	vertical-align:top;
+	margin:2px 0 0 10px;
+	padding:5px;
+	/*margin-left:10px;*/
+	font-size:14px;
+	/*font-family:tahoma;*/
+	overflow:hidden;
+}
+
+.stp_arrow {
+	display:block;
+	height:35px;
+	width:35px;
+	margin:30px;
+	margin-bottom:10px;
+	margin-top:10px;
+	overflow:hidden;
+}
+
+.stp_drag, .stp_drag_bottom {
+	height:69px;
+	width:70px;
+	position:relative;
+	left:8px;
+	top:99px;
+	display:none;
+}
+
+.stp_reorder {
+    height: 187px;
+    position: relative;
+    top: 20px;
+    width: 77px;
+    display:none;
+}
+
+.stp_remove {
+    height: 17px;
+	position: absolute;
+	top: 12px;
+	width: 17px;
+	display: none;
+	left: 230px;
+}
+
+.stp_show {
+	display:block;
+}
+
+#chicklet_search {
+    background: none repeat scroll 0 0 #CCCCCC;
+    color: #DBDBDB;
+    display: block;
+    height: 42px;
+    padding: 0 4px;
+    text-align: center;
+}
+
+#chicklet_search_field {
+	background-image: url("../images/mglass.png");
+    background-repeat: no-repeat;
+    background-position: 2px 5px;
+    border-radius: 6px;
+	color: #7F8084;
+	margin-top: 8px;
+	padding-left: 20px;
+	width: 85%;
+	height: 26px;
+	font-size: 14px;
+}
+
+.stp_li:hover {
+    background: url("http://sharethis.com/images/Gradient_Over.jpg") repeat scroll 0 0 transparent;
+    border-bottom: 1px solid grey;
+    border-left: 1px solid grey;
+    color: black;
+    cursor: pointer;
+	/*background: #ddddcc;
+	cursor: pointer; */
+}
+/*
+.stp_select, .stp_select:hover {
+	background:#ccccbb;
+}*/
+
+.stp_up:hover {
+	margin-top:-152px;
+}
+
+.stp_left {
+	margin-top:-37px;
+}
+
+.stp_left:hover {
+	margin-top:-189px;
+}
+
+.stp_right {
+	margin-top:-75px;	
+}
+
+.stp_right:hover {
+	margin-top:-227px;	
+}
+
+.stp_down {
+	margin-top:-114px;	
+}
+
+.stp_down:hover {
+	margin-top:-266px;	
+}
+
+.stp_clear {
+	clear:both;
+	width:500px;
+}
+.stp_pickerRightNative{
+	margin-top: 0px;
+}
+
+.picker_headings{
+    /*position: relative;
+	 right: 108px;
+    top: 23px;*/
+	margin-right : 12px;
+	padding-top : 10px;
+}
+
+.stp_pickerArrowBtmNative{
+	margin-left : -91px;
+	margin-top : -30px ;
+	display : block;
+}
+
+.highlightSelection{
+	color : #36759a;
+}
+
+.stp_pickerArrowRtNative{
+	margin-top : -30px;
+}
+
+ #chicklet_search input[type=text]::-ms-clear {
+    display: none;
+}

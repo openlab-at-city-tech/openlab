@@ -5,7 +5,7 @@ Used to style the TinyMCE editor.
 html .mceContentBody {
 	max-width: 500px;
 }
-* {
+body {
 	font-family: Georgia, "Bitstream Charter", serif;
 	color: #444;
 	line-height: 1.7;

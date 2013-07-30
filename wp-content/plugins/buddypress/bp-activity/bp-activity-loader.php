@@ -37,7 +37,7 @@ class BP_Activity_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5)
 	 */
-	function includes() {
+	public function includes( $includes = array() ) {
 		// Files to include
 		$includes = array(
 			'actions',
@@ -52,7 +52,7 @@ class BP_Activity_Component extends BP_Component {
 
 		// Load Akismet support if Akismet is configured
 		$akismet_key = bp_get_option( 'wordpress_api_key' );
-		if ( defined( 'AKISMET_VERSION' ) && ( !empty( $akismet_key ) || defined( 'WPCOM_API_KEY' ) ) && apply_filters( 'bp_activity_use_akismet', true ) )
+		if ( defined( 'AKISMET_VERSION' ) && ( !empty( $akismet_key ) || defined( 'WPCOM_API_KEY' ) ) && apply_filters( 'bp_activity_use_akismet', bp_is_akismet_active() ) )
 			$includes[] = 'akismet';
 
 		if ( is_admin() )
@@ -71,7 +71,7 @@ class BP_Activity_Component extends BP_Component {
 	 *
 	 * @global object $bp BuddyPress global settings
 	 */
-	function setup_globals() {
+	public function setup_globals( $args = array() ) {
 		global $bp;
 
 		// Define a slug, if necessary
@@ -109,7 +109,7 @@ class BP_Activity_Component extends BP_Component {
 	 * @uses bp_get_friends_slug()
 	 * @uses bp_get_groups_slug()
 	 */
-	function setup_nav() {
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
 		$sub_nav = array();
 
@@ -128,12 +128,13 @@ class BP_Activity_Component extends BP_Component {
 			return;
 
 		// Determine user to use
-		if ( bp_displayed_user_domain() )
+		if ( bp_displayed_user_domain() ) {
 			$user_domain = bp_displayed_user_domain();
-		elseif ( bp_loggedin_user_domain() )
+		} elseif ( bp_loggedin_user_domain() ) {
 			$user_domain = bp_loggedin_user_domain();
-		else
+		} else {
 			return;
+		}
 
 		// User link
 		$activity_link = trailingslashit( $user_domain . $this->slug );
@@ -149,15 +150,17 @@ class BP_Activity_Component extends BP_Component {
 		);
 
 		// @ mentions
-		$sub_nav[] = array(
-			'name'            => __( 'Mentions', 'buddypress' ),
-			'slug'            => 'mentions',
-			'parent_url'      => $activity_link,
-			'parent_slug'     => $this->slug,
-			'screen_function' => 'bp_activity_screen_mentions',
-			'position'        => 20,
-			'item_css_id'     => 'activity-mentions'
-		);
+		if ( bp_activity_do_mentions() ) {
+			$sub_nav[] = array(
+				'name'            => __( 'Mentions', 'buddypress' ),
+				'slug'            => 'mentions',
+				'parent_url'      => $activity_link,
+				'parent_slug'     => $this->slug,
+				'screen_function' => 'bp_activity_screen_mentions',
+				'position'        => 20,
+				'item_css_id'     => 'activity-mentions'
+			);
+		}
 
 		// Favorite activity items
 		$sub_nav[] = array(
@@ -213,7 +216,7 @@ class BP_Activity_Component extends BP_Component {
 	 * @uses bp_get_friends_slug()
 	 * @uses bp_get_groups_slug()
 	 */
-	function setup_admin_bar() {
+	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		global $bp;
 
 		// Prevent debug notices
@@ -227,11 +230,13 @@ class BP_Activity_Component extends BP_Component {
 			$activity_link = trailingslashit( $user_domain . $this->slug );
 
 			// Unread message count
-			$count = bp_get_total_mention_count_for_user( bp_loggedin_user_id() );
-			if ( !empty( $count ) ) {
-				$title = sprintf( __( 'Mentions <span class="count">%s</span>', 'buddypress' ), number_format_i18n( $count ) );
-			} else {
-				$title = __( 'Mentions', 'buddypress' );
+			if ( bp_activity_do_mentions() ) {
+				$count = bp_get_total_mention_count_for_user( bp_loggedin_user_id() );
+				if ( !empty( $count ) ) {
+					$title = sprintf( __( 'Mentions <span class="count">%s</span>', 'buddypress' ), number_format_i18n( $count ) );
+				} else {
+					$title = __( 'Mentions', 'buddypress' );
+				}
 			}
 
 			// Add the "Activity" sub menu
@@ -243,12 +248,14 @@ class BP_Activity_Component extends BP_Component {
 			);
 
 			// Mentions
-			$wp_admin_nav[] = array(
-				'parent' => 'my-account-' . $this->id,
-				'id'     => 'my-account-' . $this->id . '-mentions',
-				'title'  => $title,
-				'href'   => trailingslashit( $activity_link . 'mentions' )
-			);
+			if ( bp_activity_do_mentions() ) {
+				$wp_admin_nav[] = array(
+					'parent' => 'my-account-' . $this->id,
+					'id'     => 'my-account-' . $this->id . '-mentions',
+					'title'  => $title,
+					'href'   => trailingslashit( $activity_link . 'mentions' )
+				);
+			}
 
 			// Personal
 			$wp_admin_nav[] = array(
@@ -323,7 +330,7 @@ class BP_Activity_Component extends BP_Component {
 	/**
 	 * Setup the actions
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	 function setup_actions() {
 		// Spam prevention
@@ -339,5 +346,3 @@ function bp_setup_activity() {
 	$bp->activity = new BP_Activity_Component();
 }
 add_action( 'bp_setup_components', 'bp_setup_activity', 6 );
-
-?>

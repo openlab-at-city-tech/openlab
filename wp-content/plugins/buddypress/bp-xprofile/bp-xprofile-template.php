@@ -147,10 +147,6 @@ class BP_XProfile_Data_Template {
 	}
 }
 
-function xprofile_get_profile() {
-	locate_template( array( 'profile/profile-loop.php'), true );
-}
-
 function bp_has_profile( $args = '' ) {
 	global $profile_template;
 
@@ -392,13 +388,30 @@ function bp_the_profile_field_input_name() {
 	}
 
 /**
+ * Returns the action name for any signup errors related to this profile field
+ *
+ * In the registration templates, signup errors are pulled from the global
+ * object and rendered at actions that look like 'bp_field_12_errors'. This
+ * function allows the action name to be easily concatenated and called in the
+ * following fashion:
+ *   do_action( bp_get_the_profile_field_errors_action() );
+ *
+ * @since BuddyPress (1.8)
+ * @return string The _errors action name corresponding to this profile field
+ */
+function bp_get_the_profile_field_errors_action() {
+	global $field;
+	return 'bp_field_' . $field->id . '_errors';
+}
+
+/**
  * bp_the_profile_field_options()
  *
  * Displays field options HTML for field types of 'selectbox', 'multiselectbox',
  * 'radio', 'checkbox', and 'datebox'.
  *
  * @package BuddyPress Xprofile
- * @since 1.1
+ * @since BuddyPress (1.1)
  *
  * @uses bp_get_the_profile_field_options()
  *
@@ -414,7 +427,7 @@ function bp_the_profile_field_options( $args = '' ) {
 	 * 'radio', 'checkbox', and 'datebox'.
 	 *
 	 * @package BuddyPress Xprofile
-	 * @since 1.1
+	 * @since BuddyPress (1.1)
 	 *
 	 * @uses BP_XProfile_Field::get_children()
 	 * @uses BP_XProfile_ProfileData::get_value_byid()
@@ -735,7 +748,14 @@ function bp_the_profile_field_visibility_level() {
 	function bp_get_the_profile_field_visibility_level() {
 		global $field;
 
-		$retval = !empty( $field->visibility_level ) ? $field->visibility_level : 'public';
+		// On the registration page, values stored in POST should take
+		// precedence over default visibility, so that submitted values
+		// are not lost on failure
+		if ( bp_is_register_page() && ! empty( $_POST['field_' . $field->id . '_visibility'] ) ) {
+			$retval = esc_attr( $_POST['field_' . $field->id . '_visibility'] );
+		} else {
+			$retval = ! empty( $field->visibility_level ) ? $field->visibility_level : 'public';
+		}
 
 		return apply_filters( 'bp_get_the_profile_field_visibility_level', $retval );
 	}
@@ -752,7 +772,15 @@ function bp_the_profile_field_visibility_level_label() {
 	function bp_get_the_profile_field_visibility_level_label() {
 		global $field;
 
-		$level  = !empty( $field->visibility_level ) ? $field->visibility_level : 'public';
+		// On the registration page, values stored in POST should take
+		// precedence over default visibility, so that submitted values
+		// are not lost on failure
+		if ( bp_is_register_page() && ! empty( $_POST['field_' . $field->id . '_visibility'] ) ) {
+			$level = esc_html( $_POST['field_' . $field->id . '_visibility'] );
+		} else {
+			$level = ! empty( $field->visibility_level ) ? $field->visibility_level : 'public';
+		}
+
 		$fields = bp_xprofile_get_visibility_levels();
 
 		return apply_filters( 'bp_get_the_profile_field_visibility_level_label', $fields[$level]['label'] );
@@ -923,4 +951,3 @@ function bp_profile_visibility_radio_buttons() {
 
 		return apply_filters( 'bp_profile_get_visibility_radio_buttons', $html );
 	}
-?>

@@ -14,8 +14,7 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-function messages_action_view_message() {
-	global $thread_id, $bp;
+function messages_action_conversation() {
 
 	if ( !bp_is_messages_component() || !bp_is_current_action( 'view' ) )
 		return false;
@@ -32,10 +31,11 @@ function messages_action_view_message() {
 		check_admin_referer( 'messages_send_message', 'send_message_nonce' );
 
 		// Send the reply
-		if ( messages_new_message( array( 'thread_id' => $thread_id, 'subject' => ! empty( $_POST['subject'] ) ? $_POST['subject'] : false, 'content' => $_POST['content'] ) ) )
+		if ( messages_new_message( array( 'thread_id' => $thread_id, 'subject' => ! empty( $_POST['subject'] ) ? $_POST['subject'] : false, 'content' => $_POST['content'] ) ) ) {
 			bp_core_add_message( __( 'Your reply was sent successfully', 'buddypress' ) );
-		else
+		} else {
 			bp_core_add_message( __( 'There was a problem sending your reply, please try again', 'buddypress' ), 'error' );
+		}
 
 		bp_core_redirect( bp_displayed_user_domain() . bp_get_messages_slug() . '/view/' . $thread_id . '/' );
 	}
@@ -43,30 +43,11 @@ function messages_action_view_message() {
 	// Mark message read
 	messages_mark_thread_read( $thread_id );
 
-	// Decrease the unread count in the nav before it's rendered
-	$name = sprintf( __( 'Messages <span>%s</span>', 'buddypress' ), bp_get_total_unread_messages_count() );
-
-	$bp->bp_nav[$bp->messages->slug]['name'] = $name;
-
-	do_action( 'messages_action_view_message' );
-
-	bp_core_new_subnav_item( array(
-		'name'            => sprintf( __( 'From: %s', 'buddypress' ), BP_Messages_Thread::get_last_sender( $thread_id ) ),
-		'slug'            => 'view',
-		'parent_url'      => trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() ),
-		'parent_slug'     => bp_get_messages_slug(),
-		'screen_function' => true,
-		'position'        => 40,
-		'user_has_access' => bp_is_my_profile(),
-		'link'            => trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() . '/view/' . (int) $thread_id )
-	) );
-
-	bp_core_load_template( apply_filters( 'messages_template_view_message', 'members/single/home' ) );
+	do_action( 'messages_action_conversation' );
 }
-add_action( 'bp_actions', 'messages_action_view_message' );
+add_action( 'bp_actions', 'messages_action_conversation' );
 
 function messages_action_delete_message() {
-	global $thread_id;
 
 	if ( !bp_is_messages_component() || bp_is_current_action( 'notices' ) || !bp_is_action_variable( 'delete', 0 ) )
 		return false;
@@ -91,7 +72,6 @@ function messages_action_delete_message() {
 add_action( 'bp_actions', 'messages_action_delete_message' );
 
 function messages_action_bulk_delete() {
-	global $thread_ids;
 
 	if ( !bp_is_messages_component() || !bp_is_action_variable( 'bulk-delete', 0 ) )
 		return false;
@@ -101,17 +81,17 @@ function messages_action_bulk_delete() {
 	if ( !$thread_ids || !messages_check_thread_access( $thread_ids ) ) {
 		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() . '/' . bp_current_action() ) );
 	} else {
-		if ( !check_admin_referer( 'messages_delete_thread' ) )
+		if ( !check_admin_referer( 'messages_delete_thread' ) ) {
 			return false;
+		}
 
-		if ( !messages_delete_thread( $thread_ids ) )
+		if ( !messages_delete_thread( $thread_ids ) ) {
 			bp_core_add_message( __('There was an error deleting messages.', 'buddypress'), 'error' );
-		else
+		} else {
 			bp_core_add_message( __('Messages deleted.', 'buddypress') );
+		}
 
 		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() . '/' . bp_current_action() ) );
 	}
 }
 add_action( 'bp_actions', 'messages_action_bulk_delete' );
-
-?>

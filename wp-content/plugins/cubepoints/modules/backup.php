@@ -54,7 +54,7 @@ if(cp_module_activated('backup')){
 	}
 
 	function cp_module_backup_data_add_admin_page(){
-		add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Backup and Restore','cp'), __('Backup &amp; Restore','cp'), 8, 'cp_modules_backup_admin', 'cp_modules_backup_admin');
+		add_submenu_page('cp_admin_manage', 'CubePoints - ' .__('Backup and Restore','cp'), __('Backup &amp; Restore','cp'), 'manage_options', 'cp_modules_backup_admin', 'cp_modules_backup_admin');
 	}
 	add_action('cp_admin_pages','cp_module_backup_data_add_admin_page');
 

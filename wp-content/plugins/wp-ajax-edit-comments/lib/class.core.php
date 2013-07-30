@@ -18,34 +18,20 @@ class AECCore {
 			$comment = &get_comment( $commentID );
 			$ajax_url = admin_url( 'admin-ajax.php' ) . '?';
 			$plugin_url = $aecomments->get_plugin_url( '/views/' );
-			if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-				$ajax_url = admin_url( 'admin-ajax.php?' );
 			if (!AECCore::is_comment_owner($postID)) {
 				$edit_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=comment-editor.php&action=editcomment&cid=$commentID&pid=$postID", "editcomment_$commentID")."&height=435&width=560");
-				if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$edit_url = esc_url(wp_nonce_url($plugin_url . "comment-editor.php?action=editcomment&cid=$commentID&pid=$postID", "editcomment_$commentID")."&height=435&width=560");
 			} else {
 				$edit_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=comment-editor.php&action=editcomment&cid=$commentID&pid=$postID", "editcomment_$commentID")."&height=525&width=620");
-				if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$edit_url = esc_url(wp_nonce_url($plugin_url . "comment-editor.php?action=editcomment&cid=$commentID&pid=$postID", "editcomment_$commentID")."&height=525&width=620");
 			}
 			$move_comment_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=move-comment.php&action=movecomment&pid=$postID&cid=$commentID", "movecomment_$commentID")."&height=500&width=560");
 			
-			if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$move_comment_url = esc_url(wp_nonce_url($plugin_url . "move-comment.php?action=movecomment&pid=$postID&cid=$commentID", "movecomment_$commentID")."&height=500&width=560");
 			$request_deletion_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=request-deletion.php&action=requestdeletion&pid=$postID&cid=$commentID", "requestdeletion_$commentID")."&height=495&width=560");
-			if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$request_deletion_url = esc_url(wp_nonce_url($plugin_url . "request-deletion.php?action=requestdeletion&pid=$postID&cid=$commentID", "requestdeletion_$commentID")."&height=495&width=560");
 			$request_delete_url = esc_url( wp_nonce_url( $ajax_url . "action=requestdeletecomment&pid=$postID&cid=$commentID", "requestdeletecomment_$commentID" ) );
 			$spam_url = esc_url( wp_nonce_url( $ajax_url . "action=spamcomment&pid=$postID&cid=$commentID", "spamcomment_$commentID" ) );
 			$admin_email = get_bloginfo('admin_email');
 			$commenter_email = $comment->comment_author_email;
 			$email_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=email.php&action=email&admin=$admin_email&commenter=$commenter_email&pid=$postID&cid=$commentID", "email_$commentID")."&height=500&width=600");
-			if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$email_url = esc_url(wp_nonce_url($plugin_url . "email.php?action=email&admin=$admin_email&commenter=$commenter_email&pid=$postID&cid=$commentID", "email_$commentID")."&height=500&width=600");
 			$blacklist_url = esc_url(wp_nonce_url(get_bloginfo('url') . "/?aec_page=blacklist-comment.php&action=blacklist&pid=$postID&cid=$commentID", "blacklist_$commentID")."&height=550&width=600");
-			if ($aecomments->get_admin_option( 'use_wpload' ) == 'true')
-					$blacklist_url = esc_url(wp_nonce_url($plugin_url . "blacklist-comment.php?action=blacklist&pid=$postID&cid=$commentID", "blacklist_$commentID")."&height=550&width=600");
 			$delete_url = esc_url( wp_nonce_url( $ajax_url . "action=deletecomment&pid=$postID&cid=$commentID", "deletecomment_$commentID" ) );
 			$restore_url = esc_url( wp_nonce_url( $ajax_url . "action=restore&pid=$postID&cid=$commentID", "restore_$commentID" ) );
 			$deleteperm_url = esc_url( wp_nonce_url( $ajax_url . "action=deleteperm&pid=$postID&cid=$commentID", "deleteperm_$commentID" ) );
@@ -69,6 +55,7 @@ class AECCore {
 			} else {
 				$edit_admin = "edit-comment-admin-links-no-icon";
 				$timer_class = "ajax-edit-time-left-no-icon";
+				$request_deletion_class = "request-deletion-comment";
 			}
 			if ($aecomments->get_admin_option( 'clear_after' ) == 'true') {
 				$clearfix = "clearfix";
@@ -435,9 +422,14 @@ class AECCore {
 			}
 			
 			//Check to see if the user is logged in and can indefinitely edit
-			if (AECCore::can_indefinitely_edit($comment['user_id'])) {
-				return 1;
+			if ( is_user_logged_in() ) {
+				global $current_user;
+				$user_id = $current_user->ID;
+				if ( $user_id == $comment[ 'user_id' ] && AECCore::can_indefinitely_edit( $comment[ 'user_id' ] ) ) {
+					return 1;
+				}
 			}
+			
 			
 			
 			//Now we check to see if there is any time remaining for comments
@@ -460,14 +452,14 @@ class AECCore {
 			//Now check if options allow editing after an additional comment has been made
 			if ($aecomments->get_admin_option( 'allow_editing_after_comment' ) == "false") {
 				//Admin doesn't want users to edit - so now check if any other comments have been left
-				$query = "SELECT comment_ID from $wpdb->comments where comment_post_ID = $postID and comment_type <> 'pingback' and comment_type <> 'trackback' order by comment_ID DESC limit 1";
-				$newComment = $wpdb->get_row( $wpdb->prepare( $query ), ARRAY_A); 
+				$query = "SELECT comment_ID from $wpdb->comments where comment_post_ID = %d and comment_type <> 'pingback' and comment_type <> 'trackback' order by comment_ID DESC limit 1";
+				$newComment = $wpdb->get_row( $wpdb->prepare( $query, $postID ), ARRAY_A); 
 				if (!$newComment) { return 'new_comment_posted'; }
 				//Check to see if there is a higher comment ID
 				if ($commentID != $newComment['comment_ID']) { return 'new_comment_posted'; }
 			}
 			//Get post security key
-			$postContent = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = " . $comment['comment_post_ID'] . " and meta_key = '_" . $comment['comment_ID'] . "'" ), ARRAY_A);//$wpdb->get_row("SELECT post_content from $wpdb->posts WHERE post_type = 'ajax_edit_comments' and guid = $commentID order by ID desc limit 1", ARRAY_A);
+			$postContent = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '_%d'", $comment['comment_post_ID'], $comment['comment_ID'] ), ARRAY_A);//$wpdb->get_row("SELECT post_content from $wpdb->posts WHERE post_type = 'ajax_edit_comments' and guid = $commentID order by ID desc limit 1", ARRAY_A);
 			if (!$postContent) { return 'comment_edit_denied'; }
 			
 			$hash = md5($comment['comment_author_IP'] . $comment['comment_date_gmt']);
@@ -754,7 +746,10 @@ class AECCore {
 			if (current_user_can('edit_users')) {
 				$aecomments->admin = true;
 				return true;
-			} elseif( current_user_can( 'edit_page', $postID) || current_user_can( 'edit_post', $postID)) {
+			} elseif( current_user_can( 'edit_page', $postID) || current_user_can( 'edit_post', $postID)) { /*author privs */
+				$aecomments->admin = false;
+				return true;
+			} elseif( current_user_can( 'moderate_comments' ) ) {
 				$aecomments->admin = false;
 				return true;
 			}

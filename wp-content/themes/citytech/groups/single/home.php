@@ -105,7 +105,7 @@ function cuny_group_single() { ?>
                 <div class="course-description">
                     <?php echo apply_filters('the_content', $group_description ); ?>
                 </div>
-                <?php //do_action( 'bp_group_header_meta' ) ?>
+                <?php do_action( 'bp_group_header_meta' ) ?>
 
                 <?php if ($html): ?>
                 <div class="course-html-block">

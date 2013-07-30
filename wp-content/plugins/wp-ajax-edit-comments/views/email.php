@@ -1,7 +1,7 @@
 <?php
 global $aecomments;
 if (!isset($aecomments)) { //for wp-load.php
-	include( '../lib/plugin-checker.php' );
+	die( 'Access Denied' );
 }
 if (isset($_GET['cid'])) {
 	check_admin_referer('email_' . (int)$_GET['cid']);
@@ -28,8 +28,8 @@ if ($aecomments->get_admin_option( 'compressed_scripts' ) == 'true') {
 <head>
 <?php 
 AECCSS::output_interface_css();
-AECJS::output_js( 'aec_popups', array( 'jquery' ), false, 'aec/popups', 'popups' );
-wp_print_scripts(array('aec_popups'));
+AECJS::register_popups_js( 'email' );
+wp_print_scripts( array( 'aec_popups' ) );
 wp_print_styles( array( 'aeccommenteditor' ) );
 do_action('add_wp_ajax_comments_css_editor');
 ?>

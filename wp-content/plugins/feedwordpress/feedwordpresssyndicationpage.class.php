@@ -82,8 +82,8 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 
 		$update_set = array();
 		if ($fwp_update_invoke != 'get') :
-			if (is_array(FeedWordPress::post('link_ids'))
-			and (FeedWordPress::post('action')==FWP_UPDATE_CHECKED)) :
+			if (is_array(MyPHP::post('link_ids'))
+			and (MyPHP::post('action')==FWP_UPDATE_CHECKED)) :
 				$targets = $wpdb->get_results("
 				SELECT * FROM $wpdb->links
 				WHERE link_id IN (".implode(",",$_POST['link_ids']).")
@@ -95,8 +95,8 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 				else : // This should never happen
 					FeedWordPress::critical_bug('fwp_syndication_manage_page::targets', $targets, __LINE__, __FILE__);
 				endif;
-			elseif (!is_null(FeedWordPress::post('update_uri'))) :
-				$targets = FeedWordPress::post('update_uri');
+			elseif (!is_null(MyPHP::post('update_uri'))) :
+				$targets = MyPHP::post('update_uri');
 				if (!is_array($targets)) :
 					$targets = array($targets);
 				endif;
@@ -340,8 +340,6 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 			return;
 		endif;
 		
-		?>
-		<?php
 		$cont = true;
 		$dispatcher = array(
 			"feedfinder" => 'fwp_feedfinder_page',
@@ -352,8 +350,10 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 			'Unsubscribe' => 'multidelete_page',
 			FWP_RESUB_CHECKED => 'multiundelete_page',
 		);
-		if (isset($_REQUEST['action']) and isset($dispatcher[$_REQUEST['action']])) :
-			$method = $dispatcher[$_REQUEST['action']];
+		
+		$act = MyPHP::request('action');
+		if (isset($dispatcher[$act])) :
+			$method = $dispatcher[$act];
 			if (method_exists($this, $method)) :
 				$cont = $this->{$method}();
 			else :
@@ -384,7 +384,7 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 			add_meta_box(
 				/*id=*/ 'feedwordpress_feeds_box',
 				/*title=*/ __('Syndicated sources'),
-				/*callback=*/ array(&$this, 'syndicated_sources_box'),
+				/*callback=*/ array($this, 'syndicated_sources_box'),
 				/*page=*/ $this->meta_box_context(),
 				/*context =*/ $this->meta_box_context()
 			);
@@ -431,10 +431,11 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		
 		// Hey ho, let's go...
 		?>
+		<div style="float: left; background: #F5F5F5; padding-top: 5px; padding-right: 5px;"><a href="<?php print $this->form_action(); ?>"><img src="<?php print esc_html(WP_PLUGIN_URL."/${fwp_path}/feedwordpress.png"); ?>" alt="" /></a></div>
+
 		<p class="info" style="margin-bottom: 0px; border-bottom: 1px dotted black;">Managed by <a href="http://feedwordpress.radgeek.com/">FeedWordPress</a>
 		<?php print FEEDWORDPRESS_VERSION; ?>.</p>
 		<?php if (FEEDWORDPRESS_BLEG) : ?>
-		<div style="float: left; background: white; margin-top: 5px; margin-right: 5px;"><a href="<?php print $this->form_action(); ?>"><img src="<?php print esc_html(WP_PLUGIN_URL.'/'.$GLOBALS['fwp_path'].'/feedwordpress.png'); ?>" alt="" /></a></div>
 		<p class="info" style="margin-top: 0px; font-style: italic; font-size: 75%; color: #666;">If you find this tool useful for your daily work, you can
 		contribute to ongoing support and development with
 		<a href="http://feedwordpress.radgeek.com/donate/">a modest donation</a>.</p>
@@ -488,8 +489,8 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		  value="Source URL" style="width: 55%;" /></label>
 		
 		  <?php FeedWordPressSettingsUI::magic_input_tip_js('add-uri'); ?>
-		
-		  <input style="vertical-align: middle;" type="image" src="<?php print WP_PLUGIN_URL.'/'.$fwp_path; ?>/plus.png" alt="<?php print FWP_SYNDICATE_NEW; ?>" name="action" value="<?php print FWP_SYNDICATE_NEW; ?>" /></div>
+		  <input type="hidden" name="action" value="<?php print FWP_SYNDICATE_NEW; ?>" />
+		  <input style="vertical-align: middle;" type="image" src="<?php print WP_PLUGIN_URL.'/'.$fwp_path; ?>/plus.png" alt="<?php print FWP_SYNDICATE_NEW; ?>" /></div>
 		  </form>
 		</div> <!-- id="add-single-uri" -->
 		
@@ -566,7 +567,7 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		<div class="alignleft">
 		<?php
 		if (count($sources[$visibility]) > 0) :
-			fwp_syndication_manage_page_links_subsubsub($sources, $showInactive);
+			$this->manage_page_links_subsubsub($sources, $showInactive);
 		endif;
 		?>
 		</div> <!-- class="alignleft" -->
@@ -589,9 +590,7 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		if (count($sources[$visibility]) > 0) :
 			$this->display_button_bar($showInactive);
 		else :
-		?>
-			<?php fwp_syndication_manage_page_links_subsubsub($sources, $showInactive); ?>
-		<?php
+			$this->manage_page_links_subsubsub($sources, $showInactive);
 		endif;
 		
 		fwp_syndication_manage_page_links_table_rows($sources[$visibility], $this, $visibility);
@@ -600,7 +599,22 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		</form>
 		<?php
 	} /* FeedWordPressSyndicationPage::syndicated_sources_box() */
-	
+
+	function manage_page_links_subsubsub ($sources, $showInactive) {
+		$hrefPrefix = $this->admin_page_href("syndication.php");
+?>
+	<ul class="subsubsub">
+	<li><a <?php if (!$showInactive) : ?>class="current" <?php endif; ?>href="<?php print $hrefPrefix; ?>&amp;visibility=Y">Subscribed
+	<span class="count">(<?php print count($sources['Y']); ?>)</span></a></li>
+	<?php if ($showInactive or (count($sources['N']) > 0)) : ?>
+	<li><a <?php if ($showInactive) : ?>class="current" <?php endif; ?>href="<?php print $hrefPrefix; ?>&amp;visibility=N">Inactive</a>
+	<span class="count">(<?php print count($sources['N']); ?>)</span></a></li>
+	<?php endif; ?>
+
+	</ul> <!-- class="subsubsub" -->
+<?php
+	}
+
 	function display_button_bar ($showInactive) {
 		?>
 		<div style="clear: left" class="alignleft">
@@ -649,7 +663,7 @@ support, and documentation.</p>
 <input type="hidden" name="cmd" value="_xclick"  />
 <input type="hidden" name="item_name" value="FeedWordPress donation"  />
 <input type="hidden" name="no_shipping" value="1"  />
-<input type="hidden" name="return" value="<?php print admin_url('admin.php'); ?>?page=<?php print $GLOBALS['fwp_path'] ?>/<?php print basename($this->filename); ?>&amp;paid=yes"  />
+<input type="hidden" name="return" value="<?php print esc_attr($this->admin_page_href(basename($this->filename), array('paid' => 'yes'))); ?>"  />
 <input type="hidden" name="currency_code" value="USD" />
 <input type="hidden" name="notify_url" value="http://feedwordpress.radgeek.com/ipn/donation"  />
 <input type="hidden" name="custom" value="1"  />
@@ -681,21 +695,20 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 	
 	function multidelete_page () {
 		global $wpdb;
-		global $fwp_post;
 		
 		// If this is a POST, validate source and user credentials
 		FeedWordPressCompatibility::validate_http_request(/*action=*/ 'feedwordpress_feeds', /*capability=*/ 'manage_links');
 	
-		if (isset($fwp_post['submit']) and $fwp_post['submit']==FWP_CANCEL_BUTTON) :
+		if (MyPHP::post('submit')==FWP_CANCEL_BUTTON) :
 			return true; // Continue without further ado.
 		endif;
 		
 		$link_ids = (isset($_REQUEST['link_ids']) ? $_REQUEST['link_ids'] : array());
 		if (isset($_REQUEST['link_id'])) : array_push($link_ids, $_REQUEST['link_id']); endif;
 	
-		if (isset($GLOBALS['fwp_post']['confirm']) and $GLOBALS['fwp_post']['confirm']=='Delete'):
-			if (isset($GLOBALS['fwp_post']['link_action']) and is_array($GLOBALS['fwp_post']['link_action'])) :
-				$actions = $GLOBALS['fwp_post']['link_action'];
+		if (MyPHP::post('confirm')=='Delete'):
+			if ( is_array(MyPHP::post('link_action')) ) :
+				$actions = MyPHP::post('link_action');
 			else :
 				$actions = array();
 			endif;
@@ -733,16 +746,12 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 				// ... and kill them all
 				if (count($post_ids) > 0) :
 					foreach ($post_ids as $post_id) :
-						if (FeedWordPressCompatibility::test_version(FWP_SCHEMA_29)) :
-							// Force scrubbing of deleted post
-							// rather than sending to Trashcan
-							wp_delete_post(
-								/*postid=*/ $post_id,
-								/*force_delete=*/ true
-							);
-						else :
-							wp_delete_post($post_id);
-						endif;
+						// Force scrubbing of deleted post
+						// rather than sending to Trashcan
+						wp_delete_post(
+							/*postid=*/ $post_id,
+							/*force_delete=*/ true
+						);
 					endforeach;
 				endif;
 	
@@ -865,9 +874,9 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 		$link_ids = (isset($_REQUEST['link_ids']) ? $_REQUEST['link_ids'] : array());
 		if (isset($_REQUEST['link_id'])) : array_push($link_ids, $_REQUEST['link_id']); endif;
 	
-		if (isset($GLOBALS['fwp_post']['confirm']) and $GLOBALS['fwp_post']['confirm']=='Undelete'):
-			if (isset($GLOBALS['fwp_post']['link_action']) and is_array($GLOBALS['fwp_post']['link_action'])) :
-				$actions = $GLOBALS['fwp_post']['link_action'];
+		if (MyPHP::post('confirm')=='Undelete'):
+			if ( is_array(MyPHP::post('link_action')) ) :
+				$actions = MyPHP::post('link_action');
 			else :
 				$actions = array();
 			endif;
@@ -1071,7 +1080,7 @@ function fwp_syndication_manage_page_update_box ($object = NULL, $box = NULL) {
 		<p class="heads-up"><strong>Note:</strong> Automatic updates are currently turned
 		<strong>off</strong>. New posts from your feeds will not be syndicated
 		until you manually check for them here. You can turn on automatic
-		updates under <a href="admin.php?page=<?php print $GLOBALS['fwp_path']; ?>/feeds-page.php">Feed &amp; Update Settings<a></a>.</p>
+		updates under <a href="<?php print $object->admin_page_href('feeds-page.php'); ?>">Feed &amp; Update Settings<a></a>.</p>
 	<?php 
 	endif;
 	?>
@@ -1107,7 +1116,7 @@ function fwp_feedfinder_page () {
 
 function fwp_switchfeed_page () {
 	global $wpdb, $wp_db_version;
-	global $fwp_post;
+	global $fwp_post, $fwp_path;
 
 	// If this is a POST, validate source and user credentials
 	FeedWordPressCompatibility::validate_http_request(/*action=*/ 'feedwordpress_switchfeed', /*capability=*/ 'manage_links');
@@ -1124,7 +1133,7 @@ function fwp_switchfeed_page () {
 <div class="updated"><p><a href="<?php print $fwp_post['feed_link']; ?>"><?php print esc_html($fwp_post['feed_title']); ?></a>
 has been added as a contributing site, using the feed at
 &lt;<a href="<?php print $fwp_post['feed']; ?>"><?php print esc_html($fwp_post['feed']); ?></a>&gt;.
-| <a href="admin.php?page=<?php print $GLOBALS['fwp_path'] ?>/feeds-page.php&amp;link_id=<?php print $link_id; ?>">Configure settings</a>.</p></div>
+| <a href="admin.php?page=<?php print $fwp_path; ?>/feeds-page.php&amp;link_id=<?php print $link_id; ?>">Configure settings</a>.</p></div>
 <?php			else: ?>
 <div class="updated"><p>There was a problem adding the feed. [SQL: <?php echo esc_html(mysql_error()); ?>]</p></div>
 <?php			endif;
@@ -1144,14 +1153,14 @@ updated to &lt;<a href="<?php echo esc_html($fwp_post['feed']); ?>"><?php echo e
 	endif;
 
 	if (isset($existingLink)) :
-		$auth = FeedWordPress::post('link_rss_auth_method');
-		if (!is_null($auth) and $auth != '-') :
+		$auth = MyPHP::post('link_rss_auth_method');
+		if (!is_null($auth) and (strlen($auth) > 0) and ($auth != '-')) :
 			$existingLink->update_setting('http auth method', $auth);
 			$existingLink->update_setting('http username',
-				FeedWordPress::post('link_rss_username')
+				MyPHP::post('link_rss_username')
 			);
 			$existingLink->update_setting('http password',
-				FeedWordPress::post('link_rss_password')
+				MyPHP::post('link_rss_password')
 			);
 		else :
 			$existingLink->update_setting('http auth method', NULL);

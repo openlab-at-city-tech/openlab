@@ -135,6 +135,7 @@ function openlab_site_wide_bp_search() { ?>
         <option value="courses">Courses</option>
         <option value="projects">Projects</option>
         <option value="clubs">Clubs</option>
+        <option value="portfolios">Portfolios</option>
         </select>
 
 		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
@@ -157,6 +158,9 @@ function openlab_search_override(){
 			exit();
 		}elseif($_POST['search-which']=="clubs"){
 			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
+			exit();
+		}elseif($_POST['search-which']=="portfolios"){
+			wp_redirect($bp->root_domain.'/portfolios/?search='.$_POST['search-terms']);
 			exit();
 		}
 	}
@@ -553,6 +557,40 @@ remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
 add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
 
 /**
+ * Replace the BPGES notification setting with our own text
+ */
+function openlab_add_notice_to_notifications_page() {
+?>
+		<div id="group-email-settings">
+			<table class="notification-settings zebra">
+				<thead>
+					<tr>
+						<th class="icon">&nbsp;</th>
+						<th class="title"><?php _e( 'Individual Group Email Settings', 'bp-ass' ); ?></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<p><?php printf( 'To change the email notification settings for your groups, go to <a href="%s">My OpenLab</a> and click "Change" for each group.', bp_loggedin_user_domain() ); ?></p>
+
+							<?php if ( get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) : ?>
+								<p><a href="<?php echo wp_nonce_url( add_query_arg( 'ass_unsubscribe', 'all' ), 'ass_unsubscribe_all' ); ?>"><?php _e( "Or set all your group's email options to No Email", 'bp-ass' ); ?></a></p>
+							<?php endif; ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+<?php
+}
+remove_action( 'bp_notification_settings', 'ass_add_notice_to_notifications_page', 9000 );
+add_action( 'bp_notification_settings', 'openlab_add_notice_to_notifications_page', 9000 );
+
+
+/**
  * Filter the output of the Add Friend/Cancel Friendship button
  */
 function openlab_filter_friendship_button( $button ) {
@@ -562,3 +600,8 @@ function openlab_filter_friendship_button( $button ) {
 	return $button;
 }
 add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
+
+/**
+ * Don't allow BuddyPress Docs to use its own theme compatibility layer
+ */
+add_filter( 'bp_docs_do_theme_compat', '__return_false' );

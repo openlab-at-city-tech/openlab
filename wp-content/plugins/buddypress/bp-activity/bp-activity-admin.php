@@ -6,7 +6,7 @@
  * on which this implementation is heavily based.
  *
  * @package BuddyPress
- * @since 1.6
+ * @since BuddyPress (1.6)
  * @subpackage Activity
  */
 
@@ -23,7 +23,7 @@ if ( is_admin() && ! empty( $_REQUEST['page'] ) && 'bp-activity' == $_REQUEST['p
 /**
  * Registers the Activity component admin screen
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_add_admin_menu() {
 
@@ -31,7 +31,14 @@ function bp_activity_add_admin_menu() {
 		return;
 
 	// Add our screen
-	$hook = add_menu_page( __( 'Activity', 'buddypress' ), __( 'Activity', 'buddypress' ), 'manage_options', 'bp-activity', 'bp_activity_admin' );
+	$hook = add_menu_page(
+		__( 'Activity', 'buddypress' ),
+		__( 'Activity', 'buddypress' ),
+		'manage_options',
+		'bp-activity',
+		'bp_activity_admin',
+		'div'
+	);
 
 	// Hook into early actions to load custom CSS and our init handler.
 	add_action( "load-$hook", 'bp_activity_admin_load' );
@@ -39,10 +46,24 @@ function bp_activity_add_admin_menu() {
 add_action( bp_core_admin_hook(), 'bp_activity_add_admin_menu' );
 
 /**
+ * Add activity component to custom menus array
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @param array $custom_menus
+ * @return array
+ */
+function bp_activity_admin_menu_order( $custom_menus = array() ) {
+	array_push( $custom_menus, 'bp-activity' );
+	return $custom_menus;
+}
+add_filter( 'bp_admin_menu_order', 'bp_activity_admin_menu_order' );
+
+/**
  * AJAX receiver for Activity replies via the admin screen. Adds a new activity
  * comment, and returns HTML for a new table row.
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_reply() {
 	// Check nonce
@@ -116,7 +137,7 @@ add_action( 'wp_ajax_bp-activity-admin-reply', 'bp_activity_admin_reply' );
  * @param string $option Screen option name
  * @param string $new_value Screen option form value
  * @return string Option value. False to abandon update.
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_screen_options( $value, $option, $new_value ) {
 	if ( 'toplevel_page_bp_activity_per_page' != $option && 'toplevel_page_bp_activity_network_per_page' != $option )
@@ -135,7 +156,7 @@ function bp_activity_admin_screen_options( $value, $option, $new_value ) {
  *
  * @param WP_Screen $screen Screen identifier
  * @return array Hidden Meta Boxes
- * @since 1.0
+ * @since BuddyPress (1.0)
  */
 function bp_activity_admin_edit_hidden_metaboxes( $hidden, $screen ) {
 	if ( empty( $screen->id ) || 'toplevel_page_bp-activity' != $screen->id && 'toplevel_page_bp-activity_network' != $screen->id )
@@ -153,16 +174,15 @@ add_filter( 'default_hidden_meta_boxes', 'bp_activity_admin_edit_hidden_metaboxe
  *
  * @global object $bp BuddyPress global settings
  * @global BP_Activity_List_Table $bp_activity_list_table Activity screen list table
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_load() {
 	global $bp, $bp_activity_list_table;
 
 	// Decide whether to load the dev version of the CSS and JavaScript
-	$dev = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? 'dev.' : '';
+	$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : 'min.';
 
-	// Decide whether to load the index or edit screen
-	$doaction = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+	$doaction = bp_admin_list_table_current_bulk_action();
 
 	// Call an action for plugins to hook in early
 	do_action( 'bp_activity_admin_load', $doaction );
@@ -244,8 +264,8 @@ function bp_activity_admin_load() {
 	}
 
 	// Enqueue CSS and JavaScript
-	wp_enqueue_script( 'bp_activity_admin_js', BP_PLUGIN_URL . "bp-activity/admin/js/admin.{$dev}js",   array( 'jquery', 'wp-ajax-response' ), bp_get_version(), true );
-	wp_enqueue_style( 'bp_activity_admin_css', BP_PLUGIN_URL . "bp-activity/admin/css/admin.{$dev}css", array(),                               bp_get_version()       );
+	wp_enqueue_script( 'bp_activity_admin_js', BP_PLUGIN_URL . "bp-activity/admin/js/admin.{$min}js",   array( 'jquery', 'wp-ajax-response' ), bp_get_version(), true );
+	wp_enqueue_style( 'bp_activity_admin_css', BP_PLUGIN_URL . "bp-activity/admin/css/admin.{$min}css", array(),                               bp_get_version()       );
 
 	// Handle spam/un-spam/delete of activities
 	if ( !empty( $doaction ) && ! in_array( $doaction, array( '-1', 'edit', 'save', ) ) ) {
@@ -503,7 +523,7 @@ function bp_activity_admin_load() {
 /**
  * Outputs the Activity component admin screens
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin() {
 	// Decide whether to load the index or edit screen
@@ -522,10 +542,9 @@ function bp_activity_admin() {
  * Display the single activity edit screen
  *
  * @global int $screen_layout_columns Number of columns shown on this admin page
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit() {
-	global $screen_layout_columns;
 
 	// @todo: Check if user is allowed to edit activity items
 	// if ( ! current_user_can( 'bp_edit_activity' ) )
@@ -556,8 +575,7 @@ function bp_activity_admin_edit() {
 	$form_url = add_query_arg( 'action', 'save', $form_url );
 
 	// Call an action for plugins to modify the activity before we display the edit form
-	do_action_ref_array( 'bp_activity_admin_edit', array( &$activity ) );
-?>
+	do_action_ref_array( 'bp_activity_admin_edit', array( &$activity ) ); ?>
 
 	<div class="wrap">
 		<?php screen_icon( 'buddypress-activity' ); ?>
@@ -568,9 +586,9 @@ function bp_activity_admin_edit() {
 			<form action="<?php echo esc_attr( $form_url ); ?>" id="bp-activities-edit-form" method="post">
 				<div id="poststuff">
 
-					<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>"> 
+					<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
 						<div id="post-body-content">
-							<div id="postdiv" class="postarea">
+							<div id="postdiv">
 								<div id="bp_activity_action" class="postbox">
 									<h3><?php _e( 'Action', 'buddypress' ); ?></h3>
 									<div class="inside">
@@ -604,7 +622,7 @@ function bp_activity_admin_edit() {
 			</form>
 
 		<?php else : ?>
-			<p><?php printf( __( 'No activity found with this ID. <a href="%s">Go back and try again</a>.', 'buddypress' ), network_admin_url( 'admin.php?page=bp-activity' ) ); ?></p>
+			<p><?php printf( __( 'No activity found with this ID. <a href="%s">Go back and try again</a>.', 'buddypress' ), esc_url( bp_get_admin_url( 'admin.php?page=bp-activity' ) ) ); ?></p>
 		<?php endif; ?>
 
 	</div><!-- .wrap -->
@@ -616,7 +634,7 @@ function bp_activity_admin_edit() {
  * Status metabox for the Activity admin edit screen
  *
  * @param object $item Activity item
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit_metabox_status( $item ) {
 ?>
@@ -671,7 +689,7 @@ function bp_activity_admin_edit_metabox_status( $item ) {
  * Primary link metabox for the Activity admin edit screen
  *
  * @param object $item Activity item
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit_metabox_link( $item ) {
 ?>
@@ -687,7 +705,7 @@ function bp_activity_admin_edit_metabox_link( $item ) {
  * User ID metabox for the Activity admin edit screen
  *
  * @param object $item Activity item
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit_metabox_userid( $item ) {
 ?>
@@ -703,7 +721,7 @@ function bp_activity_admin_edit_metabox_userid( $item ) {
  *
  * @global object $bp BuddyPress global settings
  * @param object $item Activity item
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit_metabox_type( $item ) {
 	global $bp;
@@ -723,8 +741,7 @@ function bp_activity_admin_edit_metabox_type( $item ) {
 	unset( $actions['friends_register_activity_action'] );
 
 	// Sort array by the human-readable value
-	natsort( $actions );
-?>
+	natsort( $actions ); ?>
 
 	<select name="bp-activities-type">
 		<?php foreach ( $actions as $k => $v ) : ?>
@@ -739,7 +756,7 @@ function bp_activity_admin_edit_metabox_type( $item ) {
  * Primary item ID/Secondary item ID metabox for the Activity admin edit screen
  *
  * @param object $item Activity item
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_edit_metabox_itemids( $item ) {
 ?>
@@ -761,7 +778,7 @@ function bp_activity_admin_edit_metabox_itemids( $item ) {
  *
  * @global BP_Activity_List_Table $bp_activity_list_table Activity screen list table
  * @global string $plugin_page
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 function bp_activity_admin_index() {
 	global $bp_activity_list_table, $plugin_page;
@@ -780,15 +797,16 @@ function bp_activity_admin_index() {
 
 		// Make sure we don't get any empty values in $errors
 		for ( $i = 0, $errors_count = count( $errors ); $i < $errors_count; $i++ ) {
-			if ( 0 === $errors[$i] )
+			if ( 0 === $errors[$i] ) {
 				unset( $errors[$i] );
+			}
 		}
 
 		// Reindex array
 		$errors = array_values( $errors );
 
 		if ( $deleted > 0 )
-			$messages[] = sprintf( _n( '%s activity has been permanently deleted.', '%s activity items have been permanently deleted.', $deleted, 'buddypress' ), number_format_i18n( $deleted ) );
+			$messages[] = sprintf( _n( '%s activity item has been permanently deleted.', '%s activity items have been permanently deleted.', $deleted, 'buddypress' ), number_format_i18n( $deleted ) );
 
 		if ( ! empty( $errors ) ) {
 			if ( 1 == count( $errors ) ) {
@@ -810,21 +828,20 @@ function bp_activity_admin_index() {
 		}
 
 		if ( $spammed > 0 )
-			$messages[] = sprintf( _n( '%s activity has been successfully spammed.', '%s activity items have been successfully spammed.', $spammed, 'buddypress' ), number_format_i18n( $spammed ) );
+			$messages[] = sprintf( _n( '%s activity item has been successfully spammed.', '%s activity items have been successfully spammed.', $spammed, 'buddypress' ), number_format_i18n( $spammed ) );
 
 		if ( $unspammed > 0 )
-			$messages[] = sprintf( _n( '%s activity has been successfully unspammed.', '%s activity items have been successfully unspammed.', $unspammed, 'buddypress' ), number_format_i18n( $unspammed ) );
+			$messages[] = sprintf( _n( '%s activity item has been successfully unspammed.', '%s activity items have been successfully unspammed.', $unspammed, 'buddypress' ), number_format_i18n( $unspammed ) );
 
 		if ( $updated > 0 )
-			$messages[] = __( 'The activity has been updated succesfully.', 'buddypress' );
+			$messages[] = __( 'The activity item has been updated succesfully.', 'buddypress' );
 	}
 
 	// Prepare the activity items for display
 	$bp_activity_list_table->prepare_items();
 
 	// Call an action for plugins to modify the activity before we display the edit form
-	do_action( 'bp_activity_admin_index', $messages );
-?>
+	do_action( 'bp_activity_admin_index', $messages ); ?>
 
 	<div class="wrap">
 		<?php screen_icon( 'buddypress-activity' ); ?>
@@ -867,7 +884,7 @@ function bp_activity_admin_index() {
 							<a href="#" class="cancel button-secondary alignleft"><?php _e( 'Cancel', 'buddypress' ); ?></a>
 							<a href="#" class="save button-primary alignright"><?php _e( 'Reply', 'buddypress' ); ?></a>
 
-							<img class="waiting" style="display:none;" src="<?php echo esc_url( network_admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
+							<img class="waiting" style="display:none;" src="<?php echo esc_url( bp_get_admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
 							<span class="error" style="display:none;"></span>
 							<br class="clear" />
 						</p>
@@ -886,34 +903,35 @@ function bp_activity_admin_index() {
 /**
  * List table class for the Activity component admin page.
  *
- * @since 1.6
+ * @since BuddyPress (1.6)
  */
 class BP_Activity_List_Table extends WP_List_Table {
+
 	/**
 	 * What type of view is being displayed? e.g. "All", "Pending", "Approved", "Spam"...
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	*/
 	public $view = 'all';
 
 	/**
 	 * How many activity items have been marked as spam.
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	public $spam_count = 0;
 
 	/**
 	 * Store activity-to-user-ID mappings for use in the In Response To column.
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	protected $activity_user_id = array();
 
 	/**
 	 * Constructor
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	public function __construct() {
 
@@ -928,7 +946,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	/**
 	 * Handle filtering of data, sorting, pagination, and any other data-manipulation required prior to rendering.
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function prepare_items() {
 		$screen = get_current_screen();
@@ -1030,7 +1048,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * Get an array of all the columns on the page
 	 *
 	 * @return array
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function get_column_info() {
 		$this->_column_headers = array(
@@ -1045,7 +1063,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	/**
 	 * Displays a message on screen when no items are found (e.g. no search matches)
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function no_items() {
 		_e( 'No activities found.', 'buddypress' );
@@ -1054,13 +1072,12 @@ class BP_Activity_List_Table extends WP_List_Table {
 	/**
 	 * Outputs the Activity data table
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	*/
 	function display() {
 		extract( $this->_args );
 
-		$this->display_tablenav( 'top' );
-	?>
+		$this->display_tablenav( 'top' ); ?>
 
 		<table class="<?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
 			<thead>
@@ -1088,11 +1105,16 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * Generates content for a single row of the table
 	 *
 	 * @param object $item The current item
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function single_row( $item ) {
 		static $row_class = '';
-		$row_class = ( $row_class == '' ? ' class="alternate"' : '' );
+
+		if ( empty( $row_class ) ) {
+			$row_class = ' class="alternate"';
+		} else {
+			$row_class = '';
+		}
 
 		echo '<tr' . $row_class . ' id="activity-' . esc_attr( $item['id'] ) . '" data-parent_id="' . esc_attr( $item['id'] ) . '" data-root_id="' . esc_attr( $item['item_id'] ) . '">';
 		echo $this->single_row_columns( $item );
@@ -1102,16 +1124,16 @@ class BP_Activity_List_Table extends WP_List_Table {
 	/**
 	 * Get the list of views available on this table (e.g. "all", "spam").
 	 *
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function get_views() {
-		$redirect_to = remove_query_arg( array( 'activity_status', 'aid', 'deleted', 'error', 'spammed', 'unspammed', 'updated', ), $_SERVER['REQUEST_URI'] );
-	?>
-		<ul class="subsubsub">
-			<li class="all"><a href="<?php echo esc_attr( esc_url( $redirect_to ) ); ?>" class="<?php if ( 'spam' != $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
-			<li class="spam"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'activity_status', 'spam', $redirect_to ) ) ); ?>" class="<?php if ( 'spam' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Spam <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->spam_count ) ); ?></a></li>
+		$url_base = bp_get_admin_url( 'admin.php?page=bp-activity' ); ?>
 
-			<?php do_action( 'bp_activity_list_table_get_views', $redirect_to, $this->view ); ?>
+		<ul class="subsubsub">
+			<li class="all"><a href="<?php echo esc_attr( esc_url( $url_base ) ); ?>" class="<?php if ( 'spam' != $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
+			<li class="spam"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'activity_status', 'spam', $url_base ) ) ); ?>" class="<?php if ( 'spam' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Spam <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->spam_count ) ); ?></a></li>
+
+			<?php do_action( 'bp_activity_list_table_get_views', $url_base, $this->view ); ?>
 		</ul>
 	<?php
 	}
@@ -1120,7 +1142,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * Get bulk actions
 	 *
 	 * @return array Key/value pairs for the bulk actions dropdown
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function get_bulk_actions() {
 		$actions = array();
@@ -1136,7 +1158,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @see WP_List_Table::single_row_columns()
 	 * @return array
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function get_columns() {
 		return array(
@@ -1151,7 +1173,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * Get the column names for sortable columns
 	 *
 	 * @return array
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 * @todo For this to work, BP_Activity_Activity::get() needs updating to supporting ordering by specific fields
 	 */
 	function get_sortable_columns() {
@@ -1165,34 +1187,17 @@ class BP_Activity_List_Table extends WP_List_Table {
 	/**
 	 * Markup for the "filter" part of the form (i.e. which activity type to display)
 	 *
-	 * @global object $bp BuddyPress global settings
 	 * @param string $which 'top' or 'bottom'
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function extra_tablenav( $which ) {
-		global $bp;
-
 		if ( 'bottom' == $which )
 			return;
 
-		$actions  = array();
 		$selected = !empty( $_REQUEST['activity_type'] ) ? $_REQUEST['activity_type'] : '';
 
-		// Walk through the registered actions, and build an array of actions/values.
-		foreach ( $bp->activity->actions as $action ) {
-			$action = array_values( (array) $action );
-
-			for ( $i = 0, $i_count = count( $action ); $i < $i_count; $i++ )
-				$actions[ $action[$i]['key'] ] = $action[$i]['value'];
-		}
-
-		// This was a mis-named activity type from before BP 1.6
-		unset( $actions['friends_register_activity_action'] );
-
-		// This type has not been used since BP 1.0.3. It will be re-instated in a future version.
-		unset( $actions['updated_profile'] );
-
-		// Sort array by the human-readable value
+		// Get all types of activities, and sort alphabetically.
+		$actions  = bp_activity_get_types();
 		natsort( $actions );
 	?>
 
@@ -1216,10 +1221,10 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @param array $item A singular item (one full row)
 	 * @see WP_List_Table::single_row_columns()
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function column_cb( $item ) {
-		printf( '<input type="checkbox" name="aid[]" value="%d" />', (int) $item['id'] );
+		printf( '<label class="screen-reader-text" for="aid-%1$d">' . __( 'Select activity item %1$d', 'buddypress' ) . '</label><input type="checkbox" name="aid[]" value="%1$d" id="aid-%1$d" />', $item['id'] );
 	}
 
 	/**
@@ -1227,7 +1232,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @param array $item A singular item (one full row)
 	 * @see WP_List_Table::single_row_columns()
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function column_author( $item ) {
 		echo '<strong>' . get_avatar( $item['user_id'], '32' ) . ' ' . bp_core_get_userlink( $item['user_id'] ) . '</strong>';
@@ -1240,7 +1245,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @param array $item A singular item (one full row)
 	 * @see WP_List_Table::single_row_columns()
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function column_comment( $item ) {
 		// Determine what type of item (row) we're dealing with
@@ -1258,7 +1263,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 		);
 
 		// Build actions URLs
-		$base_url   = network_admin_url( 'admin.php?page=bp-activity&amp;aid=' . $item['id'] );
+		$base_url   = bp_get_admin_url( 'admin.php?page=bp-activity&amp;aid=' . $item['id'] );
 		$spam_nonce = esc_html( '_wpnonce=' . wp_create_nonce( 'spam-activity_' . $item['id'] ) );
 
 		$delete_url = $base_url . "&amp;action=delete&amp;$spam_nonce";
@@ -1292,16 +1297,17 @@ class BP_Activity_List_Table extends WP_List_Table {
 		$actions = apply_filters( 'bp_activity_admin_comment_row_actions', array_filter( $actions ), $item );
 
 		/* translators: 2: activity admin ui date/time */
-		printf( __( 'Submitted on <a href="%1$s">%2$s at %3$s</a>', 'buddypress' ), bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $item['id'] . '/', date_i18n( get_option( 'date_format' ), strtotime( $item['date_recorded'] ) ), date_i18n( get_option( 'time_format' ), strtotime( $item['date_recorded'] ) ) );
+		printf( __( 'Submitted on <a href="%1$s">%2$s at %3$s</a>', 'buddypress' ), bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $item['id'] . '/', get_date_from_gmt( $item['date_recorded'], get_option( 'date_format' ) ), get_date_from_gmt( $item['date_recorded'], get_option( 'time_format' ) ) );
 
 		// End timestamp
 		echo '</div>';
 
 		// Get activity content - if not set, use the action
-		if ( ! empty( $item['content'] ) )
+		if ( ! empty( $item['content'] ) ) {
 			$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $item['content'] ) );
-		else
+		} else {
 			$content = apply_filters_ref_array( 'bp_get_activity_action', array( $item['action'] ) );
+		}
 
 		echo $content . ' ' . $this->row_actions( $actions );
 	}
@@ -1311,18 +1317,18 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @param array $item A singular item (one full row)
 	 * @see WP_List_Table::single_row_columns()
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	function column_response( $item ) {
 		// Is $item is a root activity?
 		if ( empty( $item['item_id'] ) || ! in_array( $item['type'], apply_filters( 'bp_activity_admin_root_activity_types', array( 'activity_comment' ), $item ) ) ) {
 			$comment_count     = !empty( $item['children'] ) ? bp_activity_recurse_comment_count( (object) $item ) : 0;
-			$root_activity_url = network_admin_url( 'admin.php?page=bp-activity&amp;aid=' . $item['id'] );
+			$root_activity_url = bp_get_admin_url( 'admin.php?page=bp-activity&amp;aid=' . $item['id'] );
 
 			// If the activity has comments, display a link to the activity's permalink, with its comment count in a speech bubble
 			if ( $comment_count ) {
 				$title_attr = sprintf( _n( '%s related activity', '%s related activities', $comment_count, 'buddypress' ), number_format_i18n( $comment_count ) );
-				printf( '<a href="%1$s" title="%2$s" class="post-com-count"><span class="comment-count">%3$s</span></a>', esc_attr( $root_activity_url ), esc_attr( $title_attr ), number_format_i18n( $comment_count ) );
+				printf( '<a href="%1$s" title="%2$s" class="post-com-count"><span class="comment-count">%3$s</span></a>', esc_url( $root_activity_url ), esc_attr( $title_attr ), number_format_i18n( $comment_count ) );
 			}
 
 		// For non-root activities, display a link to the replied-to activity's author's profile
@@ -1339,7 +1345,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * A wrapper function for the BP_Activity_List_Table to get the specified activity's user ID.
 	 *
 	 * @param int $activity_id Activity ID to retrieve User ID for
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	protected function get_activity_user_id( $activity_id ) {
 		// If there is an existing activity/user ID mapping, just return the user ID.
@@ -1373,7 +1379,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 *
 	 * @param array $tree Source array
 	 * @return array Flattened array
-	 * @since 1.6
+	 * @since BuddyPress (1.6)
 	 */
 	public static function flatten_activity_array( $tree ){
 		foreach ( (array) $tree as $node ) {
@@ -1390,4 +1396,3 @@ class BP_Activity_List_Table extends WP_List_Table {
 		return $tree;
 	}
 }
-?>

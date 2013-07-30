@@ -1,0 +1,146 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Smushit\n"
+"POT-Creation-Date: 2013-04-14 20:54+0700\n"
+"PO-Revision-Date: 2013-04-14 20:55+0700\n"
+"Last-Translator: incsub.com <hakan@incsub.com>\n"
+"Language-Team: WPMU DEV\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.3\n"
+"X-Poedit-KeywordsList: _;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\Users\\Hakan\\Desktop\\wp-smushit\n"
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:103
+msgid "Use Smush.it on upload?"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:104
+msgid "How many seconds should we wait for a response from Smush.it?"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:116
+msgid "Automatically process on upload"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:117
+msgid "Do not process on upload"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:121
+#, php-format
+msgid "Temporarily disabled until %s"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:186
+#, php-format
+msgid ""
+"<p>We found %d images in your media library. Be forewarned, <strong>it will "
+"take <em>at least</em> %d minutes</strong> to process all these images if "
+"they have never been smushed before.</p>"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:190
+#, php-format
+msgid ""
+"<p><strong>This is an experimental feature.</strong> Please post any "
+"feedback to the %s.</p>"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:190
+msgid "WordPress WP Smush.it forums"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:201
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:254
+msgid "You don't have permission to work with uploaded files."
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:258
+msgid "No attachment ID was provided."
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:294
+msgid "Did not smush due to previous errors"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:301
+#, php-format
+msgid "Could not find <span class='code'>%s</span>"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:307
+#, php-format
+msgid "<span class='code'>%s</span> is not writable"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:313
+#, php-format
+msgid ""
+"<a href='http://developer.yahoo.com/yslow/smushit/faq.html#faq_restrict'>Too "
+"big</a> for Smush.it (%s)"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:322
+#, php-format
+msgid ""
+"<span class='code'>%s</span> must be within the content directory (<span "
+"class='code'>%s</span>)"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:337
+msgid "Error posting to Smush.it"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:343
+msgid "Bad response from Smush.it"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:356
+msgid "No savings"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:359
+msgid "Smush.it error: "
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:359
+msgid "unknown error"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:360
+#, php-format
+msgid ""
+" while processing <span class='code'>%s</span> (<span class='code'>%s</span>)"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:376
+#, php-format
+msgid "Error downloading file (%s)"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:387
+#, php-format
+msgid "Reduced by %01.1f%% (%s)"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:479
+msgid "WP Smush.it requires WordPress 2.8 or greater"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:519
+msgid "Re-smush"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:522
+msgid "Not processed"
+msgstr ""
+
+#: C:\Users\Hakan\Desktop\wp-smushit/wp-smushit.php:525
+msgid "Smush.it now!"
+msgstr ""

@@ -6,7 +6,7 @@
  * @package wp-simile-timeline
  * 
 	===========================================================================
-	Copyright (C) 2006 Tim Isenheim
+	Copyright (C) 2006-2013 Tim Isenheim
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

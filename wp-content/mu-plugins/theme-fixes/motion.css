@@ -1,0 +1,14 @@
+#cuny-sw-footer {
+	margin-top: 2em;
+	width: 100%;
+	position: absolute;
+	left: 0;
+}
+
+#cuny-sw-footer #footer {
+	background-image: none;
+}
+
+#cuny-sw-footer #menu-pages-4 div {
+	color: #000;
+}

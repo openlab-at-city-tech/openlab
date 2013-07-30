@@ -8,41 +8,71 @@
  * @deprecated Since 1.6
  */
 
+// Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
 /** Toolbar functions *********************************************************/
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_admin_bar_remove_wp_menus() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_admin_bar_root_site() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_admin_bar_my_sites_menu() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
-function bp_admin_bar_comments_menu( $wp_admin_bar ) {
+/**
+ * @deprecated BuddyPress (1.6)
+ */
+function bp_admin_bar_comments_menu( $wp_admin_bar = '' ) {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_admin_bar_appearance_menu() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_admin_bar_updates_menu() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_members_admin_bar_my_account_logout() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_core_is_user_deleted( $user_id = 0 ) {
 	_deprecated_function( __FUNCTION__, '1.6' );
 	bp_is_user_deleted( $user_id );
 }
 
+/**
+ * @deprecated BuddyPress (1.6)
+ */
 function bp_core_is_user_spammer( $user_id = 0 ) {
 	_deprecated_function( __FUNCTION__, '1.6' );
 	bp_is_user_spammer( $user_id );
@@ -54,7 +84,7 @@ function bp_core_is_user_spammer( $user_id = 0 ) {
  */
 
 /**
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated No longer used; see bp_blogs_transition_activity_status()
  */
 function bp_blogs_manage_comment( $comment_id, $comment_status ) {
@@ -66,7 +96,7 @@ function bp_blogs_manage_comment( $comment_id, $comment_status ) {
  */
 
 /**
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated No longer used; see BP_Admin::admin_menus()
  */
 function bp_core_add_admin_menu() {
@@ -74,23 +104,11 @@ function bp_core_add_admin_menu() {
 }
 
 /**
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated No longer used. We do ajax properly now.
  */
 function bp_core_add_ajax_hook() {
 	_deprecated_function( __FUNCTION__, '1.6', 'No longer used' );
-}
-
-/**
- * Members functions
- */
-
-/**
- * @deprecated 1.6
- * @deprecated No longer used. Check for $bp->pages->activate->slug instead.
- */
-function bp_has_custom_activation_page() {
-	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
 /**
@@ -100,7 +118,7 @@ function bp_has_custom_activation_page() {
 /**
  * Displays Friends header tabs
  *
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated No longer used
  */
 function bp_friends_header_tabs() {
@@ -118,7 +136,7 @@ function bp_friends_header_tabs() {
 /**
  * Filters the title for the Friends component
  *
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated No longer used
  */
 function bp_friends_filter_title() {
@@ -140,12 +158,10 @@ function bp_friends_filter_title() {
 }
 
 
-/**
- * Groups functions
- */
+/** Groups functions **********************************************************/
 
 /**
- * @deprecated 1.6
+ * @deprecated BuddyPress (1.6)
  * @deprecated Renamed to groups_get_id() for greater consistency
  */
 function groups_check_group_exists( $group_slug ) {
@@ -153,27 +169,21 @@ function groups_check_group_exists( $group_slug ) {
 	return groups_get_id( $group_slug );
 }
 
-/**
- * Admin functions
- */
+/** Admin functions ***********************************************************/
 
 /**
  * Loads admin panel styles and scripts.
  *
- * @deprecated 1.6
- * @deprecated No longer used.
+ * @deprecated BuddyPress (1.6)
  */
 function bp_core_add_admin_menu_styles() {
 	_deprecated_function( __FUNCTION__, '1.6' );
 }
 
-/**
- * Activity functions
- */
+/** Activity functions ********************************************************/
 
 /**
- * @deprecated 1.6
- * @deprecated No longer used. Renamed to bp_activity_register_activity_actions().
+ * @deprecated BuddyPress (1.6)
  */
 function updates_register_activity_actions() {
 	_deprecated_function( __FUNCTION__, '1.6' );
@@ -182,9 +192,8 @@ function updates_register_activity_actions() {
 /**
  * Sets the "From" address in emails sent
  *
- * @deprecated 1.6
- * @deprecated No longer used.
- * @return noreply@sitedomain email address
+ * @deprecated BuddyPress (1.6)
+ * @return string email address
  */
 function bp_core_email_from_address_filter() {
 	_deprecated_function( __FUNCTION__, '1.6' );
@@ -209,6 +218,8 @@ function bp_core_email_from_address_filter() {
  *
  * Note that this hack only runs if the function bp_dtheme_register_actions() is not found (this
  * function was introduced in BP 1.6 for related backward compatibility reasons).
+ *
+ * @deprecated BuddyPress (1.6)
  */
 if ( !function_exists( 'bp_dtheme_register_actions' ) ) :
 	function bp_die_legacy_ajax_callbacks() {
@@ -261,4 +272,3 @@ if ( !function_exists( 'bp_dtheme_register_actions' ) ) :
 	}
 	add_action( 'after_setup_theme', 'bp_die_legacy_ajax_callbacks', 20 );
 endif;
-?>

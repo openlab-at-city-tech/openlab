@@ -7,5 +7,6 @@ jQuery("a[rel^='example4']").afgcolorbox({
     maxWidth: "90%",
     maxHeight: "90%",
     current: "{current} of {total}",
+    title: function(){ return jQuery(this).find('img').attr('alt');}
     });
 });

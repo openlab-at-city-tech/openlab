@@ -2,9 +2,9 @@
 Contributors: takayukister
 Donate link: http://contactform7.com/donate/
 Tags: captcha
-Requires at least: 2.8
-Tested up to: 3.3.1
-Stable tag: 1.4
+Requires at least: 3.2
+Tested up to: 3.5.1
+Stable tag: 1.6
 
 Really Simple CAPTCHA is a CAPTCHA module intended to be called from other plugins. It is originally created for my Contact Form 7 plugin.
 
@@ -18,9 +18,9 @@ Note: This product is "really simple" as its name suggests, i.e., it is not stro
 
 Really Simple CAPTCHA does not use PHP "Sessions" for storing states, unlike many other PHP CAPTCHA solutions, but stores them as temporary files. This allows you to embed it into WordPress without worrying about conflicts.
 
-When you generate a CAPTCHA, Really Simple CAPTCHA creates two files for it; one is an image file of CAPTCHA, and the other is a PHP file which returns the correct answer to the CAPTCHA.
+When you generate a CAPTCHA, Really Simple CAPTCHA creates two files for it; one is an image file of CAPTCHA, and the other is a text file which stores the correct answer to the CAPTCHA.
 
-The two files have the same (random) prefix in their file names, for example, "a7hk3ux8p.png" and "a7hk3ux8p.php." In this case, for example, when the respondent answers "K5GF" as an answer to the "a7hk3ux8p.png" image, then Really Simple CAPTCHA runs "a7hk3ux8p.php" code and tests the answer against the return value it receives. If the return value is "K5GF," the two match, and the answer is confirmed as correct.
+The two files have the same (random) prefix in their file names, for example, "a7hk3ux8p.png" and "a7hk3ux8p.txt." In this case, for example, when the respondent answers "K5GF" as an answer to the "a7hk3ux8p.png" image, then Really Simple CAPTCHA calculates hash of "K5GF" and tests it against the hash stored in the "a7hk3ux8p.txt" file. If the two match, the answer is confirmed as correct.
 
 = How to use with your plugin =
 
@@ -41,7 +41,7 @@ Generate a random word for CAPTCHA.
 
     $word = $captcha_instance->generate_random_word();
 
-Generate an image file and a PHP code file in the temporary directory.
+Generate an image file and a corresponding text file in the temporary directory.
 
     $prefix = mt_rand();
     $captcha_instance->generate_image( $prefix, $word );
@@ -54,7 +54,7 @@ Check the correctness of the answer.
 
 If the $correct is true, go ahead. Otherwise, block the respondent -- as it would appear not to be human.
 
-And last, remove the temporary image and PHP files, as they are no longer in use.
+And last, remove the temporary image and text files, as they are no longer in use.
 
     $captcha_instance->remove( $prefix );
 
@@ -89,6 +89,17 @@ If you have any further questions, please submit them [to the support forum](htt
 
 == Changelog ==
 
+= 1.6 =
+
+* Bundled font changed to Gentium Basic 1.1.
+* Some workarounds for infrequently reported problems on Windows server.
+* Do temp file cleanup every time before generating CAPTCHA image.
+
+= 1.5 =
+
+* The required WordPress version changed to 3.2 and higher.
+* Use plain text file as answer file (again). This time, hash value generated with hash_hmac() is stored in the file.
+
 = 1.4 =
 
 * Reverted answer file to PHP. As plain text file is visible from client side, that's not good.
@@ -102,4 +113,4 @@ If you have any further questions, please submit them [to the support forum](htt
 
 = 1.1 =
 * The required WordPress version changed to 2.8 and higher.
-* `cleanup()` method added.
+* cleanup() method added.

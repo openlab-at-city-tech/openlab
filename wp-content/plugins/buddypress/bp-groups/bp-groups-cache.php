@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  */
 function bp_groups_update_meta_cache( $group_ids = false ) {
 	global $bp;
-	
+
 	$cache_args = array(
 		'object_ids' 	   => $group_ids,
 		'object_type' 	   => $bp->groups->id,
@@ -36,7 +36,7 @@ function bp_groups_update_meta_cache( $group_ids = false ) {
 		'meta_table' 	   => $bp->groups->table_name_groupmeta,
 		'cache_key_prefix' => 'bp_groups_groupmeta'
 	);
-	
+
 	bp_update_meta_cache( $cache_args );
 }
 
@@ -48,6 +48,21 @@ add_action( 'groups_settings_updated',           'groups_clear_group_object_cach
 add_action( 'groups_details_updated',            'groups_clear_group_object_cache' );
 add_action( 'groups_group_avatar_updated',       'groups_clear_group_object_cache' );
 add_action( 'groups_create_group_step_complete', 'groups_clear_group_object_cache' );
+
+/**
+ * Bust group caches when editing or deleting
+ *
+ * @since BuddyPress (1.7)
+ * @param int $group_id The group being edited
+ */
+function bp_groups_delete_group_cache( $group_id = 0 ) {
+	wp_cache_delete( 'bp_groups_group_' . $group_id . '_load_users', 'bp' );
+	wp_cache_delete( 'bp_groups_group_' . $group_id . '_noload_users', 'bp' );
+}
+add_action( 'groups_delete_group',     'bp_groups_delete_group_cache' );
+add_action( 'groups_update_group',     'bp_groups_delete_group_cache' );
+add_action( 'groups_details_updated',  'bp_groups_delete_group_cache' );
+add_action( 'groups_settings_updated', 'bp_groups_delete_group_cache' );
 
 /**
  * Clears caches for the group creator when a group is created
@@ -79,10 +94,12 @@ add_action( 'bp_groups_delete_group', 'bp_groups_clear_group_members_caches', 10
 function groups_clear_group_user_object_cache( $group_id, $user_id ) {
 	wp_cache_delete( 'bp_total_groups_for_user_' . $user_id, 'bp' );
 }
-add_action( 'groups_join_group',   'groups_clear_group_user_object_cache', 10, 2 );
-add_action( 'groups_leave_group',  'groups_clear_group_user_object_cache', 10, 2 );
-add_action( 'groups_ban_member',   'groups_clear_group_user_object_cache', 10, 2 );
-add_action( 'groups_unban_member', 'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_join_group',    'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_leave_group',   'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_ban_member',    'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_unban_member',  'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_uninvite_user', 'groups_clear_group_user_object_cache', 10, 2 );
+add_action( 'groups_remove_member', 'groups_clear_group_user_object_cache', 10, 2 );
 
 /* List actions to clear super cached pages on, if super cache is installed */
 add_action( 'groups_join_group',                 'bp_core_clear_cache' );
@@ -103,5 +120,3 @@ add_action( 'groups_membership_requested',       'bp_core_clear_cache' );
 add_action( 'groups_create_group_step_complete', 'bp_core_clear_cache' );
 add_action( 'groups_created_group',              'bp_core_clear_cache' );
 add_action( 'groups_group_avatar_updated',       'bp_core_clear_cache' );
-
-?>

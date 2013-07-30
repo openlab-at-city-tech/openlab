@@ -9,7 +9,7 @@ html .mceContentBody{
 	unicode-bidi:embed;
 	float:right;
 }
-* {
+body {
 	font-family: Arial, Tahoma, sans-serif;
 }
 h1,

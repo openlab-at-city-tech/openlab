@@ -61,6 +61,9 @@ function bp_get_default_options() {
 		// Allow comments on blog and forum activity items
 		'bp-disable-blogforum-comments'   => true,
 
+		// The ID for the current theme package.
+		'_bp_theme_package_id'            => 'legacy',
+
 		/** Groups ************************************************************/
 
 		// @todo Move this into the groups component
@@ -194,8 +197,8 @@ function bp_pre_get_option( $value = false ) {
  * @since BuddyPress (1.5)
  *
  * @uses bp_get_root_blog_id()
- * @param str $option_name The option to be retrieved
- * @param str $default Optional. Default value to be returned if the option isn't set
+ * @param string $option_name The option to be retrieved
+ * @param string $default Optional. Default value to be returned if the option isn't set
  * @return mixed The value for the option
  */
 function bp_get_option( $option_name, $default = '' ) {
@@ -214,8 +217,8 @@ function bp_get_option( $option_name, $default = '' ) {
  * @since BuddyPress (1.5)
  *
  * @uses bp_get_root_blog_id()
- * @param str $option_name The option key to be set
- * @param str $value The value to be set
+ * @param string $option_name The option key to be set
+ * @param string $value The value to be set
  */
 function bp_update_option( $option_name, $value ) {
 	update_blog_option( bp_get_root_blog_id(), $option_name, $value );
@@ -231,7 +234,7 @@ function bp_update_option( $option_name, $value ) {
  * @since BuddyPress (1.5)
  *
  * @uses bp_get_root_blog_id()
- * @param str $option_name The option key to be set
+ * @param string $option_name The option key to be set
  */
 function bp_delete_option( $option_name ) {
 	delete_blog_option( bp_get_root_blog_id(), $option_name );
@@ -290,7 +293,7 @@ function bp_core_get_root_options() {
 	// Do some magic to get all the root blog options in 1 swoop
 	$blog_options_keys      = "'" . join( "', '", (array) $root_blog_option_keys ) . "'";
 	$blog_options_table	    = bp_is_multiblog_mode() ? $wpdb->options : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'options';
-	$blog_options_query     = $wpdb->prepare( "SELECT option_name AS name, option_value AS value FROM {$blog_options_table} WHERE option_name IN ( {$blog_options_keys} )" );
+	$blog_options_query     = "SELECT option_name AS name, option_value AS value FROM {$blog_options_table} WHERE option_name IN ( {$blog_options_keys} )";
 	$root_blog_options_meta = $wpdb->get_results( $blog_options_query );
 
 	// On Multisite installations, some options must always be fetched from sitemeta
@@ -374,7 +377,7 @@ function bp_core_get_root_options() {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional.Default value true
+ * @param bool $default Optional.Default value true
  *
  * @uses bp_get_option() To get the profile sync option
  * @return bool Is profile sync enabled or not
@@ -388,7 +391,7 @@ function bp_disable_profile_sync( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional.Default value true
+ * @param bool $default Optional.Default value true
  *
  * @uses bp_get_option() To get the logged out Toolbar option
  * @return bool Is logged out Toolbar enabled or not
@@ -402,7 +405,7 @@ function bp_hide_loggedout_adminbar( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value true
+ * @param bool $default Optional. Default value true
  *
  * @uses bp_get_option() To get the avatar uploads option
  * @return bool Are avatar uploads allowed?
@@ -416,7 +419,7 @@ function bp_disable_avatar_uploads( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value
+ * @param bool $default Optional. Default value
  *
  * @uses bp_get_option() To get the account deletion option
  * @return bool Is account deletion allowed?
@@ -430,7 +433,7 @@ function bp_disable_account_deletion( $default = false ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value false
+ * @param bool $default Optional. Default value false
  * @todo split and move into blog and forum components
  * @uses bp_get_option() To get the blog/forum comments option
  * @return bool Is blog/forum comments allowed?
@@ -444,7 +447,7 @@ function bp_disable_blogforum_comments( $default = false ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value true
+ * @param bool $default Optional. Default value true
  *
  * @todo Move into groups component
  * @uses bp_get_option() To get the group creation
@@ -459,7 +462,7 @@ function bp_restrict_group_creation( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value true
+ * @param bool $default Optional. Default value true
  *
  * @todo Move into groups component
  * @uses bp_get_option() To get the WP editor option
@@ -474,7 +477,7 @@ function bp_force_buddybar( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value
+ * @param bool $default Optional. Default value
  */
 function bp_group_forums_root_id( $default = '0' ) {
 	echo bp_get_group_forums_root_id( $default );
@@ -484,13 +487,13 @@ function bp_group_forums_root_id( $default = '0' ) {
 	 *
 	 * @since BuddyPress (1.6)
 	 *
-	 * @param $default bool Optional. Default value 0
+	 * @param bool $default Optional. Default value 0
 	 *
 	 * @uses bp_get_option() To get the maximum title length
 	 * @return int Is anonymous posting allowed?
 	 */
 	function bp_get_group_forums_root_id( $default = '0' ) {
-		return (int) apply_filters( 'bp_get_group_forums_root_id', (int) bp_get_option( '_bbp_group_forums_root_id', $default ) );
+		return (int) apply_filters( 'bp_get_group_forums_root_id', (int) bp_get_option( '_bp_group_forums_root_id', $default ) );
 	}
 
 /**
@@ -498,13 +501,13 @@ function bp_group_forums_root_id( $default = '0' ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value true
+ * @param bool $default Optional. Default value true
  *
  * @uses bp_get_option() To get the group forums option
  * @return bool Is group forums enabled or not
  */
 function bp_is_group_forums_active( $default = true ) {
-	return (bool) apply_filters( 'bp_is_group_forums_active', (bool) bp_get_option( '_bbp_enable_group_forums', $default ) );
+	return (bool) apply_filters( 'bp_is_group_forums_active', (bool) bp_get_option( '_bp_enable_group_forums', $default ) );
 }
 
 /**
@@ -512,7 +515,7 @@ function bp_is_group_forums_active( $default = true ) {
  *
  * @since BuddyPress (1.6)
  *
- * @param $default bool Optional. Default value true
+ * @param bool $default Optional. Default value true
  *
  * @uses bp_get_option() To get the Akismet option
  * @return bool Is Akismet enabled or not
@@ -521,4 +524,15 @@ function bp_is_akismet_active( $default = true ) {
 	return (bool) apply_filters( 'bp_is_akismet_active', (bool) bp_get_option( '_bp_enable_akismet', $default ) );
 }
 
-?>
+/**
+ * Get the current theme package ID
+ *
+ * @since BuddyPress (1.7)
+ *
+ * @param string $default Optional. Default value 'default'
+ * @uses get_option() To get the subtheme option
+ * @return string ID of the subtheme
+ */
+function bp_get_theme_package_id( $default = 'legacy' ) {
+	return apply_filters( 'bp_get_theme_package_id', bp_get_option( '_bp_theme_package_id', $default ) );
+}

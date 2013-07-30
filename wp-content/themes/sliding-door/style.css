@@ -1,6 +1,6 @@
 /*Theme Name: Sliding Door
 
-Theme URI: http://mac-host.com/support
+Theme URI: http://dubbo.org/slidingdoor
 
 Description: A unique template featuring sliding images in the header.  Uses a Custom Menu and Featured Images to create the sliding images. The theme has a comprehensive support forum at http://mac-host.com/support  
 
@@ -8,7 +8,7 @@ Author: Wayne Connor
 
 Author URI:http://macintoshhowto.com/about
 
-Version: 3.0.8
+Version: 3.0.9
 
 Tags: black, white, three-columns, fixed-width, custom-header, theme-options, threaded-comments, sticky-post, photoblogging
 License: GNU General Public License v2.0
@@ -319,7 +319,7 @@ a:link {
 }
 
 a:visited {
-	
+	color: #0095da;
 }
 
 a:active,a:hover {

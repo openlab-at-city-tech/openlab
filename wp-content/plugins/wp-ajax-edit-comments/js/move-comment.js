@@ -193,14 +193,14 @@ $j.ajaxmovecomment = {
 				if (post_offset >= 5) {
 					$j("#post_previous").removeClass("hidden");
 				}
-			} else if (count > 0 && count < 6 && dir == "true") {
+			} else if (count > 0 && count < 6 && post_offset != 0 && dir == "true") {
 				$j("#post_previous").removeClass("hidden");
 			}
 			if (post_offset >= 5 && dir == "false") {
 				$j("#post_offset").attr("value", post_offset);
 				$j("#post_previous").removeClass("hidden");
 				$j("#post_next").removeClass("hidden");
-			} else if (post_offset == 0) {
+			} else if (post_offset == 0 && count == 6 ) {
 					$j("#post_next").removeClass("hidden");
 			}
 		}, 'json' );

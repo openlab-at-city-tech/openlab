@@ -89,94 +89,51 @@ function pilcrow_layouts() {
  * Create the options page
  */
 function pilcrow_theme_options_do_page() {
-
-	if ( ! isset( $_REQUEST['settings-updated'] ) )
-		$_REQUEST['settings-updated'] = false;
-
+	$options = pilcrow_get_theme_options();
 	?>
 	<div class="wrap">
-		<?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options', 'pilcrow' ) . "</h2>"; ?>
-
-		<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
-		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'pilcrow' ); ?></strong></p></div>
-		<?php endif; ?>
+		<?php screen_icon(); ?>
+		<h2><?php printf( __( '%s Theme Options', 'pilcrow' ), wp_get_theme() ); ?></h2>
+		<?php settings_errors(); ?>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'pilcrow_options' ); ?>
-			<?php $options = pilcrow_get_theme_options(); ?>
 
 			<table class="form-table">
-
-				<?php
-				/**
-				 * Pilcrow Color Scheme
-				 */
-				?>
-				<tr valign="top"><th scope="row"><?php _e( 'Color Scheme', 'pilcrow' ); ?></th>
+				<tr valign="top">
+					<th scope="row"><?php _e( 'Color Scheme', 'pilcrow' ); ?></th>
 					<td>
 						<select name="pilcrow_theme_options[color_scheme]">
-							<?php
-								$selected = $options['color_scheme'];
-								$p = '';
-								$r = '';
-
-								foreach ( pilcrow_color_schemes() as $option ) {
-									$label = $option['label'];
-
-									if ( $selected == $option['value'] ) // Make default first in list
-										$p = "\n\t<option selected='selected' value='" . esc_attr( $option['value'] ) . "'>$label</option>";
-									else
-										$r .= "\n\t<option value='" . esc_attr( $option['value'] ) . "'>$label</option>";
-								}
-								echo $p . $r;
-							?>
+						<?php foreach ( pilcrow_color_schemes() as $scheme ) : ?>
+							<option value="<?php echo esc_attr( $scheme['value'] ); ?>" <?php selected( $options['color_scheme'], $scheme['value'] ); ?>><?php echo $scheme['label']; ?></option>
+						<?php endforeach; ?>
 						</select>
 						<label class="description" for="pilcrow_theme_options[color_scheme]"><?php _e( 'Select a default color scheme', 'pilcrow' ); ?></label>
 					</td>
 				</tr>
 
-				<?php
-				/**
-				 * Pilcrow Layout
-				 */
-				?>
-				<tr valign="top" id="pilcrow-layouts"><th scope="row"><?php _e( 'Default Layout', 'pilcrow' ); ?></th>
+				<tr valign="top" id="pilcrow-layouts">
+					<th scope="row"><?php _e( 'Default Layout', 'pilcrow' ); ?></th>
 					<td>
-						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Default Layout', 'pilcrow' ); ?></span></legend>
-						<?php
-							if ( ! isset( $checked ) )
-								$checked = '';
-							foreach ( pilcrow_layouts() as $option ) {
-								$radio_setting = $options['theme_layout'];
-
-								if ( '' != $radio_setting ) {
-									if ( $options['theme_layout'] == $option['value'] ) {
-										$checked = "checked=\"checked\"";
-									} else {
-										$checked = '';
-									}
-								}
-								?>
-								<div class="layout">
+						<fieldset>
+							<legend class="screen-reader-text"><span><?php _e( 'Default Layout', 'pilcrow' ); ?></span></legend>
+							<?php foreach ( pilcrow_layouts() as $layout ) : ?>
+							<div class="layout">
 								<label class="description">
-									<input type="radio" name="pilcrow_theme_options[theme_layout]" value="<?php echo esc_attr( $option['value'] ); ?>" <?php echo $checked; ?> />
+									<input type="radio" name="pilcrow_theme_options[theme_layout]" value="<?php echo esc_attr( $layout['value'] ); ?>" <?php checked( $options['theme_layout'], $layout['value'] ); ?> />
 									<span>
-										<img src="<?php echo get_template_directory_uri(); ?>/images/<?php echo $option['value']; ?>.png"/>
-										<?php echo $option['label']; ?>
+										<img src="<?php echo get_template_directory_uri(); ?>/images/<?php echo $layout['value']; ?>.png"/>
+										<?php echo $layout['label']; ?>
 									</span>
 								</label>
-								</div>
-								<?php
-							}
-						?>
+							</div>
+							<?php endforeach; ?>
 						</fieldset>
 					</td>
 				</tr>
 			</table>
 
-			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options', 'pilcrow' ); ?>" />
-			</p>
+			<?php submit_button(); ?>
 		</form>
 	</div>
 	<?php
@@ -199,5 +156,3 @@ function pilcrow_theme_options_validate( $input ) {
 
 	return $input;
 }
-
-// adapted from http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/

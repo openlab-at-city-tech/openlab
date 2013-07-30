@@ -1,0 +1,37 @@
+body {
+	margin-top: 20px;
+}
+
+.menu-main li {
+	height: 60px;
+}
+
+#cuny-sw-footer {
+	position: absolute;
+	width: 100%;
+	left: 0;
+}
+
+#cuny-sw-footer #footer-widgets {
+	margin-bottom: 0;
+}
+
+#cuny-sw-footer #footer-widgets .widget-area {
+	margin-right: 0;
+}
+
+#cuny-sw-footer .footer-widgets-5 {
+	height: 100px;
+}
+
+#cuny-sw-footer .footer-widgets-5 .cuny-logo-widget img {
+	position: relative;
+}
+
+#cuny-sw-footer .cuny-logo-widget a {
+	display: block;
+}
+
+#cuny-sw-footer #footer {
+	border-top: 0;
+}

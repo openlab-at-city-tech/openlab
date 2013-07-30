@@ -5,7 +5,7 @@
  *
  * This file contains all the deprecated functions for BuddyPress forums since
  * version 1.6. This was a major update for the forums component, moving from
- * bbPress 1.1 to bbPress 2.1.
+ * bbPress 1.x to bbPress 2.x.
  *
  * @package BuddyPress
  * @subpackage Forums
@@ -14,7 +14,25 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Outputs the markup for the bb-forums-admin panel
+ */
 function bp_forums_bbpress_admin() {
+
+	// The text and URL of the Site Wide Forums button differs depending on whether bbPress
+	// is running
+	if ( is_plugin_active( 'bbpress/bbpress.php' ) ) {
+		// The bbPress admin page will always be on the root blog. switch_to_blog() will
+		// pass through if we're already there.
+		switch_to_blog( bp_get_root_blog_id() );
+		$button_url = admin_url( add_query_arg( array( 'page' => 'bbpress' ), 'options-general.php' ) );
+		restore_current_blog();
+
+		$button_text = __( 'Configure bbPress', 'buddypress' );
+	} else {
+		$button_url = bp_get_admin_url( add_query_arg( array( 'tab' => 'plugin-information', 'plugin' => 'bbpress', 'TB_iframe' => 'true', 'width' => '640', 'height' => '500' ), 'plugin-install.php' ) );
+		$button_text = __( 'Install bbPress', 'buddypress' );
+	}
 
 	$action = bp_get_admin_url( 'admin.php?page=bb-forums-setup&reinstall=1' ); ?>
 
@@ -37,15 +55,21 @@ function bp_forums_bbpress_admin() {
 
 			// Delete the bb-config.php location option
 			bp_delete_option( 'bb-config-location' );
+
+			// Now delete the bb-config.php file
+			@unlink( ABSPATH . 'bb-config.php' );
+
+			// show the updated wizard
 			bp_forums_bbpress_install_wizard();
 
 		else : ?>
 
 			<div style="width: 45%; float: left; margin-top: 20px;">
-				<h3><?php _e( 'Forums for Groups', 'buddypress' ) ?></h3>
+				<h3><?php _e( '(Installed)', 'buddypress' ); ?> <?php _e( 'Forums for Groups', 'buddypress' ) ?></h3>
 
 				<p><?php _e( 'Give each individual group its own discussion forum. Choose this if you\'d like to keep your members\' conversations separated into distinct areas.' , 'buddypress' ); ?></p>
-				<p class="description"><?php _e( 'You may use an existing bbPress installation if you have one.', 'buddypress' ); ?></p>
+
+				<p><?php _e( 'Note: This component is retired and will not be receiving any updates in the future.  Only use this component if your current site relies on it.' , 'buddypress' ); ?></p>
 
 				<h4 style="margin-bottom: 10px;"><?php _e( 'Features', 'buddypress' ); ?></h4>
 				<ul class="description" style="list-style: square; margin-left: 30px;">
@@ -56,24 +80,30 @@ function bp_forums_bbpress_admin() {
 				</ul>
 
 				<div>
-					<a class="button button-primary" href="<?php echo $action ?>"><?php _e( 'Reinstall Group Forums', 'buddypress' ) ?></a> &nbsp;
+					<a class="button button-primary confirm" href="<?php echo $action ?>"><?php _e( 'Uninstall Group Forums', 'buddypress' ) ?></a> &nbsp;
 				</div>
 			</div>
 
 			<div style="width: 45%; float: left; margin: 20px 0 20px 20px; padding: 0 20px 20px 20px; border: 1px solid #ddd; background-color: #fff;">
-				<h3><?php _e( 'New! Site Wide Forums', 'buddypress' ) ?></h3>
-				<p><?php _e( 'Your site will have central forums that are not isolated to any specific group. Choose this if you\'d like to have a central forum area for your members.', 'buddypress' ) ?></p>
-				<p class="description"><?php _e( 'You may activate both Group and Site Wide forums, but this may create a poor experience for your members.', 'buddypress' ) ?></p>
+				<h3><?php _e( 'New! bbPress', 'buddypress' ) ?></h3>
+				<p><?php _e( 'bbPress is a brand-new forum plugin from one of the lead developers of BuddyPress.', 'buddypress' ) ?></p>
 
-				<h4 style="margin-bottom: 10px;"><?php _e( 'Features', 'buddypress' ); ?></h4>
+				<p><?php _e( 'It boasts a bunch of cool features that the BP Legacy Discussion Forums does not have including:', 'buddypress' ) ?></p>
+
 				<ul class="description" style="list-style: square; margin-left: 30px;">
-					<li><?php _e( 'Central Discussion Area',     'buddypress' ); ?></p></li>
-					<li><?php _e( 'Forum Plugins Available',     'buddypress' ); ?></p></li>
-					<li><?php _e( 'Activity Stream Integration', 'buddypress' ); ?></p></li>
-					<li><?php _e( '@ Mention Integration',       'buddypress' ); ?></p></li>
+					<li><?php _e( 'Non-group specific forum creation', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'Moderation via the WP admin dashboard', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'Topic splitting', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'Revisions', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'Spam management', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'Subscriptions', 'buddypress' ); ?></p></li>
+					<li><?php _e( 'And more!', 'buddypress' ); ?></p></li>
 				</ul>
+
+				<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'http://codex.buddypress.org/user/setting-up-a-new-installation/installing-group-and-sitewide-forums/using-bbpress-2-2-with-buddypress/' ) ?></p>
+
 				<div>
-					<a class="button thickbox button-primary" href="<?php bp_admin_url( add_query_arg( array( 'tab' => 'plugin-information', 'plugin' => 'bbpress', 'TB_iframe' => 'true', 'width' => '640', 'height' => '500' ), 'plugin-install.php' ) ); ?>"><?php _e( 'Install Site Wide Forums', 'buddypress' ) ?></a> &nbsp;
+					<a class="button thickbox button-primary" href="<?php echo esc_attr( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
 				</div>
 			</div>
 
@@ -84,9 +114,27 @@ function bp_forums_bbpress_admin() {
 }
 
 function bp_forums_bbpress_install_wizard() {
-	$post_url = network_admin_url( 'admin.php?page=bb-forums-setup' );
+	$post_url                 = bp_get_admin_url( 'admin.php?page=bb-forums-setup' );
+	$bbpress_plugin_is_active = false;
 
 	$step = isset( $_REQUEST['step'] ) ? $_REQUEST['step'] : '';
+
+	// The text and URL of the Site Wide Forums button differs depending on whether bbPress
+	// is running
+	if ( is_plugin_active( 'bbpress/bbpress.php' ) ) {
+		$bbpress_plugin_is_active = true;
+
+		// The bbPress admin page will always be on the root blog. switch_to_blog() will
+		// pass through if we're already there.
+		switch_to_blog( bp_get_root_blog_id() );
+		$button_url = admin_url( add_query_arg( array( 'page' => 'bbpress' ), 'options-general.php' ) );
+		restore_current_blog();
+
+		$button_text = __( 'Configure bbPress', 'buddypress' );
+	} else {
+		$button_url = bp_get_admin_url( add_query_arg( array( 'tab' => 'plugin-information', 'plugin' => 'bbpress', 'TB_iframe' => 'true', 'width' => '640', 'height' => '500' ), 'plugin-install.php' ) );
+		$button_text = __( 'Install bbPress', 'buddypress' );
+	}
 
 	switch( $step ) {
 		case 'existing':
@@ -115,7 +163,7 @@ function bp_forums_bbpress_install_wizard() {
 		break;
 
 		case 'new':
-			if ( isset( $_REQUEST['doinstall'] ) && 1 == (int) $_REQUEST['doinstall'] ) {
+			if ( isset( $_REQUEST['doinstall'] ) && 1 == (int)$_REQUEST['doinstall'] ) {
 				$result = bp_forums_bbpress_install();
 
 				switch ( $result ) {
@@ -162,7 +210,8 @@ function bp_forums_bbpress_install_wizard() {
 					<h3><?php _e( 'Forums for Groups', 'buddypress' ) ?></h3>
 
 					<p><?php _e( 'Give each individual group its own discussion forum. Choose this if you\'d like to keep your members\' conversations separated into distinct areas.' , 'buddypress' ); ?></p>
-					<p class="description"><?php _e( 'You may use an existing bbPress installation if you have one.', 'buddypress' ); ?></p>
+
+					<p><?php _e( 'Note: This component is retired and will not be receiving any updates in the future.  Only use this component if your current site relies on it.' , 'buddypress' ); ?></p>
 
 					<h4 style="margin-bottom: 10px;"><?php _e( 'Features', 'buddypress' ); ?></h4>
 					<ul class="description" style="list-style: square; margin-left: 30px;">
@@ -179,19 +228,24 @@ function bp_forums_bbpress_install_wizard() {
 				</div>
 
 				<div style="width: 45%; float: left; margin: 20px 0 20px 20px; padding: 0 20px 20px 20px; border: 1px solid #ddd; background-color: #fff;">
-					<h3><?php _e( 'New! Site Wide Forums', 'buddypress' ) ?></h3>
-					<p><?php _e( 'Your site will have central forums that are not isolated to any specific group. Choose this if you\'d like to have a central forum area for your members.', 'buddypress' ) ?></p>
-					<p class="description"><?php _e( 'You may activate both Group and Site Wide forums, but this may create a poor experience for your members.', 'buddypress' ) ?></p>
+					<h3><?php _e( 'New! bbPress', 'buddypress' ) ?></h3>
+					<p><?php _e( 'bbPress is a brand-new forum plugin from one of the lead developers of BuddyPress.', 'buddypress' ) ?></p>
 
-					<h4 style="margin-bottom: 10px;"><?php _e( 'Features', 'buddypress' ); ?></h4>
+					<p><?php _e( 'It boasts a bunch of cool features that the BP Legacy Discussion Forums does not have including:', 'buddypress' ) ?></p>
+
 					<ul class="description" style="list-style: square; margin-left: 30px;">
-						<li><?php _e( 'Central Discussion Area',     'buddypress' ); ?></p></li>
-						<li><?php _e( 'Forum Plugins Available',     'buddypress' ); ?></p></li>
-						<li><?php _e( 'Activity Stream Integration', 'buddypress' ); ?></p></li>
-						<li><?php _e( '@ Mention Integration',       'buddypress' ); ?></p></li>
+						<li><?php _e( 'Non-group specific forum creation', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'Moderation via the WP admin dashboard', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'Topic splitting', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'Revisions', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'Spam management', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'Subscriptions', 'buddypress' ); ?></p></li>
+						<li><?php _e( 'And more!', 'buddypress' ); ?></p></li>
 					</ul>
+
+					<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'http://codex.buddypress.org/user/setting-up-a-new-installation/installing-group-and-sitewide-forums/using-bbpress-2-2-with-buddypress/' ) ?></p>
 					<div>
-						<a class="button thickbox button-primary" href="<?php bp_admin_url( add_query_arg( array( 'tab' => 'plugin-information', 'plugin' => 'bbpress', 'TB_iframe' => 'true', 'width' => '640', 'height' => '500' ), 'plugin-install.php' ) ); ?>"><?php _e( 'Install Site Wide Forums', 'buddypress' ) ?></a> &nbsp;
+						<a class="button button-primary <?php if ( ! $bbpress_plugin_is_active ) { echo esc_attr( 'thickbox' ); }?>" href="<?php echo esc_attr( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
 					</div>
 				</div>
 
@@ -199,5 +253,3 @@ function bp_forums_bbpress_install_wizard() {
 		break;
 	}
 }
-
-?>

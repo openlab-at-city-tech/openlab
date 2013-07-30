@@ -1,15 +1,15 @@
 === Genesis Connect for BuddyPress ===
 Contributors: wpmuguru
 Tags: genesis, buddypress, theme, template
-Requires at least: 3.4
-Tested up to: 3.4.2
-Stable tag: 1.2
+Requires at least: 3.5
+Tested up to: 3.5.1
+Stable tag: 1.2.1
 
 BuddyPress Theme Support for the Genesis Framework.
 
 == Description ==
 
-GenesisConnect for BuddyPress is designed to adds support for BuddyPress to any [Genesis](http://my.studiopress.com/themes/genesis/) child theme. Requires Genesis 1.8.1 or greater and BuddyPress 1.6 or greater. 
+GenesisConnect for BuddyPress is designed to adds support for BuddyPress to any [Genesis](http://my.studiopress.com/themes/genesis/) child theme. Requires Genesis 1.8.1 or greater and BuddyPress 1.7 or greater. 
 
 If used with 
 
@@ -97,6 +97,9 @@ For child themes without a GenesisConnect for BuddyPress CSS pack
 1. Edit the copy of the template located in your child theme.
 
 == Changelog ==
+
+= 1.2.1 =
+* Update for BP 1.7.
 
 = 1.2 =
 * Original version for BP 1.6.X.

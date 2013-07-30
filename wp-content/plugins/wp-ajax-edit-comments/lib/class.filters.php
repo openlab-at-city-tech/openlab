@@ -118,7 +118,7 @@ class AECFilters {
 			global $aecomments;
 			$multisite_network = AECCore::is_multisite();
 
-			$admin_uri = add_query_arg( array( 'page' => 'wpaecsettings' ), admin_url( sprintf( '%sadmin.php', $multisite_network ? 'network/' : '' ) ) );
+			$admin_uri = add_query_arg( array( 'page' => 'wpaec' ), admin_url( sprintf( '%sadmin.php', $multisite_network ? 'network/' : '' ) ) );
 			array_push($links, sprintf('<a href="%s">%s</a>', $admin_uri, __("Settings", 'ajaxEdit')));
 			return $links;
 		} //end add_settings_link

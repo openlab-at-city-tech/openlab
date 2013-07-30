@@ -29,18 +29,6 @@ $j.ajaxadminpanel = {
 	
 	//Initializes the edit links
 	function initialize_events() {
-		
-
-		//For the tabs
-		var $tabs = $j(".tabs").tabs("> .pane", { effect: "fade",fadeInSpeed: 400, onClick: function(event, tabindex) { 
-			var timer =  setInterval(function() {
-				clearTimeout(timer); 
-				var location = window.location.hash;
-				if (location != '') {
-					$j("#aecadminpanel").attr("action", jQuery.ajaxadminpanel.action + location);
-				}
-			}, 500); }}).history();
-		
 		//For the icons preview
 		$j("select[name='icon_set']").bind("change", function() {
 			$j("#iconpreview img").attr("src", $j("input[name='iconpreviewurl']").attr("value") + $j(this).attr("value") + "/sprite.png");													  

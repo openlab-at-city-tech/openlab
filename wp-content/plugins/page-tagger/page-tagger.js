@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 Plugin Name: Page Tagger
 Plugin URI: http://www.hiddentao.com/code/wordpress-page-tagger-plugin/
 Description: Enables tagging for pages. PHP 5 required.
-Version: 0.4
+Version: 0.4.2
 Author: Ramesh Nair
 Author URI: http://www.hiddentao.com/
 */

@@ -3,7 +3,7 @@
 define('BASE_URL', plugins_url() . '/' . basename(dirname(__FILE__)));
 define('SITE_URL', get_option('siteurl'));
 define('DEBUG', false);
-define('VERSION', '3.2.10');
+define('VERSION', '3.3.4');
 
 $afg_sort_order_map = array(
     'default' => 'Default',
@@ -12,6 +12,15 @@ $afg_sort_order_map = array(
     'date_taken_cmp_oldest' => 'By date taken (Oldest first)',
     'date_upload_cmp_newest' => 'By date uploaded (Newest first)',
     'date_upload_cmp_oldest' => 'By date uploaded (Oldest first)',
+    'random' => 'Random',
+);
+
+$afg_slideshow_map = array(
+    'default' => 'Default',
+    'colorbox' => 'Colorbox',
+    'disable' => 'No Slideshow',
+    'flickr' => 'Link to Flickr Photo page',
+    'none' => 'No Slideshow and No Link',
 );
 
 /* Map for photo titles displayed on the gallery. */
@@ -166,17 +175,8 @@ function afg_generate_version_line() {
     if(isset($_POST['afg_dismis_ss_msg']) && $_POST['afg_dismis_ss_msg']) {
         update_option('afg_dismis_ss_msg', true);
     }
-    $return_str = "";
 
-    if (get_option('afg_slideshow_option') == 'colorbox' && !get_option('afg_dismis_ss_msg')) {
-        $return_str .= "<p style='background-color:#FFFFE0; line-height:140%; border:1px solid #E6DB55; border-radius:3px; margin:5px 0 15px; padding:6px 10px;'><b>A better slideshow is available for use.  You are using ColorBox," .
-            " which doesn't support thumbnail slider.  Go to <a href='{$_SERVER['PHP_SELF']}?page=afg_advanced_page'>Advanced Settings</a>" .
-            " to change your slideshow to HighSlide.</b>" .
-            " <input type='submit' name='afg_dismis_ss_msg' class='button' value='Dismis Message'/>" .
-            " </p>";
-    }
-
-   $return_str .= "" .
+    $return_str = "" .
     " <h4 align=\"right\" style=\"margin-right:0.5%\">" .
        " &nbsp;Version: <b>" . VERSION . "</b> |" .
         " <a href=\"http://wordpress.org/extend/plugins/awesome-flickr-gallery-plugin/faq/\">FAQ</a> |" .
@@ -187,8 +187,6 @@ function afg_generate_version_line() {
     " </h4>";
     return $return_str;
 }
-
-
 
 function afg_generate_flickr_settings_table($photosets, $galleries, $groups) {
     global $afg_photo_source_map;
@@ -224,7 +222,7 @@ function afg_generate_flickr_settings_table($photosets, $galleries, $groups) {
 function afg_generate_gallery_settings_table() {
     global $afg_photo_size_map, $afg_on_off_map, $afg_descr_map, 
         $afg_columns_map, $afg_bg_color_map, $afg_photo_source_map, 
-        $afg_width_map, $afg_yes_no_map, $afg_sort_order_map;
+        $afg_width_map, $afg_yes_no_map, $afg_sort_order_map, $afg_slideshow_map;
     
     if (get_option('afg_photo_size') == 'custom')
         $photo_size = '(Custom - ' . get_option('afg_custom_size') . 'px' . ((get_option('afg_custom_size_square') == 'true')? ' - Square)': ')');
@@ -286,11 +284,19 @@ function afg_generate_gallery_settings_table() {
         </tr>
 
         <tr valign='top'>
-        <th scope='row'>No of Columns</th>
+        <th scope='row'>Number of Columns</th>
         <td><select name='afg_columns' id='afg_columns'>
             " . afg_generate_options($afg_columns_map, 'default', True, $afg_columns_map[get_option('afg_columns')]) . "
         </select></td>
         </tr>
+
+        <tr valign='top'>
+        <th scope='row'>Slideshow Behavior</th>
+        <td><select name='afg_slideshow_option' id='afg_slideshow_option'>
+        " . afg_generate_options($afg_slideshow_map, 'default', True, $afg_slideshow_map[get_option('afg_slideshow_option')]) . "
+    </select></td>
+            <td><font size='2'></font></td>
+            </tr>
 
         <tr valign='top'>
         <th scope='row'>Background Color</th>

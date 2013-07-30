@@ -37,6 +37,11 @@ blockquote {
 	padding-right: 60px;
 	padding-left: 0;
 }
+.inputarea .add_media:after {
+	float: left;
+	margin-left: 0;
+	margin-right: 5px;
+}
 #postbox input#tags {
 	float: right;
 }
@@ -133,22 +138,6 @@ h2 img {
 .commentlist .children li {
 	margin-right: 47px;
 	margin-left: 0;
-}
-.rss {
-	float: left;
-	background-position: bottom right;
-	padding-right: 14px;
-	padding-left: 0;
-}
-.allrss {
-	background-position: center right;
-	padding-right: 14px;
-	padding-left: 0;
-}
-h2 .rss {
-	background-position: bottom right;
-	padding-right: 16px;
-	padding-left: 0;
 }
 .sleeve_main {
 	margin-left: 242px;
@@ -267,38 +256,28 @@ div.entry {
 	margin-right: 0;
 }
 #post-types {
+	float: right;
 	margin-right: 60px;
 	margin-left: 0;
+}
+#post-types li {
+	float: right;
 }
 #post-types li a {
 	border-right-width: 1px;
 	border-left-width: 2px;
 	border-right-color: #f5f5f5;
 	border-left-color: #eee;
+	float: right;
 }
 #post-types li a:active {
 	border-right-width: 2px;
 	border-left-width: 1px;
 }
-#post-types #status {
-	padding-right: 24px;
-	padding-left: 6px;
-	background-position: 97% center;
-}
-#post-types #quote {
-	padding-right: 24px;
-	padding-left: 6px;
-	background-position: 97% center;
-}
-#post-types #link {
-	padding-right: 24px;
-	padding-left: 6px;
-	background-position: 97% center;
-}
-#post-types #post {
-	padding-right: 24px;
-	padding-left: 6px;
-	background-position: 97% center;
+.post-format-button:before {
+	float: right;
+	margin-right: 0;
+	margin-left: 5px;
 }
 .discussion p a img {
 	margin-left: 0px !important;

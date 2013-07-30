@@ -1,0 +1,1301 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CubePoints Buddypress Integration v1.9.8.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/cubepoints-buddypress-integration\n"
+"POT-Creation-Date: 2011-12-16 14:01:28+00:00\n"
+"PO-Revision-Date: 2012-06-18 16:34:18+0000\n"
+"Last-Translator: Nils Wasser <bobquentok@googlemail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: includes/templates/cubepoint/earnpoints.php:32
+#@ cp_buddypress
+msgid "Community"
+msgstr "Community"
+
+#: includes/templates/cubepoint/earnpoints.php:37
+#@ cp_buddypress
+msgid " Points - Update"
+msgstr "Statusupdate"
+
+#: includes/templates/cubepoint/earnpoints.php:43
+#@ cp_buddypress
+msgid " Points - Leaving a reply"
+msgstr "Kommentar abgeben"
+
+#: includes/templates/cubepoint/earnpoints.php:49
+#@ cp_buddypress
+msgid " Points - Creating a group"
+msgstr "Gruppe erstellen"
+
+#: includes/templates/cubepoint/earnpoints.php:55
+#@ cp_buddypress
+msgid " Points - Uploading a group avatar"
+msgstr "Gruppenbild hochladen"
+
+#: includes/templates/cubepoint/earnpoints.php:61
+#@ cp_buddypress
+msgid " Points - Joining a group"
+msgstr "Gruppe beitreten"
+
+#: includes/templates/cubepoint/earnpoints.php:67
+#@ cp_buddypress
+msgid " Points - Leaving a group"
+msgstr "Gruppe verlassen"
+
+#: includes/templates/cubepoint/earnpoints.php:73
+#@ cp_buddypress
+msgid " Points - Group Update or Reply"
+msgstr "Statusupdate oder Kommentar in Gruppe"
+
+#: includes/templates/cubepoint/earnpoints.php:79
+#@ cp_buddypress
+msgid " Points - Completed Friend Request"
+msgstr "Abgeschlossene Freundschaftsanfrage"
+
+#: includes/templates/cubepoint/earnpoints.php:85
+#@ cp_buddypress
+msgid " Points - New Group Forum Topic"
+msgstr "Neues Thema in Gruppenforum"
+
+#: includes/templates/cubepoint/earnpoints.php:91
+#@ cp_buddypress
+msgid " Points - New Group Forum Post"
+msgstr "Neuer Beitrag in Gruppenforum"
+
+#: includes/templates/cubepoint/earnpoints.php:97
+#@ cp_buddypress
+msgid " Points - Avatar Uploaded"
+msgstr "Avatar hochgeladen"
+
+#: includes/templates/cubepoint/earnpoints.php:103
+#@ cp_buddypress
+msgid " Points - Message Sent"
+msgstr "Nachricht verschickt"
+
+#: includes/templates/cubepoint/earnpoints.php:109
+#@ cp_buddypress
+msgid " Points - Link Created"
+msgstr "Link erstellt"
+
+#: includes/templates/cubepoint/earnpoints.php:115
+#@ cp_buddypress
+msgid " Points - Link Voted"
+msgstr "Link bewertet"
+
+#: includes/templates/cubepoint/earnpoints.php:121
+#@ cp_buddypress
+msgid " Points - Link Comment"
+msgstr "Link kommentiert"
+
+#: includes/templates/cubepoint/earnpoints.php:127
+#@ cp_buddypress
+msgid " Points - Gift Given"
+msgstr "Geschenk vergeben"
+
+#: includes/templates/cubepoint/earnpoints.php:133
+#@ cp_buddypress
+msgid " Points - Gallery Upload"
+msgstr "Galerie-Upload"
+
+#: includes/templates/cubepoint/earnpoints.php:138
+#@ cp_buddypress
+msgid "Blog Activity"
+msgstr "Blogaktivität"
+
+#: includes/templates/cubepoint/earnpoints.php:143
+#@ cp_buddypress
+msgid " Points - Blog Comment"
+msgstr "Blogkommentar"
+
+#: includes/templates/cubepoint/earnpoints.php:149
+#@ cp_buddypress
+msgid " Points - Blog Post"
+msgstr "Blogbeitrag"
+
+#: includes/bp-cubepoint-admin.php:1721
+#: includes/templates/cubepoint/earnpoints.php:154
+#@ cp_buddypress
+msgid "Misc"
+msgstr "Sonstiges"
+
+#: includes/templates/cubepoint/earnpoints.php:159
+#@ cp_buddypress
+msgid " Points - Becoming a Member"
+msgstr "Mitglied werden"
+
+#: includes/templates/cubepoint/earnpoints.php:165
+#@ cp_buddypress
+msgid " Points - Daily Login"
+msgstr "Täglicher Login"
+
+#: includes/templates/cubepoint/awards.php:282
+#@ cp_buddypress
+msgid "Groups"
+msgstr "Gruppen"
+
+#: includes/templates/cubepoint/awards.php:283
+#@ cp_buddypress
+msgid "Friends"
+msgstr "Freunde"
+
+#: includes/templates/cubepoint/awards.php:284
+#@ cp_buddypress
+msgid "Posting Updates"
+msgstr "Updates posten"
+
+#: includes/templates/cubepoint/awards.php:285
+#@ cp_buddypress
+msgid "Replies"
+msgstr "Antworten"
+
+#: includes/templates/cubepoint/awards.php:286
+#@ cp_buddypress
+msgid "Group Forum Topics"
+msgstr "Gruppenforenthemen"
+
+#: includes/templates/cubepoint/awards.php:287
+#@ cp_buddypress
+msgid "Group Forum Replies"
+msgstr "Gruppenforenbeiträge"
+
+#: includes/templates/cubepoint/awards.php:288
+#@ cp_buddypress
+msgid "Comments"
+msgstr "Kommentare"
+
+#: includes/templates/cubepoint/awards.php:289
+#@ cp_buddypress
+msgid "Blog Posts"
+msgstr "Blogbeiträge"
+
+#: includes/templates/cubepoint/awards.php:290
+#@ cp_buddypress
+msgid "Blog Posts in a Category"
+msgstr "Blogbeiträge in einer Kategorie"
+
+#: includes/templates/cubepoint/awards.php:291
+#@ cp_buddypress
+msgid "Donations"
+msgstr "Spenden"
+
+#: includes/templates/cubepoint/awards.php:292
+#@ cp_buddypress
+msgid "Logging In"
+msgstr "Einloggen"
+
+#: includes/bp-cubepoint-core.php:118
+#: includes/templates/cubepoint/awards.php:293
+#@ cp_buddypress
+msgid "Points"
+msgstr "Sternies"
+
+#: includes/templates/cubepoint/awards.php:294
+#@ cp_buddypress
+msgid "Main Forum"
+msgstr "Hauptforum"
+
+#: includes/templates/cubepoint/awards.php:329
+#: includes/templates/cubepoint/awards.php:363
+#: includes/templates/cubepoint/awards.php:397
+#: includes/templates/cubepoint/awards.php:431
+#: includes/templates/cubepoint/awards.php:465
+#: includes/templates/cubepoint/awards.php:499
+#: includes/templates/cubepoint/awards.php:533
+#: includes/templates/cubepoint/awards.php:567
+#: includes/templates/cubepoint/awards.php:601
+#: includes/templates/cubepoint/awards.php:635
+#: includes/templates/cubepoint/awards.php:669
+#: includes/templates/cubepoint/awards.php:733
+#: includes/templates/cubepoint/awards.php:769
+#@ cp_buddypress
+msgid "of"
+msgstr "von"
+
+#: includes/templates/cubepoint/awards.php:329
+#: includes/templates/cubepoint/awards.php:363
+#: includes/templates/cubepoint/awards.php:397
+#: includes/templates/cubepoint/awards.php:431
+#: includes/templates/cubepoint/awards.php:465
+#: includes/templates/cubepoint/awards.php:499
+#: includes/templates/cubepoint/awards.php:533
+#: includes/templates/cubepoint/awards.php:567
+#: includes/templates/cubepoint/awards.php:601
+#: includes/templates/cubepoint/awards.php:635
+#: includes/templates/cubepoint/awards.php:669
+#: includes/templates/cubepoint/awards.php:733
+#: includes/templates/cubepoint/awards.php:769
+#@ cp_buddypress
+msgid "unlocked"
+msgstr "freigeschaltet"
+
+#: includes/templates/cubepoint/awards.php:865
+#@ cp_buddypress
+msgid "Earned"
+msgstr "Verdient"
+
+#: includes/templates/cubepoint/awards.php:866
+#@ cp_buddypress
+msgid "Total"
+msgstr "Insgesamt"
+
+#: includes/bp-cubepoint-functions.php:76
+#@ cp_buddypress
+msgid "You don't have enough points to send a message."
+msgstr "Um Nachrichten versenden zu können, fehlen dir noch ein paar Sternies!"
+
+#: includes/bp-cubepoint-functions.php:129
+#@ cp_buddypress
+msgid "You don't have enough points to create a group."
+msgstr "Hättest du ein paar Sternies mehr, dann könntest du Gruppen erstellen."
+
+#: includes/bp-cubepoint-functions.php:232
+#: includes/bp-cubepoint-functions.php:236
+#: includes/bp-cubepoint-functions.php:1309
+#@ cp
+#@ cp_buddypress
+msgid "Donate"
+msgstr "Geschenk machen"
+
+#: includes/bp-cubepoint-functions.php:1309
+#@ cp_buddypress
+msgid "Donate Points"
+msgstr "Sternies verschenken"
+
+#: includes/bp-cubepoint-functions.php:1313
+#@ cp_buddypress
+msgid "Rank"
+msgstr "Rang"
+
+#: includes/bp-cubepoint-admin.php:606
+#@ cp_buddypress
+msgid "Settings Updated"
+msgstr "Einstellungen aktualisiert"
+
+#: includes/bp-cubepoint-admin.php:631
+#: includes/bp-cubepoint-admin.php:1912
+#@ cp_buddypress
+msgid "CubePoints Buddypress Integration"
+msgstr "Community-Sternies"
+
+#: includes/bp-cubepoint-admin.php:634
+#@ cp_buddypress
+msgid "CubePoints For BuddyPress Actions"
+msgstr "Community-Aktionen"
+
+#: includes/bp-cubepoint-admin.php:636
+#@ cp_buddypress
+msgid "Main Settings"
+msgstr "Einstellungen"
+
+#: includes/bp-cubepoint-admin.php:636
+#@ cp_buddypress
+msgid "Awards Settings"
+msgstr "Award-Einstellungen"
+
+#: includes/bp-cubepoint-admin.php:636
+#@ cp_buddypress
+msgid "Giveaway & Betting Settings"
+msgstr "Lostopf-Einstellungen"
+
+#: includes/bp-cubepoint-admin.php:642
+#@ cp_buddypress
+msgid "You can take away points for any BuddyPress action just use a negative number instead of a positive."
+msgstr "Sternies können auch abgezogen werden, einfach eine negative Zahl verwenden."
+
+#: includes/bp-cubepoint-admin.php:645
+#@ cp_buddypress
+msgid "Action"
+msgstr "Aktion"
+
+#: includes/bp-cubepoint-admin.php:646
+#@ cp_buddypress
+msgid "Value"
+msgstr "Wert"
+
+#: includes/bp-cubepoint-admin.php:647
+#@ cp_buddypress
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: includes/bp-cubepoint-admin.php:656
+#@ cp_buddypress
+msgid "Points for creating a group"
+msgstr "Sternies für das Erstellen einer Gruppe"
+
+#: includes/bp-cubepoint-admin.php:658
+#: includes/bp-cubepoint-admin.php:663
+#: includes/bp-cubepoint-admin.php:673
+#: includes/bp-cubepoint-admin.php:678
+#: includes/bp-cubepoint-admin.php:683
+#: includes/bp-cubepoint-admin.php:688
+#: includes/bp-cubepoint-admin.php:693
+#: includes/bp-cubepoint-admin.php:704
+#: includes/bp-cubepoint-admin.php:714
+#: includes/bp-cubepoint-admin.php:720
+#: includes/bp-cubepoint-admin.php:725
+#: includes/bp-cubepoint-admin.php:730
+#: includes/bp-cubepoint-admin.php:738
+#: includes/bp-cubepoint-admin.php:743
+#: includes/bp-cubepoint-admin.php:751
+#: includes/bp-cubepoint-admin.php:756
+#: includes/bp-cubepoint-admin.php:761
+#: includes/bp-cubepoint-admin.php:774
+#: includes/bp-cubepoint-admin.php:782
+#@ cp_buddypress
+msgid "Do not add points"
+msgstr "Keine Sternies vergeben"
+
+#: includes/bp-cubepoint-admin.php:661
+#@ cp_buddypress
+msgid "Points for uploading a group avatar"
+msgstr "Sternies für das Hochladen eines Gruppenbildes"
+
+#: includes/bp-cubepoint-admin.php:666
+#@ cp_buddypress
+msgid "Remove points for group deletion"
+msgstr "Sternies bei Löschung der Gruppe wieder abziehen"
+
+#: includes/bp-cubepoint-admin.php:668
+#@ cp_buddypress
+msgid "Do not delete points"
+msgstr "Keine Sternies abziehen"
+
+#: includes/bp-cubepoint-admin.php:671
+#@ cp_buddypress
+msgid "Points for joining a group"
+msgstr "Sternies für das Beitreten einer Gruppe"
+
+#: includes/bp-cubepoint-admin.php:676
+#@ cp_buddypress
+msgid "Points for leaving a group"
+msgstr "Sternies für das Verlassen einer Gruppe"
+
+#: includes/bp-cubepoint-admin.php:681
+#@ cp_buddypress
+msgid "Points for a update"
+msgstr "Sternies für das Statusupdate"
+
+#: includes/bp-cubepoint-admin.php:686
+#@ cp_buddypress
+msgid "Points for a comment or reply"
+msgstr "Sternies für das Kommentieren"
+
+#: includes/bp-cubepoint-admin.php:691
+#@ cp_buddypress
+msgid "Group comment or reply"
+msgstr "Gruppenkommentar oder -antwort"
+
+#: includes/bp-cubepoint-admin.php:697
+#@ cp_buddypress
+msgid "Remove points for comment deletion"
+msgstr "Sternies bei Löschung des Kommentars wieder abziehen"
+
+#: includes/bp-cubepoint-admin.php:699
+#: includes/bp-cubepoint-admin.php:709
+#: includes/bp-cubepoint-admin.php:766
+#: includes/bp-cubepoint-admin.php:787
+#@ cp_buddypress
+msgid "Do not remove points"
+msgstr "Keine Sternies abziehen"
+
+#: includes/bp-cubepoint-admin.php:702
+#@ cp_buddypress
+msgid "Points for Completed Friend Request"
+msgstr "Sternies für das Abschließen von Freundschaftsanfragen"
+
+#: includes/bp-cubepoint-admin.php:707
+#@ cp_buddypress
+msgid "Remove points for Canceled Friendship"
+msgstr "Sternies beim Beenden einer Freundschaft wieder abziehen"
+
+#: includes/bp-cubepoint-admin.php:712
+#@ cp_buddypress
+msgid "Points for New Group Forum Topic"
+msgstr "Sternies für ein neues Thema im Gruppenforum"
+
+#: includes/bp-cubepoint-admin.php:718
+#@ cp_buddypress
+msgid "Points for New Group Forum Post"
+msgstr "Sternies für einen neuen Beitrag im Gruppenforum"
+
+#: includes/bp-cubepoint-admin.php:723
+#@ cp_buddypress
+msgid "Points for Avatar Upload"
+msgstr "Sternies für das Hochladen eines Avatars"
+
+#: includes/bp-cubepoint-admin.php:728
+#@ cp_buddypress
+msgid "Points for Message Sent"
+msgstr "Sternies für das Versenden einer Nachricht"
+
+#: includes/bp-cubepoint-admin.php:733
+#: includes/bp-cubepoint-admin.php:746
+#: includes/bp-cubepoint-admin.php:769
+#: includes/bp-cubepoint-admin.php:777
+#@ cp_buddypress
+msgid "Below Requires"
+msgstr "Folgendes benötigt"
+
+#: includes/bp-cubepoint-admin.php:736
+#@ cp_buddypress
+msgid "Points for New Forum Topic"
+msgstr "Sternies für ein neues Thema im Forum"
+
+#: includes/bp-cubepoint-admin.php:741
+#@ cp_buddypress
+msgid "Points for New Forum Reply"
+msgstr "Sternies für einen neuen Beitrag im Forum"
+
+#: includes/bp-cubepoint-admin.php:749
+#@ cp_buddypress
+msgid "Points for BuddyPress Link Creation"
+msgstr "Sternies für das Erstellen eines BuddyPress-Links"
+
+#: includes/bp-cubepoint-admin.php:754
+#@ cp_buddypress
+msgid "Points for BuddyPress Link Vote"
+msgstr "Sternies für das Abstimmen eines BuddyPress-Links"
+
+#: includes/bp-cubepoint-admin.php:759
+#@ cp_buddypress
+msgid "Points for BuddyPress Link Comment"
+msgstr "Sternies für das Kommentieren eines BuddyPress-Links"
+
+#: includes/bp-cubepoint-admin.php:764
+#@ cp_buddypress
+msgid "Remove points for BuddyPress Link deletion"
+msgstr "Sternies bei Löschung eines BuddyPress-Links wieder abziehen"
+
+#: includes/bp-cubepoint-admin.php:772
+#@ cp_buddypress
+msgid "Points for giving a BuddyPress Gift"
+msgstr "Sternies für das Verschenken eines BuddyPress-Geschenks"
+
+#: includes/bp-cubepoint-admin.php:780
+#@ cp_buddypress
+msgid "Points for Gallery Upload"
+msgstr "Sternies für das Hochladen in die Galerie"
+
+#: includes/bp-cubepoint-admin.php:785
+#@ cp_buddypress
+msgid "Remove points for Gallery deletion"
+msgstr "Sternies bei Löschung aus der Galerie wieder abziehen"
+
+#: includes/bp-cubepoint-admin.php:793
+#@ cp_buddypress
+msgid "Point Blocker!"
+msgstr "Sternieblocker!"
+
+#: includes/bp-cubepoint-admin.php:796
+#@ cp_buddypress
+msgid "Enter the User ID(s) to block members from earning points on BuddyPress:<br />Use a comma after each User ID. For example 66,33,90,120"
+msgstr "Gebe die User-ID(s) ein, um Mitglieder vom Sterniesystem auszuschließen. Trenne mehrere IDs mit einem Komma, z.B. 66,33,90,120"
+
+#: includes/bp-cubepoint-admin.php:800
+#@ cp_buddypress
+msgid "To find the User ID. Go to Users > Authors &amp; Users. Then search for the user you want to block.<br />Click on the username. In the URL you will see user_id=595 , that is the User ID for that member."
+msgstr "Um die User-ID zu finden: Nils (BobQuentok) fragen :)"
+
+#: includes/bp-cubepoint-admin.php:801
+#@ cp_buddypress
+msgid "Note: They will still be able to earn points with the settings you have set up in the "
+msgstr "Beachte: Die blockierten Mitglieder weden aber trotzdem noch die Sternies erhalten, die in den"
+
+#: includes/bp-cubepoint-admin.php:801
+#@ cp_buddypress
+msgid "CubePoints Configure page. "
+msgstr "CubePoints-Einstellungen eingestellt wurden."
+
+#: includes/bp-cubepoint-admin.php:802
+#@ cp_buddypress
+msgid "There is a <a href=\"http://cubepoints.com/forums/topic/ignore-users-points-module/\" target=\"_blank\">Ignore Users Points Module</a> that will take care of that though."
+msgstr "Es gibt aber ein Modul, das Mitglieder komplett ausschließen kann: <a href=\"http://cubepoints.com/forums/topic/ignore-users-points-module/\" target=\"_blank\">Ignore Users Points Module</a>"
+
+#: includes/bp-cubepoint-admin.php:804
+#@ cp_buddypress
+msgid "Remove User IDs"
+msgstr "User-IDs entfernen"
+
+#: includes/bp-cubepoint-admin.php:807
+#@ cp_buddypress
+msgid "Spam Control"
+msgstr "Spamkontrolle"
+
+#: includes/bp-cubepoint-admin.php:810
+#@ cp_buddypress
+msgid "Enter how many points a member must have before they have access to compose a message to another member."
+msgstr "Lege fest, wie viele Sternies ein Mitglied haben muss, bevor es Nachrichten an andere verschicken kann."
+
+#: includes/bp-cubepoint-admin.php:815
+#@ cp_buddypress
+msgid "Allow anyone to compose messages"
+msgstr "Jedem das Senden von Nachrichten erlauben"
+
+#: includes/bp-cubepoint-admin.php:818
+#@ cp_buddypress
+msgid "Enter how many points a member must have before they have access to create a group."
+msgstr "Lege fest, wie viele Sternies ein Mitglied haben muss um Gruppen erstellen zu können."
+
+#: includes/bp-cubepoint-admin.php:823
+#@ cp_buddypress
+msgid "Allow anyone to create groups"
+msgstr "Jedem das Erstellen von Gruppen erlauben."
+
+#: includes/bp-cubepoint-admin.php:826
+#@ cp_buddypress
+msgid "Enter how many points a member must have before they have access to updates & replies."
+msgstr "Lege fest, wie viele Sternies ein Mitglied haben muss um Zugang zu Updates & Antworten zu bekommen."
+
+#: includes/bp-cubepoint-admin.php:831
+#@ cp_buddypress
+msgid "Allow anyone access to updates & replies"
+msgstr "Jedem Zugang zu Updates & Antworten gewähren"
+
+#: includes/bp-cubepoint-admin.php:834
+#@ cp_buddypress
+msgid "Point Logs Settings"
+msgstr "Logbuch-Einstellungen"
+
+#: includes/bp-cubepoint-admin.php:837
+#@ cp_buddypress
+msgid "How many point logs per page"
+msgstr "Sternies pro Seite"
+
+#: includes/bp-cubepoint-admin.php:840
+#: includes/bp-cubepoint-admin.php:848
+#: includes/bp-cubepoint-admin.php:860
+#: includes/bp-cubepoint-admin.php:875
+#: includes/bp-cubepoint-admin.php:882
+#: includes/bp-cubepoint-admin.php:901
+#: includes/bp-cubepoint-admin.php:938
+#@ cp_buddypress
+msgid "Set to default"
+msgstr "Als Standard festlegen"
+
+#: includes/bp-cubepoint-admin.php:843
+#@ cp_buddypress
+msgid "BuddyPress Slug"
+msgstr "Slug"
+
+#: includes/bp-cubepoint-admin.php:846
+#@ cp_buddypress
+msgid "This will change the slug in bold below."
+msgstr "Das wird den fett markierten Slug ändern."
+
+#: includes/bp-cubepoint-admin.php:851
+#@ cp_buddypress
+msgid "Show Global Points Log Menu Item"
+msgstr "Zeige den Logbuch-Eintrag im globalen Menü"
+
+#: includes/bp-cubepoint-admin.php:857
+#@ cp_buddypress
+msgid "Global Points Log Menu Title"
+msgstr "Globaler Lochbuch-Menüeintrag"
+
+#: includes/bp-cubepoint-admin.php:863
+#@ cp_buddypress
+msgid "Point Legend"
+msgstr "Legende"
+
+#: includes/bp-cubepoint-admin.php:866
+#@ cp_buddypress
+msgid "Show Points Legend Menu Item"
+msgstr "Zeige Legenden-Menüeintrag"
+
+#: includes/bp-cubepoint-admin.php:872
+#@ cp_buddypress
+msgid "Menu Title"
+msgstr "Menütitel"
+
+#: includes/bp-cubepoint-admin.php:878
+#@ cp_buddypress
+msgid "Points Legend Title"
+msgstr "Titel der Legende"
+
+#: includes/bp-cubepoint-admin.php:878
+#: includes/bp-cubepoint-admin.php:898
+#@ cp_buddypress
+msgid "HTML is allowed"
+msgstr "HTML ist erlaubt"
+
+#: includes/bp-cubepoint-admin.php:885
+#@ cp_buddypress
+msgid "Additional Way to earn points"
+msgstr "Zusätzliche Wege zum Verdienen von Sternies"
+
+#: includes/bp-cubepoint-admin.php:885
+#@ cp_buddypress
+msgid "Very basic HTML is allowed<br /><br />For example you can put ways to earn points that are not in the Cubepoint settings."
+msgstr "Basisches HTML ist erlaubt <br /><br />Du kannst Wegen Sternies zu verdinen einfügen, die nicht in den CubePoints-Einstellungen sind."
+
+#: includes/bp-cubepoint-admin.php:892
+#@ cp_buddypress
+msgid "Show Points Leaderboard"
+msgstr "Rangliste zeigen"
+
+#: includes/bp-cubepoint-admin.php:898
+#@ cp_buddypress
+msgid "Top Members title"
+msgstr "\\\"Top Mitglieder\\\"-Titel "
+
+#: includes/bp-cubepoint-admin.php:904
+#@ cp_buddypress
+msgid "Points Leaderboard:"
+msgstr "Sternie-Legende:"
+
+#: includes/bp-cubepoint-admin.php:906
+#@ cp_buddypress
+msgid "Put in how many you want to show up"
+msgstr "Lege fest, wie viele angezeigt werden sollen"
+
+#: includes/bp-cubepoint-admin.php:908
+#@ cp_buddypress
+msgid "Show all members"
+msgstr "Alle Mitglieder zeigen"
+
+#: includes/bp-cubepoint-admin.php:913
+#@ cp_buddypress
+msgid "Want to use the shortcode [earnpoints] ?"
+msgstr "Möchtest du den Shortcode [earnpoints] verwenden?"
+
+#: includes/bp-cubepoint-admin.php:924
+#@ cp_buddypress
+msgid "Awards"
+msgstr "Auszeichnungen"
+
+#: includes/bp-cubepoint-admin.php:927
+#@ cp_buddypress
+msgid "Show Awards Menu Item"
+msgstr "Zeige Auszeichnungen-Menüeintrag"
+
+#: includes/bp-cubepoint-admin.php:933
+#@ cp_buddypress
+msgid "Awards Menu Title"
+msgstr "Menütitel der Auszeichnungen"
+
+#: includes/bp-cubepoint-admin.php:941
+#@ cp_buddypress
+msgid ""
+"<p>Use the full image URL path for the award image. For example http://www.mysite.com/awards/myawesomeimage.jpg \n"
+"\t\t\t     The image will be resized to 75 by 75 pixels. But you can change this in the .css file if you wish. \n"
+"\t\t\t     On the awards value. Put in what you want your members to earn in order to unlock the award. For example \n"
+"\t\t\t     I want my member to have 5 friends before they get this award.</p>"
+msgstr ""
+"<p>Verwende den vollständigen URL-Pfad zum Bild der Auszeichnung. Zum Beispiel http://www.mysite.com/awards/myawesomeimage.jpg \n"
+"\\\t\\\t\\\t     Das Bild wird skaliert auf 75x75. Das kann in der .css-Datei geändert werden. \n"
+"\\\t\\\t\\\t     Gebe bei den Auszeichnungen einen Wert ein, den die Mitglieder erreichen müssen um die Auszeichnung freizuschalten. Zum Beispiel \n"
+"\\\t\\\t\\\t     Ich möchte dass meine Mitglieder 5 Freunde haben müssen, um die Auszeichnung freizuschalten.</p>"
+
+#: includes/bp-cubepoint-admin.php:950
+#@ cp_buddypress
+msgid "Award Image"
+msgstr "Bild der Auszeichnung"
+
+#: includes/bp-cubepoint-admin.php:951
+#@ cp_buddypress
+msgid "Award Title"
+msgstr "Titel der Auszeichnung"
+
+#: includes/bp-cubepoint-admin.php:952
+#@ cp_buddypress
+msgid "Value Needed for Award"
+msgstr "Benötigter Wert für die Auszeichnung"
+
+#: includes/bp-cubepoint-admin.php:953
+#: includes/bp-cubepoint-admin.php:968
+#: includes/bp-cubepoint-admin.php:974
+#: includes/bp-cubepoint-admin.php:980
+#: includes/bp-cubepoint-admin.php:986
+#: includes/bp-cubepoint-admin.php:992
+#: includes/bp-cubepoint-admin.php:1001
+#: includes/bp-cubepoint-admin.php:1007
+#: includes/bp-cubepoint-admin.php:1013
+#: includes/bp-cubepoint-admin.php:1019
+#: includes/bp-cubepoint-admin.php:1025
+#: includes/bp-cubepoint-admin.php:1034
+#: includes/bp-cubepoint-admin.php:1040
+#: includes/bp-cubepoint-admin.php:1046
+#: includes/bp-cubepoint-admin.php:1052
+#: includes/bp-cubepoint-admin.php:1058
+#: includes/bp-cubepoint-admin.php:1067
+#: includes/bp-cubepoint-admin.php:1073
+#: includes/bp-cubepoint-admin.php:1079
+#: includes/bp-cubepoint-admin.php:1085
+#: includes/bp-cubepoint-admin.php:1091
+#: includes/bp-cubepoint-admin.php:1100
+#: includes/bp-cubepoint-admin.php:1106
+#: includes/bp-cubepoint-admin.php:1112
+#: includes/bp-cubepoint-admin.php:1118
+#: includes/bp-cubepoint-admin.php:1124
+#: includes/bp-cubepoint-admin.php:1133
+#: includes/bp-cubepoint-admin.php:1139
+#: includes/bp-cubepoint-admin.php:1145
+#: includes/bp-cubepoint-admin.php:1151
+#: includes/bp-cubepoint-admin.php:1157
+#: includes/bp-cubepoint-admin.php:1166
+#: includes/bp-cubepoint-admin.php:1172
+#: includes/bp-cubepoint-admin.php:1178
+#: includes/bp-cubepoint-admin.php:1184
+#: includes/bp-cubepoint-admin.php:1190
+#: includes/bp-cubepoint-admin.php:1199
+#: includes/bp-cubepoint-admin.php:1205
+#: includes/bp-cubepoint-admin.php:1211
+#: includes/bp-cubepoint-admin.php:1217
+#: includes/bp-cubepoint-admin.php:1223
+#: includes/bp-cubepoint-admin.php:1239
+#: includes/bp-cubepoint-admin.php:1250
+#: includes/bp-cubepoint-admin.php:1261
+#: includes/bp-cubepoint-admin.php:1272
+#: includes/bp-cubepoint-admin.php:1283
+#: includes/bp-cubepoint-admin.php:1293
+#: includes/bp-cubepoint-admin.php:1299
+#: includes/bp-cubepoint-admin.php:1305
+#: includes/bp-cubepoint-admin.php:1311
+#: includes/bp-cubepoint-admin.php:1317
+#: includes/bp-cubepoint-admin.php:1327
+#: includes/bp-cubepoint-admin.php:1333
+#: includes/bp-cubepoint-admin.php:1339
+#: includes/bp-cubepoint-admin.php:1345
+#: includes/bp-cubepoint-admin.php:1351
+#: includes/bp-cubepoint-admin.php:1361
+#: includes/bp-cubepoint-admin.php:1367
+#: includes/bp-cubepoint-admin.php:1373
+#: includes/bp-cubepoint-admin.php:1379
+#: includes/bp-cubepoint-admin.php:1385
+#: includes/bp-cubepoint-admin.php:1391
+#: includes/bp-cubepoint-admin.php:1397
+#: includes/bp-cubepoint-admin.php:1403
+#: includes/bp-cubepoint-admin.php:1409
+#: includes/bp-cubepoint-admin.php:1415
+#: includes/bp-cubepoint-admin.php:1430
+#: includes/bp-cubepoint-admin.php:1436
+#: includes/bp-cubepoint-admin.php:1442
+#: includes/bp-cubepoint-admin.php:1448
+#: includes/bp-cubepoint-admin.php:1454
+#@ cp_buddypress
+msgid "Disable"
+msgstr "Deaktivieren"
+
+#: includes/bp-cubepoint-admin.php:962
+#@ cp_buddypress
+msgid "Groups Created Awards"
+msgstr "Auszeichnungen: Gruppen erstellt"
+
+#: includes/bp-cubepoint-admin.php:995
+#@ cp_buddypress
+msgid "Friends Awards"
+msgstr "Auszeichnungen: Freunde"
+
+#: includes/bp-cubepoint-admin.php:1028
+#@ cp_buddypress
+msgid "BuddyPress Updates Awards"
+msgstr "Auszeichnungen: BP Updates"
+
+#: includes/bp-cubepoint-admin.php:1061
+#@ cp_buddypress
+msgid "BuddyPress Replies Awards"
+msgstr "Auszeichnungen: BP Antworten"
+
+#: includes/bp-cubepoint-admin.php:1094
+#@ cp_buddypress
+msgid "Group Forum New Topic Awards"
+msgstr "Auszeichnungen: Neue Gruppenforenthemen"
+
+#: includes/bp-cubepoint-admin.php:1127
+#@ cp_buddypress
+msgid "Group Forum Replies Awards"
+msgstr "Auszeichnungen: Gruppenforenantworten"
+
+#: includes/bp-cubepoint-admin.php:1160
+#@ cp_buddypress
+msgid "Blog Comments Awards"
+msgstr "Auszeichnungen: Blogkommentare"
+
+#: includes/bp-cubepoint-admin.php:1193
+#@ cp_buddypress
+msgid "Blogger Awards"
+msgstr "Auszeichnungen: Blogger"
+
+#: includes/bp-cubepoint-admin.php:1227
+#@ cp_buddypress
+msgid "Blogger in a Specific Category Award"
+msgstr "Auszeichnungen: Blogger einer bestimmten Kategorie"
+
+#: includes/bp-cubepoint-admin.php:1231
+#: includes/bp-cubepoint-admin.php:1242
+#: includes/bp-cubepoint-admin.php:1253
+#: includes/bp-cubepoint-admin.php:1264
+#: includes/bp-cubepoint-admin.php:1275
+#@ cp_buddypress
+msgid "Enter in Category ID"
+msgstr "Kategorie-ID eingeben"
+
+#: includes/bp-cubepoint-admin.php:1287
+#@ cp_buddypress
+msgid "Point Donation Award"
+msgstr "Auszeichnungen: Sternie-Verschenker"
+
+#: includes/bp-cubepoint-admin.php:1321
+#@ cp_buddypress
+msgid "Logging in Award"
+msgstr "Auszeichnungen: Einloggen"
+
+#: includes/bp-cubepoint-admin.php:1355
+#@ cp_buddypress
+msgid "Point Level Awards"
+msgstr "Auszeichnungen: Level"
+
+#: includes/bp-cubepoint-admin.php:1419
+#@ cp_buddypress
+msgid "SimplePress: Forum Posts Awards"
+msgstr "Auszeichnungen: SimplePress-Forenbeiträge"
+
+#: includes/bp-cubepoint-admin.php:1422
+#@ cp_buddypress
+msgid "Enable <a href=\"http://simple-press.com/\">SimplePress: Forum </a>Support"
+msgstr "<a href=\"http://simple-press.com/\">SimplePress: Forum </a>Support aktivieren"
+
+#: includes/bp-cubepoint-admin.php:1458
+#@ cp_buddypress
+msgid "Earned all awards"
+msgstr "Verdiente alle Auszeichnungen"
+
+#: includes/bp-cubepoint-admin.php:1475
+#@ cp_buddypress
+msgid "Here you can customize the menu text and link to show your members if they have entered the lottery or bet their points."
+msgstr "Here kann der Menütext und -link angepasst werden, der deinen Mitgliedern angezeigt wird, wenn sie ihre Punkte gesetzt haben oder beim Lotto mitspielen"
+
+#: includes/bp-cubepoint-admin.php:1484
+#@ cp_buddypress
+msgid "Lottery #1 Menu Settings"
+msgstr "Gewinnspiel #1 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1487
+#: includes/bp-cubepoint-admin.php:1504
+#: includes/bp-cubepoint-admin.php:1521
+#: includes/bp-cubepoint-admin.php:1538
+#: includes/bp-cubepoint-admin.php:1555
+#@ cp_buddypress
+msgid "Text if they have NOT entered the lottery"
+msgstr "Text, wenn sie am Gewinnspiel NICHT teilnehmen"
+
+#: includes/bp-cubepoint-admin.php:1491
+#: includes/bp-cubepoint-admin.php:1508
+#: includes/bp-cubepoint-admin.php:1525
+#: includes/bp-cubepoint-admin.php:1542
+#: includes/bp-cubepoint-admin.php:1559
+#@ cp_buddypress
+msgid "Text if they have entered the lottery"
+msgstr "Text, wenn sie am Gewinnspiel teilnehmen"
+
+#: includes/bp-cubepoint-admin.php:1496
+#: includes/bp-cubepoint-admin.php:1513
+#: includes/bp-cubepoint-admin.php:1530
+#: includes/bp-cubepoint-admin.php:1547
+#: includes/bp-cubepoint-admin.php:1564
+#@ cp_buddypress
+msgid "Enter the link where they can enter lottery"
+msgstr "Füge den Link ein, bei dem sie am Gewinnspiel teilnehmen können"
+
+#: includes/bp-cubepoint-admin.php:1501
+#@ cp_buddypress
+msgid "Lottery #2 Menu Settings"
+msgstr "Gewinnspiel #2 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1518
+#@ cp_buddypress
+msgid "Lottery #3 Menu Settings"
+msgstr "Gewinnspiel #3 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1535
+#@ cp_buddypress
+msgid "Lottery #4 Menu Settings"
+msgstr "Gewinnspiel #4 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1552
+#@ cp_buddypress
+msgid "Lottery #5 Menu Settings"
+msgstr "Gewinnspiel #5 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1571
+#@ cp_buddypress
+msgid "Gamble #1 Menu Settings"
+msgstr "Tippspiel #1 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1574
+#: includes/bp-cubepoint-admin.php:1590
+#: includes/bp-cubepoint-admin.php:1606
+#: includes/bp-cubepoint-admin.php:1622
+#: includes/bp-cubepoint-admin.php:1638
+#@ cp_buddypress
+msgid "Text if they have NOT placed a bet"
+msgstr "Text, wenn sie KEINEN Tipp gesetzt haben"
+
+#: includes/bp-cubepoint-admin.php:1578
+#: includes/bp-cubepoint-admin.php:1594
+#: includes/bp-cubepoint-admin.php:1610
+#: includes/bp-cubepoint-admin.php:1626
+#: includes/bp-cubepoint-admin.php:1642
+#@ cp_buddypress
+msgid "Text if they have placed a bet"
+msgstr "Text, wenn sie einen Tipp gesetzt haben"
+
+#: includes/bp-cubepoint-admin.php:1583
+#: includes/bp-cubepoint-admin.php:1599
+#: includes/bp-cubepoint-admin.php:1615
+#: includes/bp-cubepoint-admin.php:1631
+#: includes/bp-cubepoint-admin.php:1647
+#@ cp_buddypress
+msgid "Enter the link where they can place a bet"
+msgstr "Füge den Link ein, wo sie einen Tipp abgeben können"
+
+#: includes/bp-cubepoint-admin.php:1587
+#@ cp_buddypress
+msgid "Gamble #2 Menu Settings"
+msgstr "Tippspiel #2 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1603
+#@ cp_buddypress
+msgid "Gamble #3 Menu Settings"
+msgstr "Tippspiel #3 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1619
+#@ cp_buddypress
+msgid "Gamble #4 Menu Settings"
+msgstr "Tippspiel #4 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1635
+#@ cp_buddypress
+msgid "Gamble #5 Menu Settings"
+msgstr "Tippspiel #5 Menüeinstellungen"
+
+#: includes/bp-cubepoint-admin.php:1659
+#@ cp_buddypress
+msgid "You do not have the CubePoints Giveaway & Betting System installed ;("
+msgstr "Du hast das Gewinnspielsystem nicht installiert ;("
+
+#: includes/bp-cubepoint-admin.php:1672
+#@ cp_buddypress
+msgid "This is the ultimate giveaway system for WordPress! If you need a plugin that can handle how you manage a giveaway / pick winners & have your users want to promote your giveaway on Twitter, Google+ & Facebook, then your search has ended! Plus it comes with a gambling / betting system!"
+msgstr "Das ist das ultimative Gewinnspielsystem!"
+
+#: includes/bp-cubepoint-admin.php:1673
+#@ cp_buddypress
+msgid "Your members can enter the CubePoints Giveaway System many different ways, including getting extra entries into the lottery for promoting your giveaway on Twitter, Google+, & Facebook!"
+msgstr "Die Mitglieder können auf verschiedene Arten mitmachen."
+
+#: includes/bp-cubepoint-admin.php:1674
+#@ cp_buddypress
+msgid "Admins can create a unique link, which you can put on your Facebook fan page. I highly recommend that you set it up to only be visible to people that like your page. Members that click that unique link on your Facebook fan page while logged into your site will get an entry into the lottery. You can also create a unique link that works the same way for your YouTube channel."
+msgstr "Administratoren können Links erstellen, die nur Facebook-Fans sehen können. Somit muss man Fan sein um am Gewinnspiel teilnehmen zu können."
+
+#: includes/bp-cubepoint-admin.php:1675
+#@ cp_buddypress
+msgid "Plus, you can setup another unique url that you can promote however you would like, but only the first 10 people, for example, that click that link will get a bonus entry into the lottery. You can change the limit from 10 in this example to anything you wish in the admin area."
+msgstr "Ein weiterer Link kann erstellt werden, der allerdings nur für die ersten 10 Leute zugänglich ist, die dann eine größere Chance auf den Gewinn bekommen."
+
+#: includes/bp-cubepoint-admin.php:1676
+#@ cp_buddypress
+msgid "Video entries are supported as well. As a lottery admin, from the front end, you can manually add video entries. The video entry limit for a specific member is set in the admin. You can add bonus entries for a member if you wish as well."
+msgstr "Man kann auch per Video teilnehmen."
+
+#: includes/bp-cubepoint-admin.php:1677
+#@ cp_buddypress
+msgid "You can have up to 5 lotteries running at once! It is just a simple shortcode you use to place on any post or page you desire."
+msgstr "Es können nur 5 Gewinnspiele gleichzeitig laufen. Es ist ein simpler Shortcode, den man bei jedem Artikel oder auf jeder Seite einfügen kann."
+
+#: includes/bp-cubepoint-admin.php:1678
+#@ cp_buddypress
+msgid "Here are all the various ways a member can enter the CubePoints Giveaway System:"
+msgstr "Das sind alle Möglichkeiten, wie man am Gewinnspiel teilnehmen kann:"
+
+#: includes/bp-cubepoint-admin.php:1680
+#@ cp_buddypress
+msgid "Lottery Ticket (Points are taken away): They can \"purchase\" a lottery ticket using points they earned while being active on your website via <a href=\"http://cubepoints.com/\">CubePoints</a>. Members are required to purchase a lottery ticket at least once to unlock all the social entries possible below."
+msgstr "Ein Los (Sternies werden abgezogen): Man kann ein Los mit Sternies \\\"kaufen\\\", die sie auf der Website verdient haben. Es muss mindestens ein Los gekauft werden, um die zusätzlichen (sozialen) Teilnahmen freizuschalten."
+
+#: includes/bp-cubepoint-admin.php:1681
+#@ cp_buddypress
+msgid "Facebook (They earn points for this action): They get an entry for liking the giveaway post on Facebook and posting about it on their Facebook profile wall!"
+msgstr "Facebook (Sternies werden hierfür gutgeschrieben): Wird der Artikel auf Facebook geteilt, dann bekommt man eine zusätzliche Teilnahme."
+
+#: includes/bp-cubepoint-admin.php:1682
+#@ cp_buddypress
+msgid "Twitter (They earn points for this action): Tweet about the giveaway using a preset message and link you set in the admin."
+msgstr "Twitter (Sternies werden gutgeschrieben): Der Artikel wird auf Twitter gepostet."
+
+#: includes/bp-cubepoint-admin.php:1683
+#@ cp_buddypress
+msgid "Google (They earn points for this action): Using the Google +1 button, they get an entry for clicking that button, which gives a +1 to your giveaway post."
+msgstr "Google+ (Sternies werden gutgeschrieben): Mithilfe des +1-Buttons kann man eine Teilnahme verdienen."
+
+#: includes/bp-cubepoint-admin.php:1684
+#@ cp_buddypress
+msgid "Facebook Fan Page (They earn points for this action): Set up a unique url that, when clicked, grants them an entry into the lottery. I highly recommend that you setup the unique link to only be visible to people that like your Facebook fan page. Make sure to tell them to be logged into your site before clicking the link."
+msgstr "Facebook-Fanpage (Sternies werden gutgeschrieben): Lege eine URL fest, die eine weitere Teilnahme mitsich bringt. Die URL kann nur für Fans sichtbar gemacht werden, somit muss man Fan sein um die Teilnahme zu bekommen."
+
+#: includes/bp-cubepoint-admin.php:1685
+#@ cp_buddypress
+msgid "YouTube Channel (They earn points for this action): Set up a unique url that, when clicked, grants them an entry into the lottery. Make sure to tell them to be logged into your site before clicking the link."
+msgstr "YouTube-Kanal (Sternies werden gutgeschrieben): Eine URL wird festgelegt, die eine zusätzliche Teilnahme mit sich bringt."
+
+#: includes/bp-cubepoint-admin.php:1686
+#@ cp_buddypress
+msgid "Bonus URL (They earn points for this action): Set up a unique url that, when clicked, grants them a bonus entry into the lottery, but, by default (for example), only the first 10 that click that link will get a bonus entry. You can change the limit to whatever you wish. Make sure to tell them to be logged into your site before clicking the link."
+msgstr "Bonus-URL (Sternies werden gutgeschrieben): Lege eine URL fest, die eine zusätzliche Teilnahme am Gewinnspiel mit sich bringt. Es kann auch festgelegt werden, dass nur die ersten 10 eine Bonusteilnahme bekommen."
+
+#: includes/bp-cubepoint-admin.php:1689
+#@ cp_buddypress
+msgid "Twitter Follow & Google +1"
+msgstr "Folgen & +1"
+
+#: includes/bp-cubepoint-admin.php:1690
+#@ cp_buddypress
+msgid "Give them points for following you on Twitter and having them +1 your website on Google!"
+msgstr "Vergebe Sternies, wenn man dir auf Twitter folgt und deine Website +1'd auf Google+ hat!"
+
+#: includes/bp-cubepoint-admin.php:1692
+#@ cp_buddypress
+msgid "Giveaway Entries"
+msgstr "Gewinnspielteilnahmen"
+
+#: includes/bp-cubepoint-admin.php:1693
+#@ cp_buddypress
+msgid "Your members can see their entries into the lottery, which are highlighted so they can easily see their entries stand out from everyone else's. It shows how they entered the lottery, as well as whether they earned or had points taken away."
+msgstr "Deine Mitglieder können ihre Teilnahmen am Gewinnspiel einsehen. Diese sind hervorgehoben, damit sie ihre Teilnahmen von denen der anderen Mitglieder unterscheiden können. Es zeigt wie sie am Gewinnspiel teilnahmen und ob ihnen Sternies gutgeschrieben oder abgezogen wurde."
+
+#: includes/bp-cubepoint-admin.php:1695
+#@ cp_buddypress
+msgid "Stats"
+msgstr "Statistiken"
+
+#: includes/bp-cubepoint-admin.php:1696
+#@ cp_buddypress
+msgid "Your members can see how many more lottery tickets they can \"purchase\" to better their chances. It also shows how many possible entries are left, such as social entries."
+msgstr "Deine Mitglieder können sehen, wie viele weitere Lose sie \\\"kaufen\\\" können, um ihre Chancen zu erhöhen. Es wird auch angezeigt, wie viele mögliche Teilnahmen und Soziale Teilnahmen übrig sind."
+
+#: includes/bp-cubepoint-admin.php:1697
+#@ cp_buddypress
+msgid "It even shows them their chance of winning. This is all displayed in a nice graph which changes color from red to orange to green, based on how many entries you have left to do or your chance of winning."
+msgstr "Es wird ihnen sogar die Chance am Gewinn mit einer farbigen Anzeige dargestellt, die ihre Farbe von rot zu orange zu grün ändert. Je nachdem, wie viele Teilnahmen man übrig hat oder wie die Chance am Gewinnen ist."
+
+#: includes/bp-cubepoint-admin.php:1699
+#@ cp_buddypress
+msgid "Pick your winners"
+msgstr "Wähle deine Gewinner"
+
+#: includes/bp-cubepoint-admin.php:1700
+#@ cp_buddypress
+msgid "This has a built-in feature for picking your winners that is pretty slick if I do say so myself! Here is a <a href=\"http://store.slyspyder.com/videos/CBLotteryPickWinner.swf\">screen capture</a> of it in action!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1701
+#@ cp_buddypress
+msgid "Click a button to shuffle all the entries as much as you'd like. Then, click another button to pick a winner at random from the entries, which creates a new table with the winners (and removes them from the original table). Pick as many winners as needed."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1702
+#@ cp_buddypress
+msgid "If somebody is picked twice, just click the the red remove icon next to the name in the winners table to remove that entry. Don't worry, though. Nothing is saved when picking your winners. A refresh will bring everything back to the way it was."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1704
+#@ cp_buddypress
+msgid "Giveaway Admins"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1705
+#@ cp_buddypress
+msgid "Do not want to give somebody admin access to your WordPress site, but want them to help out with manually adding video/bonus entries or picking winners for you? Just enter their WordPress usernames in the admin and you are good to go! Add as many as you need."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1707
+#@ cp_buddypress
+msgid "Point Betting System Included!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1708
+#@ cp_buddypress
+msgid "You can set up bets so your users can bet their points against each other! You can have up to 5 options. Put it on any page with a simple shortcode! You can have up to 5 bets running at once too!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1709
+#@ cp_buddypress
+msgid "Once the betting is over and the winning bet is decided. As a betting admin you just simply select the bet that won from a drop down menu and press submit. Then it automatically awards points to all the users that bet on the winning bet. At the same time it clears the logs so it is ready for another bet."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1711
+#@ cp_buddypress
+msgid "Gamble / Betting Admins"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1712
+#@ cp_buddypress
+msgid "Do not want to give somebody admin access to your WordPress site, but want them to help out with awarding winning bets for you? Just enter their WordPress usernames in the admin and you are good to go! Add as many as you need."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1714
+#@ cp_buddypress
+msgid "Countdowns"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1715
+#@ cp_buddypress
+msgid "For giveaways and bets you can set a end date & time. Then it will automatically close at that time. Even shows a countdown!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1717
+#: includes/bp-cubepoint-core.php:81
+#@ cp_buddypress
+msgid "BuddyPress"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1719
+#@ cp_buddypress
+msgid "In this example there are 2 lotteries & 2 bets available. This user has entered 1 lottery & 1 bet. Leaving 2 that they need to complete. The ones they need to enter are always at the top of the list. You can change the text and link to whatever you want in the admin area."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1722
+#@ cp_buddypress
+msgid "I built this primarily for <a href=\"http://www.ps3blog.net\" title=\"PS3 Blog & Community | PS3Blog.net | PS3 News, Reviews & Opinions\">PS3Blog.net</a> (which I own) but I decided to share it with the world! I spend a lot of time building it and testing it meticulously. I would love to have other people enjoy this awesome system that I built."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1724
+#@ cp_buddypress
+msgid "Can I try it out?"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1725
+#@ cp_buddypress
+msgid "Sure! Here is a <a href=\"http://store.slyspyder.com/lottery-demo/\">demo page</a>, have at it."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1727
+#@ cp_buddypress
+msgid "Where can I get it?"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1728
+#@ cp_buddypress
+msgid "You can <a href=\"http://store.slyspyder.com/slyspyder-membership-signup/\" title=\"CubePoints Lottery Giveaway / Contest System for WordPress / BuddyPress\">buy it here</a> via PayPal. You will get access to the plugin and all future updates. Plus access to the support forum."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1741
+#@ cp_buddypress
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: includes/bp-cubepoint-admin.php:1748
+#@ cp_buddypress
+msgid "Copy the code below into your themes functions.php file.<br />Then use the shortcode [earnpoints] in posts or pages."
+msgstr "Kopiere folgenden Code in die functions.php deines Themes.<br />Benutze dann den Shortcode [earnpoints] in Artikeln oder auf Seiten."
+
+#: includes/bp-cubepoint-admin.php:1900
+#@ cp_buddypress
+msgid "Close"
+msgstr "Schließen"
+
+#: includes/bp-cubepoint-admin.php:1903
+#@ cp_buddypress
+msgid "Other Plugin News and Info"
+msgstr "Andere Pluginnews and -infos"
+
+#: includes/bp-cubepoint-admin.php:1904
+#@ cp_buddypress
+msgid "Learn more about the \"CubePoints Giveaway & Betting System\" and how to get it <a href=\"http://store.slyspyder.com/\">here</a>."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1905
+#@ cp_buddypress
+msgid "How to Integrate CubePoints into the following:"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1906
+#@ cp_buddypress
+msgid "Simple:Press Forum"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1907
+#@ cp_buddypress
+msgid "Calendar Plugin [Kieran O Shea]"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1908
+#@ cp_buddypress
+msgid "WP-Polls"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1910
+#@ cp_buddypress
+msgid "Adding Support For Other BuddyPress Plugins To The CubePoints Buddypress Integration Plugin"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1911
+#@ cp_buddypress
+msgid "Integrate Simple:Press Forum into the BuddyPress Activity Stream!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1912
+#@ cp_buddypress
+msgid "Join the"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1912
+#@ cp_buddypress
+msgid "group at BuddyPress.org!"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1913
+#@ cp_buddypress
+msgid "Official Cubepoints Support Forum"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1914
+#@ cp_buddypress
+msgid "If this plugin works for you please"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1914
+#@ cp_buddypress
+msgid "rate it and vote"
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1914
+#@ cp_buddypress
+msgid "that it works. If not please let me know so I can fix it."
+msgstr ""
+
+#: includes/bp-cubepoint-admin.php:1933
+#@ default
+msgid "You do not have permission to do that."
+msgstr "Dir fehlen die nötigen Berechtigungen dafür."
+
+#: includes/bp-cubepoint-core.php:81
+#@ cp_buddypress
+msgid "CubePoints"
+msgstr "Sternies"
+
+#: includes/bp-cubepoint-core.php:108
+#: includes/bp-cubepoint-core.php:112
+#@ cp_buddypress
+msgid "My Points"
+msgstr "Meine Sternies"
+
+#: includes/bp-cubepoint-core.php:108
+#, php-format
+#@ cp_buddypress
+msgid "%s's points"
+msgstr "Sternies von %"
+

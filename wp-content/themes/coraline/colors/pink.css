@@ -22,6 +22,7 @@ ins {
 	background: #ecbfca;
 }
 input[type=text],
+input[type=email],
 textarea {
 	border: none;
 }
@@ -73,7 +74,10 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #access ul ul a:hover {
 	background: #71404e;
 }
-#access .current_page_item a {
+#access .current-menu-item a,
+#access .current-menu-ancestor a,
+#access .current_page_item a,
+#access .current_page_ancestor a {
 	background: #502c36;
 	color: #faccd6;
 }

@@ -21,7 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 Plugin Name: Page Tagger
 Plugin URI: http://www.hiddentao.com/code/wordpress-page-tagger-plugin/
 Description: Enables tagging for pages. PHP 5 required.
-Version: 0.4
+Version: 0.4.2
 Author: Ramesh Nair
 Author URI: http://www.hiddentao.com/
 */
@@ -31,12 +31,18 @@ Author URI: http://www.hiddentao.com/
 define('PAGE_TAGGER_PARENT_DIR', basename(dirname(__FILE__)) );
 
 
+load_plugin_textdomain( 'page-tagger', false, 'page-tagger/languages' );
+
+
+
 /**
  * Inform user of the minimum PHP version requird for Page Tagger.
  */
 function _page_tagger_min_version_notice()
 {
-	echo "<div class='updated' style='background-color:#f99;'><p><strong>WARNING:</strong> Page Tagger plugin requires PHP 5 or above to work.</p></div>";
+	echo "<div class='updated' style='background-color:#f99;'><p><strong>WARNING:</strong> " +
+        __('Page Tagger plugin requires PHP 5 or above to work', 'page-tagger') +
+        "</p></div>";
 }
 
 
@@ -48,8 +54,8 @@ if (5 > intval(phpversion()))
 else
 {
   // if we're at version 3 or above then we can keep it simple using WP hooks:
-  $wp_version = floatval(get_bloginfo('version'));
-  if (3 <= $wp_version)
+  global $wp_version;
+  if (3 <= substr($wp_version,0,1))
   {
     // Based on code by Bjorn Wijers at https://github.com/BjornW/tag-pages
 

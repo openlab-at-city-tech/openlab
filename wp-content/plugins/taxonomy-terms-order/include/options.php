@@ -54,7 +54,7 @@ function to_plugin_options()
                                         </form>
                                     </div>
                                 </div>
-                                <p><?php _e( "Did you found useful this plug-in? Please support our work with a donation or write an article about this plugin in your blog with a link to our site", 'to' ) ?> <br /><strong>http://www.nsp-code.com/</strong>.</p>
+                                <p><?php _e( "Did you find this plugin useful? Please support our work with a donation or write an article about this plugin in your blog with a link to our site", 'to' ) ?> <br /><strong>http://www.nsp-code.com/</strong>.</p>
                                 <h4><?php _e( "Did you know there is available a more advanced version of this plug-in?", 'to' ) ?> <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/"><?php _e( "Read more", 'to' ) ?></a></h4>
                                 <p><?php _e( "Check our", 'to' ) ?> <a target="_blank" href="http://wordpress.org/extend/plugins/post-types-order/">Post Types Order</a> <?php _e( "plugin which allow to custom sort all posts, pages, custom post types", 'to' ) ?> </p>
                             </div>

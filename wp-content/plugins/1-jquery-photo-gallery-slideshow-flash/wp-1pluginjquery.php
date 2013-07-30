@@ -1,30 +1,25 @@
 <?php
 /*
-Plugin Name: 1 Plugin video player, Photo Gallery Slideshow jQuery and audio / music / podcast - HTML5
-Plugin URI: http://1pluginjquery.com/
+Plugin Name: ZooEffect Plugin for Video player, Photo Gallery Slideshow jQuery and audio / music / podcast - HTML5
+Plugin URI: http://www.zooeffect.com/
 Description: Photo Gallery with slideshow function, video players, music and podcast, many templates (players) and powerfull admin to manage your media assets without any program skills. Delivery using state of the art CDN (Content Delivery Network) included.
-Author: 1pluginjquery
-Version: 1.03
+Author: ZooEffect
+Version: 1.09
 */
 
 
-function _1pluginjquery_plugin_ver()
+function _zooeffect_plugin_ver()
 {
-	return 'wp1.03';
+	return 'wp1.09';
 }
 
-function _1pluginjquery_url()
+if (strpos($_SERVER['REQUEST_URI'], 'media-upload.php') && strpos($_SERVER['REQUEST_URI'], '&type=zooeffect') && !strpos($_SERVER['REQUEST_URI'], '&wrt='))
 {
-	return 'http://app.1pluginjquery.com';
-}
-
-if (strpos($_SERVER['REQUEST_URI'], 'media-upload.php') && strpos($_SERVER['REQUEST_URI'], '&type=1pluginjquery') && !strpos($_SERVER['REQUEST_URI'], '&wrt='))
-{
-	header('Location: '._1pluginjquery_url().'/service.aspx?id='.get_site_option('1pluginjquery_userid').'&type=galleries&ver='._1pluginjquery_plugin_ver().'&rdt='.urlencode(_1pluginjquery_selfURL()));
+	header('Location: http://www.zooeffect.com/service.aspx?id='.get_site_option('1pluginjquery_userid').'&type=galleries&ver='._zooeffect_plugin_ver().'&rdt='.urlencode(_zooeffect_selfURL()));
 	exit;
 }
 
-function _1pluginjquery_selfURL()
+function _zooeffect_selfURL()
 {
 	$s = empty ( $_SERVER ["HTTPS"] ) ? '' : ($_SERVER ["HTTPS"] == "on") ? "s" : "";
 
@@ -38,56 +33,78 @@ function _1pluginjquery_selfURL()
 	return $ret;
 }
 
-function _1pluginjquery_pluginURI()
+function _zooeffect_pluginURI()
 {
 	return get_option('siteurl').'/wp-content/plugins/'.dirname(plugin_basename(__FILE__));
 }
 
-function _1pluginjquery_WpMedia_init() // constructor
+function _zooeffect_WpMedia_init() // constructor
 {
-	add_action('media_buttons', '_1pluginjquery_addMediaButton', 20);
+	add_action('media_buttons', '_zooeffect_addMediaButton', 20);
 
-	add_action('media_upload_1pluginjquery', '_1pluginjquery_media_upload');
+	add_action('media_upload_zooeffect', '_zooeffect_media_upload');
 	// No longer needed in WP 2.6
 	if ( !function_exists('wp_enqueue_style') )
 	{
-		add_action('admin_head_media_upload_type_1pluginjquery', 'media_admin_css');
+		add_action('admin_head_media_upload_type_zooeffect', 'media_admin_css');
 	}
       
 	// check auth enabled
 	//if(!function_exists('curl_init') && !ini_get('allow_url_fopen')) {}
 }
 
-function _1pluginjquery_addMediaButton($admin = true)
+function _zoo_media_menu($tabs) {
+    $newtab = array('zooeffect' => __('Insert ZooEffect Photo', 'zooeffect'));
+    return array_merge($tabs, $newtab);
+}
+add_filter('media_upload_tabs', '_zoo_media_menu');
+
+
+function media_zooeffect_process() {
+    media_upload_header();
+    ?>
+    <iframe src="http://zooeffect.com" width="100%" height="98%"></iframe>
+    <?php
+}
+function zooeffect_menu_handle() {
+    
+    return wp_iframe( 'media_zooeffect_process');
+}
+
+add_action('media_upload_zooeffect', 'zooeffect_menu_handle');
+
+
+function _zooeffect_addMediaButton($admin = true)
 {
 	global $post_ID, $temp_ID;
 	$uploading_iframe_ID = (int) (0 == $post_ID ? $temp_ID : $post_ID);
 
-	$media_upload_iframe_src = get_option('siteurl').'/wp-admin/media-upload.php?post_id=$uploading_iframe_ID';
+	$media_upload_iframe_src = get_option('siteurl')."/wp-admin/media-upload.php?post_id=$uploading_iframe_ID";
 
-	$media_1pluginjquery_iframe_src = apply_filters('media_1pluginjquery_iframe_src', "$media_upload_iframe_src&amp;type=1pluginjquery&amp;tab=1pluginjquery");
-	$media_1pluginjquery_title = __('Add 1pluginjquery photo', 'wp-media-1pluginjquery');
-
-	echo "<a class=\"thickbox\" href=\"{$media_1pluginjquery_iframe_src}&amp;TB_iframe=true&amp;height=500&amp;width=640\" title=\"$media_1pluginjquery_title\"><img src=\""._1pluginjquery_pluginURI()."/1plugin-icon.gif\" alt=\"$media_1pluginjquery_title\" /></a>";
+	$media_zooeffect_iframe_src = apply_filters('media_zooeffect_iframe_src', "$media_upload_iframe_src&amp;type=zooeffect&amp;tab=zooeffect");
+	$media_zooeffect_title = __('Add ZooEffect photo', 'wp-media-zooeffect');
+if($bloginfo = substr(get_bloginfo('version'), 0, 3)>=3.5):
+	echo "<a onClick=\"zooEffect_launch_popup()\" class=\"insert-media \" data-editor=\"content\" title=\"Add Media\"><img src=\""._zooeffect_pluginURI()."/1plugin-icon.gif\" alt=\"$media_zooeffect_title\" /></a>"; 
+else: echo "<a class=\"thickbox\" href=\"{$media_zooeffect_iframe_src}&amp;TB_iframe=true&amp;height=500&amp;width=640\" title=\"$media_zooeffect_title\"><img src=\""._zooeffect_pluginURI()."/1plugin-icon.gif\" alt=\"$media_zooeffect_title\" /></a>";endif;
 }
 
-function _1pluginjquery_modifyMediaTab($tabs)
+function _zooeffect_modifyMediaTab($tabs)
 {
 	return array(
-		'1pluginjquery' =>  __('1pluginjquery photo', 'wp-media-1pluginjquery'),
+		'zooeffect' =>  __('ZooEffect photo', 'wp-media-zooeffect'),
 	);
 }
 
-function _1pluginjquery_media_upload()
+function _zooeffect_media_upload()
 {
-	wp_iframe('_1pluginjquery_media_upload_type');
+	wp_iframe('_zooeffect_media_upload_type');
 }
 
 
-function _1pluginjquery_media_upload_type()
+function _zooeffect_media_upload_type()
 {
 	global $wpdb, $wp_query, $wp_locale, $type, $tab, $post_mime_types;
-	add_filter('media_upload_tabs', '_1pluginjquery_modifyMediaTab');
+	add_filter('media_upload_tabs', '_zooeffect_modifyMediaTab');
 ?>
 
 <br />
@@ -96,7 +113,7 @@ function _1pluginjquery_media_upload_type()
 
 <script>
 
-	function _1pluginjquery_stub()
+	function _zooeffect_stub()
 	{
 		var i = location.href.indexOf("&wrt=");
 
@@ -105,50 +122,54 @@ function _1pluginjquery_media_upload_type()
 			top.send_to_editor(unescape(location.href.substring(i+5)));
 		}
 
-		top.tb_remove();
+		//top.tb_remove();
 	}
 
-	window.onload = _1pluginjquery_stub;
+	window.onload = _zooeffect_stub;
 
 </script>
 
 <?php
 }
 
-_1pluginjquery_WpMedia_init();
+_zooeffect_WpMedia_init();
 
 
 // this new regex should resolve the problem of having unicode chars in the tag
-define("PLUGINJQUERY_REGEXP", "/\[1pjq([^\]]*)\]/");
+define("PLUGINJQUERY_REGEXP", "/\[(?:(?:1pjq)|(?:zooeffect)) ([^\]]*)\]/");
 
+
+function _zooeffect_tag($fid)
+{
+	return _zooeffect_async_plugin_callback(array($fid));
+}
 
 function _1pluginjquery_tag($fid)
 {
-	return _1pluginjquery_async_plugin_callback(array($fid));
+	return _zooeffect_async_plugin_callback(array($fid));
 }
 
-
-function _1pluginjquery_async_plugin_callback($match)
+function _zooeffect_async_plugin_callback($match)
 {
 	$uni = uniqid('');
 	$ret = '
-<!-- 1pluginjquery WordPress plugin '._1pluginjquery_plugin_ver().' (async engine): http://1pluginjquery.com/ -->
+<!-- ZooEffect WordPress plugin '._zooeffect_plugin_ver().' (async engine): http://www.zooeffect.com/ -->
 
-<div id="pj_widget_'.$uni.'"><img src="http://app.1pluginjquery.com/runtime/loading.gif" style="border:0;" alt="1pluginjquery WordPress plugin" /></div>
+<div id="pj_widget_'.$uni.'"><img src="http://www.zooeffect.com/runtime/loading.gif" style="border:0;" alt="ZooEffect WordPress plugin" /></div>
 
 <script type="text/javascript">
-/* PLEASE CHANGE DEFAULT EXCERPT HANDLING TO CLEAN OR FULL (go to your Wordpress Dashboard/Settings/1pluginjquery Options ... */
+/* PLEASE CHANGE DEFAULT EXCERPT HANDLING TO CLEAN OR FULL (go to your Wordpress Dashboard/Settings/ZooEffect Options ... */
 
 var zeo = [];
 zeo["_object"] ="pj_widget_'.$uni.'";
-zeo["_gid"] = "'.urlencode($match[0]).'";
+zeo["_gid"] = "'.urlencode($match[1]).'";
 
 var _zel = _zel || [];
 _zel.push(zeo);
 
 (function() {
 	var cp = document.createElement("script"); cp.type = "text/javascript";
-	cp.async = true; cp.src = "http://app.1pluginjquery.com/runtime/loader.js";
+	cp.async = true; cp.src = "http://www.zooeffect.com/runtime/loader.js";
 	var c = document.getElementsByTagName("script")[0];
 	c.parentNode.insertBefore(cp, c);
 })();
@@ -160,121 +181,117 @@ _zel.push(zeo);
 	return $ret;
 }
 
-function _1pluginjquery_feed_plugin_callback($match)
+function _zooeffect_feed_plugin_callback($match)
 {
-	$ret = '<img style="border:0;" src="http://app.1pluginjquery.com/runtime/thumb.aspx?fid='.urlencode($match[1]).'&size=large" />';
+	$ret = '<img style="border:0;" src="http://www.zooeffect.com/runtime/thumb.aspx?fid='.urlencode($match[1]).'&size=large" />';
 
 	return $ret;
 }
 
-function _1pluginjquery_plugin($content)
+function _zooeffect_plugin($content)
 {
 	$pluginjquery_excerpt_rt = get_site_option('1pluginjquery_excerpt_rt');
 	if ($pluginjquery_excerpt_rt == 'remove' && (is_search() || is_category() || is_archive() || is_home()))
 		return preg_replace(PLUGINJQUERY_REGEXP, '', $content);
 	else if ( is_feed() )
-		return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_1pluginjquery_feed_plugin_callback', $content));
+		return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_zooeffect_feed_plugin_callback', $content));
 	else
-		return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_1pluginjquery_async_plugin_callback', $content));
+		return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_zooeffect_async_plugin_callback', $content));
 }
 
-function _1pluginjquery_plugin_rss($content)
+function _zooeffect_plugin_rss($content)
 {
-	return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_1pluginjquery_feed_plugin_callback', $content));
+	return (preg_replace_callback(PLUGINJQUERY_REGEXP, '_zooeffect_feed_plugin_callback', $content));
 }
 
-//add_shortcode('1pluginjquery', '1pluginjquery_plugin_shortcode');
-add_filter('the_content', '_1pluginjquery_plugin');
-add_filter('the_content_rss', '_1pluginjquery_plugin_rss');
-add_filter('the_excerpt_rss', '_1pluginjquery_plugin_rss');
-add_filter('comment_text', '_1pluginjquery_plugin'); 
+//add_shortcode('zooeffect', 'zooeffect_plugin_shortcode');
+add_filter('the_content', '_zooeffect_plugin');
+add_filter('the_content_rss', '_zooeffect_plugin_rss');
+add_filter('the_excerpt_rss', '_zooeffect_plugin_rss');
+add_filter('comment_text', '_zooeffect_plugin'); 
 
-add_action ( 'bp_get_activity_content_body', '_1pluginjquery_plugin' );
-add_action ( 'bp_get_the_topic_post_content', '_1pluginjquery_plugin' );
+add_action ( 'bp_get_activity_content_body', '_zooeffect_plugin' );
+add_action ( 'bp_get_the_topic_post_content', '_zooeffect_plugin' );
 
-add_action('wp_dashboard_setup', '_1pluginjquery_dashboard'); 
+add_action('wp_dashboard_setup', '_zooeffect_dashboard'); 
 
 // Hook for adding admin menus
 // http://codex.wordpress.org/Adding_Administration_Menus
-add_action('admin_menu', '_1pluginjquery_mt_add_pages');
+add_action('admin_menu', '_zooeffect_mt_add_pages');
 
-// register pluginjqueryWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("pluginjqueryWidget");'));
+// register zooeffectWidget widget
+add_action('widgets_init', create_function('', 'return register_widget("zooeffectWidget");'));
 
 
 /////////////////////////////////
 // dashboard widget
 //////////////////////////////////
-function _1pluginjquery_dashboard()
+function _zooeffect_dashboard()
 {
 	if(function_exists('wp_add_dashboard_widget'))
-		wp_add_dashboard_widget('1pluginjquery', '1pluginjquery', '_1pluginjquery_dashboard_content');
+		wp_add_dashboard_widget('zooeffect', 'zooeffect', '_zooeffect_dashboard_content');
 }
 
-function _1pluginjquery_dashboard_content()
+function _zooeffect_dashboard_content()
 {
 
-	echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&continue=http%3a%2f%2fapp.1pluginjquery.com%2fmanage%2fwordpress-dashboard.aspx&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='100%' height='370px' scrolling='no'></iframe>";
+	echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&continue=http%3a%2f%2fwww.zooeffect.com%2fmanage%2fwordpress-dashboard.aspx&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='100%' height='370px' scrolling='no'></iframe>";
 
 }
 
 
 
 // action function for above hook
-function _1pluginjquery_mt_add_pages() {
+function _zooeffect_mt_add_pages() {
 
 	// Add a new submenu under Options:
 	// http://codex.wordpress.org/Roles_and_Capabilities
 	
-	add_options_page('1pluginjquery Options', '1pluginjquery Options', 'install_plugins', '1pluginjqueryoptions', '_1pluginjquery_mt_options_page');
+	add_options_page('ZooEffect Options', '<b>ZooEffect Options</b> (1PluginjQuery)', 'install_plugins', 'zooeffectoptions', '_zooeffect_mt_options_page');
 
 	$pluginjquery_permission_level = get_site_option('1pluginjquery_permission_level');
 
 	if(function_exists('add_menu_page'))
 	{
-		add_menu_page('1pluginjquery', '1pluginjquery', $pluginjquery_permission_level, __FILE__, '_1pluginjquery_mt_toplevel_page');
+		add_menu_page('zooeffect', 'ZooEffect (1PluginjQuery)', $pluginjquery_permission_level, __FILE__, '_zooeffect_mt_toplevel_page');
 
 		// kill the first menu item that is usually the identical to the menu itself
 		add_submenu_page(__FILE__, '', '', $pluginjquery_permission_level, __FILE__);
 
-		add_submenu_page(__FILE__, 'Manage Galleries', 'Manage Galleries', $pluginjquery_permission_level, 'sub-page', '_1pluginjquery_mt_sublevel_monitor');
-//		add_submenu_page(__FILE__, 'Media Library', 'Media Library', $pluginjquery_permission_level, 'sub-page1', '_1pluginjquery_mt_sublevel_library');
-//		add_submenu_page(__FILE__, 'Create Gallery', 'Create Gallery', $pluginjquery_permission_level, 'sub-page2', '_1pluginjquery_mt_sublevel_create');
-//		add_submenu_page(__FILE__, 'My Account', 'My Account', $pluginjquery_permission_level, 'sub-page3', '_1pluginjquery_mt_sublevel_myaccount');
-//		add_submenu_page(__FILE__, 'Support Forum', 'Support Forum', $pluginjquery_permission_level, 'sub-page4', '_1pluginjquery_mt_sublevel_forum');
+		add_submenu_page(__FILE__, 'Manage Galleries', 'Manage My Galleries', $pluginjquery_permission_level, 'zoo-sub-page', '_zooeffect_mt_sublevel_monitor');
+//		add_submenu_page(__FILE__, 'Media Library', 'Media Library', $pluginjquery_permission_level, 'zoo-sub-page1', '_zooeffect_mt_sublevel_library');
+		add_submenu_page(__FILE__, 'Create Gallery', 'Create Gallery', $pluginjquery_permission_level, 'zoo-sub-page2', '_zooeffect_mt_sublevel_create');
+//		add_submenu_page(__FILE__, 'My Account', 'My Account', $pluginjquery_permission_level, 'zoo-sub-page3', '_zooeffect_mt_sublevel_myaccount');
+		add_submenu_page(__FILE__, 'Support Forum', 'Support Forum', $pluginjquery_permission_level, 'zoo-sub-page4', '_zooeffect_mt_sublevel_forum');
 	}
 }
 
-function _1pluginjquery_isAdmin()
+function _zooeffect_isAdmin()
 {
 	return !function_exists('is_site_admin') || is_site_admin() == true;
 }
 
-function _1pluginjquery_mt_options_page() {
+function _zooeffect_mt_options_page() {
 
 //	if( is_site_admin() == false ) {
 //		wp_die( __('You do not have permission to access this page.') );
 //	}
-
+	
+	/*
 	if (strpos($_SERVER['QUERY_STRING'], 'hide_note=welcome_notice'))
 	{
-		update_site_option('1pluginjquery_welcome_notice', _1pluginjquery_plugin_ver());
-		echo "<script type=\"text/javascript\">	document.location.href = '".$_SERVER['HTTP_REFERER']."'; </script>";
-		exit;
+		update_site_option('zooeffect_welcome_notice', _zooeffect_plugin_ver());
+		echo '<script type="text/javascript">jQuery(function() {jQuery("#message").hide();});</script>';
 	}
-
-	if (strpos($_SERVER['QUERY_STRING'], 'hide_note=premiumpress_notice'))
-	{
-		update_site_option('premiumpress_notice', _1pluginjquery_plugin_ver());
-	}
-
+	*/
+	
 	$pluginjquery_userid = get_site_option('1pluginjquery_userid');
 	$pluginjquery_permission_level = get_site_option('1pluginjquery_permission_level');
 	$pluginjquery_excerpt = get_site_option('1pluginjquery_excerpt');
 
 	if ( isset($_POST['submit']) )
 	{
-		if (_1pluginjquery_isAdmin())
+		if (_zooeffect_isAdmin())
 		{
 			if (isset($_POST['1pluginjquery_userid']))
 			{
@@ -295,7 +312,7 @@ function _1pluginjquery_mt_options_page() {
 			update_site_option('1pluginjquery_excerpt', $pluginjquery_excerpt);			
 		}
 		
-		echo "<div id=\"updatemessage\" class=\"updated fade\"><p>1pluginjquery settings updated.</p></div>\n";
+		echo "<div id=\"updatemessage\" class=\"updated fade\"><p>ZooEffect settings updated.</p></div>\n";
 		echo "<script type=\"text/javascript\">setTimeout(function(){jQuery('#updatemessage').hide('slow');}, 3000);</script>";	
 	}
 
@@ -307,17 +324,17 @@ function _1pluginjquery_mt_options_page() {
 
 ?>
 	<div class="wrap">
-		<h2>1pluginjquery Configuration</h2>
+		<h2>ZooEffect Configuration</h2>
 		<div class="postbox-container">
 			<div class="metabox-holder">
 				<div class="meta-box-sortables">
-					<form action="" method="post" id="1pluginjquery-conf">
-						<div id="1pluginjquery_settings" class="postbox">
+					<form action="" method="post" id="zooeffect-conf">
+						<div id="zooeffect_settings" class="postbox">
 							<div class="handlediv" title="Click to toggle">
 								<br />
 							</div>
 							<h3 class="hndle">
-								<span>1pluginjquery Settings</span>
+								<span>ZooEffect Settings</span>
 							</h3>
 							<div class="inside" style="width:600px;">
 								<table class="form-table">
@@ -327,7 +344,7 @@ function _1pluginjquery_mt_options_page() {
 
 									<?php
 
-if (_1pluginjquery_isAdmin())
+if (_zooeffect_isAdmin())
 {
 ?>
 
@@ -335,7 +352,7 @@ if (_1pluginjquery_isAdmin())
 									<tr style="width:100%;">
 										<th valign="top" scrope="row">
 											<label for="1pluginjquery_userid">
-												1pluginjquery Userid (<a target="_blank" href="http://1pluginjquery.com/">what?</a>):
+												ZooEffect Userid (<a target="_blank" href="http://www.zooeffect.com/">what?</a>):
 											</label>
 										</th>
 										<td valign="top">
@@ -372,7 +389,7 @@ if (_1pluginjquery_isAdmin())
 									<tr style="width:100%;">
 										<th valign="top" scrope="row">
 											<label for="">
-												Excerpt Handling (<a target="_blank" href="http://1pluginjquery.com/">what?</a>):
+												Excerpt Handling (<a target="_blank" href="http://www.zooeffect.com/">what?</a>):
 											</label>
 										</th>
 										<td valign="top">
@@ -401,7 +418,7 @@ if (_1pluginjquery_isAdmin())
 										<th valign="top" scrope="row" colspan=2>
 											Note:
 <ol>
-<li>Use this PHP code to add a gallery directly to your template : <br>&nbsp;&nbsp;&nbsp; <i>&lt;?php echo _1pluginjquery_tag("GALLERY ID"); ?&gt;</i></li>
+<li>Use this PHP code to add a gallery directly to your template : <br>&nbsp;&nbsp;&nbsp; <i>&lt;?php echo _zooeffect_tag("GALLERY ID"); ?&gt;</i></li>
 </ol>
 										</th>
 									</tr>
@@ -423,58 +440,60 @@ if (_1pluginjquery_isAdmin())
     
 }
 /*
-// _1pluginjquery_mt_manage_page() displays the page content for the Test Manage submenu
-function _1pluginjquery_mt_manage_page() {
+// _zooeffect_mt_manage_page() displays the page content for the Test Manage submenu
+function _zooeffect_mt_manage_page() {
     echo "<h2>Test Manage</h2>";
 }
 */
 
-function _1pluginjquery_mt_toplevel_page() {
+function _zooeffect_mt_toplevel_page() {
 
-    echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='98%' height='2000px'></iframe>";
+    echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='98%' height='1000px'></iframe>";
 }
 
-function _1pluginjquery_mt_sublevel_create() {
-    echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='98%' height='2000px'></iframe>";
+function _zooeffect_mt_sublevel_create() {
+    echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=creategallery&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='98%' height='1000px'></iframe>";
 }
 
-function _1pluginjquery_mt_sublevel_monitor() {
-    echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='98%' height='2000px'></iframe>";
+function _zooeffect_mt_sublevel_monitor() {
+    echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='98%' height='1000px'></iframe>";
 }
 
-function _1pluginjquery_mt_sublevel_library() {
-    echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='98%' height='2000px'></iframe>";
+function _zooeffect_mt_sublevel_library() {
+    echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='98%' height='1000px'></iframe>";
 }
 
-function _1pluginjquery_mt_sublevel_myaccount() {
-    echo "<iframe src='http://app.1pluginjquery.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._1pluginjquery_plugin_ver()."&src=".urlencode(_1pluginjquery_selfURL())."' width='98%' height='2000px'></iframe>";
+function _zooeffect_mt_sublevel_myaccount() {
+    echo "<iframe src='http://www.zooeffect.com/service.aspx?id=".get_site_option('1pluginjquery_userid')."&type=galleries&ver="._zooeffect_plugin_ver()."&src=".urlencode(_zooeffect_selfURL())."' width='98%' height='1000px'></iframe>";
 }
 
-function _1pluginjquery_mt_sublevel_forum() {
-//    echo "<iframe src='http://app.1pluginjquery.com/redirect_to_help.aspx' width='98%' height='2000px'></iframe>";
+function _zooeffect_mt_sublevel_forum() {
+    echo "<iframe src='http://www.zooeffect.com/support.aspx' width='98%' height='1000px'></iframe>";
 }
 
 
 
-if (!class_exists('pluginjqueryWidget')) {
+if (!class_exists('zooeffectWidget')) {
 
 	/**
-	 * pluginjqueryWidget Class
+	 * zooeffectWidget Class
 	 */
-	class pluginjqueryWidget extends WP_Widget {
+	class zooeffectWidget extends WP_Widget {
 			/** constructor */
-			function pluginjqueryWidget() {
-					parent::WP_Widget(false, $name = '1pluginjquery Gallery Widget');	
+			function zooeffectWidget() {
+					parent::WP_Widget(false, $name = 'ZooEffect Gallery Widget');	
 			}
 
 			/** @see WP_Widget::widget */
 			function widget($args, $instance) {		
 					extract( $args );
 
-					if (strpos($instance['galleryid'], '1pluginjquery'))
-						$gallery = _1pluginjquery_plugin($instance['galleryid']);
+					if (strpos($instance['galleryid'], '1pjq'))
+						$gallery = _zooeffect_plugin($instance['galleryid']);
+					else if (strpos($instance['galleryid'], 'zooeffect'))
+						$gallery = _zooeffect_plugin($instance['galleryid']);
 					else
-						$gallery = _1pluginjquery_plugin('[1pjq '.$instance['galleryid'].']');
+						$gallery = _zooeffect_plugin('[zooeffect '.$instance['galleryid'].']');
 
 					echo $gallery;
 			}
@@ -490,19 +509,19 @@ if (!class_exists('pluginjqueryWidget')) {
 					?>
 	<p>
 		<label for=""
-			<?php echo $this->get_field_id('galleryid'); ?>"><?php _e('Gallery ID:'); ?> <a target="_blank" href="http://1pluginjquery.com/">what?</a> <input class="widefat" id=""<?php echo $this->get_field_id('galleryid'); ?>" name="<?php echo $this->get_field_name('galleryid'); ?>" type="text" value="<?php echo $galleryid; ?>" />
+			<?php echo $this->get_field_id('galleryid'); ?>"><?php _e('Gallery ID:'); ?> <a target="_blank" href="http://www.zooeffect.com/">what?</a> <input class="widefat" id=""<?php echo $this->get_field_id('galleryid'); ?>" name="<?php echo $this->get_field_name('galleryid'); ?>" type="text" value="<?php echo $galleryid; ?>" />
 		</label>
 	</p>
 	<?php 
 			}
 
-	} // class pluginjqueryWidget
+	} // class zooeffectWidget
 
 }
 
 // http://www.aaronrussell.co.uk/blog/improving-wordpress-the_excerpt/
 
-function _1pluginjquery_improved_trim_excerpt($text)
+function _zooeffect_improved_trim_excerpt($text)
 {
 	global $post;
 	if ( '' == $text ) {
@@ -540,29 +559,45 @@ if ($pluginjquery_excerpt_rt == 'full' || $pluginjquery_excerpt_rt == 'clean')
 {
 	remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 	//	remove_all_filters('get_the_excerpt');
-	add_filter('get_the_excerpt', '_1pluginjquery_improved_trim_excerpt');
+	add_filter('get_the_excerpt', '_zooeffect_improved_trim_excerpt');
 }
 
-function _1pluginjquery_activation_notice()
-			{ ?>
+function _zooeffect_activation_notice() { 
+	?>
 			<div id="message" class="updated fade">
 				<p style="line-height: 150%">
-					<strong>Welcome to 1pluginjquery Rich Media Plugin</strong> - The best way to manage and display photo galleries and slideshows on your site.
+					<strong>Welcome to ZooEffect (1PluginjQuery) Rich Media Plugin</strong> - The best way to manage and display photo galleries and slideshows on your site.
 				</p>
 				<p>
-					On every post page (above the text box) you'll find this  <img src="<?php echo _1pluginjquery_pluginURI() ?>/1plugin-icon.gif"  />  icon, click on it to start or use sidebar Widgets (Appearance menu).
+					On every post page (above the text box) you'll find this  <img src="<?php echo _zooeffect_pluginURI() ?>/1plugin-icon.gif"  />  icon, click on it to start or use sidebar Widgets (Appearance menu).
 				</p>
 				<p>
 		
-<input type="button" class="button" value="1pluginjquery Options Page" onclick="document.location.href = 'options-general.php?page=1pluginjqueryoptions';" />
-
-<input type="button" class="button" value="Hide this message" onclick="document.location.href = 'options-general.php?page=1pluginjqueryoptions&amp;hide_note=welcome_notice';" />
+				<input type="button" class="button" value="ZooEffect Options Page" 
+					onclick="document.location.href = 'options-general.php?page=zooeffectoptions';" />
+				<input type="button" id="zoo_welcome_hide" class="button" value="Hide this message" />
 
 
 				</p>
 
 			</div>
+			
+			<script type="text/javascript">
+				function zoo_hide_welcome_message() {
 
+		            jQuery.post(ajaxurl, { action: 'zoo_hide_welcome' }, 
+				            function(response) {
+		            			jQuery('#message').fadeOut();			            
+		            		}
+		            );
+		            
+		            return false;
+				}
+				
+				jQuery(function () {
+					jQuery('#zoo_welcome_hide').click(zoo_hide_welcome_message);	
+				});
+			</script>
 
 			<?php
 
@@ -573,10 +608,14 @@ function _1pluginjquery_activation_notice()
 	}
 }
 
+add_action('wp_ajax_zoo_hide_welcome', 'zoo_hide_welcome_callback');
 
+function zoo_hide_welcome_callback() {
+	update_site_option('zooeffect_welcome_notice', _zooeffect_plugin_ver());
+}
 
-if (get_site_option('1pluginjquery_welcome_notice') != _1pluginjquery_plugin_ver())
-	add_action( 'admin_notices', '_1pluginjquery_activation_notice' );
+if (get_site_option('zooeffect_welcome_notice') != _zooeffect_plugin_ver())
+	add_action( 'admin_notices', '_zooeffect_activation_notice' );
 
 
 if (get_site_option('1pluginjquery_userid') == "")
@@ -589,6 +628,34 @@ if (get_site_option('1pluginjquery_permission_level') == "")
 {
 	update_site_option('1pluginjquery_permission_level', 'edit_posts');
 }
+
+
+add_action( 'admin_footer-post-new.php', 'zooEffect_mediaDefault_script' );
+add_action( 'admin_footer-post.php', 'zooEffect_mediaDefault_script' );
+add_action( 'admin_footer-index.php', 'zooEffect_mediaDefault_script' );
+function zooEffect_mediaDefault_script()
+{
+	?>
+		<script type="text/javascript">
+			var zooEffect_popup_timer = null;
+			function zooEffect_launch_popup()
+			{
+				zooEffect_popup_timer = setInterval(zooEffect_check_popup, 200);
+			}
+
+			function zooEffect_check_popup()
+			{
+				if (jQuery(".media-menu-item:contains('ZooEffect')").length > 0)
+				{
+					jQuery(".media-menu-item:contains('ZooEffect')")[0].click();
+					clearInterval(zooEffect_popup_timer);
+					zooEffect_popup_timer = null;
+				}
+			}
+
+		</script>
+	<?php
+} 
 
 
 ?>

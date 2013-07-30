@@ -1,23 +1,14 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Coraline
+ * @package Coraline
  * @since Coraline 1.0
  */
+
+if ( post_password_required() )
+	return;
 ?>
 
 <div id="comments">
-	<?php if ( post_password_required() ) : ?>
-		<p class="nopassword"><?php _e( 'This post is password protected. Enter the password to view any comments.', 'coraline' ); ?></p>
-	</div><!-- #comments -->
-	<?php
-		/* Stop the rest of comments.php from being processed,
-		 * but don't kill the script entirely -- we still have
-		 * to fully load the template.
-		 */
-		return;
-	endif;
-	?>
 
 	<?php // You can start editing here -- including this comment! ?>
 

@@ -34,10 +34,10 @@
 				echo p2_date_time_with_microformat();
 			} ?>
 			<span class="actions">
-				<?php if ( ! is_singular() ) : ?>
-					<?php $before_reply_link = ' | '; ?>
-					<a href="<?php the_permalink(); ?>" class="thepermalink" title="<?php esc_attr_e( 'Permalink', 'p2' ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
-				<?php endif;
+				<a href="<?php the_permalink(); ?>" class="thepermalink<?php if ( is_singular() ) { ?> printer-only<?php } ?>" title="<?php esc_attr_e( 'Permalink', 'p2' ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
+				<?php
+				if ( ! is_singular() )
+					$before_reply_link = ' | ';
 
 				if ( comments_open() && ! post_password_required() ) {
 						echo post_reply_link( array(
@@ -53,7 +53,7 @@
 
 				<?php do_action( 'p2_action_links' ); ?>
 			</span>
-			<?php if ( ! is_page() ) : ?>
+			<?php if ( is_object_in_taxonomy( get_post_type(), 'post_tag' ) ) : ?>
 				<span class="tags">
 					<?php tags_with_count( '', __( '<br />Tags:' , 'p2' ) .' ', ', ', ' &nbsp;' ); ?>&nbsp;
 				</span>
@@ -79,9 +79,7 @@
 			the_content( __( '(More ...)' , 'p2' ) );
 			break;
 		case 'quote':
-			echo "<blockquote>";
 			p2_quote_content();
-			echo "</blockquote>";
 			break;
 		case 'post':
 		case 'standard':
@@ -101,17 +99,11 @@
 
 	$comment_notes_before = '<p class="comment-notes">' . ( get_option( 'require_name_email' ) ? sprintf( ' ' . __( 'Required fields are marked %s', 'p2' ), '<span class="required">*</span>' ) : '' ) . '</p>';
 
-	$comment_notes_after = sprintf(
-		'<span class="progress"><img src="%1$s" alt="%2$s" title="%2$s" /></span>',
-		str_replace( WP_CONTENT_DIR, content_url(), locate_template( array( "i/indicator.gif" ) ) ),
-		esc_attr( 'Loading...', 'p2' )
-	);
-
 	$p2_comment_args = array(
 		'title_reply'           => __( 'Reply', 'p2' ),
 		'comment_field'         => $comment_field,
 		'comment_notes_before'  => $comment_notes_before,
-		'comment_notes_after'   => $comment_notes_after,
+		'comment_notes_after'   => '<span class="progress spinner-comment-new"></span>',
 		'label_submit'          => __( 'Reply', 'p2' ),
 		'id_submit'             => 'comment-submit',
 	);
@@ -131,8 +123,9 @@
 
 	<div class="bottom-of-entry">&nbsp;</div>
 
-	<?php
-	if ( ! p2_is_ajax_request() ) :
+	<?php if ( p2_is_ajax_request() ) : ?>
+		<ul id="comments-<?php the_ID(); ?>" class="commentlist inlinecomments"></ul>
+	<?php else :
 		comments_template();
 		$pc = 0;
 		if ( p2_show_comment_form() && $pc == 0 && ! post_password_required() ) :

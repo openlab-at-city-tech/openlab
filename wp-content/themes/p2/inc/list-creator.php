@@ -41,6 +41,8 @@ class P2_Post_List_Creator extends P2_List_Creator {
 		parent::P2_List_Creator();
 
 		// Parse everything on display
+		add_filter( 'the_content', array( $this, 'reset_task_list_counter' ), 0 );
+		add_filter( 'the_content', array( $this, 'reset_task_list_item_id' ), 0 );
 		add_filter( 'the_content', array( $this, 'parse_list' ), 1 );
 
 		// Renormalize task list meta into ASCII x's and o's
@@ -183,6 +185,8 @@ class P2_Comment_List_Creator extends P2_List_Creator {
 		parent::P2_List_Creator();
 
 		// Parse everything on display
+		add_filter( 'comment_text', array( $this, 'reset_task_list_counter' ), 0 );
+		add_filter( 'comment_text', array( $this, 'reset_task_list_item_id' ), 0 );
 		add_filter( 'comment_text', array( $this, 'comment_text' ), 11, 2 );
 
 		// Renormalize task list meta into ASCII x's and o's
@@ -218,7 +222,7 @@ class P2_Comment_List_Creator extends P2_List_Creator {
 	 */
 	function get_object_id( $comment_id = 0 ) {
 		$comment = get_comment( $comment_id );
-		return $comment->comment_ID;
+		return is_object( $comment ) ? $comment->comment_ID : 0;
 	}
 
 	/**
@@ -557,6 +561,54 @@ jQuery( function( $ ) {
 		return $this->restore_text( $r );
 	}
 
+	function task_list_counter( $action = 'get' ) {
+		static $id = 0;
+
+		switch ( $action ) {
+		case 'increment' :
+			$id++;
+			break;
+		case 'reset' :
+			$id = 0;
+			break;
+		}
+
+		return $id;
+	}
+
+	function reset_task_list_counter( $content ) {
+		$this->task_list_counter( 'reset' );
+
+		return $content;
+	}
+
+	function task_list_item_id( $action = 'get' ) {
+		static $item_ids = array();
+
+		$object_id = $this->get_object_id();
+
+		if ( !isset( $item_ids[$object_id] ) ) {
+			$item_ids[$object_id] = 0;
+		}
+
+		switch ( $action ) {
+		case 'increment' :
+			$item_ids[$object_id]++;
+			break;
+		case 'reset' :
+			$item_ids[$object_id] = 0;
+			break;
+		}
+
+		return $item_ids[$object_id];
+	}
+
+	function reset_task_list_item_id( $content ) {
+		$this->task_list_item_id( 'reset' );
+
+		return $content;
+	}
+
 	/**
 	 * Adds UL/OL markup, adds FORM markup for task lists.  Calls internal functions for adding LI markup.
 	 *
@@ -564,7 +616,7 @@ jQuery( function( $ ) {
 	 * @return string HTML
 	 */
 	function _do_list_callback( $matches ) {
-		static $id = 0;
+		$id = $this->task_list_counter();
 
 		$doing_recursion = $this->doing_recursion;
 
@@ -596,7 +648,7 @@ jQuery( function( $ ) {
 				return $return;
 			}
 
-			$id++;
+			$id = $this->task_list_counter( 'increment' );
 
 			// Add form
 			$ajax_url = remove_query_arg( 'p2ajax', P2_JS::ajax_url() );
@@ -647,16 +699,10 @@ jQuery( function( $ ) {
 	function process_task_list_items( $text, $indent, $context = 'display' ) {
 		global $post, $comment;
 
-		static $item_ids = array();
-
 		$object_id = $this->get_object_id();
 		$current_user_can = $this->current_user_can();
 
-		if ( !isset( $item_ids[$object_id] ) ) {
-			$item_ids[$object_id] = 0;
-		}
-
-		$item_id =& $item_ids[$object_id];
+		$item_id = $this->task_list_item_id();
 
 		// Break list into list items with the same nesting level and note item marker (x, o)
 		$items = array_map( 'trim', preg_split( '/^[ ]{' . $indent . '}([xo])/m', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE ) );
@@ -665,7 +711,7 @@ jQuery( function( $ ) {
 		if ( 'edit' == $context ) {
 			$format = '%9$s%7$s %5$s%10$s';
 		} else {
-			$format = '<li id="p2-task-%1$d-%2$d">%8$s<input type="checkbox" name="p2_task[%1$d][%2$d]"%3$s%4$s value="1" /><input type="hidden" name="p2_task_ids[%1$d][%2$d]" value="%6$s" /> %5$s%10$s%8$s</li>';
+			$format = '<li id="p2-task-%1$d-%2$d"><label>%8$s<input type="checkbox" name="p2_task[%1$d][%2$d]"%3$s%4$s value="1" /><input type="hidden" name="p2_task_ids[%1$d][%2$d]" value="%6$s" /> %5$s%10$s%8$s</label></li>';
 		}
 
 		$out = array();
@@ -677,7 +723,7 @@ jQuery( function( $ ) {
 				continue;
 			}
 
-			$item_id++;
+			$item_id = $this->task_list_item_id( 'increment' );
 
 			$checked_in_meta = $this->get_item_data( $item_id );
 			if ( $checked_in_meta ) {

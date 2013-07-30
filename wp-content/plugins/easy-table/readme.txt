@@ -4,7 +4,7 @@ Donate link: http://takien.com/donate
 Tags: table,csv,csv-to-table,post,excel,csv file,widget,tablesorter
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -214,6 +214,16 @@ There are many ways to install this plugin, e.g:
 No
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed bug custom terminator doesn't work on version 1.1
+* Removed align field on Option page
+
+= 1.1 = 
+* Removed: .htaccess from plugin directory (Fixed unloaded script on some servers)
+* Use dedicated str_getcsv for Easy Table (Fixed incompatibility issue with AIOSP version 2.0)
+* Removed: align attribute on table (Fixed text wrap issue)
+* Added: new theme "minimal"
 
 = 1.0 =
 + Encoding fix

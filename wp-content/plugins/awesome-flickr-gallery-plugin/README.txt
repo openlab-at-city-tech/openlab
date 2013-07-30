@@ -1,13 +1,13 @@
 === Awesome Flickr Gallery ===
 Contributors: ronakg
 Donate link: http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin/
-Tags: awesome, gallery, flickr, photo, image, slideshow, colorbox, portfolio, highslide, group, photoset, yahoo, slider, thumbnail, images
+Tags: awesome, gallery, flickr, photo, image, slideshow, colorbox, portfolio, group, photoset, yahoo, slider, thumbnail, images
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 3.2.10
+Tested up to: 3.5
+Stable tag: 3.3.4
 License: GPLv2 or later
 
-Create a photo gallery of your Flickr photos on your WordPress enabled WebSite enabling you to customize it the way you like it.
+Create a photo gallery of your Flickr photos on your WordPress enabled Website enabling you to customize it the way you like it.
 
 == Description ==
 
@@ -22,7 +22,6 @@ galleries.
 * Support for both Public and Private photos
 * Create multiple galleries with different parameters
 * Select Photos from your Flickr Photostream, a Photoset, a Gallery, a Group or a set of tags
-* 2 Powerful slideshow options with thumbnail slider navigation
 * Multiple sorting options available so that you don't have to rely on Flickr's sorting options
 * Customizable image sizes with cropping settings
 * Infinitely customizable with custom CSS field
@@ -113,6 +112,31 @@ Still can't get the plugin working?  Head to the discussion forum for solution -
 [Discussions | RonakG.com](http://www.ronakg.com/discussions/)
 
 == Upgrade Notice ==
+
+= 3.3.4 =
+[Bug Fix] Get rid of annoying warning messages when DEBUG is enabled.
+
+= 3.3.3 =
+[FEATURE] This version introduces a capability to update the plugin from a different host other than WordPress. This will allow me to bring back HighSlide slideshow (and few other options), which I can't if the plugin is hosted on WordPress.org. Update to this version so that you can get all the exciting features in future.
+
+= 3.3.2 =
+[ENHANCEMENT] Intelligently resize images based on orientation of the image (landscape vs portrait).
+[BUG FIX] Do not include Colorbox script if it is not enabled.
+[BUG FIX] Square option for Custom Photo Size gets reset
+
+= 3.3.1 =
+[MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead. 
+
+= 3.3.0 =
+[FEATURE] Ability to set the slideshow per gallery.
+[FEATURE] Two new options for slideshow behavior - Link to Flickr photo page and non clickable thumbnails
+[BUG FIX] Custom CSS styling doesn't appear in highslide thumbnail slider
+
+= 3.2.14 =
+[FEATURE] A new sort order option "Random" added
+[BUG FIX] Tool-tip text of the thumbnails contain HTML code
+[BUG FIX] Photo descriptions with hyperlinks do not render properly
+[BUG FIX] Photo titles with apostrophe appear truncated
 
 = 3.2.10 =
 [Bug Fix] Gallery is messed up with some themes where photo description contains either a hyperlink or new line characters
@@ -221,18 +245,18 @@ MUST UPGRADE for all who are facing conflict issue with other plugin or themes.
 
 == Screenshots ==
 
-1. Full size photo view with SlideShow along with thumbnail slider at the bottom
-2. Awesome Flickr Gallery with Thumbnail size photos with white background
-3. Awesome Flickr Gallery with photos of size Square with Title and Description OFF
-4. Awesome Flickr Gallery with photos of size Small with Title and Description ON
-5. Default Settings Page
-6. Add Gallery Page
-7. Edit Galleries Page
-8. Saved Galleries Page
-9. Advanced Settings Page
+1. Awesome Flickr Gallery with Thumbnail size photos with white background
+2. Awesome Flickr Gallery with photos of size Square with Title and Description OFF
+3. Awesome Flickr Gallery with photos of size Small with Title and Description ON
+4. Default Settings Page
+5. Add Gallery Page
+6. Edit Galleries Page
+7. Saved Galleries Page
+8. Advanced Settings Page
 
 == User Testimonials ==
 
+* Awesome Flickr Gallery plugin is legend by the way - thanks for such a fantastic tool - LeonsLens
 * This remains the best way to set up flickr galleries! – forpetessake93
 * The Tag feature works great! I have been waiting for a plugin like this. I love your plugin. - ryangirtler
 * The name of AFG says it all. I really like the way you’ve taken the time to make a UI for creating & editing galleries. – chassy
@@ -250,6 +274,28 @@ MUST UPGRADE for all who are facing conflict issue with other plugin or themes.
 * your Awesome Flickr Gallery is one of the best plugins out there!! – RichardF
 
 == Changelog ==
+
+= 3.3.4 =
+[Bug Fix] Get rid of annoying warning messages when DEBUG is enabled.
+
+= 3.3.2 =
+* [ENHANCEMENT] Intelligently resize images based on orientation of the image (landscape vs portrait).
+* [BUG FIX] Do not include Colorbox script if it is not enabled.
+* [BUG FIX] Square option for Custom Photo Size gets reset
+
+= 3.3.1 =
+* [MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead. 
+
+= 3.3.0 =
+* [Feature] Ability to set the slideshow per gallery.
+* [Feature] Two new options for slideshow behavior - Link to Flickr photo page and non clickable thumbnails
+* [Bug Fix] Custom CSS styling doesn't appear in highslide thumbnail slider
+
+= 3.2.14 =
+* [Feature] A new sort order option "Random" added
+* [Bug Fix] Tool-tip text of the thumbnails contain HTML code
+* [Bug Fix] Photo descriptions with hyperlinks do not render properly
+* [Bug Fix] Photo titles with apostrophe appear truncated
 
 = 3.2.10 =
 * [Bug Fix] Gallery is messed up with some themes where photo description contains either a hyperlink or new line characters

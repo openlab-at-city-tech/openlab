@@ -2,8 +2,8 @@
 /*
 Plugin Name: CubePoints
 Plugin URI: http://cubepoints.com
-Description: CubePoints is a point management system designed for WordPress blogs. Users can earn points by posting comments on your site. To display user's points, just put <code>&lt;?php cp_displayPoints(); ?&gt;</code> in your template or activate the sidebar widget.
-Version: 3.1.1
+Description: CubePoints is a point management system for sites running on WordPress. Users can earn virtual credits on your site by posting comments, creating posts, or even by logging in each day! Install CubePoints and watch your visitor interaction soar by offering them points which could be used to view certain posts, exchange for downloads or even real items!
+Version: 3.2.1
 Author: Jonathan Lau & Peter Zhang
 Author URI: http://cubepoints.com
 */
@@ -11,7 +11,7 @@ Author URI: http://cubepoints.com
 global $wpdb;
 
 /** Define constants */
-define('CP_VER', '3.1.1');
+define('CP_VER', '3.2.1');
 define('CP_DB', $wpdb->base_prefix . 'cp');
 define('CP_PATH', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)));
 
