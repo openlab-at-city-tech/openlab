@@ -460,3 +460,17 @@ function openlab_remove_sitewide_notices() {
 	}
 }
 add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
+
+/**
+ * Force BP Docs to have comments open
+ *
+ * I guess old ones get closed automatically
+ */
+function openlab_force_doc_comments_open( $open, $post_id ) {
+        $_post = get_post( $post_id );
+        if ( bp_docs_get_post_type_name() === $_post->post_type ) {
+                $open = true;
+        }
+        return $open;
+}
+add_action( 'comments_open', 'openlab_force_doc_comments_open' );
