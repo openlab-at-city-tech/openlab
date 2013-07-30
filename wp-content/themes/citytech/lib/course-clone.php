@@ -35,6 +35,69 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 }
 
 /**
+ * Catch form submits and save to the new group
+ */
+function openlab_clone_create_form_catcher() {
+	$new_group_id = bp_get_new_group_id();
+
+	switch ( bp_get_groups_current_create_step() ) {
+		case 'group-details' :
+			if ( isset( $_POST['create-or-clone'] ) && 'clone' === $_POST['create-or-clone'] ) {
+				$clone_source_group_id = isset( $_POST['group-to-clone'] ) ? (int) $_POST['group-to-clone'] : 0;
+
+				if ( ! $clone_source_group_id ) {
+					return;
+				}
+
+				groups_update_groupmeta( $new_group_id, 'clone_source_group_id', $clone_source_group_id );
+				openlab_clone_course_group( $new_group_id, $clone_source_group_id );
+
+				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) ) {
+					$clone_source_blog_id = (int) $_POST['blog-id-to-clone'];
+					groups_update_groupmeta( $new_group_id, 'clone_source_blog_id', $clone_source_blog_id );
+					openlab_clone_course_site( $new_group_id, $clone_source_blog_id );
+				}
+			}
+			break;
+
+		case 'group-settings' :
+			$clone_source_group_id = intval( groups_get_groupmeta( $new_group_id, 'clone_source_group_id' ) );
+
+			if ( ! $clone_source_group_id ) {
+				return;
+			}
+
+			break;
+	}
+}
+add_action( 'groups_create_group_step_complete', 'openlab_clone_create_form_catcher' );
+
+/** FILTERS ***********************************************************/
+
+/**
+ * Swap out the group privacy status, if available
+ */
+function openlab_clone_bp_get_new_group_status( $status ) {
+	$clone_source_group_id = intval( groups_get_groupmeta( bp_get_new_group_id(), 'clone_source_group_id' ) );
+
+	if ( $clone_source_group_id ) {
+		$clone_source_group = groups_get_group( array( 'group_id' => $clone_source_group_id ) );
+		$status = $clone_source_group->status;
+	}
+
+	return $status;
+}
+add_filter( 'bp_get_new_group_status', 'openlab_clone_bp_get_new_group_status' );
+
+/**
+ * Swap out the new group avatar default with the source avatar
+ */
+function openlab_clone_bp_new_group_avatar( $avatar ) {
+
+}
+add_filter( 'bp_get_new_group_avatar', 'openlab_clone_bp_new_group_avatar' );
+
+/**
  * AJAX handler for fetching group details
  */
 function openlab_group_clone_fetch_details() {
@@ -84,4 +147,63 @@ function openlab_group_clone_details( $group_id ) {
 	}
 
 	return $retval;
+}
+
+function openlab_clone_course_group( $group_id, $source_group_id ) {
+	$c = new Openlab_Clone_Course_Group( $group_id, $source_group_id );
+	$c->go();
+}
+
+function openlab_clone_course_site( $group_id, $source_site_id ) {
+
+}
+
+/** CLASSES ******************************************************************/
+
+class Openlab_Clone_Course_Group {
+	var $group_id;
+	var $source_group_id;
+
+	var $source_group_admins = array();
+
+	public function __construct( $group_id, $source_group_id ) {
+		$this->group_id = $group_id;
+		$this->source_group_id = $source_group_id;
+	}
+
+	/**
+	 * Summary:
+	 * - Docs posted by admins (but no comments)
+	 * - Files posted by admins
+	 * - Discussion topics posted by admins (but no replies)
+	 */
+	public function go() {
+		$this->migrate_docs();
+		// Docs posted by admins
+		// Files posted by admins
+		// Discussion topics started by admins
+	}
+
+	protected function migrate_docs() {
+		$docs = array();
+		$docs_args = array(
+			'group_id' => $this->source_group_id,
+			'posts_per_page' => '-1',
+		);
+		if ( bp_docs_has_docs( $docs_args ) ) {
+			while ( bp_docs_has_docs() ) {
+				bp_docs_the_doc();
+				global $post;
+				var_dump( $post );
+			}
+		}
+	}
+
+	protected function migrate_files() {
+
+	}
+
+	protected function migrate_topics() {
+
+	}
 }
