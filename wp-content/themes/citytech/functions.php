@@ -12,6 +12,7 @@ endif;
 include( BP_PLUGIN_URL . '/_inc/ajax.php' );
 
 /**creating a library to organize functions**/
+require_once(STYLESHEETPATH.'/lib/course-clone.php');
 require_once(STYLESHEETPATH.'/lib/header-funcs.php');
 require_once(STYLESHEETPATH.'/lib/post-types.php');
 require_once(STYLESHEETPATH.'/lib/menus.php');
