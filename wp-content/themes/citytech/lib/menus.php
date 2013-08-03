@@ -336,8 +336,10 @@ function openlab_filter_subnav_admin($subnav_item) {
     $group_type = openlab_get_group_type(bp_get_current_group_id());
     $new_item = str_replace("Admin", ucfirst($group_type) . " Settings", $subnav_item);
     //this is to stop the course settings menu item from getting a current class on membership pages
-    if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
-        $new_item = str_replace("current selected", " ", $new_item);
+    if ( bp_action_variable( 0 ) ) {
+	    if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
+		$new_item = str_replace("current selected", " ", $new_item);
+	    }
     }
 
     return $new_item;
