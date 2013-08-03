@@ -55,7 +55,12 @@ function openlab_clone_create_form_catcher() {
 				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) ) {
 					$clone_source_blog_id = (int) $_POST['blog-id-to-clone'];
 					groups_update_groupmeta( $new_group_id, 'clone_source_blog_id', $clone_source_blog_id );
-					openlab_clone_course_site( $new_group_id, $clone_source_blog_id );
+
+					// @todo validation
+					$clone_destination_path = stripslashes( $_POST['clone-destination-path'] );
+					groups_update_groupmeta( $new_group_id, 'clone_destination_path', $clone_destination_path );
+
+					openlab_clone_course_site( $new_group_id, $clone_source_blog_id, $clone_destination_path );
 				}
 			}
 			break;
@@ -156,7 +161,7 @@ function openlab_clone_course_group( $group_id, $source_group_id ) {
 	$c->go();
 }
 
-function openlab_clone_course_site( $group_id, $source_site_id ) {
+function openlab_clone_course_site( $group_id, $source_site_id, $clone_destination_path ) {
 
 }
 
@@ -192,11 +197,54 @@ class Openlab_Clone_Course_Group {
 			'group_id' => $this->source_group_id,
 			'posts_per_page' => '-1',
 		);
+
 		if ( bp_docs_has_docs( $docs_args ) ) {
+
+			$bp_docs_query = new BP_Docs_Query;
+
 			while ( bp_docs_has_docs() ) {
 				bp_docs_the_doc();
+
 				global $post;
 				var_dump( $post );
+
+				// Docs has no good way of mass producing posts
+				// We will insert the post via WP and manually
+				// add the metadata
+				$post_a = (array) $post;
+				unset( $post_a['ID'] );
+				$new_doc_id = wp_insert_post( $post_a );
+
+				// Associated group
+				bp_docs_set_associated_group_id( $new_doc_id, $this->group_id );
+
+				// Associated user tax
+				$user = new WP_User( $post->post_author );
+				$user_term_id = bp_docs_get_item_term_id( $user->ID, 'user', $user->display_name );
+				wp_set_post_terms( $new_doc_id, $user_term_id, $bp_docs_query->associated_item_tax_name, true );
+
+				// Set last editor
+				$last_editor = get_post_meta( $post->ID, 'bp_docs_last_editor', true );
+				update_post_meta( $new_doc_id, 'bp_docs_last_editor', $last_editor );
+
+				// Migrate settings. @todo Access validation? in case new group has more restrictive settings than previous
+				$settings = get_post_meta( $post->ID, 'bp_docs_settings', true );
+				update_post_meta( $new_doc_id, 'bp_docs_settings', $settings );
+
+				// Read setting to a taxonomy
+				$read_setting = isset( $settings['read'] ) ? $settings['read'] : 'anyone';
+				bp_docs_update_doc_access( $new_doc_id, $read_setting );
+
+				// Set revision count to 1 - we're not bringing revisions with us
+				update_post_meta( $new_doc_id, 'bp_docs_revision_count', 1 );
+
+				// Update activity stream
+				$temp_query = new stdClass;
+				$temp_query->doc_id = $new_doc_id;
+				$temp_query->is_new_doc = true;
+				$temp_query->item_type = 'group';
+				$temp_query->item_id = $this->group_id;
+				BP_Docs_Component::post_activity( $temp_query );
 			}
 		}
 	}

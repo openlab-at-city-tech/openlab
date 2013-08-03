@@ -728,7 +728,8 @@ function wds_bp_group_meta(){
 					<td id="noo_clone_options">
 
 						<?php global $current_site ?>
-						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e('Domain') ?>" value="" />
+						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e('Path') ?>" value="" />
+						<input name="blog-id-to-clone" value="" type="hidden" />
 						<p id="cloned-site-url"></p>
 					</td>
 				</tr>

@@ -212,6 +212,7 @@ jQuery(document).ready(function($){
 
 					// Site URL
 					$('#cloned-site-url').html( 'Your original address was: ' + r.site_url );
+					$('#blog-id-to-clone').val( r.site_id );
 				} else {
 					$('#new_or_old_new').attr('checked', true);
 					$('#new_or_old_new').trigger('click');
