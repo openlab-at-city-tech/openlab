@@ -410,8 +410,14 @@ function openlab_filter_subnav_nav_notifications($suvbnav_item) {
 function openlab_group_submenu_nav() {
     global $bp;
 
+    $current_item = isset( $bp->current_item ) ? $bp->current_item : '';
+
+    if ( ! $current_item ) {
+	    return;
+    }
+
     //get the current item menu
-    $nav_items = $bp->bp_options_nav[$bp->current_item];
+    $nav_items = $bp->bp_options_nav[$current_item];
 
     //manual sorting of current item menu
     if ($nav_items) {

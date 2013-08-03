@@ -8,9 +8,6 @@ if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
     function bp_dtheme_enqueue_styles() {}
 endif;
 
-/**buddypress ajax**/
-include( BP_PLUGIN_URL . '/_inc/ajax.php' );
-
 /**creating a library to organize functions**/
 require_once(STYLESHEETPATH.'/lib/course-clone.php');
 require_once(STYLESHEETPATH.'/lib/header-funcs.php');
