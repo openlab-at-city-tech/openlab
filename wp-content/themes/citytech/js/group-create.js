@@ -210,16 +210,8 @@ jQuery(document).ready(function($){
 					$('#new_or_old_clone').attr('checked', true);
 					$('#new_or_old_clone').trigger('click');
 
-					// Site ID
-					$('#blog-id-to-clone option').each(function(){
-						var $blog_opt = $(this);
-						if ( $blog_opt.val() == r.site_id ) {
-							$blog_opt.attr('selected', true);
-						}
-					});
-
 					// Site URL
-					$('#cloned-site-url').val( 'Your original address was: ' + r.site_url );
+					$('#cloned-site-url').html( 'Your original address was: ' + r.site_url );
 				} else {
 					$('#new_or_old_new').attr('checked', true);
 					$('#new_or_old_new').trigger('click');

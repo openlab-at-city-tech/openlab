@@ -120,6 +120,7 @@ function openlab_group_clone_details( $group_id ) {
 		'additional_description' => '',
 		'site_id'                => '',
 		'site_url'               => '',
+		'site_path'              => '',
 	);
 
 	if ( $group_id ) {
@@ -144,6 +145,7 @@ function openlab_group_clone_details( $group_id ) {
 
 		$retval['site_id'] = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 		$retval['site_url'] = get_blog_option( $retval['site_id'], 'home' );
+		$retval['site_path'] = str_replace( bp_get_root_domain(), '', $retval['site_url'] );
 	}
 
 	return $retval;

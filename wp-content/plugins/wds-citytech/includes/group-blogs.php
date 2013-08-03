@@ -718,24 +718,21 @@ function wds_bp_group_meta(){
 				<?php endswitch ?>
 			</td></tr>
 
-			<tr id="wds-website-clone" class="form-field form-required">
-				<th valign="top" scope='row'>
-					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" />
-					Clone an existing site:
-				</th>
+			<?php if ( 'course' === $group_type ) : ?>
+				<tr id="wds-website-clone" class="form-field form-required">
+					<th valign="top" scope='row'>
+						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" />
+						Clone an existing site:
+					</th>
 
-				<td id="noo_clone_options">
-					<select name="blog-id-to-clone" id="blog-id-to-clone">
-						<option value="0">- Choose a site -</option>
-						<?php foreach( (array) $user_blogs as $user_blog ) : ?>
-							<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-						<?php endforeach ?>
-					</select>
+					<td id="noo_clone_options">
 
-					<p id="cloned-site-url"></p>
-				</td>
-
-			</tr>
+						<?php global $current_site ?>
+						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e('Domain') ?>" value="" />
+						<p id="cloned-site-url"></p>
+					</td>
+				</tr>
+			<?php endif ?>
 
 			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>

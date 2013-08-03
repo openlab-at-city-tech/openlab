@@ -4231,6 +4231,10 @@ form.standard-form .create-or-clone-options label {
 	margin-left: 10px;
 }
 
+#cloned-site-url {
+	font-style: italic;
+}
+
 .group-admin .left-menu {
 	float:left;
 	width:250px;
@@ -4242,9 +4246,6 @@ form.standard-form .create-or-clone-options label {
 
 #noo_external_options {
 	white-space:nowrap;
-}
-
-#external-site-url {
 }
 
 a#find-feeds,a.refresh-feed {
