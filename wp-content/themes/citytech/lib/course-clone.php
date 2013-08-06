@@ -162,7 +162,8 @@ function openlab_clone_course_group( $group_id, $source_group_id ) {
 }
 
 function openlab_clone_course_site( $group_id, $source_site_id, $clone_destination_path ) {
-
+	$c = new Openlab_Clone_Course_Site( $group_id, $source_group_id, $clone_destination_path );
+	$c->go();
 }
 
 /** CLASSES ******************************************************************/
@@ -347,3 +348,52 @@ class Openlab_Clone_Course_Group {
 		return $this->source_group_admins;
 	}
 }
+
+class Openlab_Clone_Course_Site {
+	var $group_id;
+	var $source_group_id;
+	var $destination_path;
+
+	var $source_group_admins = array();
+
+	public function __construct( $group_id, $source_group_id, $destination_path ) {
+		$this->group_id = $group_id;
+		$this->source_group_id = $source_group_id;
+		$this->destination_path = $destination_path;
+	}
+
+	/**
+	 * Summary:
+	 *
+	 * 1) Create new empty blog with necessary details
+	 * 2) Copy settings from old blog, using blacklist
+	 * 3) Copy admin-authored posts from old blog
+	 */
+	public function go() {
+		$this->create_site();
+		$this->migrate_site_settings();
+		$this->migrate_posts();
+	}
+
+	protected function create_site() {
+
+	}
+
+	protected function migrate_site_settings() {
+
+	}
+
+	protected function migrate_posts() {
+
+	}
+
+	protected function get_source_group_admins() {
+		if ( empty( $this->source_group_admins ) ) {
+			$g = groups_get_group( array( 'group_id' => $this->source_group_id ) );
+			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
+		}
+
+		return $this->source_group_admins;
+	}
+}
+
