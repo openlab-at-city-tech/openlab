@@ -240,7 +240,7 @@ function cuny_home_square($type){
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
 
-	  	$activity = $wpdb->get_results( $wpdb->prepare( "
+	  	$activity = $wpdb->get_results( "
 	  		SELECT
 	  			content, item_id
 	  		FROM
@@ -252,7 +252,7 @@ function cuny_home_square($type){
 	  			AND
 	  			item_id IN ({$group_ids_sql})
 	  		ORDER BY
-	  			date_recorded DESC" ) );
+	  			date_recorded DESC" );
 
 	  	// Now walk down the list and try to match with a group. Once one is found, remove
 	  	// that group from the stack
@@ -344,7 +344,7 @@ function openlab_registration_page() {
 				<?php do_action( 'template_notices' ) ?>
 
 				<p><?php _e( 'Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress' ) ?></p>
-				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p> 
+				<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
 				<?php do_action( 'bp_before_account_details_fields' ) ?>
 
 				<div class="register-section" id="basic-details-section">
@@ -484,7 +484,7 @@ function openlab_registration_page() {
 		<?php do_action( 'bp_after_register_page' ) ?>
 
 	<?php do_action( 'bp_after_directory_activity_content' ) ?>
-	
+
 	<script type="text/javascript">
 		jQuery(document).ready( function() {
 			if ( jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show') )
