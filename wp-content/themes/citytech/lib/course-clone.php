@@ -186,9 +186,8 @@ class Openlab_Clone_Course_Group {
 	 */
 	public function go() {
 		$this->migrate_docs();
-		// Docs posted by admins
-		// Files posted by admins
-		// Discussion topics started by admins
+		$this->migrate_files();
+		$this->migrate_topics();
 	}
 
 	protected function migrate_docs() {
@@ -254,7 +253,37 @@ class Openlab_Clone_Course_Group {
 	}
 
 	protected function migrate_files() {
+		$source_group_admins = $this->get_source_group_admins();
+		$source_files = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
+		foreach ( $source_files as $source_file ) {
+			if ( ! in_array( $source_file['user_id'], $source_group_admins ) ) {
+				continue;
+			}
+
+			// Set up the document info
+			$document = new BP_Group_Documents();
+
+			$document->group_id = $this->group_id;
+
+			$document->user_id = $source_file['user_id'];
+			$document->name = $source_file['name'];
+			$document->description = $source_file['description'];
+			$document->file = $source_file['file'];
+			$document->save( false ); // false is "don't check file upload"
+
+			// Copy the file itself
+			$destination_dir = bp_core_avatar_upload_path() . '/group-documents/' . $this->group_id;
+			if ( ! is_dir( $destination_dir ) ) {
+				mkdir( $destination_dir, 0755, true );
+			}
+
+			$destination_path = $destination_dir . '/' . $document->file;
+
+			$source_path = bp_core_avatar_upload_path() . '/group-documents/' . $this->source_group_id . '/' . $document->file;
+
+			copy( $source_path, $destination_path );
+		}
 	}
 
 	protected function migrate_topics() {
