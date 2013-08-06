@@ -181,14 +181,33 @@ class Openlab_Clone_Course_Group {
 
 	/**
 	 * Summary:
+	 * - Some groupmeta
 	 * - Docs posted by admins (but no comments)
 	 * - Files posted by admins
 	 * - Discussion topics posted by admins (but no replies)
 	 */
 	public function go() {
+		$this->migrate_groupmeta();
 		$this->migrate_docs();
 		$this->migrate_files();
 		$this->migrate_topics();
+	}
+
+	protected function migrate_groupmeta() {
+		$keys = array(
+			'ass_default_subscription',
+			'bpdocs',
+			'external_site_comments_feed',
+			'external_site_posts_feed',
+			'external_site_type',
+			'external_site_url',
+			'invite_status',
+		);
+
+		foreach ( $keys as $k ) {
+			$v = groups_get_groupmeta( $this->source_group_id, $k );
+			groups_update_groupmeta( $this->group_id, $k, $v );
+		}
 	}
 
 	protected function migrate_docs() {
