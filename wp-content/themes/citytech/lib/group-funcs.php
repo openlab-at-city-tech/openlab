@@ -12,6 +12,22 @@
 function openlab_group_privacy_settings($group_type)
 {
 	global $bp;
+
+	// If this is a cloned group/site, fetch the clone source's details
+	$clone_source_group_status = $clone_source_blog_status = '';
+	if ( bp_is_group_create() ) {
+		$new_group_id = bp_get_new_group_id();
+		if ( 'course' === $group_type ) {
+			$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
+			$clone_source_site_id = groups_get_groupmeta( $new_group_id, 'clone_source_blog_id' );
+
+			$clone_source_group = groups_get_group( array( 'group_id' => $clone_source_group_id ) );
+			$clone_source_group_status = $clone_source_group->status;
+
+			$clone_source_blog_status = get_blog_option( $clone_source_site_id, 'blog_public' );
+		}
+	}
+
 	?>
 	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
 	<?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
@@ -29,7 +45,7 @@ function openlab_group_privacy_settings($group_type)
 		<?php
 		$new_group_status = bp_get_new_group_status();
 		if ( ! $new_group_status ) {
-			$new_group_status = 'public';
+			$new_group_status = ! empty( $clone_source_group_status ) ? $clone_source_group_status : 'public';
 		}
 		?>
 
