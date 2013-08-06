@@ -53,7 +53,7 @@ function openlab_clone_create_form_catcher() {
 				openlab_clone_course_group( $new_group_id, $clone_source_group_id );
 
 				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) ) {
-					$clone_source_blog_id = (int) $_POST['blog-id-to-clone'];
+					$clone_source_blog_id = groups_get_groupmeta( $clone_source_group_id, 'wds_bp_group_site_id' );
 					groups_update_groupmeta( $new_group_id, 'clone_source_blog_id', $clone_source_blog_id );
 
 					// @todo validation
@@ -424,8 +424,50 @@ class Openlab_Clone_Course_Site {
 		groups_update_groupmeta( $this->group_id, 'wds_bp_group_site_id', $this->site_id );
 	}
 
+	/**
+	 * Taken from site-template
+	 */
 	protected function migrate_site_settings() {
+		global $wpdb;
 
+		switch_to_blog( $this->source_site_id );
+
+		// get all old options
+		$all_options = wp_load_alloptions();
+		$options = array();
+		foreach ( array_keys( $all_options ) as $key ) {
+			$options[ $key ] = get_option( $key );  // have to do this to deal with arrays
+		}
+
+		// theme mods -- don't show up in all_options.
+		// Only add options for the current theme
+		$theme = get_option( 'current_theme' );
+		$mods = get_option( 'mods_' . $theme );
+
+		$preserve_option = array(
+			'siteurl',
+			'blogname',
+			'admin_email',
+			'new_admin_email',
+			'home',
+			'upload_path',
+			'db_version',
+			$wpdb->get_blog_prefix( $this->site_id ) . 'user_roles',
+			'fileupload_url',
+		);
+
+		// now write them all back
+		switch_to_blog( $this->site_id );
+		foreach ( $options as $key => $value ) {
+			if ( !in_array( $key, $preserve_option ) ) {
+				update_option( $key, $value );
+			}
+		}
+
+		// add the theme mods
+		update_option( 'mods_' . $theme, $mods );
+
+		restore_current_blog();
 	}
 
 	/**
