@@ -60,7 +60,7 @@ function openlab_clone_create_form_catcher() {
 					$clone_destination_path = stripslashes( $_POST['clone-destination-path'] );
 					groups_update_groupmeta( $new_group_id, 'clone_destination_path', $clone_destination_path );
 
-					openlab_clone_course_site( $new_group_id, $clone_source_blog_id, $clone_destination_path );
+					openlab_clone_course_site( $new_group_id, $clone_source_group_id, $clone_source_blog_id, $clone_destination_path );
 				}
 			}
 			break;
@@ -161,8 +161,8 @@ function openlab_clone_course_group( $group_id, $source_group_id ) {
 	$c->go();
 }
 
-function openlab_clone_course_site( $group_id, $source_site_id, $clone_destination_path ) {
-	$c = new Openlab_Clone_Course_Site( $group_id, $source_group_id, $clone_destination_path );
+function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id, $clone_destination_path ) {
+	$c = new Openlab_Clone_Course_Site( $group_id, $source_group_id, $source_site_id, $clone_destination_path );
 	$c->go();
 }
 
@@ -299,6 +299,13 @@ class Openlab_Clone_Course_Group {
 
 		// Get source topics
 		$source_forum_id = groups_get_groupmeta( $this->source_group_id, 'forum_id' );
+
+		// Should never happen, but just in case
+		// (without this, it returns all topics)
+		if ( ! $source_forum_id ) {
+			return;
+		}
+
 		$source_forum_topics = bp_forums_get_forum_topics( array(
 			'forum_id' => $source_forum_id,
 			'per_page' => 10000000,
@@ -318,8 +325,11 @@ class Openlab_Clone_Course_Group {
 		global $wpdb, $bp, $bbdb;
 		$source_forum_topic_ids = implode( ',', wp_list_pluck( $source_forum_topics, 'topic_id' ) );
 		$source_forum_posts = $wpdb->get_results( "SELECT topic_id, post_text FROM {$bbdb->posts} WHERE topic_id IN ({$source_forum_topic_ids}) AND post_position = 1" );
+
 		foreach ( $source_forum_posts as $sfp ) {
-			$source_forum_topics_keyed[ $sfp->topic_id ]->post_text = $sfp->post_text;
+			if ( isset( $source_forum_topics_keyed[ $sfp->topic_id ] ) ) {
+				$source_forum_topics_keyed[ $sfp->topic_id ]->post_text = $sfp->post_text;
+			}
 		}
 
 		// Then post them
@@ -337,6 +347,8 @@ class Openlab_Clone_Course_Group {
 				'topic_text' => $sftk->post_text,
 			) );
 		}
+
+		// @todo - forum attachments
 	}
 
 	protected function get_source_group_admins() {
@@ -351,14 +363,18 @@ class Openlab_Clone_Course_Group {
 
 class Openlab_Clone_Course_Site {
 	var $group_id;
+	var $site_id;
+
 	var $source_group_id;
+	var $source_site_id;
 	var $destination_path;
 
 	var $source_group_admins = array();
 
-	public function __construct( $group_id, $source_group_id, $destination_path ) {
+	public function __construct( $group_id, $source_group_id, $source_site_id, $destination_path ) {
 		$this->group_id = $group_id;
 		$this->source_group_id = $source_group_id;
+		$this->source_site_id = $source_site_id;
 		$this->destination_path = $destination_path;
 	}
 
@@ -376,13 +392,47 @@ class Openlab_Clone_Course_Site {
 	}
 
 	protected function create_site() {
+		global $wpdb;
 
+		// Assemble args and create the new site
+		$domain = $wpdb->get_var( "SELECT domain FROM {$wpdb->blogs} WHERE blog_id = 1" );
+
+		$clone_destination_path = groups_get_groupmeta( $this->group_id, 'clone_destination_path' );
+		$path = '/' . $clone_destination_path . '/';
+
+		$group = groups_get_group( array( 'group_id' => $this->group_id ) );
+		$title = $group->name;
+
+		$user_id = $group->creator_id;
+
+		$meta = array(
+			'public' => get_blog_option( $this->source_site_id, 'blog_public' ),
+		);
+
+		// We take care of this ourselves later on
+		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10, 6 );
+
+		$this->site_id = wpmu_create_blog(
+			$domain,
+			$path,
+			$title,
+			$user_id,
+			$meta
+		);
+
+		// Associate site with the group in groupmeta
+		groups_update_groupmeta( $this->group_id, 'wds_bp_group_site_id', $this->site_id );
 	}
 
 	protected function migrate_site_settings() {
 
 	}
 
+	/**
+	 * The strategy is to copy all posts, postmeta, and taxonomy. Then I'll
+	 * delete the irrelevant stuff. This ensures that we don't lose any
+	 * tax/metadata by trying to do it all manually.
+	 */
 	protected function migrate_posts() {
 
 	}
