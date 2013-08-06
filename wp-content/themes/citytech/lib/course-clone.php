@@ -524,7 +524,12 @@ class Openlab_Clone_Course_Site {
 
 			// @todo
 			if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
+                                global $shardb_hash_length, $shardb_prefix;
+                                $source_table_hash = strtoupper( substr( md5( $this->source_site_id ), 0, $shardb_hash_length ) );
+                                $table_hash = strtoupper( substr( md5( $this->site_id ), 0, $shardb_hash_length ) );
 
+                                $source_table = $shardb_prefix . $source_table_hash . '.' . $source_table;
+                                $table = $shardb_prefix . $table_hash . '.' . $table;
 			}
 
 			$wpdb->query( "DELETE FROM {$table}" );
