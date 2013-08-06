@@ -476,7 +476,56 @@ class Openlab_Clone_Course_Site {
 	 * tax/metadata by trying to do it all manually.
 	 */
 	protected function migrate_posts() {
+		global $wpdb;
 
+		$tables_to_copy = array(
+			'posts',
+			'postmeta',
+			'terms',
+			'term_taxonomy',
+			'term_relationships',
+		);
+
+		// Have to use different syntax for shardb
+		$source_site_prefix = $wpdb->get_blog_prefix( $this->source_site_id );
+		$site_prefix = $wpdb->get_blog_prefix( $this->site_id );
+		foreach ( $tables_to_copy as $ttc ) {
+			$source_table = $source_site_prefix . $ttc;
+			$table = $site_prefix . $ttc;
+
+			// @todo
+			if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
+
+			}
+
+			$wpdb->query( "DELETE FROM {$table}" );
+			$wpdb->query( "INSERT INTO {$table} SELECT * FROM {$source_table}" );
+		}
+
+		// Loop through all posts and:
+		// - if it's by an admin, switch to draft
+		// - if it's not by an admin, delete
+		switch_to_blog( $this->site_id );
+
+		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status FROM {$wpdb->posts}" );
+		$source_group_admins = $this->get_source_group_admins();
+		foreach ( $site_posts as $sp ) {
+			if ( in_array( $sp->post_author, $source_group_admins ) ) {
+				if ( 'publish' === $sp->post_status ) {
+					$post_arr = array(
+						'ID' => $sp->ID,
+						'post_status' => 'draft',
+					);
+					wp_update_post( $post_arr );
+				}
+			} else {
+				wp_delete_post( $sp->ID, true );
+			}
+		}
+
+		restore_current_blog();
+
+		// @todo - move attachment files? May not be necessary
 	}
 
 	protected function get_source_group_admins() {
