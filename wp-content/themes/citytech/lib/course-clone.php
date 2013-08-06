@@ -95,14 +95,6 @@ function openlab_clone_bp_get_new_group_status( $status ) {
 add_filter( 'bp_get_new_group_status', 'openlab_clone_bp_get_new_group_status' );
 
 /**
- * Swap out the new group avatar default with the source avatar
- */
-function openlab_clone_bp_new_group_avatar( $avatar ) {
-
-}
-add_filter( 'bp_get_new_group_avatar', 'openlab_clone_bp_new_group_avatar' );
-
-/**
  * AJAX handler for fetching group details
  */
 function openlab_group_clone_fetch_details() {
@@ -188,6 +180,7 @@ class Openlab_Clone_Course_Group {
 	 */
 	public function go() {
 		$this->migrate_groupmeta();
+		$this->migrate_avatar();
 		$this->migrate_docs();
 		$this->migrate_files();
 		$this->migrate_topics();
@@ -207,6 +200,23 @@ class Openlab_Clone_Course_Group {
 		foreach ( $keys as $k ) {
 			$v = groups_get_groupmeta( $this->source_group_id, $k );
 			groups_update_groupmeta( $this->group_id, $k, $v );
+		}
+	}
+
+	protected function migrate_avatar() {
+		$avatar_path  = trailingslashit( bp_core_avatar_upload_path() ) . trailingslashit( 'group-avatars' );
+		$source_avatar_dir = $avatar_path . $this->source_group_id;
+
+		if ( file_exists( $source_avatar_dir ) ) {
+			if ( $av_dir = opendir( $source_avatar_dir ) ) {
+				$dest_avatar_dir = $avatar_path . $this->group_id;
+				mkdir( $dest_avatar_dir );
+				while ( false !== ( $source_avatar_file = readdir( $av_dir ) ) ) {
+					if ( 2 < strlen( $source_avatar_file ) ) {
+						copy( $source_avatar_dir . '/' . $source_avatar_file, $dest_avatar_dir . '/' . $source_avatar_file );
+					}
+				}
+			}
 		}
 	}
 
