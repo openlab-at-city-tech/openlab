@@ -73,7 +73,7 @@ function openlab_current_group_type( $case = 'lower' ) {
 			}
 			$bp->groups->current_group->group_type = $group_type;
 		}
-		
+
 		//fix for archive pages, which are pages and don't return an actual group type
 		if ($group_type == 'group' && openlab_page_slug_to_grouptype()!= 'not-archive' )
 		{
@@ -314,33 +314,33 @@ function openlab_group_is_hidden( $group_id = 0 ) {
 function openlab_page_slug_to_grouptype()
 {
 	global $post;
-	
+
 	$postname = $post->post_name;
 	$group_type = explode("-",$postname);
-	
+
 	switch($group_type[count($group_type) - 1]){
 		case 'courses':
 			$group_type = 'course';
 		break;
-		
+
 		case 'projects':
 			$group_type = 'project';
 		break;
-		
+
 		case 'clubs':
 			$group_type = 'club';
 		break;
-		
+
 		case 'portfolios':
 			$group_type = 'portfolio';
 		break;
-		
+
 		default :
 			$group_type = 'not-archive';
 		break;
 	}
-		
+
 	return $group_type;
-		
+
 }
 ?>

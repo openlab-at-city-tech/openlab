@@ -583,7 +583,7 @@ function wds_bp_group_meta(){
 
 	$group_type = openlab_get_group_type( $the_group_id );
 
-	if ( 'group' == $group_type && isset( $_GET['type'] ) ) {
+	if ( isset( $_GET['type'] ) && ( 'group' == $group_type || bp_is_group_create() ) ) {
 		$group_type = $_GET['type'];
 	}
 
@@ -718,7 +718,7 @@ function wds_bp_group_meta(){
 				<?php endswitch ?>
 			</td></tr>
 
-			<?php if ( 'course' === $group_type ) : ?>
+			<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
 				<tr id="wds-website-clone" class="form-field form-required">
 					<th valign="top" scope='row'>
 						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" />
