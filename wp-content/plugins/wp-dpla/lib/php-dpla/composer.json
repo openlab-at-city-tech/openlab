@@ -1,0 +1,17 @@
+{
+    "name": "3ft9/dpla",
+    "type": "library",
+    "description": "Provides access to the Digital Public Library of America's API.",
+    "authors": [
+        {
+            "name": "3ft9 Ltd",
+            "email": "hello@3ft9.com",
+            "homepage": "http://3ft9.com/"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "TFN\\": ""
+        }
+    }
+}
