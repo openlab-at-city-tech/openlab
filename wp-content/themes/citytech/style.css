@@ -4217,6 +4217,7 @@ body.group-create table.groupblog-setup th {
 
 form.standard-form .create-or-clone-options label {
 	display: inline;
+	margin-left: 8px;
 }
 
 .create-or-clone-options {
@@ -4225,6 +4226,11 @@ form.standard-form .create-or-clone-options label {
 
 .create-or-clone-options li {
 	margin-bottom: 10px;
+}
+
+p.ol-clone-description {
+	margin-left: 25px;
+	margin-bottom: 2em;
 }
 
 #group-to-clone {
