@@ -54,6 +54,9 @@ class WP_DPLA_Posts {
 .dpla-provider a {
 	opacity: .5;
 }
+.dpla-thumbnail img {
+	max-width: 95%;
+}
 </style>
 		<?php
 		return ob_get_clean();

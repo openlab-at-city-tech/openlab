@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP DPLA
-Version: 0.1-alpha
+Version: 0.2
 Description: Display related items from the Digital Public Library of America on your WP posts
 Author: Boone B Gorges
 Author URI: http://boone.gorg.es

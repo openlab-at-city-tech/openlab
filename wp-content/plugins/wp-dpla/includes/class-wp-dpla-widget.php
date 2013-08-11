@@ -11,7 +11,7 @@ class WP_DPLA_Widget extends WP_Widget {
 		);
 	}
 
-	public function form() {
+	public function form( $instance ) {
 		$title = isset( $instance['title'] ) ? $instance['title'] : __( 'Related Items from DPLA', 'wp-dpla' );
 		?>
 		<p>
