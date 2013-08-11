@@ -417,8 +417,11 @@ class Openlab_Clone_Course_Site {
 	 */
 	public function go() {
 		$this->create_site();
-		$this->migrate_site_settings();
-		$this->migrate_posts();
+
+		if ( ! empty( $this->site_id ) ) {
+			$this->migrate_site_settings();
+			$this->migrate_posts();
+		}
 	}
 
 	protected function create_site() {
@@ -442,7 +445,7 @@ class Openlab_Clone_Course_Site {
 		// We take care of this ourselves later on
 		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10, 6 );
 
-		$this->site_id = wpmu_create_blog(
+		$site_id = wpmu_create_blog(
 			$domain,
 			$path,
 			$title,
@@ -450,8 +453,12 @@ class Openlab_Clone_Course_Site {
 			$meta
 		);
 
-		// Associate site with the group in groupmeta
-		groups_update_groupmeta( $this->group_id, 'wds_bp_group_site_id', $this->site_id );
+		if ( ! is_wp_error( $site_id ) ) {
+			$this->site_id = $site_id;
+
+			// Associate site with the group in groupmeta
+			groups_update_groupmeta( $this->group_id, 'wds_bp_group_site_id', $this->site_id );
+		}
 	}
 
 	/**
