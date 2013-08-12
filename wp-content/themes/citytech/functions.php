@@ -605,3 +605,8 @@ add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
  * Don't allow BuddyPress Docs to use its own theme compatibility layer
  */
 add_filter( 'bp_docs_do_theme_compat', '__return_false' );
+
+/**
+ * Use legacy BP user queries, so member directory filters work
+ */
+add_filter( 'bp_use_legacy_user_query', '__return_true' );

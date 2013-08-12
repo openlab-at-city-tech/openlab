@@ -2589,10 +2589,11 @@ a#pgw-prev,a#pgw-next {
 	width:116px;
 }
 
-#cac-featured h4 {
+#cac-featured p.cfcw-title {
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	font-weight:700;
+        margin-bottom: 0;
 }
 
 /* Who's Online? styles */
@@ -4615,6 +4616,16 @@ body.docs #comment {
 
 body.single-help h1.entry-title a {
   color: #6D6D6D;
+}
+
+body.single-help div#content ul li {
+	list-style-type: disc;
+
+}
+
+body.single-help div#content div.entry-content ul li,
+body.single-help div#content div.entry-content ol li {
+	margin: 0 0 5px 20px;
 }
 
 #help-tags-copy p {
