@@ -14,16 +14,16 @@ if ( bp_is_user_groups() ) {
 	if ( isset( $_GET['type'] ) ) {
 		$filters['wds_group_type'] = $_GET['type'];
 	}
-	
+
 	// Set up the bp_has_groups() args: per_page, page, search_terms
 	$group_args = array(
 		'per_page' => 12
 	);
-	
+
 } else {
 	//geting the grouptype by slug - the archive pages are curently WP pages and don't have a specific grouptype associated with them - this function uses the curent page slug to assign a grouptype
 	$filters['wds_group_type'] = openlab_page_slug_to_grouptype();
-	
+
 	$group_args = array(
 	'per_page'		=> 12,
 	'show_hidden'	=> true,
@@ -47,7 +47,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 <?php $group_type = ucfirst($filters['wds_group_type']).'s'; ?>
 
 	<div class="submenu">
-	  	<?php 
+	  	<?php
 		if (openlab_is_my_profile()) {
 			echo openlab_my_groups_submenu($filters['wds_group_type']);
 		}
@@ -66,7 +66,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 				</div>
 				<div class="item">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-                    
+
                     <?php	if ($filters['wds_group_type'] == "course") :
 					$wds_faculty=groups_get_groupmeta($group_id, 'wds_faculty' );
 					$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
@@ -81,7 +81,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 					if ($wds_departments){
 						echo ' | '.$wds_departments;
 					}
-					if ($wds_project_code){
+					if ( ! empty( $wds_project_code ) ){
 						echo $wds_project_code;
 					}
 					if ($wds_semester || $wds_year)
@@ -98,9 +98,9 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 					} ?>
                     </div>
 					<?php else: ?>
-                    
+
                     <div class="info-line"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ) ?></div>
-                    
+
                     <?php endif; ?>
 
 					<?php
@@ -127,7 +127,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 <?php else: ?>
 	<?php $group_type = $filters['wds_group_type'].'s'; ?>
         <div class="submenu">
-	  	<?php 
+	  	<?php
 		if (openlab_is_my_profile()) {
 			echo openlab_my_groups_submenu($filters['wds_group_type']);
 		}

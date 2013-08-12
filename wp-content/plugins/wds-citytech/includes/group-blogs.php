@@ -583,7 +583,7 @@ function wds_bp_group_meta(){
 
 	$group_type = openlab_get_group_type( $the_group_id );
 
-	if ( 'group' == $group_type && isset( $_GET['type'] ) ) {
+	if ( isset( $_GET['type'] ) && ( 'group' == $group_type || bp_is_group_create() ) ) {
 		$group_type = $_GET['type'];
 	}
 
@@ -650,6 +650,21 @@ function wds_bp_group_meta(){
 
 		$blog_details = get_blog_details( $template );
 
+		// Set up user blogs for fields below
+		$user_blogs = get_blogs_of_user( get_current_user_id() );
+
+		// Exclude blogs where the user is not an Admin
+		foreach( $user_blogs as $ubid => $ub ) {
+			$role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
+
+			if ( !array_key_exists( 'administrator', (array) $role ) ) {
+				unset( $user_blogs[$ubid] );
+			}
+		}
+		$user_blogs = array_values( $user_blogs );
+
+
+
 		?>
 		<style type="text/css">
 		.disabled-opt {
@@ -669,11 +684,11 @@ function wds_bp_group_meta(){
 					</th>
 				</tr>
 			<?php else : ?>
-				<?php $show_website = 'block' ?>
+				<?php $show_website = 'auto' ?>
 
 				<?php if ( 'course' == $group_type ) : ?>
 					<tr class="form-field form-required">
-						<th>Site Details</th>
+						<th scope="row">Site Details</th>
 					</tr>
 				<?php endif ?>
 			<?php endif ?>
@@ -688,7 +703,7 @@ function wds_bp_group_meta(){
 							<li>smithadv1100sp2012</li>
 						</ul>
 
-						<p class="ol-tooltip">If you teach multiple sections and plan to create additional course sites on the OpenLab, consider adding other identifying information to the URL.</p>
+						<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
 						<?php break;
 					case 'project' : ?>
@@ -703,9 +718,25 @@ function wds_bp_group_meta(){
 				<?php endswitch ?>
 			</td></tr>
 
+			<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
+				<tr id="wds-website-clone" class="form-field form-required">
+					<th valign="top" scope='row'>
+						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" />
+						Clone an existing site:
+					</th>
+
+					<td id="noo_clone_options">
+
+						<?php global $current_site ?>
+						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e('Path') ?>" value="" />
+						<input name="blog-id-to-clone" value="" type="hidden" />
+						<p id="cloned-site-url"></p>
+					</td>
+				</tr>
+			<?php endif ?>
+
 			<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website;?>">
 				<th valign="top" scope='row'>
-
 					<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
 					Create a new site:
 				</th>
@@ -726,24 +757,13 @@ function wds_bp_group_meta(){
 
                         <?php /* Existing blogs - only display if some are available */ ?>
                         <?php
-                        $user_blogs = get_blogs_of_user( get_current_user_id() );
 
                         // Exclude blogs already used as groupblogs
                         global $wpdb, $bp;
-                        $current_groupblogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+                        $current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
 
                         foreach( $user_blogs as $ubid => $ub ) {
                                 if ( in_array( $ubid, $current_groupblogs ) ) {
-                                        unset( $user_blogs[$ubid] );
-                                }
-                        }
-                        $user_blogs = array_values( $user_blogs );
-
-                        // Exclude blogs where the user is not an Admin
-                        foreach( $user_blogs as $ubid => $ub ) {
-                                $role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
-
-                                if ( !array_key_exists( 'administrator', (array) $role ) ) {
                                         unset( $user_blogs[$ubid] );
                                 }
                         }
@@ -802,18 +822,24 @@ function openlab_validate_groupblog_url() {
 	/**
 	 * This is terrifying.
 	 * We check for a groupblog in the following cases:
-	 * a) 'new' == $_POST['new_or_old'], and either
+	 * a) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
 	 * b1) the 'Set up a site?' checkbox has been checked, OR
 	 * b2) the group type is Course or Portfolio, each of which requires blogs
 	 */
 	if (
 		isset( $_POST['new_or_old'] )
 		&&
-		'new' == $_POST['new_or_old']
+		( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] )
 		&&
 		( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'course', 'portfolio' ) ) )
 	) {
-		$path = isset( $_POST['blog']['domain'] ) ? $_POST['blog']['domain'] : '';
+		// Which field we check depends on whether this is a clone
+		$path = '';
+		if ( 'clone' == $_POST['new_or_old'] ) {
+			$path = $_POST['clone-destination-path'];
+		} else {
+			$path = $_POST['blog']['domain'];
+		}
 
 		if ( empty( $path ) ) {
 			bp_core_add_message( 'Your site URL cannot be blank.', 'error' );
@@ -897,10 +923,10 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
-	$exclude_blogs = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ) );
+	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
 
 	if ( !empty( $exclude_blogs ) ) {
-		$exclude_sql = $wpdb->prepare( " AND b.blog_id NOT IN (" . implode( ',', $exclude_blogs ) . ") " );
+		$exclude_sql = " AND b.blog_id NOT IN (" . implode( ',', $exclude_blogs ) . ") ";
 	} else {
 		$exclude_sql = '';
 	}
@@ -934,8 +960,8 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
 		$total_blogs = $wpdb->get_var( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
 	} else {
-		$paged_blogs = $wpdb->get_results( $wpdb->prepare( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" ) );
-		$total_blogs = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" ) );
+		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
+		$total_blogs = $wpdb->get_var( "SELECT COUNT(DISTINCT b.blog_id) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" );
 	}
 
 	$blog_ids = array();

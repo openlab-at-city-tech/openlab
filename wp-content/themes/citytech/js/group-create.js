@@ -136,14 +136,141 @@ jQuery(document).ready(function($){
 		);
 	}
 
+	function toggle_clone_options( on_or_off ) {
+		var $group_to_clone, group_id_to_clone;
+		
+		$group_to_clone = $('#group-to-clone');
+
+		if ( 'on' == on_or_off ) {
+			$('#create-or-clone-clone').attr('checked', true);	
+			$group_to_clone.removeClass('disabled-opt');	
+			$group_to_clone.attr('disabled', false);	
+			$('#ol-clone-description').removeClass('disabled-opt');
+
+			group_id_to_clone = $group_to_clone.val();
+			if ( ! group_id_to_clone ) {
+				group_id_to_clone = $.urlParam( 'clone' );
+			}
+		} else {
+			$('#create-or-clone-create').attr('checked', true);	
+			$group_to_clone.addClass('disabled-opt');	
+			$group_to_clone.attr('disabled', true);	
+			$('#ol-clone-description').addClass('disabled-opt');
+
+			group_id_to_clone = 0;
+		}
+
+		fetch_clone_source_details( group_id_to_clone );
+	}
+
+	function fetch_clone_source_details( group_id ) {
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'openlab_group_clone_fetch_details',
+				group_id: group_id
+			},
+			success: function( response ) {
+				var r = JSON.parse( response );
+
+				// Description
+				$('#group-desc').val(r.description);
+				
+				// Schools and Departments
+				$('input[name="wds_group_school[]"]').each(function(){
+					$school_input = $(this);
+					if ( -1 < $.inArray( $school_input.val(), r.schools ) ) {
+						$school_input.attr('checked', true);
+						wds_load_group_departments();
+
+						// Departments are fetched via
+						// AJAX, so we do a lame delay
+						var foo = setTimeout( function() {
+							$('input[name="wds_departments[]"]').each(function(){
+								$dept_input = $(this);
+								if ( -1 < $.inArray( $dept_input.val(), r.departments ) ) {
+									$dept_input.attr('checked', true);
+								}
+							});
+						}, 2000 );
+					}
+				});
+
+				// Course Code
+				$('input[name="wds_course_code"]').val(r.course_code);
+
+				// Section Code
+				$('input[name="wds_section_code"]').val(r.section_code);
+
+				// Additional Description
+				$('textarea[name="wds_course_html"]').val(r.additional_description);
+
+				if ( r.site_id ) {
+					$('#new_or_old_clone').attr('checked', true);
+					$('#new_or_old_clone').trigger('click');
+
+					// Site URL
+					$('#cloned-site-url').html( 'Your original address was: ' + r.site_url );
+					$('#blog-id-to-clone').val( r.site_id );
+				} else {
+					$('#new_or_old_new').attr('checked', true);
+					$('#new_or_old_new').trigger('click');
+					$('#blog-id-to-clone option').each(function(){
+						var $blog_opt = $(this);
+						if ( $blog_opt.val() == 0 ) {
+							$blog_opt.attr('selected', true);
+						}
+					});
+
+				}
+
+			}
+		});
+	}
+
 	$('.noo_radio').click(function(el){
 		var whichid = $(el.target).prop('id').split('_').pop();
 		new_old_switch(whichid);
 	});
 
+	$.urlParam = function(name){
+	    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    return results === null ? 0 : results[1];
+	}
+
 	// setup
 	new_old_switch( 'new' );
 
+	/* Clone setup */
+	var group_type = $.urlParam( 'type' );
+
+	if ( 'course' === group_type ) {
+		var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
+
+		$create_or_clone = $('input[name="create-or-clone"]');
+		create_or_clone = $create_or_clone.val();
+		group_id_to_clone = $.urlParam( 'clone' );
+
+		if ( group_id_to_clone ) {
+			// Clone ID passed to URL
+
+		} else {
+			// No clone ID passed to URL		
+			toggle_clone_options( 'create' == create_or_clone ? 'off' : 'on' );
+		}
+
+		$create_or_clone.on( 'change', function() {
+			new_create_or_clone = 'create' == $(this).val() ? 'off' : 'on';
+			toggle_clone_options( new_create_or_clone );
+		} );
+	}
+
+	// Switching between groups to clone
+	$('#group-to-clone').on('change', function() {
+		fetch_clone_source_details( this.value );
+	});
+	
 	/* AJAX validation for external RSS feeds */
 	$('#find-feeds').on( 'click', function(e) {
 		e.preventDefault();

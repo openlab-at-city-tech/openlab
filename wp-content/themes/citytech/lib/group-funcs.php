@@ -12,6 +12,22 @@
 function openlab_group_privacy_settings($group_type)
 {
 	global $bp;
+
+	// If this is a cloned group/site, fetch the clone source's details
+	$clone_source_group_status = $clone_source_blog_status = '';
+	if ( bp_is_group_create() ) {
+		$new_group_id = bp_get_new_group_id();
+		if ( 'course' === $group_type ) {
+			$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
+			$clone_source_site_id = groups_get_groupmeta( $new_group_id, 'clone_source_blog_id' );
+
+			$clone_source_group = groups_get_group( array( 'group_id' => $clone_source_group_id ) );
+			$clone_source_group_status = $clone_source_group->status;
+
+			$clone_source_blog_status = get_blog_option( $clone_source_site_id, 'blog_public' );
+		}
+	}
+
 	?>
 	<h4><?php _e( 'Privacy Settings', 'buddypress' ); ?></h4>
 	<?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
@@ -25,6 +41,13 @@ function openlab_group_privacy_settings($group_type)
     <?php endif; ?>
 
 	<div class="radio">
+
+		<?php
+		$new_group_status = bp_get_new_group_status();
+		if ( ! $new_group_status ) {
+			$new_group_status = ! empty( $clone_source_group_status ) ? $clone_source_group_status : 'public';
+		}
+		?>
 
 		<?php /* Portfolios get different copy */ ?>
 		<?php if ( openlab_is_portfolio() ) : ?>
@@ -49,7 +72,7 @@ function openlab_group_privacy_settings($group_type)
 			</label>
 		<?php else : /* All other group types */ ?>
 			<label>
-				<input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked" <?php } else { bp_group_show_status_setting('public'); } ?> />
+				<input type="radio" name="group-status" value="public" <?php checked( 'public', $new_group_status ) ?> />
 				<strong><?php _e( 'This is a public '.ucfirst($group_type), 'buddypress' ) ?></strong>
 				<ul>
 					<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will be visible to the public.', 'buddypress' ) ?></li>
@@ -59,7 +82,7 @@ function openlab_group_privacy_settings($group_type)
 			</label>
 
 			<label>
-				<input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting('private') ?> />
+				<input type="radio" name="group-status" value="private" <?php checked( 'private', $new_group_status ) ?> />
 				<strong><?php _e( 'This is a private '.ucfirst($group_type), 'buddypress' ) ?></strong>
 				<ul>
 					<li><?php _e( 'This '.ucfirst($group_type).' Profile and related content and activity will only be visible to members of the group.', 'buddypress' ) ?></li>
@@ -69,7 +92,7 @@ function openlab_group_privacy_settings($group_type)
 			</label>
 
 			<label>
-				<input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
+				<input type="radio" name="group-status" value="hidden" <?php checked( 'hidden', $new_group_status ) ?> />
 				<strong><?php _e( 'This is a hidden ' .ucfirst($group_type).'.', 'buddypress' ) ?></strong>
 				<ul>
 					<li><?php _e( 'This '.ucfirst($group_type).' Profile, related content and activity will only be visible only to members of the '.ucfirst($group_type).'.', 'buddypress' ) ?></li>
@@ -81,7 +104,6 @@ function openlab_group_privacy_settings($group_type)
 	</div>
 
 	<?php /* Site privacy markup */ ?>
-
 
 	<?php if ( $site_id = openlab_get_site_id_by_group_id() ) : ?>
 		<h4><?php _e( ucfirst($group_type).' Site')?></h4>

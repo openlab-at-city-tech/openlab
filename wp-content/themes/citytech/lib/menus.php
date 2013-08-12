@@ -25,10 +25,10 @@ function help_categories_menu($items, $args) {
             foreach($child_terms as $child_term){
                 $term[] = $child_term->parent;
             }
-            
+
             $parent_term = get_term_by('id',$term[0],'help_category');
         }
-        
+
         $help_args = array(
             'hide_empty' => false,
             'orderby' => 'term_order',
@@ -336,8 +336,10 @@ function openlab_filter_subnav_admin($subnav_item) {
     $group_type = openlab_get_group_type(bp_get_current_group_id());
     $new_item = str_replace("Admin", ucfirst($group_type) . " Settings", $subnav_item);
     //this is to stop the course settings menu item from getting a current class on membership pages
-    if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
-        $new_item = str_replace("current selected", " ", $new_item);
+    if ( bp_action_variable( 0 ) ) {
+	    if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
+		$new_item = str_replace("current selected", " ", $new_item);
+	    }
     }
 
     return $new_item;
@@ -410,8 +412,14 @@ function openlab_filter_subnav_nav_notifications($suvbnav_item) {
 function openlab_group_submenu_nav() {
     global $bp;
 
+    $current_item = isset( $bp->current_item ) ? $bp->current_item : '';
+
+    if ( ! $current_item ) {
+	    return;
+    }
+
     //get the current item menu
-    $nav_items = $bp->bp_options_nav[$bp->current_item];
+    $nav_items = $bp->bp_options_nav[$current_item];
 
     //manual sorting of current item menu
     if ($nav_items) {
@@ -446,17 +454,18 @@ add_action('bp_actions', 'openlab_group_submenu_nav', 1);
  */
 
 function openlab_no_join_on_portfolios($button) {
-    global $bp;
+	global $bp;
 
-    if (openlab_is_portfolio()) {
-        $button = "";
-    }
-    //fix for files, docs, and membership pages in group profile - hiding join button
-    else if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications') {
-        $button = "";
-    }
+	if ( openlab_is_portfolio() ) {
+            $button = "";
+	}
+	//fix for files, docs, and membership pages in group profile - hiding join button
+	else if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' )
+	{
+            $button = "";
+	}
 
-    return $button;
+        return $button;
 }
 
 add_filter('bp_get_group_join_button', 'openlab_no_join_on_portfolios');
@@ -516,13 +525,19 @@ function openlab_group_admin_tabs($group = false) {
             return false;
         ?>
 
-        <li<?php if ('group-avatar' == $current_tab) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li>
+	<li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
 
         <li<?php if ('group-settings' == $current_tab) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li>
 
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
 
-        <li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
+	<div class="subnav-right-buttons">
+		<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
+			<li class="clone-button <?php if ( 'clone-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e( 'Clone '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+		<?php endif ?>
+
+		<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete '.ucfirst($group_type), 'buddypress' ); ?></a></li>
+	</div>
 
     <?php endif ?>
     <?php

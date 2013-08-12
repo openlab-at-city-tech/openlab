@@ -20,6 +20,8 @@ get_header(); ?>
 
 function cuny_group_single() { ?>
 	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group();
+		$group_type = openlab_get_group_type( bp_get_current_group_id() );
+
 		if ( $group_type == "cheese") {
 		//if ( $group_type = openlab_get_group_type( bp_get_current_group_id() )) {
 			locate_template( array( 'groups/' . $group_type . 's/single/home.php' ), true );
@@ -27,8 +29,7 @@ function cuny_group_single() { ?>
 			?>
 			<?php do_action( 'bp_before_group_home_content' ) ?>
 
-			<?php $group_slug = bp_get_group_slug();
-			$group_type = openlab_get_group_type( bp_get_current_group_id()); ?>
+			<?php $group_slug = bp_get_group_slug(); ?>
 
 			<?php //group page vars
 				  global $bp, $wpdb;
@@ -80,7 +81,7 @@ function cuny_group_single() { ?>
                             <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a>
                         <?php endif; ?>
                     </h2>
-                    
+
                         <?php if ($group_type == "portfolio"): ?>
                     <div class="portfolio-displayname"><span class="highlight"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></span></div>
                         <?php else: ?>
@@ -232,15 +233,20 @@ function cuny_group_single() { ?>
 						$query = new WP_Query( $docs_arg );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-						if($query->have_posts()){
+						$docs_args = array(
+							'posts_per_page' => '3',
+							'group_id' => bp_get_current_group_id(),
+						);
+						if ( bp_docs_has_docs( $docs_args ) ) {
 						  echo '<ul>';
-						  while ( $query->have_posts() ) : $query->the_post();
+						  while ( bp_docs_has_docs() ) : bp_docs_the_doc();
+							  global $post;
 							  echo '<li>';
 							  echo '<h5>';
 							  the_title();
 							  echo '</h5>';
 							  ?>
-							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
+							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php the_permalink() ?>" class="read-more">See&nbsp;More</a></p>
 							  <?php
 							  echo '</li>';
 						  endwhile;

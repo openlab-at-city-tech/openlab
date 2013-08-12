@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * The base configurations of bbPress.
  *
  * This file has the following configurations: MySQL settings, Table Prefix,
@@ -11,18 +11,7 @@
  * @package bbPress
  */
 
-// ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for bbPress */
-define( 'BBDB_NAME', 'openlab' );
-
-/** MySQL database username */
-define( 'BBDB_USER', 'root' );
-
-/** MySQL database password */
-define( 'BBDB_PASSWORD', '' );
-
-/** MySQL hostname */
-define( 'BBDB_HOST', 'localhost' );
+// Database connection info is defined in env.php
 
 /** Database Charset to use in creating database tables. */
 define( 'BBDB_CHARSET', 'utf8' );
@@ -61,6 +50,11 @@ $bb_table_prefix = 'wp_bb_';
  * BB_LANG to 'de' to enable German language support.
  */
 define( 'BB_LANG', 'en_US' );
+
+if ( ! isset( $bb ) ) {
+	$bb = new stdClass;
+}
+
 $bb->custom_user_table = 'wp_users';
 $bb->custom_user_meta_table = 'wp_usermeta';
 

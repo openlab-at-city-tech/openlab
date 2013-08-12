@@ -7,15 +7,15 @@ function openlab_conditional_body_classes($classes)
 {
 	global $post;
 	$classes[] = 'header-image';
-	
+
 	if (is_front_page() || is_404())
 	{
 		$classes[] = 'full-width-content';
-	} else if ($post->post_name == 'register')
+	} else if ( isset( $post->post_name ) && $post->post_name == 'register')
 	{
 		$classes[] = 'content-sidebar';
-	} 
-	
+	}
+
 	return $classes;
 }
 
@@ -38,7 +38,7 @@ function openlab_shortened_text($text,$limit = "55") {
 
 //truncate links in profile fields - I'm using $field->data->value to just truncate the link name (it was giving odd results when trying to truncate $value)
 add_filter('bp_get_the_profile_field_value','openlab_filter_profile_fields',10,2);
- 
+
 function openlab_filter_profile_fields($value,$type)
 {
 	global $field;
@@ -61,12 +61,12 @@ function openlab_filter_profile_fields($value,$type)
 function openlab_http_check($link)
 {
 	$http_check = strpos($link, "http");
-	
+
 	if ($http_check == false)
 	{
 		$link = "http://".$link;
 	}
-	
+
 	return $link;
 }
 

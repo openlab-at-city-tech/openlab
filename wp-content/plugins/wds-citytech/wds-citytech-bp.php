@@ -453,9 +453,11 @@ function openlab_remove_sitewide_notices() {
 	global $wp_filter;
 
 	// hackkkkkkkkk
-	foreach ( $wp_filter['wp_footer'][9999] as $fname => $filter ) {
-		if ( false !== strpos( $fname, 'sitewide_notices' ) ) {
-			remove_action( 'wp_footer', $fname, 9999 );
+	if ( isset( $wp_filter['wp_footer'][9999] ) ) {
+		foreach ( $wp_filter['wp_footer'][9999] as $fname => $filter ) {
+			if ( false !== strpos( $fname, 'sitewide_notices' ) ) {
+				remove_action( 'wp_footer', $fname, 9999 );
+			}
 		}
 	}
 }
@@ -473,4 +475,4 @@ function openlab_force_doc_comments_open( $open, $post_id ) {
         }
         return $open;
 }
-add_action( 'comments_open', 'openlab_force_doc_comments_open' );
+add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );

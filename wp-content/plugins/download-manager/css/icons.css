@@ -1,0 +1,38 @@
+
+#icon-file-manager{
+    background: url('../images/download-manager.png') center center no-repeat;
+}
+
+#icon-add-new-file{
+    background: url('../images/add-file.png') center center no-repeat;
+}
+#icon-error{
+    background: url('../images/error.png') center center no-repeat;
+}
+#icon-import-file{
+    background: url('../images/import-files.png') center center no-repeat;
+}
+#icon-categories{
+    background: url('../images/category.png') center center no-repeat;
+}
+#icon-template{
+    background: url('../images/templates.png') center center no-repeat;
+}
+#icon-settings{
+    background: url('../images/settings.png') center center no-repeat;
+}
+#icon-stats{
+    background: url('../images/stats.png') center center no-repeat;
+}
+
+.infoicon{
+    background: url('../images/help1.png') center center no-repeat;
+    text-indent: -999999;
+    display: inline-block;
+    color:transparent;
+    width:16px;
+    height:16px;
+    border:0px !important;
+}
+
+ 
