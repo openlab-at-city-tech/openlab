@@ -13,22 +13,35 @@ register_nav_menus(array(
     'helpmenusec' => __('Help Menu Secondary', 'cuny')
 ));
 
-//adding help categories (custom taxonomy) to menu for help page
-function help_categories_menu($items, $args) {
+/**
+ * Help Sidebar menu: includes categories and sub-categories
+ * @global type $post
+ * @param string $items
+ * @param type $args
+ * @return string
+ */
+function openlab_help_categories_menu($items, $args) {
     global $post;
     if ($args->theme_location == 'helpmenu') {
         $term = get_query_var('term');
         $parent_term = get_term_by('slug', $term, 'help_category');
         if ($parent_term == false) {
-            $child_terms = get_the_terms($post->ID,'help_category');
+            $child_terms = get_the_terms($post->ID, 'help_category');
             $term = array();
-            foreach($child_terms as $child_term){
-                $term[] = $child_term->parent;
+            foreach ($child_terms as $child_term) {
+                $term[] = $child_term;
             }
-            
-            $parent_term = get_term_by('id',$term[0],'help_category');
+
+            $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
+            $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
         }
         
+        //for child term archive pages
+        if ($parent_term->parent != 0){
+            $current_term = $parent_term;
+            $parent_term = get_term_by('id',$current_term->parent,'help_category');
+        }
+
         $help_args = array(
             'hide_empty' => false,
             'orderby' => 'term_order',
@@ -53,40 +66,6 @@ function help_categories_menu($items, $args) {
             }
         }
 
-        //using a plugin now - if it works out, will deprecate this
-        // Temp: We have to reorder the cats to be in our desired order
-        // This worked out accidentally on the staging site, because of
-        // the order created in the database
-        /* $ordered_cats = array();
-          $cat_order = array(
-          'OpenLab Help',
-          'Getting Started',
-          'People on the OpenLab',
-          'Courses, Projects, and Clubs',
-          'Sites on the OpenLab',
-          'Best Practices',
-          'Troubleshooting',
-          'Portfolios and ePortfolios'
-          );
-
-          foreach( $help_cats as $hc_key => $hc ) {
-          $ordered_key = array_search( $hc->name, $cat_order );
-
-          if ( false !== $ordered_key ) {
-          $ordered_cats[$ordered_key] = $hc;
-
-          // Unset from the main $help_cats array, so we
-          // know which have been used
-          unset( $help_cats[$hc_key] );
-          }
-          }
-          ksort( $ordered_cats );
-
-          // Whatever's left should get tacked onto the end, so we don't
-          // lose cats added in the future
-          $help_cats = array_merge( $ordered_cats, $help_cats );
-          // END Boone's temp sort code */
-
         $help_cat_list = "";
         foreach ($help_cats as $help_cat) {
             //eliminate children cats from the menu list
@@ -109,7 +88,42 @@ function help_categories_menu($items, $args) {
                     $help_cat->name = "Glossary";
                 }
 
-                $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a></li>';
+                $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a>';
+
+                //check for child terms
+                $child_cat_check = get_term_children($help_cat->term_id, 'help_category');
+
+                //list child terms, if any
+                if (count($child_cat_check) > 0) {
+
+                    $help_cat_list .= '<ul>';
+
+                    $child_args = array(
+                        'hide_empty' => false,
+                        'orderby' => 'term_order',
+                        'hide_empty' => false,
+                        'parent' => $help_cat->term_id
+                    );
+                    $child_cats = get_terms('help_category', $child_args);
+                    foreach ($child_cats as $child_cat) {
+
+                        $child_classes = "help-cat menu-item";
+
+                        if ($child_cat->term_id == $current_term->term_id) {
+                            $child_classes .= " current-menu-item";
+                        } else if ($post->post_type == 'help') {
+                            if (in_array($child_cat->term_id, $post_cats_array)) {
+                                $child_classes .= " current-menu-item";
+                            }
+                        }
+
+                        $help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
+                    }
+
+                    $help_cat_list .= '</ul>';
+                }
+
+                $help_cat_list .= '</li>';
             }
         }
         $items = $items . $help_cat_list;
@@ -117,7 +131,25 @@ function help_categories_menu($items, $args) {
     return $items;
 }
 
-add_filter('wp_nav_menu_items', 'help_categories_menu', 10, 2);
+add_filter('wp_nav_menu_items', 'openlab_help_categories_menu', 10, 2);
+
+/**
+ * For a single help post: get the primary term for that post
+ * @global type $post
+ * @return type
+ */
+
+function openlab_get_primary_help_term_name() {
+    global $post;
+    $child_terms = get_the_terms($post->ID, 'help_category');
+    $term = array();
+    foreach ($child_terms as $child_term) {
+        $term[] = $child_term;
+    }
+    
+    $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+    return $current_term->name;
+}
 
 //sub-menus for profile pages - a series of functions, but all here in one place
 //sub-menu for profile pages
@@ -520,7 +552,7 @@ function openlab_group_admin_tabs($group = false) {
 
         <li<?php if ('group-settings' == $current_tab) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li>
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
+        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )  ?>
 
         <li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
 

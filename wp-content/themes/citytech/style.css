@@ -2243,7 +2243,7 @@ div#sidebar.sidebar div#portfolio-sidebar-widget {
 	line-height:18px;
 }
 
-#sidebar li.current-menu-item a {
+#sidebar li.current-menu-item > a {
 	color:#C84C35;
 }
 
@@ -2274,7 +2274,14 @@ li.sq-bullet ul {
 #sidebar #item-buttons {
 	border-bottom:none;
 }
-
+#sidebar ul li.current-menu-item ul{
+    display: block;
+    list-style: none;
+    padding-left: 11px;
+}
+#sidebar ul li.current-menu-item ul li a{
+    font-size: 11px;
+}
 /* Group Right Sidebar */
 #sidebar ul.website-links {
 	border-width:1px 0 0;
@@ -4659,16 +4666,12 @@ div #help-tags-copy,div #help-tags {
 	padding-left:7px;
 }
 
-#help-identity {
-	display:none;
-}
-
 #help-title h2 {
 	color:#C84C35;
 	font-size:13px;
 	font-family:'Arvo';
 	padding-left:5px;
-	margin:0 0 30px;
+	margin:0 0 17px;
 }
 
 .help-tags {
@@ -4779,9 +4782,13 @@ div #help-tags-copy,div #help-tags {
 
 .single-help #nav-single {
 	border-top:1px solid #f0f0f0;
-	padding:10px 7px;
+	padding:10px 0;
 }
-
+.single-help #nav-single.top{
+    border-bottom: 1px solid #f0f0f0;
+    padding: 4px 0;
+    margin-bottom: 15px;
+}
 .single-help .nav-previous {
 	float:left;
 }

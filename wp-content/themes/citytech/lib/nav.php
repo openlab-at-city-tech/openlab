@@ -1,7 +1,7 @@
 <?php //navigation based functionality
 
 //help navigation via Ambrosite plugin
-function openlab_help_navigation()
+function openlab_help_navigation($loc = 'bottom')
 {
 	$prev_args = array(
 			'order_by' => 'menu_order',
@@ -25,7 +25,7 @@ function openlab_help_navigation()
 			'ex_posts' => '',
 			);
 	
-	echo '<nav id="nav-single">';
+	echo '<nav id="nav-single" class="'.$loc.'">';
 			echo '<div class="nav-previous">';
 			previous_post_link_plus($prev_args);	
 			echo '</div>';
