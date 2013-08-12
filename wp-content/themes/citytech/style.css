@@ -2299,10 +2299,14 @@ li.sq-bullet ul {
 #sidebar ul li.current-menu-item ul{
     display: block;
     list-style: none;
-    padding-left: 11px;
+    padding-left: 9px;
+    margin-bottom: -2px;
 }
 #sidebar ul li.current-menu-item ul li a{
     font-size: 11px;
+    display: block;
+    margin: 5px 0 7px;
+    line-height: 13px;
 }
 /* Group Right Sidebar */
 #sidebar ul.website-links {
@@ -4843,6 +4847,7 @@ div #help-tags-copy,div #help-tags {
 .single-help #nav-single {
 	border-top:1px solid #f0f0f0;
 	padding:10px 0;
+	font-size: 11px;
 }
 .single-help #nav-single.top{
     border-bottom: 1px solid #f0f0f0;
@@ -4855,6 +4860,10 @@ div #help-tags-copy,div #help-tags {
 
 .single-help .nav-next {
 	float:right;
+}
+
+.single-help .print-page {
+  text-decoration: underline;
 }
 
 h1.parent-cat {
