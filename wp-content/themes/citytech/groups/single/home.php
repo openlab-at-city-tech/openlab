@@ -233,20 +233,15 @@ function cuny_group_single() { ?>
 						$query = new WP_Query( $docs_arg );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-						$docs_args = array(
-							'posts_per_page' => '3',
-							'group_id' => bp_get_current_group_id(),
-						);
-						if ( bp_docs_has_docs( $docs_args ) ) {
+						if($query->have_posts()){
 						  echo '<ul>';
-						  while ( bp_docs_has_docs() ) : bp_docs_the_doc();
-							  global $post;
+						  while ( $query->have_posts() ) : $query->the_post();
 							  echo '<li>';
 							  echo '<h5>';
 							  the_title();
 							  echo '</h5>';
 							  ?>
-							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php the_permalink() ?>" class="read-more">See&nbsp;More</a></p>
+							  <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135);?> <a href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
 							  <?php
 							  echo '</li>';
 						  endwhile;
