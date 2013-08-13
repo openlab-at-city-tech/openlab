@@ -148,7 +148,7 @@ function openlab_get_primary_help_term_name() {
     }
     
     $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-    return $current_term->name;
+    return $current_term;
 }
 
 //sub-menus for profile pages - a series of functions, but all here in one place
