@@ -254,7 +254,7 @@ jQuery(document).ready(function($){
 
 		if ( group_id_to_clone ) {
 			// Clone ID passed to URL
-
+			toggle_clone_options( 'on' );
 		} else {
 			// No clone ID passed to URL		
 			toggle_clone_options( 'create' == create_or_clone ? 'off' : 'on' );
