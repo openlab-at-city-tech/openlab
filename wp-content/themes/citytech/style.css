@@ -2299,14 +2299,13 @@ li.sq-bullet ul {
 #sidebar ul li.current-menu-item ul{
     display: block;
     list-style: none;
-    padding-left: 9px;
+    padding-left: 8px;
     margin-bottom: -2px;
 }
 #sidebar ul li.current-menu-item ul li a{
-    font-size: 11px;
     display: block;
     margin: 5px 0 7px;
-    line-height: 13px;
+    line-height: 14px;
 }
 /* Group Right Sidebar */
 #sidebar ul.website-links {
@@ -4941,6 +4940,10 @@ h1.parent-cat {
 
 .tax-help_category #content h2,.tax-help_category #content h3,.tax-help_category #content div {
     padding-left:7px;
+}
+
+.tax-help_category #content h2.child-cat {
+  margin-top: 0;
 }
 
 .tax-help_category #content h2.child-cat a {
