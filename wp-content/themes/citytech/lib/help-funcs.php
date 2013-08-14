@@ -193,7 +193,7 @@ function openlab_help_cats_loop() {
 
     foreach ($child_cats as $child) {
         $child_cat_id = $child->cat_ID;
-        echo '<h2 class="child-cat child-cat-num-' . $count . '">' . $child->name . '</h2>';
+        echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="'.get_term_link($child).'">' . $child->name . '</a></h2>';
 
         $args = array('tax_query' => array(
                 array(

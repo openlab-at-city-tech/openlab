@@ -4895,8 +4895,10 @@ h1.parent-cat {
     padding-left:7px;
 }
 
-.tax-help_category #content h2.child-cat {
+.tax-help_category #content h2.child-cat a {
     margin-top:0;
+    font-size: 13px;
+    font-family: 'Arvo',​arial,​serif;
 }
 
 .tax-help_category #content h3.help-title,.tax-help_category #content .help-tags {
