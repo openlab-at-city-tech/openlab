@@ -45,7 +45,7 @@ function openlab_specific_blog_breadcrumb($crumb, $args) {
         if(!is_wp_error($term_link)){
             $crumb .= ' / <a href="' . $term_link . '">' . $current_term->name . '</a>';
         }
-        $crumb .= ' / '.$post->post_title;
+        $crumb .= ' / '.bp_create_excerpt($post->post_title,50,array('ending' => __( '&hellip;', 'buddypress' )));
     }
 
     return $crumb;

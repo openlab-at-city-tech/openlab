@@ -32,7 +32,7 @@ function openlab_help_loop() {
         ?>
 
         <?php if ($help_cats): ?>
-            <h1 class="entry-title"><?php echo $parent_cat_name; ?></h1>
+            <h1 class="entry-title"><a href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title"><a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> | <?php the_title(); ?></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
@@ -163,7 +163,14 @@ function openlab_help_cats_loop() {
     $wp_query = query_posts($args); //new WP_Query($args); 
     ?> 	
 
+    <?php if ($parent_term->parent == 0): ?>
     <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
+    <?php else: 
+        $head_term = get_term_by('id',$parent_term->parent,'help_category');
+    $child_title = '<h1 class="parent-cat"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
+    $child_title .= '<h2 class="child-cat child-cat-num-0">'. $parent_cat_name .'</h2>';
+    echo $child_title;
+    endif; ?>
 
     <?php
     while (have_posts()) : the_post();
