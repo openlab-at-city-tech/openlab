@@ -579,7 +579,11 @@ add_action( 'bp_actions', 'openlab_process_unlink_site', 1 );
 function wds_bp_group_meta(){
 	global $wpdb, $bp, $current_site, $base;
 
-	$the_group_id = bp_is_group() ? bp_get_current_group_id() : 0;
+	$the_group_id = 0;
+
+	if ( bp_is_group() && ! bp_is_group_create() ) {
+		$the_group_id = bp_get_current_group_id();
+	}
 
 	$group_type = openlab_get_group_type( $the_group_id );
 
