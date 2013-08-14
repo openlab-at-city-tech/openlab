@@ -941,13 +941,13 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
 }
 
 .submenu ul li.create-button a {
-    background:url(images/submenu_sprite.png) no-repeat -1px -19px;
-    padding-left:18px;
-    margin-left:17px;
+	background:url(images/submenu_sprite.png) no-repeat -1px -19px;
+	padding-left:21px;
+	margin-left:7px;
 }
 
 .submenu ul li.create-button.selected-page a {
-    background-position:-1px -53px;
+    background-position:-2px -54px;
 }
 
 .subnav-right-buttons {
