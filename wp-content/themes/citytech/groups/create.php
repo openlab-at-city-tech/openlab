@@ -82,7 +82,8 @@ function cuny_create_group(){
 				<?php /* Create vs Clone for Courses */ ?>
 				<?php if ( 'course' == $group_type ) : ?>
 					<div class="create-or-clone-selector">
-						<p class="ol-tooltip">If you taught the same course in a previous semester or year, cloning can save you time. See the help topic Create / Clone a Course.</p>
+						<p class="ol-tooltip" id="clone-course-tooltip-1">If you taught the same course in a previous semester or year, cloning can save you time. See the help topic <br>
+						<a href="/blog/help/creating-a-course-faculty-only/">Create / Clone a Course</a>.</p>
 
 						<ul class="create-or-clone-options">
 							<li>
@@ -111,12 +112,17 @@ function cuny_create_group(){
 
 				<?php /* Name/Description */ ?>
 				<?php if ( 'course' == $group_type ) : ?>
-					<p class="ol-tooltip">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
+				  <label for="group-name"><?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
 
-					<ul class="ol-tooltip">
+					<p class="ol-tooltip" id="clone-course-tooltip-2">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
+
+					<ul class="ol-tooltip" id="clone-course-tooltip-3">
 						<li>CourseCode CourseName, Semester Year</li>
 						<li>ARCH3522 NYC Arch, FA2013</li>
 					</ul>
+          
+          <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" placeholder="Course Name" />
+
 				<?php elseif ( 'portfolio' == $group_type ) : ?>
 					<p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
 
@@ -124,12 +130,15 @@ function cuny_create_group(){
 						<li>FirstName LastName's <?php echo $group_label ?> </li>
 						<li>Jane Smith's <?php echo $group_label ?> (Example)</li>
 					</ul>
+
+				  <label for="group-name">*<?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
+          <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
+        
 				<?php else : ?>
 					<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
+				  <label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
+				  <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
 				<?php endif ?>
-
-				<label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
-				<input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
 
 				<label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 				<textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
