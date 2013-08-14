@@ -1,6 +1,22 @@
 (function($) { 
 	$(document).ready(function() {
 
+	// Workshop fields on Contact Us
+	function toggle_workshop_meeting_items() {
+		var contact_us_topic = document.getElementById('contact-us-topic');
+
+		if ( contact_us_topic.length ) {
+			if ( 'Request a Workshop / Meeting' == contact_us_topic.value ) {
+				jQuery('#workshop-meeting-items').slideDown('fast');
+			} else {
+				jQuery('#workshop-meeting-items').slideUp('fast');
+			}
+		}
+	}
+
+	jQuery('#contact-us-topic').on('change', function(){ toggle_workshop_meeting_items(); });
+	toggle_workshop_meeting_items();
+
 	jQuery('#wds-accordion-slider').easyAccordion({
 			autoStart: true,
 			slideInterval: 6000,
