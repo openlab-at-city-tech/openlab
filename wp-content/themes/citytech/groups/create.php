@@ -64,7 +64,7 @@ function cuny_create_group(){
 		<?php echo openlab_my_groups_submenu( $group_type ); ?>
 	</div>
 
-	<div id="single-course-body <?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
+	<div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
 
                 <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
 
