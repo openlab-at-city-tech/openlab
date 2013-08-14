@@ -5,7 +5,7 @@
 	function toggle_workshop_meeting_items() {
 		var contact_us_topic = document.getElementById('contact-us-topic');
 
-		if ( contact_us_topic.length ) {
+		if ( !!contact_us_topic ) {
 			if ( 'Request a Workshop / Meeting' == contact_us_topic.value ) {
 				jQuery('#workshop-meeting-items').slideDown('fast');
 			} else {
