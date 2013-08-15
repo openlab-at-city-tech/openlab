@@ -25,6 +25,7 @@ function openlab_help_loop() {
         sort($help_cats);
         if ($help_cats[0]->parent == 0) {
             $parent_cat_name = $help_cats[0]->name;
+            $parent_cat = $help_cats[0];
         } else {
             $parent_cat = get_term($help_cats[0]->parent, 'help_category');
             $parent_cat_name = $parent_cat->name;
@@ -34,7 +35,11 @@ function openlab_help_loop() {
         <?php if ($help_cats): ?>
             <h1 class="entry-title"><a href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
-            <div id="help-title"><h2 class="page-title"><a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> | <?php the_title(); ?></h2></div>
+            <div id="help-title"><h2 class="page-title">
+                    <?php if ($this_term->parent != 0): ?>
+                    <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> | 
+                    <?php endif; ?>
+                        <?php the_title(); ?></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
