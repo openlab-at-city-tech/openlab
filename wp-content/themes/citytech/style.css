@@ -4147,7 +4147,7 @@ div.activity-comments form textarea {
 .course-create td.additional-field-label {
     padding-right: 5px !important;
     text-align: right;
-    width: 90px !important;
+    width: 110px !important;
 }
 .course-create tr.additional-description-field td {
     text-align: left !important;
@@ -4169,9 +4169,6 @@ div.activity-comments form textarea {
     bottom: -60px;
     margin-top: 10px !important;
     margin-left: 15px;
-}
-.course-create #noo_clone_options p#cloned-site-url {
-  display: none;
 }
 
 /* 4.0 PROJECTS
