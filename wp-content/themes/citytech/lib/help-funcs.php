@@ -52,14 +52,14 @@ function openlab_help_loop() {
                                        onclick="window.print();
                                                return false;" /></div>
 
-        <?php echo ($post->post_name == 'openlab-help' ? '' : openlab_help_navigation('top')); ?>
+        <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation('top')); ?>
 
         <div class="entry-content">
             <?php the_content(); ?>
-            <?php echo ($post->post_name == 'openlab-help' ? '' : openlab_get_help_tag_list($post_id)); ?>
+            <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id)); ?>
         </div>
 
-        <?php echo ($post->post_name == 'openlab-help' ? '' : openlab_help_navigation()); ?>
+        <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>
 
     <?php endwhile; // end of the loop.  ?>
 
