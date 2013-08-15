@@ -4072,14 +4072,22 @@ div.activity-comments form textarea {
 #clone-course-tooltip-1 {
   font-size: 12px;
   line-height: 16px;
+  width: 575px;
 }
 #clone-course-tooltip-2 {
   line-height: 14px;
   margin-bottom: 5px;
+  width: 575px;
   margin-top: -5px;
 }
 #clone-course-tooltip-3 {
   margin-bottom: 15px;
+}
+.course-create p.ol-clone-description {
+  width: 575px;
+}
+.course-create #group-create-body {
+    margin-left: 10px;
 }
 .course-create form.standard-form input#group-name[type="text"] {
     font-size: 10px;
@@ -4089,7 +4097,7 @@ div.activity-comments form textarea {
     width: 520px;
     margin-bottom: 5px;
 }
-.course-create form.standard-form textarea#group-desc {
+.course-create form.standard-form textarea#group-desc, .course-create table textarea {
   width: 525px;
 }
 .course-create .ct-group-meta {
@@ -4101,6 +4109,69 @@ div.activity-comments form textarea {
 }
 .course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th {
   padding: 0;
+}
+.course-create tr.schools {
+  height: 31px;
+}
+.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+  font-size: 12px;
+  font-weight: 700;
+}
+.course-create .school-inputs input {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+.course-create td#departments_html {
+  width: 520px;
+}
+.course-create td#departments_html div {
+    background: none repeat scroll 0 0 #F0F0F0;
+    border: 1px solid #CCCCCC;
+    margin-top: 5px;
+    padding: 10px 5px;
+    width: 513px;
+}
+.course-create td#departments_html div input {
+  margin-bottom: 5px;
+}
+.course-create table p.ol-tooltip {
+  margin-bottom: 20px!important;
+}
+.course-create table ul.ol-tooltip {
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+.course-create tr.additional-field {
+  height: 30px;
+}
+.course-create td.additional-field-label {
+    padding-right: 5px !important;
+    text-align: right;
+    width: 90px !important;
+}
+.course-create tr.additional-description-field td {
+    text-align: left !important;
+}
+.course-create .additional-field input, .course-create .additional-field select {
+    width: 170px;
+}
+.course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
+  height: 40px;
+  vertical-align: middle;
+}
+.course-create tr#wds-website-clone input, .course-create tr#wds-website input, .course-create tr#wds-website-existing input, .course-create tr#wds-website-external input {
+  margin-right: 10px;
+}
+.course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
+    font-weight: 500;
+}
+.course-create td#noo_external_options p#check-note {
+    bottom: -60px;
+    margin-top: 10px !important;
+    margin-left: 15px;
+}
+.course-create #noo_clone_options p#cloned-site-url {
+  display: none;
 }
 
 /* 4.0 PROJECTS
