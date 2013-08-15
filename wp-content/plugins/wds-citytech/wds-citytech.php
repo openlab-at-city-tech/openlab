@@ -739,15 +739,15 @@ function wds_load_group_type( $group_type ){
 
 	$return .= '<table>';
 
-	$return .= '<tr>';
+	$return .= '<tr class="schools">';
 
-	$return .= '<td>School(s)';
+	$return .= '<td class="block-title">School(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td>';
 
-        $return .= '<td>';
+        $return .= '<td class="school-inputs">';
 
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
@@ -814,32 +814,32 @@ function wds_load_group_type( $group_type ){
 		$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id);
 		$return.='<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
 
-		$return.='<tr>';
+		$return.='<tr class="department-title">';
 
-		$return .= '<td>Department(s)';
+		$return .= '<td colspan="2" class="block-title">Department(s)';
 		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 			$return .= ' <span class="required">(required)</span>';
 		}
-		$return .= '</td>';
-            $return.='<td id="departments_html"></td>';
+		$return .= '</td></tr>';
+            $return.='<tr class="departments"><td id="departments_html" colspan="2"></td>';
         $return.='</tr>';
 
 		if ( 'course' == $group_type ) {
 
 			$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
-			$return .= '<tr>';
-			$return .= '<td>Course Code:</td>';
+			$return .= '<tr class="additional-field course-code-field">';
+			$return .= '<td class="additional-field-label">Course Code:</td>';
 			$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
 			$return .= '</tr>';
 
-			$return .= '<tr>';
-			$return .= '<td>Section Code:';
+			$return .= '<tr class="additional-field section-code-field">';
+			$return .= '<td class="additional-field-label">Section Code:';
 			$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
 			$return .= '</tr>';
 
-			$return .= '<tr>';
-			$return .= '<td>Semester:';
+			$return .= '<tr class="additional-field semester-field">';
+			$return .= '<td class="additional-field-label">Semester:';
 			$return .= '<td><select name="wds_semester">';
 			$return .= '<option value="">--select one--';
 
@@ -862,14 +862,14 @@ function wds_load_group_type( $group_type ){
 			$return .= '</select></td>';
 			$return .= '</tr>';
 
-			$return .= '<tr>';
-			$return .= '<td>Year:';
+			$return .= '<tr class="additional-field year-field">';
+			$return .= '<td class="additional-field-label">Year:';
 			$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
 			$return .= '</tr>';
 
-			$return .= '<tr>';
-			$return .= '<td>Additional Description/HTML:';
-			$return .= '<td><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td>';
+			$return .= '<tr class="additional-field additional-description-field">';
+			$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
+			$return .= '<tr><td colspan="2"><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td></tr>';
 			$return.='</tr>';
 		}
 	}elseif($group_type=="project"){
