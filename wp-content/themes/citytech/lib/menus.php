@@ -35,7 +35,7 @@ function openlab_help_categories_menu($items, $args) {
             $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
             $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
         }
-        
+
         //for child term archive pages
         if ($parent_term->parent != 0){
             $current_term = $parent_term;
@@ -146,7 +146,7 @@ function openlab_get_primary_help_term_name() {
     foreach ($child_terms as $child_term) {
         $term[] = $child_term;
     }
-    
+
     $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
     return $current_term;
 }
