@@ -83,8 +83,7 @@ function cuny_create_group(){
 				<?php /* Create vs Clone for Courses */ ?>
 				<?php if ( 'course' == $group_type ) : ?>
 					<div class="create-or-clone-selector">
-						<p class="ol-tooltip" id="clone-course-tooltip-1">If you taught the same course in a previous semester or year, cloning can save you time. See the help topic <br>
-						<a href="/blog/help/creating-a-course-faculty-only/">Create / Clone a Course</a>.</p>
+						<p class="ol-tooltip" id="clone-course-tooltip-1">If you taught the same course in a previous semester or year, cloning can save you time.</p>
 
 						<ul class="create-or-clone-options">
 							<li>
@@ -123,6 +122,7 @@ function cuny_create_group(){
 					</ul>
 
           <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" placeholder="Course Name" />
+          <label for="group-desc"><?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 
 				<?php elseif ( 'portfolio' == $group_type ) : ?>
 					<p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
@@ -134,14 +134,16 @@ function cuny_create_group(){
 
 				  <label for="group-name">*<?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
           <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
-
+          <label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
+				
 				<?php else : ?>
 					<p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords( $group_type ) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords( $group_type ) ?> will make it easier for others to find your <?php echo ucwords( $group_type ) ?> profile. We recommend keeping your  <?php echo ucwords( $group_type ) ?> name under 50 characters.</p>
 				  <label for="group-name">* <?php echo ucfirst( $group_type ); ?> Name <?php _e( '(required)', 'buddypress' )?></label>
 				  <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
+          <label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
+
 				<?php endif ?>
 
-				<label for="group-desc">* <?php echo ucfirst($group_type);?> Description <?php _e( '(required)', 'buddypress' )?></label>
 				<textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
 
 				<?php do_action( 'bp_after_group_details_creation_step' ) ?>
