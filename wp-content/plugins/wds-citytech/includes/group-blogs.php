@@ -762,18 +762,18 @@ function wds_bp_group_meta(){
                         <?php /* Existing blogs - only display if some are available */ ?>
                         <?php
 
-                        // Exclude blogs already used as groupblogs
-                        global $wpdb, $bp;
-                        $current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
+			// Exclude blogs already used as groupblogs
+			global $wpdb, $bp;
+			$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
 
-                        foreach( $user_blogs as $ubid => $ub ) {
-                                if ( in_array( $ubid, $current_groupblogs ) ) {
-                                        unset( $user_blogs[$ubid] );
-                                }
-                        }
-                        $user_blogs = array_values( $user_blogs );
+			foreach ( $user_blogs as $ubid => $ub ) {
+				if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
+					unset( $user_blogs[ $ubid ] );
+				}
+			}
+			$user_blogs = array_values( $user_blogs );
 
-                        ?>
+			?>
 
                         <?php if ( !empty( $user_blogs ) ) : ?>
                                 <tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website;?>">
