@@ -4,10 +4,11 @@
 *
 */
 
-//re-direct to courses page if user does not have permissions for course creation page
+// re-direct to courses page if user does not have permissions for course creation page
 $account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-if (!is_super_admin(get_current_user_id()) && $account_type != "Faculty") {
-    wp_redirect(home_url('courses'));
+$group_type = isset( $_GET['type'] ) ? $_GET['type'] : 'club';
+if ( 'course' === $group_type && ! is_super_admin() && $account_type != "Faculty" ) {
+	wp_redirect( home_url( 'courses' ) );
 }
 
 /**begin layout**/
