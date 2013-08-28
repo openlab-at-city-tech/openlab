@@ -476,3 +476,13 @@ function openlab_force_doc_comments_open( $open, $post_id ) {
         return $open;
 }
 add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
+
+/**
+ * Filter the signup activation email
+ */
+function openlab_activation_email_content( $message ) {
+        $message .= '
+If clicking the link does not work, try to copy the link, paste it into your browser, and press the enter key or go.';
+        return $message;
+}
+add_filter( 'bp_core_activation_signup_user_notification_message', 'openlab_activation_email_content' );
