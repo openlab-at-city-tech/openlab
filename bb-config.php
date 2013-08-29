@@ -27,6 +27,7 @@ define( 'BBDB_COLLATE', '' );
  *
  * @since 1.0
  */
+
 define( 'BB_AUTH_KEY', '69d{;}zQ-#*k#lLV-h)4A;}|2G+tHj(x nN/^AZi(7Uc*)l.6ZE|i)x<Mh~i~)c>' );
 define( 'BB_SECURE_AUTH_KEY', 'qb7;_QT2^7p%PYv9(Nd6%%c:I5+a$-m;|!xeBWeG%hg,]J2y>1o`l(O}so<zNfUp' );
 define( 'BB_LOGGED_IN_KEY', '$5oWC#{z5nD6-~NqfX;!$Gv2gZ2D*mGJ4TeI]}>S5e!V+T<+|.(2-314 l]&<09S' );
