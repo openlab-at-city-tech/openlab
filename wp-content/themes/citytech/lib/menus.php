@@ -187,19 +187,8 @@ function openlab_my_groups_submenu($group) {
 
         //determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
-
-        $group_args = array(
-            'per_page' => 12,
-            'show_hidden' => true,
-            'user_id' => $bp->loggedin_user->id
-        );
         
-        $course_num = openlab_group_post_count($filters,$group_args);
-        if ($course_num > 0){
-            $course_text = 'Create / Clone a ';
-        }else{
-            $course_text = 'Create a ';
-        }
+        $course_text = 'Create / Clone a ';
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
             $menu_list = array(
