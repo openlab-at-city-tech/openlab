@@ -921,8 +921,8 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
 .submenu ul li.delete-button a,
 #subnav li.delete-button a {
     background:url(images/submenu_sprite.png) no-repeat -1px 0;
-    padding:2px 0 0 18px;
-    height:18px;
+    padding:2px 0 0 18px!important;
+    height:17px;
 }
 
 #subnav li.clone-button a {
