@@ -731,7 +731,7 @@ function wds_bp_group_meta() {
                     <tr id="wds-website-clone" class="form-field form-required">
                         <th valign="top" scope='row' class="disabled-opt" >
                             <input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-                            Clone an existing site:
+                             Name your cloned site:
                         </th>
 
                         <td id="noo_clone_options">
