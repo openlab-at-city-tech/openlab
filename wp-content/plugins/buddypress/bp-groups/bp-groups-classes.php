@@ -353,7 +353,7 @@ class BP_Groups_Group {
 		$sql       = array();
 		$total_sql = array();
 
-		$sql['select'] = "SELECT g.*, gm1.meta_value AS total_member_count, gm2.meta_value AS last_activity";
+		$sql['select'] = "SELECT DISTINCT g.id, g.*, gm1.meta_value AS total_member_count, gm2.meta_value AS last_activity";
 		$sql['from']   = " FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2,";
 
 		if ( ! empty( $r['user_id'] ) ) {
@@ -381,7 +381,6 @@ class BP_Groups_Group {
 
 		if ( ! empty( $meta_query_sql['join'] ) ) {
 			$sql['from'] .= $meta_query_sql['join'];
-			$total_sql['select'] .= $meta_query_sql['join_total'];
 		}
 
 		if ( ! empty( $meta_query_sql['where'] ) ) {
@@ -393,14 +392,12 @@ class BP_Groups_Group {
 		}
 
 		if ( ! empty( $r['include'] ) ) {
-			$include        = wp_parse_id_list( $r['include'] );
-			$include        = $wpdb->escape( implode( ',', $include ) );
+			$include        = implode( ',', wp_parse_id_list( $r['include'] ) );
 			$sql['include'] = " AND g.id IN ({$include})";
 		}
 
 		if ( ! empty( $r['exclude'] ) ) {
-			$exclude        = wp_parse_id_list( $r['exclude'] );
-			$exclude        = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude        = implode( ',', wp_parse_id_list( $r['exclude'] ) );
 			$sql['exclude'] = " AND g.id NOT IN ({$exclude})";
 		}
 
@@ -469,11 +466,10 @@ class BP_Groups_Group {
 		// See #5099
 		if ( ! empty( $meta_query_sql['where'] ) ) {
 			// Join the groupmeta table
-			$total_sql['select'] .= ", {$bp->groups->table_name_groupmeta} gmmq";
+			$total_sql['select'] .= ", ". substr( $meta_query_sql['join'], 0, -2 );
 
 			// Modify the meta_query clause from paged_sql for our syntax
 			$meta_query_clause = preg_replace( '/^\s*AND/', '', $meta_query_sql['where'] );
-			$meta_query_clause = str_replace( $bp->groups->table_name_groupmeta, 'gmmq', $meta_query_clause );
 			$total_sql['where'][] = $meta_query_clause;
 		}
 
@@ -508,7 +504,7 @@ class BP_Groups_Group {
 
 		// Populate some extra information instead of querying each time in the loop
 		if ( !empty( $r['populate_extras'] ) ) {
-			$group_ids = $wpdb->escape( join( ',', (array) $group_ids ) );
+			$group_ids = implode( ',', wp_parse_id_list( $group_ids ) );
 			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, $r['type'] );
 		}
 
@@ -561,11 +557,19 @@ class BP_Groups_Group {
 			// @todo It may be better in the long run to refactor
 			// the more general query syntax to accord better with
 			// BP/WP convention
-			preg_match( '/INNER JOIN (.*) ON/', $meta_sql['join'], $matches_a );
-			preg_match( '/ON \((.*)\)$/', $meta_sql['join'], $matches_b );
+			preg_match_all( '/INNER JOIN (.*) ON/', $meta_sql['join'], $matches_a );
+			preg_match_all( '/ON \((.*)\)/', $meta_sql['join'], $matches_b );
+
 			if ( ! empty( $matches_a[1] ) && ! empty( $matches_b[1] ) ) {
-				$sql_array['join']  = $matches_a[1] . ', ';
-				$sql_array['where'] = preg_replace( '/^(\sAND\s+[\(\s]+)/', '$1' . $matches_b[1] . ' AND ', $meta_sql['where'] );
+				$sql_array['join']  = implode( ',', $matches_a[1] ). ', ';
+
+				$sql_array['where'] = '';
+
+				$meta_query_where_clauses = explode( "\n", $meta_sql['where'] );
+				foreach( $matches_b[1] as $key => $group_id_clause ) {
+					$sql_array['where'] .= ' ' . preg_replace( '/^(AND\s+[\(\s]+)/', '$1' . $group_id_clause . ' AND ', ltrim( $meta_query_where_clauses[ $key ] ) );
+				}
+
 			}
 		}
 
@@ -669,13 +673,12 @@ class BP_Groups_Group {
 		}
 
 		if ( !empty( $exclude ) ) {
-			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
 			$exclude_sql = " AND g.id NOT IN ({$exclude})";
 		}
 
 		if ( !empty( $user_id ) ) {
-			$user_id      = absint( $wpdb->escape( $user_id ) );
+			$user_id      = absint( esc_sql( $user_id ) );
 			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} ORDER BY f.topics DESC {$pag_sql}" );
 			$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql}" );
 		} else {
@@ -685,7 +688,7 @@ class BP_Groups_Group {
 
 		if ( !empty( $populate_extras ) ) {
 			foreach ( (array) $paged_groups as $group ) $group_ids[] = $group->id;
-			$group_ids = $wpdb->escape( join( ',', (array) $group_ids ) );
+			$group_ids = implode( ',', wp_parse_id_list( $group_ids ) );
 			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
 		}
 
@@ -711,13 +714,12 @@ class BP_Groups_Group {
 		}
 
 		if ( !empty( $exclude ) ) {
-			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
 			$exclude_sql = " AND g.id NOT IN ({$exclude})";
 		}
 
 		if ( !empty( $user_id ) ) {
-			$user_id = $wpdb->escape( $user_id );
+			$user_id = esc_sql( $user_id );
 			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} ORDER BY f.posts ASC {$pag_sql}" );
 			$total_groups = $wpdb->get_results( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.posts > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} " );
 		} else {
@@ -727,7 +729,7 @@ class BP_Groups_Group {
 
 		if ( !empty( $populate_extras ) ) {
 			foreach ( (array) $paged_groups as $group ) $group_ids[] = $group->id;
-			$group_ids = $wpdb->escape( join( ',', (array) $group_ids ) );
+			$group_ids = implode( ',', wp_parse_id_list( $group_ids ) );
 			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
 		}
 
@@ -749,8 +751,7 @@ class BP_Groups_Group {
 		}
 
 		if ( !empty( $exclude ) ) {
-			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
 			$exclude_sql = " AND g.id NOT IN ({$exclude})";
 		}
 
@@ -770,7 +771,7 @@ class BP_Groups_Group {
 			foreach ( (array) $paged_groups as $group ) {
 				$group_ids[] = $group->id;
 			}
-			$group_ids    = $wpdb->escape( join( ',', (array) $group_ids ) );
+			$group_ids    = implode( ',', wp_parse_id_list( $group_ids ) );
 			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
 		}
 
@@ -795,12 +796,12 @@ class BP_Groups_Group {
 
 		if ( !empty( $exclude ) ) {
 			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = esc_sql( implode( ',', $exclude ) );
 			$exclude_sql = " AND g.id NOT IN ({$exclude})";
 		}
 
 		if ( !empty( $user_id ) ) {
-			$user_id = $wpdb->escape( $user_id );
+			$user_id = esc_sql( $user_id );
 			$paged_groups = $wpdb->get_results( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} ORDER BY rand() {$pag_sql}" );
 			$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT m.group_id) FROM {$bp->groups->table_name_members} m LEFT JOIN {$bp->groups->table_name_groupmeta} gm ON m.group_id = gm.group_id INNER JOIN {$bp->groups->table_name} g ON m.group_id = g.id WHERE gm.meta_key = 'last_activity'{$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql}" );
 		} else {
@@ -810,7 +811,7 @@ class BP_Groups_Group {
 
 		if ( !empty( $populate_extras ) ) {
 			foreach ( (array) $paged_groups as $group ) $group_ids[] = $group->id;
-			$group_ids = $wpdb->escape( join( ',', (array) $group_ids ) );
+			$group_ids = implode( ',', wp_parse_id_list( $group_ids ) );
 			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
 		}
 
@@ -966,6 +967,14 @@ class BP_Groups_Group {
  */
 class BP_Group_Member_Query extends BP_User_Query {
 	/**
+	 * Array of group member ids, cached to prevent redundant lookups
+	 *
+	 * @var null|array Null if not yet defined, otherwise an array of ints
+	 * @since BuddyPress (1.8.1)
+	 */
+	protected $group_member_ids;
+
+	/**
 	 * Set up action hooks
 	 *
 	 * @since BuddyPress (1.8)
@@ -977,6 +986,9 @@ class BP_Group_Member_Query extends BP_User_Query {
 		if ( empty( $this->query_vars_raw['type'] ) ) {
 			$this->query_vars_raw['type'] = 'last_modified';
 		}
+
+		// Set the sort order
+		add_action( 'bp_pre_user_query', array( $this, 'set_orderby' ) );
 
 		// Set up our populate_extras method
 		add_action( 'bp_user_query_populate_extras', array( $this, 'populate_group_member_extras' ), 10, 2 );
@@ -1027,6 +1039,10 @@ class BP_Group_Member_Query extends BP_User_Query {
 	 */
 	protected function get_group_member_ids() {
 		global $wpdb;
+
+		if ( is_array( $this->group_member_ids ) ) {
+			return $this->group_member_ids;
+		}
 
 		$bp  = buddypress();
 		$sql = array(
@@ -1106,10 +1122,34 @@ class BP_Group_Member_Query extends BP_User_Query {
 		$sql['order']   = "DESC";
 
 		/** LIMIT clause ******************************************************/
+		$this->group_member_ids = $wpdb->get_col( "{$sql['select']} {$sql['where']} {$sql['orderby']} {$sql['order']} {$sql['limit']}" );
 
-		$ids = $wpdb->get_col( "{$sql['select']} {$sql['where']} {$sql['orderby']} {$sql['order']} {$sql['limit']}" );
+		return $this->group_member_ids;
+	}
 
-		return $ids;
+	/**
+	 * Tell BP_User_Query to order by the order of our query results
+	 *
+	 * This implementation assumes the 'last_modified' sort order
+	 * hardcoded in BP_Group_Member_Query::get_group_member_ids().
+	 *
+	 * @param object $query BP_User_Query object
+	 */
+	public function set_orderby( $query ) {
+		$gm_ids = $this->get_group_member_ids();
+		if ( empty( $gm_ids ) ) {
+			$gm_ids = array( 0 );
+		}
+
+		// The first param in the FIELD() clause is the sort column id
+		$gm_ids = array_merge( array( 'u.id' ), wp_parse_id_list( $gm_ids ) );
+		$gm_ids_sql = implode( ',', $gm_ids );
+
+		$query->uid_clauses['orderby'] = "ORDER BY FIELD(" . $gm_ids_sql . ")";
+
+		// Prevent this filter from running on future BP_User_Query
+		// instances on the same page
+		remove_action( 'bp_pre_user_query', array( $this, 'set_orderby' ) );
 	}
 
 	/**
@@ -1466,8 +1506,7 @@ class BP_Groups_Member {
 		$pag_sql = ( !empty( $limit ) && !empty( $page ) ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) ) : '';
 
 		if ( !empty( $exclude ) ) {
-			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
 			$exclude_sql = " AND g.id NOT IN ({$exclude})";
 		} else {
 			$exclude_sql = '';
@@ -1628,8 +1667,7 @@ class BP_Groups_Member {
 
 		$exclude_sql = '';
 		if ( !empty( $exclude ) ) {
-			$exclude     = wp_parse_id_list( $exclude );
-			$exclude     = $wpdb->escape( implode( ',', $exclude ) );
+			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
 			$exclude_sql = " AND m.user_id NOT IN ({$exclude})";
 		}
 
@@ -2535,14 +2573,14 @@ class BP_Group_Extension {
 		$method  = $context . '_' . $type;
 		$rmethod = $this->class_reflection->getMethod( $method );
 		if ( isset( $rmethod->class ) && $this->class_name === $rmethod->class ) {
-			$callback = array( $this->class_name, $method );
+			$callback = array( $this, $method );
 		}
 
 		if ( empty( $callback ) ) {
 			$fallback_method  = 'settings_' . $type;
 			$rfallback_method = $this->class_reflection->getMethod( $fallback_method );
 			if ( isset( $rfallback_method->class ) && $this->class_name === $rfallback_method->class ) {
-				$callback = array( $this->class_name, $fallback_method );
+				$callback = array( $this, $fallback_method );
 			}
 		}
 

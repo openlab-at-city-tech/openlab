@@ -48,7 +48,7 @@ class BP_Groups_Meta_Filter {
 	function setup_group_ids() {
 		global $wpdb, $bp;
 
-		$sql = $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE " );
+		$sql = "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE ";
 
 		$join_clauses  = array();
 		$where_clauses = array();
@@ -58,14 +58,14 @@ class BP_Groups_Meta_Filter {
 			$table_shortname = 'gmf' . $counter;
 
 			$join_sql = $counter > 1 ? " LEFT JOIN {$bp->groups->table_name_groupmeta} {$table_shortname} ON gmf1.group_id = {$table_shortname}.group_id " : "{$bp->groups->table_name_groupmeta} {$table_shortname}";
-			$join_clauses[]  = $wpdb->prepare( $join_sql );
+			$join_clauses[]  = $join_sql;
 
 			$where_clauses[] = $wpdb->prepare( "{$table_shortname}.meta_key = %s AND {$table_shortname}.meta_value = %s", $key, $value );
 			$counter++;
 		}
 
 		if ( !empty( $where_clauses ) ) {
-			$sql = $wpdb->prepare( $wpdb->prepare( "SELECT gmf1.group_id FROM " . implode( ' ', $join_clauses ) . " WHERE " . implode( ' AND ', $where_clauses ) ) );
+			$sql = "SELECT gmf1.group_id FROM " . implode( ' ', $join_clauses ) . " WHERE " . implode( ' AND ', $where_clauses );
 		} else {
 			$sql = $wpdb->get_results( "SELECT id FROM {$bp->groups->table_name} WHERE 1 = 0" );
 		}
