@@ -263,7 +263,17 @@ jQuery(document).ready(function($){
 		$create_or_clone.on( 'change', function() {
 			new_create_or_clone = 'create' == $(this).val() ? 'off' : 'on';
 			toggle_clone_options( new_create_or_clone );
+                        
+                        //for enabling "clone an existing site"
+                        if ('clone' == $(this).val() ){
+                            $('#wds-website-clone th').removeClass('disabled-opt');
+                            $('#wds-website-clone input[name="new_or_old"]').removeAttr('disabled');
+                        }else{
+                            $('#wds-website-clone th').addClass('disabled-opt');
+                            $('#wds-website-clone input[name="new_or_old"]').attr('disabled','disabled');
+                        }
 		} );
+                
 	}
 
 	// Switching between groups to clone
