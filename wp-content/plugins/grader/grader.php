@@ -1,10 +1,10 @@
-<?php 
-/* 
+<?php
+/*
 Plugin Name: Grader
 Description: Enables administrators to grade posts, and for users and administrators to view their grades through gradebook-like interface
 Author: Michael Porter
 Version: 1.0
-*/ 
+*/
 
 /*********************
 ** OPTION GET METHODS
@@ -19,7 +19,7 @@ function grader_get_comment_color()
 {
 	return get_option('grader_comment_color',"");
 }
-	
+
 function grader_get_warning_msg()
 {
 	return get_option('grader_warning_msg','<em><font color="#A8A8A8">Only instructors and the post&#39;s author can see the grade for a post.</font></em>');
@@ -137,7 +137,7 @@ function grader_set_grade($id)
 {
     global $current_user;
 	global $post;
-	
+
 	if (!grader_is_grader($current_user->data)) return false;
 	$grade = grader_get_grade(NULL, $id);
 	if ($grade === false) return false;
@@ -174,17 +174,17 @@ function grader_filter_comments($comments)
 ** FILTERS and ACTIONS
 **********************/
 
-add_filter('comment_text', 'grader_comment_text'); 
-add_filter('comment_text_rss', 'grader_comment_text'); 
-add_filter('comment_excerpt', 'grader_comment_text'); 
+add_filter('comment_text', 'grader_comment_text');
+add_filter('comment_text_rss', 'grader_comment_text');
+add_filter('comment_excerpt', 'grader_comment_text');
 /*********************
 ** Edits a comment
-** @return If the comment is a grade and the user can see function re-formats based on user options.  If the comment is a grade and the 
+** @return If the comment is a grade and the user can see function re-formats based on user options.  If the comment is a grade and the
 ** user cannot see returns hidden comment text.  If the comment is not a grade returns unformatted content.
 **********************/
-function grader_comment_text($content) 
-{ 
-	
+function grader_comment_text($content)
+{
+
     global $current_user;
 	global $comment;
 
@@ -196,7 +196,7 @@ function grader_comment_text($content)
 	} else {
 	    return grader_get_hidden_comment_text();
 	}
-} 
+}
 
 /*********************
 ** Remove any grade comments the user should not see
@@ -237,7 +237,7 @@ add_action ('edit_comment','grader_comment_post');
 function grader_comment_post($comment_id)
 {
 	grader_set_grade($comment_id);
-}	
+}
 
 add_action ('delete_comment','grader_delete_comment');
 /*********************
@@ -269,7 +269,7 @@ function grader_posts_custom_column($column_name)
 {
 	global $post;
 	global $current_user;
-	
+
 	if ($column_name == 'grade') {
 		if (grader_is_post_author() || grader_is_grader($current_user->data))
 		{
@@ -287,7 +287,7 @@ add_filter('post_row_actions', 'grader_post_row_actions', 10, 2);
 function grader_post_row_actions ($actions, $post)
 {
 	global $current_user;
-	
+
 	if (!grader_is_grader($current_user->data)) return $actions;
 	$comment_id = grader_get_grade_comment($post);
 	if ($comment_id === false) return $actions;
@@ -298,14 +298,14 @@ function grader_post_row_actions ($actions, $post)
 add_filter ('user_has_cap','grader_user_has_cap',10,3);
 /*********************
 ** Tests if the user can edit a post or comment.  Only admins can edit posts that are graded or grade comments.
-** @return an array of capabilities.  
+** @return an array of capabilities.
 **********************/
 function grader_user_has_cap ($allcaps,$caps,$args)
 {
 	global $comment;
 	global $post;
 	global $current_user;
-	
+
 	if ($comment == NULL && $post==NULL) return $allcaps;
 	if (grader_is_grader($current_user->data)) return $allcaps;
 	$grade_comment_id = grader_get_grade_comment($post);
@@ -335,12 +335,12 @@ function grader_admin_init()
 }
 
 add_action('admin_menu', 'grader_plugin_menu');
-function grader_plugin_menu() 
+function grader_plugin_menu()
 {
 	add_options_page('Grader Options', 'Grader Options', 8, __FILE__, 'grader_plugin_options');
 }
 
-function grader_plugin_options() 
+function grader_plugin_options()
 { ?>
 	<div class="wrap">
 	<h2>Grader</h2>
@@ -361,8 +361,8 @@ function grader_plugin_options()
         </tr>
 		<tr valing="top">
 			<td colspan=2><em>The comment Delimeter seperates the grade from the remainder of the comment.</em></td>
-		</tr>        
-	
+		</tr>
+
         <tr valign="top">
             <th width=30% scope="row">Blocked text</th>
             <td><input type="text" name="grader_hidden_comment_text" id="grader_hidden_comment_text" value="<?php echo grader_get_hidden_comment_text();?>" size="100" /></td>
@@ -370,7 +370,7 @@ function grader_plugin_options()
 		<tr valing="top">
 			<td colspan=2><em>The blocked text replaces the grade comment for users that do not have sufficient privileges to view the grade.</em></td>
 		</tr>
-		
+
         <tr valign="top">
             <th width=30% scope="row">Warning message</th>
             <td><textarea type="text" name="grader_warning_msg" id="grader_warning_msg" rows=3 cols=75><?php echo grader_get_warning_msg();?></textarea></td>
@@ -378,7 +378,7 @@ function grader_plugin_options()
 		<tr valing="top">
 			<td colspan=2><em>The warning message appears at the bottom of the grade comment and reminds users that their grades are private.</em></td>
 		</tr>
-		
+
 	    <tr valign="top">
             <th width=30% scope="row">Grade color</th>
             <td><input type="text" name="grader_grade_color" id="grader_grade_color" value="<?php echo grader_get_grade_color();?>" size="25" /></td>
@@ -397,4 +397,4 @@ function grader_plugin_options()
 	</div>
 <?php
 }
-	
+
