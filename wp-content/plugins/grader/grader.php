@@ -198,7 +198,6 @@ function grader_comment_text($content)
 	}
 } 
 
-add_filter ('comments_array','grader_comments_array');
 /*********************
 ** Remove any grade comments the user should not see
 **********************/
@@ -206,6 +205,18 @@ function grader_comments_array($comments)
 {
 	return grader_filter_comments($comments);
 }
+add_filter('comments_array','grader_comments_array');
+
+/**
+ * Filter any comments the user is not supposed to see
+ *
+ * grader_comments_array() handles this at the level of the comment
+ * template. The current function goes directly into WP_Comment_Query
+ */
+function grader_filter_the_comments( $comments ) {
+	return grader_filter_comments($comments);
+}
+add_filter( 'the_comments', 'grader_filter_the_comments' );
 
 add_filter ('get_comments_number','grader_get_comments_number');
 /*********************
