@@ -142,17 +142,25 @@ jQuery(document).ready(function($){
 		$group_to_clone = $('#group-to-clone');
 
 		if ( 'on' == on_or_off ) {
+			// Check "Clone a course" near the top
 			$('#create-or-clone-clone').attr('checked', true);	
+
+			// Allow a course to be selected from the source dropdown,
+			// and un-grey the associated labels/text
 			$group_to_clone.removeClass('disabled-opt');	
 			$group_to_clone.attr('disabled', false);	
 			$('#ol-clone-description').removeClass('disabled-opt');
 
+			// Set up the site clone information
 			group_id_to_clone = $group_to_clone.val();
 			if ( ! group_id_to_clone ) {
 				group_id_to_clone = $.urlParam( 'clone' );
 			}
 		} else {
+			// Check "Create a course" near the top
 			$('#create-or-clone-create').attr('checked', true);	
+
+			// Grey out options related to selecting a course to clone
 			$group_to_clone.addClass('disabled-opt');	
 			$group_to_clone.attr('disabled', true);	
 			$('#ol-clone-description').addClass('disabled-opt');
@@ -205,8 +213,15 @@ jQuery(document).ready(function($){
 
 				// Additional Description
 				$('textarea[name="wds_course_html"]').val(r.additional_description);
-
+ 
+				// Associated site
 				if ( r.site_id ) {
+					// Un-grey the website clone options
+					$('#wds-website-clone th').removeClass('disabled-opt');
+					$('#wds-website-clone input[name="new_or_old"]').removeAttr('disabled');
+
+					// Auto-select the "Name your cloned site" option,
+					// and trigger setup JS
 					$('#new_or_old_clone').attr('checked', true);
 					$('#new_or_old_clone').trigger('click');
 
@@ -214,15 +229,13 @@ jQuery(document).ready(function($){
 					$('#cloned-site-url').html( 'Your original address was: ' + r.site_url );
 					$('#blog-id-to-clone').val( r.site_id );
 				} else {
+					// Grey out the website clone options
+					$('#wds-website-clone th').addClass('disabled-opt');
+					$('#wds-website-clone input[name="new_or_old"]').attr('disabled','disabled');
+
+					// Pre-select "Create a new site"
 					$('#new_or_old_new').attr('checked', true);
 					$('#new_or_old_new').trigger('click');
-					$('#blog-id-to-clone option').each(function(){
-						var $blog_opt = $(this);
-						if ( $blog_opt.val() == 0 ) {
-							$blog_opt.attr('selected', true);
-						}
-					});
-
 				}
 
 			}
@@ -263,17 +276,7 @@ jQuery(document).ready(function($){
 		$create_or_clone.on( 'change', function() {
 			new_create_or_clone = 'create' == $(this).val() ? 'off' : 'on';
 			toggle_clone_options( new_create_or_clone );
-                        
-                        //for enabling "clone an existing site"
-                        if ('clone' == $(this).val() ){
-                            $('#wds-website-clone th').removeClass('disabled-opt');
-                            $('#wds-website-clone input[name="new_or_old"]').removeAttr('disabled');
-                        }else{
-                            $('#wds-website-clone th').addClass('disabled-opt');
-                            $('#wds-website-clone input[name="new_or_old"]').attr('disabled','disabled');
-                        }
 		} );
-                
 	}
 
 	// Switching between groups to clone
