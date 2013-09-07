@@ -48,6 +48,17 @@
 			return true;
 		}
 	});
+
+	window.new_topic_is_visible = $('#new-topic-post').is(":visible");
+	$('.show-hide-new').click( function() {
+		if ( window.new_topic_is_visible ) {
+			$('.single-forum #message').slideUp(300);
+			window.new_topic_is_visible = false;
+		} else {
+			$('.single-forum #message').slideDown(300);
+			window.new_topic_is_visible = true;
+		}
+	});
 	
 	//this is for the filtering - changes the text class to a "red" state
 	$('#group_seq_form select').change(function(){
