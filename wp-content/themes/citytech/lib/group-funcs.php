@@ -173,32 +173,51 @@ function openlab_group_archive() {
     }
 
 // Set up filters
-    $filters = array(
-        'wds_group_type' => $group_type
+    $meta_query = array(
+	array(
+		'key' => 'wds_group_type',
+		'value' => $group_type,
+	),
     );
 
     if (!empty($school) && 'school_all' != strtolower($school)) {
-        $filters['wds_group_school'] = $school;
+	$meta_query[] = array(
+		'key' => 'wds_group_school',
+		'value' => $school,
+		'compare' => 'LIKE',
+	);
     }
 
     if (!empty($department) && 'dept_all' != strtolower($department)) {
-        $filters['wds_departments'] = $department;
+	$meta_query[] = array(
+		'key' => 'wds_departments',
+		'value' => $department,
+		'compare' => 'LIKE',
+	);
     }
 
     if (!empty($semester) && 'semester_all' != strtolower($semester)) {
-        $filters['wds_semester'] = $semester_season;
-        $filters['wds_year'] = $semester_year;
+	$meta_query[] = array(
+		'key' => 'wds_semester',
+		'value' => $semester_season,
+	);
+	$meta_query[] = array(
+		'key' => 'wds_year',
+		'value' => $semester_year,
+	);
     }
 
     if (!empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype']) {
-        $filters['portfolio_user_type'] = ucwords($_GET['usertype']);
+	$meta_query[] = array(
+		'key' => 'portfolio_user_type',
+		'value' => ucwords( $_GET['usertype'] ),
+	);
     }
-
-    $meta_filter = new BP_Groups_Meta_Filter($filters);
 
     $group_args = array(
         'search_terms' => $search_terms_raw,
         'per_page' => 12,
+	'meta_query' => $meta_query,
     );
 
     if (!empty($_GET['group_sequence'])) {
@@ -283,7 +302,6 @@ function openlab_group_archive() {
 
     <?php endif; ?>
     <?php
-    $meta_filter->remove_filters();
 }
 
 /*
