@@ -217,6 +217,30 @@ function openlab_bp_get_new_group_name( $name ) {
 }
 add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 
+/**
+ * Get an array of group member portfolio info
+ */
+function openlab_get_group_member_portfolios( $group_id = false ) {
+	if ( ! $group_id ) {
+		$group_id = openlab_fallback_group();
+	}
+
+	// @todo Can cache this pretty aggressively
+	$portfolios = array();
+	$group_members = groups_get_group_members( $group_id, false, false, false );
+	foreach ( $group_members['members'] as $member ) {
+		$portfolio = array(
+			'user_id' => $member->ID,
+			'user_display_name' => $member->display_name,
+			'portfolio_id' => openlab_get_user_portfolio_id( $member->ID ),
+			'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
+		);
+
+		$portfolios[] = $portfolio;
+	}
+
+	return $portfolios;
+}
 
 /////////////////////////
 //     ACCESS LIST     //
