@@ -225,22 +225,69 @@ function openlab_get_group_member_portfolios( $group_id = false ) {
 		$group_id = openlab_fallback_group();
 	}
 
-	// @todo Can cache this pretty aggressively
-	$portfolios = array();
-	$group_members = groups_get_group_members( $group_id, false, false, false );
-	foreach ( $group_members['members'] as $member ) {
-		$portfolio = array(
-			'user_id' => $member->ID,
-			'user_display_name' => $member->display_name,
-			'portfolio_id' => openlab_get_user_portfolio_id( $member->ID ),
-			'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
-		);
+	$portfolios = groups_get_groupmeta( $group_id, 'member_portfolios' );
+	$cached = true;
+	if ( '' == $portfolios ) {
+		$cached = false;
+		$portfolios = array();
+		$group_members = groups_get_group_members( $group_id, false, false, false );
+		foreach ( $group_members['members'] as $member ) {
+			$portfolio = array(
+				'user_id' => $member->ID,
+				'user_display_name' => $member->display_name,
+				'portfolio_id' => openlab_get_user_portfolio_id( $member->ID ),
+				'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
+			);
 
-		$portfolios[] = $portfolio;
+			$portfolios[] = $portfolio;
+		}
+
+		groups_update_groupmeta( $group_id, 'member_portfolios', $portfolios );
 	}
 
 	return $portfolios;
 }
+
+/**
+ * Cache busting for group portfolio lists
+ *
+ * Bust the cache when:
+ * - group membership changes - openlab_bust_group_portfolios_cache_on_membership_change()
+ * - a group member adds/removes a portfolio site
+ */
+function openlab_bust_group_portfolio_cache( $group_id = 0 ) {
+	groups_delete_groupmeta( $group_id, 'member_portfolios' );
+
+	// regenerate
+	openlab_get_group_member_portfolios();
+}
+
+/**
+ * Bust group portfolio cache when membership changes
+ */
+function openlab_bust_group_portfolios_cache_on_membership_change( $member ) {
+	openlab_bust_group_portfolio_cache( $member->group_id );
+}
+add_action( 'groups_member_after_save', 'openlab_bust_group_portfolios_cache_on_membership_change' );
+
+/**
+ * Bust group portfolio cache when membership changes
+ */
+function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
+	if ( ! openlab_is_portfolio( $group_id ) ) {
+		return;
+	}
+
+	// Delete the portfolio cache for each group the user is a member of
+	// Don't regenerate - could be several groups. Let it happen on the fly
+	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
+	$group_ids = groups_get_user_groups( $user_id );
+	foreach ( $group_ids as $gid ) {
+		openlab_bust_group_portfolio_cache( $gid );
+	}
+}
+add_action( 'groups_before_delete_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
+add_action( 'groups_created_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
 
 /////////////////////////
 //     ACCESS LIST     //
