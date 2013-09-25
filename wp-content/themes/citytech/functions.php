@@ -331,19 +331,19 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $where = '';
 
-	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
+	$select = "SELECT a.group_id FROM {$bp->groups->table_name_members} a";
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
 
 	if ( !$r['show_hidden'] ) {
-		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
-		$where  .= $wpdb->prepare( " AND c.status != 'hidden' " );
+		$select .= " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) ";
+		$where  .= " AND c.status != 'hidden' ";
 	}
 
 	if ( 'all' != $r['group_type'] ) {
 		// Sanitize
 		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
 
-		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) " );
+		$select .= " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) ";
 		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
 	}
 
@@ -360,7 +360,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 		if ( $r['get_activity'] ) {
 			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
-			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" ) );
+			$activities = $wpdb->get_results( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" );
 
 			// Now walk down the list and try to match with a group. Once one is found, remove
 			// that group from the stack
