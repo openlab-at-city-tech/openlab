@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * Members - home
 *
@@ -285,7 +285,7 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 		 ?>
 		 <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
                         <!-- See all link in column headers -->
-                        <h4><?php echo $title ?>                        
+                        <h4><?php echo $title ?>
                         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
                                 <a class="group-see-all top" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
                         <?php else: ?>
