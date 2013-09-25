@@ -4805,6 +4805,36 @@ body.single-help div#content div.entry-content ol li {
     margin: 0 0 5px 20px;
 }
 
+body.single-help div#content h3 {
+    font-family: 'Arvo';
+    font-size: 15px;
+    color: #717171;
+    margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h4 {
+  font-weight: 700;
+  font-family: Arial;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h5 {
+  font-family: Arial;
+  font-style: oblique;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h6 {
+  font-family: Arial;
+  font-style: oblique;
+  font-weight: 500;
+  font-size: 11px;
+  margin: 30px 0 10px 0;
+}
+
 #help-tags-copy p {
     font-family:sans-serif;
     font-size:12px;
