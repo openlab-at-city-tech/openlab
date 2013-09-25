@@ -273,7 +273,8 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
 			'user_id'       => bp_displayed_user_id(),
 			'show_hidden'   => false,
 			'active_status' => 'all',
-			'group_type'	=> $type
+			'group_type'	=> $type,
+			'get_activity'  => false,
 		);
 		$groups = openlab_get_groups_of_user( $get_group_args );
 
@@ -306,9 +307,9 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
                                                 </div>
 
                                                 <div class="activity-inner">
-                                                        <?php $activity = !empty( $groups['activity'][bp_get_group_id()] ) ? $groups['activity'][bp_get_group_id()] : bp_get_group_description() ?>
+                                                        <?php $activity = bp_get_group_description() ?>
                                                         <?php /* shorten the description if it's getting long */ ?>
-                                                        <?php $activity = openlab_shortened_text( $activity, 75 ); ?>
+                                                        <?php $activity = strip_tags( openlab_shortened_text( $activity, 75 ) ); ?>
 
                                                         <?php echo $activity.' <a class="read-more" href="'.bp_get_group_permalink().'">See More</a>'; ?>
                                                 </div>
