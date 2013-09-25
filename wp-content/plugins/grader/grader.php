@@ -170,6 +170,32 @@ function grader_filter_comments($comments)
 	return $comments;
 }
 
+function grader_filter_bp_activity( $has_activities ) {
+	global $activities_template;
+
+	if ( $has_activities ) {
+		foreach ( $activities_template->activities as $akey => $a ) {
+			$grade = grader_parse_grade( $a->content );
+
+			// Just remove it. Don't bother checking permissions
+			if ( $grade ) {
+				unset( $activities_template->activities[ $akey ] );
+				$activities_template->total_activity_count--;
+				$activities_template->activity_count--;
+			}
+		}
+
+		$activities_template->activities = array_values( $activities_template->activities );
+
+		if ( ! $activities_template->activity_count ) {
+			$has_activities = false;
+		}
+	}
+
+	return $has_activities;
+}
+add_filter( 'bp_has_activities', 'grader_filter_bp_activity' );
+
 /*********************
 ** FILTERS and ACTIONS
 **********************/
