@@ -171,16 +171,16 @@ switch ($_GET['group_sequence']) {
             <select name="semester" class="last-select <?php echo $semester_color; ?>-text">
                 <option value="<?php echo $option_value_semester; ?>"><?php echo $display_option_semester; ?></option>
                 <option value='semester_all'>All</option>
-                <option value='fall-2011'>Fall 2011</option>
-                <option value='winter-2012'>Winter 2012</option>
-                <option value='spring-2012'>Spring 2012</option>
-                <option value='summer-2012'>Summer 2012</option>
-                <option value='fall-2012'>Fall 2012</option>
-                <option value='winter-2013'>Winter 2013</option>
-                <option value='spring-2013'>Spring 2013</option>
-                <option value='summer-2013'>Summer 2013</option>
+                <option value='winter-2014'>Winter 2014</option>
                 <option value='fall-2013'>Fall 2013</option>
+                <option value='summer-2013'>Summer 2013</option>
+                <option value='spring-2013'>Spring 2013</option>
                 <option value='winter-2013'>Winter 2013</option>
+                <option value='fall-2012'>Fall 2012</option>
+                <option value='summer-2012'>Summer 2012</option>
+                <option value='spring-2012'>Spring 2012</option>
+                <option value='winter-2012'>Winter 2012</option>
+                <option value='fall-2011'>Fall 2011</option>
             </select>
 <?php endif; ?>
         <?php if ($group_type == 'portfolio' || $post_obj->post_title == 'People'): ?>

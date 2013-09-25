@@ -4805,6 +4805,36 @@ body.single-help div#content div.entry-content ol li {
     margin: 0 0 5px 20px;
 }
 
+body.single-help div#content h3 {
+    font-family: 'Arvo';
+    font-size: 15px;
+    color: #717171;
+    margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h4 {
+  font-weight: 700;
+  font-family: Arial;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h5 {
+  font-family: Arial;
+  font-style: oblique;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h6 {
+  font-family: Arial;
+  font-style: oblique;
+  font-weight: 500;
+  font-size: 11px;
+  margin: 30px 0 10px 0;
+}
+
 #help-tags-copy p {
     font-family:sans-serif;
     font-size:12px;
@@ -5006,12 +5036,12 @@ h1.parent-cat {
     font-size:13px;
 }
 
-.tax-help_category #content > a {
+.tax-help_category #content > a, .tax-help_tags #content > a {
     font-size:12px;
     border-top:1px solid #f0f0f0;
 }
 
-.tax-help_category #content > a[href="#help-top"]:after {
+.tax-help_category #content > a[href="#help-top"]:after, .tax-help_tags #content > a[href="#help-top"]:after {
     content:" \2191";
 }
 
@@ -5029,14 +5059,23 @@ h1.parent-cat {
     font-family: 'Arvo',​arial,​serif;
 }
 
-.tax-help_category #content h3.help-title,.tax-help_category #content .help-tags {
+.tax-help_category #content h3.help-title, .tax-help_category #content .help-tags, 
+.tax-help_tags #content h3.entry-title, .tax-help_tags #content .help-tags, .tax-help_tags #content .cat-list {
     padding-left:15px;
 }
 
-.tax-help_category #content h3.help-title a {
+.tax-help_category #content h3.help-title a, .tax-help_tags #content h3.entry-title a {
     text-decoration:underline;
     font-weight:700;
     font-family:Arial,Helvetica,sans-serif;
+}
+.tax-help_tags .cat-list {
+    font-size:12px;
+    font-family:Arial;
+    font-weight:400;
+}
+.tax-help_tags .cat-list a {
+  text-decoration: underline;
 }
 
 /* Glossary page */
