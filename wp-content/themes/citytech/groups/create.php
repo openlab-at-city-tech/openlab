@@ -197,6 +197,7 @@ function cuny_create_group() {
                     <?php do_action('bp_before_group_avatar_creation_step'); ?>
 
                     <?php if (!bp_get_avatar_admin_step() || 'upload-image' == bp_get_avatar_admin_step()) : ?>
+                            <h4>Upload Avatar</h4>
 
                         <div class="left-menu">
             <?php bp_new_group_avatar() ?>

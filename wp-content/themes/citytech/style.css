@@ -49,10 +49,13 @@ followed by styles specific to each numbered section of the site.
 ** 2.6 Activity / My Activity
 
 * 3.0 COURSES / MY COURSES
+** 3.2.1 Create/Clone a Course (These are common for 4.2.1 and 5.2.1)
 
 * 4.0 PROJECTS / MY PROJECTS
+** 4.2.1 Create a Project (See 3.2.1)
 
 * 5.0 CLUBS / MY CLUBS
+** 5.2.1 Create a Club (See 3.2.1)
 
 * 6.0 GROUPS (Consolidated)
 ** 6.1 Members
@@ -4138,7 +4141,7 @@ div.activity-comments form textarea {
   margin-bottom: 20px!important;
 }
 .course-create table ul.ol-tooltip {
-  margin-top: -20px;
+  margin-top: -17px;
   margin-bottom: 10px;
 }
 .course-create tr.additional-field {
@@ -4166,18 +4169,158 @@ div.activity-comments form textarea {
     font-weight: 500;
 }
 .course-create td#noo_external_options p#check-note {
-    bottom: -60px;
+    bottom: -50px;
+    margin-left: 13px;
     margin-top: 10px !important;
-    margin-left: 15px;
+    width: 620px;
 }
+
+/* 3.2.1 Create/Clone a Course
+------------------------------------------------------------ */
+
+/* BEGIN styles shared for 4.2.1 and 5.2.1 */
+.group-create #group-create-body, .group-create #single-course-body {
+  margin: 0 10px 0 5px;
+}
+
+.group-create .submenu {
+  margin-bottom: 30px;
+}
+
+.group-create #group-create-body form.standard-form label, .group-create #group-create-body form.standard-form span.label,
+.group-create #single-course-body form.standard-form label, .group-create #single-course-body form.standard-form span.label {
+  margin-bottom: 10px;
+  margin-top: 25px;
+}
+
+.group-create #group-create-body form.standard-form div.submit input, .group-create #single-course-body form.standard-form div.submit input {
+  margin-right: 0;
+  margin-left: 17px;
+}
+
+.group-create #group-create-body form .submit {
+  margin-top: 50px;
+}
+.group-create #single-course-body form .submit {
+  margin: 95px 0 50px 17px;
+}
+.group-create #single-course-body .groupblog-setup {
+    margin-bottom:40px;
+}
+.group-create #group-create-body .groupblog-setup {
+  margin-bottom: -10px;
+}
+.group-create #group-create-body form.standard-form div.submit, .group-create #single-course-body form.standard-form div.submit {
+  padding: 0;
+}
+
+.group-create #group-create-body #check-note {
+  bottom: -50px;
+  padding-left: 25px;
+  width: 620px;
+}
+
+.group-create.group-settings #group-create-body hr {
+  display: none;
+}
+
+.group-create.group-settings #group-create-body h4 {
+  margin: 0;
+  font-size: 12px;
+}
+
+.group-create.group-settings #group-create-body p {
+  margin-bottom: 15px;
+}
+
+.group-create.group-settings #group-create-body .radio {
+  padding-left: 0;
+  margin-bottom: 25px;
+}
+
+.group-create.group-settings #group-create-body .radio em {
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+}
+    
+.group-create.group-settings #group-create-body .radio label {
+  margin: 10px 0;
+  font-size: 11px;
+}
+
+.group-create.group-settings #group-create-body .radio label strong {
+  font-size: 11px;
+}
+
+.group-create.group-settings #group-create-body .radio label input {
+  margin-right: 5px;
+}
+
+.group-create.group-settings #group-create-body .radio label ul {
+  margin: 0 0 15px 35px;
+}
+
+.group-create.group-settings #group-create-body .radio label ul li {
+  list-style: disc;
+  font-size: 11px;
+  margin: 5px 0;
+}
+
+.group-create.group-settings #group-create-body .submit {
+  margin: 50px 0 50px 17px;
+}
+
+.group-create.group-avatar #group-create-body div.submit {
+  margin-top: 50px;
+}
+
+.group-create.group-avatar #group-create-body h4 {
+  margin-bottom: 10px;
+}
+
+.group-create.group-avatar #group-create-body .left-menu {
+  width: 155px;
+}
+
+.group-create.group-avatar #group-create-body .left-menu img.avatar {
+  width: 145px;
+  height: 145px;
+}
+
+.group-create.group-avatar #group-create-body .main-column {
+  margin-left: 160px!important;
+}
+
+
+/* END shared styles */
+
+.group-create.group-settings {}
+
 
 /* 4.0 PROJECTS
 ------------------------------------------------------------ */
+
+/* 4.2.1 Create/Clone a Project - NB: shared styles are in 3.2.1
+------------------------------------------------------------ */
+
+
 /* 5.0 CLUBS
 ------------------------------------------------------------ */
-/* Course and Club Creation */
+
+/* 5.2.1 Create/Clone a Club - NB: shared styles are in 3.2.1
+------------------------------------------------------------ */
+
+/* Course and Club Creation Step 1 */
 form#create-group-form div#group-create-body div.ct-group-meta {
     margin-top:20px;
+}
+.group-create #single-course-body tr {
+  line-height: 20px;
+}
+#wds-website-tooltips .ol-tooltip li {
+    line-height: 15px;
 }
 
 /* 6.0 GROUPS
@@ -4360,7 +4503,7 @@ form.standard-form .create-or-clone-options label {
 }
 
 .create-or-clone-options li {
-    margin-bottom: 10px;
+    margin: 5px 0 15px 0;
 }
 
 p.ol-clone-description {
