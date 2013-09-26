@@ -4116,7 +4116,7 @@ div.activity-comments form textarea {
 .course-create tr.schools {
   height: 31px;
 }
-.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th, #group-create-body .schools .block-title {
   font-size: 12px;
   font-weight: 700;
 }
@@ -4178,7 +4178,7 @@ div.activity-comments form textarea {
 /* 3.2.1 Create/Clone a Course
 ------------------------------------------------------------ */
 
-/* BEGIN styles shared for 4.2.1 and 5.2.1 */
+/* BEGIN styles shared for 3.2.1, 4.2.1 and 5.2.1 */
 .group-create #group-create-body, .group-create #single-course-body {
   margin: 0 10px 0 5px;
 }
@@ -4216,7 +4216,7 @@ div.activity-comments form textarea {
 
 .group-create #group-create-body #check-note {
   bottom: -50px;
-  padding-left: 25px;
+  padding-left: 17px;
   width: 620px;
 }
 
@@ -4291,6 +4291,30 @@ div.activity-comments form textarea {
 
 .group-create.group-avatar #group-create-body .main-column {
   margin-left: 160px!important;
+}
+
+#group-create-body .school-inputs input#school_tech {
+    margin-right: 5px;
+}
+
+#group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts {
+  margin: 0 5px 0 15px;
+}
+
+#group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th {
+    padding: 8px 8px 8px 0;
+}
+
+#group-create-body .schools .block-title {
+    padding-left: 0;
+}
+
+#group-create-body #wds-website-tooltips td {
+  padding-top: 0;
+}
+
+#group-create-body #wds-website-tooltips p {
+  margin-top: 0;
 }
 
 
