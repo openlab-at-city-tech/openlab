@@ -4223,55 +4223,64 @@ div.activity-comments form textarea {
   width: 620px;
 }
 
-.group-create.group-settings #group-create-body hr {
+.group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
   display: none;
 }
 
-.group-create.group-settings #group-create-body h4 {
+.group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
   margin: 0;
   font-size: 12px;
+  font-family: 'Arial';
 }
 
-.group-create.group-settings #group-create-body p {
+.group-admin.group-settings #single-course-body h4 {
+  margin: 5px 0 15px 0;
+}
+
+.group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
+  font-weight: 700;
+}
+
+.group-create.group-settings #group-create-body p, .group-admin.group-settings #single-course-body p {
   margin-bottom: 15px;
 }
 
-.group-create.group-settings #group-create-body .radio {
+.group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
   padding-left: 0;
   margin-bottom: 25px;
 }
 
-.group-create.group-settings #group-create-body .radio em {
+.group-create.group-settings #group-create-body .radio em, .group-admin.group-settings #single-course-body .radio em {
     font-size: 11px;
     font-style: normal;
     font-weight: 700;
     line-height: 14px;
 }
     
-.group-create.group-settings #group-create-body .radio label {
+.group-create.group-settings #group-create-body .radio label, .group-admin.group-settings #single-course-body .radio label {
   margin: 10px 0;
   font-size: 11px;
 }
 
-.group-create.group-settings #group-create-body .radio label strong {
+.group-create.group-settings #group-create-body .radio label strong, .group-admin.group-settings #single-course-body .radio label strong {
   font-size: 11px;
 }
 
-.group-create.group-settings #group-create-body .radio label input {
+.group-create.group-settings #group-create-body .radio label input, .group-admin.group-settings #single-course-body .radio label input {
   margin-right: 5px;
 }
 
-.group-create.group-settings #group-create-body .radio label ul {
+.group-create.group-settings #group-create-body .radio label ul, group-admin.group-settings #single-course-body .radio label ul {
   margin: 0 0 15px 35px;
 }
 
-.group-create.group-settings #group-create-body .radio label ul li {
+.group-create.group-settings #group-create-body .radio label ul li, .group-admin.group-settings #single-course-body .radio label ul li {
   list-style: disc;
   font-size: 11px;
   margin: 5px 0;
 }
 
-.group-create.group-settings #group-create-body .submit {
+.group-create.group-settings #group-create-body .submit, .group-admin.group-settings #single-course-body .submit {
   margin: 50px 0 50px 17px;
 }
 
