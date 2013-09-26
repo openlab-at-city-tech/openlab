@@ -5006,7 +5006,7 @@ body.docs #comment {
     margin: 3px 0;
 }
 
-#change-group-site a {
+#change-group-site a, #delete-group-avatar-button a {
     background: none repeat scroll 0 0 #EEEEEE;
     border: 1px solid #AAAAAA;
     border-radius: 3px 3px 3px 3px;
@@ -5016,6 +5016,12 @@ body.docs #comment {
     margin: 2px 0 0 10px;
     padding: 2px 15px;
     text-decoration: none;
+}
+
+.group-admin.group-avatar .generic-button {
+  background: none;
+  margin: 0;
+  padding: 0;
 }
 
 .group-admin #check-note {
