@@ -5057,11 +5057,23 @@ body.single-help div#content div.entry-content ol li {
     margin: 0 0 5px 20px;
 }
 
+body.single-help .entry-content h1 {
+    border: 0 none;
+    font-family: 'Arial';
+    font-size: 24px;
+    margin: 30px 0 10px;
+}
+
+body.single-help .entry-content h2 {
+    font-size: 14px;
+}
+
 body.single-help div#content h3 {
     font-family: 'Arvo';
     font-size: 15px;
     color: #717171;
     margin: 30px 0 10px 0;
+    font-weight: 700;
 }
 
 body.single-help div#content h4 {
@@ -5140,7 +5152,7 @@ div #help-tags-copy,div #help-tags {
     color:#C84C35;
     font-size:13px;
     font-family:'Arvo';
-    padding-left:5px;
+    padding-left:7px;
     margin:0 0 17px;
 }
 #help-title h2 a{
