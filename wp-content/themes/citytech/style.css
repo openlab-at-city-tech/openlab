@@ -4314,6 +4314,23 @@ div.activity-comments form textarea {
   margin-left: 160px!important;
 }
 
+#upload-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 10px 0 5px;
+}
+
+#delete-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    margin-top: 30px;
+}
+
+#delete-group-avatar-text {
+    float: left;
+}
+
 #group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
     margin-right: 5px;
 }
@@ -4999,16 +5016,36 @@ body.docs #comment {
     margin: 3px 0;
 }
 
-#change-group-site a, #delete-group-avatar-button a {
+#avatar-crop-pane {
+  clear: left;
+}
+
+.group-admin.group-avatar #group-settings-form h3 {
+  font-family: 'Arial';
+  font-weight: 700;
+}
+
+#change-group-site a, #delete-group-avatar-button a, .group-avatar #group-settings-form #upload {
     background: none repeat scroll 0 0 #EEEEEE;
     border: 1px solid #AAAAAA;
-    border-radius: 3px 3px 3px 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
     color: #666666;
     margin: 2px 0 0 10px;
-    padding: 2px 15px;
+    padding: 1px 5px;
     text-decoration: none;
+}
+
+#avatar-crop-submit {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #666666;
+    text-decoration: none;
+    padding: 1px 5px;
 }
 
 .group-admin.group-avatar .generic-button {
