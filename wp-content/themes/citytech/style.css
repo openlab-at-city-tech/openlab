@@ -49,7 +49,7 @@ followed by styles specific to each numbered section of the site.
 ** 2.6 Activity / My Activity
 
 * 3.0 COURSES / MY COURSES
-** 3.2.1 Create/Clone a Course (These are common for 4.2.1 and 5.2.1)
+** 3.2.1 Create/Clone a Course (These are common for 3.2.1, 4.2.1 and 5.2.1)
 
 * 4.0 PROJECTS / MY PROJECTS
 ** 4.2.1 Create a Project (See 3.2.1)
@@ -65,6 +65,7 @@ followed by styles specific to each numbered section of the site.
 ** 6.5 Group Site
 
 * 7.0 PORTFOLIOS
+** 7.1.1 Group Settings
 
 * 8.0 HELP
 ** 8.1 Print Style
@@ -889,8 +890,9 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
     display:inline;
 }
 
-.submenu-text,#subnav #group-settings-label,#bpsubnav li:first-child {
-    margin:1px 6px 0;
+.submenu-text, #subnav #group-settings-label, #bpsubnav li:first-child {
+    margin: 0;
+    font-size: 13px;
 }
 
 .submenu ul li,#subnav ul li {
@@ -4072,19 +4074,19 @@ div.activity-comments form textarea {
     color:#666;
     line-height:15px;
 }
-#clone-course-tooltip-1 {
-  font-size: 12px;
+.clone-course-tooltip {
   line-height: 16px;
   width: 575px;
 }
-#clone-course-tooltip-2 {
-  line-height: 14px;
-  margin-bottom: 5px;
-  width: 575px;
-  margin-top: -5px;
+
+#create-or-clone-head {
+    font-size: 12px;
+    font-weight: 700;
 }
+
 #clone-course-tooltip-3 {
   margin-bottom: 15px;
+  margin-top: -5px;
 }
 .course-create p.ol-clone-description {
   width: 575px;
@@ -4110,13 +4112,14 @@ div.activity-comments form textarea {
 .course-create .ct-group-meta table {
   margin-top: 20px;
 }
-.course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th {
+.course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th,
+.group-admin .ct-group-meta table tr td, .group-admin .ct-group-meta table tr th {
   padding: 0;
 }
 .course-create tr.schools {
   height: 31px;
 }
-.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th, #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
   font-size: 12px;
   font-weight: 700;
 }
@@ -4127,12 +4130,12 @@ div.activity-comments form textarea {
 .course-create td#departments_html {
   width: 520px;
 }
-.course-create td#departments_html div {
+.course-create td#departments_html div, .group-admin td#departments_html div {
     background: none repeat scroll 0 0 #F0F0F0;
     border: 1px solid #CCCCCC;
     margin-top: 5px;
     padding: 10px 5px;
-    width: 513px;
+    width: 520px;
 }
 .course-create td#departments_html div input {
   margin-bottom: 5px;
@@ -4144,15 +4147,15 @@ div.activity-comments form textarea {
   margin-top: -17px;
   margin-bottom: 10px;
 }
-.course-create tr.additional-field {
+.course-create tr.additional-field, .group-admin tr.additional-field {
   height: 30px;
 }
-.course-create td.additional-field-label {
+.course-create td.additional-field-label, .group-admin td.additional-field-label {
     padding-right: 5px !important;
     text-align: right;
     width: 110px !important;
 }
-.course-create tr.additional-description-field td {
+.course-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
     text-align: left !important;
 }
 .course-create .additional-field input, .course-create .additional-field select {
@@ -4178,7 +4181,7 @@ div.activity-comments form textarea {
 /* 3.2.1 Create/Clone a Course
 ------------------------------------------------------------ */
 
-/* BEGIN styles shared for 4.2.1 and 5.2.1 */
+/* BEGIN styles shared for 3.2.1, 4.2.1 and 5.2.1 */
 .group-create #group-create-body, .group-create #single-course-body {
   margin: 0 10px 0 5px;
 }
@@ -4216,59 +4219,77 @@ div.activity-comments form textarea {
 
 .group-create #group-create-body #check-note {
   bottom: -50px;
-  padding-left: 25px;
+  padding-left: 17px;
   width: 620px;
 }
 
-.group-create.group-settings #group-create-body hr {
-  display: none;
+.group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
+  margin: 20px 0;
 }
 
-.group-create.group-settings #group-create-body h4 {
+.group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
   margin: 0;
   font-size: 12px;
+  font-family: 'Arial';
 }
 
-.group-create.group-settings #group-create-body p {
+.group-create.group-settings #single-course-body h5, .group-admin.group-settings #single-course-body h5 {
+  font-style: oblique;
+}
+
+.group-create.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h4 {
+  font-weight: 700;
+}
+
+.group-create.group-settings #single-course-body form.standard-form div.radio ul, .group-admin.group-settings #single-course-body form.standard-form div.radio ul {
+  margin-left: 35px;
+}
+
+
+.group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
+    line-height:14px!important;
+}
+
+.group-create.group-settings p.privacy-settings-tag-a, .group-admin.group-settings p.privacy-settings-tag-a  {
   margin-bottom: 15px;
 }
 
-.group-create.group-settings #group-create-body .radio {
+.group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
   padding-left: 0;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
-.group-create.group-settings #group-create-body .radio em {
+.group-create.group-settings #group-create-body .radio em, .group-admin.group-settings #single-course-body .radio em {
     font-size: 11px;
     font-style: normal;
     font-weight: 700;
     line-height: 14px;
 }
     
-.group-create.group-settings #group-create-body .radio label {
+.group-create.group-settings #group-create-body .radio label, .group-admin.group-settings #single-course-body .radio label {
   margin: 10px 0;
   font-size: 11px;
 }
 
-.group-create.group-settings #group-create-body .radio label strong {
+.group-create.group-settings #group-create-body .radio label strong, .group-admin.group-settings #single-course-body .radio label strong {
   font-size: 11px;
 }
 
-.group-create.group-settings #group-create-body .radio label input {
+.group-create.group-settings #group-create-body .radio label input, .group-admin.group-settings #single-course-body .radio label input {
   margin-right: 5px;
 }
 
-.group-create.group-settings #group-create-body .radio label ul {
+.group-create.group-settings #group-create-body .radio label ul, group-admin.group-settings #single-course-body .radio label ul {
   margin: 0 0 15px 35px;
 }
 
-.group-create.group-settings #group-create-body .radio label ul li {
+.group-create.group-settings #group-create-body .radio label ul li, .group-admin.group-settings #single-course-body .radio label ul li {
   list-style: disc;
   font-size: 11px;
   margin: 5px 0;
 }
 
-.group-create.group-settings #group-create-body .submit {
+.group-create.group-settings #group-create-body .submit, .group-admin.group-settings #single-course-body .submit {
   margin: 50px 0 50px 17px;
 }
 
@@ -4293,10 +4314,54 @@ div.activity-comments form textarea {
   margin-left: 160px!important;
 }
 
+#upload-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 10px 0 5px;
+}
+
+#delete-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    margin-top: 30px;
+}
+
+#delete-group-avatar-text {
+    float: left;
+}
+
+#group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
+    margin-right: 5px;
+}
+
+#group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
+#single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
+  margin: 0 5px 0 15px;
+}
+
+#group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th,
+#single-course-body .groupblog-setup td, #single-course-body .groupblog-setup th {
+    padding: 8px 8px 8px 0;
+}
+
+#group-create-body .schools .block-title, #single-course-body .schools .block-title  {
+    padding-left: 0;
+}
+
+#group-create-body #wds-website-tooltips td {
+  padding-top: 0;
+}
+
+#group-create-body #wds-website-tooltips p {
+  margin-top: 0;
+}
+
+.group-admin .block-title {
+    margin-left: 0;
+}
 
 /* END shared styles */
-
-.group-create.group-settings {}
 
 
 /* 4.0 PROJECTS
@@ -4452,14 +4517,11 @@ table.groupblog-setup tr th {
 }
 
 p.ol-tooltip {
-    margin:10px 0 0 15px;
+    margin: -5px 0 10px 0;
 }
 
-p.ol-tooltip:before {
-    content:"\21A0 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
+.ct-group-meta p.ol-tooltip {
+    margin: 5px 0;
 }
 
 ul.ol-tooltip {
@@ -4469,13 +4531,6 @@ ul.ol-tooltip {
 
 ul.ol-tooltip li:before {
     content:"\21A0 \0020";
-}
-
-.course-create p.ol-tooltip:before {
-    content:"\2192 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
 }
 
 .course-create ul.ol-tooltip li:before {
@@ -4564,9 +4619,7 @@ a#find-feeds:hover {
 
 #create-group-form h4,#create-group-form h5 {
     font-family:arial,sans-serif;
-    font-weight:700;
     font-size:13px;
-    margin:5px 0;
 }
 
 #group-settings-form .bp-widget h5 {
@@ -4928,6 +4981,92 @@ body.docs #comment {
 .portfolio-displayname a{
     text-decoration: underline;
 }
+
+/* 7.1 Group Settings
+------------------------------------------------------------ */
+
+.group-admin #single-course-body {
+  margin: 0 15px 0 10px;
+}
+
+.group-admin #single-course-body #subnav ul li a {
+  padding: 0 6px 0 5px;
+}
+
+.group-admin #single-course-body input#group-name, .group-admin #single-course-body textarea#group-desc {
+  padding: 1px;
+  width: 530px;
+}
+
+.group-admin #group-settings-form > p > label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.group-admin .ct-group-meta {
+  margin-top: 25px;
+}
+
+.group-admin #current-group-site {
+    margin-top: 15px;
+}
+
+.group-admin #current-group-site strong {
+    display: block;
+    margin: 3px 0;
+}
+
+#avatar-crop-pane {
+  clear: left;
+}
+
+.group-admin.group-avatar #group-settings-form h3 {
+  font-family: 'Arial';
+  font-weight: 700;
+}
+
+#change-group-site a, #delete-group-avatar-button a, .group-avatar #group-settings-form #upload {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #666666;
+    margin: 2px 0 0 10px;
+    padding: 1px 5px;
+    text-decoration: none;
+}
+
+#avatar-crop-submit {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #666666;
+    text-decoration: none;
+    padding: 1px 5px;
+}
+
+.group-admin.group-avatar .generic-button {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+.group-admin #check-note {
+    padding-left: 18px;
+    width: 630px;
+}
+
+.group-admin #save {
+  margin: 30px 0 50px 0;
+}
+
+.group-admin .department-title .block-title, .group-admin .additional-description-field .additional-field-label {
+    padding: 25px 0 5px;
+}
+
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
@@ -4948,11 +5087,23 @@ body.single-help div#content div.entry-content ol li {
     margin: 0 0 5px 20px;
 }
 
+body.single-help .entry-content h1 {
+    border: 0 none;
+    font-family: 'Arial';
+    font-size: 24px;
+    margin: 30px 0 10px;
+}
+
+body.single-help .entry-content h2 {
+    font-size: 14px;
+}
+
 body.single-help div#content h3 {
     font-family: 'Arvo';
     font-size: 15px;
     color: #717171;
     margin: 30px 0 10px 0;
+    font-weight: 700;
 }
 
 body.single-help div#content h4 {
@@ -5031,7 +5182,7 @@ div #help-tags-copy,div #help-tags {
     color:#C84C35;
     font-size:13px;
     font-family:'Arvo';
-    padding-left:5px;
+    padding-left:7px;
     margin:0 0 17px;
 }
 #help-title h2 a{
