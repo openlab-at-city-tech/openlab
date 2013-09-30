@@ -26,15 +26,16 @@ function openlab_group_privacy_settings($group_type) {
         }
     }
     ?>
-    <h4><?php _e('Privacy Settings', 'buddypress'); ?></h4>
+    <h4 class="privacy-title"><?php _e('Privacy Settings', 'buddypress'); ?></h4>
+    <p class="privacy-settings-tag-a">Set privacy options for your <?php _e(ucfirst($group_type)) ?></p>
     <?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
         <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
-        <p id="privacy-intro"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
+        <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
-        <p><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
+        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
     <?php endif; ?>
 
     <div class="radio">
@@ -107,8 +108,8 @@ function openlab_group_privacy_settings($group_type) {
     <?php /* Site privacy markup */ ?>
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
-        <h4><?php _e(ucfirst($group_type) . ' Site') ?></h4>
-        <p><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Site.') ?></p>
+        <h5><?php _e(ucfirst($group_type) . ' Site') ?></h4>
+        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Site.') ?></p>
         <?php openlab_site_privacy_settings_markup($site_id) ?>
     <?php endif ?>
 

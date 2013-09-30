@@ -478,11 +478,11 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 
 <div class="radio">
 
-	<em><?php _e('Public', 'buddypress') ?></em>
-
+	<em><?php _e('Public', 'buddypress') ?></em><br>
+  <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
 	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 
-	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.<br /><em>Note: This option will NOT block access to your site. It is up to search engines to honor your request.</em>'); ?></label>
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.<br />'); ?></label>
 
 	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
@@ -518,6 +518,7 @@ function openlab_default_subscription_settings_form() {
 	}
 
 	?>
+	<hr>
 	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
 	<div class="radio">

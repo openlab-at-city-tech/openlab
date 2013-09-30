@@ -4224,7 +4224,7 @@ div.activity-comments form textarea {
 }
 
 .group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
-  display: none;
+  margin: 20px 0;
 }
 
 .group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
@@ -4233,21 +4233,30 @@ div.activity-comments form textarea {
   font-family: 'Arial';
 }
 
-.group-admin.group-settings #single-course-body h4 {
-  margin: 5px 0 15px 0;
+.group-create.group-settings #single-course-body h5, .group-admin.group-settings #single-course-body h5 {
+  font-style: oblique;
 }
 
-.group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
+.group-create.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h4 {
   font-weight: 700;
 }
 
-.group-create.group-settings #group-create-body p, .group-admin.group-settings #single-course-body p {
+.group-create.group-settings #single-course-body form.standard-form div.radio ul, .group-admin.group-settings #single-course-body form.standard-form div.radio ul {
+  margin-left: 35px;
+}
+
+
+.group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
+    line-height:14px!important;
+}
+
+.group-create.group-settings p.privacy-settings-tag-a, .group-admin.group-settings p.privacy-settings-tag-a  {
   margin-bottom: 15px;
 }
 
 .group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
   padding-left: 0;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 .group-create.group-settings #group-create-body .radio em, .group-admin.group-settings #single-course-body .radio em {
@@ -4603,9 +4612,7 @@ a#find-feeds:hover {
 
 #create-group-form h4,#create-group-form h5 {
     font-family:arial,sans-serif;
-    font-weight:700;
     font-size:13px;
-    margin:5px 0;
 }
 
 #group-settings-form .bp-widget h5 {
