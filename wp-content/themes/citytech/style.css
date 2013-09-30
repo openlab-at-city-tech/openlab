@@ -4074,19 +4074,19 @@ div.activity-comments form textarea {
     color:#666;
     line-height:15px;
 }
-#clone-course-tooltip-1 {
-  font-size: 12px;
+.clone-course-tooltip {
   line-height: 16px;
   width: 575px;
 }
-#clone-course-tooltip-2 {
-  line-height: 14px;
-  margin-bottom: 5px;
-  width: 575px;
-  margin-top: -5px;
+
+#create-or-clone-head {
+    font-size: 12px;
+    font-weight: 700;
 }
+
 #clone-course-tooltip-3 {
   margin-bottom: 15px;
+  margin-top: -5px;
 }
 .course-create p.ol-clone-description {
   width: 575px;
@@ -4500,14 +4500,11 @@ table.groupblog-setup tr th {
 }
 
 p.ol-tooltip {
-    margin:10px 0 0 15px;
+    margin: -5px 0 10px 0;
 }
 
-p.ol-tooltip:before {
-    content:"\21A0 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
+.ct-group-meta p.ol-tooltip {
+    margin: 5px 0;
 }
 
 ul.ol-tooltip {
@@ -4517,13 +4514,6 @@ ul.ol-tooltip {
 
 ul.ol-tooltip li:before {
     content:"\21A0 \0020";
-}
-
-.course-create p.ol-tooltip:before {
-    content:"\2192 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
 }
 
 .course-create ul.ol-tooltip li:before {
@@ -4984,10 +4974,6 @@ body.docs #comment {
 
 .group-admin #single-course-body #subnav ul li a {
   padding: 0 6px 0 5px;
-}
-
-.group-admin #content h1.entry-title, .group-details #content h1.entry-title {
-  margin: 0 0 8px 3px;
 }
 
 .group-admin #single-course-body input#group-name, .group-admin #single-course-body textarea#group-desc {
