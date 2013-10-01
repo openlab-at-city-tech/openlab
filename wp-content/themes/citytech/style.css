@@ -5067,6 +5067,11 @@ body.docs #comment {
     padding: 25px 0 5px;
 }
 
+.group-create.group-avatar #single-course-body h4 {
+    font-size: 12px;
+    font-weight: 700;
+}
+
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
@@ -5100,7 +5105,7 @@ body.single-help .entry-content h2 {
 
 body.single-help div#content h3 {
     font-family: 'Arvo';
-    font-size: 15px;
+    font-size: 14px;
     color: #717171;
     margin: 30px 0 10px 0;
     font-weight: 700;
