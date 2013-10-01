@@ -10,3 +10,8 @@ if ( isset( $_SERVER['SCRIPT_NAME'] ) && '/wp-login.php' == $_SERVER['SCRIPT_NAM
 	status_header( 302 );
 	header( "Location: $url", true, 302 );
 }
+
+function openlab_swap_retrievepassword_key( $message ) {
+	return str_replace( '&key=', '&rpk=', $message );
+}
+add_filter( 'retrieve_password_message', 'openlab_swap_retrievepassword_key' );
