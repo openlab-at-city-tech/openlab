@@ -5067,6 +5067,11 @@ body.docs #comment {
     padding: 25px 0 5px;
 }
 
+.group-create.group-avatar #single-course-body h4 {
+    font-size: 12px;
+    font-weight: 700;
+}
+
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
