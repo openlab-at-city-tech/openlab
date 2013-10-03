@@ -9,6 +9,7 @@ if ( isset( $_SERVER['SCRIPT_NAME'] ) && '/wp-login.php' == $_SERVER['SCRIPT_NAM
 	$url = network_site_url( 'wp-login.php?action=rp&key=' . rawurlencode( $rpk ) . '&login=' . rawurlencode( $login ), 'login' );
 	status_header( 302 );
 	header( "Location: $url", true, 302 );
+        die();
 }
 
 function openlab_swap_retrievepassword_key( $message ) {
