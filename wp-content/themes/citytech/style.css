@@ -4469,11 +4469,24 @@ margin-bottom: 30px;
   font-size: 12px;
 }
 tr#course-table-rule td {
-  padding: 0!important;
+  padding: 0 0 5px 0!important;
 }
 .course-create #noo_external_options input[type=text] {
   width: 285px;
 }
+
+#wds-website-clone #noo_clone_options {
+padding-top: 15px!important;
+height: 35px;
+vertical-align: top;
+}
+
+#wds-website-clone th {
+height: 35px;
+padding-top: 15px!important;
+vertical-align: top;
+}
+
 /* 4.0 PROJECTS
 ------------------------------------------------------------ */
 
@@ -4693,10 +4706,6 @@ form.standard-form .create-or-clone-options label {
 
 #group-to-clone {
     margin-left: 10px;
-}
-
-#cloned-site-url {
-    font-style: italic;
 }
 
 .group-admin .left-menu {
