@@ -476,9 +476,9 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	$group_type  = openlab_get_current_group_type( 'case=upper' );
 ?>
 
-<div class="radio">
+<div class="radio group-site">
 
-	<em><?php _e('Public', 'buddypress') ?></em><br>
+	<h6><?php _e('Public', 'buddypress') ?></h6>
   <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
 	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 
@@ -486,18 +486,18 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 
 	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
-		<em><?php _e('<em>Private</em>', 'buddypress') ?></em>
+		<h6><?php _e('Private', 'buddypress') ?></h6>
 		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>> <?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
 
 		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>> <?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type)); ?></label>
 
-		<em><?php _e('<em>Hidden</em>', 'buddypress') ?></em>
+		<h6><?php _e('Hidden', 'buddypress') ?></h6>
 		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
 
 	<?php else : ?>
 
 		<?php /* Portfolios */ ?>
-		<em>Hidden</em>
+		<h6>Hidden</h6>
 		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ) ?>> I would like my site to be visible only to members of my Access List.</label>
 
 	<?php endif; ?>
@@ -521,7 +521,7 @@ function openlab_default_subscription_settings_form() {
 	<hr>
 	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
-	<div class="radio">
+	<div class="radio email-sub">
 		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
 			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />

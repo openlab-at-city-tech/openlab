@@ -4272,19 +4272,24 @@ margin-bottom: 30px;
 
 .group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
   padding-left: 0;
-  margin-bottom: 30px;
+  margin-top: -3px;
 }
 
-.group-create.group-settings #group-create-body .radio em, .group-admin.group-settings #single-course-body .radio em {
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 14px;
+.group-create.group-settings #group-create-body .radio h6, .group-admin.group-settings #single-course-body .radio h6 {
+font-size: 11px;
+font-weight: 700;
+line-height: 14px;
+margin: 20px 0 5px 0;
+font-family: 'Arial';
 }
     
 .group-create.group-settings #group-create-body .radio label, .group-admin.group-settings #single-course-body .radio label {
-  margin: 10px 0;
   font-size: 11px;
+  margin: 8px 0 20px 3px;
+}
+
+.group-create.group-settings #group-create-body .radio.group-site label, .group-admin.group-settings #single-course-body .radio.group-site label {
+  margin-bottom: 0;
 }
 
 .group-create.group-settings #group-create-body .radio label strong, .group-admin.group-settings #single-course-body .radio label strong {
@@ -5122,6 +5127,18 @@ body.docs #comment {
 
 .group-settings .checkbox {
   margin-bottom: 15px;
+}
+
+.group-settings.group-create hr {
+  display: none;
+}
+
+.group-settings.group-create h4 {
+  
+}
+
+.group-settings.group-create h5 {
+  margin-bottom: 3px;
 }
 
 .group-admin #single-course-body {
