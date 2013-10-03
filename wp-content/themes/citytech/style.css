@@ -4113,8 +4113,13 @@ div.activity-comments form textarea {
 .course-create tr.schools {
 }
 #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+}
+.groups .course-code-field .additional-field-label, .groups .section-code-field .additional-field-label,
+.groups .semester-field .additional-field-label, .groups .year-field .additional-field-label {
+  text-align: right;
+  padding-right: 5px;
 }
 .course-create .school-inputs input {
   margin-left: 10px;
@@ -4145,7 +4150,7 @@ div.activity-comments form textarea {
     text-align: left !important;
     padding-top: 16px!important;
 }
-.course-create .additional-field input, .course-create .additional-field select {
+.groups .additional-field input, .groups .additional-field select {
     width: 170px;
 }
 .course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
@@ -4413,6 +4418,10 @@ margin-bottom: 30px;
   margin: 22px 0 5px 0;
 }
 
+.group-create .ct-group-meta p.ol-tooltip {
+    margin: 0 0 -5px 0;
+}
+
 .course-create .ct-group-meta p.ol-tooltip {
   margin: 0 0 8px 0;
   width: 650px;
@@ -4432,7 +4441,7 @@ margin-bottom: 30px;
 .course-create #departments_html input {
   margin-right: 5px;
 }
-.course-create .ct-group-meta table .ol-tooltip {
+.course-create .ct-group-meta table .ol-tooltip, .group-admin .ct-group-meta table .ol-tooltip {
   margin: 30px 0 10px 0;
 }
 .course-create #wds-website-tooltips .ol-tooltip {
@@ -4654,10 +4663,6 @@ table.groupblog-setup th input {
 
 p.ol-tooltip.clone-course-tooltip {
     margin: -7px 0 7px 0;
-}
-
-.ct-group-meta p.ol-tooltip {
-    margin: 0 0 -5px 0;
 }
 
 .group-admin .ct-group-meta, .group-create .ct-group-meta {
@@ -5186,7 +5191,7 @@ body.docs #comment {
 
 .group-admin #check-note {
     padding-left: 18px;
-    width: 630px;
+    width: 650px;
 }
 
 .group-admin #save {
