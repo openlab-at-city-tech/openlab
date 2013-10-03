@@ -141,8 +141,11 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 		<?php if ( bp_forums_is_installed_correctly() ) : ?>
 
 			<div class="checkbox">
-				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussion forum', 'buddypress' ) ?></label>
+        <h4>Discussion Settings</h4>
+        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php _e( ucfirst($group_type)) ?> profile.</p>
+				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
 			</div>
+			<hr>
 
 		<?php endif; ?>
 

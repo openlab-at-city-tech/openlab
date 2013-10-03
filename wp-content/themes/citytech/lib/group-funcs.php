@@ -33,6 +33,7 @@ function openlab_group_privacy_settings($group_type) {
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
+        <h5><?php _e(ucfirst($group_type) . ' Profile.') ?></h5>
         <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
@@ -108,7 +109,7 @@ function openlab_group_privacy_settings($group_type) {
     <?php /* Site privacy markup */ ?>
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
-        <h5><?php _e(ucfirst($group_type) . ' Site') ?></h4>
+        <h5><?php _e(ucfirst($group_type) . ' Site') ?></h5>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Site.') ?></p>
         <?php openlab_site_privacy_settings_markup($site_id) ?>
     <?php endif ?>
