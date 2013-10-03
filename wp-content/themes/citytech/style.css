@@ -848,12 +848,12 @@ h3#bread-crumb .sep {
 
 /* MOL and Group submenu styles */
 h1.mol-title,#single-course-header h1,#content h1.group-title {
-    margin-bottom:5px;
+    margin-bottom:10px;
 }
 
 .submenu,#subnav,#bpsubnav {
-    margin:0 0 25px;
-    height:17px;
+    margin:0 0 30px;
+    height:15px;
     position:relative;
 }
 
@@ -4074,10 +4074,6 @@ div.activity-comments form textarea {
     color:#666;
     line-height:15px;
 }
-.clone-course-tooltip {
-  line-height: 16px;
-  width: 575px;
-}
 
 #create-or-clone-head {
     font-size: 12px;
@@ -4085,12 +4081,10 @@ div.activity-comments form textarea {
 }
 
 #clone-course-tooltip-3 {
-  margin-bottom: 15px;
-  margin-top: -5px;
+  margin-bottom: 10px;
+  margin-top: -6px;
 }
-.course-create p.ol-clone-description {
-  width: 575px;
-}
+
 .course-create #group-create-body {
     margin-left: 10px;
 }
@@ -4117,9 +4111,8 @@ div.activity-comments form textarea {
   padding: 0;
 }
 .course-create tr.schools {
-  height: 31px;
 }
-.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th, #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
+#group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
   font-size: 12px;
   font-weight: 700;
 }
@@ -4134,15 +4127,13 @@ div.activity-comments form textarea {
     background: none repeat scroll 0 0 #F0F0F0;
     border: 1px solid #CCCCCC;
     margin-top: 5px;
-    padding: 10px 5px;
+    padding: 2px 7px;
     width: 520px;
 }
 .course-create td#departments_html div input {
   margin-bottom: 5px;
 }
-.course-create table p.ol-tooltip {
-  margin-bottom: 20px!important;
-}
+
 .course-create table ul.ol-tooltip {
   margin-top: -17px;
   margin-bottom: 10px;
@@ -4150,13 +4141,9 @@ div.activity-comments form textarea {
 .course-create tr.additional-field, .group-admin tr.additional-field {
   height: 30px;
 }
-.course-create td.additional-field-label, .group-admin td.additional-field-label {
-    padding-right: 5px !important;
-    text-align: right;
-    width: 110px !important;
-}
 .course-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
     text-align: left !important;
+    padding-top: 16px!important;
 }
 .course-create .additional-field input, .course-create .additional-field select {
     width: 170px;
@@ -4168,37 +4155,42 @@ div.activity-comments form textarea {
 .course-create tr#wds-website-clone input, .course-create tr#wds-website input, .course-create tr#wds-website-existing input, .course-create tr#wds-website-external input {
   margin-right: 10px;
 }
+.course-create #clone-destination-path {
+  margin-left: 15px;
+  width: 195px;
+}
 .course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
-    font-weight: 500;
+    font-weight: 700;
 }
 .course-create td#noo_external_options p#check-note {
-    bottom: -50px;
-    margin-left: 13px;
+    bottom: -40px;
+    margin-left: 5px;
     margin-top: 10px !important;
-    width: 620px;
+    width: 635px;
 }
 
 /* 3.2.1 Create/Clone a Course
 ------------------------------------------------------------ */
 
 /* BEGIN styles shared for 3.2.1, 4.2.1 and 5.2.1 */
+
+.groups .submenu ul li.create-button.selected-page a {
+  background-position: 0px -19px;
+  color: #717171;
+}
+
 .group-create #group-create-body, .group-create #single-course-body {
-  margin: 0 10px 0 5px;
+  margin: 0 5px 5px 4px;
 }
 
-.group-create .submenu {
-  margin-bottom: 30px;
-}
-
-.group-create #group-create-body form.standard-form label, .group-create #group-create-body form.standard-form span.label,
-.group-create #single-course-body form.standard-form label, .group-create #single-course-body form.standard-form span.label {
-  margin-bottom: 10px;
-  margin-top: 25px;
+.group-create #group-create-body form.standard-form label, .group-create #group-create-body form.standard-form span.label {
+  margin-bottom: 5px;
+  margin-top: 20px;
 }
 
 .group-create #group-create-body form.standard-form div.submit input, .group-create #single-course-body form.standard-form div.submit input {
-  margin-right: 0;
-  margin-left: 17px;
+  margin: -10px 0 0 17px;
+  padding: 5px 15px;
 }
 
 .group-create #group-create-body form .submit {
@@ -4209,6 +4201,7 @@ div.activity-comments form textarea {
 }
 .group-create #single-course-body .groupblog-setup {
     margin-bottom:40px;
+    margin-top: 15px;
 }
 .group-create #group-create-body .groupblog-setup {
   margin-bottom: -10px;
@@ -4217,10 +4210,18 @@ div.activity-comments form textarea {
   padding: 0;
 }
 
+.group-create #noo_external_options input[type=text] {
+  font-size: 11px;
+  padding-left: 2px;
+  padding-right: 2px;
+  margin-right: 5px;
+  width: 280px;
+}
+
 .group-create #group-create-body #check-note {
-  bottom: -50px;
-  padding-left: 17px;
-  width: 620px;
+  bottom: -40px;
+  padding-left: 20px;
+  width: 635px;
 }
 
 .group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
@@ -4245,6 +4246,19 @@ div.activity-comments form textarea {
   margin-left: 35px;
 }
 
+.group-create #single-course-body input#group-name, .group-create #single-course-body textarea#group-desc {
+  width: 525px;
+}
+.group-create #single-course-body textarea#group-desc {
+  margin-bottom: 25px;
+}
+.course-create textarea#group-desc {
+margin-bottom: 30px;
+}
+
+.group-create #single-course-body textarea#group-desc {
+  height: 115px;
+}
 
 .group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
     line-height:14px!important;
@@ -4337,7 +4351,7 @@ div.activity-comments form textarea {
 
 #group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
 #single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
-  margin: 0 5px 0 15px;
+  margin: 0 5px 0 20px;
 }
 
 #group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th,
@@ -4347,6 +4361,7 @@ div.activity-comments form textarea {
 
 #group-create-body .schools .block-title, #single-course-body .schools .block-title  {
     padding-left: 0;
+    width: 116px;
 }
 
 #group-create-body #wds-website-tooltips td {
@@ -4361,9 +4376,103 @@ div.activity-comments form textarea {
     margin-left: 0;
 }
 
+#wds-website-tooltips .ol-tooltip {
+  margin-bottom: 0;
+}
+
+.group-create a#find-feeds {
+  padding: 2px 10px!important;
+  -moz-border-radius: 3px!important;
+  border-radius: 3px!important;
+  text-transform: lowercase;
+  font-size: 10px!important;
+}
+
+#single-course-body label[for="group-desc"] {
+  margin-top: 20px;
+}
+
+#group-create-body label[for="group-name"], #group-create-body label[for="group-desc"] {
+  font-size: 12px;
+}
+
 /* END shared styles */
 
+#ol-clone-description {
+  margin: -3px 0 0 0;
+  line-height: 14px;
+}
 
+.course-create #group-create-body label[for="group-name"] {
+  font-size: 12px;
+  margin: 22px 0 15px 0;
+}
+.course-create #group-create-body label[for="group-desc"] {
+  font-size: 12px;
+  margin: 22px 0 5px 0;
+}
+
+.course-create .ct-group-meta p.ol-tooltip {
+  margin: 0 0 8px 0;
+  width: 650px;
+}
+.course-create .ct-group-meta table {
+  margin-top: 0;
+}
+.course-create .ct-group-meta td.school-inputs input#school_studies, .course-create .ct-group-meta td.school-inputs input#school_arts {
+  margin-left: 40px;
+}
+.course-create .school-inputs input#school_studies, .course-create .school-inputs input#school_arts {
+    margin-right: 10px;
+}
+.course-create .department-title .block-title {
+  padding-top: 23px;
+}
+.course-create #departments_html input {
+  margin-right: 5px;
+}
+.course-create .ct-group-meta table .ol-tooltip {
+  margin: 30px 0 10px 0;
+}
+.course-create #wds-website-tooltips .ol-tooltip {
+  
+}
+.course-create .course-code-field .additional-field-label, .course-create .section-code-field .additional-field-label, .course-create .semester-field .additional-field-label, .course-create .year-field .additional-field-label {
+  height: 36px;
+  padding-right: 5px !important;
+  text-align: right!important;
+  width: 80px !important;
+}
+.course-create textarea#group-desc {
+  margin-bottom: 30px!important;
+}
+
+.course-create #group-create-body #wds-website-tooltips p.ol-tooltip {
+  margin-top: -5px;
+  margin-bottom: 2px;
+}
+
+.course-create #group-create-body #wds-website-tooltips ul.ol-tooltip {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+#wds-website-clone th, #wds-website th, #wds-website-external th {
+  font-size: 11px;
+}
+
+.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+  font-weight: 700;
+}
+.course-create .groupblog-setup th {
+  font-size: 12px;
+}
+tr#course-table-rule td {
+  padding: 0!important;
+}
+.course-create #noo_external_options input[type=text] {
+  width: 285px;
+}
 /* 4.0 PROJECTS
 ------------------------------------------------------------ */
 
@@ -4379,7 +4488,7 @@ div.activity-comments form textarea {
 
 /* Course and Club Creation Step 1 */
 form#create-group-form div#group-create-body div.ct-group-meta {
-    margin-top:20px;
+    margin-top:0;
 }
 .group-create #single-course-body tr {
   line-height: 20px;
@@ -4391,6 +4500,7 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 /* 6.0 GROUPS
 ------------------------------------------------------------ */
 /* Group Archive: (My)Courses, (My)Projects, (My)Clubs, Portfolios */
+
 #content ul#group-list.item-list li,#content ul#course-list.item-list li {
     width:308px;
     float:left;
@@ -4499,7 +4609,13 @@ h4.group-activity-title.activity-members-title {
 }
 
 /* Create & Admin Group */
-#active-toggle {
+
+.groups .submenu a {
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.groups #active-toggle {
     margin:10px 0;
 }
 
@@ -4512,21 +4628,31 @@ form.standard-form #active-toggle label {
     margin-left:10px;
 }
 
+.ct-group-meta table {
+  border-spacing: 0;
+}
 table.groupblog-setup tr th {
     text-align:left;
 }
+table.groupblog-setup th input {
+  margin-right: 5px;
+}
 
-p.ol-tooltip {
-    margin: -5px 0 10px 0;
+p.ol-tooltip.clone-course-tooltip {
+    margin: -7px 0 7px 0;
 }
 
 .ct-group-meta p.ol-tooltip {
-    margin: 5px 0;
+    margin: 0 0 -5px 0;
+}
+
+.group-admin .ct-group-meta, .group-create .ct-group-meta {
+  margin-top: 25px;
 }
 
 ul.ol-tooltip {
     list-style-type:none;
-    padding-left:40px;
+    padding-left:37px;
 }
 
 ul.ol-tooltip li:before {
@@ -4544,8 +4670,11 @@ ul.ol-tooltip li:before {
     background:url(/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif) no-repeat scroll left center transparent;
 }
 
-body.group-create table.groupblog-setup th {
-    width: 200px;
+.groups #noo_new_options input {
+  margin-left: 15px;
+  width: 191px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 form.standard-form .create-or-clone-options label {
@@ -4554,16 +4683,11 @@ form.standard-form .create-or-clone-options label {
 }
 
 .create-or-clone-options {
-    margin: 15px 0;
+    margin: 10px 0;
 }
 
 .create-or-clone-options li {
-    margin: 5px 0 15px 0;
-}
-
-p.ol-clone-description {
-    margin-left: 25px;
-    margin-bottom: 2em;
+    margin: 5px 0 8px 0;
 }
 
 #group-to-clone {
@@ -4650,7 +4774,7 @@ a#find-feeds:hover {
 }
 
 #create-group-form label,#group-settings-form label {
-    font-size:12px;
+    font-size:11px;
     line-height:18px;
 }
 
@@ -5001,10 +5125,6 @@ body.docs #comment {
 .group-admin #group-settings-form > p > label {
     font-size: 11px;
     font-weight: 500;
-}
-
-.group-admin .ct-group-meta {
-  margin-top: 25px;
 }
 
 .group-admin #current-group-site {

@@ -141,15 +141,15 @@ function cuny_create_group() {
                             <li>Jane Smith's <?php echo $group_label ?> (Example)</li>
                         </ul>
 
-                        <label for="group-name">*<?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
+                        <label for="group-name"><?php echo ucfirst($group_type); ?>Name <?php _e('(required)', 'buddypress') ?></label>
                         <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
-                        <label for="group-desc">* <?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
+                        <label for="group-desc"><?php echo ucfirst($group_type); ?>Description <?php _e('(required)', 'buddypress') ?></label>
 
         <?php else : ?>
-                        <label for="group-name">* <?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
+                        <label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
                         <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                         <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
-                        <label for="group-desc">* <?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
+                        <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
 
         <?php endif ?>
 
