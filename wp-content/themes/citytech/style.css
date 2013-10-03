@@ -4161,6 +4161,7 @@ div.activity-comments form textarea {
 }
 .course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
     font-weight: 700;
+    width: 191px;
 }
 .course-create td#noo_external_options p#check-note {
     bottom: -40px;
@@ -4225,7 +4226,7 @@ div.activity-comments form textarea {
 }
 
 .group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
-  margin: 20px 0;
+  display: none;
 }
 
 .group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
