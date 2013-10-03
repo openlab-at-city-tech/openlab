@@ -4230,10 +4230,6 @@ div.activity-comments form textarea {
   width: 635px;
 }
 
-.group-create.group-settings #group-create-body hr, .group-admin.group-settings #single-course-body hr {
-  display: none;
-}
-
 .group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
   margin: 0;
   font-size: 12px;
@@ -5123,6 +5119,10 @@ body.docs #comment {
 
 /* 7.1 Group Settings
 ------------------------------------------------------------ */
+
+.group-settings .checkbox {
+  margin-bottom: 15px;
+}
 
 .group-admin #single-course-body {
   margin: 0 15px 0 10px;
