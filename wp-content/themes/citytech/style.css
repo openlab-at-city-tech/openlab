@@ -4230,8 +4230,15 @@ div.activity-comments form textarea {
   width: 635px;
 }
 
-.group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h5 {
+.group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4 {
   margin: 0;
+  font-size: 12px;
+  font-family: 'Arial';
+}
+
+.group-admin.group-settings h5 {
+  margin-bottom: 5px;
+  line-height: 13px;
   font-size: 12px;
   font-family: 'Arial';
 }
@@ -4270,6 +4277,10 @@ margin-bottom: 30px;
   margin-bottom: 15px;
 }
 
+.group-settings.group-admin .privacy-settings-tag-c {
+  margin-bottom: 9px;
+}
+
 .group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
   padding-left: 0;
   margin-top: -3px;
@@ -4279,13 +4290,29 @@ margin-bottom: 30px;
 font-size: 11px;
 font-weight: 700;
 line-height: 14px;
-margin: 20px 0 5px 0;
+margin: 10px 0 5px 0;
 font-family: 'Arial';
 }
-    
+
+.group-admin.group-settings .radio.group-site {
+  margin-bottom: 20px;
+}
+
+.group-admin.group-settings .radio.email-sub label {
+  margin-bottom: 10px!important;
+}
+
+.group-admin.group-settings .radio h6 {
+  margin-bottom: 10px;
+}
+
 .group-create.group-settings #group-create-body .radio label, .group-admin.group-settings #single-course-body .radio label {
   font-size: 11px;
   margin: 8px 0 20px 3px;
+}
+
+.group-admin.group-settings hr {
+  margin-bottom: 20px;
 }
 
 .group-create.group-settings #group-create-body .radio.group-site label, .group-admin.group-settings #single-course-body .radio.group-site label {
@@ -4300,9 +4327,11 @@ font-family: 'Arial';
   margin-right: 5px;
 }
 
-.group-create.group-settings #group-create-body .radio label ul, group-admin.group-settings #single-course-body .radio label ul {
+.group-create.group-settings #group-create-body .radio label ul, .group-admin.group-settings #single-course-body .radio label ul {
   margin: 0 0 15px 35px;
 }
+
+
 
 .group-create.group-settings #group-create-body .radio label ul li, .group-admin.group-settings #single-course-body .radio label ul li {
   list-style: disc;
@@ -4772,6 +4801,10 @@ a#find-feeds:hover {
 
 #create-group-form .radio,#group-settings-form .radio {
     padding-left:30px;
+}
+
+.group-admin.group-settings .radio.group-profile {
+  margin-bottom: 27px;
 }
 
 .radio label strong {

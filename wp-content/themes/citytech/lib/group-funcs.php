@@ -39,7 +39,7 @@ function openlab_group_privacy_settings($group_type) {
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
     <?php endif; ?>
 
-    <div class="radio">
+    <div class="radio group-profile">
 
         <?php
         $new_group_status = bp_get_new_group_status();
