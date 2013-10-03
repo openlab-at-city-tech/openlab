@@ -4161,6 +4161,7 @@ div.activity-comments form textarea {
 }
 .course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
     font-weight: 700;
+    font-size: 11px;
 }
 .course-create td#noo_external_options p#check-note {
     bottom: -40px;
