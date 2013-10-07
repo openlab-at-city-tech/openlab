@@ -33,7 +33,7 @@ function openlab_group_privacy_settings($group_type) {
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
-        <h5><?php _e(ucfirst($group_type) . ' Profile.') ?></h5>
+        <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
         <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
@@ -65,7 +65,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <label>
                 <input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-                <strong><?php _e('This is a hidden ' . ucfirst($group_type) . '.', 'buddypress') ?></strong>
+                <strong><?php _e('This is a hidden ' . ucfirst($group_type), 'buddypress') ?></strong>
                 <ul>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile will only be visible to members of your Access List.', 'buddypress') ?></li>
                     <li><p id="privacy-intro"><?php _e('Note: Use the ' . ucfirst($group_type) . ' Profile Settings to add members to your Access List.', 'buddypress'); ?></p></li>
@@ -96,7 +96,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <label>
                 <input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
-                <strong><?php _e('This is a hidden ' . ucfirst($group_type) . '.', 'buddypress') ?></strong>
+                <strong><?php _e('This is a hidden ' . ucfirst($group_type), 'buddypress') ?></strong>
                 <ul>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile, related content and activity will only be visible only to members of the ' . ucfirst($group_type) . '.', 'buddypress') ?></li>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile will NOT be listed in the ' . ucfirst($group_type) . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
