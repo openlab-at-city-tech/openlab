@@ -218,7 +218,7 @@ function cuny_create_group() {
 
                     <?php if ('crop-image' == bp_get_avatar_admin_step()) : ?>
 
-                        <h3><?php _e('Crop Avatar', 'buddypress') ?></h3>
+                        <h4><?php _e('Crop Avatar', 'buddypress') ?></h4>
 
                         <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
 
