@@ -4113,13 +4113,15 @@ div.activity-comments form textarea {
 .course-create tr.schools {
 }
 #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
-  font-size: 11px;
   font-weight: 700;
 }
 .groups .course-code-field .additional-field-label, .groups .section-code-field .additional-field-label,
 .groups .semester-field .additional-field-label, .groups .year-field .additional-field-label {
   text-align: right;
   padding-right: 5px;
+}
+.groups .additional-field-label {
+  font-size: 12px;
 }
 .course-create .school-inputs input {
   margin-left: 10px;
@@ -4164,10 +4166,6 @@ div.activity-comments form textarea {
   margin-left: 15px;
   width: 195px;
 }
-.course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
-    font-weight: 700;
-    font-size: 11px;
-}
 .course-create td#noo_external_options p#check-note {
     bottom: -40px;
     margin-left: 5px;
@@ -4205,7 +4203,7 @@ div.activity-comments form textarea {
 .group-create #single-course-body form .submit {
   margin: 95px 0 50px 17px;
 }
-.group-create #single-course-body .groupblog-setup {
+.group-create #single-course-body .groupblog-setup, .group-admin #single-course-body .groupblog-setup {
     margin-bottom:40px;
     margin-top: 15px;
 }
@@ -4401,9 +4399,19 @@ font-family: 'Arial';
     padding: 8px 8px 8px 0;
 }
 
+#single-course-body .groupblog-setup tr.form-field.form-required:first-child {
+  font-size: 12px;
+}
+
 #group-create-body .schools .block-title, #single-course-body .schools .block-title  {
     padding-left: 0;
     width: 116px;
+    font-size: 12px;
+}
+
+.course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
+    font-weight: 700;
+    font-size: 11px;
 }
 
 #group-create-body #wds-website-tooltips td {
@@ -4432,10 +4440,6 @@ font-family: 'Arial';
 
 #single-course-body label[for="group-desc"] {
   margin-top: 20px;
-}
-
-#group-create-body label[for="group-name"], #group-create-body label[for="group-desc"] {
-  font-size: 12px;
 }
 
 /* END shared styles */
@@ -4473,6 +4477,7 @@ font-family: 'Arial';
 }
 .course-create .department-title .block-title {
   padding-top: 23px;
+  font-size: 12px;
 }
 .course-create #departments_html input {
   margin-right: 5px;
@@ -4488,17 +4493,18 @@ font-family: 'Arial';
   padding-right: 5px !important;
   text-align: right!important;
   width: 80px !important;
+  font-size: 12px;
 }
 .course-create textarea#group-desc {
   margin-bottom: 30px!important;
 }
 
-.course-create #group-create-body #wds-website-tooltips p.ol-tooltip {
+.course-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
   margin-top: -5px;
   margin-bottom: 2px;
 }
 
-.course-create #group-create-body #wds-website-tooltips ul.ol-tooltip {
+.course-create #group-create-body #wds-website-tooltips ul.ol-tooltip, #single-course-body #wds-website-tooltips ul.ol-tooltip {
   margin-top: 0;
   margin-bottom: 15px;
 }
@@ -4828,9 +4834,13 @@ a#find-feeds:hover {
     line-height:35px;
 }
 
-#create-group-form label,#group-settings-form label {
+#create-group-form label, #group-settings-form label {
     font-size:11px;
     line-height:18px;
+}
+
+.groups label[for="group-name"], .groups label[for="group-desc"] {
+  font-size: 12px!important;
 }
 
 /* Column Classes - THESE ARE LEFTOVER FROM GENESIS, THEY ARE STILL IN USE
@@ -5256,6 +5266,7 @@ body.docs #comment {
 
 .group-admin .department-title .block-title, .group-admin .additional-description-field .additional-field-label {
     padding: 25px 0 5px;
+    font-size: 12px;
 }
 
 .group-create.group-avatar #single-course-body h4 {
