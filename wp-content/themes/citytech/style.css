@@ -4290,7 +4290,7 @@ margin-bottom: 30px;
 font-size: 11px;
 font-weight: 700;
 line-height: 14px;
-margin: 10px 0 5px 0;
+margin: 10px 0 5px auto;
 font-family: 'Arial';
 }
 
@@ -4316,7 +4316,11 @@ font-family: 'Arial';
 }
 
 .group-create.group-settings #group-create-body .radio.group-site label, .group-admin.group-settings #single-course-body .radio.group-site label {
-  margin-bottom: 0;
+  margin-bottom: 10px;
+}
+
+.group-settings .radio.group-site label input#blog-private0, .group-settings .radio.group-site label input#blog-private-2 {
+  margin-bottom: 10px;
 }
 
 .group-create.group-settings #group-create-body .radio label strong, .group-admin.group-settings #single-course-body .radio label strong {
@@ -4324,14 +4328,16 @@ font-family: 'Arial';
 }
 
 .group-create.group-settings #group-create-body .radio label input, .group-admin.group-settings #single-course-body .radio label input {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .group-create.group-settings #group-create-body .radio label ul, .group-admin.group-settings #single-course-body .radio label ul {
   margin: 0 0 15px 35px;
 }
 
-
+#group-create-body h4#email-sub-defaults, #single-course-body h4#email-sub-defaults {
+  margin-bottom: 5px;
+}
 
 .group-create.group-settings #group-create-body .radio label ul li, .group-admin.group-settings #single-course-body .radio label ul li {
   list-style: disc;
