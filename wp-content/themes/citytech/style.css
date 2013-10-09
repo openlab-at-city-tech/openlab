@@ -4275,8 +4275,8 @@ margin-bottom: 30px;
   margin-bottom: 15px;
 }
 
-.group-settings.group-admin .privacy-settings-tag-c {
-  margin-bottom: 9px;
+.group-settings .privacy-settings-tag-c {
+  margin-bottom: 15px;
 }
 
 .group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
