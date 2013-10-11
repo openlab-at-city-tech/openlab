@@ -37,17 +37,28 @@
 	
 	equal_row_height();
 	
-	//this add an onclick event to the "New Topic" button while preserving the original event; this is so "New Topic" can have a "current" class
+	// this add an onclick event to the "New Topic" button while preserving 
+	// the original event; this is so "New Topic" can have a "current" class
 	$('.show-hide-new').click (function (){
-            var origOnClick = $('.show-hide-new').onclick;
-            return function (e) {
-                if (origOnClick != null && !origOnClick()) {
-                    return false;
-                }
-                alert('some work');
-                return true;
+		var origOnClick = $('.show-hide-new').onclick;
+		return function (e) {
+			if (origOnClick != null && !origOnClick()) {
+				return false;
 			}
-			});
+			return true;
+		}
+	});
+
+	window.new_topic_is_visible = $('#new-topic-post').is(":visible");
+	$('.show-hide-new').click( function() {
+		if ( window.new_topic_is_visible ) {
+			$('.single-forum #message').slideUp(300);
+			window.new_topic_is_visible = false;
+		} else {
+			$('.single-forum #message').slideDown(300);
+			window.new_topic_is_visible = true;
+		}
+	});
 	
 	//this is for the filtering - changes the text class to a "red" state
 	$('#group_seq_form select').change(function(){

@@ -26,18 +26,20 @@ function openlab_group_privacy_settings($group_type) {
         }
     }
     ?>
-    <h4><?php _e('Privacy Settings', 'buddypress'); ?></h4>
+    <h4 class="privacy-title"><?php _e('Privacy Settings', 'buddypress'); ?></h4>
+    <p class="privacy-settings-tag-a">Set privacy options for your <?php _e(ucfirst($group_type)) ?></p>
     <?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
         <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
-        <p id="privacy-intro"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
+        <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
+        <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
-        <p><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
+        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
     <?php endif; ?>
 
-    <div class="radio">
+    <div class="radio group-profile">
 
         <?php
         $new_group_status = bp_get_new_group_status();
@@ -63,7 +65,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <label>
                 <input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-                <strong><?php _e('This is a hidden ' . ucfirst($group_type) . '.', 'buddypress') ?></strong>
+                <strong><?php _e('This is a hidden ' . ucfirst($group_type), 'buddypress') ?></strong>
                 <ul>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile will only be visible to members of your Access List.', 'buddypress') ?></li>
                     <li><p id="privacy-intro"><?php _e('Note: Use the ' . ucfirst($group_type) . ' Profile Settings to add members to your Access List.', 'buddypress'); ?></p></li>
@@ -94,7 +96,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <label>
                 <input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
-                <strong><?php _e('This is a hidden ' . ucfirst($group_type) . '.', 'buddypress') ?></strong>
+                <strong><?php _e('This is a hidden ' . ucfirst($group_type), 'buddypress') ?></strong>
                 <ul>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile, related content and activity will only be visible only to members of the ' . ucfirst($group_type) . '.', 'buddypress') ?></li>
                     <li><?php _e('This ' . ucfirst($group_type) . ' Profile will NOT be listed in the ' . ucfirst($group_type) . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
@@ -107,8 +109,8 @@ function openlab_group_privacy_settings($group_type) {
     <?php /* Site privacy markup */ ?>
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
-        <h4><?php _e(ucfirst($group_type) . ' Site') ?></h4>
-        <p><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Site.') ?></p>
+        <h5><?php _e(ucfirst($group_type) . ' Site') ?></h5>
+        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Site.') ?></p>
         <?php openlab_site_privacy_settings_markup($site_id) ?>
     <?php endif ?>
 
@@ -173,32 +175,51 @@ function openlab_group_archive() {
     }
 
 // Set up filters
-    $filters = array(
-        'wds_group_type' => $group_type
+    $meta_query = array(
+	array(
+		'key' => 'wds_group_type',
+		'value' => $group_type,
+	),
     );
 
     if (!empty($school) && 'school_all' != strtolower($school)) {
-        $filters['wds_group_school'] = $school;
+	$meta_query[] = array(
+		'key' => 'wds_group_school',
+		'value' => $school,
+		'compare' => 'LIKE',
+	);
     }
 
     if (!empty($department) && 'dept_all' != strtolower($department)) {
-        $filters['wds_departments'] = $department;
+	$meta_query[] = array(
+		'key' => 'wds_departments',
+		'value' => $department,
+		'compare' => 'LIKE',
+	);
     }
 
     if (!empty($semester) && 'semester_all' != strtolower($semester)) {
-        $filters['wds_semester'] = $semester_season;
-        $filters['wds_year'] = $semester_year;
+	$meta_query[] = array(
+		'key' => 'wds_semester',
+		'value' => $semester_season,
+	);
+	$meta_query[] = array(
+		'key' => 'wds_year',
+		'value' => $semester_year,
+	);
     }
 
     if (!empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype']) {
-        $filters['portfolio_user_type'] = ucwords($_GET['usertype']);
+	$meta_query[] = array(
+		'key' => 'portfolio_user_type',
+		'value' => ucwords( $_GET['usertype'] ),
+	);
     }
-
-    $meta_filter = new BP_Groups_Meta_Filter($filters);
 
     $group_args = array(
         'search_terms' => $search_terms_raw,
         'per_page' => 12,
+	'meta_query' => $meta_query,
     );
 
     if (!empty($_GET['group_sequence'])) {
@@ -283,7 +304,6 @@ function openlab_group_archive() {
 
     <?php endif; ?>
     <?php
-    $meta_filter->remove_filters();
 }
 
 /*

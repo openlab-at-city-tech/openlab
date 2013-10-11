@@ -49,10 +49,13 @@ followed by styles specific to each numbered section of the site.
 ** 2.6 Activity / My Activity
 
 * 3.0 COURSES / MY COURSES
+** 3.2.1 Create/Clone a Course (These are common for 3.2.1, 4.2.1 and 5.2.1)
 
 * 4.0 PROJECTS / MY PROJECTS
+** 4.2.1 Create a Project (See 3.2.1)
 
 * 5.0 CLUBS / MY CLUBS
+** 5.2.1 Create a Club (See 3.2.1)
 
 * 6.0 GROUPS (Consolidated)
 ** 6.1 Members
@@ -62,6 +65,7 @@ followed by styles specific to each numbered section of the site.
 ** 6.5 Group Site
 
 * 7.0 PORTFOLIOS
+** 7.1.1 Group Settings
 
 * 8.0 HELP
 ** 8.1 Print Style
@@ -844,12 +848,12 @@ h3#bread-crumb .sep {
 
 /* MOL and Group submenu styles */
 h1.mol-title,#single-course-header h1,#content h1.group-title {
-    margin-bottom:5px;
+    margin-bottom:10px;
 }
 
 .submenu,#subnav,#bpsubnav {
-    margin:0 0 25px;
-    height:17px;
+    margin:0 0 30px;
+    height:15px;
     position:relative;
 }
 
@@ -886,8 +890,9 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
     display:inline;
 }
 
-.submenu-text,#subnav #group-settings-label,#bpsubnav li:first-child {
-    margin:1px 6px 0;
+.submenu-text, #subnav #group-settings-label, #bpsubnav li:first-child {
+    margin: 0;
+    font-size: 13px;
 }
 
 .submenu ul li,#subnav ul li {
@@ -4069,23 +4074,17 @@ div.activity-comments form textarea {
     color:#666;
     line-height:15px;
 }
-#clone-course-tooltip-1 {
-  font-size: 12px;
-  line-height: 16px;
-  width: 575px;
+
+#create-or-clone-head {
+    font-size: 12px;
+    font-weight: 700;
 }
-#clone-course-tooltip-2 {
-  line-height: 14px;
-  margin-bottom: 5px;
-  width: 575px;
-  margin-top: -5px;
-}
+
 #clone-course-tooltip-3 {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  margin-top: -6px;
 }
-.course-create p.ol-clone-description {
-  width: 575px;
-}
+
 .course-create #group-create-body {
     margin-left: 10px;
 }
@@ -4107,15 +4106,22 @@ div.activity-comments form textarea {
 .course-create .ct-group-meta table {
   margin-top: 20px;
 }
-.course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th {
+.course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th,
+.group-admin .ct-group-meta table tr td, .group-admin .ct-group-meta table tr th {
   padding: 0;
 }
 .course-create tr.schools {
-  height: 31px;
 }
-.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
-  font-size: 12px;
+#group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
   font-weight: 700;
+}
+.groups .course-code-field .additional-field-label, .groups .section-code-field .additional-field-label,
+.groups .semester-field .additional-field-label, .groups .year-field .additional-field-label {
+  text-align: right;
+  padding-right: 5px;
+}
+.groups .additional-field-label {
+  font-size: 12px;
 }
 .course-create .school-inputs input {
   margin-left: 10px;
@@ -4124,35 +4130,29 @@ div.activity-comments form textarea {
 .course-create td#departments_html {
   width: 520px;
 }
-.course-create td#departments_html div {
+.course-create td#departments_html div, .group-admin td#departments_html div {
     background: none repeat scroll 0 0 #F0F0F0;
     border: 1px solid #CCCCCC;
     margin-top: 5px;
-    padding: 10px 5px;
-    width: 513px;
+    padding: 2px 7px;
+    width: 520px;
 }
 .course-create td#departments_html div input {
   margin-bottom: 5px;
 }
-.course-create table p.ol-tooltip {
-  margin-bottom: 20px!important;
-}
+
 .course-create table ul.ol-tooltip {
-  margin-top: -20px;
+  margin-top: -17px;
   margin-bottom: 10px;
 }
-.course-create tr.additional-field {
+.course-create tr.additional-field, .group-admin tr.additional-field {
   height: 30px;
 }
-.course-create td.additional-field-label {
-    padding-right: 5px !important;
-    text-align: right;
-    width: 110px !important;
-}
-.course-create tr.additional-description-field td {
+.course-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
     text-align: left !important;
+    padding-top: 16px!important;
 }
-.course-create .additional-field input, .course-create .additional-field select {
+.groups .additional-field input, .groups .additional-field select {
     width: 170px;
 }
 .course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
@@ -4162,27 +4162,410 @@ div.activity-comments form textarea {
 .course-create tr#wds-website-clone input, .course-create tr#wds-website input, .course-create tr#wds-website-existing input, .course-create tr#wds-website-external input {
   margin-right: 10px;
 }
-.course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
-    font-weight: 500;
+.course-create #clone-destination-path {
+  margin-left: 15px;
+  width: 195px;
 }
 .course-create td#noo_external_options p#check-note {
-    bottom: -60px;
+    bottom: -40px;
+    margin-left: 5px;
     margin-top: 10px !important;
-    margin-left: 15px;
+    width: 635px;
+}
+
+/* 3.2.1 Create/Clone a Course
+------------------------------------------------------------ */
+
+/* BEGIN styles shared for 3.2.1, 4.2.1 and 5.2.1 */
+
+.groups .submenu ul li.create-button.selected-page a {
+  background-position: 0px -19px;
+  color: #717171;
+}
+
+.group-create #group-create-body, .group-create #single-course-body {
+  margin: 0 5px 5px 4px;
+}
+
+.group-create #group-create-body form.standard-form label, .group-create #group-create-body form.standard-form span.label {
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.group-create #group-create-body form.standard-form div.submit input, .group-create #single-course-body form.standard-form div.submit input {
+  margin: -10px 0 0 17px;
+  padding: 5px 15px;
+}
+
+.group-create #group-create-body form .submit {
+  margin-top: 50px;
+}
+.group-create #single-course-body form .submit {
+  margin: 95px 0 50px 17px;
+}
+.group-create #single-course-body .groupblog-setup, .group-admin #single-course-body .groupblog-setup {
+    margin-bottom:40px;
+    margin-top: 15px;
+}
+.group-create #group-create-body .groupblog-setup {
+  margin-bottom: -10px;
+}
+.group-create #group-create-body form.standard-form div.submit, .group-create #single-course-body form.standard-form div.submit {
+  padding: 0;
+}
+
+.group-create #noo_external_options input[type=text] {
+  font-size: 11px;
+  padding-left: 2px;
+  padding-right: 2px;
+  margin-right: 5px;
+  width: 280px;
+}
+
+.group-create #group-create-body #check-note {
+  bottom: -40px;
+  padding-left: 20px;
+  width: 635px;
+}
+
+.group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4 {
+  margin: 0;
+  font-size: 12px;
+  font-family: 'Arial';
+}
+
+.group-admin.group-settings h5 {
+  margin-bottom: 5px;
+  line-height: 13px;
+  font-size: 12px;
+  font-family: 'Arial';
+}
+
+.group-create.group-settings #single-course-body h5, .group-admin.group-settings #single-course-body h5 {
+  font-style: oblique;
+}
+
+.group-create.group-settings #single-course-body h4, .group-admin.group-settings #single-course-body h4 {
+  font-weight: 700;
+}
+
+.group-create.group-settings #single-course-body form.standard-form div.radio ul, .group-admin.group-settings #single-course-body form.standard-form div.radio ul {
+  margin-left: 35px;
+}
+
+.group-create #single-course-body input#group-name, .group-create #single-course-body textarea#group-desc {
+  width: 525px;
+}
+.group-create #single-course-body textarea#group-desc {
+  margin-bottom: 25px;
+}
+.course-create textarea#group-desc {
+margin-bottom: 30px;
+}
+
+.group-create #single-course-body textarea#group-desc {
+  height: 115px;
+}
+
+.group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
+    line-height:14px!important;
+}
+
+.group-create.group-settings p.privacy-settings-tag-a, .group-admin.group-settings p.privacy-settings-tag-a  {
+  margin-bottom: 15px;
+}
+
+.group-settings .privacy-settings-tag-c {
+  margin-bottom: 15px;
+}
+
+.group-create.group-settings #group-create-body .radio, .group-admin.group-settings #single-course-body .radio {
+  padding-left: 0;
+  margin-top: -3px;
+}
+
+.group-create.group-settings #group-create-body .radio h6, .group-admin.group-settings #single-course-body .radio h6 {
+font-size: 11px;
+font-weight: 700;
+line-height: 14px;
+margin: 10px 0 5px auto;
+font-family: 'Arial';
+}
+
+.group-admin.group-settings .radio.group-site {
+  margin-bottom: 20px;
+}
+
+.group-admin.group-settings .radio.email-sub label {
+  margin-bottom: 10px!important;
+}
+
+.group-admin.group-settings .radio h6 {
+  margin-bottom: 10px;
+}
+
+.group-create.group-settings #group-create-body .radio label, .group-admin.group-settings #single-course-body .radio label {
+  font-size: 11px;
+  margin: 8px 0 20px 3px;
+}
+
+.group-admin.group-settings hr {
+  margin-bottom: 20px;
+}
+
+.group-create.group-settings #group-create-body .radio.group-site label, .group-admin.group-settings #single-course-body .radio.group-site label {
+  margin-bottom: 10px;
+}
+
+.group-settings .radio.group-site label input#blog-private0, .group-settings .radio.group-site label input#blog-private-2 {
+  margin-bottom: 10px;
+}
+
+.group-create.group-settings #group-create-body .radio label strong, .group-admin.group-settings #single-course-body .radio label strong {
+  font-size: 11px;
+}
+
+.group-create.group-settings #group-create-body .radio label input, .group-admin.group-settings #single-course-body .radio label input {
+  margin-right: 10px;
+}
+
+.group-create.group-settings #group-create-body .radio label ul, .group-admin.group-settings #single-course-body .radio label ul {
+  margin: 0 0 15px 35px;
+}
+
+#group-create-body h4#email-sub-defaults, #single-course-body h4#email-sub-defaults {
+  margin-bottom: 5px;
+}
+
+.group-create.group-settings #group-create-body .radio label ul li, .group-admin.group-settings #single-course-body .radio label ul li {
+  list-style: disc;
+  font-size: 11px;
+  margin: 5px 0;
+}
+
+.group-create.group-settings #group-create-body .submit, .group-admin.group-settings #single-course-body .submit {
+  margin: 50px 0 50px 17px;
+}
+
+.group-create.group-avatar #group-create-body div.submit {
+  margin-top: 50px;
+}
+
+.group-create.group-avatar #group-create-body h4 {
+  margin-bottom: 10px;
+}
+
+.group-create.group-avatar #group-create-body .left-menu {
+  width: 155px;
+}
+
+.group-create.group-avatar #group-create-body .left-menu img.avatar {
+  width: 145px;
+  height: 145px;
+}
+
+.group-create.group-avatar #group-create-body .main-column {
+  margin-left: 160px!important;
+}
+
+#upload-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 10px 0 5px;
+}
+
+#delete-group-avatar-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    margin-top: 30px;
+}
+
+#delete-group-avatar-text {
+    float: left;
+}
+
+#group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
+    margin-right: 5px;
+}
+
+#group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
+#single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
+  margin: 0 5px 0 20px;
+}
+
+#group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th,
+#single-course-body .groupblog-setup td, #single-course-body .groupblog-setup th {
+    padding: 8px 8px 8px 0;
+}
+
+#single-course-body .groupblog-setup tr.form-field.form-required:first-child {
+  font-size: 12px;
+}
+
+#group-create-body .schools .block-title, #single-course-body .schools .block-title  {
+    padding-left: 0;
+    width: 116px;
+    font-size: 12px;
+}
+
+.course-create tr#wds-website-clone th, .course-create tr#wds-website th, .course-create tr#wds-website-existing th, .course-create tr#wds-website-external th {
+    font-weight: 700;
+    font-size: 11px;
+}
+
+#group-create-body #wds-website-tooltips td {
+  padding-top: 0;
+}
+
+#group-create-body #wds-website-tooltips p {
+  margin-top: 0;
+}
+
+.group-admin .block-title {
+    margin-left: 0;
+}
+
+#wds-website-tooltips .ol-tooltip {
+  margin-bottom: 0;
+}
+
+.group-create a#find-feeds {
+  padding: 2px 10px!important;
+  -moz-border-radius: 3px!important;
+  border-radius: 3px!important;
+  text-transform: lowercase;
+  font-size: 10px!important;
+}
+
+#single-course-body label[for="group-desc"] {
+  margin-top: 20px;
+}
+
+/* END shared styles */
+
+#ol-clone-description {
+  margin: -3px 0 0 0;
+  line-height: 14px;
+}
+
+.course-create #group-create-body label[for="group-name"] {
+  font-size: 12px;
+  margin: 22px 0 15px 0;
+}
+.course-create #group-create-body label[for="group-desc"] {
+  font-size: 12px;
+  margin: 22px 0 5px 0;
+}
+
+.group-create .ct-group-meta p.ol-tooltip {
+    margin: 0 0 -5px 0;
+}
+
+.course-create .ct-group-meta p.ol-tooltip {
+  margin: 0 0 8px 0;
+  width: 650px;
+}
+.course-create .ct-group-meta table {
+  margin-top: 0;
+}
+.course-create .ct-group-meta td.school-inputs input#school_studies, .course-create .ct-group-meta td.school-inputs input#school_arts {
+  margin-left: 40px;
+}
+.course-create .school-inputs input#school_studies, .course-create .school-inputs input#school_arts {
+    margin-right: 10px;
+}
+.course-create .department-title .block-title {
+  padding-top: 23px;
+  font-size: 12px;
+}
+.course-create #departments_html input {
+  margin-right: 5px;
+}
+.course-create .ct-group-meta table .ol-tooltip, .group-admin .ct-group-meta table .ol-tooltip {
+  margin: 30px 0 10px 0;
+}
+.course-create #wds-website-tooltips .ol-tooltip {
+  
+}
+.course-create .course-code-field .additional-field-label, .course-create .section-code-field .additional-field-label, .course-create .semester-field .additional-field-label, .course-create .year-field .additional-field-label {
+  height: 36px;
+  padding-right: 5px !important;
+  text-align: right!important;
+  width: 80px !important;
+  font-size: 12px;
+}
+.course-create textarea#group-desc {
+  margin-bottom: 30px!important;
+}
+
+.course-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
+  margin-top: -5px;
+  margin-bottom: 2px;
+}
+
+.course-create #group-create-body #wds-website-tooltips ul.ol-tooltip, #single-course-body #wds-website-tooltips ul.ol-tooltip {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+#wds-website-clone th, #wds-website th, #wds-website-external th {
+  font-size: 11px;
+}
+
+.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+  font-weight: 700;
+}
+.course-create .groupblog-setup th {
+  font-size: 12px;
+}
+tr#course-table-rule td {
+  padding: 0 0 5px 0!important;
+}
+.course-create #noo_external_options input[type=text] {
+  width: 285px;
+}
+
+#wds-website-clone #noo_clone_options {
+padding-top: 15px!important;
+height: 35px;
+vertical-align: top;
+}
+
+#wds-website-clone th {
+height: 35px;
+padding-top: 15px!important;
+vertical-align: top;
 }
 
 /* 4.0 PROJECTS
 ------------------------------------------------------------ */
+
+/* 4.2.1 Create/Clone a Project - NB: shared styles are in 3.2.1
+------------------------------------------------------------ */
+
+
 /* 5.0 CLUBS
 ------------------------------------------------------------ */
-/* Course and Club Creation */
+
+/* 5.2.1 Create/Clone a Club - NB: shared styles are in 3.2.1
+------------------------------------------------------------ */
+
+/* Course and Club Creation Step 1 */
 form#create-group-form div#group-create-body div.ct-group-meta {
-    margin-top:20px;
+    margin-top:0;
+}
+.group-create #single-course-body tr {
+  line-height: 20px;
+}
+#wds-website-tooltips .ol-tooltip li {
+    line-height: 15px;
 }
 
 /* 6.0 GROUPS
 ------------------------------------------------------------ */
 /* Group Archive: (My)Courses, (My)Projects, (My)Clubs, Portfolios */
+
 #content ul#group-list.item-list li,#content ul#course-list.item-list li {
     width:308px;
     float:left;
@@ -4291,7 +4674,13 @@ h4.group-activity-title.activity-members-title {
 }
 
 /* Create & Admin Group */
-#active-toggle {
+
+.groups .submenu a {
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.groups #active-toggle {
     margin:10px 0;
 }
 
@@ -4304,35 +4693,31 @@ form.standard-form #active-toggle label {
     margin-left:10px;
 }
 
+.ct-group-meta table {
+  border-spacing: 0;
+}
 table.groupblog-setup tr th {
     text-align:left;
 }
-
-p.ol-tooltip {
-    margin:10px 0 0 15px;
+table.groupblog-setup th input {
+  margin-right: 5px;
 }
 
-p.ol-tooltip:before {
-    content:"\21A0 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
+p.ol-tooltip.clone-course-tooltip {
+    margin: -7px 0 7px 0;
+}
+
+.group-admin .ct-group-meta, .group-create .ct-group-meta {
+  margin-top: 25px;
 }
 
 ul.ol-tooltip {
     list-style-type:none;
-    padding-left:40px;
+    padding-left:37px;
 }
 
 ul.ol-tooltip li:before {
     content:"\21A0 \0020";
-}
-
-.course-create p.ol-tooltip:before {
-    content:"\2192 \0020";
-    width:15px;
-    margin-left:-15px;
-    display:inline-block;
 }
 
 .course-create ul.ol-tooltip li:before {
@@ -4346,8 +4731,11 @@ ul.ol-tooltip li:before {
     background:url(/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif) no-repeat scroll left center transparent;
 }
 
-body.group-create table.groupblog-setup th {
-    width: 200px;
+.groups #noo_new_options input {
+  margin-left: 15px;
+  width: 191px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 form.standard-form .create-or-clone-options label {
@@ -4356,24 +4744,15 @@ form.standard-form .create-or-clone-options label {
 }
 
 .create-or-clone-options {
-    margin: 15px 0;
+    margin: 10px 0;
 }
 
 .create-or-clone-options li {
-    margin-bottom: 10px;
-}
-
-p.ol-clone-description {
-    margin-left: 25px;
-    margin-bottom: 2em;
+    margin: 5px 0 8px 0;
 }
 
 #group-to-clone {
     margin-left: 10px;
-}
-
-#cloned-site-url {
-    font-style: italic;
 }
 
 .group-admin .left-menu {
@@ -4421,9 +4800,7 @@ a#find-feeds:hover {
 
 #create-group-form h4,#create-group-form h5 {
     font-family:arial,sans-serif;
-    font-weight:700;
     font-size:13px;
-    margin:5px 0;
 }
 
 #group-settings-form .bp-widget h5 {
@@ -4436,6 +4813,10 @@ a#find-feeds:hover {
 
 #create-group-form .radio,#group-settings-form .radio {
     padding-left:30px;
+}
+
+.group-admin.group-settings .radio.group-profile {
+  margin-bottom: 27px;
 }
 
 .radio label strong {
@@ -4453,9 +4834,13 @@ a#find-feeds:hover {
     line-height:35px;
 }
 
-#create-group-form label,#group-settings-form label {
-    font-size:12px;
+#create-group-form label, #group-settings-form label {
+    font-size:11px;
     line-height:18px;
+}
+
+.groups label[for="group-name"], .groups label[for="group-desc"] {
+  font-size: 12px!important;
 }
 
 /* Column Classes - THESE ARE LEFTOVER FROM GENESIS, THEY ARE STILL IN USE
@@ -4785,6 +5170,110 @@ body.docs #comment {
 .portfolio-displayname a{
     text-decoration: underline;
 }
+
+/* 7.1 Group Settings
+------------------------------------------------------------ */
+
+.group-settings .checkbox {
+  margin-bottom: 15px;
+}
+
+.group-settings.group-create hr {
+  display: none;
+}
+
+.group-settings.group-create h4 {
+  
+}
+
+.group-settings.group-create h5 {
+  margin-bottom: 3px;
+}
+
+.group-admin #single-course-body {
+  margin: 0 15px 0 10px;
+}
+
+.group-admin #single-course-body #subnav ul li a {
+  padding: 0 6px 0 5px;
+}
+
+.group-admin #single-course-body input#group-name, .group-admin #single-course-body textarea#group-desc {
+  padding: 1px;
+  width: 530px;
+}
+
+.group-admin #group-settings-form > p > label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.group-admin #current-group-site {
+    margin-top: 15px;
+}
+
+.group-admin #current-group-site strong {
+    display: block;
+    margin: 3px 0;
+}
+
+#avatar-crop-pane {
+  clear: left;
+}
+
+.group-admin.group-avatar #group-settings-form h3 {
+  font-family: 'Arial';
+  font-weight: 700;
+}
+
+#change-group-site a, #delete-group-avatar-button a, .group-avatar #group-settings-form #upload {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #666666;
+    margin: 2px 0 0 10px;
+    padding: 1px 5px;
+    text-decoration: none;
+}
+
+#avatar-crop-submit {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #666666;
+    text-decoration: none;
+    padding: 1px 5px;
+}
+
+.group-admin.group-avatar .generic-button {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+.group-admin #check-note {
+    padding-left: 18px;
+    width: 650px;
+}
+
+.group-admin #save {
+  margin: 30px 0 50px 0;
+}
+
+.group-admin .department-title .block-title, .group-admin .additional-description-field .additional-field-label {
+    padding: 25px 0 5px;
+    font-size: 12px;
+}
+
+.group-create.group-avatar #single-course-body h4 {
+    font-size: 12px;
+    font-weight: 700;
+}
+
 /* 8.0 HELP
 ------------------------------------------------------------ */
 .help-tags a {
@@ -4803,6 +5292,47 @@ body.single-help div#content ul li {
 body.single-help div#content div.entry-content ul li,
 body.single-help div#content div.entry-content ol li {
     margin: 0 0 5px 20px;
+}
+
+body.single-help .entry-content h1 {
+    border: 0 none;
+    font-family: 'Arial';
+    font-size: 24px;
+    margin: 30px 0 10px;
+}
+
+body.single-help .entry-content h2 {
+    font-size: 14px;
+}
+
+body.single-help div#content h3 {
+    font-family: 'Arvo';
+    font-size: 14px;
+    color: #717171;
+    margin: 30px 0 10px 0;
+    font-weight: 700;
+}
+
+body.single-help div#content h4 {
+  font-weight: 700;
+  font-family: Arial;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h5 {
+  font-family: Arial;
+  font-style: oblique;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
+}
+
+body.single-help div#content h6 {
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 30px 0 10px 0;
 }
 
 #help-tags-copy p {
@@ -4858,7 +5388,7 @@ div #help-tags-copy,div #help-tags {
     color:#C84C35;
     font-size:13px;
     font-family:'Arvo';
-    padding-left:5px;
+    padding-left:7px;
     margin:0 0 17px;
 }
 #help-title h2 a{
@@ -5006,12 +5536,12 @@ h1.parent-cat {
     font-size:13px;
 }
 
-.tax-help_category #content > a {
+.tax-help_category #content > a, .tax-help_tags #content > a {
     font-size:12px;
     border-top:1px solid #f0f0f0;
 }
 
-.tax-help_category #content > a[href="#help-top"]:after {
+.tax-help_category #content > a[href="#help-top"]:after, .tax-help_tags #content > a[href="#help-top"]:after {
     content:" \2191";
 }
 
@@ -5029,14 +5559,23 @@ h1.parent-cat {
     font-family: 'Arvo',​arial,​serif;
 }
 
-.tax-help_category #content h3.help-title,.tax-help_category #content .help-tags {
+.tax-help_category #content h3.help-title, .tax-help_category #content .help-tags, 
+.tax-help_tags #content h3.entry-title, .tax-help_tags #content .help-tags, .tax-help_tags #content .cat-list {
     padding-left:15px;
 }
 
-.tax-help_category #content h3.help-title a {
+.tax-help_category #content h3.help-title a, .tax-help_tags #content h3.entry-title a {
     text-decoration:underline;
     font-weight:700;
     font-family:Arial,Helvetica,sans-serif;
+}
+.tax-help_tags .cat-list {
+    font-size:12px;
+    font-family:Arial;
+    font-weight:400;
+}
+.tax-help_tags .cat-list a {
+  text-decoration: underline;
 }
 
 /* Glossary page */

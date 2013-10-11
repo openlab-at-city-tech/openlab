@@ -11,12 +11,15 @@ class WP_DPLA_Query {
 			return '';
 		}
 
-		$tkey = 'dpla_random_posts_post_' . $post->ID;
+		$tkey = $this->get_transient_key( $post->ID );
 		$items = get_transient( $tkey );
+
+		// Six hours by default
+		$expiration = $this->get_expiration();
 
 		if ( false === $items ) {
 			$items = $this->get_random_items_for_post();
-			set_transient( $tkey, $items, 5 * 60 );
+			set_transient( $tkey, $items, $expiration );
 		}
 
 		if ( empty( $items ) ) {
@@ -58,6 +61,22 @@ class WP_DPLA_Query {
 		return $items_markup;
 	}
 
+	protected function get_transient_key( $post_id ) {
+		return 'dpla_random_posts_post_' . $post_id;
+	}
+
+	protected function get_expiration() {
+		$expiration = (int) apply_filters( 'wp_dpla_cache_expiration_time', 6 * 60 * 60 );
+
+		// Prevent API flooding - don't allow a value less than
+		// 10 minutes
+		if ( $expiration < 600 ) {
+			$expiration = 600;
+		}
+
+		return $expiration;
+	}
+
 	public function get_random_items_for_post( $args = array() ) {
 		$retval = array();
 		$post = get_post();
@@ -65,13 +84,23 @@ class WP_DPLA_Query {
 			$terms = wp_get_post_tags( $post->ID );
 
 			if ( ! empty( $terms ) ) {
-				$args['search_term'] = implode( ' OR ', wp_list_pluck( $terms, 'name' ) );
+				$search_terms = array();
+				foreach ( wp_list_pluck( $terms, 'name' ) as $raw_term ) {
+					$search_terms[] = urlencode( $raw_term );
+				}
+				$args['search_term'] = implode( ' OR ', $search_terms );
 
 				// We'll get random items, but we first do a
 				// preliminary query to get a range
 				$pre_args = $args;
 				$pre_args['page'] = 1;
 				$pre_args['per_page'] = 1;
+				$pre_args['fields'] = implode( ',', array(
+					'isShownAt',
+					'sourceResource.title',
+					'object',
+					'provider',
+				) );
 				$pre_query = $this->create_query( $pre_args );
 				$this->total_count = $pre_query->getTotalCount();
 
@@ -96,28 +125,29 @@ class WP_DPLA_Query {
 		);
 
 		$query = $this->create_query( $qargs );
-		$item = array_pop( $query->getDocuments() );
+		$documents = $query->getDocuments();
+		$item = array_pop( $documents );
 
 		// No dupes
 		if ( in_array( $item['isShownAt'], $this->fetched_items ) ) {
-			$retval = $this->get_random_item_by_search_term( $search_term );
+			return $this->get_random_item_by_search_term( $search_term );
 		} else {
 			$this->fetched_items[] = $item['isShownAt'];
 		}
 
 		// sometimes a field is empty
 		if ( ! isset( $item['sourceResource']['title'], $item['object'], $item['isShownAt'], $item['provider']['name'], $item['provider']['@id'] ) ) {
-			$retval = $this->get_random_item_by_search_term( $search_term );
+			return $this->get_random_item_by_search_term( $search_term );
 		}
 
 		// We need a thumbnail
-		if ( empty( $item['object'] ) ) {
-			$retval = $this->get_random_item_by_search_term( $search_term );
+		if ( ! isset( $item['object'] ) || empty( $item['object'] ) ) {
+			return $this->get_random_item_by_search_term( $search_term );
 		}
 
 		// sometimes a field is not a string
 		if ( ! is_string( $item['sourceResource']['title'] ) || ! is_string( $item['object'] ) || ! is_string( $item['isShownAt'] ) || ! is_string( $item['provider']['name'] ) || ! is_string( $item['provider']['@id'] ) ) {
-			$retval = $this->get_random_item_by_search_term( $search_term );
+			return $this->get_random_item_by_search_term( $search_term );
 		}
 
 		// If the title is an array, just take the first item
@@ -139,14 +169,14 @@ class WP_DPLA_Query {
 			'search_term' => '',
 		) );
 
-		return $this->get_dpla()->createSearchQuery()->forText( $r['search_term'] )->withPaging( $r['page'], $r['per_page'] )->execute();
+		return $this->get_dpla()->createSearchQuery()->withSourceResourceField( 'title', $r['search_term'] )->withPaging( $r['page'], $r['per_page'] )->execute();
 	}
 
 	protected function get_dpla() {
 		if ( ! isset( $this->_dpla ) ) {
 			$api_key = get_option( 'dpla_api_key' );
-			require_once __DIR__ . '/../lib/php-dpla/tfn/dpla.php';
-			$this->_dpla = new \TFN\DPLA( $api_key );
+			require_once __DIR__ . '/dpla/class-wp-dpla-dpla.php';
+			$this->_dpla = new \TFN\WP_DPLA_DPLA( $api_key );
 		}
 
 		return $this->_dpla;

@@ -331,19 +331,19 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 	$select = $where = '';
 
-	$select = $wpdb->prepare( "SELECT a.group_id FROM {$bp->groups->table_name_members} a" );
+	$select = "SELECT a.group_id FROM {$bp->groups->table_name_members} a";
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
 
 	if ( !$r['show_hidden'] ) {
-		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) " );
-		$where  .= $wpdb->prepare( " AND c.status != 'hidden' " );
+		$select .= " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) ";
+		$where  .= " AND c.status != 'hidden' ";
 	}
 
 	if ( 'all' != $r['group_type'] ) {
 		// Sanitize
 		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
 
-		$select .= $wpdb->prepare( " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) " );
+		$select .= " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) ";
 		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
 	}
 
@@ -360,7 +360,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 		if ( $r['get_activity'] ) {
 			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
-			$activities = $wpdb->get_results( $wpdb->prepare( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" ) );
+			$activities = $wpdb->get_results( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" );
 
 			// Now walk down the list and try to match with a group. Once one is found, remove
 			// that group from the stack
@@ -476,29 +476,29 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	$group_type  = openlab_get_current_group_type( 'case=upper' );
 ?>
 
-<div class="radio">
+<div class="radio group-site">
 
-	<em><?php _e('Public', 'buddypress') ?></em>
+	<h6><?php _e('Public', 'buddypress') ?></h6>
+  <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
+	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 
-	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /> <?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
-
-	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /> <?php _e('Ask search engines not to index this site. Your site should not show up in web search results.<br /><em>Note: This option will NOT block access to your site. It is up to search engines to honor your request.</em>'); ?></label>
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label>
 
 	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
-		<em><?php _e('<em>Private</em>', 'buddypress') ?></em>
-		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>> <?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
+		<h6><?php _e('Private', 'buddypress') ?></h6>
+		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
 
-		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>> <?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type)); ?></label>
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>><?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type) . '.'); ?></label>
 
-		<em><?php _e('<em>Hidden</em>', 'buddypress') ?></em>
+		<h6><?php _e('Hidden', 'buddypress') ?></h6>
 		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
 
 	<?php else : ?>
 
 		<?php /* Portfolios */ ?>
-		<em>Hidden</em>
-		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ) ?>> I would like my site to be visible only to members of my Access List.</label>
+		<h6>Hidden</h6>
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ) ?>>I would like my site to be visible only to members of my Access List.</label>
 
 	<?php endif; ?>
 </div>
@@ -518,9 +518,10 @@ function openlab_default_subscription_settings_form() {
 	}
 
 	?>
-	<h4><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
+	<hr>
+	<h4 id="email-sub-defaults"><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
-	<div class="radio">
+	<div class="radio email-sub">
 		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
 			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />

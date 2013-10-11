@@ -141,7 +141,9 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 		<?php if ( bp_forums_is_installed_correctly() ) : ?>
 
 			<div class="checkbox">
-				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussion forum', 'buddypress' ) ?></label>
+        <h4>Discussion Settings</h4>
+        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php _e( ucfirst($group_type)) ?> profile.</p>
+				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
 			</div>
 
 		<?php endif; ?>
@@ -158,8 +160,8 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 <?php if ( bp_is_group_admin_screen( 'group-avatar' ) ) : ?>
 
 	<?php if ( 'upload-image' == bp_get_avatar_admin_step() ) : ?>
-
-			<p><?php _e("Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress') ?></p>
+      <p id="upload-group-avatar-title">Upload New Avatar</p>
+			<p id="upload-group-avatar-text"><?php _e("Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress') ?></p>
 
 			<p>
 				<input type="file" name="file" id="file" />
@@ -168,8 +170,9 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</p>
 
 			<?php if ( bp_get_group_has_avatar() ) : ?>
-
-				<p><?php _e( "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress' ) ?></p>
+        
+        <p id="delete-group-avatar-title">Delete Avatar</p>
+				<p id="delete-group-avatar-text"><?php _e( "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress' ) ?></p>
 
 				<?php bp_button( array( 'id' => 'delete_group_avatar', 'component' => 'groups', 'wrapper_id' => 'delete-group-avatar-button', 'link_class' => 'edit', 'link_href' => bp_get_group_avatar_delete_link(), 'link_title' => __( 'Delete Avatar', 'buddypress' ), 'link_text' => __( 'Delete Avatar', 'buddypress' ) ) ); ?>
 

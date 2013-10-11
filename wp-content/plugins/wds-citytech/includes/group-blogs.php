@@ -733,7 +733,6 @@ function wds_bp_group_meta() {
                             <input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
                              Name your cloned site:
                         </th>
-
                         <td id="noo_clone_options">
 
             <?php global $current_site ?>
@@ -741,8 +740,11 @@ function wds_bp_group_meta() {
                             <input name="blog-id-to-clone" value="" type="hidden" />
                             <p id="cloned-site-url"></p>
                         </td>
+
                     </tr>
         <?php endif ?>
+
+                <tr id="course-table-rule"><td><hr></td><td><hr></td></tr>
 
                 <tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website; ?>">
                     <th valign="top" scope='row'>
