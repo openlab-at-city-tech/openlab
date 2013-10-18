@@ -1881,7 +1881,8 @@ div#signup-avatar img {
 }
 
 form.standard-form textarea {
-    height:120px;
+    height:115px;
+    box-sizing: border-box;
     width:75%;
 }
 
@@ -4097,7 +4098,11 @@ div.activity-comments form textarea {
     margin-bottom: 5px;
 }
 .course-create form.standard-form textarea#group-desc, .course-create table textarea {
-  width: 525px;
+    width: 520px;
+    background: none repeat scroll 0 0 #F0F0F0;
+    border: 1px solid #CCCCCC;
+    margin-top: 5px;
+    padding: 2px 7px;
 }
 .course-create .ct-group-meta {
   margin-top: 0!important;
@@ -4122,10 +4127,6 @@ div.activity-comments form textarea {
 }
 .groups .additional-field-label {
   font-size: 12px;
-}
-.course-create .school-inputs input {
-  margin-left: 10px;
-  margin-right: 5px;
 }
 .course-create td#departments_html {
   width: 520px;
@@ -4154,6 +4155,7 @@ div.activity-comments form textarea {
 }
 .groups .additional-field input, .groups .additional-field select {
     width: 170px;
+    box-sizing: border-box;
 }
 .course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
   height: 40px;
@@ -4254,7 +4256,9 @@ div.activity-comments form textarea {
 }
 
 .group-create #single-course-body input#group-name, .group-create #single-course-body textarea#group-desc {
-  width: 525px;
+  width: 520px;
+  padding: 2px 7px;
+  box-sizing: border-box;
 }
 .group-create #single-course-body textarea#group-desc {
   margin-bottom: 25px;
@@ -4265,6 +4269,7 @@ margin-bottom: 30px;
 
 .group-create #single-course-body textarea#group-desc {
   height: 115px;
+  box-sizing: border-box;
 }
 
 .group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
@@ -4384,14 +4389,35 @@ font-family: 'Arial';
 #delete-group-avatar-text {
     float: left;
 }
-
+#group-create-body .ct-group-meta select{
+    padding: 0;
+}
+#group-create-body .school-tooltip p.ol-tooltip{
+    margin: 0 0 10px;
+}
+#group-create-body .school-tooltip td,
+#group-create-body tr td.school-inputs{
+    padding: 0;
+}
+#group-create-body .department-list-container{
+    height: 115px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+#group-create-body .school-inputs label{
+    display: inline-block;
+    margin: 0 0 5px;
+}
+#group-create-body .school-inputs input{
+    vertical-align: top;
+}
 #group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
-    margin-right: 5px;
+    margin-right: 10px;  
 }
 
 #group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
 #single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
-  margin: 0 5px 0 20px;
+  margin: 0 5px 0 30px;
 }
 
 #group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th,
