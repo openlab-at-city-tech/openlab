@@ -681,7 +681,10 @@ function wds_bp_group_meta() {
                 <?php if ($group_type != "course" && $group_type != 'portfolio') : ?>
                     <?php $show_website = "none" ?>
                     <tr class="form-field form-required">
-                        <th scope='row'>
+                            <th scope="row" class="site-details-title">Site Details</th>
+                        </tr>
+                    <tr class="form-field form-required">
+                        <th scope='row' class="site-details-query">
                             <input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?
                         </th>
                     </tr>
