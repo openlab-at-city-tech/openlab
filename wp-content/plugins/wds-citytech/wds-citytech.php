@@ -613,7 +613,7 @@ function wds_load_group_departments(){
 		$wds_departments=explode(",",$wds_departments);
 	}
 
-	$return="<div style='height:100px;overflow:scroll;'>";
+	$return='<div class="department-list-container">';
 	foreach ($departments as $i => $value) {
 		$checked="";
 		if(in_array($value,$wds_departments)){
@@ -716,7 +716,24 @@ function wds_load_group_type( $group_type ){
 		$group_type = $_POST['group_type'];
 	}
 
-	// associated school/dept tooltip
+	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
+	$wds_group_school = explode( ",", $wds_group_school );
+
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+
+	$return .= '<table>';
+
+	$return .= '<tr class="schools">';
+
+	$return .= '<td class="block-title" colspan="2">School(s)(required)';
+	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
+		$return .= ' <span class="required">(required)</span>';
+	}
+	$return .= '</td></tr>';
+        
+        $return .= '<tr class="school-tooltip"><td colspan="2">';
+        
+        // associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
@@ -731,23 +748,10 @@ function wds_load_group_type( $group_type ){
 			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
 			break;
 	}
+        
+        $return .= '</td></tr>';
 
-	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
-	$wds_group_school = explode( ",", $wds_group_school );
-
-	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
-
-	$return .= '<table>';
-
-	$return .= '<tr class="schools">';
-
-	$return .= '<td class="block-title">School(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-		$return .= ' <span class="required">(required)</span>';
-	}
-	$return .= '</td>';
-
-        $return .= '<td class="school-inputs">';
+        $return .= '<tr><td class="school-inputs" colspan="2">';
 
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
@@ -786,11 +790,11 @@ function wds_load_group_type( $group_type ){
 		$onclick = '';
 	}
 
-	$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
+	$return.='<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design</label>';
 
-	$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
+	$return.='<label><input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies</label>';
 
-	$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
+	$return.='<label><input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences</label>';
 
 	$return .= '</td>';
 	$return .= '</tr>';
