@@ -1048,6 +1048,14 @@ function wds_bp_group_meta_save($group) {
 		}
 	}
 
+	// Portfolio list display
+	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
+		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
+		groups_update_groupmeta( $group->id, 'portfolio_list_enabled', $enabled );
+
+		groups_update_groupmeta( $group->id, 'portfolio_list_heading', strip_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
+	}
+
 	// Feed URLs (step two of group creation)
 	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {
 		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );

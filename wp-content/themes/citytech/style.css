@@ -4663,6 +4663,20 @@ form#create-group-form div#group-create-body div.ct-group-meta {
     margin:0 0 0 15px!important;
 }
 
+#sidebar > div > ul.group-member-portfolio-list {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#sidebar > div > ul.group-member-portfolio-list > li {
+    list-style-image: none;
+}
+
+#sidebar > div > ul.group-member-portfolio-list > li a {
+    text-decoration: underline;
+		font-family: Arial,Helvetica,Tahoma,sans-serif;
+}
+
 h4.group-activity-title {
     border-bottom: 1px solid #717171;
     margin-bottom: 10px;

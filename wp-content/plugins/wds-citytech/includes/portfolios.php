@@ -217,6 +217,8 @@ function openlab_bp_get_new_group_name( $name ) {
 }
 add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 
+/** Group Portfolios *********************************************************/
+
 /**
  * Get an array of group member portfolio info
  */
@@ -288,6 +290,67 @@ function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
 }
 add_action( 'groups_before_delete_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
 add_action( 'groups_created_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
+
+/**
+ * Check whether portfolio list display is enabled for a group.
+ */
+function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Empty values fall back on 'yes', so do a strict 'no' check
+	return 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+}
+
+/**
+ * Get the heading/title for the group portfolio listing.
+ */
+function openlab_portfolio_list_group_heading( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	$heading = groups_get_groupmeta( $group_id, 'portfolio_list_heading' );
+
+	if ( ! $heading ) {
+		$heading = 'Student ePortfolios';
+	}
+
+	return $heading;
+}
+
+/**
+ * Add the portfolio display to group sidebars.
+ */
+function openlab_portfolio_list_group_display() {
+	if ( 'course' !== openlab_get_group_type( bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	if ( ! openlab_portfolio_list_enabled_for_group() ) {
+		return;
+	}
+
+	$portfolio_data = openlab_get_group_member_portfolios();
+
+	?>
+
+	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
+		<h4 class="sidebar-header">
+			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
+		</h4>
+
+		<ul class="group-member-portfolio-list">
+		<?php foreach ( $portfolio_data as $pdata ) : ?>
+			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( '%s&#8217;s ePortfolio', $pdata['user_display_name'] ) ) ?></a></li>
+		<?php endforeach ?>
+		</ul>
+	</div>
+
+	<?php
+}
+add_action( 'bp_group_options_nav', 'openlab_portfolio_list_group_display', 20 );
 
 /////////////////////////
 //     ACCESS LIST     //
