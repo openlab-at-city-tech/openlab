@@ -232,8 +232,15 @@ function openlab_get_group_member_portfolios( $group_id = false ) {
 	if ( '' == $portfolios ) {
 		$cached = false;
 		$portfolios = array();
-		$group_members = groups_get_group_members( $group_id, false, false, false );
-		foreach ( $group_members['members'] as $member ) {
+		$group_members = new BP_Group_Member_Query( array(
+			'group_id' => $group_id,
+			'per_page' => false,
+			'page' => false,
+			'group_role' => array( 'member', 'mod', 'admin', ),
+			'type' => 'alphabetical',
+		) );
+
+		foreach ( $group_members->results as $member ) {
 			$portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
