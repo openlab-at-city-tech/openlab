@@ -4412,7 +4412,7 @@ font-family: 'Arial';
     vertical-align: top;
 }
 #group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
-    margin-right: 10px;  
+    margin-right: 10px;
 }
 
 #group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
@@ -4512,7 +4512,7 @@ font-family: 'Arial';
   margin: 30px 0 10px 0;
 }
 .course-create #wds-website-tooltips .ol-tooltip {
-  
+
 }
 .course-create .course-code-field .additional-field-label, .course-create .section-code-field .additional-field-label, .course-create .semester-field .additional-field-label, .course-create .year-field .additional-field-label {
   height: 36px;
@@ -5223,7 +5223,7 @@ body.docs #comment {
 }
 
 .group-settings.group-create h4 {
-  
+
 }
 
 .group-settings.group-create h5 {
@@ -5599,7 +5599,7 @@ h1.parent-cat {
     font-family: 'Arvo',​arial,​serif;
 }
 
-.tax-help_category #content h3.help-title, .tax-help_category #content .help-tags, 
+.tax-help_category #content h3.help-title, .tax-help_category #content .help-tags,
 .tax-help_tags #content h3.entry-title, .tax-help_tags #content .help-tags, .tax-help_tags #content .cat-list {
     padding-left:15px;
 }

@@ -186,7 +186,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</p>
 
 			<?php if ( bp_get_group_has_avatar() ) : ?>
-        
+
         <p id="delete-group-avatar-title">Delete Avatar</p>
 				<p id="delete-group-avatar-text"><?php _e( "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress' ) ?></p>
 
@@ -369,15 +369,15 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 	<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if(this.checked) { document.getElementById('delete-group-button').disabled = ''; } else { document.getElementById('delete-group-button').disabled = 'disabled'; }" /> <?php printf( 'I understand the consequences of deleting this %s.', openlab_get_group_type() ); ?>
 
 	<?php do_action( 'bp_after_group_delete_admin' ); ?>
-    
-    <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id); 
+
+    <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id);
 		  if ($account_type == 'Student' && openlab_get_group_type() == 'portfolio' )
 		  {
 			  $group_type = 'ePortfolio';
 		  } else {
 			  $group_type = openlab_get_group_type();
 		  }
-	
+
 	?>
 
 	<div class="submit">

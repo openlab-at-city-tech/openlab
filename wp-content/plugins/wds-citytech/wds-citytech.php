@@ -730,9 +730,9 @@ function wds_load_group_type( $group_type ){
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td></tr>';
-        
+
         $return .= '<tr class="school-tooltip"><td colspan="2">';
-        
+
         // associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
@@ -748,7 +748,7 @@ function wds_load_group_type( $group_type ){
 			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
 			break;
 	}
-        
+
         $return .= '</td></tr>';
 
         $return .= '<tr><td class="school-inputs" colspan="2">';
