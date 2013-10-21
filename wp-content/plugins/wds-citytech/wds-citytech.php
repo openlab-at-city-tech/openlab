@@ -2001,3 +2001,116 @@ function openlab_ds_login_header() {
 					<h1><a href="<?php echo apply_filters('login_headerurl', 'http://' . $current_site->domain . $current_site->path ); ?>" title="<?php echo apply_filters('login_headertitle', $current_site->site_name ); ?>"><span class="hide"><?php bloginfo('name'); ?></span></a></h1>
 	<?php
 	}
+
+/**
+ * Course member portfolio list widget
+ *
+ * This function is here (rather than includes/portfolios.php) because it needs
+ * to run at 'widgets_init'.
+ *
+ * @todo Make sure it doesn't show up for non-courses. This can only be done
+ * after BP is set up.
+ */
+class OpenLab_Course_Portfolios_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'openlab_course_portfolios_widget',
+			'Portfolio List',
+			array(
+				'description' => 'Display a list of the ePortfolios belonging to the members of this course.',
+			)
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		echo $args['before_widget'];
+
+		echo $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'];
+
+		$name_key = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
+
+		// Trim the portfolio list if necessary
+		if ( ! empty( $instance['num_links'] ) ) {
+			$portfolios = array_slice( $portfolios, 0, (int) $instance['num_links'] );
+		}
+
+		if ( '1' === $instance['display_as_dropdown'] ) {
+			echo '<form action="" method="get">';
+			echo '<select name="portfolio-goto">';
+			foreach ( $portfolios as $portfolio ) {
+				echo '<option value="' . esc_attr( $portfolio['portfolio_url'] ) . '">' . esc_attr( $portfolio[ $name_key ] ) . '</option>';
+			}
+			echo '</select>';
+			echo '<input style="margin-top: .5em" type="submit" value="Go" />';
+			wp_nonce_field( 'portfolio_goto', '_pnonce' );
+			echo '</form>';
+		} else {
+			echo '<ul class="openlab-portfolio-links">';
+			foreach ( $portfolios as $portfolio ) {
+				echo '<li><a href="' . esc_url( $portfolio['portfolio_url'] ) . '">' . esc_html( $portfolio[ $name_key ] ) . '</a></li>';
+			}
+			echo '</ul>';
+		}
+
+
+		echo $args['after_widget'];
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance = $old_instance;
+
+		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['display_as_dropdown'] = ! empty( $new_instance['display_as_dropdown'] ) ? '1' : '';
+		$instance['sort_by'] = 'title' == $new_instance['sort_by'] ? 'title' : 'display_name';
+		$instance['num_links'] = isset( $new_instance['num_links'] ) ? (int) $new_instance['num_links'] : '';
+
+		return $instance;
+	}
+
+	public function form( $instance ) {
+		$settings = wp_parse_args( $instance, array(
+			'title' => 'Student ePortfolios',
+			'display_as_dropdown' => '0',
+			'sort_by' => 'title',
+			'num_links' => false,
+		) );
+
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'title' ) ?>">Title:</label><br />
+			<input name="<?php echo $this->get_field_name( 'title' ) ?>" id="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $settings['title'] ) ?>" />
+		</p>
+
+		<p>
+			<input name="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" id="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" value="1" <?php checked( $settings['display_as_dropdown'], '1' ) ?> type="checkbox" />
+			<label for="<?php echo $this->get_field_id( 'display_as_dropdown' ) ?>">Display as dropdown</label>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'sort_by' ) ?>">Sort by:</label><br />
+			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
+				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
+				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Student name</option>
+			</select>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'num_links' ) ?>">Number of links to show: </label>
+			<input name="<?php echo $this->get_field_name( 'num_links' ) ?>" id="<?php echo $this->get_field_name( 'num_links' ) ?>" value="<?php echo esc_attr( $settings['num_links'] ) ?>" size="2" />
+			<p class="description">Set to 0 to display all course ePortfolios.</p>
+		</p>
+		<?php
+	}
+}
+
+/**
+ * Register the Course Portfolios widget
+ */
+function openlab_register_portfolios_widget() {
+	register_widget( 'OpenLab_Course_Portfolios_Widget' );
+}
+add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
+
+

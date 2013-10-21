@@ -222,15 +222,16 @@ add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 /**
  * Get an array of group member portfolio info
  */
-function openlab_get_group_member_portfolios( $group_id = false ) {
+function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'display_name' ) {
 	if ( ! $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
 
-	$portfolios = groups_get_groupmeta( $group_id, 'member_portfolios' );
-	$cached = true;
+	$cache_key = 'member_portfolios_' . $sort_by;
+	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
+	$portfolios = '';
+
 	if ( '' == $portfolios ) {
-		$cached = false;
 		$portfolios = array();
 		$group_members = new BP_Group_Member_Query( array(
 			'group_id' => $group_id,
@@ -241,17 +242,36 @@ function openlab_get_group_member_portfolios( $group_id = false ) {
 		) );
 
 		foreach ( $group_members->results as $member ) {
+			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
+			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
 			$portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
-				'portfolio_id' => openlab_get_user_portfolio_id( $member->ID ),
+				'portfolio_id' => $portfolio_id,
 				'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
+				'portfolio_title' => get_blog_option( $portfolio_blog_id, 'blogname' ),
 			);
 
 			$portfolios[] = $portfolio;
 		}
 
-		groups_update_groupmeta( $group_id, 'member_portfolios', $portfolios );
+		$key = 'display_name' === $sort_by ? 'user_display_name' : 'portfolio_title';
+		usort( $portfolios, create_function( '$a, $b', '
+			$key = "' . $key . '";
+			$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
+			$cmp = strcmp( $values[0], $values[1] );
+
+			if ( 0 > $cmp ) {
+				$retval = -1;
+			} else if ( 0 < $cmp ) {
+				$retval = 1;
+			} else {
+				$retval = 0;
+			}
+			return $retval;
+		' ) );
+
+		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
 	}
 
 	return $portfolios;
@@ -265,7 +285,12 @@ function openlab_get_group_member_portfolios( $group_id = false ) {
  * - a group member adds/removes a portfolio site
  */
 function openlab_bust_group_portfolio_cache( $group_id = 0 ) {
-	groups_delete_groupmeta( $group_id, 'member_portfolios' );
+	global $wpdb, $bp;
+
+	$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$bp->groups->table_name_groupmeta} WHERE group_id = %d AND meta_key LIKE 'member_portfolios_%%'", $group_id ) );
+	foreach ( $keys as $k ) {
+		groups_delete_groupmeta( $group_id, $k );
+	}
 
 	// regenerate
 	openlab_get_group_member_portfolios();
@@ -358,6 +383,43 @@ function openlab_portfolio_list_group_display() {
 	<?php
 }
 add_action( 'bp_group_options_nav', 'openlab_portfolio_list_group_display', 20 );
+
+/**
+ * Don't enable the eportfolio widget for non-courses.
+ */
+function openlab_disable_eportfolio_widget_for_non_courses() {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group_type = openlab_get_group_type( $group_id );
+	if ( 'course' !== $group_type ) {
+		unregister_widget( 'OpenLab_Course_Portfolios_Widget' );
+
+		// unregister_widget() appears to be broken, so...
+		global $wp_registered_widgets;
+		foreach ( $wp_registered_widgets as $n => $rw ) {
+			if ( isset( $rw['callback'][0] ) && is_a( $rw['callback'][0], 'OpenLab_Course_Portfolios_Widget' ) ) {
+				unset( $wp_registered_widgets[ $n ] );
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'openlab_disable_eportfolio_widget_for_non_courses' );
+
+/**
+ * Catch form requests (from the widget dropdown) to redirect to a student portfolio
+ *
+ * See {@link OpenLab_Course_Portfolios_Widget::widget()}
+ */
+function openlab_redirect_to_student_portfolio_catcher() {
+	if ( empty( $_GET['portfolio-goto'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'portfolio_goto', '_pnonce' );
+
+	$url = urldecode( $_GET['portfolio-goto'] );
+	wp_redirect( $url );
+}
+add_action( 'wp', 'openlab_redirect_to_student_portfolio_catcher' );
 
 /////////////////////////
 //     ACCESS LIST     //
