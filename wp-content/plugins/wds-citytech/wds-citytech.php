@@ -1406,7 +1406,7 @@ class buddypress_Translation_Mangler {
   * This function will choke if we try to load it when not viewing a group page or in a group loop
   * So we bail in cases where neither of those things is present, by checking $groups_template
   */
- function filter_gettext($translation, $text, $domain) {
+ static function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
 
    if ( 'buddypress' != $domain ) {
@@ -1431,7 +1431,7 @@ class buddypress_Translation_Mangler {
    }
 
    $uc_grouptype = ucfirst($grouptype);
-   $translations = &get_translations_for_domain( 'buddypress' );
+   $translations = get_translations_for_domain( 'buddypress' );
    switch($text){
 	case "Forum":
 		return $translations->translate( "Discussion" );
@@ -1486,8 +1486,8 @@ class buddypress_ajax_Translation_Mangler {
  /*
   * Filter the translation string before it is displayed.
   */
- function filter_gettext($translation, $text, $domain) {
-   $translations = &get_translations_for_domain( 'buddypress' );
+ static function filter_gettext($translation, $text, $domain) {
+   $translations = get_translations_for_domain( 'buddypress' );
    switch($text){
 	case "Friendship Requested":
 	case "Add Friend":
