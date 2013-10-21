@@ -229,7 +229,6 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 
 	$cache_key = 'member_portfolios_' . $sort_by;
 	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
-	$portfolios = '';
 
 	if ( '' == $portfolios ) {
 		$portfolios = array();
@@ -255,21 +254,39 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			$portfolios[] = $portfolio;
 		}
 
-		$key = 'display_name' === $sort_by ? 'user_display_name' : 'portfolio_title';
-		usort( $portfolios, create_function( '$a, $b', '
-			$key = "' . $key . '";
-			$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
-			$cmp = strcmp( $values[0], $values[1] );
+		switch ( $sort_by ) {
+			case 'display_name' :
+				$key = 'user_display_name';
+				break;
 
-			if ( 0 > $cmp ) {
-				$retval = -1;
-			} else if ( 0 < $cmp ) {
-				$retval = 1;
-			} else {
-				$retval = 0;
-			}
-			return $retval;
-		' ) );
+			case 'random' :
+				$key = 'random';
+				break;
+
+			case 'title' :
+			default :
+				$key = 'portfolio_title';
+				break;
+		}
+
+		if ( 'random' === $key ) {
+			shuffle( $portfolios );
+		} else {
+			usort( $portfolios, create_function( '$a, $b', '
+				$key = "' . $key . '";
+				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
+				$cmp = strcmp( $values[0], $values[1] );
+
+				if ( 0 > $cmp ) {
+					$retval = -1;
+				} else if ( 0 < $cmp ) {
+					$retval = 1;
+				} else {
+					$retval = 0;
+				}
+				return $retval;
+			' ) );
+		}
 
 		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
 	}

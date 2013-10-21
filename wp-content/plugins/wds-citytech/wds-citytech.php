@@ -2063,9 +2063,8 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['display_as_dropdown'] = ! empty( $new_instance['display_as_dropdown'] ) ? '1' : '';
-		$instance['sort_by'] = 'title' == $new_instance['sort_by'] ? 'title' : 'display_name';
+		$instance['sort_by'] = in_array( $new_instance['sort_by'], array( 'random', 'display_name', 'title' ) ) ? $new_instance['sort_by'] : 'display_name';
 		$instance['num_links'] = isset( $new_instance['num_links'] ) ? (int) $new_instance['num_links'] : '';
-
 		return $instance;
 	}
 
@@ -2093,6 +2092,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
 				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
 				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Student name</option>
+				<option value="random" <?php selected( $settings['sort_by'], 'random' ) ?>>Random</option>
 			</select>
 		</p>
 
