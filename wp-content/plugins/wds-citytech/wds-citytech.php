@@ -2017,7 +2017,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			'openlab_course_portfolios_widget',
 			'Portfolio List',
 			array(
-				'description' => 'Display a list of the ePortfolios belonging to the members of this course.',
+				'description' => 'Display a list of the Portfolios belonging to the members of this course.',
 			)
 		);
 	}
@@ -2031,19 +2031,15 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
-		// Trim the portfolio list if necessary
-		if ( ! empty( $instance['num_links'] ) ) {
-			$portfolios = array_slice( $portfolios, 0, (int) $instance['num_links'] );
-		}
-
 		if ( '1' === $instance['display_as_dropdown'] ) {
 			echo '<form action="" method="get">';
-			echo '<select name="portfolio-goto">';
+			echo '<select class="portfolio-goto" name="portfolio-goto">';
+			echo '<option value="" selected="selected">Choose a Portfolio</option>';
 			foreach ( $portfolios as $portfolio ) {
 				echo '<option value="' . esc_attr( $portfolio['portfolio_url'] ) . '">' . esc_attr( $portfolio[ $name_key ] ) . '</option>';
 			}
 			echo '</select>';
-			echo '<input style="margin-top: .5em" type="submit" value="Go" />';
+			echo '<input class="openlab-portfolio-list-widget-submit" style="margin-top: .5em" type="submit" value="Go" />';
 			wp_nonce_field( 'portfolio_goto', '_pnonce' );
 			echo '</form>';
 		} else {
@@ -2054,8 +2050,22 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			echo '</ul>';
 		}
 
+		// Some lousy inline CSS
+		?>
+		<style type="text/css">
+			.openlab-portfolio-list-widget-submit {
+				margin-top: .5em;
+			}
+			body.js .openlab-portfolio-list-widget-submit {
+				display: none;
+			}
+		</style>
+
+		<?php
 
 		echo $args['after_widget'];
+
+		$this->enqueue_scripts();
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -2070,7 +2080,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 	public function form( $instance ) {
 		$settings = wp_parse_args( $instance, array(
-			'title' => 'Student ePortfolios',
+			'title' => 'Member Portfolios',
 			'display_as_dropdown' => '0',
 			'sort_by' => 'title',
 			'num_links' => false,
@@ -2091,16 +2101,33 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'sort_by' ) ?>">Sort by:</label><br />
 			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
 				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
-				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Student name</option>
+				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Member name</option>
 				<option value="random" <?php selected( $settings['sort_by'], 'random' ) ?>>Random</option>
 			</select>
 		</p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id( 'num_links' ) ?>">Number of links to show: </label>
-			<input name="<?php echo $this->get_field_name( 'num_links' ) ?>" id="<?php echo $this->get_field_name( 'num_links' ) ?>" value="<?php echo esc_attr( $settings['num_links'] ) ?>" size="2" />
-			<p class="description">Set to 0 to display all course ePortfolios.</p>
-		</p>
+		<?php
+	}
+
+	protected function enqueue_scripts() {
+		wp_enqueue_script( 'jquery' );
+
+		// poor man's dependency - jquery will be loaded by now
+		add_action( 'wp_footer', array( $this, 'script' ), 1000 );
+	}
+
+	public function script() {
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			$('.portfolio-goto').on( 'change', function() {
+				var maybe_url = this.value;
+				if ( maybe_url ) {
+					document.location.href = maybe_url;
+				}
+			});
+		},(jQuery));
+		</script>
 		<?php
 	}
 }

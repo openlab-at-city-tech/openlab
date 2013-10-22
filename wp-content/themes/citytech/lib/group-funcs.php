@@ -50,29 +50,43 @@ function openlab_group_privacy_settings($group_type) {
 
         <?php /* Portfolios get different copy */ ?>
         <?php if (openlab_is_portfolio()) : ?>
+	    <?php
+		$portfolio_label = openlab_get_portfolio_label( array(
+			'user_id' => openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ),
+			'case' => 'upper',
+		) );
+	    ?>
             <label>
                 <input type="radio" name="group-status" value="public" <?php if ('public' == bp_get_new_group_status() || !bp_get_new_group_status()) { ?> checked="checked" <?php
                 } else {
                     bp_group_show_status_setting('public');
                 }
                 ?>/>
-                <strong><?php _e('This is a public ' . ucfirst($group_type), 'buddypress') ?></strong>
+                <strong>This is a public <?php echo $portfolio_label ?></strong>
                 <ul>
-                    <li><?php _e('This ' . ucfirst($group_type) . ' Profile and related content and activity will be visible to the public.', 'buddypress') ?></li>
-                    <li><?php _e('This ' . ucfirst($group_type) . ' will be listed in the ' . ucfirst($group_type) . 's directory, search results, or OpenLab home page.', 'buddypress') ?></li>
+                    <li>Your <?php echo $portfolio_label ?> Profile and related content and activity will be visible to the public.</li>
+                    <li>Your <?php echo $portfolio_label ?> Profile will be listed in the <?php echo $portfolio_label ?>s directory, search results, and may be displayed on the OpenLab home page.</li>
                 </ul>
             </label>
 
-            <label>
-                <input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting('hidden') ?> />
-                <strong><?php _e('This is a hidden ' . ucfirst($group_type), 'buddypress') ?></strong>
+	    <label>
+                <input type="radio" name="group-status" value="private" <?php checked( 'private', bp_get_new_group_status() ) ?> />
+                <strong>This is a private <?php echo $portfolio_label ?></strong>
                 <ul>
-                    <li><?php _e('This ' . ucfirst($group_type) . ' Profile will only be visible to members of your Access List.', 'buddypress') ?></li>
-                    <li><p id="privacy-intro"><?php _e('Note: Use the ' . ucfirst($group_type) . ' Profile Settings to add members to your Access List.', 'buddypress'); ?></p></li>
-                    <li><?php _e('This ' . ucfirst($group_type) . ' Profile will NOT be listed in the ' . ucfirst($group_type) . 's directory, search results, or OpenLab home page.', 'buddypress') ?></li>
-                    <li><?php _e('The link to this ' . ucfirst($group_type) . ' Profile and Site will not be publicly visible on your OpenLab Profile.', 'buddypress') ?></li>
+                    <li>Your <?php echo $portfolio_label ?> Profile and related content and activity will only be visible to OpenLab members who request access via your <?php $portfolio_label ?> Profile.</li>
+                    <li>Your <?php echo $portfolio_label ?> Profile will be listed in the <?php echo $portfolio_label ?>s directory, search results, and may be displayed on the OpenLab home page.</li>
                 </ul>
             </label>
+
+	    <label>
+                <input type="radio" name="group-status" value="hidden" <?php checked( 'hidden', bp_get_new_group_status() ) ?> />
+                <strong>This is a hidden <?php echo $portfolio_label ?></strong>
+                <ul>
+                    <li>Your <?php echo $portfolio_label ?> Profile and related content and activity will only be visible to OpenLab members who are invited by you.</li>
+                    <li>Your <?php echo $portfolio_label ?> Profile will NOT be listed in the <?php echo $portfolio_label ?>s directory, search results, or OpenLab home page.</li>
+                </ul>
+            </label>
+
     <?php else : /* All other group types */ ?>
             <label>
                 <input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
@@ -321,44 +335,24 @@ function openlab_delete_group() {
 /**
  * This function prints out the departments for the course archives (non ajax)
  *
+ * @param string $school The id of the school to return a course list for
+ * @param string $department The id of the deparment currently selected in
+ *        the dropdown.
  */
-function openlab_return_course_list($school) {
-    if ($school == "tech" || $option_value_school == "tech") {
-        $tech_depts = openlab_get_department_list('tech');
+function openlab_return_course_list( $school, $department ) {
 
-        $tech_list = '<option value="dept_all">All</option>';
+	// Sanitize and fall back on 'tech'
+	$school = in_array( $school, array( 'tech', 'studies', 'arts' ) ) ? $school : 'tech';
+	$depts = openlab_get_department_list( $school );
 
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    } else if ($school == "studies" || $option_value_school == "studies") {
+        $list = '<option value="dept_all" ' . selected( '', $department ) . ' >All</option>';
+	foreach ( $depts as $dept ) {
+		$display_option_dept = str_replace( 'And', '&amp;', $dept );
+		$option_value_dept = strtolower( str_replace( ' ', '-', $dept ) );
+		$list .= '<option value="' . $option_value_dept . '" ' . selected( $department, $option_value_dept, false ) . '>' . $display_option_dept . '</option>';
+	}
 
-        $tech_depts = openlab_get_department_list('studies');
-
-        $tech_list = '<option value="dept_all">All</option>';
-
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    } else if ($school == "arts" || $option_value_school == "arts") {
-
-        $tech_depts = openlab_get_department_list('arts');
-
-        $tech_list = '<option value="dept_all">All</option>';
-
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    }
+	return $list;
 }
 
 function openlab_group_post_count($filters,$group_args) {

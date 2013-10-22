@@ -4864,6 +4864,13 @@ a#find-feeds:hover {
     list-style-type:none;
 }
 
+form.standard-form p.description.private-portfolio-gloss {
+	font-style: italic;
+	margin-top: -1em;
+	margin-bottom: 1em;
+	padding-top: 0;
+}
+
 #create-group-form .radio,#group-settings-form .radio {
     padding-left:30px;
 }
