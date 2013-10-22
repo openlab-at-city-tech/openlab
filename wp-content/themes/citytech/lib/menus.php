@@ -178,9 +178,26 @@ function openlab_my_groups_submenu($group) {
     global $bp;
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
+    $no_link = 'no-link';
 
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
+    
+    //get group step
+    $current_step = $bp->groups->current_create_step;
+    $step_name = '';
+    
+    switch($current_step){
+        case 'group-details':
+            $step_name = 'Step One: Profile';
+            break;
+        case 'group-settings':
+            $step_name = 'Step Two: Privacy Settings';
+            break;
+        case 'group-avatar':
+            $step_name = 'Step Three: Avatar';
+            break;
+    }
 
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
     if ($group == "course") {
@@ -194,6 +211,7 @@ function openlab_my_groups_submenu($group) {
             $menu_list = array(
                 $group_link => 'My ' . ucfirst($group) . 's',
                 $create_link => $course_text . ucfirst($group),
+                $no_link => $step_name,
             );
         } else {
             $menu_list = array(
@@ -204,6 +222,7 @@ function openlab_my_groups_submenu($group) {
         $menu_list = array(
             $group_link => 'My ' . ucfirst($group) . 's',
             $create_link => 'Create a ' . ucfirst($group),
+            $no_link => $step_name,
         );
     }
 
@@ -337,16 +356,19 @@ function openlab_submenu_gen($items) {
         }
 
         //this is just to make styling the "delete" and "create" buttons easier
+        //also added a class for the "no-link" submenu items that indicate the step in group creation
         if (strpos($item_classes, "delete")) {
             $item_classes .= " delete-button";
         } else if (strpos($item_classes, "create")) {
             $item_classes .= " create-button";
+        } else if ($item == 'no-link'){
+            $item_classes .= " no-link";
         }
 
         $submenu .= '<li class="' . $item_classes . '">';
-        $submenu .= '<a href="' . $item . '">';
+        $submenu .= ($item == 'no-link' ? '' : '<a href="' . $item . '">');
         $submenu .= $title;
-        $submenu .= '</a>';
+        $submenu .= ($item == 'no-link' ? '' : '</a>');
         $submenu .= '</li>';
 
         //increment counter
