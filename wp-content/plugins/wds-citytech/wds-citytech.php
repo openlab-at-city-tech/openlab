@@ -2031,11 +2031,6 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
-		// Trim the portfolio list if necessary
-		if ( ! empty( $instance['num_links'] ) ) {
-			$portfolios = array_slice( $portfolios, 0, (int) $instance['num_links'] );
-		}
-
 		if ( '1' === $instance['display_as_dropdown'] ) {
 			echo '<form action="" method="get">';
 			echo '<select class="portfolio-goto" name="portfolio-goto">';
@@ -2106,16 +2101,11 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'sort_by' ) ?>">Sort by:</label><br />
 			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
 				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
-				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Student name</option>
+				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Member name</option>
 				<option value="random" <?php selected( $settings['sort_by'], 'random' ) ?>>Random</option>
 			</select>
 		</p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id( 'num_links' ) ?>">Number of links to show: </label>
-			<input name="<?php echo $this->get_field_name( 'num_links' ) ?>" id="<?php echo $this->get_field_name( 'num_links' ) ?>" value="<?php echo esc_attr( $settings['num_links'] ) ?>" size="2" />
-			<p class="description">Set to 0 to display all course ePortfolios.</p>
-		</p>
 		<?php
 	}
 
