@@ -182,12 +182,12 @@ function openlab_my_groups_submenu($group) {
 
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
-    
+
     //get group step
     $current_step = $bp->groups->current_create_step;
     $step_name = '';
-    
-    switch($current_step){
+
+    switch ($current_step) {
         case 'group-details':
             $step_name = 'Step One: Profile';
             break;
@@ -204,26 +204,42 @@ function openlab_my_groups_submenu($group) {
 
         //determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
-        
+
         $course_text = 'Create / Clone a ';
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
-            $menu_list = array(
-                $group_link => 'My ' . ucfirst($group) . 's',
-                $create_link => $course_text . ucfirst($group),
-                $no_link => $step_name,
-            );
+            //have to add extra conditional in here for submenus on editing pages
+            if ($step_name == '') {
+                $menu_list = array(
+                    $group_link => 'My ' . ucfirst($group) . 's',
+                    $create_link => $course_text . ucfirst($group),
+                );
+            } else {
+                $menu_list = array(
+                    $group_link => 'My ' . ucfirst($group) . 's',
+                    $create_link => $course_text . ucfirst($group),
+                    $no_link => $step_name,
+                );
+            }
         } else {
             $menu_list = array(
                 $group_link => 'My ' . ucfirst($group) . 's',
             );
         }
     } else {
-        $menu_list = array(
-            $group_link => 'My ' . ucfirst($group) . 's',
-            $create_link => 'Create a ' . ucfirst($group),
-            $no_link => $step_name,
-        );
+        //have to add extra conditional in here for submenus on editing pages
+        if ($step_name == '') {
+            $menu_list = array(
+                $group_link => 'My ' . ucfirst($group) . 's',
+                $create_link => 'Create a ' . ucfirst($group),
+            );
+        } else {
+            $menu_list = array(
+                $group_link => 'My ' . ucfirst($group) . 's',
+                $create_link => 'Create a ' . ucfirst($group),
+                $no_link => $step_name,
+            );
+        }
     }
 
     return openlab_submenu_gen($menu_list);
@@ -361,7 +377,7 @@ function openlab_submenu_gen($items) {
             $item_classes .= " delete-button";
         } else if (strpos($item_classes, "create")) {
             $item_classes .= " create-button";
-        } else if ($item == 'no-link'){
+        } else if ($item == 'no-link') {
             $item_classes .= " no-link";
         }
 
