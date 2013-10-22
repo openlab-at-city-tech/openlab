@@ -725,7 +725,7 @@ function wds_load_group_type( $group_type ){
 
 	$return .= '<tr class="schools">';
 
-	$return .= '<td class="block-title" colspan="2">School(s)(required)';
+	$return .= '<td class="block-title" colspan="2">School(s)'.('course' == $group_type ? ' (required)' : '');
 	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}

@@ -28,27 +28,28 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
 
 <?php do_action( 'bp_before_group_admin_content' ) ?>
+    
+    <div class="item-body" id="group-create-body"> 
 
 <?php /* Edit Group Details */ ?>
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
 
-	<label for="group-name">* <?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?></label>
+	<label for="group-name"><?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?> (required)</label>
 	<input type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
 
-	<label for="group-desc">* <?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?></label>
+	<label for="group-desc"><?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?> (required)</label>
 	<textarea name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
 
 	<?php if ( !openlab_is_portfolio() ) : ?>
-
-		<p>
-			<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
-			<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
-			<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
-		</p>
+        <div class="notify-settings">
+			<p class="ol-tooltip notify-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></p>
+                        <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
+                        <label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
+        </div>
 
 	<?php else : ?>
 
@@ -392,6 +393,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <?php /* This is important, don't forget it */ ?>
 	<input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />
+    </div><!--#group-create-body-->
 
 <?php do_action( 'bp_after_group_admin_content' ) ?>
 
