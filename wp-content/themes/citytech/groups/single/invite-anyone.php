@@ -25,7 +25,7 @@
 		</li>
 	</ul>
 <div id="searchinvitemembersdescription">
-	<p>Start typing a few letters of member's display name. When a dropdown list appears, select from the list. The member will appear in your access list.</p>
+	<p>Start typing a few letters of member's display name. When a dropdown list appears, select from the list.</p>
 	
 </div>    
 
