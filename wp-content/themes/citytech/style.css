@@ -1890,6 +1890,7 @@ div#signup-avatar img {
 form.standard-form textarea {
     height:115px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width:75%;
 }
 
@@ -4096,20 +4097,13 @@ div.activity-comments form textarea {
 .course-create #group-create-body {
     margin-left: 10px;
 }
-.course-create form.standard-form input#group-name[type="text"] {
-    font-size: 10px;
+#group-create-body form.standard-form input#group-name[type="text"] {
+    font-size: 11px;
     height: 15px;
     line-height: 15px;
     padding-left: 5px;
     width: 520px;
     margin-bottom: 5px;
-}
-.course-create form.standard-form textarea#group-desc, .course-create table textarea {
-    width: 520px;
-    background: none repeat scroll 0 0 #F0F0F0;
-    border: 1px solid #CCCCCC;
-    margin-top: 5px;
-    padding: 2px 7px;
 }
 .course-create .ct-group-meta {
   margin-top: 0!important;
@@ -4126,11 +4120,6 @@ div.activity-comments form textarea {
 }
 #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
   font-weight: 700;
-}
-.groups .course-code-field .additional-field-label, .groups .section-code-field .additional-field-label,
-.groups .semester-field .additional-field-label, .groups .year-field .additional-field-label {
-  text-align: right;
-  padding-right: 5px;
 }
 .groups .additional-field-label {
   font-size: 12px;
@@ -4153,8 +4142,9 @@ div.activity-comments form textarea {
   margin-top: -17px;
   margin-bottom: 10px;
 }
-.course-create tr.additional-field, .group-admin tr.additional-field {
+#group-create-body .additional-field{
   height: 30px;
+  line-height: 20px;
 }
 .course-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
     text-align: left !important;
@@ -4163,6 +4153,7 @@ div.activity-comments form textarea {
 .groups .additional-field input, .groups .additional-field select {
     width: 170px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 .course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
   height: 40px;
@@ -4186,6 +4177,10 @@ div.activity-comments form textarea {
 ------------------------------------------------------------ */
 
 /* BEGIN styles shared for 3.2.1, 4.2.1 and 5.2.1 */
+#create-group-form label, #group-settings-form label {
+    font-size:12px;
+    line-height:18px;
+}
 
 .groups .submenu ul li.create-button.selected-page a {
   background-position: 0px -19px;
@@ -4262,27 +4257,18 @@ div.activity-comments form textarea {
   margin-left: 35px;
 }
 
-.group-create #single-course-body input#group-name, .group-create #single-course-body textarea#group-desc {
+#group-create-body input#group-name, #group-create-body textarea#group-desc {
   width: 520px;
   padding: 2px 7px;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  background: none repeat scroll 0 0 #F0F0F0;
+  border: 1px solid #CCCCCC;
 }
-.group-create #single-course-body textarea#group-desc {
+#group-create-body input#group-desc{
   margin-bottom: 25px;
-}
-.course-create textarea#group-desc {
-margin-bottom: 30px;
-}
-
-.group-create #single-course-body textarea#group-desc {
   height: 115px;
-  box-sizing: border-box;
 }
-
-.group-create.group-settings #single-course-body #create-group-form label,#group-settings-form label, .group-admin.group-settings #single-course-body #create-group-form label,#group-settings-form label {
-    line-height:14px!important;
-}
-
 .group-create.group-settings p.privacy-settings-tag-a, .group-admin.group-settings p.privacy-settings-tag-a  {
   margin-bottom: 15px;
 }
@@ -4400,7 +4386,7 @@ font-family: 'Arial';
     padding: 0;
 }
 #group-create-body .school-tooltip p.ol-tooltip{
-    margin: 0 0 10px;
+    margin: 5px 0 10px;
 }
 #group-create-body .school-tooltip td,
 #group-create-body tr td.school-inputs{
@@ -4410,6 +4396,7 @@ font-family: 'Arial';
     height: 115px;
     overflow: auto;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 #group-create-body .school-inputs label{
     display: inline-block;
@@ -4418,10 +4405,17 @@ font-family: 'Arial';
 #group-create-body .school-inputs input{
     vertical-align: top;
 }
-#group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech {
+#group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech{
     margin-right: 10px;
 }
-
+#group-create-body .notify-settings label{
+    display: inline-block;
+    margin: 0 25px 5px 0;
+}
+#group-create-body .notify-settings input{
+    vertical-align: top;
+    margin-right: 3px;
+}
 #group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
 #single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
   margin: 0 5px 0 30px;
@@ -4431,7 +4425,15 @@ font-family: 'Arial';
 #single-course-body .groupblog-setup td, #single-course-body .groupblog-setup th {
     padding: 8px 8px 8px 0;
 }
-
+#group-create-body .groupblog-setup th.site-details-query{
+    padding-top: 0;
+}
+#group-create-body .site-details-query label{
+    margin: 0 0 5px;
+}
+#group-create-body .site-details-query input{
+    vertical-align: top;
+}
 #single-course-body .groupblog-setup tr.form-field.form-required:first-child {
   font-size: 12px;
 }
@@ -4471,10 +4473,6 @@ font-family: 'Arial';
   font-size: 10px!important;
 }
 
-#single-course-body label[for="group-desc"] {
-  margin-top: 20px;
-}
-
 /* END shared styles */
 
 #ol-clone-description {
@@ -4482,12 +4480,10 @@ font-family: 'Arial';
   line-height: 14px;
 }
 
-.course-create #group-create-body label[for="group-name"] {
-  font-size: 12px;
-  margin: 22px 0 15px 0;
+#group-create-body label[for="group-name"] {
+  margin: 22px 0 10px 0;
 }
-.course-create #group-create-body label[for="group-desc"] {
-  font-size: 12px;
+#group-create-body label[for="group-desc"] {
   margin: 22px 0 5px 0;
 }
 
@@ -4521,15 +4517,21 @@ font-family: 'Arial';
 .course-create #wds-website-tooltips .ol-tooltip {
 
 }
-.course-create .course-code-field .additional-field-label, .course-create .section-code-field .additional-field-label, .course-create .semester-field .additional-field-label, .course-create .year-field .additional-field-label {
+#group-create-body .additional-field .additional-field-label{
   height: 36px;
-  padding-right: 5px !important;
-  text-align: right!important;
-  width: 80px !important;
+  padding-right: 5px;
+  text-align: right;
+  width: 80px;
   font-size: 12px;
 }
-.course-create textarea#group-desc {
-  margin-bottom: 30px!important;
+#group-create-body .additional-field.additional-description-field .additional-field-label{
+    text-align: left;
+    padding-right: 0;
+    width: auto;
+    height: 20px;
+}
+#group-create-body textarea#group-desc {
+  margin-bottom: 30px;
 }
 
 .course-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
@@ -4570,6 +4572,13 @@ height: 35px;
 padding-top: 15px!important;
 vertical-align: top;
 }
+#group-create-body h3.site-details-header{
+    font-size: 12px;
+    font-family: Arial, Helvetica, Tahoma, sans-serif;
+    font-weight: 700;
+    margin: 0;
+    padding: 8px 8px 8px 0;
+}
 
 /* 4.0 PROJECTS
 ------------------------------------------------------------ */
@@ -4587,9 +4596,6 @@ vertical-align: top;
 /* Course and Club Creation Step 1 */
 form#create-group-form div#group-create-body div.ct-group-meta {
     margin-top:0;
-}
-.group-create #single-course-body tr {
-  line-height: 20px;
 }
 #wds-website-tooltips .ol-tooltip li {
     line-height: 15px;
@@ -4880,16 +4886,6 @@ a#find-feeds:hover {
     font-weight:700;
     line-height:35px;
 }
-
-#create-group-form label, #group-settings-form label {
-    font-size:11px;
-    line-height:18px;
-}
-
-.groups label[for="group-name"], .groups label[for="group-desc"] {
-  font-size: 12px!important;
-}
-
 /* Column Classes - THESE ARE LEFTOVER FROM GENESIS, THEY ARE STILL IN USE
 ------------------------------------------------------------ */
 .five-sixths,.four-fifths,.four-sixths,.one-fifth,.one-fourth,.one-half,.one-sixth,.one-third,.three-fifths,.three-fourths,.three-sixths,.two-fifths,.two-fourths,.two-sixths,.two-thirds {
@@ -5243,11 +5239,6 @@ body.docs #comment {
 
 .group-admin #single-course-body #subnav ul li a {
   padding: 0 6px 0 5px;
-}
-
-.group-admin #single-course-body input#group-name, .group-admin #single-course-body textarea#group-desc {
-  padding: 1px;
-  width: 530px;
 }
 
 .group-admin #group-settings-form > p > label {
