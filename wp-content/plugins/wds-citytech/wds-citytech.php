@@ -2017,7 +2017,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			'openlab_course_portfolios_widget',
 			'Portfolio List',
 			array(
-				'description' => 'Display a list of the ePortfolios belonging to the members of this course.',
+				'description' => 'Display a list of the Portfolios belonging to the members of this course.',
 			)
 		);
 	}
@@ -2085,7 +2085,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 	public function form( $instance ) {
 		$settings = wp_parse_args( $instance, array(
-			'title' => 'Student ePortfolios',
+			'title' => 'Member Portfolios',
 			'display_as_dropdown' => '0',
 			'sort_by' => 'title',
 			'num_links' => false,
