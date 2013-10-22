@@ -182,11 +182,11 @@ function openlab_my_groups_submenu($group) {
 
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
-    
+
     //get group step
     $current_step = $bp->groups->current_create_step;
     $step_name = '';
-    
+
     switch($current_step){
         case 'group-details':
             $step_name = 'Step One: Profile';
@@ -204,7 +204,7 @@ function openlab_my_groups_submenu($group) {
 
         //determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
-        
+
         $course_text = 'Create / Clone a ';
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
