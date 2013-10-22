@@ -5381,10 +5381,12 @@ body.single-help div#content h6 {
   font-size: 12px;
   margin: 30px 0 10px 0;
 }
-
+#help-menu .sidebar-nav{
+    padding-bottom: 17px;
+}
 #help-tags-copy p {
     font-family:sans-serif;
-    font-size:12px;
+    font-size:11px;
     padding-bottom:10px;
 }
 
@@ -5422,9 +5424,10 @@ div #help-tags a:nth-child(2n) {
 
 #sidebar h2.help-tags-title {
     border-bottom:0;
-    border-top:1px solid #f0f0f0;
+    border-top:1px solid #F0F0F0;
     color:#717171;
-    padding:15px 0 0 7px;
+    padding:20px 0 0 7px;
+    margin-bottom: 12px;
 }
 
 div #help-tags-copy,div #help-tags {
@@ -5501,7 +5504,7 @@ div #help-tags-copy,div #help-tags {
     color:#717171;
     font-size:14px;
     font-weight:400;
-    margin:0 0 25px;
+    margin:0 0 12px;
     padding:15px 0 3px 7px;
 }
 
@@ -5510,10 +5513,15 @@ div #help-tags-copy,div #help-tags {
 }
 
 #sidebar #support-team #team-thumbs {
-    padding:0;
+    padding: 0 0 0 7px;
     margin:0;
 }
-
+#sidebar #support-team #team-thumbs .team-name{
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-weight: bold;
+}
 #sidebar #support-team #team-thumbs .thumb-wrapper {
     padding:0;
     list-style-image:none;
@@ -5521,12 +5529,14 @@ div #help-tags-copy,div #help-tags {
     margin-right:14px;
     float:left;
 }
-
+#sidebar h3#help-contact-us{
+    margin-bottom: 0;
+}
 #sidebar #help-contact-us a {
     display:block;
-    padding:20px 10px;
+    padding:19px 0 19px 7px;
     border-top:1px solid #f0f0f0;
-    border-bottom:1px solid #f0f0f0;
+    font-size: 14px;
 }
 
 #sidebar #help-contact-us a #mail-icon {
