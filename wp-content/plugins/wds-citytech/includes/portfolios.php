@@ -348,8 +348,8 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	// Empty values fall back on 'yes', so do a strict 'no' check
-	return 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+        // This kind of check will make 'no' the fallback
+	return 'yes' === groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
 }
 
 /**
