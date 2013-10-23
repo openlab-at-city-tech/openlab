@@ -275,7 +275,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			usort( $portfolios, create_function( '$a, $b', '
 				$key = "' . $key . '";
 				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
-				$cmp = strcmp( $values[0], $values[1] );
+				$cmp = strcasecmp( $values[0], $values[1] );
 
 				if ( 0 > $cmp ) {
 					$retval = -1;
