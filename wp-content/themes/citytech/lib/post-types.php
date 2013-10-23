@@ -91,7 +91,7 @@ function openlab_register_help() {
         'show_in_nav_menus' => true,
         'publicly_queryable' => true,
         'exclude_from_search' => false,
-        'has_archive' => true,
+        'has_archive' => false,
         'query_var' => true,
 		'menu_icon' => get_stylesheet_directory_uri() . '/images/help_icon.png',
         'can_export' => true,
