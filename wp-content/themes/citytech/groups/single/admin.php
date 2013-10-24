@@ -155,14 +155,14 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
 		<div class="checkbox">
-			<h5>Portfolio List Settings</h5>
+			<h4>Portfolio List Settings</h4>
 			<p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
 
 			<?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
 			<?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
 			<label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked( $portfolio_list_enabled ) ?> /> Enable portfolio list</label>
 
-			<label for="group-portfolio-list-heading">List Heading</label>
+			<h5><label for="group-portfolio-list-heading">List Heading</label></h5>
 			<input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr( $portfolio_list_heading ) ?>" />
 		</div>
 
