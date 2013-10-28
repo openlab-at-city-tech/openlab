@@ -148,21 +148,20 @@ switch ($_GET['group_sequence']) {
         <div id="tester">
 
         </div>
-	<?php if ($group_type == 'course' || $group_type == 'portfolio'): ?>
-            <div class="<?php echo $school_color; ?>-square"></div>
-            <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
+
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
                 <option value="" <?php selected( '', $option_value_school ) ?>>Select School</option>
                 <option value='school_all' <?php selected( 'school_all', $option_value_school ) ?>>All</option>
                 <option value='tech' <?php selected( 'tech', $option_value_school ) ?>>Technology &amp; Design</option>
                 <option value='studies' <?php selected( 'studies', $option_value_school ) ?>>Professional Studies</option>
                 <option value='arts' <?php selected( 'arts', $option_value_school ) ?>>Arts &amp; Sciences</option>
-            </select>
-            <div class="<?php echo $school_color; ?>-square"></div>
-            <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
-            <select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
+	</select>
+	<div class="<?php echo $school_color; ?>-square"></div>
+	<div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
+	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
 		<?php echo openlab_return_course_list( $option_value_school, $option_value_dept ); ?>
-            </select>
-            <?php endif; ?>
+	</select>
 
         <?php // @todo figure out a way to make this dynamic ?>
         <?php if ( $group_type == 'course' ): ?>
@@ -194,33 +193,14 @@ switch ($_GET['group_sequence']) {
             </select>
 	<?php endif; ?>
 
-        <?php
-        //for clubs and projects pages, which will process the filter without a submit button
-        $on_change = "";
-        if ($group_type == 'project' || $group_type == 'club') {
-            $on_change = 'onchange="document.forms[\'group_seq_form\'].submit();"';
-        }
-        ?>
-
-        <?php if ($group_type == 'portfolio' || $group_type == 'course' || $group_type == 'people'): ?>
-            <div class="<?php echo $sort_color; ?>-square"></div>
-            <select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
-                <option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
-                <option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
-                <option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
-            </select>
-            <input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
-            <input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
-<?php else: ?>
-            <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-                <div class="<?php echo $sort_color; ?>-square"></div>
-                <select name="group_sequence" onchange="document.forms['group_seq_form'].submit();" class="last-select <?php echo $select_class; ?> <?php echo $sort_color; ?>-text">
-                    <option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
-                    <option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
-                    <option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
-                </select>
-            </form>
-<?php endif; ?>
+	<div class="<?php echo $sort_color; ?>-square"></div>
+	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
+		<option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
+		<option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
+		<option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
+	</select>
+	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
+	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
 
     </form>
     <div class="clearfloat"></div>
