@@ -4447,6 +4447,7 @@ font-family: 'Arial';
 }
 #group-create-body .site-details-query label{
     margin: 0 0 5px;
+    font-size: 11px;
 }
 #group-create-body .site-details-query input{
     vertical-align: top;
@@ -4455,8 +4456,8 @@ font-family: 'Arial';
   font-size: 12px;
 }
 
-#group-create-body .schools .block-title, #single-course-body .schools .block-title  {
-    padding-left: 0;
+.groups .schools .block-title  {
+    padding: 0px;
     width: 116px;
     font-size: 12px;
 }
@@ -4498,7 +4499,7 @@ font-family: 'Arial';
 }
 
 .group-create #group-create-body label[for="group-name"] {
-  margin: 22px 0 15px 0;
+  margin: 22px 0 5px 0;
 }
 #group-create-body label[for="group-desc"] {
   margin: 26px 0 5px 0;

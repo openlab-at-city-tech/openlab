@@ -873,7 +873,7 @@ function wds_load_group_type( $group_type ){
 
 			$return .= '<tr class="additional-field additional-description-field">';
 			$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-			$return .= '<tr><td colspan="2"><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td></tr>';
+			$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 			$return.='</tr>';
 		}
 	}elseif($group_type=="project"){
