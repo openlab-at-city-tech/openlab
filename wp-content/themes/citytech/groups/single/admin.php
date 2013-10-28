@@ -28,8 +28,8 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
 
 <?php do_action( 'bp_before_group_admin_content' ) ?>
-    
-    <div class="item-body" id="group-create-body"> 
+
+    <div class="item-body" id="group-create-body">
 
 <?php /* Edit Group Details */ ?>
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
@@ -79,13 +79,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
 
-		<div id="invite-anyone-member-list">
-			<ul>
-				<?php openlab_access_list_checkboxes() ?>
-			</ul>
-
-			<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-		</div>
+		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
 	</div>
 
 	<div class="main-column access-menu-main">
