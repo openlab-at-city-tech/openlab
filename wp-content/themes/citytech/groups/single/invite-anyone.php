@@ -34,20 +34,7 @@
 
 <div class="left-menu">
 
-    <h5 class="invite-title"><?php _e('Select members from the OpenLab directory:'); ?></h5>
-
-    <p class="invite-copy"><?php _e("Select the checkbox next to the member's name. The member will appear in the list of invites."); ?></p>
-
-	<!--<p id="t"><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p> -->
-
-	<div id="invite-anyone-member-list">
-		<ul>
-			<?php bp_new_group_invite_member_list() ?>
-		</ul>
-
-		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-	</div>
-
+	<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
     <?php if ( invite_anyone_access_test() && !bp_is_group_create() ) : ?>
 	<h5 class="invite-title"><?php _e('Invite new members by email:'); ?></h5>
 
