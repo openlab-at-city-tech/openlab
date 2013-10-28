@@ -4133,12 +4133,13 @@ div.activity-comments form textarea {
     margin-top: 5px;
     padding: 2px 7px;
     width: 530px;
+    margin-bottom: 25px;
 }
 .groups .ct-group-meta #additional-desc-html {
   width: 530px;
   margin-bottom: 5px;
 }
-.course-create td#departments_html div input {
+.groups td#departments_html div input {
   margin-bottom: 5px;
 }
 
@@ -4200,8 +4201,12 @@ div.activity-comments form textarea {
   margin-top: 20px;
 }
 
-.group-create #group-create-body form.standard-form div.submit input, .group-create #single-course-body form.standard-form div.submit input {
+.groups form.standard-form div.submit input, .groups form.standard-form div.submit input {
   margin: -10px 0 0 17px;
+  padding: 5px 15px;
+}
+
+.groups input#save {
   padding: 5px 15px;
 }
 
@@ -4389,8 +4394,11 @@ font-family: 'Arial';
 #group-create-body .ct-group-meta select{
     padding: 0;
 }
-#group-create-body .school-tooltip p.ol-tooltip{
+.group-create .school-tooltip p.ol-tooltip{
     margin: 7px 0 10px;
+}
+.group-admin .school-tooltip p.ol-tooltip{
+    margin: 7px 0 7px;
 }
 #group-create-body .school-tooltip td,
 #group-create-body tr td.school-inputs{
@@ -4410,21 +4418,24 @@ font-family: 'Arial';
 #group-create-body .school-inputs input{
     vertical-align: top;
 }
-#group-create-body .school-inputs input#school_tech, #single-course-body .school-inputs input#school_tech{
+.group-create .school-inputs input#school_tech {
     margin-right: 10px;
-    margin-top: 2px;
+    margin-top: 3px;
+}
+.group-admin .school-inputs input#school_tech {
+    margin-right: 5px;
+    margin-top: 3px;
+}
+.notify-settings p.ol-tooltip.notify-members {
+  margin-bottom: 5px;
 }
 #group-create-body .notify-settings label{
     display: inline-block;
     margin: 0 25px 5px 0;
+    font-size: 11px;
 }
-#group-create-body .notify-settings input{
-    vertical-align: top;
-    margin-right: 3px;
-}
-#group-create-body .school-inputs input#school_studies, #group-create-body .school-inputs input#school_arts,
-#single-course-body .school-inputs input#school_studies, #single-course-body .school-inputs input#school_arts {
-  margin: 0 10px 0 30px;
+.groups .school-inputs input#school_studies, .groups .school-inputs input#school_arts {
+  margin: 3px 10px 0 30px;
 }
 
 #group-create-body .groupblog-setup td, #group-create-body .groupblog-setup th,
@@ -4486,7 +4497,7 @@ font-family: 'Arial';
   line-height: 14px;
 }
 
-#group-create-body label[for="group-name"] {
+.group-create #group-create-body label[for="group-name"] {
   margin: 22px 0 15px 0;
 }
 #group-create-body label[for="group-desc"] {
@@ -4505,7 +4516,7 @@ font-family: 'Arial';
   margin-top: 0;
 }
 .course-create .ct-group-meta td.school-inputs input#school_studies, .course-create .ct-group-meta td.school-inputs input#school_arts {
-  margin-left: 40px;
+  margin-left: 30px;
 }
 .course-create .school-inputs input#school_studies, .course-create .school-inputs input#school_arts {
     margin-right: 10px;
@@ -4517,11 +4528,8 @@ font-family: 'Arial';
 .course-create #departments_html input {
   margin-right: 5px;
 }
-.course-create .ct-group-meta table .ol-tooltip, .group-admin .ct-group-meta table .ol-tooltip {
-  margin: 30px 0 10px 0;
-}
-.course-create #wds-website-tooltips .ol-tooltip {
-
+.groups .ct-group-meta table .ol-tooltip {
+  margin: 6px 0 10px 0;
 }
 #group-create-body .additional-field .additional-field-label{
   height: 33px;
@@ -4539,8 +4547,12 @@ font-family: 'Arial';
     width: auto;
     height: 20px;
 }
-#group-create-body textarea#group-desc {
+.group-create #group-create-body textarea#group-desc {
   margin-bottom: 30px;
+}
+
+.group-admin #group-create-body textarea#group-desc {
+  margin-bottom: 25px;
 }
 
 .course-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
@@ -4769,7 +4781,10 @@ p.ol-tooltip.clone-course-tooltip {
     margin: -7px 0 7px 0;
 }
 
-.group-admin .ct-group-meta, .group-create .ct-group-meta {
+.group-admin .ct-group-meta {
+  margin-top: 20px;
+}
+.group-create .ct-group-meta {
   margin-top: 25px;
 }
 
