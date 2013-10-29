@@ -124,7 +124,7 @@ function cuny_create_group() {
                     <?php /* Name/Description */ ?>
                     <?php if ('course' == $group_type) : ?>
                         <label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
-                        <p class="ol-tooltip clone-course-tooltip">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
+                        <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
                         <ul class="ol-tooltip" id="clone-course-tooltip-3">
                             <li>CourseCode CourseName, Semester Year</li>
                             <li>ARCH3522 NYC Arch, FA2013</li>

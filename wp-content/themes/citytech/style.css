@@ -4782,6 +4782,10 @@ p.ol-tooltip.clone-course-tooltip {
     margin: -7px 0 7px 0;
 }
 
+#clone-course-tooltip-4 {
+  margin-top: 0px;
+}
+
 .group-admin .ct-group-meta {
   margin-top: 20px;
 }
