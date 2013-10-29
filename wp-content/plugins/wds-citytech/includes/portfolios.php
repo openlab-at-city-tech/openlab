@@ -222,7 +222,7 @@ add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 /**
  * Get an array of group member portfolio info
  */
-function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'display_name' ) {
+function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'display_name', $type = 'public' ) {
 	if ( ! $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
@@ -242,9 +242,15 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 
 		foreach ( $group_members->results as $member ) {
 			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
+			$portfolio_group = groups_get_group( array( 'group_id' => $portfolio_id ) );
 			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
 
-			if ( ! $portfolio_id || ! $portfolio_blog_id ) {
+			if ( empty( $portfolio_id ) || empty( $portfolio_blog_id ) || empty( $portfolio_group ) ) {
+				continue;
+			}
+
+			// Don't add hidden portfolios, unless they've been requested
+			if ( 'all' !== $type && 'hidden' === $portfolio_group->status ) {
 				continue;
 			}
 
@@ -338,12 +344,13 @@ function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
 	// Don't regenerate - could be several groups. Let it happen on the fly
 	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
 	$group_ids = groups_get_user_groups( $user_id );
-	foreach ( $group_ids as $gid ) {
+	foreach ( $group_ids['groups'] as $gid ) {
 		openlab_bust_group_portfolio_cache( $gid );
 	}
 }
 add_action( 'groups_before_delete_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
 add_action( 'groups_created_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
+add_action( 'groups_group_settings_edited', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
 
 /**
  * Check whether portfolio list display is enabled for a group.
