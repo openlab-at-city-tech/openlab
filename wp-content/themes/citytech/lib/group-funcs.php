@@ -28,12 +28,11 @@ function openlab_group_privacy_settings($group_type) {
     ?>
     <h4 class="privacy-title"><?php _e('Privacy Settings', 'buddypress'); ?></h4>
     <p class="privacy-settings-tag-a">Set privacy options for your <?php _e(ucfirst($group_type)) ?></p>
-    <?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
+    <?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>
         <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
-        <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
         <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
