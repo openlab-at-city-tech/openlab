@@ -5534,11 +5534,6 @@ div #help-tags-copy,div #help-tags {
     margin:0 0 17px;
 }
 
-#support-team {
-    margin-top:30px;
-    border-top:1px solid #F0F0F0;
-}
-
 #support-team h2 {
     border-bottom:none;
     color:#717171;
@@ -5549,7 +5544,10 @@ div #help-tags-copy,div #help-tags {
 }
 
 #sidebar #support-team {
-    margin:0 0 30px;
+    margin:0 0 15px;
+    padding: 0 0 15px;
+    border-top:1px solid #F0F0F0;
+    border-bottom:1px solid #F0F0F0;
 }
 
 #sidebar #support-team #team-thumbs {
