@@ -28,8 +28,8 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
 
 <?php do_action( 'bp_before_group_admin_content' ) ?>
-    
-    <div class="item-body" id="group-create-body"> 
+
+    <div class="item-body" id="group-create-body">
 
 <?php /* Edit Group Details */ ?>
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
@@ -79,13 +79,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
 
-		<div id="invite-anyone-member-list">
-			<ul>
-				<?php openlab_access_list_checkboxes() ?>
-			</ul>
-
-			<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-		</div>
+		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
 	</div>
 
 	<div class="main-column access-menu-main">
@@ -155,14 +149,14 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
 		<div class="checkbox">
-			<h5>Portfolio List Settings</h5>
+			<h4>Portfolio List Settings</h4>
 			<p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
 
 			<?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
 			<?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
 			<label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked( $portfolio_list_enabled ) ?> /> Enable portfolio list</label>
 
-			<label for="group-portfolio-list-heading">List Heading</label>
+			<h5><label for="group-portfolio-list-heading">List Heading</label></h5>
 			<input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr( $portfolio_list_heading ) ?>" />
 		</div>
 

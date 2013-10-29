@@ -275,7 +275,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			usort( $portfolios, create_function( '$a, $b', '
 				$key = "' . $key . '";
 				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
-				$cmp = strcmp( $values[0], $values[1] );
+				$cmp = strcasecmp( $values[0], $values[1] );
 
 				if ( 0 > $cmp ) {
 					$retval = -1;
@@ -348,8 +348,8 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	// Empty values fall back on 'yes', so do a strict 'no' check
-	return 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+        // This kind of check will make 'no' the fallback
+	return 'yes' === groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
 }
 
 /**

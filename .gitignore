@@ -17,6 +17,7 @@ openlabdev
 
 # Don't include the error log
 php_error.log
+debug.log
 
 # Misc exclusions
 *.bak

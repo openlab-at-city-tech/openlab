@@ -15,7 +15,7 @@ function openlab_list_members($view) {
 	// Set up variables
 
 	// There are two ways to specify user type: through the page name, or a URL param
-	$user_type = $sequence_type = $search_terms = '';
+	$user_type = $sequence_type = $search_terms = $user_school = $user_dept = '';
 	if ( !empty( $_GET['usertype'] ) && $_GET['usertype'] != 'user_type_all' ) {
 		$user_type = $_GET['usertype'];
 		$user_type = ucwords( $user_type );
@@ -48,6 +48,20 @@ function openlab_list_members($view) {
     		echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
     	}
 
+	if ( ! empty( $_GET['school'] ) ) {
+		$user_school = urldecode( $_GET['school'] );
+
+		// Sanitize
+		$schools = openlab_get_school_list();
+		if ( ! isset( $schools[ $user_school ] ) ) {
+			$user_school = '';
+		}
+	}
+
+	if ( ! empty( $_GET['department'] ) ) {
+		$user_department = urldecode( $_GET['department'] );
+	}
+
 	// Set up the bp_has_members() arguments
 	// Note that we're not taking user_type into account. We'll do that with a query filter
 	$args = array( 'per_page' => 48 );
@@ -56,77 +70,160 @@ function openlab_list_members($view) {
 		$args['type'] = $sequence_type;
 	}
 
-	if ( $search_terms ) {
-		// Filter the sql query so that we ignore the first name and last name fields
+	// Set up $include
+	// $include_noop is a flag that gets triggered when one of the search
+	// conditions returns no items. If that happens, don't bother doing
+	// the other queries, and just return a null result
+	$include_arrays = array();
+	$include_noop = false;
+
+	if ( $search_terms && ! $include_noop ) {
+		// The first and last name fields are private, so they should
+		// not show up in search results
 		$first_name_field_id = xprofile_get_field_id_from_name( 'First Name' );
 		$last_name_field_id  = xprofile_get_field_id_from_name( 'Last Name' );
 
-		// These are the same runtime-created functions, created separately so I don't have
-		// to toss globals around. If you change one, change them both!
-		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
-			$ex = explode( " AND ", $sql );
-			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
-			$ex = implode( " AND ", $ex );
-
-			return $ex;
-		' ) );
-
-		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
-			$ex = explode( " AND ", $sql );
-			array_splice( $ex, 1, 0, "spd.field_id NOT IN (' . $first_name_field_id . ',' . $last_name_field_id . ')" );
-			$ex = implode( " AND ", $ex );
-
-			return $ex;
-		' ) );
-
-		$args['search_terms'] = $search_terms;
-	}
-
-	// I don't love doing this
-	if ( $user_type ) {
-		// These are the same runtime-created functions, created separately so I don't have
-		// to toss globals around. If you change one, change them both!
-		add_filter( 'bp_core_get_paged_users_sql', create_function( '$sql', '
-			// Join to profile table for user type
-			$ex = explode( " LEFT JOIN ", $sql );
-			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
-			$ex = implode( " LEFT JOIN ", $ex );
-
-			// Add the necessary where clause
-			$ex = explode( " AND ", $ex );
-			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
-			$ex = implode( " AND ", $ex );
-
-			return $ex;
-		' ) );
-
-		add_filter( 'bp_core_get_total_users_sql', create_function( '$sql', '
-			// Join to profile table for user type
-			$ex = explode( " LEFT JOIN ", $sql );
-			array_splice( $ex, 1, 0, "' . $bp->profile->table_name_data . ' ut ON ut.user_id = u.ID" );
-			$ex = implode( " LEFT JOIN ", $ex );
-
-			// Add the necessary where clause
-			$ex = explode( " AND ", $ex );
-			array_splice( $ex, 1, 0, "ut.field_id = 7 AND ut.value = \'' . $user_type . '\'" );
-			$ex = implode( " AND ", $ex );
-
-			return $ex;
-		' ) );
-    	}
-
-	$avatar_args = array (
-			'type' => 'full',
-			'width' => 72,
-			'height' => 72,
-			'class' => 'avatar',
-			'id' => false,
-			'alt' => __( 'Member avatar', 'buddypress' )
+		$search_terms_matches = $wpdb->get_col(
+			"SELECT user_id
+			 FROM {$bp->profile->table_name_data}
+			 WHERE field_id NOT IN ({$first_name_field_id}, {$last_name_field_id})
+			       AND
+			       value LIKE '%" . esc_sql( like_escape( $search_terms ) ) . "%'"
 		);
 
+		if ( empty( $search_terms_matches ) ) {
+			$include_noop = true;
+		} else {
+			$include_arrays[] = $search_terms_matches;
+		}
+	}
+
+	if ( $user_type && ! $include_noop ) {
+		$user_type_matches = $wpdb->get_col( $wpdb->prepare(
+			"SELECT user_id
+			 FROM {$bp->profile->table_name_data}
+			 WHERE field_id = 7
+			       AND
+			       value = %s",
+			$user_type
+		) );
+
+		if ( empty( $user_type_matches ) ) {
+			$user_type_matches = array( 0 );
+		}
+
+		if ( empty( $user_type_matches ) ) {
+			$include_noop = true;
+		} else {
+			$include_arrays[] = $user_type_matches;
+		}
+	}
+
+	if ( $user_school && ! $include_noop ) {
+		$department_field_id = xprofile_get_field_id_from_name( 'Department' );
+
+		$department_list = openlab_get_department_list( $user_school );
+
+		// just in case
+		$department_list_sql = '';
+		$department_list = array_map( 'esc_sql', $department_list );
+		foreach ( $department_list as &$department_list_item ) {
+			$department_list_item = "'" . $department_list_item . "'";
+		}
+		$department_list_sql = implode( ',',  $department_list );
+
+		$user_school_matches = $wpdb->get_col( $wpdb->prepare(
+			"SELECT user_id
+			 FROM {$bp->profile->table_name_data}
+			 WHERE field_id = %d
+			       AND
+			       value IN (" . $department_list_sql . ")",
+			$department_field_id
+		) );
+
+		if ( empty( $user_school_matches ) ) {
+			$include_noop = true;
+		} else {
+			$include_arrays[] = $user_school_matches;
+		}
+	}
+
+	if ( $user_department && ! $include_noop && 'dept_all' !== $user_department ) {
+		$department_field_id = xprofile_get_field_id_from_name( 'Department' );
+
+		// Department comes through $_GET in the hyphenated form, but
+		// is stored in the database in the fulltext form. So we have
+		// to pull up a list of all departments and attempt a
+		// translation.
+		//
+		// Could this be any more of a mess?
+		$department_names = $wpdb->get_col( $wpdb->prepare(
+			"SELECT name
+			 FROM {$bp->profile->table_name_fields}
+			 WHERE parent_id = %d",
+			 $department_field_id
+		) );
+
+		foreach ( $department_names as $department_name ) {
+			if ( $user_department == strtolower( str_replace( ' ', '-', $department_name ) ) ) {
+				$user_department = $department_name;
+				break;
+			}
+		}
+
+		$user_department_matches = $wpdb->get_col( $wpdb->prepare(
+			"SELECT user_id
+			 FROM {$bp->profile->table_name_data}
+			 WHERE field_id = %d
+			       AND
+			       value = %s",
+			$department_field_id,
+			$user_department
+		) );
+
+		if ( empty( $user_department_matches ) ) {
+			$include_noop = true;
+		} else {
+			$include_arrays[] = $user_department_matches;
+		}
+	}
+
+	// Parse the results into a single 'include' parameter
+	if ( $include_noop ) {
+		$include = array( 0 );
+	} else if ( ! empty( $include_arrays ) ) {
+		foreach ( $include_arrays as $iak => $ia ) {
+			// On the first go-round, seed the temp variable with
+			// the first set of includes
+			if ( ! isset( $include ) ) {
+				$include = $ia;
+
+			// On subsequent iterations, do array_intersect() to
+			// trim down the included users
+			} else {
+				$include = array_intersect( $include, $ia );
+			}
+		}
+
+		if ( empty( $include ) ) {
+			$include = array( 0 );
+		}
+	}
+
+	if ( ! empty( $include ) ) {
+		$args['include'] = array_unique( $include );
+	}
+
+	$avatar_args = array (
+		'type' => 'full',
+		'width' => 72,
+		'height' => 72,
+		'class' => 'avatar',
+		'id' => false,
+		'alt' => __( 'Member avatar', 'buddypress' )
+	);
 
 	if ( bp_has_members( $args ) ) :
-
 
 	?>
 	<div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
