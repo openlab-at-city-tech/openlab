@@ -21,6 +21,7 @@ require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
 require_once(STYLESHEETPATH.'/lib/help-funcs.php');
 require_once(STYLESHEETPATH.'/lib/member-funcs.php');
 require_once(STYLESHEETPATH.'/lib/page-funcs.php');
+require_once(STYLESHEETPATH.'/lib/admin-funcs.php');
 
 /**js calls**/
 function my_init_method() {
