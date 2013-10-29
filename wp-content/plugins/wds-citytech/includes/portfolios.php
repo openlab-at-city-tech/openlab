@@ -243,6 +243,11 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		foreach ( $group_members->results as $member ) {
 			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
 			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
+
+			if ( ! $portfolio_id || ! $portfolio_blog_id ) {
+				continue;
+			}
+
 			$portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
