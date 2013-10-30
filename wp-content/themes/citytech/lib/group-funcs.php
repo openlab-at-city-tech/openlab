@@ -340,11 +340,16 @@ function openlab_delete_group() {
  */
 function openlab_return_course_list( $school, $department ) {
 
-	// Sanitize and fall back on 'tech'
-	$school = in_array( $school, array( 'tech', 'studies', 'arts' ) ) ? $school : 'tech';
+	$list = '<option value="dept_all" ' . selected( '', $department ) . ' >All</option>';
+
+	// Sanitize. If no value is found, don't return any
+	// courses
+	if ( ! in_array( $school, array( 'tech', 'studies', 'arts' ) ) ) {
+		return $list;
+	}
+
 	$depts = openlab_get_department_list( $school );
 
-        $list = '<option value="dept_all" ' . selected( '', $department ) . ' >All</option>';
 	foreach ( $depts as $dept ) {
 		$display_option_dept = str_replace( 'And', '&amp;', $dept );
 		$option_value_dept = strtolower( str_replace( ' ', '-', $dept ) );
