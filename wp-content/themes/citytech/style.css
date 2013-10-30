@@ -4244,14 +4244,14 @@ div.activity-comments form textarea {
 .group-create.group-settings #group-create-body h4, .group-admin.group-settings #single-course-body h4 {
   margin: 0;
   font-size: 12px;
-  font-family: 'Arial';
+  font-family: Arial,Helvetica,sans-serif;
 }
 
 .group-admin.group-settings h5 {
   margin-bottom: 5px;
   line-height: 13px;
   font-size: 12px;
-  font-family: 'Arial';
+  font-family: Arial,Helvetica,sans-serif;
 }
 
 .group-create.group-settings #single-course-body h5, .group-admin.group-settings #single-course-body h5 {
@@ -4296,7 +4296,7 @@ font-size: 11px;
 font-weight: 700;
 line-height: 14px;
 margin: 10px 0 5px auto;
-font-family: 'Arial';
+font-family: Arial,Helvetica,sans-serif;
 }
 
 .group-admin.group-settings .radio.group-site {
@@ -4720,7 +4720,7 @@ h4.group-activity-title {
 
 .recent-discussions h5 {
     color: #666666;
-    font-family: Arial;
+    font-family: Arial,Helvetica,sans-serif;
     font-size: 11px;
     font-weight: bold;
     line-height: 11px;
@@ -5297,7 +5297,7 @@ body.docs #comment {
 }
 
 .group-admin.group-avatar #group-settings-form h3 {
-  font-family: 'Arial';
+  font-family: Arial,Helvetica,sans-serif;
   font-weight: 700;
 }
 
@@ -5354,24 +5354,49 @@ body.docs #comment {
 .help-tags a {
     text-decoration:underline;
 }
-
-body.single-help p {
+.single-help ol,
+.single-help ul{
+    padding: 0 0 0 30px;
+    margin: 10px 0 13px;
+}
+.single-help #content li{
+    margin: 0 0 5px;
+}
+.single-help #content ul li{
+    list-style: disc;
+}
+.single-help #content li > ul{
+    padding: 0 0 0 30px;
+}
+.single-help #content li > ul li{
+    list-style: circle;
+}
+.single-help p {
   margin-bottom: 13px;
 }
-
+.single-help blockquote{
+    clear: both;
+    margin: 20px 15px 15px;
+    padding: 10px 20px 10px 15px;
+}
+.single-help blockquote p{
+    margin: 0;
+    padding: 0;
+}
+.single-help .wp-caption{
+    background-color: #F0F0F0;
+    border: 1px solid #CCCCCC;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+.single-help p.wp-caption-text{
+    font-size: 11px;
+    line-height: 12px;
+    text-align: center;
+}
 body.single-help h1.entry-title a {
     color: #6D6D6D;
 }
-
-body.single-help div#content ul li {
-    list-style-type: disc;
-}
-
-body.single-help div#content div.entry-content ul li,
-body.single-help div#content div.entry-content ol li {
-    margin: 0 0 5px 20px;
-}
-
 body.single-help div#content div.entry-content ul li > ol li {
   list-style-type: decimal;
   padding-top: 5px;
@@ -5386,7 +5411,7 @@ body.single-help div#content div.entry-content ol li > ul {
 }
 body.single-help .entry-content h1 {
     border: 0 none;
-    font-family: 'Arial';
+    font-family: Arial,Helvetica,sans-serif;
     font-size: 24px;
     margin: 30px 0 10px;
 }
@@ -5396,22 +5421,22 @@ body.single-help .entry-content h2 {
 }
 
 body.single-help div#content h3 {
-    font-family: 'Arvo';
+    font-family: Arial,Helvetica,sans-serif;
     font-size: 15px;
     color: #717171;
-    margin: 30px 0 10px 0;
+    margin: 30px 0 15px 0;
     font-weight: 700;
 }
 
 body.single-help div#content h4 {
   font-weight: 700;
-  font-family: Arial;
+  font-family: Arial,Helvetica,sans-serif;
   font-size: 13px;
   margin: 30px 0 10px 0;
 }
 
 body.single-help div#content h5 {
-  font-family: Arial;
+  font-family: Arial,Helvetica,sans-serif;
   font-style: oblique;
   font-weight: 500;
   font-size: 12px;
@@ -5419,7 +5444,7 @@ body.single-help div#content h5 {
 }
 
 body.single-help div#content h6 {
-  font-family: Arial;
+  font-family: Arial,Helvetica,sans-serif;
   font-weight: 500;
   font-size: 12px;
   margin: 30px 0 10px 0;
