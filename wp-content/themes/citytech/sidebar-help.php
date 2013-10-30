@@ -39,7 +39,7 @@ wp_nav_menu($args);
 <h3 id="help-contact-us"><a href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>">Contact Us <div id="mail-icon"></div></a></h3>
 <div id="support-team">
     <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
-    <div id="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions...</p></div>
+    <div id="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
     <?php
     $args = array(
         'name' => 'contact-us',
