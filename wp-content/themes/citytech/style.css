@@ -5358,6 +5358,7 @@ body.docs #comment {
 .single-help ul{
     padding: 0 0 0 30px;
     margin: 10px 0 13px;
+    width: auto;
 }
 .single-help #content li{
     margin: 0 0 5px;
