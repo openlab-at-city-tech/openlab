@@ -5810,12 +5810,12 @@ img.alignnone {
 
 img.alignleft {
     display:inline;
-    margin:0 10px 10px 0;
+    margin:0 15px 15px 0;
 }
 
 img.alignright {
     display:inline;
-    margin:0 0 10px 10px;
+    margin:0 0 15px 15px;
 }
 
 .alignleft {
