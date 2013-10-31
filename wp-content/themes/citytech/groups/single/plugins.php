@@ -10,23 +10,23 @@ get_header(); ?>
 	<div id="content" class="hfeed">
     	<?php cuny_group_single(); ?>
     </div><!--content-->
-    
+
     <div id="sidebar" class="sidebar widget-area">
 	<?php cuny_buddypress_group_actions(); ?>
     </div>
-	
+
 <?php get_footer();
 /**end layout**/
 
-function cuny_group_single() { 
+function cuny_group_single() {
 	global $bp; ?>
-	
+
 	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 
 			<?php do_action( 'bp_before_group_plugin_template' ); ?>
-			
+
 			<?php locate_template( array( 'groups/single/group-header.php' ), true ); ?>
-			
+
             <?php if ($bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications'): ?>
 				<?php do_action( 'bp_before_group_members_content' ); ?>
             	<div class="item-list-tabs no-ajax" id="subnav">
@@ -34,11 +34,11 @@ function cuny_group_single() {
                     	<?php openlab_group_membership_tabs(); ?>
                 	</ul>
             	</div><!-- .item-list-tabs -->
-            
+
             <?php else: ?>
               <div id="item-nav">
                   <div class="item-list-tabs no-ajax" id="object-nav">
-                      <ul>         	
+                      <ul>
                           <?php do_action( 'bp_group_plugin_options_nav' ); ?>
                       </ul>
                   </div>
@@ -56,5 +56,5 @@ function cuny_group_single() {
 
 			<?php endwhile; endif; ?>
 
-			<?php do_action( 'bp_after_group_plugin_template' );  
+			<?php do_action( 'bp_after_group_plugin_template' );
 }
