@@ -375,7 +375,7 @@ function openlab_portfolio_list_group_heading( $group_id = 0 ) {
 	$heading = groups_get_groupmeta( $group_id, 'portfolio_list_heading' );
 
 	if ( ! $heading ) {
-		$heading = 'Student ePortfolios';
+		$heading = 'Member Portfolios';
 	}
 
 	return $heading;
