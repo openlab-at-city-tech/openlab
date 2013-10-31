@@ -610,3 +610,21 @@ add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
  * Don't allow BuddyPress Docs to use its own theme compatibility layer
  */
 add_filter( 'bp_docs_do_theme_compat', '__return_false' );
+
+/**
+ * Output the sidebar content for a single group
+ */
+function cuny_buddypress_group_actions() {
+	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
+		<div id="item-buttons">
+			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
+			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
+				<ul>
+					<?php bp_get_options_nav(); ?>
+				</ul>
+			<?php endif ?>
+		</div><!-- #item-buttons -->
+	<?php do_action( 'bp_group_options_nav' ) ?>
+	<?php endwhile; endif;
+}
+
