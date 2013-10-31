@@ -33,23 +33,16 @@
 </div>
 
 <div class="left-menu">
-
-	<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-    <?php if ( invite_anyone_access_test() && !bp_is_group_create() ) : ?>
-	<h5 class="invite-title"><?php _e('Invite new members by email:'); ?></h5>
-
-    <p class="invite-copy"><?php _e('This link will take you to My Invitations, where you may invite people to join the OpenLab and this'.ucfirst($group_type)); ?></p>
-
-    <p><a class="underline" href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Invite New Members to OpenLab.', 'bp-invite-anyone' ) ?></a></p>
-<?php endif; ?>
-
-</div>
-
-<div class="main-column">
 	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
     <p class="invite-copy"><?php _e('These members will be sent an invitation to your '.ucfirst($group_type).'. Click the "Send Invites" button to continue.'); ?></p>
 
 	<?php do_action( 'bp_before_group_send_invites_list' ) ?>
+
+	<?php if ( !bp_get_new_group_id() ) : ?>
+		<div class="submit">
+			<input type="submit" name="submit" id="submit" value="<?php _e( 'Send Invites', 'buddypress' ) ?>" />
+		</div>
+	<?php endif; ?>
 
 	<?php /* The ID 'friend-list' is important for AJAX support. */ ?>
 	<ul id="invite-anyone-invite-list" class="item-list">
@@ -80,13 +73,21 @@
 
 </div>
 
-<!-- <div class="clear"></div> -->
+<div class="main-column">
 
-<?php if ( !bp_get_new_group_id() ) : ?>
-<div class="submit">
-	<input type="submit" name="submit" id="submit" value="<?php _e( 'Send Invites', 'buddypress' ) ?>" />
+	<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
+
+	<?php if ( invite_anyone_access_test() && !bp_is_group_create() ) : ?>
+		<h5 class="invite-title"><?php _e('Invite new members by email:'); ?></h5>
+
+		<p class="invite-copy"><?php _e('This link will take you to My Invitations, where you may invite people to join the OpenLab and this'.ucfirst($group_type)); ?></p>
+
+		<p><a class="underline" href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Invite New Members to OpenLab.', 'bp-invite-anyone' ) ?></a></p>
+	<?php endif; ?>
+
 </div>
-<?php endif; ?>
+
+<!-- <div class="clear"></div> -->
 
 <?php wp_nonce_field( 'groups_send_invites', '_wpnonce_send_invites') ?>
 

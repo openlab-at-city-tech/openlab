@@ -4994,13 +4994,19 @@ p#selectmemberslabel {
     margin-top:15px;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity,form#group-settings-form div.main-column ul#invite-anyone-invite-list span.activity {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list span.activity,
+form#send-invite-form div.left-menu ul#invite-anyone-invite-list span.activity,
+form#group-settings-form div.left-menu ul#invite-anyone-invite-list span.activity,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list span.activity {
     display:block;
     float:left;
     clear:none;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action,form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action,
+form#send-invite-form div.left-menu ul#invite-anyone-invite-list div.action,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action,
+form#group-settings-form div.left-menu ul#invite-anyone-invite-list div.action {
     display:block;
     text-align:left;
     padding-bottom:20px;
@@ -5011,7 +5017,10 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action,fo
     position:static;
 }
 
-form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action a {
+form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
+form#send-invite-form div.left-menu ul#invite-anyone-invite-list div.action a,
+form#group-settings-form div.main-column ul#invite-anyone-invite-list div.action a,
+form#group-settings-form div.left-menu ul#invite-anyone-invite-list div.action a {
     font-family:Arial,Verdana,sans-serif;
     -moz-border-radius:5px;
     border-radius:5px;
@@ -5027,6 +5036,8 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
 #topgroupinvite {
     float:left;
     width:100%;
+		padding-bottom: 1.5em;
+		margin-bottom: 1em;
     border-bottom:1px solid #f0f0f0;
 }
 
@@ -5036,6 +5047,10 @@ form#send-invite-form div.main-column ul#invite-anyone-invite-list div.action a,
 
 #topgroupinvite h5 {
     float:left;
+}
+
+body.invite-anyone form .submit {
+	margin-top: 0;
 }
 
 #content #invite-anyone-invite-list {
