@@ -4709,7 +4709,8 @@ form#create-group-form div#group-create-body div.ct-group-meta {
 
 #sidebar > div > ul.group-member-portfolio-list > li a {
     text-decoration: underline;
-		font-family: Arial,Helvetica,Tahoma,sans-serif;
+    font-family: Arial,Helvetica,Tahoma,sans-serif;
+    font-size: 11px;
 }
 
 h4.group-activity-title {
