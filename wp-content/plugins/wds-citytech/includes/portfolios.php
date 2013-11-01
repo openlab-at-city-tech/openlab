@@ -395,6 +395,11 @@ function openlab_portfolio_list_group_display() {
 
 	$portfolio_data = openlab_get_group_member_portfolios();
 
+        // No member of the group has a portfolio
+        if ( empty( $portfolio_data ) ) {
+                return;
+        }
+
 	?>
 
 	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
