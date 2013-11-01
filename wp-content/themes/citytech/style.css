@@ -5363,8 +5363,8 @@ body.docs #comment {
 .help-tags a {
     text-decoration:underline;
 }
-.single-help ol,
-.single-help ul{
+.single-help .entry-content ol,
+.single-help .entry-content ul{
     padding: 0 0 0 30px;
     margin: 10px 0 13px;
     width: auto;
