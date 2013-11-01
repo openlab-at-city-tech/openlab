@@ -77,8 +77,6 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</li>
 		</ul>
 
-		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
-
 		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
 	</div>
 
