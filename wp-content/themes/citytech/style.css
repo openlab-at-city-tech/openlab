@@ -5469,6 +5469,7 @@ body.single-help div#content h6 {
 }
 #support-team #help-tags-copy p {
   padding-bottom: 0px;
+  margin-bottom: 11px;
 }
 div #help-tags a {
     float:left;
@@ -5581,7 +5582,7 @@ div #help-tags-copy,div #help-tags {
     font-size:14px;
     font-weight:400;
     margin:0 0 5px;
-    padding:15px 0 3px 7px;
+    padding:15px 0 5px 7px;
 }
 
 #sidebar #support-team {
