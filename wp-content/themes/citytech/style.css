@@ -5465,9 +5465,11 @@ body.single-help div#content h6 {
 #help-tags-copy p {
     font-family:sans-serif;
     font-size:11px;
-    padding-bottom:10px;
+    padding-bottom:2px;
 }
-
+#support-team #help-tags-copy p {
+  padding-bottom: 0px;
+}
 div #help-tags a {
     float:left;
     display:inline-block;
@@ -5505,7 +5507,7 @@ div #help-tags a:nth-child(2n) {
     border-top:1px solid #F0F0F0;
     color:#717171;
     padding:20px 0 0 7px;
-    margin-bottom: 12px;
+    margin-bottom: 9px;
 }
 
 div #help-tags-copy,div #help-tags {
@@ -5578,7 +5580,7 @@ div #help-tags-copy,div #help-tags {
     color:#717171;
     font-size:14px;
     font-weight:400;
-    margin:0 0 12px;
+    margin:0 0 5px;
     padding:15px 0 3px 7px;
 }
 
@@ -5594,7 +5596,7 @@ div #help-tags-copy,div #help-tags {
     margin:0;
 }
 #sidebar #support-team #team-thumbs .team-name{
-    font-size: 12px;
+    font-size: 11px;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     font-weight: bold;
