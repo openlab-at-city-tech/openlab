@@ -5460,7 +5460,7 @@ body.single-help div#content h6 {
   margin: 30px 0 10px 0;
 }
 #help-menu .sidebar-nav{
-    padding-bottom: 17px;
+    padding-bottom: 10px;
 }
 #help-tags-copy p {
     font-family:sans-serif;
@@ -5507,7 +5507,7 @@ div #help-tags a:nth-child(2n) {
     border-bottom:0;
     border-top:1px solid #F0F0F0;
     color:#717171;
-    padding:20px 0 0 7px;
+    padding:13px 0 0 7px;
     margin-bottom: 9px;
 }
 
@@ -5573,7 +5573,7 @@ div #help-tags-copy,div #help-tags {
 
 /* Help sidebar */
 #help-tags {
-    margin:0 0 17px;
+    margin:0 0 12px;
 }
 
 #support-team h2 {
@@ -5614,7 +5614,7 @@ div #help-tags-copy,div #help-tags {
 }
 #sidebar #help-contact-us a {
     display:block;
-    padding:19px 0 19px 7px;
+    padding:12px 0 13px 7px;
     border-top:1px solid #f0f0f0;
     font-size: 14px;
 }
