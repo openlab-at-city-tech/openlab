@@ -178,33 +178,68 @@ function openlab_my_groups_submenu($group) {
     global $bp;
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
+    $no_link = 'no-link';
 
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
+
+    //get group step
+    $current_step = $bp->groups->current_create_step;
+    $step_name = '';
+
+    switch($current_step){
+        case 'group-details':
+            $step_name = 'Step One: Profile';
+            break;
+        case 'group-settings':
+            $step_name = 'Step Two: Privacy Settings';
+            break;
+        case 'group-avatar':
+            $step_name = 'Step Three: Avatar';
+            break;
+    }
 
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
     if ($group == "course") {
 
         //determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
-        
+
         $course_text = 'Create / Clone a ';
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
-            $menu_list = array(
-                $group_link => 'My ' . ucfirst($group) . 's',
-                $create_link => $course_text . ucfirst($group),
-            );
+            //have to add extra conditional in here for submenus on editing pages
+            if ($step_name == '') {
+                $menu_list = array(
+                    $group_link => 'My ' . ucfirst($group) . 's',
+                    $create_link => $course_text . ucfirst($group),
+                );
+            } else {
+                $menu_list = array(
+                    $group_link => 'My ' . ucfirst($group) . 's',
+                    $create_link => $course_text . ucfirst($group),
+                    $no_link => $step_name,
+                );
+            }
         } else {
             $menu_list = array(
                 $group_link => 'My ' . ucfirst($group) . 's',
             );
         }
     } else {
-        $menu_list = array(
-            $group_link => 'My ' . ucfirst($group) . 's',
-            $create_link => 'Create a ' . ucfirst($group),
-        );
+        //have to add extra conditional in here for submenus on editing pages
+        if ($step_name == '') {
+            $menu_list = array(
+                $group_link => 'My ' . ucfirst($group) . 's',
+                $create_link => 'Create a ' . ucfirst($group),
+            );
+        } else {
+            $menu_list = array(
+                $group_link => 'My ' . ucfirst($group) . 's',
+                $create_link => 'Create a ' . ucfirst($group),
+                $no_link => $step_name,
+            );
+        }
     }
 
     return openlab_submenu_gen($menu_list);
@@ -337,16 +372,19 @@ function openlab_submenu_gen($items) {
         }
 
         //this is just to make styling the "delete" and "create" buttons easier
+        //also added a class for the "no-link" submenu items that indicate the step in group creation
         if (strpos($item_classes, "delete")) {
             $item_classes .= " delete-button";
         } else if (strpos($item_classes, "create")) {
             $item_classes .= " create-button";
+        } else if ($item == 'no-link') {
+            $item_classes .= " no-link";
         }
 
         $submenu .= '<li class="' . $item_classes . '">';
-        $submenu .= '<a href="' . $item . '">';
+        $submenu .= ($item == 'no-link' ? '' : '<a href="' . $item . '">');
         $submenu .= $title;
-        $submenu .= '</a>';
+        $submenu .= ($item == 'no-link' ? '' : '</a>');
         $submenu .= '</li>';
 
         //increment counter
@@ -492,21 +530,24 @@ add_action('bp_actions', 'openlab_group_submenu_nav', 1);
 /*
  * Hide "Join Group/Leave Group" button on Portfolios and select group profile pages
  */
-
-function openlab_no_join_on_portfolios($button) {
+function openlab_no_join_on_portfolios( $button ) {
     global $bp;
 
-    if (openlab_is_portfolio()) {
-        $button = "";
+    if ( openlab_is_portfolio() ) {
+	    if ( bp_group_has_requested_membership( groups_get_current_group() ) ) {
+		    $button['link_text'] = $button['link_title'] = 'Requested';
+	    } else {
+		    $button['link_text'] = $button['link_title'] = 'Request Access';
+	    }
     }
-    //fix for files, docs, and membership pages in group profile - hiding join button
+
+    // fix for files, docs, and membership pages in group profile - hiding join button
     else if ($bp->current_action == 'files' || $bp->current_action == 'docs' || $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications') {
         $button = "";
     }
 
     return $button;
 }
-
 add_filter('bp_get_group_join_button', 'openlab_no_join_on_portfolios');
 
 /**

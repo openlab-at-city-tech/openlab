@@ -67,11 +67,9 @@ function cuny_group_single() { ?>
                                 <div id="action-edit-avatar"><a href="<?php echo bp_group_permalink(). 'admin/group-avatar/'; ?>">Change Avatar</a></div>
                      </div>
                     <?php elseif (is_user_logged_in()): ?>
-                        <?php if ($group_type != 'portfolio'): ?>
                             <div id="group-action-wrapper">
                                     <?php do_action( 'bp_group_header_actions' ); ?>
                             </div>
-                        <?php endif; ?>
                     <?php endif; ?>
                 </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
@@ -353,26 +351,6 @@ function cuny_group_single() { ?>
 
 	<?php	}
 	endwhile; endif; ?>
-<?php }
-
-function cuny_buddypress_group_actions() {
-global $bp;
-
-?>
-<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
-		<div id="item-buttons">
-			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
-			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
-		    <ul>
-				<?php bp_get_options_nav(); ?>
-			</ul>
-			<?php endif ?>
-
-
-
-		</div><!-- #item-buttons -->
-<?php do_action( 'bp_group_options_nav' ) ?>
-<?php endwhile; endif; ?>
 <?php }
 
 add_filter( 'bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');

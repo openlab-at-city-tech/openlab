@@ -29,26 +29,27 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <?php do_action( 'bp_before_group_admin_content' ) ?>
 
+    <div class="item-body" id="group-create-body">
+
 <?php /* Edit Group Details */ ?>
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
 
-	<label for="group-name">* <?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?></label>
+	<label for="group-name"><?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?> (required)</label>
 	<input type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
 
-	<label for="group-desc">* <?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?></label>
+	<label for="group-desc"><?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?> (required)</label>
 	<textarea name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
 
 	<?php if ( !openlab_is_portfolio() ) : ?>
-
-		<p>
-			<label for="group-notifiy-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
-			<input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?>&nbsp;
-			<input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?>&nbsp;
-		</p>
+        <div class="notify-settings">
+			<p class="ol-tooltip notify-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></p>
+                        <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
+                        <label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
+        </div>
 
 	<?php else : ?>
 
@@ -76,15 +77,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</li>
 		</ul>
 
-		<p><?php _e( 'Select members from the directory:', 'bp-invite-anyone' ) ?></p>
-
-		<div id="invite-anyone-member-list">
-			<ul>
-				<?php openlab_access_list_checkboxes() ?>
-			</ul>
-
-			<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-		</div>
+		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
 	</div>
 
 	<div class="main-column access-menu-main">
@@ -152,8 +145,24 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<hr />
 
+	<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
+		<div class="checkbox">
+			<h4>Portfolio List Settings</h4>
+			<p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
+
+			<?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
+			<?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
+			<label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked( $portfolio_list_enabled ) ?> /> Enable portfolio list</label>
+
+			<h5><label for="group-portfolio-list-heading">List Heading</label></h5>
+			<input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr( $portfolio_list_heading ) ?>" />
+		</div>
+
+		<hr />
+	<?php endif ?>
+
 	<?php openlab_group_privacy_settings($group_type); ?>
-    
+
 <?php endif; ?>
 
 <?php /* Group Avatar Settings */ ?>
@@ -170,7 +179,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 			</p>
 
 			<?php if ( bp_get_group_has_avatar() ) : ?>
-        
+
         <p id="delete-group-avatar-title">Delete Avatar</p>
 				<p id="delete-group-avatar-text"><?php _e( "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress' ) ?></p>
 
@@ -353,15 +362,15 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 	<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if(this.checked) { document.getElementById('delete-group-button').disabled = ''; } else { document.getElementById('delete-group-button').disabled = 'disabled'; }" /> <?php printf( 'I understand the consequences of deleting this %s.', openlab_get_group_type() ); ?>
 
 	<?php do_action( 'bp_after_group_delete_admin' ); ?>
-    
-    <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id); 
+
+    <?php $account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id);
 		  if ($account_type == 'Student' && openlab_get_group_type() == 'portfolio' )
 		  {
 			  $group_type = 'ePortfolio';
 		  } else {
 			  $group_type = openlab_get_group_type();
 		  }
-	
+
 	?>
 
 	<div class="submit">
@@ -376,6 +385,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <?php /* This is important, don't forget it */ ?>
 	<input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />
+    </div><!--#group-create-body-->
 
 <?php do_action( 'bp_after_group_admin_content' ) ?>
 

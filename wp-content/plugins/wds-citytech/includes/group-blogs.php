@@ -633,7 +633,7 @@ function wds_bp_group_meta() {
         <?php if (!empty($group_site_url)) : ?>
 
             <div id="current-group-site">
-
+                <h3 class="site-details-header">Site Details</h3>
                 <?php
                 $maybe_site_id = openlab_get_site_id_by_group_id($the_group_id);
 
@@ -681,8 +681,11 @@ function wds_bp_group_meta() {
                 <?php if ($group_type != "course" && $group_type != 'portfolio') : ?>
                     <?php $show_website = "none" ?>
                     <tr class="form-field form-required">
-                        <th scope='row'>
-                            <input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?
+                            <th scope="row" class="site-details-title">Site Details</th>
+                        </tr>
+                    <tr class="form-field form-required">
+                        <th scope='row' class="site-details-query">
+                            <label><input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?</label>
                         </th>
                     </tr>
                 <?php else : ?>

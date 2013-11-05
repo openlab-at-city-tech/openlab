@@ -104,7 +104,7 @@ class bpass_Translation_Mangler {
   * This function will choke if we try to load it when not viewing a group page or in a group loop
   * So we bail in cases where neither of those things is present, by checking $groups_template
   */
- function filter_gettext($translation, $text, $domain) {
+ static function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
 
    if ( empty( $groups_template->group ) && empty( $bp->groups->current_group ) ) {
@@ -128,7 +128,7 @@ class bpass_Translation_Mangler {
 
    $uc_grouptype = ucfirst($grouptype);
    $plural_grouptype = $grouptype . 's';
-   $translations = &get_translations_for_domain( 'bp-ass' );
+   $translations = get_translations_for_domain( 'bp-ass' );
 
    switch($text){
 	case "How do you want to read this group?":

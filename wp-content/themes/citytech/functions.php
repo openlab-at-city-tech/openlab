@@ -21,6 +21,7 @@ require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
 require_once(STYLESHEETPATH.'/lib/help-funcs.php');
 require_once(STYLESHEETPATH.'/lib/member-funcs.php');
 require_once(STYLESHEETPATH.'/lib/page-funcs.php');
+require_once(STYLESHEETPATH.'/lib/admin-funcs.php');
 
 /**js calls**/
 function my_init_method() {
@@ -606,6 +607,19 @@ add_filter( 'bp_get_add_friend_button', 'openlab_filter_friendship_button' );
 add_filter( 'bp_docs_do_theme_compat', '__return_false' );
 
 /**
- * Use legacy BP user queries, so member directory filters work
+ * Output the sidebar content for a single group
  */
-add_filter( 'bp_use_legacy_user_query', '__return_true' );
+function cuny_buddypress_group_actions() {
+	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
+		<div id="item-buttons">
+			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
+			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
+				<ul>
+					<?php bp_get_options_nav(); ?>
+				</ul>
+			<?php endif ?>
+		</div><!-- #item-buttons -->
+	<?php do_action( 'bp_group_options_nav' ) ?>
+	<?php endwhile; endif;
+}
+

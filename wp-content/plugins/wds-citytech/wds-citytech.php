@@ -613,7 +613,7 @@ function wds_load_group_departments(){
 		$wds_departments=explode(",",$wds_departments);
 	}
 
-	$return="<div style='height:100px;overflow:scroll;'>";
+	$return='<div class="department-list-container">';
 	foreach ($departments as $i => $value) {
 		$checked="";
 		if(in_array($value,$wds_departments)){
@@ -716,7 +716,24 @@ function wds_load_group_type( $group_type ){
 		$group_type = $_POST['group_type'];
 	}
 
-	// associated school/dept tooltip
+	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
+	$wds_group_school = explode( ",", $wds_group_school );
+
+	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+
+	$return .= '<table>';
+
+	$return .= '<tr class="schools">';
+
+	$return .= '<td class="block-title" colspan="2">School(s)';
+	if ( openlab_is_school_required_for_group_type( $group_type ) && ('staff' != strtolower( $account_type ) || is_super_admin(get_current_user_id()) )) {
+		$return .= ' <span class="required">(required)</span>';
+	}
+	$return .= '</td></tr>';
+
+        $return .= '<tr class="school-tooltip"><td colspan="2">';
+
+        // associated school/dept tooltip
 	switch ( $group_type ) {
 		case 'course' :
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
@@ -732,22 +749,9 @@ function wds_load_group_type( $group_type ){
 			break;
 	}
 
-	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
-	$wds_group_school = explode( ",", $wds_group_school );
+        $return .= '</td></tr>';
 
-	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
-
-	$return .= '<table>';
-
-	$return .= '<tr class="schools">';
-
-	$return .= '<td class="block-title">School(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-		$return .= ' <span class="required">(required)</span>';
-	}
-	$return .= '</td>';
-
-        $return .= '<td class="school-inputs">';
+        $return .= '<tr><td class="school-inputs" colspan="2">';
 
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
@@ -786,11 +790,11 @@ function wds_load_group_type( $group_type ){
 		$onclick = '';
 	}
 
-	$return.='<input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design ';
+	$return.='<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design</label>';
 
-	$return.='<input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies ';
+	$return.='<label><input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies</label>';
 
-	$return.='<input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences ';
+	$return.='<label><input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences</label>';
 
 	$return .= '</td>';
 	$return .= '</tr>';
@@ -869,7 +873,7 @@ function wds_load_group_type( $group_type ){
 
 			$return .= '<tr class="additional-field additional-description-field">';
 			$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-			$return .= '<tr><td colspan="2"><textarea name="wds_course_html">' . $wds_course_html . '</textarea></td></tr>';
+			$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 			$return.='</tr>';
 		}
 	}elseif($group_type=="project"){
@@ -1042,6 +1046,14 @@ function wds_bp_group_meta_save($group) {
 		if ( $site_id ) {
 			update_blog_option( $site_id, 'blog_public', $blog_public );
 		}
+	}
+
+	// Portfolio list display
+	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
+		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
+		groups_update_groupmeta( $group->id, 'portfolio_list_enabled', $enabled );
+
+		groups_update_groupmeta( $group->id, 'portfolio_list_heading', strip_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
 	}
 
 	// Feed URLs (step two of group creation)
@@ -1394,7 +1406,7 @@ class buddypress_Translation_Mangler {
   * This function will choke if we try to load it when not viewing a group page or in a group loop
   * So we bail in cases where neither of those things is present, by checking $groups_template
   */
- function filter_gettext($translation, $text, $domain) {
+ static function filter_gettext($translation, $text, $domain) {
    global $bp, $groups_template;
 
    if ( 'buddypress' != $domain ) {
@@ -1419,7 +1431,7 @@ class buddypress_Translation_Mangler {
    }
 
    $uc_grouptype = ucfirst($grouptype);
-   $translations = &get_translations_for_domain( 'buddypress' );
+   $translations = get_translations_for_domain( 'buddypress' );
    switch($text){
 	case "Forum":
 		return $translations->translate( "Discussion" );
@@ -1474,8 +1486,8 @@ class buddypress_ajax_Translation_Mangler {
  /*
   * Filter the translation string before it is displayed.
   */
- function filter_gettext($translation, $text, $domain) {
-   $translations = &get_translations_for_domain( 'buddypress' );
+ static function filter_gettext($translation, $text, $domain) {
+   $translations = get_translations_for_domain( 'buddypress' );
    switch($text){
 	case "Friendship Requested":
 	case "Add Friend":
@@ -1989,3 +2001,143 @@ function openlab_ds_login_header() {
 					<h1><a href="<?php echo apply_filters('login_headerurl', 'http://' . $current_site->domain . $current_site->path ); ?>" title="<?php echo apply_filters('login_headertitle', $current_site->site_name ); ?>"><span class="hide"><?php bloginfo('name'); ?></span></a></h1>
 	<?php
 	}
+
+/**
+ * Course member portfolio list widget
+ *
+ * This function is here (rather than includes/portfolios.php) because it needs
+ * to run at 'widgets_init'.
+ *
+ * @todo Make sure it doesn't show up for non-courses. This can only be done
+ * after BP is set up.
+ */
+class OpenLab_Course_Portfolios_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'openlab_course_portfolios_widget',
+			'Portfolio List',
+			array(
+				'description' => 'Display a list of the Portfolios belonging to the members of this course.',
+			)
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		echo $args['before_widget'];
+
+		echo $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'];
+
+		$name_key = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
+
+		if ( '1' === $instance['display_as_dropdown'] ) {
+			echo '<form action="" method="get">';
+			echo '<select class="portfolio-goto" name="portfolio-goto">';
+			echo '<option value="" selected="selected">Choose a Portfolio</option>';
+			foreach ( $portfolios as $portfolio ) {
+				echo '<option value="' . esc_attr( $portfolio['portfolio_url'] ) . '">' . esc_attr( $portfolio[ $name_key ] ) . '</option>';
+			}
+			echo '</select>';
+			echo '<input class="openlab-portfolio-list-widget-submit" style="margin-top: .5em" type="submit" value="Go" />';
+			wp_nonce_field( 'portfolio_goto', '_pnonce' );
+			echo '</form>';
+		} else {
+			echo '<ul class="openlab-portfolio-links">';
+			foreach ( $portfolios as $portfolio ) {
+				echo '<li><a href="' . esc_url( $portfolio['portfolio_url'] ) . '">' . esc_html( $portfolio[ $name_key ] ) . '</a></li>';
+			}
+			echo '</ul>';
+		}
+
+		// Some lousy inline CSS
+		?>
+		<style type="text/css">
+			.openlab-portfolio-list-widget-submit {
+				margin-top: .5em;
+			}
+			body.js .openlab-portfolio-list-widget-submit {
+				display: none;
+			}
+		</style>
+
+		<?php
+
+		echo $args['after_widget'];
+
+		$this->enqueue_scripts();
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance = $old_instance;
+
+		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['display_as_dropdown'] = ! empty( $new_instance['display_as_dropdown'] ) ? '1' : '';
+		$instance['sort_by'] = in_array( $new_instance['sort_by'], array( 'random', 'display_name', 'title' ) ) ? $new_instance['sort_by'] : 'display_name';
+		$instance['num_links'] = isset( $new_instance['num_links'] ) ? (int) $new_instance['num_links'] : '';
+		return $instance;
+	}
+
+	public function form( $instance ) {
+		$settings = wp_parse_args( $instance, array(
+			'title' => 'Member Portfolios',
+			'display_as_dropdown' => '0',
+			'sort_by' => 'title',
+			'num_links' => false,
+		) );
+
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'title' ) ?>">Title:</label><br />
+			<input name="<?php echo $this->get_field_name( 'title' ) ?>" id="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $settings['title'] ) ?>" />
+		</p>
+
+		<p>
+			<input name="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" id="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" value="1" <?php checked( $settings['display_as_dropdown'], '1' ) ?> type="checkbox" />
+			<label for="<?php echo $this->get_field_id( 'display_as_dropdown' ) ?>">Display as dropdown</label>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'sort_by' ) ?>">Sort by:</label><br />
+			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
+				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
+				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Member name</option>
+				<option value="random" <?php selected( $settings['sort_by'], 'random' ) ?>>Random</option>
+			</select>
+		</p>
+
+		<?php
+	}
+
+	protected function enqueue_scripts() {
+		wp_enqueue_script( 'jquery' );
+
+		// poor man's dependency - jquery will be loaded by now
+		add_action( 'wp_footer', array( $this, 'script' ), 1000 );
+	}
+
+	public function script() {
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			$('.portfolio-goto').on( 'change', function() {
+				var maybe_url = this.value;
+				if ( maybe_url ) {
+					document.location.href = maybe_url;
+				}
+			});
+		},(jQuery));
+		</script>
+		<?php
+	}
+}
+
+/**
+ * Register the Course Portfolios widget
+ */
+function openlab_register_portfolios_widget() {
+	register_widget( 'OpenLab_Course_Portfolios_Widget' );
+}
+add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
+
+

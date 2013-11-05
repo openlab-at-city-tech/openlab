@@ -28,12 +28,11 @@ function openlab_group_privacy_settings($group_type) {
     ?>
     <h4 class="privacy-title"><?php _e('Privacy Settings', 'buddypress'); ?></h4>
     <p class="privacy-settings-tag-a">Set privacy options for your <?php _e(ucfirst($group_type)) ?></p>
-    <?php if ($bp->current_action == 'admin' || openlab_is_portfolio()): ?>
+    <?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>
         <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
     <?php endif; ?>
 
     <?php if ($bp->current_action == 'create'): ?>
-        <h5><?php _e(ucfirst($group_type) . ' Profile') ?></h5>
         <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type . ' Profile Settings page.', 'buddypress'); ?></p>
     <?php else: ?>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . ucfirst($group_type) . ' Profile.') ?></p>
@@ -321,44 +320,29 @@ function openlab_delete_group() {
 /**
  * This function prints out the departments for the course archives (non ajax)
  *
+ * @param string $school The id of the school to return a course list for
+ * @param string $department The id of the deparment currently selected in
+ *        the dropdown.
  */
-function openlab_return_course_list($school) {
-    if ($school == "tech" || $option_value_school == "tech") {
-        $tech_depts = openlab_get_department_list('tech');
+function openlab_return_course_list( $school, $department ) {
 
-        $tech_list = '<option value="dept_all">All</option>';
+	$list = '<option value="dept_all" ' . selected( '', $department ) . ' >All</option>';
 
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    } else if ($school == "studies" || $option_value_school == "studies") {
+	// Sanitize. If no value is found, don't return any
+	// courses
+	if ( ! in_array( $school, array( 'tech', 'studies', 'arts' ) ) ) {
+		return $list;
+	}
 
-        $tech_depts = openlab_get_department_list('studies');
+	$depts = openlab_get_department_list( $school );
 
-        $tech_list = '<option value="dept_all">All</option>';
+	foreach ( $depts as $dept ) {
+		$display_option_dept = str_replace( 'And', '&amp;', $dept );
+		$option_value_dept = strtolower( str_replace( ' ', '-', $dept ) );
+		$list .= '<option value="' . $option_value_dept . '" ' . selected( $department, $option_value_dept, false ) . '>' . $display_option_dept . '</option>';
+	}
 
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    } else if ($school == "arts" || $option_value_school == "arts") {
-
-        $tech_depts = openlab_get_department_list('arts');
-
-        $tech_list = '<option value="dept_all">All</option>';
-
-        foreach ($tech_depts as $tech_dept) {
-            $display_option_dept = str_replace('And', '&amp;', $tech_dept);
-            $option_value_dept = strtolower(str_replace(' ', '-', $tech_dept));
-            $tech_list .= '<option value="' . $option_value_dept . '">' . $display_option_dept . '</option>';
-        }
-        return $tech_list;
-    }
+	return $list;
 }
 
 function openlab_group_post_count($filters,$group_args) {

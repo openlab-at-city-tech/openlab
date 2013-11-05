@@ -217,32 +217,89 @@ function openlab_bp_get_new_group_name( $name ) {
 }
 add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 
+/** Group Portfolios *********************************************************/
+
 /**
  * Get an array of group member portfolio info
  */
-function openlab_get_group_member_portfolios( $group_id = false ) {
+function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'display_name', $type = 'public' ) {
 	if ( ! $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
 
-	$portfolios = groups_get_groupmeta( $group_id, 'member_portfolios' );
-	$cached = true;
+	$cache_key = 'member_portfolios_' . $sort_by;
+	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
+
 	if ( '' == $portfolios ) {
-		$cached = false;
 		$portfolios = array();
-		$group_members = groups_get_group_members( $group_id, false, false, false );
-		foreach ( $group_members['members'] as $member ) {
+		$group_members = new BP_Group_Member_Query( array(
+			'group_id' => $group_id,
+			'per_page' => false,
+			'page' => false,
+			'group_role' => array( 'member', 'mod', 'admin', ),
+			'type' => 'alphabetical',
+		) );
+
+		foreach ( $group_members->results as $member ) {
+			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
+			$portfolio_group = groups_get_group( array( 'group_id' => $portfolio_id ) );
+			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
+
+			if ( empty( $portfolio_id ) || empty( $portfolio_blog_id ) || empty( $portfolio_group ) ) {
+				continue;
+			}
+
+			// Don't add hidden portfolios, unless they've been requested
+			if ( 'all' !== $type && 'hidden' === $portfolio_group->status ) {
+				continue;
+			}
+
 			$portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
-				'portfolio_id' => openlab_get_user_portfolio_id( $member->ID ),
+				'portfolio_id' => $portfolio_id,
 				'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
+				'portfolio_title' => get_blog_option( $portfolio_blog_id, 'blogname' ),
 			);
 
 			$portfolios[] = $portfolio;
 		}
 
-		groups_update_groupmeta( $group_id, 'member_portfolios', $portfolios );
+		switch ( $sort_by ) {
+			case 'display_name' :
+				$key = 'user_display_name';
+				break;
+
+			case 'random' :
+				$key = 'random';
+				break;
+
+			case 'title' :
+			default :
+				$key = 'portfolio_title';
+				break;
+		}
+
+		if ( 'random' === $key ) {
+			shuffle( $portfolios );
+		} else {
+			usort( $portfolios, create_function( '$a, $b', '
+				$key = "' . $key . '";
+				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
+				$cmp = strcasecmp( $values[0], $values[1] );
+
+				if ( 0 > $cmp ) {
+					$retval = -1;
+				} else if ( 0 < $cmp ) {
+					$retval = 1;
+				} else {
+					$retval = 0;
+				}
+				return $retval;
+			' ) );
+		}
+
+		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
 	}
 
 	return $portfolios;
@@ -256,7 +313,12 @@ function openlab_get_group_member_portfolios( $group_id = false ) {
  * - a group member adds/removes a portfolio site
  */
 function openlab_bust_group_portfolio_cache( $group_id = 0 ) {
-	groups_delete_groupmeta( $group_id, 'member_portfolios' );
+	global $wpdb, $bp;
+
+	$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$bp->groups->table_name_groupmeta} WHERE group_id = %d AND meta_key LIKE 'member_portfolios_%%'", $group_id ) );
+	foreach ( $keys as $k ) {
+		groups_delete_groupmeta( $group_id, $k );
+	}
 
 	// regenerate
 	openlab_get_group_member_portfolios();
@@ -282,12 +344,116 @@ function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
 	// Don't regenerate - could be several groups. Let it happen on the fly
 	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
 	$group_ids = groups_get_user_groups( $user_id );
-	foreach ( $group_ids as $gid ) {
+	foreach ( $group_ids['groups'] as $gid ) {
 		openlab_bust_group_portfolio_cache( $gid );
 	}
 }
 add_action( 'groups_before_delete_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
 add_action( 'groups_created_group', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
+add_action( 'groups_group_settings_edited', 'openlab_bust_group_portfolios_cache_on_portfolio_event' );
+
+/**
+ * Check whether portfolio list display is enabled for a group.
+ */
+function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Empty values fall back on 'yes', so do a strict 'no' check
+	return 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+}
+
+/**
+ * Get the heading/title for the group portfolio listing.
+ */
+function openlab_portfolio_list_group_heading( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	$heading = groups_get_groupmeta( $group_id, 'portfolio_list_heading' );
+
+	if ( ! $heading ) {
+		$heading = 'Member Portfolios';
+	}
+
+	return $heading;
+}
+
+/**
+ * Add the portfolio display to group sidebars.
+ */
+function openlab_portfolio_list_group_display() {
+	if ( 'course' !== openlab_get_group_type( bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	if ( ! openlab_portfolio_list_enabled_for_group() ) {
+		return;
+	}
+
+	$portfolio_data = openlab_get_group_member_portfolios();
+
+        // No member of the group has a portfolio
+        if ( empty( $portfolio_data ) ) {
+                return;
+        }
+
+	?>
+
+	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
+		<h4 class="sidebar-header">
+			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
+		</h4>
+
+		<ul class="group-member-portfolio-list">
+		<?php foreach ( $portfolio_data as $pdata ) : ?>
+			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( '%s&#8217;s ePortfolio', $pdata['user_display_name'] ) ) ?></a></li>
+		<?php endforeach ?>
+		</ul>
+	</div>
+
+	<?php
+}
+add_action( 'bp_group_options_nav', 'openlab_portfolio_list_group_display', 20 );
+
+/**
+ * Don't enable the eportfolio widget for non-courses.
+ */
+function openlab_disable_eportfolio_widget_for_non_courses() {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group_type = openlab_get_group_type( $group_id );
+	if ( 'course' !== $group_type ) {
+		unregister_widget( 'OpenLab_Course_Portfolios_Widget' );
+
+		// unregister_widget() appears to be broken, so...
+		global $wp_registered_widgets;
+		foreach ( $wp_registered_widgets as $n => $rw ) {
+			if ( isset( $rw['callback'][0] ) && is_a( $rw['callback'][0], 'OpenLab_Course_Portfolios_Widget' ) ) {
+				unset( $wp_registered_widgets[ $n ] );
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'openlab_disable_eportfolio_widget_for_non_courses' );
+
+/**
+ * Catch form requests (from the widget dropdown) to redirect to a student portfolio
+ *
+ * See {@link OpenLab_Course_Portfolios_Widget::widget()}
+ */
+function openlab_redirect_to_student_portfolio_catcher() {
+	if ( empty( $_GET['portfolio-goto'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'portfolio_goto', '_pnonce' );
+
+	$url = urldecode( $_GET['portfolio-goto'] );
+	wp_redirect( $url );
+}
+add_action( 'wp', 'openlab_redirect_to_student_portfolio_catcher' );
 
 /////////////////////////
 //     ACCESS LIST     //

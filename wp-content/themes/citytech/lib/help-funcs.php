@@ -5,6 +5,23 @@
  */
 
 /**
+ * This function catches any URL that returns a 404 *and* includes the word help in the URL string
+ * See http://openlab.citytech.cuny.edu/redmine/issues/964 for more details
+ * @param type $redirect_url
+ * @param type $requested_url
+ * @return type
+ */
+
+function openlab_help_404_handler($redirect_url,$requested_url){
+    if (is_404() && strpos($requested_url,'help')){
+        $redirect_url = site_url('blog/help/openlab-help');
+        return $redirect_url;
+    }
+}
+
+add_filter('redirect_canonical','openlab_help_404_handler',10,2);
+
+/**
  * 	Loop for single help pages
  *
  */
