@@ -394,6 +394,12 @@ function openlab_portfolio_list_group_display() {
 		return;
 	}
 
+	// Don't display on private groups. See #997
+	$group = groups_get_current_group();
+	if ( 'public' !== $group->status ) {
+		return false;
+	}
+
 	$portfolio_data = openlab_get_group_member_portfolios();
 
         // No member of the group has a portfolio
