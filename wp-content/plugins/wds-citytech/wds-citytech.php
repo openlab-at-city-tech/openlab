@@ -655,7 +655,7 @@ function openlab_get_department_list( $school = '' ) {
 	$all_departments = array(
 		'tech' => array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology'),
 		'studies' => array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology'),
-		'arts' => array('African-American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science')
+		'arts' => array('African American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science')
 	);
 
 	// Lazy - I didn't feel like manually converting to key-value structure
