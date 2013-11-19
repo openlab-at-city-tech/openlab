@@ -270,11 +270,11 @@ function openlab_list_members($view) {
 			if($user_type=="Student"){
 				$user_type="students";
 			}
-			
+
 			if ( empty( $user_type ) ) {
 				$user_type = 'people';
 			}
-			
+
 			?>
 
 			<div class="widget-error">

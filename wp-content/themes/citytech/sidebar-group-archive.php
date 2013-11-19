@@ -69,7 +69,6 @@ if (empty($_GET['department'])) {
     $option_value_dept = $_GET['department'];
 }
 
-
 //semesters
 if (empty($_GET['semester'])) {
     $_GET['semester'] = "";
