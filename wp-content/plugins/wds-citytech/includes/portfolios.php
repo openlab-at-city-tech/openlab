@@ -257,6 +257,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			$portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
+				'user_type' => xprofile_get_field_data( 'Account Type', $member->ID ),
 				'portfolio_id' => $portfolio_id,
 				'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
 				'portfolio_title' => get_blog_option( $portfolio_blog_id, 'blogname' ),
@@ -409,7 +410,8 @@ function openlab_portfolio_list_group_display() {
 
 		<ul class="group-member-portfolio-list">
 		<?php foreach ( $portfolio_data as $pdata ) : ?>
-			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( '%s&#8217;s ePortfolio', $pdata['user_display_name'] ) ) ?></a></li>
+			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
+			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
 		<?php endforeach ?>
 		</ul>
 	</div>
