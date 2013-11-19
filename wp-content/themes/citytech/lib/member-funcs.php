@@ -44,10 +44,6 @@ function openlab_list_members($view) {
 		$search_terms = $_POST['group_search'];
 	}
 
-    	if ( $user_type ) {
-    		echo '<h3 id="bread-crumb">'.$user_type.'</h3>';
-    	}
-
 	if ( ! empty( $_GET['school'] ) ) {
 		$user_school = urldecode( $_GET['school'] );
 
@@ -227,9 +223,12 @@ function openlab_list_members($view) {
 		'alt' => __( 'Member avatar', 'buddypress' )
 	);
 
-	if ( bp_has_members( $args ) ) :
-
 	?>
+        <div class="current-group-filters current-portfolio-filters">
+		<?php openlab_current_directory_filters(); ?>
+        </div>
+
+	<?php if ( bp_has_members( $args ) ) : ?>
 	<div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
 	<div class="clearfloat"></div>
 			<div class="avatar-block">
