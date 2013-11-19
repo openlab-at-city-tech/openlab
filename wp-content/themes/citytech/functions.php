@@ -623,3 +623,20 @@ function cuny_buddypress_group_actions() {
 	<?php endwhile; endif;
 }
 
+/**
+ * Save the Account Type setting on the Account Settings screen.
+ */
+function openlab_save_account_type_on_settings() {
+	if ( isset( $_POST['account_type'] ) ) {
+		$types = array( 'Student', 'Alumni' );
+		$account_type = in_array( $_POST['account_type'], $types ) ? $_POST['account_type'] : 'Student';
+		$user_id = bp_displayed_user_id();
+		$current_type = openlab_get_displayed_user_account_type();
+
+		// Only students and alums can do this
+		if ( in_array( $current_type, $types ) ) {
+			xprofile_set_field_data( 'Account Type', bp_displayed_user_id(), $account_type );
+		}
+	}
+}
+add_action( 'bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings' );

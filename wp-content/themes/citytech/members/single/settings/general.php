@@ -72,6 +72,17 @@ do_action( 'bp_before_member_settings_template' );
 				<input type="text" name="lname" id="lname" value="<?php echo bp_get_profile_field_data( array( 'field' => 'Last Name' ) ) ?>" />
 			</div>
 
+			<?php $account_type = openlab_get_displayed_user_account_type(); ?>
+			<?php if ( in_array( $account_type, array( 'Student', 'Alumni' ) ) ) : ?>
+				<div class="settings-section account-type-section">
+					<label for="account_type">Account Type</label>
+					<select name="account_type">
+						<option value="Student" <?php selected( 'Student', $account_type ) ?>>Student</option>
+						<option value="Alumni" <?php selected( 'Alumni', $account_type ) ?>>Alumni</option>
+					</select>
+				</div>
+			<?php endif ?>
+
 			<?php do_action( 'bp_core_general_settings_before_submit' ); ?>
 
 			<div class="submit">
