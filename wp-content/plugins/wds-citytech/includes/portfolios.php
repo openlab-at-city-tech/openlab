@@ -394,9 +394,9 @@ function openlab_portfolio_list_group_display() {
 		return;
 	}
 
-	// Don't display on private groups. See #997
+	// Non-public groups shouldn't show this to non-members. See #997
 	$group = groups_get_current_group();
-	if ( 'public' !== $group->status ) {
+	if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
 		return false;
 	}
 
