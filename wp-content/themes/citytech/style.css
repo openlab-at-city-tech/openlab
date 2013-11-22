@@ -281,6 +281,10 @@ ul.item-list li h4 a {
     padding:3px 5px;
     margin:0 5px 0 0;
 }
+.forum #content ul li .poster-meta a:first-child{
+    background: none;
+    border: none;
+}
 
 /* "See All" links in widget headers */
 div.bp-widget h4 span {
