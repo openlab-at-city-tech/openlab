@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * Members settings - general
 *

@@ -287,7 +287,7 @@ function cuny_profile_activty_block($type,$title,$last,$desc_length=135) {
                         <!-- See all link in column headers -->
                         <h4><?php echo $title ?>
                         <?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
-                                <a class="group-see-all top" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>">See All</a>
+                                <a class="group-see-all top" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>s">See All</a>
                         <?php else: ?>
                                 <a class="group-see-all top" href="<?php echo $bp->displayed_user->domain ?>groups/?type=<?php echo $type; ?>">See All</a>
                         <?php endif; ?>

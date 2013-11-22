@@ -186,14 +186,22 @@ function openlab_get_directory_filter( $filter_type ) {
 function openlab_current_directory_filters() {
 	$filters = array();
 
-	switch (openlab_get_current_group_type()) {
+	if ( is_page( 'people' ) ) {
+		$current_view = 'people';
+	} else {
+		$current_view = openlab_get_current_group_type();
+	}
+
+	switch ( $current_view ) {
 		case 'portfolio' :
 			$filters = array( 'school', 'department', 'usertype' );
 			break;
 		case 'course' :
 			$filters = array( 'school', 'department', 'semester' );
 			break;
-
+		case 'people' :
+			$filters = array( 'usertype', 'school', 'department' );
+			break;
 		default :
 
 			break;
@@ -206,7 +214,6 @@ function openlab_current_directory_filters() {
 		}
 	}
 
-//<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp; </span>
 	$markup = '';
 	if ( !empty( $active_filters ) ) {
 		$markup .= '<h3 id="bread-crumb">';
