@@ -378,6 +378,7 @@ age .box-1 a {
 .home-page #cuny_openlab_jump_start .red-box a {
 color:#fff;
     margin-bottom:7px;
+    text-decoration: underline;
 }
 
 #open-lab-login #user-info h4 a {
