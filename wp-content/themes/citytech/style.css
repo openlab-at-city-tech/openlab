@@ -196,11 +196,6 @@ h4 span.small {
     font-weight:700;
 }
 
-#content h4 a {
-    display:inline!important;
-    padding:0!important;
-}
-
 h1.entry-title {
     padding-left:7px;
     margin:0 0 5px;
@@ -252,6 +247,175 @@ p a {
     width:100%;
     text-align:right;
     padding-top:20px;
+}
+
+#content h4 a {
+    display:inline!important;
+    padding:0!important;
+}
+/**Link consolidation - currently a work in progress**/
+#content h4 a {
+    display:inline!important;
+    padding:0!important;
+}
+
+ul.item-list li h4 a {
+    padding:0;
+    display:inline;
+}
+
+.forum #content ul li .poster-meta a {
+    border:none;
+}
+
+.forum #content ul li .poster-meta a img {
+    border:1px solid #E6E6E6;
+    padding:5px;
+}
+
+.forum #content ul li .poster-meta a {
+    display:inline;
+    background:#F7F7F7 none repeat scroll 0;
+    border:1px solid #E6E6E6;
+    font-size:1em;
+    padding:3px 5px;
+    margin:0 5px 0 0;
+}
+
+/* "See All" links in widget headers */
+div.bp-widget h4 span {
+    float:right;
+}
+
+#content .bp-widget ul li h5 a {
+    display:inline;
+}
+
+.activity-list .activity-content span a {
+    border:none;
+    background:none;
+}
+
+#sidebar li a {
+    font-family:'Arvo',arial,serif;
+    font-size:12px;
+    color:#666;
+    text-decoration:none;
+    line-height:18px;
+}
+
+#sidebar li.current-menu-item > a {
+    color:#C84C35;
+}
+
+#sidebar li a:hover {
+    color:#0fceba;
+}
+
+#sidebar li.selected-page > a,#sidebar li.current > a,#sidebar li.current-menu-parent > a,li.current_page_item > a {
+    color:#c84c35;
+}
+
+#portfolio-sidebar-widget ul.portfolio-sublinks li a {
+    padding:0 4px;
+    border-right:1px solid #717171;
+    font-family:Arial,Helvetica,Tahoma,sans-serif;
+    text-decoration:underline;
+    font-size:11px;
+}
+
+.portfolio-site-link a,.portfolio-dashboard-link a {
+    padding:0 12px;
+}
+
+#portfolio-sidebar-widget ul.portfolio-sublinks li:first-child a,.portfolio-profile-link a {
+    padding-left:0;
+    padding-right:6px;
+    font-family:arial;
+}
+
+#portfolio-sidebar-widget ul.portfolio-sublinks li:last-child a {
+    border-right:0;
+}
+
+#pgw-gallery-medium a,#pgw-gallery-large a,#pgw-gallery-full a {
+    color:#FFF!important;
+    text-decoration:underline;
+}
+
+#whos-online .avatar-block .cuny-member-info a {
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+}
+
+.home-page #home-right .box-1 h2 a {
+    font-size:12px;
+    text-decoration:none;
+}
+
+.home-p
+age .box-1 a {
+    text-decoration:underline;
+}
+
+.home-page a {
+    text-decoration:none;
+}
+
+.home .box-1 a {
+    text-decoration: underline;
+}
+
+.home-page #home-right .home-page-group-list .title a {
+    text-decoration:none;
+}
+
+.home-page #cuny_openlab_jump_start .red-box a {
+color:#fff;
+    margin-bottom:7px;
+}
+
+#open-lab-login #user-info h4 a {
+    font-size:14px;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#c84c35;
+    text-decoration:none;
+}
+
+.home-page .box-1 .title a {
+    color:#717171;
+    font-size:13px;
+}
+
+.home-page .box-1 .green-title a {
+    font-weight:700;
+    font-size:13px;
+    line-height:13px;
+    font-family:Arial;
+}
+
+#areas-of-activty a {
+    color:#666;
+}
+
+#member-item-body .activity-list .activity-content .activity-header a {
+    color:#8f8f8f;
+}
+
+#content .messages .message h2.item-title,#content .messages .message h2.item-title a {
+    color:#6d6d6d;
+    font-size:12px;
+    font-weight:700;
+    line-height:12px;
+}
+
+div#message-thread strong a {
+    text-decoration:none;
+}
+
+#sidebar .activity-list .activity-content a {
+    text-decoration:underline;
 }
 
 /* See All, View More
@@ -1125,11 +1289,6 @@ ul.item-list li img.avatar {
     margin:0 10px 10px 0;
 }
 
-ul.item-list li h4 a {
-    padding:0;
-    display:inline;
-}
-
 ul.item-list li div.item-title,ul.item-list li h4 {
     font-weight:400;
     font-size:1.2em;
@@ -1262,15 +1421,6 @@ ul#topic-post-list li {
     padding:15px 5px;
 }
 
-.forum #content ul li .poster-meta a {
-    border:none;
-}
-
-.forum #content ul li .poster-meta a img {
-    border:1px solid #E6E6E6;
-    padding:5px;
-}
-
 /* FROM buddypress.css */
 #bpnav,.item-list-tabs,#user-nav {
     margin:0 auto;
@@ -1383,15 +1533,6 @@ table.notification-settings .yes,table.notification-settings .no {
     width:40px;
 }
 
-/* "See All" links in widget headers */
-div.bp-widget h4 span {
-    float:right;
-}
-
-#content .bp-widget ul li h5 a {
-    display:inline;
-}
-
 /* #message -- This is used for all error/success message feedback */
 div#message p {
     background:none repeat scroll 0 0 #63DFD2;
@@ -1449,11 +1590,6 @@ div#invite-list input {
     background:url(../images/ajax-loader.gif) center left no-repeat!important;
     padding:8px;
     display:none;
-}
-
-.activity-list .activity-content span a {
-    border:none;
-    background:none;
 }
 
 div.activity-meta,div.activity-comments {
@@ -1713,15 +1849,6 @@ table.forum td {
 .internal-page table tr td,.internal-page table tr th,.directory table tr td,.directory table tr th {
     padding:8px;
     vertical-align:middle;
-}
-
-.forum #content ul li .poster-meta a {
-    display:inline;
-    background:#F7F7F7 none repeat scroll 0;
-    border:1px solid #E6E6E6;
-    font-size:1em;
-    padding:3px 5px;
-    margin:0 5px 0 0;
 }
 
 .forums #global-forum-topic-filters ul {
@@ -2271,32 +2398,12 @@ div#sidebar.sidebar div#portfolio-sidebar-widget {
     list-style-image:none;
 }
 
-#sidebar li a {
-    font-family:'Arvo',arial,serif;
-    font-size:12px;
-    color:#666;
-    text-decoration:none;
-    line-height:18px;
-}
-
-#sidebar li.current-menu-item > a {
-    color:#C84C35;
-}
-
-#sidebar li a:hover {
-    color:#0fceba;
-}
-
 #sidebar li.current,#sidebar li.selected-page,#sidebar li.current_page_item {
     list-style-image:url(images/sidebar_bullet_orange.png);
 }
 
 #sidebar li.current_page_item ul,#sidebar li.selected-page > ul {
     display:block;
-}
-
-#sidebar li.selected-page > a,#sidebar li.current > a,#sidebar li.current-menu-parent > a,li.current_page_item > a {
-    color:#c84c35;
 }
 
 li.sq-bullet ul {
@@ -2347,28 +2454,6 @@ li.sq-bullet ul {
     margin:0 0 18px;
     padding:0 0 0 5px;
     padding:0 0 10px 5px;
-}
-
-#portfolio-sidebar-widget ul.portfolio-sublinks li a {
-    padding:0 4px;
-    border-right:1px solid #717171;
-    font-family:Arial,Helvetica,Tahoma,sans-serif;
-    text-decoration:underline;
-    font-size:11px;
-}
-
-.portfolio-site-link a,.portfolio-dashboard-link a {
-    padding:0 12px;
-}
-
-#portfolio-sidebar-widget ul.portfolio-sublinks li:first-child a,.portfolio-profile-link a {
-    padding-left:0;
-    padding-right:6px;
-    font-family:arial;
-}
-
-#portfolio-sidebar-widget ul.portfolio-sublinks li:last-child a {
-    border-right:0;
 }
 
 #sidebar > div > ul.portfolio-sublinks {
@@ -2604,11 +2689,6 @@ a#pgw-prev,a#pgw-next {
     z-index:9999;
 }
 
-#pgw-gallery-medium a,#pgw-gallery-large a,#pgw-gallery-full a {
-    color:#FFF!important;
-    text-decoration:underline;
-}
-
 /* In the Spotlight styles */
 #cac-featured {
     border:2px solid #F5F6F7;
@@ -2673,12 +2753,6 @@ a#pgw-prev,a#pgw-next {
     right:-15px;
     width:115px;
     z-index:10;
-}
-
-#whos-online .avatar-block .cuny-member-info a {
-    color:#fff;
-    font-size:12px;
-    font-weight:700;
 }
 
 #whos-online .cuny-member:hover .cuny-member-info {
@@ -2806,11 +2880,6 @@ a#pgw-prev,a#pgw-next {
     margin:0;
 }
 
-.home-page #home-right .box-1 h2 a {
-    font-size:12px;
-    text-decoration:none;
-}
-
 .home-page #home-right .box-1 h2 {
     margin-top:11px;
 }
@@ -2822,11 +2891,6 @@ a#pgw-prev,a#pgw-next {
 .home-page .box-1 .byline {
     color:#aaa;
     margin-bottom:17px;
-}
-
-.home-p
-age .box-1 a {
-    text-decoration:underline;
 }
 
 /* 0.1 Sign Up
@@ -2843,18 +2907,6 @@ age .box-1 a {
     width:253px;
 }
 
-.home-page a {
-    text-decoration:none;
-}
-
-.home .box-1 a {
-    text-decoration: underline;
-}
-
-.home-page #home-right .home-page-group-list .title a {
-    text-decoration:none;
-}
-
 .home-page #cuny_openlab_jump_start .red-box {
     background-color:#de5b4a;
     width:259px;
@@ -2863,7 +2915,7 @@ age .box-1 a {
     margin-bottom:10px;
 }
 
-.home-page #cuny_openlab_jump_start .red-box .title,.home-page #cuny_openlab_jump_start .red-box p,.home-page #cuny_openlab_jump_start .red-box a {
+.home-page #cuny_openlab_jump_start .red-box .title,.home-page #cuny_openlab_jump_start .red-box p{
     color:#fff;
     margin-bottom:7px;
 }
@@ -2945,13 +2997,6 @@ age .box-1 a {
     margin-bottom:24px;
 }
 
-#open-lab-login #user-info h4 a {
-    font-size:14px;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#c84c35;
-    text-decoration:none;
-}
-
 #open-lab-login #user-info p {
     margin:5px 0;
 }
@@ -2991,12 +3036,7 @@ age .box-1 a {
     width:141px;
 }
 
-.home-page .box-1 .title a {
-    color:#717171;
-    font-size:13px;
-}
-
-.home-page .box-1 .green-title,.home-page .box-1 .green-title a {
+.home-page .box-1 .green-title{
     font-weight:700;
     font-size:13px;
     line-height:13px;
@@ -3109,10 +3149,6 @@ h2.member-name-title {
     padding:5px 0 0;
 }
 
-#areas-of-activty a {
-    color:#666;
-}
-
 #member-item-body {
     margin-left:0;
     clear:both;
@@ -3159,10 +3195,6 @@ h2.member-name-title {
 #member-item-body .activity-list .activity-content .activity-header {
     line-height:13px;
     font-weight:700;
-}
-
-#member-item-body .activity-list .activity-content .activity-header a {
-    color:#8f8f8f;
 }
 
 #member-item-body .activity-list .activity-avatar a img {
@@ -3334,13 +3366,6 @@ span.label {
     margin:15px 0;
 }
 
-#content .messages .message h2.item-title,#content .messages .message h2.item-title a {
-    color:#6d6d6d;
-    font-size:12px;
-    font-weight:700;
-    line-height:12px;
-}
-
 #content .messages .message .info-line {
     color:#aaa;
     font-size:11px;
@@ -3437,10 +3462,6 @@ div#message-thread strong {
     margin:0;
 }
 
-div#message-thread strong a {
-    text-decoration:none;
-}
-
 div#message-thread strong span.activity {
     margin:4px 0 0 10px;
 }
@@ -3501,10 +3522,6 @@ table#message-threads {
     margin:0 0 0 10px;
     float:left;
     width:145px;
-}
-
-#sidebar .activity-list .activity-content a {
-    text-decoration:underline;
 }
 
 #sidebar .activity-list .activity-content a.activity-time-since {
