@@ -387,7 +387,7 @@ function openlab_registration_page() {
 
                         <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
-            <?php echo wds_get_register_fields(); ?>
+            <?php echo wds_get_register_fields( 'Base' ); ?>
 
             <?php do_action('bp_after_signup_profile_fields') ?>
 

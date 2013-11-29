@@ -140,11 +140,12 @@ function wds_email_validate() {
 //
 add_action( 'bp_signup_validate', 'wds_email_validate' );
 //
-function wds_get_register_fields($group_id=1){
+function wds_get_register_fields( $account_type ){
+	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return="";
 	if ( function_exists( 'bp_has_profile' ) ) :
-	if ( bp_has_profile( 'profile_group_id='.$group_id ) ) : while ( bp_profile_groups() ) : bp_the_profile_group();
+	if ( bp_has_profile( 'exclude_groups=' . $exclude_groups ) ) : while ( bp_profile_groups() ) : bp_the_profile_group();
 		while ( bp_profile_fields() ) : bp_the_profile_field();
 
 			$return.='<div class="editfield">';

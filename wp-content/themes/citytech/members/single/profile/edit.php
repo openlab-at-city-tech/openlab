@@ -7,27 +7,33 @@ if(is_super_admin( $user_ID )){
 	$pgroup=bp_get_current_profile_group_id();
 	$account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
 }else{
-  $account_type=bp_get_profile_field_data( 'field=Account Type' );
-  if($account_type=="Student"){
-	  $pgroup="2";
-  }elseif($account_type=="Faculty"){
-	  $pgroup="3";
-  }elseif($account_type=="Alumni"){
-	  $pgroup="4";
-  }elseif($account_type=="Staff"){
-	  $pgroup="5";
-  }else{
-	  $pgroup="1";
-  }
+	$account_type = bp_get_profile_field_data( 'field=Account Type' );
+	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 }
 
 $display_name=bp_get_profile_field_data( 'field=Name' );
 
-if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
+$profile_args = array();
 
+if ( isset( $pgroup ) ) {
+	$profile_args['profile_group_id'] = $pgroup;
+}
+
+if ( isset( $exclude_groups ) ) {
+	$profile_args['exclude_groups'] = $exclude_groups;
+}
+
+$display_name_shown = isset( $pgroup ) && 1 == $pgroup;
+$field_ids = array( 1 );
+
+?>
 <div class="submenu"><div class="submenu-text">My Settings: </div><?php echo openlab_profile_settings_submenu(); ?></div>
 
-<form action="<?php bp_the_profile_group_edit_form_action() ?>" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
+<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
+
+<?php
+
+if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
 
@@ -40,19 +46,21 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 		</ul>
 
 		<div class="clear"></div>
-		<?php if($pgroup!="1"){?>
-          <div class="editfield field_1 field_name alt">
-          <label for="field_1">Display Name (required)</label>
-          <input type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
-          <p class="description"></p>
-          </div>
-        <?php } ?>
+		<?php if ( ! $display_name_shown ) {?>
+			<div class="editfield field_1 field_name alt">
+				<label for="field_1">Display Name (required)</label>
+				<input type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
+				<p class="description"></p>
+			</div>
+			<?php $display_name_shown = true ?>
+		<?php } ?>
 
 		<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
+			<?php /* Add to the array for the field-ids input */ ?>
+			<?php $field_ids[] = bp_get_the_profile_field_id() ?>
+
 			<div<?php bp_field_css_class( 'editfield' ) ?>>
-
-
 
 				<?php if ( 'textbox' == bp_get_the_profile_field_type() ) : ?>
 				<?php	if(bp_get_the_profile_field_name()=="Name"){ ?>
@@ -149,16 +157,18 @@ if ( bp_has_profile( 'profile_group_id=' . $pgroup ) ) : while ( bp_profile_grou
 
 		<?php endwhile; ?>
 
-	<?php do_action( 'bp_after_profile_field_content' ) ?>
+	<?php endwhile; ?>
 
-	<div class="submit">
-		<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> " />
-	</div>
-	<input type="hidden" name="field_ids" id="field_ids" value="1,<?php bp_the_profile_group_field_ids() ?>" />
-	<?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
+<?php do_action( 'bp_after_profile_field_content' ) ?>
+
+<div class="submit">
+	<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> " />
+</div>
+<input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode( ',', $field_ids ) ?>" />
+<?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
+
+<?php endif; ?>
 
 </form>
-
-<?php endwhile; endif; ?>
 
 <?php do_action( 'bp_after_profile_edit_content' ) ?>

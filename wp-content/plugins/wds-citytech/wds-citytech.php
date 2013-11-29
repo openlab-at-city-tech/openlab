@@ -453,28 +453,20 @@ function wds_load_default_account_type() {
 
 }
 
-add_action('wp_ajax_wds_load_account_type', 'wds_load_account_type');
-add_action('wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type');
 function wds_load_account_type(){
 	global $wpdb, $bp;
 	$return='';
 	$account_type = $_POST['account_type'];
-	if($account_type){
-		//get matching profile group_id
-		$sql = "SELECT id FROM wp_bp_xprofile_groups where name='".$account_type."'";
-		$posts = $wpdb->get_results($sql, OBJECT);
-		if ($posts){
-			foreach ($posts as $post):
-				$group_id=$post->id;
-			endforeach;
-			$return.=wds_get_register_fields($group_id);
-		}
+	if ( $account_type ) {
+		$return .= wds_get_register_fields( $account_type );
 	}else{
 		$return="Please select an Account Type.";
 	}
 	$return=str_replace("'","\'",$return);
 	die("document.getElementById('wds-account-type').innerHTML='$return'");
 }
+add_action('wp_ajax_wds_load_account_type', 'wds_load_account_type');
+add_action('wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type');
 
 function wds_bp_profile_group_tabs() {
 	global $bp, $group_name;
@@ -2140,4 +2132,31 @@ function openlab_register_portfolios_widget() {
 }
 add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
 
+/**
+ * Utility function for getting the xprofile exclude groups for a given account type
+ */
+function openlab_get_exclude_groups_for_account_type( $type ) {
+	global $wpdb, $bp;
+	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
 
+	// Reindex
+	$gs = array();
+	foreach ( $groups as $group ) {
+		$gs[ $group->name ] = $group->id;
+	}
+
+	$exclude_groups = array();
+	foreach ( $gs as $gname => $gid ) {
+		// special case for alumni
+		if ( 'Alumni' === $type && 'Student' === $gname ) {
+			continue;
+		}
+
+		// otherwise, non-matches are excluded
+		if ( $gname !== $type ) {
+			$exclude_groups[] = $gid;
+		}
+	}
+
+	return implode( ',', $exclude_groups );
+}
