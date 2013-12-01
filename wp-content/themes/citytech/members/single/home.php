@@ -115,42 +115,47 @@ if ( !$dud = bp_displayed_user_domain() ) {
 		</div><!-- #item-meta -->
 
         <div class="profile-fields">
-        	<?php if ( bp_has_profile() ) : /* global $profile_template; echo '<pre>'; print_r( $profile_template ); echo '</pre>'; */ ?>
+		<?php $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type ) ?>
+        	<?php if ( bp_has_profile( array( 'exclude_groups' => $exclude_groups ) ) ) : ?>
+
+			<table class="profile-fields">
+
 			<?php while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
-                <?php global $profile_template ?>
-                <?php /* Don't show fields corresponding to other account types */ ?>
-                <?php if ( $account_type == $profile_template->group->name && bp_profile_group_has_fields() ) : ?>
-    					<table class="profile-fields">
-                            <?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+				<?php if ( bp_profile_group_has_fields() ) : ?>
 
-                                <?php if ( bp_field_has_data() ) :
-					if( bp_get_the_profile_field_name() != "Name"
-				                &&
-						bp_get_the_profile_field_name() != "Account Type"
-						&&
-						bp_get_the_profile_field_name() != "First Name"
-						&&
-						bp_get_the_profile_field_name()!="Last Name" ) : ?>
+					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
-						<tr>
-							<td class="label" nowrap="nowrap">
-								<?php bp_the_profile_field_name() ?>
-							</td>
+						<?php if ( bp_field_has_data() ) : ?>
+							<?php if( bp_get_the_profile_field_name() != "Name"
+							&&
+							bp_get_the_profile_field_name() != "Account Type"
+							&&
+							bp_get_the_profile_field_name() != "First Name"
+							&&
+							bp_get_the_profile_field_name()!="Last Name" ) : ?>
 
-							<td>
-								<?php bp_the_profile_field_value(); ?>
-							</td>
-    						</tr>
-					<?php endif;
-				endif; ?>
+								<tr>
+									<td class="label" nowrap="nowrap">
+										<?php bp_the_profile_field_name() ?>
+									</td>
 
-                             <?php endwhile; ?>
+									<td>
+										<?php bp_the_profile_field_value(); ?>
+									</td>
+								</tr>
+
+							<?php endif; ?>
+
+						<?php endif; // bp_field_has_data() ?>
+
+					<?php endwhile; // bp_profile_fields() ?>
+				<?php endif; // bp_profile_group_has_fields() ?>
+
+				<?php endwhile; // bp_profile_groups() ?>
                         </table>
-                 <?php endif; ?>
 
-            <?php endwhile; ?>
-    		<?php endif; ?>
+    		<?php endif; // bp_has_profile() ?>
         </div>
 
 	</div><!-- #item-header-content -->
