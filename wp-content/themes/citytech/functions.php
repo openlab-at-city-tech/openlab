@@ -640,3 +640,15 @@ function openlab_save_account_type_on_settings() {
 	}
 }
 add_action( 'bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings' );
+
+/**
+ * Remove the 'hidden' class from hidden group leave buttons
+ *
+ * A crummy conflict with wp-ajax-edit-comments causes these items to be
+ * hidden by jQuery. See b208c80 and #1004
+ */
+function openlab_remove_hidden_class_from_leave_group_button( $button ) {
+	$button['wrapper_class'] = str_replace( ' hidden', '', $button['wrapper_class'] );
+	return $button;
+}
+add_action( 'bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_group_button', 20 );
