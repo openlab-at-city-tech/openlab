@@ -16,7 +16,7 @@
  * Description: Social networking in a box. Build a social network for your company, school, sports team or niche community all based on the power and flexibility of WordPress.
  * Author:      The BuddyPress Community
  * Author URI:  http://buddypress.org/community/members/
- * Version:     1.8.1
+ * Version:     1.9
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -106,11 +106,6 @@ class BuddyPress {
 	/** Singleton *************************************************************/
 
 	/**
-	 * @var BuddyPress The one true BuddyPress
-	 */
-	private static $instance;
-
-	/**
 	 * Main BuddyPress Instance
 	 *
 	 * BuddyPress is great
@@ -122,9 +117,10 @@ class BuddyPress {
 	 *
 	 * @since BuddyPress (1.7)
 	 *
-	 * @staticvar array $instance
+	 * @staticvar object $instance
 	 * @uses BuddyPress::constants() Setup the constants (mostly deprecated)
 	 * @uses BuddyPress::setup_globals() Setup the globals needed
+	 * @uses BuddyPress::legacy_constants() Setup the legacy constants (deprecated)
 	 * @uses BuddyPress::includes() Include the required files
 	 * @uses BuddyPress::setup_actions() Setup the hooks and actions
 	 * @see buddypress()
@@ -132,15 +128,22 @@ class BuddyPress {
 	 * @return BuddyPress The one true BuddyPress
 	 */
 	public static function instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new BuddyPress;
-			self::$instance->constants();
-			self::$instance->setup_globals();
-			self::$instance->legacy_constants();
-			self::$instance->includes();
-			self::$instance->setup_actions();
+
+		// Store the instance locally to avoid private static replication
+		static $instance = null;
+
+		// Only run these methods if they haven't been ran previously
+		if ( null === $instance ) {
+			$instance = new BuddyPress;
+			$instance->constants();
+			$instance->setup_globals();
+			$instance->legacy_constants();
+			$instance->includes();
+			$instance->setup_actions();
 		}
-		return self::$instance;
+
+		// Always return the instance
+		return $instance;
 	}
 
 	/** Magic Methods *********************************************************/
@@ -225,7 +228,7 @@ class BuddyPress {
 
 		// Path and URL
 		if ( ! defined( 'BP_PLUGIN_DIR' ) ) {
-			define( 'BP_PLUGIN_DIR', trailingslashit( WP_PLUGIN_DIR . '/buddypress' ) );
+			define( 'BP_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 		}
 
 		if ( ! defined( 'BP_PLUGIN_URL' ) ) {
@@ -294,8 +297,8 @@ class BuddyPress {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '1.8.1';
-		$this->db_version = 6080;
+		$this->version    = '1.9-7682';
+		$this->db_version = 7553;
 
 		/** Loading ***********************************************************/
 
@@ -521,12 +524,24 @@ class BuddyPress {
 	/** Public Methods ********************************************************/
 
 	/**
-	 * Setup the BuddyPress theme directory
+	 * Set up BuddyPress's legacy theme directory.
 	 *
-	 * @since BuddyPress (1.5)
-	 * @todo Move bp-default to wordpress.org/extend/themes and remove this
+	 * Starting with version 1.2, and ending with version 1.8, BuddyPress
+	 * registered a custom theme directory - bp-themes - which contained
+	 * the bp-default theme. Since BuddyPress 1.9, bp-themes is no longer
+	 * registered (and bp-default no longer offered) on new installations.
+	 * Sites using bp-default (or a child theme of bp-default) will
+	 * continue to have bp-themes registered as before.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @todo Move bp-default to wordpress.org/extend/themes and remove this.
 	 */
 	public function register_theme_directory() {
+		if ( ! bp_do_register_theme_directory() ) {
+			return;
+		}
+
 		register_theme_directory( $this->old_themes_dir );
 	}
 
@@ -599,7 +614,7 @@ if ( defined( 'BUDDYPRESS_LATE_LOAD' ) ) {
 
 // "And now here's something we hope you'll really like!"
 } else {
-	$GLOBALS['bp'] = &buddypress();
+	$GLOBALS['bp'] = buddypress();
 }
 
 endif;

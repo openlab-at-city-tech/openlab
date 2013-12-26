@@ -39,7 +39,10 @@ class BP_XProfile_Component extends BP_Component {
 		parent::start(
 			'xprofile',
 			__( 'Extended Profiles', 'buddypress' ),
-			BP_PLUGIN_DIR
+			BP_PLUGIN_DIR,
+			array(
+				'adminbar_myaccount_order' => 20
+			)
 		);
 	}
 
@@ -74,19 +77,24 @@ class BP_XProfile_Component extends BP_Component {
 	 * backwards compatibility.
 	 *
 	 * @since BuddyPress (1.5)
-	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
 	public function setup_globals( $args = array() ) {
-		global $bp;
+		$bp = buddypress();
 
 		// Define a slug, if necessary
 		if ( !defined( 'BP_XPROFILE_SLUG' ) )
 			define( 'BP_XPROFILE_SLUG', 'profile' );
 
-		// Assign the base group and fullname field names to constants to use
-		// in SQL statements
-		define ( 'BP_XPROFILE_BASE_GROUP_NAME',     stripslashes( $bp->site_options['bp-xprofile-base-group-name']     ) );
-		define ( 'BP_XPROFILE_FULLNAME_FIELD_NAME', stripslashes( $bp->site_options['bp-xprofile-fullname-field-name'] ) );
+		// Assign the base group and fullname field names to constants
+		// to use in SQL statements.
+		// Defined conditionally to accommodate unit tests
+		if ( ! defined( 'BP_XPROFILE_BASE_GROUP_NAME' ) ) {
+			define( 'BP_XPROFILE_BASE_GROUP_NAME', stripslashes( $bp->site_options['bp-xprofile-base-group-name'] ) );
+		}
+
+		if ( ! defined( 'BP_XPROFILE_FULLNAME_FIELD_NAME' ) ) {
+			define( 'BP_XPROFILE_FULLNAME_FIELD_NAME', stripslashes( $bp->site_options['bp-xprofile-fullname-field-name'] ) );
+		}
 
 		// Set the support field type ids
 		$this->field_types = apply_filters( 'xprofile_field_types', array(
@@ -103,16 +111,16 @@ class BP_XProfile_Component extends BP_Component {
 		$this->visibility_levels = array(
 			'public' => array(
 				'id'	  => 'public',
-				'label' => __( 'Anyone', 'buddypress' )
-			),
-			'loggedin' => array(
-				'id'	  => 'loggedin',
-				'label' => __( 'Logged In Users', 'buddypress' )
+				'label' => __( 'Everyone', 'buddypress' )
 			),
 			'adminsonly' => array(
 				'id'	  => 'adminsonly',
-				'label' => __( 'Admins Only', 'buddypress' )
+				'label' => __( 'Only Me', 'buddypress' )
 			),
+			'loggedin' => array(
+				'id'	  => 'loggedin',
+				'label' => __( 'All Members', 'buddypress' )
+			)
 		);
 
 		if ( bp_is_active( 'friends' ) ) {
@@ -207,11 +215,9 @@ class BP_XProfile_Component extends BP_Component {
 
 	/**
 	 * Set up the Toolbar
-	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
-		global $bp;
+		$bp = buddypress();
 
 		// Prevent debug notices
 		$wp_admin_nav = array();
@@ -261,11 +267,9 @@ class BP_XProfile_Component extends BP_Component {
 
 	/**
 	 * Sets up the title for pages and <title>
-	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance
 	 */
 	function setup_title() {
-		global $bp;
+		$bp = buddypress();
 
 		if ( bp_is_profile_component() ) {
 			if ( bp_is_my_profile() ) {
@@ -285,7 +289,7 @@ class BP_XProfile_Component extends BP_Component {
 }
 
 function bp_setup_xprofile() {
-	global $bp;
+	$bp = buddypress();
 
 	if ( !isset( $bp->profile->id ) )
 		$bp->profile = new BP_XProfile_Component();

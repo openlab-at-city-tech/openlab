@@ -3,9 +3,9 @@
 /**
  * BuddyPress Groups Actions
  *
- * Action functions are exactly the same as screen functions, however they do not
- * have a template screen associated with them. Usually they will send the user
- * back to the default screen after execution.
+ * Action functions are exactly the same as screen functions, however they do
+ * not have a template screen associated with them. Usually they will send the
+ * user back to the default screen after execution.
  *
  * @package BuddyPress
  * @subpackage GroupsActions
@@ -14,6 +14,9 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Catch and process group creation form submissions.
+ */
 function groups_action_create_group() {
 	global $bp;
 
@@ -42,7 +45,8 @@ function groups_action_create_group() {
 		setcookie( 'bp_completed_create_steps', false, time() - 1000, COOKIEPATH );
 
 		$reset_steps = true;
-		bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . array_shift( array_keys( $bp->groups->group_creation_steps ) ) . '/' );
+		$keys        = array_keys( $bp->groups->group_creation_steps );
+		bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . array_shift( $keys ) . '/' );
 	}
 
 	// If this is a creation step that is not recognized, just redirect them back to the first screen
@@ -133,7 +137,8 @@ function groups_action_create_group() {
 
 		// If we have completed all steps and hit done on the final step we
 		// can redirect to the completed group
-		if ( count( $bp->groups->completed_create_steps ) == count( $bp->groups->group_creation_steps ) && bp_get_groups_current_create_step() == array_pop( array_keys( $bp->groups->group_creation_steps ) ) ) {
+		$keys = array_keys( $bp->groups->group_creation_steps );
+		if ( count( $bp->groups->completed_create_steps ) == count( $keys ) && bp_get_groups_current_create_step() == array_pop( $keys ) ) {
 			unset( $bp->groups->current_create_step );
 			unset( $bp->groups->completed_create_steps );
 
@@ -152,7 +157,7 @@ function groups_action_create_group() {
 			 * Since we don't know what the next step is going to be (any plugin can insert steps)
 			 * we need to loop the step array and fetch the next step that way.
 			 */
-			foreach ( (array) $bp->groups->group_creation_steps as $key => $value ) {
+			foreach ( $keys as $key ) {
 				if ( $key == bp_get_groups_current_create_step() ) {
 					$next = 1;
 					continue;
@@ -235,38 +240,58 @@ function groups_action_join_group() {
 }
 add_action( 'bp_actions', 'groups_action_join_group' );
 
-
+/**
+ * Catch and process "Leave Group" button clicks.
+ *
+ * When a group member clicks on the "Leave Group" button from a group's page,
+ * this function is run.
+ *
+ * Note: When leaving a group from the group directory, AJAX is used and
+ * another function handles this. See {@link bp_legacy_theme_ajax_joinleave_group()}.
+ *
+ * @since BuddyPress (1.2.4)
+ */
 function groups_action_leave_group() {
-	global $bp;
-
-	if ( !bp_is_single_item() || !bp_is_groups_component() || !bp_is_current_action( 'leave-group' ) )
+	if ( ! bp_is_single_item() || ! bp_is_groups_component() || ! bp_is_current_action( 'leave-group' ) ) {
 		return false;
+	}
 
 	// Nonce check
-	if ( !check_admin_referer( 'groups_leave_group' ) )
+	if ( ! check_admin_referer( 'groups_leave_group' ) ) {
 		return false;
+	}
 
 	// User wants to leave any group
-	if ( groups_is_user_member( bp_loggedin_user_id(), $bp->groups->current_group->id ) ) {
+	if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
+		$bp = buddypress();
 
 		// Stop sole admins from abandoning their group
-		$group_admins = groups_get_group_admins( $bp->groups->current_group->id );
-	 	if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() )
+		$group_admins = groups_get_group_admins( bp_get_current_group_id() );
+
+	 	if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() ) {
 			bp_core_add_message( __( 'This group must have at least one admin', 'buddypress' ), 'error' );
-
-		elseif ( !groups_leave_group( $bp->groups->current_group->id ) )
+		} elseif ( ! groups_leave_group( $bp->groups->current_group->id ) ) {
 			bp_core_add_message( __( 'There was an error leaving the group.', 'buddypress' ), 'error' );
-		else
+		} else {
 			bp_core_add_message( __( 'You successfully left the group.', 'buddypress' ) );
+		}
+			
+		$redirect = bp_get_group_permalink( groups_get_current_group() );
+		
+		if( 'hidden' == $bp->groups->current_group->status ) {
+			$redirect = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() );
+		}
 
-		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) );
+		bp_core_redirect( $redirect );
 	}
 
 	bp_core_load_template( apply_filters( 'groups_template_group_home', 'groups/single/home' ) );
 }
 add_action( 'bp_actions', 'groups_action_leave_group' );
 
-
+/**
+ * Sort the group creation steps.
+ */
 function groups_action_sort_creation_steps() {
 	global $bp;
 
@@ -292,7 +317,7 @@ function groups_action_sort_creation_steps() {
 }
 
 /**
- * Catches requests for a random group page (example.com/groups/?random-group) and redirects
+ * Catch requests for a random group page (example.com/groups/?random-group) and redirect.
  */
 function groups_action_redirect_to_random_group() {
 
@@ -305,9 +330,9 @@ function groups_action_redirect_to_random_group() {
 add_action( 'bp_actions', 'groups_action_redirect_to_random_group' );
 
 /**
- * Load the activity feed for the specific group.
+ * Load the activity feed for the current group.
  *
- * @since BuddyPress (v1.2)
+ * @since BuddyPress (1.2.0)
  */
 function groups_action_group_feed() {
 

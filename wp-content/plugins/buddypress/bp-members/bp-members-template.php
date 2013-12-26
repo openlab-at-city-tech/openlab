@@ -344,13 +344,13 @@ function bp_members_pagination_count() {
 		$total     = bp_core_number_format( $members_template->total_member_count );
 
 		if ( 'active' == $members_template->type )
-			$pag = sprintf( __( 'Viewing member %1$s to %2$s (of %3$s active members)', 'buddypress' ), $from_num, $to_num, $total );
+			$pag = sprintf( _n( 'Viewing member %1$s to %2$s (of %3$s active member)', 'Viewing member %1$s to %2$s (of %3$s active members)', $total, 'buddypress' ), $from_num, $to_num, $total );
 		else if ( 'popular' == $members_template->type )
-			$pag = sprintf( __( 'Viewing member %1$s to %2$s (of %3$s members with friends)', 'buddypress' ), $from_num, $to_num, $total );
+			$pag = sprintf( _n( 'Viewing member %1$s to %2$s (of %3$s member with friends)', 'Viewing member %1$s to %2$s (of %3$s members with friends)', $total, 'buddypress' ), $from_num, $to_num, $total );
 		else if ( 'online' == $members_template->type )
-			$pag = sprintf( __( 'Viewing member %1$s to %2$s (of %3$s members online)', 'buddypress' ), $from_num, $to_num, $total );
+			$pag = sprintf( _n( 'Viewing member %1$s to %2$s (of %3$s member online)', 'Viewing member %1$s to %2$s (of %3$s members online)', $total, 'buddypress' ), $from_num, $to_num, $total );
 		else
-			$pag = sprintf( __( 'Viewing member %1$s to %2$s (of %3$s members)', 'buddypress' ), $from_num, $to_num, $total );
+			$pag = sprintf( _n( 'Viewing member %1$s to %2$s (of %3$s member)', 'Viewing member %1$s to %2$s (of %3$s members)', $total, 'buddypress' ), $from_num, $to_num, $total );
 
 		return apply_filters( 'bp_members_pagination_count', $pag );
 	}
@@ -703,14 +703,14 @@ function bp_member_hidden_fields() {
 function bp_directory_members_search_form() {
 
 	$default_search_value = bp_get_search_default_text( 'members' );
-	$search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value; ?>
+	$search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value;
 
-	<form action="" method="get" id="search-members-form">
-		<label><input type="text" name="s" id="members_search" placeholder="<?php echo esc_attr( $search_value ) ?>" /></label>
-		<input type="submit" id="members_search_submit" name="members_search_submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
-	</form>
+	$search_form_html = '<form action="" method="get" id="search-members-form">
+		<label><input type="text" name="s" id="members_search" placeholder="'. esc_attr( $search_value ) .'" /></label>
+		<input type="submit" id="members_search_submit" name="members_search_submit" value="' . __( 'Search', 'buddypress' ) . '" />
+	</form>';
 
-<?php
+	echo apply_filters( 'bp_directory_members_search_form', $search_form_html );
 }
 
 function bp_total_site_member_count() {
@@ -868,7 +868,7 @@ function bp_last_activity( $user_id = 0 ) {
 		if ( empty( $user_id ) )
 			$user_id = bp_displayed_user_id();
 
-		$last_activity = bp_core_get_last_activity( bp_get_user_meta( $user_id, 'last_activity', true ), __('active %s', 'buddypress') );
+		$last_activity = bp_core_get_last_activity( bp_get_user_last_activity( $user_id ), __('active %s', 'buddypress') );
 
 		return apply_filters( 'bp_get_last_activity', $last_activity );
 	}

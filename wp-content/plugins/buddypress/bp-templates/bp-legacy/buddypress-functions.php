@@ -121,7 +121,9 @@ class BP_Legacy extends BP_Theme_Compat {
 
 		/** Notices ***********************************************************/
 
-		if ( bp_is_active( 'messages' ) ) {
+		// Only hook the 'sitewide_notices' overlay if the Sitewide
+		// Notices widget is not in use (to avoid duplicate content).
+		if ( bp_is_active( 'messages' ) && ! is_active_widget( false, false, 'bp_messages_sitewide_notices_widget', true ) ) {
 			add_action( 'wp_footer', array( $this, 'sitewide_notices' ), 9999 );
 		}
 
@@ -224,20 +226,22 @@ class BP_Legacy extends BP_Theme_Compat {
 			wp_enqueue_script( $asset['handle'], $asset['location'], array( 'jquery' ), $this->version );
 		}
 
-		// Add words that we need to use in JS to the end of the page so they can be translated and still used.
+		// Add words that we need to use in JS to the end of the page
+		// so they can be translated and still used.
 		$params = array(
-			'my_favs'           => __( 'My Favorites', 'buddypress' ),
-			'accepted'          => __( 'Accepted', 'buddypress' ),
-			'rejected'          => __( 'Rejected', 'buddypress' ),
-			'show_all_comments' => __( 'Show all comments for this thread', 'buddypress' ),
-			'show_x_comments'   => __( 'Show all %d comments', 'buddypress' ),
-			'show_all'          => __( 'Show all', 'buddypress' ),
-			'comments'          => __( 'comments', 'buddypress' ),
-			'close'             => __( 'Close', 'buddypress' ),
-			'view'              => __( 'View', 'buddypress' ),
-			'mark_as_fav'	    => __( 'Favorite', 'buddypress' ),
-			'remove_fav'	    => __( 'Remove Favorite', 'buddypress' ),
-			'unsaved_changes'   => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
+			'accepted'            => __( 'Accepted', 'buddypress' ),
+			'close'               => __( 'Close', 'buddypress' ),
+			'comments'            => __( 'comments', 'buddypress' ),
+			'leave_group_confirm' => __( 'Are you sure you want to leave this group?', 'buddypress' ),
+			'mark_as_fav'	      => __( 'Favorite', 'buddypress' ),
+			'my_favs'             => __( 'My Favorites', 'buddypress' ),
+			'rejected'            => __( 'Rejected', 'buddypress' ),
+			'remove_fav'	      => __( 'Remove Favorite', 'buddypress' ),
+			'show_all'            => __( 'Show all', 'buddypress' ),
+			'show_all_comments'   => __( 'Show all comments for this thread', 'buddypress' ),
+			'show_x_comments'     => __( 'Show all %d comments', 'buddypress' ),
+			'unsaved_changes'     => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
+			'view'                => __( 'View', 'buddypress' ),
 		);
 		wp_localize_script( $asset['handle'], 'BP_DTheme', $params );
 
@@ -772,12 +776,11 @@ function bp_legacy_theme_delete_activity_comment() {
 /**
  * AJAX spam an activity item or comment
  *
- * @global BuddyPress $bp The one true BuddyPress instance
  * @return mixed String on error, void on success
  * @since BuddyPress (1.6)
  */
 function bp_legacy_theme_spam_activity() {
-	global $bp;
+	$bp = buddypress();
 
 	// Bail if not a POST action
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
@@ -905,11 +908,27 @@ function bp_legacy_theme_ajax_invite_user() {
 	if ( ! friends_check_friendship( bp_loggedin_user_id(), $_POST['friend_id'] ) )
 		return;
 
-	if ( 'invite' == $_POST['friend_action'] ) {
-		if ( ! groups_invite_user( array( 'user_id' => $_POST['friend_id'], 'group_id' => $_POST['group_id'] ) ) )
-			return;
+	$group_id = (int) $_POST['group_id'];
+	$friend_id = (int) $_POST['friend_id'];
 
-		$user = new BP_Core_User( $_POST['friend_id'] );
+	if ( 'invite' == $_POST['friend_action'] ) {
+		$group = groups_get_group( $group_id );
+
+		// Users who have previously requested membership do not need
+		// another invitation created for them
+		if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
+			$user_status = 'is_pending';
+
+		// Create the user invitation
+		} else if ( groups_invite_user( array( 'user_id' => $friend_id, 'group_id' => $group_id ) ) ) {
+			$user_status = 'is_invited';
+
+		// Miscellaneous failure
+		} else {
+			return;
+		}
+
+		$user = new BP_Core_User( $friend_id );
 
 		echo '<li id="uid-' . $user->id . '">';
 		echo $user->avatar_thumb;
@@ -918,12 +937,25 @@ function bp_legacy_theme_ajax_invite_user() {
 		echo '<div class="action">
 				<a class="button remove" href="' . wp_nonce_url( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
 			  </div>';
+
+		if ( 'is_pending' == $user_status ) {
+			echo '<p class="description">' . sprintf( __( '%s has previously requested to join this group. Sending an invitation will automatically add the member to the group.', 'buddypress' ), $user->user_link ) . '</p>';
+		}
+
 		echo '</li>';
 		exit;
 
 	} elseif ( 'uninvite' == $_POST['friend_action'] ) {
-		if ( ! groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] ) )
+		// Users who have previously requested membership should not
+		// have their requests deleted on the "uninvite" action
+		if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
 			return;
+		}
+
+		// Remove the unsent invitation
+		if ( ! groups_uninvite_user( $friend_id, $group_id ) ) {
+			return;
+		}
 
 		exit;
 
@@ -1054,12 +1086,27 @@ function bp_legacy_theme_ajax_joinleave_group() {
 			}
 
 		} elseif ( 'private' == $group->status ) {
-			check_ajax_referer( 'groups_request_membership' );
 
-			if ( ! groups_send_membership_request( bp_loggedin_user_id(), $group->id ) ) {
-				_e( 'Error requesting membership', 'buddypress' );
+			// If the user has already been invited, then this is
+			// an Accept Invitation button
+			if ( groups_check_user_has_invite( bp_loggedin_user_id(), $group->id ) ) {
+				check_ajax_referer( 'groups_accept_invite' );
+
+				if ( ! groups_accept_invite( bp_loggedin_user_id(), $group->id ) ) {
+					_e( 'Error requesting membership', 'buddypress' );
+				} else {
+					echo '<a id="group-' . esc_attr( $group->id ) . '" class="leave-group" rel="leave" title="' . __( 'Leave Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'leave-group', 'groups_leave_group' ) . '">' . __( 'Leave Group', 'buddypress' ) . '</a>';
+				}
+
+			// Otherwise, it's a Request Membership button
 			} else {
-				echo '<a id="group-' . esc_attr( $group->id ) . '" class="membership-requested" rel="membership-requested" title="' . __( 'Membership Requested', 'buddypress' ) . '" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Membership Requested', 'buddypress' ) . '</a>';
+				check_ajax_referer( 'groups_request_membership' );
+
+				if ( ! groups_send_membership_request( bp_loggedin_user_id(), $group->id ) ) {
+					_e( 'Error requesting membership', 'buddypress' );
+				} else {
+					echo '<a id="group-' . esc_attr( $group->id ) . '" class="membership-requested" rel="membership-requested" title="' . __( 'Membership Requested', 'buddypress' ) . '" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Membership Requested', 'buddypress' ) . '</a>';
+				}
 			}
 		}
 
@@ -1239,7 +1286,6 @@ function bp_legacy_theme_ajax_messages_delete() {
 /**
  * AJAX handler for autocomplete. Displays friends only, unless BP_MESSAGES_AUTOCOMPLETE_ALL is defined.
  *
- * @global BuddyPress $bp The one true BuddyPress instance
  * @return string HTML
  * @since BuddyPress (1.2)
  */
@@ -1289,7 +1335,9 @@ function bp_legacy_theme_ajax_messages_autocomplete_results() {
 			}
 
 			if ( bp_is_username_compatibility_mode() ) {
-				$username = $ud->user_login;
+				// Sanitize for spaces. Use urlencode() rather
+				// than rawurlencode() because %20 breaks JS
+				$username = urlencode( $ud->user_login );
 			} else {
 				$username = $ud->user_nicename;
 			}

@@ -354,7 +354,7 @@ jq(document).ready( function() {
 	});
 
 	// Activity "Read More" links
-	jq('.activity-read-more a').on('click', function(event) {
+	jq('div.activity').on('click', '.activity-read-more a', function(event) {
 		var target = jq(event.target);
 		var link_id = target.parent().attr('id').split('-');
 		var a_id = link_id[3];
@@ -749,6 +749,7 @@ jq(document).ready( function() {
 			var css_id = el.attr('id').split( '-' );
 			var object = css_id[0];
 			var search_terms = false;
+			var pagination_id = jq(target).closest('.pagination-links').attr('id');
 
 			if ( jq('div.dir-search input').length )
 				search_terms = jq('.dir-search input').val();
@@ -759,8 +760,14 @@ jq(document).ready( function() {
 				var page_number = Number( jq('.pagination span.current').html() ) - 1;
 			else
 				var page_number = Number( jq(target).html() );
+			
+			if ( pagination_id.indexOf( 'pag-bottom' ) !== -1 ) {
+				var caller = 'pag-bottom';
+			} else {
+				var caller = null;
+			}
 
-			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope'), 'div.' + object, search_terms, page_number, jq.cookie('bp-' + object + '-extras') );
+			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope'), 'div.' + object, search_terms, page_number, jq.cookie('bp-' + object + '-extras'), caller );
 
 			return false;
 		}
@@ -1009,6 +1016,13 @@ jq(document).ready( function() {
 
 	/** Group Join / Leave Buttons **************************************/
 
+	// Confirmation when clicking Leave Group in group headers
+	jq('#buddypress').on('click', '.group-button .leave-group', function() {
+		if ( false == confirm( BP_DTheme.leave_group_confirm ) ) {
+			return false;
+		}
+	});
+
 	jq('#groups-dir-list').on('click', '.group-button a', function() {
 		var gid = jq(this).parent().attr('id');
 		gid = gid.split('-');
@@ -1021,6 +1035,12 @@ jq(document).ready( function() {
 
 		var thelink = jq(this);
 
+		// Leave Group confirmation within directories - must intercept
+		// AJAX request
+		if ( thelink.hasClass( 'leave-group' ) && false == confirm( BP_DTheme.leave_group_confirm ) ) {
+			return false;
+		}
+
 		jq.post( ajaxurl, {
 			action: 'joinleave_group',
 			'cookie': bp_get_cookies(),
@@ -1031,14 +1051,41 @@ jq(document).ready( function() {
 		{
 			var parentdiv = thelink.parent();
 
-			if ( !jq('body.directory').length )
+			// user groups page
+			if ( ! jq('body.directory').length ) {
 				location.href = location.href;
-			else {
+
+			// groups directory
+			} else {
 				jq(parentdiv).fadeOut(200,
 					function() {
 						parentdiv.fadeIn(200).html(response);
+
+						var mygroups = jq('#groups-personal span');
+						var add      = 1;
+
+						if( thelink.hasClass( 'leave-group' ) ) {
+							// hidden groups slide up
+							if ( parentdiv.hasClass( 'hidden' ) ) {
+								parentdiv.closest('li').slideUp( 200 );
+							}
+
+							add = 0;
+						} else if ( thelink.hasClass( 'request-membership' ) ) {
+							add = false;
+						}
+
+						// change the "My Groups" value
+						if ( mygroups.length && add !== false ) {
+							if ( add ) {
+								mygroups.text( ( mygroups.text() >> 0 ) + 1 );
+							} else {
+								mygroups.text( ( mygroups.text() >> 0 ) - 1 );
+							}
+						}
+
 					}
-					);
+				);
 			}
 		});
 		return false;
@@ -1164,36 +1211,38 @@ jq(document).ready( function() {
 	});
 
 	/* Selecting unread and read messages in inbox */
-	jq("#message-type-select").change(
-		function() {
-			var selection = jq("#message-type-select").val();
-			var checkboxes = jq("td input[type='checkbox']");
-			checkboxes.each( function(i) {
-				checkboxes[i].checked = "";
-			});
+	jq( 'body.messages #item-body div.messages' ).on( 'change', '#message-type-select', function() {
+		var selection = this.value;
+		var checkboxes = jq( "td input[type='checkbox']" );
 
-			switch(selection) {
-				case 'unread':
-					var checkboxes = jq("tr.unread td input[type='checkbox']");
-					break;
-				case 'read':
-					var checkboxes = jq("tr.read td input[type='checkbox']");
-					break;
-			}
-			if ( selection != '' ) {
-				checkboxes.each( function(i) {
-					checkboxes[i].checked = "checked";
-				});
-			} else {
-				checkboxes.each( function(i) {
-					checkboxes[i].checked = "";
-				});
-			}
+		checkboxes.each( function(i) {
+			checkboxes[i].checked = "";
+		});
+
+		var checked_value = "checked";
+		switch ( selection ) {
+			case 'unread' :
+				checkboxes = jq("tr.unread td input[type='checkbox']");
+				break;
+			case 'read' :
+				checkboxes = jq("tr.read td input[type='checkbox']");
+				break;
+			case '' :
+				checked_value = "";
+				break;
 		}
-	);
 
+		checkboxes.each( function(i) {
+			checkboxes[i].checked = checked_value;
+		});
+	});
+	
 	/* Bulk delete messages */
-	jq("#delete_inbox_messages, #delete_sentbox_messages").on( 'click', function() {
+	jq( 'body.messages #item-body div.messages' ).on( 'click', '.messages-options-nav a', function() {
+		if ( -1 == jq.inArray( this.id ), Array( 'delete_sentbox_messages', 'delete_inbox_messages' ) ) {
+			return;
+		}
+		
 		checkboxes_tosend = '';
 		checkboxes = jq("#message-threads tr td input[type='checkbox']");
 
@@ -1209,7 +1258,7 @@ jq(document).ready( function() {
 			jq(this).removeClass('loading');
 			return false;
 		}
-
+		
 		jq.post( ajaxurl, {
 			action: 'messages_delete',
 			'thread_ids': checkboxes_tosend
@@ -1220,14 +1269,19 @@ jq(document).ready( function() {
 				jq('#message-threads').before( '<div id="message" class="updated"><p>' + response + '</p></div>' );
 
 				jq(checkboxes).each( function(i) {
-					if( jq(this).is(':checked') )
+					if( jq(this).is(':checked') ) {
+						// We need to uncheck because message is only hidden
+						// Otherwise, AJAX will be fired again with same data 
+						jq(this).attr( 'checked', false );
 						jq(this).parent().parent().fadeOut(150);
+					}
 				});
 			}
 
 			jq('#message').hide().slideDown(150);
 			jq("#delete_inbox_messages, #delete_sentbox_messages").removeClass('loading');
 		});
+
 		return false;
 	});
 
@@ -1329,7 +1383,7 @@ function bp_init_objects(objects) {
 }
 
 /* Filter the current content list (groups/members/blogs/topics) */
-function bp_filter_request( object, filter, scope, target, search_terms, page, extras ) {
+function bp_filter_request( object, filter, scope, target, search_terms, page, extras, caller ) {
 	if ( 'activity' == object )
 		return false;
 
@@ -1376,10 +1430,23 @@ function bp_filter_request( object, filter, scope, target, search_terms, page, e
 	},
 	function(response)
 	{
-		jq(target).fadeOut( 100, function() {
-			jq(this).html(response);
-			jq(this).fadeIn(100);
-		});
+		/* animate to top if called from bottom pagination */
+		if ( caller == 'pag-bottom' && jq('#subnav').length ) {
+			var top = jq('#subnav').parent();
+			jq('html,body').animate({scrollTop: top.offset().top}, 'slow', function() {
+				jq(target).fadeOut( 100, function() {
+					jq(this).html(response);
+					jq(this).fadeIn(100);
+			 	});
+			});	
+
+		} else {
+			jq(target).fadeOut( 100, function() {
+				jq(this).html(response);
+				jq(this).fadeIn(100);
+		 	});
+		}
+
 		jq('.item-list-tabs li.selected').removeClass('loading');
 	});
 }
@@ -1520,7 +1587,7 @@ function bp_get_cookies() {
 	for (var i = 0; i < allCookies.length; i++) {
 		var cookie    = allCookies[i];
 		var delimiter = cookie.indexOf("=");
-		var name      = unescape( cookie.slice(0, delimiter) ).trim();
+		var name      = jq.trim( unescape( cookie.slice(0, delimiter) ) );
 		var value     = unescape( cookie.slice(delimiter + 1) );
 
 		// if BP cookie, store it

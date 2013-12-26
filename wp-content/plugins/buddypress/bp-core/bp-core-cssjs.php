@@ -1,8 +1,17 @@
 <?php
+/**
+ * Core component CSS & JS.
+ *
+ * @package BuddyPress
+ * @subpackage Core
+ */
 
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Load the JS for "Are you sure?" .confirm links.
+ */
 function bp_core_confirmation_js() {
 
 	if ( is_multisite() && ! bp_is_root_blog() )
@@ -29,11 +38,7 @@ add_action( 'wp_head',    'bp_core_confirmation_js', 100 );
 add_action( 'admin_head', 'bp_core_confirmation_js', 100 );
 
 /**
- * bp_core_add_jquery_cropper()
- *
- * Makes sure the jQuery jCrop library is loaded.
- *
- * @package BuddyPress Core
+ * Enqueues jCrop library and hooks BP's custom cropper JS.
  */
 function bp_core_add_jquery_cropper() {
 	wp_enqueue_style( 'jcrop' );
@@ -43,11 +48,7 @@ function bp_core_add_jquery_cropper() {
 }
 
 /**
- * bp_core_add_cropper_inline_js()
- *
- * Adds the inline JS needed for the cropper to work on a per-page basis.
- *
- * @package BuddyPress Core
+ * Output the inline JS needed for the cropper to work on a per-page basis.
  */
 function bp_core_add_cropper_inline_js() {
 
@@ -68,8 +69,8 @@ function bp_core_add_cropper_inline_js() {
 	}
 
 	// Default cropper coordinates
-	$crop_left   = $image[0] / 4;
-	$crop_top    = $image[1] / 4;
+	$crop_left   = round( $image[0] / 4 );
+	$crop_top    = round( $image[1] / 4 );
 	$crop_right  = $image[0] - $crop_left;
 	$crop_bottom = $image[1] - $crop_top; ?>
 
@@ -113,9 +114,7 @@ function bp_core_add_cropper_inline_js() {
 }
 
 /**
- * bp_core_add_cropper_inline_css()
- *
- * Adds the inline CSS needed for the cropper to work on a per-page basis.
+ * Output the inline CSS for the BP image cropper.
  *
  * @package BuddyPress Core
  */
@@ -137,9 +136,9 @@ function bp_core_add_cropper_inline_css() {
 }
 
 /**
- * Adds AJAX target URL so themes can access the WordPress AJAX functionality.
+ * Define the 'ajaxurl' JS variable, used by themes as an AJAX endpoint.
  *
- * @since BuddyPress (1.1)
+ * @since BuddyPress (1.1.0)
  */
 function bp_core_add_ajax_url_js() {
 ?>
@@ -151,14 +150,14 @@ function bp_core_add_ajax_url_js() {
 add_action( 'wp_head', 'bp_core_add_ajax_url_js' );
 
 /**
- * Returns the proper value for BP's ajaxurl
+ * Get the proper value for BP's ajaxurl.
  *
  * Designed to be sensitive to FORCE_SSL_ADMIN and non-standard multisite
  * configurations.
  *
- * @since BuddyPress (1.7)
+ * @since BuddyPress (1.7.0)
  *
- * @return string
+ * @return string AJAX endpoint URL.
  */
 function bp_core_ajax_url() {
 	return apply_filters( 'bp_core_ajax_url', admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' ) );

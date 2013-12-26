@@ -437,12 +437,8 @@ function bp_the_profile_field_options( $args = '' ) {
 	function bp_get_the_profile_field_options( $args = '' ) {
 		global $field;
 
-		// Generally a required dropdown field will not get a blank value at
-		// the top. Set 'null_on_required' to true if you want this blank value
-		// even on required fields.
 		$defaults = array(
-			'type' 		       => false,
-			'null_on_required' => false
+			'type' => false,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -472,9 +468,7 @@ function bp_the_profile_field_options( $args = '' ) {
 		switch ( $field->type ) {
 			case 'selectbox':
 
-				if ( !$field->is_required || $null_on_required ) {
-					$html .= '<option value="">' . /* translators: no option picked in select box */ __( '----', 'buddypress' ) . '</option>';
-				}
+				$html .= '<option value="">' . /* translators: no option picked in select box */ __( '----', 'buddypress' ) . '</option>';
 
 				$original_option_values = '';
 				$original_option_values = maybe_unserialize( BP_XProfile_ProfileData::get_value_byid( $field->id ) );
@@ -944,7 +938,11 @@ function bp_profile_visibility_radio_buttons() {
 		foreach( bp_xprofile_get_visibility_levels() as $level ) {
 			$checked = $level['id'] == bp_get_the_profile_field_visibility_level() ? ' checked="checked" ' : '';
 
-			$html .= '<li><label for="see-field_' . esc_attr( $level['id'] ) . '"><input type="radio" id="see-field_' . esc_attr( $level['id'] ) . '" name="field_' . bp_get_the_profile_field_id() . '_visibility" value="' . esc_attr( $level['id'] ) . '"' . $checked . ' /> ' . esc_html( $level['label'] ) . '</label></li>';
+			// Only sanitize once
+			$field_id = bp_get_the_profile_field_id();
+			$level_id = esc_attr( $level['id'] );
+
+			$html .= '<li><label for="see-field_' . $field_id . '_' . $level_id . '"><input type="radio" id="see-field_' . $field_id . '_' . $level_id . '" name="field_' . $field_id . '_visibility" value="' . $level_id . '"' . $checked . ' /> ' . esc_html( $level['label'] ) . '</label></li>';
 		}
 
 		$html .= '</ul>';

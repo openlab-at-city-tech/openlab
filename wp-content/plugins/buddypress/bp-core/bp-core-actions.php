@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Filters & Actions
+ * BuddyPress Filters & Actions.
  *
  * @package BuddyPress
  * @subpackage Hooks
@@ -16,7 +16,7 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Attach BuddyPress to WordPress
+ * Attach BuddyPress to WordPress.
  *
  * BuddyPress uses its own internal actions to help aid in third-party plugin
  * development, and to limit the amount of potential future code changes when
@@ -33,6 +33,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
   */
 add_action( 'plugins_loaded',          'bp_loaded',                 10    );
 add_action( 'init',                    'bp_init',                   10    );
+add_action( 'parse_query',             'bp_parse_query',            2     ); // Early for overrides
 add_action( 'wp',                      'bp_ready',                  10    );
 add_action( 'set_current_user',        'bp_setup_current_user',     10    );
 add_action( 'setup_theme',             'bp_setup_theme',            10    );
@@ -69,6 +70,8 @@ add_action( 'bp_init', 'bp_setup_nav',               6  );
 add_action( 'bp_init', 'bp_setup_title',             8  );
 add_action( 'bp_init', 'bp_core_load_admin_bar_css', 12 );
 add_action( 'bp_init', 'bp_add_rewrite_tags',        20 );
+add_action( 'bp_init', 'bp_add_rewrite_rules',       30 );
+add_action( 'bp_init', 'bp_add_permastructs',        40 );
 
 /**
  * bp_template_redirect - Attached to 'template_redirect' above
@@ -79,10 +82,13 @@ add_action( 'bp_init', 'bp_add_rewrite_tags',        20 );
  * Note that we currently use template_redirect versus template include because
  * BuddyPress is a bully and overrides the existing themes output in many
  * places. This won't always be this way, we promise.
- *                                                v---Load order
+ *                                                           v---Load order
  */
-add_action( 'bp_template_redirect', 'bp_actions', 4 );
-add_action( 'bp_template_redirect', 'bp_screens', 6 );
+add_action( 'bp_template_redirect', 'bp_redirect_canonical', 2  );
+add_action( 'bp_template_redirect', 'bp_actions',            4  );
+add_action( 'bp_template_redirect', 'bp_screens',            6  );
+add_action( 'bp_template_redirect', 'bp_post_request',       10 );
+add_action( 'bp_template_redirect', 'bp_get_request',        10 );
 
 /**
  * Add the BuddyPress functions file

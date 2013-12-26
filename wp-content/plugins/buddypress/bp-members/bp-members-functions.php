@@ -215,14 +215,15 @@ function bp_core_get_userid_from_nicename( $user_nicename ) {
  *
  * @package BuddyPress Core
  * @param int $uid User ID to check.
- * @global $userdata WordPress user data for the current logged in user.
- * @uses get_userdata() WordPress function to fetch the userdata for a user ID
+ * @uses bp_core_get_core_userdata() Fetch the userdata for a user ID
  * @return string|bool The username of the matched user, or false.
  */
-function bp_core_get_username( $user_id, $user_nicename = false, $user_login = false ) {
-	global $bp;
+function bp_core_get_username( $user_id = 0, $user_nicename = false, $user_login = false ) {
+	$bp = buddypress();
 
-	if ( !$username = wp_cache_get( 'bp_user_username_' . $user_id, 'bp' ) ) {
+	// Check cache for user nicename
+	$username = wp_cache_get( 'bp_user_username_' . $user_id, 'bp' );
+	if ( false === $username ) {
 
 		// Cache not found so prepare to update it
 		$update_cache = true;
@@ -268,13 +269,14 @@ function bp_core_get_username( $user_id, $user_nicename = false, $user_login = f
 		$update_cache = false;
 	}
 
-	// Check $username for empty spaces and default to nicename if found
-	if ( strstr( $username, ' ' ) )
-		$username = bp_members_get_user_nicename( $user_id );
-
 	// Add this to cache
-	if ( ( true == $update_cache ) && !empty( $username ) )
+	if ( ( true === $update_cache ) && !empty( $username ) ) {
 		wp_cache_set( 'bp_user_username_' . $user_id, $username, 'bp' );
+
+	// @todo bust this cache if no $username found?
+	//} else {
+	//	wp_cache_delete( 'bp_user_username_' . $user_id );
+	}
 
 	return apply_filters( 'bp_core_get_username', $username );
 }
@@ -526,24 +528,21 @@ function bp_core_get_active_member_count() {
 }
 
 /**
- * Processes a spammed or unspammed user
+ * Process a spammed or unspammed user.
  *
- * This function is called in three ways:
- *  - in bp_settings_action_capabilities() (from the front-end)
- *  - by bp_core_mark_user_spam_admin()    (from wp-admin)
- *  - bp_core_mark_user_ham_admin()        (from wp-admin)
+ * This function is called from three places:
  *
- * @since BuddyPress (1.6)
+ * - in bp_settings_action_capabilities() (from the front-end)
+ * - by bp_core_mark_user_spam_admin()    (from wp-admin)
+ * - bp_core_mark_user_ham_admin()        (from wp-admin)
  *
- * @param int $user_id The user being spammed/hammed
- * @param string $status 'spam' if being marked as spam, 'ham' otherwise
+ * @since BuddyPress (1.6.0)
+ *
+ * @param int $user_id The ID of the user being spammed/hammed.
+ * @param string $status 'spam' if being marked as spam, 'ham' otherwise.
  */
 function bp_core_process_spammer_status( $user_id, $status ) {
 	global $wpdb;
-
-	// Only super admins can currently spam users
-	if ( !is_super_admin() || bp_is_my_profile() )
-		return;
 
 	// Bail if no user ID
 	if ( empty( $user_id ) )
@@ -607,6 +606,10 @@ function bp_core_process_spammer_status( $user_id, $status ) {
 
 	// Allow plugins to do neat things
 	do_action( 'bp_core_process_spammer_status', $user_id, $is_spam );
+
+	// Put things back how we found them
+	add_action( 'make_spam_user', 'bp_core_mark_user_spam_admin' );
+	add_action( 'make_ham_user',  'bp_core_mark_user_ham_admin'  );
 
 	return true;
 }
@@ -808,6 +811,51 @@ function bp_is_user_inactive( $user_id = 0 ) {
 }
 
 /**
+ * Update a user's last activity
+ *
+ * @since BuddyPress (1.9)
+ * @param int $user_id ID of the user being updated
+ * @param string $time Time of last activity, in 'Y-m-d H:i:s' format
+ * @return bool True on success
+ */
+function bp_update_user_last_activity( $user_id = 0, $time = '' ) {
+	// Fall back on current user
+	if ( empty( $user_id ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	// Bail if the user id is 0, as there's nothing to update
+	if ( empty( $user_id ) ) {
+		return false;
+	}
+
+	// Fall back on current time
+	if ( empty( $time ) ) {
+		$time = bp_core_current_time();
+	}
+
+	return bp_update_user_meta( $user_id, 'last_activity', $time );
+}
+
+/**
+ * Get the last activity for a given user
+ *
+ * @param int $user_id The ID of the user
+ * @return string Time of last activity, in 'Y-m-d H:i:s' format, or an empty
+ *   string if none is found
+ */
+function bp_get_user_last_activity( $user_id = 0 ) {
+	// Fall back on current user
+	if ( empty( $user_id ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	$activity = bp_get_user_meta( $user_id, 'last_activity', true );
+
+	return apply_filters( 'bp_get_user_last_activity', $activity, $user_id );
+}
+
+/**
  * Fetch every post that is authored by the given user for the current blog.
  *
  * @package BuddyPress Core
@@ -879,6 +927,23 @@ function bp_core_delete_account( $user_id = 0 ) {
 }
 
 /**
+ * Delete a user's avatar when the user is deleted.
+ *
+ * @since BuddyPress (1.9.0)
+ *
+ * @param int $user_id ID of the user who is about to be deleted.
+ * @return bool True on success, false on failure.
+ */
+function bp_core_delete_avatar_on_user_delete( $user_id ) {
+	return bp_core_delete_existing_avatar( array(
+		'item_id' => $user_id,
+		'object'  => 'user',
+	) );
+}
+add_action( 'wpmu_delete_user', 'bp_core_delete_avatar_on_user_delete' );
+add_action( 'delete_user', 'bp_core_delete_avatar_on_user_delete' );
+
+/**
  * Localization safe ucfirst() support.
  *
  * @package BuddyPress Core
@@ -891,21 +956,6 @@ function bp_core_ucfirst( $str ) {
 		return ucfirst( $str );
 	}
 }
-
-/**
- * Strips spaces from usernames that are created using add_user() and wp_insert_user()
- *
- * @package BuddyPress Core
- */
-function bp_core_strip_username_spaces( $username ) {
-	// Don't alter the user_login of existing users, as it causes user_nicename problems.
-	// See http://trac.buddypress.org/ticket/2642
-	if ( username_exists( $username ) && ( !bp_is_username_compatibility_mode() ) )
-		return $username;
-
-	return str_replace( ' ', '-', $username );
-}
-add_action( 'pre_user_login', 'bp_core_strip_username_spaces' );
 
 /**
  * When a user logs in, check if they have been marked as a spammer. If yes then simply
@@ -981,12 +1031,15 @@ function bp_core_flush_illegal_names() {
 function bp_core_get_illegal_names( $value = '', $oldvalue = '' ) {
 
 	// Make sure $value is array
-	if ( empty( $value ) )
+	if ( empty( $value ) ) {
 		$db_illegal_names = array();
-	if ( is_array( $value ) )
+	}
+
+	if ( is_array( $value ) ) {
 		$db_illegal_names = $value;
-	elseif ( is_string( $value ) )
+	} elseif ( is_string( $value ) ) {
 		$db_illegal_names = explode( ' ', $value );
+	}
 
 	// Add the core components' slugs to the banned list even if their components aren't active.
 	$bp_component_slugs = array(
@@ -999,6 +1052,7 @@ function bp_core_get_illegal_names( $value = '', $oldvalue = '' ) {
 		'friends',
 		'search',
 		'settings',
+		'notifications',
 		'register',
 		'activate'
 	);
@@ -1014,12 +1068,15 @@ function bp_core_get_illegal_names( $value = '', $oldvalue = '' ) {
 		'BP_FRIENDS_SLUG',
 		'BP_SEARCH_SLUG',
 		'BP_SETTINGS_SLUG',
+		'BP_NOTIFICATIONS_SLUG',
 		'BP_REGISTER_SLUG',
 		'BP_ACTIVATION_SLUG',
 	);
-	foreach( $slug_constants as $constant )
-		if ( defined( $constant ) )
+	foreach( $slug_constants as $constant ) {
+		if ( defined( $constant ) ) {
 			$bp_component_slugs[] = constant( $constant );
+		}
+	}
 
 	// Add our slugs to the array and allow them to be filtered
 	$filtered_illegal_names = apply_filters( 'bp_core_illegal_usernames', array_merge( array( 'www', 'web', 'root', 'admin', 'main', 'invite', 'administrator' ), $bp_component_slugs ) );
@@ -1119,52 +1176,76 @@ function bp_core_add_validation_error_messages( WP_Error $errors, $validation_re
  */
 function bp_core_validate_user_signup( $user_name, $user_email ) {
 
-	$errors = new WP_Error();
-
-	// Apply any user_login filters added by BP or other plugins before validating
-	$user_name = apply_filters( 'pre_user_login', $user_name );
-
-	if ( empty( $user_name ) )
-		$errors->add( 'user_name', __( 'Please enter a username', 'buddypress' ) );
-
 	// Make sure illegal names include BuddyPress slugs and values
 	bp_core_flush_illegal_names();
 
-	$illegal_names = get_site_option( 'illegal_names' );
+	// WordPress Multisite has its own validation. Use it, so that we
+	// properly mirror restrictions on username, etc.
+	if ( function_exists( 'wpmu_validate_user_signup' ) ) {
+		$result = wpmu_validate_user_signup( $user_name, $user_email );
 
-	if ( in_array( $user_name, (array) $illegal_names ) )
-		$errors->add( 'user_name', __( 'That username is not allowed', 'buddypress' ) );
+	// When not running Multisite, we perform our own validation. What
+	// follows reproduces much of the logic of wpmu_validate_user_signup(),
+	// minus the multisite-specific restrictions on user_login
+	} else {
+		$errors = new WP_Error();
 
-	if ( ! validate_username( $user_name ) )
-		$errors->add( 'user_name', __( 'Usernames can contain only letters, numbers, ., -, *, and @', 'buddypress' ) );
+		// Apply any user_login filters added by BP or other plugins before validating
+		$user_name = apply_filters( 'pre_user_login', $user_name );
 
-	if( strlen( $user_name ) < 4 )
-		$errors->add( 'user_name',  __( 'Username must be at least 4 characters', 'buddypress' ) );
+		// User name can't be empty
+		if ( empty( $user_name ) ) {
+			$errors->add( 'user_name', __( 'Please enter a username', 'buddypress' ) );
+		}
 
-	if ( strpos( ' ' . $user_name, '_' ) != false )
-		$errors->add( 'user_name', __( 'Sorry, usernames may not contain the character "_"!', 'buddypress' ) );
+		// user name can't be on the blacklist
+		$illegal_names = get_site_option( 'illegal_names' );
+		if ( in_array( $user_name, (array) $illegal_names ) ) {
+			$errors->add( 'user_name', __( 'That username is not allowed', 'buddypress' ) );
+		}
 
-	// Is the user_name all numeric?
-	$match = array();
-	preg_match( '/[0-9]*/', $user_name, $match );
+		// User name must pass WP's validity check
+		if ( ! validate_username( $user_name ) ) {
+			$errors->add( 'user_name', __( 'Usernames can contain only letters, numbers, ., -, and @', 'buddypress' ) );
+		}
 
-	if ( $match[0] == $user_name )
-		$errors->add( 'user_name', __( 'Sorry, usernames must have letters too!', 'buddypress' ) );
+		// Minimum of 4 characters
+		if ( strlen( $user_name ) < 4 ) {
+			$errors->add( 'user_name',  __( 'Username must be at least 4 characters', 'buddypress' ) );
+		}
 
-	// Check if the username has been used already.
-	if ( username_exists( $user_name ) )
-		$errors->add( 'user_name', __( 'Sorry, that username already exists!', 'buddypress' ) );
+		// No underscores. @todo Why not?
+		if ( false !== strpos( ' ' . $user_name, '_' ) ) {
+			$errors->add( 'user_name', __( 'Sorry, usernames may not contain the character "_"!', 'buddypress' ) );
+		}
 
-	// Validate the email address and process the validation results into
-	// error messages
-	$validate_email = bp_core_validate_email_address( $user_email );
-	bp_core_add_validation_error_messages( $errors, $validate_email );
+		// No usernames that are all numeric. @todo Why?
+		$match = array();
+		preg_match( '/[0-9]*/', $user_name, $match );
+		if ( $match[0] == $user_name ) {
+			$errors->add( 'user_name', __( 'Sorry, usernames must have letters too!', 'buddypress' ) );
+		}
 
-	// Assemble the return array
-	$result = array( 'user_name' => $user_name, 'user_email' => $user_email, 'errors' => $errors );
+		// Check if the username has been used already.
+		if ( username_exists( $user_name ) ) {
+			$errors->add( 'user_name', __( 'Sorry, that username already exists!', 'buddypress' ) );
+		}
 
-	// Apply WPMU legacy filter
-	$result = apply_filters( 'wpmu_validate_user_signup', $result );
+		// Validate the email address and process the validation results into
+		// error messages
+		$validate_email = bp_core_validate_email_address( $user_email );
+		bp_core_add_validation_error_messages( $errors, $validate_email );
+
+		// Assemble the return array
+		$result = array(
+			'user_name'  => $user_name,
+			'user_email' => $user_email,
+			'errors'     => $errors,
+		);
+
+		// Apply WPMU legacy filter
+		$result = apply_filters( 'wpmu_validate_user_signup', $result );
+	}
 
  	return apply_filters( 'bp_core_validate_user_signup', $result );
 }
@@ -1470,7 +1551,14 @@ add_action( 'bp_init', 'bp_core_wpsignup_redirect' );
  */
 function bp_stop_live_spammer() {
 	// if we're on the login page, stop now to prevent redirect loop
-	if ( strpos( $GLOBALS['pagenow'], 'wp-login.php' ) !== false ) {
+	$is_login = false;
+	if ( isset( $_GLOBALS['pagenow'] ) && false !== strpos( $GLOBALS['pagenow'], 'wp-login.php' ) ) {
+		$is_login = true;
+	} else if ( isset( $_SERVER['SCRIPT_NAME'] ) && false !== strpos( $_SERVER['SCRIPT_NAME'], 'wp-login.php' ) ) {
+		$is_login = true;
+	}
+
+	if ( $is_login ) {
 		return;
 	}
 
@@ -1513,4 +1601,4 @@ function bp_live_spammer_login_error() {
 	// shake shake shake!
 	add_action( 'login_head', 'wp_shake_js', 12 );
 }
-add_action( 'login_form_bp-spam', 'bp_live_spammer_login_error' ); 
+add_action( 'login_form_bp-spam', 'bp_live_spammer_login_error' );
