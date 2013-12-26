@@ -88,10 +88,10 @@
 	margin: -10px 10px 0 0;
 	padding: 0;
 	width:109px;
-	
+
 }
 
-#wpadminbar .quicklinks #wp-admin-bar-my-openlab { 
+#wpadminbar .quicklinks #wp-admin-bar-my-openlab {
 	border-right: none;
 	padding-left: 0;
 	width:109px;
@@ -122,7 +122,7 @@
 	height: 16px;
 	display: block;
 	padding: 0 12px 0 0;
-	margin: 0;	
+	margin: 0;
 }
 
 #wpadminbar .ab-item {
@@ -137,7 +137,7 @@
 #wpadminbar .item-avatar, #wp-admin-bar-user-info img {
 	float:left;
 	margin: 0 5px 5px 0;
-	
+
 }
 
 #wpadminbar .item-avatar img {
@@ -404,7 +404,7 @@ margin: 0;
 
 #wpadminbar .menupop #wp-admin-bar-invites-default, #wpadminbar .menupop #wp-admin-bar-messages-default, #wpadminbar .menupop #wp-admin-bar-activity-default {
 	width: 100%;
-	
+
 }
 
 #wpadminbar .menupop #wp-admin-bar-invites-default {
@@ -448,15 +448,15 @@ font-family: Arial, Verdana, sans-serif;
 	margin:7px 3px 0 0;
 	background-color:#dcdcdc;
 	font-size:10px;
-	
-	/* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde)); 
+
+	/* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e7e7e7), to(#dedfde));
 	/* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(top, #e7e7e7, #dedfde);
-	/* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde); 
+	/* Firefox 3.6+ */ background: -moz-linear-gradient(top, #e7e7e7, #dedfde);
 	/* IE 10 */ background: -ms-linear-gradient(top, #e7e7e7, #1dedfde);
 	/* Opera 11.10+ */ background: -o-linear-gradient(top, #e7e7e7, #dedfde);
 }
 
-#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button:hover, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button:hover 
+#wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-friendship-request div.ab-item div.action a.button:hover, #wpadminbar div.ab-sub-wrapper li.nav-content-item.nav-invitation div.ab-item div.action a.button:hover
 {
 	text-decoration:none;
 }
@@ -503,7 +503,7 @@ font-family: Arial, Verdana, sans-serif;
 
 #wpadminbar #wp-admin-bar-edit-profile {
 	border-right: 1px solid;
-	
+
 }
 
 #wpadminbar #wp-admin-bar-logout {
@@ -550,7 +550,7 @@ font-family: Arial, Verdana, sans-serif;
 }
 
 #wpadminbar  #wp-admin-bar-messages-default #wp-admin-bar-messages-more a {
-	
+
 }
 
 #wpadminbar #wp-admin-bar-activity-default .nav-activity .ab-item {
@@ -611,7 +611,7 @@ li.wp-admin-bar-bp-login {position:relative;}
 
 #wpadminbar form#sidebar-login-form textarea, #wpadminbar form#sidebar-login-form input[type="text"],
 #wpadminbar form#sidebar-login-form select, #wpadminbar form#sidebar-login-form input[type="password"],
-#wpadminbar form#sidebar-login-form input[type="submit"] { 
+#wpadminbar form#sidebar-login-form input[type="submit"] {
 	color: #444;
 	text-shadow: none; line-height: 11px;
 }
@@ -628,7 +628,7 @@ form#sidebar-login-form a.lost-pw {padding-right:2px !important; float:right; fo
 	#wp-admin-bar li a.lost-pw:hover {text-decoration:underline !important; background:none !important;}
 
 form#sidebar-login-form #sidebar-wp-submit {
-	background:#fff; 
+	background:#fff;
 	text-transform: uppercase;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
