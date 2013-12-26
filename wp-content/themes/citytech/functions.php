@@ -498,7 +498,7 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 	<?php else : ?>
 
 		<?php /* Portfolios */ ?>
-		<h6>Site Visibility</h6>
+		<h6>Private</h6>
 		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
 
 		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
