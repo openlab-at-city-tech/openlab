@@ -68,6 +68,8 @@ class OpenLab_Admin_Bar {
 
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
+			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
+
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 		} else {
@@ -569,6 +571,13 @@ class OpenLab_Admin_Bar {
 			'title'  => 'See All Activity',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() )
 		) );
+	}
+
+	/**
+	 * Remove + > User
+	 */
+	public function remove_adduser( $wp_admin_bar ) {
+		$wp_admin_bar->remove_menu( 'new-user' );
 	}
 
 	/**
