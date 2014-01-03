@@ -123,6 +123,10 @@
 	margin: 0;
 }
 
+#wpadminbar .quicklinks a.ab-item {
+	padding-right: 8px;
+}
+
 #wpadminbar .ab-item {
 	clear:both;
 }
@@ -301,6 +305,10 @@ background-position: -158px 0;
 margin: 0;
 }
 
+#wpadminbar #wp-admin-bar-user-actions.ab-submenu {
+	padding: 5px;
+}
+
 /* notification counts */
 
 
@@ -381,7 +389,7 @@ margin: 0;
 }
 
 #wpadminbar #wp-admin-bar-my-account .ab-sub-wrapper {
-	width: 225px;
+	width: 255px;
 	left: -122px;
 	background-position: 75% top;
 }
@@ -476,7 +484,7 @@ font-family: Arial, Verdana, sans-serif;
 }
 
 #wpadminbar #wp-admin-bar-user-actions {
- 	width: 215px;
+ 	width: 245px;
 }
 
 
@@ -514,13 +522,27 @@ font-family: Arial, Verdana, sans-serif;
 	text-decoration: underline;
 }
 
+#wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-user-info {
+	 margin-bottom: 30px;
+}
+
 #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-user-info a {
 	text-decoration: none;
-
 }
 
 #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-user-info .display-name {
 	font-weight: bold;
+}
+
+#wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-user-info .display-name,
+#wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-user-info .username {
+	width: 110px;
+	float: left;
+}
+
+#wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-edit-profile,
+#wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-logout {
+	margin: 0;
 }
 
 #wpadminbar  #wp-admin-bar-messages-default .message-excerpt {
