@@ -99,7 +99,7 @@ function cuny_home_login() {
             </div>
 
         <?php do_action('bp_sidebar_login_form') ?>
-            <input type="hidden" name="testcookie" value="1" />
+
         </form>
         <?php echo '</div>'; ?>
     <?php
