@@ -257,7 +257,16 @@
 	top: -5px;
 }
 
-#wpadminbar #wp-admin-bar-invites:hover, #wpadminbar #wp-admin-bar-messages:hover, #wpadminbar #wp-admin-bar-activity:hover, #wpadminbar #wp-admin-bar-comments:hover, #wpadminbar #wp-admin-bar-new-content:hover {
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-invites.hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-messages.hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-activity.hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-comments.hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-new-content.hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-invites:hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-messages:hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-activity:hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-comments:hover,
+#wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-new-content:hover {
 	opacity: 1;
 	filter:alpha(opacity=100);
 }
