@@ -279,7 +279,7 @@
 }
 
 #wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-new-content {
-	background-position: -138px 0;
+	background-position: -137px 0;
 }
 
 #wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-updates {
@@ -594,6 +594,10 @@ font-family: Arial, Verdana, sans-serif;
 #wpadminbar .ab-top-menu>li:hover>.ab-item,#wpadminbar .ab-top-menu>li.hover>.ab-item,#wpadminbar .ab-top-menu>li>.ab-item:focus,#wpadminbar.nojq .quicklinks .ab-top-menu>li>.ab-item:focus {
 	color: #717171;
 	/*text-decoration: underline;*/
+}
+
+#wpadminbar #wp-admin-bar-edit > .ab-item:before {
+	top: -8px;
 }
 
 #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-edit-profile, #wpadminbar #wp-admin-bar-user-actions #wp-admin-bar-logout {
