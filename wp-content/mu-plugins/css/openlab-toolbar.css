@@ -112,6 +112,8 @@
 	border-right: none;
 	padding-left: 0;
 	width:109px;
+	margin-left: -2px;
+	margin-right: 2px;
 }
 
 #wpadminbar .quicklinks > ul > li > a, #wpadminbar .quicklinks > ul > li > .ab-empty-item {
@@ -258,6 +260,10 @@
   margin-right: 0;
 }
 
+#wpadminbar ul#wp-admin-bar-root-default #wp-admin-bar-openlab {
+	border-right: 2px solid #cfcfcf;
+}
+
 #wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-invites,
 #wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-messages,
 #wpadminbar ul#wp-admin-bar-root-default > li#wp-admin-bar-activity,
@@ -354,7 +360,7 @@ margin: 0;
 	margin-left: 3px;
 }
 
-#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count, #wpadminbar #wp-admin-bar-updates .ab-label {
+#wpadminbar .quicklinks #wp-admin-bar-invites .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-messages .toolbar-item-count, #wpadminbar .quicklinks #wp-admin-bar-activity .toolbar-item-count, #wpadminbar #wp-admin-bar-comments .pending-count, #wpadminbar > #wp-toolbar #wp-admin-bar-updates span.ab-label {
 	position:absolute;
 	top: -5px;
 	right: 0px;
