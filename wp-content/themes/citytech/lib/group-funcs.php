@@ -59,28 +59,28 @@ function openlab_group_privacy_settings( $group_type ) {
 			<strong>This is a public <?php echo $group_type_name_uc ?></strong>
 			<ul>
 				<li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
-				<li><?php _e( 'This ' . ucfirst($group_type ) . ' will be listed in the ' . ucfirst($group_type) . 's directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-				<li><?php _e( 'Any OpenLab member may join this ' . ucfirst($group_type ) . '.', 'buddypress') ?></li>
+				<li><?php _e( 'This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . 's directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
+				<li><?php _e( 'Any OpenLab member may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
 			</ul>
 		</label>
 
 		<label>
 			<input type="radio" name="group-status" value="private" <?php checked( 'private', $new_group_status ) ?> />
-			<strong><?php _e( 'This is a private ' . ucfirst($group_type ), 'buddypress') ?></strong>
+			<strong><?php _e( 'This is a private ' . $group_type_name_uc, 'buddypress') ?></strong>
 			<ul>
-				<li><?php _e( 'This ' . ucfirst($group_type ) . ' Profile and related content and activity will only be visible to members of the group.', 'buddypress') ?></li>
-				<li><?php _e( 'This ' . ucfirst($group_type ) . ' will be listed in the ' . ucfirst($group_type) . ' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-				<li><?php _e( 'Only OpenLab members who request membership and are accepted may join this ' . ucfirst($group_type ) . '.', 'buddypress') ?></li>
+				<li><?php _e( 'This ' . $group_type_name_uc . ' Profile and related content and activity will only be visible to members of the group.', 'buddypress') ?></li>
+				<li><?php _e( 'This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . ' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
+				<li><?php _e( 'Only OpenLab members who request membership and are accepted may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
 			</ul>
 		</label>
 
 		<label>
 			<input type="radio" name="group-status" value="hidden" <?php checked( 'hidden', $new_group_status ) ?> />
-			<strong><?php _e( 'This is a hidden ' . ucfirst($group_type ), 'buddypress') ?></strong>
+			<strong><?php _e( 'This is a hidden ' . $group_type_name_uc, 'buddypress') ?></strong>
 			<ul>
-				<li><?php _e( 'This ' . ucfirst($group_type ) . ' Profile, related content and activity will only be visible only to members of the ' . ucfirst($group_type) . '.', 'buddypress') ?></li>
-				<li><?php _e( 'This ' . ucfirst($group_type ) . ' Profile will NOT be listed in the ' . ucfirst($group_type) . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
-				<li><?php _e( 'Only OpenLab members who are invited may join this ' . ucfirst($group_type ) . '.', 'buddypress') ?></li>
+				<li><?php _e( 'This ' . $group_type_name_uc . ' Profile, related content and activity will only be visible only to members of the ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+				<li><?php _e( 'This ' . $group_type_name_uc . ' Profile will NOT be listed in the ' . $group_type_name_uc . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
+				<li><?php _e( 'Only OpenLab members who are invited may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
 			</ul>
 		</label>
 	</div>
@@ -88,8 +88,8 @@ function openlab_group_privacy_settings( $group_type ) {
 	<?php /* Site privacy markup */ ?>
 
 	<?php if ( $site_id = openlab_get_site_id_by_group_id()) : ?>
-		<h5><?php _e( ucfirst($group_type ) . ' Site') ?></h5>
-		<p class="privacy-settings-tag-c"><?php _e( 'These settings affect how others view your ' . ucfirst($group_type ) . ' Site.') ?></p>
+		<h5><?php _e( $group_type_name_uc . ' Site') ?></h5>
+		<p class="privacy-settings-tag-c"><?php _e( 'These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
 		<?php openlab_site_privacy_settings_markup( $site_id ) ?>
 	<?php endif ?>
 
@@ -210,7 +210,7 @@ function openlab_group_archive() {
 		<div class="current-group-filters current-portfolio-filters">
 		<?php openlab_current_directory_filters(); ?>
 		</div>
-		<div class="group-count"><?php cuny_groups_pagination_count( ucfirst($group_type ) . 's'); ?></div>
+		<div class="group-count"><?php cuny_groups_pagination_count( ucwords( $group_type ) . 's'); ?></div>
 		<div class="clearfloat"></div>
 		<ul id="group-list" class="item-list">
 			<?php
