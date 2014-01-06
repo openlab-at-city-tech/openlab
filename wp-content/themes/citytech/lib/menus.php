@@ -555,11 +555,6 @@ function openlab_group_admin_tabs( $group = false ) {
 
 		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Privacy Settings</a></li>
 
-		<?php /* Only show the Edit Access List tab for non-public groups */ ?>
-		<?php if ( 'public' != $group->status ) : ?>
-			<li<?php if ( 'access-list' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/access-list">Edit Access List</a></li>
-		<?php endif ?>
-
 		<?php
 		$account_type = xprofile_get_field_data( 'Account Type', $bp->loggedin_user->id );
 		if ( $account_type == "Student" ) {
