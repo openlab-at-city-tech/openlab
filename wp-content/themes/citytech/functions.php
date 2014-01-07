@@ -5,49 +5,49 @@ add_theme_support( 'post-thumbnails' );
 
 //dequeue buddypress default styles
 if ( !function_exists( 'bp_dtheme_enqueue_styles' ) ) :
-    function bp_dtheme_enqueue_styles() {}
+	function bp_dtheme_enqueue_styles() {}
 endif;
 
 /**creating a library to organize functions**/
-require_once(STYLESHEETPATH.'/lib/course-clone.php');
-require_once(STYLESHEETPATH.'/lib/header-funcs.php');
-require_once(STYLESHEETPATH.'/lib/post-types.php');
-require_once(STYLESHEETPATH.'/lib/menus.php');
-require_once(STYLESHEETPATH.'/lib/content-processing.php');
-require_once(STYLESHEETPATH.'/lib/nav.php');
-require_once(STYLESHEETPATH.'/lib/breadcrumbs.php');
-require_once(STYLESHEETPATH.'/lib/group-funcs.php');
-require_once(STYLESHEETPATH.'/lib/ajax-funcs.php');
-require_once(STYLESHEETPATH.'/lib/help-funcs.php');
-require_once(STYLESHEETPATH.'/lib/member-funcs.php');
-require_once(STYLESHEETPATH.'/lib/page-funcs.php');
-require_once(STYLESHEETPATH.'/lib/admin-funcs.php');
+require_once( STYLESHEETPATH.'/lib/course-clone.php' );
+require_once( STYLESHEETPATH.'/lib/header-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/post-types.php' );
+require_once( STYLESHEETPATH.'/lib/menus.php' );
+require_once( STYLESHEETPATH.'/lib/content-processing.php' );
+require_once( STYLESHEETPATH.'/lib/nav.php' );
+require_once( STYLESHEETPATH.'/lib/breadcrumbs.php' );
+require_once( STYLESHEETPATH.'/lib/group-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/ajax-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/help-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/member-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/page-funcs.php' );
+require_once( STYLESHEETPATH.'/lib/admin-funcs.php' );
 
 /**js calls**/
 function my_init_method() {
-    if (!is_admin()) {
-        wp_enqueue_script( 'jquery' );
-        wp_register_script( 'jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
-        wp_enqueue_script( 'jcarousellite' );
-        wp_register_script( 'easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
-        wp_enqueue_script( 'easyaccordion' );
-        wp_register_script( 'utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
-        wp_enqueue_script( 'utility' );
-        wp_enqueue_script( 'dtheme-ajax-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array( 'jquery' ) );
-    }
+	if ( !is_admin() ) {
+		wp_enqueue_script( 'jquery' );
+		wp_register_script( 'jcarousellite', get_bloginfo( 'stylesheet_directory' ) . '/js/jcarousellite.js' );
+		wp_enqueue_script( 'jcarousellite' );
+		wp_register_script( 'easyaccordion', get_bloginfo( 'stylesheet_directory' ) . '/js/easyaccordion.js' );
+		wp_enqueue_script( 'easyaccordion' );
+		wp_register_script( 'utility', get_bloginfo( 'stylesheet_directory' ) . '/js/utility.js' );
+		wp_enqueue_script( 'utility' );
+		wp_enqueue_script( 'dtheme-ajax-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array( 'jquery' ) );
+	}
 }
 
-add_action('init', 'my_init_method');
+add_action( 'init', 'my_init_method' );
 
 // Custom Login
 function my_custom_logo() { ?>
 	<style type="text/css">
 		#login { margin: 50px auto 0 auto; width: 350px; }
-		#login h1 a { background: url(<?php bloginfo('stylesheet_directory') ?>/images/logo.png) center no-repeat; height:125px; width: 370px; }
+		#login h1 a { background: url( <?php bloginfo( 'stylesheet_directory' ) ?>/images/logo.png ) center no-repeat; height:125px; width: 370px; }
 		body { background: #fff }
 	</style>
 <?php }
-add_action('login_head', 'my_custom_logo');
+add_action( 'login_head', 'my_custom_logo' );
 
 /**
  * Custom template loader for my-{grouptype}
@@ -67,11 +67,11 @@ function openlab_mygroups_template_loader( $template ) {
 }
 add_filter( 'template_include', 'openlab_mygroups_template_loader' );
 
-function cuny_o_e_class($num){
+function cuny_o_e_class( $num ) {
  return $num % 2 == 0 ? " even":" odd";
 }
 
-function cuny_third_end_class($num){
+function cuny_third_end_class( $num ) {
  return $num % 3 == 0 ? " last":"";
 }
 
@@ -80,8 +80,8 @@ function cuny_default_avatar( $url ) {
 }
 add_filter( 'bp_core_mysteryman_src', 'cuny_default_avatar' );
 
-remove_all_actions('genesis_footer');
-//add_action('genesis_footer', 'cuny_creds_footer');
+remove_all_actions( 'genesis_footer' );
+//add_action( 'genesis_footer', 'cuny_creds_footer' );
 function cuny_creds_footer() {
 	echo '<span class="alignleft">� New York City College of Technology</span>';
 	echo '<span class="alignright">City University of New York</span>';
@@ -90,10 +90,10 @@ function cuny_creds_footer() {
 remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 
 //before header mods
-//add_action('genesis_before_header','cuny_bp_adminbar_menu');
+//add_action( 'genesis_before_header','cuny_bp_adminbar_menu' );
 //cuny_bp_adminbar_menu function moved to cuny-sitewide-navi
 
-add_action('bp_header','openlab_header_bar', 10);
+add_action( 'bp_header','openlab_header_bar', 10 );
 function openlab_header_bar() { ?>
 
 	<div id="header-wrap">
@@ -112,7 +112,7 @@ function openlab_header_bar() { ?>
 
       wp_nav_menu( $args );
       //do_action( 'cuny_bp_adminbar_menus' );
-      if ( is_user_logged_in() ){?>
+      if ( is_user_logged_in() ) {?>
       <div id="extra-border"></div>
       <ul id="openlab-link">
           <li>
@@ -129,77 +129,77 @@ function openlab_site_wide_bp_search() { ?>
 	<form action="<?php echo bp_search_form_action() ?>" method="post" id="search-form">
 		<input type="text" id="search-terms" name="search-terms" value="" />
 		<?php //echo bp_search_form_type_select() ?>
-        <select style="width: auto" id="search-which" name="search-which">
-        <option value="members">People</option>
-        <option value="courses">Courses</option>
-        <option value="projects">Projects</option>
-        <option value="clubs">Clubs</option>
-        <option value="portfolios">Portfolios</option>
-        </select>
+		<select style="width: auto" id="search-which" name="search-which">
+		<option value="members">People</option>
+		<option value="courses">Courses</option>
+		<option value="projects">Projects</option>
+		<option value="clubs">Clubs</option>
+		<option value="portfolios">Portfolios</option>
+		</select>
 
 		<input type="submit" name="search-submit" id="search-submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
 		<?php wp_nonce_field( 'bp_search_form' ) ?>
 	</form><!-- #search-form -->
 <?php }
 
-add_action('init','openlab_search_override',1);
-function openlab_search_override(){
-    global $bp;
-	if(isset($_POST['search-submit']) && $_POST['search-terms']){
-		if($_POST['search-which']=="members"){
-			wp_redirect($bp->root_domain.'/people/?search='.$_POST['search-terms']);
+add_action( 'init','openlab_search_override',1 );
+function openlab_search_override() {
+	global $bp;
+	if ( isset( $_POST['search-submit'] ) && $_POST['search-terms'] ) {
+		if ( $_POST['search-which']=="members" ) {
+			wp_redirect( $bp->root_domain.'/people/?search='.$_POST['search-terms'] );
 			exit();
-		}elseif($_POST['search-which']=="courses"){
-			wp_redirect($bp->root_domain.'/courses/?search='.$_POST['search-terms']);
+		} elseif ( $_POST['search-which']=="courses" ) {
+			wp_redirect( $bp->root_domain.'/courses/?search='.$_POST['search-terms'] );
 			exit();
-		}elseif($_POST['search-which']=="projects"){
-			wp_redirect($bp->root_domain.'/projects/?search='.$_POST['search-terms']);
+		} elseif ( $_POST['search-which']=="projects" ) {
+			wp_redirect( $bp->root_domain.'/projects/?search='.$_POST['search-terms'] );
 			exit();
-		}elseif($_POST['search-which']=="clubs"){
-			wp_redirect($bp->root_domain.'/clubs/?search='.$_POST['search-terms']);
+		} elseif ( $_POST['search-which']=="clubs" ) {
+			wp_redirect( $bp->root_domain.'/clubs/?search='.$_POST['search-terms'] );
 			exit();
-		}elseif($_POST['search-which']=="portfolios"){
-			wp_redirect($bp->root_domain.'/portfolios/?search='.$_POST['search-terms']);
+		} elseif ( $_POST['search-which']=="portfolios" ) {
+			wp_redirect( $bp->root_domain.'/portfolios/?search='.$_POST['search-terms'] );
 			exit();
 		}
 	}
 }
 
-/*add_action('genesis_after_content', 'cuny_the_clear_div');
+/*add_action( 'genesis_after_content', 'cuny_the_clear_div' );
 function cuny_the_clear_div() {
 	echo '<div style="clear:both;"></div>';
 }*/
 
-remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-add_filter('get_the_excerpt', 'cuny_add_links_wp_trim_excerpt');
-function cuny_add_links_wp_trim_excerpt($text) {
+remove_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
+add_filter( 'get_the_excerpt', 'cuny_add_links_wp_trim_excerpt' );
+function cuny_add_links_wp_trim_excerpt( $text ) {
 	$raw_excerpt = $text;
 	if ( '' == $text ) {
-		$text = get_the_content('');
+		$text = get_the_content( '' );
 
 		$text = strip_shortcodes( $text );
 
-		$text = apply_filters('the_content', $text);
-		$text = str_replace(']]>', ']]>', $text);
-		$text = strip_tags($text, '<a>');
-		$excerpt_length = apply_filters('excerpt_length', 55);
+		$text = apply_filters( 'the_content', $text );
+		$text = str_replace( ']]>', ']]>', $text );
+		$text = strip_tags( $text, '<a>' );
+		$excerpt_length = apply_filters( 'excerpt_length', 55 );
 
-		$excerpt_more = apply_filters('excerpt_more', ' ' . '[...]');
-		$words = preg_split('/(<a.*?a>)|\n|\r|\t|\s/', $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE );
-		if ( count($words) > $excerpt_length ) {
-			array_pop($words);
-			$text = implode(' ', $words);
+		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '[...]' );
+		$words = preg_split( '/( <a.*?a> )|\n|\r|\t|\s/', $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE );
+		if ( count( $words ) > $excerpt_length ) {
+			array_pop( $words );
+			$text = implode( ' ', $words );
 			$text = $text . $excerpt_more;
 		} else {
-			$text = implode(' ', $words);
+			$text = implode( ' ', $words );
 		}
 	}
-	return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
+	return apply_filters( 'new_wp_trim_excerpt', $text, $raw_excerpt );
 
 }
 
 //a variation on bp_groups_pagination_count() to match design
-function cuny_groups_pagination_count($group_name)
+function cuny_groups_pagination_count( $group_name )
 {
   global $bp, $groups_template;
 
@@ -208,10 +208,10 @@ function cuny_groups_pagination_count($group_name)
 	$to_num = bp_core_number_format( ( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ) );
 	$total = bp_core_number_format( $groups_template->total_group_count );
 
-	echo sprintf( __( '%1$s to %2$s (of %3$s '.$group_name.')', 'buddypress' ), $from_num, $to_num, $total );
+	echo sprintf( __( '%1$s to %2$s ( of %3$s '.$group_name.' )', 'buddypress' ), $from_num, $to_num, $total );
 }
 //a variation on bp_members_pagination_count() to match design
-function cuny_members_pagination_count($member_name)
+function cuny_members_pagination_count( $member_name )
 {
 	global $bp, $members_template;
 
@@ -223,7 +223,7 @@ function cuny_members_pagination_count($member_name)
 		$to_num    = bp_core_number_format( ( $start_num + ( $members_template->pag_num - 1 ) > $members_template->total_member_count ) ? $members_template->total_member_count : $start_num + ( $members_template->pag_num - 1 ) );
 		$total     = bp_core_number_format( $members_template->total_member_count );
 
-		$pag = sprintf( __( '%1$s to %2$s (of %3$s members)', 'buddypress' ), $from_num, $to_num, $total );
+		$pag = sprintf( __( '%1$s to %2$s ( of %3$s members )', 'buddypress' ), $from_num, $to_num, $total );
 		echo $pag;
 }
 
@@ -251,31 +251,31 @@ function openlab_modify_options_nav() {
 		}
 	}
 
-        if ( bp_is_group() ) {
-                $bp->bp_options_nav[ bp_get_current_group_slug() ]['admin']['position'] = 15;
-                return;
-        }
+		if ( bp_is_group() ) {
+				$bp->bp_options_nav[ bp_get_current_group_slug() ]['admin']['position'] = 15;
+				return;
+		}
 }
 add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 //custom widgets for OpenLab
 function cuny_widgets_init() {
 	//add widget for Rotating Post Gallery Widget - will be placed on the homepage
-	register_sidebar(array(
-		'name' => __('Rotating Post Gallery Widdget', 'cuny'),
-		'description' => __('This is the widget for holding the Rotating Post Gallery Widget', 'cuny'),
+	register_sidebar( array(
+		'name' => __( 'Rotating Post Gallery Widdget', 'cuny' ),
+		'description' => __( 'This is the widget for holding the Rotating Post Gallery Widget', 'cuny' ),
 		'id' => 'pgw-gallery',
 		'before_widget' => '<div id="pgw-gallery">',
 		'after_widget'  => '</div>',
-	));
+	) );
 	//add widget for the Featured Widget - will be placed on the homepage under "In the Spotlight"
-	register_sidebar(array(
-		'name' => __('Featured Widget', 'cuny'),
-		'description' => __('This is the widget for holding the Featured Widget', 'cuny'),
+	register_sidebar( array(
+		'name' => __( 'Featured Widget', 'cuny' ),
+		'description' => __( 'This is the widget for holding the Featured Widget', 'cuny' ),
 		'id' => 'cac-featured',
 		'before_widget' => '<div id="cac-featured">',
 		'after_widget'  => '</div>',
-	));
+	) );
 }
 
 add_action( 'widgets_init', 'cuny_widgets_init' );
@@ -338,7 +338,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
 
 	if ( !$r['show_hidden'] ) {
-		$select .= " JOIN {$bp->groups->table_name} c ON (c.id = a.group_id) ";
+		$select .= " JOIN {$bp->groups->table_name} c ON ( c.id = a.group_id ) ";
 		$where  .= " AND c.status != 'hidden' ";
 	}
 
@@ -346,7 +346,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 		// Sanitize
 		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
 
-		$select .= " JOIN {$bp->groups->table_name_groupmeta} d ON (a.group_id = d.group_id) ";
+		$select .= " JOIN {$bp->groups->table_name_groupmeta} d ON ( a.group_id = d.group_id ) ";
 		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
 	}
 
@@ -363,12 +363,12 @@ function openlab_get_groups_of_user( $args = array() ) {
 
 		if ( $r['get_activity'] ) {
 			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
-			$activities = $wpdb->get_results( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ({$retval['group_ids_sql']}) ORDER BY id DESC" );
+			$activities = $wpdb->get_results( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ( {$retval['group_ids_sql']} ) ORDER BY id DESC" );
 
 			// Now walk down the list and try to match with a group. Once one is found, remove
 			// that group from the stack
 			$group_activity_items = array();
-			foreach( (array)$activities as $act ) {
+			foreach ( ( array )$activities as $act ) {
 				if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
 					$group_activity_items[$act->item_id] = $act->content;
 					$key = array_search( $act->item_id, $group_ids );
@@ -388,7 +388,7 @@ function openlab_get_groups_of_user( $args = array() ) {
  */
 function openlab_help_menu_external_glyph( $items, $args ) {
 	if ( false !== strpos( $args->theme_location, 'about' ) ) {
-		foreach( $items as $key => $item ) {
+		foreach ( $items as $key => $item ) {
 			if ( false === strpos( $item->url, bp_get_root_domain() ) ) {
 				$items[$key]->classes[] = 'external-link';
 			}
@@ -423,10 +423,10 @@ function openlab_get_groups_in_sql( $search_terms ) {
 		$search_terms_sql = like_escape( $search_terms );
 
 		// Don't get hidden groups. Important to keep counts in line with bp_has_groups()
-		$matched_group_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE (name LIKE '%%{$search_terms_sql}%%' OR description LIKE '%%{$search_terms_sql}%%') AND status != 'hidden'" ) );
+		$matched_group_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE ( name LIKE '%%{$search_terms_sql}%%' OR description LIKE '%%{$search_terms_sql}%%' ) AND status != 'hidden'" ) );
 
 		if ( !empty( $matched_group_ids ) ) {
-			$in_sql = " AND a.group_id IN (" . implode(',', wp_parse_id_list( $matched_group_ids ) ) . ") ";
+			$in_sql = " AND a.group_id IN ( " . implode( ',', wp_parse_id_list( $matched_group_ids ) ) . " ) ";
 		}
 	}
 
@@ -434,7 +434,7 @@ function openlab_get_groups_in_sql( $search_terms ) {
 }
 
 /**
- * Get blog avatar (group avatar when available, otherwise user)
+ * Get blog avatar ( group avatar when available, otherwise user )
  */
 function openlab_get_blog_avatar( $args = array() ) {
 	global $blogs_template;
@@ -481,32 +481,32 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
 
 <div class="radio group-site">
 
-	<h6><?php _e('Public', 'buddypress') ?></h6>
+	<h6><?php _e( 'Public', 'buddypress' ) ?></h6>
   <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
-	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
+	<label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> /><?php _e( 'Allow search engines to index this site. Your site will show up in web search results.' ); ?></label>
 
-	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label>
+	<label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> /><?php _e( 'Ask search engines not to index this site. Your site should not show up in web search results.' ); ?></label>
 
 	<?php if ( !openlab_is_portfolio() && ( !isset( $_GET['type'] ) || 'portfolio' != $_GET['type'] ) ): ?>
 
-		<h6><?php _e('Private', 'buddypress') ?></h6>
-		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
+		<h6><?php _e( 'Private', 'buddypress' ) ?></h6>
+		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e( 'I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress' ); ?></label>
 
-		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>><?php _e('I would like my site to be visible to registered users of this '.ucfirst($group_type) . '.'); ?></label>
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ); ?>><?php _e( 'I would like my site to be visible to registered users of this '.ucfirst( $group_type ) . '.' ); ?></label>
 
-		<h6><?php _e('Hidden', 'buddypress') ?></h6>
-		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
+		<h6><?php _e( 'Hidden', 'buddypress' ) ?></h6>
+		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', $blog_public ); ?>><?php _e( 'I would like my site to be visible only to site administrators.' ); ?></label>
 
 	<?php else : ?>
 
 		<?php /* Portfolios */ ?>
 		<h6>Private</h6>
-		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress'); ?></label>
+		<label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>><?php _e( 'I would like my site to be visible only to registered users of City Tech OpenLab.','buddypress' ); ?></label>
 
-		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public ); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
+		<label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
 		<p class="description private-portfolio-gloss">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
 
-		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public ); ?>>I would like my site to be visible only to me.</label>
+		<label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', $blog_public ); ?>>I would like my site to be visible only to me.</label>
 
 	<?php endif; ?>
 </div>
@@ -517,8 +517,8 @@ function openlab_site_privacy_settings_markup( $site_id = 0 ) {
  * Output the group subscription default settings
  *
  * This is a lazy way of fixing the fact that the BP Group Email Subscription
- * plugin doesn't actually display the correct default sub level (even though it
- * does *save* the correct level)
+ * plugin doesn't actually display the correct default sub level ( even though it
+ * does *save* the correct level )
  */
 function openlab_default_subscription_settings_form() {
 	if ( openlab_is_portfolio() || ( isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
@@ -527,19 +527,19 @@ function openlab_default_subscription_settings_form() {
 
 	?>
 	<hr>
-	<h4 id="email-sub-defaults"><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
-	<p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
+	<h4 id="email-sub-defaults"><?php _e( 'Email Subscription Defaults', 'bp-ass' ); ?></h4>
+	<p><?php _e( 'When new users join this group, their default email notification settings will be:', 'bp-ass' ); ?></p>
 	<div class="radio email-sub">
 		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
-			<?php _e( 'No Email (users will read this group on the web - good for any group - the default)', 'bp-ass' ) ?></label>
+			<?php _e( 'No Email ( users will read this group on the web - good for any group - the default )', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
-			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'bp-ass' ) ?></label>
+			<?php _e( 'Weekly Summary Email ( the week\'s topics - good for large groups )', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
-			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'bp-ass' ) ?></label>
+			<?php _e( 'Daily Digest Email ( all daily activity bundles in one email - good for medium-size groups )', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
-			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'bp-ass' ) ?></label>
+			<?php _e( 'New Topics Email ( new topics are sent as they arrive, but not replies - good for small groups )', 'bp-ass' ) ?></label>
 		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
-			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'bp-ass' ) ?></label>
+			<?php _e( 'All Email ( send emails about everything - recommended only for working groups )', 'bp-ass' ) ?></label>
 	</div>
 	<hr />
 	<?php
@@ -619,7 +619,7 @@ add_filter( 'bp_docs_do_theme_compat', '__return_false' );
 function cuny_buddypress_group_actions() {
 	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
-			<h2 class="sidebar-header"><?php echo ucwords(groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' )) ?></h2>
+			<h2 class="sidebar-header"><?php echo ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) ?></h2>
 			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
 				<ul>
 					<?php bp_get_options_nav(); ?>
