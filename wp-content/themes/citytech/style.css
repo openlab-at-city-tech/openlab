@@ -880,10 +880,10 @@ input.wpcf7-submit,.filter input[type="submit"] {
 }
 
 #openlab-link li a {
-    color:#8db9ac;
     padding:2px 20px;
     text-decoration:none;
     line-height:15px;
+		display: block;
 }
 
 #extra-border {
