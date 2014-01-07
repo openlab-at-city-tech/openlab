@@ -569,7 +569,7 @@ function openlab_group_admin_tabs( $group = false ) {
 	<?php else : ?>
 
 		<?php if ( $bp->is_item_admin || $bp->is_item_mod ) { ?>
-			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress' ); ?></a></li>
+			<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/edit-details"><?php _e( 'Edit Profile', 'buddypress' ); ?></a></li>
 		<?php } ?>
 
 		<?php
@@ -577,18 +577,18 @@ function openlab_group_admin_tabs( $group = false ) {
 			return false;
 		?>
 
-		<li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'group-avatar' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/group-avatar"><?php _e( 'Change Avatar', 'buddypress' ); ?></a></li>
 
-		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/group-settings"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
 
 		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )   ?>
 
 		<div class="subnav-right-buttons">
 			<?php if ( 'course' === openlab_get_group_type( bp_get_current_group_id() ) ) : ?>
-				<li class="clone-button <?php if ( 'clone-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id( ) ?>"><?php _e('Clone ' . ucfirst($group_type ), 'buddypress' ); ?></a></li>
+				<li class="clone-button <?php if ( 'clone-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id( ) ?>"><?php _e( 'Clone ' . ucfirst( $group_type ), 'buddypress' ); ?></a></li>
 			<?php endif ?>
 
-			<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type ), 'buddypress' ); ?></a></li>
+			<li class="delete-button <?php if ( 'delete-group' == $current_tab ) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/delete-group"><?php _e( 'Delete ' . ucfirst( $group_type ), 'buddypress' ); ?></a></li>
 		</div>
 
 	<?php endif ?>
@@ -610,25 +610,25 @@ function openlab_group_membership_tabs( $group = false ) {
 	?>
 
 	<?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
-		<li<?php if ( 'manage-members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/manage-members"><?php _e('Membership', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'manage-members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/manage-members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
 
 		<?php if ( $group->status == 'private' ): ?>
-			<li<?php if ( 'membership-requests' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/membership-requests"><?php _e('Member Requests', 'buddypress' ); ?></a></li>
+			<li<?php if ( 'membership-requests' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/membership-requests"><?php _e( 'Member Requests', 'buddypress' ); ?></a></li>
 		<?php endif; ?>
 	<?php else: ?>
-		<li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/members"><?php _e('Membership', 'buddypress' ); ?></a></li>
+		<li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
 	<?php if ( bp_group_is_member() ): ?>
-		<li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/invite-anyone"><?php _e('Invite New Members', 'buddypress' ); ?></a></li>
+		<li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Members', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
 	<?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
-		<li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/notifications"><?php _e('Email Members', 'buddypress' ); ?></a></li>
+		<li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/notifications"><?php _e( 'Email Members', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
 	<?php if ( bp_group_is_member() ): ?>
-		<li<?php if ( $bp->current_action == 'notifications' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/notifications"><?php _e('Your Email Options', 'buddypress' ); ?></a></li>
+		<li<?php if ( $bp->current_action == 'notifications' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/notifications"><?php _e( 'Your Email Options', 'buddypress' ); ?></a></li>
 		<?php endif; ?>
 
 	<?php
