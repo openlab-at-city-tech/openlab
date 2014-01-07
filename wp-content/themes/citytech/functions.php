@@ -237,12 +237,14 @@ function openlab_modify_options_nav() {
 	global $bp;
 
 	if ( bp_is_group() && openlab_is_portfolio() ) {
-		foreach( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+		// Keep the following tabs as-is
+		$keepers = array( 'members' );
+		foreach ( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
 			if ( 'home' == $key ) {
 				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
 			} else if ( 'admin' == $key ) {
 				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
-			} else {
+			} else if ( ! in_array( $key, $keepers ) ) {
 				unset( $bp->bp_options_nav[$bp->current_item][$key] );
 			}
 
