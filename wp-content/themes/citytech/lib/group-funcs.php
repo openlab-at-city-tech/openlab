@@ -226,7 +226,7 @@ function openlab_group_archive() {
 				?>
 				<li class="course<?php echo cuny_o_e_class( $count ) ?>">
 					<div class="item-avatar alignleft">
-						<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array('type' => 'full', 'width' => 100, 'height' => 100 ) ) ?></a>
+						<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar( array( 'type' => 'full', 'width' => 100, 'height' => 100 ) ) ?></a>
 					</div>
 					<div class="item">
 
