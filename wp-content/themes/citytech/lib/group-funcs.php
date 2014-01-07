@@ -331,7 +331,7 @@ function openlab_return_course_list( $school, $department ) {
 	return $list;
 }
 
-function openlab_group_post_count( $filters,$group_args ) {
+function openlab_group_post_count( $filters, $group_args ) {
 
 	$post_count = 0;
 
