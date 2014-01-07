@@ -132,7 +132,7 @@ function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group
  *
  * This is the master function where filter data should be stored
  */
-function openlab_get_directory_filter( $filter_type ) {
+function openlab_get_directory_filter( $filter_type, $label_type ) {
 	$filter_array = array(
 		'type' => $filter_type,
 		'label' => '',
@@ -158,7 +158,7 @@ function openlab_get_directory_filter( $filter_type ) {
 				'dept_all' => 'All'
 			);
 
-			foreach( openlab_get_department_list() as $depts ) {
+			foreach( openlab_get_department_list( '', 'short' ) as $depts ) {
 				foreach( $depts as $dept_key => $dept_label ) {
 					$filter_array['options'][$dept_key] = $dept_label;
 				}
@@ -220,7 +220,7 @@ function openlab_current_directory_filters() {
 
 		$filter_words = array();
 		foreach( $active_filters as $ftype => $fvalue ) {
-			$filter_data = openlab_get_directory_filter( $ftype );
+			$filter_data = openlab_get_directory_filter( $ftype, 'short' );
 
 			$word = isset( $filter_data['options'][$fvalue] ) ? $filter_data['options'][$fvalue] : ucwords( $fvalue );
 

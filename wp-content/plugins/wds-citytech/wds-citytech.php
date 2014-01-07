@@ -635,7 +635,7 @@ function openlab_get_school_list() {
  *
  * @param str Optional. Leave out to get all departments
  */
-function openlab_get_department_list( $school = '' ) {
+function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 
 	// Sanitize school name
 	$schools = openlab_get_school_list();
@@ -646,9 +646,101 @@ function openlab_get_department_list( $school = '' ) {
 	}
 
 	$all_departments = array(
-		'tech' => array('Advertising Design and Graphic Arts','Architectural Technology','Computer Engineering Technology','Computer Systems Technology','Construction Management and Civil Engineering Technology','Electrical and Telecommunications Engineering Technology','Entertainment Technology','Environmental Control Technology','Mechanical Engineering Technology'),
-		'studies' => array('Business','Career and Technology Teacher Education','Dental Hygiene','Health Services Administration','Hospitality Management','Human Services','Law and Paralegal Studies','Nursing','Radiologic Technology and Medical Imaging','Restorative Dentistry','Vision Care Technology'),
-		'arts' => array('African American Studies','Biological Sciences','Chemistry','English','Humanities','Library','Mathematics','Physics','Social Science')
+		'tech' => array(
+			'advertising-design-and-graphic-arts' => array(
+				'label' => 'Advertising Design and Graphic Arts',
+			),
+			'architectural-technology' => array(
+				'label' => 'Architectural Technology',
+			),
+			'computer-engineering-technology' => array(
+				'label' => 'Computer Engineering Technology',
+			),
+			'computer-systems-technology' => array(
+				'label' => 'Computer Systems Technology',
+			),
+			'construction-management-and-civil-engineering-technology' => array(
+				'label' => 'Construction Management and Civil Engineering Technology',
+				'short_label' => 'Construction & Civil Engineering Tech',
+			),
+			'electrical-and-telecommunications-engineering-technology' => array(
+				'label' => 'Electrical and Telecommunications Engineering Technology',
+				'short_label' => 'Electrical & Telecom Engineering Tech',
+			),
+			'entertainment-technology' => array(
+				'label' => 'Entertainment Technology',
+			),
+			'environmental-control-technology' => array(
+				'label' => 'Environmental Control Technology',
+			),
+			'mechanical-engineering-technology' => array(
+				'label' => 'Mechanical Engineering Technology'
+			),
+		),
+		'studies' => array(
+			'business' => array(
+				'label' => 'Business',
+			),
+			'career-and-technology-teacher-education' => array(
+				'label' => 'Career and Technology Teacher Education',
+			),
+			'dental-hygiene' => array(
+				'label' => 'Dental Hygiene',
+			),
+			'health-services-administration' => array(
+				'label' => 'Health Services Administration',
+			),
+			'hospitality-management' => array(
+				'label' => 'Hospitality Management',
+			),
+			'human-services' => array(
+				'label' => 'Human Services',
+			),
+			'law-and-paralegal-studies' => array(
+				'label' => 'Law and Paralegal Studies',
+			),
+			'nursing' => array(
+				'label' => 'Nursing',
+			),
+			'radiologic-technology-and-medical-imaging' => array(
+				'label' => 'Radiologic Technology and Medical Imaging',
+			),
+			'restorative-dentistry' => array(
+				'label' => 'Restorative Dentistry',
+			),
+			'vision-care-technology' => array(
+				'label' => 'Vision Care Technology',
+			),
+		),
+		'arts' => array(
+			'african-american-studies' => array(
+				'label' => 'African American Studies',
+			),
+			'biological-sciences' => array(
+				'label' => 'Biological Sciences',
+			),
+			'chemistry' => array(
+				'label' => 'Chemistry',
+			),
+			'english' => array(
+				'label' => 'English',
+			),
+			'humanities' => array(
+				'label' => 'Humanities',
+			),
+			'library' => array(
+				'label' => 'Library',
+			),
+			'mathematics' => array(
+				'label' => 'Mathematics',
+			),
+			'physics' => array(
+				'label' => 'Physics',
+			),
+			'social-science' => array(
+				'label' => 'Social Science',
+			),
+		),
 	);
 
 	// Lazy - I didn't feel like manually converting to key-value structure
@@ -668,9 +760,14 @@ function openlab_get_department_list( $school = '' ) {
 			continue;
 		}
 
-		foreach( $depts as $dept ) {
-			$d_key = strtolower( str_replace( ' ', '-', $dept ) );
-			$departments_sorted[$s_key][$d_key] = $dept;
+		foreach( $depts as $dept_name => $dept ) {
+			if ( 'short' == $label_type ) {
+				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
+			} else {
+				$d_label = $dept['label'];
+			}
+
+			$departments_sorted[ $s_key ][ $dept_name ] = $d_label;
 		}
 	}
 

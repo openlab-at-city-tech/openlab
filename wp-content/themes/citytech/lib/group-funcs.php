@@ -320,7 +320,7 @@ function openlab_return_course_list( $school, $department ) {
 		return $list;
 	}
 
-	$depts = openlab_get_department_list( $school );
+	$depts = openlab_get_department_list( $school, 'short' );
 
 	foreach ( $depts as $dept ) {
 		$display_option_dept = str_replace( 'And', '&amp;', $dept );
