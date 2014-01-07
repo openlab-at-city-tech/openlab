@@ -1416,6 +1416,10 @@ ul#topic-post-list li div.post-content {
     margin-left:0;
 }
 
+#content ul#topic-post-list.item-list li {
+	width: 650px;
+}
+
 /**extra styles**/
 ul#friend-list li {
     clear:both;
