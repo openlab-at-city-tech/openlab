@@ -644,7 +644,7 @@ function wds_bp_group_meta() {
                     $group_site_text = '<strong><a href="' . $group_site_url . '">' . $group_site_url . '</a></strong>';
                 }
                 ?>
-                <p>This <?php echo $group_type ?> is currently associated with the site <?php echo $group_site_text ?>. <span id="change-group-site"><a class="button confirm" href="<?php echo wp_nonce_url(bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/unlink-site/', 'unlink-site') ?>" id="change-group-site-toggle" />Unlink</a></p>
+                <p>This <?php echo openlab_get_group_type_label() ?> is currently associated with the site <?php echo $group_site_text ?>. <span id="change-group-site"><a class="button confirm" href="<?php echo wp_nonce_url(bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/unlink-site/', 'unlink-site') ?>" id="change-group-site-toggle" />Unlink</a></p>
 
             </div>
 

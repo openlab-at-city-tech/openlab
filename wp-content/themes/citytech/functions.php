@@ -619,7 +619,7 @@ add_filter( 'bp_docs_do_theme_compat', '__return_false' );
 function cuny_buddypress_group_actions() {
 	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		<div id="item-buttons">
-			<h2 class="sidebar-header"><?php echo ucwords( groups_get_groupmeta( bp_get_group_id(), 'wds_group_type' ) ) ?></h2>
+			<h2 class="sidebar-header"><?php echo openlab_get_group_type_label( 'case=upper' ) ?></h2>
 			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
 				<ul>
 					<?php bp_get_options_nav(); ?>
@@ -659,3 +659,35 @@ function openlab_remove_hidden_class_from_leave_group_button( $button ) {
 	return $button;
 }
 add_action( 'bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_group_button', 20 );
+
+/**
+ * Prints a message if the group is not visible to the current user (it is a
+ * hidden or private group, and the user does not have access).
+ *
+ * @global BP_Groups_Template $groups_template Groups template object
+ * @param object $group Group to get status message for. Optional; defaults to current group.
+ */
+function openlab_group_status_message( $group = null ) {
+	global $groups_template;
+
+	if ( ! $group )
+		$group =& $groups_template->group;
+
+	$group_label = openlab_get_group_type_label( 'group_id=' . $group->id );
+
+	if ( 'private' == $group->status ) {
+		if ( ! bp_group_has_requested_membership() ) {
+			if ( is_user_logged_in() )
+				$message = 'This is a private ' . $group_label . ' and you must request ' . $group_label . ' membership in order to join.';
+			else
+				$message = 'This is a private ' . $group_label . '. To join you must be a registered site member and request ' . $group_label . ' membership.';
+		} else {
+			$message = 'This is a private ' . $group_label . '. Your membership request is awaiting approval from the ' . $group_label . ' administrator.';
+		}
+	} else {
+		$message = 'This is a hidden ' . $group_label . ' and only invited members can join.';
+	}
+
+	echo $message;
+}
+

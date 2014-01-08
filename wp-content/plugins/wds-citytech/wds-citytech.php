@@ -808,9 +808,9 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '<tr class="schools">';
 
-	$return .= '<td class="block-title" colspan="2">School( s )';
+	$return .= '<td class="block-title" colspan="2">School(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
-		$return .= ' <span class="required">( required )</span>';
+		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td></tr>';
 
@@ -822,7 +822,7 @@ function wds_load_group_type( $group_type ) {
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
 		case 'portfolio' :
-			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label( 'user_id=' . bp_loggedin_user_id() ) . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
 		case 'project' :
 			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
@@ -903,9 +903,9 @@ function wds_load_group_type( $group_type ) {
 
 		$return.= '<tr class="department-title">';
 
-		$return .= '<td colspan="2" class="block-title">Department( s )';
+		$return .= '<td colspan="2" class="block-title">Department(s)';
 		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-			$return .= ' <span class="required">( required )</span>';
+			$return .= ' <span class="required">(required)</span>';
 		}
 		$return .= '</td></tr>';
 			$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
@@ -1536,18 +1536,6 @@ class buddypress_Translation_Mangler {
 		break;
 	case "Recent Discussion":
 		return $translations->translate( "Recent Forum Discussion" );
-		break;
-	case "This is a hidden group and only invited members can join.":
-		return $translations->translate( "This is a hidden " . $grouptype . " and only invited members can join." );
-		break;
-	case "This is a private group and you must request group membership in order to join.":
-		return $translations->translate( "This is a private " . $grouptype . " and you must request " . $grouptype . " membership in order to join." );
-		break;
-	case "This is a private group. To join you must be a registered site member and request group membership.":
-		return $translations->translate( "This is a private " . $grouptype . ". To join you must be a registered site member and request " . $grouptype . " membership." );
-		break;
-	case "This is a private group. Your membership request is awaiting approval from the group administrator.":
-		return $translations->translate( "This is a private " . $grouptype . ". Your membership request is awaiting approval from the " . $grouptype . " administrator." );
 		break;
 	case "said ":
 		return $translations->translate( "" );

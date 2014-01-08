@@ -153,7 +153,7 @@ function cuny_group_single() { ?>
 			<?php do_action( 'bp_before_group_status_message' ) ?>
 
 			<div id="message" class="info">
-				<p><?php bp_group_status_message() ?></p>
+				<p><?php openlab_group_status_message() ?></p>
 			</div>
 
 			<?php do_action( 'bp_after_group_status_message' ) ?>

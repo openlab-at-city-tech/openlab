@@ -88,6 +88,33 @@ function openlab_current_group_type( $case = 'lower' ) {
 	}
 
 /**
+ * Get a printable label for a group or group type
+ */
+function openlab_get_group_type_label( $args = array() ) {
+	$r = wp_parse_args( $args, array(
+		'group_id' => openlab_fallback_group(),
+		'case' => 'lower',
+	) );
+
+	// Skip the group type lookup if one has been provided
+	if ( empty( $r['group_type'] ) ) {
+		$r['group_type'] = openlab_get_group_type( $r['group_id'] );
+	}
+
+	if ( 'portfolio' === $r['group_type'] ) {
+		$label = openlab_get_portfolio_label( $args );
+	} else {
+		$label = $r['group_type'];
+
+		if ( 'upper' === $r['case'] ) {
+			$label = ucwords( $label );
+		}
+	}
+
+	return $label;
+}
+
+/**
  * Get a group type by group id
  *
  * @param int $group_id

@@ -3,6 +3,8 @@
 <?php global $bp;
 
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
+
+$group_label_uc = openlab_get_group_type_label( 'case=upper' );
 ?>
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages
@@ -17,7 +19,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
     <?php else: ?>
     <div class="item-list-tabs no-ajax" id="subnav">
-        <div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
+        <div id="group-settings-label"><?php echo $group_label_uc ?> Settings:</div>
         <ul>
             <?php openlab_group_admin_tabs(); ?>
         </ul>
@@ -36,10 +38,10 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
 
-	<label for="group-name"><?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?> (required)</label>
+	<label for="group-name"><?php echo $group_label_uc . ' Name' ?> (required)</label>
 	<input type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
 
-	<label for="group-desc"><?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?> (required)</label>
+	<label for="group-desc"><?php echo $group_label_uc . ' Description' ?> (required)</label>
 	<textarea name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
@@ -75,7 +77,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 			<div class="checkbox">
         <h4>Discussion Settings</h4>
-        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php _e( ucfirst($group_type)) ?> profile.</p>
+        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
 				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
 			</div>
 

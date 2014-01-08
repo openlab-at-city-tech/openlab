@@ -411,8 +411,8 @@ add_filter( 'bp_get_options_nav_admin', 'openlab_filter_subnav_admin' );
 
 function openlab_filter_subnav_admin( $subnav_item ) {
 	global $bp;
-	$group_type = openlab_get_group_type( bp_get_current_group_id() );
-	$new_item = str_replace( "Admin", ucfirst( $group_type ) . " Settings", $subnav_item );
+	$group_label = openlab_get_group_type_label( 'case=upper' );
+	$new_item = str_replace( 'Admin', $group_label . ' Settings', $subnav_item );
 	//this is to stop the course settings menu item from getting a current class on membership pages
 	if ( bp_action_variable( 0 ) ) {
 		if ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests' ) {
