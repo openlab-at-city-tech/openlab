@@ -691,3 +691,21 @@ function openlab_group_status_message( $group = null ) {
 	echo $message;
 }
 
+/**
+ * Modify the body class
+ *
+ * Invite New Members and Your Email Options fall under "Settings", so need
+ * an appropriate body class.
+ */
+function openlab_group_admin_body_classes( $classes ) {
+	if ( ! bp_is_group() ) {
+		return $classes;
+	}
+
+	if ( in_array( bp_current_action(), array( 'invite-anyone', 'notifications' ) ) ) {
+		$classes[] = 'group-admin';
+	}
+
+	return $classes;
+}
+add_filter( 'bp_get_the_body_class', 'openlab_group_admin_body_classes' );
