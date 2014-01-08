@@ -114,8 +114,8 @@ function openlab_header_bar() { ?>
       //do_action( 'cuny_bp_adminbar_menus' );
       if ( is_user_logged_in() ) {?>
       <div id="extra-border"></div>
-      <ul id="openlab-link">
-          <li>
+      <ul class="nav" id="openlab-link">
+          <li<?php if ( bp_is_my_profile() ) : ?> class="current-menu-item"<?php endif ?>>
               <a href="<?php echo bp_loggedin_user_domain() ?>">My OpenLab</a>
           </li>
       </ul>
