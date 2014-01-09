@@ -836,6 +836,10 @@ input.wpcf7-submit,.filter input[type="submit"] {
     width:auto;
 }
 
+#header ul.nav#openlab-link {
+	padding-left: 2px;
+}
+
 #header ul.nav,#extra-border,#openlab-link {
     float:left;
 }
@@ -846,6 +850,10 @@ input.wpcf7-submit,.filter input[type="submit"] {
     border-right:2px solid #F0F0F0;
     font-size:13px;
     display:inline-block;
+}
+
+#header ul.nav#openlab-link li {
+	border-right: 0;
 }
 
 #header ul.nav li a {
