@@ -864,7 +864,7 @@ input.wpcf7-submit,.filter input[type="submit"] {
     text-decoration:none;
 }
 
-#header ul.nav li:first-child a {
+#header ul.nav#menu-main-menu li:first-child a {
     padding-left:0;
 }
 
