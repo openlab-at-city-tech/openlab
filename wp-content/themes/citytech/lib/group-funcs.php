@@ -322,10 +322,8 @@ function openlab_return_course_list( $school, $department ) {
 
 	$depts = openlab_get_department_list( $school, 'short' );
 
-	foreach ( $depts as $dept ) {
-		$display_option_dept = str_replace( 'And', '&amp;', $dept );
-		$option_value_dept = strtolower( str_replace( ' ', '-', $dept ) );
-		$list .= '<option value="' . $option_value_dept . '" ' . selected( $department, $option_value_dept, false ) . '>' . $display_option_dept . '</option>';
+	foreach ( $depts as $dept_name => $dept_label ) {
+		$list .= '<option value="' . esc_attr( $dept_name ) . '" ' . selected( $department, $dept_name, false ) . '>' . esc_attr( $dept_label ) . '</option>';
 	}
 
 	return $list;
