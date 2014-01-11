@@ -618,16 +618,138 @@ add_filter( 'bp_docs_do_theme_compat', '__return_false' );
  */
 function cuny_buddypress_group_actions() {
 	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
-		<div id="item-buttons">
-			<h2 class="sidebar-header"><?php echo openlab_get_group_type_label( 'case=upper' ) ?></h2>
-			<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
-				<ul>
-					<?php bp_get_options_nav(); ?>
-				</ul>
-			<?php endif ?>
-		</div><!-- #item-buttons -->
+		<div class="sidebar-widget">
+			<?php echo openlab_group_visibility_flag() ?>
+			<div id="item-buttons">
+				<h2 class="sidebar-header"><?php echo openlab_get_group_type_label( 'case=upper' ) ?></h2>
+				<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
+					<ul>
+						<?php bp_get_options_nav(); ?>
+					</ul>
+				<?php endif ?>
+			</div><!-- #item-buttons -->
+		</div>
 	<?php do_action( 'bp_group_options_nav' ) ?>
 	<?php endwhile; endif;
+}
+
+/**
+ * Output the group visibility flag, shown above the right-hand nav
+ */
+function openlab_group_visibility_flag( $type = 'group' ) {
+	static $group_buttons;
+
+	if ( ! in_array( $type, array( 'group', 'site' ) ) ) {
+		return;
+	}
+
+	if ( ! isset( $group_buttons ) ) {
+		$group_buttons = array();
+	}
+
+	// We stash it so that we only have to do the calculation once
+	if ( isset( $group_buttons[ $type ] ) ) {
+		return $group_buttons[ $type ];
+	}
+
+	$group = groups_get_current_group();
+//	var_Dump( $group );
+
+	$site_url = openlab_get_group_site_url( $group->id );
+	$site_id  = openlab_get_site_id_by_group_id( $group->id );
+
+	if ( $site_url ) {
+		// If we have a site URL but no ID, it's an external site, and is public
+		if ( ! $site_id ) {
+			$site_status = 1;
+		} else {
+			$site_status = get_blog_option( $site_id, 'blog_public' );
+		}
+	}
+
+	$g_text = $s_text = '';
+	$g_flag_type = $s_flag_type = 'down';
+	$site_status = (float) $site_status;
+
+	switch ( $site_status ) {
+
+		// Public
+		case 1 :
+		case 0 :
+			// If the group is also public, we use a single "up" flag
+			if ( 'public' === $group->status ) {
+				$g_text = 'Open';
+				$g_flag_type = 'up';
+			} else {
+				$g_text = 'Private';
+				$s_text = 'Open';
+			}
+
+			break;
+
+		case -1 :
+			$user_has_access = is_user_logged_in();
+
+			if ( 'public' === $group->status ) {
+				$g_text = 'Open';
+			} else {
+				$g_text = 'Private';
+			}
+
+			if ( $user_has_access ) {
+				// If the group is public, show a single Public up flag
+				if ( 'public' === $group->status ) {
+					$g_flag_type = 'up';
+
+				// For a private group, separate the flags
+				} else {
+					$s_text = 'Open';
+				}
+			} else {
+				// Two separate flags
+				if ( 'public' === $group->status ) {
+					$s_text = 'Private';
+
+				// Single "up" private flag
+				} else {
+					$g_flag_type = 'up';
+				}
+			}
+
+			break;
+
+		case -2 :
+		case -3 :
+			if ( 'public' === $group->status ) {
+				$g_text = 'Open';
+				$s_text = 'Private';
+			} else {
+				$g_text = 'Private';
+				$g_flag_type = 'up';
+			}
+
+			break;
+	}
+
+	// Assemble the HTML
+	$group_buttons['group'] = sprintf(
+		'<div class="group-visibility-flag group-visibility-flag-group group-visibility-flag-%s group-visibility-flag-%s">%s</div>',
+		strtolower( $g_text ),
+		$g_flag_type,
+		$g_text
+	);
+
+	// Only build the site button if there's something to build
+	if ( ! empty( $s_text ) ) {
+		$group_buttons['site'] = sprintf(
+			'<div class="group-visibility-flag group-visibility-flag-site group-visibility-flag-%s group-visibility-flag-%s">%s</div>',
+			strtolower( $s_text ),
+			$s_flag_type,
+			$s_text
+		);
+	}
+
+	return $group_buttons[ $type ];
 }
 
 /**

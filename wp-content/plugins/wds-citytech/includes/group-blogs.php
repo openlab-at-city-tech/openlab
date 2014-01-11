@@ -491,12 +491,26 @@ function wds_bp_group_site_pages() {
 		$site_url = get_blog_option( $site_id, 'siteurl' );
 		$is_local = true;
 
-		$blog_public = get_blog_option( $site_id, 'blog_public' );
-		if ( "-3" == $blog_public ) {
-			$caps = get_user_meta( get_current_user_id(), 'wp_' . $site_id . '_capabilities', true );
-			$is_visible = isset( $caps['administrator'] );
-		} else {
-			$is_visible = true;
+		$blog_public = (float) get_blog_option( $site_id, 'blog_public' );
+		switch ( $blog_public ) {
+			case 1 :
+			case 0 :
+				$is_visible = true;
+				break;
+
+			case -1 :
+				$is_visible = is_user_logged_in();
+				break;
+
+			case -2 :
+				$group = groups_get_current_group();
+				$is_visible = $group->is_member || current_user_can( 'bp_moderate' );
+				break;
+
+			case -3 :
+				$caps = get_user_meta( get_current_user_id(), 'wp_' . $site_id . '_capabilities', true );
+				$is_visible = isset( $caps['administrator'] );
+				break;
 		}
 	} else {
 		$site_url = groups_get_groupmeta( $group_id, 'external_site_url' );
@@ -509,6 +523,8 @@ function wds_bp_group_site_pages() {
 		if ( openlab_is_portfolio() ) {
 			?>
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
+				<?php echo openlab_group_visibility_flag( 'site' ); ?>
+
 				<h4 class="sidebar-header">
 					<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
 				</h4>
@@ -530,6 +546,8 @@ function wds_bp_group_site_pages() {
 		<?php } else { ?>
 
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
+				<?php echo openlab_group_visibility_flag( 'site' ); ?>
+
 				<h4 class="sidebar-header">
 					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
 				</h4>

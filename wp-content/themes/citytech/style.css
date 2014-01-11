@@ -2387,17 +2387,52 @@ div#sidebar.sidebar div#portfolio-sidebar-widget {
     margin:0 0 10px;
 }
 
+.sidebar-widget {
+	position: relative;
+}
+
+/* Group visibility flags */
+.group-visibility-flag {
+	font-family: 'Arvo', Arial, serif;
+	font-size: 12px;
+	color: #fff;
+	background-color: #0fceba;
+	font-weight: 400;
+	padding: 2px 0;
+	position: absolute;
+	right: 0;
+	top: 28px;
+	width: 65px;
+	text-align: center;
+}
+
+.group-visibility-flag-up {
+	top: -10px;
+	right: -12px;
+}
+
+.group-visibility-flag-site {
+	top: 0px;
+}
+
+.group-visibility-flag-private {
+	background-color: #bbb;
+}
+
 /* Global Right Sidebar */
+#sidebar #item-buttons > ul,
 #sidebar > div > ul {
     margin:0 0 0 21px;
     padding:0 0 10px 5px;
 }
 
+#sidebar #item-buttons > ul > li,
 #sidebar > div > ul > li {
     list-style-image:url(images/sidebar-bullet-gray.png);
     padding:0 0 6px;
 }
 
+#sidebar #item-buttons > ul > .current-menu-item,
 #sidebar > div > ul > .current-menu-item {
     list-style-image:url(images/sidebar_bullet_orange.png);
     padding:0 0 6px;
