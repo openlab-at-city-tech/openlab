@@ -622,11 +622,9 @@ function cuny_buddypress_group_actions() {
 			<?php echo openlab_group_visibility_flag() ?>
 			<div id="item-buttons">
 				<h2 class="sidebar-header"><?php echo openlab_get_group_type_label( 'case=upper' ) ?></h2>
-				<?php if ( !openlab_is_portfolio() || openlab_is_my_portfolio() ) : ?>
-					<ul>
-						<?php bp_get_options_nav(); ?>
-					</ul>
-				<?php endif ?>
+				<ul>
+					<?php bp_get_options_nav(); ?>
+				</ul>
 			</div><!-- #item-buttons -->
 		</div>
 	<?php do_action( 'bp_group_options_nav' ) ?>
