@@ -679,6 +679,14 @@ function openlab_group_visibility_flag( $type = 'group' ) {
 			if ( 'public' === $group->status ) {
 				$g_text = 'Open';
 				$g_flag_type = 'up';
+
+			// Special case: groups without a site will show up as
+			// $site_status = 0. They should get an up flag, since
+			// "Private" applies to the entire group (the entire
+			// group consisting of the profile)
+			} else if ( ! $site_url ) {
+				$g_text = 'Private';
+				$g_flag_type = 'up';
 			} else {
 				$g_text = 'Private';
 				$s_text = 'Open';
@@ -822,7 +830,7 @@ function openlab_group_status_message( $group = null ) {
 				// group does not have an associated site. When
 				// this is the case, and the group is not
 				// public, don't mention anything about the Site.
-				$message = 'This ' . $group_label . ' Profile is PRIVATE.';
+				$message = 'This ' . $group_label . ' is PRIVATE.';
 			} else {
 				$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
 			}
