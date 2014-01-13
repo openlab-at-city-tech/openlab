@@ -653,7 +653,6 @@ function openlab_group_visibility_flag( $type = 'group' ) {
 	}
 
 	$group = groups_get_current_group();
-//	var_Dump( $group );
 
 	$site_url = openlab_get_group_site_url( $group->id );
 	$site_id  = openlab_get_site_id_by_group_id( $group->id );
@@ -783,8 +782,7 @@ function openlab_remove_hidden_class_from_leave_group_button( $button ) {
 add_action( 'bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_group_button', 20 );
 
 /**
- * Prints a message if the group is not visible to the current user (it is a
- * hidden or private group, and the user does not have access).
+ * Prints a status message regarding the group visibility.
  *
  * @global BP_Groups_Template $groups_template Groups template object
  * @param object $group Group to get status message for. Optional; defaults to current group.
@@ -795,19 +793,54 @@ function openlab_group_status_message( $group = null ) {
 	if ( ! $group )
 		$group =& $groups_template->group;
 
-	$group_label = openlab_get_group_type_label( 'group_id=' . $group->id );
+	$group_label = openlab_get_group_type_label( 'group_id=' . $group->id . '&case=upper' );
 
-	if ( 'private' == $group->status ) {
-		if ( ! bp_group_has_requested_membership() ) {
-			if ( is_user_logged_in() )
-				$message = 'This is a private ' . $group_label . ' and you must request ' . $group_label . ' membership in order to join.';
-			else
-				$message = 'This is a private ' . $group_label . '. To join you must be a registered site member and request ' . $group_label . ' membership.';
+	$site_id = openlab_get_site_id_by_group_id( $group->id );
+	$site_url = openlab_get_group_site_url( $group->id );
+
+	if ( $site_url ) {
+		// If we have a site URL but no ID, it's an external site, and is public
+		if ( ! $site_id ) {
+			$site_status = 1;
 		} else {
-			$message = 'This is a private ' . $group_label . '. Your membership request is awaiting approval from the ' . $group_label . ' administrator.';
+			$site_status = get_blog_option( $site_id, 'blog_public' );
 		}
-	} else {
-		$message = 'This is a hidden ' . $group_label . ' and only invited members can join.';
+	}
+
+	$site_status = (float) $site_status;
+
+	$message = '';
+
+	switch ( $site_status ) {
+		// Public
+		case 1 :
+		case 0 :
+			if ( 'public' === $group->status ) {
+				$message = 'This ' . $group_label . ' is OPEN.';
+			} else {
+				$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
+			}
+
+			break;
+
+		case -1 :
+			if ( 'public' === $group->status ) {
+				$message = 'This ' . $group_label . ' Profile is OPEN, but only logged-in OpenLab members may view the ' . $group_label . ' Site.';
+			} else {
+				$message = 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+			}
+
+			break;
+
+		case -2 :
+		case -3 :
+			if ( 'public' === $group->status ) {
+				$message = 'This ' . $group_label . ' Profile is OPEN, but the ' . $group_label . ' Site is PRIVATE.';
+			} else {
+				$message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+			}
+
+			break;
 	}
 
 	echo $message;

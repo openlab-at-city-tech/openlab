@@ -1028,6 +1028,11 @@ h1.mol-title,#single-course-header h1,#content h1.group-title {
     margin-bottom:10px;
 }
 
+div#message.info.group-status-info p {
+	border: 2px solid #0fceba;
+	margin: 3em 0;
+}
+
 .submenu,#subnav,#bpsubnav {
     margin:0 0 30px;
     height:15px;

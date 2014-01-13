@@ -145,22 +145,13 @@ function cuny_group_single() { ?>
 
 	<?php if ( bp_is_group_home() ) { ?>
 
+		<?php do_action( 'bp_before_group_status_message' ) ?>
 
-		<?php if ( !bp_group_is_visible() ) : ?>
-			<?php /* The group is not visible, show the status message */ ?>
+		<div id="message" class="info group-status-info">
+			<p><?php openlab_group_status_message() ?></p>
+		</div>
 
-			<?php do_action( 'bp_before_group_status_message' ) ?>
-
-			<div id="message" class="info">
-				<p><?php openlab_group_status_message() ?></p>
-			</div>
-
-			<?php do_action( 'bp_after_group_status_message' ) ?>
-
-		<?php else : ?>
-
-		<?php endif; ?>
-
+		<?php do_action( 'bp_after_group_status_message' ) ?>
 
 		<?php if ( bp_group_is_visible() || !bp_is_active( 'activity' ) ) { ?>
 			        <?php global $first_displayed; ?>
