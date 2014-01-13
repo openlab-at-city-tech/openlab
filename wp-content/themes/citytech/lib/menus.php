@@ -197,6 +197,9 @@ function openlab_my_groups_submenu( $group ) {
 		case 'group-avatar':
 			$step_name = 'Step Three: Avatar';
 			break;
+		case 'invite-anyone' :
+			$step_name = 'Step Four: Invite Members';
+			break;
 	}
 
 	//if the current user is faculty or a super admin, they can create a course, otherwise no dice
