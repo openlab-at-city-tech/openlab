@@ -5368,8 +5368,24 @@ body.docs #comment {
   margin: 0 15px 0 10px;
 }
 
+.group-admin.invite-anyone #single-course-body {
+	margin: auto;
+}
+
 .group-admin #single-course-body #subnav ul li a {
   padding: 0 6px 0 5px;
+}
+
+.group-admin.invite-anyone #single-course-body #subnav ul li a {
+	padding: 2px 12px;
+}
+
+.group-admin.invite-anyone #single-course-body #subnav ul li:first-child a {
+	padding-left: 0;
+}
+
+.group-admin.invite-anyone #content h1.group-title {
+	margin-bottom: 5px;
 }
 
 .group-admin #group-settings-form > p > label {
