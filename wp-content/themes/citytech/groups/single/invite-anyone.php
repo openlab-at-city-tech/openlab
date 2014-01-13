@@ -80,7 +80,7 @@
 	<?php if ( invite_anyone_access_test() && !bp_is_group_create() ) : ?>
 		<h5 class="invite-title"><?php _e('Invite new members by email:'); ?></h5>
 
-		<p class="invite-copy"><?php _e('This link will take you to My Invitations, where you may invite people to join the OpenLab and this'.ucfirst($group_type)); ?></p>
+		<p class="invite-copy"><?php _e('This link will take you to My Invitations, where you may invite people to join the OpenLab and this '.ucfirst($group_type)); ?></p>
 
 		<p><a class="underline" href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Invite New Members to OpenLab.', 'bp-invite-anyone' ) ?></a></p>
 	<?php endif; ?>
