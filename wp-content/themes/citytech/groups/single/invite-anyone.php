@@ -34,7 +34,16 @@
 
 <div class="left-menu">
 	<h5 class="invite-title"><?php _e('Invites:'); ?></h5>
-    <p class="invite-copy"><?php _e('These members will be sent an invitation to your '.ucfirst($group_type).'. Click the "Send Invites" button to continue.'); ?></p>
+
+	<p class="invite-copy">
+		<?php echo 'These members will be sent an invitation to your ' . ucfirst( $group_type ) . '.'; ?>
+
+		<?php if ( bp_is_group_create() ) : ?>
+			Click 'Finish' to continue.
+		<?php else : ?>
+			Click the "Send Invites" button to continue.
+		<?php endif ?>
+	</p>
 
 	<?php do_action( 'bp_before_group_send_invites_list' ) ?>
 
