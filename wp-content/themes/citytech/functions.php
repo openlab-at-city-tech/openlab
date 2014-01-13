@@ -877,4 +877,3 @@ function openlab_group_admin_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'bp_get_the_body_class', 'openlab_group_admin_body_classes' );
->>>>>>> 1.3.x
