@@ -86,48 +86,49 @@ function cuny_group_single() { ?>
 
 				<?php do_action( 'bp_before_group_header_meta' ) ?>
 
-              <?php if ($group_type == "course"): ?>
-                  <div class="course-byline">
-                    <span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>
-                    <?php
-                    $wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
-                    $wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );
-                    $wds_year=groups_get_groupmeta($group_id, 'wds_year' );
-                    $wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
-                    ?>
-                    <div class="info-line" style="margin-top:2px;"><?php echo $wds_course_code;?> | <?php echo $wds_departments;?> | <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
+				<?php if ($group_type == "course"): ?>
+					<div class="course-byline">
+						<span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>
+						<?php
+						$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
+						$wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );
+						$wds_year=groups_get_groupmeta($group_id, 'wds_year' );
+						$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
+						?>
+						<div class="info-line" style="margin-top:2px;"><?php echo $wds_course_code;?> | <?php echo $wds_departments;?> | <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
 
-                </div><!-- .course-byline -->
-                <?php //do_action( 'bp_before_group_header_meta' ) ?>
-                <div class="course-description">
-                    <?php echo apply_filters('the_content', $group_description ); ?>
-                </div>
-                <?php do_action( 'bp_group_header_meta' ) ?>
+					</div><!-- .course-byline -->
 
-                <?php if ($html): ?>
-                <div class="course-html-block">
-                    <?php echo $html; ?>
-                </div>
-                <?php endif; //end courses block ?>
+					<div class="course-description">
+						<?php echo apply_filters('the_content', $group_description ); ?>
+					</div>
 
-			<?php else: ?>
+					<?php do_action( 'bp_group_header_meta' ) ?>
 
-            	<div id="item-meta">
-					<?php bp_group_description() ?>
+					<?php if ($html): ?>
+						<div class="course-html-block">
+							<?php echo $html; ?>
+						</div>
+					<?php endif; //end courses block ?>
 
-                    <?php do_action( 'bp_group_header_meta' ) ?>
-                </div>
+				<?php else : ?>
 
-            <?php endif; ?>
-		</div><!-- .header-content -->
+					<div id="item-meta">
+						<?php bp_group_description() ?>
+						<?php do_action( 'bp_group_header_meta' ) ?>
+					</div>
 
-		<?php do_action( 'bp_after_group_header' ) ?>
-		<?php do_action( 'template_notices' ) ?>
+				<?php endif; ?>
+			</div><!-- .header-content -->
 
-       <div class="clear"></div>
-       </div><!--<?php echo $group_type; ?>-header -->
+			<?php do_action( 'bp_after_group_header' ) ?>
+			<?php do_action( 'template_notices' ) ?>
 
-            <?php endif; ?>
+			<div class="clear"></div>
+
+		</div><!--<?php echo $group_type; ?>-header -->
+
+		<?php endif; ?>
 
             <div id="single-course-body">
 <?php
