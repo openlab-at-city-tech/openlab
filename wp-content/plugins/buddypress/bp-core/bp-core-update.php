@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Updater
+ * BuddyPress Updater.
  *
  * @package BuddyPress
  * @subpackage Updater
@@ -11,26 +11,34 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * If there is no raw DB version, this is the first installation
+ * Is this a fresh installation of BuddyPress?
  *
- * @since BuddyPress (1.7)
+ * If there is no raw DB version, we infer that this is the first installation.
+ *
+ * @since BuddyPress (1.7.0)
  *
  * @uses get_option()
- * @uses bp_get_db_version() To get BuddyPress's database version
- * @return bool True if update, False if not
+ * @uses bp_get_db_version() To get BuddyPress's database version.
+ *
+ * @return bool True if this is a fresh BP install, otherwise false.
  */
 function bp_is_install() {
 	return ! bp_get_db_version_raw();
 }
 
 /**
- * Compare the BuddyPress version to the DB version to determine if updating
+ * Is this a BuddyPress update?
  *
- * @since BuddyPress (1.6)
+ * Determined by comparing the registered BuddyPress version to the version
+ * number stored in the database. If the registered version is greater, it's
+ * an update.
+ *
+ * @since BuddyPress (1.6.0)
  *
  * @uses get_option()
- * @uses bp_get_db_version() To get BuddyPress's database version
- * @return bool True if update, False if not
+ * @uses bp_get_db_version() To get BuddyPress's database version.
+ *
+ * @return bool True if update, otherwise false.
  */
 function bp_is_update() {
 
@@ -46,12 +54,13 @@ function bp_is_update() {
 }
 
 /**
- * Determine if BuddyPress is being activated
+ * Determine whether BuddyPress is in the process of being activated.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
  * @uses buddypress()
- * @return bool True if activating BuddyPress, false if not
+ *
+ * @return bool True if activating BuddyPress, false if not.
  */
 function bp_is_activation( $basename = '' ) {
 	$bp     = buddypress();
@@ -90,12 +99,13 @@ function bp_is_activation( $basename = '' ) {
 }
 
 /**
- * Determine if BuddyPress is being deactivated
+ * Determine whether BuddyPress is in the process of being deactivated.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
  * @uses buddypress()
- * @return bool True if deactivating BuddyPress, false if not
+ *
+ * @return bool True if deactivating BuddyPress, false if not.
  */
 function bp_is_deactivation( $basename = '' ) {
 	$bp     = buddypress();
@@ -134,22 +144,21 @@ function bp_is_deactivation( $basename = '' ) {
 }
 
 /**
- * Update the DB to the latest version
+ * Update the BP version stored in the database to the current version.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
- * @uses update_option()
- * @uses bp_get_db_version() To get BuddyPress's database version
- * @uses bp_update_option() To update BuddyPress's database version
+ * @uses bp_get_db_version() To get BuddyPress's database version.
+ * @uses bp_update_option() To update BuddyPress's database version.
  */
 function bp_version_bump() {
 	bp_update_option( '_bp_db_version', bp_get_db_version() );
 }
 
 /**
- * Setup the BuddyPress updater
+ * Set up the BuddyPress updater.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  */
 function bp_setup_updater() {
 
@@ -161,20 +170,30 @@ function bp_setup_updater() {
 }
 
 /**
- * BuddyPress's version updater looks at what the current database version is,
- * and runs whatever other code is needed.
+ * Initialize an update or installation of BuddyPress.
  *
- * This is most-often used when the data schema changes, but should also be used
+ * BuddyPress's version updater looks at what the current database version is,
+ * and runs whatever other code is needed - either the "update" or "install"
+ * code.
+ *
+ * This is most often used when the data schema changes, but should also be used
  * to correct issues with BuddyPress metadata silently on software update.
  *
- * @since BuddyPress (1.7)
+ * @since BuddyPress (1.7.0)
  */
 function bp_version_updater() {
 
 	// Get the raw database version
 	$raw_db_version = (int) bp_get_db_version_raw();
 
-	$default_components = apply_filters( 'bp_new_install_default_components', array( 'activity' => 1, 'members' => 1, 'xprofile' => 1, ) );
+	$default_components = apply_filters( 'bp_new_install_default_components', array(
+		'activity'      => 1,
+		'members'       => 1,
+		'settings'      => 1,
+		'xprofile'      => 1,
+		'notifications' => 1,
+	) );
+
 	require_once( BP_PLUGIN_DIR . '/bp-core/admin/bp-core-schema.php' );
 
 	// Install BP schema and activate only Activity and XProfile
@@ -201,6 +220,11 @@ function bp_version_updater() {
 		if ( $raw_db_version < 6067 ) {
 			bp_update_to_1_6();
 		}
+
+		// 1.9
+		if ( $raw_db_version < 7553 ) {
+			bp_update_to_1_9();
+		}
 	}
 
 	/** All done! *************************************************************/
@@ -210,9 +234,11 @@ function bp_version_updater() {
 }
 
 /**
- * Database update methods based on version numbers
+ * Remove unused metadata from database when upgrading from < 1.5.
  *
- * @since BuddyPress (1.7)
+ * Database update methods based on version numbers.
+ *
+ * @since BuddyPress (1.7.0)
  */
 function bp_update_to_1_5() {
 
@@ -226,9 +252,11 @@ function bp_update_to_1_5() {
 }
 
 /**
- * Database update methods based on version numbers
+ * Remove unused metadata from database when upgrading from < 1.6.
  *
- * @since BuddyPress (1.7)
+ * Database update methods based on version numbers.
+ *
+ * @since BuddyPress (1.7.0)
  */
 function bp_update_to_1_6() {
 
@@ -246,13 +274,40 @@ function bp_update_to_1_6() {
 }
 
 /**
- * Redirect user to BuddyPress's What's New page on activation
+ * Add the notifications component to active components.
  *
- * @since BuddyPress (1.7)
+ * Notifications was added in 1.9.0, and previous installations will already
+ * have the core notifications API active. We need to add the new Notifications
+ * component to the active components option to retain existing functionality.
  *
- * @internal Used internally to redirect BuddyPress to the about page on activation
+ * @since BuddyPress (1.9.0)
+ */
+function bp_update_to_1_9() {
+
+	// Setup hardcoded keys
+	$active_components_key      = 'bp-active-components';
+	$notifications_component_id = 'notifications';
+
+	// Get the active components
+	$active_components          = bp_get_option( $active_components_key );
+
+	// Add notifications
+	if ( ! in_array( $notifications_component_id, $active_components ) ) {
+		$active_components[ $notifications_component_id ] = 1;
+	}
+
+	// Update the active components option
+	bp_update_option( $active_components_key, $active_components );
+}
+
+/**
+ * Redirect user to BP's What's New page on first page load after activation.
  *
- * @uses set_transient() To drop the activation transient for 30 seconds
+ * @since BuddyPress (1.7.0)
+ *
+ * @internal Used internally to redirect BuddyPress to the about page on activation.
+ *
+ * @uses set_transient() To drop the activation transient for 30 seconds.
  */
 function bp_add_activation_redirect() {
 
@@ -273,11 +328,13 @@ function bp_add_activation_redirect() {
 /** Activation Actions ********************************************************/
 
 /**
- * Runs on BuddyPress activation
+ * Fire activation hooks and events.
  *
- * @since BuddyPress (1.6)
+ * Runs on BuddyPress activation.
  *
- * @uses do_action() Calls 'bp_activation' hook
+ * @since BuddyPress (1.6.0)
+ *
+ * @uses do_action() Calls 'bp_activation' hook.
  */
 function bp_activation() {
 
@@ -292,11 +349,13 @@ function bp_activation() {
 }
 
 /**
- * Runs on BuddyPress deactivation
+ * Fire deactivation hooks and events.
  *
- * @since BuddyPress (1.6)
+ * Runs on BuddyPress deactivation.
  *
- * @uses do_action() Calls 'bp_deactivation' hook
+ * @since BuddyPress (1.6.0)
+ *
+ * @uses do_action() Calls 'bp_deactivation' hook.
  */
 function bp_deactivation() {
 
@@ -319,11 +378,13 @@ function bp_deactivation() {
 }
 
 /**
- * Runs when uninstalling BuddyPress
+ * Fire uninstall hook.
  *
- * @since BuddyPress (1.6)
+ * Runs when uninstalling BuddyPress.
  *
- * @uses do_action() Calls 'bp_uninstall' hook
+ * @since BuddyPress (1.6.0)
+ *
+ * @uses do_action() Calls 'bp_uninstall' hook.
  */
 function bp_uninstall() {
 	do_action( 'bp_uninstall' );

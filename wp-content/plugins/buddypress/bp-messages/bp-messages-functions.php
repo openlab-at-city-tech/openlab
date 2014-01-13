@@ -74,31 +74,26 @@ function messages_new_message( $args = '' ) {
 
 			$recipient_id = false;
 
-			// input was numeric
-			if ( is_numeric( $recipient ) ) {
-				// do a check against the user ID column first
-				if ( bp_core_get_core_userdata( (int) $recipient ) )
-					$recipient_id = (int) $recipient;
-
-				// if that fails, check against the user_login / user_nicename column
-				else {
-					if ( bp_is_username_compatibility_mode() )
-						$recipient_id = bp_core_get_userid( (int) $recipient );
-					else
-						$recipient_id = bp_core_get_userid_from_nicename( (int) $recipient );
-				}
-
+			// check user_login / nicename columns first
+			// @see http://buddypress.trac.wordpress.org/ticket/5151
+			if ( bp_is_username_compatibility_mode() ) {
+				$recipient_id = bp_core_get_userid( urldecode( $recipient ) );
 			} else {
-				if ( bp_is_username_compatibility_mode() )
-					$recipient_id = bp_core_get_userid( $recipient );
-				else
-					$recipient_id = bp_core_get_userid_from_nicename( $recipient );
+				$recipient_id = bp_core_get_userid_from_nicename( $recipient );
 			}
 
-			if ( !$recipient_id )
+			// check against user ID column if no match and if passed recipient is numeric
+			if ( ! $recipient_id && is_numeric( $recipient ) ) {
+				if ( bp_core_get_core_userdata( (int) $recipient ) ) {
+					$recipient_id = (int) $recipient;
+				}
+			}
+
+			if ( ! $recipient_id ) {
 				$invalid_recipients[] = $recipient;
-			else
+			} else {
 				$recipient_ids[] = (int) $recipient_id;
+			}
 		}
 
 		// Strip the sender from the recipient list if they exist
@@ -119,14 +114,6 @@ function messages_new_message( $args = '' ) {
 	}
 
 	if ( $message->send() ) {
-
-		// Send screen notifications to the recipients
-		foreach ( (array) $message->recipients as $recipient )
-			bp_core_add_notification( $message->id, $recipient->user_id, 'messages', 'new_message' );
-
-		// Send email notifications to the recipients
-		messages_notification_new_message( array( 'message_id' => $message->id, 'sender_id' => $message->sender_id, 'subject' => $message->subject, 'content' => $message->message, 'recipients' => $message->recipients, 'thread_id' => $message->thread_id) );
-
 		do_action_ref_array( 'messages_message_sent', array( &$message ) );
 
 		return $message->thread_id;
@@ -226,44 +213,4 @@ function messages_get_message_sender( $message_id ) {
 
 function messages_is_valid_thread( $thread_id ) {
 	return BP_Messages_Thread::is_valid( $thread_id );
-}
-
-/**
- * Format the BuddyBar/Toolbar notifications for the Messages component
- *
- * @package BuddyPress
- *
- * @param string $action The kind of notification being rendered
- * @param int $item_id The primary item id
- * @param int $secondary_item_id The secondary item id
- * @param int $total_items The total number of messaging-related notifications waiting for the user
- * @param string $format 'string' for BuddyBar-compatible notifications; 'array' for WP Toolbar
- */
-function messages_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
-
-	if ( 'new_message' == $action ) {
-		$link  = trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/inbox' );
-		$title = __( 'Inbox', 'buddypress' );
-
-		if ( (int) $total_items > 1 ) {
-			$text = sprintf( __('You have %d new messages', 'buddypress' ), (int) $total_items );
-			$filter = 'bp_messages_multiple_new_message_notification';
-		} else {
-			$text = sprintf( __('You have %d new message', 'buddypress' ), (int) $total_items );
-			$filter = 'bp_messages_single_new_message_notification';
-		}
-	}
-
-	if ( 'string' == $format ) {
-		$return = apply_filters( $filter, '<a href="' . $link . '" title="' . $title . '">' . $text . '</a>', (int) $total_items, $text, $link );
-	} else {
-		$return = apply_filters( $filter, array(
-			'text' => $text,
-			'link' => $link
-		), $link, (int) $total_items, $text, $link );
-	}
-
-	do_action( 'messages_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
-
-	return $return;
 }

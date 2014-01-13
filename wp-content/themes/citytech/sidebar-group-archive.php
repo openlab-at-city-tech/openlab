@@ -69,7 +69,6 @@ if (empty($_GET['department'])) {
     $option_value_dept = $_GET['department'];
 }
 
-
 //semesters
 if (empty($_GET['semester'])) {
     $_GET['semester'] = "";
@@ -109,6 +108,9 @@ switch ($_GET['usertype']) {
         $display_option_user_type = "Staff";
         $option_value_user_type = "staff";
         break;
+    case 'alumni' :
+	$display_option_user_type = 'Alumni';
+	$option_value_user_type = 'alumni';
     case "user_type_all":
         $display_option_user_type = "All";
         $option_value_user_type = "user_type_all";
@@ -189,6 +191,7 @@ switch ($_GET['group_sequence']) {
                 <option value='student' <?php selected( 'student', $option_value_user_type ) ?>>Student</option>
                 <option value='faculty' <?php selected( 'faculty', $option_value_user_type ) ?>>Faculty</option>
                 <option value='staff' <?php selected( 'staff', $option_value_user_type ) ?>>Staff</option>
+                <option value='alumni' <?php selected( 'alumni', $option_value_user_type ) ?>>Alumni</option>
                 <option value='user_type_all' <?php selected( 'user_type_all', $option_value_user_type ) ?>>All</option>
             </select>
 	<?php endif; ?>

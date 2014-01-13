@@ -3,9 +3,6 @@
 /**
  * BuddyPress Admin Actions
  *
- * @package BuddyPress
- * @subpackage Admin
- *
  * This file contains the actions that are used through-out BuddyPress Admin. They
  * are consolidated here to make searching for them easier, and to help developers
  * understand at a glance the order in which things occur.
@@ -15,6 +12,8 @@
  *  - BuddyPress: In {@link BuddyPress::setup_actions()} in BuddyPress.php
  *  - Admin: More in {@link bp_Admin::setup_actions()} in admin.php
  *
+ * @package BuddyPress
+ * @subpackage Admin
  * @see bp-core-actions.php
  * @see bp-core-filters.php
  */
@@ -131,13 +130,17 @@ function bp_admin_notices() {
 }
 
 /**
- * Piggy back admin_notices action
+ * Piggy back admin_enqueue_scripts action.
  *
- * @since BuddyPress (1.7)
- * @uses do_action() Calls 'bp_admin_notices'
+ * @since BuddyPress (1.7.0)
+ *
+ * @uses do_action() Calls 'bp_admin_enqueue_scripts''.
+ *
+ * @param string $hook_suffix The current admin page, passed to
+ *        'admin_enqueue_scripts'.
  */
-function bp_admin_enqueue_scripts() {
-	do_action( 'bp_admin_enqueue_scripts' );
+function bp_admin_enqueue_scripts( $hook_suffix = '' ) {
+	do_action( 'bp_admin_enqueue_scripts', $hook_suffix );
 }
 
 /**

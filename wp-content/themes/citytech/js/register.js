@@ -17,6 +17,7 @@ jQuery(document).ready(function($){
 
                 if ( 'student' == emailtype ) {
                         newtypes += '<option value="Student">Student</option>';
+                        newtypes += '<option value="Alumni">Alumni</option>';
                 }
 
                 if ( 'fs' == emailtype ) {

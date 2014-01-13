@@ -1,9 +1,9 @@
 <?php
 
 /**
- * BuddyPress Core Loader
+ * BuddyPress Core Loader.
  *
- * Core contains the commonly used functions, classes, and API's
+ * Core contains the commonly used functions, classes, and APIs.
  *
  * @package BuddyPress
  * @subpackage Core
@@ -15,9 +15,9 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class BP_Core extends BP_Component {
 
 	/**
-	 * Start the members component creation process
+	 * Start the members component creation process.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 *
 	 * @uses BP_Core::bootstrap()
 	 */
@@ -32,17 +32,15 @@ class BP_Core extends BP_Component {
 	}
 
 	/**
-	 * Populate the global data needed before BuddyPress can continue
+	 * Populate the global data needed before BuddyPress can continue.
 	 *
 	 * This involves figuring out the currently required, active, deactive,
 	 * and optional components.
 	 *
-	 * @since BuddyPress (1.5)
-	 *
-	 * @global BuddyPress $bp
+	 * @since BuddyPress (1.5.0)
 	 */
 	private function bootstrap() {
-		global $bp;
+		$bp = buddypress();
 
 		/**
 		 * At this point in the stack, BuddyPress core has been loaded but
@@ -56,7 +54,7 @@ class BP_Core extends BP_Component {
 		/** Components ********************************************************/
 
 		// Set the included and optional components.
-		$bp->optional_components = apply_filters( 'bp_optional_components', array( 'activity', 'blogs', 'forums', 'friends', 'groups', 'messages', 'settings', 'xprofile' ) );
+		$bp->optional_components = apply_filters( 'bp_optional_components', array( 'activity', 'blogs', 'forums', 'friends', 'groups', 'messages', 'notifications', 'settings', 'xprofile' ) );
 
 		// Set the required components
 		$bp->required_components = apply_filters( 'bp_required_components', array( 'members' ) );
@@ -110,6 +108,13 @@ class BP_Core extends BP_Component {
 		$bp->required_components[] = 'core';
 	}
 
+	/**
+	 * Include bp-core files.
+	 *
+	 * @see BP_Component::includes() for description of parameters.
+	 *
+	 * @param array $includes See {@link BP_Component::includes()}.
+	 */
 	public function includes( $includes = array() ) {
 
 		if ( !is_admin() )
@@ -123,15 +128,19 @@ class BP_Core extends BP_Component {
 	}
 
 	/**
+	 * Set up bp-core global settings.
+	 *
 	 * Sets up a majority of the BuddyPress globals that require a minimal
 	 * amount of processing, meaning they cannot be set in the BuddyPress class.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 *
-	 * @global BuddyPress $bp
+	 * @see BP_Component::setup_globals() for description of parameters.
+	 *
+	 * @param array $args See {@link BP_Component::setup_globals()}.
 	 */
 	public function setup_globals( $args = array() ) {
-		global $bp;
+		$bp = buddypress();
 
 		/** Database **********************************************************/
 
@@ -168,7 +177,8 @@ class BP_Core extends BP_Component {
 		$bp->grav_default->group = apply_filters( 'bp_group_gravatar_default', $bp->grav_default->user );
 		$bp->grav_default->blog  = apply_filters( 'bp_blog_gravatar_default',  $bp->grav_default->user );
 
-		// Notifications Table
+		// Notifications table. Included here for legacy purposes. Use
+		// bp-notifications instead.
 		$bp->core->table_name_notifications = $bp->table_prefix . 'bp_notifications';
 
 		/**
@@ -188,20 +198,22 @@ class BP_Core extends BP_Component {
 	}
 
 	/**
-	 * Setup BuddyBar navigation
+	 * Set up component navigation.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 *
-	 * @global BuddyPress $bp
+	 * @see BP_Component::setup_nav() for a description of arguments.
+	 *
+	 * @param array $main_nav Optional. See BP_Component::setup_nav() for
+	 *        description.
+	 * @param array $sub_nav Optional. See BP_Component::setup_nav() for
+	 *        description.
 	 */
-	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
-		global $bp;
+         public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
+		$bp = buddypress();
 
 		 // If xprofile component is disabled, revert to WordPress profile
 		if ( !bp_is_active( 'xprofile' ) ) {
-
-			// Define local variable
-			$sub_nav = array();
 
 			// Fallback values if xprofile is disabled
 			if ( ! isset( $bp->core->profile ) ) {
@@ -236,14 +248,13 @@ class BP_Core extends BP_Component {
 }
 
 /**
- * Setup the BuddyPress Core component
+ * Set up the BuddyPress Core component.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
- * @global BuddyPress $bp
+ * @global BuddyPress $bp BuddyPress global settings object.
  */
 function bp_setup_core() {
-	global $bp;
-	$bp->core = new BP_Core();
+	buddypress()->core = new BP_Core();
 }
 add_action( 'bp_setup_components', 'bp_setup_core', 2 );

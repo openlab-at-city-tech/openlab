@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Friends Caching
+ * BuddyPress Friends Caching.
  *
  * Caching functions handle the clearing of cached objects and pages on specific
  * actions throughout BuddyPress.
@@ -10,10 +10,15 @@
  * @subpackage FriendsCaching
  */
 
-
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Clear friends-related cache for members of a specific friendship.
+ *
+ * @param int $friendship_id ID of the friendship whose two members should
+ *        have their friends cache busted.
+ */
 function friends_clear_friend_object_cache( $friendship_id ) {
 	if ( !$friendship = new BP_Friends_Friendship( $friendship_id ) )
 		return false;
@@ -21,14 +26,6 @@ function friends_clear_friend_object_cache( $friendship_id ) {
 	wp_cache_delete( 'friends_friend_ids_' .    $friendship->initiator_user_id, 'bp' );
 	wp_cache_delete( 'friends_friend_ids_' .    $friendship->friend_user_id,    'bp' );
 }
-
-function friends_clear_friend_notifications() {
-	global $bp;
-
-	if ( isset( $_GET['new'] ) )
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->friends->id, 'friendship_accepted' );
-}
-add_action( 'bp_activity_screen_my_activity', 'friends_clear_friend_notifications' );
 
 // List actions to clear object caches on
 add_action( 'friends_friendship_accepted', 'friends_clear_friend_object_cache' );

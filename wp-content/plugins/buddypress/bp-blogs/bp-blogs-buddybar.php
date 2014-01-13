@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Blogs Activity
+ * BuddyPress Blogs BuddyBar functions.
  *
  * @package BuddyPress
  * @subpackage BlogsBuddyBar
@@ -11,15 +11,14 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Add a Sites menu to the BuddyBar
+ * Add a Sites menu to the BuddyBar.
  *
- * @since BuddyPress (1.0)
- * @package BuddyPress
- * @subpackage BlogsBuddyBar
- * @global BuddyPress $bp
- * @return boolean
+ * @since BuddyPress (1.0.0)
+ *
+ * @global object $bp The BuddyPress global settings object.
+ *
+ * @return bool|null Returns false on failure. Otherwise echoes the menu item.
  */
-
 function bp_adminbar_blogs_menu() {
 	global $bp;
 

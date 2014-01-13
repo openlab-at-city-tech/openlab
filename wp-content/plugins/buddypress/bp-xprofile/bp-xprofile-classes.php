@@ -11,19 +11,19 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 class BP_XProfile_Group {
-	var $id = null;
-	var $name;
-	var $description;
-	var $can_delete;
-	var $group_order;
-	var $fields;
+	public $id = null;
+	public $name;
+	public $description;
+	public $can_delete;
+	public $group_order;
+	public $fields;
 
-	function __construct( $id = null ) {
+	public function __construct( $id = null ) {
 		if ( !empty( $id ) )
 			$this->populate( $id );
 	}
 
-	function populate( $id ) {
+	public function populate( $id ) {
 		global $wpdb, $bp;
 
 		$sql = $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_groups} WHERE id = %d", $id );
@@ -38,7 +38,7 @@ class BP_XProfile_Group {
 		$this->group_order = $group->group_order;
 	}
 
-	function save() {
+	public function save() {
 		global $wpdb, $bp;
 
 		$this->name        = apply_filters( 'xprofile_group_name_before_save',        $this->name,        $this->id );
@@ -63,7 +63,7 @@ class BP_XProfile_Group {
 		return $this->id;
 	}
 
-	function delete() {
+	public function delete() {
 		global $wpdb, $bp;
 
 		if ( empty( $this->can_delete ) )
@@ -111,7 +111,7 @@ class BP_XProfile_Group {
 	 *
 	 * @return array $groups
 	 */
-	function get( $args = '' ) {
+	public static function get( $args = array() ) {
 		global $wpdb, $bp;
 
 		$defaults = array(
@@ -174,6 +174,7 @@ class BP_XProfile_Group {
 		if ( empty( $fields ) )
 			return $groups;
 
+		// Maybe fetch field data
 		if ( ! empty( $fetch_field_data ) ) {
 
 			// Fetch the field data for the user.
@@ -188,7 +189,7 @@ class BP_XProfile_Group {
 			}
 
 			// Remove data-less fields, if necessary
-			if ( !empty( $hide_empty_fields ) ) {
+			if ( !empty( $hide_empty_fields ) && ! empty( $field_ids ) && ! empty( $field_data ) ) {
 
 				// Loop through the results and find the fields that have data.
 				foreach( (array) $field_data as $data ) {
@@ -210,11 +211,10 @@ class BP_XProfile_Group {
 
 				// Reset indexes
 				$fields = array_values( $fields );
-
 			}
 
 			// Field data was found
-			if ( !empty( $field_data ) && !is_wp_error( $field_data ) ) {
+			if ( ! empty( $fields ) && !empty( $field_data ) && !is_wp_error( $field_data ) ) {
 
 				// Loop through fields
 				foreach( (array) $fields as $field_key => $field ) {
@@ -224,17 +224,18 @@ class BP_XProfile_Group {
 
 						// Assign correct data value to the field
 						if ( $field->id == $data->field_id ) {
-							$fields[$field_key]->data = new stdClass;
+							$fields[$field_key]->data        = new stdClass;
 							$fields[$field_key]->data->value = $data->value;
-							$fields[$field_key]->data->id = $data->id;
+							$fields[$field_key]->data->id    = $data->id;
 						}
 					}
 				}
 			}
+		}
 
-			if ( !empty( $fetch_visibility_level ) ) {
-				$fields = self::fetch_visibility_level( $user_id, $fields );
-			}
+		// Maybe fetch visibility levels
+		if ( !empty( $fetch_visibility_level ) ) {
+			$fields = self::fetch_visibility_level( $user_id, $fields );
 		}
 
 		// Merge the field array back in with the group array
@@ -263,7 +264,7 @@ class BP_XProfile_Group {
 		return $groups;
 	}
 
-	function admin_validate() {
+	public static function admin_validate() {
 		global $message;
 
 		/* Validate Form */
@@ -275,7 +276,7 @@ class BP_XProfile_Group {
 		}
 	}
 
-	function update_position( $field_group_id, $position ) {
+	public static function update_position( $field_group_id, $position ) {
 		global $wpdb, $bp;
 
 		if ( !is_numeric( $position ) )
@@ -293,7 +294,7 @@ class BP_XProfile_Group {
 	 * @param array $fields The database results returned by the get() query
 	 * @return array $fields The database results, with field_visibility added
 	 */
-	function fetch_visibility_level( $user_id = 0, $fields = array() ) {
+	public static function fetch_visibility_level( $user_id = 0, $fields = array() ) {
 
 		// Get the user's visibility level preferences
 		$visibility_levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
@@ -329,7 +330,7 @@ class BP_XProfile_Group {
 	 * @return array $default_visibility_levels An array, keyed by field_id, of default
 	 *   visibility level + allow_custom (whether the admin allows this field to be set by user)
 	 */
-	function fetch_default_visibility_levels() {
+	public static function fetch_default_visibility_levels() {
 		global $wpdb, $bp;
 
 		$levels = $wpdb->get_results( "SELECT object_id, meta_key, meta_value FROM {$bp->profile->table_name_meta} WHERE object_type = 'field' AND ( meta_key = 'default_visibility' OR meta_key = 'allow_custom_visibility' )" );
@@ -347,7 +348,7 @@ class BP_XProfile_Group {
 		return $default_visibility_levels;
 	}
 
-	function render_admin_form() {
+	public function render_admin_form() {
 		global $message;
 
 		if ( empty( $this->id ) ) {
@@ -382,7 +383,7 @@ class BP_XProfile_Group {
 							<div id="titlediv">
 								<div id="titlewrap">
 									<label class="screen-reader-text" id="title-prompt-text" for=​"title">​<?php _e( 'Field Group Title', 'buddypress') ?></label>
-									<input type="text" name="group_name" id="title" value="<?php echo esc_attr( $this->name ); ?>" />
+									<input type="text" name="group_name" id="title" value="<?php echo esc_attr( $this->name ); ?>" placeholder="<?php esc_attr_e( 'Field Group Title', 'buddypress' ); ?>" />
 								</div>
 							</div>
 
@@ -426,31 +427,31 @@ class BP_XProfile_Group {
 }
 
 class BP_XProfile_Field {
-	var $id;
-	var $group_id;
-	var $parent_id;
-	var $type;
-	var $name;
-	var $description;
-	var $is_required;
-	var $can_delete;
-	var $field_order;
-	var $option_order;
-	var $order_by;
-	var $is_default_option;
-	var $default_visibility;
-	var $allow_custom_visibility = 'allowed';
+	public $id;
+	public $group_id;
+	public $parent_id;
+	public $type;
+	public $name;
+	public $description;
+	public $is_required;
+	public $can_delete = '1';
+	public $field_order;
+	public $option_order;
+	public $order_by;
+	public $is_default_option;
+	public $default_visibility = 'public';
+	public $allow_custom_visibility = 'allowed';
 
-	var $data;
-	var $message = null;
-	var $message_type = 'err';
+	public $data;
+	public $message = null;
+	public $message_type = 'err';
 
-	function __construct( $id = null, $user_id = null, $get_data = true ) {
+	public function __construct( $id = null, $user_id = null, $get_data = true ) {
 		if ( !empty( $id ) )
 			$this->populate( $id, $user_id, $get_data );
 	}
 
-	function populate( $id, $user_id, $get_data ) {
+	public function populate( $id, $user_id, $get_data ) {
 		global $wpdb, $userdata, $bp;
 
 		if ( empty( $user_id ) ) {
@@ -487,7 +488,7 @@ class BP_XProfile_Field {
 		}
 	}
 
-	function delete( $delete_data = false ) {
+	public function delete( $delete_data = false ) {
 		global $wpdb, $bp;
 
 		// Prevent deletion if no ID is present
@@ -506,24 +507,25 @@ class BP_XProfile_Field {
 		return true;
 	}
 
-	function save() {
+	public function save() {
 		global $wpdb, $bp;
 
-		$this->group_id	   = apply_filters( 'xprofile_field_group_id_before_save',    $this->group_id,    $this->id );
+		$this->group_id    = apply_filters( 'xprofile_field_group_id_before_save',    $this->group_id,    $this->id );
 		$this->parent_id   = apply_filters( 'xprofile_field_parent_id_before_save',   $this->parent_id,   $this->id );
-		$this->type	       = apply_filters( 'xprofile_field_type_before_save',        $this->type,        $this->id );
-		$this->name	       = apply_filters( 'xprofile_field_name_before_save',        $this->name,        $this->id );
+		$this->type        = apply_filters( 'xprofile_field_type_before_save',        $this->type,        $this->id );
+		$this->name        = apply_filters( 'xprofile_field_name_before_save',        $this->name,        $this->id );
 		$this->description = apply_filters( 'xprofile_field_description_before_save', $this->description, $this->id );
 		$this->is_required = apply_filters( 'xprofile_field_is_required_before_save', $this->is_required, $this->id );
 		$this->order_by	   = apply_filters( 'xprofile_field_order_by_before_save',    $this->order_by,    $this->id );
 		$this->field_order = apply_filters( 'xprofile_field_field_order_before_save', $this->field_order, $this->id );
+		$this->can_delete  = apply_filters( 'xprofile_field_can_delete_before_save',  $this->can_delete,  $this->id );
 
 		do_action_ref_array( 'xprofile_field_before_save', array( $this ) );
 
 		if ( $this->id != null ) {
-			$sql = $wpdb->prepare( "UPDATE {$bp->profile->table_name_fields} SET group_id = %d, parent_id = 0, type = %s, name = %s, description = %s, is_required = %d, order_by = %s, field_order = %d WHERE id = %d", $this->group_id, $this->type, $this->name, $this->description, $this->is_required, $this->order_by, $this->field_order, $this->id );
+			$sql = $wpdb->prepare( "UPDATE {$bp->profile->table_name_fields} SET group_id = %d, parent_id = 0, type = %s, name = %s, description = %s, is_required = %d, order_by = %s, field_order = %d, can_delete = %d WHERE id = %d", $this->group_id, $this->type, $this->name, $this->description, $this->is_required, $this->order_by, $this->field_order, $this->can_delete, $this->id );
 		} else {
-			$sql = $wpdb->prepare( "INSERT INTO {$bp->profile->table_name_fields} (group_id, parent_id, type, name, description, is_required, order_by, field_order ) VALUES (%d, %d, %s, %s, %s, %d, %s, %d )", $this->group_id, $this->parent_id, $this->type, $this->name, $this->description, $this->is_required, $this->order_by, $this->field_order );
+			$sql = $wpdb->prepare( "INSERT INTO {$bp->profile->table_name_fields} (group_id, parent_id, type, name, description, is_required, order_by, field_order, can_delete ) VALUES (%d, %d, %s, %s, %s, %d, %s, %d, %d )", $this->group_id, $this->parent_id, $this->type, $this->name, $this->description, $this->is_required, $this->order_by, $this->field_order, $this->can_delete );
 		}
 
 		/**
@@ -623,11 +625,11 @@ class BP_XProfile_Field {
 		}
 	}
 
-	function get_field_data( $user_id ) {
+	public function get_field_data( $user_id ) {
 		return new BP_XProfile_ProfileData( $this->id, $user_id );
 	}
 
-	function get_children( $for_editing = false ) {
+	public function get_children( $for_editing = false ) {
 		global $wpdb, $bp;
 
 		// This is done here so we don't have problems with sql injection
@@ -654,7 +656,7 @@ class BP_XProfile_Field {
 		return apply_filters( 'bp_xprofile_field_get_children', $children );
 	}
 
-	function delete_children() {
+	public function delete_children() {
 		global $wpdb, $bp;
 
 		$sql = $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_fields} WHERE parent_id = %d", $this->id );
@@ -662,9 +664,9 @@ class BP_XProfile_Field {
 		$wpdb->query( $sql );
 	}
 
-	/* Static Functions */
+	/** Static Methods ********************************************************/
 
-	function get_type( $field_id ) {
+	public static function get_type( $field_id ) {
 		global $wpdb, $bp;
 
 		if ( !empty( $field_id ) ) {
@@ -680,7 +682,7 @@ class BP_XProfile_Field {
 		return false;
 	}
 
-	function delete_for_group( $group_id ) {
+	public static function delete_for_group( $group_id ) {
 		global $wpdb, $bp;
 
 		if ( !empty( $group_id ) ) {
@@ -696,7 +698,7 @@ class BP_XProfile_Field {
 		return false;
 	}
 
-	function get_id_from_name( $field_name ) {
+	public static function get_id_from_name( $field_name ) {
 		global $wpdb, $bp;
 
 		if ( empty( $bp->profile->table_name_fields ) || !isset( $field_name ) )
@@ -705,7 +707,7 @@ class BP_XProfile_Field {
 		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", $field_name ) );
 	}
 
-	function update_position( $field_id, $position, $field_group_id ) {
+	public static function update_position( $field_id, $position, $field_group_id ) {
 		global $wpdb, $bp;
 
 		if ( !is_numeric( $position ) || !is_numeric( $field_group_id ) )
@@ -728,7 +730,7 @@ class BP_XProfile_Field {
 	*/
 
 	/* This function populates the items for radio buttons checkboxes and drop down boxes */
-	function render_admin_form_children() {
+	public function render_admin_form_children() {
 		$input_types = array( 'checkbox', 'selectbox', 'multiselectbox', 'radio' );
 
 		foreach ( $input_types as $type ) {
@@ -748,72 +750,75 @@ class BP_XProfile_Field {
 
 			?>
 
-			<div id="<?php echo esc_attr( $type ); ?>" class="options-box" style="<?php echo esc_attr( $class ); ?> margin-left: 15px;">
-				<h4><?php _e( 'Please enter options for this Field:', 'buddypress' ); ?></h4>
-				<p>
-					<label for="sort_order_<?php echo esc_attr( $type ); ?>"><?php _e( 'Sort Order:', 'buddypress' ); ?></label>
-					<select name="sort_order_<?php echo esc_attr( $type ); ?>" id="sort_order_<?php echo esc_attr( $type ); ?>" >
-						<option value="custom" <?php selected( 'custom', $this->order_by ); ?>><?php _e( 'Custom',     'buddypress' ); ?></option>
-						<option value="asc"    <?php selected( 'asc',    $this->order_by ); ?>><?php _e( 'Ascending',  'buddypress' ); ?></option>
-						<option value="desc"   <?php selected( 'desc',   $this->order_by ); ?>><?php _e( 'Descending', 'buddypress' ); ?></option>
-					</select>
+			<div id="<?php echo esc_attr( $type ); ?>" class="postbox bp-options-box" style="<?php echo esc_attr( $class ); ?> margin-top: 15px;">
+				<h3><?php _e( 'Please enter options for this Field:', 'buddypress' ); ?></h3>
+				<div class="inside">
+					<p>
+						<label for="sort_order_<?php echo esc_attr( $type ); ?>"><?php _e( 'Sort Order:', 'buddypress' ); ?></label>
+						<select name="sort_order_<?php echo esc_attr( $type ); ?>" id="sort_order_<?php echo esc_attr( $type ); ?>" >
+							<option value="custom" <?php selected( 'custom', $this->order_by ); ?>><?php _e( 'Custom',     'buddypress' ); ?></option>
+							<option value="asc"    <?php selected( 'asc',    $this->order_by ); ?>><?php _e( 'Ascending',  'buddypress' ); ?></option>
+							<option value="desc"   <?php selected( 'desc',   $this->order_by ); ?>><?php _e( 'Descending', 'buddypress' ); ?></option>
+						</select>
+					</p>
 
-				<?php if ( !$options = $this->get_children( true ) ) {
+					<?php if ( !$options = $this->get_children( true ) ) {
 
-					$i = 1;
-					while ( isset( $_POST[$type . '_option'][$i] ) ) {
-						(array) $options[] = (object) array(
-							'id'                => -1,
-							'name'              => $_POST[$type . '_option'][$i],
-							'is_default_option' => ( ( 'multiselectbox' != $type ) && ( 'checkbox' != $type ) && ( $_POST["isDefault_{$type}_option"] == $i ) ) ? 1 : $_POST["isDefault_{$type}_option"][$i]
-						);
+						$i = 1;
+						while ( isset( $_POST[$type . '_option'][$i] ) ) {
+							(array) $options[] = (object) array(
+								'id'                => -1,
+								'name'              => $_POST[$type . '_option'][$i],
+								'is_default_option' => ( ( 'multiselectbox' != $type ) && ( 'checkbox' != $type ) && ( $_POST["isDefault_{$type}_option"] == $i ) ) ? 1 : $_POST["isDefault_{$type}_option"][$i]
+							);
 
-						++$i;
+							++$i;
+						}
 					}
-				}
 
-				if ( !empty( $options ) ) {
-					for ( $i = 0, $count = count( $options ); $i < $count; ++$i ) {
-						$j = $i + 1;
+					if ( !empty( $options ) ) {
+						for ( $i = 0, $count = count( $options ); $i < $count; ++$i ) {
+							$j = $i + 1;
+
+							if ( 'multiselectbox' == $type || 'checkbox' == $type )
+								$default_name = '[' . $j . ']'; ?>
+
+							<p class="sortable">
+								<span>&nbsp;&Xi;&nbsp;</span>
+								<input type="text" name="<?php echo esc_attr( $type ); ?>_option[<?php echo esc_attr( $j ); ?>]" id="<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $j ); ?>" value="<?php echo stripslashes( esc_attr( $options[$i]->name ) ); ?>" />
+								<input type="<?php echo $default_input; ?>" name="isDefault_<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $default_name ); ?>" <?php checked( (int) $options[$i]->is_default_option, true ); ?> value="<?php echo esc_attr( $j ); ?>" />
+								<span><?php _e( 'Default Value', 'buddypress' ); ?></span>
+								<a href="<?php echo esc_url( 'users.php?page=bp-profile-setup&amp;mode=delete_option&amp;option_id=' . $options[$i]->id ); ?>" class="ajax-option-delete" id="delete-<?php echo esc_attr( $options[$i]->id ); ?>">[x]</a>
+							</p>
+
+						<?php } /* end for */ ?>
+
+						<input type="hidden" name="<?php echo esc_attr( $type ); ?>_option_number" id="<?php echo esc_attr( $type ); ?>_option_number" value="<?php echo esc_attr( (int) $j + 1 ); ?>" />
+
+					<?php } else {
 
 						if ( 'multiselectbox' == $type || 'checkbox' == $type )
-							$default_name = '[' . $j . ']'; ?>
+							$default_name = '[1]'; ?>
 
 						<p class="sortable">
 							<span>&nbsp;&Xi;&nbsp;</span>
-							<input type="text" name="<?php echo esc_attr( $type ); ?>_option[<?php echo esc_attr( $j ); ?>]" id="<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $j ); ?>" value="<?php echo stripslashes( esc_attr( $options[$i]->name ) ); ?>" />
-							<input type="<?php echo $default_input; ?>" name="isDefault_<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $default_name ); ?>" <?php checked( (int) $options[$i]->is_default_option, true ); ?> value="<?php echo esc_attr( $j ); ?>" />
+							<input type="text" name="<?php echo esc_attr( $type ); ?>_option[1]" id="<?php echo esc_attr( $type ); ?>_option1" />
+							<input type="<?php echo esc_attr( $default_input ); ?>" name="isDefault_<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $default_name ); ?>" id="isDefault_<?php echo esc_attr( $type ); ?>_option" value="1" />
 							<span><?php _e( 'Default Value', 'buddypress' ); ?></span>
-							<a href="<?php echo esc_url( 'users.php?page=bp-profile-setup&amp;mode=delete_option&amp;option_id=' . $options[$i]->id ); ?>" class="ajax-option-delete" id="delete-<?php echo esc_attr( $options[$i]->id ); ?>">[x]</a>
+							<input type="hidden" name="<?php echo esc_attr( $type ); ?>_option_number" id="<?php echo esc_attr( $type ); ?>_option_number" value="2" />
 						</p>
 
-					<?php } /* end for */ ?>
+					<?php } /* end if */ ?>
 
-					<input type="hidden" name="<?php echo esc_attr( $type ); ?>_option_number" id="<?php echo esc_attr( $type ); ?>_option_number" value="<?php echo esc_attr( (int) $j + 1 ); ?>" />
-
-				<?php } else {
-
-					if ( 'multiselectbox' == $type || 'checkbox' == $type )
-						$default_name = '[1]'; ?>
-
-					<p class="sortable">
-						<span>&nbsp;&Xi;&nbsp;</span>
-						<input type="text" name="<?php echo esc_attr( $type ); ?>_option[1]" id="<?php echo esc_attr( $type ); ?>_option1" />
-						<input type="<?php echo esc_attr( $default_input ); ?>" name="isDefault_<?php echo esc_attr( $type ); ?>_option<?php echo esc_attr( $default_name ); ?>" id="isDefault_<?php echo esc_attr( $type ); ?>_option" value="1" />
-						<span><?php _e( 'Default Value', 'buddypress' ); ?></span>
-						<input type="hidden" name="<?php echo esc_attr( $type ); ?>_option_number" id="<?php echo esc_attr( $type ); ?>_option_number" value="2" />
-					</p>
-
-				<?php } /* end if */ ?>
-
-				<div id="<?php echo esc_attr( $type ); ?>_more"></div>
-				<p><a href="javascript:add_option('<?php echo esc_attr( $type ); ?>')"><?php _e( 'Add Another Option', 'buddypress' ); ?></a></p>
+					<div id="<?php echo esc_attr( $type ); ?>_more"></div>
+					<p><a href="javascript:add_option('<?php echo esc_attr( $type ); ?>')"><?php _e( 'Add Another Option', 'buddypress' ); ?></a></p>
+				</div>
 			</div>
 
 		<?php }
 	}
 
-	function render_admin_form( $message = '' ) {
+	public function render_admin_form( $message = '' ) {
 		if ( empty( $this->id ) ) {
 			$title  = __( 'Add Field', 'buddypress' );
 			$action	= "users.php?page=bp-profile-setup&amp;group_id=" . $this->group_id . "&amp;mode=add_field#tabs-" . $this->group_id;
@@ -834,7 +839,6 @@ class BP_XProfile_Field {
 		<div class="wrap">
 			<div id="icon-users" class="icon32"><br /></div>
 			<h2><?php echo esc_html( $title ); ?></h2>
-			<p><?php _e( 'Fields marked * are required', 'buddypress' ) ?></p>
 
 			<?php if ( !empty( $message ) ) : ?>
 
@@ -846,91 +850,129 @@ class BP_XProfile_Field {
 
 			<form id="bp-xprofile-add-field" action="<?php echo esc_url( $action ); ?>" method="post">
 				<div id="poststuff">
-					<div id="titlediv">
-						<h3><label for="title"><?php _e( 'Field Title', 'buddypress' ); ?> *</label></h3>
-						<div id="titlewrap">
-							<input type="text" name="title" id="title" value="<?php echo esc_attr( $this->name ); ?>" style="width:50%" />
-						</div>
-					</div>
+					<div id="post-body" class="metabox-holder columns-<?php echo ( 1 == get_current_screen()->get_columns() ) ? '1' : '2'; ?>">
+						<div id="post-body-content">
+							<div id="titlediv">
+								<input type="text" name="title" id="title" value="<?php echo esc_attr( $this->name ); ?>" />
+							</div>
+							<div class="postbox">
+								<h3><?php _e( 'Field Description', 'buddypress' ); ?></h3>
+								<div class="inside">
+									<textarea name="description" id="description" rows="8" cols="60"><?php echo esc_attr( $this->description ); ?></textarea>
+								</div>
+							</div>
+						</div><!-- #post-body-content -->
 
-					<div id="titlediv">
-						<h3><label for="description"><?php _e("Field Description", 'buddypress'); ?></label></h3>
-						<div id="titlewrap">
-							<textarea name="description" id="description" rows="8" cols="60"><?php echo esc_textarea( $this->description ); ?></textarea>
-						</div>
-					</div>
-
-					<?php if ( '0' != $this->can_delete ) : ?>
-
-						<div id="titlediv">
-							<h3><label for="required"><?php _e( "Is This Field Required?", 'buddypress' ); ?> *</label></h3>
-							<select name="required" id="required" style="width: 30%">
-								<option value="0"<?php selected( $this->is_required, '0' ); ?>><?php _e( 'Not Required', 'buddypress' ); ?></option>
-								<option value="1"<?php selected( $this->is_required, '1' ); ?>><?php _e( 'Required',     'buddypress' ); ?></option>
-							</select>
-						</div>
-
-						<div id="titlediv">
-							<h3><label for="fieldtype"><?php _e( 'Field Type', 'buddypress'); ?> *</label></h3>
-							<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)" style="width: 30%">
-								<option value="textbox"        <?php selected( $this->type, 'textbox'        ); ?>><?php _e( 'Text Box',             'buddypress' ); ?></option>
-								<option value="textarea"       <?php selected( $this->type, 'textarea'       ); ?>><?php _e( 'Multi-line Text Box',  'buddypress' ); ?></option>
-								<option value="datebox"        <?php selected( $this->type, 'datebox'        ); ?>><?php _e( 'Date Selector',        'buddypress' ); ?></option>
-								<option value="radio"          <?php selected( $this->type, 'radio'          ); ?>><?php _e( 'Radio Buttons',        'buddypress' ); ?></option>
-								<option value="selectbox"      <?php selected( $this->type, 'selectbox'      ); ?>><?php _e( 'Drop Down Select Box', 'buddypress' ); ?></option>
-								<option value="multiselectbox" <?php selected( $this->type, 'multiselectbox' ); ?>><?php _e( 'Multi Select Box',     'buddypress' ); ?></option>
-								<option value="checkbox"       <?php selected( $this->type, 'checkbox'       ); ?>><?php _e( 'Checkboxes',           'buddypress' ); ?></option>
-							</select>
-						</div>
-
-						<?php do_action_ref_array( 'xprofile_field_additional_options', array( $this ) ); ?>
-
-						<?php $this->render_admin_form_children(); ?>
-
-					<?php else : ?>
-
-						<input type="hidden" name="required"  id="required"  value="1"       />
-						<input type="hidden" name="fieldtype" id="fieldtype" value="textbox" />
-
-					<?php endif;
-
-					/* The fullname field cannot be hidden */
-					if ( 1 != $this->id ) : ?>
-
-						<div id="titlediv">
-							<div id="titlewrap">
-								<h3><label for="default-visibility"><?php _e( 'Default Visibility', 'buddypress' ); ?></label></h3>
-								<ul>
-
-									<?php foreach( bp_xprofile_get_visibility_levels() as $level ) : ?>
-
-										<li><label><input type="radio" name="default-visibility" value="<?php echo esc_attr( $level['id'] ) ?>" <?php checked( $this->default_visibility, $level['id'] ); ?>> <?php echo esc_html( $level['label'] ) ?></label></li>
-
-									<?php endforeach ?>
-
-								</ul>
+						<div id="postbox-container-1" class="postbox-container">
+							<div id="submitdiv" class="postbox">
+								<h3><?php _e( 'Submit', 'buddypress' ); ?></h3>
+								<div class="inside">
+									<div id="submitcomment" class="submitbox">
+										<div id="major-publishing-actions">
+											<input type="hidden" name="field_order" id="field_order" value="<?php echo esc_attr( $this->field_order ); ?>" />
+											<div id="publishing-action">
+												<input type="submit" value="<?php _e( 'Save', 'buddypress' ); ?>" name="saveField" id="saveField" style="font-weight: bold" class="button-primary" />
+											</div>
+											<div id="delete-action">
+												<a href="users.php?page=bp-profile-setup" class="deletion"><?php _e( 'Cancel', 'buddypress' ); ?></a>
+											</div>
+											<?php wp_nonce_field( 'xprofile_delete_option' ); ?>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
 							</div>
 
-							<div id="titlewrap">
-								<h3><label for="allow-custom-visibility"><?php _e( 'Per-Member Visibility', 'buddypress' ); ?></label></h3>
-								<ul>
-									<li><label><input type="radio" name="allow-custom-visibility" value="allowed"  <?php checked( $this->allow_custom_visibility, 'allowed'  ); ?>> <?php _e( "Let members change this field's visibility", 'buddypress' ); ?></label></li>
-									<li><label><input type="radio" name="allow-custom-visibility" value="disabled" <?php checked( $this->allow_custom_visibility, 'disabled' ); ?>> <?php _e( 'Enforce the default visibility for all members', 'buddypress' ); ?></label></li>
-								</ul>
-							</div>
+							<?php /* Field 1 is the fullname field, which cannot have custom visibility */ ?>
+							<?php if ( 1 != $this->id ) : ?>
+
+								<div class="postbox">
+									<h3><label for="default-visibility"><?php _e( 'Default Visibility', 'buddypress' ); ?></label></h3>
+									<div class="inside">
+										<ul>
+
+											<?php foreach( bp_xprofile_get_visibility_levels() as $level ) : ?>
+
+												<li>
+													<input type="radio" id="default-visibility[<?php echo esc_attr( $level['id'] ) ?>]" name="default-visibility" value="<?php echo esc_attr( $level['id'] ) ?>" <?php checked( $this->default_visibility, $level['id'] ); ?> />
+													<label for="default-visibility[<?php echo esc_attr( $level['id'] ) ?>]"><?php echo esc_html( $level['label'] ) ?></label>
+												</li>
+
+											<?php endforeach ?>
+
+										</ul>
+									</div>
+								</div>
+
+								<div class="postbox">
+									<h3><label for="allow-custom-visibility"><?php _e( 'Per-Member Visibility', 'buddypress' ); ?></label></h3>
+									<div class="inside">
+										<ul>
+											<li>
+												<input type="radio" id="allow-custom-visibility-allowed" name="allow-custom-visibility" value="allowed" <?php checked( $this->allow_custom_visibility, 'allowed' ); ?> />
+												<label for="allow-custom-visibility-allowed"><?php _e( "Let members change this field's visibility", 'buddypress' ); ?></label>
+											</li>
+											<li>
+												<input type="radio" id="allow-custom-visibility-disabled" name="allow-custom-visibility" value="disabled" <?php checked( $this->allow_custom_visibility, 'disabled' ); ?> />
+												<label for="allow-custom-visibility-disabled"><?php _e( 'Enforce the default visibility for all members', 'buddypress' ); ?></label>
+											</li>
+										</ul>
+									</div>
+								</div>
+
+							<?php endif ?>
 						</div>
 
-					<?php endif ?>
+						<div id="postbox-container-2" class="postbox-container">
 
-					<p class="submit">
-						<input type="hidden" name="field_order" id="field_order" value="<?php echo esc_attr( $this->field_order ); ?>" />
-						<input type="submit" value="<?php _e( 'Save', 'buddypress' ); ?>" name="saveField" id="saveField" style="font-weight: bold" class="button-primary" />
-						<?php _e( 'or', 'buddypress' ); ?> <a href="users.php?page=bp-profile-setup" class="deletion"><?php _e( 'Cancel', 'buddypress' ); ?></a>
-					</p>
+							<?php /* Field 1 is the fullname field, which cannot be altered */ ?>
+							<?php if ( 1 != $this->id ) : ?>
 
-				</div>
+								<div class="postbox">
+									<h3><label for="required"><?php _e( "Field Requirement", 'buddypress' ); ?></label></h3>
+									<div class="inside">
+										<select name="required" id="required" style="width: 30%">
+											<option value="0"<?php selected( $this->is_required, '0' ); ?>><?php _e( 'Not Required', 'buddypress' ); ?></option>
+											<option value="1"<?php selected( $this->is_required, '1' ); ?>><?php _e( 'Required',     'buddypress' ); ?></option>
+										</select>
+									</div>
+								</div>
 
-				<?php wp_nonce_field( 'xprofile_delete_option' ); ?>
+								<div class="postbox">
+									<h3><label for="fieldtype"><?php _e( 'Field Type', 'buddypress'); ?></label></h3>
+									<div class="inside">
+										<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)" style="width: 30%">
+											<optgroup label="<?php _e( 'Single Fields', 'buddypress' ); ?>">
+												<option value="textbox"        <?php selected( $this->type, 'textbox'        ); ?>><?php _e( 'Text Box',             'buddypress' ); ?></option>
+												<option value="textarea"       <?php selected( $this->type, 'textarea'       ); ?>><?php _e( 'Multi-line Text Area', 'buddypress' ); ?></option>
+												<option value="datebox"        <?php selected( $this->type, 'datebox'        ); ?>><?php _e( 'Date Selector',        'buddypress' ); ?></option>
+											</optgroup>
+											<optgroup label="<?php _e( 'Multi Fields', 'buddypress' ); ?>">
+												<option value="radio"          <?php selected( $this->type, 'radio'          ); ?>><?php _e( 'Radio Buttons',        'buddypress' ); ?></option>
+												<option value="selectbox"      <?php selected( $this->type, 'selectbox'      ); ?>><?php _e( 'Drop Down Select Box', 'buddypress' ); ?></option>
+												<option value="multiselectbox" <?php selected( $this->type, 'multiselectbox' ); ?>><?php _e( 'Multi Select Box',     'buddypress' ); ?></option>
+												<option value="checkbox"       <?php selected( $this->type, 'checkbox'       ); ?>><?php _e( 'Checkboxes',           'buddypress' ); ?></option>
+											</optgroup>
+										</select>
+
+										<?php do_action_ref_array( 'xprofile_field_additional_options', array( $this ) ); ?>
+
+										<?php $this->render_admin_form_children(); ?>
+
+									</div>
+								</div>
+
+							<?php else : ?>
+
+								<input type="hidden" name="required"  id="required"  value="1"       />
+								<input type="hidden" name="fieldtype" id="fieldtype" value="textbox" />
+
+							<?php endif; ?>
+
+						</div>
+					</div><!-- #post-body -->
+
+				</div><!-- #poststuff -->
 
 			</form>
 		</div>
@@ -938,7 +980,7 @@ class BP_XProfile_Field {
 <?php
 	}
 
-	function admin_validate() {
+	public static function admin_validate() {
 		global $message;
 
 		// Validate Form
@@ -965,19 +1007,19 @@ class BP_XProfile_Field {
 
 
 class BP_XProfile_ProfileData {
-	var $id;
-	var $user_id;
-	var $field_id;
-	var $value;
-	var $last_updated;
+	public $id;
+	public $user_id;
+	public $field_id;
+	public $value;
+	public $last_updated;
 
-	function __construct( $field_id = null, $user_id = null ) {
+	public function __construct( $field_id = null, $user_id = null ) {
 		if ( !empty( $field_id ) ) {
 			$this->populate( $field_id, $user_id );
 		}
 	}
 
-	function populate( $field_id, $user_id )  {
+	public function populate( $field_id, $user_id )  {
 		global $wpdb, $bp;
 
 		$sql = $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_data} WHERE field_id = %d AND user_id = %d", $field_id, $user_id );
@@ -996,15 +1038,13 @@ class BP_XProfile_ProfileData {
 	}
 
 	/**
-	 * exists ()
-	 *
 	 * Check if there is data already for the user.
 	 *
 	 * @global object $wpdb
 	 * @global array $bp
 	 * @return bool
 	 */
-	function exists() {
+	public function exists() {
 		global $wpdb, $bp;
 
 		$retval = $wpdb->get_row( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_data} WHERE user_id = %d AND field_id = %d", $this->user_id, $this->field_id ) );
@@ -1013,15 +1053,13 @@ class BP_XProfile_ProfileData {
 	}
 
 	/**
-	 * is_valid_field()
-	 *
 	 * Check if this data is for a valid field.
 	 *
 	 * @global object $wpdb
 	 * @global array $bp
 	 * @return bool
 	 */
-	function is_valid_field() {
+	public function is_valid_field() {
 		global $wpdb, $bp;
 
 		$retval = $wpdb->get_row( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE id = %d", $this->field_id ) );
@@ -1029,7 +1067,7 @@ class BP_XProfile_ProfileData {
 		return apply_filters_ref_array( 'xprofile_data_is_valid_field', array( (bool)$retval, $this ) );
 	}
 
-	function save() {
+	public function save() {
 		global $wpdb, $bp;
 
 		$this->user_id      = apply_filters( 'xprofile_data_user_id_before_save',      $this->user_id,         $this->id );
@@ -1063,23 +1101,35 @@ class BP_XProfile_ProfileData {
 		return false;
 	}
 
-	function delete() {
-		global $wpdb, $bp;
+	/**
+	 * Delete specific XProfile field data
+	 *
+	 * @global object $wpdb
+	 * @return boolean
+	 */
+	public function delete() {
+		global $wpdb;
+
+		$bp = buddypress();
+
+		do_action_ref_array( 'xprofile_data_before_delete', array( $this ) );
 
 		if ( !$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_data} WHERE field_id = %d AND user_id = %d", $this->field_id, $this->user_id ) ) )
 			return false;
 
+		do_action_ref_array( 'xprofile_data_after_delete', array( $this ) );
+
 		return true;
 	}
 
-	/** Static Functions **/
+	/** Static Methods ********************************************************/
 
 	/**
 	 * BP_XProfile_ProfileData::get_all_for_user()
 	 *
 	 * Get all of the profile information for a specific user.
 	 */
-	function get_all_for_user( $user_id ) {
+	public static function get_all_for_user( $user_id ) {
 		global $wpdb, $bp;
 
 		$results      = $wpdb->get_results( $wpdb->prepare( "SELECT g.id as field_group_id, g.name as field_group_name, f.id as field_id, f.name as field_name, f.type as field_type, d.value as field_data, u.user_login, u.user_nicename, u.user_email FROM {$bp->profile->table_name_groups} g LEFT JOIN {$bp->profile->table_name_fields} f ON g.id = f.group_id INNER JOIN {$bp->profile->table_name_data} d ON f.id = d.field_id LEFT JOIN {$wpdb->users} u ON d.user_id = u.ID WHERE d.user_id = %d AND d.value != ''", $user_id ) );
@@ -1111,7 +1161,7 @@ class BP_XProfile_ProfileData {
 	 * @param int $user_id
 	 * @return int $fielddata_id
 	 */
-	function get_fielddataid_byid( $field_id, $user_id ) {
+	public static function get_fielddataid_byid( $field_id, $user_id ) {
 		global $wpdb, $bp;
 
 		if ( empty( $field_id ) || empty( $user_id ) ) {
@@ -1123,7 +1173,7 @@ class BP_XProfile_ProfileData {
 		return $fielddata_id;
 	}
 
-	function get_value_byid( $field_id, $user_ids = null ) {
+	public static function get_value_byid( $field_id, $user_ids = null ) {
 		global $wpdb, $bp;
 
 		if ( empty( $user_ids ) )
@@ -1139,7 +1189,7 @@ class BP_XProfile_ProfileData {
 		return $data;
 	}
 
-	function get_value_byfieldname( $fields, $user_id = null ) {
+	public static function get_value_byfieldname( $fields, $user_id = null ) {
 		global $bp, $wpdb;
 
 		if ( empty( $fields ) )
@@ -1188,7 +1238,7 @@ class BP_XProfile_ProfileData {
 		return $new_values;
 	}
 
-	function delete_for_field( $field_id ) {
+	public static function delete_for_field( $field_id ) {
 		global $wpdb, $bp;
 
 		if ( !$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_data} WHERE field_id = %d", $field_id ) ) )
@@ -1197,7 +1247,7 @@ class BP_XProfile_ProfileData {
 		return true;
 	}
 
-	function get_last_updated( $user_id ) {
+	public static function get_last_updated( $user_id ) {
 		global $wpdb, $bp;
 
 		$last_updated = $wpdb->get_var( $wpdb->prepare( "SELECT last_updated FROM {$bp->profile->table_name_data} WHERE user_id = %d ORDER BY last_updated LIMIT 1", $user_id ) );
@@ -1205,13 +1255,13 @@ class BP_XProfile_ProfileData {
 		return $last_updated;
 	}
 
-	function delete_data_for_user( $user_id ) {
+	public static function delete_data_for_user( $user_id ) {
 		global $wpdb, $bp;
 
 		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_data} WHERE user_id = %d", $user_id ) );
 	}
 
-	function get_random( $user_id, $exclude_fullname ) {
+	public static function get_random( $user_id, $exclude_fullname ) {
 		global $wpdb, $bp;
 
 		if ( !empty( $exclude_fullname ) )
@@ -1220,7 +1270,7 @@ class BP_XProfile_ProfileData {
 		return $wpdb->get_results( $wpdb->prepare( "SELECT pf.type, pf.name, pd.value FROM {$bp->profile->table_name_data} pd INNER JOIN {$bp->profile->table_name_fields} pf ON pd.field_id = pf.id AND pd.user_id = %d {$exclude_sql} ORDER BY RAND() LIMIT 1", $user_id ) );
 	}
 
-	function get_fullname( $user_id = 0 ) {
+	public static function get_fullname( $user_id = 0 ) {
 
 		if ( empty( $user_id ) )
 			$user_id = bp_displayed_user_id();

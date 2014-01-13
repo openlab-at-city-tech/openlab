@@ -521,7 +521,7 @@ function bp_group_avatar( $args = '' ) {
 
 		/* Fetch the avatar from the folder, if not provide backwards compat. */
 		if ( !$avatar = bp_core_fetch_avatar( array( 'item_id' => $groups_template->group->id, 'object' => 'group', 'type' => $type, 'avatar_dir' => 'group-avatars', 'alt' => $alt, 'css_id' => $id, 'class' => $class, 'width' => $width, 'height' => $height, 'title' => $groups_template->group->name, 'alt' => $alt ) ) )
-			$avatar = '<img src="' . esc_attr( $groups_template->group->avatar_thumb ) . '" class="avatar" alt="' . esc_attr( $groups_template->group->name ) . '" />';
+			$avatar = '<img src="' . esc_url( $groups_template->group->avatar_thumb ) . '" class="avatar" alt="' . esc_attr( $groups_template->group->name ) . '" />';
 
 		return apply_filters( 'bp_get_group_avatar', $avatar );
 	}
@@ -884,14 +884,14 @@ function bp_group_search_form() {
 	$label = __('Filter Groups', 'buddypress');
 	$name = 'group-filter-box';
 
-?>
-	<form action="<?php echo $action ?>" id="group-search-form" method="post">
-		<label for="<?php echo $name ?>" id="<?php echo $name ?>-label"><?php echo $label ?></label>
-		<input type="search" name="<?php echo $name ?>" id="<?php echo $name ?>" value="<?php echo $value ?>"<?php echo $disabled ?> />
+	$search_form_html = '<form action="' . $action . '" id="group-search-form" method="post">
+		<label for="'. $name .'" id="'. $name .'-label">'. $label .'</label>
+		<input type="search" name="'. $name . '" id="'. $name .'" value="'. $value .'"'.  $disabled .' />
 
-		<?php wp_nonce_field( 'group-filter-box', '_wpnonce_group_filter' ) ?>
-	</form>
-<?php
+		'. wp_nonce_field( 'group-filter-box', '_wpnonce_group_filter', true, false ) .'
+		</form>';
+
+	echo apply_filters( 'bp_group_search_form', $search_form_html );
 }
 
 function bp_group_show_no_groups_message() {
@@ -929,7 +929,7 @@ function bp_groups_pagination_count() {
 		$to_num    = bp_core_number_format( ( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ) );
 		$total     = bp_core_number_format( $groups_template->total_group_count );
 
-		return apply_filters( 'bp_get_groups_pagination_count', sprintf( __( 'Viewing group %1$s to %2$s (of %3$s groups)', 'buddypress' ), $from_num, $to_num, $total ) );
+		return apply_filters( 'bp_get_groups_pagination_count', sprintf( _n( 'Viewing group %1$s to %2$s (of %3$s group)', 'Viewing group %1$s to %2$s (of %3$s groups)', $total, 'buddypress' ), $from_num, $to_num, $total ), $from_num, $to_num, $total );
 	}
 
 function bp_groups_auto_join() {
@@ -1725,6 +1725,7 @@ function bp_group_join_button( $group = false ) {
 
 		if ( empty( $group ) )
 			$group =& $groups_template->group;
+
 		if ( !is_user_logged_in() || bp_group_is_user_banned( $group ) )
 			return false;
 
@@ -1779,23 +1780,25 @@ function bp_group_join_button( $group = false ) {
 
 				case 'private' :
 
-					// Member has not requested membership yet
-					if ( !bp_group_has_requested_membership( $group ) ) {
+					// Member has outstanding invitation -
+					// show an "Accept Invitation" button
+					if ( $group->is_invited ) {
 						$button = array(
-							'id'                => 'request_membership',
+							'id'                => 'accept_invite',
 							'component'         => 'groups',
 							'must_be_logged_in' => true,
 							'block_self'        => false,
 							'wrapper_class'     => 'group-button ' . $group->status,
 							'wrapper_id'        => 'groupbutton-' . $group->id,
-							'link_href'         => wp_nonce_url( bp_get_group_permalink( $group ) . 'request-membership', 'groups_request_membership' ),
-							'link_text'         => __( 'Request Membership', 'buddypress' ),
-							'link_title'        => __( 'Request Membership', 'buddypress' ),
-							'link_class'        => 'group-button request-membership',
+							'link_href'         => add_query_arg( 'redirect_to', bp_get_group_permalink( $group ), bp_get_group_accept_invite_link( $group ) ),
+							'link_text'         => __( 'Accept Invitation', 'buddypress' ),
+							'link_title'        => __( 'Accept Invitation', 'buddypress' ),
+							'link_class'        => 'group-button accept-invite',
 						);
 
-					// Member has requested membership already
-					} else {
+					// Member has requested membership but request is pending -
+					// show a "Request Sent" button
+					} elseif ( $group->is_pending ) {
 						$button = array(
 							'id'                => 'membership_requested',
 							'component'         => 'groups',
@@ -1807,6 +1810,22 @@ function bp_group_join_button( $group = false ) {
 							'link_text'         => __( 'Request Sent', 'buddypress' ),
 							'link_title'        => __( 'Request Sent', 'buddypress' ),
 							'link_class'        => 'group-button pending membership-requested',
+						);
+
+					// Member has not requested membership yet -
+					// show a "Request Membership" button
+					} else {
+						$button = array(
+							'id'                => 'request_membership',
+							'component'         => 'groups',
+							'must_be_logged_in' => true,
+							'block_self'        => false,
+							'wrapper_class'     => 'group-button ' . $group->status,
+							'wrapper_id'        => 'groupbutton-' . $group->id,
+							'link_href'         => wp_nonce_url( bp_get_group_permalink( $group ) . 'request-membership', 'groups_request_membership' ),
+							'link_text'         => __( 'Request Membership', 'buddypress' ),
+							'link_title'        => __( 'Request Membership', 'buddypress' ),
+							'link_class'        => 'group-button request-membership',
 						);
 					}
 
@@ -1877,6 +1896,7 @@ function bp_total_group_count_for_user( $user_id = 0 ) {
 	function bp_get_total_group_count_for_user( $user_id = 0 ) {
 		return apply_filters( 'bp_get_total_group_count_for_user', groups_total_groups_for_user( $user_id ), $user_id );
 	}
+	add_filter( 'bp_get_total_group_count_for_user', 'bp_core_number_format' );
 
 
 /***************************************************************************
@@ -2149,7 +2169,7 @@ function bp_group_member_pagination_count() {
 		$to_num = bp_core_number_format( ( $start_num + ( $members_template->pag_num - 1 ) > $members_template->total_member_count ) ? $members_template->total_member_count : $start_num + ( $members_template->pag_num - 1 ) );
 		$total = bp_core_number_format( $members_template->total_member_count );
 
-		return apply_filters( 'bp_get_group_member_pagination_count', sprintf( __( 'Viewing members %1$s to %2$s (of %3$s members)', 'buddypress' ), $from_num, $to_num, $total ) );
+		return apply_filters( 'bp_get_group_member_pagination_count', sprintf( _n( 'Viewing member %1$s to %2$s (of %3$s member)', 'Viewing members %1$s to %2$s (of %3$s members)', $total, 'buddypress' ), $from_num, $to_num, $total ), $from_num, $to_num, $total );
 	}
 
 function bp_group_member_admin_pagination() {
@@ -2203,8 +2223,10 @@ function bp_group_creation_tabs() {
 	if ( !is_array( $bp->groups->group_creation_steps ) )
 		return false;
 
-	if ( !bp_get_groups_current_create_step() )
-		$bp->groups->current_create_step = array_shift( array_keys( $bp->groups->group_creation_steps ) );
+	if ( !bp_get_groups_current_create_step() ) {
+		$keys = array_keys( $bp->groups->group_creation_steps );
+		$bp->groups->current_create_step = array_shift( $keys );
+	}
 
 	$counter = 1;
 
@@ -2232,8 +2254,10 @@ function bp_group_creation_form_action() {
 	function bp_get_group_creation_form_action() {
 		global $bp;
 
-		if ( !bp_action_variable( 1 ) )
-			$bp->action_variables[1] = array_shift( array_keys( $bp->groups->group_creation_steps ) );
+		if ( !bp_action_variable( 1 ) ) {
+			$keys = array_keys( $bp->groups->group_creation_steps );
+			$bp->action_variables[1] = array_shift( $keys );
+		}
 
 		return apply_filters( 'bp_get_group_creation_form_action', trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . bp_action_variable( 1 ) ) );
 	}
@@ -2246,7 +2270,8 @@ function bp_is_group_creation_step( $step_slug ) {
 		return false;
 
 	/* If this the first step, we can just accept and return true */
-	if ( !bp_action_variable( 1 ) && array_shift( array_keys( $bp->groups->group_creation_steps ) ) == $step_slug )
+	$keys = array_keys( $bp->groups->group_creation_steps );
+	if ( !bp_action_variable( 1 ) && array_shift( $keys ) == $step_slug )
 		return true;
 
 	/* Before allowing a user to see a group creation step we must make sure previous steps are completed */
@@ -2288,7 +2313,8 @@ function bp_are_previous_group_creation_steps_complete( $step_slug ) {
 	global $bp;
 
 	/* If this is the first group creation step, return true */
-	if ( array_shift( array_keys( $bp->groups->group_creation_steps ) ) == $step_slug )
+	$keys = array_keys( $bp->groups->group_creation_steps );
+	if ( array_shift( $keys ) == $step_slug )
 		return true;
 
 	reset( $bp->groups->group_creation_steps );
@@ -2432,7 +2458,8 @@ function bp_groups_current_create_step() {
 function bp_is_last_group_creation_step() {
 	global $bp;
 
-	$last_step = array_pop( array_keys( $bp->groups->group_creation_steps ) );
+	$keys      = array_keys( $bp->groups->group_creation_steps );
+	$last_step = array_pop( $keys );
 
 	if ( $last_step == bp_get_groups_current_create_step() )
 		return true;
@@ -2443,7 +2470,8 @@ function bp_is_last_group_creation_step() {
 function bp_is_first_group_creation_step() {
 	global $bp;
 
-	$first_step = array_shift( array_keys( $bp->groups->group_creation_steps ) );
+	$keys       = array_keys( $bp->groups->group_creation_steps );
+	$first_step = array_shift( $keys );
 
 	if ( $first_step == bp_get_groups_current_create_step() )
 		return true;
@@ -2495,14 +2523,15 @@ function bp_new_group_invite_friend_list() {
 function bp_directory_groups_search_form() {
 
 	$default_search_value = bp_get_search_default_text( 'groups' );
-	$search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value; ?>
+	$search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value;
 
-	<form action="" method="get" id="search-groups-form">
-		<label><input type="text" name="s" id="groups_search" placeholder="<?php echo esc_attr( $search_value ) ?>" /></label>
-		<input type="submit" id="groups_search_submit" name="groups_search_submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
-	</form>
+	$search_form_html = '<form action="" method="get" id="search-groups-form">
+		<label><input type="text" name="s" id="groups_search" placeholder="'. esc_attr( $search_value ) .'" /></label>
+		<input type="submit" id="groups_search_submit" name="groups_search_submit" value="'. __( 'Search', 'buddypress' ) .'" />
+	</form>';
 
-<?php
+	echo apply_filters( 'bp_directory_groups_search_form', $search_form_html );
+
 }
 
 /**
@@ -2602,11 +2631,11 @@ function bp_group_current_avatar() {
 
 	if ( $bp->groups->current_group->avatar_full ) { ?>
 
-		<img src="<?php echo esc_attr( $bp->groups->current_group->avatar_full ) ?>" alt="<?php _e( 'Group Avatar', 'buddypress' ) ?>" class="avatar" />
+		<img src="<?php echo esc_url( $bp->groups->current_group->avatar_full ); ?>" alt="<?php _e( 'Group Avatar', 'buddypress' ) ?>" class="avatar" />
 
 	<?php } else { ?>
 
-		<img src="<?php echo $bp->groups->image_base . '/none.gif' ?>" alt="<?php _e( 'No Group Avatar', 'buddypress' ) ?>" class="avatar" />
+		<img src="<?php echo esc_url( $bp->groups->image_base . '/none.gif' ); ?>" alt="<?php _e( 'No Group Avatar', 'buddypress' ) ?>" class="avatar" />
 
 	<?php }
 }

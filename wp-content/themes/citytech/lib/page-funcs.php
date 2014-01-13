@@ -69,7 +69,7 @@ function cuny_home_login() {
 
         <div id="login-help" class="home-box red-box">
             <h3 class="title">Need HELP?</h3>
-            <p>Visit the <a href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a href='"<?php site_url(); ?>"/about/contact-us/'>contact us</a> with a question.</p>
+            <p>Visit the <a href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
         </div><!--login-help-->
 
     <?php else : ?>
@@ -99,7 +99,7 @@ function cuny_home_login() {
             </div>
 
         <?php do_action('bp_sidebar_login_form') ?>
-            <input type="hidden" name="testcookie" value="1" />
+
         </form>
         <?php echo '</div>'; ?>
     <?php
@@ -387,7 +387,7 @@ function openlab_registration_page() {
 
                         <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
-            <?php echo wds_get_register_fields(); ?>
+            <?php echo wds_get_register_fields( 'Base' ); ?>
 
             <?php do_action('bp_after_signup_profile_fields') ?>
 

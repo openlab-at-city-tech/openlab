@@ -1,9 +1,9 @@
 <?php
 
 /**
- * BuddyPress Activity Functions
+ * BuddyPress Activity Functions.
  *
- * Functions for the Activity Streams component
+ * Functions for the Activity Streams component.
  *
  * @package BuddyPress
  * @subpackage ActivityFunctions
@@ -13,13 +13,13 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Checks $bp pages global and looks for directory page
+ * Check whether the $bp global lists an activity directory page.
  *
  * @since BuddyPress (1.5)
  *
  * @global object $bp BuddyPress global settings
  *
- * @return bool True if set, False if empty
+ * @return bool True if activity directory page is found, otherwise false.
  */
 function bp_activity_has_directory() {
 	global $bp;
@@ -45,6 +45,7 @@ function bp_activity_has_directory() {
  * @since BuddyPress (1.8)
  *
  * @uses apply_filters() To call 'bp_activity_do_mentions' hook.
+ *
  * @return bool $retval True to enable mentions, false to disable.
  */
 function bp_activity_do_mentions() {
@@ -52,13 +53,12 @@ function bp_activity_do_mentions() {
 }
 
 /**
- * Searches through the content of an activity item to locate usernames,
- * designated by an @ sign.
+ * Locate usernames in an activity content string, as designated by an @ sign.
  *
  * @since BuddyPress (1.5)
  *
  * @param string $content The content of the activity, usually found in $activity->content.
- * @return mixed Associative array with user ID as key and username as value. Boolean false if no mentions found.
+ * @return array|bool Associative array with user ID as key and username as value. Boolean false if no mentions found.
  */
 function bp_activity_find_mentions( $content ) {
 	$pattern = '/[@]+([A-Za-z0-9-_\.@]+)\b/';
@@ -72,11 +72,7 @@ function bp_activity_find_mentions( $content ) {
 
 	// We've found some mentions! Check to see if users exist
 	foreach( (array) $usernames as $key => $username ) {
-		if ( bp_is_username_compatibility_mode() ) {
-			$user_id = username_exists( $username );
-		} else {
-			$user_id = bp_core_get_userid_from_nicename( $username );
-		}
+		$user_id = bp_activity_get_userid_from_mentionname( $username );
 
 		// user ID exists, so let's add it to our array
 		if ( ! empty( $user_id ) ) {
@@ -91,12 +87,13 @@ function bp_activity_find_mentions( $content ) {
 }
 
 /**
- * Resets a user's unread mentions list and count
+ * Reset a user's unread mentions list and count.
  *
  * @since BuddyPress (1.5)
  *
- * @param int $user_id The id of the user whose unread mentions are being reset
  * @uses bp_delete_user_meta()
+ *
+ * @param int $user_id The id of the user whose unread mentions are being reset.
  */
 function bp_activity_clear_new_mentions( $user_id ) {
 	bp_delete_user_meta( $user_id, 'bp_new_mention_count' );
@@ -113,11 +110,11 @@ function bp_activity_clear_new_mentions( $user_id ) {
  *
  * @since BuddyPress (1.5)
  *
- * @param int $activity_id The unique id for the activity item
- * @param string $action Can be 'delete' or 'add'. Defaults to 'add'.
- *
  * @uses bp_activity_find_mentions()
  * @uses bp_activity_update_mention_count_for_user()
+ *
+ * @param int $activity_id The unique id for the activity item.
+ * @param string $action Can be 'delete' or 'add'. Defaults to 'add'.
  */
 function bp_activity_adjust_mention_count( $activity_id = 0, $action = 'add' ) {
 	if ( empty( $activity_id ) )
@@ -140,19 +137,19 @@ function bp_activity_adjust_mention_count( $activity_id = 0, $action = 'add' ) {
 }
 
 /**
- * Updates the mention count for the user in question.
+ * Update the mention count for a given user.
  *
  * This function should be used when you've already parsed your activity item
  * for @mentions.
  *
  * @since BuddyPress (1.7)
  *
- * @param int $user_id The user ID
- * @param int $activity_id The unique id for the activity item
- * @param string $action Can be 'delete' or 'add'. Defaults to 'add'
- *
  * @uses bp_get_user_meta()
  * @uses bp_update_user_meta()
+ *
+ * @param int $user_id The user ID.
+ * @param int $activity_id The unique ID for the activity item.
+ * @param string $action 'delete' or 'add'. Default: 'add'.
  * @return bool
  */
 function bp_activity_update_mention_count_for_user( $user_id, $activity_id, $action = 'add' ) {
@@ -194,74 +191,82 @@ function bp_activity_update_mention_count_for_user( $user_id, $activity_id, $act
 }
 
 /**
- * Formats notifications related to activity
+ * Determine a user's "mentionname", the name used for that user in @-mentions.
  *
- * @since BuddyPress (1.5)
+ * @since BuddyPress (1.9.0)
  *
- * @param string $action The type of activity item. Just 'new_at_mention' for now
- * @param int $item_id The activity id
- * @param int $secondary_item_id In the case of at-mentions, this is the mentioner's id
- * @param int $total_items The total number of notifications to format
- * @param string $format 'string' to get a BuddyBar-compatible notification, 'array' otherwise
- *
- * @uses bp_loggedin_user_domain()
- * @uses bp_get_activity_slug()
- * @uses bp_core_get_user_displayname()
- * @uses apply_filters() To call the 'bp_activity_multiple_at_mentions_notification' hook
- * @uses apply_filters() To call the 'bp_activity_single_at_mentions_notification' hook
- * @uses do_action() To call 'activity_format_notifications' hook
- *
- * @return string $return Formatted @mention notification
+ * @return string User name appropriate for @-mentions.
  */
-function bp_activity_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
+function bp_activity_get_user_mentionname( $user_id ) {
+	$mentionname = '';
 
-	switch ( $action ) {
-		case 'new_at_mention':
-			$activity_id      = $item_id;
-			$poster_user_id   = $secondary_item_id;
-			$at_mention_link  = bp_loggedin_user_domain() . bp_get_activity_slug() . '/mentions/';
-			$at_mention_title = sprintf( __( '@%s Mentions', 'buddypress' ), bp_get_loggedin_user_username() );
+	$userdata = bp_core_get_core_userdata( $user_id );
 
-			if ( (int) $total_items > 1 ) {
-				$text = sprintf( __( 'You have %1$d new mentions', 'buddypress' ), (int) $total_items );
-				$filter = 'bp_activity_multiple_at_mentions_notification';
-			} else {
-				$user_fullname = bp_core_get_user_displayname( $poster_user_id );
-				$text =  sprintf( __( '%1$s mentioned you', 'buddypress' ), $user_fullname );
-				$filter = 'bp_activity_single_at_mentions_notification';
-			}
-		break;
+	if ( $userdata ) {
+		if ( bp_is_username_compatibility_mode() ) {
+			$mentionname = str_replace( ' ', '-', $userdata->user_login );
+		} else {
+			$mentionname = $userdata->user_nicename;
+		}
 	}
 
-	if ( 'string' == $format ) {
-		$return = apply_filters( $filter, '<a href="' . $at_mention_link . '" title="' . $at_mention_title . '">' . $text . '</a>', $at_mention_link, (int) $total_items, $activity_id, $poster_user_id );
+	return $mentionname;
+}
+
+/**
+ * Get a user ID from a "mentionname", the name used for a user in @-mentions.
+ *
+ * @since BuddyPress (1.9.0)
+ *
+ * @return int|bool ID of the user, if one is found. Otherwise false.
+ */
+function bp_activity_get_userid_from_mentionname( $mentionname ) {
+	$user_id = false;
+
+	// In username compatibility mode, hyphens are ambiguous between
+	// actual hyphens and converted spaces.
+	//
+	// @todo There is the potential for username clashes between 'foo bar'
+	// and 'foo-bar' in compatibility mode. Come up with a system for
+	// unique mentionnames.
+	if ( bp_is_username_compatibility_mode() ) {
+		// First, try the raw username
+		$userdata = get_user_by( 'login', $mentionname );
+
+		// Doing a direct query to use proper regex. Necessary to
+		// account for hyphens + spaces in the same user_login.
+		if ( empty( $userdata ) || ! is_a( $userdata, 'WP_User' ) ) {
+			global $wpdb;
+			$regex   = esc_sql( str_replace( '-', '[ \-]', $mentionname ) );
+			$user_id = $wpdb->get_var( "SELECT ID FROM {$wpdb->users} WHERE user_login REGEXP '{$regex}'" );
+		} else {
+			$user_id = $userdata->ID;
+		}
+
+	// When username compatibility mode is disabled, the mentionname is
+	// the same as the nicename
 	} else {
-		$return = apply_filters( $filter, array(
-			'text' => $text,
-			'link' => $at_mention_link
-		), $at_mention_link, (int) $total_items, $activity_id, $poster_user_id );
+		$user_id = bp_core_get_userid_from_nicename( $mentionname );
 	}
 
-	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
 
-	return $return;
+	return $user_id;
 }
 
 /** Actions ******************************************************************/
 
 /**
- * Sets the current action for a given activity stream location
+ * Set the current action for a given activity stream location.
  *
  * @since BuddyPress (1.1)
- *
- * @param string $component_id
- * @param string $key
- * @param string $value
  *
  * @global object $bp BuddyPress global settings
  * @uses apply_filters() To call the 'bp_activity_set_action' hook
  *
- * @return bool False if any param is empty, otherwise true
+ * @param string $component_id The unique string ID of the component.
+ * @param string $key The action key.
+ * @param string $value The action value.
+ * @return bool False if any param is empty, otherwise true.
  */
 function bp_activity_set_action( $component_id, $key, $value ) {
 	global $bp;
@@ -288,17 +293,16 @@ function bp_activity_set_action( $component_id, $key, $value ) {
 }
 
 /**
- * Retreives the current action from a component and key
+ * Retreive the current action from a component and key.
  *
  * @since BuddyPress (1.1)
  *
- * @param string $component_id
- * @param string $key
+ * @global object $bp BuddyPress global settings.
+ * @uses apply_filters() To call the 'bp_activity_get_action' hook.
  *
- * @global object $bp BuddyPress global settings
- * @uses apply_filters() To call the 'bp_activity_get_action' hook
- *
- * @return mixed False on error, action on success
+ * @param string $component_id The unique string ID of the component.
+ * @param string $key The action key.
+ * @return string|bool Action value if found, otherwise false.
  */
 function bp_activity_get_action( $component_id, $key ) {
 	global $bp;
@@ -311,10 +315,11 @@ function bp_activity_get_action( $component_id, $key ) {
 }
 
 /**
- * Fetch details of all registered activity types
+ * Fetch details of all registered activity types.
+ *
+ * @since BuddyPress (1.7)
  *
  * @return array array( type => description ), ...
- * @since BuddyPress (1.7)
  */
 function bp_activity_get_types() {
 	$actions  = array();
@@ -339,16 +344,15 @@ function bp_activity_get_types() {
 /** Favorites ****************************************************************/
 
 /**
- * Get a users favorite activity stream items
+ * Get a users favorite activity stream items.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $user_id
- *
  * @uses bp_get_user_meta()
- * @uses apply_filters() To call the 'bp_activity_get_user_favorites' hook
+ * @uses apply_filters() To call the 'bp_activity_get_user_favorites' hook.
  *
- * @return array Array of users favorite activity stream ID's
+ * @param int $user_id ID of the user whose favorites are being queried.
+ * @return array IDs of the user's favorite activity items.
  */
 function bp_activity_get_user_favorites( $user_id = 0 ) {
 
@@ -363,22 +367,21 @@ function bp_activity_get_user_favorites( $user_id = 0 ) {
 }
 
 /**
- * Add an activity stream item as a favorite for a user
+ * Add an activity stream item as a favorite for a user.
  *
  * @since BuddyPress (1.2)
- *
- * @param int $activity_id
- * @param int $user_id
  *
  * @uses is_user_logged_in()
  * @uses bp_get_user_meta()
  * @uses bp_activity_get_meta()
  * @uses bp_update_user_meta()
  * @uses bp_activity_update_meta()
- * @uses do_action() To call the 'bp_activity_add_user_favorite' hook
- * @uses do_action() To call the 'bp_activity_add_user_favorite_fail' hook
+ * @uses do_action() To call the 'bp_activity_add_user_favorite' hook.
+ * @uses do_action() To call the 'bp_activity_add_user_favorite_fail' hook.
  *
- * @return bool True on success, false on failure
+ * @param int $activity_id ID of the activity item being favorited.
+ * @param int $user_id ID of the user favoriting the activity item.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
 
@@ -420,21 +423,20 @@ function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
 }
 
 /**
- * Remove an activity stream item as a favorite for a user
+ * Remove an activity stream item as a favorite for a user.
  *
  * @since BuddyPress (1.2)
- *
- * @param int $activity_id
- * @param int $user_id
  *
  * @uses is_user_logged_in()
  * @uses bp_get_user_meta()
  * @uses bp_activity_get_meta()
  * @uses bp_activity_update_meta()
  * @uses bp_update_user_meta()
- * @uses do_action() To call the 'bp_activity_remove_user_favorite' hook
+ * @uses do_action() To call the 'bp_activity_remove_user_favorite' hook.
  *
- * @return bool True on success, false on failure
+ * @param int $activity_id ID of the activity item being unfavorited.
+ * @param int $user_id ID of the user unfavoriting the activity item.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_remove_user_favorite( $activity_id, $user_id = 0 ) {
 
@@ -484,45 +486,43 @@ function bp_activity_remove_user_favorite( $activity_id, $user_id = 0 ) {
 }
 
 /**
- * Check if activity exists by scanning content
+ * Check whether an activity item exists with a given content string.
  *
  * @since BuddyPress (1.1)
  *
- * @param string $content
- *
  * @uses BP_Activity_Activity::check_exists_by_content() {@link BP_Activity_Activity}
- * @uses apply_filters() To call the 'bp_activity_check_exists_by_content' hook
+ * @uses apply_filters() To call the 'bp_activity_check_exists_by_content' hook.
  *
- * @return bool
+ * @param string $content The content to filter by.
+ * @return int|null The ID of the located activity item. Null if none is found.
  */
 function bp_activity_check_exists_by_content( $content ) {
 	return apply_filters( 'bp_activity_check_exists_by_content', BP_Activity_Activity::check_exists_by_content( $content ) );
 }
 
 /**
- * Retrieve the last time activity was updated
+ * Retrieve the last time activity was updated.
  *
  * @since BuddyPress (1.0)
  *
  * @uses BP_Activity_Activity::get_last_updated() {@link BP_Activity_Activity}
- * @uses apply_filters() To call the 'bp_activity_get_last_updated' hook
+ * @uses apply_filters() To call the 'bp_activity_get_last_updated' hook.
  *
- * @return string Date last updated
+ * @return string Date last updated.
  */
 function bp_activity_get_last_updated() {
 	return apply_filters( 'bp_activity_get_last_updated', BP_Activity_Activity::get_last_updated() );
 }
 
 /**
- * Retrieve the number of favorite activity stream items a user has
+ * Retrieve the number of favorite activity stream items a user has.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $user_id
- *
  * @uses BP_Activity_Activity::total_favorite_count() {@link BP_Activity_Activity}
  *
- * @return int Total favorite count
+ * @param int $user_id ID of the user whose favorite count is being requested.
+ * @return int Total favorite count for the user.
  */
 function bp_activity_total_favorites_for_user( $user_id = 0 ) {
 
@@ -536,20 +536,22 @@ function bp_activity_total_favorites_for_user( $user_id = 0 ) {
 /** Meta *********************************************************************/
 
 /**
- * Delete a meta entry from the DB for an activity stream item
+ * Delete a meta entry from the DB for an activity stream item.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $activity_id
- * @param string $meta_key
- * @param string $meta_value
- *
- * @global object $wpdb
- * @global object $bp BuddyPress global settings
+ * @global object $wpdb WordPress database access object.
+ * @global object $bp BuddyPress global settings.
  * @uses wp_cache_delete()
  * @uses is_wp_error()
  *
- * @return bool True on success, false on failure
+ * @param int $activity_id ID of the activity item whose metadata is being deleted.
+ * @param string $meta_key Optional. The key of the metadata being deleted. If
+ *                         omitted, all metadata associated with the activity
+ *                         item will be deleted.
+ * @param string $meta_value Optional. If present, the metadata will only be
+ *                           deleted if the meta_value matches this parameter.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_delete_meta( $activity_id, $meta_key = '', $meta_value = '' ) {
 	global $wpdb, $bp;
@@ -592,20 +594,21 @@ function bp_activity_delete_meta( $activity_id, $meta_key = '', $meta_value = ''
 }
 
 /**
- * Get activity meta
+ * Get metadata for a given activity item.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $activity_id
- * @param string $meta_key
- *
- * @global object $wpdb
- * @global object $bp BuddyPress global settings
+ * @global object $wpdb WordPress database access object.
+ * @global object $bp BuddyPress global settings.
  * @uses wp_cache_get()
  * @uses wp_cache_set()
- * @uses apply_filters() To call the 'bp_activity_get_meta' hook
+ * @uses apply_filters() To call the 'bp_activity_get_meta' hook.
  *
- * @return bool
+ * @param int $activity_id ID of the activity item whose metadata is being requseted.
+ * @param string $meta_key Optional. If present, only the metadata matching
+ *                         that meta key will be returned. Otherwise, all
+ *                         metadata for the activity item will be fetched.
+ * @return mixed The meta value(s) being requested.
  */
 function bp_activity_get_meta( $activity_id = 0, $meta_key = '' ) {
 	global $wpdb, $bp;
@@ -657,21 +660,20 @@ function bp_activity_get_meta( $activity_id = 0, $meta_key = '' ) {
 }
 
 /**
- * Update activity meta
+ * Update a piece of activity meta.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $activity_id
- * @param string $meta_key
- * @param string $meta_value
- *
- * @global object $wpdb
- * @global object $bp BuddyPress global settings
+ * @global object $wpdb WordPress database access object.
+ * @global object $bp BuddyPress global settings.
  * @uses maybe_serialize()
  * @uses bp_activity_delete_meta()
  * @uses wp_cache_set()
  *
- * @return bool True on success, false on failure
+ * @param int $activity_id ID of the activity item whose metadata is being updated.
+ * @param string $meta_key Key of the metadata being updated.
+ * @param mixed $meta_value Value to be set.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_update_meta( $activity_id, $meta_key, $meta_value ) {
 	global $wpdb, $bp;
@@ -684,14 +686,15 @@ function bp_activity_update_meta( $activity_id, $meta_key, $meta_value ) {
 	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
 
 	// Sanitize value
-	if ( is_string( $meta_value ) )
-		$meta_value = stripslashes( esc_sql( $meta_value ) );
+	if ( is_string( $meta_value ) ) {
+		$meta_value = stripslashes( $meta_value );
+	}
 
 	// Maybe, just maybe... serialize
 	$meta_value = maybe_serialize( $meta_value );
 
-	// If value is empty, delete the meta key
-	if ( empty( $meta_value ) )
+	// If value is false, delete the meta key
+	if ( false === $meta_value )
 		return bp_activity_delete_meta( $activity_id, $meta_key );
 
 	// See if meta key exists for activity_id
@@ -719,17 +722,17 @@ function bp_activity_update_meta( $activity_id, $meta_key, $meta_value ) {
 /** Clean up *****************************************************************/
 
 /**
- * Completely remove a user's activity data
+ * Completely remove a user's activity data.
  *
  * @since BuddyPress (1.5)
- *
- * @param int $user_id
  *
  * @uses is_user_logged_in()
  * @uses bp_activity_delete()
  * @uses bp_delete_user_meta()
- * @uses do_action() To call the 'bp_activity_remove_data' hook
- * @uses do_action() To call the 'bp_activity_remove_all_user_data' hook
+ * @uses do_action() To call the 'bp_activity_remove_data' hook.
+ * @uses do_action() To call the 'bp_activity_remove_all_user_data' hook.
+ *
+ * @param int $user_id ID of the user whose activity is being deleted.
  */
 function bp_activity_remove_all_user_data( $user_id = 0 ) {
 
@@ -754,12 +757,14 @@ add_action( 'wpmu_delete_user',  'bp_activity_remove_all_user_data' );
 add_action( 'delete_user',       'bp_activity_remove_all_user_data' );
 
 /**
- * Mark all of the user's activity as spam
+ * Mark all of the user's activity as spam.
  *
- * @global object $wpdb
- * @global object $bp BuddyPress global settings
- * @param int $user_id
  * @since BuddyPress (1.6)
+ *
+ * @global object $wpdb WordPress database access object.
+ * @global object $bp BuddyPress global settings.
+ *
+ * @param int $user_id ID of the user whose activity is being spammed.
  */
 function bp_activity_spam_all_user_data( $user_id = 0 ) {
 	global $bp, $wpdb;
@@ -805,12 +810,14 @@ function bp_activity_spam_all_user_data( $user_id = 0 ) {
 add_action( 'bp_make_spam_user', 'bp_activity_spam_all_user_data' );
 
 /**
- * Mark all of the user's activity as ham (not spam)
+ * Mark all of the user's activity as ham (not spam).
  *
- * @global object $wpdb
- * @global object $bp BuddyPress global settings
- * @param int $user_id
  * @since BuddyPress (1.6)
+ *
+ * @global object $wpdb WordPress database access object.
+ * @global object $bp BuddyPress global settings.
+ *
+ * @param int $user_id ID of the user whose activity is being hammed.
  */
 function bp_activity_ham_all_user_data( $user_id = 0 ) {
 	global $bp, $wpdb;
@@ -858,8 +865,9 @@ add_action( 'bp_make_ham_user', 'bp_activity_ham_all_user_data' );
 /**
  * Register the activity stream actions for updates
  *
- * @global object $bp BuddyPress global settings
  * @since BuddyPress (1.6)
+ *
+ * @global object $bp BuddyPress global settings.
  */
 function bp_activity_register_activity_actions() {
 	global $bp;
@@ -882,19 +890,26 @@ add_action( 'bp_register_activity_actions', 'bp_activity_register_activity_actio
  */
 
 /**
- * Retrieve an activity or activities
+ * Retrieve an activity or activities.
+ *
+ * bp_activity_get() shares all arguments with BP_Activity_Activity::get(). The
+ * following is a list of bp_activity_get() parameters that have different
+ * default values from BP_Activity_Activity::get() (value in parentheses is
+ * the default for the bp_activity_get()).
+ *   - 'per_page' (false)
  *
  * @since BuddyPress (1.2)
  *
- * @param array $args
- *
+ * @see BP_Activity_Activity::get() For more information on accepted arguments
+ *      and the format of the returned value.
  * @uses wp_parse_args()
  * @uses wp_cache_get()
  * @uses wp_cache_set()
  * @uses BP_Activity_Activity::get() {@link BP_Activity_Activity}
- * @uses apply_filters_ref_array() To call the 'bp_activity_get' hook
+ * @uses apply_filters_ref_array() To call the 'bp_activity_get' hook.
  *
- * @return object $activity The activity/activities object
+ * @param array $args See BP_Activity_Activity::get() for description.
+ * @return array $activity See BP_Activity_Activity::get() for description.
  */
 function bp_activity_get( $args = '' ) {
 	$defaults = array(
@@ -967,17 +982,22 @@ function bp_activity_get( $args = '' ) {
 }
 
 /**
- * Fetch specific activity items
+ * Fetch specific activity items.
  *
  * @since BuddyPress (1.2)
  *
- * @param array $args See docs for $defaults for details
- *
+ * @see BP_Activity_Activity::get() For more information on accepted arguments
  * @uses wp_parse_args()
  * @uses apply_filters() To call the 'bp_activity_get_specific' hook
  * @uses BP_Activity_Activity::get() {@link BP_Activity_Activity}
  *
- * @return array The array returned by BP_Activity_Activity::get()
+ * @param array $args {
+ *     All arguments and defaults are shared with BP_Activity_Activity::get(),
+ *     except for the following:
+ *     @type string|int|array Single activity ID, comma-separated list of IDs,
+ *                            or array of IDs.
+ * }
+ * @return array $activity See BP_Activity_Activity::get() for description.
  */
 function bp_activity_get_specific( $args = '' ) {
 	$defaults = array(
@@ -1007,11 +1027,9 @@ function bp_activity_get_specific( $args = '' ) {
 }
 
 /**
- * Add an activity item
+ * Add an activity item.
  *
  * @since BuddyPress (1.1)
- *
- * @param array $args See docs for $defaults for details
  *
  * @uses wp_parse_args()
  * @uses BP_Activity_Activity::save() {@link BP_Activity_Activity}
@@ -1019,7 +1037,32 @@ function bp_activity_get_specific( $args = '' ) {
  * @uses wp_cache_delete()
  * @uses do_action() To call the 'bp_activity_add' hook
  *
- * @return int The activity id
+ * @param array $args {
+ *     An array of arguments.
+ *     @type int|bool $id Pass an activity ID to update an existing item, or
+ *           false to create a new item. Default: false.
+ *     @type string $action Optional. The activity action/description, typically
+ *           something like "Joe posted an update".
+ *     @type string $content Optional. The content of the activity item.
+ *     @type string $component The unique name of the component associated with
+ *           the activity item - 'groups', 'profile', etc.
+ *     @type string $type The specific activity type, used for directory
+ *           filtering. 'new_blog_post', 'activity_update', etc.
+ *     @type string $primary_link Optional. The URL for this item, as used in
+ *           RSS feeds. Defaults to the URL for this activity item's permalink page.
+ *     @type int|bool $user_id Optional. The ID of the user associated with the
+ *           activity item. May be set to false or 0 if the item is not related
+ *           to any user. Default: the ID of the currently logged-in user.
+ *     @type int $item_id Optional. The ID of the associated item.
+ *     @type int $secondary_item_id Optional. The ID of a secondary associated
+ *           item.
+ *     @type string $date_recorded Optional. The GMT time, in Y-m-d h:i:s format,
+ *           when the item was recorded. Defaults to the current time.
+ *     @type bool $hide_sitewide Should the item be hidden on sitewide streams?
+ *           Default: false.
+ *     @type bool $is_spam Should the item be marked as spam? Default: false.
+ * }
+ * @return int|bool The ID of the activity on success. False on error.
  */
 function bp_activity_add( $args = '' ) {
 
@@ -1078,24 +1121,26 @@ function bp_activity_add( $args = '' ) {
 }
 
 /**
- * Post an activity update
+ * Post an activity update.
  *
  * @since BuddyPress (1.2)
  *
- * @param array $args See docs for $defaults for details
- *
- * @global object $bp BuddyPress global settings
+ * @global object $bp BuddyPress global settings.
  * @uses wp_parse_args()
  * @uses bp_is_user_inactive()
  * @uses bp_core_get_userlink()
  * @uses bp_activity_add()
- * @uses apply_filters() To call the 'bp_activity_new_update_action' hook
- * @uses apply_filters() To call the 'bp_activity_new_update_content' hook
- * @uses apply_filters() To call the 'bp_activity_new_update_primary_link' hook
+ * @uses apply_filters() To call the 'bp_activity_new_update_action' hook.
+ * @uses apply_filters() To call the 'bp_activity_new_update_content' hook.
+ * @uses apply_filters() To call the 'bp_activity_new_update_primary_link' hook.
  * @uses bp_update_user_meta()
  * @uses wp_filter_kses()
- * @uses do_action() To call the 'bp_activity_posted_update' hook
+ * @uses do_action() To call the 'bp_activity_posted_update' hook.
  *
+ * @param array $args {
+ *     @type string $content The content of the activity update.
+ *     @type int $user_id Optional. Defaults to the logged-in user.
+ * }
  * @return int $activity_id The activity id
  */
 function bp_activity_post_update( $args = '' ) {
@@ -1141,45 +1186,56 @@ function bp_activity_post_update( $args = '' ) {
 }
 
 /**
- * Add an activity comment
+ * Add an activity comment.
  *
  * @since BuddyPress (1.2)
  *
- * @param array $args See docs for $defaults for details
- *
- * @global object $bp BuddyPress global settings
+ * @global object $bp BuddyPress global settings.
  * @uses wp_parse_args()
  * @uses bp_activity_add()
- * @uses apply_filters() To call the 'bp_activity_comment_action' hook
- * @uses apply_filters() To call the 'bp_activity_comment_content' hook
+ * @uses apply_filters() To call the 'bp_activity_comment_action' hook.
+ * @uses apply_filters() To call the 'bp_activity_comment_content' hook.
  * @uses bp_activity_new_comment_notification()
  * @uses wp_cache_delete()
- * @uses do_action() To call the 'bp_activity_comment_posted' hook
+ * @uses do_action() To call the 'bp_activity_comment_posted' hook.
  *
- * @return int $comment_id The comment id
+ * @param array $args {
+ *     @type int $id Optional. Pass an ID to update an existing comment.
+ *     @type string $content The content of the comment.
+ *     @type int $user_id Optional. The ID of the user making the comment.
+ *                        Defaults to the ID of the logged-in user.
+ *     @type int $activity_id The ID of the "root" activity item, ie the oldest
+ *                            ancestor of the comment.
+ *     @type int $parent_id Optional. The ID of the parent activity item, ie the
+ *                          item to which the comment is an immediate reply. If
+ *                          not provided, this value defaults to the $activity_id.
+ * }
+ * @return int|bool The ID of the comment on success, otherwise false.
  */
 function bp_activity_new_comment( $args = '' ) {
-	global $bp;
 
-	$defaults = array(
+	$params = wp_parse_args( $args, array(
 		'id'          => false,
 		'content'     => false,
 		'user_id'     => bp_loggedin_user_id(),
 		'activity_id' => false, // ID of the root activity item
 		'parent_id'   => false  // ID of a parent comment (optional)
-	);
+	) );
 
-	$params = wp_parse_args( $args, $defaults );
 	extract( $params, EXTR_SKIP );
 
-	if ( empty( $content ) || empty( $user_id ) || empty( $activity_id ) )
+	// Bail if missing necessary data
+	if ( empty( $content ) || empty( $user_id ) || empty( $activity_id ) ) {
 		return false;
+	}
 
-	if ( empty( $parent_id ) )
+	// Maybe set current activity ID as the parent
+	if ( empty( $parent_id ) ) {
 		$parent_id = $activity_id;
+	}
 
 	// Check to see if the parent activity is hidden, and if so, hide this comment publically.
-	$activity = new BP_Activity_Activity( $activity_id );
+	$activity  = new BP_Activity_Activity( $activity_id );
 	$is_hidden = ( (int) $activity->hide_sitewide ) ? 1 : 0;
 
 	// Insert the activity comment
@@ -1187,7 +1243,7 @@ function bp_activity_new_comment( $args = '' ) {
 		'id'                => $id,
 		'action'            => apply_filters( 'bp_activity_comment_action', sprintf( __( '%s posted a new activity comment', 'buddypress' ), bp_core_get_userlink( $user_id ) ) ),
 		'content'           => apply_filters( 'bp_activity_comment_content', $content ),
-		'component'         => $bp->activity->id,
+		'component'         => buddypress()->activity->id,
 		'type'              => 'activity_comment',
 		'user_id'           => $user_id,
 		'item_id'           => $activity_id,
@@ -1195,13 +1251,10 @@ function bp_activity_new_comment( $args = '' ) {
 		'hide_sitewide'     => $is_hidden
 	) );
 
-	// Send an email notification if settings allow
-	bp_activity_new_comment_notification( $comment_id, $user_id, $params );
-
 	// Clear the comment cache for this activity
 	wp_cache_delete( 'bp_activity_comments_' . $parent_id );
 
-	do_action( 'bp_activity_comment_posted', $comment_id, $params );
+	do_action( 'bp_activity_comment_posted', $comment_id, $params, $activity );
 
 	return $comment_id;
 }
@@ -1211,13 +1264,13 @@ function bp_activity_new_comment( $args = '' ) {
  *
  * @since BuddyPress (1.2)
  *
- * @param array $args See docs for $defaults for details
- *
+ * @see BP_Activity_Activity::get() For more information on accepted arguments.
  * @uses wp_parse_args()
- * @uses apply_filters() To call the 'bp_activity_get_activity_id' hook
+ * @uses apply_filters() To call the 'bp_activity_get_activity_id' hook.
  * @uses BP_Activity_Activity::save() {@link BP_Activity_Activity}
  *
- * @return int $activity_id The activity id
+ * @param array $args See BP_Activity_Activity::get() for description.
+ * @return int $activity_id The ID of the activity item found.
  */
 function bp_activity_get_activity_id( $args = '' ) {
 	$defaults = array(
@@ -1238,7 +1291,7 @@ function bp_activity_get_activity_id( $args = '' ) {
 }
 
 /**
- * Deleting Activity
+ * Delete activity item(s).
  *
  * If you're looking to hook into one action that provides the ID(s) of
  * the activity/activities deleted, then use:
@@ -1252,19 +1305,22 @@ function bp_activity_get_activity_id( $args = '' ) {
  *
  * @since BuddyPress (1.0)
  *
- * @param array $args See docs for $defaults for details
- *
+ * @see BP_Activity_Activity::get() For more information on accepted arguments.
  * @uses wp_parse_args()
  * @uses bp_activity_adjust_mention_count()
  * @uses BP_Activity_Activity::delete() {@link BP_Activity_Activity}
- * @uses do_action() To call the 'bp_before_activity_delete' hook
+ * @uses do_action() To call the 'bp_before_activity_delete' hook.
  * @uses bp_get_user_meta()
  * @uses bp_delete_user_meta()
- * @uses do_action() To call the 'bp_activity_delete' hook
- * @uses do_action() To call the 'bp_activity_deleted_activities' hook
+ * @uses do_action() To call the 'bp_activity_delete' hook.
+ * @uses do_action() To call the 'bp_activity_deleted_activities' hook.
  * @uses wp_cache_delete()
  *
- * @return bool True on success, false on failure
+ * @param array $args To delete specific activity items, use
+ *            $args = array( 'id' => $ids );
+ *        Otherwise, to use filters for item deletion, the argument format is
+ *        the same as BP_Activity_Activity::get(). See that method for a description.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_delete( $args = '' ) {
 
@@ -1315,19 +1371,20 @@ function bp_activity_delete( $args = '' ) {
 }
 
 	/**
-	 * Delete an activity item by activity id
+	 * Delete an activity item by activity id.
 	 *
-	 * You should use bp_activity_delete() instead
+	 * You should use bp_activity_delete() instead.
 	 *
 	 * @since BuddyPress (1.1)
 	 * @deprecated BuddyPress (1.2)
 	 *
-	 * @param array $args See docs for $defaults for details
-	 *
 	 * @uses wp_parse_args()
 	 * @uses bp_activity_delete()
 	 *
-	 * @return bool True on success, false on failure
+	 * @param array $args See BP_Activity_Activity::get for a description
+	 *                    of accepted arguments.
+	 *
+	 * @return bool True on success, false on failure.
 	 */
 	function bp_activity_delete_by_item_id( $args = '' ) {
 
@@ -1345,77 +1402,75 @@ function bp_activity_delete( $args = '' ) {
 	}
 
 	/**
-	 * Delete an activity item by activity id
-	 *
-	 * You should use bp_activity_delete() instead
+	 * Delete an activity item by activity id.
 	 *
 	 * @since BuddyPress (1.1)
-	 * @deprecated BuddyPress (1.2)
-	 *
-	 * @param int $activity_id The activity id
 	 *
 	 * @uses bp_activity_delete()
 	 *
-	 * @return bool True on success, false on failure
+	 * @param int ID of the activity item to be deleted.
+	 * @return bool True on success, false on failure.
 	 */
 	function bp_activity_delete_by_activity_id( $activity_id ) {
 		return bp_activity_delete( array( 'id' => $activity_id ) );
 	}
 
 	/**
-	 * Delete an activity item by it's content
+	 * Delete an activity item by its content.
 	 *
-	 * You should use bp_activity_delete() instead
+	 * You should use bp_activity_delete() instead.
 	 *
 	 * @since BuddyPress (1.1)
 	 * @deprecated BuddyPress (1.2)
 	 *
-	 * @param int $user_id The user id
-	 * @param string $content The activity id
-	 * @param string $component The activity component
-	 * @param string $type The activity type
-	 *
 	 * @uses bp_activity_delete()
 	 *
-	 * @return bool True on success, false on failure
+	 * @param int $user_id The user id.
+	 * @param string $content The activity id.
+	 * @param string $component The activity component.
+	 * @param string $type The activity type.
+	 * @return bool True on success, false on failure.
 	 */
 	function bp_activity_delete_by_content( $user_id, $content, $component, $type ) {
 		return bp_activity_delete( array( 'user_id' => $user_id, 'content' => $content, 'component' => $component, 'type' => $type ) );
 	}
 
 	/**
-	 * Delete a user's activity for a component
+	 * Delete a user's activity for a component.
 	 *
-	 * You should use bp_activity_delete() instead
+	 * You should use bp_activity_delete() instead.
 	 *
 	 * @since BuddyPress (1.1)
 	 * @deprecated BuddyPress (1.2)
 	 *
-	 * @param int $user_id The user id
-	 * @param string $component The activity component
-	 *
 	 * @uses bp_activity_delete()
 	 *
-	 * @return bool True on success, false on failure
+	 * @param int $user_id The user id.
+	 * @param string $component The activity component.
+	 * @return bool True on success, false on failure.
 	 */
 	function bp_activity_delete_for_user_by_component( $user_id, $component ) {
 		return bp_activity_delete( array( 'user_id' => $user_id, 'component' => $component ) );
 	}
 
 /**
- * Delete an activity comment
+ * Delete an activity comment.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $activity_id The activity id
- * @param int $comment_id The activity comment id
- *
- * @uses apply_filters() To call the 'bp_activity_delete_comment_pre' hook
+ * @uses apply_filters() To call the 'bp_activity_delete_comment_pre' hook.
  * @uses bp_activity_delete_children()
  * @uses bp_activity_delete()
  * @uses BP_Activity_Activity::rebuild_activity_comment_tree() {@link BP_Activity_Activity}
- * @uses do_action() To call the 'bp_activity_delete_comment' hook
+ * @uses do_action() To call the 'bp_activity_delete_comment' hook.
+ * @todo Why is an activity id required? We could look this up.
+ * @todo Why do we encourage users to call this function directly? We could just
+ *       as easily examine the activity type in bp_activity_delete() and then
+ *       call this function with the proper arguments if necessary.
  *
+ * @param int $activity_id The ID of the "root" activity, ie the comment's
+ *                         oldest ancestor.
+ * @param int $comment_id The ID of the comment to be deleted.
  * @return bool True on success, false on failure
  */
 function bp_activity_delete_comment( $activity_id, $comment_id ) {
@@ -1442,16 +1497,17 @@ function bp_activity_delete_comment( $activity_id, $comment_id ) {
 }
 
 	/**
-	 * Delete an activity comment's children
+	 * Delete an activity comment's children.
 	 *
 	 * @since BuddyPress (1.2)
-	 *
-	 * @param int $activity_id The activity id
-	 * @param int $comment_id The activity comment id
 	 *
 	 * @uses BP_Activity_Activity::get_child_comments() {@link BP_Activity_Activity}
 	 * @uses bp_activity_delete_children()
 	 * @uses bp_activity_delete()
+	 *
+	 * @param int $activity_id The ID of the "root" activity, ie the
+	 *                         comment's oldest ancestor.
+	 * @param int $comment_id The ID of the comment to be deleted.
 	 */
 	function bp_activity_delete_children( $activity_id, $comment_id) {
 		// Recursively delete all children of this comment.
@@ -1464,22 +1520,22 @@ function bp_activity_delete_comment( $activity_id, $comment_id ) {
 	}
 
 /**
- * Get the permalink for a single activity item
+ * Get the permalink for a single activity item.
  *
- * When only the $activity_id param is passed, BP has to instantiate a new BP_Activity_Activity
- * object. To save yourself some processing overhead, be sure to pass the full $activity_obj param
- * as well, if you already have it available.
+ * When only the $activity_id param is passed, BP has to instantiate a new
+ * BP_Activity_Activity object. To save yourself some processing overhead,
+ * be sure to pass the full $activity_obj parameter as well, if you already
+ * have it available.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $activity_id The unique id of the activity object
- * @param object $activity_obj (optional) The activity object
- *
  * @uses bp_get_root_domain()
  * @uses bp_get_activity_root_slug()
- * @uses apply_filters_ref_array() To call the 'bp_activity_get_permalink' hook
+ * @uses apply_filters_ref_array() To call the 'bp_activity_get_permalink' hook.
  *
- * @return string $link Permalink for the activity item
+ * @param int $activity_id The unique id of the activity object.
+ * @param object $activity_obj Optional. The activity object.
+ * @return string $link Permalink for the activity item.
  */
 function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 
@@ -1504,34 +1560,41 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 }
 
 /**
- * Hide a user's activity
+ * Hide a user's activity.
  *
  * @since BuddyPress (1.2)
  *
- * @param int $user_id The user id
- *
  * @uses BP_Activity_Activity::hide_all_for_user() {@link BP_Activity_Activity}
  *
- * @return bool True on success, false on failure
+ * @param int $user_id The ID of the user whose activity is being hidden.
+ * @return bool True on success, false on failure.
  */
 function bp_activity_hide_user_activity( $user_id ) {
 	return BP_Activity_Activity::hide_all_for_user( $user_id );
 }
 
 /**
- * Take content, remove all images and replace them with one thumbnail image.
+ * Take content, remove images, and replace them with a single thumbnail image.
+ *
+ * The format of items in the activity stream is such that we do not want to
+ * allow an arbitrary number of arbitrarily large images to be rendered.
+ * However, the activity stream is built to elegantly display a single
+ * thumbnail corresponding to the activity comment. This function looks
+ * through the content, grabs the first image and converts it to a thumbnail,
+ * and removes the rest of the images from the string.
  *
  * @since BuddyPress (1.2)
- *
- * @param string $content The content to work with
- * @param string $link Optional. The URL that the image should link to
- * @param array $activity_args Optional. The args passed to the activity
- *   creation function (eg bp_blogs_record_activity())
  *
  * @uses esc_attr()
  * @uses apply_filters() To call the 'bp_activity_thumbnail_content_images' hook
  *
- * @return string $content The content with images stripped and replaced with a single thumb.
+ * @param string $content The content of the activity item.
+ * @param string $link Optional. The unescaped URL that the image should link
+ *                               to. If absent, the image will not be a link.
+ * @param array $activity_args Optional. The args passed to the activity
+ *                             creation function (eg bp_blogs_record_activity()).
+ * @return string $content The content with images stripped and replaced with a
+ *                         single thumb.
  */
 function bp_activity_thumbnail_content_images( $content, $link = false, $args = false ) {
 
@@ -1561,11 +1624,10 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
 			$ratio      = (int) $width / (int) $height;
 			$new_height = (int) $height >= 100 ? 100 : $height;
 			$new_width  = $new_height * $ratio;
-
-			$image = '<img src="' . esc_attr( $src ) . '" width="' . $new_width . '" height="' . $new_height . '" alt="' . __( 'Thumbnail', 'buddypress' ) . '" class="align-left thumbnail" />';
+			$image      = '<img src="' . esc_url( $src ) . '" width="' . absint( $new_width ) . '" height="' . absint( $new_height ) . '" alt="' . __( 'Thumbnail', 'buddypress' ) . '" class="align-left thumbnail" />';
 
 			if ( !empty( $link ) ) {
-				$image = '<a href="' . $link . '">' . $image . '</a>';
+				$image = '<a href="' . esc_url( $link ) . '">' . $image . '</a>';
 			}
 
 			$content = $image . $content;
@@ -1576,23 +1638,27 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
 }
 
 /**
- * Convenience function to control whether the current user is allowed to mark activity items as spam
+ * Fetch whether the current user is allowed to mark items as spam.
  *
- * @return bool True if user is allowed to mark activity items as spam
  * @since BuddyPress (1.6)
- * @static
+ *
+ * @return bool True if user is allowed to mark activity items as spam.
  */
 function bp_activity_user_can_mark_spam() {
 	return apply_filters( 'bp_activity_user_can_mark_spam', bp_current_user_can( 'bp_moderate' ) );
 }
 
 /**
- * Mark activity item as spam
+ * Mark an activity item as spam.
  *
- * @global object $bp BuddyPress global settings
- * @param BP_Activity_Activity $activity
- * @param string $source Optional; default is "by_a_person" (e.g. a person has manually marked the activity as spam).
  * @since BuddyPress (1.6)
+ *
+ * @global object $bp BuddyPress global settings.
+ *
+ * @param BP_Activity_Activity $activity The activity item to be spammed.
+ * @param string $source Optional. Default is "by_a_person" (ie, a person has
+ *                       manually marked the activity as spam). BP core also
+ *                       accepts 'by_akismet'.
  */
 function bp_activity_mark_as_spam( &$activity, $source = 'by_a_person' ) {
 	global $bp;
@@ -1623,12 +1689,16 @@ function bp_activity_mark_as_spam( &$activity, $source = 'by_a_person' ) {
 }
 
 /**
- * Mark activity item as ham
+ * Mark an activity item as ham.
  *
- * @global object $bp BuddyPress global settings
- * @param BP_Activity_Activity $activity
- * @param string $source Optional; default is "by_a_person" (e.g. a person has manually marked the activity as spam).
  * @since BuddyPress (1.6)
+ *
+ * @global object $bp BuddyPress global settings.
+ *
+ * @param BP_Activity_Activity $activity The activity item to be hammed.
+ * @param string $source Optional. Default is "by_a_person" (ie, a person has
+ *                       manually marked the activity as spam). BP core also
+ *                       accepts 'by_akismet'.
  */
 function bp_activity_mark_as_ham( &$activity, $source = 'by_a_person' ) {
 	global $bp;
@@ -1662,8 +1732,11 @@ function bp_activity_mark_as_ham( &$activity, $source = 'by_a_person' ) {
 /** Embeds *******************************************************************/
 
 /**
- * Grabs the activity update ID and attempts to retrieve the oEmbed cache (if it exists)
- * during the activity loop.  If no cache and link is embeddable, cache it.
+ * Set up activity oEmbed cache during the activity loop.
+ *
+ * During an activity loop, this function sets up the hooks necessary to grab
+ * each item's embeds from the cache, or put them in the cache if they are
+ * not there yet.
  *
  * This does not cover recursive activity comments, as they do not use a real loop.
  * For that, see {@link bp_activity_comment_embed()}.
@@ -1673,10 +1746,9 @@ function bp_activity_mark_as_ham( &$activity, $source = 'by_a_person' ) {
  * @see BP_Embed
  * @see bp_embed_activity_cache()
  * @see bp_embed_activity_save_cache()
- *
- * @uses add_filter() To attach 'bp_get_activity_id' to 'embed_post_id'
- * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'
- * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'
+ * @uses add_filter() To attach 'bp_get_activity_id' to 'embed_post_id'.
+ * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'.
+ * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'.
  */
 function bp_activity_embed() {
 	add_filter( 'embed_post_id',         'bp_get_activity_id'                  );
@@ -1686,19 +1758,21 @@ function bp_activity_embed() {
 add_action( 'activity_loop_start', 'bp_activity_embed' );
 
 /**
- * Grabs the activity comment ID and attempts to retrieve the oEmbed cache (if it exists)
- * when BP is recursing through activity comments {@link bp_activity_recurse_comments()}.
- * If no cache and link is embeddable, cache it.
+ * Set up activity oEmbed cache while recursing through activity comments.
+ *
+ * While crawling through an activity comment tree
+ * ({@link bp_activity_recurse_comments}), this function sets up the hooks
+ * necessary to grab each comment's embeds from the cache, or put them in
+ * the cache if they are not there yet.
  *
  * @since BuddyPress (1.5)
  *
  * @see BP_Embed
  * @see bp_embed_activity_cache()
  * @see bp_embed_activity_save_cache()
- *
- * @uses add_filter() To attach 'bp_get_activity_comment_id' to 'embed_post_id'
- * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'
- * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'
+ * @uses add_filter() To attach 'bp_get_activity_comment_id' to 'embed_post_id'.
+ * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'.
+ * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'.
  */
 function bp_activity_comment_embed() {
 	add_filter( 'embed_post_id',         'bp_get_activity_comment_id'          );
@@ -1713,13 +1787,12 @@ add_action( 'bp_before_activity_comment', 'bp_activity_comment_embed' );
  * @since BuddyPress (1.5)
  *
  * @see BP_Embed
- *
- * @param object $activity The activity that is being expanded
- *
  * @global object $bp BuddyPress global settings
- * @uses add_filter() To attach create_function() to 'embed_post_id'
- * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'
- * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'
+ * @uses add_filter() To attach create_function() to 'embed_post_id'.
+ * @uses add_filter() To attach 'bp_embed_activity_cache' to 'bp_embed_get_cache'.
+ * @uses add_action() To attach 'bp_embed_activity_save_cache' to 'bp_embed_update_cache'.
+ *
+ * @param object $activity The activity that is being expanded.
  */
 function bp_dtheme_embed_read_more( $activity ) {
 	global $bp;
@@ -1733,15 +1806,15 @@ function bp_dtheme_embed_read_more( $activity ) {
 add_action( 'bp_dtheme_get_single_activity_content', 'bp_dtheme_embed_read_more' );
 
 /**
- * Removes the 'embed_post_id' filter after {@link bp_activity_recurse_comments()}
- * is rendered to avoid conflict with the 'embed_post_id' filter in
- * {@link bp_activity_embed()} or any other component embeds.
+ * Clean up 'embed_post_id' filter after comment recursion.
+ *
+ * This filter must be removed so that the non-comment filters take over again
+ * once the comments are done being processed.
  *
  * @since BuddyPress (1.5)
  *
  * @see bp_activity_comment_embed()
- *
- * @uses remove_filter() To remove 'bp_get_activity_comment_id' from 'embed_post_id'
+ * @uses remove_filter() To remove 'bp_get_activity_comment_id' from 'embed_post_id'.
  */
 function bp_activity_comment_embed_after_recurse() {
 	remove_filter( 'embed_post_id', 'bp_get_activity_comment_id' );
@@ -1749,26 +1822,40 @@ function bp_activity_comment_embed_after_recurse() {
 add_action( 'bp_after_activity_comment', 'bp_activity_comment_embed_after_recurse' );
 
 /**
- * Wrapper function for {@link bp_activity_get_meta()}.
+ * Fetch an activity item's cached embeds.
+ *
  * Used during {@link BP_Embed::parse_oembed()} via {@link bp_activity_embed()}.
  *
  * @since BuddyPress (1.5)
  *
+ * @see BP_Embed::parse_oembed()
  * @uses bp_activity_get_meta()
  *
- * @return mixed The activity meta
+ * @param string $cache An empty string passed by BP_Embed::parse_oembed() for
+ *                      functions like this one to filter.
+ * @param int $id The ID of the activity item.
+ * @param string $cachekey The cache key generated in BP_Embed::parse_oembed().
+ * @return mixed The cached embeds for this activity item.
  */
 function bp_embed_activity_cache( $cache, $id, $cachekey ) {
 	return bp_activity_get_meta( $id, $cachekey );
 }
 
 /**
- * Wrapper function for {@link bp_activity_update_meta()}.
+ * Set an activity item's embed cache.
+ *
  * Used during {@link BP_Embed::parse_oembed()} via {@link bp_activity_embed()}.
  *
  * @since BuddyPress (1.5)
  *
+ * @see BP_Embed::parse_oembed()
  * @uses bp_activity_update_meta()
+ *
+ * @param string $cache An empty string passed by BP_Embed::parse_oembed() for
+ *                      functions like this one to filter.
+ * @param int $id The ID of the activity item.
+ * @param string $cachekey The cache key generated in BP_Embed::parse_oembed().
+ * @return bool True on success, false on failure.
  */
 function bp_embed_activity_save_cache( $cache, $cachekey, $id ) {
 	bp_activity_update_meta( $id, $cachekey, $cache );

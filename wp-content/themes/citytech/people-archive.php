@@ -1,4 +1,4 @@
-<?php /* Template Name: People Archive */ 
+<?php /* Template Name: People Archive */
 get_header(); ?>
 
 <?php	global $wp_query;
@@ -13,9 +13,9 @@ get_header(); ?>
         	</div><!--entry-content-->
         </div><!--hentry-->
     </div><!--content-->
-    
+
     <div id="sidebar" class="sidebar widget-area">
     	<?php get_sidebar('group-archive'); ?>
     </div><!--sidebar-->
-	
+
 <?php get_footer();

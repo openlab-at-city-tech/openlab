@@ -88,6 +88,33 @@ function openlab_current_group_type( $case = 'lower' ) {
 	}
 
 /**
+ * Get a printable label for a group or group type
+ */
+function openlab_get_group_type_label( $args = array() ) {
+	$r = wp_parse_args( $args, array(
+		'group_id' => openlab_fallback_group(),
+		'case' => 'lower',
+	) );
+
+	// Skip the group type lookup if one has been provided
+	if ( empty( $r['group_type'] ) ) {
+		$r['group_type'] = openlab_get_group_type( $r['group_id'] );
+	}
+
+	if ( 'portfolio' === $r['group_type'] ) {
+		$label = openlab_get_portfolio_label( $args );
+	} else {
+		$label = $r['group_type'];
+
+		if ( 'upper' === $r['case'] ) {
+			$label = ucwords( $label );
+		}
+	}
+
+	return $label;
+}
+
+/**
  * Get a group type by group id
  *
  * @param int $group_id
@@ -132,7 +159,7 @@ function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group
  *
  * This is the master function where filter data should be stored
  */
-function openlab_get_directory_filter( $filter_type ) {
+function openlab_get_directory_filter( $filter_type, $label_type ) {
 	$filter_array = array(
 		'type' => $filter_type,
 		'label' => '',
@@ -158,7 +185,7 @@ function openlab_get_directory_filter( $filter_type ) {
 				'dept_all' => 'All'
 			);
 
-			foreach( openlab_get_department_list() as $depts ) {
+			foreach( openlab_get_department_list( '', 'short' ) as $depts ) {
 				foreach( $depts as $dept_key => $dept_label ) {
 					$filter_array['options'][$dept_key] = $dept_label;
 				}
@@ -186,14 +213,22 @@ function openlab_get_directory_filter( $filter_type ) {
 function openlab_current_directory_filters() {
 	$filters = array();
 
-	switch (openlab_get_current_group_type()) {
+	if ( is_page( 'people' ) ) {
+		$current_view = 'people';
+	} else {
+		$current_view = openlab_get_current_group_type();
+	}
+
+	switch ( $current_view ) {
 		case 'portfolio' :
 			$filters = array( 'school', 'department', 'usertype' );
 			break;
 		case 'course' :
 			$filters = array( 'school', 'department', 'semester' );
 			break;
-
+		case 'people' :
+			$filters = array( 'usertype', 'school', 'department' );
+			break;
 		default :
 
 			break;
@@ -206,14 +241,13 @@ function openlab_current_directory_filters() {
 		}
 	}
 
-//<h3 id="bread-crumb">'.$school.'<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp; </span>
 	$markup = '';
 	if ( !empty( $active_filters ) ) {
 		$markup .= '<h3 id="bread-crumb">';
 
 		$filter_words = array();
 		foreach( $active_filters as $ftype => $fvalue ) {
-			$filter_data = openlab_get_directory_filter( $ftype );
+			$filter_data = openlab_get_directory_filter( $ftype, 'short' );
 
 			$word = isset( $filter_data['options'][$fvalue] ) ? $filter_data['options'][$fvalue] : ucwords( $fvalue );
 

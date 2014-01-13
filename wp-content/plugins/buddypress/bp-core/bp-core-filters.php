@@ -1,16 +1,13 @@
 <?php
 
 /**
- * BuddyPress Filters
+ * BuddyPress Filters.
  *
- * @package BuddyPress
- * @subpackage Core
- *
- * This file contains the filters that are used through-out BuddyPress. They are
+ * This file contains the filters that are used throughout BuddyPress. They are
  * consolidated here to make searching for them easier, and to help developers
  * understand at a glance the order in which things occur.
  *
- * There are a few common places that additional filters can currently be found
+ * There are a few common places that additional filters can currently be found.
  *
  *  - BuddyPress: In {@link BuddyPress::setup_actions()} in buddypress.php
  *  - Component: In {@link BP_Component::setup_actions()} in
@@ -18,6 +15,8 @@
  *  - Admin: More in {@link BP_Admin::setup_actions()} in
  *            bp-core/bp-core-admin.php
  *
+ * @package BuddyPress
+ * @subpackage Core
  * @see bp-core-actions.php
  */
 
@@ -25,7 +24,7 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Attach BuddyPress to WordPress
+ * Attach BuddyPress to WordPress.
  *
  * BuddyPress uses its own internal actions to help aid in third-party plugin
  * development, and to limit the amount of potential future code changes when
@@ -54,7 +53,7 @@ add_filter( 'bp_core_render_message_content', 'shortcode_unautop' );
 add_filter( 'bp_core_render_message_content', 'wp_kses_data', 5   );
 
 /**
- * Template Compatibility
+ * Template Compatibility.
  *
  * If you want to completely bypass this and manage your own custom BuddyPress
  * template hierarchy, start here by removing this filter, then look at how
@@ -70,13 +69,13 @@ add_filter( 'bp_get_template_stack', 'bp_add_template_stack_locations'          
 add_filter( 'comments_open', 'bp_comments_open', 10, 2 );
 
 /**
- * bp_core_exclude_pages()
+ * Prevent specific pages (eg 'Activate') from showing on page listings.
  *
- * Excludes specific pages from showing on page listings, for example the "Activation" page.
- *
- * @package BuddyPress Core
  * @uses bp_is_active() checks if a BuddyPress component is active.
- * @return array The list of page ID's to exclude
+ *
+ * @param array $pages List of excluded page IDs, as passed to the
+ *        'wp_list_pages_excludes' filter.
+ * @return array The exclude list, with BP's pages added.
  */
 function bp_core_exclude_pages( $pages = array() ) {
 
@@ -100,13 +99,11 @@ function bp_core_exclude_pages( $pages = array() ) {
 add_filter( 'wp_list_pages_excludes', 'bp_core_exclude_pages' );
 
 /**
- * bp_core_email_from_name_filter()
+ * Set "From" name in outgoing email to the site name.
  *
- * Sets the "From" name in emails sent to the name of the site and not "WordPress"
+ * @uses bp_get_option() fetches the value for a meta_key in the wp_X_options table.
  *
- * @package BuddyPress Core
- * @uses bp_get_option() fetches the value for a meta_key in the wp_X_options table
- * @return string The blog name for the root blog
+ * @return string The blog name for the root blog.
  */
 function bp_core_email_from_name_filter() {
  	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
@@ -114,11 +111,11 @@ function bp_core_email_from_name_filter() {
 add_filter( 'wp_mail_from_name', 'bp_core_email_from_name_filter' );
 
 /**
- * bp_core_filter_comments()
- *
  * Filter the blog post comments array and insert BuddyPress URLs for users.
  *
- * @package BuddyPress Core
+ * @param array $comments The array of comments supplied to the comments template.
+ * @param int $post->ID The post ID.
+ * @return array $comments The modified comment array.
  */
 function bp_core_filter_comments( $comments, $post_id ) {
 	global $wpdb;
@@ -151,17 +148,17 @@ function bp_core_filter_comments( $comments, $post_id ) {
 add_filter( 'comments_array', 'bp_core_filter_comments', 10, 2 );
 
 /**
- * When a user logs in, redirect him in a logical way
+ * When a user logs in, redirect him in a logical way.
  *
- * @package BuddyPress Core
+ * @uses apply_filters() Filter 'bp_core_login_redirect' to modify where users
+ *       are redirected to on login.
  *
- * @uses apply_filters Filter bp_core_login_redirect to modify where users are redirected to on
- *   login
- * @param string $redirect_to The URL to be redirected to, sanitized in wp-login.php
+ * @param string $redirect_to The URL to be redirected to, sanitized
+ *        in wp-login.php.
  * @param string $redirect_to_raw The unsanitized redirect_to URL ($_REQUEST['redirect_to'])
- * @param WP_User $user The WP_User object corresponding to a successfully logged-in user. Otherwise
- *   a WP_Error object
- * @return string The redirect URL
+ * @param WP_User $user The WP_User object corresponding to a successfully
+ *        logged-in user. Otherwise a WP_Error object.
+ * @return string The redirect URL.
  */
 function bp_core_login_redirect( $redirect_to, $redirect_to_raw, $user ) {
 
@@ -192,19 +189,22 @@ function bp_core_login_redirect( $redirect_to, $redirect_to_raw, $user ) {
 		return wp_get_referer();
 	}
 
-	return bp_get_root_domain();
+	return apply_filters( 'bp_core_login_redirect_to', bp_get_root_domain() );
 }
 add_filter( 'bp_login_redirect', 'bp_core_login_redirect', 10, 3 );
 
-/***
- * bp_core_filter_user_welcome_email()
+/**
+ * Replace the generated password in the welcome email with '[User Set]'.
  *
- * Replace the generated password in the welcome email.
- * This will not filter when the site admin registers a user.
+ * On a standard BP installation, users who register themselves also set their
+ * own passwords. Therefore there is no need for the insecure practice of
+ * emailing the plaintext password to the user in the welcome email.
  *
- * @uses locate_template To see if custom registration files exist
- * @param string $welcome_email Complete email passed through WordPress
- * @return string Filtered $welcome_email with 'PASSWORD' replaced by [User Set]
+ * This filter will not fire when a user is registered by the site admin.
+ *
+ * @param string $welcome_email Complete email passed through WordPress.
+ * @return string Filtered $welcome_email with the password replaced
+ *         by '[User Set]'.
  */
 function bp_core_filter_user_welcome_email( $welcome_email ) {
 
@@ -217,18 +217,20 @@ function bp_core_filter_user_welcome_email( $welcome_email ) {
 }
 add_filter( 'update_welcome_user_email', 'bp_core_filter_user_welcome_email' );
 
-/***
- * bp_core_filter_blog_welcome_email()
+/**
+ * Replace the generated password in the welcome email with '[User Set]'.
  *
- * Replace the generated password in the welcome email.
- * This will not filter when the site admin registers a user.
+ * On a standard BP installation, users who register themselves also set their
+ * own passwords. Therefore there is no need for the insecure practice of
+ * emailing the plaintext password to the user in the welcome email.
  *
- * @uses locate_template To see if custom registration files exist
- * @param string $welcome_email Complete email passed through WordPress
- * @param integer $blog_id ID of the blog user is joining
- * @param integer $user_id ID of the user joining
- * @param string $password Password of user
- * @return string Filtered $welcome_email with $password replaced by [User Set]
+ * This filter will not fire when a user is registered by the site admin.
+ *
+ * @param string $welcome_email Complete email passed through WordPress.
+ * @param int $blog_id ID of the blog user is joining.
+ * @param int $user_id ID of the user joining.
+ * @param string $password Password of user.
+ * @return string Filtered $welcome_email with $password replaced by '[User Set]'.
  */
 function bp_core_filter_blog_welcome_email( $welcome_email, $blog_id, $user_id, $password ) {
 
@@ -241,29 +243,44 @@ function bp_core_filter_blog_welcome_email( $welcome_email, $blog_id, $user_id, 
 }
 add_filter( 'update_welcome_email', 'bp_core_filter_blog_welcome_email', 10, 4 );
 
-// Notify user of signup success.
+/**
+ * Notify new users of a successful registration (with blog).
+ *
+ * This function filter's WP's 'wpmu_signup_blog_notification', and replaces
+ * WP's default welcome email with a BuddyPress-specific message.
+ *
+ * @see wpmu_signup_blog_notification() for a description of parameters.
+ *
+ * @param string $domain The new blog domain.
+ * @param string $path The new blog path.
+ * @param string $title The site title.
+ * @param string $user The user's login name.
+ * @param string $user_email The user's email address.
+ * @param string $key The activation key created in wpmu_signup_blog()
+ * @param array $meta By default, contains the requested privacy setting and
+ *        lang_id.
+ * @return bool True on success, false on failure.
+ */
 function bp_core_activation_signup_blog_notification( $domain, $path, $title, $user, $user_email, $key, $meta ) {
 
-	// Send email with activation link.
+	// Set up activation link
 	$activate_url = bp_get_activation_page() ."?key=$key";
 	$activate_url = esc_url( $activate_url );
 
-	$admin_email = get_site_option( 'admin_email' );
+	// Email contents
+	$message = sprintf( __( "Thanks for registering! To complete the activation of your account and blog, please click the following link:\n\n%1\$s\n\n\n\nAfter you activate, you can visit your blog here:\n\n%2\$s", 'buddypress' ), $activate_url, esc_url( "http://{$domain}{$path}" ) );
+	$subject = bp_get_email_subject( array( 'text' => sprintf( __( 'Activate %s', 'buddypress' ), 'http://' . $domain . $path ) ) );
 
-	if ( empty( $admin_email ) )
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	// Email filters
+	$to      = apply_filters( 'bp_core_activation_signup_blog_notification_to',   $user_email, $domain, $path, $title, $user, $user_email, $key, $meta );
+	$subject = apply_filters( 'bp_core_activation_signup_blog_notification_subject', $subject, $domain, $path, $title, $user, $user_email, $key, $meta );
+	$message = apply_filters( 'bp_core_activation_signup_blog_notification_message', $message, $domain, $path, $title, $user, $user_email, $key, $meta );
 
-	$from_name       = bp_get_option( 'blogname', 'WordPress' );
-	$message_headers = "MIME-Version: 1.0\n" . "From: \"{$from_name}\" <{$admin_email}>\n" . "Content-Type: text/plain; charset=\"" . get_option( 'blog_charset' ) . "\"\n";
-	$message         = sprintf( __( "Thanks for registering! To complete the activation of your account and blog, please click the following link:\n\n%1\$s\n\n\n\nAfter you activate, you can visit your blog here:\n\n%2\$s", 'buddypress' ), $activate_url, esc_url( "http://{$domain}{$path}" ) );
-	$subject         = bp_get_email_subject( array( 'text' => sprintf( __( 'Activate %s', 'buddypress' ), 'http://' . $domain . $path ) ) );
+	// Send the email
+	wp_mail( $to, $subject, $message );
 
-	// Send the message
-	$to              = apply_filters( 'bp_core_activation_signup_blog_notification_to',   $user_email, $domain, $path, $title, $user, $user_email, $key, $meta );
-	$subject         = apply_filters( 'bp_core_activation_signup_blog_notification_subject', $subject, $domain, $path, $title, $user, $user_email, $key, $meta );
-	$message         = apply_filters( 'bp_core_activation_signup_blog_notification_message', $message, $domain, $path, $title, $user, $user_email, $key, $meta );
-
-	wp_mail( $to, $subject, $message, $message_headers );
+	// Set up the $admin_email to pass to the filter
+	$admin_email = bp_get_option( 'admin_email' );
 
 	do_action( 'bp_core_sent_blog_signup_email', $admin_email, $subject, $message, $domain, $path, $title, $user, $user_email, $key, $meta );
 
@@ -272,26 +289,37 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 }
 add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_notification', 1, 7 );
 
+/**
+ * Notify new users of a successful registration (without blog).
+ *
+ * @see wpmu_signup_user_notification() for a full description of params.
+ *
+ * @param string $user The user's login name.
+ * @param string $user_email The user's email address.
+ * @param string $key The activation key created in wpmu_signup_user()
+ * @param array $meta By default, an empty array.
+ * @return bool True on success, false on failure.
+ */
 function bp_core_activation_signup_user_notification( $user, $user_email, $key, $meta ) {
 
+	// Set up activation link
 	$activate_url = bp_get_activation_page() . "?key=$key";
-	$activate_url = esc_url($activate_url);
-	$admin_email  = get_site_option( 'admin_email' );
+	$activate_url = esc_url( $activate_url );
 
-	if ( empty( $admin_email ) )
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	// Email contents
+	$message = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%1\$s\n\n", 'buddypress' ), $activate_url );
+	$subject = bp_get_email_subject( array( 'text' => __( 'Activate Your Account', 'buddypress' ) ) );
 
-	$from_name       = bp_get_option( 'blogname', 'WordPress' );
-	$message_headers = "MIME-Version: 1.0\n" . "From: \"{$from_name}\" <{$admin_email}>\n" . "Content-Type: text/plain; charset=\"" . get_option( 'blog_charset' ) . "\"\n";
-	$message         = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%1\$s\n\n", 'buddypress' ), $activate_url );
-	$subject         = bp_get_email_subject( array( 'text' => __( 'Activate Your Account', 'buddypress' ) ) );
-
-	// Send the message
+	// Email filters
 	$to      = apply_filters( 'bp_core_activation_signup_user_notification_to',   $user_email, $user, $user_email, $key, $meta );
 	$subject = apply_filters( 'bp_core_activation_signup_user_notification_subject', $subject, $user, $user_email, $key, $meta );
 	$message = apply_filters( 'bp_core_activation_signup_user_notification_message', $message, $user, $user_email, $key, $meta );
 
-	wp_mail( $to, $subject, $message, $message_headers );
+	// Send the email
+	wp_mail( $to, $subject, $message );
+
+	// Set up the $admin_email to pass to the filter
+	$admin_email = bp_get_option( 'admin_email' );
 
 	do_action( 'bp_core_sent_user_signup_email', $admin_email, $subject, $message, $user, $user_email, $key, $meta );
 
@@ -301,15 +329,17 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 add_filter( 'wpmu_signup_user_notification', 'bp_core_activation_signup_user_notification', 1, 4 );
 
 /**
- * Filter the page title for BuddyPress pages
+ * Filter the page title for BuddyPress pages.
  *
- * @global object $bp BuddyPress global settings
- * @param string $title Original page title
- * @param string $sep How to separate the various items within the page title.
- * @param string $seplocation Direction to display title
- * @return string new page title
+ * @since BuddyPress (1.5.0)
+ *
  * @see wp_title()
- * @since BuddyPress (1.5)
+ * @global object $bp BuddyPress global settings.
+ *
+ * @param string $title Original page title.
+ * @param string $sep How to separate the various items within the page title.
+ * @param string $seplocation Direction to display title.
+ * @return string New page title.
  */
 function bp_modify_page_title( $title, $sep, $seplocation ) {
 	global $bp;
@@ -317,6 +347,11 @@ function bp_modify_page_title( $title, $sep, $seplocation ) {
 	// If this is not a BP page, just return the title produced by WP
 	if ( bp_is_blog_page() )
 		return $title;
+
+	// If this is a 404, let WordPress handle it
+	if ( is_404() ) {
+		return $title;
+	}
 
 	// If this is the front page of the site, return WP's title
 	if ( is_front_page() || is_home() )
@@ -387,3 +422,74 @@ add_filter( 'wp_title', 'bp_modify_page_title', 10, 3 );
 add_filter( 'bp_modify_page_title', 'wptexturize'     );
 add_filter( 'bp_modify_page_title', 'convert_chars'   );
 add_filter( 'bp_modify_page_title', 'esc_html'        );
+
+/**
+ * Add BuddyPress-specific items to the wp_nav_menu.
+ *
+ * @since BuddyPress (1.9.0)
+ *
+ * @param WP_Post $menu_item The menu item.
+ * @return obj The modified WP_Post object.
+ */
+function bp_setup_nav_menu_item( $menu_item ) {
+	if ( is_admin() ) {
+		return $menu_item;
+	}
+
+	// We use information stored in the CSS class to determine what kind of
+	// menu item this is, and how it should be treated
+	$css_target = preg_match( '/\sbp-(.*)-nav/', implode( ' ', $menu_item->classes), $matches );
+
+	// If this isn't a BP menu item, we can stop here
+	if ( empty( $matches[1] ) ) {
+		return $menu_item;
+	}
+
+	switch ( $matches[1] ) {
+		case 'login' :
+			if ( is_user_logged_in() ) {
+				$menu_item->_invalid = true;
+			} else {
+				$menu_item->url = wp_login_url( wp_guess_url() );
+			}
+
+			break;
+
+		case 'logout' :
+			if ( ! is_user_logged_in() ) {
+				$menu_item->_invalid = true;
+			} else {
+				$menu_item->url = wp_logout_url( wp_guess_url() );
+			}
+
+			break;
+
+		// Don't show the Register link to logged-in users
+		case 'register' :
+			if ( is_user_logged_in() ) {
+				$menu_item->_invalid = true;
+			}
+
+			break;
+
+		// All other BP nav items are specific to the logged-in user,
+		// and so are not relevant to logged-out users
+		default:
+			if ( is_user_logged_in() ) {
+				$menu_item->url = bp_nav_menu_get_item_url( $matches[1] );
+			} else {
+				$menu_item->_invalid = true;
+			}
+
+			break;
+	}
+
+	// Highlight the current page
+	$current = bp_get_requested_url();
+	if ( strpos( $current, $menu_item->url ) !== false ) {
+		$menu_item->classes[] = 'current_page_item';
+	}
+
+	return $menu_item;
+}
+add_filter( 'wp_setup_nav_menu_item', 'bp_setup_nav_menu_item', 10, 1 );

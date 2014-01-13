@@ -1,13 +1,13 @@
-=== Plugin Name ===
+=== BuddyPress ===
 Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y
 Tags: social networking, activity, profiles, messaging, friends, groups, forums, notifications, settings, twitter, facebook, social, community, networks, networking, cms
-Requires at least: 3.5
-Tested up to: 3.6
-Stable tag: 1.8.1
+Requires at least: 3.6
+Tested up to: 3.8
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Social networking in a box. Build a social network for your company, school, sports team or niche community.
+Social networking in a box. Build a social network for your company, school, sports team, or niche community.
 
 == Description ==
 
@@ -29,11 +29,11 @@ Visit the <a href="http://buddypress.org/">BuddyPress website</a> for more infor
 
 You can download and install BuddyPress using the built in WordPress plugin installer. If you download BuddyPress manually, make sure it is uploaded to "/wp-content/plugins/buddypress/".
 
-Activate BuddyPress in the "Plugins" admin panel using the "Activate" link. You'll then see a message asking you to complete the BuddyPress Installation Wizard, which will guide you through configuring your site for BuddyPress.
+Activate BuddyPress in the "Plugins" admin panel using the "Activate" link. If you're using WordPress Multisite, you can optionally activate BuddyPress Network Wide, allowing its toolbar integration to appear on all of your sites, and optionally turning on post and comment aggregation to the Activity Stream too!
 
---- Discussion Forums ---
+= Discussion Forums =
 
-BuddyPress includes full support for discussion forums. Each group created on your site can have its own forum. If you'd like to enable this feature, after completing the Installation Wizard, visit the "Forums Setup" item under the "BuddyPress" menu in your WordPress admin-area, and follow the on-screen instructions.
+Try <a href="http://wordpress.org/plugins/bbpress/">bbPress</a>. It's designed to work cohesively with BuddyPress Groups, Profiles, and Notifications. Each group on your site can choose to have its own forum, and each user's topics, replies, favorites, and subscriptions appear in their profiles.
 
 == Frequently Asked Questions ==
 
@@ -63,11 +63,11 @@ Check out the development trunk of BuddyPress via Subversion, from <a href="http
 
 == Screenshots ==
 
-1. **Activity Streams** - Global, personal and group activity streams with threaded commenting, direct posting, favoriting and @mentions. All with full RSS feeds and email notification support.
+1. **Activity Streams** - Global, personal, and group activity streams with threaded commenting, direct posting, favoriting and @mentions. All with full RSS feeds and email notification support.
 2. **Extended Profiles** - Fully editable profile fields allow you to define the fields users can fill in to describe themselves. Tailor profile fields to suit your audience.
 3. **User Settings** - Give your users complete control over profile and notification settings. Settings are fully integrated into your theme, and can be disabled by the administrator.
 4. **Extensible Groups** - Powerful public, private or hidden groups allow your users to break the discussion down into specific topics. Extend groups with your own custom features using the group extension API.
-5. **Friend Connections** - Let your users make connections so they can track the activity of others, or filter on only those users they care about the most.
+5. **Friend Connections** - Let your users make connections so they can track the activity of others, or filter to show only those users they care about the most.
 6. **Private Messaging** - Private messaging will allow your users to talk to each other directly and in private. Not just limited to one-on-one discussions, your users can send messages to multiple recipients.
 7. **Blogging Network** - Allow your users to start their own blogs using WordPress's Multisite feature, and track posts and comments from across your blog network in the activity stream.
 
@@ -76,6 +76,9 @@ Check out the development trunk of BuddyPress via Subversion, from <a href="http
 BuddyPress is available in more than 20 languages. For more information, check out the <a href="http://codex.buddypress.org/getting-started/translations/">translation page</a> on the BuddyPress Codex.
 
 == Upgrade Notice ==
+
+= 1.9 =
+See: http://codex.buddypress.org/releases/version-1-9/
 
 = 1.8.1 =
 See: http://codex.buddypress.org/releases/version-1-8-1/
@@ -126,6 +129,9 @@ Compatibility with WordPress 3.1
 Fixes over 10 bugs.
 
 == Changelog ==
+
+= 1.9 =
+See: http://codex.buddypress.org/releases/version-1-9/
 
 = 1.8.1 =
 See: http://codex.buddypress.org/releases/version-1-8-1/

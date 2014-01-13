@@ -68,6 +68,8 @@ class OpenLab_Admin_Bar {
 
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
+			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
+
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 		} else {
@@ -572,6 +574,13 @@ class OpenLab_Admin_Bar {
 	}
 
 	/**
+	 * Remove + > User
+	 */
+	public function remove_adduser( $wp_admin_bar ) {
+		$wp_admin_bar->remove_menu( 'new-user' );
+	}
+
+	/**
 	 * Add a 'Log Out' link to the far right
 	 */
 	function add_logout_item( $wp_admin_bar ) {
@@ -676,7 +685,7 @@ function cac_adminbar_js() {
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
-		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><input type="hidden" name="testcookie" value="1" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a><input type="hidden" name="redirect_to" value="<?php echo wp_guess_url() ?>" /></form>';
+		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a><input type="hidden" name="redirect_to" value="<?php echo wp_guess_url() ?>" /></form>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
 

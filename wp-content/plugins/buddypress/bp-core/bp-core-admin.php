@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Main BuddyPress Admin Class
+ * Main BuddyPress Admin Class.
  *
  * @package BuddyPress
  * @subpackage CoreAdministration
@@ -12,53 +12,73 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 if ( !class_exists( 'BP_Admin' ) ) :
 /**
- * Loads BuddyPress plugin admin area
+ * Load BuddyPress plugin admin area.
  *
  * @package BuddyPress
  * @subpackage CoreAdministration
- * @since BuddyPress (1.6)
+ *
+ * @since BuddyPress (1.6.0)
  */
 class BP_Admin {
 
 	/** Directory *************************************************************/
 
 	/**
-	 * @var string Path to the BuddyPress admin directory
+	 * Path to the BuddyPress admin directory.
+	 *
+	 * @var string $admin_dir
 	 */
 	public $admin_dir = '';
 
 	/** URLs ******************************************************************/
 
 	/**
-	 * @var string URL to the BuddyPress admin directory
+	 * URL to the BuddyPress admin directory.
+	 *
+	 * @var string $admin_url
 	 */
 	public $admin_url = '';
 
 	/**
-	 * @var string URL to the BuddyPress images directory
+	 * URL to the BuddyPress images directory.
+	 *
+	 * @var string $images_url
 	 */
 	public $images_url = '';
 
 	/**
-	 * @var string URL to the BuddyPress admin CSS directory
+	 * URL to the BuddyPress admin CSS directory.
+	 *
+	 * @var string $css_url
 	 */
 	public $css_url = '';
 
 	/**
-	 * @var string URL to the BuddyPress admin JS directory
+	 * URL to the BuddyPress admin JS directory.
+	 *
+	 * @var string
 	 */
 	public $js_url = '';
+
+	/** Other *****************************************************************/
+
+	/**
+	 * Notices used for user feedback, like saving settings.
+	 *
+	 * @var array()
+	 */
+	public $notices = array();
 
 	/** Methods ***************************************************************/
 
 	/**
-	 * The main BuddyPress admin loader
+	 * The main BuddyPress admin loader.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.6.0)
 	 *
-	 * @uses BP_Admin::setup_globals() Setup the globals needed
-	 * @uses BP_Admin::includes() Include the required files
-	 * @uses BP_Admin::setup_actions() Setup the hooks and actions
+	 * @uses BP_Admin::setup_globals() Setup the globals needed.
+	 * @uses BP_Admin::includes() Include the required files.
+	 * @uses BP_Admin::setup_actions() Setup the hooks and actions.
 	 */
 	public function __construct() {
 		$this->setup_globals();
@@ -67,10 +87,10 @@ class BP_Admin {
 	}
 
 	/**
-	 * Admin globals
+	 * Set admin-related globals.
 	 *
-	 * @since BuddyPress (1.6)
 	 * @access private
+	 * @since BuddyPress (1.6.0)
 	 */
 	private function setup_globals() {
 		$bp = buddypress();
@@ -87,9 +107,9 @@ class BP_Admin {
 	}
 
 	/**
-	 * Include required files
+	 * Include required files.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.6.0)
 	 * @access private
 	 */
 	private function includes() {
@@ -101,13 +121,13 @@ class BP_Admin {
 	}
 
 	/**
-	 * Setup the admin hooks, actions and filters
+	 * Set up the admin hooks, actions, and filters.
 	 *
-	 * @since BuddyPress (1.6)
 	 * @access private
+	 * @since BuddyPress (1.6.0)
 	 *
-	 * @uses add_action() To add various actions
-	 * @uses add_filter() To add various filters
+	 * @uses add_action() To add various actions.
+	 * @uses add_filter() To add various filters.
 	 */
 	private function setup_actions() {
 
@@ -124,8 +144,14 @@ class BP_Admin {
 
 		/** BuddyPress Actions ************************************************/
 
+		// Load the BuddyPress metabox in the WP Nav Menu Admin UI
+		add_action( 'load-nav-menus.php', 'bp_admin_wp_nav_menu_meta_box' );
+
 		// Add settings
 		add_action( 'bp_register_admin_settings', array( $this, 'register_admin_settings' ) );
+
+		// Add a link to BuddyPress About page to the admin bar
+		add_action( 'admin_bar_menu', array( $this, 'admin_bar_about_link' ), 15 );
 
 		/** Filters ***********************************************************/
 
@@ -135,13 +161,13 @@ class BP_Admin {
 	}
 
 	/**
-	 * Add the navigational menu elements
+	 * Add the navigational menu elements.
 	 *
 	 * @since BuddyPress (1.6)
 	 *
-	 * @uses add_management_page() To add the Recount page in Tools section
+	 * @uses add_management_page() To add the Recount page in Tools section.
 	 * @uses add_options_page() To add the Forums settings page in Settings
-	 *                           section
+	 *       section.
 	 */
 	public function admin_menus() {
 
@@ -223,13 +249,13 @@ class BP_Admin {
 	}
 
 	/**
-	 * Register the settings
+	 * Register the settings.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.6.0)
 	 *
-	 * @uses add_settings_section() To add our own settings section
-	 * @uses add_settings_field() To add various settings fields
-	 * @uses register_setting() To register various settings
+	 * @uses add_settings_section() To add our own settings section.
+	 * @uses add_settings_field() To add various settings fields.
+	 * @uses register_setting() To register various settings.
 	 */
 	public function register_admin_settings() {
 
@@ -312,13 +338,31 @@ class BP_Admin {
 	}
 
 	/**
-	 * Add Settings link to plugins area
+	 * Add a link to BuddyPress About page to the admin bar.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.9.0)
 	 *
-	 * @param array $links Links array in which we would prepend our link
-	 * @param string $file Current plugin basename
-	 * @return array Processed links
+	 * @param WP_Admin_Bar $wp_admin_bar As passed to 'admin_bar_menu'.
+	 */
+	public function admin_bar_about_link( $wp_admin_bar ) {
+		if ( is_user_logged_in() ) {
+			$wp_admin_bar->add_menu( array(
+				'parent' => 'wp-logo',
+				'id'     => 'bp-about',
+				'title'  => esc_html__( 'About BuddyPress', 'buddypress' ),
+				'href'   => add_query_arg( array( 'page' => 'bp-about' ), bp_get_admin_url( 'index.php' ) ),
+			) );
+		}
+	}
+
+	/**
+	 * Add Settings link to plugins area.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param array $links Links array in which we would prepend our link.
+	 * @param string $file Current plugin basename.
+	 * @return array Processed links.
 	 */
 	public function modify_plugin_action_links( $links, $file ) {
 
@@ -334,9 +378,9 @@ class BP_Admin {
 	}
 
 	/**
-	 * Add some general styling to the admin area
+	 * Add some general styling to the admin area.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.6.0)
 	 */
 	public function admin_head() {
 
@@ -350,9 +394,9 @@ class BP_Admin {
 	}
 
 	/**
-	 * Add some general styling to the admin area
+	 * Add some general styling to the admin area.
 	 *
-	 * @since BuddyPress (1.6)
+	 * @since BuddyPress (1.6.0)
 	 */
 	public function enqueue_scripts() {
 
@@ -366,9 +410,9 @@ class BP_Admin {
 	/** About *****************************************************************/
 
 	/**
-	 * Output the about screen
+	 * Output the about screen.
 	 *
-	 * @since BuddyPress (1.7)
+	 * @since BuddyPress (1.7.0)
 	 */
 	public function about_screen() {
 		global $wp_rewrite;
@@ -383,11 +427,22 @@ class BP_Admin {
 			<h1><?php printf( __( 'Welcome to BuddyPress %s', 'buddypress' ), $display_version ); ?></h1>
 			<div class="about-text">
 				<?php if ( $is_new_install ) : ?>
-					<?php printf( __( 'BuddyPress %s is our safest, fastest, most flexible version ever.', 'buddypress' ), $display_version ); ?>
+				<?php printf( __( 'It&#8217;s a great time to use BuddyPress! %s is our first version with a new component in over two years. Not only that, there are plenty of new features, enhancements, and bug fixes.', 'buddypress' ), $display_version ); ?>
 				<?php else : ?>
-					<?php printf( __( 'Thank you for updating! BuddyPress %s is our safest, fastest, most flexible version ever.', 'buddypress' ), $display_version ); ?>
+					<?php printf( __( 'Thanks for updating! BuddyPress %s is our first version with a new component in over two years. Not only that, there are plenty of new features, enhancements, and bug fixes.', 'buddypress' ), $display_version ); ?>
 				<?php endif; ?>
 			</div>
+
+			<div class="changelog">
+				<h3><?php _e( 'Check out the highlights:', 'buddypress' ); ?></h3>
+
+				<ul>
+					<li><strong><?php _e( 'You can now add dynamic BuddyPress links to custom navigation menus.', 'buddypress' ); ?></strong></li>
+					<li><strong><?php _e( 'Notifications have been moved into their own component.', 'buddypress' ); ?></strong></li>
+					<li><strong><?php _e( 'Three new widgets, allowing easier site customization.', 'buddypress' ); ?></strong></li>
+				<ul>
+			</div>
+
 			<div class="bp-badge"><?php printf( __( 'Version %s', 'buddypress' ), $display_version ); ?></div>
 
 			<h2 class="nav-tab-wrapper">
@@ -403,7 +458,9 @@ class BP_Admin {
 
 				<div class="feature-section">
 					<h4><?php _e( 'Your Default Setup', 'buddypress' ); ?></h4>
-					<p><?php printf(
+
+					<?php if ( bp_is_active( 'members' ) && bp_is_active( 'activity' ) ) : ?>
+						<p><?php printf(
 						__( 'BuddyPress&#8217;s powerful features help your users connect and collaborate. To help get your community started, we&#8217;ve activated two of the most commonly used tools in BP: <strong>Extended Profiles</strong> and <strong>Activity Streams</strong>. See these components in action at the %1$s and %2$s directories, and be sure to spend a few minutes <a href="%3$s">configuring user profiles</a>. Want to explore more of BP&#8217;s features? Visit the <a href="%4$s">Components panel</a>.', 'buddypress' ),
 						$pretty_permalinks_enabled ? '<a href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_members_root_slug() ) . '">' . __( 'Members', 'buddypress' ) . '</a>' : __( 'Members', 'buddypress' ),
 						$pretty_permalinks_enabled ? '<a href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_activity_root_slug() ) . '">' . __( 'Activity', 'buddypress' ) . '</a>' : __( 'Activity', 'buddypress' ),
@@ -411,78 +468,81 @@ class BP_Admin {
 						bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) )
 					); ?></p>
 
+					<?php else : ?>
+						<p><?php printf(
+						__( 'BuddyPress&#8217;s powerful features help your users connect and collaborate. Want to explore BP&#8217;s features? Visit the <a href="%s">Components panel</a>.', 'buddypress' ),
+						bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) )
+					); ?></p>
+
+					<?php endif; ?>
+
 					<h4><?php _e( 'Community and Support', 'buddypress' ); ?></h4>
 					<p><?php _e( 'Looking for help? The <a href="http://codex.buddypress.org/">BuddyPress Codex</a> has you covered, with dozens of user-contributed guides on how to configure and use your BP site. Can&#8217;t find what you need? Stop by <a href="http://buddypress.org/support/">our support forums</a>, where a vibrant community of BuddyPress users and developers is waiting to share tips, show off their sites, talk about the future of BuddyPress, and much more.', 'buddypress' ) ?></p>
 				</div>
 
 			<?php endif; ?>
 
+			<hr />
 			<div class="changelog">
-				<h3><?php _e( 'Improved Theme Integration', 'buddypress' ); ?></h3>
+				<h3><?php _e( 'Dynamic links for custom navigation menus', 'buddypress' ); ?></h3>
 
 				<div class="feature-section">
-					<h4><?php _e( 'Hey, Good Lookin&#8217;', 'buddypress' ); ?></h4>
-					<p><?php _e( 'We&#8217;ve streamlined our stylesheets, so that BuddyPress content looks more at home in your theme. And theme developers will love BP&#8217;s new hierarchies that make it easy to override specific top-level templates, stylesheets, and JavaScript files.', 'buddypress' ) ?></p>
+					<p><?php printf( __( 'It&#8217;s now easy to add BuddyPress-specific links to your menus through <a href="%s">Appearance &gt; Menus</a>. For example, you can now add a link to a specific user profile screen, and each person will end up at that screen inside their own user profile.', 'buddypress' ), admin_url( 'nav-menus.php' ) ); ?></p>
 				</div>
 			</div>
 
+			<hr />
 			<div class="changelog">
-				<h3><?php _e( 'Better Group Member Management', 'buddypress' ); ?></h3>
+				<h3><?php _e( 'Notifications component', 'buddypress' ); ?></h3>
 
 				<div class="feature-section">
-					<h4><?php _e( '<em>Add</em>, <em>Remove</em>, and More, in a Snap', 'buddypress' ); ?></h4>
+					<p><?php _e( 'The notification features have been promoted into a new component. Use it to keep your site&#8217;s members abreast of the latest connections and @mentions within the site, via email notifications and Toolbar alerts.', 'buddypress' ); ?></p>
 
-					<?php
-					$group_admin_text = __( 'Groups administration panel', 'buddypress' );
-					if ( bp_is_active( 'groups' ) ) {
-						$group_admin_text = '<a href="' . bp_get_admin_url( add_query_arg( array( 'page' => 'bp-groups' ), 'admin.php' ) ) . '">' . $group_admin_text . '</a>';
-					}
-					?>
-
-					<p><?php printf(
-						__( 'The Manage Members section of the %s has been rewritten, to make it easier to handle groups with many members. We&#8217;ve also made the interface nicer to use, to ensure that you don&#8217;t make changes and then forget to save them.', 'buddypress' ),
-						$group_admin_text
-					); ?></p>
 				</div>
 			</div>
 
+			<hr />
 			<div class="changelog">
-				<h3><?php _e( 'Under the Hood', 'buddypress' ); ?></h3>
+				<h3><?php _e( 'Widgets', 'buddypress' ); ?></h3>
 
-				<div class="feature-section three-col">
-					<div>
-						<h4><?php _e( 'Superpowered Group Extensions', 'buddypress' ); ?></h4>
-						<p><?php _e( '<code>BP_Group_Extension</code> has been overhauled, making it easier than ever before to add custom functionality to groups.', 'buddypress' ); ?></p>
-
-						<h4><?php _e( 'Filter Groups or Activity by Metadata', 'buddypress' ); ?></h4>
-						<p><?php _e( '<code>bp_has_groups()</code> and <code>bp_has_activities()</code> now accept a <code>meta_query</code> paramater, for more powerful directory queries.', 'buddypress' ); ?></p>
-					</div>
-
-					<div>
-						<h4><?php _e( 'Feed Me, Seymour', 'buddypress' ); ?></h4>
-						<p><?php _e( 'The new <code>BP_Activity_Feed</code> class centralizes BP&#8217;s RSS logic, making our feeds more standards-compliant, and giving developers more tools for building custom feeds.', 'buddypress' ); ?></p>
-
-						<h4><?php _e( 'Disable @-Mentions', 'buddypress' ); ?></h4>
-						<p><?php _e( "Not using @-mentions? Disable them with <code>add_filter( 'bp_activity_do_mentions', '__return_false' );</code>", 'buddypress' ); ?></p>
-					</div>
+				<div class="feature-section">
+					<ul>
+						<li><?php _e( '<strong>Friends Widget</strong>: a list of recently active, popular, and newest friends of the displayed member.', 'buddypress' ); ?></li>
+						<li><?php _e( '<strong>Log In Widget</strong>: adds a simple &ldquo;Log In&rdquo; form to your site.', 'buddypress' ); ?></li>
+						<li><?php _e( '<strong>Sitewide Notices Widget</strong>: display Sitewide Notices from the Private Messaging component.', 'buddypress' ); ?></li>
+					</ul>
+				</div>
 			</div>
 
-			<div class="return-to-dashboard">
-				<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) ) ); ?>"><?php _e( 'Go to the BuddyPress Settings page', 'buddypress' ); ?></a>
-			</div>
+			<hr />
+			<div class="changelog">
+				<h3><?php _e( 'Developer changes', 'buddypress' ); ?></h3>
 
-		</div>
+				<div class="feature-section">
+					<ul>
+						<li><?php _e( '<code>bp_redirect_canonical()</code> functionality has been reinstated', 'buddypress' ); ?></li>
+						<li><?php _e( 'Improved phpDoc inline documentation', 'buddypress' ); ?></li>
+						<li><?php printf( __( 'Improved compatibility with <a href="%s">develop.svn.wordpress.org</a> unit-test suite', 'buddypress' ), 'https://develop.svn.wordpress.org/' ); ?></li>
+						<li><?php printf( __( '<a href="%s">&hellip;and lots more!</a>' ), 'http://codex.buddypress.org/releases/version-1-9' ); ?></li>
+					</ul>
+				</div>
+
+				<div class="return-to-dashboard">
+					<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) ) ); ?>"><?php _e( 'Go to the BuddyPress Settings page', 'buddypress' ); ?></a>
+				</div>
+
+			</div>
 
 		<?php
 	}
 
 	/**
-	 * Output the credits screen
+	 * Output the credits screen.
 	 *
-	 * Hardcoding this in here is pretty janky. It's fine for 2.2, but we'll
+	 * Hardcoding this in here is pretty janky. It's fine for now, but we'll
 	 * want to leverage api.wordpress.org eventually.
 	 *
-	 * @since BuddyPress (1.7)
+	 * @since BuddyPress (1.7.0)
 	 */
 	public function credits_screen() {
 
@@ -490,7 +550,7 @@ class BP_Admin {
 
 		<div class="wrap about-wrap">
 			<h1><?php printf( __( 'Welcome to BuddyPress %s', 'buddypress' ), $display_version ); ?></h1>
-			<div class="about-text"><?php printf( __( 'Thank you for updating to the latest version! BuddyPress %s is ready to make your community a safer, faster, and better looking place to hang out!', 'buddypress' ), $display_version ); ?></div>
+			<div class="about-text"><?php printf( __( 'BuddyPress %s is our first version with a new component in over two years. Not only that, there are plenty of new features, enhancements, and bug fixes.', 'buddypress' ), $display_version ); ?></div>
 			<div class="bp-badge"><?php printf( __( 'Version %s', 'buddypress' ), $display_version ); ?></div>
 
 			<h2 class="nav-tab-wrapper">
@@ -537,64 +597,65 @@ class BP_Admin {
 
 			<h4 class="wp-people-group"><?php _e( 'Recent Rockstars', 'buddypress' ); ?></h4>
 			<ul class="wp-people-group " id="wp-people-group-rockstars">
-				<li class="wp-person" id="wp-person-karmatosed">
-					<a href="http://profiles.wordpress.org/karmatosed"><img src="http://0.gravatar.com/avatar/d36d2c1821af9249b69ff7f5ed60529b?s=60" class="gravatar" alt="Tammie Lister" /></a>
-					<a class="web" href="http://profiles.wordpress.org/karmatosed">Tammie Lister</a>
-					<span class="title"><?php _e( 'Design Officer', 'buddypress' ); ?></span>
+				<li class="wp-person" id="wp-person-imath">
+					<a href="http://profiles.wordpress.org/imath"><img src="http://0.gravatar.com/avatar/8b208ca408dad63888253ee1800d6a03?s=60" class="gravatar" alt="Mathieu Viet" /></a>
+					<a class="web" href="http://profiles.wordpress.org/imath">Mathieu Viet</a>
+				</li>
+				<li class="wp-person" id="wp-person-hnla">
+					<a href="http://profiles.wordpress.org/hnla"><img src="http://0.gravatar.com/avatar/3860c955aa3f79f13b92826ae47d07fe?s=60" class="gravatar" alt="Hugo Ashmore" /></a>
+					<a class="web" href="http://profiles.wordpress.org/hnla">Hugo Ashmore</a>
 				</li>
 				<li class="wp-person" id="wp-person-mercime">
 					<a href="http://profiles.wordpress.org/mercime"><img src="http://0.gravatar.com/avatar/fae451be6708241627983570a1a1817a?s=60" class="gravatar" alt="Mercime" /></a>
 					<a class="web" href="http://profiles.wordpress.org/mercime">Mercime</a>
-					<span class="title"><?php _e( 'Support Officer', 'buddypress' ); ?></span>
+				</li>
+				<li class="wp-person" id="wp-person-karmatosed">
+					<a href="http://profiles.wordpress.org/karmatosed"><img src="http://0.gravatar.com/avatar/d36d2c1821af9249b69ff7f5ed60529b?s=60" class="gravatar" alt="Tammie Lister" /></a>
+					<a class="web" href="http://profiles.wordpress.org/karmatosed">Tammie Lister</a>
 				</li>
 			</ul>
 
-			<h4 class="wp-people-group"><?php _e( 'Core Contributors to BuddyPress 1.8', 'buddypress' ); ?></h4>
+			<h4 class="wp-people-group"><?php _e( 'Contributors to BuddyPress 1.9', 'buddypress' ); ?></h4>
 			<p class="wp-credits-list">
-				<a href="http://profiles.wordpress.org/boonebgorges">boonebgorges</a>,
-				<a href="http://profiles.wordpress.org/borkweb">borkweb</a>,
-				<a href="http://profiles.wordpress.org/chouf1">chouf1</a>,
-				<a href="http://profiles.wordpress.org/chriskeeble">chriskeeble</a>,
-				<a href="http://profiles.wordpress.org/chroniko">chroniko</a>,
-				<a href="http://profiles.wordpress.org/czarate">czarate</a>,
-				<a href="http://profiles.wordpress.org/danbp">danbp</a>,
-				<a href="http://profiles.wordpress.org/dcavins">dcavins</a>,
-				<a href="http://profiles.wordpress.org/dcowgill">dcowgill</a>,
-				<a href="http://profiles.wordpress.org/ddean">ddean</a>,
-				<a href="http://profiles.wordpress.org/djpaul">djpaul</a>,
-				<a href="http://profiles.wordpress.org/dontdream">dontdream</a>,
-				<a href="http://profiles.wordpress.org/eggproject">eggproject</a>,
-				<a href="http://profiles.wordpress.org/ericlewis">ericlewis</a>,
-				grahamwashbroo,
-				<a href="http://profiles.wordpress.org/hnla">hnla</a>,
-				<a href="http://profiles.wordpress.org/imath">imath</a>,
-				<a href="http://profiles.wordpress.org/johnjamesjacoby">johnjamesjacoby</a>,
-				<a href="http://profiles.wordpress.org/karmatosed">karmatosed</a>,
-				<a href="http://profiles.wordpress.org/lenasterg">lenasterg</a>,
-				<a href="http://profiles.wordpress.org/magnus78">magnus78</a>,
-				<a href="http://profiles.wordpress.org/megainfo">megainfo</a>,
-				<a href="http://profiles.wordpress.org/rogercoathup">rogercoathup</a>,
-				<a href="http://profiles.wordpress.org/mercime">mercime</a>,
-				<a href="http://profiles.wordpress.org/merty">merty</a>,
-				<a href="http://profiles.wordpress.org/mjustice">mjustice</a>,
-				<a href="http://profiles.wordpress.org/modemlooper">modemlooper</a>,
-				<a href="http://profiles.wordpress.org/mort3n">mort3n</a>,
-				<a href="http://profiles.wordpress.org/mukkundthanki">mukkundthanki</a>,
-				<a href="http://profiles.wordpress.org/nacin">nacin</a>,
-				<a href="http://profiles.wordpress.org/needle">needle</a>,
-				<a href="http://profiles.wordpress.org/r-a-y">r-a-y</a>,
-				<a href="http://profiles.wordpress.org/saurabhshukla">saurabhshukla</a>,
-				<a href="http://profiles.wordpress.org/sbrajesh">sbrajesh</a>,
-				<a href="http://profiles.wordpress.org/SergeyBiryukov">SergeyBiryukov</a>,
-				<a href="http://profiles.wordpress.org/SGr33n">SGr33n</a>,
-				<a href="http://profiles.wordpress.org/shanebp">shanebp</a>,
-				<a href="http://profiles.wordpress.org/splatte">splatte</a>,
-				<a href="http://profiles.wordpress.org/thebrandonallen">thebrandonallen</a>,
-				<a href="http://profiles.wordpress.org/themightymo">themightymo</a>,
-				<a href="http://profiles.wordpress.org/tivnet">tivnet</a>,
-				<a href="http://profiles.wordpress.org/trishasalas">trishasalas</a>,
-				<a href="http://profiles.wordpress.org/vegasgeek">vegasgeek</a>,
-				<a href="http://profiles.wordpress.org/wpdennis">wpdennis</a>
+				<a href="http://profiles.wordpress.org/AliMH/">AliMH</a>,
+				<a href="http://profiles.wordpress.org/asakurayoh/">asakurayoh</a>,
+				<a href="http://profiles.wordpress.org/boonebgorges/">boonebgorges</a>,
+				<a href="http://profiles.wordpress.org/burakali/">burakali</a>,
+				<a href="http://profiles.wordpress.org/dcavins/">dcavins</a>,
+				<a href="http://profiles.wordpress.org/ddean/">ddean</a>,
+				<a href="http://profiles.wordpress.org/DennisSmolek/">DennisSmolek</a>,
+				<a href="http://profiles.wordpress.org/dimensionmedia/">dimensionmedia</a>,
+				<a href="http://profiles.wordpress.org/djpaul/">DJPaul</a>,
+				<a href="http://profiles.wordpress.org/dtc7240/">dtc7240</a>,
+				<a href="http://profiles.wordpress.org/ericlewis/">ericlewis</a>,
+				<a href="http://profiles.wordpress.org/gametako/">gametako</a>,
+				<a href="http://profiles.wordpress.org/geoffroycochard/">geoffroycochard</a>,
+				<a href="http://profiles.wordpress.org/graham-washbrook/">graham-washbrook</a>,
+				<a href="http://profiles.wordpress.org/hanni/">hanni</a>,
+				<a href="http://profiles.wordpress.org/haykayltduk/">haykayltduk</a>,
+				<a href="http://profiles.wordpress.org/henrywright/">henrywright</a>,
+				<a href="http://profiles.wordpress.org/hnla/">hnla</a>,
+				<a href="http://profiles.wordpress.org/imath/">imath</a>,
+				<a href="http://profiles.wordpress.org/johnjamesjacoby/">johnjamesjacoby</a>,
+				<a href="http://profiles.wordpress.org/lenasterg/">lenasterg</a>,
+				<a href="http://profiles.wordpress.org/mboynes/">mboynes</a>,
+				<a href="http://profiles.wordpress.org/megainfo/">megainfo</a>,
+				<a href="http://profiles.wordpress.org/Mike_Cowobo/">Mike_Cowobo</a>,
+				<a href="http://profiles.wordpress.org/modemlooper/">modemlooper</a>,
+				<a href="http://profiles.wordpress.org/olivM/">olivM</a>,
+				<a href="http://profiles.wordpress.org/needle/">needle</a>,
+				<a href="http://profiles.wordpress.org/netweblogic/">netweblogic</a>,
+				<a href="http://profiles.wordpress.org/r-a-y/">r-a-y</a>,
+				<a href="http://profiles.wordpress.org/ryderlewis/">ryderlewis</a>,
+				<a href="http://profiles.wordpress.org/sbrajesh/">sbrajesh</a>,
+				<a href="http://profiles.wordpress.org/sgr33n/">sgr33n</a>,
+				<a href="http://profiles.wordpress.org/sooskriszta/">sooskriszta</a>,
+				<a href="http://profiles.wordpress.org/terraling/">terraling</a>,
+				<a href="http://profiles.wordpress.org/tomdxw/">tomdxw</a>,
+				<a href="http://profiles.wordpress.org/trishasalas/">trishasalas</a>,
+				<a href="http://profiles.wordpress.org/vhauri/">vhauri</a>,
+				<a href="http://profiles.wordpress.org/williamsba1/">williamsba1</a>,
+				<a href="http://profiles.wordpress.org/wpdennis/">wpdennis</a>
 			</p>
 
 			<div class="return-to-dashboard">
@@ -609,9 +670,9 @@ class BP_Admin {
 endif; // class_exists check
 
 /**
- * Setup BuddyPress Admin
+ * Setup BuddyPress Admin.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
  * @uses BP_Admin
  */

@@ -184,10 +184,6 @@ function bp_has_message_threads( $args = '' ) {
 	if ( bp_is_current_action( 'notices' ) && !bp_current_user_can( 'bp_moderate' ) ) {
 		wp_redirect( bp_displayed_user_id() );
 	} else {
-		if ( bp_is_current_action( 'inbox' ) ) {
-			bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->messages->id, 'new_message' );
-		}
-
 		if ( bp_is_current_action( 'sentbox' ) ) {
 			$box = 'sentbox';
 		}
@@ -317,13 +313,60 @@ function bp_message_thread_last_post_date() {
 		return apply_filters( 'bp_get_message_thread_last_post_date', bp_format_time( strtotime( $messages_template->thread->last_message_date ) ) );
 	}
 
-function bp_message_thread_avatar() {
-	echo bp_get_message_thread_avatar();
+/**
+ * Output the avatar for the last sender in the current message thread.
+ *
+ * @see bp_get_message_thread_avatar() for a description of arguments.
+ *
+ * @param array $args See {@link bp_get_message_thread_avatar()}.
+ */
+function bp_message_thread_avatar( $args = '' ) {
+	echo bp_get_message_thread_avatar( $args );
 }
-	function bp_get_message_thread_avatar() {
+	/**
+	 * Return the avatar for the last sender in the current message thread.
+	 *
+	 * @see bp_core_fetch_avatar() For a description of arguments and
+	 *      return values.
+	 *
+	 * @param array $args {
+	 *     Arguments are listed here with an explanation of their defaults.
+	 *     For more information about the arguments, see
+	 *     {@link bp_core_fetch_avatar()}.
+	 *     @type string $type Default: 'thumb'.
+	 *     @type int|bool $width Default: false.
+	 *     @type int|bool $height Default: false.
+	 *     @type string $class Default: 'avatar'.
+	 *     @type string|bool $id Default: false.
+	 *     @type string $alt Default: 'Profile picture of [display name]'.
+	 * }
+	 * @return User avatar string.
+	 */
+	function bp_get_message_thread_avatar( $args = '' ) {
 		global $messages_template;
 
-		return apply_filters( 'bp_get_message_thread_avatar', bp_core_fetch_avatar( array( 'item_id' => $messages_template->thread->last_sender_id, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) ) ) ) );
+		$fullname = bp_core_get_user_displayname( $messages_template->thread->last_sender_id );
+
+		$defaults = array(
+			'type'   => 'thumb',
+			'width'  => false,
+			'height' => false,
+			'class'  => 'avatar',
+			'id'     => false,
+			'alt'    => sprintf( __( 'Profile picture of %s', 'buddypress' ), $fullname )
+		);
+
+		$r = wp_parse_args( $args, $defaults );
+
+		return apply_filters( 'bp_get_message_thread_avatar', bp_core_fetch_avatar( array(
+			'item_id' => $messages_template->thread->last_sender_id,
+			'type'    => $r['type'],
+			'alt'     => $r['alt'],
+			'css_id'  => $r['id'],
+			'class'   => $r['class'],
+			'width'   => $r['width'],
+			'height'  => $r['height'],
+		) ) );
 	}
 
 function bp_total_unread_messages_count() {
@@ -349,7 +392,7 @@ function bp_messages_pagination_count() {
 	$to_num = bp_core_number_format( ( $start_num + ( $messages_template->pag_num - 1 ) > $messages_template->total_thread_count ) ? $messages_template->total_thread_count : $start_num + ( $messages_template->pag_num - 1 ) );
 	$total = bp_core_number_format( $messages_template->total_thread_count );
 
-	echo sprintf( __( 'Viewing message %1$s to %2$s (of %3$s messages)', 'buddypress' ), $from_num, $to_num, $total ); ?><?php
+	echo sprintf( _n( 'Viewing message %1$s to %2$s (of %3$s message)', 'Viewing message %1$s to %2$s (of %3$s messages)', $total, 'buddypress' ), $from_num, $to_num, number_format_i18n( $total ) ); ?><?php
 }
 
 /**
@@ -585,14 +628,12 @@ function bp_messages_slug() {
 	}
 
 function bp_message_get_notices() {
-	global $userdata;
-
 	$notice = BP_Messages_Notice::get_active();
 
 	if ( empty( $notice ) )
 		return false;
 
-	$closed_notices = bp_get_user_meta( $userdata->ID, 'closed_notices', true );
+	$closed_notices = bp_get_user_meta( bp_loggedin_user_id(), 'closed_notices', true );
 
 	if ( !$closed_notices )
 		$closed_notices = array();
@@ -848,6 +889,27 @@ function bp_the_thread_recipients() {
 		}
 
 		return apply_filters( 'bp_get_the_thread_recipients', implode( ', ', $recipient_links ) );
+	}
+
+/**
+ * Echoes the ID of the current message in the thread
+ *
+ * @since BuddyPress (1.9)
+ */
+function bp_the_thread_message_id() {
+	echo bp_get_the_thread_message_id();
+}
+	/**
+	 * Gets the ID of the current message in the thread
+	 *
+	 * @since BuddyPress (1.9)
+	 * @return int
+	 */
+	function bp_get_the_thread_message_id() {
+		global $thread_template;
+
+		$thread_message_id = isset( $thread_template->message->id ) ? (int) $thread_template->message->id : null;
+		return apply_filters( 'bp_get_the_thread_message_id', $thread_message_id );
 	}
 
 function bp_the_thread_message_alt_class() {

@@ -3,6 +3,8 @@
 <?php global $bp;
 
 $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type' );
+
+$group_label_uc = openlab_get_group_type_label( 'case=upper' );
 ?>
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages
@@ -17,7 +19,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
     <?php else: ?>
     <div class="item-list-tabs no-ajax" id="subnav">
-        <div id="group-settings-label"><?php echo ucfirst($group_type); ?> Settings:</div>
+        <div id="group-settings-label"><?php echo $group_label_uc ?> Settings:</div>
         <ul>
             <?php openlab_group_admin_tabs(); ?>
         </ul>
@@ -36,10 +38,10 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
 
-	<label for="group-name"><?php _e( ucfirst($group_type).' Name', 'buddypress' ) ?> (required)</label>
+	<label for="group-name"><?php echo $group_label_uc . ' Name' ?> (required)</label>
 	<input type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
 
-	<label for="group-desc"><?php _e( ucfirst($group_type).' Description', 'buddypress' ) ?> (required)</label>
+	<label for="group-desc"><?php echo $group_label_uc . ' Description' ?> (required)</label>
 	<textarea name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
@@ -64,66 +66,6 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 <?php endif; ?>
 
-<?php /* Edit Access List (Portfolios only) */ ?>
-<?php if ( bp_is_group_admin_screen( 'access-list' ) ) : ?>
-	<p><?php printf( 'Want to grant access to your %s to someone who is not yet a member of the site?', openlab_get_portfolio_label() ) ?> <a href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Send invitations by email.', 'bp-invite-anyone' ) ?></a></p>
-
-	<div class="left-menu access-menu-left">
-		<p>Search for members to grant access to:</p>
-
-		<ul class="first acfb-holder">
-			<li>
-				<input type="text" name="send-to-input" class="send-to-input" id="send-to-input" />
-			</li>
-		</ul>
-
-		<?php wp_nonce_field( 'groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user' ) ?>
-	</div>
-
-	<div class="main-column access-menu-main">
-
-		<p>Members who have access to your <?php openlab_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ?></p>
-
-		<?php do_action( 'bp_before_group_send_invites_list' ) ?>
-
-		<?php /* The ID 'friend-list' is important for AJAX support. */ ?>
-		<ul id="invite-anyone-invite-list" class="item-list">
-		<?php if ( bp_group_has_members() ) : ?>
-
-			<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
-
-				<li id="uid-<?php bp_group_member_id() ?>">
-					<?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_group_member_id(), 'type' => 'thumb', 'alt' => __( 'Profile picture of %s', 'buddypress' ) ) ) ?>
-
-					<h4><?php bp_group_member_link() ?></h4>
-
-					<div class="action">
-						<a class="remove" href="<?php echo openlab_access_remove_link() ?>" id="member-<?php bp_group_member_id() ?>"><?php _e( 'Remove Access', 'buddypress' ) ?></a>
-					</div>
-				</li>
-
-			<?php endwhile; ?>
-
-		<?php endif; ?>
-		</ul>
-
-	</div>
-
-	<div class="clear"></div>
-
-	<?php wp_nonce_field( 'groups_send_invites', '_wpnonce_send_invites') ?>
-
-		<!-- Don't leave out this sweet field -->
-	<?php
-	if ( !bp_get_new_group_id() ) {
-		?><input type="hidden" name="group_id" id="group_id" value="<?php bp_group_id() ?>" /><?php
-	} else {
-		?><input type="hidden" name="group_id" id="group_id" value="<?php bp_new_group_id() ?>" /><?php
-	}
-	?>
-
-<?php endif ?>
-
 <?php /* Manage Group Settings */ ?>
 <?php if ( bp_is_group_admin_screen( 'group-settings' ) ) : ?>
 
@@ -135,7 +77,7 @@ $group_type=groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type
 
 			<div class="checkbox">
         <h4>Discussion Settings</h4>
-        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php _e( ucfirst($group_type)) ?> profile.</p>
+        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
 				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
 			</div>
 
