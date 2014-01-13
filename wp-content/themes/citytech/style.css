@@ -2342,6 +2342,10 @@ div#sidebar.sidebar div#portfolio-sidebar-widget {
     margin-bottom:15px;
 }
 
+.sidebar-widget.group-nav {
+	min-height: 70px;
+}
+
 .sidebar-content #sidebar,.sidebar-sidebar-content #sidebar {
     float:left;
 }

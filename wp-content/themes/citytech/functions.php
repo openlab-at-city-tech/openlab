@@ -618,7 +618,7 @@ add_filter( 'bp_docs_do_theme_compat', '__return_false' );
  */
 function cuny_buddypress_group_actions() {
 	if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
-		<div class="sidebar-widget">
+		<div class="group-nav sidebar-widget">
 			<?php echo openlab_group_visibility_flag() ?>
 			<div id="item-buttons">
 				<h2 class="sidebar-header"><?php echo openlab_get_group_type_label( 'case=upper' ) ?></h2>
