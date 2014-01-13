@@ -4926,6 +4926,10 @@ form.standard-form .create-or-clone-options label {
     padding-left:250px;
 }
 
+.group-admin.invite-anyone .main-column {
+	padding-left: 0;
+}
+
 #noo_external_options {
     white-space:nowrap;
 }
