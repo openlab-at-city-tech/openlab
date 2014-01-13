@@ -817,6 +817,12 @@ function openlab_group_status_message( $group = null ) {
 		case 0 :
 			if ( 'public' === $group->status ) {
 				$message = 'This ' . $group_label . ' is OPEN.';
+			} else if ( ! $site_url ) {
+				// Special case: $site_status will be 0 when the
+				// group does not have an associated site. When
+				// this is the case, and the group is not
+				// public, don't mention anything about the Site.
+				$message = 'This ' . $group_label . ' Profile is PRIVATE.';
 			} else {
 				$message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
 			}
