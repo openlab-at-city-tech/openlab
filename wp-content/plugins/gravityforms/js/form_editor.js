@@ -4,14 +4,6 @@
 //-------------------------------------------------
 
 jQuery(document).ready(function() {
-    gforms_original_json = jQuery.toJSON(form);
-
-    window.onbeforeunload = function(){
-        UpdateFormObject();
-        if (gforms_original_json != jQuery.toJSON(form)){
-            return "You have unsaved changes.";
-        }
-    }
 
     setTimeout("CloseStatus();", 5000)
 
@@ -32,33 +24,34 @@ jQuery(document).ready(function() {
         }
     });
 
+    if(typeof gf_global['view'] == 'undefined' || gf_global['view'] != 'settings')
+        InitializeForm(form);
 
+	//for backwards compatibility <1.7
+	jQuery(document).trigger('gform_load_form_settings', [form]);
 
-    if(jQuery(document).on){
-    jQuery(document).on('change', '.gfield_rule_value_dropdown', function(){
-            SetRuleValueDropDown(jQuery(this));
-        });
-    }
-    else{
-        jQuery('.gfield_rule_value_dropdown').live('change', function(){
-            SetRuleValueDropDown(jQuery(this));
-        });
-    }
-    InitializeForm(form);
+    SetupUnsavedChangesWarning();
+
+	//log deprecated events
+	if (window.console){
+		var doc = jQuery(document)[0];
+		var data = jQuery.hasData(doc) && jQuery._data(doc);
+		if (data){
+			var deprecatedEvents = new Array('gform_load_form_settings');
+			for (var e in data.events) {
+				if (jQuery.inArray(e, deprecatedEvents) !== -1) {
+					console.log('Gravity Forms API warning: The jQuery event "' + e + '" is deprecated on this page since version 1.7');
+				}
+			}
+		}
+	}
+
+    // store original value of input before change
+    jQuery(document).on('focus', '#field_choices input.field-choice-text, #field_choices input.field-choice-value', function(){
+        jQuery(this).data('previousValue', jQuery(this).val());
+    });
+
 });
-
-function SetRuleValueDropDown(element){
-        //parsing ID to get objectType and ruleIndex
-        var ary = element.attr("id").split('_rule_value_');
-
-        if(ary.length < 2)
-            return;
-
-        var objectType = ary[0];
-        var ruleIndex = ary[1];
-
-        SetRuleProperty(objectType, ruleIndex, "value", element.val());
-}
 
 function CloseStatus(){
     jQuery('.updated_base, .error_base').slideUp();
@@ -66,73 +59,10 @@ function CloseStatus(){
 
 function InitializeForm(form){
 
-    //initializing form settings
-    jQuery("#form_title_input").val(form.title);
-    jQuery("#gform_title").html(form.title);
-
-    jQuery("#form_description_input").val(form.description);
-    jQuery("#gform_description").html(form.description);
-
-    jQuery("#form_label_placement").val(form.labelPlacement);
-    jQuery("#form_description_placement").val(form.descriptionPlacement ? form.descriptionPlacement : "below");
-
-    if(!form.confirmation)
-        form.confirmation = new Confirmation();
-
-    var isRedirect = (form.confirmation.type == "redirect" && form.confirmation.url.length > 0) ? true : false;
-    var isPage = (form.confirmation.type == "page" || (form.confirmation.type == "redirect" && form.confirmation.url.length == 0 && form.confirmation.pageId > 0)) ? true : false;
-
-    if(isRedirect)
-        jQuery("#form_confirmation_redirect").attr("checked", true);
-    else if(isPage)
-        jQuery("#form_confirmation_show_page").attr("checked", true);
-    else
-        jQuery("#form_confirmation_show_message").attr("checked", true);
-
-    jQuery("#form_confirmation_message").text(form.confirmation.message);
-    jQuery("#form_confirmation_url").val(form.confirmation.url == "" ? "http://" : form.confirmation.url);
-    jQuery("#form_confirmation_page").val(form.confirmation.pageId);
-    jQuery("#form_disable_autoformatting").attr("checked", form.confirmation.disableAutoformat ? true : false);
-
-    var hasQueryString = (form.confirmation.queryString != undefined && form.confirmation.queryString.length > 0);
-    jQuery("#form_redirect_querystring").val(hasQueryString ? form.confirmation.queryString : "");
-    jQuery("#form_redirect_use_querystring").attr("checked", hasQueryString);
-    ToggleQueryString(true);
-
-    if(!form["button"])
-        form["button"] = new Button();
-
-    if(form.button.type == "image")
-        jQuery("#form_button_image").attr("checked", true);
-    else
-        jQuery("#form_button_text").attr("checked", true);
-
-    jQuery("#form_button_text_input").val(form.button.text);
-    jQuery("#form_button_image_url").val(form.button.imageUrl);
-    jQuery("#form_css_class").val(form.cssClass);
-    jQuery("#gform_enable_honeypot").attr("checked", form.enableHoneypot ? true : false);
-    jQuery("#gform_enable_animation").attr("checked", form.enableAnimation ? true : false);
-    jQuery("#gform_limit_entries").attr("checked", form.limitEntries ? true : false);
-    jQuery("#gform_limit_entries_count").val(form.limitEntriesCount);
-    jQuery("#gform_limit_entries_period").val(form.limitEntriesPeriod);
-    jQuery("#form_limit_entries_message").val(form.limitEntriesMessage);
-    jQuery("#gform_require_login").attr("checked", form.requireLogin ? true : false);
-    jQuery("#gform_require_login_message").val(form.requireLoginMessage);
-    jQuery("#gform_schedule_form").attr("checked", form.scheduleForm ? true : false);
-    jQuery("#gform_schedule_start").val(form.scheduleStart);
-    jQuery("#gform_schedule_end").val(form.scheduleEnd);
-    jQuery("#gform_schedule_message").val(form.scheduleMessage);
-    jQuery("#gform_schedule_start_hour").val(form.scheduleStartHour ? form.scheduleStartHour : "12");
-    jQuery("#gform_schedule_start_minute").val(form.scheduleStartMinute ? form.scheduleStartMinute : "00");
-    jQuery("#gform_schedule_start_ampm").val(form.scheduleStartAmpm ? form.scheduleStartAmpm : "am");
-    jQuery("#gform_schedule_end_hour").val(form.scheduleEndHour ? form.scheduleEndHour : "12");
-    jQuery("#gform_schedule_end_minute").val(form.scheduleEndMinute ? form.scheduleEndMinute : "00");
-    jQuery("#gform_schedule_end_ampm").val(form.scheduleEndAmpm ? form.scheduleEndAmpm : "am");
-
     if(form.lastPageButton && form.lastPageButton.type == "image")
-        jQuery("#last_page_button_image").attr("checked", true);
+        jQuery("#last_page_button_image").prop("checked", true);
     else if(!form.lastPageButton || form.lastPageButton.type != "image")
-        jQuery("#last_page_button_text").attr("checked", true);
+        jQuery("#last_page_button_text").prop("checked", true);
 
     jQuery("#last_page_button_text_input").val(form.lastPageButton ? form.lastPageButton.text : gf_vars["previousLabel"]);
     jQuery("#last_page_button_image_url").val(form.lastPageButton ? form.lastPageButton.imageUrl : "");
@@ -148,7 +78,7 @@ function InitializeForm(form){
     if(form.useCurrentUserAsAuthor == undefined)
         form.useCurrentUserAsAuthor = true;
 
-    jQuery('#gfield_current_user_as_author').attr('checked', form.useCurrentUserAsAuthor ? true : false);
+    jQuery('#gfield_current_user_as_author').prop('checked', form.useCurrentUserAsAuthor ? true : false);
 
     if(form.postCategory)
         jQuery('#field_post_category').val(form.postCategory);
@@ -157,26 +87,25 @@ function InitializeForm(form){
         jQuery('#field_post_format').val(form.postFormat);
 
     if(form.postContentTemplateEnabled){
-        jQuery('#gfield_post_content_enabled').attr("checked", true);
+        jQuery('#gfield_post_content_enabled').prop("checked", true);
         jQuery('#field_post_content_template').val(form.postContentTemplate);
     }
     else{
-        jQuery('#gfield_post_content_enabled').attr("checked", false);
+        jQuery('#gfield_post_content_enabled').prop("checked", false);
         jQuery('#field_post_content_template').val("");
     }
     TogglePostContentTemplate(true);
 
     if(form.postTitleTemplateEnabled){
-        jQuery('#gfield_post_title_enabled').attr("checked", true);
+        jQuery('#gfield_post_title_enabled').prop("checked", true);
         jQuery('#field_post_title_template').val(form.postTitleTemplate);
     }
     else{
-        jQuery('#gfield_post_title_enabled').attr("checked", false);
+        jQuery('#gfield_post_title_enabled').prop("checked", false);
         jQuery('#field_post_title_template').val("");
     }
     TogglePostTitleTemplate(true);
 
-    jQuery("#gform_heading").bind("click", function(){FieldClick(this);});
     jQuery("#gform_last_page_settings").bind("click", function(){FieldClick(this);});
     jQuery("#gform_pagination").bind("click", function(){FieldClick(this);});
     jQuery(".gfield").bind("click", function(){FieldClick(this);});
@@ -187,27 +116,18 @@ function InitializeForm(form){
     var paginationNone = paginationType == "none" ? true : false;
 
     if(paginationSteps)
-        jQuery("#pagination_type_steps").attr("checked", true);
+        jQuery("#pagination_type_steps").prop("checked", true);
     else if(paginationPercentage)
-        jQuery("#pagination_type_percentage").attr("checked", true);
+        jQuery("#pagination_type_percentage").prop("checked", true);
     else if(paginationNone)
-        jQuery("#pagination_type_none").attr("checked", true);
+        jQuery("#pagination_type_none").prop("checked", true);
 
     jQuery("#first_page_css_class").val(form["firstPageCssClass"]);
 
-    jQuery("#field_settings, #form_settings, #last_page_settings, #pagination_settings").tabs({selected:0});
-
-    ToggleButton(true);
-    ToggleConfirmation(true);
-    ToggleSchedule(true);
-    ToggleLimitEntry(true);
-    ToggleRequireLogin(true);
-    InitializeFormConditionalLogic();
+    jQuery("#field_settings, #last_page_settings, #pagination_settings").tabs({selected:0});
 
     TogglePageBreakSettings();
     InitPaginationOptions(true);
-
-    jQuery(document).trigger('gform_load_form_settings', [form]);
 
     InitializeFields();
 }
@@ -233,9 +153,9 @@ function LoadFieldSettings(){
     jQuery("#post_custom_field_type").val(field.inputType);
     jQuery("#post_tag_type").val(field.inputType);
     jQuery("#field_size").val(field.size);
-    jQuery("#field_required").attr("checked", field.isRequired == true ? true : false);
-    jQuery("#field_margins").attr("checked", field.disableMargins == true ? true : false);
-    jQuery("#field_no_duplicates").attr("checked", field.noDuplicates == true ? true : false);
+    jQuery("#field_required").prop("checked", field.isRequired == true ? true : false);
+    jQuery("#field_margins").prop("checked", field.disableMargins == true ? true : false);
+    jQuery("#field_no_duplicates").prop("checked", field.noDuplicates == true ? true : false);
     jQuery("#field_default_value").val(field.defaultValue == undefined ? "" : field.defaultValue);
     jQuery("#field_default_value_textarea").val(field.defaultValue == undefined ? "" : field.defaultValue);
     jQuery("#field_description").val(field.description == undefined ? "" : field.description);
@@ -243,29 +163,51 @@ function LoadFieldSettings(){
     jQuery("#field_range_min").val(field.rangeMin);
     jQuery("#field_range_max").val(field.rangeMax);
     jQuery("#field_name_format").val(field.nameFormat);
-    jQuery('#field_force_ssl').attr('checked', field.forceSSL ? true : false);
+    jQuery('#field_force_ssl').prop('checked', field.forceSSL ? true : false);
     jQuery('#credit_card_style').val(field.creditCardStyle ? field.creditCardStyle : "style1");
 
     if(field.adminOnly)
-        jQuery("#field_visibility_admin").attr("checked", true);
+        jQuery("#field_visibility_admin").prop("checked", true);
     else
-        jQuery("#field_visibility_everyone").attr("checked", true);
+        jQuery("#field_visibility_everyone").prop("checked", true);
 
     jQuery("#field_file_extension").val(field.allowedExtensions == undefined ? "" : field.allowedExtensions);
+    jQuery("#field_multiple_files").prop("checked", field.multipleFiles ? true : false);
+    jQuery("#field_max_files").val(field.maxFiles ? field.maxFiles : "" );
+    jQuery("#field_max_file_size").val(field.maxFileSize ? field.maxFileSize + "MB" : "" );
+    ToggleMultiFile(true);
+
+
+    jQuery(document).on('change', '#field_max_file_size', function(){
+        var $this = jQuery(this),
+            inputValue = parseInt($this.val());
+        var value = inputValue ? inputValue : '';
+        var maskedValue = value === '' ? '' : value + "MB"
+        SetFieldProperty('maxFileSize', value);
+        $this.val( maskedValue );
+    });
+
+    jQuery(document).on('onkeyup', '#field_max_file_size', function(){
+        var value = parseInt(jQuery(this).val()) ? parseInt(jQuery(this).val()) : '';
+        SetFieldProperty('maxFileSize', value);
+    });
+
+
+
     jQuery("#field_phone_format").val(field.phoneFormat);
     jQuery("#field_error_message").val(field.errorMessage);
     jQuery('#field_captcha_theme').val(field.captchaTheme == undefined ? "red" : field.captchaTheme);
     jQuery('#field_captcha_language').val(field.captchaLanguage == undefined ? "en" : field.captchaLanguage);
-    jQuery('#field_other_choice').attr('checked', field.enableOtherChoice ? true : false);
+    jQuery('#field_other_choice').prop('checked', field.enableOtherChoice ? true : false);
     jQuery('#field_add_icon_url').val(field.addIconUrl ? field.addIconUrl : "");
     jQuery('#field_delete_icon_url').val(field.deleteIconUrl ? field.deleteIconUrl : "");
-    jQuery('#gfield_enable_enhanced_ui').attr('checked', field.enableEnhancedUI ? true : false);
+    jQuery('#gfield_enable_enhanced_ui').prop('checked', field.enableEnhancedUI ? true : false);
 
-    jQuery("#gfield_password_strength_enabled").attr("checked", field.passwordStrengthEnabled == true ? true : false);
+    jQuery("#gfield_password_strength_enabled").prop("checked", field.passwordStrengthEnabled == true ? true : false);
     jQuery("#gfield_min_strength").val(field.minPasswordStrength == undefined ? "" : field.minPasswordStrength);
     TogglePasswordStrength(true);
 
-    jQuery("#gfield_email_confirm_enabled").attr("checked", field.emailConfirmEnabled == true ? true : false);
+    jQuery("#gfield_email_confirm_enabled").prop("checked", field.emailConfirmEnabled == true ? true : false);
 
     //Creating blank item for number format to existing number fields so that user is not force into a format (for backwards compatibility)
     if(!field.numberFormat){
@@ -278,21 +220,23 @@ function LoadFieldSettings(){
 
     jQuery("#field_number_format").val(field.numberFormat ? field.numberFormat : "");
 
-
-
     // Handle calculation options
 
     // hide rounding option for calculation product fields
-    if(field.type == 'product' && field.inputType == 'calculation') {
+    if (field.type == 'product' && field.inputType == 'calculation') {
         field.enableCalculation = true;
         jQuery('.field_calculation_rounding').hide();
         jQuery('.field_enable_calculation').hide();
     } else {
-        jQuery('.field_calculation_rounding').show();
         jQuery('.field_enable_calculation').show();
+        if (field.type == 'number' && field.numberFormat == "currency") {
+            jQuery('.field_calculation_rounding').hide();
+        } else {
+            jQuery('.field_calculation_rounding').show();
+        }
     }
 
-    jQuery('#field_enable_calculation').attr('checked', field.enableCalculation ? true : false);
+    jQuery('#field_enable_calculation').prop('checked', field.enableCalculation ? true : false);
     ToggleCalculationOptions(field.enableCalculation, field);
 
     jQuery('#field_calculation_formula').val(field.calculationFormula);
@@ -305,9 +249,9 @@ function LoadFieldSettings(){
     var productFieldType = jQuery("#product_field_type");
     productFieldType.val(field.inputType);
     if(has_entry(field.id))
-        productFieldType.attr("disabled", true);
+        productFieldType.prop("disabled", true);
     else
-        productFieldType.removeAttr("disabled");
+        productFieldType.prop("disabled", false);
 
     jQuery("#donation_field_type").val(field.inputType);
     jQuery("#quantity_field_type").val(field.inputType);
@@ -318,19 +262,19 @@ function LoadFieldSettings(){
         SetBasePrice(basePrice);
     }
 
-    jQuery("#field_disable_quantity").attr("checked", field.disableQuantity == true ? true : false);
+    jQuery("#field_disable_quantity").prop("checked", field.disableQuantity == true ? true : false);
     SetDisableQuantity(field.disableQuantity == true);
 
     var isPassword = field.enablePasswordInput ? true : false
-    jQuery("#field_password").attr("checked", isPassword ? true : false);
+    jQuery("#field_password").prop("checked", isPassword ? true : false);
 
     jQuery("#field_maxlen").val(typeof field.maxLength == "undefined" ? "" : field.maxLength);
     jQuery("#field_maxrows").val(typeof field.maxRows == "undefined" ? "" : field.maxRows);
 
     var addressType = field.addressType == undefined ? "international" : field.addressType;
     jQuery('#field_address_type').val(addressType);
-    jQuery("#field_address_hide_address2").attr("checked", field.hideAddress2 == true ? true : false);
-    jQuery("#field_address_hide_state_" + addressType).attr("checked", field.hideState == true ? true : false);
+    jQuery("#field_address_hide_address2").prop("checked", field.hideAddress2 == true ? true : false);
+    jQuery("#field_address_hide_state_" + addressType).prop("checked", field.hideState == true ? true : false);
 
     var defaultState = field.defaultState == undefined ? "" : field.defaultState;
     var defaultProvince = field.defaultProvince == undefined ? "" : field.defaultProvince; //for backwards compatibility
@@ -338,13 +282,13 @@ function LoadFieldSettings(){
 
     jQuery("#field_address_default_state_" + addressType).val(defaultStateProvince);
     jQuery("#field_address_default_country_" + addressType).val(field.defaultCountry == undefined ? "" : field.defaultCountry);
-    jQuery("#field_address_hide_country_" + addressType).attr("checked", field.hideCountry == true ? true : false);
+    jQuery("#field_address_hide_country_" + addressType).prop("checked", field.hideCountry == true ? true : false);
 
     SetAddressType(true);
 
-    jQuery("#gfield_display_title").attr("checked", field.displayTitle == true ? true : false);
-    jQuery("#gfield_display_caption").attr("checked", field.displayCaption == true ? true : false);
-    jQuery("#gfield_display_description").attr("checked", field.displayDescription == true ? true : false);
+    jQuery("#gfield_display_title").prop("checked", field.displayTitle == true ? true : false);
+    jQuery("#gfield_display_caption").prop("checked", field.displayCaption == true ? true : false);
+    jQuery("#gfield_display_description").prop("checked", field.displayDescription == true ? true : false);
 
     var customFieldExists = CustomFieldExists(field.postCustomFieldName);
     jQuery("#field_custom_field_name_select")[0].selectedIndex = 0;
@@ -356,40 +300,40 @@ function LoadFieldSettings(){
         jQuery("#field_custom_field_name_text").val(field.postCustomFieldName);
 
     if(customFieldExists)
-        jQuery("#field_custom_existing").attr("checked", true);
+        jQuery("#field_custom_existing").prop("checked", true);
     else
-        jQuery("#field_custom_new").attr("checked", true);
+        jQuery("#field_custom_new").prop("checked", true);
 
     ToggleCustomField(true);
 
-    jQuery('#gfield_customfield_content_enabled').attr("checked", field.customFieldTemplateEnabled ? true : false);
+    jQuery('#gfield_customfield_content_enabled').prop("checked", field.customFieldTemplateEnabled ? true : false);
     jQuery('#field_customfield_content_template').val(field.customFieldTemplateEnabled ? field.customFieldTemplate : "");
     ToggleCustomFieldTemplate(true);
 
     if(field.displayAllCategories)
-        jQuery("#gfield_category_all").attr("checked", true);
+        jQuery("#gfield_category_all").prop("checked", true);
     else
-        jQuery("#gfield_category_select").attr("checked", true);
+        jQuery("#gfield_category_select").prop("checked", true);
 
     ToggleCategory(true);
 
-    jQuery('#gfield_post_category_initial_item_enabled').attr("checked", field.categoryInitialItemEnabled ? true : false);
+    jQuery('#gfield_post_category_initial_item_enabled').prop("checked", field.categoryInitialItemEnabled ? true : false);
     jQuery('#field_post_category_initial_item').val(field.categoryInitialItemEnabled ? field.categoryInitialItem : "");
     TogglePostCategoryInitialItem(true);
 
     var hasPostFeaturedImage = field.postFeaturedImage ? true : false;
-    jQuery('#gfield_featured_image').attr('checked', hasPostFeaturedImage);
+    jQuery('#gfield_featured_image').prop('checked', hasPostFeaturedImage);
 
     var isStandardMask = IsStandardMask(field.inputMaskValue);
 
-    jQuery("#field_input_mask").attr('checked', field.inputMask ? true : false);
+    jQuery("#field_input_mask").prop('checked', field.inputMask ? true : false);
 
     if(isStandardMask){
-        jQuery("#field_mask_standard").attr("checked", true);
+        jQuery("#field_mask_standard").prop("checked", true);
         jQuery("#field_mask_select").val(field.inputMaskValue);
     }
     else{
-        jQuery("#field_mask_custom").attr("checked", true);
+        jQuery("#field_mask_custom").prop("checked", true);
         jQuery("#field_mask_text").val(field.inputMaskValue);
     }
 
@@ -401,7 +345,10 @@ function LoadFieldSettings(){
             field.creditCards = ['amex', 'visa', 'discover', 'mastercard'];
 
         for(i in field.creditCards) {
-            jQuery('#field_credit_card_' + field.creditCards[i]).attr('checked', true);
+            if(!field.creditCards.hasOwnProperty(i))
+                continue;
+
+            jQuery('#field_credit_card_' + field.creditCards[i]).prop('checked', true);
         }
     }
 
@@ -421,7 +368,7 @@ function LoadFieldSettings(){
 
     field.allowsPrepopulate = field.allowsPrepopulate ? true : false; //needed when property is undefined
 
-    jQuery("#field_prepopulate").attr("checked", field.allowsPrepopulate ? true : false);
+    jQuery("#field_prepopulate").prop("checked", field.allowsPrepopulate ? true : false);
     CreateInputNames(field);
     ToggleInputName(true);
 
@@ -437,9 +384,9 @@ function LoadFieldSettings(){
     if(field.nextButton){
 
         if(field.nextButton.type == "image")
-            jQuery("#next_button_image").attr("checked", true);
+            jQuery("#next_button_image").prop("checked", true);
         else
-            jQuery("#next_button_text").attr("checked", true);
+            jQuery("#next_button_text").prop("checked", true);
 
         jQuery("#next_button_text_input").val(field.nextButton.text);
         jQuery("#next_button_image_url").val(field.nextButton.imageUrl);
@@ -448,9 +395,9 @@ function LoadFieldSettings(){
     if(field.previousButton){
 
         if(field.previousButton.type == "image")
-            jQuery("#previous_button_image").attr("checked", true);
+            jQuery("#previous_button_image").prop("checked", true);
         else
-            jQuery("#previous_button_text").attr("checked", true);
+            jQuery("#previous_button_text").prop("checked", true);
 
         jQuery("#previous_button_text_input").val(field.previousButton.text);
         jQuery("#previous_button_image_url").val(field.previousButton.imageUrl);
@@ -471,13 +418,13 @@ function LoadFieldSettings(){
     });
 
     if(has_entry(field.id))
-        jQuery("#field_type, #field_name_format").attr("disabled", true);
+        jQuery("#field_type, #field_name_format, #field_multiple_files").prop("disabled", true);
     else
-        jQuery("#field_type, #field_name_format").attr("disabled", false);
+        jQuery("#field_type, #field_name_format, #field_multiple_files").prop("disabled", false);
 
     jQuery("#field_custom_field_name").val(field.postCustomFieldName);
 
-    jQuery("#field_columns_enabled").attr("checked", field.enableColumns ? true : false);
+    jQuery("#field_columns_enabled").prop("checked", field.enableColumns ? true : false);
 
     LoadFieldChoices(field);
 
@@ -569,16 +516,31 @@ function LoadFieldSettings(){
         }
     }
 
+    if(field.type == 'product') {
+        if(field.inputType == 'singleproduct') {
+            var ff=jQuery(".admin_label_setting");
+            jQuery(".admin_label_setting").hide();
+        } else {
+            jQuery(".admin_label_setting").show();
+        }
+    }
+
+
     jQuery(document).trigger('gform_load_field_settings', [field, form]);
 
     jQuery("#field_settings").appendTo(".field_selected");
 
-    jQuery("#field_settings").tabs("select", 0);
+    jQuery("#field_settings").tabs("option", "active", 0);
 
     ShowSettings("field_settings");
 
+    gform.doAction('gform_post_load_field_settings', [field, form]);
+
     SetProductField(field);
+
+    Placeholders.enable();
 }
+
 
 function TogglePageBreakSettings(){
     if(HasPageBreak()){
@@ -590,37 +552,6 @@ function TogglePageBreakSettings(){
         jQuery("#gform_last_page_settings").hide();
         jQuery("#gform_pagination").hide();
     }
-}
-
-function UpdateFormProperty(name, value){
-    jQuery("#gform_" + name).html(value);
-}
-
-function UpdateLabelPlacement(isInit){
-    var placement = jQuery("#form_label_placement").val();
-    jQuery("#gform_fields").removeClass("top_label").removeClass("left_label").removeClass("right_label").addClass(placement);
-
-    var speed = isInit ? "" : "slow";
-
-    if(placement == 'top_label'){
-        jQuery('#description_placement_setting').show(speed);
-    }
-    else{
-        jQuery('#description_placement_setting').hide(speed);
-        jQuery('#form_description_placement').val('below');
-        UpdateDescriptionPlacement();
-    }
-}
-
-function UpdateDescriptionPlacement(){
-    var placement = jQuery("#form_description_placement").val();
-
-    jQuery("#gform_fields").removeClass("description_below").removeClass("description_above").addClass("description_" + placement);
-
-    jQuery(".gfield_description").each(function(){
-        var prevElement = placement == "above" ?  ".gfield_label" : ".ginput_container:visible";
-        jQuery(this).siblings(prevElement).after(jQuery(this).remove());
-    });
 }
 
 function SetDisableQuantity(isChecked){
@@ -729,28 +660,6 @@ function SetAddressProperties(){
     UpdateAddressFields();
 }
 
-function ToggleLimitEntry(isInit){
-    var speed = isInit ? "" : "slow";
-
-    if(jQuery("#gform_limit_entries").is(":checked")){
-        jQuery("#gform_limit_entries_container").show(speed);
-    }
-    else{
-        jQuery("#gform_limit_entries_container").hide(speed);
-    }
-}
-
-function ToggleRequireLogin(isInit){
-    var speed = isInit ? "" : "slow";
-
-    if(jQuery("#gform_require_login").is(":checked")){
-        jQuery("#gform_require_login_container").show(speed);
-    }
-    else{
-        jQuery("#gform_require_login_container").hide(speed);
-    }
-}
-
 function TogglePasswordStrength(isInit){
     var speed = isInit ? "" : "slow";
 
@@ -759,17 +668,6 @@ function TogglePasswordStrength(isInit){
     }
     else{
         jQuery("#gfield_min_strength_container").hide(speed);
-    }
-}
-
-function ToggleSchedule(isInit){
-    var speed = isInit ? "" : "slow";
-
-    if(jQuery("#gform_schedule_form").is(":checked")){
-        jQuery("#gform_schedule_form_container").show(speed);
-    }
-    else{
-        jQuery("#gform_schedule_form_container").hide(speed);
     }
 }
 
@@ -847,18 +745,6 @@ function ToggleCustomFieldTemplate(isInit){
     }
 }
 
-function ToggleQueryString(isInit){
-    var speed = isInit ? "" : "slow";
-    if(jQuery('#form_redirect_use_querystring').is(":checked")){
-        jQuery('#form_redirect_querystring_container').show(speed);
-    }
-    else{
-        jQuery('#form_redirect_querystring_container').hide(speed);
-        jQuery("#form_redirect_querystring").val("");
-    }
-
-}
-
 function ToggleInputName(isInit){
     var speed = isInit ? "" : "slow";
     if(jQuery('#field_prepopulate').is(":checked")){
@@ -892,89 +778,6 @@ function ToggleChoiceValue(isInit){
     else if(field.enablePrice){
         container.addClass("choice_with_price");
     }
-
-    /*var label = isShowValues ? gf_vars.hideValues : gf_vars.showValues;
-    jQuery('.gfield_value_label').html(label);*/
-}
-
-function GetConditionalObject(objectType){
-    switch(objectType){
-        case "page" :
-        case "field" :
-            return GetSelectedField();
-        break;
-
-        case "next_button" :
-            var field = GetSelectedField();
-            return field["nextButton"];
-        break;
-
-        default:
-            return form.button;
-        break;
-    }
-}
-
-function ToggleConditionalLogic(isInit, objectType){
-    var speed = isInit ? "" : "slow";
-    if(jQuery('#' + objectType + '_conditional_logic').is(":checked")){
-
-        var obj = GetConditionalObject(objectType);
-
-        CreateConditionalLogic(objectType, obj);
-
-        //Initializing object so it has the default options set
-        SetConditionalProperty(objectType, "actionType", jQuery("#" + objectType + "_action_type").val());
-        SetConditionalProperty(objectType, "logicType", jQuery("#" + objectType + "_logic_type").val());
-        SetRule(objectType, 0);
-
-        jQuery('#' + objectType + '_conditional_logic_container').show(speed);
-    }
-    else{
-        jQuery('#' + objectType + '_conditional_logic_container').hide(speed);
-    }
-
-}
-
-function ToggleConfirmation(isInit){
-
-    var isRedirect = jQuery("#form_confirmation_redirect").is(":checked");
-    var isPage = jQuery("#form_confirmation_show_page").is(":checked");
-
-    if(isRedirect){
-        show_element = "#form_confirmation_redirect_container";
-        hide_element = "#form_confirmation_message_container, #form_confirmation_page_container";
-    }
-    else if(isPage){
-        show_element = "#form_confirmation_page_container";
-        hide_element = "#form_confirmation_message_container, #form_confirmation_redirect_container";
-    }
-    else{
-        show_element = "#form_confirmation_message_container";
-        hide_element = "#form_confirmation_page_container, #form_confirmation_redirect_container";
-    }
-
-    var speed = isInit ? "" : "slow";
-
-    jQuery(hide_element).hide(speed);
-    jQuery(show_element).show(speed);
-
-}
-
-function ToggleButton(isInit){
-    var isText = jQuery("#form_button_text").is(":checked");
-    show_element = isText ? "#form_button_text_container" : "#form_button_image_container"
-    hide_element = isText ? "#form_button_image_container"  : "#form_button_text_container";
-
-    if(isInit){
-        jQuery(hide_element).hide();
-        jQuery(show_element).show();
-    }
-    else{
-        jQuery(hide_element).hide();
-        jQuery(show_element).fadeIn(800);
-     }
-
 }
 
 function TogglePageButton(button_name, isInit){
@@ -1063,13 +866,29 @@ function ToggleAutoresponder(){
         jQuery("#form_autoresponder_container").hide("slow");
 }
 
-function HasPostField(){
-    for(var i=0; i<form.fields.length; i++){
-        var type = form.fields[i].type;
-        if(type == "post_title" || type == "post_content" || type == "post_excerpt")
-            return true;
+function ToggleMultiFile(isInit){
+
+    var speed = isInit ? "" : "slow";
+
+    if(jQuery("#field_multiple_files").prop("checked")){
+        jQuery("#gform_multiple_files_options").show(speed);
+        SetFieldProperty('multipleFiles', true);
     }
-    return false;
+    else{
+        jQuery("#gform_multiple_files_options").hide(speed);
+
+        SetFieldProperty('multipleFiles', false);
+
+        jQuery("#field_max_files").val("");
+        SetFieldProperty('maxFiles', "");
+
+    }
+
+    if(!isInit){
+        var field = GetSelectedField();
+        jQuery("#field_settings").slideUp(function(){StartChangeInputType("fileupload", field);});
+
+    }
 }
 
 function HasPostContentField(){
@@ -1108,10 +927,6 @@ function HasPageBreak(){
     return false;
 }
 
-function SetButtonConditionalLogic(isChecked){
-    form.button.conditionalLogic = isChecked ? new ConditionalLogic() : null;
-}
-
 function SetNextButtonConditionalLogic(isChecked){
     var field = GetSelectedField();
 
@@ -1119,44 +934,6 @@ function SetNextButtonConditionalLogic(isChecked){
 }
 
 function UpdateFormObject(){
-
-    form.title = jQuery("#form_title_input").val();
-    form.description = jQuery("#form_description_input").val();
-    form.labelPlacement = jQuery("#form_label_placement").val();
-    form.descriptionPlacement = jQuery("#form_description_placement").val();
-
-    form.confirmation.message = jQuery("#form_confirmation_message").val();
-    form.confirmation.url = jQuery("#form_confirmation_url").val() == "http://" ? "" : jQuery("#form_confirmation_url").val();
-    form.confirmation.pageId = jQuery("#form_confirmation_page").val();
-    form.confirmation.queryString = jQuery("#form_redirect_querystring").val();
-    form.confirmation.disableAutoformat = jQuery("#form_disable_autoformatting").is(":checked");
-
-    if(jQuery("#form_confirmation_redirect").is(":checked") && form.confirmation.url.length > 0){
-        form.confirmation.type = "redirect";
-        form.confirmation.pageId = "";
-        form.confirmation.message = "";
-        form.confirmation.disableAutoformat = false;
-    }
-    else if(jQuery("#form_confirmation_show_page").is(":checked") && form.confirmation.pageId != ""){
-        form.confirmation.type = "page";
-        form.confirmation.message = "";
-        form.confirmation.url = "";
-        form.confirmation.queryString = "";
-        form.confirmation.disableAutoformat = false;
-    }
-    else{
-        form.confirmation.type = "message";
-        form.confirmation.url = "";
-        form.confirmation.pageId = "";
-        form.confirmation.queryString = "";
-    }
-
-    form.button.type = jQuery("#form_button_text").is(":checked") ? "text" : "image";
-    form.button.text = jQuery("#form_button_text_input").val();
-    form.button.imageUrl = jQuery("#form_button_image_url").val();
-    form.cssClass = jQuery("#form_css_class").val();
-    form.enableHoneypot = jQuery("#gform_enable_honeypot").is(":checked");
-    form.enableAnimation = jQuery("#gform_enable_animation").is(":checked");
 
     form.postContentTemplateEnabled = false;
     form.postTitleTemplateEnabled = false;
@@ -1229,73 +1006,17 @@ function UpdateFormObject(){
         form["firstPageCssClass"] = null;
     }
 
-    form.limitEntries = jQuery("#gform_limit_entries").is(":checked");
-    if(form.limitEntries){
-        form.limitEntriesCount = jQuery("#gform_limit_entries_count").val();
-        form.limitEntriesMessage = jQuery("#form_limit_entries_message").val();
-        form.limitEntriesPeriod = jQuery("#gform_limit_entries_period").val();
-    }
-    else{
-        form.limitEntriesCount = "";
-        form.limitEntriesMessage = "";
-        form.limitEntriesPeriod = "";
-    }
-
-    form.requireLogin = jQuery("#gform_require_login").is(":checked");
-    if(form.requireLogin){
-        form.requireLoginMessage = jQuery("#gform_require_login_message").val();
-    } else {
-        form.requireLoginMessage = "";
-    }
-
-    form.scheduleForm = jQuery("#gform_schedule_form").is(":checked");
-    if(form.scheduleForm){
-        form.scheduleStart = jQuery("#gform_schedule_start").val();
-        form.scheduleStartHour = jQuery("#gform_schedule_start_hour").val();
-        form.scheduleStartMinute = jQuery("#gform_schedule_start_minute").val();
-        form.scheduleStartAmpm = jQuery("#gform_schedule_start_ampm").val();
-        form.scheduleEnd = jQuery("#gform_schedule_end").val();
-        form.scheduleEndHour = jQuery("#gform_schedule_end_hour").val();
-        form.scheduleEndMinute = jQuery("#gform_schedule_end_minute").val();
-        form.scheduleEndAmpm = jQuery("#gform_schedule_end_ampm").val();
-        form.scheduleMessage = jQuery("#gform_schedule_message").val();
-    }
-    else{
-        form.scheduleStart = "";
-        form.scheduleStartHour = "";
-        form.scheduleStartMinute = "";
-        form.scheduleStartAmpm = "";
-        form.scheduleEnd = "";
-        form.scheduleEndHour = "";
-        form.scheduleEndMinute = "";
-        form.scheduleEndAmpm = "";
-        form.scheduleMessage = "";
-    }
-
     SortFields();
 
+    // allow users to update form with custom function before save
     if(window["gform_before_update"]){
         form = window["gform_before_update"](form);
+        if(window.console)
+            console.log('"gform_before_update" is deprecated since version 1.7! Use the "gform_pre_form_editor_save" filter instead.');
     }
-}
 
-function EndInsertForm(formId){
-     jQuery("#please_wait_container").hide();
-
-     jQuery("#edit_form_link").attr("href", "?page=gf_edit_forms&id=" + formId);
-     jQuery("#notification_form_link").attr("href", "?page=gf_edit_forms&view=notification&id=" + formId);
-     jQuery("#preview_form_link").attr("href", jQuery("#preview_form_link").attr("href").replace("{formid}",formId));
-
-     jQuery("#after_insert_dialog").modal(
-        {
-        close:false,
-        onOpen: function (dialog) {
-          dialog.overlay.fadeIn('slow', function () {
-            dialog.container.slideDown('slow', function () {
-              dialog.data.fadeIn('slow');
-            });
-          });
-        }});
+    // new method for filtering the form object before save
+    form = gform.applyFilters('gform_pre_form_editor_save', form);
 
 }
 
@@ -1318,12 +1039,186 @@ function SortFields(){
         fields.push(GetFieldById(id));
     }
     );
+
     form.fields = fields;
 }
 
 function StartDeleteField(element){
-    var fieldId = jQuery(element)[0].id.split("_")[2]
+
+    var fieldId = jQuery(element)[0].id.split("_")[2];
+
+    // if cond logic dependency is found, confirm that user is aware and wants to proceed, otherwise bail
+    if( HasConditionalLogicDependency(fieldId) && !confirm(gf_vars.conditionalLogicDependency) )
+        return;
+
     DeleteField(fieldId);
+}
+
+/**
+* Check if a field or choice has a field with conditional logic dependent upon it.
+*
+* If a field is being deleted, only a field ID is required. If a choice is being edited or deleted
+* both the field ID and the value of the choice should be provided. This function will then loop
+* through all form fields and each field's conditional logic rules to find if any field depends on
+* the field being modified for conditional logic.
+*
+* Triggered when:
+*   delete field        pass field ID
+*   delete choice       pass field ID, value
+*   edit choice         pass field ID, value
+*
+* @param fieldId the field ID that is being edited or deleted
+* @param value Optional the value of the choice being edited or deleted
+*
+* @returns {Boolean}
+*/
+function HasConditionalLogicDependencyLegwork(fieldId, value) {
+
+    // check form button conditional logic
+    if( ObjectHasConditionalLogicDependency(form.button, fieldId, value) )
+        return true;
+
+    // check confirmations conditional logic
+    for(i in form.confirmations) {
+
+        if(!form.confirmations.hasOwnProperty(i))
+            continue;
+
+        if( ObjectHasConditionalLogicDependency(form.confirmations[i], fieldId, value) )
+            return true;
+    }
+
+    // check notifications conditional logic
+    for(i in form.notifications) {
+
+        if(!form.notifications.hasOwnProperty(i))
+            continue;
+
+        if( ObjectHasConditionalLogicDependency(form.notifications[i], fieldId, value) )
+            return true;
+    }
+
+    // check field conditional logic
+    for(i in form.fields) {
+
+        if(!form.fields.hasOwnProperty(i))
+            continue;
+
+        var field = form.fields[i];
+
+        if( ObjectHasConditionalLogicDependency(field, fieldId, value) )
+            return true;
+
+        // if this is a page field, check the next button conditional logic as well
+        if( GetInputType(field) == 'page' && ObjectHasConditionalLogicDependency(field.nextButton, fieldId, value) )
+            return true;
+
+    }
+
+    return false;
+}
+
+/**
+* Runs the check for conditional logic dependencies and then applies a filter to result.
+*
+* Couldn't find a tidier way of applying the filter in the original function so I made this
+* caller function so the code remains effecient and user can override the result in cases
+* of failure and success.
+*
+* @param fieldId
+* @param value
+*/
+function HasConditionalLogicDependency(fieldId, value) {
+    var result = HasConditionalLogicDependencyLegwork(fieldId, value);
+    return gform.applyFilters('gform_has_conditional_logic_dependency', result, fieldId, value);
+}
+
+/**
+* Determine if an object has a conditional logic rule dependent on the field and/or value provided.
+*
+* All GF objects (fields, buttons, confirmations, etc) that have conditional logic have it stored in a
+* 'conditionaLogic' property. This function checks if this property exists and if so loops through all
+* the rules until it finds a match. If not match is found, function returns false.
+*
+* @param object The GF Object that has conditional logic property (fields, buttons, confirmation, notifications, paging)
+* @param fieldId The fieldId being modified and on which a dependency is being searched for
+* @param value Optional The value of the choice being being modified or deleted
+*
+* @returns {Boolean}
+*/
+function ObjectHasConditionalLogicDependency(object, fieldId, value) {
+
+    if(!object.conditionalLogic)
+        return false;
+
+    if(typeof value == 'undefined')
+        var value = false;
+
+    var rules = object.conditionalLogic.rules;
+
+    for(i in rules) {
+
+        if(! rules.hasOwnProperty(i))
+            continue;
+
+        var rule = rules[i];
+
+        // if rule field ID does not match the field ID of the field being modified, continue
+        if(rule.fieldId != fieldId)
+            continue;
+
+        // if value is provided and the rule value does not match provided value, continue
+        if(value !== false && rule.value != value)
+            continue;
+
+        return true;
+    }
+
+    return false;
+}
+
+function HasDependentRule(rules, fieldId, value) {
+
+    if(typeof value == 'undefined')
+        value = false;
+
+    for(i in rules) {
+
+        if(! rules.hasOwnProperty(i))
+            continue;
+
+        var rule = rules[i];
+
+        // if rule field ID does not match the field ID of the field being modified, continue
+        if(rule.fieldId != fieldId)
+            continue;
+
+        // if value is provided and the rule value does not match provided value, continue
+        if(value !== false && rule.value != value)
+            continue;
+
+        return true;
+    }
+
+    return false;
+}
+
+function CheckChoiceConditionalLogicDependency(input) {
+
+    var field = GetSelectedField();
+
+    // check for cond logic dependency
+    if( HasConditionalLogicDependency(field.id, jQuery(input).data('previousValue')) ) {
+
+        // confirm that the user wants to make the modification
+        if(confirm(gf_vars.conditionalLogicDependencyChoiceEdit))
+            return;
+
+        // if user does not want to make modification, replace with original value
+        jQuery(input).val(jQuery(input).data('previousValue')).trigger('keyup');
+
+    }
+
 }
 
 function EndDeleteField(fieldId){
@@ -1391,7 +1286,7 @@ function EndDeleteField(fieldId){
         }
     }
     TogglePageBreakSettings();
-	
+
 	jQuery(document).trigger('gform_field_deleted', [form, fieldId]);
 }
 
@@ -1400,6 +1295,9 @@ function StartDuplicateField(element) {
     var sourcefieldId = jQuery(element)[0].id.split("_")[2];
 
     for(fieldIndex in form.fields){
+
+        if(! form.fields.hasOwnProperty(fieldIndex))
+            continue;
 
         if(form.fields[fieldIndex].id == sourcefieldId) {
 
@@ -1412,6 +1310,10 @@ function StartDuplicateField(element) {
                 var inputId = 1;
 
                 for(inputIndex in field.inputs) {
+
+                    if(!field.inputs.hasOwnProperty(inputIndex))
+                        continue;
+
                     var id = field.inputs[inputIndex]['id'] + "";
                     field.inputs[inputIndex]['id'] = id.replace(/(\d+\.)/, field.id + '.');
                     /*
@@ -1453,26 +1355,6 @@ function EndDuplicateField(field, fieldString, sourceFieldId) {
 
 }
 
-function Copy(variable){
-
-    if(!variable)
-        return variable;
-    else if(typeof variable != 'object')
-        return variable;
-
-    variable = jQuery.isArray(variable) ? variable.slice() : jQuery.extend({}, variable);
-
-    for(i in variable) {
-        variable[i] = Copy(variable[i]);
-    }
-
-    return variable;
-}
-
-function GetInputType(field){
-    return field.inputType ? field.inputType : field.type;
-}
-
 function GetFieldsByType(types){
     var fields = new Array();
     for(var i=0; i<form["fields"].length; i++){
@@ -1493,6 +1375,8 @@ function GetNextFieldId(){
 
 function EndAddField(field, fieldString){
 
+    gf_vars["currentlyAddingField"] = false;
+
     //sets up DOM for new field
     jQuery("#gform_fields").append(fieldString);
     var newFieldElement = jQuery("#field_" + field.id);
@@ -1501,6 +1385,7 @@ function EndAddField(field, fieldString){
 
     //creates new javascript field
     form.fields.push(field);
+    jQuery('#no-fields').hide();
 
     //Unselects all fields
     jQuery(".selectable").removeClass("field_selected");
@@ -1522,8 +1407,6 @@ function EndAddField(field, fieldString){
 
     newFieldElement.removeClass("field_selected");
 
-    UpdateDescriptionPlacement();
-	
 	jQuery(document).trigger('gform_field_added', [form, field]);
 }
 
@@ -1585,6 +1468,7 @@ function StartChangePostCategoryType(type){
     return StartChangeInputType(type, field);
 }
 
+
 function EndChangeInputType(fieldId, fieldType, fieldString){
 
     jQuery("#field_" + fieldId).html(fieldString);
@@ -1605,7 +1489,7 @@ function EndChangeInputType(fieldId, fieldType, fieldString){
 
     LoadFieldSettings();
 
-    UpdateDescriptionPlacement();
+    //UpdateDescriptionPlacement();
 }
 
 function InitializeFields(){
@@ -1624,9 +1508,11 @@ function InitializeFields(){
     });
 
 
-    jQuery("#field_settings, #form_settings, #last_page_settings, #pagination_settings, .captcha_message, .form_delete_icon").bind("click", function(event){event.stopPropagation();});
+    jQuery("#field_settings, #form_settings, #last_page_settings, #pagination_settings, .captcha_message, .form_delete_icon, .all-merge-tags").bind("click", function(event){
+        event.stopPropagation();
+    });
 
-    UpdateLabelPlacement(true);
+    //UpdateLabelPlacement(true);
 }
 
 function FieldClick(field){
@@ -1637,9 +1523,10 @@ function FieldClick(field){
         return;
     }
 
-    if(jQuery(field).hasClass("field_selected"))
-    {
+    if(jQuery(field).hasClass("field_selected")) {
+
         var element_id = "";
+
         switch(field.id){
             case "gform_heading" :
                 element_id = "#form_settings";
@@ -1657,7 +1544,14 @@ function FieldClick(field){
             default:
                 element_id = "#field_settings";
         }
-        jQuery(element_id).slideUp(function(){jQuery(field).removeClass("field_selected").addClass("field_hover"); HideSettings("field_settings");});
+
+        // force focus to ensure onblur events fire for field setting inputs
+        jQuery('input#gform_force_focus').focus();
+
+        jQuery(element_id).slideUp(function(){
+            jQuery(field).removeClass("field_selected").addClass("field_hover");
+            HideSettings("field_settings");
+        });
 
         return;
     }
@@ -1717,6 +1611,7 @@ function FieldClick(field){
         //selects current field
         LoadFieldSettings();
     }
+
 }
 
 function TogglePercentageStyle(isInit){
@@ -1767,164 +1662,10 @@ function IsStandardMask(value){
     return false;
 }
 
-function InsertRule(objectType, ruleIndex){
-    var obj = GetConditionalObject(objectType);
-    obj.conditionalLogic.rules.splice(ruleIndex, 0, new ConditionalRule());
-    CreateConditionalLogic(objectType, obj);
-    SetRule(objectType, ruleIndex);
-}
-
-function SetRule(objectType, ruleIndex){
-    SetRuleProperty(objectType, ruleIndex, "fieldId", jQuery("#" + objectType + "_rule_field_" + ruleIndex).val());
-    SetRuleProperty(objectType, ruleIndex, "operator", jQuery("#" + objectType + "_rule_operator_" + ruleIndex).val());
-    SetRuleProperty(objectType, ruleIndex, "value", jQuery("#" + objectType + "_rule_value_" + ruleIndex).val());
-}
-
-function DeleteRule(objectType, ruleIndex){
-    var obj = GetConditionalObject(objectType);
-    obj.conditionalLogic.rules.splice(ruleIndex, 1);
-    CreateConditionalLogic(objectType, obj);
-}
-
-function GetRuleFields(objectType, ruleIndex, selectedFieldId){
-    var str = "<select id='" + objectType + "_rule_field_" + ruleIndex + "' class='gfield_rule_select' onchange='jQuery(\"#" + objectType + "_rule_value_" + ruleIndex + "\").replaceWith(GetRuleValues(\"" + objectType + "\", " + ruleIndex + ", jQuery(this).val())); SetRule(\"" + objectType + "\", " + ruleIndex + "); '>";
-    var inputType;
-    for(var i=0; i<form.fields.length; i++){
-        if(IsConditionalLogicField(form.fields[i])){
-            var selected = form.fields[i].id == selectedFieldId ? "selected='selected'" : "";
-            var label = form.fields[i].adminLabel ? form.fields[i].adminLabel : form.fields[i].label
-            str += "<option value='" + form.fields[i].id + "' " + selected + ">" + label + "</option>";
-        }
-    }
-    str += "</select>";
-    return str;
-}
-
-function IsConditionalLogicField(field){
-    inputType = field.inputType ? field.inputType : field.type;
-    var supported_fields = ["checkbox", "radio", "select", "text", "website", "textarea", "email", "hidden", "number", "phone", "multiselect", "post_title",
-                            "post_tags", "post_custom_field", "post_content", "post_excerpt"];
-
-    var index = jQuery.inArray(inputType, supported_fields);
-
-    return index >= 0;
-}
-
-function TruncateRuleText(text){
-    if(!text || text.length <= 18)
-        return text;
-
-    return text.substr(0, 9) + "..." + text.substr(text.length -8, 9);
-
-}
-
-function GetFirstRuleField(){
-    var inputType;
-    for(var i=0; i<form.fields.length; i++){
-        if(IsConditionalLogicField(form.fields[i]))
-            return form.fields[i].id;
-    }
-
-    return 0;
-}
-
-function GetRuleValues(objectType, ruleIndex, selectedFieldId, selectedValue){
-
-    if(selectedFieldId == 0)
-        selectedFieldId = GetFirstRuleField();
-
-    if(selectedFieldId == 0)
-        return "";
-
-    var isAnySelected = false;
-    var field = GetFieldById(selectedFieldId);
-
-    if(!field)
-        return "";
-
-    var str = "";
-
-    if(field["type"] == "post_category" && field["displayAllCategories"]){
-
-        var dropdown_id = objectType + '_rule_value_' + ruleIndex;
-        var dropdown = jQuery('#' + dropdown_id + ".gfield_category_dropdown");
-
-        //don't load category drop down if it already exists (to avoid unecessary ajax requests)
-        if(dropdown.length > 0){
-
-            var options = dropdown.html();
-            options = options.replace("value=\"" + selectedValue + "\"", "value=\"" + selectedValue + "\" selected=\"selected\"");
-            str = "<select id='" + dropdown_id + "' class='gfield_rule_select gfield_rule_value_dropdown gfield_category_dropdown'>" + options + "</select>";
-        }
-        else{
-            //loading categories via AJAX
-            jQuery.post(ajaxurl,{   action:"gf_get_post_categories",
-                                    objectType: objectType,
-                                    ruleIndex: ruleIndex,
-                                    selectedValue: selectedValue},
-                                function(dropdown_string){
-                                    if(dropdown_string){
-                                        jQuery('#gfield_ajax_placeholder_' + ruleIndex).replaceWith(dropdown_string.trim());
-
-                                        SetRuleProperty(objectType, ruleIndex, "value", jQuery("#" + dropdown_id).val());
-                                    }
-                                }
-                        );
-
-            //will be replaced by real drop down during the ajax callback
-            str = "<select id='gfield_ajax_placeholder_" + ruleIndex + "' class='gfield_rule_select'><option>" + gf_vars["loading"] + "</option></select>";
-        }
-    }
-    else if(field.choices){
-        str = GetRuleValuesDropDown(field.choices, objectType, ruleIndex, selectedValue);
-    }
-    else{
-        selectedValue = selectedValue ? selectedValue.replace(/'/g, "&#039;") : "";
-
-        //create a text field for fields that don't have choices (i.e text, textarea, number, email, etc...)
-        str = "<input type='text' placeholder='" + gf_vars["enterValue"] + "' class='gfield_rule_select' id='" + objectType + "_rule_value_" + ruleIndex + "' value='" + selectedValue.replace(/'/g, "&#039;") + "' onchange='SetRuleProperty(\"" + objectType + "\", " + ruleIndex + ", \"value\", jQuery(this).val());' onkeyup='SetRuleProperty(\"" + objectType + "\", " + ruleIndex + ", \"value\", jQuery(this).val());'>";
-    }
-
-    return str;
-}
-
-function GetRuleValuesDropDown(choices, objectType, ruleIndex, selectedValue){
-    //create a drop down for fields that have choices (i.e. drop down, radio, checkboxes, etc...)
-    str = "<select class='gfield_rule_select gfield_rule_value_dropdown' id='" + objectType + "_rule_value_" + ruleIndex + "'>";
-
-    var isAnySelected = false;
-    for(var i=0; i<choices.length; i++){
-        var choiceValue = typeof choices[i].value == "undefined" || choices[i].value == null ? choices[i].text + '' : choices[i].value + '';
-        var isSelected = choiceValue == selectedValue;
-        var selected = isSelected ? "selected='selected'" : "";
-        if(isSelected)
-            isAnySelected = true;
-
-        str += "<option value='" + choiceValue.replace(/'/g, "&#039;") + "' " + selected + ">" + choices[i].text + "</option>";
-    }
-
-    if(!isAnySelected && selectedValue && selectedValue != "")
-        str += "<option value='" + selectedValue.replace(/'/g, "&#039;") + "' selected='selected'>" + selectedValue + "</option>";
-
-    str += "</select>";
-
-    return str;
-
-}
-function SetRuleProperty(objectType, ruleIndex, name, value){
-    var obj = GetConditionalObject(objectType);
-    obj.conditionalLogic.rules[ruleIndex][name] = value;
-}
-
-function SetConditionalProperty(objectType, name, value){
-    var obj = GetConditionalObject(objectType);
-    obj.conditionalLogic[name] = value;
-}
-
 function LoadFieldChoices(field){
 
     //loading ui
-    jQuery('#field_choice_values_enabled').attr("checked", field.enableChoiceValue ? true : false);
+    jQuery('#field_choice_values_enabled').prop("checked", field.enableChoiceValue ? true : false);
     ToggleChoiceValue();
     var container_name = GetInputType(field) == "list" ? "field_columns" : "field_choices";
     jQuery("#" + container_name).html(GetFieldChoices(field));
@@ -1932,8 +1673,11 @@ function LoadFieldChoices(field){
     //loading bulk input
     LoadBulkChoices(field);
 
-	jQuery(document).trigger('gform_load_field_choices', [field]);
+    jQuery(document).trigger('gform_load_field_choices', [field]);
+
+    gform.doAction('gform_load_field_choices', [field]);
 }
+
 function LoadBulkChoices(field){
     LoadCustomChoices();
 
@@ -1972,6 +1716,10 @@ function LoadCustomChoices(){
     if(!IsEmpty(gform_custom_choices)){
         var str = "<li class='choice_section_header'>Custom Choices</li>";
         for(key in gform_custom_choices){
+
+            if(!gform_custom_choices.hasOwnProperty(key))
+                continue;
+
             str += "<li class='bulk_custom_choice'><a href='#' onclick='SelectCustomChoice(\"" + key + "\");' class='bulk-choice bulk_custom_choice'>" + key + "</a></li>";
         }
         str += "<li class='choice_section_header'>Predefined Choices</li>";
@@ -2016,7 +1764,7 @@ function InsertBulkChoices(choices){
 
     if(enableValue){
         field["enableChoiceValue"] = true;
-        jQuery('#field_choice_values_enabled').attr("checked", true);
+        jQuery('#field_choice_values_enabled').prop("checked", true);
         ToggleChoiceValue();
     }
 
@@ -2071,6 +1819,7 @@ function IsEmpty(array){
 }
 
 function SetFieldChoice(inputType, index){
+
     text = jQuery("#" + inputType + "_choice_text_" + index).val();
     value = jQuery("#" + inputType + "_choice_value_" + index).val();
     price = jQuery("#" + inputType + "_choice_price_" + index).val();
@@ -2205,7 +1954,15 @@ function InsertFieldChoice(index){
 }
 
 function DeleteFieldChoice(index){
+
     field = GetSelectedField();
+    var value = jQuery('#' + GetInputType(field) + '_choice_value_' + index).val();
+
+    if( HasConditionalLogicDependency(field.id, value) ) {
+        if(!confirm(gf_vars.conditionalLogicDependencyChoice))
+            return;
+    }
+
     field.choices.splice(index, 1);
     LoadFieldChoices(field);
     UpdateFieldChoices(GetInputType(field));
@@ -2232,14 +1989,6 @@ function GetFieldType(fieldId){
 function GetSelectedField(){
     var id = jQuery(".field_selected")[0].id.substr(6);
     return GetFieldById(id);
-}
-
-function GetFieldById(id){
-    for(var i=0; i<form.fields.length; i++){
-        if(form.fields[i].id == id)
-            return form.fields[i];
-    }
-    return null;
 }
 
 function SetPasswordProperty(isChecked){
@@ -2368,11 +2117,11 @@ function SetCalendarIconType(iconType, isInit){
         iconType = "none";
 
     if(iconType == "none")
-        jQuery("#gsetting_icon_none").attr("checked", true);
+        jQuery("#gsetting_icon_none").prop("checked", true);
     else if(iconType == "calendar")
-        jQuery("#gsetting_icon_calendar").attr("checked", true);
+        jQuery("#gsetting_icon_calendar").prop("checked", true);
     else if(iconType == "custom")
-        jQuery("#gsetting_icon_custom").attr("checked", true);
+        jQuery("#gsetting_icon_custom").prop("checked", true);
 
     SetFieldProperty('calendarIconType', iconType);
     ToggleCalendarIconUrl(isInit);
@@ -2414,6 +2163,10 @@ function SetFeaturedImage() {
     if(isChecked) {
 
         for(i in form.fields) {
+
+            if(!form.fields.hasOwnProperty(i))
+                continue;
+
             form.fields[i].postFeaturedImage = false;
         }
 
@@ -2565,7 +2318,7 @@ function SetEmailConfirmation(isEnabled){
     }
 
     SetFieldProperty('emailConfirmEnabled', isEnabled);
-    UpdateDescriptionPlacement();
+    //UpdateDescriptionPlacement();
 }
 
 
@@ -2601,6 +2354,53 @@ function SetFieldRequired(isRequired){
     SetFieldProperty('isRequired', isRequired);
 }
 
+function SetMaxLength(input) {
+
+    var patt = GetMaxLengthPattern();
+    var cleanValue = '';
+    var characters = input.value.split('');
+
+    for(i in characters) {
+
+        if(!characters.hasOwnProperty(i))
+            continue;
+
+        if( !patt.test(characters[i]) )
+            cleanValue += characters[i];
+    }
+
+    input.value = cleanValue;
+    SetFieldProperty('maxLength', cleanValue);
+
+}
+
+function GetMaxLengthPattern() {
+    return /[a-zA-Z\-!@#$%^&*();'":_+=<,>.~`?\/|\[\]\{\}\\]/;
+}
+
+/**
+* Validate any keypress events based on a provided RegExp.
+*
+* Function retrieves the character code from the keypress event and tests it against provided pattern.
+* Optionally specify 'matchPositive' argument to false in order to return true if the character is NOT
+* in the provided pattern.
+*
+* @param event The JS keypress event.
+* @param patt RegExp to test keypress character against.
+* @param matchPositive Defaults to true. Whether to return true if the character is found or NOT found in the pattern.
+*/
+function ValidateKeyPress(event, patt, matchPositive) {
+
+    var matchPositive = typeof matchPositive == 'undefined' ? true : matchPositive;
+    var char = event['which'] ? event.which : event.keyCode;
+    var isMatch = patt.test(String.fromCharCode(char));
+
+    if(event.ctrlKey)
+        return true;
+
+    return matchPositive ? isMatch : !isMatch;
+}
+
 function IndexOf(ary, item){
     for(var i=0; i<ary.length; i++)
         if(ary[i] == item)
@@ -2608,16 +2408,6 @@ function IndexOf(ary, item){
 
     return -1;
 }
-
-function DefaultValueCallback(){
-    SetFieldDefaultValue(jQuery('#field_default_value').val())
-}
-
-function HtmlContentCallback(){
-    SetFieldProperty('content', jQuery('#field_content').val())
-}
-
-
 
 function ToggleCalculationOptions(isEnabled, field) {
 
@@ -2642,7 +2432,24 @@ function ToggleCalculationOptions(isEnabled, field) {
 }
 
 function FormulaContentCallback() {
-    SetFieldProperty('calculationFormula', jQuery('#field_calculation_formula').val());
+    SetFieldProperty('calculationFormula', jQuery('#field_calculation_formula').val().trim());
+}
+
+function SetupUnsavedChangesWarning() {
+
+    // apply system changes to the form, unsaved notification should only apply for user-made changes
+    UpdateFormObject();
+
+    // store a json copy of original form to determine if user-made changes were made
+    gforms_original_json = jQuery.toJSON(form);
+
+    window.onbeforeunload = function(){
+        UpdateFormObject();
+        if ( gforms_original_json != jQuery.toJSON(form) && !gf_vars.isFormTrash ) {
+            return "You have unsaved changes.";
+        }
+    }
+
 }
 
 
@@ -2695,7 +2502,7 @@ function SetColorPickerColor(field_name, color, callback){
 function SetFieldChoices(){
     var field = GetSelectedField();
     for(var i=0; i<field.choices.length; i++){
-        SetFieldChoice(i);
+        SetFieldChoice(GetInputType(field), i);
     }
 }
 

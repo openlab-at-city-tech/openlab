@@ -21,7 +21,44 @@ if(!GFCommon::current_user_can_any("gravityforms_view_entries"))
     die(__("You don't have adequate permission to view entries.", "gravityforms"));
 
 $form_id = absint(rgget("fid"));
-$lead_ids = explode(',', rgget("lid"));
+$leads = rgget("lid");
+if(0 == $leads){
+    // get all the lead ids for the current filter / search
+    $filter = rgget("filter");
+    $search = rgget("search");
+    $star = $filter == "star" ? 1 : null;
+    $read = $filter == "unread" ? 0 : null;
+    $status = in_array($filter, array("trash", "spam")) ? $filter : "active";
+    $search_criteria["status"] =  $status;
+
+    if($star)
+        $search_criteria["field_filters"][] = array("key" => "is_starred", "value" => (bool) $star );
+    if(!is_null($read))
+        $search_criteria["field_filters"][] = array("key" => "is_read", "value" => (bool) $read );
+
+    $search_field_id = rgget("field_id");
+    $search_operator = rgget("operator");
+    if(isset($_GET["field_id"]) && $_GET["field_id"] !== ''){
+        $key = $search_field_id;
+        $val = rgget("s");
+        $strpos_row_key       = strpos($search_field_id, "|");
+        if ($strpos_row_key !== false) { //multi-row
+            $key_array = explode("|", $search_field_id);
+            $key       = $key_array[0];
+            $val       = $key_array[1] . ":" . $val;
+        }
+        $search_criteria["field_filters"][] = array(
+            "key" => $key,
+            "operator" => rgempty("operator", $_GET) ? "is" : rgget("operator"),
+            "value" => $val
+        );
+    }
+    $lead_ids = GFFormsModel::search_lead_ids($form_id, $search_criteria);
+} else {
+    $lead_ids = explode(',', $leads);
+}
+
+
 $page_break = rgget("page_break") ? 'print-page-break' : false;
 
 // sort lead IDs numerically
@@ -50,12 +87,14 @@ $form = RGFormsModel::get_form_meta($form_id);
         <?php echo count($lead_ids) > 1 ? __("Entry # ", "gravityforms") . $lead_ids[0] : 'Bulk Print' ?>
     </title>
     <link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/print.css' type='text/css' />
-	<?php 
+	<?php
 		$styles = apply_filters("gform_print_styles", false, $form);
 		if(!empty($styles)){
 			wp_print_styles($styles);
 		}
-	?> 
+
+
+	?>
     </head>
 	<body onload="window.print();">
 
