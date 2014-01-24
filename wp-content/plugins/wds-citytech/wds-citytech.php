@@ -1884,8 +1884,8 @@ add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_c
  * Brackets in password reset emails cause problems in some clients. Remove them
  */
 function openlab_strip_brackets_from_pw_reset_email( $message ) {
-	$message = preg_replace( '/<( http\S*? )>/', '$1', $message );
-		return $message;
+        $message = preg_replace( '/<(http\S*?)>/', '$1', $message );
+        return $message;
 }
 add_filter( 'retrieve_password_message', 'openlab_strip_brackets_from_pw_reset_email' );
 
