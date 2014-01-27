@@ -28,13 +28,14 @@ function dpa_has_progress( $args = array() ) {
 		switch_to_blog( DPA_DATA_STORE );
 
 	$defaults = array(
-		'max_num_pages' => false,                         // Maximum number of pages to show
-		'order'         => 'DESC',                        // 'ASC', 'DESC
-		'orderby'       => 'date',                        // 'meta_value', 'author', 'date', 'title', 'modified', 'parent', 'rand'
-		'paged'         => dpa_get_paged(),               // Page number
-		'post_status'   => dpa_get_unlocked_status_id(),  // Get posts in the unlocked status by default.
-		'post_type'     => dpa_get_progress_post_type(),  // Only retrieve progress posts
-		's'             => '',                            // No search
+		'ignore_sticky_posts' => true,                          // Ignored sticky posts
+		'max_num_pages'       => false,                         // Maximum number of pages to show
+		'order'               => 'DESC',                        // 'ASC', 'DESC
+		'orderby'             => 'date',                        // 'meta_value', 'author', 'date', 'title', 'modified', 'parent', 'rand'
+		'paged'               => dpa_get_paged(),               // Page number
+		'post_status'         => dpa_get_unlocked_status_id(),  // Get posts in the unlocked status by default.
+		'post_type'           => dpa_get_progress_post_type(),  // Only retrieve progress posts
+		's'                   => '',                            // No search
 
 
 		// Conditional defaults
@@ -47,11 +48,11 @@ function dpa_has_progress( $args = array() ) {
 
 		// If on a single achievement page, don't paginate progresses.
 		//'posts_per_page' => dpa_is_single_achievement() ? -1 : dpa_get_progresses_per_page(),
-		// Above commented out for 3.1; see https://github.com/paulgibbs/achievements/issues/70 for details
+		// @todo Above commented out for 3.1; see https://github.com/paulgibbs/achievements/issues/70 for details
 		'posts_per_page' => -1,
 
 		// If on a user's achievements page, fetch the achievements if we haven't got them already
-		'ach_populate_achievements' => dpa_is_single_user_achievements() && ! is_a( achievements()->achievement_query, 'WP_Query' ),
+		'ach_populate_achievements' => dpa_is_single_user_achievements() && is_a( achievements()->achievement_query, 'WP_Query' ) && empty( achievements()->achievement_query->request ),
 	);
 
 	$args = dpa_parse_args( $args, $defaults, 'has_progress' );
@@ -60,7 +61,7 @@ function dpa_has_progress( $args = array() ) {
 	achievements()->progress_query = new WP_Query( $args );
 
 	// If no limit to posts per page, set it to the current post_count
-	if ( -1 == $args['posts_per_page'] )
+	if ( -1 === (int) $args['posts_per_page'] )
 		$args['posts_per_page'] = achievements()->progress_query->post_count;
 
 	// Add pagination values to query object
@@ -103,8 +104,8 @@ function dpa_has_progress( $args = array() ) {
 			'current'   => (int) achievements()->progress_query->paged,
 			'format'    => '',
 			'mid_size'  => 1,
-			'next_text' => '&rarr;',
-			'prev_text' => '&larr;',
+			'next_text' => is_rtl() ? '&larr;' : '&rarr;',
+			'prev_text' => is_rtl() ? '&rarr;' : '&larr;',
 			'total'     => ( $args['posts_per_page'] == achievements()->progress_query->found_posts ) ? 1 : ceil( (int) achievements()->progress_query->found_posts / (int) $args['posts_per_page'] ),
 		) );
 
@@ -353,7 +354,7 @@ function dpa_progress_class( $progress_id = 0, $classes = array() ) {
 			$classes[] = 'dpa-single-progress';
 
 		// Does this progress belong to the logged in user?
-		if ( is_user_logged_in() && wp_get_current_user()->ID == dpa_get_progress_author_id( $progress_id ) )
+		if ( is_user_logged_in() && wp_get_current_user()->ID === dpa_get_progress_author_id( $progress_id ) )
 			$classes[] = 'logged-in-user';
 
 		$classes[] = 'user-id-' . dpa_get_progress_author_id( $progress_id );
@@ -361,13 +362,14 @@ function dpa_progress_class( $progress_id = 0, $classes = array() ) {
 
 		// Remove hentry as Achievements isn't hAtom compliant.
 		foreach ( $classes as &$class ) {
-			if ( 'hentry' == $class )
+			if ( 'hentry' === $class )
 				$class = '';
 		}
-		$classes = array_merge( $classes, array() );
 
-		$retval = 'class="' . join( ' ', $classes ) . '"';
-		return $retval;
+		$classes = array_map( 'sanitize_html_class', array_merge( $classes, array() ) );
+		$classes = join( ' ', $classes );
+
+		return 'class="' . esc_attr( $classes )  . '"';
 	}
 
 /**
@@ -387,7 +389,7 @@ function dpa_is_achievement_unlocked( $achievement_id = 0 ) {
 	$progress = wp_filter_object_list( achievements()->progress_query->posts, array( 'post_parent' => $achievement_id ) );
 	$progress = array_shift( $progress );
 
-	$retval = ( ! empty( $progress ) && dpa_get_unlocked_status_id() == $progress->post_status );
+	$retval = ( ! empty( $progress ) && dpa_get_unlocked_status_id() === $progress->post_status );
 	return apply_filters( 'dpa_is_achievement_unlocked', $retval, $achievement_id, $progress ); 
 }
 
@@ -423,7 +425,7 @@ function dpa_progress_pagination_count() {
 
 		// Several achievements within a single page
 		if ( empty( $to_num ) ) {
-			$retstr = sprintf( _n( 'Viewing %1$s achievement progress', "Viewing %1$s achievements&rsquo; progress", $total_int, 'dpa' ), $total );
+			$retstr = sprintf( _n( 'Viewing %1$s achievement progress', "Viewing %1\$s achievements&rsquo; progress", $total_int, 'dpa' ), $total );
 
 		// Several achievements with several pages
 		} else {
@@ -449,7 +451,7 @@ function dpa_progress_pagination_links() {
 	 */
 	function dpa_get_progress_pagination_links() {
 		if ( ! is_a( achievements()->progress_query, 'WP_Query' ) )
-			return;
+			return '';
 
 		return apply_filters( 'dpa_get_progress_pagination_links', achievements()->progress_query->pagination_links );
 	}

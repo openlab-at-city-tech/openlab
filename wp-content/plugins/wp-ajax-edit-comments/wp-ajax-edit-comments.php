@@ -4,7 +4,7 @@ Plugin Name: Ajax Edit Comments
 Plugin URI: http://wordpress.org/extend/plugins/wp-ajax-edit-comments/
 Description: Ajax Edit Comments allows users to edit their comments for a period of time. Administrators have a lot more features, such as the ability to edit comments directly on a post or page.
 Author: Ronald Huereca
-Version: 5.0.27.0
+Version: 5.0.36.0
 Requires at least: 3.1
 Author URI: http://www.ronalfy.com
 Contributors:  Ronald Huereca, Ajay Dsouza, Josh Benham, and Glenn Ansley
@@ -25,7 +25,7 @@ if (!class_exists('WPrapAjaxEditComments')) {
 		private $admin_options = array();
 		private $errors = '';
 		private $minutes = 5; 
-		private $version = "5.0.27";
+		private $version = "5.0.36";
 		private $colorbox_params = array();
 		private $plugin_url = '';
 		private $plugin_dir = '';
@@ -384,7 +384,17 @@ if (!class_exists('WPrapAjaxEditComments')) {
    			  add_action( 'admin_menu', array("AECAdmin",'add_admin_pages') );
 			}
 			
-			if (!is_feed()) {
+			add_action( 'template_redirect', array( $this, 'comment_text' ) ); //front end
+			add_action( 'auth_redirect', array( $this, 'comment_text' ) ); //admin panel
+			
+			
+			//* Localization Code */
+			load_plugin_textdomain( 'ajaxEdit', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+			
+		}//end function init
+		
+		public function comment_text() {
+			if ( !is_feed() && !is_comment_feed() ) {
 				//Yay, filters.
 				add_filter('comment_excerpt', array("AECFilters", 'add_edit_links'), '1000');
 				//Commented out because some ppl add issues with these screwing up their theme
@@ -394,13 +404,7 @@ if (!class_exists('WPrapAjaxEditComments')) {
 				add_filter('thesis_comment_text', array("AECFilters", 'add_edit_links'),'1000'); //For Thesis (todo - remove when necessary)
 				add_filter('get_comment_author_link', array("AECFilters", 'add_author_spans'), '1000'); //Low priority so other HTML can be added first
 			}
-			
-			
-			
-			//* Localization Code */
-			load_plugin_textdomain( 'ajaxEdit', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-			
-		}//end function init
+		} //end comment_text
 		
 		public function is_multisite() {
 			global $aecomments;

@@ -38,7 +38,14 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Check if any of the plugin extensions need to be set up or updated
+ * Check if any of the plugin extensions need to be set up or updated.
+ *
+ * If a new extension is found (technically, an extension with an un-registered 'ID'), the
+ * actions that the extension supports will be automatically added to the dpa_get_event_tax_id() taxonomy.
+ * 
+ * If an extension is updated (by changing the 'version' property), its actions WILL NOT be automatically updated.
+ * You will need to implement custom upgrade handling in the do_update() method to add, remove, or update taxonomy
+ * data for the extension.
  *
  * @since Achievements (3.0)
  */
@@ -48,8 +55,8 @@ function dpa_maybe_update_extensions() {
 	if ( dpa_is_deactivation( achievements()->basename ) )
 		return;
 
-	// Only do things if the user is active (logged in and not a spammer) and in wp-admin
-	if ( ! dpa_is_user_active() || ! is_admin() )
+	// Only do things if the user is active (logged in and not a spammer), in wp-admin, and is not doing an import.
+	if ( ! dpa_is_user_active() || ! is_admin() || defined( 'WP_IMPORTING' ) && WP_IMPORTING )
 		return;
 
 	// Check user has the ability to edit and create terms
@@ -111,18 +118,18 @@ function dpa_register_events() {
 	if ( dpa_is_deactivation( achievements()->basename ) )
 		return;
 
-	// Only do things if the user is active (logged in and not a spammer)
-	if ( ! dpa_is_user_active() )
+	// Only do things if the user is active (logged in and not a spammer) and is not doing an import.
+	if ( ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) || ! apply_filters( 'dpa_maybe_register_events', dpa_is_user_active() ) )
 		return;
 
-	$events = array();
+	$events = false;
 
 	// If multisite and running network-wide, see if the terms have previously been cached.
 	if ( is_multisite() && dpa_is_running_networkwide() )
-		$events = wp_cache_get( 'dpa_registered_events', 'achievements' );
+		$events = wp_cache_get( 'dpa_registered_events', 'achievements_events' );
 
 	// No cache. Get events.
-	if ( empty( $events ) ) {
+	if ( $events === false ) {
 
 		// If multisite and running network-wide, switch_to_blog to the data store site
 		if ( is_multisite() && dpa_is_running_networkwide() )
@@ -142,8 +149,8 @@ function dpa_register_events() {
 
 		// Items were found! If network-wide, cache the results and undo the switch_to_blog.
 		} elseif ( is_multisite() && dpa_is_running_networkwide() ) {
-			wp_cache_set( 'dpa_registered_events', $events, 'achievements' );
 			restore_current_blog();
+			wp_cache_add( 'dpa_registered_events', $events, 'achievements_events' );
 		}
 	}
 
@@ -212,7 +219,7 @@ function dpa_handle_event() {
 		'ach_populate_progress' => $user_id,     // Fetch Progress posts for this user ID
 		'no_found_rows'         => true,         // Disable SQL_CALC_FOUND_ROWS
 		'nopaging'              => true,         // No pagination
-		'post_status'           => 'publish',    // We only want active achievements
+		'post_status'           => 'any',        // We only want published/private achievements, but need to compensate (see below)
 		'posts_per_page'        => -1,           // No pagination
 		's'                     => '',           // Stop sneaky people running searches on this query
 	);
@@ -227,6 +234,12 @@ function dpa_handle_event() {
 		while ( dpa_achievements() ) {
 			dpa_the_achievement();
 
+			// Check that the post status is published or privately published
+			// We need to check this here to work around WP_Query not
+			// constructing the query correctly with private
+			if ( ! in_array( $GLOBALS['post']->post_status, array( 'publish', 'private' ) ) )
+				continue;
+
 			// Let other plugins do things before we maybe_unlock_achievement
 			do_action( 'dpa_handle_event', $event_name, $func_args, $user_id, $args );
 
@@ -239,7 +252,7 @@ function dpa_handle_event() {
 			$progress = array_shift( $progress );
 
 			// If the achievement hasn't already been unlocked, maybe_unlock_achievement.
-			if ( empty( $progress ) || dpa_get_unlocked_status_id() != $progress->post_status )
+			if ( empty( $progress ) || dpa_get_unlocked_status_id() !== $progress->post_status )
 				dpa_maybe_unlock_achievement( $user_id, false, $progress );
 		}
 	}
@@ -248,8 +261,9 @@ function dpa_handle_event() {
 	if ( is_multisite() && dpa_is_running_networkwide() )
 		restore_current_blog();
 
-	achievements()->achievement_query = new stdClass();
-	achievements()->progress_query    = new stdClass();
+	achievements()->achievement_query = new WP_Query();
+	achievements()->leaderboard_query = new ArrayObject();
+	achievements()->progress_query    = new WP_Query();
 
 	// Everything's done. Let other plugins do things.
 	do_action( 'dpa_after_handle_event', $event_name, $func_args, $user_id, $args );
@@ -287,7 +301,7 @@ function dpa_maybe_unlock_achievement( $user_id, $skip_validation = '', $progres
 	}
 
 	// Has the user already unlocked the achievement?
-	if ( ! empty( $progress_obj ) && dpa_get_unlocked_status_id() == $progress_obj->post_status )
+	if ( ! empty( $progress_obj ) && dpa_get_unlocked_status_id() === $progress_obj->post_status )
 		return;
 
 	// Prepare default values to create/update a progress post
@@ -330,7 +344,7 @@ function dpa_maybe_unlock_achievement( $user_id, $skip_validation = '', $progres
 	$progress_id = wp_insert_post( $progress_args );
 
 	// If the achievement was just unlocked, do stuff.
-	if ( dpa_get_unlocked_status_id() == $progress_args['post_status'] ) {
+	if ( dpa_get_unlocked_status_id() === $progress_args['post_status'] ) {
 
 		// Achievement was unlocked. Notifications and points updates are hooked to this function.
 		do_action( 'dpa_unlock_achievement', $achievement_obj, $user_id, $progress_id );

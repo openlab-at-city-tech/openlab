@@ -1,0 +1,1911 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Ajax Edit Comments 简体中文\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-08 09:06+0800\n"
+"PO-Revision-Date: 2013-08-08 11:53+0800\n"
+"Last-Translator: 倡萌@WordPress大学 <admin@cmhello.com>\n"
+"Language-Team: 倡萌 @ WordPress大学 <admin@wpdaxue.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _c;_e;__;__ngettext:1,2;__ngettext_noop:1,2;_n:1,2;"
+"_x:1,2c;_ex:1,2c\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../wp-ajax-edit-comments.php:128
+msgid ""
+"Your edited comment was marked as spam.  If this is in error, please contact "
+"the admin."
+msgstr "您编辑的评论已被标识为垃圾，如果被误判，请联系管理员。"
+
+#: ../wp-ajax-edit-comments.php:187 ../wp-ajax-edit-comments.php:208
+#: ../lib/class.core.php:173 ../lib/class.core.php:176
+msgid "Approve"
+msgstr "批准"
+
+#: ../wp-ajax-edit-comments.php:188 ../wp-ajax-edit-comments.php:209
+#: ../lib/class.core.php:186 ../lib/class.core.php:189
+msgid "Moderate"
+msgstr "待审核"
+
+#: ../wp-ajax-edit-comments.php:189 ../wp-ajax-edit-comments.php:210
+#: ../lib/class.core.php:199 ../lib/class.core.php:202
+#: ../views/comment-editor.php:170 ../views/comment-editor.php:177
+msgid "Spam"
+msgstr "垃圾评论"
+
+#: ../wp-ajax-edit-comments.php:190 ../wp-ajax-edit-comments.php:211
+#: ../lib/class.core.php:85 ../lib/class.core.php:88
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Delete"
+msgstr "直接删除"
+
+#: ../wp-ajax-edit-comments.php:191 ../wp-ajax-edit-comments.php:212
+#: ../lib/class.core.php:161 ../lib/class.core.php:164
+msgid "De-link"
+msgstr "删除网址"
+
+#: ../wp-ajax-edit-comments.php:192 ../wp-ajax-edit-comments.php:213
+#: ../lib/class.core.php:154 ../views/move-comment.php:61
+#: ../views/move-comment.php:86 ../views/move-comment.php:111
+msgid "Move"
+msgstr "移动"
+
+#: ../wp-ajax-edit-comments.php:193 ../wp-ajax-edit-comments.php:214
+#: ../lib/class.core.php:139 ../lib/class.core.php:142
+#: ../views/comment-editor.php:124
+msgid "E-mail"
+msgstr "发送邮件"
+
+#: ../wp-ajax-edit-comments.php:194 ../wp-ajax-edit-comments.php:215
+#: ../lib/class.core.php:211 ../lib/class.core.php:214
+#: ../views/blacklist-comment.php:116
+msgid "Blacklist"
+msgstr "加入黑名单"
+
+#: ../wp-ajax-edit-comments.php:207 ../lib/class.core.php:114
+msgid "Edit"
+msgstr "编辑"
+
+#: ../wp-ajax-edit-comments.php:284 ../wp-ajax-edit-comments.php:289
+msgid "Unknown error."
+msgstr "未知错误。"
+
+#: ../lib/class.actions.php:141
+#, php-format
+msgid "A comment has been edited on post %s"
+msgstr "文章 %s 的一条评论已被编辑"
+
+#: ../lib/class.actions.php:142
+#, php-format
+msgid "Author: %s\n"
+msgstr "作者：%s\n"
+
+#: ../lib/class.actions.php:143
+#, php-format
+msgid "Author URL: %s\n"
+msgstr "作者网址：%s\n"
+
+#: ../lib/class.actions.php:144
+#, php-format
+msgid "Author E-mail: %s\n"
+msgstr "作者邮箱：%s\n"
+
+#: ../lib/class.actions.php:145
+msgid "Comment:\n"
+msgstr "评论：\n"
+
+#: ../lib/class.actions.php:146
+msgid "See all comments on this post here:\n"
+msgstr "查看本文的所有评论：\n"
+
+#: ../lib/class.actions.php:148
+#, php-format
+msgid "New Edited Comment On: %s"
+msgstr "新的已被编辑的评论在：%s"
+
+#: ../lib/class.admin.php:9 ../views/admin-panel.php:213
+#: ../views/admin-panel/admin-panel.php:213
+#: ../views/admin-panel/behavior.php:73
+msgid "Behavior"
+msgstr "操作"
+
+#: ../lib/class.admin.php:10 ../views/admin-panel.php:214
+#: ../views/admin-panel/admin-panel.php:214
+#: ../views/admin-panel/appearance.php:136
+msgid "Appearance"
+msgstr "显示"
+
+#: ../lib/class.admin.php:11 ../views/admin-panel.php:215
+#: ../views/admin-panel/admin-panel.php:215
+#: ../views/admin-panel/permissions.php:36
+msgid "Permissions"
+msgstr "权限"
+
+#: ../lib/class.admin.php:12 ../views/admin-panel.php:216
+#: ../views/admin-panel/admin-panel.php:216
+#: ../views/admin-panel/cleanup.php:23
+msgid "Cleanup"
+msgstr "清除"
+
+#: ../lib/class.ajax.php:47
+msgid "Move Successful. "
+msgstr "已成功移动"
+
+#: ../lib/class.ajax.php:181
+msgid "Successfully blacklisted."
+msgstr "已添加到黑名单"
+
+#: ../lib/class.ajax.php:181
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr "根据您的高级标准，评论已被标识为垃圾。"
+
+#: ../lib/class.ajax.php:230
+msgid "Successfully Deleted"
+msgstr "已成功删除"
+
+#: ../lib/class.ajax.php:291
+msgid "Comment deleted."
+msgstr "评论已删除"
+
+#: ../lib/class.ajax.php:309
+msgid "Successfully Marked as Spam"
+msgstr "已标识为垃圾评论"
+
+#: ../lib/class.ajax.php:337
+msgid "Successfully Approved"
+msgstr "已成功批准"
+
+#: ../lib/class.ajax.php:362
+msgid "Successfully Marked for Moderation"
+msgstr "已标识为待审核"
+
+#: ../lib/class.ajax.php:396
+msgid "Successfully De-linked"
+msgstr "已删除网址"
+
+#: ../lib/class.ajax.php:748
+#, php-format
+msgid ""
+"A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The "
+"comment has been moved to the moderation queue."
+msgstr ""
+"有一位评论者请求删除他在这篇文章 #%1$s \"%2$s\" 中的评论。该评论已被移动到待"
+"审核队列。"
+
+#: ../lib/class.ajax.php:749
+msgid "The reason given is: "
+msgstr "理由是："
+
+#: ../lib/class.ajax.php:750
+#, php-format
+msgid "E-mail : %s"
+msgstr "邮箱：%s"
+
+#: ../lib/class.ajax.php:751
+#, php-format
+msgid "URL    : %s"
+msgstr "网址 : %s"
+
+#: ../lib/class.ajax.php:752
+#, php-format
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+
+#: ../lib/class.ajax.php:754
+#, php-format
+msgid "Delete it: %s"
+msgstr "刪除：%s"
+
+#: ../lib/class.ajax.php:755
+#, php-format
+msgid "Approve it: %s"
+msgstr "批准：%s"
+
+#: ../lib/class.ajax.php:756
+#, php-format
+msgid "Spam it: %s"
+msgstr "标识为垃圾：%s"
+
+#: ../lib/class.ajax.php:764
+#, php-format
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr "申请删除评论： \"%2$s\""
+
+#: ../lib/class.ajax.php:865
+msgid "Comment successfully saved"
+msgstr "评论已保存"
+
+#: ../lib/class.core.php:66 ../lib/class.core.php:111
+msgid "Comment Editor"
+msgstr "评论编辑器"
+
+#: ../lib/class.core.php:69
+msgid "Click to Edit"
+msgstr "点此编辑评论"
+
+#: ../lib/class.core.php:76 ../lib/class.core.php:79
+#: ../views/admin-panel.php:283 ../views/request-deletion.php:35
+#: ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Request Deletion"
+msgstr "发送删除申请"
+
+#: ../lib/class.core.php:120 ../lib/class.core.php:123
+msgid "Restore"
+msgstr "还原"
+
+#: ../lib/class.core.php:129 ../lib/class.core.php:132
+msgid "Delete Permanently"
+msgstr "永久删除"
+
+#: ../lib/class.core.php:151
+msgid "Move Comments"
+msgstr "移动评论"
+
+#: ../lib/class.core.php:211
+msgid "Blacklist Comment"
+msgstr "黑名单评论"
+
+#: ../lib/class.core.php:220 ../lib/class.core.php:223
+#: ../views/comment-editor.php:171 ../views/comment-editor.php:178
+msgid "Trash"
+msgstr "垃圾箱"
+
+#: ../lib/class.core.php:244 ../lib/class.dependencies.php:125
+msgid "More Options"
+msgstr "更多选项"
+
+#: ../lib/class.core.php:710
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr "在其他评论发布后，您无法编辑改评论。"
+
+#: ../lib/class.core.php:711
+msgid "The time to edit your comment has elapsed."
+msgstr "已经超过了再次编辑评论的时间。"
+
+#: ../lib/class.core.php:712
+msgid "You do not have permission to edit this comment."
+msgstr "您无权编辑该评论。"
+
+#: ../lib/class.core.php:714
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr "该评论无法再次编辑，因为它已被标识为垃圾。"
+
+#: ../lib/class.core.php:715
+msgid "Comment loading failed."
+msgstr "评论加载失败。"
+
+#: ../lib/class.core.php:716
+msgid "Comment editing has been disabled."
+msgstr "评论编辑功能已被停用。"
+
+#: ../lib/class.core.php:717
+msgid "Could not mark as spam."
+msgstr "无法标识为垃圾评论。"
+
+#: ../lib/class.core.php:718
+msgid "You do not have permission to mark this comment as Spam."
+msgstr "您无权将该评论标识为垃圾。"
+
+#: ../lib/class.core.php:719
+msgid "Could not delete comment."
+msgstr "无法删除评论。"
+
+#: ../lib/class.core.php:720
+msgid "You do not have permission to delete this comment."
+msgstr "您无权删除该评论。"
+
+#: ../lib/class.core.php:721
+msgid "You do not have permission to approve this comment."
+msgstr "您无权批准该评论。"
+
+#: ../lib/class.core.php:722
+msgid "Could not approve comment."
+msgstr "无法批准评论。"
+
+#: ../lib/class.core.php:723
+msgid "Could not mark this comment for moderation."
+msgstr "无法标识该评论为待审核。"
+
+#: ../lib/class.core.php:724
+msgid "You do not have permission to mark this comment for moderation."
+msgstr "您无权将该评论标识为待审核。"
+
+#: ../lib/class.core.php:725
+msgid "Please enter a valid email address."
+msgstr "请输入有效的邮箱地址。"
+
+#: ../lib/class.core.php:726
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "请填写必要的字段（姓名、邮箱）"
+
+#: ../lib/class.core.php:727
+msgid "You cannot have an empty comment."
+msgstr "您不能提交空白评论。"
+
+#: ../lib/class.core.php:728
+msgid "You do not have permission to delink this comment."
+msgstr "您无权删除该评论的网址。"
+
+#: ../lib/class.core.php:729
+msgid "Your comment was marked for moderation"
+msgstr "您的评论已被标识为待审核"
+
+#: ../lib/class.core.php:730
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr "该评论无法编辑，因为它被标识为待审核。"
+
+#: ../lib/class.core.php:731
+msgid "Request failed."
+msgstr "申请失败。"
+
+#: ../lib/class.core.php:732
+msgid "You have not selected anything to blacklist."
+msgstr "您内有选择任何要添加到黑名单的项目。"
+
+#: ../lib/class.core.php:733
+msgid "Upgrade check failed."
+msgstr "升级检查失败。"
+
+#: ../lib/class.core.php:734
+msgid "You are using the latest version."
+msgstr "您正在使用最新版本。"
+
+#: ../lib/class.dependencies.php:106
+msgid "minutes"
+msgstr "分"
+
+#: ../lib/class.dependencies.php:107
+msgid "minute"
+msgstr "分"
+
+#: ../lib/class.dependencies.php:108
+msgid "and"
+msgstr "又"
+
+#: ../lib/class.dependencies.php:109
+msgid "seconds"
+msgstr "秒"
+
+#: ../lib/class.dependencies.php:110
+msgid "second"
+msgstr "秒"
+
+#: ../lib/class.dependencies.php:111
+msgid "Mark for Moderation?"
+msgstr "标识为待审核？"
+
+#: ../lib/class.dependencies.php:112
+msgid "Approve Comment?"
+msgstr "批准评论？"
+
+#: ../lib/class.dependencies.php:113
+msgid "Mark as Spam?"
+msgstr "标识为垃圾评论？"
+
+#: ../lib/class.dependencies.php:114
+msgid "Delete this comment?"
+msgstr "删除该评论？"
+
+#: ../lib/class.dependencies.php:115
+msgid "Anonymous"
+msgstr "匿名"
+
+#: ../lib/class.dependencies.php:116
+msgid "Loading..."
+msgstr "加载中..."
+
+#: ../lib/class.dependencies.php:117
+msgid "Ready"
+msgstr "待命"
+
+#: ../lib/class.dependencies.php:118
+msgid "Sending..."
+msgstr "发送中..."
+
+#: ../lib/class.dependencies.php:119
+msgid "Message Sent"
+msgstr "信息已发送"
+
+#: ../lib/class.dependencies.php:120
+msgid "Comment Loaded Successfully"
+msgstr "评论加载成功"
+
+#: ../lib/class.dependencies.php:121
+msgid "Saving..."
+msgstr "正在保存..."
+
+#: ../lib/class.dependencies.php:122
+msgid "Blacklisting..."
+msgstr "正在加入黑名单..."
+
+#: ../lib/class.dependencies.php:123
+msgid "Comment Successfully Saved"
+msgstr "评论已保存"
+
+#: ../lib/class.dependencies.php:124
+msgid "De-link Successful"
+msgstr "已删除网址"
+
+#: ../lib/class.dependencies.php:126
+msgid "Less Options"
+msgstr "更少选项"
+
+#: ../lib/class.dependencies.php:128
+msgid "Request has been sent successfully"
+msgstr "申请已成功发送"
+
+#: ../lib/class.dependencies.php:129
+msgid "Error sending request"
+msgstr "发送申请时发生错误"
+
+#: ../lib/class.dependencies.php:130
+msgid "Approving..."
+msgstr "正在批准..."
+
+#: ../lib/class.dependencies.php:131
+msgid "De-linking..."
+msgstr "正在删除网址..."
+
+#: ../lib/class.dependencies.php:132
+msgid "Moderating..."
+msgstr "正在审核..."
+
+#: ../lib/class.dependencies.php:133
+msgid "Spamming..."
+msgstr "正在标识为垃圾评论..."
+
+#: ../lib/class.dependencies.php:134
+msgid "Deleting..."
+msgstr "正在删除..."
+
+#: ../lib/class.dependencies.php:135
+msgid "Restoring..."
+msgstr "正在还原..."
+
+#: ../lib/class.dependencies.php:136
+msgid "Comment Restored."
+msgstr "评论已还原。"
+
+#: ../lib/class.dependencies.php:137
+msgid "Undoing..."
+msgstr "正在取消..."
+
+#: ../lib/class.dependencies.php:138
+msgid "Undo Successful"
+msgstr "已成功取消"
+
+#: ../lib/class.dependencies.php:139
+msgid "Comment Deleted Permanently"
+msgstr "评论已永久删除"
+
+#: ../lib/class.dependencies.php:140
+msgid "Input Fields are Required"
+msgstr "输入字段为必填"
+
+#: ../lib/class.dependencies.php:141
+msgid "E-mail Address is Invalid"
+msgstr "无效的邮箱地址"
+
+#: ../lib/class.dependencies.php:145 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "Yes"
+msgstr "是"
+
+#: ../lib/class.dependencies.php:146 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "No"
+msgstr "否"
+
+#: ../lib/class.dependencies.php:147
+msgid "Are you sure?"
+msgstr "您确定吗？"
+
+#: ../lib/class.filters.php:123
+msgid "Settings"
+msgstr "设置"
+
+#: ../lib/class.js.php:32 ../lib/class.js.php:59
+msgid "Comment Box"
+msgstr "评论框"
+
+#: ../lib/class.utility.php:18
+msgid "Undo"
+msgstr "取消"
+
+#: ../views/admin-getting-started.php:65
+#, php-format
+msgid "Getting Started with Ajax Edit Comments v%s"
+msgstr "开始使用 Ajax Edit Comments v%s"
+
+#: ../views/admin-panel-support.php:13
+msgid "Support"
+msgstr "支持"
+
+#: ../views/admin-panel-support.php:18
+msgid "Support Forums"
+msgstr "支持论坛"
+
+#: ../views/admin-panel-support.php:19
+msgid "Documentation"
+msgstr "文件"
+
+#: ../views/admin-panel-support.php:23
+#, php-format
+msgid ""
+"To receive help from PluginBuddy support and the PluginBuddy community, "
+"please consider leaving a support request via our %sSupport Forums%s"
+msgstr "要获取来自开发团队的支持和帮助，请在 %sSupport Forums%s 进行反馈。"
+
+#: ../views/admin-panel-support.php:26
+#, php-format
+msgid ""
+"For in-depth documenation, including feature descriptions and how-to videos, "
+"please visit our %sDocumentation Section%s"
+msgstr ""
+"要获取更详细的说明资料，保护功能简介和视频教程，请访问我们的 %sDocumentation "
+"Section%s"
+
+#: ../views/admin-panel.php:18 ../views/admin-panel/admin-panel.php:18
+#: ../views/admin-panel/cleanup.php:15
+msgid "Security keys deleted"
+msgstr "安全密钥已删除"
+
+#: ../views/admin-panel.php:37 ../views/admin-panel/admin-panel.php:37
+#: ../views/admin-panel/behavior.php:20
+msgid "Comment time must be greater than one minute."
+msgstr "评论时间必须大于1分钟。"
+
+#: ../views/admin-panel.php:199 ../views/admin-panel/admin-panel.php:199
+#: ../views/admin-panel/appearance.php:129
+#: ../views/admin-panel/behavior.php:66
+#: ../views/admin-panel/permissions.php:29
+msgid "Settings successfully updated."
+msgstr "设置已保存。"
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "Your commentators have edited their comments "
+msgstr ""
+"感谢 <a href=\"http://www.wpdaxue.com\" target=\"_blank\">WordPress大学</a> "
+"提供简体中文支持<br /><br />您的评论者已编辑他们的评论 "
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "times"
+msgstr "次"
+
+#: ../views/admin-panel.php:223 ../views/admin-panel/admin-panel.php:223
+#: ../views/admin-panel/behavior.php:76
+msgid "General"
+msgstr "常规"
+
+#: ../views/admin-panel.php:224 ../views/admin-panel.php:260
+#: ../views/admin-panel/admin-panel.php:224
+#: ../views/admin-panel/admin-panel.php:260
+#: ../views/admin-panel/behavior.php:95 ../views/admin-panel/behavior.php:107
+msgid "Advertising Options"
+msgstr "广告选项"
+
+#: ../views/admin-panel.php:225 ../views/admin-panel/admin-panel.php:225
+#: ../views/admin-panel/behavior.php:116
+msgid "Anonymous Users"
+msgstr "匿名用户"
+
+#: ../views/admin-panel.php:226 ../views/admin-panel/admin-panel.php:226
+#: ../views/admin-panel/behavior.php:137
+msgid "Registered Users"
+msgstr "已注册用户"
+
+#: ../views/admin-panel.php:227 ../views/admin-panel/admin-panel.php:227
+#: ../views/admin-panel/behavior.php:160
+msgid "Other Features"
+msgstr "其他选项"
+
+#: ../views/admin-panel.php:236 ../views/admin-panel/admin-panel.php:236
+#: ../views/admin-panel/behavior.php:82
+msgid "Set comment time (minutes):"
+msgstr "设置评论可编辑时间（以分钟为单位）："
+
+#: ../views/admin-panel.php:240 ../views/admin-panel/admin-panel.php:240
+#: ../views/admin-panel/behavior.php:86
+msgid "Spam notification text:"
+msgstr "垃圾评论通知文字："
+
+#: ../views/admin-panel.php:242 ../views/admin-panel/admin-panel.php:242
+#: ../views/admin-panel/behavior.php:88
+msgid ""
+"Please limit to one line if possible since this text will show up when "
+"editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr ""
+"如果可能的话，请限制为一行文字，当评论者在编辑他们的评论时，将显示这段文字"
+"（可用标签：em, a, strong, blockquote）："
+
+#: ../views/admin-panel.php:253 ../views/admin-panel/admin-panel.php:253
+#: ../views/admin-panel/behavior.php:100
+msgid "Advertising Text:"
+msgstr "广告文字："
+
+#: ../views/admin-panel.php:255 ../views/admin-panel/admin-panel.php:255
+#: ../views/admin-panel/behavior.php:102
+msgid ""
+"This text will show when an anonymous commenter sees the editing options.  "
+"WordPress shortcodes may be used here."
+msgstr ""
+"当评论者查看编辑选项时，将显示这些内容。可以在这里使用 WordPress 简码"
+"（shortcodes）。"
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid "Enable comment advertising?"
+msgstr "启用评论广告？"
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid ""
+"Selecting \"Yes\" will show the \"Advertising Text\" above the editing "
+"options for each anonymous comment posted."
+msgstr "选择“是”将在每个匿名评论的编辑选项上方显示“广告文字”。"
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid "Allow editing after additional comments have been posted?"
+msgstr "允许提交其他评论后还可以编辑之前的评论？"
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid ""
+"Selecting \"No\" will prevent users from editing their comments if another "
+"comment has been made on a post."
+msgstr "选择“否”时，将阻止评论者在提交其他评论后再次编辑之前的评论。"
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Allow Users to Edit Their Name?"
+msgstr "允许用户编辑他们的姓名？"
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "选择“否”时，将不允许评论者编辑他们的姓名"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "允许用户编辑他们的邮箱地址？"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid ""
+"Selecting \"No\" will turn off editing of e-mail addresses.  One of the "
+"reasons you may want this on is for users with Avatars."
+msgstr ""
+"选择“否”时，将不允许用户编辑他们的邮箱地址。需要该选项的一个原因是，或许您会"
+"任何该用户可能是 Avatars 的用户。"
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Allow Users to Edit Their URLs?"
+msgstr "允许用户编辑他们的网址？"
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "选择“否”时，将不允许用户编辑他们的网址"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid "Request Deletion Behavior"
+msgstr "申请删除评论"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid ""
+"Determine if you want users to request deletion (comments are sent to "
+"moderation with admin notification) or delete comments (comments are deleted "
+"immediately with no admin notification).  Select Off if you would like to "
+"disable this feature."
+msgstr ""
+"此选项决定让用户如何删除评论。例如：用户删除评论时，需发送删除申请，通知管理"
+"员审核；或者 用户可以直接删除评论，不需要通知管理员。如果您要停用该功能，请设"
+"置为关闭。"
+
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Off"
+msgstr "关闭"
+
+#: ../views/admin-panel.php:294 ../views/admin-panel/admin-panel.php:294
+#: ../views/admin-panel/behavior.php:143
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "允许已注册用户无限期编辑评论？"
+
+#: ../views/admin-panel.php:295 ../views/admin-panel/admin-panel.php:295
+#: ../views/admin-panel/behavior.php:144
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit "
+"comments without a time limit."
+msgstr "选择“是”时，将允许已注册用户无限期编辑他发布在您网站上的评论。"
+
+#: ../views/admin-panel.php:297 ../views/admin-panel/admin-panel.php:297
+#: ../views/admin-panel/behavior.php:146
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "允许已注册用户编辑他们的姓名？"
+
+#: ../views/admin-panel.php:298 ../views/admin-panel/admin-panel.php:298
+#: ../views/admin-panel/behavior.php:147
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"names.  This can prevent issues if a user wishes to impersonate others."
+msgstr ""
+"选择“是”时，将允许已注册用户编辑他们的姓名。这个可以防止冒用姓名发布评论。"
+
+#: ../views/admin-panel.php:300 ../views/admin-panel/admin-panel.php:300
+#: ../views/admin-panel/behavior.php:149
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "允许已注册用户编辑他们的邮箱？"
+
+#: ../views/admin-panel.php:301 ../views/admin-panel/admin-panel.php:301
+#: ../views/admin-panel/behavior.php:150
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"e-mail address."
+msgstr "选择“是”时，将允许用户编辑他们的邮箱地址。"
+
+#: ../views/admin-panel.php:303 ../views/admin-panel/admin-panel.php:303
+#: ../views/admin-panel/behavior.php:152
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "允许已注册用户编辑他们的网址？"
+
+#: ../views/admin-panel.php:304 ../views/admin-panel/admin-panel.php:304
+#: ../views/admin-panel/behavior.php:153
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"URL."
+msgstr "选择“是”时，将允许用户编辑他们的网址。"
+
+#: ../views/admin-panel.php:317 ../views/admin-panel/admin-panel.php:317
+#: ../views/admin-panel/behavior.php:166
+msgid "Edit E-mails"
+msgstr "发送编辑通知"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid "Allow Edit E-mails?"
+msgstr "允许发送编辑通知？"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid ""
+"Selecting \"Yes\" will send you an email each time someone edits their "
+"comment."
+msgstr "选择“是”时，当有人编辑了他们的评论，将发送一封邮件通知您。"
+
+#: ../views/admin-panel.php:324 ../views/admin-panel/admin-panel.php:324
+#: ../views/admin-panel/behavior.php:173
+msgid "Spam Protection"
+msgstr "垃圾评论防护"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Akismet"
+msgstr "Akismet （强大的垃圾评论拦截）"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Defensio"
+msgstr "Defensio （处理网站中的恶意程序）"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "None"
+msgstr "无"
+
+#: ../views/admin-panel.php:330 ../views/admin-panel/admin-panel.php:330
+#: ../views/admin-panel/behavior.php:179
+msgid "Performance"
+msgstr "性能"
+
+#: ../views/admin-panel.php:332 ../views/admin-panel/admin-panel.php:332
+#: ../views/admin-panel/behavior.php:181
+msgid ""
+"Load Scripts in Footer? (Requires WordPress 2.8 or above and theme "
+"compatibility)"
+msgstr ""
+"在 Footer 加载脚本？（此功能只支持 WordPress 2.8 以上的版本，并且需要主题兼"
+"容） "
+
+#: ../views/admin-panel.php:334 ../views/admin-panel/admin-panel.php:334
+#: ../views/admin-panel/behavior.php:183
+msgid "Use Compressed JavaScript Files?"
+msgstr "使用已压缩的 JavaScript 文件？"
+
+#: ../views/admin-panel.php:339 ../views/admin-panel/admin-panel.php:339
+#: ../views/admin-panel/behavior.php:188
+msgid "Character Encoding"
+msgstr "字符编码"
+
+#: ../views/admin-panel.php:341 ../views/admin-panel/admin-panel.php:341
+#: ../views/admin-panel/behavior.php:190
+msgid "Enable mb_convert_encoding?"
+msgstr "启用 mb_convert_encoding？"
+
+#: ../views/admin-panel.php:342 ../views/admin-panel/admin-panel.php:342
+#: ../views/admin-panel/behavior.php:191
+msgid ""
+"Some servers do not have this installed.  If you disable this option, be "
+"sure to test out various characters.  The mb_convert_encoding function is "
+"necessary to convert from UTF-8 to various charsets."
+msgstr ""
+"某些服务器并没有安装这个选项。如果您禁用该选项，请务必尽可能测试各种字符。"
+"mb_convert_encoding 是用来将 UTF-8 字符转换成其他字符的。"
+
+#: ../views/admin-panel.php:347 ../views/admin-panel/admin-panel.php:347
+#: ../views/admin-panel/behavior.php:196
+msgid "Spell Check"
+msgstr "拼写检查"
+
+#: ../views/admin-panel.php:349 ../views/admin-panel/admin-panel.php:349
+#: ../views/admin-panel/behavior.php:198
+msgid "Select After the Deadline Language"
+msgstr "使用 After the Deadline 自动进行拼写检查"
+
+#: ../views/admin-panel.php:362 ../views/admin-panel/admin-panel.php:362
+#: ../views/admin-panel/behavior.php:211
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "禁止在文章中使用 After the Deadline 自动拼写检查功能"
+
+#: ../views/admin-panel.php:364 ../views/admin-panel/admin-panel.php:364
+#: ../views/admin-panel/behavior.php:213
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr "禁止在弹出窗口中使用 After the Deadline 自动拼写检查功能"
+
+#: ../views/admin-panel.php:369 ../views/admin-panel/admin-panel.php:369
+#: ../views/admin-panel/behavior.php:218
+msgid "Expand Options"
+msgstr "展开选项"
+
+#: ../views/admin-panel.php:371 ../views/admin-panel/admin-panel.php:371
+#: ../views/admin-panel/behavior.php:220
+msgid "Disable the Expand Option on Posts?"
+msgstr "禁止在文章中使用展开选项？"
+
+#: ../views/admin-panel.php:373 ../views/admin-panel/admin-panel.php:373
+#: ../views/admin-panel/behavior.php:222
+msgid "Disable the Expand Option on the Popups?"
+msgstr "禁止在弹出窗口中使用展开选项？"
+
+#: ../views/admin-panel.php:378 ../views/admin-panel/admin-panel.php:378
+#: ../views/admin-panel/behavior.php:227
+msgid "Disable Trackbacks"
+msgstr "停用引用通告（Trackbacks）"
+
+#: ../views/admin-panel.php:380 ../views/admin-panel/admin-panel.php:380
+#: ../views/admin-panel/behavior.php:229
+msgid "Disable trackbacks from showing?"
+msgstr "禁止显示引用通告？"
+
+#: ../views/admin-panel.php:381 ../views/admin-panel/admin-panel.php:381
+#: ../views/admin-panel/behavior.php:230
+msgid ""
+"Enabling this option will prevent trackbacks from showing up on your blog.  "
+"Please note that this option will not prevent your site from receiving "
+"trackbacks."
+msgstr ""
+"开启此功能，会让您的网站不显示引用通告。请注意，此选项并不会让您的网站不被其"
+"他网站所引用。"
+
+#: ../views/admin-panel.php:386 ../views/admin-panel/admin-panel.php:386
+#: ../views/admin-panel/behavior.php:235
+msgid "Disable No-follow"
+msgstr "停用 No-follow"
+
+#: ../views/admin-panel.php:388 ../views/admin-panel/admin-panel.php:388
+#: ../views/admin-panel/behavior.php:237
+msgid "Disable no-follow in comment links?"
+msgstr "在评论的网址中关闭 no-follow 功能？"
+
+#: ../views/admin-panel.php:389 ../views/admin-panel/admin-panel.php:389
+#: ../views/admin-panel/behavior.php:238
+msgid ""
+"Enabling this option will remove no-follow from comment and author links."
+msgstr "开启此功能，将会在评论内容和作者的网址链接中移除 no-follow 属性 。"
+
+#: ../views/admin-panel.php:394 ../views/admin-panel/admin-panel.php:394
+#: ../views/admin-panel/behavior.php:243
+msgid "Disable Self Pings"
+msgstr "停用 Self Pings"
+
+#: ../views/admin-panel.php:396 ../views/admin-panel/admin-panel.php:396
+#: ../views/admin-panel/behavior.php:245
+msgid "Disable self-pings to your site?"
+msgstr "在网站中停用 Self-pings 功能？"
+
+#: ../views/admin-panel.php:397 ../views/admin-panel/admin-panel.php:397
+#: ../views/admin-panel/behavior.php:246
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "开启此功能，可以避免您收到引用自己站内文章的引用通告。"
+
+#: ../views/admin-panel.php:402 ../views/admin-panel/admin-panel.php:402
+#: ../views/admin-panel/behavior.php:251
+msgid "De-link Behavior"
+msgstr "删除网址链接"
+
+#: ../views/admin-panel.php:404 ../views/admin-panel/admin-panel.php:404
+#: ../views/admin-panel/behavior.php:253
+msgid "Choose how the de-link function behaves."
+msgstr "选择如何删除网址链接"
+
+#: ../views/admin-panel.php:405 ../views/admin-panel/admin-panel.php:405
+#: ../views/admin-panel/behavior.php:254
+msgid ""
+"You can choose to remove links from the comment content and comment author "
+"URL, or just the comment author URL."
+msgstr "您可以选择移除评论内容和评论者的网址链接，或者仅仅是评论者的网址链接。"
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Content and comment author URL."
+msgstr "内容和评论者的链接"
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Comment author URL."
+msgstr "评论者的网址链接"
+
+#: ../views/admin-panel.php:416 ../views/admin-panel/admin-panel.php:416
+#: ../views/admin-panel/appearance.php:141
+msgid "Display"
+msgstr "显示"
+
+#: ../views/admin-panel.php:417 ../views/admin-panel/admin-panel.php:417
+#: ../views/admin-panel/appearance.php:184
+msgid "Icons"
+msgstr "图标"
+
+#: ../views/admin-panel.php:418 ../views/admin-panel/admin-panel.php:418
+#: ../views/admin-panel/appearance.php:321
+msgid "Colorbox"
+msgstr "Colorbox"
+
+#: ../views/admin-panel.php:425 ../views/admin-panel/admin-panel.php:425
+#: ../views/admin-panel/appearance.php:145
+msgid "Countdown Timer"
+msgstr "倒数计时器"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid "Show a Countdown Timer?"
+msgstr "显示一个倒数计时器？"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid ""
+"Selecting \"No\" will turn off the countdown timer for non-admin "
+"commentators."
+msgstr "选择“否”时，将关闭非管理员评论者上的倒数计时器。"
+
+#: ../views/admin-panel.php:432 ../views/admin-panel/admin-panel.php:432
+#: ../views/admin-panel/appearance.php:152
+msgid "Pages"
+msgstr "页面"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Display on pages?"
+msgstr "是否在页面上显示？"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "选择“否”时，将在页面上关闭该插件的评论编辑功能。"
+
+#: ../views/admin-panel.php:439 ../views/admin-panel/admin-panel.php:439
+#: ../views/admin-panel/appearance.php:159
+msgid "Clearfix"
+msgstr "清除浮动（Clearfix）"
+
+#: ../views/admin-panel.php:441 ../views/admin-panel/admin-panel.php:441
+#: ../views/admin-panel/appearance.php:161
+msgid "Turn Off clearfix:after?"
+msgstr "关闭 clearfix:after?"
+
+#: ../views/admin-panel.php:442 ../views/admin-panel/admin-panel.php:442
+#: ../views/admin-panel/appearance.php:162
+msgid ""
+"The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "使用 Clearfix 可以使该插件最有效地兼容您的主题。"
+
+#: ../views/admin-panel.php:447 ../views/admin-panel/admin-panel.php:447
+#: ../views/admin-panel/appearance.php:167
+msgid "JavaScript Scrolling"
+msgstr "JavaScript 滚动"
+
+#: ../views/admin-panel.php:449 ../views/admin-panel/admin-panel.php:449
+#: ../views/admin-panel/appearance.php:169
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "关闭管理员的 JavaScript 滚动？"
+
+#: ../views/admin-panel.php:450 ../views/admin-panel/admin-panel.php:450
+#: ../views/admin-panel/appearance.php:170
+msgid ""
+"The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr "如果您是管理员，插件将尝试修正文章李的错误间距。"
+
+#: ../views/admin-panel.php:455 ../views/admin-panel/admin-panel.php:455
+#: ../views/admin-panel/appearance.php:175
+msgid "Edit Interface Location"
+msgstr "编辑界面的位置"
+
+#: ../views/admin-panel.php:457 ../views/admin-panel/admin-panel.php:457
+#: ../views/admin-panel/appearance.php:177
+msgid "Comment Edit Interface On Bottom?"
+msgstr "将评论编辑界面置于底部？"
+
+#: ../views/admin-panel.php:470 ../views/admin-panel/admin-panel.php:470
+#: ../views/admin-panel/appearance.php:188
+msgid "Icon Display"
+msgstr "显示图标"
+
+#: ../views/admin-panel.php:472 ../views/admin-panel/admin-panel.php:472
+#: ../views/admin-panel/appearance.php:190
+msgid ""
+"Select an option below to determine how the icons are displayed on your "
+"website."
+msgstr "选择图标的显示方式"
+
+#: ../views/admin-panel.php:474 ../views/admin-panel/admin-panel.php:474
+#: ../views/admin-panel/appearance.php:192
+msgid "Text Only"
+msgstr "只显示文字"
+
+#: ../views/admin-panel.php:475 ../views/admin-panel/admin-panel.php:475
+#: ../views/admin-panel/appearance.php:193
+msgid "Classic"
+msgstr "传统"
+
+#: ../views/admin-panel.php:476 ../views/admin-panel/admin-panel.php:476
+#: ../views/admin-panel/appearance.php:194
+msgid "Dropdown"
+msgstr "下拉"
+
+#: ../views/admin-panel.php:477 ../views/admin-panel/admin-panel.php:477
+#: ../views/admin-panel/appearance.php:195
+msgid "Icons Only"
+msgstr "只显示图标"
+
+#: ../views/admin-panel.php:481 ../views/admin-panel/admin-panel.php:481
+#: ../views/admin-panel/appearance.php:199
+msgid "Icon Set"
+msgstr "图标集"
+
+#: ../views/admin-panel.php:483 ../views/admin-panel/admin-panel.php:483
+#: ../views/admin-panel/appearance.php:201
+msgid "Select an option below to display the icon set on your website."
+msgstr "选择要使用的图标集"
+
+#: ../views/admin-panel.php:506 ../views/admin-panel/admin-panel.php:506
+#: ../views/admin-panel/appearance.php:224
+msgid "Icon Drop Down Menu"
+msgstr "下拉式图标菜单"
+
+#: ../views/admin-panel.php:508 ../views/admin-panel/admin-panel.php:508
+#: ../views/admin-panel/appearance.php:226
+msgid ""
+"Drag and drop between lists to adjust the icon order.  Click on the image to "
+"disable or enable the option."
+msgstr "在列表中拖放调整图标顺序。点击图像，禁用或启用该选项。"
+
+#: ../views/admin-panel.php:566 ../views/admin-panel/admin-panel.php:566
+#: ../views/admin-panel/appearance.php:284
+msgid "Classic and Icons Only Vew"
+msgstr "传统和只显示图标"
+
+#: ../views/admin-panel.php:568 ../views/admin-panel/admin-panel.php:568
+#: ../views/admin-panel/appearance.php:286
+msgid ""
+"Drag and drop to adjust the icon order.  Click on the image to disable or "
+"enable the option."
+msgstr "拖放调整图标顺序。点击图像，禁用或启用该选项。"
+
+#: ../views/admin-panel.php:605 ../views/admin-panel/admin-panel.php:605
+#: ../views/admin-panel/appearance.php:322
+#, php-format
+msgid ""
+"%s is a lightbox script that is used for the various pop-ups within this "
+"plugin."
+msgstr "%s 是一个灯箱脚本，用来实现该插件的各种弹窗操作。"
+
+#: ../views/admin-panel.php:609 ../views/admin-panel/admin-panel.php:609
+#: ../views/admin-panel/appearance.php:326
+msgid "Enable Colorbox on the front-end?"
+msgstr "在前台启用 Colorbox？"
+
+#: ../views/admin-panel.php:611 ../views/admin-panel/admin-panel.php:611
+#: ../views/admin-panel/appearance.php:328
+#, php-format
+msgid ""
+"Disable this option if you would like to use another Colorbox WordPress "
+"plugin such as %s or %s."
+msgstr "如果你希望使用其他灯箱脚本，比如 %s 或 %s，请禁用Colorbox。"
+
+#: ../views/admin-panel.php:616 ../views/admin-panel/admin-panel.php:616
+#: ../views/admin-panel/appearance.php:333
+msgid "Set the Colorbox Width"
+msgstr "设置 Colorbox 宽度"
+
+#: ../views/admin-panel.php:622 ../views/admin-panel/admin-panel.php:622
+#: ../views/admin-panel/appearance.php:339
+msgid "Set the Colorbox Height"
+msgstr "设置 Colorbox 高度"
+
+#: ../views/admin-panel.php:642 ../views/admin-panel/admin-panel.php:642
+#: ../views/admin-panel/permissions.php:48
+msgid "Registered Comment Editing"
+msgstr "已注册用户编辑评论"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "允许已注册用户编辑他们的评论？"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr "选择“否”时，将关闭已注册用户编辑他们的评论的功能。"
+
+#: ../views/admin-panel.php:649 ../views/admin-panel/admin-panel.php:649
+#: ../views/admin-panel/permissions.php:55
+msgid "Anonymous Commenter Editing"
+msgstr "匿名评论者编辑评论"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "允许匿名评论者编辑他们的评论？"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr "选择“否”时，将关闭匿名用户编辑他们的评论的功能。"
+
+#: ../views/admin-panel.php:656 ../views/admin-panel/admin-panel.php:656
+#: ../views/admin-panel/permissions.php:62
+msgid "Admin Users (Admin Panel)"
+msgstr "管理员用户（管理面板）"
+
+#: ../views/admin-panel.php:658 ../views/admin-panel/admin-panel.php:658
+#: ../views/admin-panel/permissions.php:64
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "在管理面板中关闭评论编辑"
+
+#: ../views/admin-panel.php:659 ../views/admin-panel/admin-panel.php:659
+#: ../views/admin-panel/permissions.php:65
+msgid ""
+"Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr "选择“是”时，将在后台评论管理面板中关闭该插件的评论编辑功能"
+
+#: ../views/admin-panel.php:664 ../views/admin-panel/admin-panel.php:664
+#: ../views/admin-panel/permissions.php:70
+msgid "Admin Users (Posts)"
+msgstr "管理员用户（文章）"
+
+#: ../views/admin-panel.php:666 ../views/admin-panel.php:674
+#: ../views/admin-panel/admin-panel.php:666
+#: ../views/admin-panel/admin-panel.php:674
+#: ../views/admin-panel/permissions.php:72
+#: ../views/admin-panel/permissions.php:80
+msgid "Turn On Comment Editing?"
+msgstr "开启评论编辑？"
+
+#: ../views/admin-panel.php:667 ../views/admin-panel/admin-panel.php:667
+#: ../views/admin-panel/permissions.php:73
+msgid ""
+"Selecting \"Yes\" will enable your ability to edit a user's comment.  "
+"Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr ""
+"选择“是”，将允许您编辑用户的评论；选择“否”将取消您编辑文章中的评论的权限。"
+
+#: ../views/admin-panel.php:672 ../views/admin-panel/admin-panel.php:672
+#: ../views/admin-panel/permissions.php:78
+msgid "Editors"
+msgstr "编辑"
+
+#: ../views/admin-panel.php:675 ../views/admin-panel/admin-panel.php:675
+#: ../views/admin-panel/permissions.php:81
+msgid ""
+"Selecting \"Yes\" will allow Editors to see the AEC edit options on a post "
+"or in the admin panel."
+msgstr "选择“是”时，将允许编辑在文章或管理面板中看到 AEC 编辑选项。"
+
+#: ../views/admin-panel.php:688 ../views/admin-panel/admin-panel.php:688
+#: ../views/admin-panel/cleanup.php:29
+msgid "Delete all security keys"
+msgstr "删除所有安全密钥"
+
+#: ../views/admin-panel.php:690 ../views/admin-panel/admin-panel.php:690
+#: ../views/admin-panel/cleanup.php:31
+msgid ""
+"Each time a user leaves a comment, a security key is stored as a custom "
+"key.  Periodically you may want to delete this information.  Please backup "
+"your database first."
+msgstr ""
+"每次用户发布评论后，都会存储一个安全密钥作为自定义密钥。您可能需要定期删除这"
+"些信息。在这之前，请先备份您的数据库。"
+
+#: ../views/admin-panel.php:698 ../views/admin-panel/admin-panel.php:698
+#: ../views/admin-panel/appearance.php:349
+#: ../views/admin-panel/behavior.php:262 ../views/admin-panel/cleanup.php:38
+#: ../views/admin-panel/permissions.php:88
+msgid "Update Settings"
+msgstr "更新设置"
+
+#: ../views/blacklist-comment.php:50 ../views/comment-editor.php:99
+msgid "Main"
+msgstr "主要"
+
+#: ../views/blacklist-comment.php:51 ../views/comment-editor.php:100
+msgid "Advanced"
+msgstr "高级选项"
+
+#: ../views/blacklist-comment.php:55
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "从下面的选项中选择一个添加到您的评论黑名单中。"
+
+#: ../views/blacklist-comment.php:60 ../views/blacklist-comment.php:90
+#: ../views/comment-editor.php:118
+msgid "Name"
+msgstr "姓名"
+
+#: ../views/blacklist-comment.php:67 ../views/blacklist-comment.php:97
+#: ../views/comment-editor.php:130
+msgid "URL"
+msgstr "网址（URL）"
+
+#: ../views/blacklist-comment.php:74 ../views/blacklist-comment.php:104
+msgid "E-mail Address"
+msgstr "邮箱地址"
+
+#: ../views/blacklist-comment.php:78 ../views/blacklist-comment.php:108
+msgid "IP Address"
+msgstr "IP 位置"
+
+#: ../views/blacklist-comment.php:84
+msgid "Spam Matching Comments"
+msgstr "垃圾评论与一般评论的匹配功能（Spam Matching Comments）"
+
+#: ../views/blacklist-comment.php:85
+msgid ""
+" Example: Selecting 'email' and 'name' will spam all comments that match "
+"both the name and e-mail address."
+msgstr ""
+"例如：选择“邮箱”和“姓名”，会把以后的评论中，与“邮箱”和“姓名”相匹配的评论标识"
+"为垃圾评论。"
+
+#: ../views/blacklist-comment.php:85
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr "该功能一旦设置，就无法取消，请谨慎设置。"
+
+#: ../views/blacklist-comment.php:117 ../views/comment-editor.php:188
+#: ../views/email.php:72 ../views/request-deletion.php:56
+msgid "Cancel"
+msgstr "取消"
+
+#: ../views/blacklist-comment.php:119 ../views/comment-editor.php:191
+#: ../views/email.php:74 ../views/move-comment.php:142
+#: ../views/request-deletion.php:58
+msgid "Close"
+msgstr "关闭"
+
+#: ../views/comment-editor.php:47
+#, php-format
+msgid "%1$s%2$s, %3$s @ %4$s : %5$s"
+msgstr "%1$s%2$s, %3$s @ %4$s : %5$s"
+
+#: ../views/comment-editor.php:151
+msgid "M j, Y @ G:i"
+msgstr "M j, Y @ G:i"
+
+#: ../views/comment-editor.php:152
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr "已发送到： <b>%1$s</b>"
+
+#: ../views/comment-editor.php:154
+msgid "Adjust Comment Time"
+msgstr "调整评论时间"
+
+#: ../views/comment-editor.php:156
+msgid "Adjust Comment Status"
+msgstr "调整评论状态"
+
+#: ../views/comment-editor.php:168 ../views/comment-editor.php:175
+msgid "Approved"
+msgstr "批准"
+
+#: ../views/comment-editor.php:169 ../views/comment-editor.php:176
+msgid "Pending"
+msgstr "审核中"
+
+#: ../views/comment-editor.php:187
+msgid "Save"
+msgstr "保存"
+
+#: ../views/comment-popup.php:25
+msgid "Please type out your comment below."
+msgstr "请在下面输入您的评论"
+
+#: ../views/comment-popup.php:28
+msgid "Save and Return"
+msgstr "保存并返回"
+
+#: ../views/comment-popup.php:28
+msgid "Submit Comment"
+msgstr "提交评论"
+
+#: ../views/email.php:51
+msgid "To"
+msgstr "收件人"
+
+#: ../views/email.php:55
+msgid "From"
+msgstr "寄件人"
+
+#: ../views/email.php:59
+msgid "Site Admin"
+msgstr "网站管理"
+
+#: ../views/email.php:59
+msgid "Post Author"
+msgstr "文章作者"
+
+#: ../views/email.php:62
+msgid "Subject"
+msgstr "主题"
+
+#: ../views/email.php:71
+msgid "Send"
+msgstr "发送"
+
+#: ../views/move-comment.php:45
+msgid "Move by Post"
+msgstr "以文章移动"
+
+#: ../views/move-comment.php:46
+msgid "Move by Title"
+msgstr "以文章标题移动"
+
+#: ../views/move-comment.php:47
+msgid "Move by ID"
+msgstr "以ID移动"
+
+#: ../views/move-comment.php:59
+msgid "Previous"
+msgstr "上一个"
+
+#: ../views/move-comment.php:59
+msgid "Next"
+msgstr "下一个"
+
+#: ../views/move-comment.php:70 ../views/move-comment.php:78
+#: ../views/move-comment.php:95 ../views/move-comment.php:103
+msgid "Search"
+msgstr "搜索"
+
+#: ../views/move-comment.php:72 ../views/move-comment.php:76
+msgid "Title"
+msgstr "标题"
+
+#: ../views/move-comment.php:97 ../views/move-comment.php:101
+msgid "Post ID"
+msgstr "文章ID"
+
+#: ../views/move-comment.php:128 ../views/move-comment.php:131
+msgid "Mark as Approved"
+msgstr "标识为已批准"
+
+#: ../views/request-deletion.php:47
+msgid ""
+"Please explain why the comment should be deleted.  After sending the "
+"request, your comment will be marked as moderated and will no longer be "
+"viewable publicly."
+msgstr ""
+"请说明为什么要删除该评论。发送删除申请后，您的评论将被归类到待审核队列，并且"
+"不会公开显示。"
+
+#: ../views/request-deletion.php:55
+msgid "Send Request"
+msgstr "发送申请"
+
+#~ msgid "An upgrade (Version %s) is available.  Please visit your"
+#~ msgstr "已有更新版 (版本 %s). 請到您的"
+
+#~ msgid "member's section"
+#~ msgstr "會員專區"
+
+#~ msgid "There is a new version of WP Ajax Edit Comments available."
+#~ msgstr "已有更新版的 WP Ajax Edit Comments 。"
+
+#~ msgid "Upgrade automatically"
+#~ msgstr "自動更新"
+
+#~ msgid ""
+#~ "Oops!! Something went wrong.<br/>Please try again or <a href='http://www."
+#~ "ajaxeditcomments.com/contact/'>contact us</a>."
+#~ msgstr ""
+#~ "糟糕!! 某些地方出了些問題。<br/>請重試一次，或 <a href='http://www."
+#~ "ajaxeditcomments.com/contact/'>與我們聯絡</a>。"
+
+#~ msgid "View version %s Details"
+#~ msgstr "查看 %s  版本詳情"
+
+#~ msgid "Check for upgrades"
+#~ msgstr "檢查更新"
+
+#~ msgid ""
+#~ "Get your own comment editor for your WordPress website.  Try [url]Ajax "
+#~ "Edit Comments[/url] today!"
+#~ msgstr ""
+#~ "您也想在WordPress 部落格裡，方便快速的的管理回應嗎？ 請今天就試用 [url]"
+#~ "Ajax Edit Comments[/url] !"
+
+#~ msgid "Checking..."
+#~ msgstr "檢查中..."
+
+#~ msgid "Check for Upgrades"
+#~ msgstr "檢查更新"
+
+#~ msgid "show"
+#~ msgstr "顯示"
+
+#~ msgid "hide"
+#~ msgstr "隱藏"
+
+#~ msgid "Support Request Sent."
+#~ msgstr "支援申請已寄出。"
+
+#~ msgid "Support Request"
+#~ msgstr "申請支援"
+
+#~ msgid "Your Name"
+#~ msgstr "您的姓名"
+
+#~ msgid "Email"
+#~ msgstr "您的電子信箱"
+
+#~ msgid "Description of Issue"
+#~ msgstr "簡述問題"
+
+#~ msgid ""
+#~ "Please state in detail what problems you are experiencing.  Details we "
+#~ "need to know are:"
+#~ msgstr "請詳述您所遇到的問題。我們需要知道的詳情是："
+
+#~ msgid "The problem"
+#~ msgstr "問題"
+
+#~ msgid "Steps to duplicate the problem"
+#~ msgstr "產生此問題的步驟"
+
+#~ msgid ""
+#~ "Whether you are experiencing this problem on the front-end, the admin-"
+#~ "panel, or both"
+#~ msgstr "這個問題是在前臺、管理介面發生？還是兩者皆有？"
+
+#~ msgid "What browsers you are using to duplicate the problem"
+#~ msgstr "問題發生時，您是使用何種瀏覽器？"
+
+#~ msgid "Information Collection"
+#~ msgstr "資料收集"
+
+#~ msgid "By clicking Submit, you agree to send us the following information"
+#~ msgstr "在您按下傳送的同時，您同意把以下的資料寄給我們"
+
+#~ msgid "Submit Support Request"
+#~ msgstr "傳送支援申請"
+
+#~ msgid "Comment time must be a numerical value"
+#~ msgstr "可修改的回覆時間必需為「數值」"
+
+#~ msgid "Authentication Key could not be validated."
+#~ msgstr "無法驗證授權碼"
+
+#~ msgid "Please try again later."
+#~ msgstr "請稍後再重試一次。"
+
+#~ msgid "Invalid Authentication Key"
+#~ msgstr "無效的授權驗證碼"
+
+#~ msgid "Number of Sites Exceeded"
+#~ msgstr "可安裝此外掛的部落格數量，上限已經超過"
+
+#~ msgid "Authentication Key is valid"
+#~ msgstr "有效的授權驗證碼"
+
+#~ msgid "Site could not be removed."
+#~ msgstr "網站不能被移除。"
+
+#~ msgid "Site removed."
+#~ msgstr "網站已移除。"
+
+#~ msgid "Affiliate ID could not be validated.  Please try again later."
+#~ msgstr "夥伴行銷編號 (Affiliate ID) "
+
+#~ msgid "Invalid Affiliate ID"
+#~ msgstr "無效的夥伴行銷編號 (Affiliate ID)"
+
+#~ msgid "Global Options"
+#~ msgstr "整體選項"
+
+#~ msgid "Individual Options"
+#~ msgstr "個別選項"
+
+#~ msgid "Affiliate Options"
+#~ msgstr "夥伴行銷選項"
+
+#~ msgid "Styles"
+#~ msgstr "樣式"
+
+#~ msgid "Other options"
+#~ msgstr "其他選項"
+
+#~ msgid "Authentication Key:"
+#~ msgstr "授權驗證碼(Authentication Key)："
+
+#~ msgid "Enter Your Authentication Key"
+#~ msgstr "輸入您的授權驗證碼："
+
+#~ msgid ""
+#~ "The Authentication Key enables automatic upgrades within the WordPress "
+#~ "admin panel.  An Authentication Key is given to subscribers of the <a "
+#~ "href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support "
+#~ "Forums</a>."
+#~ msgstr ""
+#~ "授權驗證碼(Authentication Key) 可以讓您在WordPress 的後台管理頁面中，開啟"
+#~ "自動更新本外掛的功能。<a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments 技術支援論壇</a>的付費會員，皆會被授予一個 授權驗證碼。"
+
+#~ msgid "Remove Site?"
+#~ msgstr "移除網站？"
+
+#~ msgid ""
+#~ "Selecting \"Yes\" will remove the current site and allow you to use the "
+#~ "Authentication Key on another site."
+#~ msgstr ""
+#~ "選擇 \"是\" 將會移除目前這個網站，並允許您在其他網站使用這組授權驗證碼。"
+
+#~ msgid "Affiliate ID:"
+#~ msgstr "夥伴行銷編號 (Affiliate ID)："
+
+#~ msgid ""
+#~ "The Affiliate ID allows you to make money from the Ajax Edit Comments "
+#~ "plugin through referrals.  An Affiliate ID is given to subscribers of the "
+#~ "<a href=\"http://www.ajaxeditcomments.com\">Ajax Edit Comments Support "
+#~ "Forums</a>."
+#~ msgstr ""
+#~ "夥伴行銷編號 (Affiliate ID) 可以讓您透過銷售 Ajax Edit Comments 外掛，來賺"
+#~ "取介紹費。您只需成為 <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments 技術支援論壇</a> 的付費會員，即可得到一個夥伴行銷編號。"
+
+#~ msgid "Affiliate Text:"
+#~ msgstr "夥伴行銷文字："
+
+#~ msgid "Display for anonymous commenters?"
+#~ msgstr "是否要顯示給未註冊的用戶?"
+
+#~ msgid "Use RTL StyleSheet?"
+#~ msgstr "是否使用 RTL StyleSheet?"
+
+#~ msgid "text"
+#~ msgstr "文字"
+
+#~ msgid "Display Options"
+#~ msgstr "顯示選項"
+
+#~ msgid "Load wp-load.php Directly?"
+#~ msgstr "直接加載 wp-load.php ？"
+
+#~ msgid ""
+#~ "Loading wp-load.php directly prevents most plugin conflicts.  It requires "
+#~ "that the wp-content folder be in the default location."
+#~ msgstr ""
+#~ "直接加載 wp-load.php 可避免大多數外掛的衝突。wp-content 的資料夾必須要在預"
+#~ "設的位置裡。"
+
+#~ msgid "After the Deadline"
+#~ msgstr "After the Deadline 自動拼字文法校正功能"
+
+#~ msgid "Admin Panel Editing"
+#~ msgstr "管理者編輯面板"
+
+#~ msgid "Post Editing"
+#~ msgstr "文章編輯"
+
+#~ msgid "Comment Approved. "
+#~ msgstr "留言審核通過。"
+
+#~ msgid "<b>%1$s</b> :on Submitted"
+#~ msgstr "<b>%1$s</b> ：已傳送"
+
+#~ msgid ""
+#~ "By subscribing to the <a href=\"http://www.ajaxeditcomments.com\">Ajax "
+#~ "Edit Comments Forums</a>, you will get access to automatic upgrades and "
+#~ "support."
+#~ msgstr ""
+#~ "成為 <a href=\"http笨//www.ajaxeditcomments.com\">Ajax Edit Comments 論壇"
+#~ "的付費會員</a>，您將可以使用本外掛自動更新的功能，及得到我們的技術支援。."
+
+#~ msgid "Allow Users to Request Deletion of Comments?"
+#~ msgstr "是否允許所有人編輯其發表的回應?"
+
+#~ msgid "Selecting \"No\" will turn off the deletion option."
+#~ msgstr "選擇 \"否\"時，將會關閉刪除選項的功能。"
+
+#~ msgid "Post/Admin CSS URL"
+#~ msgstr "文章/管理者 CSS URL"
+
+#~ msgid "Leaving a style empty will revert back to the default plugin styles."
+#~ msgstr "如樣式欄位空白，則將會預設為原始的外掛樣式。"
+
+#~ msgid "The URL should be relative to: "
+#~ msgstr "URL 應該相對於： "
+
+#~ msgid "Editor CSS URL"
+#~ msgstr "編輯 CSS URL"
+
+#~ msgid ""
+#~ "Selecting \"No\" will turn off comment editing for everyone except admin "
+#~ "types who have post and page editing permissions."
+#~ msgstr ""
+#~ "選擇 \"否\"時， 將會關閉所有人編輯回應的功能，除了具有發表文章及頁面編輯權"
+#~ "限的管理員。"
+
+#~ msgid "Ajax Edit Comments"
+#~ msgstr "Ajax 編輯回應"
+
+#~ msgid "Global Options - These Options Affect Everyone"
+#~ msgstr "全域設定 - 這些選項將會影響到所有人"
+
+#~ msgid "The following affects the editing interface."
+#~ msgstr "下列選項將會影響編輯介面。"
+
+#~ msgid "Turn Off More Options?"
+#~ msgstr "關閉其它選項?"
+
+#~ msgid "Individual Options - These Options Only Affect You"
+#~ msgstr "個人選項 - 這些選項將只會影響到您本身"
+
+#~ msgid "Show Advanced Options in Editor?"
+#~ msgstr "在編輯器中選擇進階選項?"
+
+#~ msgid "Selecting \"Yes\" will show advanced options in the editor window"
+#~ msgstr "選擇 \"是\"時，將會在編輯器中顯示進階選項。"
+
+#~ msgid "Ajax Edit Comments Cleanup"
+#~ msgstr "Ajax Edit Comments 清除編輯回應"
+
+#~ msgid "Your readers have edited their comments "
+#~ msgstr "您的讀者已編輯了他的回應"
+
+#~ msgid ""
+#~ " times.\n"
+#~ "\n"
+#~ msgstr ""
+#~ " 次。\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "The Ajax Edit Comments plugin has saved you and your readers a ton of "
+#~ "time. Please consider a small donation for our hard work and time spent "
+#~ "on the plugin.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Ajax Edit Comments 外掛對您和您的讀者來說，是個非常省時又便利的好工具。請"
+#~ "您考慮對辛勞的本外掛開發團隊，提供小額的捐助。\n"
+#~ "\n"
+
+#~ msgid "Donate: %s"
+#~ msgstr "贊助: %s"
+
+#~ msgid ""
+#~ "If you do not wish to receive these e-mails anymore, please unsubscribe "
+#~ "in the WordPress settings page for Ajax Edit Comments.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "如果您從今以後不想再收到這些電子郵件，請在Wordpress管理首頁的 Ajax Edit "
+#~ "Comments 設定區中，把訂閱取消。\n"
+#~ "\n"
+
+#~ msgid "Please"
+#~ msgstr "請"
+
+#~ msgid "Donate"
+#~ msgstr "贊助"
+
+#~ msgid "Unsubscribe"
+#~ msgstr "取消訂閱"
+
+#~ msgid "Unsubscribe from periodic reminder e-mails?"
+#~ msgstr "是否取消定期的提醒電子郵件通知?"
+
+#~ msgid "Not Spam"
+#~ msgstr "非垃圾留言"
+
+#~ msgid ""
+#~ "Tweaking the style options is recommended for advanced users only.  If "
+#~ "you choose to disable styles, you will have to provide your own styles in "
+#~ "your default WordPress stylesheet."
+#~ msgstr ""
+#~ "調整樣式選項只建議進階用戶使用。如果您選擇停用樣式，您必需在您所預設的 "
+#~ "WordPress 樣式表單裡自定樣式。"
+
+#~ msgid "Turn Off Icons?"
+#~ msgstr "關閉圖示?"
+
+#~ msgid "Selecting \"Yes\" will prevent the plugin icons from showing."
+#~ msgstr "選擇 \"是\"時，將防止顯示外掛圖示。"
+
+#~ msgid "Gravatars"
+#~ msgstr "Gravatars 頭像功能"
+
+#~ msgid "Turning off Gravatars may solve some plugin compatibility issues."
+#~ msgstr "關閉 Gravatars 頭像功能可能會解決一些外掛程式的相容性問題。"
+
+#~ msgid "Turn Off Gravatars?"
+#~ msgstr "關閉 Gravatars頭像功能?"
+
+#~ msgid "Please leave as is if you wish to retain proper plugin credit."
+#~ msgstr "如果您希望保留適當的外掛著作權，請保留下列欄位。"
+
+#~ msgid "Editor Title"
+#~ msgstr "編輯名稱"
+
+#, fuzzy
+#~ msgid "Deleted"
+#~ msgstr "刪除"

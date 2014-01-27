@@ -7,7 +7,7 @@
             var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
 
 
-            function start_lvl(&$output, $depth, $args) 
+            function start_lvl(&$output, $depth = 0, $args = array() )
                 {
                     extract($args, EXTR_SKIP);
                     
@@ -16,7 +16,7 @@
                 }
 
 
-            function end_lvl(&$output, $depth, $args) 
+            function end_lvl(&$output, $depth = 0, $args = array())
                 {
                     extract($args, EXTR_SKIP);
                         
@@ -25,7 +25,7 @@
                 }
 
 
-            function start_el(&$output, $term, $depth, $args) 
+            function start_el(&$output, $term, $depth = 0, $args = array(), $current_object_id = 0) 
                 {
                     if ( $depth )
                         $indent = str_repeat("\t", $depth);
@@ -38,7 +38,7 @@
                 }
 
 
-            function end_el(&$output, $post_type, $depth) 
+            function end_el(&$output, $object, $depth = 0, $args = array()) 
                 {
                     $output .= "</li>\n";
                 }

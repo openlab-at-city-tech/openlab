@@ -25,7 +25,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		$this->template_file     = 'groupblog/blog';
 	}
 
-	function create_screen() {
+	function create_screen( $group_id = null ) {
 		global $bp, $groupblog_create_screen;
 
 		if ( !bp_is_group_creation_step( $this->slug ) )
@@ -45,14 +45,14 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		echo '<input type="hidden" name="groupblog-create-save" value="groupblog-create-save" />';
 	}
 
-	function create_screen_save() {
+	function create_screen_save( $group_id = null ) {
 		if ( isset( $_POST['save'] ) ) {
 			check_admin_referer( 'groups_create_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
 
-	function edit_screen() {
+	function edit_screen( $group_id = null ) {
 		global $bp;
 
 		if ( !bp_is_group_admin_screen( $this->slug ) )
@@ -67,7 +67,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		do_action( 'bp_groupblog_edit_screen_markup' );
 	}
 
-	function edit_screen_save() {
+	function edit_screen_save( $group_id = null ) {
 		if ( isset( $_POST['save'] ) ) {
 			check_admin_referer( 'groups_edit_save_' . $this->slug );
 			groupblog_edit_settings();

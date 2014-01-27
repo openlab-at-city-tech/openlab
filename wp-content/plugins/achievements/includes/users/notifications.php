@@ -40,35 +40,6 @@ function dpa_user_has_notifications() {
 }
 
 /**
- * Print any notifications for the current user to the page footer.
- * 
- * @since Achievements (3.0)
- */
-function dpa_print_notifications() {
-	// If user's not active or is inside the WordPress Admin, bail out.
-	if ( ! dpa_is_user_active() || is_admin() || is_404() || ! dpa_user_has_notifications() )
-		return;
-
-	// Get current notifications
-	$achievements  = array();
-	$notifications = dpa_get_user_notifications();
-
-	// If we're viewing an achievement, clear the notification
-	if ( ! empty( $notifications ) && dpa_is_single_achievement() && isset( $notifications[get_the_ID()] ) ) {
-		unset( $notifications[get_the_ID()] );
-
-		// Save the user's notifications
-		dpa_update_user_notifications( $notifications );
-	}
-
-	if ( empty( $notifications ) )
-		return;
-
-	// Display notifications
-	echo achievements()->shortcodes->display_feedback_achievement_unlocked();
-}
-
-/**
  * Add a new notification for the specified user
  *
  * @param int $user_id int Optional. The ID for the user.

@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return string
  * @since Achievements (3.0)
  */
-function dpa_get_template_part( $slug, $name = null ) {
+function dpa_get_template_part( $slug, $name = '' ) {
 	do_action( 'get_template_part_' . $slug, $slug, $name );
 
 	// Setup possible parts
 	$templates = array();
-	if ( isset( $name ) )
+	if ( ! empty( $name ) )
 		$templates[] = $slug . '-' . $name . '.php';
 
 	$templates[] = $slug . '.php';
@@ -90,10 +90,30 @@ function dpa_locate_template( $template_names, $load = false, $require_once = tr
 		}
 	}
 
-	if ( ( true == $load ) && ! empty( $located ) )
+	if ( ( true === $load ) && ! empty( $located ) )
 		load_template( $located, $require_once );
 
 	return $located;
+}
+
+/**
+ * Load a template part into an output buffer, and return it.
+ *
+ * @param string $slug Template part to load.
+ * @param string $name Optional.
+ * @param bool $echo Optional. Echo (default) or return the output buffer contents.
+ * @return string|void If $echo is true, a value will not be returned.
+ * @since Achievements (3.4)
+ */
+function dpa_buffer_template_part( $slug, $name = '', $echo = true ) {
+	ob_start();
+	dpa_get_template_part( $slug, $name );
+	$output = ob_get_clean();
+
+	if ( $echo )
+		echo $output;
+	else
+		return $output;
 }
 
 /**
@@ -172,4 +192,31 @@ function dpa_add_template_locations( $templates = array() ) {
  * @since Achievements (3.0)
  */
 function dpa_parse_query( $posts_query ) {
+
+	// Bail if not the main loop, if filters are suppressed, or if in WP admin.
+	if ( ! $posts_query->is_main_query() || true === $posts_query->get( 'suppress_filters' ) || is_admin() )
+		return;
+
+	// Set the per-page pagination value the same as the dpa_has_achievements() template loop's setting.
+	if ( dpa_is_achievement_archive() )
+		$posts_query->set( 'posts_per_page', dpa_get_achievements_per_page() );
+}
+
+/**
+ * Make sure WordPress supports post thumbnails for the achievements post type
+ *
+ * @link https://core.trac.wordpress.org/ticket/21912
+ * @since Achievements (3.4)
+ */
+function dpa_add_post_thumbnail_support() {
+	$old_support = get_theme_support( 'post-thumbnails' );
+
+	// If the theme is already supporting post-thumbnails for all post types, don't change anything.
+	if ( $old_support === true )
+		return;
+
+	if ( ! is_array( $old_support ) )
+		$old_support = array( $old_support );
+
+	add_theme_support( 'post-thumbnails', array_merge( $old_support, (array) dpa_get_achievement_post_type() ) );
 }

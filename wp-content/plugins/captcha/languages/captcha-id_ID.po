@@ -1,0 +1,455 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Captcha\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-22 13:53+0300\n"
+"PO-Revision-Date: 2013-11-22 13:53+0300\n"
+"Last-Translator: \n"
+"Language-Team: Nasrulhaq Muiz <nasroel@al-badar.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"Language: id_ID\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# @ captcha
+#: captcha.php:32
+#: captcha.php:255
+msgid "Captcha Settings"
+msgstr "Pengaturan Captcha"
+
+# @ captcha
+#: captcha.php:32
+msgid "Captcha"
+msgstr "Captcha"
+
+#: captcha.php:49
+msgid "requires"
+msgstr ""
+
+#: captcha.php:49
+msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
+msgstr ""
+
+#: captcha.php:49
+msgid "Back to the WordPress"
+msgstr ""
+
+#: captcha.php:49
+msgid "Plugins page"
+msgstr ""
+
+# @ captcha
+#: captcha.php:57
+msgid "Login form"
+msgstr "Form login"
+
+# @ captcha
+#: captcha.php:58
+#: captcha.php:291
+msgid "Registration form"
+msgstr "Form Pendaftaran"
+
+# @ captcha
+#: captcha.php:58
+msgid "Register form"
+msgstr "Form Pendaftar"
+
+# @ captcha
+#: captcha.php:59
+msgid "Reset Password form"
+msgstr "Setel ulang Kata kunci "
+
+# @ captcha
+#: captcha.php:59
+msgid "Lost password form"
+msgstr "Form katakunci hilang"
+
+# @ captcha
+#: captcha.php:60
+#: captcha.php:292
+msgid "Comments form"
+msgstr "Form Komentar"
+
+# @ captcha
+#: captcha.php:61
+msgid "Hide CAPTCHA for registered users"
+msgstr "Sembunyikan CAPTCHA pada pengguna terdaftar"
+
+# @ captcha
+#: captcha.php:66
+msgid "Plus (&#43;)"
+msgstr "Tambahan (&#43;)"
+
+# @ captcha
+#: captcha.php:66
+msgid "Plus"
+msgstr "Tambahan"
+
+# @ captcha
+#: captcha.php:67
+msgid "Minus (&minus;)"
+msgstr "Kurang (&kurang;)"
+
+# @ captcha
+#: captcha.php:67
+msgid "Minus"
+msgstr "Kurang"
+
+# @ captcha
+#: captcha.php:68
+msgid "Multiplication (&times;)"
+msgstr "Melipatgandakan (&kali;)"
+
+# @ captcha
+#: captcha.php:68
+msgid "Multiply"
+msgstr "Melipatgandakan"
+
+# @ captcha
+#: captcha.php:73
+msgid "Numbers"
+msgstr "Angka"
+
+# @ captcha
+#: captcha.php:74
+msgid "Words"
+msgstr "Kata"
+
+# @ bestwebsoft
+# @ captcha
+#: captcha.php:188
+#: captcha.php:200
+msgid "Settings"
+msgstr "Pengaturan"
+
+# @ captcha
+#: captcha.php:201
+msgid "FAQ"
+msgstr "FAQ"
+
+# @ captcha
+#: captcha.php:202
+msgid "Support"
+msgstr "Dukungan"
+
+# @ captcha
+#: captcha.php:244
+msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+msgstr "Silahkan pilih salah satu item dalam Aritmatika blok dan Kompleksitas untuk CAPTCHA"
+
+# @ captcha
+#: captcha.php:248
+msgid "Settings saved."
+msgstr "Pengaturan disimpan"
+
+# @ captcha
+#: captcha.php:261
+#: captcha.php:288
+msgid "Enable CAPTCHA for:"
+msgstr "Aktifkan CAPTCHA untuk:"
+
+# @ captcha
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "Contact form"
+msgstr "Form kontak"
+
+# @ captcha
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "powered by"
+msgstr "didukung oleh"
+
+# @ captcha
+#: captcha.php:275
+msgid "Activate contact form"
+msgstr "Aktifkan form kontak"
+
+# @ captcha
+#: captcha.php:278
+msgid "Download contact form"
+msgstr "Unduh form kontak"
+
+# @ captcha
+#: captcha.php:280
+msgid "If you would like to customize this plugin for a custom form, please see"
+msgstr "Jika anda ingin kostumisasi plugin ini melalui form kostumisasi, harap lihat"
+
+# @ captcha
+#: captcha.php:293
+msgid "\"Create a Group\" form"
+msgstr "Form \"Buat Grup\""
+
+# @ captcha
+#: captcha.php:299
+msgid "Enable CAPTCHA:"
+msgstr "Aktifkan CAPTCHA:"
+
+# @ captcha
+#: captcha.php:307
+msgid "This functionality is available in the Pro version of the plugin. For more details, please follow the link"
+msgstr "Fungsionalitas ini tersedia untuk plugin versi Pro. Lebih detail, ikuti link berikut"
+
+# @ captcha
+#: captcha.php:314
+msgid "Title for CAPTCHA in the form"
+msgstr "Titel CAPTCHA pada form"
+
+#: captcha.php:318
+msgid "Required symbol"
+msgstr ""
+
+# @ captcha
+#: captcha.php:324
+msgid "Arithmetic actions for CAPTCHA"
+msgstr "Tindakan Aritmatika untuk CAPTCHA"
+
+# @ captcha
+#: captcha.php:338
+msgid "CAPTCHA complexity level"
+msgstr "Level kompleksitas  CAPTCHA"
+
+# @ default
+#: captcha.php:354
+msgid "Save Changes"
+msgstr "Simpan Perubahan"
+
+# @ captcha
+#: captcha.php:400
+#: captcha.php:407
+#: captcha.php:584
+#: captcha.php:592
+#: captcha.php:606
+#: captcha.php:614
+msgid "ERROR"
+msgstr "SALAH"
+
+# @ captcha
+#: captcha.php:400
+#: captcha.php:426
+#: captcha.php:547
+#: captcha.php:584
+#: captcha.php:606
+#: captcha.php:634
+msgid "Please fill the form."
+msgstr "Harap isi form"
+
+# @ captcha
+#: captcha.php:407
+#: captcha.php:437
+#: captcha.php:592
+#: captcha.php:614
+msgid "Please enter a valid CAPTCHA value."
+msgstr "Harap memasukkan nilai CAPTCHA yang benar"
+
+# @ captcha
+#: captcha.php:553
+#: captcha.php:642
+msgid "Error: You have entered an incorrect CAPTCHA value. Click the BACK button on your browser, and try again."
+msgstr "Salah: Anda memasukkan nilai CAPTCHA yang salah. Klik tombol Back di browser anda, dan coba lagi."
+
+# @ captcha
+#: captcha.php:660
+#: captcha.php:958
+msgid "zero"
+msgstr "nol"
+
+# @ captcha
+#: captcha.php:661
+#: captcha.php:959
+#: captcha.php:1174
+msgid "one"
+msgstr "satu"
+
+# @ captcha
+#: captcha.php:662
+#: captcha.php:960
+msgid "two"
+msgstr "dua"
+
+# @ captcha
+#: captcha.php:663
+#: captcha.php:961
+msgid "three"
+msgstr "tiga"
+
+# @ captcha
+#: captcha.php:664
+#: captcha.php:962
+msgid "four"
+msgstr "empat"
+
+# @ captcha
+#: captcha.php:665
+#: captcha.php:963
+msgid "five"
+msgstr "lima"
+
+# @ captcha
+#: captcha.php:666
+#: captcha.php:964
+#: captcha.php:1174
+msgid "six"
+msgstr "enam"
+
+# @ captcha
+#: captcha.php:667
+#: captcha.php:965
+#: captcha.php:1162
+#: captcha.php:1168
+msgid "seven"
+msgstr "tujuh"
+
+# @ captcha
+#: captcha.php:668
+#: captcha.php:966
+#: captcha.php:1165
+msgid "eight"
+msgstr "delapan"
+
+# @ captcha
+#: captcha.php:669
+#: captcha.php:967
+msgid "nine"
+msgstr "sembilan"
+
+# @ captcha
+#: captcha.php:672
+#: captcha.php:970
+msgid "eleven"
+msgstr "sebelas"
+
+# @ captcha
+#: captcha.php:673
+#: captcha.php:971
+msgid "twelve"
+msgstr "dua belas"
+
+# @ captcha
+#: captcha.php:674
+#: captcha.php:972
+msgid "thirteen"
+msgstr "tiga belas"
+
+# @ captcha
+#: captcha.php:675
+#: captcha.php:973
+msgid "fourteen"
+msgstr "empat belas"
+
+# @ captcha
+#: captcha.php:676
+#: captcha.php:974
+msgid "fifteen"
+msgstr "lima belas"
+
+# @ captcha
+#: captcha.php:677
+#: captcha.php:975
+msgid "sixteen"
+msgstr "enam belas"
+
+# @ captcha
+#: captcha.php:678
+#: captcha.php:976
+msgid "seventeen"
+msgstr "tujuh belas"
+
+# @ captcha
+#: captcha.php:679
+#: captcha.php:977
+msgid "eighteen"
+msgstr "delapan belas"
+
+# @ captcha
+#: captcha.php:680
+#: captcha.php:978
+msgid "nineteen"
+msgstr "sembilan belas"
+
+# @ captcha
+#: captcha.php:683
+#: captcha.php:981
+msgid "ten"
+msgstr "sepuluh"
+
+# @ captcha
+#: captcha.php:684
+#: captcha.php:982
+msgid "twenty"
+msgstr "dua puluh"
+
+# @ captcha
+#: captcha.php:685
+#: captcha.php:983
+msgid "thirty"
+msgstr "tiga puluh"
+
+# @ captcha
+#: captcha.php:686
+#: captcha.php:984
+msgid "forty"
+msgstr "empat puluh"
+
+# @ captcha
+#: captcha.php:687
+#: captcha.php:985
+msgid "fifty"
+msgstr "lima puluh"
+
+# @ captcha
+#: captcha.php:688
+#: captcha.php:986
+msgid "sixty"
+msgstr "enam puluh"
+
+# @ captcha
+#: captcha.php:689
+#: captcha.php:987
+msgid "seventy"
+msgstr "tujuh puluh"
+
+# @ captcha
+#: captcha.php:690
+#: captcha.php:988
+msgid "eighty"
+msgstr "delapan puluh"
+
+# @ captcha
+#: captcha.php:691
+#: captcha.php:989
+msgid "ninety"
+msgstr "sembilan puluh"
+
+# @ captcha
+#: captcha.php:778
+#: captcha.php:1076
+msgid "and"
+msgstr "dan"
+
+# @ captcha
+#: captcha.php:853
+msgid "Encryption password is not set"
+msgstr "Enkripsi password belum diatur"
+
+# @ captcha
+#: captcha.php:873
+msgid "Decryption password is not set"
+msgstr "Dekripsi password belum diatur"
+
+#: captcha.php:1235
+msgid "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</strong> version"
+msgstr ""
+
+#: captcha.php:1236
+msgid "Extend standard plugin functionality with new great options"
+msgstr ""
+

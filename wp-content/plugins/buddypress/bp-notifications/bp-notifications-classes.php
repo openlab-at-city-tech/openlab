@@ -553,7 +553,7 @@ class BP_Notifications_Notification {
 			'user_id'           => false,
 			'item_id'           => false,
 			'secondary_item_id' => false,
-			'component_name'    => false,
+			'component_name'    => bp_notifications_get_registered_components(),
 			'component_action'  => false,
 			'is_new'            => true,
 			'search_terms'      => '',
@@ -611,6 +611,10 @@ class BP_Notifications_Notification {
 	 */
 	public static function get_total_count( $args ) {
 		global $wpdb;
+
+		$args = wp_parse_args( $args, array(
+			'component_name' => bp_notifications_get_registered_components(),
+		) );
 
 		$bp         = buddypress();
 		$select_sql = "SELECT COUNT(*)";

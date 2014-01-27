@@ -19,27 +19,27 @@ class DPA_Admin {
 	// Paths
 
 	/**
-	 * Path to the Achievements admin directory
+	 * @var string Path to the Achievements admin directory
 	 */
 	public $admin_dir = '';
 
 	/**
-	 * URL to the Achievements admin directory
+	 * @var string URL to the Achievements admin directory
 	 */
 	public $admin_url = '';
 
 	/**
-	 * URL to the Achievements admin css directory
+	 * @var string URL to the Achievements admin css directory
 	 */
 	public $css_url = '';
 
 	/**
-	 * URL to the Achievements admin image directory
+	 * @var string URL to the Achievements admin image directory
 	 */
 	public $images_url = '';
 
 	/**
-	 * URL to the Achievements admin javascript directory
+	 * @var string URL to the Achievements admin javascript directory
 	 */
 	public $javascript_url = '';
 
@@ -75,7 +75,7 @@ class DPA_Admin {
 			return;
 
 		// If the plugin's been activated network-wide, only load the admin stuff on the DPA_DATA_STORE site
-		if ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() != DPA_DATA_STORE )
+		if ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() !== DPA_DATA_STORE )
 			return;
 
 
@@ -84,14 +84,8 @@ class DPA_Admin {
 		// Add menu item to settings menu
 		add_action( 'dpa_admin_menu',                           array( $this, 'admin_menus'             ) );
 
-		// Add some general styling to the admin area
-		//add_action( 'dpa_admin_head',                         array( $this, 'admin_head'              ) );
-
 		// Add settings
 		add_action( 'dpa_register_admin_settings',              array( $this, 'register_admin_settings' ) );
-
-		// Add menu item to settings menu
-		//add_action( 'dpa_activation',                         array( $this, 'new_install'             ) );
 
 		// Column headers
 		add_filter( 'manage_achievement_posts_columns',         'dpa_achievement_posts_columns' );
@@ -109,6 +103,9 @@ class DPA_Admin {
 		add_action( 'load-edit.php',                            'dpa_achievement_index_contextual_help' );
 		add_action( 'load-post-new.php',                        'dpa_achievement_new_contextual_help' );
 		add_action( 'load-post.php',                            'dpa_achievement_new_contextual_help' );
+
+		// Messages
+		add_filter( 'post_updated_messages',                    'dpa_achievement_feedback_messages' );
 
 
 		// Allow plugins to modify these actions
@@ -156,6 +153,16 @@ class DPA_Admin {
 	 */
 	public function admin_menus() {
 		$hooks = array();
+
+		// About
+		add_dashboard_page(
+			__( 'Welcome to Achievements', 'dpa' ),
+			__( 'Welcome to Achievements', 'dpa' ),
+			$this->minimum_capability,
+			'achievements-about',
+			array( $this, 'about_screen' )
+		);
+		remove_submenu_page( 'index.php', 'achievements-about' );
 
 		// "Users" menu
 		$hooks[] = add_submenu_page(
@@ -211,9 +218,9 @@ class DPA_Admin {
 			return;
 
 		// "Supported Plugins" screen
-		if ( 'achievements-plugins' == $_GET['page'] )
+		if ( 'achievements-plugins' === $_GET['page'] )
 			dpa_supported_plugins_on_load();
-		elseif ( 'achievements-users' == $_GET['page'] )
+		elseif ( 'achievements-users' === $_GET['page'] )
 			dpa_admin_screen_users_on_load();
 	}
 
@@ -230,11 +237,11 @@ class DPA_Admin {
 		$rtl = is_rtl() ? '-rtl' : '';
 
 		// "Supported Plugins" screen
-		if ( 'achievements-plugins' == $_GET['page'] )
+		if ( 'achievements-plugins' === $_GET['page'] )
 			wp_enqueue_style( 'dpa_admin_css', trailingslashit( $this->css_url ) . "supportedplugins{$rtl}.css", array(), '20120722' );
 
 		// Achievements "users" screen
-		elseif ( 'achievements-users' == $_GET['page'] )
+		elseif ( 'achievements-users' === $_GET['page'] )
 			wp_enqueue_style( 'dpa_admin_users_css', trailingslashit( $this->css_url ) . "users{$rtl}.css", array(), '20130113' );
 	}
 
@@ -263,10 +270,10 @@ class DPA_Admin {
 			return;
 
 		// "Supported Plugins" screen
-		if ( 'achievements-plugins' == $_GET['page'] ) {
+		if ( 'achievements-plugins' === $_GET['page'] ) {
 			wp_enqueue_script( 'dpa_socialite',   trailingslashit( $this->javascript_url ) . 'socialite-min.js',          array(), '20120722', true );
 			wp_enqueue_script( 'tablesorter_js',  trailingslashit( $this->javascript_url ) . 'jquery-tablesorter-min.js', array( 'jquery' ), '20120722', true );
-			wp_enqueue_script( 'dpa_sp_admin_js', trailingslashit( $this->javascript_url ) . 'supportedplugins-min.js',   array( 'jquery', 'dpa_socialite', 'dashboard', 'postbox' ), '20120722', true );
+			wp_enqueue_script( 'dpa_sp_admin_js', trailingslashit( $this->javascript_url ) . 'supportedplugins.js',       array( 'jquery', 'dpa_socialite', 'dashboard', 'postbox' ), '20130908', true );
 
 			// Add thickbox for the 'not installed' links on the List view
 			add_thickbox();
@@ -302,7 +309,7 @@ class DPA_Admin {
 		<table class="form-table">
 			<tr>
 				<th><label for="dpa_achievements"><?php _ex( 'Total Points', "User&rsquo;s total points from unlocked Achievements", 'dpa' ); ?></label></th>
-				<td><input type="number" name="dpa_achievements" id="dpa_achievements" value="<?php echo esc_attr( dpa_get_user_points( $user->ID ) ); ?>" class="regular-text" />
+				<td><input type="number" name="dpa_achievements" id="dpa_achievements" value="<?php echo (int) dpa_get_user_points( $user->ID ); ?>" class="regular-text" />
 				</td>
 			</tr>
 
@@ -316,7 +323,7 @@ class DPA_Admin {
 							<?php while ( dpa_achievements() ) : ?>
 								<?php dpa_the_achievement(); ?>
 
-								<label><input type="checkbox" name="dpa_user_achievements[]" value="<?php echo esc_attr( dpa_get_the_achievement_ID() ); ?>" <?php checked( dpa_is_achievement_unlocked(), true ); ?>> <?php dpa_achievement_title(); ?></label><br>
+								<label><input type="checkbox" name="dpa_user_achievements[]" value="<?php echo absint( dpa_get_the_achievement_ID() ); ?>" <?php checked( dpa_is_achievement_unlocked(), true ); ?>> <?php dpa_achievement_title(); ?></label><br>
 							<?php endwhile; ?>
 
 						</fieldset>
@@ -330,8 +337,11 @@ class DPA_Admin {
 	}
 
 	/**
-	 * Update the user's 'User Points' meta information when the Edit User page has been saved,
+	 * Update the user's "User Points" meta information when the Edit User page has been saved,
 	 * and modify the user's current achievements as appropriate.
+	 *
+	 * The action that this function is hooked to is only executed on a succesful update,
+	 * which is behind a nonce and capability check (see wp-admin/user-edit.php).
 	 *
 	 * @param int $user_id
 	 * @since Achievements (3.0)
@@ -367,22 +377,9 @@ class DPA_Admin {
 
 		// Remove achievements :(
 		if ( ! empty( $achievements_to_remove ) ) {
-			$notifications = dpa_get_user_notifications( $user_id );
 
-			foreach ( $achievements_to_remove as $achievement_id ) {
+			foreach ( $achievements_to_remove as $achievement_id )
 				dpa_delete_achievement_progress( $achievement_id, $user_id );
-
-				// Check this achievement isn't in the user's pending notifications
-				if ( isset( $notifications[$achievement_id] ) )
-					unset( $notifications[$achievement_id]);
-			}
-
-			// Decrease user unlocked count
-			$unlock_count = dpa_get_user_unlocked_count( $user_id ) - count( $achievements_to_remove );
-			dpa_update_user_unlocked_count( $user_id, $unlock_count );
-
-			// Update the user's notifications in case we cleared any above
-			dpa_update_user_notifications( $notifications, $user_id );
 		}
 
 
@@ -431,10 +428,78 @@ class DPA_Admin {
 	public static function is_admin_screen() {
 		$result = false;
 
-		if ( ! empty( $_GET['post_type'] ) && 'achievement' == $_GET['post_type'] )
+		if ( ! empty( $_GET['post_type'] ) && 'achievement' === $_GET['post_type'] )
 			$result = true;
 
 		return true;
+	}
+
+	/**
+	 * Output the about screen
+	 *
+	 * @since Achievements (3.4)
+	 */
+	public function about_screen() {
+		list( $display_version ) = explode( '-', dpa_get_version() );
+
+		$is_new_install = ! empty( $_GET['is_new_install'] );
+		$name           = wp_get_current_user()->display_name;
+	?>
+
+		<style type="text/css">
+		.about-text {
+			min-height: 0;
+			margin-bottom: 0;
+			margin-right: 0;
+		}
+		.about-wrap h3 {
+			margin-bottom: 0;
+			padding-top: 0;
+		}
+		</style>
+
+		<div class="wrap about-wrap">
+			<h1><?php _e( 'Welcome to Achievements', 'dpa' ); ?></h1>
+			<div class="about-text">
+				<?php if ( $is_new_install ) : ?>
+					<?php printf( __( 'Hi, %s! Thanks very much for downloading Achievements %s. You really are rather nice. This exciting update screen is to confirm a few things that you probably already know:', 'dpa' ), esc_html( $name ), $display_version ); ?>
+
+					<ol>
+						<li><?php _e( 'You&#8217;re super-talented at finding great WordPress plugins.', 'dpa' ); ?></li>
+						<li><?php _e( 'We think you&#8217;ve got a truly beautiful website.', 'dpa' ); ?></li>
+						<li><?php _e( 'See 1 &amp; 2.', 'dpa' ); ?></li>
+					</ol>
+
+					<?php _e( 'Achievements gamifies your WordPress site with challenges, badges, and points, which are the funnest ways to reward and encourage members of your community to participate. We hope you enjoy using the plugin!', 'dpa' ); ?>
+				<?php else : ?>
+					<?php printf( __( 'Hello there! Version %s is a maintenance release.', 'dpa' ), $display_version ); ?>
+				<?php endif; ?>
+			</div>
+
+			<?php if ( $is_new_install ) : ?>
+				<h3><?php _e( 'Getting Started', 'dpa' ); ?></h3>
+
+				<div class="feature-section">
+					<h4><?php _e( 'Create your first achievement', 'dpa' ); ?></h4>
+					<p><?php printf( __( 'The first idea to grasp is that there are two different types of achievements: <strong>awards</strong> and <strong>events</strong>. Award achievements have to be manually given out by a site admin, and event achievements are awarded automatically when its criteria has been met. <a href="%s">Learn more about achievement types</a>.', 'dpa' ), esc_url( 'http://achievementsapp.com/getting-started/types-of-achievements/' ) ); ?></p>
+					<p><?php printf( __( 'The best way to learn is by doing, so let&rsquo;s create an achievement and find out how everything works. Our <a href="%s">Getting Started guide</a> will walk you through this easy process.', 'dpa' ), esc_url( 'http://achievementsapp.com/getting-started/' ) ); ?></p>
+
+					<h4><?php _e( 'Get help and support', 'dpa' ); ?></h4>
+					<p><?php printf( __( 'If you have questions about the plugin or need help, get in contact by leaving a message on the <a href="%s">WordPress.org support forum</a>. We&rsquo;d love to find out how you&rsquo;re using Achievements, so be sure to drop by and tell us!', 'dpa' ), esc_url( 'http://wordpress.org/support/plugin/achievements' ) ); ?></p>
+				</div>
+
+			<?php else : ?>
+
+			<div class="changelog">
+				<div class="feature-section">
+					<p><?php _e( 'This release improves compatibility with WordPress 3.8. Some of the UI elements in the admin screens have had their styles tweaked for WordPress&#8217; new admin appearance, and the unlocked achievement check (the heartbeat) now happens much more quickly. Enjoy!', 'dpa' ); ?></p>
+				</div>
+			</div>
+
+			<?php endif; ?>
+
+		</div>
+		<?php
 	}
 }
 endif; // class_exists check

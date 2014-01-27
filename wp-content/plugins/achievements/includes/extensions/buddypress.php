@@ -39,6 +39,7 @@ class DPA_BuddyPress_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			'bp_activity_add_user_favorite'    => __( 'The user marks an item in an activity stream as a favourite.', 'dpa' ),
 			'bp_activity_comment_posted'       => __( 'The user replies to an item in an activity stream.', 'dpa' ),
@@ -96,7 +97,7 @@ class DPA_BuddyPress_Extension extends DPA_Extension {
 		$this->rss_url         = 'http://buddypress.org/blog/feed/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/buddypress-small.png';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/buddypress/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/buddypress/';
 
 		add_filter( 'dpa_handle_event_user_id', array( $this, 'event_user_id' ), 10, 3 );
 	}
@@ -116,15 +117,15 @@ class DPA_BuddyPress_Extension extends DPA_Extension {
 			return $user_id;
 
 		// A new user activates their account on your website
-		if ( 'bp_core_activated_user' == $action_name ) {
+		if ( 'bp_core_activated_user' === $action_name ) {
 			$user_id = $action_func_args[0];
 
 		// The user is demoted from being a moderator or an administrator in a group
-		} elseif ( 'groups_demote_member' == $action_name ) {
+		} elseif ( 'groups_demote_member' === $action_name ) {
 			$user_id = $action_func_args[1];
 
 		// The user is promoted to a moderator or an administrator in a group
-		} elseif ( 'groups_promote_member' == $action_name ) {
+		} elseif ( 'groups_promote_member' === $action_name ) {
 			$user_id = $action_func_args[1];
 		}
 

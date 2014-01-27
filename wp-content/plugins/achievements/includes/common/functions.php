@@ -22,20 +22,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @param string $older_date Unix timestamp from which the difference begins.
  * @param bool|string $newer_date Optional. Unix timestamp from which the difference ends. False for current time.
+ * @param int $gmt Optional. Whether to use GMT timezone. Default is false. 
  * @since Achievements (3.0)
  */
-function dpa_time_since( $older_date, $newer_date = false ) {
-	echo dpa_get_time_since( $older_date, $newer_date );
+function dpa_time_since( $older_date, $newer_date = false, $gmt = false ) {
+	echo dpa_get_time_since( $older_date, $newer_date, $gmt );
 }
 	/**
 	 * Return formatted time to display human readable time difference.
 	 *
 	 * @param string $older_date Unix timestamp from which the difference begins.
 	 * @param bool|string $newer_date Optional. Unix timestamp from which the difference ends. False for current time.
+	 * @param int $gmt Optional. Whether to use GMT timezone. Default is false. 
 	 * @return string Formatted time
 	 * @since Achievements (3.0)
 	 */
-	function dpa_get_time_since( $older_date, $newer_date = false ) {		
+	function dpa_get_time_since( $older_date, $newer_date = false, $gmt = false ) {		
 		// Setup the strings
 		$unknown_text   = apply_filters( 'dpa_time_since_unknown_text',   _x( 'sometime',  'time', 'dpa' ) );
 		$right_now_text = apply_filters( 'dpa_time_since_right_now_text', _x( 'right now', 'time', 'dpa' ) );
@@ -63,7 +65,7 @@ function dpa_time_since( $older_date, $newer_date = false ) {
 		 * between a date and the current time. $newer_date will have a value if
 		 * we want to work out time elapsed between two known dates.
 		 */
-		$newer_date = ( ! $newer_date ) ? strtotime( current_time( 'mysql' ) ) : $newer_date;
+		$newer_date = ( ! $newer_date ) ? strtotime( current_time( 'mysql', $gmt ) ) : $newer_date;
 
 		// Difference in seconds
 		$since = $newer_date - $older_date;
@@ -120,7 +122,7 @@ function dpa_time_since( $older_date, $newer_date = false ) {
 		}
 
 		// Append 'ago' to the end of time-since if not 'right now'
-		if ( $output != $right_now_text ) {
+		if ( $output !== $right_now_text ) {
 			$output = sprintf( $ago_text, $output );
 		}
 
@@ -248,7 +250,6 @@ function dpa_is_developer_mode() {
 /**
  * Assist pagination by returning correct page number
  *
- * @global WP_Query $wp_query
  * @return int Current page number
  * @since Achievements (3.0)
  */
@@ -268,8 +269,18 @@ function dpa_get_paged() {
 	if ( ! empty( $paged ) )
 		return (int) $paged;
 
-	// Default to first page
 	return 1;
+}
+
+/**
+ * Assist pagination by returning correct page number for leaderboard pagination
+ *
+ * @return int Current page number
+ * @since Achievements (3.4)
+ * @todo If a top-level /leaderboard/ rewrite is ever added, we can make this properly use query vars.
+ */
+function dpa_get_leaderboard_paged() {
+	return ( ! empty( $_GET['leaderboard-page'] ) ) ? (int) $_GET['leaderboard-page'] : 1;
 }
 
 /**
@@ -313,7 +324,7 @@ function dpa_delete_rewrite_rules() {
  * @return array Merged user defined values with defaults.
  * @since Achievements (3.0)
  */
-function dpa_parse_args( $args, $defaults = '', $filter_key = '' ) {
+function dpa_parse_args( $args, $defaults = array(), $filter_key = '' ) {
 	// Setup a temporary array from $args
 	if ( is_object( $args ) )
 		$r = get_object_vars( $args );
@@ -327,7 +338,7 @@ function dpa_parse_args( $args, $defaults = '', $filter_key = '' ) {
 		$r = apply_filters( 'dpa_before_' . $filter_key . '_parse_args', $r );
 
 	// Parse
-	if ( is_array( $defaults ) )
+	if ( is_array( $defaults ) && ! empty( $defaults ) )
 		$r = array_merge( $defaults, $r );
 
 	// Aggressively filter the args after the parse
@@ -359,17 +370,6 @@ function dpa_get_page_by_path( $path = '' ) {
 	return apply_filters( 'dpa_get_page_by_path', $retval, $path );
 }
 
-/**
- * Return the unescaped redirect_to request value
- *
- * @return string The URL to redirect to, if set
- * @since Achievements (3.1)
- */
-function dpa_get_redirect_to() {
-	$retval = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';
-	return apply_filters( 'dpa_get_redirect_to', $retval );
-}
-
 
 /**
  * Nonces
@@ -389,12 +389,25 @@ function dpa_get_redirect_to() {
 function dpa_verify_nonce_request( $action = '', $query_arg = '_wpnonce' ) {
 
 	// Parse home_url() into pieces to remove query strings, strange characters, and other funny things that plugins might to do to it.
-	$parsed_home   = parse_url( home_url( '/', ( is_ssl() ? 'https://' : 'http://' ) ) );
-	$home_url      = trim( strtolower( $parsed_home['scheme'] . '://' . $parsed_home['host'] . $parsed_home['path'] ), '/' );
+	$parsed_home = parse_url( home_url( '/', ( is_ssl() ? 'https://' : 'http://' ) ) ); 
+
+	if ( isset( $parsed_home['port'] ) )
+		$parsed_host = $parsed_home['host'] . ':' . $parsed_home['port'];
+	else
+		$parsed_host = $parsed_home['host'];
+
+	// Set the home URL for use in comparisons
+	$home_url = trim( strtolower( $parsed_home['scheme'] . '://' . $parsed_host . $parsed_home['path'] ), '/' );
+
+	// Maybe include the port, if it's included in home_url()
+	if ( isset( $parsed_home['port'] ) )
+		$request_host = $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'];
+	else
+		$request_host = $_SERVER['HTTP_HOST'];
 
 	// Build the currently requested URL
 	$scheme        = is_ssl() ? 'https://' : 'http://';
-	$requested_url = apply_filters( 'dpa_verify_nonce_request_url', strtolower( $scheme . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) );
+	$requested_url = strtolower( $scheme . $request_host . $_SERVER['REQUEST_URI'] );
 
 	// Check the nonce
 	$result = isset( $_REQUEST[$query_arg] ) ? wp_verify_nonce( $_REQUEST[$query_arg], $action ) : false;

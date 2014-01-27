@@ -1,0 +1,169 @@
+#adminmenu #toplevel_page_bws_plugins div.wp-menu-image {
+    background: url("../images/icon_16.png") no-repeat scroll center center transparent;
+}
+.admin-color-classic #adminmenu #toplevel_page_bws_plugins div.wp-menu-image {
+    background: url("../images/icon_16_b.png") no-repeat scroll center center transparent;
+}
+#adminmenu #toplevel_page_bws_plugins:hover div.wp-menu-image,
+#adminmenu #toplevel_page_bws_plugins.wp-has-current-submenu div.wp-menu-image {
+    background: url("../images/icon_16_c.png") no-repeat scroll center center transparent;
+}
+.wrap #icon-options-general.icon32-bws {
+	background: url("../images/icon_36.png") no-repeat scroll left top transparent;
+}
+.admin-color-classic .wrap #icon-options-general.icon32-bws {
+	background: url("../images/icon_36_b.png") no-repeat scroll left top transparent;
+}
+#toplevel_page_bws_plugins .wp-submenu .wp-first-item {
+	display: none;
+}
+/*
+* styles for rate-support div on the settings page
+*/
+.bws-plugin-reviews {
+    background: none repeat scroll 0 0 #BEE1F1;
+    border: 1px solid #70A8C2;
+    border-radius: 3px;
+    max-width: 700px;
+}
+.bws-plugin-reviews-rate {
+    padding: 10px;
+    border-bottom: 1px dashed #70A8C2;
+}
+.bws-plugin-reviews-support {
+    padding: 10px;
+}
+/*
+* styles for settings page
+*/
+.cptch_example_fields_actions {
+	float: left;
+    height: 18px;
+	width: 140px;
+	position: relative;
+	top: -7px;
+	padding: 2px 0;
+}
+.cptch_example_fields_actions img {
+	position: relative;
+	width: 30px;
+	top: 6px;
+}
+.cptch_block {
+	direction: ltr;
+}
+/*
+* styles help tooltips
+*/
+.cptch_help_box {
+    background-image: url("../images/tooltip_icons.png");
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: left;
+    height: 29px;
+    position: relative;
+    margin: -3px 5px 3px;
+    width: 29px;
+    clear: none !important;
+}
+.cptch_hidden_help_text {
+    background: #F4F4F4;
+    border: 1px solid #DCDCDC;
+    border-radius: 4px;
+    left: 40px;
+    padding: 5px 10px;
+    position: absolute;
+    width: 240px;
+    line-height: 1.5;
+}
+.cptch_hidden_help_text:before {
+    content: url("../images/help.png");
+    left: -10px;
+    position: absolute;
+    top: 7px;
+}
+/*
+* styles for pro_version settings, banner and tooltip 
+*/
+table.bws_pro_version {	
+    background: #E0E0E0;
+    border: 1px solid #AAA;
+    margin-bottom: 5px;
+    width: auto !important;
+    float: left;
+}
+table.bws_pro_version th,
+table.bws_pro_version td {
+	color: #555;
+    padding-left: 10px;
+}
+.bws_pro_version_tooltip {
+    background: #FFF;
+    border: 1px solid #AAA;
+}
+.form-table.bws_pro_version .bws_pro_version_tooltip th {
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+/* banner on the plugins page */
+.cptch_message {
+    min-width: 800px;
+    border: 1px solid #d4d4d4;
+    margin: 12px 0;
+    background: #ececec;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    position: relative;
+    overflow: hidden
+}
+.cptch_message .cptch_text {
+    color:#000;
+    font-size: 15px;
+    line-height: 26px;
+    margin-top: 13px;
+    float: left;
+}
+.cptch_message .cptch_text span {
+    font-size: 12px;
+    opacity: 0.7;
+}
+.cptch_message .cptch_button {
+    float: left;
+    border: 1px solid #1f75ad; 
+    font-size: 14px;
+    margin: 15px 19px 15px 16px;
+    padding: 12px 0;
+    color: #FFF;
+    text-shadow: 0 1px 3px #636363;
+    font-weight: bold;
+    background: #227cc2;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    text-decoration: none;
+    height: 50px;
+    text-align: center;
+    width: 147px;
+    -moz-box-shadow: 0px 1px 1px 0 #43acd9 inset;
+    -webkit-box-shadow: 0px 1px 1px 0 #43acd9 inset;
+    box-shadow: 0px 1px 1px 0 #43acd9 inset;
+}
+.cptch_message .cptch_button:hover,
+.cptch_message .cptch_button:focus {    
+    background: #f26e50;
+    color :#FFF;
+    border: 1px solid #bf573f;
+    -moz-box-shadow: 0px 1px 1px 0 #f5906f inset;
+    -webkit-box-shadow: 0px 1px 1px 0 #f5906f inset;
+    box-shadow: 0px 1px 1px 0 #f5906f inset;
+}
+.cptch_message .cptch_icon {
+    float: right;
+    margin: 18px 0;
+}
+.cptch_message .cptch_close_icon {
+    float: right;
+    margin: 8px;
+    cursor: pointer;
+}

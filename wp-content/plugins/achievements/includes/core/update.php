@@ -38,11 +38,17 @@ function dpa_is_update() {
  * @since Achievements (3.0)
  */
 function dpa_is_activation( $basename = '' ) {
+	global $pagenow;
+
+	// Bail if not in admin/plugins
+	if ( ! is_admin() || 'plugins.php' !== $pagenow )
+		return false;
+
 	$action = false;
 
-	if ( ! empty( $_REQUEST['action'] ) && '-1' != $_REQUEST['action'] )
+	if ( ! empty( $_REQUEST['action'] ) && '-1' !== $_REQUEST['action'] )
 		$action = $_REQUEST['action'];
-	elseif ( ! empty( $_REQUEST['action2'] ) && '-1' != $_REQUEST['action2'] )
+	elseif ( ! empty( $_REQUEST['action2'] ) && '-1' !== $_REQUEST['action2'] )
 		$action = $_REQUEST['action2'];
 
 	// Bail if not activating
@@ -50,7 +56,7 @@ function dpa_is_activation( $basename = '' ) {
 		return false;
 
 	// The plugin(s) being activated
-	if ( $action == 'activate' )
+	if ( $action === 'activate' )
 		$plugins = isset( $_GET['plugin'] ) ? array( $_GET['plugin'] ) : array();
 	else
 		$plugins = isset( $_POST['checked'] ) ? (array) $_POST['checked'] : array();
@@ -75,11 +81,17 @@ function dpa_is_activation( $basename = '' ) {
  * @since Achievements (3.0)
  */
 function dpa_is_deactivation( $basename = '' ) {
+	global $pagenow;
+
+	// Bail if not in admin/plugins
+	if ( ! is_admin() || 'plugins.php' !== $pagenow )
+		return false;
+
 	$action = false;
 
-	if ( ! empty( $_REQUEST['action'] ) && '-1' != $_REQUEST['action'] )
+	if ( ! empty( $_REQUEST['action'] ) && '-1' !== $_REQUEST['action'] )
 		$action = $_REQUEST['action'];
-	elseif ( ! empty( $_REQUEST['action2'] ) && '-1' != $_REQUEST['action2'] )
+	elseif ( ! empty( $_REQUEST['action2'] ) && '-1' !== $_REQUEST['action2'] )
 		$action = $_REQUEST['action2'];
 
 	// Bail if not deactivating
@@ -87,7 +99,7 @@ function dpa_is_deactivation( $basename = '' ) {
 		return false;
 
 	// The plugin(s) being deactivated
-	if ( $action == 'deactivate' )
+	if ( $action === 'deactivate' )
 		$plugins = isset( $_GET['plugin'] ) ? array( $_GET['plugin'] ) : array();
 	else
 		$plugins = isset( $_POST['checked'] ) ? (array) $_POST['checked'] : array();
@@ -157,4 +169,23 @@ function dpa_version_updater() {
  * @since Achievements (3.0)
  */
 function dpa_create_initial_content( $args = array() ) {
+}
+
+/**
+ * Redirect user to Achievements's "What's New" page on activation
+ *
+ * @since Achievements (3.4)
+ */
+function dpa_add_activation_redirect() {
+
+	// Bail if activating from network, or bulk.
+	if ( isset( $_GET['activate-multi'] ) )
+		return;
+
+	// Record that this is a new installation, so we show the right welcome message
+	if ( dpa_is_install() )
+		set_transient( '_dpa_is_new_install', true, 30 );
+
+	// Add the transient to redirect
+	set_transient( '_dpa_activation_redirect', true, 30 );
 }

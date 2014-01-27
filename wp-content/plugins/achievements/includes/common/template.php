@@ -71,7 +71,7 @@ function dpa_is_achievement( $post_id = 0 ) {
 	$retval = false;
 
 	// Supplied ID is an achievement
-	if ( ! empty( $post_id ) && ( dpa_get_achievement_post_type() == get_post_type( $post_id ) ))
+	if ( ! empty( $post_id ) && ( dpa_get_achievement_post_type() === get_post_type( $post_id ) ))
 		$retval = true;
 
 	return (bool) apply_filters( 'dpa_is_achievement', $retval, $post_id );
@@ -120,7 +120,7 @@ function dpa_is_single_user_achievements() {
 
 	// Using BuddyPress user profiles
 	if ( dpa_integrate_into_buddypress() ) {
-		$retval = bp_is_user() && bp_is_current_component( 'achievements' ) && bp_is_current_action( 'all' );
+		$retval = bp_is_user() && bp_is_current_component( dpa_get_authors_endpoint() ) && bp_is_current_action( 'all' );
 
 	// Using WordPress' author page and the 'achievements' endpoint
 	} else {
@@ -208,65 +208,6 @@ function is_achievements() {
 
 
 /**
- * General template helpers
- */
-
-/**
- * Echo sanitised $_REQUEST value.
- *
- * Use the $input_type parameter to properly process the value. This
- * ensures correct sanitisation of the value for the receiving input.
- *
- * @param string $request Name of $_REQUEST to look for
- * @param string $input_type Type of input. Optional. Default: text. Accepts: textarea|password|select|radio|checkbox
- * @since Achievements (3.0)
- */
-function dpa_sanitise_val( $request, $input_type = 'text' ) {
-	echo dpa_get_sanitise_val( $request, $input_type );
-}
-	/**
-	 * Return sanitised $_REQUEST value.
-	 *
-	 * Use the $input_type parameter to properly process the value. This
-	 * ensures correct sanitisation of the value for the receiving input.
-	 *
-	 * @param string $request Name of $_REQUEST to look for
-	 * @param string $input_type Type of input. Optional. Default: text. Accepts: textarea|password|select|radio|checkbox
-	 * @return string Sanitised value ready for screen display
-	 * @since Achievements (3.0)
-	 */
-	function dpa_get_sanitise_val( $request, $input_type = 'text' ) {
-		// Check that requested variable exists
-		if ( empty( $_REQUEST[$request] ) )
-			return false;
-
-		// Set request varaible
-		$pre_ret_val = $_REQUEST[$request];
-
-		// Treat different kinds of fields in different ways
-		switch ( $input_type ) {
-			case 'text'     :
-				$retval = esc_attr( stripslashes( $pre_ret_val ) );
-				break;
-
-			case 'textarea' :
-				$retval = esc_html( stripslashes( $pre_ret_val ) );
-				break;
-
-			case 'checkbox' :
-			case 'password' :
-			case 'radio'    :
-			case 'select'   :
-			default :
-				$retval = esc_attr( $pre_ret_val );
-				break;
-		}
-
-		return apply_filters( 'dpa_get_sanitise_val', $retval, $request, $input_type );
-	}
-
-
-/**
  * Query functions
  */
 
@@ -278,7 +219,7 @@ function dpa_sanitise_val( $request, $input_type = 'text' ) {
  * @since Achievements (3.0)
  */
 function dpa_is_query_name( $name )  {
-	return (bool) ( dpa_get_query_name() == $name );
+	return (bool) ( dpa_get_query_name() === $name );
 }
 
 /**
@@ -341,7 +282,6 @@ function dpa_breadcrumb( $args = array() ) {
 	 * @param array $args Optional.
 	 * @return string Breadcrumbs
 	 * @since Achievements (3.0)
-	 * @todo Achievements - phpDoc for $args. Contribute back to bbPress.
 	 */
 	function dpa_get_breadcrumb( $args = array() ) {
 		// Turn off breadcrumbs
@@ -392,7 +332,7 @@ function dpa_breadcrumb( $args = array() ) {
 		 */
 
 		// Root slug is also the front page
-		if ( ! empty( $front_id ) && ( $front_id == $root_id ) )
+		if ( ! empty( $front_id ) && ( $front_id === $root_id ) )
 			$pre_include_root = false;
 
 		// Don't show root if viewing achievement archive
@@ -400,7 +340,7 @@ function dpa_breadcrumb( $args = array() ) {
 			$pre_include_root = false;
 
 		// Don't show root if viewing page in place of achievement archive
-		if ( ! empty( $root_id ) && ( ( is_single() || is_page() ) && ( $root_id == get_the_ID() ) ) )
+		if ( ! empty( $root_id ) && ( ( is_single() || is_page() ) && ( $root_id === get_the_ID() ) ) )
 			$pre_include_root = false;
 
 
@@ -522,7 +462,7 @@ function dpa_breadcrumb( $args = array() ) {
 		 */
 
 		// Add current page to breadcrumb
-		if ( ! empty( $include_current ) || empty( $pre_current_text ) )
+		if ( ! empty( $include_current ) || empty( $current_text ) )
 			$crumbs[] = $current_before . $current_text . $current_after;
 
 
@@ -583,7 +523,7 @@ function dpa_template_notices() {
 
 		// Loop through notices and separate errors from messages
 		foreach ( achievements()->errors->get_error_messages( $code ) as $error ) {
-			if ( 'message' == $severity )
+			if ( 'message' === $severity )
 				$messages[] = $error;
 			else
 				$errors[] = $error;
@@ -628,46 +568,54 @@ function dpa_template_notices() {
  * @since Achievements (3.0)
  */
 function dpa_title( $title = '', $sep = '&raquo;', $seplocation = '' ) {
-	// Store original title to compare
-	$_title = $title;
+	$new_title = array();
 
 	// Achievement archive
-	if ( dpa_is_achievement_archive() )
-		$title = dpa_get_achievement_archive_title();
+	if ( dpa_is_achievement_archive() ) {
+		$new_title['text'] = dpa_get_achievement_archive_title();
 
 	// Single achievement page
-	elseif ( dpa_is_single_achievement() )
-		$title = apply_filters( 'dpa_title_single_achievement', sprintf( __( 'Achievement: %s', 'dpa' ), dpa_get_achievement_title() ) );
+	} elseif ( dpa_is_single_achievement() ) {
+		$new_title['text']   = dpa_get_achievement_title();
+		$new_title['format'] = esc_attr__( 'Achievement: %s', 'dpa' );
+	}
 
+	$new_title = apply_filters( 'dpa_raw_title_array', $new_title ); 
 
-	// Filter the raw title
-	$title = apply_filters( 'dpa_raw_title', $title, $sep, $seplocation );
+	$new_title = dpa_parse_args( $new_title, array(
+		'format' => '%s',
+		'text'   => $title,
+	), 'title' );
+
+	// Get the formatted raw title
+	$new_title = sprintf( $new_title['format'], $new_title['text'] );
+	$new_title = apply_filters( 'dpa_raw_title', $new_title, $sep, $seplocation );
 
 	// Compare new title with original title
-	if ( $title == $_title )
+	if ( $new_title === $title )
 		return $title;
 
-	// Temporary separator, for accurate flipping, if necessary
+	// Temporary separator for accurate flipping, if necessary
 	$t_sep  = '%WP_TITILE_SEP%';
 	$prefix = '';
 
-	if ( ! empty( $title ) )
+	if ( ! empty( $new_title ) )
 		$prefix = " $sep ";
 
 	// Separate on right, so reverse the order
-	if ( 'right' == $seplocation ) {
-		$title_array = explode( $t_sep, $title );
-		$title_array = array_reverse( $title_array );
-		$title       = implode( " $sep ", $title_array ) . $prefix;
+	if ( 'right' === $seplocation ) {
+		$new_title_array = explode( $t_sep, $new_title );
+		$new_title_array = array_reverse( $new_title_array );
+		$new_title       = implode( " $sep ", $new_title_array ) . $prefix;
 
 	// Separate on left, do not reverse
 	} else {
-		$title_array = explode( $t_sep, $title );
-		$title       = $prefix . implode( " $sep ", $title_array );
+		$new_title_array = explode( $t_sep, $new_title );
+		$new_title       = $prefix . implode( " $sep ", $new_title_array );
 	}
 
 	// Filter and return
-	return apply_filters( 'dpa_title', $title, $sep, $seplocation );
+	return apply_filters( 'dpa_title', $new_title, $sep, $seplocation );
 }
 
 

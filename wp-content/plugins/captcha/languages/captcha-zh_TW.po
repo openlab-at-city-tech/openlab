@@ -1,0 +1,449 @@
+# Byrial Ole Jensen <byrial@vip.cybercity.dk>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: captcha\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-22 13:56+0300\n"
+"PO-Revision-Date: 2013-11-22 13:56+0300\n"
+"Last-Translator: \n"
+"Language-Team: billyjeans <billyjeans@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cn\n"
+"X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: captcha.php:32
+#: captcha.php:255
+msgid "Captcha Settings"
+msgstr "驗證碼設置"
+
+#: captcha.php:32
+msgid "Captcha"
+msgstr "驗證碼"
+
+#: captcha.php:49
+msgid "requires"
+msgstr "必須要"
+
+#: captcha.php:49
+msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
+msgstr "或更高等級，所以這被停止了！請升級Wordpress然後在試一次。"
+
+#: captcha.php:49
+msgid "Back to the WordPress"
+msgstr "回到Wordpress"
+
+#: captcha.php:49
+msgid "Plugins page"
+msgstr "外掛程式的網頁"
+
+#: captcha.php:57
+msgid "Login form"
+msgstr "登錄表格"
+
+#: captcha.php:58
+#: captcha.php:291
+msgid "Registration form"
+msgstr "註冊表格"
+
+#: captcha.php:58
+msgid "Register form"
+msgstr "註冊表格"
+
+#: captcha.php:59
+msgid "Reset Password form"
+msgstr "重設密碼表格"
+
+#: captcha.php:59
+msgid "Lost password form"
+msgstr "遺失密碼的表格"
+
+#: captcha.php:60
+#: captcha.php:292
+msgid "Comments form"
+msgstr "評論表格"
+
+#: captcha.php:61
+msgid "Hide CAPTCHA for registered users"
+msgstr "對有註冊的用戶關閉驗證碼"
+
+#: captcha.php:66
+msgid "Plus (&#43;)"
+msgstr "加 (&#43;)"
+
+#: captcha.php:66
+msgid "Plus"
+msgstr "加 (&#43;)"
+
+#: captcha.php:67
+msgid "Minus (&minus;)"
+msgstr "减 (&minus;)"
+
+#: captcha.php:67
+msgid "Minus"
+msgstr "减 (&minus;)"
+
+#: captcha.php:68
+msgid "Multiplication (&times;)"
+msgstr "乘 (&times;)"
+
+#: captcha.php:68
+msgid "Multiply"
+msgstr "乘 (&times;)"
+
+#: captcha.php:73
+msgid "Numbers"
+msgstr "數字"
+
+#: captcha.php:74
+msgid "Words"
+msgstr "文字"
+
+#: captcha.php:188
+#: captcha.php:200
+msgid "Settings"
+msgstr "設置"
+
+#: captcha.php:201
+msgid "FAQ"
+msgstr "常見問題"
+
+#: captcha.php:202
+msgid "Support"
+msgstr "支持"
+
+#: captcha.php:244
+msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+msgstr "請選擇一組數學運算操作和驗證碼難度"
+
+#: captcha.php:248
+msgid "Settings saved."
+msgstr "選項保存成功"
+
+#: captcha.php:261
+#: captcha.php:288
+msgid "Enable CAPTCHA for:"
+msgstr "開啟驗證碼給："
+
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "Contact form"
+msgstr "聯絡表格"
+
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "powered by"
+msgstr ""
+
+#: captcha.php:275
+msgid "Activate contact form"
+msgstr "啟動聯絡表格"
+
+#: captcha.php:278
+msgid "Download contact form"
+msgstr "下载聯絡表格"
+
+#: captcha.php:280
+msgid "If you would like to customize this plugin for a custom form, please see"
+msgstr "如果您希望更改這外掛程式用於客制的表格，請看"
+
+#: captcha.php:293
+msgid "\"Create a Group\" form"
+msgstr "\"開組群\" 表格"
+
+#: captcha.php:299
+msgid "Enable CAPTCHA:"
+msgstr "開啟驗證碼："
+
+#: captcha.php:307
+msgid "This functionality is available in the Pro version of the plugin. For more details, please follow the link"
+msgstr "這工能在Pro版本才有。詳細資訊請看連捷"
+
+#: captcha.php:314
+msgid "Title for CAPTCHA in the form"
+msgstr "驗證碼在表格上的標題"
+
+#: captcha.php:318
+msgid "Required symbol"
+msgstr "必要符號"
+
+#: captcha.php:324
+msgid "Arithmetic actions for CAPTCHA"
+msgstr "驗證碼的數學操作"
+
+#: captcha.php:338
+msgid "CAPTCHA complexity level"
+msgstr "驗證碼的難度設定"
+
+#: captcha.php:354
+msgid "Save Changes"
+msgstr "保存更改"
+
+#: captcha.php:400
+#: captcha.php:407
+#: captcha.php:584
+#: captcha.php:592
+#: captcha.php:606
+#: captcha.php:614
+msgid "ERROR"
+msgstr "錯誤"
+
+#: captcha.php:400
+#: captcha.php:426
+#: captcha.php:547
+#: captcha.php:584
+#: captcha.php:606
+#: captcha.php:634
+msgid "Please fill the form."
+msgstr "請填寫表格"
+
+#: captcha.php:407
+#: captcha.php:437
+#: captcha.php:592
+#: captcha.php:614
+msgid "Please enter a valid CAPTCHA value."
+msgstr "請您輸入正確的驗證碼"
+
+#: captcha.php:553
+#: captcha.php:642
+msgid "Error: You have entered an incorrect CAPTCHA value. Click the BACK button on your browser, and try again."
+msgstr "錯誤：您輸入的驗證碼不正確，請按瀏覽器的返回按鍵，並重新嘗試。"
+
+#: captcha.php:660
+#: captcha.php:958
+msgid "zero"
+msgstr "零"
+
+#: captcha.php:661
+#: captcha.php:959
+#: captcha.php:1174
+msgid "one"
+msgstr "一"
+
+#: captcha.php:662
+#: captcha.php:960
+msgid "two"
+msgstr "二"
+
+#: captcha.php:663
+#: captcha.php:961
+msgid "three"
+msgstr "三"
+
+#: captcha.php:664
+#: captcha.php:962
+msgid "four"
+msgstr "四"
+
+#: captcha.php:665
+#: captcha.php:963
+msgid "five"
+msgstr "五"
+
+#: captcha.php:666
+#: captcha.php:964
+#: captcha.php:1174
+msgid "six"
+msgstr "六"
+
+#: captcha.php:667
+#: captcha.php:965
+#: captcha.php:1162
+#: captcha.php:1168
+msgid "seven"
+msgstr "七"
+
+#: captcha.php:668
+#: captcha.php:966
+#: captcha.php:1165
+msgid "eight"
+msgstr "八"
+
+#: captcha.php:669
+#: captcha.php:967
+msgid "nine"
+msgstr "九"
+
+#: captcha.php:672
+#: captcha.php:970
+msgid "eleven"
+msgstr "十一"
+
+#: captcha.php:673
+#: captcha.php:971
+msgid "twelve"
+msgstr "十二"
+
+#: captcha.php:674
+#: captcha.php:972
+msgid "thirteen"
+msgstr "十三"
+
+#: captcha.php:675
+#: captcha.php:973
+msgid "fourteen"
+msgstr "十四"
+
+#: captcha.php:676
+#: captcha.php:974
+msgid "fifteen"
+msgstr "十五"
+
+#: captcha.php:677
+#: captcha.php:975
+msgid "sixteen"
+msgstr "十六"
+
+#: captcha.php:678
+#: captcha.php:976
+msgid "seventeen"
+msgstr "十七"
+
+#: captcha.php:679
+#: captcha.php:977
+msgid "eighteen"
+msgstr "十八"
+
+#: captcha.php:680
+#: captcha.php:978
+msgid "nineteen"
+msgstr "十九"
+
+#: captcha.php:683
+#: captcha.php:981
+msgid "ten"
+msgstr "十"
+
+#: captcha.php:684
+#: captcha.php:982
+msgid "twenty"
+msgstr "二十"
+
+#: captcha.php:685
+#: captcha.php:983
+msgid "thirty"
+msgstr "三十"
+
+#: captcha.php:686
+#: captcha.php:984
+msgid "forty"
+msgstr "四十"
+
+#: captcha.php:687
+#: captcha.php:985
+msgid "fifty"
+msgstr "五十"
+
+#: captcha.php:688
+#: captcha.php:986
+msgid "sixty"
+msgstr "六十"
+
+#: captcha.php:689
+#: captcha.php:987
+msgid "seventy"
+msgstr "七十"
+
+#: captcha.php:690
+#: captcha.php:988
+msgid "eighty"
+msgstr "八十"
+
+#: captcha.php:691
+#: captcha.php:989
+msgid "ninety"
+msgstr "九十"
+
+#: captcha.php:778
+#: captcha.php:1076
+msgid "and"
+msgstr "和"
+
+#: captcha.php:853
+msgid "Encryption password is not set"
+msgstr "沒有設置加密密碼"
+
+#: captcha.php:873
+msgid "Decryption password is not set"
+msgstr "沒有設置解密密碼"
+
+#: captcha.php:1235
+msgid "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</strong> version"
+msgstr ""
+
+#: captcha.php:1236
+msgid "Extend standard plugin functionality with new great options"
+msgstr "擴充標準外掛程式，加入新又好用的功能"
+
+#~ msgid "It's time to upgrade your"
+#~ msgstr "這是時候來升級您的"
+#~ msgid "to"
+#~ msgstr "到"
+#~ msgid "version"
+#~ msgstr "版本"
+
+#, fuzzy
+#~ msgid "Please enter a valid email address."
+#~ msgstr "请您输入验证问答"
+#~ msgid "Activated plugins"
+#~ msgstr "激活插件"
+#~ msgid "Read more"
+#~ msgstr "阅读更多"
+#~ msgid "Installed plugins"
+#~ msgstr "安装插件"
+#~ msgid "Recommended plugins"
+#~ msgstr "推荐插件"
+
+#, fuzzy
+#~ msgid "Free plugins"
+#~ msgstr "推荐插件"
+#~ msgid "Download"
+#~ msgstr "下载"
+#~ msgid "Install %s"
+#~ msgstr "安装 %s"
+#~ msgid "Install now from wordpress.org"
+#~ msgstr "现在从wordpress.org安装"
+
+#, fuzzy
+#~ msgid "Active Plugins"
+#~ msgstr "激活插件"
+
+#, fuzzy
+#~ msgid "Inactive Plugins"
+#~ msgstr "激活插件"
+
+#, fuzzy
+#~ msgid "Send to support"
+#~ msgstr "支持"
+
+#, fuzzy
+#~ msgid "(powered by bestwebsoft.com)"
+#~ msgstr "(powered by bestwebsoft.com)"
+
+#, fuzzy
+#~ msgid ""
+#~ "If you have any questions, please contact us via plugin@bestwebsoft.com "
+#~ "or fill in the contact form on our website"
+#~ msgstr ""
+#~ "如果有疑问，请通过plugin@bestwebsoft.com联系我们，或者在我们的网站填写联系"
+#~ "信息"
+#~ msgid "Increase"
+#~ msgstr "增加"
+#~ msgid "Difficulty for CAPTCHA"
+#~ msgstr "问答难度："
+#~ msgid "That CAPTCHA was incorrect."
+#~ msgstr "您输入的验证问答不正确"
+#~ msgid "The password of encryption is not set"
+#~ msgstr "未设置加密的密码"
+#~ msgid "null"
+#~ msgstr "cero"
+#~ msgid "Install Now"
+#~ msgstr "Installér nu"
+

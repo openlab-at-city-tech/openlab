@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Retrieves a list of progress posts matching criteria
  *
+ * If you try to use this function, you will need to implement your own switch_to_blog and wp_reset_postdata() handling if running in a multisite
+ * and in a dpa_is_running_networkwide() configuration, otherwise the data won't be fetched from the appropriate site.
+ *
  * @param array|string $args All the arguments supported by {@link WP_Query}, and some more.
  * @return array Posts
  * @since Achievements (3.0)
@@ -90,9 +93,12 @@ function dpa_delete_achievement_progress( $achievement_id, $user_id ) {
 		return;
 
 	$progress_id = dpa_get_progress( array(
-		'author'      => $user_id,
-		'fields'      => 'ids',
-		'post_parent' => $achievement_id,
+		'author'        => $user_id,
+		'fields'        => 'ids',
+		'no_found_rows' => true,
+		'nopaging'      => true,
+		'numberposts'   => 1,
+		'post_parent'   => $achievement_id,
 	) );
 
 	if ( empty( $progress_id ) )
@@ -102,4 +108,24 @@ function dpa_delete_achievement_progress( $achievement_id, $user_id ) {
 	do_action( 'dpa_before_delete_achievement_progress', $progress_id, $achievement_id, $user_id );
 
 	wp_delete_post( $progress_id, true );
+
+	// Check that the delete achievement isn't in the user's pending notifications
+	$notifications = dpa_get_user_notifications( $user_id );
+	if ( isset( $notifications[$achievement_id] ) )
+		unset( $notifications[$achievement_id]);
+
+	// Update the user's notifications in case we cleared any above
+	dpa_update_user_notifications( $notifications, $user_id );
+
+	// Decrease user unlocked count
+	dpa_update_user_unlocked_count( $user_id, dpa_get_user_unlocked_count( $user_id ) - 1 );
+
+	/**
+	 * If the progress was linked to an achievement that is the same achievement that is stored in
+	 * this user's "last unlocked" meta, then clear the "last unlocked" meta, too.
+	 */
+	if ( (int) dpa_get_user_last_unlocked( $user_id ) === $achievement_id )
+		dpa_update_user_last_unlocked( $user_id, 0 );
+
+	do_action( 'dpa_after_delete_achievement_progress', $progress_id, $achievement_id, $user_id );
 }

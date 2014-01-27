@@ -458,11 +458,16 @@ class AECCore {
 				//Check to see if there is a higher comment ID
 				if ($commentID != $newComment['comment_ID']) { return 'new_comment_posted'; }
 			}
+			//Check to see if cookie is set
+			$hash = md5($comment['comment_author_IP'] . $comment['comment_date_gmt']);
+			if ( !isset( $_COOKIE['WPAjaxEditCommentsComment' . $commentID . $hash] ) ) {
+				return 'comment_edit_denied'; 
+			}
 			//Get post security key
 			$postContent = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '_%d'", $comment['comment_post_ID'], $comment['comment_ID'] ), ARRAY_A);//$wpdb->get_row("SELECT post_content from $wpdb->posts WHERE post_type = 'ajax_edit_comments' and guid = $commentID order by ID desc limit 1", ARRAY_A);
 			if (!$postContent) { return 'comment_edit_denied'; }
 			
-			$hash = md5($comment['comment_author_IP'] . $comment['comment_date_gmt']);
+			
 			
 			//Now check to see if there's a valid cookie
 			if ( !isset( $GLOBALS['WPAjaxEditCommentsComment' . $commentID . $hash] ) ){ //For compatability with CFORMS

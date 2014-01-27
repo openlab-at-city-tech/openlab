@@ -11,18 +11,18 @@ class Anthologize_Format_API {
 	}
 
 	/**
-   * register_format()
-   *
-   * Use this function to register an export format translator in
-   * Anthologize
-   *
-   * @author Boone Gorges
-   * @param $name string The name used internally by Anthologize for this format (eg 'pdf')
-   * @param $label string The format name as displayed to the user. Can be localizable.
-   * @param $loader_path string Path to the translator loader file, which will be included with WordPress's load_template()
-   * @return type bool Returns true on successful registration
-   */
-	public function register_format( $name, $label, $loader_path, $options = false ) {
+	 * register_format()
+	 *
+	 * Use this function to register an export format translator in
+	 * Anthologize
+	 *
+	 * @author Boone Gorges
+	 * @param $name string The name used internally by Anthologize for this format (eg 'pdf')
+	 * @param $label string The format name as displayed to the user. Can be localizable.
+	 * @param $loader_path string Path to the translator loader file, which will be included with WordPress's load_template()
+	 * @return type bool Returns true on successful registration
+	 */
+	public static function register_format( $name, $label, $loader_path, $options = false ) {
 		global $anthologize_formats;
 
 		if ( !is_array( $anthologize_formats ) )
@@ -47,13 +47,13 @@ class Anthologize_Format_API {
 		return false;
 	}
 
-	public function deregister_format( $name ) {
+	public static function deregister_format( $name ) {
 		global $anthologize_formats;
 
 		unset( $anthologize_formats[$name] );
 	}
 
-	public function register_format_option( $format_name, $option_name, $label, $type, $values, $default ) {
+	public static function register_format_option( $format_name, $option_name, $label, $type, $values, $default ) {
 		global $anthologize_formats;
 
 		$option = array(
@@ -75,7 +75,7 @@ class Anthologize_Format_API {
 		return false;
 	}
 
-	public function deregister_format_option( $format_name, $option_name ) {
+	public static function deregister_format_option( $format_name, $option_name ) {
 		global $anthologize_formats;
 
 		unset( $anthologize_formats[$format_name][$option_name] );

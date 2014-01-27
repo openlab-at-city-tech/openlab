@@ -38,6 +38,7 @@ class DPA_BuddyPress_Courseware_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			'courseware_new_teacher_added'   => __( 'The user is added as a teacher', 'dpa' ),
 			'courseware_grade_added'         => __( 'A grade is given to the user', 'dpa' ),
@@ -83,7 +84,7 @@ class DPA_BuddyPress_Courseware_Extension extends DPA_Extension {
 		$this->rss_url         = 'http://feeds.nerd.ro/stas/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/buddypress-courseware-small.png';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/buddypress-courseware/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/buddypress-courseware/';
 
 		add_filter( 'dpa_handle_event_user_id', array( $this, 'event_user_id' ), 10, 3 );
 	}

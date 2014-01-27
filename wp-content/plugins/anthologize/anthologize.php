@@ -3,7 +3,7 @@
 Plugin Name: Anthologize
 Plugin URI: http://anthologize.org
 Description: Use the power of WordPress to transform your content into a book.
-Version: 0.7.1
+Version: 0.7.2
 Author: One Week | One Tool
 Author URI: http://oneweekonetool.org
 */
@@ -31,7 +31,7 @@ modifications of TDPDF must comply with its license.
 session_start();
 
 if ( ! defined( 'ANTHOLOGIZE_VERSION' ) )
-	define( 'ANTHOLOGIZE_VERSION', '0.7.1' );
+	define( 'ANTHOLOGIZE_VERSION', '0.7.2' );
 
 if ( ! class_exists( 'Anthologize' ) ) :
 
@@ -81,7 +81,8 @@ class Anthologize {
 
 		// @todo WP's functions plugin_basename() etc don't work
 		//   correctly on symlinked setups, so I'm implementing my own
-		$this->basename     = array_pop( explode( DIRECTORY_SEPARATOR, dirname( __FILE__ ) ) );
+		$bn = explode( DIRECTORY_SEPARATOR, dirname( __FILE__ ) );
+		$this->basename     = array_pop( $bn );
 		$this->plugin_dir   = plugin_dir_path( __FILE__ );
 		$this->plugin_url   = plugin_dir_url( __FILE__ );
 		$this->includes_dir = trailingslashit( $this->plugin_dir . 'includes' );
