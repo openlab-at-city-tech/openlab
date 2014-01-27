@@ -3,7 +3,7 @@
 Plugin Name: TinyMCE Advanced
 Plugin URI: http://www.laptoptips.ca/projects/tinymce-advanced/
 Description: Enables advanced features and plugins in TinyMCE, the visual editor in WordPress.
-Version: 3.5.9
+Version: 3.5.9.1
 Author: Andrew Ozz
 Author URI: http://www.laptoptips.ca/
 
@@ -196,7 +196,8 @@ if ( ! function_exists('tadv_htmledit') ) {
 		if ( isset($tadv_options['no_autop']) && $tadv_options['no_autop'] == 1 ) {
 			$c = str_replace( array('&amp;', '&lt;', '&gt;'), array('&', '<', '>'), $c );
 			$c = wpautop($c);
-			$c = htmlspecialchars($c, ENT_NOQUOTES);
+			$c = preg_replace( '/^<p>(https?:\/\/[^<> "]+?)<\/p>$/im', '$1', $c );
+			$c = htmlspecialchars( $c, ENT_NOQUOTES, get_option( 'blog_charset' ) );
 		}
 		return $c;
 	}
@@ -207,25 +208,66 @@ if ( ! function_exists('tadv_htmledit') ) {
 if ( ! function_exists('tmce_replace') ) {
 	function tmce_replace() {
 		$tadv_options = get_option('tadv_options', array());
-		$tadv_plugins = get_option('tadv_plugins', array());
 
-		if ( isset($tadv_options['no_autop']) && $tadv_options['no_autop'] == 1 ) { ?>
-
-<script type="text/javascript">
-if ( typeof(jQuery) != 'undefined' ) {
-  jQuery('body').bind('afterPreWpautop', function(e, o){
-    o.data = o.unfiltered
-    .replace(/caption\]\[caption/g, 'caption] [caption')
-    .replace(/<object[\s\S]+?<\/object>/g, function(a) {
-      return a.replace(/[\r\n]+/g, ' ');
-    });
-  }).bind('afterWpautop', function(e, o){
-    o.data = o.unfiltered;
-  });
-}
-</script>
-<?php
+		if ( empty( $tadv_options['no_autop'] ) ) {
+			return;
 		}
+
+		?>
+		<script type="text/javascript">
+		if ( typeof(jQuery) != 'undefined' ) {
+			jQuery('body').on('afterPreWpautop', function( event, obj ) {
+				var regex = [
+					new RegExp('https?://(www\.)?youtube\.com/watch.*', 'i'),
+					new RegExp('http://youtu.be/*'),
+					new RegExp('http://blip.tv/*'),
+					new RegExp('https?://(www\.)?vimeo\.com/.*', 'i'),
+					new RegExp('https?://(www\.)?dailymotion\.com/.*', 'i'),
+					new RegExp('http://dai.ly/*'),
+					new RegExp('https?://(www\.)?flickr\.com/.*', 'i'),
+					new RegExp('http://flic.kr/*'),
+					new RegExp('https?://(.+\.)?smugmug\.com/.*', 'i'),
+					new RegExp('https?://(www\.)?hulu\.com/watch/.*', 'i'),
+					new RegExp('https?://(www\.)?viddler\.com/.*', 'i'),
+					new RegExp('http://qik.com/*'),
+					new RegExp('http://revision3.com/*'),
+					new RegExp('http://i*.photobucket.com/albums/*'),
+					new RegExp('http://gi*.photobucket.com/groups/*'),
+					new RegExp('https?://(www\.)?scribd\.com/.*', 'i'),
+					new RegExp('http://wordpress.tv/*'),
+					new RegExp('https?://(.+\.)?polldaddy\.com/.*', 'i'),
+					new RegExp('https?://(www\.)?funnyordie\.com/videos/.*', 'i'),
+					new RegExp('https?://(www\.)?twitter\.com/.+?/status(es)?/.*', 'i'),
+					new RegExp('https?://(www\.)?soundcloud\.com/.*', 'i'),
+					new RegExp('https?://(www\.)?slideshare\.net/*', 'i'),
+					new RegExp('http://instagr(\.am|am\.com)/p/.*', 'i'),
+					new RegExp('https?://(www\.)?rdio\.com/.*', 'i'),
+					new RegExp('https?://rd\.io/x/.*', 'i'),
+					new RegExp('https?://(open|play)\.spotify\.com/.*', 'i')
+				];
+
+				obj.data = obj.unfiltered
+				.replace(/<p>(https?:\/\/[^<> "]+?)<\/p>/ig, function( all, match ) {
+					for( var i in regex ) {
+						if ( regex[i].test( match ) ) {
+							return '\n' + match + '\n';
+						}
+					}
+					return all;
+				})
+				.replace(/caption\]\[caption/g, 'caption] [caption')
+				.replace(/<object[\s\S]+?<\/object>/g, function(a) {
+					return a.replace(/[\r\n]+/g, ' ');
+				}).replace( /<pre[^>]*>[\s\S]+?<\/pre>/g, function( match ) {
+					match = match.replace( /<br ?\/?>(\r\n|\n)?/g, '\n' );
+					return match.replace( /<\/?p( [^>]*)?>(\r\n|\n)?/g, '\n' );
+				});
+			}).on('afterWpautop', function( event, obj ){
+				obj.data = obj.unfiltered;
+			});
+		}
+		</script>
+		<?php
 	}
 	add_action( 'after_wp_tiny_mce', 'tmce_replace' );
 }

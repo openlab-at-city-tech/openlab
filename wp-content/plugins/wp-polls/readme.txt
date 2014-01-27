@@ -1,10 +1,10 @@
 === WP-Polls ===
-Contributors: GamerZ
-Donate link: http://lesterchan.net/site/donation/
-Tags: poll, polls, polling, vote, booth, democracy, ajax, survey, post, widget
-Requires at least: 2.8
-Tested up to: 3.5.1
-Stable tag: trunk
+Contributors: GamerZ  
+Donate link: http://lesterchan.net/site/donation/  
+Tags: poll, polls, polling, vote, booth, democracy, ajax, survey, post, widget  
+Requires at least: 2.8  
+Tested up to: 3.7
+Stable tag: trunk  
 
 Adds an AJAX poll system to your WordPress blog. You can also easily add a poll into your WordPress's blog post/page.
 
@@ -36,6 +36,10 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 * I spent most of my free time creating, updating, maintaining and supporting these plugins, if you really love my plugins and could spare me a couple of bucks, I will really appericiate it. If not feel free to use it without any obligations.
 
 == Changelog ==
+
+= Version 2.64 =
+* NEW: Add in various filters in the plugin. Props Machiel.
+* FIXED: Deveral undefined variable / undefined index notices. Props Machiel.
 
 = Version 2.63 (21-05-2012) =
 * Move AJAX Request to wp-admin/admin-ajax.php
@@ -263,23 +267,24 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 1. Open `wp-content/themes/<YOUR THEME NAME>/sidebar.php`
 2. Add:
 <code>
-<?php if (function_exists('vote_poll') &amp;&amp; !in_pollarchive()): ?>
-	<li>
-		<h2>Polls</h2>
-		<ul>
-			<li><?php get_poll();?></li>
-		</ul>
-		<?php display_polls_archive_link(); ?>
-	</li>
-<?php endif; ?>
+<?php if (function_exists('vote_poll') && !in_pollarchive()): ?>  
+  <li>  
+    <h2>Polls</h2>  
+    <ul>  
+      <li><?php get_poll();?></li>  
+    </ul>  
+    <?php display_polls_archive_link(); ?>  
+  </li>  
+<?php endif; ?>  
 </code>
+
 * To show specific poll, use `<?php get_poll(2); ?>` where 2 is your poll id.
 * To show random poll, use `<?php get_poll(-2); ?>`
 * To embed a specific poll in your post, use `[poll id="2"]` where 2 is your poll id.
 * To embed a random poll in your post, use `[poll id="-2"]`
 * To embed a specific poll's result in your post, use `[poll id="2" type="result"]` where 2 is your poll id.
 
-= General Usage (With Widget)= =
+= General Usage (With Widget) =
 1. Go to `WP-Admin -> Appearance -> Widgets`.
 2. You can add the Polls Widget by clicking on the 'Add' link besides it.
 3. After adding, you can configure the Polls Widget by clicking on the 'Edit' link besides it.
@@ -339,21 +344,20 @@ N/A
 * Courtesy Of [TreedBox.com](http://treedbox.com "TreedBox.com")
 * Open poll-css.css
 * Add to the end of the file:
+
 <code>
-/* css3 for coloring each pollbars */
-.wp-polls-ul li:nth-child(01) .pollbar{ background:#8FA0C5}
-.wp-polls-ul li:nth-child(02) .pollbar{ background:#FF8}
-.wp-polls-ul li:nth-child(03) .pollbar{ background:#ff8a3b}
-.wp-polls-ul li:nth-child(04) .pollbar{ background:#a61e2a}
-.wp-polls-ul li:nth-child(05) .pollbar{ background:#4ebbff}
-.wp-polls-ul li:nth-child(06) .pollbar{ background:#fbca54}
-.wp-polls-ul li:nth-child(07) .pollbar{ background:#aad34f}
-.wp-polls-ul li:nth-child(08) .pollbar{ background:#66cc9a}
-.wp-polls-ul li:nth-child(09) .pollbar{ background:#98CBCB}
-.wp-polls-ul li:nth-child(10) .pollbar{ background:#a67c52}
-/* little transition */
-.wp-polls-ul li .pollbar{-webkit-transition: background 0.7s ease-in-out}
-.wp-polls-ul li .pollbar:hover{background:#F00}
+.wp-polls-ul li:nth-child(01) .pollbar{ background:#8FA0C5}  
+.wp-polls-ul li:nth-child(02) .pollbar{ background:#FF8}  
+.wp-polls-ul li:nth-child(03) .pollbar{ background:#ff8a3b}  
+.wp-polls-ul li:nth-child(04) .pollbar{ background:#a61e2a}  
+.wp-polls-ul li:nth-child(05) .pollbar{ background:#4ebbff}  
+.wp-polls-ul li:nth-child(06) .pollbar{ background:#fbca54}  
+.wp-polls-ul li:nth-child(07) .pollbar{ background:#aad34f}  
+.wp-polls-ul li:nth-child(08) .pollbar{ background:#66cc9a}  
+.wp-polls-ul li:nth-child(09) .pollbar{ background:#98CBCB}  
+.wp-polls-ul li:nth-child(10) .pollbar{ background:#a67c52}  
+.wp-polls-ul li .pollbar{-webkit-transition: background 0.7s ease-in-out}  
+.wp-polls-ul li .pollbar:hover{background:#F00}  
 </code>
 
 = Polls Stats (Outside WP Loop) =
@@ -361,31 +365,31 @@ N/A
 = To Display Total Polls =
 * Use:
 <code>
-<?php if (function_exists('get_pollquestions')): ?>
-	<?php get_pollquestions(); ?>
+<?php if (function_exists('get_pollquestions')): ?>  
+	<?php get_pollquestions(); ?>  
 <?php endif; ?>
 </code>
 
 = To Display Total Poll Answers =
 * Use:
 <code>
-<?php if (function_exists('get_pollanswers')): ?>
-	<?php get_pollanswers(); ?>
+<?php if (function_exists('get_pollanswers')): ?>  
+	<?php get_pollanswers(); ?>  
 <?php endif; ?>
 </code>
 
 = To Display Total Poll Votes =
 * Use:
 <code>
-<?php if (function_exists('get_pollvotes')): ?>
-	<?php get_pollvotes(); ?>
+<?php if (function_exists('get_pollvotes')): ?>  
+	<?php get_pollvotes(); ?>  
 <?php endif; ?>
 </code>
 
 = To Display Total Poll Voters =
 * Use:
 <code>
-<?php if (function_exists('get_pollvoters')): ?>
-	<?php get_pollvoters(); ?>
+<?php if (function_exists('get_pollvoters')): ?>  
+	<?php get_pollvoters(); ?>  
 <?php endif; ?>
 </code>

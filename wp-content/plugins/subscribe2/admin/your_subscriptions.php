@@ -92,7 +92,9 @@ if ( isset($_POST['s2_admin']) && 'user' == $_POST['s2_admin'] ) {
 
 // show our form
 echo "<div class=\"wrap\">";
-echo "<div id=\"icon-users\" class=\"icon32\"></div>";
+if ( version_compare($GLOBALS['wp_version'], '3.8', '<=') ) {
+	echo "<div id=\"icon-users\" class=\"icon32\"></div>";
+}
 echo "<h2>" . __('Notification Settings', 'subscribe2') . "</h2>\r\n";
 if ( isset($_GET['email']) ) {
 	$user = get_userdata($user_ID);
@@ -223,6 +225,7 @@ if ( $this->s2_mu && !isset($_GET['email']) ) {
 		restore_current_blog();
 	}
 
+	echo "<div class=\"s2_admin\" id=\"s2_mu_sites\">\r\n";
 	if ( !empty($blogs_subscribed) ) {
 		ksort($blogs_subscribed);
 		echo "<h2>" . __('Subscribed Blogs', 'subscribe2') . "</h2>\r\n";
@@ -264,6 +267,7 @@ if ( $this->s2_mu && !isset($_GET['email']) ) {
 		}
 		echo "</ul>\r\n";
 	}
+	echo "</div>\r\n";
 }
 
 echo "</div>\r\n";

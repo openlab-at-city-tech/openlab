@@ -4,13 +4,13 @@ Plugin Name: ZooEffect Plugin for Video player, Photo Gallery Slideshow jQuery a
 Plugin URI: http://www.zooeffect.com/
 Description: Photo Gallery with slideshow function, video players, music and podcast, many templates (players) and powerfull admin to manage your media assets without any program skills. Delivery using state of the art CDN (Content Delivery Network) included.
 Author: ZooEffect
-Version: 1.09
+Version: 1.10
 */
 
 
 function _zooeffect_plugin_ver()
 {
-	return 'wp1.09';
+	return 'wp1.10';
 }
 
 if (strpos($_SERVER['REQUEST_URI'], 'media-upload.php') && strpos($_SERVER['REQUEST_URI'], '&type=zooeffect') && !strpos($_SERVER['REQUEST_URI'], '&wrt='))

@@ -3,11 +3,12 @@
 Plugin Name: Subscribe2
 Plugin URI: http://subscribe2.wordpress.com
 Description: Notifies an email list when new entries are posted.
-Version: 8.9.1
+Version: 9.1
 Author: Matthew Robinson
 Author URI: http://subscribe2.wordpress.com
 Licence: GPL3
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
+Text Domain: subscribe2
 */
 
 /*
@@ -31,12 +32,12 @@ You should have received a copy of the GNU General Public License
 along with Subscribe2. If not, see <http://www.gnu.org/licenses/>.
 */
 
-if ( version_compare($GLOBALS['wp_version'], '3.1', '<') || !function_exists( 'add_action' ) ) {
+if ( version_compare($GLOBALS['wp_version'], '3.3', '<') || !function_exists( 'add_action' ) ) {
 	if ( !function_exists( 'add_action' ) ) {
 		$exit_msg = __("I'm just a plugin, please don't call me directly", 'subscribe2');
 	} else {
-		// Subscribe2 needs WordPress 3.1 or above, exit if not on a compatible version
-		$exit_msg = sprintf(__('This version of Subscribe2 requires WordPress 3.1 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2'), '<a href="http://codex.wordpress.org/Updating_WordPress">Wordpress</a>', '<a href="http://wordpress.org/extend/plugins/subscribe2/download/">Subscribe2</a>');
+		// Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
+		$exit_msg = sprintf(__('This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2'), '<a href="http://codex.wordpress.org/Updating_WordPress">Wordpress</a>', '<a href="http://wordpress.org/extend/plugins/subscribe2/download/">Subscribe2</a>');
 	}
 	exit($exit_msg);
 }
@@ -54,7 +55,7 @@ if ( is_plugin_active_for_network(plugin_basename(__FILE__)) ) {
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '8.9' );
+define( 'S2VERSION', '9.1' );
 define( 'S2PATH', trailingslashit(dirname(__FILE__)) );
 define( 'S2DIR', trailingslashit(dirname(plugin_basename(__FILE__))) );
 define( 'S2URL', plugin_dir_url(dirname(__FILE__)) . S2DIR );

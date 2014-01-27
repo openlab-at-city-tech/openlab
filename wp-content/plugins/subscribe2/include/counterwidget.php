@@ -30,7 +30,7 @@ class S2_Counter_widget extends WP_Widget {
 		$count = (count($registered) + count($confirmed));
 		echo "<ul><div style=\"text-align:center; background-color:" . $s2w_bg . "; color:" . $s2w_fg . "; width:" . $s2w_width . "px; height:" . $s2w_height . "px; font:" . $s2w_font . "pt Verdana, Arial, Helvetica, sans-serif; vertical-align:middle; padding:3px; border:1px solid #444;\">";
 		echo $count;
-		echo "</span></div></ul>";
+		echo "</div></ul>";
 		echo $after_widget;
 	}
 

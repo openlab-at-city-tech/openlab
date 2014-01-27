@@ -3,25 +3,25 @@
 Plugin Name: SharDB site admin utilities
 Plugin URI: http://wpmututorials.com/plugins/shardb/
 Description: A Multi-database plugin for WordPress networks
-Version: 2.7.6
+Version: 2.7.7
 Author: Ron Rennick
 Author URI: http://ronandandrea.com/
 Network: true
-
+ 
 */
-/* Copyright:	(C) 2009 Ron Rennick, All rights reserved.
+/* Copyright:	(C) 2009 Ron Rennick, All rights reserved.  
 	Contributions by Luke Poland copyright:	(C) 2009 Luke Poland, All rights reserved.
-
+	
 */
 function shardb_get_ds_part_from_blog_id( $blog_id ) {
 	global $shardb_hash_length, $shardb_dataset, $shardb_num_db, $vip_db, $shardb_prefix, $enable_home_db, $db_ds_parts;
-
+	
 	if( !$enable_home_db && $blog_id < 2 && defined( 'MULTISITE' ) ) {
-		$dataset = 'global';
+		$dataset = 'global'; 
 		$partition = 0;
 	} elseif( isset( $shardb_hash_length ) ) {
-		$dataset = $shardb_dataset;
-		$hash = strtoupper( substr( md5( $blog_id ), 0, $shardb_hash_length ) );
+		$dataset = $shardb_dataset; 
+		$hash = substr( md5( $blog_id ), 0, $shardb_hash_length );
 		$partition = hexdec( $hash );
 // VIP Blog Check.
 // Added by: Luke Poland
@@ -49,7 +49,7 @@ add_filter( 'wpmu_blogs_columns', 'shardb_blog_columns' );
 
 function shardb_blog_field( $column, $blog_id ) {
 	global $wpdb, $db_servers;
-
+	
 	if ( $column == 'shardb' ) {
 		$ds_part = shardb_get_ds_part_from_blog_id( $blog_id );
 		echo $ds_part[ 'dataset' ] . ' / ' . $db_servers[ $ds_part[ 'dataset' ] ][ $ds_part[ 'partition' ] ][ 0 ][ 'name' ];
@@ -73,9 +73,8 @@ function shardb_migrate() {
 	screen_icon();
 	echo '<h2>' . __( 'SharDB Migration', 'shardb' ) . '</h2>';
 
-	$action = isset($_GET['action']) ? $_GET['action'] : 'show';
-	//$url = menu_page_url( __FUNCTION__, false );
-        $url = network_admin_url( 'settings.php?page=shardb_migrate' );
+	$action = isset( $_GET['action'] ) ? $_GET['action'] : 'show';
+	$url = add_query_arg( array( 'page' => 'shardb_migrate' ), network_admin_url( 'settings.php' ) );
 	$start_url = add_query_arg( array( 'action' => 'migrate' ), $url );
 	$global_url = add_query_arg( array( 'action' => 'global' ), $url );
 
@@ -132,8 +131,8 @@ function shardb_migrate() {
 		case 'show':
 		default:
 			?><p><?php _e( 'You can migrate all the database tables on your network through this page. It works by calling the migrate script for each site automatically.', 'shardb' ); ?></p>
-			<p><a class="button" href="<?php echo $global_url; ?>"><?php _e( 'Migrate Global Tables', 'shardb' ); ?></a>
-			<a class="button" href="<?php echo $start_url; ?>"><?php _e( 'Migrate Sites', 'shardb' ); ?></a></p><?php
+			<p><a class="button" href="<?php echo esc_url( $global_url ); ?>"><?php _e( 'Migrate Global Tables', 'shardb' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $start_url ); ?>"><?php _e( 'Migrate Sites', 'shardb' ); ?></a></p><?php
 		break;
 	}
 	echo '</div>';
@@ -196,19 +195,6 @@ function shardb_migrate_site_tables( $blog_id, $siteurl, &$source_object, $shard
 				$new_tables = $target_object->get_col( "SHOW TABLES LIKE '$t'" );
 			}
 			$msg = "<li>$t <strong>";
-			if ( in_array( $t, $new_tables ) ) {
-				$target_object->query( "TRUNCATE TABLE $t" );
-			} else {
-				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
-				$target_object->query( $create[1] );
-			}
-
-			$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
-			foreach( $data as $row )
-				$target_object->insert( $t, $row );
-
-			$msg .= 'copied to';
-			/*
 			if( !in_array( $t, $new_tables ) ) {
 				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
 				if( !empty( $create[1] ) ) {
@@ -223,7 +209,7 @@ function shardb_migrate_site_tables( $blog_id, $siteurl, &$source_object, $shard
 			} else {
 				$msg .= 'already exists';
 				$prep = 'in';
-			}*/
+			}
 			if( $display )
 				echo $msg . "</strong> $prep <strong>$db_name</strong></li>";
 		}
@@ -243,12 +229,12 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 
 	if( empty( $db_servers['global'][0] ) )
 		return array();
-
+	
 	$db_server = current( $db_servers['global'][0] );
 	$column = 'Tables_in_' . $source_object->dbname;
 	$query = "SHOW TABLES WHERE {$column} LIKE '{$source_object->base_prefix}%' AND SUBSTR({$column}," . ( strlen( $source_object->base_prefix ) + 1 ) . ',1) NOT BETWEEN 1 AND 9';
 	$tables = $source_object->get_col( $query );
-
+	
 	$errors = array();
 	if( !empty( $tables ) ) {
 		$global = new wpdb( DB_USER, DB_PASSWORD, $db_server['name'], DB_HOST );
@@ -256,58 +242,36 @@ function shardb_migrate_global_tables( &$source_object, $display = true ) {
 		$blog_tables = array();
 		if( $enable_home_db && defined( 'MULTISITE' ) )
 			$blog_tables = $source_object->tables( 'blog', true, 1 );
-
+			
 		if( $display )
 			echo "<h4>Global Tables</h4><ul>\n";
-
+			
 		foreach( $tables as $t ) {
-
-			// Skip wp_bp_activity - it's too big, and needs to
-			// be copied manually
-			var_dump( $t );
-			if ( 'wp_bp_activity' == $t || 'wp_bp_xprofile_data' == $t || 'wp_posts' == $t || 'wp_sitemeta' == $t || 'wp_bp_groups_groupmeta' == $t || 'wp_usermeta' == $t || 'wp_users' == $t ) {
+			if( in_array( $t, $blog_tables ) )
 				continue;
-			}
-
-			if( in_array( $t, $blog_tables ) ) {
-				continue;
-				// This is here to prevent overwriting, but
-				// we want to be able to do that
-				$global->query( "TRUNCATE TABLE $t" );
-				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
-				$global->query( $create[1] );
-			//	continue;
-			}
-			
+				
 			$msg = "<li>$t <strong>";
-			
-			$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
-			foreach( $data as $row )
-				$global->insert( $t, $row );
-			$msg .= 'copied';
-			/*
 			if( !in_array( $t, $new_tables ) ) {
-				//$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
-//				if( !empty( $create[1] ) ) {
-				//	$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
+				$create = $source_object->get_row( "SHOW CREATE TABLE $t", ARRAY_N );
+				if( !empty( $create[1] ) ) {
+					$data = $source_object->get_results( "SELECT * FROM $t", ARRAY_A );
 					$global->query( $create[1] );
 					foreach( $data as $row )
 						$global->insert( $t, $row );
 					$msg .= 'copied';
-//				} else
-//					$msg .= 'was not copied';
+				} else
+					$msg .= 'was not copied';
 				$prep = 'to';
 			} else {
 				$msg .= 'already exists';
 				$prep = 'in';
 			}
-			*/
 			if( $display )
 				echo $msg . "</strong> $prep <strong>{$db_server['name']}</strong></li>";
 		}
 		if( $display )
 			echo '</ul>';
-
+		
 	}
 	return $errors;
 }

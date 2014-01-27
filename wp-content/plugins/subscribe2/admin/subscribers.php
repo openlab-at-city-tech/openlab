@@ -5,23 +5,32 @@ if ( !function_exists('add_action') ) {
 
 global $wpdb, $subscribers, $what, $current_tab;
 
+// detect or define which tab we are in
+$current_tab = isset( $_GET['tab'] ) ? esc_attr($_GET['tab']) : 'public';
+
 // was anything POSTed ?
 if ( isset($_POST['s2_admin']) ) {
 	check_admin_referer('bulk-subscribers');
 	if ( !empty($_POST['addresses']) ) {
-		$sub_error = '';
+		$reg_sub_error = '';
+		$pub_sub_error = '';
 		$unsub_error = '';
+		$message = '';
 		foreach ( preg_split("|[\s,]+|", $_POST['addresses']) as $email ) {
 			$email = $this->sanitize_email($email);
-			if ( is_email($email) && $_POST['subscribe'] ) {
+			if ( is_email($email) && isset($_POST['subscribe']) ) {
 				if ( $this->is_public($email) !== false ) {
-					('' == $sub_error) ? $sub_error = "$email" : $sub_error .= ", $email";
+					('' == $pub_sub_error) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
+					continue;
+				}
+				if ( $this->is_registered($email) ) {
+					('' == $reg_sub_error) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
 					continue;
 				}
 				$this->add($email, true);
 				$message = "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Address(es) subscribed!', 'subscribe2') . "</strong></p></div>";
-			} elseif ( is_email($email) && $_POST['unsubscribe'] ) {
-				if ( $this->is_public($email) === false ) {
+			} elseif ( is_email($email) && isset($_POST['unsubscribe']) ) {
+				if ( $this->is_public($email) === false || $this->is_registered($email) ) {
 					('' == $unsub_error) ? $unsub_error = "$email" : $unsub_error .= ", $email";
 					continue;
 				}
@@ -29,20 +38,42 @@ if ( isset($_POST['s2_admin']) ) {
 				$message = "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Address(es) unsubscribed!', 'subscribe2') . "</strong></p></div>";
 			}
 		}
-		if ( $sub_error != '' ) {
-			echo "<div id=\"message\" class=\"error\"><p><strong>" . __('Some emails were not processed, the following were already subscribed' , 'subscribe2') . ":<br />$sub_error</strong></p></div>";
+		if ( $reg_sub_error != '' ) {
+			echo "<div id=\"message\" class=\"error\"><p><strong>" . __('Some emails were not processed, the following are already Registered Subscribers' , 'subscribe2') . ":<br />$reg_sub_error</strong></p></div>";
+		}
+		if ( $pub_sub_error != '' ) {
+			echo "<div id=\"message\" class=\"error\"><p><strong>" . __('Some emails were not processed, the following are already Public Subscribers' , 'subscribe2') . ":<br />$pub_sub_error</strong></p></div>";
 		}
 		if ( $unsub_error != '' ) {
 			echo "<div id=\"message\" class=\"error\"><p><strong>" . __('Some emails were not processed, the following were not in the database' , 'subscribe2') . ":<br />$unsub_error</strong></p></div>";
 		}
-		echo $message;
-		$_POST['what'] = 'confirmed';
-	} elseif ( $_POST['action'] === 'delete' || $_POST['action2'] === 'delete' ) {
-		foreach ( $_POST['subscriber'] as $address ) {
-			$this->delete($address);
+		if ( $message != '' ) {
+			echo $message;
 		}
-		echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Address(es) deleted!', 'subscribe2') . "</strong></p></div>";
-	} elseif ( $_POST['action'] === 'toggle' || $_POST['action2'] === 'toggle' ) {
+		$_POST['what'] = 'confirmed';
+	} elseif ( (isset($_POST['action']) && $_POST['action'] === 'delete') || (isset($_POST['action2']) && $_POST['action2'] === 'delete') ) {
+		if ( $current_tab === 'public' ) {
+			foreach ( $_POST['subscriber'] as $address ) {
+				$this->delete($address);
+			}
+			echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Address(es) deleted!', 'subscribe2') . "</strong></p></div>";
+		} elseif ( $current_tab === 'registered' ) {
+			global $current_user;
+			$users_deleted_error = '';
+			$users_deleted = '';
+			foreach ( $_POST['subscriber'] as $address ) {
+				$user = get_user_by('email', $address);
+				if ( !current_user_can('delete_user', $user->ID) || $user->ID == $current_user->ID ) {
+					$users_deleted_error = __('Delete failed! You cannot delete some or all of these users', 'subscribe2') . "<br />";
+					continue;
+				} else {
+					$users_deleted = __('User(s) deleted! Any posts made by these users were assigned to you', 'subscribe2');
+					wp_delete_user($user->$id, $current_user->ID);
+				}
+			}
+			echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . $users_deleted_error . $users_deleted . "</strong></p></div>";
+		}
+	} elseif ( (isset($_POST['action']) && $_POST['action'] === 'toggle') || (isset($_POST['action2']) && $_POST['action2'] === 'toggle') ) {
 		global $current_user;
 		$this->ip = $current_user->user_login;
 		foreach ( $_POST['subscriber'] as $address ) {
@@ -67,8 +98,6 @@ if ( isset($_POST['s2_admin']) ) {
 	}
 }
 
-// detect or define which tab we are in
-$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'public';
 if ( $current_tab == 'registered' ) {
 	// Get Registered Subscribers
 	$registered = $this->get_registered();
@@ -120,13 +149,22 @@ if ( isset($_REQUEST['what']) ) {
 	}
 }
 
-if ( !empty($_POST['s']) ) {
-	foreach ( $subscribers as $subscriber ) {
-		if ( is_numeric(stripos($subscriber, $_POST['s'])) ) {
-			$result[] = $subscriber;
+if ( !empty($_REQUEST['s']) ) {
+	if ( !empty($_POST['s']) ) {
+		foreach ( $subscribers as $subscriber ) {
+			if ( is_numeric(stripos($subscriber, $_POST['s'])) ) {
+				$result[] = $subscriber;
+			}
 		}
+		$subscribers = $result;
+	} else {
+		foreach ( $subscribers as $subscriber ) {
+			if ( is_numeric(stripos($subscriber, $_REQUEST['s'])) ) {
+				$result[] = $subscriber;
+			}
+		}
+		$subscribers = $result;
 	}
-	$subscribers = $result;
 }
 
 if ( !class_exists('WP_List_Table') ) {
@@ -142,7 +180,9 @@ $S2ListTable->prepare_items();
 
 // show our form
 echo "<div class=\"wrap\">";
-echo "<div id=\"icon-tools\" class=\"icon32\"></div>";
+if ( version_compare($GLOBALS['wp_version'], '3.8', '<=') ) {
+	echo "<div id=\"icon-tools\" class=\"icon32\"></div>";
+}
 $tabs = array('public' => __('Public Subscribers', 'subscribe2'), 'registered' => __('Registered Subscribers', 'subscribe2'));
 echo "<h2 class=\"nav-tab-wrapper\">";
 foreach ( $tabs as $tab_key => $tab_caption ) {
@@ -178,7 +218,7 @@ switch ($current_tab) {
 	case 'registered':
 		echo "<div class=\"s2_admin\" id=\"s2_add_subscribers\">\r\n";
 		echo "<h2>" . __('Add/Remove Subscribers', 'subscribe2') . "</h2>\r\n";
-		echo "<p class=\"submit\" style=\"border-top: none;\"><input type=\"button\" class=\"button-primary\" name=\"add_user\" value=\"" . __('Add Registered User', 'subscribe2') . "\" formaction=\"" . admin_url() . "user-new.php\" /></p>\r\n";
+		echo "<p class=\"submit\" style=\"border-top: none;\"><a class=\"button-primary\" href=\"" . admin_url() . "user-new.php\">" . __('Add Registered User', 'subscribe2') . "</a></p>\r\n";
 
 		echo "</div>\r\n";
 

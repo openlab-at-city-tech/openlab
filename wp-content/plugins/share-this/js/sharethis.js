@@ -49,7 +49,26 @@ function st_log() {
 }
 
 jQuery(document).ready(function(){
+	jQuery('.wrap').css({'background':'white', 'width':'1002px','padding':'10px','border-radius':'5px'});
+	
 	removeInterval();
+	
+	jQuery('#st_add_to_content').change(function() {
+		if(jQuery('#st_add_to_content').val() == "no") {
+			jQuery('#st_add_to_content1').attr('disabled', 'disabled');
+		} else {
+			jQuery('#st_add_to_content1').removeAttr('disabled');
+		}
+	});
+	
+	jQuery('#st_add_to_page').change(function() {
+		if(jQuery('#st_add_to_page').val() == "no") {
+			jQuery('#st_add_to_page2').attr('disabled', 'disabled');
+		} else {
+			jQuery('#st_add_to_page2').removeAttr('disabled');
+		}
+	});
+	
 	jQuery('#st_cns_settings').find('input').live('click', updateDoNotHash);
 	if(jQuery('#st_callesi').val() == 1){
 		getGlobalCNSConfig();
@@ -60,6 +79,22 @@ jQuery(document).ready(function(){
 		windowLoaded();
 	}
 });
+
+function st_signOut() {
+	jQuery('<iframe />', {
+		name: 'tempIframe',
+		id:   'tempIframe',
+		src: 'http://www.sharethis.com/account/signout.php'
+	}).appendTo('body');
+	jQuery('#tempIframe').css({'width': '1px', 'height': '1px', 'position': 'absolute', 'top': '-100px'});
+	jQuery('#st_pkey').val('');
+	jQuery('#st_user_name').val('');
+	jQuery("#ak_sharethis").submit();
+	//Once the signout is done then reload the page.
+	jQuery('#tempIframe').load(function() {
+		document.location.reload();
+	});
+}
 
 function submitForm(){
 	jQuery("#ak_sharethis").submit(function(event) {
@@ -552,7 +587,7 @@ function scriptLoading(barStyle){
 	if(barStyle=="hoverbarStyle"){
 		jQuery('#hoverBarImage').hide();
 		jQuery("#hoverbarLoadingImg").show();
-		jQuery.getScript("http://sharethis.com/js/new/get-hoverbuttons-new.js",function(data){ 
+		jQuery.getScript(PLUGIN_PATH+"libraries/get-hoverbuttons-new.js",function(data){ 
 			hoverbuttons.stgOptions.position =  st_hoverBarPosition;
 			var st_hoverbuttons_widget = new sharethis.widgets.hoverbuttons(hoverbuttons.stgOptions);
 			checkHoverBarPosition();
@@ -581,7 +616,7 @@ function scriptLoading(barStyle){
 	  }else if(barStyle=="pulldownStyle"){
 		jQuery('#pullDownBarImage').hide();
 		jQuery("#pulldownLoadingImg").show();
-		jQuery.getScript("http://sharethis.com/js/new/get-pulldown-new.js",function(data){ 
+		jQuery.getScript(PLUGIN_PATH+"libraries/get-pulldown-new.js",function(data){ 
 			var st_pulldown_widget = new sharethis.widgets.pulldownbar(pulldown.stgOptions);
 			jQuery("#st_configure_pulldown").show();
 			st_selectedBarStyle = barStyle;
@@ -610,7 +645,7 @@ function scriptLoading(barStyle){
 	  if(barStyle=="fbStyle"){
 		jQuery('#shareNowImage').hide();
 		jQuery("#sharenowLoadingImg").show();
-		jQuery.getScript("http://sharethis.com/js/new/get-sharenow-new.js",function(data){ 
+		jQuery.getScript(PLUGIN_PATH+"libraries/get-sharenow-new.js",function(data){ 
 			sharenow.stgOptions.style = jQuery("#st_sharenow_theme").val();
 			var st_service_widget = new sharethis.widgets.serviceWidget(sharenow.stgOptions);
 			jQuery("#st_customize_sharenow").show();
