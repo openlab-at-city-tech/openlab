@@ -3,8 +3,8 @@ Contributors: takien
 Donate link: http://takien.com/donate
 Tags: table,csv,csv-to-table,post,excel,csv file,widget,tablesorter
 Requires at least: 3.0
-Tested up to: 3.5.1
-Stable tag: 1.1.1
+Tested up to: 3.8
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,11 @@ Easy Table using standard CSV format to generate table data, it's easiest way to
 * Fancy table design (using Twitter CSS bootstrap)
 * WYSIWYG safe, I mean you can switch HTML/View tab in WordPress editor without breaking the table data.
 
+= Known bugs and limitation =
+* Enclosure will not work on first cell of a row
+* Chinese characters (and others?) usually stripped down on first cell of a row
+* Unable to create nested table
+
 = Example usage =
 
 * Basic table
@@ -39,6 +44,16 @@ Year,Make,Model,Length
 1997,Ford,E350,2.34
 2000,Mercury,Cougar,2.38
 [/table]`
+
+* Table with specific width
+`[table width="500px"]
+Year,Make,Model,Length
+1997,Ford,E350,2.34
+2000,Mercury,Cougar,2.38
+[/table]`
+
+Valid width value : auto, any number followed by % or px.
+If width not set, it will use default width value ( can be changed via Plugin option )
 
 * Table with colspan and other attribute in some cells
 `[table]
@@ -169,6 +184,24 @@ row3col1,row3col2,row3col3|
 row4col1,row4col2,row4col3|
 [/table]`
 
+* Table with comma in cell using enclosure
+`[table]
+head1,head2,head3
+row1col1,row1col2,"this, should, in, one cell, because, enclosured, with, doublequote"
+row2col1,row2col2,row2col3
+row3col1,row3col2,row3col3
+row4col1,row4col2,row4col3
+[/table]`
+
+* Table with comma in cell using escape (since 1.3)
+`[table]
+head1,head2,head3
+row1col1,row1col2,this\, should\, in\, one cell\, because\, commas \,escaped \,with \,backslash
+row2col1,row2col2,row2col3
+row3col1,row3col2,row3col3
+row4col1,row4col2,row4col3
+[/table]`
+
 * Table with no heading
 `[table th="0"]some data here[/table]`
 
@@ -185,9 +218,9 @@ row4col1,row4col2,row4col3|
 `[table file="example.com/blog/wp-content/uploads/pricelist.csv"][/table]`
 
 [Look confusing? Please click here](http://takien.com/plugins/easy-table).
+Or check out our video tutorial here http://www.youtube.com/watch?v=Th0_qSleyDI
 
 = Other notes =
-* Data in each cell must not have line break, otherwise it will be detected as new row.
 * If read from file, the file URL must not contain space.
 
 == Installation ==
@@ -214,6 +247,28 @@ There are many ways to install this plugin, e.g:
 No
 
 == Changelog ==
+
+= 1.4 =
+* Updated: TableSorter JavaScript library now updated to 2.10.8 from 2.0.5b ( hope it will solve many sorting problems )
+
+= 1.3.1 =
+* Fixed: Bug on version 1.3, fatal error on PHP prior to 5.3.0
+
+= 1.3 =
+* Fixed: `escape` is now working, you can use escape to skip `delimiter`s (also `terminator`s if they're not \r or \n) using escape (default escape character is backslash)
+
+= 1.2 =
+* Added: `align` parameter is now back. (Previously removed on version 1.1)
+
+= 1.1.4 =
+* Added new parameter 'fixlinebreak' to optionally convert newline to &lt;br /&gt; if terminator is not \r or \n
+
+= 1.1.3 =
+* Added: now you can use 'auto' for table width
+* Table width now use inline style ( internally, not affected to the plugin usage )
+
+= 1.1.2 =
+* Fixed bug limit param doesn't work on version 1.1.1
 
 = 1.1.1 =
 * Fixed bug custom terminator doesn't work on version 1.1

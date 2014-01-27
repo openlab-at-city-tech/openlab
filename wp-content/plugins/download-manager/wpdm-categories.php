@@ -37,7 +37,7 @@ input{
     </tfoot>
 
     <tbody class="list:post" id="the-list">
-    <?php 
+    <?php
     function wpdm_render_cats($parent="",$level=0){
     if($categories = maybe_unserialize(get_option("_fm_categories",true))){    
     if(is_array($categories)){

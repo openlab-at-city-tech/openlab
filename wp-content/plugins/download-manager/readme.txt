@@ -1,18 +1,18 @@
 === WordPress Download Manager ===
-Contributors: codename065
+Contributors: codename065, shahriar0822
 Donate link: 
-Tags: file management plugin, downloads, document management plugin, download manager, file manager, download monitor, download counter, password protection, downlad tracker, download protection
+Tags: file management plugin, downloads, document management plugin, download manager, file manager, download monitor, download counter, password protection, download tracker, download protection
 Requires at least: 3.4
-Tested up to: 3.6
+Tested up to: 3.8
 License: GPLv2 or later
  
   
  
-This is a Files and Document Management plugin which will help you to manage, track and control file downloads from your wordpress site.
+This is a Files and Document Management plugin which will help you to manage, track and control file downloads from your WordPress site.
    
 
 == Description ==
-WordPress Download Manager is a Files and Document Management plugin for your WordPress Site. WordPress Download Manager plugin will help you to manage, track and control file downloads from your wordpress site. You can set password and set access level any of your downloadable files from your wordpress site.
+WordPress Download Manager is a Files and Document Management plugin for your WordPress Site. WordPress Download Manager plugin will help you to manage, track and control file downloads from your WordPress site. You can set password and set access level any of your downloadable files from your WordPress site.
 You can add/embed downloadable files anywhere in the post just pasting the embed code inside your post content using WordPress Download Manager.
 
 `"Download Monitor" to "Download Manager" Files Importer Integrated. Import all download monitor files in a single click`
@@ -26,10 +26,10 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 *	Custom download link icon
 *	File type icon support
 *	DataTable support ( use short-code [wpdm_all_packages] )
-*	Seatching and Sorting Option
+*	Searching and Sorting Option
 *	Custom link label
-*	Shortcode for download link
-*	Shortcode for direct link to downloadable file [wpdm_hotlink id=file_id_required link_label=any_text_optional]
+*	Short-code for download link
+*	Short-code for direct link to downloadable file [wpdm_hotlink id=file_id_required link_label=any_text_optional]
 *	New templates for file links
 *	WP Thickbox popup for download page
 *	Tinymce button for short-code embed
@@ -55,13 +55,63 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 1. Create new download package
 2. Manage download packages
 3. Categories
-4. Frton-end link template preview
+4. Front-end link template preview
 5. Full tree view of categories and files with a simple short-code [wpdm_tree]
 6. Sortable and Searchable Download List , use short-code [wpdm_all_packages] to embed the list
 7. Insert short-code
-8. Create a new download pacakge quickly from popup
+8. Create a new download package quickly from popup
 
 == Changelog ==
+
+= 2.5.94 =
+* Fixed HTTP response code for download page
+* and this is the last update of v2.5.x , next update 2.6.0 , where wpdm moving to custom post type, but still I'll keep this version in archive.
+
+
+= 2.5.93 =
+* Added validation for input data
+* Updated settings page
+* Fixed access level issue
+
+= 2.5.92 =
+* Applied sanitize file name for cached file 
+
+= 2.5.91 =
+* regular maintenance and compatibility release for wp 3.8
+
+= 2.5.9 = 
+* Fixed input validation issue
+
+= 2.5.8 =
+* Adjusted 3 minor issues with input validation and notice display.
+
+= 2.5.7 =
+* Adjusted some minor issues ( notices )
+
+= 2.5.6 =
+* Fixed category id issue for non-ascii chars
+
+= 2.5.5 =
+* Fixed data validation issue
+
+= 2.5.4 =
+* Fixed an issue with quick add option
+
+= 2.5.3 =
+* regular maintenance and compatibility release for wp 3.7
+
+= 2.5.2 =
+* Updated tinymce button, added selection option for additional short-codes
+
+= 2.5.1 =
+* Fixed conflict with nextgen gallery
+
+= 2.5.0 =
+* Fixed issue with category id for utf8 charset
+* Fixed issue with file title
+
+= 2.4.9 =
+* Fixed an issue with tinymce button
 
 = 2.4.8 =
 * Compatibility update for wp 3.6
@@ -72,7 +122,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 
 = 2.4.6 =
 * Added stripslashed for title and description
-* Upgraded some intenal css
+* Upgraded some internal css
 
 = 2.4.5 =
 * Fixed the issue with tinymce button 
@@ -97,7 +147,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * Fixed members download issue
 
 = 2.3.9 =
-* Fxied the issue with fread
+* Fixed the issue with "fread"
 
 = 2.3.8 =
 * Adjusted broken file issue
@@ -119,7 +169,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 = 2.3.3 =
 * added search functionality in admin
 * added individual icon support 
-* added new short-code for all download using datatable.js, with sorting and searhing option
+* added new short-code for all download using datatable.js, with sorting and searching option
 
 = 2.3.2 = 
 * Fixed a minor issue with uploader
@@ -127,7 +177,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 = 2.3.1 = 
 * Optimized for wp 3.5
 * Upgraded file upload option
-* ADjusted file delete issue
+* Adjusted file delete issue
 * Upgraded content formatting
 
 = 2.3.0 = 
@@ -151,7 +201,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * Adjusted enqueue script issue
 
 = 2.2.5 =
-* Fixed compatibility issue with wordpress 3.4
+* Fixed compatibility issue with WordPress 3.4
 
 = 2.2.4 =
 * Fixed empty category name issue
@@ -162,7 +212,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * Fixed category page security issue
 
 = 2.2.2 =
-* setHtaccess funtion error fixed
+* setHtaccess function error fixed
 * optimized front-end css
 * additional button template added
 
@@ -174,18 +224,18 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 = 2.2.0 =
 * New templates for file links
 * WP Thickbox popup for download page
-* Upgraded tiny-mce butotn
+* Upgraded tiny-mce button
 
 = 2.1.3 =
-* update short-code from {filelink=fileid} to [file id=fileid]. also support for old styles shortcode exists.
+* update short-code from {filelink=fileid} to [file id=fileid]. also support for old styles short-code exists.
 
 = 2.1.2 =
 * fixed download issues with 2.1.1
-* acitvated direct download without apearing popup for the files without password, so popup will apear only for files with password
+* activated direct download without appearing popup for the files without password, so popup will appear only for files with password
 = 2.1.1 =
-* added new shortcode [wpdm_hotlink id=file_id_required link_label=any_text_optional], use the short-code to place direct download link to files without showing popup
+* added new short-code [wpdm_hotlink id=file_id_required link_label=any_text_optional], use the short-code to place direct download link to files without showing popup
 = 2.1.0 =
-* adjusted category hirarchy issue on parent selection
+* adjusted category hierarchy issue on parent selection
 * download monitor importer adjusted
 
 = 2.0.19 =
@@ -209,7 +259,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * adjusted a minor database bug
 
 = 2.0.14 =
-* Addded option for "Import Download Monitor files". You can use this option if you already using "Download Monitor" from earlier and want use "Download Manager" now. It'll import all files and categories from "Download Monitor" to "Download Manager"
+* Added option for "Import Download Monitor files". You can use this option if you already using "Download Monitor" from earlier and want use "Download Manager" now. It'll import all files and categories from "Download Monitor" to "Download Manager"
 
 = 2.0.13 =
 * access option restored
@@ -225,7 +275,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * fixed bug with db table creation
 
 = 2.0.9 =
-* added categroy feature
+* added category feature
 * new popup style added
 * advanced server file browser added
 
@@ -243,14 +293,14 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * "Install" function conflict resolved
 
 = 2.0.4 =
-* some plgins conflict adjusted
+* some plugins conflict adjusted
 * new option added for setting custom message
 * new option added for uploading upload link icon
 
 = 2.0.3 =
-* Add/Edit Downoad count option added
+* Add/Edit Download count option added
 = 2.0.2 =
-* database class conflick fixed
+* database class conflict fixed
 
 = 2.0.1 =
 * New Option added for download link label
@@ -273,7 +323,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 
 
 = 1.5.1 =
-* Adjsuted minor issues with download counter
+* Adjusted minor issues with download counter
 
 = 1.5 = 
 * New feature: Download counter
@@ -305,7 +355,7 @@ You can add/embed downloadable files anywhere in the post just pasting the embed
 * Fixed bug with download link
 
 = 1.2 =
-* Fxied installation bug
+* Fixed installation bug
 
 
 

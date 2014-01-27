@@ -155,28 +155,35 @@ fieldset{padding: 10px;}
                     
                     jQuery(function(){  
                                       
-                    var stitle ='', sdesc = '';
+                    var s_title ='', s_desc = '';
                     jQuery('#addtopost').click(function(){
                      
                     var win = window.dialogArguments || opener || parent || top;       
                             
-                    if(jQuery('#stitle').attr("checked")=='checked') stitle = ' title="true" ';
-                    if(jQuery('#sdesc').attr("checked")=='checked') sdesc = ' desc="true" ';  
+                    if(jQuery('#s_title').is(":checked")) s_title = ' title="true" ';
+                    if(jQuery('#s_desc').is(":checked")) s_desc = ' desc="true" ';
                     var shadow = jQuery('#shadow').val();  
                     var template = ' template="'+jQuery('#template').val()+' '+shadow+'" ';
                     if(jQuery('#template').val()=='') template = "";
-                    win.send_to_editor('[wpdm_file id='+jQuery('#fl').val()+stitle+sdesc+template+']');
+                    win.send_to_editor('[wpdm_file id='+jQuery('#fl').val()+s_title+s_desc+template+']');
                     tinyMCEPopup.close();
                     return false;                   
                     });
                     jQuery('#addtopostc').click(function(){              
-                    var win = window.dialogArguments || opener || parent || top;                
-                    if(jQuery('#title').attr("checked")==true) title = ' title="true" ';
-                    if(jQuery('#desc').attr("checked")==true) desc = ' desc="true" ';
+                    var win = window.dialogArguments || opener || parent || top;
+
                     win.send_to_editor('{wpdm_category='+jQuery('#flc').val()+'}');
                     tinyMCEPopup.close();
                     return false;                   
-                    });  
+                    });
+
+                   jQuery('#addtoposte').click(function(){
+                    var win = window.dialogArguments || opener || parent || top;
+
+                    win.send_to_editor(jQuery('#esc').val());
+                    tinyMCEPopup.close();
+                    return false;
+                    });
                               
                 });
                 </script>
@@ -188,8 +195,8 @@ fieldset{padding: 10px;}
 <div style="clear: both;"></div>        
 <div id="scode"  class="tab-pane">
 <fieldset><legend>Embed File</legend> 
-<input type="checkbox" id="stitle" value="1"> <label for="title">Show Title</label> 
-<input type="checkbox" id="sdesc" value="1"> <label for="desc">Show Description</label> <br/>
+<input type="checkbox" id="s_title" value="1"> <label for="s_title">Show Title</label>
+<input type="checkbox" id="s_desc" value="1"> <label for="s_desc">Show Description</label> <br/>
 Template: <select id="template">
 <option value="">None</option>
 <option value="facebook">Facebook</option>
@@ -228,12 +235,19 @@ Drop Shadow Effect: <select id="shadow">
     ?>
     </select>
     <input type="submit" id="addtopostc" class="button button-primary" name="addtopost" value="Insert into post" />
+</fieldset>   <br>
+<fieldset><legend>Additional Short-codes</legend>
+    <select class="button input" id="esc">
+    <option value="[wpdm_all_packages]">All Downloads (Data Table)</option>
+    <option value="[wpdm_tree]">All Downloads (Tree View)</option>
+    </select>
+    <input type="submit" id="addtoposte" class="button button-primary" name="addtopost" value="Insert into post" />
 </fieldset>
 </div>
 <div id="qbtn"  class="tab-pane" style="display: none;"> 
 <fieldset>
 <legend>Add New Package</legend>
-    <form action="admin.php?page=file-manager/add-new-package" id="wpdmpack">
+    <form action="admin.php?page=file-manager/add-new-package" id="wpdmpack" method="post">
      
     <input type="hidden" id="act" name="file[access]" value="guest" />
     <input type="hidden" name="action" value="save_wpdm_file" />

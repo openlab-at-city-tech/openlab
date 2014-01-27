@@ -1,4 +1,6 @@
 <?php
+if(!defined('ABSPATH')) die('Error!');
+
 global $wpdb; 
  if(!file_exists(dirname(__FILE__).'/cache/'))
     die("<code>".dirname(__FILE__).'/cache/</code> is missing!' );
@@ -8,8 +10,9 @@ global $wpdb;
 $did = explode('.',base64_decode($_GET['did']));
 $id = array_shift($did);
 if(!is_numeric($id)){   
-    $_GET['did'] = esc_attr($_GET['did']); 
+    $_GET['did'] =  esc_attr($_GET['did']); 
     $data = @unserialize(file_get_contents(dirname(__FILE__).'/cache/'.$_GET['did']));
+    
    
 }
 else {    
@@ -23,6 +26,7 @@ if(is_array($data)){
         header("location: wp-login.php?redirect_to=".urlencode($_SERVER['REQUEST_URI']));
         die();
     }
+    $_GET['did'] = sanitize_file_name($_GET['did']);
     @unlink(dirname(__FILE__).'/cache/'.$_GET['did']);
     
     
@@ -44,7 +48,7 @@ if(is_array($data)){
     die('File not found!');
     
     $wpdb->query("update ahm_files set download_count=download_count+1 where id='$data[id]'");
-    
+/*    
     $mime_types = array("323" => "text/h323",
                         "acx" => "application/internet-property-stream",
                         "ai" => "application/postscript",
@@ -231,9 +235,13 @@ if(is_array($data)){
                         "xwd" => "image/x-xwindowdump",
                         "z" => "application/x-compress",
                         "zip" => "application/zip");
-                        
-    $mtype = $mime_types[strtolower(end(explode('.',$fname)))];  
+ * 
+ */
      
+    $filetype = wp_check_filetype($fname);
+                       
+    $mtype = $filetype['type'];
+    
     $asfname = basename($fname);
 
     $fsize = filesize($fname);
@@ -277,7 +285,7 @@ if(is_array($data)){
     }
 
 }  else {
-    die('File not found');
+    die('File not found or Downlaoad Link Expired!');
 }
 
 die();

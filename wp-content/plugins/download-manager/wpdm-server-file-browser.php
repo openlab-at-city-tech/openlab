@@ -1,7 +1,7 @@
 <?php
 
 function wpdm_dir_tree(){
-    if($_GET['task']!='wpdm_dir_tree') return;
+    if(!isset($_GET['task'])||$_GET['task']!='wpdm_dir_tree') return;
     $_POST['dir'] = urldecode($_POST['dir']);
     if( file_exists($root . $_POST['dir']) ) {
 	    $files = scandir($root . $_POST['dir']);
@@ -27,7 +27,7 @@ function wpdm_dir_tree(){
 }
 
 function wpdm_file_browser(){
-    if($_GET['task']!='wpdm_file_browser') return;
+    if(!isset($_GET['task'])||$_GET['task']!='wpdm_file_browser') return;
     ?>
     <link rel="stylesheet" href="<?php echo plugins_url().'/download-manager/css/jqueryFileTree.css';?>" />
     <style type="text/css">.jqueryFileTree li{line-height: 20px;}</style>

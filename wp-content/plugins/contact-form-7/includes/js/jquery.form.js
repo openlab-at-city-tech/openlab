@@ -1,7 +1,7 @@
 /*!
  * jQuery Form Plugin
- * version: 3.36.0-2013.06.16
- * @requires jQuery v1.5 or later
+ * version: 3.46.0-2013.11.21
+ * Requires jQuery v1.5 or later
  * Copyright (c) 2013 M. Alsup
  * Examples and documentation at: http://malsup.com/jquery/form/
  * Project repository: https://github.com/malsup/form
@@ -9,7 +9,19 @@
  * https://github.com/malsup/form#copyright-and-license
  */
 /*global ActiveXObject */
-;(function($) {
+
+// AMD support
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // using AMD; register as anon module
+        define(['jquery'], factory);
+    } else {
+        // no AMD; invoke directly
+        factory( (typeof(jQuery) != 'undefined') ? jQuery : window.Zepto );
+    }
+}
+
+(function($) {
 "use strict";
 
 /*
@@ -89,6 +101,9 @@ $.fn.ajaxSubmit = function(options) {
     if (typeof options == 'function') {
         options = { success: options };
     }
+    else if ( options === undefined ) {
+        options = {};
+    }
 
     method = options.type || this.attr2('method');
     action = options.url  || this.attr2('action');
@@ -103,7 +118,7 @@ $.fn.ajaxSubmit = function(options) {
     options = $.extend(true, {
         url:  url,
         success: $.ajaxSettings.success,
-        type: method || 'GET',
+        type: method || $.ajaxSettings.type,
         iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
     }, options);
 
@@ -206,7 +221,7 @@ $.fn.ajaxSubmit = function(options) {
 
     // [value] (issue #113), also see comment:
     // https://github.com/malsup/form/commit/588306aedba1de01388032d5f42a60159eea9228#commitcomment-2180219
-    var fileInputs = $('input[type=file]:enabled[value!=""]', this);
+    var fileInputs = $('input[type=file]:enabled', this).filter(function() { return $(this).val() !== ''; });
 
     var hasFileInputs = fileInputs.length > 0;
     var mp = 'multipart/form-data';
@@ -309,11 +324,15 @@ $.fn.ajaxSubmit = function(options) {
         }
 
         s.data = null;
-            var beforeSend = s.beforeSend;
-            s.beforeSend = function(xhr, o) {
+        var beforeSend = s.beforeSend;
+        s.beforeSend = function(xhr, o) {
+            //Send FormData() provided by user
+            if (options.formData)
+                o.data = options.formData;
+            else
                 o.data = formdata;
-                if(beforeSend)
-                    beforeSend.call(this, xhr, o);
+            if(beforeSend)
+                beforeSend.call(this, xhr, o);
         };
         return $.ajax(s);
     }
@@ -322,6 +341,11 @@ $.fn.ajaxSubmit = function(options) {
     function fileUploadIframe(a) {
         var form = $form[0], el, i, s, g, id, $io, io, xhr, sub, n, timedOut, timeoutHandle;
         var deferred = $.Deferred();
+
+        // #341
+        deferred.abort = function(status) {
+            xhr.abort(status);
+        };
 
         if (a) {
             // ensure that every serialized input is still enabled
@@ -471,7 +495,7 @@ $.fn.ajaxSubmit = function(options) {
 
             // update form attrs in IE friendly way
             form.setAttribute('target',id);
-            if (!method) {
+            if (!method || /post/i.test(method) ) {
                 form.setAttribute('method', 'POST');
             }
             if (a != s.url) {
@@ -531,11 +555,11 @@ $.fn.ajaxSubmit = function(options) {
                 if (!s.iframeTarget) {
                     // add iframe to doc and submit the form
                     $io.appendTo('body');
-                    if (io.attachEvent)
-                        io.attachEvent('onload', cb);
-                    else
-                        io.addEventListener('load', cb, false);
                 }
+                if (io.attachEvent)
+                    io.attachEvent('onload', cb);
+                else
+                    io.addEventListener('load', cb, false);
                 setTimeout(checkState,15);
 
                 try {
@@ -627,7 +651,7 @@ $.fn.ajaxSubmit = function(options) {
                     s.dataType = 'xml';
                 xhr.getResponseHeader = function(header){
                     var headers = {'content-type': s.dataType};
-                    return headers[header];
+                    return headers[header.toLowerCase()];
                 };
                 // support for XHR 'status' & 'statusText' emulation :
                 if (docRoot) {
@@ -721,6 +745,8 @@ $.fn.ajaxSubmit = function(options) {
             setTimeout(function() {
                 if (!s.iframeTarget)
                     $io.remove();
+                else  //adding else to clean up existing iframe response.
+                    $io.attr('src', s.iframeSrc);
                 xhr.responseXML = null;
             }, 100);
         }
@@ -822,7 +848,7 @@ function doAjaxSubmit(e) {
     var options = e.data;
     if (!e.isDefaultPrevented()) { // if event has been canceled, don't proceed
         e.preventDefault();
-        $(this).ajaxSubmit(options);
+        $(e.target).ajaxSubmit(options); // #365
     }
 }
 
@@ -1187,4 +1213,5 @@ function log() {
     }
 }
 
-})(jQuery);
+}));
+

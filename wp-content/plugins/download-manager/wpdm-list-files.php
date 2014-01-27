@@ -1,4 +1,5 @@
 <?php
+if(!defined('ABSPATH')) die('Direct Access is not Allowed!'); 
 global $wpdb;
 $limit = 10;
 
@@ -29,8 +30,8 @@ $row = $wpdb->get_row("select count(*) as total from ahm_files $cond",ARRAY_A);
  
 </h2> 
 <div class="updated" style="padding:5px 10px;color:#fff;font-weight:bold;background: #6F9348; border: 0px;padding:8px 20px;font-size:10pt;font-style: italic;">
- <a style="color: #fff;font-family: 'Verdana'" href="http://www.wpdownloadmanager.com/?ref=wpadmin&domain=<?php echo $_SERVER['HTTP_HOST']; ?>" target="_blank">Get download manager premium version now! </a> /
- <a style="color: #fff;font-family: 'Verdana'" href="http://www.wpdownloadmanager.com/?ref=wpadmin&domain=<?php echo $_SERVER['HTTP_HOST']; ?>#features" target="_blank">Checkout the features here</a>
+ <a style="color: #fff;font-family: 'Verdana'" href="http://www.wpdownloadmanager.com/?affid=admin&domain=<?php echo $_SERVER['HTTP_HOST']; ?>" target="_blank">Get download manager premium version now! </a> /
+ <a style="color: #fff;font-family: 'Verdana'" href="http://www.wpdownloadmanager.com/?affid=admin&domain=<?php echo $_SERVER['HTTP_HOST']; ?>#features" target="_blank">Checkout the features here</a>
  </div>
  <i><b style="font-family:Georgia">Simply Copy and Paste the embed code at anywhere in post contents</b></i><br><br>
 
@@ -91,7 +92,7 @@ $row = $wpdb->get_row("select count(*) as total from ahm_files $cond",ARRAY_A);
     <tbody class="list:post" id="the-list">
     <?php foreach($res as $media) { 
         
-            switch(end(explode(".",$media[file]))){
+            switch(end(explode(".",$media['file']))){
                 case 'jpg':  case 'png':  case 'bmp':   case 'gif': 
                     $icon = 'img.png';
                 break;
@@ -100,7 +101,7 @@ $row = $wpdb->get_row("select count(*) as total from ahm_files $cond",ARRAY_A);
                 case 'zip':  $icon = 'zip.png';  break;
                 
                 default:
-                $icon = end(explode(".",$media[file])).'.png';  
+                $icon = end(explode(".",$media['file'])).'.png';  
                 break;
                 
                 
@@ -133,15 +134,15 @@ $row = $wpdb->get_row("select count(*) as total from ahm_files $cond",ARRAY_A);
 </table>
 
 <?php
-$_GET['paged'] = $_GET['paged'] ?$_GET['paged'] :1;
+$paged = isset($_GET['paged']) ?$_GET['paged'] :1;
 
 $page_links = paginate_links( array(
     'base' => add_query_arg( 'paged', '%#%' ),
     'format' => '',
     'prev_text' => __('&laquo;'),
     'next_text' => __('&raquo;'),
-    'total' => ceil($row[total]/$limit),
-    'current' => $_GET['paged']
+    'total' => ceil($row['total']/$limit),
+    'current' => $paged
 ));
 
 
@@ -152,11 +153,13 @@ $page_links = paginate_links( array(
 <div class="tablenav">
 
 <?php 
-if ( $page_links ) { ?>
+if ( $page_links ) { 
+                
+    ?>
 <div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
-    number_format_i18n( ( $_GET['paged'] - 1 ) * $limit + 1 ),
-    number_format_i18n( min( $_GET['paged'] * $limit, $row[total] ) ),
-    number_format_i18n( $row[total] ),
+    number_format_i18n( ( $paged - 1 ) * $limit + 1 ),
+    number_format_i18n( min( $paged * $limit, $row['total'] ) ),
+    number_format_i18n( $row['total'] ),
     $page_links
 ); echo $page_links_text; ?></div>
 <?php } ?>

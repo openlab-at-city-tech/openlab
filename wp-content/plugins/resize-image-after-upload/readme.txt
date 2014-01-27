@@ -4,7 +4,7 @@ Donate link: http://www.jepsonrae.com/?utm_campaign=plugins&utm_source=wp-resize
 Tags: image, plugin, resize, upload
 Requires at least: 2.6
 Tested up to: 3.5.2
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 This plugin resizes uploaded images to within a given maximum width and height after uploading, discarding the original uploaded file in the process.
 
@@ -30,6 +30,9 @@ The plugin uses a class originally from Jacob Wyke (www.redvodkajelly.com) and i
 1. Full preview of the settings screen
 
 == Changelog ==
+
+= 1.4.2 =
+* [update] Added ability to enter a resize value of zero (0) to prevent resizing in a particular dimension.
 
 = 1.4.1 =
 * [fix] Reverting code back to how it was in v1.3.0 after previous premature deployment of v1.4.0. Please use this version.

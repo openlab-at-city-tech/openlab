@@ -145,4 +145,10 @@
         return $msgs[$key]?$msgs[$key]:$key;
     }
     
+    function wpdm_skip_ngg_resource_manager($r){
+        return false;
+    }
+
+    add_filter('run_ngg_resource_manager', 'wpdm_skip_ngg_resource_manager');
+    
 ?>
