@@ -131,7 +131,7 @@ class P2_Options {
 						<td>
 
 						<input id="p2_hide_threads" type="checkbox" name="p2_hide_threads" <?php if ( $p2_hide_threads == 1 ) echo 'checked="checked"'; ?> value="1" />
-						<label for="p2_hide_threads"><?php _e( 'Hide comment threads by default', 'p2' ); ?></label>
+						<label for="p2_hide_threads"><?php _e( 'Hide comment threads by default on all non-single views', 'p2' ); ?></label>
 
 						</td>
 					</tr>

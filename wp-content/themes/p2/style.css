@@ -2,9 +2,9 @@
 Theme Name: P2
 Theme URI: http://p2theme.com/
 Author: Automattic
-Author URI: http://automattic.com/
-Description: A group blog theme for short update messages, inspired by Twitter. Featuring: Hassle-free posting from the front page. Perfect for group blogging, or as a liveblog theme. Dynamic page updates. Threaded comment display on the front page. In-line editing for posts and comments. Live tag suggestion based on previously used tags. A show/hide feature for comments, to keep things tidy. Real-time notifications when a new comment or update is posted. Super-handy keyboard shortcuts. Helvetica Neue for you modern font lovers.
-Version: 1.5.1
+Author URI: http://theme.wordpress.com/
+Description: Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more.
+Version: 1.5.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: blue, custom-colors, two-columns, fixed-width, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, custom-background, custom-header, custom-menu, post-formats, sticky-post, theme-options
@@ -794,7 +794,8 @@ a.hidemessage {
 	border-style: solid;
 	border-width: 2px;
 }
-li.newupdates, li.newcomment {
+li.newupdates,
+li.newcomment {
 	display: none;
 }
 #settings {
@@ -802,7 +803,8 @@ li.newupdates, li.newcomment {
 	padding: 22px 22px 0;
 	width: 176px;
 }
-#help, #notify {
+#help,
+#notify {
 	position: fixed;
 	z-index: 10000;
 	-webkit-border-radius: 10px;
@@ -1206,7 +1208,8 @@ h3 {
 #newCommentsIndicator {
 	border-color: #f00;
 }
-li.newupdates, li.newcomment {
+li.newupdates,
+li.newcomment {
 	background-color: #F6F3D1;
 }
 .repyling .post .comment {

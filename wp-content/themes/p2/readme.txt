@@ -25,9 +25,23 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 
 == Changelog ==
 
+= 1.5.2 - November 2013 =
+* Fix posting bug with Chrome 31.x
+* Fix broken "selected" class values for post form
+* Better not found message on author results
+* Swap out get_term_link for get_tag_link to avoid fatal errors when an error object is returned
+* Trigger a custom JavaScript event when new post is created or edited
+* Fix keyboard keys and keyboard shortcut menu clash
+* Minor JS fixes to add missing semicolons and better check for updating title with newupdates count
+* Only implement "p2_hide_threads" theme option when on non-singular views
+* When hide comments on homepage option is on, don't try to link to in-page comments in Recent Comments widget
+* Turkish translation added, via erayaydin
+* Serbian translation added, from Andrijana Nikolic
+
+
 = 1.5.1 - July 2013 =
-* Fix broken "Allow any registered member to post" feature.
-* Fix display of empty comments. Props nacin.
+* Fix broken "Allow any registered member to post" feature
+* Fix display of empty comments, props nacin
 * Remove deprecated functions for custom background support
 
 = 1.5 - June 2013 =
