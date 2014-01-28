@@ -168,19 +168,13 @@ switch ($_GET['group_sequence']) {
         <?php // @todo figure out a way to make this dynamic ?>
         <?php if ( $group_type == 'course' ): ?>
             <div class="<?php echo $school_color; ?>-square"></div>
+
             <select name="semester" class="last-select <?php echo $semester_color; ?>-text">
                 <option value='' <?php selected( '', $option_value_semester ) ?>>Select Semester</option>
                 <option value='semester_all' <?php selected( 'semester_all', $option_value_semester ) ?>>All</option>
-                <option value='winter-2014' <?php selected( 'winter-2014', $option_value_semester ) ?>>Winter 2014</option>
-                <option value='fall-2013' <?php selected( 'fall-2013', $option_value_semester ) ?>>Fall 2013</option>
-                <option value='summer-2013' <?php selected( 'summer-2013', $option_value_semester ) ?>>Summer 2013</option>
-                <option value='spring-2013' <?php selected( 'sprint-2013', $option_value_semester ) ?>>Spring 2013</option>
-                <option value='winter-2013' <?php selected( 'winter-2013', $option_value_semester ) ?>>Winter 2013</option>
-                <option value='fall-2012' <?php selected( 'fall-2012', $option_value_semester ) ?>>Fall 2012</option>
-                <option value='summer-2012' <?php selected( 'summer-2012', $option_value_semester ) ?>>Summer 2012</option>
-                <option value='spring-2012' <?php selected( 'sprint-2012', $option_value_semester ) ?>>Spring 2012</option>
-                <option value='winter-2012' <?php selected( 'winter-2012', $option_value_semester ) ?>>Winter 2012</option>
-                <option value='fall-2011' <?php selected( 'fall-2011', $option_value_semester ) ?>>Fall 2011</option>
+		<?php foreach ( openlab_get_active_semesters() as $sem ) : ?>
+			<option value="<?php echo esc_attr( $sem['option_value'] ) ?>" <?php selected( $option_value_semester, $sem['option_value'] ) ?>><?php echo esc_attr( $sem['option_label'] ) ?></option>
+		<?php endforeach; ?>
             </select>
 	<?php endif; ?>
 

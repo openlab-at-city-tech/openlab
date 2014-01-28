@@ -1077,6 +1077,9 @@ function wds_bp_group_meta_save( $group ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );
 	}
 
+	// Clear the active semester cache
+	delete_transient( 'openlab_active_semesters' );
+
 	// Site association. Non-courses have the option of not having associated sites ( thus the
 	// wds_website_check value ).
 	if ( isset( $_POST['wds_website_check'] ) ||
