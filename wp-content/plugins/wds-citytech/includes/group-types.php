@@ -223,14 +223,18 @@ function openlab_current_directory_filters() {
 		case 'portfolio' :
 			$filters = array( 'school', 'department', 'usertype' );
 			break;
+
 		case 'course' :
+		case 'club' :
+		case 'project' :
 			$filters = array( 'school', 'department', 'semester' );
 			break;
+
 		case 'people' :
 			$filters = array( 'usertype', 'school', 'department' );
 			break;
-		default :
 
+		default :
 			break;
 	}
 
