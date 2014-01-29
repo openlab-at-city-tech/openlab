@@ -298,15 +298,17 @@ jQuery(document).ready(function($){
 	};
 
 	// Set up Invite Anyone autocomplete
-	$('#send-to-input').autocomplete({
-		serviceUrl: ajaxurl,
-		width: 300,
-		delimiter: /(,|;)\s*/,
-		onSelect: ia_on_autocomplete_select,
-		deferRequestBy: 300,
-		params: { action: 'invite_anyone_autocomplete_ajax_handler' },
-		noCache: true
-	});
+	if ( typeof ia_on_autocomplete_select !== 'undefined' ) {
+		$('#send-to-input').autocomplete({
+			serviceUrl: ajaxurl,
+			width: 300,
+			delimiter: /(,|;)\s*/,
+			onSelect: ia_on_autocomplete_select,
+			deferRequestBy: 300,
+			params: { action: 'invite_anyone_autocomplete_ajax_handler' },
+			noCache: true
+		});
+	}
 
 	/* AJAX validation for blog URLs */
 	$('form input[type="submit"]').click(function(e){
