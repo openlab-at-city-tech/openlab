@@ -4172,7 +4172,7 @@ div.activity-comments form textarea {
   margin-top: -6px;
 }
 
-.course-create #group-create-body {
+.group-create #group-create-body {
     margin-left: 10px;
 }
 #group-create-body form.standard-form input#group-name[type="text"] {
@@ -4183,18 +4183,16 @@ div.activity-comments form textarea {
     width: 520px;
     margin-bottom: 5px;
 }
-.course-create .ct-group-meta {
+.group-create .ct-group-meta {
   margin-top: 0!important;
   width: 550px;
 }
-.course-create .ct-group-meta table {
+.group-create .ct-group-meta table {
   margin-top: 20px;
 }
-.course-create .ct-group-meta table tr td, .course-create .ct-group-meta table tr th,
+.group-create .ct-group-meta table tr td, .group-create .ct-group-meta table tr th,
 .group-admin .ct-group-meta table tr td, .group-admin .ct-group-meta table tr th {
   padding: 0;
-}
-.course-create tr.schools {
 }
 #group-create-body .schools .block-title, #single-course-body .schools .block-title, .group-admin .department-title .block-title, .group-admin .additional-field-label {
   font-weight: 700;
@@ -4202,10 +4200,10 @@ div.activity-comments form textarea {
 .groups .additional-field-label {
   font-size: 12px;
 }
-.course-create td#departments_html {
+.group-create td#departments_html {
   width: 520px;
 }
-.course-create td#departments_html div, .group-admin td#departments_html div {
+.group-create td#departments_html div, .group-admin td#departments_html div {
     background: none repeat scroll 0 0 #F0F0F0;
     border: 1px solid #CCCCCC;
     margin-top: 5px;
@@ -4221,7 +4219,7 @@ div.activity-comments form textarea {
   margin-bottom: 5px;
 }
 
-.course-create table ul.ol-tooltip {
+.group-create table ul.ol-tooltip {
   margin-top: -17px;
   margin-bottom: 10px;
 }
@@ -4229,7 +4227,7 @@ div.activity-comments form textarea {
   height: 30px;
   line-height: 20px;
 }
-.course-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
+.group-create tr.additional-description-field td, .group-admin tr.additional-description-field td {
     text-align: left !important;
     padding-top: 16px!important;
 }
@@ -4238,18 +4236,18 @@ div.activity-comments form textarea {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
-.course-create tr#wds-website-clone, .course-create tr#wds-website, .course-create tr#wds-website-existing, .course-create tr#wds-website-external {
+.group-create tr#wds-website-clone, .group-create tr#wds-website, .group-create tr#wds-website-existing, .group-create tr#wds-website-external {
   height: 40px;
   vertical-align: middle;
 }
-.course-create tr#wds-website-clone input, .course-create tr#wds-website input, .course-create tr#wds-website-existing input, .course-create tr#wds-website-external input {
+.group-create tr#wds-website-clone input, .group-create tr#wds-website input, .group-create tr#wds-website-existing input, .group-create tr#wds-website-external input {
   margin-right: 10px;
 }
-.course-create #clone-destination-path {
+.group-create #clone-destination-path {
   margin-left: 15px;
   width: 195px;
 }
-.course-create td#noo_external_options p#check-note {
+.group-create td#noo_external_options p#check-note {
     bottom: -40px;
     margin-left: 5px;
     margin-top: 10px !important;
@@ -4587,24 +4585,24 @@ font-family: Arial,Helvetica,sans-serif;
     margin: 0 0 -5px 0;
 }
 
-.course-create .ct-group-meta p.ol-tooltip {
+.group-create .ct-group-meta p.ol-tooltip {
   margin: 0 0 8px 0;
   width: 650px;
 }
-.course-create .ct-group-meta table {
+.group-create .ct-group-meta table {
   margin-top: 0;
 }
-.course-create .ct-group-meta td.school-inputs input#school_studies, .course-create .ct-group-meta td.school-inputs input#school_arts {
+.group-create .ct-group-meta td.school-inputs input#school_studies, .course-create .ct-group-meta td.school-inputs input#school_arts {
   margin-left: 30px;
 }
-.course-create .school-inputs input#school_studies, .course-create .school-inputs input#school_arts {
+.group-create .school-inputs input#school_studies, .course-create .school-inputs input#school_arts {
     margin-right: 10px;
 }
-.course-create .department-title .block-title {
+.group-create .department-title .block-title {
   padding-top: 21px;
   font-size: 12px;
 }
-.course-create #departments_html input {
+.group-create #departments_html input {
   margin-right: 5px;
 }
 .groups .ct-group-meta table .ol-tooltip {
@@ -4634,12 +4632,12 @@ font-family: Arial,Helvetica,sans-serif;
   margin-bottom: 25px;
 }
 
-.course-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
+.group-create #group-create-body #wds-website-tooltips p.ol-tooltip, #single-course-body #wds-website-tooltips p.ol-tooltip {
   margin-top: -5px;
   margin-bottom: 2px;
 }
 
-.course-create #group-create-body #wds-website-tooltips ul.ol-tooltip, #single-course-body #wds-website-tooltips ul.ol-tooltip {
+.group-create #group-create-body #wds-website-tooltips ul.ol-tooltip, #single-course-body #wds-website-tooltips ul.ol-tooltip {
   margin-top: 0;
   margin-bottom: 12px;
 }
@@ -4648,16 +4646,16 @@ font-family: Arial,Helvetica,sans-serif;
   font-size: 11px;
 }
 
-.course-create td.block-title, .course-create td.department-title, .course-create .additional-field-label, .course-create tr.form-field.form-required th {
+.group-create td.block-title, .group-create td.department-title, .group-create .additional-field-label, .group-create tr.form-field.form-required th {
   font-weight: 700;
 }
-.course-create .groupblog-setup th {
+.group-create .groupblog-setup th {
   font-size: 12px;
 }
 tr#course-table-rule td {
   padding: 0 0 5px 0!important;
 }
-.course-create #noo_external_options input[type=text] {
+.group-create #noo_external_options input[type=text] {
   width: 285px;
 }
 
