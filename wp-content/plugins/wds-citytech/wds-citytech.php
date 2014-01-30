@@ -1367,7 +1367,7 @@ load_textdomain( 'bp-group-documents', WP_CONTENT_DIR . '/languages/buddypress-g
  * Allow super admins to change user type on Dashboard
  */
 class OpenLab_Change_User_Type {
-	function init() {
+	static function function init() {
 		static $instance;
 
 		if ( !is_super_admin() ) {
