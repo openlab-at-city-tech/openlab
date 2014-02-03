@@ -1422,6 +1422,9 @@ ul.item-list li h5 span.small {
     font-weight:700;
     padding:10px;
     margin:0 0 0 10px;
+		white-space: nowrap;
+		position: absolute;
+		top: 27px;
 }
 
 /* Discussions */
