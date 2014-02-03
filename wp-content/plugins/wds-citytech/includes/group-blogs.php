@@ -774,6 +774,7 @@ function wds_bp_group_meta() {
 					</th>
 
 					<td id="noo_new_options">
+						<div id="noo_new_options-div">
 						<?php
 						$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 
@@ -785,6 +786,7 @@ function wds_bp_group_meta() {
 							echo $current_site->domain . $current_site->path
 							?><input size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
 				<?php endif; ?>
+						</div>
 
 					</td>
 				</tr>

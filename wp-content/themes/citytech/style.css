@@ -1424,7 +1424,7 @@ ul.item-list li h5 span.small {
     margin:0 0 0 10px;
 		white-space: nowrap;
 		position: absolute;
-		top: 27px;
+		top: -10px;
 }
 
 /* Discussions */
@@ -4891,6 +4891,10 @@ ul.ol-tooltip li:before {
     width:15px;
     height:15px;
     background:url(/wp-content/plugins/buddypress/bp-themes/bp-default/_inc/images/ajax-loader.gif) no-repeat scroll left center transparent;
+}
+
+#noo_new_options-div {
+	position: relative; /* for ajax warning absolute positioning */
 }
 
 .groups #noo_new_options input {
