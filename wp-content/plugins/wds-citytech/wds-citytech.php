@@ -867,11 +867,7 @@ function wds_load_group_type( $group_type ) {
 		}
 	}
 
-	if ( $group_type == "course" || $group_type == 'portfolio' ) {
-		$onclick = 'onclick="wds_load_group_departments();"';
-	} else {
-		$onclick = '';
-	}
+	$onclick = 'onclick="wds_load_group_departments();"';
 
 	$return.= '<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design</label>';
 
@@ -882,96 +878,87 @@ function wds_load_group_type( $group_type ) {
 	$return .= '</td>';
 	$return .= '</tr>';
 
-	if ( 'course' == $group_type || 'portfolio' == $group_type ) {
-		// For the love of Pete, it's not that hard to cast variables
-		$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
+	// For the love of Pete, it's not that hard to cast variables
+	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
-		if ( bp_get_current_group_id() ) {
-			$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
-			$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(),  'wds_course_code' );
-			$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
-			$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
-			$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
-			$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
+	if ( bp_get_current_group_id() ) {
+		$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
+		$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(),  'wds_course_code' );
+		$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
+		$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
+		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
+		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
+	}
+	//$return. = '<tr>';
+   //$return. = ' <td>Faculty:';
+		//$return. = '<td><input type="text" name="wds_faculty" value="'.$bp->loggedin_user->fullname.'"></td>';
+	//$return. = '</tr>';
+	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
+	$return.= '<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
+
+	$return.= '<tr class="department-title">';
+
+	$return .= '<td colspan="2" class="block-title">Department(s)';
+	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
+		$return .= ' <span class="required">(required)</span>';
+	}
+	$return .= '</td></tr>';
+		$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
+	$return.= '</tr>';
+
+	if ( 'course' == $group_type ) {
+
+		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
+
+		$return .= '<tr class="additional-field course-code-field">';
+		$return .= '<td class="additional-field-label">Course Code:</td>';
+		$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+		$return .= '</tr>';
+
+		$return .= '<tr class="additional-field section-code-field">';
+		$return .= '<td class="additional-field-label">Section Code:';
+		$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+		$return .= '</tr>';
+
+		$return .= '<tr class="additional-field semester-field">';
+		$return .= '<td class="additional-field-label">Semester:';
+		$return .= '<td><select name="wds_semester">';
+		$return .= '<option value="">--select one--';
+
+		$checked = $Spring = $Summer = $Fall = $Winter = "";
+
+		if ( $wds_semester == "Spring" ) {
+			$Spring = "selected";
+		} elseif ( $wds_semester == "Summer" ) {
+			$Summer = "selected";
+		} elseif ( $wds_semester == "Fall" ) {
+			$Fall   = "selected";
+		} elseif ( $wds_semester == "Winter" ) {
+			$Winter = "selected";
 		}
-		//$return. = '<tr>';
-           //$return. = ' <td>Faculty:';
-			//$return. = '<td><input type="text" name="wds_faculty" value="'.$bp->loggedin_user->fullname.'"></td>';
-		//$return. = '</tr>';
-		$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
-		$return.= '<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
 
-		$return.= '<tr class="department-title">';
+		$return .= '<option value="Spring" ' . $Spring . '>Spring';
+		$return .= '<option value="Summer" ' . $Summer . '>Summer';
+		$return .= '<option value="Fall" ' . $Fall . '>Fall';
+		$return .= '<option value="Winter" ' . $Winter . '>Winter';
+		$return .= '</select></td>';
+		$return .= '</tr>';
 
-		$return .= '<td colspan="2" class="block-title">Department(s)';
-		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-			$return .= ' <span class="required">(required)</span>';
-		}
-		$return .= '</td></tr>';
-			$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
+		$return .= '<tr class="additional-field year-field">';
+		$return .= '<td class="additional-field-label">Year:';
+		$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
+		$return .= '</tr>';
+
+		$return .= '<tr class="additional-field additional-description-field">';
+		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
+		$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return.= '</tr>';
-
-		if ( 'course' == $group_type ) {
-
-			$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
-
-			$return .= '<tr class="additional-field course-code-field">';
-			$return .= '<td class="additional-field-label">Course Code:</td>';
-			$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
-			$return .= '</tr>';
-
-			$return .= '<tr class="additional-field section-code-field">';
-			$return .= '<td class="additional-field-label">Section Code:';
-			$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
-			$return .= '</tr>';
-
-			$return .= '<tr class="additional-field semester-field">';
-			$return .= '<td class="additional-field-label">Semester:';
-			$return .= '<td><select name="wds_semester">';
-			$return .= '<option value="">--select one--';
-
-			$checked = $Spring = $Summer = $Fall = $Winter = "";
-
-			if ( $wds_semester == "Spring" ) {
-				$Spring = "selected";
-			} elseif ( $wds_semester == "Summer" ) {
-				$Summer = "selected";
-			} elseif ( $wds_semester == "Fall" ) {
-				$Fall   = "selected";
-			} elseif ( $wds_semester == "Winter" ) {
-				$Winter = "selected";
-			}
-
-			$return .= '<option value="Spring" ' . $Spring . '>Spring';
-			$return .= '<option value="Summer" ' . $Summer . '>Summer';
-			$return .= '<option value="Fall" ' . $Fall . '>Fall';
-			$return .= '<option value="Winter" ' . $Winter . '>Winter';
-			$return .= '</select></td>';
-			$return .= '</tr>';
-
-			$return .= '<tr class="additional-field year-field">';
-			$return .= '<td class="additional-field-label">Year:';
-			$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
-			$return .= '</tr>';
-
-			$return .= '<tr class="additional-field additional-description-field">';
-			$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-			$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
-			$return.= '</tr>';
-		}
-	} elseif ( $group_type == "project" ) {
-
-	} elseif ( $group_type == "club" ) {
-
-	} else {
-		$return = "Please select a Group Type.";
 	}
 
 	$return.= '</table>';
 
-	if ( $group_type == "course" || 'portfolio' == $group_type ) {
-		$return.= '<script>wds_load_group_departments();</script>';
-	}
+	$return.= '<script>wds_load_group_departments();</script>';
+
 	if ( $echo ) {
 		return $return;
 	} else {
@@ -1076,6 +1063,9 @@ function wds_bp_group_meta_save( $group ) {
 	if ( isset( $_POST['group_project_type'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );
 	}
+
+	// Clear the active semester cache
+	delete_transient( 'openlab_active_semesters' );
 
 	// Site association. Non-courses have the option of not having associated sites ( thus the
 	// wds_website_check value ).
@@ -1377,7 +1367,7 @@ load_textdomain( 'bp-group-documents', WP_CONTENT_DIR . '/languages/buddypress-g
  * Allow super admins to change user type on Dashboard
  */
 class OpenLab_Change_User_Type {
-	function init() {
+	public static function init() {
 		static $instance;
 
 		if ( !is_super_admin() ) {

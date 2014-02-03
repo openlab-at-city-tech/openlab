@@ -25,7 +25,7 @@ wp.locale = function( translations ) {
 			if (curChar != '\\') backslashCount = 0;
 		}
 		return returnStr;
-	}
+	};
 
 	this.parseISO8601 =  function(iso8601){
 		var regexp = /(\d\d\d\d)(-)?(\d\d)(-)?(\d\d)(T)?(\d\d)(:)?(\d\d)(:)?(\d\d)(\.\d+)?(Z|([+-])(\d\d)(:)?(\d\d))/;
@@ -108,4 +108,4 @@ wp.locale = function( translations ) {
 		r: function() { return this.toString(); },
 		U: function() { return this.getTime() / 1000; }
 	};
-}
+};

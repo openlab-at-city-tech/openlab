@@ -2,7 +2,7 @@
 /*
 Plugin Name: More Privacy Options
 Plugin URI:	http://wordpress.org/extend/plugins/more-privacy-options/
-Version: 3.5
+Version: 3.7.1
 Description: Add more privacy(visibility) options to a WordPress 3.5 Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
 Author: D. Sader
 Author URI: http://dsader.snowotherway.org/
@@ -107,7 +107,7 @@ class ds_more_privacy_options {
 			//email SuperAdmin when privacy changes
 				add_action( 'update_blog_public', array(&$this,'ds_mail_super_admin'));
 			// hook into signup form?
-				// add_action('signup_blogform', array(&$this, 'add_privacy_options'));
+				 add_action('signup_blogform', array(&$this, 'add_privacy_options'));
 
 	}
 
@@ -124,7 +124,8 @@ class ds_more_privacy_options {
 			$email =  stripslashes( get_site_option('admin_email') );
 			$subject = 'Blog '.$blogname.'('.$blog_id.'), http://'.$current_blog->domain.$current_blog->path . ', changed reading visibility setting from '.$from_old.' to '.$to_new;
 			$message = 'Blog '.$blogname.'('.$blog_id.'), http://'.$current_blog->domain.$current_blog->path . ', changed reading visibility setting from '.$from_old.' to '.$to_new;
- 		wp_mail($email, $subject , $message);
+			$headers = 'Auto-Submitted: auto-generated';
+ 		wp_mail($email, $subject, $message, $headers);
 	}
 
 	function ds_mail_super_admin_messages($blog_public) {
@@ -143,7 +144,7 @@ class ds_more_privacy_options {
 			if ( '-3' == $blog_public ) {
 				return 'Site Admins Only(-3)';
 			}
-	}
+	}	
 
 	function do_robots() {
 		remove_action('do_robots', 'do_robots');
@@ -152,22 +153,20 @@ class ds_more_privacy_options {
 
 		do_action( 'do_robotstxt' );
 
-		if ( '1' != get_option( 'blog_public' ) ) {
-			echo "User-agent: *\n";
-			echo "Disallow: /\n";
+		$output = "User-agent: *\n";
+		$public = get_option( 'blog_public' );
+		if ( '1' != $public ) {
+			$output .= "Disallow: /\n";
 		} else {
-			echo "User-agent: *\n";
-			echo "Disallow:\n";
-			echo "Disallow: /wp-admin\n";
-			echo "Disallow: /wp-includes\n";
-			echo "Disallow: /wp-login.php\n";
-			echo "Disallow: /wp-content/plugins\n";
-			echo "Disallow: /wp-content/cache\n";
-			echo "Disallow: /wp-content/themes\n";
-			echo "Disallow: /trackback\n";
-			echo "Disallow: /comments\n";
-		}
-	}	
+			$site_url = parse_url( site_url() );
+			$path = ( !empty( $site_url['path'] ) ) ? $site_url['path'] : '';
+			$output .= "Disallow: $path/wp-admin/\n";
+			$output .= "Disallow: $path/wp-includes/\n";
+	}
+
+	echo apply_filters('robots_txt', $output, $public);
+	}
+	
 
 	function noindex() {
 		remove_action( 'login_head', 'noindex' );
@@ -264,16 +263,17 @@ class ds_more_privacy_options {
 		global $blogname,$current_site; 
 		$blog_name = get_bloginfo('name', 'display');
 		?>
+			<label class="checkbox" for="blog-private-1">
+				<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', get_option('blog_public')); ?> /><?php _e(' I would like my blog to be visible only to registered users of '); ?><?php echo esc_attr( $current_site->site_name ) ?>
+			</label>
 			<br/>
-			<input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', get_option('blog_public')); ?> />
-			<label for="blog-private-1"><?php _e('I would like my blog to be visible only to registered users of '); ?><?php echo esc_attr( $current_site->site_name ) ?></label>
+			<label class="checkbox" for="blog-private-2">
+				<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', get_option('blog_public')); ?> /><?php _e(' I would like my blog to be visible only to registered users I add to '); ?>"<?php echo $blog_name; ?>"
+			</label>
 			<br/>
-			<input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', get_option('blog_public')); ?> />
-			<label for="blog-private-2"><?php _e('I would like my blog to be visible only to <a href="users.php">registered users I add</a> to '); ?>"<?php echo $blog_name; ?>"</label>
-			<br/>
-			<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', get_option('blog_public')); ?> />
-			<label for="blog-private-3">I would like "<?php echo $blog_name; ?>" to be visible only to Admins.</label>
-		<?php 
+			<label class="checkbox" for="blog-private-3">
+				<input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', get_option('blog_public')); ?> /> I would like "<?php echo $blog_name; ?>" to be visible only to Admins.</label>
+<?php 
 	}
 
 	//------------------------------------------------------------------------//
@@ -376,7 +376,7 @@ class ds_more_privacy_options {
 	//------------------------------------------------------------------------//
 	function ds_members_authenticator() {
 		global $current_user, $blog_id;
-		if( is_user_member_of_blog( $current_user->id, $blog_id ) || is_super_admin() ) {
+		if( is_user_member_of_blog( $current_user->ID, $blog_id ) || is_super_admin() ) {
 			 return;
 		} else {
 				if ( is_user_logged_in() ) {	      	

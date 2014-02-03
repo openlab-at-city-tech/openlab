@@ -1,14 +1,14 @@
-# Copyright (C) 2012 the WordPress team
+# Copyright (C) 2013 the WordPress team
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Twenty Ten 1.4\n"
+"Project-Id-Version: Twenty Ten 1.6\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tags/twentyten\n"
-"POT-Creation-Date: 2012-11-16 22:18:49+00:00\n"
+"POT-Creation-Date: 2013-05-22 21:14:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Comments are closed."
 msgstr ""
 
-#. #-#-#-#-#  twentyten.pot (Twenty Ten 1.4)  #-#-#-#-#
+#. #-#-#-#-#  twentyten.pot (Twenty Ten 1.6)  #-#-#-#-#
 #. Author URI of the plugin/theme
 #: footer.php:33
 msgid "http://wordpress.org/"
@@ -141,7 +141,7 @@ msgstr ""
 msgid "Sunset"
 msgstr ""
 
-#: functions.php:255 loop-attachment.php:104 loop.php:115 loop.php:143
+#: functions.php:255 loop-attachment.php:104 loop.php:114 loop.php:142
 msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgid "Primary Widget Area"
 msgstr ""
 
 #: functions.php:386
-msgid "The primary widget area"
+msgid "Add widgets here to appear in your sidebar."
 msgstr ""
 
 #: functions.php:395
@@ -179,39 +179,29 @@ msgid "Secondary Widget Area"
 msgstr ""
 
 #: functions.php:397
-msgid "The secondary widget area"
+msgid ""
+"An optional secondary widget area, displays below the primary widget area in "
+"your sidebar."
 msgstr ""
 
 #: functions.php:406
 msgid "First Footer Widget Area"
 msgstr ""
 
-#: functions.php:408
-msgid "The first footer widget area"
+#: functions.php:408 functions.php:419 functions.php:430 functions.php:441
+msgid "An optional widget area for your site footer."
 msgstr ""
 
 #: functions.php:417
 msgid "Second Footer Widget Area"
 msgstr ""
 
-#: functions.php:419
-msgid "The second footer widget area"
-msgstr ""
-
 #: functions.php:428
 msgid "Third Footer Widget Area"
 msgstr ""
 
-#: functions.php:430
-msgid "The third footer widget area"
-msgstr ""
-
 #: functions.php:439
 msgid "Fourth Footer Widget Area"
-msgstr ""
-
-#: functions.php:441
-msgid "The fourth footer widget area"
 msgstr ""
 
 #: functions.php:475
@@ -276,11 +266,11 @@ msgid "Link to full-size image"
 msgstr ""
 
 #: loop-attachment.php:63 loop-attachment.php:111 loop-page.php:30
-#: loop-single.php:56 loop.php:100 loop.php:123 loop.php:165
+#: loop-single.php:56 loop.php:99 loop.php:122 loop.php:164
 msgid "Edit"
 msgstr ""
 
-#: loop-attachment.php:105 loop-page.php:29 loop-single.php:34 loop.php:144
+#: loop-attachment.php:105 loop-page.php:29 loop-single.php:34 loop.php:143
 msgid "Pages:"
 msgstr ""
 
@@ -298,11 +288,11 @@ msgstr ""
 msgid "View all posts by %s <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
-#: loop.php:25 loop.php:178
+#: loop.php:25 loop.php:177
 msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
 msgstr ""
 
-#: loop.php:26 loop.php:179
+#: loop.php:26 loop.php:178
 msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
 msgstr ""
 
@@ -312,55 +302,55 @@ msgid ""
 "searching will help find a related post."
 msgstr ""
 
-#: loop.php:60 loop.php:95 loop.php:96
+#: loop.php:60 loop.php:94
 msgctxt "gallery category slug"
 msgid "gallery"
 msgstr ""
 
-#: loop.php:62 loop.php:83 loop.php:131
-msgid "Permalink to %s"
-msgstr ""
-
-#: loop.php:82
+#: loop.php:81
 msgid "This gallery contains <a %1$s>%2$s photo</a>."
 msgid_plural "This gallery contains <a %1$s>%2$s photos</a>."
 msgstr[0] ""
 msgstr[1] ""
 
-#: loop.php:93
+#: loop.php:82
+msgid "Permalink to %s"
+msgstr ""
+
+#: loop.php:92
 msgid "View Galleries"
 msgstr ""
 
-#: loop.php:93 loop.php:96
+#: loop.php:92 loop.php:95
 msgid "More Galleries"
 msgstr ""
 
-#: loop.php:96
+#: loop.php:95
 msgid "View posts in the Gallery category"
 msgstr ""
 
-#: loop.php:99 loop.php:122 loop.php:164
+#: loop.php:98 loop.php:121 loop.php:163
 msgid "Leave a comment"
 msgstr ""
 
-#: loop.php:99 loop.php:122 loop.php:164
+#: loop.php:98 loop.php:121 loop.php:163
 msgid "1 Comment"
 msgstr ""
 
-#: loop.php:99 loop.php:122 loop.php:164
+#: loop.php:98 loop.php:121 loop.php:163
 msgid "% Comments"
 msgstr ""
 
-#: loop.php:106
+#: loop.php:105
 msgctxt "asides category slug"
 msgid "asides"
 msgstr ""
 
-#: loop.php:151
+#: loop.php:150
 msgid "<span class=\"%1$s\">Posted in</span> %2$s"
 msgstr ""
 
-#: loop.php:160
+#: loop.php:159
 msgid "<span class=\"%1$s\">Tagged</span> %2$s"
 msgstr ""
 
@@ -395,7 +385,7 @@ msgid "Twenty Ten"
 msgstr ""
 
 #. Theme URI of the plugin/theme
-msgid "http://wordpress.org/extend/themes/twentyten"
+msgid "http://wordpress.org/themes/twentyten"
 msgstr ""
 
 #. Description of the plugin/theme

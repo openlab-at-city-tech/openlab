@@ -38,6 +38,7 @@ class DPA_Buddy_Stream_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			'buddystream_facebook_activated' => __( 'The user connects their Facebook account to BuddyStream.', 'dpa' ),
 			'buddystream_flickr_activated'   => __( 'The user connects their Flickr account to BuddyStream.', 'dpa' ),
@@ -61,6 +62,6 @@ class DPA_Buddy_Stream_Extension extends DPA_Extension {
 		$this->rss_url         = 'http://buddystream.net/feed/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/buddystream-small.jpg';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/buddystream/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/buddystream/';
 	}
 }

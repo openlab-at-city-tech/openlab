@@ -1,2 +1,3 @@
-// version 1.0 - original version for WordPress versions less than 3.3
-edButtons[edButtons.length] = new edButton('Subscribe2', 'Subscribe2', '[subscribe2]', '', '', -1);
+/* global QTags */
+// version 2.0 - original version for WordPress versions 3.3 and greater
+QTags.addButton( 'Subscribe2', 'Subscribe2', '[subscribe2]' );

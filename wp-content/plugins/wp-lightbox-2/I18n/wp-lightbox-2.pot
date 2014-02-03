@@ -1,0 +1,46 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-lightbox-2\n"
+"POT-Creation-Date: 2011-11-27 17:40:12+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: options.php:17
+msgid "WP Lightbox 2 Options"
+msgstr ""
+
+#: options.php:22
+msgid "Lightbox Appearance"
+msgstr ""
+
+#: options.php:54
+msgid "If in doubt, try the Black theme"
+msgstr ""
+
+#: options.php:58
+msgid "Auto-lightbox image links"
+msgstr ""
+
+#: options.php:68
+msgid "Let the plugin add necessary html to image links"
+msgstr ""
+
+#: options.php:71
+msgid "Shrink large images to fit smaller screens"
+msgstr ""
+
+#: options.php:81
+msgid ""
+"Note: <u>Excessively large images</u> waste bandwidth and slow browsing!"
+msgstr ""
+
+#: options.php:87
+msgid "Save Changes"
+msgstr ""

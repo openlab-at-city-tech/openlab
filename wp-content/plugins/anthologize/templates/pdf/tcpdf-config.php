@@ -46,8 +46,12 @@ if ( !apply_filters( 'anthologize_tcpdf_external_config', ANTHOLOGIZE_TCPDF_EXTE
          * subdirectories. However, all WP installations should be able to
          * write to the WP upload directory. So we'll put our TCPDF cache there
 	 */
-	define ('K_PATH_CACHE', untrailingslashit( anthologize()->cache_dir ) );
-	define ('K_PATH_URL_CACHE', untrailingslashit( anthologize()->cache_url ) );
+	define ('K_PATH_CACHE', trailingslashit( anthologize()->cache_dir ) );
+	define ('K_PATH_URL_CACHE', trailingslashit( anthologize()->cache_url ) );
+
+	if ( ! file_exists( K_PATH_CACHE ) ) {
+		wp_mkdir_p( K_PATH_CACHE );
+	}
 
         // The rest of these values are the same as TCPDF's
 	define ('K_PATH_FONTS', K_PATH_MAIN.'fonts/');

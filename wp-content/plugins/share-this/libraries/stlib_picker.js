@@ -39,7 +39,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 		var answer = [];
 		var lis = jQElement.children(".stp_background").children(".stp_pickerLeft").find(".stp_li");
 		lis.each(function() {
-			answer.push($(this).attr("id").substring(6));
+			answer.push(jQuery(this).attr("id").substring(6));
 		});
 		return answer;
 	};
@@ -71,12 +71,12 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header' style='padding-left:5px;'  onclick='showSocialPlugins()'>Social Plugins</span></div>";
 	
 	html += "<div class='stp_pickerArrow stp_pickerArrowRtNative'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag'></div>";
-	html += "<div class='stp_pickerRight'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay($(this).parent().parent().parent().parent(), $(this).parent().parent(), this.value);'></div><ul class='stp_ulRight'></ul></div>";
+	html += "<div class='stp_pickerRight'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulRight'></ul></div>";
 	if (options && !options.showNative) {
 		html += "<div class='stp_clear'></div>";
 	} else {
 		html += "<div class='stp_pickerArrow stp_pickerArrowBtmNative'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag_bottom'></div>";
-		html += "<div class='stp_pickerBottom stp_pickerRightNative'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay($(this).parent().parent().parent().parent(), $(this).parent().parent(), this.value);'></div><ul class='stp_ulBottom'></ul></div>";
+		html += "<div class='stp_pickerBottom stp_pickerRightNative'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulBottom'></ul></div>";
 		html += "<div class='stp_clear'></div>";
 	}
 	html += "</div>";
@@ -123,13 +123,13 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	// TOP SERVICES
 	ul = jQElement.children(".stp_background").children(".stp_pickerRight").children(".stp_ulRight");
 	for(i=0;i<optionsArray["topServices"].length;i++) {
-		if ($.inArray(optionsArray["topServices"][i], optionsArray["excludedServices"]) == -1) {
+		if (jQuery.inArray(optionsArray["topServices"][i], optionsArray["excludedServices"]) == -1) {
 			stlib_picker.addServiceLink(ul, optionsArray["topServices"][i], stlib_picker._all_services[optionsArray["topServices"][i]]);
 		}
 	}
 	// EVERYTHING ELSE
-	$.each(stlib_picker._all_services, function(key, value) {
-		if($.inArray(key, pickerDefaults) == -1 && $.inArray(key, optionsArray["topServices"]) == -1 && $.inArray(key, optionsArray["excludedServices"]) == -1) {
+	jQuery.each(stlib_picker._all_services, function(key, value) {
+		if(jQuery.inArray(key, pickerDefaults) == -1 && jQuery.inArray(key, optionsArray["topServices"]) == -1 && jQuery.inArray(key, optionsArray["excludedServices"]) == -1) {
 			stlib_picker.addServiceLink(ul, key, value);
 		}
 	});
@@ -139,28 +139,28 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 		// TOP SERVICES
 		ul = jQElement.children(".stp_background").children(".stp_pickerBottom").children(".stp_ulBottom");
 		for(i=0;i<optionsArray["topNativeServices"].length;i++) {
-			if ($.inArray(optionsArray["topNativeServices"][i], optionsArray["excludedNativeServices"]) == -1) {
+			if (jQuery.inArray(optionsArray["topNativeServices"][i], optionsArray["excludedNativeServices"]) == -1) {
 				stlib_picker.addServiceLink(ul, optionsArray["topNativeServices"][i], stlib_picker._all_native_services[optionsArray["topNativeServices"][i]]);
 			}
 		}
 		
 		// EVERYTHING ELSE
-		$.each(stlib_picker._all_native_services, function(key, value) {
-			if($.inArray(key, pickerDefaults) == -1 && $.inArray(key, optionsArray["topNativeServices"]) == -1 && $.inArray(key, optionsArray["excludedNativeServices"]) == -1) {
+		jQuery.each(stlib_picker._all_native_services, function(key, value) {
+			if(jQuery.inArray(key, pickerDefaults) == -1 && jQuery.inArray(key, optionsArray["topNativeServices"]) == -1 && jQuery.inArray(key, optionsArray["excludedNativeServices"]) == -1) {
 				stlib_picker.addServiceLink(ul, key, value);
 			}
 		});
 	}
 	
 	jQElement.find("#chicklet_search_field").blur(function() {
-		var element=$(this);
+		var element=jQuery(this);
 		if(element.val()==""){
 			element.val("Search services");
 		}
 	});
 	
 	jQElement.find("#chicklet_search_field").focus(function() {
-		var element=$(this);
+		var element=jQuery(this);
 		if(element.val()=="Search services"){
 			element.val("");
 		}
@@ -247,13 +247,13 @@ stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
 	if(searchTerm == "") {
 		// Add top services
 		for(i=0;i<topServices.length;i++) {
-			if($.inArray(topServices[i], leftServices) == -1 && $.inArray(topServices[i], excludedServices) == -1) {
+			if(jQuery.inArray(topServices[i], leftServices) == -1 && jQuery.inArray(topServices[i], excludedServices) == -1) {
 				stlib_picker.addServiceLink(ul, topServices[i], searchServices[topServices[i]]);
 			}
 		}
 		// Add remaining services
-		$.each(searchServices, function(key, value) {
-			if($.inArray(key, leftServices) == -1 && $.inArray(key, topServices) == -1 && $.inArray(key, excludedServices) == -1) {
+		jQuery.each(searchServices, function(key, value) {
+			if(jQuery.inArray(key, leftServices) == -1 && jQuery.inArray(key, topServices) == -1 && jQuery.inArray(key, excludedServices) == -1) {
 				stlib_picker.addServiceLink(ul, key, value);
 			}
 		});
@@ -269,13 +269,13 @@ stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
 		
 		//Add top services
 		for(var c=0; c<matches.length; c++){
-			if($.inArray(matches[c], leftServices) == -1 && $.inArray(matches[c], topServices) != -1 && $.inArray(matches[c], excludedServices) == -1) {
+			if(jQuery.inArray(matches[c], leftServices) == -1 && jQuery.inArray(matches[c], topServices) != -1 && jQuery.inArray(matches[c], excludedServices) == -1) {
 				stlib_picker.addServiceLink(ul, matches[c], searchServices[matches[c]]);
 			}
 		}
 		//Add remaining services
 		for(var c=0; c<matches.length; c++){
-			if($.inArray(matches[c], leftServices) == -1 && $.inArray(matches[c], topServices) == -1 && $.inArray(matches[c], excludedServices) == -1) {
+			if(jQuery.inArray(matches[c], leftServices) == -1 && jQuery.inArray(matches[c], topServices) == -1 && jQuery.inArray(matches[c], excludedServices) == -1) {
 				stlib_picker.addServiceLink(ul, matches[c], searchServices[matches[c]]);
 			}
 		}
@@ -320,7 +320,7 @@ stlib_picker.makeDraggable = function (jQElement, elem) {
 		targetElem = elem;
 	}
 	jQElement.find(targetElem).find(".stp_remove").mousedown(function() {
-		var element=$(this).parent();
+		var element=jQuery(this).parent();
 		stlib_picker.removeElement(jQElement, element);
 	});
 	jQElement.find(targetElem).mouseover(function() {
@@ -391,17 +391,17 @@ stlib_picker.removeElement = function (jQElement, element) {
 }
 
 function showSocialButtons(){
-	$(".stp_pickerRight").show();
-	$(".stp_pickerBottom").hide();
-	$(".stp_pickerArrowBtmNative").hide();
-	$("#sharingBtn").removeClass("highlightSelection");
-	$("#socialPlgn").addClass("highlightSelection");
+	jQuery(".stp_pickerRight").show();
+	jQuery(".stp_pickerBottom").hide();
+	jQuery(".stp_pickerArrowBtmNative").hide();
+	jQuery("#sharingBtn").removeClass("highlightSelection");
+	jQuery("#socialPlgn").addClass("highlightSelection");
 }
 
 function showSocialPlugins(){
-	$(".stp_pickerRight").hide();
-	$(".stp_pickerBottom").show();
-	$(".stp_pickerArrowBtmNative").show();
-	$("#socialPlgn").removeClass("highlightSelection");
-	$("#sharingBtn").addClass("highlightSelection");
+	jQuery(".stp_pickerRight").hide();
+	jQuery(".stp_pickerBottom").show();
+	jQuery(".stp_pickerArrowBtmNative").show();
+	jQuery("#socialPlgn").removeClass("highlightSelection");
+	jQuery("#sharingBtn").addClass("highlightSelection");
 }

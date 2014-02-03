@@ -238,7 +238,7 @@ function dpa_is_theme_compat_original_template( $template = '' ) {
 	if ( empty( achievements()->theme_compat->original_template ) )
 		return false;
 
-	return achievements()->theme_compat->original_template == $template;
+	return achievements()->theme_compat->original_template === $template;
 }
 
 /**
@@ -262,6 +262,7 @@ function dpa_register_theme_package( $theme = array(), $override = true ) {
 		achievements()->theme_compat->packages[$theme->id] = $theme;
 	}
 }
+
 /**
  * This fun little function fills up some WordPress globals with dummy data to
  * stop your average page template from complaining about it missing.
@@ -274,44 +275,12 @@ function dpa_register_theme_package( $theme = array(), $override = true ) {
 function dpa_theme_compat_reset_post( $args = array() ) {
 	global $wp_query, $post;
 
-	// Default arguments
-	$defaults = array(
-		'comment_count'         => 0,
-		'comment_status'        => 'closed',
-		'guid'                  => '',
-		'ID'                    => -9999,
-		'menu_order'            => 0,
-		'pinged'                => '',
-		'ping_status'           => '',
-		'post_author'           => 0,
-		'post_content'          => '',
-		'post_content_filtered' => '',
-		'post_date'             => 0,
-		'post_date_gmt'         => 0,
-		'post_excerpt'          => '',
-		'post_mime_type'        => '',
-		'post_modified'         => 0,
-		'post_modified_gmt'     => 0,
-		'post_name'             => '',
-		'post_parent'           => 0,
-		'post_password'         => '',
-		'post_status'           => 'publish',
-		'post_title'            => '',
-		'post_type'             => 'page',
-		'to_ping'               => '',
-
-		'is_404'                => false,
-		'is_archive'            => false,
-		'is_page'               => false,
-		'is_single'             => false,
-		'is_tax'                => false,
-	);
-
 	// Switch defaults if post is set
 	if ( isset( $wp_query->post ) ) {
-		$defaults = array(
+		$dummy = dpa_parse_args( $args, array(
 			'comment_count'         => $wp_query->post->comment_count,
 			'comment_status'        => $wp_query->post->comment_status,
+			'filter'                => $wp_query->post->filter,
 			'guid'                  => $wp_query->post->guid,
 			'ID'                    => $wp_query->post->ID,
 			'menu_order'            => $wp_query->post->menu_order,
@@ -339,57 +308,66 @@ function dpa_theme_compat_reset_post( $args = array() ) {
 			'is_page'               => false,
 			'is_single'             => false,
 			'is_tax'                => false,
-		);
+		), 'theme_compat_reset_post' );
+
+	} else {
+		$dummy = dpa_parse_args( $args, array(
+			'comment_count'         => 0,
+			'comment_status'        => 'closed',
+			'filter'                => 'raw',
+			'ID'                    => -9999,
+			'guid'                  => '',
+			'menu_order'            => 0,
+			'pinged'                => '',
+			'ping_status'           => '',
+			'post_author'           => 0,
+			'post_content'          => '',
+			'post_content_filtered' => '',
+			'post_date'             => 0,
+			'post_date_gmt'         => 0,
+			'post_excerpt'          => '',
+			'post_mime_type'        => '',
+			'post_modified'         => 0,
+			'post_modified_gmt'     => 0,
+			'post_name'             => '',
+			'post_parent'           => 0,
+			'post_password'         => '',
+			'post_status'           => 'publish',
+			'post_title'            => '',
+			'post_type'             => 'page',
+			'to_ping'               => '',
+
+			'is_404'                => false,
+			'is_archive'            => false,
+			'is_page'               => false,
+			'is_single'             => false,
+			'is_tax'                => false,
+		), 'theme_compat_reset_post' );
 	}
-	$dummy = dpa_parse_args( $args, $defaults, 'theme_compat_reset_post' );
 
-	// Clear out the post related globals
-	unset( $wp_query->posts );
-	unset( $wp_query->post  );
-	unset( $post            );
-
-	// Setup the dummy post object
-	$wp_query->post                        = new stdClass();
-	$wp_query->post->comment_count         = $dummy['comment_count'];
-	$wp_query->post->comment_status        = $dummy['comment_status'];
-	$wp_query->post->guid                  = $dummy['guid'];
-	$wp_query->post->ID                    = $dummy['ID'];
-	$wp_query->post->menu_order            = $dummy['menu_order'];
-	$wp_query->post->pinged                = $dummy['pinged'];
-	$wp_query->post->ping_status           = $dummy['ping_status'];
-	$wp_query->post->post_author           = $dummy['post_author'];
-	$wp_query->post->post_content          = $dummy['post_content'];
-	$wp_query->post->post_content_filtered = $dummy['post_content_filtered'];
-	$wp_query->post->post_date             = $dummy['post_date'];
-	$wp_query->post->post_date_gmt         = $dummy['post_date_gmt'];
-	$wp_query->post->post_excerpt          = $dummy['post_excerpt'];
-	$wp_query->post->post_mime_type        = $dummy['post_mime_type'];
-	$wp_query->post->post_modified         = $dummy['post_modified'];
-	$wp_query->post->post_modified_gmt     = $dummy['post_modified_gmt'];
-	$wp_query->post->post_name             = $dummy['post_name'];
-	$wp_query->post->post_parent           = $dummy['post_parent'];
-	$wp_query->post->post_password         = $dummy['post_password'];
-	$wp_query->post->post_title            = $dummy['post_title'];
-	$wp_query->post->post_type             = $dummy['post_type'];
-	$wp_query->post->to_ping               = $dummy['to_ping'];
-	$wp_query->post->post_status           = $dummy['post_status'];
+	// Bail if dummy post is empty
+	if ( empty( $dummy ) )
+		return;
 
 	// Set the $post global
-	$post = $wp_query->post;
+	$post = new WP_Post( (object) $dummy );
 
-	// Setup the dummy post loop
-	$wp_query->posts[0] = $wp_query->post;
+	// Copy the new post global into the main $wp_query
+	$wp_query->post  = $post;
+	$wp_query->posts = array( $post );
 
 	// Prevent comments form from appearing
 	$wp_query->post_count = 1;
 	$wp_query->is_404     = $dummy['is_404'];
-	$wp_query->is_archive = $dummy['is_archive'];
 	$wp_query->is_page    = $dummy['is_page'];
 	$wp_query->is_single  = $dummy['is_single'];
+	$wp_query->is_archive = $dummy['is_archive'];
 	$wp_query->is_tax     = $dummy['is_tax'];
 
+	unset( $dummy );
+
 	// If we are resetting a post, we are in theme compat
-	dpa_set_theme_compat_active();
+	dpa_set_theme_compat_active( true );
 }
 
 /**
@@ -399,17 +377,48 @@ function dpa_theme_compat_reset_post( $args = array() ) {
  * @since Achievements (3.0)
  */
 function dpa_template_include_theme_compat( $template = '' ) {
+
+	// Bail if a root template was already found. This prevents unintended recursive filtering of 'the_content'.
+	if ( dpa_is_template_included() )
+		return $template;
+
+	// Bail if shortcodes are unset somehow
+	if ( ! is_a( achievements()->shortcodes, 'DPA_Shortcodes' ) )
+		return $template;
+
 	// Achievements archive
 	if ( dpa_is_achievement_archive() ) {
+
+		// Page exists where this archive should be
+		$page = dpa_get_page_by_path( dpa_get_root_slug() );
+
+		// Should we replace the content...
+		if ( empty( $page->post_content ) ) {
+			$new_content = achievements()->shortcodes->display_achievements_index(); 
+
+		// ...or use the existing page content?
+		} else {
+			$new_content = apply_filters( 'the_content', $page->post_content );
+		}
+
+		// Should we replace the title...
+		if ( empty( $page->post_title ) ) {
+			$new_title = dpa_get_achievement_archive_title();
+
+		// ...or use the existing page title?
+		} else {
+			$new_title = apply_filters( 'the_title', $page->post_title );
+		}
+
 		dpa_theme_compat_reset_post( array(
 			'comment_status' => 'closed',
-			'ID'             => 0,
+			'ID'             => ! empty( $page->ID ) ? $page->ID : 0,
 			'is_archive'     => true,
 			'post_author'    => 0,
-			'post_content'   => '',
+			'post_content'   => $new_content,
 			'post_date'      => 0,
 			'post_status'    => 'publish',
-			'post_title'     => dpa_get_achievement_archive_title(),
+			'post_title'     => $new_title,
 			'post_type'      => dpa_get_achievement_post_type(),
 		) );
 
@@ -420,7 +429,7 @@ function dpa_template_include_theme_compat( $template = '' ) {
 			'ID'             => dpa_get_achievement_id(),
 			'is_single'      => true,
 			'post_author'    => dpa_get_achievement_author_id(),
-			'post_content'   => get_post_field( 'post_content', dpa_get_achievement_id() ),
+			'post_content'   => achievements()->shortcodes->display_achievement( array( 'id' => dpa_get_achievement_id() ) ),
 			'post_date'      => 0,
 			'post_status'    => 'publish',
 			'post_title'     => dpa_get_achievement_title(),
@@ -434,7 +443,7 @@ function dpa_template_include_theme_compat( $template = '' ) {
 			'ID'             => 0,
 			'is_archive'     => true,
 			'post_author'    => 0,
-			'post_content'   => '',
+			'post_content'   => achievements()->shortcodes->display_user_achievements(),
 			'post_date'      => 0,
 			'post_status'    => 'publish',
 			'post_title'     => sprintf( _x( "%s's achievements", 'possesive noun', 'dpa' ), get_the_author_meta( 'display_name', dpa_get_displayed_user_id() ) ),
@@ -447,7 +456,7 @@ function dpa_template_include_theme_compat( $template = '' ) {
 	 * archive-* and single-* WordPress post_type matches (allowing themes to use the
 	 * expected format) as well as all other Achievements-specific template files.
 	 */
-	if ( ! empty( achievements()->theme_compat->achievements_template ) )
+	if ( dpa_is_template_included() ) {
 		return $template;
 
 	/**
@@ -467,120 +476,30 @@ function dpa_template_include_theme_compat( $template = '' ) {
 	 * Hook into the 'dpa_get_achievements_template' to override the array of
 	 * possible templates, or 'dpa_achievements_template' to override the result.
 	 */
-	if ( dpa_is_theme_compat_active() ) {
-		// Remove all filters from the_content
+	} elseif ( dpa_is_theme_compat_active() ) {
 		dpa_remove_all_filters( 'the_content' );
 
-		// Add a filter on the_content late, which we will later remove
-		add_filter( 'the_content', 'dpa_replace_the_content' );
-
-		// Find the appropriate template file
 		$template = dpa_get_theme_compat_templates();
 	}
 
 	return apply_filters( 'dpa_template_include_theme_compat', $template );
 }
 
-/**
- * Replaces the_content() if the post_type being displayed is one that would
- * normally be handled by Achievements, but proper single page templates do not
- * exist in the currently active theme.
- *
- * Note that we do *not* currently use is_main_query() here. This is because so
- * many existing themes either use query_posts() or fail to use wp_reset_query()
- * when running queries before the main loop, causing theme compat to fail.
- * 
- * @param string $content Optional
- * @return type
- * @since Achievements (3.0)
- */
-function dpa_replace_the_content( $content = '' ) {
-	// Bail if not inside the  query loop
-	if ( ! in_the_loop() )
-			return $content;
-
-	// Bail if shortcodes are unset somehow
-	if ( ! is_a( achievements()->shortcodes, 'DPA_Shortcodes' ) )
-		return $content;
-
-	$new_content = '';
-
-	/**
-	 * Use shortcode API to display template parts because they are
-	 * already output buffered and ready to fit inside the_content.
-	 */
-
-	// Achievement archive
-	if ( dpa_is_achievement_archive() ) {
-
-		// Page exists where this archive should be
-		$page = dpa_get_page_by_path( dpa_get_root_slug() );
-		if ( ! empty( $page ) ) {
-
-			// Restore previously unset filters
-			dpa_restore_all_filters( 'the_content' );
-
-			// Remove 'dpa_replace_the_content' filter to prevent infinite loops
-			remove_filter( 'the_content', 'dpa_replace_the_content' );
-
-			// Start output buffer
-			ob_start();
-
-			// Grab the content of this page
-			$new_content = apply_filters( 'the_content', $page->post_content );
-
-			// Clean up the buffer
-			ob_end_clean();
-
-			// Add 'dpa_replace_the_content' filter back
-			add_filter( 'the_content', 'dpa_replace_the_content' );
-
-		// No page so show the archive
-		} else {
-			$new_content = achievements()->shortcodes->display_achievements_index();
-		}
-
-	// Single achievement post
-	} elseif ( dpa_is_single_achievement() ) {
-
-		// Check the post_type
-		switch ( get_post_type() ) {
-
-			// Single achievement
-			case dpa_get_achievement_post_type() :
-				$new_content = achievements()->shortcodes->display_achievement( array( 'id' => get_the_ID() ) );
-				break;
-		}
-
-	// Single user's achievements template
-	} elseif ( dpa_is_single_user_achievements() ) {
-
-		// Clear pending notifications when visiting your user achievement page
-		if ( dpa_is_user_active() && get_current_user_id() == dpa_get_displayed_user_id() )
-			dpa_update_user_notifications();
-
-		$new_content = achievements()->shortcodes->display_user_achievements();
-	}
-
-	// Juggle the content around and try to prevent unsightly comments
-	if ( ! empty( $new_content ) && $new_content != $content ) {
-
-		// Set the content to be the new content
-		$content = apply_filters( 'dpa_replace_the_content', $new_content, $content );
-		unset( $new_content );
-
-		// Reset the $post global 
-		wp_reset_postdata(); 
-	}
-
-	// Return possibly hi-jacked content
-	return $content;
-}
-
 
 /**
  * Helpers
  */
+
+/** 
+ * Are we replacing the_content ?
+ * 
+ * @since Achievevements (3.4)
+ * @return bool 
+ */ 
+function dpa_do_theme_compat() {
+	$retval = ! dpa_is_template_included() && in_the_loop() && dpa_is_theme_compat_active();
+	return apply_filters( 'dpa_do_theme_compat', (bool) $retval );
+}
 
 /**
  * Remove the canonical redirect to allow pretty pagination
@@ -604,7 +523,6 @@ function dpa_redirect_canonical( $redirect_url ) {
 				$redirect_url = false;
 
 			// ...and any single anything else...
-			// @todo - Find a more accurate way to disable paged canonicals for paged shortcode usage within other posts.
 			} elseif ( is_page() || is_singular() ) {
 				$redirect_url = false;
 			}

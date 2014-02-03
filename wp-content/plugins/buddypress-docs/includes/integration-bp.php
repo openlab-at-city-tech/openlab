@@ -5,16 +5,6 @@ class BP_Docs_BP_Integration {
 	var $slugstocheck;
 
 	/**
-	 * PHP 4 constructor
-	 *
-	 * @package BuddyPress Docs
-	 * @since 1.0-beta
-	 */
-	function bp_docs_bp_integration() {
-		$this->__construct();
-	}
-
-	/**
 	 * PHP 5 constructor
 	 *
 	 * @package BuddyPress Docs
@@ -62,7 +52,7 @@ class BP_Docs_BP_Integration {
 
 		// Make sure that comment links are correct. Can't use $wp_rewrite bc of assoc items
 		add_filter( 'post_type_link',		array( $this, 'filter_permalinks'	), 10, 4 );
-		
+
 		// Respect $activities_template->disable_blogforum_replies
 		add_filter( 'bp_activity_can_comment',	array( $this, 'activity_can_comment'	) );
 
@@ -644,7 +634,7 @@ class BP_Docs_BP_Integration {
 
 		return $link;
 	}
-	
+
 	/**
 	 * Repsect disable_blogforum_replies
 	 *
@@ -669,15 +659,15 @@ class BP_Docs_BP_Integration {
 	 */
 	function activity_can_comment( $can_comment ) {
 		global $activities_template;
-		
+
 		if ( 'bp_doc_created' == bp_get_activity_action_name() ||
 		     'bp_doc_edited' == bp_get_activity_action_name() ||
 		     'bp_doc_comment' == bp_get_activity_action_name()
 		   ) {
 		   	// Flip the 'disable'
-			$can_comment = !(bool)$activities_template->disable_blogforum_replies; 
+			$can_comment = !(bool)$activities_template->disable_blogforum_replies;
 		}
-		
+
 		return apply_filters( 'bp_docs_activity_can_comment', $can_comment );
 	}
 

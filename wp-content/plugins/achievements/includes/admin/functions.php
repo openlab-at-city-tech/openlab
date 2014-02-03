@@ -25,13 +25,13 @@ function dpa_admin_setup_metaboxes() {
 	remove_meta_box( 'tagsdiv-dpa_event', dpa_get_achievement_post_type(), 'side' );
 
 	// Chosen is a JavaScript plugin that makes long, unwieldy select boxes much more user-friendly.
-	wp_enqueue_style( 'dpa_chosen_css', trailingslashit( achievements()->admin->css_url ) . 'chosen.css', array(), '20121006' );
-	wp_enqueue_script( 'dpa_chosen_js', trailingslashit( achievements()->admin->javascript_url ) . 'chosen-jquery-min.js', array( 'jquery' ), '20121006' );
+	wp_enqueue_style( 'dpa_chosen_css', trailingslashit( achievements()->admin->css_url ) . 'chosen.css', array(), dpa_get_version() );
+	wp_enqueue_script( 'dpa_chosen_js', trailingslashit( achievements()->admin->javascript_url ) . 'chosen-jquery-min.js', array( 'jquery' ), dpa_get_version() );
 
 	// General styles for the post type admin screen.
 	$rtl = is_rtl() ? '-rtl' : '';
-	wp_enqueue_script( 'dpa_admin_js', trailingslashit( achievements()->admin->javascript_url ) . 'achievements-min.js', array( 'jquery', 'dpa_chosen_js' ), '20121006' );
-	wp_enqueue_style( 'dpa_admin_css', trailingslashit( achievements()->admin->css_url ) . "achievements{$rtl}.css", array(), '20121006' );
+	wp_enqueue_script( 'dpa_admin_js', trailingslashit( achievements()->admin->javascript_url ) . 'achievements.js', array( 'jquery', 'dpa_chosen_js' ), dpa_get_version() );
+	wp_enqueue_style( 'dpa_admin_css', trailingslashit( achievements()->admin->css_url ) . "achievements{$rtl}.css", array(), dpa_get_version() );
 }
 
 /**
@@ -50,7 +50,7 @@ function dpa_achievement_metabox( $post ) {
 	$existing_points = dpa_get_achievement_points( $post->ID );
 	$existing_target = dpa_get_achievement_target( $post->ID );
 	$existing_events = wp_get_post_terms( $post->ID, dpa_get_event_tax_id(), array( 'fields' => 'ids', ) );
-	$existing_type   = ( empty( $existing_events ) && ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] ) ? 'award' : 'event';
+	$existing_type   = ( empty( $existing_events ) && ! empty( $_GET['action'] ) && 'edit' === $_GET['action'] ) ? 'award' : 'event';
 	$existing_code   = dpa_get_achievement_redemption_code( $post->ID );
 
 	// Ensure sane defaults
@@ -121,11 +121,11 @@ function dpa_achievement_metabox_save( $achievement_id ) {
 		return $achievement_id;
 
 	// Bail if not a post request
-	if ( 'POST' != strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return $achievement_id;
 
 	// Bail if not saving an achievement post type
-	if ( dpa_get_achievement_post_type() != get_post_type( $achievement_id ) )
+	if ( dpa_get_achievement_post_type() !== get_post_type( $achievement_id ) )
 		return $achievement_id;
 
 	// Nonce check
@@ -143,24 +143,24 @@ function dpa_achievement_metabox_save( $achievement_id ) {
 	// Type
 	$type = 'award';
 	if ( ! empty( $_POST['dpa_type'] ) ) {
-		if ( 'event' == $_POST['dpa_type'] )
+		if ( 'event' === $_POST['dpa_type'] )
 			$type = 'event';
 		else
 			$type = 'award';
 	}
 
 	// Redemption code
-	$redemption_code = isset( $_POST['dpa_code'] ) ? strip_tags( stripslashes( $_POST['dpa_code'] ) ) : '';
+	$redemption_code = isset( $_POST['dpa_code'] ) ? sanitize_text_field( stripslashes( $_POST['dpa_code'] ) ) : '';
 	update_post_meta( $achievement_id, '_dpa_redemption_code', $redemption_code );
 
 	// Event repeats count target
-	$frequency = ! empty( $_POST['dpa_target'] ) ? (int) $_POST['dpa_target'] : 1;
+	$frequency = ! empty( $_POST['dpa_target'] ) ? absint( $_POST['dpa_target'] ) : 1;
 	if ( $frequency < 1 )
 		$frequency = 1;
 
 	// Events
 	$events = array();
-	if ( 'event' == $type && ! empty( $_POST['dpa_event'] ) ) {
+	if ( 'event' === $type && ! empty( $_POST['dpa_event'] ) ) {
 		$events = wp_parse_id_list( $_POST['dpa_event'] );
 		update_post_meta( $achievement_id, '_dpa_target', $frequency );
 
@@ -205,15 +205,15 @@ function dpa_achievement_posts_columns( $columns ) {
  * @since Achievements (3.0)
  */
 function dpa_achievement_custom_column( $column, $post_id ) {
-	if ( 'karma' == $column ) {
+	if ( 'karma' === $column ) {
 		dpa_achievement_points( $post_id );
 
-	} elseif ( 'achievement_type' == $column ) {
+	} elseif ( 'achievement_type' === $column ) {
 		$existing_events = wp_get_post_terms( $post_id, dpa_get_event_tax_id(), array( 'fields' => 'ids', ) );
 		$existing_type   = empty( $existing_events ) ? __( 'Award', 'dpa' ) : __( 'Event', 'dpa' );
 		echo $existing_type;
 
-	} elseif ( 'dpa_thumb' == $column ) {
+	} elseif ( 'dpa_thumb' === $column ) {
 			the_post_thumbnail( 'dpa-thumb' );
 	}
 }
@@ -239,7 +239,7 @@ function dpa_achievement_sortable_columns( $columns ) {
  */
 function dpa_achievement_new_contextual_help() {
 	// Bail out if we're not on the right screen
-	if ( dpa_get_achievement_post_type() != get_current_screen()->post_type )
+	if ( dpa_get_achievement_post_type() !== get_current_screen()->post_type )
 		return;
 
 	// Most of this was copied from wpcore
@@ -307,7 +307,7 @@ function dpa_achievement_new_contextual_help() {
  */
 function dpa_achievement_index_contextual_help() {
 	// Bail out if we're not on the right screen
-	if ( dpa_get_achievement_post_type() != get_current_screen()->post_type )
+	if ( dpa_get_achievement_post_type() !== get_current_screen()->post_type )
 		return;
 
 	// Most of this was copied from wpcore
@@ -349,4 +349,92 @@ function dpa_achievement_index_contextual_help() {
 		'<p><a href="http://achievementsapp.com/" target="_blank">' . __( 'Achievements Website', 'dpa' ) . '</a></p>' .
 		'<p><a href="http://wordpress.org/support/plugin/achievements/" target="_blank">' . __( 'Support Forums', 'dpa' ) . '</a></p>'
 	);
+}
+
+/**
+ * Custom user feedback messages for achievement post type
+ *
+ * @param array $messages
+ * @return array
+ * @since Achievements (3.4)
+ */
+function dpa_achievement_feedback_messages( $messages ) {
+	global $post;
+
+	// Bail out if we're not on the right screen
+	if ( dpa_get_achievement_post_type() !== get_current_screen()->post_type )
+		return;
+
+	$achievement_url = dpa_get_achievement_permalink( $post );
+	$post_date       = sanitize_post_field( 'post_date', $post->post_date, $post->ID, 'raw' );
+
+	$messages[dpa_get_achievement_post_type()] = array(
+		0 =>  '', // Left empty on purpose
+
+		// Updated
+		1 =>  sprintf( __( 'Achievement updated. <a href="%s">View achievement</a>', 'dpa' ), $achievement_url ),
+
+		// Custom field updated
+		2 => __( 'Custom field updated.', 'dpa' ),
+
+		// Custom field deleted
+		3 => __( 'Custom field deleted.', 'dpa' ),
+
+		// Achievement updated
+		4 => __( 'Achievement updated.', 'dpa' ),
+
+		// Restored from revision
+		// translators: %s: date and time of the revision
+		5 => isset( $_GET['revision'] )
+				 ? sprintf( __( 'Achievement restored to revision from %s', 'dpa' ), wp_post_revision_title( (int) $_GET['revision'], false ) )
+				 : false,
+
+		// Achievement created
+		6 => sprintf( __( 'Achievement created. <a href="%s">View achievement</a>', 'dpa' ), $achievement_url ),
+
+		// Achievement saved
+		7 => __( 'Achievement saved.', 'dpa' ),
+
+		// Achievement submitted
+		8 => sprintf( __( 'Achievement submitted. <a target="_blank" href="%s">Preview achievement</a>', 'dpa' ), esc_url( add_query_arg( 'preview', 'true', $achievement_url ) ) ),
+
+		// Achievement scheduled
+		9 => sprintf( __( 'Achievement scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview achievement</a>', 'dpa' ),
+				// translators: Publish box date format, see http://php.net/date
+				date_i18n( __( 'M j, Y @ G:i', 'dpa' ),
+				strtotime( $post_date ) ),
+				$achievement_url ),
+
+		// Achievement draft updated
+		10 => sprintf( __( 'Achievement draft updated. <a target="_blank" href="%s">Preview topic</a>', 'dpa' ), esc_url( add_query_arg( 'preview', 'true', $achievement_url ) ) ),
+	);
+
+	return $messages;
+}
+
+/**
+ * Redirect user to Achievements' "What's New" page on activation
+ *
+ * @since Achievements (3.4)
+ */
+function dpa_do_activation_redirect() {
+
+	// Bail if no activation redirect
+	if ( ! get_transient( '_dpa_activation_redirect' ) )
+		return;
+
+	delete_transient( '_dpa_activation_redirect' );
+
+	// Bail if activating from network, or bulk.
+	if ( isset( $_GET['activate-multi'] ) )
+		return;
+
+	$query_args = array( 'page' => 'achievements-about' );
+
+	if ( get_transient( '_dpa_is_new_install' ) ) {
+		$query_args['is_new_install'] = '1';
+		delete_transient( '_dpa_is_new_install' );
+	}
+
+	wp_safe_redirect( add_query_arg( $query_args, admin_url( 'index.php' ) ) );
 }

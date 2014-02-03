@@ -123,8 +123,7 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'simpl
 	// Setup local variables
 	$bp                    = buddypress();
 	$notifications         = BP_Notifications_Notification::get( array(
-		'user_id'        => $user_id,
-		'component_name' => array_keys( $bp->active_components ),
+		'user_id' => $user_id
 	) );
 	$grouped_notifications = array(); // Notification groups
 	$renderable            = array(); // Renderable notifications
@@ -507,4 +506,35 @@ function bp_notifications_get_unread_notification_count( $user_id = 0 ) {
 	$count = ! empty( $notifications ) ? count( $notifications ) : 0;
 
 	return apply_filters( 'bp_notifications_get_total_notification_count', $count );
+}
+
+
+/**
+ * Return an array of component names that are currently active and have
+ * registered Notifications callbacks.
+ *
+ * @since BuddyPress (1.9.1)
+ *
+ * @see http://buddypress.trac.wordpress.org/ticket/5300
+ */
+function bp_notifications_get_registered_components() {
+
+	// Load BuddyPress
+	$bp = buddypress();
+
+	// Setup return value
+	$component_names = array();
+
+	// Get the active components
+	$active_components = array_keys( $bp->active_components );
+
+	// Loop through components, look for callbacks, add to return value
+	foreach ( $active_components as $component ) {
+		if ( !empty( $bp->$component->notification_callback ) ) {
+			$component_names[] = $component;
+		}
+	}
+
+	// Return active components with registered notifications callbacks
+	return apply_filters( 'bp_notifications_get_registered_components', $component_names, $active_components );
 }

@@ -15,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Most of the values that $args can accept are documented in {@link WP_Query}. The custom values added by Achievements are as follows:
  * 'ach_event' - string - Loads achievements for a specific event. Matches a slug from the dpa_event tax. Default is empty.
  *
+ * If you try to use this function, you will need to implement your own switch_to_blog and wp_reset_postdata() handling if running in a multisite
+ * and in a dpa_is_running_networkwide() configuration, otherwise the data won't be fetched from the appropriate site.
+ *
  * @param array|string $args All the arguments supported by {@link WP_Query}, and some more.
  * @return array Posts
  * @since Achievements (3.0)
@@ -187,13 +190,12 @@ function dpa_before_achievement_deleted( $post_id = 0 ) {
 
 	// An achievement is being permanently deleted, so any related Progress posts have to go, too.
 	$progress = new WP_Query( array(
-		'fields'           => 'id=>parent',
-		'nopaging'         => true,
-		'post_parent'      => $post_id,
-		'post_status'      => array( dpa_get_locked_status_id(), dpa_get_unlocked_status_id() ),
-		'post_type'        => dpa_get_progress_post_type(),
-		'posts_per_page'   => -1,
-		'suppress_filters' => true,
+		'fields'         => 'id=>parent',
+		'nopaging'       => true,
+		'post_parent'    => $post_id,
+		'post_status'    => array( dpa_get_locked_status_id(), dpa_get_unlocked_status_id() ),
+		'post_type'      => dpa_get_progress_post_type(),
+		'posts_per_page' => -1,
 	) );
 
 	if ( empty( $progress ) )
@@ -217,7 +219,7 @@ function dpa_form_redeem_achievement( $action = '' ) {
 		return;
 
 	// Check required form values are present
-	$redemption_code = isset( $_POST['dpa_code'] ) ? strip_tags( stripslashes( $_POST['dpa_code'] ) ) : '';
+	$redemption_code = isset( $_POST['dpa_code'] ) ? sanitize_text_field( stripslashes( $_POST['dpa_code'] ) ) : '';
 	$redemption_code = apply_filters( 'dpa_form_redeem_achievement_code', $redemption_code );
 
 	if ( empty( $redemption_code ) || ! dpa_verify_nonce_request( 'dpa-redeem-achievement' ) )
@@ -256,7 +258,7 @@ function dpa_form_redeem_achievement( $action = '' ) {
 			if ( $achievement_obj->ID === $progress->post_parent ) {
 
 				// If the user has already unlocked this achievement, don't give it to them again.
-				if ( dpa_get_unlocked_status_id() == $progress->post_status )
+				if ( dpa_get_unlocked_status_id() === $progress->post_status )
 					$progress_obj = false;
 				else
 					$progress_obj = $progress;
@@ -272,4 +274,70 @@ function dpa_form_redeem_achievement( $action = '' ) {
 	// If multisite and running network-wide, undo the switch_to_blog
 	if ( is_multisite() && dpa_is_running_networkwide() )
 		restore_current_blog();
+}
+
+/**
+ * Has a specific user unlocked a specific achievement?
+ *
+ * @param int $user_id
+ * @param int $achievement_id
+ * @return bool True if user has unlocked the achievement
+ * @since Achievements (3.4) 
+ */
+function dpa_has_user_unlocked_achievement( $user_id, $achievement_id ) {
+
+	if ( ! dpa_is_user_active( $user_id ) )
+		return false;
+
+	$achievement_id = dpa_get_achievement_id( $achievement_id );
+	if ( empty( $achievement_id ) || ! dpa_is_achievement( $achievement_id ) )
+		return false;
+
+	// Try to fetched an unlocked progress item for this user pair/achievement pair
+	$progress = dpa_get_progress( array(
+		'author'        => $user_id,
+		'fields'        => 'ids',
+		'no_found_rows' => true,
+		'nopaging'      => true,
+		'numberposts'   => 1,
+		'post_parent'   => $achievement_id,
+		'post_status'   => dpa_get_unlocked_status_id(),
+	) );
+
+	return apply_filters( 'dpa_has_user_unlocked_achievement', ! empty( $progress ), $progress, $user_id, $achievement_id );
+}
+
+/**
+ * Updates the dpa_event taxonomy's term count.
+ *
+ * Mostly a copy of WordPress core's _update_post_term_count() function, but updated to work for Private posts.
+ *
+ * @param array $terms List of term taxonomy IDs
+ * @param object $taxonomy Current taxonomy object of terms
+ * @since Achievements (3.4)
+ */
+function dpa_update_event_term_count( $terms, $taxonomy ) {
+	global $wpdb;
+
+	$object_types = (array) $taxonomy->object_type;
+
+	foreach ( $object_types as &$object_type )
+		list( $object_type ) = explode( ':', $object_type );
+
+	$object_types = array_unique( $object_types );
+
+	if ( $object_types )
+		$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
+
+	foreach ( (array) $terms as $term ) {
+		$count = 0;
+
+		if ( $object_types ) {
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('publish', 'private') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+		}
+
+		do_action( 'edit_term_taxonomy', $term, $taxonomy );
+		$wpdb->update( $wpdb->term_taxonomy, compact( 'count' ), array( 'term_taxonomy_id' => $term ) );
+		do_action( 'edited_term_taxonomy', $term, $taxonomy );
+	}
 }

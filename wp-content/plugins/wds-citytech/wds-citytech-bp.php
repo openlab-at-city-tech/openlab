@@ -5,7 +5,7 @@ class WDS_Group_Extension extends BP_Group_Extension {
 
 	var $enable_nav_item = true;
 	var $enable_create_step = false;
-	function wds_group_extension() {
+	public function __construct() {
 		global $bp;
 		$group_id=$bp->groups->current_group->id;
 		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
@@ -16,13 +16,13 @@ class WDS_Group_Extension extends BP_Group_Extension {
 		}
 	}
 
-	function create_screen() {
+	public function create_screen( $group_id = null ) {
 		if ( !bp_is_group_creation_step( $this->slug ) )
 			return false;
 		wp_nonce_field( 'groups_create_save_' . $this->slug );
 	}
 
-	function create_screen_save() {
+	public function create_screen_save( $group_id = null ) {
 		global $bp;
 
 		check_admin_referer( 'groups_create_save_' . $this->slug );
@@ -30,7 +30,7 @@ class WDS_Group_Extension extends BP_Group_Extension {
 		groups_update_groupmeta( $bp->groups->new_group_id, 'my_meta_name', 'value' );
 	}
 
-	function edit_screen() {
+	public function edit_screen( $group_id = null ) {
 		if ( !bp_is_group_admin_screen( $this->slug ) )
 			return false; ?>
 
@@ -39,7 +39,7 @@ class WDS_Group_Extension extends BP_Group_Extension {
 		wp_nonce_field( 'groups_edit_save_' . $this->slug );
 	}
 
-	function edit_screen_save() {
+	public function edit_screen_save( $group_id = null ) {
 		global $bp;
 
 		if ( !isset( $_POST['save'] ) )

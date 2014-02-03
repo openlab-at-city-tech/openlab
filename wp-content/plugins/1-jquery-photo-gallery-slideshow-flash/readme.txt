@@ -2,7 +2,7 @@
 Contributors: ZooEffect
 Tags: ZooEffect, 1plugin, jquery, HTML5, buddypress, photos, flash, flv, slideshow, images, amazon, gallery, media, cooliris, admin, posts, WPtouch, photo-albums, pictures, plugin, widget, photo, picture, s3, music, playlists, playlist, sidebar, ajax, video, vidavee, iphone, cms, ipod, smooth gallery, nextgen, javascript, embed, menus, analytics, media library, itunes, mu, podpress, lightbox, podpress, podcast, flowplayer, jw player, comments, twitter, page, google, links, image
 Requires at least: 2.0.2
-Tested up to: 3.5.2
+Tested up to: 3.6
 
 Photo Gallery with slideshow function, video players, music and podcast, many templates (players) and powerfull admin to manage your media assets without any program skills. Delivery using state of the art CDN (Content Delivery Network) included.
 

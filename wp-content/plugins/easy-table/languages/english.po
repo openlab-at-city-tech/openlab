@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: easy-table 1.1.1\n"
+"Project-Id-Version: easy-table 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-13 04:13+0700\n"
-"PO-Revision-Date: 2013-05-13 14:24+0700\n"
+"PO-Revision-Date: 2013-08-30 01:28+0700\n"
 "Last-Translator: takien <contact@takien.com>\n"
 "Language-Team: takien.com <contact@takien.com>\n"
 "Language: en_US\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: easy-table.php:588
@@ -25,7 +25,8 @@ msgid "Instruction"
 msgstr ""
 
 #: easy-table.php:601
-msgid "Once plugin installed, go to plugin options page to configure some options"
+msgid ""
+"Once plugin installed, go to plugin options page to configure some options"
 msgstr ""
 
 #: easy-table.php:602
@@ -33,7 +34,9 @@ msgid "You are ready to write a table in post or page."
 msgstr ""
 
 #: easy-table.php:603
-msgid "To be able write table in widget you have to check <em>Enable render table in widget</em> option in the option page."
+msgid ""
+"To be able write table in widget you have to check <em>Enable render table "
+"in widget</em> option in the option page."
 msgstr ""
 
 #: easy-table.php:622
@@ -65,8 +68,7 @@ msgstr ""
 msgid "Shortcode tag, type 'table' if you want to use [table] short tag."
 msgstr ""
 
-#: easy-table.php:652
-#: easy-table.php:917
+#: easy-table.php:652 easy-table.php:917
 msgid "Cell attribute tag"
 msgstr ""
 
@@ -115,7 +117,10 @@ msgid "Load script on footer?"
 msgstr ""
 
 #: easy-table.php:705
-msgid "Check this if you want the script to be rendered in footer. Try to check or uncheck this if you experienced conflict with another JavaScript library (not guaranteed though)."
+msgid ""
+"Check this if you want the script to be rendered in footer. Try to check or "
+"uncheck this if you experienced conflict with another JavaScript library "
+"(not guaranteed though)."
 msgstr ""
 
 #: easy-table.php:716
@@ -131,7 +136,9 @@ msgid "Use TH for the first row?"
 msgstr ""
 
 #: easy-table.php:726
-msgid "Check this if you want to use first row as table head (required by tablesorter)"
+msgid ""
+"Check this if you want to use first row as table head (required by "
+"tablesorter)"
 msgstr ""
 
 #: easy-table.php:730
@@ -139,7 +146,9 @@ msgid "Load CSS?"
 msgstr ""
 
 #: easy-table.php:733
-msgid "Check this to use CSS included in this plugin to styling table, you may unceck if you want to write your own style."
+msgid ""
+"Check this to use CSS included in this plugin to styling table, you may "
+"unceck if you want to write your own style."
 msgstr ""
 
 #: easy-table.php:737
@@ -223,7 +232,9 @@ msgid "New line replacement"
 msgstr ""
 
 #: easy-table.php:815
-msgid "Since new line is used by parser, you need specify character as a replacement."
+msgid ""
+"Since new line is used by parser, you need specify character as a "
+"replacement."
 msgstr ""
 
 #: easy-table.php:818
@@ -232,8 +243,9 @@ msgstr ""
 
 #: easy-table.php:822
 msgid ""
-"This caharacter will converted into new row. Default value \\n"
-" (this is invisible character when you press Enter). If your new line not converted as new row in the table, try use \\r instead."
+"This caharacter will converted into new row. Default value \\n (this is "
+"invisible character when you press Enter). If your new line not converted as "
+"new row in the table, try use \\r instead."
 msgstr ""
 
 #: easy-table.php:825
@@ -277,25 +289,15 @@ msgid "Possible parameter"
 msgstr ""
 
 #: easy-table.php:879
-msgid "These parameters commonly can override global options in the left side of this page. Example usage:"
+msgid ""
+"These parameters commonly can override global options in the left side of "
+"this page. Example usage:"
 msgstr ""
 
-#: easy-table.php:882
-#: easy-table.php:883
-#: easy-table.php:884
-#: easy-table.php:885
-#: easy-table.php:886
-#: easy-table.php:887
-#: easy-table.php:888
-#: easy-table.php:889
-#: easy-table.php:890
-#: easy-table.php:891
-#: easy-table.php:892
-#: easy-table.php:893
-#: easy-table.php:894
-#: easy-table.php:895
-#: easy-table.php:896
-#: easy-table.php:897
+#: easy-table.php:882 easy-table.php:883 easy-table.php:884 easy-table.php:885
+#: easy-table.php:886 easy-table.php:887 easy-table.php:888 easy-table.php:889
+#: easy-table.php:890 easy-table.php:891 easy-table.php:892 easy-table.php:893
+#: easy-table.php:894 easy-table.php:895 easy-table.php:896 easy-table.php:897
 #: easy-table.php:898
 msgid "default value"
 msgstr ""
@@ -305,11 +307,14 @@ msgid "another value"
 msgstr ""
 
 #: easy-table.php:901
-msgid "parameter is for initial sorting order. Value for each column separated by comma. See example below:"
+msgid ""
+"parameter is for initial sorting order. Value for each column separated by "
+"comma. See example below:"
 msgstr ""
 
 #: easy-table.php:903
-msgid "Set initial order of first column descending and second column ascending:"
+msgid ""
+"Set initial order of first column descending and second column ascending:"
 msgstr ""
 
 #: easy-table.php:909
@@ -317,7 +322,9 @@ msgid "Set initial order of second column descending:"
 msgstr ""
 
 #: easy-table.php:915
-msgid "Additionaly, sort option also can be set via sort attr in a cell. See example below"
+msgid ""
+"Additionaly, sort option also can be set via sort attr in a cell. See "
+"example below"
 msgstr ""
 
 #: easy-table.php:919
@@ -357,11 +364,15 @@ msgid "Easy Table theme editor"
 msgstr ""
 
 #: easy-table.php:992
-msgid "I have tried to make this plugin can be used as easy as possible and documentation as complete as possible. However it is also possible that you are still confused. Therefore feel free to ask. I would be happy to answer."
+msgid ""
+"I have tried to make this plugin can be used as easy as possible and "
+"documentation as complete as possible. However it is also possible that you "
+"are still confused. Therefore feel free to ask. I would be happy to answer."
 msgstr ""
 
 #: easy-table.php:993
-msgid "You can use this discussion to get support, request feature or reporting bug."
+msgid ""
+"You can use this discussion to get support, request feature or reporting bug."
 msgstr ""
 
 #: easy-table.php:994
@@ -447,10 +458,7 @@ msgstr ""
 msgid "Thanks to"
 msgstr ""
 
-#: easy-table.php:1127
-#: easy-table.php:1128
-#: easy-table.php:1129
+#: easy-table.php:1127 easy-table.php:1128 easy-table.php:1129
 #: easy-table.php:1130
 msgid "by"
 msgstr ""
-

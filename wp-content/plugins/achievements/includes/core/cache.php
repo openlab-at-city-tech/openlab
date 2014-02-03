@@ -24,11 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since Achievements (3.0)
  */
 function dpa_clear_events_tax_cache( $ids, $taxonomy ) {
-	if ( dpa_get_event_tax_id() != $taxonomy )
+	if ( dpa_get_event_tax_id() !== $taxonomy )
 		return;
 
 	// If multisite and running network-wide, clear the registered events cache for the events taxonomy.
 	if ( is_multisite() && dpa_is_running_networkwide() )
-		wp_cache_delete( 'dpa_registered_events', 'achievements' );
+		wp_cache_delete( 'dpa_registered_events', 'achievements_events' );
 }
 add_action( 'clean_term_cache', 'dpa_clear_events_tax_cache', 10, 2 );

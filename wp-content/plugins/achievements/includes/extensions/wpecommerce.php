@@ -38,6 +38,7 @@ class DPA_WP_e_Commerce_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			'wpsc_activate_subscription' => __( 'The user sets up a PayPal Subscription', 'dpa' ),
 			'wpsc_payment_successful'    => __( 'The user completes checkout', 'dpa' ),
@@ -73,6 +74,6 @@ class DPA_WP_e_Commerce_Extension extends DPA_Extension {
 		$this->rss_url         = 'http://getshopped.org/blog/feed/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/wp-e-commerce.jpg';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/wp-e-commerce/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/wp-e-commerce/';
 	}
 }

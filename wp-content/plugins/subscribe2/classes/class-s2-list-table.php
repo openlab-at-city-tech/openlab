@@ -38,9 +38,9 @@ class Subscribe2_List_Table extends WP_List_Table {
 		} else {
 			global $mysubscribe2;
 			if ( '0' === $mysubscribe2->is_public($item['email']) ) {
-				return sprintf('<span style="color:#FF0000">%1$s</span>', $item['email']);
+				return sprintf('<span style="color:#FF0000"><abbr title="' . $mysubscribe2->signup_ip($item['email']) . '">%1$s</abbr></span>', $item['email']);
 			} else {
-				return sprintf('%1$s', $item['email']);
+				return sprintf('<abbr title="' . $mysubscribe2->signup_ip($item['email']) . '">%1$s</abbr>', $item['email']);
 			}
 		}
 	}
@@ -52,7 +52,16 @@ class Subscribe2_List_Table extends WP_List_Table {
 	function get_columns() {
 		global $current_tab;
 		if ( $current_tab == 'registered' ) {
-			$columns = array('email' => _x('Email', 'column name', 'subscribe2'));
+			if (is_multisite()) {
+				$columns = array(
+					'email' => _x('Email', 'column name', 'subscribe2')
+				);
+			} else {
+				$columns = array(
+					'cb'		=> '<input type="checkbox" />',
+					'email' => _x('Email', 'column name', 'subscribe2')
+				);
+			}
 		} else {
 			$columns = array(
 				'cb'	=> '<input type="checkbox" />',
@@ -79,7 +88,13 @@ class Subscribe2_List_Table extends WP_List_Table {
 	function get_bulk_actions() {
 		global $current_tab;
 		if ( $current_tab == 'registered' ) {
-			return array();
+			if (is_multisite()) {
+				return array();
+			} else {
+				return array(
+					'delete'	=> __('Delete', 'subscribe2')
+				);
+			}
 		} else {
 			$actions = array(
 				'delete'	=> __('Delete', 'subscribe2'),
@@ -115,6 +130,10 @@ class Subscribe2_List_Table extends WP_List_Table {
 			$current_url = add_query_arg( array('what' => $what), $current_url );
 		} elseif ( isset($_REQUEST['what']) ) {
 			$current_url = add_query_arg( array('what' => $_REQUEST['what']), $current_url );
+		}
+
+		if ( isset($_POST['s']) ) {
+			$current_url = add_query_arg( array('s' => $_POST['s']), $current_url );
 		}
 
 		$page_links = array();

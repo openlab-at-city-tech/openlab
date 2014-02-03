@@ -3,8 +3,8 @@ Contributors: azaozz
 Tags: wysiwyg, formatting, tinymce, write, editor
 License: GPL v2
 Requires at least: 3.7
-Tested up to: 3.7
-Stable tag: 3.5.8
+Tested up to: 3.8
+Stable tag: 3.5.9
 
 Enables the advanced features of TinyMCE, the WordPress WYSIWYG editor. 
 
@@ -36,6 +36,9 @@ More translations are available as a separate plugin: [TinyMCE Advanced Language
 Best is to install directly from WordPress. If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 3.5.9.1 =
+Updated for WordPress 3.8, fixed auto-embedding of single line URLs when not removing paragraph tags.
 
 = 3.5.9 =
 Updated for WordPress 3.7 and TinyMCE 3.5.9.

@@ -1,0 +1,1591 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPAjaxEditComments\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-22 11:49+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.5.7\n"
+
+#. Description of the plugin
+msgid ""
+"Ajax Edit Comments allows users to edit their comments for a period of time. "
+"Administrators have a lot more features, such as the ability to edit "
+"comments directly on a post or page."
+msgstr ""
+".به کابران اجازه می دهد که نظرات خود را در زمان مشخصی ویرایش کنند. مدیران "
+"ویژگی های بسیار زیادتری را مانند، توانایی ویرایش کردن نظرات بر روی یک پست یا "
+"صفحه به طور مستقیمAjax Edit "
+
+#: ../wp-ajax-edit-comments.php:125
+msgid ""
+"Your edited comment was marked as spam.  If this is in error, please contact "
+"the admin."
+msgstr ""
+".نظر ویرایش شده ی شما به عنوان اسپم علامت گذاری شده است. اگر این در یک خطا "
+"است، لطفا با مدیریت تماس بگیرید"
+
+#: ../wp-ajax-edit-comments.php:184 ../wp-ajax-edit-comments.php:205
+#: ../lib/class.core.php:173 ../lib/class.core.php:176
+msgid "Approve"
+msgstr "تایید کردن"
+
+#: ../wp-ajax-edit-comments.php:185 ../wp-ajax-edit-comments.php:206
+#: ../lib/class.core.php:186 ../lib/class.core.php:189
+msgid "Moderate"
+msgstr "متعادل سازی"
+
+#: ../wp-ajax-edit-comments.php:186 ../wp-ajax-edit-comments.php:207
+#: ../lib/class.core.php:199 ../lib/class.core.php:202
+#: ../views/comment-editor.php:170 ../views/comment-editor.php:177
+msgid "Spam"
+msgstr "اسپم"
+
+#: ../wp-ajax-edit-comments.php:187 ../wp-ajax-edit-comments.php:208
+#: ../lib/class.core.php:85 ../lib/class.core.php:88
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Delete"
+msgstr "حذف کردن"
+
+#: ../wp-ajax-edit-comments.php:188 ../wp-ajax-edit-comments.php:209
+#: ../lib/class.core.php:161 ../lib/class.core.php:164
+msgid "De-link"
+msgstr "دی - لینک"
+
+#: ../wp-ajax-edit-comments.php:189 ../wp-ajax-edit-comments.php:210
+#: ../lib/class.core.php:154 ../views/move-comment.php:62
+#: ../views/move-comment.php:87 ../views/move-comment.php:112
+msgid "Move"
+msgstr "انتقال دادن"
+
+#: ../wp-ajax-edit-comments.php:190 ../wp-ajax-edit-comments.php:211
+#: ../lib/class.core.php:139 ../lib/class.core.php:142
+#: ../views/comment-editor.php:124
+msgid "E-mail"
+msgstr "ایمیل"
+
+#: ../wp-ajax-edit-comments.php:191 ../wp-ajax-edit-comments.php:212
+#: ../lib/class.core.php:211 ../lib/class.core.php:214
+#: ../views/blacklist-comment.php:116
+msgid "Blacklist"
+msgstr "لیست سیاه"
+
+#: ../wp-ajax-edit-comments.php:204 ../lib/class.core.php:114
+msgid "Edit"
+msgstr "ویرایش کردن"
+
+#: ../wp-ajax-edit-comments.php:281 ../wp-ajax-edit-comments.php:286
+msgid "Unknown error."
+msgstr "خطای نا معلوم"
+
+#: ../lib/class.actions.php:141
+msgid "A comment has been edited on post %s"
+msgstr "یک نظر بر روی پست، ویرایش شده است"
+
+#: ../lib/class.actions.php:142
+msgid "Author: %s\n"
+msgstr "نویسنده: %s\n"
+
+#: ../lib/class.actions.php:143
+msgid "Author URL: %s\n"
+msgstr " نویسنده URL: %s\n"
+
+#: ../lib/class.actions.php:144
+msgid "Author E-mail: %s\n"
+msgstr "ایمیل نویسنده: %s\n"
+
+#: ../lib/class.actions.php:145
+msgid "Comment:\n"
+msgstr "نظر: \n"
+
+#: ../lib/class.actions.php:146
+msgid "See all comments on this post here:\n"
+msgstr "همه ی نظرات را اینجا و در این پست ببینید: \n"
+
+#: ../lib/class.actions.php:148
+msgid "New Edited Comment On: %s"
+msgstr "%s :نظراتی که به تازگی ویرایش شده اند"
+
+#: ../lib/class.admin.php:9 ../views/admin-panel.php:213
+#: ../views/admin-panel/admin-panel.php:213
+#: ../views/admin-panel/behavior.php:73
+msgid "Behavior"
+msgstr "خط مشی"
+
+#: ../lib/class.admin.php:10 ../views/admin-panel.php:214
+#: ../views/admin-panel/admin-panel.php:214
+#: ../views/admin-panel/appearance.php:136
+msgid "Appearance"
+msgstr "ظواهر"
+
+#: ../lib/class.admin.php:11 ../views/admin-panel.php:215
+#: ../views/admin-panel/admin-panel.php:215
+#: ../views/admin-panel/permissions.php:36
+msgid "Permissions"
+msgstr "مجوز ها"
+
+#: ../lib/class.admin.php:12 ../views/admin-panel.php:216
+#: ../views/admin-panel/admin-panel.php:216
+#: ../views/admin-panel/cleanup.php:23
+msgid "Cleanup"
+msgstr "پاکسازی"
+
+#: ../lib/class.ajax.php:47
+msgid "Move Successful. "
+msgstr ".انتقال موفقیت آمیز"
+
+#: ../lib/class.ajax.php:181
+msgid "Successfully blacklisted."
+msgstr ".با موفقیت در لیست سیاه قرار گرفت"
+
+#: ../lib/class.ajax.php:181
+msgid "comment(s) were marked as spam according to your advanced criteria."
+msgstr ".بر اساس ظوابط پیشرفته ی شما،نظرات به عنوان اسپم علامت گذاری شده اند"
+
+#: ../lib/class.ajax.php:230
+msgid "Successfully Deleted"
+msgstr ".با موفقیت حذف شد"
+
+#: ../lib/class.ajax.php:291
+msgid "Comment deleted."
+msgstr ".نظر حذف شد"
+
+#: ../lib/class.ajax.php:309
+msgid "Successfully Marked as Spam"
+msgstr "با موفقیت به عنوان اسپم علامت گذاری شد"
+
+#: ../lib/class.ajax.php:337
+msgid "Successfully Approved"
+msgstr " با موفقیت تایید شد"
+
+#: ../lib/class.ajax.php:362
+msgid "Successfully Marked for Moderation"
+msgstr "با موفقیت برای متعادل سازی علامت گذاری شد"
+
+#: ../lib/class.ajax.php:396
+msgid "Successfully De-linked"
+msgstr "با موفقیت دی - لینک شد"
+
+#: ../lib/class.ajax.php:745
+msgid ""
+"A commenter requests deletion of a comment on your post #%1$s \"%2$s\".  The "
+"comment has been moved to the moderation queue."
+msgstr ""
+".یک نظر دهنده درخواست حذف یک نظر بر روی پست شما  را دارد. نظر به صف متعادل "
+"سازی منتقل شده است"
+
+#: ../lib/class.ajax.php:746
+msgid "The reason given is: "
+msgstr ":دلیلی که داده شده است این است"
+
+#: ../lib/class.ajax.php:747
+msgid "E-mail : %s"
+msgstr "%s :ایمیل "
+
+#: ../lib/class.ajax.php:748
+msgid "URL    : %s"
+msgstr "URL : %s"
+
+#: ../lib/class.ajax.php:749
+msgid "Whois  : http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s"
+msgstr " http://ws.arin.net/cgi-bin/whois.pl?queryinput=%s : دامنه "
+
+#: ../lib/class.ajax.php:751
+msgid "Delete it: %s"
+msgstr " %s :آن را حذف کن "
+
+#: ../lib/class.ajax.php:752
+msgid "Approve it: %s"
+msgstr " %s :آن را تایید کن "
+
+#: ../lib/class.ajax.php:753
+msgid "Spam it: %s"
+msgstr " %s :آن را اسپم کن "
+
+#: ../lib/class.ajax.php:761
+msgid "Request for Comment Deletion: \"%2$s\""
+msgstr " \"%2$s\": درخواست برای حذف نظر"
+
+#: ../lib/class.ajax.php:862
+msgid "Comment successfully saved"
+msgstr "نظر با موفقیت ذخیره شد"
+
+#: ../lib/class.core.php:66 ../lib/class.core.php:111
+msgid "Comment Editor"
+msgstr "ویرایشگر نظر"
+
+#: ../lib/class.core.php:69
+msgid "Click to Edit"
+msgstr "برای ویرایش کلیک کنید"
+
+#: ../lib/class.core.php:76 ../lib/class.core.php:79
+#: ../views/admin-panel.php:283 ../views/request-deletion.php:35
+#: ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Request Deletion"
+msgstr "برای حذف درخواست دهید"
+
+#: ../lib/class.core.php:120 ../lib/class.core.php:123
+msgid "Restore"
+msgstr "بازگرداندن"
+
+#: ../lib/class.core.php:129 ../lib/class.core.php:132
+msgid "Delete Permanently"
+msgstr "حذف برای همیشه"
+
+#: ../lib/class.core.php:151
+msgid "Move Comments"
+msgstr "انتقال دادن نظرات"
+
+#: ../lib/class.core.php:211
+msgid "Blacklist Comment"
+msgstr "قرار دادن نظر در لیست سیاه"
+
+#: ../lib/class.core.php:220 ../lib/class.core.php:223
+#: ../views/comment-editor.php:171 ../views/comment-editor.php:178
+msgid "Trash"
+msgstr "زباله"
+
+#: ../lib/class.core.php:244 ../lib/class.dependencies.php:125
+msgid "More Options"
+msgstr "گزینه های بیشتر"
+
+#: ../lib/class.core.php:710
+msgid "You cannot edit a comment after other comments have been posted."
+msgstr ""
+"شما نمی توانید یک نظر را بعد از اینکه نظرات دیگر فرستاده شده اند، ویرایش کنید"
+
+#: ../lib/class.core.php:711
+msgid "The time to edit your comment has elapsed."
+msgstr ".وقت شما برای ویرایش نظرتان تمام شد"
+
+#: ../lib/class.core.php:712
+msgid "You do not have permission to edit this comment."
+msgstr ".شما برای ویرایش این نظر مجوز ندارید"
+
+#: ../lib/class.core.php:714
+msgid "This comment cannot be edited because it is marked as spam."
+msgstr ""
+".این نظر نمی تواند ویرایش شود زیرا که به عنوان اسپم علامت گذاری شده است"
+
+#: ../lib/class.core.php:715
+msgid "Comment loading failed."
+msgstr ".بارگذاری نظر رد شد"
+
+#: ../lib/class.core.php:716
+msgid "Comment editing has been disabled."
+msgstr ".ویرایش کردن نظر، غیر فعال شده است"
+
+#: ../lib/class.core.php:717
+msgid "Could not mark as spam."
+msgstr ".نمی تواند به عنوان اسپم علامت گذاری شود"
+
+#: ../lib/class.core.php:718
+msgid "You do not have permission to mark this comment as Spam."
+msgstr ".شما برای علامت گذاری این نظر به عنوان اسپم، مجوز ندارید"
+
+#: ../lib/class.core.php:719
+msgid "Could not delete comment."
+msgstr ".نمی توان نظر را حذف کرد"
+
+#: ../lib/class.core.php:720
+msgid "You do not have permission to delete this comment."
+msgstr ".شما برای حذف این نظر مجوز ندارید"
+
+#: ../lib/class.core.php:721
+msgid "You do not have permission to approve this comment."
+msgstr ".شما برای تایید این نظر مجوز ندارید"
+
+#: ../lib/class.core.php:722
+msgid "Could not approve comment."
+msgstr ".نمی توان نظر را تایید کرد"
+
+#: ../lib/class.core.php:723
+msgid "Could not mark this comment for moderation."
+msgstr ".نمی توان این نظر ار برای متعادل سازی علامت گذاری کرد"
+
+#: ../lib/class.core.php:724
+msgid "You do not have permission to mark this comment for moderation."
+msgstr ".شما برای علامت گذاری این نظر به عنوان معتدل سازی، مجوز ندارید"
+
+#: ../lib/class.core.php:725
+msgid "Please enter a valid email address."
+msgstr ".لطفا یک ادرس ایمیل معتبر وارد کنید"
+
+#: ../lib/class.core.php:726
+msgid "Please fill in the required fields (Name, E-mail)"
+msgstr "(لطفا بخش های درخواست شده را پر کنید.( اسم، ایمیل"
+
+#: ../lib/class.core.php:727
+msgid "You cannot have an empty comment."
+msgstr ".نمی توانید یک نظر خالی داشته باشید"
+
+#: ../lib/class.core.php:728
+msgid "You do not have permission to delink this comment."
+msgstr ".شما برای دی - لینک کردن این نظر مجوز ندارید"
+
+#: ../lib/class.core.php:729
+msgid "Your comment was marked for moderation"
+msgstr "نظر شما برای متعادل سازی علامت گذاری شد"
+
+#: ../lib/class.core.php:730
+msgid "This comment cannot be edited because it is marked for moderation."
+msgstr ""
+".این نظر نمی تواند ویرایش شود زیرا که برای متعادل سازی علامت گذاری شده است"
+
+#: ../lib/class.core.php:731
+msgid "Request failed."
+msgstr ".درخواست رد شد"
+
+#: ../lib/class.core.php:732
+msgid "You have not selected anything to blacklist."
+msgstr ".شما چیزی را برای قرار دادن در لیست سیاه انتخاب نکرده اید"
+
+#: ../lib/class.core.php:733
+msgid "Upgrade check failed."
+msgstr ".بررسی کردن برای ارتقا رد شد"
+
+#: ../lib/class.core.php:734
+msgid "You are using the latest version."
+msgstr ".شما در حال استفاده از آخرین نسخه هستید"
+
+#: ../lib/class.dependencies.php:106
+msgid "minutes"
+msgstr "دقایق"
+
+#: ../lib/class.dependencies.php:107
+msgid "minute"
+msgstr "دقیقه"
+
+#: ../lib/class.dependencies.php:108
+msgid "and"
+msgstr "و"
+
+#: ../lib/class.dependencies.php:109
+msgid "seconds"
+msgstr "ثانیه ها"
+
+#: ../lib/class.dependencies.php:110
+msgid "second"
+msgstr "ثانیه"
+
+#: ../lib/class.dependencies.php:111
+msgid "Mark for Moderation?"
+msgstr "برای متعادل سازی علامت گذاری شود؟"
+
+#: ../lib/class.dependencies.php:112
+msgid "Approve Comment?"
+msgstr "نظر انتقال داده شود؟"
+
+#: ../lib/class.dependencies.php:113
+msgid "Mark as Spam?"
+msgstr "به عنوان اسپم علامت گذاری شود؟"
+
+#: ../lib/class.dependencies.php:114
+msgid "Delete this comment?"
+msgstr "این نظر حذف شود؟"
+
+#: ../lib/class.dependencies.php:115
+msgid "Anonymous"
+msgstr "بی نام"
+
+#: ../lib/class.dependencies.php:116
+msgid "Loading..."
+msgstr "...در حال خواندن"
+
+#: ../lib/class.dependencies.php:117
+msgid "Ready"
+msgstr "آماده"
+
+#: ../lib/class.dependencies.php:118
+msgid "Sending..."
+msgstr "... در حال ارسال"
+
+#: ../lib/class.dependencies.php:119
+msgid "Message Sent"
+msgstr "پیغام فرستاده شد"
+
+#: ../lib/class.dependencies.php:120
+msgid "Comment Loaded Successfully"
+msgstr "نظر با موفقیت بارگذاری شد"
+
+#: ../lib/class.dependencies.php:121
+msgid "Saving..."
+msgstr "... در حال ذخیره سازی"
+
+#: ../lib/class.dependencies.php:122
+msgid "Blacklisting..."
+msgstr "... در حال قرار دادن در لیست سیاه "
+
+#: ../lib/class.dependencies.php:123
+msgid "Comment Successfully Saved"
+msgstr "نظر با موفقیت ذخیره شد"
+
+#: ../lib/class.dependencies.php:124
+msgid "De-link Successful"
+msgstr "دی - لینک کردن موفقیت آمیز بود"
+
+#: ../lib/class.dependencies.php:126
+msgid "Less Options"
+msgstr "گزینه های کمتر"
+
+#: ../lib/class.dependencies.php:128
+msgid "Request has been sent successfully"
+msgstr "درخواست با موفقیت ازسال شد"
+
+#: ../lib/class.dependencies.php:129
+msgid "Error sending request"
+msgstr "خطا در هنگام ارسال درخواست"
+
+#: ../lib/class.dependencies.php:130
+msgid "Approving..."
+msgstr "...در حال تایید کردن"
+
+#: ../lib/class.dependencies.php:131
+msgid "De-linking..."
+msgstr "... در حال دی - لینک کردن"
+
+#: ../lib/class.dependencies.php:132
+msgid "Moderating..."
+msgstr "... در حال متعادل سازی کردن"
+
+#: ../lib/class.dependencies.php:133
+msgid "Spamming..."
+msgstr "... در حال اسپم کردن"
+
+#: ../lib/class.dependencies.php:134
+msgid "Deleting..."
+msgstr "... در حال حذف کردی"
+
+#: ../lib/class.dependencies.php:135
+msgid "Restoring..."
+msgstr "... در حال بازیابی کردن "
+
+#: ../lib/class.dependencies.php:136
+msgid "Comment Restored."
+msgstr ".نظر بازیابی شد"
+
+#: ../lib/class.dependencies.php:137
+msgid "Undoing..."
+msgstr "... در حال لغو کردن"
+
+#: ../lib/class.dependencies.php:138
+msgid "Undo Successful"
+msgstr "لغو موفقیت آمیز"
+
+#: ../lib/class.dependencies.php:139
+msgid "Comment Deleted Permanently"
+msgstr "نظر برای همیشه حذف شد"
+
+#: ../lib/class.dependencies.php:140
+msgid "Input Fields are Required"
+msgstr "بخش های درونی ضروری هستند"
+
+#: ../lib/class.dependencies.php:141
+msgid "E-mail Address is Invalid"
+msgstr "آدرس ایمیل نا معتبر است"
+
+#: ../lib/class.dependencies.php:145 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "Yes"
+msgstr "بله"
+
+#: ../lib/class.dependencies.php:146 ../views/admin-panel.php:263
+#: ../views/admin-panel.php:275 ../views/admin-panel.php:277
+#: ../views/admin-panel.php:279 ../views/admin-panel.php:281
+#: ../views/admin-panel.php:296 ../views/admin-panel.php:299
+#: ../views/admin-panel.php:302 ../views/admin-panel.php:305
+#: ../views/admin-panel.php:320 ../views/admin-panel.php:333
+#: ../views/admin-panel.php:335 ../views/admin-panel.php:343
+#: ../views/admin-panel.php:363 ../views/admin-panel.php:365
+#: ../views/admin-panel.php:372 ../views/admin-panel.php:374
+#: ../views/admin-panel.php:382 ../views/admin-panel.php:390
+#: ../views/admin-panel.php:398 ../views/admin-panel.php:428
+#: ../views/admin-panel.php:435 ../views/admin-panel.php:443
+#: ../views/admin-panel.php:451 ../views/admin-panel.php:458
+#: ../views/admin-panel.php:612 ../views/admin-panel.php:645
+#: ../views/admin-panel.php:652 ../views/admin-panel.php:660
+#: ../views/admin-panel.php:668 ../views/admin-panel.php:676
+#: ../views/admin-panel.php:691 ../views/admin-panel/admin-panel.php:263
+#: ../views/admin-panel/admin-panel.php:275
+#: ../views/admin-panel/admin-panel.php:277
+#: ../views/admin-panel/admin-panel.php:279
+#: ../views/admin-panel/admin-panel.php:281
+#: ../views/admin-panel/admin-panel.php:296
+#: ../views/admin-panel/admin-panel.php:299
+#: ../views/admin-panel/admin-panel.php:302
+#: ../views/admin-panel/admin-panel.php:305
+#: ../views/admin-panel/admin-panel.php:320
+#: ../views/admin-panel/admin-panel.php:333
+#: ../views/admin-panel/admin-panel.php:335
+#: ../views/admin-panel/admin-panel.php:343
+#: ../views/admin-panel/admin-panel.php:363
+#: ../views/admin-panel/admin-panel.php:365
+#: ../views/admin-panel/admin-panel.php:372
+#: ../views/admin-panel/admin-panel.php:374
+#: ../views/admin-panel/admin-panel.php:382
+#: ../views/admin-panel/admin-panel.php:390
+#: ../views/admin-panel/admin-panel.php:398
+#: ../views/admin-panel/admin-panel.php:428
+#: ../views/admin-panel/admin-panel.php:435
+#: ../views/admin-panel/admin-panel.php:443
+#: ../views/admin-panel/admin-panel.php:451
+#: ../views/admin-panel/admin-panel.php:458
+#: ../views/admin-panel/admin-panel.php:612
+#: ../views/admin-panel/admin-panel.php:645
+#: ../views/admin-panel/admin-panel.php:652
+#: ../views/admin-panel/admin-panel.php:660
+#: ../views/admin-panel/admin-panel.php:668
+#: ../views/admin-panel/admin-panel.php:676
+#: ../views/admin-panel/admin-panel.php:691
+#: ../views/admin-panel/appearance.php:148
+#: ../views/admin-panel/appearance.php:155
+#: ../views/admin-panel/appearance.php:163
+#: ../views/admin-panel/appearance.php:171
+#: ../views/admin-panel/appearance.php:178
+#: ../views/admin-panel/appearance.php:329
+#: ../views/admin-panel/behavior.php:110 ../views/admin-panel/behavior.php:123
+#: ../views/admin-panel/behavior.php:125 ../views/admin-panel/behavior.php:127
+#: ../views/admin-panel/behavior.php:129 ../views/admin-panel/behavior.php:145
+#: ../views/admin-panel/behavior.php:148 ../views/admin-panel/behavior.php:151
+#: ../views/admin-panel/behavior.php:154 ../views/admin-panel/behavior.php:169
+#: ../views/admin-panel/behavior.php:182 ../views/admin-panel/behavior.php:184
+#: ../views/admin-panel/behavior.php:192 ../views/admin-panel/behavior.php:212
+#: ../views/admin-panel/behavior.php:214 ../views/admin-panel/behavior.php:221
+#: ../views/admin-panel/behavior.php:223 ../views/admin-panel/behavior.php:231
+#: ../views/admin-panel/behavior.php:239 ../views/admin-panel/behavior.php:247
+#: ../views/admin-panel/cleanup.php:32 ../views/admin-panel/permissions.php:51
+#: ../views/admin-panel/permissions.php:58
+#: ../views/admin-panel/permissions.php:66
+#: ../views/admin-panel/permissions.php:74
+#: ../views/admin-panel/permissions.php:82
+msgid "No"
+msgstr "خیر"
+
+#: ../lib/class.dependencies.php:147
+msgid "Are you sure?"
+msgstr "آیا مطمئن هستید؟"
+
+#: ../lib/class.filters.php:122
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: ../lib/class.js.php:32 ../lib/class.js.php:59
+msgid "Comment Box"
+msgstr "جعبه ی نظرات"
+
+#: ../lib/class.utility.php:18
+msgid "Undo"
+msgstr "لغو کردن"
+
+#: ../views/admin-getting-started.php:65
+msgid "Getting Started with Ajax Edit Comments v%s"
+msgstr "Ajax Edit Comments v%s شروع کار با"
+
+#: ../views/admin-panel-support.php:13
+msgid "Support"
+msgstr "پشتیبانی"
+
+#: ../views/admin-panel-support.php:18
+msgid "Support Forums"
+msgstr "انجمن پشتیبانی"
+
+#: ../views/admin-panel-support.php:19
+msgid "Documentation"
+msgstr "مستندات"
+
+#: ../views/admin-panel-support.php:23
+msgid ""
+"To receive help from PluginBuddy support and the PluginBuddy community, "
+"please consider leaving a support request via our %sSupport Forums%s"
+msgstr ""
+" برای ما یک در خواست ارسال کنیدارسال کنید% Support Forums% برای دریافت کمک "
+"از طرف پشتیبانی و انجمن اصلی افزونه، لطفا از طریق"
+
+#: ../views/admin-panel-support.php:26
+msgid ""
+"For in-depth documenation, including feature descriptions and how-to videos, "
+"please visit our %sDocumentation Section%s"
+msgstr ""
+".دیدن کنید%sDocumentation Section%s که شامل ویژگی شرح حال دادن و چگونه ویدئو "
+"کردن نیز می شود، لطفا از،in-depthبرای مستندات"
+
+#: ../views/admin-panel.php:18 ../views/admin-panel/admin-panel.php:18
+#: ../views/admin-panel/cleanup.php:15
+msgid "Security keys deleted"
+msgstr "کلیدهای امنیتی حذف شد"
+
+#: ../views/admin-panel.php:37 ../views/admin-panel/admin-panel.php:37
+#: ../views/admin-panel/behavior.php:20
+msgid "Comment time must be greater than one minute."
+msgstr ".زمان نظر دهی باید بیشتر از یک دقیقه باشد"
+
+#: ../views/admin-panel.php:199 ../views/admin-panel/admin-panel.php:199
+#: ../views/admin-panel/appearance.php:129
+#: ../views/admin-panel/behavior.php:66
+#: ../views/admin-panel/permissions.php:29
+msgid "Settings successfully updated."
+msgstr ".تنظیمات با موفقیت به روز رسانی شد"
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "Your commentators have edited their comments "
+msgstr "مفسران شما نظر خود را ویرایش کرده اند"
+
+#: ../views/admin-panel.php:207 ../views/admin-panel/admin-panel.php:207
+#: ../views/admin-panel/appearance.php:137
+#: ../views/admin-panel/behavior.php:74 ../views/admin-panel/cleanup.php:24
+#: ../views/admin-panel/permissions.php:37
+msgid "times"
+msgstr "زمان ها"
+
+#: ../views/admin-panel.php:223 ../views/admin-panel/admin-panel.php:223
+#: ../views/admin-panel/behavior.php:76
+msgid "General"
+msgstr "عمومی"
+
+#: ../views/admin-panel.php:224 ../views/admin-panel.php:260
+#: ../views/admin-panel/admin-panel.php:224
+#: ../views/admin-panel/admin-panel.php:260
+#: ../views/admin-panel/behavior.php:95 ../views/admin-panel/behavior.php:107
+msgid "Advertising Options"
+msgstr "گزینه های تبلیغاتی"
+
+#: ../views/admin-panel.php:225 ../views/admin-panel/admin-panel.php:225
+#: ../views/admin-panel/behavior.php:116
+msgid "Anonymous Users"
+msgstr "کاربرهای بی نام"
+
+#: ../views/admin-panel.php:226 ../views/admin-panel/admin-panel.php:226
+#: ../views/admin-panel/behavior.php:137
+msgid "Registered Users"
+msgstr "کاربرهای ثبت نام شده"
+
+#: ../views/admin-panel.php:227 ../views/admin-panel/admin-panel.php:227
+#: ../views/admin-panel/behavior.php:160
+msgid "Other Features"
+msgstr "دیگر ویژگی ها"
+
+#: ../views/admin-panel.php:236 ../views/admin-panel/admin-panel.php:236
+#: ../views/admin-panel/behavior.php:82
+msgid "Set comment time (minutes):"
+msgstr ":(تنظیم زمان نظر دهی ( دقیقه"
+
+#: ../views/admin-panel.php:240 ../views/admin-panel/admin-panel.php:240
+#: ../views/admin-panel/behavior.php:86
+msgid "Spam notification text:"
+msgstr ":متن اطلاع دهنده ی اسپم"
+
+#: ../views/admin-panel.php:242 ../views/admin-panel/admin-panel.php:242
+#: ../views/admin-panel/behavior.php:88
+msgid ""
+"Please limit to one line if possible since this text will show up when "
+"editing the comment or author (Tags allowed: em, a, strong, blockquote):"
+msgstr ""
+".به دلیل اینکه متن در هنگام ویرایش نظرات یا نویسنده ظاهر خواهد شد، لطفا اگر "
+"مقدور است آن را در یک خط محدود کنید"
+
+#: ../views/admin-panel.php:253 ../views/admin-panel/admin-panel.php:253
+#: ../views/admin-panel/behavior.php:100
+msgid "Advertising Text:"
+msgstr ": متن تبلیغاتی"
+
+#: ../views/admin-panel.php:255 ../views/admin-panel/admin-panel.php:255
+#: ../views/admin-panel/behavior.php:102
+msgid ""
+"This text will show when an anonymous commenter sees the editing options.  "
+"WordPress shortcodes may be used here."
+msgstr ""
+"این متن در هنگامی که یک نظر دهنده ی ناشناس گزینه های ویرایشی را می بیند، "
+"ظاهر خواهد شد. کدهای کوتاه وردپرس ممکن در اینجا مورد استفاده قرار گیرد."
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid "Enable comment advertising?"
+msgstr "فعال کردن نظر تبلیغاتی را؟"
+
+#: ../views/admin-panel.php:262 ../views/admin-panel/admin-panel.php:262
+#: ../views/admin-panel/behavior.php:109
+msgid ""
+"Selecting \"Yes\" will show the \"Advertising Text\" above the editing "
+"options for each anonymous comment posted."
+msgstr ""
+"را در بالای گزینه های ویرایشی برای هر نظر ناشناس ارسال شده، نشان خواهد داد"
+"\"Advertising Text\"،\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid "Allow editing after additional comments have been posted?"
+msgstr "اجازه برای ویرایش بعد از اینکه نظر اضافی ارسال شده است؟"
+
+#: ../views/admin-panel.php:274 ../views/admin-panel/admin-panel.php:274
+#: ../views/admin-panel/behavior.php:122
+msgid ""
+"Selecting \"No\" will prevent users from editing their comments if another "
+"comment has been made on a post."
+msgstr ""
+"در صورتی که نظر دیگری بر روی پست گذاشته شود، از ویرایش کردن نظر توسط کاربر "
+"ها جلوگیری خواهد کرد\"No\" انتخاب"
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Allow Users to Edit Their Name?"
+msgstr "مجوز دادن به کاربران برای ویرایش نامشان؟"
+
+#: ../views/admin-panel.php:276 ../views/admin-panel/admin-panel.php:276
+#: ../views/admin-panel/behavior.php:124
+msgid "Selecting \"No\" will turn off editing of Names"
+msgstr "ویرایش نام ها را غیر فعال خواهد کرد\"No\" انتخاب"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid "Allow Users to Edit Their E-mail Addresses?"
+msgstr "مجوز دادن به کاربران برای ویرایش آدرس ایمیلشان؟"
+
+#: ../views/admin-panel.php:278 ../views/admin-panel/admin-panel.php:278
+#: ../views/admin-panel/behavior.php:126
+msgid ""
+"Selecting \"No\" will turn off editing of e-mail addresses.  One of the "
+"reasons you may want this on is for users with Avatars."
+msgstr ""
+"ویرایش آدرس های ایمیل را غیر فعال خواهد کرد. این یکی از دلایلی است که شاید "
+"شما این گزینه را برای کاربران دارای نام مستعار فعال شده بخواهید\"No\" انتخاب"
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Allow Users to Edit Their URLs?"
+msgstr "؟URL مجوز دادن به کاربران برای ویرایش نامشان"
+
+#: ../views/admin-panel.php:280 ../views/admin-panel/admin-panel.php:280
+#: ../views/admin-panel/behavior.php:128
+msgid "Selecting \"No\" will turn off editing of URLs"
+msgstr "ها را غیر فعال خواهد کردURL ویرایش \"No\" انتخاب"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid "Request Deletion Behavior"
+msgstr "درخواست حذف خط مشی"
+
+#: ../views/admin-panel.php:282 ../views/admin-panel/admin-panel.php:282
+#: ../views/admin-panel/behavior.php:130
+msgid ""
+"Determine if you want users to request deletion (comments are sent to "
+"moderation with admin notification) or delete comments (comments are deleted "
+"immediately with no admin notification).  Select Off if you would like to "
+"disable this feature."
+msgstr ""
+"لطفا تعیین کنید، اگر می خواهید که کاربران درخواست خذف بدهند( نظرات بااطلاع "
+"دادن به مدیریت به بخش معتدل سازی فرستاده خواهند شد) یا نظرات را حذف کنند"
+"( نظرات بدون اطلاع رسانی از طرف مدیریت حذف خواهند شد) اگر می خواهید که این "
+"ویژگی غیر فعال شود، گزینه ی خاموش را انتخاب کنید"
+
+#: ../views/admin-panel.php:283 ../views/admin-panel/admin-panel.php:283
+#: ../views/admin-panel/behavior.php:131
+msgid "Off"
+msgstr "خاموش"
+
+#: ../views/admin-panel.php:294 ../views/admin-panel/admin-panel.php:294
+#: ../views/admin-panel/behavior.php:143
+msgid "Allow Registered Users to Edit Comments Indefinitely?"
+msgstr "دادن مجوز نا محدود به کاربران ثبت نام شده برای ویرایش نظرات شان؟"
+
+#: ../views/admin-panel.php:295 ../views/admin-panel/admin-panel.php:295
+#: ../views/admin-panel/behavior.php:144
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit "
+"comments without a time limit."
+msgstr ""
+"به کاربران ثبت نام شده در وب سایت شم اجازه می دهد که نظرات را بدون محدودیت "
+"زمانی، ویرایش کنند\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:297 ../views/admin-panel/admin-panel.php:297
+#: ../views/admin-panel/behavior.php:146
+msgid "Allow Registered Users to Edit Their Name?"
+msgstr "مجوز دادن به کاربران ثبت نام شده برای ویرایش نامشان؟"
+
+#: ../views/admin-panel.php:298 ../views/admin-panel/admin-panel.php:298
+#: ../views/admin-panel/behavior.php:147
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"names.  This can prevent issues if a user wishes to impersonate others."
+msgstr ""
+"به کاربران ثبت نام شده در وب سایت شما اجازه می دهد که نام خود را ویرایش "
+"کنند. اگر یک کاربر بخواهد که خود را به جای کس دیگری معرفی کند، این کار می "
+"تواند از بروز مشکلات جلوگیری کند\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:300 ../views/admin-panel/admin-panel.php:300
+#: ../views/admin-panel/behavior.php:149
+msgid "Allow Registered Users to Edit Their E-mail Address?"
+msgstr "مجوز دادن به کاربران ثبت نام شده برای ویرایش آدرس ایمیل شان؟"
+
+#: ../views/admin-panel.php:301 ../views/admin-panel/admin-panel.php:301
+#: ../views/admin-panel/behavior.php:150
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"e-mail address."
+msgstr ""
+"به کاربران ثبت نام شده در وب سایت شما اجازه می دهد که آدرس ایمیل خود را "
+"ویرایش کنند\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:303 ../views/admin-panel/admin-panel.php:303
+#: ../views/admin-panel/behavior.php:152
+msgid "Allow Registered Users to Edit Their URL?"
+msgstr "؟URL مجوز دادن به کاربران ثبت نام شده برای ویرایش "
+
+#: ../views/admin-panel.php:304 ../views/admin-panel/admin-panel.php:304
+#: ../views/admin-panel/behavior.php:153
+msgid ""
+"Selecting \"Yes\" will allow users registered on your website to edit their "
+"URL."
+msgstr ""
+"خود را ویرایش کنندURL به کاربران ثبت نام شده در وب سایت شما اجازه می دهد که  "
+"\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:317 ../views/admin-panel/admin-panel.php:317
+#: ../views/admin-panel/behavior.php:166
+msgid "Edit E-mails"
+msgstr "ویرایش ایمیل"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid "Allow Edit E-mails?"
+msgstr "اجازه برای ویرایش ایمیل؟"
+
+#: ../views/admin-panel.php:319 ../views/admin-panel/admin-panel.php:319
+#: ../views/admin-panel/behavior.php:168
+msgid ""
+"Selecting \"Yes\" will send you an email each time someone edits their "
+"comment."
+msgstr ""
+"هر بار که شخصی نظر خود را ویرایش کند، به شما یک ایمیل خواهد فرستاد \"Yes\" "
+"انتخاب"
+
+#: ../views/admin-panel.php:324 ../views/admin-panel/admin-panel.php:324
+#: ../views/admin-panel/behavior.php:173
+msgid "Spam Protection"
+msgstr "محافظت در برابر دریافت اسپم"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Akismet"
+msgstr "Akismet"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "Defensio"
+msgstr "Defensio"
+
+#: ../views/admin-panel.php:326 ../views/admin-panel/admin-panel.php:326
+#: ../views/admin-panel/behavior.php:175
+msgid "None"
+msgstr "هیچ کدام"
+
+#: ../views/admin-panel.php:330 ../views/admin-panel/admin-panel.php:330
+#: ../views/admin-panel/behavior.php:179
+msgid "Performance"
+msgstr "کارایی"
+
+#: ../views/admin-panel.php:332 ../views/admin-panel/admin-panel.php:332
+#: ../views/admin-panel/behavior.php:181
+msgid ""
+"Load Scripts in Footer? (Requires WordPress 2.8 or above and theme "
+"compatibility)"
+msgstr ""
+"(بارگذاری اسکریپت ها در پاورقی؟( به نسخهی 2.8 وردپرس یا بالاتر و قابلیت تم، "
+"نیاز دارد "
+
+#: ../views/admin-panel.php:334 ../views/admin-panel/admin-panel.php:334
+#: ../views/admin-panel/behavior.php:183
+msgid "Use Compressed JavaScript Files?"
+msgstr "از فایل های فشرده شده ی جاوااسکریپت استفاده شود؟"
+
+#: ../views/admin-panel.php:339 ../views/admin-panel/admin-panel.php:339
+#: ../views/admin-panel/behavior.php:188
+msgid "Character Encoding"
+msgstr "رمزگذاری کاراکتر"
+
+#: ../views/admin-panel.php:341 ../views/admin-panel/admin-panel.php:341
+#: ../views/admin-panel/behavior.php:190
+msgid "Enable mb_convert_encoding?"
+msgstr "؟ mb_convert_encoding فعال سازی"
+
+#: ../views/admin-panel.php:342 ../views/admin-panel/admin-panel.php:342
+#: ../views/admin-panel/behavior.php:191
+msgid ""
+"Some servers do not have this installed.  If you disable this option, be "
+"sure to test out various characters.  The mb_convert_encoding function is "
+"necessary to convert from UTF-8 to various charsets."
+msgstr ""
+"بعضی از سرورها این را نصب نمی کنند. اگر شما این گزینه را غیر فعال کنید، از "
+"آزمایش کردن کاراکتر های گوناگون ما مطمئن شوید. تابع ام بی - تبدیل - رمزگذاری "
+"برای تبدیل کردن یو تی اف - 8 به کاراکتر های گوناگون ضروری است"
+
+#: ../views/admin-panel.php:347 ../views/admin-panel/admin-panel.php:347
+#: ../views/admin-panel/behavior.php:196
+msgid "Spell Check"
+msgstr "بررسی املا"
+
+#: ../views/admin-panel.php:349 ../views/admin-panel/admin-panel.php:349
+#: ../views/admin-panel/behavior.php:198
+msgid "Select After the Deadline Language"
+msgstr "انتخاب بعد از زبان مهلتی "
+
+#: ../views/admin-panel.php:362 ../views/admin-panel/admin-panel.php:362
+#: ../views/admin-panel/behavior.php:211
+msgid "Disable the After the Deadline Spellchecker on Posts?"
+msgstr "غیر فعال کردن بعد از مهلت بررسی املا بر روی پست؟"
+
+#: ../views/admin-panel.php:364 ../views/admin-panel/admin-panel.php:364
+#: ../views/admin-panel/behavior.php:213
+msgid "Disable the After the Deadline Spellchecker on the Popups?"
+msgstr " ها؟ Popup غیر فعال کردن بعد از مهلت بررسی املا بر روی"
+
+#: ../views/admin-panel.php:369 ../views/admin-panel/admin-panel.php:369
+#: ../views/admin-panel/behavior.php:218
+msgid "Expand Options"
+msgstr "گزینه های توسعه"
+
+#: ../views/admin-panel.php:371 ../views/admin-panel/admin-panel.php:371
+#: ../views/admin-panel/behavior.php:220
+msgid "Disable the Expand Option on Posts?"
+msgstr "غیر فعال کردن گزینه های توسعه بر روی پست؟"
+
+#: ../views/admin-panel.php:373 ../views/admin-panel/admin-panel.php:373
+#: ../views/admin-panel/behavior.php:222
+msgid "Disable the Expand Option on the Popups?"
+msgstr " ها؟ Popup غیر فعال کردن گزینه های توسعه بر روی"
+
+#: ../views/admin-panel.php:378 ../views/admin-panel/admin-panel.php:378
+#: ../views/admin-panel/behavior.php:227
+msgid "Disable Trackbacks"
+msgstr "غیر فعال کردن دنبالک ها"
+
+#: ../views/admin-panel.php:380 ../views/admin-panel/admin-panel.php:380
+#: ../views/admin-panel/behavior.php:229
+msgid "Disable trackbacks from showing?"
+msgstr "غیر فعال کردن دنبالک ها از نمایش داده شدن؟"
+
+#: ../views/admin-panel.php:381 ../views/admin-panel/admin-panel.php:381
+#: ../views/admin-panel/behavior.php:230
+msgid ""
+"Enabling this option will prevent trackbacks from showing up on your blog.  "
+"Please note that this option will not prevent your site from receiving "
+"trackbacks."
+msgstr ""
+"فعال کردن این گزینه از نمایش داده شدن دنبالک ها بر روی وبلاگ شما جلوگیری "
+"خواهد کرد. لطفا توجه کنید که این گزینه سایت شما را در برابر دریافت دنبالک ها "
+"محافظت نخواهد کرد"
+
+#: ../views/admin-panel.php:386 ../views/admin-panel/admin-panel.php:386
+#: ../views/admin-panel/behavior.php:235
+msgid "Disable No-follow"
+msgstr "no-follow غیر فعال کردن "
+
+#: ../views/admin-panel.php:388 ../views/admin-panel/admin-panel.php:388
+#: ../views/admin-panel/behavior.php:237
+msgid "Disable no-follow in comment links?"
+msgstr " بر روی لینک نظر؟ no-follow غیر فعال کردن "
+
+#: ../views/admin-panel.php:389 ../views/admin-panel/admin-panel.php:389
+#: ../views/admin-panel/behavior.php:238
+msgid ""
+"Enabling this option will remove no-follow from comment and author links."
+msgstr " را از لینک نظر و نویسنده پاک می کند no-follow فعال کردن این گزینه"
+
+#: ../views/admin-panel.php:394 ../views/admin-panel/admin-panel.php:394
+#: ../views/admin-panel/behavior.php:243
+msgid "Disable Self Pings"
+msgstr "غیر فعال سازی خود پینگ کردن"
+
+#: ../views/admin-panel.php:396 ../views/admin-panel/admin-panel.php:396
+#: ../views/admin-panel/behavior.php:245
+msgid "Disable self-pings to your site?"
+msgstr "غیر فعال سازی خود پینگ کردن در وب سایت شما؟"
+
+#: ../views/admin-panel.php:397 ../views/admin-panel/admin-panel.php:397
+#: ../views/admin-panel/behavior.php:246
+msgid "Enabling this option will prevent your site from pinging itself."
+msgstr "فعال کردن این گزینه، سایت شما را از پینگ مردن خودش محافظت می کند"
+
+#: ../views/admin-panel.php:402 ../views/admin-panel/admin-panel.php:402
+#: ../views/admin-panel/behavior.php:251
+msgid "De-link Behavior"
+msgstr "عملکرد دی - لینک"
+
+#: ../views/admin-panel.php:404 ../views/admin-panel/admin-panel.php:404
+#: ../views/admin-panel/behavior.php:253
+msgid "Choose how the de-link function behaves."
+msgstr "چگونگی عملکرد تابع دی- لینک را انتخاب کنید"
+
+#: ../views/admin-panel.php:405 ../views/admin-panel/admin-panel.php:405
+#: ../views/admin-panel/behavior.php:254
+msgid ""
+"You can choose to remove links from the comment content and comment author "
+"URL, or just the comment author URL."
+msgstr ""
+" محتوای و نویسنده ی نظر و یا فقط نویسنده ی نظر حق انتخاب دارید  URLبرای حذف "
+"لینک ها از "
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Content and comment author URL."
+msgstr " نویسنده ی محتوا و نظر URL"
+
+#: ../views/admin-panel.php:406 ../views/admin-panel/admin-panel.php:406
+#: ../views/admin-panel/behavior.php:255
+msgid "Comment author URL."
+msgstr " نویسنده ی نظر URL"
+
+#: ../views/admin-panel.php:416 ../views/admin-panel/admin-panel.php:416
+#: ../views/admin-panel/appearance.php:141
+msgid "Display"
+msgstr "نمایش"
+
+#: ../views/admin-panel.php:417 ../views/admin-panel/admin-panel.php:417
+#: ../views/admin-panel/appearance.php:184
+msgid "Icons"
+msgstr "آیکون ها"
+
+#: ../views/admin-panel.php:418 ../views/admin-panel/admin-panel.php:418
+#: ../views/admin-panel/appearance.php:321
+msgid "Colorbox"
+msgstr "Colorbox"
+
+#: ../views/admin-panel.php:425 ../views/admin-panel/admin-panel.php:425
+#: ../views/admin-panel/appearance.php:145
+msgid "Countdown Timer"
+msgstr "ثانیه شمار بر عکس"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid "Show a Countdown Timer?"
+msgstr "نشان دادن ثانیه شمار بر عکس؟"
+
+#: ../views/admin-panel.php:427 ../views/admin-panel/admin-panel.php:427
+#: ../views/admin-panel/appearance.php:147
+msgid ""
+"Selecting \"No\" will turn off the countdown timer for non-admin "
+"commentators."
+msgstr ""
+"ثانیه شمار بر عکس را بر اشخاصی که مدیر نیستند غیر فعال خواهد کرد\"No\" انتخاب"
+
+#: ../views/admin-panel.php:432 ../views/admin-panel/admin-panel.php:432
+#: ../views/admin-panel/appearance.php:152
+msgid "Pages"
+msgstr "صفحات"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Display on pages?"
+msgstr "نمایش بر روی صفحات؟"
+
+#: ../views/admin-panel.php:434 ../views/admin-panel/admin-panel.php:434
+#: ../views/admin-panel/appearance.php:154
+msgid "Selecting \"No\" will turn off comment editing on pages."
+msgstr "ویرایش نظرات را بر روی صفحه غیر فعال خواهد کرد\"No\" انتخاب"
+
+#: ../views/admin-panel.php:439 ../views/admin-panel/admin-panel.php:439
+#: ../views/admin-panel/appearance.php:159
+msgid "Clearfix"
+msgstr "Clearfix"
+
+#: ../views/admin-panel.php:441 ../views/admin-panel/admin-panel.php:441
+#: ../views/admin-panel/appearance.php:161
+msgid "Turn Off clearfix:after?"
+msgstr "؟ clearfix:after خاموش کردن"
+
+#: ../views/admin-panel.php:442 ../views/admin-panel/admin-panel.php:442
+#: ../views/admin-panel/appearance.php:162
+msgid ""
+"The clearfix is enabled by default for maximum compatibility with themes."
+msgstr "به طور پیش فرض برای بیشترین ظرفیت با تم فعال شده استclearfix"
+
+#: ../views/admin-panel.php:447 ../views/admin-panel/admin-panel.php:447
+#: ../views/admin-panel/appearance.php:167
+msgid "JavaScript Scrolling"
+msgstr "بالا و پایین بردن جاوا اسکریپت"
+
+#: ../views/admin-panel.php:449 ../views/admin-panel/admin-panel.php:449
+#: ../views/admin-panel/appearance.php:169
+msgid "Turn Off Admin JavaScript Scrolling?"
+msgstr "بالا و پایین بردن جاوا اسکریپت؟ خاموش کردن"
+
+#: ../views/admin-panel.php:450 ../views/admin-panel/admin-panel.php:450
+#: ../views/admin-panel/appearance.php:170
+msgid ""
+"The plugin tries to correct incorrect offsets on a post if you are admin."
+msgstr ""
+"اگر شما مدیر هستید، افزونه برای تصحیح افست های نا صحیح بر روی یک پست تلاش می "
+"کند"
+
+#: ../views/admin-panel.php:455 ../views/admin-panel/admin-panel.php:455
+#: ../views/admin-panel/appearance.php:175
+msgid "Edit Interface Location"
+msgstr "موقعیت خط اتصال ویرایشگر"
+
+#: ../views/admin-panel.php:457 ../views/admin-panel/admin-panel.php:457
+#: ../views/admin-panel/appearance.php:177
+msgid "Comment Edit Interface On Bottom?"
+msgstr "خط اتصال ویرایش نظرات در پایین؟"
+
+#: ../views/admin-panel.php:470 ../views/admin-panel/admin-panel.php:470
+#: ../views/admin-panel/appearance.php:188
+msgid "Icon Display"
+msgstr "نمایش آیکون"
+
+#: ../views/admin-panel.php:472 ../views/admin-panel/admin-panel.php:472
+#: ../views/admin-panel/appearance.php:190
+msgid ""
+"Select an option below to determine how the icons are displayed on your "
+"website."
+msgstr ""
+"برای تعیین چگونگی نمایش آیکون ها در وب سایتتان، یکی از گزینه های زیر را "
+"انتخاب کنید"
+
+#: ../views/admin-panel.php:474 ../views/admin-panel/admin-panel.php:474
+#: ../views/admin-panel/appearance.php:192
+msgid "Text Only"
+msgstr "فقط متن"
+
+#: ../views/admin-panel.php:475 ../views/admin-panel/admin-panel.php:475
+#: ../views/admin-panel/appearance.php:193
+msgid "Classic"
+msgstr "کلاسیک"
+
+#: ../views/admin-panel.php:476 ../views/admin-panel/admin-panel.php:476
+#: ../views/admin-panel/appearance.php:194
+msgid "Dropdown"
+msgstr "کشویی"
+
+#: ../views/admin-panel.php:477 ../views/admin-panel/admin-panel.php:477
+#: ../views/admin-panel/appearance.php:195
+msgid "Icons Only"
+msgstr "فقط آیکون ها "
+
+#: ../views/admin-panel.php:481 ../views/admin-panel/admin-panel.php:481
+#: ../views/admin-panel/appearance.php:199
+msgid "Icon Set"
+msgstr "تنظیم آیکون ها "
+
+#: ../views/admin-panel.php:483 ../views/admin-panel/admin-panel.php:483
+#: ../views/admin-panel/appearance.php:201
+msgid "Select an option below to display the icon set on your website."
+msgstr ""
+"برای نمایش تنظیم آیکون ها در وب سایتتان، یکی از گزینه های زیر را انتخاب کنید"
+
+#: ../views/admin-panel.php:506 ../views/admin-panel/admin-panel.php:506
+#: ../views/admin-panel/appearance.php:224
+msgid "Icon Drop Down Menu"
+msgstr "منو کشویی آیکون ها "
+
+#: ../views/admin-panel.php:508 ../views/admin-panel/admin-panel.php:508
+#: ../views/admin-panel/appearance.php:226
+msgid ""
+"Drag and drop between lists to adjust the icon order.  Click on the image to "
+"disable or enable the option."
+msgstr ""
+".برای تنظیم ترتیب آیکون ها، بکشید و در میان لیست ها رها کنید. برای غیر فعال "
+"یا فعال کردن گزینه ها، بر روی تصویر کلیک کنید "
+
+#: ../views/admin-panel.php:566 ../views/admin-panel/admin-panel.php:566
+#: ../views/admin-panel/appearance.php:284
+msgid "Classic and Icons Only Vew"
+msgstr "Vew کلاسیک و آیکن فقط "
+
+#: ../views/admin-panel.php:568 ../views/admin-panel/admin-panel.php:568
+#: ../views/admin-panel/appearance.php:286
+msgid ""
+"Drag and drop to adjust the icon order.  Click on the image to disable or "
+"enable the option."
+msgstr ""
+".برای تنظیم ترتیب آیکون ها، بکشید و رها کنید. برای غیر فعال یا فعال کردن "
+"گزینه ها، بر روی تصویر کلیک کنید "
+
+#: ../views/admin-panel.php:605 ../views/admin-panel/admin-panel.php:605
+#: ../views/admin-panel/appearance.php:322
+msgid ""
+"%s is a lightbox script that is used for the various pop-ups within this "
+"plugin."
+msgstr ""
+"های متفاوتی در درون پلاگین استفاده می شود pop-ups است که برای lightbox یک "
+"اسکریپت%s"
+
+#: ../views/admin-panel.php:609 ../views/admin-panel/admin-panel.php:609
+#: ../views/admin-panel/appearance.php:326
+msgid "Enable Colorbox on the front-end?"
+msgstr "را در ظاهر کاربری فعال کنیدColorbox"
+
+#: ../views/admin-panel.php:611 ../views/admin-panel/admin-panel.php:611
+#: ../views/admin-panel/appearance.php:328
+msgid ""
+"Disable this option if you would like to use another Colorbox WordPress "
+"plugin such as %s or %s."
+msgstr ""
+"  استفاده کنید، این گزینه را غیر فعال کنید%s or %s مثل  Colorbox WordPress "
+"اگر می خواهید از یکی دیگر از افزونه های"
+
+#: ../views/admin-panel.php:616 ../views/admin-panel/admin-panel.php:616
+#: ../views/admin-panel/appearance.php:333
+msgid "Set the Colorbox Width"
+msgstr "Colorbox تنظیم عرض "
+
+#: ../views/admin-panel.php:622 ../views/admin-panel/admin-panel.php:622
+#: ../views/admin-panel/appearance.php:339
+msgid "Set the Colorbox Height"
+msgstr "Colorbox تنظیم ارتفاع "
+
+#: ../views/admin-panel.php:642 ../views/admin-panel/admin-panel.php:642
+#: ../views/admin-panel/permissions.php:48
+msgid "Registered Comment Editing"
+msgstr "ویرایش نظر دهنده ی ثبت نام شده"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Allow Registered Users to Edit Their Own Comments?"
+msgstr "مجوز به کاربران ثبت نام شده برای ویرایش نظراتشان؟"
+
+#: ../views/admin-panel.php:644 ../views/admin-panel/admin-panel.php:644
+#: ../views/admin-panel/permissions.php:50
+msgid "Selecting \"No\" will turn off comment editing for registered users."
+msgstr ""
+".ویرایش نظرات را برای کاربرهای ثبت نام شده غیر فعال می کند \"No\" انتخاب"
+
+#: ../views/admin-panel.php:649 ../views/admin-panel/admin-panel.php:649
+#: ../views/admin-panel/permissions.php:55
+msgid "Anonymous Commenter Editing"
+msgstr "ویرایش نظر دهنده ی بی نام"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Allow Anonymous Users to Edit Their Own Comments?"
+msgstr "مجوز به کاربران بی نام برای ویرایش نظراتشان؟"
+
+#: ../views/admin-panel.php:651 ../views/admin-panel/admin-panel.php:651
+#: ../views/admin-panel/permissions.php:57
+msgid "Selecting \"No\" will turn off comment editing for anonymous users."
+msgstr ".ویرایش نظرات را برای کاربرهای بی نام غیر فعال می کند \"No\" انتخاب"
+
+#: ../views/admin-panel.php:656 ../views/admin-panel/admin-panel.php:656
+#: ../views/admin-panel/permissions.php:62
+msgid "Admin Users (Admin Panel)"
+msgstr "(کاربران مدیر( پانل مدیریت"
+
+#: ../views/admin-panel.php:658 ../views/admin-panel/admin-panel.php:658
+#: ../views/admin-panel/permissions.php:64
+msgid "Turn Off Comment Editing in Admin Panel?"
+msgstr "غیر فعال کردن ویرایش نظرات در پانل مدیریت؟"
+
+#: ../views/admin-panel.php:659 ../views/admin-panel/admin-panel.php:659
+#: ../views/admin-panel/permissions.php:65
+msgid ""
+"Selecting \"Yes\" will disable comment editing in the Admin Comments Panel."
+msgstr " .ویرایش نظرات را در پانل نظرات مدیریت، غیر فعال می کند\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:664 ../views/admin-panel/admin-panel.php:664
+#: ../views/admin-panel/permissions.php:70
+msgid "Admin Users (Posts)"
+msgstr "(کاربران مدیر( پست ها "
+
+#: ../views/admin-panel.php:666 ../views/admin-panel.php:674
+#: ../views/admin-panel/admin-panel.php:666
+#: ../views/admin-panel/admin-panel.php:674
+#: ../views/admin-panel/permissions.php:72
+#: ../views/admin-panel/permissions.php:80
+msgid "Turn On Comment Editing?"
+msgstr "فعال کردن ویرایش نظرات؟"
+
+#: ../views/admin-panel.php:667 ../views/admin-panel/admin-panel.php:667
+#: ../views/admin-panel/permissions.php:73
+msgid ""
+"Selecting \"Yes\" will enable your ability to edit a user's comment.  "
+"Selecting \"No\" will disable your ability to edit comments on a post"
+msgstr ""
+"توانایی شما را برای ویرایش نظر بر روی یک پست غیر فعال می کند\"No\"  توانایی "
+"شما را برای ویرایش نظر یک کاربر فعال می کند. انتخاب\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:672 ../views/admin-panel/admin-panel.php:672
+#: ../views/admin-panel/permissions.php:78
+msgid "Editors"
+msgstr "ویرایشگران"
+
+#: ../views/admin-panel.php:675 ../views/admin-panel/admin-panel.php:675
+#: ../views/admin-panel/permissions.php:81
+msgid ""
+"Selecting \"Yes\" will allow Editors to see the AEC edit options on a post "
+"or in the admin panel."
+msgstr ""
+".را بر روی یک پست یا در پانل مدیریت ببینند AEC به ویرایشگران اجازه می دهد که "
+"گزینه ی ویرایشی\"Yes\" انتخاب"
+
+#: ../views/admin-panel.php:688 ../views/admin-panel/admin-panel.php:688
+#: ../views/admin-panel/cleanup.php:29
+msgid "Delete all security keys"
+msgstr "همه ی کلیدهای امنیتی را حذف کنید"
+
+#: ../views/admin-panel.php:690 ../views/admin-panel/admin-panel.php:690
+#: ../views/admin-panel/cleanup.php:31
+msgid ""
+"Each time a user leaves a comment, a security key is stored as a custom "
+"key.  Periodically you may want to delete this information.  Please backup "
+"your database first."
+msgstr ""
+".هر بار که یک کاربر یک نظر می گذارد، یک کلید امنیتی در یک کلید سفارشی ذخیره "
+"می شود. ممکن است که شما بخواهید به صورت دوره ای این اطلاعات را پاک کنید. "
+"لطفا قبل از انجام این کار از منبع داده های خود یک فایل پشتیبانی تهیه کنید"
+
+#: ../views/admin-panel.php:698 ../views/admin-panel/admin-panel.php:698
+#: ../views/admin-panel/appearance.php:349
+#: ../views/admin-panel/behavior.php:262 ../views/admin-panel/cleanup.php:38
+#: ../views/admin-panel/permissions.php:88
+msgid "Update Settings"
+msgstr "تنظیمات به روز رسانی"
+
+#: ../views/blacklist-comment.php:50 ../views/comment-editor.php:99
+msgid "Main"
+msgstr "اصلی"
+
+#: ../views/blacklist-comment.php:51 ../views/comment-editor.php:100
+msgid "Advanced"
+msgstr "پیشرفته شده"
+
+#: ../views/blacklist-comment.php:55
+msgid "Select from the options below to add to your comment blacklist."
+msgstr "برای اضافه کردن نظر لیست سیاه خود، از گزینه های زیر انتخاب کنید"
+
+#: ../views/blacklist-comment.php:60 ../views/blacklist-comment.php:90
+#: ../views/comment-editor.php:118
+msgid "Name"
+msgstr "نام"
+
+#: ../views/blacklist-comment.php:67 ../views/blacklist-comment.php:97
+#: ../views/comment-editor.php:130
+msgid "URL"
+msgstr "URL"
+
+#: ../views/blacklist-comment.php:74 ../views/blacklist-comment.php:104
+msgid "E-mail Address"
+msgstr "آدرس ایمیل"
+
+#: ../views/blacklist-comment.php:78 ../views/blacklist-comment.php:108
+msgid "IP Address"
+msgstr "IP آدرس"
+
+#: ../views/blacklist-comment.php:84
+msgid "Spam Matching Comments"
+msgstr "نظرات مطابق را اسپم کنید"
+
+#: ../views/blacklist-comment.php:85
+msgid ""
+" Example: Selecting 'email' and 'name' will spam all comments that match "
+"both the name and e-mail address."
+msgstr ""
+".مثال: انتخاب نام و ایمیل همه ی نظراتی را که با نام و ایمیل مطابقت داشته "
+"باشد، اسپم می کند"
+
+#: ../views/blacklist-comment.php:85
+msgid "Please be careful with this feature.  There is no undo function."
+msgstr ""
+".لطفا در مورد این ویژگی مراقب باشید. هیچ گونه گزینه ی لغو کردن وجود ندارد."
+
+#: ../views/blacklist-comment.php:117 ../views/comment-editor.php:188
+#: ../views/email.php:72 ../views/request-deletion.php:56
+msgid "Cancel"
+msgstr "لغو کردن"
+
+#: ../views/blacklist-comment.php:119 ../views/comment-editor.php:191
+#: ../views/email.php:74 ../views/move-comment.php:143
+#: ../views/request-deletion.php:58
+msgid "Close"
+msgstr "بستن"
+
+#: ../views/comment-editor.php:47
+msgid "%1$s%2$s, %3$s @ %4$s : %5$s"
+msgstr "%1$s%2$s, %3$s @ %4$s : %5$s"
+
+#: ../views/comment-editor.php:151
+msgid "M j, Y @ G:i"
+msgstr "M j, Y @ G:i"
+
+#: ../views/comment-editor.php:152
+msgid "Submitted on: <b>%1$s</b>"
+msgstr ":ثبت کنید <b>%1$s</b> در"
+
+#: ../views/comment-editor.php:154
+msgid "Adjust Comment Time"
+msgstr "تنظیم زمان نظر دهی"
+
+#: ../views/comment-editor.php:156
+msgid "Adjust Comment Status"
+msgstr "تنظیم وضعیت نظر دهی "
+
+#: ../views/comment-editor.php:168 ../views/comment-editor.php:175
+msgid "Approved"
+msgstr "تایید شد"
+
+#: ../views/comment-editor.php:169 ../views/comment-editor.php:176
+msgid "Pending"
+msgstr "د رحال انتظار"
+
+#: ../views/comment-editor.php:187
+msgid "Save"
+msgstr "ذخیره سازی"
+
+#: ../views/comment-popup.php:25
+msgid "Please type out your comment below."
+msgstr "لطفا نظر خود را در زیر بنویسید"
+
+#: ../views/comment-popup.php:28
+msgid "Save and Return"
+msgstr "ذخیره کنید و باز گردید"
+
+#: ../views/comment-popup.php:28
+msgid "Submit Comment"
+msgstr "ثبت نظر"
+
+#: ../views/email.php:51
+msgid "To"
+msgstr "به"
+
+#: ../views/email.php:55
+msgid "From"
+msgstr "از"
+
+#: ../views/email.php:59
+msgid "Site Admin"
+msgstr "مدیر سایت"
+
+#: ../views/email.php:59
+msgid "Post Author"
+msgstr "نویسنده ی ارسال"
+
+#: ../views/email.php:62
+msgid "Subject"
+msgstr "موضوع"
+
+#: ../views/email.php:71
+msgid "Send"
+msgstr "ارسال"
+
+#: ../views/move-comment.php:46
+msgid "Move by Post"
+msgstr "انتقال به وسیله ی ارسال"
+
+#: ../views/move-comment.php:47
+msgid "Move by Title"
+msgstr "انتقال به وسیله ی عنوان"
+
+#: ../views/move-comment.php:48
+msgid "Move by ID"
+msgstr "ID انتقال به وسیله ی"
+
+#: ../views/move-comment.php:60
+msgid "Previous"
+msgstr "قبلی"
+
+#: ../views/move-comment.php:60
+msgid "Next"
+msgstr "بعدی"
+
+#: ../views/move-comment.php:71 ../views/move-comment.php:79
+#: ../views/move-comment.php:96 ../views/move-comment.php:104
+msgid "Search"
+msgstr "جستجو"
+
+#: ../views/move-comment.php:73 ../views/move-comment.php:77
+msgid "Title"
+msgstr "عنوان"
+
+#: ../views/move-comment.php:98 ../views/move-comment.php:102
+msgid "Post ID"
+msgstr "ID ارسال"
+
+#: ../views/move-comment.php:129 ../views/move-comment.php:132
+msgid "Mark as Approved"
+msgstr "به عنوان تایید شده علامت گذاری کنید"
+
+#: ../views/request-deletion.php:47
+msgid ""
+"Please explain why the comment should be deleted.  After sending the "
+"request, your comment will be marked as moderated and will no longer be "
+"viewable publicly."
+msgstr ""
+".لطفا توضیح دهید که چرا نظر باید حذف شود. بعد از ارسال درخواست، نظر شما به "
+"عنوان معتدل سازی شده علامت گذاری می شود و دیگر برای عموم قابل دیدن نیست"
+
+#: ../views/request-deletion.php:55
+msgid "Send Request"
+msgstr "ارسال در خواست"

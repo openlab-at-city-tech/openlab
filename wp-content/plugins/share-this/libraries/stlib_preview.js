@@ -160,7 +160,7 @@ stlib_preview.setupPreview = function(jQElement, newDefaults, newOptions) {
 //			tags+="<span class='st_"+attrname+type+"' displayText='"+ title +"'></span>"+br;
 //		}
 //		/*
-//		$.each(stlib_preview.currentServices, function(key, value) {
+//		jQuery.each(stlib_preview.currentServices, function(key, value) {
 //			tags+="<span class='st_"+key+"' displayText='"+ value.title +"'></span>";
 //		});
 //		*/

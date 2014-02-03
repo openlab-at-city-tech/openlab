@@ -1,9 +1,9 @@
 === Gravity Forms Directory ===
 Tags: gravity forms, gravity form, forms, gravity, form, crm, directory, business, business directory, list, listings, sort, submissions, table, tables, member, contact, contacts, directorypress, business directory, directory plugin, wordpress directory, classifieds, captcha, cforms, contact, contact form, contact form 7, contact forms, CRM, email, enhanced wp contact form, feedback, form, forms, gravity, gravity form, gravity forms, secure form, simplemodal contact form, wp contact form, widget
-Requires at least: 3.0
-Tested up to: 3.5.1
+Requires at least: 3.3
+Tested up to: 3.8
 Stable tag: trunk
-Contributors: katzwebdesign
+Contributors: katzwebdesign, katzwebservices
 License: GPLv2 or later
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms%20Addons&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
@@ -38,7 +38,7 @@ There are tons of configurable options for how you want the directory to display
 
 * Expand the Add Fields boxes to view all the boxes at once.
 * Edit form entries directly from the Entries page (saving two clicks)
-* Easily access form data to use in your website with PHP functions - [Learn more on the plugin's website](http://www.seodenver.com/gravity-forms-addons/)
+* Easily access form data to use in your website with PHP functions - [Learn more on the plugin's website](https://katz.co/gravity-forms-addons/)
 
 #### Other Gravity Forms Add-ons:
 
@@ -78,6 +78,7 @@ When editing a form, click on a field to expand the field. Next, click the "Dire
 * Choose whether you would like the field to be a link to the Single Entry View;
 * Hide the field in Directory View; and
 * Hide the field in Single Entry View
+* Enable using the field as an advanced search filter
 
 = How do I select what columns I want to display in the Directory? =
 
@@ -87,6 +88,21 @@ When editing a form, click on a field to expand the field. Next, click the "Dire
 	* Drag from the right ("Hidden Columns") side to the left ("Visible Columns") side.
 1. Click the "Save" button
 1. Voila!
+
+= How do Directory Search filters work? =
+If the field is a text field, a text search input will be added that will search only this field. Otherwise, the field choices will be used to populate a dropdown menu search input.
+
+Example: if the "Vehicle Make" field has choices "Ford", "Chevy", and "Toyota", the search dropdown options will have those items as choices in a dropdown search field. If "Ford" is selected and the search form is submitted, only entries with the Vehicle Make of "Ford" will be shown.
+
+To enable a field as a search filter, view "How do I add a field as a Directory Search filter?" below.
+
+= How do I add a field as a Directory Search filter? =
+
+1. Edit the Gravity Forms form you'd like to configure a Directory for
+1. Click the bar on the top of the field to expand the field
+1. Click the "Directory" tab
+1. Check the box that says "Use this field as a search filter"
+1. Click "Update Form" to save the form
 
 = How do I turn off lightbox grouping? =
 Add the following to your theme's `functions.php` file:
@@ -200,6 +216,53 @@ To fix this issue, add this to your theme's `functions.php` file:
 
 == Changelog ==
 
+= 3.5.4 (January 23, 2014) =
+* Separated Change Entry Creator functionality into a separate, packaged plugin. This will allow you to enable or disable the functionality as you would a plugin.
+* Added a new filter (`kws_gf_entry_creator_users`) for the Change Entry Creator plugin. This allows you to define what users appear in the dropdown (as an array of `WP_User` objects). If no users are specified, all users are shown.
+
+= 3.5.3 (January 13, 2014) =
+The fixes in this update were submitted by [Dylan Bartlett](http://www.dylanbarlett.com). Thanks, Dylan!
+
+* Check for 'page' request var instead of suppressing error when not set.
+* Add filters & actions to `gf_edit_forms` only when editing a specific form
+* Fixed: Use correct path to enqueue Colorbox JS
+* Fixed: JS syntax in Search function
+
+= 3.5.2 (December 30, 2013) =
+* Fixed: Fatal error for users using < Gravity Forms 1.8
+
+= 3.5 & 3.5.1 (December 29, 2013) =
+* Added: __Advanced search filters!__ Filter results based on fields of the form. For more information, read the item in the FAQ tab: "How do Directory Search filters work?"
+* Added: Make fields visibile based on whether an user is logged-in and has certain capabilities ("Only visible to logged in users with [Any] role." setting in the Directory tab)
+* Added: Supports Single Entry links when Previewing posts and pages that have an embedded directory
+* Fixed: Use `sort_field_number` instead of `sort_field` for the `get_leads()` method
+* Fixed: Replaced `WP_PLUGIN_URL` with `plugins_url()` to prevent mixed content warnings when editing forms over HTTPS (thanks, [dbarlett](https://github.com/dbarlett))
+* Fixed: Now respects shortcode `entryback` link setting (previously, only the global setting was respected)
+* Updated: Better icon on Edit Form view for Gravity Forms 1.8
+* Updated: Removed `remove_admin_only()` method and replaced with `remove_hidden_fields()`
+
+= 3.4.4 (December 9, 2013) =
+* Fixed: Entry approval error [ticket](http://wordpress.org/support/topic/approval-not-working-1)
+* Fixed: Images in the directory now open using lightbox again
+* Fixed: Show Form IDs functionality
+* Fixed: Broken link to SimpleModal script on Forms page ([ticket](http://wordpress.org/support/topic/js-error-6))
+* Fixed: Compatibility with Gravity Forms 1.8's new icon set
+* Updated: Now uses latest Colorbox script
+
+= 3.4.3 (October 31, 2013) =
+* Fixed: PHP 5.4 warnings
+* Fixed: Editing Lists field type
+* Fixed: Directory Columns window now displays properly
+* Fixed: File Upload display in single entry
+* Fixed: `Notice: Trying to get property of non-object[...]on line 4051` error
+* Known issue: Compatibility with editing entries in forms with Quiz and Poll types
+
+= 3.4.2 (October 11, 2013) =
+* Fixed compatibility with WordPress 3.6+
+	- Directory tab restored to form editor
+	- Converted jQuery `live()` to `on()`
+* Updated Colorbox library
+
 = 3.4.1 (February 26, 2013) =
 * Fixed: Issue where entries would be hidden if both "Show only entries that have been Approved" and "Smart Approval" aren't checked
 * Fixed: Insert Directory button image path fixed
@@ -261,7 +324,7 @@ To fix this issue, add this to your theme's `functions.php` file:
 
 = 3.2.1 =
 * Fixed Colorbox not loading properly in certain cases (<a href="Issue http://wordpress.org/support/topic/656033" rel="nofollow">Issue #656033</a>)
-* Fixed issue where entries appeared not to be approving properly in the admin. (<a href="http://www.seodenver.com/forums/topic/edits-to-entries-not-visible-in-directory-view/">Reported on the Support Forum</a>)
+* Fixed issue where entries appeared not to be approving properly in the admin.
 
 = 3.2 =
 * Added `limituser` option - a new option to show only entries users have created. You can also hide entries from not-logged-in users (see FAQ).
@@ -273,13 +336,13 @@ To fix this issue, add this to your theme's `functions.php` file:
 * Added `list` input type support
 * Fixed bugs/issues
 	* Fixed 404 errors in Single Entry View after de-activating then re-activating plugin. Now properly generates rewrite rules.
-	* Fixed header code 404 when viewing entries in lightbox mode (Support topics <a href="http://www.seodenver.com/forums/topic/intermittent-404s-in-ie-when-clicking-entry-detail-firefox-ok/">here</a> and <a href="http://www.seodenver.com/forums/topic/lightbox-error/">here</a>)
+	* Fixed header code 404 when viewing entries in lightbox mode
 	* Front-end editing of certain types of input types failed because `GFFormDisplay` class wasn't defined.
-	* Fixed <a href="http://www.seodenver.com/forums/topic/intermittent-404s-in-ie-when-clicking-entry-detail-firefox-ok/">issue</a> where scripts were not always printing in the `<head>`
+	* Fixed issue where scripts were not always printing in the `<head>`
 	* Fixed fatal error when outputting `date_created` field (<a href="http://wordpress.org/support/topic/649652">issue #649652</a>)
 
 = 3.1.1 =
-* Fixes issue where entries not showing on sort (<a href="http://www.seodenver.com/forums/topic/entries-not-showing-on-sort/">as reported in the plugin support forums</a>)
+* Fixes issue where entries not showing on sort
 
 = 3.1 =
 * Added much-requested option for front-end User editing of entries. Must be enabled (off by default).
@@ -348,7 +411,7 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 = 2.5.2 =
 * Fixed broken image for lightbox close button (<a href="http://wordpress.org/support/topic/570042" rel="nofollow">issue #570042</a>)
 * Fixed definition list (DL) display mode: each entry in directory view is now wrapped with a `dl`; single-entry view entries are now wrapped with single `dl`
-* HTML generation fix: `<liclass` now `<li class` (<a href="http://www.seodenver.com/gravity-forms-addons/#dsq-comment-header-193118389">thanks @lolawson</a>)
+* HTML generation fix: `<liclass` now `<li class` (thanks @lolawson)
 * Improved JavaScript table sorting function (thanks to <a href="http://wordpress.org/support/topic/565544" rel="nofollow">feedback from heavymark</a>)
 * Added option to use links to sort tables instead of JavaScript (`jssearch`, under Formatting Options)
 
@@ -398,6 +461,53 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 
 == Upgrade Notice ==
 
+= 3.5.4 (January 23, 2014) =
+* Separated Change Entry Creator functionality into a separate, packaged plugin. This will allow you to enable or disable the functionality as you would a plugin.
+* Added a new filter (`kws_gf_entry_creator_users`) for the Change Entry Creator plugin. This allows you to define what users appear in the dropdown (as an array of `WP_User` objects). If no users are specified, all users are shown.
+
+= 3.5.3 (January 13, 2014) =
+The fixes in this update were submitted by [Dylan Bartlett](http://www.dylanbarlett.com). Thanks, Dylan!
+
+* Check for 'page' request var instead of suppressing error when not set.
+* Add filters & actions to `gf_edit_forms` only when editing a specific form
+* Fixed: Use correct path to enqueue Colorbox JS
+* Fixed: JS syntax in Search function
+
+= 3.5.2 (December 30, 2013) =
+* Fixed: Fatal error for users using < Gravity Forms 1.8
+
+= 3.5 & 3.5.1 (December 29, 2013) =
+* Added: __Advanced search filters!__ Filter results based on fields of the form. For more information, read the item in the FAQ tab: "How do Directory Search filters work?"
+* Added: Make fields visibile based on whether an user is logged-in and has certain capabilities ("Only visible to logged in users with [Any] role." setting in the Directory tab)
+* Added: Supports Single Entry links when Previewing posts and pages that have an embedded directory
+* Fixed: Use `sort_field_number` instead of `sort_field` for the `get_leads()` method
+* Fixed: Replaced `WP_PLUGIN_URL` with `plugins_url()` to prevent mixed content warnings when editing forms over HTTPS (thanks, [dbarlett](https://github.com/dbarlett))
+* Fixed: Now respects shortcode `entryback` link setting (previously, only the global setting was respected)
+* Updated: Better icon on Edit Form view for Gravity Forms 1.8
+* Updated: Removed `remove_admin_only()` method and replaced with `remove_hidden_fields()`
+
+= 3.4.4 (December 9, 2013) =
+* Fixed: Entry approval error [ticket](http://wordpress.org/support/topic/approval-not-working-1)
+* Fixed: Images in the directory now open using lightbox again
+* Fixed: Show Form IDs functionality
+* Fixed: Broken link to SimpleModal script on Forms page ([ticket](http://wordpress.org/support/topic/js-error-6))
+* Fixed: Compatibility with Gravity Forms 1.8's new icon set
+* Updated: Now uses latest Colorbox script
+
+= 3.4.3 (October 31, 2013) =
+* Fixed: PHP 5.4 warnings
+* Fixed: Editing Lists field type
+* Fixed: Directory Columns window now displays properly
+* Fixed: File Upload display in single entry
+* Fixed: `Notice: Trying to get property of non-object[...]on line 4051` error
+* Known issue: Compatibility with editing entries in forms with Quiz and Poll types
+
+= 3.4.2 (October 11, 2013) =
+* Fixed compatibility with WordPress 3.6+
+	- Directory tab restored to form editor
+	- Converted jQuery `live()` to `on()`
+* Updated Colorbox library
+
 = 3.4.1 (February 26, 2013) =
 * Fixed: Issue where entries would be hidden if both "Show only entries that have been Approved" and "Smart Approval" aren't checked
 * Fixed: Insert Directory button image path fixed
@@ -436,7 +546,7 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 
 = 3.2.1 =
 * Fixed Colorbox not loading properly in certain cases (<a href="Issue http://wordpress.org/support/topic/656033" rel="nofollow">Issue #656033</a>)
-* Fixed issue where entries appeared not to be approving properly in the admin. (<a href="http://www.seodenver.com/forums/topic/edits-to-entries-not-visible-in-directory-view/">Reported on the Support Forum</a>)
+* Fixed issue where entries appeared not to be approving properly in the admin.
 
 = 3.2 =
 * Added `limituser` option - a new option to show only entries users have created. You can also hide entries from not-logged-in users (see FAQ).
@@ -451,7 +561,7 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 * Fixed header code 404 when viewing entries in lightbox mode
 
 = 3.1.1 =
-* Fixes issue where entries not showing on sort (<a href="http://www.seodenver.com/forums/topic/entries-not-showing-on-sort/">as reported in the plugin support forums</a>) - NoteL this only affected users using versions of Gravity Forms older than 1.6.
+* Fixes issue where entries not showing on sort - Note: this only affected users using versions of Gravity Forms older than 1.6.
 
 = 3.1 =
 * Added much-requested option for front-end User editing of entries. Must be enabled (off by default).
@@ -515,7 +625,7 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 = 2.5.2 =
 * Fixed broken image for lightbox close button (<a href="http://wordpress.org/support/topic/570042" rel="nofollow">issue #570042</a>)
 * Fixed definition list (DL) display mode: each entry in directory view is now wrapped with a `dl`; single-entry view entries are now wrapped with single `dl`
-* HTML generation fix: `<liclass` now `<li class` (<a href="http://www.seodenver.com/gravity-forms-addons/#dsq-comment-header-193118389">thanks @lolawson</a>)
+* HTML generation fix: `<liclass` now `<li class` (thanks @lolawson)
 * Improved JavaScript table sorting function (thanks to <a href="http://wordpress.org/support/topic/565544" rel="nofollow">feedback from heavymark</a>)
 * Added option to use links to sort tables instead of JavaScript (`jssearch`, under Formatting Options)
 

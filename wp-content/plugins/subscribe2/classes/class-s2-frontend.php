@@ -6,17 +6,18 @@ class s2_frontend extends s2class {
 	*/
 	function shortcode($atts) {
 		extract(shortcode_atts(array(
-			'hide'  => strtolower(''),
+			'hide'  => '',
 			'id'    => '',
-			'url' => '',
 			'nojs' => 'false',
+			'noantispam' => 'false',
 			'link' => '',
-			'size' => 20
+			'size' => 20,
+			'wrap' => 'true'
 			), $atts));
 
 		// if link is true return a link to the page with the ajax class
 		if ( $link !== '' && !is_user_logged_in() ) {
-			$hide_id = ($hide === '') ? "": " id=\"" . $hide . "\"";
+			$hide_id = ($hide === '') ? "": " id=\"" . strtolower($hide) . "\"";
 			$this->s2form = "<a href=\"" . get_permalink($this->subscribe2_options['s2page']) . "\" class=\"s2popup\"" . $hide_id . ">" . $link . "</a>\r\n";
 			return $this->s2form;
 		}
@@ -26,9 +27,9 @@ class s2_frontend extends s2class {
 		$subscribe_button_value = apply_filters('s2_subscribe_button', __('Subscribe', 'subscribe2'));
 
 		// if a button is hidden, show only other
-		if ( $hide == 'subscribe' ) {
+		if ( strtolower($hide) == 'subscribe' ) {
 			$this->input_form_action = "<input type=\"submit\" name=\"unsubscribe\" value=\"" . esc_attr($unsubscribe_button_value) . "\" />";
-		} elseif ( $hide == 'unsubscribe' ) {
+		} elseif ( strtolower($hide) == 'unsubscribe' ) {
 			$this->input_form_action = "<input type=\"submit\" name=\"subscribe\" value=\"" . esc_attr($subscribe_button_value) . "\" />";
 		} else {
 			// both form input actions
@@ -50,19 +51,34 @@ class s2_frontend extends s2class {
 		// allow remote setting of email in form
 		if ( isset($_REQUEST['email']) && is_email($_REQUEST['email']) ) {
 			$value = $this->sanitize_email($_REQUEST['email']);
-		} elseif ( $nojs == 'true' ) {
+		} elseif ( strtolower($nojs) == 'true' ) {
 			$value = '';
 		} else {
 			$value = __('Enter email address...', 'subscribe2');
 		}
 
-		// build default form
-		if ( $nojs == 'true' ) {
-			$this->form = "<form method=\"post\"" . $action . "><input type=\"hidden\" name=\"ip\" value=\"" . $_SERVER['REMOTE_ADDR'] . "\" /><p><label for=\"s2email\">" . __('Your email:', 'subscribe2') . "</label><br /><input type=\"text\" name=\"email\" id=\"s2email\" value=\"" . $value . "\" size=\"" . $size . "\" /></p><p>" . $this->input_form_action . "</p></form>";
-		} else {
-			$this->form = "<form method=\"post\"" . $action . "><input type=\"hidden\" name=\"ip\" value=\"" . $_SERVER['REMOTE_ADDR'] . "\" /><p><label for=\"s2email\">" . __('Your email:', 'subscribe2') . "</label><br /><input type=\"text\" name=\"email\" id=\"s2email\" value=\"" . $value . "\" size=\"" . $size . "\" onfocus=\"if (this.value == '" . $value . "') {this.value = '';}\" onblur=\"if (this.value == '') {this.value = '" . $value . "';}\" /></p><p>" . $this->input_form_action . "</p></form>\r\n";
+		// if wrap is true add paragraph html tags
+		$wrap_text = '';
+		if ( strtolower($wrap) == 'true' ) {
+			$wrap_text = '</p><p>';
 		}
-		$this->s2form = $this->form;
+
+		// deploy some anti-spam measures
+		$antispam_text = '';
+		if ( strtolower($noantispam) != 'true' ) {
+			$antispam_text = "<span style=\"display:none !important\">";
+			$antispam_text .= "<label for=\"name\">Leave Blank:</label><input type=\"text\" id=\"name\" name=\"name\" />";
+			$antispam_text .= "<label for=\"uri\">Do Not Change:</label><input type=\"text\" id=\"uri\" name=\"uri\" value=\"http://\" />";
+			$antispam_text .= "</span>";
+		}
+
+		// build default form
+		if ( strtolower($nojs) == 'true' ) {
+			$this->form = "<form method=\"post\"" . $action . "><input type=\"hidden\" name=\"ip\" value=\"" . $_SERVER['REMOTE_ADDR'] . "\" />" . $antispam_text . "<p><label for=\"s2email\">" . __('Your email:', 'subscribe2') . "</label><br /><input type=\"text\" name=\"email\" id=\"s2email\" value=\"" . $value . "\" size=\"" . $size . "\" />" . $wrap_text . $this->input_form_action . "</p></form>";
+		} else {
+			$this->form = "<form method=\"post\"" . $action . "><input type=\"hidden\" name=\"ip\" value=\"" . $_SERVER['REMOTE_ADDR'] . "\" />" . $antispam_text . "<p><label for=\"s2email\">" . __('Your email:', 'subscribe2') . "</label><br /><input type=\"text\" name=\"email\" id=\"s2email\" value=\"" . $value . "\" size=\"" . $size . "\" onfocus=\"if (this.value == '" . $value . "') {this.value = '';}\" onblur=\"if (this.value == '') {this.value = '" . $value . "';}\" />" . $wrap_text . $this->input_form_action . "</p></form>\r\n";
+		}
+		$this->s2form = apply_filters('s2_form', $this->form);
 
 		global $user_ID;
 		get_currentuserinfo();
@@ -70,6 +86,11 @@ class s2_frontend extends s2class {
 			$this->s2form = $this->profile;
 		}
 		if ( isset($_POST['subscribe']) || isset($_POST['unsubscribe']) ) {
+			// anti spam sign up measure
+			if ( $_POST['name'] != '' || $_POST['uri'] != 'http://' ) {
+				// looks like some invisible-to-user fields were changed; falsely report success
+				return $this->confirmation_sent;
+			}
 			global $wpdb, $user_email;
 			$this->email = $this->sanitize_email($_POST['email']);
 			if ( !is_email($this->email) ) {
@@ -147,14 +168,20 @@ class s2_frontend extends s2class {
 
 		global $wpdb;
 
+		// brute force Simple Facebook Connect to bypass compatiblity issues
+		$priority = has_filter('wp_head', 'sfc_base_meta');
+		if ( $priority !== false ) {
+			remove_action('wp_head', 'sfc_base_meta', $priority);
+		}
+
 		if ( 0 != $this->subscribe2_options['s2page'] ) {
-			return "page_id=" . $this->subscribe2_options['s2page'];
+			return array('page_id' => $this->subscribe2_options['s2page']);
 		} else {
 			$id = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' LIMIT 1");
 			if ( $id ) {
-				return "page_id=$id";
+				return array('page_id' => $id);
 			} else {
-				return "showposts=1";
+				return array('showposts' => 1);
 			}
 		}
 	} // end query_filter()
@@ -203,7 +230,7 @@ class s2_frontend extends s2class {
 
 		if ( '1' == $action ) {
 			// make this subscription active
-			$this->message = $this->added;
+			$this->message = apply_filters('s2_subscribe_confirmed', $this->added);
 			if ( '1' != $current ) {
 				$this->ip = $_SERVER['REMOTE_ADDR'];
 				$this->toggle($this->email);
@@ -217,6 +244,7 @@ class s2_frontend extends s2class {
 					foreach ($wp_user_query as $user) {
 						$recipients[] = $user->user_email;
 					}
+					$recipients = apply_filters('s2_admin_email', $recipients, 'subscribe');
 					$headers = $this->headers();
 					// send individual emails so we don't reveal admin emails to each other
 					foreach ( $recipients as $recipient ) {
@@ -227,7 +255,7 @@ class s2_frontend extends s2class {
 			$this->filtered = 1;
 		} elseif ( '0' == $action ) {
 			// remove this subscriber
-			$this->message = $this->deleted;
+			$this->message = apply_filters('s2_unsubscribe_confirmed', $this->deleted);
 			if ( '0' != $current ) {
 				$this->delete($this->email);
 				if ( $this->subscribe2_options['admin_email'] == 'unsubs' || $this->subscribe2_options['admin_email'] == 'both' ) {
@@ -240,6 +268,7 @@ class s2_frontend extends s2class {
 					foreach ($wp_user_query as $user) {
 						$recipients[] = $user->user_email;
 					}
+					$recipients = apply_filters('s2_admin_email', $recipients, 'unsubscribe');
 					$headers = $this->headers();
 					// send individual emails so we don't reveal admin emails to each other
 					foreach ( $recipients as $recipient ) {
@@ -270,7 +299,11 @@ class s2_frontend extends s2class {
 	function add_ajax() {
 		// enqueue the jQuery script we need and let WordPress handle the dependencies
 		wp_enqueue_script('jquery-ui-dialog');
-		wp_register_style('jquery-ui-style', apply_filters('s2_jqueryui_css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/ui-darkness/jquery-ui.css'));
+		$css = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.css';
+		if ( is_ssl() ) {
+			$css = str_replace('http:', 'https:', $css);
+		}
+		wp_register_style('jquery-ui-style', apply_filters('s2_jqueryui_css', $css));
 		wp_enqueue_style('jquery-ui-style');
 	} // end add_ajax()
 
@@ -280,11 +313,12 @@ class s2_frontend extends s2class {
 	function add_s2_ajax() {
 		echo "<script type=\"text/javascript\">\r\n";
 		echo "//<![CDATA[\r\n";
-		echo "jQuery(document).ready(function() {\r\n";
-		echo "	var dialog = jQuery('<div></div>');\r\n";
-		echo "	if (jQuery('a.s2popup').attr('id') === 'unsubscribe') {\r\n";
+		echo "var s2jQuery = jQuery.noConflict();\r\n";
+		echo "s2jQuery(document).ready(function() {\r\n";
+		echo "	var dialog = s2jQuery('<div></div>');\r\n";
+		echo "	if (s2jQuery('a.s2popup').attr('id') === 'unsubscribe') {\r\n";
 		echo "		dialog.html('" . do_shortcode('[subscribe2 nojs="true" hide="unsubscribe"]') . "');\r\n";
-		echo "	} else if (jQuery('a.s2popup').attr('id') === 'subscribe') {\r\n";
+		echo "	} else if (s2jQuery('a.s2popup').attr('id') === 'subscribe') {\r\n";
 		echo "		dialog.html('" . do_shortcode('[subscribe2 nojs="true" hide="subscribe"]') . "');\r\n";
 		echo "	} else {\r\n";
 		echo "		dialog.html('" . do_shortcode('[subscribe2 nojs="true"]') . "');\r\n";
@@ -294,7 +328,7 @@ class s2_frontend extends s2class {
 		} else {
 			echo "	dialog.dialog({autoOpen: false, modal: true, zIndex: 10000, title: '" . __('Subscribe to this blog', 'subscribe2') . "'});\r\n";
 		}
-		echo "	jQuery('a.s2popup').click(function(){\r\n";
+		echo "	s2jQuery('a.s2popup').click(function(){\r\n";
 		echo "		dialog.dialog('open');\r\n";
 		echo "		return false;\r\n";
 		echo "	});\r\n";
@@ -302,5 +336,21 @@ class s2_frontend extends s2class {
 		echo "//]]>\r\n";
 		echo "</script>\r\n";
 	} // end add_s2_ajax()
+
+	/**
+	Check email is not from a barred domain
+	*/
+	function is_barred($email = '') {
+		if ( '' == $email ) { return false; }
+
+		$bar_check = false;
+		list($user, $domain) = explode('@', $email, 2);
+		foreach ( preg_split("|[\s,]+|", $this->subscribe2_options['barred']) as $barred_domain ) {
+			if ( strtolower($domain) === strtolower(trim($barred_domain)) ) {
+				$bar_check = true;
+			}
+		}
+		return $bar_check;
+	} // end is_barred()
 }
 ?>

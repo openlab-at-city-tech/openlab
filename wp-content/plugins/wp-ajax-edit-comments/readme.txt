@@ -4,13 +4,31 @@ Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, 
 Requires at least: 3.1
 Tested up to: 3.6
 License: GPLv2 or later
-Stable tag: 5.0.27.0
+Stable tag: 5.0.36.0
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
 == Description ==
 
 Ajax Edit Comments allows users to edit their own comments for a limited time.  Administrators can edit all comments on the front-end.
+
+= Looking for Just Comment Editing? =
+
+Check out a "lite" version of this plugin called <a href="http://wordpress.org/plugins/simple-comment-editing/">Simple Comment Editing</a>.  Check out the <a href="http://www.wptavern.com/plugin-review-simple-comment-editing">WPTavern review</a> for more information.
+
+= Looking for a new Contributor =
+We're looking for a new contributor to this plugin.  All the current contributors no longer have the time to maintain this project.  If you're interested, <a href="https://github.com/ronalfy/ajax-edit-comments">fork the project on GitHub</a> and submit a pull request.  
+
+Here are some things that need to be worked on:
+<ul>
+<li>Existing support requests.</li>
+<li>Code re-factoring.</li>
+<li>CSS overhaul.</li>
+<li>Admin options de-cluttering.</li>
+</ul>
+
+If interested, visit the <a href="https://github.com/ronalfy/ajax-edit-comments">Ajax Edit Comments GitHub project page</a>.
+
 
 = Features =
 <h4>Admin Features</h4>
@@ -24,7 +42,6 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 <li>Undo functionality for most editing options.</li>
 <li>Can choose different icon sets for use on your blog.</li>
 <li>Dropdown menu to de-clutter the interface.</li>
-<li>Improved RTL support.</li>
 <li>Various admin-panel options including<ul><li>Can edit comment time.</li><li>Can specify anonymous user options.</li><li>Can specify logged-in user options.</li><li>Can choose between Akismet and Defensio for spam protection.</li><li>Can disable timer.</li><li>And much, much more...</li></ul></li>
 </ul>
 <h4>Anonymous User Features</h4>
@@ -47,6 +64,24 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+= 5.0.36.0 =
+* Released 12 October 2013 by Ronald Huereca
+* Rolled back JavaScript slashes functionality
+
+= 5.0.35.0 =
+* Released 09 October 2013 by Ronald Huereca
+* Added Persian translation
+* Fixed AEC showing up in feeds
+* Fixed JavaScript bug with slashes
+
+= 5.0.30.0 =
+* Released 06 September 2013 by Ronald Huereca
+* Fixing SSL error when FORCE_SSL_ADMIN is set to true. See trac ticket: http://buddypress.trac.wordpress.org/ticket/4761
+
+= 5.0.28.0 =
+* Released 09 August 2013 by Ronald Huereca
+* Minor performance improvements when checking for comment editing permissions
+* Added simplied chinese
 
 = 5.0.27.0 =
 * Released 06 June 2013 by Ronald Huereca
@@ -207,6 +242,18 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 
 == Upgrade Notice ==
 
+= 5.0.36.0 =
+Rolled back JavaScript slashes functionality
+
+= 5.0.35.0 =
+Added Persian translation. Fixed AEC showing up in feeds. Fixed JavaScript bug with slashes.
+
+= 5.0.29.0 =
+Fixing SSL error when FORCE_SSL_ADMIN is set to true.
+
+= 5.0.28.0 =
+Minor performance improvements when checking for comment editing permissions.  Added simplied chinese language.
+
 = 5.0.27.0 =
 Updated colorbox for WP 3.6 compatibility.
 
@@ -256,6 +303,10 @@ From there, you and your users should be able to edit comments.  This plugin has
 Advanced customization options are available through the admin panel options.  
 
 == Frequently Asked Questions ==
+
+= I have an "XYZ" problem with the plugin. =
+
+We're looking for a new contributor to this plugin.  All the current contributors no longer have the time to maintain this project.  If you're interested, <a href="https://github.com/ronalfy/ajax-edit-comments">fork the project on GitHub</a> and submit a pull request. 
 
 = I installed the plugin and the edit buttons aren't shown or the colorbox popup is off = 
 

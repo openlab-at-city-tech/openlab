@@ -409,7 +409,7 @@ function get_tags_with_count( $post, $format = 'list', $before = '', $sep = '', 
 
 	foreach ( $posttags as $tag ) {
 		if ( $tag->count > 1 && !is_tag($tag->slug) ) {
-			$tag_link = '<a href="' . get_term_link($tag, 'post_tag' ) . '" rel="tag">' . $tag->name . ' ( ' . number_format_i18n( $tag->count ) . ' )</a>';
+			$tag_link = '<a href="' . get_tag_link( $tag ) . '" rel="tag">' . $tag->name . ' ( ' . number_format_i18n( $tag->count ) . ' )</a>';
 		} else {
 			$tag_link = $tag->name;
 		}

@@ -16,7 +16,7 @@ add_filter( 'show_admin_bar', '__return_true', 999999 );
 add_action( 'add_admin_bar_menus', array( 'OpenLab_Admin_Bar', 'init' ) );
 
 class OpenLab_Admin_Bar {
-	function init() {
+	public static function init() {
 		static $instance;
 
 		if ( empty( $instance ) ) {

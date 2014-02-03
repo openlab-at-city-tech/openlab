@@ -95,6 +95,12 @@ function wpcf7_normalize_newline_deep( $arr, $to = "\n" ) {
 	return wpcf7_normalize_newline( $arr, $to );
 }
 
+function wpcf7_strip_newline( $str ) {
+	$str = (string) $str;
+	$str = str_replace( array( "\r", "\n" ), '', $str );
+	return trim( $str );
+}
+
 function wpcf7_canonicalize( $text ) {
 	if ( function_exists( 'mb_convert_kana' ) && 'UTF-8' == get_option( 'blog_charset' ) )
 		$text = mb_convert_kana( $text, 'asKV', 'UTF-8' );
@@ -145,6 +151,33 @@ function wpcf7_is_date( $date ) {
 		$result = checkdate( $matches[2], $matches[3], $matches[1] );
 
 	return apply_filters( 'wpcf7_is_date', $result, $date );
+}
+
+function wpcf7_antiscript_file_name( $filename ) {
+	$filename = basename( $filename );
+	$parts = explode( '.', $filename );
+
+	if ( count( $parts ) < 2 )
+		return $filename;
+
+	$script_pattern = '/^(php|phtml|pl|py|rb|cgi|asp|aspx)\d?$/i';
+
+	$filename = array_shift( $parts );
+	$extension = array_pop( $parts );
+
+	foreach ( (array) $parts as $part ) {
+		if ( preg_match( $script_pattern, $part ) )
+			$filename .= '.' . $part . '_';
+		else
+			$filename .= '.' . $part;
+	}
+
+	if ( preg_match( $script_pattern, $extension ) )
+		$filename .= '.' . $extension . '_.txt';
+	else
+		$filename .= '.' . $extension;
+
+	return $filename;
 }
 
 ?>

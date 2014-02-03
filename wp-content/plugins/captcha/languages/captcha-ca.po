@@ -1,0 +1,419 @@
+# Byrial Ole Jensen <byrial@vip.cybercity.dk>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: captcha\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-22 13:51+0300\n"
+"PO-Revision-Date: 2013-11-22 13:51+0300\n"
+"Last-Translator: \n"
+"Language-Team: Psiete <psiete@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: da\n"
+"X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: captcha.php:32
+#: captcha.php:255
+msgid "Captcha Settings"
+msgstr "Opcions de Captcha"
+
+#: captcha.php:32
+msgid "Captcha"
+msgstr "Captcha"
+
+#: captcha.php:49
+msgid "requires"
+msgstr ""
+
+#: captcha.php:49
+msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
+msgstr ""
+
+#: captcha.php:49
+msgid "Back to the WordPress"
+msgstr ""
+
+#: captcha.php:49
+#, fuzzy
+msgid "Plugins page"
+msgstr "BWS Plugins"
+
+#: captcha.php:57
+msgid "Login form"
+msgstr "Inici de sessió"
+
+#: captcha.php:58
+#: captcha.php:291
+msgid "Registration form"
+msgstr "Formulari de registre"
+
+#: captcha.php:58
+msgid "Register form"
+msgstr "Formulari de registre"
+
+#: captcha.php:59
+msgid "Reset Password form"
+msgstr "Formulari per a restablir la contrasenya"
+
+#: captcha.php:59
+msgid "Lost password form"
+msgstr "Formulari de contrasenya oblidada"
+
+#: captcha.php:60
+#: captcha.php:292
+msgid "Comments form"
+msgstr "Formulari de comentaris"
+
+#: captcha.php:61
+msgid "Hide CAPTCHA for registered users"
+msgstr "Amagar el CAPTCHA als usuaris registrats"
+
+#: captcha.php:66
+msgid "Plus (&#43;)"
+msgstr "Suma (&#43;)"
+
+#: captcha.php:66
+msgid "Plus"
+msgstr "Suma (&#43;)"
+
+#: captcha.php:67
+msgid "Minus (&minus;)"
+msgstr "Resta (&minus;)"
+
+#: captcha.php:67
+msgid "Minus"
+msgstr "Resta (&minus;)"
+
+#: captcha.php:68
+msgid "Multiplication (&times;)"
+msgstr "Multiplicació (&times;)"
+
+#: captcha.php:68
+msgid "Multiply"
+msgstr "Multiplicar"
+
+#: captcha.php:73
+msgid "Numbers"
+msgstr "Números"
+
+#: captcha.php:74
+msgid "Words"
+msgstr "Paraules"
+
+#: captcha.php:188
+#: captcha.php:200
+msgid "Settings"
+msgstr "Configuració"
+
+#: captcha.php:201
+msgid "FAQ"
+msgstr "FAQ"
+
+#: captcha.php:202
+msgid "Support"
+msgstr "Suport"
+
+#: captcha.php:244
+msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+msgstr "Si us plau, seleccioneu un element en el bloc d'Aritmètica i la complexitat de CAPTCHA"
+
+#: captcha.php:248
+#, fuzzy
+msgid "Settings saved."
+msgstr "Opcions guardades."
+
+#: captcha.php:261
+#: captcha.php:288
+msgid "Enable CAPTCHA for:"
+msgstr "Habilitar CAPTCHA per:"
+
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "Contact form"
+msgstr "Plugin Contact Form"
+
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "powered by"
+msgstr "impulsat per"
+
+#: captcha.php:275
+msgid "Activate contact form"
+msgstr "Activar plugin Contact Form"
+
+#: captcha.php:278
+msgid "Download contact form"
+msgstr "Descarregar plugin Contact Form"
+
+#: captcha.php:280
+msgid "If you would like to customize this plugin for a custom form, please see"
+msgstr "Si vols personalitzar aquest plugin per a un formulari personalitzat, consulteu"
+
+#: captcha.php:293
+msgid "\"Create a Group\" form"
+msgstr ""
+
+#: captcha.php:299
+#, fuzzy
+msgid "Enable CAPTCHA:"
+msgstr "Habilitar CAPTCHA per:"
+
+#: captcha.php:307
+msgid "This functionality is available in the Pro version of the plugin. For more details, please follow the link"
+msgstr "Aquesta funcionalitat està disponible en la versió Pro del plugin. Per a més detalls, si us plau seguiu l'enllaç"
+
+#: captcha.php:314
+msgid "Title for CAPTCHA in the form"
+msgstr "Títol per al CAPTCHA en el formulari"
+
+#: captcha.php:318
+msgid "Required symbol"
+msgstr ""
+
+#: captcha.php:324
+msgid "Arithmetic actions for CAPTCHA"
+msgstr "Operacions aritmètiques del CAPTCHA"
+
+#: captcha.php:338
+msgid "CAPTCHA complexity level"
+msgstr "Nivell de complexitat de CAPTCHA"
+
+#: captcha.php:354
+msgid "Save Changes"
+msgstr "Salvar canvis"
+
+#: captcha.php:400
+#: captcha.php:407
+#: captcha.php:584
+#: captcha.php:592
+#: captcha.php:606
+#: captcha.php:614
+msgid "ERROR"
+msgstr "ERROR"
+
+#: captcha.php:400
+#: captcha.php:426
+#: captcha.php:547
+#: captcha.php:584
+#: captcha.php:606
+#: captcha.php:634
+msgid "Please fill the form."
+msgstr "Si us plau ompli el formulari."
+
+#: captcha.php:407
+#: captcha.php:437
+#: captcha.php:592
+#: captcha.php:614
+msgid "Please enter a valid CAPTCHA value."
+msgstr "Si us plau, introduïu un valor vàlid per al CAPTCHA"
+
+#: captcha.php:553
+#: captcha.php:642
+msgid "Error: You have entered an incorrect CAPTCHA value. Click the BACK button on your browser, and try again."
+msgstr "Error: S'ha introduït un valor CAPTCHA incorrecte. Feu clic al botó Enrere del navegador i torneu a intentar-ho."
+
+#: captcha.php:660
+#: captcha.php:958
+msgid "zero"
+msgstr "zero"
+
+#: captcha.php:661
+#: captcha.php:959
+#: captcha.php:1174
+msgid "one"
+msgstr "un"
+
+#: captcha.php:662
+#: captcha.php:960
+msgid "two"
+msgstr "dues"
+
+#: captcha.php:663
+#: captcha.php:961
+msgid "three"
+msgstr "tres"
+
+#: captcha.php:664
+#: captcha.php:962
+msgid "four"
+msgstr "quatre"
+
+#: captcha.php:665
+#: captcha.php:963
+msgid "five"
+msgstr "cinc"
+
+#: captcha.php:666
+#: captcha.php:964
+#: captcha.php:1174
+msgid "six"
+msgstr "sis"
+
+#: captcha.php:667
+#: captcha.php:965
+#: captcha.php:1162
+#: captcha.php:1168
+msgid "seven"
+msgstr "set"
+
+#: captcha.php:668
+#: captcha.php:966
+#: captcha.php:1165
+msgid "eight"
+msgstr "vuit"
+
+#: captcha.php:669
+#: captcha.php:967
+msgid "nine"
+msgstr "nou"
+
+#: captcha.php:672
+#: captcha.php:970
+msgid "eleven"
+msgstr "onze"
+
+#: captcha.php:673
+#: captcha.php:971
+msgid "twelve"
+msgstr "dotze"
+
+#: captcha.php:674
+#: captcha.php:972
+msgid "thirteen"
+msgstr "tretze"
+
+#: captcha.php:675
+#: captcha.php:973
+msgid "fourteen"
+msgstr "catorze"
+
+#: captcha.php:676
+#: captcha.php:974
+msgid "fifteen"
+msgstr "quinze"
+
+#: captcha.php:677
+#: captcha.php:975
+msgid "sixteen"
+msgstr "setze"
+
+#: captcha.php:678
+#: captcha.php:976
+msgid "seventeen"
+msgstr "disset"
+
+#: captcha.php:679
+#: captcha.php:977
+msgid "eighteen"
+msgstr "divuit"
+
+#: captcha.php:680
+#: captcha.php:978
+msgid "nineteen"
+msgstr "dinou"
+
+#: captcha.php:683
+#: captcha.php:981
+msgid "ten"
+msgstr "deu"
+
+#: captcha.php:684
+#: captcha.php:982
+msgid "twenty"
+msgstr "vint"
+
+#: captcha.php:685
+#: captcha.php:983
+msgid "thirty"
+msgstr "trenta"
+
+#: captcha.php:686
+#: captcha.php:984
+msgid "forty"
+msgstr "quaranta"
+
+#: captcha.php:687
+#: captcha.php:985
+msgid "fifty"
+msgstr "cinquanta"
+
+#: captcha.php:688
+#: captcha.php:986
+msgid "sixty"
+msgstr "seixanta"
+
+#: captcha.php:689
+#: captcha.php:987
+msgid "seventy"
+msgstr "setanta"
+
+#: captcha.php:690
+#: captcha.php:988
+msgid "eighty"
+msgstr "vuitanta"
+
+#: captcha.php:691
+#: captcha.php:989
+msgid "ninety"
+msgstr "noranta"
+
+#: captcha.php:778
+#: captcha.php:1076
+msgid "and"
+msgstr "i"
+
+#: captcha.php:853
+msgid "Encryption password is not set"
+msgstr "La contrasenya de xifratge no s'ha establert"
+
+#: captcha.php:873
+msgid "Decryption password is not set"
+msgstr "La contrasenya de desxifrat no s'ha establert"
+
+#: captcha.php:1235
+msgid "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</strong> version"
+msgstr ""
+
+#: captcha.php:1236
+msgid "Extend standard plugin functionality with new great options"
+msgstr ""
+
+#, fuzzy
+#~ msgid "to"
+#~ msgstr "dues"
+
+#, fuzzy
+#~ msgid "PHP XML support"
+#~ msgstr "Soporte"
+#~ msgid "Please enter a valid email address."
+#~ msgstr "Introduïu una adreça de correu electrònic vàlida."
+#~ msgid "Read more"
+#~ msgstr "Leer más"
+#~ msgid "Installed plugins"
+#~ msgstr "Plugins instalados"
+#~ msgid "Recommended plugins"
+#~ msgstr "Plugins recomendados"
+
+#, fuzzy
+#~ msgid "Free plugins"
+#~ msgstr "Plugins recomendados"
+#~ msgid "Download"
+#~ msgstr "Descargar"
+#~ msgid "Install %s"
+#~ msgstr "Instalar %s"
+#~ msgid "Install now from wordpress.org"
+#~ msgstr "Instala ahora desde wordpress.org"
+#~ msgid "Active Plugins"
+#~ msgstr "Plugins actius"
+#~ msgid "Inactive Plugins"
+#~ msgstr "Plugins inactius"
+#~ msgid "Send to support"
+#~ msgstr "Enviar a suport"
+

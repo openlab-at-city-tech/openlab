@@ -1,3 +1,61 @@
+= Version 9.1 by Matthew Robinson =
+
+* Shortcode parameters are now not case sensitive
+* Fixed AJAX mode to work with new Anti Spam code
+* Suppress undefined variable warnings when sending Digest Email previews
+* Include Signup Date and IP for Public Subscribers in CSV Export - props Taylor4484
+* Fix for Sticky Posts in the digest returning errant posts - thanks to belg4mit
+* Move FAQs to external site to allow more timely updates
+* Add ability to hide other Multisite blogs with CSS in the Subscribe2->Your Subscriptions page (DIV id of 's2_mu_sites') - props cblsysadmin
+* Add 's2_form' filter to allow dynamic alterations to the default form - props adam_jack
+* Conduct more thorough checking for Public and Registered emails when adding users in the admin pages - thanks to MadtownLems
+* Introduce the {REFERENCELINKS} keyword - props manu1033
+* Fix link to jQuery CSS for servers using HTTPS connections - props Christian (aka Alariel)
+* Introduce link to Templates page with unsupported keywords are detected - props MadtownLems
+* Ensure all JavaScript passes the JSHint WordPress Coding Standards
+* Initialise ‘colorpicker’ boxes on page load so they are coloured before first user click
+* Only add a new Weekly schedule if it doesn’t already exist
+* Use trim() on post excerpt to account for blank but non-empty excerpts
+* Don't display screen icons in WordPress 3.8 as they are hidden by CSS - see ticket http://core.trac.wordpress.org/ticket/26119
+* Added 's2_confirm_email' filter to allow amendment or replacement of the subscribe and unsubscribe emails - proposed by Tim Büttner
+* Fixed a typo in the names of the five 's2_send_{email_type}_subscribers' hooks - thanks to robertjj
+* Introduced the 's2_post_statuses' to allow for custom post status transitions, for example with the 'Edit Flow' plugin
+* Fix for failed deletion of Registered Subscribers in Subscribe2->Subscribers page - thanks to Russ Michaels
+
+= Version 9.0 by Matthew Robinson =
+
+* Added capability to send emails with attachments from Send Email page
+* Added feature that removes unconfirmed public subscribers after 28 days (time frame can be altered with a filter)
+* Added ability to bulk delete Registered Users/Subscribers
+* Use {IMAGE} tag in HTML excerpt emails and digests only, images would be stripped in plain text and included anyway in full content HTML - applies to Subscribe2 HTML only
+* Added help tabs on the plugins admin pages
+* Improved the comparison of barred domains to subscribing email addresses - thanks to SashainSydney
+* Added Text Domain to the plugin header to allow information on plugin page to translate - thanks to qwertysimo
+* Applied a fix to ensure translation of all strings - thanks to qwertysimo
+* Improved some strings to use sprintf() - thanks to Tom Adams (tomdxw)
+* Use jQuery.noConflict(); when AJAX is enabled
+* Removed excess span tag from the Counter Widget - thanks to dimagsv
+* Allow filtering of admin email address for the emails sent when users confirm a subscription or unsubscription - suggested by 3cstudio
+* Fixed default email notification subject text - thanks to Steve C @ 3Cstudio
+* Fixed ability to have translation files in WP_LANG folder
+* Fixed an issue with pagination of search results - thanks to sijpie
+* Fixed 'Add Registered User' button in Subscribe2->Subscribers, Registered Tab - thanks to qwik3r
+* Improved pages dropdown to an ordered and hierarchical display - thanks to xavierlh1
+* Improved control over digest email scheduling - proposed by Jason Lemahieu
+* Fixed Subscriber Dropdown counts for Compulsory categories
+* Added a link to Tranlation files to the plugin page and the miscellaneous tab of the Subscribe2->Settings page - props eyephone21
+* Added {KEYWORD} checking in the template to warn users of disallowed keywords - proposed by Jason Lemahieu
+* Fixed some notices in the Send Email page - thanks to Bryan Hadaway (bhadaway)
+* Added anti-spam measures to the sign up form - thanks to Bryan Hadaway (bhadaway)
+* Update query_filter() function to hook into the 'request' filter instead of the deprecated 'query_filter'
+* Added a default 'Select a page' option to the page dropdown to highlight the need to have a published page select
+* Added filters to the subscription and unsubscription confirmation messages to allow personalisation - see FAQs for example functions
+* Remove Simple Facebook Connect action during subscription and unsubscription confirmation to ensure user messages are displayed
+* Improved white space stripping in the plaintext full content email
+* Fixed a PHP notice on the Subscribe2->Subscribers page - thanks to emile.swain
+* Fixes the non-working 'check all' boxes in WordPress 3.6 and above
+* NOTE Version 9.0 needs WordPress 3.3 or above
+
 = Version 8.9.1 by Matthew Robinson =
 
 * Check for the existence of the mb_encode_mimeheader function before use as it's optional in PHP builds - thanks to derekmacewen
@@ -13,6 +71,7 @@
 * Fix internationalisation of subscribers list table - thanks to Milan Dinić
 * Use mb_encode_mimeheader on email sender name - thanks to xl32
 * Trim email addresses before sanitising them - thanks to byarts
+* Optimised the upgrade() function for large sites
 
 = Version 8.8 by Matthew Robinson =
 

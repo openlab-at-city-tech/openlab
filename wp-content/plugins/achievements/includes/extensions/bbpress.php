@@ -17,8 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since Achievements (3.0)
  */
 function dpa_init_bbpress_extension() {
-	achievements()->extensions->bbpress = new DPA_bbPress_Forum_Extension;
 
+	achievements()->extensions->bbpress = new DPA_bbPress_Forum_Extension;
 	// Tell the world that the bbPress extension is ready
 	do_action( 'dpa_init_bbpress_extension' );
 }
@@ -38,6 +38,7 @@ class DPA_bbPress_Forum_Extension extends DPA_CPT_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			// Forum
 			'bbp_deleted_forum'   => __( 'A forum is permanently deleted by the user', 'dpa' ),
@@ -100,7 +101,7 @@ class DPA_bbPress_Forum_Extension extends DPA_CPT_Extension {
 		$this->rss_url         = 'http://bbpress.org/blog/feed/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/bbpress-small.png';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/bbpress/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/bbpress/';
 
 		add_filter( 'dpa_filter_events',        array( $this, 'get_generic_cpt_actions' ), 1,  1 );
 		add_filter( 'dpa_handle_event_name',    array( $this, 'event_name'              ), 10, 2 );
@@ -121,11 +122,11 @@ class DPA_bbPress_Forum_Extension extends DPA_CPT_Extension {
 			return $event_name;
 
 		// Switch the event name for Replies
-		if ( 'reply' == $func_args[0]->post_type )
+		if ( 'reply' === $func_args[0]->post_type )
 			return 'bbpress_reply_draft_to_publish';
 
 		// Switch the event name for Topics
-		elseif ( 'topic' == $func_args[0]->post_type )
+		elseif ( 'topic' === $func_args[0]->post_type )
 			return 'bbpress_topic_draft_to_publish';
 
 		// The event is a generic post type action which isn't handled by this extension. Bail out.

@@ -5,8 +5,8 @@ add_action('init', array('GFDirectory_Admin', 'initialize'));
 
 class GFDirectory_Admin {
 
-	function initialize() {
-		new GFDirectory_Admin();
+	static function initialize() {
+		new GFDirectory_Admin;
 	}
 
 	function __construct() {
@@ -36,7 +36,50 @@ class GFDirectory_Admin {
 		if(!empty($settings['modify_admin'])) {
 			add_action('admin_head', array(&$this, 'admin_head'), 1);
 		}
+
+		self::process_bulk_update();
 	}
+
+    public static function process_bulk_update() {
+		global $process_bulk_update_message;
+
+        if(RGForms::post("action") === 'bulk'){
+            check_admin_referer('gforms_entry_list', 'gforms_entry_list');
+
+            $bulk_action = !empty($_POST["bulk_action"]) ? $_POST["bulk_action"] : $_POST["bulk_action2"];
+            $leads = $_POST["lead"];
+
+            $entry_count = count($leads) > 1 ? sprintf(__("%d entries", "gravityforms"), count($leads)) : __("1 entry", "gravityforms");
+
+			$bulk_action = explode('-', $bulk_action);
+			if(!isset($bulk_action[1]) || empty($leads)) { return false; }
+
+            switch($bulk_action[0]){
+                case "approve":
+                    self::directory_update_bulk($leads, 1, $bulk_action[1]);
+                    $process_bulk_update_message = sprintf(__("%s approved.", "gravity-forms-addons"), $entry_count);
+                break;
+
+                case "unapprove":
+            		self::directory_update_bulk($leads, 0, $bulk_action[1]);
+                    $process_bulk_update_message = sprintf(__("%s disapproved.", "gravity-forms-addons"), $entry_count);
+                break;
+			}
+		}
+	}
+
+    private function directory_update_bulk($leads, $approved, $form_id) {
+    	global $_gform_directory_approvedcolumn;
+
+    	if(empty($leads) || !is_array($leads)) { return false; }
+
+    	$_gform_directory_approvedcolumn = empty($_gform_directory_approvedcolumn) ? self::globals_get_approved_column($_POST['form_id']) : $_gform_directory_approvedcolumn;
+
+		$approved = empty($approved) ? 0 : 'Approved';
+    	foreach($leads as $lead_id) {
+			GFDirectory::directory_update_approved($lead_id, $approved, $form_id);
+		}
+    }
 
 	// If the classes don't exist, the plugin won't do anything useful.
 	function gf_warning() {
@@ -84,8 +127,8 @@ class GFDirectory_Admin {
 		}
 
 		if(!empty($settings['modify_admin']['expand'])) {
-			if(@$_REQUEST['page'] == 'gf_edit_forms' && isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
-				$style = '<style type="text/css">
+			if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'gf_edit_forms' && isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
+				$style = '<style>
 					.gforms_edit_form_expanded ul.menu li.add_field_button_container ul,
 					.gforms_edit_form_expanded ul.menu li.add_field_button_container ul ol {
 						display:block!important;
@@ -96,9 +139,6 @@ class GFDirectory_Admin {
 				echo $style;
 			}
 		}
-		if(!empty($settings['modify_admin']['ids'])) {
-			echo '<script src="'.GFCommon::get_base_url().'/js/jquery.simplemodal-1.3.min.js"></script>'; // Added for the new IDs popup
-		}
 
 		if(isset($_REQUEST['page']) && ($_REQUEST['page'] == 'gf_edit_forms' || $_REQUEST['page'] == 'gf_entries')) {
 			echo self::add_edit_js(isset($_REQUEST['id']), $settings);
@@ -107,7 +147,7 @@ class GFDirectory_Admin {
 
 	private function add_edit_js($edit_forms = false, $settings = array()) {
 	?>
-		<script type="text/javascript">
+		<script>
 			// Edit link for Gravity Forms entries
 			jQuery(document).ready(function($) {
 	<?php	if(!empty($settings['modify_admin']['expand']) && $edit_forms) { ?>
@@ -148,44 +188,10 @@ class GFDirectory_Admin {
 			else if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'gf_edit_forms' && !empty($settings['modify_admin']['ids'])) {
 				?>
 				// Changed from :contains('Delete') to :last-child for future-proofing
-				$(".row-actions span.edit:last-child").each(function() {
+				$(".row-actions .trash").each(function() {
 					var formID = $(this).parents('tr').find('.column-id').text();;
-					$(this).after('<span class="edit">| <a title="<?php _e("View form field IDs", "gravity-forms-addons"); ?>" href="<?php  echo WP_PLUGIN_URL . "/" . basename(dirname(__FILE__)) . "/field-ids.php"; ?>?id='+formID+'&amp;show_field_ids=true" class="form_ids"><?php _e("IDs", "gravity-forms-addons"); ?></a></span>');
+					$(this).after('<span class="edit"> | <a title="<?php _e("View form field IDs", "gravity-forms-addons"); ?>" href="<?php echo plugins_url("field-ids.php", __FILE__); ?>?id='+formID+'&amp;show_field_ids=true&amp;width=600&amp;height=800&amp;TB_iframe=true" class="thickbox form_ids"><?php _e("IDs", "gravity-forms-addons"); ?></a></span>');
 				});
-					var h = $('#gravityformspreviewidsiframe').css('height');
-
-					$("a.form_ids").live('click', function(e) {
-						e.preventDefault();
-						var src = $(this).attr('href');
-						$.modal('<iframe src="' + src + '" width="" height="" style="border:0;">', {
-//							closeHTML:"<a href='#'>Close</a>",
-							minHeight:400,
-							minWidth: 600,
-							containerCss:{
-								borderColor: 'transparent',
-								borderWidth: 0,
-								padding:10,
-								escClose: true,
-								minWidth:500,
-								maxWidth:800,
-								minHeight:500,
-							},
-							overlayClose:true,
-							onShow: function(dlg) {
-								var iframeHeight = $('iframe', $(dlg.container)).height();
-								var containerHeight = $(dlg.container).height();
-								var iframeWidth = $('iframe', $(dlg.container)).width();
-								var containerWidth = $(dlg.container).width();
-
-								if(containerHeight < iframeHeight) { $(dlg.container).height(iframeHeight); }
-								else { $('iframe', $(dlg.container)).height(containerHeight); }
-
-								if(containerWidth < iframeWidth) { $(dlg.container).width(iframeWidth); }
-								else { $('iframe', $(dlg.container)).width(containerWidth); }
-							}
-						});
-			         });
-
 				<?php } ?>
 			});
 		</script>
@@ -198,7 +204,7 @@ class GFDirectory_Admin {
 		$form = RGFormsModel::add_default_properties($form);
 
 		echo <<<EOD
-		<style type="text/css">
+		<style>
 			#input_ids th, #input_ids td { border-bottom:1px solid #999; padding:.25em 15px; }
 			#input_ids th { border-bottom-color: #333; font-size:.9em; background-color: #464646; color:white; padding:.5em 15px; font-weight:bold;  }
 			#input_ids { background:#ccc; margin:0 auto; font-size:1.2em; line-height:1.4; width:100%; border-collapse:collapse;  }
@@ -231,7 +237,7 @@ EOD;
 
 		//Action target that displays the popup to insert a form to a post/page
 		?>
-		<script type="text/javascript">
+		<script>
 			function addslashes (str) {
 				   // Escapes single quote, double quotes and backslash characters in a string with backslashes
 				   // discuss at: http://phpjs.org/functions/addslashes
@@ -269,14 +275,13 @@ EOD;
 
 
 
-				$('#insert_gf_directory').live('click', function(e) {
+				$(document).on('click', '#insert_gf_directory', function(e) {
 					e.preventDefault();
-
 					$('#select_gf_directory_form').trigger('submit');
 					return;
 				});
 
-				$('a.select_gf_directory').live('click', function(e) {
+				$('a.select_gf_directory').click(function(e) {
 					// This auto-sizes the box
 					if(typeof tb_position == 'function') {
 						tb_position();
@@ -695,7 +700,7 @@ EOD;
 		$output = '
 			<style>
 			.gfdirectory_media_icon {
-                background:url('.plugins_url( '/editor-icon.gif', __FILE__).') no-repeat top left;
+                background:url('.plugins_url( '/images/editor-icon.gif', __FILE__).') no-repeat top left;
 	            display: inline-block;
 	            height: 16px;
 	            margin: 0 2px 0 0;
@@ -739,7 +744,7 @@ EOD;
 	    }
 
         ?>
-        <style type="text/css">
+        <style>
             .ul-square li { list-style: square!important; }
             .ol-decimal li { list-style: decimal!important; }
             .form-table label { font-size: 1em!important; margin: .4em 0; display: block;}
@@ -763,7 +768,7 @@ EOD;
 			}
 
         </style>
-        <script type="text/javascript">
+        <script>
         	jQuery('document').ready(function($) {
 				$('#kws_gf_advanced_settings').show();
 				$('a:contains(Directory)', $('ul.subsubsub')).css('font-weight', 'bold');
@@ -780,13 +785,13 @@ EOD;
 					}
 				}).trigger('change');
 
-				$('label[for=gf_addons_directory]').live('load click', function() {
+				$(document).on('load click', 'label[for=gf_addons_directory]', function() {
 					if($('#gf_addons_directory').is(":checked")) {
 						$("tr#directory_settings_row").show();
 					} else {
 						$("tr#directory_settings_row").hide();
 					}
-				}).trigger('load');
+				});
 
 				$('#kws_gf_instructions_button').click(function(e) {
 					e.preventDefault();
@@ -827,7 +832,7 @@ EOD;
 		<div id="kws_gf_donate" class="alert_gray"<?php echo isset($_GET['viewinstructions']) ? ' style="display:none;"' : ''; ?>>
 			<p>
 			<?php if(!is_ssl()) {?><img src="http://www.gravatar.com/avatar/f0f175f8545912adbdab86f0b586f4c3?s=64" alt="Zack Katz, plugin author" height="64" width="64" /> <?php } _e('Hi there! If you find this plugin useful, consider showing your appreciation by making a small donation to its author!', 'gravity-forms-addons'); ?>
-			<a href="http://katz.si/35" target="_blank" class="button button-primary"><?php _e('Donate using PayPal', 'gravity-forms-addons'); ?></a>
+			<a href="http://katz.si/35" target="_blank" class="clear alignleft button button-primary"><?php _e('Donate using PayPal', 'gravity-forms-addons'); ?></a>
 			</p>
 		</div>
 		<?php } ?>
@@ -844,7 +849,7 @@ EOD;
 				<div class="alignright" style="margin:1em 1.2em;">
 					<iframe width="400" height="255" src="http<?php echo is_ssl() ? 's' : '';?>://www.youtube.com/embed/PMI7Jb-RP2I?hd=1" frameborder="0" allowfullscreen></iframe>
 				</div>
-				<h3><?php _e('To integrate a form with Directory:', 'gravity-forms-addons'); ?></h3>
+				<h3 style="padding-top:1em;"><?php _e('To integrate a form with Directory:', 'gravity-forms-addons'); ?></h3>
 				<ol class="ol-decimal">
 					<li><?php _e('Go to the post or page where you would like to add the directory.', 'gravity-forms-addons'); ?></li>
 					<li><?php _e('Click the "Add Directory" button above the content area.', 'gravity-forms-addons'); ?></li>
@@ -919,7 +924,7 @@ EOD;
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" ><input type="submit" name="gf_addons_submit" class="button-primary" value="<?php _e("Save Settings", "gravity-forms-addons") ?>" /></td>
+                    <td colspan="2" ><input type="submit" name="gf_addons_submit" class="button-primary button-large button-mega" value="<?php _e("Save Settings", "gravity-forms-addons") ?>" /></td>
                 </tr>
             </table>
         </form>

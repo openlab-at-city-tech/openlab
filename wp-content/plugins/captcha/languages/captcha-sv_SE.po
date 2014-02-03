@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 11:43+0300\n"
-"PO-Revision-Date: 2013-07-24 11:44+0300\n"
+"POT-Creation-Date: 2013-11-22 13:55+0300\n"
+"PO-Revision-Date: 2013-11-22 13:55+0300\n"
 "Last-Translator: \n"
 "Language-Team: Christer Rönningborg, Blittan <blittan@xbmc.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,547 +16,478 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: captcha.php:31
-msgid "Login form"
-msgstr "Inloggningsformulär"
-
 #: captcha.php:32
-msgid "Registration form"
-msgstr "Registreringsformulär"
-
-#: captcha.php:32
-msgid "Register form"
-msgstr "Registreringsformulär"
-
-#: captcha.php:33
-msgid "Reset Password form"
-msgstr "Formulär för att återställa lösenord"
-
-#: captcha.php:33
-msgid "Lost password form"
-msgstr "Formulär för att återställa lösenord"
-
-#: captcha.php:34
-msgid "Comments form"
-msgstr "Kommentarsformulär"
-
-#: captcha.php:35
-msgid "Hide CAPTCHA for registered users"
-msgstr "Dölj CAPTCHA för registrerade användare"
-
-#: captcha.php:40
-msgid "Plus (&#43;)"
-msgstr "Plus (&#43;)"
-
-#: captcha.php:40
-msgid "Plus"
-msgstr "Plus"
-
-#: captcha.php:41
-msgid "Minus (&minus;)"
-msgstr "Minus (&minus;)"
-
-#: captcha.php:41
-msgid "Minus"
-msgstr "Minus"
-
-#: captcha.php:42
-msgid "Multiplication (&times;)"
-msgstr "Multiplikation (&times;)"
-
-#: captcha.php:42
-msgid "Multiply"
-msgstr "Multiplicera"
-
-#: captcha.php:47
-msgid "Numbers"
-msgstr "Siffror"
-
-#: captcha.php:48
-msgid "Words"
-msgstr "Ord"
-
-#: captcha.php:129
-msgid "Not set"
-msgstr "Inte angiven"
-
-#: captcha.php:131
-#: captcha.php:135
-msgid "On"
-msgstr "På"
-
-#: captcha.php:133
-#: captcha.php:137
-msgid "Off"
-msgstr "Av"
-
-#: captcha.php:141
-#: captcha.php:145
-#: captcha.php:149
-#: captcha.php:153
-#: captcha.php:157
-#: captcha.php:183
-msgid "N/A"
-msgstr "Finns ej"
-
-#: captcha.php:155
-msgid " Mb"
-msgstr " Mb"
-
-#: captcha.php:159
-#: captcha.php:163
-#: captcha.php:167
-#: captcha.php:178
-msgid "Yes"
-msgstr "Ja"
-
-#: captcha.php:161
-#: captcha.php:165
-#: captcha.php:169
-#: captcha.php:180
-msgid "No"
-msgstr "Nej"
-
-#: captcha.php:194
-msgid "Operating System"
-msgstr "Operativsystem"
-
-#: captcha.php:195
-msgid "Server"
-msgstr "Server"
-
-#: captcha.php:196
-msgid "Memory usage"
-msgstr "Minnesanvändning"
-
-#: captcha.php:197
-msgid "MYSQL Version"
-msgstr "MySQL-version"
-
-#: captcha.php:198
-msgid "SQL Mode"
-msgstr "SQL-läge"
-
-#: captcha.php:199
-msgid "PHP Version"
-msgstr "PHP-version"
-
-#: captcha.php:200
-msgid "PHP Safe Mode"
-msgstr "PHP säkert läge"
-
-#: captcha.php:201
-msgid "PHP Allow URL fopen"
-msgstr "PHP tillåt URL fopen"
-
-#: captcha.php:202
-msgid "PHP Memory Limit"
-msgstr "PHP Minnesgräns"
-
-#: captcha.php:203
-msgid "PHP Max Upload Size"
-msgstr "PHP Max uppladdningstorlek"
-
-#: captcha.php:204
-msgid "PHP Max Post Size"
-msgstr "PHP Max poststorlek"
-
-#: captcha.php:205
-msgid "PHP Max Script Execute Time"
-msgstr "PHP Max skriptexekverinstid"
-
-#: captcha.php:206
-msgid "PHP Exif support"
-msgstr "PHP Exifstöd"
-
-#: captcha.php:207
-msgid "PHP IPTC support"
-msgstr "PHP ITPC-stöd"
-
-#: captcha.php:208
-msgid "PHP XML support"
-msgstr "PHP XML-stöd"
-
-#: captcha.php:209
-msgid "Site URL"
-msgstr "SajtURL"
-
-#: captcha.php:210
-msgid "Home URL"
-msgstr "HemURL"
-
-#: captcha.php:211
-msgid "WordPress Version"
-msgstr "WordPress-version"
-
-#: captcha.php:212
-msgid "WordPress DB Version"
-msgstr "WordPress-DB-version"
-
-#: captcha.php:213
-msgid "Multisite"
-msgstr "Multisajt"
-
-#: captcha.php:214
-msgid "Active Theme"
-msgstr "Aktivt tema"
-
-#: captcha.php:229
-msgid "Please enter a valid email address."
-msgstr "Var god ange en giltig epost-adress."
-
-#: captcha.php:233
-msgid "Email with system info is sent to "
-msgstr "Epost med systeminfo är skickat till"
-
-#: captcha.php:237
-msgid "Thank you for contacting us."
-msgstr "Tack för att du kontaktade oss."
-
-#: captcha.php:265
-msgid "Sorry, email message could not be delivered."
-msgstr "Ledsen, eposten kunde inte levereras."
-
-#: captcha.php:273
-msgid "Pro plugins"
-msgstr "Betaltillägg"
-
-#: captcha.php:276
-#: captcha.php:302
-msgid "Activated plugins"
-msgstr "Aktiverade tillägg"
-
-#: captcha.php:278
-#: captcha.php:286
-#: captcha.php:294
-#: captcha.php:304
-#: captcha.php:312
-#: captcha.php:320
-msgid "Read more"
-msgstr "Läs mer"
-
-#: captcha.php:278
-#: captcha.php:304
-#: captcha.php:488
-#: captcha.php:497
-msgid "Settings"
-msgstr "Inställningar"
-
-#: captcha.php:284
-#: captcha.php:310
-msgid "Installed plugins"
-msgstr "Installerade tillägg"
-
-#: captcha.php:292
-#: captcha.php:318
-msgid "Recommended plugins"
-msgstr "Rekommenderade tillägg"
-
-#: captcha.php:294
-msgid "Purchase"
-msgstr "Köp"
-
-#: captcha.php:299
-msgid "Free plugins"
-msgstr "Gratis tillägg"
-
-#: captcha.php:320
-msgid "Download"
-msgstr "Hämta"
-
-#: captcha.php:320
-#, php-format
-msgid "Install %s"
-msgstr "Installera %s"
-
-#: captcha.php:320
-msgid "Install now from wordpress.org"
-msgstr "Installera nu från wordpress.org"
-
-#: captcha.php:325
-msgid "If you have any questions, please contact us via"
-msgstr "Om du har några frågor, kontakta oss via"
-
-#: captcha.php:332
-msgid "System status"
-msgstr "Systemstatus"
-
-#: captcha.php:336
-msgid "Environment"
-msgstr "Miljövariabler"
-
-#: captcha.php:347
-msgid "Active Plugins"
-msgstr "Aktiverade tillägg"
-
-#: captcha.php:358
-msgid "Inactive Plugins"
-msgstr "Inaktiverade tillägg"
-
-#: captcha.php:372
-msgid "Send to support"
-msgstr "Skicka till support"
-
-#: captcha.php:379
-msgid "Send to custom email &#187;"
-msgstr "Skicka till anpassad epost &#187;"
-
-#: captcha.php:395
-#: captcha.php:555
+#: captcha.php:255
 msgid "Captcha Settings"
 msgstr "Captchainställningar"
 
-#: captcha.php:395
+#: captcha.php:32
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:498
+#: captcha.php:49
+msgid "requires"
+msgstr ""
+
+#: captcha.php:49
+msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
+msgstr ""
+
+#: captcha.php:49
+msgid "Back to the WordPress"
+msgstr ""
+
+#: captcha.php:49
+#, fuzzy
+msgid "Plugins page"
+msgstr "Betaltillägg"
+
+#: captcha.php:57
+msgid "Login form"
+msgstr "Inloggningsformulär"
+
+#: captcha.php:58
+#: captcha.php:291
+msgid "Registration form"
+msgstr "Registreringsformulär"
+
+#: captcha.php:58
+msgid "Register form"
+msgstr "Registreringsformulär"
+
+#: captcha.php:59
+msgid "Reset Password form"
+msgstr "Formulär för att återställa lösenord"
+
+#: captcha.php:59
+msgid "Lost password form"
+msgstr "Formulär för att återställa lösenord"
+
+#: captcha.php:60
+#: captcha.php:292
+msgid "Comments form"
+msgstr "Kommentarsformulär"
+
+#: captcha.php:61
+msgid "Hide CAPTCHA for registered users"
+msgstr "Dölj CAPTCHA för registrerade användare"
+
+#: captcha.php:66
+msgid "Plus (&#43;)"
+msgstr "Plus (&#43;)"
+
+#: captcha.php:66
+msgid "Plus"
+msgstr "Plus"
+
+#: captcha.php:67
+msgid "Minus (&minus;)"
+msgstr "Minus (&minus;)"
+
+#: captcha.php:67
+msgid "Minus"
+msgstr "Minus"
+
+#: captcha.php:68
+msgid "Multiplication (&times;)"
+msgstr "Multiplikation (&times;)"
+
+#: captcha.php:68
+msgid "Multiply"
+msgstr "Multiplicera"
+
+#: captcha.php:73
+msgid "Numbers"
+msgstr "Siffror"
+
+#: captcha.php:74
+msgid "Words"
+msgstr "Ord"
+
+#: captcha.php:188
+#: captcha.php:200
+msgid "Settings"
+msgstr "Inställningar"
+
+#: captcha.php:201
 msgid "FAQ"
 msgstr "FAQ"
 
-#: captcha.php:499
+#: captcha.php:202
 msgid "Support"
 msgstr "Support"
 
-#: captcha.php:539
+#: captcha.php:244
 msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
 msgstr "Var god markera ett val i avdelningarna Aritmetiska metoder och Svårighetsgrad för CAPTCHA"
 
-#: captcha.php:543
-msgid "Options saved."
+#: captcha.php:248
+#, fuzzy
+msgid "Settings saved."
 msgstr "Inställningar sparade."
 
-#: captcha.php:561
+#: captcha.php:261
+#: captcha.php:288
 msgid "Enable CAPTCHA for:"
 msgstr "Aktivera CAPTCHA för:"
 
-#: captcha.php:575
-#: captcha.php:577
-#: captcha.php:580
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
 msgid "Contact form"
 msgstr "Kontaktformulär"
 
-#: captcha.php:575
-#: captcha.php:577
-#: captcha.php:580
-msgid "(powered by bestwebsoft.com)"
-msgstr "(tillhandahålls av bestwebsoft.com)"
+#: captcha.php:273
+#: captcha.php:275
+#: captcha.php:278
+msgid "powered by"
+msgstr ""
 
-#: captcha.php:577
+#: captcha.php:275
 msgid "Activate contact form"
 msgstr "Aktivera kontaktformulär"
 
-#: captcha.php:580
+#: captcha.php:278
 msgid "Download contact form"
 msgstr "Hämta kontaktformulär"
 
-#: captcha.php:582
-msgid "If you would like to customize this plugin for a custom form, please contact us via"
+#: captcha.php:280
+#, fuzzy
+msgid "If you would like to customize this plugin for a custom form, please see"
 msgstr "Om du vill anpassa detta tillägg för ett skräddarsytt formulär, vänligen kontakta oss via"
 
-#: captcha.php:586
+#: captcha.php:293
+msgid "\"Create a Group\" form"
+msgstr ""
+
+#: captcha.php:299
+#, fuzzy
+msgid "Enable CAPTCHA:"
+msgstr "Aktivera CAPTCHA för:"
+
+#: captcha.php:307
+msgid "This functionality is available in the Pro version of the plugin. For more details, please follow the link"
+msgstr ""
+
+#: captcha.php:314
 msgid "Title for CAPTCHA in the form"
 msgstr "Etikett för CAPTCHA i formulär"
 
-#: captcha.php:590
+#: captcha.php:318
+msgid "Required symbol"
+msgstr ""
+
+#: captcha.php:324
 msgid "Arithmetic actions for CAPTCHA"
 msgstr "Aritmetiska metoder för CAPTCHA"
 
-#: captcha.php:599
+#: captcha.php:338
 msgid "CAPTCHA complexity level"
 msgstr "CAPTCHA-svårighetsgrad"
 
-#: captcha.php:609
+#: captcha.php:354
 msgid "Save Changes"
 msgstr "Spara ändringar"
 
-#: captcha.php:653
-#: captcha.php:659
-#: captcha.php:820
-#: captcha.php:827
-#: captcha.php:836
-#: captcha.php:843
+#: captcha.php:400
+#: captcha.php:407
+#: captcha.php:584
+#: captcha.php:592
+#: captcha.php:606
+#: captcha.php:614
 msgid "ERROR"
 msgstr "FEL"
 
-#: captcha.php:653
-#: captcha.php:674
-#: captcha.php:788
-#: captcha.php:820
-#: captcha.php:836
-#: captcha.php:858
+#: captcha.php:400
+#: captcha.php:426
+#: captcha.php:547
+#: captcha.php:584
+#: captcha.php:606
+#: captcha.php:634
 msgid "Please fill the form."
 msgstr "Var god fyll i formuläret."
 
-#: captcha.php:659
-#: captcha.php:685
-#: captcha.php:827
-#: captcha.php:843
+#: captcha.php:407
+#: captcha.php:437
+#: captcha.php:592
+#: captcha.php:614
 msgid "Please enter a valid CAPTCHA value."
 msgstr "Var god fyll i CAPTCHA."
 
-#: captcha.php:794
-#: captcha.php:865
+#: captcha.php:553
+#: captcha.php:642
 msgid "Error: You have entered an incorrect CAPTCHA value. Click the BACK button on your browser, and try again."
 msgstr "Fel: Du angav ett felaktigt svar i fältet för CAPTCHA. Klicka på tillbaka-knappen i din webbläsare och försök igen."
 
-#: captcha.php:875
-#: captcha.php:1098
+#: captcha.php:660
+#: captcha.php:958
 msgid "zero"
 msgstr "noll"
 
-#: captcha.php:876
-#: captcha.php:1099
-#: captcha.php:1309
+#: captcha.php:661
+#: captcha.php:959
+#: captcha.php:1174
 msgid "one"
 msgstr "ett"
 
-#: captcha.php:877
-#: captcha.php:1100
+#: captcha.php:662
+#: captcha.php:960
 msgid "two"
 msgstr "två"
 
-#: captcha.php:878
-#: captcha.php:1101
+#: captcha.php:663
+#: captcha.php:961
 msgid "three"
 msgstr "tre"
 
-#: captcha.php:879
-#: captcha.php:1102
+#: captcha.php:664
+#: captcha.php:962
 msgid "four"
 msgstr "fyra"
 
-#: captcha.php:880
-#: captcha.php:1103
+#: captcha.php:665
+#: captcha.php:963
 msgid "five"
 msgstr "fem"
 
-#: captcha.php:881
-#: captcha.php:1104
-#: captcha.php:1309
+#: captcha.php:666
+#: captcha.php:964
+#: captcha.php:1174
 msgid "six"
 msgstr "sex"
 
-#: captcha.php:882
-#: captcha.php:1105
-#: captcha.php:1297
-#: captcha.php:1303
+#: captcha.php:667
+#: captcha.php:965
+#: captcha.php:1162
+#: captcha.php:1168
 msgid "seven"
 msgstr "sju"
 
-#: captcha.php:883
-#: captcha.php:1106
-#: captcha.php:1300
+#: captcha.php:668
+#: captcha.php:966
+#: captcha.php:1165
 msgid "eight"
 msgstr "åtta"
 
-#: captcha.php:884
-#: captcha.php:1107
+#: captcha.php:669
+#: captcha.php:967
 msgid "nine"
 msgstr "nio"
 
-#: captcha.php:887
-#: captcha.php:1110
+#: captcha.php:672
+#: captcha.php:970
 msgid "eleven"
 msgstr "elva"
 
-#: captcha.php:888
-#: captcha.php:1111
+#: captcha.php:673
+#: captcha.php:971
 msgid "twelve"
 msgstr "tolv"
 
-#: captcha.php:889
-#: captcha.php:1112
+#: captcha.php:674
+#: captcha.php:972
 msgid "thirteen"
 msgstr "tretton"
 
-#: captcha.php:890
-#: captcha.php:1113
+#: captcha.php:675
+#: captcha.php:973
 msgid "fourteen"
 msgstr "fjorton"
 
-#: captcha.php:891
-#: captcha.php:1114
+#: captcha.php:676
+#: captcha.php:974
 msgid "fifteen"
 msgstr "femton"
 
-#: captcha.php:892
-#: captcha.php:1115
+#: captcha.php:677
+#: captcha.php:975
 msgid "sixteen"
 msgstr "sexton"
 
-#: captcha.php:893
-#: captcha.php:1116
+#: captcha.php:678
+#: captcha.php:976
 msgid "seventeen"
 msgstr "sjutton"
 
-#: captcha.php:894
-#: captcha.php:1117
+#: captcha.php:679
+#: captcha.php:977
 msgid "eighteen"
 msgstr "arton"
 
-#: captcha.php:895
-#: captcha.php:1118
+#: captcha.php:680
+#: captcha.php:978
 msgid "nineteen"
 msgstr "nitton"
 
-#: captcha.php:898
-#: captcha.php:1121
+#: captcha.php:683
+#: captcha.php:981
 msgid "ten"
 msgstr "tio"
 
-#: captcha.php:899
-#: captcha.php:1122
+#: captcha.php:684
+#: captcha.php:982
 msgid "twenty"
 msgstr "tjugo"
 
-#: captcha.php:900
-#: captcha.php:1123
+#: captcha.php:685
+#: captcha.php:983
 msgid "thirty"
 msgstr "trettio"
 
-#: captcha.php:901
-#: captcha.php:1124
+#: captcha.php:686
+#: captcha.php:984
 msgid "forty"
 msgstr "fyrtio"
 
-#: captcha.php:902
-#: captcha.php:1125
+#: captcha.php:687
+#: captcha.php:985
 msgid "fifty"
 msgstr "femtio"
 
-#: captcha.php:903
-#: captcha.php:1126
+#: captcha.php:688
+#: captcha.php:986
 msgid "sixty"
 msgstr "sextio"
 
-#: captcha.php:904
-#: captcha.php:1127
+#: captcha.php:689
+#: captcha.php:987
 msgid "seventy"
 msgstr "sjuttio"
 
-#: captcha.php:905
-#: captcha.php:1128
+#: captcha.php:690
+#: captcha.php:988
 msgid "eighty"
 msgstr "åttio"
 
-#: captcha.php:906
-#: captcha.php:1129
+#: captcha.php:691
+#: captcha.php:989
 msgid "ninety"
 msgstr "nittio"
 
-#: captcha.php:993
-#: captcha.php:1216
+#: captcha.php:778
+#: captcha.php:1076
 msgid "and"
 msgstr "och"
 
-#: captcha.php:1011
+#: captcha.php:853
 msgid "Encryption password is not set"
 msgstr "Lösenord för kodning har inte angetts"
 
-#: captcha.php:1029
+#: captcha.php:873
 msgid "Decryption password is not set"
 msgstr "Lösenord för avkodning har inte angetts"
+
+#: captcha.php:1235
+msgid "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</strong> version"
+msgstr ""
+
+#: captcha.php:1236
+msgid "Extend standard plugin functionality with new great options"
+msgstr ""
+
+#, fuzzy
+#~ msgid "to"
+#~ msgstr "två"
+
+#, fuzzy
+#~ msgid "version"
+#~ msgstr "PHP-version"
+#~ msgid "Not set"
+#~ msgstr "Inte angiven"
+#~ msgid "On"
+#~ msgstr "På"
+#~ msgid "Off"
+#~ msgstr "Av"
+#~ msgid "N/A"
+#~ msgstr "Finns ej"
+#~ msgid " Mb"
+#~ msgstr " Mb"
+#~ msgid "Yes"
+#~ msgstr "Ja"
+#~ msgid "No"
+#~ msgstr "Nej"
+#~ msgid "Operating System"
+#~ msgstr "Operativsystem"
+#~ msgid "Server"
+#~ msgstr "Server"
+#~ msgid "Memory usage"
+#~ msgstr "Minnesanvändning"
+#~ msgid "MYSQL Version"
+#~ msgstr "MySQL-version"
+#~ msgid "SQL Mode"
+#~ msgstr "SQL-läge"
+#~ msgid "PHP Safe Mode"
+#~ msgstr "PHP säkert läge"
+#~ msgid "PHP Allow URL fopen"
+#~ msgstr "PHP tillåt URL fopen"
+#~ msgid "PHP Memory Limit"
+#~ msgstr "PHP Minnesgräns"
+#~ msgid "PHP Max Upload Size"
+#~ msgstr "PHP Max uppladdningstorlek"
+#~ msgid "PHP Max Post Size"
+#~ msgstr "PHP Max poststorlek"
+#~ msgid "PHP Max Script Execute Time"
+#~ msgstr "PHP Max skriptexekverinstid"
+#~ msgid "PHP Exif support"
+#~ msgstr "PHP Exifstöd"
+#~ msgid "PHP IPTC support"
+#~ msgstr "PHP ITPC-stöd"
+#~ msgid "PHP XML support"
+#~ msgstr "PHP XML-stöd"
+#~ msgid "Site URL"
+#~ msgstr "SajtURL"
+#~ msgid "Home URL"
+#~ msgstr "HemURL"
+#~ msgid "WordPress Version"
+#~ msgstr "WordPress-version"
+#~ msgid "WordPress DB Version"
+#~ msgstr "WordPress-DB-version"
+#~ msgid "Multisite"
+#~ msgstr "Multisajt"
+#~ msgid "Active Theme"
+#~ msgstr "Aktivt tema"
+#~ msgid "Please enter a valid email address."
+#~ msgstr "Var god ange en giltig epost-adress."
+#~ msgid "Email with system info is sent to "
+#~ msgstr "Epost med systeminfo är skickat till"
+#~ msgid "Thank you for contacting us."
+#~ msgstr "Tack för att du kontaktade oss."
+#~ msgid "Sorry, email message could not be delivered."
+#~ msgstr "Ledsen, eposten kunde inte levereras."
+#~ msgid "Activated plugins"
+#~ msgstr "Aktiverade tillägg"
+#~ msgid "Read more"
+#~ msgstr "Läs mer"
+#~ msgid "Installed plugins"
+#~ msgstr "Installerade tillägg"
+#~ msgid "Recommended plugins"
+#~ msgstr "Rekommenderade tillägg"
+#~ msgid "Purchase"
+#~ msgstr "Köp"
+#~ msgid "Free plugins"
+#~ msgstr "Gratis tillägg"
+#~ msgid "Download"
+#~ msgstr "Hämta"
+#~ msgid "Install %s"
+#~ msgstr "Installera %s"
+#~ msgid "Install now from wordpress.org"
+#~ msgstr "Installera nu från wordpress.org"
+#~ msgid "If you have any questions, please contact us via"
+#~ msgstr "Om du har några frågor, kontakta oss via"
+#~ msgid "System status"
+#~ msgstr "Systemstatus"
+#~ msgid "Environment"
+#~ msgstr "Miljövariabler"
+#~ msgid "Active Plugins"
+#~ msgstr "Aktiverade tillägg"
+#~ msgid "Inactive Plugins"
+#~ msgstr "Inaktiverade tillägg"
+#~ msgid "Send to support"
+#~ msgstr "Skicka till support"
+#~ msgid "Send to custom email &#187;"
+#~ msgstr "Skicka till anpassad epost &#187;"
+#~ msgid "(powered by bestwebsoft.com)"
+#~ msgstr "(tillhandahålls av bestwebsoft.com)"
 
 #, fuzzy
 #~ msgid ""

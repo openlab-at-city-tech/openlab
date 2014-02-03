@@ -1,0 +1,2 @@
+/*! http://wordpress.org/plugins/achievements/ */
+!function(a){a(document).ready(function(){"award"===a('input[name="dpa_type"]:checked').prop("value")&&setTimeout(function(){a("#dpa_event_chzn, .dpa-target").hide()},10),a("#dpa-event").chosen(),a("#dpa-type-award, #dpa-type-event").change(function(){"event"===a(this).prop("value")?a("#dpa_event_chzn, .dpa-target").show():a("#dpa_event_chzn, .dpa-target").fadeOut(200)})})}(jQuery);

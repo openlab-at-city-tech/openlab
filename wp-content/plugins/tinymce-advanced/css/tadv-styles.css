@@ -56,6 +56,20 @@ body {
 	background: url(../images/wp_page.gif) no-repeat 0 0;
 }
 
+#fontsizeselect,
+#fontselect,
+#formatselect,
+#styleselect {
+	border: 1px solid #ccc;
+}
+
+#tadvpalettediv #fontsizeselect,
+#tadvpalettediv #fontselect,
+#tadvpalettediv #formatselect,
+#tadvpalettediv #styleselect {
+	border: 0;
+}
+
 /* Theme */
 #bold {background-position:0 0}
 #italic {background-position:-60px 0}
@@ -220,12 +234,7 @@ form#tadvadmin {
 	margin: 0;
 	padding: 2px 4px;
 	border: 1px solid #ccc;
-	background: #eee;
-	background-image: -webkit-gradient(linear, left bottom, left top, from(#e5e5e5), to(#f4f4f4));
-	background-image: -webkit-linear-gradient(bottom, #e5e5e5, #f4f4f4);
-	background-image:    -moz-linear-gradient(bottom, #e5e5e5, #f4f4f4);
-	background-image:      -o-linear-gradient(bottom, #e5e5e5, #f4f4f4);
-	background-image: linear-gradient(to top, #e5e5e5, #f4f4f4);
+	background: #e5e5e5;
 }
 
 #tadvadmin .tadvmodule {

@@ -1,0 +1,44 @@
+<h2>How to Use: <span style="font-size:15px">You can check more details <a href="http://onlinewebapplication.com/how-to-use-wp-lightbox-2-wordpress-plugin/" target="_blank">here</a></span></h2> 	
+	<ol> 
+	<li>You can use WordPress image galleries and have them grouped and auto-lightboxed: <a href="http://codex.wordpress.org/Gallery_Shortcode"><code>[gallery link="file"]</code></a></li> 	
+	<li>You can also add a <code>rel="lightbox"</code> attribute to any link tag to activate the lightbox. For example:
+	<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;lightbox&quot; title=&quot;my caption&quot;&gt;image #1&lt;/a&gt;</code></pre> 
+	<em>Optional:</em> Use the <code>title</code> attribute if you want to show a caption.
+	</li> 
+	<li>If you have a set of related images that you would like to group, simply include a group name in the rel attribute. For example:
+	<pre><code>	&lt;a href=&quot;images/image-1.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #1&lt;/a&gt;
+	&lt;a href=&quot;images/image-2.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #2&lt;/a&gt;
+	&lt;a href=&quot;images/image-3.jpg&quot; rel=&quot;lightbox[roadtrip]&quot;&gt;image #3&lt;/a&gt;</code></pre> 
+	No limits to the number of image sets per page or how many images are allowed in each set. Go nuts!</li> 
+	<li>To <strong>disable</strong> lightboxing of an image link, just set any other rel-attribute: <code>rel="nobox"</code></li>
+	</ol>	
+	<h2>For	developers:</h2> 	
+	<ol> 
+	<li>Always have <code>wp_footer();</code> just before the closing &lt;/body&gt; tag of your theme, or you will break many plugins, which generally use this hook to reference JavaScript files</li> 
+	<li>Apply lightbox to any content by running <code>jqlb_apply_lightbox($your_content, "any ID");</code> It returns a string with all image links lightboxed, grouped by "any id"</li> 
+	<li>Many JavaScript optimizers, combiners, minifiers, etc. conflict with <a href="http://codex.wordpress.org/Function_Reference/wp_localize_script2"><code>wp_localize_script()</code></a>, used to configure this plugin and many others.
+		<ul style="list-style-type: circle;margin-left: 24px;"> 
+		<li>If you experience problems with jQuery Lightbox, please disable all JavaScript-optimizing plugins. (Optimize Scripts, W3 Total Cache, WP Minify etc)</li>
+		<li>If you develop JavaScript optimizers for WordPress, please play nice with the default API...</li>
+		</ul> 
+	</li>
+	</ol>	
+	<h2>Credits</h2><ul style="list-style-type: circle;margin-left: 24px;">
+	<li>Based on wp-jquery-lightbox was created by <a href="http://www.ulfben.com">Ulf Benjaminsson</a> (who <a href="http://amzn.com/w/2QB6SQ5XX2U0N">appreciates books</a>). :)</li>		
+	<li>wp-lightbox-2 borrowed the regexp from <a href="http://stimuli.ca/lightbox/">LightBox-2 by Rupert Morris</a> to apply lightbox-rel without clobbering manual inputs.</li>		
+	<li><a href="http://onlinewebapplication.com/wp-lightbox-2/">WP Lightbox 2</a> is based on <a href="http://www.huddletogether.com/projects/lightbox2/">Lightbox 2 by Lokesh Dhakar</a></li>
+	</ul>
+	
+	<h2>Changes to Lightbox-script:</h2><p style="margin-left: 24px;">
+	Takes the WordPress admin bar into consideration.<br />	
+	Resizing code manages <strong>both</strong> height and width and never destroy aspect ratio.<br />
+	Scaling routines now maximize images fully while taking captions into account.<br />
+	Added support for browser resizing and orientation changes - allowing images to <em>remain</em> optimally scaled and centered.<br />
+	WP Lightbox 2 rely on <code>rel="lightbox"</code> instead of <code>class="lightbox"</code>, since rel is what all the previous *box-scripts used.<br />
+	Replaced explicit IMG-urls with divs styled through the CSS. (see: <code>jqlb_loading</code> and <code>jqlb_closelabel</code> divs).<br />
+	Can grab titles and captions from the WordPress Media Gallery-output (<a href="http://codex.wordpress.org/Gallery_Shortcode">[gallery]</a>, "insert attachments" etc).<br />
+	Grabs image title if the link lacks one<br />
+	Honors empty titles.<br />
+	Uses WordPress API to localize script (with safe fallbacks).<br />	
+	</p>
+	

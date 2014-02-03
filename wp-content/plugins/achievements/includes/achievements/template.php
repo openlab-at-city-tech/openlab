@@ -35,20 +35,21 @@ function dpa_has_achievements( $args = array() ) {
 
 	$defaults = array(
 		// Standard WP_Query params
-		'order'                 => 'ASC',                                                // 'ASC', 'DESC
-		'orderby'               => 'title',                                              // 'meta_value', 'author', 'date', 'title', 'modified', 'parent', rand'
-		'max_num_pages'         => false,                                                // Maximum number of pages to show
-		'paged'                 => dpa_get_paged(),                                      // Page number
-		'perm'                  => 'readable',                                           // Query var value to provide statuses
-		'post_parent'           => $default_post_parent,                                 // Post parent
-		'post_type'             => dpa_get_achievement_post_type(),                      // Only retrieve achievement posts
-		'posts_per_page'        => dpa_get_achievements_per_page(),                      // Achievements per page
-		'ach_progress_status'   => $default_progress_status,                             // On single user achievement page, default to only showing unlocked achievements
-		's'                     => ! empty( $_REQUEST['dpa'] ) ? $_REQUEST['dpa'] : '',  // Achievements search @todo Is this implemented correctly?
+		'ignore_sticky_posts'   => true,                                                       // Ignored sticky posts
+		'order'                 => 'ASC',                                                      // 'ASC', 'DESC
+		'orderby'               => 'title',                                                    // 'meta_value', 'author', 'date', 'title', 'modified', 'parent', rand'
+		'max_num_pages'         => false,                                                      // Maximum number of pages to show
+		'paged'                 => dpa_get_paged(),                                            // Page number
+		'perm'                  => 'readable',                                                 // Query var value to provide statuses
+		'post_parent'           => $default_post_parent,                                       // Post parent
+		'post_type'             => dpa_get_achievement_post_type(),                            // Only retrieve achievement posts
+		'posts_per_page'        => dpa_get_achievements_per_page(),                            // Achievements per page
+		'ach_progress_status'   => $default_progress_status,                                   // On single user achievement page, default to only showing unlocked achievements
+		's'                     => ! empty( $_GET['dpa'] ) ? wp_unslash( $_GET['dpa'] ) : '',  // Achievements search
 
 		// Achievements params
- 		'ach_event'             => '',                                                   // Load achievements for a specific event
-		'ach_populate_progress' => false,                                                // Progress post type: populate user progress for the results.
+ 		'ach_event'             => '',                                                         // Load achievements for a specific event
+		'ach_populate_progress' => false,                                                      // Progress post type: populate user progress for the results.
 	);
 
 	// Load achievements for a specific event
@@ -89,7 +90,7 @@ function dpa_has_achievements( $args = array() ) {
 	}
 
 	// If no limit to posts per page, set it to the current post_count
-	if ( -1 == $posts_per_page )
+	if ( -1 === $posts_per_page )
 		$posts_per_page = achievements()->achievement_query->post_count;
 
 	// Add pagination values to query object
@@ -132,8 +133,8 @@ function dpa_has_achievements( $args = array() ) {
 			'current'   => (int) achievements()->achievement_query->paged,
 			'format'    => '',
 			'mid_size'  => 1,
-			'next_text' => '&rarr;',
-			'prev_text' => '&larr;',
+			'next_text' => is_rtl() ? '&larr;' : '&rarr;',
+			'prev_text' => is_rtl() ? '&rarr;' : '&larr;',
 			'total'     => ( $posts_per_page == achievements()->achievement_query->found_posts ) ? 1 : ceil( (int) achievements()->achievement_query->found_posts / (int) $posts_per_page ),
 		) );
 
@@ -386,7 +387,16 @@ function dpa_achievement_content( $achievement_id = 0 ) {
 
 		$content = get_post_field( 'post_content', $achievement_id );
 
-		return apply_filters( 'dpa_get_achievement_content', $content, $achievement_id );
+		/**
+		 * Juggle the do_shortcode filter to prevent Achievements' shortcodes being run on the excerpt.
+		 * This is important because otherwise some shortcodes affect the achievements() global in bad
+		 * ways (i.e. the breadcrumb shortcode breaks pagination).
+		 */
+		remove_filter( 'dpa_get_achievement_content', 'do_shortcode', 26 );
+		$retval = apply_filters( 'dpa_get_achievement_content', $content, $achievement_id );
+		add_filter( 'dpa_get_achievement_content', 'do_shortcode', 26 );
+
+		return $retval;
 	}
 
 /**
@@ -477,7 +487,6 @@ function dpa_achievement_excerpt( $achievement_id = 0, $length = 200 ) {
 	 * @param int $length Optional. Length of the excerpt. Defaults to 200 letters
 	 * @return string Achievement excerpt
 	 * @since Achievements (3.0)
-	 * @todo Handle multibyte characters when generating an excerpt
 	 * @todo Don't cut off part of a word; go to the nearest space
 	 */
 	function dpa_get_achievement_excerpt( $achievement_id = 0, $length = 200 ) {
@@ -602,7 +611,7 @@ function dpa_achievements_index_description( $args = '' ) {
 
 				// Check achievement ID is valid
 				$achievement = get_post( $recent_achievement_id );
-				if ( ! empty( $achievement ) && 'publish' == $achievement->post_status ) {
+				if ( ! empty( $achievement ) && 'publish' === $achievement->post_status ) {
 
 					// Combine all the things to build the output text
 					$retstr = sprintf(
@@ -651,7 +660,7 @@ function dpa_achievement_class( $achievement_id = 0, $classes = array() ) {
 		$count          = isset( achievements()->achievement_query->current_post ) ? achievements()->achievement_query->current_post : 1;
 
 		// If we've only one post in the loop, don't both with odd and even.
-		if ( $count > 1 )
+		if ( count( achievements()->achievement_query->posts ) > 1 )
 			$classes[] = ( (int) $count % 2 ) ? 'even' : 'odd';
 		else
 			$classes[] = 'dpa-single-achievement';
@@ -661,13 +670,14 @@ function dpa_achievement_class( $achievement_id = 0, $classes = array() ) {
 
 		// Remove hentry as Achievements isn't hAtom compliant.
 		foreach ( $classes as &$class ) {
-			if ( 'hentry' == $class )
+			if ( 'hentry' === $class )
 				$class = '';
 		}
-		$classes = array_merge( $classes, array() );
 
-		$retval = 'class="' . join( ' ', $classes ) . '"';
-		return $retval;
+		$classes = array_map( 'sanitize_html_class', array_merge( $classes, array() ) );
+		$classes = join( ' ', $classes );
+
+		return 'class="' . esc_attr( $classes )  . '"';
 	}
 
 /**
@@ -779,7 +789,7 @@ function dpa_achievement_pagination_links() {
 	 */
 	function dpa_get_achievement_pagination_links() {
 		if ( ! is_a( achievements()->achievement_query, 'WP_Query' ) )
-			return;
+			return '';
 
 		return apply_filters( 'dpa_get_achievement_pagination_links', achievements()->achievement_query->pagination_links );
 	}

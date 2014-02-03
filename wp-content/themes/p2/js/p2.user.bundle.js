@@ -98,10 +98,10 @@
         var onreset  = settings.onreset  || function() { };
 
         /* add custom event if it does not exist */
-        if  (!$.isFunction($(this)[settings.event])) {
+        if (!$.isFunction($(this)[settings.event])) {
             $.fn[settings.event] = function(fn){
           		return fn ? this.bind(settings.event, fn) : this.trigger(settings.event);
-          	}
+          	};
         }
 
         /* show tooltip */
@@ -363,7 +363,7 @@
                         $(self).attr('title', settings.tooltip);
                     }
                 }
-            }
+            };
         });
 
     };
@@ -913,7 +913,7 @@ $.widget( "ui.autocomplete", {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
+			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
@@ -1078,8 +1078,8 @@ $.widget( "ui.autocomplete", {
 			this.search( null, event );
 			return;
 		}
-		if ( this.menu.first() && /^previous/.test(direction) ||
-				this.menu.last() && /^next/.test(direction) ) {
+		if ( this.menu.first() && (/^previous/).test(direction) ||
+				this.menu.last() && (/^next/).test(direction) ) {
 			this.element.val( this.term );
 			this.menu.deactivate();
 			return;

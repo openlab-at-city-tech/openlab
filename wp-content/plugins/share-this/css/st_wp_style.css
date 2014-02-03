@@ -674,10 +674,11 @@ background:url("http://sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 }
 
 .wp_st_customizewidget_options{
-	margin-top : 15px; 
+	/*margin-top : 15px; 
 	text-align : center;
 	left : 50px;
-	position : absolute;
+	position : absolute;*/
+	margin-left: 50px;
 }
 
 .wp_st_loginWindowDiv{

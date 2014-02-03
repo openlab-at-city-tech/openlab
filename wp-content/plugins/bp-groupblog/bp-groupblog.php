@@ -1095,6 +1095,48 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 
 /**
+ * When a blog post is deleted, delete the activity item
+ *
+ * @since 1.8.5
+ *
+ * @param int $post_id
+ * @param int $blog_id
+ * @param int $user_id
+ */
+function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
+	global $wpdb, $bp;
+
+	$post_id = (int) $post_id;
+
+	if ( !$blog_id )
+		$blog_id = get_current_blog_id();
+
+	if ( !$user_id )
+		$user_id = bp_loggedin_user_id();
+
+	$group_id = get_groupblog_group_id( $blog_id );
+
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	do_action( 'bp_groupblog_before_remove_post', $blog_id, $post_id, $user_id, $group_id );
+
+	// Delete activity stream item
+	bp_blogs_delete_activity( array(
+		'item_id' => $group_id,
+		'secondary_item_id' => $post_id,
+		'type' => 'new_groupblog_post',
+		'component' => $bp->groups->id
+	) );
+
+	do_action( 'bp_groupblog_remove_post', $blog_id, $post_id, $user_id, $group_id );
+}
+add_action( 'wp_trash_post', 'bp_groupblog_remove_post', 5 );
+add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
+
+
+/**
  * See if users are able to comment to the activity entry of the groupblog post.
  *
  * @since 1.8.4

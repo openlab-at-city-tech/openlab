@@ -13,9 +13,9 @@
 Plugin Name: Achievements
 Plugin URI: http://achievementsapp.com/
 Description: Achievements gamifies your WordPress site with challenges, badges, and points.
-Version: 3.3.1
-Requires at least: 3.5.1
-Tested up to: 3.6
+Version: 3.5.1
+Requires at least: 3.8
+Tested up to: 3.8.20
 License: GPLv3
 Author: Paul Gibbs
 Author URI: http://byotos.com/
@@ -74,17 +74,12 @@ final class DPA_Achievements_Loader {
 	/**
 	 * @var array Overloads get_option()
 	 */
-	public $options      = array(); 
+	public $options      = array();
 
 	/**
 	 * @var array Overloads get_user_meta()
 	 */
 	public $user_options = array();
-
-	/**
-	 * @var Achievements The one true Achievements
-	 */
-	private static $instance;
 
 
 	/**
@@ -96,16 +91,19 @@ final class DPA_Achievements_Loader {
 	 * @return DPA_Achievements_Loader The one true Achievements
 	 * @see achievements()
 	 * @since Achievements (3.0)
-	 * @staticvar Achievements $instance
 	 */
 	public static function instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new DPA_Achievements_Loader;
-			self::$instance->setup_globals();
-			self::$instance->includes();
-			self::$instance->setup_actions();
+		static $instance = null;
+
+		// Only run these methods if they haven't been ran previously
+		if ( null === $instance ) {
+			$instance = new DPA_Achievements_Loader;
+			$instance->setup_globals();
+			$instance->includes();
+			$instance->setup_actions(); 
 		}
-		return self::$instance;
+
+		return $instance;
 	}
 
 
@@ -175,8 +173,8 @@ final class DPA_Achievements_Loader {
 	 */
 	private function setup_globals() {
 		// Versions
-		$this->version    = 3.3;
-		$this->db_version = 300;
+		$this->version    = '3.5.1';
+		$this->db_version = 340;
 
 		// Paths - plugin
 		$this->file       = __FILE__;
@@ -191,9 +189,9 @@ final class DPA_Achievements_Loader {
 		// Paths - languages
 		$this->lang_dir = apply_filters( 'dpa_lang_dir', trailingslashit( $this->plugin_dir . 'languages' ) );
 
-		// Includes 
-		$this->includes_dir = apply_filters( 'dpa_includes_dir', trailingslashit( $this->plugin_dir . 'includes' ) ); 
-		$this->includes_url = apply_filters( 'dpa_includes_url', trailingslashit( $this->plugin_url . 'includes' ) ); 
+		// Includes
+		$this->includes_dir = apply_filters( 'dpa_includes_dir', trailingslashit( $this->plugin_dir . 'includes' ) );
+		$this->includes_url = apply_filters( 'dpa_includes_url', trailingslashit( $this->plugin_url . 'includes' ) );
 
 		// Post type/endpoint/taxonomy identifiers
 		$this->achievement_post_type          = apply_filters( 'dpa_achievement_post_type',          'achievement'  );
@@ -208,8 +206,9 @@ final class DPA_Achievements_Loader {
 		// Queries
 		$this->current_achievement_id = 0;  // Current achievement ID
 
-		$this->achievement_query = new stdClass();  // Main achievement post type query
-		$this->progress_query    = new stdClass();  // Main dpa_progress post type query
+		$this->achievement_query = new WP_Query();     // Main achievement post type query
+		$this->leaderboard_query = new ArrayObject();  // Leaderboard template loop
+		$this->progress_query    = new WP_Query();     // Main dpa_progress post type query
 
 		// Theme compat
 		$this->theme_compat = new stdClass();  // Base theme compatibility class
@@ -219,12 +218,9 @@ final class DPA_Achievements_Loader {
 		$this->domain     = 'dpa';            // Unique identifier for retrieving translated strings
 		$this->errors     = new WP_Error();   // Errors
 		$this->extensions = new stdClass();   // Other plugins add data here
-		
+
 		// Deep integration with other plugins
 		$this->integrate_into_buddypress = false;  // Use BuddyPress profiles for screens like "my achievements"
-
-		// Add to global cache groups
-		wp_cache_add_global_groups( 'achievements' );
 
 		/**
 		 * If multisite and running network-wide, grab the options from the site options
@@ -262,6 +258,7 @@ final class DPA_Achievements_Loader {
 		require( $this->includes_dir . 'core/options.php'    );
 		require( $this->includes_dir . 'core/caps.php'       );
 		require( $this->includes_dir . 'core/update.php'     );
+		require( $this->includes_dir . 'core/backpat.php'    );
 
 
 		/**
@@ -275,15 +272,18 @@ final class DPA_Achievements_Loader {
 		/**
 		 * Plugin extensions
 		 */
-		require( $this->includes_dir . 'extensions/bbpress.php'      );
-		require( $this->includes_dir . 'extensions/buddypress.php'   );
-		require( $this->includes_dir . 'extensions/buddystream.php'  );
-		require( $this->includes_dir . 'extensions/inviteanyone.php' );
-		require( $this->includes_dir . 'extensions/scholarpress.php' );
-		require( $this->includes_dir . 'extensions/wordpress.php'    );
-		require( $this->includes_dir . 'extensions/wpecommerce.php'  );
+		//We need this so that is_active_plugin is registered when we check for active plugins
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		require( $this->includes_dir . 'extensions/bbpress.php'       );
+		require( $this->includes_dir . 'extensions/buddypress.php'    );
+		require( $this->includes_dir . 'extensions/buddystream.php'   );
+		require( $this->includes_dir . 'extensions/inviteanyone.php'  );
+		require( $this->includes_dir . 'extensions/scholarpress.php'  );
+		require( $this->includes_dir . 'extensions/wordpress.php'     );
+		require( $this->includes_dir . 'extensions/wpecommerce.php'   );
+		require( $this->includes_dir . 'extensions/wppostratings.php' );
 
-		require( $this->includes_dir . 'buddypress/functions.php'    );
+		require( $this->includes_dir . 'buddypress/functions.php'     );
 
 
 		/**
@@ -291,7 +291,6 @@ final class DPA_Achievements_Loader {
 		 */
 		require( $this->includes_dir . 'common/functions.php'  );
 		require( $this->includes_dir . 'common/template.php'   );
-		require( $this->includes_dir . 'common/widgets.php'    );
 
 		require( $this->includes_dir . 'achievements/functions.php' );
 		require( $this->includes_dir . 'achievements/template.php'  );
@@ -314,9 +313,18 @@ final class DPA_Achievements_Loader {
 
 
 		/**
+		 * Widgets
+		 */
+		require( $this->includes_dir . 'class-dpa-redeem-achievements-widget.php'    );
+		require( $this->includes_dir . 'class-dpa-featured-achievement-widget.php'   );
+		require( $this->includes_dir . 'class-dpa-available-achievements-widget.php' );
+		require( $this->includes_dir . 'class-dpa-leaderboard-widget.php'            );
+
+
+		/**
 		 * Admin
 		 */
-		if ( is_admin() ) {
+		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			require( $this->includes_dir . 'admin/admin.php'   );
 			require( $this->includes_dir . 'admin/actions.php' );
 		}
@@ -347,7 +355,7 @@ final class DPA_Achievements_Loader {
 
 		// Add the core actions
 		$actions = array(
-			'setup_theme',               // Setup the default theme compat
+			'setup_theme',               // Set up the default theme compat
 			'register_post_types',       // Register post types (achievement, dpa_progress)
 			'register_post_statuses',    // Register post statuses (dpa_progress: locked, unlocked)
 			'register_taxonomies',       // Register taxonomies (dpa_event)
@@ -384,15 +392,18 @@ final class DPA_Achievements_Loader {
 	 * @since Achievements (3.0)
 	 */
 	public function load_textdomain() {
-		// Traditional WordPress plugin locale filter
-		$locale = apply_filters( 'plugin_locale',  get_locale(), $this->domain );
+
+		// Try to load via load_plugin_textdomain() first, for future wordpress.org translation downloads
+		if ( load_plugin_textdomain( $this->domain, false, 'achievements' ) )
+			return;
+
+		$locale = apply_filters( 'plugin_locale', get_locale(), $this->domain );
 		$mofile = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
 
-		// Look in global /wp-content/languages/plugins/ folder
+		// Nothing found look in global /wp-content/languages/plugins/ folder
 		$mofile_global = WP_LANG_DIR . '/plugins/' . $mofile;
 
-		if ( file_exists( $mofile_global ) )
-			load_textdomain( $this->domain, $mofile_global );
+		load_textdomain( $this->domain, $mofile_global );
 	}
 
 	/**
@@ -407,7 +418,7 @@ final class DPA_Achievements_Loader {
 			return;
 
 		// If the plugin's been activated network-wide, only register the endpoint on the DPA_DATA_STORE site
-		if ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() != DPA_DATA_STORE )
+		if ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() !== DPA_DATA_STORE )
 			return;
 
 		add_rewrite_endpoint( dpa_get_authors_endpoint(), EP_AUTHORS );  // /authors/paul/[achievements]
@@ -432,7 +443,7 @@ final class DPA_Achievements_Loader {
 		 * The solution to this is $post_type_is_public. If it's false, the post type is registered, but it's hidden from the admin,
 		 * isn't publicly queryable, doesn't create rewrite rules, and so on. If it's set to true, the post type behaves as normal.
 		 */
-		$post_type_is_public = ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() != DPA_DATA_STORE ) ? false : true;
+		$post_type_is_public = ( is_multisite() && dpa_is_running_networkwide() && get_current_blog_id() !== DPA_DATA_STORE ) ? false : true;
 
 		// CPT labels
 		$labels['achievement'] = array(
@@ -458,7 +469,7 @@ final class DPA_Achievements_Loader {
 			'feed'       => false,                       // Remove feed rewrite rules
 			'feeds'      => false,                       // Remove feed rewrite rules (this is what the parameter ought to be)
 			'pages'      => true,
-			'slug'       => dpa_get_root_slug(),
+			'slug'       => dpa_get_singular_root_slug(),
 			'with_front' => false,
 		);
 		// CPT supports
@@ -479,7 +490,7 @@ final class DPA_Achievements_Loader {
 			'capability_type'      => array( 'achievement', 'achievements' ),
 			'delete_with_user'     => false,
 			'description'          => _x( 'Achievements types (e.g. new post, new site, new user)', 'Achievement post type description', 'dpa' ),
-			'has_archive'          => $post_type_is_public,
+			'has_archive'          => $post_type_is_public ? dpa_get_root_slug() : false,
 			'labels'               => $labels['achievement'],
 			'public'               => $post_type_is_public,
 			'rewrite'              => $rewrite['achievement'],
@@ -573,7 +584,7 @@ final class DPA_Achievements_Loader {
 			'show_in_nav_menus'     => false,
 			'show_tagcloud'         => false,
 			'show_ui'               => dpa_is_developer_mode(),
-			'update_count_callback' => '_update_post_term_count',
+			'update_count_callback' => 'dpa_update_event_term_count',
 		) );
 
 		// Register the achievement event taxonomy
@@ -697,6 +708,7 @@ function dpa_get_default_options() {
 		'_dpa_achievements_per_page'     => 15,                 // Achievements per page
 		'_dpa_achievements_per_rss_page' => 25,                 // Achievements per RSS page
 		'_dpa_root_slug'                 => 'achievements',     // Achievements archive slug
+		'_dpa_singular_root_slug'        => 'achievement',      // Achievements singular item slug
 
 		// Progress post type
 		'_dpa_progresses_per_page'     => 15,                   // Progresses per page

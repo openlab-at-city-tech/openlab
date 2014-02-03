@@ -89,7 +89,7 @@ class AECDependencies {
 			?>
 <script type='text/javascript'>
 /*From Ajax Edit Comments*/
-if ( typeof( ajaxurl ) == 'undefined' ) { var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>'; }
+if ( typeof( ajaxurl ) == 'undefined' ) { var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' ) ); ?>'; }
 </script>
             <?php
 		} //end ajax_url

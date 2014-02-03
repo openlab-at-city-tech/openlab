@@ -298,15 +298,17 @@ jQuery(document).ready(function($){
 	};
 
 	// Set up Invite Anyone autocomplete
-	$('#send-to-input').autocomplete({
-		serviceUrl: ajaxurl,
-		width: 300,
-		delimiter: /(,|;)\s*/,
-		onSelect: ia_on_autocomplete_select,
-		deferRequestBy: 300,
-		params: { action: 'invite_anyone_autocomplete_ajax_handler' },
-		noCache: true
-	});
+	if ( typeof ia_on_autocomplete_select !== 'undefined' ) {
+		$('#send-to-input').autocomplete({
+			serviceUrl: ajaxurl,
+			width: 300,
+			delimiter: /(,|;)\s*/,
+			onSelect: ia_on_autocomplete_select,
+			deferRequestBy: 300,
+			params: { action: 'invite_anyone_autocomplete_ajax_handler' },
+			noCache: true
+		});
+	}
 
 	/* AJAX validation for blog URLs */
 	$('form input[type="submit"]').click(function(e){
@@ -329,6 +331,12 @@ jQuery(document).ready(function($){
 		}
 
 		var path = $(domain).val();
+
+		if ( 0 == path.length ) {
+			$(domain).after('<span class="ajax-warning">This field cannot be blank.</span>');
+			return false;
+		}
+
 		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
 			{
 				action: 'openlab_validate_groupblog_url_handler',

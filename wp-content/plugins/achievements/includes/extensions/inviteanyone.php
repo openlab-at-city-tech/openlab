@@ -38,6 +38,7 @@ class DPA_Invite_Anyone_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function __construct() {
+
 		$this->actions = array(
 			'accepted_email_invite' => __( 'A new user activates their account.', 'dpa' ),
 			'sent_email_invite'     => __( 'The user invites someone else to join the site.', 'dpa' ),
@@ -63,7 +64,7 @@ class DPA_Invite_Anyone_Extension extends DPA_Extension {
 		$this->rss_url         = 'http://teleogistic.net/feed/';
 		$this->small_image_url = trailingslashit( achievements()->includes_url ) . 'admin/images/invite-anyone-small.jpg';
 		$this->version         = 1;
-		$this->wporg_url       = 'http://wordpress.org/extend/plugins/invite-anyone/';
+		$this->wporg_url       = 'http://wordpress.org/plugins/invite-anyone/';
 
 		add_filter( 'dpa_handle_event_user_id', array( $this, 'event_user_id' ), 10, 3 );
 	}
@@ -79,7 +80,7 @@ class DPA_Invite_Anyone_Extension extends DPA_Extension {
 	 * @since Achievements (3.0)
 	 */
 	public function event_user_id( $user_id, $action_name, $action_func_args ) {
-		if ( 'accepted_email_invite' != $action_name )
+		if ( 'accepted_email_invite' !== $action_name )
 			return $user_id;
 
 		return (int) $action_func_args[0];
