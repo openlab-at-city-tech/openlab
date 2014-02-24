@@ -227,26 +227,44 @@ add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
 function cuny_add_group_menu_items( $items, $args ) {
-		// The Sliding Door theme shouldn't get any added items
-		// See http://openlab.citytech.cuny.edu/redmine/issues/772
-		if ( 'custom-sliding-menu' == $args->theme_location ) {
-				return $items;
-		}
+	// The Sliding Door theme shouldn't get any added items
+	// See http://openlab.citytech.cuny.edu/redmine/issues/772
+	if ( 'custom-sliding-menu' == $args->theme_location ) {
+		return $items;
+	}
 
 	if ( ! bp_is_root_blog() ) {
-		if ( ( strpos( $items, 'Contact' ) ) ) {
-		} else {
-			$items = '<li><a title="Home" href="' . site_url() . '">Home</a></li>' . $items;
+		// Only add the Home link if one is not already found
+		// See http://openlab.citytech.cuny.edu/redmine/isues/1031
+		$has_home = false;
+		foreach ( $items as $item ) {
+			if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
+				$has_home = true;
+				break;
+			}
 		}
-		$items = cuny_group_menu_items() . $items;
+
+		if ( ! $has_home ) {
+			$post_args = new stdClass;
+			$home_link = new WP_Post( $post_args );
+			$home_link->title = 'Home';
+			$home_link->url = trailingslashit( site_url() );
+			$home_link->slug = 'home';
+			$home_link->ID = 'home';
+			$items = array_merge( array( $home_link ), $items );
+		}
+
+		$items = array_merge( cuny_group_menu_items(), $items );
 	}
 
 	return $items;
 }
-add_filter( 'wp_nav_menu_items','cuny_add_group_menu_items', 10, 2 );
+add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
 
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
+
+	$items = array();
 
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
@@ -254,13 +272,17 @@ function cuny_group_menu_items() {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$tab = '<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/'.$group->slug.'/">'.$group_type.' Profile</a></li>';
-		$tabs = $tab;
-	} else {
-		$tabs = '';
+		$post_args = new stdClass;
+		$profile_item = new WP_Post( $post_args );
+		$profile_item->ID = 'group-profile-link';
+		$profile_item->title = sprintf( '%s Profile', $group_type );
+		$profile_item->slug = 'group-profile-link';
+		$profile_item->url = bp_get_group_permalink( $group );
+
+		$items[] = $profile_item;
 	}
 
-	return $tabs;
+	return $items;
 }
 
 //add breadcrumbs for buddypress pages
