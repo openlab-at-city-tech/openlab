@@ -211,7 +211,7 @@ function cuny_create_group() {
                                 <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                             </p>
 
-                            <p><?php _e('To skip the avatar upload process, hit the "Finish" button.', 'buddypress') ?></p>
+                            <p>To skip the avatar upload process, click the "Next Step" button.</p>
                         </div><!-- .main-column -->
 
         <?php endif; ?>
