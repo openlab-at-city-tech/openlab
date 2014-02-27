@@ -381,4 +381,64 @@ function openlab_page_slug_to_grouptype()
 	return $group_type;
 
 }
-?>
+
+/**
+ * Add group types switcher metabox to group admin in dashboard.
+ */
+function openlab_group_type_meta_box() {
+	add_meta_box(
+		'openlab_group_type',
+		'Group Type',
+		'openlab_group_type_meta_box_cb',
+		get_current_screen()->id,
+		'side',
+		'core'
+	);
+}
+add_action( 'bp_groups_admin_meta_boxes', 'openlab_group_type_meta_box' );
+
+/**
+ * Display callback for Group Type meta box.
+ */
+function openlab_group_type_meta_box_cb( $group ) {
+	$group_type = openlab_get_group_type( $group->id );
+
+	wp_nonce_field( 'openlab_group_type_' . $group->id, 'openlab_group_type_nonce' )
+
+	?>
+
+	<ul>
+		<li>
+			<input type="radio" <?php checked( 'course', $group_type ) ?> value="course" name="openlab-group-type" /> Course
+		</li>
+
+		<li>
+			<input type="radio" <?php checked( 'club', $group_type ) ?> value="club" name="openlab-group-type" /> Club
+		</li>
+
+		<li>
+			<input type="radio" <?php checked( 'project', $group_type ) ?> value="project" name="openlab-group-type" /> Project
+		</li>
+
+		<li>
+			<input type="radio" <?php checked( 'portfolio', $group_type ) ?> value="portfolio" name="openlab-group-type" /> Portfolio
+		</li>
+	</ul>
+	<?php
+}
+
+/**
+ * Catch group type save in admin.
+ */
+function openlab_group_type_meta_box_save( $group_id ) {
+	check_admin_referer( 'openlab_group_type_' . $group_id, 'openlab_group_type_nonce' );
+
+	$type = isset( $_POST['openlab-group-type'] ) && in_array( $_POST['openlab-group-type'], openlab_group_types() ) ? $_POST['openlab-group-type'] : '';
+
+	if ( ! $type ) {
+		return;
+	}
+
+	groups_update_groupmeta( $group_id, 'wds_group_type', $type );
+}
+add_action( 'bp_group_admin_edit_after', 'openlab_group_type_meta_box_save' );
