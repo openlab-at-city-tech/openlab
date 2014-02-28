@@ -1,0 +1,23 @@
+#slideshow {
+	z-index: 1;
+}
+
+#mainNav {
+	z-index: 50;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#content #projectGrid {
+	display: block;
+}
+
+#searchsubmit{
+	padding-right: 10px;
+}
+
+input[type="submit"]  {
+	border: none;
+}

@@ -1,0 +1,157 @@
+/** ESSENTIAL STYLES */
+
+.sf-menu, .sf-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+}
+
+.sf-menu {
+	line-height:	1.0;
+}
+
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			120px; /* left offset of submenus need to match (see below) */	
+}
+
+.sf-menu ul li {
+	width:			100%;
+}
+
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+
+.sf-menu li {
+	float:			left;
+	position:		relative;
+	width: 			auto;
+}
+
+.sf-menu a {
+	display:		block;
+	position:		relative;
+}
+
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0px;
+	top:			35px; /* match top ul list item height */
+	z-index:		100;
+}
+
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			120px; /* match ul width */
+	top:			0px!important;
+}
+
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			120px; /* match ul width */
+	top:			0px!important;
+}
+
+/* Filtered Styles */
+
+#mainNav .sf-menu a,
+#mainNav .sf-menu a:visited  {
+	outline: none;
+}
+
+#mainNav .sf-menu ul {
+	padding: 10px 10px 10px 10px !important;
+	background: #5d5d5d;		
+}
+
+#mainNav .sf-menu li li ul {
+	top: -5px!important;
+	left: 100%!important;
+}
+
+#mainNav .sf-menu li li:last-child {
+	background: none !important;
+}
+
+#mainNav .sf-menu li li {	
+	margin: 0;
+	border: none;	
+	padding: 3px 0;
+	text-transform: none !important;
+}
+
+#mainNav .sf-menu li li a,
+#mainNav .sf-menu li li a:visited,
+#mainNav .sf-menu li li li a,
+#mainNav .sf-menu li li li a:visited,
+#mainNav .sf-menu li li li li a,
+#mainNav .sf-menu li li li li a:visited {
+	margin: 0px;
+	padding: 5px 15px 5px 5px;
+	line-height: 1.2em;	
+	color: #fff;	
+	display: block;	
+	font-size: 12px;
+}
+
+/** arrow **/
+
+#mainNav .sf-menu a.sf-with-ul {
+	position: relative;
+	min-width:		1px;
+}
+
+.sf-sub-indicator {
+	position: absolute;
+	bottom: 0px;	
+	display:		block;
+	width: 100%;
+	text-indent: 	-999em;
+	overflow:		hidden;
+	z-index: 200;
+	height: 40px;
+}
+
+
+
+.sfHover .sf-sub-indicator {
+	background:	url('../../images/subnav_arrow.png') center bottom no-repeat;
+	bottom: -10px;	
+}
+
+#mainNav .sf-menu li ul ul {
+	margin-left: 20px;
+}
+
+#mainNav .sf-menu li ul .sf-sub-indicator {
+	display: none;
+}
+
+#mainNav .sf-menu li ul .sfHover .sf-sub-indicator {
+	background:	url('../../images/subnav_arrow_left.png') right 5px no-repeat;
+	position: absolute;
+	top: 0;
+	right: -20px;
+	left: none;
+	display: block;	
+}
+
+.sfHover a.sf-with-ul .sf-sub-indicator {
+	height: 30px;
+}
+
+.children .sf-sub-indicator {
+	display: none;
+}

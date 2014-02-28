@@ -1,0 +1,901 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Filtered v2.0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-02 13:45-0500\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: filtered/404.php:3
+msgid "Page Not Found"
+msgstr ""
+
+#: filtered/404.php:7
+msgid "Sorry, but what you're looking for could not be found."
+msgstr ""
+
+#: filtered/archive.php:11
+#: filtered/archive.php:13
+#: filtered/archive.php:15
+#: filtered/archive.php:17
+msgid "Archive"
+msgstr ""
+
+#: filtered/archive.php:38
+#: filtered/author.php:23
+#: filtered/index.php:19
+msgid "Posted by"
+msgstr ""
+
+#: filtered/archive.php:38
+#: filtered/author.php:23
+#: filtered/index.php:19
+msgid "on"
+msgstr ""
+
+#: filtered/archive.php:38
+#: filtered/author.php:23
+#: filtered/index.php:19
+msgid "No Comments"
+msgstr ""
+
+#: filtered/archive.php:38
+#: filtered/author.php:23
+#: filtered/index.php:19
+msgid "One Comment"
+msgstr ""
+
+#: filtered/archive.php:38
+#: filtered/author.php:23
+#: filtered/index.php:19
+msgid "% Comments"
+msgstr ""
+
+#: filtered/archives.php:14
+msgid "Archives by Month:"
+msgstr ""
+
+#: filtered/archives.php:18
+msgid "Archives by Subject:"
+msgstr ""
+
+#: filtered/author.php:5
+msgid "Author:"
+msgstr ""
+
+#: filtered/comments-popup.php:10
+msgid "- Comments on"
+msgstr ""
+
+#: filtered/comments-popup.php:29
+#: filtered/comments.php:25
+msgid "Comments"
+msgstr ""
+
+#: filtered/comments-popup.php:31
+msgid "RSS"
+msgstr ""
+
+#: filtered/comments-popup.php:31
+msgid "feed for comments on this post."
+msgstr ""
+
+#: filtered/comments-popup.php:34
+msgid "The <abbr title=\"Universal Resource Locator\">URL</abbr> to TrackBack this entry is:"
+msgstr ""
+
+#: filtered/comments-popup.php:52
+msgid "by"
+msgstr ""
+
+#: filtered/comments-popup.php:58
+msgid "No comments yet."
+msgstr ""
+
+#: filtered/comments-popup.php:62
+msgid "Leave a comment"
+msgstr ""
+
+#: filtered/comments-popup.php:63
+msgid "Line and paragraph breaks automatic, e-mail address never displayed, <acronym title=\"Hypertext Markup Language\">HTML</acronym> allowed:"
+msgstr ""
+
+#: filtered/comments-popup.php:67
+msgid "Logged in as"
+msgstr ""
+
+#: filtered/comments-popup.php:67
+msgid "Log out"
+msgstr ""
+
+#: filtered/comments-popup.php:71
+#: filtered/comments.php:68
+msgid "Name"
+msgstr ""
+
+#: filtered/comments-popup.php:76
+msgid "E-mail"
+msgstr ""
+
+#: filtered/comments-popup.php:81
+#: filtered/functions.php:505
+msgid "URL"
+msgstr ""
+
+#: filtered/comments-popup.php:86
+msgid "Your Comment"
+msgstr ""
+
+#: filtered/comments-popup.php:94
+msgid "Say it!"
+msgstr ""
+
+#: filtered/comments-popup.php:99
+msgid "Sorry, the comment form is closed at this time."
+msgstr ""
+
+#: filtered/comments-popup.php:104
+msgid "Close this window."
+msgstr ""
+
+#: filtered/comments-popup.php:110
+#: filtered/comments-popup.php:114
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#: filtered/comments.php:10
+msgid "Enter your password to view comments."
+msgstr ""
+
+#: filtered/comments.php:25
+msgid "Comment"
+msgstr ""
+
+#: filtered/comments.php:53
+msgid "Leave a Reply"
+msgstr ""
+
+#: filtered/comments.php:53
+#, php-format
+msgid "Leave a Reply to %s"
+msgstr ""
+
+#: filtered/comments.php:56
+#, php-format
+msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
+msgstr ""
+
+#: filtered/comments.php:63
+#, php-format
+msgid "Logged in as %s"
+msgstr ""
+
+#: filtered/comments.php:63
+msgid "Log out of this account"
+msgstr ""
+
+#: filtered/comments.php:63
+msgid "Log out &raquo;"
+msgstr ""
+
+#: filtered/comments.php:68
+#: filtered/comments.php:71
+msgid "(required)"
+msgstr ""
+
+#: filtered/comments.php:71
+msgid "Email"
+msgstr ""
+
+#: filtered/comments.php:74
+msgid "Website"
+msgstr ""
+
+#: filtered/comments.php:81
+msgid "Submit Comment"
+msgstr ""
+
+#: filtered/comments.php:81
+msgid "Cancel Reply"
+msgstr ""
+
+#: filtered/footer.php:23
+msgid "All Rights Reserved."
+msgstr ""
+
+#: filtered/functions.php:340
+msgid "Read More"
+msgstr ""
+
+#: filtered/functions.php:355
+msgid "Projects"
+msgstr ""
+
+#: filtered/functions.php:356
+msgid "Project"
+msgstr ""
+
+#: filtered/functions.php:357
+msgid "Add New"
+msgstr ""
+
+#: filtered/functions.php:358
+msgid "Add New Project"
+msgstr ""
+
+#: filtered/functions.php:359
+msgid "Edit"
+msgstr ""
+
+#: filtered/functions.php:360
+msgid "Edit Project"
+msgstr ""
+
+#: filtered/functions.php:361
+msgid "New Project"
+msgstr ""
+
+#: filtered/functions.php:362
+#: filtered/functions.php:363
+msgid "View Project"
+msgstr ""
+
+#: filtered/functions.php:364
+msgid "Search Projects"
+msgstr ""
+
+#: filtered/functions.php:365
+msgid "No projects found"
+msgstr ""
+
+#: filtered/functions.php:366
+msgid "No projects found in Trash"
+msgstr ""
+
+#: filtered/functions.php:367
+msgid "Parent Project"
+msgstr ""
+
+#: filtered/functions.php:392
+#: filtered/functions.php:553
+msgid "Skills"
+msgstr ""
+
+#: filtered/functions.php:393
+msgid "Skill"
+msgstr ""
+
+#: filtered/functions.php:394
+msgid "Search Skills"
+msgstr ""
+
+#: filtered/functions.php:395
+msgid "All Skills"
+msgstr ""
+
+#: filtered/functions.php:396
+msgid "Parent Skill"
+msgstr ""
+
+#: filtered/functions.php:397
+msgid "Parent Skill:"
+msgstr ""
+
+#: filtered/functions.php:398
+msgid "Edit Skill"
+msgstr ""
+
+#: filtered/functions.php:399
+msgid "Update Skill"
+msgstr ""
+
+#: filtered/functions.php:400
+msgid "Add New Skill"
+msgstr ""
+
+#: filtered/functions.php:401
+msgid "New Skill Name"
+msgstr ""
+
+#: filtered/functions.php:498
+msgid "Notes"
+msgstr ""
+
+#: filtered/functions.php:499
+msgid "Enter a description about the project."
+msgstr ""
+
+#: filtered/functions.php:506
+msgid "Enter the URL of your project."
+msgstr ""
+
+#: filtered/functions.php:512
+msgid "URL Label"
+msgstr ""
+
+#: filtered/functions.php:513
+msgid "Enter a label for the URL."
+msgstr ""
+
+#: filtered/functions.php:519
+msgid "Feature on Home Page"
+msgstr ""
+
+#: filtered/functions.php:520
+msgid "Display this project on the home page."
+msgstr ""
+
+#: filtered/functions.php:529
+msgid "Include in Slideshow"
+msgstr ""
+
+#: filtered/functions.php:530
+msgid "Display this project in the home page slideshow."
+msgstr ""
+
+#: filtered/functions.php:536
+msgid "Slideshow Image"
+msgstr ""
+
+#: filtered/functions.php:537
+msgid "Enter the full URL of an image to be displayed in the home page slideshow. (Recommended dimensions: 960px x 350px)"
+msgstr ""
+
+#: filtered/functions.php:543
+msgid "Home Slideshow Text"
+msgstr ""
+
+#: filtered/functions.php:544
+msgid "Enter a short description to be included with the slideshow image."
+msgstr ""
+
+#: filtered/functions.php:554
+msgid "For use with the Portfolio page template. <br/><br/>Enter the names of the skills (separated by commas) you want shown on this page. If left blank, all skills will be used."
+msgstr ""
+
+#: filtered/functions.php:611
+msgid "Project Details"
+msgstr ""
+
+#: filtered/functions.php:612
+#: filtered/functions.php:614
+#: filtered/functions.php:615
+msgid "Slideshow Options"
+msgstr ""
+
+#: filtered/functions.php:613
+msgid "Portfolio Options"
+msgstr ""
+
+#: filtered/functions.php:692
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: filtered/functions.php:699
+msgid "Reply"
+msgstr ""
+
+#: filtered/functions.php:699
+msgid "Log in to reply"
+msgstr ""
+
+#: filtered/links.php:3
+msgid "Links"
+msgstr ""
+
+#: filtered/options.php:37
+msgid "General"
+msgstr ""
+
+#: filtered/options.php:40
+msgid "Logo"
+msgstr ""
+
+#: filtered/options.php:41
+msgid "Upload a custom logo."
+msgstr ""
+
+#: filtered/options.php:45
+msgid "Favicon"
+msgstr ""
+
+#: filtered/options.php:46
+msgid "Upload a custom favicon."
+msgstr ""
+
+#: filtered/options.php:50
+msgid "Custom CSS"
+msgstr ""
+
+#: filtered/options.php:51
+msgid "Enter custom CSS here."
+msgstr ""
+
+#: filtered/options.php:56
+msgid "Left Footer Text"
+msgstr ""
+
+#: filtered/options.php:57
+msgid "This will appear on the left side of the footer."
+msgstr ""
+
+#: filtered/options.php:62
+msgid "Right Footer Text"
+msgstr ""
+
+#: filtered/options.php:63
+msgid "This will appear on the right side of the footer."
+msgstr ""
+
+#: filtered/options.php:68
+msgid "Appearance"
+msgstr ""
+
+#: filtered/options.php:71
+msgid "Background"
+msgstr ""
+
+#: filtered/options.php:72
+#: filtered/options.php:79
+msgid "Select a pattern for your background."
+msgstr ""
+
+#: filtered/options.php:78
+msgid "Footer Color"
+msgstr ""
+
+#: filtered/options.php:85
+msgid "Button Color"
+msgstr ""
+
+#: filtered/options.php:86
+msgid "Select a color for your buttons."
+msgstr ""
+
+#: filtered/options.php:91
+msgid "Button Hover Color"
+msgstr ""
+
+#: filtered/options.php:92
+msgid "Select a hover color for your buttons on hover."
+msgstr ""
+
+#: filtered/options.php:97
+msgid "Link Color"
+msgstr ""
+
+#: filtered/options.php:98
+msgid "Select a color for your links."
+msgstr ""
+
+#: filtered/options.php:103
+msgid "Link Hover Color"
+msgstr ""
+
+#: filtered/options.php:104
+msgid "Select a hover color for your links."
+msgstr ""
+
+#: filtered/options.php:110
+msgid "Typography"
+msgstr ""
+
+#: filtered/options.php:113
+msgid "Font for Headings"
+msgstr ""
+
+#: filtered/options.php:114
+msgid "Enter the name of the <a href=\"http://www.google.com/webfonts\" target=\"_blank\">Google Web Font</a> you want to use for headings."
+msgstr ""
+
+#: filtered/options.php:119
+msgid "Font for Body Text"
+msgstr ""
+
+#: filtered/options.php:120
+msgid "Enter the name of the <a href=\"http://www.google.com/webfonts\" target=\"_blank\">Google Web Font</a> you want to use for the body text."
+msgstr ""
+
+#: filtered/options.php:125
+msgid "Font for the Home Message"
+msgstr ""
+
+#: filtered/options.php:126
+msgid "Enter the name of the <a href=\"http://www.google.com/webfonts\" target=\"_blank\">Google Web Font</a> you want to use for the call to action box text."
+msgstr ""
+
+#: filtered/options.php:132
+msgid "Integration"
+msgstr ""
+
+#: filtered/options.php:135
+msgid "Analytics"
+msgstr ""
+
+#: filtered/options.php:136
+msgid "Enter your custom analytics code. (e.g. Google Analytics)."
+msgstr ""
+
+#: filtered/options.php:142
+msgid "Home Page"
+msgstr ""
+
+#: filtered/options.php:145
+msgid "Enable Slideshow"
+msgstr ""
+
+#: filtered/options.php:146
+msgid "Check this box to enable the home page slideshow."
+msgstr ""
+
+#: filtered/options.php:151
+msgid "Deactivate Links"
+msgstr ""
+
+#: filtered/options.php:152
+msgid "Check this box to prevent slides from linking to corresponding pages."
+msgstr ""
+
+#: filtered/options.php:157
+msgid "Slideshow Effect"
+msgstr ""
+
+#: filtered/options.php:158
+msgid "Select the type of transition effect for the slideshow."
+msgstr ""
+
+#: filtered/options.php:164
+msgid "Slideshow Speed"
+msgstr ""
+
+#: filtered/options.php:165
+msgid "Enter the delay in seconds between slides."
+msgstr ""
+
+#: filtered/options.php:170
+msgid "Home Message"
+msgstr ""
+
+#: filtered/options.php:171
+msgid "Enter a short message to be displayed on the home page."
+msgstr ""
+
+#: filtered/options.php:176
+msgid "Show Posts Instead of Projects?"
+msgstr ""
+
+#: filtered/options.php:177
+msgid "Check this box to display posts and a sidebar on the home page instead of the project gallery."
+msgstr ""
+
+#: filtered/options.php:182
+msgid "Show Only Featured Projects"
+msgstr ""
+
+#: filtered/options.php:183
+msgid "Check this box if you only want to show featured projects instead of all projects."
+msgstr ""
+
+#: filtered/search.php:3
+msgid "Search Results"
+msgstr ""
+
+#: filtered/search.php:29
+msgid "No Matches Found"
+msgstr ""
+
+#: filtered/search.php:30
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr ""
+
+#: filtered/searchform.php:3
+msgid "Search"
+msgstr ""
+
+#: filtered/sidebar.php:5
+msgid "Author Info"
+msgstr ""
+
+#: filtered/single-projects.php:17
+msgid "Visit Site"
+msgstr ""
+
+#: filtered/single.php:26
+msgid "Edit Post"
+msgstr ""
+
+#: filtered/admin/options-framework.php:238
+msgid "Click OK to reset. Any theme settings will be lost!"
+msgstr ""
+
+#: filtered/admin/options-framework.php:269
+msgid "Default options restored."
+msgstr ""
+
+#: filtered/admin/options-framework.php:310
+msgid "Options saved."
+msgstr ""
+
+#: filtered/admin/options-framework.php:368
+msgid "Theme Options"
+msgstr ""
+
+#: filtered/admin/options-medialibrary-uploader.php:26
+msgid "Options Framework Internal Container"
+msgstr ""
+
+#: filtered/admin/options-medialibrary-uploader.php:128
+msgid "Upload"
+msgstr ""
+
+#: filtered/admin/options-medialibrary-uploader.php:151
+msgid "View File"
+msgstr ""
+
+#: filtered/admin/options-medialibrary-uploader.php:288
+msgid "Gallery"
+msgstr ""
+
+#: filtered/admin/options-medialibrary-uploader.php:288
+msgid "Previously Uploaded"
+msgstr ""
+
+#: filtered/admin/options.php:33
+msgid "Support"
+msgstr ""
+
+#: filtered/admin/options.php:76
+msgid "Enter a URL or upload a custom logo."
+msgstr ""
+
+#: filtered/admin/options.php:89
+msgid "Footer Text"
+msgstr ""
+
+#: filtered/admin/options.php:91
+msgid "Left side:"
+msgstr ""
+
+#: filtered/admin/options.php:95
+msgid "Right side:"
+msgstr ""
+
+#: filtered/admin/options.php:105
+msgid "Color & Background"
+msgstr ""
+
+#: filtered/admin/options.php:108
+msgid "Background:"
+msgstr ""
+
+#: filtered/admin/options.php:110
+msgid "none"
+msgstr ""
+
+#: filtered/admin/options.php:111
+msgid "Grid"
+msgstr ""
+
+#: filtered/admin/options.php:112
+msgid "Scratches"
+msgstr ""
+
+#: filtered/admin/options.php:113
+msgid "Noise"
+msgstr ""
+
+#: filtered/admin/options.php:118
+msgid "Footer Color:"
+msgstr ""
+
+#: filtered/admin/options.php:120
+msgid "Dark"
+msgstr ""
+
+#: filtered/admin/options.php:121
+msgid "Light"
+msgstr ""
+
+#: filtered/admin/options.php:126
+msgid "Button:"
+msgstr ""
+
+#: filtered/admin/options.php:130
+msgid "Links:"
+msgstr ""
+
+#: filtered/admin/options.php:131
+msgid "hover:"
+msgstr ""
+
+#: filtered/admin/options.php:133
+msgid "Use these fields to set custom colors. If the fields are left blank, the default colors will be used."
+msgstr ""
+
+#: filtered/admin/options.php:154
+msgid "Slideshow"
+msgstr ""
+
+#: filtered/admin/options.php:156
+msgid "Enable Slideshow:"
+msgstr ""
+
+#: filtered/admin/options.php:169
+msgid "Transition Effect:"
+msgstr ""
+
+#: filtered/admin/options.php:171
+msgid "Slice Down"
+msgstr ""
+
+#: filtered/admin/options.php:172
+msgid "Slice Down Left"
+msgstr ""
+
+#: filtered/admin/options.php:173
+msgid "Slice Up"
+msgstr ""
+
+#: filtered/admin/options.php:174
+msgid "Slice Up Left"
+msgstr ""
+
+#: filtered/admin/options.php:175
+msgid "Slice Up Down"
+msgstr ""
+
+#: filtered/admin/options.php:176
+msgid "Slice Up Down Left"
+msgstr ""
+
+#: filtered/admin/options.php:177
+msgid "Fold"
+msgstr ""
+
+#: filtered/admin/options.php:178
+msgid "Fade"
+msgstr ""
+
+#: filtered/admin/options.php:179
+msgid "Slide In Right"
+msgstr ""
+
+#: filtered/admin/options.php:180
+msgid "Slide In Left"
+msgstr ""
+
+#: filtered/admin/options.php:186
+msgid "Speed:"
+msgstr ""
+
+#: filtered/admin/options.php:197
+msgid "Adjust the speed of the home page slideshow. Move the slider to the far left to disable auto-playing."
+msgstr ""
+
+#: filtered/admin/options.php:202
+msgid "Message"
+msgstr ""
+
+#: filtered/admin/options.php:204
+msgid "Enter a message. This will appear on the home page under the slideshow."
+msgstr ""
+
+#: filtered/admin/options.php:209
+msgid "Home Page Content"
+msgstr ""
+
+#: filtered/admin/options.php:212
+msgid "Show Posts instead of Projects:"
+msgstr ""
+
+#: filtered/admin/options.php:218
+msgid "Show Only Featured Projects:"
+msgstr ""
+
+#: filtered/admin/options.php:225
+msgid "Save Changes"
+msgstr ""
+
+#: filtered/admin/widgets.php:12
+msgid "This is the default widget area for the sidebar. This will be displayed if the other sidebars have not been populated with widgets."
+msgstr ""
+
+#: filtered/admin/widgets.php:22
+msgid "Widget area for the home page sidebar."
+msgstr ""
+
+#: filtered/admin/widgets.php:32
+msgid "Widget area for the sidebar on pages."
+msgstr ""
+
+#: filtered/admin/widgets.php:42
+msgid "Widget area for the sidebar on posts."
+msgstr ""
+
+#: filtered/admin/widgets.php:52
+msgid "This is the default widget area for the footer. This will be displayed if the other footers have not been populated with widgets."
+msgstr ""
+
+#: filtered/admin/widgets.php:62
+msgid "Widget area for the footer on the home page."
+msgstr ""
+
+#: filtered/admin/widgets.php:72
+msgid "Widget area for the footer on pages."
+msgstr ""
+
+#: filtered/admin/widgets.php:82
+msgid "Widget area for the footer on posts."
+msgstr ""
+
+#: filtered/admin/widgets.php:103
+msgid "Display recent posts from any category."
+msgstr ""
+
+#: filtered/admin/widgets.php:104
+msgid "Recent Posts"
+msgstr ""
+
+#: filtered/admin/widgets.php:201
+#: filtered/admin/widgets.php:308
+#: filtered/admin/widgets.php:415
+msgid "Title:"
+msgstr ""
+
+#: filtered/admin/widgets.php:203
+msgid "Category"
+msgstr ""
+
+#: filtered/admin/widgets.php:205
+#: filtered/includes/projects-home.php:21
+#: filtered/includes/projects-home.php:41
+msgid "All"
+msgstr ""
+
+#: filtered/admin/widgets.php:212
+msgid "Show latest post"
+msgstr ""
+
+#: filtered/admin/widgets.php:214
+msgid "Number of posts:"
+msgstr ""
+
+#: filtered/admin/widgets.php:216
+msgid "10 max"
+msgstr ""
+
+#: filtered/admin/widgets.php:236
+msgid "Twitter"
+msgstr ""
+
+#: filtered/admin/widgets.php:313
+msgid "Username:"
+msgstr ""
+
+#: filtered/admin/widgets.php:318
+msgid "Number of tweets:"
+msgstr ""
+
+#: filtered/admin/widgets.php:322
+msgid "Follow Link label:"
+msgstr ""
+
+#: filtered/admin/widgets.php:346
+msgid "Flickr"
+msgstr ""
+
+#: filtered/admin/widgets.php:421
+msgid "Flickr ID:"
+msgstr ""
+
+#: filtered/admin/widgets.php:427
+msgid "Number of photos:"
+msgstr ""
+
+#: filtered/admin/widgets.php:429
+msgid "(15 max)"
+msgstr ""
