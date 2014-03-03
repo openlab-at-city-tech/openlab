@@ -10,6 +10,7 @@ function openlab_load_theme_fixes() {
 	switch ( $t ) {
 		case 'carrington-blog' :
 		case 'coraline' :
+		case 'herothemetrust' :
 		case 'motion' :
 		case 'pilcrow' :
 		case 'themorningafter' :
