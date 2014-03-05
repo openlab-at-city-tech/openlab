@@ -170,6 +170,24 @@ function grader_filter_comments($comments)
 	return $comments;
 }
 
+/**
+ * Prevent grade from getting posted to the activity stream.
+ *
+ * This is a hack: we short-circuit BP by telling it that the current post type
+ * should not have its comments recorded
+ */
+function grader_prevent_bp_activity( $comment_id ) {
+        $comment = get_comment( $comment_id );
+
+        $grade = grader_parse_grade( $comment->comment_content );
+        if ( $grade ) {
+                remove_action( 'comment_post', 'bp_blogs_record_comment', 10 );
+                remove_action( 'edit_comment', 'bp_blogs_record_comment', 10, 2 );
+        }
+}
+add_action( 'comment_post', 'grader_prevent_bp_activity', 0 );
+add_action( 'edit_comment', 'grader_prevent_bp_activity', 0 );
+
 function grader_filter_bp_activity( $has_activities ) {
 	global $activities_template;
 
