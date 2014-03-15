@@ -6088,6 +6088,7 @@ p.wp-caption-text {
 		width: 30%;
 	}
 
+	#content ul#group-list.item-list > li,
 	#people-listing .person-block {
 		width: 45%;
 	}
@@ -6132,6 +6133,7 @@ p.wp-caption-text {
 		float: none;
 	}
 
+	#content ul#group-list.item-list > li,
 	#people-listing .person-block {
 		width: auto;
 		float: none;
