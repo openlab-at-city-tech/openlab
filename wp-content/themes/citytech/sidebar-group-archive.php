@@ -151,22 +151,28 @@ switch ($_GET['group_sequence']) {
 
         </div>
 
-	<div class="<?php echo $school_color; ?>-square"></div>
-	<select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
-                <option value="" <?php selected( '', $option_value_school ) ?>>Select School</option>
-                <option value='school_all' <?php selected( 'school_all', $option_value_school ) ?>>All</option>
-                <option value='tech' <?php selected( 'tech', $option_value_school ) ?>>Technology &amp; Design</option>
-                <option value='studies' <?php selected( 'studies', $option_value_school ) ?>>Professional Studies</option>
-                <option value='arts' <?php selected( 'arts', $option_value_school ) ?>>Arts &amp; Sciences</option>
-	</select>
-	<div class="<?php echo $school_color; ?>-square"></div>
-	<div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
-	<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
-		<?php echo openlab_return_course_list( $option_value_school, $option_value_dept ); ?>
-	</select>
+	<div class="directory-filter-option">
+		<div class="<?php echo $school_color; ?>-square"></div>
+		<select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
+			<option value="" <?php selected( '', $option_value_school ) ?>>Select School</option>
+			<option value='school_all' <?php selected( 'school_all', $option_value_school ) ?>>All</option>
+			<option value='tech' <?php selected( 'tech', $option_value_school ) ?>>Technology &amp; Design</option>
+			<option value='studies' <?php selected( 'studies', $option_value_school ) ?>>Professional Studies</option>
+			<option value='arts' <?php selected( 'arts', $option_value_school ) ?>>Arts &amp; Sciences</option>
+		</select>
+	</div>
+
+	<div class="directory-filter-option">
+		<div class="<?php echo $school_color; ?>-square"></div>
+		<div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
+		<select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
+			<?php echo openlab_return_course_list( $option_value_school, $option_value_dept ); ?>
+		</select>
+	</div>
 
         <?php // @todo figure out a way to make this dynamic ?>
         <?php if ( $group_type == 'course' ): ?>
+	<div class="directory-filter-option">
             <div class="<?php echo $school_color; ?>-square"></div>
 
             <select name="semester" class="last-select <?php echo $semester_color; ?>-text">
@@ -176,9 +182,11 @@ switch ($_GET['group_sequence']) {
 			<option value="<?php echo esc_attr( $sem['option_value'] ) ?>" <?php selected( $option_value_semester, $sem['option_value'] ) ?>><?php echo esc_attr( $sem['option_label'] ) ?></option>
 		<?php endforeach; ?>
             </select>
+	</div>
 	<?php endif; ?>
 
         <?php if ( $group_type == 'portfolio' || $post_obj->post_title == 'People' ): ?>
+	<div class="directory-filter-option">
             <div class="<?php echo $user_color; ?>-square"></div>
             <select name="usertype" class="last-select <?php echo $user_color; ?>-text">
 		<option value='' <?php selected( '', $option_value_user_type ) ?>>Select User Type</option>
@@ -188,16 +196,22 @@ switch ($_GET['group_sequence']) {
                 <option value='alumni' <?php selected( 'alumni', $option_value_user_type ) ?>>Alumni</option>
                 <option value='user_type_all' <?php selected( 'user_type_all', $option_value_user_type ) ?>>All</option>
             </select>
+	</div>
 	<?php endif; ?>
 
-	<div class="<?php echo $sort_color; ?>-square"></div>
-	<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
-		<option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
-		<option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
-		<option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
-	</select>
-	<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
-	<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+	<div class="directory-filter-option">
+		<div class="<?php echo $sort_color; ?>-square"></div>
+		<select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
+			<option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
+			<option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
+			<option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
+		</select>
+	</div>
+
+	<div class="directory-filter-buttons">
+		<input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
+		<input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+	</div>
 
     </form>
     <div class="clearfloat"></div>
