@@ -6163,6 +6163,11 @@ p.wp-caption-text {
 		width: 90%;
 	}
 
+	/* Single member page */
+	#member-header-content {
+		width: auto;
+	}
+
 	/* Footer */
 	#footer-widgets .wrap > div {
 		float: none;
