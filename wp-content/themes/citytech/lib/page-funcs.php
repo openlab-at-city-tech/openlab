@@ -7,6 +7,7 @@
 /**
  * 	Home page layout
  *
+ * No longer used. See home.php
  */
 function cuny_build_homepage() {
     echo '<div id="home-left">';
