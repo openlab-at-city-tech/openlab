@@ -13,6 +13,7 @@
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
 <meta name="robots" content="noodp,noydir" />
+<meta name="viewport" content="initial-scale=1.0;"/>
 <link rel="Shortcut Icon" href="<?php echo get_stylesheet_directory_uri() ?>/images/favicon.ico" type="image/x-icon" />
 
 <title><?php bloginfo( 'name' ); ?></title>
@@ -32,10 +33,10 @@
     	<div id="header">
 				<?php do_action( 'bp_header' ) ?>
 		</div><!-- #header -->
-        
+
 		<?php do_action( 'bp_after_header' ) ?>
 		<?php do_action( 'bp_before_container' ) ?>
-        
+
         <div id="inner">
         	<div class="wrap">
             	<div id="content-sidebar-wrap">

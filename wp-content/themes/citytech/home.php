@@ -18,7 +18,7 @@ get_header(); ?>
 			<?php cuny_home_square( 'club' ); ?>
 			<?php cuny_home_square( 'portfolio' ); ?>
 			<div class="clearfloat"></div>
-			<script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>";
+			<script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>
 		</div>
 	</div>
 

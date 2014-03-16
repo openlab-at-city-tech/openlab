@@ -6034,7 +6034,7 @@ p.wp-caption-text {
 		width: 100%;
 	}
 
-  .full-width-content #content {
+        .full-width-content #content {
 		padding: 0 20px;
 	}
 
@@ -6068,7 +6068,7 @@ p.wp-caption-text {
 	.home-page #open-lab-login,
 	.home-page #cac-featured,
 	.home-page #whos-online,
-  .home-page #new-members {
+        .home-page #new-members {
 		float: left;
 		margin-right: 15px;
 		width: 300px;
@@ -6079,8 +6079,8 @@ p.wp-caption-text {
 		width: 95%;
 	}
 
-	#content-sidebar-wrap #content {
-		width: 60%;
+	body.directory #content-sidebar-wrap #content {
+		width: 55%;
 		margin-right: 5%;
 	}
 
@@ -6090,14 +6090,14 @@ p.wp-caption-text {
 
 	#content ul#group-list.item-list > li,
 	#people-listing .person-block {
-		width: 45%;
+		width: 43%;
 	}
 
 	/* Single group pages */
 	.recent-discussions,
 	.recent-discussions .recent-posts,
 	#recent-docs .recent-posts,
-  #recent-course .recent-posts {
+        #recent-course .recent-posts {
 		width: 90%;
 	}
 
@@ -6123,11 +6123,22 @@ p.wp-caption-text {
 	}
 }
 
-@media screen and (max-width:400px) {
-	/* Home page */
+@media screen and (max-width:740px) {
 	.home-page #pgw-gallery {
 		display: none;
 	}
+}
+
+@media screen and (max-width:480px) {
+	/* Home page */
+        .home-page .activity-list {
+                width: 90%;
+                border-right: none;
+        }
+
+        .home-page .title-wrapper .title {
+                width: auto;
+        }
 
 	/* Directories */
 	#content-sidebar-wrap #content {

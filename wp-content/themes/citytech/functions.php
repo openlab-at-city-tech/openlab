@@ -866,13 +866,13 @@ function openlab_group_status_message( $group = null ) {
  * an appropriate body class.
  */
 function openlab_group_admin_body_classes( $classes ) {
-	if ( ! bp_is_group() ) {
-		return $classes;
-	}
-
 	if ( in_array( bp_current_action(), array( 'invite-anyone', 'notifications' ) ) ) {
 		$classes[] = 'group-admin';
 	}
+
+        if ( is_page( 'members' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'courses' ) || is_page( 'portfolios' ) ) {
+                $classes[] = 'directory';
+        }
 
 	return $classes;
 }
