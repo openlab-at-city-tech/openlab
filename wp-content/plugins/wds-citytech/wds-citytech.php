@@ -2086,13 +2086,10 @@ function openlab_ds_login_header() {
 	}
 
 /**
- * Course member portfolio list widget
+ * Group member portfolio list widget
  *
- * This function is here ( rather than includes/portfolios.php ) because it needs
+ * This function is here (rather than includes/portfolios.php) because it needs
  * to run at 'widgets_init'.
- *
- * @todo Make sure it doesn't show up for non-courses. This can only be done
- * after BP is set up.
  */
 class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 	public function __construct() {

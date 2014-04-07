@@ -361,9 +361,42 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	// Empty values fall back on 'yes', so do a strict 'no' check
-	return 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+	$group_type = openlab_get_group_type( $group_id );
+
+	// For courses, fall back on 'yes'
+	if ( 'course' === $group_type ) {
+		$enabled = 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+
+	// Otherwise default to 'no'
+	} else {
+		$enabled = 'yes' === groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
+	}
+
+	return $enabled;
 }
+
+/**
+ * Adjust widget description to match proper group type.
+ *
+ * The widget is registered too early to do this in the class constructor.
+ */
+function openlab_swap_portfolio_widget_description() {
+	global $wp_registered_widgets;
+
+	foreach ( $wp_registered_widgets as &$w ) {
+		if ( 'Portfolio List' !== $w['name'] ) {
+			continue;
+		}
+
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$group_type = openlab_get_group_type_label( array(
+			'group_id' => $group_id,
+		) );
+
+		$w['description'] = sprintf( 'Display a list of the Portfolios belonging to the members of this %s.', $group_type );
+	}
+}
+add_action( 'bp_init', 'openlab_swap_portfolio_widget_description', 20 );
 
 /**
  * Get the heading/title for the group portfolio listing.
@@ -386,10 +419,6 @@ function openlab_portfolio_list_group_heading( $group_id = 0 ) {
  * Add the portfolio display to group sidebars.
  */
 function openlab_portfolio_list_group_display() {
-	if ( 'course' !== openlab_get_group_type( bp_get_current_group_id() ) ) {
-		return;
-	}
-
 	if ( ! openlab_portfolio_list_enabled_for_group() ) {
 		return;
 	}
@@ -425,26 +454,6 @@ function openlab_portfolio_list_group_display() {
 	<?php
 }
 add_action( 'bp_group_options_nav', 'openlab_portfolio_list_group_display', 20 );
-
-/**
- * Don't enable the eportfolio widget for non-courses.
- */
-function openlab_disable_eportfolio_widget_for_non_courses() {
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	$group_type = openlab_get_group_type( $group_id );
-	if ( 'course' !== $group_type ) {
-		unregister_widget( 'OpenLab_Course_Portfolios_Widget' );
-
-		// unregister_widget() appears to be broken, so...
-		global $wp_registered_widgets;
-		foreach ( $wp_registered_widgets as $n => $rw ) {
-			if ( isset( $rw['callback'][0] ) && is_a( $rw['callback'][0], 'OpenLab_Course_Portfolios_Widget' ) ) {
-				unset( $wp_registered_widgets[ $n ] );
-			}
-		}
-	}
-}
-add_action( 'admin_init', 'openlab_disable_eportfolio_widget_for_non_courses' );
 
 /**
  * Catch form requests (from the widget dropdown) to redirect to a student portfolio
