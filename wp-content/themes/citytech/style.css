@@ -6093,14 +6093,6 @@ p.wp-caption-text {
 		width: 45%;
 	}
 
-	/* Single group pages */
-	.recent-discussions,
-	.recent-discussions .recent-posts,
-	#recent-docs .recent-posts,
-  #recent-course .recent-posts {
-		width: 90%;
-	}
-
 	/* Footer */
 	#footer-widgets .wrap {
 		width: 90%;
@@ -6145,22 +6137,6 @@ p.wp-caption-text {
 	#people-listing .person-block {
 		width: auto;
 		float: none;
-	}
-
-	/* Single group page */
-	#single-course-body .one-half {
-		width: auto;
-		float: none;
-		margin-left: 0;
-		padding-left: 0;
-	}
-
-	#single-course-body h4 {
-		margin-top: 2em;
-	}
-
-	#members-list {
-		width: 90%;
 	}
 
 	/* Footer */
