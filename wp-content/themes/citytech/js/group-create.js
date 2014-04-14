@@ -34,7 +34,7 @@ jQuery(document).ready(function($){
 				});
 				$(thisid).find('select').each(function(index,element){
 					$(element).removeProp('disabled').removeClass('disabled');
-				});			
+				});
 			} else {
 				$(thisid).addClass('disabled-opt');
 				$(thisid).find('input').each(function(index,element){
@@ -139,17 +139,17 @@ jQuery(document).ready(function($){
 
 	function toggle_clone_options( on_or_off ) {
 		var $group_to_clone, group_id_to_clone;
-		
+
 		$group_to_clone = $('#group-to-clone');
 
 		if ( 'on' == on_or_off ) {
 			// Check "Clone a course" near the top
-			$('#create-or-clone-clone').attr('checked', true);	
+			$('#create-or-clone-clone').attr('checked', true);
 
 			// Allow a course to be selected from the source dropdown,
 			// and un-grey the associated labels/text
-			$group_to_clone.removeClass('disabled-opt');	
-			$group_to_clone.attr('disabled', false);	
+			$group_to_clone.removeClass('disabled-opt');
+			$group_to_clone.attr('disabled', false);
 			$('#ol-clone-description').removeClass('disabled-opt');
 
 			// Set up the site clone information
@@ -164,11 +164,11 @@ jQuery(document).ready(function($){
 			}
 		} else {
 			// Check "Create a course" near the top
-			$('#create-or-clone-create').attr('checked', true);	
+			$('#create-or-clone-create').attr('checked', true);
 
 			// Grey out options related to selecting a course to clone
-			$group_to_clone.addClass('disabled-opt');	
-			$group_to_clone.attr('disabled', true);	
+			$group_to_clone.addClass('disabled-opt');
+			$group_to_clone.attr('disabled', true);
 			$('#ol-clone-description').addClass('disabled-opt');
 
 			group_id_to_clone = 0;
@@ -190,7 +190,7 @@ jQuery(document).ready(function($){
 
 				// Description
 				$('#group-desc').val(r.description);
-				
+
 				// Schools and Departments
 				$('input[name="wds_group_school[]"]').each(function(){
 					$school_input = $(this);
@@ -219,7 +219,7 @@ jQuery(document).ready(function($){
 
 				// Additional Description
 				$('textarea[name="wds_course_html"]').val(r.additional_description);
- 
+
 				// Associated site
 				if ( r.site_id ) {
 					// Un-grey the website clone options
@@ -275,7 +275,7 @@ jQuery(document).ready(function($){
 			// Clone ID passed to URL
 			toggle_clone_options( 'on' );
 		} else {
-			// No clone ID passed to URL		
+			// No clone ID passed to URL
 			toggle_clone_options( 'create' == create_or_clone ? 'off' : 'on' );
 		}
 
@@ -289,7 +289,7 @@ jQuery(document).ready(function($){
 	$('#group-to-clone').on('change', function() {
 		fetch_clone_source_details( this.value );
 	});
-	
+
 	/* AJAX validation for external RSS feeds */
 	$('#find-feeds').on( 'click', function(e) {
 		e.preventDefault();
