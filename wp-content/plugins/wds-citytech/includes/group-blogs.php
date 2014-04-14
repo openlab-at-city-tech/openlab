@@ -696,7 +696,7 @@ function wds_bp_group_meta() {
 			<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 
 			<table class="form-table groupblog-setup"<?php if ( !empty( $group_site_url ) ) : ?> style="display: none;"<?php endif ?>>
-				<?php if ( $group_type != "course" && $group_type != 'portfolio' ) : ?>
+				<?php if ( $group_type != 'portfolio' ) : ?>
 					<?php $show_website = "none" ?>
 					<tr class="form-field form-required">
 							<th scope="row" class="site-details-title">Site Details</th>
@@ -747,23 +747,23 @@ function wds_bp_group_meta() {
 				<?php endswitch ?>
 					</td></tr>
 
-		<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
+			<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
+				<tr id="wds-website-clone" class="form-field form-required" style="display:<?php echo $show_website; ?>">
+					<th valign="top" scope='row' class="disabled-opt" >
+						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
+						Name your cloned site:
+					</th>
 
-					<tr id="wds-website-clone" class="form-field form-required">
-						<th valign="top" scope='row' class="disabled-opt" >
-							<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-                             Name your cloned site:
-						</th>
-						<td id="noo_clone_options">
+					<td id="noo_clone_options">
 
-			<?php global $current_site ?>
-			<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
-							<input name="blog-id-to-clone" value="" type="hidden" />
-							<p id="cloned-site-url"></p>
-						</td>
+						<?php global $current_site ?>
+						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
+						<input name="blog-id-to-clone" value="" type="hidden" />
+						<p id="cloned-site-url"></p>
+					</td>
 
-					</tr>
-		<?php endif ?>
+				</tr>
+			<?php endif ?>
 
 				<tr id="course-table-rule"><td><hr></td><td><hr></td></tr>
 
@@ -858,12 +858,12 @@ function openlab_validate_groupblog_url() {
      * We check for a groupblog in the following cases:
      * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
      * b1 ) the 'Set up a site?' checkbox has been checked, OR
-     * b2 ) the group type is Course or Portfolio, each of which requires blogs
+     * b2 ) the group type is Portfolio, which requires a blog
      */
 	if (
 			isset( $_POST['new_or_old'] ) &&
 			( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
-			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'course', 'portfolio' ) ) )
+			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ) ) )
 	) {
 		// Which field we check depends on whether this is a clone
 		$path = '';

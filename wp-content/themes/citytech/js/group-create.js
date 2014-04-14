@@ -82,6 +82,7 @@ jQuery(document).ready(function($){
 		showHide('wds-website-existing');
 		showHide('wds-website-external');
 		showHide('wds-website-tooltips');
+		showHide('wds-website-clone');
 	}
 
 	function do_external_site_query(e) {
@@ -155,6 +156,11 @@ jQuery(document).ready(function($){
 			group_id_to_clone = $group_to_clone.val();
 			if ( ! group_id_to_clone ) {
 				group_id_to_clone = $.urlParam( 'clone' );
+			}
+
+			// Ensure that the "Set up a site" section is visible
+			if ( ! $(setuptoggle).is( ':checked' ) ) {
+				$(setuptoggle).trigger('click');
 			}
 		} else {
 			// Check "Create a course" near the top
@@ -297,6 +303,10 @@ jQuery(document).ready(function($){
 		showHideAll();
 	};
 
+	if ( 'course' === group_type && ! $(setuptoggle).is( ':checked' ) ) {
+		$(setuptoggle).trigger('click');
+	}
+
 	// Set up Invite Anyone autocomplete
 	if ( typeof ia_on_autocomplete_select !== 'undefined' ) {
 		$('#send-to-input').autocomplete({
@@ -321,6 +331,11 @@ jQuery(document).ready(function($){
                 if ( 'new' != $('input[name=new_or_old]:checked').val() ) {
                         return true;
                 }
+
+		// If "Set up a site" is not checked, there's no validation to do
+		if ( ! $(setuptoggle).is( ':checked' ) ) {
+			return true;
+		}
 
 		e.preventDefault();
 		var domain = $('input[name="blog[domain]"]');
