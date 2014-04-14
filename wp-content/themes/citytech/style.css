@@ -6038,7 +6038,6 @@ p.wp-caption-text {
 		padding: 0 20px;
 	}
 
-	/* Home page */
 	.home-page #content-sidebar-wrap {
 		width: 100%;
 	}
@@ -6074,25 +6073,6 @@ p.wp-caption-text {
 		width: 300px;
 	}
 
-	/* Directories */
-	#content-sidebar-wrap	{
-		width: 95%;
-	}
-
-	#content-sidebar-wrap #content {
-		width: 60%;
-		margin-right: 5%;
-	}
-
-	#content-sidebar-wrap #sidebar {
-		width: 30%;
-	}
-
-	#people-listing .person-block {
-		width: 45%;
-	}
-
-	/* Footer */
 	#footer-widgets .wrap {
 		width: 90%;
 	}
@@ -6115,29 +6095,10 @@ p.wp-caption-text {
 }
 
 @media screen and (max-width:400px) {
-	/* Home page */
 	.home-page #pgw-gallery {
 		display: none;
 	}
 
-	/* Directories */
-	#content-sidebar-wrap #content {
-		width: auto;
-		margin-right: auto;
-		float: none;
-	}
-
-	#content-sidebar-wrap #sidebar {
-		width: auto;
-		float: none;
-	}
-
-	#people-listing .person-block {
-		width: auto;
-		float: none;
-	}
-
-	/* Footer */
 	#footer-widgets .wrap > div {
 		float: none;
 		width: 90%;
