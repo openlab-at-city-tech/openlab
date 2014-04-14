@@ -69,8 +69,6 @@ followed by styles specific to each numbered section of the site.
 
 * 8.0 HELP
 ** 8.1 Print Style
-
-* 9.0 MEDIA QUERIES
 */
 
 /* GLOBAL
@@ -6020,106 +6018,4 @@ p.wp-caption-text {
         width: 100%;
         padding: 0;
     }
-}
-
-/* 9.0 MEDIA QUERIES
------------------------------------------------------------- */
-
-@media screen and (max-width:980px) {
-	#header {
-		width: 100%;
-	}
-
-	.wrap {
-		width: 100%;
-	}
-
-  .full-width-content #content {
-		padding: 0 20px;
-	}
-
-	.home-page #content-sidebar-wrap {
-		width: 100%;
-	}
-
-	.full-width-content #content {
-		width: 100%;
-	}
-
-	.home-page #home-right {
-		width: auto;
-		float: none;
-		margin-bottom: 2em;
-	}
-
-	.home-page #home-left {
-		float: none;
-		width: auto;
-	}
-
-	#cuny_openlab_jump_start {
-		width: 100%;
-		clear: both;
-		overflow: hidden;
-	}
-
-	.home-page #cuny_openlab_jump_start .red-box,
-	.home-page #open-lab-login,
-	.home-page #cac-featured,
-	.home-page #whos-online,
-  .home-page #new-members {
-		float: left;
-		margin-right: 15px;
-		width: 300px;
-	}
-
-	#footer-widgets .wrap {
-		width: 90%;
-	}
-
-	.footer-widgets-2 {
-		border-right: none;
-		clear: right;
-	}
-
-	.footer-widgets-3 {
-		margin-top: 3em;
-		width: 300px;
-	}
-
-	.footer-widgets-4 {
-		margin-top: 3em;
-		border-right: none;
-		clear: right;
-	}
-}
-
-@media screen and (max-width:400px) {
-	.home-page #pgw-gallery {
-		display: none;
-	}
-
-	#footer-widgets .wrap > div {
-		float: none;
-		width: 90%;
-		height: auto;
-		border-right: none;
-		border-top: 1px solid #929292;
-		margin-top: 1em;
-		padding-top: 1em;
-	}
-
-	#footer-widgets .wrap > div.footer-widgets-1 {
-		border-top: none;
-	}
-
-	#footer {
-		padding-right: 20px;
-		padding-left: 20px;
-	}
-
-	#footer .alignright {
-		padding-top: 1em;
-		float: left;
-	}
 }
