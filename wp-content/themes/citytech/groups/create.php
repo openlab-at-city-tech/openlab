@@ -121,8 +121,8 @@ function cuny_create_group() {
 
         <?php endif ?>
 
-                    <?php /* Name/Description */ ?>
-                    <?php if ('course' == $group_type) : ?>
+		<?php /* Name/Description */ ?>
+		<?php if ('course' == $group_type) : ?>
                         <label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
                         <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
                         <ul class="ol-tooltip" id="clone-course-tooltip-3">
@@ -133,7 +133,7 @@ function cuny_create_group() {
                         <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" placeholder="Course Name" />
                         <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
 
-        <?php elseif ('portfolio' == $group_type) : ?>
+		<?php elseif ('portfolio' == $group_type) : ?>
                         <p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
 
                         <ul class="ol-tooltip">
@@ -145,13 +145,13 @@ function cuny_create_group() {
                         <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
                         <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
 
-        <?php else : ?>
+		<?php else : ?>
                         <label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label>
                         <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                         <input size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
                         <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
 
-        <?php endif ?>
+		<?php endif ?>
 
                     <textarea name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
 
