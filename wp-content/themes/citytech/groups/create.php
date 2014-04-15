@@ -134,7 +134,7 @@ function cuny_create_group() {
                         <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
 
 		<?php elseif ('portfolio' == $group_type) : ?>
-                        <p class="ol-tooltip">We recommend that the name of your <?php echo $group_label ?> follow this format:</p>
+                        <p class="ol-tooltip">The suggested <?php echo $group_label ?> Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.</p>
 
                         <ul class="ol-tooltip">
                             <li>FirstName LastName's <?php echo $group_label ?> </li>
