@@ -58,7 +58,7 @@ function openlab_clone_create_form_catcher() {
 					groups_update_groupmeta( $new_group_id, 'clone_source_blog_id', $clone_source_blog_id );
 
 					// @todo validation
-					$clone_destination_path = stripslashes( $_POST['clone-destination-path'] );
+					$clone_destination_path = friendly_url( stripslashes( $_POST['clone-destination-path'] ) );
 					groups_update_groupmeta( $new_group_id, 'clone_destination_path', $clone_destination_path );
 
 					openlab_clone_course_site( $new_group_id, $clone_source_group_id, $clone_source_blog_id, $clone_destination_path );
