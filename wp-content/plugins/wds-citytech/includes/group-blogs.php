@@ -854,16 +854,16 @@ function openlab_validate_groupblog_url() {
 	global $current_blog;
 
 	/**
-     * This is terrifying.
-     * We check for a groupblog in the following cases:
-     * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
-     * b1 ) the 'Set up a site?' checkbox has been checked, OR
-     * b2 ) the group type is Portfolio, which requires a blog
-     */
+	 * This is terrifying.
+	 * We check for a groupblog in the following cases:
+	 * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
+	 * b1 ) the 'Set up a site?' checkbox has been checked, OR
+	 * b2 ) the group type is Portfolio, which requires a blog
+	 */
 	if (
-			isset( $_POST['new_or_old'] ) &&
-			( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
-			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ) ) )
+		isset( $_POST['new_or_old'] ) &&
+		( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
+		( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ) ) )
 	) {
 		// Which field we check depends on whether this is a clone
 		$path = '';
