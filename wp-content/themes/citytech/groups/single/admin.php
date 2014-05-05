@@ -83,23 +83,24 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 		<?php endif; ?>
 
+		<hr />
 	<?php endif; ?>
 
-	<hr />
+	<?php if ( ! openlab_is_portfolio() ) : ?>
+		<div class="checkbox">
+			<h4>Portfolio List Settings</h4>
+			<p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
 
-	<div class="checkbox">
-		<h4>Portfolio List Settings</h4>
-		<p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
+			<?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
+			<?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
+			<label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked( $portfolio_list_enabled ) ?> /> Enable portfolio list</label>
 
-		<?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
-		<?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
-		<label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked( $portfolio_list_enabled ) ?> /> Enable portfolio list</label>
+			<h5><label for="group-portfolio-list-heading">List Heading</label></h5>
+			<input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr( $portfolio_list_heading ) ?>" />
+		</div>
 
-		<h5><label for="group-portfolio-list-heading">List Heading</label></h5>
-		<input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr( $portfolio_list_heading ) ?>" />
-	</div>
-
-	<hr />
+		<hr />
+	<?php endif; ?>
 
 	<?php openlab_group_privacy_settings($group_type); ?>
 

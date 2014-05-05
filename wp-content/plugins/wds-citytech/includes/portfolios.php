@@ -363,6 +363,11 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 
 	$group_type = openlab_get_group_type( $group_id );
 
+	// Portfolio groups never have the list enabled
+	if ( 'portfolios' === $group_type ) {
+		return false;
+	}
+
 	// For courses, fall back on 'yes'
 	if ( 'course' === $group_type ) {
 		$enabled = 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
