@@ -53,7 +53,7 @@ function openlab_clone_create_form_catcher() {
 				groups_update_groupmeta( $new_group_id, 'clone_source_group_id', $clone_source_group_id );
 				openlab_clone_course_group( $new_group_id, $clone_source_group_id );
 
-				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) ) {
+				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) && isset( $_POST['wds_website_check'] ) ) {
 					$clone_source_blog_id = groups_get_groupmeta( $clone_source_group_id, 'wds_bp_group_site_id' );
 					groups_update_groupmeta( $new_group_id, 'clone_source_blog_id', $clone_source_blog_id );
 

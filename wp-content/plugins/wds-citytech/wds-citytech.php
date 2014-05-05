@@ -1089,11 +1089,9 @@ function wds_bp_group_meta_save( $group ) {
 	// Clear the active semester cache
 	delete_transient( 'openlab_active_semesters' );
 
-	// Site association. Non-courses have the option of not having associated sites ( thus the
-	// wds_website_check value ).
+	// Site association. Non-portfolios have the option of not having associated sites (thus the
+	// wds_website_check value).
 	if ( isset( $_POST['wds_website_check'] ) ||
-	     openlab_is_course( $group->id ) ||
-	     !empty( $is_course ) ||
 	     openlab_is_portfolio( $group->id )
 	) {
 
