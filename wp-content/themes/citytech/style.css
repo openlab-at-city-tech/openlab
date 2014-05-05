@@ -3251,9 +3251,8 @@ h2.member-name-title {
     margin:0;
     float:left;
     width:110px;
-    height:30px;
     overflow:hidden;
-    height:100px;
+    min-height:100px;
 }
 
 #member-item-body .activity-list .activity-content .activity-header {
