@@ -2246,3 +2246,38 @@ function openlab_get_exclude_groups_for_account_type( $type ) {
 
 	return implode( ',', $exclude_groups );
 }
+
+/**
+ * Flush rewrite rules when a blog is created.
+ *
+ * There's a bug in WP that causes rewrite rules to be flushed before
+ * taxonomies have been registered. As a result, tag and category archive links
+ * do not work. Here we work around the issue by hooking into blog creation,
+ * registering the taxonomies, and forcing another rewrite flush.
+ *
+ * See https://core.trac.wordpress.org/ticket/20171, http://openlab.citytech.cuny.edu/redmine/issues/1054
+ */
+function openlab_flush_rewrite_rules( $blog_id ) {
+	switch_to_blog( $blog_id );
+	create_initial_taxonomies();
+	flush_rewrite_rules();
+	update_option( 'openlab_rewrite_rules_flushed', 1 );
+	restore_current_blog();
+}
+add_action( 'wpmu_new_blog', 'openlab_flush_rewrite_rules', 9999 );
+
+/**
+ * Lazyloading rewrite rules repairer.
+ *
+ * Repairs the damage done by WP's buggy rewrite rules generator for new blogs.
+ *
+ * See openlab_flush_rewrite_rules().
+ */
+function openlab_lazy_flush_rewrite_rules() {
+	// We load late, so taxonomies should be created by now
+	if ( ! get_option( 'openlab_rewrite_rules_flushed' ) ) {
+		flush_rewrite_rules();
+		update_option( 'openlab_rewrite_rules_flushed', 1 );
+	}
+}
+add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
