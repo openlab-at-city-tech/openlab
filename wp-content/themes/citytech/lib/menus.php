@@ -184,7 +184,7 @@ function openlab_my_groups_submenu( $group ) {
 	$faculty = xprofile_get_field_data( 'Account Type', get_current_user_id() );
 
 	//get group step
-	$current_step = $bp->groups->current_create_step;
+	$current_step = isset( $bp->groups->current_create_step ) ? $bp->groups->current_create_step : '';
 	$step_name = '';
 
 	switch( $current_step ) {

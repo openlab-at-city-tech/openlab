@@ -754,7 +754,7 @@ function openlab_group_visibility_flag( $type = 'group' ) {
 		);
 	}
 
-	return $group_buttons[ $type ];
+	return isset( $group_buttons[ $type ] ) ? $group_buttons[ $type ] : '';
 }
 
 /**
