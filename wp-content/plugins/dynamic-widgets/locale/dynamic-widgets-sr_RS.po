@@ -1,0 +1,835 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Dynamic Widgets\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-13 18:05+0100\n"
+"PO-Revision-Date: 2013-10-30 16:43+0100\n"
+"Last-Translator: Jacco Drabbe <jacco@qurl.nl>\n"
+"Language-Team: Alexis NOMINE <alexis@nomine.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: s;\n"
+"Language: fr_FR\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:164 ../dynwid_class.php:149
+msgid "Role"
+msgstr "Uloga"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:165 ../dynwid_class.php:150
+msgid "Date"
+msgstr "Datum"
+
+#: ../dynwid_class_php4.php:166 ../dynwid_class.php:151
+msgid "Browser"
+msgstr "Pretraživač"
+
+#: ../dynwid_class_php4.php:167 ../dynwid_class.php:152
+msgid "Templates"
+msgstr "Templates"
+
+#: ../dynwid_class_php4.php:168 ../dynwid_class_php4.php:169
+#: ../dynwid_class.php:153 ../dynwid_class.php:154
+msgid "Language"
+msgstr "Jezik"
+
+#: ../dynwid_class_php4.php:170 ../dynwid_class.php:155
+#: ../mods/frontpage_module.php:13
+msgid "Front Page"
+msgstr "Prednja stranica"
+
+#: ../dynwid_class_php4.php:171 ../dynwid_class.php:156
+#: ../mods/single_module.php:58
+msgid "Single Posts"
+msgstr "Jedna stranica"
+
+#: ../dynwid_class_php4.php:172 ../dynwid_class.php:157
+#: ../mods/attachment_module.php:12
+msgid "Attachments"
+msgstr "Attachments"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:173 ../dynwid_class.php:158
+msgid "Pages"
+msgstr "Stranice"
+
+#: ../dynwid_class_php4.php:174 ../dynwid_class.php:159
+msgid "Author Pages"
+msgstr "Autorske stranice"
+
+#: ../dynwid_class_php4.php:175 ../dynwid_class.php:160
+#: ../mods/category_module.php:17
+msgid "Category Pages"
+msgstr "Stranice sa kategorijom"
+
+#: ../dynwid_class_php4.php:176 ../dynwid_class.php:161
+msgid "Archive Pages"
+msgstr "Stranice sa arhivom"
+
+#: ../dynwid_class_php4.php:177 ../dynwid_class.php:162
+#: ../mods/error_module.php:12
+msgid "Error Page"
+msgstr "Stranica sa greškom"
+
+#: ../dynwid_class_php4.php:178 ../dynwid_class.php:163
+msgid "Search page"
+msgstr "Pretraga strance"
+
+#: ../dynwid_class_php4.php:179 ../dynwid_class.php:164
+msgid "WPSC Category"
+msgstr "WPSC Category"
+
+#: ../dynwid_class_php4.php:180 ../dynwid_class.php:165
+#, fuzzy
+msgid "Custom Post Type Archives"
+msgstr "Types de contenu personnalisés"
+
+#: ../dynwid_class_php4.php:181 ../dynwid_class.php:166
+msgid "BuddyPress"
+msgstr "BuddyPress"
+
+#: ../dynwid_class_php4.php:182 ../dynwid_class.php:167
+msgid "BuddyPress Groups"
+msgstr "BuddyPress Groups"
+
+#: ../dynwid_admin.php:19 ../dynamic-widgets.php:152
+#: ../dynamic-widgets.php:175 ../dynamic-widgets.php:281
+#: ../dynamic-widgets.php:680
+#, fuzzy
+msgid "Dynamic Widgets"
+msgstr "à la vue générale Dynamic Widget"
+
+#: ../dynwid_admin.php:26
+msgid ""
+"<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work "
+"correctly. Please disable STRICT sql mode."
+msgstr ""
+"<b>WARNING</b>STRICT sql mode radi. Dynamic Widgets možda neće ispravno "
+"raditi. Molim vas onemogućite STRICT sql mode."
+
+#: ../dynwid_admin.php:46
+msgid "Oops! Something went terrible wrong. Please reinstall Dynamic Widgets."
+msgstr "UPS! Nešto nije kako treba! Molim vas reinstalirajte Dynamic Widgets."
+
+#: ../dynwid_admin.php:54 ../dynwid_admin_overview.php:20
+msgid "OLD"
+msgstr "STARO"
+
+#: ../dynwid_admin.php:54 ../dynwid_admin_overview.php:20
+msgid "FILTER"
+msgstr "FILTER"
+
+#: ../dynamic-widgets.php:160
+msgid "Widgets are always displayed by default"
+msgstr "Widgeti su uvek prikazani po defaultu"
+
+#: ../dynamic-widgets.php:160
+msgid "The '<em>Yes</em>' selection"
+msgstr "'<em>Yes</em>' selekcija"
+
+#: ../dynamic-widgets.php:161
+msgid "Click on the"
+msgstr "Klik na"
+
+#: ../dynamic-widgets.php:161
+msgid "next to the options for more info"
+msgstr "pored opcija za više info"
+
+#: ../dynamic-widgets.php:162
+#, fuzzy
+msgid "The"
+msgstr "Le"
+
+#: ../dynamic-widgets.php:162
+msgid "next to a section means it has options set."
+msgstr "pored sekcije znači da ima set opcija."
+
+#: ../dynamic-widgets.php:164 ../dynamic-widgets.php:165
+#: ../dynamic-widgets.php:168 ../dynamic-widgets.php:682
+#: ../dynwid_admin_overview.php:85
+msgid "Static"
+msgstr "Statično"
+
+#: ../dynamic-widgets.php:164 ../dynamic-widgets.php:166
+#: ../dynamic-widgets.php:682 ../dynwid_admin_overview.php:85
+msgid "Dynamic"
+msgstr "Dinamično"
+
+#: ../dynamic-widgets.php:165
+msgid "When a widget is"
+msgstr "Kada je widget"
+
+#: ../dynamic-widgets.php:165
+msgid ""
+"the widget uses the WordPress default. In other words, it's shown everywhere"
+msgstr "widget koristi WordPress default. Drugim rečima vidljiv je svuda."
+
+#: ../dynamic-widgets.php:166
+msgid "A widget is"
+msgstr "Widget je"
+
+#: ../dynamic-widgets.php:166
+msgid "when there are options set, i.e. not showing on the front page."
+msgstr "kada postoji set opcija, npr. nije prikazano na rednjoj strani"
+
+#: ../dynamic-widgets.php:167 ../dynwid_admin_overview.php:79
+msgid "Reset"
+msgstr "Resetuj"
+
+#: ../dynamic-widgets.php:168
+msgid "Reset makes the widget return to"
+msgstr "Resetovanje tera widgeta da se vrati na"
+
+# WordPress MO
+#: ../dynamic-widgets.php:234
+msgid "Settings"
+msgstr "Postavke"
+
+#: ../dynamic-widgets.php:248
+msgid "Apply exception rule to widgets:"
+msgstr "Pimeni pravilo za izuzetak na widgete:"
+
+#: ../dynamic-widgets.php:264 ../dynamic-widgets.php:298
+msgid "Off"
+msgstr "Ugašeno"
+
+#: ../dynamic-widgets.php:264 ../dynamic-widgets.php:298
+msgid "On"
+msgstr "Upaljeno"
+
+#: ../dynamic-widgets.php:265
+msgid " (Default: "
+msgstr " (Default: "
+
+#: ../dynamic-widgets.php:299
+msgid "Default"
+msgstr "Default"
+
+#: ../dynamic-widgets.php:359
+#, fuzzy
+msgid "Dynamic Widgets Options saved"
+msgstr "Options du widget sauvegardées."
+
+#: ../dynamic-widgets.php:360
+msgid "for"
+msgstr "za"
+
+#: ../dynamic-widgets.php:681
+#, fuzzy
+msgid "Edit Dynamic Widgets Options"
+msgstr "Modifier les réglages de ce widget"
+
+#: ../dynamic-widgets.php:706
+msgid "and"
+msgstr "i"
+
+#: ../dynamic-widgets.php:712
+msgid "Options set for"
+msgstr "Namesti opcije za"
+
+#: ../dynamic-widgets.php:712
+msgid "Option set for"
+msgstr "Namesti opcije za"
+
+#: ../dynwid_admin_edit.php:118
+msgid "Widget options saved."
+msgstr "Widget opcije sačuvane."
+
+#: ../dynwid_admin_edit.php:119 ../dynwid_admin_edit.php:194
+msgid "Return"
+msgstr "Povratak"
+
+#: ../dynwid_admin_edit.php:119
+msgid "to Dynamic Widgets overview"
+msgstr "za Dynamic Widgets pregled"
+
+#: ../dynwid_admin_edit.php:123
+msgid "Dynamic does not mean static hiding of a widget."
+msgstr "Dynamic ne znači statično skrivanje widget."
+
+#: ../dynwid_admin_edit.php:123
+msgid "Hint"
+msgstr "Nagoveštaj"
+
+#: ../dynwid_admin_edit.php:123
+msgid "Remove"
+msgstr "Ukloni"
+
+#: ../dynwid_admin_edit.php:123
+msgid "the widget from the sidebar"
+msgstr "widget sa sidebara"
+
+#: ../dynwid_admin_edit.php:128
+msgid "The From date can't be later than the To date."
+msgstr "Forma sa datumom ne sme da bude kasnije od Do datuma"
+
+#: ../dynwid_admin_edit.php:134
+#, fuzzy
+msgid "Edit options for the widget"
+msgstr "Modifier les réglages de"
+
+#: ../dynwid_admin_edit.php:138
+msgid "Quick settings"
+msgstr "Brze postavke"
+
+#: ../dynwid_admin_edit.php:140
+msgid "Set all options to 'No'"
+msgstr "Namesti sve opcije na NE"
+
+#: ../dynwid_admin_edit.php:140
+msgid "Except overriding options like Role, Date, etc."
+msgstr "Osim opcije po kojima može opet da se piše Uloga, Datum itd"
+
+# WordPress MO
+#: ../dynwid_admin_edit.php:190 ../dynwid_admin_overview.php:140
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: ../dynwid_admin_overview.php:20
+msgid "Method set to"
+msgstr "Metod postavi na"
+
+#: ../dynwid_admin_overview.php:28
+msgid "Page limit set to"
+msgstr "Limit stranice namesti na"
+
+#: ../dynwid_admin_overview.php:31
+msgid "ERROR"
+msgstr "GREŠKA"
+
+#: ../dynwid_admin_overview.php:31
+msgid "is not a valid limit."
+msgstr "nije validan limit"
+
+#: ../dynwid_admin_overview.php:40
+msgid "Widget options have been reset to default."
+msgstr "Widget opcije su resetovane na default."
+
+#: ../dynwid_admin_overview.php:48
+msgid "Inactive Widgets"
+msgstr "Neaktivni widgeti"
+
+#: ../dynwid_admin_overview.php:71 ../dynwid_admin_overview.php:74
+msgid "Edit this widget options"
+msgstr "Edituj ovu opciju widgeta"
+
+# WordPress MO
+#: ../dynwid_admin_overview.php:74
+msgid "Edit"
+msgstr "Edituj"
+
+#: ../dynwid_admin_overview.php:79
+msgid "Reset widget to Static"
+msgstr "Resetuj widget na Static"
+
+#: ../dynwid_admin_overview.php:100
+msgid "Advanced"
+msgstr "Unapredjeno"
+
+#: ../dynwid_admin_overview.php:105
+msgid "wp_head() check:"
+msgstr "wp_head() proveri:"
+
+#: ../dynwid_admin_overview.php:110
+msgid "wp_head() is NOT called (at the most obvious place)"
+msgstr "wp_head() NIJE pozvan(na najočiglenije mesto)"
+
+#: ../dynwid_admin_overview.php:114
+msgid "wp_head() is called"
+msgstr "wp_head() je pozvan"
+
+#: ../dynwid_admin_overview.php:118
+msgid "Unable to determine if wp_head() is called"
+msgstr "Nije moguće ustanoviti da li je pozvan"
+
+#: ../dynwid_admin_overview.php:130
+msgid "Use 'OLD' method"
+msgstr "Koristi STARI metod"
+
+#: ../dynwid_admin_overview.php:140
+msgid "Page limit"
+msgstr "Limit stranice"
+
+#: ../dynwid_admin_overview.php:142
+msgid ""
+"The page limit sets the limit of number of pages to prevent a timeout when "
+"building the hierarchical tree. When the number of pages is above this "
+"limit, a flat list will be displayed which is less time consuming."
+msgstr ""
+"Limit stranice namešta limit broja stranica da bi sprečio timeout kada se "
+"gradi drvo hijerarhije. Kada je broj stranica iznad ovog limita, ravna lista "
+"će biti prikazana što zahteva manje vremena."
+
+#: ../dynwid_admin_overview.php:144
+msgid "Currently the number of pages is"
+msgstr "Trenutan broj stranica je"
+
+#: ../dynwid_admin_overview.php:151
+msgid ""
+"When upgrading to WPEC 3.8 the Dynamic Widgets rules for WPEC are lost. The "
+"WPEC dump gives you an overview of the rules before the update."
+msgstr ""
+"Kada upgradujete na WPEC 3.8 Dynamic Widgets pravila za WPEC će se izgubiti. "
+"WPEC vam daje pregled pravila pre update-a."
+
+#: ../dynwid_admin_overview.php:152
+msgid "WARNING"
+msgstr "UPOZORENJE"
+
+#: ../dynwid_admin_overview.php:152
+msgid ""
+"This only works correct when you did not add or change anything in the "
+"Dynamic Widgets rules."
+msgstr ""
+"Ovo radi ispravno samo kada ne dodajete ili ne menjate ništa u  Dynamic "
+"Widgets pravilima."
+
+#: ../dynwid_admin_overview.php:157
+msgid "Create WPEC dump"
+msgstr "Stvori WPEC dump"
+
+#: ../dynwid_admin_overview.php:164
+msgid ""
+"For debugging purposes it is possible you're asked to create a dump. Click "
+"the 'Create dump' button and save the text file."
+msgstr ""
+"Za svrhe debugovanja traženo vamje da stvorite dump. Kliknite na STVORITE "
+"DUMP dugme i sačuvajte tekst fajla."
+
+#: ../dynwid_admin_overview.php:169
+msgid "Create dump"
+msgstr "Stvorite dump"
+
+#: ../dynwid_admin_overview.php:176
+msgid ""
+"When you deceide not to use this plugin anymore (sorry to hear that!). You "
+"can cleanup all settings and data related to this plugin by clicking on the "
+"'Uninstall' button. This process is irreversible! After the cleanup the "
+"plugin is deactivated automaticly."
+msgstr ""
+"Kada odlučite da ne koristite više ovaj plugin(žao nam je zbog toga) možete "
+"da očistite sve postavke i podatke vezane za ovaj plugin klikom na UNINSTALL "
+"dugme. Ovaj proces ne može da se povrati! Posle čišćenja plugin se "
+"deaktivira automatski."
+
+#: ../dynwid_admin_overview.php:181
+msgid "Uninstall"
+msgstr "Uninstall"
+
+#: ../mods/search_module.php:13
+msgid "Search Page"
+msgstr "Stranica za pretragu"
+
+#: ../mods/search_module.php:15
+msgid "Show widget on the search page?"
+msgstr "Prikaži widget na stranici za retragu?"
+
+# WordPress MO
+#: ../mods/search_module.php:17 ../mods/qtranslate_module.php:31
+#: ../mods/category_module.php:21 ../mods/single_module.php:69
+#: ../mods/attachment_module.php:16 ../mods/error_module.php:16
+#: ../mods/frontpage_module.php:24
+msgid "Yes"
+msgstr "Da"
+
+# WordPress MO
+#: ../mods/search_module.php:18 ../mods/qtranslate_module.php:32
+#: ../mods/category_module.php:22 ../mods/single_module.php:70
+#: ../mods/attachment_module.php:17 ../mods/error_module.php:17
+#: ../mods/frontpage_module.php:25
+msgid "No"
+msgstr "Ne"
+
+#: ../mods/qtranslate_module.php:22
+msgid "Language (QT)"
+msgstr "Jezik(QT)"
+
+#: ../mods/qtranslate_module.php:24
+#, fuzzy
+msgid "Show widget default on all languages?"
+msgstr "Afficher le widget sur les pages statiques?"
+
+#: ../mods/qtranslate_module.php:24 ../mods/single_module.php:60
+#: ../mods/single_module.php:74
+#, fuzzy
+msgid "Click to toggle info"
+msgstr "Cliquez sur"
+
+#: ../mods/qtranslate_module.php:28
+msgid "Using this option can override all other options."
+msgstr "Korišćenjem ovih opcija možete da prepišete sve ostale opcije."
+
+#: ../mods/qtranslate_module.php:33
+#, fuzzy
+msgid "Except the languages"
+msgstr "Sauf la/les page(s)"
+
+#: ../mods/category_module.php:19
+msgid "Show widget default on category pages?"
+msgstr "Prikaži default widget na stranici sa kategorijama?"
+
+#: ../mods/category_module.php:23
+msgid "Except the categories"
+msgstr "Osim kategorija"
+
+#: ../mods/single_module.php:52
+msgid "Posts: "
+msgstr "Postovi:"
+
+#: ../mods/single_module.php:52
+msgid "Tags: "
+msgstr "Tagavi:"
+
+#: ../mods/single_module.php:60
+msgid "Show widget default on single posts?"
+msgstr "Prikaži default widget za jedan post?"
+
+#: ../mods/single_module.php:64
+msgid ""
+"When you use an author <b>AND</b> a category exception, both rules in the "
+"condition must be met. Otherwise the exception rule won't be applied.\n"
+"  \t\t\t\t\tIf you want to use the rules in a logical OR condition. Add the "
+"same widget again and apply the other rule to that.\n"
+"  \t\t\t\t\t"
+msgstr ""
+"Kada koristite autora <b>i</b> izuetak kategorije, oba pravila u uslovima "
+"moraj da se sretnu. Inače pravilo za izuetke neće biti primenjeno.\n"
+" \t\t\t\t\tIf želite da koristite pravila u logičkom OR stanju. I isti "
+"widget opet i primenite drugo pravilo.\n"
+" \t\t\t\t\t"
+
+#: ../mods/single_module.php:73
+msgid "Make exception rule available to individual posts and tags."
+msgstr ""
+"Napravi da pravilo za izuzetke bude dostupno individualnim postovima i "
+"tagovima."
+
+#: ../mods/single_module.php:77
+msgid ""
+"When you enable this option, you have the ability to apply the exception "
+"rule for <em>Single Posts</em> to tags and individual posts.\n"
+"\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag "
+"Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php"
+"\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
+"\t\t\t\t\t\tException rules for tags and individual posts in any combination "
+"work independantly, but will always be counted as one exception.<br />\n"
+"  \t\t\t\t\tPlease note when exception rules are set for Author and/or "
+"Category, these will be removed.\n"
+"  \t\t\t\t"
+msgstr ""
+"Kada omigućite ovu opciju,imate mogućnost da primenite pravilo za izuzetke "
+"<em>Single Posts</em> za tagove i  individualne postove.\n"
+"\t\t\t\t\t\tMožete postaviti pravilo za izuzetke za tagove u single Edit Tag "
+"Panel (idi na <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tclick a tag), Za individualne postove u <a href=\"post-new.php"
+"\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
+"\t\t\t\t\t\tPravila za izuzetke za tagove i individualne postove u bio kojoj "
+"kombinaciji rade neuavisno ali će se uvek brojati kao jedan izuzetak.<br />\n"
+" \t\t\t\t\tImajte na umu da ako su pravila sa izuzetkom nameštena za Autore "
+"i/ili Kategorije, biće uklonjeni.\n"
+" \t\t\t\t"
+
+#: ../mods/single_module.php:94
+msgid "Except the posts by author"
+msgstr "Osim postova po autoru"
+
+#: ../mods/single_module.php:105
+msgid "Except the posts in category"
+msgstr "Osim postova u kategoriji"
+
+#: ../mods/attachment_module.php:14
+#, fuzzy
+msgid "Show widget on attachment pages"
+msgstr "Afficher le widget sur les pages d'archives"
+
+#: ../mods/error_module.php:14
+msgid "Show widget on the error page?"
+msgstr "Prikaži widget na attachment stranici"
+
+#: ../mods/frontpage_module.php:15
+msgid "Show widget on the front page?"
+msgstr "Prikaži widget na stranici sa greškom?"
+
+#: ../mods/frontpage_module.php:19
+msgid ""
+"This option only applies when your front page is set to display your latest "
+"posts (See Settings &gt; Reading).<br />\n"
+"\t\t\t\t\t\tWhen a static page is set, you can use the options for the "
+"static pages below.\n"
+"\t\t\t\t\t"
+msgstr ""
+"Ova opcija se primenjuje samo je vaša prednja stranica podešena na prikaz "
+"vaših poslednjih blogova (pogledaj Postavke&gt; Čitanje).<br />\n"
+"\t\t\t\t\t\tKada je statična stranica nameštena možete koristiti opcije za "
+"nju. \n"
+"\t\t\t\t\t"
+
+#: ../mods/archive_module.php:14
+msgid "Show widget on archive pages"
+msgstr "Prikaži Widget na stranicama arhive"
+
+#: ../mods/archive_module.php:18
+msgid "This option does not include Author and Category Pages."
+msgstr "Ova opcija ne uključuje Autor i Kategorija stranice."
+
+#: ../mods/pages_module.php:14
+msgid "The static page module failed to load."
+msgstr "Modul statične stranice nije uspeo da se loaduje."
+
+#: ../mods/pages_module.php:16
+msgid ""
+"This is probably because building the hierarchical tree took too long.<br /"
+">Decrease the limit of number of pages in the advanced settings."
+msgstr ""
+"To je verovatno zbog toga što gradjenje hijerarhijskog drveta traje dugo."
+"<br />Smanjite broj limita stranica u unapredjenim postavkama."
+
+#: ../mods/pages_module.php:43 ../mods/custompost_module.php:46
+#: ../mods/custompost_module.php:89
+msgid "All childs"
+msgstr "Sva deca"
+
+#: ../mods/pages_module.php:83 ../mods/pages_module.php:86
+#, fuzzy
+msgid "Front page"
+msgstr "Page d'accueil"
+
+#: ../mods/pages_module.php:83 ../mods/pages_module.php:88
+#, fuzzy
+msgid "Posts page"
+msgstr "Page d'accueil"
+
+#: ../mods/pages_module.php:94
+msgid "Show widget default on static pages?"
+msgstr "Prikaži default widget na statičnoj stranici."
+
+#: ../mods/pages_module.php:101
+msgid ""
+"Checking the \"All childs\" option, makes the exception rule apply\n"
+"\t\t\t\t\tto the parent and all items under it in all levels. Also future "
+"items\n"
+"\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
+"\t\t\t\t\t\"All childs\" without the parent."
+msgstr ""
+"Proverite opciju,napravite pravilo sa izuzetkom primenite\n"
+"\t\t\t\t\tna roditelja i sve stavke su u svim nivoima. Takodje buduće "
+"stavke\n"
+"\t\t\t\t\tsu pod roditeljem. Nije moguće primeniti pravilo sa izuzetkom bez "
+"roditelja.   "
+
+#: ../mods/pages_module.php:106
+msgid ""
+"Unfortunately the childs-function has been disabled\n"
+"\t\t\t\t\tbecause you have more than the limit of pages."
+msgstr ""
+"Unfortunately the childs-function has been disabled\n"
+"\t\t\t\t\tbecause you have more than the limit of pages."
+
+#: ../mods/pages_module.php:116
+msgid "Except the page(s)"
+msgstr "Osim stranica"
+
+#: ../mods/author_module.php:24
+msgid "Show widget default on author pages?"
+msgstr "Prikaži defaut widget na stranicama autora?"
+
+#: ../mods/author_module.php:28
+msgid "Except the author(s)"
+msgstr "Osim autora"
+
+#: ../mods/bp_module.php:24
+#, fuzzy
+msgid "Show widget default on BuddyPress pages?"
+msgstr "Afficher le widget sur les pages d'auteur"
+
+#: ../mods/bp_module.php:28
+#, fuzzy
+msgid "Except on the components pages"
+msgstr "Sauf la/les page(s)"
+
+#: ../mods/bp_module.php:47
+msgid "Forum Index"
+msgstr "Index foruma"
+
+#: ../mods/bp_module.php:48
+msgid "Forum Topics"
+msgstr "Teme sa foruma"
+
+#: ../mods/bp_module.php:49
+msgid "Members Index"
+msgstr "Index članova"
+
+#: ../mods/bp_module.php:54
+#, fuzzy
+msgid "Show widget default on BuddyPress Group pages?"
+msgstr "Afficher le widget sur les pages d'auteur"
+
+#: ../mods/bp_module.php:61
+#, fuzzy
+msgid "Except in the groups"
+msgstr "Sauf la/les page(s)"
+
+#: ../mods/bp_module.php:70
+#, fuzzy
+msgid "Except in the group pages"
+msgstr "Sauf la/les page(s)"
+
+# WordPress MO
+#: ../mods/role_module.php:10
+msgid "Anonymous"
+msgstr "Anoniman"
+
+#: ../mods/role_module.php:25
+msgid "Show widget to everybody?"
+msgstr "Prikaži svima widget?"
+
+#: ../mods/role_module.php:29
+msgid ""
+"Setting options by role is very powerfull. It can override all other options!"
+"<br />\n"
+"\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
+msgstr ""
+"Opcije postavki po ulozi su veoma moćne. Mogu da pišu po svim opcijama!<br /"
+">\n"
+"\t\t\t\t\t\tKorisnici oji nisu ulogovani dobijaju <em>Anonymous</em>ulogu."
+
+#: ../mods/role_module.php:34
+msgid "only to"
+msgstr "samo za"
+
+#: ../mods/useragent_module.php:10
+msgid "(and other Gecko based)"
+msgstr "(i ostale bazirane na Gecko)"
+
+#: ../mods/useragent_module.php:17
+msgid "Other / Unknown / Not detected"
+msgstr "Drugo/ Nepoznato / Nije primećeno"
+
+#: ../mods/useragent_module.php:28
+#, fuzzy
+msgid "Show widget with all browsers?"
+msgstr "Toujours afficher le widget?"
+
+#: ../mods/useragent_module.php:32
+msgid "Browser detection is never 100% accurate."
+msgstr "Primetnost pretraživača nikada nije 100% tačna."
+
+#: ../mods/useragent_module.php:37
+#, fuzzy
+msgid "Except the browser(s)"
+msgstr "Sauf le/les auteur(s)"
+
+#: ../mods/tpl_module.php:23
+#, fuzzy
+msgid "Show widget on every template?"
+msgstr "Afficher le widget sur les pages d'erreur?"
+
+#: ../mods/tpl_module.php:27
+msgid ""
+"This options takes precedence above other options like Pages and/or Single "
+"Posts."
+msgstr ""
+"Ova opcija zahteva pvenstvenost iznad drugih opcija kao Stranice i-ili Sami "
+"postovi"
+
+#: ../mods/tpl_module.php:32
+#, fuzzy
+msgid "Except the templates"
+msgstr "Sauf la/les page(s)"
+
+#: ../mods/tpl_module.php:34
+msgid "Default Template"
+msgstr "Default Template"
+
+#: ../mods/custompost_module.php:126 ../mods/custompost_module.php:216
+msgid "Show widget on"
+msgstr "Prikaži widget na"
+
+#: ../mods/custompost_module.php:136
+msgid ""
+"All exceptions (Titles and Taxonomies) work in a logical OR condition. That "
+"means when one of the exceptions is met, the exception rule is applied."
+msgstr ""
+"Svi izuzeci(Naslovi i taxonomije) rade u logičnom OR stanju. To znači da "
+"kada se naidje na  jedno od izuzetaka, izuzeto pravilo se primenjuje"
+
+#: ../mods/custompost_module.php:143 ../mods/custompost_module.php:178
+#: ../mods/custompost_module.php:227 ../mods/custompost_module.php:260
+msgid "Except for"
+msgstr "Osim za"
+
+#: ../mods/custompost_module.php:254
+#, fuzzy
+msgid "Show widget on Custom Post Type Archives"
+msgstr "Afficher le widget sur les pages de recherche?"
+
+#: ../mods/date_module.php:32
+msgid "Show widget always?"
+msgstr "Prikaži widget na Custom Post Type Arhivama"
+
+#: ../mods/date_module.php:36
+msgid ""
+"Next to the above role option, the date option is also very powerfull. "
+"You've been warned!"
+msgstr "Pored opcije uloge ispod, opcija datuma je veoma moćna."
+
+#: ../mods/date_module.php:37
+msgid ""
+"Enter dates in the YYYY-MM-DD format. You can also use the calender by "
+"clicking on the"
+msgstr ""
+"Unesite datume u GGGG-MM-DD formatu. Možete takodje koristiti kalendar "
+"klikom na"
+
+#: ../mods/date_module.php:38
+msgid ""
+"Date ranges can be made by entering a From AND a To date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to be displayed from a specific date, "
+"only fill in the From date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to stop displaying on a specific date, "
+"only fill in the To date.\n"
+"  \t\t\t\t"
+msgstr ""
+"Datum može biti napravljen unosom OD i Do datuma<br />\n"
+" \t\t\t\t\tKada želite da widget  odredjenog datuma bude prikazana, popunite "
+"Od datuma<br />\n"
+" \t\t\t\t\tKada želite da widget prestane da se prikazuje na odredjenom "
+"datumu, popunite Do datuma.\n"
+" \t\t\t\t"
+
+#: ../mods/date_module.php:45
+msgid "only"
+msgstr "samo"
+
+#: ../mods/date_module.php:49
+msgid "From"
+msgstr "Od"
+
+#: ../mods/date_module.php:53
+msgid "To"
+msgstr "Za"
+
+#: ../mods/wpec_module.php:25
+msgid "Show widget default on WPSC categories?"
+msgstr "Prikaži widget default na WPSC kategorijama?"
+
+#: ../mods/wpml_module.php:21
+msgid "Language (WPML)"
+msgstr "Language (WPML)"
+
+#~ msgid "Custom Post Type"
+#~ msgstr "Types de contenu personnalisés"
+
+#~ msgid "This widget is"
+#~ msgstr "Ce widget est"
+
+#~ msgid "selection"
+#~ msgstr "sélection"
