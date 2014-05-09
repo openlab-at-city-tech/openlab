@@ -1,0 +1,1765 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BadgeOS BadgeStack Add-On 1.0\n"
+"POT-Creation-Date: 2013-04-09 17:11-0500\n"
+"PO-Revision-Date: 2013-04-09 17:11-0500\n"
+"Last-Translator: Brian Richards <brian@rzen.net>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __;_x;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: ../..\n"
+
+#: ../badgeos-badgestack.php:64
+#: ../../badgeos-badgestack/badgeos-badgestack.php:64
+msgid "Community Badge"
+msgstr ""
+
+#: ../badgeos-badgestack.php:65
+#: ../../badgeos-badgestack/badgeos-badgestack.php:65
+msgid "Community Badges"
+msgstr ""
+
+#: ../badgeos-badgestack.php:68
+#: ../../badgeos-badgestack/badgeos-badgestack.php:68
+msgid "Quest Badge"
+msgstr ""
+
+#: ../badgeos-badgestack.php:69
+#: ../../badgeos-badgestack/badgeos-badgestack.php:69
+msgid "Quest Badges"
+msgstr ""
+
+#: ../badgeos-badgestack.php:72
+#: ../../badgeos-badgestack/badgeos-badgestack.php:72
+msgid "Quest"
+msgstr ""
+
+#: ../badgeos-badgestack.php:73
+#: ../../badgeos-badgestack/badgeos-badgestack.php:73
+msgid "Quests"
+msgstr ""
+
+#: ../badgeos-badgestack.php:76
+#: ../../badgeos-badgestack/badgeos-badgestack.php:76
+msgid "Level"
+msgstr ""
+
+#: ../badgeos-badgestack.php:77
+#: ../../badgeos-badgestack/badgeos-badgestack.php:77
+msgid "Levels"
+msgstr ""
+
+#: ../badgeos-badgestack.php:147
+#: ../../badgeos-badgestack/badgeos-badgestack.php:147
+#, php-format
+msgid ""
+"BadgeOS BadgeStack Add-On requires BadgeOS and has been <a href=\"%s"
+"\">deactivated</a>. Please install and activate BadgeOS and then reactivate "
+"this plugin."
+msgstr ""
+
+#: ../badgeos-badgestack.php:387
+#: ../../badgeos-badgestack/badgeos-badgestack.php:387
+msgid "Active Learner"
+msgstr ""
+
+#: ../badgeos-badgestack.php:388
+#: ../../badgeos-badgestack/badgeos-badgestack.php:388
+msgid ""
+"This badge rewards active participation on our site. Complete Quests, earn "
+"other badges, comment meaningfully on others' contributions and posts: all "
+"will contribute to your achievement of this internal community badge. (Earn "
+"500 points in our community to earn this badge.)"
+msgstr ""
+
+#: ../badgeos-badgestack.php:389
+#: ../../badgeos-badgestack/badgeos-badgestack.php:389
+msgid ""
+"Rewards active participation right here in our learning community. Complete "
+"quests, earn other badges, comment meaningfully on others' contributions and "
+"posts: all will contribute to your achievement of this internal community "
+"badge."
+msgstr ""
+
+#: ../badgeos-badgestack.php:395
+#: ../../badgeos-badgestack/badgeos-badgestack.php:395
+msgid ""
+"You earned 500 points by interacting with this online community. This makes "
+"you a very active learner, and we're rewarding you with a community badge to "
+"show for it."
+msgstr ""
+
+#: ../badgeos-badgestack.php:403
+#: ../../badgeos-badgestack/badgeos-badgestack.php:403
+msgid "Commentator"
+msgstr ""
+
+#: ../badgeos-badgestack.php:404 ../badgeos-badgestack.php:405
+#: ../../badgeos-badgestack/badgeos-badgestack.php:404
+#: ../../badgeos-badgestack/badgeos-badgestack.php:405
+msgid ""
+"This badge recognizes someone who engages deeply with our online learning "
+"community, taking the time to share feedback and insights based on the "
+"contributions of others."
+msgstr ""
+
+#: ../badgeos-badgestack.php:411
+#: ../../badgeos-badgestack/badgeos-badgestack.php:411
+msgid ""
+"Thank you for taking time to consistently share feedback and insights with "
+"others in our online community. Your contributions make our learning "
+"experiences more vibrant and meaningful."
+msgstr ""
+
+#: ../badgeos-badgestack.php:416
+#: ../../badgeos-badgestack/badgeos-badgestack.php:416
+msgid "Visit this site at least 5 times"
+msgstr ""
+
+#: ../badgeos-badgestack.php:422
+#: ../../badgeos-badgestack/badgeos-badgestack.php:422
+msgid "Comment at least 10 times on others' posts"
+msgstr ""
+
+#: ../badgeos-badgestack.php:433
+#: ../../badgeos-badgestack/badgeos-badgestack.php:433
+msgid "Community Activist"
+msgstr ""
+
+#: ../badgeos-badgestack.php:434
+#: ../../badgeos-badgestack/badgeos-badgestack.php:434
+msgid ""
+"The earner of this badge has participated in every core aspect of this "
+"online community, including completing the both levels, multiple quests and "
+"badges, and has engaged with peers in active dialogue and the exchange of "
+"ideas."
+msgstr ""
+
+#: ../badgeos-badgestack.php:435
+#: ../../badgeos-badgestack/badgeos-badgestack.php:435
+msgid ""
+"Rewarded to those who take full advantage of available opportunities to "
+"explore new information and exchange ideas with peers."
+msgstr ""
+
+#: ../badgeos-badgestack.php:441
+#: ../../badgeos-badgestack/badgeos-badgestack.php:441
+msgid ""
+"You are an exceedingly active learner who takes full advantage of available "
+"opportunities to explore new information and exchange ideas with peers."
+msgstr ""
+
+#: ../badgeos-badgestack.php:446
+#: ../../badgeos-badgestack/badgeos-badgestack.php:446
+msgid "Do any 3 Quests"
+msgstr ""
+
+#: ../badgeos-badgestack.php:453
+#: ../../badgeos-badgestack/badgeos-badgestack.php:453
+msgid "Earn any 2 Community Badges"
+msgstr ""
+
+#: ../badgeos-badgestack.php:460
+#: ../../badgeos-badgestack/badgeos-badgestack.php:460
+msgid "Post at least 20 comments"
+msgstr ""
+
+#: ../badgeos-badgestack.php:466
+#: ../../badgeos-badgestack/badgeos-badgestack.php:466
+msgid "Complete Both Levels"
+msgstr ""
+
+#: ../badgeos-badgestack.php:478
+#: ../../badgeos-badgestack/badgeos-badgestack.php:478
+msgid "Innovator"
+msgstr ""
+
+#: ../badgeos-badgestack.php:479
+#: ../../badgeos-badgestack/badgeos-badgestack.php:479
+msgid ""
+"This badge recognizes someone who develops innovative strategies and shares "
+"new perspectives. Nominate a member of this community who you think "
+"epitomizes the role of \"innovator\"."
+msgstr ""
+
+#: ../badgeos-badgestack.php:480
+#: ../../badgeos-badgestack/badgeos-badgestack.php:480
+msgid ""
+"This nomination-based badge recognizes someone who develops innovative "
+"strategies and shares new perspectives."
+msgstr ""
+
+#: ../badgeos-badgestack.php:485
+#: ../../badgeos-badgestack/badgeos-badgestack.php:485
+msgid ""
+"You have been recognized by your peers as an innovative thinker and problem "
+"solver."
+msgstr ""
+
+#: ../badgeos-badgestack.php:496
+#: ../../badgeos-badgestack/badgeos-badgestack.php:496
+msgid "Adventures in Badging"
+msgstr ""
+
+#: ../badgeos-badgestack.php:497
+#: ../../badgeos-badgestack/badgeos-badgestack.php:497
+msgid ""
+"In this Level you'll learn about the potential for digital badges, and think "
+"about skills, behaviors, roles or milestones that often go unrecognized -- "
+"but deserve to be acknowledged."
+msgstr ""
+
+#: ../badgeos-badgestack.php:498
+#: ../../badgeos-badgestack/badgeos-badgestack.php:498
+msgid ""
+"Learn about the potential for digital badges and think about skills, "
+"behaviors, roles or milestones that often go unrecognized -- but that "
+"deserve to be acknowledged."
+msgstr ""
+
+#: ../badgeos-badgestack.php:504
+#: ../../badgeos-badgestack/badgeos-badgestack.php:504
+msgid ""
+"Congratulations! You have completed the Level \"Adventures in Badging\" and "
+"are on your way to becoming a go-to resource on alternative forms of "
+"recognizing achievement."
+msgstr ""
+
+#: ../badgeos-badgestack.php:510
+#: ../../badgeos-badgestack/badgeos-badgestack.php:510
+msgid "Earn the Badge: “Badge Explorer”"
+msgstr ""
+
+#: ../badgeos-badgestack.php:514 ../badgeos-badgestack.php:685
+#: ../../badgeos-badgestack/badgeos-badgestack.php:514
+#: ../../badgeos-badgestack/badgeos-badgestack.php:685
+msgid "Badge Explorer"
+msgstr ""
+
+#: ../badgeos-badgestack.php:523
+#: ../../badgeos-badgestack/badgeos-badgestack.php:523
+msgid "Begin Earning & Issuing Badges"
+msgstr ""
+
+#: ../badgeos-badgestack.php:524
+#: ../../badgeos-badgestack/badgeos-badgestack.php:524
+msgid ""
+"In this Level you’ll set-up a profile on Credly so you can earn, store, and "
+"share badges. You'll also issue a badge to one or more people who "
+"demonstrate skills, values or behaviors you have witnessed first-hand."
+msgstr ""
+
+#: ../badgeos-badgestack.php:525
+#: ../../badgeos-badgestack/badgeos-badgestack.php:525
+msgid ""
+"In this Level you’ll set-up a profile on Credly so you can earn, store, and "
+"share badges. You'll also issue a badge to one or more people who "
+"demonstrate skills, values or behaviors you have witnesses first-hand."
+msgstr ""
+
+#: ../badgeos-badgestack.php:531
+#: ../../badgeos-badgestack/badgeos-badgestack.php:531
+msgid ""
+"Congratulations! You have completed the Level \"Start Your Badge Profile\" "
+"and now have a way to curate all of your achievements, and to recognize the "
+"skills and behaviors you value in the world! Add your Credly profile link to "
+"your resume or email footer and share your achievements with the world."
+msgstr ""
+
+#: ../badgeos-badgestack.php:537
+#: ../../badgeos-badgestack/badgeos-badgestack.php:537
+msgid "Earn the Badge: “Credly Member”"
+msgstr ""
+
+#: ../badgeos-badgestack.php:541 ../badgeos-badgestack.php:746
+#: ../../badgeos-badgestack/badgeos-badgestack.php:541
+#: ../../badgeos-badgestack/badgeos-badgestack.php:746
+msgid "Credly Member"
+msgstr ""
+
+#: ../badgeos-badgestack.php:545
+#: ../../badgeos-badgestack/badgeos-badgestack.php:545
+msgid "Earn the Badge: “Badge Issuer”"
+msgstr ""
+
+#: ../badgeos-badgestack.php:549 ../badgeos-badgestack.php:711
+#: ../../badgeos-badgestack/badgeos-badgestack.php:549
+#: ../../badgeos-badgestack/badgeos-badgestack.php:711
+msgid "Badge Issuer"
+msgstr ""
+
+#: ../badgeos-badgestack.php:560 ../badgeos-badgestack.php:666
+#: ../badgeos-badgestack.php:781
+#: ../../badgeos-badgestack/badgeos-badgestack.php:560
+#: ../../badgeos-badgestack/badgeos-badgestack.php:666
+#: ../../badgeos-badgestack/badgeos-badgestack.php:781
+msgid "Customize Your Profile"
+msgstr ""
+
+#: ../badgeos-badgestack.php:561
+#: ../../badgeos-badgestack/badgeos-badgestack.php:561
+msgid ""
+"Your Credly profile is like a dynamic resume that helps others appreciate "
+"your skills and accomplishments. Each badge is validated by a person or "
+"organization that has observed your achievements first hand.\n"
+"\n"
+"\t\t\t\t\tIn this Quest, you'll complete your Credly profile and explore the "
+"various options for sharing your badges so that you can curate how you "
+"showcase your achievements to others.\n"
+"\n"
+"\t\t\t\t\tNow that you have a <a href=\"https://credly.com\" target=\"_blank"
+"\">Credly</a> account, login and visit the \"Account Settings\" area from "
+"the top right menu:\n"
+"\t\t\t\t\t<ol>\n"
+"\t\t\t\t\t\t<li>Hover your mouse over the \"About Me\" section and click the "
+"pencil to add some about information about yourself.</span></li>\n"
+"\t\t\t\t\t\t<li>Click the pencil next to \"Email\" and add any email "
+"addresses you use. This will allow you to automatically consolidate "
+"achievements you receive from any person or organization in your Credly "
+"account, regardless of what email address they use when they issue you "
+"badges.</li>\n"
+"\t\t\t\t\t\t<li>Use the \"Social Settings and Auto Share\" area to link your "
+"social networks. This makes sharing your badges wherever you want them super "
+"easy.</li>\n"
+"\t\t\t\t\t\t<li>Hover over the avatar area and add an image of yourself.</"
+"li>\n"
+"\t\t\t\t\t\t<li>Click \"<strong>Save Changes</strong>\".</li>\n"
+"\t\t\t\t\t\t<li>Then visit the \"My Credit\" area of Credly to explore how "
+"to manage your badges, share them on social networks and create Categories.</"
+"li>\n"
+"\t\t\t\t\t</ol>\n"
+"\t\t\t\t\tWhen you are done, use the submission area to list at least one "
+"group or person who might issue you badges to recognize your achievements."
+msgstr ""
+
+#: ../badgeos-badgestack.php:575
+#: ../../badgeos-badgestack/badgeos-badgestack.php:575
+msgid ""
+"In this Quest, you'll complete your Credly profile and explore the various "
+"options for sharing your badges so that you can curate how you showcase your "
+"achievements to others."
+msgstr ""
+
+#: ../badgeos-badgestack.php:580
+#: ../../badgeos-badgestack/badgeos-badgestack.php:580
+msgid ""
+"You have set-up and customized your Credly.com profile, so you are ready to "
+"begin earning and sharing credit you receive for your achievements."
+msgstr ""
+
+#: ../badgeos-badgestack.php:589 ../badgeos-badgestack.php:674
+#: ../badgeos-badgestack.php:737
+#: ../../badgeos-badgestack/badgeos-badgestack.php:589
+#: ../../badgeos-badgestack/badgeos-badgestack.php:674
+#: ../../badgeos-badgestack/badgeos-badgestack.php:737
+msgid "Give Someone Credit"
+msgstr ""
+
+#: ../badgeos-badgestack.php:590
+#: ../../badgeos-badgestack/badgeos-badgestack.php:590
+msgid ""
+"We know that a badge says something about a person who earns it, but what "
+"does a badge say about the issuer?\n"
+"\n"
+"\t\t\t\t\tWhen an observer of an earned badge looks at its criteria and the "
+"evidence that someone achieved something, what will they learn about the "
+"organization or individual who decided to bestow the badge? What does a "
+"badge say about what you value in the world?\n"
+"\n"
+"\t\t\t\t\tIn this Quest, you will define a badge that represents the "
+"achievement of something you value. For example, it could be the "
+"demonstration of a skill, an important behavior or attitude, or the reaching "
+"of a milestone that matters. You will create a badge for this achievement, "
+"and then you will issue it someone who deserves it. Here's how:\n"
+"\t\t\t\t\t<ol>\n"
+"\t\t\t\t\t\t<li><span style=\"line-height: 15px;\">Sign into your <a href="
+"\"https://credly.com\" target=\"_blank\">Credly</a> account.</span></li>\n"
+"\t\t\t\t\t\t<li>Click \"Give\" at the top of the page.</li>\n"
+"\t\t\t\t\t\t<li>Design and define a badge that acknowledges something "
+"important to you or your work. Follow the steps to save and then give the "
+"badge to one or more people who deserves it.</li>\n"
+"\t\t\t\t\t</ol>\n"
+"\n"
+"\t\t\t\t\tAfter you give a badge, describe in the submission here the name "
+"of the badge and the criteria, or link to the badge on Credly.\n"
+"\t\t\t\t\t"
+msgstr ""
+
+#: ../badgeos-badgestack.php:603
+#: ../../badgeos-badgestack/badgeos-badgestack.php:603
+msgid ""
+"In this Quest you will define a badge that represents the achievement of "
+"something you value. You will create a badge for this achievement, and then "
+"you will issue it someone who deserves it."
+msgstr ""
+
+#: ../badgeos-badgestack.php:608
+#: ../../badgeos-badgestack/badgeos-badgestack.php:608
+msgid ""
+"You have considered what you value and have defined, designed and issued a "
+"badge on Credly.com that acknowledges these values in practice in the world. "
+msgstr ""
+
+#: ../badgeos-badgestack.php:617 ../badgeos-badgestack.php:773
+#: ../../badgeos-badgestack/badgeos-badgestack.php:617
+#: ../../badgeos-badgestack/badgeos-badgestack.php:773
+msgid "Join Credly"
+msgstr ""
+
+#: ../badgeos-badgestack.php:618
+#: ../../badgeos-badgestack/badgeos-badgestack.php:618
+msgid ""
+"<a href=\"https://credly.com\">Credly</a> is universal way for you to earn, "
+"store and showcase achievements throughout your life.  Achievements are "
+"represented by badges, which you can earn in virtually every aspect of your "
+"life, from school to the workplace to museums and fitness activities.\n"
+"\n"
+"\t\t\t\t\tBadges you earn for the learning you do right here on this site "
+"will be sent to Credly, where you can make them visible on social networks "
+"you use, on your blog, or your own web site. Every person on Credly also has "
+"a public \"profile.\" You can curate what achievements you'd like to "
+"showcase at any time on your Credly Profile.\n"
+"\n"
+"\t\t\t\t\tIn this Quest, you'll visit <strong><a href=\"https://credly.com\" "
+"target=\"_blank\">Credly.com</a></strong> and join, creating a free "
+"account.\n"
+"\n"
+"\t\t\t\t\tOnce you have created your account, visit the \"View Profile\" "
+"page from the user menu at the top right of the page and then copy the web "
+"address for your Profile page into the submission box here. (It will look "
+"something like \"https://credly.com/u/jonathan\".)"
+msgstr ""
+
+#: ../badgeos-badgestack.php:625
+#: ../../badgeos-badgestack/badgeos-badgestack.php:625
+msgid ""
+"Visit Credly.com and create a free account where you can receive, showcase "
+"and curate your achievements -- including those you earn while on this site."
+msgstr ""
+
+#: ../badgeos-badgestack.php:630 ../badgeos-badgestack.php:754
+#: ../../badgeos-badgestack/badgeos-badgestack.php:630
+#: ../../badgeos-badgestack/badgeos-badgestack.php:754
+msgid ""
+"Credly empowers people to earn and give credit wherever it is due -- "
+"empowering everyone to acknowledge, share and reward achievement. Today, we "
+"give you credit for being a pioneer and a part of this growing movement by "
+"joining the Credly community."
+msgstr ""
+
+#: ../badgeos-badgestack.php:640 ../badgeos-badgestack.php:702
+#: ../../badgeos-badgestack/badgeos-badgestack.php:640
+#: ../../badgeos-badgestack/badgeos-badgestack.php:702
+msgid "Watch a Video: Learn about Badges"
+msgstr ""
+
+#: ../badgeos-badgestack.php:641
+#: ../../badgeos-badgestack/badgeos-badgestack.php:641
+msgid ""
+"In this Quest, you'll watch a video presentation entitled, \"Giving Credit "
+"Where Credit is Due: Adventures in Digital Credentials and Badges\". The "
+"talk was led by Jonathan Finkelstein, Founder of <a href=\"https://credly.com"
+"\" target=\"_blank\">Credly</a> and director of the BadgeStack Project, at "
+"an annual meeting about transforming education through technology.\n"
+"\n"
+"\t\t\t\t\tWatch the video below, and then in the submission box, share a "
+"brief comment or reflection about one action, milestone, behavior, or skill "
+"that people should get credit for achieving. Focus on something that people "
+"don't currently get properly acknowledged for having done.\n"
+"\n"
+"\t\t\t\t\t<iframe src=\"http://educause.mediasite.com/mediasite/"
+"Play/2a2738935a3649b7a97c32449a017a641d\" height=\"560\" width=\"100%\" "
+"frameborder=\"0\" scrolling=\"no\"></iframe>\n"
+"\n"
+"\t\t\t\t\tSource: Original video available on the <a href=\"http://bit.ly/"
+"educause-finkelstein\" target=\"_blank\">EDUCAUSE</a> web site.\n"
+"\n"
+"\t\t\t\t\t<strong>Quest Question:</strong> Describe at least one action, "
+"milestone, behavior, or skill that people should get credit for achieving, "
+"but which usually go unrecognized or unnoticed."
+msgstr ""
+
+#: ../badgeos-badgestack.php:650
+#: ../../badgeos-badgestack/badgeos-badgestack.php:650
+msgid ""
+"Watch a video about the potential for digital badges and share ideas about "
+"actions, milestones, behaviors, or skills that people should get credit for "
+"achieving, but which usually go unrecognized or unnoticed."
+msgstr ""
+
+#: ../badgeos-badgestack.php:656
+#: ../../badgeos-badgestack/badgeos-badgestack.php:656
+msgid ""
+"You are continuing your exploration about the power of digital badges and "
+"thinking about how they can be used to acknowledge valued -- but often "
+"unrecognized -- achievements.  You can re-visit or share the video you "
+"watched at any time: http://bit.ly/educause-finkelstein."
+msgstr ""
+
+#: ../badgeos-badgestack.php:662
+#: ../../badgeos-badgestack/badgeos-badgestack.php:662
+msgid "Earn “Customize Your Profile” 30 times."
+msgstr ""
+
+#: ../badgeos-badgestack.php:670
+#: ../../badgeos-badgestack/badgeos-badgestack.php:670
+msgid "Earn “Give Someone Credit” 1 time."
+msgstr ""
+
+#: ../badgeos-badgestack.php:686
+#: ../../badgeos-badgestack/badgeos-badgestack.php:686
+msgid ""
+"A badge is a validated display of accomplishment, skill, quality or interest "
+"that can be earned in any environment. Badges can represent traditional "
+"academic achievement or the development of skills or knowledge outside "
+"traditional education. The earner of this badge has taken steps to learn "
+"about this new form of achievement recognition and to consider its potential."
+msgstr ""
+
+#: ../badgeos-badgestack.php:687
+#: ../../badgeos-badgestack/badgeos-badgestack.php:687
+msgid ""
+"A badge is a validated display of accomplishment, skill, quality or interest "
+"that can be earned in any environment. The earner of this badge has taken "
+"steps to learn about this unique form of achievement recognition and to "
+"consider its potential."
+msgstr ""
+
+#: ../badgeos-badgestack.php:693
+#: ../../badgeos-badgestack/badgeos-badgestack.php:693
+msgid ""
+"You are taking steps to explore the potential for badges and the unique "
+"possibilities this form of achievement recognition affords to learners "
+"throughout their lives."
+msgstr ""
+
+#: ../badgeos-badgestack.php:698
+#: ../../badgeos-badgestack/badgeos-badgestack.php:698
+msgid "Quest: Watch a Video: \"Learn about Badges\""
+msgstr ""
+
+#: ../badgeos-badgestack.php:712
+#: ../../badgeos-badgestack/badgeos-badgestack.php:712
+msgid ""
+"A badge says as much about the person or group who issued it as it does "
+"about the recipient.  To earn this \"Issuer\" badge, you will think about "
+"something you value in the world, define the criteria by which you and "
+"others will know that value has been exhibited, and then identify someone "
+"who deserves to be recognized."
+msgstr ""
+
+#: ../badgeos-badgestack.php:713
+#: ../../badgeos-badgestack/badgeos-badgestack.php:713
+msgid ""
+"To earn this \"Issuer\" badge, you will think about something you value in "
+"the world, define the criteria by which you and others will know that value "
+"has been exhibited, and then identify someone who deserves to be recognized."
+msgstr ""
+
+#: ../badgeos-badgestack.php:719
+#: ../../badgeos-badgestack/badgeos-badgestack.php:719
+msgid ""
+"You have taken the time to consider what you value in the world, you have "
+"defined a badge that represents those values, and you have identified and "
+"issued the badge to someone deserving of recognition."
+msgstr ""
+
+#: ../badgeos-badgestack.php:733
+#: ../../badgeos-badgestack/badgeos-badgestack.php:733
+msgid "Quest: Give Someone Credit"
+msgstr ""
+
+#: ../badgeos-badgestack.php:747
+#: ../../badgeos-badgestack/badgeos-badgestack.php:747
+msgid ""
+"To receive this badge, the earner needs to create a free profile on Credly "
+"to receive, manage and share their lifelong achievements, and they need to "
+"issue a badge to someone else for a valued accomplishment or contribution "
+"that they have observed first-hand."
+msgstr ""
+
+#: ../badgeos-badgestack.php:748
+#: ../../badgeos-badgestack/badgeos-badgestack.php:748
+msgid ""
+"This badge is earned by creating a profile on Credly to receive, manage and "
+"share one's lifelong credentials and achievements, and by issuing a badge to "
+"someone else for a valued accomplishment or contribution."
+msgstr ""
+
+#: ../badgeos-badgestack.php:769
+#: ../../badgeos-badgestack/badgeos-badgestack.php:769
+msgid "Quest: Create a free account on Credly.com"
+msgstr ""
+
+#: ../badgeos-badgestack.php:777
+#: ../../badgeos-badgestack/badgeos-badgestack.php:777
+msgid "Quest: Customize Your Credly Profile"
+msgstr ""
+
+#: ../../badgeos/badgeos.php:152
+msgid "Badges"
+msgstr ""
+
+#: ../../badgeos/badgeos.php:158
+msgid "Badge"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:61
+msgid "Please enter a valid email address in the username field."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:64
+msgid "Please enter a password."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:113
+msgid ""
+"There was an error getting a Credly API Key. Please check your username and "
+"password."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:169
+msgid "BadgeOS Settings"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:175
+msgid "Minimum Role to Administer BadgeOS plugin: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:178
+msgid "Administrator"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:179
+msgid "Editor"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:180
+msgid "Author"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:181
+msgid "Contributor"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:182
+msgid "Subscriber"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:186
+msgid "Send email when submissions/nominations are received:"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:189
+#: ../../badgeos/includes/admin-settings.php:198
+msgid "Enabled"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:190
+#: ../../badgeos/includes/admin-settings.php:197
+msgid "Disabled"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:194
+msgid "Debug Mode:"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:205
+#: ../../badgeos/includes/admin-settings.php:306
+msgid "Save Settings"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:222
+msgid "BadgeOS Add-Ons"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:235
+msgid "BadgeOS Help and Support"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:236
+msgid "About BadgeOS"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:237
+#, php-format
+msgid ""
+"BadgeOS&trade; is plugin to WordPress that allows your site's users to "
+"complete tasks, demonstrate achievement, and earn badges. You define the "
+"Achievement types, organize your requirements any way you like, and choose "
+"from a range of options to determine whether each task or requirement has "
+"been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through "
+"out-of-the-box integration of the \"Open Credit\" API by <a href=\"%s\" "
+"target=\"_blank\">Credly</a>, the free web service for issuing, earning and "
+"sharing badges."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:238
+msgid ""
+"BadgeOS is extremely extensible. Check out examples of what we’ve built with "
+"it, and stay connected to the project site for updates, add-ins and news. "
+"Share your ideas and code improvements on our github site so we can keep "
+"making BadgeOS better for everyone."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:240
+msgid "Help / Support"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:241
+msgid ""
+"For support on using BadgeOS or to suggest feature enhancements, visit the "
+"BadgeOS site at http://#.  The BadgeOS team does perform custom development "
+"that extends the BadgeOS platform in some incredibly powerful ways. Contact "
+"us at http://# with inquiries. See examples of enhanced BadgeOS projects."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:242
+msgid ""
+"Please submit bugs or issues to our Github site for the BadgeOS Project."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:244
+msgid "Shortcodes"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:245
+msgid ""
+"With BadgeOS activated, the following shortcodes can be placed on any page "
+"or post within WordPress to expose a variety of BadgeOS functions."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:247
+msgid ""
+"Use this shortcode to generate a list of achievements of any type on any "
+"post or page."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:250
+msgid "Parameters"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:254
+msgid "type"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:254
+msgid "Custom post type of achievements to list.  Default: all"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:255
+msgid "limit"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:255
+msgid "Number of achievements to display per page.  Default: 10"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:259
+msgid "Example"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:263
+msgid ""
+"Use this shortcode to add a submission box to any achievement set to require "
+"Submission by the user.  If <strong>Earned By</strong> is set to "
+"<strong>Submission</strong> this shortcode is automatically added on the "
+"single page."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:264
+msgid ""
+"Use this shortcode to add a nomination box to any achievement set to require "
+"Nomination by the user.  If <strong>Earned By</strong> is set to "
+"<strong>Nomination</strong> this shortcode is automatically added on the "
+"single page."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:278
+msgid "Credly Integration Settings"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:286
+#, php-format
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Credly</a> is a universal way for people to "
+"earn and showcase their achievements and badges. With Credly Integration "
+"enabled here, badges or achievements you create on this BadgeOS site can "
+"automatically be created on your Credly account. As select badges are earned "
+"using BadgeOS, the badge will automatically be issued via Credly to the "
+"earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla "
+"Backpack, their web site, blog, Credly profile or other location. Credly "
+"makes badge issuing and sharing fun and easy! <a href=\"%s\" target=\"_blank"
+"\">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a "
+"href=\"%s\" target=\"_blank\">create one now</a>. It's free."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:288
+msgid "Enable Badge Sharing via Credly: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:290
+#: ../../badgeos/includes/admin-settings.php:415
+#: ../../badgeos/includes/credly.php:804 ../../badgeos/includes/credly.php:816
+#: ../../badgeos/includes/credly.php:824 ../../badgeos/includes/credly.php:837
+msgid "No"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:291
+#: ../../badgeos/includes/admin-settings.php:414
+#: ../../badgeos/includes/credly.php:803 ../../badgeos/includes/credly.php:815
+#: ../../badgeos/includes/credly.php:823 ../../badgeos/includes/credly.php:836
+msgid "Yes"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:338
+msgid "Get Credly API Key"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:339
+msgid "Enter your Credly account username and password to access your API key."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:340
+#, php-format
+msgid "Enter your %s to access your API key."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:340
+msgid "Credly account username and password"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:342
+msgid "Username: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:345
+msgid "Password: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:348
+#: ../../badgeos/includes/admin-settings.php:368
+msgid "API Key: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:352
+#, php-format
+msgid "Already have your API key? %s"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:352
+msgid "Click here"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:366
+msgid "Credly API Key"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:373
+msgid "Credly Field Mapping"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:374
+msgid ""
+"Customize which Credly fields for badge creation and issuing (listed on the "
+"left) match which WordPress and BadgeOS fields (listed to the right)."
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:374
+msgid ""
+"When badges are created and issued, the info sent to Credly will rely on the "
+"global mapping found here. (Note: Visit the edit screen for each achievement "
+"you create in BadgeOS to further configure the sharing and Credly settings "
+"for that achievement.)"
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:376
+msgid "Badge Title: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:381
+msgid "Short Description: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:386
+msgid "Description: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:391
+msgid "Criteria: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:396
+msgid "Image: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:401
+msgid "Testimonial: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:406
+msgid "Evidence: "
+msgstr ""
+
+#: ../../badgeos/includes/admin-settings.php:411
+msgid "Notify users of earned badge: "
+msgstr ""
+
+#: ../../badgeos/includes/content-filters.php:127
+#: ../../badgeos/includes/shortcodes.php:375
+msgid "Original Submission"
+msgstr ""
+
+#: ../../badgeos/includes/content-filters.php:130
+msgid "Date"
+msgstr ""
+
+#: ../../badgeos/includes/content-filters.php:133
+#: ../../badgeos/includes/meta-boxes.php:142
+#: ../../badgeos/includes/meta-boxes.php:171
+#: ../../badgeos/includes/shortcodes.php:384
+#: ../../badgeos/includes/submission-actions.php:158
+#: ../../badgeos/includes/submission-actions.php:184
+msgid "Status"
+msgstr ""
+
+#: ../../badgeos/includes/content-filters.php:341
+#, php-format
+msgid "%d Required %s"
+msgstr ""
+
+#: ../../badgeos/includes/content-filters.php:394
+#, php-format
+msgid "%d Points"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:93
+#, php-format
+msgid ""
+"<div class=\"updated\"><p>Note: Credly Integration is turned on, but you "
+"must first <a href=\"%s\">enter your Credly credentials</a> to allow earned "
+"badges to be shared and by recipients (or Disable Credly Integration to hide "
+"this notice).</p></div>"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:436
+msgid "Badge Sharing"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:437
+msgid "Send eligible earned badges to Credly"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:769
+msgid "Badge Sharing Options"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:798
+msgid ""
+"This setting makes the earned badge for this achievement sharable via Credly "
+"on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, "
+"or the badge earner’s own blog or site."
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:798
+#, php-format
+msgid "<a href=\"%s\">Configure global settings</a> for Credly integration."
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:800
+msgid "Send to Credly when earned"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:812
+msgid "Include Evidence"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:820
+msgid "Include Testimonial"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:828
+msgid "Expiration ( In days; 0 = never )"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:833
+msgid "Allow Badge to be Given by Others"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:841
+msgid "Credly Category Search"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:847
+msgid "Credly Badge Category"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:854
+msgid "Credly Badge ID"
+msgstr ""
+
+#: ../../badgeos/includes/credly.php:1029
+msgid "&mdash; Select Field &mdash;"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:33
+msgid "Achievement Type Data"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:40
+msgid "Plural Name"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:41
+msgid "The plural name for this achievement (Title is singular name)."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:46
+msgid "Show in Menu?"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:47
+msgid "Yes, show this achievement in the BadgeOS menu."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:52
+msgid "Default Badge Image"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:53
+msgid ""
+"To set a default image, use the <strong>Featured Image</strong> metabox to "
+"the right.  For best results, use a square .png file with a transparent "
+"background, at least 200x200 pixels."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:63
+msgid "Achievement Data"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:70
+msgid "Upload Badge Image"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:71
+#, php-format
+msgid ""
+"<p>To set an image use the <strong>Featured Image</strong> metabox to the "
+"right.  For best results, use a square .png file with a transparent "
+"background, at least 200x200 pixels.</p><p>If no image is specified, this "
+"achievement will default to the <a href=\"%s\">Achievement Type's</a> "
+"featured image.</p>"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:76
+msgid "Points Awarded"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:77
+msgid ""
+"Points awarded for earning this achievement (optional).  Leave empty if no "
+"points are awarded."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:82
+msgid "Earned By:"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:83
+msgid "How this achievement can be earned."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:96
+msgid "Minimum Points Requried"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:97
+msgid "Fewest number of points required for earning this achievement."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:102
+msgid "Sequential Steps"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:103
+msgid "Yes, steps must be completed in order."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:108
+msgid "Congratulations Text"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:109
+msgid ""
+"Displayed after achievement is earned. If sending to Credly, a great place "
+"for a testimonial for those who complete this achievement."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:114
+msgid "Maximum Earnings"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:115
+msgid ""
+"Number of times a user can earn this badge (default, if blank: infinite)"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:120
+msgid "Hidden?"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:135
+msgid "Submission Data"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:143
+#: ../../badgeos/includes/meta-boxes.php:172
+msgid "Approve or Deny this entry."
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:153
+#: ../../badgeos/includes/meta-boxes.php:194
+msgid "Achievement ID to Award"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:154
+#: ../../badgeos/includes/meta-boxes.php:195
+msgid "View Achievement"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:164
+msgid "Nomination Data"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:182
+msgid "Nominee"
+msgstr ""
+
+#: ../../badgeos/includes/meta-boxes.php:188
+msgid "Nominated By"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:23
+#: ../../badgeos/includes/post-types.php:29
+#: ../../badgeos/includes/post-types.php:35
+msgid "Achievement Types"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:24
+msgid "Achievement Type"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:25
+#: ../../badgeos/includes/post-types.php:56
+#: ../../badgeos/includes/post-types.php:88
+#: ../../badgeos/includes/post-types.php:120
+#: ../../badgeos/includes/post-types.php:151
+#: ../../badgeos/includes/post-types.php:229
+msgid "Add New"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:26
+msgid "Add New Achievement Type"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:27
+msgid "Edit Achievement Type"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:28
+msgid "New Achievement Type"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:30
+msgid "View Achievement Type"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:31
+msgid "Search Achievement Types"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:32
+msgid "No achievement types found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:33
+msgid "No achievement types found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:54
+#: ../../badgeos/includes/post-types.php:60
+#: ../../badgeos/includes/post-types.php:66
+msgid "Steps"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:55
+msgid "Step"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:57
+#: ../../badgeos/includes/steps-ui.php:78
+msgid "Add New Step"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:58
+msgid "Edit Step"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:59
+msgid "New Step"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:61
+msgid "View Step"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:62
+msgid "Search Steps"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:63
+msgid "No steps found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:64
+msgid "No steps found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:86
+#: ../../badgeos/includes/post-types.php:92
+#: ../../badgeos/includes/post-types.php:98
+msgid "Submissions"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:87
+msgid "Submission"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:89
+msgid "Add New Submission"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:90
+msgid "Edit Submission"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:91
+msgid "New Submission"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:93
+msgid "View Submission"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:94
+msgid "Search Submissions"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:95
+msgid "No submissions found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:96
+msgid "No submissions found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:118
+#: ../../badgeos/includes/post-types.php:124
+#: ../../badgeos/includes/post-types.php:130
+msgid "Nominations"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:119
+msgid "Nomination"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:121
+msgid "Add New Nomination"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:122
+msgid "Edit Nomination"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:123
+msgid "New Nomination"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:125
+msgid "View Nomination"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:126
+msgid "Search Nominations"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:127
+msgid "No nominations found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:128
+msgid "No nominations found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:149
+#: ../../badgeos/includes/post-types.php:155
+#: ../../badgeos/includes/post-types.php:161
+msgid "Log Entries"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:150
+msgid "Log Entry"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:152
+msgid "Add New Log Entry"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:153
+msgid "Edit Log Entry"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:154
+msgid "New Log Entry"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:156
+msgid "View Log Entries"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:157
+msgid "Search Log Entries"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:158
+msgid "No Log Entries found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:159
+msgid "No Log Entries found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:230
+#, php-format
+msgid "Add New %s"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:231
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:232
+#, php-format
+msgid "New %s"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:234
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:235
+#, php-format
+msgid "Search %s"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:236
+#, php-format
+msgid "No %s found"
+msgstr ""
+
+#: ../../badgeos/includes/post-types.php:237
+#, php-format
+msgid "No %s found in Trash"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:224
+msgid "Nomination saved successfully."
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:232
+#: ../../badgeos/includes/shortcodes.php:302
+msgid "Step Description"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:246
+msgid "You must be logged in to post a nomination."
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:255
+msgid "Nomination Form"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:256
+#: ../../badgeos/includes/shortcodes.php:327
+msgid "Submit"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:268
+msgid "User to nominate"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:271
+msgid "Reason for nomination"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:294
+msgid "Submission saved successfully."
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:316
+msgid "You must be logged in to post a submission."
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:325
+msgid "Submission Form"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:326
+#: ../../badgeos/includes/submission-actions.php:467
+msgid "Attachment:"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:382
+#: ../../badgeos/includes/submission-actions.php:590
+#, php-format
+msgid "%s by %s"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:400
+msgid "Submission Attachments"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:405
+msgid "Attachment"
+msgstr ""
+
+#: ../../badgeos/includes/shortcodes.php:407
+#, php-format
+msgid " - uploaded %s by %s"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:34
+msgid "Required Steps"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:68
+msgid ""
+"Define the required \"steps\" for this achievement to be considered "
+"complete. Use the \"Label\" field to optionally customize the titles of each "
+"step."
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:79
+msgid "Save All Steps"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:102
+msgid "Delete"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:106
+msgid "Require"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:138
+msgid "time(s)."
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:267
+#, php-format
+msgid "any %s"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:272
+#, php-format
+msgid "all %s"
+msgstr ""
+
+#: ../../badgeos/includes/steps-ui.php:306
+#, php-format
+msgid "Earn %s %s."
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:156
+#: ../../badgeos/includes/submission-actions.php:181
+msgid "Content"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:182
+#: ../../badgeos/includes/p2p/p2p-core/side.php:236
+msgid "User"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:212
+#: ../../badgeos/includes/submission-actions.php:251
+msgid "Approve"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:213
+#: ../../badgeos/includes/submission-actions.php:251
+msgid "Deny"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:224
+msgid "pending"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:251
+msgid "Pending"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:257
+msgid "Show All Statuses"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:466
+msgid "Comment on Submission"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:468
+msgid "Submit Comment"
+msgstr ""
+
+#: ../../badgeos/includes/submission-actions.php:602
+msgid "Submission Comments"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:24
+msgid "Logged-in to Website"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:25
+msgid "Commented on a post"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:28
+msgid "Specific Achievement of Type"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:29
+msgid "Any Achievement of Type"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:30
+msgid "All Achievements of Type"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:56
+#, php-format
+msgid "Unlocked a %s"
+msgstr ""
+
+#: ../../badgeos/includes/triggers.php:57
+#, php-format
+msgid "Unlocked all %s"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:158
+#, php-format
+msgid "%s awarded %s %s points for a new total of %s points"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:160
+#, php-format
+msgid "%s earned %s points for a new total of %s points"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:208
+msgid "Earned Achievements"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:212
+msgid "Earned Points"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:215
+msgid ""
+"The user's points total. Entering a new total will automatically log the "
+"change and difference between totals."
+msgstr ""
+
+#: ../../badgeos/includes/user.php:232
+msgid "Revoke Achievement"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:290
+msgid "Award an Achievement"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:291
+msgid "Select an Achievement Type to Award:"
+msgstr ""
+
+#: ../../badgeos/includes/user.php:324
+#, php-format
+msgid "Award %s"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/box.php:44
+msgid "Are you sure you want to delete all connections?"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/box.php:123
+msgid "Search"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/box.php:200
+msgid "previous"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/box.php:201
+msgid "next"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/box.php:202
+msgid "of"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/dropdown.php:108
+msgid "Filter"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/factory.php:88
+msgid " (from)"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/factory.php:89
+msgid " (to)"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/fields.php:7
+msgid "Delete all connections"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/fields.php:16
+msgid "Delete connection"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:7
+msgid "Connection Types"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:41
+#, php-format
+msgid "<em>%s</em> is not a registered connection type."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:50
+#, php-format
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:64
+msgid "Name"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:65
+msgid "Information"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:66
+msgid "Connections"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:74
+msgid "No connection types registered."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:76
+#, php-format
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-admin/tools.php:129
+msgid "Go"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:16
+msgid "Posts 2 Posts"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:17
+msgid "A list of posts connected to the current post"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:34
+msgid "Title:"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:41
+msgid "Connection type:"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:46
+msgid "Connection listing:"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:52
+msgid "connected"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/extra.php:53
+msgid "related"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/side.php:227
+msgid "Users"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/side.php:237
+msgid "Search Users"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/side.php:238
+msgid "No users found."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/type.php:102
+msgid "Create connections"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/p2p-core/type.php:120
+#, php-format
+msgid "Connected %s"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/scb/AdminPage.php:172
+msgid "Settings <strong>saved</strong>."
+msgstr ""
+
+#: ../../badgeos/includes/p2p/scb/AdminPage.php:185
+#: ../../badgeos/includes/p2p/scb/AdminPage.php:196
+msgid "Save Changes"
+msgstr ""
+
+#: ../../badgeos/includes/p2p/scb/AdminPage.php:346
+msgid "Settings"
+msgstr ""
+
+#: ../../badgeos/includes/widgets/earned-user-achievements-widget.php:9
+msgid "Displays all achievements earned by the logged in user"
+msgstr ""
+
+#: ../../badgeos/includes/widgets/earned-user-achievements-widget.php:11
+msgid "BadgeOS Earned User Achievements"
+msgstr ""
+
+#: ../../badgeos/includes/widgets/earned-user-achievements-widget.php:21
+msgid "Title"
+msgstr ""
+
+#: ../../badgeos/includes/widgets/earned-user-achievements-widget.php:22
+msgid "Number to Display (0 = all)"
+msgstr ""
