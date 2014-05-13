@@ -81,7 +81,6 @@ function bp_core_add_cropper_inline_js() {
 				onSelect: showPreview,
 				onSelect: updateCoords,
 				aspectRatio: <?php echo $aspect_ratio; ?>,
-				minSize: [ <?php echo buddypress()->avatar->full->width ?>, <?php echo buddypress()->avatar->full->height ?> ],
 				setSelect: [ <?php echo $crop_left; ?>, <?php echo $crop_top; ?>, <?php echo $crop_right; ?>, <?php echo $crop_bottom; ?> ]
 			});
 			updateCoords({x: <?php echo $crop_left; ?>, y: <?php echo $crop_top; ?>, w: <?php echo $crop_right; ?>, h: <?php echo $crop_bottom; ?>});
