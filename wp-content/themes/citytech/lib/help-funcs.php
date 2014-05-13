@@ -117,18 +117,17 @@ function openlab_help_tags_loop() {
         ),
         'post_type' => 'help',
         'order' => 'ASC',
+        'posts_per_page' => '-1',
     );
 
 
-    $temp = $wp_query;
-    $wp_query = null;
-    $wp_query = query_posts($args); //new WP_Query($args);
+    $tags_query = new WP_Query( $args );
     ?>
 
     <h1 class="parent-cat">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
 
     <?php
-    while (have_posts()) : the_post();
+    while ($tags_query->have_posts()) : $tags_query->the_post();
 
         $post_id = get_the_ID();
         ?>
@@ -177,10 +176,10 @@ function openlab_help_cats_loop() {
         'post_type' => 'help',
         'orderby' => 'menu_order',
         'order' => 'ASC',
+        'posts_per_page' => '-1',
     );
 
 
-    $temp = $wp_query;
     $help_query = new WP_Query( $args );
     ?>
 
@@ -230,11 +229,10 @@ function openlab_help_cats_loop() {
             'order' => 'ASC',
 	    'posts_per_page' => '-1',
         );
-        $temp = $wp_query;
-        $wp_query = null;
-        $wp_query = query_posts($args); //new WP_Query($args);
+        $child_query = null;
+        $child_query = new WP_Query( $args ); //new WP_Query($args);
 
-        while (have_posts()) : the_post();
+        while ($child_query->have_posts()) : $child_query->the_post();
             ?>
 
             <h3 class="entry-title help-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
