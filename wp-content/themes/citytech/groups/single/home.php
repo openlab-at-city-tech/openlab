@@ -221,6 +221,7 @@ function cuny_group_single() { ?>
 						$query = new WP_Query( $docs_arg );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
 		//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
+						global $post;
 						if($query->have_posts()){
 						  echo '<ul>';
 						  while ( $query->have_posts() ) : $query->the_post();
