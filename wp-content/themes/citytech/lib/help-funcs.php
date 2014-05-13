@@ -54,14 +54,14 @@ function openlab_help_loop() {
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
                     <?php if ($this_term->parent != 0): ?>
-                    <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> | 
+                    <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
                     <?php endif; ?>
                         <?php the_title(); ?></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
-            <h1 class="entry-title"><?php echo the_title(); ?></h1>       
+            <h1 class="entry-title"><?php echo the_title(); ?></h1>
         <?php endif; ?>
 
         <?php //print this page button - this is going to be absolutely positioned for now ?>
@@ -91,7 +91,7 @@ function openlab_get_help_tag_list($id) {
     $term_list = '<div id="help-identity">'
             . '<div class="help-tags">Tags: '.($terms ? $terms : 'None assigned').'</div>'
             . '</div>';
-    
+
     return $term_list;
 }
 
@@ -122,8 +122,8 @@ function openlab_help_tags_loop() {
 
     $temp = $wp_query;
     $wp_query = null;
-    $wp_query = query_posts($args); //new WP_Query($args); 
-    ?> 	
+    $wp_query = query_posts($args); //new WP_Query($args);
+    ?>
 
     <h1 class="parent-cat">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
 
@@ -138,7 +138,7 @@ function openlab_help_tags_loop() {
         <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
         <?php
-    endwhile; // end of the loop. 
+    endwhile; // end of the loop.
     wp_reset_query();
     ?>
 
@@ -181,13 +181,12 @@ function openlab_help_cats_loop() {
 
 
     $temp = $wp_query;
-    $wp_query = null;
-    $wp_query = query_posts($args); //new WP_Query($args); 
-    ?> 	
+    $help_query = new WP_Query( $args );
+    ?>
 
     <?php if ($parent_term->parent == 0): ?>
     <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
-    <?php else: 
+    <?php else:
         $head_term = get_term_by('id',$parent_term->parent,'help_category');
     $child_title = '<h1 class="parent-cat"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
     $child_title .= '<h2 class="child-cat child-cat-num-0">'. $parent_cat_name .'</h2>';
@@ -195,7 +194,7 @@ function openlab_help_cats_loop() {
     endif; ?>
 
     <?php
-    while (have_posts()) : the_post();
+    while ( $help_query->have_posts()) : $help_query->the_post();
 
         $post_id = get_the_ID();
         ?>
@@ -204,7 +203,7 @@ function openlab_help_cats_loop() {
         <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
         <?php
-    endwhile; // end of the loop. 
+    endwhile; // end of the loop.
     wp_reset_query();
     ?>
 
@@ -229,6 +228,7 @@ function openlab_help_cats_loop() {
             'post_type' => 'help',
             'orderby' => 'menu_order',
             'order' => 'ASC',
+	    'posts_per_page' => '-1',
         );
         $temp = $wp_query;
         $wp_query = null;
@@ -241,13 +241,13 @@ function openlab_help_cats_loop() {
             <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
             <?php
-        endwhile; // end of the loop. 
+        endwhile; // end of the loop.
         wp_reset_query();
         ?>
 
         <?php
         $count++;
-    }//ecnd child_cats for each 
+    }//ecnd child_cats for each
     ?>
 
     <a href="#help-top">Go To Top</a>
@@ -276,19 +276,18 @@ function openlab_glossary_cats_loop() {
         'post_type' => 'help_glossary',
         'orderby' => 'menu_order',
         'order' => 'ASC',
+	'posts_per_page' => '-1',
     );
 
 
-    $temp = $wp_query;
-    $wp_query = null;
-    $wp_query = query_posts($args); //new WP_Query($args); 
-    ?> 	
+    $cat_query = new WP_Query( $args );
+    ?>
 
     <h1 class="parent-cat">Glossary</h1>
     <div class="glossary-description"><p><?php echo $parent_term->description; ?></p></div>
 
     <?php
-    while (have_posts()) : the_post();
+    while ($cat_query->have_posts()) : $cat_query->the_post();
 
         $post_id = get_the_ID();
         ?>
@@ -300,7 +299,7 @@ function openlab_glossary_cats_loop() {
         </div><!--glossary-wrapper-->
 
         <?php
-    endwhile; // end of the loop. 
+    endwhile; // end of the loop.
     wp_reset_query();
     ?>
 
