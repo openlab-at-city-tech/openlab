@@ -256,14 +256,16 @@ class OpenLab_Admin_Bar {
 			) );
 		}
 
-		$invites = groups_get_invites_for_user();
-		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-invitations',
-			'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . '">%d</span>', $invite_count ),
-			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
-		) );
+		if ( bp_is_active( 'groups' ) ) {
+			$invites = groups_get_invites_for_user();
+			$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-invitations',
+				'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . '">%d</span>', $invite_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+			) );
+		}
 
 		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
 		// this panel only works if looking at a site where the user has Dashboard-level
@@ -312,6 +314,9 @@ class OpenLab_Admin_Bar {
 	 * Add the Invites menu (Friend Requests + Group Invitations)
 	 */
 	function add_invites_menu( $wp_admin_bar ) {
+		if ( ! bp_is_active( 'friends' ) || ! bp_is_active( 'groups' ) ) {
+			return;
+		}
 
 		// We need this data up front so we can provide counts
 		$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
@@ -570,12 +575,17 @@ class OpenLab_Admin_Bar {
 			}
 		}
 
+		$link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
+		if ( bp_is_active( 'groups' ) ) {
+			$link .= trailingslashit( bp_get_groups_slug() );
+		}
+
 		// "Go to Inbox" Makes sense that users should always see this
 		$wp_admin_bar->add_node( array(
 			'parent' => 'activity',
 			'id'     => 'activity-more',
 			'title'  => 'See All Activity',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() )
+			'href'   => $link,
 		) );
 	}
 

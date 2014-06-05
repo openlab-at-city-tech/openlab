@@ -97,7 +97,7 @@ if ( !$dud = bp_displayed_user_domain() ) {
 				</div>
 			<?php endif; ?>
 <!--
-			<?php if ( bp_has_groups() ) : ?>
+			<?php if ( bp_is_active( 'groups' ) && bp_has_groups() ) : ?>
 				<div id="areas-of-activty" class="item-list">
 				<strong>All groups:</strong>
 				<?php while ( bp_groups() ) : bp_the_group(); ?>

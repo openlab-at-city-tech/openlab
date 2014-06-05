@@ -491,6 +491,10 @@ function openlab_portfolio_creation_url() {
 	 * Returns the URL for the portfolio creation page
 	 */
 	function openlab_get_portfolio_creation_url() {
+		if ( ! bp_is_active( 'groups' ) ) {
+			return '';
+		}
+
 		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=portfolio&new=true';
 	}
 

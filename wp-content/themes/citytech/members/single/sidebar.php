@@ -39,10 +39,12 @@ if ( !$dud = bp_displayed_user_domain() ) {
 			<?php endif; ?>
 
 			<?php /* Get an invitation count */ ?>
-			<?php $invites = groups_get_invites_for_user();
-			      $invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0; ?>
+			<?php if ( bp_is_active( 'groups' ) ) : ?>
+				<?php $invites = groups_get_invites_for_user();
+				      $invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0; ?>
 
-			<li class="sq-bullet <?php if ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <span class="mol-count count-<?php echo $invite_count ?>"><?php echo $invite_count ?></span></a></li>
+				<li class="sq-bullet <?php if ( bp_is_user_groups() && bp_is_current_action( 'invites' ) ) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <span class="mol-count count-<?php echo $invite_count ?>"><?php echo $invite_count ?></span></a></li>
+			<?php endif ?>
 
 		</ul>
 
