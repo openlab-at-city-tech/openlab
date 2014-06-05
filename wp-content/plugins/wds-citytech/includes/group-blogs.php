@@ -9,6 +9,10 @@
 function openlab_get_group_id_by_blog_id( $blog_id ) {
 	global $wpdb, $bp;
 
+	if ( ! bp_is_active( 'groups' ) ) {
+		return 0;
+	}
+
 	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
 
 	return (int) $group_id;
@@ -18,6 +22,10 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
  * Utility function for fetching the site id for a group
  */
 function openlab_get_site_id_by_group_id( $group_id = 0 ) {
+	if ( ! bp_is_active( 'groups' ) ) {
+		return 0;
+	}
+
 	if ( !$group_id ) {
 		$group_id = bp_get_current_group_id();
 	}

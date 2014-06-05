@@ -121,6 +121,10 @@ function openlab_get_group_type_label( $args = array() ) {
  * @return string
  */
 function openlab_get_group_type( $group_id = 0 ) {
+	if ( ! bp_is_active( 'groups' ) ) {
+		return '';
+	}
+
 	if ( !$group_id ) {
 		$group_id = openlab_fallback_group();
 	}

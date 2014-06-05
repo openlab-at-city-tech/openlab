@@ -510,6 +510,11 @@ function wds_bp_profile_group_tabs() {
 add_action( 'wp_head', 'wds_groups_ajax' );
 function wds_groups_ajax() {
 	global $bp;
+
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
+	}
+
 	wp_print_scripts( array( 'sack' ) );
 	$sack = 'var isack = new sack( "'.get_bloginfo( 'wpurl' ).'/wp-admin/admin-ajax.php" );';
 	$loading = '<img src="'.get_bloginfo( 'template_directory' ).'/_inc/images/ajax-loader.gif">';?>
@@ -1787,6 +1792,10 @@ function openlab_fallback_user() {
  */
 function openlab_fallback_group() {
 	global $groups_template;
+
+	if ( ! bp_is_active( 'groups' ) ) {
+		return 0;
+	}
 
 	$group_id = bp_get_current_group_id();
 

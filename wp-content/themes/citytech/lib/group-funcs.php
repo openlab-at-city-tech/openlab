@@ -116,6 +116,10 @@ function openlab_group_privacy_settings( $group_type ) {
 function openlab_group_archive() {
 	global $wpdb, $bp, $groups_template, $post;
 
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
+	}
+
 //geting the grouptype by slug - the archive pages are curently WP pages and don't have a specific grouptype associated with them - this function uses the curent page slug to assign a grouptype
 //@to-do - get the archive page in the right spot to function correctly within the BP framework
 	$group_type = openlab_page_slug_to_grouptype();

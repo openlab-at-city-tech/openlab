@@ -1,101 +1,5 @@
 <?php
 
-//show blog and pages on menu
-class WDS_Group_Extension extends BP_Group_Extension {
-
-	var $enable_nav_item = true;
-	var $enable_create_step = false;
-	public function __construct() {
-		global $bp;
-		$group_id=$bp->groups->current_group->id;
-		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-		if($wds_bp_group_site_id!=""){
-		  $this->name = 'Activity';
-		  $this->slug = 'activity';
-  		  $this->nav_item_position = 10;
-		}
-	}
-
-	public function create_screen( $group_id = null ) {
-		if ( !bp_is_group_creation_step( $this->slug ) )
-			return false;
-		wp_nonce_field( 'groups_create_save_' . $this->slug );
-	}
-
-	public function create_screen_save( $group_id = null ) {
-		global $bp;
-
-		check_admin_referer( 'groups_create_save_' . $this->slug );
-
-		groups_update_groupmeta( $bp->groups->new_group_id, 'my_meta_name', 'value' );
-	}
-
-	public function edit_screen( $group_id = null ) {
-		if ( !bp_is_group_admin_screen( $this->slug ) )
-			return false; ?>
-
-		<h2><?php echo esc_attr( $this->name ) ?></h2>
-        <?php
-		wp_nonce_field( 'groups_edit_save_' . $this->slug );
-	}
-
-	public function edit_screen_save( $group_id = null ) {
-		global $bp;
-
-		if ( !isset( $_POST['save'] ) )
-			return false;
-
-		check_admin_referer( 'groups_edit_save_' . $this->slug );
-
-		/* Insert your edit screen save code here */
-
-		/* To post an error/success message to the screen, use the following */
-		if ( !$success )
-			bp_core_add_message( __( 'There was an error saving, please try again', 'buddypress' ), 'error' );
-		else
-			bp_core_add_message( __( 'Settings saved successfully', 'buddypress' ) );
-
-		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) . '/admin/' . $this->slug );
-	}
-
-	function display() {
-		global $bp;
-		gconnect_locate_template( array( 'groups/single/group-header.php' ), true );
-		gconnect_locate_template( array( 'groups/single/activity.php' ), true );
-
-		/*$group_id=$bp->groups->current_group->id;
-		$wds_bp_group_site_id=groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );
-		if($wds_bp_group_site_id!=""){
-		  switch_to_blog($wds_bp_group_site_id);
-		  $pages = get_pages();
-		  ?>
-		  <div role="navigation" id="subnav" class="item-list-tabs no-ajax">
-			  <ul>
-				 <?php foreach ($pages as $pagg) {?>
-					<li class="current"><a href="?page=<?php echo $pagg->ID;?>"><?php echo $pagg->post_title;?></a></li>
-				  <?php }?>
-			  </ul>
-		  </div>
-		  <?php
-		  if($_GET['page']){
-			  $id=$_GET['page'];
-			  $post = get_post($id);
-			  echo $post->post_content;
-		  }
-		  restore_current_blog();
-		}*/
-	}
-
-	function widget_display() { ?>
-		<div class=&quot;info-group&quot;>
-			<h4><?php echo esc_attr( $this->name ) ?></h4>
-		</div>
-		<?php
-	}
-
-}
-//bp_register_group_extension( 'WDS_Group_Extension' );
-
 //Change "Group" to something else
 class bpass_Translation_Mangler {
  /*
@@ -245,6 +149,10 @@ add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
 add_action('bp_actions','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
+
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
+	}
 
 	if ( $group_id = bp_get_current_group_id() ) {
 	     $blog_id = groups_get_groupmeta($group_id, 'wds_bp_group_site_id' );

@@ -215,6 +215,10 @@ function cuny_whos_online() {
 function cuny_home_square($type){
 	global $wpdb, $bp;
 
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
+	}
+
 	$meta_filter = new BP_Groups_Meta_Filter( array(
 		'wds_group_type' => $type
 	) );

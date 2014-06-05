@@ -558,7 +558,7 @@ function openlab_delete_portfolio_redirect() {
  * Enforce one portfolio per person, by redirecting away from the portfolio creation page
  */
 function openlab_enforce_one_portfolio_per_person() {
-	if ( bp_is_group_creation_step( 'group-details' ) && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
+	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 		bp_core_add_message( sprintf( 'You already have %s', openlab_get_portfolio_label( 'leading_a=1' ) ), 'error' );
 		bp_core_redirect( bp_loggedin_user_domain() );
 	}
