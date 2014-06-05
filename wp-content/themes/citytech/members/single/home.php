@@ -226,6 +226,7 @@ global $bp;
         <div class="clearfloat"></div>
         <script type='text/javascript'>(function($){ $('.activity-list').css('visibility','hidden'); })(jQuery);</script>
 <?php
+	if ( bp_is_active( 'friends' ) ) :
         if ( !$friend_ids = wp_cache_get( 'friends_friend_ids_' . $bp->displayed_user->id, 'bp' ) ) {
             $friend_ids = BP_Friends_Friendship::get_random_friends( $bp->displayed_user->id, 20);
             wp_cache_set( 'friends_friend_ids_' . $bp->displayed_user->id, $friend_ids, 'bp' );
@@ -255,6 +256,7 @@ global $bp;
               </div>
 
           <?php } ?>
+	  <?php endif; /* bp_is_active( 'friends' ) */ ?>
           <div class="clear"></div>
       </div>
       <?php } ?>

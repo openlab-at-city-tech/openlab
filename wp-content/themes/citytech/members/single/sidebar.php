@@ -26,10 +26,12 @@ if ( !$dud = bp_displayed_user_domain() ) {
 			<li class="sq-bullet <?php if ( is_page( 'my-clubs' ) ) : ?>selected-page<?php endif ?>" class="mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
 
 			<?php /* Get a friend request count */ ?>
-			<?php $request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-			      $request_count = intval( count( (array) $request_ids ) ); ?>
+			<?php if ( bp_is_active( 'friends' ) ) : ?>
+				<?php $request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+				      $request_count = intval( count( (array) $request_ids ) ); ?>
 
-			<li class="sq-bullet <?php if ( bp_is_user_friends() ) : ?>selected-page<?php endif ?>" class="mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <span class="mol-count count-<?php echo $request_count ?>"><?php echo $request_count ?></span></a></li>
+				<li class="sq-bullet <?php if ( bp_is_user_friends() ) : ?>selected-page<?php endif ?>" class="mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <span class="mol-count count-<?php echo $request_count ?>"><?php echo $request_count ?></span></a></li>
+			<?php endif; ?>
 
 			<?php /* Get an unread message count */ ?>
 			<?php if ( bp_is_active( 'messages' ) ) : ?>

@@ -237,14 +237,16 @@ class OpenLab_Admin_Bar {
 			) );
 		}
 
-                $request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-                $request_count = count( $request_ids );
-		$wp_admin_bar->add_node( array(
-			'parent' => 'my-openlab',
-			'id'     => 'my-friends',
-			'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . '">%d</span>', $request_count ),
-			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
-		) );
+		if ( bp_is_active( 'friends' ) ) {
+			$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+			$request_count = count( $request_ids );
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-friends',
+				'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . '">%d</span>', $request_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
+			) );
+		}
 
 		if ( bp_is_active( 'messages' ) ) {
 			$messages_count = bp_get_total_unread_messages_count();
