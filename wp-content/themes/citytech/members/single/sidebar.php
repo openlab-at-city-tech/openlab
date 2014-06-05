@@ -32,9 +32,11 @@ if ( !$dud = bp_displayed_user_domain() ) {
 			<li class="sq-bullet <?php if ( bp_is_user_friends() ) : ?>selected-page<?php endif ?>" class="mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <span class="mol-count count-<?php echo $request_count ?>"><?php echo $request_count ?></span></a></li>
 
 			<?php /* Get an unread message count */ ?>
-			<?php $message_count = bp_get_total_unread_messages_count() ?>
+			<?php if ( bp_is_active( 'messages' ) ) : ?>
+				<?php $message_count = bp_get_total_unread_messages_count() ?>
 
-			<li class="sq-bullet <?php if ( bp_is_user_messages() ) : ?>selected-page<?php endif ?>" class="mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <span class="mol-count count-<?php echo $message_count ?>"><?php echo $message_count ?></span></a></li>
+				<li class="sq-bullet <?php if ( bp_is_user_messages() ) : ?>selected-page<?php endif ?>" class="mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <span class="mol-count count-<?php echo $message_count ?>"><?php echo $message_count ?></span></a></li>
+			<?php endif; ?>
 
 			<?php /* Get an invitation count */ ?>
 			<?php $invites = groups_get_invites_for_user();
