@@ -15,5 +15,7 @@ function openlab_disable_widgets_on_non_root_blogs() {
 	unregister_widget( 'BP_Core_Login_Widget' );
 	unregister_widget( 'BP_Core_Members_Widget' );
 	unregister_widget( 'BP_Messages_Sitewide_Notices_Widget' );
+	unregister_widget( 'BP_Group_Documents_Newest_Widget' );
+	unregister_widget( 'BP_Group_Documents_Popular_Widget' );
 }
 add_action( 'widgets_init', 'openlab_disable_widgets_on_non_root_blogs', 99 );
