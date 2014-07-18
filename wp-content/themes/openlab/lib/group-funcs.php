@@ -17,11 +17,11 @@ function openlab_group_privacy_settings($group_type) {
     if ('portfolio' === $group_type) {
         $group_type_name = openlab_get_portfolio_label(array(
             'group_id' => bp_get_current_group_id(),
-                ));
+        ));
         $group_type_name_uc = openlab_get_portfolio_label(array(
             'group_id' => bp_get_current_group_id(),
             'case' => 'upper',
-                ));
+        ));
     }
 
     // If this is a cloned group/site, fetch the clone source's details
