@@ -349,3 +349,63 @@ function openlab_group_post_count($filters, $group_args) {
 
     return $post_count;
 }
+
+//a variation on bp_groups_pagination_count() to match design
+function cuny_groups_pagination_count($group_name) {
+    global $bp, $groups_template;
+
+    $start_num = intval(( $groups_template->pag_page - 1 ) * $groups_template->pag_num) + 1;
+    $from_num = bp_core_number_format($start_num);
+    $to_num = bp_core_number_format(( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ) );
+    $total = bp_core_number_format($groups_template->total_group_count);
+
+    echo sprintf(__('%1$s to %2$s ( of %3$s ' . $group_name . ' )', 'buddypress'), $from_num, $to_num, $total);
+}
+
+/**
+ * Get list of active semesters for use in course sidebar filter.
+ */
+function openlab_get_active_semesters() {
+    global $wpdb, $bp;
+
+    $tkey = 'openlab_active_semesters';
+    $combos = get_transient($tkey);
+
+    if (false === $combos) {
+        $sems = array('Winter', 'Spring', 'Summer', 'Fall');
+        $years = array();
+        $this_year = date('Y');
+        for ($i = 2011; $i <= $this_year; $i++) {
+            $years[] = $i;
+        }
+
+        // Combos
+        $combos = array();
+        foreach ($years as $year) {
+            foreach ($sems as $sem) {
+                $combos[] = array(
+                    'year' => $year,
+                    'sem' => $sem,
+                    'option_value' => sprintf('%s-%s', strtolower($sem), $year),
+                    'option_label' => sprintf('%s %s', $sem, $year),
+                );
+            }
+        }
+
+        // Verify that the combos are all active
+        foreach ($combos as $ckey => $c) {
+            $active = (bool) $wpdb->get_var($wpdb->prepare("SELECT COUNT(gm1.id) FROM {$bp->groups->table_name_groupmeta} gm1 JOIN {$bp->groups->table_name_groupmeta} gm2 ON gm1.group_id = gm2.group_id WHERE gm1.meta_key = 'wds_semester' AND gm1.meta_value = %s AND gm2.meta_key = 'wds_year' AND gm2.meta_value = %s", $c['sem'], $c['year']));
+
+            if (!$active) {
+                unset($combos[$ckey]);
+            }
+        }
+
+        $combos = array_values(array_reverse($combos));
+
+        set_transient($tkey, $combos);
+        var_dump('Miss');
+    }
+
+    return $combos;
+}
