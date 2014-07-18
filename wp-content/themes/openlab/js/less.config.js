@@ -1,0 +1,13 @@
+/**
+ * Less js config
+ */
+
+var less = {
+    env: "development",
+    dumpLineNumbers: "mediaquery",
+    errorReporting : "html"
+};
+
+console.log(less);
+
+
