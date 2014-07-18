@@ -172,7 +172,7 @@ switch ($_GET['group_sequence']) {
             <select name="semester" class="last-select <?php echo $semester_color; ?>-text">
                 <option value='' <?php selected( '', $option_value_semester ) ?>>Select Semester</option>
                 <option value='semester_all' <?php selected( 'semester_all', $option_value_semester ) ?>>All</option>
-		<?php foreach ( openlab_get_active_semesters() as $sem ) : ?>
+		<?php foreach (openlab_get_active_semesters() as $sem ) : ?>
 			<option value="<?php echo esc_attr( $sem['option_value'] ) ?>" <?php selected( $option_value_semester, $sem['option_value'] ) ?>><?php echo esc_attr( $sem['option_label'] ) ?></option>
 		<?php endforeach; ?>
             </select>

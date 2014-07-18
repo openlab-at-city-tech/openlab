@@ -93,10 +93,10 @@ function cuny_widgets_init() {
 
 add_action('widgets_init', 'cuny_widgets_init');
 
-function cuny_o_e_class( $num ) {
- return $num % 2 == 0 ? " even":" odd";
+function cuny_o_e_class($num) {
+    return $num % 2 == 0 ? " even" : " odd";
 }
 
-function cuny_third_end_class( $num ) {
- return $num % 3 == 0 ? " last":"";
+function cuny_third_end_class($num) {
+    return $num % 3 == 0 ? " last" : "";
 }
