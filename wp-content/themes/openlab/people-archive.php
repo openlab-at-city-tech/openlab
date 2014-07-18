@@ -1,8 +1,10 @@
-<?php /* Template Name: People Archive */
+<?php
+/* Template Name: People Archive */
 get_header();
 ?>
 
-<?php global $wp_query;
+<?php
+global $wp_query;
 $post_obj = $wp_query->get_queried_object();
 ?>
 <div id="content" class="hfeed row">

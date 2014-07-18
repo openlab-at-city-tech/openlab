@@ -23,7 +23,7 @@
 	</div><!-- #content -->
 
 	<?php //locate_template( array( 'sidebar.php' ), true ) ?>
-	<div id="sidebar" class="sidebar widget-area">
+        <div id="sidebar" class="sidebar widget-area">
 			<div id="blog-dir-search" class="dir-search">
 				<?php bp_directory_blogs_search_form() ?>
 			</div><!-- #blog-dir-search -->

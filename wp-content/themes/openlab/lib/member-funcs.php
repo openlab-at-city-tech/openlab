@@ -108,7 +108,7 @@ function openlab_list_members($view) {
 			 WHERE field_id = 7
 			       AND
 			       value = %s", $user_type
-                ));
+        ));
 
         if (empty($user_type_matches)) {
             $user_type_matches = array(0);
@@ -140,7 +140,7 @@ function openlab_list_members($view) {
 			 WHERE field_id IN (%d, %d)
 			       AND
 			       value IN (" . $department_list_sql . ")", $department_field_id, $major_field_id
-                ));
+        ));
 
         if (empty($user_school_matches)) {
             $include_noop = true;
@@ -165,7 +165,7 @@ function openlab_list_members($view) {
 			 FROM {$bp->profile->table_name_fields}
 			 WHERE parent_id IN (%d, %d)
 			 AND name REGEXP '{$regex}'", $department_field_id, $major_field_id
-                ));
+        ));
 
         $user_departments_sql = '';
         foreach ($user_departments as &$ud) {
@@ -179,7 +179,7 @@ function openlab_list_members($view) {
 			 WHERE field_id IN (%d, %d)
 			       AND
 			       value IN ({$user_departments_sql})", $department_field_id, $major_field_id
-                ));
+        ));
 
         if (empty($user_department_matches)) {
             $include_noop = true;
@@ -224,21 +224,21 @@ function openlab_list_members($view) {
     );
     ?>
     <div class="current-group-filters current-portfolio-filters">
-    <?php openlab_current_directory_filters(); ?>
+        <?php openlab_current_directory_filters(); ?>
     </div>
 
     <?php if (bp_has_members($args)) : ?>
         <div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
         <div class="clearfloat"></div>
         <div class="avatar-block">
-        <?php
-        while (bp_members()) : bp_the_member();
-            //the following checks the current $id agains the passed list from the query
-            $member_id = $members_template->member->id;
+            <?php
+            while (bp_members()) : bp_the_member();
+                //the following checks the current $id agains the passed list from the query
+                $member_id = $members_template->member->id;
 
 
-            $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
-            ?>
+                $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
+                ?>
                 <div class="person-block col-md-4">
                     <div class="item-avatar">
                         <a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
@@ -246,36 +246,36 @@ function openlab_list_members($view) {
                     <div class="cuny-member-info">
                         <a class="member-name" href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a>
                         <span class="member-since-line">Member since <?php echo $registered; ?></span>
-                <?php if (bp_get_member_latest_update()) : ?>
+                        <?php if (bp_get_member_latest_update()) : ?>
                             <span class="update"><?php bp_member_latest_update('length=10') ?></span>
-            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
-        <?php endwhile; ?>
+            <?php endwhile; ?>
         </div>
         <div id="pag-top" class="pagination">
 
             <div class="pag-count" id="member-dir-count-top">
-                    <?php bp_members_pagination_count() ?>
+                <?php bp_members_pagination_count() ?>
             </div>
 
             <div class="pagination-links" id="member-dir-pag-top">
-            <?php bp_members_pagination_links() ?>
+                <?php bp_members_pagination_links() ?>
             </div>
 
         </div>
 
-            <?php
-            else:
-                if ($user_type == "Student") {
-                    $user_type = "students";
-                }
+        <?php
+    else:
+        if ($user_type == "Student") {
+            $user_type = "students";
+        }
 
-                if (empty($user_type)) {
-                    $user_type = 'people';
-                }
-                ?>
+        if (empty($user_type)) {
+            $user_type = 'people';
+        }
+        ?>
 
         <div class="widget-error">
             <p><?php _e('There are no ' . strtolower($user_type) . ' to display.', 'buddypress') ?></p>

@@ -417,16 +417,16 @@ function cuny_buddypress_group_actions() {
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
             <div class="group-nav sidebar-widget">
-            <?php echo openlab_group_visibility_flag() ?>
+                <?php echo openlab_group_visibility_flag() ?>
                 <div id="item-buttons">
                     <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?></h2>
                     <ul>
-            <?php bp_get_options_nav(); ?>
+                        <?php bp_get_options_nav(); ?>
                     </ul>
                 </div><!-- #item-buttons -->
             </div>
             <?php do_action('bp_group_options_nav') ?>
-        <?php
+            <?php
         endwhile;
     endif;
 }
@@ -434,125 +434,119 @@ function cuny_buddypress_group_actions() {
 /**
  * Output the group visibility flag, shown above the right-hand nav
  */
-function openlab_group_visibility_flag( $type = 'group' ) {
-	static $group_buttons;
+function openlab_group_visibility_flag($type = 'group') {
+    static $group_buttons;
 
-	if ( ! in_array( $type, array( 'group', 'site' ) ) ) {
-		return;
-	}
+    if (!in_array($type, array('group', 'site'))) {
+        return;
+    }
 
-	if ( ! isset( $group_buttons ) ) {
-		$group_buttons = array();
-	}
+    if (!isset($group_buttons)) {
+        $group_buttons = array();
+    }
 
-	// We stash it so that we only have to do the calculation once
-	if ( isset( $group_buttons[ $type ] ) ) {
-		return $group_buttons[ $type ];
-	}
+    // We stash it so that we only have to do the calculation once
+    if (isset($group_buttons[$type])) {
+        return $group_buttons[$type];
+    }
 
-	$group = groups_get_current_group();
+    $group = groups_get_current_group();
 
-	$site_url = openlab_get_group_site_url( $group->id );
-	$site_id  = openlab_get_site_id_by_group_id( $group->id );
+    $site_url = openlab_get_group_site_url($group->id);
+    $site_id = openlab_get_site_id_by_group_id($group->id);
 
-	if ( $site_url ) {
-		// If we have a site URL but no ID, it's an external site, and is public
-		if ( ! $site_id ) {
-			$site_status = 1;
-		} else {
-			$site_status = get_blog_option( $site_id, 'blog_public' );
-		}
-	}
+    if ($site_url) {
+        // If we have a site URL but no ID, it's an external site, and is public
+        if (!$site_id) {
+            $site_status = 1;
+        } else {
+            $site_status = get_blog_option($site_id, 'blog_public');
+        }
+    }
 
-	$g_text = $s_text = '';
-	$g_flag_type = $s_flag_type = 'down';
-	$site_status = (float) $site_status;
+    $g_text = $s_text = '';
+    $g_flag_type = $s_flag_type = 'down';
+    $site_status = (float) $site_status;
 
-	switch ( $site_status ) {
+    switch ($site_status) {
 
-		// Public
-		case 1 :
-		case 0 :
-			// If the group is also public, we use a single "up" flag
-			if ( 'public' === $group->status ) {
-				$g_text = 'Open';
-				$g_flag_type = 'up';
+        // Public
+        case 1 :
+        case 0 :
+            // If the group is also public, we use a single "up" flag
+            if ('public' === $group->status) {
+                $g_text = 'Open';
+                $g_flag_type = 'up';
 
-			// Special case: groups without a site will show up as
-			// $site_status = 0. They should get an up flag, since
-			// "Private" applies to the entire group (the entire
-			// group consisting of the profile)
-			} else if ( ! $site_url ) {
-				$g_text = 'Private';
-				$g_flag_type = 'up';
-			} else {
-				$g_text = 'Private';
-				$s_text = 'Open';
-			}
+                // Special case: groups without a site will show up as
+                // $site_status = 0. They should get an up flag, since
+                // "Private" applies to the entire group (the entire
+                // group consisting of the profile)
+            } else if (!$site_url) {
+                $g_text = 'Private';
+                $g_flag_type = 'up';
+            } else {
+                $g_text = 'Private';
+                $s_text = 'Open';
+            }
 
-			break;
+            break;
 
-		case -1 :
-			$user_has_access = is_user_logged_in();
+        case -1 :
+            $user_has_access = is_user_logged_in();
 
-			if ( 'public' === $group->status ) {
-				$g_text = 'Open';
-			} else {
-				$g_text = 'Private';
-			}
+            if ('public' === $group->status) {
+                $g_text = 'Open';
+            } else {
+                $g_text = 'Private';
+            }
 
-			if ( $user_has_access ) {
-				// If the group is public, show a single Public up flag
-				if ( 'public' === $group->status ) {
-					$g_flag_type = 'up';
+            if ($user_has_access) {
+                // If the group is public, show a single Public up flag
+                if ('public' === $group->status) {
+                    $g_flag_type = 'up';
 
-				// For a private group, separate the flags
-				} else {
-					$s_text = 'Open';
-				}
-			} else {
-				// Two separate flags
-				if ( 'public' === $group->status ) {
-					$s_text = 'Private';
+                    // For a private group, separate the flags
+                } else {
+                    $s_text = 'Open';
+                }
+            } else {
+                // Two separate flags
+                if ('public' === $group->status) {
+                    $s_text = 'Private';
 
-				// Single "up" private flag
-				} else {
-					$g_flag_type = 'up';
-				}
-			}
+                    // Single "up" private flag
+                } else {
+                    $g_flag_type = 'up';
+                }
+            }
 
-			break;
+            break;
 
-		case -2 :
-		case -3 :
-			if ( 'public' === $group->status ) {
-				$g_text = 'Open';
-				$s_text = 'Private';
-			} else {
-				$g_text = 'Private';
-				$g_flag_type = 'up';
-			}
+        case -2 :
+        case -3 :
+            if ('public' === $group->status) {
+                $g_text = 'Open';
+                $s_text = 'Private';
+            } else {
+                $g_text = 'Private';
+                $g_flag_type = 'up';
+            }
 
-			break;
-	}
+            break;
+    }
 
-	// Assemble the HTML
-	$group_buttons['group'] = sprintf(
-		'<div class="group-visibility-flag group-visibility-flag-group group-visibility-flag-%s group-visibility-flag-%s">%s</div>',
-		strtolower( $g_text ),
-		$g_flag_type,
-		$g_text
-	);
+    // Assemble the HTML
+    $group_buttons['group'] = sprintf(
+            '<div class="group-visibility-flag group-visibility-flag-group group-visibility-flag-%s group-visibility-flag-%s">%s</div>', strtolower($g_text), $g_flag_type, $g_text
+    );
 
-	// Only build the site button if there's something to build
-	if ( ! empty( $s_text ) ) {
-		$group_buttons['site'] = sprintf(
-			'<div class="group-visibility-flag group-visibility-flag-site group-visibility-flag-%s group-visibility-flag-%s">%s</div>',
-			strtolower( $s_text ),
-			$s_flag_type,
-			$s_text
-		);
-	}
+    // Only build the site button if there's something to build
+    if (!empty($s_text)) {
+        $group_buttons['site'] = sprintf(
+                '<div class="group-visibility-flag group-visibility-flag-site group-visibility-flag-%s group-visibility-flag-%s">%s</div>', strtolower($s_text), $s_flag_type, $s_text
+        );
+    }
 
-	return isset( $group_buttons[ $type ] ) ? $group_buttons[ $type ] : '';
+    return isset($group_buttons[$type]) ? $group_buttons[$type] : '';
 }
