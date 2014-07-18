@@ -27,6 +27,8 @@ require_once( STYLESHEETPATH . '/lib/help-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/admin-funcs.php' );
+require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
+require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
 function openlab_load_scripts() {
     /**
@@ -57,7 +59,36 @@ function openlab_load_scripts() {
 
         wp_register_script('bootstrap-js', get_stylesheet_directory_uri() . '/js/bootstrap.min.js', array('jquery'));
         wp_enqueue_script('bootstrap-js');
+        wp_register_script('jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
+        wp_enqueue_script('jcarousellite');
+        wp_register_script('easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
+        wp_enqueue_script('easyaccordion');
+        wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
+        wp_enqueue_script('utility');
+        wp_enqueue_script('dtheme-ajax-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array('jquery'));
     }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
+
+//custom widgets for OpenLab
+function cuny_widgets_init() {
+    //add widget for Rotating Post Gallery Widget - will be placed on the homepage
+    register_sidebar(array(
+        'name' => __('Rotating Post Gallery Widdget', 'cuny'),
+        'description' => __('This is the widget for holding the Rotating Post Gallery Widget', 'cuny'),
+        'id' => 'pgw-gallery',
+        'before_widget' => '<div id="pgw-gallery">',
+        'after_widget' => '</div>',
+    ));
+    //add widget for the Featured Widget - will be placed on the homepage under "In the Spotlight"
+    register_sidebar(array(
+        'name' => __('Featured Widget', 'cuny'),
+        'description' => __('This is the widget for holding the Featured Widget', 'cuny'),
+        'id' => 'cac-featured',
+        'before_widget' => '<div id="cac-featured">',
+        'after_widget' => '</div>',
+    ));
+}
+
+add_action('widgets_init', 'cuny_widgets_init');
