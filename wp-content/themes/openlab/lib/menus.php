@@ -21,6 +21,7 @@ register_nav_menus( array(
  * @return string
  */
 function openlab_help_categories_menu( $items, $args ) {
+    
 	global $post;
 	if ( $args->theme_location == 'helpmenu' ) {
 		$term = get_query_var( 'term' );
