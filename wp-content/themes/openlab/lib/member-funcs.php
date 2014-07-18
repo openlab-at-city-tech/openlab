@@ -248,7 +248,7 @@ function openlab_list_members($view) {
 
 
 					$registered = bp_format_time( strtotime( $members_template->member->user_registered ), true ) ?>
-					<div class="person-block">
+					<div class="person-block col-md-4">
 						<div class="item-avatar">
 							<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
 						</div>
@@ -292,4 +292,21 @@ function openlab_list_members($view) {
 
 		<?php endif;
 
+}
+
+//a variation on bp_members_pagination_count() to match design
+function cuny_members_pagination_count( $member_name )
+{
+	global $bp, $members_template;
+
+		if ( empty( $members_template->type ) )
+			$members_template->type = '';
+
+		$start_num = intval( ( $members_template->pag_page - 1 ) * $members_template->pag_num ) + 1;
+		$from_num  = bp_core_number_format( $start_num );
+		$to_num    = bp_core_number_format( ( $start_num + ( $members_template->pag_num - 1 ) > $members_template->total_member_count ) ? $members_template->total_member_count : $start_num + ( $members_template->pag_num - 1 ) );
+		$total     = bp_core_number_format( $members_template->total_member_count );
+
+		$pag = sprintf( __( '%1$s to %2$s ( of %3$s members )', 'buddypress' ), $from_num, $to_num, $total );
+		echo $pag;
 }
