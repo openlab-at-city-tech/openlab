@@ -19,7 +19,7 @@ get_header();
 </div><!--content-->
 
 <div id="sidebar" class="sidebar widget-area">
-    <?php get_template_part('members/single/sidebar'); ?>
+    <?php get_template_part('buddypress/members/single/sidebar'); ?>
 </div>
 
 <?php

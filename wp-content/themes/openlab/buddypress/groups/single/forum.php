@@ -1,9 +1,9 @@
 <?php
 do_action('bp_before_group_forum_content');
 if (bp_is_group_forum_topic_edit()) {
-    get_template_part('groups/single/forum/edit');
+    get_template_part('buddypress/groups/single/forum/edit');
 } elseif (bp_is_group_forum_topic()) {
-    get_template_part('groups/single/forum/topic');
+    get_template_part('buddypress/groups/single/forum/topic');
 } else {
     ?>
     <div class="item-list-tabs no-ajax" id="bpsubnav" role="navigation">
@@ -29,7 +29,7 @@ if (bp_is_group_forum_topic_edit()) {
         <div class="clear"></div>
     </div>
     <div class="forums single-forum" role="main">
-    <?php get_template_part('forums/forums-loop'); ?>
+    <?php get_template_part('buddypress/forums/forums-loop'); ?>
     </div><!-- .forums.single-forum -->
 
 <?php

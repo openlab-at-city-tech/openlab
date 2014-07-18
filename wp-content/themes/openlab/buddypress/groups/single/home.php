@@ -7,13 +7,15 @@
 /**begin layout**/
 get_header(); ?>
 
-	<div id="content" class="hfeed">
-    	<?php cuny_group_single(); ?>
-    </div><!--content-->
+	<div id="content" class="hfeed row">
+            <div class="col-sm-9">
+            <?php cuny_group_single(); ?>
+    </div>
 
-    <div id="sidebar" class="sidebar widget-area">
+    <div id="sidebar" class="sidebar widget-area col-sm-3">
 	<?php cuny_buddypress_group_actions(); ?>
     </div>
+</div>
 
 <?php get_footer();
 /**end layout**/
@@ -331,7 +333,7 @@ function cuny_group_single() { ?>
 		<?php } ?>
 
 	<?php } else {
-		locate_template( array( 'groups/single/wds-bp-action-logics.php' ), true );
+		locate_template( array( 'buddypress/groups/single/wds-bp-action-logics.php' ), true );
 	} ?>
 
 	<?php do_action( 'bp_after_group_body' ) ?>

@@ -300,3 +300,74 @@ function cuny_members_pagination_count($member_name) {
     $pag = sprintf(__('%1$s to %2$s ( of %3$s members )', 'buddypress'), $from_num, $to_num, $total);
     echo $pag;
 }
+
+/**
+ * Prints a status message regarding the group visibility.
+ *
+ * @global BP_Groups_Template $groups_template Groups template object
+ * @param object $group Group to get status message for. Optional; defaults to current group.
+ */
+function openlab_group_status_message($group = null) {
+    global $groups_template;
+
+    if (!$group)
+        $group = & $groups_template->group;
+
+    $group_label = openlab_get_group_type_label('group_id=' . $group->id . '&case=upper');
+
+    $site_id = openlab_get_site_id_by_group_id($group->id);
+    $site_url = openlab_get_group_site_url($group->id);
+
+    if ($site_url) {
+        // If we have a site URL but no ID, it's an external site, and is public
+        if (!$site_id) {
+            $site_status = 1;
+        } else {
+            $site_status = get_blog_option($site_id, 'blog_public');
+        }
+    }
+
+    $site_status = (float) $site_status;
+
+    $message = '';
+
+    switch ($site_status) {
+        // Public
+        case 1 :
+        case 0 :
+            if ('public' === $group->status) {
+                $message = 'This ' . $group_label . ' is OPEN.';
+            } else if (!$site_url) {
+                // Special case: $site_status will be 0 when the
+                // group does not have an associated site. When
+                // this is the case, and the group is not
+                // public, don't mention anything about the Site.
+                $message = 'This ' . $group_label . ' is PRIVATE.';
+            } else {
+                $message = 'This ' . $group_label . ' Profile is PRIVATE, but the ' . $group_label . ' Site is OPEN to all visitors.';
+            }
+
+            break;
+
+        case -1 :
+            if ('public' === $group->status) {
+                $message = 'This ' . $group_label . ' Profile is OPEN, but only logged-in OpenLab members may view the ' . $group_label . ' Site.';
+            } else {
+                $message = 'This ' . $group_label . ' Profile is PRIVATE, but all logged-in OpenLab members may view the ' . $group_label . ' Site.';
+            }
+
+            break;
+
+        case -2 :
+        case -3 :
+            if ('public' === $group->status) {
+                $message = 'This ' . $group_label . ' Profile is OPEN, but the ' . $group_label . ' Site is PRIVATE.';
+            } else {
+                $message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+            }
+
+            break;
+    }
+
+    echo $message;
+}
