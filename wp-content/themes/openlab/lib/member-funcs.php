@@ -371,3 +371,71 @@ function openlab_group_status_message($group = null) {
 
     echo $message;
 }
+
+function openlab_get_groups_of_user( $args = array() ) {
+	global $bp, $wpdb;
+
+	$retval = array(
+		'group_ids'     => array(),
+		'group_ids_sql' => '',
+		'activity'	=> array()
+	);
+
+	$defaults = array(
+		'user_id' 	=> bp_loggedin_user_id(),
+		'show_hidden'   => true,
+		'group_type'	=> 'club',
+		'get_activity'	=> true
+	);
+	$r = wp_parse_args( $args, $defaults );
+
+	$select = $where = '';
+
+	$select = "SELECT a.group_id FROM {$bp->groups->table_name_members} a";
+	$where  = $wpdb->prepare( "WHERE a.is_confirmed = 1 AND a.is_banned = 0 AND a.user_id = %d", $r['user_id'] );
+
+	if ( !$r['show_hidden'] ) {
+		$select .= " JOIN {$bp->groups->table_name} c ON ( c.id = a.group_id ) ";
+		$where  .= " AND c.status != 'hidden' ";
+	}
+
+	if ( 'all' != $r['group_type'] ) {
+		// Sanitize
+		$group_type = in_array( strtolower( $r['group_type'] ), array( 'club', 'project', 'course' ) ) ? strtolower( $r['group_type'] ) : 'club';
+
+		$select .= " JOIN {$bp->groups->table_name_groupmeta} d ON ( a.group_id = d.group_id ) ";
+		$where  .= $wpdb->prepare( " AND d.meta_key = 'wds_group_type' AND d.meta_value = %s ", $group_type );
+	}
+
+	$sql = $select . ' ' . $where;
+
+	$group_ids = $wpdb->get_col( $sql );
+
+	$retval['group_ids'] = $group_ids;
+
+	// Now that we have group ids, get the associated activity items and format the
+	// whole shebang in the proper way
+	if ( !empty( $group_ids ) ) {
+		$retval['group_ids_sql'] = implode( ',', $group_ids );
+
+		if ( $r['get_activity'] ) {
+			// bp_has_activities() doesn't allow arrays of item_ids, so query manually
+			$activities = $wpdb->get_results( "SELECT id,item_id, content FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id IN ( {$retval['group_ids_sql']} ) ORDER BY id DESC" );
+
+			// Now walk down the list and try to match with a group. Once one is found, remove
+			// that group from the stack
+			$group_activity_items = array();
+			foreach ( ( array )$activities as $act ) {
+				if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
+					$group_activity_items[$act->item_id] = $act->content;
+					$key = array_search( $act->item_id, $group_ids );
+					unset( $group_ids[$key] );
+				}
+			}
+
+			$retval['activity'] = $group_activity_items;
+		}
+	}
+
+	return $retval;
+}

@@ -100,3 +100,28 @@ function cuny_o_e_class($num) {
 function cuny_third_end_class($num) {
     return $num % 3 == 0 ? " last" : "";
 }
+
+/**
+ * Modify the body class
+ *
+ * Invite New Members and Your Email Options fall under "Settings", so need
+ * an appropriate body class.
+ */
+function openlab_group_admin_body_classes($classes) {
+    if (!bp_is_group()) {
+        return $classes;
+    }
+
+    if (in_array(bp_current_action(), array('invite-anyone', 'notifications'))) {
+        $classes[] = 'group-admin';
+    }
+
+    return $classes;
+}
+
+add_filter('bp_get_the_body_class', 'openlab_group_admin_body_classes');
+
+/**
+ * Don't allow BuddyPress Docs to use its own theme compatibility layer
+ */
+add_filter('bp_docs_do_theme_compat', '__return_false');

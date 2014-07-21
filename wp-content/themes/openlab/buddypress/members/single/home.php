@@ -292,12 +292,11 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
         );
         $groups = openlab_get_groups_of_user($get_group_args);
 
-
         //echo $ids;
         if (!empty($groups['group_ids_sql']) && bp_has_groups('include=' . $groups['group_ids_sql'] . '&per_page=20')) :
 //	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
             ?>
-            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
+            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-4">
                 <!-- See all link in column headers -->
                 <h4><?php echo $title ?>
                 <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
