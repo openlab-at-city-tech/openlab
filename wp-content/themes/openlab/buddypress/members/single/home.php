@@ -222,7 +222,7 @@ function cuny_student_profile() {
             <?php do_action('bp_after_member_friends_content') ?>
 
         <?php } else { ?>
-
+            
             <?php echo cuny_profile_activty_block('course', 'My Courses', '', 25); ?>
         <?php echo cuny_profile_activty_block('project', 'My Projects', ' last', 25); ?>
         <?php echo cuny_profile_activty_block('club', 'My Clubs', ' last', 25); ?>
