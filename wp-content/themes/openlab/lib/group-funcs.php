@@ -5,6 +5,24 @@
  */
 
 /**
+ * Custom template loader for my-{grouptype}
+ */
+function openlab_mygroups_template_loader( $template ) {
+	if ( is_page() ) {
+		switch ( get_query_var( 'pagename' ) ) {
+			case 'my-courses' :
+			case 'my-clubs' :
+			case 'my-projects' :
+				get_template_part('buddypress/groups/index');
+				break;
+		}
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'openlab_mygroups_template_loader' );
+
+/**
  * This function consolidates the group privacy settings in one spot for easier updating
  *
  */
@@ -549,4 +567,53 @@ function openlab_group_visibility_flag($type = 'group') {
     }
 
     return isset($group_buttons[$type]) ? $group_buttons[$type] : '';
+}
+
+/**
+ * Markup for groupblog privacy settings
+ */
+function openlab_site_privacy_settings_markup($site_id = 0) {
+    global $blogname, $current_site;
+
+    if (!$site_id) {
+        $site_id = get_current_blog_id();
+    }
+
+    $blog_name = get_blog_option($site_id, 'blogname');
+    $blog_public = get_blog_option($site_id, 'blog_public');
+    $group_type = openlab_get_current_group_type('case=upper');
+    ?>
+
+    <div class="radio group-site">
+
+        <h6><?php _e('Public', 'buddypress') ?></h6>
+        <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
+        <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked('1', $blog_public); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
+
+        <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label>
+
+        <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
+
+            <h6><?php _e('Private', 'buddypress') ?></h6>
+            <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
+
+            <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>><?php _e('I would like my site to be visible to registered users of this ' . ucfirst($group_type) . '.'); ?></label>
+
+            <h6><?php _e('Hidden', 'buddypress') ?></h6>
+            <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
+
+        <?php else : ?>
+
+            <?php /* Portfolios */ ?>
+            <h6>Private</h6>
+            <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
+
+            <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
+            <p class="description private-portfolio-gloss">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
+
+            <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>>I would like my site to be visible only to me.</label>
+
+        <?php endif; ?>
+    </div>
+    <?php
 }
