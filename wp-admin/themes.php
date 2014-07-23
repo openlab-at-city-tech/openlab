@@ -56,7 +56,7 @@ if ( current_user_can( 'install_themes' ) ) {
 	if ( is_multisite() ) {
 		$help_install = '<p>' . __('Installing themes on Multisite can only be done from the Network Admin section.') . '</p>';
 	} else {
-		$help_install = '<p>' . sprintf( __('If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href="%s" target="_blank">WordPress.org Theme Directory</a>. Themes in the WordPress.org Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!'), 'http://wordpress.org/themes/' ) . '</p>';
+		$help_install = '<p>' . sprintf( __('If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href="%s" target="_blank">WordPress.org Theme Directory</a>. Themes in the WordPress.org Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!'), 'https://wordpress.org/themes/' ) . '</p>';
 	}
 
 	get_current_screen()->add_help_tab( array(
@@ -83,7 +83,7 @@ if ( current_user_can( 'edit_theme_options' ) ) {
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="http://codex.wordpress.org/Using_Themes" target="_blank">Documentation on Using Themes</a>' ) . '</p>' .
-	'<p>' . __( '<a href="http://wordpress.org/support/" target="_blank">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://wordpress.org/support/" target="_blank">Support Forums</a>' ) . '</p>'
 );
 
 if ( current_user_can( 'switch_themes' ) ) {
@@ -99,15 +99,12 @@ wp_localize_script( 'theme', '_wpThemeSettings', array(
 		'canInstall'    => ( ! is_multisite() && current_user_can( 'install_themes' ) ),
 		'installURI'    => ( ! is_multisite() && current_user_can( 'install_themes' ) ) ? admin_url( 'theme-install.php' ) : null,
 		'confirmDelete' => __( "Are you sure you want to delete this theme?\n\nClick 'Cancel' to go back, 'OK' to confirm the delete." ),
-		'root'          => parse_url( admin_url( 'themes.php' ), PHP_URL_PATH ),
-		'theme'         => esc_html( $theme ),
-		'search'        => esc_html( $search ),
-
+		'adminUrl'      => parse_url( admin_url(), PHP_URL_PATH ),
 	),
  	'l10n' => array(
  		'addNew' => __( 'Add New Theme' ),
  		'search'  => __( 'Search Installed Themes' ),
- 		'searchPlaceholder' => __( 'Search installed themes...' ),
+ 		'searchPlaceholder' => __( 'Search installed themes...' ), // placeholder (no ellipsis)
   	),
 ) );
 
@@ -122,7 +119,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 	<h2><?php esc_html_e( 'Themes' ); ?>
 		<span class="theme-count"><?php echo count( $themes ); ?></span>
 	<?php if ( ! is_multisite() && current_user_can( 'install_themes' ) ) : ?>
-		<a href="<?php echo admin_url( 'theme-install.php' ); ?>" class="add-new-h2"><?php echo esc_html( _x( 'Add New', 'Add new theme' ) ); ?></a>
+		<a href="<?php echo admin_url( 'theme-install.php' ); ?>" class="hide-if-no-js add-new-h2"><?php echo esc_html( _x( 'Add New', 'Add new theme' ) ); ?></a>
 	<?php endif; ?>
 	</h2>
 <?php
@@ -142,7 +139,7 @@ endif;
 $ct = wp_get_theme();
 
 if ( $ct->errors() && ( ! is_multisite() || current_user_can( 'manage_network_themes' ) ) ) {
-	echo '<p class="error-message">' . sprintf( __( 'ERROR: %s' ), $ct->errors()->get_error_message() ) . '</p>';
+	echo '<div class="error"><p>' . sprintf( __( 'ERROR: %s' ), $ct->errors()->get_error_message() ) . '</p></div>';
 }
 
 /*
@@ -191,8 +188,11 @@ if ( ! $ct->errors() || ( 1 == count( $ct->errors()->get_error_codes() )
  * This PHP is synchronized with the tmpl-theme template below!
  */
 
-foreach ( $themes as $theme ) : ?>
-<div class="theme<?php if ( $theme['active'] ) echo ' active'; ?>">
+foreach ( $themes as $theme ) :
+	$aria_action = esc_attr( $theme['id'] . '-action' );
+	$aria_name   = esc_attr( $theme['id'] . '-name' );
+	?>
+<div class="theme<?php if ( $theme['active'] ) echo ' active'; ?>" tabindex="0" aria-describedby="<?php echo $aria_action . ' ' . $aria_name; ?>">
 	<?php if ( ! empty( $theme['screenshot'][0] ) ) { ?>
 		<div class="theme-screenshot">
 			<img src="<?php echo $theme['screenshot'][0]; ?>" alt="" />
@@ -200,13 +200,13 @@ foreach ( $themes as $theme ) : ?>
 	<?php } else { ?>
 		<div class="theme-screenshot blank"></div>
 	<?php } ?>
-	<span class="more-details"><?php _e( 'Theme Details' ); ?></span>
+	<span class="more-details" id="<?php echo $aria_action; ?>"><?php _e( 'Theme Details' ); ?></span>
 	<div class="theme-author"><?php printf( __( 'By %s' ), $theme['author'] ); ?></div>
 
 	<?php if ( $theme['active'] ) { ?>
-		<h3 class="theme-name"><span><?php _ex( 'Active:', 'theme' ); ?></span> <?php echo $theme['name']; ?></h3>
+		<h3 class="theme-name" id="<?php echo $aria_name; ?>"><span><?php _ex( 'Active:', 'theme' ); ?></span> <?php echo $theme['name']; ?></h3>
 	<?php } else { ?>
-		<h3 class="theme-name"><?php echo $theme['name']; ?></h3>
+		<h3 class="theme-name" id="<?php echo $aria_name; ?>"><?php echo $theme['name']; ?></h3>
 	<?php } ?>
 
 	<div class="theme-actions">
@@ -277,13 +277,13 @@ if ( ! is_multisite() && current_user_can('edit_themes') && $broken_themes = wp_
 	<# } else { #>
 		<div class="theme-screenshot blank"></div>
 	<# } #>
-	<span class="more-details"><?php _e( 'Theme Details' ); ?></span>
+	<span class="more-details" id="{{ data.id }}-action"><?php _e( 'Theme Details' ); ?></span>
 	<div class="theme-author"><?php printf( __( 'By %s' ), '{{{ data.author }}}' ); ?></div>
 
 	<# if ( data.active ) { #>
-		<h3 class="theme-name"><span><?php _ex( 'Active:', 'theme' ); ?></span> {{{ data.name }}}</h3>
+		<h3 class="theme-name" id="{{ data.id }}-name"><span><?php _ex( 'Active:', 'theme' ); ?></span> {{{ data.name }}}</h3>
 	<# } else { #>
-		<h3 class="theme-name">{{{ data.name }}}</h3>
+		<h3 class="theme-name" id="{{ data.id }}-name">{{{ data.name }}}</h3>
 	<# } #>
 
 	<div class="theme-actions">
@@ -309,9 +309,9 @@ if ( ! is_multisite() && current_user_can('edit_themes') && $broken_themes = wp_
 	<div class="theme-backdrop"></div>
 	<div class="theme-wrap">
 		<div class="theme-header">
-			<div alt="<?php _e( 'Close overlay' ); ?>" class="close dashicons dashicons-no"></div>
-			<div alt="<?php _e( 'Show previous theme' ); ?>" class="left dashicons dashicons-no"></div>
-			<div alt="<?php _e( 'Show next theme' ); ?>" class="right dashicons dashicons-no"></div>
+			<button class="left dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Show previous theme' ); ?></span></button>
+			<button class="right dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Show next theme' ); ?></span></button>
+			<button class="close dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Close overlay' ); ?></span></button>
 		</div>
 		<div class="theme-about">
 			<div class="theme-screenshots">
