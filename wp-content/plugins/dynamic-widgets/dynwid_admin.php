@@ -2,7 +2,7 @@
 /**
  * dynwid_admin.php - Startpage for admin
  *
- * @version $Id: dynwid_admin.php 689417 2013-03-31 09:16:14Z qurl $
+ * @version $Id: dynwid_admin.php 937227 2014-06-23 15:10:15Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 ?>
@@ -19,12 +19,13 @@
 	<?php _e('Dynamic Widgets', DW_L10N_DOMAIN); ?>
 	<input type="image" style="vertical-align: middle;" title="Donate for this plugin via PayPal" alt="Donate" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" onclick="jQuery('#paypal').submit()">
 </div></h2>
-<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;width:360px;float:left;position:relative;top:-7px;">
-<div style="float:left"><a href="<?php echo DW_URL_AUTHOR; ?>/"><img src="<?php echo $DW->plugin_url; ?>/img/qurl.png" alt="" title="QURL - Quality and Reliability" /></a></div>
-<div style="float:left;margin-left:7px;">
-<strong>Did you know?</strong><br />
-I also provide other services. See <a href="<?php echo DW_URL_AUTHOR; ?>/services/" target="_blank">my website</a> for details.
-</div></div>
+<div style="padding:5px;width:360px;float:left;position:relative;top:-7px;">
+	<div style="float:left;">
+			<a target="_blank" href="https://www.facebook.com/qurl.nl"><img src="<?php echo $DW->plugin_url; ?>/img/facebook.png" alt="Facebook" title="Like Dynamic Widgets? Like my Facebook page!" style="margin-right:10px;" /></a>
+			<a target="_blank" href="https://twitter.com/s_jacco"><img src="<?php echo $DW->plugin_url; ?>/img/twitter.png" alt="Twitter" title="Follow me on Twitter" style="margin-right:10px;" /></a>
+			<a target="_blank" href="<?php echo DW_URL_AUTHOR; ?>/"><img src="<?php echo $DW->plugin_url; ?>/img/qurl.png" alt="QURL" title="QURL - Quality and Reliability" /></a>
+	</div>
+</div>
 
 <br style="clear:both" />
 <?php

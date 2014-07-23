@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
-     jQuery(".jlk").live("click", function(e){
+     jQuery(".jlk").on("click", function(e){
           e.preventDefault();
           var task = jQuery(this).attr("data-task");
           var post_id = jQuery(this).attr("data-post_id");

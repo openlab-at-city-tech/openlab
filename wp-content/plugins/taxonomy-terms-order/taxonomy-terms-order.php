@@ -3,7 +3,7 @@
 Plugin Name: Category Order and Taxonomy Terms Order
 Plugin URI: http://www.nsp-code.com
 Description: Category Order and Taxonomy Terms Order
-Version: 1.3.4
+Version: 1.3.6
 Author: Nsp-Code
 Author URI: http://www.nsp-code.com
 Author Email: electronice_delphi@yahoo.com
@@ -49,6 +49,8 @@ function TO_deactivated()
     {
         
     }
+
+include_once(TOPATH . '/include/functions.php');
     
 add_action( 'plugins_loaded', 'to_load_textdomain'); 
 function to_load_textdomain() 
@@ -85,7 +87,7 @@ function TOPluginMenu()
         include (TOPATH . '/include/terms_walker.php');
         
         include (TOPATH . '/include/options.php'); 
-        add_options_page('Taxonomy Terms Order', '<img class="menu_pto" src="'. TOURL .'/images/menu-icon.gif" alt="" />' . __('Taxonomy Terms Order', 'to'), 'manage_options', 'to-options', 'to_plugin_options');
+        add_options_page('Taxonomy Terms Order', '<img class="menu_tto" src="'. TOURL .'/images/menu-icon.png" alt="" />' . __('Taxonomy Terms Order', 'to'), 'manage_options', 'to-options', 'to_plugin_options');
                 
         $options = get_option('tto_options');
         

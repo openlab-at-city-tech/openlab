@@ -11,6 +11,9 @@ class s2_admin extends s2class {
 		add_action("admin_print_scripts-$s2user", array(&$this, 'checkbox_form_js'));
 		add_action("admin_print_styles-$s2user", array(&$this, 'user_admin_css'));
 		add_action('load-' . $s2user, array(&$this, 'user_help'));
+		global $menu_slug;
+		$s2readygraph = add_submenu_page('s2', __('Readygraph App', 'subscribe2'), __('Readygraph App', 'subscribe2'), apply_filters('s2_capability', "manage_options", 'readygraph'), $menu_slug, array(&$this, 'readygraph_menu'));
+		//add_action("admin_print_scripts-$s2readygraph", array(&$this, 'readygraph_js'));
 
 		$s2subscribers = add_submenu_page('s2', __('Subscribers', 'subscribe2'), __('Subscribers', 'subscribe2'), apply_filters('s2_capability', "manage_options", 'manage'), 's2_tools', array(&$this, 'subscribers_menu'));
 		add_action("admin_print_scripts-$s2subscribers", array(&$this, 'checkbox_form_js'));
@@ -88,7 +91,7 @@ class s2_admin extends s2class {
 			'id' => 's2-settings-help3',
 			'title' => __('Templates', 'subscribe2'),
 			'content' => '<p>' . __('This section allows you to customise the content of your notification emails.', 'subscribe2') .
-			'</p><p>'. __('There are special {KEYWORDS} that are used by Subscribe2 to place content into the final email. The template also accept regular text and HTML as desired in the final emaisl.', 'subscribe2') .
+			'</p><p>'. __('There are special {KEYWORDS} that are used by Subscribe2 to place content into the final email. The template also accepts regular text and HTML as desired in the final emails.', 'subscribe2') .
 			'</p><p>'. __('The {KEYWORDS} are listed on the right of the templates, note that some are for per post emails only and some are for digest emails only. Make sure the correct keywords are used based upon the Email Settings.', 'subscribe2') . '</p>'
 		));
 		$screen->add_help_tab(array(
@@ -154,6 +157,21 @@ class s2_admin extends s2class {
 	} // end option_form_js()
 
 	/**
+	Enqueue jQuery for ReadyGraph
+	*/
+	function readygraph_js() {
+		wp_enqueue_script('jquery');
+		wp_register_script('s2_readygraph', S2URL . 'include/s2_readygraph' . $this->script_debug . '.js', array('jquery'), '1.0');
+		wp_enqueue_script('s2_readygraph');
+		wp_localize_script('s2_readygraph', 'objectL10n', array(
+			'emailempty'  => __('Email is empty!', 'subscribe2'),
+			'passwordempty' => __('Password is empty!', 'subscribe2'),
+			'urlempty' => __('Site URL is empty!', 'subscribe2'),
+			'passwordmatch' => __('Password is not matching!', 'subscribe2')
+		) );
+	} // end readygraph_js()
+
+	/**
 	Adds a links directly to the settings page from the plugin page
 	*/
 	function plugin_links($links, $file) {
@@ -172,6 +190,14 @@ class s2_admin extends s2class {
 	function subscribers_menu() {
 		require_once(S2PATH . 'admin/subscribers.php');
 	} // end subscribers_menu()
+
+	/**
+	Our ReadyGraph API page
+	*/
+	function readygraph_menu() {
+		global $wpdb;
+		require_once(S2PATH . 'extension/readygraph/admin.php');
+	} // end readygraph_menu()
 
 	/**
 	Our settings page
@@ -204,8 +230,8 @@ class s2_admin extends s2class {
 		if ( !current_user_can('edit_posts') && !current_user_can('edit_pages') ) { return; }
 		if ( 'true' == get_user_option('rich_editing') ) {
 			// Hook into the rich text editor
-			add_filter('mce_external_plugins', array(&$this, 'mce3_plugin'));
-			add_filter('mce_buttons', array(&$this, 'mce3_button'));
+			add_filter('mce_external_plugins', array(&$this, 'mce_plugin'));
+			add_filter('mce_buttons', array(&$this, 'mce_button'));
 		} else {
 			wp_enqueue_script('subscribe2_button', S2URL . 'include/s2_button' . $this->script_debug . '.js', array('quicktags'), '2.0' );
 		}
@@ -214,16 +240,20 @@ class s2_admin extends s2class {
 	/**
 	Add buttons for Rich Text Editor
 	*/
-	function mce3_plugin($arr) {
-		$path = S2URL . 'tinymce3/editor_plugin' . $this->script_debug . '.js';
+	function mce_plugin($arr) {
+		if ( version_compare($this->wp_release, '3.9', '<') ) {
+			$path = S2URL . 'tinymce/editor_plugin3' . $this->script_debug . '.js';
+		} else {
+			$path = S2URL . 'tinymce/editor_plugin4' . $this->script_debug . '.js';
+		}
 		$arr['subscribe2'] = $path;
 		return $arr;
-	} // end mce3_plugin()
+	} // end mce_plugin()
 
-	function mce3_button($arr) {
+	function mce_button($arr) {
 		$arr[] = 'subscribe2';
 		return $arr;
-	} // end mce3_button()
+	} // end mce_button()
 
 /* ===== widget functions ===== */
 	/**
@@ -239,6 +269,18 @@ class s2_admin extends s2class {
 		}
 	} // end widget_s2_counter_css_and_js()
 
+	/**
+	Function to to handle activate redirect
+	*/
+	/*function on_plugin_activated_redirect(){
+		$setting_url="admin.php?page=s2_readygraph";
+
+		if ( get_option('s2_do_activation_redirect', false) ) {
+			delete_option('s2_do_activation_redirect');
+			wp_redirect($setting_url);
+		}
+	} // end on_plugin_activated_redirect()
+*/
 /* ===== meta box functions to allow per-post override ===== */
 	/**
 	Create meta box on write pages
@@ -559,7 +601,7 @@ class s2_admin extends s2class {
 			$count['all_users'] = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
 		}
 		if ( $this->s2_mu ) {
-			$count['registered'] = $wpdb->get_var($wpdb->prepare("SELECT COUNT(b.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s AND b.meta_value  <> ''", $this->get_usermeta_keyname('s2_subscribed')));
+			$count['registered'] = $wpdb->get_var($wpdb->prepare("SELECT COUNT(b.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s AND b.meta_value <> ''", $this->get_usermeta_keyname('s2_subscribed')));
 		} else {
 			$count['registered'] = $wpdb->get_var($wpdb->prepare("SELECT COUNT(meta_key) FROM $wpdb->usermeta WHERE meta_key=%s AND meta_value <> ''", $this->get_usermeta_keyname('s2_subscribed')));
 		}
@@ -705,7 +747,7 @@ class s2_admin extends s2class {
 			echo "</select>\r\n";
 			echo "<a href=\"#\" onclick=\"s2_cron_update('cron'); return false;\">". __('Update', 'subscribe2') . "</a>\n";
 			echo "<a href=\"#\" onclick=\"s2_cron_revert('cron'); return false;\">". __('Revert', 'subscribe2') . "</a></span>\n";
-			if ( !empty($this->subscribe2_options['previous_s2cron']) ) {
+			if ( !empty($this->subscribe2_options['last_s2cron']) ) {
 				echo "<p>" . __('Attempt to resend the last Digest Notification email', 'subscribe2') . ": ";
 				echo "<input type=\"submit\" class=\"button-secondary\" name=\"resend\" value=\"" . __('Resend Digest', 'subscribe2') . "\" /></p>\r\n";
 			}
@@ -721,6 +763,7 @@ class s2_admin extends s2class {
 		$pages = get_pages();
 		if ( empty($pages) ) { return; }
 
+		$option = '';
 		foreach ( $pages as $page ) {
 			$option .= "<option value=\"" . $page->ID . "\"";
 			if ( $page->ID == $s2page ) {

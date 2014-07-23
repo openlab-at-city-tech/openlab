@@ -111,7 +111,7 @@ if (!isset($this->subscribe2_options['ajax'])) {
 } // option to enable an AJAX style form
 
 if (!isset($this->subscribe2_options['widget'])) {
-	$this->subscribe2_options['widget'] = "0";
+	$this->subscribe2_options['widget'] = "1";
 } // option to enable Subscribe2 Widget
 
 if (!isset($this->subscribe2_options['counterwidget'])) {

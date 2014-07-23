@@ -1,0 +1,16 @@
+.rgw-lightbox .rgw-content-frame .rgw-content {
+background: #ffff5b !important;
+}
+.rgw-style{
+color: #003d97 !important;
+}
+.rgw-style .rgw-dialog-header .rgw-dialog-headline, .rgw-style .rgw-dialog-header .rgw-dialog-headline * {
+color: #003d97 !important;
+}
+
+.rgw-notify .rgw-float-box {
+background: #ffff5b !important;
+}
+.rgw-notify .rgw-social-status:hover{
+background: #ffff5b !important;
+}

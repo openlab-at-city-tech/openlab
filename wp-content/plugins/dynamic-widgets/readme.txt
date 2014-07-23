@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 3.8.1
-Stable tag: 1.5.7
+Tested up to: 3.9.1
+Stable tag: 1.5.9
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -30,7 +30,8 @@ It is very hard to continue development and support for this plugin without cont
   - Day of week
   - Weeknumbers
   - Browsers
-  - Mobile devices
+  - IP ranges
+  - Devices (mobile, desktop)
   - Theme Templates
   - Languages (WPML or QTranslate)
   - URL
@@ -59,6 +60,8 @@ It is very hard to continue development and support for this plugin without cont
   - Day of week on day
   - Weeknumer on number
   - Browsers on browser name
+  - IP on ranges
+  - Devices on type
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
   - URL on starting with URL, ending on URL or exact match
@@ -181,6 +184,20 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.9 =
+
+* Added support for IP range
+* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made 
+* Bugfix for Single Post Catregory is saved wrong 
+* Bugfix for Strict warning notice in author_module.php at line 42
+
+= Version 1.5.8 =
+
+* Renamed Mobile Device to Device for more expansion. WARNING: When you upgrade manually, remove the dynamic-widgets directory first!
+* Removed the version number from the HTML comment.
+* Fixed a few strict warnings.
+* Fixed a few vulnerabilities discovered by Leon Juranic.
 
 = Version 1.5.7 =
 
@@ -430,7 +447,8 @@ This version has 4 new features and 5 bugs fixed. See the changelog for details.
 
 == Upgrade Notice ==
 
-= 1.5.7 =
+= 1.5.8 =
+When you upgrade manually, remove the dynamic-widgets directory first.
 
 This version has 1 feature added, 1 language added and 3 bugs fixed.
 

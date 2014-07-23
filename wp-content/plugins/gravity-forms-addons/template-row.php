@@ -145,6 +145,14 @@
 							}
 						break;
 
+						case "post_title":
+							if( apply_filters( 'kws_gf_directory_post_title_link', false, $form, $lead ) && !empty( $lead['post_id'] ) ) {
+								$value = '<a href="'. esc_url( get_permalink( $lead['post_id'] ) ) .'" title="'. esc_attr( $value ).'" '. $nofollow . $target .'>'. esc_html( $value ) .'</a>';
+							} else {
+								$value = esc_html( $value );
+							}
+							break;
+
 						case "textarea" :
 						case "post_content" :
 						case "post_excerpt" :

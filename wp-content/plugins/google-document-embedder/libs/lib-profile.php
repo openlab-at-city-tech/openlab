@@ -114,7 +114,7 @@ function gde_profile_form( $id = 1 ) {
 <?php
 	gde_profile_checkbox( $p['tb_fullwin'], 'fs_win', __('Open in New Window', 'gde') );
 	gde_profile_checkbox( $p['tb_fulluser'], 'fs_user', __('Allow Logged-in Users Only', 'gde'), 'blockAnon' );
-	gde_profile_checkbox( $p['tb_print'], 'fs_print', __('Allow Printing', 'gde'), 'allowPrint' );
+	//gde_profile_checkbox( $p['tb_print'], 'fs_print', __('Allow Printing', 'gde'), 'allowPrint' );
 ?>
 						</td>
 					</tr>

@@ -122,22 +122,6 @@ msgid ""
 "value."
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "SlideShare"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "http://yoast.com/wordpress/slideshare/"
-msgstr ""
-
 #. Description of the plugin/theme
 msgid "A plugin for WordPress to easily display slideshare.net presentations."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Joost de Valk"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://yoast.com/"
 msgstr ""

@@ -3,9 +3,9 @@ Contributors: webtechideas
 Contributor's website: http://www.webtechideas.com/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.com/thanks/
 Tags: wp like post,wordpress like post,wp like page,wordpress like page,wplikepost,wplikepage,wti,webtechideas,wp vote page,wp vote post,wordpress vote page,wordpress vote post,thumbs up, thumbs down, most liked posts, recently liked posts
-Requires at least: 2.8
-Tested up to: 3.5.2
-Stable tag: 1.4.1
+Requires at least: 3.6
+Tested up to: 3.9.1
+Stable tag: 1.4.2
 
 A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO version is also available.
 
@@ -14,31 +14,38 @@ A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO 
 WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts.
 
 = PRO Features =
-1. Functionality for getting automatic plugin updates as a standard wordpress plugin update process
-2. Has 2 template files which can be used to show most liked posts through out the site and the most liked posts by an author on author page
-3. Compatible with multisite set up
-4. Can be used with custom post types
-5. Shortcode to place the like/unlike buttons inside post content
-6. Functionality for disabling the plugin css file so that you can use custom css from your theme
-7. Functionality for showing the like/unlike buttons for post excerpts
-8. Functionality for allowing/disallowing author to vote against own post with custom message
-9. Option to save plugin settings and table after plugin uninstallation in case you need to reuse the data in future
-10. Functionality to disable auto-loading of the like/unlike buttons so that you can use the template tag <?php GetWtiLikePost()?> inside your theme
-11. Functionality to store voting counts (like, unlike, total) as post meta which can be used to show posts sorted by voting counts
-12. Functionality to use texts instead of like/unlike images in case you want to have some encouraging message which can't be conveyed using images
-13. Functionality for adding default like/unlike entries for posts when they are created
-14. Functionality to show most liked/unliked posts from selected categories on Most Liked/Unliked Posts widget
-15. Functionality to show posts liked/unliked by all users or the logged in user on the widget and also shortcode for showing the same on a page
-16. Wide range of time including hours to have more control on the posts shown on the widget
-17. Most Liked/Unliked Category Posts widget to show posts liked/unliked on the specific category page
-18. Functionality to show post title, like/unlike count, excerpt, thumbnail, author, categories, tags on all the available widgets
-19. Functionality to have default message to encourage users to like posts
-20. Functionality to see users who liked a post below the like/unlike buttons
-21. In total 6 styles of buttons for like/unlike functionality
-22. Functionality to see like count for each post in admin post list/edit section
+1. Functionality for getting automatic plugin updates as a standard wordpress plugin update process.
+2. Action hook available for successful voting so that you can attach any functionality like sending thank you mail to user. There are 2 other hooks available for further customizing the message you see on page load and ajax call.
+3. Functionality for viewing like, unlike, total counts for individual post on admin Most Liked Posts screen. You can also view users who voted for each of them. This works only when logged in users are allowed to vote.
+4. Buddypress activity integration to show activity updates when a user likes and dislikes any content.
+5. Functionality for highlighting the like/unlike icon on successful voting and page load.
+6. Compatible with multisite set up.
+7. Can be used with custom post types. You can show most liked posts based on custom post types using shortcode and widget.
+8. Functionality for disabling the plugin css file so that you can use custom css from your theme.
+9. Functionality for redirecting user to a specific page on successful voting.
+10. Functionality for showing the like/unlike buttons for post excerpts.
+11. Functionality for allowing/disallowing author to vote against own post with custom message.
+12. Option to save plugin settings and table after plugin un-installation in case you need to reuse the data in future.
+13. Functionality to disable auto-loading of the like/unlike buttons so that you can use the template tag <?php GetWtiLikePost()?> inside your theme or [wtilp_buttons] inside post/page content using the editor. Please note that [wtilp_buttons] is NOT a shortcode.
+14. Functionality to store voting counts (like, unlike, total) as post meta which can be used to show posts sorted by voting counts. 
+15. Functionality to have default message to encourage users to like posts. 
+16. Functionality to show users who liked a post below the like/unlike buttons. 
+17. In total 6 styles of buttons for like/unlike functionality.
+18. Functionality to show like count for each post in admin post list/edit section.
+19. Has 2 template files which can be used to show most liked posts throughout the site and the most liked posts by an author on author page.
+20. Functionality to use texts instead of like/unlike images in case you want to have some encouraging texts which can not be conveyed using images.
+21. Functionality for adding default like/unlike entries i.e. 0 for posts and pages when they are created.
+22. Functionality to show most liked/unliked posts from selected categories on Most Liked/Unliked Posts widget.
+23. Functionality to show posts liked/unliked by all users or the logged in user on the widget and also shortcode for showing the same on a page.
+24. Wide range of time including hours to have more control on the posts shown on the widget.
+25. Most Liked/Unliked Category Posts widget to show posts liked/unliked on the specific category page.
+26. Functionality to show post excerpt, thumbnail on all the available widgets.
 
 **PRO Plugin URL:** http://www.webtechideas.com/product/wti-like-post-pro/ PRO manual is available for downloading on the last section of the page.
+
 **PRO Plugin Demo URL:** http://demowp.webtechideas.com/
+
+**PRO Plugin Support Forum:** http://support.webtechideas.com/forums/forum/wti-like-post-pro/
 
 = Standard features =
 1. AJAX thumbs up/down functionality without refreshing your screen
@@ -110,6 +117,16 @@ Yes, this is available (PRO Version).
 = Is this compatible with multisite set up? =
 Yes, this is (PRO Version).
 
+= Can this plugin work with Buddypress Activity component? =
+Yes, the PRO Version has this functionality.
+Yes, this is (PRO Version).
+
+= Can user be redirected to a Thank You page after successful voting? =
+Yes, with the PRO Version you can specify the redirect page url where user will be redirected after successful voting.
+
+= Is there any hook available? =
+Yes, there are 3 hooks available with the PRO Version. There is one action hook using which you can send notification to admin or user on successful voting.
+
 = Can I restrict the user from revoting? =
 Yes, you can do this. There is admin setting available. You can completely disallow a user from revoting or allow after a given period of time.
 
@@ -147,6 +164,11 @@ Yes, you can use this plugin against wordpress pages. You need to enable this fe
 In total there are 6 styles available. If you still need a different one, then place thumbs up/down images of same file name and same size.
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixed issue with voting period more than 1 day
+* Modified table structure to work with IPv6
+* Fixed the issue with Recently Liked Posts widget
 
 = 1.4.1 =
 * This is a security release following the correct and secured approach for ajax requests as per wordpress standards

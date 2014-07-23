@@ -2,22 +2,39 @@
 Contributors: joostdevalk
 Donate link: http://yoast.com/donate/
 Tags: slideshare, powerpoint, keynote, ppt, presentation, slide shows, presentations
-Requires at least: 2.9
-Tested up to: 3.2.1
-stable tag: 1.8.1
+Requires at least: 3.0
+Tested up to: 3.9
+Stable tag: 1.9
 
 Easily embed SlideShare presentations into your WordPress posts by using the SlideShare WordPress.com embed code.
 
 == Description ==
 
-Easily embed SlideShare presentations or documents into your WordPress posts by copying the WordPress.com embed code, and change the default width with one simple setting. Once installed, simply go to any SlideShare presentation, click on Embed -> Customize and copy / paste the WordPress.com embed code. You can also just paste the URL of a presentation on it's own line in a post.
+Easily embed SlideShare presentations or documents into your WordPress posts.
+
+= oEmbed =
+Just paste the URL of a presentation on its own line in a post, hit Publish / Update and you're done.
+
+= Embed with shortcode =
+Once installed, simply go to any SlideShare presentation, click on Share and copy / paste the WordPress embed code.
 
 More info:
 
-* [SlideShare WordPress plugin](http://yoast.com/wordpress/slideshare/).
-* Check out the other [Wordpress plugins](http://yoast.com/wordpress/) by the same author.
+* [SlideShare WordPress plugin](https://yoast.com/wordpress/plugins/slideshare/).
+* Check out the other [Wordpress plugins](https://yoast.com/wordpress/plugins/) by the same author.
 
 == Changelog ==
+
+= 1.9 =
+
+* Enhancements
+	* Made the plugin work with version 2 of SlideShare's oembed API.
+	* Made the plugins always use SSL for embedding.
+	* Remove the credit link back to Slideshare.
+	* Optimize code.
+	* Remove Yoast dashboard widget.
+* i18n updates:
+	* Added fa_IR & hu_HU
 
 = 1.8.1 =
 
@@ -31,7 +48,7 @@ More info:
 * Support oEmbed for SlideShare.
 * Use new iframe embed method over object tag.
 * Better calculation of height related to width.
-* [Separation of frontend and backend code](http://yoast.com/wp-best-practice/separate-frontend-admin-code/) for better performance.
+* [Separation of frontend and backend code](https://yoast.com/separate-frontend-admin-code/) for better performance.
 
 = 1.7.2 =
 
@@ -100,12 +117,13 @@ More info:
 
 = How do I embed a presentation? =
 
-Follow the steps outlined on the first screenshot on the [Screenshots page](http://wordpress.org/extend/plugins/slideshare/screenshots/), or go to the [SlideShare for WordPress page](http://yoast.com/wordpress/slideshare/).
+Two options:
+* Either embed the URL of the presentation on a line of its own.
+* Copy the WordPress embed code.
 
 == Screenshots ==
 
-1. Example of how to embed a SlideShare presentation.
-1. Configuration page.
+1. Screenshot of the SlideShare plugin configuration page.
 
 == Installation ==
 
@@ -131,8 +149,3 @@ If you want to change the default width:
 * Choose the width you want the presentations to have.
 * Press "Update Settings".
 * You're done.
-
-== Upgrade Notice ==
-
-= 1.8.1 = 
-Fixes error on Dashboard as well as some internationalization issues.

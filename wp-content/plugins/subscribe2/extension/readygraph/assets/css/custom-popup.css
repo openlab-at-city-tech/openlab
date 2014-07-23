@@ -1,0 +1,16 @@
+.rgw-lightbox .rgw-content-frame .rgw-content {
+background: #ffffff !important; /*popup background*/
+}
+.rgw-style{
+color: #000000 !important; /*text color*/
+}
+.rgw-style .rgw-dialog-header .rgw-dialog-headline, .rgw-style .rgw-dialog-header .rgw-dialog-headline * {
+color: #000000 !important;  /*heading color*/
+}
+
+.rgw-notify .rgw-float-box {
+background: #ffffff !important; /*lower right notification*/
+}
+.rgw-notify .rgw-social-status:hover{
+background: #ffffff !important;  /*lower right notification on hover*/
+}

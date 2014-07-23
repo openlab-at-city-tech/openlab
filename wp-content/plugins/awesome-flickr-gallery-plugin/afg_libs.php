@@ -1,9 +1,9 @@
 <?php
 
 define('BASE_URL', plugins_url() . '/' . basename(dirname(__FILE__)));
-define('SITE_URL', get_option('siteurl'));
+define('SITE_URL', site_url());
 define('DEBUG', false);
-define('VERSION', '3.3.4');
+define('VERSION', '3.3.5');
 
 $afg_sort_order_map = array(
     'default' => 'Default',
@@ -109,6 +109,53 @@ $afg_text_color_map = array(
     'White' => 'Black',
 );
 
+function afg_get_sets_groups_galleries (&$photosets_map, &$groups_map, &$galleries_map, $user_id) {
+    global $pf;
+
+    $rsp_obj = $pf->photosets_getList($user_id);
+    if (!$pf->error_code) {
+        foreach($rsp_obj['photoset'] as $photoset) {
+            $photosets_map[$photoset['id']] = $photoset['title']['_content'];
+        }
+    }
+
+    $rsp_obj = $pf->galleries_getList($user_id);
+    if (!$pf->error_code) {
+        foreach($rsp_obj['galleries']['gallery'] as $gallery) {
+            $galleries_map[$gallery['id']] = $gallery['title']['_content'];
+        }
+    }
+
+    if (get_option('afg_flickr_token')) {
+        $rsp_obj = $pf->groups_pools_getGroups();
+        if (!$pf->error_code) {
+            foreach($rsp_obj['group'] as $group) {
+                $groups_map[$group['nsid']] = $group['name'];
+            }
+        }
+    }
+    else {
+        $rsp_obj = $pf->people_getPublicGroups($user_id);
+        if (!$pf->error_code) {
+            foreach($rsp_obj as $group) {
+                $groups_map[$group['nsid']] = $group['name'];
+            }
+        }
+    }
+
+    asort($photosets_map);
+    asort($groups_map);
+    asort($galleries_map);
+}
+
+function afg_get_cur_url() {
+    $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+    $port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
+    $port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
+    $url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["HTTP_HOST"].$port.$_SERVER["REQUEST_URI"];
+    return $url;
+}
+
 function create_afgFlickr_obj() {
     global $pf;
     unset($_SESSION['afgFlickr_auth_token']);
@@ -138,20 +185,29 @@ function date_upload_cmp_oldest($a, $b) {
 }
 
 function afg_fb_like_box() {
-    return "<iframe src=\"//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fawesome.flickr.gallery&amp;width=300&amp;height=258&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;appId=107783615948615\" scrolling=\"no\" frameborder=\"0\" style=\"border:none; overflow:hidden; width:300px; height:170px;\" allowTransparency=\"true\"></iframe>";
+    return "<div><iframe src=\"//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fawesome.flickr.gallery&amp;width=300&amp;height=258&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;appId=107783615948615\" scrolling=\"no\" frameborder=\"0\" style=\"border:none; overflow:hidden; width:300px; height:258px;\" allowTransparency=\"true\"></iframe><div>";
 }
 
 function afg_share_box() {
-    return "<div id=\"poststuff\">
-        <div class=\"postbox\" style='width:300px; box-shadow:0 0 2px'>
+    return "<div>
         <h3>Follow Awesome Flickr Gallery</h3>"
-        . afg_fb_like_box()
         . afg_gplus_box()
-        . "</div></div>";
+        . afg_fb_like_box()
+        . "</div>";
 }
 
 function afg_gplus_box() {
-    return "<div class=\"g-plus\" data-href=\"https://plus.google.com/110562610836727777499\" data-size=\"badge\"></div>";
+    return "<!-- Place this tag where you want the widget to render. -->
+<div class=\"g-page\" data-href=\"//plus.google.com/u/0/110562610836727777499\" data-showtagline=\"true\" data-rel=\"publisher\"></div>
+
+<!-- Place this tag after the last widget tag. -->
+<script type=\"text/javascript\">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>";
 }
 
 function delete_afg_caches() {
@@ -177,14 +233,14 @@ function afg_generate_version_line() {
     }
 
     $return_str = "" .
-    " <h4 align=\"right\" style=\"margin-right:0.5%\">" .
+    "<div><h4 align=\"right\" style=\"margin-right:0.5%\">" .
        " &nbsp;Version: <b>" . VERSION . "</b> |" .
         " <a href=\"http://wordpress.org/extend/plugins/awesome-flickr-gallery-plugin/faq/\">FAQ</a> |" .
         " <a href=\"http://wordpress.org/extend/plugins/awesome-flickr-gallery-plugin/\">Rate this plugin</a> |" .
         " <a href=\"http://www.ronakg.com/discussions/\">Support Forums</a> |" .
-        " <a href=\"http://wordpress.org/extend/plugins/awesome-flickr-gallery-plugin/changelog/\">Changelog</a> |" .
+        " <a href=\"https://github.com/ronakg/Awesome-Flickr-Gallery/wiki/Changelog\">Changelog</a> |" .
         " <a href=\"http://www.ronakg.com/photos/\">Live Demo</a>" .
-    " </h4>";
+    " </h4></div>";
     return $return_str;
 }
 
@@ -194,17 +250,20 @@ function afg_generate_flickr_settings_table($photosets, $galleries, $groups) {
     $galleries = afg_generate_options($galleries, '', False);
     $groups = afg_generate_options($groups, '', False);
     return "
-    <div id=\"poststuff\">
-<div class=\"postbox\" style='box-shadow:0 0 2px'>
     <h3>Flickr Settings</h3>
-    <table class='form-table'>
-        <tr valign='top'>
-        <th scope='row'>Gallery Source</th>
+    <table class='widefat afg-settings-box'>
+        <tr>
+            <th class='afg-label'></th>
+            <th class='afg-input'></th>
+            <th class='afg-help-bubble'></th>
+        </tr>
+        <tr>
+        <td>Gallery Source</td>
         <td><select name='afg_photo_source_type' id='afg_photo_source_type' onchange='getPhotoSourceType()' >" . afg_generate_options($afg_photo_source_map, 'photostream', False) . "
         </select></td>
         </tr>
         <tr>
-        <th id='afg_photo_source_label'></th>
+        <td id='afg_photo_source_label'></td>
         <td><select style='display:none' name='afg_photosets_box' id='afg_photosets_box'>$photosets
         </select>
         <select style='display:none' name='afg_galleries_box' id='afg_galleries_box'>$galleries
@@ -213,126 +272,124 @@ function afg_generate_flickr_settings_table($photosets, $galleries, $groups) {
         </select>
         <textarea rows='3' cols='30' name='afg_tags' id='afg_tags' style='display:none'></textarea>
         </td>
-        <td id='afg_source_help' style='display:none'><font size='2'>Enter tags separated by comma. For example: <b>tag1, tag2, tag3, tag4</b><br />Photos matching any of the given tags will be displayed.</font></td>
+        <td id='afg_source_help' class='afg-help-bubble' style='display:none'>Enter tags separated by comma. For example: <b>tag1, tag2, tag3, tag4</b><br />Photos matching any of the given tags will be displayed.</td>
         </tr>
-    </table>
-</div></div>";
+    </table>";
 }
 
 function afg_generate_gallery_settings_table() {
-    global $afg_photo_size_map, $afg_on_off_map, $afg_descr_map, 
-        $afg_columns_map, $afg_bg_color_map, $afg_photo_source_map, 
+    global $afg_photo_size_map, $afg_on_off_map, $afg_descr_map,
+        $afg_columns_map, $afg_bg_color_map, $afg_photo_source_map,
         $afg_width_map, $afg_yes_no_map, $afg_sort_order_map, $afg_slideshow_map;
-    
+
     if (get_option('afg_photo_size') == 'custom')
         $photo_size = '(Custom - ' . get_option('afg_custom_size') . 'px' . ((get_option('afg_custom_size_square') == 'true')? ' - Square)': ')');
     else
         $photo_size = $afg_photo_size_map[get_option('afg_photo_size')];
 
     return "
-    <div id=\"poststuff\">
-        <div class=\"postbox\" style='box-shadow:0 0 2px'>
         <h3>Gallery Settings</h3>
-        <table class='form-table'>
-
-        <tr valign='top'>
-        <th scope='row'>Max Photos Per Page</th>
-        <td style='width:28%'><input type='checkbox' name='afg_per_page_check' id='afg_per_page_check' onclick='showHidePerPage()' value='default' checked='' style='vertical-align:top'> Default </input><input name='afg_per_page' disabled='true' id='afg_per_page' type='text' size='3' maxlength='3' onblur='verifyBlank()' value='10'/> 
+        <table class='widefat fixed afg-settings-box'>
+            <tr>
+                <th class='afg-label'></th>
+                <th class='afg-input'></th>
+                <th class='afg-help-bubble'></th>
+            </tr>
+        <tr>
+        <td>Max Photos Per Page</td>
+        <td><div  style='display:inline; margin-right:10px'><input type='checkbox' name='afg_per_page_check' id='afg_per_page_check' onclick='showHidePerPage()' value='default' checked=''> Default </input></div><div  class='afg-small-input' style='display:inline-block'><input name='afg_per_page' disabled='true' id='afg_per_page' type='text' maxlength='3' onblur='verifyBlank()' value='10'/></div>
         </td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Sort order of Photos</th>
+        <tr>
+        <td>Sort order of Photos</td>
         <td><select name='afg_sort_order' id='afg_sort_order'>"
         . afg_generate_options($afg_sort_order_map, 'default', True, $afg_sort_order_map[get_option('afg_sort_order')]) . "
-    </select>
-            <td><font size='2'>Set the sort order of the photos as per your liking and forget about how photos are arranged on Flickr.</font></td>
-            </td>
+    </select></td>
+            <td class='afg-help'>Set the sort order of the photos as per your liking and forget about how photos are arranged on Flickr.</td>
             </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Size of Photos</th>
+        <tr>
+        <td>Size of Photos</td>
         <td><select name='afg_photo_size' id='afg_photo_size' onchange='customPhotoSize()'>
             " . afg_generate_options($afg_photo_size_map, 'default', True, $photo_size) . "
         </select></td>
         </tr>
-        
-        <tr valign='top' id='afg_custom_size_block' style='display:none'>
-        <th>Custom Width</th>
-        <td><input type='text' size='3' maxlength='3' name='afg_custom_size' id='afg_custom_size' onblur='verifyCustomSizeBlank()' value='100'><font color='red'>*</font> (in px)
+
+        <tr id='afg_custom_size_block' style='display:none'>
+        <td>Custom Width</td>
+        <td><input type='text' maxlength='3' name='afg_custom_size' id='afg_custom_size' onblur='verifyCustomSizeBlank()' value='100'><font color='red'>*</font> (in px)
         &nbsp;Square? <input type='checkbox' id='afg_custom_size_square' name='afg_custom_size_square' value='true'>
         </td>
-        <td><font size='2'>Fill in the exact width for the photos (min 50, max 500).  Height of the photos will be adjusted
+        <td class='afg-help'>Fill in the exact width for the photos (min 50, max 500).  Height of the photos will be adjusted
         accordingly to maintain aspect ratio of the photo. Enable <b>Square</b> to crop
         the photo to a square aspect ratio.</td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Photo Titles</th>
+        <tr>
+        <td>Photo Titles</td>
         <td><select name='afg_captions' id='afg_captions'>
             " . afg_generate_options($afg_on_off_map, 'default', True, $afg_on_off_map[get_option('afg_captions')]) . "
         </select></td>
-        <td><font size='2'>Photo Title setting applies only to Thumbnail (and above) size photos.</font></td>
+        <td class='afg-help'>Photo Title setting applies only to Thumbnail (and above) size photos.</td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Photo Descriptions</th>
+        <tr>
+        <td>Photo Descriptions</td>
         <td><select name='afg_descr' id='afg_descr'>
             " . afg_generate_options($afg_descr_map, 'default', True, $afg_descr_map[get_option('afg_descr')]) . "
         </select></td>
-        <td><font size='2'>Photo Description setting applies only to Small and Medium size photos.</td>
+        <td class='afg-help'>Photo Description setting applies only to Small and Medium size photos.</td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Number of Columns</th>
+        <tr>
+        <td>Number of Columns</td>
         <td><select name='afg_columns' id='afg_columns'>
             " . afg_generate_options($afg_columns_map, 'default', True, $afg_columns_map[get_option('afg_columns')]) . "
         </select></td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Slideshow Behavior</th>
+        <tr>
+        <td>Slideshow Behavior</td>
         <td><select name='afg_slideshow_option' id='afg_slideshow_option'>
         " . afg_generate_options($afg_slideshow_map, 'default', True, $afg_slideshow_map[get_option('afg_slideshow_option')]) . "
     </select></td>
-            <td><font size='2'></font></td>
             </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Background Color</th>
+        <tr>
+        <td>Background Color</td>
         <td><select name='afg_bg_color' id='afg_bg_color'>
             " . afg_generate_options($afg_bg_color_map, 'default', True, $afg_bg_color_map[get_option('afg_bg_color')]) . "
         </select></td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Gallery Width</th>
+        <tr>
+        <td>Gallery Width</td>
         <td><select name='afg_width' id='afg_width'>
         " . afg_generate_options($afg_width_map, 'default', True, $afg_width_map[get_option('afg_width')]) . "
         </select></td>
-        <td><font size='2'>Width of the Gallery is relative to the width of the page where Gallery is being generated.  <i>Automatic</i> is 100% of page width.</font></td>
+        <td class='afg-help'>Width of the Gallery is relative to the width of the page where Gallery is being generated.  <i>Automatic</i> is 100% of page width.</td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Disable Pagination?</th>
+        <tr>
+        <td>Disable Pagination?</td>
         <td><select name='afg_pagination' id='afg_pagination'>
         " . afg_generate_options($afg_yes_no_map, 'default', True, $afg_yes_no_map[get_option('afg_pagination')]) . "
         </select></td>
-        <td><font size='2'>Useful when displaying gallery in a sidebar widget where you want only few recent photos.</td>
+        <td class='afg-help'>Useful when displaying gallery in a sidebar widget where you want only few recent photos.</td>
         </tr>
 
-        <tr valign='top'>
-        <th scope='row'>Add a Small Credit Note?</th>
+        <tr>
+        <td>Add a Small Credit Note?</td>
         <td><select name='afg_credit_note' id='afg_credit_note'>
              " . afg_generate_options($afg_on_off_map, 'default', True, $afg_on_off_map[get_option('afg_credit_note')]) . "
              </select></td>
-        <td><font size='2'>Credit Note will appear at the bottom of the gallery as - </font>
+        <td class='afg-help'>Credit Note will appear at the bottom of the gallery as - </font>
             Powered by
             <a href=\"http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin\"/>
             AFG</a></td>
         </tr>
-    </table>
-</div></div>";
+    </table>";
 }
 
 function afg_generate_options($params, $selection, $show_default=False, $default_value=0) {
@@ -358,26 +415,18 @@ function afg_filter($param) {
 
 function afg_box($title, $message) {
      return "
-        <div id=\"poststuff\">
-        <div class=\"postbox\" style='box-shadow:0 0 2px'>
+        <table class='widefat fixed afg-side-box'>
         <h3>$title</h3>
-        <table class='form-table'>
-        <td>$message</td>
+        <tr><td>$message</td></tr>
         </table>
-        </div></div>
         ";
 }
 
 function afg_usage_box($code) {
-    return "
-        <div id=\"poststuff\">
-        <div class=\"postbox\" style='box-shadow:0 0 2px'>
+    return "<table class='fixed widefat afg-side-box'>
         <h3>Usage Instructions</h3>
-        <table class='form-table'>
-        <td>Just insert $code in any of the posts or page to display your Flickr gallery.</td>
-        </table>
-        </div></div>
-        ";
+        <tr><td>Just insert $code in any of the posts or page to display your Flickr gallery.</td></tr>
+        </table>";
 }
 
 function get_afg_option($gallery, $var) {
@@ -387,15 +436,21 @@ function get_afg_option($gallery, $var) {
 
 function afg_donate_box() {
     return "
-        <div id=\"poststuff\">
-        <div class=\"postbox\" style='box-shadow:0 0 2px'>
         <h3>Support this plugin</h3>
-        <table class='form-table'>
+        <table class='widefat fixed afg-side-box'>
         <td>It takes time and effort to keep releasing new versions of this plugin.  If you like it, consider donating a few bucks <b>(especially if you are using this plugin on a commercial website)</b> to keep receiving new features.
-        </form><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\"><div style=\"text-align:center\" class=\"paypal-donations\"><input type='hidden' name='item_name' value='Awesome Flickr Gallery'/><input type=\"hidden\" name=\"cmd\" value=\"_donations\" /><input type=\"hidden\" name=\"business\" value=\"2P32M6V34HDCQ\" /><input type=\"hidden\" name=\"currency_code\" value=\"USD\" /><input type=\"image\" src=\"" . BASE_URL . "/images/donate_small.png\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online.\" /><img alt=\"PayPal Donate\" src=\"https://www.paypal.com/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\" /><br /><b>All major credit cards are accepted too.</b></div></form>
+        </form>
+
+        <br />
+        <div style=\"text-align:center; margin-top:15px\"><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_blank\">
+<input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
+<input type=\"hidden\" name=\"encrypted\" value=\"-----BEGIN PKCS7-----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-----END PKCS7-----
+\">
+<input type=\"image\" src=\"https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">
+<img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">
+</div></form></div>
         </td>
-        </table>
-        </div></div>";
+        </table>";
 }
 
 function afg_reference_box() {

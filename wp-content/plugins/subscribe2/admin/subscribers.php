@@ -68,7 +68,7 @@ if ( isset($_POST['s2_admin']) ) {
 					continue;
 				} else {
 					$users_deleted = __('User(s) deleted! Any posts made by these users were assigned to you', 'subscribe2');
-					wp_delete_user($user->$id, $current_user->ID);
+					wp_delete_user($user->ID, $current_user->ID);
 				}
 			}
 			echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . $users_deleted_error . $users_deleted . "</strong></p></div>";
@@ -218,7 +218,7 @@ switch ($current_tab) {
 	case 'registered':
 		echo "<div class=\"s2_admin\" id=\"s2_add_subscribers\">\r\n";
 		echo "<h2>" . __('Add/Remove Subscribers', 'subscribe2') . "</h2>\r\n";
-		echo "<p class=\"submit\" style=\"border-top: none;\"><a class=\"button-primary\" href=\"" . admin_url() . "user-new.php\">" . __('Add Registered User', 'subscribe2') . "</a></p>\r\n";
+		echo "<p class=\"submit\" style=\"border-top: none;\"><a class=\"button-primary\" href=\"" . admin_url('user-new.php') . "\">" . __('Add Registered User', 'subscribe2') . "</a></p>\r\n";
 
 		echo "</div>\r\n";
 
@@ -260,32 +260,63 @@ if ( $current_tab === 'registered' ) {
 	echo "<div class=\"s2_admin\" id=\"s2_bulk_manage\">\r\n";
 	echo "<h2>" . __('Bulk Management', 'subscribe2') . "</h2>\r\n";
 	if ( $this->subscribe2_options['email_freq'] == 'never' ) {
+		$categories = array();
+		if ( isset($_POST['category']) ) {
+			$categories = $_POST['category'];
+		}
+		$format = '';
+		if ( isset($_POST['format']) ) {
+			$format = $_POST['format'];
+		}
 		echo __('Preferences for Registered Users selected in the filter above can be changed using this section.', 'subscribe2') . "<br />\r\n";
 		echo "<strong><em style=\"color: red\">" . __('Consider User Privacy as changes cannot be undone', 'subscribe2') . "</em></strong><br />\r\n";
 		echo "<br />" . __('Action to perform', 'subscribe2') . ":\r\n";
 		echo "<label><input type=\"radio\" name=\"manage\" value=\"subscribe\" checked=\"checked\" /> " . __('Subscribe', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
 		echo "<label><input type=\"radio\" name=\"manage\" value=\"unsubscribe\" /> " . __('Unsubscribe', 'subscribe2') . "</label><br /><br />\r\n";
-		$this->display_category_form();
+		if ( '1' === $this->subscribe2_options['reg_override'] ) {
+			$this->display_category_form($categories, 1);
+		} else {
+			$this->display_category_form($categories, 0);
+		}
 		echo "<p class=\"submit\"><input type=\"submit\" class=\"button-primary\" name=\"sub_categories\" value=\"" . __('Bulk Update Categories', 'subscribe2') . "\" /></p>";
 		echo "<br />" . __('Send email as', 'subscribe2') . ":\r\n";
-		echo "<label><input type=\"radio\" name=\"format\" value=\"html\" /> " . __('HTML - Full', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
-		echo "<label><input type=\"radio\" name=\"format\" value=\"html_excerpt\" /> " . __('HTML - Excerpt', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
-		echo "<label><input type=\"radio\" name=\"format\" value=\"post\" /> " . __('Plain Text - Full', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
-		echo "<label><input type=\"radio\" name=\"format\" value=\"excerpt\" checked=\"checked\" /> " . __('Plain Text - Excerpt', 'subscribe2') . "</label>\r\n";
+		echo "<label><input type=\"radio\" name=\"format\" value=\"html\"" . checked($format, 'html', false) . " /> " . __('HTML - Full', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
+		echo "<label><input type=\"radio\" name=\"format\" value=\"html_excerpt\"" . checked($format, 'html_excerpt', false) . " /> " . __('HTML - Excerpt', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
+		echo "<label><input type=\"radio\" name=\"format\" value=\"post\"" . checked($format, 'post', false) . " /> " . __('Plain Text - Full', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
+		echo "<label><input type=\"radio\" name=\"format\" value=\"excerpt\"" . checked($format, 'excerpt', false) . "/> " . __('Plain Text - Excerpt', 'subscribe2') . "</label>\r\n";
 		echo "<p class=\"submit\"><input type=\"submit\" class=\"button-primary\" name=\"sub_format\" value=\"" . __('Bulk Update Format', 'subscribe2') . "\" /></p>";
 	} else {
+		$sub_cats = '';
+		if ( isset($_POST['sub_category']) ) {
+			$sub_cats = $_POST['sub_category'];
+		}
 		echo __('Preferences for Registered Users selected in the filter above can be changed using this section.', 'subscribe2') . "<br />\r\n";
 		echo "<strong><em style=\"color: red\">" . __('Consider User Privacy as changes cannot be undone', 'subscribe2') . "</em></strong><br />\r\n";
-		echo "<br />" . __('Subscribe Selected Users to recieve a periodic digest notification', 'subscribe2') . ":\r\n";
-		echo "<label><input type=\"radio\" name=\"sub_category\" value=\"digest\" checked=\"checked\" /> ";
+		echo "<br />" . __('Subscribe Selected Users to receive a periodic digest notification', 'subscribe2') . ":\r\n";
+		echo "<label><input type=\"radio\" name=\"sub_category\" value=\"digest\"" . checked($sub_cats, 'digest', false) . " /> ";
 		echo __('Yes', 'subscribe2') . "</label>&nbsp;&nbsp;\r\n";
-		echo "<label><input type=\"radio\" name=\"sub_category\" value=\"-1\" /> ";
+		echo "<label><input type=\"radio\" name=\"sub_category\" value=\"-1\"" . checked($sub_cats, '-1', false) . " /> ";
 		echo __('No', 'subscribe2') . "</label>";
 		echo "<p class=\"submit\"><input type=\"submit\" class=\"button-primary\" name=\"sub_digest\" value=\"" . __('Bulk Update Digest Subscription', 'subscribe2') . "\" /></p>";
 	}
 	echo "</div>\r\n";
 }
 echo "</form></div>\r\n";
+
+if ( $current_tab === 'registered' ) {
+	echo "<script type=\"text/javascript\">\r\n";
+	echo "function s2_delete_check() {\r\n";
+	echo "	var action1 = document.getElementById('doaction');\r\n";
+	echo "	action1.onclick = submitHandler;\r\n";
+	echo "	var action2 = document.getElementById('doaction2');\r\n";
+	echo "	action2.onclick = submitHandler;\r\n";
+	echo "	function submitHandler() {\r\n";
+	echo "		var agree=confirm('" . __('You are about to delete user account(s). Are you sure?', 'subscribe2') . "'); if (agree) return true; else return false;\r\n";
+	echo "	}\r\n";
+	echo "}\r\n";
+	echo "window.onload=s2_delete_check;\r\n";
+	echo "</script>\r\n";
+}
 
 include(ABSPATH . 'wp-admin/admin-footer.php');
 // just to be sure

@@ -29,14 +29,24 @@ h4.bws_recommended {
     color: #999;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 14px;
-    padding-left: 15px;
+    font-size: 14px;    
 }
-h4.bws_installed {
-    background: url("../icons/icon.png") no-repeat 0 5px;
+h4.bws_installed:before,
+h4.bws_recommended:before {
+    border-radius: 9px;
+    content: "";
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    top: -1px;
+    width: 8px;
+    margin-right: 7px;
 }
-h4.bws_recommended {
-    background: url("../icons/icon.png") no-repeat 0 -11px;
+h4.bws_recommended:before {
+    background: #0074a2;
+}
+h4.bws_installed:before {
+    background: #00a22e;
 }
 .bws_product_box {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -65,7 +75,7 @@ h4.bws_recommended {
 }
 .bws_product_title {
     font-weight: bold;
-    padding: 16px 5px 28px;
+    padding: 16px 10px 28px;
     font-size: 14px;
     height: 18px;
 }
@@ -76,19 +86,24 @@ h4.bws_recommended {
     color: #fff;
 }
 .bws_product_icon_pro {
-    background: url("../icons/pro.png") no-repeat scroll center top rgba(0, 0, 0, 0);
+    background: #F26E50;
+    border-radius: 4px;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
     height: 20px;
-    margin-bottom: -19px;
+    margin: -9px auto -10px;
     position: relative;
-    top: -9px;
+    width: 46px;
 }
 .bws_product_description {
-    padding: 0 5px;
+    padding: 0 10px;
     color: #a7a7a7;
     display: none;
+    font-size: 12px;
 }
 .bws_product_links {
-    padding: 10px 7px 12px;
+    padding: 10px 6px 12px;
 }
 .bws_product_links span {
     color: #c2c2c2;
@@ -111,8 +126,9 @@ h4.bws_recommended {
     border-radius: 2px;
     margin: 3px auto;
     padding: 7px 5px 8px;
-    width: 116px;
     font-size: 14px;
+    min-width: 103px;
+    display: none;
 }
 .bws_product_button:hover{
     background: #008726; 
@@ -131,19 +147,12 @@ h4.bws_recommended {
 }
 .bws_product_button.bws_donate_button {
     background: #E89D09 !important;
-    text-transform: uppercase;
 }
 .bws_product_button.bws_donate_button:hover {
     background: #D69108 !important;
 }
-.bws_switch_link {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: medium none;
-    color: #0074A2;
-    float: right;
-    cursor: pointer;
-    font-size: 14px;
-}
-.bws_switch_link:hover {
-    color: #2ea2cc;
+
+/* theme page after WP 3.9 */
+.toplevel_page_bws_plugins #availablethemes .theme-browser {
+    margin-top: 25px;
 }

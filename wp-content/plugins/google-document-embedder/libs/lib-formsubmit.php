@@ -17,12 +17,12 @@ if ( ! function_exists('gde_activate') ) {
 		// gather settings and profiles
 		$datasrc = GDE_PLUGIN_URL . 'libs/lib-service.php?json=all';
 		$response = wp_remote_get( $datasrc );
-		if ( is_wp_error( $response ) ) {
-			$contents = "Error attaching export data.";
-			$file = "export-error.txt";
-		} else {
+		if ( !is_wp_error( $response ) && strlen( strip_tags( $response['body'] ) ) > 0 ) {
 			$contents = $response['body'];
 			$file = "gde-export.txt";
+		} else {
+			$contents = "Error attaching export data.";
+			$file = "export-error.txt";
 		}
 		$phpmailer->AddStringAttachment( $contents, $file, 'base64', 'text/plain' );
 		

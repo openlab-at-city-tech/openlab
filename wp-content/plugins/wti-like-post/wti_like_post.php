@@ -3,12 +3,12 @@
 Plugin Name: WTI Like Post
 Plugin URI: http://www.webtechideas.com/wti-like-post-plugin/
 Description: WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts. Check out the <strong><a href="http://www.webtechideas.com/product/wti-like-post-pro/" target="_blank">powerful PRO version</a></strong> with lots of useful features.
-Version: 1.4.1
+Version: 1.4.2
 Author: webtechideas
 Author URI: http://www.webtechideas.com/
 License: GPLv2 or later
 
-Copyright 2013  Webtechideas  (email : support@webtechideas.com)
+Copyright 2014  Webtechideas  (email : support@webtechideas.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ GNU General Public License for more details.
 */
 
 global $wti_like_post_db_version;
-$wti_like_post_db_version = "1.4.1";
+$wti_like_post_db_version = "1.4.2";
 
 add_action('init', 'WtiLoadPluginTextdomain');
 add_action('admin_init', 'WtiLikePostPluginUpdateMessage');
@@ -106,7 +106,7 @@ function SetOptionsWtiLikePost() {
 			`post_id` int(11) NOT NULL,
 			`value` int(2) NOT NULL,
 			`date_time` datetime NOT NULL,
-			`ip` varchar(20) NOT NULL,
+			`ip` varchar(40) NOT NULL,
 			`user_id` int(11) NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		)";
@@ -213,6 +213,9 @@ function UpdateOptionsWtiLikePost() {
 	$current_db_version = get_option('wti_like_post_db_version');
 	
 	if ($current_db_version != $wti_like_post_db_version) {
+		// Increase column size to support IPv6
+		$wpdb->query("ALTER TABLE `{$wpdb->prefix}wti_like_post` CHANGE `ip` `ip` VARCHAR( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL");
+		
 		$user_col = $wpdb->get_row("SHOW COLUMNS FROM {$wpdb->prefix}wti_like_post LIKE 'user_id'");
 	
 		if (count($user_col) == 0) {
@@ -243,8 +246,7 @@ if (is_admin()) {
  * @param no-param
  * @return string
  */
-function WtiGetRealIpAddress()
-{
+function WtiGetRealIpAddress() {
 	if (getenv('HTTP_CLIENT_IP')) {
 		$ip = getenv('HTTP_CLIENT_IP');
 	} elseif (getenv('HTTP_X_FORWARDED_FOR')) {
@@ -272,12 +274,133 @@ function HasWtiAlreadyVoted($post_id, $ip = null) {
 	global $wpdb;
 	
 	if (null == $ip) {
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = WtiGetRealIpAddress();
 	}
 	
 	$wti_has_voted = $wpdb->get_var("SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'");
 	
 	return $wti_has_voted;
+}
+
+/**
+ * Get last voted date for a given post by ip
+ * @param $post_id integer
+ * @param $ip string
+ * @return string
+ */
+function GetWtiLastVotedDate($post_id, $ip = null) {
+     global $wpdb;
+     
+     if (null == $ip) {
+          $ip = WtiGetRealIpAddress();
+     }
+     
+     $wti_has_voted = $wpdb->get_var("SELECT date_time FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'");
+
+     return $wti_has_voted;
+}
+
+/**
+ * Get next vote date for a given user
+ * @param $last_voted_date string
+ * @param $voting_period integer
+ * @return string
+ */
+function GetWtiNextVoteDate($last_voted_date, $voting_period) {
+     switch($voting_period) {
+          case "1":
+               $day = 1;
+               break;
+          case "2":
+               $day = 2;
+               break;
+          case "3":
+               $day = 3;
+               break;
+          case "7":
+               $day = 7;
+               break;
+          case "14":
+               $day = 14;
+               break;
+          case "21":
+               $day = 21;
+               break;
+          case "1m":
+               $month = 1;
+               break;
+          case "2m":
+               $month = 2;
+               break;
+          case "3m":
+               $month = 3;
+               break;
+          case "6m":
+               $month = 6;
+               break;
+          case "1y":
+               $year = 1;
+            break;
+     }
+     
+     $last_strtotime = strtotime($last_voted_date);
+     $next_strtotime = mktime(date('H', $last_strtotime), date('i', $last_strtotime), date('s', $last_strtotime),
+                    date('m', $last_strtotime) + $month, date('d', $last_strtotime) + $day, date('Y', $last_strtotime) + $year);
+     
+     $next_voting_date = date('Y-m-d H:i:s', $next_strtotime);
+     
+     return $next_voting_date;
+}
+
+/**
+ * Get last voted date as per voting period
+ * @param $post_id integer
+ * @return string
+ */
+function GetWtiLastDate($voting_period) {
+     switch($voting_period) {
+          case "1":
+               $day = 1;
+               break;
+          case "2":
+               $day = 2;
+               break;
+          case "3":
+               $day = 3;
+               break;
+          case "7":
+               $day = 7;
+               break;
+          case "14":
+               $day = 14;
+               break;
+          case "21":
+               $day = 21;
+               break;
+          case "1m":
+               $month = 1;
+               break;
+          case "2m":
+               $month = 2;
+               break;
+          case "3m":
+               $month = 3;
+               break;
+          case "6m":
+               $month = 6;
+               break;
+          case "1y":
+               $year = 1;
+            break;
+     }
+     
+     $last_strtotime = strtotime(date('Y-m-d H:i:s'));
+     $last_strtotime = mktime(date('H', $last_strtotime), date('i', $last_strtotime), date('s', $last_strtotime),
+                    date('m', $last_strtotime) - $month, date('d', $last_strtotime) - $day, date('Y', $last_strtotime) - $year);
+     
+     $last_voting_date = date('Y-m-d H:i:s', $last_strtotime);
+     
+     return $last_voting_date;
 }
 
 /**

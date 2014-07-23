@@ -348,7 +348,6 @@ function gde_import_settings( $data ) {
 	global $gdeoptions;
 	
 	$current = $gdeoptions;
-	unset( $current['api_key'] );
 	
 	if ( $current == $data ) {
 		// nothing to do

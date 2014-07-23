@@ -49,6 +49,7 @@ if ( !apply_filters( 'anthologize_tcpdf_external_config', ANTHOLOGIZE_TCPDF_EXTE
 	define ('K_PATH_CACHE', trailingslashit( anthologize()->cache_dir ) );
 	define ('K_PATH_URL_CACHE', trailingslashit( anthologize()->cache_url ) );
 
+	// Create the cache dir if it doesn't exist
 	if ( ! file_exists( K_PATH_CACHE ) ) {
 		wp_mkdir_p( K_PATH_CACHE );
 	}

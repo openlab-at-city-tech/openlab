@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_save.php - Saving options to the database
  *
- * @version $Id: dynwid_admin_save.php 863974 2014-02-24 10:43:41Z qurl $
+ * @version $Id: dynwid_admin_save.php 939272 2014-06-26 19:44:38Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -68,6 +68,12 @@
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
   }
+  
+  // IP
+  if ( $_POST['ip'] == 'no' && empty($_POST['ip_value']) ) {
+  	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+  	die();
+  }  
 
   // Removing already set options, but keeping individual rules
   $dbtable = $GLOBALS['wpdb']->prefix . DW_DB_TABLE;
@@ -75,7 +81,8 @@
   $count = $GLOBALS['wpdb']->get_var($query);
   
   if ( $count > 0 && isset($_POST['individual']) && $_POST['individual'] == '1' ) {
-  	$post_types = array_merge( array('single_post', 'single_tag'), $_POST['post_types'] );
+  	$post_types = ( is_array($_POST['post_types']) ) ? $_POST['post_types'] : array();
+  	$post_types = array_merge( array('single_post', 'single_tag'), $post_types );
   	
   	foreach ( $post_types as $t ) {
  			$maintype = (! preg_match('/^single/', $t) ) ? $t . '-post' : $t;
@@ -128,8 +135,8 @@
   // Browser
 	DWModule::save('browser', 'complex');
 	
-	// Mobile
-	DWModule::save('mobile');
+	// Device
+	DWModule::save('device', 'complex');
 
 	// Template
 	DWModule::save('tpl', 'complex');
@@ -153,6 +160,26 @@
 			$DW->addUrls($widget_id, $_POST['url'], $urls);
 		}
 	}
+	
+	// IP
+	if (! empty($_POST['ip_value']) ) {
+		$ips = array();
+
+		$ip_values = trim($_POST['ip_value']);
+		$ip_values = str_replace("\r", "", $ip_values);
+		$ip_values = explode("\n", $ip_values);
+
+		foreach ( $ip_values as $ip ) {
+			$ip = trim($ip);
+			if (! empty($ip) ) {
+				$ips[ ] = $ip;
+			}
+		}
+
+		if ( count($ips) > 0 ) {
+			$DW->addIPs($widget_id, $_POST['ip'], $ips);
+		}
+	}	
 
   // Front Page
   DWModule::save('front-page', 'complex');

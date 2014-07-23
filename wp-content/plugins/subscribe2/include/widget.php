@@ -13,7 +13,6 @@ class S2_Form_widget extends WP_Widget {
 	Displays the Widget
 	*/
 	function widget($args, $instance) {
-		extract($args);
 		$title = empty($instance['title']) ? __('Subscribe2', 'subscribe2') : $instance['title'];
 		$div = empty($instance['div']) ? 'search' : $instance['div'];
 		$widgetprecontent = empty($instance['widgetprecontent']) ? '' : $instance['widgetprecontent'];
@@ -23,6 +22,7 @@ class S2_Form_widget extends WP_Widget {
 		$postto = empty($instance['postto']) ? '' : $instance['postto'];
 		$js = empty($instance['js']) ? '' : $instance['js'];
 		$noantispam = empty($instance['noantispam']) ? '' : $instance['noantispam'];
+		$nowrap = empty($instance['nowrap']) ? '' : $instance['nowrap'];
 		$hide = '';
 		if ( $hidebutton == 'subscribe' || $hidebutton == 'unsubscribe' ) {
 			$hide = " hide=\"" . $hidebutton . "\"";
@@ -41,9 +41,14 @@ class S2_Form_widget extends WP_Widget {
 		if ( $noantispam ) {
 			$noantispam = " noantispam=\"true\"";
 		}
-		$shortcode = "[subscribe2" . $hide . $postid . $size . $nojs . $noantispam . "]";
-		echo $before_widget;
-		echo $before_title . $title . $after_title;
+		if ( $nowrap ) {
+			$nowrap = " wrap=\"false\"";
+		}
+		$shortcode = "[subscribe2" . $hide . $postid . $size . $nojs . $noantispam . $nowrap . "]";
+		echo $args['before_widget'];
+		if ( !empty($title) ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
 		echo "<div class=\"" . $div . "\">";
 		$content = do_shortcode( $shortcode );
 		if ( !empty($widgetprecontent) ) {
@@ -54,7 +59,7 @@ class S2_Form_widget extends WP_Widget {
 			echo $widgetpostcontent;
 		}
 		echo "</div>";
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 	/**
@@ -71,6 +76,7 @@ class S2_Form_widget extends WP_Widget {
 		$instance['postto'] = stripslashes($new_instance['postto']);
 		$instance['js'] = stripslashes($new_instance['js']);
 		$instance['noantispam'] = stripslashes($new_instance['noantispam']);
+		$instance['nowrap'] = stripslashes($new_instance['nowrap']);
 
 		return $instance;
 	}
@@ -82,9 +88,9 @@ class S2_Form_widget extends WP_Widget {
 		// set some defaults, getting any old options first
 		$options = get_option('widget_subscribe2widget');
 		if ( $options === false ) {
-			$defaults = array('title' => 'Subscribe2', 'div' => 'search', 'widgetprecontent' => '', 'widgetpostcontent' => '', 'size' => 20, 'hidebutton' => 'none', 'postto' => '', 'js' => '', 'noantispam' => '');
+			$defaults = array('title' => 'Subscribe2', 'div' => 'search', 'widgetprecontent' => '', 'widgetpostcontent' => '', 'size' => 20, 'hidebutton' => 'none', 'postto' => '', 'js' => '', 'noantispam' => '', 'nowrap' => '');
 		} else {
-			$defaults = array('title' => $options['title'], 'div' => $options['div'], 'widgetprecontent' => $options['widgetprecontent'], 'widgetpostcontent' => $options['widgetpostcontent'], 'size' => $options['size'], 'hidebutton' => $options['hidebutton'], 'postto' => $options['postto'], 'js' => $options['js'], 'noantispam' => $options['noantispam']);
+			$defaults = array('title' => $options['title'], 'div' => $options['div'], 'widgetprecontent' => $options['widgetprecontent'], 'widgetpostcontent' => $options['widgetpostcontent'], 'size' => $options['size'], 'hidebutton' => $options['hidebutton'], 'postto' => $options['postto'], 'js' => $options['js'], 'noantispam' => $options['noantispam'], 'nowrap' => $options['nowrap']);
 			delete_option('widget_subscribe2widget');
 		}
 		// code to obtain old settings too
@@ -99,6 +105,7 @@ class S2_Form_widget extends WP_Widget {
 		$postto = htmlspecialchars($instance['postto'], ENT_QUOTES);
 		$js = htmlspecialchars($instance['js'], ENT_QUOTES);
 		$noantispam  = htmlspecialchars($instance['noantispam'], ENT_QUOTES);
+		$nowrap = htmlspecialchars($instance['nowrap'], ENT_QUOTES);
 
 		global $wpdb, $mysubscribe2;
 		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish'";
@@ -138,6 +145,9 @@ class S2_Form_widget extends WP_Widget {
 		echo "</label></p>\r\n";
 		echo "<p><label for=\"" . $this->get_field_id('noantispam') . "\">" . __('Disable Anti-spam measures', 'subscribe2') . ":\r\n";
 		echo "<input id=\"" . $this->get_field_id('noantispam') . "\" name =\"" . $this->get_field_name('noantispam') . "\" value=\"true\" type=\"checkbox\"" . checked('true', $noantispam, false) . "/>";
+		echo "</label></p>\r\n";
+		echo "<p><label for=\"" . $this->get_field_id('nowrap') . "\">" . __('Disable wrapping of form buttons', 'subscribe2') . ":\r\n";
+		echo "<input id=\"" . $this->get_field_id('nowrap') . "\" name =\"" . $this->get_field_name('nowrap') . "\" value=\"true\" type=\"checkbox\"" . checked('true', $nowrap, false) . "/>";
 		echo "</label></p>\r\n";
 		echo "</div>\r\n";
 	}

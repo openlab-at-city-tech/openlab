@@ -2,12 +2,12 @@
 /**
  * dynwid_init_worker.php
  *
- * @version $Id: dynwid_init_worker.php 618242 2012-10-28 14:00:39Z qurl $
+ * @version $Id: dynwid_init_worker.php 939272 2014-06-26 19:44:38Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
 	$DW->message('Dynamic Widgets INIT');
-	echo "\n" . '<!-- Dynamic Widgets v' . DW_VERSION . ' by QURL - http://www.qurl.nl //-->' . "\n";
+	echo "\n" . '<!-- Dynamic Widgets by QURL - http://www.qurl.nl //-->' . "\n";
 
 	// Register the overrule maintypes
 	$DW->registerOverrulers();
@@ -15,6 +15,9 @@
 
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
+	
+	//IP 
+	$DW->message('IP: ' . $DW->ip_address);
 
 	$DW->message('Today it is ' . date('l', current_time('timestamp', 0)) . ' (' . date('N', current_time('timestamp', 0)) . '), Week: ' . date('W', current_time('timestamp', 0)));
 

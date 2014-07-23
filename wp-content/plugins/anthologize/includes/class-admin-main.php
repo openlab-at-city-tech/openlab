@@ -171,10 +171,9 @@ class Anthologize_Admin_Main {
 			array( $this, 'load_admin_panel_about' )
 		);
 
-		// @todo Don't do this
 		foreach ( $plugin_pages as $plugin_page ) {
-			add_action( "admin_print_styles", array( $this, 'load_styles' ) );
-			add_action( "admin_print_scripts", array( $this, 'load_scripts' ) );
+			add_action( "admin_print_styles-$plugin_page", array( $this, 'load_styles' ) );
+			add_action( "admin_print_scripts-$plugin_page", array( $this, 'load_scripts' ) );
 		}
 
 	}
@@ -563,7 +562,7 @@ class Anthologize_Admin_Main {
 
 							<?php
 							$controlActions	  = array();
-							$controlActions[] = '<a href="admin.php?page=anthologize_new_project.php&project_id=' . get_the_ID() .'">' . __('Project Details', 'anthologize') . '</a>';
+							$controlActions[] = '<a href="admin.php?page=anthologize_new_project&project_id=' . get_the_ID() .'">' . __('Project Details', 'anthologize') . '</a>';
 							$controlActions[] = '<a href="admin.php?page=anthologize&action=edit&project_id=' . get_the_ID() .'">'.__('Manage Parts', 'anthologize') . '</a>';
 							$controlActions[] = '<a href="admin.php?page=anthologize&action=delete&project_id=' . get_the_ID() .'" class="confirm-delete">'.__('Delete Project', 'anthologize') . '</a>';
 							?>

@@ -1,12 +1,13 @@
 <?php
 
 require_once WPCF7_PLUGIN_DIR . '/includes/functions.php';
-require_once WPCF7_PLUGIN_DIR . '/includes/deprecated.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/formatting.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/pipe.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/shortcodes.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/capabilities.php';
-require_once WPCF7_PLUGIN_DIR . '/includes/classes.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/contact-form.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/mail.php';
+require_once WPCF7_PLUGIN_DIR . '/includes/submission.php';
 require_once WPCF7_PLUGIN_DIR . '/includes/upgrade.php';
 
 if ( is_admin() )
@@ -17,20 +18,6 @@ else
 add_action( 'plugins_loaded', 'wpcf7' );
 
 function wpcf7() {
-	global $wpcf7, $wpcf7_shortcode_manager;
-
-	if ( ! is_object( $wpcf7 ) ) {
-		$wpcf7 = (object) array(
-			'processing_within' => '',
-			'widget_count' => 0,
-			'unit_count' => 0,
-			'global_unit_count' => 0,
-			'result' => array(),
-			'request_uri' => null );
-	}
-
-	$wpcf7_shortcode_manager = new WPCF7_ShortcodeManager();
-
 	wpcf7_load_textdomain();
 	wpcf7_load_modules();
 }
@@ -38,10 +25,7 @@ function wpcf7() {
 add_action( 'init', 'wpcf7_init' );
 
 function wpcf7_init() {
-	global $wpcf7;
-
-	$wpcf7->request_uri = add_query_arg( array() );
-
+	wpcf7_get_request_uri();
 	wpcf7_register_post_types();
 
 	do_action( 'wpcf7_init' );
@@ -83,8 +67,8 @@ function wpcf7_install() {
 	if ( get_posts( array( 'post_type' => 'wpcf7_contact_form' ) ) )
 		return;
 
-	$contact_form = wpcf7_get_contact_form_default_pack(
-		array( 'title' => sprintf( __( 'Contact form %d', 'contact-form-7' ), 1 ) ) );
+	$contact_form = WPCF7_ContactForm::get_template( array(
+		'title' => sprintf( __( 'Contact form %d', 'contact-form-7' ), 1 ) ) );
 
 	$contact_form->save();
 }

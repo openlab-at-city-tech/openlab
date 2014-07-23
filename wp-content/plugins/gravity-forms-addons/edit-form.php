@@ -12,18 +12,21 @@ class GFDirectory_EditForm {
 
 		add_action('admin_init',  array(&$this, 'process_exterior_pages'));
 
-		if(self::is_gravity_page() && isset($_REQUEST['id'])) {
+		if(self::is_gravity_page() ) {
 
-			add_filter('gform_tooltips', array(&$this, 'directory_tooltips')); //Filter to add a new tooltip
-			add_action("gform_editor_js", array(&$this, "editor_script")); //Action to inject supporting script to the form editor page
-			add_action("admin_head", array(&$this, "toolbar_links")); //Action to inject supporting script to the form editor page
-			add_action("gform_field_advanced_settings", array(&$this,"use_as_entry_link_settings"), 10, 2);
-			add_filter("gform_add_field_buttons", array(&$this,"add_field_buttons"));
 			add_filter('admin_head', array(&$this,'directory_admin_head'));
-			add_action('gform_editor_js_set_default_values', array(&$this,'directory_add_default_values'));
 
-			// Allows for edit links to work with a link instead of a form (GET instead of POST)
-			if(isset($_GET["screen_mode"])) { $_POST["screen_mode"] = $_GET["screen_mode"]; }
+			if( isset($_REQUEST['id'] ) ) {
+				add_filter('gform_tooltips', array(&$this, 'directory_tooltips')); //Filter to add a new tooltip
+				add_action("gform_editor_js", array(&$this, "editor_script")); //Action to inject supporting script to the form editor page
+				add_action("admin_head", array(&$this, "toolbar_links")); //Action to inject supporting script to the form editor page
+				add_action("gform_field_advanced_settings", array(&$this,"use_as_entry_link_settings"), 10, 2);
+				add_filter("gform_add_field_buttons", array(&$this,"add_field_buttons"));
+				add_action('gform_editor_js_set_default_values', array(&$this,'directory_add_default_values'));
+
+				// Allows for edit links to work with a link instead of a form (GET instead of POST)
+				if(isset($_GET["screen_mode"])) { $_POST["screen_mode"] = $_GET["screen_mode"]; }
+			}
 		}
 	}
 
@@ -96,11 +99,21 @@ class GFDirectory_EditForm {
 	}
 
 	public function directory_admin_head() {
-			global $_gform_directory_approvedcolumn, $process_bulk_update_message;
+		global $_gform_directory_approvedcolumn, $process_bulk_update_message;
 
-			if(!(self::is_gravity_page('gf_entries') && isset($_GET['id']) && !self::is_gravity_page('gf_edit_forms'))) { return; }
+		// Entries screen shows first form's entries by default, if not specified
+		if( isset( $_GET['id'] ) ) {
+			$formID = $_GET['id'];
+		} else {
+			if( class_exists('RGFormsModel') ) {
+				$forms = RGFormsModel::get_forms(null, "title");
+				$formID = $forms[0]->id;
+			}
+		}
 
-			 ?>
+		if( !( self::is_gravity_page('gf_entries') && isset( $formID ) && !self::is_gravity_page('gf_edit_forms') ) ) { return; }
+
+		?>
 		<style>
 
 		.lead_approved .toggleApproved {
@@ -119,7 +132,7 @@ class GFDirectory_EditForm {
 
 			<?php
 
-			$formID = RGForms::get("id");
+			//$formID = RGForms::get("id");
 
 	        if(empty($formID)) {
 		        $forms = RGFormsModel::get_forms(null, "title");

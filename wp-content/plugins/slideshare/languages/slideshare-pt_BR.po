@@ -1,0 +1,110 @@
+# Translation of Slideshare in Portuguese (Brazil)
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-08-24 08:12:18+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "Configuração do SlideShare"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "Largura padrão"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "Atualizar configurações do SlideShare"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "Configurações"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "Explicação de uso"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "Copie e cole o código \"Embed (wordpress.com)\" de %s e está feito"
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "Explicação da largura padrão"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "Se você não preencher este campo, você poderá alterar a largura manualmente, alterando o valor w=, que está em negrito e vermelho aqui:"
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr "Se você <em>preencher</em> um valor, ele irá sempre substituir a largura com o mesmo."
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "Porque não fazer um ou todos do seguinte:"
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "Link para ele, assim outras pessoas poderão conhecer."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "Dê uma boa nota no Wordpress.org"
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "Faça uma doação de apoio, usando o botão abaixo."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "Deixar outras pessoas saberem que ele funciona com sua configuração do Wordpress."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "Gostou deste plugin?"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "Este plugin tomou diversas horas de trabalho, se você o usa, por favor doe como amostra de sua apreciação."
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "Se você encontrou um bug neste plugin, por favor envie nos Forums de Suporte com uma descrição clara."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "Encontrou um bug?"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "Nenhum novo item, o feed deve estar com problemas..."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "Assinar com RSS"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "Assinar por e-mail"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "Últimas notícias por Yoast"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "Se você recarregar a página, este widget sumirá e não aparecerá novamente, a não ser que você decida apagar a opção no banco de dados: 'yoastdbwidget'."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "Remover este widget do painel de todos os usuários"
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "Um plugin de Wordpress para mostrar apresentações do slideshare.net de forma simplificada"

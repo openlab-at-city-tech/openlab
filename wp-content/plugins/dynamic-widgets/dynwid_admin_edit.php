@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 864301 2014-02-24 20:50:40Z qurl $
+ * @version $Id: dynwid_admin_edit.php 939272 2014-06-26 19:44:38Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -30,7 +30,7 @@ label {
 }
 
 .condition-select {
-  width : 300px;
+  width : 450px;
   -moz-border-radius-topleft : 6px;
   -moz-border-radius-topright : 6px;
   -moz-border-radius-bottomleft : 6px;
@@ -102,11 +102,12 @@ div.settingbox {
   		add = false;
   	}
 
-  	var value = jQuery( '#' + prefix + '_act' ).val();
+  	var value = jQuery( 'input[name^="' + prefix + '_act"]' ).val();
+  	console.log( 'prefix: ' + prefix + ', value: ' + value );
   	var a = value.split(',');
 
   	if ( child ) {
-  		var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  		var value_child = jQuery( 'input[name^="' + prefix + '_childs_act"]' ).val();
   		var a_child = value_child.split(',');
   	}
 
@@ -147,8 +148,10 @@ div.settingbox {
   		add = true;
   	}
 
-  	var value = jQuery( '#' + prefix + '_act' ).val();
-  	var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  	// var value = jQuery( '#' + prefix + '_act' ).val();
+		var value = jQuery( 'input[name^="' + prefix + '_act"]' ).val();
+  	// var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  	var value_child = jQuery( 'input[name^="' + prefix + '_childs_act"]' ).val();
   	var a = value.split(',');
   	var a_child = value_child.split(',');
 
@@ -376,10 +379,15 @@ div.settingbox {
 		$DW_Browser = new DW_Browser();
 		$DW_Browser->admin();
 	}
+	
+	if ( array_key_exists('ip', $DW->dwoptions) ) {
+		$DW_IP = new DW_IP();
+		$DW_IP->admin();
+	}	
 
-	if ( array_key_exists('mobile', $DW->dwoptions) ) {
-		$DW_Mobile = new DW_Mobile();
-		$DW_Mobile->admin();
+	if ( array_key_exists('device', $DW->dwoptions) ) {
+		$DW_Device = new DW_Device();
+		$DW_Device->admin();
 	}	
 
 	if ( array_key_exists('tpl', $DW->dwoptions) ) {

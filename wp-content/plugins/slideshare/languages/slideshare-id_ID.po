@@ -1,0 +1,110 @@
+# Translation of Slideshare in Indonesian
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-08-24 08:11:55+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "Konfigurasi SlideShare"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "Lebar default"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "Memperbarui Pengaturan SlideShare"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "Penjelasan penggunaan"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "Copy dan paste kode \"Embed (wordpress.com)\" dari %s dan selesai"
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "Penjelasan lebar default"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "Jika Anda tidak memasukkan apapun, Anda dapat mengubah lebar dengan mengubah w= value, lihat yang dicetak tebal dan berwarna merah:"
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr "Jika Anda <em>memasukkan</em> nilai, maka akan menggantikan lebar dengan nilai tersebut."
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "Mengapa tidak melakukan salah satu atau semua hal berikut:"
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "Tautkan sehingga orang lain dapat mencari tahu tentang hal itu."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "Berikan rating yang baik di WordPress.org."
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "Donasi tanda penghargaan Anda dengan tombol di bawah ini."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "Biarkan orang lain tahu bahwa ini bekerja dengan baik di setup WordPress Anda."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "Suka dengan plugin ini?"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "Plugin ini memiliki biaya atas jam kerja saya yang tak terhitung, jika Anda menggunakannya, silahkan donasikan tanda penghargaan Anda!"
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "Jika Anda telah menemukan bug di plugin ini, silakan submit ke Support Forum dengan uraian yang jelas."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "Menemukan bug?"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "Tidak ada item berita, feed mungkin rusak ..."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "Berlangganan RSS"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "Berlangganan via email"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "Kabar terbaru dari Yoast"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "Jika Anda muat ulang, widget ini akan hilang dan tidak pernah muncul lagi, kecuali Anda memutuskan untuk menghapus opsi database 'yoastdbwidget'."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "Hapus widget ini dari semua dasbor pengguna"
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "Plugin Wordpress untuk menampilkan presentasi slideshare.net dengan mudah"
