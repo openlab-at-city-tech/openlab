@@ -68,7 +68,6 @@ add_filter( 'bp_admin_menu_order', 'bp_groups_admin_menu_order' );
  *
  * @since BuddyPress (1.7.0)
  *
- * @global object $bp BuddyPress global settings
  * @global BP_Groups_List_Table $bp_groups_list_table Groups screen list table
  */
 function bp_groups_admin_load() {
@@ -132,7 +131,6 @@ function bp_groups_admin_load() {
 		// Enqueue javascripts
 		wp_enqueue_script( 'postbox' );
 		wp_enqueue_script( 'dashboard' );
-		wp_enqueue_script( 'comment' );
 
 	// Index screen
 	} else {
@@ -166,9 +164,11 @@ function bp_groups_admin_load() {
 		);
 	}
 
+	$bp = buddypress();
+
 	// Enqueue CSS and JavaScript
-	wp_enqueue_script( 'bp_groups_admin_js', BP_PLUGIN_URL . "bp-groups/admin/js/admin.{$min}js", array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), bp_get_version(), true );
-	wp_enqueue_style( 'bp_groups_admin_css', BP_PLUGIN_URL . "bp-groups/admin/css/admin.{$min}css", array(), bp_get_version() );
+	wp_enqueue_script( 'bp_groups_admin_js', $bp->plugin_url . "bp-groups/admin/js/admin.{$min}js", array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), bp_get_version(), true );
+	wp_enqueue_style( 'bp_groups_admin_css', $bp->plugin_url . "bp-groups/admin/css/admin.{$min}css", array(), bp_get_version() );
 
 	wp_localize_script( 'bp_groups_admin_js', 'BP_Group_Admin', array(
 		'add_member_placeholder' => __( 'Start typing a username to add a new member.', 'buddypress' ),
@@ -683,22 +683,27 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 	<?php endif; ?>
 
 	<div class="bp-groups-settings-section" id="bp-groups-settings-section-status">
-		<label for="group-status"><?php _e( 'Privacy', 'buddypress' ); ?></label>
+		<fieldset>
+			<legend><?php _e( 'Privacy', 'buddypress' ); ?></legend>
 
-		<ul>
-			<li><input type="radio" name="group-status" id="bp-group-status-public" value="public" <?php checked( $item->status, 'public' ) ?> /> <?php _e( 'Public', 'buddypress' ) ?></li>
-			<li><input type="radio" name="group-status" id="bp-group-status-private" value="private" <?php checked( $item->status, 'private' ) ?> /> <?php _e( 'Private', 'buddypress' ) ?></li>
-			<li><input type="radio" name="group-status" id="bp-group-status-hidden" value="hidden" <?php checked( $item->status, 'hidden' ) ?> /> <?php _e( 'Hidden', 'buddypress' ) ?></li>
+			<ul>
+				<li><input type="radio" name="group-status" id="bp-group-status-public" value="public" <?php checked( $item->status, 'public' ) ?> /><label for="bp-group-status-public"><?php _e( 'Public', 'buddypress' ) ?></label></li>
+				<li><input type="radio" name="group-status" id="bp-group-status-private" value="private" <?php checked( $item->status, 'private' ) ?> /><label for="bp-group-status-private"><?php _e( 'Private', 'buddypress' ) ?></label></li>
+				<li><input type="radio" name="group-status" id="bp-group-status-hidden" value="hidden" <?php checked( $item->status, 'hidden' ) ?> /><label for="bp-group-status-hidden"><?php _e( 'Hidden', 'buddypress' ) ?></label></li>
+			</ul>
+		</fieldset>
 	</div>
 
 	<div class="bp-groups-settings-section" id="bp-groups-settings-section-invite-status">
-		<label for="group-invite-status"><?php _e( 'Who can invite others to this group?', 'buddypress' ); ?></label>
+		<fieldset>
+			<legend><?php _e( 'Who can invite others to this group?', 'buddypress' ); ?></legend>
 
-		<ul>
-			<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-members" value="members" <?php checked( $invite_status, 'members' ) ?> /> <?php _e( 'All group members', 'buddypress' ) ?></li>
-			<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-mods" value="mods" <?php checked( $invite_status, 'mods' ) ?> /> <?php _e( 'Group admins and mods only', 'buddypress' ) ?></li>
-			<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-admins" value="admins" <?php checked( $invite_status, 'admins' ) ?> /> <?php _e( 'Group admins only', 'buddypress' ) ?></li>
-		</ul>
+			<ul>
+				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-members" value="members" <?php checked( $invite_status, 'members' ) ?> /><label for="bp-group-invite-status-members"><?php _e( 'All group members', 'buddypress' ) ?></label></li>
+				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-mods" value="mods" <?php checked( $invite_status, 'mods' ) ?> /><label for="bp-group-invite-status-mods"><?php _e( 'Group admins and mods only', 'buddypress' ) ?></label></li>
+				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-admins" value="admins" <?php checked( $invite_status, 'admins' ) ?> /><label for="bp-group-invite-status-admins"><?php _e( 'Group admins only', 'buddypress' ) ?></label></li>
+			</ul>
+		</fieldset>
 	</div>
 
 <?php
@@ -712,7 +717,7 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 function bp_groups_admin_edit_metabox_add_new_members( $item ) {
 	?>
 
-	<input name="bp-groups-new-members" id="bp-groups-new-members" class="bp-suggest-user" placeholder="<?php _e( 'Enter a comma-separated list of user logins.', 'buddypress' ) ?>" />
+	<input name="bp-groups-new-members" id="bp-groups-new-members" class="bp-suggest-user" placeholder="<?php esc_attr_e( 'Enter a comma-separated list of user logins.', 'buddypress' ) ?>" />
 	<ul id="bp-groups-new-members-list"></ul>
 	<?php
 }
@@ -927,8 +932,8 @@ function bp_groups_admin_create_pagination_links( BP_Group_Member_Query $query, 
 	$pag_links = paginate_links( array(
 		'base'      => add_query_arg( $qs_key, '%#%', $url_base ),
 		'format'    => '',
-		'prev_text' => __( '&laquo;' ),
-		'next_text' => __( '&raquo;' ),
+		'prev_text' => __( '&laquo;', 'buddypress' ),
+		'next_text' => __( '&raquo;', 'buddypress' ),
 		'total'     => ceil( $query->total_users / $per_page ),
 		'current'   => $page,
 	) );
@@ -992,18 +997,18 @@ function bp_groups_admin_autocomplete_handler() {
 	$group_members = ! empty( $group_member_query->results ) ? wp_list_pluck( $group_member_query->results, 'ID' ) : array();
 
 	$terms = isset( $_GET['term'] ) ? $_GET['term'] : '';
-	$users = get_users( array(
-		'blog_id'        => false,
-		'search'         => '*' . $terms . '*',
-		'exclude'        => $group_members,
-		'search_columns' => array( 'user_login', 'user_nicename', 'user_email', 'display_name' ),
-		'number'         => 10
+	$users = bp_core_get_users( array(
+		'type'            => 'alphabetical',
+		'search_terms'    => $terms,
+		'exclude'         => $group_members,
+		'per_page'        => 10,
+		'populate_extras' => false
 	) );
 
-	foreach ( (array) $users as $user ) {
+	foreach ( (array) $users['users'] as $user ) {
 		$return[] = array(
 			/* translators: 1: user_login, 2: user_email */
-			'label' => sprintf( __( '%1$s (%2$s)' ), bp_is_username_compatibility_mode() ? $user->user_login : $user->user_nicename, $user->user_email ),
+			'label' => sprintf( __( '%1$s (%2$s)', 'buddypress' ), bp_is_username_compatibility_mode() ? $user->user_login : $user->user_nicename, $user->user_email ),
 			'value' => $user->user_nicename,
 		);
 	}
@@ -1260,9 +1265,9 @@ class BP_Groups_List_Table extends WP_List_Table {
 
 		<ul class="subsubsub">
 			<li class="all"><a href="<?php echo esc_attr( esc_url( $url_base ) ); ?>" class="<?php if ( 'all' == $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
-			<li class="public"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'public', $url_base ) ) ); ?>" class="<?php if ( 'public' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Public <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->group_counts['public'] ) ); ?></a> |</li>
-			<li class="private"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'private', $url_base ) ) ); ?>" class="<?php if ( 'private' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Private <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->group_counts['private'] ) ); ?></a> |</li>
-			<li class="hidden"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'hidden', $url_base ) ) ); ?>" class="<?php if ( 'hidden' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Hidden <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->group_counts['hidden'] ) ); ?></a></li>
+			<li class="public"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'public', $url_base ) ) ); ?>" class="<?php if ( 'public' == $this->view ) echo 'current'; ?>"><?php printf( _n( 'Public <span class="count">(%s)</span>', 'Public <span class="count">(%s)</span>', $this->group_counts['public'], 'buddypress' ), number_format_i18n( $this->group_counts['public'] ) ); ?></a> |</li>
+			<li class="private"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'private', $url_base ) ) ); ?>" class="<?php if ( 'private' == $this->view ) echo 'current'; ?>"><?php printf( _n( 'Private <span class="count">(%s)</span>', 'Private <span class="count">(%s)</span>', $this->group_counts['private'], 'buddypress' ), number_format_i18n( $this->group_counts['private'] ) ); ?></a> |</li>
+			<li class="hidden"><a href="<?php echo esc_attr( esc_url( add_query_arg( 'group_status', 'hidden', $url_base ) ) ); ?>" class="<?php if ( 'hidden' == $this->view ) echo 'current'; ?>"><?php printf( _n( 'Hidden <span class="count">(%s)</span>', 'Hidden <span class="count">(%s)</span>', $this->group_counts['hidden'], 'buddypress' ), number_format_i18n( $this->group_counts['hidden'] ) ); ?></a></li>
 
 			<?php do_action( 'bp_groups_list_table_get_views', $url_base, $this->view ); ?>
 		</ul>
@@ -1292,14 +1297,14 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 * @return array Array of column titles.
 	 */
 	function get_columns() {
-		return array(
+		return apply_filters( 'bp_groups_list_table_get_columns', array(
 			'cb'          => '<input name type="checkbox" />',
 			'comment'     => _x( 'Name', 'Groups admin Group Name column header',               'buddypress' ),
 			'description' => _x( 'Description', 'Groups admin Group Description column header', 'buddypress' ),
 			'status'      => _x( 'Status', 'Groups admin Privacy Status column header',         'buddypress' ),
 			'members'     => _x( '# Members', 'Groups admin Members column header',             'buddypress' ),
 			'last_active' => _x( 'Last Active', 'Groups admin Last Active column header',       'buddypress' )
-		);
+		) );
 	}
 
 	/**
@@ -1474,5 +1479,17 @@ class BP_Groups_List_Table extends WP_List_Table {
 	function column_last_active( $item = array() ) {
 		$last_active = groups_get_groupmeta( $item['id'], 'last_activity' );
 		echo apply_filters_ref_array( 'bp_groups_admin_get_group_last_active', array( $last_active, $item ) );
+	}
+
+	/**
+	 * Allow plugins to add their costum column.
+	 *
+	 * @since BuddyPress 2.0.0
+	 *
+	 * @param array Information about the current row.
+	 * @param string the column name.
+	 */
+	function column_default( $item = array(), $column_name = '' ) {
+		return apply_filters( 'bp_groups_admin_get_group_custom_column', '', $column_name, $item );
 	}
 }

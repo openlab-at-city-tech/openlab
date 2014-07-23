@@ -104,6 +104,20 @@ function bp_admin_setting_callback_blogforum_comments() {
 }
 
 /**
+ * Allow Heartbeat to refresh activity stream.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_admin_setting_callback_heartbeat() {
+?>
+
+	<input id="_bp_enable_heartbeat_refresh" name="_bp_enable_heartbeat_refresh" type="checkbox" value="1" <?php checked( bp_is_activity_heartbeat_active( true ) ); ?> />
+	<label for="_bp_enable_heartbeat_refresh"><?php _e( 'Automatically check for new items while viewing the activity stream', 'buddypress' ); ?></label>
+
+<?php
+}
+
+/**
  * Sanitization for _bp_force_buddyvar
  *
  * If upgraded to 1.6 and you chose to keep the BuddyBar, a checkbox asks if you want to switch to
@@ -223,7 +237,7 @@ function bp_admin_setting_callback_bbpress_configuration() {
 
 	<?php if ( false === $file_exists ) : ?>
 
-		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>" title="<?php _e( 'Attempt to save a new config file.', 'buddypress' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
+		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>" title="<?php esc_attr_e( 'Attempt to save a new config file.', 'buddypress' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
 		<span class="attention"><?php _e( 'File does not exist', 'buddypress' ); ?></span>
 
 	<?php endif; ?>
@@ -264,7 +278,7 @@ function bp_core_admin_settings() {
 			<?php do_settings_sections( 'buddypress' ); ?>
 
 			<p class="submit">
-				<input type="submit" name="submit" class="button-primary" value="<?php _e( 'Save Settings', 'buddypress' ); ?>" />
+				<input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e( 'Save Settings', 'buddypress' ); ?>" />
 			</p>
 		</form>
 	</div>

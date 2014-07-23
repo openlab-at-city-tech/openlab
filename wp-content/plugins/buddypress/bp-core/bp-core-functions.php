@@ -112,7 +112,8 @@ function bp_core_get_table_prefix() {
 function bp_alpha_sort_by_key( $items, $key ) {
 	usort( $items, create_function( '$a, $b', '
 		$values = array( 0 => false, 1 => false, );
-		foreach ( func_get_args() as $indexi => $index ) {
+		$func_args = func_get_args();
+		foreach ( $func_args as $indexi => $index ) {
 			if ( isset( $index->' . $key . ' ) ) {
 				$values[ $indexi ] = $index->' . $key . ';
 			} else if ( isset( $index["' . $key . '"] ) ) {
@@ -199,6 +200,52 @@ function bp_core_parse_args_array( $old_args_keys, $func_args ) {
 	}
 
 	return $new_args;
+}
+
+/**
+ * Merge user defined arguments into defaults array.
+ *
+ * This function is used throughout BuddyPress to allow for either a string or
+ * array to be merged into another array. It is identical to wp_parse_args()
+ * except it allows for arguments to be passively or aggressively filtered using
+ * the optional $filter_key parameter. If no $filter_key is passed, no filters
+ * are applied.
+ *
+ * @since BuddyPress (r7704)
+ *
+ * @param string|array $args Value to merge with $defaults
+ * @param array $defaults Array that serves as the defaults.
+ * @param string $filter_key String to key the filters from
+ * @return array Merged user defined values with defaults.
+ */
+function bp_parse_args( $args, $defaults = array(), $filter_key = '' ) {
+
+	// Setup a temporary array from $args
+	if ( is_object( $args ) ) {
+		$r = get_object_vars( $args );
+	} elseif ( is_array( $args ) ) {
+		$r =& $args;
+	} else {
+		wp_parse_str( $args, $r );
+	}
+
+	// Passively filter the args before the parse
+	if ( !empty( $filter_key ) ) {
+		$r = apply_filters( 'bp_before_' . $filter_key . '_parse_args', $r );
+	}
+
+	// Parse
+	if ( is_array( $defaults ) && !empty( $defaults ) ) {
+		$r = array_merge( $defaults, $r );
+	}
+
+	// Aggressively filter the args after the parse
+	if ( !empty( $filter_key ) ) {
+		$r = apply_filters( 'bp_after_' . $filter_key . '_parse_args', $r );
+	}
+
+	// Return the parsed results
+	return $r;
 }
 
 /**
@@ -310,44 +357,52 @@ function bp_core_update_directory_page_ids( $blog_page_ids ) {
 function bp_core_get_directory_pages() {
 	global $wpdb;
 
-	// Set pages as standard class
-	$pages = new stdClass;
+	// Look in cache first
+	$pages = wp_cache_get( 'directory_pages', 'bp' );
 
-	// Get pages and IDs
-	$page_ids = bp_core_get_directory_page_ids();
-	if ( !empty( $page_ids ) ) {
+	if ( false === $pages ) {
 
-		// Always get page data from the root blog, except on multiblog mode, when it comes
-		// from the current blog
-		$posts_table_name = bp_is_multiblog_mode() ? $wpdb->posts : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'posts';
-		$page_ids_sql     = implode( ',', wp_parse_id_list( $page_ids ) );
-		$page_names       = $wpdb->get_results( "SELECT ID, post_name, post_parent, post_title FROM {$posts_table_name} WHERE ID IN ({$page_ids_sql}) AND post_status = 'publish' " );
+		// Set pages as standard class
+		$pages = new stdClass;
 
-		foreach ( (array) $page_ids as $component_id => $page_id ) {
-			foreach ( (array) $page_names as $page_name ) {
-				if ( $page_name->ID == $page_id ) {
-					if ( !isset( $pages->{$component_id} ) || !is_object( $pages->{$component_id} ) ) {
-						$pages->{$component_id} = new stdClass;
+		// Get pages and IDs
+		$page_ids = bp_core_get_directory_page_ids();
+		if ( !empty( $page_ids ) ) {
+
+			// Always get page data from the root blog, except on multiblog mode, when it comes
+			// from the current blog
+			$posts_table_name = bp_is_multiblog_mode() ? $wpdb->posts : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'posts';
+			$page_ids_sql     = implode( ',', wp_parse_id_list( $page_ids ) );
+			$page_names       = $wpdb->get_results( "SELECT ID, post_name, post_parent, post_title FROM {$posts_table_name} WHERE ID IN ({$page_ids_sql}) AND post_status = 'publish' " );
+
+			foreach ( (array) $page_ids as $component_id => $page_id ) {
+				foreach ( (array) $page_names as $page_name ) {
+					if ( $page_name->ID == $page_id ) {
+						if ( !isset( $pages->{$component_id} ) || !is_object( $pages->{$component_id} ) ) {
+							$pages->{$component_id} = new stdClass;
+						}
+
+						$pages->{$component_id}->name  = $page_name->post_name;
+						$pages->{$component_id}->id    = $page_name->ID;
+						$pages->{$component_id}->title = $page_name->post_title;
+						$slug[]                        = $page_name->post_name;
+
+						// Get the slug
+						while ( $page_name->post_parent != 0 ) {
+							$parent                 = $wpdb->get_results( $wpdb->prepare( "SELECT post_name, post_parent FROM {$posts_table_name} WHERE ID = %d", $page_name->post_parent ) );
+							$slug[]                 = $parent[0]->post_name;
+							$page_name->post_parent = $parent[0]->post_parent;
+						}
+
+						$pages->{$component_id}->slug = implode( '/', array_reverse( (array) $slug ) );
 					}
 
-					$pages->{$component_id}->name  = $page_name->post_name;
-					$pages->{$component_id}->id    = $page_name->ID;
-					$pages->{$component_id}->title = $page_name->post_title;
-					$slug[]                        = $page_name->post_name;
-
-					// Get the slug
-					while ( $page_name->post_parent != 0 ) {
-						$parent                 = $wpdb->get_results( $wpdb->prepare( "SELECT post_name, post_parent FROM {$posts_table_name} WHERE ID = %d", $page_name->post_parent ) );
-						$slug[]                 = $parent[0]->post_name;
-						$page_name->post_parent = $parent[0]->post_parent;
-					}
-
-					$pages->{$component_id}->slug = implode( '/', array_reverse( (array) $slug ) );
+					unset( $slug );
 				}
-
-				unset( $slug );
 			}
 		}
+
+		wp_cache_set( 'directory_pages', $pages, 'bp' );
 	}
 
 	return apply_filters( 'bp_core_get_directory_pages', $pages );
@@ -361,12 +416,17 @@ function bp_core_get_directory_pages() {
  *
  * @since BuddyPress (1.7.0)
  *
- * @param array $default_components Components to create pages for.
+ * @param array $components Components to create pages for.
  * @param string $existing 'delete' if you want to delete existing page
  *        mappings and replace with new ones. Otherwise existing page mappings
  *        are kept, and the gaps filled in with new pages. Default: 'keep'.
  */
 function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
+
+	// If no value is passed, there's nothing to do.
+	if ( empty( $components ) ) {
+		return;
+	}
 
 	// Make sure that the pages are created on the root blog no matter which Dashboard the setup is being run on
 	if ( ! bp_is_root_blog() )
@@ -515,12 +575,21 @@ function bp_core_add_root_component( $slug ) {
  * Create WordPress pages to be used as BP component directories.
  */
 function bp_core_create_root_component_page() {
-	global $bp;
+
+	// Get BuddyPress
+	$bp = buddypress();
 
 	$new_page_ids = array();
 
-	foreach ( (array) $bp->add_root as $slug )
-		$new_page_ids[$slug] = wp_insert_post( array( 'comment_status' => 'closed', 'ping_status' => 'closed', 'post_title' => ucwords( $slug ), 'post_status' => 'publish', 'post_type' => 'page' ) );
+	foreach ( (array) $bp->add_root as $slug ) {
+		$new_page_ids[ $slug ] = wp_insert_post( array(
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+			'post_title'     => ucwords( $slug ),
+			'post_status'    => 'publish',
+			'post_type'      => 'page'
+		) );
+	}
 
 	$page_ids = array_merge( (array) $new_page_ids, (array) bp_core_get_directory_page_ids() );
 	bp_core_update_directory_page_ids( $page_ids );
@@ -545,7 +614,25 @@ function bp_core_add_illegal_names() {
  * @return bool True if bp-themes should be registered, false otherwise.
  */
 function bp_do_register_theme_directory() {
+	// If bp-default exists in another theme directory, bail.
+	// This ensures that the version of bp-default in the regular themes
+	// directory will always take precedence, as part of a migration away
+	// from the version packaged with BuddyPress
+	foreach ( array_values( (array) $GLOBALS['wp_theme_directories'] ) as $directory ) {
+		if ( is_dir( $directory . '/bp-default' ) ) {
+			return false;
+		}
+	}
+
+	// If the current theme is bp-default (or a bp-default child), BP
+	// should register its directory
 	$register = 'bp-default' === get_stylesheet() || 'bp-default' === get_template();
+
+	// Legacy sites continue to have the theme registered
+	if ( empty( $register ) && ( 1 == get_site_option( '_bp_retain_bp_default' ) ) ) {
+		$register = true;
+	}
+
 	return apply_filters( 'bp_do_register_theme_directory', $register );
 }
 
@@ -827,22 +914,23 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 /**
  * Add a feedback (error/success) message to the WP cookie so it can be displayed after the page reloads.
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @param string $message Feedback message to be displayed.
  * @param string $type Message type. 'updated', 'success', 'error', 'warning'.
  *        Default: 'success'.
  */
 function bp_core_add_message( $message, $type = '' ) {
-	global $bp;
 
 	// Success is the default
-	if ( empty( $type ) )
+	if ( empty( $type ) ) {
 		$type = 'success';
+	}
 
 	// Send the values to the cookie for page reload display
 	@setcookie( 'bp-message',      $message, time() + 60 * 60 * 24, COOKIEPATH );
 	@setcookie( 'bp-message-type', $type,    time() + 60 * 60 * 24, COOKIEPATH );
+
+	// Get BuddyPress
+	$bp = buddypress();
 
 	/***
 	 * Send the values to the $bp global so we can still output messages
@@ -862,24 +950,30 @@ function bp_core_add_message( $message, $type = '' ) {
  * After the message is displayed, it removes the message vars from the cookie
  * so that the message is not shown to the user multiple times.
  *
- * @global BuddyPress $bp BuddyPress global settings object.
  * @uses setcookie() Sets a cookie value for the user.
  */
 function bp_core_setup_message() {
-	global $bp;
 
-	if ( empty( $bp->template_message ) && isset( $_COOKIE['bp-message'] ) )
+	// Get BuddyPress
+	$bp = buddypress();
+
+	if ( empty( $bp->template_message ) && isset( $_COOKIE['bp-message'] ) ) {
 		$bp->template_message = stripslashes( $_COOKIE['bp-message'] );
+	}
 
-	if ( empty( $bp->template_message_type ) && isset( $_COOKIE['bp-message-type'] ) )
+	if ( empty( $bp->template_message_type ) && isset( $_COOKIE['bp-message-type'] ) ) {
 		$bp->template_message_type = stripslashes( $_COOKIE['bp-message-type'] );
+	}
 
 	add_action( 'template_notices', 'bp_core_render_message' );
 
-	if ( isset( $_COOKIE['bp-message'] ) )
+	if ( isset( $_COOKIE['bp-message'] ) ) {
 		@setcookie( 'bp-message', false, time() - 1000, COOKIEPATH );
-	if ( isset( $_COOKIE['bp-message-type'] ) )
+	}
+
+	if ( isset( $_COOKIE['bp-message-type'] ) ) {
 		@setcookie( 'bp-message-type', false, time() - 1000, COOKIEPATH );
+	}
 }
 add_action( 'bp_actions', 'bp_core_setup_message', 5 );
 
@@ -888,17 +982,17 @@ add_action( 'bp_actions', 'bp_core_setup_message', 5 );
  *
  * The hook action 'template_notices' is used to call this function, it is not
  * called directly.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
  */
 function bp_core_render_message() {
-	global $bp;
+
+	// Get BuddyPress
+	$bp = buddypress();
 
 	if ( !empty( $bp->template_message ) ) :
-		$type    = ( 'success' == $bp->template_message_type ) ? 'updated' : 'error';
+		$type    = ( 'success' === $bp->template_message_type ) ? 'updated' : 'error';
 		$content = apply_filters( 'bp_core_render_message_content', $bp->template_message, $type ); ?>
 
-		<div id="message" class="bp-template-notice <?php echo $type; ?>">
+		<div id="message" class="bp-template-notice <?php echo esc_attr( $type ); ?>">
 
 			<?php echo $content; ?>
 
@@ -987,10 +1081,10 @@ function bp_core_get_last_activity( $last_activity_date, $string ) {
  *
  * Plugin authors should use BP's _user_meta() functions, which bakes in
  * bp_get_user_meta_key():
- *    $last_active = bp_get_user_meta( $user_id, 'last_activity', true );
+ *    $friend_count = bp_get_user_meta( $user_id, 'total_friend_count', true );
  * If you must use WP's _user_meta() functions directly for some reason, you
  * should use this function to determine the $key parameter, eg
- *    $last_active = get_user_meta( $user_id, bp_get_user_meta_key( 'last_activity' ), true );
+ *    $friend_count = get_user_meta( $user_id, bp_get_user_meta_key( 'total_friend_count' ), true );
  * If using the WP functions, do not not hardcode your meta keys.
  *
  * @since BuddyPress (1.5.0)
@@ -1075,14 +1169,15 @@ function bp_delete_user_meta( $user_id, $key, $value = '' ) {
  * Initializes {@link BP_Embed} after everything is loaded.
  *
  * @since BuddyPress (1.5.0)
- *
- * @global BuddyPress $bp BuddyPress global settings.
  */
 function bp_embed_init() {
-	global $bp;
 
-	if ( empty( $bp->embed ) )
+	// Get BuddyPress
+	$bp = buddypress();
+
+	if ( empty( $bp->embed ) ) {
 		$bp->embed = new BP_Embed();
+	}
 }
 add_action( 'bp_init', 'bp_embed_init', 9 );
 
@@ -1261,9 +1356,7 @@ function bp_is_root_blog( $blog_id = 0 ) {
  * @return int The root site ID.
  */
 function bp_get_root_blog_id() {
-	global $bp;
-
-	return (int) apply_filters( 'bp_get_root_blog_id', (int) $bp->root_blog_id );
+	return (int) apply_filters( 'bp_get_root_blog_id', (int) buddypress()->root_blog_id );
 }
 
 /**
@@ -1347,57 +1440,51 @@ function bp_is_network_activated() {
 /** Global Manipulators *******************************************************/
 
 /**
- * Set the $bp->is_directory global.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
+ * Set the "is_directory" global.
  *
  * @param bool $is_directory Optional. Default: false.
  * @param string $component Optional. Component name. Default: the current
  *        component.
  */
 function bp_update_is_directory( $is_directory = false, $component = '' ) {
-	global $bp;
 
-	if ( empty( $component ) )
+	if ( empty( $component ) ) {
 		$component = bp_current_component();
+	}
 
-	$bp->is_directory = apply_filters( 'bp_update_is_directory', $is_directory, $component );
+	buddypress()->is_directory = apply_filters( 'bp_update_is_directory', $is_directory, $component );
 }
 
 /**
- * Set the $bp->is_item_admin global.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
+ * Set the "is_item_admin" global.
  *
  * @param bool $is_item_admin Optional. Default: false.
- * @param string $component. Optional. Component name. Default: the current
+ * @param string $component Optional. Component name. Default: the current
  *        component.
  */
 function bp_update_is_item_admin( $is_item_admin = false, $component = '' ) {
-	global $bp;
 
-	if ( empty( $component ) )
+	if ( empty( $component ) ) {
 		$component = bp_current_component();
+	}
 
-	$bp->is_item_admin = apply_filters( 'bp_update_is_item_admin', $is_item_admin, $component );
+	buddypress()->is_item_admin = apply_filters( 'bp_update_is_item_admin', $is_item_admin, $component );
 }
 
 /**
- * Set the $bp->is_item_mod global.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
+ * Set the "is_item_mod" global.
  *
  * @param bool $is_item_mod Optional. Default: false.
- * @param string $component. Optional. Component name. Default: the current
+ * @param string $component Optional. Component name. Default: the current
  *        component.
  */
 function bp_update_is_item_mod( $is_item_mod = false, $component = '' ) {
-	global $bp;
 
-	if ( empty( $component ) )
+	if ( empty( $component ) ) {
 		$component = bp_current_component();
+	}
 
-	$bp->is_item_mod = apply_filters( 'bp_update_is_item_mod', $is_item_mod, $component );
+	buddypress()->is_item_mod = apply_filters( 'bp_update_is_item_mod', $is_item_mod, $component );
 }
 
 /**
@@ -1419,8 +1506,9 @@ function bp_do_404( $redirect = 'remove_canonical_direct' ) {
 	status_header( 404 );
 	nocache_headers();
 
-	if ( 'remove_canonical_direct' == $redirect )
+	if ( 'remove_canonical_direct' === $redirect ) {
 		remove_action( 'template_redirect', 'redirect_canonical' );
+	}
 }
 
 /** Nonces ********************************************************************/
@@ -1728,7 +1816,7 @@ function bp_nav_menu_get_loggedout_pages() {
 		$register_page = get_post( $bp_directory_page_ids['register'] );
 		$bp_menu_items[] = array(
 			'name' => $register_page->post_title,
-			'slug' => $register_page->post_name,
+			'slug' => 'register',
 			'link' => get_permalink( $register_page->ID ),
 		);
 	}
@@ -1785,4 +1873,17 @@ function bp_nav_menu_get_item_url( $slug ) {
 	}
 
 	return $nav_item_url;
+}
+
+/**
+ * Get the javascript dependencies for buddypress.js.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @uses apply_filters() to allow other component to load extra dependencies
+ *
+ * @return array The javascript dependencies.
+ */
+function bp_core_get_js_dependencies() {
+	return apply_filters( 'bp_core_get_js_dependencies', array( 'jquery' ) );
 }

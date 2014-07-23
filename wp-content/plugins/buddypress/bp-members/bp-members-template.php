@@ -32,8 +32,7 @@ function bp_members_slug() {
 	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_members_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_members_slug', $bp->members->slug );
+		return apply_filters( 'bp_get_members_slug', buddypress()->members->slug );
 	}
 
 /**
@@ -56,8 +55,7 @@ function bp_members_root_slug() {
 	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_members_root_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_members_root_slug', $bp->members->root_slug );
+		return apply_filters( 'bp_get_members_root_slug', buddypress()->members->root_slug );
 	}
 
 /**
@@ -109,12 +107,13 @@ function bp_signup_slug() {
 	function bp_get_signup_slug() {
 		$bp = buddypress();
 
-		if ( !empty( $bp->pages->register->slug ) )
+		if ( !empty( $bp->pages->register->slug ) ) {
 			$slug = $bp->pages->register->slug;
-		elseif ( defined( 'BP_REGISTER_SLUG' ) )
+		} elseif ( defined( 'BP_REGISTER_SLUG' ) ) {
 			$slug = BP_REGISTER_SLUG;
-		else
+		} else {
 			$slug = 'register';
+		}
 
 		return apply_filters( 'bp_get_signup_slug', $slug );
 	}
@@ -139,14 +138,15 @@ function bp_activate_slug() {
 	 * @since BuddyPress (1.5)
 	 */
 	function bp_get_activate_slug() {
-		global $bp;
+		$bp = buddypress();
 
-		if ( !empty( $bp->pages->activate->slug ) )
+		if ( !empty( $bp->pages->activate->slug ) ) {
 			$slug = $bp->pages->activate->slug;
-		elseif ( defined( 'BP_ACTIVATION_SLUG' ) )
+		} elseif ( defined( 'BP_ACTIVATION_SLUG' ) ) {
 			$slug = BP_ACTIVATION_SLUG;
-		else
+		} else {
 			$slug = 'activate';
+		}
 
 		return apply_filters( 'bp_get_activate_slug', $slug );
 	}
@@ -300,7 +300,7 @@ function bp_has_members( $args = '' ) {
 		'populate_extras' => true           // Fetch usermeta? Friend count, last active etc.
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_members' );
 	extract( $r );
 
 	// Pass a filter if ?s= is set.
@@ -586,16 +586,40 @@ function bp_member_name() {
 	add_filter( 'bp_get_member_name', 'strip_tags'     );
 	add_filter( 'bp_get_member_name', 'esc_html'       );
 
-function bp_member_last_active() {
-	echo bp_get_member_last_active();
+/**
+ * Output the current member's last active time.
+ *
+ * @param array $args See {@link bp_get_member_last_active()}.
+ */
+function bp_member_last_active( $args = array() ) {
+	echo bp_get_member_last_active( $args );
 }
-	function bp_get_member_last_active() {
+	/**
+	 * Return the current member's last active time.
+	 *
+	 * @param array $args {
+	 *     Array of optional arguments.
+	 *     @type bool $active_format If true, formatted "Active 5 minutes
+	 *           ago". If false, formatted "5 minutes ago". Default: true.
+	 * }
+	 * @return string
+	 */
+	function bp_get_member_last_active( $args = array() ) {
 		global $members_template;
 
-		if ( isset( $members_template->member->last_activity ) )
-			$last_activity = bp_core_get_last_activity( $members_template->member->last_activity, __( 'active %s', 'buddypress' ) );
-		else
+		$r = wp_parse_args( $args, array(
+			'active_format' => true,
+		) );
+
+		if ( isset( $members_template->member->last_activity ) ) {
+			if ( ! empty( $r['active_format'] ) ) {
+				$last_activity = bp_core_get_last_activity( $members_template->member->last_activity, __( 'active %s', 'buddypress' ) );
+			} else {
+				$last_activity = bp_core_time_since( $members_template->member->last_activity );
+			}
+		} else {
 			$last_activity = __( 'Never active', 'buddypress' );
+		}
 
 		return apply_filters( 'bp_member_last_active', $last_activity );
 	}
@@ -630,40 +654,77 @@ function bp_member_latest_update( $args = '' ) {
 		return apply_filters( 'bp_get_member_latest_update', $update_content );
 	}
 
+/**
+ * Output a piece of user profile data.
+ *
+ * @see bp_get_member_profile_data() for a description of params.
+ *
+ * @param array $args See {@link bp_get_member_profile_data()}.
+ */
 function bp_member_profile_data( $args = '' ) {
 	echo bp_get_member_profile_data( $args );
 }
+	/**
+	 * Get a piece of user profile data.
+	 *
+	 * When used in a bp_has_members() loop, this function will attempt
+	 * to fetch profile data cached in the template global. It is also safe
+	 * to use outside of the loop.
+	 *
+	 * @param array $args {
+	 *     Array of config paramaters.
+	 *     @type string $field Name of the profile field.
+	 *     @type int $user_id ID of the user whose data is being fetched.
+	 *           Defaults to the current member in the loop, or if not
+	 *           present, to the currently displayed user.
+	 * }
+	 * @return string|bool Profile data if found, otherwise false.
+	 */
 	function bp_get_member_profile_data( $args = '' ) {
 		global $members_template;
 
-		if ( !bp_is_active( 'xprofile' ) )
+		if ( ! bp_is_active( 'xprofile' ) ) {
 			return false;
+		}
 
 		// Declare local variables
-		$data    = false;
-		$user_id = 0;
+		$data = false;
 
 		// Guess at default $user_id
-		if ( !empty( $members_template->member->id ) )
-			$user_id = $members_template->member->id;
-		elseif ( bp_displayed_user_id() )
-			$user_id = bp_displayed_user_id();
+		$default_user_id = 0;
+		if ( ! empty( $members_template->member->id ) ) {
+			$default_user_id = $members_template->member->id;
+		} elseif ( bp_displayed_user_id() ) {
+			$default_user_id = bp_displayed_user_id();
+		}
 
 		$defaults = array(
-			'field'   => false,   // Field name
-			'user_id' => $user_id
+			'field'   => false,
+			'user_id' => $default_user_id,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
-		extract( $r, EXTR_SKIP );
 
-		// Populate the user if it hasn't been already.
-		if ( empty( $members_template->member->profile_data ) && method_exists( 'BP_XProfile_ProfileData', 'get_all_for_user' ) )
-			$members_template->member->profile_data = BP_XProfile_ProfileData::get_all_for_user( $user_id );
+		// If we're in a members loop, get the data from the global
+		if ( ! empty( $members_template->member->profile_data ) ) {
+			$profile_data = $members_template->member->profile_data;
+		}
 
-		// Get the field data if there is data to get
-		if ( ! empty( $members_template->member->profile_data ) && ! empty( $members_template->member->profile_data[$field]['field_type'] ) && ! empty( $members_template->member->profile_data[$field]['field_data'] ) )
-			$data = xprofile_format_profile_field( $members_template->member->profile_data[$field]['field_type'], $members_template->member->profile_data[$field]['field_data'] );
+		// Otherwise query for the data
+		if ( empty( $profile_data ) && method_exists( 'BP_XProfile_ProfileData', 'get_all_for_user' ) ) {
+			$profile_data = BP_XProfile_ProfileData::get_all_for_user( $r['user_id'] );
+		}
+
+		// If we're in the members loop, but the profile data has not
+		// been loaded into the global, cache it there for later use
+		if ( ! empty( $members_template->member ) && empty( $members_template->member->profile_data ) ) {
+			$members_template->member->profile_data = $profile_data;
+		}
+
+		// Get the data for the specific field requested
+		if ( ! empty( $profile_data ) && ! empty( $profile_data[ $r['field'] ]['field_type'] ) && ! empty( $profile_data[ $r['field'] ]['field_data'] ) ) {
+			$data = xprofile_format_profile_field( $profile_data[ $r['field'] ]['field_type'], $profile_data[ $r['field'] ]['field_data'] );
+		}
 
 		return apply_filters( 'bp_get_member_profile_data', $data );
 	}
@@ -1138,7 +1199,7 @@ function bp_signup_avatar( $args = '' ) {
 	echo bp_get_signup_avatar( $args );
 }
 	function bp_get_signup_avatar( $args = '' ) {
-		global $bp;
+		$bp = buddypress();
 
 		$defaults = array(
 			'size' => bp_core_avatar_full_width(),
@@ -1169,7 +1230,7 @@ function bp_signup_avatar( $args = '' ) {
 			if ( empty( $bp->grav_default->user ) )
 				$default_grav = 'wavatar';
 			else if ( 'mystery' == $bp->grav_default->user )
-				$default_grav = BP_PLUGIN_URL . 'bp-core/images/mystery-man.jpg';
+				$default_grav = $bp->plugin_url . 'bp-core/images/mystery-man.jpg';
 			else
 				$default_grav = $bp->grav_default->user;
 

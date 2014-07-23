@@ -146,12 +146,24 @@ class BP_Groups_Group {
 	public $user_has_access;
 
 	/**
+	 * Raw arguments passed to the constructor.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 * @var array
+	 */
+	public $args;
+
+	/**
 	 * Constructor method.
 	 *
 	 * @param int $id Optional. If the ID of an existing group is provided,
 	 *        the object will be pre-populated with info about that group.
 	 */
-	public function __construct( $id = null ) {
+	public function __construct( $id = null, $args = array() ) {
+		$this->args = wp_parse_args( $args, array(
+			'populate_extras' => false,
+		) );
+
 		if ( !empty( $id ) ) {
 			$this->id = $id;
 			$this->populate();
@@ -162,45 +174,76 @@ class BP_Groups_Group {
 	 * Set up data about the current group.
 	 */
 	public function populate() {
-		global $wpdb, $bp;
+		global $wpdb;
 
-		if ( $group = $wpdb->get_row( $wpdb->prepare( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id = %d", $this->id ) ) ) {
-			bp_groups_update_meta_cache( $this->id );
+		// Get BuddyPress
+		$bp    = buddypress();
 
-			$this->id                 = $group->id;
-			$this->creator_id         = $group->creator_id;
-			$this->name               = stripslashes($group->name);
-			$this->slug               = $group->slug;
-			$this->description        = stripslashes($group->description);
-			$this->status             = $group->status;
-			$this->enable_forum       = $group->enable_forum;
-			$this->date_created       = $group->date_created;
-			$this->last_activity      = groups_get_groupmeta( $this->id, 'last_activity' );
-			$this->total_member_count = groups_get_groupmeta( $this->id, 'total_member_count' );
-			$this->is_member          = BP_Groups_Member::check_is_member( bp_loggedin_user_id(), $this->id );
-			$this->is_invited         = BP_Groups_Member::check_has_invite( bp_loggedin_user_id(), $this->id );
-			$this->is_pending         = BP_Groups_Member::check_for_membership_request( bp_loggedin_user_id(), $this->id );
+		// Check cache for group data
+		$group = wp_cache_get( $this->id, 'bp_groups' );
 
-			// If this is a private or hidden group, does the current user have access?
-			if ( 'private' == $this->status || 'hidden' == $this->status ) {
-				if ( $this->is_member && is_user_logged_in() || bp_current_user_can( 'bp_moderate' ) )
-					$this->user_has_access = true;
-				else
-					$this->user_has_access = false;
-			} else {
-				$this->user_has_access = true;
-			}
+		// Cache missed, so query the DB
+		if ( false === $group ) {
+			$group = $wpdb->get_row( $wpdb->prepare( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id = %d", $this->id ) );
+
+			wp_cache_set( $this->id, $group, 'bp_groups' );
+		}
+
+		// No group found so set the ID and bail
+		if ( empty( $group ) || is_wp_error( $group ) ) {
+			$this->id = 0;
+			return;
+		}
+
+		// Group found so setup the object variables
+		$this->id           = $group->id;
+		$this->creator_id   = $group->creator_id;
+		$this->name         = stripslashes( $group->name );
+		$this->slug         = $group->slug;
+		$this->description  = stripslashes( $group->description );
+		$this->status       = $group->status;
+		$this->enable_forum = $group->enable_forum;
+		$this->date_created = $group->date_created;
+
+		// Are we getting extra group data?
+		if ( ! empty( $this->args['populate_extras'] ) ) {
 
 			// Get group admins and mods
 			$admin_mods = $wpdb->get_results( apply_filters( 'bp_group_admin_mods_user_join_filter', $wpdb->prepare( "SELECT u.ID as user_id, u.user_login, u.user_email, u.user_nicename, m.is_admin, m.is_mod FROM {$wpdb->users} u, {$bp->groups->table_name_members} m WHERE u.ID = m.user_id AND m.group_id = %d AND ( m.is_admin = 1 OR m.is_mod = 1 )", $this->id ) ) );
-			foreach( (array) $admin_mods as $user ) {
-				if ( (int) $user->is_admin )
+
+			// Add admins and moderators to their respective arrays
+			foreach ( (array) $admin_mods as $user ) {
+				if ( !empty( $user->is_admin ) ) {
 					$this->admins[] = $user;
-				else
+				} else {
 					$this->mods[] = $user;
+				}
 			}
-		} else {
-			$this->id = 0;
+
+			// Set up some specific group vars from meta. Excluded
+			// from the bp_groups cache because it's cached independently
+			$this->last_activity      = groups_get_groupmeta( $this->id, 'last_activity' );
+			$this->total_member_count = groups_get_groupmeta( $this->id, 'total_member_count' );
+
+			// Set user-specific data
+			$user_id          = bp_loggedin_user_id();
+			$this->is_member  = BP_Groups_Member::check_is_member( $user_id, $this->id );
+			$this->is_invited = BP_Groups_Member::check_has_invite( $user_id, $this->id );
+			$this->is_pending = BP_Groups_Member::check_for_membership_request( $user_id, $this->id );
+
+			// If this is a private or hidden group, does the current user have access?
+			if ( ( 'private' === $this->status ) || ( 'hidden' === $this->status ) ) {
+
+				// Assume user does not have access to hidden/private groups
+				$this->user_has_access = false;
+
+				// Group members or community moderators have access
+				if ( ( $this->is_member && is_user_logged_in() ) || bp_current_user_can( 'bp_moderate' ) ) {
+					$this->user_has_access = true;
+				}
+			} else {
+				$this->user_has_access = true;
+			}
 		}
 	}
 
@@ -221,6 +264,26 @@ class BP_Groups_Group {
 		$this->date_created = apply_filters( 'groups_group_date_created_before_save', $this->date_created, $this->id );
 
 		do_action_ref_array( 'groups_group_before_save', array( &$this ) );
+
+		// Groups need at least a name
+		if ( empty( $this->name ) ) {
+			return false;
+		}
+
+		// Set slug with group title if not passed
+		if ( empty( $this->slug ) ) {
+			$this->slug = sanitize_title( $this->name );
+		}
+
+		// Sanity check
+		if ( empty( $this->slug ) ) {
+			return false;
+		}
+
+		// Check for slug conflicts if creating new group
+		if ( empty( $this->id ) ) {
+			$this->slug = groups_check_slug( $this->slug );
+		}
 
 		if ( !empty( $this->id ) ) {
 			$sql = $wpdb->prepare(
@@ -275,7 +338,7 @@ class BP_Groups_Group {
 
 		do_action_ref_array( 'groups_group_after_save', array( &$this ) );
 
-		wp_cache_delete( 'bp_groups_group_' . $this->id, 'bp' );
+		wp_cache_delete( $this->id, 'bp_groups' );
 
 		return true;
 	}
@@ -303,7 +366,7 @@ class BP_Groups_Group {
 
 		do_action_ref_array( 'bp_groups_delete_group', array( &$this, $user_ids ) );
 
-		wp_cache_delete( 'bp_groups_group_' . $this->id, 'bp' );
+		wp_cache_delete( $this->id, 'bp_groups' );
 
 		// Finally remove the group entry from the DB
 		if ( !$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->groups->table_name} WHERE id = %d", $this->id ) ) )
@@ -599,18 +662,19 @@ class BP_Groups_Group {
 		}
 
 		$defaults = array(
-			'type'            => null,
-			'orderby'         => 'date_created',
-			'order'           => 'DESC',
-			'per_page'        => null,
-			'page'            => null,
-			'user_id'         => 0,
-			'search_terms'    => false,
-			'meta_query'      => false,
-			'include'         => false,
-			'populate_extras' => true,
-			'exclude'         => false,
-			'show_hidden'     => false,
+			'type'              => null,
+			'orderby'           => 'date_created',
+			'order'             => 'DESC',
+			'per_page'          => null,
+			'page'              => null,
+			'user_id'           => 0,
+			'search_terms'      => false,
+			'meta_query'        => false,
+			'include'           => false,
+			'populate_extras'   => true,
+			'update_meta_cache' => true,
+			'exclude'           => false,
+			'show_hidden'       => false,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -773,7 +837,9 @@ class BP_Groups_Group {
 		}
 
 		// Grab all groupmeta
-		bp_groups_update_meta_cache( $group_ids );
+		if ( ! empty( $r['update_meta_cache'] ) ) {
+			bp_groups_update_meta_cache( $group_ids );
+		}
 
 		unset( $sql, $total_sql );
 
@@ -1206,7 +1272,11 @@ class BP_Groups_Group {
 		$group_ids = implode( ',', wp_parse_id_list( $group_ids ) );
 
 		// Fetch the logged-in user's status within each group
-		$user_status_results = $wpdb->get_results( $wpdb->prepare( "SELECT group_id, is_confirmed, invite_sent FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id IN ( {$group_ids} ) AND is_banned = 0", bp_loggedin_user_id() ) );
+		if ( is_user_logged_in() ) {
+			$user_status_results = $wpdb->get_results( $wpdb->prepare( "SELECT group_id, is_confirmed, invite_sent FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id IN ( {$group_ids} ) AND is_banned = 0", bp_loggedin_user_id() ) );
+		} else {
+			$user_status_results = array();
+		}
 
 		// Reindex
 		$user_status = array();
@@ -1239,7 +1309,12 @@ class BP_Groups_Group {
 			$paged_groups[ $i ]->is_pending = $is_pending;
 		}
 
-		$user_banned = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_members} WHERE is_banned = 1 AND user_id = %d AND group_id IN ( {$group_ids} )", bp_loggedin_user_id() ) );
+		if ( is_user_logged_in() ) {
+			$user_banned = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_members} WHERE is_banned = 1 AND user_id = %d AND group_id IN ( {$group_ids} )", bp_loggedin_user_id() ) );
+		} else {
+			$user_banned = array();
+		}
+
 		for ( $i = 0, $count = count( $paged_groups ); $i < $count; ++$i ) {
 			$paged_groups[$i]->is_banned = false;
 
@@ -1392,7 +1467,30 @@ class BP_Groups_Group {
 /**
  * Query for the members of a group.
  *
+ * Special notes about the group members data schema:
+ * - *Members* are entries with is_confirmed = 1
+ * - *Pending requests* are entries with is_confirmed = 0 and inviter_id = 0
+ * - *Pending and sent invitations* are entries with is_confirmed = 0 and
+ *   inviter_id != 0 and invite_sent = 1
+ * - *Pending and unsent invitations* are entries with is_confirmed = 0 and
+ *   inviter_id != 0 and invite_sent = 0
+ * - *Membership requests* are entries with is_confirmed = 0 and
+ *   inviter_id = 0 (and invite_sent = 0)
+ *
  * @since BuddyPress (1.8.0)
+ *
+ * @param array $args {
+ *     Array of arguments. Accepts all arguments from
+ *     {@link BP_User_Query}, with the following additions:
+ *     @type int $group_id ID of the group to limit results to.
+ *     @type array $group_role Array of group roles to match ('member',
+ *           'mod', 'admin', 'banned'). Default: array( 'member' ).
+ *     @type bool $is_confirmed Whether to limit to confirmed members.
+ *           Default: true.
+ *     @type string $type Sort order. Accepts any value supported by
+ *           {@link BP_User_Query}, in addition to 'last_joined' and
+ *           'first_joined'. Default: 'last_joined'.
+ * }
  */
 class BP_Group_Member_Query extends BP_User_Query {
 
@@ -1411,10 +1509,10 @@ class BP_Group_Member_Query extends BP_User_Query {
 	 */
 	public function setup_hooks() {
 		// Take this early opportunity to set the default 'type' param
-		// to 'last_modified', which will ensure that BP_User_Query
+		// to 'last_joined', which will ensure that BP_User_Query
 		// trusts our order and does not try to apply its own
 		if ( empty( $this->query_vars_raw['type'] ) ) {
-			$this->query_vars_raw['type'] = 'last_modified';
+			$this->query_vars_raw['type'] = 'last_joined';
 		}
 
 		// Set the sort order
@@ -1446,6 +1544,9 @@ class BP_Group_Member_Query extends BP_User_Query {
 			'group_id'     => 0,
 			'group_role'   => array( 'member' ),
 			'is_confirmed' => true,
+			'invite_sent'  => null,
+			'inviter_id'   => null,
+			'type'         => 'last_joined',
 		) );
 
 		$group_member_ids = $this->get_group_member_ids();
@@ -1483,7 +1584,6 @@ class BP_Group_Member_Query extends BP_User_Query {
 			'where'   => array(),
 			'orderby' => '',
 			'order'   => '',
-			'limit'   => '',
 		);
 
 		/** WHERE clauses *****************************************************/
@@ -1494,6 +1594,35 @@ class BP_Group_Member_Query extends BP_User_Query {
 		// is_confirmed
 		$is_confirmed = ! empty( $this->query_vars['is_confirmed'] ) ? 1 : 0;
 		$sql['where'][] = $wpdb->prepare( "is_confirmed = %d", $is_confirmed );
+
+		// invite_sent
+		if ( ! is_null( $this->query_vars['invite_sent'] ) ) {
+			$invite_sent = ! empty( $this->query_vars['invite_sent'] ) ? 1 : 0;
+			$sql['where'][] = $wpdb->prepare( "invite_sent = %d", $invite_sent );
+		}
+
+		// inviter_id
+		if ( ! is_null( $this->query_vars['inviter_id'] ) ) {
+			$inviter_id = $this->query_vars['inviter_id'];
+
+			// Empty: inviter_id = 0. (pass false, 0, or empty array)
+			if ( empty( $inviter_id ) ) {
+				$sql['where'][] = "inviter_id = 0";
+
+			// The string 'any' matches any non-zero value (inviter_id != 0)
+			} else if ( 'any' === $inviter_id ) {
+				$sql['where'][] = "inviter_id != 0";
+
+			// Assume that a list of inviter IDs has been passed
+			} else {
+				// Parse and sanitize
+				$inviter_ids = wp_parse_id_list( $inviter_id );
+				if ( ! empty( $inviter_ids ) ) {
+					$inviter_ids_sql = implode( ',', $inviter_ids );
+					$sql['where'][] = "inviter_id IN ({$inviter_ids_sql})";
+				}
+			}
+		}
 
 		// Role information is stored as follows: admins have
 		// is_admin = 1, mods have is_mod = 1, banned have is_banned =
@@ -1546,16 +1675,20 @@ class BP_Group_Member_Query extends BP_User_Query {
 
 		$sql['where'] = ! empty( $sql['where'] ) ? 'WHERE ' . implode( ' AND ', $sql['where'] ) : '';
 
-		/** ORDER BY clause ***************************************************/
-
-		// @todo For now, mimicking legacy behavior of
-		// bp_group_has_members(), which has us order by date_modified
-		// only. Should abstract it in the future
+		// We fetch group members in order of last_joined, regardless
+		// of 'type'. If the 'type' value is not 'last_joined' or
+		// 'first_joined', the order will be overridden in
+		// BP_Group_Member_Query::set_orderby()
 		$sql['orderby'] = "ORDER BY date_modified";
-		$sql['order']   = "DESC";
+		$sql['order']   = 'first_joined' === $this->query_vars['type'] ? 'ASC' : 'DESC';
 
-		/** LIMIT clause ******************************************************/
-		$this->group_member_ids = $wpdb->get_col( "{$sql['select']} {$sql['where']} {$sql['orderby']} {$sql['order']} {$sql['limit']}" );
+		$this->group_member_ids = $wpdb->get_col( "{$sql['select']} {$sql['where']} {$sql['orderby']} {$sql['order']}" );
+
+		/**
+		 * Use this filter to build a custom query (such as when you've
+		 * defined a custom 'type').
+		 */
+		$this->group_member_ids = apply_filters( 'bp_group_member_query_group_member_ids', $this->group_member_ids, $this );
 
 		return $this->group_member_ids;
 	}
@@ -1563,8 +1696,8 @@ class BP_Group_Member_Query extends BP_User_Query {
 	/**
 	 * Tell BP_User_Query to order by the order of our query results.
 	 *
-	 * This implementation assumes the 'last_modified' sort order
-	 * hardcoded in BP_Group_Member_Query::get_group_member_ids().
+	 * We only override BP_User_Query's native ordering in case of the
+	 * 'last_joined' and 'first_joined' $type parameters.
 	 *
 	 * @param BP_User_Query $query BP_User_Query object.
 	 */
@@ -1574,11 +1707,18 @@ class BP_Group_Member_Query extends BP_User_Query {
 			$gm_ids = array( 0 );
 		}
 
-		// The first param in the FIELD() clause is the sort column id
-		$gm_ids = array_merge( array( 'u.id' ), wp_parse_id_list( $gm_ids ) );
-		$gm_ids_sql = implode( ',', $gm_ids );
+		// For 'last_joined' and 'first_joined' types, we force
+		// the order according to the query performed in
+		// BP_Group_Member_Query::get_group_members(). Otherwise, fall
+		// through and let BP_User_Query do its own ordering.
+		if ( in_array( $query->query_vars['type'], array( 'last_joined', 'first_joined' ) ) ) {
 
-		$query->uid_clauses['orderby'] = "ORDER BY FIELD(" . $gm_ids_sql . ")";
+			// The first param in the FIELD() clause is the sort column id
+			$gm_ids = array_merge( array( 'u.id' ), wp_parse_id_list( $gm_ids ) );
+			$gm_ids_sql = implode( ',', $gm_ids );
+
+			$query->uid_clauses['orderby'] = "ORDER BY FIELD(" . $gm_ids_sql . ")";
+		}
 
 		// Prevent this filter from running on future BP_User_Query
 		// instances on the same page
@@ -1604,14 +1744,22 @@ class BP_Group_Member_Query extends BP_User_Query {
 		global $wpdb;
 
 		$bp     = buddypress();
-		$extras = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, date_modified, is_banned FROM {$bp->groups->table_name_members} WHERE user_id IN ({$user_ids_sql}) AND group_id = %d", $this->query_vars['group_id'] ) );
+		$extras = $wpdb->get_results( $wpdb->prepare( "SELECT id, user_id, date_modified, is_admin, is_mod, comments, user_title, invite_sent, is_confirmed, inviter_id, is_banned FROM {$bp->groups->table_name_members} WHERE user_id IN ({$user_ids_sql}) AND group_id = %d", $this->query_vars['group_id'] ) );
 
 		foreach ( (array) $extras as $extra ) {
 			if ( isset( $this->results[ $extra->user_id ] ) ) {
 				// user_id is provided for backward compatibility
 				$this->results[ $extra->user_id ]->user_id       = (int) $extra->user_id;
+				$this->results[ $extra->user_id ]->is_admin      = (int) $extra->is_admin;
+				$this->results[ $extra->user_id ]->is_mod        = (int) $extra->is_mod;
 				$this->results[ $extra->user_id ]->is_banned     = (int) $extra->is_banned;
 				$this->results[ $extra->user_id ]->date_modified = $extra->date_modified;
+				$this->results[ $extra->user_id ]->user_title    = $extra->user_title;
+				$this->results[ $extra->user_id ]->comments      = $extra->comments;
+				$this->results[ $extra->user_id ]->invite_sent   = (int) $extra->invite_sent;
+				$this->results[ $extra->user_id ]->inviter_id    = (int) $extra->inviter_id;
+				$this->results[ $extra->user_id ]->is_confirmed  = (int) $extra->is_confirmed;
+				$this->results[ $extra->user_id ]->membership_id = (int) $extra->id;
 			}
 		}
 
@@ -2197,9 +2345,31 @@ class BP_Groups_Member {
 		}
 
 		$paged_groups = $wpdb->get_results( $wpdb->prepare( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND m.is_confirmed = 0 AND m.inviter_id != 0 AND m.invite_sent = 1 AND m.user_id = %d {$exclude_sql} ORDER BY m.date_modified ASC {$pag_sql}", $user_id ) );
-		$total_groups = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT m.group_id) FROM {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE m.group_id = g.id AND m.is_confirmed = 0 AND m.inviter_id != 0 AND m.invite_sent = 1 AND m.user_id = %d {$exclude_sql} ORDER BY date_modified ASC", $user_id ) );
 
-		return array( 'groups' => $paged_groups, 'total' => $total_groups );
+		return array( 'groups' => $paged_groups, 'total' => self::get_invite_count_for_user( $user_id ) );
+	}
+
+	/**
+	 * Gets the total group invite count for a user.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param int $user_id The user ID
+	 * @return int
+	 */
+	public static function get_invite_count_for_user( $user_id = 0 ) {
+		global $wpdb;
+
+		$bp = buddypress();
+
+		$count = wp_cache_get( $user_id, 'bp_group_invite_count' );
+
+		if ( false === $count ) {
+			$count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT m.group_id) FROM {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE m.group_id = g.id AND m.is_confirmed = 0 AND m.inviter_id != 0 AND m.invite_sent = 1 AND m.user_id = %d", $user_id ) );
+			wp_cache_set( $user_id, $count, 'bp_group_invite_count' );
+		}
+
+		return $count;
 	}
 
 	/**

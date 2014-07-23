@@ -25,14 +25,12 @@ function bp_activity_slug() {
 	 *
 	 * @since BuddyPress (1.5)
 	 *
-	 * @global object $bp BuddyPress global settings.
 	 * @uses apply_filters() To call the 'bp_get_activity_slug' hook.
 	 *
 	 * @return string The activity component slug.
 	 */
 	function bp_get_activity_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_activity_slug', $bp->activity->slug );
+		return apply_filters( 'bp_get_activity_slug', buddypress()->activity->slug );
 	}
 
 /**
@@ -50,14 +48,12 @@ function bp_activity_root_slug() {
 	 *
 	 * @since BuddyPress (1.5)
 	 *
-	 * @global object $bp BuddyPress global settings.
 	 * @uses apply_filters() To call the 'bp_get_activity_root_slug' hook.
 	 *
 	 * @return string The activity component root slug.
 	 */
 	function bp_get_activity_root_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_activity_root_slug', $bp->activity->root_slug );
+		return apply_filters( 'bp_get_activity_root_slug', buddypress()->activity->root_slug );
 	}
 
 /**
@@ -163,20 +159,21 @@ class BP_Activity_Template {
 		}
 
 		$defaults = array(
-			'page'             => 1,
-			'per_page'         => 20,
-			'page_arg'         => 'acpage',
-			'max'              => false,
-			'sort'             => false,
-			'include'          => false,
-			'exclude'          => false,
-			'in'               => false,
-			'filter'           => false,
-			'search_terms'     => false,
-			'meta_query'       => false,
-			'display_comments' => 'threaded',
-			'show_hidden'      => false,
-			'spam'             => 'ham_only',
+			'page'              => 1,
+			'per_page'          => 20,
+			'page_arg'          => 'acpage',
+			'max'               => false,
+			'sort'              => false,
+			'include'           => false,
+			'exclude'           => false,
+			'in'                => false,
+			'filter'            => false,
+			'search_terms'      => false,
+			'meta_query'        => false,
+			'display_comments'  => 'threaded',
+			'show_hidden'       => false,
+			'spam'              => 'ham_only',
+			'update_meta_cache' => true,
 		);
 		$r = wp_parse_args( $args, $defaults );
 		extract( $r );
@@ -191,12 +188,37 @@ class BP_Activity_Template {
 		$this->my_favs = maybe_unserialize( bp_get_user_meta( bp_loggedin_user_id(), 'bp_favorite_activities', true ) );
 
 		// Fetch specific activity items based on ID's
-		if ( !empty( $include ) )
-			$this->activities = bp_activity_get_specific( array( 'activity_ids' => explode( ',', $include ), 'max' => $max, 'page' => $this->pag_page, 'per_page' => $this->pag_num, 'sort' => $sort, 'display_comments' => $display_comments, 'show_hidden' => $show_hidden, 'spam' => $spam ) );
+		if ( !empty( $include ) ) {
+			$this->activities = bp_activity_get_specific( array(
+				'activity_ids'      => explode( ',', $include ),
+				'max'               => $max,
+				'page'              => $this->pag_page,
+				'per_page'          => $this->pag_num,
+				'sort'              => $sort,
+				'display_comments'  => $display_comments,
+				'show_hidden'       => $show_hidden,
+				'spam'              => $spam,
+				'update_meta_cache' => $update_meta_cache,
+			) );
 
 		// Fetch all activity items
-		else
-			$this->activities = bp_activity_get( array( 'display_comments' => $display_comments, 'max' => $max, 'per_page' => $this->pag_num, 'page' => $this->pag_page, 'sort' => $sort, 'search_terms' => $search_terms, 'meta_query' => $meta_query, 'filter' => $filter, 'show_hidden' => $show_hidden, 'exclude' => $exclude, 'in' => $in, 'spam' => $spam ) );
+		} else {
+			$this->activities = bp_activity_get( array(
+				'display_comments'  => $display_comments,
+				'max'               => $max,
+				'per_page'          => $this->pag_num,
+				'page'              => $this->pag_page,
+				'sort'              => $sort,
+				'search_terms'      => $search_terms,
+				'meta_query'        => $meta_query,
+				'filter'            => $filter,
+				'show_hidden'       => $show_hidden,
+				'exclude'           => $exclude,
+				'in'                => $in,
+				'spam'              => $spam,
+				'update_meta_cache' => $update_meta_cache,
+			) );
+		}
 
 		if ( !$max || $max >= (int) $this->activities['total'] )
 			$this->total_activity_count = (int) $this->activities['total'];
@@ -432,6 +454,9 @@ class BP_Activity_Template {
  *           column in the database. The meaning of 'secondary_id' differs
  *           between components/types. Accepts a single ID, or an array of
  *           multiple IDs. Defaults to false.
+ *     @type int $offset Return only activity items with an ID greater than or
+ *           equal to this one. Note that providing an offset will disable
+ *           pagination. Default: false.
  *     @type string|bool $display_comments How to handle activity comments.
  *           Possible values:
  *             - 'threaded' - comments appear in a threaded tree, under their
@@ -452,6 +477,8 @@ class BP_Activity_Template {
  *               which he is a member
  *     @type string|bool $spam Spam status. 'ham_only', 'spam_only', or false
  *           to show all activity regardless of spam status. Default: 'ham_only'.
+ *     @type bool $populate_extras Whether to pre-fetch the activity metadata
+ *           for the queried items. Default: true.
  * }
  * @return bool Returns true when activities are found, otherwise false.
  */
@@ -497,36 +524,39 @@ function bp_has_activities( $args = '' ) {
 
 	// Note: any params used for filtering can be a single value, or multiple values comma separated.
 	$defaults = array(
-		'display_comments' => 'threaded',   // false for none, stream/threaded - show comments in the stream or threaded under items
-		'include'          => $include,     // pass an activity_id or string of IDs comma-separated
-		'exclude'          => $exclude,     // pass an activity_id or string of IDs comma-separated
-		'in'               => $in,          // comma-separated list or array of activity IDs among which to search
-		'sort'             => 'DESC',       // sort DESC or ASC
-		'page'             => 1,            // which page to load
-		'per_page'         => 20,           // number of items per page
-		'max'              => false,        // max number to return
-		'show_hidden'      => $show_hidden, // Show activity items that are hidden site-wide?
-		'spam'             => 'ham_only',   // Hide spammed items
+		'display_comments'  => 'threaded',   // false for none, stream/threaded - show comments in the stream or threaded under items
+		'include'           => $include,     // pass an activity_id or string of IDs comma-separated
+		'exclude'           => $exclude,     // pass an activity_id or string of IDs comma-separated
+		'in'                => $in,          // comma-separated list or array of activity IDs among which to search
+		'sort'              => 'DESC',       // sort DESC or ASC
+		'page'              => 1,            // which page to load
+		'per_page'          => 20,           // number of items per page
+		'max'               => false,        // max number to return
+		'show_hidden'       => $show_hidden, // Show activity items that are hidden site-wide?
+		'spam'              => 'ham_only',   // Hide spammed items
 
-		'page_arg'         => 'acpage',     // See https://buddypress.trac.wordpress.org/ticket/3679
+		'page_arg'          => 'acpage',     // See https://buddypress.trac.wordpress.org/ticket/3679
 
 		// Scope - pre-built activity filters for a user (friends/groups/favorites/mentions)
-		'scope'            => $scope,
+		'scope'             => $scope,
 
 		// Filtering
-		'user_id'          => $user_id,     // user_id to filter on
-		'object'           => $object,      // object to filter on e.g. groups, profile, status, friends
-		'action'           => false,        // action to filter on e.g. activity_update, new_forum_post, profile_updated
-		'primary_id'       => $primary_id,  // object ID to filter on e.g. a group_id or forum_id or blog_id etc.
-		'secondary_id'     => false,        // secondary object ID to filter on e.g. a post_id
+		'user_id'           => $user_id,     // user_id to filter on
+		'object'            => $object,      // object to filter on e.g. groups, profile, status, friends
+		'action'            => false,        // action to filter on e.g. activity_update, new_forum_post, profile_updated
+		'primary_id'        => $primary_id,  // object ID to filter on e.g. a group_id or forum_id or blog_id etc.
+		'secondary_id'      => false,        // secondary object ID to filter on e.g. a post_id
+		'offset'            => false,        // return only items >= this ID
+		'since'             => false,        // return only items recorded since this Y-m-d H:i:s date
 
-		'meta_query'       => false,        // filter on activity meta. See WP_Meta_Query for format
+		'meta_query'        => false,        // filter on activity meta. See WP_Meta_Query for format
 
 		// Searching
-		'search_terms'     => false         // specify terms to search on
+		'search_terms'      => false,        // specify terms to search on
+		'update_meta_cache' => true,
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_activities' );
 	extract( $r );
 
 	// Translate various values for 'display_comments'
@@ -534,6 +564,11 @@ function bp_has_activities( $args = '' ) {
 	// or =none or =false. Final true is a strict type check. See #5029
 	if ( in_array( $display_comments, array( 0, '0', 'none', 'false' ), true ) ) {
 		$display_comments = false;
+	}
+
+	// Ignore pagination if an offset is passed
+	if ( ! empty( $offset ) ) {
+		$page = 0;
 	}
 
 	if ( empty( $search_terms ) && ! empty( $_REQUEST['s'] ) )
@@ -607,8 +642,8 @@ function bp_has_activities( $args = '' ) {
 	// into bp-custom.php or your theme's functions.php
 	if ( isset( $_GET['afilter'] ) && apply_filters( 'bp_activity_enable_afilter_support', false ) )
 		$filter = array( 'object' => $_GET['afilter'] );
-	else if ( !empty( $user_id ) || !empty( $object ) || !empty( $action ) || !empty( $primary_id ) || !empty( $secondary_id ) )
-		$filter = array( 'user_id' => $user_id, 'object' => $object, 'action' => $action, 'primary_id' => $primary_id, 'secondary_id' => $secondary_id );
+	else if ( ! empty( $user_id ) || ! empty( $object ) || ! empty( $action ) || ! empty( $primary_id ) || ! empty( $secondary_id ) || ! empty( $offset ) || ! empty( $since ) )
+		$filter = array( 'user_id' => $user_id, 'object' => $object, 'action' => $action, 'primary_id' => $primary_id, 'secondary_id' => $secondary_id, 'offset' => $offset, 'since' => $since );
 	else
 		$filter = false;
 
@@ -617,20 +652,21 @@ function bp_has_activities( $args = '' ) {
 		$spam = 'all';
 
 	$template_args = array(
-		'page'             => $page,
-		'per_page'         => $per_page,
-		'page_arg'         => $page_arg,
-		'max'              => $max,
-		'sort'             => $sort,
-		'include'          => $include,
-		'exclude'          => $exclude,
-		'in'               => $in,
-		'filter'           => $filter,
-		'search_terms'     => $search_terms,
-		'meta_query'       => $meta_query,
-		'display_comments' => $display_comments,
-		'show_hidden'      => $show_hidden,
-		'spam'             => $spam
+		'page'              => $page,
+		'per_page'          => $per_page,
+		'page_arg'          => $page_arg,
+		'max'               => $max,
+		'sort'              => $sort,
+		'include'           => $include,
+		'exclude'           => $exclude,
+		'in'                => $in,
+		'filter'            => $filter,
+		'search_terms'      => $search_terms,
+		'meta_query'        => $meta_query,
+		'display_comments'  => $display_comments,
+		'show_hidden'       => $show_hidden,
+		'spam'              => $spam,
+		'update_meta_cache' => $update_meta_cache,
 	);
 
 	$activities_template = new BP_Activity_Template( $template_args );
@@ -741,7 +777,12 @@ function bp_activity_pagination_links() {
 function bp_activity_has_more_items() {
 	global $activities_template;
 
-	$remaining_pages = floor( ( $activities_template->total_activity_count - 1 ) / ( $activities_template->pag_num * $activities_template->pag_page ) );
+	$remaining_pages = 0;
+
+	if ( ! empty( $activities_template->pag_page ) ) {
+		$remaining_pages = floor( ( $activities_template->total_activity_count - 1 ) / ( $activities_template->pag_num * $activities_template->pag_page ) );
+	}
+
 	$has_more_items  = (int) $remaining_pages ? true : false;
 
 	return apply_filters( 'bp_activity_has_more_items', $has_more_items );
@@ -1280,7 +1321,11 @@ function bp_activity_secondary_avatar( $args = '' ) {
 
 				// Only if groups is active
 				if ( bp_is_active( 'groups' ) ) {
-					$group = groups_get_group( array( 'group_id' => $item_id ) );
+					$group = groups_get_group( array(
+						'group_id'          => $item_id,
+						'populate_extras'   => false,
+						'update_meta_cache' => false,
+					) );
 					$link  = bp_get_group_permalink( $group );
 					$name  = $group->name;
 				}
@@ -1753,8 +1798,6 @@ function bp_activity_comments( $args = '' ) {
 		 *
 		 * @since BuddyPress (1.2)
 		 *
-		 * @todo remove $counter global
-		 *
 		 * @param object $comment The activity object currently being recursed
 		 *
 		 * @global object $activities_template {@link BP_Activity_Template}
@@ -1781,7 +1824,7 @@ function bp_activity_comments( $args = '' ) {
 				// older themes (which are not children of bp-default and won't
 				// have the new template) will still work.
 				if ( !$template ) {
-					$template = BP_PLUGIN_DIR . '/bp-themes/bp-default/activity/comment.php';
+					$template = buddypress()->plugin_dir . '/bp-themes/bp-default/activity/comment.php';
 				}
 
 				load_template( $template, false );
@@ -2105,6 +2148,26 @@ function bp_activity_comment_count() {
 
 			return $count;
 		}
+
+/**
+ * Output the depth of the current activity comment.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_activity_comment_depth() {
+	echo bp_activity_get_comment_depth();
+}
+	/**
+	 * Return the current activity comment depth.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @return int
+	 */
+	function bp_activity_get_comment_depth() {
+		global $activities_template;
+		return apply_filters( 'bp_activity_get_comment_depth', $activities_template->activity->current_comment->depth );
+	}
 
 /**
  * Output the activity comment link.
@@ -2607,6 +2670,10 @@ function bp_activity_can_comment() {
 function bp_activity_can_comment_reply( $comment ) {
 	$can_comment = true;
 
+	if ( get_option( 'thread_comments' ) && bp_activity_get_comment_depth() >= get_option( 'thread_comments_depth' ) ) {
+		$can_comment = false;
+	}
+
 	return apply_filters( 'bp_activity_can_comment_reply', $can_comment, $comment );
 }
 
@@ -2728,6 +2795,32 @@ function bp_send_public_message_link() {
 		return apply_filters( 'bp_get_send_public_message_link', wp_nonce_url( bp_get_activity_directory_permalink() . '?r=' . bp_get_displayed_user_mentionname() ) );
 	}
 
+/**
+ * Recurse through all activity comments and return the activity comment IDs.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $activity Array of activities generated from {@link bp_activity_get()}.
+ * @param array $activity_ids Used for recursion purposes in this function.
+ * @return array
+ */
+function bp_activity_recurse_comments_activity_ids( $activity = array(), $activity_ids = array() ) {
+	if ( is_array( $activity ) && ! empty( $activity['activities'] ) ) {
+		$activity = $activity['activities'][0];
+	}
+
+	if ( ! empty( $activity->children ) ) {
+		foreach ($activity->children as $child ) {
+			$activity_ids[] = $child->id;
+
+			if( ! empty( $child->children ) ) {
+				$activity_ids = bp_activity_recurse_comments_activity_ids( $child, $activity_ids );
+			}
+		}
+	}
+
+	return $activity_ids;
+}
 
 /**
  * Output the mentioned user display name.

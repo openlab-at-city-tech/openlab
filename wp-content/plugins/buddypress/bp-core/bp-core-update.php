@@ -194,7 +194,7 @@ function bp_version_updater() {
 		'notifications' => 1,
 	) );
 
-	require_once( BP_PLUGIN_DIR . '/bp-core/admin/bp-core-schema.php' );
+	require_once( buddypress()->plugin_dir . '/bp-core/admin/bp-core-schema.php' );
 
 	// Install BP schema and activate only Activity and XProfile
 	if ( bp_is_install() ) {
@@ -225,6 +225,21 @@ function bp_version_updater() {
 		if ( $raw_db_version < 7553 ) {
 			bp_update_to_1_9();
 		}
+
+		// 1.9.2
+		if ( $raw_db_version < 7731 ) {
+			bp_update_to_1_9_2();
+		}
+
+		// 2.0
+		if ( $raw_db_version < 7892 ) {
+			bp_update_to_2_0();
+		}
+
+		// 2.0.1
+		if ( $raw_db_version < 8311 ) {
+			bp_update_to_2_0_1();
+		}
 	}
 
 	/** All done! *************************************************************/
@@ -232,6 +247,8 @@ function bp_version_updater() {
 	// Bump the version
 	bp_version_bump();
 }
+
+/** Upgrade Routines **********************************************************/
 
 /**
  * Remove unused metadata from database when upgrading from < 1.5.
@@ -301,6 +318,77 @@ function bp_update_to_1_9() {
 }
 
 /**
+ * Perform database updates for BP 1.9.2
+ *
+ * In 1.9, BuddyPress stopped registering its theme directory when it detected
+ * that bp-default (or a child theme) was not currently being used, in effect
+ * deprecating bp-default. However, this ended up causing problems when site
+ * admins using bp-default would switch away from the theme temporarily:
+ * bp-default would no longer be available, with no obvious way (outside of
+ * a manual filter) to restore it. In 1.9.2, we add an option that flags
+ * whether bp-default or a child theme is active at the time of upgrade; if so,
+ * the theme directory will continue to be registered even if the theme is
+ * deactivated temporarily. Thus, new installations will not see bp-default,
+ * but legacy installations using the theme will continue to see it.
+ *
+ * @since BuddyPress (1.9.2)
+ */
+function bp_update_to_1_9_2() {
+	if ( 'bp-default' === get_stylesheet() || 'bp-default' === get_template() ) {
+		update_site_option( '_bp_retain_bp_default', 1 );
+	}
+}
+
+/**
+ * 2.0 update routine.
+ *
+ * - Ensure that the activity tables are installed, for last_activity storage.
+ * - Migrate last_activity data from usermeta to activity table
+ * - Add values for all BuddyPress options to the options table
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_update_to_2_0() {
+
+	/** Install activity tables for 'last_activity' ***************************/
+
+	bp_core_install_activity_streams();
+
+	/** Migrate 'last_activity' data ******************************************/
+
+	bp_last_activity_migrate();
+
+	/** Migrate signups data **************************************************/
+
+	if ( ! is_multisite() ) {
+
+		// Maybe install the signups table
+		bp_core_maybe_install_signups();
+
+		// Run the migration script
+		bp_members_migrate_signups();
+	}
+
+	/** Add BP options to the options table ***********************************/
+
+	bp_add_options();
+}
+
+/**
+ * 2.0.1 database upgrade routine
+ *
+ * @since BuddyPress (2.0.1)
+ *
+ * @return void
+ */
+function bp_update_to_2_0_1() {
+
+	// We purposely call this during both the 2.0 upgrade and the 2.0.1 upgrade.
+	// Don't worry; it won't break anything, and safely handles all cases.
+	bp_core_maybe_install_signups();
+}
+
+/**
  * Redirect user to BP's What's New page on first page load after activation.
  *
  * @since BuddyPress (1.7.0)
@@ -325,6 +413,56 @@ function bp_add_activation_redirect() {
 	set_transient( '_bp_activation_redirect', true, 30 );
 }
 
+/** Signups *******************************************************************/
+
+/**
+ * Check if the signups table needs to be created.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @global WPDB $wpdb
+ *
+ * @return bool If signups table exists
+ */
+function bp_core_maybe_install_signups() {
+
+	// Bail if we are explicitly not upgrading global tables
+	if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
+		return false;
+	}
+
+	global $wpdb;
+
+	// The table to run queries against
+	$signups_table = $wpdb->base_prefix . 'signups';
+
+	// Suppress errors because users shouldn't see what happens next
+	$old_suppress  = $wpdb->suppress_errors();
+
+	// Never use bp_core_get_table_prefix() for any global users tables
+	$table_exists  = (bool) $wpdb->get_results( "DESCRIBE {$signups_table};" );
+
+	// Table already exists, so maybe upgrade instead?
+	if ( true === $table_exists ) {
+
+		// Look for the 'signup_id' column
+		$column_exists = $wpdb->query( "SHOW COLUMNS FROM {$signups_table} LIKE 'signup_id'" );
+
+		// 'signup_id' column doesn't exist, so run the upgrade
+		if ( empty( $column_exists ) ) {
+			bp_core_upgrade_signups();
+		}
+
+	// Table does not exist, and we are a single site, so install the multisite
+	// signups table using WordPress core's database schema.
+	} elseif ( ! is_multisite() ) {
+		bp_core_install_signups();
+	}
+
+	// Restore previous error suppression setting
+	$wpdb->suppress_errors( $old_suppress );
+}
+
 /** Activation Actions ********************************************************/
 
 /**
@@ -340,6 +478,9 @@ function bp_activation() {
 
 	// Force refresh theme roots.
 	delete_site_transient( 'theme_roots' );
+
+	// Add options
+	bp_add_options();
 
 	// Use as of (1.6)
 	do_action( 'bp_activation' );

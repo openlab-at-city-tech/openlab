@@ -169,16 +169,28 @@ class BP_Blogs_Template {
 	 * @param string $search_terms See {@link BP_Blogs_Blog::get()}.
 	 * @param string $page_arg The string used as a query parameter in
 	 *        pagination links. Default: 'bpage'.
+	 * @param bool $update_meta_cache Whether to pre-fetch metadata for
+	 *        queried blogs.
+	 * @param array $include_blog_ids Array of blog IDs to include.
 	 */
-	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg = 'bpage' ) {
+	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg = 'bpage', $update_meta_cache = true, $include_blog_ids = false ) {
 
 		$this->pag_page = isset( $_REQUEST[$page_arg] ) ? intval( $_REQUEST[$page_arg] ) : $page;
 		$this->pag_num = isset( $_REQUEST['num'] ) ? intval( $_REQUEST['num'] ) : $per_page;
 
-		if ( isset( $_REQUEST['letter'] ) && '' != $_REQUEST['letter'] )
+		if ( isset( $_REQUEST['letter'] ) && '' != $_REQUEST['letter'] ) {
 			$this->blogs = BP_Blogs_Blog::get_by_letter( $_REQUEST['letter'], $this->pag_num, $this->pag_page );
-		else
-			$this->blogs = bp_blogs_get_blogs( array( 'type' => $type, 'per_page' => $this->pag_num, 'page' => $this->pag_page, 'user_id' => $user_id, 'search_terms' => $search_terms ) );
+		} else {
+			$this->blogs = bp_blogs_get_blogs( array(
+				'type'              => $type,
+				'per_page'          => $this->pag_num,
+				'page'              => $this->pag_page,
+				'user_id'           => $user_id,
+				'search_terms'      => $search_terms,
+				'update_meta_cache' => $update_meta_cache,
+				'include_blog_ids'  => $include_blog_ids,
+			) );
+		}
 
 		if ( !$max || $max >= (int) $this->blogs['total'] )
 			$this->total_blog_count = (int) $this->blogs['total'];
@@ -325,7 +337,8 @@ function bp_rewind_blogs() {
  *     @type int|bool $max Maximum number of results to return.
  *           Default: false (unlimited).
  *     @type string $type The order in which results should be fetched.
-	     'active', 'alphabetical', 'newest', or 'random'.
+ *	     'active', 'alphabetical', 'newest', or 'random'.
+ *     @type array $include_blog_ids Array of blog IDs to limit results to.
  *     @type string $sort 'ASC' or 'DESC'. Default: 'DESC'.
  *     @type string $search_terms Limit results by a search term. Default: null.
  *     @type int $user_id The ID of the user whose blogs should be retrieved.
@@ -351,18 +364,20 @@ function bp_has_blogs( $args = '' ) {
 		$user_id = bp_displayed_user_id();
 
 	$defaults = array(
-		'type'         => $type,
-		'page'         => 1,
-		'per_page'     => 20,
-		'max'          => false,
+		'type'              => $type,
+		'page'              => 1,
+		'per_page'          => 20,
+		'max'               => false,
 
-		'page_arg'     => 'bpage',        // See https://buddypress.trac.wordpress.org/ticket/3679
+		'page_arg'          => 'bpage',        // See https://buddypress.trac.wordpress.org/ticket/3679
 
-		'user_id'      => $user_id,       // Pass a user_id to limit to only blogs this user has higher than subscriber access to
-		'search_terms' => $search_terms   // Pass search terms to filter on the blog title or description.
+		'user_id'           => $user_id,       // Pass a user_id to limit to only blogs this user has higher than subscriber access to
+		'include_blog_ids'  => false,
+		'search_terms'      => $search_terms,  // Pass search terms to filter on the blog title or description.
+		'update_meta_cache' => true,
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_blogs' );
 	extract( $r );
 
 	if ( is_null( $search_terms ) ) {
@@ -378,7 +393,7 @@ function bp_has_blogs( $args = '' ) {
 		}
 	}
 
-	$blogs_template = new BP_Blogs_Template( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg );
+	$blogs_template = new BP_Blogs_Template( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg, $update_meta_cache, $include_blog_ids );
 	return apply_filters( 'bp_has_blogs', $blogs_template->has_blogs(), $blogs_template );
 }
 
@@ -911,7 +926,7 @@ function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = ''
 
 			<?php bp_blogs_signup_blog($blogname, $blog_title, $errors); ?>
 			<p>
-				<input id="submit" type="submit" name="submit" class="submit" value="<?php _e('Create Site', 'buddypress') ?>" />
+				<input id="submit" type="submit" name="submit" class="submit" value="<?php esc_attr_e('Create Site', 'buddypress') ?>" />
 			</p>
 
 			<?php wp_nonce_field( 'bp_blog_signup_form' ) ?>
@@ -1138,6 +1153,43 @@ function bp_directory_blogs_search_form() {
 }
 
 /**
+ * Output the Create a Site button.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_blog_create_button() {
+	echo bp_get_blog_create_button();
+}
+	/**
+	 * Get the Create a Site button.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @return string
+	 */
+	function bp_get_blog_create_button() {
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		if ( ! bp_blog_signup_enabled() ) {
+			return false;
+		}
+
+		$button_args = array(
+			'id'         => 'create_blog',
+			'component'  => 'blogs',
+			'link_text'  => __( 'Create a Site', 'buddypress' ),
+			'link_title' => __( 'Create a Site', 'buddypress' ),
+			'link_class' => 'button blog-create bp-title-button',
+			'link_href'  => trailingslashit( bp_get_root_domain() ) . trailingslashit( bp_get_blogs_root_slug() ) . trailingslashit( 'create' ),
+			'wrapper'    => false,
+		);
+
+		return bp_get_button( apply_filters( 'bp_get_blog_create_button', $button_args ) );
+	}
+
+/**
  * Output button for visiting a blog in a loop.
  *
  * @see bp_get_blogs_visit_blog_button() for description of arguments.
@@ -1186,3 +1238,57 @@ function bp_blogs_visit_blog_button( $args = '' ) {
 		// Filter and return the HTML button
 		return bp_get_button( apply_filters( 'bp_get_blogs_visit_blog_button', $button ) );
 	}
+
+/** Stats **********************************************************************/
+
+/**
+ * Display the number of blogs in user's profile.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $args before|after|user_id
+ * @uses bp_blogs_admin_get_profile_stats() to get the stats
+ */
+function bp_blogs_profile_stats( $args = '' ) {
+	echo bp_blogs_get_profile_stats( $args );
+}
+add_action( 'bp_members_admin_user_stats', 'bp_blogs_profile_stats', 9, 1 );
+
+/**
+ * Return the number of blogs in user's profile.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $args before|after|user_id
+ * @return string HTML for stats output.
+ */
+function bp_blogs_get_profile_stats( $args = '' ) {
+
+	// Parse the args
+	$r = bp_parse_args( $args, array(
+		'before'  => '<li class="bp-blogs-profile-stats">',
+		'after'   => '</li>',
+		'user_id' => bp_displayed_user_id(),
+		'blogs'   => 0,
+		'output'  => ''
+	), 'blogs_get_profile_stats' );
+
+	// Allow completely overloaded output
+	if ( is_multisite() && empty( $r['output'] ) ) {
+
+		// Only proceed if a user ID was passed
+		if ( ! empty( $r['user_id'] ) ) {
+
+			// Get the user's blogs
+			if ( empty( $r['blogs'] ) ) {
+				$r['blogs'] = absint( bp_blogs_total_blogs_for_user( $r['user_id'] ) );
+			}
+
+			// If blogs exist, show some formatted output
+			$r['output'] = $r['before'] . sprintf( _n( '%s site', '%s sites', $r['blogs'], 'buddypress' ), '<strong>' . $r['blogs'] . '</strong>' ) . $r['after'];
+		}
+	}
+
+	// Filter and return
+	return apply_filters( 'bp_blogs_get_profile_stats', $r['output'], $r );
+}

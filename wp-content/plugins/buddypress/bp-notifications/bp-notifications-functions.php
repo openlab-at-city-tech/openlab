@@ -42,7 +42,26 @@ function bp_notifications_add_notification( $args = array() ) {
 		'component_action'  => '',
 		'date_notified'     => bp_core_current_time(),
 		'is_new'            => 1,
+		'allow_duplicate'   => false,
 	) );
+
+	// Check for existing duplicate notifications
+	if ( ! $r['allow_duplicate'] ) {
+		// date_notified, allow_duplicate don't count toward
+		// duplicate status
+		$existing = BP_Notifications_Notification::get( array(
+			'user_id'           => $r['user_id'],
+			'item_id'           => $r['item_id'],
+			'secondary_item_id' => $r['secondary_item_id'],
+			'component_name'    => $r['component_name'],
+			'component_action'  => $r['component_action'],
+			'is_new'            => $r['is_new'],
+		) );
+
+		if ( ! empty( $existing ) ) {
+			return false;
+		}
+	}
 
 	// Setup the new notification
 	$notification                    = new BP_Notifications_Notification;
@@ -114,17 +133,24 @@ function bp_notifications_mark_notification( $id, $is_new = false ) {
  * @since BuddyPress (1.9.0)
  *
  * @param int $user_id ID of the user whose notification are being fetched.
- * @param string $format Format of the returned values. 'simple' returns HTML,
+ * @param string $format Format of the returned values. 'string' returns HTML,
  *        while 'object' returns a structured object for parsing.
  * @return mixed Object or array on success, false on failure.
  */
-function bp_notifications_get_notifications_for_user( $user_id, $format = 'simple' ) {
+function bp_notifications_get_notifications_for_user( $user_id, $format = 'string' ) {
 
 	// Setup local variables
-	$bp                    = buddypress();
-	$notifications         = BP_Notifications_Notification::get( array(
-		'user_id' => $user_id
-	) );
+	$bp = buddypress();
+
+	// Get notifications out of the cache, or query if necessary
+	$notifications = wp_cache_get( 'all_for_user_' . $user_id, 'bp_notifications' );
+	if ( false === $notifications ) {
+		$notifications = BP_Notifications_Notification::get( array(
+			'user_id' => $user_id
+		) );
+		wp_cache_set( 'all_for_user_' . $user_id, $notifications, 'bp_notifications' );
+	}
+
 	$grouped_notifications = array(); // Notification groups
 	$renderable            = array(); // Renderable notifications
 
@@ -499,15 +525,18 @@ function bp_notifications_get_unread_notification_count( $user_id = 0 ) {
 	}
 
 	// Get the notifications, and count them
-	$notifications = BP_Notifications_Notification::get( array(
-		'user_id' => $user_id,
-	) );
+	$notifications = wp_cache_get( 'all_for_user_' . $user_id, 'bp_notifications' );
+	if ( false === $notifications ) {
+		$notifications = BP_Notifications_Notification::get( array(
+			'user_id' => $user_id,
+		) );
+		wp_cache_set( 'all_for_user_' . $user_id, $notifications, 'bp_notifications' );
+	}
 
 	$count = ! empty( $notifications ) ? count( $notifications ) : 0;
 
 	return apply_filters( 'bp_notifications_get_total_notification_count', $count );
 }
-
 
 /**
  * Return an array of component names that are currently active and have

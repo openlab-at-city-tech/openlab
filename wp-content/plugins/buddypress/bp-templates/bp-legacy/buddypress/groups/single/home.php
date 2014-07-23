@@ -47,7 +47,7 @@
 				elseif ( bp_is_active( 'activity' ) ) : bp_get_template_part( 'groups/single/activity' );
 
 				// Otherwise show members
-				elseif ( bp_is_active( 'members'  ) ) : bp_get_template_part( 'groups/single/members'  );
+				elseif ( bp_is_active( 'members'  ) ) : bp_groups_members_template_part();
 
 				endif;
 				
@@ -61,13 +61,16 @@
 				elseif ( bp_is_group_activity()   ) : bp_get_template_part( 'groups/single/activity'     );
 
 				// Group Members
-				elseif ( bp_is_group_members()    ) : bp_get_template_part( 'groups/single/members'      );
+				elseif ( bp_is_group_members()    ) : bp_groups_members_template_part();
 
 				// Group Invitations
 				elseif ( bp_is_group_invites()    ) : bp_get_template_part( 'groups/single/send-invites' );
 
 				// Old group forums
 				elseif ( bp_is_group_forum()      ) : bp_get_template_part( 'groups/single/forum'        );
+
+				// Membership request
+				elseif ( bp_is_group_membership_request() ) : bp_get_template_part( 'groups/single/request-membership' );
 
 				// Anything else (plugins mostly)
 				else                                : bp_get_template_part( 'groups/single/plugins'      );

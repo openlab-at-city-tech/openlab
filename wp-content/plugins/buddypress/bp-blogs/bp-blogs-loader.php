@@ -19,11 +19,11 @@ class BP_Blogs_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5.0)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'blogs',
 			__( 'Site Tracking', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 30
 			)
@@ -54,6 +54,10 @@ class BP_Blogs_Component extends BP_Component {
 			'table_name_blogmeta' => $bp->table_prefix . 'bp_user_blogs_blogmeta',
 		);
 
+		$meta_tables = array(
+			'blog' => $bp->table_prefix . 'bp_user_blogs_blogmeta',
+		);
+
 		// All globals for messaging component.
 		// Note that global_tables is included in this array.
 		$args = array(
@@ -64,6 +68,7 @@ class BP_Blogs_Component extends BP_Component {
 			'search_string'         => __( 'Search sites...', 'buddypress' ),
 			'autocomplete_all'      => defined( 'BP_MESSAGES_AUTOCOMPLETE_ALL' ),
 			'global_tables'         => $global_tables,
+			'meta_tables'           => $meta_tables,
 		);
 
 		// Setup the globals
@@ -212,7 +217,7 @@ class BP_Blogs_Component extends BP_Component {
 	/**
 	 * Set up the title for pages and <title>
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		// Set up the component options navigation for Site

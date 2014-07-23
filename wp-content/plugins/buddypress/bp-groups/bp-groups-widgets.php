@@ -28,7 +28,7 @@ class BP_Groups_Widget extends WP_Widget {
 
 		if ( is_active_widget( false, false, $this->id_base ) && !is_admin() && !is_network_admin() ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-			wp_enqueue_script( 'groups_widget_groups_list-js', BP_PLUGIN_URL . "bp-groups/js/widget-groups{$min}.js", array( 'jquery' ), bp_get_version() );
+			wp_enqueue_script( 'groups_widget_groups_list-js', buddypress()->plugin_url . "bp-groups/js/widget-groups{$min}.js", array( 'jquery' ), bp_get_version() );
 		}
 	}
 
@@ -169,7 +169,16 @@ function groups_ajax_widget_groups_list() {
 		break;
 	}
 
-	if ( bp_has_groups( 'type=' . $type . '&per_page=' . $_POST['max_groups'] . '&max=' . $_POST['max_groups'] ) ) : ?>
+	$per_page = isset( $_POST['max_groups'] ) ? intval( $_POST['max_groups'] ) : 5;
+
+	$groups_args = array(
+		'user_id'  => 0,
+		'type'     => $type,
+		'per_page' => $per_page,
+		'max'      => $per_page,
+	);
+
+	if ( bp_has_groups( $groups_args ) ) : ?>
 		<?php echo "0[[SPLIT]]"; ?>
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 			<li <?php bp_group_class(); ?>>

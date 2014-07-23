@@ -15,7 +15,7 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 function groups_directory_groups_setup() {
-	if ( bp_is_groups_component() && !bp_current_action() && !bp_current_item() ) {
+	if ( bp_is_groups_directory() ) {
 		bp_update_is_directory( true, 'groups' );
 
 		do_action( 'groups_directory_groups_setup' );
@@ -49,7 +49,6 @@ function groups_screen_group_invites() {
 			$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 			groups_record_activity( array(
-				'action'  => apply_filters_ref_array( 'groups_activity_accepted_invite_action', array( sprintf( __( '%1$s joined the group %2$s', 'buddypress'), bp_core_get_userlink( bp_loggedin_user_id() ), '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' ), bp_loggedin_user_id(), &$group ) ),
 				'type'    => 'joined_group',
 				'item_id' => $group->id
 			) );
@@ -447,6 +446,49 @@ function groups_screen_group_invite() {
 	}
 }
 
+/**
+ * Process group invitation removal requests.
+ *
+ * Note that this function is only used when JS is disabled. Normally, clicking
+ * Remove Invite removes the invitation via AJAX.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function groups_remove_group_invite() {
+	if ( ! bp_is_group_invites() ) {
+		return;
+	}
+
+	if ( ! bp_is_action_variable( 'remove', 0 ) || ! is_numeric( bp_action_variable( 1 ) ) ) {
+		return;
+	}
+
+	if ( ! check_admin_referer( 'groups_invite_uninvite_user' ) ) {
+		return false;
+	}
+
+	$friend_id = intval( bp_action_variable( 1 ) );
+	$group_id  = bp_get_current_group_id();
+	$message   = __( 'Invite successfully removed', 'buddypress' );
+	$redirect  = wp_get_referer();
+	$error     = false;
+
+	if ( ! bp_groups_user_can_send_invites( $group_id ) ) {
+		$message = __( 'You are not allowed to send or remove invites', 'buddypress' );
+		$error = 'error';
+	} else if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
+		$message = __( 'The member requested to join the group', 'buddypress' );
+		$error = 'error';
+	} else if ( ! groups_uninvite_user( $friend_id, $group_id ) ) {
+		$message = __( 'There was an error removing the invite', 'buddypress' );
+		$error = 'error';
+	}
+
+	bp_core_add_message( $message, $error );
+	bp_core_redirect( $redirect );
+}
+add_action( 'bp_screens', 'groups_remove_group_invite' );
+
 function groups_screen_group_request_membership() {
 	global $bp;
 
@@ -649,9 +691,9 @@ function groups_screen_group_admin_avatar() {
 		);
 
 		if ( !bp_core_avatar_handle_crop( $args ) ) {
-			bp_core_add_message( __( 'There was a problem cropping the avatar.', '       buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was a problem cropping the avatar.', 'buddypress' ), 'error' );
 		} else {
-			bp_core_add_message( __( 'The new group avatar was uploaded successfully.', 'buddypress' )          );
+			bp_core_add_message( __( 'The new group avatar was uploaded successfully.', 'buddypress' ) );
 		}
 	}
 
@@ -1021,12 +1063,7 @@ class BP_Groups_Theme_Compat {
 	 */
 	public function directory_dummy_post() {
 
-		// Title based on ability to create groups
-		if ( is_user_logged_in() && bp_user_can_create_groups() ) {
-			$title = __( 'Groups', 'buddypress' ) . '&nbsp;<a class="button bp-title-button" href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create' ) . '">' . __( 'Create a Group', 'buddypress' ) . '</a>';
-		} else {
-			$title = __( 'Groups', 'buddypress' );
-		}
+		$title = apply_filters( 'bp_groups_directory_header', bp_get_directory_title( 'groups' ) );
 
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
@@ -1036,7 +1073,7 @@ class BP_Groups_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_group',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}
@@ -1082,12 +1119,7 @@ class BP_Groups_Theme_Compat {
 	 */
 	public function create_dummy_post() {
 
-		// Title based on ability to create groups
-		if ( is_user_logged_in() && bp_user_can_create_groups() ) {
-			$title = '<a class="button" href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ) . '">' . __( 'Groups', 'buddypress' ) . '</a>&nbsp;' . __( 'Create a Group', 'buddypress' );
-		} else {
-			$title = __( 'Groups', 'buddypress' );
-		}
+		$title = __( 'Groups', 'buddypress' );
 
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
@@ -1097,7 +1129,7 @@ class BP_Groups_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_group',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}
@@ -1114,7 +1146,7 @@ class BP_Groups_Theme_Compat {
 	/** Single ****************************************************************/
 
 	/**
-	 * Add custom template hierarchy to theme compat for group pages. 
+	 * Add custom template hierarchy to theme compat for group pages.
 	 *
 	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
 	 *
@@ -1157,7 +1189,7 @@ class BP_Groups_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_group',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}

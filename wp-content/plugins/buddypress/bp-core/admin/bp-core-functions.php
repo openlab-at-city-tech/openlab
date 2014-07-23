@@ -74,11 +74,16 @@ add_action( bp_core_admin_hook(), 'bp_core_admin_backpat_menu', 999 );
  * @since BuddyPress (1.6)
  */
 function bp_core_modify_admin_menu_highlight() {
-	global $plugin_page, $submenu_file;
+	global $pagenow, $plugin_page, $submenu_file;
 
 	// This tweaks the Settings subnav menu to show only one BuddyPress menu item
 	if ( ! in_array( $plugin_page, array( 'bp-activity', 'bp-general-settings', ) ) )
 		$submenu_file = 'bp-components';
+
+	// Network Admin > Tools
+	if ( in_array( $plugin_page, array( 'bp-tools', 'available-tools' ) ) ) {
+		$submenu_file = $plugin_page;
+	}
 }
 
 /**
@@ -388,7 +393,7 @@ function bp_core_admin_tabs( $active_tab = '' ) {
 		'2' => array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), 'admin.php' ) ),
 			'name' => __( 'Settings', 'buddypress' )
-		)
+		),
 	);
 
 	// If forums component is active, add additional tab
@@ -441,7 +446,7 @@ function bp_core_add_contextual_help( $screen = '' ) {
 			// help tabs
 			$screen->add_help_tab( array(
 				'id'      => 'bp-comp-overview',
-				'title'   => __( 'Overview' ),
+				'title'   => __( 'Overview', 'buddypress' ),
 				'content' => bp_core_add_contextual_help_content( 'bp-comp-overview' ),
 			) );
 
@@ -459,7 +464,7 @@ function bp_core_add_contextual_help( $screen = '' ) {
 			// Help tabs
 			$screen->add_help_tab( array(
 				'id' => 'bp-page-overview',
-				'title' => __( 'Overview' ),
+				'title' => __( 'Overview', 'buddypress' ),
 				'content' => bp_core_add_contextual_help_content( 'bp-page-overview' ),
 			) );
 
@@ -478,7 +483,7 @@ function bp_core_add_contextual_help( $screen = '' ) {
 			// Help tabs
 			$screen->add_help_tab( array(
 				'id'      => 'bp-settings-overview',
-				'title'   => __( 'Overview' ),
+				'title'   => __( 'Overview', 'buddypress' ),
 				'content' => bp_core_add_contextual_help_content( 'bp-settings-overview' ),
 			) );
 
@@ -492,12 +497,12 @@ function bp_core_add_contextual_help( $screen = '' ) {
 			break;
 
 		// Profile fields page
-		case 'users_page_bp-profile-overview' :
+		case 'users_page_bp-profile-setup' :
 
 			// Help tabs
 			$screen->add_help_tab( array(
 				'id'      => 'bp-profile-overview',
-				'title'   => __( 'Overview' ),
+				'title'   => __( 'Overview', 'buddypress' ),
 				'content' => bp_core_add_contextual_help_content( 'bp-profile-overview' ),
 			) );
 
@@ -745,7 +750,7 @@ function bp_admin_do_wp_nav_menu_meta_box() {
 
 		<p class="button-controls">
 			<span class="add-to-menu">
-				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="submit-buddypress-menu" />
+				<input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'buddypress' ); ?>" name="add-custom-menu-item" id="submit-buddypress-menu" />
 				<span class="spinner"></span>
 			</span>
 		</p>
@@ -784,4 +789,101 @@ function bp_admin_wp_nav_menu_restrict_items() {
 	});
 	</script>
 <?php
+}
+
+/**
+ * Add "Mark as Spam/Ham" button to user row actions.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $actions User row action links.
+ * @param object $user_object Current user information.
+ * @return array $actions User row action links.
+ */
+function bp_core_admin_user_row_actions( $actions, $user_object ) {
+
+	if ( current_user_can( 'edit_user', $user_object->ID ) && bp_loggedin_user_id() != $user_object->ID ) {
+
+		$url = bp_get_admin_url( 'users.php' );
+
+		if ( bp_is_user_spammer( $user_object->ID ) ) {
+			$actions['ham'] = "<a href='" . wp_nonce_url( $url . "?action=ham&amp;user=$user_object->ID", 'bp-spam-user' ) . "'>" . __( 'Not Spam', 'buddypress' ) . "</a>";
+		} else {
+			$actions['spam'] = "<a class='submitdelete' href='" . wp_nonce_url( $url . "?action=spam&amp;user=$user_object->ID", 'bp-spam-user' ) . "'>" . __( 'Mark as Spam', 'buddypress' ) . "</a>";
+		}
+	}
+
+	return $actions;
+}
+
+/**
+ * Catch requests to mark individual users as spam/ham from users.php.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_core_admin_user_manage_spammers() {
+
+	// Print our inline scripts on non-Multisite
+	add_action( 'admin_footer', 'bp_core_admin_user_spammed_js' );
+
+	$action  = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : false;
+	$updated = isset( $_REQUEST['updated'] ) ? $_REQUEST['updated'] : false;
+	$mode    = isset( $_POST['mode'] ) ? $_POST['mode'] : false;
+
+	// if this is a multisite, bulk request, stop now!
+	if ( 'list' == $mode ) {
+		return;
+	}
+
+	// Process a spam/ham request
+	if ( ! empty( $action ) && in_array( $action, array( 'spam', 'ham' ) ) ) {
+
+		check_admin_referer( 'bp-spam-user' );
+
+		$user_id = ! empty( $_REQUEST['user'] ) ? intval( $_REQUEST['user'] ) : false;
+
+		if ( empty( $user_id ) ) {
+			return;
+		}
+
+		$redirect = wp_get_referer();
+
+		$status = ( $action == 'spam' ) ? 'spam' : 'ham';
+
+		// Process the user
+		bp_core_process_spammer_status( $user_id, $status );
+
+		$redirect = add_query_arg( array( 'updated' => 'marked-' . $status ), $redirect);
+
+		wp_redirect( $redirect );
+	}
+
+	// Display feedback
+	if ( ! empty( $updated ) && in_array( $updated, array( 'marked-spam', 'marked-ham' ) ) ) {
+
+		if ( 'marked-spam' === $updated ) {
+			$notice = __( 'User marked as spammer. Spam users are visible only to site admins.', 'buddypress' );
+		} else {
+			$notice = __( 'User removed from spam.', 'buddypress' );
+		}
+
+		bp_core_add_admin_notice( $notice );
+	}
+}
+
+/**
+ * Inline script that adds the 'site-spammed' class to spammed users.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_core_admin_user_spammed_js() {
+	?>
+	<script type="text/javascript">
+		jQuery( document ).ready( function($) {
+			$( '.row-actions .ham' ).each( function() {
+				$( this ).closest( 'tr' ).addClass( 'site-spammed' );
+			});
+		});
+	</script>
+	<?php
 }

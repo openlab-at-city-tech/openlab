@@ -165,37 +165,59 @@ class BP_Messages_Box_Template {
 	}
 }
 
+/**
+ * Retrieve private message threads for display in inbox/sentbox/notices
+ *
+ * Similar to WordPress's have_posts() function, this function is responsible
+ * for querying the database and retrieving private messages for display inside
+ * the theme via individual template parts for a member's inbox/sentbox/notices.
+ *
+ * @since BuddyPress (1.0.0)
+ *
+ * @global BP_Messages_Box_Template $messages_template
+ * @param array $args
+ * @return object
+ */
 function bp_has_message_threads( $args = '' ) {
-	global $bp, $messages_template;
+	global $messages_template;
 
-	$defaults = array(
+	// The default box the user is looking at
+	if ( bp_is_current_action( 'sentbox' ) ) {
+		$default_box = 'sentbox';
+	} elseif ( bp_is_current_action( 'notices' ) ) {
+		$default_box = 'notices';
+	} else {
+		$default_box = 'inbox';
+	}
+
+	// Parse the arguments
+	$r = bp_parse_args( $args, array(
 		'user_id'      => bp_loggedin_user_id(),
-		'box'          => 'inbox',
+		'box'          => $default_box,
 		'per_page'     => 10,
 		'max'          => false,
 		'type'         => 'all',
 		'search_terms' => isset( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : '',
 		'page_arg'     => 'mpage', // See https://buddypress.trac.wordpress.org/ticket/3679
-	);
+	), 'has_message_threads' );
 
-	$r = wp_parse_args( $args, $defaults );
-	extract( $r, EXTR_SKIP );
-
+	// If trying to access notices without capabilities, redirect to root domain
 	if ( bp_is_current_action( 'notices' ) && !bp_current_user_can( 'bp_moderate' ) ) {
-		wp_redirect( bp_displayed_user_id() );
-	} else {
-		if ( bp_is_current_action( 'sentbox' ) ) {
-			$box = 'sentbox';
-		}
-
-		if ( bp_is_current_action( 'notices' ) ) {
-			$box = 'notices';
-		}
-
-		$messages_template = new BP_Messages_Box_Template( $user_id, $box, $per_page, $max, $type, $search_terms, $page_arg );
+		bp_core_redirect( bp_displayed_user_domain() );
 	}
 
-	return apply_filters( 'bp_has_message_threads', $messages_template->has_threads(), $messages_template );
+	// Load the messages loop global up with messages
+	$messages_template = new BP_Messages_Box_Template(
+		$r['user_id'],
+		$r['box'],
+		$r['per_page'],
+		$r['max'],
+		$r['type'],
+		$r['search_terms'],
+		$r['page_arg']
+	);
+
+	return apply_filters( 'bp_has_message_threads', $messages_template->has_threads(), $messages_template, $r );
 }
 
 function bp_message_threads() {
@@ -235,6 +257,38 @@ function bp_message_thread_excerpt() {
 		return apply_filters( 'bp_get_message_thread_excerpt', strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) );
 	}
 
+/**
+ * Output the thread's last message content
+ *
+ * When viewing your Inbox, the last message is the most recent message in
+ * the thread of which you are *not* the author.
+ *
+ * When viewing your Sentbox, last message is the most recent message in
+ * the thread of which you *are* the member.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_message_thread_content() {
+	echo bp_get_message_thread_content();
+}
+	/**
+	 * Return the thread's last message content
+	 *
+	 * When viewing your Inbox, the last message is the most recent message in
+	 * the thread of which you are *not* the author.
+	 *
+	 * When viewing your Sentbox, last message is the most recent message in
+	 * the thread of which you *are* the member.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 * @return string The raw content of the last message in the thread
+	 */
+	function bp_get_message_thread_content() {
+		global $messages_template;
+
+		return apply_filters( 'bp_get_message_thread_content', $messages_template->thread->last_message_content );
+	}
+
 function bp_message_thread_from() {
 	echo bp_get_message_thread_from();
 }
@@ -252,12 +306,19 @@ function bp_message_thread_to() {
 		return apply_filters( 'bp_message_thread_to', BP_Messages_Thread::get_recipient_links($messages_template->thread->recipients ) );
 	}
 
-function bp_message_thread_view_link() {
-	echo bp_get_message_thread_view_link();
+function bp_message_thread_view_link( $thread_id = 0 ) {
+	echo bp_get_message_thread_view_link( $thread_id );
 }
-	function bp_get_message_thread_view_link() {
-		global $messages_template, $bp;
-		return apply_filters( 'bp_get_message_thread_view_link', trailingslashit( bp_loggedin_user_domain() . $bp->messages->slug . '/view/' . $messages_template->thread->thread_id ) );
+	function bp_get_message_thread_view_link( $thread_id = 0 ) {
+		global $messages_template;
+
+		if ( empty( $messages_template ) && (int) $thread_id > 0 ) {
+			$thread_id = (int) $thread_id;
+		} else {
+			$thread_id = $messages_template->thread->thread_id;
+		}
+
+		return apply_filters( 'bp_get_message_thread_view_link', trailingslashit( bp_loggedin_user_domain() . buddypress()->messages->slug . '/view/' . $thread_id ) );
 	}
 
 function bp_message_thread_delete_link() {
@@ -407,7 +468,7 @@ function bp_message_search_form() {
 
 	<form action="" method="get" id="search-message-form">
 		<label><input type="text" name="s" id="messages_search" <?php if ( $search_value === $default_search_value ) : ?>placeholder="<?php echo esc_html( $search_value ); ?>"<?php endif; ?> <?php if ( $search_value !== $default_search_value ) : ?>value="<?php echo esc_html( $search_value ); ?>"<?php endif; ?> /></label>
-		<input type="submit" id="messages_search_submit" name="messages_search_submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
+		<input type="submit" id="messages_search_submit" name="messages_search_submit" value="<?php esc_attr_e( 'Search', 'buddypress' ) ?>" />
 	</form>
 
 <?php

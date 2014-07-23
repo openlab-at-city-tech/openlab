@@ -43,7 +43,7 @@ add_action( 'bp_screens', 'bp_blogs_screen_create_a_blog', 3 );
  * Load the top-level Blogs directory.
  */
 function bp_blogs_screen_index() {
-	if ( is_multisite() && bp_is_blogs_component() && !bp_current_action() ) {
+	if ( bp_is_blogs_directory() ) {
 		bp_update_is_directory( true, 'blogs' );
 
 		do_action( 'bp_blogs_screen_index' );
@@ -141,12 +141,7 @@ class BP_Blogs_Theme_Compat {
 	 */
 	public function directory_dummy_post() {
 
-		// Title based on ability to create blogs
-		if ( is_user_logged_in() && bp_blog_signup_enabled() ) {
-			$title = __( 'Sites', 'buddypress' ) . '&nbsp;<a class="button" href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_blogs_root_slug() . '/create' ) . '">' . __( 'Create a Sites', 'buddypress' ) . '</a>';
-		} else {
-			$title = __( 'Sites', 'buddypress' );
-		}
+		$title = apply_filters( 'bp_blogs_directory_header', __( 'Sites', 'buddypress' ) );
 
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
@@ -156,7 +151,7 @@ class BP_Blogs_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_blogs',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}
@@ -219,7 +214,7 @@ class BP_Blogs_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_group',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}

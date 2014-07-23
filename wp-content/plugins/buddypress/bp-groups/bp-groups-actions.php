@@ -63,6 +63,12 @@ function groups_action_create_group() {
 	if ( isset( $_COOKIE['bp_new_group_id'] ) ) {
 		$bp->groups->new_group_id = $_COOKIE['bp_new_group_id'];
 		$bp->groups->current_group = groups_get_group( array( 'group_id' => $bp->groups->new_group_id ) );
+
+		// Only allow the group creator to continue to edit the new group
+		if ( ! bp_is_group_creator( $bp->groups->current_group, bp_loggedin_user_id() ) ) {
+			bp_core_add_message( __( 'Only the group creator may continue editing this group.', 'buddypress' ), 'error' );
+			bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/' );
+		}
 	}
 
 	// If the save, upload or skip button is hit, lets calculate what we need to save
@@ -116,8 +122,18 @@ function groups_action_create_group() {
 			groups_update_groupmeta( $bp->groups->new_group_id, 'invite_status', $invite_status );
 		}
 
-		if ( 'group-invites' == bp_get_groups_current_create_step() )
+		if ( 'group-invites' === bp_get_groups_current_create_step() ) {
+			if ( ! empty( $_POST['friends'] ) ) {
+				foreach ( (array) $_POST['friends'] as $friend ) {
+					groups_invite_user( array(
+						'user_id'  => $friend,
+						'group_id' => $bp->groups->new_group_id,
+					) );
+				}
+			}
+
 			groups_send_invites( bp_loggedin_user_id(), $bp->groups->new_group_id );
+		}
 
 		do_action( 'groups_create_group_step_save_' . bp_get_groups_current_create_step() );
 		do_action( 'groups_create_group_step_complete' ); // Mostly for clearing cache on a generic action name
@@ -144,7 +160,6 @@ function groups_action_create_group() {
 
 			// Once we compelete all steps, record the group creation in the activity stream.
 			groups_record_activity( array(
-				'action' => apply_filters( 'groups_activity_created_group_action', sprintf( __( '%1$s created the group %2$s', 'buddypress'), bp_core_get_userlink( bp_loggedin_user_id() ), '<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_attr( $bp->groups->current_group->name ) . '</a>' ) ),
 				'type' => 'created_group',
 				'item_id' => $bp->groups->new_group_id
 			) );
@@ -171,6 +186,24 @@ function groups_action_create_group() {
 
 			bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . $next_step . '/' );
 		}
+	}
+
+	// Remove invitations
+	if ( 'group-invites' === bp_get_groups_current_create_step() && ! empty( $_REQUEST['user_id'] ) && is_numeric( $_REQUEST['user_id'] ) ) {
+		if ( ! check_admin_referer( 'groups_invite_uninvite_user' ) ) {
+			return false;
+		}
+
+		$message = __( 'Invite successfully removed', 'buddypress' );
+		$error   = false;
+
+		if( ! groups_uninvite_user( (int) $_REQUEST['user_id'], $bp->groups->new_group_id ) ) {
+			$message = __( 'There was an error removing the invite', 'buddypress' );
+			$error   = 'error';
+		}
+
+		bp_core_add_message( $message, $error );
+		bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-invites/' );
 	}
 
 	// Group avatar is handled separately
@@ -275,9 +308,9 @@ function groups_action_leave_group() {
 		} else {
 			bp_core_add_message( __( 'You successfully left the group.', 'buddypress' ) );
 		}
-			
+
 		$redirect = bp_get_group_permalink( groups_get_current_group() );
-		
+
 		if( 'hidden' == $bp->groups->current_group->status ) {
 			$redirect = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() );
 		}

@@ -245,10 +245,10 @@ class BP_User_Query {
 			// number of minutes used as an interval
 			case 'online' :
 				$this->uid_name = 'user_id';
-				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
-				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'last_activity' ) );
-				$sql['where'][] = $wpdb->prepare( "u.meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL %d MINUTE )", apply_filters( 'bp_user_query_online_interval', 15 ) );
-				$sql['orderby'] = "ORDER BY u.meta_value";
+				$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$bp->members->table_name_last_activity} u";
+				$sql['where'][] = $wpdb->prepare( "u.component = %s AND u.type = 'last_activity'", buddypress()->members->id );
+				$sql['where'][] = $wpdb->prepare( "u.date_recorded >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL %d MINUTE )", apply_filters( 'bp_user_query_online_interval', 15 ) );
+				$sql['orderby'] = "ORDER BY u.date_recorded";
 				$sql['order']   = "DESC";
 
 				break;
@@ -259,8 +259,8 @@ class BP_User_Query {
 			case 'newest' :
 			case 'random' :
 				$this->uid_name = 'user_id';
-				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
-				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'last_activity' ) );
+				$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$bp->members->table_name_last_activity} u";
+				$sql['where'][] = $wpdb->prepare( "u.component = %s AND u.type = 'last_activity'", buddypress()->members->id );
 
 				if ( 'newest' == $type ) {
 					$sql['orderby'] = "ORDER BY u.user_id";
@@ -268,7 +268,7 @@ class BP_User_Query {
 				} else if ( 'random' == $type ) {
 					$sql['orderby'] = "ORDER BY rand()";
 				} else {
-					$sql['orderby'] = "ORDER BY u.meta_value";
+					$sql['orderby'] = "ORDER BY u.date_recorded";
 					$sql['order'] = "DESC";
 				}
 
@@ -277,7 +277,7 @@ class BP_User_Query {
 			// 'popular' sorts by the 'total_friend_count' usermeta
 			case 'popular' :
 				$this->uid_name = 'user_id';
-				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
+				$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$wpdb->usermeta} u";
 				$sql['where'][] = $wpdb->prepare( "u.meta_key = %s", bp_get_user_meta_key( 'total_friend_count' ) );
 				$sql['orderby'] = "ORDER BY CONVERT(u.meta_value, SIGNED)";
 				$sql['order']   = "DESC";
@@ -294,18 +294,16 @@ class BP_User_Query {
 				// @todo remove need for bp_is_active() check
 				if ( ! bp_disable_profile_sync() || ! bp_is_active( 'xprofile' ) ) {
 					$this->uid_name = 'ID';
-					$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->users} u";
+					$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$wpdb->users} u";
 					$sql['orderby'] = "ORDER BY u.display_name";
 					$sql['order']   = "ASC";
 
 				// When profile sync is disabled, alphabetical sorts must happen against
 				// the xprofile table
 				} else {
-					$fullname_field_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
-
 					$this->uid_name = 'user_id';
-					$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$bp->profile->table_name_data} u";
-					$sql['where'][] = "u.field_id = {$fullname_field_id}";
+					$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$bp->profile->table_name_data} u";
+					$sql['where'][] = $wpdb->prepare( "u.field_id = %d", bp_xprofile_fullname_field_id() );
 					$sql['orderby'] = "ORDER BY u.value";
 					$sql['order']   = "ASC";
 				}
@@ -320,7 +318,7 @@ class BP_User_Query {
 			// Any other 'type' falls through
 			default :
 				$this->uid_name = 'ID';
-				$sql['select']  = "SELECT DISTINCT u.{$this->uid_name} as id FROM {$wpdb->users} u";
+				$sql['select']  = "SELECT u.{$this->uid_name} as id FROM {$wpdb->users} u";
 
 				// In this case, we assume that a plugin is
 				// handling order, so we leave those clauses
@@ -363,20 +361,11 @@ class BP_User_Query {
 
 		/** Search Terms ******************************************************/
 
-		// 'search_terms' searches the xprofile fields
-		// To avoid global joins, do a separate query
-		// @todo remove need for bp_is_active() check
-		if ( false !== $search_terms && bp_is_active( 'xprofile' ) ) {
-			$search_terms_clean = mysql_real_escape_string( mysql_real_escape_string( $search_terms ) );
-			$search_terms_clean = like_escape( $search_terms_clean );
-			$found_user_ids_query = "SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE '%" . $search_terms_clean . "%'";
-			$found_user_ids = $wpdb->get_col( $found_user_ids_query );
-
-			if ( ! empty( $found_user_ids ) ) {
-				$sql['where'][] = "u.{$this->uid_name} IN (" . implode( ',', wp_parse_id_list( $found_user_ids ) ) . ")";
-			} else {
-				$sql['where'][] = $this->no_results['where'];
-			}
+		// 'search_terms' searches user_login and user_nicename
+		// xprofile field matches happen in bp_xprofile_bp_user_query_search()
+		if ( false !== $search_terms ) {
+			$search_terms_clean = esc_sql( esc_sql( $search_terms ) );
+			$sql['where']['search'] = "u.{$this->uid_name} IN ( SELECT ID FROM {$wpdb->users} WHERE ( user_login LIKE '%{$search_terms_clean}%' OR user_nicename LIKE '%{$search_terms_clean}%' ) )";
 		}
 
 		// 'meta_key', 'meta_value' allow usermeta search
@@ -401,6 +390,9 @@ class BP_User_Query {
 		} else {
 			$sql['limit'] = '';
 		}
+
+		// Allow custom filters
+		$sql = apply_filters_ref_array( 'bp_user_query_uid_clauses', array( $sql, &$this ) );
 
 		// Assemble the query chunks
 		$this->uid_clauses['select']  = $sql['select'];
@@ -437,7 +429,7 @@ class BP_User_Query {
 		if ( 'sql_calc_found_rows' == $this->query_vars['count_total'] ) {
 			$this->total_users = $wpdb->get_var( apply_filters( 'bp_found_user_query', "SELECT FOUND_ROWS()", $this ) );
 		} elseif ( 'count_query' == $this->query_vars['count_total'] ) {
-			$count_select      = preg_replace( '/^SELECT.*?FROM (\S+) u/', "SELECT COUNT(DISTINCT u.{$this->uid_name}) FROM $1 u", $this->uid_clauses['select'] );
+			$count_select      = preg_replace( '/^SELECT.*?FROM (\S+) u/', "SELECT COUNT(u.{$this->uid_name}) FROM $1 u", $this->uid_clauses['select'] );
 			$this->total_users = $wpdb->get_var( apply_filters( 'bp_found_user_query', "{$count_select} {$this->uid_clauses['where']}", $this ) );
 		}
 	}
@@ -448,10 +440,17 @@ class BP_User_Query {
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function do_wp_user_query() {
+		$fields = array( 'ID', 'user_login', 'user_pass', 'user_nicename', 'user_email', 'user_url', 'user_registered', 'user_activation_key', 'user_status', 'display_name' );
+
+		if ( is_multisite() ) {
+			$fields[] = 'spam';
+			$fields[] = 'deleted';
+		}
+
 		$wp_user_query = new WP_User_Query( apply_filters( 'bp_wp_user_query_args', array(
 
 			// Relevant
-			'fields'      => array( 'ID', 'user_registered', 'user_login', 'user_nicename', 'display_name', 'user_email' ),
+			'fields'      => $fields,
 			'include'     => $this->user_ids,
 
 			// Overrides
@@ -459,6 +458,14 @@ class BP_User_Query {
 			'count_total' => false // We already have a count
 
 		), $this ) );
+
+		// WP_User_Query doesn't cache the data it pulls from wp_users,
+		// and it does not give us a way to save queries by fetching
+		// only uncached users. However, BP does cache this data, so
+		// we set it here.
+		foreach ( $wp_user_query->results as $u ) {
+			wp_cache_set( 'bp_core_userdata_' . $u->ID, $u, 'bp' );
+		}
 
 		// We calculate total_users using a standalone query, except
 		// when a whitelist of user_ids is passed to the constructor.
@@ -540,6 +547,8 @@ class BP_User_Query {
 		// Turn user ID's into a query-usable, comma separated value
 		$user_ids_sql = implode( ',', wp_parse_id_list( $this->user_ids ) );
 
+		$bp = buddypress();
+
 		/**
 		 * Use this action to independently populate your own custom extras.
 		 *
@@ -555,13 +564,20 @@ class BP_User_Query {
 		 */
 		do_action_ref_array( 'bp_user_query_populate_extras', array( $this, $user_ids_sql ) );
 
+		// Fetch last_active data from the activity table
+		$last_activities = BP_Core_User::get_last_activity( $this->user_ids );
+
+		// Set a last_activity value for each user, even if it's empty
+		foreach ( $this->results as $user_id => $user ) {
+			$user_last_activity = isset( $last_activities[ $user_id ] ) ? $last_activities[ $user_id ]['date_recorded'] : '';
+			$this->results[ $user_id ]->last_activity = $user_last_activity;
+		}
+
 		// Fetch usermeta data
 		// We want the three following pieces of info from usermeta:
 		// - friend count
-		// - last activity
 		// - latest update
 		$total_friend_count_key = bp_get_user_meta_key( 'total_friend_count' );
-		$last_activity_key      = bp_get_user_meta_key( 'last_activity'      );
 		$bp_latest_update_key   = bp_get_user_meta_key( 'bp_latest_update'   );
 
 		// total_friend_count must be set for each user, even if its
@@ -571,7 +587,7 @@ class BP_User_Query {
 		}
 
 		// Create, prepare, and run the seperate usermeta query
-		$user_metas = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_key, meta_value FROM {$wpdb->usermeta} WHERE meta_key IN (%s,%s,%s) AND user_id IN ({$user_ids_sql})", $total_friend_count_key, $last_activity_key, $bp_latest_update_key ) );
+		$user_metas = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_key, meta_value FROM {$wpdb->usermeta} WHERE meta_key IN (%s,%s) AND user_id IN ({$user_ids_sql})", $total_friend_count_key, $bp_latest_update_key ) );
 
 		// The $members_template global expects the index key to be different
 		// from the meta_key in some cases, so we rejig things here.
@@ -579,10 +595,6 @@ class BP_User_Query {
 			switch ( $user_meta->meta_key ) {
 				case $total_friend_count_key :
 					$key = 'total_friend_count';
-					break;
-
-				case $last_activity_key :
-					$key = 'last_activity';
 					break;
 
 				case $bp_latest_update_key :
@@ -1013,7 +1025,7 @@ class BP_Core_User {
 			unset( $sql['pagination'] );
 		}
 
-		array_unshift( $sql, "SELECT COUNT(DISTINCT u.ID)" );
+		array_unshift( $sql, "SELECT COUNT(u.ID)" );
 
 		// Get total user results
 		$total_users_sql = apply_filters( 'bp_core_get_total_users_sql', join( ' ', (array) $sql ), $sql );
@@ -1131,8 +1143,8 @@ class BP_Core_User {
 		$user_ids   = implode( ',', wp_parse_id_list( $user_ids ) );
 		$status_sql = bp_core_get_status_sql();
 
-		$total_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT COUNT(DISTINCT ID) FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids})" );
-		$paged_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT DISTINCT ID as id, user_registered, user_nicename, user_login, user_email FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids}) {$pag_sql}" );
+		$total_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT COUNT(ID) FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids})" );
+		$paged_users_sql = apply_filters( 'bp_core_get_specific_users_count_sql', "SELECT ID as id, user_registered, user_nicename, user_login, user_email FROM {$wpdb->users} WHERE {$status_sql} AND ID IN ({$user_ids}) {$pag_sql}" );
 
 		$total_users = $wpdb->get_var( $total_users_sql );
 		$paged_users = $wpdb->get_results( $paged_users_sql );
@@ -1298,6 +1310,183 @@ class BP_Core_User {
 			return false;
 
 		return $user;
+	}
+
+	/**
+	 * Get last activity data for a user or set of users.
+	 *
+	 * @param int|array User IDs or multiple user IDs.
+	 * @return array
+	 */
+	public static function get_last_activity( $user_id ) {
+		global $wpdb;
+
+		if ( is_array( $user_id ) ) {
+			$user_ids = wp_parse_id_list( $user_id );
+		} else {
+			$user_ids = array( absint( $user_id ) );
+		}
+
+		if ( empty( $user_ids ) ) {
+			return false;
+		}
+
+		// get cache for single user only
+		if ( ! is_array( $user_id ) ) {
+			$cache = wp_cache_get( $user_id, 'bp_last_activity' );
+
+			if ( false !== $cache ) {
+				return $cache;
+			}
+		}
+
+		$bp = buddypress();
+
+		$user_ids_sql = implode( ',', $user_ids );
+		$user_count   = count( $user_ids );
+
+		$last_activities = $wpdb->get_results( $wpdb->prepare( "SELECT id, user_id, date_recorded FROM {$bp->members->table_name_last_activity} WHERE component = %s AND type = 'last_activity' AND user_id IN ({$user_ids_sql}) LIMIT {$user_count}", $bp->members->id ) );
+
+		// Re-key
+		$retval = array();
+		foreach ( $last_activities as $last_activity ) {
+			$retval[ $last_activity->user_id ] = array(
+				'user_id'       => $last_activity->user_id,
+				'date_recorded' => $last_activity->date_recorded,
+				'activity_id'   => $last_activity->id,
+			);
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Set a user's last_activity value.
+	 *
+	 * Will create a new entry if it does not exist. Otherwise updates the
+	 * existing entry.
+	 *
+	 * @since 2.0
+	 *
+	 * @param int $user_id ID of the user whose last_activity you are updating.
+	 * @param string $time MySQL-formatted time string.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function update_last_activity( $user_id, $time ) {
+		global $wpdb;
+
+		$table_name = buddypress()->members->table_name_last_activity;
+
+		$activity = self::get_last_activity( $user_id );
+
+		if ( ! empty( $activity ) ) {
+			$updated = $wpdb->update(
+				$table_name,
+
+				// Data to update
+				array(
+					'date_recorded' => $time,
+				),
+
+				// WHERE
+				array(
+					'id' => $activity[ $user_id ]['activity_id'],
+				),
+
+				// Data sanitization format
+				array(
+					'%s',
+				),
+
+				// WHERE sanitization format
+				array(
+					'%d',
+				)
+			);
+
+			// add new date to existing activity entry for caching
+			$activity[ $user_id ]['date_recorded'] = $time;
+
+		} else {
+			$updated = $wpdb->insert(
+				$table_name,
+
+				// Data
+				array(
+					'user_id'       => $user_id,
+					'component'     => buddypress()->members->id,
+					'type'          => 'last_activity',
+					'action'        => '',
+					'content'       => '',
+					'primary_link'  => '',
+					'item_id'       => 0,
+					'date_recorded' => $time,
+				),
+
+				// Data sanitization format
+				array(
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%d',
+					'%s',
+				)
+			);
+
+			// setup activity array for caching
+			// view the foreach loop in the get_last_activity() method for format
+			$activity = array();
+			$activity[ $user_id ] = array(
+				'user_id'       => $user_id,
+				'date_recorded' => $time,
+				'activity_id'   => $wpdb->insert_id,
+			);
+		}
+
+		// set cache
+		wp_cache_set( $user_id, $activity, 'bp_last_activity' );
+
+		return $updated;
+	}
+
+	/**
+	 * Delete a user's last_activity value.
+	 *
+	 * @since 2.0
+	 *
+	 * @param int $user_id
+	 * @return bool True on success, false on failure or if no last_activity
+	 *         is found for the user.
+	 */
+	public static function delete_last_activity( $user_id ) {
+		global $wpdb;
+
+		$existing = self::get_last_activity( $user_id );
+
+		if ( empty( $existing ) ) {
+			return false;
+		}
+
+		$deleted = $wpdb->delete(
+			buddypress()->members->table_name_last_activity,
+
+			// WHERE
+			array(
+				'id' => $existing[ $user_id ]['activity_id'],
+			),
+
+			// WHERE sanitization format
+			array(
+				'%s',
+			)
+		);
+
+		wp_cache_delete( $user_id, 'bp_last_activity' );
+
+		return $deleted;
 	}
 }
 
@@ -1993,7 +2182,9 @@ class BP_Walker_Nav_Menu extends Walker_Nav_Menu {
 	 * @return string See {@link Walker::walk()}.
 	 */
 	public function walk( $elements, $max_depth ) {
-		$args   = array_slice( func_get_args(), 2 );
+		$func_args = func_get_args();
+
+		$args   = array_slice( $func_args, 2 );
 		$output = '';
 
 		if ( $max_depth < -1 ) // invalid parameter

@@ -73,8 +73,6 @@ function xprofile_filter_kses( $content ) {
 }
 
 /**
- * xprofile_sanitize_data_value_before_save ( $field_value, $field_id )
- *
  * Safely runs profile field data through kses and force_balance_tags.
  *
  * @param string $field_value
@@ -85,8 +83,9 @@ function xprofile_filter_kses( $content ) {
 function xprofile_sanitize_data_value_before_save ( $field_value, $field_id, $reserialize = true ) {
 
 	// Return if empty
-	if ( empty( $field_value ) )
-		return;
+	if ( empty( $field_value ) ) {
+		return $field_value;
+	}
 
 	// Value might be serialized
 	$field_value = maybe_unserialize( $field_value );
@@ -215,9 +214,9 @@ function xprofile_filter_comments( $comments, $post_id ) {
 	}
 
 	// Pull up the xprofile fullname of each commenter
-	if ( $fullnames = BP_XProfile_ProfileData::get_value_byid( 1, $user_ids ) ) {
-		foreach( (array) $fullnames as $user ) {
-			$users[ $user->user_id ] = trim( stripslashes( $user->value ) );
+	if ( $fullnames = bp_core_get_user_displaynames( $user_ids ) ) {
+		foreach( (array) $fullnames as $user_id => $user_fullname ) {
+			$users[ $user_id ] = trim( stripslashes( $user_fullname ) );
 		}
 	}
 
@@ -247,16 +246,113 @@ add_filter( 'comments_array', 'xprofile_filter_comments', 10, 2 );
 function bp_xprofile_filter_user_query_populate_extras( BP_User_Query $user_query, $user_ids_sql ) {
 	global $bp, $wpdb;
 
-	if ( bp_is_active( 'xprofile' ) ) {
-		$fullname_field_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
-		$user_id_names     = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, value as fullname FROM {$bp->profile->table_name_data} WHERE user_id IN ({$user_ids_sql}) AND field_id = %d", $fullname_field_id ) );
+	if ( ! bp_is_active( 'xprofile' ) ) {
+		return;
+	}
 
-		// Loop through names and override each user's fullname
-		foreach ( $user_id_names as $user ) {
-			if ( isset( $user_query->results[ $user->user_id ] ) ) {
-				$user_query->results[ $user->user_id ]->fullname = $user->fullname;
-			}
+	$user_id_names = bp_core_get_user_displaynames( $user_query->user_ids );
+
+	// Loop through names and override each user's fullname
+	foreach ( $user_id_names as $user_id => $user_fullname ) {
+		if ( isset( $user_query->results[ $user_id ] ) ) {
+			$user_query->results[ $user_id ]->fullname = $user_fullname;
 		}
 	}
 }
 add_filter( 'bp_user_query_populate_extras', 'bp_xprofile_filter_user_query_populate_extras', 2, 2 );
+
+/**
+ * Filter meta queries to modify for the xprofile data schema.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @access private Do not use.
+ *
+ * @param string $q SQL query.
+ * @return string
+ */
+function bp_xprofile_filter_meta_query( $q ) {
+	global $wpdb;
+
+	// Get the first word of the command
+	preg_match( '/^(\S+)/', $q, $first_word_matches );
+
+	if ( empty( $first_word_matches[0] ) ) {
+		return $q;
+	}
+
+	// Get the field type
+	preg_match( '/xprofile_(group|field|data)_id/', $q, $matches );
+
+	if ( empty( $matches[0] ) || empty( $matches[1] ) ) {
+		return $q;
+	}
+
+	switch ( $first_word_matches[0] ) {
+
+		/**
+		 * SELECT:
+		 * - replace 'xprofile_{fieldtype}_id' with 'object_id'
+		 * - ensure that 'object_id' is aliased to 'xprofile_{fieldtype}_id',
+		 *   because update_meta_cache() needs the column name to parse
+		 *   the query results
+		 * - append the 'object type' WHERE clause
+		 */
+		case 'SELECT' :
+			$q = str_replace(
+				array(
+					$matches[0],
+					'SELECT object_id',
+					'WHERE ',
+				),
+				array(
+					'object_id',
+					'SELECT object_id AS ' . $matches[0],
+					$wpdb->prepare( 'WHERE object_type = %s AND ', $matches[1] ),
+				),
+				$q
+			);
+			break;
+
+		/**
+		 * UPDATE and DELETE:
+		 * - replace 'xprofile_{fieldtype}_id' with 'object_id'
+		 * - append the 'object type' WHERE clause
+		 */
+		case 'UPDATE' :
+		case 'DELETE' :
+			$q = str_replace(
+				array(
+					$matches[0],
+					'WHERE ',
+				),
+				array(
+					'object_id',
+					$wpdb->prepare( 'WHERE object_type = %s AND ', $matches[1] ),
+				),
+				$q
+			);
+			break;
+
+		/**
+		 * UPDATE and DELETE:
+		 * - replace 'xprofile_{fieldtype}_id' with 'object_id'
+		 * - ensure that the object_type field gets filled in
+		 */
+		case 'INSERT' :
+			$q = str_replace(
+				array(
+					'`' . $matches[0] . '`',
+					'VALUES (',
+				),
+				array(
+					'`object_type`,`object_id`',
+					$wpdb->prepare( "VALUES (%s,", $matches[1] ),
+				),
+				$q
+			);
+			break;
+	}
+
+	return $q;
+}

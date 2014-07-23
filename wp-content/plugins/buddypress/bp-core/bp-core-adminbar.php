@@ -33,7 +33,7 @@ function bp_admin_bar_my_account_root() {
 		$wp_admin_bar->add_menu( array(
 			'parent'    => 'my-account',
 			'id'        => 'my-account-buddypress',
-			'title'     => __( 'My Account' ),
+			'title'     => __( 'My Account', 'buddypress' ),
 			'group'     => true,
 			'meta'      => array(
 				'class' => 'ab-sub-secondary'
@@ -102,7 +102,7 @@ function bp_core_load_admin_bar_css() {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 	// Toolbar styles
-	$stylesheet = BP_PLUGIN_URL . "bp-core/css/admin-bar{$min}.css";
+	$stylesheet = buddypress()->plugin_url . "bp-core/css/admin-bar{$min}.css";
 
 	wp_enqueue_style( 'bp-admin-bar', apply_filters( 'bp_core_admin_bar_css', $stylesheet ), array( 'admin-bar' ), bp_get_version() );
 	$wp_styles->add_data( 'bp-admin-bar', 'rtl', true );

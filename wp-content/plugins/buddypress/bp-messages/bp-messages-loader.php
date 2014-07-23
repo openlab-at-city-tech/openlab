@@ -27,11 +27,11 @@ class BP_Messages_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'messages',
 			__( 'Private Messages', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 50
 			)
@@ -102,11 +102,18 @@ class BP_Messages_Component extends BP_Component {
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
-		$name = sprintf( __( 'Messages <span>%s</span>', 'buddypress' ), bp_get_total_unread_messages_count() );
+		// Only grab count if we're on a user page and current user has access
+		if ( bp_is_user() && bp_user_has_access() ) {
+			$count    = bp_get_total_unread_messages_count();
+			$class    = ( 0 === $count ) ? 'no-count' : 'count';
+			$nav_name = sprintf( __( 'Messages <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) );
+		} else {
+			$nav_name = __( 'Messages', 'buddypress' );
+		}
 
 		// Add 'Messages' to the main navigation
 		$main_nav = array(
-			'name'                    => $name,
+			'name'                    => $nav_name,
 			'slug'                    => $this->slug,
 			'position'                => 50,
 			'show_for_displayed_user' => false,
@@ -245,7 +252,7 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Sets up the title for pages and <title>
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		if ( bp_is_messages_component() ) {

@@ -50,7 +50,8 @@ class BP_Core_Login_Widget extends WP_Widget {
 	 * @param array $instance Widget settings, as saved by the user.
 	 */
 	public function widget( $args, $instance ) {
-		$title = apply_filters( 'widget_title', $instance['title'] );
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
+		$title = apply_filters( 'widget_title', $title );
 
 		echo $args['before_widget'];
 
@@ -86,7 +87,7 @@ class BP_Core_Login_Widget extends WP_Widget {
 
 				<div class="forgetmenot"><label><input name="rememberme" type="checkbox" id="bp-login-widget-rememberme" value="forever" /> <?php _e( 'Remember Me', 'buddypress' ); ?></label></div>
 
-				<input type="submit" name="wp-submit" id="bp-login-widget-submit" value="<?php _e( 'Log In', 'buddypress' ); ?>" />
+				<input type="submit" name="wp-submit" id="bp-login-widget-submit" value="<?php esc_attr_e( 'Log In', 'buddypress' ); ?>" />
 
 				<?php if ( bp_get_signup_allowed() ) : ?>
 
@@ -112,9 +113,7 @@ class BP_Core_Login_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance             = $old_instance;
-		$instance['title']    = strip_tags( $new_instance['title'] );
-		$instance['register'] = esc_url_raw( $new_instance['register'] );
-		$instance['lostpass'] = esc_url_raw( $new_instance['lostpass'] );
+		$instance['title']    = isset( $new_instance['title'] ) ? strip_tags( $new_instance['title'] ) : '';
 
 		return $instance;
 	}
@@ -156,7 +155,7 @@ class BP_Core_Members_Widget extends WP_Widget {
 
 		if ( is_active_widget( false, false, $this->id_base ) && !is_admin() && !is_network_admin() ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-			wp_enqueue_script( 'bp_core_widget_members-js', BP_PLUGIN_URL . "bp-core/js/widget-members{$min}.js", array( 'jquery' ), bp_get_version() );
+			wp_enqueue_script( 'bp_core_widget_members-js', buddypress()->plugin_url . "bp-core/js/widget-members{$min}.js", array( 'jquery' ), bp_get_version() );
 		}
 	}
 
@@ -183,9 +182,20 @@ class BP_Core_Members_Widget extends WP_Widget {
 
 		echo $before_title
 		   . $title
-		   . $after_title; ?>
+		   . $after_title;
 
-		<?php if ( bp_has_members( 'user_id=0&type=' . $instance['member_default'] . '&max=' . $instance['max_members'] . '&populate_extras=1' ) ) : ?>
+		$members_args = array(
+			'user_id'         => 0,
+			'type'            => $instance['member_default'],
+			'per_page'        => $instance['max_members'],
+			'max'             => $instance['max_members'],
+			'populate_extras' => true,
+			'search_terms'    => false,
+		);
+
+		?>
+
+		<?php if ( bp_has_members( $members_args ) ) : ?>
 			<div class="item-options" id="members-list-options">
 				<a href="<?php bp_members_directory_permalink(); ?>" id="newest-members" <?php if ( $instance['member_default'] == 'newest' ) : ?>class="selected"<?php endif; ?>><?php _e( 'Newest', 'buddypress' ) ?></a>
 				|  <a href="<?php bp_members_directory_permalink(); ?>" id="recently-active-members" <?php if ( $instance['member_default'] == 'active' ) : ?>class="selected"<?php endif; ?>><?php _e( 'Active', 'buddypress' ) ?></a>
@@ -328,9 +338,20 @@ class BP_Core_Whos_Online_Widget extends WP_Widget {
 		echo $before_widget;
 		echo $before_title
 		   . $title
-		   . $after_title; ?>
+		   . $after_title;
 
-		<?php if ( bp_has_members( 'user_id=0&type=online&per_page=' . $instance['max_members'] . '&max=' . $instance['max_members'] . '&populate_extras=1' ) ) : ?>
+		$members_args = array(
+			'user_id'         => 0,
+			'type'            => 'online',
+			'per_page'        => $instance['max_members'],
+			'max'             => $instance['max_members'],
+			'populate_extras' => true,
+			'search_terms'    => false,
+		);
+
+		?>
+
+		<?php if ( bp_has_members( $members_args ) ) : ?>
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); ?>
 					<div class="item-avatar">
@@ -420,9 +441,20 @@ class BP_Core_Recently_Active_Widget extends WP_Widget {
 		echo $before_widget;
 		echo $before_title
 		   . $title
-		   . $after_title; ?>
+		   . $after_title;
 
-		<?php if ( bp_has_members( 'user_id=0&type=active&per_page=' . $instance['max_members'] . '&max=' . $instance['max_members'] . '&populate_extras=1' ) ) : ?>
+		$members_args = array(
+			'user_id'         => 0,
+			'type'            => 'active',
+			'per_page'        => $instance['max_members'],
+			'max'             => $instance['max_members'],
+			'populate_extras' => true,
+			'search_terms'    => false,
+		);
+
+		?>
+
+		<?php if ( bp_has_members( $members_args ) ) : ?>
 			<div class="avatar-block">
 				<?php while ( bp_members() ) : bp_the_member(); ?>
 					<div class="item-avatar">
@@ -505,7 +537,16 @@ function bp_core_ajax_widget_members() {
 			break;
 	}
 
-	if ( bp_has_members( 'user_id=0&type=' . $type . '&per_page=' . $_POST['max-members'] . '&max=' . $_POST['max-members'] . '&populate_extras=1' ) ) : ?>
+	$members_args = array(
+		'user_id'         => 0,
+		'type'            => $type,
+		'per_page'        => $_POST['max-members'],
+		'max'             => $_POST['max-members'],
+		'populate_extras' => 1,
+		'search_terms'    => false,
+	);
+
+	if ( bp_has_members( $members_args ) ) : ?>
 		<?php echo '0[[SPLIT]]'; // return valid result. TODO: remove this. ?>
 		<?php while ( bp_members() ) : bp_the_member(); ?>
 			<li class="vcard">

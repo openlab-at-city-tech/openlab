@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @uses apply_filters() To call the 'bp_activity_screen_index' hook.
  */
 function bp_activity_screen_index() {
-	if ( !bp_displayed_user_id() && bp_is_activity_component() && !bp_current_action() ) {
+	if ( bp_is_activity_directory() ) {
 		bp_update_is_directory( true, 'activity' );
 
 		do_action( 'bp_activity_screen_index' );
@@ -381,13 +381,13 @@ class BP_Activity_Theme_Compat {
 	public function directory_dummy_post() {
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => __( 'Sitewide Activity', 'buddypress' ),
+			'post_title'     => bp_get_directory_title( 'activity' ),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
 			'post_type'      => 'bp_activity',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}
@@ -440,7 +440,7 @@ class BP_Activity_Theme_Compat {
 			'post_content'   => '',
 			'post_type'      => 'bp_activity',
 			'post_status'    => 'publish',
-			'is_archive'     => true,
+			'is_page'        => true,
 			'comment_status' => 'closed'
 		) );
 	}

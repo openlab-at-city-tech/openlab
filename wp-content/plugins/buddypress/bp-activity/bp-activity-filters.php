@@ -67,14 +67,14 @@ add_filter( 'bp_get_activity_latest_update',         'make_clickable', 9 );
 add_filter( 'bp_get_activity_latest_update_excerpt', 'make_clickable', 9 );
 add_filter( 'bp_get_activity_feed_item_description', 'make_clickable', 9 );
 
-add_filter( 'bp_acomment_name',                      'stripslashes_deep' );
-add_filter( 'bp_get_activity_action',                'stripslashes_deep' );
-add_filter( 'bp_get_activity_content',               'stripslashes_deep' );
-add_filter( 'bp_get_activity_content_body',          'stripslashes_deep' );
-add_filter( 'bp_get_activity_parent_content',        'stripslashes_deep' );
-add_filter( 'bp_get_activity_latest_update',         'stripslashes_deep' );
-add_filter( 'bp_get_activity_latest_update_excerpt', 'stripslashes_deep' );
-add_filter( 'bp_get_activity_feed_item_description', 'stripslashes_deep' );
+add_filter( 'bp_acomment_name',                      'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_action',                'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_content',               'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_content_body',          'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_parent_content',        'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_latest_update',         'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_latest_update_excerpt', 'stripslashes_deep', 5 );
+add_filter( 'bp_get_activity_feed_item_description', 'stripslashes_deep', 5 );
 
 add_filter( 'bp_activity_primary_link_before_save',  'esc_url_raw' );
 
@@ -182,7 +182,6 @@ function bp_activity_filter_kses( $content ) {
 	$activity_allowedtags['img']           = array();
 	$activity_allowedtags['img']['src']    = array();
 	$activity_allowedtags['img']['alt']    = array();
-	$activity_allowedtags['img']['class']  = array();
 	$activity_allowedtags['img']['width']  = array();
 	$activity_allowedtags['img']['height'] = array();
 	$activity_allowedtags['img']['class']  = array();
@@ -195,12 +194,9 @@ function bp_activity_filter_kses( $content ) {
 }
 
 /**
- * Finds and links @-mentioned users in the contents of a given item.
+ * Find and link @-mentioned users in the contents of a given item.
  *
- * @since BuddyPress (1.2)
- *
- * @uses bp_activity_find_mentions()
- * @uses bp_core_get_user_domain()
+ * @since BuddyPress (1.2.0)
  *
  * @param string $content The contents of a given item.
  * @param int $activity_id The activity id. Deprecated.
@@ -220,9 +216,32 @@ function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
 	if ( empty( $usernames ) )
 		return $content;
 
+	// We don't want to link @mentions that are inside of links, so we
+	// temporarily remove them
+	$replace_count = 0;
+	$replacements = array();
+	foreach ( $usernames as $username ) {
+		// prevent @ name linking inside <a> tags
+		preg_match_all( '/(<a.*?(?!<\/a>)@' . $username . '.*?<\/a>)/', $content, $content_matches );
+		if ( ! empty( $content_matches[1] ) ) {
+			foreach ( $content_matches[1] as $replacement ) {
+				$replacements[ '#BPAN' . $replace_count ] = $replacement;
+				$content = str_replace( $replacement, '#BPAN' . $replace_count, $content );
+				$replace_count++;
+			}
+		}
+	}
+
 	// Linkify the mentions with the username
-	foreach( (array) $usernames as $user_id => $username ) {
+	foreach ( (array) $usernames as $user_id => $username ) {
 		$content = preg_replace( '/(@' . $username . '\b)/', "<a href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $content );
+	}
+
+	// put everything back
+	if ( ! empty( $replacements ) ) {
+		foreach ( $replacements as $placeholder => $original ) {
+			$content = str_replace( $placeholder, $original, $content );
+		}
 	}
 
 	// Return the content
@@ -376,3 +395,179 @@ function bp_activity_truncate_entry( $text ) {
 
 	return apply_filters( 'bp_activity_truncate_entry', $excerpt, $text, $append_text );
 }
+
+/**
+ * Include extra javascript dependencies for activity component.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @uses bp_activity_do_heartbeat() to check if heartbeat is required.
+ *
+ * @param array $js_handles The original dependencies.
+ * @return array $js_handles The new dependencies.
+ */
+function bp_activity_get_js_dependencies( $js_handles = array() ) {
+	if ( bp_activity_do_heartbeat() ) {
+		$js_handles[] = 'heartbeat';
+	}
+
+	return $js_handles;
+}
+add_filter( 'bp_core_get_js_dependencies', 'bp_activity_get_js_dependencies', 10, 1 );
+
+/**
+ * Add a just-posted classes to the most recent activity item.
+ *
+ * We use these classes to avoid pagination issues when items are loaded
+ * dynamically into the activity stream.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $classes
+ * @return string $classes
+ */
+function bp_activity_newest_class( $classes = '' ) {
+	$bp = buddypress();
+
+	if ( ! empty( $bp->activity->last_recorded ) && $bp->activity->last_recorded == bp_get_activity_date_recorded() ) {
+		$classes .= ' new-update';
+	}
+
+	$classes .= ' just-posted';
+	return $classes;
+}
+
+/**
+ * Check if Activity Heartbeat feature i on to add a timestamp class.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $classes
+ * @return string $classes
+ */
+function bp_activity_timestamp_class( $classes = '' ) {
+
+	if ( ! bp_activity_do_heartbeat() ) {
+		return $classes;
+	}
+
+	$activity_date = bp_get_activity_date_recorded();
+
+	if ( empty( $activity_date ) ) {
+		return $classes;
+	}
+	
+	$classes .= ' date-recorded-' . strtotime( $activity_date );
+
+	return $classes;
+}
+add_filter( 'bp_get_activity_css_class', 'bp_activity_timestamp_class', 9, 1 );
+
+/**
+ * Use WordPress Heartbeat API to check for latest activity update.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @uses bp_activity_get_last_updated() to get the recorded date of the last activity
+ *
+ * @param array $response
+ * @param array $data
+ * @return array $response
+ */
+function bp_activity_heartbeat_last_recorded( $response = array(), $data = array() ) {
+	$bp = buddypress();
+
+	if ( empty( $data['bp_activity_last_recorded'] ) ) {
+		return $response;
+	}
+
+	// Use the querystring argument stored in the cookie (to preserve
+	// filters), but force the offset to get only new items
+	$activity_latest_args = bp_parse_args(
+		bp_ajax_querystring( 'activity' ),
+		array( 'since' => date( 'Y-m-d H:i:s', $data['bp_activity_last_recorded'] ) ),
+		'activity_latest_args'
+	);
+
+	$newest_activities = array();
+	$last_activity_recorded = 0;
+
+	// Temporarly add a just-posted class for new activity items
+	add_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
+
+	ob_start();
+	if ( bp_has_activities( $activity_latest_args ) ) {
+		while ( bp_activities() ) {
+			bp_the_activity();
+
+			$atime = strtotime( bp_get_activity_date_recorded() );
+			if ( $last_activity_recorded < $atime ) {
+				$last_activity_recorded = $atime;
+			}
+
+			bp_get_template_part( 'activity/entry' );
+		}
+	}
+
+	$newest_activities['activities']    = ob_get_contents();
+	$newest_activities['last_recorded'] = $last_activity_recorded;
+	ob_end_clean();
+
+	// Remove the temporary filter
+	remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
+
+	if ( ! empty( $newest_activities['last_recorded'] ) ) {
+		$response['bp_activity_newest_activities'] = $newest_activities;
+	}
+
+	return $response;
+}
+add_filter( 'heartbeat_received', 'bp_activity_heartbeat_last_recorded', 10, 2 );
+add_filter( 'heartbeat_nopriv_received', 'bp_activity_heartbeat_last_recorded', 10, 2 );
+
+/**
+ * Set the strings for WP HeartBeat API where needed.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $strings Localized strings.
+ * @return array $strings
+ */
+function bp_activity_heartbeat_strings( $strings = array() ) {
+
+	if ( ! bp_activity_do_heartbeat() ) {
+		return $strings;
+	}
+
+	$global_pulse = 0;
+
+	// Check whether the global heartbeat settings already exist.
+	$heartbeat_settings = apply_filters( 'heartbeat_settings', array() );
+	if ( ! empty( $heartbeat_settings['interval'] ) ) {
+		// 'Fast' is 5
+		$global_pulse = is_numeric( $heartbeat_settings['interval'] ) ? absint( $heartbeat_settings['interval'] ) : 5;
+	}
+
+	// Filter here to specify a BP-specific pulse frequency
+	$bp_activity_pulse = apply_filters( 'bp_activity_heartbeat_pulse', 15 );
+
+	/**
+	 * Use the global pulse value unless:
+	 * a. the BP-specific value has been specifically filtered, or
+	 * b. it doesn't exist (ie, BP will be the only one using the heartbeat,
+	 *    so we're responsible for enabling it)
+	 */
+	if ( has_filter( 'bp_activity_heartbeat_pulse' ) || empty( $global_pulse ) ) {
+		$pulse = $bp_activity_pulse;
+	} else {
+		$pulse = $global_pulse;
+	}
+
+	$strings = array_merge( $strings, array(
+		'newest' => __( 'Load Newest', 'buddypress' ),
+		'pulse'  => absint( $pulse ),
+	) );
+
+	return $strings;
+}
+add_filter( 'bp_core_get_js_strings', 'bp_activity_heartbeat_strings', 10, 1 );

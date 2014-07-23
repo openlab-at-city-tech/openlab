@@ -40,77 +40,104 @@ function bp_groups_has_directory() {
  * @return BP_Groups_Group $group The group object
  */
 function groups_get_group( $args = '' ) {
-	$defaults = array(
-		'group_id'   => false,
-		'load_users' => false
+	$r = wp_parse_args( $args, array(
+		'group_id'          => false,
+		'load_users'        => false,
+		'populate_extras'   => false,
+	) );
+
+	$group_args = array(
+		'populate_extras' => $r['populate_extras'],
 	);
 
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args, EXTR_SKIP );
-
-	$cache_key = 'bp_groups_group_' . $group_id . ( $load_users ? '_load_users' : '_noload_users' );
-
-	if ( !$group = wp_cache_get( $cache_key, 'bp' ) ) {
-		$group = new BP_Groups_Group( $group_id, true, $load_users );
-		wp_cache_set( $cache_key, $group, 'bp' );
-	}
+	$group = new BP_Groups_Group( $r['group_id'], $group_args );
 
 	return apply_filters( 'groups_get_group', $group );
 }
 
 /*** Group Creation, Editing & Deletion *****************************************/
 
+/**
+ * Create a group.
+ *
+ * @since BuddyPress (1.0.0)
+ *
+ * @param array $args {
+ *     An array of arguments.
+ *     @type int|bool $group_id Pass a group ID to update an existing item, or
+ *           0 / false to create a new group. Default: 0.
+ *     @type int $creator_id The user ID that creates the group.
+ *     @type string $name The group name.
+ *     @type string $description Optional. The group's description.
+ *     @type string $slug The group slug.
+ *     @type string $status The group's status. Accepts 'public', 'private' or
+             'hidden'. Defaults to 'public'.
+ *     @type int $enable_forum Optional. Whether the group has a forum enabled.
+ *           If the legacy forums are enabled for this group or if a bbPress
+ *           forum is enabled for the group, set this to 1. Default: 0.
+ *     @type string $date_created The GMT time, in Y-m-d h:i:s format,
+ *           when the group was created. Defaults to the current time.
+ * }
+ * @return int|bool The ID of the group on success. False on error.
+ */
 function groups_create_group( $args = '' ) {
 
-	extract( $args );
+	$defaults = array(
+		'group_id'     => 0,
+		'creator_id'   => 0,
+		'name'         => '',
+		'description'  => '',
+		'slug'         => '',
+		'status'       => 'public',
+		'enable_forum' => 0,
+		'date_created' => bp_core_current_time()
+	);
 
-	/**
-	 * Possible parameters (pass as assoc array):
-	 *	'group_id'
-	 *	'creator_id'
-	 *	'name'
-	 *	'description'
-	 *	'slug'
-	 *	'status'
-	 *	'enable_forum'
-	 *	'date_created'
-	 */
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args, EXTR_SKIP );
 
-	if ( !empty( $group_id ) )
-		$group = groups_get_group( array( 'group_id' => $group_id ) );
-	else
-		$group = new BP_Groups_Group;
+	// Pass an existing group ID
+	if ( ! empty( $group_id ) ) {
+		$group = groups_get_group( array( 'group_id' => (int) $group_id ) );
+		$name  = ! empty( $name ) ? $name : $group->name;
+		$slug  = ! empty( $slug ) ? $slug : $group->slug;
+		$description = ! empty( $description ) ? $description : $group->description;
 
-	if ( !empty( $creator_id ) )
-		$group->creator_id = $creator_id;
-	else
-		$group->creator_id = bp_loggedin_user_id();
-
-	if ( isset( $name ) )
-		$group->name = $name;
-
-	if ( isset( $description ) )
-		$group->description = $description;
-
-	if ( isset( $slug ) && groups_check_slug( $slug ) )
-		$group->slug = $slug;
-
-	if ( isset( $status ) ) {
-		if ( groups_is_valid_status( $status ) ) {
-			$group->status = $status;
+		// Groups need at least a name
+		if ( empty( $name ) ) {
+			return false;
 		}
+
+	// Create a new group
+	} else {
+		// Instantiate new group object
+		$group = new BP_Groups_Group;
 	}
 
-	if ( isset( $enable_forum ) )
-		$group->enable_forum = $enable_forum;
-	else if ( empty( $group_id ) && !isset( $enable_forum ) )
-		$group->enable_forum = 1;
+	// Set creator ID
+	if ( ! empty( $creator_id ) ) {
+		$group->creator_id = (int) $creator_id;
+	} else {
+		$group->creator_id = bp_loggedin_user_id();
+	}
 
-	if ( isset( $date_created ) )
-		$group->date_created = $date_created;
-
-	if ( !$group->save() )
+	// Validate status
+	if ( ! groups_is_valid_status( $status ) ) {
 		return false;
+	}
+
+	// Set group name
+	$group->name         = $name;
+	$group->description  = $description;
+	$group->slug         = $slug;
+	$group->status       = $status;
+	$group->enable_forum = (int) $enable_forum;
+	$group->date_created = $date_created;
+
+	// Save group
+	if ( ! $group->save() ) {
+		return false;
+	}
 
 	// If this is a new group, set up the creator as the first member and admin
 	if ( empty( $group_id ) ) {
@@ -332,10 +359,9 @@ function groups_join_group( $group_id, $user_id = 0 ) {
 
 	// Record this in activity streams
 	groups_record_activity( array(
-		'action'  => apply_filters( 'groups_activity_joined_group', sprintf( __( '%1$s joined the group %2$s', 'buddypress'), bp_core_get_userlink( $user_id ), '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( bp_get_group_name( $group ) ) . '</a>' ) ),
 		'type'    => 'joined_group',
 		'item_id' => $group_id,
-		'user_id' => $user_id
+		'user_id' => $user_id,
 	) );
 
 	// Modify group meta
@@ -357,7 +383,7 @@ function groups_get_group_mods( $group_id ) {
 }
 
 /**
- * Fetch the members of a group
+ * Fetch the members of a group.
  *
  * Since BuddyPress 1.8, a procedural wrapper for BP_Group_Member_Query.
  * Previously called BP_Groups_Member::get_all_for_group().
@@ -365,47 +391,91 @@ function groups_get_group_mods( $group_id ) {
  * To use the legacy query, filter 'bp_use_legacy_group_member_query',
  * returning true.
  *
- * @param int $group_id
- * @param int $limit Maximum members to return
- * @param int $page The page of results to return (requires $limit)
- * @param bool $exclude_admins_mods Whether to exclude admins and mods
- * @param bool $exclude_banned Whether to exclude banned users
- * @param array|string $exclude Array or comma-sep list of users to exclude
- * @return array Multi-d array of 'members' list and 'count'
+ * @param array $args {
+ *     An array of optional arguments.
+ *     @type int $group_id ID of the group whose members are being queried.
+ *           Default: current group ID.
+ *     @type int $page Page of results to be queried. Default: 1.
+ *     @type int $per_page Number of items to return per page of results.
+ *           Default: 20.
+ *     @type int $max Optional. Max number of items to return.
+ *     @type array $exclude Optional. Array of user IDs to exclude.
+ *     @type bool|int True (or 1) to exclude admins and mods from results.
+ *           Default: 1.
+ *     @type bool|int True (or 1) to exclude banned users from results.
+ *           Default: 1.
+ *     @type array $group_role Optional. Array of group roles to include.
+ *     @type string $search_terms Optional. Filter results by a search string.
+ *     @type string $type Optional. Sort the order of results. 'last_joined',
+ *           'first_joined', or any of the $type params available in
+ *           {@link BP_User_Query}. Default: 'last_joined'.
+ * }
+ * @return array Multi-d array of 'members' list and 'count'.
  */
-function groups_get_group_members( $group_id, $limit = false, $page = false, $exclude_admins_mods = true, $exclude_banned = true, $exclude = false, $group_role = false ) {
+function groups_get_group_members( $args = array() ) {
+
+	// Backward compatibility with old method of passing arguments
+	if ( ! is_array( $args ) || func_num_args() > 1 ) {
+		_deprecated_argument( __METHOD__, '2.0.0', sprintf( __( 'Arguments passed to %1$s should be in an associative array. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
+
+		$old_args_keys = array(
+			0 => 'group_id',
+			1 => 'per_page',
+			2 => 'page',
+			3 => 'exclude_admins_mods',
+			4 => 'exclude_banned',
+			5 => 'exclude',
+			6 => 'group_role',
+		);
+
+		$func_args = func_get_args();
+		$args      = bp_core_parse_args_array( $old_args_keys, $func_args );
+	}
+
+	$r = wp_parse_args( $args, array(
+		'group_id'            => bp_get_current_group_id(),
+		'per_page'            => false,
+		'page'                => false,
+		'exclude_admins_mods' => true,
+		'exclude_banned'      => true,
+		'exclude'             => false,
+		'group_role'          => array(),
+		'search_terms'        => false,
+		'type'                => 'last_joined',
+	) );
 
 	// For legacy users. Use of BP_Groups_Member::get_all_for_group()
 	// is deprecated. func_get_args() can't be passed to a function in PHP
 	// 5.2.x, so we create a variable
 	$func_args = func_get_args();
 	if ( apply_filters( 'bp_use_legacy_group_member_query', false, __FUNCTION__, $func_args ) ) {
-		$retval = BP_Groups_Member::get_all_for_group( $group_id, $limit, $page, $exclude_admins_mods, $exclude_banned, $exclude );
+		$retval = BP_Groups_Member::get_all_for_group( $r['group_id'], $r['per_page'], $r['page'], $r['exclude_admins_mods'], $r['exclude_banned'], $r['exclude'] );
 	} else {
 
 		// exclude_admins_mods and exclude_banned are legacy arguments.
 		// Convert to group_role
-		if ( empty( $group_role ) ) {
-			$group_role = array( 'member' );
+		if ( empty( $r['group_role'] ) ) {
+			$r['group_role'] = array( 'member' );
 
-			if ( ! $exclude_admins_mods ) {
-				$group_role[] = 'mod';
-				$group_role[] = 'admin';
+			if ( ! $r['exclude_admins_mods'] ) {
+				$r['group_role'][] = 'mod';
+				$r['group_role'][] = 'admin';
 			}
 
-			if ( ! $exclude_banned ) {
-				$group_role[] = 'banned';
+			if ( ! $r['exclude_banned'] ) {
+				$r['group_role'][] = 'banned';
 			}
 		}
 
 		// Perform the group member query (extends BP_User_Query)
 		$members = new BP_Group_Member_Query( array(
-			'group_id'       => $group_id,
-			'per_page'       => $limit,
-			'page'           => $page,
-			'group_role'     => $group_role,
-			'exclude'        => $exclude,
-			'type'           => 'last_modified',
+			'group_id'       => $r['group_id'],
+			'per_page'       => $r['per_page'],
+			'page'           => $r['page'],
+			'group_role'     => $r['group_role'],
+			'exclude'        => $r['exclude'],
+			'search_terms'   => $r['search_terms'],
+			'type'           => $r['type'],
 		) );
 
 		// Structure the return value as expected by the template functions
@@ -435,35 +505,37 @@ function groups_get_total_member_count( $group_id ) {
 function groups_get_groups( $args = '' ) {
 
 	$defaults = array(
-		'type'            => false,    // active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts
-		'order'           => 'DESC',   // 'ASC' or 'DESC'
-		'orderby'         => 'date_created', // date_created, last_activity, total_member_count, name, random
-		'user_id'         => false,    // Pass a user_id to limit to only groups that this user is a member of
-		'include'         => false,    // Only include these specific groups (group_ids)
-		'exclude'         => false,    // Do not include these specific groups (group_ids)
-		'search_terms'    => false,    // Limit to groups that match these search terms
-		'meta_query'      => false,    // Filter by groupmeta. See WP_Meta_Query for syntax
-		'show_hidden'     => false,    // Show hidden groups to non-admins
-		'per_page'        => 20,       // The number of results to return per page
-		'page'            => 1,        // The page to return if limiting per page
-		'populate_extras' => true,     // Fetch meta such as is_banned and is_member
+		'type'              => false,    // active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts
+		'order'             => 'DESC',   // 'ASC' or 'DESC'
+		'orderby'           => 'date_created', // date_created, last_activity, total_member_count, name, random
+		'user_id'           => false,    // Pass a user_id to limit to only groups that this user is a member of
+		'include'           => false,    // Only include these specific groups (group_ids)
+		'exclude'           => false,    // Do not include these specific groups (group_ids)
+		'search_terms'      => false,    // Limit to groups that match these search terms
+		'meta_query'        => false,    // Filter by groupmeta. See WP_Meta_Query for syntax
+		'show_hidden'       => false,    // Show hidden groups to non-admins
+		'per_page'          => 20,       // The number of results to return per page
+		'page'              => 1,        // The page to return if limiting per page
+		'populate_extras'   => true,     // Fetch meta such as is_banned and is_member
+		'update_meta_cache' => true,   // Pre-fetch groupmeta for queried groups
 	);
 
 	$r = wp_parse_args( $args, $defaults );
 
 	$groups = BP_Groups_Group::get( array(
-		'type'            => $r['type'],
-		'user_id'         => $r['user_id'],
-		'include'         => $r['include'],
-		'exclude'         => $r['exclude'],
-		'search_terms'    => $r['search_terms'],
-		'meta_query'      => $r['meta_query'],
-		'show_hidden'     => $r['show_hidden'],
-		'per_page'        => $r['per_page'],
-		'page'            => $r['page'],
-		'populate_extras' => $r['populate_extras'],
-		'order'           => $r['order'],
-		'orderby'         => $r['orderby'],
+		'type'              => $r['type'],
+		'user_id'           => $r['user_id'],
+		'include'           => $r['include'],
+		'exclude'           => $r['exclude'],
+		'search_terms'      => $r['search_terms'],
+		'meta_query'        => $r['meta_query'],
+		'show_hidden'       => $r['show_hidden'],
+		'per_page'          => $r['per_page'],
+		'page'              => $r['page'],
+		'populate_extras'   => $r['populate_extras'],
+		'update_meta_cache' => $r['update_meta_cache'],
+		'order'             => $r['order'],
+		'orderby'           => $r['orderby'],
 	) );
 
 	return apply_filters_ref_array( 'groups_get_groups', array( &$groups, &$r ) );
@@ -618,6 +690,22 @@ function groups_get_invites_for_user( $user_id = 0, $limit = false, $page = fals
 		$user_id = bp_loggedin_user_id();
 
 	return BP_Groups_Member::get_invites( $user_id, $limit, $page, $exclude );
+}
+
+/**
+ * Gets the total group invite count for a user.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $user_id The user ID
+ * @return int
+ */
+function groups_get_invite_count_for_user( $user_id = 0 ) {
+	if ( empty( $user_id ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	return BP_Groups_Member::get_invite_count_for_user( $user_id );
 }
 
 function groups_invite_user( $args = '' ) {
@@ -956,94 +1044,103 @@ function groups_accept_all_pending_membership_requests( $group_id ) {
 
 /*** Group Meta ****************************************************/
 
-function groups_delete_groupmeta( $group_id, $meta_key = false, $meta_value = false ) {
-	global $wpdb, $bp;
+/**
+ * Delete metadata for a group.
+ *
+ * @param int $group_id ID of the group.
+ * @param string $meta_key The key of the row to delete.
+ * @param string $meta_value Optional. Metadata value. If specified, only delete
+ *        metadata entries with this value.
+ * @param bool $delete_all Optional. If true, delete matching metadata entries
+ *        for all groups. Default: false.
+ * @param bool $delete_all Optional. If true, delete matching metadata entries
+ * 	  for all objects, ignoring the specified group_id. Otherwise, only
+ * 	  delete matching metadata entries for the specified group.
+ * 	  Default: false.
+ * @return bool True on success, false on failure.
+ */
+function groups_delete_groupmeta( $group_id, $meta_key = false, $meta_value = false, $delete_all = false ) {
+	global $wpdb;
 
-	if ( !is_numeric( $group_id ) )
-		return false;
+	// Legacy - if no meta_key is passed, delete all for the item
+	if ( empty( $meta_key ) ) {
+		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$wpdb->groupmeta} WHERE group_id = %d", $group_id ) );
 
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-	if ( is_array( $meta_value ) || is_object( $meta_value ) )
-		$meta_value = serialize($meta_value);
-
-	$meta_value = trim( $meta_value );
-
-	if ( !$meta_key )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d", $group_id ) );
-	else if ( $meta_value )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s AND meta_value = %s", $group_id, $meta_key, $meta_value ) );
-	else
-		$wpdb->query( $wpdb->prepare( "DELETE FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s", $group_id, $meta_key ) );
-
-	// Delete the cached object
-	wp_cache_delete( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, 'bp' );
-
-	return true;
-}
-
-function groups_get_groupmeta( $group_id, $meta_key = '') {
-	global $wpdb, $bp;
-
-	$group_id = (int) $group_id;
-
-	if ( !$group_id )
-		return false;
-
-	if ( !empty($meta_key) ) {
-		$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-		$metas = wp_cache_get( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, 'bp' );
-		if ( false === $metas ) {
-			$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s", $group_id, $meta_key ) );
-			wp_cache_set( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, $metas, 'bp' );
-		}
+		// With no meta_key, ignore $delete_all
+		$delete_all = false;
 	} else {
-		$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d", $group_id ) );
+		$keys = array( $meta_key );
 	}
 
-	if ( empty( $metas ) ) {
-		if ( empty( $meta_key ) )
-			return array();
-		else
-			return '';
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'group', $group_id, $key, $meta_value, $delete_all );
 	}
 
-	$metas = array_map( 'maybe_unserialize', (array) $metas );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( 1 == count( $metas ) )
-		return $metas[0];
-	else
-		return $metas;
+	return $retval;
 }
 
-function groups_update_groupmeta( $group_id, $meta_key, $meta_value ) {
-	global $wpdb, $bp;
+/**
+ * Get a piece of group metadata.
+ *
+ * @param int $group_id ID of the group.
+ * @param string $meta_key Metadata key.
+ * @param bool $single Optional. If true, return only the first value of the
+ *        specified meta_key. This parameter has no effect if meta_key is
+ *        empty.
+ * @return mixed Metadata value.
+ */
+function groups_get_groupmeta( $group_id, $meta_key = '', $single = true ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = get_metadata( 'group', $group_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( !is_numeric( $group_id ) )
-		return false;
+	return $retval;
+}
 
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
+/**
+ * Update a piece of group metadata.
+ *
+ * @param int $group_id ID of the group.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Value to store.
+ * @param mixed $prev_value Optional. If specified, only update existing
+ *        metadata entries with the specified value. Otherwise, update all
+ *        entries.
+ * @return bool|int Returns false on failure. On successful update of existing
+ *         metadata, returns true. On successful creation of new metadata,
+ *         returns the integer ID of the new metadata row.
+ */
+function groups_update_groupmeta( $group_id, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = update_metadata( 'group', $group_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( is_string( $meta_value ) ) {
-		$meta_value = stripslashes( $meta_value );
-	}
+	return $retval;
+}
 
-	$meta_value = maybe_serialize( $meta_value );
+/**
+ * Add a piece of group metadata.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $group_id ID of the group.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Metadata value.
+ * @param bool $unique. Optional. Whether to enforce a single metadata value
+ *        for the given key. If true, and the object already has a value for
+ *        the key, no change will be made. Default: false.
+ * @return int|bool The meta ID on successful update, false on failure.
+ */
+function groups_add_groupmeta( $group_id, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = add_metadata( 'group', $group_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $bp->groups->table_name_groupmeta . " WHERE group_id = %d AND meta_key = %s", $group_id, $meta_key ) );
-
-	if ( !$cur )
-		$wpdb->query( $wpdb->prepare( "INSERT INTO " . $bp->groups->table_name_groupmeta . " ( group_id, meta_key, meta_value ) VALUES ( %d, %s, %s )", $group_id, $meta_key, $meta_value ) );
-	else if ( $cur->meta_value != $meta_value )
-		$wpdb->query( $wpdb->prepare( "UPDATE " . $bp->groups->table_name_groupmeta . " SET meta_value = %s WHERE group_id = %d AND meta_key = %s", $meta_value, $group_id, $meta_key ) );
-	else
-		return false;
-
-	// Update the cached object and recache
-	wp_cache_set( 'bp_groups_groupmeta_' . $group_id . '_' . $meta_key, $meta_value, 'bp' );
-
-	return true;
+	return $retval;
 }
 
 /*** Group Cleanup Functions ****************************************************/

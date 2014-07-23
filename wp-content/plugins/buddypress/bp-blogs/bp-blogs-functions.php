@@ -34,26 +34,30 @@ function bp_blogs_has_directory() {
  *     information about the arguments, see {@link BP_Blogs_Blog::get()}.
  *     @type string $type Default: 'active'.
  *     @type int|bool $user_id Default: false.
+ *     @type array $include_blog_ids Default: false.
  *     @type string|bool $search_terms Default: false.
  *     @type int $per_page Default: 20.
  *     @type int $page Default: 1.
+ *     @type bool $update_meta_cache Whether to pre-fetch blogmeta. Default: true.
  * }
  * @return array See {@link BP_Blogs_Blog::get()}.
  */
 function bp_blogs_get_blogs( $args = '' ) {
 
 	$defaults = array(
-		'type'         => 'active', // active, alphabetical, newest, or random
-		'user_id'      => false,    // Pass a user_id to limit to only blogs that this user has privilages higher than subscriber on
-		'search_terms' => false,    // Limit to blogs that match these search terms
-		'per_page'     => 20,       // The number of results to return per page
-		'page'         => 1,        // The page to return if limiting per page
+		'type'              => 'active', // active, alphabetical, newest, or random
+		'user_id'           => false,    // Pass a user_id to limit to only blogs that this user has privilages higher than subscriber on
+		'include_blog_ids'  => false,
+		'search_terms'      => false,    // Limit to blogs that match these search terms
+		'per_page'          => 20,       // The number of results to return per page
+		'page'              => 1,        // The page to return if limiting per page
+		'update_meta_cache' => true,
 	);
 
 	$params = wp_parse_args( $args, $defaults );
 	extract( $params, EXTR_SKIP );
 
-	return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
+	return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms, $update_meta_cache, $include_blog_ids ), $params );
 }
 
 /**
@@ -68,7 +72,7 @@ function bp_blogs_record_existing_blogs() {
 	global $bp, $wpdb;
 
 	// Truncate user blogs table and re-record.
-	$wpdb->query( "TRUNCATE TABLE {$bp->blogs->table_name}" );
+	$wpdb->query( "DELETE FROM {$bp->blogs->table_name} WHERE 1=1" );
 
 	if ( is_multisite() ) {
 		$blog_ids = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM {$wpdb->base_prefix}blogs WHERE mature = 0 AND spam = 0 AND deleted = 0 AND site_id = %d", $wpdb->siteid ) );
@@ -178,11 +182,24 @@ function bp_blogs_record_blog( $blog_id, $user_id, $no_activity = false ) {
 	if ( !bp_blogs_is_blog_recordable( $blog_id, $user_id ) )
 		return false;
 
-	$name        = get_blog_option( $blog_id, 'blogname' );
-	$description = get_blog_option( $blog_id, 'blogdescription' );
+	$name = get_blog_option( $blog_id, 'blogname' );
 
-	if ( empty( $name ) )
+	if ( empty( $name ) ) {
 		return false;
+	}
+
+	$url             = get_home_url( $blog_id );
+	$description     = get_blog_option( $blog_id, 'blogdescription' );
+	$close_old_posts = get_blog_option( $blog_id, 'close_comments_for_old_posts' );
+	$close_days_old  = get_blog_option( $blog_id, 'close_comments_days_old' );
+
+	$thread_depth = get_blog_option( $blog_id, 'thread_comments' );
+	if ( ! empty( $thread_depth ) ) {
+		$thread_depth = get_blog_option( $blog_id, 'thread_comments_depth' );
+	} else {
+		// perhaps filter this?
+		$thread_depth = 1;
+	}
 
 	$recorded_blog          = new BP_Blogs_Blog;
 	$recorded_blog->user_id = $user_id;
@@ -190,9 +207,13 @@ function bp_blogs_record_blog( $blog_id, $user_id, $no_activity = false ) {
 	$recorded_blog_id       = $recorded_blog->save();
 	$is_recorded            = !empty( $recorded_blog_id ) ? true : false;
 
+	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'url', $url );
 	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'name', $name );
 	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'description', $description );
 	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'last_activity', bp_core_current_time() );
+	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'close_comments_for_old_posts', $close_old_posts );
+	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'close_comments_days_old', $close_days_old );
+	bp_blogs_update_blogmeta( $recorded_blog->blog_id, 'thread_comments_depth', $thread_depth );
 
 	$is_private = !empty( $_POST['blog_public'] ) && (int) $_POST['blog_public'] ? false : true;
 	$is_private = !apply_filters( 'bp_is_new_blog_public', !$is_private );
@@ -203,8 +224,7 @@ function bp_blogs_record_blog( $blog_id, $user_id, $no_activity = false ) {
 		// Record this in activity streams
 		bp_blogs_record_activity( array(
 			'user_id'      => $recorded_blog->user_id,
-			'action'       => apply_filters( 'bp_blogs_activity_created_blog_action', sprintf( __( '%s created the site %s', 'buddypress'), bp_core_get_userlink( $recorded_blog->user_id ), '<a href="' . get_home_url( $recorded_blog->blog_id ) . '">' . esc_attr( $name ) . '</a>' ), $recorded_blog, $name, $description ),
-			'primary_link' => apply_filters( 'bp_blogs_activity_created_blog_primary_link', get_home_url( $recorded_blog->blog_id ), $recorded_blog->blog_id ),
+			'primary_link' => apply_filters( 'bp_blogs_activity_created_blog_primary_link', $url, $recorded_blog->blog_id ),
 			'type'         => 'new_blog',
 			'item_id'      => $recorded_blog->blog_id
 		) );
@@ -247,6 +267,88 @@ function bp_blogs_update_option_blogdescription( $oldvalue, $newvalue ) {
 add_action( 'update_option_blogdescription', 'bp_blogs_update_option_blogdescription', 10, 2 );
 
 /**
+ * Update "Close comments for old posts" option in BuddyPress blogmeta table.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @global object $wpdb DB Layer.
+ *
+ * @param string $oldvalue Value before save. Passed by do_action() but
+ *        unused here.
+ * @param string $newvalue Value to change meta to.
+ */
+function bp_blogs_update_option_close_comments_for_old_posts( $oldvalue, $newvalue ) {
+	global $wpdb;
+
+	bp_blogs_update_blogmeta( $wpdb->blogid, 'close_comments_for_old_posts', $newvalue );
+}
+add_action( 'update_option_close_comments_for_old_posts', 'bp_blogs_update_option_close_comments_for_old_posts', 10, 2 );
+
+/**
+ * Update "Close comments after days old" option in BuddyPress blogmeta table.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @global object $wpdb DB Layer.
+ *
+ * @param string $oldvalue Value before save. Passed by do_action() but
+ *        unused here.
+ * @param string $newvalue Value to change meta to.
+ */
+function bp_blogs_update_option_close_close_comments_days_old( $oldvalue, $newvalue ) {
+	global $wpdb;
+
+	bp_blogs_update_blogmeta( $wpdb->blogid, 'close_comments_days_old', $newvalue );
+}
+add_action( 'update_option_close_comments_days_old', 'bp_blogs_update_option_close_comments_days_old', 10, 2 );
+
+/**
+ * When toggling threaded comments, update thread depth in blogmeta table.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @global object $wpdb DB Layer.
+ *
+ * @param string $oldvalue Value before save. Passed by do_action() but
+ *        unused here.
+ * @param string $newvalue Value to change meta to.
+ */
+function bp_blogs_update_option_thread_comments( $oldvalue, $newvalue ) {
+	global $wpdb;
+
+	if ( empty( $newvalue ) ) {
+		$thread_depth = 1;
+	} else {
+		$thread_depth = get_option( 'thread_comments_depth' );
+	}
+
+	bp_blogs_update_blogmeta( $wpdb->blogid, 'thread_comments_depth', $thread_depth );
+}
+add_action( 'update_option_thread_comments', 'bp_blogs_update_option_thread_comments', 10, 2 );
+
+/**
+ * When updating comment depth, update thread depth in blogmeta table.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @global object $wpdb DB Layer.
+ *
+ * @param string $oldvalue Value before save. Passed by do_action() but
+ *        unused here.
+ * @param string $newvalue Value to change meta to.
+ */
+function bp_blogs_update_option_thread_comments_depth( $oldvalue, $newvalue ) {
+	global $wpdb;
+
+	$comments_enabled = get_option( 'thread_comments' );
+
+	if (  $comments_enabled ) {
+		bp_blogs_update_blogmeta( $wpdb->blogid, 'thread_comments_depth', $newvalue );
+	}
+}
+add_action( 'update_option_thread_comments_depth', 'bp_blogs_update_option_thread_comments_depth', 10, 2 );
+
+/**
  * Detect a change in post status, and initiate an activity update if necessary.
  *
  * Posts get new activity updates when (a) they are being published, and (b)
@@ -255,27 +357,46 @@ add_action( 'update_option_blogdescription', 'bp_blogs_update_option_blogdescrip
  *
  * See #4090, #3746, #2546 for background.
  *
- * @since BuddyPress (1.9.0)
+ * @since BuddyPress (2.0.0)
+ *
+ * @todo Support untrashing better
  *
  * @param string $new_status New status for the post.
  * @param string $old_status Old status for the post.
  * @param object $post Post data.
  */
-function bp_blogs_catch_published_post( $new_status, $old_status, $post ) {
+function bp_blogs_catch_transition_post_status( $new_status, $old_status, $post ) {
 
-	// Only record published posts
-	if ( 'publish' !== $new_status ) {
-		return;
+	// This is an edit
+	if ( $new_status === $old_status ) {
+		if ( $new_status == 'publish' ) {
+			bp_blogs_update_post( $post );
+			return;
+		}
 	}
 
-	// Don't record edits (publish -> publish)
-	if ( 'publish' === $old_status ) {
-		return;
-	}
+	// Publishing a previously unpublished post
+	if ( 'publish' === $new_status ) {
+		// Untrashing the post
+		// Nothing here yet
+		if ( 'trash' == $old_status ) {}
 
-	return bp_blogs_record_post( $post->ID, $post );
+		// Record the post
+		bp_blogs_record_post( $post->ID, $post );
+
+	// Unpublishing a previously published post
+	} else if ( 'publish' === $old_status ) {
+		// Some form of pending status
+		// Only remove the activity entry
+		bp_blogs_delete_activity( array(
+			'item_id'           => get_current_blog_id(),
+			'secondary_item_id' => $post->ID,
+			'component'         => buddypress()->blogs->id,
+			'type'              => 'new_blog_post'
+		) );
+	}
 }
-add_action( 'transition_post_status', 'bp_blogs_catch_published_post', 10, 3 );
+add_action( 'transition_post_status', 'bp_blogs_catch_transition_post_status', 10, 3 );
 
 /**
  * Record a new blog post in the BuddyPress activity stream.
@@ -351,7 +472,6 @@ function bp_blogs_record_post( $post_id, $post, $user_id = 0 ) {
 
 			bp_blogs_record_activity( array(
 				'user_id'           => (int) $post->post_author,
-				'action'            => apply_filters( 'bp_blogs_activity_new_post_action',       $activity_action,  $post, $post_permalink ),
 				'content'           => apply_filters( 'bp_blogs_activity_new_post_content',      $activity_content, $post, $post_permalink ),
 				'primary_link'      => apply_filters( 'bp_blogs_activity_new_post_primary_link', $post_permalink,   $post_id               ),
 				'type'              => 'new_blog_post',
@@ -371,6 +491,45 @@ function bp_blogs_record_post( $post_id, $post, $user_id = 0 ) {
 }
 
 /**
+ * Updates a blog post's corresponding activity entry during a post edit.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @see bp_blogs_catch_transition_post_status()
+ *
+ * @param WP_Post $post
+ */
+function bp_blogs_update_post( $post ) {
+	if ( ! bp_is_active( 'activity' ) ) {
+		return;
+	}
+
+	$activity_id = bp_activity_get_activity_id( array(
+		'component'         => buddypress()->blogs->id,
+		'item_id'           => get_current_blog_id(),
+		'secondary_item_id' => $post->ID,
+		'type'              => 'new_blog_post',
+	 ) );
+
+	// activity ID doesn't exist, so stop!
+	if ( empty( $activity_id ) ) {
+		return;
+	}
+
+	// update the activity entry
+	$activity = new BP_Activity_Activity( $activity_id );
+	$activity->content = $post->post_content;
+	$activity->save();
+
+	// add post comment status to activity meta if closed
+	if( 'closed' == $post->comment_status ) {
+		bp_activity_update_meta( $activity_id, 'post_comment_status', $post->comment_status );
+	} else {
+		bp_activity_delete_meta( $activity_id, 'post_comment_status' );
+	}
+}
+
+/**
  * Record a new blog comment in the BuddyPress activity stream.
  *
  * Only posts the item if blog is public and post is not password-protected.
@@ -381,6 +540,11 @@ function bp_blogs_record_post( $post_id, $post, $user_id = 0 ) {
  * @return bool|object Returns false on failure, the comment object on success.
  */
 function bp_blogs_record_comment( $comment_id, $is_approved = true ) {
+	// bail if activity component is not active
+	if ( ! bp_is_active( 'activity' ) ) {
+		return;
+	}
+
 	// Get the users comment
 	$recorded_comment = get_comment( $comment_id );
 
@@ -435,25 +599,95 @@ function bp_blogs_record_comment( $comment_id, $is_approved = true ) {
 		$post_permalink = get_permalink( $recorded_comment->comment_post_ID );
 		$comment_link   = get_comment_link( $recorded_comment->comment_ID );
 
-		// Prepare to record in activity streams
-		if ( is_multisite() )
-			$activity_action = sprintf( __( '%1$s commented on the post, %2$s, on the site %3$s', 'buddypress' ), bp_core_get_userlink( $user_id ), '<a href="' . $post_permalink . '">' . apply_filters( 'the_title', $recorded_comment->post->post_title ) . '</a>', '<a href="' . get_blog_option( $blog_id, 'home' ) . '">' . get_blog_option( $blog_id, 'blogname' ) . '</a>' );
-		else
-			$activity_action = sprintf( __( '%1$s commented on the post, %2$s', 'buddypress' ), bp_core_get_userlink( $user_id ), '<a href="' . $post_permalink . '">' . apply_filters( 'the_title', $recorded_comment->post->post_title ) . '</a>' );
+		// Setup activity args
+		$args = array();
 
-		$activity_content	= $recorded_comment->comment_content;
+		$args['user_id']       = $user_id;
+		$args['content']       = apply_filters_ref_array( 'bp_blogs_activity_new_comment_content', array( $recorded_comment->comment_content, &$recorded_comment, $comment_link ) );
+		$args['primary_link']  = apply_filters_ref_array( 'bp_blogs_activity_new_comment_primary_link', array( $comment_link,     &$recorded_comment ) );
+		$args['recorded_time'] = $recorded_comment->comment_date_gmt;
 
-		// Record in activity streams
-		bp_blogs_record_activity( array(
-			'user_id'           => $user_id,
-			'action'            => apply_filters_ref_array( 'bp_blogs_activity_new_comment_action',       array( $activity_action,  &$recorded_comment, $comment_link ) ),
-			'content'           => apply_filters_ref_array( 'bp_blogs_activity_new_comment_content',      array( $activity_content, &$recorded_comment, $comment_link ) ),
-			'primary_link'      => apply_filters_ref_array( 'bp_blogs_activity_new_comment_primary_link', array( $comment_link,     &$recorded_comment                ) ),
-			'type'              => 'new_blog_comment',
-			'item_id'           => $blog_id,
-			'secondary_item_id' => $comment_id,
-			'recorded_time'     => $recorded_comment->comment_date_gmt
-		) );
+		// Setup some different activity args depending if activity commenting is
+		// enabled or not
+
+		// if cannot comment, record separate activity entry
+		// this is the old way of doing things
+		if ( bp_disable_blogforum_comments() ) {
+			$args['type']              = 'new_blog_comment';
+			$args['item_id']           = $blog_id;
+			$args['secondary_item_id'] = $comment_id;
+
+			// record the activity entry
+			bp_blogs_record_activity( $args );
+
+		// record comment as BP activity comment under the parent 'new_blog_post'
+		// activity item
+		} else {
+			// this is a comment edit
+			// check to see if corresponding activity entry already exists
+			if ( ! empty( $_REQUEST['action'] ) ) {
+				$existing_activity_id = get_comment_meta( $comment_id, 'bp_activity_comment_id', true );
+
+				if ( ! empty( $existing_activity_id ) ) {
+					$args['id'] = $existing_activity_id;
+				}
+			}
+
+			// find the parent 'new_blog_post' activity entry
+			$parent_activity_id = bp_activity_get_activity_id( array(
+				'component'         => 'blogs',
+				'type'              => 'new_blog_post',
+				'item_id'           => $blog_id,
+				'secondary_item_id' => $recorded_comment->comment_post_ID
+			) );
+
+			// we found the parent activity entry
+			// so let's go ahead and reconfigure some activity args
+			if ( ! empty( $parent_activity_id ) ) {
+				// set the 'item_id' with the parent activity entry ID
+				$args['item_id'] = $parent_activity_id;
+
+				// now see if the WP parent comment has a BP activity ID
+				$comment_parent = 0;
+				if ( ! empty( $recorded_comment->comment_parent ) ) {
+					$comment_parent = get_comment_meta( $recorded_comment->comment_parent, 'bp_activity_comment_id', true );
+				}
+
+				// WP parent comment does not have a BP activity ID
+				// so set to 'new_blog_post' activity ID
+				if ( empty( $comment_parent ) ) {
+					$comment_parent = $parent_activity_id;
+				}
+
+				$args['secondary_item_id'] = $comment_parent;
+				$args['component']         = 'activity';
+				$args['type']              = 'activity_comment';
+
+			// could not find corresponding parent activity entry
+			// so wipe out $args array
+			} else {
+				$args = array();
+			}
+
+			// Record in activity streams
+			if ( ! empty( $args ) ) {
+				// @todo should we use bp_activity_new_comment()? that function will also send
+				// an email to people in the activity comment thread
+				//
+				// what if a site already has some comment email notification plugin setup?
+				// this is why I decided to go with bp_activity_add() to avoid any conflict
+				// with existing comment email notification plugins
+				$comment_activity_id = bp_activity_add( $args );
+
+				if ( empty( $args['id'] ) ) {
+					// add meta to activity comment
+					bp_activity_update_meta( $comment_activity_id, 'bp_blogs_post_comment_id', $comment_id );
+
+					// add meta to comment
+					add_comment_meta( $comment_id, 'bp_activity_comment_id', $comment_activity_id );
+				}
+			}
+		}
 
 		// Update the blogs last active date
 		bp_blogs_update_blogmeta( $blog_id, 'last_activity', bp_core_current_time() );
@@ -627,12 +861,97 @@ add_action( 'delete_post', 'bp_blogs_remove_post' );
 function bp_blogs_remove_comment( $comment_id ) {
 	global $wpdb;
 
-	// Delete activity stream item
-	bp_blogs_delete_activity( array( 'item_id' => $wpdb->blogid, 'secondary_item_id' => $comment_id, 'type' => 'new_blog_comment' ) );
+	// activity comments are disabled for blog posts
+	// which means that individual activity items exist for blog comments
+	if ( bp_disable_blogforum_comments() ) {
+		// Delete the individual activity stream item
+		bp_blogs_delete_activity( array(
+			'item_id'           => $wpdb->blogid,
+			'secondary_item_id' => $comment_id,
+			'type'              => 'new_blog_comment'
+		) );
+
+	// activity comments are enabled for blog posts
+	// remove the associated activity item
+	} else {
+		// get associated activity ID from comment meta
+		$activity_id = get_comment_meta( $comment_id, 'bp_activity_comment_id', true );
+
+		// delete the associated activity comment
+		//
+		// also removes child post comments and associated activity comments
+		if ( ! empty( $activity_id ) && bp_is_active( 'activity' ) ) {
+			// fetch the activity comments for the activity item
+			$activity = bp_activity_get( array(
+				'in'               => $activity_id,
+				'display_comments' => 'stream',
+			) );
+
+			// get all activity comment IDs for the pending deleted item
+			if ( ! empty( $activity['activities'] ) ) {
+				$activity_ids   = bp_activity_recurse_comments_activity_ids( $activity );
+				$activity_ids[] = $activity_id;
+
+				// delete activity items
+				foreach ( $activity_ids as $activity_id ) {
+					bp_activity_delete( array(
+						'id' => $activity_id
+					) );
+				}
+
+				// remove associated blog comments
+				bp_blogs_remove_associated_blog_comments( $activity_ids );
+
+				// rebuild activity comment tree
+				BP_Activity_Activity::rebuild_activity_comment_tree( $activity['activities'][0]->item_id );
+			}
+		}
+	}
 
 	do_action( 'bp_blogs_remove_comment', $wpdb->blogid, $comment_id, bp_loggedin_user_id() );
 }
 add_action( 'delete_comment', 'bp_blogs_remove_comment' );
+
+/**
+ * Removes blog comments that are associated with activity comments.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @see bp_blogs_remove_comment()
+ * @see bp_blogs_sync_delete_from_activity_comment()
+ *
+ * @param array $activity_ids The activity IDs to check association with blog
+ *              comments.
+ * @param bool $force_delete Whether to force delete the comments. If false,
+ *             comments are trashed instead.
+ */
+function bp_blogs_remove_associated_blog_comments( $activity_ids = array(), $force_delete = true ) {
+	// query args
+	$query_args = array(
+		'meta_query' => array(
+			array(
+				'key'     => 'bp_activity_comment_id',
+				'value'   => implode( ',', (array) $activity_ids ),
+				'compare' => 'IN',
+			)
+		)
+	);
+
+	// get comment
+	$comment_query = new WP_Comment_Query;
+	$comments = $comment_query->query( $query_args );
+
+	// found the corresponding comments
+	// let's delete them!
+	foreach ( $comments as $comment ) {
+		wp_delete_comment( $comment->comment_ID, $force_delete );
+
+		// if we're trashing the comment, remove the meta key as well
+		if ( empty( $force_delete ) ) {
+			delete_comment_meta( $comment->comment_ID, 'bp_activity_comment_id' );
+		}
+	}
+}
 
 /**
  * When a blog comment status transition occurs, update the relevant activity's status.
@@ -658,28 +977,34 @@ function bp_blogs_transition_activity_status( $new_status, $old_status, $comment
 	 * If a blog comment transitions to a "delete" or "hold" status, delete the activity item.
 	 * If a blog comment transitions to trashed, or spammed, mark the activity as spam.
 	 * If a blog comment transitions to approved (and the activity exists), mark the activity as ham.
+	 * If a blog comment transitions to unapproved (and the activity exists), mark the activity as spam.
 	 * Otherwise, record the comment into the activity stream.
 	 */
 
 	// This clause was moved in from bp_blogs_remove_comment() in BuddyPress 1.6. It handles delete/hold.
-	if ( in_array( $new_status, array( 'delete', 'hold' ) ) )
+	if ( in_array( $new_status, array( 'delete', 'hold' ) ) ) {
 		return bp_blogs_remove_comment( $comment->comment_ID );
 
 	// These clauses handle trash, spam, and un-spams.
-	elseif ( in_array( $new_status, array( 'trash', 'spam' ) ) )
+	} elseif ( in_array( $new_status, array( 'trash', 'spam', 'unapproved' ) ) ) {
 		$action = 'spam_activity';
-	elseif ( 'approved' == $new_status )
+	} elseif ( 'approved' == $new_status ) {
 		$action = 'ham_activity';
+	}
 
 	// Get the activity
-	$activity_id = bp_activity_get_activity_id( array( 'component' => $bp->blogs->id, 'item_id' => get_current_blog_id(), 'secondary_item_id' => $comment->comment_ID, 'type' => 'new_blog_comment', ) );
+	if ( bp_disable_blogforum_comments() ) {
+		$activity_id = bp_activity_get_activity_id( array( 'component' => $bp->blogs->id, 'item_id' => get_current_blog_id(), 'secondary_item_id' => $comment->comment_ID, 'type' => 'new_blog_comment', ) );
+	} else {
+		$activity_id = get_comment_meta( $comment->comment_ID, 'bp_activity_comment_id', true );
+	}
 
 	// Check activity item exists
-	if ( ! $activity_id ) {
-
+	if ( empty( $activity_id ) ) {
 		// If no activity exists, but the comment has been approved, record it into the activity table.
-		if ( 'approved' == $new_status )
+		if ( 'approved' == $new_status ) {
 			return bp_blogs_record_comment( $comment->comment_ID, true );
+		}
 
 		return;
 	}
@@ -834,31 +1159,33 @@ function bp_blogs_is_blog_hidden( $blog_id ) {
  *        omitted, all BP metadata associated with the blog will be deleted.
  * @param string $meta_value Optional. If present, the metadata will only be
  *        deleted if the meta_value matches this parameter.
+ * @param bool $delete_all Optional. If true, delete matching metadata entries
+ * 	  for all objects, ignoring the specified blog_id. Otherwise, only
+ * 	  delete matching metadata entries for the specified blog.
+ * 	  Default: false.
  * @return bool True on success, false on failure.
  */
-function bp_blogs_delete_blogmeta( $blog_id, $meta_key = false, $meta_value = false ) {
+function bp_blogs_delete_blogmeta( $blog_id, $meta_key = false, $meta_value = false, $delete_all = false ) {
 	global $wpdb, $bp;
 
-	if ( !is_numeric( $blog_id ) )
-		return false;
+	// Legacy - if no meta_key is passed, delete all for the blog_id
+	if ( empty( $meta_key ) ) {
+		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$wpdb->blogmeta} WHERE blog_id = %d", $blog_id ) );
+		$delete_all = false;
+	} else {
+		$keys = array( $meta_key );
+	}
 
-	$meta_key = preg_replace('|[^a-z0-9_]|i', '', $meta_key);
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( is_array($meta_value) || is_object($meta_value) )
-		$meta_value = serialize($meta_value);
+	$retval = false;
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'blog', $blog_id, $key, $meta_value, $delete_all );
+	}
 
-	$meta_value = trim( $meta_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( !$meta_key )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d", $blog_id ) );
-	else if ( $meta_value )
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d AND meta_key = %s AND meta_value = %s", $blog_id, $meta_key, $meta_value ) );
-	else
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d AND meta_key = %s", $blog_id, $meta_key ) );
-
-	wp_cache_delete( 'bp_blogs_blogmeta_' . $blog_id . '_' . $meta_key, 'bp' );
-
-	return true;
+	return $retval;
 }
 
 /**
@@ -873,40 +1200,17 @@ function bp_blogs_delete_blogmeta( $blog_id, $meta_key = false, $meta_value = fa
  * @param string $meta_key Optional. If present, only the metadata matching
  *        that meta key will be returned. Otherwise, all metadata for the
  *        blog will be fetched.
+ * @param bool $single Optional. If true, return only the first value of the
+ *	  specified meta_key. This parameter has no effect if meta_key is not
+ *	  specified. Default: true.
  * @return mixed The meta value(s) being requested.
  */
-function bp_blogs_get_blogmeta( $blog_id, $meta_key = '') {
-	global $wpdb, $bp;
+function bp_blogs_get_blogmeta( $blog_id, $meta_key = '', $single = true ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = get_metadata( 'blog', $blog_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	$blog_id = (int) $blog_id;
-
-	if ( !$blog_id )
-		return false;
-
-	if ( !empty($meta_key) ) {
-		$meta_key = preg_replace('|[^a-z0-9_]|i', '', $meta_key);
-
-		if ( !$metas = wp_cache_get( 'bp_blogs_blogmeta_' . $blog_id . '_' . $meta_key, 'bp' ) ) {
-			$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d AND meta_key = %s", $blog_id, $meta_key ) );
-			wp_cache_set( 'bp_blogs_blogmeta_' . $blog_id . '_' . $meta_key, $metas, 'bp' );
-		}
-	} else {
-		$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d", $blog_id ) );
-	}
-
-	if ( empty($metas) ) {
-		if ( empty($meta_key) )
-			return array();
-		else
-			return '';
-	}
-
-	$metas = array_map('maybe_unserialize', (array) $metas);
-
-	if ( 1 == count($metas) )
-		return $metas[0];
-	else
-		return $metas;
+	return $retval;
 }
 
 /**
@@ -918,38 +1222,41 @@ function bp_blogs_get_blogmeta( $blog_id, $meta_key = '') {
  * @param int $blog_id ID of the blog whose metadata is being updated.
  * @param string $meta_key Key of the metadata being updated.
  * @param mixed $meta_value Value to be set.
- * @return bool True on success, false on failure.
+ * @param mixed $prev_value Optional. If specified, only update existing
+ *        metadata entries with the specified value. Otherwise, update all
+ *        entries.
+ * @return bool|int Returns false on failure. On successful update of existing
+ *         metadata, returns true. On successful creation of new metadata,
+ *         returns the integer ID of the new metadata row.
  */
-function bp_blogs_update_blogmeta( $blog_id, $meta_key, $meta_value ) {
-	global $wpdb, $bp;
+function bp_blogs_update_blogmeta( $blog_id, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = update_metadata( 'blog', $blog_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	if ( !is_numeric( $blog_id ) )
-		return false;
-
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-	if ( is_string($meta_value) )
-		$meta_value = stripslashes( esc_sql( $meta_value ) );
-
-	$meta_value = maybe_serialize($meta_value);
-
-	if (empty( $meta_value ) )
-		return bp_blogs_delete_blogmeta( $blog_id, $meta_key );
-
-	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->blogs->table_name_blogmeta} WHERE blog_id = %d AND meta_key = %s", $blog_id, $meta_key ) );
-
-	if ( !$cur )
-		$wpdb->query( $wpdb->prepare( "INSERT INTO {$bp->blogs->table_name_blogmeta} ( blog_id, meta_key, meta_value ) VALUES ( %d, %s, %s )", $blog_id, $meta_key, $meta_value ) );
-	else if ( $cur->meta_value != $meta_value )
-		$wpdb->query( $wpdb->prepare( "UPDATE {$bp->blogs->table_name_blogmeta} SET meta_value = %s WHERE blog_id = %d AND meta_key = %s", $meta_value, $blog_id, $meta_key ) );
-	else
-		return false;
-
-	wp_cache_set( 'bp_blogs_blogmeta_' . $blog_id . '_' . $meta_key, $meta_value, 'bp' );
-
-	return true;
+	return $retval;
 }
 
+/**
+ * Add a piece of blog metadata.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $blog_id ID of the blog.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Metadata value.
+ * @param bool $unique. Optional. Whether to enforce a single metadata value
+ *        for the given key. If true, and the object already has a value for
+ *        the key, no change will be made. Default: false.
+ * @return int|bool The meta ID on successful update, false on failure.
+ */
+function bp_blogs_add_blogmeta( $blog_id, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = add_metadata( 'blog', $blog_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
 /**
  * Remove all blog associations for a given user.
  *

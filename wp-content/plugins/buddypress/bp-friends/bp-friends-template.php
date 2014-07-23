@@ -26,8 +26,7 @@ function bp_friends_slug() {
 	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_friends_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_friends_slug', $bp->friends->slug );
+		return apply_filters( 'bp_get_friends_slug', buddypress()->friends->slug );
 	}
 
 /**
@@ -46,8 +45,7 @@ function bp_friends_root_slug() {
 	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_friends_root_slug() {
-		global $bp;
-		return apply_filters( 'bp_get_friends_root_slug', $bp->friends->root_slug );
+		return apply_filters( 'bp_get_friends_root_slug', buddypress()->friends->root_slug );
 	}
 
 /**
@@ -540,3 +538,57 @@ function bp_friend_total_requests_count( $user_id = 0 ) {
 
 		return apply_filters( 'bp_friend_get_total_requests_count', count( BP_Friends_Friendship::get_friend_user_ids( $user_id, true ) ) );
 	}
+
+/** Stats **********************************************************************/
+
+/**
+ * Display the number of friends in user's profile.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $args before|after|user_id
+ * @uses bp_friends_get_profile_stats() to get the stats
+ */
+function bp_friends_profile_stats( $args = '' ) {
+	echo bp_friends_get_profile_stats( $args );
+}
+add_action( 'bp_members_admin_user_stats', 'bp_friends_profile_stats', 7, 1 );
+
+/**
+ * Return the number of friends in user's profile.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $args before|after|user_id
+ * @return string HTML for stats output.
+ */
+function bp_friends_get_profile_stats( $args = '' ) {
+
+	// Parse the args
+	$r = bp_parse_args( $args, array(
+		'before'  => '<li class="bp-friends-profile-stats">',
+		'after'   => '</li>',
+		'user_id' => bp_displayed_user_id(),
+		'friends' => 0,
+		'output'  => ''
+	), 'friends_get_profile_stats' );
+
+	// Allow completely overloaded output
+	if ( empty( $r['output'] ) ) {
+
+		// Only proceed if a user ID was passed
+		if ( ! empty( $r['user_id'] ) ) {
+
+			// Get the user's friends
+			if ( empty( $r['friends'] ) ) {
+				$r['friends'] = absint( friends_get_total_friend_count( $r['user_id'] ) );
+			}
+
+			// If friends exist, show some formatted output
+			$r['output'] = $r['before'] . sprintf( _n( '%s friend', '%s friends', $r['friends'], 'buddypress' ), '<strong>' . $r['friends'] . '</strong>' ) . $r['after'];
+		}
+	}
+
+	// Filter and return
+	return apply_filters( 'bp_friends_get_profile_stats', $r['output'], $r );
+}

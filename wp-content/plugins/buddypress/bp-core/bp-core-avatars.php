@@ -12,6 +12,8 @@ if ( !defined( 'ABSPATH' ) ) exit;
  */
 function bp_core_set_avatar_constants() {
 
+	$bp = buddypress();
+
 	if ( !defined( 'BP_AVATAR_THUMB_WIDTH' ) )
 		define( 'BP_AVATAR_THUMB_WIDTH', 50 );
 
@@ -29,20 +31,12 @@ function bp_core_set_avatar_constants() {
 
 	if ( !defined( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE' ) ) {
 
-		$bp = buddypress();
-
 		if ( !isset( $bp->site_options['fileupload_maxk'] ) ) {
 			define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', 5120000 ); // 5mb
 		} else {
 			define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', $bp->site_options['fileupload_maxk'] * 1024 );
 		}
 	}
-
-	if ( !defined( 'BP_AVATAR_DEFAULT' ) )
-		define( 'BP_AVATAR_DEFAULT', BP_PLUGIN_URL . 'bp-core/images/mystery-man.jpg' );
-
-	if ( !defined( 'BP_AVATAR_DEFAULT_THUMB' ) )
-		define( 'BP_AVATAR_DEFAULT_THUMB', BP_PLUGIN_URL . 'bp-core/images/mystery-man-50.jpg' );
 
 	if ( ! defined( 'BP_SHOW_AVATARS' ) ) {
 		define( 'BP_SHOW_AVATARS', bp_get_option( 'show_avatars' ) );
@@ -73,8 +67,8 @@ function bp_core_set_avatar_globals() {
 	$bp->avatar->original_max_filesize = BP_AVATAR_ORIGINAL_MAX_FILESIZE;
 
 	// Defaults
-	$bp->avatar->thumb->default = BP_AVATAR_DEFAULT_THUMB;
-	$bp->avatar->full->default  = BP_AVATAR_DEFAULT;
+	$bp->avatar->thumb->default = bp_core_avatar_default_thumb();
+	$bp->avatar->full->default  = bp_core_avatar_default();
 
 	// These have to be set on page load in order to avoid infinite filter loops at runtime
 	$bp->avatar->upload_path = bp_core_avatar_upload_path();
@@ -439,7 +433,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 		if ( empty( $bp->grav_default->{$object} ) ) {
 			$default_grav = 'wavatar';
 		} else if ( 'mystery' == $bp->grav_default->{$object} ) {
-			$default_grav = apply_filters( 'bp_core_mysteryman_src', bp_core_avatar_default(), $grav_size );
+			$default_grav = apply_filters( 'bp_core_mysteryman_src', 'mm', $grav_size );
 		} else {
 			$default_grav = $bp->grav_default->{$object};
 		}
@@ -471,7 +465,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 
 	// No avatar was found, and we've been told not to use a gravatar.
 	} else {
-		$gravatar = apply_filters( "bp_core_default_avatar_$object", BP_PLUGIN_URL . 'bp-core/images/mystery-man.jpg', $params );
+		$gravatar = apply_filters( "bp_core_default_avatar_$object", bp_core_avatar_default( 'local' ), $params );
 	}
 
 	if ( true === $html ) {
@@ -756,7 +750,25 @@ function bp_core_avatar_handle_crop( $args = '' ) {
 	require_once( ABSPATH . '/wp-admin/includes/file.php' );
 
 	// Delete the existing avatar files for the object
-	bp_core_delete_existing_avatar( array( 'object' => $object, 'avatar_path' => $avatar_folder_dir ) );
+	$existing_avatar = bp_core_fetch_avatar( array(
+		'object'  => $object,
+		'item_id' => $item_id,
+		'html' => false,
+	) );
+
+	if ( ! empty( $existing_avatar ) ) {
+		// Check that the new avatar doesn't have the same name as the
+		// old one before deleting
+		$upload_dir           = wp_upload_dir();
+		$existing_avatar_path = str_replace( $upload_dir['baseurl'], '', $existing_avatar );
+		$new_avatar_path      = str_replace( $upload_dir['basedir'], '', $original_file );
+
+		if ( $existing_avatar_path !== $new_avatar_path ) {
+			bp_core_delete_existing_avatar( array( 'object' => $object, 'item_id' => $item_id, 'avatar_path' => $avatar_folder_dir ) );
+		}
+	}
+
+
 
 	// Make sure we at least have a width and height for cropping
 	if ( empty( $crop_w ) ) {
@@ -1021,7 +1033,7 @@ function bp_get_user_has_avatar( $user_id = 0 ) {
 		$user_id = bp_displayed_user_id();
 
 	$retval = false;
-	if ( bp_core_fetch_avatar( array( 'item_id' => $user_id, 'no_grav' => true, 'html' => false ) ) != bp_core_avatar_default() )
+	if ( bp_core_fetch_avatar( array( 'item_id' => $user_id, 'no_grav' => true, 'html' => false ) ) != bp_core_avatar_default( 'local' ) )
 		$retval = true;
 
 	return (bool) apply_filters( 'bp_get_user_has_avatar', $retval, $user_id );
@@ -1116,19 +1128,66 @@ function bp_core_avatar_original_max_filesize() {
  *
  * @since BuddyPress (1.5.0)
  *
+ * @param string $type 'local' if the fallback should be the locally-hosted
+ *        version of the mystery-man, 'gravatar' if the fallback should be
+ *        Gravatar's version. Default: 'gravatar'.
  * @return string The URL of the default avatar.
  */
-function bp_core_avatar_default() {
-	return apply_filters( 'bp_core_avatar_default', buddypress()->avatar->full->default );
+function bp_core_avatar_default( $type = 'gravatar' ) {
+	// Local override
+	if ( defined( 'BP_AVATAR_DEFAULT' ) ) {
+		$avatar = BP_AVATAR_DEFAULT;
+
+	// Use the local default image
+	} else if ( 'local' === $type ) {
+		$avatar = buddypress()->plugin_url . 'bp-core/images/mystery-man.jpg';
+
+	// Use Gravatar's mystery man as fallback
+	} else {
+		if ( is_ssl() ) {
+			$host = 'https://secure.gravatar.com';
+		} else {
+			$host = 'http://www.gravatar.com';
+		}
+
+		$avatar = $host . '/avatar/00000000000000000000000000000000?d=mm&amp;s=' . bp_core_avatar_full_width();
+	}
+
+	return apply_filters( 'bp_core_avatar_default', $avatar );
 }
 
 /**
  * Get the URL of the 'thumb' default avatar.
  *
+ * Uses Gravatar's mystery-man avatar, unless BP_AVATAR_DEFAULT_THUMB has been
+ * defined.
+ *
  * @since BuddyPress (1.5.0)
  *
+ * @param string $type 'local' if the fallback should be the locally-hosted
+ *        version of the mystery-man, 'gravatar' if the fallback should be
+ *        Gravatar's version. Default: 'gravatar'.
  * @return string The URL of the default avatar thumb.
  */
-function bp_core_avatar_default_thumb() {
-	return apply_filters( 'bp_core_avatar_thumb', buddypress()->avatar->thumb->default );
+function bp_core_avatar_default_thumb( $type = 'gravatar' ) {
+	// Local override
+	if ( defined( 'BP_AVATAR_DEFAULT_THUMB' ) ) {
+		$avatar = BP_AVATAR_DEFAULT_THUMB;
+
+	// Use the local default image
+	} else if ( 'local' === $type ) {
+		$avatar = buddypress()->plugin_url . 'bp-core/images/mystery-man-50.jpg';
+
+	// Use Gravatar's mystery man as fallback
+	} else {
+		if ( is_ssl() ) {
+			$host = 'https://secure.gravatar.com';
+		} else {
+			$host = 'http://www.gravatar.com';
+		}
+
+		$avatar = $host . '/avatar/00000000000000000000000000000000?d=mm&amp;s=' . bp_core_avatar_thumb_width();
+	}
+
+	return apply_filters( 'bp_core_avatar_thumb', $avatar );
 }

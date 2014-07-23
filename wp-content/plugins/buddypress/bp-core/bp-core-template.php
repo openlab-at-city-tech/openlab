@@ -83,6 +83,31 @@ function bp_get_options_title() {
 	echo apply_filters( 'bp_get_options_title', esc_attr( $bp->bp_options_title ) );
 }
 
+/**
+ * Get the directory title for a component.
+ *
+ * Used for the <title> element and the page header on the component directory
+ * page.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @return string
+ */
+function bp_get_directory_title( $component = '' ) {
+	$title = '';
+
+	// Use the string provided by the component
+	if ( ! empty( buddypress()->{$component}->directory_title ) ) {
+		$title = buddypress()->{$component}->directory_title;
+
+	// If none is found, concatenate
+	} else if ( isset( buddypress()->{$component}->name ) ) {
+		$title = sprintf( __( '%s Directory', 'buddypress' ), buddypress()->{$component}->name );
+	}
+
+	return apply_filters( 'bp_get_directory_title', $title, $component );
+}
+
 /** Avatars *******************************************************************/
 
 /**
@@ -1491,6 +1516,20 @@ function bp_is_current_component_core() {
 /** Activity ******************************************************************/
 
 /**
+ * Is the current page the activity directory ?
+ *
+ * @since BuddyPress (2.0.0)
+ * 
+ * @return True if the current page is the activity directory.
+ */
+function bp_is_activity_directory() {
+	if ( ! bp_displayed_user_id() && bp_is_activity_component() && ! bp_current_action() )
+		return true;
+
+	return false;
+}
+
+/**
  * Is the current page a single activity item permalink?
  *
  * @return True if the current page is a single activity item permalink.
@@ -1503,6 +1542,20 @@ function bp_is_single_activity() {
 }
 
 /** User **********************************************************************/
+
+/**
+ * Is the current page the members directory ?
+ *
+ * @since BuddyPress (2.0.0)
+ * 
+ * @return True if the current page is the members directory.
+ */
+function bp_is_members_directory() {
+	if ( ! bp_is_user() && bp_is_members_component() )
+		return true;
+
+	return false;
+}
 
 /**
  * Is the current page part of the profile of the logged-in user?
@@ -1843,7 +1896,37 @@ function bp_is_user_settings_account_delete() {
 	return false;
 }
 
+/**
+ * Is this a user's profile settings?
+ *
+ * Eg http://example.com/members/joe/settings/profile/.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @return bool True if the current page is a user's Profile Settings page.
+ */
+function bp_is_user_settings_profile() {
+	if ( bp_is_user_settings() && bp_is_current_action( 'profile' ) )
+		return true;
+
+	return false;
+}
+
 /** Groups ********************************************************************/
+
+/**
+ * Is the current page the groups directory ?
+ *
+ * @since BuddyPress (2.0.0)
+ * 
+ * @return True if the current page is the groups directory.
+ */
+function bp_is_groups_directory() {
+	if ( bp_is_groups_component() && ! bp_current_action() && ! bp_current_item() )
+		return true;
+
+	return false;
+}
 
 /**
  * Does the current page belong to a single group?
@@ -2046,6 +2129,20 @@ function bp_is_group_single() {
  */
 function bp_is_create_blog() {
 	if ( bp_is_blogs_component() && bp_is_current_action( 'create' ) )
+		return true;
+
+	return false;
+}
+
+/**
+ * Is the current page the blogs directory ?
+ *
+ * @since BuddyPress (2.0.0)
+ * 
+ * @return True if the current page is the blogs directory.
+ */
+function bp_is_blogs_directory() {
+	if ( is_multisite() && bp_is_blogs_component() && ! bp_current_action() )
 		return true;
 
 	return false;
@@ -2275,9 +2372,6 @@ function bp_the_body_class() {
 		if ( bp_is_user_groups_activity() )
 			$bp_classes[] = 'groups-activity';
 
-		if ( is_user_logged_in() )
-			$bp_classes[] = 'logged-in';
-
 		/** Messages **********************************************************/
 
 		if ( bp_is_messages_inbox() )
@@ -2349,37 +2443,14 @@ function bp_the_body_class() {
 			$bp_classes[] = bp_current_action();
 		}
 
-		/** is_buddypress *****************************************************/
+		/** Clean up ***********************************************************/
 
 		// Add BuddyPress class if we are within a BuddyPress page
 		if ( ! bp_is_blog_page() ) {
 			$bp_classes[] = 'buddypress';
 		}
 
-		/** Clean up***********************************************************/
-
-		// We don't want WordPress blog classes to appear on non-blog pages.
-		if ( !bp_is_blog_page() ) {
-
-			// Observe WP custom background body class
-			if ( in_array( 'custom-background', (array) $wp_classes ) )
-				$bp_classes[] = 'custom-background';
-
-			// Observe WP admin bar body classes
-			if ( in_array( 'admin-bar', (array) $wp_classes ) )
-				$bp_classes[] = 'admin-bar';
-			if ( in_array( 'no-customize-support', (array) $wp_classes ) )
-				$bp_classes[] = 'no-customize-support';
-
-			// Preserve any custom classes already set
-			if ( !empty( $custom_classes ) ) {
-				$wp_classes = (array) $custom_classes;
-			} else {
-				$wp_classes = array();
-			}
-		}
-
-		// Merge WP classes with BP classes and remove any duplicates
+		// Merge WP classes with BuddyPress classes and remove any duplicates
 		$classes = array_unique( array_merge( (array) $bp_classes, (array) $wp_classes ) );
 
 		return apply_filters( 'bp_get_the_body_class', $classes, $bp_classes, $wp_classes, $custom_classes );

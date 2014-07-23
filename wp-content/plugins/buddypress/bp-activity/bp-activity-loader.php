@@ -24,11 +24,11 @@ class BP_Activity_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'activity',
 			__( 'Activity Streams', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 10
 			)
@@ -95,15 +95,22 @@ class BP_Activity_Component extends BP_Component {
 			'table_name_meta' => $bp->table_prefix . 'bp_activity_meta',
 		);
 
+		// Metadata tables for groups component
+		$meta_tables = array(
+			'activity' => $bp->table_prefix . 'bp_activity_meta',
+		);
+
 		// All globals for activity component.
 		// Note that global_tables is included in this array.
 		$args = array(
 			'slug'                  => BP_ACTIVITY_SLUG,
 			'root_slug'             => isset( $bp->pages->activity->slug ) ? $bp->pages->activity->slug : BP_ACTIVITY_SLUG,
 			'has_directory'         => true,
+			'directory_title'       => _x( 'Sitewide Activity', 'component directory title', 'buddypress' ),
+			'notification_callback' => 'bp_activity_format_notifications',
 			'search_string'         => __( 'Search Activity...', 'buddypress' ),
 			'global_tables'         => $global_tables,
-			'notification_callback' => 'bp_activity_format_notifications',
+			'meta_tables'           => $meta_tables,
 		);
 
 		parent::setup_globals( $args );
@@ -262,6 +269,14 @@ class BP_Activity_Component extends BP_Component {
 				'href'   => trailingslashit( $activity_link )
 			);
 
+			// Personal
+			$wp_admin_nav[] = array(
+				'parent' => 'my-account-' . $this->id,
+				'id'     => 'my-account-' . $this->id . '-personal',
+				'title'  => __( 'Personal', 'buddypress' ),
+				'href'   => trailingslashit( $activity_link )
+			);
+
 			// Mentions
 			if ( bp_activity_do_mentions() ) {
 				$wp_admin_nav[] = array(
@@ -271,14 +286,6 @@ class BP_Activity_Component extends BP_Component {
 					'href'   => trailingslashit( $activity_link . 'mentions' )
 				);
 			}
-
-			// Personal
-			$wp_admin_nav[] = array(
-				'parent' => 'my-account-' . $this->id,
-				'id'     => 'my-account-' . $this->id . '-personal',
-				'title'  => __( 'Personal', 'buddypress' ),
-				'href'   => trailingslashit( $activity_link )
-			);
 
 			// Favorites
 			$wp_admin_nav[] = array(
@@ -321,7 +328,7 @@ class BP_Activity_Component extends BP_Component {
 	 * @uses bp_is_my_profile()
 	 * @uses bp_core_fetch_avatar()
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		// Adjust title based on view
@@ -346,7 +353,7 @@ class BP_Activity_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.6)
 	 */
-	 function setup_actions() {
+	public function setup_actions() {
 		// Spam prevention
 		add_action( 'bp_include', 'bp_activity_setup_akismet' );
 

@@ -189,7 +189,9 @@ add_filter( 'default_hidden_meta_boxes', 'bp_activity_admin_edit_hidden_metaboxe
  * @global BP_Activity_List_Table $bp_activity_list_table Activity screen list table.
  */
 function bp_activity_admin_load() {
-	global $bp, $bp_activity_list_table;
+	global $bp_activity_list_table;
+
+	$bp = buddypress();
 
 	// Decide whether to load the dev version of the CSS and JavaScript
 	$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : 'min.';
@@ -276,8 +278,11 @@ function bp_activity_admin_load() {
 	}
 
 	// Enqueue CSS and JavaScript
-	wp_enqueue_script( 'bp_activity_admin_js', BP_PLUGIN_URL . "bp-activity/admin/js/admin.{$min}js",   array( 'jquery', 'wp-ajax-response' ), bp_get_version(), true );
-	wp_enqueue_style( 'bp_activity_admin_css', BP_PLUGIN_URL . "bp-activity/admin/css/admin.{$min}css", array(),                               bp_get_version()       );
+	wp_enqueue_script( 'bp_activity_admin_js', $bp->plugin_url . "bp-activity/admin/js/admin.{$min}js",   array( 'jquery', 'wp-ajax-response' ), bp_get_version(), true );
+	wp_localize_script( 'bp_activity_admin_js', 'bp_activity_admin_vars', array(
+ 	  	'page'   => get_current_screen()->id
+ 	) );
+	wp_enqueue_style( 'bp_activity_admin_css', $bp->plugin_url . "bp-activity/admin/css/admin.{$min}css", array(),                               bp_get_version()       );
 
 	// Handle spam/un-spam/delete of activities
 	if ( !empty( $doaction ) && ! in_array( $doaction, array( '-1', 'edit', 'save', ) ) ) {
@@ -453,22 +458,12 @@ function bp_activity_admin_load() {
 
 		// Activity type
 		if ( ! empty( $_POST['bp-activities-type'] ) ) {
-			$actions  = array();
-
-			// Walk through the registered actions, and build an array of actions/values.
-			foreach ( $bp->activity->actions as $action ) {
-				$action = array_values( (array) $action );
-
-				for ( $i = 0, $i_count = count( $action ); $i < $i_count; $i++ )
-					$actions[] = $action[$i]['key'];
-			}
-
-			// This was a mis-named activity type from before BP 1.6
-			unset( $actions['friends_register_activity_action'] );
+			$actions = bp_activity_admin_get_activity_actions();
 
 			// Check that the new type is a registered activity type
-			if ( in_array( $_POST['bp-activities-type'], $actions ) )
+			if ( in_array( $_POST['bp-activities-type'], $actions ) ) {
 				$activity->type = $_POST['bp-activities-type'];
+			}
 		}
 
 		// Activity timestamp
@@ -731,6 +726,36 @@ function bp_activity_admin_edit_metabox_userid( $item ) {
 }
 
 /**
+ * Get flattened array of all registered activity actions.
+ *
+ * Format is [activity_type] => Pretty name for activity type.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @return array
+ */
+function bp_activity_admin_get_activity_actions() {
+	$actions  = array();
+
+	// Walk through the registered actions, and build an array of actions/values.
+	foreach ( buddypress()->activity->actions as $action ) {
+		$action = array_values( (array) $action );
+
+		for ( $i = 0, $i_count = count( $action ); $i < $i_count; $i++ ) {
+			$actions[ $action[$i]['key'] ] = $action[$i]['value'];
+		}
+	}
+
+	// This was a mis-named activity type from before BP 1.6
+	unset( $actions['friends_register_activity_action'] );
+
+	// Sort array by the human-readable value
+	natsort( $actions );
+
+	return $actions;
+}
+
+/**
  * Activity type metabox for the Activity admin edit screen
  *
  * @since BuddyPress (1.6.0)
@@ -757,7 +782,17 @@ function bp_activity_admin_edit_metabox_type( $item ) {
 	unset( $actions['friends_register_activity_action'] );
 
 	// Sort array by the human-readable value
-	natsort( $actions ); ?>
+	natsort( $actions );
+
+	// If the activity type is not registered properly (eg, a plugin has
+	// not called bp_activity_set_action()), add the raw type to the end
+	// of the list
+	if ( ! isset( $actions[ $selected ] ) ) {
+		_doing_it_wrong( __FUNCTION__, sprintf( __( 'This activity item has a type (%s) that is not registered using bp_activity_set_action(), so no label is available.', 'buddypress' ), $selected ), '2.0.0' );
+		$actions[ $selected ] = $selected;
+	}
+
+	?>
 
 	<select name="bp-activities-type">
 		<?php foreach ( $actions as $k => $v ) : ?>
@@ -958,6 +993,9 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * @since BuddyPress (1.6.0)
 	 */
 	public function __construct() {
+
+		// See if activity commenting is enabled for blog / forum activity items
+		$this->disable_blogforum_comments = bp_disable_blogforum_comments();
 
 		// Define singular and plural labels, as well as whether we support AJAX.
 		parent::__construct( array(
@@ -1202,6 +1240,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 			'cb'       => '<input name type="checkbox" />',
 			'author'   => __( 'Author', 'buddypress' ),
 			'comment'  => __( 'Activity', 'buddypress' ),
+			'action'   => __( 'Action', 'buddypress' ),
 			'response' => __( 'In Response To', 'buddypress' ),
 		);
 	}
@@ -1285,6 +1324,25 @@ class BP_Activity_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Action column markup.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @see WP_List_Table::single_row_columns()
+	 *
+	 * @param array $item A singular item (one full row).
+	 */
+	function column_action( $item ) {
+		$actions = bp_activity_admin_get_activity_actions();
+
+		if ( isset( $actions[ $item['type'] ] ) ) {
+			echo $actions[ $item['type'] ];
+		} else {
+			printf( __( 'Unregistered action - %s', 'buddypress' ), $item['type'] );
+		}
+	}
+
+	/**
 	 * Content column, and "quick admin" rollover actions.
 	 *
 	 * Called "comment" in the CSS so we can re-use some WP core CSS.
@@ -1323,7 +1381,11 @@ class BP_Activity_List_Table extends WP_List_Table {
 
 		// Reply - javascript only; implemented by AJAX.
 		if ( 'spam' != $item_status ) {
-			$actions['reply'] = sprintf( '<a href="#" class="reply hide-if-no-js">%s</a>', __( 'Reply', 'buddypress' ) );
+			if ( $this->can_comment( $item ) ) {
+				$actions['reply'] = sprintf( '<a href="#" class="reply hide-if-no-js">%s</a>', __( 'Reply', 'buddypress' ) );
+			} else {
+				$actions['reply'] = sprintf( '<span class="form-input-tip" title="%s">%s</span>', __( 'Replies are disabled for this activity item', 'buddypress' ), __( 'Replies disabled', 'buddypress' ) );
+			}
 
 			// Edit
 			$actions['edit'] = sprintf( '<a href="%s">%s</a>', $edit_url, __( 'Edit', 'buddypress' ) );
@@ -1427,6 +1489,65 @@ class BP_Activity_List_Table extends WP_List_Table {
 			// Return the user ID
 			return $activity['activities'][0]->user_id;
 		}
+	}
+
+	/**
+	 * Checks if an activity item can be replied to.
+	 *
+	 * This method merges functionality from {@link bp_activity_can_comment()} and
+	 * {@link bp_blogs_disable_activity_commenting()}.  This is done because the activity
+	 * list table doesn't use a BuddyPress activity loop, which prevents those
+	 * functions from working as intended.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $item An array version of the BP_Activity_Activity object.
+	 * @return bool
+	 */
+	protected function can_comment( $item  ) {
+		$can_comment = true;
+
+		if ( $this->disable_blogforum_comments ) {
+			switch ( $item['type'] ) {
+				case 'new_blog_post' :
+				case 'new_blog_comment' :
+				case 'new_forum_topic' :
+				case 'new_forum_post' :
+					$can_comment = false;
+					break;
+			}
+
+		// activity comments supported
+		} else {
+			// activity comment
+			if ( 'activity_comment' == $item['type'] ) {
+				// blogs
+				if ( bp_is_active( 'blogs' ) ) {
+					// grab the parent activity entry
+					$parent_activity = new BP_Activity_Activity( $item['item_id'] );
+
+					// fetch blog post comment depth and if the blog post's comments are open
+					bp_blogs_setup_activity_loop_globals( $parent_activity );
+
+					// check if the activity item can be replied to
+					if ( false === bp_blogs_can_comment_reply( true, $item ) ) {
+						$can_comment = false;
+					}
+				}
+
+			// blog post
+			} elseif ( 'new_blog_post' == $item['type'] ) {
+				if ( bp_is_active( 'blogs' ) ) {
+					bp_blogs_setup_activity_loop_globals( (object) $item );
+
+					if ( empty( buddypress()->blogs->allow_comments[$item['id']] ) ) {
+						$can_comment = false;
+					}
+				}
+			}
+		}
+
+		return apply_filters( 'bp_activity_list_table_can_comment', $can_comment );
 	}
 
 	/**

@@ -60,6 +60,50 @@ function xprofile_update_field_group_position( $field_group_id, $position ) {
 
 /*** Field Management *********************************************************/
 
+/**
+ * Get details of all xprofile field types.
+ *
+ * @return array Key/value pairs (field type => class name).
+ * @since BuddyPress (2.0.0)
+ */
+function bp_xprofile_get_field_types() {
+	$fields = array(
+		'checkbox'       => 'BP_XProfile_Field_Type_Checkbox',
+		'datebox'        => 'BP_XProfile_Field_Type_Datebox',
+		'multiselectbox' => 'BP_XProfile_Field_Type_Multiselectbox',
+		'number'         => 'BP_XProfile_Field_Type_Number',
+		'radio'          => 'BP_XProfile_Field_Type_Radiobutton',
+		'selectbox'      => 'BP_XProfile_Field_Type_Selectbox',
+		'textarea'       => 'BP_XProfile_Field_Type_Textarea',
+		'textbox'        => 'BP_XProfile_Field_Type_Textbox',
+	);
+
+	// If you've added a custom field type in a plugin, register it with this filter.
+	return apply_filters( 'bp_xprofile_get_field_types', $fields );
+}
+
+/**
+ * Creates the specified field type object; used for validation and templating.
+ *
+ * @param string $type Type of profile field to create. See {@link bp_xprofile_get_field_types()} for default core values.
+ * @return object If field type unknown, returns BP_XProfile_Field_Type_Textarea. Otherwise returns an instance of the relevant child class of BP_XProfile_Field_Type.
+ * @since BuddyPress (2.0.0)
+ */
+function bp_xprofile_create_field_type( $type ) {
+
+	$field = bp_xprofile_get_field_types();
+	$class = isset( $field[$type] ) ? $field[$type] : '';
+
+	/**
+	 * To handle (missing) field types, fallback to a placeholder field object if a type is unknown.
+	 */
+	if ( $class && class_exists( $class ) ) {
+		return new $class;
+	} else {
+		return new BP_XProfile_Field_Type_Placeholder;
+	}
+}
+
 function xprofile_insert_field( $args = '' ) {
 	global $bp;
 
@@ -211,41 +255,39 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	if ( empty( $field_id ) )
 		return false;
 
-	if ( $is_required && ( empty( $value ) || !is_array( $value ) && !strlen( trim( $value ) ) ) )
+	// Special-case support for integer 0 for the number field type
+	if ( $is_required && ! is_integer( $value ) && $value !== '0' && ( empty( $value ) || ! is_array( $value ) && ! strlen( trim( $value ) ) ) ) {
 		return false;
+	}
 
-	$field = new BP_XProfile_Field( $field_id );
+	$field          = new BP_XProfile_Field( $field_id );
+	$field_type     = BP_XProfile_Field::get_type( $field_id );
+	$field_type_obj = bp_xprofile_create_field_type( $field_type );
 
-	// If the value is empty, then delete any field data that exists, unless the field is of a
-	// type where null values are semantically meaningful
-	if ( empty( $value ) && 'checkbox' != $field->type && 'multiselectbox' != $field->type ) {
+	/**
+	 * Certain types of fields (checkboxes, multiselects) may come through empty.
+	 * Save as empty array so this isn't overwritten by the default on next edit.
+	 *
+	 * Special-case support for integer 0 for the number field type
+	 */
+	if ( empty( $value ) && ! is_integer( $value ) && $value !== '0' && $field_type_obj->accepts_null_value ) {
+		$value = array();
+	}
+
+	// If the value is empty, then delete any field data that exists, unless the field is of a type where null values are semantically meaningful
+	if ( empty( $value ) && ! is_integer( $value ) && $value !== '0' && ! $field_type_obj->accepts_null_value ) {
 		xprofile_delete_field_data( $field_id, $user_id );
 		return true;
 	}
 
-	$possible_values = array();
+	// For certain fields, only certain parameters are acceptable, so add them to the whitelist.
+	if ( $field_type_obj->supports_options ) {
+		$field_type_obj->set_whitelist_values( wp_list_pluck( $field->get_children(), 'name' ) );
+	}
 
-	// Check the value is an acceptable value
-	if ( 'checkbox' == $field->type || 'radio' == $field->type || 'selectbox' == $field->type || 'multiselectbox' == $field->type ) {
-		$options = $field->get_children();
-
-		foreach( $options as $option )
-			$possible_values[] = $option->name;
-
-		if ( is_array( $value ) ) {
-			foreach( $value as $i => $single ) {
-				if ( !in_array( $single, $possible_values ) ) {
-					unset( $value[$i] );
-				}
-			}
-
-			// Reset the keys by merging with an empty array
-			$value = array_merge( array(), $value );
-		} else {
-			if ( !in_array( $value, $possible_values ) ) {
-				return false;
-			}
-		}
+	// Check the value is in an accepted format for this form field.
+	if ( ! $field_type_obj->is_valid( $value ) ) {
+		return false;
 	}
 
 	$field           = new BP_XProfile_ProfileData();
@@ -285,6 +327,40 @@ function xprofile_set_field_visibility_level( $field_id = 0, $user_id = 0, $visi
 	$current_visibility_levels[$field_id] = $visibility_level;
 
 	return bp_update_user_meta( $user_id, 'bp_xprofile_visibility_levels', $current_visibility_levels );
+}
+
+/**
+ * Get the visibility level for a field.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $field_id The ID of the xprofile field.
+ * @param int $user_id The ID of the user to whom the data belongs.
+ * @return string
+ */
+function xprofile_get_field_visibility_level( $field_id = 0, $user_id = 0 ) {
+	$current_level = '';
+
+	if ( empty( $field_id ) || empty( $user_id ) ) {
+		return $current_level;
+	}
+
+	$current_levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+	$current_level  = isset( $current_levels[ $field_id ] ) ? $current_levels[ $field_id ] : '';
+
+	// Use the user's stored level, unless custom visibility is disabled
+	$field = new BP_XProfile_Field( $field_id );
+	if ( isset( $field->allow_custom_visibility ) && 'disabled' === $field->allow_custom_visibility ) {
+		$current_level = $field->default_visibility;
+	}
+
+	// If we're still empty, it means that overrides are permitted, but the
+	// user has not provided a value. Use the default value.
+	if ( empty( $current_level ) ) {
+		$current_level = $field->default_visibility;
+	}
+
+	return $current_level;
 }
 
 function xprofile_delete_field_data( $field, $user_id ) {
@@ -420,6 +496,37 @@ function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
 }
 
 /**
+ * When search_terms are passed to BP_User_Query, search against xprofile fields.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $sql Clauses in the user_id SQL query.
+ * @param BP_User_Query User query object.
+ */
+function bp_xprofile_bp_user_query_search( $sql, BP_User_Query $query ) {
+	global $wpdb;
+
+	if ( empty( $query->query_vars['search_terms'] ) || empty( $sql['where']['search'] ) ) {
+		return $sql;
+	}
+
+	$bp = buddypress();
+
+	$search_terms_clean = esc_sql( esc_sql( $query->query_vars['search_terms'] ) );
+
+	// Combine the core search (against wp_users) into a single OR clause
+	// with the xprofile_data search
+	$search_core     = $sql['where']['search'];
+	$search_xprofile = "u.{$query->uid_name} IN ( SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE '%{$search_terms_clean}%' )";
+	$search_combined = "( {$search_xprofile} OR {$search_core} )";
+
+	$sql['where']['search'] = $search_combined;
+
+	return $sql;
+}
+add_action( 'bp_user_query_uid_clauses', 'bp_xprofile_bp_user_query_search', 10, 2 );
+
+/**
  * Syncs Xprofile data to the standard built in WordPress profile data.
  *
  * @package BuddyPress Core
@@ -437,7 +544,7 @@ function xprofile_sync_wp_profile( $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		return false;
 
-	$fullname = xprofile_get_field_data( bp_xprofile_fullname_field_name(), $user_id );
+	$fullname = xprofile_get_field_data( bp_xprofile_fullname_field_id(), $user_id );
 	$space    = strpos( $fullname, ' ' );
 
 	if ( false === $space ) {
@@ -473,7 +580,7 @@ function xprofile_sync_bp_profile( &$errors, $update, &$user ) {
 	if ( ( !empty( $bp->site_options['bp-disable-profile-sync'] ) && (int) $bp->site_options['bp-disable-profile-sync'] ) || !$update || $errors->get_error_codes() )
 		return;
 
-	xprofile_set_field_data( bp_xprofile_fullname_field_name(), $user->ID, $user->display_name );
+	xprofile_set_field_data( bp_xprofile_fullname_field_id(), $user->ID, $user->display_name );
 }
 add_action( 'user_profile_update_errors', 'xprofile_sync_bp_profile', 10, 3 );
 
@@ -495,121 +602,131 @@ add_action( 'bp_make_spam_user', 'xprofile_remove_data' );
 
 /*** XProfile Meta ****************************************************/
 
-function bp_xprofile_delete_meta( $object_id, $object_type, $meta_key = false, $meta_value = false ) {
-	global $wpdb, $bp;
+/**
+ * Delete a piece of xprofile metadata.
+ *
+ * @param int $object_id ID of the object the metadata belongs to.
+ * @param string $object_type Type of object. 'group', 'field', or 'data'.
+ * @param string $meta_key Key of the metadata being deleted. If omitted, all
+ *        metadata for the object will be deleted.
+ * @param mixed $meta_value Optional. If provided, only metadata that matches
+ *        the value will be permitted.
+ * @param bool $delete_all Optional. If true, delete matching metadata entries
+ * 	  for all objects, ignoring the specified object_id. Otherwise, only
+ * 	  delete matching metadata entries for the specified object.
+ * 	  Default: false.
+ * @return bool True on success, false on failure.
+ */
+function bp_xprofile_delete_meta( $object_id, $object_type, $meta_key = false, $meta_value = false, $delete_all = false ) {
+	global $wpdb;
 
-	$object_id = (int) $object_id;
-
-	if ( !$object_id )
+	// Sanitize object type
+	if ( ! in_array( $object_type, array( 'group', 'field', 'data' ) ) ) {
 		return false;
-
-	if ( !isset( $object_type ) )
-		return false;
-
-	if ( !in_array( $object_type, array( 'group', 'field', 'data' ) ) )
-		return false;
-
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-	if ( is_array( $meta_value ) || is_object( $meta_value ) ) {
-		$meta_value = serialize( $meta_value );
 	}
 
-	$meta_value = trim( $meta_value );
-
+	// Legacy - if no meta_key is passed, delete all for the item
 	if ( empty( $meta_key ) ) {
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
-	} elseif ( !empty( $meta_value ) ) {
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s AND meta_value = %s", $object_id, $object_type, $meta_key, $meta_value ) );
+		$table_key  = 'xprofile_' . $object_type . 'meta';
+		$table_name = $wpdb->{$table_key};
+		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$table_name} WHERE object_type = %s AND object_id = %d", $object_type, $object_id ) );
+
+		// Force delete_all to false if deleting all for object
+		$delete_all = false;
 	} else {
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
+		$keys = array( $meta_key );
 	}
 
-	// Delete the cached object
-	wp_cache_delete( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, 'bp' );
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	add_filter( 'query', 'bp_xprofile_filter_meta_query' );
 
-	return true;
+	$retval = false;
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'xprofile_' . $object_type, $object_id, $key, $meta_value, $delete_all );
+	}
+
+	remove_filter( 'query', 'bp_xprofile_filter_meta_query' );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
 }
 
-function bp_xprofile_get_meta( $object_id, $object_type, $meta_key = '') {
-	global $wpdb, $bp;
-
-	$object_id = (int) $object_id;
-
-	if ( !$object_id )
+/**
+ * Get a piece of xprofile metadata.
+ *
+ * Note that the default value of $single is true, unlike in the case of the
+ * underlying get_metadata() function. This is for backward compatibility.
+ *
+ * @param int $object_id ID of the object the metadata belongs to.
+ * @param string $object_type Type of object. 'group', 'field', or 'data'.
+ * @param string $meta_key Key of the metadata being fetched. If omitted, all
+ *        metadata for the object will be retrieved.
+ * @param bool $single Optional. If true, return only the first value of the
+ *	  specified meta_key. This parameter has no effect if meta_key is not
+ *	  specified. Default: true.
+ * @return mixed Meta value if found. False on failure.
+ */
+function bp_xprofile_get_meta( $object_id, $object_type, $meta_key = '', $single = true ) {
+	// Sanitize object type
+	if ( ! in_array( $object_type, array( 'group', 'field', 'data' ) ) ) {
 		return false;
-
-	if ( !isset( $object_type ) )
-		return false;
-
-	if ( !in_array( $object_type, array( 'group', 'field', 'data' ) ) )
-		return false;
-
-	if ( !empty( $meta_key ) ) {
-		$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-		if ( !$metas = wp_cache_get( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, 'bp' ) ) {
-			$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
-			wp_cache_set( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, $metas, 'bp' );
-		}
-	} else {
-		$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s", $object_id, $object_type ) );
 	}
 
-	if ( empty( $metas ) ) {
-		if ( empty( $meta_key ) ) {
-			return array();
-		} else {
-			return '';
-		}
-	}
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	add_filter( 'query', 'bp_xprofile_filter_meta_query' );
+	$retval = get_metadata( 'xprofile_' . $object_type, $object_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+	remove_filter( 'query', 'bp_xprofile_filter_meta_query' );
 
-	$metas = array_map( 'maybe_unserialize', (array) $metas );
-
-	if ( 1 == count( $metas ) )
-		return $metas[0];
-	else
-		return $metas;
+	return $retval;
 }
 
-function bp_xprofile_update_meta( $object_id, $object_type, $meta_key, $meta_value ) {
-	global $wpdb, $bp;
+/**
+ * Update a piece of xprofile metadata.
+ *
+ * @param int $object_id ID of the object the metadata belongs to.
+ * @param string $object_type Type of object. 'group', 'field', or 'data'.
+ * @param string $meta_key Key of the metadata being updated.
+ * @param mixed $meta_value Value of the metadata being updated.
+ * @param mixed $prev_value Optional. If specified, only update existing
+ *        metadata entries with the specified value. Otherwise, update all
+ *        entries.
+ * @return bool|int Returns false on failure. On successful update of existing
+ *         metadata, returns true. On successful creation of new metadata,
+ *         returns the integer ID of the new metadata row.
+ */
+function bp_xprofile_update_meta( $object_id, $object_type, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	add_filter( 'query', 'bp_xprofile_filter_meta_query' );
+	$retval = update_metadata( 'xprofile_' . $object_type, $object_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_xprofile_filter_meta_query' );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	$object_id = (int) $object_id;
+	return $retval;
+}
 
-	if ( empty( $object_id ) )
-		return false;
+/**
+ * Add a piece of xprofile metadata.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $object_id ID of the object the metadata belongs to.
+ * @param string $object_type Type of object. 'group', 'field', or 'data'.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Metadata value.
+ * @param bool $unique. Optional. Whether to enforce a single metadata value
+ *        for the given key. If true, and the object already has a value for
+ *        the key, no change will be made. Default: false.
+ * @return int|bool The meta ID on successful update, false on failure.
+ */
+function bp_xprofile_add_meta( $object_id, $object_type, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	add_filter( 'query', 'bp_xprofile_filter_meta_query' );
+	$retval = add_metadata( 'xprofile_' . $object_type , $object_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+	remove_filter( 'query', 'bp_xprofile_filter_meta_query' );
 
-	if ( !isset( $object_type ) )
-		return false;
-
-	if ( !in_array( $object_type, array( 'group', 'field', 'data' ) ) )
-		return false;
-
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-	if ( is_string( $meta_value ) ) {
-		$meta_value = stripslashes( $meta_value );
-	}
-
-	$meta_value = maybe_serialize( $meta_value );
-
-	if ( empty( $meta_value ) )
-		return bp_xprofile_delete_meta( $object_id, $object_type, $meta_key );
-
-	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_meta} WHERE object_id = %d AND object_type = %s AND meta_key = %s", $object_id, $object_type, $meta_key ) );
-
-	if ( empty( $cur ) )
-		$wpdb->query( $wpdb->prepare( "INSERT INTO {$bp->profile->table_name_meta} ( object_id, object_type, meta_key, meta_value ) VALUES ( %d, %s, %s, %s )", $object_id, $object_type,  $meta_key, $meta_value ) );
-	else if ( $cur->meta_value != $meta_value )
-		$wpdb->query( $wpdb->prepare( "UPDATE {$bp->profile->table_name_meta} SET meta_value = %s WHERE object_id = %d AND object_type = %s AND meta_key = %s", $meta_value, $object_id, $object_type, $meta_key ) );
-	else
-		return false;
-
-	// Update the cached object and recache
-	wp_cache_set( 'bp_xprofile_meta_' . $object_type . '_' . $object_id . '_' . $meta_key, $meta_value, 'bp' );
-
-	return true;
+	return $retval;
 }
 
 function bp_xprofile_update_fieldgroup_meta( $field_group_id, $meta_key, $meta_value ) {
@@ -622,6 +739,28 @@ function bp_xprofile_update_field_meta( $field_id, $meta_key, $meta_value ) {
 
 function bp_xprofile_update_fielddata_meta( $field_data_id, $meta_key, $meta_value ) {
 	return bp_xprofile_update_meta( $field_data_id, 'data', $meta_key, $meta_value );
+}
+
+/**
+ * Return the field ID for the Full Name xprofile field.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @return int Field ID.
+ */
+function bp_xprofile_fullname_field_id() {
+	$id = wp_cache_get( 'fullname_field_id', 'bp_xprofile' );
+
+	if ( false === $id ) {
+		global $wpdb;
+
+		$bp = buddypress();
+		$id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
+
+		wp_cache_set( 'fullname_field_id', $id, 'bp_xprofile' );
+	}
+
+	return absint( $id );
 }
 
 /**
@@ -724,7 +863,7 @@ function bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id = 0, $c
 		$hidden_levels = array( 'friends', 'loggedin', 'adminsonly', );
 	}
 
-	return $hidden_levels;
+	return apply_filters( 'bp_xprofile_get_hidden_field_types_for_user', $hidden_levels, $displayed_user_id, $current_user_id );
 }
 
 /**

@@ -256,38 +256,54 @@ function bp_activity_get_userid_from_mentionname( $mentionname ) {
 /** Actions ******************************************************************/
 
 /**
- * Set the current action for a given activity stream location.
+ * Register an activity 'type' and its action description/callback.
  *
- * @since BuddyPress (1.1)
+ * Activity actions are strings used to describe items in the activity stream,
+ * such as 'Joe became a registered member' or 'Bill and Susie are now
+ * friends'. Each activity type (such as 'new_member' or 'friendship_created')
+ * used by a component should be registered using this function.
  *
- * @global object $bp BuddyPress global settings
- * @uses apply_filters() To call the 'bp_activity_set_action' hook
+ * While it's possible to post items to the activity stream whose types are
+ * not registered using bp_activity_set_action(), it is not recommended;
+ * unregistered types will not be displayed properly in the activity admin
+ * panel, and dynamic action generation (which is essential for multilingual
+ * sites, etc) will not work.
+ *
+ * @since BuddyPress (1.1.0)
  *
  * @param string $component_id The unique string ID of the component.
- * @param string $key The action key.
- * @param string $value The action value.
+ * @param string $type The action type.
+ * @param string $description The action description.
+ * @param callable $format_callback Callback for formatting the action string.
  * @return bool False if any param is empty, otherwise true.
  */
-function bp_activity_set_action( $component_id, $key, $value ) {
-	global $bp;
+function bp_activity_set_action( $component_id, $type, $description, $format_callback = false ) {
+	$bp = buddypress();
 
 	// Return false if any of the above values are not set
-	if ( empty( $component_id ) || empty( $key ) || empty( $value ) )
+	if ( empty( $component_id ) || empty( $type ) || empty( $description ) ) {
 		return false;
+	}
 
 	// Set activity action
-	if ( !isset( $bp->activity->actions ) || !is_object( $bp->activity->actions ) ) {
+	if ( ! isset( $bp->activity->actions ) || ! is_object( $bp->activity->actions ) ) {
 		$bp->activity->actions = new stdClass;
 	}
 
-	if ( !isset( $bp->activity->actions->{$component_id} ) || !is_object( $bp->activity->actions->{$component_id} ) ) {
+	// Verify callback
+	if ( ! is_callable( $format_callback ) ) {
+		$format_callback = '';
+	}
+
+	if ( ! isset( $bp->activity->actions->{$component_id} ) || ! is_object( $bp->activity->actions->{$component_id} ) ) {
 		$bp->activity->actions->{$component_id} = new stdClass;
 	}
 
-	$bp->activity->actions->{$component_id}->{$key} = apply_filters( 'bp_activity_set_action', array(
-		'key'   => $key,
-		'value' => $value
-	), $component_id, $key, $value );
+	$bp->activity->actions->{$component_id}->{$type} = apply_filters( 'bp_activity_set_action', array(
+		'key'             => $type,
+		'value'           => $description,
+		'format_callback' => $format_callback,
+	), $component_id, $type, $description, $format_callback );
 
 	return true;
 }
@@ -334,9 +350,6 @@ function bp_activity_get_types() {
 
 	// This was a mis-named activity type from before BP 1.6
 	unset( $actions['friends_register_activity_action'] );
-
-	// This type has not been used since BP 1.0.3. It will be re-instated in a future version.
-	unset( $actions['updated_profile'] );
 
 	return apply_filters( 'bp_activity_get_types', $actions );
 }
@@ -393,8 +406,17 @@ function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		$user_id = bp_loggedin_user_id();
 
-	// Update the user's personal favorites
-	$my_favs   = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
+	$my_favs = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
+	if ( empty( $my_favs ) || ! is_array( $my_favs ) ) {
+		$my_favs = array();
+	}
+
+	// Bail if the user has already favorited this activity item
+	if ( in_array( $activity_id, $my_favs ) ) {
+		return false;
+	}
+
+	// Add to user's favorites
 	$my_favs[] = $activity_id;
 
 	// Update the total number of users who have favorited this activity
@@ -405,7 +427,7 @@ function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
 	bp_update_user_meta( $user_id, 'bp_favorite_activities', $my_favs );
 
 	// Update activity meta counts
-	if ( true === bp_activity_update_meta( $activity_id, 'favorite_count', $fav_count ) ) {
+	if ( bp_activity_update_meta( $activity_id, 'favorite_count', $fav_count ) ) {
 
 		// Execute additional code
 		do_action( 'bp_activity_add_user_favorite', $activity_id, $user_id );
@@ -448,9 +470,15 @@ function bp_activity_remove_user_favorite( $activity_id, $user_id = 0 ) {
 	if ( empty( $user_id ) )
 		$user_id = bp_loggedin_user_id();
 
-	// Remove the fav from the user's favs
 	$my_favs = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
 	$my_favs = array_flip( (array) $my_favs );
+
+	// Bail if the user has not previously favorited the item
+	if ( ! isset( $my_favs[ $activity_id ] ) ) {
+		return false;
+	}
+
+	// Remove the fav from the user's favs
 	unset( $my_favs[$activity_id] );
 	$my_favs = array_unique( array_flip( $my_favs ) );
 
@@ -538,59 +566,46 @@ function bp_activity_total_favorites_for_user( $user_id = 0 ) {
 /**
  * Delete a meta entry from the DB for an activity stream item.
  *
- * @since BuddyPress (1.2)
+ * @since BuddyPress (1.2.0)
  *
  * @global object $wpdb WordPress database access object.
  * @global object $bp BuddyPress global settings.
- * @uses wp_cache_delete()
- * @uses is_wp_error()
  *
  * @param int $activity_id ID of the activity item whose metadata is being deleted.
  * @param string $meta_key Optional. The key of the metadata being deleted. If
- *                         omitted, all metadata associated with the activity
- *                         item will be deleted.
+ *        omitted, all metadata associated with the activity
+ *        item will be deleted.
  * @param string $meta_value Optional. If present, the metadata will only be
- *                           deleted if the meta_value matches this parameter.
+ *        deleted if the meta_value matches this parameter.
+ * @param bool $delete_all Optional. If true, delete matching metadata entries
+ * 	  for all objects, ignoring the specified object_id. Otherwise,
+ * 	  only delete matching metadata entries for the specified
+ * 	  activity item. Default: false.
  * @return bool True on success, false on failure.
  */
-function bp_activity_delete_meta( $activity_id, $meta_key = '', $meta_value = '' ) {
+function bp_activity_delete_meta( $activity_id, $meta_key = '', $meta_value = '', $delete_all = false ) {
 	global $wpdb, $bp;
 
-	// Return false if any of the above values are not set
-	if ( !is_numeric( $activity_id ) )
-		return false;
+	// Legacy - if no meta_key is passed, delete all for the item
+	if ( empty( $meta_key ) ) {
+		$all_meta = bp_activity_get_meta( $activity_id );
+		$keys     = ! empty( $all_meta ) ? array_keys( $all_meta ) : array();
 
-	// Sanitize key
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
+		// With no meta_key, ignore $delete_all
+		$delete_all = false;
+	} else {
+		$keys = array( $meta_key );
+	}
 
-	if ( is_array( $meta_value ) || is_object( $meta_value ) )
-		$meta_value = serialize( $meta_value );
+	$retval = true;
 
-	// Trim off whitespace
-	$meta_value = trim( $meta_value );
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'activity', $activity_id, $key, $meta_value, $delete_all );
+	}
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	// Delete all for activity_id
-	if ( empty( $meta_key ) )
-		$retval = $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->activity->table_name_meta} WHERE activity_id = %d", $activity_id ) );
-
-	// Delete only when all match
-	else if ( $meta_value )
-		$retval = $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->activity->table_name_meta} WHERE activity_id = %d AND meta_key = %s AND meta_value = %s", $activity_id, $meta_key, $meta_value ) );
-
-	// Delete only when activity_id and meta_key match
-	else
-		$retval = $wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->activity->table_name_meta} WHERE activity_id = %d AND meta_key = %s", $activity_id, $meta_key ) );
-
-	// Delete cache entry
-	wp_cache_delete( 'bp_activity_meta_' . $activity_id . '_' . $meta_key, 'bp' );
-
-	// Success
-	if ( !is_wp_error( $retval ) )
-		return true;
-
-	// Fail
-	else
-		return false;
+	return $retval;
 }
 
 /**
@@ -598,65 +613,24 @@ function bp_activity_delete_meta( $activity_id, $meta_key = '', $meta_value = ''
  *
  * @since BuddyPress (1.2)
  *
- * @global object $wpdb WordPress database access object.
- * @global object $bp BuddyPress global settings.
- * @uses wp_cache_get()
- * @uses wp_cache_set()
  * @uses apply_filters() To call the 'bp_activity_get_meta' hook.
  *
- * @param int $activity_id ID of the activity item whose metadata is being requseted.
+ * @param int $activity_id ID of the activity item whose metadata is being requested.
  * @param string $meta_key Optional. If present, only the metadata matching
- *                         that meta key will be returned. Otherwise, all
- *                         metadata for the activity item will be fetched.
+ *        that meta key will be returned. Otherwise, all metadata for the
+ *        activity item will be fetched.
+ * @param bool $single Optional. If true, return only the first value of the
+ *	  specified meta_key. This parameter has no effect if meta_key is not
+ *	  specified. Default: true.
  * @return mixed The meta value(s) being requested.
  */
-function bp_activity_get_meta( $activity_id = 0, $meta_key = '' ) {
-	global $wpdb, $bp;
-
-	// Make sure activity_id is valid
-	if ( empty( $activity_id ) || !is_numeric( $activity_id ) )
-		return false;
-
-	// We have a key to look for
-	if ( !empty( $meta_key ) ) {
-
-		// Sanitize key
-		$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
-
-		// Check cache
-		if ( !$metas = wp_cache_get( 'bp_activity_meta_' . $activity_id . '_' . $meta_key, 'bp' ) ) {
-			// No cache so hit the DB
-			$metas = $wpdb->get_col( $wpdb->prepare("SELECT meta_value FROM {$bp->activity->table_name_meta} WHERE activity_id = %d AND meta_key = %s", $activity_id, $meta_key ) );
-
-			// Set cache
-			wp_cache_set( 'bp_activity_meta_' . $activity_id . '_' . $meta_key, $metas, 'bp' );
-		}
-
-	// No key so get all for activity_id
-	} else {
-		$metas = $wpdb->get_results( $wpdb->prepare( "SELECT meta_key, meta_value FROM {$bp->activity->table_name_meta} WHERE activity_id = %d", $activity_id ) );
-
-		if ( !empty( $metas ) ) {
-			$metas = array_map( 'maybe_unserialize', (array) $metas );
-
-			foreach( $metas as $mkey => $mvalue ) {
-				wp_cache_set( 'bp_activity_meta_' . $activity_id . '_' . $mkey, $mvalue, 'bp' );
-			}
-		}
-	}
-
-	// No result so return false
-	if ( empty( $metas ) )
-		return false;
-
-	// Maybe, just maybe... unserialize
-	$metas = array_map( 'maybe_unserialize', (array) $metas );
-
-	// Return first item in array if only 1, else return all metas found
-	$retval = ( 1 == count( $metas ) ? $metas[0] : $metas );
+function bp_activity_get_meta( $activity_id = 0, $meta_key = '', $single = true ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = get_metadata( 'activity', $activity_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
 	// Filter result before returning
-	return apply_filters( 'bp_activity_get_meta', $retval, $activity_id, $meta_key );
+	return apply_filters( 'bp_activity_get_meta', $retval, $activity_id, $meta_key, $single );
 }
 
 /**
@@ -664,59 +638,44 @@ function bp_activity_get_meta( $activity_id = 0, $meta_key = '' ) {
  *
  * @since BuddyPress (1.2)
  *
- * @global object $wpdb WordPress database access object.
- * @global object $bp BuddyPress global settings.
- * @uses maybe_serialize()
- * @uses bp_activity_delete_meta()
- * @uses wp_cache_set()
- *
- * @param int $activity_id ID of the activity item whose metadata is being updated.
+ * @param int $activity_id ID of the activity item whose metadata is being
+ *        updated.
  * @param string $meta_key Key of the metadata being updated.
  * @param mixed $meta_value Value to be set.
- * @return bool True on success, false on failure.
+ * @param mixed $prev_value Optional. If specified, only update existing
+ *        metadata entries with the specified value. Otherwise, update all
+ *        entries.
+ * @return bool|int Returns false on failure. On successful update of existing
+ *         metadata, returns true. On successful creation of new metadata,
+ *         returns the integer ID of the new metadata row.
  */
-function bp_activity_update_meta( $activity_id, $meta_key, $meta_value ) {
-	global $wpdb, $bp;
+function bp_activity_update_meta( $activity_id, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = update_metadata( 'activity', $activity_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	// Make sure activity_id is valid
-	if ( !is_numeric( $activity_id ) )
-		return false;
+	return $retval;
+}
 
-	// Sanitize key
-	$meta_key = preg_replace( '|[^a-z0-9_]|i', '', $meta_key );
+/**
+ * Add a piece of activity metadata.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param int $activity_id ID of the activity item.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Metadata value.
+ * @param bool $unique. Optional. Whether to enforce a single metadata value
+ *        for the given key. If true, and the object already has a value for
+ *        the key, no change will be made. Default: false.
+ * @return int|bool The meta ID on successful update, false on failure.
+ */
+function bp_activity_add_meta( $activity_id, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = add_metadata( 'activity', $activity_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
 
-	// Sanitize value
-	if ( is_string( $meta_value ) ) {
-		$meta_value = stripslashes( $meta_value );
-	}
-
-	// Maybe, just maybe... serialize
-	$meta_value = maybe_serialize( $meta_value );
-
-	// If value is false, delete the meta key
-	if ( false === $meta_value )
-		return bp_activity_delete_meta( $activity_id, $meta_key );
-
-	// See if meta key exists for activity_id
-	$cur = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->activity->table_name_meta} WHERE activity_id = %d AND meta_key = %s", $activity_id, $meta_key ) );
-
-	// Meta key does not exist so INSERT
-	if ( empty( $cur ) )
-		$wpdb->query( $wpdb->prepare( "INSERT INTO {$bp->activity->table_name_meta} ( activity_id, meta_key, meta_value ) VALUES ( %d, %s, %s )", $activity_id, $meta_key, $meta_value ) );
-
-	// Meta key exists, so UPDATE
-	else if ( $cur->meta_value != $meta_value )
-		$wpdb->query( $wpdb->prepare( "UPDATE {$bp->activity->table_name_meta} SET meta_value = %s WHERE activity_id = %d AND meta_key = %s", $meta_value, $activity_id, $meta_key ) );
-
-	// Weirdness, so return false
-	else
-		return false;
-
-	// Set cache
-	wp_cache_set( 'bp_activity_meta_' . $activity_id . '_' . $meta_key, $meta_value, 'bp' );
-
-	// Victory is ours!
-	return true;
+	return $retval;
 }
 
 /** Clean up *****************************************************************/
@@ -872,8 +831,19 @@ add_action( 'bp_make_ham_user', 'bp_activity_ham_all_user_data' );
 function bp_activity_register_activity_actions() {
 	global $bp;
 
-	bp_activity_set_action( $bp->activity->id, 'activity_update', __( 'Posted a status update', 'buddypress' ) );
-	bp_activity_set_action( $bp->activity->id, 'activity_comment', __( 'Replied to a status update', 'buddypress' ) );
+	bp_activity_set_action(
+		$bp->activity->id,
+		'activity_update',
+		__( 'Posted a status update', 'buddypress' ),
+		'bp_activity_format_activity_action_activity_update'
+	);
+
+	bp_activity_set_action(
+		$bp->activity->id,
+		'activity_comment',
+		__( 'Replied to a status update', 'buddypress' ),
+		'bp_activity_format_activity_action_activity_comment'
+	);
 
 	do_action( 'bp_activity_register_activity_actions' );
 
@@ -881,6 +851,64 @@ function bp_activity_register_activity_actions() {
 	do_action( 'updates_register_activity_actions' );
 }
 add_action( 'bp_register_activity_actions', 'bp_activity_register_activity_actions' );
+
+/**
+ * Generate an activity action string for an activity item.
+ *
+ * @param object $activity Activity data object.
+ * @return string|bool Returns false if no callback is found, otherwise returns
+ *         the formatted action string.
+ */
+function bp_activity_generate_action_string( $activity ) {
+	// Check for valid input
+	if ( empty( $activity->component ) || empty( $activity->type ) ) {
+		return false;
+	}
+
+	// Check for registered format callback
+	if ( empty( buddypress()->activity->actions->{$activity->component}->{$activity->type}['format_callback'] ) ) {
+		return false;
+	}
+
+	// We apply the format_callback as a filter
+	add_filter( 'bp_activity_generate_action_string', buddypress()->activity->actions->{$activity->component}->{$activity->type}['format_callback'], 10, 2 );
+
+	// Generate the action string (run through the filter defined above)
+	$action = apply_filters( 'bp_activity_generate_action_string', $activity->action, $activity );
+
+	// Remove the filter for future activity items
+	remove_filter( 'bp_activity_generate_action_string', buddypress()->activity->actions->{$activity->component}->{$activity->type}['format_callback'], 10, 2 );
+
+	return $action;
+}
+
+/**
+ * Format 'activity_update' activity actions.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $action Static activity action.
+ * @param object $activity Activity data object.
+ * @return string
+ */
+function bp_activity_format_activity_action_activity_update( $action, $activity ) {
+	$action = sprintf( __( '%s posted an update', 'buddypress' ), bp_core_get_userlink( $activity->user_id ) );
+	return apply_filters( 'bp_activity_new_update_action', $action, $activity );
+}
+
+/**
+ * Format 'activity_comment' activity actions.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $action Static activity action.
+ * @param object $activity Activity data object.
+ * @return string
+ */
+function bp_activity_format_activity_action_activity_comment( $action, $activity ) {
+	$action = sprintf( __( '%s posted a new activity comment', 'buddypress' ), bp_core_get_userlink( $activity->user_id ) );
+	return apply_filters( 'bp_activity_comment_action', $action, $activity );
+}
 
 /******************************************************************************
  * Business functions are where all the magic happens in BuddyPress. They will
@@ -913,18 +941,19 @@ add_action( 'bp_register_activity_actions', 'bp_activity_register_activity_actio
  */
 function bp_activity_get( $args = '' ) {
 	$defaults = array(
-		'max'              => false,        // Maximum number of results to return
-		'page'             => 1,            // page 1 without a per_page will result in no pagination.
-		'per_page'         => false,        // results per page
-		'sort'             => 'DESC',       // sort ASC or DESC
-		'display_comments' => false,        // false for no comments. 'stream' for within stream display, 'threaded' for below each activity item
+		'max'               => false,        // Maximum number of results to return
+		'page'              => 1,            // page 1 without a per_page will result in no pagination.
+		'per_page'          => false,        // results per page
+		'sort'              => 'DESC',       // sort ASC or DESC
+		'display_comments'  => false,        // false for no comments. 'stream' for within stream display, 'threaded' for below each activity item
 
-		'search_terms'     => false,        // Pass search terms as a string
-		'meta_query'       => false,        // Filter by activity meta. See WP_Meta_Query for format
-		'show_hidden'      => false,        // Show activity items that are hidden site-wide?
-		'exclude'          => false,        // Comma-separated list of activity IDs to exclude
-		'in'               => false,        // Comma-separated list or array of activity IDs to which you want to limit the query
-		'spam'             => 'ham_only',   // 'ham_only' (default), 'spam_only' or 'all'.
+		'search_terms'      => false,        // Pass search terms as a string
+		'meta_query'        => false,        // Filter by activity meta. See WP_Meta_Query for format
+		'show_hidden'       => false,        // Show activity items that are hidden site-wide?
+		'exclude'           => false,        // Comma-separated list of activity IDs to exclude
+		'in'                => false,        // Comma-separated list or array of activity IDs to which you want to limit the query
+		'spam'              => 'ham_only',   // 'ham_only' (default), 'spam_only' or 'all'.
+		'update_meta_cache' => true,
 
 		/**
 		 * Pass filters as an array -- all filter items can be multiple values comma separated:
@@ -945,16 +974,17 @@ function bp_activity_get( $args = '' ) {
 	if ( 1 == (int) $page && empty( $max ) && empty( $search_terms ) && empty( $meta_query ) && empty( $filter ) && empty( $exclude ) && empty( $in ) && 'DESC' == $sort && empty( $exclude ) && 'ham_only' == $spam ) {
 		if ( !$activity = wp_cache_get( 'bp_activity_sitewide_front', 'bp' ) ) {
 			$args = array(
-				'page'             => $page,
-				'per_page'         => $per_page,
-				'max'              => $max,
-				'sort'             => $sort,
-				'search_terms'     => $search_terms,
-				'meta_query'       => $meta_query,
-				'filter'           => $filter,
-				'display_comments' => $display_comments,
-				'show_hidden'      => $show_hidden,
-				'spam'             => $spam
+				'page'              => $page,
+				'per_page'          => $per_page,
+				'max'               => $max,
+				'sort'              => $sort,
+				'search_terms'      => $search_terms,
+				'meta_query'        => $meta_query,
+				'filter'            => $filter,
+				'display_comments'  => $display_comments,
+				'show_hidden'       => $show_hidden,
+				'spam'              => $spam,
+				'update_meta_cache' => $update_meta_cache,
 			);
 			$activity = BP_Activity_Activity::get( $args );
 			wp_cache_set( 'bp_activity_sitewide_front', $activity, 'bp' );
@@ -995,33 +1025,35 @@ function bp_activity_get( $args = '' ) {
  *     All arguments and defaults are shared with BP_Activity_Activity::get(),
  *     except for the following:
  *     @type string|int|array Single activity ID, comma-separated list of IDs,
- *                            or array of IDs.
+ *           or array of IDs.
  * }
  * @return array $activity See BP_Activity_Activity::get() for description.
  */
 function bp_activity_get_specific( $args = '' ) {
 	$defaults = array(
-		'activity_ids'     => false,       // A single activity_id or array of IDs.
-		'display_comments' => false,       // true or false to display threaded comments for these specific activity items
-		'max'              => false,       // Maximum number of results to return
-		'page'             => 1,           // page 1 without a per_page will result in no pagination.
-		'per_page'         => false,       // results per page
-		'show_hidden'      => true,        // When fetching specific items, show all
-		'sort'             => 'DESC',      // sort ASC or DESC
-		'spam'             => 'ham_only',  // Retrieve items marked as spam
+		'activity_ids'      => false,       // A single activity_id or array of IDs.
+		'display_comments'  => false,       // true or false to display threaded comments for these specific activity items
+		'max'               => false,       // Maximum number of results to return
+		'page'              => 1,           // page 1 without a per_page will result in no pagination.
+		'per_page'          => false,       // results per page
+		'show_hidden'       => true,        // When fetching specific items, show all
+		'sort'              => 'DESC',      // sort ASC or DESC
+		'spam'              => 'ham_only',  // Retrieve items marked as spam
+		'update_meta_cache' => true,
 	);
 	$r = wp_parse_args( $args, $defaults );
 	extract( $r, EXTR_SKIP );
 
 	$get_args = array(
-		'page'             => $page,
-		'per_page'         => $per_page,
-		'max'              => $max,
-		'sort'             => $sort,
-		'display_comments' => $display_comments,
-		'show_hidden'      => $show_hidden,
-		'in'               => $activity_ids,
-		'spam'             => $spam
+		'page'              => $page,
+		'per_page'          => $per_page,
+		'max'               => $max,
+		'sort'              => $sort,
+		'display_comments'  => $display_comments,
+		'show_hidden'       => $show_hidden,
+		'in'                => $activity_ids,
+		'spam'              => $spam,
+		'update_meta_cache' => $update_meta_cache,
 	);
 	return apply_filters( 'bp_activity_get_specific', BP_Activity_Activity::get( $get_args ), $args, $get_args );
 }
@@ -1042,7 +1074,13 @@ function bp_activity_get_specific( $args = '' ) {
  *     @type int|bool $id Pass an activity ID to update an existing item, or
  *           false to create a new item. Default: false.
  *     @type string $action Optional. The activity action/description, typically
- *           something like "Joe posted an update".
+ *           something like "Joe posted an update". Values passed to this param
+ *           will be stored in the database and used as a fallback for when the
+ *           activity item's format_callback cannot be found (eg, when the
+ *           component is disabled). As long as you have registered a
+ *           format_callback for your $type, it is unnecessary to include this
+ *           argument - BP will generate it automatically.
+ *           See {@link bp_activity_set_action()}.
  *     @type string $content Optional. The content of the activity item.
  *     @type string $component The unique name of the component associated with
  *           the activity item - 'groups', 'profile', etc.
@@ -1098,7 +1136,6 @@ function bp_activity_add( $args = '' ) {
 	$activity->user_id           = $user_id;
 	$activity->component         = $component;
 	$activity->type              = $type;
-	$activity->action            = $action;
 	$activity->content           = $content;
 	$activity->primary_link      = $primary_link;
 	$activity->item_id           = $item_id;
@@ -1106,6 +1143,7 @@ function bp_activity_add( $args = '' ) {
 	$activity->date_recorded     = $recorded_time;
 	$activity->hide_sitewide     = $hide_sitewide;
 	$activity->is_spam           = $is_spam;
+	$activity->action            = ! empty( $action ) ? $action : bp_activity_generate_action_string( $activity );
 
 	if ( !$activity->save() )
 		return false;
@@ -1161,18 +1199,16 @@ function bp_activity_post_update( $args = '' ) {
 
 	// Record this on the user's profile
 	$from_user_link   = bp_core_get_userlink( $user_id );
-	$activity_action  = sprintf( __( '%s posted an update', 'buddypress' ), $from_user_link );
 	$activity_content = $content;
 	$primary_link     = bp_core_get_userlink( $user_id, false, true );
 
 	// Now write the values
 	$activity_id = bp_activity_add( array(
 		'user_id'      => $user_id,
-		'action'       => apply_filters( 'bp_activity_new_update_action', $activity_action ),
 		'content'      => apply_filters( 'bp_activity_new_update_content', $activity_content ),
 		'primary_link' => apply_filters( 'bp_activity_new_update_primary_link', $primary_link ),
 		'component'    => $bp->activity->id,
-		'type'         => 'activity_update'
+		'type'         => 'activity_update',
 	) );
 
 	$activity_content = apply_filters( 'bp_activity_latest_update_content', $content, $activity_content );
@@ -1241,7 +1277,6 @@ function bp_activity_new_comment( $args = '' ) {
 	// Insert the activity comment
 	$comment_id = bp_activity_add( array(
 		'id'                => $id,
-		'action'            => apply_filters( 'bp_activity_comment_action', sprintf( __( '%s posted a new activity comment', 'buddypress' ), bp_core_get_userlink( $user_id ) ) ),
 		'content'           => apply_filters( 'bp_activity_comment_content', $content ),
 		'component'         => buddypress()->activity->id,
 		'type'              => 'activity_comment',
@@ -1251,8 +1286,17 @@ function bp_activity_new_comment( $args = '' ) {
 		'hide_sitewide'     => $is_hidden
 	) );
 
-	// Clear the comment cache for this activity
-	wp_cache_delete( 'bp_activity_comments_' . $parent_id );
+	// Comment caches are stored only with the top-level item
+	wp_cache_delete( $activity_id, 'bp_activity_comments' );
+
+	// Walk the tree to clear caches for all parent items
+	$clear_id = $parent_id;
+	while ( $clear_id != $activity_id ) {
+		$clear_object = new BP_Activity_Activity( $clear_id );
+		wp_cache_delete( $clear_id, 'bp_activity' );
+		$clear_id = intval( $clear_object->secondary_item_id );
+	}
+	wp_cache_delete( $activity_id, 'bp_activity' );
 
 	do_action( 'bp_activity_comment_posted', $comment_id, $params, $activity );
 
@@ -1669,7 +1713,7 @@ function bp_activity_mark_as_spam( &$activity, $source = 'by_a_person' ) {
 	wp_cache_delete( 'bp_activity_sitewide_front', 'bp' );
 
 	// Clear the activity comment cache for this activity item
-	wp_cache_delete( 'bp_activity_comments_' . $activity->id, 'bp' );
+	wp_cache_delete( $activity->id, 'bp_activity_comments' );
 
 	// If Akismet is active, and this was a manual spam/ham request, stop Akismet checking the activity
 	if ( 'by_a_person' == $source && !empty( $bp->activity->akismet ) ) {
@@ -1709,7 +1753,7 @@ function bp_activity_mark_as_ham( &$activity, $source = 'by_a_person' ) {
 	wp_cache_delete( 'bp_activity_sitewide_front', 'bp' );
 
 	// Clear the activity comment cache for this activity item
-	wp_cache_delete( 'bp_activity_comments_' . $activity->id, 'bp' );
+	wp_cache_delete( $activity->id, 'bp_activity_comments' );
 
 	// If Akismet is active, and this was a manual spam/ham request, stop Akismet checking the activity
 	if ( 'by_a_person' == $source && !empty( $bp->activity->akismet ) ) {
@@ -1859,4 +1903,43 @@ function bp_embed_activity_cache( $cache, $id, $cachekey ) {
  */
 function bp_embed_activity_save_cache( $cache, $cachekey, $id ) {
 	bp_activity_update_meta( $id, $cachekey, $cache );
+}
+
+/**
+ * Should we use Heartbeat to refresh activities?
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @uses bp_is_activity_heartbeat_active() to check if heatbeat setting is on.
+ * @uses bp_is_activity_directory() to check if the current page is the activity
+ *       directory.
+ * @uses bp_is_active() to check if the group component is active.
+ * @uses bp_is_group_activity() to check if on a single group, the current page
+ *       is the group activities.
+ * @uses bp_is_group_home() to check if the current page is a single group home
+ *       page.
+ *
+ * @return bool True if activity heartbeat is enabled, otherwise false.
+ */
+function bp_activity_do_heartbeat() {
+	$retval = false;
+
+	if ( ! bp_is_activity_heartbeat_active() ) {
+		return $retval;
+	}
+
+	if ( bp_is_activity_directory() ) {
+		$retval = true;
+	}
+
+	if ( bp_is_active( 'groups') ) {
+		// If no custom front, then activities are loaded in group's home
+		$has_custom_front = bp_locate_template( array( 'groups/single/front.php' ), false, true );
+
+		if ( bp_is_group_activity() || ( ! $has_custom_front && bp_is_group_home() ) ) {
+			$retval = true;
+		}
+	}
+
+	return $retval;
 }
