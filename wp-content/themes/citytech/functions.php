@@ -925,3 +925,20 @@ function openlab_get_active_semesters() {
 
 	return $combos;
 }
+
+/**
+ * Temporary fix for loading the people-archive.php template
+ *
+ * For some reason this breaks with BP 2.0
+ *
+ * This change does *not* need to be ported to the bootstrap theme (unless the
+ * problem occurs there too).
+ */
+function openlab_filter_people_archive_template( $template, $templates ) {
+	if ( isset( $templates[0] ) && 'members/index.php' === $templates[0] ) {
+		$template = locate_template( array( 'people-archive.php' ), false );
+	}
+
+	return $template;
+}
+add_filter( 'bp_located_template', 'openlab_filter_people_archive_template', 10, 2 );
