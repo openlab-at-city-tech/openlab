@@ -1,0 +1,109 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: More Privacy Options\n"
+"POT-Creation-Date: 2014-02-16 18:20-0700\n"
+"PO-Revision-Date: 2014-02-16 18:23-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: ds_wp3_private_blog.php:133 ds_wp3_private_blog.php:134
+msgid "Site "
+msgstr ""
+
+#: ds_wp3_private_blog.php:133 ds_wp3_private_blog.php:134
+msgid "changed reading visibility setting from "
+msgstr ""
+
+#: ds_wp3_private_blog.php:133 ds_wp3_private_blog.php:134
+msgid " to "
+msgstr ""
+
+#: ds_wp3_private_blog.php:141 ds_wp3_private_blog.php:204
+#: ds_wp3_private_blog.php:230 ds_wp3_private_blog.php:250
+msgid "Visible(1)"
+msgstr ""
+
+#: ds_wp3_private_blog.php:144 ds_wp3_private_blog.php:206
+#: ds_wp3_private_blog.php:233 ds_wp3_private_blog.php:253
+msgid "No Search(0)"
+msgstr ""
+
+#: ds_wp3_private_blog.php:147 ds_wp3_private_blog.php:208
+#: ds_wp3_private_blog.php:236 ds_wp3_private_blog.php:256
+msgid "Network Users Only(-1)"
+msgstr ""
+
+#: ds_wp3_private_blog.php:150 ds_wp3_private_blog.php:210
+#: ds_wp3_private_blog.php:239 ds_wp3_private_blog.php:259
+msgid "Site Members Only(-2)"
+msgstr ""
+
+#: ds_wp3_private_blog.php:153 ds_wp3_private_blog.php:212
+#: ds_wp3_private_blog.php:242 ds_wp3_private_blog.php:262
+msgid "Site Admins Only(-3)"
+msgstr ""
+
+#: ds_wp3_private_blog.php:202
+msgid "More Privacy Options"
+msgstr ""
+
+#: ds_wp3_private_blog.php:219
+msgctxt "column name"
+msgid "<nobr>Visibility</nobr>"
+msgstr ""
+
+#: ds_wp3_private_blog.php:275 ds_wp3_private_blog.php:328
+#: ds_wp3_private_blog.php:333 ds_wp3_private_blog.php:337
+#: ds_wp3_private_blog.php:490
+msgid "Visible only to registered users of this network"
+msgstr ""
+
+#: ds_wp3_private_blog.php:278 ds_wp3_private_blog.php:414
+#: ds_wp3_private_blog.php:424 ds_wp3_private_blog.php:428
+msgid "Visible only to registered users of this site"
+msgstr ""
+
+#: ds_wp3_private_blog.php:282 ds_wp3_private_blog.php:462
+#: ds_wp3_private_blog.php:467 ds_wp3_private_blog.php:471
+msgid "Visible only to administrators of this site"
+msgstr ""
+
+#: ds_wp3_private_blog.php:351 ds_wp3_private_blog.php:486
+msgid "Site Visibility"
+msgstr ""
+
+#: ds_wp3_private_blog.php:417
+msgid "To become a member of this site, contact"
+msgstr ""
+
+#: ds_wp3_private_blog.php:417
+msgid " Site Membership at "
+msgstr ""
+
+#: ds_wp3_private_blog.php:443
+msgid "Visit"
+msgstr ""
+
+#: ds_wp3_private_blog.php:443
+msgid "to continue"
+msgstr ""
+
+#: ds_wp3_private_blog.php:482
+msgid "Network Visibility Selector"
+msgstr ""
+
+#: ds_wp3_private_blog.php:495
+msgid "Default: visibility managed per site."
+msgstr ""

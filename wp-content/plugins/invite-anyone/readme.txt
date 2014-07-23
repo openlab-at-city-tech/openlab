@@ -3,8 +3,8 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
 Requires at least: WP 3.2, BuddyPress 1.2.9
-Tested up to: WP 3.6.1, BuddyPress 1.8.1
-Stable tag: 1.0.25
+Tested up to: WP 3.9.1, BuddyPress 2.0.1
+Stable tag: 1.3.1
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -33,7 +33,7 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 * Belarussian: Alexander Ovsov (<a href="http://webhostinggeeks.com/science">Web Geek Science</a>)
 * Brazilian Portuguese: Celso Bessa
 * Danish: Mort3n
-* Dutch: Jesper Popma
+* Dutch: Jesper Popma, Tim de Hoog
 * French: Guillaume Coulon, Nicolas Mollet
 * German: Lars Berning, Thorsten Wollenhöfer
 * Greek: Lena Stergatou
@@ -45,9 +45,51 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 * Swedish: Alexander Berthelsen
 
 Additional details about the plugin can be found in the following languages:
-* Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a> 
+* Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a>
 
 == Changelog ==
+
+= 1.3.1 =
+* CloudSponge integration now has access to LinkedIn and Facebook address books
+
+= 1.3 =
+* Improved behavior after redirects
+* Fix bug that prevented error messages from displaying on invitation page
+* Fix bug that caused error messages to be reset when forbidden email addresses are entered
+* Enforce BuddyPress's 'invite_status' group setting when adding Invite Anyone menu
+* Enfore BP's 'invite_status' setting for individual groups when creating group checkboxes on email invitation page
+
+= 1.2.1 =
+* Allow is_large_network value to be filtered
+* Localization improvements with pagination strings
+* Update ru_RU
+
+= 1.2 =
+* Group creation step can now be toggled from admin panel
+* Fix bug that prevented autocomplete from working properly during group creation
+* Don't show group invite checkbox list if network is very large (rely on autocomplete only)
+* Fix "headers already sent" warnings when IA is used in connection with certain plugins
+* Fix "bypass registration lock" setting on recent versions of BP+Multisite
+* Enforce registration lock when user manually changes email address after reaching accept-invitation page
+* Fix incorrect links when removing newly created group invitations
+* Improved localization on "accept-invitation" screen
+
+= 1.1.1 =
+* Fix some PHP notices
+* Update nl_NL localization
+* Fix bug with group invitation autocomplete in some BP/WP setups
+
+= 1.1.0 =
+* Fix bug in pagination after sending email invitations
+* Fix broken sprite
+* Improve compatibility with template overrides when using theme compatibility
+* Improved responsiveness for group invitations
+* Error data is stored in a cookie rather than the URL, for better support across hosting environments
+
+= 1.0.26 =
+* Allow + signs to appear in invited email addresses
+* Improves icon appearance and performance
+* Improves appearance of group list on Send Invites screen
 
 = 1.0.25 =
 * Fixes broken Sent Invites screen
@@ -221,7 +263,7 @@ Additional details about the plugin can be found in the following languages:
 * Improved checking for deactivated components
 * BuddyPress Followers support
 
-= 0.6.6 = 
+= 0.6.6 =
 * Updated hooks to work with more recent versions of BuddyPress
 * Increased number of results returned to user on group invite autocomplete
 

@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.6' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -652,6 +652,12 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
 				<?php $blog_address = isset( $_GET['invalid_address'] ) ? urldecode( $_GET['invalid_address'] ) : bp_groupblog_sanitize_blog_name( $bp->groups->current_group->slug ) ?>
 
+				<?php
+					// Don't suggest a subdomain if it's really long,
+					// since subdomains longer than 63 chars won't work.
+					if (strlen($blog_address > 50)) $blog_address = "";
+				?>
+
 				<?php if (is_subdomain_install()) : ?>
 					<span class="gbd-value"><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /><em><?php echo $current_site->domain . $current_site->path ?></em></span>
 				<?php else : ?>
@@ -1065,6 +1071,11 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 
 	// This is an existing blog post!
 	if ( ! empty( $id ) ) {
+
+		if ( apply_filters( 'groupblog_skip_edit_activity', false ) ) {
+			return;
+		}
+
 		$activity->id = $id;
 
 		// @todo just in case another user edited the original author's post?
@@ -1104,6 +1115,11 @@ add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity'
  * @param int $user_id
  */
 function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
+	// Bail if the activity or blogs components are not enabled
+	if ( ! bp_is_active( 'blogs' ) || ! bp_is_active( 'activity' ) ) {
+		return;
+	}
+
 	global $wpdb, $bp;
 
 	$post_id = (int) $post_id;
@@ -1134,7 +1150,6 @@ function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 }
 add_action( 'wp_trash_post', 'bp_groupblog_remove_post', 5 );
 add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
-
 
 /**
  * See if users are able to comment to the activity entry of the groupblog post.
@@ -1181,7 +1196,7 @@ add_filter( 'bp_activity_get_permalink', 'bp_groupblog_activity_permalink', 10, 
  */
 function bp_groupblog_posts() { ?>
 
-	<option value="new_groupblog_post"><?php _e( 'Show Blog Posts', 'groupblog' ) ?></option><?php
+	<option value="new_groupblog_post"><?php _e( 'Blog Posts', 'groupblog' ) ?></option><?php
 
 }
 add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );

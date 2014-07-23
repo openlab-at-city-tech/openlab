@@ -70,7 +70,7 @@ class BP_Invite_Anyone extends BP_Group_Extension {
 		}
 
 		$this->enable_nav_item = $this->enable_nav_item();
-		$this->enable_create_step = $this->enable_nav_item();
+		$this->enable_create_step = $this->enable_create_step();
 	}
 
 	function display() {
@@ -134,8 +134,23 @@ class BP_Invite_Anyone extends BP_Group_Extension {
 			bp_core_add_message( __('Group created successfully.', 'buddypress') );
 	}
 
+	/**
+	 * Should the group creation step be included?
+	 *
+	 * @since 1.2
+	 */
+	public function enable_create_step() {
+		$options = invite_anyone_options();
+		return ! empty( $options['group_invites_enable_create_step'] ) && $options['group_invites_enable_create_step'] === 'yes';
+	}
+
 	function enable_nav_item() {
 		global $bp;
+
+		// Group-specific settings always override
+		if ( ! bp_groups_user_can_send_invites() ) {
+			return false;
+		}
 
 		if ( invite_anyone_group_invite_access_test() == 'anyone' )
 			return true;
@@ -168,7 +183,7 @@ function invite_anyone_catch_group_invites() {
 add_action( 'wp', 'invite_anyone_catch_group_invites', 1 );
 
 function invite_anyone_create_screen_content( $event ) {
-	if ( !$template = locate_template( 'groups/single/invite-anyone.php', true ) ) {
+	if ( !$template = function_exists( 'bp_locate_template' ) ? bp_locate_template( 'groups/single/invite-anyone.php', true ) : locate_template( 'groups/single/invite-anyone.php', true ) ) {
 		include_once( 'templates/invite-anyone.php' );
 	}
 }
@@ -190,6 +205,8 @@ function bp_new_group_invite_member_list() {
 
 		if ( !$group_id )
 			$group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : $bp->groups->current_group->id;
+
+		$items = array();
 
 		$friends = get_members_invite_list( $bp->loggedin_user->id, $group_id );
 
@@ -328,7 +345,7 @@ function get_members_invite_list( $user_id = false, $group_id ) {
 
 	}
 
-	if ( !$friends )
+	if ( ! isset( $friends ) )
 		return false;
 
 	return $friends;
@@ -351,12 +368,18 @@ function invite_anyone_ajax_invite_user() {
 
 		$group_slug = isset( $bp->groups->root_slug ) ? $bp->groups->root_slug : $bp->groups->slug;
 
+		if ( bp_is_current_action( 'create' ) ) {
+			$uninvite_url = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-invites/?user_id=' . $user->id;
+		} else {
+			$uninvite_url = bp_get_group_permalink( groups_get_current_group() ) . 'send-invites/remove/' . $user->id;
+		}
+
 		echo '<li id="uid-' . $user->id . '">';
 		echo bp_core_fetch_avatar( array( 'item_id' => $user->id ) );
 		echo '<h4>' . bp_core_get_userlink( $user->id ) . '</h4>';
 		echo '<span class="activity">' . esc_html( $user->last_active ) . '</span>';
 		echo '<div class="action">
-				<a class="remove" href="' . wp_nonce_url( $bp->loggedin_user->domain . $group_slug . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_html( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
+				<a class="remove" href="' . wp_nonce_url( $uninvite_url ) . '" id="uid-' . esc_html( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
 			  </div>';
 		echo '</li>';
 
@@ -425,19 +448,32 @@ function invite_anyone_remove_invite_subnav() {
 add_filter( 'groups_create_group_steps', 'invite_anyone_remove_group_creation_invites', 1 );
 add_action( 'bp_setup_nav', 'invite_anyone_remove_invite_subnav', 15 );
 
-
-
-
-/* Utility function to test which members the current user can invite to a group */
-function invite_anyone_group_invite_access_test() {
+/**
+ * Determine access setting for a group/user pair.
+ *
+ * @param int $group_id Group ID. Default: current group ID.
+ * @param int $user_id User ID. Default: current user ID.
+ */
+function invite_anyone_group_invite_access_test( $group_id = 0, $user_id = 0 ) {
 	global $current_user, $bp;
 
-	if ( ! is_user_logged_in() || ( empty( $bp->groups->current_group ) && ! bp_is_group_create() ) ) {
+	if ( empty( $group_id ) ) {
+		$group_id = bp_is_group() ? bp_get_current_group_id() : 0;
+	}
+
+	if ( empty( $group_id ) && ! bp_is_group_create() ) {
 		return 'noone';
 	}
 
-	if ( !$iaoptions = get_option( 'invite_anyone' ) )
-		$iaoptions = array();
+	if ( empty( $user_id ) ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	if ( empty( $user_id ) ) {
+		return 'noone';
+	}
+
+	$iaoptions = invite_anyone_options();
 
 	if ( bp_is_group_create() ) {
 		if ( empty( $iaoptions['group_invites_can_group_admin'] ) || $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
@@ -448,24 +484,25 @@ function invite_anyone_group_invite_access_test() {
 			return 'noone';
 	}
 
-	if ( !groups_is_user_member( $bp->loggedin_user->id, $bp->groups->current_group->id ) )
+	if ( ! groups_is_user_member( $user_id, $group_id ) ) {
 		return 'noone';
+	}
 
-	if ( is_super_admin() ) {
+	if ( user_can( $user_id, 'bp_moderate' ) ) {
 		if ( empty( $iaoptions['group_invites_can_admin'] ) || $iaoptions['group_invites_can_admin'] == 'anyone' || !$iaoptions['group_invites_can_admin'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_admin'] == 'friends' )
 			return 'friends';
 		if ( $iaoptions['group_invites_can_admin'] == 'noone' )
 			return 'noone';
-	} else if ( bp_group_is_admin() || bp_is_group_create() ) {
+	} else if ( groups_is_user_admin( $user_id, $group_id ) ) {
 		if ( empty( $iaoptions['group_invites_can_group_admin'] ) || $iaoptions['group_invites_can_group_admin'] == 'anyone' || !$iaoptions['group_invites_can_group_admin'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_admin'] == 'friends' )
 			return 'friends';
 		if ( $iaoptions['group_invites_can_group_admin'] == 'noone' )
 			return 'noone';
-	} else if ( bp_group_is_mod() ) {
+	} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
 		if ( empty( $iaoptions['group_invites_can_group_mod'] ) || $iaoptions['group_invites_can_group_mod'] == 'anyone' || !$iaoptions['group_invites_can_group_mod'] )
 			return 'anyone';
 		if ( $iaoptions['group_invites_can_group_mod'] == 'friends' )
@@ -539,4 +576,27 @@ To view %5$s\'s profile visit: %6$s
 ', 'buddypress' ), $inviter_name, $group->name, $invites_link, $group_link, $inviter_name, $inviter_link );
 
 	return $message;
+}
+
+/**
+ * Wrapper for wp_is_large_network() that supports non-MS.
+ *
+ * @since 1.1.2
+ */
+function invite_anyone_is_large_network() {
+	if ( function_exists( 'wp_is_large_network' ) ) {
+		$is_large_network = wp_is_large_network( 'users' );
+		$count = get_user_count();
+	} else {
+		global $wpdb;
+		$count = get_transient( 'ia_user_count' );
+		if ( false === $count ) {
+			$count = $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE user_status = '0'" );
+			set_transient( 'ia_user_count', $count, 60*60*24 );
+		}
+		$is_large_network = $count > 10000;
+		return apply_filters( 'invite_anyone_is_large_network', $count > 10000, $count );
+	}
+
+	return apply_filters( 'invite_anyone_is_large_network', $is_large_network, $count );
 }
