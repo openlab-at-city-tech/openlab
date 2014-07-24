@@ -7,20 +7,21 @@
 /**
  * Custom template loader for my-{grouptype}
  */
-function openlab_mygroups_template_loader( $template ) {
-	if ( is_page() ) {
-		switch ( get_query_var( 'pagename' ) ) {
-			case 'my-courses' :
-			case 'my-clubs' :
-			case 'my-projects' :
-				get_template_part('buddypress/groups/index');
-				break;
-		}
-	}
+function openlab_mygroups_template_loader($template) {
+    if (is_page()) {
+        switch (get_query_var('pagename')) {
+            case 'my-courses' :
+            case 'my-clubs' :
+            case 'my-projects' :
+                get_template_part('buddypress/groups/index');
+                break;
+        }
+    }
 
-	return $template;
+    return $template;
 }
-add_filter( 'template_include', 'openlab_mygroups_template_loader' );
+
+add_filter('template_include', 'openlab_mygroups_template_loader');
 
 /**
  * This function consolidates the group privacy settings in one spot for easier updating
@@ -236,7 +237,7 @@ function openlab_group_archive() {
     if (bp_has_groups($group_args)) :
         ?>
         <div class="current-group-filters current-portfolio-filters">
-            <?php openlab_current_directory_filters(); ?>
+        <?php openlab_current_directory_filters(); ?>
         </div>
         <div class="group-count"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
         <div class="clearfloat"></div>
@@ -270,7 +271,7 @@ function openlab_group_archive() {
                             $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
                             ?>
                             <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?><br /> <?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
-                        <?php elseif ($group_type == 'portfolio'): ?>
+            <?php elseif ($group_type == 'portfolio'): ?>
 
                             <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
 
@@ -295,18 +296,18 @@ function openlab_group_archive() {
                 }
                 ?>
                 <?php $count++ ?>
-            <?php endwhile; ?>
+        <?php endwhile; ?>
         </ul>
 
         <div class="pagination-links" id="group-dir-pag-top">
-            <?php bp_groups_pagination_links() ?>
+        <?php bp_groups_pagination_links() ?>
         </div>
-    <?php else: ?>
+        <?php else: ?>
         <div class="current-group-filters current-portfolio-filters">
-            <?php openlab_current_directory_filters(); ?>
+        <?php openlab_current_directory_filters(); ?>
         </div>
         <div class="widget-error">
-            <?php _e('There are no ' . $group_type . 's to display.', 'buddypress') ?>
+        <?php _e('There are no ' . $group_type . 's to display.', 'buddypress') ?>
         </div>
 
     <?php endif; ?>
@@ -435,11 +436,11 @@ function cuny_buddypress_group_actions() {
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
             <div class="group-nav sidebar-widget">
-                <?php echo openlab_group_visibility_flag() ?>
+            <?php echo openlab_group_visibility_flag() ?>
                 <div id="item-buttons">
                     <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?></h2>
                     <ul>
-                        <?php bp_get_options_nav(); ?>
+            <?php bp_get_options_nav(); ?>
                     </ul>
                 </div><!-- #item-buttons -->
             </div>
@@ -592,7 +593,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
         <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label>
 
-        <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
+    <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
             <h6><?php _e('Private', 'buddypress') ?></h6>
             <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
@@ -604,7 +605,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
         <?php else : ?>
 
-            <?php /* Portfolios */ ?>
+        <?php /* Portfolios */ ?>
             <h6>Private</h6>
             <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
 
