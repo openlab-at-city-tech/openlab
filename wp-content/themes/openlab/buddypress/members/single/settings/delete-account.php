@@ -3,25 +3,6 @@
  * Members settings - email notifications settings
  *
  * */
-/* * begin layout* */
-get_header();
-?>
-
-<div id="content" class="hfeed">
-    <?php cuny_delete_profile(); ?>
-</div><!--content-->
-
-<div id="sidebar" class="sidebar widget-area">
-    <?php bp_get_template_part('members/single/sidebar'); ?>
-</div>
-
-<?php
-get_footer();
-
-/* * end layout* */
-
-function cuny_delete_profile() {
-
     do_action('bp_before_member_settings_template');
     ?>
     <div class="submenu"><div class="submenu-text">My Settings: </div> <?php echo openlab_profile_settings_submenu(); ?></div>
@@ -54,5 +35,3 @@ function cuny_delete_profile() {
     </div><!-- #item-body -->
     <?php
     do_action('bp_after_member_settings_template');
-}
-?>
