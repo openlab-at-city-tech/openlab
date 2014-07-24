@@ -70,7 +70,7 @@
 
             <div id="forums-dir-list" class="forums dir-list" role="main">
 
-<?php locate_template(array('buddypress/forums/forums-loop.php'), true); ?>
+<?php bp_get_template_part('forums/forums-loop.php'); ?>
 
             </div>
 

@@ -11,7 +11,7 @@
 
 
 			<div id="blogs-dir-list" class="blogs dir-list">
-				<?php locate_template( array( 'buddypress/blogs/blogs-loop.php' ), true ) ?>
+				<?php bp_get_template_part('blogs/blogs-loop.php' ); ?>
 			</div><!-- #blogs-dir-list -->
 
 			<?php do_action( 'bp_after_directory_blogs_content' ) ?>

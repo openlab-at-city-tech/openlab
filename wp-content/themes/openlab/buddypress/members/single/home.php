@@ -13,7 +13,7 @@ get_header();
     </div>
 
     <div id="sidebar" class="sidebar widget-area col-sm-3">
-        <?php get_template_part('buddypress/members/single/sidebar'); ?>
+        <?php bp_get_template_part('members/single/sidebar'); ?>
     </div>
 </div><!--content-->
 
@@ -187,7 +187,7 @@ function cuny_student_profile() {
                 <?php do_action('bp_before_member_blogs_content') ?>
 
             <div class="blogs myblogs">
-            <?php locate_template(array('buddypress/blogs/blogs-loop.php'), true) ?>
+            <?php bp_get_template_part('blogs/blogs-loop.php'); ?>
             </div><!-- .blogs.myblogs -->
 
             <?php do_action('bp_after_member_blogs_content') ?>
@@ -195,17 +195,17 @@ function cuny_student_profile() {
             <?php do_action('bp_before_member_body') ?>
 
         <?php } elseif ('view' == bp_current_action()) { ?>
-            <?php locate_template(array('buddypress/members/single/messages/single.php'), true) ?>
+            <?php bp_get_template_part('members/single/messages/single.php'); ?>
         <?php } elseif (bp_is_user_messages()) { ?>
-            <?php locate_template(array('buddypress/members/single/messages.php'), true) ?>
+            <?php bp_get_template_part('members/single/messages.php'); ?>
         <?php } elseif (bp_is_user_groups()) { ?>
-            <?php locate_template(array('buddypress/members/single/groups.php'), true) ?>
+            <?php bp_get_template_part('members/single/groups.php'); ?>
         <?php } elseif ('edit' == bp_current_action()) { ?>
-            <?php locate_template(array('buddypress/members/single/profile/edit.php'), true); ?>
+            <?php bp_get_template_part('members/single/profile/edit.php'); ?>
         <?php } elseif ('change-avatar' == bp_current_action()) { ?>
-            <?php locate_template(array('buddypress/members/single/profile/change-avatar.php'), true) ?>
+            <?php bp_get_template_part('members/single/profile/change-avatar.php'); ?>
         <?php } elseif ('requests' == bp_current_action()) { ?>
-            <?php locate_template(array('buddypress/members/single/friends/requests.php'), true) ?>
+            <?php bp_get_template_part('members/single/friends/requests.php'); ?>
         <?php } elseif (bp_is_user_friends()) { ?>
 
             <?php do_action('bp_before_member_friends_content') ?>
@@ -216,7 +216,7 @@ function cuny_student_profile() {
 
             <div class="members friends">
 
-            <?php locate_template(array('buddypress/members/members-loop.php'), true) ?>
+            <?php bp_get_template_part('members/members-loop.php'); ?>
             </div><!-- .members.friends -->
 
             <?php do_action('bp_after_member_friends_content') ?>

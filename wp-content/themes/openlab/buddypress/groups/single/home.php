@@ -46,7 +46,7 @@ function cuny_group_single() {
             $html = groups_get_groupmeta($group_id, 'wds_course_html');
             ?>
 
-            <h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
+            <h1 class="entry-title group-title"><?php echo bp_group_name(); ?></h1>
                 <?php if (bp_is_group_home()): ?>
                 <div id="<?php echo $group_type; ?>-header" class="group-header">
                     <?php if ($group_type == 'portfolio') : ?>
@@ -341,7 +341,7 @@ function cuny_group_single() {
 
                     <?php
                 } else {
-                    locate_template(array('buddypress/groups/single/wds-bp-action-logics.php'), true);
+                    bp_get_template_part('groups/single/wds-bp-action-logics.php');
                 }
                 ?>
 

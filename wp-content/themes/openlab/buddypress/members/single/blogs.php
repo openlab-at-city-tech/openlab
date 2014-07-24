@@ -18,7 +18,7 @@
 <?php do_action('bp_before_member_blogs_content') ?>
 
 <div class="blogs myblogs">
-    <?php locate_template(array('buddypress/blogs/blogs-loop.php'), true) ?>
+    <?php bp_get_template_part('blogs/blogs-loop.php'); ?>
 </div><!-- .blogs.myblogs -->
 
 <?php do_action('bp_after_member_blogs_content') ?>

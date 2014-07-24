@@ -26,14 +26,14 @@
 <?php do_action('bp_before_group_activity_post_form') ?>
 
 <?php if (is_user_logged_in() && bp_group_is_member()) : ?>
-    <?php locate_template(array('buddypress/activity/post-form.php'), true) ?>
+    <?php bp_get_template_part('activity/post-form.php'); ?>
 <?php endif; ?>
 
 <?php do_action('bp_after_group_activity_post_form') ?>
 <?php do_action('bp_before_group_activity_content') ?>
 
 <div class="activity single-group">
-    <?php locate_template(array('buddypress/activity/activity-loop.php'), true) ?>
+    <?php bp_get_template_part('activity/activity-loop.php'); ?>
 </div><!-- .activity.single-group -->
 
 <?php do_action('bp_after_group_activity_content') ?>

@@ -10,7 +10,7 @@
 			<?php do_action( 'bp_before_directory_activity_content' ) ?>
 
 			<?php if ( is_user_logged_in() ) : ?>
-				<?php locate_template( array( 'buddypress/activity/post-form.php'), true ) ?>
+				<?php bp_get_template_part( 'activity/post-form.php'); ?>
 			<?php endif; ?>
 
 			<?php do_action( 'template_notices' ) ?>
@@ -94,7 +94,7 @@
 			</div><!-- .item-list-tabs -->
 
 			<div class="activity">
-				<?php locate_template( array( 'buddypress/activity/activity-loop.php' ), true ) ?>
+				<?php bp_get_template_part( 'activity/activity-loop.php' ); ?>
 			</div><!-- .activity -->
 
 			<?php do_action( 'bp_after_directory_activity_content' ) ?>

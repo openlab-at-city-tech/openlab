@@ -18,7 +18,7 @@
 
         <?php while (bp_activities()) : bp_the_activity(); ?>
 
-            <?php include( locate_template(array('buddypress/activity/entry.php'), false) ) ?>
+            <?php bp_get_template_part('activity/entry.php'); ?>
 
         <?php endwhile; ?>
 
