@@ -57,7 +57,6 @@ function cuny_no_bp_default_styles() {
 	wp_dequeue_script('superfish');
 	wp_dequeue_script('superfish-args');
 
-	wp_enqueue_style( 'cuny-bp', get_stylesheet_directory_uri() . '/css/buddypress.css' );
 	wp_dequeue_style( 'gconnect-adminbar' );
 }
 
