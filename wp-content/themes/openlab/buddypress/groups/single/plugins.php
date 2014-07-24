@@ -4,30 +4,12 @@
 *
 */
 
-/**begin layout**/
-get_header(); ?>
-
-	<div id="content" class="hfeed">
-    	<?php cuny_group_single(); ?>
-    </div><!--content-->
-
-    <div id="sidebar" class="sidebar widget-area">
-	<?php cuny_buddypress_group_actions(); ?>
-    </div>
-
-<?php get_footer();
-/**end layout**/
-
-function cuny_group_single() {
-	global $bp; ?>
-
-	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
-
-		<?php do_action( 'bp_before_group_plugin_template' ); ?>
+                global $bp;
+		do_action( 'bp_before_group_plugin_template' ); ?>
 
 		<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 
-		<div id="single-course-body">
+		<div id="single-course-body"><?php echo '<pre>'.print_r($bp->current_action, true). '</pre>'; ?>
 			<?php if ( $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' ) : ?>
 				<?php do_action( 'bp_before_group_members_content' ); ?>
 
@@ -55,8 +37,4 @@ function cuny_group_single() {
 				<?php do_action( 'bp_after_group_body' ); ?>
 			</div><!-- #item-body -->
 		</div>
-
-	<?php endwhile; endif; ?>
-
 	<?php do_action( 'bp_after_group_plugin_template' );
-}

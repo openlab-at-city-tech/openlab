@@ -1,32 +1,17 @@
-<?php
-/**
+<?php /**
  * Create a group
  *
- */
-// re-direct to courses page if user does not have permissions for course creation page
-$account_type = xprofile_get_field_data('Account Type', get_current_user_id());
-$group_type = isset($_GET['type']) ? $_GET['type'] : 'club';
-if ('course' === $group_type && !is_super_admin() && $account_type != "Faculty") {
-    wp_redirect(home_url('courses'));
-}
+ */ ?>
+<div class="col-sm-9">
 
-/* * begin layout* */
-get_header();
-?>
+    <?php
+    // re-direct to courses page if user does not have permissions for course creation page
+    $account_type = xprofile_get_field_data('Account Type', get_current_user_id());
+    $group_type = isset($_GET['type']) ? $_GET['type'] : 'club';
+    if ('course' === $group_type && !is_super_admin() && $account_type != "Faculty") {
+        wp_redirect(home_url('courses'));
+    }
 
-<div id="content" class="hfeed">
-    <?php cuny_create_group(); ?>
-</div><!--content-->
-
-<div id="sidebar" class="sidebar widget-area">
-    <?php bp_get_template_part('members/single/sidebar'); ?>
-</div>
-
-<?php
-get_footer();
-/* * end layout* */
-
-function cuny_create_group() {
     global $bp;
 
     //get group type
@@ -324,21 +309,24 @@ function cuny_create_group() {
                         <?php /* Finish Button */ ?>
                         <?php if (bp_is_last_group_creation_step()) : ?>
                             <input type="submit" value="<?php _e('Finish', 'buddypress') ?> &rarr;" id="group-creation-finish" name="save" />
-                        <?php endif; ?>
-                    </div>
                     <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
                 <?php do_action('bp_after_group_creation_step_buttons'); ?>
 
-                <?php /* Don't leave out this hidden field */ ?>
+<?php /* Don't leave out this hidden field */ ?>
                 <input type="hidden" name="group_id" id="group_id" value="<?php bp_new_group_id() ?>" />
 
-    <?php do_action('bp_directory_groups_content') ?>
+<?php do_action('bp_directory_groups_content') ?>
 
             </div><!-- .item-body -->
 
-    <?php do_action('bp_after_create_group') ?>
+<?php do_action('bp_after_create_group') ?>
 
         </form>
     </div>
-<?php } ?>
+</div>
+<div id="sidebar" class="sidebar widget-area col-sm-3">
+    <?php bp_get_template_part('members/single/sidebar'); ?>
+</div>
