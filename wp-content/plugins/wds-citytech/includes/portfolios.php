@@ -343,6 +343,14 @@ function openlab_bust_group_portfolios_cache_on_membership_change( $member ) {
 add_action( 'groups_member_after_save', 'openlab_bust_group_portfolios_cache_on_membership_change' );
 
 /**
+ * Bust group portfolio cache when member leaves group
+ */
+function openlab_bust_group_portfolios_cache_on_group_leave( $group_id ) {
+	openlab_bust_group_portfolio_cache( $group_id );
+}
+add_action( 'groups_uninvite_user', 'openlab_bust_group_portfolios_cache_on_group_leave' );
+
+/**
  * Bust group portfolio cache when membership changes
  */
 function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
