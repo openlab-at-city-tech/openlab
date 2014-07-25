@@ -4,6 +4,15 @@
  *
  */
 
+function openlab_is_admin_truly_member( $group = false ) {
+	global $groups_template;
+
+	if ( empty( $group ) )
+		$group =& $groups_template->group;
+
+	return apply_filters( 'bp_group_is_member', !empty( $group->is_member ) );
+}
+
 /**
  * 	People archive page
  *

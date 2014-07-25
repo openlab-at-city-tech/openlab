@@ -623,15 +623,15 @@ function openlab_group_membership_tabs( $group = false ) {
 		<li<?php if ( $bp->current_action == 'members' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/members"><?php _e( 'Membership', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
-	<?php if ( bp_group_is_member() ): ?>
-		<li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Members', 'buddypress' ); ?></a></li>
+	<?php if ( bp_group_is_member() && invite_anyone_access_test() && openlab_is_admin_truly_member() ): ?>
+		<li<?php if ( $bp->current_action == 'invite-anyone' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/invite-anyone"><?php _e( 'Invite New Member', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
 	<?php if ( $bp->is_item_admin || $bp->is_item_mod ): ?>
 		<li<?php if ( 'notifications' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/admin/notifications"><?php _e( 'Email Members', 'buddypress' ); ?></a></li>
 	<?php endif; ?>
 
-	<?php if ( bp_group_is_member() ): ?>
+	<?php if ( bp_group_is_member() && openlab_is_admin_truly_member() ): ?>
 		<li<?php if ( $bp->current_action == 'notifications' ) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug( ) . '/' . $group->slug ?>/notifications"><?php _e( 'Your Email Options', 'buddypress' ); ?></a></li>
 		<?php endif; ?>
 
