@@ -1,8 +1,8 @@
 <?php
 
-require( WP_PLUGIN_DIR . '/invite-anyone/by-email/by-email-db.php' );
-require( WP_PLUGIN_DIR . '/invite-anyone/widgets/widgets.php' );
-require( WP_PLUGIN_DIR . '/invite-anyone/by-email/cloudsponge-integration.php' );
+require( BP_INVITE_ANYONE_DIR . 'by-email/by-email-db.php' );
+require( BP_INVITE_ANYONE_DIR . 'widgets/widgets.php' );
+require( BP_INVITE_ANYONE_DIR . 'by-email/cloudsponge-integration.php' );
 
 // Temporary function until bp_is_active is fully integrated
 function invite_anyone_are_groups_running() {
@@ -168,27 +168,18 @@ function invite_anyone_register_screen_message() {
 			}
 			$inviters = array_unique( $inviters );
 
-			$inviters_text = '';
-			if ( count( $inviters ) == 0 ) {
-				$inviters_text = '';
-			} else if ( count( $inviters ) == 1 ) {
-				$inviters_text .= 'by ';
-				$inviters_text .= bp_core_get_user_displayname( $inviters[0] );
-			} else {
-				$counter = 1;
-				$inviters_text .= 'by ';
-				$inviters_text .= bp_core_get_user_displayname( $inviters[0] );
-				while ( $counter < count( $inviters ) - 1 ) {
-					$inviters_text .= ', ' . bp_core_get_user_displayname( $inviters[$counter] );
-					$counter++;
-				}
-				$inviters_text .= ' and ' . bp_core_get_user_displayname( $inviters[$counter] );
+			$inviters_names = array();
+			foreach ( $inviters as $inviter ) {
+				$inviters_names[] = bp_core_get_user_displayname( $inviters[0] );
 			}
 
-			if ( !empty( $inviters_text ) ) {
-				$message = sprintf( __( 'Welcome! You\'ve been invited %s to join the site. Please fill out the information below to create your account.', 'bp-invite-anyone' ), $inviters_text );
-				echo '<div id="message" class="success"><p>' . $message . '</p></div>';
+			if ( ! empty( $inviters_names ) ) {
+				$message = sprintf( _n( 'Welcome! You&#8217;ve been invited to join the site by the following user: %s. Please fill out the information below to create your account.', 'Welcome! You&#8217;ve been invited to join the site by the following users: %s. Please fill out the information below to create your account.', count( $inviters_names ), 'bp-invite-anyone' ), implode( ', ', $inviters_names ) );
+			} else {
+				$message = __( 'Welcome! You&#8217;ve been invited to join the site. Please fill out the information below to create your account.', 'bp-invite-anyone' );
 			}
+
+			echo '<div id="message" class="success"><p>' . esc_html( $message ) . '</p></div>';
 
 		?>
 
@@ -203,12 +194,13 @@ function invite_anyone_activate_user( $user_id, $key, $user ) {
 
 	$email = bp_core_get_user_email( $user_id );
 
+	$inviters 	= array();
+
 	// Fire the query
 	$invites = invite_anyone_get_invitations_by_invited_email( $email );
 
 	if ( $invites->have_posts() ) {
 		// From the posts returned by the query, get a list of unique inviters
-		$inviters 	= array();
 		$groups		= array();
 		while ( $invites->have_posts() ) {
 			$invites->the_post();
@@ -387,32 +379,57 @@ function invite_anyone_access_test() {
 }
 add_action( 'wp_head', 'invite_anyone_access_test' );
 
+/**
+ * Catch and process email sends.
+ *
+ * @since 1.1.0
+ */
+function invite_anyone_catch_send() {
+	global $bp;
+
+	if ( ! bp_is_current_component( $bp->invite_anyone->slug ) ) {
+		return;
+	}
+
+	if ( ! bp_is_current_action( 'sent-invites' ) ) {
+		return;
+	}
+
+	if ( ! bp_is_action_variable( 'send', 0 ) ) {
+		return;
+	}
+
+	if ( ! invite_anyone_process_invitations( $_POST ) ) {
+		bp_core_add_message( __( 'Sorry, there was a problem sending your invitations. Please try again.', 'bp-invite-anyone' ), 'error' );
+	}
+
+	bp_core_redirect( bp_displayed_user_domain() . $bp->invite_anyone->slug . '/sent-invites' );
+}
+add_action( 'wp', 'invite_anyone_catch_send' );
+
 function invite_anyone_catch_clear() {
 	global $bp;
 
-	// We'll take a moment nice and early in the loading process to get returned_data
-	$keys = array(
-		'error_message',
-		'error_emails',
-		'subject',
-		'message',
-		'groups'
-	);
+	$returned_data = isset( $_COOKIE['invite-anyone'] ) ? unserialize( stripslashes( $_COOKIE['invite-anyone'] ) ) : '';
+	if ( $returned_data ) {
+		// We'll take a moment nice and early in the loading process to get returned_data
+		$keys = array(
+			'error_message',
+			'error_emails',
+			'subject',
+			'message',
+			'groups',
+		);
 
-	foreach( $keys as $key ) {
-		$bp->invite_anyone->returned_data[$key] = null;
-		if ( isset( $_GET[$key] ) ) {
-			if ( is_array( $_GET[$key] ) ) {
-				$value = array();
-				foreach( $_GET[$key] as $kk => $vv ) {
-					$value[$kk] = urldecode( $vv );
-				}
-			} else {
-				$value = urldecode( $_GET[$key] );
+		foreach ( $keys as $key ) {
+			$bp->invite_anyone->returned_data[ $key ] = null;
+			if ( isset( $returned_data[ $key ] ) ) {
+				$value = stripslashes_deep( $returned_data[ $key ] );
+				$bp->invite_anyone->returned_data[ $key ] = $value;
 			}
-			$bp->invite_anyone->returned_data[$key] = $value;
 		}
 	}
+	@setcookie( 'invite-anyone', '', time() - 3600, '/' );
 
 	if ( isset( $_GET['clear'] ) ) {
 		$clear_id = $_GET['clear'];
@@ -436,7 +453,7 @@ function invite_anyone_catch_clear() {
 		bp_core_redirect( $bp->displayed_user->domain . $bp->invite_anyone->slug . '/sent-invites/' );
 	}
 }
-add_action( 'wp', 'invite_anyone_catch_clear', 1 );
+add_action( 'bp_template_redirect', 'invite_anyone_catch_clear', 5 );
 
 function invite_anyone_screen_one() {
 	global $bp;
@@ -630,6 +647,14 @@ function invite_anyone_screen_one_content() {
 				<p><?php _e( '(optional) Select some groups. Invitees will receive invitations to these groups when they join the site.', 'bp-invite-anyone' ) ?></p>
 				<ul id="invite-anyone-group-list">
 					<?php while ( bp_groups() ) : bp_the_group(); ?>
+						<?php
+
+						// Enforce per-group invitation settings
+						if ( ! bp_groups_user_can_send_invites( bp_get_group_id() ) || 'anyone' !== invite_anyone_group_invite_access_test( bp_get_group_id() ) ) {
+							continue;
+						}
+
+						?>
 						<li>
 						<input type="checkbox" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php bp_group_id() ?>" value="<?php bp_group_id() ?>" <?php if ( $from_group == bp_get_group_id() || array_search( bp_get_group_id(), $returned_groups) ) : ?>checked<?php endif; ?> />
 
@@ -664,11 +689,6 @@ function invite_anyone_screen_one_content() {
 function invite_anyone_screen_two() {
 	global $bp;
 
-	if ( $bp->current_component == $bp->invite_anyone->slug && $bp->current_action == 'sent-invites' && isset( $bp->action_variables[0] ) && $bp->action_variables[0] == 'send' ) {
-		if ( ! invite_anyone_process_invitations( $_POST ) )
-			bp_core_add_message( __( 'Sorry, there was a problem sending your invitations. Please try again.', 'bp-invite-anyone' ), 'error' );
-	}
-
 	do_action( 'invite_anyone_sent_invites_screen' );
 
 	/* bp_template_title ought to be used - bp-default needs to markup the template tag
@@ -691,7 +711,7 @@ function invite_anyone_screen_two() {
 
 		// Load the pagination helper
 		if ( !class_exists( 'BBG_CPT_Pag' ) )
-			require_once( dirname( __FILE__ ) . '/../lib/bbg-cpt-pag.php' );
+			require_once( BP_INVITE_ANYONE_DIR . 'lib/bbg-cpt-pag.php' );
 		$pagination = new BBG_CPT_Pag;
 
 		$inviter_id = bp_loggedin_user_id();
@@ -765,7 +785,8 @@ function invite_anyone_screen_two() {
 						continue;
 					}
 
-					$email	= $emails[0]->name;
+					// Before storing taxonomy terms in the db, we replaced "+" with ".PLUSSIGN.", so we need to reverse that before displaying the email address.
+					$email	= str_replace( '.PLUSSIGN.', '+', $emails[0]->name );
 
 					$post_id = get_the_ID();
 
@@ -808,7 +829,7 @@ function invite_anyone_screen_two() {
 						<td><?php echo esc_html( $email ) ?></td>
 						<td><?php echo $group_names ?></td>
 						<td><?php echo $date_invited ?></td>
-						<td class="date-joined"><?php echo $date_joined ?></td>
+						<td class="date-joined"><span></span><?php echo $date_joined ?></td>
 					</tr>
 				<?php endwhile ?>
 			 </tbody>
@@ -1078,13 +1099,16 @@ function invite_anyone_process_invitations( $data ) {
 		$returned_data['error_message']	= sprintf( __( 'You are only allowed to invite up to %s people at a time. Please remove some addresses and try again', 'bp-invite-anyone' ), $max_invites );
 		$returned_data['error_emails'] 	= $emails;
 
-		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members' . invite_anyone_prepare_return_qs( $returned_data );
+		setcookie( 'invite-anyone', serialize( $returned_data ), 0, '/' );
+		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
 		bp_core_redirect( $redirect );
+		die();
 	}
 
 	if ( empty( $emails ) ) {
 		bp_core_add_message( __( 'You didn\'t include any email addresses!', 'bp-invite-anyone' ), 'error' );
 		bp_core_redirect( $bp->loggedin_user->domain . $bp->invite_anyone->slug . '/invite-new-members' );
+		die();
 	}
 
 	// Max number of invites sent
@@ -1098,8 +1122,10 @@ function invite_anyone_process_invitations( $data ) {
 			$returned_data['error_message'] = sprintf( __( 'You are only allowed to invite %s more people. Please remove some addresses and try again', 'bp-invite-anyone' ), $remaining_invites_count );
 			$returned_data['error_emails'] = $emails;
 
-			$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members' . invite_anyone_prepare_return_qs( $returned_data );
+			setcookie( 'invite-anyone', serialize( $returned_data ), 0, '/' );
+			$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
 			bp_core_redirect( $redirect );
+			die();
 		}
 	}
 
@@ -1130,7 +1156,7 @@ function invite_anyone_process_invitations( $data ) {
 				break;
 
 			case 'limited_domain' :
-				$returned_data['error_message'] = sprintf( __( '<strong>%s</strong> is not a permitted email address. Please make sure that you have typed the domain name correctly.', 'bp-invite-anyone' ), $email );
+				$returned_data['error_message'] .= sprintf( __( '<strong>%s</strong> is not a permitted email address. Please make sure that you have typed the domain name correctly.', 'bp-invite-anyone' ), $email );
 				break;
 		}
 
@@ -1193,31 +1219,20 @@ function invite_anyone_process_invitations( $data ) {
 		bp_core_add_message( $success_message );
 
 		do_action( 'sent_email_invites', $bp->loggedin_user->id, $emails, $groups );
-
 	} else {
 		$success_message = sprintf( __( "Please correct your errors and resubmit.", 'bp-invite-anyone' ) );
 		bp_core_add_message( $success_message, 'error' );
-
 	}
 
 	// If there are errors, redirect to the Invite New Members page
 	if ( ! empty( $returned_data['error_emails'] ) ) {
-		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members' . invite_anyone_prepare_return_qs( $returned_data );
+		setcookie( 'invite-anyone', serialize( $returned_data ), 0, '/' );
+		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
 		bp_core_redirect( $redirect );
+		die();
 	}
 
 	return true;
-}
-
-function invite_anyone_prepare_return_qs( $returned_data ) {
-	$qs = '';
-	foreach( $returned_data as $key => $value ) {
-		/*if ( is_array( $value ) ) {
-			$key .= '[]';
-		}*/
-		$qs = add_query_arg( $key, $value, $qs );
-	}
-	return $qs;
 }
 
 function invite_anyone_send_invitation( $inviter_id, $email, $message, $groups ) {
@@ -1247,19 +1262,49 @@ function invite_anyone_bypass_registration_lock() {
 		return;
 	}
 
-	// This is a royal hack until there is a filter on bp_get_signup_allowed()
+	// To support old versions of BP, we have to force the overloaded
+	// site_options property in some cases
 	if ( is_multisite() ) {
+		$site_options = $bp->site_options;
 		if ( !empty( $bp->site_options['registration'] ) && $bp->site_options['registration'] == 'blog' ) {
-			$bp->site_options['registration'] = 'all';
+			$site_options['registration'] = 'all';
 		} else if ( !empty( $bp->site_options['registration'] ) && $bp->site_options['registration'] == 'none' ) {
-			$bp->site_options['registration'] = 'user';
+			$site_options['registration'] = 'user';
 		}
+		$bp->site_options = $site_options;
+
+		add_filter( 'bp_get_signup_allowed', '__return_true' );
 	} else {
 		add_filter( 'option_users_can_register', create_function( false, 'return true;' ) );
 	}
 }
 add_action( 'wp', 'invite_anyone_bypass_registration_lock', 1 );
 
+/**
+ * Double check that passed email address matches an existing invitation when registration lock bypass is on.
+ *
+ * @since 1.2
+ *
+ * @param array $results Error results from user signup validation
+ * @return array
+ */
+function invite_anyone_check_invitation($results) {
+	if ( ! bp_is_current_component( BP_REGISTER_SLUG ) || ! bp_is_current_action( 'accept-invitation' ) ) {
+		return $results;
+	}
+
+	// Check to make sure that it's actually a valid email
+	$ia_obj = invite_anyone_get_invitations_by_invited_email( $results['user_email'] );
+
+	if ( !$ia_obj->have_posts() ) {
+		$errors = new WP_Error();
+		$errors->add( 'user_email', __( "We couldn't find any invitations associated with this email address.", 'bp-invite-anyone' ) );
+		$results['errors'] = $errors;
+	}
+
+	return $results;
+}
+add_filter( 'bp_core_validate_user_signup', 'invite_anyone_check_invitation' );
 
 function invite_anyone_validate_email( $user_email ) {
 
@@ -1318,3 +1363,4 @@ function invite_anyone_already_accepted_redirect( $redirect ) {
 	return $redirect;
 }
 add_filter( 'bp_loggedin_register_page_redirect_to', 'invite_anyone_already_accepted_redirect' );
+
