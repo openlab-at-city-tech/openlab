@@ -604,7 +604,7 @@ function openlab_group_admin_tabs( $group = false ) {
  */
 function openlab_group_membership_tabs( $group = false ) {
 	global $bp, $groups_template;
-
+        
 	if ( !$group )
 		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
 
