@@ -432,7 +432,7 @@ add_filter( 'bp_get_options_nav_members', 'openlab_filter_subnav_members' );
 function openlab_filter_subnav_members( $subnav_item ) {
 	global $bp;
 	global $wp_query;
-
+        
 	//string replace menu name
 	$new_item = str_replace( "Members", "Membership", $subnav_item );
 
