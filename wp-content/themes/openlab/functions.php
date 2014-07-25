@@ -125,3 +125,13 @@ add_filter('bp_get_the_body_class', 'openlab_group_admin_body_classes');
  * Don't allow BuddyPress Docs to use its own theme compatibility layer
  */
 add_filter('bp_docs_do_theme_compat', '__return_false');
+
+function cuny_send_invite_fac_only($subnav_item) {
+    global $bp;
+    $account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
+
+    if ($account_type != 'Student')
+        return $subnav_item;
+}
+
+add_filter('bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');
