@@ -4,24 +4,6 @@
  *
  * */
 /* * begin layout* */
-get_header();
-?>
-
-<div id="content" class="hfeed">
-    <?php cuny_plugin_loop(); ?>
-</div><!--content-->
-
-<div id="sidebar" class="sidebar widget-area">
-    <?php bp_get_template_part('members/single/sidebar'); ?>
-</div>
-
-<?php
-get_footer();
-
-/* * end layout* */
-
-function cuny_plugin_loop() {
-
     global $bp;
 
     do_action('bp_before_member_plugin_template');
@@ -39,4 +21,3 @@ function cuny_plugin_loop() {
     </div><!-- #item-body -->
     <?php
     do_action('bp_after_member_plugin_template');
-}
