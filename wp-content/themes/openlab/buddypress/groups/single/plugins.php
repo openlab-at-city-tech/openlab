@@ -9,7 +9,7 @@
 
 		<h1 class="entry-title group-title"><?php echo bp_group_name(); ?> Profile</h1>
 
-		<div id="single-course-body"><?php echo '<pre>'.print_r($bp->current_action, true). '</pre>'; ?>
+		<div id="single-course-body">
 			<?php if ( $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' ) : ?>
 				<?php do_action( 'bp_before_group_members_content' ); ?>
 
