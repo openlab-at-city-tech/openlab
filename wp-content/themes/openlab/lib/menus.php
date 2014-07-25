@@ -459,6 +459,11 @@ add_filter( 'bp_get_options_nav_nav-docs', 'openlab_filter_subnav_docs' );
 
 function openlab_filter_subnav_docs( $subnav_item ) {
 	global $bp;
+        
+        //no docs if we're on the portfolio page
+        if(openlab_is_portfolio()){
+            return '';
+        }
 
 	$group_slug = bp_get_group_slug();
 
@@ -476,6 +481,15 @@ function openlab_filter_subnav_docs( $subnav_item ) {
 
 	$new_item = str_replace( '<span>' . $total_doc_count . '</span>', '<span class="mol-count count-' . $total_doc_count . '">' . $total_doc_count . '</span>', $subnav_item );
 	return $new_item;
+}
+
+add_filter( 'bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents' );
+
+function openlab_filter_subnav_nav_group_documents( $suvbnav_item ) {
+	//no files if we're on the portfolio page
+        if(openlab_is_portfolio()){
+            return '';
+        }
 }
 
 add_filter( 'bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone' );
