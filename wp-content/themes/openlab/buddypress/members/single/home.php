@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
 <div id="content" class="hfeed row">
-                            <div class="col-sm-9">
+                            <div class="col-sm-9 members-single-home">
 
 <?php do_action( 'bp_before_member_body' );
 
