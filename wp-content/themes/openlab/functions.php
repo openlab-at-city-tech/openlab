@@ -65,7 +65,6 @@ function openlab_load_scripts() {
         wp_enqueue_script('easyaccordion');
         wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
         wp_enqueue_script('utility');
-        wp_enqueue_script('dtheme-ajax-js', BP_PLUGIN_URL . '/bp-themes/bp-default/_inc/global.js', array('jquery'));
     }
 }
 
