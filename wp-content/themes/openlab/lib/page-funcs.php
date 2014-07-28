@@ -98,6 +98,7 @@ function cuny_home_login() {
             <div id="keep-logged-in">
                 <input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /> <?php _e('Keep me logged in', 'buddypress') ?>
             </div>
+            <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
         <?php do_action('bp_sidebar_login_form') ?>
 
