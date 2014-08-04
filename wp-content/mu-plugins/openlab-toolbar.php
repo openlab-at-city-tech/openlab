@@ -681,7 +681,9 @@ class OpenLab_Admin_Bar {
 	}
 
 	function enqueue_styles() {
-		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css' );
+		$url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
+		$url = set_url_scheme( $url );
+		wp_enqueue_style( 'openlab-toolbar', $url );
 	}
 }
 
