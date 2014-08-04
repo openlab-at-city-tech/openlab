@@ -49,7 +49,6 @@ function openlab_load_scripts() {
             wp_enqueue_style('main-styles');
         }
 
-
         if ($local_off) {
             wp_register_script('less-config-js', get_stylesheet_directory_uri() . '/js/less.config.js', array('jquery'));
             wp_enqueue_script('less-config-js');
@@ -69,6 +68,14 @@ function openlab_load_scripts() {
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
+
+function openlab_dequeue_calls() {
+    //dequeue wp admin bar styles
+    wp_dequeue_style('openlab-toolbar');
+}
+
+add_action('wp_print_styles', 'openlab_dequeue_calls',11);
+add_action('admin_print_styles', 'openlab_dequeue_calls',11);
 
 //custom widgets for OpenLab
 function cuny_widgets_init() {
