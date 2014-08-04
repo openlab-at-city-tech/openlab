@@ -251,10 +251,6 @@ function dlblock_user_has_access( $file ) {
 /** Enabling/disabling protection ********************************************/
 
 function dlblock_update_blog_public( $old_value, $value ) {
-	if ( $old_value == $value ) {
-		return;
-	}
-
 	// @todo Apache check
 	$uploads = wp_upload_dir();
 
@@ -272,4 +268,36 @@ function dlblock_update_blog_public( $old_value, $value ) {
 	}
 
 }
-add_action( 'update_option_blog_public', 'dlblock_update_blog_public', 10, 2 );
+add_action( 'pre_update_option_blog_public', 'dlblock_update_blog_public', 10, 2 );
+
+function dlblock_network_migrate() {
+	if ( ! is_super_admin() ) {
+		return;
+	}
+
+	if ( empty( $_GET['dlblock_network_migrate'] ) || 1 != $_GET['dlblock_network_migrate'] ) {
+		return;
+	}
+
+	global $wpdb;
+	$blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
+	echo '<pre>';
+	foreach ( $blog_ids as $blog_id ) {
+		switch_to_blog( $blog_id );
+
+		$blog_public = get_option( 'blog_public' );
+
+		// Fixing broken items
+		if ( '' === $blog_public ) {
+			$blog_public = 1;
+		}
+
+		echo "Updated blog $blog_id to $blog_public\n\r";
+
+		update_option( 'blog_public', $blog_public );
+
+		restore_current_blog();
+	}
+	echo '</pre>';
+}
+add_action( 'admin_init', 'dlblock_network_migrate' );
