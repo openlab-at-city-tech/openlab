@@ -250,7 +250,7 @@ function dlblock_user_has_access( $file ) {
 
 /** Enabling/disabling protection ********************************************/
 
-function dlblock_update_blog_public( $old_value, $value ) {
+function dlblock_update_blog_public( $value, $old_value ) {
 	// @todo Apache check
 	$uploads = wp_upload_dir();
 
@@ -267,6 +267,7 @@ function dlblock_update_blog_public( $old_value, $value ) {
 		}
 	}
 
+        return $value;
 }
 add_action( 'pre_update_option_blog_public', 'dlblock_update_blog_public', 10, 2 );
 
