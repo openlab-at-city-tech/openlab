@@ -485,10 +485,12 @@ function openlab_filter_subnav_docs( $subnav_item ) {
 
 add_filter( 'bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents' );
 
-function openlab_filter_subnav_nav_group_documents( $suvbnav_item ) {
+function openlab_filter_subnav_nav_group_documents( $subnav_item ) {
 	//no files if we're on the portfolio page
         if(openlab_is_portfolio()){
             return '';
+        }else{
+            return $subnav_item;
         }
 }
 
