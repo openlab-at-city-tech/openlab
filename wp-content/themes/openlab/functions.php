@@ -74,8 +74,8 @@ function openlab_dequeue_calls() {
     wp_dequeue_style('openlab-toolbar');
 }
 
-add_action('wp_print_styles', 'openlab_dequeue_calls',11);
-add_action('admin_print_styles', 'openlab_dequeue_calls',11);
+add_action('wp_print_styles', 'openlab_dequeue_calls', 11);
+add_action('admin_print_styles', 'openlab_dequeue_calls', 11);
 
 //custom widgets for OpenLab
 function cuny_widgets_init() {

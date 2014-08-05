@@ -22,7 +22,7 @@ function openlab_site_wide_bp_search() {
         <input type="submit" name="search-submit" id="search-submit" value="<?php _e('Search', 'buddypress') ?>" />
         <?php wp_nonce_field('bp_search_form') ?>
     </form><!-- #search-form -->
-<?php
+    <?php
 }
 
 add_action('init', 'openlab_search_override', 1);
