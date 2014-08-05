@@ -48,7 +48,7 @@ function wds_jquery() {
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 function cuny_site_wide_navi_styles() {
 	global $blog_id;
-	$sw_navi_styles = WPMU_PLUGIN_URL . '/css/sw-navi.css';
+	$sw_navi_styles = set_url_scheme( WPMU_PLUGIN_URL . '/css/sw-navi.css' );
 
 	if ( $blog_id == 1 )
 		return;
@@ -57,7 +57,7 @@ function cuny_site_wide_navi_styles() {
 	wp_enqueue_style( 'SW_Navi_styles' );
 
         //google fonts
-        wp_register_style('google-fonts','http://fonts.googleapis.com/css?family=Arvo',$sw_navi_styles);
+        wp_register_style('google-fonts', set_url_scheme( 'http://fonts.googleapis.com/css?family=Arvo' ),$sw_navi_styles);
 	wp_enqueue_style('google-fonts');
 }
 

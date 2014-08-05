@@ -273,7 +273,7 @@ class OpenLab_Admin_Bar {
 		// this panel only works if looking at a site where the user has Dashboard-level
 		// permissions. So we have to find a valid site for the logged in user.
 		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
-		$primary_site_url = get_blog_option( $primary_site_id, 'siteurl' );
+		$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
 
 		if ( !empty( $primary_site_id ) && !empty( $primary_site_url ) ) {
 

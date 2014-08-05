@@ -1,6 +1,6 @@
 <?php
 
-function openlab_ssl_fix( $url ) {
+function openlab_ssl_fix( $text ) {
 	// Replacing the root domain will catch the specific blog domain
 	// because we aren't using subdomains
 	if ( is_ssl() ) {
@@ -11,7 +11,7 @@ function openlab_ssl_fix( $url ) {
 		$replace = set_url_scheme( bp_get_root_domain(), 'http' );
 	}
 
-	return str_replace( $search, $replace, $url );
+	return str_replace( $search, $replace, $text );
 }
 
 /**
@@ -38,3 +38,26 @@ function openlab_ssl_upload_dir( $upload_dir ) {
 	return $upload_dir;
 }
 add_filter( 'upload_dir', 'openlab_ssl_upload_dir' );
+
+/**
+ * Widget callbacks
+ *
+ * This is needed for cac-featured-content (and maybe others)
+ */
+function openlab_ssl_widget_display_callback( $instance, $widget ) {
+	// A bit ham-handed, but whatevs
+	if ( ! empty( $instance ) ) {
+		$instance = array_map( 'openlab_ssl_fix', $instance );
+	}
+
+	return $instance;
+}
+add_filter( 'widget_display_callback', 'openlab_ssl_widget_display_callback', 10, 2 );
+
+/**
+ * Content
+ *
+ * This is very heavy-handed, but should be harmless, and is faster than
+ * preg_replace() to catch things like inline images.
+ */
+add_filter( 'the_content', 'openlab_ssl_fix' );
