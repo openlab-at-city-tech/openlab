@@ -954,3 +954,92 @@ function cuny_send_invite_fac_only($subnav_item) {
     if ($account_type != 'Student')
         return $subnav_item;
 }
+
+/**
+ * Add the group type to the Previous Step button during group creation
+ *
+ * @see http://openlab.citytech.cuny.edu/redmine/issues/397
+ */
+function openlab_previous_step_type( $url ) {
+	if ( !empty( $_GET['type'] ) ) {
+		$url = add_query_arg( 'type', $_GET['type'], $url );
+	}
+
+	return $url;
+}
+add_filter( 'bp_get_group_creation_previous_link', 'openlab_previous_step_type' );
+
+/**
+>>>>>>> 1.3.x
+ * Remove the 'hidden' class from hidden group leave buttons
+ *
+ * A crummy conflict with wp-ajax-edit-comments causes these items to be
+ * hidden by jQuery. See b208c80 and #1004
+ */
+function openlab_remove_hidden_class_from_leave_group_button( $button ) {
+	$button['wrapper_class'] = str_replace( ' hidden', '', $button['wrapper_class'] );
+	return $button;
+}
+add_action( 'bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_group_button', 20 );
+
+/**
+ * Output the group subscription default settings
+ *
+ * This is a lazy way of fixing the fact that the BP Group Email Subscription
+ * plugin doesn't actually display the correct default sub level ( even though it
+ * does *save* the correct level )
+ */
+function openlab_default_subscription_settings_form() {
+	if ( openlab_is_portfolio() || ( isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+		return;
+	}
+
+	?>
+	<hr>
+	<h4 id="email-sub-defaults"><?php _e( 'Email Subscription Defaults', 'bp-ass' ); ?></h4>
+	<p><?php _e( 'When new users join this group, their default email notification settings will be:', 'bp-ass' ); ?></p>
+	<div class="radio email-sub">
+		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
+			<?php _e( 'No Email ( users will read this group on the web - good for any group - the default )', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
+			<?php _e( 'Weekly Summary Email ( the week\'s topics - good for large groups )', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
+			<?php _e( 'Daily Digest Email ( all daily activity bundles in one email - good for medium-size groups )', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
+			<?php _e( 'New Topics Email ( new topics are sent as they arrive, but not replies - good for small groups )', 'bp-ass' ) ?></label>
+		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
+			<?php _e( 'All Email ( send emails about everything - recommended only for working groups )', 'bp-ass' ) ?></label>
+	</div>
+	<hr />
+	<?php
+}
+remove_action ( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
+add_action ( 'bp_after_group_settings_admin' ,'openlab_default_subscription_settings_form' );
+
+/**
+ * Save the group default email setting
+ *
+ * We override the way that GES does it, because we want to save the value even
+ * if it's 'no'. This should probably be fixed upstream
+ */
+function openlab_save_default_subscription( $group ) {
+	global $bp, $_POST;
+
+	if ( isset( $_POST['ass-default-subscription'] ) && $postval = $_POST['ass-default-subscription'] ) {
+		groups_update_groupmeta( $group->id, 'ass_default_subscription', $postval );
+	}
+}
+remove_action( 'groups_group_after_save', 'ass_save_default_subscription' );
+add_action( 'groups_group_after_save', 'openlab_save_default_subscription' );
+
+/**
+ * Pagination links in group directories cannot contain the 's' URL parameter for search
+ */
+function openlab_group_pagination_search_key( $pag ) {
+	if ( false !== strpos( $pag, 'grpage' ) ) {
+		$pag = remove_query_arg( 's', $pag );
+	}
+
+	return $pag;
+}
+add_filter( 'paginate_links', 'openlab_group_pagination_search_key' );
