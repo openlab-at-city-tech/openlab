@@ -14,6 +14,51 @@ register_nav_menus( array(
 ) );
 
 /**
+ * Ensure that external links in the help menu get the external-link glyph
+ */
+function openlab_help_menu_external_glyph( $items, $args ) {
+	if ( false !== strpos( $args->theme_location, 'about' ) ) {
+		foreach ( $items as $key => $item ) {
+			if ( false === strpos( $item->url, bp_get_root_domain() ) ) {
+				$items[$key]->classes[] = 'external-link';
+			}
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2 );
+
+/**
+ * Reach into the item nav menu and remove stuff as necessary
+ *
+ * Hooked to bp_screens at 1 because apparently BP is broken??
+ */
+function openlab_modify_options_nav() {
+	global $bp;
+
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		// Keep the following tabs as-is
+		$keepers = array( 'members' );
+		foreach ( $bp->bp_options_nav[$bp->current_item] as $key => $item ) {
+			if ( 'home' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
+			} else if ( 'admin' == $key ) {
+				$bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
+			} else if ( ! in_array( $key, $keepers ) ) {
+				unset( $bp->bp_options_nav[$bp->current_item][$key] );
+			}
+
+		}
+	}
+
+		if ( bp_is_group() ) {
+				$bp->bp_options_nav[ bp_get_current_group_slug() ]['admin']['position'] = 15;
+				return;
+		}
+}
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
+
+/**
  * Help Sidebar menu: includes categories and sub-categories
  * @global type $post
  * @param string $items
