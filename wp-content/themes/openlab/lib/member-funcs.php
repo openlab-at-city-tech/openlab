@@ -818,41 +818,60 @@ function cuny_member_profile_header() {
 
                                 <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
-                    <?php if (bp_field_has_data()) : ?>
-                        <?php
-                        if (bp_get_the_profile_field_name() != "Name" &&
-                                bp_get_the_profile_field_name() != "Account Type" &&
-                                bp_get_the_profile_field_name() != "First Name" &&
-                                bp_get_the_profile_field_name() != "Last Name") :
-                            ?>
+                                    <?php if (bp_field_has_data()) : ?>
+                                        <?php
+                                        if (bp_get_the_profile_field_name() != "Name" &&
+                                                bp_get_the_profile_field_name() != "Account Type" &&
+                                                bp_get_the_profile_field_name() != "First Name" &&
+                                                bp_get_the_profile_field_name() != "Last Name") :
+                                            ?>
 
                                             <tr>
                                                 <td class="label" nowrap="nowrap">
-                                            <?php bp_the_profile_field_name() ?>
+                                                    <?php bp_the_profile_field_name() ?>
                                                 </td>
 
                                                 <td>
-                                            <?php bp_the_profile_field_value(); ?>
+                                                    <?php bp_the_profile_field_value(); ?>
                                                 </td>
                                             </tr>
 
                                         <?php endif; ?>
 
-                                <?php endif; // bp_field_has_data()   ?>
+                                    <?php endif; // bp_field_has_data()   ?>
 
-                <?php endwhile; // bp_profile_fields()  ?>
-            <?php endif; // bp_profile_group_has_fields()   ?>
+                                <?php endwhile; // bp_profile_fields()  ?>
+                            <?php endif; // bp_profile_group_has_fields()   ?>
 
-            <?php endwhile; // bp_profile_groups()   ?>
+                        <?php endwhile; // bp_profile_groups()   ?>
                     </table>
 
-    <?php endif; // bp_has_profile()   ?>
+                <?php endif; // bp_has_profile()   ?>
             </div>
 
         </div><!-- #item-header-content -->
 
-    <?php do_action('bp_after_member_header') ?>
+        <?php do_action('bp_after_member_header') ?>
 
     </div><!-- #item-header -->
     <?php
 }
+
+/**
+ * Save the Account Type setting on the Account Settings screen.
+ */
+function openlab_save_account_type_on_settings() {
+    if (isset($_POST['account_type'])) {
+        $types = array('Student', 'Alumni');
+        $account_type = in_array($_POST['account_type'], $types) ? $_POST['account_type'] : 'Student';
+        $user_id = bp_displayed_user_id();
+        $current_type = openlab_get_displayed_user_account_type();
+
+        // Only students and alums can do this
+        if (in_array($current_type, $types)) {
+            xprofile_set_field_data('Account Type', bp_displayed_user_id(), $account_type);
+        }
+    }
+}
+
+add_action('bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings');
