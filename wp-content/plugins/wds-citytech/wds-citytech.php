@@ -30,7 +30,7 @@ global $wpdb;
 date_default_timezone_set( 'America/New_York' );
 
 function wds_add_default_member_avatar( $url = false ) {
-	return WP_CONTENT_URL . '/img/bubbleavatar.jpg';
+	return set_url_scheme( WP_CONTENT_URL . '/img/bubbleavatar.jpg' );
 }
 add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
 
