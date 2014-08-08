@@ -334,7 +334,7 @@ function openlab_groups_filter_clause($sql) {
  *
  */
 function openlab_registration_page() {
-    do_action('bp_before_register_page')
+    do_action('bp_before_register_page');
     ?>
 
     <div class="page" id="register-page">

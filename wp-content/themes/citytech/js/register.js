@@ -31,7 +31,7 @@ jQuery(document).ready(function($){
                 }
 
                 $(typedrop).html(newtypes);
-		
+
 		/* Because there is no alternative in the dropdown, the 'change' event never
 		 * fires. So we trigger it manually
 		 */
