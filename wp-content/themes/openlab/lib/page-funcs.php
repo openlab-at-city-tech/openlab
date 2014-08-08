@@ -275,7 +275,7 @@ function cuny_home_square($type){
 	  	?>
 
 
-      <div class="activity-list <?php echo $type; ?>-list col-sm-3">
+      <div class="activity-list <?php echo $type; ?>-list col-sm-6">
       	<div class="title-wrapper">
 	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
 		<div class="see-all"><a href="<?php echo site_url().'/'.strtolower($type); ?>s">See All</a></div>

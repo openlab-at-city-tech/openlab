@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
 <div id="content" class="hfeed row">
-                            <div class="col-sm-9 members-single-home">
+                            <div class="col-sm-18 members-single-home">
 
 <?php do_action( 'bp_before_member_body' );
 
@@ -42,7 +42,7 @@
 
 <?php do_action( 'bp_after_member_home_content' ); ?>
     
-<div id="sidebar" class="sidebar widget-area col-sm-3">
+<div id="sidebar" class="sidebar widget-area col-sm-6">
                         <?php bp_get_template_part('members/single/sidebar'); ?>
                             </div>
                         </div><!--content-->

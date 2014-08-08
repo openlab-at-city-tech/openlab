@@ -9,7 +9,7 @@ get_header();
 ?>
 
 <div class="row" class="hfeed">
-    <div id="home-left" class="col-sm-3">
+    <div id="home-left" class="col-sm-6">
         <div id="cuny_openlab_jump_start">
             <?php cuny_home_login(); ?>
         </div>
@@ -23,7 +23,7 @@ get_header();
 
         <?php cuny_home_new_members(); ?>
     </div>
-    <div id="home-right" class="col-sm-9">
+    <div id="home-right" class="col-sm-18">
         <?php dynamic_sidebar('pgw-gallery'); ?>
 
         <div id="home-group-list-wrapper">

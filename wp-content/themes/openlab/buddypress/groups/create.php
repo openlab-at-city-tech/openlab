@@ -2,7 +2,7 @@
  * Create a group
  *
  */ ?>
-<div class="col-sm-9">
+<div class="col-sm-18">
 
     <?php
     // re-direct to courses page if user does not have permissions for course creation page
@@ -328,6 +328,6 @@
         </form>
     </div>
 </div>
-<div id="sidebar" class="sidebar widget-area col-sm-3">
+<div id="sidebar" class="sidebar widget-area col-sm-6">
     <?php bp_get_template_part('members/single/sidebar'); ?>
 </div>

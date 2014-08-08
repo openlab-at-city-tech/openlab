@@ -60,7 +60,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 		$count = 1;
 		while ( bp_groups() ) : bp_the_group();
 			$group_id=bp_get_group_id();?>
-			<li class="course<?php echo cuny_o_e_class($count) ?> col-sm-6">
+			<li class="course<?php echo cuny_o_e_class($count) ?> col-sm-12">
 				<div class="item-avatar alignleft">
 					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
 				</div>
