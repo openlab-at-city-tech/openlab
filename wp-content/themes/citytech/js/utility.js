@@ -1,4 +1,8 @@
 (function($) { 
+	var related_links_count,
+		$add_new_related_link,
+		$cloned_related_link_fields;
+
 	$(document).ready(function() {
 
 	// Workshop fields on Contact Us
@@ -13,6 +17,13 @@
 			}
 		}
 	}
+
+	// + button on Related Links List Settings
+	$add_new_related_link = $( '#add-new-related-link' );
+	$add_new_related_link.css( 'display', 'inline-block' );
+	$add_new_related_link.on( 'click', function() {
+		create_new_related_link_field();
+	} );
 
 	jQuery('#contact-us-topic').on('change', function(){ toggle_workshop_meeting_items(); });
 	toggle_workshop_meeting_items();
@@ -109,6 +120,39 @@
   }
 
 	});//end document.ready
+
+	function create_new_related_link_field() {
+		$cloned_related_link_fields = $add_new_related_link.closest( 'li' ).clone();
+
+		// Get count of existing link fields for the iterator
+		related_links_count = $( '.related-links-edit-items li' ).length + 1;
+
+		// Swap label:for and input:id attributes
+		$cloned_related_link_fields.html( function( i, old_html ) {
+			return old_html.replace( /(related\-links\-)[0-9]+\-(name|url)/g, '$1' + related_links_count + '-$2' );
+		} );
+
+		// Swap name iterator
+		$cloned_related_link_fields.html( function( i, old_html ) {
+			return old_html.replace( /(related\-links\[)[0-9]+(\])/g, '$1' + related_links_count + '$2' );
+		} );
+
+		// Remove current button from the DOM, as the cloned fields contain the new one
+		$add_new_related_link.remove();
+
+		// Add new fields to the DOM
+		$( '.related-links-edit-items' ).append( $cloned_related_link_fields );
+
+		// Remove values
+		$( '#related-links-' + related_links_count + '-name' ).val( '' );
+		$( '#related-links-' + related_links_count + '-url' ).val( '' );
+
+		// Reindex new Add button and bind click event
+		$add_new_related_link = $( '#add-new-related-link' );
+		$add_new_related_link.on( 'click', function() {
+			create_new_related_link_field();
+		} );
+	}
 	
 	/*this is for the homepage group list, so that cells in each row all have the same height 
 	- there is a possiblity of doing this template-side, but requires extensive restructuring of the group list function*/

@@ -4340,6 +4340,49 @@ div.activity-comments form textarea {
   font-weight: 700;
 }
 
+ul.related-links-edit-items {
+	margin: 1.5em 0;
+}
+
+ul.related-links-edit-items li {
+	overflow: hidden; /* break floats */
+	height: 30px;
+	vertical-align: bottom;
+}
+
+form.standard-form ul.related-links-edit-items label,
+form.standard-form ul.related-links-edit-items input {
+	float: left;
+}
+
+form.standard-form ul.related-links-edit-items label {
+	min-width: 20px;
+	margin: 0 5px 0 0;
+}
+
+form.standard-form ul.related-links-edit-items input {
+	width: 150px;
+	margin-right: 30px;
+}
+
+#add-new-related-link {
+	display: none;
+	border-radius: 50%;
+	background: #666;
+	width: 18px;
+	height: 18px;
+	color: #fff;
+	text-align: center;
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+a#add-new-related-link:hover {
+	text-decoration: none;
+	background: #aaa;
+}
+
 .group-create.group-settings #single-course-body form.standard-form div.radio ul, .group-admin.group-settings #single-course-body form.standard-form div.radio ul {
   margin-left: 35px;
 }
@@ -4776,16 +4819,16 @@ form#create-group-form div#group-create-body div.ct-group-meta {
     margin:0 0 0 15px!important;
 }
 
-#sidebar > div > ul.group-member-portfolio-list {
+#sidebar > div > ul.group-data-list {
     margin-left: 0;
     padding-left: 0;
 }
 
-#sidebar > div > ul.group-member-portfolio-list > li {
+#sidebar > div > ul.group-data-list > li {
     list-style-image: none;
 }
 
-#sidebar > div > ul.group-member-portfolio-list > li a {
+#sidebar > div > ul.group-data-list > li a {
     text-decoration: underline;
     font-family: Arial,Helvetica,Tahoma,sans-serif;
     font-size: 11px;
