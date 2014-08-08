@@ -407,33 +407,6 @@ function wds_registration_ajax() {
 	<script type="text/javascript">
 		//<![CDATA[
 
-		//load register account type
-		function wds_load_account_type( id,default_type ) {
-			<?php echo $sack;?>
-			//document.getElementById( 'save-pad' ).innerHTML='<?php echo $loading; ?>';
-			if ( default_type != "" ) {
-			 selected_value = default_type;
-			} else {
-			   var select_box=document.getElementById( id );
-			   var selected_index=select_box.selectedIndex;
-			   var selected_value = select_box.options[selected_index].value;
-			}
-
-			if ( selected_value != "" ) {
-				document.getElementById( 'signup_submit' ).style.display='';
-			} else {
-				document.getElementById( 'signup_submit' ).style.display='none';
-			}
-
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar( "action", "wds_load_account_type" );
-			isack.setVar( "account_type", selected_value );
-			isack.runAJAX();
-			return true;
-		}
-
-
 		//]]>
 	</script>
 	<?php
@@ -462,7 +435,7 @@ function wds_load_default_account_type() {
 		    if ( $type && $selected_index ) {
 			$return .=  'var select_box=document.getElementById( \'field_7\' );';
 			$return .=  'select_box.selectedIndex = ' . $selected_index . ';';
-			$return .= "wds_load_account_type( 'field_7','$type' );";
+//			$return .= "wds_load_account_type( 'field_7','$type' );";
 		    }
 		    $return .= '</script>';
 		    echo $return;
@@ -470,16 +443,18 @@ function wds_load_default_account_type() {
 }
 
 function wds_load_account_type() {
-	global $wpdb, $bp;
 	$return = '';
+
 	$account_type = $_POST['account_type'];
+	$post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
+
 	if ( $account_type ) {
-		$return .= wds_get_register_fields( $account_type );
+		$return .= wds_get_register_fields( $account_type, $post_data );
 	} else {
 		$return = "Please select an Account Type.";
 	}
-	$return = str_replace( "'","\'", $return );
-	die( "document.getElementById( 'wds-account-type' ).innerHTML='$return'" );
+
+	die( $return );
 }
 add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );
 add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );

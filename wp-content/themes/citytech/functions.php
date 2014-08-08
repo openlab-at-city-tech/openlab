@@ -942,3 +942,14 @@ function openlab_filter_people_archive_template( $template, $templates ) {
 	return $template;
 }
 add_filter( 'bp_located_template', 'openlab_filter_people_archive_template', 10, 2 );
+
+/**
+ * Get a value from a failed POST request, especially during registration.
+ */
+function openlab_post_value( $key ) {
+	$value = '';
+	if ( ! empty( $_POST[ $key ] ) ) {
+		$value = wp_unslash( $_POST[ $key ] );
+	}
+	return $value;
+}
