@@ -780,7 +780,7 @@ function cuny_member_profile_header() {
 
         <div id="member-header-content" class="alignleft">
 
-            <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?><?php //echo " ".$last_name;     ?></h2>
+            <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?><?php //echo " ".$last_name;             ?></h2>
             <span class="activity"><?php bp_last_activity(bp_displayed_user_id()) ?></span>
 
 
@@ -795,14 +795,14 @@ function cuny_member_profile_header() {
                 <?php endif; ?>
                 <!--
                 <?php if (bp_is_active('groups') && bp_has_groups()) : ?>
-                                                                    <div id="areas-of-activty" class="item-list">
-                                                                    <strong>All groups:</strong>
+                                                                                                    <div id="areas-of-activty" class="item-list">
+                                                                                                    <strong>All groups:</strong>
                     <?php while (bp_groups()) : bp_the_group(); ?>
-                                                        
-                                                                                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a>,
-                                                        
+                                                                                                                        
+                                                                                                                                                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a>,
+                                                                                                                        
                     <?php endwhile; ?>
-                                                                    </div>
+                                                                                                    </div>
                 <?php endif; ?>
                 -->
 
@@ -845,13 +845,13 @@ function cuny_member_profile_header() {
 
                                     <?php endif; // bp_field_has_data()   ?>
 
-                                <?php endwhile; // bp_profile_fields()  ?>
+                                <?php endwhile; // bp_profile_fields()   ?>
                             <?php endif; // bp_profile_group_has_fields()   ?>
 
-                        <?php endwhile; // bp_profile_groups()   ?>
+                        <?php endwhile; // bp_profile_groups()    ?>
                     </table>
 
-                <?php endif; // bp_has_profile()   ?>
+                <?php endif; // bp_has_profile()    ?>
             </div>
 
         </div><!-- #item-header-content -->

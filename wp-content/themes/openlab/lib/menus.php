@@ -672,12 +672,12 @@ function openlab_group_admin_tabs($group = false) {
 
         <li<?php if ('group-settings' == $current_tab) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li>
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )    ?>
+        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )     ?>
 
         <div class="subnav-right-buttons">
             <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
                 <li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li>
-        <?php endif ?>
+            <?php endif ?>
 
             <li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
         </div>
@@ -718,9 +718,9 @@ function openlab_group_membership_tabs($group = false) {
         <li<?php if ('notifications' == $current_tab) : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e('Email Members', 'buddypress'); ?></a></li>
     <?php endif; ?>
 
-        <?php if (bp_group_is_member() && openlab_is_admin_truly_member()): ?>
+    <?php if (bp_group_is_member() && openlab_is_admin_truly_member()): ?>
         <li<?php if ($bp->current_action == 'notifications') : ?> class="current"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e('Your Email Options', 'buddypress'); ?></a></li>
-    <?php endif; ?>
+        <?php endif; ?>
 
     <?php
 }
