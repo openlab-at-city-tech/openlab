@@ -5,7 +5,7 @@
  * */
     do_action('bp_before_member_settings_template');
     ?>
-    <div class="submenu"><div class="submenu-text">My Settings: </div> <?php echo openlab_profile_settings_submenu(); ?></div>
+    <?php echo openlab_submenu_markup(); ?>
 
     <div id="item-body" role="main">
 

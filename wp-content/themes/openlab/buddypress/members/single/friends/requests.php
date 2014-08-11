@@ -1,6 +1,6 @@
 <?php do_action( 'bp_before_member_friend_requests_content' ) ?>
 
-<div class="submenu"><?php echo openlab_my_friends_submenu(); ?></div>
+<?php echo openlab_submenu_markup('friends'); ?>
 
 <?php if ( bp_has_members( 'include=' . bp_get_friendship_requests() . '&per_page=0' ) ) : ?>
 

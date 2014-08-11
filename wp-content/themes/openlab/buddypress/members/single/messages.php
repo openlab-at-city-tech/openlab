@@ -1,4 +1,4 @@
-<div class="submenu"><div class="submenu-text">My Messages: </div><?php echo openlab_my_messages_submenu(); ?></div>
+<?php echo openlab_submenu_markup('messages'); ?>
 <?php if ('compose' == bp_current_action()) : ?>
     <?php bp_get_template_part('members/single/messages/compose'); ?>
 

@@ -200,6 +200,31 @@ function openlab_get_primary_help_term_name() {
     return $current_term;
 }
 
+function openlab_submenu_markup($type = '', $opt_var = NULL) {
+    $submenu_text = '';
+
+    switch ($type) {
+        case 'invitations':
+            $submenu_text = '<div class="submenu-text">My Invitations: </div>';
+            $menu = openlab_my_invitations_submenu();
+            break;
+        case 'friends':
+            $menu = openlab_my_friends_submenu();
+            break;
+        case 'messages':
+            $submenu_text = '<div class="submenu-text">My Messages: </div>';
+            $menu = openlab_my_messages_submenu();
+            break;
+        case 'groups':
+            $menu = openlab_my_groups_submenu($opt_var);
+        default:
+            $submenu_text = '<div class="submenu-text">My Settings: </div>';
+            $menu = openlab_profile_settings_submenu();
+    }
+    
+    return '<div class="submenu">'.$submenu_text.$menu.'</div>';
+}
+
 //sub-menus for profile pages - a series of functions, but all here in one place
 //sub-menu for profile pages
 function openlab_profile_settings_submenu() {

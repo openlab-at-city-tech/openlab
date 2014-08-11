@@ -11,7 +11,7 @@
 
     <h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 
-    <div class="submenu"><div class="submenu-text">My Invitations: </div><?php echo openlab_my_invitations_submenu(); ?></div>
+    <?php echo openlab_submenu_markup('invitations'); ?>
 
     <div id="item-body" role="main">
         <?php do_action('bp_before_member_body'); ?>

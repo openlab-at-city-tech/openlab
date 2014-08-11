@@ -7,7 +7,7 @@ do_action('bp_before_member_settings_template');
 ?>
 <h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
 
-<div class="submenu"><div class="submenu-text">My Settings: </div> <?php echo openlab_profile_settings_submenu(); ?></div>
+<?php echo openlab_submenu_markup(); ?>
 
 <div id="item-body" role="main">
 

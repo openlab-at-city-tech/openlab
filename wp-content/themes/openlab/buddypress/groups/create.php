@@ -44,9 +44,7 @@
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
     ?>
 
-    <div class="submenu">
-        <?php echo openlab_my_groups_submenu($group_type); ?>
-    </div>
+    <?php echo openlab_submenu_markup($group_type); ?>
 
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
 
