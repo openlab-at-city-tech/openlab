@@ -113,11 +113,55 @@ add_filter( 'get_comment_text', 'olgc_add_private_info_to_comment_text', 100, 2 
  * Ensure that private comments are only included for the proper users.
  */
 function olgc_filter_private_comments( $clauses, $comment_query ) {
+	$post_id = 0;
+	if ( ! empty( $comment_query->query_vars['post_id'] ) ) {
+		$post_id = $comment_query->query_vars['post_id'];
+	} else if ( ! empty( $comment_query->query_vars['post_ID'] ) ) {
+		$post_id = $comment_query->query_vars['post_ID'];
+	}
+
 	// Unfiltered
-	if ( olgc_is_instructor() || olgc_is_author( $comment_query->query_vars['post_ID'] ) ) {
+	if ( olgc_is_instructor() || olgc_is_author( $post_id ) ) {
 		return $clauses;
 	}
 
+	$pc_ids = olgc_get_inaccessible_comments( get_current_user_id(), $post_id );
+
+	// WP_Comment_Query sucks
+	if ( ! empty( $pc_ids ) ) {
+		$clauses['where'] .= ' AND comment_ID NOT IN (' . implode( ',', $pc_ids ) . ')';
+	}
+
+	return $clauses;
+}
+add_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
+
+/**
+ * Filter private comments out of the 'comments_array'
+ *
+ * This is called during comments_template, instead of the API. This is a damn
+ * mess.
+ */
+function olgc_filter_comments_array( $comments, $post_id ) {
+	$pc_ids = olgc_get_inaccessible_comments( get_current_user_id(), $post_id );
+
+	foreach ( $comments as $ckey => $cvalue ) {
+		if ( in_array( $cvalue->comment_ID, $pc_ids ) ) {
+			unset( $comments[ $ckey ] );
+		}
+	}
+
+	$comments = array_values( $comments );
+	return $comments;
+}
+add_filter( 'comments_array', 'olgc_filter_comments_array', 10, 2 );
+
+/**
+ * Get inaccessible comments for a user.
+ *
+ * Optionally by post ID.
+ */
+function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 	// Get a list of private comments
 	remove_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
 	$comment_args = array(
@@ -129,8 +173,8 @@ function olgc_filter_private_comments( $clauses, $comment_query ) {
 		),
 	);
 
-	if ( ! empty( $comment_query->query_vars['post_ID'] ) ) {
-		$comment_args['post_ID'] = $comment_query->query_vars['post_ID'];
+	if ( ! empty( $post_id ) ) {
+		$comment_args['post_id'] = $post_id;
 	}
 
 	$private_comments = get_comments( $comment_args );
@@ -140,7 +184,7 @@ function olgc_filter_private_comments( $clauses, $comment_query ) {
 	// in case
 	$pc_ids = array();
 	foreach ( $private_comments as $private_comment ) {
-		if ( is_user_logged_in() && ! empty( $private_comment->user_id ) && get_current_user_id() == $private_comment->user_id ) {
+		if ( $user_id && ! empty( $private_comment->user_id ) && $user_id == $private_comment->user_id ) {
 			continue;
 		}
 
@@ -150,28 +194,27 @@ function olgc_filter_private_comments( $clauses, $comment_query ) {
 
 	$pc_ids = wp_parse_id_list( $pc_ids );
 
-	// WP_Comment_Query sucks
-	if ( ! empty( $pc_ids ) ) {
-		$clauses['where'] .= ' AND comment_ID NOT IN (' . implode( ',', $pc_ids ) . ')';
-
-		$GLOBALS['olgc_private_comment_count'] = count( $pc_ids );
-		add_filter( 'get_comments_number', 'olgc_get_comments_number' );
-	}
-
-	return $clauses;
+	return $pc_ids;
 }
-add_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
 
 /**
  * Filter comment count. Not cool.
  */
-function olgc_get_comments_number( $count ) {
-	if ( ! empty( $GLOBALS['olgc_private_comment_count'] ) ) {
-		$count = $count - intval( $GLOBALS['olgc_private_comment_count'] );
+function olgc_get_comments_number( $count, $post_id = 0 ) {
+	if ( empty( $post_id ) ) {
+		return $count;
 	}
+
+	$cquery = new WP_Comment_Query();
+	$comments_for_post = $cquery->query( array(
+		'post_id' => $post_id,
+		'count' => true,
+	) );
+	$count = $comments_for_post;
 
 	return $count;
 }
+add_filter( 'get_comments_number', 'olgc_get_comments_number', 10, 2 );
 
 /**
  * Enqueue assets
