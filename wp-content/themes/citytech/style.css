@@ -2340,9 +2340,18 @@ div#new-topic-post {
     padding:0 0 0 7px;
 }
 
-div#sidebar.sidebar div#portfolio-sidebar-widget {
+body.groups.single-item div#sidebar.sidebar .sidebar-widget {
     border-bottom:1px solid #F0F0F0;
     margin-bottom:15px;
+}
+
+body.groups.single-item div#sidebar.sidebar .sidebar-widget:last-child {
+    border-bottom:none;
+    margin-bottom:0;
+}
+
+body.groups.single-item div#sidebar.sidebar .sidebar-widget:first-child {
+	margin-bottom: 0;
 }
 
 .sidebar-widget.group-nav {
@@ -2513,8 +2522,6 @@ li.sq-bullet ul {
 
 /* Portfolio Right Sidebar */
 #portfolio-sidebar-widget {
-    border-bottom:none;
-    border-top:1px solid #F0F0F0;
     margin:0 0 18px;
     padding:0 0 0 5px;
     padding:0 0 10px 5px;
