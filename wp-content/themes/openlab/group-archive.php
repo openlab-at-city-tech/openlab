@@ -13,9 +13,7 @@ get_header();
         </div><!--entry-content-->
     </div><!--hentry-->
 
-    <div id="sidebar" class="sidebar widget-area col-sm-6">
-        <?php get_sidebar('group-archive'); ?>
-    </div>
+    <?php openlab_bp_sidebar('groups'); ?>
 </div><!--content-->
 
 <?php

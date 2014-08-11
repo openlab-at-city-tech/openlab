@@ -89,7 +89,5 @@ if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 	<?php do_action( 'bp_after_group_home_content' ); ?>
         
 	<?php endwhile; endif; ?>
-
-        <div id="sidebar" class="sidebar widget-area col-sm-6">
-        <?php cuny_buddypress_group_actions(); ?>
-        </div>
+        
+        <?php openlab_bp_sidebar('actions'); ?>

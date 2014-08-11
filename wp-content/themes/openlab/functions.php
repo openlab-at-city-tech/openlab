@@ -26,6 +26,7 @@ require_once( STYLESHEETPATH . '/lib/ajax-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/help-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
+require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/admin-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );

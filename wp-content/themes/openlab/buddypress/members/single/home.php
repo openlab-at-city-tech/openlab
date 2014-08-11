@@ -42,7 +42,5 @@
 
 <?php do_action( 'bp_after_member_home_content' ); ?>
     
-<div id="sidebar" class="sidebar widget-area col-sm-6">
-                        <?php bp_get_template_part('members/single/sidebar'); ?>
-                            </div>
+<?php openlab_bp_sidebar('members'); ?>
                         </div><!--content-->

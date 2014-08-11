@@ -8,6 +8,4 @@
     <?php openlab_registration_page(); ?>
 </div><!--content-->
 
-<div id="sidebar" class="sidebar widget-area col-sm-6">
-    <?php openlab_buddypress_register_actions(); ?>
-</div>
+<?php openlab_bp_sidebar('register'); ?>

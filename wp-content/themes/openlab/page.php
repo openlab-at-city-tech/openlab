@@ -22,17 +22,7 @@
 
 //add the about-page sidebar to just the about page and any child about page
     if ($postID == "49" || $parent == "49") {
-        echo '<div id="sidebar" class="sidebar widget-area col-sm-6">';
-
-        $args = array(
-            'theme_location' => 'aboutmenu',
-            'container' => 'div',
-            'container_id' => 'about-menu',
-            'menu_class' => 'sidbar-nav'
-        );
-        echo '<h2 class="sidebar-title">About</h2>';
-        wp_nav_menu($args);
-        echo '</div>';
+        openlab_bp_sidebar('about');
     }
     ?>
 

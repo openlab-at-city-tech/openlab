@@ -200,29 +200,40 @@ function openlab_get_primary_help_term_name() {
     return $current_term;
 }
 
+/**
+ * Getting all of the submenu wrapper markup in one place
+ * @param type $type
+ * @param type $opt_var
+ * @return string
+ */
 function openlab_submenu_markup($type = '', $opt_var = NULL) {
     $submenu_text = '';
 
     switch ($type) {
         case 'invitations':
-            $submenu_text = '<div class="submenu-text">My Invitations: </div>';
+            $submenu_text = 'My Invitations: ';
             $menu = openlab_my_invitations_submenu();
             break;
         case 'friends':
             $menu = openlab_my_friends_submenu();
             break;
         case 'messages':
-            $submenu_text = '<div class="submenu-text">My Messages: </div>';
+            $submenu_text = 'My Messages: ';
             $menu = openlab_my_messages_submenu();
             break;
         case 'groups':
             $menu = openlab_my_groups_submenu($opt_var);
+            break;
         default:
-            $submenu_text = '<div class="submenu-text">My Settings: </div>';
+            $submenu_text = 'My Settings: ';
             $menu = openlab_profile_settings_submenu();
     }
     
-    return '<div class="submenu">'.$submenu_text.$menu.'</div>';
+    $submenu = '<div class="row"><div class="col-md-24">';
+    $submenu .= '<div class="submenu"><div class="submenu-text pull-left">'.$submenu_text.'</div>'.$menu.'</div>';
+    $submenu .= '</div></div>';
+    
+    return $submenu;
 }
 
 //sub-menus for profile pages - a series of functions, but all here in one place
@@ -396,7 +407,7 @@ function openlab_submenu_gen($items) {
     //counter
     $i = 1;
 
-    $submenu = '<ul>';
+    $submenu = '<ul class="nav nav-inline">';
 
     foreach ($items as $item => $title) {
         $slug = strtolower($title);
@@ -457,6 +468,10 @@ function openlab_submenu_gen($items) {
         }
 
         $submenu .= '<li class="' . $item_classes . '">';
+        
+        //for delete
+        $submenu .= ($slug == 'delete-account' ? '<span class="fa fa-minus-circle"></span>' : '');
+        
         $submenu .= ( $item == 'no-link' ? '' : '<a href="' . $item . '">' );
         $submenu .= $title;
         $submenu .= ( $item == 'no-link' ? '' : '</a>' );

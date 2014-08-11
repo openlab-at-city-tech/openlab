@@ -8,9 +8,7 @@ global $bp;?>
     	<?php bp_get_template_part('groups/groups','loop'); ?>
             </div>
 
-    <div id="sidebar" class="sidebar widget-area col-sm-6">
-		<?php bp_get_template_part('members/single/sidebar'); ?>
-    </div>
+	<?php openlab_bp_sidebar('members'); ?>
         </div><!--content-->
 
 <?php get_footer();

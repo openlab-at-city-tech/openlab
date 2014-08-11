@@ -17,9 +17,7 @@ $post_obj = $wp_query->get_queried_object();
         </div><!--entry-content-->
     </div><!--hentry-->
 
-    <div id="sidebar" class="sidebar widget-area col-sm-6">
-<?php get_sidebar('group-archive'); ?>
-    </div><!--sidebar-->
+    <?php openlab_bp_sidebar('groups'); ?>
 </div><!--content-->
 
 <?php

@@ -10,9 +10,7 @@ get_header(); ?>
             <div class="col-sm-18">
 		<?php openlab_help_loop(); ?>
             </div>
-    <div id="sidebar" class="sidebar widget-area col-sm-6">
-		<?php get_sidebar('help'); ?>
-	</div>
+        <?php openlab_bp_sidebar('help'); ?>
             </div>
 <?php get_footer(); 
 /**end layout**/
