@@ -36,6 +36,13 @@ function openlab_load_scripts() {
      */
     if (!is_admin()) {
 
+
+        //google fonts
+        wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
+        wp_enqueue_style('google-open-sans');
+        wp_register_style('font-awesome', get_stylesheet_directory_uri() . '/css/font-awesome.min.css', array(), '20130604', 'all');
+        wp_enqueue_style('font-awesome');
+
         //need to turn less.js (local only) off for now until issues with comments in Bootstrap is resolved
         $local_off = false;
 
