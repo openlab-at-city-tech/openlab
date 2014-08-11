@@ -1,8 +1,73 @@
 /*
+Custom Vars
+*/
+
+//** website colors
+@magenta: #ff5959;
+@cyan: #63dfd2;
+@aqua: #49cabe;
+@yellow: #f7e700;
+@black: #000;
+@80gray: #333;
+@70gray: #444;
+@60gray: #666;
+@30gray: #bbb;
+@10gray: #ddd;
+@5gray: #f0f0f0;
+@white: #fff;
+
+/**header margins**/
+@header-margin: 20px 0 15px 0;
+/**types, not included p tags**/
+@type-margin: 10px 0 15px 0;
+/**custom border radius**/
+@border-radius-bottom: 0 0 4px 4px;
+
+/*
 Bootstrap variable overrides
 */
+
+//== Scaffolding
+//
+//** Global textual link color.
+@link-color:            @80gray;
 
 //** Number of columns in the grid.
 @grid-columns:              24;
 //** Padding between columns. Gets divided in half for the left and right.
 @grid-gutter-width:         15px;
+
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+@font-family-sans-serif: 'Open Sans', Helvetica, Arial, sans-serif;
+
+@font-size-h1:            floor((@font-size-base * 1.3)); // ~18px
+@font-size-h2:            floor((@font-size-base * 1.3)); // ~18px
+@font-size-h5:            ceil((@font-size-base * 1.10)); // ~16px
+
+@headings-font-weight:    600;
+@headings-line-height:    1.1em;
+
+//== Type
+//
+//##
+//** Blockquote font size
+@blockquote-font-size:        @font-size-base;
+//** Blockquote border color
+@blockquote-border-color:     @10gray;
+
+//== Navbar
+//
+//##
+
+// Basics of a navbar
+@navbar-default-bg:                @white;
+@navbar-default-border:            @10gray; 
+
+//== Navs
+//
+//##
+
+//=== Shared nav styles
+@nav-link-hover-bg:                         transparent;
