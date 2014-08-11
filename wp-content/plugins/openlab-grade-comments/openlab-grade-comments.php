@@ -180,13 +180,20 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 	$private_comments = get_comments( $comment_args );
 	add_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
 
-	// Filter out the ones that are written by the logged-in user, just
-	// in case
+	// Filter out the ones that are written by the logged-in user, as well
+	// as those that are attached to a post that the user is the author of
 	$pc_ids = array();
 	foreach ( $private_comments as $private_comment ) {
 		if ( $user_id && ! empty( $private_comment->user_id ) && $user_id == $private_comment->user_id ) {
 			continue;
 		}
+
+                if ( $user_id ) {
+                        $comment_post = get_post( $private_comment->comment_post_ID );
+                        if ( $user_id == $comment_post->post_author ) {
+                                continue;
+                        }
+                }
 
 		$pc_ids[] = $private_comment->comment_ID;
 
