@@ -115,20 +115,25 @@ add_filter( 'get_comment_text', 'olgc_add_private_info_to_comment_text', 100, 2 
 function olgc_filter_private_comments( $clauses, $comment_query ) {
 	// Unfiltered
 	if ( olgc_is_instructor() || olgc_is_author( $comment_query->query_vars['post_ID'] ) ) {
-		return;
+		return $clauses;
 	}
 
 	// Get a list of private comments
 	remove_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
-	$private_comments = get_comments( array(
-		'post_ID' => $comment_query->query_vars['post_ID'],
+	$comment_args = array(
 		'meta_query' => array(
 			array(
 				'key'   => 'olgc_is_private',
 				'value' => '1',
 			),
 		),
-	) );
+	);
+
+	if ( ! empty( $comment_query->query_vars['post_ID'] ) ) {
+		$comment_args['post_ID'] = $comment_query->query_vars['post_ID'];
+	}
+
+	$private_comments = get_comments( $comment_args );
 	add_filter( 'comments_clauses', 'olgc_filter_private_comments', 10, 2 );
 
 	// Filter out the ones that are written by the logged-in user, just
