@@ -4,12 +4,9 @@
         <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
         <meta name="robots" content="noodp,noydir" />
         <link rel="Shortcut Icon" href="<?php echo get_stylesheet_directory_uri() ?>/images/favicon.ico" type="image/x-icon" />
-
-        <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ?>/print.css" type="text/css" media="print" />
-
         <title><?php bloginfo('name'); ?></title>
 
-        <?php do_action('bp_head') ?>
+        <?php // do_action('bp_head') ?>
 
         <link rel="pingback" href="<?php bloginfo('pingback_url') ?>" />
 
