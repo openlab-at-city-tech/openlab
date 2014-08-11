@@ -458,11 +458,17 @@ function openlab_get_groups_of_user($args = array()) {
 }
 
 function cuny_student_profile() {
-    global $bp;
-    ?>
-    <?php do_action('bp_before_member_home_content') ?>
+    global $site_members_template, $user_ID, $bp;
 
-    <h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>&rsquo;s Profile</h1>
+    $this_user_id = isset($site_members_template->member->id) ? $site_members_template->member->id : bp_displayed_user_id();
+    do_action('bp_before_member_home_content');
+    ?>
+    <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
+
+    <h2 class="entry-title profile-title clearfix">
+        <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
+        <span class="profile-type pull-right"><?php echo $account_type ?></span>
+    </h2>
 
     <?php if (bp_is_user_activity() || 'public' == bp_current_action()) { ?>
         <?php cuny_member_profile_header(); ?>
@@ -737,7 +743,6 @@ function cuny_member_profile_header() {
     }
     ?>
 
-    <h4 class="profile-header"><?php echo $account_type ?> Profile</h4>
     <div id="member-header">
         <?php do_action('bp_before_member_header') ?>
 
