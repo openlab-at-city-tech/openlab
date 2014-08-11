@@ -429,26 +429,6 @@ function openlab_get_active_semesters() {
     return $combos;
 }
 
-/**
- * Output the sidebar content for a single group
- */
-function cuny_buddypress_group_actions() {
-    if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
-            ?>
-            <div class="group-nav sidebar-widget">
-                <?php echo openlab_group_visibility_flag() ?>
-                <div id="item-buttons">
-                    <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?></h2>
-                    <ul>
-                        <?php bp_get_options_nav(); ?>
-                    </ul>
-                </div><!-- #item-buttons -->
-            </div>
-            <?php do_action('bp_group_options_nav') ?>
-            <?php
-        endwhile;
-    endif;
-}
 
 /**
  * Output the group visibility flag, shown above the right-hand nav

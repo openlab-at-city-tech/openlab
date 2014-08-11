@@ -505,21 +505,3 @@ function openlab_registration_page() {
 		});
 	</script>
 <?php }
-
-/**
-*	Registration page sidebar
-*
-*/
-
-function openlab_buddypress_register_actions() {
-		global $bp;?>
-		<h2 class="sidebar-title">&nbsp;</h2>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-	<?php
-	}

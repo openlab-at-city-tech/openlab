@@ -11,7 +11,7 @@ if (!$dud = bp_displayed_user_domain()) {
 
     <h2 class="sidebar-title">My OpenLab</h2>
 
-    <div id="item-buttons" class="mol-menu">
+    <div id="item-buttons" class="mol-menu sidebar-block">
 
         <ul class="main-nav">
 
@@ -58,7 +58,7 @@ if (!$dud = bp_displayed_user_domain()) {
 
     <h2 class="sidebar-title">People</h2>
 
-    <div id="item-buttons" class="mol-menu">
+    <div id="item-buttons" class="mol-menu sidebar-block">
 
         <ul class="main-nav">
 
@@ -89,9 +89,11 @@ if (!$dud = bp_displayed_user_domain()) {
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
     <div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
-        <h4 class="sidebar-header">
+        <h2 class="sidebar-header">
             <a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper') ?> Site</a>
-        </h4>
+        </h2>
+        
+        <div class="sidebar-block">
 
         <ul class="sidebar-sublinks portfolio-sublinks">
 
@@ -109,14 +111,17 @@ if (!$dud = bp_displayed_user_domain()) {
                 </li>
     <?php endif ?>
         </ul>
+        </div>
     </div>
 
 <?php elseif (openlab_is_my_profile() && !bp_is_group_create()) : ?>
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
     <div class="sidebar-widget" id="portfolio-sidebar-widget">
-        <h4 class="sidebar-header">
+        <h2 class="sidebar-header">
+            <div class="sidebar-block">
             <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
-        </h4>
+            </div>
+        </h2>
     </div>
 
 <?php endif ?>
@@ -140,13 +145,13 @@ $activity_args = array(
 ?>
 
 <?php if (bp_is_user_friends()) : ?>
-    <h4 class="sidebar-header">Recent Friend Activity</h4>
+    <h2 class="sidebar-header">Recent Friend Activity</h2>
 <?php else : ?>
-    <h4 class="sidebar-header">Recent Account Activity</h4>
+    <h2 class="sidebar-header">Recent Account Activity</h2>
 <?php endif ?>
 
 <?php if (bp_has_activities($activity_args)) : ?>
-
+<div class="sidebar-block">
     <ul id="activity-stream" class="activity-list item-list">
         <div>
             <?php while (bp_activities()) : bp_the_activity(); ?>
@@ -177,8 +182,9 @@ $activity_args = array(
             <?php endwhile; ?>
         </div>
     </ul>
-
+</div>
 <?php else : ?>
+    <div class="sidebar-block">
     <ul id="activity-stream" class="activity-list item-list">
         <div>
             <div id="message" class="info">
@@ -186,4 +192,5 @@ $activity_args = array(
             </div>
         </div>
     </ul>
+    </div>
 <?php endif; ?>

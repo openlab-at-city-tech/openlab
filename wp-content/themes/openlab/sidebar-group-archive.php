@@ -15,6 +15,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 ?>
 
 <h2 class="sidebar-title"><?php echo $sidebar_title; ?></h2>
+<div class="sidebar-block">
 <p>Narrow down your search using the filters or search box below.</p>
 <?php
 //determine class type for filtering
@@ -211,6 +212,7 @@ switch ($_GET['group_sequence']) {
     </form>
     <div class="clearfloat"></div>
 </div><!--archive search-->
+</div>
 <?php
 
 function slug_maker($full_string) {

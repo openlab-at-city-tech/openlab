@@ -444,9 +444,11 @@ function openlab_portfolio_list_group_display() {
 	?>
 
 	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
-		<h4 class="sidebar-header">
+		<h2 class="sidebar-header">
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
-		</h4>
+		</h2>
+            
+                <div class="sidebar-block">
 
 		<ul class="group-member-portfolio-list">
 		<?php foreach ( $portfolio_data as $pdata ) : ?>
@@ -454,6 +456,8 @@ function openlab_portfolio_list_group_display() {
 			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
 		<?php endforeach ?>
 		</ul>
+                    
+                </div>
 	</div>
 
 	<?php

@@ -556,10 +556,11 @@ function wds_bp_group_site_pages() {
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
 				<?php echo openlab_group_visibility_flag( 'site' ); ?>
 
-				<h4 class="sidebar-header">
-					<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">' . ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Site</a>'; ?>
-				</h4>
+				<h2 class="sidebar-header">
+					<?php echo ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Sites'; ?>
+				</h2>
 
+                                <div class="sidebar-block">
 				<?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
 					<ul class="sidebar-sublinks portfolio-sublinks">
 						<li class="portfolio-site-link">
@@ -571,6 +572,8 @@ function wds_bp_group_site_pages() {
 						</li>
 					</ul>
 				<?php endif; ?>
+                                
+                                </div>
 			</div>
 			<?php
 		} // openlab_is_portfolio()
