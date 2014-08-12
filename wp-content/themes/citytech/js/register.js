@@ -36,7 +36,7 @@ jQuery(document).ready(function($){
 		 * fires. So we trigger it manually
 		 */
 		if ( 'student' == emailtype ) {
-			wds_load_account_type('field_7','');
+			load_account_type_fields();
 		}
         });
 
