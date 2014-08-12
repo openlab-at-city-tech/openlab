@@ -97,7 +97,7 @@
 	  
 	  $.ajax({
 			 type: 'GET',
-			 url: 'http://' + document.domain + '/wp-admin/admin-ajax.php',
+			 url: ajaxurl,
 			 data:
 			  {
 				  action: 'openlab_ajax_return_course_list',
