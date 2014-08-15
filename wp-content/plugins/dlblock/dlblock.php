@@ -102,6 +102,8 @@ function dlblock_generate_htaccess_rules( $rewrite_base = '/' ) {
 }
 
 function dlblock_process_download_request() {
+	global $current_blog;
+
 	if ( empty( $_GET['dlb_download'] ) ) {
 		return;
 	}
@@ -191,7 +193,7 @@ function dlblock_process_download_request() {
                 exit;
 	}
 }
-add_action( 'template_redirect', 'dlblock_process_download_request' );
+add_action( 'init', 'dlblock_process_download_request', 0 );
 
 /**
  * Generate download headers
