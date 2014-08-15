@@ -88,6 +88,23 @@ class SharDB extends wpdb {
 	}
 
 	/**
+	 * Real escape, using mysql_real_escape_string()
+	 *
+	 * @see mysql_real_escape_string()
+	 * @since 2.8.0
+	 * @access private
+	 *
+	 * @param  string $string to escape
+	 * @return string escaped
+	 */
+	function _real_escape( $string ) {
+		if ( $this->dbh )
+			return mysql_real_escape_string( $string, $this->dbh );
+
+		return addslashes( $string );
+	}
+
+	/**
 	 * Find the first table name referenced in a query
 	 * @param string query
 	 * @return string table
