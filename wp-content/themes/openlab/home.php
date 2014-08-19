@@ -8,25 +8,30 @@
 get_header();
 ?>
 
-<div class="row" class="hfeed">
-    <div id="home-left" class="col-sm-6">
+<div class="clearfix row-home-top">
+    <div class="no-gutter no-gutter-right login">
         <div id="cuny_openlab_jump_start">
             <?php cuny_home_login(); ?>
         </div>
+    </div>
+    <div class="fill-gutter fill-gutter-left slider">
+        <?php dynamic_sidebar('pgw-gallery'); ?>
+    </div>
 
+</div>
+<div class="row row-home-bottom">
+    <div id="home-left" class="col-sm-8">
         <?php dynamic_sidebar('cac-featured') ?>
 
         <div class="box-1" id="whos-online">
-            <h3 class="title">Who's Online?</h3>
+            <h2 class="title">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
         </div>
 
         <?php cuny_home_new_members(); ?>
     </div>
-    <div id="home-right" class="col-sm-18">
-        <?php dynamic_sidebar('pgw-gallery'); ?>
-
-        <div id="home-group-list-wrapper">
+    <div id="home-right" class="col-sm-16">
+        <div id="home-group-list-wrapper" class="row">
             <?php cuny_home_square('course'); ?>
             <?php cuny_home_square('project'); ?>
             <?php cuny_home_square('club'); ?>
@@ -34,11 +39,10 @@ get_header();
             <div class="clearfloat"></div>
             <script type='text/javascript'>(function($) {
                     $('.activity-list').css('visibility', 'hidden');
-                })(jQuery);</script>";
+                })(jQuery);</script>
         </div>
     </div>
-
-</div><!--content-->
+</div>
 
 <?php
 get_footer();

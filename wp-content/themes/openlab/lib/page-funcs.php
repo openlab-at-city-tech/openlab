@@ -44,42 +44,45 @@ function cuny_home_login() {
 
     if (is_user_logged_in()) :
 
-        echo '<div id="open-lab-login" class="box-1">';
-        echo '<h3 class="title">Welcome...</h3>';
+        echo '<div id="open-lab-login" class="log-box">';
+        echo '<h2 class="title">Welcome...</h2>';
         do_action('bp_before_sidebar_me')
         ?>
 
-        <div id="sidebar-me">
-            <a class="alignleft avatar" href="<?php echo bp_loggedin_user_domain() ?>">
-        <?php bp_loggedin_user_avatar('type=thumb&width=80&height=80') ?>
-            </a>
+        <div id="sidebar-me" class="row">
+            <div class="col-sm-11">
+                <a class="alignleft avatar" href="<?php echo bp_loggedin_user_domain() ?>">
+                    <img class="img-responsive" src="<?php bp_loggedin_user_avatar(array('type' => 'full', 'html' => false)); ?>" alt="Avatar for <?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?>" />
+                </a>
+            </div>
 
-            <div id="user-info">
-                <h4><?php echo bp_core_get_userlink(bp_loggedin_user_id()); ?></h4>
-                <p><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></p>
-                <p><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></p>
+            <div id="user-info" class="col-sm-13">
+                <h4 class="no-margin no-margin-top"><?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?></h4>
+                <ul class="content-list">
+                    <li><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>
+                    <li><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></li>
+                </ul>
             </div><!--user-info-->
-            <div class="clearfloat"></div>
 
-        <?php do_action('bp_sidebar_me') ?>
+            <?php do_action('bp_sidebar_me') ?>
         </div><!--sidebar-me-->
 
         <?php do_action('bp_after_sidebar_me') ?>
 
         <?php echo '</div>'; ?>
 
-        <div id="login-help" class="home-box red-box">
-            <h3 class="title">Need HELP?</h3>
+        <div id="login-help" class="log-box">
+            <h4 class="title">Need HELP?</h4>
             <p>Visit the <a href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
         </div><!--login-help-->
 
     <?php else : ?>
-        <?php echo '<div id="open-lab-join" class="home-box red-box">'; ?>
-        <?php echo '<h3 class="title">JOIN OpenLab</h3>'; ?>
+        <?php echo '<div id="open-lab-join" class="log-box">'; ?>
+        <?php echo '<h2 class="title">JOIN OpenLab</h2>'; ?>
         <?php _e('<p>Need an account? <b><a href="' . site_url() . '/register/">Sign Up</a></b> to become a member!</p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
-        <?php echo '<div id="open-lab-login" class="box-1">'; ?>
+        <?php echo '<div id="open-lab-login" class="log-box">'; ?>
         <?php do_action('bp_after_sidebar_login_form') ?>
 
         <?php echo '<h3 class="title">Log in to OpenLab</h3>'; ?>
@@ -115,15 +118,18 @@ function cuny_home_login() {
 function cuny_home_new_members() {
     global $wpdb, $bp;
     echo '<div id="new-members" class="box-1 last">';
-    echo '<h3 class="title">New OpenLab Members</h3>';
+    echo '<h2 class="title">New OpenLab Members</h2>';
+    echo '<div class="left-block-content new-members-wrapper">'
     ?>
     <div id="new-members-top-wrapper">
         <div id="new-members-text">
-            <p>Browse through and say "Hello!" to the newest members of OpenLab.</p>
-        </div>
-        <div class="new-member-navigation">
-            <button class="prev">&lt;&lt;</button>
-            <button class="next">&gt;&gt;</button>
+            <p><span class="new-member-navigation pull-right">
+                    <a class="btn prev" href="#">
+                        <i class="fa fa-chevron-left"></i></a>
+                    <a class="btn prev" href="#">
+                        <i class="fa fa-chevron-right"></i></a>
+                </span>
+                Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>
         <div class="clearfloat"></div>
     </div><!--members-top-wrapper-->
@@ -145,18 +151,18 @@ function cuny_home_new_members() {
             ?>
             <li class="home-new-member">
                 <div class="home-new-member-avatar">
-                    <a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
+                    <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                 </div>
                 <div class="home-new-member-info">
-            <?php echo "<h2>" . $firstname . "</h2>"; ?>
+                    <?php echo "<h2>" . $firstname . "</h2>"; ?>
                     <div class="registered"><?php bp_member_registered() ?></div>
                 </div>
             </li>
-        <?php
+            <?php
         endwhile;
         echo '</ul></div>';
     endif;
-    echo '</div>';
+    echo '</div></div>';
 }
 
 /**
@@ -186,26 +192,31 @@ function cuny_whos_online() {
         $x+=1;
         ?>
 
-        <div class="avatar-block">
-            <?php while (bp_members()) : bp_the_member(); ?>
+        <div class="avatar-block left-block-content">
+            <?php
+            while (bp_members()) : bp_the_member();
+                global $members_template;
+                $member = $members_template->member;
+                ?>
 
-            <?php ?>
+                <?php ?>
                 <div class="cuny-member">
                     <div class="item-avatar">
-                        <a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
+                        <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                     </div>
-                    <div class="cuny-member-info">
+                    <div class="cuny-member-info">s
                         <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />
-            <?php do_action('bp_directory_members_item');
-            bp_member_profile_data('field=Account Type'); ?>,
-                <?php bp_member_last_active() ?>
+                        <?php
+                        do_action('bp_directory_members_item');
+                        bp_member_profile_data('field=Account Type');
+                        ?>,
+                        <?php bp_member_last_active() ?>
                     </div>
                 </div>
 
-        <?php endwhile; ?>
-            <div style="clear:both"></div>
+            <?php endwhile; ?>
         </div>
-    <?php
+        <?php
     endif;
 }
 
@@ -259,55 +270,58 @@ function cuny_home_square($type){
 	  			AND
 	  			item_id IN ({$group_ids_sql})
 	  		ORDER BY
-	  			date_recorded DESC" );
+	  			date_recorded DESC");
 
-	  	// Now walk down the list and try to match with a group. Once one is found, remove
-	  	// that group from the stack
-	  	$group_activity_items = array();
-	  	foreach( (array)$activity as $act ) {
-	  		if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
-	  			$group_activity_items[$act->item_id] = $act->content;
-				$key = array_search( $act->item_id, $group_ids );
-				unset( $group_ids[$key] );
-	  		}
-	  	}
+        // Now walk down the list and try to match with a group. Once one is found, remove
+        // that group from the stack
+        $group_activity_items = array();
+        foreach ((array) $activity as $act) {
+            if (!empty($act->content) && in_array($act->item_id, $group_ids) && !isset($group_activity_items[$act->item_id])) {
+                $group_activity_items[$act->item_id] = $act->content;
+                $key = array_search($act->item_id, $group_ids);
+                unset($group_ids[$key]);
+            }
+        }
+        ?>
 
-	  	?>
 
+        <div class="col-sm-6 activity-list <?php echo $type; ?>-list">
+            <div class="activity-wrapper">
+                <div class="title-wrapper">
+                    <h2 class="title"><a class="no-deco" href="<?php echo site_url() . '/' . strtolower($type); ?>s"><?php echo ucfirst($type); ?>s<span class="fa fa-chevron-circle-right"></span></a></h2>
+                </div><!--title-wrapper-->
+                <?php
+                while (bp_groups()) : bp_the_group();
+                    global $groups_template;
+                    $group = $groups_template->group;
 
-      <div class="activity-list <?php echo $type; ?>-list col-sm-6">
-      	<div class="title-wrapper">
-	  	<h3 class="title"><a href="<?php echo site_url().'/'.strtolower($type); ?>s"><?php echo ucfirst($type); ?>s</a></h3>
-		<div class="see-all"><a href="<?php echo site_url().'/'.strtolower($type); ?>s">See All</a></div>
-        <div class="clearfloat"></div>
-        </div><!--title-wrapper-->
-		<?php while ( bp_groups() ) : bp_the_group();
-		global $groups_template;
-		$group = $groups_template->group;
+                    // Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
+                    // $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
+                    $activity = stripslashes($group->description);
+                    echo '<div class="box-1 row-' . $i . ' activity-item type-' . $type . '">';
+                    ?>
+                    <div class="item-avatar">
+                        <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                        <div class="timestamp"><span class="fa fa-undo"></span> <?php printf(__('%s', 'buddypress'), bp_get_group_last_active()) ?></div>
+                    </div>
+                    <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
+                    ?>
+                    <?php
+                    //echo '<div class="byline">Author Name | Date</div>';
 
-		// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
-		// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
-		$activity = stripslashes( $group->description );
-			 echo '<div class="box-1 row row-'.$i.' type-'.$type.'">'; ?>
-			 <div class="item-avatar">
-					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 141, 'height' => 141 )) ?></a>
-				</div>
-			  <?php echo '<h2 class="green-title"><a href="'.bp_get_group_permalink().'">'.bp_get_group_name().'</a></h2>';
-			  ?>
-        <div class="timestamp"><span class="fa fa-undo"></span> <?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></div>
-              <?php
-			  //echo '<div class="byline">Author Name | Date</div>';
-
-			  echo bp_create_excerpt( $activity, 125, array( 'html' => false ) ) . '<p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
-			  echo '</div>';
-			  $i++;
-		  endwhile; ?>
-	  	<div class="clearfloat"></div>
+                    echo '<p>' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
+                    echo '</div>';
+                    $i++;
+                endwhile;
+                ?>
+                <div class="clearfloat"></div>
+            </div>
         </div><!--activity-list-->
 
-      <?php endif;
+        <?php
+    endif;
 
-      $meta_filter->remove_filters();
+    $meta_filter->remove_filters();
 }
 
 /**

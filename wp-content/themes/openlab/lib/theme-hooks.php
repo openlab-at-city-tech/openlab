@@ -5,38 +5,32 @@
  */
 function openlab_header_bar() {
     ?>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+            </div>
+            <div class="navbar-collapse"> 
+                <?php
+                //this adds the main menu, controlled through the WP menu interface
+                $args = array(
+                    'theme_location' => 'main',
+                    'container' => false,
+                    'menu_class' => 'nav navbar-nav',
+                );
 
-    <div id="header-wrap">
-
-        <div class="clearfloat"></div>
-
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
-                </div>
-                <div class="navbar-collapse"> 
-                    <?php
-                    //this adds the main menu, controlled through the WP menu interface
-                    $args = array(
-                        'theme_location' => 'main',
-                        'container' => false,
-                        'menu_class' => 'nav navbar-nav',
-                    );
-
-                    wp_nav_menu($args);
-                    ?>
-                    <div class="navbar-right search">
-                        <?php openlab_site_wide_bp_search(); ?>
-                    </div>
+                wp_nav_menu($args);
+                ?>
+                <div class="navbar-right search">
+                    <?php openlab_site_wide_bp_search(); ?>
                 </div>
             </div>
-        </nav>
-    </div><!--#wrap-->
+        </div>
+    </nav>
     <?php
 }
 
-add_action('bp_header', 'openlab_header_bar', 10);
+add_action('bp_before_header', 'openlab_header_bar', 10);
 
 function openlab_custom_menu_items($items, $menu) {
 
@@ -50,3 +44,11 @@ function openlab_custom_menu_items($items, $menu) {
 }
 
 add_filter('wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2);
+
+function openlab_activity_log_text($text){
+    $text = '%s';
+    
+    return $text;
+}
+
+add_filter('bp_core_time_since_ago_text','openlab_activity_log_text');
