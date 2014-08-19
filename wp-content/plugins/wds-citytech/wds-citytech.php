@@ -29,11 +29,6 @@ add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 global $wpdb;
 date_default_timezone_set( 'America/New_York' );
 
-function wds_add_default_member_avatar( $url = false ) {
-	return WP_CONTENT_URL . '/img/bubbleavatar.jpg';
-}
-add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
-
 function wds_default_signup_avatar( $img ) {
 	if ( false !== strpos( $img, 'mystery-man' ) ) {
 		$img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
