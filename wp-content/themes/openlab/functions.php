@@ -62,12 +62,36 @@ function openlab_load_scripts() {
         wp_enqueue_script('jcarousellite');
         wp_register_script('easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
         wp_enqueue_script('easyaccordion');
+        wp_register_script('easing-js', get_stylesheet_directory_uri() . '/js/jquery.easing.1.3.js', array('jquery'));
+        wp_enqueue_script('easing-js');
+        wp_register_script('mobile-custom-js', get_stylesheet_directory_uri() . '/js/jquery.mobile.customized.min.js', array('jquery'));
+        wp_enqueue_script('mobile-custom-js');
+        wp_register_script('camera-js', get_stylesheet_directory_uri() . '/js/camera.min.js', array('jquery'));
+        wp_enqueue_script('camera-js');
         wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
         wp_enqueue_script('utility');
+        
     }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
+
+/**
+ * Giving the main stylesheet the highest priority among stylesheets to make sure it loads last
+ */
+function openlab_load_scripts_high_priority() {
+    //less compliation via js so we can check styles in firebug via fireless - local dev only
+    //@to-do: way to enqueue as last item?
+    if (IS_LOCAL_ENV) {
+        wp_register_style('main-styles', get_stylesheet_directory_uri() . '/style.less', array(), '20130604', 'all');
+        wp_enqueue_style('main-styles');
+    } else {
+        wp_register_style('main-styles', get_stylesheet_uri(), array(), '20130604', 'all');
+        wp_enqueue_style('main-styles');
+    }
+}
+
+add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);
 
 function openlab_dequeue_calls() {
     //dequeue wp admin bar styles
@@ -131,3 +155,21 @@ add_filter('bp_get_the_body_class', 'openlab_group_admin_body_classes');
  * Don't allow BuddyPress Docs to use its own theme compatibility layer
  */
 add_filter('bp_docs_do_theme_compat', '__return_false');
+
+//for less js - local dev only
+function enqueue_less_styles($tag, $handle) {
+    global $wp_styles;
+    $match_pattern = '/\.less$/U';
+    if (preg_match($match_pattern, $wp_styles->registered[$handle]->src)) {
+        $handle = $wp_styles->registered[$handle]->handle;
+        $media = $wp_styles->registered[$handle]->args;
+        $href = $wp_styles->registered[$handle]->src;
+        $rel = isset($wp_styles->registered[$handle]->extra['alt']) && $wp_styles->registered[$handle]->extra['alt'] ? 'alternate stylesheet' : 'stylesheet';
+        $title = isset($wp_styles->registered[$handle]->extra['title']) ? "title='" . esc_attr($wp_styles->registered[$handle]->extra['title']) . "'" : '';
+
+        $tag = "<link rel='stylesheet/less' $title href='$href' type='text/css' media='$media' />";
+    }
+    return $tag;
+}
+
+add_filter('style_loader_tag', 'enqueue_less_styles', 5, 2);
