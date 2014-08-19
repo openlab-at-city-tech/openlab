@@ -45,23 +45,14 @@ function openlab_load_scripts() {
         wp_register_style('font-awesome', get_stylesheet_directory_uri() . '/css/font-awesome.min.css', array(), '20130604', 'all');
         wp_enqueue_style('font-awesome');
 
-        //need to turn less.js (local only) off for now until issues with comments in Bootstrap is resolved
-        $local_off = false;
+        wp_register_style('camera-js-styles', get_stylesheet_directory_uri() . '/css/camera.css', array(), '20130604', 'all');
+        wp_enqueue_style('camera-js-styles');
 
-        //less for local dev
-        //Local dev less debugging
-        if ($local_off) {
-            wp_register_style('main-styles', get_stylesheet_directory_uri() . '/less/style.less', array(), '20130604', 'all');
-            wp_enqueue_style('main-styles');
-        } else {
-            wp_register_style('main-styles', get_stylesheet_uri(), array(), '20130604', 'all');
-            wp_enqueue_style('main-styles');
-        }
-
-        if ($local_off) {
+        //less compliation via js so we can check styles in firebug via fireless - local dev only
+        if (IS_LOCAL_ENV) {
             wp_register_script('less-config-js', get_stylesheet_directory_uri() . '/js/less.config.js', array('jquery'));
             wp_enqueue_script('less-config-js');
-            wp_register_script('less-js', get_stylesheet_directory_uri() . '/js/less-1.7.0.js', array('jquery'));
+            wp_register_script('less-js', get_stylesheet_directory_uri() . '/js/less-1.7.4.js', array('jquery'));
             wp_enqueue_script('less-js');
         }
 
