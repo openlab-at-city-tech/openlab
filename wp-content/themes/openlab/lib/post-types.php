@@ -223,3 +223,41 @@ function help_glossary_column_register_sortable($columns) {
     $columns['menu_order'] = 'menu_order';
     return $columns;
 }
+
+//adding slider post type
+function register_cpt_slider() {
+    $labels = array(
+        'name' => _x('Sliders', 'slider'),
+        'singular_name' => _x('Slider', 'slider'),
+        'add_new' => _x('Add New', 'slider'),
+        'add_new_item' => _x('Add New Slider', 'slider'),
+        'edit_item' => _x('Edit Slider', 'slider'),
+        'new_item' => _x('New Slider', 'slider'),
+        'view_item' => _x('View Slider', 'slider'),
+        'search_items' => _x('Search Sliders', 'slider'),
+        'not_found' => _x('No sliders found', 'slider'),
+        'not_found_in_trash' => _x('No sliders found in Trash', 'slider'),
+        'parent_item_colon' => _x('Parent Slider:', 'slider'),
+        'menu_name' => _x('Sliders', 'slider'),
+    );
+    $args = array(
+        'labels' => $labels,
+        'hierarchical' => false,
+        'supports' => array('title', 'editor', 'thumbnail'),
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_icon' => 'dashicons-images-alt2',
+        'show_in_nav_menus' => false,
+        'publicly_queryable' => true,
+        'exclude_from_search' => true,
+        'has_archive' => false,
+        'query_var' => true,
+        'can_export' => true,
+        'rewrite' => false,
+        'capability_type' => 'post'
+    );
+    register_post_type('slider', $args);
+}
+
+add_action('init', 'register_cpt_slider');
