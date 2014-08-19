@@ -21,6 +21,7 @@ require_once( STYLESHEETPATH . '/lib/menus.php' );
 require_once( STYLESHEETPATH . '/lib/content-processing.php' );
 require_once( STYLESHEETPATH . '/lib/nav.php' );
 require_once( STYLESHEETPATH . '/lib/breadcrumbs.php' );
+require_once( STYLESHEETPATH . '/lib/media-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/group-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/ajax-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/help-funcs.php' );
