@@ -1,0 +1,454 @@
+/*
+Theme Name: OpenLab
+Theme URL: http://openlab.early-adopter.com
+Description: OpenLab Bootstrap based theme
+Author: CityTech OpenLab Dev Team
+Author URI:http://openlab.early-adopter.com
+Version: 0.1
+Text Domain: openlab
+*/
+
+/**import bootstrap**/
+@import "less/bootstrap/bootstrap.less";
+/**import boostrap overrides**/
+@import "less/variables.less";
+
+/*
+Direct Bootstrap overrides
+*/
+
+// Headings
+// -------------------------
+h1, .h1{
+    font-weight: 700;
+}
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+    margin: @header-margin;
+}
+
+// Body text
+// -------------------------
+
+p {
+    margin: 0 0 15px;
+}
+
+// Links
+
+a {
+    color: @link-color;
+    text-decoration: underline;
+
+    &:hover,
+        &:focus {
+        color: @aqua;
+        text-decoration: underline;
+    }
+
+    &.no-deco{
+        text-decoration: none;
+    }
+}
+
+// Lists
+// -------------------------
+
+// Unordered and Ordered lists
+ul,
+ol {
+    margin: @type-margin;
+    padding: 0 0 0 30px;
+    li{
+        margin: 0 0 5px 0;
+        ul,
+        ol{
+            margin: @type-margin;
+            padding: 0 0 0 30px;
+        }
+    }
+}
+
+// Misc
+// -------------------------
+
+// Blockquotes
+blockquote {
+    padding: 30px;
+    margin: @type-margin;
+    /**take out bootstrap left border first**/
+    border-left: none;
+    border: 1px solid @blockquote-border-color;
+    border-radius: @border-radius-base;
+    p{
+        font-weight: 600;
+    }
+    h1, .h1,
+    h2, .h2,
+    h3, .h3,
+    h4, .h4,
+    h5, .h5,
+    h6, .h6 {
+        color: @magenta;
+        margin-top: 0;
+    }
+}
+
+// Base class
+// --------------------------------------------------
+
+.nav{
+    &.nav-inline{
+        .submenu-text{
+            font-weight: 700;
+        }
+        li{
+            display: inline-block;
+            a{
+                color: @black;
+                display: inline-block;
+                border-right: 1px solid @80gray;
+                padding: 0 7px;
+                line-height: 100%;
+            }
+            &.last-item{
+                a{
+                    border-right: none;
+                }
+            }
+            .fa{
+                padding-left: 7px;
+            }
+        }
+    }
+}
+
+/**structural**/
+[class^="col-"]{
+    border-radius: @border-radius-base;
+}
+
+/**header**/
+.navbar-default{
+    .container-fluid{
+        max-width: 1140px;
+        margin: 0 auto;
+        .navbar-header{
+            h1{
+                margin: 0;
+                border-right: 1px solid @10gray;
+                a{
+                    display: block;
+                    background: url('images/openlab_menu_logo.png') no-repeat;
+                    padding-top: 63px;
+                    width: 185px;
+                    height: 0;
+                    overflow: hidden;
+                }
+            }
+        }
+        ul.nav{
+            margin: 0;
+            padding: 0;
+            li{
+                margin:0;
+                a{
+                    color: @black;
+                    display: block;
+                    text-decoration: none;
+                    font-weight: 700;
+                    padding: 21px 15px;
+                    &:hover,
+                        &:focus {
+                        color: @cyan;
+                    }
+                }
+                &.current-menu-item{
+                    a{
+                        background: @cyan;
+                        color: @black;
+                    }
+                }
+            }
+        }
+        .navbar-right{
+            &.search{
+                input[type="text"]{
+                    width: 150px;
+                }
+            }
+        }
+    }
+}
+
+/**page**/
+h1.entry-title{
+    border-bottom: 1px solid @30gray;
+}
+
+/**custom tags**/
+.no-gutter{
+    &.no-gutter-right{
+        padding-right: 0;
+    }
+}
+.fill-gutter{
+    &.fill-gutter-left{
+        padding-left: 0;
+    }
+}
+.no-margin{
+    &.no-margin-top{
+        margin-top: 0;
+    }
+}
+.content-list{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.timestamp{
+    font-size: @font-size-small;
+    color: @60gray;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.mol-count{
+    background: @magenta;
+    color: @white;
+    border-radius: 8px;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 400;
+    height: 16px;
+    line-height: 164%;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px;
+}
+
+/**home page**/
+.home-page {
+    .row-home-top{
+        margin-bottom: 15px;
+        .login{
+            background: url('images/log_in_background.png') no-repeat right -70px @magenta;
+            float: left;
+            width: 32.5%;
+            border-radius: @border-radius-left;
+            color: @white;
+            height: 400px;
+            h4{
+                margin-bottom: 25px;
+            }
+            a{
+                color: inherit;
+            }
+            .log-box{
+                padding: 0 6.5%;
+                &#open-lab-login{
+                    border-bottom: 12px solid darken(desaturate(@magenta,21%),8%);
+                    padding-bottom: 22px;
+                }
+            }
+        }
+        .slider{
+            float: left;
+            width: 67.5%;
+            border-radius: @border-radius-right;
+        }
+    }
+    .left-block-content{
+        background: @5gray;
+        border-radius: @border-radius-base;
+        padding: 2%;
+    }
+    #cac-featured{
+        .cfcw-content{
+            background: @5gray;
+            border-radius: @border-radius-base;
+            padding: 2%;
+            img{
+                float: left;
+                max-width: 46%;
+                margin-right: 18px;
+            }
+            p{
+                float: left;
+                width: 40%;
+            }
+            &:after{
+                clear:both;
+                content: " ";
+                display: table;
+                box-sizing: border-box;
+            }
+        }
+    }
+    #whos-online{
+        .avatar-block{
+            position: relative;
+            margin: 0;
+            position: relative;
+            .cuny-member{
+                position:relative;
+                display:inline-block;
+                width: 24.3%;
+                .cuny-member-info{
+                    background-color:@black;
+                    top:42px;
+                    color:@30gray;
+                    display:none;
+                    font-size:11px;
+                    padding:5px;
+                    position:absolute;
+                    right:-15px;
+                    width:115px;
+                    z-index:10;
+                    a{
+                        color: @white;
+                    }
+                }
+                &:hover{
+                    border: 1px solid @black;
+                    .cuny-member-info{
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    .new-members-wrapper{
+        .fa{
+            color: @aqua;
+            font-size: @font-size-h3; 
+            &:hover{
+                color: @white;
+            }
+        }
+        #home-new-member-wrap{
+            max-width: 100%;
+            .home-new-member{
+                width: 50%;
+                .home-new-member-avatar,
+                .home-new-member-info{
+                    margin: 0 auto;
+                    width: 97%;
+                }
+            }
+        }
+    }
+    .activity-list{
+        .activity-wrapper{
+            .title{
+                .fa{
+                    margin-left: 10px;
+                    color: @cyan;
+                }
+            }
+            border-radius: inherit;
+            .activity-item{
+                border: @border-light-gray;
+                border-radius: inherit;
+                padding: 5px;
+                margin-bottom: 15px;
+                h4{
+                    margin-top: 15px;
+                }
+                a{
+                    display:block;
+                }
+                .item-avatar{
+                    position: relative;
+                    .timestamp{
+                        background: @white;
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        padding-right: 3%;
+                    }
+                }
+            }
+        }
+    }
+    #pgw-gallery {
+        background-color: #929292;
+        height: 215px;
+        margin-bottom: 10px;
+        padding: 3px;
+        width: 651px;
+    }
+}
+
+/**sidebar**/
+.sidebar{
+    h2{
+        &.sidebar-title{
+            font-weight: 700;
+        }
+    }
+    .sidebar-block{
+        background: @5gray;
+        padding: 15px 0;
+        border-radius: @border-radius-bottom;
+        border-top: 1px solid @30gray;
+        ul{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            li{
+                a{
+                    color: @black;
+                    display: block;
+                    text-decoration: none;
+                    font-weight: 700;
+                    padding: 6px 15px;
+                    &:hover,
+                        &:focus{
+                        background: @cyan;
+                        color: @black;
+                    }
+                }
+                &.current,
+                &.selected-page{
+                    a{
+                        background: @cyan;
+                        color: @black;
+                    }
+                }
+                ul{
+                    li{
+                        margin: 1px 0 0 15px;
+                        a{
+                            color: @70gray;
+                            border-left: 1px solid @30gray;
+                            padding: 10px 0 10px 15px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**member profiles**/
+.profile-title{
+    font-weight: 700;
+    padding: 5px 0;
+    border-bottom: 1px solid @30gray;
+}
+.profile-type{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: @font-size-base;
+    background: @5gray;
+    color: @magenta;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 200%;
+    margin-bottom: -5px;
+}
