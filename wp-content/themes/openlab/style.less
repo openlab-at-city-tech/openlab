@@ -191,46 +191,53 @@ h1.entry-title{
 }
 
 /**custom tags**/
-.no-gutter{
-    &.no-gutter-right{
-        padding-right: 0;
+body{
+    .no-gutter{
+        &.no-gutter-right{
+            padding-right: 0;
+        }
+    }
+    .fill-gutter{
+        &.fill-gutter-left{
+            padding-left: 0;
+        }
+    }
+    .no-margin{
+        &.no-margin-top{
+            margin-top: 0;
+        }
+    }
+    .content-list{
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    .timestamp{
+        font-size: @font-size-small;
+        color: @60gray;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .mol-count{
+        background: @magenta;
+        color: @white;
+        border-radius: 8px;
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 400;
+        height: 16px;
+        line-height: 164%;
+        text-align: center;
+        vertical-align: middle;
+        width: 16px;
+    }
+    .uppercase{
+        text-transform: uppercase;
+    }
+    .bold{
+        font-weight: 700;
     }
 }
-.fill-gutter{
-    &.fill-gutter-left{
-        padding-left: 0;
-    }
-}
-.no-margin{
-    &.no-margin-top{
-        margin-top: 0;
-    }
-}
-.content-list{
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-.timestamp{
-    font-size: @font-size-small;
-    color: @60gray;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-.mol-count{
-    background: @magenta;
-    color: @white;
-    border-radius: 8px;
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 400;
-    height: 16px;
-    line-height: 164%;
-    text-align: center;
-    vertical-align: middle;
-    width: 16px;
-}
-
 /**home page**/
 .home-page {
     .row-home-top{
@@ -451,4 +458,35 @@ h1.entry-title{
     height: 30px;
     line-height: 200%;
     margin-bottom: -5px;
+}
+/**group archives**/
+#group-list{
+    .group-item-wrapper{
+        border-radius: @border-radius-base;
+        border: 1px solid @10gray;
+        padding: 1.2%;
+        height: 235px;
+        margin-bottom: 12px;
+        color: @60gray;
+        h2{
+            margin: 7px 0 10px;
+        }
+        a{
+            color: inherit;
+        }
+        p{
+            color: @80gray;
+        }
+        .info-line{
+            margin-bottom: 12px;
+        }
+    }
+}
+.filter{
+    width: 95%;
+    margin: 0 auto;
+    select{
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
