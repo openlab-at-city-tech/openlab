@@ -68,6 +68,8 @@ function openlab_load_scripts() {
         wp_enqueue_script('mobile-custom-js');
         wp_register_script('camera-js', get_stylesheet_directory_uri() . '/js/camera.min.js', array('jquery'));
         wp_enqueue_script('camera-js');
+        wp_register_script('select-js', get_stylesheet_directory_uri() . '/js/jquery.customSelect.min.js', array('jquery'));
+        wp_enqueue_script('select-js');
         wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
         wp_enqueue_script('utility');
         

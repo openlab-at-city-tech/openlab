@@ -68,6 +68,9 @@
 												$(this).prev('div.gray-square').addClass('red-square').removeClass('gray-square');
 
 												});
+                                                                                                
+        //custom select arrows
+        $('.custom-select select').customSelect();
 	
 	//ajax functionality for courses archive
 	$('#school-select').change(function(){

@@ -6760,6 +6760,7 @@ Custom Vars
 /*
 Bootstrap variable overrides
 */
+/**Mixins**/
 /*
 Direct Bootstrap overrides
 */
@@ -6946,6 +6947,26 @@ body .uppercase {
 }
 body .bold {
   font-weight: 700;
+}
+/**custom selects**/
+.custom-select {
+  position: relative;
+}
+.custom-select span.customSelect {
+  font: 12px sans-serif;
+  background: #ffffff url('images/select-arrow-open.png') 97% center no-repeat;
+  border: 1px solid #dddddd;
+  padding: 12px 8px;
+  width: 100%;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.custom-select span.customSelect.customSelectOpen {
+  background-image: url('images/select-arrow-close.png');
 }
 /**home page**/
 .home-page .row-home-top {
@@ -7165,10 +7186,10 @@ body .bold {
   margin-bottom: 12px;
 }
 .filter {
-  width: 95%;
+  width: 93%;
   margin: 0 auto;
 }
-.filter select {
+.filter .custom-select {
   width: 100%;
   margin-bottom: 5px;
 }

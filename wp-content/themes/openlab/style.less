@@ -238,6 +238,21 @@ body{
         font-weight: 700;
     }
 }
+/**custom selects**/
+.custom-select{
+    position: relative;
+    span.customSelect { 
+        font:12px sans-serif;
+        background:#fff url('images/select-arrow-open.png') 97% center no-repeat;
+        border:1px solid @10gray;
+        padding: 12px 8px;
+        width:100%;
+        .border-radius;
+        &.customSelectOpen{
+            background-image: url('images/select-arrow-close.png');
+        }
+    }
+}
 /**home page**/
 .home-page {
     .row-home-top{
@@ -483,9 +498,9 @@ body{
     }
 }
 .filter{
-    width: 95%;
+    width: 93%;
     margin: 0 auto;
-    select{
+    .custom-select{
         width: 100%;
         margin-bottom: 5px;
     }
