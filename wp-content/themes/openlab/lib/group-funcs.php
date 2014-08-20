@@ -241,17 +241,19 @@ function openlab_group_archive() {
         </div>
         <div class="group-count"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
         <div class="clearfloat"></div>
-        <ul id="group-list" class="item-list">
+        <div id="group-list" class="item-list row">
             <?php
             $count = 1;
             while (bp_groups()) : bp_the_group();
                 $group_id = bp_get_group_id();
                 ?>
-                <li class="course<?php echo cuny_o_e_class($count) ?> col-md-12">
-                    <div class="item-avatar alignleft">
-                        <a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array('type' => 'full', 'width' => 100, 'height' => 100)) ?></a>
+                <div class="group-item col-md-12">
+                    <div class="group-item-wrapper">
+                    <div class="row">
+                    <div class="item-avatar alignleft col-sm-8">
+                        <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                     </div>
-                    <div class="item">
+                    <div class="item col-sm-16">
 
                         <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
                         <?php
@@ -270,7 +272,7 @@ function openlab_group_archive() {
                             $wds_year = groups_get_groupmeta($group_id, 'wds_year');
                             $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
                             ?>
-                            <div class="info-line"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?><br /> <?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
+                        <div class="info-line uppercase"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?> | <span class="bold"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></span></div>
                         <?php elseif ($group_type == 'portfolio'): ?>
 
                             <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
@@ -287,17 +289,13 @@ function openlab_group_archive() {
                             bp_group_description();
                         }
                         ?>
+                    </div>
                     </div><!--item-->
-
-                </li>
-                <?php
-                if ($count % 2 == 0) {
-                    echo '<hr style="clear:both;" />';
-                }
-                ?>
+                    </div>
+                </div>
                 <?php $count++ ?>
             <?php endwhile; ?>
-        </ul>
+        </div>
 
         <div class="pagination-links" id="group-dir-pag-top">
             <?php bp_groups_pagination_links() ?>
