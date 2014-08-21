@@ -6948,6 +6948,10 @@ h1.entry-title {
   margin-bottom: 10px;
   padding-bottom: 6px;
 }
+h2.course-title {
+  font-size: 32px;
+  margin: 0 0 5px;
+}
 /**fa overrides**/
 .fa {
   font-size: 15px;
@@ -6973,6 +6977,27 @@ body .timestamp {
   color: #666666;
   text-transform: uppercase;
   font-weight: 600;
+}
+body .inline-element {
+  display: inline-block;
+}
+body img.padded {
+  border-radius: 4px;
+  border: 25px solid #f0f0f0;
+}
+body a.link-btn {
+  text-align: left;
+  text-decoration: none;
+  margin-top: 5px;
+}
+body ul.inline-element-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+body .activity-title .fa {
+  margin-left: 10px;
+  color: #63dfd2;
 }
 body .mol-count {
   background: #ff5959;
@@ -7128,10 +7153,6 @@ body .underline {
 .home-page .activity-list .activity-wrapper {
   border-radius: inherit;
 }
-.home-page .activity-list .activity-wrapper .title .fa {
-  margin-left: 10px;
-  color: #63dfd2;
-}
 .home-page .activity-list .activity-wrapper .activity-item {
   border: 1px solid #dddddd;
   border-radius: inherit;
@@ -7249,6 +7270,37 @@ body .underline {
 .filter .custom-select {
   width: 100%;
   margin-bottom: 5px;
+}
+/**group profiles**/
+.course-info {
+  margin-top: 30px;
+  padding: 0 1.5%;
+}
+.course-info .table td:first-child {
+  width: 45%;
+}
+.course-info .table td:last-child {
+  width: 65%;
+}
+.group-activity-overview .panel {
+  height: 105px;
+}
+.group-activity-overview .panel .panel-body {
+  padding: 3% 4%;
+}
+.group-activity-overview .panel .panel-body h6 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.group-activity-overview .panel .panel-body p {
+  margin-bottom: 0;
+}
+#members-list .inline-element {
+  margin-right: 1.4%;
+  width: 9.2%;
+}
+#members-list .inline-element:last-child {
+  margin-right: 0;
 }
 /**breadcrumbs**/
 #breadcrumb-container {

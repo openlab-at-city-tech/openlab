@@ -637,31 +637,17 @@ function cuny_group_single() {
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
     ?>
 
-    <h1 class="entry-title group-title"><?php echo bp_group_name(); ?></h1>
+    <h1 class="entry-title group-title"><?php echo bp_group_name(); ?><span class="profile-type pull-right"><?php echo ucfirst(groups_get_current_group()->status) ?></span></h1>
     <?php if (bp_is_group_home()): ?>
-        <div id="<?php echo $group_type; ?>-header" class="group-header">
-            <?php if ($group_type == 'portfolio') : ?>
-                <?php
-                if (strpos(bp_get_group_name(), 'ePortfolio')) {
-                    $profile = 'ePortfolio';
-                } else {
-                    $profile = "Portfolio";
-                }
-                ?>
-                <h4 class="profile-header"><?php echo $profile; ?> Profile</h4>
-            <?php else: ?>
-                <h4 class="profile-header"><?php echo ucfirst($group_type); ?> Profile</h4>
-            <?php endif; ?>
+        <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
-            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar">
-                <a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>">
-                    <?php bp_group_avatar('type=full&width=225') ?>
-                </a>
+            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-md-8">
+                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group_name->name; ?>"/>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
                     <div id="group-action-wrapper">
-                        <div id="action-edit-group"><a href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>">Edit Profile</a></div>
-                        <div id="action-edit-avatar"><a href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>">Change Avatar</a></div>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
                     </div>
                 <?php elseif (is_user_logged_in()) : ?>
                     <div id="group-action-wrapper">
@@ -670,45 +656,51 @@ function cuny_group_single() {
                 <?php endif; ?>
         </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
-            <div id="<?php echo $group_type; ?>-header-content" class="alignleft group-header-content group-<?php echo $group_id; ?>">
-                <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?>
-                    <?php if ($group_type != 'portfolio' && $group_type != 'club'): ?>
-                        <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php bp_group_name() ?>'s Feeds"></a>
-                    <?php endif; ?>
-                </h2>
+            <div id="<?php echo $group_type; ?>-header-content" class="col-md-16 alignleft group-header-content group-<?php echo $group_id; ?>">
+                <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?></h2>
 
                 <?php if ($group_type == "portfolio") : ?>
                     <div class="portfolio-displayname"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
                 <?php else : ?>
-                    <div class="info-line"><span class="highlight"><?php echo ucfirst(groups_get_current_group()->status) ?></span>: <span class="activity"><?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+                    <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
                 <?php endif; ?>
 
                 <?php do_action('bp_before_group_header_meta') ?>
 
                 <?php if ($group_type == "course"): ?>
-                    <div class="course-byline">
-                        <span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>
+                    <div class="course-info panel panel-default">
                         <?php
                         $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
                         $wds_year = groups_get_groupmeta($group_id, 'wds_year');
                         $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
                         ?>
-                        <div class="info-line" style="margin-top:2px;"><?php echo $wds_course_code; ?> | <?php echo $wds_departments; ?> | <?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
+                        <table class="table">
+                            <tr>
+                                <td class="bold">Professor(s)</td>
+                                <td><?php echo $first_name . " " . $last_name; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Department</td>
+                                <td><?php echo $wds_departments; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Course Code</td>
+                                <td><?php echo $wds_course_code; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Semester / Year</td>
+                                <td><?php echo $wds_semester; ?> <?php echo $wds_year; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Course Description</td>
+                                <td><?php echo apply_filters('the_content', $group_description); ?></td>
+                            </tr>
+                        </table>
 
-                    </div><!-- .course-byline -->
-
-                    <div class="course-description">
-                        <?php echo apply_filters('the_content', $group_description); ?>
                     </div>
 
                     <?php do_action('bp_group_header_meta') ?>
-
-                    <?php if ($html): ?>
-                        <div class="course-html-block">
-                            <?php echo $html; ?>
-                        </div>
-                    <?php endif; //end courses block    ?>
 
                 <?php else : ?>
 
@@ -722,8 +714,6 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
             <?php do_action('template_notices') ?>
-
-            <div class="clear"></div>
 
                                                                                                 </div><!--<?php echo $group_type; ?>-header -->
 
@@ -753,34 +743,27 @@ function cuny_group_single() {
             <?php do_action('bp_after_group_status_message') ?>
 
             <?php if (bp_group_is_visible() || !bp_is_active('activity')) { ?>
-                <?php global $first_displayed; ?>
-                <?php $first_displayed = false; ?>
-
 
                 <?php if (bp_group_is_visible() && bp_is_active('activity')) : ?>
                     <?php
                     if (wds_site_can_be_viewed()) {
-                        show_site_posts_and_comments();
+                        openlab_show_site_posts_and_comments();
                     }
-                    /*
-                      if ($first_displayed) {
-                      $first_class = "";
-                      } else {
-                      $first_class = "first";
-                      }
-                     */
                     ?>
 
                     <?php if ($group_type != "portfolio"): ?>
-                        <div class="one-half <?php echo $first_class; ?>">
+        <div class="row group-activity-overview">
+                        <div class="col-sm-12">
                             <div class="recent-discussions">
                                 <div class="recent-posts">
-                                    <h4 class="group-activity-title">Recent Discussions<span class="view-more"><a class="read-more" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></span></h4>
+                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
                                     <?php if (bp_has_forum_topics('per_page=3')) : ?>
-                                        <ul>
                                             <?php while (bp_forum_topics()) : bp_the_forum_topic(); ?>
-                                                <li>
-                                                    <h5><?php bp_the_topic_title() ?></h5>
+                                                
+
+<div class="panel panel-default">
+  <div class="panel-body">
+                                                    <h6><?php bp_the_topic_title() ?></h6>
 
                                                     <?php
                                                     $topic_id = bp_get_the_topic_id();
@@ -792,25 +775,21 @@ function cuny_group_single() {
                                                     ?></p>
 
                                                     <a href="<?php bp_the_topic_permalink(); ?>" class="read-more">See More</a><p>
-                                                </li>
-                                            <?php endwhile; ?>
-                                        </ul>
+  </div></div>                                            <?php endwhile; ?>
                                     <?php else: ?>
-                                        <div id="message" class="info">
+                                        <div class="panel panel-default"><div class="panel-body">
                                             <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
-                                        </div>
+                                            </div></div>
                                     <?php endif; ?>
                                 </div><!-- .recent-post -->
                             </div>
                         </div>
                         <?php $first_class = ""; ?>
-                        <div class="one-half <?php echo $first_class; ?>">
+                        <div class="col-sm-12">
                             <div id="recent-docs">
                                 <div class="recent-posts">
-                                    <h4 class="group-activity-title">Recent Docs<span class="view-more"><a class="read-more" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">See All</a></span></h4>
+                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
                                     <?php
-//*********************************************************************
-
                                     $docs_arg = Array("posts_per_page" => "3",
                                         "post_type" => "bp_doc",
                                         "tax_query" =>
@@ -822,41 +801,45 @@ function cuny_group_single() {
                                     //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
                                     global $post;
                                     if ($query->have_posts()) {
-                                        echo '<ul>';
                                         while ($query->have_posts()) : $query->the_post();
-                                            echo '<li>';
-                                            echo '<h5>';
+                                            echo '<div class="panel panel-default"><div class="panel-body">';
+                                            echo '<h6>';
                                             the_title();
-                                            echo '</h5>';
+                                            echo '</h6>';
                                             ?>
                                             <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
                                             <?php
-                                            echo '</li>';
+                                            echo '</div></div>';
                                         endwhile;
-                                        echo '</ul>';
                                         ?>
                                         <?php
                                     }else {
-                                        echo "<div><p>No Recent Docs</p></div>";
+                                        echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
                                     }
-                                    ?>
-                                    <?php
-//*********************************************************************
                                     ?>
                                 </div>
                             </div>
                         </div>
+        </div>
                         <div id="members-list" class="info-group">
 
-                            <h4 class="group-activity-title activity-members-title">Members</h4>
+                            <?php if ($bp->is_item_admin || $bp->is_item_mod):
+                                $href = site_url().'/groups/'.$group_slug.'/admin/manage-members/">See All</a></div>';
+                            else:
+                                $href = site_url().'/groups/'.$group_slug.'/members/">See All</a></div>';
+                            endif; ?>
+                            
+                            <h4 class="title activity-title"><a class="no-deco" href="<?php $href; ?>/groups/<?php echo $group_slug; ?>/docs/">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
                             <?php $member_arg = Array("exclude_admins_mods" => false); ?>
                             <?php if (bp_group_has_members($member_arg)) : ?>
 
-                                <ul id="member-list">
-                                    <?php while (bp_group_members()) : bp_group_the_member(); ?>
-                                        <li>
+                                <ul id="member-list" class="inline-element-list">
+                                    <?php while (bp_group_members()) : bp_group_the_member(); 
+                                    global $members_template;
+                $member = $members_template->member;?>
+                                        <li class="inline-element">
                                             <a href="<?php echo bp_group_member_domain() ?>">
-                                                <?php bp_group_member_avatar_mini(60, 60) ?>
+                                                <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
                                             </a>
                                         </li>
                                     <?php endwhile; ?>
@@ -870,12 +853,6 @@ function cuny_group_single() {
 
                             <?php endif; ?>
 
-                            <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
-                                <div class="view-more"><a class="read-more" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/admin/manage-members/">See All</a></div>
-                            <?php else: ?>
-                                <div class="view-more"><a class="read-more" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/members/">See All</a></div>
-                            <?php endif; ?>
-
                         </div>
 
                     <?php endif; //end of if $group != 'portfolio'    ?>
@@ -886,7 +863,7 @@ function cuny_group_single() {
                     //   case show site posts and comments even though this group is private
                     //
 					if (wds_site_can_be_viewed()) {
-                        show_site_posts_and_comments();
+                        openlab_show_site_posts_and_comments();
                         echo "<div class='clear'></div>";
                     }
                     ?>
@@ -910,7 +887,7 @@ function cuny_group_single() {
                     //   case show site posts and comments even though this group is private
                     //
 					if (wds_site_can_be_viewed()) {
-                        show_site_posts_and_comments();
+                        openlab_show_site_posts_and_comments();
                         echo "<div class='clear'></div>";
                     }
                     ?>

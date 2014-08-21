@@ -228,6 +228,10 @@ h1.entry-title{
     margin-bottom: 10px;
     padding-bottom: 6px;
 }
+h2.course-title{
+    font-size: 32px;
+    margin: 0 0 5px;
+}
 
 /**fa overrides**/
 .fa{
@@ -262,6 +266,35 @@ body{
         color: @60gray;
         text-transform: uppercase;
         font-weight: 600;
+    }
+    .inline-element{
+        display: inline-block;
+    }
+    img{
+        &.padded{
+            border-radius: @border-radius-base;
+            border: 25px solid @5gray;
+        }
+    }
+    a{
+        &.link-btn{
+            text-align: left;
+            text-decoration: none;
+            margin-top: 5px;
+        }
+    }
+    ul{
+        &.inline-element-list{
+            padding:0;
+            margin: 0;
+            list-style-type: none;
+        }
+    }
+    .activity-title{
+        .fa{
+            margin-left: 10px;
+            color: @cyan;
+        }
     }
     .mol-count{
         background: @magenta;
@@ -420,12 +453,6 @@ body{
     }
     .activity-list{
         .activity-wrapper{
-            .title{
-                .fa{
-                    margin-left: 10px;
-                    color: @cyan;
-                }
-            }
             border-radius: inherit;
             .activity-item{
                 border: @border-light-gray;
@@ -558,6 +585,45 @@ body{
     .custom-select{
         width: 100%;
         margin-bottom: 5px;
+    }
+}
+/**group profiles**/
+.course-info{
+    margin-top: 30px;
+    padding: 0 1.5%;
+    .table{
+        td{
+            &:first-child{
+                width: 45%;
+            }
+            &:last-child{
+                width: 65%;
+            }
+        }
+    }
+}
+.group-activity-overview{
+    .panel{
+        height: 105px;
+        .panel-body{
+            padding: 3% 4%;
+            h6{
+                margin-top: 0;
+                margin-bottom: 5px;
+            }
+            p{
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+#members-list{
+    .inline-element{
+        margin-right: 1.4%;
+        width: 9.2%;
+        &:last-child{
+            margin-right: 0;
+        }
     }
 }
 /**breadcrumbs**/
