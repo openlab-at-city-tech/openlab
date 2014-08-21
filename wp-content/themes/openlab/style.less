@@ -126,6 +126,36 @@ blockquote {
         }
     }
 }
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
+.pagination {
+    margin: 0;
+    li{
+        a,
+        span{
+            border-radius: 0;
+            color: @70gray;
+            &.prev{
+                border-radius: @border-radius-left;
+            }
+            &.next{
+                border-radius: @border-radius-right;
+            }
+            &.current{
+                background: @cyan;
+                border-color: @cyan;
+            }
+            .fa{
+                font-size: 16px;
+            }
+            &:hover{
+                color: @cyan;
+                background-color: inherit;
+            }
+        }
+    }
+}
 
 /**structural**/
 [class^="col-"]{
@@ -195,6 +225,8 @@ blockquote {
 /**page**/
 h1.entry-title{
     border-bottom: 1px solid @30gray;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
 }
 
 /**fa overrides**/
@@ -244,11 +276,17 @@ body{
         vertical-align: middle;
         width: 16px;
     }
+    .group-count{
+        text-align: right;
+    }
     .uppercase{
         text-transform: uppercase;
     }
     .bold{
         font-weight: 700;
+    }
+    .underline{
+        text-decoration: underline;
     }
 }
 /**custom selects**/
@@ -492,6 +530,7 @@ body{
 }
 /**group archives**/
 #group-list{
+    margin-top: 50px;
     .group-item-wrapper{
         border-radius: @border-radius-base;
         border: 1px solid @10gray;
@@ -520,4 +559,8 @@ body{
         width: 100%;
         margin-bottom: 5px;
     }
+}
+/**breadcrumbs**/
+#breadcrumb-container{
+    margin-top: 60px;
 }

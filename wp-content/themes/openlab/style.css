@@ -6862,6 +6862,36 @@ blockquote .h6 {
 .nav.nav-inline li .fa {
   padding-left: 7px;
 }
+.pagination {
+  margin: 0;
+}
+.pagination li a,
+.pagination li span {
+  border-radius: 0;
+  color: #444444;
+}
+.pagination li a.prev,
+.pagination li span.prev {
+  border-radius: 4px 0 0 4px;
+}
+.pagination li a.next,
+.pagination li span.next {
+  border-radius: 0 4px 4px 0;
+}
+.pagination li a.current,
+.pagination li span.current {
+  background: #63dfd2;
+  border-color: #63dfd2;
+}
+.pagination li a .fa,
+.pagination li span .fa {
+  font-size: 16px;
+}
+.pagination li a:hover,
+.pagination li span:hover {
+  color: #63dfd2;
+  background-color: inherit;
+}
 /**structural**/
 [class^="col-"] {
   border-radius: 4px;
@@ -6915,6 +6945,8 @@ blockquote .h6 {
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
 }
 /**fa overrides**/
 .fa {
@@ -6955,11 +6987,17 @@ body .mol-count {
   vertical-align: middle;
   width: 16px;
 }
+body .group-count {
+  text-align: right;
+}
 body .uppercase {
   text-transform: uppercase;
 }
 body .bold {
   font-weight: 700;
+}
+body .underline {
+  text-decoration: underline;
 }
 /**custom selects**/
 .custom-select {
@@ -7181,6 +7219,9 @@ body .bold {
   margin-bottom: -5px;
 }
 /**group archives**/
+#group-list {
+  margin-top: 50px;
+}
 #group-list .group-item-wrapper {
   border-radius: 4px;
   border: 1px solid #dddddd;
@@ -7208,4 +7249,8 @@ body .bold {
 .filter .custom-select {
   width: 100%;
   margin-bottom: 5px;
+}
+/**breadcrumbs**/
+#breadcrumb-container {
+  margin-top: 60px;
 }
