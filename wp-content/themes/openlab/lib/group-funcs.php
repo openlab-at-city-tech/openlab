@@ -1162,3 +1162,129 @@ function openlab_current_directory_filters() {
 
     echo $markup;
 }
+
+/**
+ * Get a group's recent posts and comments, and display them in two widgets
+ */
+function openlab_show_site_posts_and_comments() {
+	global $first_displayed, $bp;
+
+	$group_id = bp_get_group_id();
+
+	$site_type = false;
+
+	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+		$site_type = 'local';
+	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
+		$site_type = 'external';
+	}
+
+	$posts = array();
+	$comments = array();
+
+	switch ( $site_type ) {
+		case 'local':
+			switch_to_blog( $site_id );
+
+			// Set up posts
+			$wp_posts = get_posts( array(
+				'posts_per_page' => 3
+			) );
+
+			foreach ( $wp_posts as $wp_post ) {
+				$posts[] = array(
+					'title' => $wp_post->post_title,
+					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
+					'permalink' => get_permalink( $wp_post->ID )
+				);
+			}
+
+			// Set up comments
+			$comment_args = array(
+				"status" => "approve",
+				"number" => "3"
+			);
+
+			$wp_comments = get_comments( $comment_args );
+
+			foreach ( $wp_comments as $wp_comment ) {
+				// Skip the crummy "Hello World" comment
+				if ( $wp_comment->comment_ID == "1" ) {
+					continue;
+				}
+				$post_id = $wp_comment->comment_post_ID;
+
+				$comments[] = array(
+					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
+					'permalink' => get_permalink( $post_id )
+				);
+			}
+
+			$site_url = get_option( 'siteurl' );
+
+			restore_current_blog();
+
+			break;
+
+		case 'external':
+			$posts = openlab_get_external_posts_by_group_id();
+			$comments = openlab_get_external_comments_by_group_id();
+
+			break;
+	}
+
+	// If we have either, show both
+	if ( !empty( $posts ) || !empty( $comments ) ) {
+		?>
+                <div class="row group-activity-overview">
+		<div class="col-sm-12">
+			<div id="recent-course">
+				<div class="recent-posts">
+                                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr( $site_url ) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h4>
+
+					
+						<?php foreach ( $posts as $post ) : ?>
+							<div class="panel panel-default">
+                                                             <div class="panel-body">
+                                <h6 class="underline"><?php echo $post['title']; ?></h6>
+                                <p>
+                                    <?php echo $post['content']; ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
+                                </p>
+							</div>
+                                </div>
+						<?php endforeach ?>
+
+					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
+						<p class="description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'posts', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-posts-feed' ) ?>">Refresh now</a></p>
+					<?php endif ?>
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-course -->
+		</div><!-- .one-half -->
+
+		<div class="col-sm-12">
+			<div id="recent-site-comments">
+				<div class="recent-posts">
+                                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr( $site_url ) ?>">Recent Comments<span class="fa fa-chevron-circle-right"></span></a></h4>
+						<?php if ( !empty( $comments ) ) : ?>
+							<?php foreach ( $comments as $comment ) : ?>
+                               <div class="panel panel-default">
+                                                             <div class="panel-body">
+                                    <p><?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a></p>
+                                </div></div>
+							<?php endforeach ?>
+						<?php else : ?>
+							<div class="panel panel-default">
+                                                            <div class="panel-body"><p>No Comments Found</p></div></div>
+						<?php endif ?>
+
+					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
+						<p class="refresh-message description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'comments', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-comments-feed' ) ?>">Refresh now</a></p>
+					<?php endif ?>
+
+				</div><!-- .recent-posts -->
+			</div><!-- #recent-site-comments -->
+		</div><!-- .one-half -->
+                </div>
+		<?php
+	}
+}
