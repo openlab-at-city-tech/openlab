@@ -250,48 +250,48 @@ function openlab_group_archive() {
                 ?>
                 <div class="group-item col-md-12">
                     <div class="group-item-wrapper">
-                    <div class="row">
-                    <div class="item-avatar alignleft col-sm-8">
-                        <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
-                    </div>
-                    <div class="item col-sm-16">
+                        <div class="row">
+                            <div class="item-avatar alignleft col-sm-8">
+                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                            </div>
+                            <div class="item col-sm-16">
 
-                        <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
-                        <?php
-                        //course group type
-                        if ($group_type == 'course'):
-                            ?>
+                                <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+                                <?php
+                                //course group type
+                                if ($group_type == 'course'):
+                                    ?>
 
-                            <?php
-                            $admins = groups_get_group_admins($group_id);
-                            $faculty_id = $admins[0]->user_id;
-                            $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
-                            $last_name = ucfirst(xprofile_get_field_data('Last Name', $faculty_id));
-                            $wds_faculty = $first_name . " " . $last_name;
-                            $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
-                            $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
-                            $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-                            $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
-                            ?>
-                        <div class="info-line uppercase"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?> | <span class="bold"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></span></div>
-                        <?php elseif ($group_type == 'portfolio'): ?>
+                                    <?php
+                                    $admins = groups_get_group_admins($group_id);
+                                    $faculty_id = $admins[0]->user_id;
+                                    $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
+                                    $last_name = ucfirst(xprofile_get_field_data('Last Name', $faculty_id));
+                                    $wds_faculty = $first_name . " " . $last_name;
+                                    $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
+                                    $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
+                                    $wds_year = groups_get_groupmeta($group_id, 'wds_year');
+                                    $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+                                    ?>
+                                    <div class="info-line uppercase"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?> | <span class="bold"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></span></div>
+                                <?php elseif ($group_type == 'portfolio'): ?>
 
-                            <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
+                                    <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
 
-                        <?php endif; ?>
+                                <?php endif; ?>
 
-                        <?php
-                        $len = strlen(bp_get_group_description());
-                        if ($len > 135) {
-                            $this_description = substr(bp_get_group_description(), 0, 135);
-                            $this_description = str_replace("</p>", "", $this_description);
-                            echo $this_description . '&hellip; <a href="' . bp_get_group_permalink() . '">See&nbsp;More</a></p>';
-                        } else {
-                            bp_group_description();
-                        }
-                        ?>
-                    </div>
-                    </div><!--item-->
+                                <?php
+                                $len = strlen(bp_get_group_description());
+                                if ($len > 135) {
+                                    $this_description = substr(bp_get_group_description(), 0, 135);
+                                    $this_description = str_replace("</p>", "", $this_description);
+                                    echo $this_description . '&hellip; <a href="' . bp_get_group_permalink() . '">See&nbsp;More</a></p>';
+                                } else {
+                                    bp_group_description();
+                                }
+                                ?>
+                            </div>
+                        </div><!--item-->
                     </div>
                 </div>
                 <?php $count++ ?>
@@ -445,7 +445,6 @@ function openlab_get_active_semesters() {
 
     return $combos;
 }
-
 
 /**
  * Output the group visibility flag, shown above the right-hand nav
@@ -709,7 +708,7 @@ function cuny_group_single() {
                         <div class="course-html-block">
                             <?php echo $html; ?>
                         </div>
-                    <?php endif; //end courses block   ?>
+                    <?php endif; //end courses block    ?>
 
                 <?php else : ?>
 
@@ -726,7 +725,7 @@ function cuny_group_single() {
 
             <div class="clear"></div>
 
-                                                                        </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -879,7 +878,7 @@ function cuny_group_single() {
 
                         </div>
 
-                    <?php endif; //end of if $group != 'portfolio'   ?>
+                    <?php endif; //end of if $group != 'portfolio'    ?>
 
                 <?php elseif (!bp_group_is_visible()) : ?>
                     <?php
@@ -893,13 +892,13 @@ function cuny_group_single() {
                     ?>
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )   ?>
+                    <?php // do_action( 'bp_before_group_status_message' )    ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()     ?></p>
+                                                            <p><?php // bp_group_status_message()        ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )   ?>
+                    <?php // do_action( 'bp_after_group_status_message' )    ?>
 
                 <?php endif; ?>
 
@@ -918,13 +917,13 @@ function cuny_group_single() {
 
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )   ?>
+                    <?php // do_action( 'bp_before_group_status_message' )    ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()     ?></p>
+                                                            <p><?php // bp_group_status_message()        ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )    ?>
+                    <?php // do_action( 'bp_after_group_status_message' )     ?>
 
                 <?php endif; ?>
 
@@ -1006,7 +1005,7 @@ function openlab_default_subscription_settings_form() {
         <label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings('sub') ?> />
             <?php _e('New Topics Email ( new topics are sent as they arrive, but not replies - good for small groups )', 'bp-ass') ?></label>
         <label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings('supersub') ?> />
-    <?php _e('All Email ( send emails about everything - recommended only for working groups )', 'bp-ass') ?></label>
+            <?php _e('All Email ( send emails about everything - recommended only for working groups )', 'bp-ass') ?></label>
     </div>
     <hr />
     <?php
