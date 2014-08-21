@@ -299,7 +299,7 @@ function openlab_group_archive() {
         </div>
 
         <div class="pagination-links" id="group-dir-pag-top">
-            <?php bp_groups_pagination_links() ?>
+            <?php echo openlab_groups_pagination_links() ?>
         </div>
     <?php else: ?>
         <div class="current-group-filters current-portfolio-filters">
@@ -311,6 +311,24 @@ function openlab_group_archive() {
 
     <?php endif; ?>
     <?php
+}
+
+function openlab_groups_pagination_links() {
+    global $groups_template;
+
+    $pagination = paginate_links(array(
+        'base' => add_query_arg(array('grpage' => '%#%', 'num' => $groups_template->pag_num, 's' => $search_terms, 'sortby' => $groups_template->sort_by, 'order' => $groups_template->order)),
+        'format' => '',
+        'total' => ceil((int) $groups_template->total_group_count / (int) $groups_template->pag_num),
+        'current' => $groups_template->pag_page,
+        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+        'mid_size' => 3,
+        'type' => 'list',
+            ));
+
+    $pagination = str_replace('page-numbers','page-numbers pagination',$pagination);
+    return $pagination;
 }
 
 /*
