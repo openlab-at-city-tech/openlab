@@ -16,23 +16,22 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
 <h2 class="sidebar-title"><?php echo $sidebar_title; ?></h2>
 <div class="sidebar-block">
-    <p>Narrow down your search using the filters or search box below.</p>
     <?php
 //determine class type for filtering
-    $school_color = "gray";
-    $dept_color = "gray";
-    $semester_color = "gray";
-    $sort_color = "gray";
-    $user_color = "gray";
+    $school_color = "passive";
+    $dept_color = "passive";
+    $semester_color = "passive";
+    $sort_color = "passive";
+    $user_color = "passive";
 
 //school filter - easiest to do this with a switch statment
     if (empty($_GET['school'])) {
         $_GET['school'] = "";
     } else if ($_GET['school'] == 'school_all') {
         $_GET['school'] = "school_all";
-        $school_color = "red";
+        $school_color = "active";
     } else {
-        $school_color = "red";
+        $school_color = "active";
     }
     switch ($_GET['school']) {
         case "tech":
@@ -64,7 +63,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $display_option_dept = "All";
         $option_value_dept = "dept_all";
     } else {
-        $dept_color = "red";
+        $dept_color = "active";
         $display_option_dept = ucwords(str_replace('-', ' ', $_GET['department']));
         $display_option_dept = str_replace('And', '&amp;', $display_option_dept);
         $option_value_dept = $_GET['department'];
@@ -74,7 +73,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     if (empty($_GET['semester'])) {
         $_GET['semester'] = "";
     } else {
-        $semester_color = "red";
+        $semester_color = "active";
     }
 //processing the semester value - now dynamic instead of a switch statement
     if (empty($_GET['semester'])) {
@@ -84,7 +83,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $display_option_semester = "All";
         $option_value_semester = "semester_all";
     } else {
-        $dept_color = "red";
+        $dept_color = "active";
         $display_option_semester = ucfirst(str_replace('-', ' ', $_GET['semester']));
         $option_value_semester = $_GET['semester'];
     }
@@ -93,7 +92,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     if (empty($_GET['usertype'])) {
         $_GET['usertype'] = "";
     } else {
-        $user_color = "red";
+        $user_color = "active";
     }
     switch ($_GET['usertype']) {
 
@@ -125,7 +124,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     if (empty($_GET['group_sequence'])) {
         $_GET['group_sequence'] = "active";
     } else {
-        $sort_color = "red";
+        $sort_color = "active";
     }
     switch ($_GET['group_sequence']) {
         case "alphabetical":
@@ -147,6 +146,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     }
     ?>
     <div class="filter">
+        <p>Narrow down your search using the filters or search box below.</p>
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
             <div class="custom-select">
                 <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
@@ -197,21 +197,20 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                     <option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
                 </select>
             </div>
-            <input type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
-            <input type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
-
+            <input class="btn btn-primary" type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
+            <input class="btn btn-default" type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
         </form>
-        <div class="clearfloat"></div>
+
+        <div class="archive-search">
+            <h5 class="bold">Search</h5>
+            <form method="get" class="form-inline btn-combo" role="form">
+                <div class="form-group">
+                    <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" /><button class="btn btn-primary" id="search-submit" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+            <div class="clearfloat"></div>
+        </div><!--archive search-->
     </div><!--filter-->
-
-    <div class="archive-search">
-        <div class="gray-square"></div>
-        <form method="get">
-            <input id="search-terms" type="text" name="search" placeholder="Search" />
-            <input id="search-submit" type="submit" value="Search" />
-        </form>
-        <div class="clearfloat"></div>
-    </div><!--archive search-->
 </div>
 <?php
 

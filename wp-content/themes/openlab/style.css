@@ -3381,8 +3381,8 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #ffffff;
-  background-color: #428bca;
-  border-color: #357ebd;
+  background-color: #444444;
+  border-color: #373737;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -3390,8 +3390,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #ffffff;
-  background-color: #3071a9;
-  border-color: #285e8e;
+  background-color: #2b2b2b;
+  border-color: #191919;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3413,11 +3413,11 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #428bca;
-  border-color: #357ebd;
+  background-color: #444444;
+  border-color: #373737;
 }
 .btn-primary .badge {
-  color: #428bca;
+  color: #444444;
   background-color: #ffffff;
 }
 .btn-success {
@@ -4600,6 +4600,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-form .has-feedback .form-control-feedback {
     top: 0;
   }
+}
+.navbar-form.btn-combo .form-control {
+  width: 82%;
+  margin-right: 2%;
 }
 @media (max-width: 767px) {
   .navbar-form .form-group {
@@ -6862,6 +6866,10 @@ blockquote .h6 {
 [class^="col-"] {
   border-radius: 4px;
 }
+.form-inline.btn-combo .form-control {
+  width: 82%;
+  margin-right: 2%;
+}
 /**header**/
 .navbar-default .container-fluid {
   max-width: 1140px;
@@ -6908,6 +6916,11 @@ blockquote .h6 {
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
 }
+/**fa overrides**/
+.fa {
+  font-size: 15px;
+  line-height: 1.25;
+}
 /**custom tags**/
 body .no-gutter.no-gutter-right {
   padding-right: 0;
@@ -6953,10 +6966,10 @@ body .bold {
   position: relative;
 }
 .custom-select span.customSelect {
-  font: 12px sans-serif;
+  font: inherit;
   background: #ffffff url('images/select-arrow-open.png') 97% center no-repeat;
   border: 1px solid #dddddd;
-  padding: 12px 8px;
+  padding: 8px 5%;
   width: 100%;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -6967,6 +6980,9 @@ body .bold {
 }
 .custom-select span.customSelect.customSelectOpen {
   background-image: url('images/select-arrow-close.png');
+}
+.custom-select span.customSelect.active-text {
+  color: #49cabe;
 }
 /**home page**/
 .home-page .row-home-top {

@@ -131,7 +131,14 @@ blockquote {
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
-
+.form-inline{
+    &.btn-combo{
+        .form-control{
+            width: 82%;
+            margin-right: 2%;
+        }
+    }
+}
 /**header**/
 .navbar-default{
     .container-fluid{
@@ -190,6 +197,12 @@ h1.entry-title{
     border-bottom: 1px solid @30gray;
 }
 
+/**fa overrides**/
+.fa{
+    font-size: 15px;
+    line-height: 1.25;
+}
+
 /**custom tags**/
 body{
     .no-gutter{
@@ -242,14 +255,17 @@ body{
 .custom-select{
     position: relative;
     span.customSelect { 
-        font:12px sans-serif;
+        font: inherit;
         background:#fff url('images/select-arrow-open.png') 97% center no-repeat;
         border:1px solid @10gray;
-        padding: 12px 8px;
+        padding: 8px 5%;
         width:100%;
         .border-radius;
         &.customSelectOpen{
             background-image: url('images/select-arrow-close.png');
+        }
+        &.active-text{
+            color: @aqua;
         }
     }
 }

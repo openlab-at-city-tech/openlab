@@ -103,6 +103,7 @@
                     $('#dept-select').removeAttr('disabled');
                     $('#dept-select').removeClass('processing');
                     $('#dept-select').html(data);
+                    $('.custom-select select').trigger('render');
                 },
                 error: function(MLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);
