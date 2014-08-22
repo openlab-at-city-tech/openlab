@@ -98,31 +98,32 @@ $site=site_url();
 restore_current_blog();
 ?>
 
-<div id="cuny-sw-footer">
-<div class="footer-widgets" id="footer-widgets"><div class="wrap"><div class="footer-widgets-1 widget-area"><div class="widget widget_text" id="text-4"><div class="widget-wrap">
-	<div class="textwidget"><a href="http://www.citytech.cuny.edu/" target="_blank"><img src="<?php echo $site;?>/wp-content/themes/citytech/images/ctnyc-seal.png" alt="Ney York City College of Technology" border="0" /></a></div>
-		</div></div>
-</div><div class="footer-widgets-2 widget-area"><div class="widget widget_text" id="text-3"><div class="widget-wrap"><h4 class="widgettitle">About OpenLab</h4>
-			<div class="textwidget"><p>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p></div>
-		</div></div>
-</div><div class="footer-widgets-3 widget-area"><div class="widget menupages" id="menu-pages-4"><div class="widget-wrap"><h4 class="widgettitle">Support</h4>
-<a href="<?php echo $site;?>/blog/help/openlab-help/">Help</a> | <a href="<?php echo $site;?>/about/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site;?>/about/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site;?>/about/credits/">Credits</a></div></div>
-</div><div class="footer-widgets-4 widget-area"><div class="widget widget_text" id="text-6"><div class="widget-wrap"><h4 class="widgettitle">Share</h4>
-			<div class="textwidget"><ul class="nav"><li class="rss"><a href="<?php echo $site."/activity/feed/" ?>">RSS</a></li>
-            <li>
-            <!-- Place this tag in your head or just before your close body tag -->
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-
-<!-- Place this tag where you want the +1 button to render -->
-<g:plusone size="small"></g:plusone>
-            </li>
-            </ul></div>
-		</div></div>
-</div>
-<div class="footer-widgets-5 widget-area"><div class="cuny-logo-widget widget widget_text" id="text-7"><div class="widget-wrap"><div class="textwidget"><a href="http://www.cuny.edu/" target="_blank"><img alt="City University of New York" src="<?php echo $site;?>/wp-content/uploads/2011/05/cuny-box.png" /></a></div>
-		</div></div>
-</div></div><!-- end .wrap --></div>
-<div class="footer" id="footer"><div class="wrap"><span class="alignleft">&copy; <a href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span><span class="alignright"><a href="http://www.cuny.edu" target="_blank">City University of New York</a></span></div><!-- end .wrap --></div>
+<div id="openlab-footer">
+    <div class="container">
+        <div class="row row-footer">
+                <div class="col-sm-14 col-logos">
+                    <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>
+                    <p class="semibold"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
+                        <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                </div>
+                <div class="col-sm-6 col-links semibold">
+                    <h2>Support</h2>
+                    <a href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> | <a href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site; ?>/about/credits/">Credits</a>
+                </div>
+                <div class="col-sm-4 col-share">
+                    <h2>Share</h2>
+                    <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
+                    <!-- Place this tag in your head or just before your close body tag -->
+                    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                    <a class="google-plus-link" href="https://plus.google.com/share?url={URL}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">Google +</a>
+                </div>
+            </div>
+        <div class="row row-copyright">
+            <div class="col-sm-24">
+                <p><span class="alignleft">&copy; <a href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span class="alignright"><a href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 

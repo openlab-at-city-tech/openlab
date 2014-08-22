@@ -7342,3 +7342,50 @@ body .underline {
   padding-right: 5px;
   margin-right: 8px;
 }
+/**footer**/
+#openlab-footer {
+  padding-top: 30px;
+  background: #f0f0f0;
+}
+#openlab-footer p,
+#openlab-footer a {
+  font-size: 12px;
+}
+#openlab-footer .col-logos {
+  display: inline-block;
+}
+#openlab-footer .col-logos p {
+  color: #444444;
+}
+#openlab-footer .col-logos a img {
+  padding-top: 5px;
+  margin-right: 15px;
+}
+#openlab-footer .col-links {
+  color: #797979;
+}
+#openlab-footer .col-links a {
+  color: inherit;
+  font-weight: inherit;
+}
+#openlab-footer .col-share a {
+  display: inline-block;
+  background: url('images/share_icons.png') no-repeat 0 0;
+  padding-top: 22px;
+  width: 22px;
+  height: 0;
+  overflow: hidden;
+  margin-right: 6px;
+}
+#openlab-footer .col-share a.rss-link {
+  background-position: -32px 0;
+}
+#openlab-footer .row-copyright {
+  margin-top: 42px;
+}
+#openlab-footer .row-copyright p {
+  color: #797979;
+}
+#openlab-footer .row-copyright p a {
+  color: inherit;
+}
