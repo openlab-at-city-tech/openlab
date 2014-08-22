@@ -7018,6 +7018,9 @@ body .group-count {
 body .uppercase {
   text-transform: uppercase;
 }
+body .semibold {
+  font-weight: 600;
+}
 body .bold {
   font-weight: 700;
 }
@@ -7318,5 +7321,24 @@ body .underline {
 }
 /**breadcrumbs**/
 #breadcrumb-container {
+  background-color: #5cdbce;
   margin-top: 60px;
+  height: 50px;
+}
+#breadcrumb-container .breadcrumb-col {
+  color: #ffffff;
+  line-height: 3.5;
+}
+#breadcrumb-container .breadcrumb-col a {
+  font-weight: inherit;
+  color: inherit;
+}
+#breadcrumb-container .breadcrumb-col .breadcrumb-prefix-label {
+  background: url('images/breadcrumb_bkrnd.png') no-repeat left center;
+  display: inline-block;
+  text-align: center;
+  height: 100%;
+  width: 124px;
+  padding-right: 5px;
+  margin-right: 8px;
 }

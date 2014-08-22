@@ -315,6 +315,9 @@ body{
     .uppercase{
         text-transform: uppercase;
     }
+    .semibold{
+        font-weight: 600;
+    }
     .bold{
         font-weight: 700;
     }
@@ -644,5 +647,24 @@ body{
 }
 /**breadcrumbs**/
 #breadcrumb-container{
+    background-color: darken(desaturate(@cyan,1.7%),2.1%);
     margin-top: 60px;
+    height: 50px;
+    .breadcrumb-col{
+        color: @white;
+        line-height: 3.5;
+        a{
+            font-weight: inherit;
+            color: inherit;
+        }
+        .breadcrumb-prefix-label{
+            background: url('images/breadcrumb_bkrnd.png') no-repeat left center;
+            display: inline-block;
+            text-align: center;
+            height: 100%;
+            width: 124px;
+            padding-right: 5px;
+            margin-right: 8px;
+        }
+    }
 }

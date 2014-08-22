@@ -232,14 +232,16 @@ function openlab_list_members($view) {
         'alt' => __('Member avatar', 'buddypress')
     );
     ?>
-    <div class="current-group-filters current-portfolio-filters">
-        <?php openlab_current_directory_filters(); ?>
-    </div>
 
     <?php if (bp_has_members($args)) : ?>
-        <div class="group-count"><?php cuny_members_pagination_count('members'); ?></div>
-        <div class="clearfloat"></div>
-        <div class="avatar-block">
+    <div class="row group-archive-header-row">
+            <div class="current-group-filters current-portfolio-filters col-sm-19">
+                <?php openlab_current_directory_filters(); ?>
+            </div>
+            <div class="group-count col-sm-5"><?php cuny_members_pagination_count('members'); ?></div>
+    </div>
+
+        <div id="group-list" class="item-list row">
             <?php
             while (bp_members()) : bp_the_member();
                 //the following checks the current $id agains the passed list from the query
@@ -248,16 +250,20 @@ function openlab_list_members($view) {
 
                 $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
                 ?>
-                <div class="person-block col-md-8">
-                    <div class="item-avatar">
-                        <a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar($avatar_args) ?></a>
-                    </div>
-                    <div class="cuny-member-info">
-                        <a class="member-name" href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a>
-                        <span class="member-since-line">Member since <?php echo $registered; ?></span>
-                        <?php if (bp_get_member_latest_update()) : ?>
-                            <span class="update"><?php bp_member_latest_update('length=10') ?></span>
-                        <?php endif; ?>
+                <div class="group-item col-md-12">
+                    <div class="group-item-wrapper">
+                        <div class="row">
+                            <div class="item-avatar col-sm-8">
+                                <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                            </div>
+                            <div class="item col-sm-16">
+                                <h2 class="item-title"><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
+                                <span class="member-since-line">Member since <?php echo $registered; ?></span>
+                                <?php if (bp_get_member_latest_update()) : ?>
+                                    <span class="update"><?php bp_member_latest_update('length=10') ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -265,12 +271,8 @@ function openlab_list_members($view) {
         </div>
         <div id="pag-top" class="pagination">
 
-            <div class="pag-count" id="member-dir-count-top">
-                <?php bp_members_pagination_count() ?>
-            </div>
-
             <div class="pagination-links" id="member-dir-pag-top">
-                <?php bp_members_pagination_links() ?>
+                <?php echo openlab_members_pagination_links() ?>
             </div>
 
         </div>
@@ -292,6 +294,24 @@ function openlab_list_members($view) {
 
     <?php
     endif;
+}
+
+function openlab_members_pagination_links() {
+    global $members_template;
+
+    $pagination = paginate_links(array(
+        'base' => add_query_arg('upage', '%#%'),
+        'format' => '',
+        'total' => ceil((int) $members_template->total_member_count / (int) $members_template->pag_num),
+        'current' => (int) $members_template->pag_page,
+        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+        'mid_size' => 3,
+        'type' => 'list',
+    ));
+    
+    $pagination = str_replace('page-numbers','page-numbers pagination',$pagination);
+    return $pagination;
 }
 
 //a variation on bp_members_pagination_count() to match design
