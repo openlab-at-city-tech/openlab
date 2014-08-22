@@ -7272,14 +7272,14 @@ body .underline {
   margin-bottom: 5px;
 }
 /**group profiles**/
-.course-info {
+.info-panel {
   margin-top: 30px;
   padding: 0 1.5%;
 }
-.course-info .table td:first-child {
+.info-panel .table td:first-child {
   width: 45%;
 }
-.course-info .table td:last-child {
+.info-panel .table td:last-child {
   width: 65%;
 }
 .group-activity-overview .panel {

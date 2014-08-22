@@ -668,7 +668,7 @@ function cuny_group_single() {
                 <?php do_action('bp_before_group_header_meta') ?>
 
                 <?php if ($group_type == "course"): ?>
-                    <div class="course-info panel panel-default">
+                    <div class="info-panel panel panel-default">
                         <?php
                         $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
