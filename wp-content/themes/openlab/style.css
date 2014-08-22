@@ -7302,6 +7302,20 @@ body .underline {
 #members-list .inline-element:last-child {
   margin-right: 0;
 }
+/**member profiles**/
+#member-item-body .panel {
+  height: 130px;
+}
+#member-item-body .panel .panel-body {
+  padding: 2%;
+}
+#member-item-body .panel .panel-body h6 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+#member-item-body .panel .panel-body p {
+  margin-bottom: 0;
+}
 /**breadcrumbs**/
 #breadcrumb-container {
   margin-top: 60px;

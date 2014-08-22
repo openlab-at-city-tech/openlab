@@ -460,68 +460,20 @@ function openlab_get_groups_of_user($args = array()) {
 function cuny_student_profile() {
     global $site_members_template, $user_ID, $bp;
 
-    $this_user_id = isset($site_members_template->member->id) ? $site_members_template->member->id : bp_displayed_user_id();
     do_action('bp_before_member_home_content');
     ?>
-    <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
-
-    <h2 class="entry-title profile-title clearfix">
-        <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
-        <span class="profile-type pull-right"><?php echo $account_type ?></span>
-    </h2>
 
     <?php if (bp_is_user_activity() || 'public' == bp_current_action()) { ?>
         <?php cuny_member_profile_header(); ?>
     <?php } ?>
 
 
-    <div id="member-item-body">
-
-        <?php if (bp_is_user_blogs()) { ?>
-            <?php do_action('bp_before_member_blogs_content') ?>
-
-            <div class="blogs myblogs">
-                <?php bp_get_template_part('blogs/blogs-loop.php'); ?>
-            </div><!-- .blogs.myblogs -->
-
-            <?php do_action('bp_after_member_blogs_content') ?>
-
-            <?php do_action('bp_before_member_body') ?>
-
-        <?php } elseif ('view' == bp_current_action()) { ?>
-            <?php bp_get_template_part('members/single/messages/single.php'); ?>
-        <?php } elseif (bp_is_user_messages()) { ?>
-            <?php bp_get_template_part('members/single/messages.php'); ?>
-        <?php } elseif (bp_is_user_groups()) { ?>
-            <?php bp_get_template_part('members/single/groups.php'); ?>
-        <?php } elseif ('edit' == bp_current_action()) { ?>
-            <?php bp_get_template_part('members/single/profile/edit.php'); ?>
-        <?php } elseif ('change-avatar' == bp_current_action()) { ?>
-            <?php bp_get_template_part('members/single/profile/change-avatar.php'); ?>
-        <?php } elseif ('requests' == bp_current_action()) { ?>
-            <?php bp_get_template_part('members/single/friends/requests.php'); ?>
-        <?php } elseif (bp_is_user_friends()) { ?>
-
-            <?php do_action('bp_before_member_friends_content') ?>
-
-            <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
-                <div class="submenu"><?php echo openlab_my_friends_submenu(); ?></div>
-            <?php endif; ?>
-
-            <div class="members friends">
-
-                <?php bp_get_template_part('members/members-loop.php'); ?>
-            </div><!-- .members.friends -->
-
-            <?php do_action('bp_after_member_friends_content') ?>
-
-        <?php } else { ?>
+    <div id="member-item-body" class="row">
 
             <?php echo cuny_profile_activty_block('course', 'My Courses', '', 25); ?>
             <?php echo cuny_profile_activty_block('project', 'My Projects', ' last', 25); ?>
             <?php echo cuny_profile_activty_block('club', 'My Clubs', ' last', 25); ?>
 
-            <div class="clearfloat"></div>
             <script type='text/javascript'>(function($) {
                     $('.activity-list').css('visibility', 'hidden');
                 })(jQuery);</script>
@@ -533,23 +485,23 @@ function cuny_student_profile() {
                 }
                 ?>
 
-                <div class="info-group">
-                    <div><h4><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h4></div>
+                <div id="members-list" class="info-group">
+                    <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right"></span></a></h4>
 
                     <?php if ($friend_ids) { ?>
 
-                        <ul id="member-list">
+                        <ul id="member-list" class="inline-element-list">
 
                             <?php for ($i = 0; $i < count($friend_ids); $i++) { ?>
 
-                                <li>
-                                    <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>"><?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'type' => 'thumb')) ?></a>
+                                <li class="inline-element">
+                                    <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>">                                      <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                    </a>
                                 </li>
 
                             <?php } ?>
 
                         </ul>
-                        <span><a href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php _e('See All Friends', 'buddypress') ?></a></span>
                     <?php } else { ?>
 
                         <div id="message" class="info">
@@ -558,9 +510,7 @@ function cuny_student_profile() {
 
                     <?php } ?>
                 <?php endif; /* bp_is_active( 'friends' ) */ ?>
-                <div class="clear"></div>
             </div>
-        <?php } ?>
         <?php do_action('bp_after_member_body') ?>
 
     </div><!-- #item-body -->
@@ -591,40 +541,44 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
 //	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
             ?>
             <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8">
-                <!-- See all link in column headers -->
-                <h4><?php echo $title ?>
-                    <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
-                        <a class="group-see-all top" href="<?php echo bp_get_root_domain() ?>/my-<?php echo $type; ?>s">See All</a>
-                    <?php else: ?>
-                        <a class="group-see-all top" href="<?php echo $bp->displayed_user->domain ?>groups/?type=<?php echo $type; ?>">See All</a>
-                    <?php endif; ?>
-                </h4>
+                <?php
+                if ($bp->is_item_admin || $bp->is_item_mod):
+                    $href = bp_get_root_domain().'./my-'.$type.'s';
+                else:
+                    $href = $bp->displayed_user->domain.'groups/?type='.$type;
+                endif;
+                ?>
+                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right"></span></a></h4>
                 <?php $x = 0; ?>
                 <?php while (bp_groups()) : bp_the_group(); ?>
 
-                    <div class="row row-<?php echo $x + 1; ?>">
-                        <div class="activity-avatar">
-                            <a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array('width' => 76, 'height' => 76)) ?></a>
-                        </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                
+                                <div class="activity-avatar col-sm-9">
+                                    <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
+                                </div>
 
-                        <div class="activity-content">
+                                <div class="activity-content col-sm-15">
 
-                            <div class="activity-header">
-                                <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
+                                    <h6>
+                                        <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
+                                    </h6>
+
+                                    <p>
+                                        <?php $activity = bp_get_group_description() ?>
+                                        <?php /* shorten the description if it's getting long */ ?>
+                                        <?php $activity = strip_tags(openlab_shortened_text($activity, 55)); ?>
+
+                                        <?php echo $activity . ' <a class="read-more" href="' . bp_get_group_permalink() . '">See More</a>'; ?>
+                                    </p>
+
+                                </div>
+
                             </div>
 
-                            <div class="activity-inner">
-                                <?php $activity = bp_get_group_description() ?>
-                                <?php /* shorten the description if it's getting long */ ?>
-                                <?php $activity = strip_tags(openlab_shortened_text($activity, 75)); ?>
-
-                                <?php echo $activity . ' <a class="read-more" href="' . bp_get_group_permalink() . '">See More</a>'; ?>
-                            </div>
-
                         </div>
-
-                        <div class="clearfloat"></div>
-
                     </div>
 
                     <?php /* Increment */ ?>
@@ -743,19 +697,31 @@ function cuny_member_profile_header() {
     }
     ?>
 
-    <div id="member-header">
-        <?php do_action('bp_before_member_header') ?>
+    <div id="member-header" class="member-header row">
+        <?php do_action('bp_before_member_header');
+        
+        $this_user_id = isset($site_members_template->member->id) ? $site_members_template->member->id : bp_displayed_user_id();
+    do_action('bp_before_member_home_content');
+    ?>
+    <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
 
-        <div id="member-header-avatar" class="alignleft">
+    <h1 class="entry-title profile-title clearfix">
+        <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
+        <span class="profile-type pull-right"><?php echo $account_type ?></span>
+    </h1>
+
+        <div id="member-header-avatar" class="alignleft group-header-avatar col-md-8">
             <div id="avatar-wrapper">
                 <a href="<?php bp_user_link() ?>">
-                    <?php bp_displayed_user_avatar('type=full&width=225') ?>
+                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
                 </a>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
                 <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
-                    <div id="action-edit-profile"><a href="<?php echo $dud . 'profile/edit/'; ?>">Edit Profile</a></div>
-                    <div id="action-edit-avatar"><a href="<?php echo $dud . 'profile/change-avatar/'; ?>">Change Avatar</a></div>
+                    <div id="group-action-wrapper">
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
+                    </div>
                 <?php elseif (is_user_logged_in() && !openlab_is_my_profile()) : ?>
                     <?php bp_add_friend_button(openlab_fallback_user(), bp_loggedin_user_id()) ?>
 
@@ -768,8 +734,8 @@ function cuny_member_profile_header() {
                         'wrapper_id' => 'send-private-message',
                         'link_href' => bp_get_send_private_message_link(),
                         'link_title' => __('Send a private message to this user.', 'buddypress'),
-                        'link_text' => __('Send Message', 'buddypress'),
-                        'link_class' => 'send-message',
+                        'link_text' => __('<i class="fa fa-envelope"></i> Send Message', 'buddypress'),
+                        'link_class' => 'send-message btn btn-default btn-block btn-primary link-btn',
                     ))
                     ?>
 
@@ -778,34 +744,14 @@ function cuny_member_profile_header() {
                     <!--<p>Some descriptive tags about the student...</p>-->
         </div><!-- #item-header-avatar -->
 
-        <div id="member-header-content" class="alignleft">
+        <div id="member-header-content" class="col-md-16">
 
-            <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?><?php //echo " ".$last_name;             ?></h2>
-            <span class="activity"><?php bp_last_activity(bp_displayed_user_id()) ?></span>
-
-
+            <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
+            <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
 
             <?php do_action('bp_before_member_header_meta') ?>
 
             <div id="item-meta">
-                <?php if (function_exists('bp_activity_latest_update')) : ?>
-                    <div id="latest-update">
-                        <?php bp_activity_latest_update(bp_displayed_user_id()) ?>
-                    </div>
-                <?php endif; ?>
-                <!--
-                <?php if (bp_is_active('groups') && bp_has_groups()) : ?>
-                                                                                                    <div id="areas-of-activty" class="item-list">
-                                                                                                    <strong>All groups:</strong>
-                    <?php while (bp_groups()) : bp_the_group(); ?>
-                                                                                                                        
-                                                                                                                                                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a>,
-                                                                                                                        
-                    <?php endwhile; ?>
-                                                                                                    </div>
-                <?php endif; ?>
-                -->
-
 
                 <?php do_action('bp_profile_header_meta') ?>
 
@@ -814,13 +760,13 @@ function cuny_member_profile_header() {
             <div class="profile-fields">
                 <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
                 <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
-
-                    <table class="profile-fields">
+                <div class="info-panel panel panel-default">
+                    <table class="profile-fields table">
 
                         <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
                             <?php if (bp_profile_group_has_fields()) : ?>
-
+                        
                                 <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
                                     <?php if (bp_field_has_data()) : ?>
@@ -832,7 +778,7 @@ function cuny_member_profile_header() {
                                             ?>
 
                                             <tr>
-                                                <td class="label" nowrap="nowrap">
+                                                <td class="bold">
                                                     <?php bp_the_profile_field_name() ?>
                                                 </td>
 
@@ -846,11 +792,12 @@ function cuny_member_profile_header() {
                                     <?php endif; // bp_field_has_data()   ?>
 
                                 <?php endwhile; // bp_profile_fields()   ?>
+                            
                             <?php endif; // bp_profile_group_has_fields()   ?>
 
                         <?php endwhile; // bp_profile_groups()    ?>
                     </table>
-
+                </div>
                 <?php endif; // bp_has_profile()    ?>
             </div>
 
@@ -880,3 +827,13 @@ function openlab_save_account_type_on_settings() {
 }
 
 add_action('bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings');
+
+function openlab_custom_add_friend_button($button){
+    
+    $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> '.$button['link_text'].'</span><i class="fa fa-plus-circle pull-right"></i>';
+    $button['link_class'] = $button['link_class'].' btn btn-default btn-block btn-primary link-btn clearfix';
+    
+    return $button;
+}
+
+add_filter('bp_get_add_friend_button','openlab_custom_add_friend_button');
