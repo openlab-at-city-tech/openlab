@@ -642,7 +642,9 @@ function cuny_group_single() {
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-md-8">
-                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group_name->name; ?>"/>
+                <div class="padded-img">
+                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group_name->name; ?>"/>
+                </div>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
                     <div id="group-action-wrapper">

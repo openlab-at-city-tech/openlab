@@ -934,6 +934,7 @@ img {
   width: 100% \9;
   max-width: 100%;
   height: auto;
+  width: 100%;
 }
 .img-rounded {
   border-radius: 6px;
@@ -6896,6 +6897,13 @@ blockquote .h6 {
 [class^="col-"] {
   border-radius: 4px;
 }
+.img-responsive,
+.thumbnail > img,
+.thumbnail a > img,
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  width: 100%;
+}
 .form-control {
   margin-bottom: 5px;
 }
@@ -6991,9 +6999,12 @@ body .print-link a {
 body .inline-element {
   display: inline-block;
 }
-body img.padded {
+body .padded-img {
   border-radius: 4px;
   border: 25px solid #f0f0f0;
+}
+body .padded-img img {
+  border-radius: 4px;
 }
 body a.link-btn {
   text-align: left;

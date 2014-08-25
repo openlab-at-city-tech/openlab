@@ -161,6 +161,9 @@ blockquote {
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
+.img-responsive{
+    width: 100%;
+}
 .form-control{
     margin-bottom: 5px;
 }
@@ -280,10 +283,11 @@ body{
     .inline-element{
         display: inline-block;
     }
-    img{
-        &.padded{
+    .padded-img{
+        border-radius: @border-radius-base;
+        border: 25px solid @5gray;
+        img{
             border-radius: @border-radius-base;
-            border: 25px solid @5gray;
         }
     }
     a{

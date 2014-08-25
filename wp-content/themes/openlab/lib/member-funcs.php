@@ -732,9 +732,9 @@ function cuny_member_profile_header() {
 
         <div id="member-header-avatar" class="alignleft group-header-avatar col-md-8">
             <div id="avatar-wrapper">
-                <a href="<?php bp_user_link() ?>">
+                <div class="padded-img">
                     <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
-                </a>
+                </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
                 <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
