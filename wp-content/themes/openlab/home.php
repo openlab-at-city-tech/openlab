@@ -15,7 +15,7 @@ get_header();
         </div>
     </div>
     <div class="fill-gutter fill-gutter-left slider">
-        <?php dynamic_sidebar('pgw-gallery'); ?>
+        
     </div>
 
 </div>

@@ -7089,6 +7089,8 @@ body .underline {
   float: left;
   width: 67.5%;
   border-radius: 0 4px 4px 0;
+  padding-top: 400px;
+  background: url('images/front_page_holder.jpg') no-repeat;
 }
 .home-page .left-block-content {
   background: #f0f0f0;
@@ -7187,13 +7189,6 @@ body .underline {
   bottom: 0;
   left: 0;
   padding-right: 3%;
-}
-.home-page #pgw-gallery {
-  background-color: #929292;
-  height: 215px;
-  margin-bottom: 10px;
-  padding: 3px;
-  width: 651px;
 }
 /**sidebar**/
 .sidebar h2.sidebar-title {
