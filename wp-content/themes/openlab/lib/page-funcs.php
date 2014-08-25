@@ -46,35 +46,38 @@ function cuny_home_login() {
 
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box">'; ?>
-        <?php echo '<h2 class="title">JOIN OpenLab</h2>'; ?>
-        <?php _e('<p>Need an account? <b><a href="' . site_url() . '/register/">Sign Up</a></b> to become a member!</p>', 'buddypress') ?>
+        <?php echo '<h2 class="title"><span class="fa fa-plus-circle"></span> Join OpenLab</h2>'; ?>
+        <p class="italics">A Place to learn, work and share</p>
+        <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-left" href="' . site_url() . '/register/">Sign up</a> Need an account?<br />Sign Up to become a member!</p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
         <?php echo '<div id="open-lab-login" class="log-box">'; ?>
         <?php do_action('bp_after_sidebar_login_form') ?>
+        <?php echo '</div>'; ?>
+        
+        <div id="user-login" class="log-box">
 
-        <?php echo '<h3 class="title">Log in to OpenLab</h3>'; ?>
+        <?php echo '<h2 class="title"><span class="fa fa-arrow-circle-right"></span> Log in</h2>'; ?>
         <?php do_action('bp_before_sidebar_login_form') ?>
 
         <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-            <label><?php _e('Username', 'buddypress') ?>
-                <input type="text" name="log" id="sidebar-user-login" class="input" value="" tabindex="97" /></label>
+                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="Username" tabindex="97" />
 
-            <label><?php _e('Password', 'buddypress') ?>
-                <input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" tabindex="98" /></label>
+                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="Password" tabindex="98" />
 
             <div id="below-login-form">
-                <a class="forgot-password-link" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                <input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" /></div>
-            <div id="keep-logged-in">
-                <input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /> <?php _e('Keep me logged in', 'buddypress') ?>
+                <a class="forgot-password-link small-text" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
+            </div>
+            <div id="keep-logged-in" class="small-text">
+                <input class="btn btn-default btn-primary link-btn pull-left" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
+                <input  name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
             </div>
             <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
             <?php do_action('bp_sidebar_login_form') ?>
 
         </form>
-        <?php echo '</div>'; ?>
+        </div>
     <?php
     endif;
 }

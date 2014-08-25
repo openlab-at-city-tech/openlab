@@ -6896,6 +6896,9 @@ blockquote .h6 {
 [class^="col-"] {
   border-radius: 4px;
 }
+.form-control {
+  margin-bottom: 5px;
+}
 .form-inline.btn-combo .form-control {
   width: 82%;
   margin-right: 2%;
@@ -7034,8 +7037,14 @@ body .bold {
 body .regular {
   font-weight: 400;
 }
+body .italics {
+  font-style: italic;
+}
 body .underline {
   text-decoration: underline;
+}
+body .small-text {
+  font-size: 12px;
 }
 /**custom selects**/
 .custom-select {
@@ -7084,6 +7093,24 @@ body .underline {
 .home-page .row-home-top .login .log-box#open-lab-login {
   border-bottom: 12px solid #e94646;
   padding-bottom: 22px;
+}
+.home-page .row-home-top .login .log-box#open-lab-join .btn-primary {
+  margin-right: 15px;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in {
+  margin-top: 12px;
+  line-height: 3.5;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in .btn-primary {
+  margin-right: 15px;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in input {
+  vertical-align: middle;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in span {
+  line-height: 2.5;
+  padding-left: 7px;
+  vertical-align: middle;
 }
 .home-page .row-home-top .slider {
   float: left;
