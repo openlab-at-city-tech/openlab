@@ -96,7 +96,7 @@ wp_nav_menu($args);
 </div><!--support team-->
 </div>
 <h2 class="sidebar-title">Help Content</h2>
-<div class="sidebar-block" class="padded-block">
+<div class="sidebar-block padded-block">
 <div id="creative-commons">
     <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a>
 </div>
