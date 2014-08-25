@@ -37,6 +37,23 @@
 
         jQuery("#header #menu-item-40 ul li ul li a").prepend("+ ");
 
+        //search
+        if ($('.search-trigger-wrapper').length) {
+            var searchForm = $('.search-form-wrapper');
+            var searchTrigger = $('.search-trigger-wrapper');
+            var select = $('.search-form-wrapper .hidden-custom-select select');
+            $('.search-trigger').on('click', function() {
+                if (searchForm.is(':visible')) {
+                    searchForm.slideUp(700);
+                    searchTrigger.toggleClass('search-live');
+                } else {
+                    searchForm.slideDown(700);
+                    searchTrigger.toggleClass('search-live');
+                }
+                select.customSelect();
+            })
+        }
+
         equal_row_height();
 
         // this add an onclick event to the "New Topic" button while preserving 
@@ -73,12 +90,12 @@
 
         //custom select arrows
         $('.custom-select select').customSelect();
-        
+
         //printing page
-        if($('.print-page').length){
-            $('.print-page').on('click',function(e){
-               e.preventDefault();
-               window.print();
+        if ($('.print-page').length) {
+            $('.print-page').on('click', function(e) {
+                e.preventDefault();
+                window.print();
             });
         }
 

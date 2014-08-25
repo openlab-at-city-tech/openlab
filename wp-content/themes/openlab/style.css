@@ -4606,6 +4606,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   width: 82%;
   margin-right: 2%;
 }
+.navbar-form .custom-select,
+.navbar-form .hidden-custom-select {
+  display: inline-block;
+}
+.navbar-form .top-align {
+  vertical-align: top;
+}
 @media (max-width: 767px) {
   .navbar-form .form-group {
     margin-bottom: 5px;
@@ -6911,6 +6918,13 @@ blockquote .h6 {
   width: 82%;
   margin-right: 2%;
 }
+.form-inline .custom-select,
+.form-inline .hidden-custom-select {
+  display: inline-block;
+}
+.form-inline .top-align {
+  vertical-align: top;
+}
 /**header**/
 .navbar-default .container-fluid {
   max-width: 1140px;
@@ -6952,6 +6966,46 @@ blockquote .h6 {
 }
 .navbar-default .container-fluid .navbar-right.search input[type="text"] {
   width: 150px;
+}
+.search {
+  position: relative;
+}
+.search .search-form-wrapper {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 63px;
+  width: 336px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+.search .search-form-wrapper .form-group {
+  margin-left: 18px;
+  padding: 10px 0 6px;
+}
+.search .search-trigger-wrapper {
+  height: 63px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 30px;
+  cursor: pointer;
+}
+.search .search-trigger-wrapper:hover {
+  color: #49cabe;
+}
+.search .search-trigger-wrapper span {
+  line-height: 4.5;
+}
+.search .search-trigger-wrapper.search-live {
+  background: #fff;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  height: 67px;
+  z-index: 3;
+}
+.search .search-trigger-wrapper.search-live span {
+  color: #49cabe;
 }
 /**page**/
 h1.entry-title {
@@ -7062,10 +7116,12 @@ body .small-text {
   font-size: 12px;
 }
 /**custom selects**/
-.custom-select {
+.custom-select,
+.hidden-custom-select {
   position: relative;
 }
-.custom-select span.customSelect {
+.custom-select span.customSelect,
+.hidden-custom-select span.customSelect {
   font: inherit;
   background: #ffffff url('images/select-arrow-open.png') 97% center no-repeat;
   border: 1px solid #dddddd;
@@ -7078,10 +7134,12 @@ body .small-text {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
 }
-.custom-select span.customSelect.customSelectOpen {
+.custom-select span.customSelect.customSelectOpen,
+.hidden-custom-select span.customSelect.customSelectOpen {
   background-image: url('images/select-arrow-close.png');
 }
-.custom-select span.customSelect.active-text {
+.custom-select span.customSelect.active-text,
+.hidden-custom-select span.customSelect.active-text {
   color: #49cabe;
 }
 /**home page**/

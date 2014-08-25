@@ -8,20 +8,29 @@
 //openlab search function
 function openlab_site_wide_bp_search() {
     ?>
-    <form action="<?php echo bp_search_form_action() ?>" method="post" id="search-form">
-        <input type="text" id="search-terms" name="search-terms" value="" />
+<div class="search-trigger-wrapper">
+    <span class="fa fa-search search-trigger"></span>
+</div>
+    <div class="search-form-wrapper">
+    <form action="<?php echo bp_search_form_action() ?>" method="post" id="search-form" class="form-inline">
+        <div class="form-group">
+        <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" />
         <?php //echo bp_search_form_type_select() ?>
-<!--        <select style="width: auto" id="search-which" name="search-which">
+        <div class="hidden-custom-select">
+        <select style="width: auto" id="search-which" name="search-which" class="form-control">
             <option value="members">People</option>
             <option value="courses">Courses</option>
             <option value="projects">Projects</option>
             <option value="clubs">Clubs</option>
             <option value="portfolios">Portfolios</option>
-        </select>-->
+        </select>
+        </div>
 
-        <input type="submit" name="search-submit" id="search-submit" value="<?php _e('Search', 'buddypress') ?>" />
+        <button class="btn btn-primary top-align" id="search-submit" type="submit"><i class="fa fa-search"></i></button>
         <?php wp_nonce_field('bp_search_form') ?>
+        </div>
     </form><!-- #search-form -->
+    </div>
     <?php
 }
 
