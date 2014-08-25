@@ -16,7 +16,7 @@ wp_nav_menu($args);
 ?>
 </div>
 <h2 class="sidebar-help-title help-tags-title">Find a Help Topic With Tags</h2>
-<div class="sidebar-block">
+<div class="sidebar-block padded-block">
 <div id="help-tags-copy"><p>Find answers throughout Help that correspond to the tags below:</p></div>
 <div id="help-tags">
     <?php
@@ -32,7 +32,7 @@ wp_nav_menu($args);
     $count = count($terms);
     if ($count > 0) {
         foreach ($terms as $term) {
-            echo '<a href="' . get_term_link($term) . '" class="tag-count-' . $term->count . '">' . $term->name . '</a> ';
+            echo '<a href="' . get_term_link($term) . '" class="btn btn-default btn-primary link-btn tag-btn tag-count-' . $term->count . '">' . $term->name . '</a> ';
         }
     }
     ?>
@@ -40,7 +40,7 @@ wp_nav_menu($args);
 </div>
 </div>
 <h2 id="help-contact-us"><a href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>">Contact Us <div id="mail-icon"></div></a></h2>
-<div class="sidebar-block">
+<div class="sidebar-block padded-block">
 <div id="support-team">
     <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
     <div id="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
@@ -67,37 +67,37 @@ wp_nav_menu($args);
     if ($attachments) {
         $i = 0;
 
-        echo '<ul id="team-thumbs">';
+        echo '<div id="team-thumbs" class="row">';
         foreach ($attachments as $attachment) {
-            $thumb_class = "thumb-wrapper";
-            if ($i % 3 == 2) {
-                $thumb_class .= " clear-right";
-            };
+            $thumb_class = "col-sm-12 thumb-wrapper";
 
-            echo '<li class="' . $thumb_class . '">';
-            echo '<a href="' . bp_get_root_domain() . '/blog/help/contact-us">';
+            echo '<div class="' . $thumb_class . '">';
             echo '<div class="team-thumb">';
             //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
-            $src = wp_get_attachment_image_src($attachment->ID, 'thumbnail');
-            echo '<img src="' . $src[0] . '" width="51" height="51" >';
+            $src = wp_get_attachment_image_src($attachment->ID, 'full');
+            
+            echo '<a href="' . bp_get_root_domain() . '/blog/help/contact-us">';
+            echo '<img class="img-responsive" src="' . $src[0] . '" />';
+            echo '</a>';
             echo '</div>';
 
             echo '<div class="team-name">';
+            echo '<a href="' . bp_get_root_domain() . '/blog/help/contact-us">';
             echo $attachment->post_excerpt;
-            echo '</div>';
             echo '</a>';
-            echo '</li>';
+            echo '</div>';
+            echo '</div>';
             $i++;
         }//end for each
-        echo '</ul>';
+        echo '</div>';
     } //end if 
     ?>
-    <div class="clearfloat"></div>
+    <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o"></i> Contact Us</a>
 </div><!--support team-->
 </div>
-<div class="sidebar-block">
+<h2 class="sidebar-title">Help Content</h2>
+<div class="sidebar-block" class="padded-block">
 <div id="creative-commons">
-    <p>Help Content:
-        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a></p>
+    <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a>
 </div>
 </div>

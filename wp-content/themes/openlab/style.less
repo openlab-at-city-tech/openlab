@@ -310,6 +310,10 @@ body{
             color: @cyan;
         }
     }
+    .tag-btn{
+        padding: 0 2%;
+        font-weight: 600;
+    }
     .mol-count{
         background: @magenta;
         color: @white;
@@ -540,7 +544,7 @@ body{
         padding: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: 1px solid @30gray;
-        ul{
+        ul.sidebar-nav{
             margin: 0;
             padding: 0;
             list-style-type: none;
@@ -565,6 +569,9 @@ body{
                     }
                 }
                 ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
                     li{
                         margin: 1px 0 0 15px;
                         a{
@@ -575,6 +582,9 @@ body{
                     }
                 }
             }
+        }
+        &.padded-block{
+            padding: 6%;
         }
     }
 }
@@ -690,6 +700,21 @@ body{
         span{
             color: @aqua;
         }
+    }
+}
+#team-thumbs{
+    .thumb-wrapper{
+        margin-bottom: 17px;
+    }
+}
+#creative-commons{
+    a{
+        background: url("images/cc_license.gif") no-repeat;
+        display: block;
+        height: 0;
+        overflow: hidden;
+        padding-top: 35px;
+        width: 101px;
     }
 }
 .page-nav{

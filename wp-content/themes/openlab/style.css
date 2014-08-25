@@ -7020,6 +7020,10 @@ body .activity-title .fa {
   margin-left: 10px;
   color: #63dfd2;
 }
+body .tag-btn {
+  padding: 0 2%;
+  font-weight: 600;
+}
 body .mol-count {
   background: #ff5959;
   color: #ffffff;
@@ -7238,35 +7242,43 @@ body .small-text {
   border-radius: 0 0 4px 4px;
   border-top: 1px solid #bbbbbb;
 }
-.sidebar .sidebar-block ul {
+.sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-.sidebar .sidebar-block ul li a {
+.sidebar .sidebar-block ul.sidebar-nav li a {
   color: #000000;
   display: block;
   text-decoration: none;
   font-weight: 700;
   padding: 6px 15px;
 }
-.sidebar .sidebar-block ul li a:hover,
-.sidebar .sidebar-block ul li a:focus {
+.sidebar .sidebar-block ul.sidebar-nav li a:hover,
+.sidebar .sidebar-block ul.sidebar-nav li a:focus {
   background: #63dfd2;
   color: #000000;
 }
-.sidebar .sidebar-block ul li.current-menu-item > a,
-.sidebar .sidebar-block ul li.selected-page > a {
+.sidebar .sidebar-block ul.sidebar-nav li.current-menu-item > a,
+.sidebar .sidebar-block ul.sidebar-nav li.selected-page > a {
   background: #63dfd2;
   color: #000000;
 }
-.sidebar .sidebar-block ul li ul li {
+.sidebar .sidebar-block ul.sidebar-nav li ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.sidebar .sidebar-block ul.sidebar-nav li ul li {
   margin: 1px 0 0 15px;
 }
-.sidebar .sidebar-block ul li ul li a {
+.sidebar .sidebar-block ul.sidebar-nav li ul li a {
   color: #444444;
   border-left: 1px solid #bbbbbb;
   padding: 10px 0 10px 15px;
+}
+.sidebar .sidebar-block.padded-block {
+  padding: 6%;
 }
 /**member profiles**/
 .profile-title {
@@ -7368,6 +7380,17 @@ body .small-text {
 }
 .col-help .page-title span {
   color: #49cabe;
+}
+#team-thumbs .thumb-wrapper {
+  margin-bottom: 17px;
+}
+#creative-commons a {
+  background: url("images/cc_license.gif") no-repeat;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  padding-top: 35px;
+  width: 101px;
 }
 .page-nav {
   background: #f0f0f0;
