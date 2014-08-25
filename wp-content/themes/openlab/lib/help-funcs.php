@@ -50,24 +50,19 @@ function openlab_help_loop() {
         ?>
 
         <?php if ($help_cats): ?>
-            <h1 class="entry-title"><a href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a></h1>
+<h1 class="entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a><span class="print-link pull-right"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
                     <?php if ($this_term->parent != 0): ?>
-                    <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
+                    <a class="regular" href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
                     <?php endif; ?>
-                        <?php the_title(); ?></h2></div>
+                    <span><?php the_title(); ?></span></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
         <?php endif; ?>
-
-        <?php //print this page button - this is going to be absolutely positioned for now ?>
-        <div class="print-page"><input type="button" value="Print this page"
-                                       onclick="window.print();
-                                               return false;" /></div>
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation('top')); ?>
 

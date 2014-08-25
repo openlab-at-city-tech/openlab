@@ -7,7 +7,7 @@ Template Name: Help
 get_header(); ?>
 
 	<div id="content" class="hfeed row">
-            <div class="col-sm-18">
+            <div class="col-sm-18 col-help">
 		<?php openlab_help_loop(); ?>
             </div>
         <?php openlab_bp_sidebar('help'); ?>

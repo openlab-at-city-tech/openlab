@@ -73,6 +73,14 @@
 
         //custom select arrows
         $('.custom-select select').customSelect();
+        
+        //printing page
+        if($('.print-page').length){
+            $('.print-page').on('click',function(e){
+               e.preventDefault();
+               window.print();
+            });
+        }
 
         //ajax functionality for courses archive
         $('#school-select').change(function() {

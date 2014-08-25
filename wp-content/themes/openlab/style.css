@@ -6978,6 +6978,13 @@ body .timestamp {
   text-transform: uppercase;
   font-weight: 600;
 }
+body .print-link {
+  font-size: 14px;
+  font-weight: 400;
+}
+body .print-link a {
+  text-decoration: none;
+}
 body .inline-element {
   display: inline-block;
 }
@@ -7023,6 +7030,9 @@ body .semibold {
 }
 body .bold {
   font-weight: 700;
+}
+body .regular {
+  font-weight: 400;
 }
 body .underline {
   text-decoration: underline;
@@ -7212,8 +7222,8 @@ body .underline {
   background: #63dfd2;
   color: #000000;
 }
-.sidebar .sidebar-block ul li.current a,
-.sidebar .sidebar-block ul li.selected-page a {
+.sidebar .sidebar-block ul li.current-menu-item > a,
+.sidebar .sidebar-block ul li.selected-page > a {
   background: #63dfd2;
   color: #000000;
 }
@@ -7318,6 +7328,22 @@ body .underline {
 }
 #member-item-body .panel .panel-body p {
   margin-bottom: 0;
+}
+/**help**/
+.col-help .page-title {
+  font-size: 14px;
+}
+.col-help .page-title span {
+  color: #49cabe;
+}
+.page-nav {
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin: 20px 0 35px;
+  padding: 0 1.5%;
+}
+.page-nav a {
+  line-height: 2.25;
 }
 /**breadcrumbs**/
 #breadcrumb-container {

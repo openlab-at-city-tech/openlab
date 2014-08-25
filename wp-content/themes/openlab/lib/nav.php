@@ -7,7 +7,7 @@ function openlab_help_navigation($loc = 'bottom') {
         'order_by' => 'menu_order',
         'order_2nd' => 'post_date',
         'post_type' => '"help"',
-        'format' => '&larr; %link',
+        'format' => '<span class="fa fa-chevron-circle-left"></span> %link',
         'link' => '%title',
         'date_format' => '',
         'tooltip' => '%title',
@@ -18,7 +18,7 @@ function openlab_help_navigation($loc = 'bottom') {
         'order_by' => 'menu_order',
         'order_2nd' => 'post_date',
         'post_type' => '"help"',
-        'format' => '%link &rarr;',
+        'format' => '%link <span class="fa fa-chevron-circle-right"></span>',
         'link' => '%title',
         'date_format' => '',
         'tooltip' => '%title',
@@ -26,14 +26,13 @@ function openlab_help_navigation($loc = 'bottom') {
     );
 
     if (function_exists('previous_post_link_plus') && function_exists('next_post_link_plus')) {
-        echo '<nav id="nav-single" class="' . $loc . '">';
-        echo '<div class="nav-previous">';
+        echo '<nav id="nav-single" class="' . $loc . ' clearfix page-nav">';
+        echo '<div class="nav-previous pull-left">';
         previous_post_link_plus($prev_args);
         echo '</div>';
-        echo '<div class="nav-next">';
+        echo '<div class="nav-next pull-right">';
         next_post_link_plus($next_args);
         echo '</div>';
-        echo '<div class="clearfloat"></div>';
         echo '</nav><!-- #nav-single -->';
     }
 }

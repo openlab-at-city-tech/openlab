@@ -267,6 +267,13 @@ body{
         text-transform: uppercase;
         font-weight: 600;
     }
+    .print-link{
+        font-size: 14px;
+        font-weight: 400;
+        a{
+            text-decoration: none;
+        }
+    }
     .inline-element{
         display: inline-block;
     }
@@ -320,6 +327,9 @@ body{
     }
     .bold{
         font-weight: 700;
+    }
+    .regular{
+        font-weight: 400;
     }
     .underline{
         text-decoration: underline;
@@ -519,9 +529,9 @@ body{
                         color: @black;
                     }
                 }
-                &.current,
+                &.current-menu-item,
                 &.selected-page{
-                    a{
+                     > a{
                         background: @cyan;
                         color: @black;
                     }
@@ -643,6 +653,24 @@ body{
                 margin-bottom: 0;
             }
         }
+    }
+}
+/**help**/
+.col-help{
+    .page-title{
+        font-size: 14px;
+        span{
+            color: @aqua;
+        }
+    }
+}
+.page-nav{
+    background: @5gray;
+    border-radius: @border-radius-base;
+    margin: 20px 0 35px;
+    padding: 0 1.5%;
+    a{
+        line-height: 2.25;
     }
 }
 /**breadcrumbs**/
