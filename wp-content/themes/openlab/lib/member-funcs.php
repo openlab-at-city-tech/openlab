@@ -848,12 +848,20 @@ function openlab_save_account_type_on_settings() {
 
 add_action('bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings');
 
-function openlab_custom_add_friend_button($button){
+function openlab_custom_add_friend_button($button) {
     
-    $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> '.$button['link_text'].'</span><i class="fa fa-plus-circle pull-right"></i>';
-    $button['link_class'] = $button['link_class'].' btn btn-default btn-block btn-primary link-btn clearfix';
-    
+    if ($button['id'] == 'not_friends') {
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> Add Friend</span><i class="fa fa-plus-circle pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    } else if ($button['id'] == 'pending') {
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> Pending Friend</span><i class="fa fa-clock-o pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    } else {
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> Friend</span><i class="fa fa-check-circle pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    }
+
     return $button;
 }
 
-add_filter('bp_get_add_friend_button','openlab_custom_add_friend_button');
+add_filter('bp_get_add_friend_button', 'openlab_custom_add_friend_button');

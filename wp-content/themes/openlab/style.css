@@ -7419,6 +7419,9 @@ body .small-text {
   margin-right: 0;
 }
 /**member profiles**/
+#member-header .btn.is_friend.friendship-button:hover {
+  color: #49cabe;
+}
 #member-item-body .panel {
   height: 130px;
 }

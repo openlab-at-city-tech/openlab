@@ -717,10 +717,28 @@ function cuny_group_single() {
             <?php do_action('bp_after_group_header') ?>
             <?php do_action('template_notices') ?>
 
-                                                                                                </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
+    <?php if (bp_is_group_home()) { ?>
+
+            <?php do_action('bp_before_group_status_message') ?>
+
+            <div id="message" class="info group-status-info">
+                <p><?php openlab_group_status_message() ?></p>
+            </div>
+
+            <?php do_action('bp_after_group_status_message');
+    }
+            
+    if (bp_get_group_status() == 'public') {
+        openlab_group_profile_activity_list();
+    }
+}
+
+function openlab_group_profile_activity_list() {
+    ?>
     <div id="single-course-body">
         <?php
 //
@@ -735,14 +753,6 @@ function cuny_group_single() {
         <?php do_action('bp_before_group_body') ?>
 
         <?php if (bp_is_group_home()) { ?>
-
-            <?php do_action('bp_before_group_status_message') ?>
-
-            <div id="message" class="info group-status-info">
-                <p><?php openlab_group_status_message() ?></p>
-            </div>
-
-            <?php do_action('bp_after_group_status_message') ?>
 
             <?php if (bp_group_is_visible() || !bp_is_active('activity')) { ?>
 
@@ -958,6 +968,24 @@ function openlab_remove_hidden_class_from_leave_group_button($button) {
 }
 
 add_action('bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_group_button', 20);
+
+function openlab_custom_group_buttons($button) {
+
+    if ($button['id'] == 'leave_group') {
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    } else if ($button['id'] == 'join_group' || $button['id'] == 'request_membership') {
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    } else if ($button['id'] == 'membership_requested'){
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-clock-o pull-right"></i>';
+        $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
+    }
+
+    return $button;
+}
+
+add_filter('bp_get_group_join_button', 'openlab_custom_group_buttons');
 
 /**
  * Output the group subscription default settings
