@@ -149,7 +149,7 @@ function openlab_group_archive() {
     }
 
     $search_terms = $search_terms_raw = '';
-
+    
     if (!empty($_POST['group_search'])) {
         $search_terms_raw = $_POST['group_search'];
         $search_terms = "search_terms=" . $search_terms_raw . "&";

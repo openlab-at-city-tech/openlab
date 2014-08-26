@@ -733,7 +733,7 @@ function cuny_member_profile_header() {
                 </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
-    <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
+                <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
                     <div id="group-action-wrapper">
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
@@ -755,7 +755,7 @@ function cuny_member_profile_header() {
                     ))
                     ?>
 
-    <?php endif ?>
+                <?php endif ?>
             </div><!--profile-action-wrapper-->
                     <!--<p>Some descriptive tags about the student...</p>-->
         </div><!-- #item-header-avatar -->
@@ -765,17 +765,17 @@ function cuny_member_profile_header() {
             <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
             <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
 
-    <?php do_action('bp_before_member_header_meta') ?>
+            <?php do_action('bp_before_member_header_meta') ?>
 
             <div id="item-meta">
 
-    <?php do_action('bp_profile_header_meta') ?>
+                <?php do_action('bp_profile_header_meta') ?>
 
             </div><!-- #item-meta -->
 
             <div class="profile-fields">
                 <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
-    <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
+                <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
                     <div class="info-panel panel panel-default">
                         <table class="profile-fields table">
 
@@ -795,11 +795,11 @@ function cuny_member_profile_header() {
 
                                                 <tr>
                                                     <td class="bold">
-                            <?php bp_the_profile_field_name() ?>
+                                                        <?php bp_the_profile_field_name() ?>
                                                     </td>
 
                                                     <td>
-                            <?php bp_the_profile_field_value(); ?>
+                                                        <?php bp_the_profile_field_value(); ?>
                                                     </td>
                                                 </tr>
 
@@ -811,15 +811,15 @@ function cuny_member_profile_header() {
 
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
-        <?php endwhile; // bp_profile_groups()     ?>
+                            <?php endwhile; // bp_profile_groups()     ?>
                         </table>
                     </div>
-    <?php endif; // bp_has_profile()     ?>
+                <?php endif; // bp_has_profile()     ?>
             </div>
 
         </div><!-- #item-header-content -->
 
-    <?php do_action('bp_after_member_header') ?>
+        <?php do_action('bp_after_member_header') ?>
 
     </div><!-- #item-header -->
     <?php
@@ -845,7 +845,7 @@ function openlab_save_account_type_on_settings() {
 add_action('bp_core_general_settings_after_save', 'openlab_save_account_type_on_settings');
 
 function openlab_custom_add_friend_button($button) {
-    
+
     if ($button['id'] == 'not_friends') {
         $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> Add Friend</span><i class="fa fa-plus-circle pull-right"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
