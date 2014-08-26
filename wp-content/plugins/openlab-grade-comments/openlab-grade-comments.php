@@ -250,5 +250,9 @@ function olgc_is_author( $post_id = null ) {
 		$post = get_queried_object();
 	}
 
+	if ( ! is_a( $post, 'WP_Post' ) ) {
+		return false;
+	}
+
 	return is_user_logged_in() && get_current_user_id() == $post->post_author;
 }
