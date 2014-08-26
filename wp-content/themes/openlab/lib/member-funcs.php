@@ -234,12 +234,12 @@ function openlab_list_members($view) {
     ?>
 
     <?php if (bp_has_members($args)) : ?>
-    <div class="row group-archive-header-row">
+        <div class="row group-archive-header-row">
             <div class="current-group-filters current-portfolio-filters col-sm-19">
                 <?php openlab_current_directory_filters(); ?>
             </div>
             <div class="group-count col-sm-5"><?php cuny_members_pagination_count('members'); ?></div>
-    </div>
+        </div>
 
         <div id="group-list" class="item-list row">
             <?php
@@ -309,8 +309,8 @@ function openlab_members_pagination_links() {
         'mid_size' => 3,
         'type' => 'list',
     ));
-    
-    $pagination = str_replace('page-numbers','page-numbers pagination',$pagination);
+
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
     return $pagination;
 }
 
@@ -490,47 +490,47 @@ function cuny_student_profile() {
 
     <div id="member-item-body" class="row">
 
-            <?php echo cuny_profile_activty_block('course', 'My Courses', '', 25); ?>
-            <?php echo cuny_profile_activty_block('project', 'My Projects', ' last', 25); ?>
-            <?php echo cuny_profile_activty_block('club', 'My Clubs', ' last', 25); ?>
+        <?php echo cuny_profile_activty_block('course', 'My Courses', '', 25); ?>
+        <?php echo cuny_profile_activty_block('project', 'My Projects', ' last', 25); ?>
+        <?php echo cuny_profile_activty_block('club', 'My Clubs', ' last', 25); ?>
 
-            <script type='text/javascript'>(function($) {
-                    $('.activity-list').css('visibility', 'hidden');
-                })(jQuery);</script>
-            <?php
-            if (bp_is_active('friends')) :
-                if (!$friend_ids = wp_cache_get('friends_friend_ids_' . $bp->displayed_user->id, 'bp')) {
-                    $friend_ids = BP_Friends_Friendship::get_random_friends($bp->displayed_user->id, 20);
-                    wp_cache_set('friends_friend_ids_' . $bp->displayed_user->id, $friend_ids, 'bp');
-                }
-                ?>
+        <script type='text/javascript'>(function($) {
+                $('.activity-list').css('visibility', 'hidden');
+            })(jQuery);</script>
+        <?php
+        if (bp_is_active('friends')) :
+            if (!$friend_ids = wp_cache_get('friends_friend_ids_' . $bp->displayed_user->id, 'bp')) {
+                $friend_ids = BP_Friends_Friendship::get_random_friends($bp->displayed_user->id, 20);
+                wp_cache_set('friends_friend_ids_' . $bp->displayed_user->id, $friend_ids, 'bp');
+            }
+            ?>
 
-                <div id="members-list" class="info-group">
-                    <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right"></span></a></h4>
+            <div id="members-list" class="info-group">
+                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right"></span></a></h4>
 
-                    <?php if ($friend_ids) { ?>
+                <?php if ($friend_ids) { ?>
 
-                        <ul id="member-list" class="inline-element-list">
+                    <ul id="member-list" class="inline-element-list">
 
-                            <?php for ($i = 0; $i < count($friend_ids); $i++) { ?>
+                        <?php for ($i = 0; $i < count($friend_ids); $i++) { ?>
 
-                                <li class="inline-element">
-                                    <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>">                                      <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
-                                    </a>
-                                </li>
+                            <li class="inline-element">
+                                <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>">                                      <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                </a>
+                            </li>
 
-                            <?php } ?>
+                        <?php } ?>
 
-                        </ul>
-                    <?php } else { ?>
+                    </ul>
+                <?php } else { ?>
 
-                        <div id="message" class="info">
-                            <p><?php bp_word_or_name(__("You haven't added any friend connections yet.", 'buddypress'), __("%s hasn't created any friend connections yet.", 'buddypress')) ?></p>
-                        </div>
+                    <div id="message" class="info">
+                        <p><?php bp_word_or_name(__("You haven't added any friend connections yet.", 'buddypress'), __("%s hasn't created any friend connections yet.", 'buddypress')) ?></p>
+                    </div>
 
-                    <?php } ?>
-                <?php endif; /* bp_is_active( 'friends' ) */ ?>
-            </div>
+                <?php } ?>
+            <?php endif; /* bp_is_active( 'friends' ) */ ?>
+        </div>
         <?php do_action('bp_after_member_body') ?>
 
     </div><!-- #item-body -->
@@ -563,9 +563,9 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
             <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8">
                 <?php
                 if ($bp->is_item_admin || $bp->is_item_mod):
-                    $href = bp_get_root_domain().'./my-'.$type.'s';
+                    $href = bp_get_root_domain() . './my-' . $type . 's';
                 else:
-                    $href = $bp->displayed_user->domain.'groups/?type='.$type;
+                    $href = $bp->displayed_user->domain . 'groups/?type=' . $type;
                 endif;
                 ?>
                 <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right"></span></a></h4>
@@ -575,7 +575,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="row">
-                                
+
                                 <div class="activity-avatar col-sm-9">
                                     <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
                                 </div>
@@ -718,17 +718,18 @@ function cuny_member_profile_header() {
     ?>
 
     <div id="member-header" class="member-header row">
-        <?php do_action('bp_before_member_header');
-        
+        <?php
+        do_action('bp_before_member_header');
+
         $this_user_id = isset($site_members_template->member->id) ? $site_members_template->member->id : bp_displayed_user_id();
-    do_action('bp_before_member_home_content');
-    ?>
+        do_action('bp_before_member_home_content');
+        ?>
     <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
 
-    <h1 class="entry-title profile-title clearfix">
-        <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
-        <span class="profile-type pull-right"><?php echo $account_type ?></span>
-    </h1>
+        <h1 class="entry-title profile-title clearfix">
+    <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
+            <span class="profile-type pull-right"><?php echo $account_type ?></span>
+        </h1>
 
         <div id="member-header-avatar" class="alignleft group-header-avatar col-md-8">
             <div id="avatar-wrapper">
@@ -737,7 +738,7 @@ function cuny_member_profile_header() {
                 </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
-                <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
+    <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
                     <div id="group-action-wrapper">
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
@@ -759,7 +760,7 @@ function cuny_member_profile_header() {
                     ))
                     ?>
 
-                <?php endif ?>
+    <?php endif ?>
             </div><!--profile-action-wrapper-->
                     <!--<p>Some descriptive tags about the student...</p>-->
         </div><!-- #item-header-avatar -->
@@ -769,61 +770,61 @@ function cuny_member_profile_header() {
             <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
             <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
 
-            <?php do_action('bp_before_member_header_meta') ?>
+    <?php do_action('bp_before_member_header_meta') ?>
 
             <div id="item-meta">
 
-                <?php do_action('bp_profile_header_meta') ?>
+    <?php do_action('bp_profile_header_meta') ?>
 
             </div><!-- #item-meta -->
 
             <div class="profile-fields">
                 <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
-                <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
-                <div class="info-panel panel panel-default">
-                    <table class="profile-fields table">
+    <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
+                    <div class="info-panel panel panel-default">
+                        <table class="profile-fields table">
 
-                        <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
+                            <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
-                            <?php if (bp_profile_group_has_fields()) : ?>
-                        
-                                <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
+                                <?php if (bp_profile_group_has_fields()) : ?>
 
-                                    <?php if (bp_field_has_data()) : ?>
-                                        <?php
-                                        if (bp_get_the_profile_field_name() != "Name" &&
-                                                bp_get_the_profile_field_name() != "Account Type" &&
-                                                bp_get_the_profile_field_name() != "First Name" &&
-                                                bp_get_the_profile_field_name() != "Last Name") :
-                                            ?>
+                                    <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
-                                            <tr>
-                                                <td class="bold">
-                                                    <?php bp_the_profile_field_name() ?>
-                                                </td>
+                                        <?php if (bp_field_has_data()) : ?>
+                                            <?php
+                                            if (bp_get_the_profile_field_name() != "Name" &&
+                                                    bp_get_the_profile_field_name() != "Account Type" &&
+                                                    bp_get_the_profile_field_name() != "First Name" &&
+                                                    bp_get_the_profile_field_name() != "Last Name") :
+                                                ?>
 
-                                                <td>
-                                                    <?php bp_the_profile_field_value(); ?>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="bold">
+                            <?php bp_the_profile_field_name() ?>
+                                                    </td>
 
-                                        <?php endif; ?>
+                                                    <td>
+                            <?php bp_the_profile_field_value(); ?>
+                                                    </td>
+                                                </tr>
 
-                                    <?php endif; // bp_field_has_data()   ?>
+                                            <?php endif; ?>
 
-                                <?php endwhile; // bp_profile_fields()   ?>
-                            
-                            <?php endif; // bp_profile_group_has_fields()   ?>
+                                        <?php endif; // bp_field_has_data()    ?>
 
-                        <?php endwhile; // bp_profile_groups()    ?>
-                    </table>
-                </div>
-                <?php endif; // bp_has_profile()    ?>
+                                    <?php endwhile; // bp_profile_fields()    ?>
+
+                                <?php endif; // bp_profile_group_has_fields()    ?>
+
+        <?php endwhile; // bp_profile_groups()     ?>
+                        </table>
+                    </div>
+    <?php endif; // bp_has_profile()     ?>
             </div>
 
         </div><!-- #item-header-content -->
 
-        <?php do_action('bp_after_member_header') ?>
+    <?php do_action('bp_after_member_header') ?>
 
     </div><!-- #item-header -->
     <?php

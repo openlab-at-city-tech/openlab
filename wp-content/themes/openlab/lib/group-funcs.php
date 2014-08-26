@@ -325,9 +325,9 @@ function openlab_groups_pagination_links() {
         'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
-            ));
+    ));
 
-    $pagination = str_replace('page-numbers','page-numbers pagination',$pagination);
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
     return $pagination;
 }
 
@@ -770,91 +770,95 @@ function openlab_group_profile_activity_list() {
                     ?>
 
                     <?php if ($group_type != "portfolio"): ?>
-        <div class="row group-activity-overview">
-                        <div class="col-sm-12">
-                            <div class="recent-discussions">
-                                <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
-                                    <?php if (bp_has_forum_topics('per_page=3')) : ?>
+                        <div class="row group-activity-overview">
+                            <div class="col-sm-12">
+                                <div class="recent-discussions">
+                                    <div class="recent-posts">
+                                        <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
+                                        <?php if (bp_has_forum_topics('per_page=3')) : ?>
                                             <?php while (bp_forum_topics()) : bp_the_forum_topic(); ?>
-                                                
 
-<div class="panel panel-default">
-  <div class="panel-body">
-                                                    <h6><?php bp_the_topic_title() ?></h6>
 
-                                                    <?php
-                                                    $topic_id = bp_get_the_topic_id();
-                                                    $last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <h6><?php bp_the_topic_title() ?></h6>
+
+                                                        <?php
+                                                        $topic_id = bp_get_the_topic_id();
+                                                        $last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
 													WHERE topic_id='$topic_id'
 												   ORDER BY post_id DESC LIMIT 1", "ARRAY_A");
-                                                    $last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']), 135);
-                                                    echo $last_topic_content;
-                                                    ?></p>
+                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']), 135);
+                                                        echo $last_topic_content;
+                                                        ?></p>
 
-                                                    <a href="<?php bp_the_topic_permalink(); ?>" class="read-more">See More</a><p>
-  </div></div>                                            <?php endwhile; ?>
-                                    <?php else: ?>
-                                        <div class="panel panel-default"><div class="panel-body">
-                                            <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
-                                            </div></div>
-                                    <?php endif; ?>
-                                </div><!-- .recent-post -->
+                                                        <a href="<?php bp_the_topic_permalink(); ?>" class="read-more">See More</a><p>
+                                                    </div></div>                                            <?php endwhile; ?>
+                                        <?php else: ?>
+                                            <div class="panel panel-default"><div class="panel-body">
+                                                    <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
+                                                </div></div>
+                                        <?php endif; ?>
+                                    </div><!-- .recent-post -->
+                                </div>
                             </div>
-                        </div>
-                        <?php $first_class = ""; ?>
-                        <div class="col-sm-12">
-                            <div id="recent-docs">
-                                <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
-                                    <?php
-                                    $docs_arg = Array("posts_per_page" => "3",
-                                        "post_type" => "bp_doc",
-                                        "tax_query" =>
-                                        Array(Array("taxonomy" => "bp_docs_associated_item",
-                                                "field" => "slug",
-                                                "terms" => $group_slug)));
-                                    $query = new WP_Query($docs_arg);
-                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
-                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-                                    global $post;
-                                    if ($query->have_posts()) {
-                                        while ($query->have_posts()) : $query->the_post();
-                                            echo '<div class="panel panel-default"><div class="panel-body">';
-                                            echo '<h6>';
-                                            the_title();
-                                            echo '</h6>';
-                                            ?>
-                                            <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
-                                            <?php
-                                            echo '</div></div>';
-                                        endwhile;
-                                        ?>
+                            <?php $first_class = ""; ?>
+                            <div class="col-sm-12">
+                                <div id="recent-docs">
+                                    <div class="recent-posts">
+                                        <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
                                         <?php
-                                    }else {
-                                        echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
-                                    }
-                                    ?>
+                                        $docs_arg = Array("posts_per_page" => "3",
+                                            "post_type" => "bp_doc",
+                                            "tax_query" =>
+                                            Array(Array("taxonomy" => "bp_docs_associated_item",
+                                                    "field" => "slug",
+                                                    "terms" => $group_slug)));
+                                        $query = new WP_Query($docs_arg);
+                                        //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
+                                        //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
+                                        global $post;
+                                        if ($query->have_posts()) {
+                                            while ($query->have_posts()) : $query->the_post();
+                                                echo '<div class="panel panel-default"><div class="panel-body">';
+                                                echo '<h6>';
+                                                the_title();
+                                                echo '</h6>';
+                                                ?>
+                                                <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
+                                                <?php
+                                                echo '</div></div>';
+                                            endwhile;
+                                            ?>
+                                            <?php
+                                        }else {
+                                            echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-        </div>
                         <div id="members-list" class="info-group">
 
-                            <?php if ($bp->is_item_admin || $bp->is_item_mod):
-                                $href = site_url().'/groups/'.$group_slug.'/admin/manage-members/">See All</a></div>';
+                            <?php
+                            if ($bp->is_item_admin || $bp->is_item_mod):
+                                $href = site_url() . '/groups/' . $group_slug . '/admin/manage-members/">See All</a></div>';
                             else:
-                                $href = site_url().'/groups/'.$group_slug.'/members/">See All</a></div>';
-                            endif; ?>
-                            
+                                $href = site_url() . '/groups/' . $group_slug . '/members/">See All</a></div>';
+                            endif;
+                            ?>
+
                             <h4 class="title activity-title"><a class="no-deco" href="<?php $href; ?>/groups/<?php echo $group_slug; ?>/docs/">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
                             <?php $member_arg = Array("exclude_admins_mods" => false); ?>
                             <?php if (bp_group_has_members($member_arg)) : ?>
 
                                 <ul id="member-list" class="inline-element-list">
-                                    <?php while (bp_group_members()) : bp_group_the_member(); 
-                                    global $members_template;
-                $member = $members_template->member;?>
+                                    <?php
+                                    while (bp_group_members()) : bp_group_the_member();
+                                        global $members_template;
+                                        $member = $members_template->member;
+                                        ?>
                                         <li class="inline-element">
                                             <a href="<?php echo bp_group_member_domain() ?>">
                                                 <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
@@ -873,7 +877,7 @@ function openlab_group_profile_activity_list() {
 
                         </div>
 
-                    <?php endif; //end of if $group != 'portfolio'    ?>
+                    <?php endif; //end of if $group != 'portfolio'     ?>
 
                 <?php elseif (!bp_group_is_visible()) : ?>
                     <?php
@@ -887,13 +891,13 @@ function openlab_group_profile_activity_list() {
                     ?>
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )    ?>
+                    <?php // do_action( 'bp_before_group_status_message' )      ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()        ?></p>
+                                                            <p><?php // bp_group_status_message()          ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )    ?>
+                    <?php // do_action( 'bp_after_group_status_message' )     ?>
 
                 <?php endif; ?>
 
@@ -912,13 +916,13 @@ function openlab_group_profile_activity_list() {
 
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )    ?>
+                    <?php // do_action( 'bp_before_group_status_message' )      ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()        ?></p>
+                                                            <p><?php // bp_group_status_message()          ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )     ?>
+                    <?php // do_action( 'bp_after_group_status_message' )       ?>
 
                 <?php endif; ?>
 
@@ -932,7 +936,6 @@ function openlab_group_profile_activity_list() {
         ?>
 
     </div><!-- #single-course-body -->
-
     <?php
 }
 
@@ -1180,124 +1183,124 @@ function openlab_current_directory_filters() {
  * Get a group's recent posts and comments, and display them in two widgets
  */
 function openlab_show_site_posts_and_comments() {
-	global $first_displayed, $bp;
+    global $first_displayed, $bp;
 
-	$group_id = bp_get_group_id();
+    $group_id = bp_get_group_id();
 
-	$site_type = false;
+    $site_type = false;
 
-	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
-		$site_type = 'local';
-	} else if ( $site_url = openlab_get_external_site_url_by_group_id( $group_id ) ) {
-		$site_type = 'external';
-	}
+    if ($site_id = openlab_get_site_id_by_group_id($group_id)) {
+        $site_type = 'local';
+    } else if ($site_url = openlab_get_external_site_url_by_group_id($group_id)) {
+        $site_type = 'external';
+    }
 
-	$posts = array();
-	$comments = array();
+    $posts = array();
+    $comments = array();
 
-	switch ( $site_type ) {
-		case 'local':
-			switch_to_blog( $site_id );
+    switch ($site_type) {
+        case 'local':
+            switch_to_blog($site_id);
 
-			// Set up posts
-			$wp_posts = get_posts( array(
-				'posts_per_page' => 3
-			) );
+            // Set up posts
+            $wp_posts = get_posts(array(
+                'posts_per_page' => 3
+            ));
 
-			foreach ( $wp_posts as $wp_post ) {
-				$posts[] = array(
-					'title' => $wp_post->post_title,
-					'content' => strip_tags( bp_create_excerpt( $wp_post->post_content, 135, array( 'html' => true ) ) ),
-					'permalink' => get_permalink( $wp_post->ID )
-				);
-			}
+            foreach ($wp_posts as $wp_post) {
+                $posts[] = array(
+                    'title' => $wp_post->post_title,
+                    'content' => strip_tags(bp_create_excerpt($wp_post->post_content, 135, array('html' => true))),
+                    'permalink' => get_permalink($wp_post->ID)
+                );
+            }
 
-			// Set up comments
-			$comment_args = array(
-				"status" => "approve",
-				"number" => "3"
-			);
+            // Set up comments
+            $comment_args = array(
+                "status" => "approve",
+                "number" => "3"
+            );
 
-			$wp_comments = get_comments( $comment_args );
+            $wp_comments = get_comments($comment_args);
 
-			foreach ( $wp_comments as $wp_comment ) {
-				// Skip the crummy "Hello World" comment
-				if ( $wp_comment->comment_ID == "1" ) {
-					continue;
-				}
-				$post_id = $wp_comment->comment_post_ID;
+            foreach ($wp_comments as $wp_comment) {
+                // Skip the crummy "Hello World" comment
+                if ($wp_comment->comment_ID == "1") {
+                    continue;
+                }
+                $post_id = $wp_comment->comment_post_ID;
 
-				$comments[] = array(
-					'content' => strip_tags( bp_create_excerpt( $wp_comment->comment_content, 135, array( 'html' => false ) ) ),
-					'permalink' => get_permalink( $post_id )
-				);
-			}
+                $comments[] = array(
+                    'content' => strip_tags(bp_create_excerpt($wp_comment->comment_content, 135, array('html' => false))),
+                    'permalink' => get_permalink($post_id)
+                );
+            }
 
-			$site_url = get_option( 'siteurl' );
+            $site_url = get_option('siteurl');
 
-			restore_current_blog();
+            restore_current_blog();
 
-			break;
+            break;
 
-		case 'external':
-			$posts = openlab_get_external_posts_by_group_id();
-			$comments = openlab_get_external_comments_by_group_id();
+        case 'external':
+            $posts = openlab_get_external_posts_by_group_id();
+            $comments = openlab_get_external_comments_by_group_id();
 
-			break;
-	}
+            break;
+    }
 
-	// If we have either, show both
-	if ( !empty( $posts ) || !empty( $comments ) ) {
-		?>
-                <div class="row group-activity-overview">
-		<div class="col-sm-12">
-			<div id="recent-course">
-				<div class="recent-posts">
-                                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr( $site_url ) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h4>
+    // If we have either, show both
+    if (!empty($posts) || !empty($comments)) {
+        ?>
+        <div class="row group-activity-overview">
+            <div class="col-sm-12">
+                <div id="recent-course">
+                    <div class="recent-posts">
+                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h4>
 
-					
-						<?php foreach ( $posts as $post ) : ?>
-							<div class="panel panel-default">
-                                                             <div class="panel-body">
-                                <h6 class="underline"><?php echo $post['title']; ?></h6>
-                                <p>
-                                    <?php echo $post['content']; ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
-                                </p>
-							</div>
+
+                        <?php foreach ($posts as $post) : ?>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h6 class="underline"><?php echo $post['title']; ?></h6>
+                                    <p>
+                                        <?php echo $post['content']; ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
+                                    </p>
                                 </div>
-						<?php endforeach ?>
+                            </div>
+                        <?php endforeach ?>
 
-					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
-						<p class="description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'posts', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-posts-feed' ) ?>">Refresh now</a></p>
-					<?php endif ?>
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-course -->
-		</div><!-- .one-half -->
+                        <?php if ('external' == $site_type && groups_is_user_admin(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                            <p class="description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url(add_query_arg('refresh_feed', 'posts', bp_get_group_permalink(groups_get_current_group())), 'refresh-posts-feed') ?>">Refresh now</a></p>
+                        <?php endif ?>
+                    </div><!-- .recent-posts -->
+                </div><!-- #recent-course -->
+            </div><!-- .one-half -->
 
-		<div class="col-sm-12">
-			<div id="recent-site-comments">
-				<div class="recent-posts">
-                                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr( $site_url ) ?>">Recent Comments<span class="fa fa-chevron-circle-right"></span></a></h4>
-						<?php if ( !empty( $comments ) ) : ?>
-							<?php foreach ( $comments as $comment ) : ?>
-                               <div class="panel panel-default">
-                                                             <div class="panel-body">
-                                    <p><?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a></p>
-                                </div></div>
-							<?php endforeach ?>
-						<?php else : ?>
-							<div class="panel panel-default">
-                                                            <div class="panel-body"><p>No Comments Found</p></div></div>
-						<?php endif ?>
+            <div class="col-sm-12">
+                <div id="recent-site-comments">
+                    <div class="recent-posts">
+                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Comments<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <?php if (!empty($comments)) : ?>
+                            <?php foreach ($comments as $comment) : ?>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <p><?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a></p>
+                                    </div></div>
+                            <?php endforeach ?>
+                        <?php else : ?>
+                            <div class="panel panel-default">
+                                <div class="panel-body"><p>No Comments Found</p></div></div>
+                        <?php endif ?>
 
-					<?php if ( 'external' == $site_type && groups_is_user_admin( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
-						<p class="refresh-message description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url( add_query_arg( 'refresh_feed', 'comments', bp_get_group_permalink( groups_get_current_group() ) ), 'refresh-comments-feed' ) ?>">Refresh now</a></p>
-					<?php endif ?>
+                        <?php if ('external' == $site_type && groups_is_user_admin(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                            <p class="refresh-message description">Feed updates automatically every 10 minutes <a class="refresh-feed" id="refresh-posts-feed" href="<?php echo wp_nonce_url(add_query_arg('refresh_feed', 'comments', bp_get_group_permalink(groups_get_current_group())), 'refresh-comments-feed') ?>">Refresh now</a></p>
+                        <?php endif ?>
 
-				</div><!-- .recent-posts -->
-			</div><!-- #recent-site-comments -->
-		</div><!-- .one-half -->
-                </div>
-		<?php
-	}
+                    </div><!-- .recent-posts -->
+                </div><!-- #recent-site-comments -->
+            </div><!-- .one-half -->
+        </div>
+        <?php
+    }
 }
