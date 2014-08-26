@@ -28,7 +28,7 @@ $field_ids = array( 1 );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
-<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?>">
+<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?> form-panel">
 
 <?php
 
@@ -45,10 +45,15 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 		</ul>
 
 		<div class="clear"></div>
+                
+                <div class="panel panel-default">
+                    <div class="panel-heading">Edit Profile</div>
+                    <div class="panel-body">
+                
 		<?php if ( ! $display_name_shown ) {?>
-			<div class="editfield field_1 field_name alt">
+			<div class="editfield field_1 field_name alt form-group">
 				<label for="field_1">Display Name (required)</label>
-				<input type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
+				<input class="form-control" type="text" value="<?php echo $display_name;?>" id="field_1" name="field_1">
 				<p class="description"></p>
 			</div>
 			<?php $display_name_shown = true ?>
@@ -68,14 +73,14 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 					<label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
 				<?php	}      ?>
 
-					<input type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="<?php bp_the_profile_field_edit_value() ?>" />
+					<input class="form-control" type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="<?php bp_the_profile_field_edit_value() ?>" />
 
 				<?php endif; ?>
 
 				<?php if ( 'textarea' == bp_get_the_profile_field_type() ) : ?>
 
 					<label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
-					<textarea rows="5" cols="40" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_edit_value() ?></textarea>
+					<textarea class="form-control" rows="5" cols="40" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_edit_value() ?></textarea>
 
 				<?php endif; ?>
 
@@ -86,7 +91,7 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 					}?>
 
 					<label <?php echo $style;?> for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
-					<select <?php echo $style;?> name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>">
+					<select class="form-control" <?php echo $style;?> name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>">
 						<?php bp_the_profile_field_options() ?>
 					</select>
 
@@ -95,7 +100,7 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 				<?php if ( 'multiselectbox' == bp_get_the_profile_field_type() ) : ?>
 
 					<label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
-					<select name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" multiple="multiple">
+					<select class="form-control" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" multiple="multiple">
 						<?php bp_the_profile_field_options() ?>
 					</select>
 
@@ -134,15 +139,15 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 					<div class="datebox">
 						<label for="<?php bp_the_profile_field_input_name() ?>_day"><?php bp_the_profile_field_name() ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ) ?><?php endif; ?></label>
 
-						<select name="<?php bp_the_profile_field_input_name() ?>_day" id="<?php bp_the_profile_field_input_name() ?>_day">
+						<select class="form-control" name="<?php bp_the_profile_field_input_name() ?>_day" id="<?php bp_the_profile_field_input_name() ?>_day">
 							<?php bp_the_profile_field_options( 'type=day' ) ?>
 						</select>
 
-						<select name="<?php bp_the_profile_field_input_name() ?>_month" id="<?php bp_the_profile_field_input_name() ?>_month">
+						<select class="form-control" name="<?php bp_the_profile_field_input_name() ?>_month" id="<?php bp_the_profile_field_input_name() ?>_month">
 							<?php bp_the_profile_field_options( 'type=month' ) ?>
 						</select>
 
-						<select name="<?php bp_the_profile_field_input_name() ?>_year" id="<?php bp_the_profile_field_input_name() ?>_year">
+						<select class="form-control" name="<?php bp_the_profile_field_input_name() ?>_year" id="<?php bp_the_profile_field_input_name() ?>_year">
 							<?php bp_the_profile_field_options( 'type=year' ) ?>
 						</select>
 					</div>
@@ -153,10 +158,12 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 
 				<p class="description"><?php bp_the_profile_field_description() ?></p>
 			</div>
-
 		<?php endwhile; ?>
 
 	<?php endwhile; ?>
+                        </div><!--panel-body-->
+                </div>
+
 
 <?php do_action( 'bp_after_profile_field_content' ) ?>
 

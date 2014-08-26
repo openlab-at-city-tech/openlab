@@ -724,12 +724,7 @@ function cuny_member_profile_header() {
         $this_user_id = isset($site_members_template->member->id) ? $site_members_template->member->id : bp_displayed_user_id();
         do_action('bp_before_member_home_content');
         ?>
-    <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
-
-        <h1 class="entry-title profile-title clearfix">
-    <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
-            <span class="profile-type pull-right"><?php echo $account_type ?></span>
-        </h1>
+        <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
 
         <div id="member-header-avatar" class="alignleft group-header-avatar col-md-8">
             <div id="avatar-wrapper">

@@ -52,3 +52,12 @@ function openlab_activity_log_text($text){
 }
 
 add_filter('bp_core_time_since_ago_text','openlab_activity_log_text');
+
+function openlab_form_classes($classes){
+    
+   $classes[] = 'field-group';
+    
+   return $classes; 
+}
+
+add_filter('bp_field_css_classes','openlab_form_classes');
