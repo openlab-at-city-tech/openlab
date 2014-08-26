@@ -25,7 +25,7 @@ function openlab_bp_sidebar($type) {
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
-                'menu_class' => 'sidbar-nav'
+                'menu_class' => 'sidebar-nav'
             );
             echo '<h2 class="sidebar-title">About</h2>';
             echo '<div class="sidebar-block">';
@@ -48,11 +48,11 @@ function openlab_bp_sidebar($type) {
 function openlab_group_sidebar() {
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
-            <div class="group-nav sidebar-widget">
+            <div class="profile-nav">
                 <div id="item-buttons">
                     <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?></h2>
                     <div class="sidebar-block">
-                        <ul>
+                        <ul class="sidebar-nav">
                             <?php bp_get_options_nav(); ?>
                         </ul>
                     </div>
