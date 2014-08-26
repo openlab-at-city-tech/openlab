@@ -406,7 +406,7 @@ function openlab_group_status_message($group = null) {
             break;
     }
 
-    echo $message;
+    return $message;
 }
 
 function openlab_get_groups_of_user($args = array()) {

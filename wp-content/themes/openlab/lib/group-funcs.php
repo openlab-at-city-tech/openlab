@@ -615,12 +615,22 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
     <?php
 }
 
-function openlab_group_profile_header(){ ?>
-    <h1 class="entry-title group-title"><?php echo bp_group_name(); ?><span class="profile-type pull-right"><?php echo ucfirst(groups_get_current_group()->status) ?></span></h1>
-<?php
-    }
+function openlab_group_profile_header() {
+    ?>
+    <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?><span class="profile-type uppercase pull-right"><?php echo openlab_get_privacy_icon(); ?> <?php echo ucfirst(groups_get_current_group()->status) ?></span></h1>
+    <?php
+}
 
-add_action('bp_before_group_body','openlab_group_profile_header');
+add_action('bp_before_group_body', 'openlab_group_profile_header');
+
+function openlab_get_privacy_icon() {
+
+    if (bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') {
+        return '<span class="fa fa-eye-slash"></span>';
+    } else {
+        return '<span class="fa fa-eye-slash"></span>';
+    }
+}
 
 function cuny_group_single() {
     ?>
@@ -662,6 +672,7 @@ function cuny_group_single() {
                         <?php do_action('bp_group_header_actions'); ?>
                     </div>
                 <?php endif; ?>
+                <?php openlab_render_message(); ?>
         </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
             <div id="<?php echo $group_type; ?>-header-content" class="col-md-16 alignleft group-header-content group-<?php echo $group_id; ?>">
@@ -684,8 +695,22 @@ function cuny_group_single() {
                         $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
                         ?>
                         <table class="table">
+                            <?php
+                            if (bp_is_group_home() && openlab_group_status_message() != '') {
+
+                                do_action('bp_before_group_status_message')
+                                ?>
+
+                                <tr>
+                                    <th colspan="2" class="regular text-danger"><?php echo openlab_group_status_message() ?></th>
+                                </tr>
+
+                                <?php
+                                do_action('bp_after_group_status_message');
+                            }
+                            ?>
                             <tr>
-                                <td class="bold">Professor(s)</td>
+                                <td class = "bold">Professor(s)</td>
                                 <td><?php echo $first_name . " " . $last_name; ?></td>
                             </tr>
                             <tr>
@@ -721,26 +746,36 @@ function cuny_group_single() {
             </div><!-- .header-content -->
 
             <?php do_action('bp_after_group_header') ?>
-            <?php do_action('template_notices') ?>
 
-                                                                                                                </div><!--<?php echo $group_type; ?>-header -->
+                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
-    <?php if (bp_is_group_home()) { ?>
-
-            <?php do_action('bp_before_group_status_message') ?>
-
-            <div id="message" class="info group-status-info">
-                <p><?php openlab_group_status_message() ?></p>
-            </div>
-
-            <?php do_action('bp_after_group_status_message');
-    }
-            
+    <?php
     if (bp_get_group_status() == 'public') {
         openlab_group_profile_activity_list();
     }
+}
+
+function openlab_render_message() {
+	global $bp;
+        
+	if ( !empty( $bp->template_message ) ) :
+		$type    = ( 'success' == $bp->template_message_type ) ? 'updated' : 'error';
+		$content = apply_filters( 'bp_core_render_message_content', $bp->template_message, $type ); ?>
+
+		<div id="message" class="bp-template-notice <?php echo $type; ?> btn btn-default btn-block btn-primary link-btn clearfix">
+                    
+                    <span class="pull-left fa fa-check"></span>
+			<?php echo $content; ?>
+
+		</div>
+
+	<?php
+
+		do_action( 'bp_core_render_message' );
+
+	endif;
 }
 
 function openlab_group_profile_activity_list() {
@@ -756,7 +791,6 @@ function openlab_group_profile_activity_list() {
         $first_class = "first";
         ?>
         <?php $group_slug = bp_get_group_slug(); ?>
-        <?php do_action('bp_before_group_body') ?>
 
         <?php if (bp_is_group_home()) { ?>
 
