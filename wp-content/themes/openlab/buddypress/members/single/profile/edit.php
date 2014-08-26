@@ -1,4 +1,3 @@
-<?php do_action( 'template_notices' ) ?>
 <?php do_action( 'bp_before_profile_edit_content' ) ?>
 
 <?php
