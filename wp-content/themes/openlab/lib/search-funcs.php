@@ -38,21 +38,21 @@ add_action('init', 'openlab_search_override', 1);
 
 function openlab_search_override() {
     global $bp;
-    if (isset($_POST['search-submit']) && $_POST['search-terms']) {
+    if (isset($_POST['search']) && $_POST['search-which']) {
         if ($_POST['search-which'] == "members") {
-            wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search-terms']);
+            wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
             exit();
         } elseif ($_POST['search-which'] == "courses") {
-            wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search-terms']);
+            wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
             exit();
         } elseif ($_POST['search-which'] == "projects") {
-            wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search-terms']);
+            wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
             exit();
         } elseif ($_POST['search-which'] == "clubs") {
-            wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search-terms']);
+            wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
             exit();
         } elseif ($_POST['search-which'] == "portfolios") {
-            wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search-terms']);
+            wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
             exit();
         }
     }
