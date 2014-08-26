@@ -18,9 +18,9 @@ if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 		 *
 		 * @todo A real template hierarchy? Gasp!
 		 */
-
+                
 		// Group is visible
-		if ( bp_group_is_visible() ) : 
+		if ( bp_get_group_status() == 'public' || bp_get_group_status() == 'private' ) : 
 
 			// Looking at home location
 			if ( bp_is_group_home() ) :
@@ -54,6 +54,9 @@ if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
 
 				// Old group forums
 				elseif ( bp_is_group_forum()      ) : bp_get_template_part( 'groups/single/forum'        );
+                                
+                                // Membership request
+                                elseif ( bp_is_group_membership_request() ) : bp_get_template_part( 'groups/single/request-membership' );
 
 				// Anything else (plugins mostly)
 				else                                : bp_get_template_part( 'groups/single/plugins'      );
