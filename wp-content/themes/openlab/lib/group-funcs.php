@@ -615,6 +615,13 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
     <?php
 }
 
+function openlab_group_profile_header(){ ?>
+    <h1 class="entry-title group-title"><?php echo bp_group_name(); ?><span class="profile-type pull-right"><?php echo ucfirst(groups_get_current_group()->status) ?></span></h1>
+<?php
+    }
+
+add_action('bp_before_group_body','openlab_group_profile_header');
+
 function cuny_group_single() {
     ?>
     <?php
@@ -637,7 +644,6 @@ function cuny_group_single() {
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
     ?>
 
-    <h1 class="entry-title group-title"><?php echo bp_group_name(); ?><span class="profile-type pull-right"><?php echo ucfirst(groups_get_current_group()->status) ?></span></h1>
     <?php if (bp_is_group_home()): ?>
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
