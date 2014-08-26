@@ -911,7 +911,7 @@ function openlab_group_profile_activity_list() {
 
                         </div>
 
-                    <?php endif; //end of if $group != 'portfolio'     ?>
+                    <?php endif; //end of if $group != 'portfolio'         ?>
 
                 <?php elseif (!bp_group_is_visible()) : ?>
                     <?php
@@ -925,13 +925,13 @@ function openlab_group_profile_activity_list() {
                     ?>
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )      ?>
+                    <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()          ?></p>
+                                                            <p><?php // bp_group_status_message()                  ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )     ?>
+                    <?php // do_action( 'bp_after_group_status_message' )         ?>
 
                 <?php endif; ?>
 
@@ -950,13 +950,13 @@ function openlab_group_profile_activity_list() {
 
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )      ?>
+                    <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()          ?></p>
+                                                            <p><?php // bp_group_status_message()                  ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )       ?>
+                    <?php // do_action( 'bp_after_group_status_message' )           ?>
 
                 <?php endif; ?>
 
@@ -1020,7 +1020,7 @@ function openlab_custom_group_buttons($button) {
     } else if ($button['id'] == 'join_group' || $button['id'] == 'request_membership') {
         $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
-    } else if ($button['id'] == 'membership_requested'){
+    } else if ($button['id'] == 'membership_requested') {
         $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-clock-o pull-right"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     }
