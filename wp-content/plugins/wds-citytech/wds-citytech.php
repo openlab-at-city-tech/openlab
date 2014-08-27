@@ -898,8 +898,8 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '</td>';
 	$return .= '</tr>';
-
-	// For the love of Pete, it's not that hard to cast variables
+        
+        // For the love of Pete, it's not that hard to cast variables
 	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
 	if ( bp_get_current_group_id() ) {
