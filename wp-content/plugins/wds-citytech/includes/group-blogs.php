@@ -534,11 +534,14 @@ function wds_bp_group_meta() {
 
 		$group_site_url = openlab_get_group_site_url( $the_group_id );
 		?>
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading bold">Site Details</div>
+                            <div class="panel-body">
 
 		<?php if ( !empty( $group_site_url ) ) : ?>
 
 			<div id="current-group-site">
-				<h3 class="site-details-header">Site Details</h3>
 				<?php
 				$maybe_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
@@ -586,21 +589,12 @@ function wds_bp_group_meta() {
 				<?php if ( $group_type != 'portfolio' ) : ?>
 					<?php $show_website = "none" ?>
 					<tr class="form-field form-required">
-							<th scope="row" class="site-details-title">Site Details</th>
-						</tr>
-					<tr class="form-field form-required">
 						<th scope='row' class="site-details-query">
 							<label><input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?</label>
 						</th>
 					</tr>
 				<?php else : ?>
 					<?php $show_website = 'auto' ?>
-
-					<?php if ( 'course' == $group_type ) : ?>
-						<tr class="form-field form-required">
-							<th scope="row">Site Details</th>
-						</tr>
-					<?php endif ?>
 				<?php endif ?>
 
 				<tr id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website; ?>"><td colspan="2">
@@ -637,14 +631,17 @@ function wds_bp_group_meta() {
 			<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
 				<tr id="wds-website-clone" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 					<th valign="top" scope='row' class="disabled-opt" >
+                                            <div class="radio">
+                                            <label>
 						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-						Name your cloned site:
+                                                Name your cloned site:</label>
+                                            </div>
 					</th>
 
 					<td id="noo_clone_options">
 
 						<?php global $current_site ?>
-						<?php echo $current_site->domain . $current_site->path ?><input size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
+						<?php echo $current_site->domain . $current_site->path ?><input class="form-control" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
 						<input name="blog-id-to-clone" value="" type="hidden" />
 						<p id="cloned-site-url"></p>
 					</td>
@@ -656,8 +653,11 @@ function wds_bp_group_meta() {
 
 				<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 					<th valign="top" scope='row'>
+                                            <div class="radio">
+                                                <label>
 						<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
-						Create a new site:
+                                                Create a new site:</label>
+                                            </div>
 					</th>
 
 					<td id="noo_new_options">
@@ -667,11 +667,11 @@ function wds_bp_group_meta() {
 
 						if ( constant( "VHOST" ) == 'yes' ) :
 							?>
-							<input size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain; ?>
+							<input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain; ?>
 						<?php
 						else:
 							echo $current_site->domain . $current_site->path
-							?><input size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
+							?><input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
 				<?php endif; ?>
 						</div>
 
@@ -695,12 +695,15 @@ function wds_bp_group_meta() {
 		<?php if ( !empty( $user_blogs ) ) : ?>
 					<tr id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 						<th valign="top" scope='row'>
+                                                    <div class="radio">
+                                                        <label>
 							<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-							Use an existing site:
+                                                        Use an existing site:</label>
+                                                    </div>
 						</th>
 
 						<td id="noo_old_options">
-							<select name="groupblog-blogid" id="groupblog-blogid">
+							<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
                                 <option value="0">- Choose a site -</option>
 			<?php foreach ( (array) $user_blogs as $user_blog) : ?>
                                     <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
@@ -712,18 +715,26 @@ function wds_bp_group_meta() {
 
 				<tr id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 					<th valign="top" scope='row'>
+                                            <div class="radio">
+                                                <label>
 						<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
 						Use an external site:
+                                                </label>
+                                            </div>
 					</th>
 
 					<td id="noo_external_options">
-						<input size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="button" id="find-feeds" href="#" display="none">Check</a>
-						<p id="check-note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p>
+                                            <div class="form-group form-inline">
+						<input class="form-control" size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="btn btn-primary no-deco top-align" id="find-feeds" href="#" display="none">Check</a>
+                                            </div>
 					</td>
 				</tr>
+                                <tr><td colspan="2"><p id="check-note" class="italics">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></td></tr>
 			</table>
 
-	<?php endif ?>
+	<?php endif; ?>
+                            </div>
+                        </div>
 	</div>
 	<?php
 }

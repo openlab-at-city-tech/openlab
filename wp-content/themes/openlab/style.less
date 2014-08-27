@@ -161,6 +161,15 @@ blockquote {
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
+.radio,
+.radio-inline {
+    label{
+        font-weight: 700;
+    }
+    input[type="radio"]{
+        margin-top: 2px;
+    }
+}
 .img-responsive{
     width: 100%;
 }
@@ -400,6 +409,20 @@ body{
     }
     .small-text{
         font-size: 12px;
+    }
+}
+/**form custom**/
+#departments_html{
+    .department-list-container{
+        height: 120px;
+        border: 1px solid @30gray;
+        border-radius: @border-radius-base;
+        overflow: auto;
+    }
+}
+.groupblog-setup{
+    th{
+        width: 25%;
     }
 }
 /**custom selects**/

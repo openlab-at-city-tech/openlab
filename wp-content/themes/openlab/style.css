@@ -6904,6 +6904,14 @@ blockquote .h6 {
 [class^="col-"] {
   border-radius: 4px;
 }
+.radio label,
+.radio-inline label {
+  font-weight: 700;
+}
+.radio input[type="radio"],
+.radio-inline input[type="radio"] {
+  margin-top: 2px;
+}
 .img-responsive,
 .thumbnail > img,
 .thumbnail a > img,
@@ -6913,6 +6921,9 @@ blockquote .h6 {
 }
 .form-control {
   margin-bottom: 5px;
+}
+.form-control[type='file'] {
+  padding: 0 12px;
 }
 .form-inline.btn-combo .form-control {
   width: 82%;
@@ -7114,6 +7125,16 @@ body .underline {
 }
 body .small-text {
   font-size: 12px;
+}
+/**form custom**/
+#departments_html .department-list-container {
+  height: 120px;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
+  overflow: auto;
+}
+.groupblog-setup th {
+  width: 25%;
 }
 /**custom selects**/
 .custom-select,

@@ -825,16 +825,15 @@ function wds_load_group_type( $group_type ) {
 	$wds_group_school = explode( ",", $wds_group_school );
 
 	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+        
+        $return = '<div class="panel panel-default">';
 
-	$return .= '<table>';
-
-	$return .= '<tr class="schools">';
-
-	$return .= '<td class="block-title" colspan="2">School(s)';
+	$return .= '<div class="panel-heading bold">School(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
-	$return .= '</td></tr>';
+        $return .= '</div><div class="panel-body">';
+	$return .= '<table>';
 
 		$return .= '<tr class="school-tooltip"><td colspan="2">';
 
@@ -920,31 +919,37 @@ function wds_load_group_type( $group_type ) {
 
 	$return.= '<tr class="department-title">';
 
-	$return .= '<td colspan="2" class="block-title">Department(s)';
+	$return .= '<td colspan="2" class="block-title italics">Department(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td></tr>';
 		$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
 	$return.= '</tr>';
+        
+        $return .= '</table></div></div>';
+        
+        $return .= '<div class="panel panel-default">';
+        $return .= '<div class="panel-heading bold">Course Information</div>';
+        $return .= '<div class="panel-body">';
 
-	if ( 'course' == $group_type ) {
+ 	if ( 'course' == $group_type ) {
 
 		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
 		$return .= '<tr class="additional-field course-code-field">';
 		$return .= '<td class="additional-field-label">Course Code:</td>';
-		$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field section-code-field">';
 		$return .= '<td class="additional-field-label">Section Code:';
-		$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field semester-field">';
 		$return .= '<td class="additional-field-label">Semester:';
-		$return .= '<td><select name="wds_semester">';
+		$return .= '<td><select class="form-control" name="wds_semester">';
 		$return .= '<option value="">--select one--';
 
 		$checked = $Spring = $Summer = $Fall = $Winter = "";
@@ -968,16 +973,16 @@ function wds_load_group_type( $group_type ) {
 
 		$return .= '<tr class="additional-field year-field">';
 		$return .= '<td class="additional-field-label">Year:';
-		$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_year" value="' . $wds_year . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field additional-description-field">';
 		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-		$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
+		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return.= '</tr>';
 	}
 
-	$return.= '</table>';
+	$return.= '</table></div></div><!--.panel-->';
 
 	$return.= '<script>wds_load_group_departments();</script>';
 

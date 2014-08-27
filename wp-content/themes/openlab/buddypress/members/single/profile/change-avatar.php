@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-sm-16">
                             
-                                <p class="italics"><?php _e( 'Upload an image to use as an avatar for this course. The image will be shown on the main course page, and in search results.', 'buddypress') ?></p>
+                                <p class="italics"><?php _e( 'Upload an image to use as an avatar for this ' . bp_get_group_type() . '. The image will be shown on the main ' . bp_get_group_type() . ' page, and in search results.', 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
                                     <div class="form-group">

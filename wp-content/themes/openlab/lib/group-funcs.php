@@ -58,19 +58,16 @@ function openlab_group_privacy_settings($group_type) {
         }
     }
     ?>
-    <h4 class="privacy-title"><?php _e('Privacy Settings', 'buddypress'); ?></h4>
-    <p class="privacy-settings-tag-a">Set privacy options for your <?php echo $group_type_name_uc ?></p>
-    <?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>
-        <h5><?php echo $group_type_name_uc ?> Profile</h5>
-    <?php endif; ?>
+    <div class="panel panel-default">
+        <div class="panel-heading bold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>    
 
-    <?php if ($bp->current_action == 'create'): ?>
-        <p id="privacy-settings-tag-b"><?php _e('To change these settings later, use the ' . $group_type_name . ' Profile Settings page.', 'buddypress'); ?></p>
+    <div class="radio group-profile panel-body">
+        
+        <?php if ($bp->current_action == 'create'): ?>
+        <p id="privacy-settings-tag-b"><?php _e('These settings affect how others view your ' . $group_type_name . ' Profile. You may change these settings later in the course Profile Settings.', 'buddypress'); ?></p>
     <?php else: ?>
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Profile.') ?></p>
     <?php endif; ?>
-
-    <div class="radio group-profile">
 
         <?php
         $new_group_status = bp_get_new_group_status();
@@ -79,48 +76,47 @@ function openlab_group_privacy_settings($group_type) {
         }
         ?>
 
-        <label>
-            <input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
-            <strong>This is a public <?php echo $group_type_name_uc ?></strong>
+            <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
+            This is a public <?php echo $group_type_name_uc ?></label>
             <ul>
                 <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
                 <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . 's directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
                 <li><?php _e('Any OpenLab member may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
             </ul>
-        </label>
 
-        <label>
-            <input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />
-            <strong><?php _e('This is a private ' . $group_type_name_uc, 'buddypress') ?></strong>
+            <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />
+            <?php _e('This is a private ' . $group_type_name_uc, 'buddypress') ?></label>
             <ul>
                 <li><?php _e('This ' . $group_type_name_uc . ' Profile and related content and activity will only be visible to members of the group.', 'buddypress') ?></li>
                 <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . ' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
                 <li><?php _e('Only OpenLab members who request membership and are accepted may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
             </ul>
-        </label>
 
-        <label>
-            <input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
-            <strong><?php _e('This is a hidden ' . $group_type_name_uc, 'buddypress') ?></strong>
+            <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
+            <?php _e('This is a hidden ' . $group_type_name_uc, 'buddypress') ?></label>
             <ul>
                 <li><?php _e('This ' . $group_type_name_uc . ' Profile, related content and activity will only be visible only to members of the ' . $group_type_name_uc . '.', 'buddypress') ?></li>
                 <li><?php _e('This ' . $group_type_name_uc . ' Profile will NOT be listed in the ' . $group_type_name_uc . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
                 <li><?php _e('Only OpenLab members who are invited may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
             </ul>
-        </label>
+    </div>
     </div>
 
     <?php /* Site privacy markup */ ?>
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
-        <h5><?php _e($group_type_name_uc . ' Site') ?></h5>
+    <div class="panel panel-default">
+        <div class="panel-heading bold"><?php _e($group_type_name_uc . ' Site') ?></div>
+        <div class="panel-body">
         <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
         <?php openlab_site_privacy_settings_markup($site_id) ?>
+        </div>
+    </div>
     <?php endif ?>
 
     <?php if ($bp->current_action == 'admin'): ?>
         <?php do_action('bp_after_group_settings_admin'); ?>
-        <p><input type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &rarr;" id="save" name="save" /></p>
+        <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &rarr;" id="save" name="save" /></p>
         <?php wp_nonce_field('groups_edit_group_settings'); ?>
     <?php elseif ($bp->current_action == 'create'): ?>
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
@@ -583,26 +579,26 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
     <div class="radio group-site">
 
-        <h6><?php _e('Public', 'buddypress') ?></h6>
-        <span id="search-setting-note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
+        <h4><?php _e('Public', 'buddypress') ?></h4>
+        <span id="search-setting-note" class="italics">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</span>
         <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked('1', $blog_public); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label>
 
         <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label>
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
-            <h6><?php _e('Private', 'buddypress') ?></h6>
+        <h4><?php _e('Private', 'buddypress') ?></h4>
             <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
 
             <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>><?php _e('I would like my site to be visible to registered users of this ' . ucfirst($group_type) . '.'); ?></label>
 
-            <h6><?php _e('Hidden', 'buddypress') ?></h6>
+            <h4><?php _e('Hidden', 'buddypress') ?></h4>
             <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label>
 
         <?php else : ?>
 
             <?php /* Portfolios */ ?>
-            <h6>Private</h6>
+            <h4>Private</h4>
             <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label>
 
             <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
