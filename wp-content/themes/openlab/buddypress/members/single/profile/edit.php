@@ -28,7 +28,7 @@ $field_ids = array( 1 );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
-<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?> form-panel">
+<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?form form-panel">
 
 <?php
 
