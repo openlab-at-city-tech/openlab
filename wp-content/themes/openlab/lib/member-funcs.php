@@ -250,7 +250,7 @@ function openlab_list_members($view) {
 
                 $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
                 ?>
-                <div class="group-item col-md-12">
+                <div class="group-item col-md-8">
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar col-sm-8">
