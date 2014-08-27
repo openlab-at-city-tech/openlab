@@ -44,7 +44,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
-<?php $group_type = ucfirst($filters['wds_group_type']).'s'; ?>
+<?php $group_type = $filters['wds_group_type']; ?>
 
 	  	<?php
 		if (openlab_is_my_profile()) {
@@ -52,76 +52,67 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 		}
 		?>
   
-    <div class="group-count"><?php cuny_groups_pagination_count($group_type); ?></div>
-	<div class="clearfloat"></div>
-	<ul id="course-list" class="item-list">
+	<div class="row group-archive-header-row">
+            <div class="group-count col-sm-5 pull-right"><?php cuny_groups_pagination_count($group_type); ?></div>
+        </div>
+	<div id="group-list" class="item-list row">
 		<?php
 		$count = 1;
 		while ( bp_groups() ) : bp_the_group();
-			$group_id=bp_get_group_id();?>
-			<li class="course<?php echo cuny_o_e_class($count) ?> col-sm-12">
-				<div class="item-avatar alignleft">
-					<a href="<?php bp_group_permalink() ?>"><?php echo bp_get_group_avatar(array( 'type' => 'full', 'width' => 100, 'height' => 100 )) ?></a>
-				</div>
-				<div class="item">
+			$group_id = bp_get_group_id(); ?>
+			<div class="group-item col-md-12">
+                    <div class="group-item-wrapper">
+                        <div class="row">
+				<div class="item-avatar alignleft col-sm-8">
+                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                            </div>
+				<div class="item col-sm-16">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+                                <?php
+                                //course group type
+                                echo $group_type;
+                                if ($group_type == 'course'):
+                                    ?>
 
-                    <?php	if ($filters['wds_group_type'] == "course") :
-					$wds_faculty=groups_get_groupmeta($group_id, 'wds_faculty' );
-					$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
-					$wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );
-		  			$wds_year=groups_get_groupmeta($group_id, 'wds_year' );
-		  			$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
-					?>
-                    <div class="info-line">
-					<?php if ($wds_faculty){
-						echo $wds_faculty;
-					}
-					if ($wds_departments){
-						echo ' | '.$wds_departments;
-					}
-					if ( ! empty( $wds_project_code ) ){
-						echo $wds_project_code;
-					}
-					if ($wds_semester || $wds_year)
-					{
-						echo '<br />';
-						if ($wds_semester)
-						{
-							echo $wds_semester.' ';
-						}
-						if ($wds_year)
-						{
-							echo $wds_year;
-						}
-					} ?>
-                    </div>
-					<?php else: ?>
+                                    <?php
+                                    $admins = groups_get_group_admins($group_id);
+                                    $faculty_id = $admins[0]->user_id;
+                                    $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
+                                    $last_name = ucfirst(xprofile_get_field_data('Last Name', $faculty_id));
+                                    $wds_faculty = $first_name . " " . $last_name;
+                                    $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
+                                    $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
+                                    $wds_year = groups_get_groupmeta($group_id, 'wds_year');
+                                    $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+                                    ?>
+                                    <div class="info-line uppercase"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?> | <span class="bold"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></span></div>
+                                <?php elseif ($group_type == 'portfolio'): ?>
 
-                    <div class="info-line"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ) ?></div>
+                                    <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
 
-                    <?php endif; ?>
+                                <?php endif; ?>
 
-					<?php
-					     $len = strlen(bp_get_group_description());
-					     if ($len > 135) {
-						$this_description = substr(bp_get_group_description(),0,135);
-						$this_description = str_replace("</p>","",$this_description);
-						echo $this_description.'&hellip; <a href="'.bp_get_group_permalink().'">See&nbsp;More</a></p>';
-					     } else {
-						bp_group_description();
-					     }
-					?>
+                                <?php
+                                $len = strlen(bp_get_group_description());
+                                if ($len > 135) {
+                                    $this_description = substr(bp_get_group_description(), 0, 135);
+                                    $this_description = str_replace("</p>", "", $this_description);
+                                    echo $this_description . '&hellip; <a href="' . bp_get_group_permalink() . '">See&nbsp;More</a></p>';
+                                } else {
+                                    bp_group_description();
+                                }
+                                ?>
 				</div>
 
-			</li>
-			<?php if ( $count % 2 == 0 ) { echo '<hr style="clear:both;" />'; } ?>
-			<?php $count++ ?>
+                        </div>
+                    </div>
+                        </div>
+            <?php $count++ ?>
 		<?php endwhile; ?>
-	</ul>
+        </div>
 
 		<div class="pagination-links" id="group-dir-pag-top">
-			<?php bp_groups_pagination_links() ?>
+			<?php echo openlab_groups_pagination_links() ?>
 		</div>
 <?php else: ?>
 	<?php $group_type = $filters['wds_group_type'].'s'; ?>
