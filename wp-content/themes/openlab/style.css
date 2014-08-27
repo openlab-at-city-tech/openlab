@@ -7401,6 +7401,9 @@ body .small-text {
 #group-list .group-item-wrapper .info-line {
   margin-bottom: 12px;
 }
+#people-listing .group-item-wrapper {
+  height: 90px;
+}
 .filter {
   width: 93%;
   margin: 0 auto;
