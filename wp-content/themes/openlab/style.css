@@ -937,7 +937,7 @@ img {
   width: 100%;
 }
 .img-rounded {
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .img-thumbnail {
   padding: 4px;
@@ -3083,7 +3083,7 @@ select[multiple].input-sm {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 select.input-lg {
   height: 46px;
@@ -3623,7 +3623,7 @@ fieldset[disabled] .btn-link:focus {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .btn-sm,
 .btn-group-sm > .btn {
@@ -4014,7 +4014,7 @@ tbody.collapse.in {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 select.input-group-lg > .form-control,
 select.input-group-lg > .input-group-addon,
@@ -4088,7 +4088,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .input-group-addon.input-lg {
   padding: 10px 16px;
   font-size: 18px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .input-group-addon input[type="radio"],
 .input-group-addon input[type="checkbox"] {
@@ -4954,13 +4954,13 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 }
 .pagination-lg > li:first-child > a,
 .pagination-lg > li:first-child > span {
-  border-bottom-left-radius: 6px;
-  border-top-left-radius: 6px;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
 }
 .pagination-lg > li:last-child > a,
 .pagination-lg > li:last-child > span {
-  border-bottom-right-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
 }
 .pagination-sm > li > a,
 .pagination-sm > li > span {
@@ -5140,7 +5140,7 @@ a.list-group-item.active > .badge,
   border-top-color: #d5d5d5;
 }
 .container .jumbotron {
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .jumbotron .container {
   max-width: 100%;
@@ -5908,7 +5908,7 @@ a.list-group-item-danger.active:focus {
 }
 .well-lg {
   padding: 24px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .well-sm {
   padding: 9px;
@@ -5980,7 +5980,7 @@ button.close {
   background-color: #ffffff;
   border: 1px solid #999999;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 4px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
@@ -6170,7 +6170,7 @@ button.close {
   background-clip: padding-box;
   border: 1px solid #cccccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 4px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   white-space: normal;
@@ -6195,7 +6195,7 @@ button.close {
   line-height: 18px;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
-  border-radius: 5px 5px 0 0;
+  border-radius: 3px 3px 0 0;
 }
 .popover-content {
   padding: 9px 14px;
@@ -6851,6 +6851,9 @@ blockquote .h6 {
   color: #ff5959;
   margin-top: 0;
 }
+.nav.nav-inline {
+  margin-top: 0;
+}
 .nav.nav-inline .submenu-text {
   font-weight: 700;
 }
@@ -6864,11 +6867,21 @@ blockquote .h6 {
   padding: 0 7px;
   line-height: 100%;
 }
-.nav.nav-inline li.last-item a {
+.nav.nav-inline li.current-menu-item a,
+.nav.nav-inline li:hover a,
+.nav.nav-inline li.current-menu-item span,
+.nav.nav-inline li:hover span {
+  color: #49cabe;
+  text-decoration: none;
+}
+.nav.nav-inline li:last-child a {
   border-right: none;
 }
 .nav.nav-inline li .fa {
   padding-left: 7px;
+}
+.nav.nav-inline li:first-child a {
+  padding-left: 0;
 }
 .pagination {
   margin: 0;
@@ -6935,6 +6948,16 @@ blockquote .h6 {
 }
 .form-inline .top-align {
   vertical-align: top;
+}
+.form-panel .panel {
+  margin-bottom: 0;
+  margin-top: 30px;
+}
+.form-panel .panel:last-child {
+  margin-bottom: 20px;
+}
+.submenu .submenu-text {
+  margin-right: 8px;
 }
 /**header**/
 .navbar-default .container-fluid {
@@ -7125,6 +7148,15 @@ body .underline {
 }
 body .small-text {
   font-size: 12px;
+}
+body .align-right {
+  text-align: right;
+}
+body .align-center {
+  text-align: center;
+}
+body .align-left {
+  text-align: left;
 }
 /**form custom**/
 #departments_html .department-list-container {
@@ -7451,6 +7483,54 @@ body .small-text {
 }
 #members-list .inline-element:last-child {
   margin-right: 0;
+}
+.plugins #item-body {
+  margin-top: 30px;
+}
+.docs-info-header #tags-toggle {
+  padding: 6px 16px;
+}
+.docs-info-header #tags-toggle .plus-or-minus {
+  font-size: 1.1em;
+}
+.docs-info-header #tags-list {
+  margin-top: 0;
+}
+.doc-tabs ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.doctable-panel {
+  padding-bottom: 12px;
+}
+.doctable-panel .doctable .edited-date-cell {
+  width: 20%;
+}
+.doc-content .wp-switch-editor {
+  padding: 0 8px;
+  text-decoration: none;
+  border-radius: 4px 4px 0 0;
+}
+.doc-content .tmce-active .switch-tmce {
+  color: #49cabe;
+}
+.doc-content .html-active .switch-html {
+  color: #49cabe;
+}
+.doc-content .wp-editor-container {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  border-top-right-radius: 0;
+}
+#doc-meta .toggle-switch {
+  padding: 6px 16px;
+}
+#doc-meta .toggle-switch .plus-or-minus {
+  font-size: 1.1em;
+}
+#doc-meta .toggle-content {
+  width: 100%;
 }
 /**member profiles**/
 #member-header .btn.is_friend.friendship-button:hover {

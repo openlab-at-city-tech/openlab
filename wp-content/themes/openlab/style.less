@@ -103,6 +103,7 @@ blockquote {
 
 .nav{
     &.nav-inline{
+        margin-top: 0;
         .submenu-text{
             font-weight: 700;
         }
@@ -115,13 +116,26 @@ blockquote {
                 padding: 0 7px;
                 line-height: 100%;
             }
-            &.last-item{
+            &.current-menu-item,
+            &:hover{
+                a,
+                span{
+                    color: @aqua;
+                    text-decoration: none;
+                }
+            }
+            &:last-child{
                 a{
                     border-right: none;
                 }
             }
             .fa{
                 padding-left: 7px;
+            }
+            &:first-child{
+                a{
+                    padding-left: 0;
+                }
             }
         }
     }
@@ -192,6 +206,20 @@ blockquote {
     }
     .top-align{
         vertical-align: top;
+    }
+}
+.form-panel{
+    .panel{
+        margin-bottom: 0;
+        margin-top: 30px;
+        &:last-child{
+            margin-bottom: 20px;
+        }
+    }
+}
+.submenu{
+    .submenu-text{
+        margin-right: 8px;
     }
 }
 /**header**/
@@ -409,6 +437,15 @@ body{
     }
     .small-text{
         font-size: 12px;
+    }
+    .align-right{
+        text-align: right;
+    }
+    .align-center{
+        text-align: center;
+    }
+    .align-left{
+        text-align: left;
     }
 }
 /**form custom**/
@@ -764,6 +801,70 @@ body{
         &:last-child{
             margin-right: 0;
         }
+    }
+}
+.plugins{
+    #item-body{
+        margin-top: 30px;
+    }
+}
+.docs-info-header{
+    #tags-toggle{
+        padding: 6px 16px;
+        .plus-or-minus{
+            font-size: 1.1em;
+        } 
+    }
+    #tags-list{
+        margin-top: 0;
+    }
+}
+.doc-tabs{
+    ul{
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+}
+.doctable-panel{
+    padding-bottom: 12px;
+    .doctable{
+        .edited-date-cell{
+            width: 20%;
+        }
+    }
+}
+.doc-content{
+    .wp-switch-editor{
+        padding: 0 8px;
+        text-decoration: none;
+        border-radius: @border-radius-top;
+    }
+    .tmce-active{
+        .switch-tmce{
+            color: @aqua;
+        }
+    }
+    .html-active{
+        .switch-html{
+            color: @aqua;
+        }
+    }
+    .wp-editor-container{
+        border: @border-light-gray;
+        border-radius: @border-radius-base;
+        border-top-right-radius: 0;
+    }
+}
+#doc-meta{
+    .toggle-switch{
+        padding: 6px 16px;
+        .plus-or-minus{
+            font-size: 1.1em;
+        } 
+    }
+    .toggle-content{
+        width: 100%;
     }
 }
 /**member profiles**/
