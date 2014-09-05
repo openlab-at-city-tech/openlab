@@ -45,16 +45,15 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
 <?php $group_type = $filters['wds_group_type']; ?>
-
+<div class="row">
 	  	<?php
 		if (openlab_is_my_profile()) {
 			echo openlab_submenu_markup('groups', $filters['wds_group_type']);
 		}
 		?>
   
-	<div class="row group-archive-header-row">
             <div class="group-count col-sm-5 pull-right"><?php cuny_groups_pagination_count($group_type); ?></div>
-        </div>
+</div>
 	<div id="group-list" class="item-list row">
 		<?php
 		$count = 1;
@@ -115,12 +114,14 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 			<?php echo openlab_groups_pagination_links() ?>
 		</div>
 <?php else: ?>
+<div class="row">
 	<?php $group_type = $filters['wds_group_type'].'s'; ?>
 	  	<?php
 		if (openlab_is_my_profile()) {
-			echo openlab_submenu_markup($filters['wds_group_type']);
+			echo openlab_submenu_markup('groups', $filters['wds_group_type']);
 		}
 		?>
+</div>
 	<div class="widget-error">
 		<?php _e('There are no '.$group_type.' to display.', 'buddypress') ?>
 	</div>

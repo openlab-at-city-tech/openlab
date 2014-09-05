@@ -775,6 +775,7 @@ function openlab_render_message() {
 }
 
 function openlab_group_profile_activity_list() {
+    global $wpdb;
     ?>
     <div id="single-course-body">
         <?php
@@ -816,13 +817,12 @@ function openlab_group_profile_activity_list() {
                                                         <?php
                                                         $topic_id = bp_get_the_topic_id();
                                                         $last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
-													WHERE topic_id='$topic_id'
-												   ORDER BY post_id DESC LIMIT 1", "ARRAY_A");
+											WHERE topic_id='$topic_id'
+										   ORDER BY post_id DESC LIMIT 1","ARRAY_A");
                                                         $last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']), 135);
-                                                        echo $last_topic_content;
-                                                        ?></p>
+                                                        ?>
 
-                                                        <a href="<?php bp_the_topic_permalink(); ?>" class="read-more">See More</a><p>
+                                                        <p><a href="<?php bp_the_topic_permalink(); ?>" class="read-more">See More</a></p>
                                                     </div></div>                                            <?php endwhile; ?>
                                         <?php else: ?>
                                             <div class="panel panel-default"><div class="panel-body">

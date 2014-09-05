@@ -6,27 +6,33 @@ if (bp_is_group_forum_topic_edit()) {
     bp_get_template_part('groups/single/forum/topic');
 } else {
     ?>
-    <div class="item-list-tabs no-ajax" id="bpsubnav" role="navigation">
-        <ul>
+    <div class="row"><div class="col-md-17">
+        <div class="submenu">
             <?php if (is_user_logged_in()) : ?>
-                <li class="selected-page">Discussion:</li>
+                <div class="submenu-text pull-left bold">Discussion:</div>
+                <ul class="nav nav-inline">
                 <li class="new-topic"><a href="#post-new" class="show-hide-new"><?php _e('New Topic', 'buddypress') ?></a></li>
+                </ul>
             <?php endif ?>
+        </div></div>
 
             <?php do_action('bp_forums_directory_group_sub_types'); ?>
 
-            <li id="forums-order-select" class="last filter">
+            <div class="col-sm-7 pull-right align-right">
+                <form class="standard-form form-inline">
+                <div class="form-group">
                 <label for="forums-order-by"><?php _e('Order By:', 'buddypress'); ?></label>
-                <select id="forums-order-by">
+                <select id="forums-order-by" class="form-control">
                     <option value="active"><?php _e('Last Active', 'buddypress'); ?></option>
                     <option value="popular"><?php _e('Most Posts', 'buddypress'); ?></option>
                     <option value="unreplied"><?php _e('Unreplied', 'buddypress'); ?></option>
 
                     <?php do_action('bp_forums_directory_order_options'); ?>
                 </select>
-            </li>
+                </div>
+                </form>
+            </div>
         </ul>
-        <div class="clear"></div>
     </div>
     <div class="forums single-forum" role="main">
         <?php bp_get_template_part('forums/forums-loop'); ?>

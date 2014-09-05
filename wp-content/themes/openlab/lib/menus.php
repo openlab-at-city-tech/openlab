@@ -209,13 +209,16 @@ function openlab_get_primary_help_term_name() {
 function openlab_submenu_markup($type = '', $opt_var = NULL) {
     $submenu_text = '';
 
+    $width = 'col-md-24';
+    $row_wrapper = true;
+
     switch ($type) {
         case 'invitations':
             $submenu_text = 'My Invitations: ';
             $menu = openlab_my_invitations_submenu();
             break;
         case 'friends':
-            $menu = openlab_my_friends_submenu();
+            $menu = openlab_my_friends_submenu(false);
             break;
         case 'messages':
             $submenu_text = 'My Messages: ';
@@ -223,16 +226,22 @@ function openlab_submenu_markup($type = '', $opt_var = NULL) {
             break;
         case 'groups':
             $menu = openlab_my_groups_submenu($opt_var);
+            $width = 'col-sm-19';
+            $row_wrapper = false;
             break;
         default:
             $submenu_text = 'My Settings: ';
             $menu = openlab_profile_settings_submenu();
     }
-    
-    $submenu = '<div class="row"><div class="col-md-24">';
-    $submenu .= '<div class="submenu"><div class="submenu-text pull-left">'.$submenu_text.'</div>'.$menu.'</div>';
-    $submenu .= '</div></div>';
-    
+
+    $submenu = '<div class="' . $width . '">';
+    $submenu .= '<div class="submenu"><div class="submenu-text pull-left bold">' . $submenu_text . '</div>' . $menu . '</div>';
+    $submenu .= '</div>';
+
+    if ($row_wrapper) {
+        $submenu = '<div class="row">' . $submenu . '</div>';
+    }
+
     return $submenu;
 }
 
@@ -332,7 +341,7 @@ function openlab_my_groups_submenu($group) {
 }
 
 //sub-menus for my-friends pages
-function openlab_my_friends_submenu() {
+function openlab_my_friends_submenu($count = true) {
     global $bp;
     if (!$dud = bp_displayed_user_domain()) {
         $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
@@ -347,9 +356,14 @@ function openlab_my_friends_submenu() {
     $item = $bp->current_item;
     $component = $bp->current_component;
 
+    $count_span = '';
+    if ($count) {
+        $count_span = '<span class="mol-count pull-right count-' . $request_count . '">' . $request_count . '</span>';
+    }
+
     $menu_list = array(
         $my_friends => 'My Friends',
-        $friend_requests => 'Requests Received <span class="mol-count pull-right count-' . $request_count . '">' . $request_count . '</span>',
+        $friend_requests => 'Requests Received ' . $count_span,
             //'#' => $page_identify,
     );
     return openlab_submenu_gen($menu_list);
@@ -427,25 +441,25 @@ function openlab_submenu_gen($items) {
             $current_check = false;
         }
 
-        //adding the selected-page class - also includes special cases, parsed out to make them easier to identify
+        //adding the current-menu-item class - also includes special cases, parsed out to make them easier to identify
         if ($current_check !== false) {
-            $item_classes .= " selected-page";
+            $item_classes .= " current-menu-item";
         } else if ($page_identify == "general" && $title == "Account Settings") {
             //special case just for account settings page
-            $item_classes .= " selected-page";
+            $item_classes .= " current-menu-item";
         } else if ($page_identify == "my-friends" && $title == "My Friends") {
             //special case just for my friends page
-            $item_classes .= " selected-page";
+            $item_classes .= " current-menu-item";
         } else if ($page_identify == "invite-new-members" && $title == "Invite New Members") {
             //special case just for Invite New Members page
-            $item_classes .= " selected-page";
+            $item_classes .= " current-menu-item";
         } else if ($page_identify == 'my-groups') {
             //special case for my-<groups> pages
             if (isset($_GET['type'])) {
                 $type = $_GET['type'];
                 $type_title = 'My ' . ucfirst(str_replace('-', ' ', $type)) . 's';
                 if ($title == $type_title) {
-                    $item_classes .= " selected-page";
+                    $item_classes .= " current-menu-item";
                 }
             }
         }
@@ -468,10 +482,11 @@ function openlab_submenu_gen($items) {
         }
 
         $submenu .= '<li class="' . $item_classes . '">';
-        
+
         //for delete
-        $submenu .= ($slug == 'delete-account' ? '<span class="fa fa-minus-circle"></span>' : '');
-        
+        $submenu .= (strstr($slug, 'delete-') > -1 ? '<span class="fa fa-minus-circle"></span>' : '');
+        $submenu .= (strstr($slug, 'create-') > -1 ? '<span class="fa fa-plus-circle"></span>' : '');
+
         $submenu .= ( $item == 'no-link' ? '' : '<a href="' . $item . '">' );
         $submenu .= $title;
         $submenu .= ( $item == 'no-link' ? '' : '</a>' );
@@ -494,10 +509,10 @@ add_filter('bp_get_options_nav_home', 'openlab_filter_subnav_home');
 
 function openlab_filter_subnav_home($subnav_item) {
     $new_item = str_replace("Home", "Profile", $subnav_item);
-    
+
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected","current-menu-item",$new_item);
-    
+    $new_item = str_replace("current selected", "current-menu-item", $new_item);
+
     return $new_item;
 }
 
@@ -511,9 +526,9 @@ function openlab_filter_subnav_admin($subnav_item) {
     if (bp_action_variable(0)) {
         if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
             $new_item = str_replace("current selected", " ", $new_item);
-        }else{
+        } else {
             //update "current" class to "current-menu-item" to unify site identification of current menu page
-            $new_item = str_replace("current selected","current-menu-item", $new_item);
+            $new_item = str_replace("current selected", "current-menu-item", $new_item);
         }
     }
 
@@ -534,12 +549,19 @@ function openlab_filter_subnav_members($subnav_item) {
         $new_item = str_replace("/members/", "/admin/manage-members", $new_item);
     endif;
 
+    $uri = $bp->unfiltered_uri;
+    $check_uri = array('groups', 'notifications');
+    $notification_status = false;
+    if (count(array_intersect($uri, $check_uri)) == count($check_uri)) {
+        $notification_status = true;
+    }
+
     //filtering for current status on membership menu item when in membership submenu
-    if (bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) {
+    if ((bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) || $notification_status) {
         $new_item = str_replace('id="members-groups-li"', 'id="members-groups-li" class="current-menu-item"', $new_item);
-    } else{
+    } else {
         //update "current" class to "current-menu-item" to unify site identification of current menu page
-            $new_item = str_replace("current selected","current-menu-item", $new_item);
+        $new_item = str_replace("current selected", "current-menu-item", $new_item);
     }
 
     //get total member count
@@ -574,12 +596,12 @@ function openlab_filter_subnav_docs($subnav_item) {
     $total_doc_count = !empty($query->found_posts) ? $query->found_posts : 0;
 
     wp_reset_query();
-    
+
     $new_item = str_replace('<span>' . $total_doc_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . '">' . $total_doc_count . '</span>', $subnav_item);
-    
+
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected","current-menu-item", $new_item);
-    
+    $new_item = str_replace("current selected", "current-menu-item", $new_item);
+
     return $new_item;
 }
 
@@ -590,10 +612,10 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
     if (openlab_is_portfolio()) {
         return '';
     } else {
-        
+
         //update "current" class to "current-menu-item" to unify site identification of current menu page
-        $subnav_item = str_replace("current selected","current-menu-item", $subnav_item);
-        
+        $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+
         return $subnav_item;
     }
 }
@@ -602,9 +624,9 @@ add_filter('bp_get_options_nav_forums', 'openlab_filter_subnav_forums');
 
 function openlab_filter_subnav_forums($subnav_item) {
     //update "current" class to "current-menu-item" to unify site identification of current menu page
-        $subnav_item = str_replace("current selected","current-menu-item", $subnav_item);
-        
-        return $subnav_item;
+    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+
+    return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
@@ -716,13 +738,11 @@ function openlab_group_admin_tabs($group = false) {
 
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )     ?>
 
-        <div class="subnav-right-buttons">
-            <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
-                <li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li>
-            <?php endif ?>
+        <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
+            <li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span> <a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li>
+        <?php endif ?>
 
-            <li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
-        </div>
+        <li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span> <a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
 
     <?php endif ?>
     <?php
