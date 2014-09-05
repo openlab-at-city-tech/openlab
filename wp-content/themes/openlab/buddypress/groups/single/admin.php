@@ -41,7 +41,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
         
         <div class="panel panel-default">
-                    <div class="panel-heading">Course Details</div>
+                    <div class="panel-heading"><?php echo $group_label_uc; ?> Details</div>
                     <div class="panel-body">
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
