@@ -782,6 +782,20 @@ function openlab_group_membership_tabs($group = false) {
 
     <?php if (bp_group_is_member() && openlab_is_admin_truly_member()): ?>
         <li<?php if ($bp->current_action == 'notifications') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e('Your Email Options', 'buddypress'); ?></a></li>
+    <?php endif; ?>
+
+    <?php
+}
+
+function openlab_docs_tabs() {
+    global $bp;
+    $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+    ?>
+
+    <li <?php echo (bp_docs_current_view() == 'list' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/">View Docs</a></li>
+    <li <?php echo (bp_docs_current_view() == 'create' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/create">New Doc</a></li>
+        <?php if ((bp_docs_current_view() == 'edit' || bp_docs_current_view() == 'single') && bp_docs_is_existing_doc()): ?>
+        <li class="current-menu-item"><?php the_title() ?></li>
         <?php endif; ?>
 
     <?php

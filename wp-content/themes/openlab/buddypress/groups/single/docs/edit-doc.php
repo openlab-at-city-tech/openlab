@@ -11,13 +11,13 @@ if ( !function_exists( 'wp_editor' ) ) {
 
 ?>
 
-<div class="doc-content">
+<div class="doc-content img-rounded">
 
 <div id="idle-warning" style="display:none">
 	<p><?php _e( 'You have been idle for <span id="idle-warning-time"></span>', 'bp-docs' ) ?></p>
 </div>
 
-<form action="" method="post" class="standard-form" id="doc-form">
+<form action="" method="post" class="form-group" id="doc-form">
     <div class="doc-header">	
 	<?php if ( bp_docs_is_existing_doc() ) : ?>
 		<input type="hidden" id="existing-doc-id" value="<?php the_ID() ?>" />
@@ -26,7 +26,7 @@ if ( !function_exists( 'wp_editor' ) ) {
     <div class="doc-content-wrapper">
         <div id="doc-content-title">
 		<label for="doc[title]"><?php _e( 'Title', 'bp-docs' ) ?></label>        	
-		<input type="text" id="doc-title" name="doc[title]" class="long" value="<?php bp_docs_edit_doc_title() ?>" />
+		<input type="text" id="doc-title" name="doc[title]" class="form-control" value="<?php bp_docs_edit_doc_title() ?>" />
         </div>
         
         <?php if ( bp_docs_is_existing_doc() ) : ?>
@@ -122,7 +122,7 @@ if ( !function_exists( 'wp_editor' ) ) {
         
         	<?php wp_nonce_field( 'bp_docs_save' ) ?>
         
-		<input type="submit" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e( 'Save', 'bp-docs' ) ?>"> <a href="<?php bp_docs_cancel_edit_link() ?>" class="action safe"><?php _e( 'Cancel', 'bp-docs' ); ?></a>
+		<input class="btn btn-primary" type="submit" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e( 'Save', 'bp-docs' ) ?>"> <a href="<?php bp_docs_cancel_edit_link() ?>" class="action safe btn btn-default no-deco"><?php _e( 'Cancel', 'bp-docs' ); ?></a>
             
             	<?php if ( bp_docs_current_user_can( 'manage' ) ) : ?><a class="delete-doc-button confirm" href="<?php bp_docs_delete_doc_link() ?>">Delete</a><?php endif ?>
         </div>

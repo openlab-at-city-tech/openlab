@@ -19,7 +19,7 @@
 	<?php bp_docs_inline_toggle_js() ?>
 <?php endif ?>
 
-<div class="doc-content">
+<div class="doc-content img-rounded">
 	<?php the_content() ?>
 </div>
 
@@ -27,7 +27,11 @@
 	<?php do_action( 'bp_docs_single_doc_meta' ) ?>
 </div>
 
-<?php comments_template( '/docs/comments.php' ) ?>
+<?php 
+$template_path = bp_docs_locate_template('comments.php'); 
+
+include( apply_filters( 'bp_docs_template', $template_path ) );
+?>
 
 <?php endwhile; ?>
 
