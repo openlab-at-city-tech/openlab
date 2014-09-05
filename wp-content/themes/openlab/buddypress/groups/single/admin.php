@@ -31,7 +31,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
         </div><!-- .item-list-tabs -->
     </div></div>
 
-<form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form" method="post" enctype="multipart/form-data">
+<form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
 
 <?php do_action( 'bp_before_group_admin_content' ) ?>
 
@@ -39,22 +39,28 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 <?php /* Edit Group Details */ ?>
 <?php if ( bp_is_group_admin_screen( 'edit-details' ) ) : ?>
+        
+        <div class="panel panel-default">
+                    <div class="panel-heading">Course Details</div>
+                    <div class="panel-body">
 
 	<?php do_action( 'bp_before_group_details_admin' ); ?>
 
 	<label for="group-name"><?php echo $group_label_uc . ' Name' ?> (required)</label>
-	<input type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
+	<input class="form-control" type="text" name="group-name" id="group-name" value="<?php bp_group_name() ?>" />
 
 	<label for="group-desc"><?php echo $group_label_uc . ' Description' ?> (required)</label>
-	<textarea name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
+	<textarea class="form-control" name="group-desc" id="group-desc"><?php bp_group_description_editable() ?></textarea>
 
 	<?php do_action( 'groups_custom_group_fields_editable' ) ?>
 
 	<?php if ( !openlab_is_portfolio() ) : ?>
         <div class="notify-settings">
 			<p class="ol-tooltip notify-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></p>
-                        <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
-                        <label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
+                        <div class="radio">
+                            <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
+                            <label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
+                        </div>
         </div>
 
 	<?php else : ?>
@@ -62,12 +68,14 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 		<input type="hidden" name="group-notify-members" value="0" />
 
 	<?php endif ?>
+                </div>
+        </div>
+
 
 	<?php do_action( 'bp_after_group_details_admin' ); ?>
 
-	<p><input type="submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> &rarr;" id="save" name="save" /></p>
+	<p><input class="btn btn-primary" type="submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> &rarr;" id="save" name="save" /></p>
 	<?php wp_nonce_field( 'groups_edit_group_details' ) ?>
-
 <?php endif; ?>
 
 <?php /* Manage Group Settings */ ?>
