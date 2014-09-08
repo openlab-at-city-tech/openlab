@@ -171,7 +171,7 @@ function wds_get_register_fields( $account_type ){
 				$return .= "<br />Post Field 193: " . $_POST['field_193'];
 				$input_value = $_POST["{$input_name}"];
 				*/
-				$return.='<input type="text" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" value="'.bp_get_the_profile_field_edit_value().'" />';
+				$return.='<input class="form-control" type="text" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" value="'.bp_get_the_profile_field_edit_value().'" />';
 			endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
 				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
@@ -180,7 +180,7 @@ function wds_get_register_fields( $account_type ){
 				endif;
 				$return.='</label>';
 				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
-				$return.='<textarea rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
+				$return.='<textarea class="form-control" rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
 				$return.='</textarea>';
 			endif;
 			if ( 'selectbox' == bp_get_the_profile_field_type() ) :
@@ -197,7 +197,7 @@ function wds_get_register_fields( $account_type ){
 				}else{
 					$onchange="";
 				}
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
+				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
 					 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
 						$return .= '<option selected="selected" value=""> ---- </option>';
 					 }
@@ -212,7 +212,7 @@ function wds_get_register_fields( $account_type ){
 				endif;
 				$return.='</label>';
 				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
+				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
 					$return.=bp_get_the_profile_field_options();
 				$return.='</select>';
 			endif;

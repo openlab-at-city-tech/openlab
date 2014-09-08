@@ -324,12 +324,16 @@ function openlab_registration_page() {
     ?>
 
     <div class="page" id="register-page">
+        
+        <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
 
-        <form action="" name="signup_form" id="signup_form" class="standard-form" method="post" enctype="multipart/form-data">
+        <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
 
             <?php if ('request-details' == bp_get_current_signup_step()) : ?>
-
-                <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
+            
+            <div class="panel panel-default">
+                            <div class="panel-heading bold">Account Details</div>
+                            <div class="panel-body">
 
                 <?php do_action('template_notices') ?>
 
@@ -341,40 +345,42 @@ function openlab_registration_page() {
 
                     <?php /*                     * *** Basic Account Details ***** */ ?>
 
-                    <h4><?php _e('Account Details', 'buddypress') ?></h4>
-
                     <label for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
                     <?php do_action('bp_signup_username_errors') ?>
-                    <input type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
+                    <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
 
                     <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
                     <?php do_action('bp_signup_email_errors') ?>
-                    <input type="text" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
+                    <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
 
                     <label for="signup_email_confirm">Confirm Email Address (required)</label>
-                    <input type="text" name="signup_email_confirm" id="signup_email_confirm" value="" />
+                    <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="" />
 
                     <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
                     <?php do_action('bp_signup_password_errors') ?>
-                    <input type="password" name="signup_password" id="signup_password" value="" />
+                    <input class="form-control" type="password" name="signup_password" id="signup_password" value="" />
 
                     <label for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
                     <?php do_action('bp_signup_password_confirm_errors') ?>
-                    <input type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
+                    <input class="form-control" type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
 
                 </div><!-- #basic-details-section -->
+                </div>
+            </div><!--.panel-->
 
                 <?php do_action('bp_after_account_details_fields') ?>
 
                 <?php /*                 * *** Extra Profile Details ***** */ ?>
 
                 <?php if (bp_is_active('xprofile')) : ?>
+            
+                    <div class="panel panel-default">
+                            <div class="panel-heading bold">Public Profile Details</div>
+                            <div class="panel-body">
 
                     <?php do_action('bp_before_signup_profile_fields') ?>
 
                     <div class="register-section" id="profile-details-section">
-
-                        <h4><?php _e('Public Profile Details', 'buddypress') ?></h4>
 
                         <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
@@ -383,6 +389,8 @@ function openlab_registration_page() {
                         <?php do_action('bp_after_signup_profile_fields') ?>
 
                     </div><!-- #profile-details-section -->
+                    </div>
+            </div><!--.panel-->
 
 
 
@@ -390,12 +398,12 @@ function openlab_registration_page() {
 
                 <?php do_action('bp_before_registration_submit_buttons') ?>
 
-                <div class="sign-up-terms">
+                <p class="sign-up-terms">
                     By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
-                </div>
+                </p>
 
                 <div class="submit">
-                    <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" value="<?php _e('Complete Sign Up', 'buddypress') ?> &rarr;" />
+                    <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?> <span class='fa fa-chevron-circle-right'></span>" />
                 </div>
 
                 <?php do_action('bp_after_registration_submit_buttons') ?>
@@ -406,7 +414,9 @@ function openlab_registration_page() {
 
             <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
 
-                <h2><?php _e('Sign Up Complete!', 'buddypress') ?></h2>
+                <div class="panel panel-default">
+                            <div class="panel-heading bold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
+                            <div class="panel-body">
 
                 <?php do_action('template_notices') ?>
 
@@ -470,6 +480,9 @@ function openlab_registration_page() {
             <?php endif; // completed-confirmation signup step   ?>
 
             <?php do_action('bp_custom_signup_steps') ?>
+                </div>
+            </div><!--.panel-->
+                
 
         </form>
 
