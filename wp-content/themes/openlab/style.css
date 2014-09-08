@@ -7422,7 +7422,7 @@ body .align-left {
   color: #666666;
 }
 #group-list .group-item-wrapper h2 {
-  margin: 7px 0 10px;
+  margin: 0 0 10px;
 }
 #group-list .group-item-wrapper a {
   color: inherit;
@@ -7559,7 +7559,7 @@ body .align-left {
   color: #ffffff;
 }
 .messages #group-list .group-item-wrapper {
-  height: 150px;
+  height: 152px;
 }
 /**help**/
 .col-help .page-title {

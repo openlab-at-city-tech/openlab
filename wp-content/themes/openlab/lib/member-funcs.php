@@ -875,3 +875,24 @@ function openlab_member_header() {
 }
 
 add_action('bp_before_member_body', 'openlab_member_header');
+
+function openlab_messages_pagination() {
+    global $messages_template;
+
+    if ((int) $messages_template->total_thread_count && (int) $messages_template->pag_num) {
+        $pagination = paginate_links(array(
+            'base' => add_query_arg( $page_arg, array('mpage' => '%#%' )),
+            'format' => '',
+            'total' => ceil((int) $messages_template->total_thread_count / (int) $messages_template->pag_num),
+            'current' => $messages_template->pag_page,
+            'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
+            'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+            'mid_size' => 3,
+            'type' => 'list',
+        ));
+    }
+    
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+    return $pagination;
+}

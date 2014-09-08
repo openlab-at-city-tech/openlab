@@ -18,10 +18,10 @@
 		<?php if ( $mstatus ) { ?>
 			<div id="m-<?php bp_message_thread_id() ?>" class="message col-md-12 <?php echo $read ?>">
                             <div class="group-item-wrapper">
-				<div class="item-avatar col-sm-8">	
+				<div class="item-avatar col-sm-9">	
                                     <a href="<?php bp_message_thread_view_link() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $messages_template->thread->last_sender_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Message #<?php echo bp_message_thread_id(); ?>"/></a>
 				</div>
-				<div class="item col-sm-16">
+				<div class="item col-sm-15">
 					<h2 class="item-title"><a href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><?php bp_message_thread_subject() ?></a></h2>
 					<div class="info-line">
 						<?php if ( 'sentbox' != bp_current_action() ) : ?>
@@ -47,10 +47,10 @@
 		<?php endwhile; ?>
 
 
-	<div class="pagination no-ajax" id="user-pag">
+	<div id="pag-bottom" class="pagination">
 	
 		<div class="pagination-links" id="messages-dir-pag">
-			<?php bp_messages_pagination() ?>
+                        <?php echo openlab_messages_pagination(); ?>
 		</div>
 
 	</div><!-- .pagination -->

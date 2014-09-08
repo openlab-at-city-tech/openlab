@@ -146,3 +146,14 @@ function openlab_custom_form_classes($classes){
 }
 
 add_filter('wpcf7_form_class_attr','openlab_custom_form_classes');
+
+function openlab_message_thread_excerpt_custom_size($message){
+    global $messages_template;
+    
+    $message = strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 55 ) );
+    
+    return $message;
+    
+}
+
+add_filter('bp_get_message_thread_excerpt','openlab_message_thread_excerpt_custom_size');
