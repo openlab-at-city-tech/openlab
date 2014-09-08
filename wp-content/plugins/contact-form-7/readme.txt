@@ -2,9 +2,9 @@
 Contributors: takayukister
 Donate link: http://contactform7.com/donate/
 Tags: contact, form, contact form, feedback, email, ajax, captcha, akismet, multilingual
-Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 3.6
+Requires at least: 3.8
+Tested up to: 4.0
+Stable tag: 3.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,9 +48,9 @@ The following are other recommended plugins by the author of Contact Form 7.
 * Chinese, Simplified (zh_CN) - [Soz](http://www.webtoolol.com/), [Keefe Dunn](http://dengkefu.com/), [Stella Hu](http://prowordpresser.com/)
 * Chinese, Traditional (zh_TW) - [James Wu](http://jameswublog.com)
 * Croatian (hr) - [tolingo Translation Services](http://www.tolingo.com)
-* Czech (cs_CZ) - Korry, [Radovan Fiser](http://algymsa.cz/), [Tomas Vesely](http://www.mcmotylek.cz/), [Pavel Bilek](http://chcistranky.eu/zdarma/)
+* Czech (cs_CZ) - Korry, [Radovan Fiser](http://algymsa.cz/), [Tomas Vesely](http://www.mcmotylek.cz/), [Pavel Bilek](http://chcistranky.eu/zdarma/), Vladislav Šenk
 * Danish (da_DK) - [Jens Griebel](http://www.kompas-it.dk/), [Georg S. Adamsen](http://wordpress.blogos.dk/)
-* Dutch (nl_NL) - [Chris Devriese](http://www.100it.be/), [Martin Hein](http://www.split-a-pixel.nl/), [Rene](http://wpwebshop.com/), [TenSheep](http://tensheep.nl/)
+* Dutch (nl_NL) - [Chris Devriese](http://www.100it.be/), [Martin Hein](http://www.split-a-pixel.nl/), [Rene](http://wpwebshop.com/), [TenSheep](http://tensheep.nl/), [Tim de Hoog](http://www.ecommany.com/)
 * Esperanto (eo_EO) - Arkadiusz Zychewicz
 * Estonian (et) - [Peeter Rahuvarm](http://www.kraabus.ee), Egon Elbre
 * Finnish (fi) - [Miika Turunen](http://www.webwork.fi/), [Mediajalostamo](http://www.mediajalostamo.fi/), [Jani Alha](http://www.wysiwyg.fi/)
@@ -58,8 +58,9 @@ The following are other recommended plugins by the author of Contact Form 7.
 * Galician (gl_ES) - [Arume Desenvolvementos Informáticos](http://www.arumeinformatica.es/)
 * Georgian (ka_GE) - [Nodar Rocko Davituri](http://davituri.com/)
 * German (de_DE) - [Marcel Spitau](http://blog.spitau.de), [Ivan Graf](http://blog.bildergallery.com/)
-* Greek (el) - [Nick Mouratidis](http://www.kepik.gr/), [Pr. friedlich](http://friedlich.wordpress.com/)
+* Greek (el) - [Nick Mouratidis](http://www.kepik.gr/), [Pr. friedlich](http://friedlich.wordpress.com/), John D. Dimoferlias
 * Gujarati (gu_IN) - [Apoto](http://www.apoto.com/)
+* Haitian (ht) - [Lam Tu Do](http://bizover.net/)
 * Hebrew (he_IL) - [Yaron Ofer](http://www.gadgetguru.co.il/), [Arik Galansky](http://www.arikg.co.il/)
 * Hindi (hi_IN) - [Tarun Joshi](http://www.readers-cafe.net/), [Ashish](http://outshinesolutions.com/)
 * Hungarian (hu_HU) - [Andras Hirschler](http://hia.itblog.hu/), [János Csárdi-Braunstein](http://blogocska.org/), [Farkas Győző](http://www.sakraft.hu/)
@@ -68,9 +69,9 @@ The following are other recommended plugins by the author of Contact Form 7.
 * Irish (ga_IE) - [Vikas Arora](http://www.wiznicworld.com/)
 * Italian (it_IT) - [Bruno](http://www.brunosalzano.com), [Gianni Diurno](http://gidibao.net/)
 * Japanese (ja) - [Takayuki Miyoshi](http://ideasilo.wordpress.com)
-* Korean (ko_KR) - Seong Eun Lee, [Jong-In Kim](http://incommunity.codex.kr/wordpress/)
+* Korean (ko_KR) - Seong Eun Lee, [Jong-In Kim](http://incommunity.codex.kr/wordpress/), [martian36](http://martian36.tistory.com/)
 * Latvian (lv) - [Sandis Veinbergs](http://www.kleofass.lv/)
-* Lithuanian (lt_LT) - [Ernestas Kardzys](http://www.ernestas.info/), [Vincent G](http://www.host1free.com/)
+* Lithuanian (lt_LT) - [Ernestas Kardzys](http://www.ernestas.info/), [Vincent G](http://www.host1free.com/), [Mantas Malcius](http://mantas.malcius.lt/)
 * Macedonian (mk_MK) - [Darko](http://www.findermind.com/)
 * Malay (ms_MY) - [Zairul Azmil](http://www.zairul.com/)
 * Malayalam (ml_IN) - [RAHUL.S.A](http://www.infution.co.cc/)
@@ -79,6 +80,7 @@ The following are other recommended plugins by the author of Contact Form 7.
 * Persian (Farsi; fa_IR) - [Mohammad Musavi](http://www.musavis.com/), [Mohsen Firoozmandan](http://www.rankbazar.com/), Ghaem Omidi
 * Polish (pl_PL) - [Zbigniew Czernik](http://zibik.jogger.pl/), [Daniel Fruzynski](http://www.poradnik-webmastera.com), [RafalDesign](http://www.rafaldesign.pl/), [Bartosz Arendt](http://digitalfactory.pl/)
 * Portuguese (pt_PT) - [Hugo Baeta](http://hugobaeta.com), [Pedro Nave](http://pedronave.com/)
+* Punjabi (pa_IN) - Jasvinder Sing
 * Russian (ru_RU) - Dmitry Volotovich, [Denis Voituk](http://artprima.cz/), [kg69design](http://kg69design.com/)
 * Romanian (ro_RO) - [Stas Sushkov](http://stas.nerd.ro/), [Anunturi Jibo](http://www.jibo.ro/), [Marius Olar](http://webdudes.ro/), [Inbox Translation](http://inboxtranslation.com/)
 * Serbian (sr_RS) - [Vedran](http://www.seorabbit.com/), [Aleksandar Urošević](http://blog.urosevic.net/)
@@ -89,12 +91,12 @@ The following are other recommended plugins by the author of Contact Form 7.
 * Swedish (sv_SE) - [Fredrik Jonsson](http://www.fredda-o-ac.se/), [the Swedish community](http://wp-support.se/)
 * Tagalog (tl) - [Rupert Agnew Lanuza](http://www.rupertlanuza.com/), [Hanne](http://pointen.dk/), [Language Connect](http://www.languageconnect.net/)
 * Tamil (ta) - [Nitin Aggarwal](http://offshoreally.com/)
-* Thai (th) - [ToshiK](http://www.tuntikorn.com/), [kazama](http://blog.wordthai.com/)
+* Thai (th) - [ToshiK](http://www.tuntikorn.com/), [kazama](http://blog.wordthai.com/), [TG Knowledge](http://www.เกร็ดความรู้.com/)
 * Turkish (tr_TR) - [Roman Neumuller](http://katpatuka.wordpress.com), [Hasan Yılmaz](http://hedefturkce.com/), [Emin Buğra Saral](http://www.rahmetli.info/), Burak Yavuz
-* Ukrainian (uk) - [Andrey Kovba](http://myserver.com.ua/), [Ukrainian WordPress localization team](http://wordpress.co.ua/plugins/contact-form-7.html)
+* Ukrainian (uk) - [Andrey Kovba](http://myserver.com.ua/), [Ukrainian WordPress localization team](http://wordpress.co.ua/plugins/contact-form-7.html), Myroslava Pabyrivska
 * Vietnamese (vi) - Thanh Hải, Hà, [Khang Minh](http://betterwp.net/)
 
-If you have created your own language pack, or have an update of an existing one, you can send [gettext PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://ideasilo.wordpress.com/about/) so that I can bundle it into Contact Form 7. You can download the latest [POT file](http://plugins.svn.wordpress.org/contact-form-7/trunk/languages/wpcf7.pot), and [PO files in each language](http://plugins.svn.wordpress.org/contact-form-7/branches/languages/).
+If you have created your own language pack, or have an update of an existing one, you can send [gettext PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://ideasilo.wordpress.com/about/) so that I can bundle it into Contact Form 7. You can download the latest [POT file](http://plugins.svn.wordpress.org/contact-form-7/trunk/languages/contact-form-7.pot), and [PO files in each language](http://plugins.svn.wordpress.org/contact-form-7/branches/languages/).
 
 == Installation ==
 
@@ -121,18 +123,35 @@ Do you have questions or issues with Contact Form 7? Use these support channels 
 
 == Changelog ==
 
-= 3.6 =
+For more information, see [Releases](http://contactform7.com/category/releases/).
 
-* Accessibility: Apply role="alert" to response message and validation errors.
-* Accessibility: Apply aria-invalid="true" to input fields in which validation errors occuring.
-* Accessibility: Stop using floating-style validation error messages (not-valid-tip) which disappear with mouse-over, as it is not accessible.
-* Text domain has been changed from "wpcf7" to "contact-form-7" according with the standard of WordPress.org language packs.
-* Admin: "Add New" submenu has been added.
-* Flamingo: Sub-channel support.
-* Flamingo: Pass data to Flamingo in cases of spam detected, in addition to cases of mail sent.
-* Flamingo: Support flamingo_email, flamingo_name and flamingo_subject additional settings which allow to alter values passed to Flamingo.
-* New: Date format in mail.
-* New: wpcf7_submit action hook.
-* New: wpcf7_flamingo_submit_if and wpcf7_flamingo_get_value filter hooks.
-* The jQuery Form Plugin (jquery.form.js) has been updated to 3.46.0.
-* Translations for Brazilian Portuguese and French have been updated.
+= 3.9.3 =
+
+* Fixed: file uploading was disabled in some of server environments because of wrong use of mt_rand() function.
+* Translations for Hungarian has been updated.
+
+= 3.9.2 =
+
+* Fixed: incorrect behavior seen in demo mode.
+* Fixed: Flamingo saved submitter's contact info even when the submission was spam.
+* New: introduce wpcf7_skip_mail filter.
+* Enhancement: add a random-named directory to each uploaded file's temporary file path in order to make the path harder for a submitter to guess.
+* Translation for Punjabi has been created.
+* Translations for Turkish, Korean and Slovak have been updated.
+
+= 3.9.1 =
+
+* Fix: options with empty values didn't work correctly in a drop-down menu.
+* Fix: broke layout of input fields after validation by an incorrect jQuery use.
+* Fix: couldn't enqueue JavaScript manually with wpcf7_enqueue_scripts() when WPCF7_LOAD_JS was false.
+* Fix: couldn't enqueue CSS manually with wpcf7_enqueue_styles() when WPCF7_LOAD_CSS was false.
+* Translations for Greek and Hungarian have been updated.
+
+= 3.9 =
+
+* A major change has been made to the internal structure. For details, see [beta release announcement](http://contactform7.com/2014/07/02/contact-form-7-39-beta/).
+* The exclude_blank mail option has been introduced.
+* The wpcf7_load_js and wpcf7_load_css (functions and filter hooks) have been introduced.
+* The jQuery Form Plugin (jquery.form.js) has been updated to 3.51.0.
+* Translations for Persian and Slovak have been updated.
+* WordPress 3.8 or higher is required.

@@ -46,6 +46,8 @@
 
 		this.find('.wpcf7-exclusive-checkbox').wpcf7ExclusiveCheckbox();
 
+		this.find('.wpcf7-list-item.has-free-text').wpcf7ToggleCheckboxFreetext();
+
 		this.find('[placeholder]').wpcf7Placeholder();
 
 		if (_wpcf7.jqueryUi && ! _wpcf7.supportHtml5.date) {
@@ -126,7 +128,7 @@
 		$(data.into).trigger('submit.wpcf7');
 
 		if (1 == data.mailSent)
-			$form.resetForm().clearForm();
+			$form.resetForm();
 
 		$form.find('[placeholder].placeheld').each(function(i, n) {
 			$(n).val($(n).attr('placeholder'));
@@ -134,6 +136,8 @@
 
 		$responseOutput.append(data.message).slideDown('fast');
 		$responseOutput.attr('role', 'alert');
+
+		$.wpcf7UpdateScreenReaderResponse($form, data);
 	}
 
 	$.fn.wpcf7ExclusiveCheckbox = function() {
@@ -199,10 +203,55 @@
 		});
 	};
 
+	$.fn.wpcf7ToggleCheckboxFreetext = function() {
+		return this.each(function() {
+			var $wrap = $(this).closest('.wpcf7-form-control');
+
+			if ($(this).find(':checkbox, :radio').is(':checked')) {
+				$(this).find(':input.wpcf7-free-text').prop('disabled', false);
+			} else {
+				$(this).find(':input.wpcf7-free-text').prop('disabled', true);
+			}
+
+			$wrap.find(':checkbox, :radio').change(function() {
+				var $cb = $('.has-free-text', $wrap).find(':checkbox, :radio');
+				var $freetext = $(':input.wpcf7-free-text', $wrap);
+
+				if ($cb.is(':checked')) {
+					$freetext.prop('disabled', false).focus();
+				} else {
+					$freetext.prop('disabled', true);
+				}
+			});
+		});
+	};
+
 	$.fn.wpcf7NotValidTip = function(message) {
 		return this.each(function() {
-			var into = $(this);
-			into.hide().append('<span role="alert" class="wpcf7-not-valid-tip">' + message + '</span>').slideDown('fast');
+			var $into = $(this);
+
+			$into.find('span.wpcf7-not-valid-tip').remove();
+			$into.append('<span role="alert" class="wpcf7-not-valid-tip">' + message + '</span>');
+
+			if ($into.is('.use-floating-validation-tip *')) {
+				$('.wpcf7-not-valid-tip', $into).mouseover(function() {
+					$(this).wpcf7FadeOut();
+				});
+
+				$(':input', $into).focus(function() {
+					$('.wpcf7-not-valid-tip', $into).not(':hidden').wpcf7FadeOut();
+				});
+			}
+		});
+	};
+
+	$.fn.wpcf7FadeOut = function() {
+		return this.each(function() {
+			$(this).animate({
+				opacity: 0
+			}, 'fast', function() {
+				$(this).css({'z-index': -100});
+			});
 		});
 	};
 
@@ -260,6 +309,33 @@
 			$(this).find('img.ajax-loader').css({ visibility: 'hidden' });
 		});
 	};
+
+	$.wpcf7UpdateScreenReaderResponse = function($form, data) {
+		$('.wpcf7 .screen-reader-response').html('').attr('role', '');
+
+		if (data.message) {
+			var $response = $form.siblings('.screen-reader-response').first();
+			$response.append(data.message);
+
+			if (data.invalids) {
+				var $invalids = $('<ul></ul>');
+
+				$.each(data.invalids, function(i, n) {
+					if (n.idref) {
+						var $li = $('<li></li>').append($('<a></a>').attr('href', '#' + n.idref).append(n.message));
+					} else {
+						var $li = $('<li></li>').append(n.message);
+					}
+
+					$invalids.append($li);
+				});
+
+				$response.append($invalids);
+			}
+
+			$response.attr('role', 'alert').focus();
+		}
+	}
 
 	$.wpcf7SupportHtml5 = function() {
 		var features = {};

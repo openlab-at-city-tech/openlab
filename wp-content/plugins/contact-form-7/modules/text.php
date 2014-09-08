@@ -38,7 +38,7 @@ function wpcf7_text_shortcode_handler( $tag ) {
 	$atts['size'] = $tag->get_size_option( '40' );
 	$atts['maxlength'] = $tag->get_maxlength_option();
 	$atts['class'] = $tag->get_class_option( $class );
-	$atts['id'] = $tag->get_option( 'id', 'id', true );
+	$atts['id'] = $tag->get_id_option();
 	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
 
 	if ( $tag->has_option( 'readonly' ) )
@@ -54,28 +54,11 @@ function wpcf7_text_shortcode_handler( $tag ) {
 	if ( $tag->has_option( 'placeholder' ) || $tag->has_option( 'watermark' ) ) {
 		$atts['placeholder'] = $value;
 		$value = '';
-	} elseif ( empty( $value ) && is_user_logged_in() ) {
-		$user = wp_get_current_user();
-
-		$user_options = array(
-			'default:user_login' => 'user_login',
-			'default:user_email' => 'user_email',
-			'default:user_url' => 'user_url',
-			'default:user_first_name' => 'first_name',
-			'default:user_last_name' => 'last_name',
-			'default:user_nickname' => 'nickname',
-			'default:user_display_name' => 'display_name' );
-
-		foreach ( $user_options as $option => $prop ) {
-			if ( $tag->has_option( $option ) ) {
-				$value = $user->{$prop};
-				break;
-			}
-		}
+	} elseif ( '' === $value ) {
+		$value = $tag->get_default_option();
 	}
 
-	if ( wpcf7_is_posted() && isset( $_POST[$tag->name] ) )
-		$value = stripslashes_deep( $_POST[$tag->name] );
+	$value = wpcf7_get_hangover( $tag->name, $value );
 
 	$atts['value'] = $value;
 
@@ -91,7 +74,7 @@ function wpcf7_text_shortcode_handler( $tag ) {
 
 	$html = sprintf(
 		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
-		$tag->name, $atts, $validation_error );
+		sanitize_html_class( $tag->name ), $atts, $validation_error );
 
 	return $html;
 }
@@ -114,7 +97,7 @@ function wpcf7_text_validation_filter( $result, $tag ) {
 	$name = $tag->name;
 
 	$value = isset( $_POST[$name] )
-		? trim( stripslashes( strtr( (string) $_POST[$name], "\n", " " ) ) )
+		? trim( wp_unslash( strtr( (string) $_POST[$name], "\n", " " ) ) )
 		: '';
 
 	if ( 'text*' == $tag->type ) {
@@ -152,6 +135,10 @@ function wpcf7_text_validation_filter( $result, $tag ) {
 			$result['valid'] = false;
 			$result['reason'][$name] = wpcf7_get_message( 'invalid_tel' );
 		}
+	}
+
+	if ( isset( $result['reason'][$name] ) && $id = $tag->get_id_option() ) {
+		$result['idref'][$name] = $id;
 	}
 
 	return $result;
@@ -202,19 +189,19 @@ function wpcf7_add_tag_generator_text() {
 		'wpcf7-tg-pane-tel', 'wpcf7_tg_pane_tel' );
 }
 
-function wpcf7_tg_pane_text( &$contact_form ) {
+function wpcf7_tg_pane_text( $contact_form ) {
 	wpcf7_tg_pane_text_and_relatives( 'text' );
 }
 
-function wpcf7_tg_pane_email( &$contact_form ) {
+function wpcf7_tg_pane_email( $contact_form ) {
 	wpcf7_tg_pane_text_and_relatives( 'email' );
 }
 
-function wpcf7_tg_pane_url( &$contact_form ) {
+function wpcf7_tg_pane_url( $contact_form ) {
 	wpcf7_tg_pane_text_and_relatives( 'url' );
 }
 
-function wpcf7_tg_pane_tel( &$contact_form ) {
+function wpcf7_tg_pane_tel( $contact_form ) {
 	wpcf7_tg_pane_text_and_relatives( 'tel' );
 }
 
@@ -270,9 +257,9 @@ function wpcf7_tg_pane_text_and_relatives( $type = 'text' ) {
 </tr>
 </table>
 
-<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'contact-form-7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag" readonly="readonly" onfocus="this.select()" /></div>
+<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'contact-form-7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag wp-ui-text-highlight code" readonly="readonly" onfocus="this.select()" /></div>
 
-<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'contact-form-7' ) ); ?><br /><span class="arrow">&#11015;</span>&nbsp;<input type="text" class="mail-tag" readonly="readonly" onfocus="this.select()" /></div>
+<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'contact-form-7' ) ); ?><br /><input type="text" class="mail-tag wp-ui-text-highlight code" readonly="readonly" onfocus="this.select()" /></div>
 </form>
 </div>
 <?php

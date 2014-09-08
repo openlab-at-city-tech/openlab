@@ -31,10 +31,10 @@ function wpcf7_date_shortcode_handler( $tag ) {
 	$atts = array();
 
 	$atts['class'] = $tag->get_class_option( $class );
-	$atts['id'] = $tag->get_option( 'id', 'id', true );
+	$atts['id'] = $tag->get_id_option();
 	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
-	$atts['min'] = $tag->get_option( 'min', 'date', true );
-	$atts['max'] = $tag->get_option( 'max', 'date', true );
+	$atts['min'] = $tag->get_date_option( 'min' );
+	$atts['max'] = $tag->get_date_option( 'max' );
 	$atts['step'] = $tag->get_option( 'step', 'int', true );
 
 	if ( $tag->has_option( 'readonly' ) )
@@ -52,8 +52,7 @@ function wpcf7_date_shortcode_handler( $tag ) {
 		$value = '';
 	}
 
-	if ( wpcf7_is_posted() && isset( $_POST[$tag->name] ) )
-		$value = stripslashes_deep( $_POST[$tag->name] );
+	$value = wpcf7_get_hangover( $tag->name, $value );
 
 	$atts['value'] = $value;
 
@@ -69,7 +68,7 @@ function wpcf7_date_shortcode_handler( $tag ) {
 
 	$html = sprintf(
 		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
-		$tag->name, $atts, $validation_error );
+		sanitize_html_class( $tag->name ), $atts, $validation_error );
 
 	return $html;
 }
@@ -85,8 +84,8 @@ function wpcf7_date_validation_filter( $result, $tag ) {
 
 	$name = $tag->name;
 
-	$min = $tag->get_option( 'min', 'date', true );
-	$max = $tag->get_option( 'max', 'date', true );
+	$min = $tag->get_date_option( 'min' );
+	$max = $tag->get_date_option( 'max' );
 
 	$value = isset( $_POST[$name] )
 		? trim( strtr( (string) $_POST[$name], "\n", " " ) )
@@ -104,6 +103,10 @@ function wpcf7_date_validation_filter( $result, $tag ) {
 	} elseif ( '' != $value && ! empty( $max ) && $max < $value ) {
 		$result['valid'] = false;
 		$result['reason'][$name] = wpcf7_get_message( 'date_too_late' );
+	}
+
+	if ( isset( $result['reason'][$name] ) && $id = $tag->get_id_option() ) {
+		$result['idref'][$name] = $id;
 	}
 
 	return $result;
@@ -145,7 +148,7 @@ function wpcf7_add_tag_generator_date() {
 		'wpcf7-tg-pane-date', 'wpcf7_tg_pane_date' );
 }
 
-function wpcf7_tg_pane_date( &$contact_form ) {
+function wpcf7_tg_pane_date( $contact_form ) {
 	wpcf7_tg_pane_date_and_relatives( 'date' );
 }
 
@@ -192,9 +195,9 @@ function wpcf7_tg_pane_date_and_relatives( $type = 'date' ) {
 </tr>
 </table>
 
-<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'contact-form-7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag" readonly="readonly" onfocus="this.select()" /></div>
+<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'contact-form-7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag wp-ui-text-highlight code" readonly="readonly" onfocus="this.select()" /></div>
 
-<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'contact-form-7' ) ); ?><br /><span class="arrow">&#11015;</span>&nbsp;<input type="text" class="mail-tag" readonly="readonly" onfocus="this.select()" /></div>
+<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'contact-form-7' ) ); ?><br /><input type="text" class="mail-tag wp-ui-text-highlight code" readonly="readonly" onfocus="this.select()" /></div>
 </form>
 </div>
 <?php
