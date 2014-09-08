@@ -9,7 +9,7 @@
 
     <?php do_action('bp_before_member_messages_content') ?>
 
-    <div class="messages">
+    <div id="group-list" class="messages row">
         <?php if ('notices' == bp_current_action()) : ?>
             <?php bp_get_template_part('members/single/messages/notices-loop'); ?>
 

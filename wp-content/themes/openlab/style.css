@@ -7555,8 +7555,11 @@ body .align-left {
 .members.friends #group-list .group-item-wrapper .info-row {
   height: 90px;
 }
-.members.friends #group-list .group-item-wrapper a {
+.members.friends #group-list .group-item-wrapper .btn {
   color: #ffffff;
+}
+.messages #group-list .group-item-wrapper {
+  height: 150px;
 }
 /**help**/
 .col-help .page-title {
