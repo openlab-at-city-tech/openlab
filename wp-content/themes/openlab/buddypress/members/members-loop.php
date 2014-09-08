@@ -4,13 +4,12 @@
 
 <?php if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : ?>
 
-	<div id="pag-top" class="pagination">
-
-		<div class="pag-count" id="member-dir-count-top">
+	<div class="row group-archive-header-row">
+            <div class="current-group-filters current-portfolio-filters col-sm-19">
 			<?php bp_members_pagination_count() ?>
 		</div>
 
-		<div class="pagination-links" id="member-dir-pag-top">
+		<div class="group-count col-sm-5">
 			<?php bp_members_pagination_links() ?>
 		</div>
 
@@ -18,17 +17,19 @@
 
 	<?php do_action( 'bp_before_directory_members_list' ) ?>
 
-	<ul id="members-list" class="item-list">
+	<div id="group-list" class="item-list row">
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<li>
-			<div class="item-avatar">
-				<a href="<?php bp_member_permalink() ?>"><?php bp_member_avatar() ?></a>
+		<div class="group-item col-md-8">
+                    <div class="group-item-wrapper">
+                        <div class="row info-row">
+			<div class="item-avatar col-sm-8">
+				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
 			</div>
 
-			<div class="item">
-				<div class="item-title">
-					<a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a>
+			<div class="item col-sm-16">
+				<h2 class="item-title">
+                                    <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h2>
 
 					<?php if ( bp_get_member_latest_update() ) : ?>
 
@@ -36,11 +37,11 @@
 
 					<?php endif; ?>
 
-				</div>
-
-				<div class="item-meta"><span class="activity"><?php bp_member_last_active() ?></span></div>
-                
-                <div class="action">
+				<div class="timestamp"><?php bp_member_last_active() ?></div>
+                                </div>
+                        </div>
+                <div class="row">
+                <div class="action col-sm-24">
 
 				<?php do_action( 'bp_directory_members_actions' ); ?>
 
@@ -57,13 +58,12 @@
 				  * bp_member_profile_data( 'field=the field name' );
 				  */
 				?>
-			</div>
-
-			<div class="clear"></div>
-		</li>
+                    </div>
+                    </div>
+		</div>
 
 	<?php endwhile; ?>
-	</ul>
+	</div>
 
 	<?php do_action( 'bp_after_directory_members_list' ) ?>
 

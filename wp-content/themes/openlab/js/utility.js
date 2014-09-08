@@ -129,15 +129,18 @@
         function clear_form() {
             document.getElementById('group_seq_form').reset();
         }
-        
+
         //member profile friend/cancel friend hover fx
-        if($('.btn.is_friend.friendship-button').length){
-            var thisButton = $('.btn.is_friend.friendship-button');
-            var thisButtonHTML = thisButton.html();
-            thisButton.hover(function(){
-                thisButton.html('<span class="pull-left"><i class="fa fa-user"></i> Cancel Friend</span><i class="fa fa-minus-circle pull-right"></i>');
-            },function(){
-                thisButton.html(thisButtonHTML);
+        if ($('.btn.is_friend.friendship-button').length) {
+            var allButtons = $('.btn.is_friend.friendship-button');
+            allButtons.each(function() {
+                var thisButton = $(this);
+                var thisButtonHTML = $(this).html();
+                thisButton.hover(function() {
+                    thisButton.html('<span class="pull-left"><i class="fa fa-user"></i> Cancel Friend</span><i class="fa fa-minus-circle pull-right"></i>');
+                }, function() {
+                    thisButton.html(thisButtonHTML);
+                });
             });
         }
 

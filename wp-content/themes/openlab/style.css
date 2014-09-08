@@ -7549,6 +7549,15 @@ body .align-left {
 #member-item-body .panel .panel-body p {
   margin-bottom: 0;
 }
+.members.friends #group-list .group-item-wrapper {
+  height: auto;
+}
+.members.friends #group-list .group-item-wrapper .info-row {
+  height: 90px;
+}
+.members.friends #group-list .group-item-wrapper a {
+  color: #ffffff;
+}
 /**help**/
 .col-help .page-title {
   font-size: 14px;
