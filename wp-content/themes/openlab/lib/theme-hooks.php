@@ -3,6 +3,28 @@
 /**
  * Theme based hooks
  */
+
+function openlab_custom_the_content($content){
+    global $post;
+    
+    if($post->post_name == 'contact-us' && $post->post_type == 'page'){
+        $form = do_shortcode('[contact-form-7 id="447" title="Contact Form 1"]');
+        $content = <<<HTML
+                <div class="panel panel-default">
+                    <div class="panel-heading">Contact Form</div>
+                    <div class="panel-body">
+                        {$content}
+                        {$form}
+                    </div>
+                </div>
+HTML;
+    }
+    
+    return $content;
+}
+
+add_filter('the_content','openlab_custom_the_content');
+
 function openlab_header_bar() {
     ?>
     <nav class="navbar navbar-default" role="navigation">
@@ -118,3 +140,9 @@ function openlab_plugin_custom_header_elements() {
 }
 
 add_action('bp_before_group_plugin_template', 'openlab_plugin_custom_header_elements');
+
+function openlab_custom_form_classes($classes){
+    return 'form-panel '.$classes;
+}
+
+add_filter('wpcf7_form_class_attr','openlab_custom_form_classes');
