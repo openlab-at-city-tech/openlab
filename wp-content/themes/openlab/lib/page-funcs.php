@@ -403,7 +403,7 @@ function openlab_registration_page() {
                 </p>
 
                 <div class="submit">
-                    <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?> <span class='fa fa-chevron-circle-right'></span>" />
+                    <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
                 </div>
 
                 <?php do_action('bp_after_registration_submit_buttons') ?>
