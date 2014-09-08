@@ -16,7 +16,9 @@
 
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>
 
-			<div class="message-box">
+			<div class="message-box panel panel-default">
+                            
+                            <div class="panel-body">
 
 				<div class="message-metadata">
 
@@ -39,7 +41,7 @@
 
 				<?php do_action( 'bp_after_message_content' ) ?>
 
-				<div class="clear"></div>
+				</div>
 
 			</div><!-- .message-box -->
 
@@ -49,10 +51,11 @@
 
 		<?php do_action( 'bp_before_message_thread_reply' ) ?>
 
-		<form id="send-reply" action="<?php bp_messages_form_action() ?>" method="post" class="standard-form">
+		<form id="send-reply" action="<?php bp_messages_form_action() ?>" method="post" class="standard-form form-panel">
 
-			<div class="message-box">
+			<div class="message-box panel panel-default">
 
+                            <div class="panel-heading bold">
 				<div class="message-metadata">
 
 					<?php do_action( 'bp_before_message_meta' ) ?>
@@ -66,17 +69,19 @@
 					<?php do_action( 'bp_after_message_meta' ) ?>
 
 				</div><!-- .message-metadata -->
+                            </div>
 
+                            <div class="panel-body">
 				<div class="message-content">
 
 					<?php do_action( 'bp_before_message_reply_box' ) ?>
 
-					<textarea name="content" id="message_content" rows="15" cols="40"></textarea>
+					<textarea class="form-control" name="content" id="message_content" rows="15" cols="40"></textarea>
 
 					<?php do_action( 'bp_after_message_reply_box' ) ?>
 
 					<div class="submit">
-						<input type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?> &rarr;" id="send_reply_button"/>
+						<input class="btn btn-primary" type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?> &rarr;" id="send_reply_button"/>
 						<span class="ajax-loader"></span>
 					</div>
 
@@ -84,6 +89,7 @@
 					<?php wp_nonce_field( 'messages_send_message', 'send_message_nonce' ) ?>
 
 				</div><!-- .message-content -->
+                            </div>
 
 			</div><!-- .message-box -->
 
