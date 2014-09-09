@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This template, which powers the group Send Invites tab when IA is enabled, can be overridden
  * with a template file at groups/single/invite-anyone.php
