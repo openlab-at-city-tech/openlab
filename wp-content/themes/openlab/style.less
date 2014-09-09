@@ -731,6 +731,9 @@ body{
         h2{
             margin: 0 0 10px;
         }
+        h4{
+            margin: 0 0 10px;
+        }
         a{
             color: inherit;
         }
@@ -803,6 +806,13 @@ body{
         }
     }
 }
+.group-members{
+    &#group-list{
+        .group-item-wrapper{
+            height: 90px;
+        }
+    }
+}
 .plugins{
     #item-body{
         margin-top: 30px;
@@ -865,6 +875,24 @@ body{
     }
     .toggle-content{
         width: 100%;
+    }
+}
+/**invite-anyone specific**/
+#invite-anyone-invite-list{
+    li{
+        border: @border-light-gray;
+        border-radius: 4px;
+        float: left;
+        margin-right: 1%;
+        padding: 1%;
+        width: 31%;
+        h4{
+            margin: 0 0 4px;
+        }
+        img{
+            float: left;
+            margin-right: 5px;
+        }
     }
 }
 /**member profiles**/

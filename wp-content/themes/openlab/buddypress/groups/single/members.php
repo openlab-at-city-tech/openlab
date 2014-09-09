@@ -2,35 +2,30 @@
 
 	<?php do_action( 'bp_before_group_members_content' ) ?>
     <div class="row"><div class="col-md-24">
-        <div class="submenu">
+        <div class="submenu col-sm-16">
 		<ul class="nav nav-inline">
 			<?php openlab_group_membership_tabs(); ?>
 		</ul>
 	</div><!-- .item-list-tabs --> 
-        </div></div>
-
-	<div class="pagination no-ajax">
-
-		<div id="member-count" class="pag-count">
+        <div id="member-count" class="pag-count col-sm-8 align-right">
 			<?php bp_group_member_pagination_count() ?>
 		</div>
 
-		<div id="member-pagination" class="pagination-links">
-			<?php bp_group_member_pagination() ?>
-		</div>
-
-	</div>
+        </div></div>
 
 	<?php do_action( 'bp_before_group_members_list' ) ?>
 
-	<ul id="member-list" class="item-list">
+	<div id="group-list" class="item-list group-members">
 		<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
 
-			<li>
-				<a href="<?php bp_group_member_domain() ?>">
-					<?php bp_group_member_avatar_thumb() ?>
-				</a>
-				<h5><?php bp_group_member_link() ?></h5>
+			<div class="group-item col-md-8">
+                            <div class="group-item-wrapper">
+                                <div class="row">
+                                <div class="item-avatar col-sm-8">
+				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                                </div>
+                                <div class="item col-sm-16">
+				<h4><?php bp_group_member_link() ?></h4>
 				<span class="activity"><?php bp_group_member_joined_since() ?></span>
 
 				<?php do_action( 'bp_group_members_list_item' ) ?>
@@ -44,11 +39,14 @@
 					</div>
 
 				<?php endif; ?>
-			</li>
+                                </div>
+                            </div>
+			</div>
+                        </div>
 
 		<?php endwhile; ?>
 
-	</ul>
+	</div>
 
 	<?php do_action( 'bp_after_group_members_content' ) ?>
 

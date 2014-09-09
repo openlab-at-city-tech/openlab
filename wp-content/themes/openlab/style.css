@@ -7424,6 +7424,9 @@ body .align-left {
 #group-list .group-item-wrapper h2 {
   margin: 0 0 10px;
 }
+#group-list .group-item-wrapper h4 {
+  margin: 0 0 10px;
+}
 #group-list .group-item-wrapper a {
   color: inherit;
 }
@@ -7484,6 +7487,9 @@ body .align-left {
 #members-list .inline-element:last-child {
   margin-right: 0;
 }
+.group-members#group-list .group-item-wrapper {
+  height: 90px;
+}
 .plugins #item-body {
   margin-top: 30px;
 }
@@ -7531,6 +7537,22 @@ body .align-left {
 }
 #doc-meta .toggle-content {
   width: 100%;
+}
+/**invite-anyone specific**/
+#invite-anyone-invite-list li {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  float: left;
+  margin-right: 1%;
+  padding: 1%;
+  width: 31%;
+}
+#invite-anyone-invite-list li h4 {
+  margin: 0 0 4px;
+}
+#invite-anyone-invite-list li img {
+  float: left;
+  margin-right: 5px;
 }
 /**member profiles**/
 #member-header .btn.is_friend.friendship-button:hover {
