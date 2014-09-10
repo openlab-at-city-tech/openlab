@@ -48,7 +48,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 <div class="row">
 	  	<?php
 		if (openlab_is_my_profile()) {
-			echo openlab_submenu_markup('groups', $filters['wds_group_type']);
+			echo openlab_submenu_markup('groups', $filters['wds_group_type'],false);
 		}
 		?>
   
@@ -118,7 +118,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 	<?php $group_type = $filters['wds_group_type'].'s'; ?>
 	  	<?php
 		if (openlab_is_my_profile()) {
-			echo openlab_submenu_markup('groups', $filters['wds_group_type']);
+			echo openlab_submenu_markup('groups', $filters['wds_group_type'], false);
 		}
 		?>
 </div>

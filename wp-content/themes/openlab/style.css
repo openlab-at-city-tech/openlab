@@ -6867,6 +6867,11 @@ blockquote .h6 {
   padding: 0 7px;
   line-height: 100%;
 }
+.nav.nav-inline li.no-link {
+  color: #49cabe;
+  padding: 0 7px;
+  font-weight: bold;
+}
 .nav.nav-inline li.current-menu-item a,
 .nav.nav-inline li:hover a,
 .nav.nav-inline li.current-menu-item span,

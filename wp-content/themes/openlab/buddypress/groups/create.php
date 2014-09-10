@@ -48,7 +48,7 @@
 
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
 
-        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel form-inline" enctype="multipart/form-data">
+        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel" enctype="multipart/form-data">
 
             <?php do_action('bp_before_create_group') ?>
 

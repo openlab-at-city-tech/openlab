@@ -206,11 +206,10 @@ function openlab_get_primary_help_term_name() {
  * @param type $opt_var
  * @return string
  */
-function openlab_submenu_markup($type = '', $opt_var = NULL) {
+function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true) {
     $submenu_text = '';
 
     $width = 'col-md-24';
-    $row_wrapper = true;
 
     switch ($type) {
         case 'invitations':
@@ -227,7 +226,6 @@ function openlab_submenu_markup($type = '', $opt_var = NULL) {
         case 'groups':
             $menu = openlab_my_groups_submenu($opt_var);
             $width = 'col-sm-19';
-            $row_wrapper = false;
             break;
         default:
             $submenu_text = 'My Settings: ';
