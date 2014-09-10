@@ -6809,6 +6809,9 @@ a:focus {
 a.no-deco {
   text-decoration: none;
 }
+a.btn-primary {
+  color: #ffffff;
+}
 ul,
 ol {
   margin: 10px 0 15px 0;
@@ -7070,6 +7073,9 @@ body .fill-gutter.fill-gutter-left {
 }
 body .no-margin.no-margin-top {
   margin-top: 0;
+}
+body .no-margin.no-margin-bottom {
+  margin-bottom: 0;
 }
 body .content-list {
   margin: 0;
@@ -7432,7 +7438,7 @@ body .align-left {
 #group-list .group-item-wrapper h4 {
   margin: 0 0 10px;
 }
-#group-list .group-item-wrapper a {
+#group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
 }
 #group-list .group-item-wrapper p {
@@ -7494,6 +7500,18 @@ body .align-left {
 }
 .group-members#group-list .group-item-wrapper {
   height: 90px;
+}
+.group-manage-members#group-list .group-item-wrapper {
+  height: 120px;
+}
+.group-manage-members#group-list .group-item-wrapper.no-btn {
+  height: 87px;
+}
+.group-manage-members#group-list .group-item-wrapper.moderators {
+  height: 107px;
+}
+.group-manage-members#group-list .group-item-wrapper.members {
+  height: 216px;
 }
 .plugins #item-body {
   margin-top: 30px;
@@ -7581,9 +7599,6 @@ body .align-left {
 }
 .members.friends #group-list .group-item-wrapper .info-row {
   height: 90px;
-}
-.members.friends #group-list .group-item-wrapper .btn {
-  color: #ffffff;
 }
 .messages #group-list .group-item-wrapper {
   height: 152px;

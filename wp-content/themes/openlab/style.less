@@ -43,15 +43,16 @@ p {
 a {
     color: @link-color;
     text-decoration: underline;
-
     &:hover,
         &:focus {
         color: @aqua;
         text-decoration: underline;
     }
-
     &.no-deco{
         text-decoration: none;
+    }
+    &.btn-primary{
+        color: @white;
     }
 }
 
@@ -352,6 +353,9 @@ body{
     .no-margin{
         &.no-margin-top{
             margin-top: 0;
+        }
+        &.no-margin-bottom{
+            margin-bottom: 0;
         }
     }
     .content-list{
@@ -740,7 +744,9 @@ body{
             margin: 0 0 10px;
         }
         a{
-            color: inherit;
+            :not(.btn-primary){
+                color: inherit;
+            }
         }
         p{
             color: @80gray;
@@ -815,6 +821,22 @@ body{
     &#group-list{
         .group-item-wrapper{
             height: 90px;
+        }
+    }
+}
+.group-manage-members{
+    &#group-list{
+        .group-item-wrapper{
+            height: 120px;
+            &.no-btn{
+                height: 87px;
+            }
+            &.moderators{
+                height: 107px;
+            }
+            &.members{
+                height: 216px;
+            }
         }
     }
 }
@@ -929,9 +951,6 @@ body{
             height: auto;
             .info-row{
                 height: 90px;
-            }
-            .btn{
-                color: @white;
             }
         }
     }

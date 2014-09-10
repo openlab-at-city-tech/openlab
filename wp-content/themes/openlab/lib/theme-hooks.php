@@ -157,3 +157,56 @@ function openlab_message_thread_excerpt_custom_size($message){
 }
 
 add_filter('bp_get_message_thread_excerpt','openlab_message_thread_excerpt_custom_size');
+
+/**
+ * This function overwrites the email status output from the buddypress group email subscription plugin
+ * This is done in order to inject Bootstrap classes
+ * @global type $members_template
+ * @global type $groups_template
+ * @param type $user_id
+ * @param type $group
+ * @return type
+ */
+function openlab_manage_members_email_status(  $user_id = '', $group = '' ) {
+	global $members_template, $groups_template;
+
+	// if group admins / mods cannot manage email subscription settings, stop now!
+	if ( get_option('ass-admin-can-edit-email') == 'no' ) {
+		return;
+	}
+
+	// no user ID? fallback on members loop user ID if it exists
+	if ( ! $user_id ) {
+		$user_id = ! empty( $members_template->member->user_id ) ? $members_template->member->user_id : false;
+	}
+
+	// no user ID? fallback on group loop if it exists
+	if( ! $group ) {
+		$group = ! empty( $groups_template->group ) ? $groups_template->group : false;
+	}
+
+	// no user or group? stop now!
+	if ( ! $user_id || ! is_object( $group ) ) {
+		return;
+	}
+
+	$user_id = (int) $user_id;
+
+	$group_url = bp_get_group_permalink( $group ) . 'admin/manage-members/email';
+	$sub_type = ass_get_group_subscription_status( $user_id, $group->id );
+	echo '<p class="italics no-margin no-margin-bottom"> '.__('Email status:','bp-ass').' ' . ass_subscribe_translate( $sub_type ) . '.';
+	echo ' &nbsp; '.__('Change to:','bp-ass').' ';
+        echo '</p>';
+	echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url( $group_url.'/no/'.$user_id, 'ass_member_email_status' ) . '">'.__('No Email','bp-ass').'</a>';
+	echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url( $group_url.'/sum/'.$user_id, 'ass_member_email_status' ) . '">'.__('Weekly','bp-ass').'</a>';
+	echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url( $group_url.'/dig/'.$user_id, 'ass_member_email_status' ) . '">'.__('Daily','bp-ass').'</a>';
+
+	if ( ass_get_forum_type() ) {
+		echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url( $group_url.'/sub/'.$user_id, 'ass_member_email_status' ) . '">'.__('New Topics','bp-ass').'</a>';
+	}
+
+	echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url( $group_url.'/supersub/'.$user_id, 'ass_member_email_status' ) . '">'.__('All Email','bp-ass').'</a>';
+}
+
+remove_action( 'bp_group_manage_members_admin_item', 'ass_manage_members_email_status' );
+add_action( 'bp_group_manage_members_admin_item', 'openlab_manage_members_email_status' );
