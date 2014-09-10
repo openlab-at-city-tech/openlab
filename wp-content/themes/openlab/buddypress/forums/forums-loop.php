@@ -33,7 +33,9 @@
 
 	<?php do_action( 'bp_before_directory_forums_list' ); ?>
 
-	<table class="forum">
+        <div class="forum-panel panel panel-default">
+
+	<table class="forum table">
 		<thead>
 			<tr>
 				<th id="th-title"><?php _e( 'Topic', 'buddypress' ); ?></th>
@@ -101,6 +103,8 @@
 
 		</tbody>
 	</table>
+            
+        </div>
 
 	<?php do_action( 'bp_after_directory_forums_list' ); ?>
 
