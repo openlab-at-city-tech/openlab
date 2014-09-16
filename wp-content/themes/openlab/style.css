@@ -7591,6 +7591,9 @@ body .align-left {
 #invite-anyone-group-list.group-list .group-item-wrapper {
   height: 83px;
 }
+.invites#group-list .group-item-wrapper {
+  height: 158px;
+}
 /**member profiles**/
 #member-header .btn.is_friend.friendship-button:hover {
   color: #49cabe;
