@@ -386,6 +386,9 @@ body{
             border-radius: @border-radius-base;
         }
     }
+    .pointer{
+        cursor: pointer;
+    }
     a{
         &.link-btn{
             text-align: left;
@@ -393,7 +396,8 @@ body{
             margin-top: 5px;
         }
     }
-    ul{
+    ul,
+    ol{
         &.inline-element-list{
             padding:0;
             margin: 0;
@@ -728,7 +732,8 @@ body{
     margin-bottom: -5px;
 }
 /**group archives**/
-#group-list{
+#group-list,
+.group-list{
     margin-top: 50px;
     .group-item-wrapper{
         border-radius: @border-radius-base;
@@ -919,6 +924,13 @@ body{
         img{
             float: left;
             margin-right: 5px;
+        }
+    }
+}
+#invite-anyone-group-list{
+    &.group-list{
+        .group-item-wrapper{
+            height: 83px;
         }
     }
 }

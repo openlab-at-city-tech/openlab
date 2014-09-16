@@ -7105,12 +7105,16 @@ body .padded-img {
 body .padded-img img {
   border-radius: 4px;
 }
+body .pointer {
+  cursor: pointer;
+}
 body a.link-btn {
   text-align: left;
   text-decoration: none;
   margin-top: 5px;
 }
-body ul.inline-element-list {
+body ul.inline-element-list,
+body ol.inline-element-list {
   padding: 0;
   margin: 0;
   list-style-type: none;
@@ -7421,10 +7425,12 @@ body .align-left {
   margin-bottom: -5px;
 }
 /**group archives**/
-#group-list {
+#group-list,
+.group-list {
   margin-top: 50px;
 }
-#group-list .group-item-wrapper {
+#group-list .group-item-wrapper,
+.group-list .group-item-wrapper {
   border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 1.2%;
@@ -7432,19 +7438,24 @@ body .align-left {
   margin-bottom: 12px;
   color: #666666;
 }
-#group-list .group-item-wrapper h2 {
+#group-list .group-item-wrapper h2,
+.group-list .group-item-wrapper h2 {
   margin: 0 0 10px;
 }
-#group-list .group-item-wrapper h4 {
+#group-list .group-item-wrapper h4,
+.group-list .group-item-wrapper h4 {
   margin: 0 0 10px;
 }
-#group-list .group-item-wrapper a :not(.btn-primary) {
+#group-list .group-item-wrapper a :not(.btn-primary),
+.group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
 }
-#group-list .group-item-wrapper p {
+#group-list .group-item-wrapper p,
+.group-list .group-item-wrapper p {
   color: #333333;
 }
-#group-list .group-item-wrapper .info-line {
+#group-list .group-item-wrapper .info-line,
+.group-list .group-item-wrapper .info-line {
   margin-bottom: 12px;
 }
 #people-listing .group-item-wrapper {
@@ -7576,6 +7587,9 @@ body .align-left {
 #invite-anyone-invite-list li img {
   float: left;
   margin-right: 5px;
+}
+#invite-anyone-group-list.group-list .group-item-wrapper {
+  height: 83px;
 }
 /**member profiles**/
 #member-header .btn.is_friend.friendship-button:hover {
