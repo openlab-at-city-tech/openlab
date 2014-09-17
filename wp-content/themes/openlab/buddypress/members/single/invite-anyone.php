@@ -19,6 +19,11 @@
             echo openlab_submenu_markup('invitations');
             openlab_invite_anyone_screen_one_content();
             break;
+        
+        case 'sent-invites':
+            echo openlab_submenu_markup('invitations');
+            openlab_invite_anyone_screen_two_content();
+            break;
 
         // Any other
         default :

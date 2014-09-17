@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
 <div id="content" class="hfeed row">
-                            <div class="col-sm-18 members-single-home">
+    <div class="col-sm-18 members-single-home">
 
 <?php do_action( 'bp_before_member_body' );
 
@@ -31,7 +31,7 @@
 		elseif ( bp_is_user_settings() ) :
 			bp_get_template_part( 'members/single/settings' );
                 
-                elseif (bp_current_action() == 'invite-new-members') :
+                elseif (bp_current_action() == 'invite-new-members' || bp_current_action() == 'sent-invites') :
                     bp_get_template_part( 'members/single/invite-anyone' );
                 
 		// If nothing sticks, load a generic template
