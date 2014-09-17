@@ -7438,12 +7438,16 @@ body .align-left {
   margin-bottom: 12px;
   color: #666666;
 }
+#group-list .group-item-wrapper h1,
+.group-list .group-item-wrapper h1,
 #group-list .group-item-wrapper h2,
-.group-list .group-item-wrapper h2 {
-  margin: 0 0 10px;
-}
+.group-list .group-item-wrapper h2,
+#group-list .group-item-wrapper h3,
+.group-list .group-item-wrapper h3,
 #group-list .group-item-wrapper h4,
-.group-list .group-item-wrapper h4 {
+.group-list .group-item-wrapper h4,
+#group-list .group-item-wrapper h5,
+.group-list .group-item-wrapper h5 {
   margin: 0 0 10px;
 }
 #group-list .group-item-wrapper a :not(.btn-primary),
@@ -7619,6 +7623,15 @@ body .align-left {
 }
 .messages #group-list .group-item-wrapper {
   height: 152px;
+}
+#friend-list.group-list .group-item-wrapper {
+  height: 101px;
+}
+#friend-list.group-list .group-item-wrapper .timestamp {
+  font-size: 10px;
+}
+#friend-list.group-list .group-item-wrapper .timestamp .fa {
+  font-size: 11px;
 }
 /**help**/
 .col-help .page-title {

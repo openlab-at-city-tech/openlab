@@ -1,44 +1,55 @@
-<?php do_action( 'bp_before_member_friend_requests_content' ) ?>
+<?php do_action('bp_before_member_friend_requests_content') ?>
 
-<?php echo openlab_submenu_markup('friends'); ?>
-
-<?php if ( bp_has_members( 'include=' . bp_get_friendship_requests() . '&per_page=0' ) ) : ?>
+<?php if (bp_has_members('include=' . bp_get_friendship_requests() . '&per_page=0')) : ?>
 
 
-	<ul id="friend-list" class="item-list">
-		<?php while ( bp_members() ) : bp_the_member(); ?>
+    <div id="friend-list" class="item-list group-list">
+        <?php while (bp_members()) : bp_the_member(); ?>
 
-			<li id="friendship-<?php bp_friend_friendship_id() ?>">
-				<div class="item-avatar">
-					<a href="<?php bp_member_link() ?>"><?php bp_member_avatar() ?></a>
-				</div>
+            <div class="group-item col-md-8">
+                <div class="group-item-wrapper">
+                    <div class="row info-row">
+                        <div class="item-avatar col-sm-9">
+                            <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                        </div>
 
-				<div class="item">
-					<div class="item-title"><a href="<?php bp_member_link() ?>"><?php bp_member_name() ?></a></div>
-					<div class="item-meta"><span class="activity"><?php bp_member_last_active() ?></span></div>
-				</div>
+                        <div class="item col-sm-15">
+                            <h5 class="item-title"><a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h5>
 
-				<?php do_action( 'bp_friend_requests_item' ) ?>
+                            <?php if (bp_get_member_latest_update()) : ?>
 
-				<div class="action">
-					<a class="button accept" href="<?php bp_friend_accept_request_link() ?>"><?php _e( 'Accept', 'buddypress' ); ?></a> &nbsp;
-					<a class="button reject" href="<?php bp_friend_reject_request_link() ?>"><?php _e( 'Reject', 'buddypress' ); ?></a>
+                                <span class="update"> - <?php bp_member_latest_update('length=10') ?></span>
 
-					<?php do_action( 'bp_friend_requests_item_action' ) ?>
-				</div>
-			</li>
+                            <?php endif; ?>
 
-		<?php endwhile; ?>
-	</ul>
+                            <div class="timestamp"><span class="fa fa-undo"></span> <?php bp_member_last_active() ?></div>
+                        </div>
+                        <?php do_action('bp_friend_requests_item') ?>
 
-	<?php do_action( 'bp_friend_requests_content' ) ?>
+                        <div class="action">
+                            <a class="button accept btn btn-primary link-btn btn-xs" href="<?php bp_friend_accept_request_link() ?>"><?php _e('Accept', 'buddypress'); ?></a> &nbsp;
+                            <a class="button reject btn btn-primary link-btn btn-xs" href="<?php bp_friend_reject_request_link() ?>"><?php _e('Reject', 'buddypress'); ?></a>
+
+                            <?php do_action('bp_friend_requests_item_action') ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        <?php endwhile; ?>
+    </div>
+
+    <?php do_action('bp_friend_requests_content') ?>
 
 <?php else: ?>
 
-	<div id="message" class="info">
-		<p><?php _e( 'You have no pending friendship requests.', 'buddypress' ); ?></p>
-	</div>
+    <div id="message" class="info row">
+        <div class="col-md-24">
+            <p><?php _e('You have no pending friendship requests.', 'buddypress'); ?></p>
+        </div>
+    </div>
 
-<?php endif;?>
+<?php endif; ?>
 
-<?php do_action( 'bp_after_member_friend_requests_content' ) ?>
+<?php do_action('bp_after_member_friend_requests_content') ?>

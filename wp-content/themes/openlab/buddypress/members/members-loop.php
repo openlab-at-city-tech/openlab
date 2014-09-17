@@ -16,20 +16,20 @@
 	</div>
 
 	<?php do_action( 'bp_before_directory_members_list' ) ?>
+        <?php global $bp; ?>
 
-	<div id="group-list" class="item-list row">
+	<div id="friend-list" class="item-list group-list row">
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
 		<div class="group-item col-md-8">
                     <div class="group-item-wrapper">
                         <div class="row info-row">
-			<div class="item-avatar col-sm-8">
+			<div class="item-avatar col-sm-9">
 				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
 			</div>
 
-			<div class="item col-sm-16">
-				<h2 class="item-title">
-                                    <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h2>
+			<div class="item col-sm-15">
+				<h5 class="item-title"><a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h5>
 
 					<?php if ( bp_get_member_latest_update() ) : ?>
 
@@ -37,15 +37,8 @@
 
 					<?php endif; ?>
 
-				<div class="timestamp"><?php bp_member_last_active() ?></div>
-                                </div>
-                        </div>
-                <div class="row">
-                <div class="action col-sm-24">
-
-				<?php do_action( 'bp_directory_members_actions' ); ?>
-
-				</div>
+				<div class="timestamp"><span class="fa fa-undo"></span> <?php bp_member_last_active() ?></div>
+                                <?php do_action( 'bp_directory_members_actions' ); ?>
 
 				<?php do_action( 'bp_directory_members_item' ) ?>
 
@@ -58,7 +51,8 @@
 				  * bp_member_profile_data( 'field=the field name' );
 				  */
 				?>
-                    </div>
+                                </div>
+                        </div>
                     </div>
 		</div>
 
