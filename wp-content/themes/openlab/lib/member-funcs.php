@@ -253,12 +253,12 @@ function openlab_list_members($view) {
                 <div class="group-item col-md-8">
                     <div class="group-item-wrapper">
                         <div class="row">
-                            <div class="item-avatar col-sm-8">
+                            <div class="item-avatar col-sm-10">
                                 <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                             </div>
-                            <div class="item col-sm-16">
+                            <div class="item col-sm-14">
                                 <h2 class="item-title"><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
-                                <span class="member-since-line">Member since <?php echo $registered; ?></span>
+                                <span class="member-since-line uppercase">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
                                     <span class="update"><?php bp_member_latest_update('length=10') ?></span>
                                 <?php endif; ?>
