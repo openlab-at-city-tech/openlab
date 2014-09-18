@@ -58,6 +58,9 @@ if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
                                 // Membership request
                                 elseif ( bp_is_group_membership_request() ) : bp_get_template_part( 'groups/single/request-membership' );
                                 
+                                // Email subscription options
+                                elseif (bp_current_action() == 'notifications' ) : bp_get_template_part( 'groups/single/notifications' );
+                                
 				// Anything else (plugins mostly)
 				else                                : bp_get_template_part( 'groups/single/plugins'      );
 

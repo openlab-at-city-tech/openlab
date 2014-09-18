@@ -75,3 +75,73 @@ function openlab_ass_admin_notice_form() {
         <?php
     }
 }
+
+/**
+ * show group subscription settings on the notification page.
+ * @global type $bp
+ * @return boolean
+ */
+function openlab_ass_group_subscribe_settings () {
+	global $bp;
+
+	$group = groups_get_current_group();
+
+	if ( !is_user_logged_in() || !empty( $group->is_banned ) || !$group->is_member )
+		return false;
+
+	$group_status = ass_get_group_subscription_status( bp_loggedin_user_id(), $group->id );
+
+	$submit_link = bp_get_groups_action_link( 'notifications' );
+
+	?>
+	<div id="ass-email-subscriptions-options-page">
+	<form action="<?php echo $submit_link ?>" method="post" class="form-panel">
+            <div class="panel-button-group">
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php _e('Email Subscription Options', 'bp-ass') ?></div>
+                <div class="panel-body">
+	<input type="hidden" name="ass_group_id" value="<?php echo $group->id; ?>"/>
+	<?php wp_nonce_field( 'ass_subscribe' ); ?>
+
+	<b><?php _e('How do you want to read this group?', 'bp-ass'); ?></b>
+
+	<div class="ass-email-type radio">
+	<label><input type="radio" name="ass_group_subscribe" value="no" <?php if ( $group_status == "no" || $group_status == "un" || !$group_status ) echo 'checked="checked"'; ?>><?php _e('No Email', 'bp-ass'); ?></label>
+	<div class="ass-email-explain italics"><?php _e('I will read this group on the web', 'bp-ass'); ?></div>
+	</div>
+
+	<div class="ass-email-type radio">
+	<label><input type="radio" name="ass_group_subscribe" value="sum" <?php if ( $group_status == "sum" ) echo 'checked="checked"'; ?>><?php _e('Weekly Summary Email', 'bp-ass'); ?></label>
+	<div class="ass-email-explain italics"><?php _e('Get a summary of new topics each week', 'bp-ass'); ?></div>
+	</div>
+
+	<div class="ass-email-type radio">
+	<label><input type="radio" name="ass_group_subscribe" value="dig" <?php if ( $group_status == "dig" ) echo 'checked="checked"'; ?>><?php _e('Daily Digest Email', 'bp-ass'); ?></label>
+	<div class="ass-email-explain italics"><?php _e('Get all the day\'s activity bundled into a single email', 'bp-ass'); ?></div>
+	</div>
+
+	<?php if ( ass_get_forum_type() ) : ?>
+		<div class="ass-email-type radio">
+		<label><input type="radio" name="ass_group_subscribe" value="sub" <?php if ( $group_status == "sub" ) echo 'checked="checked"'; ?>><?php _e('New Topics Email', 'bp-ass'); ?></label>
+		<div class="ass-email-explain italics"><?php _e('Send new topics as they arrive (but don\'t send replies)', 'bp-ass'); ?></div>
+		</div>
+	<?php endif; ?>
+
+	<div class="ass-email-type radio">
+	<label><input type="radio" name="ass_group_subscribe" value="supersub" <?php if ( $group_status == "supersub" ) echo 'checked="checked"'; ?>><?php _e('All Email', 'bp-ass'); ?></label>
+	<div class="ass-email-explain italics"><?php _e('Send all group activity as it arrives', 'bp-ass'); ?></div>
+	</div>
+                </div>
+            </div>
+
+	<input type="submit" value="<?php _e('Save Settings', 'bp-ass') ?>" id="ass-save" name="ass-save" class="btn btn-primary">
+            </div>
+
+	<?php if ( ass_get_forum_type() == 'buddypress' ) : ?>
+		<p class="ass-sub-note italics"><?php _e('Note: Normally, you receive email notifications for topics you start or comment on. This can be changed at', 'bp-ass'); ?> <a href="<?php echo bp_loggedin_user_domain() . BP_SETTINGS_SLUG . '/notifications/' ?>"><?php _e('email notifications', 'bp-ass'); ?></a>.</p>
+	<?php endif; ?>
+
+	</form>
+	</div><!-- end ass-email-subscriptions-options-page -->
+	<?php
+}
