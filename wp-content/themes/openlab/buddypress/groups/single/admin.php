@@ -405,6 +405,20 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
         <?php endif; ?>
 
+        <?php
+        /**
+         * This is a quick and dirty solution for injecting Bootstrap markup into the bp group email subscription edit screens
+         * Basically it opts out of the action call to groups_custom_edit_steps and instead uses custom functions pulled from the bp group email subscription core
+         * This functionality is definitely a candidate for a better solution
+         */
+        if (bp_is_group_admin_screen('notifications')) {
+            openlab_ass_admin_notice_form();
+        } else {
+            // Allow plugins to add custom group edit screens
+            do_action('groups_custom_edit_steps');
+        }
+        ?>
+
         <?php /* This is important, don't forget it */ ?>
         <input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />
     </div><!--#group-create-body-->

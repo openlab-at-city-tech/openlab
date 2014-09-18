@@ -6964,6 +6964,12 @@ blockquote .h6 {
 .form-panel .panel:last-child {
   margin-bottom: 20px;
 }
+.form-panel .panel:only-child {
+  margin-bottom: 20px;
+}
+.panel-button-group .panel:last-of-type {
+  margin-bottom: 20px;
+}
 .submenu .submenu-text {
   margin-right: 8px;
 }
