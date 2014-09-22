@@ -7454,7 +7454,7 @@ body .align-left {
 .group-list .group-item-wrapper h4,
 #group-list .group-item-wrapper h5,
 .group-list .group-item-wrapper h5 {
-  margin: 0 0 10px;
+  margin: 0 0 5px;
 }
 #group-list .group-item-wrapper a :not(.btn-primary),
 .group-list .group-item-wrapper a :not(.btn-primary) {
@@ -7526,13 +7526,16 @@ body .align-left {
   height: 120px;
 }
 .group-manage-members#group-list .group-item-wrapper.no-btn {
-  height: 87px;
+  height: 98px;
 }
 .group-manage-members#group-list .group-item-wrapper.moderators {
   height: 107px;
 }
 .group-manage-members#group-list .group-item-wrapper.members {
   height: 216px;
+}
+.group-manage-members#group-list .group-item-wrapper.members .link-btn {
+  margin-right: 3px;
 }
 .plugins #item-body {
   margin-top: 30px;

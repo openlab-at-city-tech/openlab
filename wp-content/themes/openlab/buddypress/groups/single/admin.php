@@ -185,22 +185,18 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                             <div class="col-md-8 group-item">
                                 <div class="group-item-wrapper admins <?php echo (count(bp_group_admin_ids(false, 'array')) > 1 ? '' : 'no-btn'); ?>">
                                     <div class="row info-row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-9">
                                             <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                         </div>
-                                        <div class="col-sm-16">
+                                        <div class="col-sm-15">
                                             <h4>
                                                 <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
                                             </h4>
+                                            <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
+                                            <a class="btn btn-primary link-btn btn-xs confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                    <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
-                                        <div class="row">
-                                            <div class="col-sm-24">
-                                                <a class="btn btn-primary btn-block link-btn confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endwhile; ?>
@@ -222,19 +218,15 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                 <div class="col-md-8 group-item">
                                     <div class="group-item-wrapper moderators">
                                         <div class="row info-row">
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-9">
                                                 <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             </div>
-                                            <div class="col-sm-16">
+                                            <div class="col-sm-15">
                                                 <h4>
                                                     <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
                                                 </h4>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-24">
-                                                <a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="btn btn-primary btn-sm link-btn confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a>
-                                                <a class="btn btn-primary btn-sm link-btn confirm mod-demote-to-member" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
+                                                <a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="btn btn-primary btn-xs link-btn confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a>
+                                                <a class="btn btn-primary btn-xs link-btn confirm mod-demote-to-member" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
                                             </div>
                                         </div>
                                     </div>
