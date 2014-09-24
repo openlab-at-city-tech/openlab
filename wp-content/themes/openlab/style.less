@@ -181,6 +181,9 @@ blockquote {
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
+.container .content-wrapper{
+    width: 98.5%;
+}
 .radio,
 .radio-inline {
     label{
@@ -240,8 +243,7 @@ blockquote {
 }
 /**header**/
 .navbar-default{
-    .container-fluid{
-        max-width: 1140px;
+    .container{
         margin: 0 auto;
         .navbar-header{
             h1{
@@ -672,6 +674,7 @@ body{
     h2{
         &.sidebar-title{
             font-weight: 700;
+            margin-bottom: 6px;
         }
     }
     .sidebar-block{

@@ -5,11 +5,13 @@
     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
             <div <?php post_class('col-sm-18'); ?>>
-                <h1 class="entry-title"><?php the_title(); ?></h1>
-                <div class="entry-content"><?php the_content(); ?></div>
+                <div class="content-wrapper">
+                    <h1 class="entry-title"><?php the_title(); ?></h1>
+                    <div class="entry-content"><?php the_content(); ?></div>
+                </div>
             </div><!--hentry-->
 
-        <?php
+            <?php
         endwhile;
     endif;
     ?>

@@ -258,7 +258,7 @@ function openlab_list_members($view) {
                             </div>
                             <div class="item col-sm-14">
                                 <h2 class="item-title"><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
-                                <span class="member-since-line uppercase">Member since <?php echo $registered; ?></span>
+                                <span class="member-since-line timestamp">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
                                     <span class="update"><?php bp_member_latest_update('length=10') ?></span>
                                 <?php endif; ?>

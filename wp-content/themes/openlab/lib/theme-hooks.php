@@ -28,7 +28,7 @@ add_filter('the_content','openlab_custom_the_content');
 function openlab_header_bar() {
     ?>
     <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
                 <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
             </div>
