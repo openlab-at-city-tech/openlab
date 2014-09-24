@@ -4822,6 +4822,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   width: 82%;
   margin-right: 2%;
 }
+.navbar-form.btn-combo .btn {
+  width: 16%;
+}
 .navbar-form .custom-select,
 .navbar-form .hidden-custom-select {
   display: inline-block;
@@ -7168,6 +7171,9 @@ blockquote .h6 {
 .form-inline.btn-combo .form-control {
   width: 82%;
   margin-right: 2%;
+}
+.form-inline.btn-combo .btn {
+  width: 16%;
 }
 .form-inline .custom-select,
 .form-inline .hidden-custom-select {
