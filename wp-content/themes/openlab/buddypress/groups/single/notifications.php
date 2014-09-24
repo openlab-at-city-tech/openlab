@@ -1,9 +1,7 @@
 <?php
 /**
- * BuddyPress - Users Profile
- *
- * @package BuddyPress
- * @subpackage bp-legacy
+ * Custom template for notifications page
+ * Derived from BuddyPress Group Email Subscription
  */
 ?>
 

@@ -8,7 +8,7 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
 
         <?php do_action('bp_before_group_home_content'); ?>
 
-        <div class="col-sm-18 groups-single-home">
+<div class="col-sm-18 groups-single-home">
 
             <?php
             do_action('bp_before_group_body');
