@@ -44,7 +44,7 @@
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
     ?>
 
-    <?php echo openlab_submenu_markup('groups',$group_type); ?>
+    <?php echo openlab_create_group_menu($group_type); ?>
 
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
 
@@ -62,7 +62,7 @@
                     <?php /* Create vs Clone for Courses */ ?>
                     <?php if ('course' == $group_type) : ?>
                         <div class="panel panel-default create-or-clone-selector">
-                            <div class="panel-heading bold">Create New or Clone Existing?</div>
+                            <div class="panel-heading semibold">Create New or Clone Existing?</div>
                             <div class="panel-body">
                             <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-2">If you taught the same course in a previous semester or year, cloning can save you time.</p>
 
@@ -100,7 +100,7 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
+                            <p class="ol-clone-description italics note" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
                             </div>
                         </div>
 
@@ -109,7 +109,7 @@
                     <?php /* Name/Description */ ?>
             
                     <div class="panel panel-default">
-                            <div class="panel-heading bold"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></div>
+                            <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></div>
                             <div class="panel-body">
                     <?php if ('course' == $group_type) : ?>
                         <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
@@ -139,7 +139,7 @@
                     </div>
             
                     <div class="panel panel-default">
-                    <div class="panel-heading bold"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></div>
+                    <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></div>
                     <div class="panel-body">
                     <textarea class="form-control" name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
                     </div>
@@ -162,7 +162,7 @@
                     ?>
                     <?php if (!openlab_is_portfolio() && function_exists('bp_forums_is_installed_correctly')) : ?>
         <?php if (bp_forums_is_installed_correctly()) : ?>
-                            <div class="checkbox">
+                            <div class="checkbox hidden">
                                 <label><input type="hidden" name="group-show-forum" id="group-show-forum" value="1"<?php if (bp_get_new_group_enable_forum()) { ?> checked="checked"<?php } ?> /></label>
                             </div>
                         <?php else : ?>
@@ -173,8 +173,6 @@
                             <?php endif; ?>
                         <?php endif; ?>
     <?php endif; ?>
-
-                    <hr />
 
                     <?php openlab_group_privacy_settings($group_type); ?>
 
@@ -202,14 +200,14 @@
                                 <p class="italics"><?php _e("Upload an image to use as an avatar for this " . $group_type . ". The image will be shown on the main " . $group_type . " page, and in search results.", 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
-                                    <div class="form-group">
+                                    <div class="form-group form-inline">
                                             <input class="form-control" type="file" name="file" id="file" />
                                             <input class="btn btn-primary top-align" type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ) ?>" />
                                             <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                                     </div>
                                 </p>
 
-                                <p>To skip the avatar upload process, click the "Next Step" button.</p>
+                                <p class="italics">To skip the avatar upload process, click the "Next Step" button.</p>
                             </div>
                         </div>
                 </div>
@@ -310,27 +308,25 @@
                 <?php do_action('bp_before_group_creation_step_buttons'); ?>
 
                     <?php if ('crop-image' != bp_get_avatar_admin_step()) : ?>
-                    <div class="submit" id="previous-next">
                         <?php /* Previous Button */ ?>
                         <?php if (!bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="button" value="&larr; <?php _e('Previous Step', 'buddypress') ?>" id="group-creation-previous" name="previous" onclick="location.href = '<?php bp_group_creation_previous_link() ?>'" />
+                            <input class="btn btn-primary prev-btn" type="button" value="&#xf137; <?php _e('Previous Step', 'buddypress') ?>" id="group-creation-previous" name="previous" onclick="location.href = '<?php bp_group_creation_previous_link() ?>'" />
                         <?php endif; ?>
 
                         <?php /* Next Button */ ?>
                         <?php if (!bp_is_last_group_creation_step() && !bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Next Step', 'buddypress') ?> &rarr;" id="group-creation-next" name="save" />
+                            <input class="btn btn-primary" type="submit" value="<?php _e('Next Step', 'buddypress') ?> &#xf138;" id="group-creation-next" name="save" />
                         <?php endif; ?>
 
                         <?php /* Create Button */ ?>
                         <?php if (bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Create ' . ucfirst($group_type) . ' and Continue', 'buddypress') ?> &rarr;" id="group-creation-create" name="save" />
+                            <input class="btn btn-primary" type="submit" value="<?php _e('Create ' . ucfirst($group_type) . ' and Continue ', 'buddypress'); ?> &#xf138;" id="group-creation-create" name="save" />
                         <?php endif; ?>
 
                         <?php /* Finish Button */ ?>
                         <?php if (bp_is_last_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Finish', 'buddypress') ?> &rarr;" id="group-creation-finish" name="save" />
+                            <input class="btn btn-primary" type="submit" value="<?php _e('Finish', 'buddypress') ?> &#xf138;" id="group-creation-finish" name="save" />
                     <?php endif; ?>
-                    </div>
                 <?php endif; ?>
 
                 <?php do_action('bp_after_group_creation_step_buttons'); ?>

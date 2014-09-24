@@ -55,7 +55,7 @@
 
 			<div class="message-box panel panel-default">
 
-                            <div class="panel-heading bold">
+                            <div class="panel-heading semibold">
 				<div class="message-metadata">
 
 					<?php do_action( 'bp_before_message_meta' ) ?>

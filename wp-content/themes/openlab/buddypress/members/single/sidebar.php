@@ -19,11 +19,11 @@ if (!$dud = bp_displayed_user_domain()) {
 
             <li class="sq-bullet <?php if (bp_is_user_settings()) : ?>selected-page<?php endif ?>" class="mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
 
-            <li class="sq-bullet <?php if (is_page('my-courses')) : ?>selected-page<?php endif ?>" class="mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
+            <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?>" class="mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
 
-            <li class="sq-bullet <?php if (is_page('my-projects')) : ?>selected-page<?php endif ?>" class="mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
+            <li class="sq-bullet <?php if (is_page('my-projects') || openlab_is_create_group('project')) : ?>selected-page<?php endif ?>" class="mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
 
-            <li class="sq-bullet <?php if (is_page('my-clubs')) : ?>selected-page<?php endif ?>" class="mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
+            <li class="sq-bullet <?php if (is_page('my-clubs') || openlab_is_create_group('club')) : ?>selected-page<?php endif ?>" class="mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
 
             <?php /* Get a friend request count */ ?>
             <?php if (bp_is_active('friends')) : ?>

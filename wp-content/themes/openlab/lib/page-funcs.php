@@ -332,7 +332,7 @@ function openlab_registration_page() {
             <?php if ('request-details' == bp_get_current_signup_step()) : ?>
             
             <div class="panel panel-default">
-                            <div class="panel-heading bold">Account Details</div>
+                            <div class="panel-heading semibold">Account Details</div>
                             <div class="panel-body">
 
                 <?php do_action('template_notices') ?>
@@ -375,7 +375,7 @@ function openlab_registration_page() {
                 <?php if (bp_is_active('xprofile')) : ?>
             
                     <div class="panel panel-default">
-                            <div class="panel-heading bold">Public Profile Details</div>
+                            <div class="panel-heading semibold">Public Profile Details</div>
                             <div class="panel-body">
 
                     <?php do_action('bp_before_signup_profile_fields') ?>
@@ -415,7 +415,7 @@ function openlab_registration_page() {
             <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
 
                 <div class="panel panel-default">
-                            <div class="panel-heading bold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
+                            <div class="panel-heading semibold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
                             <div class="panel-body">
 
                 <?php do_action('template_notices') ?>

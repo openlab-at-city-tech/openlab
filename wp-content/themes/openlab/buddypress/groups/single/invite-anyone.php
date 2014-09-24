@@ -17,7 +17,7 @@
     <?php endif; ?>
 
     <div id="topgroupinvite" class="panel panel-default">
-        <div class="panel-heading bold">Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></div>
+        <div class="panel-heading semibold">Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></div>
         <div class="panel-body">
             <label><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></label>
 
@@ -82,7 +82,7 @@
 
     <?php if (invite_anyone_access_test() && !bp_is_group_create()) : ?>
         <div class="panel panel-default">
-            <div class="panel-heading bold"><?php _e('Invite new members by email:'); ?></div>
+            <div class="panel-heading semibold"><?php _e('Invite new members by email:'); ?></div>
             <div class="panel-body">
 
                 <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user') ?>

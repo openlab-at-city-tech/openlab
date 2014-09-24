@@ -273,25 +273,6 @@ function openlab_my_groups_submenu($group) {
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
 
-    //get group step
-    $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
-    $step_name = '';
-
-    switch ($current_step) {
-        case 'group-details':
-            $step_name = 'Step One: Profile';
-            break;
-        case 'group-settings':
-            $step_name = 'Step Two: Privacy Settings';
-            break;
-        case 'group-avatar':
-            $step_name = 'Step Three: Avatar';
-            break;
-        case 'invite-anyone' :
-            $step_name = 'Step Four: Invite Members';
-            break;
-    }
-
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
     if ($group == "course") {
 
@@ -326,16 +307,50 @@ function openlab_my_groups_submenu($group) {
                 $group_link => 'My ' . ucfirst($group) . 's',
                 $create_link => 'Create a ' . ucfirst($group),
             );
-        } else {
-            $menu_list = array(
-                $group_link => 'My ' . ucfirst($group) . 's',
-                $create_link => 'Create a ' . ucfirst($group),
-                $no_link => $step_name,
-            );
         }
     }
 
     return openlab_submenu_gen($menu_list);
+}
+
+function openlab_create_group_menu($grouptype) {
+    global $bp;
+    
+    //get group step
+    $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
+    $step_name = '';
+
+    switch ($current_step) {
+        case 'group-details':
+            $step_name = 'Step One: Profile';
+            break;
+        case 'group-settings':
+            $step_name = 'Step Two: Privacy Settings';
+            break;
+        case 'group-avatar':
+            $step_name = 'Step Three: Avatar';
+            break;
+        case 'invite-anyone' :
+            $step_name = 'Step Four: Invite Members';
+            break;
+    }
+
+    if ($grouptype == 'course') {
+        $title = 'Create/Clone a Course: ';
+    } else {
+        $title = 'Create a ' . ucfirst($grouptype);
+    }
+
+    $menu_mup = <<<HTML
+            <div class="submenu">
+                <ul class="nav nav-inline">
+                    <li class="submenu-item bold">{$title}</li>
+                    <li class="submenu-item item-create-clone-a-course current-menu-item bold">{$step_name}</li>
+                </ul>
+            </div>
+HTML;
+
+    return $menu_mup;
 }
 
 //sub-menus for my-friends pages
@@ -792,9 +807,25 @@ function openlab_docs_tabs() {
 
     <li <?php echo (bp_docs_current_view() == 'list' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/">View Docs</a></li>
     <li <?php echo (bp_docs_current_view() == 'create' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/create">New Doc</a></li>
-        <?php if ((bp_docs_current_view() == 'edit' || bp_docs_current_view() == 'single') && bp_docs_is_existing_doc()): ?>
+    <?php if ((bp_docs_current_view() == 'edit' || bp_docs_current_view() == 'single') && bp_docs_is_existing_doc()): ?>
         <li class="current-menu-item"><?php the_title() ?></li>
         <?php endif; ?>
 
     <?php
+}
+
+function openlab_is_create_group($group_type){
+    global $bp;
+    $return = NULL;
+    
+    //get group step
+    $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
+    
+    $steps = array('group-details','group-settings','group-avatar','invite-anyone');
+    
+    if(openlab_get_group_type() == $group_type && in_array($current_step,$steps) && bp_current_action() == 'create'){
+        $return = true;
+    }
+    
+    return $return;
 }

@@ -50,7 +50,7 @@ if (!bp_is_group_forum_topic_edit() && !bp_is_group_forum_topic() && !bp_group_i
 
 
             <div class="panel panel-default">
-                <div class="panel-heading bold"><?php _e('Post a New Topic:', 'buddypress') ?></div>
+                <div class="panel-heading semibold"><?php _e('Post a New Topic:', 'buddypress') ?></div>
                 <div class="panel-body">
             <?php do_action('bp_before_group_forum_post_new') ?>
 

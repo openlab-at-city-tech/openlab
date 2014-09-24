@@ -638,18 +638,22 @@ function wds_bp_group_meta() {
                                             </div>
 					</th>
 
-					<td id="noo_clone_options">
-
-						<?php global $current_site ?>
-						<?php echo $current_site->domain . $current_site->path ?><input class="form-control" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
-						<input name="blog-id-to-clone" value="" type="hidden" />
-						<p id="cloned-site-url"></p>
-					</td>
+                                        <td id="noo_clone_options">
+                                                        <div class="row">
+                                                            <div class="col-sm-8 site-label">
+                                                                <?php global $current_site ?>
+                                                                <?php echo $current_site->domain . $current_site->path ?>
+                                                            </div>
+                                                            <div class="col-sm-16">
+                                                                <input class="form-control" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e('Path') ?>" value="" />
+                                                            </div>
+                                                                <input name="blog-id-to-clone" value="" type="hidden" />
+                                                        </div>
+                                                        <p id="cloned-site-url"></p>
+                                                    </td>
 
 				</tr>
 			<?php endif ?>
-
-				<tr id="course-table-rule"><td><hr></td><td><hr></td></tr>
 
 				<tr id="wds-website" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 					<th valign="top" scope='row'>
@@ -661,19 +665,24 @@ function wds_bp_group_meta() {
 					</th>
 
 					<td id="noo_new_options">
-						<div id="noo_new_options-div">
-						<?php
-						$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+                                            <div id="noo_new_options-div" class="row">
+                                                        <div class="col-sm-8 site-label">
+                                                            <?php
+                                                            $suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 
-						if ( constant( "VHOST" ) == 'yes' ) :
-							?>
-							<input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain; ?>
-						<?php
-						else:
-							echo $current_site->domain . $current_site->path
-							?><input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
-				<?php endif; ?>
-						</div>
+                                                            if (constant("VHOST") == 'yes') :
+                                                                ?>
+                                                                <input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain; ?>
+                                                                <?php
+                                                            else:
+                                                                echo $current_site->domain . $current_site->path
+                                                                ?>
+                                                            </div>
+                                                            <div class="col-sm-16">
+                                                                <input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e('Domain') ?>" value="<?php echo $suggested_path ?>" />
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
 
 					</td>
 				</tr>
@@ -697,8 +706,8 @@ function wds_bp_group_meta() {
 						<th valign="top" scope='row'>
                                                     <div class="radio">
                                                         <label>
-							<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-                                                        Use an existing site:</label>
+                                                            <input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
+                                                            Use an existing site:</label>
                                                     </div>
 						</th>
 
@@ -724,12 +733,17 @@ function wds_bp_group_meta() {
 					</th>
 
 					<td id="noo_external_options">
-                                            <div class="form-group form-inline">
-						<input class="form-control" size="50" type="text" name="external-site-url" id="external-site-url" placeholder="http://" /> <a class="btn btn-primary no-deco top-align" id="find-feeds" href="#" display="none">Check</a>
-                                            </div>
+                                            <div class="form-group row">
+                                                        <div class="col-sm-21">
+                                                            <input class="form-control" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <a class="btn btn-primary no-deco top-align" id="find-feeds" href="#" display="none">Check</a>
+                                                        </div>
+                                                    </div>
 					</td>
 				</tr>
-                                <tr><td colspan="2"><p id="check-note" class="italics">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></td></tr>
+                                <tr><td colspan="2"><p id="check-note" class="italics note">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></td></tr>
 			</table>
 
 	<?php endif; ?>

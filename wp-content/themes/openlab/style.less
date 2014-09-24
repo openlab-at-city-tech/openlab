@@ -124,9 +124,10 @@ blockquote {
             }
             &.current-menu-item,
             &:hover{
+                color: @aqua;
                 a,
                 span{
-                    color: @aqua;
+                    color: inherit;
                     text-decoration: none;
                 }
             }
@@ -181,6 +182,11 @@ blockquote {
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
+input[type="button"], 
+input[type="reset"], 
+input[type="submit"]{
+    font-family: fontawesome, @font-family-sans-serif;
+} 
 .container .content-wrapper{
     width: 98.5%;
 }
@@ -223,12 +229,18 @@ blockquote {
 .form-panel{
     .panel{
         margin-bottom: 0;
-        margin-top: 30px;
+        margin-top: 35px;
         &:last-child{
             margin-bottom: 20px;
         }
         &:only-child{
             margin-bottom: 20px;
+        }
+        &:last-of-type{
+            margin-bottom: 20px;
+        }
+        .panel-heading{
+            font-size: 16px;
         }
     }
 }
@@ -395,6 +407,9 @@ body{
     .inline-element{
         display: inline-block;
     }
+    .note{
+        color: @40gray;
+    }
     .padded-img{
         border-radius: @border-radius-base;
         border: 25px solid @5gray;
@@ -404,6 +419,9 @@ body{
     }
     .pointer{
         cursor: pointer;
+    }
+    .prev-btn{
+        margin-right: 15px;
     }
     a{
         &.link-btn{
@@ -489,6 +507,32 @@ body{
 .groupblog-setup{
     th{
         width: 25%;
+    }
+}
+.ct-group-meta{
+    tr{
+        label{
+            input[type="checkbox"]{
+                margin-top: -2px;
+                margin-right: 5px;
+                margin-left: 32px;
+                vertical-align: text-bottom;
+            }
+            &:first-child{
+                input[type="checkbox"]{
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+    .groupblog-setup{
+        .site-label{
+            padding-top: 9px;
+        }
+        .radio{
+            margin-bottom: 7px;
+            margin-top: 7px
+        }
     }
 }
 /**custom selects**/

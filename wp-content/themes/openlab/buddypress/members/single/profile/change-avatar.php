@@ -24,7 +24,7 @@
                                 <p class="italics"><?php _e( 'Upload an image to use as an avatar for this ' . bp_get_group_type() . '. The image will be shown on the main ' . bp_get_group_type() . ' page, and in search results.', 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
-                                    <div class="form-group">
+                                    <div class="form-group form-inline">
                                             <input class="form-control" type="file" name="file" id="file" />
                                             <input class="btn btn-primary top-align" type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ) ?>" />
                                             <input type="hidden" name="action" id="action" value="bp_avatar_upload" />

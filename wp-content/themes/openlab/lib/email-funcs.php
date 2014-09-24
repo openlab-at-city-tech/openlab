@@ -18,7 +18,7 @@ function openlab_ass_admin_notice_form() {
 
             <div class="panel-button-group">
                 <div class="panel panel-default">
-                    <div class="panel-heading bold"><?php _e('Send an email notice to everyone in the group', 'bp-ass'); ?></div>
+                    <div class="panel-heading semibold"><?php _e('Send an email notice to everyone in the group', 'bp-ass'); ?></div>
                     <div class="panel-body">
 
                         <p><?php _e('You can use the form below to send an email notice to all group members.', 'bp-ass'); ?> <br>
@@ -45,7 +45,7 @@ function openlab_ass_admin_notice_form() {
 
             <div class="panel-button-group">
                 <div class="panel panel-default">
-                    <div class="panel-heading bold"><?php _e('Welcome Email', 'bp-ass'); ?></div>
+                    <div class="panel-heading semibold"><?php _e('Welcome Email', 'bp-ass'); ?></div>
                     <div class="panel-body">
 
                         <p><?php _e('Send an email when a new member join the group.', 'bp-ass'); ?></p>
