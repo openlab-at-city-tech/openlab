@@ -7034,7 +7034,7 @@ a.btn-primary {
 ul,
 ol {
   margin: 10px 0 15px 0;
-  padding: 0 0 0 30px;
+  padding: 0 0 0 40px;
 }
 ul li,
 ol li {
@@ -7262,6 +7262,7 @@ blockquote .h6 {
   text-align: center;
   width: 30px;
   cursor: pointer;
+  color: #999999;
 }
 .search .search-trigger-wrapper:hover {
   color: #49cabe;
@@ -7609,7 +7610,7 @@ body .align-left {
   color: #000000;
   display: block;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
   padding: 6px 15px;
 }
 .sidebar .sidebar-block ul.sidebar-nav li a:hover,
@@ -7870,6 +7871,7 @@ body .align-left {
 /**help**/
 .col-help .page-title {
   font-size: 14px;
+  margin: 15px 0 35px;
 }
 .col-help .page-title span {
   color: #49cabe;
