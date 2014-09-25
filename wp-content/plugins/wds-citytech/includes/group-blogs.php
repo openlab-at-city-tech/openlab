@@ -438,9 +438,9 @@ function wds_bp_group_site_pages() {
 
                                 <div class="sidebar-block">
 				<?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
-					<ul class="sidebar-sublinks portfolio-sublinks">
+					<ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 						<li class="portfolio-site-link">
-							<?php echo '<a href="' . trailingslashit( esc_attr( $site_url ) ) . '">Site</a>'; ?>
+                                                    <span class="fa fa-external-link"></span> <?php echo '<a class="bold" href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ).' Site</a>'; ?>
 						</li>
 
 						<li class="portfolio-dashboard-link">

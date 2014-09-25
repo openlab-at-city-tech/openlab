@@ -7674,6 +7674,9 @@ body .align-left {
   border-left: 1px solid #bbbbbb;
   padding: 10px 0 10px 15px;
 }
+.sidebar .sidebar-block ul.sidebar-sublinks {
+  padding: 3% 4%;
+}
 .sidebar .sidebar-block.padded-block {
   padding: 6%;
 }
