@@ -505,7 +505,7 @@ function cuny_student_profile() {
             }
             ?>
 
-            <div id="members-list" class="info-group">
+            <div id="members-list" class="info-group col-sm-24">
                 <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right"></span></a></h4>
 
                 <?php if ($friend_ids) { ?>
@@ -576,11 +576,11 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                         <div class="panel-body">
                             <div class="row">
 
-                                <div class="activity-avatar col-sm-9">
+                                <div class="activity-avatar col-sm-10">
                                     <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
                                 </div>
 
-                                <div class="activity-content col-sm-15">
+                                <div class="activity-content col-sm-14">
 
                                     <h6>
                                         <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
@@ -799,7 +799,15 @@ function cuny_member_profile_header() {
                                                     </td>
 
                                                     <td>
-                                                        <?php bp_the_profile_field_value(); ?>
+                                                        <?php 
+                                                        if(bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio'){
+                                                            echo bp_get_the_profile_field_value();
+                                                        }else{
+                                                            $field_value = str_replace('<p>','',bp_get_the_profile_field_value());
+                                                            $field_value = str_replace('</p>','',$field_value);
+                                                            echo $field_value;
+                                                        }
+                                                        ?>
                                                     </td>
                                                 </tr>
 

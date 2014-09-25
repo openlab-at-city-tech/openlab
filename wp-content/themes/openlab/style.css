@@ -7309,6 +7309,7 @@ h2.course-title {
 .fa {
   font-size: 16px;
   line-height: 1.25;
+  margin: 0 4px;
 }
 /**custom tags**/
 body .no-gutter.no-gutter-right {
@@ -7634,7 +7635,7 @@ body .align-left {
 }
 .sidebar .sidebar-block {
   background: #f0f0f0;
-  padding: 15px 0;
+  margin: 15px 0;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid #bbbbbb;
 }
@@ -7675,23 +7676,6 @@ body .align-left {
 }
 .sidebar .sidebar-block.padded-block {
   padding: 6%;
-}
-/**member profiles**/
-.profile-title {
-  font-weight: 700;
-  padding: 5px 0;
-  border-bottom: 1px solid #bbbbbb;
-}
-.profile-type {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 14px;
-  background: #f0f0f0;
-  color: #ff5959;
-  padding: 0 15px;
-  height: 30px;
-  line-height: 200%;
-  margin-bottom: -5px;
 }
 /**group archives**/
 #group-list,
@@ -7872,11 +7856,35 @@ body .align-left {
   height: 158px;
 }
 /**member profiles**/
+.members-single-home .profile-title {
+  font-weight: 700;
+  padding: 5px 0;
+  border-bottom: 1px solid #bbbbbb;
+}
+.members-single-home .profile-type {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  background: #f0f0f0;
+  color: #ff5959;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 200%;
+  margin-bottom: -5px;
+}
+#member-header {
+  margin-top: 64px;
+}
+#member-header .member-name-title {
+  color: #444444;
+  font-size: 32px;
+  font-weight: 600;
+}
 #member-header .btn.is_friend.friendship-button:hover {
   color: #49cabe;
 }
 #member-item-body .panel {
-  height: 130px;
+  height: 116px;
 }
 #member-item-body .panel .panel-body {
   padding: 2%;
@@ -7887,6 +7895,7 @@ body .align-left {
 }
 #member-item-body .panel .panel-body p {
   margin-bottom: 0;
+  font-size: 12px;
 }
 .members.friends #group-list .group-item-wrapper {
   height: auto;

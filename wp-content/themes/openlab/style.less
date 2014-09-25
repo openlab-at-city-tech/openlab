@@ -364,6 +364,7 @@ h2.course-title{
 .fa{
     font-size: 16px;
     line-height: 1.25;
+    margin: 0 4px;
 }
 
 /**custom tags**/
@@ -727,7 +728,7 @@ body{
     }
     .sidebar-block{
         background: @5gray;
-        padding: 15px 0;
+        margin: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: 1px solid @30gray;
         ul.sidebar-nav{
@@ -775,23 +776,6 @@ body{
     }
 }
 
-/**member profiles**/
-.profile-title{
-    font-weight: 700;
-    padding: 5px 0;
-    border-bottom: 1px solid @30gray;
-}
-.profile-type{
-    display: inline-block;
-    vertical-align: middle;
-    font-size: @font-size-base;
-    background: @5gray;
-    color: @magenta;
-    padding: 0 15px;
-    height: 30px;
-    line-height: 200%;
-    margin-bottom: -5px;
-}
 /**group archives**/
 #group-list,
 .group-list{
@@ -1008,7 +992,31 @@ body{
     }
 }
 /**member profiles**/
+.members-single-home{
+    .profile-title{
+        font-weight: 700;
+        padding: 5px 0;
+        border-bottom: 1px solid @30gray;
+    }
+    .profile-type{
+        display: inline-block;
+        vertical-align: middle;
+        font-size: @font-size-base;
+        background: @5gray;
+        color: @magenta;
+        padding: 0 15px;
+        height: 30px;
+        line-height: 200%;
+        margin-bottom: -5px;
+    }
+}
 #member-header{
+    margin-top: 64px;
+    .member-name-title{
+        color: #444444;
+        font-size: 32px;
+        font-weight: 600;
+    }
     .btn.is_friend.friendship-button{
         &:hover{
             color: @aqua;
@@ -1017,7 +1025,7 @@ body{
 }
 #member-item-body{
     .panel{
-        height: 130px;
+        height: 116px;
         .panel-body{
             padding: 2%;
             h6{
@@ -1026,6 +1034,7 @@ body{
             }
             p{
                 margin-bottom: 0;
+                font-size: 12px;
             }
         }
     }
