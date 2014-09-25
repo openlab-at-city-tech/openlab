@@ -235,10 +235,10 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-19">
+            <div class="current-group-filters current-portfolio-filters col-sm-18">
                 <?php openlab_current_directory_filters(); ?>
             </div>
-            <div class="group-count col-sm-5"><?php cuny_members_pagination_count('members'); ?></div>
+            <div class="group-count col-sm-6"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
         <div id="group-list" class="item-list row">
