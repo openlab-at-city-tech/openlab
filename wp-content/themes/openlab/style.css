@@ -7460,7 +7460,7 @@ body .align-left {
 .custom-select span.customSelect,
 .hidden-custom-select span.customSelect {
   font: inherit;
-  background: #ffffff url('images/select-arrow-open.png') 97% center no-repeat;
+  background: #ffffff url('images/select-arrow-open.png') 96% center no-repeat;
   border: 1px solid #dddddd;
   padding: 8px 5%;
   width: 100%;

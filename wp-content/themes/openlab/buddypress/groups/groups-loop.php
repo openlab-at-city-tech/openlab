@@ -62,10 +62,10 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 			<div class="group-item col-md-12">
                     <div class="group-item-wrapper">
                         <div class="row">
-				<div class="item-avatar alignleft col-sm-8">
+				<div class="item-avatar alignleft col-sm-7">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                             </div>
-				<div class="item col-sm-16">
+				<div class="item col-sm-17">
 					<h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
                                 <?php
                                 //course group type
