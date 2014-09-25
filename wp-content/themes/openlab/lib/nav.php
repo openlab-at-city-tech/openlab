@@ -36,3 +36,15 @@ function openlab_help_navigation($loc = 'bottom') {
         echo '</nav><!-- #nav-single -->';
     }
 }
+
+function openlab_custom_nav_classes($classes,$item){
+    global $post;
+    
+    if(($post->post_type == 'help' || is_taxonomy('help_category')) && $item->title == 'Help' ){
+        $classes[] = ' current-menu-item';
+    }
+    
+    return $classes;
+}
+
+add_filter('nav_menu_css_class','openlab_custom_nav_classes', 10, 2);
