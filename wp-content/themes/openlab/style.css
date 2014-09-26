@@ -7305,6 +7305,7 @@ h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
   margin-bottom: 10px;
   padding-bottom: 6px;
+  line-height: 140%;
 }
 h2.course-title {
   font-size: 32px;
@@ -7646,7 +7647,7 @@ body .align-left {
   border-top: 1px solid #bbbbbb;
 }
 .sidebar .sidebar-block:first-of-type {
-  margin-top: 0;
+  margin-top: 11px;
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
@@ -7868,11 +7869,6 @@ body .align-left {
   height: 158px;
 }
 /**member profiles**/
-.members-single-home .profile-title {
-  font-weight: 700;
-  padding: 5px 0;
-  border-bottom: 1px solid #bbbbbb;
-}
 .members-single-home .profile-type {
   display: inline-block;
   vertical-align: middle;
