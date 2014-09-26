@@ -40,7 +40,7 @@ function openlab_help_navigation($loc = 'bottom') {
 function openlab_custom_nav_classes($classes,$item){
     global $post;
     
-    if(($post->post_type == 'help' || is_taxonomy('help_category')) && $item->title == 'Help' ){
+    if(($post->post_type == 'help') && $item->title == 'Help' ){
         $classes[] = ' current-menu-item';
     }
     
