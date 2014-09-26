@@ -4560,7 +4560,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 @media (min-width: 768px) {
   .navbar {
-    border-radius: 4px;
+    border-radius: 0;
   }
 }
 @media (min-width: 768px) {
@@ -7214,6 +7214,10 @@ input[type="submit"] {
   margin-right: 8px;
 }
 /**header**/
+.navbar-default {
+  border: none;
+  border-bottom: 1px solid #dddddd;
+}
 .navbar-default .container {
   margin: 0 auto;
 }
@@ -7241,6 +7245,7 @@ input[type="submit"] {
   display: block;
   text-decoration: none;
   font-weight: 700;
+  line-height: 150%;
   padding: 21px 15px;
 }
 .navbar-default .container ul.nav li a:hover,
