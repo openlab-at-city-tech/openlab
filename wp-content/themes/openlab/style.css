@@ -7629,7 +7629,8 @@ body .align-left {
   padding-right: 3%;
 }
 /**sidebar**/
-.sidebar h2.sidebar-title {
+.sidebar h2.sidebar-title,
+.sidebar h2.sidebar-header {
   font-weight: 700;
   margin-bottom: 6px;
 }
@@ -7638,6 +7639,9 @@ body .align-left {
   margin: 15px 0;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid #bbbbbb;
+}
+.sidebar .sidebar-block:first-of-type {
+  margin-top: 0;
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;

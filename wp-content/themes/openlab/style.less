@@ -721,7 +721,8 @@ body{
 /**sidebar**/
 .sidebar{
     h2{
-        &.sidebar-title{
+        &.sidebar-title,
+        &.sidebar-header{
             font-weight: 700;
             margin-bottom: 6px;
         }
@@ -731,6 +732,9 @@ body{
         margin: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: 1px solid @30gray;
+        &:first-of-type{
+            margin-top: 0;
+        }
         ul.sidebar-nav{
             margin: 0;
             padding: 0;
