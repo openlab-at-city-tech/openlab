@@ -932,9 +932,8 @@ img {
 .carousel-inner > .item > a > img {
   display: block;
   width: 100% \9;
-  max-width: 100%;
   height: auto;
-  width: 100%;
+  max-width: 100%;
 }
 .img-rounded {
   border-radius: 4px;
@@ -7164,12 +7163,13 @@ input[type="submit"] {
 .radio-inline input[type="radio"] {
   margin-top: 2px;
 }
+.entry-content img,
 .img-responsive,
 .thumbnail > img,
 .thumbnail a > img,
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
-  width: 100%;
+  max-width: 100%;
 }
 .form-control {
   margin-bottom: 5px;
