@@ -1,0 +1,142 @@
+/* Toolbar / Top Nav */
+/**Currently there are no custom less variables for this stylesheet**/
+
+#wpadminbar{
+    background: #444;
+    color: #fff;
+    height: 50px;
+    #wp-toolbar{
+        line-height: normal;
+        margin: 0 auto;
+        max-width: 1140px;
+        #wp-admin-bar-root-default{
+            > li{
+                position: relative;
+                > .ab-item{
+                    color: #e5e5e5;
+                    cursor: pointer;
+                    text-align: center;
+                    line-height: 140%;
+                    margin-right: 0;
+                    padding: 14px 14px 16px;
+                    font-size: 14px;
+                    text-decoration: none;
+                    &:before{
+                        margin: 0;
+                        content: '';
+                    }
+                }
+                > .fa{
+                    font-family: FontAwesome;
+                    font-size: 14px;
+                    width: 14px;
+                    margin: 0 auto;
+                }
+                .toolbar-item-count{
+                    background: #ff5959;
+                    color: #fff;
+                    border-radius: 8px;
+                    display: inline-block;
+                    font-size: 10px;
+                    font-weight: 400;
+                    height: 16px;
+                    line-height: 164%;
+                    text-align: center;
+                    vertical-align: middle;
+                    width: 16px;
+                    opacity: 1;
+                    &.sub-count{
+                        position: absolute;
+                        right: 8px;
+                        top: 11px;
+                    }
+                }
+                &.hover,
+                &:hover{
+                    > a,
+                    > .ab-item{
+                        background: #333;
+                        color: #63dfd2;
+                    }
+                }
+            }
+        }
+        .ab-sub-wrapper{
+            background: #fff;
+            border-radius: 0 0 4px 4px;
+            width: 600%;
+            .admin-bar-menu-item{
+                font-size: 14px;
+                a{
+                    color: #333;
+                    padding: 6px 12px;
+                    text-decoration: none;
+                    &:hover{
+                        background: #63dfd2;
+                    }
+                }
+            }
+            .ab-submenu{
+                padding: 0;
+                background: #fff;
+                border-radius: inherit;
+                .submenu-title{
+                    background: #b8e2df;
+                    margin-bottom: 16px;
+                    .ab-item{
+                        padding: 5px 10px;
+                        font-size: 14px;
+                    }
+                }
+                .menu-bottom-link{
+                    background: #b8e2df;
+                    padding: 9px 16px;
+                    text-align: right;
+                    border-radius: inherit;
+                }
+                .nav-content-item{
+                    padding-bottom: 16px;
+                    margin-top: 16px;
+                    border-bottom: 1px solid #e5e5e5;
+                    .ab-item{
+                        width: 90%;
+                        margin: 0 auto;
+                        p{
+                            color: #333;
+                            margin-bottom: 8px;
+                            &:last-child{
+                                margin-bottom: 0;
+                            }
+                        }
+                        .actions{
+                            .btn{
+                                float: left;
+                                font-size: 14px;
+                                margin-right: 2%;
+                                position: relative;
+                                width: auto;
+                            }
+                        }
+                    }
+                    .inline-links{
+                        a{
+                            display: inline-block;
+                            &.activity-action{
+                                display: block;
+                                margin-top: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #wp-admin-bar-my-openlab,
+        #wp-admin-bar-site-name{
+            border-left: 1px #000 solid;
+            border-right: 1px #000 solid;
+            .ab-sub-wrapper{
+                width: 170%;
+            }
+        }
+    }
+}

@@ -9,6 +9,26 @@
  */
 add_filter( 'show_admin_bar', '__return_true', 999999 );
 
+/**
+ * Removing the default WP admin bar styles; a customized version of the default styles can now be found
+ * in the mu-plugins folder
+ * This is done for two reasons:
+ * 
+ *  1) The current default css uses a an all selector ('*') to apply a number of default styles that completely
+ *     inhibit the ability to inject Bootstrap into the admin, and make custom responsive styling an immense challenge
+ *  2) Because this admin bar is now highly customized, we do not want future releases of WP to upset those customizations
+ *     without proper vetting
+ * 
+ * Note: in addition to removing the all selector styles, there are also a number of customizations to the custom default admin
+ * bar css, to reduce overall styling overhead
+ * 
+ * @param type $styles
+ */
+function openlab_remove_admin_bar_default_css($styles) {
+    $styles->remove('admin-bar');
+}
+
+add_action('wp_default_styles', 'openlab_remove_admin_bar_default_css', 99999);
 
 /**
  * Bootstrap
@@ -43,8 +63,9 @@ class OpenLab_Admin_Bar {
 
 		// Removes the Search menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 4 );
-
-		add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
+                
+                //taking out the admin network menu for now
+		//add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
@@ -72,7 +93,17 @@ class OpenLab_Admin_Bar {
 
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
-		} else {
+                        //creating custom menus for comments, new content, and editing
+                        if (!is_network_admin() && !is_user_admin()) {
+                            remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
+                            remove_action('admin_bar_menu', 'wp_admin_bar_new_content_menu', 70);
+                            add_action('admin_bar_menu',array($this,'add_custom_comments_menu'), 60);
+                            add_action('admin_bar_menu',array($this,'add_custom_content_menu'), 70);
+                        }
+                        
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
+                        add_action('admin_bar_menu',array($this,'add_custom_edit_menu'),80);
+        } else {
 			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
@@ -202,28 +233,40 @@ class OpenLab_Admin_Bar {
 			'parent' => 'my-openlab',
 			'id'     => 'my-profile',
 			'title'  => 'My Profile',
-			'href'   => bp_loggedin_user_domain()
+			'href'   => bp_loggedin_user_domain(),
+                        'meta' => array(
+                            'class' => 'admin-bar-menu-item'
+                        )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
 			'title'  => 'My Courses',
-			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' ),
+                        'meta' => array(
+                            'class' => 'admin-bar-menu-item'
+                        )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-projects',
 			'title'  => 'My Projects',
-			'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' ),
+                        'meta' => array(
+                            'class' => 'admin-bar-menu-item'
+                        )
 		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-clubs',
 			'title'  => 'My Clubs',
-			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' ),
+                        'meta' => array(
+                            'class' => 'admin-bar-menu-item'
+                        )
 		) );
 
 		// Only show a My Portfolio link for users who actually have one
@@ -233,7 +276,10 @@ class OpenLab_Admin_Bar {
 				'parent' => 'my-openlab',
 				'id'     => 'my-portfolio',
 				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
-				'href'   => $portfolio_url
+				'href'   => $portfolio_url,
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 		}
 
@@ -243,8 +289,11 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-friends',
-				'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . '">%d</span>', $request_count ),
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() )
+				'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . ' pull-right">%d</span>', $request_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 		}
 
@@ -253,8 +302,11 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-messages',
-				'title'  => sprintf( 'My Messages <span class="toolbar-item-count count-' . $messages_count . '">%d</span>', $messages_count ),
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
+				'title'  => sprintf( 'My Messages <span class="toolbar-item-count count-' . $messages_count . ' pull-right">%d</span>', $messages_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 		}
 
@@ -264,8 +316,11 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-invitations',
-				'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . '">%d</span>', $invite_count ),
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
+				'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . ' pull-right">%d</span>', $invite_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 		}
 
@@ -281,14 +336,20 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-openlab-separator',
-				'title'  => '-----------'
+				'title'  => '-----------',
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-dashboard',
 				'title'  => 'My Dashboard',
-				'href'   => $primary_site_url . '/wp-admin/my-sites.php'
+				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item'
+                                )
 			) );
 		}
 	}
@@ -331,7 +392,7 @@ class OpenLab_Admin_Bar {
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => '<span class="toolbar-item-name">Invitations </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
+			'title' => '<span class="toolbar-item-icon fa fa-user"></span><span class="toolbar-item-count sub-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		/**
@@ -339,23 +400,16 @@ class OpenLab_Admin_Bar {
 		 */
 
 		// "Friend Requests" title
-		$wp_admin_bar->add_node( array(
-			'parent' => 'invites',
-			'id'     => 'friend-requests-title',
-			'title'  => 'Friend Requests'
-		) );
+		$wp_admin_bar->add_node(array(
+                    'parent' => 'invites',
+                    'id' => 'friend-requests-title',
+                    'title' => 'Friend Requests',
+                    'meta' => array(
+                        'class' => 'submenu-title bold'
+                    )
+                ));
 
-		if ( 0 < count( $request_ids ) ) {
-			// "See More" - changed so it shows up for anything greater than 0
-			$wp_admin_bar->add_node( array(
-				'parent' => 'invites',
-				'id'     => 'friend-requests-more',
-				'title'  => 'See All Friends',
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests' )
-			) );
-		}
-
-		$members_args = array(
+        $members_args = array(
 			'max'     => 0
 		);
 
@@ -364,15 +418,15 @@ class OpenLab_Admin_Bar {
 		if ( bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
 				bp_the_member();
-
+                                
 				// avatar
-				$title = '<div class="item-avatar"><a href="' . bp_get_member_link() . '">' . bp_get_member_avatar() . '</a></div>';
+				$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_member_link() . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '.bp_get_member_name().'"/></a></div></div>';
 
 				// name link
-				$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_member_link() . '">' . bp_get_member_name() . '</a></div></div>';
+				$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_member_link() . '">' . bp_get_member_name() . '</a></p>';
 
 				// accept/reject buttons
-				$title .= '<div class="action"><a class="button accept" href="' . bp_get_friend_accept_request_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_friend_reject_request_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+				$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_friend_accept_request_link() . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_friend_reject_request_link() . '">' . __( 'Reject', 'buddypress' ) . '</a></p></div></div>';
 
 				$wp_admin_bar->add_node( array(
 					'parent' => 'invites',
@@ -389,9 +443,9 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
 				'id'     => 'friend-requests-none',
-				'title'  => 'No new friendship requests.',
+				'title'  => '<div class="row"><div class="col-sm-24"><p>No new friendship requests.</p></div></div>',
 				'meta'   => array(
-					'class' => 'nav-no-items'
+					'class' => 'nav-no-items nav-content-item'
 				)
 			) );
 		}
@@ -399,23 +453,20 @@ class OpenLab_Admin_Bar {
 		/**
 		 * INVITATIONS
 		 */
-
+                
+                $title = 'Invitations';
+                if ( !empty( $invites['groups'] )){
+                    $title .= '<span class="see-all pull-right"><a class="regular" href="'.trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug()) . '/invites">See All Invites</a></span>';
+                }
 		// "Invitations" title
 		$wp_admin_bar->add_node( array(
 			'parent' => 'invites',
 			'id'     => 'invitations-title',
-			'title'  => 'Invitations'
+			'title'  => $title,
+                        'meta' => array(
+                            'class' => 'submenu-title bold'
+                        )
 		) );
-
-		// "See More" - changed so it shows up for anything greater than 0
-		if ( !empty( $invites['groups'] )) {
-			$wp_admin_bar->add_node( array(
-				'parent' => 'invites',
-				'id'     => 'invites-see-more',
-				'title'  => 'See All Invites',
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' )
-			) );
-		}
 
 		$groups_args = array(
 			'type'    => 'invites',
@@ -427,13 +478,13 @@ class OpenLab_Admin_Bar {
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '">' . 					bp_core_fetch_avatar( array( 'item_id' => $group->id, 'object' => 'group', 'type' => 'thumb', 'avatar_dir' => 'group-avatars', 'alt' => $group->name . ' avatar', 'width' => '50', 'height' => '50', 'class' => 'avatar', 'no_grav' => false )).'</a></div>' ;
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $group->name.'"/></a></div></div>' ;
 
 					// name link
-					$title .= '<div class="item"><div class="item-title"><a href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></div></div>';
+					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $group ) . '">' . $group->name . '</a></p>';
 
 					// accept/reject buttons
-					$title .= '<div class="action"><a class="button accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="button reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'buddypress' ) . '</a></div>';
+					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'buddypress' ) . '</a></p></div></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'invites',
@@ -452,9 +503,9 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'invites',
 				'id'     => 'group-invites-none',
-				'title'  => 'No new invitations',
+				'title'  => '<div class="row"><div class="col-sm-24"><p>No new invitations.</p></div></div>',
 				'meta'   => array(
-					'class' => 'nav-no-items'
+					'class' => 'nav-no-items nav-content-item'
 				)
 			) );
 		}
@@ -472,7 +523,7 @@ class OpenLab_Admin_Bar {
 		$total_count = bp_get_total_unread_messages_count();
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => '<span class="toolbar-item-name">Messages </span><span class="toolbar-item-count count-' . $total_count . '">' . $total_count . '</span>',
+			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span><span class="toolbar-item-count sub-count count-' . $total_count . '">' . $total_count . '</span>',
 		) );
 
 		// Only show the first 5
@@ -489,23 +540,19 @@ class OpenLab_Admin_Bar {
 
 				if ( $messages_counter < 5 ) {
 					// avatar
-					$title = '<div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_get_message_thread_avatar() . '</a></div>';
-
-					$title .= '<div class="item">';
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $messages_template->thread->last_sender_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '.$messages_template->thread->last_sender_id.'"/></a></div></div>';
 
 					// subject
-					$title .= '<div class="item-title"><a href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt(bp_get_message_thread_subject(), 30) . '</a></div>';
+					$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt(bp_get_message_thread_subject(), 30) . '</a>';
 
 					// last sender
-					$title .= '<div class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></div>';
+					$title .= '<span class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
 
 					// date and time
-					$title .= bp_format_time( strtotime( $messages_template->thread->last_message_date ) );
+					$title .= '<p class="message-excerpt">' .bp_format_time( strtotime( $messages_template->thread->last_message_date ) ).'<br />';
 
 					// Message excerpt
-					$title .= '<p class="message-excerpt">' . strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p>';
-
-					$title .= '</div>'; // .item
+					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p></div></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'messages',
@@ -525,9 +572,9 @@ class OpenLab_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'messages',
 				'id'     => 'messages-none',
-				'title'  => 'No new messages.',
+				'title'  => '<div class="row"><div class="col-sm-24"><p>No new messages.</p></div></div>',
 				'meta'   => array(
-					'class' => 'nav-no-items'
+					'class' => 'nav-content-item nav-no-items'
 				)
 			) );
 		}
@@ -537,7 +584,10 @@ class OpenLab_Admin_Bar {
 			'parent' => 'messages',
 			'id'     => 'messages-more',
 			'title'  => 'See All Messages',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() )
+			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
+                        'meta' => array(
+                            'class' => 'menu-bottom-link'
+                        )
 		) );
 	}
 
@@ -547,7 +597,7 @@ class OpenLab_Admin_Bar {
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => '<span class="toolbar-item-name">Activity </span>'
+			'title' => '<span class="toolbar-item-name fa fa-bullhorn"></span>'
 		) );
 
 		$activity_args = array(
@@ -557,14 +607,32 @@ class OpenLab_Admin_Bar {
 		);
 
 		if ( bp_has_activities( $activity_args ) ) {
+                    global $activities_template;
 			while ( bp_activities() ) {
 				bp_the_activity();
 
 				// avatar
-				$title = '<div class="item-avatar"><a href="' . bp_get_activity_user_link() . '">' . bp_get_activity_avatar() . '</a></div>';
+				$title = '<div class="row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_activity_user_link() . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => bp_get_activity_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '.  bp_get_activity_user_id().'"/></a></div></div>';
 
 				// action
-				$title .= '<div class="item">' . bp_get_activity_action() . '</div>';
+				$title .= '<div class="col-sm-18">';
+                                
+                                //the things we do...
+                                $action_output = '';
+                                $action_output_raw = $activities_template->activity->action;
+                                $action_output_ary = explode('<a',$action_output_raw);
+                                $count = 0;
+                                foreach ($action_output_ary as $action_redraw){
+                                    if(!ctype_space($action_redraw)){
+                                        $class = ($count == 0 ? 'activity-user' : 'activity-action');
+                                        $action_output .= '<a class="'.$class.'"'.$action_redraw;
+                                        $count++;
+                                    }
+                                }
+                                
+                                $title .= '<p class="item inline-links">'.$action_output.'</p>';
+                                $title .= '<p class="item">'.bp_insert_activity_meta('').' ago</p>';
+                                $title .= '</div></div>';
 
 				$wp_admin_bar->add_node( array(
 					'parent' => 'activity',
@@ -588,10 +656,165 @@ class OpenLab_Admin_Bar {
 			'id'     => 'activity-more',
 			'title'  => 'See All Activity',
 			'href'   => $link,
+                        'meta' => array(
+                                'class' => 'menu-bottom-link'
+                            )
 		) );
 	}
+        
+        function add_custom_edit_menu( $wp_admin_bar ) {
+                global $tag, $wp_the_query;
 
-	/**
+                if ( is_admin() ) {
+                        $current_screen = get_current_screen();
+                        $post = get_post();
+
+                        if ( 'post' == $current_screen->base
+                                && 'add' != $current_screen->action
+                                && ( $post_type_object = get_post_type_object( $post->post_type ) )
+                                && current_user_can( 'read_post', $post->ID )
+                                && ( $post_type_object->public )
+                                && ( $post_type_object->show_in_admin_bar ) )
+                        {
+                                $wp_admin_bar->add_menu( array(
+                                        'id' => 'view',
+                                        'title' => '<span class="fa fa-eye "></span>',
+                                        'href' => get_permalink( $post->ID )
+                                ) );
+                        } elseif ( 'edit-tags' == $current_screen->base
+                                && isset( $tag ) && is_object( $tag )
+                                && ( $tax = get_taxonomy( $tag->taxonomy ) )
+                                && $tax->public )
+                        {
+                                $wp_admin_bar->add_menu( array(
+                                        'id' => 'view',
+                                        'title' => '<span class="fa fa-eye "></span>',
+                                        'href' => get_term_link( $tag )
+                                ) );
+                        }
+                } else {
+                        $current_object = $wp_the_query->get_queried_object();
+
+                        if ( empty( $current_object ) )
+                                return;
+
+                        if ( ! empty( $current_object->post_type )
+                                && ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+                                && current_user_can( 'edit_post', $current_object->ID )
+                                && $post_type_object->show_ui && $post_type_object->show_in_admin_bar )
+                        {
+                                $wp_admin_bar->add_menu( array(
+                                        'id' => 'edit',
+                                        'title' => '<span class="fa fa-pencil"></span>',
+                                        'href' => get_edit_post_link( $current_object->ID )
+                                ) );
+                        } elseif ( ! empty( $current_object->taxonomy )
+                                && ( $tax = get_taxonomy( $current_object->taxonomy ) )
+                                && current_user_can( $tax->cap->edit_terms )
+                                && $tax->show_ui )
+                        {
+                                $wp_admin_bar->add_menu( array(
+                                        'id' => 'edit',
+                                        'title' => '<span class="fa fa-pencil"></span>',
+                                        'href' => get_edit_term_link( $current_object->term_id, $current_object->taxonomy )
+                                ) );
+                        }
+                }
+        }
+        
+    /**
+     * Custom content menu
+     * @param type $wp_admin_bar
+     * @return type
+     */
+    function add_custom_content_menu($wp_admin_bar) {
+        $actions = array();
+
+	$cpts = (array) get_post_types( array( 'show_in_admin_bar' => true ), 'objects' );
+
+	if ( isset( $cpts['post'] ) && current_user_can( $cpts['post']->cap->create_posts ) )
+		$actions[ 'post-new.php' ] = array( $cpts['post']->labels->name_admin_bar, 'new-post' );
+
+	if ( isset( $cpts['attachment'] ) && current_user_can( 'upload_files' ) )
+		$actions[ 'media-new.php' ] = array( $cpts['attachment']->labels->name_admin_bar, 'new-media' );
+
+	if ( current_user_can( 'manage_links' ) )
+		$actions[ 'link-add.php' ] = array( _x( 'Link', 'add new from admin bar' ), 'new-link' );
+
+	if ( isset( $cpts['page'] ) && current_user_can( $cpts['page']->cap->create_posts ) )
+		$actions[ 'post-new.php?post_type=page' ] = array( $cpts['page']->labels->name_admin_bar, 'new-page' );
+
+	unset( $cpts['post'], $cpts['page'], $cpts['attachment'] );
+
+	// Add any additional custom post types.
+	foreach ( $cpts as $cpt ) {
+		if ( ! current_user_can( $cpt->cap->create_posts ) )
+			continue;
+
+		$key = 'post-new.php?post_type=' . $cpt->name;
+		$actions[ $key ] = array( $cpt->labels->name_admin_bar, 'new-' . $cpt->name );
+	}
+	// Avoid clash with parent node and a 'content' post type.
+	if ( isset( $actions['post-new.php?post_type=content'] ) )
+		$actions['post-new.php?post_type=content'][1] = 'add-new-content';
+
+	if ( current_user_can( 'create_users' ) || current_user_can( 'promote_users' ) )
+		$actions[ 'user-new.php' ] = array( _x( 'User', 'add new from admin bar' ), 'new-user' );
+
+	if ( ! $actions )
+		return;
+
+	$title = '<span class="fa fa-plus-circle"></span>';
+
+	$wp_admin_bar->add_menu( array(
+		'id'    => 'new-content',
+		'title' => $title,
+		'href'  => admin_url( current( array_keys( $actions ) ) ),
+		'meta'  => array(
+			'title' => _x( 'Add New', 'admin bar menu group label' ),
+		),
+	) );
+
+	foreach ( $actions as $link => $action ) {
+		list( $title, $id ) = $action;
+
+		$wp_admin_bar->add_menu( array(
+			'parent'    => 'new-content',
+			'id'        => $id,
+			'title'     => $title,
+			'href'      => admin_url( $link ),
+                        'meta' => array(
+                                'class' => 'admin-bar-menu-item'
+                            )
+		) );
+	}
+    }
+    
+    /**
+     * Custom comments menu
+     * @param type $wp_admin_bar
+     * @return type
+     */
+    function add_custom_comments_menu($wp_admin_bar) {
+        if (!current_user_can('edit_posts'))
+            return;
+
+        $awaiting_mod = wp_count_comments();
+        $awaiting_mod = $awaiting_mod->moderated;
+        $awaiting_title = esc_attr(sprintf(_n('%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod), number_format_i18n($awaiting_mod)));
+
+        $icon = '<span class="fa fa-comment"></span>';
+        $title = '<span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count toolbar-item-count sub-count count-' . $awaiting_mod . '">' . number_format_i18n($awaiting_mod) . '</span>';
+
+        $wp_admin_bar->add_menu(array(
+            'id' => 'comments',
+            'title' => $icon . $title,
+            'href' => admin_url('edit-comments.php'),
+            'meta' => array('title' => $awaiting_title),
+        ));
+    }
+
+    /**
 	 * Remove + > User
 	 */
 	public function remove_adduser( $wp_admin_bar ) {
@@ -681,7 +904,9 @@ class OpenLab_Admin_Bar {
 	}
 
 	function enqueue_styles() {
-		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css' );
+                //custom admin bar styles
+                wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );
+		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
 	}
 }
 

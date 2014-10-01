@@ -98,14 +98,6 @@ function openlab_load_scripts_high_priority() {
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);
 
-function openlab_dequeue_calls() {
-    //dequeue wp admin bar styles
-    wp_dequeue_style('openlab-toolbar');
-}
-
-add_action('wp_print_styles', 'openlab_dequeue_calls', 11);
-add_action('admin_print_styles', 'openlab_dequeue_calls', 11);
-
 //custom widgets for OpenLab
 function cuny_widgets_init() {
     //add widget for Rotating Post Gallery Widget - will be placed on the homepage
