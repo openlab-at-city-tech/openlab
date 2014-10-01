@@ -49,7 +49,7 @@ class OpenLab_Admin_Bar {
 		if ( !class_exists( 'BP_Core' ) ) {
 			return;
 		}
-
+                
 		// Add a body style to distinguish between sites
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
@@ -565,6 +565,7 @@ class OpenLab_Admin_Bar {
 				}
 
 				$messages_counter++;
+                                
 			}
 
 		} else {
@@ -882,7 +883,7 @@ class OpenLab_Admin_Bar {
 			)
 		) );
 	}
-
+        
 	function body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class[] = 'openlab-main';
