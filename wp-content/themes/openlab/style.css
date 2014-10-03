@@ -7256,6 +7256,9 @@ input[type="submit"] {
   background: #63dfd2;
   color: #000000;
 }
+.navbar-default .container ul.nav li:first-child a {
+  padding-left: 30px;
+}
 .navbar-default .container .navbar-right.search input[type="text"] {
   width: 150px;
 }
@@ -7341,6 +7344,10 @@ body .timestamp {
   text-transform: uppercase;
   font-weight: 600;
 }
+body .timestamp .fa {
+  font-size: inherit;
+  margin-right: 0;
+}
 body .print-link {
   font-size: 14px;
   font-weight: 400;
@@ -7371,6 +7378,14 @@ body a.link-btn {
   text-align: left;
   text-decoration: none;
   margin-top: 5px;
+}
+body a.roll-over-loss:hover,
+body a.roll-over-loss:focus {
+  text-decoration: none !important;
+}
+body a.roll-over-color:hover,
+body a.roll-over-color:focus {
+  color: #333333 !important;
 }
 body ul.inline-element-list,
 body ol.inline-element-list {
@@ -7486,6 +7501,10 @@ body .align-left {
   color: #49cabe;
 }
 /**home page**/
+.home-page .btn,
+.home-page p {
+  font-size: 12px;
+}
 .home-page .row-home-top {
   margin-bottom: 15px;
   margin-top: 27px;
@@ -7503,6 +7522,7 @@ body .align-left {
 }
 .home-page .row-home-top .login a {
   color: inherit;
+  font-size: inherit;
 }
 .home-page .row-home-top .login .log-box {
   padding: 0 6.5%;
@@ -7553,7 +7573,8 @@ body .align-left {
 }
 .home-page #cac-featured .cfcw-content p {
   float: left;
-  width: 40%;
+  width: 45%;
+  font-weight: normal;
 }
 .home-page #cac-featured .cfcw-content:after {
   clear: both;
@@ -7591,12 +7612,19 @@ body .align-left {
 .home-page #whos-online .avatar-block .cuny-member:hover .cuny-member-info {
   display: block;
 }
-.home-page .new-members-wrapper .fa {
-  color: #49cabe;
-  font-size: 24px;
+.home-page .new-members-wrapper .btn {
+  padding-top: 0;
 }
-.home-page .new-members-wrapper .fa:hover {
-  color: #ffffff;
+.home-page .new-members-wrapper .btn .fa {
+  color: #63dfd2;
+  font-size: 24px;
+  line-height: 90%;
+}
+.home-page .new-members-wrapper .btn .fa:hover {
+  color: #49cabe;
+}
+.home-page .new-members-wrapper .btn.prev {
+  padding-right: 0;
 }
 .home-page .new-members-wrapper #home-new-member-wrap {
   max-width: 100%;
@@ -7633,6 +7661,10 @@ body .align-left {
   bottom: 0;
   left: 0;
   padding-right: 3%;
+}
+.home-page .activity-list .activity-wrapper .activity-item .item-content-wrapper {
+  margin: 0 auto;
+  width: 88%;
 }
 /**sidebar**/
 .sidebar h2.sidebar-title,
@@ -8005,6 +8037,9 @@ body .align-left {
 }
 #openlab-footer .col-links {
   color: #797979;
+}
+#openlab-footer .col-links h2 {
+  color: #333333;
 }
 #openlab-footer .col-links a {
   color: inherit;

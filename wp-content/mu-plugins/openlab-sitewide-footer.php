@@ -108,7 +108,7 @@ restore_current_blog();
                 </div>
                 <div class="col-sm-6 col-links semibold">
                     <h2>Support</h2>
-                    <a href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> | <a href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> | <a href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> | <a href="<?php echo $site; ?>/about/credits/">Credits</a>
+                    <a class="no-deco roll-over-color" href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> | <a class="no-deco roll-over-color" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/credits/">Credits</a>
                 </div>
                 <div class="col-sm-4 col-share">
                     <h2>Share</h2>
@@ -120,7 +120,7 @@ restore_current_blog();
             </div>
         <div class="row row-copyright">
             <div class="col-sm-24">
-                <p><span class="alignleft">&copy; <a href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span class="alignright"><a href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
+                <p><span class="alignleft">&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span class="alignright"><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
             </div>
         </div>
     </div>

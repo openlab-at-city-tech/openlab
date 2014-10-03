@@ -47,7 +47,7 @@ function cuny_home_login() {
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box">'; ?>
         <?php echo '<h2 class="title"><span class="fa fa-plus-circle"></span> Join OpenLab</h2>'; ?>
-        <p class="italics">A Place to learn, work and share</p>
+        <p class="italics">&nbsp;&nbsp;A Place to learn, work and share</p>
         <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-left" href="' . site_url() . '/register/">Sign up</a> Need an account?<br />Sign Up to become a member!</p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
@@ -66,7 +66,7 @@ function cuny_home_login() {
                 <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="Password" tabindex="98" />
 
             <div id="below-login-form">
-                <a class="forgot-password-link small-text" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
+                <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
             </div>
             <div id="keep-logged-in" class="small-text">
                 <input class="btn btn-default btn-primary link-btn pull-left" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
@@ -96,9 +96,9 @@ function cuny_home_new_members() {
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
                     <a class="btn prev" href="#">
-                        <i class="fa fa-chevron-left"></i></a>
+                        <i class="fa fa-angle-left"></i></a>
                     <a class="btn prev" href="#">
-                        <i class="fa fa-chevron-right"></i></a>
+                        <i class="fa fa-angle-right"></i></a>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>
@@ -126,7 +126,7 @@ function cuny_home_new_members() {
                 </div>
                 <div class="home-new-member-info">
                     <?php echo "<h2>" . $firstname . "</h2>"; ?>
-                    <div class="registered timestamp"><?php bp_member_registered() ?></div>
+                    <div class="registered timestamp"><?php bp_member_registered() ?> ago</div>
                 </div>
             </li>
             <?php
@@ -273,8 +273,9 @@ function cuny_home_square($type) {
                     ?>
                     <div class="item-avatar">
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
-                        <div class="timestamp"><span class="fa fa-undo"></span> <?php printf(__('%s', 'buddypress'), bp_get_group_last_active()) ?></div>
+                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf(__('%s', 'buddypress'), bp_get_group_last_active()) ?></div>
                     </div>
+                    <div class="item-content-wrapper">
                     <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
                     ?>
                     <?php
@@ -282,10 +283,10 @@ function cuny_home_square($type) {
 
                     echo '<p>' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
                     echo '</div>';
+                    echo '</div>';
                     $i++;
                 endwhile;
                 ?>
-                <div class="clearfloat"></div>
             </div>
         </div><!--activity-list-->
 
