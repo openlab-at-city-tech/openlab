@@ -7553,8 +7553,77 @@ body .align-left {
   float: left;
   width: 67.5%;
   border-radius: 0 4px 4px 0;
-  padding-top: 400px;
-  background: url('images/front_page_holder.jpg') no-repeat;
+  max-height: 400px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_fakehover {
+  width: 95.5%;
+  float: left;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag {
+  background: #63dfd2;
+  width: 4.5%;
+  float: left;
+  height: 100%;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul {
+  margin-top: 14px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li {
+  margin: 0 auto 4px;
+  background: transparent;
+  border: 1px solid #ffffff;
+  display: block;
+  height: 12px;
+  width: 12px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li span {
+  display: none;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li.cameracurrent {
+  background: #fff;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_content {
+  background: rgba(99, 223, 210, 0.8);
+  bottom: 0;
+  color: #ffffff;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 33%;
+  padding: 5% 4%;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_content a {
+  color: inherit;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_content h2 {
+  font-size: 32px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_content p {
+  font-size: 16px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_prev,
+.home-page .row-home-top .slider .camera_wrap .camera_next {
+  background: transparent;
+  top: 2%;
+  margin-top: 0;
+  height: 15px;
+  width: 10px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_prev span,
+.home-page .row-home-top .slider .camera_wrap .camera_next span {
+  background: url('images/camera_js_nav.png') no-repeat;
+  height: 15px;
+  width: 10px;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_next {
+  right: 4%;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_next span {
+  background-position: -11px 0;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_prev {
+  left: auto;
+  right: 27%;
 }
 .home-page .left-block-content {
   background: #f0f0f0;

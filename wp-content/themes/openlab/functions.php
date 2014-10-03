@@ -98,6 +98,12 @@ function openlab_load_scripts_high_priority() {
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);
 
+/**
+ * Custom image sizes
+ */
+//front page slider
+add_image_size('front-page-slider', 735, 400, true);
+
 //custom widgets for OpenLab
 function cuny_widgets_init() {
     //add widget for Rotating Post Gallery Widget - will be placed on the homepage
@@ -170,3 +176,17 @@ function enqueue_less_styles($tag, $handle) {
 }
 
 add_filter('style_loader_tag', 'enqueue_less_styles', 5, 2);
+
+/**
+ * Get content with formatting in place 
+ * @param type $more_link_text
+ * @param type $stripteaser
+ * @param type $more_file
+ * @return type
+ */
+function get_the_content_with_formatting($more_link_text = '(more...)', $stripteaser = 0, $more_file = '') {
+    $content = get_the_content($more_link_text, $stripteaser, $more_file);
+    $content = apply_filters('the_content', $content);
+    $content = str_replace(']]>', ']]&gt;', $content);
+    return $content;
+}

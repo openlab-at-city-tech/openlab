@@ -636,8 +636,78 @@ body{
             float: left;
             width: 67.5%;
             border-radius: @border-radius-right;
-            padding-top: 400px;
-            background: url('images/front_page_holder.jpg') no-repeat;
+            max-height: 400px;
+            .camera_wrap{
+                .camera_fakehover{
+                    width: 95.5%;
+                    float: left;
+                }
+                .camera_pag{
+                    background: @cyan;
+                    width: 4.5%;
+                    float: left;
+                    height: 100%;
+                    .camera_pag_ul{
+                        margin-top: 14px;
+                        li{
+                            margin: 0 auto 4px;
+                            background: transparent;
+                            border: 1px solid @white;
+                            display: block;
+                            height: 12px;
+                            width: 12px;
+                            span{
+                                display: none;
+                            }
+                            &.cameracurrent{
+                                background: #fff;
+                            }
+                        }
+                    }
+                }
+                .camera_content{
+                    background: rgba(99, 223, 210, 0.8);
+                    bottom: 0;
+                    color: @white;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 33%;
+                    padding: 5% 4%;
+                    a{
+                        color: inherit;
+                    }
+                    h2{
+                        font-size: floor((@font-size-base * 2.3));
+                    }
+                    p{
+                        font-size: ceil((@font-size-base * 1.10));
+                    }
+                }
+                .camera_prev, 
+                .camera_next{
+                    background: transparent;
+                    top: 2%;
+                    margin-top: 0;
+                    height: 15px;
+                    width: 10px;
+                    span{
+                        background: url('images/camera_js_nav.png') no-repeat;
+                        height: 15px;
+                        width: 10px;
+                    }
+                }
+                .camera_next{
+                    right: 4%;
+                    span{
+                        background-position: -11px 0;
+                    }
+                }
+                .camera_prev{
+                    left: auto;
+                    right: 27%;
+                }
+            }
         }
     }
     .left-block-content{

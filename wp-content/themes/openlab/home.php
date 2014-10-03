@@ -15,7 +15,7 @@ get_header();
         </div>
     </div>
     <div class="fill-gutter fill-gutter-left slider">
-        
+        <?php echo openlab_get_home_slider(); ?>
     </div>
 
 </div>

@@ -4,6 +4,39 @@
  * Media-oriented functionality
  */
 
+function openlab_get_home_slider() {
+    global $post;
+    $slider_mup = '';
+
+    $slider_args = array(
+        'post_type' => 'slider',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+    );
+
+    $legacy = $post;
+    $slider_query = new WP_Query($slider_args);
+
+    if ($slider_query->have_posts()):
+        $slider_mup = '<div class="camera_wrap clearfix">';
+        while ($slider_query->have_posts()) : $slider_query->the_post();
+            //if the featured image is not set, slider will not be added
+            if (get_post_thumbnail_id()) {
+                
+                $img_obj = wp_get_attachment_image_src(get_post_thumbnail_id());
+                
+                $slider_mup .= '<div data-src="'.$img_obj[0].'"><div class="fadeIn camera_content"><h2>'.get_the_title().'</h2>'.get_the_content_with_formatting().'</div></div>';
+            }
+        endwhile;
+        $slider_mup .= '</div>';
+    endif;
+
+    wp_reset_postdata();
+    $post = $legacy;
+
+    return $slider_mup;
+}
+
 /**
  * Custom mysteryman
  * @return type
@@ -21,11 +54,11 @@ add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
  * @return string
  */
 function openlab_default_get_group_avatar($url, $params) {
-    
-    if(strstr($url,'default-avatar')){
+
+    if (strstr($url, 'default-avatar')) {
         $url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
     }
-    
+
     return $url;
 }
 

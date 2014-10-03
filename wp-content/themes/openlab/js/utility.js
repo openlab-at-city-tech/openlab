@@ -145,7 +145,22 @@
     });//end document.ready
     
     $(window).load(function(){
+        
+        //setting equal rows on homepage group list
         equal_row_height();
+        
+        //camera js slider on home
+        if($('.camera_wrap').length){
+            $('.camera_wrap').camera({
+                autoAdvance : false,
+                fx: 'simpleFade',
+                playPause: false,
+                height: '400px',
+                navigationHover: false
+            });
+        }
+        
+        
     });
 
     /*this is for the homepage group list, so that cells in each row all have the same height 
