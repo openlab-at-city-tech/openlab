@@ -9,11 +9,11 @@
         line-height: normal;
         margin: 0 auto;
         max-width: 1140px;
-        #wp-admin-bar-root-default{
+        > ul{
             > li{
                 position: relative;
                 > .ab-item{
-                    color: #e5e5e5;
+                    color: #ffffff;
                     cursor: pointer;
                     text-align: center;
                     line-height: 140%;
@@ -61,11 +61,8 @@
                 }
             }
         }
-        .ab-sub-wrapper{
-            background: #fff;
-            border-radius: 0 0 4px 4px;
-            width: 600%;
-            .admin-bar-menu-item{
+        .admin-bar-menu{
+            li{
                 font-size: 14px;
                 a{
                     color: #333;
@@ -76,6 +73,11 @@
                     }
                 }
             }
+        }
+        .ab-sub-wrapper{
+            background: #fff;
+            border-radius: 0 0 4px 4px;
+            width: 600%;
             .ab-submenu{
                 padding: 0;
                 background: #fff;
@@ -131,11 +133,40 @@
             }
         }
         #wp-admin-bar-my-openlab,
-        #wp-admin-bar-site-name{
+        #wp-admin-bar-site-name
+        {
             border-left: 1px #000 solid;
             border-right: 1px #000 solid;
             .ab-sub-wrapper{
                 width: 170%;
+            }
+        }
+        #wp-admin-bar-my-account{
+            .ab-sub-wrapper{
+                width: 150%;
+                p{
+                    color: #333;
+                    &.actions{
+                        padding-top: 6px;
+                    }
+                }
+            }
+        }
+        #wp-admin-bar-top-logout{
+            background: #000;
+            border-left: 1px #666666 solid;
+            border-right: 1px #666666 solid;
+        }
+        #wp-admin-bar-bp-login{
+            max-width: 70px;
+            .ab-sub-wrapper{
+                color: #333;
+                width: 350%;
+                -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                #sidebar-login-form{
+                    padding: 3% 5%;
+                }
             }
         }
     }

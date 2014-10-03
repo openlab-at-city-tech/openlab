@@ -86,10 +86,20 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
 			add_action( 'admin_bar_menu', array( $this, 'add_activity_menu' ), 26 );
+                        
+                        //customizations for site menu
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_site_menu', 30 );
+                        add_action('admin_bar_menu',array($this,'openlab_custom_admin_bar_site_menu'),30);
 
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
+                        
+                        //removing the default account information item and menu so we can a custom Bootstrap-style one
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
+                        add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
+                        add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
 
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
@@ -187,7 +197,10 @@ class OpenLab_Admin_Bar {
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
 			'title' => 'My OpenLab',
-			'href'  => bp_loggedin_user_domain()
+			'href'  => bp_loggedin_user_domain(),
+                        'meta'  => array(
+                            'class' => 'admin-bar-menu',
+                        ),
 		) );
  	}
 
@@ -663,6 +676,71 @@ class OpenLab_Admin_Bar {
 		) );
 	}
         
+        function openlab_custom_admin_bar_site_menu($wp_admin_bar){
+            // Don't show for logged out users.
+            if ( ! is_user_logged_in() )
+                    return;
+
+            // Show only when the user is a member of this site, or they're a super admin.
+            if ( ! is_user_member_of_blog() && ! is_super_admin() )
+                    return;
+
+            $blogname = get_bloginfo('name');
+
+            if ( empty( $blogname ) )
+                    $blogname = preg_replace( '#^(https?://)?(www.)?#', '', get_home_url() );
+
+            if ( is_network_admin() ) {
+                    $blogname = sprintf( __('Network Admin: %s'), esc_html( get_current_site()->site_name ) );
+            } elseif ( is_user_admin() ) {
+                    $blogname = sprintf( __('Global Dashboard: %s'), esc_html( get_current_site()->site_name ) );
+            }
+
+            $title = wp_html_excerpt( $blogname, 40, '&hellip;' );
+
+            $wp_admin_bar->add_menu( array(
+                    'id'    => 'site-name',
+                    'title' => $title,
+                    'href'  => is_admin() ? home_url( '/' ) : admin_url(),
+                    'meta' => array(
+                        'class' => 'admin-bar-menu',
+                    ),
+            ) );
+
+            // Create submenu items.
+
+            if ( is_admin() ) {
+                    // Add an option to visit the site.
+                    $wp_admin_bar->add_menu( array(
+                            'parent' => 'site-name',
+                            'id'     => 'view-site',
+                            'title'  => __( 'Visit Site' ),
+                            'href'   => home_url( '/' ),
+                    ) );
+
+                    if ( is_blog_admin() && is_multisite() && current_user_can( 'manage_sites' ) ) {
+                            $wp_admin_bar->add_menu( array(
+                                    'parent' => 'site-name',
+                                    'id'     => 'edit-site',
+                                    'title'  => __( 'Edit Site' ),
+                                    'href'   => network_admin_url( 'site-info.php?id=' . get_current_blog_id() ),
+                            ) );
+                    }
+
+            } else {
+                    // We're on the front end, link to the Dashboard.
+                    $wp_admin_bar->add_menu( array(
+                            'parent' => 'site-name',
+                            'id'     => 'dashboard',
+                            'title'  => __( 'Dashboard' ),
+                            'href'   => admin_url(),
+                    ) );
+
+                    // Add the appearance submenu items.
+                    wp_admin_bar_appearance_menu( $wp_admin_bar );
+            }
+        }
+        
         function add_custom_edit_menu( $wp_admin_bar ) {
                 global $tag, $wp_the_query;
 
@@ -772,6 +850,7 @@ class OpenLab_Admin_Bar {
 		'title' => $title,
 		'href'  => admin_url( current( array_keys( $actions ) ) ),
 		'meta'  => array(
+                        'class' => 'admin-bar-menu',
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
 		),
 	) );
@@ -830,11 +909,72 @@ class OpenLab_Admin_Bar {
 			'parent' => 'top-secondary',
 			'id'     => 'top-logout',
 			'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
-			'title'  => 'Log Out'
+			'title'  => 'Log Out',
+                        'meta'   => array(
+                            'class' => 'bold',
+                        ),
 		) );
 	}
+        
+        function openlab_custom_my_account_item($wp_admin_bar) {
+            
+                $user_id = get_current_user_id();
+                $current_user = wp_get_current_user();
+                $profile_url = get_edit_profile_url($user_id);
 
-	/**
+                if (!$user_id)
+                    return;
+
+                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+
+                $wp_admin_bar->add_menu(array(
+                    'id' => 'my-account',
+                    'parent' => 'top-secondary',
+                    'title' => $howdy,
+                    'href' => $profile_url,
+                    'meta' => array(
+                        'class' => '',
+                        'title' => __('My Account'),
+                    ),
+                ));
+        }
+        
+        /**
+         * Custom account menu
+         * @param type $wp_admin_bar
+         * @return type
+         */
+        function openlab_custom_my_account_menu($wp_admin_bar){
+            $user_id      = get_current_user_id();
+            $current_user = wp_get_current_user();
+            $profile_url  = get_edit_profile_url( $user_id );
+
+            if ( ! $user_id )
+                    return;
+
+            if ( $current_user->display_name !== $current_user->user_login )
+                    $user_login = "<br /><span class='username'>{$current_user->user_login}</span>";
+                    
+            // avatar
+            $user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $current_user->display_name.'"/></a></div></div>' ;
+
+            // name link
+            $user_info .= '<div class="col-sm-16"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $group ) . '"><span class="display-name">'.$current_user->display_name.$user_login.'</a></p>';
+
+            // accept/reject buttons
+            $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></p></div></div>';
+
+            $wp_admin_bar->add_node( array(
+                    'parent' => 'my-account',
+                    'id'     => 'user-listing',
+                    'title'  => $user_info,
+                    'meta'   => array(
+                            'class' => 'nav-content-item',
+                    ),
+            ) );
+        }
+
+    /**
 	 * Fix the logout redirect
 	 */
 	function fix_logout_redirect( $wp_admin_bar ) {
@@ -929,7 +1069,7 @@ function cac_adminbar_js() {
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
-		var loginform = '<form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form>';
+		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
 

@@ -10,11 +10,11 @@
   margin: 0 auto;
   max-width: 1140px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li {
+#wpadminbar #wp-toolbar > ul > li {
   position: relative;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li > .ab-item {
-  color: #e5e5e5;
+#wpadminbar #wp-toolbar > ul > li > .ab-item {
+  color: #ffffff;
   cursor: pointer;
   text-align: center;
   line-height: 140%;
@@ -23,17 +23,17 @@
   font-size: 14px;
   text-decoration: none;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li > .ab-item:before {
+#wpadminbar #wp-toolbar > ul > li > .ab-item:before {
   margin: 0;
   content: '';
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li > .fa {
+#wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
   width: 14px;
   margin: 0 auto;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li .toolbar-item-count {
+#wpadminbar #wp-toolbar > ul > li .toolbar-item-count {
   background: #ff5959;
   color: #fff;
   border-radius: 8px;
@@ -47,33 +47,33 @@
   width: 16px;
   opacity: 1;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li .toolbar-item-count.sub-count {
+#wpadminbar #wp-toolbar > ul > li .toolbar-item-count.sub-count {
   position: absolute;
   right: 8px;
   top: 11px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li.hover > a,
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li:hover > a,
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li.hover > .ab-item,
-#wpadminbar #wp-toolbar #wp-admin-bar-root-default > li:hover > .ab-item {
+#wpadminbar #wp-toolbar > ul > li.hover > a,
+#wpadminbar #wp-toolbar > ul > li:hover > a,
+#wpadminbar #wp-toolbar > ul > li.hover > .ab-item,
+#wpadminbar #wp-toolbar > ul > li:hover > .ab-item {
   background: #333;
   color: #63dfd2;
+}
+#wpadminbar #wp-toolbar .admin-bar-menu li {
+  font-size: 14px;
+}
+#wpadminbar #wp-toolbar .admin-bar-menu li a {
+  color: #333;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+#wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
+  background: #63dfd2;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
   border-radius: 0 0 4px 4px;
   width: 600%;
-}
-#wpadminbar #wp-toolbar .ab-sub-wrapper .admin-bar-menu-item {
-  font-size: 14px;
-}
-#wpadminbar #wp-toolbar .ab-sub-wrapper .admin-bar-menu-item a {
-  color: #333;
-  padding: 6px 12px;
-  text-decoration: none;
-}
-#wpadminbar #wp-toolbar .ab-sub-wrapper .admin-bar-menu-item a:hover {
-  background: #63dfd2;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
   padding: 0;
@@ -132,4 +132,30 @@
 #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
 #wpadminbar #wp-toolbar #wp-admin-bar-site-name .ab-sub-wrapper {
   width: 170%;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
+  width: 150%;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p {
+  color: #333;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p.actions {
+  padding-top: 6px;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
+  background: #000;
+  border-left: 1px #666666 solid;
+  border-right: 1px #666666 solid;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
+  max-width: 70px;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
+  color: #333;
+  width: 350%;
+  -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
+  padding: 3% 5%;
 }

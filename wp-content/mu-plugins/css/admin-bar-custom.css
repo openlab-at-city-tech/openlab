@@ -74,10 +74,6 @@
 	outline: none;
 }
 
-#wpadminbar .quicklinks .ab-top-secondary > li {
-	float: right;
-}
-
 #wpadminbar .quicklinks a,
 #wpadminbar .quicklinks .ab-empty-item,
 #wpadminbar .shortlink-input {
@@ -399,10 +395,6 @@
 	width: 16px;
 	display: inline-block;
 	margin: 6px 8px 0 -2px;
-}
-
-#wpadminbar #wp-admin-bar-appearance {
-	margin-top: -12px;
 }
 
 #wpadminbar #wp-admin-bar-my-sites > .ab-item:before,
