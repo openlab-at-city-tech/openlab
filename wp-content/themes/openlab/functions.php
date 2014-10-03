@@ -75,7 +75,6 @@ function openlab_load_scripts() {
         wp_enqueue_script('select-js');
         wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
         wp_enqueue_script('utility');
-        
     }
 }
 
