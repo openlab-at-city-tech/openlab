@@ -25,7 +25,9 @@ add_filter( 'show_admin_bar', '__return_true', 999999 );
  * @param type $styles
  */
 function openlab_remove_admin_bar_default_css($styles) {
-    $styles->remove('admin-bar');
+    if(!is_admin()){
+        $styles->remove('admin-bar');
+    }
 }
 
 add_action('wp_default_styles', 'openlab_remove_admin_bar_default_css', 99999);
