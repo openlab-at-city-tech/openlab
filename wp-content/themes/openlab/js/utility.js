@@ -54,8 +54,6 @@
             })
         }
 
-        equal_row_height();
-
         // this add an onclick event to the "New Topic" button while preserving 
         // the original event; this is so "New Topic" can have a "current" class
         $('.show-hide-new').click(function() {
@@ -145,6 +143,10 @@
         }
 
     });//end document.ready
+    
+    $(window).load(function(){
+        equal_row_height();
+    });
 
     /*this is for the homepage group list, so that cells in each row all have the same height 
      - there is a possiblity of doing this template-side, but requires extensive restructuring of the group list function*/
