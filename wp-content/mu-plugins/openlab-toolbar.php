@@ -68,6 +68,9 @@ class OpenLab_Admin_Bar {
                 
                 //taking out the admin network menu for now
 		//add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
+                
+                //adjust the padding at the top of the page
+                add_action('wp_head',array($this,'admin_bar_html_update'),99999);
 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
@@ -1051,6 +1054,21 @@ class OpenLab_Admin_Bar {
                 wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );
 		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
 	}
+        
+        function admin_bar_html_update(){
+            ?>
+
+            <style type="text/css" media="screen">
+                    html { margin-top: 50px !important; }
+                    * html body { margin-top: 50px !important; }
+                    @media screen and ( max-width: 782px ) {
+                            html { margin-top: 50px !important; }
+                            * html body { margin-top: 50px !important; }
+                    }
+            </style>
+
+            <?php
+        }
 }
 
 // Themes like TwentyTen don't use jQuery by default, so let's enqueue it!
