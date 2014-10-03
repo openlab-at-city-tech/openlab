@@ -27,8 +27,8 @@ function cuny_home_login() {
             <div id="user-info" class="col-sm-13">
                 <h4 class="no-margin no-margin-top"><?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?></h4>
                 <ul class="content-list">
-                    <li><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>
-                    <li><a class="button logout" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></li>
+                    <li><a class="button logout font-size font-14 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>
+                    <li><a class="button logout font-size font-14 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></li>
                 </ul>
             </div><!--user-info-->
 
@@ -41,14 +41,14 @@ function cuny_home_login() {
 
         <div id="login-help" class="log-box">
             <h4 class="title">Need HELP?</h4>
-            <p>Visit the <a href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
+            <p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a class="roll-over-loss" href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
         </div><!--login-help-->
 
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box">'; ?>
         <?php echo '<h2 class="title"><span class="fa fa-plus-circle"></span> Join OpenLab</h2>'; ?>
-        <p class="italics">&nbsp;&nbsp;A Place to learn, work and share</p>
-        <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-left" href="' . site_url() . '/register/">Sign up</a> Need an account?<br />Sign Up to become a member!</p>', 'buddypress') ?>
+        <p class="italics font-size font-14">&nbsp;&nbsp;A Place to learn, work and share</p>
+        <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-left" href="' . site_url() . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
         <?php echo '<div id="open-lab-login" class="log-box">'; ?>

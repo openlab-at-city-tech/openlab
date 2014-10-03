@@ -7333,6 +7333,9 @@ body .no-margin.no-margin-top {
 body .no-margin.no-margin-bottom {
   margin-bottom: 0;
 }
+body .font-size.font-14 {
+  font-size: 14px !important;
+}
 body .content-list {
   margin: 0;
   padding: 0;
@@ -7644,6 +7647,9 @@ body .align-left {
   float: left;
   width: 45%;
   font-weight: normal;
+}
+.home-page #cac-featured .cfcw-content p.cfcw-title {
+  font-weight: 600;
 }
 .home-page #cac-featured .cfcw-content:after {
   clear: both;
