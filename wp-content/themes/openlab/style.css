@@ -7600,6 +7600,7 @@ body .align-left {
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content h2 {
   font-size: 32px;
+  margin: 15px 0;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
   font-size: 16px;
@@ -7607,7 +7608,7 @@ body .align-left {
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
   background: transparent;
-  top: 2%;
+  top: 14px;
   margin-top: 0;
   height: 15px;
   width: 10px;
