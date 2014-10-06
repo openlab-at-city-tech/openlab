@@ -73,6 +73,7 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
   border-radius: 0 0 4px 4px;
+  margin-top: 1px;
   width: 600%;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
@@ -123,6 +124,16 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
   display: block;
   margin-top: 8px;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
+  background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;
+  padding: 49px 0 0;
+  width: 127px;
+  overflow: hidden;
+  height: 0;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-openlab .ab-sub-wrapper {
+  width: 170px;
 }
 #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab,
 #wpadminbar #wp-toolbar #wp-admin-bar-site-name {
