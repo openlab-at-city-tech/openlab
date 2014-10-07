@@ -159,9 +159,11 @@ blockquote {
             color: @70gray;
             &.prev{
                 border-radius: @border-radius-left;
+                padding: 8px 12px;
             }
             &.next{
                 border-radius: @border-radius-right;
+                padding: 8px 12px;
             }
             &.current{
                 background: @cyan;
@@ -585,6 +587,9 @@ body{
 /**custom selects**/
 .custom-select,
 .hidden-custom-select{
+    option{
+        font-weight: 600;
+    }
     position: relative;
     span.customSelect { 
         font: inherit;
@@ -592,6 +597,7 @@ body{
         border:1px solid @10gray;
         padding: 8px 5%;
         width:100%;
+        font-weight: 600;
         .border-radius;
         &.customSelectOpen{
             background-image: url('images/select-arrow-close.png');
@@ -932,11 +938,13 @@ body{
         margin-bottom: 12px;
         color: @60gray;
         h1,
-        h2,
         h3,
         h4,
         h5{
             margin: 0 0 5px;
+        }
+        h2{
+            margin: 10px 0 12px;
         }
         a{
             :not(.btn-primary){
@@ -947,6 +955,7 @@ body{
             color: @80gray;
         }
         .info-line{
+            font-size: 12px;
             margin-bottom: 12px;
         }
     }

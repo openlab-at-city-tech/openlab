@@ -7125,10 +7125,12 @@ blockquote .h6 {
 .pagination li a.prev,
 .pagination li span.prev {
   border-radius: 4px 0 0 4px;
+  padding: 8px 12px;
 }
 .pagination li a.next,
 .pagination li span.next {
   border-radius: 0 4px 4px 0;
+  padding: 8px 12px;
 }
 .pagination li a.current,
 .pagination li span.current {
@@ -7495,6 +7497,10 @@ body .align-left {
 .hidden-custom-select {
   position: relative;
 }
+.custom-select option,
+.hidden-custom-select option {
+  font-weight: 600;
+}
 .custom-select span.customSelect,
 .hidden-custom-select span.customSelect {
   font: inherit;
@@ -7502,6 +7508,7 @@ body .align-left {
   border: 1px solid #dddddd;
   padding: 8px 5%;
   width: 100%;
+  font-weight: 600;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -7828,8 +7835,6 @@ body .align-left {
 }
 #group-list .group-item-wrapper h1,
 .group-list .group-item-wrapper h1,
-#group-list .group-item-wrapper h2,
-.group-list .group-item-wrapper h2,
 #group-list .group-item-wrapper h3,
 .group-list .group-item-wrapper h3,
 #group-list .group-item-wrapper h4,
@@ -7837,6 +7842,10 @@ body .align-left {
 #group-list .group-item-wrapper h5,
 .group-list .group-item-wrapper h5 {
   margin: 0 0 5px;
+}
+#group-list .group-item-wrapper h2,
+.group-list .group-item-wrapper h2 {
+  margin: 10px 0 12px;
 }
 #group-list .group-item-wrapper a :not(.btn-primary),
 .group-list .group-item-wrapper a :not(.btn-primary) {
@@ -7848,6 +7857,7 @@ body .align-left {
 }
 #group-list .group-item-wrapper .info-line,
 .group-list .group-item-wrapper .info-line {
+  font-size: 12px;
   margin-bottom: 12px;
 }
 #people-listing .group-item-wrapper {
