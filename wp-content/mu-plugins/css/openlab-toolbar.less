@@ -24,6 +24,10 @@
                         margin: 0;
                         content: '';
                     }
+                    .fa-caret-down{
+                        font-size: 12px;
+                        padding-left: 8px;
+                    }
                 }
                 > .fa{
                     font-family: FontAwesome;
@@ -82,9 +86,21 @@
                 padding: 0;
                 background: #fff;
                 border-radius: inherit;
+                p{
+                    color: #333;
+                    margin-bottom: 8px;
+                    font-size: 12px;
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+                }
+                span{
+                    font-size: 12px;
+                }
                 .submenu-title{
                     background: #b8e2df;
                     margin-bottom: 16px;
+                    color: #333;
                     .ab-item{
                         padding: 5px 10px;
                         font-size: 14px;
@@ -103,13 +119,6 @@
                     .ab-item{
                         width: 90%;
                         margin: 0 auto;
-                        p{
-                            color: #333;
-                            margin-bottom: 8px;
-                            &:last-child{
-                                margin-bottom: 0;
-                            }
-                        }
                         .actions{
                             .btn{
                                 float: left;

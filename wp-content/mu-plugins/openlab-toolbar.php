@@ -204,7 +204,7 @@ class OpenLab_Admin_Bar {
  	function add_my_openlab_menu( $wp_admin_bar ) {
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => 'My OpenLab',
+			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'admin-bar-menu',
@@ -605,7 +605,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'messages',
 			'id'     => 'messages-more',
-			'title'  => 'See All Messages',
+			'title'  => '<span>See All Messages</span>',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
                         'meta' => array(
                             'class' => 'menu-bottom-link'
@@ -676,7 +676,7 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'activity',
 			'id'     => 'activity-more',
-			'title'  => 'See All Activity',
+			'title'  => '<span>See All Activity</span>',
 			'href'   => $link,
                         'meta' => array(
                                 'class' => 'menu-bottom-link'
@@ -708,7 +708,7 @@ class OpenLab_Admin_Bar {
 
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => $title,
+                    'title' => $title.' <span class="fa fa-caret-down"></span>',
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
                         'class' => 'admin-bar-menu',

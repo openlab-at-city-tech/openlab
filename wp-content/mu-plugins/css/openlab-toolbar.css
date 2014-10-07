@@ -27,6 +27,10 @@
   margin: 0;
   content: '';
 }
+#wpadminbar #wp-toolbar > ul > li > .ab-item .fa-caret-down {
+  font-size: 12px;
+  padding-left: 8px;
+}
 #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
@@ -81,9 +85,21 @@
   background: #fff;
   border-radius: inherit;
 }
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
+  margin-bottom: 0;
+}
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu span {
+  font-size: 12px;
+}
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
   background: #b8e2df;
   margin-bottom: 16px;
+  color: #333;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title .ab-item {
   padding: 5px 10px;
@@ -103,13 +119,6 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item {
   width: 90%;
   margin: 0 auto;
-}
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item p {
-  color: #333;
-  margin-bottom: 8px;
-}
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item p:last-child {
-  margin-bottom: 0;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item .actions .btn {
   float: left;
