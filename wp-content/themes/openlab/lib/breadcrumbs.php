@@ -30,7 +30,7 @@ add_filter('openlab_single_crumb', 'openlab_specific_blog_breadcrumb', 10, 2);
 
 function openlab_specific_blog_breadcrumb($crumb, $args) {
     global $post;
-
+    
     if ($post->post_type == 'help') {
         $crumb = '<a title="View all Help" href="' . site_url('help/openlab-help') . '">Help</a>';
         
@@ -181,7 +181,7 @@ class Openlab_Breadcrumb {
 
         /** Merge and Filter user and default arguments * */
         $this->args = apply_filters('openlab_breadcrumb_args', wp_parse_args($args, $this->args));
-
+        
         return $this->args['prefix'] . $this->args['labels']['prefix'] . $this->build_crumbs() . $this->args['suffix'];
     }
 
@@ -325,7 +325,6 @@ class Openlab_Breadcrumb {
      * @todo redirect taxonomies to plural pages.
      */
     function get_archive_crumb() {
-
         global $wp_query, $wp_locale;
 
         if (is_category()) {
@@ -415,7 +414,7 @@ class Openlab_Breadcrumb {
 
             $crumb .= $this->args['sep'] . single_post_title('', false);
         }
-
+        
         return apply_filters('openlab_single_crumb', $crumb, $this->args);
     }
 
@@ -429,7 +428,7 @@ class Openlab_Breadcrumb {
     function build_crumbs() {
 
         $crumbs[] = $this->get_home_crumb();
-
+        
         if (is_home())
             $crumbs[] = $this->get_blog_crumb();
         elseif (is_search())
