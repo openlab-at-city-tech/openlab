@@ -7262,7 +7262,10 @@ input[type="submit"] {
   padding-left: 30px;
 }
 .navbar-default .container .navbar-right.search input[type="text"] {
-  width: 150px;
+  width: 43%;
+}
+.navbar-default .container .navbar-right.search .btn {
+  padding: 8px 2%;
 }
 .search {
   position: relative;
@@ -7337,6 +7340,12 @@ body .no-margin.no-margin-bottom {
 }
 body .font-size.font-14 {
   font-size: 14px !important;
+}
+body .font-size.font-13 {
+  font-size: 13px !important;
+}
+body .line-height.height-200 {
+  line-height: 200% !important;
 }
 body .content-list {
   margin: 0;
@@ -7889,6 +7898,7 @@ body .align-left {
 }
 .group-activity-overview .panel .panel-body p {
   margin-bottom: 0;
+  font-size: 12px;
 }
 #members-list .inline-element {
   margin-right: 1.4%;
@@ -7986,7 +7996,7 @@ body .align-left {
   height: 158px;
 }
 /**member profiles**/
-.members-single-home .profile-type {
+.profile-type {
   display: inline-block;
   vertical-align: middle;
   font-size: 14px;
@@ -7996,6 +8006,9 @@ body .align-left {
   height: 30px;
   line-height: 200%;
   margin-bottom: -5px;
+}
+.profile-type .fa-eye-slash {
+  margin-left: 0;
 }
 #member-header {
   margin-top: 64px;

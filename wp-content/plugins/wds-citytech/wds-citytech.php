@@ -281,7 +281,7 @@ function cuny_group_menu_items() {
 }
 
 //add breadcrumbs for buddypress pages
-add_action( 'wp_footer','wds_footer_breadcrumbs' );
+//add_action( 'wp_footer','wds_footer_breadcrumbs' );
 function wds_footer_breadcrumbs() {
 	global $bp, $bp_current;
 	if ( bp_is_group() ) {

@@ -421,7 +421,7 @@ function wds_bp_group_site_pages() {
 
 						<?php if ( openlab_user_portfolio_site_is_local() ) : ?>
 							<li class="portfolio-dashboard-link">
-                                <a href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
+                                <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
 							</li>
 						<?php endif ?>
 					</ul>
@@ -444,7 +444,7 @@ function wds_bp_group_site_pages() {
 						</li>
 
 						<li class="portfolio-dashboard-link">
-							<?php echo '<a href="' . esc_attr( trailingslashit( $site_url ) ) . 'wp-admin/">Dashboard</a>'; ?>
+							<?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr( trailingslashit( $site_url ) ) . 'wp-admin/">Dashboard</a>'; ?>
 						</li>
 					</ul>
 				<?php endif; ?>

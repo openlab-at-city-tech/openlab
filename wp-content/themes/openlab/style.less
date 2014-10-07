@@ -311,7 +311,10 @@ input[type="submit"]{
         .navbar-right{
             &.search{
                 input[type="text"]{
-                    width: 150px;
+                    width: 43%;
+                }
+                .btn{
+                    padding: 8px 2%;
                 }
             }
         }
@@ -401,6 +404,14 @@ body{
     .font-size{
         &.font-14{
             font-size: 14px !important;
+        }
+        &.font-13{
+            font-size: 13px !important;
+        }
+    }
+    .line-height{
+        &.height-200{
+            line-height: 200% !important;
         }
     }
     .content-list{
@@ -995,6 +1006,7 @@ body{
             }
             p{
                 margin-bottom: 0;
+                font-size: @font-size-small;
             }
         }
     }
@@ -1131,17 +1143,18 @@ body{
     }
 }
 /**member profiles**/
-.members-single-home{
-    .profile-type{
-        display: inline-block;
-        vertical-align: middle;
-        font-size: @font-size-base;
-        background: @5gray;
-        color: @magenta;
-        padding: 0 15px;
-        height: 30px;
-        line-height: 200%;
-        margin-bottom: -5px;
+.profile-type{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: @font-size-base;
+    background: @5gray;
+    color: @magenta;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 200%;
+    margin-bottom: -5px;
+    .fa-eye-slash{
+        margin-left: 0;
     }
 }
 #member-header{

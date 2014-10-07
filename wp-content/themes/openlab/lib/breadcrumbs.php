@@ -54,6 +54,7 @@ function openlab_specific_blog_breadcrumb($crumb, $args) {
 add_filter('openlab_archive_crumb', 'openlab_specific_archive_breadcrumb', 10, 2);
 
 function openlab_specific_archive_breadcrumb($crumb, $args) {
+    global $bp, $bp_current;
 
     $tax = get_query_var('taxonomy');
     if ($tax == 'help_category') {
@@ -70,6 +71,39 @@ function openlab_specific_archive_breadcrumb($crumb, $args) {
         }
         $crumb .= ' / ' . $term->name;
     }
+    
+    if ( bp_is_group() ) {
+		$group_id = $bp->groups->current_group->id;
+		$b2 = $bp->groups->current_group->name;
+		$group_type = groups_get_groupmeta( $bp->groups->current_group->id, 'wds_group_type' );
+		if ( $group_type == "course" ) {
+			$b1 = '<a href="'.site_url().'/courses/">Courses</a>';
+		} elseif ( $group_type == "project" ) {
+			$b1 = '<a href="'.site_url().'/projects/">Projects</a>';
+		} elseif ( $group_type == "club" ) {
+			$b1 ='<a href="'.site_url().'/clubs/">Clubs</a>';
+		} else {
+			$b1 = '<a href="'.site_url().'/groups/">Groups</a>';
+		}
+
+	}
+	if ( !empty( $bp->displayed_user->id ) ) {
+		$account_type = xprofile_get_field_data( 'Account Type', $bp->displayed_user->id );
+		if ( $account_type == "Staff" ) {
+			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/staff/">Staff</a>';
+		} elseif ( $account_type == "Faculty" ) {
+			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/faculty/">Faculty</a>';
+		} elseif ( $account_type == "Student" ) {
+			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/students/">Students</a>';
+		} else {
+			$b1 = '<a href="'.site_url().'/people/">People</a>';
+		}
+		$last_name= xprofile_get_field_data( 'Last Name', $bp->displayed_user->id );
+		$b2 = ucfirst( $bp->displayed_user->fullname );//.''.ucfirst( $last_name )
+	}
+	if ( bp_is_group() || !empty( $bp->displayed_user->id ) ) {
+		$crumb = $b1.' / '.$b2;
+                }
 
     return $crumb;
 }
