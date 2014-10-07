@@ -7215,6 +7215,9 @@ input[type="submit"] {
 .submenu .submenu-text {
   margin-right: 8px;
 }
+.wp-caption {
+  max-width: 100%;
+}
 /**header**/
 .navbar-default {
   border: none;
