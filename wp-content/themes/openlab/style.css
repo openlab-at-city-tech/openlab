@@ -4823,6 +4823,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-form.btn-combo .btn {
   width: 16%;
+  padding: 7px 3%;
 }
 .navbar-form .custom-select,
 .navbar-form .hidden-custom-select {
@@ -7183,6 +7184,7 @@ input[type="submit"] {
 }
 .form-inline.btn-combo .btn {
   width: 16%;
+  padding: 7px 3%;
 }
 .form-inline .custom-select,
 .form-inline .hidden-custom-select {
@@ -7839,9 +7841,16 @@ body .align-left {
 #people-listing .group-item-wrapper {
   height: 110px;
 }
+#people-listing .group-item-wrapper h2 {
+  margin: 10px 0 12px;
+}
 .filter {
   width: 93%;
   margin: 0 auto;
+  padding-bottom: 7px;
+}
+.filter p:first-child {
+  margin-top: 7px;
 }
 .filter .custom-select {
   width: 100%;

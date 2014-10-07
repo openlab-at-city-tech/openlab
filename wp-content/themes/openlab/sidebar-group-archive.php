@@ -202,7 +202,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         </form>
 
         <div class="archive-search">
-            <h5 class="bold">Search</h5>
+            <h5 class="bold font-size font-14">Search</h5>
             <form method="get" class="form-inline btn-combo" role="form">
                 <div class="form-group">
                     <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" /><button class="btn btn-primary top-align" id="search-submit" type="submit"><i class="fa fa-search"></i></button>
