@@ -28,9 +28,9 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
 
                         // Use custom front if one exists
                         $custom_front = bp_locate_template(array('groups/single/front.php'), false, true);
-                    
+
                         if (!empty($custom_front)) : load_template($custom_front, true);
-                        
+
                         // Default to activity
                         elseif (bp_is_active('activity')) : cuny_group_single();
 
@@ -71,6 +71,42 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
                         endif;
                     endif;
 
+                //for portfolios that are hidden, check to see if user is admin
+                elseif (openlab_get_group_type() == 'portfolio' && bp_get_group_status() == 'hidden'):
+                    
+                    if (bp_is_item_admin()):
+                        // Looking at home location
+                        if (bp_is_group_home()) :
+                            // Use custom front if one exists
+                            $custom_front = bp_locate_template(array('groups/single/front.php'), false, true);
+
+                            if (!empty($custom_front)) : load_template($custom_front, true);
+
+                            // Default to activity
+                            elseif (bp_is_active('activity')) : cuny_group_single();
+                            
+                            endif;
+                            
+                        else :
+                            
+                            // Group Admin
+                            if (bp_is_group_admin_page()) : bp_get_template_part('groups/single/admin');
+                            
+                            // Group Members
+                            elseif (bp_is_group_members()) : bp_get_template_part('groups/single/members');
+                            
+                            // Email subscription options
+                            elseif (bp_current_action() == 'notifications') : bp_get_template_part('groups/single/notifications');
+                            
+                            // Anything else (plugins mostly)
+                            else : bp_get_template_part('groups/single/plugins');
+                            
+                            endif;
+                            
+                        endif;
+                    endif;
+
+
                 // Group is not visible
                 elseif (!bp_group_is_visible()) :
 
@@ -102,6 +138,7 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
         <?php do_action('bp_after_group_home_content'); ?>
 
     <?php endwhile;
-endif; ?>
+endif;
+?>
 
 <?php openlab_bp_sidebar('actions'); ?>

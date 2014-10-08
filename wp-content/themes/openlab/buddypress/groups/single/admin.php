@@ -75,7 +75,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php do_action('bp_after_group_details_admin'); ?>
 
-            <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &rarr;" id="save" name="save" /></p>
+            <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &#xf138;" id="save" name="save" /></p>
             <?php wp_nonce_field('groups_edit_group_details') ?>
         <?php endif; ?>
 
@@ -123,47 +123,72 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('group-avatar')) : ?>
 
             <?php if ('upload-image' == bp_get_avatar_admin_step()) : ?>
-                <p id="upload-group-avatar-title">Upload New Avatar</p>
-                <p id="upload-group-avatar-text"><?php _e("Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress') ?></p>
+                
+                <div class="panel panel-default">
+                <div class="panel-heading">Upload Avatar</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div id="avatar-wrapper">
+                                    <div class="padded-img">
+                                        
+                                        <?php if(bp_get_group_avatar()): ?>
+                                        <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/>
+                                        <?php else: ?>
+                                            <img class="img-responsive padded" src ="<?php echo get_stylesheet_directory_uri(); ?>/images/avatar_blank.png" alt="avatar-blank"/>
+                                        <?php endif; ?>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-16">
+                            
+                                <p class="italics"><?php _e( 'Upload an image to use as an avatar for this ' . bp_get_group_type() . '. The image will be shown on the main ' . bp_get_group_type() . ' page, and in search results.', 'buddypress') ?></p>
 
-                <p>
-                    <input type="file" name="file" id="file" />
-                    <input type="submit" name="upload" id="upload" value="<?php _e('Upload Image', 'buddypress') ?>" />
-                    <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
-                </p>
+                                <p id="avatar-upload">
+                                    <div class="form-group form-inline">
+                                            <input class="form-control" type="file" name="file" id="file" />
+                                            <input class="btn btn-primary top-align" type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ) ?>" />
+                                            <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
+                                    </div>
+                                </p>
 
-                <?php if (bp_get_group_has_avatar()) : ?>
+                                <?php if ( bp_get_user_has_avatar() ) : ?>
+                                        <p class="italics"><?php _e( "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress' ) ?></p>
+                                        <a class="btn btn-primary no-deco" href="<?php echo bp_get_group_avatar_delete_link() ?>" title="<?php _e( 'Delete Avatar', 'buddypress' ) ?>"><?php _e( 'Delete Avatar', 'buddypress' ) ?></a>
+                                <?php endif; ?>
 
-                    <p id="delete-group-avatar-title">Delete Avatar</p>
-                    <p id="delete-group-avatar-text"><?php _e("If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button.", 'buddypress') ?></p>
-
-                    <?php bp_button(array('id' => 'delete_group_avatar', 'component' => 'groups', 'wrapper_id' => 'delete-group-avatar-button', 'link_class' => 'edit', 'link_href' => bp_get_group_avatar_delete_link(), 'link_title' => __('Delete Avatar', 'buddypress'), 'link_text' => __('Delete Avatar', 'buddypress'))); ?>
-
-                <?php endif; ?>
-
-                <?php wp_nonce_field('bp_avatar_upload') ?>
+                                <?php wp_nonce_field( 'bp_avatar_upload' ) ?>
+                            </div>
+                        </div>
+                </div>
+                </div>
 
             <?php endif; ?>
 
             <?php if ('crop-image' == bp_get_avatar_admin_step()) : ?>
 
-                <h3><?php _e('Crop Avatar', 'buddypress') ?></h3>
+                <div class="panel panel-default">
+                <div class="panel-heading">Crop Avatar</div>
+                        <div class="panel-body">
 
-                <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
+                            <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
 
-                <div id="avatar-crop-pane">
-                    <img src="<?php bp_avatar_to_crop() ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e('Avatar preview', 'buddypress') ?>" />
+                            <div id="avatar-crop-pane">
+                                <img src="<?php bp_avatar_to_crop() ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e('Avatar preview', 'buddypress') ?>" />
+                            </div>
+
+                            <input class="btn btn-primary" type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e('Crop Image', 'buddypress') ?>" />
+
+                            <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src() ?>" />
+                            <input type="hidden" id="x" name="x" />
+                            <input type="hidden" id="y" name="y" />
+                            <input type="hidden" id="w" name="w" />
+                            <input type="hidden" id="h" name="h" />
+
+                            <?php wp_nonce_field('bp_avatar_cropstore') ?>
+                        </div>
                 </div>
-
-                <input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e('Crop Image', 'buddypress') ?>" />
-
-                <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src() ?>" />
-                <input type="hidden" id="x" name="x" />
-                <input type="hidden" id="y" name="y" />
-                <input type="hidden" id="w" name="w" />
-                <input type="hidden" id="h" name="h" />
-
-                <?php wp_nonce_field('bp_avatar_cropstore') ?>
 
             <?php endif; ?>
 
@@ -386,7 +411,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             ?>
 
             <div class="submit">
-                <input type="submit" disabled="disabled" value="<?php _e('Delete ' . $group_type, 'buddypress') ?> &rarr;" id="delete-group-button" name="delete-group-button" />
+                <input class="btn btn-primary" type="submit" disabled="disabled" value="<?php _e('Delete ' . $group_type, 'buddypress') ?> &#xf138;" id="delete-group-button" name="delete-group-button" />
             </div>
 
             <input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />

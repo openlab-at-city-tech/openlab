@@ -929,11 +929,11 @@ function wds_load_group_type( $group_type ) {
         
         $return .= '</table></div></div>';
         
+        if ( 'course' == $group_type ) {
+        
         $return .= '<div class="panel panel-default">';
         $return .= '<div class="panel-heading bold">Course Information</div>';
-        $return .= '<div class="panel-body">';
-
- 	if ( 'course' == $group_type ) {
+        $return .= '<div class="panel-body"><table>';
 
 		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
@@ -980,9 +980,9 @@ function wds_load_group_type( $group_type ) {
 		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
 		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return.= '</tr>';
+                
+                $return.= '</table></div></div><!--.panel-->';
 	}
-
-	$return.= '</table></div></div><!--.panel-->';
 
 	$return.= '<script>wds_load_group_departments();</script>';
 
