@@ -28,8 +28,9 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
 
                         // Use custom front if one exists
                         $custom_front = bp_locate_template(array('groups/single/front.php'), false, true);
+                    
                         if (!empty($custom_front)) : load_template($custom_front, true);
-
+                        
                         // Default to activity
                         elseif (bp_is_active('activity')) : cuny_group_single();
 
