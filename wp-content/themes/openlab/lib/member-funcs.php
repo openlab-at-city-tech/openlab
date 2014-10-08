@@ -506,7 +506,7 @@ function cuny_student_profile() {
             ?>
 
             <div id="members-list" class="info-group col-sm-24">
-                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right"></span></a></h4>
+                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                 <?php if ($friend_ids) { ?>
 
@@ -568,7 +568,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                     $href = $bp->displayed_user->domain . 'groups/?type=' . $type;
                 endif;
                 ?>
-                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right"></span></a></h4>
+                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
                 <?php $x = 0; ?>
                 <?php while (bp_groups()) : bp_the_group(); ?>
 
@@ -583,7 +583,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                 <div class="activity-content col-sm-14">
 
                                     <h6>
-                                        <a href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
+                                        <a class="font-size font-14" href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
                                     </h6>
 
                                     <p>
@@ -799,12 +799,12 @@ function cuny_member_profile_header() {
                                                     </td>
 
                                                     <td>
-                                                        <?php 
-                                                        if(bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio'){
+                                                        <?php
+                                                        if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
-                                                        }else{
-                                                            $field_value = str_replace('<p>','',bp_get_the_profile_field_value());
-                                                            $field_value = str_replace('</p>','',$field_value);
+                                                        } else {
+                                                            $field_value = str_replace('<p>', '', bp_get_the_profile_field_value());
+                                                            $field_value = str_replace('</p>', '', $field_value);
                                                             echo $field_value;
                                                         }
                                                         ?>
@@ -893,7 +893,7 @@ function openlab_messages_pagination() {
 
     if ((int) $messages_template->total_thread_count && (int) $messages_template->pag_num) {
         $pagination = paginate_links(array(
-            'base' => add_query_arg( $page_arg, array('mpage' => '%#%' )),
+            'base' => add_query_arg($page_arg, array('mpage' => '%#%')),
             'format' => '',
             'total' => ceil((int) $messages_template->total_thread_count / (int) $messages_template->pag_num),
             'current' => $messages_template->pag_page,
@@ -903,8 +903,32 @@ function openlab_messages_pagination() {
             'type' => 'list',
         ));
     }
-    
+
     $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
 
     return $pagination;
+}
+
+function openlab_get_custom_activity_action() {
+    global $activities_template;
+
+    //the things we do...
+    $action_output = '';
+    $action_output_raw = $activities_template->activity->action;
+    $action_output_ary = explode('<a', $action_output_raw);
+    $count = 0;
+    foreach ($action_output_ary as $action_redraw) {
+        if (!ctype_space($action_redraw)) {
+            $class = ($count == 0 ? 'activity-user' : 'activity-action');
+            $action_output .= '<a class="' . $class . '"' . $action_redraw;
+            $count++;
+        }
+    }
+    
+    $time_since = apply_filters_ref_array( 'bp_activity_time_since', array( '<span class="time-since">' . bp_core_time_since( $activities_template->activity->date_recorded ) . '</span>', &$activities_template->activity ) );
+
+    $title .= '<p class="item inline-links semibold">' . $action_output . '</p>';
+    $title .= '<p class="item timestamp font-size font-14"><span class="fa fa-undo"></span> ' . $time_since . ' ago</p>';
+    
+    return $title;
 }

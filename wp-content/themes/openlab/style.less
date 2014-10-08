@@ -407,11 +407,14 @@ body{
         }
     }
     .font-size{
+        &.font-13{
+            font-size: 13px !important;
+        }
         &.font-14{
             font-size: 14px !important;
         }
-        &.font-13{
-            font-size: 13px !important;
+        &.font-18{
+            font-size: 18px !important;
         }
     }
     .line-height{
@@ -880,7 +883,7 @@ body{
         }
         ul.sidebar-nav{
             margin: 0;
-            padding: 0;
+            padding: 12px 0;
             list-style-type: none;
             li{
                 a{
@@ -922,6 +925,13 @@ body{
         }
         &.padded-block{
             padding: 6%;
+        }
+        #activity-stream{
+            .activity-avatar{
+                img{
+                    padding-top: 6px;
+                }
+            }
         }
     }
 }
@@ -1176,6 +1186,11 @@ body{
         font-size: 32px;
         font-weight: 600;
     }
+    .timestamp{
+        .fa{
+            margin: 0;
+        }
+    }
     .btn.is_friend.friendship-button{
         &:hover{
             color: @aqua;
@@ -1191,7 +1206,8 @@ body{
                 margin-top: 0;
                 margin-bottom: 5px;
             }
-            p{
+            p,
+            a{
                 margin-bottom: 0;
                 font-size: 12px;
             }

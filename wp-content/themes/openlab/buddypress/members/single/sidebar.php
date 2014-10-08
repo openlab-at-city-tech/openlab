@@ -165,11 +165,11 @@ $activity_args = array(
                     <div class="activity-content col-sm-17">
 
                         <div class="activity-header">
-                        <?php bp_activity_action() ?>
+                        <?php echo openlab_get_custom_activity_action(); ?>
                         </div>
 
                         <?php if (bp_activity_has_content()) : ?>
-                            <div class="activity-inner">
+                            <div class="activity-inner semibold">
                             <?php bp_activity_content_body() ?>
                             </div>
         <?php endif; ?>
