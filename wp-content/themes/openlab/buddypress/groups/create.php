@@ -258,7 +258,7 @@
         <?php bp_new_group_invite_friend_list() ?>
                                 </ul>
 
-        <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user') ?>
+        <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user'); ?>
                             </div>
                         </div><!-- .left-menu -->
 

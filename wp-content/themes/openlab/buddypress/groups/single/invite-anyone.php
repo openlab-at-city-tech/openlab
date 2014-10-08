@@ -79,13 +79,13 @@
             <?php do_action('bp_after_group_send_invites_list') ?>
         </div>
     </div>
+        
+    <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user') ?>
 
     <?php if (invite_anyone_access_test() && !bp_is_group_create()) : ?>
         <div class="panel panel-default">
             <div class="panel-heading semibold"><?php _e('Invite new members by email:'); ?></div>
             <div class="panel-body">
-
-                <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user') ?>
 
                 <p class="invite-copy"><?php _e('This link will take you to My Invitations, where you may invite people to join the OpenLab and this ' . ucfirst($group_type)); ?></p>
 
