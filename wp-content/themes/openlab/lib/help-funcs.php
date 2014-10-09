@@ -119,7 +119,7 @@ function openlab_help_tags_loop() {
     $tags_query = new WP_Query( $args );
     ?>
 
-    <h1 class="parent-cat">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
+    <h1 class="parent-cat entry-title">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
 
     <?php
     while ($tags_query->have_posts()) : $tags_query->the_post();
@@ -127,7 +127,7 @@ function openlab_help_tags_loop() {
         $post_id = get_the_ID();
         ?>
 
-        <h3 class="entry-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <h2 class="help-title cat-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h2>
         <div class="cat-list">Category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ', ''); ?></div>
         <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
@@ -136,7 +136,7 @@ function openlab_help_tags_loop() {
     wp_reset_query();
     ?>
 
-    <a href="#help-top">Go To Top</a>
+        <a class="pull-right" href="#help-top">Go To Top <span class="fa fa-angle-up"></span></a>
 
     <?php
 }
@@ -179,10 +179,10 @@ function openlab_help_cats_loop() {
     ?>
 
     <?php if ($parent_term->parent == 0): ?>
-    <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
+    <h1 class="parent-cat entry-title"><?php echo $parent_cat_name; ?></h1>
     <?php else:
         $head_term = get_term_by('id',$parent_term->parent,'help_category');
-    $child_title = '<h1 class="parent-cat"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
+    $child_title = '<h1 class="parent-cat entry-title"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
     $child_title .= '<h2 class="child-cat child-cat-num-0">'. $parent_cat_name .'</h2>';
     echo $child_title;
     endif; ?>
@@ -193,7 +193,7 @@ function openlab_help_cats_loop() {
         $post_id = get_the_ID();
         ?>
 
-        <h3 class="entry-title help-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <h2 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h2>
         <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
         <?php
@@ -230,7 +230,7 @@ function openlab_help_cats_loop() {
         while ($child_query->have_posts()) : $child_query->the_post();
             ?>
 
-            <h3 class="entry-title help-title"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <h2 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h2>
             <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
 
             <?php
@@ -243,7 +243,7 @@ function openlab_help_cats_loop() {
     }//ecnd child_cats for each
     ?>
 
-    <a href="#help-top">Go To Top</a>
+    <a class="pull-right" href="#help-top">Go To Top <span class="fa fa-angle-up"></span></a>
 
     <?php
 }
@@ -276,7 +276,7 @@ function openlab_glossary_cats_loop() {
     $cat_query = new WP_Query( $args );
     ?>
 
-    <h1 class="parent-cat">Glossary</h1>
+    <h1 class="parent-cat entry-title">Glossary</h1>
     <div class="glossary-description"><p><?php echo $parent_term->description; ?></p></div>
 
     <?php
@@ -286,7 +286,7 @@ function openlab_glossary_cats_loop() {
         ?>
 
         <div class="glossary-wrapper">
-            <h3 class="glossary-title"><?php the_title(); ?></h3>
+            <h2 class="help-title glossary-title no-margin no-margin-bottom"><?php the_title(); ?></h2>
             <div class="glossary-entry"><?php the_content(); ?></div>
             <div class="clearfloat"></div>
         </div><!--glossary-wrapper-->
@@ -296,7 +296,7 @@ function openlab_glossary_cats_loop() {
     wp_reset_query();
     ?>
 
-    <a href="#help-top">Go To Top</a>
+    <a class="pull-right" href="#help-top">Go To Top <span class="fa fa-angle-up"></span></a>
 
     <?php
 }

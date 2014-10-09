@@ -8090,6 +8090,9 @@ body .align-left {
 .col-help .page-title span {
   color: #49cabe;
 }
+.help-title:first-of-type {
+  margin-top: 64px;
+}
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
