@@ -7343,11 +7343,14 @@ body .no-margin.no-margin-top {
 body .no-margin.no-margin-bottom {
   margin-bottom: 0;
 }
+body .font-size.font-13 {
+  font-size: 13px !important;
+}
 body .font-size.font-14 {
   font-size: 14px !important;
 }
-body .font-size.font-13 {
-  font-size: 13px !important;
+body .font-size.font-18 {
+  font-size: 18px !important;
 }
 body .line-height.height-200 {
   line-height: 200% !important;
@@ -7420,18 +7423,24 @@ body .tag-btn {
   padding: 0 2%;
   font-weight: 600;
 }
-body .mol-count {
+body .mol-count,
+body .site-visibility .fa {
   background: #ff5959;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 10px;
   display: inline-block;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 400;
-  height: 16px;
-  line-height: 164%;
+  height: 20px;
+  line-height: 155%;
   text-align: center;
   vertical-align: middle;
-  width: 16px;
+  width: 20px;
+}
+body .site-visibility .fa {
+  margin: 0;
+  background: #ffffff;
+  color: #ff5959;
 }
 body .group-count {
   text-align: right;
@@ -7620,11 +7629,10 @@ body .align-left {
   color: inherit;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content h2 {
-  font-size: 32px;
   margin: 15px 0;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
-  font-size: 16px;
+  font-size: 13px;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
@@ -7780,7 +7788,7 @@ body .align-left {
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
-  padding: 0;
+  padding: 12px 0;
   list-style-type: none;
 }
 .sidebar .sidebar-block ul.sidebar-nav li a {
@@ -7818,6 +7826,9 @@ body .align-left {
 }
 .sidebar .sidebar-block.padded-block {
   padding: 6%;
+}
+.sidebar .sidebar-block #activity-stream .activity-avatar img {
+  padding-top: 6px;
 }
 /**group archives**/
 #group-list,
@@ -8031,6 +8042,9 @@ body .align-left {
   font-size: 32px;
   font-weight: 600;
 }
+#member-header .timestamp .fa {
+  margin: 0;
+}
 #member-header .btn.is_friend.friendship-button:hover {
   color: #49cabe;
 }
@@ -8044,7 +8058,8 @@ body .align-left {
   margin-top: 0;
   margin-bottom: 5px;
 }
-#member-item-body .panel .panel-body p {
+#member-item-body .panel .panel-body p,
+#member-item-body .panel .panel-body a {
   margin-bottom: 0;
   font-size: 12px;
 }
