@@ -407,16 +407,15 @@ function wds_bp_group_site_pages() {
 		if ( openlab_is_portfolio() ) {
 			?>
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
-				<?php echo openlab_group_visibility_flag( 'site' ); ?>
 
 				<h4 class="sidebar-header">
 					<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
 				</h4>
-
+                            
 				<?php if ( openlab_is_my_portfolio() || is_super_admin() ) : ?>
 					<ul class="sidebar-sublinks portfolio-sublinks">
 						<li class="portfolio-site-link">
-							<a href="<?php openlab_user_portfolio_url() ?>">Site</a>
+							<a href="<?php openlab_user_portfolio_url() ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag( 'site' ); ?></span>
 						</li>
 
 						<?php if ( openlab_user_portfolio_site_is_local() ) : ?>
@@ -430,16 +429,15 @@ function wds_bp_group_site_pages() {
 		<?php } else { ?>
 
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
-				<?php echo openlab_group_visibility_flag( 'site' ); ?>
 
 				<h2 class="sidebar-header">
 					<?php echo ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ) . ' Sites'; ?>
 				</h2>
-
+                            
                                 <div class="sidebar-block">
 					<ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 						<li class="portfolio-site-link">
-                                                    <span class="fa fa-external-link"></span> <?php echo '<a class="bold" href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ).' Site</a>'; ?>
+                                                    <span class="fa fa-external-link"></span> <?php echo '<a class="bold" href="' . trailingslashit( esc_attr( $site_url ) ) . '">'.ucwords( groups_get_groupmeta( bp_get_group_id(), "wds_group_type" ) ).' Site</a>'; ?><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag( 'site' ); ?></span>
 						</li>
                                                 <?php if ( $bp->is_item_admin || is_super_admin() || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) : ?>
 						<li class="portfolio-dashboard-link">

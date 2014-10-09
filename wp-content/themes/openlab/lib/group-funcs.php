@@ -501,8 +501,9 @@ function openlab_group_visibility_flag($type = 'group') {
                 $g_flag_type = 'up';
             } else {
                 $g_text = 'Private';
-                $s_text = 'Open';
             }
+            
+            $s_text = '<span class="fa fa-eye"></span>';
 
             break;
 
@@ -519,32 +520,45 @@ function openlab_group_visibility_flag($type = 'group') {
                 // If the group is public, show a single Public up flag
                 if ('public' === $group->status) {
                     $g_flag_type = 'up';
+                    $s_text = '<span class="fa fa-lock"></span>';
 
                     // For a private group, separate the flags
                 } else {
-                    $s_text = 'Open';
+                    $s_text = '<span class="fa fa-lock"></span>';
                 }
             } else {
                 // Two separate flags
                 if ('public' === $group->status) {
-                    $s_text = 'Private';
+                    $s_text = '<span class="fa fa-lock"></span>';
 
                     // Single "up" private flag
                 } else {
                     $g_flag_type = 'up';
+                    $s_text = '<span class="fa fa-lock"></span>';
                 }
             }
 
             break;
 
         case -2 :
-        case -3 :
             if ('public' === $group->status) {
                 $g_text = 'Open';
-                $s_text = 'Private';
+                $s_text = '<span class="fa fa-lock"></span>';
             } else {
                 $g_text = 'Private';
                 $g_flag_type = 'up';
+                $s_text = '<span class="fa fa-lock"></span>';
+            }
+            
+            break;
+        case -3 :
+            if ('public' === $group->status) {
+                $g_text = 'Open';
+                $s_text = '<span class="fa fa-eye-slash"></span>';
+            } else {
+                $g_text = 'Private';
+                $g_flag_type = 'up';
+                $s_text = '<span class="fa fa-eye-slash"></span>';
             }
 
             break;
@@ -557,9 +571,7 @@ function openlab_group_visibility_flag($type = 'group') {
 
     // Only build the site button if there's something to build
     if (!empty($s_text)) {
-        $group_buttons['site'] = sprintf(
-                '<div class="group-visibility-flag group-visibility-flag-site group-visibility-flag-%s group-visibility-flag-%s">%s</div>', strtolower($s_text), $s_flag_type, $s_text
-        );
+        $group_buttons['site'] = sprintf('%s', $s_text);
     }
 
     return isset($group_buttons[$type]) ? $group_buttons[$type] : '';
@@ -641,9 +653,9 @@ add_action('bp_before_group_body', 'openlab_group_profile_header');
 function openlab_get_privacy_icon() {
 
     if (bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') {
-        return '<span class="fa fa-eye-slash"></span>';
+        return '<span class="fa fa-lock"></span>';
     } else {
-        return '<span class="fa fa-eye-slash"></span>';
+        return '<span class="fa fa-lock"></span>';
     }
 }
 
