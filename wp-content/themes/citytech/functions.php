@@ -922,7 +922,6 @@ function openlab_get_active_semesters() {
 		$combos = array_values( array_reverse( $combos ) );
 
 		set_transient( $tkey, $combos );
-		var_dump( 'Miss' );
 	}
 
 	return $combos;
