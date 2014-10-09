@@ -55,7 +55,7 @@ add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
  */
 function openlab_default_get_group_avatar($url, $params) {
 
-    if (strstr($url, 'default-avatar')) {
+    if (strstr($url, 'default-avatar') || strstr($url, 'wavatar')) {
         $url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
     }
 
