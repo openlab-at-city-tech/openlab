@@ -938,12 +938,12 @@ function openlab_trim_member_name($name){
     
     if($post->post_name == 'people' || $bp->current_action == 'members'){
         $process_name = explode(' ',$name);
-        $new_name = array();
+        $new_name = '';
         foreach($process_name as $process){
-            array_push($new_name,openlab_shortened_text($process,10));
+            $new_name .= ' '.openlab_shortened_text($process,13,false);
         }
         
-        $name = implode(' ',$new_name);
+        $name = $new_name;
     }
     
     return $name;
