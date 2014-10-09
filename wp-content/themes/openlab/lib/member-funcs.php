@@ -932,3 +932,21 @@ function openlab_get_custom_activity_action() {
     
     return $title;
 }
+
+function openlab_trim_member_name($name){
+    global $post, $bp;
+    
+    if($post->post_name == 'people' || $bp->current_action == 'members'){
+        $process_name = explode(' ',$name);
+        $new_name = array();
+        foreach($process_name as $process){
+            array_push($new_name,openlab_shortened_text($process,10));
+        }
+        
+        $name = implode(' ',$new_name);
+    }
+    
+    return $name;
+}
+
+add_filter('bp_member_name','openlab_trim_member_name');
