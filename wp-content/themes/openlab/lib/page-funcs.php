@@ -281,7 +281,7 @@ function cuny_home_square($type) {
                     <?php
                     //echo '<div class="byline">Author Name | Date</div>';
 
-                    echo '<p>' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a href="' . bp_get_group_permalink() . '">See More</a></p>';
+                    echo '<p>' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
                     echo '</div>';
                     echo '</div>';
                     $i++;
