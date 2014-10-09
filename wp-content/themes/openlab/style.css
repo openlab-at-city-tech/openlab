@@ -7597,6 +7597,7 @@ body .align-left {
   width: 4.5%;
   float: left;
   height: 100%;
+  border-radius: 0 4px 4px 0;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul {
   margin-top: 14px;
