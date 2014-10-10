@@ -934,7 +934,7 @@ function bp_docs_get_group_settings( $group_id ) {
 		$settings = groups_get_groupmeta( $group_id, 'bpdocs' );
 	}
 
-	if ( '' === $settsing ) {
+	if ( '' === $setting ) {
 		$settings = array();
 	}
 
