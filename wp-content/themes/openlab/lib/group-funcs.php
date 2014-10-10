@@ -651,12 +651,22 @@ function openlab_group_profile_header() {
 add_action('bp_before_group_body', 'openlab_group_profile_header');
 
 function openlab_get_privacy_icon() {
-
-    if (bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') {
-        return '<span class="fa fa-lock"></span>';
-    } else {
-        return '<span class="fa fa-lock"></span>';
+    
+    switch(bp_get_group_status()){
+        case 'public':
+            $status = '<span class="fa fa-eye"></span>';
+            break;
+        case 'private':
+            $status = '<span class="fa fa-lock"></span>';
+            break;
+        case 'hidden':
+            $status = '<span class="fa fa-eye-slash"></span>';
+            break;
+        default:
+            $status = '<span class="fa fa-eye"></span>';
     }
+
+    return $status;
 }
 
 function cuny_group_single() {
