@@ -22,7 +22,7 @@
         </div>
 
             <div class="submit">
-                <input type="submit" name="submit" value="<?php _e('Save Changes', 'buddypress'); ?>" id="submit" class="auto" />
+                <input type="submit" name="submit" value="<?php _e('Save Changes', 'buddypress'); ?>" id="submit" class="auto btn btn-primary" />
             </div>
 
     <?php do_action('bp_members_notification_settings_after_submit');
