@@ -150,9 +150,8 @@ class BP_Signup {
 
 			// Search terms
 			if ( ! empty( $r['usersearch'] ) ) {
-				$search_terms_clean = esc_sql( esc_sql( $r['usersearch'] ) );
-				$search_terms_clean = like_escape( $search_terms_clean );
-				$sql['where'][]     = "( user_login LIKE '%" . $search_terms_clean . "%' OR user_email LIKE '%" . $search_terms_clean . "%' OR meta LIKE '%" . $search_terms_clean . "%' )";
+				$search_terms_like = '%' . bp_esc_like( $r['usersearch'] ) . '%';
+				$sql['where'][]    = $wpdb->prepare( "( user_login LIKE %s OR user_email LIKE %s OR meta LIKE %s )", $search_terms_like, $search_terms_like, $search_terms_like );
 			}
 
 			// Activation key
@@ -208,7 +207,7 @@ class BP_Signup {
 			$diff    = $now - $sent_at;
 
 			/**
-			 * add a boolean in case the last time an activation link 
+			 * add a boolean in case the last time an activation link
 			 * has been sent happened less than a day ago
 			 */
 			if ( $diff < 1 * DAY_IN_SECONDS ) {
@@ -472,8 +471,8 @@ class BP_Signup {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param array $signup_ids single id or list of ids to resend
-	 * @return array the results
+	 * @param array $signup_ids Single ID or list of IDs to resend.
+	 * @return array
 	 */
 	public static function resend( $signup_ids = array() ) {
 		if ( empty( $signup_ids ) || ! is_array( $signup_ids ) ) {
@@ -539,8 +538,8 @@ class BP_Signup {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param array $signup_ids Single id or list of ids to resend.
-	 * @return array the results
+	 * @param array $signup_ids Single ID or list of IDs to activate.
+	 * @return array
 	 */
 	public static function activate( $signup_ids = array() ) {
 		if ( empty( $signup_ids ) || ! is_array( $signup_ids ) ) {
@@ -599,8 +598,8 @@ class BP_Signup {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param array $signup_ids single id or list of ids to resend
-	 * @return array the results
+	 * @param array $signup_ids Single ID or list of IDs to delete.
+	 * @return array
 	 */
 	public static function delete( $signup_ids = array() ) {
 		global $wpdb;

@@ -4,8 +4,6 @@
  *
  * BuddyPress is social networking software with a twist from the creators of WordPress.
  *
- * $Id$
- *
  * @package BuddyPress
  * @subpackage Main
  */
@@ -16,7 +14,7 @@
  * Description: Social networking in a box. Build a social network for your company, school, sports team or niche community all based on the power and flexibility of WordPress.
  * Author:      The BuddyPress Community
  * Author URI:  http://buddypress.org/community/members/
- * Version:     2.0.1
+ * Version:     2.1.1
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -37,7 +35,7 @@ if ( !class_exists( 'BuddyPress' ) ) :
  */
 class BuddyPress {
 
-	/** Magic *************************************************************/
+	/** Magic *****************************************************************/
 
 	/**
 	 * BuddyPress uses many variables, most of which can be filtered to
@@ -52,7 +50,7 @@ class BuddyPress {
 	 */
 	private $data;
 
-	/** Not Magic *********************************************************/
+	/** Not Magic *************************************************************/
 
 	/**
 	 * @var array Primary BuddyPress navigation.
@@ -97,14 +95,14 @@ class BuddyPress {
 	 */
 	public $active_components = array();
 
-	/** Option Overload ***************************************************/
+	/** Option Overload *******************************************************/
 
 	/**
 	 * @var array Optional Overloads default options retrieved from get_option().
 	 */
 	public $options = array();
 
-	/** Singleton *********************************************************/
+	/** Singleton *************************************************************/
 
 	/**
 	 * Main BuddyPress Instance.
@@ -147,7 +145,7 @@ class BuddyPress {
 		return $instance;
 	}
 
-	/** Magic Methods *****************************************************/
+	/** Magic Methods *********************************************************/
 
 	/**
 	 * A dummy constructor to prevent BuddyPress from being loaded more than once.
@@ -207,7 +205,7 @@ class BuddyPress {
 	 */
 	public function __call( $name = '', $args = array() ) { unset( $name, $args ); return null; }
 
-	/** Private Methods ***************************************************/
+	/** Private Methods *******************************************************/
 
 	/**
 	 * Bootstrap constants.
@@ -229,17 +227,16 @@ class BuddyPress {
 
 		// Path and URL
 		if ( ! defined( 'BP_PLUGIN_DIR' ) ) {
-			define( 'BP_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+			define( 'BP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 		}
 
 		if ( ! defined( 'BP_PLUGIN_URL' ) ) {
-			$plugin_url = plugin_dir_url( __FILE__ );
+			define( 'BP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+		}
 
-			// If we're using https, update the protocol. Workaround for WP13941, WP15928, WP19037.
-			if ( is_ssl() )
-				$plugin_url = str_replace( 'http://', 'https://', $plugin_url );
-
-			define( 'BP_PLUGIN_URL', $plugin_url );
+		// Only applicable to those running trunk
+		if ( ! defined( 'BP_SOURCE_SUBDIRECTORY' ) ) {
+			define( 'BP_SOURCE_SUBDIRECTORY', '' );
 		}
 
 		// Define on which blog ID BuddyPress should run
@@ -262,7 +259,7 @@ class BuddyPress {
 					$plugins = get_site_option( 'active_sitewide_plugins');
 
 					// basename
-					$basename = plugin_basename( constant( 'BP_PLUGIN_DIR' ) . 'bp-loader.php' );
+					$basename = basename( constant( 'BP_PLUGIN_DIR' ) ) . '/bp-loader.php';
 
 					// plugin is network-activated; use main site ID instead
 					if ( isset( $plugins[ $basename ] ) ) {
@@ -301,23 +298,23 @@ class BuddyPress {
 	 */
 	private function setup_globals() {
 
-		/** Versions **************************************************/
+		/** Versions **********************************************************/
 
-		$this->version    = '2.0.1';
+		$this->version    = '2.1.1';
 		$this->db_version = 8311;
 
-		/** Loading ***************************************************/
+		/** Loading ***********************************************************/
 
 		$this->load_deprecated = ! apply_filters( 'bp_ignore_deprecated', BP_IGNORE_DEPRECATED );
 
-		/** Toolbar ***************************************************/
+		/** Toolbar ***********************************************************/
 
 		/**
 		 * @var string The primary toolbar ID
 		 */
 		$this->my_account_menu_id = '';
 
-		/** URIs ******************************************************/
+		/** URIs **************************************************************/
 
 		/**
 		 * @var int The current offset of the URI.
@@ -330,7 +327,7 @@ class BuddyPress {
 		 */
 		$this->no_status_set = false;
 
-		/** Components ************************************************/
+		/** Components ********************************************************/
 
 		/**
 		 * @var string Name of the current BuddyPress component (primary)
@@ -352,18 +349,18 @@ class BuddyPress {
 		 */
 		$this->is_single_item = false;
 
-		/** Root ******************************************************/
+		/** Root **************************************************************/
 
 		// BuddyPress Root blog ID
 		$this->root_blog_id = (int) apply_filters( 'bp_get_root_blog_id', BP_ROOT_BLOG );
 
-		/** Paths******************************************************/
+		/** Paths**************************************************************/
 
 		// BuddyPress root directory
-		$this->file           = __FILE__;
-		$this->basename       = plugin_basename( $this->file );
-		$this->plugin_dir     = BP_PLUGIN_DIR;
-		$this->plugin_url     = BP_PLUGIN_URL;
+		$this->file           = constant( 'BP_PLUGIN_DIR' ) . 'bp-loader.php';
+		$this->basename       = basename( constant( 'BP_PLUGIN_DIR' ) ) . '/bp-loader.php';
+		$this->plugin_dir     = trailingslashit( constant( 'BP_PLUGIN_DIR' ) . constant( 'BP_SOURCE_SUBDIRECTORY' ) );
+		$this->plugin_url     = trailingslashit( constant( 'BP_PLUGIN_URL' ) . constant( 'BP_SOURCE_SUBDIRECTORY' ) );
 
 		// Languages
 		$this->lang_dir       = $this->plugin_dir . 'bp-languages';
@@ -376,12 +373,12 @@ class BuddyPress {
 		$this->old_themes_dir = $this->plugin_dir . 'bp-themes';
 		$this->old_themes_url = $this->plugin_url . 'bp-themes';
 
-		/** Theme Compat **********************************************/
+		/** Theme Compat ******************************************************/
 
 		$this->theme_compat   = new stdClass(); // Base theme compatibility class
 		$this->filters        = new stdClass(); // Used when adding/removing filters
 
-		/** Users *****************************************************/
+		/** Users *************************************************************/
 
 		$this->current_user   = new stdClass();
 		$this->displayed_user = new stdClass();
@@ -415,12 +412,12 @@ class BuddyPress {
 	private function includes() {
 
 		// Load the WP abstraction file so BuddyPress can run on all WordPress setups.
-		require( $this->plugin_dir . '/bp-core/bp-core-wpabstraction.php' );
+		require( $this->plugin_dir . 'bp-core/bp-core-wpabstraction.php' );
 
 		// Setup the versions (after we include multisite abstraction above)
 		$this->versions();
 
-		/** Update/Install ********************************************/
+		/** Update/Install ****************************************************/
 
 		// Theme compatability
 		require( $this->plugin_dir . 'bp-core/bp-core-template-loader.php'     );
@@ -453,7 +450,9 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/1.5.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/1.6.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/1.7.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/1.9.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.0.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.1.php' );
 		}
 	}
 
@@ -528,7 +527,7 @@ class BuddyPress {
 		}
 	}
 
-	/** Public Methods ****************************************************/
+	/** Public Methods ********************************************************/
 
 	/**
 	 * Set up BuddyPress's legacy theme directory.

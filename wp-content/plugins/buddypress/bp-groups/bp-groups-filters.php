@@ -33,12 +33,12 @@ add_filter( 'bp_get_group_description_excerpt', 'wpautop' );
 add_filter( 'bp_get_group_description',         'make_clickable', 9 );
 add_filter( 'bp_get_group_description_excerpt', 'make_clickable', 9 );
 
-add_filter( 'bp_get_group_name',                    'wp_filter_kses', 1 );
-add_filter( 'bp_get_group_permalink',               'wp_filter_kses', 1 );
+add_filter( 'bp_get_group_name',                    'wp_filter_kses',        1 );
+add_filter( 'bp_get_group_permalink',               'wp_filter_kses',        1 );
 add_filter( 'bp_get_group_description',             'bp_groups_filter_kses', 1 );
-add_filter( 'bp_get_group_description_excerpt',     'wp_filter_kses', 1 );
-add_filter( 'groups_group_name_before_save',        'wp_filter_kses', 1 );
-add_filter( 'groups_group_description_before_save', 'wp_filter_kses', 1 );
+add_filter( 'bp_get_group_description_excerpt',     'wp_filter_kses',        1 );
+add_filter( 'groups_group_name_before_save',        'wp_filter_kses',        1 );
+add_filter( 'groups_group_description_before_save', 'wp_filter_kses',        1 );
 
 add_filter( 'bp_get_group_description',         'stripslashes' );
 add_filter( 'bp_get_group_description_excerpt', 'stripslashes' );
@@ -65,29 +65,55 @@ add_filter( 'bp_get_total_group_count',      'bp_core_number_format' );
 add_filter( 'bp_get_group_total_for_member', 'bp_core_number_format' );
 add_filter( 'bp_get_group_total_members',    'bp_core_number_format' );
 
-function bp_groups_filter_kses( $content ) {
-	global $allowedtags;
+/**
+ * Filter output of Group Description through WordPress's KSES API.
+ *
+ * @since BuddyPress (1.1.0)
+ *
+ * @param string $content
+ * @return string
+ */
+function bp_groups_filter_kses( $content = '' ) {
 
-	$groups_allowedtags                  = $allowedtags;
-	$groups_allowedtags['a']['class']    = array();
-	$groups_allowedtags['img']           = array();
-	$groups_allowedtags['img']['src']    = array();
-	$groups_allowedtags['img']['alt']    = array();
-	$groups_allowedtags['img']['class']  = array();
-	$groups_allowedtags['img']['width']  = array();
-	$groups_allowedtags['img']['height'] = array();
-	$groups_allowedtags['img']['class']  = array();
-	$groups_allowedtags['img']['id']     = array();
-	$groups_allowedtags['code']          = array();
-	$groups_allowedtags = apply_filters( 'bp_groups_filter_kses', $groups_allowedtags );
+	/**
+	 * Note that we don't immediately bail if $content is empty. This is because
+	 * WordPress's KSES API calls several other filters that might be relevant
+	 * to someone's workflow (like `pre_kses`)
+	 */
 
-	return wp_kses( $content, $groups_allowedtags );
+	// Get allowed tags using core WordPress API allowing third party plugins
+	// to target the specific `buddypress-groups` context.
+	$allowed_tags = wp_kses_allowed_html( 'buddypress-groups' );
+
+	// Add our own tags allowed in group descriptions
+	$allowed_tags['a']['class']    = array();
+	$allowed_tags['img']           = array();
+	$allowed_tags['img']['src']    = array();
+	$allowed_tags['img']['alt']    = array();
+	$allowed_tags['img']['class']  = array();
+	$allowed_tags['img']['width']  = array();
+	$allowed_tags['img']['height'] = array();
+	$allowed_tags['img']['class']  = array();
+	$allowed_tags['img']['id']     = array();
+	$allowed_tags['code']          = array();
+
+	/**
+	 * Filter HTML elements allowed for a given context.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 *
+	 * @param string $allowed_tags Allowed tags, attributes, and/or entities.
+	 */
+	$tags = apply_filters( 'bp_groups_filter_kses', $allowed_tags );
+
+	// Return KSES'ed content, allowing the above tags
+	return wp_kses( $content, $tags );
 }
 
-/** Group forums **************************************************************/
+/** Legacy group forums (bbPress 1.x) *****************************************/
 
 /**
- * Only filter the forum SQL on group pages or on the forums directory
+ * Filter bbPress query SQL when on group pages or on forums directory.
  */
 function groups_add_forum_privacy_sql() {
 	add_filter( 'get_topics_fields', 'groups_add_forum_fields_sql' );
@@ -96,11 +122,23 @@ function groups_add_forum_privacy_sql() {
 }
 add_filter( 'bbpress_init', 'groups_add_forum_privacy_sql' );
 
+/**
+ * Add fields to bbPress query for group-specific data.
+ *
+ * @param string $sql
+ * @return string
+ */
 function groups_add_forum_fields_sql( $sql = '' ) {
 	$sql = 't.*, g.id as object_id, g.name as object_name, g.slug as object_slug';
 	return $sql;
 }
 
+/**
+ * Add JOINed tables to bbPress query for group-specific data.
+ *
+ * @param string $sql
+ * @return string
+ */
 function groups_add_forum_tables_sql( $sql = '' ) {
 	global $bp;
 
@@ -109,6 +147,12 @@ function groups_add_forum_tables_sql( $sql = '' ) {
 	return $sql;
 }
 
+/**
+ * Add WHERE clauses to bbPress query for group-specific data and access protection.
+ *
+ * @param string $sql
+ * @return string
+ */
 function groups_add_forum_where_sql( $sql = '' ) {
 	global $bp;
 
@@ -152,6 +196,14 @@ function groups_add_forum_where_sql( $sql = '' ) {
 	return $bp->groups->filter_sql;
 }
 
+/**
+ * Modify bbPress caps for bp-forums.
+ *
+ * @param bool $value
+ * @param string $cap
+ * @param array $args
+ * @return bool
+ */
 function groups_filter_bbpress_caps( $value, $cap, $args ) {
 	global $bp;
 
@@ -169,11 +221,13 @@ function groups_filter_bbpress_caps( $value, $cap, $args ) {
 add_filter( 'bb_current_user_can', 'groups_filter_bbpress_caps', 10, 3 );
 
 /**
- * Amends the forum directory's "last active" bbPress SQL query to stop it fetching
- * information we aren't going to use. This speeds up the query.
+ * Amends the forum directory's "last active" bbPress SQL query to stop it fetching information we aren't going to use.
+ *
+ * This speeds up the query.
+ *
+ * @since BuddyPress (1.5.0)
  *
  * @see BB_Query::_filter_sql()
- * @since BuddyPress (1.5)
  */
 function groups_filter_forums_root_page_sql( $sql ) {
 	return apply_filters( 'groups_filter_bbpress_root_page_sql', 't.topic_id' );

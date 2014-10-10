@@ -200,17 +200,20 @@ function bp_core_add_admin_notice( $notice = '' ) {
  * @since BuddyPress (1.2)
  */
 function bp_core_activation_notice() {
-	global $wpdb, $wp_rewrite;
-
-	$bp = buddypress();
+	global $wp_rewrite, $wpdb;
 
 	// Only the super admin gets warnings
 	if ( ! bp_current_user_can( 'bp_moderate' ) ) {
 		return;
 	}
 
+	// Bail in user admin
+	if ( is_user_admin() ) {
+		return;
+	}
+
 	// On multisite installs, don't load on a non-root blog, unless do_network_admin is overridden
-	if ( is_multisite() && bp_core_do_network_admin() && !bp_is_root_blog() ) {
+	if ( is_multisite() && bp_core_do_network_admin() && ! bp_is_root_blog() ) {
 		return;
 	}
 
@@ -219,17 +222,13 @@ function bp_core_activation_notice() {
 		return;
 	}
 
-	// Bail in network admin
-	if ( is_user_admin() ) {
-		return;
-	}
-
 	/**
-	 * Check to make sure that the blog setup routine has run. This can't happen during the
-	 * wizard because of the order which the components are loaded. We check for multisite here
-	 * on the off chance that someone has activated the blogs component and then disabled MS
+	 * Check to make sure that the blog setup routine has run. This can't
+	 * happen during the wizard because of the order which the components
+	 * are loaded.
 	 */
 	if ( bp_is_active( 'blogs' ) ) {
+		$bp    = buddypress();
 		$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$bp->blogs->table_name}" );
 
 		if ( empty( $count ) ) {
@@ -237,16 +236,13 @@ function bp_core_activation_notice() {
 		}
 	}
 
-	/**
-	 * Are pretty permalinks enabled?
-	 */
-	if ( isset( $_POST['permalink_structure'] ) ) {
-		return;
-	}
-
+	// Add notice if no rewrite rules are enabled
 	if ( empty( $wp_rewrite->permalink_structure ) ) {
 		bp_core_add_admin_notice( sprintf( __( '<strong>BuddyPress is almost ready</strong>. You must <a href="%s">update your permalink structure</a> to something other than the default for it to work.', 'buddypress' ), admin_url( 'options-permalink.php' ) ) );
 	}
+
+	// Get BuddyPress instance
+	$bp = buddypress();
 
 	/**
 	 * Check for orphaned BP components (BP component is enabled, no WP page exists)
@@ -527,15 +523,15 @@ function bp_core_add_contextual_help_content( $tab = '' ) {
 
 	switch ( $tab ) {
 		case 'bp-comp-overview' :
-			$retval = __( 'By default, all BuddyPress components are enabled. You can selectively disable any of the components by using the form. Your BuddyPress installation will continue to function. However, the features of the disabled components will no longer be accessible to anyone using the site.', 'buddypress' );
+			$retval = __( 'By default, all but four of the BuddyPress components are enabled. You can selectively enable or disable any of the components by using the form below. Your BuddyPress installation will continue to function. However, the features of the disabled components will no longer be accessible to anyone using the site.', 'buddypress' );
 			break;
 
 		case 'bp-page-overview' :
-			$retval = __( 'BuddyPress Components use WordPress Pages for their root directory/archive pages. Here you can change the page associations for each active component.', 'buddypress' );
+			$retval = __( 'BuddyPress Components use WordPress Pages for their root directory/archive pages. You can change the page associations for each active component by using the form below.', 'buddypress' );
 			break;
 
 		case 'bp-settings-overview' :
-			$retval = __( 'Extra configuration settings.', 'buddypress' );
+			$retval = __( 'Extra configuration settings are provided and activated. You can selectively enable or disable any setting by using the form on this screen.', 'buddypress' );
 			break;
 
 		case 'bp-profile-overview' :
@@ -802,17 +798,37 @@ function bp_admin_wp_nav_menu_restrict_items() {
  */
 function bp_core_admin_user_row_actions( $actions, $user_object ) {
 
-	if ( current_user_can( 'edit_user', $user_object->ID ) && bp_loggedin_user_id() != $user_object->ID ) {
+	// Setup the $user_id variable from the current user object
+	$user_id = 0;
+	if ( !empty( $user_object->ID ) ) {
+		$user_id = absint( $user_object->ID );
+	}
 
+	// Bail early if user cannot perform this action, or is looking at themselves
+	if ( current_user_can( 'edit_user', $user_id ) && ( bp_loggedin_user_id() !== $user_id ) ) {
+
+		// Admin URL could be single site or network
 		$url = bp_get_admin_url( 'users.php' );
 
-		if ( bp_is_user_spammer( $user_object->ID ) ) {
-			$actions['ham'] = "<a href='" . wp_nonce_url( $url . "?action=ham&amp;user=$user_object->ID", 'bp-spam-user' ) . "'>" . __( 'Not Spam', 'buddypress' ) . "</a>";
+		// If spammed, create unspam link
+		if ( bp_is_user_spammer( $user_id ) ) {
+			$url             = add_query_arg( array( 'action' => 'ham', 'user' => $user_id ), $url );
+			$unspam_link     = wp_nonce_url( $url, 'bp-spam-user' );
+			$actions['ham']  = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $unspam_link ), esc_html__( 'Not Spam', 'buddypress' ) );
+
+		// If not already spammed, create spam link
 		} else {
-			$actions['spam'] = "<a class='submitdelete' href='" . wp_nonce_url( $url . "?action=spam&amp;user=$user_object->ID", 'bp-spam-user' ) . "'>" . __( 'Mark as Spam', 'buddypress' ) . "</a>";
+			$url             = add_query_arg( array( 'action' => 'spam', 'user' => $user_id ), $url );
+			$spam_link       = wp_nonce_url( $url, 'bp-spam-user' );
+			$actions['spam'] = sprintf( '<a class="submitdelete" href="%1$s">%2$s</a>', esc_url( $spam_link ), esc_html__( 'Spam', 'buddypress' ) );
 		}
 	}
 
+	// Create a "View" link
+	$url             = bp_core_get_user_domain( $user_id );
+	$actions['view'] = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $url ), esc_html__( 'View', 'buddypress' ) );
+
+	// Return new actions
 	return $actions;
 }
 

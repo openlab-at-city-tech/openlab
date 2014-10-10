@@ -15,9 +15,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Register activity actions for the Groups component.
+ *
+ * @return bool|null False on failure.
  */
 function groups_register_activity_actions() {
-	global $bp;
+	$bp = buddypress();
 
 	if ( ! bp_is_active( 'activity' ) ) {
 		return false;
@@ -27,22 +29,41 @@ function groups_register_activity_actions() {
 		$bp->groups->id,
 		'created_group',
 		__( 'Created a group', 'buddypress' ),
-		'bp_groups_format_activity_action_created_group'
+		'bp_groups_format_activity_action_created_group',
+		__( 'New Groups', 'buddypress' ),
+		array( 'activity', 'member', 'member_groups' )
 	);
 
 	bp_activity_set_action(
 		$bp->groups->id,
 		'joined_group',
 		__( 'Joined a group', 'buddypress' ),
-		'bp_groups_format_activity_action_joined_group'
+		'bp_groups_format_activity_action_joined_group',
+		__( 'Group Memberships', 'buddypress' ),
+		array( 'activity', 'group', 'member', 'member_groups' )
 	);
 
 	// These actions are for the legacy forums
 	// Since the bbPress plugin also shares the same 'forums' identifier, we also
 	// check for the legacy forums loader class to be extra cautious
 	if ( bp_is_active( 'forums' ) && class_exists( 'BP_Forums_Component' ) ) {
-		bp_activity_set_action( $bp->groups->id, 'new_forum_topic', __( 'New group forum topic', 'buddypress' ) );
-		bp_activity_set_action( $bp->groups->id, 'new_forum_post',  __( 'New group forum post',  'buddypress' ) );
+		bp_activity_set_action(
+			$bp->groups->id,
+			'new_forum_topic',
+			__( 'New group forum topic', 'buddypress' ),
+			false,
+			__( 'Forum Topics', 'buddypress' ),
+			array( 'activity', 'group', 'member', 'member_groups' )
+		);
+
+		bp_activity_set_action(
+			$bp->groups->id,
+			'new_forum_post',
+			__( 'New group forum post',  'buddypress' ),
+			false,
+			__( 'Forum Replies', 'buddypress' ),
+			array( 'activity', 'group', 'member', 'member_groups' )
+		);
 	}
 
 	do_action( 'groups_register_activity_actions' );
@@ -144,7 +165,8 @@ function bp_groups_prefetch_activity_object_data( $activities ) {
 		}
 
 		if ( ! empty( $uncached_ids ) ) {
-			global $wpdb, $bp;
+			global $wpdb;
+			$bp = buddypress();
 			$uncached_ids_sql = implode( ',', wp_parse_id_list( $uncached_ids ) );
 			$groups = $wpdb->get_results( "SELECT * FROM {$bp->groups->table_name} WHERE id IN ({$uncached_ids_sql})" );
 			foreach ( $groups as $group ) {
@@ -219,6 +241,7 @@ function groups_record_activity( $args = '' ) {
  *
  * @param int $group_id Optional. The ID of the group whose last_activity is
  *        being updated. Default: the current group's ID.
+ * @return bool|null False on failure.
  */
 function groups_update_last_activity( $group_id = 0 ) {
 
@@ -241,8 +264,10 @@ add_action( 'groups_new_forum_topic_post', 'groups_update_last_activity' );
  * Add an activity stream item when a member joins a group
  *
  * @since BuddyPress (1.9.0)
- * @param int $user_id
- * @param int $group_id
+ *
+ * @param int $user_id ID of the user joining the group.
+ * @param int $group_id ID of the group.
+ * @return bool|null False on failure.
  */
 function bp_groups_membership_accepted_add_activity( $user_id, $group_id ) {
 
@@ -265,9 +290,11 @@ function bp_groups_membership_accepted_add_activity( $user_id, $group_id ) {
 add_action( 'groups_membership_accepted', 'bp_groups_membership_accepted_add_activity', 10, 2 );
 
 /**
- * Delete all group activity from activity streams
+ * Delete all activity items related to a specific group.
  *
  * @since BuddyPress (1.9.0)
+ *
+ * @param int $group_id ID of the group.
  */
 function bp_groups_delete_group_delete_all_activity( $group_id ) {
 	if ( bp_is_active( 'activity' ) ) {
@@ -280,14 +307,16 @@ function bp_groups_delete_group_delete_all_activity( $group_id ) {
 add_action( 'groups_delete_group', 'bp_groups_delete_group_delete_all_activity', 10 );
 
 /**
- * Delete group member activity if they leave or are removed within 5 minutes of
- * membership modification.
+ * Delete group member activity if they leave or are removed within 5 minutes of membership modification.
  *
  * If the user joined this group less than five minutes ago, remove the
  * joined_group activity so users cannot flood the activity stream by
  * joining/leaving the group in quick succession.
  *
  * @since BuddyPress (1.9.0)
+ *
+ * @param int $group_id ID of the group.
+ * @param int $user_id ID of the user leaving the group.
  */
 function bp_groups_leave_group_delete_recent_activity( $group_id, $user_id ) {
 

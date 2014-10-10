@@ -150,6 +150,21 @@ if ( !function_exists( 'bp_dtheme_enqueue_scripts' ) ) :
  */
 function bp_dtheme_enqueue_scripts() {
 
+	// Enqueue various scripts
+	wp_enqueue_script( 'bp-jquery-query' );
+	wp_enqueue_script( 'bp-jquery-cookie' );
+
+	// Enqueue scrollTo only on activity pages
+	if ( bp_is_activity_component() ) {
+		wp_enqueue_script( 'bp-jquery-scroll-to' );
+	}
+
+	// A similar check is done in BP_Core_Members_Widget, but due to a load order
+	// issue, we do it again here
+	if ( is_active_widget( false, false, 'bp_core_members_widget' ) && ! is_admin() && ! is_network_admin() ) {
+		wp_enqueue_script( 'bp-widget-members' );
+	}
+
 	// Enqueue the global JS - Ajax will not work without it
 	wp_enqueue_script( 'dtheme-ajax-js', get_template_directory_uri() . '/_inc/global.js', array( 'jquery' ), bp_get_version() );
 
@@ -790,4 +805,23 @@ function bp_dtheme_remove_nojs_body_class() {
 }
 add_action( 'bp_before_header', 'bp_dtheme_remove_nojs_body_class' );
 
-?>
+/**
+ * Ensure that multiselect boxes have trailing brackets in their 'id' and 'name' attributes.
+ *
+ * These brackets are required for an array of values to be sent in the POST
+ * request. Previously, bp_get_the_profile_field_input_name() contained the
+ * necessary logic, but since BP 2.0 that logic has been moved into
+ * BP_XProfile_Field_Type_Multiselectbox. Since bp-default does not use the
+ * BP_XProfile_Field_Type classes to build its markup, it did not inherit
+ * the brackets from their new location. Thus this workaround.
+ */
+function bp_dtheme_add_brackets_to_multiselectbox_attributes( $name ) {
+	global $field;
+
+	if ( 'multiselectbox' === $field->type ) {
+		$name .= '[]';
+	}
+
+	return $name;
+}
+add_filter( 'bp_get_the_profile_field_input_name', 'bp_dtheme_add_brackets_to_multiselectbox_attributes' );

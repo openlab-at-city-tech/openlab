@@ -250,7 +250,8 @@ class BP_Messages_Thread {
 	public static function get_current_threads_for_user( $user_id, $box = 'inbox', $type = 'all', $limit = null, $page = null, $search_terms = '' ) {
 		global $wpdb, $bp;
 
-		$pag_sql = $type_sql = $search_sql = '';
+		$user_id_sql = $pag_sql = $type_sql = $search_sql = '';
+
 		if ( $limit && $page ) {
 			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
 		}
@@ -262,16 +263,18 @@ class BP_Messages_Thread {
 		}
 
 		if ( ! empty( $search_terms ) ) {
-			$search_terms = like_escape( esc_sql( $search_terms ) );
-			$search_sql   = "AND ( subject LIKE '%%$search_terms%%' OR message LIKE '%%$search_terms%%' )";
+			$search_terms_like = '%' . bp_esc_like( $search_terms ) . '%';
+			$search_sql        = $wpdb->prepare( "AND ( subject LIKE %s OR message LIKE %s )", $search_terms_like, $search_terms_like );
 		}
 
 		if ( 'sentbox' == $box ) {
-			$thread_ids    = $wpdb->get_results( $wpdb->prepare( "SELECT m.thread_id, MAX(m.date_sent) AS date_sent FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND m.sender_id = r.user_id AND m.sender_id = %d AND r.is_deleted = 0 {$search_sql} GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}", $user_id ) );
-			$total_threads = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT( DISTINCT m.thread_id ) FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND m.sender_id = r.user_id AND m.sender_id = %d AND r.is_deleted = 0 {$search_sql} ", $user_id ) );
+			$user_id_sql = $wpdb->prepare( 'm.sender_id = %d', $user_id );
+			$thread_ids  = $wpdb->get_results( "SELECT m.thread_id, MAX(m.date_sent) AS date_sent FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND m.sender_id = r.user_id AND {$user_id_sql} AND r.is_deleted = 0 {$search_sql} GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}" );
+			$total_threads = $wpdb->get_var( "SELECT COUNT( DISTINCT m.thread_id ) FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND m.sender_id = r.user_id AND {$user_id_sql} AND r.is_deleted = 0 {$search_sql} " );
 		} else {
-			$thread_ids = $wpdb->get_results( $wpdb->prepare( "SELECT m.thread_id, MAX(m.date_sent) AS date_sent FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND r.is_deleted = 0 AND r.user_id = %d AND r.sender_only = 0 {$type_sql} {$search_sql} GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}", $user_id ) );
-			$total_threads = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT( DISTINCT m.thread_id ) FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND r.is_deleted = 0 AND r.user_id = %d AND r.sender_only = 0 {$type_sql} {$search_sql} ", $user_id ) );
+			$user_id_sql = $wpdb->prepare( 'r.user_id = %d', $user_id );
+			$thread_ids = $wpdb->get_results( "SELECT m.thread_id, MAX(m.date_sent) AS date_sent FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND r.is_deleted = 0 AND {$user_id_sql} AND r.sender_only = 0 {$type_sql} {$search_sql} GROUP BY m.thread_id ORDER BY date_sent DESC {$pag_sql}" );
+			$total_threads = $wpdb->get_var( "SELECT COUNT( DISTINCT m.thread_id ) FROM {$bp->messages->table_name_recipients} r, {$bp->messages->table_name_messages} m WHERE m.thread_id = r.thread_id AND r.is_deleted = 0 AND {$user_id_sql} AND r.sender_only = 0 {$type_sql} {$search_sql}" );
 		}
 
 		if ( empty( $thread_ids ) ) {
@@ -442,8 +445,15 @@ class BP_Messages_Thread {
 	 * @param int $thread_id The message thread ID.
 	 * @return int The message thread ID on success.
 	 */
-	public static function is_valid( $thread_id ) {
-		global $wpdb, $bp;
+	public static function is_valid( $thread_id = 0 ) {
+		global $wpdb;
+
+		// Bail if no thread ID is passed
+		if ( empty( $thread_id ) ) {
+			return false;
+		}
+
+		$bp = buddypress();
 
 		return $wpdb->get_var( $wpdb->prepare( "SELECT thread_id FROM {$bp->messages->table_name_messages} WHERE thread_id = %d LIMIT 1", $thread_id ) );
 	}
@@ -520,16 +530,64 @@ class BP_Messages_Thread {
 	}
 }
 
+/**
+ * Single message class.
+ */
 class BP_Messages_Message {
+	/**
+	 * ID of the message.
+	 *
+	 * @var int
+	 */
 	public $id;
+
+	/**
+	 * ID of the message thread.
+	 *
+	 * @var int
+	 */
 	public $thread_id;
+
+	/**
+	 * ID of the sender.
+	 *
+	 * @var int
+	 */
 	public $sender_id;
+
+	/**
+	 * Subject line of the message.
+	 *
+	 * @var string
+	 */
 	public $subject;
+
+	/**
+	 * Content of the message.
+	 *
+	 * @var string
+	 */
 	public $message;
+
+	/**
+	 * Date the message was sent.
+	 *
+	 * @var string
+	 */
 	public $date_sent;
 
+	/**
+	 * Message recipients.
+	 *
+	 * @var bool|array
+	 */
 	public $recipients = false;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param int $id Optional. ID of the message.
+	 */
 	public function __construct( $id = null ) {
 		$this->date_sent = bp_core_current_time();
 		$this->sender_id = bp_loggedin_user_id();
@@ -539,6 +597,11 @@ class BP_Messages_Message {
 		}
 	}
 
+	/**
+	 * Set up data related to a specific message object.
+	 *
+	 * @param int $id ID of the message.
+	 */
 	public function populate( $id ) {
 		global $wpdb, $bp;
 
@@ -552,6 +615,12 @@ class BP_Messages_Message {
 		}
 	}
 
+	/**
+	 * Send a message.
+	 *
+	 * @return int|bool ID of the newly created message on success, false
+	 *         on failure.
+	 */
 	public function send() {
 		global $wpdb, $bp;
 
@@ -605,13 +674,24 @@ class BP_Messages_Message {
 		return $this->id;
 	}
 
+	/**
+	 * Get a list of recipients for a message.
+	 *
+	 * @return array
+	 */
 	public function get_recipients() {
 		global $bp, $wpdb;
 		return $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM {$bp->messages->table_name_recipients} WHERE thread_id = %d", $this->thread_id ) );
 	}
 
-	/** Static Functions ******************************************************/
+	/** Static Functions **************************************************/
 
+	/**
+	 * Get list of recipient IDs from their usernames.
+	 *
+	 * @param array $recipient_usernames Usernames of recipients.
+	 * @return array
+	 */
 	public static function get_recipient_ids( $recipient_usernames ) {
 		if ( !$recipient_usernames )
 			return false;
@@ -627,16 +707,36 @@ class BP_Messages_Message {
 		return $recipient_ids;
 	}
 
+	/**
+	 * Get the ID of the message last sent by the logged-in user for a given thread.
+	 *
+	 * @param int $thread_id ID of the thread.
+	 * @return int|null ID of the message if found, otherwise null.
+	 */
 	public static function get_last_sent_for_user( $thread_id ) {
 		global $wpdb, $bp;
 		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_messages} WHERE sender_id = %d AND thread_id = %d ORDER BY date_sent DESC LIMIT 1", bp_loggedin_user_id(), $thread_id ) );
 	}
 
+	/**
+	 * Check whether a user is the sender of a message.
+	 *
+	 * @param int $user_id ID of the user.
+	 * @param int $message_id ID of the message.
+	 * @return int|null Returns the ID of the message if the user is the
+	 *         sender, otherwise null.
+	 */
 	public static function is_user_sender( $user_id, $message_id ) {
 		global $wpdb, $bp;
 		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_messages} WHERE sender_id = %d AND id = %d", $user_id, $message_id ) );
 	}
 
+	/**
+	 * Get the ID of the sender of a message.
+	 *
+	 * @param int $message_id ID of the message.
+	 * @return int|null The ID of the sender if found, otherwise null.
+	 */
 	public static function get_message_sender( $message_id ) {
 		global $wpdb, $bp;
 		return $wpdb->get_var( $wpdb->prepare( "SELECT sender_id FROM {$bp->messages->table_name_messages} WHERE id = %d", $message_id ) );
