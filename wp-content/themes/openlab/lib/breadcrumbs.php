@@ -356,6 +356,8 @@ class Openlab_Breadcrumb {
             $crumb = $this->args['labels']['author'] . esc_html($wp_query->queried_object->display_name);
         } elseif (is_post_type_archive()) {
             $crumb = $this->args['labels']['post_type'] . esc_html(post_type_archive_title('', false));
+        } else{
+            $crumb = $wp_query->queried_object->post_title;
         }
 
         return apply_filters('openlab_archive_crumb', $crumb, $this->args);

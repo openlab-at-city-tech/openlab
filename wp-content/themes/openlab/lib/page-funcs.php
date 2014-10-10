@@ -477,13 +477,13 @@ function openlab_registration_page() {
                     <?php endif; ?>
 
                 <?php endif; ?> -->
+                
+                </div>
+            </div><!--.panel-->
 
             <?php endif; // completed-confirmation signup step   ?>
 
             <?php do_action('bp_custom_signup_steps') ?>
-                </div>
-            </div><!--.panel-->
-                
 
         </form>
 
