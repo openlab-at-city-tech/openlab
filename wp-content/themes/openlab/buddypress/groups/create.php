@@ -230,6 +230,7 @@
                             <input class="btn btn-primary" type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e('Crop Image', 'buddypress') ?>" />
 
                             <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src() ?>" />
+                            <input type="hidden" name="upload" id="upload" />
                             <input type="hidden" id="x" name="x" />
                             <input type="hidden" id="y" name="y" />
                             <input type="hidden" id="w" name="w" />
