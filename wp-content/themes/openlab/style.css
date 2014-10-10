@@ -7539,6 +7539,12 @@ body .align-left {
 .hidden-custom-select span.customSelect.active-text {
   color: #49cabe;
 }
+.custom-select span.customSelect .customSelectInner,
+.hidden-custom-select span.customSelect .customSelectInner {
+  max-width: 192px;
+  overflow: hidden;
+  white-space: nowrap;
+}
 /**home page**/
 .home-page .btn,
 .home-page p {
