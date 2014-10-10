@@ -371,7 +371,7 @@ function openlab_my_friends_submenu($count = true) {
 
     $count_span = '';
     if ($count) {
-        $count_span = '<span class="mol-count pull-right count-' . $request_count . '">' . $request_count . '</span>';
+        $count_span = openlab_get_menu_count_mup($count);
     }
 
     $menu_list = array(
@@ -581,7 +581,11 @@ function openlab_filter_subnav_members($subnav_item) {
     $total_mem = bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
 
     //added classes to span
-    $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . '">' . $total_mem . '</span>', $new_item);
+    if($total_mem > 0){
+        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . '">' . $total_mem . '</span>', $new_item);
+    }else{
+        $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
+    }
 
     return $new_item;
 }
@@ -610,7 +614,11 @@ function openlab_filter_subnav_docs($subnav_item) {
 
     wp_reset_query();
 
-    $new_item = str_replace('<span>' . $total_doc_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . '">' . $total_doc_count . '</span>', $subnav_item);
+    if ($total_doc_count > 0) {
+        $new_item = str_replace('<span>' . $total_doc_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . '">' . $total_doc_count . '</span>', $subnav_item);
+    } else {
+        $new_item = str_replace('<span>' . $total_doc_count . '</span>', '', $subnav_item);
+    }
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $new_item = str_replace("current selected", "current-menu-item", $new_item);

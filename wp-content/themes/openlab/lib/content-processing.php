@@ -99,3 +99,13 @@ function cuny_add_links_wp_trim_excerpt($text) {
     }
     return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
 }
+
+function openlab_get_menu_count_mup($count, $pull_right = ' pull-right'){
+    
+    if($count < 1){
+        return '';
+    }else{
+        return '<span class="mol-count count-'.$count.$pull_right.'">'.$count.'</span>';
+    }
+    
+}
