@@ -163,7 +163,12 @@ function wds_get_register_fields( $account_type ){
 					}
 				}
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
+                                
+                                //dump echoed messages into var so they appear inline
+                                ob_start();
+				do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
+                                $return .= ob_get_clean();
+                                
 				/*
 				$input_name = trim(bp_get_the_profile_field_input_name());
 				$return.="<br />Input field name: " . $input_name;
