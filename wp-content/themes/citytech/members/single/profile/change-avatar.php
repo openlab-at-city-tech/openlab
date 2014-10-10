@@ -1,5 +1,7 @@
 <div class="submenu"><div class="submenu-text">My Settings: </div><?php echo openlab_profile_settings_submenu(); ?></div>
 <div id="item-body" role="main">
+<?php do_action( 'template_notices' ) ?>
+
 <?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
 
 <?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) ) : ?>
