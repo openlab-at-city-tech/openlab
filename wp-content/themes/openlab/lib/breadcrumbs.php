@@ -326,7 +326,7 @@ class Openlab_Breadcrumb {
      */
     function get_archive_crumb() {
         global $wp_query, $wp_locale;
-
+        
         if (is_category()) {
             $crumb = $this->args['labels']['category'] . $this->get_term_parents(get_query_var('cat'), 'category');
             $crumb .= edit_term_link(__('(Edit)', 'genesis'), ' ', '', null, false);
@@ -430,7 +430,7 @@ class Openlab_Breadcrumb {
     function build_crumbs() {
 
         $crumbs[] = $this->get_home_crumb();
-        
+
         if (is_home())
             $crumbs[] = $this->get_blog_crumb();
         elseif (is_search())
