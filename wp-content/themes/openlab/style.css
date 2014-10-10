@@ -7443,6 +7443,10 @@ body .error {
   padding: 15px;
   border-radius: 4px;
 }
+body .error p:last-child,
+body .error p:only-child {
+  margin-bottom: 0;
+}
 body .site-visibility .fa {
   margin: 0;
   background: #ffffff;
