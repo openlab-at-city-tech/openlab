@@ -306,11 +306,11 @@ class OpenLab_Admin_Bar {
 
 		if ( bp_is_active( 'friends' ) ) {
 			$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-			$request_count = count( $request_ids );
+			$request_count = openlab_admin_bar_counts(count( $request_ids ));
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-friends',
-				'title'  => sprintf( 'My Friends <span class="toolbar-item-count count-' . $request_count . ' pull-right">%d</span>', $request_count ),
+				'title'  => 'My Friends '.$request_count,
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
                                 'meta' => array(
                                     'class' => 'admin-bar-menu-item'
@@ -319,11 +319,11 @@ class OpenLab_Admin_Bar {
 		}
 
 		if ( bp_is_active( 'messages' ) ) {
-			$messages_count = bp_get_total_unread_messages_count();
+                        $messages_count = openlab_admin_bar_counts(bp_get_total_unread_messages_count());
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-messages',
-				'title'  => sprintf( 'My Messages <span class="toolbar-item-count count-' . $messages_count . ' pull-right">%d</span>', $messages_count ),
+				'title'  => sprintf( 'My Messages %s', $messages_count ),
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
                                 'meta' => array(
                                     'class' => 'admin-bar-menu-item'
@@ -333,11 +333,11 @@ class OpenLab_Admin_Bar {
 
 		if ( bp_is_active( 'groups' ) ) {
 			$invites = groups_get_invites_for_user();
-			$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+			$invite_count = openlab_admin_bar_counts(isset( $invites['total'] ) ? (int) $invites['total'] : 0);
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-invitations',
-				'title'  => sprintf( 'My Invitations <span class="toolbar-item-count count-' . $invite_count . ' pull-right">%d</span>', $invite_count ),
+				'title'  => sprintf( 'My Invitations %s', $invite_count ),
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
                                 'meta' => array(
                                     'class' => 'admin-bar-menu-item'
@@ -409,11 +409,11 @@ class OpenLab_Admin_Bar {
 		$invites = groups_get_invites_for_user();
 		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
 
-		$total_count = $request_count + $invite_count;
+		$total_count = openlab_admin_bar_counts($request_count + $invite_count,' sub-count');
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => '<span class="toolbar-item-icon fa fa-user"></span><span class="toolbar-item-count sub-count count-' . $total_count . '">' . $total_count . '</span>',
+			'title' => '<span class="toolbar-item-icon fa fa-user"></span>' . $total_count,
 		) );
 
 		/**
@@ -541,10 +541,11 @@ class OpenLab_Admin_Bar {
 			return;
 		}
 
-		$total_count = bp_get_total_unread_messages_count();
+		$total_count = openlab_admin_bar_counts(bp_get_total_unread_messages_count(),' sub-count');
+                
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span><span class="toolbar-item-count sub-count count-' . $total_count . '">' . $total_count . '</span>',
+			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span>' . $total_count,
 		) );
 
 		// Only show the first 5
@@ -889,10 +890,11 @@ class OpenLab_Admin_Bar {
 
         $awaiting_mod = wp_count_comments();
         $awaiting_mod = $awaiting_mod->moderated;
+        $awaiting_count = openlab_admin_bar_counts(number_format_i18n($awaiting_mod),' sub-count');
         $awaiting_title = esc_attr(sprintf(_n('%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod), number_format_i18n($awaiting_mod)));
 
         $icon = '<span class="fa fa-comment"></span>';
-        $title = '<span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count toolbar-item-count sub-count count-' . $awaiting_mod . '">' . number_format_i18n($awaiting_mod) . '</span>';
+        $title = $awaiting_count;
 
         $wp_admin_bar->add_menu(array(
             'id' => 'comments',
@@ -1080,6 +1082,16 @@ class OpenLab_Admin_Bar {
 
             <?php
         }
+}
+
+function openlab_admin_bar_counts($count, $pull_right = ' pull-right'){
+    
+    if($count < 1){
+        return '';
+    }else{
+        return '<span class="toolbar-item-count count-' . $count .$pull_right. '">'.$count.'</span>';
+    }
+    
 }
 
 // Themes like TwentyTen don't use jQuery by default, so let's enqueue it!

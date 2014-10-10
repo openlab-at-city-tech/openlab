@@ -93,9 +93,6 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
   margin-bottom: 0;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu span {
-  font-size: 12px;
-}
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
   background: #b8e2df;
   margin-bottom: 16px;
