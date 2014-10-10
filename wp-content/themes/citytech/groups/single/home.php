@@ -177,22 +177,35 @@ function cuny_group_single() { ?>
 				<div class="recent-discussions">
 					<div class="recent-posts">
 						<h4 class="group-activity-title">Recent Discussions<span class="view-more"><a class="read-more" href="<?php site_url();?>/groups/<?php echo $group_slug; ?>/forum/">See All</a></span></h4>
-						<?php if ( bp_has_forum_topics('per_page=3') ) : ?>
+						<?php
+						$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+
+						// Get the first forum ID
+						if ( !empty( $forum_ids ) ) {
+							$forum_id = (int) is_array( $forum_ids ) ? $forum_ids[0] : $forum_ids;
+						}
+
+						?>
+
+						<?php if ( bbp_has_topics( 'posts_per_page=3&post_parent=' . $forum_id ) ) : ?>
 							<ul>
-								<?php while ( bp_forum_topics() ) : bp_the_forum_topic(); ?>
+								<?php while ( bbp_topics() ) : bbp_the_topic(); ?>
 									<li>
-									<h5><?php bp_the_topic_title() ?></h5>
+									<h5><?php bbp_topic_title() ?></h5>
 
 						<?php
-							$topic_id = bp_get_the_topic_id();
-							$last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
-													WHERE topic_id='$topic_id'
-												   ORDER BY post_id DESC LIMIT 1","ARRAY_A");
-							$last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']),135);
-							echo $last_topic_content;
+							$topic_id = bbp_get_topic_id();
+							$last_reply_id = bbp_get_topic_last_reply_id( $topic_id );
+
+							// Oh, bbPress.
+							$last_reply = get_post( $last_reply_id );
+							if ( ! empty( $last_reply->post_content ) ) {
+								$last_topic_content = wds_content_excerpt( strip_tags( $last_reply->post_content ), 135 );
+								echo $last_topic_content;
+							}
 						?></p>
 
-                        			<a href="<?php bp_the_topic_permalink();?>" class="read-more">See More</a><p>
+                        			<a href="<?php bbp_topic_permalink( $topic_id );?>" class="read-more">See More</a><p>
 									</li>
 								<?php endwhile; ?>
 							</ul>
