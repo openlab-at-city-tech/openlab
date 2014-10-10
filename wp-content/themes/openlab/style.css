@@ -7511,6 +7511,10 @@ body .align-left {
   margin-bottom: 7px;
   margin-top: 7px;
 }
+.notification-settings .no,
+.notification-settings .yes {
+  width: 10%;
+}
 /**custom selects**/
 .custom-select,
 .hidden-custom-select {

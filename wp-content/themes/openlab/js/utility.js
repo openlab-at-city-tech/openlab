@@ -141,6 +141,13 @@
                 });
             });
         }
+        
+        //member notificatoins page - injecting Bootstrap classes
+        if($('table.notification-settings').length){
+            $('table.notification-settings').each(function(){
+                $(this).addClass('table');
+            });
+        }
 
     });//end document.ready
     
