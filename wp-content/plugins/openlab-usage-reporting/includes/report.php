@@ -212,7 +212,7 @@ function olur_generate_report( $start, $end ) {
 
 	$fh = @fopen( 'php://output', 'w' );
 
-	fprintf( $fh, chr(0xEF) . chr(0xBB) . chr(0xBF) );
+	//fprintf( $fh, chr(0xEF) . chr(0xBB) . chr(0xBF) );
 
 	header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
 	header( 'Content-Description: File Transfer' );
