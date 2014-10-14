@@ -25,16 +25,6 @@
             slideNum: false
         });
 
-        //this is for the new OpenLab members slider on the homepage
-        jQuery("#home-new-member-wrap").jCarouselLite({
-            btnNext: ".next",
-            btnPrev: ".prev",
-            vertical: false,
-            visible: 2,
-            auto: 4000,
-            speed: 200
-        });
-
         jQuery("#header #menu-item-40 ul li ul li a").prepend("+ ");
 
         //search
@@ -141,33 +131,46 @@
                 });
             });
         }
-        
+
         //member notificatoins page - injecting Bootstrap classes
-        if($('table.notification-settings').length){
-            $('table.notification-settings').each(function(){
+        if ($('table.notification-settings').length) {
+            $('table.notification-settings').each(function() {
                 $(this).addClass('table');
             });
         }
 
     });//end document.ready
-    
-    $(window).load(function(){
-        
+
+    $(window).load(function() {
+
         //setting equal rows on homepage group list
         equal_row_height();
-        
+
         //camera js slider on home
-        if($('.camera_wrap').length){
+        if ($('.camera_wrap').length) {
             $('.camera_wrap').camera({
-                autoAdvance : false,
+                autoAdvance: false,
                 fx: 'simpleFade',
                 playPause: false,
                 height: '400px',
                 navigationHover: false
             });
         }
+
+        var newMembers = jQuery("#home-new-member-wrap");
+
+        //this is for the new OpenLab members slider on the homepage
+        newMembers.jCarouselLite({
+            btnNext: ".next",
+            btnPrev: ".prev",
+            vertical: false,
+            visible: 2,
+            auto: 4000,
+            speed: 200,
+        });
         
-        
+        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700);
+
     });
 
     /*this is for the homepage group list, so that cells in each row all have the same height 

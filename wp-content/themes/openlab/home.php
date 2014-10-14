@@ -39,6 +39,7 @@ get_header();
             <div class="clearfloat"></div>
             <script type='text/javascript'>(function($) {
                     $('.activity-list').css('visibility', 'hidden');
+                    $('#home-new-member-wrap').css('visibility','hidden');
                 })(jQuery);</script>
         </div>
     </div>
