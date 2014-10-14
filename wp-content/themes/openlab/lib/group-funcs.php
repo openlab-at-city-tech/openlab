@@ -1238,7 +1238,7 @@ function openlab_current_directory_filters() {
 
             // Leave out the 'All's
             if ('All' != $word) {
-                $filter_words[] = '<span class="underline">' . $word . '</span>';
+                $filter_words[] = '<span>' . $word . '</span>';
             }
         }
 
