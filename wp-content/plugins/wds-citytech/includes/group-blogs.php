@@ -407,23 +407,36 @@ function wds_bp_group_site_pages() {
 		if ( openlab_is_portfolio() ) {
 			?>
 			<div class="sidebar-widget" id="portfolio-sidebar-widget">
+                            
+                            <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
+    <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
 
-				<h4 class="sidebar-header">
-					<a href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label( 'case=upper' ) ?> Site</a>
-				</h4>
+                            <h2 class="sidebar-header">
+    <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site
+        </h2>
+                            
+                            <div class="sidebar-block">
                             
 				<?php if ( openlab_is_my_portfolio() || is_super_admin() ) : ?>
-					<ul class="sidebar-sublinks portfolio-sublinks">
+					<ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 						<li class="portfolio-site-link">
-							<a href="<?php openlab_user_portfolio_url() ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag( 'site' ); ?></span>
+							<span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag( 'site' ); ?></span>
 						</li>
 
-						<?php if ( openlab_user_portfolio_site_is_local() ) : ?>
+						<?php if ( openlab_user_portfolio_site_is_local($displayed_user_id) ) : ?>
 							<li class="portfolio-dashboard-link">
-                                <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
+                                <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>/wp-admin">Dashboard</a>
 							</li>
 						<?php endif ?>
 					</ul>
+                                <?php else: ?>
+                                
+                                <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+						<li class="portfolio-site-link">
+							<span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag( 'site' ); ?></span>
+						</li>
+					</ul>
+                                
 				<?php endif ?>
 			</div>
 		<?php } else { ?>
