@@ -40,7 +40,7 @@
                     <a href="<?php bp_docs_order_by_link('modified') ?>"><?php _e('Last Edited', 'bp-docs'); ?></a>
                 </th>
 
-                <?php do_action('bp_docs_loop_additional_th') ?>
+                <th scope="column" class="tags-cell hidden-xs"><?php _e( 'Tags', 'bp-docs' ); ?></th>
             </tr>
         </thead>
 
@@ -69,7 +69,19 @@
                         <?php echo get_the_modified_date() ?>
                     </td>
 
-                    <?php do_action('bp_docs_loop_additional_td') ?>		
+                    <?php
+                            $tags = wp_get_post_terms(get_the_ID(), $this->docs_tag_tax_name);
+                            $tagtext = array();
+
+                            foreach ($tags as $tag) {
+                                $tagtext[] = bp_docs_get_tag_link(array('tag' => $tag->name));
+                            }
+                            ?>
+
+                            <td class="tags-cell hidden-xs">
+                                <?php echo implode(', ', $tagtext) ?>
+                            </td>
+		
                 </tr>
             <?php endwhile ?>        
         </tbody>

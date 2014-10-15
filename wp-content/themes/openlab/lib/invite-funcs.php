@@ -282,7 +282,7 @@ function openlab_invite_anyone_screen_two_content() {
                             <th scope="col" <?php if ($sort_by == 'email') : ?>class="sort-by-me"<?php endif ?>><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=email&amp;order=<?php if ($sort_by == 'email' && $order == 'ASC') : ?>DESC<?php else : ?>ASC<?php endif; ?>"><?php _e('Invited email address', 'bp-invite-anyone') ?></a></th>
                             <th scope="col"><?php _e('Group invitations', 'bp-invite-anyone') ?></th>
                             <th scope="col" <?php if ($sort_by == 'date_invited') : ?>class="sort-by-me"<?php endif ?>><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=date_invited&amp;order=<?php if ($sort_by == 'date_invited' && $order == 'DESC') : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e('Sent', 'bp-invite-anyone') ?></a></th>
-                            <th scope="col" <?php if ($sort_by == 'date_joined') : ?>class="sort-by-me"<?php endif ?>><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=date_joined&amp;order=<?php if ($order == 'DESC') : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e('Accepted', 'bp-invite-anyone') ?></a></th>
+                            <th scope="col" <?php if ($sort_by == 'date_joined') : ?>class="sort-by-me hidden-xs"<?php endif ?>><a class="<?php echo $order ?> hidden-xs" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=date_joined&amp;order=<?php if ($order == 'DESC') : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e('Accepted', 'bp-invite-anyone') ?></a></th>
                         </tr>
                     </thead>
 
@@ -351,7 +351,7 @@ function openlab_invite_anyone_screen_two_content() {
                                 <td><?php echo esc_html($email) ?></td>
                                 <td><?php echo $group_names ?></td>
                                 <td><?php echo $date_invited ?></td>
-                                <td class="date-joined"><span></span><?php echo $date_joined ?></td>
+                                <td class="date-joined hidden-xs"><span></span><?php echo $date_joined ?></td>
                             </tr>
                         <?php endwhile ?>
                     </tbody>

@@ -40,7 +40,7 @@
 			<tr>
 				<th id="th-title"><?php _e( 'Topic', 'buddypress' ); ?></th>
 				<th id="th-postcount"><?php _e( 'Posts', 'buddypress' ); ?></th>
-				<th id="th-freshness"><?php _e( 'Freshness', 'buddypress' ); ?></th>
+				<th id="th-freshness" class="hidden-xs"><?php _e( 'Freshness', 'buddypress' ); ?></th>
 
 				<?php do_action( 'bp_directory_forums_extra_cell_head' ); ?>
 
@@ -83,7 +83,7 @@
 				<td class="td-postcount">
 					<?php bp_the_topic_total_posts(); ?>
 				</td>
-				<td class="td-freshness">
+				<td class="td-freshness" class="hidden-xs">
 					<span class="time-since"><?php bp_the_topic_time_since_last_post(); ?></span>
 					<p class="topic-meta">
 						<span class="freshness-author">
