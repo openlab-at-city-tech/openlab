@@ -17,7 +17,7 @@
 
     <body <?php body_class(); ?>>
         <?php do_action('bp_before_header') ?>
-        <div class="container">
+        <div class="container-fluid">
             <div id="header" class="row">
                 <?php do_action('bp_header') ?>
             </div><!-- #header -->

@@ -4,6 +4,7 @@
     background: #444;
     color: #fff;
     height: 50px;
+    min-width: 0;
     #wp-toolbar{
         line-height: normal;
         margin: 0 auto;
@@ -27,6 +28,9 @@
                     .fa-caret-down{
                         font-size: 12px;
                         padding-left: 8px;
+                    }
+                    @media(max-width: 992px){
+                        font-size: 13px;
                     }
                 }
                 > .fa{
@@ -134,6 +138,18 @@
                                 margin-top: 8px;
                             }
                         }
+                    }
+                }
+            }
+        }
+        #wp-admin-bar-my-hamburger{
+            .ab-item{
+                padding: 9px 12%;
+                .navbar-toggle{
+                    margin: 0;
+                    float: none;
+                    .icon-bar{
+                        background: #ccc;
                     }
                 }
             }

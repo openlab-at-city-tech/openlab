@@ -7147,6 +7147,9 @@ blockquote .h6 {
   background-color: inherit;
 }
 /**structural**/
+.container-fluid {
+  max-width: 1155px;
+}
 [class^="col-"] {
   border-radius: 4px;
 }
@@ -7155,7 +7158,7 @@ input[type="reset"],
 input[type="submit"] {
   font-family: fontawesome, 'Open Sans', Helvetica, Arial, sans-serif;
 }
-.container .content-wrapper {
+.container-fluid .content-wrapper {
   width: 98.5%;
 }
 .radio label,
@@ -7225,14 +7228,14 @@ input[type="submit"] {
   border: none;
   border-bottom: 1px solid #dddddd;
 }
-.navbar-default .container {
+.navbar-default .container-fluid {
   margin: 0 auto;
 }
-.navbar-default .container .navbar-header h1 {
+.navbar-default .container-fluid .navbar-header h1 {
   margin: 0;
   border-right: 1px solid #dddddd;
 }
-.navbar-default .container .navbar-header h1 a {
+.navbar-default .container-fluid .navbar-header h1 a {
   display: block;
   background: url('images/openlab_menu_logo.png') no-repeat;
   padding-top: 63px;
@@ -7240,14 +7243,21 @@ input[type="submit"] {
   height: 0;
   overflow: hidden;
 }
-.navbar-default .container ul.nav {
+@media (max-width: 991px) {
+  .navbar-default .container-fluid .navbar-header h1 a {
+    width: 135px;
+    background-size: 100%;
+    background-position: 0 8px;
+  }
+}
+.navbar-default .container-fluid ul.nav {
   margin: 0;
   padding: 0;
 }
-.navbar-default .container ul.nav li {
+.navbar-default .container-fluid ul.nav li {
   margin: 0;
 }
-.navbar-default .container ul.nav li a {
+.navbar-default .container-fluid ul.nav li a {
   color: #000000;
   display: block;
   text-decoration: none;
@@ -7255,21 +7265,29 @@ input[type="submit"] {
   line-height: 150%;
   padding: 21px 15px;
 }
-.navbar-default .container ul.nav li a:hover,
-.navbar-default .container ul.nav li a:focus {
+.navbar-default .container-fluid ul.nav li a:hover,
+.navbar-default .container-fluid ul.nav li a:focus {
   color: #63dfd2;
 }
-.navbar-default .container ul.nav li.current-menu-item a {
+@media (max-width: 991px) {
+  .navbar-default .container-fluid ul.nav li a {
+    font-size: 13px;
+    padding: 22px 11px;
+  }
+}
+.navbar-default .container-fluid ul.nav li.current-menu-item a {
   background: #63dfd2;
   color: #000000;
 }
-.navbar-default .container ul.nav li:first-child a {
-  padding-left: 30px;
+@media (min-width: 992px) {
+  .navbar-default .container-fluid ul.nav li:first-child a {
+    padding-left: 30px;
+  }
 }
-.navbar-default .container .navbar-right.search input[type="text"] {
+.navbar-default .container-fluid .navbar-right.search input[type="text"] {
   width: 43%;
 }
-.navbar-default .container .navbar-right.search .btn {
+.navbar-default .container-fluid .navbar-right.search .btn {
   padding: 8px 2%;
 }
 .search {
@@ -7288,6 +7306,11 @@ input[type="submit"] {
   margin-left: 18px;
   padding: 10px 0 6px;
 }
+@media (max-width: 767px) {
+  .search .search-form-wrapper {
+    display: block;
+  }
+}
 .search .search-trigger-wrapper {
   height: 63px;
   position: absolute;
@@ -7303,6 +7326,11 @@ input[type="submit"] {
 .search .search-trigger-wrapper span {
   line-height: 4.5;
 }
+@media (max-width: 991px) {
+  .search .search-trigger-wrapper span {
+    line-height: 4;
+  }
+}
 .search .search-trigger-wrapper.search-live {
   background: #fff;
   border-left: 1px solid #ddd;
@@ -7312,6 +7340,13 @@ input[type="submit"] {
 }
 .search .search-trigger-wrapper.search-live span {
   color: #49cabe;
+}
+.search-mobile #search-terms {
+  display: inline-block;
+  width: 50%;
+}
+.search-mobile #search-submit {
+  padding: 8px 12px;
 }
 /**page**/
 h1.entry-title {

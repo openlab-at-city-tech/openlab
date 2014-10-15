@@ -99,7 +99,7 @@ restore_current_blog();
 ?>
 
 <div id="openlab-footer">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row row-footer">
                 <div class="col-sm-14 col-logos">
                     <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>

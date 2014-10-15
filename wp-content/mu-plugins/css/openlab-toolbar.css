@@ -4,6 +4,7 @@
   background: #444;
   color: #fff;
   height: 50px;
+  min-width: 0;
 }
 #wpadminbar #wp-toolbar {
   line-height: normal;
@@ -30,6 +31,11 @@
 #wpadminbar #wp-toolbar > ul > li > .ab-item .fa-caret-down {
   font-size: 12px;
   padding-left: 8px;
+}
+@media (max-width: 992px) {
+  #wpadminbar #wp-toolbar > ul > li > .ab-item {
+    font-size: 13px;
+  }
 }
 #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
@@ -130,6 +136,16 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
   display: block;
   margin-top: 8px;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item {
+  padding: 9px 12%;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle {
+  margin: 0;
+  float: none;
+}
+#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle .icon-bar {
+  background: #ccc;
 }
 #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
   background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;

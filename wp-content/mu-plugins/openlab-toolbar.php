@@ -73,10 +73,14 @@ class OpenLab_Admin_Bar {
                 
                 //adjust the padding at the top of the page
                 add_action('wp_head',array($this,'admin_bar_html_update'),99999);
+                
+                //for hamburger menu on mobile
+                add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
-			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 1 );
+                    
+			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
@@ -109,7 +113,7 @@ class OpenLab_Admin_Bar {
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
 
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
-			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
+//			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
                         if (!is_network_admin() && !is_user_admin()) {
                             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
@@ -202,15 +206,43 @@ class OpenLab_Admin_Bar {
  	 * Adds 'My OpenLab' menu
  	 */
  	function add_my_openlab_menu( $wp_admin_bar ) {
+            
+                $current_user = wp_get_current_user();
+
+                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+            
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
+			'title' => '<span class="hidden-xs">My OpenLab <span class="fa fa-caret-down"></span></span><span class="visible-xs">'.$howdy.'</span>',
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'admin-bar-menu',
                         ),
 		) );
  	}
+        
+        /**
+         * Hamurger menu (mobile only)
+         */
+        function openlab_hamburger_menu($wp_admin_bar){
+            
+            $hamburger = <<<HTML
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+HTML;
+            $wp_admin_bar->add_node( array(
+			'id'    => 'my-hamburger',
+			'title' => $hamburger,
+                        'meta'  => array(
+                            'class' => 'visible-xs',
+                        ),
+		) );
+            
+        }
 
 	/**
 	 * Change 'Howdy' message to 'Hi'
@@ -343,7 +375,20 @@ class OpenLab_Admin_Bar {
                                     'class' => 'admin-bar-menu-item'
                                 )
 			) );
-		}
+                        
+                        $link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
+                        $link .= trailingslashit(bp_get_groups_slug());
+                        
+                        $wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-activity',
+				'title'  => 'Activity',
+				'href'   => $link,
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item visible-xs'
+                                )
+			) );
+        }
 
 		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
 		// this panel only works if looking at a site where the user has Dashboard-level
@@ -414,6 +459,9 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
 			'title' => '<span class="toolbar-item-icon fa fa-user"></span>' . $total_count,
+                        'meta' => array(
+                          'class' => 'hidden-xs',  
+                        ),
 		) );
 
 		/**
@@ -546,6 +594,9 @@ class OpenLab_Admin_Bar {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
 			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span>' . $total_count,
+                        'meta' => array(
+                          'class' => 'hidden-xs',  
+                        ),
 		) );
 
 		// Only show the first 5
@@ -620,7 +671,10 @@ class OpenLab_Admin_Bar {
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => '<span class="toolbar-item-name fa fa-bullhorn"></span>'
+			'title' => '<span class="toolbar-item-name fa fa-bullhorn"></span>',
+                        'meta' => array(
+                          'class' => 'hidden-xs',  
+                        ),
 		) );
 
 		$activity_args = array(
@@ -709,10 +763,10 @@ class OpenLab_Admin_Bar {
 
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => $title.' <span class="fa fa-caret-down"></span>',
+                    'title' => '<span class="hidden-sm">'.$title.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
-                        'class' => 'admin-bar-menu',
+                        'class' => 'admin-bar-menu hidden-xs',
                     ),
             ) );
 
@@ -794,7 +848,10 @@ class OpenLab_Admin_Bar {
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'edit',
                                         'title' => '<span class="fa fa-pencil"></span>',
-                                        'href' => get_edit_post_link( $current_object->ID )
+                                        'href' => get_edit_post_link( $current_object->ID ),
+                                        'meta' => array(
+                                            'class' => 'hidden-xs',
+                                        )
                                 ) );
                         } elseif ( ! empty( $current_object->taxonomy )
                                 && ( $tax = get_taxonomy( $current_object->taxonomy ) )
@@ -804,7 +861,10 @@ class OpenLab_Admin_Bar {
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'edit',
                                         'title' => '<span class="fa fa-pencil"></span>',
-                                        'href' => get_edit_term_link( $current_object->term_id, $current_object->taxonomy )
+                                        'href' => get_edit_term_link( $current_object->term_id, $current_object->taxonomy ),
+                                        'meta' => array(
+                                            'class' => 'hidden-xs',
+                                        )
                                 ) );
                         }
                 }
@@ -859,7 +919,7 @@ class OpenLab_Admin_Bar {
 		'title' => $title,
 		'href'  => admin_url( current( array_keys( $actions ) ) ),
 		'meta'  => array(
-                        'class' => 'admin-bar-menu',
+                        'class' => 'admin-bar-menu hidden-xs',
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
 		),
 	) );
@@ -900,7 +960,10 @@ class OpenLab_Admin_Bar {
             'id' => 'comments',
             'title' => $icon . $title,
             'href' => admin_url('edit-comments.php'),
-            'meta' => array('title' => $awaiting_title),
+            'meta' => array(
+                'title' => $awaiting_title,
+                'class' => 'hidden-xs',
+                    ),
         ));
     }
 
@@ -943,7 +1006,7 @@ class OpenLab_Admin_Bar {
                     'title' => $howdy,
                     'href' => $profile_url,
                     'meta' => array(
-                        'class' => '',
+                        'class' => 'hidden-xs',
                         'title' => __('My Account'),
                     ),
                 ));

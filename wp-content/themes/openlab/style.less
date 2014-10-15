@@ -181,6 +181,9 @@ blockquote {
 }
 
 /**structural**/
+.container-fluid{
+    max-width: 1155px;
+}
 [class^="col-"]{
     border-radius: @border-radius-base;
 }
@@ -189,7 +192,7 @@ input[type="reset"],
 input[type="submit"]{
     font-family: fontawesome, @font-family-sans-serif;
 } 
-.container .content-wrapper{
+.container-fluid .content-wrapper{
     width: 98.5%;
 }
 .radio,
@@ -267,7 +270,7 @@ input[type="submit"]{
 .navbar-default{
     border: none;
     border-bottom: 1px solid @10gray;
-    .container{
+    .container-fluid{
         margin: 0 auto;
         .navbar-header{
             h1{
@@ -280,6 +283,11 @@ input[type="submit"]{
                     width: 185px;
                     height: 0;
                     overflow: hidden;
+                    @media(max-width: @screen-sm-max){
+                        width: 135px;
+                        background-size: 100%;
+                        background-position: 0 8px;
+                    }
                 }
             }
         }
@@ -299,6 +307,10 @@ input[type="submit"]{
                         &:focus {
                         color: @cyan;
                     }
+                    @media(max-width: @screen-sm-max){
+                        font-size: 13px;
+                        padding: 22px 11px;
+                    }
                 }
                 &.current-menu-item{
                     a{
@@ -308,7 +320,9 @@ input[type="submit"]{
                 }
                 &:first-child{
                     a{
-                        padding-left: 30px;
+                        @media (min-width: @screen-md){
+                            padding-left: 30px;
+                        }
                     }
                 }
             }
@@ -339,6 +353,9 @@ input[type="submit"]{
             margin-left: 18px;
             padding: 10px 0 6px;
         }
+        @media(max-width:@screen-xs-max){
+            display: block;
+        }
     }
     .search-trigger-wrapper{
         height: 63px;
@@ -353,6 +370,9 @@ input[type="submit"]{
         }
         span{
             line-height: 4.5;
+            @media(max-width: @screen-sm-max){
+                line-height: 4;
+            }
         }
         &.search-live{
             background: #fff;
@@ -366,7 +386,15 @@ input[type="submit"]{
         }
     }
 }
-
+.search-mobile{
+    #search-terms{
+        display: inline-block;
+        width: 50%;
+    }
+    #search-submit{
+        padding: 8px 12px;
+    }
+}
 /**page**/
 h1.entry-title{
     border-bottom: 1px solid @30gray;
