@@ -1055,7 +1055,7 @@ function openlab_custom_group_buttons($button) {
         $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     } else if ($button['id'] == 'join_group' || $button['id'] == 'request_membership') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-plus-circle pull-right"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     } else if ($button['id'] == 'membership_requested') {
         $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-clock-o pull-right"></i>';
