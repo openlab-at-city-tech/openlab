@@ -138,6 +138,13 @@
                 $(this).addClass('table');
             });
         }
+        
+        //clear login form
+        if($('#user-login').length){
+            $('#sidebar-user-login, #sidebar-user-pass').on('focus',function(){
+                $(this).val('');
+            });
+        }
 
     });//end document.ready
 
