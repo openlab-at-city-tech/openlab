@@ -23,7 +23,7 @@ function openlab_get_home_slider() {
             //if the featured image is not set, slider will not be added
             if (get_post_thumbnail_id()) {
                 
-                $img_obj = wp_get_attachment_image_src(get_post_thumbnail_id());
+                $img_obj = wp_get_attachment_image_src(get_post_thumbnail_id(),'front-page-slider');
                 
                 $slider_mup .= '<div data-src="'.$img_obj[0].'"><div class="fadeIn camera_content"><h2 class="regular">'.get_the_title().'</h2>'.get_the_content_with_formatting().'</div></div>';
             }
