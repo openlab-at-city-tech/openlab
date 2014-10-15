@@ -88,10 +88,14 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
                 <?php if (bp_forums_is_installed_correctly()) : ?>
 
-                    <div class="checkbox">
-                        <h4>Discussion Settings</h4>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Discussion Settings</div>
+                        <div class="panel-body">
                         <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
-                        <label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e('Enable discussions forum', 'buddypress') ?></label>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e('Enable discussions forum', 'buddypress') ?></label>
+                        </div>
+                    </div>
                     </div>
 
                 <?php endif; ?>
@@ -100,16 +104,20 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php endif; ?>
 
             <?php if (!openlab_is_portfolio()) : ?>
-                <div class="checkbox">
-                    <h4>Portfolio List Settings</h4>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Portfolio List Settings</div>
+                    <div class="panel-body">
                     <p id="portfolio-list-settings-tag">These settings enable or disable the member portfolio list display on your Course profile.</p>
 
                     <?php $portfolio_list_enabled = openlab_portfolio_list_enabled_for_group() ?>
                     <?php $portfolio_list_heading = openlab_portfolio_list_group_heading() ?>
+                    <div class="checkbox">
                     <label><input type="checkbox" name="group-show-portfolio-list" id="group-show-portfolio-list" value="1" <?php checked($portfolio_list_enabled) ?> /> Enable portfolio list</label>
+                    </div>
 
-                    <h5><label for="group-portfolio-list-heading">List Heading</label></h5>
-                    <input name="group-portfolio-list-heading" id="group-portfolio-list-heading" type="text" value="<?php echo esc_attr($portfolio_list_heading) ?>" />
+                    <label for="group-portfolio-list-heading">List Heading</label>
+                    <input name="group-portfolio-list-heading" id="group-portfolio-list-heading" class="form-control" type="text" value="<?php echo esc_attr($portfolio_list_heading) ?>" />
+                    </div>
                 </div>
 
                 <hr />

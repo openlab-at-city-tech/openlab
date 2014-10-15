@@ -119,7 +119,7 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php if ($bp->current_action == 'admin'): ?>
         <?php do_action('bp_after_group_settings_admin'); ?>
-        <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &rarr;" id="save" name="save" /></p>
+        <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &#xf138;" id="save" name="save" /></p>
         <?php wp_nonce_field('groups_edit_group_settings'); ?>
     <?php elseif ($bp->current_action == 'create'): ?>
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
