@@ -21,14 +21,14 @@
 	<div id="friend-list" class="item-list group-list row">
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<div class="group-item col-md-8">
+		<div class="group-item col-sm-8 col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row info-row">
-			<div class="item-avatar col-sm-9">
+			<div class="item-avatar col-sm-9 col-xs-7">
 				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
 			</div>
 
-			<div class="item col-sm-15">
+			<div class="item col-sm-15 col-xs-17">
 				<h5 class="item-title"><a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h5>
 
 					<?php if ( bp_get_member_latest_update() ) : ?>

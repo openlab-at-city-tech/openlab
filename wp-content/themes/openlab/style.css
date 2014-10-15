@@ -7588,6 +7588,12 @@ body .align-left {
   overflow: hidden;
   white-space: nowrap;
 }
+@media (max-width: 767px) {
+  .custom-select span.customSelect .customSelectInner,
+  .hidden-custom-select span.customSelect .customSelectInner {
+    width: 100% !important;
+  }
+}
 /**home page**/
 .home-page .btn,
 .home-page p {

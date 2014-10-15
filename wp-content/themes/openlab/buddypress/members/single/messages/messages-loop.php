@@ -16,12 +16,12 @@
                 $read = 'read';
                 ?>
 		<?php if ( $mstatus ) { ?>
-			<div id="m-<?php bp_message_thread_id() ?>" class="message col-md-12 <?php echo $read ?>">
+			<div id="m-<?php bp_message_thread_id() ?>" class="message col-xs-12 <?php echo $read ?>">
                             <div class="group-item-wrapper">
-				<div class="item-avatar col-sm-9">	
+				<div class="item-avatar col-sm-9 col-xs-7">	
                                     <a href="<?php bp_message_thread_view_link() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $messages_template->thread->last_sender_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Message #<?php echo bp_message_thread_id(); ?>"/></a>
 				</div>
-				<div class="item col-sm-15">
+				<div class="item col-sm-15 col-xs-17">
 					<h2 class="item-title"><a href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><?php bp_message_thread_subject() ?></a></h2>
 					<div class="info-line">
 						<?php if ( 'sentbox' != bp_current_action() ) : ?>

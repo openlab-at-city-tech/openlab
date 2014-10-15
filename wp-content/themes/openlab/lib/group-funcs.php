@@ -247,13 +247,13 @@ function openlab_group_archive() {
             while (bp_groups()) : bp_the_group();
                 $group_id = bp_get_group_id();
                 ?>
-                <div class="group-item col-md-12">
+                <div class="group-item col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row">
-                            <div class="item-avatar alignleft col-sm-7">
+                            <div class="item-avatar alignleft col-xs-7">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                             </div>
-                            <div class="item col-sm-16">
+                            <div class="item col-xs-16">
 
                                 <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
                                 <?php
@@ -694,7 +694,7 @@ function cuny_group_single() {
     <?php if (bp_is_group_home()): ?>
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
-            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-md-8">
+            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
                 <div class="padded-img">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group_name->name; ?>"/>
                 </div>
@@ -712,7 +712,7 @@ function cuny_group_single() {
                 <?php openlab_render_message(); ?>
         </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
-            <div id="<?php echo $group_type; ?>-header-content" class="col-md-16 alignleft group-header-content group-<?php echo $group_id; ?>">
+            <div id="<?php echo $group_type; ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo $group_id; ?>">
                 <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?></h2>
 
                 <?php if ($group_type == "portfolio") : ?>

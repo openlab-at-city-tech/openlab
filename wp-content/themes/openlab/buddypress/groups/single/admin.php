@@ -207,13 +207,13 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                     <div id="group-list" class="item-list inline-element-list row group-manage-members">
 
                         <?php while (bp_members()) : bp_the_member(); ?>
-                            <div class="col-md-8 group-item">
+                            <div class="col-md-8 col-xs-12 group-item">
                                 <div class="group-item-wrapper admins <?php echo (count(bp_group_admin_ids(false, 'array')) > 1 ? '' : 'no-btn'); ?>">
                                     <div class="row info-row">
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 col-xs-7">
                                             <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                         </div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-15 col-xs-17">
                                             <h4>
                                                 <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
                                             </h4>
@@ -240,13 +240,13 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                         <div id="group-list" class="item-list single-line inline-element-list row group-manage-members">
 
                             <?php while (bp_members()) : bp_the_member(); ?>
-                                <div class="col-md-8 group-item">
+                                <div class="col-md-8 col-xs-12 group-item">
                                     <div class="group-item-wrapper moderators">
                                         <div class="row info-row">
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-9 col-xs-7">
                                                 <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             </div>
-                                            <div class="col-sm-15">
+                                            <div class="col-sm-15 col-xs-17">
                                                 <h4>
                                                     <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
                                                 </h4>
@@ -289,14 +289,14 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                     <div id="group-list" class="item-list inline-element-list row group-manage-members">
                         <?php while (bp_group_members()) : bp_group_the_member(); ?>
 
-                            <div class="col-md-8 group-item">
+                            <div class="col-md-8 col-xs-12 group-item">
                                 <div class="group-item-wrapper members">
                                     <div class="row info-row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-8 col-xs-7">
                                             <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             <span class="italics"><?php if (bp_get_group_member_is_banned()) _e('(banned)', 'buddypress'); ?></span>
                                         </div>
-                                        <div class="col-sm-16">
+                                        <div class="col-sm-16 col-xs-17">
                                             <h4>
                                                 <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
                                             </h4>

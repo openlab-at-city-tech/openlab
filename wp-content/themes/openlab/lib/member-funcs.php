@@ -250,13 +250,13 @@ function openlab_list_members($view) {
 
                 $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
                 ?>
-                <div class="group-item col-md-8">
+                <div class="group-item col-sm-8 col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row">
-                            <div class="item-avatar col-sm-10">
+                            <div class="item-avatar col-sm-10 col-xs-8">
                                 <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                             </div>
-                            <div class="item col-sm-14">
+                            <div class="item col-sm-14 col-xs-16">
                                 <h2 class="item-title"><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
                                 <span class="member-since-line timestamp">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
@@ -505,7 +505,7 @@ function cuny_student_profile() {
             }
             ?>
 
-            <div id="members-list" class="info-group col-sm-24">
+            <div id="members-list" class="info-group col-xs-24">
                 <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                 <?php if ($friend_ids) { ?>
@@ -560,7 +560,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
         if (!empty($groups['group_ids_sql']) && bp_has_groups('include=' . $groups['group_ids_sql'] . '&per_page=20')) :
 //	  if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
             ?>
-            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8">
+            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8 col-xs-12">
                 <?php
                 if ($bp->is_item_admin || $bp->is_item_mod):
                     $href = bp_get_root_domain() . './my-' . $type . 's';
@@ -576,11 +576,11 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                         <div class="panel-body">
                             <div class="row">
 
-                                <div class="activity-avatar col-sm-10">
+                                <div class="activity-avatar col-sm-10 col-xs-8">
                                     <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
                                 </div>
 
-                                <div class="activity-content col-sm-14">
+                                <div class="activity-content col-sm-14 col-xs-16">
 
                                     <h6>
                                         <a class="font-size font-14" href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
@@ -726,7 +726,7 @@ function cuny_member_profile_header() {
         ?>
         <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
 
-        <div id="member-header-avatar" class="alignleft group-header-avatar col-md-8">
+        <div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
             <div id="avatar-wrapper">
                 <div class="padded-img">
                     <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
@@ -760,7 +760,7 @@ function cuny_member_profile_header() {
                     <!--<p>Some descriptive tags about the student...</p>-->
         </div><!-- #item-header-avatar -->
 
-        <div id="member-header-content" class="col-md-16">
+        <div id="member-header-content" class="col-sm-16 col-xs-24">
 
             <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
             <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>

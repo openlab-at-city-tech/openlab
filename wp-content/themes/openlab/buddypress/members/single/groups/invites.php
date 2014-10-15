@@ -7,13 +7,13 @@
 
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 			
-                <div class="group-item col-md-12">
+                <div class="group-item col-xs-12">
                             <div class="group-item-wrapper">
                                 <div class="row info-row">
-                                    <div class="item-avatar alignleft col-sm-7">
+                                    <div class="item-avatar alignleft col-xs-7">
                                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                                     </div>
-                                    <div class="item col-sm-16">
+                                    <div class="item col-xs-16">
                                         <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
                                         <?php
                                         $group_type = openlab_get_group_type();
