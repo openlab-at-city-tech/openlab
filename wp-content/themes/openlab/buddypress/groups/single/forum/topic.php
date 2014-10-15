@@ -2,7 +2,7 @@
 
 <?php if ( bp_has_forum_topic_posts() ) : ?>
 
-	<form action="<?php bp_forum_topic_action() ?>" method="post" id="forum-topic-form" enctype="multipart/form-data" class="standard-form">
+	<form action="<?php bp_forum_topic_action() ?>" method="post" id="forum-topic-form" enctype="multipart/form-data" class="standard-form form-panel">
 
 		<div class="pagination no-ajax">
 
@@ -18,7 +18,7 @@
 
 		<div id="topic-meta">
 			<h3><?php bp_the_topic_title() ?> (<?php bp_the_topic_total_post_count() ?>)</h3>
-			<a class="button" href="<?php bp_forum_permalink() ?>">&larr; <?php _e( 'Group Forum', 'buddypress' ) ?></a>
+                        <a class="btn btn-primary link-btn" href="<?php bp_forum_permalink() ?>"><span class="fa fa-chevron-circle-left"></span> <?php _e( 'Group Forum', 'buddypress' ) ?></a>
 
 			<div class="admin-links">
 				<?php if ( bp_group_is_admin() || bp_group_is_mod() || bp_get_the_topic_is_mine() ) : ?>
@@ -31,30 +31,34 @@
 
 		<?php do_action( 'bp_before_group_forum_topic_posts' ) ?>
 
-		<ul id="topic-post-list" class="item-list">
+		<ul id="topic-post-list" class="item-list list-group">
 			<?php while ( bp_forum_topic_posts() ) : bp_the_forum_topic_post(); ?>
 
-				<li id="post-<?php bp_the_topic_post_id() ?>" class="<?php bp_the_topic_post_css_class() ?>">
-					<div class="poster-meta">
+				<li id="post-<?php bp_the_topic_post_id() ?>" class="<?php bp_the_topic_post_css_class() ?> list-group-item">
+                                    <div class="row">
+					<div class="poster-meta col-xs-8">
 						<a href="<?php bp_the_topic_post_poster_link() ?>">
 							<?php bp_the_topic_post_poster_avatar( 'width=40&height=40' ) ?>
 						</a>
 						<?php echo sprintf( __( '%s said %s:', 'buddypress' ), bp_get_the_topic_post_poster_name(), bp_get_the_topic_post_time_since() ) ?>
 					</div>
 
-					<div class="post-content">
-						<?php bp_the_topic_post_content() ?>
-					</div>
+                                        <div class="col-xs-16">
+                                            <div class="post-content">
+                                                    <?php bp_the_topic_post_content() ?>
+                                            </div>
 
-					<div class="admin-links">
-						<?php if ( bp_group_is_admin() || bp_group_is_mod() || bp_get_the_topic_post_is_mine() ) : ?>
-							<?php bp_the_topic_post_admin_links() ?>
-						<?php endif; ?>
+                                            <div class="admin-links">
+                                                    <?php if ( bp_group_is_admin() || bp_group_is_mod() || bp_get_the_topic_post_is_mine() ) : ?>
+                                                            <?php bp_the_topic_post_admin_links() ?>
+                                                    <?php endif; ?>
 
-						<?php do_action( 'bp_group_forum_post_meta' ); ?>
+                                                    <?php do_action( 'bp_group_forum_post_meta' ); ?>
 
-						<a href="#post-<?php bp_the_topic_post_id() ?>" title="<?php _e( 'Permanent link to this post', 'buddypress' ) ?>">#</a>
-					</div>
+                                                    <a href="#post-<?php bp_the_topic_post_id() ?>" title="<?php _e( 'Permanent link to this post', 'buddypress' ) ?>">#</a>
+                                            </div>
+                                        </div>
+                                    </div>
 				</li>
 
 			<?php endwhile; ?>
@@ -83,19 +87,25 @@
 					<div id="post-topic-reply">
 						<p id="post-reply"></p>
 
-						<?php if ( bp_groups_auto_join() && !bp_group_is_member() ) : ?>
-							<p><?php _e( 'You will auto join this group when you reply to this topic.', 'buddypress' ) ?></p>
-						<?php endif; ?>
-
 						<?php do_action( 'groups_forum_new_reply_before' ) ?>
+                                                        
+                                                <div class="panel panel-default">
 
-						<h4><?php _e( 'Add a reply:', 'buddypress' ) ?></h4>
+                                                    <div class="panel-heading"><?php _e( 'Add a reply:', 'buddypress' ) ?></div>
+                                                    <div class="panel-body">
+                                                        
+                                                        <?php if ( bp_groups_auto_join() && !bp_group_is_member() ) : ?>
+                                                            <p class="italics"><?php _e( 'You will auto join this group when you reply to this topic.', 'buddypress' ) ?></p>
+                                                        <?php endif; ?>
 
-						<textarea name="reply_text" id="reply_text"></textarea>
+                                                    <textarea name="reply_text" id="reply_text" class="form-control"></textarea>
+                                                    
+                                                    </div>
 
-						<div class="submit">
-							<input type="submit" name="submit_reply" id="submit" value="<?php _e( 'Post Reply', 'buddypress' ) ?>" />
-						</div>
+                                                    <div class="submit">
+                                                            <input type="submit" name="submit_reply" id="submit" class="btn btn-primary" value="<?php _e( 'Post Reply', 'buddypress' ) ?>" />
+                                                    </div>
+                                                </div>
 
 						<?php do_action( 'groups_forum_new_reply_after' ) ?>
 
