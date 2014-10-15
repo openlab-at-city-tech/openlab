@@ -170,6 +170,7 @@
 #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
   color: #333;
   width: 350%;
+  left: -250%;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
