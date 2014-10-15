@@ -54,17 +54,23 @@ function openlab_header_bar() {
 add_action('bp_before_header', 'openlab_header_bar', 10);
 
 function openlab_custom_menu_items($items, $menu) {
-    $opl_link = '';
-    
-    if (is_user_logged_in()) {
-        $opl_link = '<li ' . (bp_is_my_profile() ? 'class="current-menu-item"' : '') . '>';
-        $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
-        $opl_link .= '</li>';
-    }
-    
-    $mobile_search = '<li class="visible-xs search-mobile">'.openlab_site_wide_bp_search(true).'</li>';
 
-    return $items . $opl_link. $mobile_search;
+    if ($menu->theme_location == 'main') {
+
+        $opl_link = '';
+
+        if (is_user_logged_in()) {
+            $opl_link = '<li ' . (bp_is_my_profile() ? 'class="current-menu-item"' : '') . '>';
+            $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
+            $opl_link .= '</li>';
+        }
+
+        $mobile_search = '<li class="visible-xs search-mobile">' . openlab_site_wide_bp_search(true) . '</li>';
+
+        return $items . $opl_link . $mobile_search;
+    } else {
+        return $items;
+    }
 }
 
 add_filter('wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2);

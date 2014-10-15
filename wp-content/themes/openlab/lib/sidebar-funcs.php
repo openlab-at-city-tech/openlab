@@ -5,7 +5,7 @@
  */
 function openlab_bp_sidebar($type) {
 
-    echo '<div id="sidebar" class="sidebar col-sm-6">';
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24">';
 
     switch ($type) {
         case 'actions':
@@ -27,8 +27,8 @@ function openlab_bp_sidebar($type) {
                 'container_id' => 'about-menu',
                 'menu_class' => 'sidebar-nav'
             );
-            echo '<h2 class="sidebar-title">About</h2>';
-            echo '<div class="sidebar-block">';
+            echo '<h2 class="sidebar-title hidden-xs">About</h2>';
+            echo '<div class="sidebar-block hidden-xs">';
             wp_nav_menu($args);
             echo '</div>';
             break;
@@ -43,14 +43,63 @@ function openlab_bp_sidebar($type) {
 }
 
 /**
+ * Mobile sidebar - for when a piece of the sidebar needs to appear above the content in the mobile space
+ * @param type $type
+ */
+function openlab_bp_mobile_sidebar($type) {
+
+    echo '<div id="sidebar-mobile" class="sidebar col-xs-24 visible-xs">';
+
+    switch ($type) {
+        case 'actions':
+            openlab_group_sidebar(true);
+            break;
+        case 'members':
+            openlab_member_sidebar_menu(true);
+            break;
+        case 'about':
+            $args = array(
+                'theme_location' => 'aboutmenu',
+                'container' => 'div',
+                'container_id' => 'about-menu',
+                'menu_class' => 'sidebar-nav'
+            );
+            echo '<h2 class="sidebar-title">About</h2>';
+            echo '<div class="sidebar-block">';
+            wp_nav_menu($args);
+            echo '</div>';
+            break;
+        case 'help':
+            echo '<h2 class="sidebar-title">Help</h2>';
+            echo '<div class="sidebar-block">';
+
+            $args = array(
+                'theme_location' => 'helpmenu',
+                'container' => 'div',
+                'container_id' => 'help-menu',
+                'menu_class' => 'sidebar-nav',
+            );
+            wp_nav_menu($args);
+
+            echo '</div>';
+            break;
+    }
+
+    echo '</div>';
+}
+
+/**
  * Output the sidebar content for a single group
  */
-function openlab_group_sidebar() {
+function openlab_group_sidebar($mobile = false) {
+    
+    $classes = ($mobile ? 'visible-xs' : 'hidden-xs');
+    
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
-            <div class="profile-nav">
+            <div class="profile-nav <?php echo $classes; ?>">
                 <div id="item-buttons">
-                    <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?> Materials</h2>
+                    <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?> Material</h2>
                     <div class="sidebar-block">
                         <ul class="sidebar-nav">
                             <?php bp_get_options_nav(); ?>
@@ -58,7 +107,9 @@ function openlab_group_sidebar() {
                     </div>
                 </div><!-- #item-buttons -->
             </div>
-            <?php do_action('bp_group_options_nav') ?>
+            <?php if (!$mobile): ?>
+                <?php do_action('bp_group_options_nav') ?>
+            <?php endif; ?>
             <?php
         endwhile;
     endif;
@@ -80,4 +131,95 @@ function openlab_buddypress_register_actions() {
     <p>&nbsp;</p>
     <p>&nbsp;</p>
     <?php
+}
+
+/**
+ * Member pages sidebar - modularized for easier parsing of mobile menus
+ * @param type $mobile
+ */
+function openlab_member_sidebar_menu($mobile = false) {
+    
+    if($mobile){
+        $classes = 'visible-xs';
+    }else{
+        $classes = 'hidden-xs';
+    }
+    
+    if (is_user_logged_in() && openlab_is_my_profile()) :
+    ?>
+
+            <h2 class="sidebar-title <?php echo $classes; ?>">My OpenLab</h2>
+
+            <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+
+                <ul class="sidebar-nav">
+
+                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?>" class="mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
+
+                    <li class="sq-bullet <?php if (bp_is_user_settings()) : ?>selected-page<?php endif ?>" class="mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
+
+                    <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?>" class="mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
+
+                    <li class="sq-bullet <?php if (is_page('my-projects') || openlab_is_create_group('project')) : ?>selected-page<?php endif ?>" class="mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
+
+                    <li class="sq-bullet <?php if (is_page('my-clubs') || openlab_is_create_group('club')) : ?>selected-page<?php endif ?>" class="mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
+
+        <?php /* Get a friend request count */ ?>
+        <?php if (bp_is_active('friends')) : ?>
+            <?php
+            $request_ids = friends_get_friendship_request_user_ids(bp_loggedin_user_id());
+            $request_count = intval(count((array) $request_ids));
+            ?>
+
+                            <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?>" class="mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup($request_count); ?></a></li>
+        <?php endif; ?>
+
+        <?php /* Get an unread message count */ ?>
+        <?php if (bp_is_active('messages')) : ?>
+            <?php $message_count = bp_get_total_unread_messages_count() ?>
+
+                            <li class="sq-bullet <?php if (bp_is_user_messages()) : ?>selected-page<?php endif ?>" class="mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup($message_count); ?></a></li>
+        <?php endif; ?>
+
+        <?php /* Get an invitation count */ ?>
+        <?php if (bp_is_active('groups')) : ?>
+            <?php
+            $invites = groups_get_invites_for_user();
+            $invite_count = isset($invites['total']) ? (int) $invites['total'] : 0;
+            ?>
+
+                            <li class="sq-bullet <?php if (bp_is_user_groups() && bp_is_current_action('invites')) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
+        <?php endif ?>
+
+                </ul>
+
+            </div>
+
+    <?php else : ?>
+
+            <h2 class="sidebar-title <?php echo $classes; ?>">People</h2>
+
+            <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+
+                <ul class="sidebar-nav">
+
+                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?>" class="mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
+
+        <?php /* Current page highlighting requires the GET param */ ?>
+        <?php $current_group_view = isset($_GET['type']) ? $_GET['type'] : ''; ?>
+
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'course' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-courses"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a></li>
+
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'project' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-projects"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a></li>
+
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'club' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-club"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a></li>
+
+                    <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?>" class="mol-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a></li>
+
+                </ul>
+
+            </div>
+
+    <?php
+    endif;
 }

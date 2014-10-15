@@ -3,8 +3,8 @@
  *
  */ ?>
 
-<h2 class="sidebar-title">Help</h2>
-<div class="sidebar-block">
+<h2 class="sidebar-title hidden-xs">Help</h2>
+<div class="sidebar-block hidden-xs">
 <?php
 $args = array(
     'theme_location' => 'helpmenu',

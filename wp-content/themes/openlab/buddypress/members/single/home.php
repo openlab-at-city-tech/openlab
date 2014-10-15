@@ -1,7 +1,8 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
 <div id="content" class="hfeed row">
-    <div class="col-sm-18 members-single-home">
+    <?php openlab_bp_mobile_sidebar('members'); ?>
+    <div class="col-sm-18 col-xs-24 members-single-home">
 
 <?php do_action( 'bp_before_member_body' );
 
