@@ -18,13 +18,13 @@ function cuny_home_login() {
         ?>
 
         <div id="sidebar-me" class="row">
-            <div class="col-sm-11">
+            <div class="col-xs-11">
                 <a class="alignleft avatar" href="<?php echo bp_loggedin_user_domain() ?>">
                     <img class="img-responsive" src="<?php bp_loggedin_user_avatar(array('type' => 'full', 'html' => false)); ?>" alt="Avatar for <?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?>" />
                 </a>
             </div>
 
-            <div id="user-info" class="col-sm-13">
+            <div id="user-info" class="col-xs-13">
                 <h4 class="no-margin no-margin-top"><?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?></h4>
                 <ul class="content-list">
                     <li><a class="button logout font-size font-14 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>

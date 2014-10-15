@@ -7605,6 +7605,12 @@ body .align-left {
   color: #ffffff;
   height: 400px;
 }
+@media (max-width: 767px) {
+  .home-page .row-home-top .login {
+    width: 100%;
+    float: none;
+  }
+}
 .home-page .row-home-top .login h4 {
   margin-bottom: 25px;
 }
@@ -7642,6 +7648,12 @@ body .align-left {
   width: 67.5%;
   border-radius: 0 4px 4px 0;
   max-height: 400px;
+}
+@media (max-width: 767px) {
+  .home-page .row-home-top .slider {
+    width: 100%;
+    float: none;
+  }
 }
 .home-page .row-home-top .slider .camera_wrap .camera_fakehover {
   width: 95.5%;

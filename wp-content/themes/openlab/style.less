@@ -683,6 +683,10 @@ body{
             border-radius: @border-radius-left;
             color: @white;
             height: 400px;
+            @media (max-width: @screen-xs-max){
+                width: 100%;
+                float: none;
+            }
             h4{
                 margin-bottom: 25px;
             }
@@ -723,6 +727,10 @@ body{
             width: 67.5%;
             border-radius: @border-radius-right;
             max-height: 400px;
+            @media (max-width: @screen-xs-max){
+                width: 100%;
+                float: none;
+            }
             .camera_wrap{
                 .camera_fakehover{
                     width: 95.5%;
