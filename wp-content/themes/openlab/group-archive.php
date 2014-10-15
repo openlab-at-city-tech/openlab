@@ -5,7 +5,8 @@ get_header();
 ?>
 
 <div id="content" class="hfeed row">
-    <div <?php post_class('col-sm-18'); ?>>
+    <?php openlab_bp_sidebar('groups'); ?>
+    <div <?php post_class('col-sm-18 col-xs-24'); ?>>
         <h1 class="entry-title"><?php echo ucfirst(openlab_page_slug_to_grouptype()) . 's'; ?> on the OpenLab</h1>
 
         <div class="entry-content">
@@ -13,7 +14,6 @@ get_header();
         </div><!--entry-content-->
     </div><!--hentry-->
 
-    <?php openlab_bp_sidebar('groups'); ?>
 </div><!--content-->
 
 <?php

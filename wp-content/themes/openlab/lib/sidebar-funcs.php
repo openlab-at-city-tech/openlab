@@ -4,8 +4,10 @@
  * Sidebar based functionality
  */
 function openlab_bp_sidebar($type) {
-
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24">';
+    
+    $pull_classes = ($type == 'groups' ? ' pull-right' : '');
+    
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24'.$pull_classes.'">';
 
     switch ($type) {
         case 'actions':
@@ -47,7 +49,6 @@ function openlab_bp_sidebar($type) {
  * @param type $type
  */
 function openlab_bp_mobile_sidebar($type) {
-
     echo '<div id="sidebar-mobile" class="sidebar col-xs-24 visible-xs">';
 
     switch ($type) {

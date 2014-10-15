@@ -1,4 +1,4 @@
-<?php
+<?php 
 global $bp, $wp_query;
 $post_obj = $wp_query->get_queried_object();
 $group_type = openlab_page_slug_to_grouptype();

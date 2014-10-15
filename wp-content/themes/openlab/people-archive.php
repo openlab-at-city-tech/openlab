@@ -8,7 +8,8 @@ global $wp_query;
 $post_obj = $wp_query->get_queried_object();
 ?>
 <div id="content" class="hfeed row">
-    <div <?php post_class('col-sm-18'); ?>>
+    <?php openlab_bp_sidebar('groups'); ?>
+    <div <?php post_class('col-sm-18 col-xs-24'); ?>>
         <div class="content-wrapper">
             <h1 class="entry-title"><?php echo $post_obj->post_title; ?> on the OpenLab</h1>
             <div class="entry-content">
@@ -19,7 +20,6 @@ $post_obj = $wp_query->get_queried_object();
         </div>
     </div><!--hentry-->
 
-    <?php openlab_bp_sidebar('groups'); ?>
 </div><!--content-->
 
 <?php
