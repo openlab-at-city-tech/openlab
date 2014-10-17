@@ -1541,8 +1541,28 @@ class buddypress_Translation_Mangler {
 
 function openlab_launch_translator() {
 	add_filter( 'gettext', array( 'buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
+
+class bbPress_Translation_Mangler {
+	static function filter_gettext( $translation, $text, $domain ) {
+
+		if ( 'bbpress' != $domain ) {
+			return $translation;
+		}
+
+		$translations = get_translations_for_domain( 'buddypress' );
+
+		switch( $text ) {
+			case "Forum":
+				return $translations->translate( "Discussion" );
+				break;
+		}
+
+		return $translation;
+	}
+}
 
 class buddypress_ajax_Translation_Mangler {
  /*
