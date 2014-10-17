@@ -2286,3 +2286,67 @@ function openlab_lazy_flush_rewrite_rules() {
 	}
 }
 add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
+
+/**
+ * Fix bbPress new topic form action attribute.
+ *
+ * bbPress uses get_permalink(). On a BP group, this refers to the Groups WP
+ * page. For some reason, it's not getting filtered correctly by bbPress.
+ */
+function openlab_fix_new_topic_form_action( $url, $post ) {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	return bp_get_group_permalink();
+}
+add_filter( 'page_link', 'openlab_fix_new_topic_form_action' );
+
+/**
+ * More generous cap mapping for bbPress topic posting.
+ *
+ * bbPress maps everything onto Participant. We don't want to have to use that.
+ */
+function openlab_bbp_map_group_forum_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
+
+	if ( ! bp_is_group() ) {
+		return $caps;
+	}
+
+	switch ( $cap ) {
+
+		// If user is a group mmember, allow them to create content.
+		case 'read_forum'          :
+		case 'publish_replies'     :
+		case 'publish_topics'      :
+		case 'read_hidden_forums'  :
+		case 'read_private_forums' :
+			if ( bbp_group_is_member() || bbp_group_is_mod() || bbp_group_is_admin() ) {
+				$caps = array( 'exist' );
+			}
+			break;
+
+		// If user is a group mod ar admin, map to participate cap.
+		case 'moderate'     :
+		case 'edit_topic'   :
+		case 'edit_reply'   :
+		case 'view_trash'   :
+		case 'edit_others_replies' :
+		case 'edit_others_topics'  :
+			if ( bbp_group_is_mod() || bbp_group_is_admin() ) {
+				$caps = array( 'exist' );
+			}
+			break;
+
+		// If user is a group admin, allow them to delete topics and replies.
+		case 'delete_topic' :
+		case 'delete_reply' :
+			if ( bbp_group_is_admin() ) {
+				$caps = array( 'exist' );
+			}
+			break;
+	}
+
+	return apply_filters( 'bbp_map_group_forum_topic_meta_caps', $caps, $cap, $user_id, $args );
+}
+add_filter( 'bbp_map_meta_caps', 'openlab_bbp_map_group_forum_meta_caps', 10, 4 );
