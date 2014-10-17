@@ -286,6 +286,10 @@ ul.item-list li h4 a {
     border: none;
 }
 
+.bbp-author-role {
+	display: none;
+}
+
 /* "See All" links in widget headers */
 div.bp-widget h4 span {
     float:right;
