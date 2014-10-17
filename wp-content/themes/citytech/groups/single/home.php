@@ -187,7 +187,7 @@ function cuny_group_single() { ?>
 
 						?>
 
-						<?php if ( bbp_has_topics( 'posts_per_page=3&post_parent=' . $forum_id ) ) : ?>
+						<?php if ( $forum_id && bbp_has_topics( 'posts_per_page=3&post_parent=' . $forum_id ) ) : ?>
 							<ul>
 								<?php while ( bbp_topics() ) : bbp_the_topic(); ?>
 									<li>
