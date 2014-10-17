@@ -1506,6 +1506,7 @@ class buddypress_Translation_Mangler {
 
    $uc_grouptype = ucfirst( $grouptype );
    $translations = get_translations_for_domain( 'buddypress' );
+
    switch( $text ) {
 	case "Forum":
 		return $translations->translate( "Discussion" );
@@ -1534,6 +1535,9 @@ class buddypress_Translation_Mangler {
 	case "Create a Group":
 		return $translations->translate( "Create a " . $uc_grouptype );
 		break;
+	case "Manage" :
+		return $translations->translate( 'Settings' );
+		break;
   }
   return $translation;
  }
@@ -1542,8 +1546,26 @@ class buddypress_Translation_Mangler {
 function openlab_launch_translator() {
 	add_filter( 'gettext', array( 'buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
+
+function openlab_gettext_with_context( $translations, $text, $context, $domain ) {
+	if ( 'buddypress' !== $domain ) {
+		return $translations;
+	}
+
+	switch ( $text ) {
+		case 'Manage' :
+			if ( 'My Group screen nav' === $context ) {
+				return 'Settings';
+			}
+			break;
+
+	}
+
+	return $translations;
+}
 
 class bbPress_Translation_Mangler {
 	static function filter_gettext( $translation, $text, $domain ) {
