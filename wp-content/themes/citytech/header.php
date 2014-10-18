@@ -34,10 +34,10 @@
     	<div id="header">
 				<?php do_action( 'bp_header' ) ?>
 		</div><!-- #header -->
-        
+
 		<?php do_action( 'bp_after_header' ) ?>
 		<?php do_action( 'bp_before_container' ) ?>
-        
+
         <div id="inner">
         	<div class="wrap">
             	<div id="content-sidebar-wrap">
