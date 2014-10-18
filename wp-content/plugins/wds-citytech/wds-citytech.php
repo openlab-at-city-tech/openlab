@@ -2310,21 +2310,6 @@ function openlab_lazy_flush_rewrite_rules() {
 add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
 
 /**
- * Fix bbPress new topic form action attribute.
- *
- * bbPress uses get_permalink(). On a BP group, this refers to the Groups WP
- * page. For some reason, it's not getting filtered correctly by bbPress.
- */
-function openlab_fix_new_topic_form_action( $url ) {
-	if ( ! bp_is_group() ) {
-		return $url;
-	}
-
-	return bp_get_group_permalink( groups_get_current_group() );
-}
-add_filter( 'page_link', 'openlab_fix_new_topic_form_action' );
-
-/**
  * More generous cap mapping for bbPress topic posting.
  *
  * bbPress maps everything onto Participant. We don't want to have to use that.
