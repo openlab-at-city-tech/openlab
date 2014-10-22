@@ -950,3 +950,15 @@ function openlab_trim_member_name($name){
 }
 
 add_filter('bp_member_name','openlab_trim_member_name');
+
+function openlab_trim_message_subject($subject){
+    global $bp;
+    
+    if ($bp->current_component == 'messages' && ($bp->current_action == 'inbox' || $bp->current_action== 'sentbox')){
+        $subject = openlab_shortened_text($subject, 20, false);
+    }
+    
+    return $subject;
+}
+
+add_filter('bp_get_message_thread_subject','openlab_trim_message_subject');
