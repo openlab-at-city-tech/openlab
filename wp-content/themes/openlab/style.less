@@ -974,6 +974,7 @@ body{
                     }
                 }
                 ul{
+                    display: none;
                     margin: 0;
                     padding: 0;
                     list-style-type: none;
@@ -984,6 +985,11 @@ body{
                             border-left: 1px solid @30gray;
                             padding: 10px 0 10px 15px;
                         }
+                    }
+                }
+                &.current-menu-item{
+                    ul{
+                        display: block;
                     }
                 }
             }
