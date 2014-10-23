@@ -936,7 +936,15 @@ function openlab_get_custom_activity_action() {
 function openlab_trim_member_name($name){
     global $post, $bp;
     
+    $trim_switch = false;
+    
     if($post->post_name == 'people' || $bp->current_action == 'members'){
+        $trim_switch = true;
+    }else if ($bp->action_variables[0] == 'manage-members' || ($bp->current_action == 'members' && $bp->current_component == 'groups')){
+        $trim_switch = true;
+    }
+    
+    if($trim_switch){
         $process_name = explode(' ',$name);
         $new_name = '';
         foreach($process_name as $process){

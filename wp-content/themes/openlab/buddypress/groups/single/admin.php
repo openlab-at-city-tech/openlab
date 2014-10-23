@@ -223,7 +223,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                         </div>
                                         <div class="col-sm-15 col-xs-17">
                                             <h4>
-                                                <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
+                                                <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                             </h4>
                                             <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
                                             <a class="btn btn-primary link-btn btn-xs confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
@@ -256,7 +256,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                             </div>
                                             <div class="col-sm-15 col-xs-17">
                                                 <h4>
-                                                    <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
+                                                    <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                                 </h4>
                                                 <a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="btn btn-primary btn-xs link-btn confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a>
                                                 <a class="btn btn-primary btn-xs link-btn confirm mod-demote-to-member" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
@@ -306,7 +306,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                         </div>
                                         <div class="col-sm-16 col-xs-17">
                                             <h4>
-                                                <a href="<?php bp_member_permalink(); ?>"> <?php bp_member_name(); ?></a>
+                                                <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                             </h4>
                                         </div>
                                     </div>
