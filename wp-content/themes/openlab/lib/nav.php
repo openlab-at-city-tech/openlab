@@ -42,6 +42,8 @@ function openlab_custom_nav_classes($classes,$item){
     
     if(($post->post_type == 'help') && $item->title == 'Help' ){
         $classes[] = ' current-menu-item';
+    } else if ($post->post_parent == get_page_by_path('about')->ID && $item->title == 'About'){
+        $classes[] = ' current-menu-item';
     }
     
     return $classes;
