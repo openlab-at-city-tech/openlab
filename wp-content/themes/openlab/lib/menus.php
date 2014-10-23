@@ -581,9 +581,9 @@ function openlab_filter_subnav_members($subnav_item) {
     $total_mem = bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
 
     //added classes to span
-    if($total_mem > 0){
+    if ($total_mem > 0) {
         $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . '">' . $total_mem . '</span>', $new_item);
-    }else{
+    } else {
         $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
     }
 
@@ -611,14 +611,14 @@ function openlab_filter_subnav_docs($subnav_item) {
     $query = new WP_Query($docs_arg);
 
     $total_doc_count = !empty($query->found_posts) ? $query->found_posts : 0;
-    
+
     //legacy issue - some DB entries list doc_count as greater than 0 when in fact it is 0
     //if that's the case, the search replace below will not work properly
-    $doc_count = groups_get_groupmeta( $bp->groups->current_group->id, 'bp-docs-count' );
-    
-    if($doc_count == $total_doc_count){
+    $doc_count = groups_get_groupmeta($bp->groups->current_group->id, 'bp-docs-count');
+
+    if ($doc_count == $total_doc_count) {
         $span_count = $total_doc_count;
-    }else{
+    } else {
         $span_count = $doc_count;
     }
 
@@ -629,7 +629,7 @@ function openlab_filter_subnav_docs($subnav_item) {
     } else {
         $new_item = str_replace('<span>' . $span_count . '</span>', '', $subnav_item);
     }
-    
+
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $new_item = str_replace("current selected", "current-menu-item", $new_item);
 
@@ -834,18 +834,18 @@ function openlab_docs_tabs() {
     <?php
 }
 
-function openlab_is_create_group($group_type){
+function openlab_is_create_group($group_type) {
     global $bp;
     $return = NULL;
-    
+
     //get group step
     $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
-    
-    $steps = array('group-details','group-settings','group-avatar','invite-anyone');
-    
-    if(openlab_get_group_type() == $group_type && in_array($current_step,$steps) && bp_current_action() == 'create'){
+
+    $steps = array('group-details', 'group-settings', 'group-avatar', 'invite-anyone');
+
+    if (openlab_get_group_type() == $group_type && in_array($current_step, $steps) && bp_current_action() == 'create') {
         $return = true;
     }
-    
+
     return $return;
 }
