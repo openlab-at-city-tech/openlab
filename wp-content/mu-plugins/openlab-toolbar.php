@@ -69,6 +69,8 @@ class OpenLab_Admin_Bar {
                 //restricting network menu to group sites only
                 if(get_current_blog_id() !== 1 || is_admin()){
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
+                    add_filter('body_class',array($this,'adminbar_special_body_class'));
+                    add_filter('admin_body_class',array($this,'adminbar_special_admin_body_class'));
                 }
                 
                 //adjust the padding at the top of the page
@@ -1129,6 +1131,22 @@ HTML;
             //custom admin bar styles
             wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );            
             wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
+        }
+        
+        function adminbar_special_body_class($classes){
+            
+            $classes[] = 'adminbar-manual-bootstrap';
+            
+            return $classes;
+            
+        }
+        
+        function adminbar_special_admin_body_class($classes){
+            
+            $classes .= 'adminbar-manual-bootstrap';
+            
+            return $classes;
+            
         }
         
         function admin_bar_html_update(){

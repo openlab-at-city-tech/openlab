@@ -194,107 +194,107 @@
   padding: 3% 5%;
 }
 /**Bootstrap/custom stylesheet styles - these are here to help out admin, which currently does not load main theme stylesheet**/
-body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-item {
+body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-menu-toggle .ab-item {
   padding: 0 14px;
 }
-body.wp-admin #wpadminbar #wp-toolbar .ab-sub-wrapper {
+body.adminbar-manual-bootstrap #wpadminbar #wp-toolbar .ab-sub-wrapper {
   margin-top: 0;
 }
-body.wp-admin #wpadminbar * {
+body.adminbar-manual-bootstrap #wpadminbar * {
   box-sizing: border-box;
 }
-body.wp-admin #wpadminbar *:before,
-body.wp-admin #wpadminbar *:after {
+body.adminbar-manual-bootstrap #wpadminbar *:before,
+body.adminbar-manual-bootstrap #wpadminbar *:after {
   box-sizing: border-box;
 }
-body.wp-admin #wpadminbar button,
-body.wp-admin #wpadminbar html input[type="button"],
-body.wp-admin #wpadminbar input[type="reset"],
-body.wp-admin #wpadminbar input[type="submit"] {
+body.adminbar-manual-bootstrap #wpadminbar button,
+body.adminbar-manual-bootstrap #wpadminbar html input[type="button"],
+body.adminbar-manual-bootstrap #wpadminbar input[type="reset"],
+body.adminbar-manual-bootstrap #wpadminbar input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
 }
-body.wp-admin #wpadminbar p {
+body.adminbar-manual-bootstrap #wpadminbar p {
   line-height: normal;
   margin: 0;
 }
-body.wp-admin #wpadminbar a {
+body.adminbar-manual-bootstrap #wpadminbar a {
   color: #333333;
   text-decoration: underline;
 }
-body.wp-admin #wpadminbar .fa {
+body.adminbar-manual-bootstrap #wpadminbar .fa {
   font-size: 16px;
   margin: 0 4px;
 }
-body.wp-admin #wpadminbar .row {
+body.adminbar-manual-bootstrap #wpadminbar .row {
   margin-left: -7.5px;
   margin-right: -7.5px;
 }
-body.wp-admin #wpadminbar .clearfix:before,
-body.wp-admin #wpadminbar .clearfix:after,
-body.wp-admin #wpadminbar .row:before,
-body.wp-admin #wpadminbar .row:after,
-body.wp-admin #wpadminbar .nav:before,
-body.wp-admin #wpadminbar .nav:after,
-body.wp-admin #wpadminbar .navbar:before,
-body.wp-admin #wpadminbar .navbar:after,
-body.wp-admin #wpadminbar .navbar-header:before,
-body.wp-admin #wpadminbar .navbar-header:after,
-body.wp-admin #wpadminbar .navbar-collapse:before,
-body.wp-admin #wpadminbar .navbar-collapse:after {
+body.adminbar-manual-bootstrap #wpadminbar .clearfix:before,
+body.adminbar-manual-bootstrap #wpadminbar .clearfix:after,
+body.adminbar-manual-bootstrap #wpadminbar .row:before,
+body.adminbar-manual-bootstrap #wpadminbar .row:after,
+body.adminbar-manual-bootstrap #wpadminbar .nav:before,
+body.adminbar-manual-bootstrap #wpadminbar .nav:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar:before,
+body.adminbar-manual-bootstrap #wpadminbar .navbar:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-header:before,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-header:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:before,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after {
   content: " ";
   display: table;
 }
-body.wp-admin #wpadminbar .clearfix:after,
-body.wp-admin #wpadminbar .container:after,
-body.wp-admin #wpadminbar .container-fluid:after,
-body.wp-admin #wpadminbar .row:after,
-body.wp-admin #wpadminbar .nav:after,
-body.wp-admin #wpadminbar .navbar:after,
-body.wp-admin #wpadminbar .navbar-header:after,
-body.wp-admin #wpadminbar .navbar-collapse:after {
+body.adminbar-manual-bootstrap #wpadminbar .clearfix:after,
+body.adminbar-manual-bootstrap #wpadminbar .container:after,
+body.adminbar-manual-bootstrap #wpadminbar .container-fluid:after,
+body.adminbar-manual-bootstrap #wpadminbar .row:after,
+body.adminbar-manual-bootstrap #wpadminbar .nav:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-header:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after {
   clear: both;
 }
-body.wp-admin #wpadminbar .visible-xs,
-body.wp-admin #wpadminbar .visible-sm,
-body.wp-admin #wpadminbar .visible-md,
-body.wp-admin #wpadminbar .visible-lg {
+body.adminbar-manual-bootstrap #wpadminbar .visible-xs,
+body.adminbar-manual-bootstrap #wpadminbar .visible-sm,
+body.adminbar-manual-bootstrap #wpadminbar .visible-md,
+body.adminbar-manual-bootstrap #wpadminbar .visible-lg {
   display: none !important;
 }
-body.wp-admin #wpadminbar .col-sm-6,
-body.wp-admin #wpadminbar .col-sm-8,
-body.wp-admin #wpadminbar .col-sm-16,
-body.wp-admin #wpadminbar .col-sm-18 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-6,
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-8,
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-16,
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-18 {
   float: left;
   min-height: 1px;
   padding-left: 7.5px;
   padding-right: 7.5px;
   position: relative;
 }
-body.wp-admin #wpadminbar .col-sm-6 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-6 {
   width: 25%;
 }
-body.wp-admin #wpadminbar .col-sm-8 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-8 {
   width: 33.3333%;
 }
-body.wp-admin #wpadminbar .col-sm-16 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-16 {
   width: 66.6667%;
 }
-body.wp-admin #wpadminbar .col-sm-18 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-18 {
   width: 75%;
 }
-body.wp-admin #wpadminbar .img-responsive {
+body.adminbar-manual-bootstrap #wpadminbar .img-responsive {
   max-width: 100%;
   display: block;
   height: auto;
 }
-body.wp-admin #wpadminbar .bold {
+body.adminbar-manual-bootstrap #wpadminbar .bold {
   font-weight: 600;
 }
-body.wp-admin #wpadminbar .regular {
+body.adminbar-manual-bootstrap #wpadminbar .regular {
   font-weight: 400;
 }
-body.wp-admin #wpadminbar .btn {
+body.adminbar-manual-bootstrap #wpadminbar .btn {
   -moz-user-select: none;
   background-image: none;
   border: 1px solid rgba(0, 0, 0, 0);
@@ -310,39 +310,39 @@ body.wp-admin #wpadminbar .btn {
   vertical-align: middle;
   white-space: nowrap;
 }
-body.wp-admin #wpadminbar a.link-btn {
+body.adminbar-manual-bootstrap #wpadminbar a.link-btn {
   margin-top: 5px;
   text-align: left;
   text-decoration: none;
 }
-body.wp-admin #wpadminbar .btn-primary {
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary {
   background-color: #444444;
   border-color: #373737;
   color: #ffffff;
 }
-body.wp-admin #wpadminbar .btn-default {
+body.adminbar-manual-bootstrap #wpadminbar .btn-default {
   background-color: #ffffff;
   border-color: #cccccc;
   color: #333333;
 }
-body.wp-admin #wpadminbar .btn-default:hover,
-body.wp-admin #wpadminbar .btn-default:focus,
-body.wp-admin #wpadminbar .btn-default:active,
-body.wp-admin #wpadminbar .btn-default.active {
+body.adminbar-manual-bootstrap #wpadminbar .btn-default:hover,
+body.adminbar-manual-bootstrap #wpadminbar .btn-default:focus,
+body.adminbar-manual-bootstrap #wpadminbar .btn-default:active,
+body.adminbar-manual-bootstrap #wpadminbar .btn-default.active {
   background-color: #e6e6e6;
   border-color: #adadad;
   color: #63dfd2;
   text-decoration: none;
 }
-body.wp-admin #wpadminbar .btn-primary:hover,
-body.wp-admin #wpadminbar .btn-primary:focus,
-body.wp-admin #wpadminbar .btn-primary:active,
-body.wp-admin #wpadminbar .btn-primary.active {
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary:hover,
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary:focus,
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary:active,
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary.active {
   background-color: #2b2b2b;
   border-color: #191919;
   color: #63dfd2;
 }
-body.wp-admin #wpadminbar .sr-only {
+body.adminbar-manual-bootstrap #wpadminbar .sr-only {
   border: 0 none;
   clip: rect(0px, 0px, 0px, 0px);
   height: 1px;
@@ -352,7 +352,7 @@ body.wp-admin #wpadminbar .sr-only {
   position: absolute;
   width: 1px;
 }
-body.wp-admin #wpadminbar .navbar-toggle {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle {
   position: relative;
   float: right;
   margin-right: 7px;
@@ -364,25 +364,25 @@ body.wp-admin #wpadminbar .navbar-toggle {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-body.wp-admin #wpadminbar .navbar-toggle:focus {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle:focus {
   outline: 0;
 }
-body.wp-admin #wpadminbar .navbar-toggle .icon-bar {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar {
   display: block;
   width: 22px;
   height: 2px;
   border-radius: 1px;
 }
-body.wp-admin #wpadminbar .navbar-toggle .icon-bar + .icon-bar {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
 }
-body.wp-admin #wpadminbar .collapse {
+body.adminbar-manual-bootstrap #wpadminbar .collapse {
   display: none;
 }
-body.wp-admin #wpadminbar .collapse.in {
+body.adminbar-manual-bootstrap #wpadminbar .collapse.in {
   display: block;
 }
-body.wp-admin #wpadminbar .navbar-collapse {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse {
   overflow-x: visible;
   padding-right: 7px;
   padding-left: 7px;
@@ -390,25 +390,25 @@ body.wp-admin #wpadminbar .navbar-collapse {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   -webkit-overflow-scrolling: touch;
 }
-body.wp-admin #wpadminbar .navbar-collapse.in {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse.in {
   overflow-y: auto;
 }
-body.wp-admin #wpadminbar #wp-admin-bar-my-hamburger {
+body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-my-hamburger {
   display: none !important;
 }
 @media (min-width: 768px) and (max-width: 991px) {
-  body.wp-admin #wpadminbar .hidden-sm {
+  body.adminbar-manual-bootstrap #wpadminbar .hidden-sm {
     display: none !important;
   }
-  body.wp-admin #wpadminbar .visible-sm {
+  body.adminbar-manual-bootstrap #wpadminbar .visible-sm {
     display: block !important;
   }
 }
 @media (max-width: 767px) {
-  body.wp-admin #wpadminbar .hidden-xs {
+  body.adminbar-manual-bootstrap #wpadminbar .hidden-xs {
     display: none !important;
   }
-  body.wp-admin #wpadminbar .visible-xs {
+  body.adminbar-manual-bootstrap #wpadminbar .visible-xs {
     display: block !important;
   }
 }
