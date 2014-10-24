@@ -7110,6 +7110,7 @@ blockquote .h6 {
 }
 .nav.nav-inline li .fa {
   padding-left: 7px;
+  margin: 0;
 }
 .nav.nav-inline li:first-child a {
   padding-left: 0;
