@@ -823,7 +823,7 @@ function openlab_render_message() {
         <div id="message" class="bp-template-notice <?php echo $type; ?> btn btn-default btn-block btn-primary link-btn clearfix">
 
             <span class="pull-left fa fa-check"></span>
-        <?php echo $content; ?>
+            <?php echo $content; ?>
 
         </div>
 
@@ -983,7 +983,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                   ?></p>
+                                                            <p><?php // bp_group_status_message()                     ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )         ?>
@@ -1008,7 +1008,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                   ?></p>
+                                                            <p><?php // bp_group_status_message()                     ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )           ?>

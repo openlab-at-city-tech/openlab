@@ -82,7 +82,7 @@ function openlab_bp_group_documents_display_content() {
                         ?>
 
                         <li class="list-group-item <?php if (++$count % 2) echo ' alt'; ?>" >
-                            
+
                             <?php
                             //show edit and delete options if user is privileged
                             echo '<div class="admin-links pull-right">';
@@ -95,9 +95,10 @@ function openlab_bp_group_documents_display_content() {
                                 echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='$delete_link' id='bp-group-documents-delete'>" . __('Delete', 'bp-group-documents') . "</a>";
                             }
 
-                            echo '</div>'; ?>
-                            
-                            <?php if (get_option('bp_group_documents_display_icons')) $document->icon(); ?>
+                            echo '</div>';
+                            ?>
+
+            <?php if (get_option('bp_group_documents_display_icons')) $document->icon(); ?>
 
                             <a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo $document->name; ?>
 
@@ -119,104 +120,103 @@ function openlab_bp_group_documents_display_content() {
                         ?>
                 </ul>
 
-            <?php } else { ?>
+    <?php } else { ?>
                 <div id="message" class="info">
                     <p><?php _e('There have been no documents uploaded for this group', 'bp-group-documents') ?></p>
                 </div>
 
-            <?php } ?>
+    <?php } ?>
             <div class="spacer">&nbsp;</div>
 
-            <?php //-------------------------------------------------------------------DETAIL VIEW--  ?>
+            <?php //-------------------------------------------------------------------DETAIL VIEW--   ?>
 
             <?php if ($template->show_detail) { ?>
-            
-                    <?php
-                    if ($template->operation == 'add') { 
-                        $this_id = 'bp-group-documents-upload-new';
-                    }else{
-                        $this_id = 'bp-group-documents-edit';
-                    }
-                    ?>
 
-                    <div id="<?php echo $this_id; ?>">
+                <?php
+                if ($template->operation == 'add') {
+                    $this_id = 'bp-group-documents-upload-new';
+                } else {
+                    $this_id = 'bp-group-documents-edit';
+                }
+                ?>
 
-                            <form method="post" id="bp-group-documents-form" class="standard-form form-panel" action="<?php echo $template->action_link; ?>" enctype="multipart/form-data">
-                            <input type="hidden" name="bp_group_documents_operation" value="<?php echo $template->operation; ?>" />
-                            <input type="hidden" name="bp_group_documents_id" value="<?php echo $template->id; ?>" />
+                <div id="<?php echo $this_id; ?>">
 
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><?php echo $template->header ?></div>
-                                <div class="panel-body">
+                    <form method="post" id="bp-group-documents-form" class="standard-form form-panel" action="<?php echo $template->action_link; ?>" enctype="multipart/form-data">
+                        <input type="hidden" name="bp_group_documents_operation" value="<?php echo $template->operation; ?>" />
+                        <input type="hidden" name="bp_group_documents_id" value="<?php echo $template->id; ?>" />
 
-                                    <?php if ($template->operation == 'add') { ?>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><?php echo $template->header ?></div>
+                            <div class="panel-body">
 
-                                        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo return_bytes(ini_get('post_max_size')) ?>" />
-                                        <label><?php _e('Choose File:', 'bp-group-documents'); ?></label>
-                                        <input type="file" name="bp_group_documents_file" class="bp-group-documents-file form-control" />
-                                    <?php } ?>
+        <?php if ($template->operation == 'add') { ?>
 
-                                    <?php if (BP_GROUP_DOCUMENTS_FEATURED) { ?>
-                                        <div class="checkbox">
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo return_bytes(ini_get('post_max_size')) ?>" />
+                                    <label><?php _e('Choose File:', 'bp-group-documents'); ?></label>
+                                    <input type="file" name="bp_group_documents_file" class="bp-group-documents-file form-control" />
+                                <?php } ?>
+
+        <?php if (BP_GROUP_DOCUMENTS_FEATURED) { ?>
+                                    <div class="checkbox">
                                         <label class="bp-group-documents-featured-label"><input type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php if ($template->featured) echo 'checked="checked"'; ?> > <?php _e('Featured Document', 'bp-group-documents'); ?></label>
-                                        </div>
-                                    <?php } ?>
-
-                                    <div id="document-detail-clear" class="clear"></div>
-                                    <div class="document-info">
-                                        <label><?php _e('Display Name:', 'bp-group-documents'); ?></label>
-                                        <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo $template->name ?>" />
-                                        <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
-                                            <label><?php _e('Description:', 'bp-group-documents'); ?></label>
-                                            <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo $template->description; ?></textarea>
-                                        <?php } ?>
-                                        <label></label>
                                     </div>
+        <?php } ?>
+
+                                <div id="document-detail-clear" class="clear"></div>
+                                <div class="document-info">
+                                    <label><?php _e('Display Name:', 'bp-group-documents'); ?></label>
+                                    <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo $template->name ?>" />
+        <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
+                                        <label><?php _e('Description:', 'bp-group-documents'); ?></label>
+                                        <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo $template->description; ?></textarea>
+        <?php } ?>
+                                    <label></label>
                                 </div>
                             </div>
-
-                            <input type="submit" class="button" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
-
-                            <?php if (get_option('bp_group_documents_use_categories')) { ?>
-                                <div class="bp-group-documents-category-wrapper">
-                                    <label><?php _e('Category:', 'bp-group-documents'); ?></label>
-                                    <div class="bp-group-documents-category-list">
-                                        <ul class="inline-element-list">
-                                            <?php foreach ($template->get_group_categories(false) as $category) { ?>
-                                                <li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo $category->term_id; ?>" <?php if ($template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /><?php echo $category->name; ?></li>
-                                            <?php } ?>
-                                        </ul>
-                                    </div>
-                                    <input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-category" />
-                                </div><!-- .bp-group-documents-category-wrapper -->
-                            <?php } ?>
-
-                            </form>
-                        
-                    </div>
-
-                    <?php if ($template->operation == 'add') { ?>
-                        <a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php _e('Upload a New Document', 'bp-group-documents'); ?></a>
-                    <?php } ?>
-
-                <?php } ?>
-
-                <div class="pagination no-ajax">
-                    <?php if ($template->show_pagination()) { ?>
-                        <div id="group-documents-page-links" class="pagination-links">
-                            <?php $template->pagination_links(); ?>
                         </div>
-                    <?php } ?>
+
+                        <input type="submit" class="button" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
+
+        <?php if (get_option('bp_group_documents_use_categories')) { ?>
+                            <div class="bp-group-documents-category-wrapper">
+                                <label><?php _e('Category:', 'bp-group-documents'); ?></label>
+                                <div class="bp-group-documents-category-list">
+                                    <ul class="inline-element-list">
+                                        <?php foreach ($template->get_group_categories(false) as $category) { ?>
+                                            <li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo $category->term_id; ?>" <?php if ($template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /><?php echo $category->name; ?></li>
+            <?php } ?>
+                                    </ul>
+                                </div>
+                                <input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-category" />
+                            </div><!-- .bp-group-documents-category-wrapper -->
+        <?php } ?>
+
+                    </form>
+
                 </div>
 
-            </div><!--end #group-documents-->
-            <?php
-        }
+                <?php if ($template->operation == 'add') { ?>
+                    <a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php _e('Upload a New Document', 'bp-group-documents'); ?></a>
+                <?php } ?>
 
-        function openlab_get_files_count() {
+    <?php } ?>
 
-            $template = new BP_Group_Documents_Template();
+            <div class="pagination no-ajax">
+                    <?php if ($template->show_pagination()) { ?>
+                    <div id="group-documents-page-links" class="pagination-links">
+                    <?php $template->pagination_links(); ?>
+                    </div>
+    <?php } ?>
+            </div>
 
-            return $template->pagination_count();
-        }
-        
+    </div><!--end #group-documents-->
+    <?php
+}
+
+function openlab_get_files_count() {
+
+    $template = new BP_Group_Documents_Template();
+
+    return $template->pagination_count();
+}
