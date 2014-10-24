@@ -1375,3 +1375,23 @@ function openlab_show_site_posts_and_comments() {
         <?php
     }
 }
+
+function openlab_trim_group_name($name) {
+    global $post;
+
+    $groups = array('Courses', 'Projects', 'Clubs', 'Portfolios');
+
+    if (strstr($post->post_title, 'My') || in_array($post->post_title, $groups)) {
+        $process_name = explode(' ', $name);
+        $new_name = '';
+        foreach ($process_name as $process) {
+            $new_name .= ' ' . openlab_shortened_text($process, 24, false);
+        }
+
+        $name = $new_name;
+    }
+
+    return $name;
+}
+
+add_filter('bp_get_group_name', 'openlab_trim_group_name');
