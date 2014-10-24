@@ -1353,6 +1353,26 @@ body{
         line-height: 2.25;
     }
 }
+.archive{
+    h2.child-cat{
+        margin-top: 42px;
+        a{
+            border-top: 1px solid #333333;
+            padding-top: 7px;
+        }
+        &:first-of-type{
+            margin-top: 0;
+            a{
+                border-top: 0;
+                padding-top: 0;
+            }
+        }
+    }
+    h2.help-title,
+   .help-tags {
+        margin-left: 21px;
+    }
+}
 /**breadcrumbs**/
 #breadcrumb-container{
     background-color: darken(desaturate(@cyan,1.7%),2.1%);

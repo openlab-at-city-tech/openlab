@@ -8192,6 +8192,24 @@ body .align-left {
 .page-nav a {
   line-height: 2.25;
 }
+.archive h2.child-cat {
+  margin-top: 42px;
+}
+.archive h2.child-cat a {
+  border-top: 1px solid #333333;
+  padding-top: 7px;
+}
+.archive h2.child-cat:first-of-type {
+  margin-top: 0;
+}
+.archive h2.child-cat:first-of-type a {
+  border-top: 0;
+  padding-top: 0;
+}
+.archive h2.help-title,
+.archive .help-tags {
+  margin-left: 21px;
+}
 /**breadcrumbs**/
 #breadcrumb-container {
   background-color: #5cdbce;
