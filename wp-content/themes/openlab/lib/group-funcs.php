@@ -330,6 +330,24 @@ function openlab_groups_pagination_links() {
     return $pagination;
 }
 
+function openlab_forum_pagination() {
+    global $forum_template;
+
+    $pagination = paginate_links(array(
+        'base' => add_query_arg(array('p' => '%#%', 'n' => $forum_template->pag_num)),
+        'format' => '',
+        'total' => ceil((int) $forum_template->total_topic_count / (int) $forum_template->pag_num),
+        'current' => $forum_template->pag_page,
+        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Forum pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Forum pagination next text', 'buddypress'),
+        'mid_size' => 3,
+        'type' => 'list',
+    ));
+
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+    return $pagination;
+}
+
 /*
  * Redirect to users profile after deleting a group
  */
@@ -784,7 +802,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                            </div><!--<?php echo $group_type; ?>-header -->
+                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 

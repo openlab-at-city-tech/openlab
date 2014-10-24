@@ -23,12 +23,6 @@
 
 		</div>
 
-		<div class="pagination-links" id="topic-pag-top">
-
-			<?php bp_forum_pagination(); ?>
-
-		</div>
-
 	</div>
 
 	<?php do_action( 'bp_before_directory_forums_list' ); ?>
@@ -110,12 +104,8 @@
 
 	<div id="pag-bottom" class="pagination">
 
-		<div class="pag-count" id="topic-count-bottom">
-			<?php bp_forum_pagination_count(); ?>
-		</div>
-
 		<div class="pagination-links" id="topic-pag-bottom">
-			<?php bp_forum_pagination(); ?>
+			<?php echo openlab_forum_pagination(); ?>
 		</div>
 
 	</div>
