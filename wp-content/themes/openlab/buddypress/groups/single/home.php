@@ -65,8 +65,6 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
                         // Email subscription options
                         elseif (bp_current_action() == 'notifications') : bp_get_template_part('groups/single/notifications');
 
-                        elseif (function_exists('bp_group_documents_display_content') && bp_current_action() == 'files'): bp_get_template_part('groups/single/files');
-
                         // Anything else (plugins mostly)
                         else : bp_get_template_part('groups/single/plugins');
 

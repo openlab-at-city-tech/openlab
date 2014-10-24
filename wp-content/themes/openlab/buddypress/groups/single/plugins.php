@@ -21,7 +21,18 @@
                                     <?php openlab_docs_tabs(); ?>
                                 </ul>
                             
-			<?php else: ?>
+                            <?php elseif ($bp->current_action == 'files'): ?>
+
+                                <div class="row">
+                                    <div class="submenu col-sm-17">
+                                        <ul class="nav nav-inline">
+                                            <li class="current-menu-item"><a href=""><?php _e('Document List', 'bp-group-documents'); ?></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="group-count col-sm-7 pull-right"><?php echo openlab_get_files_count(); ?></div>
+                                </div>
+
+                            <?php else: ?>
                                 <ul class="nav nav-inline">
                                         <?php do_action( 'bp_group_plugin_options_nav' ); ?>
                                 </ul>

@@ -11,6 +11,8 @@
  */
 function openlab_dequeue_bp_files_styles() {
     wp_dequeue_style('bp-group-documents');
+    remove_action( 'bp_template_content', 'bp_group_documents_display_content' );
+    add_action( 'bp_template_content', 'openlab_bp_group_documents_display_content' );
 }
 
 add_action('wp_print_styles', 'openlab_dequeue_bp_files_styles', 999);
