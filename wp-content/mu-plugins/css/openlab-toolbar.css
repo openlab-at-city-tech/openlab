@@ -20,7 +20,7 @@
   text-align: center;
   line-height: 140%;
   margin-right: 0;
-  padding: 14px 14px 16px;
+  padding: 14px 14px 17px;
   font-size: 14px;
   text-decoration: none;
 }
@@ -83,7 +83,7 @@
 #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
   border-radius: 0 0 4px 4px;
-  margin-top: 1px;
+  margin-top: 3px;
   width: 600%;
 }
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
@@ -196,6 +196,9 @@
 /**Bootstrap/custom stylesheet styles - these are here to help out admin, which currently does not load main theme stylesheet**/
 body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-item {
   padding: 0 14px;
+}
+body.wp-admin #wpadminbar #wp-toolbar .ab-sub-wrapper {
+  margin-top: 0;
 }
 body.wp-admin #wpadminbar * {
   box-sizing: border-box;
