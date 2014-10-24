@@ -25,9 +25,9 @@ add_filter( 'show_admin_bar', '__return_true', 999999 );
  * @param type $styles
  */
 function openlab_remove_admin_bar_default_css($styles) {
-    if(!is_admin()){
-        $styles->remove('admin-bar');
-    }
+
+    $styles->remove('admin-bar');
+
 }
 
 add_action('wp_default_styles', 'openlab_remove_admin_bar_default_css', 99999);
@@ -67,7 +67,7 @@ class OpenLab_Admin_Bar {
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 4 );
                 
                 //restricting network menu to group sites only
-                if(get_current_blog_id() !== 1){
+                if(get_current_blog_id() !== 1 || is_admin()){
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
                 }
                 
@@ -1126,10 +1126,10 @@ HTML;
             //registering font-awesome here so it can be used on the admin bar and on the main site
             wp_register_style('font-awesome', get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css', array(), '20130604', 'all');
             wp_enqueue_style('font-awesome');
-                //custom admin bar styles
-                wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );
-		wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
-	}
+            //custom admin bar styles
+            wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );            
+            wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
+        }
         
         function admin_bar_html_update(){
             ?>
