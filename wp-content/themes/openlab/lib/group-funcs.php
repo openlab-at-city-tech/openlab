@@ -61,21 +61,21 @@ function openlab_group_privacy_settings($group_type) {
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>    
 
-    <div class="radio group-profile panel-body">
-        
-        <?php if ($bp->current_action == 'create'): ?>
-        <p id="privacy-settings-tag-b"><?php _e('These settings affect how others view your ' . $group_type_name . ' Profile. You may change these settings later in the course Profile Settings.', 'buddypress'); ?></p>
-    <?php else: ?>
-        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Profile.') ?></p>
-    <?php endif; ?>
+        <div class="radio group-profile panel-body">
 
-        <?php
-        $new_group_status = bp_get_new_group_status();
-        if (!$new_group_status) {
-            $new_group_status = !empty($clone_source_group_status) ? $clone_source_group_status : 'public';
-        }
-        ?>
-        <div class="row">
+            <?php if ($bp->current_action == 'create'): ?>
+                <p id="privacy-settings-tag-b"><?php _e('These settings affect how others view your ' . $group_type_name . ' Profile. You may change these settings later in the course Profile Settings.', 'buddypress'); ?></p>
+            <?php else: ?>
+                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Profile.') ?></p>
+            <?php endif; ?>
+
+            <?php
+            $new_group_status = bp_get_new_group_status();
+            if (!$new_group_status) {
+                $new_group_status = !empty($clone_source_group_status) ? $clone_source_group_status : 'public';
+            }
+            ?>
+            <div class="row">
                 <div class="col-sm-23 col-sm-offset-1">
                     <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
@@ -102,19 +102,19 @@ function openlab_group_privacy_settings($group_type) {
                     </ul>
                 </div>
             </div>
-    </div>
+        </div>
     </div>
 
     <?php /* Site privacy markup */ ?>
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
-    <div class="panel panel-default">
-        <div class="panel-heading semibold"><?php _e($group_type_name_uc . ' Site') ?></div>
-        <div class="panel-body">
-        <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
-        <?php openlab_site_privacy_settings_markup($site_id) ?>
+        <div class="panel panel-default">
+            <div class="panel-heading semibold"><?php _e($group_type_name_uc . ' Site') ?></div>
+            <div class="panel-body">
+                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
+                <?php openlab_site_privacy_settings_markup($site_id) ?>
+            </div>
         </div>
-    </div>
     <?php endif ?>
 
     <?php if ($bp->current_action == 'admin'): ?>
@@ -148,7 +148,7 @@ function openlab_group_archive() {
     }
 
     $search_terms = $search_terms_raw = '';
-    
+
     if (!empty($_POST['group_search'])) {
         $search_terms_raw = $_POST['group_search'];
         $search_terms = "search_terms=" . $search_terms_raw . "&";
@@ -502,7 +502,7 @@ function openlab_group_visibility_flag($type = 'group') {
             } else {
                 $g_text = 'Private';
             }
-            
+
             $s_text = '<span class="fa fa-eye"></span>';
 
             break;
@@ -549,7 +549,7 @@ function openlab_group_visibility_flag($type = 'group') {
                 $g_flag_type = 'up';
                 $s_text = '<span class="fa fa-lock"></span>';
             }
-            
+
             break;
         case -3 :
             if ('public' === $group->status) {
@@ -596,46 +596,46 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
         <h4><?php _e('Public', 'buddypress') ?></h4>
         <p id="search-setting-note" class="italics note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</p>
-            <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
-                    <p><label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked('1', $blog_public); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label></p>
+        <div class="row">
+            <div class="col-sm-23 col-sm-offset-1">
+                <p><label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked('1', $blog_public); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label></p>
 
-                    <p><label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label></p>
-                </div>
+                <p><label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label></p>
             </div>
+        </div>
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
-        <h4><?php _e('Private', 'buddypress') ?></h4>
-                <div class="row">
-                    <div class="col-sm-23 col-sm-offset-1">
-                        <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
+            <h4><?php _e('Private', 'buddypress') ?></h4>
+            <div class="row">
+                <div class="col-sm-23 col-sm-offset-1">
+                    <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
 
-                        <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>><?php _e('I would like my site to be visible to registered users of this ' . ucfirst($group_type) . '.'); ?></label></p>
-                    </div>
+                    <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>><?php _e('I would like my site to be visible to registered users of this ' . ucfirst($group_type) . '.'); ?></label></p>
                 </div>
+            </div>
 
-        <h4><?php _e('Hidden', 'buddypress') ?></h4>
-                <div class="row">
-                    <div class="col-sm-23 col-sm-offset-1">
-                        <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label></p>
-                    </div>
+            <h4><?php _e('Hidden', 'buddypress') ?></h4>
+            <div class="row">
+                <div class="col-sm-23 col-sm-offset-1">
+                    <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label></p>
                 </div>
+            </div>
 
         <?php else : ?>
 
             <?php /* Portfolios */ ?>
             <h4>Private</h4>
             <div class="row">
-                        <div class="col-sm-23 col-sm-offset-1">
-                            <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
+                <div class="col-sm-23 col-sm-offset-1">
+                    <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
 
-                            <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible only to registered users that I have granted access.</label></p>
-                            <p class="description private-portfolio-gloss italics note">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
+                    <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible only to registered users that I have granted access.</label></p>
+                    <p class="description private-portfolio-gloss italics note">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
 
-                            <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>>I would like my site to be visible only to me.</label></p>
-                        </div>
-                    </div>
+                    <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>>I would like my site to be visible only to me.</label></p>
+                </div>
+            </div>
 
         <?php endif; ?>
     </div>
@@ -651,8 +651,8 @@ function openlab_group_profile_header() {
 add_action('bp_before_group_body', 'openlab_group_profile_header');
 
 function openlab_get_privacy_icon() {
-    
-    switch(bp_get_group_status()){
+
+    switch (bp_get_group_status()) {
         case 'public':
             $status = '<span class="fa fa-eye"></span>';
             break;
@@ -784,7 +784,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                    </div><!--<?php echo $group_type; ?>-header -->
+                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -795,24 +795,24 @@ function cuny_group_single() {
 }
 
 function openlab_render_message() {
-	global $bp;
-        
-	if ( !empty( $bp->template_message ) ) :
-		$type    = ( 'success' == $bp->template_message_type ) ? 'updated' : 'error';
-		$content = apply_filters( 'bp_core_render_message_content', $bp->template_message, $type ); ?>
+    global $bp;
 
-		<div id="message" class="bp-template-notice <?php echo $type; ?> btn btn-default btn-block btn-primary link-btn clearfix">
-                    
-                    <span class="pull-left fa fa-check"></span>
-			<?php echo $content; ?>
+    if (!empty($bp->template_message)) :
+        $type = ( 'success' == $bp->template_message_type ) ? 'updated' : 'error';
+        $content = apply_filters('bp_core_render_message_content', $bp->template_message, $type);
+        ?>
 
-		</div>
+        <div id="message" class="bp-template-notice <?php echo $type; ?> btn btn-default btn-block btn-primary link-btn clearfix">
 
-	<?php
+            <span class="pull-left fa fa-check"></span>
+        <?php echo $content; ?>
 
-		do_action( 'bp_core_render_message' );
+        </div>
 
-	endif;
+        <?php
+        do_action('bp_core_render_message');
+
+    endif;
 }
 
 function openlab_group_profile_activity_list() {
@@ -859,7 +859,7 @@ function openlab_group_profile_activity_list() {
                                                         $topic_id = bp_get_the_topic_id();
                                                         $last_topic_post = $wpdb->get_results("SELECT post_id,topic_id,post_text FROM wp_bb_posts
 											WHERE topic_id='$topic_id'
-										   ORDER BY post_id DESC LIMIT 1","ARRAY_A");
+										   ORDER BY post_id DESC LIMIT 1", "ARRAY_A");
                                                         $last_topic_content = wds_content_excerpt(strip_tags($last_topic_post[0]['post_text']), 135);
                                                         ?>
 
@@ -965,7 +965,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                  ?></p>
+                                                            <p><?php // bp_group_status_message()                   ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )         ?>
@@ -990,7 +990,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                  ?></p>
+                                                            <p><?php // bp_group_status_message()                   ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )           ?>
