@@ -140,6 +140,10 @@ function openlab_buddypress_register_actions() {
  */
 function openlab_member_sidebar_menu($mobile = false) {
     
+    if ( !$dud = bp_displayed_user_domain() ) {
+		$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
+    
     if($mobile){
         $classes = 'visible-xs';
     }else{
@@ -155,15 +159,15 @@ function openlab_member_sidebar_menu($mobile = false) {
 
                 <ul class="sidebar-nav">
 
-                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?>" class="mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
 
-                    <li class="sq-bullet <?php if (bp_is_user_settings()) : ?>selected-page<?php endif ?>" class="mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_settings()) : ?>selected-page<?php endif ?> mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
 
-                    <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?>" class="mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
+                    <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?> mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
 
-                    <li class="sq-bullet <?php if (is_page('my-projects') || openlab_is_create_group('project')) : ?>selected-page<?php endif ?>" class="mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
+                    <li class="sq-bullet <?php if (is_page('my-projects') || openlab_is_create_group('project')) : ?>selected-page<?php endif ?> mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
 
-                    <li class="sq-bullet <?php if (is_page('my-clubs') || openlab_is_create_group('club')) : ?>selected-page<?php endif ?>" class="mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
+                    <li class="sq-bullet <?php if (is_page('my-clubs') || openlab_is_create_group('club')) : ?>selected-page<?php endif ?> mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
 
         <?php /* Get a friend request count */ ?>
         <?php if (bp_is_active('friends')) : ?>
@@ -172,14 +176,14 @@ function openlab_member_sidebar_menu($mobile = false) {
             $request_count = intval(count((array) $request_ids));
             ?>
 
-                            <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?>" class="mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup($request_count); ?></a></li>
+                            <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?> mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup($request_count); ?></a></li>
         <?php endif; ?>
 
         <?php /* Get an unread message count */ ?>
         <?php if (bp_is_active('messages')) : ?>
             <?php $message_count = bp_get_total_unread_messages_count() ?>
 
-                            <li class="sq-bullet <?php if (bp_is_user_messages()) : ?>selected-page<?php endif ?>" class="mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup($message_count); ?></a></li>
+                            <li class="sq-bullet <?php if (bp_is_user_messages()) : ?>selected-page<?php endif ?> mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup($message_count); ?></a></li>
         <?php endif; ?>
 
         <?php /* Get an invitation count */ ?>
@@ -189,7 +193,7 @@ function openlab_member_sidebar_menu($mobile = false) {
             $invite_count = isset($invites['total']) ? (int) $invites['total'] : 0;
             ?>
 
-                            <li class="sq-bullet <?php if (bp_is_user_groups() && bp_is_current_action('invites')) : ?>selected-page<?php endif ?>" class="mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
+                            <li class="sq-bullet <?php if (bp_is_user_groups() && bp_is_current_action('invites')) : ?>selected-page<?php endif ?> mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
         <?php endif ?>
 
                 </ul>
@@ -204,18 +208,18 @@ function openlab_member_sidebar_menu($mobile = false) {
 
                 <ul class="sidebar-nav">
 
-                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?>" class="mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
 
         <?php /* Current page highlighting requires the GET param */ ?>
         <?php $current_group_view = isset($_GET['type']) ? $_GET['type'] : ''; ?>
 
-                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'course' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-courses"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'course' == $current_group_view) : ?>selected-page<?php endif ?> mol-courses"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a></li>
 
-                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'project' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-projects"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'project' == $current_group_view) : ?>selected-page<?php endif ?> mol-projects"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a></li>
 
-                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'club' == $current_group_view) : ?>selected-page<?php endif ?>" class="mol-club"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_groups() && 'club' == $current_group_view) : ?>selected-page<?php endif ?> mol-club"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a></li>
 
-                    <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?>" class="mol-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a></li>
+                    <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?> mol-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a></li>
 
                 </ul>
 
