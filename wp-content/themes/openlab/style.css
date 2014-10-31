@@ -7605,7 +7605,7 @@ body .align-left {
   margin-top: 27px;
 }
 .home-page .row-home-top .login {
-  background: url('images/log_in_background.png') no-repeat right -70px #ff5959;
+  background: url('images/log_in_background.png') no-repeat 207px -70px #ff5959;
   float: left;
   width: 32.5%;
   border-radius: 4px 0 0 4px;
@@ -7624,6 +7624,9 @@ body .align-left {
 .home-page .row-home-top .login a {
   color: inherit;
   font-size: inherit;
+}
+.home-page .row-home-top .login a:hover {
+  color: #63dfd2;
 }
 .home-page .row-home-top .login .log-box {
   padding: 0 6.5%;

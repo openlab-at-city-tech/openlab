@@ -70,7 +70,7 @@ function cuny_home_login() {
             </div>
             <div id="keep-logged-in" class="small-text">
                 <input class="btn btn-default btn-primary link-btn pull-left" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
-                <input  name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
+                <input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
             </div>
             <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
