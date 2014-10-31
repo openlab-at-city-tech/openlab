@@ -433,7 +433,7 @@ function wds_bp_group_site_pages() {
 
                         <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                             <li class="portfolio-site-link">
-                                <span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag('site'); ?></span>
+                                <span class="fa fa-external-link"></span><a class="bold" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag('site'); ?></span>
                             </li>
                         </ul>
 
