@@ -10,7 +10,7 @@
  * Dequeue inherit styling from plugin
  */
 function openlab_dequeue_bp_files_styles() {
-    global $bp; echo $bp->current_action;
+    global $bp;
     wp_dequeue_style('bp-group-documents');
 
     remove_action('bp_template_content', 'bp_group_documents_display_content');
