@@ -71,6 +71,13 @@ function openlab_custom_menu_items($items, $menu) {
         $mobile_search = '<li class="visible-xs search-mobile">' . openlab_site_wide_bp_search(true) . '</li>';
 
         return $items . $opl_link . $mobile_search;
+    
+    } else if ($menu->theme_location == 'aboutmenu'){
+        
+        $items = str_replace('Privacy Policy','Privacy Policy <i class="fa fa-external-link"></i>',$items);
+        
+        return $items;
+        
     } else {
         return $items;
     }
