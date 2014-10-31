@@ -49,7 +49,7 @@ function openlab_bp_sidebar($type) {
  * @param type $type
  */
 function openlab_bp_mobile_sidebar($type) {
-    echo '<div id="sidebar-mobile" class="sidebar col-xs-24 visible-xs">';
+    echo '<div id="sidebar-mobile" class="sidebar col-xs-20 visible-xs clearfix">';
 
     switch ($type) {
         case 'actions':
