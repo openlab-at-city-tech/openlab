@@ -374,11 +374,19 @@ function openlab_my_friends_submenu($count = true) {
         $count_span = openlab_get_menu_count_mup($count);
     }
 
-    $menu_list = array(
-        $my_friends => 'My Friends',
-        $friend_requests => 'Requests Received ' . $count_span,
-            //'#' => $page_identify,
-    );
+    
+    if($bp->is_item_admin){
+        $menu_list = array(
+            $my_friends => 'My Friends',
+            $friend_requests => 'Requests Received ' . $count_span,
+                //'#' => $page_identify,
+        );
+    }else{
+        $menu_list = array(
+            $my_friends => 'My Friends',
+        );
+    }
+    
     return openlab_submenu_gen($menu_list);
 }
 
