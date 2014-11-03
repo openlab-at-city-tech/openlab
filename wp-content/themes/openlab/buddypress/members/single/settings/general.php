@@ -71,7 +71,7 @@ do_action('bp_before_member_settings_template');
         <?php do_action('bp_core_general_settings_before_submit'); ?>
 
         <div class="submit">
-            <input class="btn btn-primary" type="submit" name="submit" value="<?php _e('Save Changes', 'buddypress'); ?>" id="submit" class="auto" />
+            <input class="btn btn-primary btn-margin btn-margin-top" type="submit" name="submit" value="<?php _e('Save Changes', 'buddypress'); ?>" id="submit" class="auto" />
         </div>
 
         <?php do_action('bp_core_general_settings_after_submit');

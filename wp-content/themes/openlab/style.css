@@ -7206,13 +7206,7 @@ input[type="submit"] {
 .form-panel .panel:last-child {
   margin-bottom: 20px;
 }
-.form-panel .panel:only-child {
-  margin-bottom: 20px;
-}
-.form-panel .panel:last-of-type {
-  margin-bottom: 20px;
-}
-.form-panel .panel .panel-heading {
+.form-panel .panel-heading {
   font-size: 16px;
 }
 .panel-button-group .panel:last-of-type {
@@ -7378,6 +7372,9 @@ body .no-margin.no-margin-top {
 }
 body .no-margin.no-margin-bottom {
   margin-bottom: 0;
+}
+body .btn-margin.btn-margin-top {
+  margin-top: 20px;
 }
 body .font-size.font-13 {
   font-size: 13px !important;
@@ -8235,7 +8232,6 @@ body .align-left {
   background: url('images/breadcrumb_bkrnd.png') no-repeat left center;
   display: inline-block;
   text-align: center;
-  height: 100%;
   width: 129px;
   padding-right: 5px;
   margin-right: 8px;

@@ -241,15 +241,9 @@ input[type="submit"]{
         &:last-child{
             margin-bottom: 20px;
         }
-        &:only-child{
-            margin-bottom: 20px;
-        }
-        &:last-of-type{
-            margin-bottom: 20px;
-        }
-        .panel-heading{
-            font-size: 16px;
-        }
+    }
+    .panel-heading{
+        font-size: 16px;
     }
 }
 .panel-button-group{
@@ -433,6 +427,11 @@ body{
         }
         &.no-margin-bottom{
             margin-bottom: 0;
+        }
+    }
+    .btn-margin{
+        &.btn-margin-top{
+            margin-top: 20px;
         }
     }
     .font-size{
@@ -1394,7 +1393,6 @@ body{
             background: url('images/breadcrumb_bkrnd.png') no-repeat left center;
             display: inline-block;
             text-align: center;
-            height: 100%;
             width: 129px;
             padding-right: 5px;
             margin-right: 8px;

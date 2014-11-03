@@ -168,7 +168,7 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 <?php do_action( 'bp_after_profile_field_content' ) ?>
 
 <div class="submit">
-	<input type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> " />
+	<input class="btn btn-primary btn-margin btn-margin-top" type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> " />
 </div>
 <input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode( ',', $field_ids ) ?>" />
 <?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
