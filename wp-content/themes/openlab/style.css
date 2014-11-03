@@ -7716,6 +7716,11 @@ body .align-left {
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
   font-size: 13px;
 }
+@media (max-width: 767px) {
+  .home-page .row-home-top .slider .camera_wrap .camera_content {
+    width: 72%;
+  }
+}
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
   background: transparent;
