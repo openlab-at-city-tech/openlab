@@ -7765,6 +7765,10 @@ body .align-left {
 .home-page #cac-featured .cfcw-content p.cfcw-title {
   font-weight: 600;
 }
+.home-page #cac-featured .cfcw-content p.cfcw-title a {
+  font-size: 18px;
+  line-height: 1.1em;
+}
 .home-page #cac-featured .cfcw-content:after {
   clear: both;
   content: " ";
