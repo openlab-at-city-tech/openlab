@@ -8301,3 +8301,9 @@ body .align-left {
 #openlab-footer .row-copyright p a {
   color: inherit;
 }
+/**Custom media query items**/
+@media (max-width: 767px) {
+  .group-subscription-div {
+    display: none;
+  }
+}
