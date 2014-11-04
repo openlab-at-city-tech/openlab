@@ -7155,13 +7155,37 @@ blockquote .h6 {
   border-radius: 4px;
 }
 @media (max-width: 480px) {
-  [class*="col-"].group-item {
+  [class*="col-"].group-item,
+  [class*="col-"].message {
     width: 100%;
   }
 }
 @media (max-width: 480px) {
-  [class*="col-"].group-item .group-item-wrapper {
+  [class*="col-"].group-item .group-item-wrapper,
+  [class*="col-"].message .group-item-wrapper {
     height: auto !important;
+  }
+  [class*="col-"].group-item .group-item-wrapper:before,
+  [class*="col-"].message .group-item-wrapper:before,
+  [class*="col-"].group-item .group-item-wrapper:after,
+  [class*="col-"].message .group-item-wrapper:after {
+    content: " ";
+    display: table;
+  }
+  [class*="col-"].group-item .group-item-wrapper:after,
+  [class*="col-"].message .group-item-wrapper:after {
+    clear: both;
+  }
+  [class*="col-"].group-item .group-item-wrapper:before,
+  [class*="col-"].message .group-item-wrapper:before,
+  [class*="col-"].group-item .group-item-wrapper:after,
+  [class*="col-"].message .group-item-wrapper:after {
+    content: " ";
+    display: table;
+  }
+  [class*="col-"].group-item .group-item-wrapper:after,
+  [class*="col-"].message .group-item-wrapper:after {
+    clear: both;
   }
 }
 input[type="button"],
@@ -8175,6 +8199,11 @@ body .align-left {
 }
 .messages #group-list .group-item-wrapper {
   height: 152px;
+}
+@media (max-width: 991px) {
+  .messages #group-list .group-item-wrapper {
+    height: 221px;
+  }
 }
 #friend-list.group-list .group-item-wrapper {
   height: 101px;

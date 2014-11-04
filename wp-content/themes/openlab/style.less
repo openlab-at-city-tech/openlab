@@ -187,13 +187,15 @@ blockquote {
 }
 [class*="col-"]{
     border-radius: @border-radius-base;
-    &.group-item{
+    &.group-item,
+    &.message{
         @media (max-width: @screen-xs-min){
             width: 100%;
         }
         .group-item-wrapper{
             @media (max-width: @screen-xs-min){
                 height: auto !important;
+                .clearfix();
             }
         }
     }
@@ -1324,6 +1326,9 @@ body{
     #group-list{
         .group-item-wrapper{
             height: 152px;
+            @media (max-width: @screen-sm-max){
+                height: 221px;
+            }
         }
     }
 }
