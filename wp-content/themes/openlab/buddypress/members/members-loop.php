@@ -21,7 +21,7 @@
 	<div id="friend-list" class="item-list group-list row">
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<div class="group-item col-sm-8 col-xs-12">
+		<div class="group-item col-md-8 col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row info-row">
 			<div class="item-avatar col-sm-9 col-xs-7">

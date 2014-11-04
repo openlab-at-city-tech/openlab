@@ -7407,6 +7407,12 @@ body .no-margin.no-margin-top {
 body .no-margin.no-margin-bottom {
   margin-bottom: 0;
 }
+body .no-margin.no-margin-right {
+  margin-right: 0;
+}
+body .no-margin.no-margin-left {
+  margin-left: 0;
+}
 body .btn-margin.btn-margin-top {
   margin-top: 20px;
 }
@@ -8213,6 +8219,14 @@ body .align-left {
 }
 #friend-list.group-list .group-item-wrapper .timestamp .fa {
   font-size: 11px;
+}
+#friend-list.group-list .group-item-wrapper .btn .fa-user {
+  margin-right: 2px;
+}
+@media (max-width: 991px) {
+  #friend-list.group-list .group-item-wrapper {
+    height: 130px;
+  }
 }
 /**help**/
 .col-help .page-title {
