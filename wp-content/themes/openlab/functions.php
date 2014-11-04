@@ -49,7 +49,7 @@ function openlab_load_scripts() {
         wp_enqueue_style('camera-js-styles');
 
         //less compliation via js so we can check styles in firebug via fireless - local dev only
-        if (WP_DEBUG) {
+        if (CSS_DEBUG) {
             wp_register_script('less-config-js', get_stylesheet_directory_uri() . '/js/less.config.js', array('jquery'));
             wp_enqueue_script('less-config-js');
             wp_register_script('less-js', get_stylesheet_directory_uri() . '/js/less-1.7.4.js', array('jquery'));
@@ -83,7 +83,7 @@ add_action('wp_enqueue_scripts', 'openlab_load_scripts');
 function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
-    if (WP_DEBUG) {
+    if (CSS_DEBUG) {
         wp_register_style('main-styles', get_stylesheet_directory_uri() . '/style.less', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
     } else {
