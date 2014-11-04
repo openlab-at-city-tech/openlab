@@ -1688,6 +1688,14 @@ div.activity-comments ul li ul {
     margin:5px 0 10px;
 }
 
+#validation-code {
+	margin-top: 8px;
+	background: #eaeaea;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+	padding: 8px 16px;
+}
+
 ul#topic-post-list li .poster-meta {
     color:#888;
 }
