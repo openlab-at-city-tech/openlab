@@ -212,7 +212,7 @@ function openlab_manage_members_email_status($user_id = '', $group = '') {
     $group_url = bp_get_group_permalink($group) . 'admin/manage-members/email';
     $sub_type = ass_get_group_subscription_status($user_id, $group->id);
     echo '<p class="italics no-margin no-margin-bottom"> ' . __('Email status:', 'bp-ass') . ' ' . ass_subscribe_translate($sub_type) . '.';
-    echo ' &nbsp; ' . __('Change to:', 'bp-ass') . ' ';
+    echo ' ' . __('Change to:', 'bp-ass') . ' ';
     echo '</p>';
     echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url($group_url . '/no/' . $user_id, 'ass_member_email_status') . '">' . __('No Email', 'bp-ass') . '</a>';
     echo '<a class="btn btn-primary link-btn btn-xs" href="' . wp_nonce_url($group_url . '/sum/' . $user_id, 'ass_member_email_status') . '">' . __('Weekly', 'bp-ass') . '</a>';

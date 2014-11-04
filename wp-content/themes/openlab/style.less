@@ -185,8 +185,18 @@ blockquote {
 .container-fluid{
     max-width: 1155px;
 }
-[class^="col-"]{
+[class*="col-"]{
     border-radius: @border-radius-base;
+    &.group-item{
+        @media (max-width: @screen-xs-min){
+            width: 100%;
+        }
+        .group-item-wrapper{
+            @media (max-width: @screen-xs-min){
+                height: auto !important;
+            }
+        }
+    }
 }
 input[type="button"], 
 input[type="reset"], 
@@ -1133,24 +1143,29 @@ body{
 .group-members{
     &#group-list{
         .group-item-wrapper{
-            height: 90px;
+            height: 95px;
         }
     }
 }
 .group-manage-members{
     &#group-list{
-        .group-item-wrapper{
-            height: 120px;
-            &.no-btn{
-                height: 98px;
-            }
-            &.moderators{
-                height: 107px;
-            }
-            &.members{
-                height: 216px;
-                .link-btn{
-                    margin-right: 3px;
+        .group-item{
+            .group-item-wrapper{
+                height: 120px;
+                &.no-btn{
+                    height: 98px;
+                }
+                &.moderators{
+                    height: 107px;
+                }
+                &.members{
+                    height: 222px;
+                    .link-btn{
+                        margin-right: 3px;
+                    }
+                }
+                @media (min-width: @screen-md-min) and (max-width: @screen-md-max){
+                    height: 258px;
                 }
             }
         }

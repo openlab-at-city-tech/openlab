@@ -18,13 +18,13 @@
 	<div id="group-list" class="item-list group-members">
 		<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
 
-			<div class="group-item col-sm-8 col-xs-12">
+			<div class="group-item col-md-8 col-xs-12">
                             <div class="group-item-wrapper">
                                 <div class="row">
-                                <div class="item-avatar col-xs-8">
+                                <div class="item-avatar col-md-9 col-xs-7">
 				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                                 </div>
-                                <div class="item col-xs-16">
+                                <div class="item col-md-15 col-xs-17">
 				<h4><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h4>
 				<span class="activity"><?php bp_group_member_joined_since() ?></span>
 
