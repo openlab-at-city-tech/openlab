@@ -109,3 +109,11 @@ function openlab_get_menu_count_mup($count, $pull_right = ' pull-right'){
     }
     
 }
+
+function openlab_not_empty($content){
+    if($content && !ctype_space($content) && $content !== ''){
+        return true;
+    }else{
+        return false;
+    }
+}

@@ -261,18 +261,9 @@ function openlab_group_archive() {
                                 if ($group_type == 'course'):
                                     ?>
 
-                                    <?php
-                                    $admins = groups_get_group_admins($group_id);
-                                    $faculty_id = $admins[0]->user_id;
-                                    $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
-                                    $last_name = ucfirst(xprofile_get_field_data('Last Name', $faculty_id));
-                                    $wds_faculty = $first_name . " " . $last_name;
-                                    $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
-                                    $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
-                                    $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-                                    $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
-                                    ?>
-                                    <div class="info-line uppercase"><?php echo $wds_faculty; ?> | <?php echo openlab_shortened_text($wds_departments, 20); ?> | <?php echo $wds_course_code; ?> | <span class="bold"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></span></div>
+                                    <div class="info-line uppercase">
+                                        <?php echo openlab_output_course_info_line($group_id); ?>
+                                    </div>
                                 <?php elseif ($group_type == 'portfolio'): ?>
 
                                     <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
@@ -1395,6 +1386,40 @@ function openlab_show_site_posts_and_comments() {
         </div>
         <?php
     }
+}
+
+function openlab_output_course_info_line($group_id) {
+    $infoline_mup = '';
+    
+    $admins = groups_get_group_admins($group_id);
+    $faculty_id = $admins[0]->user_id;
+    $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
+    $last_name = ucfirst(xprofile_get_field_data('Last Name', $faculty_id));
+    $wds_faculty = $first_name . " " . $last_name;
+    $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
+    $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
+    $wds_year = groups_get_groupmeta($group_id, 'wds_year');
+    $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'),20,false);
+    
+    $infoline_elems = array();
+    
+    if (openlab_not_empty($wds_faculty)){
+        array_push($infoline_elems,$wds_faculty);
+    }
+    if (openlab_not_empty($wds_departments)){
+        array_push($infoline_elems,$wds_departments);
+    }
+    if (openlab_not_empty($wds_course_code)){
+        array_push($infoline_elems,$wds_course_code);
+    }
+    if(openlab_not_empty($wds_semester) || openlab_not_empty($wds_year)){
+        $semester_year = '<span class="bold">'.$wds_semester.' '.$wds_year.'</span>';
+        array_push($infoline_elems,$semester_year);
+    }
+    
+    $infoline_mup = implode('|', $infoline_elems);
+    
+    return $infoline_mup;
 }
 
 function openlab_trim_group_name($name) {
