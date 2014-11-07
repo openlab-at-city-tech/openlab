@@ -382,9 +382,7 @@ function openlab_my_friends_submenu($count = true) {
                 //'#' => $page_identify,
         );
     }else{
-        $menu_list = array(
-            $my_friends => 'My Friends',
-        );
+        return '';
     }
     
     return openlab_submenu_gen($menu_list);
