@@ -112,6 +112,14 @@
                     padding: 9px 16px;
                     text-align: right;
                     border-radius: inherit;
+                    a{
+                        color: #333;
+                        &:hover, 
+                            &:focus {
+                            color: #49cabe;
+                            text-decoration: underline;
+                        }
+                    }
                 }
                 .nav-content-item{
                     padding-bottom: 16px;
@@ -209,7 +217,14 @@
 
 /**Bootstrap/custom stylesheet styles - these are here to help out admin, which currently does not load main theme stylesheet**/
 body.adminbar-manual-bootstrap{
-    #wpadminbar{
+    #wpadminbar,
+    #openlab-footer{
+        .container-fluid{
+            max-width: 1155px;
+            margin: 0 auto;
+            padding-left: 7.5px;
+            padding-right: 7.5px;
+        }
         #wp-admin-bar-menu-toggle{
             .ab-item{
                 padding: 0 14px;
@@ -233,13 +248,25 @@ body.adminbar-manual-bootstrap{
             -webkit-appearance: button;
             cursor: pointer;
         }
+        h2, .h2 {
+            font-family: inherit;
+            font-weight: 600;
+            line-height: 1.1em;
+            margin: 20px 0 15px;
+        }
+        h2, .h2 {
+            font-size: 18px;
+        }
         p{
             line-height: normal;
             margin: 0;
         }
         a {
-            color: #333333;
+            color: inherit;
             text-decoration: underline;
+            &.no-deco{
+                text-decoration: none;
+            }
         }
         .fa {
             font-size: 16px;
@@ -259,18 +286,28 @@ body.adminbar-manual-bootstrap{
         .visible-xs, .visible-sm, .visible-md, .visible-lg {
             display: none !important;
         }
-        .col-sm-6, .col-sm-8, .col-sm-16, .col-sm-18 {
+        .col-sm-4, .col-sm-6, .col-sm-8, .col-sm-16,.col-sm-14, .col-sm-18 {
             float: left;
             min-height: 1px;
             padding-left: 7.5px;
             padding-right: 7.5px;
             position: relative;
+            @media (max-width: 479px){
+                width: 100%;
+                float: none;
+            }
+        }
+        .col-sm-4 {
+            width: 16.6667%;
         }
         .col-sm-6 {
             width: 25%;
         }
         .col-sm-8 {
             width: 33.3333%;
+        }
+        .col-sm-14 {
+            width: 58.3333%;
         }
         .col-sm-16 {
             width: 66.6667%;
@@ -284,6 +321,9 @@ body.adminbar-manual-bootstrap{
             height: auto;
         }
         .bold {
+            font-weight: 700;
+        }
+        .semibold{
             font-weight: 600;
         }
         .regular {
@@ -399,6 +439,60 @@ body.adminbar-manual-bootstrap{
             }
             .visible-xs {
                 display: block !important;
+            }
+        }
+    }
+}
+/**footer - also a sitewide component**/
+#openlab-footer{
+    padding-top: 30px;
+    background: #f0f0f0;
+    p,
+    a{
+        font-size: 12px;
+    }
+    .col-logos{
+        display: inline-block;
+        p{
+            color: #444;
+        }
+        a{
+            img{
+                padding-top: 5px;
+                margin-right: 15px;
+            }
+        }
+    }
+    .col-links{
+        color: lighten(#666, 7.5%);
+        h2{
+            color: #333;
+        }
+        a{
+            color: lighten(#666, 7.5%);
+            font-weight: inherit;
+        }
+    }
+    .col-share{
+        a{
+            display: inline-block;
+            background: url('images/share_icons.png') no-repeat 0 0;
+            padding-top: 22px;
+            width: 22px;
+            height: 0;
+            overflow: hidden;
+            margin-right: 6px;
+            &.rss-link{
+                background-position: -32px 0;
+            }
+        }
+    }
+    .row-copyright{
+        margin-top: 42px;
+        p{
+            color: lighten(#666, 7.5%);
+            a{
+                color: inherit;
             }
         }
     }

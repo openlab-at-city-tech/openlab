@@ -1125,6 +1125,9 @@ HTML;
             //getting the theme folder for the main site
             $main_site_theme = $wpdb->get_var('SELECT option_value FROM wp_options WHERE option_name = "template"');
             
+            wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
+            wp_enqueue_style('google-open-sans');
+            
             //registering font-awesome here so it can be used on the admin bar and on the main site
             wp_register_style('font-awesome', get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css', array(), '20130604', 'all');
             wp_enqueue_style('font-awesome');

@@ -114,6 +114,14 @@
   text-align: right;
   border-radius: inherit;
 }
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a {
+  color: #333;
+}
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
+#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
+  color: #49cabe;
+  text-decoration: underline;
+}
 #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item {
   padding-bottom: 16px;
   margin-top: 16px;
@@ -194,107 +202,215 @@
   padding: 3% 5%;
 }
 /**Bootstrap/custom stylesheet styles - these are here to help out admin, which currently does not load main theme stylesheet**/
-body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-menu-toggle .ab-item {
+body.adminbar-manual-bootstrap #wpadminbar .container-fluid,
+body.adminbar-manual-bootstrap #openlab-footer .container-fluid {
+  max-width: 1155px;
+  margin: 0 auto;
+  padding-left: 7.5px;
+  padding-right: 7.5px;
+}
+body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-menu-toggle .ab-item,
+body.adminbar-manual-bootstrap #openlab-footer #wp-admin-bar-menu-toggle .ab-item {
   padding: 0 14px;
 }
-body.adminbar-manual-bootstrap #wpadminbar #wp-toolbar .ab-sub-wrapper {
+body.adminbar-manual-bootstrap #wpadminbar #wp-toolbar .ab-sub-wrapper,
+body.adminbar-manual-bootstrap #openlab-footer #wp-toolbar .ab-sub-wrapper {
   margin-top: 0;
 }
-body.adminbar-manual-bootstrap #wpadminbar * {
+body.adminbar-manual-bootstrap #wpadminbar *,
+body.adminbar-manual-bootstrap #openlab-footer * {
   box-sizing: border-box;
 }
 body.adminbar-manual-bootstrap #wpadminbar *:before,
-body.adminbar-manual-bootstrap #wpadminbar *:after {
+body.adminbar-manual-bootstrap #openlab-footer *:before,
+body.adminbar-manual-bootstrap #wpadminbar *:after,
+body.adminbar-manual-bootstrap #openlab-footer *:after {
   box-sizing: border-box;
 }
 body.adminbar-manual-bootstrap #wpadminbar button,
+body.adminbar-manual-bootstrap #openlab-footer button,
 body.adminbar-manual-bootstrap #wpadminbar html input[type="button"],
+body.adminbar-manual-bootstrap #openlab-footer html input[type="button"],
 body.adminbar-manual-bootstrap #wpadminbar input[type="reset"],
-body.adminbar-manual-bootstrap #wpadminbar input[type="submit"] {
+body.adminbar-manual-bootstrap #openlab-footer input[type="reset"],
+body.adminbar-manual-bootstrap #wpadminbar input[type="submit"],
+body.adminbar-manual-bootstrap #openlab-footer input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
 }
-body.adminbar-manual-bootstrap #wpadminbar p {
+body.adminbar-manual-bootstrap #wpadminbar h2,
+body.adminbar-manual-bootstrap #openlab-footer h2,
+body.adminbar-manual-bootstrap #wpadminbar .h2,
+body.adminbar-manual-bootstrap #openlab-footer .h2 {
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.1em;
+  margin: 20px 0 15px;
+}
+body.adminbar-manual-bootstrap #wpadminbar h2,
+body.adminbar-manual-bootstrap #openlab-footer h2,
+body.adminbar-manual-bootstrap #wpadminbar .h2,
+body.adminbar-manual-bootstrap #openlab-footer .h2 {
+  font-size: 18px;
+}
+body.adminbar-manual-bootstrap #wpadminbar p,
+body.adminbar-manual-bootstrap #openlab-footer p {
   line-height: normal;
   margin: 0;
 }
-body.adminbar-manual-bootstrap #wpadminbar a {
-  color: #333333;
+body.adminbar-manual-bootstrap #wpadminbar a,
+body.adminbar-manual-bootstrap #openlab-footer a {
+  color: inherit;
   text-decoration: underline;
 }
-body.adminbar-manual-bootstrap #wpadminbar .fa {
+body.adminbar-manual-bootstrap #wpadminbar a.no-deco,
+body.adminbar-manual-bootstrap #openlab-footer a.no-deco {
+  text-decoration: none;
+}
+body.adminbar-manual-bootstrap #wpadminbar .fa,
+body.adminbar-manual-bootstrap #openlab-footer .fa {
   font-size: 16px;
   margin: 0 4px;
 }
-body.adminbar-manual-bootstrap #wpadminbar .row {
+body.adminbar-manual-bootstrap #wpadminbar .row,
+body.adminbar-manual-bootstrap #openlab-footer .row {
   margin-left: -7.5px;
   margin-right: -7.5px;
 }
 body.adminbar-manual-bootstrap #wpadminbar .clearfix:before,
+body.adminbar-manual-bootstrap #openlab-footer .clearfix:before,
 body.adminbar-manual-bootstrap #wpadminbar .clearfix:after,
+body.adminbar-manual-bootstrap #openlab-footer .clearfix:after,
 body.adminbar-manual-bootstrap #wpadminbar .row:before,
+body.adminbar-manual-bootstrap #openlab-footer .row:before,
 body.adminbar-manual-bootstrap #wpadminbar .row:after,
+body.adminbar-manual-bootstrap #openlab-footer .row:after,
 body.adminbar-manual-bootstrap #wpadminbar .nav:before,
+body.adminbar-manual-bootstrap #openlab-footer .nav:before,
 body.adminbar-manual-bootstrap #wpadminbar .nav:after,
+body.adminbar-manual-bootstrap #openlab-footer .nav:after,
 body.adminbar-manual-bootstrap #wpadminbar .navbar:before,
+body.adminbar-manual-bootstrap #openlab-footer .navbar:before,
 body.adminbar-manual-bootstrap #wpadminbar .navbar:after,
+body.adminbar-manual-bootstrap #openlab-footer .navbar:after,
 body.adminbar-manual-bootstrap #wpadminbar .navbar-header:before,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-header:before,
 body.adminbar-manual-bootstrap #wpadminbar .navbar-header:after,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-header:after,
 body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:before,
-body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after {
+body.adminbar-manual-bootstrap #openlab-footer .navbar-collapse:before,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-collapse:after {
   content: " ";
   display: table;
 }
 body.adminbar-manual-bootstrap #wpadminbar .clearfix:after,
+body.adminbar-manual-bootstrap #openlab-footer .clearfix:after,
 body.adminbar-manual-bootstrap #wpadminbar .container:after,
+body.adminbar-manual-bootstrap #openlab-footer .container:after,
 body.adminbar-manual-bootstrap #wpadminbar .container-fluid:after,
+body.adminbar-manual-bootstrap #openlab-footer .container-fluid:after,
 body.adminbar-manual-bootstrap #wpadminbar .row:after,
+body.adminbar-manual-bootstrap #openlab-footer .row:after,
 body.adminbar-manual-bootstrap #wpadminbar .nav:after,
+body.adminbar-manual-bootstrap #openlab-footer .nav:after,
 body.adminbar-manual-bootstrap #wpadminbar .navbar:after,
+body.adminbar-manual-bootstrap #openlab-footer .navbar:after,
 body.adminbar-manual-bootstrap #wpadminbar .navbar-header:after,
-body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after {
+body.adminbar-manual-bootstrap #openlab-footer .navbar-header:after,
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse:after,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-collapse:after {
   clear: both;
 }
 body.adminbar-manual-bootstrap #wpadminbar .visible-xs,
+body.adminbar-manual-bootstrap #openlab-footer .visible-xs,
 body.adminbar-manual-bootstrap #wpadminbar .visible-sm,
+body.adminbar-manual-bootstrap #openlab-footer .visible-sm,
 body.adminbar-manual-bootstrap #wpadminbar .visible-md,
-body.adminbar-manual-bootstrap #wpadminbar .visible-lg {
+body.adminbar-manual-bootstrap #openlab-footer .visible-md,
+body.adminbar-manual-bootstrap #wpadminbar .visible-lg,
+body.adminbar-manual-bootstrap #openlab-footer .visible-lg {
   display: none !important;
 }
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-4,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-4,
 body.adminbar-manual-bootstrap #wpadminbar .col-sm-6,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-6,
 body.adminbar-manual-bootstrap #wpadminbar .col-sm-8,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-8,
 body.adminbar-manual-bootstrap #wpadminbar .col-sm-16,
-body.adminbar-manual-bootstrap #wpadminbar .col-sm-18 {
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-16,
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-14,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-14,
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-18,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-18 {
   float: left;
   min-height: 1px;
   padding-left: 7.5px;
   padding-right: 7.5px;
   position: relative;
 }
-body.adminbar-manual-bootstrap #wpadminbar .col-sm-6 {
+@media (max-width: 479px) {
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-4,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-4,
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-6,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-6,
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-8,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-8,
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-16,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-16,
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-14,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-14,
+  body.adminbar-manual-bootstrap #wpadminbar .col-sm-18,
+  body.adminbar-manual-bootstrap #openlab-footer .col-sm-18 {
+    width: 100%;
+    float: none;
+  }
+}
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-4,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-4 {
+  width: 16.6667%;
+}
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-6,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-6 {
   width: 25%;
 }
-body.adminbar-manual-bootstrap #wpadminbar .col-sm-8 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-8,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-8 {
   width: 33.3333%;
 }
-body.adminbar-manual-bootstrap #wpadminbar .col-sm-16 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-14,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-14 {
+  width: 58.3333%;
+}
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-16,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-16 {
   width: 66.6667%;
 }
-body.adminbar-manual-bootstrap #wpadminbar .col-sm-18 {
+body.adminbar-manual-bootstrap #wpadminbar .col-sm-18,
+body.adminbar-manual-bootstrap #openlab-footer .col-sm-18 {
   width: 75%;
 }
-body.adminbar-manual-bootstrap #wpadminbar .img-responsive {
+body.adminbar-manual-bootstrap #wpadminbar .img-responsive,
+body.adminbar-manual-bootstrap #openlab-footer .img-responsive {
   max-width: 100%;
   display: block;
   height: auto;
 }
-body.adminbar-manual-bootstrap #wpadminbar .bold {
+body.adminbar-manual-bootstrap #wpadminbar .bold,
+body.adminbar-manual-bootstrap #openlab-footer .bold {
+  font-weight: 700;
+}
+body.adminbar-manual-bootstrap #wpadminbar .semibold,
+body.adminbar-manual-bootstrap #openlab-footer .semibold {
   font-weight: 600;
 }
-body.adminbar-manual-bootstrap #wpadminbar .regular {
+body.adminbar-manual-bootstrap #wpadminbar .regular,
+body.adminbar-manual-bootstrap #openlab-footer .regular {
   font-weight: 400;
 }
-body.adminbar-manual-bootstrap #wpadminbar .btn {
+body.adminbar-manual-bootstrap #wpadminbar .btn,
+body.adminbar-manual-bootstrap #openlab-footer .btn {
   -moz-user-select: none;
   background-image: none;
   border: 1px solid rgba(0, 0, 0, 0);
@@ -310,39 +426,51 @@ body.adminbar-manual-bootstrap #wpadminbar .btn {
   vertical-align: middle;
   white-space: nowrap;
 }
-body.adminbar-manual-bootstrap #wpadminbar a.link-btn {
+body.adminbar-manual-bootstrap #wpadminbar a.link-btn,
+body.adminbar-manual-bootstrap #openlab-footer a.link-btn {
   margin-top: 5px;
   text-align: left;
   text-decoration: none;
 }
-body.adminbar-manual-bootstrap #wpadminbar .btn-primary {
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary,
+body.adminbar-manual-bootstrap #openlab-footer .btn-primary {
   background-color: #444444;
   border-color: #373737;
   color: #ffffff;
 }
-body.adminbar-manual-bootstrap #wpadminbar .btn-default {
+body.adminbar-manual-bootstrap #wpadminbar .btn-default,
+body.adminbar-manual-bootstrap #openlab-footer .btn-default {
   background-color: #ffffff;
   border-color: #cccccc;
   color: #333333;
 }
 body.adminbar-manual-bootstrap #wpadminbar .btn-default:hover,
+body.adminbar-manual-bootstrap #openlab-footer .btn-default:hover,
 body.adminbar-manual-bootstrap #wpadminbar .btn-default:focus,
+body.adminbar-manual-bootstrap #openlab-footer .btn-default:focus,
 body.adminbar-manual-bootstrap #wpadminbar .btn-default:active,
-body.adminbar-manual-bootstrap #wpadminbar .btn-default.active {
+body.adminbar-manual-bootstrap #openlab-footer .btn-default:active,
+body.adminbar-manual-bootstrap #wpadminbar .btn-default.active,
+body.adminbar-manual-bootstrap #openlab-footer .btn-default.active {
   background-color: #e6e6e6;
   border-color: #adadad;
   color: #63dfd2;
   text-decoration: none;
 }
 body.adminbar-manual-bootstrap #wpadminbar .btn-primary:hover,
+body.adminbar-manual-bootstrap #openlab-footer .btn-primary:hover,
 body.adminbar-manual-bootstrap #wpadminbar .btn-primary:focus,
+body.adminbar-manual-bootstrap #openlab-footer .btn-primary:focus,
 body.adminbar-manual-bootstrap #wpadminbar .btn-primary:active,
-body.adminbar-manual-bootstrap #wpadminbar .btn-primary.active {
+body.adminbar-manual-bootstrap #openlab-footer .btn-primary:active,
+body.adminbar-manual-bootstrap #wpadminbar .btn-primary.active,
+body.adminbar-manual-bootstrap #openlab-footer .btn-primary.active {
   background-color: #2b2b2b;
   border-color: #191919;
   color: #63dfd2;
 }
-body.adminbar-manual-bootstrap #wpadminbar .sr-only {
+body.adminbar-manual-bootstrap #wpadminbar .sr-only,
+body.adminbar-manual-bootstrap #openlab-footer .sr-only {
   border: 0 none;
   clip: rect(0px, 0px, 0px, 0px);
   height: 1px;
@@ -352,7 +480,8 @@ body.adminbar-manual-bootstrap #wpadminbar .sr-only {
   position: absolute;
   width: 1px;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-toggle {
   position: relative;
   float: right;
   margin-right: 7px;
@@ -364,25 +493,31 @@ body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle:focus {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle:focus,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-toggle:focus {
   outline: 0;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-toggle .icon-bar {
   display: block;
   width: 22px;
   height: 2px;
   border-radius: 1px;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar + .icon-bar {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-toggle .icon-bar + .icon-bar,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
 }
-body.adminbar-manual-bootstrap #wpadminbar .collapse {
+body.adminbar-manual-bootstrap #wpadminbar .collapse,
+body.adminbar-manual-bootstrap #openlab-footer .collapse {
   display: none;
 }
-body.adminbar-manual-bootstrap #wpadminbar .collapse.in {
+body.adminbar-manual-bootstrap #wpadminbar .collapse.in,
+body.adminbar-manual-bootstrap #openlab-footer .collapse.in {
   display: block;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-collapse {
   overflow-x: visible;
   padding-right: 7px;
   padding-left: 7px;
@@ -390,25 +525,81 @@ body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   -webkit-overflow-scrolling: touch;
 }
-body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse.in {
+body.adminbar-manual-bootstrap #wpadminbar .navbar-collapse.in,
+body.adminbar-manual-bootstrap #openlab-footer .navbar-collapse.in {
   overflow-y: auto;
 }
-body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-my-hamburger {
+body.adminbar-manual-bootstrap #wpadminbar #wp-admin-bar-my-hamburger,
+body.adminbar-manual-bootstrap #openlab-footer #wp-admin-bar-my-hamburger {
   display: none !important;
 }
 @media (min-width: 768px) and (max-width: 991px) {
-  body.adminbar-manual-bootstrap #wpadminbar .hidden-sm {
+  body.adminbar-manual-bootstrap #wpadminbar .hidden-sm,
+  body.adminbar-manual-bootstrap #openlab-footer .hidden-sm {
     display: none !important;
   }
-  body.adminbar-manual-bootstrap #wpadminbar .visible-sm {
+  body.adminbar-manual-bootstrap #wpadminbar .visible-sm,
+  body.adminbar-manual-bootstrap #openlab-footer .visible-sm {
     display: block !important;
   }
 }
 @media (max-width: 767px) {
-  body.adminbar-manual-bootstrap #wpadminbar .hidden-xs {
+  body.adminbar-manual-bootstrap #wpadminbar .hidden-xs,
+  body.adminbar-manual-bootstrap #openlab-footer .hidden-xs {
     display: none !important;
   }
-  body.adminbar-manual-bootstrap #wpadminbar .visible-xs {
+  body.adminbar-manual-bootstrap #wpadminbar .visible-xs,
+  body.adminbar-manual-bootstrap #openlab-footer .visible-xs {
     display: block !important;
   }
+}
+/**footer - also a sitewide component**/
+#openlab-footer {
+  padding-top: 30px;
+  background: #f0f0f0;
+}
+#openlab-footer p,
+#openlab-footer a {
+  font-size: 12px;
+}
+#openlab-footer .col-logos {
+  display: inline-block;
+}
+#openlab-footer .col-logos p {
+  color: #444;
+}
+#openlab-footer .col-logos a img {
+  padding-top: 5px;
+  margin-right: 15px;
+}
+#openlab-footer .col-links {
+  color: #797979;
+}
+#openlab-footer .col-links h2 {
+  color: #333;
+}
+#openlab-footer .col-links a {
+  color: #797979;
+  font-weight: inherit;
+}
+#openlab-footer .col-share a {
+  display: inline-block;
+  background: url('images/share_icons.png') no-repeat 0 0;
+  padding-top: 22px;
+  width: 22px;
+  height: 0;
+  overflow: hidden;
+  margin-right: 6px;
+}
+#openlab-footer .col-share a.rss-link {
+  background-position: -32px 0;
+}
+#openlab-footer .row-copyright {
+  margin-top: 42px;
+}
+#openlab-footer .row-copyright p {
+  color: #797979;
+}
+#openlab-footer .row-copyright p a {
+  color: inherit;
 }
