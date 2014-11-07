@@ -74,7 +74,7 @@ function openlab_custom_menu_items($items, $menu) {
     
     } else if ($menu->theme_location == 'aboutmenu'){
         
-        $items = str_replace('Privacy Policy','Privacy Policy <i class="fa fa-external-link"></i>',$items);
+        $items = str_replace('Privacy Policy','<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy',$items);
         
         return $items;
         
