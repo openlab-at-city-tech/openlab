@@ -8032,6 +8032,25 @@ body .align-left {
   font-size: 12px;
   margin-bottom: 12px;
 }
+@media (max-width: 1199px) {
+  #group-list .group-item-wrapper .item,
+  .group-list .group-item-wrapper .item {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+  }
+}
+@media (max-width: 1199px) {
+  #group-list .group-item-wrapper,
+  .group-list .group-item-wrapper {
+    height: 302px;
+  }
+}
+@media (max-width: 767px) {
+  #group-list .group-item-wrapper,
+  .group-list .group-item-wrapper {
+    height: 352px;
+  }
+}
 #people-listing .group-item-wrapper {
   height: 110px;
 }

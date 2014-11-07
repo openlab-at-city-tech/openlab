@@ -1403,10 +1403,10 @@ function openlab_trim_group_name($name) {
         $process_name = explode(' ', $name);
         $new_name = '';
         foreach ($process_name as $process) {
-            $new_name .= ' ' . openlab_shortened_text($process, 24, false);
+            $new_name .= ' ' . openlab_shortened_text($process, 15, false);
         }
 
-        $name = $new_name;
+        $name = openlab_shortened_text($new_name, 52, false);
     }
 
     return $name;

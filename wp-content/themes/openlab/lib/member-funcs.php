@@ -250,13 +250,13 @@ function openlab_list_members($view) {
 
                 $registered = bp_format_time(strtotime($members_template->member->user_registered), true)
                 ?>
-                <div class="group-item col-sm-8 col-xs-12">
+                <div class="group-item col-md-8 col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row">
-                            <div class="item-avatar col-sm-10 col-xs-8">
+                            <div class="item-avatar col-md-10 col-xs-8">
                                 <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                             </div>
-                            <div class="item col-sm-14 col-xs-16">
+                            <div class="item col-md-14 col-xs-16">
                                 <h2 class="item-title"><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
                                 <span class="member-since-line timestamp">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
@@ -948,7 +948,7 @@ function openlab_trim_member_name($name){
         $process_name = explode(' ',$name);
         $new_name = '';
         foreach($process_name as $process){
-            $new_name .= ' '.openlab_shortened_text($process,13,false);
+            $new_name .= ' '.openlab_shortened_text($process,12,false);
         }
         
         $name = $new_name;

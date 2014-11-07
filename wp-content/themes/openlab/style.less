@@ -1076,6 +1076,18 @@ body{
             font-size: 12px;
             margin-bottom: 12px;
         }
+        .item{
+            @media (max-width: @screen-md-max){
+                padding-left: 1.5%;
+                padding-right: 1.5%;
+            }
+        }
+        @media(max-width: @screen-md-max){
+            height: 302px;
+        }
+        @media(max-width: @screen-xs-max){
+            height: 352px;
+        }
     }
 }
 #people-listing{
