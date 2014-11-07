@@ -188,11 +188,13 @@ blockquote {
 [class*="col-"]{
     border-radius: @border-radius-base;
     &.group-item,
-    &.message{
+    &.message,
+    &.activity-list{
         @media (max-width: @screen-xs-min){
             width: 100%;
         }
-        .group-item-wrapper{
+        .group-item-wrapper,
+        .panel{
             @media (max-width: @screen-xs-min){
                 height: auto !important;
                 .clearfix();
