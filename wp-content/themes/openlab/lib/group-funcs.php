@@ -802,7 +802,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -983,7 +983,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                     ?></p>
+                                                            <p><?php // bp_group_status_message()                      ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )         ?>
@@ -1008,7 +1008,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )          ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                     ?></p>
+                                                            <p><?php // bp_group_status_message()                      ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )           ?>
