@@ -20,7 +20,7 @@
 
 <?php if (have_posts()) : ?>
 <div class="info-panel panel panel-default doctable-panel">
-    <table class="doctable table">
+    <table class="doctable table table-striped">
 
         <thead>
             <tr valign="bottom">
