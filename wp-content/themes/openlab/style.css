@@ -8154,8 +8154,14 @@ body .align-left {
 .doctable-panel {
   padding-bottom: 12px;
 }
-.doctable-panel .doctable .edited-date-cell {
+.doctable-panel .doctable td {
+  width: 12%;
+}
+.doctable-panel .doctable td.edited-date-cell {
   width: 20%;
+}
+.doctable-panel .doctable td.tags-cell {
+  width: auto;
 }
 .doc-content .wp-switch-editor {
   padding: 0 8px;
