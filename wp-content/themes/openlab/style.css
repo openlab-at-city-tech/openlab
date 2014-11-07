@@ -8153,6 +8153,7 @@ body .align-left {
 }
 .doctable-panel {
   padding-bottom: 12px;
+  min-width: 330px;
 }
 .doctable-panel .doctable td {
   width: 12%;
