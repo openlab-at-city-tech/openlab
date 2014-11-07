@@ -73,9 +73,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
                                     ?>
 
                                     <div class="info-line uppercase">
-                                        
                                         <?php echo openlab_output_course_info_line($group_id); ?>
-                                        
                                     </div>
                                 <?php elseif ($group_type == 'portfolio'): ?>
 
