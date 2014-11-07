@@ -163,7 +163,7 @@ function openlab_group_archive() {
 		$semester = trim( $semester_season . ' ' . $semester_year );
 	}
 
-// Set up filters
+	// Set up filters
 	$meta_query = array(
 		array(
 			'key' => 'wds_group_type',
