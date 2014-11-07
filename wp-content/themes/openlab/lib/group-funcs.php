@@ -807,7 +807,7 @@ function cuny_group_single() {
     <?php endif; ?>
 
     <?php
-    if (bp_get_group_status() == 'public') {
+    if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) {
         openlab_group_profile_activity_list();
     }
 }
