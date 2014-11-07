@@ -1245,8 +1245,13 @@ function openlab_current_directory_filters() {
         $filter_words = array();
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
-
+            
             $word = isset($filter_data['options'][$fvalue]) ? $filter_data['options'][$fvalue] : ucwords($fvalue);
+            
+            //dump hyphens from semester values
+            if($filter_data['type'] == 'semester'){
+                $word = str_replace('-',' ',$word);
+            }
 
             // Leave out the 'All's
             if ('All' != $word) {
