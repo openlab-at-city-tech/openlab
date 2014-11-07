@@ -678,6 +678,12 @@ function openlab_filter_subnav_nav_notifications($suvbnav_item) {
     return "";
 }
 
+add_filter('bp_get_options_nav_request-membership', 'openlab_filter_subnav_nav_request_membership');
+
+function openlab_filter_subnav_nav_request_membership($suvbnav_item) {
+    return "";
+}
+
 //submenu navigation re-ordering
 function openlab_group_submenu_nav() {
     global $bp;
