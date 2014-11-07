@@ -100,7 +100,7 @@ function openlab_group_sidebar($mobile = false) {
             ?>
             <div class="profile-nav <?php echo $classes; ?>">
                 <div id="item-buttons">
-                    <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?> Material</h2>
+                    <h2 class="sidebar-header"><?php echo openlab_get_group_type_label('case=upper') ?> Materials</h2>
                     <div class="sidebar-block">
                         <ul class="sidebar-nav">
                             <?php bp_get_options_nav(); ?>
