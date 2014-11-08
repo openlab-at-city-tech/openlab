@@ -95,9 +95,9 @@ function cuny_home_new_members() {
     <div id="new-members-top-wrapper">
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
-                    <a class="btn prev" href="#">
+                    <a class="prev btn" href="#">
                         <i class="fa fa-angle-left"></i></a>
-                    <a class="btn prev" href="#">
+                    <a class="next btn" href="#">
                         <i class="fa fa-angle-right"></i></a>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
