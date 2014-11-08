@@ -83,6 +83,7 @@ jQuery(document).ready(function($){
 		showHide('wds-website-external');
 		showHide('wds-website-tooltips');
 		showHide('wds-website-clone');
+                showHide('check-note-wrapper');
 	}
 
 	function do_external_site_query(e) {
