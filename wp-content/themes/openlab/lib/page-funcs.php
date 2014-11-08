@@ -175,7 +175,7 @@ function cuny_whos_online() {
                     <div class="item-avatar">
                         <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                     </div>
-                    <div class="cuny-member-info">s
+                    <div class="cuny-member-info">
                         <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />
                         <?php
                         do_action('bp_directory_members_item');
