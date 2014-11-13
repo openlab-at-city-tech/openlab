@@ -311,22 +311,22 @@
                     <?php if ('crop-image' != bp_get_avatar_admin_step()) : ?>
                         <?php /* Previous Button */ ?>
                         <?php if (!bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary prev-btn" type="button" value="&#xf137; <?php _e('Previous Step', 'buddypress') ?>" id="group-creation-previous" name="previous" onclick="location.href = '<?php bp_group_creation_previous_link() ?>'" />
+                            <input class="btn btn-primary prev-btn btn-margin btn-margin-top" type="button" value="&#xf137; <?php _e('Previous Step', 'buddypress') ?>" id="group-creation-previous" name="previous" onclick="location.href = '<?php bp_group_creation_previous_link() ?>'" />
                         <?php endif; ?>
 
                         <?php /* Next Button */ ?>
                         <?php if (!bp_is_last_group_creation_step() && !bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Next Step', 'buddypress') ?> &#xf138;" id="group-creation-next" name="save" />
+                            <input class="btn btn-primary btn-margin btn-margin-top" type="submit" value="<?php _e('Next Step', 'buddypress') ?> &#xf138;" id="group-creation-next" name="save" />
                         <?php endif; ?>
 
                         <?php /* Create Button */ ?>
                         <?php if (bp_is_first_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Create ' . ucfirst($group_type) . ' and Continue ', 'buddypress'); ?> &#xf138;" id="group-creation-create" name="save" />
+                            <input class="btn btn-primary btn-margin btn-margin-top" type="submit" value="<?php _e('Create ' . ucfirst($group_type) . ' and Continue ', 'buddypress'); ?> &#xf138;" id="group-creation-create" name="save" />
                         <?php endif; ?>
 
                         <?php /* Finish Button */ ?>
                         <?php if (bp_is_last_group_creation_step()) : ?>
-                            <input class="btn btn-primary" type="submit" value="<?php _e('Finish', 'buddypress') ?> &#xf138;" id="group-creation-finish" name="save" />
+                            <input class="btn btn-primary btn-margin btn-margin-top" type="submit" value="<?php _e('Finish', 'buddypress') ?> &#xf138;" id="group-creation-finish" name="save" />
                     <?php endif; ?>
                 <?php endif; ?>
 
