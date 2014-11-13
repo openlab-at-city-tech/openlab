@@ -7634,8 +7634,6 @@ body .align-left {
   padding: 8px 5%;
   width: 100%;
   font-weight: 600;
-  width: 100% !important;
-  /*have to do this for IE*/
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
