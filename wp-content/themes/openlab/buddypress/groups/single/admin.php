@@ -428,7 +428,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             ?>
 
             <div class="submit">
-                <input class="btn btn-primary" type="submit" disabled="disabled" value="<?php _e('Delete ' . $group_type, 'buddypress') ?> &#xf138;" id="delete-group-button" name="delete-group-button" />
+                <input class="btn btn-primary btn-margin btn-margin-top" type="submit" disabled="disabled" value="<?php _e('Delete ' . $group_type, 'buddypress') ?> &#xf138;" id="delete-group-button" name="delete-group-button" />
             </div>
 
             <input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id() ?>" />
