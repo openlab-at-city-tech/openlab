@@ -1,5 +1,3 @@
-<?php do_action('template_notices') ?>
-
 <?php
 global $bp;
 
@@ -40,6 +38,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
         <?php /* Edit Group Details */ ?>
         <?php if (bp_is_group_admin_screen('edit-details')) : ?>
+        
+            <?php do_action('template_notices') ?>
 
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo $group_label_uc; ?> Details</div>
@@ -83,6 +83,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('group-settings')) : ?>
 
             <?php do_action('bp_before_group_settings_admin'); ?>
+            
+            <?php do_action('template_notices') ?>
 
             <?php if (function_exists('bp_forums_is_installed_correctly') && !openlab_is_portfolio()) : ?>
 
@@ -135,6 +137,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                 <div class="panel panel-default">
                 <div class="panel-heading">Upload Avatar</div>
                     <div class="panel-body">
+                        <?php do_action('template_notices') ?>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div id="avatar-wrapper">
@@ -206,6 +209,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('manage-members')) : ?>
 
             <?php do_action('bp_before_group_manage_members_admin'); ?>
+                
+            <?php do_action('template_notices') ?>
 
             <div class="bp-widget">
                 <h4><?php _e('Administrators', 'buddypress'); ?></h4>
@@ -353,6 +358,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('membership-requests')) : ?>
 
             <?php do_action('bp_before_group_membership_requests_admin'); ?>
+                
+            <?php do_action('template_notices') ?>
 
             <?php if (bp_group_has_membership_requests()) : ?>
 
@@ -396,8 +403,10 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('delete-group')) : ?>
 
             <?php do_action('bp_before_group_delete_admin'); ?>
+            
+            <?php do_action('template_notices'); ?>
 
-            <div id="message" class="info">
+            <div id="message" class="bp-template-notice error">
                 <p><?php printf('WARNING: Deleting this %s will completely remove ALL content associated with it. There is no way back, please be careful with this option.', openlab_get_group_type()); ?></p>
             </div>
 

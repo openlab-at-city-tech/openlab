@@ -7539,15 +7539,41 @@ body .site-visibility .fa {
   vertical-align: middle;
   width: 20px;
 }
-body .error {
-  background: #f7e700;
-  font-weight: 700;
+body .bp-template-notice,
+body #ubpfattach-message {
+  font-weight: 400;
   padding: 15px;
   border-radius: 4px;
+  margin-top: 17px;
 }
-body .error p:last-child,
-body .error p:only-child {
+body .bp-template-notice p:last-child,
+body #ubpfattach-message p:last-child,
+body .bp-template-notice p:only-child,
+body #ubpfattach-message p:only-child {
   margin-bottom: 0;
+}
+body .bp-template-notice.error,
+body #ubpfattach-message.error,
+body .bp-template-notice.err,
+body #ubpfattach-message.err {
+  background: #f7e700;
+  border-color: #f7e700;
+}
+body .bp-template-notice.err,
+body #ubpfattach-message.err {
+  padding: 15px;
+  color: #333333;
+}
+body .bp-template-notice.updated,
+body #ubpfattach-message.updated {
+  background: #63dfd2;
+  border-color: #63dfd2;
+}
+body .group-header .bp-template-notice {
+  color: #000000;
+  margin-top: 4px;
+  padding: 6px 12px;
+  text-align: left;
 }
 body .site-visibility .fa {
   margin: 0;
@@ -8070,15 +8096,6 @@ body .align-left {
   margin-bottom: 5px;
 }
 /**group profiles**/
-#message {
-  background: #ff5959;
-  border-color: #ff5959;
-  margin-top: 5px;
-}
-#message p {
-  margin: 0;
-  text-align: left;
-}
 .info-panel {
   margin-top: 30px;
   padding: 0 1.5%;

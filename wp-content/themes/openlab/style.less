@@ -562,16 +562,38 @@ body{
         vertical-align: middle;
         width: 20px;
     }
-    .error{
-        background: @yellow;
-        font-weight: 700;
+    .bp-template-notice,
+    #ubpfattach-message{
+        font-weight: 400;
         padding: 15px;
         border-radius: @border-radius-base;
+        margin-top: 17px;
         p{
             &:last-child,
                 &:only-child{
                 margin-bottom: 0;
             }
+        }
+        &.error,
+        &.err{
+            background: @yellow;
+            border-color: @yellow;
+        }
+        &.err{
+            padding: 15px;
+            color: @80gray;
+        }
+        &.updated{
+            background: @cyan;
+            border-color: @cyan;
+        }
+    }
+    .group-header{
+        .bp-template-notice{
+            color: #000000;
+            margin-top: 4px;
+            padding: 6px 12px;
+            text-align: left;
         }
     }
     .site-visibility .fa{
@@ -1113,15 +1135,6 @@ body{
     }
 }
 /**group profiles**/
-#message{
-    background: @magenta;
-    border-color: @magenta;
-    margin-top: 5px;
-    p{
-        margin: 0;
-        text-align: left;
-    }
-}
 .info-panel{
     margin-top: 30px;
     padding: 0 1.5%;
