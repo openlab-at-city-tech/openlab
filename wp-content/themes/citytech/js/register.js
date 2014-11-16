@@ -6,13 +6,6 @@ jQuery(document).ready(function($){
 		var $validationdiv = $( '#validation-code' );
 		var $emailconfirm = $( '#signup_email_confirm' );
 
-		// Fade out and show a 'Checking' message.
-		$emaillabel.fadeOut(function(){
-			$emaillabel.html('&mdash; Checking...');
-			$emaillabel.css('color', '#000');
-			$emaillabel.fadeIn();
-		});
-
                 if ( 0 <= email.indexOf( 'mail.citytech.cuny.edu' ) ) {
                         emailtype = 'student';
                 } else if ( 0 <= email.indexOf( 'citytech.cuny.edu' ) ) {
@@ -22,6 +15,13 @@ jQuery(document).ready(function($){
 		}
 
 		if ( 'nonct' == emailtype ) {
+			// Fade out and show a 'Checking' message.
+			$emaillabel.fadeOut(function(){
+				$emaillabel.html('&mdash; Checking...');
+				$emaillabel.css('color', '#000');
+				$emaillabel.fadeIn();
+			});
+
 			// Non-City Tech requires an AJAX request for verification.
 			$.post( ajaxurl, {
 				action: 'cac_ajax_email_check',
@@ -97,7 +97,7 @@ jQuery(document).ready(function($){
 
 		} else {
 			$validationdiv.hide();
-			$emaillabel.hide();
+			$emaillabel.fadeOut();
 			$emailconfirm.focus();
 			set_account_type_fields();
 		}
