@@ -245,32 +245,6 @@ function cuny_home_square($type){
 	  		$group_ids[] = $g->id;
 	  	}
 	  	$group_ids_sql = implode( ',', $group_ids );
-
-	  	$activity = $wpdb->get_results( "
-	  		SELECT
-	  			content, item_id
-	  		FROM
-	  			{$bp->activity->table_name}
-	  		WHERE
-	  			component = 'groups'
-	  			AND
-	  			type IN ('new_forum_post', 'new_forum_reply', 'new_blog_post', 'new_blog_comment')
-	  			AND
-	  			item_id IN ({$group_ids_sql})
-	  		ORDER BY
-	  			date_recorded DESC" );
-
-	  	// Now walk down the list and try to match with a group. Once one is found, remove
-	  	// that group from the stack
-	  	$group_activity_items = array();
-	  	foreach( (array)$activity as $act ) {
-	  		if ( !empty( $act->content ) && in_array( $act->item_id, $group_ids ) && !isset( $group_activity_items[$act->item_id] ) ) {
-	  			$group_activity_items[$act->item_id] = $act->content;
-				$key = array_search( $act->item_id, $group_ids );
-				unset( $group_ids[$key] );
-	  		}
-	  	}
-
 	  	?>
 
 
@@ -293,7 +267,10 @@ function cuny_home_square($type){
 				</div>
 			  <?php echo '<h2 class="green-title"><a href="'.bp_get_group_permalink().'">'.bp_get_group_name().'</a></h2>';
 			  ?>
-              <div class="byline"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></div>
+
+			<?php $last_active = bp_get_group_last_active(); ?>
+
+			<div class="byline"><?php printf( __( 'active %s', 'buddypress' ), $last_active ) ?></div>
               <?php
 			  //echo '<div class="byline">Author Name | Date</div>';
 
