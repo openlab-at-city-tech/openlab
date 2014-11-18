@@ -34,6 +34,7 @@
 			<?php do_action( 'bbp_theme_before_topic_form' ); ?>
 
 			<fieldset class="bbp-form">
+				<?php /*
 				<legend>
 
 					<?php
@@ -46,14 +47,7 @@
 				</legend>
 
 				<?php do_action( 'bbp_theme_before_topic_form_notices' ); ?>
-
-				<?php if ( !bbp_is_topic_edit() && bbp_is_forum_closed() ) : ?>
-
-					<div class="bbp-template-notice">
-						<p><?php _e( 'This forum is marked as closed to new topics, however your posting capabilities still allow you to do so.', 'bbpress' ); ?></p>
-					</div>
-
-				<?php endif; ?>
+*/ ?>
 
 				<?php if ( current_user_can( 'unfiltered_html' ) ) : ?>
 
@@ -112,12 +106,6 @@
 
 						<p>
 							<label for="bbp_forum_id"><?php _e( 'Forum:', 'bbpress' ); ?></label><br />
-							<?php
-								bbp_dropdown( array(
-									'show_none' => __( '(No Forum)', 'bbpress' ),
-									'selected'  => bbp_get_form_topic_forum()
-								) );
-							?>
 						</p>
 
 						<?php do_action( 'bbp_theme_after_topic_form_forum' ); ?>
