@@ -540,7 +540,7 @@ add_filter('bp_get_options_nav_admin', 'openlab_filter_subnav_admin');
 function openlab_filter_subnav_admin($subnav_item) {
     global $bp;
     $group_label = openlab_get_group_type_label('case=upper');
-    $new_item = str_replace('Admin', $group_label . ' Settings', $subnav_item);
+    $new_item = str_replace('Manage', $group_label . ' Settings', $subnav_item);
     //this is to stop the course settings menu item from getting a current class on membership pages
     if (bp_action_variable(0)) {
         if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
@@ -662,6 +662,8 @@ add_filter('bp_get_options_nav_forums', 'openlab_filter_subnav_forums');
 function openlab_filter_subnav_forums($subnav_item) {
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+    
+    $subnav_item = str_replace('Forum','Discussion',$subnav_item);
 
     return $subnav_item;
 }

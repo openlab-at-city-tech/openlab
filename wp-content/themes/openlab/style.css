@@ -4825,6 +4825,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   width: 16%;
   padding: 7px 3%;
 }
+.navbar-form.label-combo label {
+  margin-right: 2%;
+  width: 18%;
+}
+.navbar-form.label-combo input {
+  width: 80%;
+}
 .navbar-form .custom-select,
 .navbar-form .hidden-custom-select {
   display: inline-block;
@@ -7254,6 +7261,13 @@ input[type="submit"] {
 .form-inline.btn-combo .btn {
   width: 16%;
   padding: 7px 3%;
+}
+.form-inline.label-combo label {
+  margin-right: 2%;
+  width: 18%;
+}
+.form-inline.label-combo input {
+  width: 80%;
 }
 .form-inline .custom-select,
 .form-inline .hidden-custom-select {
