@@ -41,7 +41,7 @@ function cuny_no_bp_default_styles() {
 }
 
 function openlab_google_font() {
-	wp_register_style('google-fonts','http://fonts.googleapis.com/css?family=Arvo',get_bloginfo( 'stylesheet_url' ));
+	wp_register_style('google-fonts', set_url_scheme( 'http://fonts.googleapis.com/css?family=Arvo' ),get_bloginfo( 'stylesheet_url' ));
 	wp_enqueue_style('google-fonts');
 }
 
