@@ -49,21 +49,6 @@ function bp_admin_setting_callback_account_deletion() {
 <?php
 }
 
-/**
- * If user has upgraded to 1.6 and chose to retain their BuddyBar, offer then a switch to change over
- * to the WP Toolbar.
- *
- * @since BuddyPress (1.6)
- */
-function bp_admin_setting_callback_force_buddybar() {
-?>
-
-	<input id="_bp_force_buddybar" name="_bp_force_buddybar" type="checkbox" value="1" <?php checked( ! bp_force_buddybar( true ) ); ?> />
-	<label for="_bp_force_buddybar"><?php _e( 'Switch to WordPress Toolbar', 'buddypress' ); ?></label>
-
-<?php
-}
-
 /** Activity *******************************************************************/
 
 /**
@@ -104,17 +89,17 @@ function bp_admin_setting_callback_blogforum_comments() {
 }
 
 /**
- * Sanitization for _bp_force_buddyvar
+ * Allow Heartbeat to refresh activity stream.
  *
- * If upgraded to 1.6 and you chose to keep the BuddyBar, a checkbox asks if you want to switch to
- * the WP Toolbar. The option we store is 1 if the BuddyBar is forced on, so we use this function
- * to flip the boolean before saving the intval.
- *
- * @since BuddyPress (1.6)
- * @access Private
+ * @since BuddyPress (2.0.0)
  */
-function bp_admin_sanitize_callback_force_buddybar( $value = false ) {
-	return $value ? 0 : 1;
+function bp_admin_setting_callback_heartbeat() {
+?>
+
+	<input id="_bp_enable_heartbeat_refresh" name="_bp_enable_heartbeat_refresh" type="checkbox" value="1" <?php checked( bp_is_activity_heartbeat_active( true ) ); ?> />
+	<label for="_bp_enable_heartbeat_refresh"><?php _e( 'Automatically check for new items while viewing the activity stream', 'buddypress' ); ?></label>
+
+<?php
 }
 
 /**
@@ -223,7 +208,7 @@ function bp_admin_setting_callback_bbpress_configuration() {
 
 	<?php if ( false === $file_exists ) : ?>
 
-		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>" title="<?php _e( 'Attempt to save a new config file.', 'buddypress' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
+		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>" title="<?php esc_attr_e( 'Attempt to save a new config file.', 'buddypress' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
 		<span class="attention"><?php _e( 'File does not exist', 'buddypress' ); ?></span>
 
 	<?php endif; ?>
@@ -264,7 +249,7 @@ function bp_core_admin_settings() {
 			<?php do_settings_sections( 'buddypress' ); ?>
 
 			<p class="submit">
-				<input type="submit" name="submit" class="button-primary" value="<?php _e( 'Save Settings', 'buddypress' ); ?>" />
+				<input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e( 'Save Settings', 'buddypress' ); ?>" />
 			</p>
 		</form>
 	</div>

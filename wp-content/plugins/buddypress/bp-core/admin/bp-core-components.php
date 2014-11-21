@@ -29,7 +29,7 @@ function bp_core_admin_components_settings() {
 			<?php bp_core_admin_components_options(); ?>
 
 			<p class="submit clear">
-				<input class="button-primary" type="submit" name="bp-admin-component-submit" id="bp-admin-component-submit" value="<?php _e( 'Save Settings', 'buddypress' ) ?>"/>
+				<input class="button-primary" type="submit" name="bp-admin-component-submit" id="bp-admin-component-submit" value="<?php esc_attr_e( 'Save Settings', 'buddypress' ) ?>"/>
 			</p>
 
 			<?php wp_nonce_field( 'bp-admin-component-setup' ); ?>
@@ -247,7 +247,7 @@ function bp_core_admin_components_settings_handler() {
 		$bp = buddypress();
 
 		// Save settings and upgrade schema
-		require_once( BP_PLUGIN_DIR . '/bp-core/admin/bp-core-schema.php' );
+		require_once( $bp->plugin_dir . '/bp-core/admin/bp-core-schema.php' );
 
 		$submitted = stripslashes_deep( $_POST['bp_components'] );
 		$bp->active_components = bp_core_admin_get_active_components_from_submitted_settings( $submitted );
@@ -262,6 +262,7 @@ function bp_core_admin_components_settings_handler() {
 
 	// Redirect
 	wp_redirect( $base_url );
+	die();
 }
 add_action( 'bp_admin_init', 'bp_core_admin_components_settings_handler' );
 
@@ -420,5 +421,5 @@ function bp_core_admin_get_components( $type = 'all' ) {
 
 	}
 
-	return $components;
+	return apply_filters( 'bp_core_admin_get_components', $components, $type );
 }

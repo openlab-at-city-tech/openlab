@@ -111,6 +111,8 @@ class BP_Legacy extends BP_Theme_Compat {
 				add_action( 'bp_group_header_actions',     'bp_group_join_button',           5 );
 				add_action( 'bp_group_header_actions',     'bp_group_new_topic_button',      20 );
 				add_action( 'bp_directory_groups_actions', 'bp_group_join_button' );
+				add_filter( 'bp_groups_directory_header',  'bp_legacy_theme_group_create_button' );
+				add_filter( 'bp_blogs_directory_header',   'bp_legacy_theme_blog_create_button' );
 			}
 
 			// Blog button
@@ -137,6 +139,8 @@ class BP_Legacy extends BP_Theme_Compat {
 			'groups_filter'   => 'bp_legacy_theme_object_template_loader',
 			'members_filter'  => 'bp_legacy_theme_object_template_loader',
 			'messages_filter' => 'bp_legacy_theme_messages_template_loader',
+			'invite_filter'   => 'bp_legacy_theme_invite_template_loader',
+			'requests_filter' => 'bp_legacy_theme_requests_template_loader',
 
 			// Friends
 			'accept_friendship' => 'bp_legacy_theme_ajax_accept_friendship',
@@ -195,16 +199,19 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * @uses wp_enqueue_style() To enqueue the styles
 	 */
 	public function enqueue_styles() {
-
-		// LTR or RTL
-		$file = is_rtl() ? 'buddypress-rtl.css' : 'buddypress.css';
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// Locate the BP stylesheet
-		$asset = $this->locate_asset_in_stack( $file, 'css' );
+		$asset = $this->locate_asset_in_stack( "buddypress{$min}.css", 'css' );
 
 		// Enqueue BuddyPress-specific styling, if found
 		if ( isset( $asset['location'], $asset['handle'] ) ) {
 			wp_enqueue_style( $asset['handle'], $asset['location'], array(), $this->version, 'screen' );
+
+			wp_style_add_data( $asset['handle'], 'rtl', true );
+			if ( $min ) {
+				wp_style_add_data( $asset['handle'], 'suffix', $min );
+			}
 		}
 	}
 
@@ -214,21 +221,20 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * @since BuddyPress (1.7)
 	 */
 	public function enqueue_scripts() {
-
-		$file = 'buddypress.js';
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// Locate the BP JS file
-		$asset = $this->locate_asset_in_stack( $file, 'js' );
+		$asset = $this->locate_asset_in_stack( "buddypress{$min}.js", 'js' );
 
 		// Enqueue the global JS, if found - AJAX will not work
 		// without it
 		if ( isset( $asset['location'], $asset['handle'] ) ) {
-			wp_enqueue_script( $asset['handle'], $asset['location'], array( 'jquery' ), $this->version );
+			wp_enqueue_script( $asset['handle'], $asset['location'], bp_core_get_js_dependencies(), $this->version );
 		}
 
 		// Add words that we need to use in JS to the end of the page
 		// so they can be translated and still used.
-		$params = array(
+		$params = apply_filters( 'bp_core_get_js_strings', array(
 			'accepted'            => __( 'Accepted', 'buddypress' ),
 			'close'               => __( 'Close', 'buddypress' ),
 			'comments'            => __( 'comments', 'buddypress' ),
@@ -242,12 +248,26 @@ class BP_Legacy extends BP_Theme_Compat {
 			'show_x_comments'     => __( 'Show all %d comments', 'buddypress' ),
 			'unsaved_changes'     => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
 			'view'                => __( 'View', 'buddypress' ),
-		);
+		) );
 		wp_localize_script( $asset['handle'], 'BP_DTheme', $params );
 
 		// Maybe enqueue comment reply JS
 		if ( is_singular() && bp_is_blog_page() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
+		}
+
+		// Maybe enqueue password verify JS (register page or user settings page)
+		if ( bp_is_register_page() || ( function_exists( 'bp_is_user_settings_general' ) && bp_is_user_settings_general() ) ) {
+
+			// Locate the Register Page JS file
+			$asset = $this->locate_asset_in_stack( "password-verify{$min}.js", 'js' );
+
+			$dependencies = array_merge( bp_core_get_js_dependencies(), array(
+				'password-strength-meter',
+			) );
+
+			// Enqueue script
+			wp_enqueue_script( $asset['handle'] . '-password-verify', $asset['location'], $dependencies, $this->version);
 		}
 	}
 
@@ -288,19 +308,22 @@ class BP_Legacy extends BP_Theme_Compat {
 		// No need to check child if template == stylesheet
 		if ( is_child_theme() ) {
 			$locations['bp-child'] = array(
-				'dir' => get_stylesheet_directory(),
-				'uri' => get_stylesheet_directory_uri(),
+				'dir'  => get_stylesheet_directory(),
+				'uri'  => get_stylesheet_directory_uri(),
+				'file' => str_replace( '.min', '', $file )
 			);
 		}
 
 		$locations['bp-parent'] = array(
-			'dir' => get_template_directory(),
-			'uri' => get_template_directory_uri(),
+			'dir'  => get_template_directory(),
+			'uri'  => get_template_directory_uri(),
+			'file' => str_replace( '.min', '', $file )
 		);
 
 		$locations['bp-legacy'] = array(
-			'dir' => bp_get_theme_compat_dir(),
-			'uri' => bp_get_theme_compat_url(),
+			'dir'  => bp_get_theme_compat_dir(),
+			'uri'  => bp_get_theme_compat_url(),
+			'file' => $file
 		);
 
 		// Subdirectories within the top-level $locations directories
@@ -314,8 +337,8 @@ class BP_Legacy extends BP_Theme_Compat {
 
 		foreach ( $locations as $location_type => $location ) {
 			foreach ( $subdirs as $subdir ) {
-				if ( file_exists( trailingslashit( $location['dir'] ) . trailingslashit( $subdir ) . $file ) ) {
-					$retval['location'] = trailingslashit( $location['uri'] ) . trailingslashit( $subdir ) . $file;
+				if ( file_exists( trailingslashit( $location['dir'] ) . trailingslashit( $subdir ) . $location['file'] ) ) {
+					$retval['location'] = trailingslashit( $location['uri'] ) . trailingslashit( $subdir ) . $location['file'];
 					$retval['handle']   = $location_type . '-' . $type;
 					break 2;
 				}
@@ -333,7 +356,7 @@ class BP_Legacy extends BP_Theme_Compat {
 	public function head_scripts() {
 	?>
 
-		<script type="text/javascript" charset="utf-8">
+		<script type="text/javascript">
 			/* <![CDATA[ */
 			var ajaxurl = '<?php echo bp_core_ajax_url(); ?>';
 			/* ]]> */
@@ -420,6 +443,35 @@ new BP_Legacy();
 endif;
 
 /**
+ * Add the Create a Group button to the Groups directory title.
+ *
+ * bp-legacy puts the Create a Group button into the page title, to mimic
+ * the behavior of bp-default.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $title Groups directory title.
+ * @return string
+ */
+function bp_legacy_theme_group_create_button( $title ) {
+	return $title . ' ' . bp_get_group_create_button();
+}
+
+/**
+ * Add the Create a Site button to the Sites directory title.
+ *
+ * bp-legacy puts the Create a Site button into the page title, to mimic
+ * the behavior of bp-default.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param string $title Sites directory title.
+ * @return string
+ */
+function bp_legacy_theme_blog_create_button( $title ) {
+	return $title . ' ' . bp_get_blog_create_button();
+}
+/**
  * This function looks scarier than it actually is. :)
  * Each object loop (activity/members/groups/blogs/forums) contains default
  * parameters to show specific information based on the page we are currently
@@ -480,9 +532,14 @@ function bp_legacy_theme_ajax_querystring( $query_string, $object ) {
 		$qs[] = 'exclude=' . implode( ',', $just_posted );
 	}
 
+	// to get newest activities
+	if ( ! empty( $_POST['offset'] ) ) {
+		$qs[] = 'offset=' . intval( $_POST['offset'] );
+	}
+
 	$object_search_text = bp_get_search_default_text( $object );
  	if ( ! empty( $_POST['search_terms'] ) && $object_search_text != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
-		$qs[] = 'search_terms=' . $_POST['search_terms'];
+		$qs[] = 'search_terms=' . urlencode( $_POST['search_terms'] );
 
 	// Now pass the querystring to override default values.
 	$query_string = empty( $qs ) ? '' : join( '&', (array) $qs );
@@ -541,8 +598,15 @@ function bp_legacy_theme_object_template_loader() {
 	if ( ! bp_current_action() )
 		bp_update_is_directory( true, bp_current_component() );
 
+	$template_part = $object . '/' . $object . '-loop';
+
+	// The template part can be overridden by the calling JS function
+	if ( ! empty( $_POST['template'] ) ) {
+		$template_part = sanitize_option( 'upload_path', $_POST['template'] );
+	}
+
 	// Locate the object template
-	bp_get_template_part( "$object/$object-loop" );
+	bp_get_template_part( $template_part );
 	exit();
 }
 
@@ -554,6 +618,26 @@ function bp_legacy_theme_object_template_loader() {
  */
 function bp_legacy_theme_messages_template_loader() {
 	bp_get_template_part( 'members/single/messages/messages-loop' );
+	exit();
+}
+
+/**
+ * Load group invitations loop to handle pagination requests sent via AJAX.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_legacy_theme_invite_template_loader() {
+	bp_get_template_part( 'groups/single/invites-loop' );
+	exit();
+}
+
+/**
+ * Load group membership requests loop to handle pagination requests sent via AJAX.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_legacy_theme_requests_template_loader() {
+	bp_get_template_part( 'groups/single/requests-loop' );
 	exit();
 }
 
@@ -611,6 +695,8 @@ function bp_legacy_theme_activity_template_loader() {
  * @since BuddyPress (1.2)
  */
 function bp_legacy_theme_post_update() {
+	$bp = buddypress();
+
 	// Bail if not a POST action
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return;
@@ -637,13 +723,26 @@ function bp_legacy_theme_post_update() {
 	}
 
 	if ( empty( $activity_id ) )
-		exit( '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update, please try again.', 'buddypress' ) . '</p></div>' );
+		exit( '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update; please try again.', 'buddypress' ) . '</p></div>' );
 
-	if ( bp_has_activities ( 'include=' . $activity_id ) ) {
+	$last_recorded = ! empty( $_POST['since'] ) ? date( 'Y-m-d H:i:s', intval( $_POST['since'] ) ) : 0;
+	if ( $last_recorded ) {
+		$activity_args = array( 'since' => $last_recorded );
+		$bp->activity->last_recorded = $last_recorded;
+		add_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
+	} else {
+		$activity_args = array( 'include' => $activity_id );
+	}
+
+	if ( bp_has_activities ( $activity_args ) ) {
 		while ( bp_activities() ) {
 			bp_the_activity();
 			bp_get_template_part( 'activity/entry' );
 		}
+	}
+
+	if ( ! empty( $last_recorded ) ) {
+		remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
 	}
 
 	exit;
@@ -685,13 +784,24 @@ function bp_legacy_theme_new_activity_comment() {
 		exit( '-1<div id="message" class="error"><p>' . __( 'There was an error posting that reply, please try again.', 'buddypress' ) . '</p></div>' );
 
 	// Load the new activity item into the $activities_template global
-	bp_has_activities( 'display_comments=stream&hide_spam=false&include=' . $comment_id );
+	bp_has_activities( 'display_comments=stream&hide_spam=false&show_hidden=true&include=' . $comment_id );
 
 	// Swap the current comment with the activity item we just loaded
 	if ( isset( $activities_template->activities[0] ) ) {
 		$activities_template->activity = new stdClass();
 		$activities_template->activity->id              = $activities_template->activities[0]->item_id;
 		$activities_template->activity->current_comment = $activities_template->activities[0];
+
+		// Because the whole tree has not been loaded, we manually
+		// determine depth
+		$depth = 1;
+		$parent_id = (int) $activities_template->activities[0]->secondary_item_id;
+		while ( $parent_id !== (int) $activities_template->activities[0]->item_id ) {
+			$depth++;
+			$p_obj = new BP_Activity_Activity( $parent_id );
+			$parent_id = (int) $p_obj->secondary_item_id;
+		}
+		$activities_template->activity->current_comment->depth = $depth;
 	}
 
 	// get activity comment template part
@@ -930,12 +1040,14 @@ function bp_legacy_theme_ajax_invite_user() {
 
 		$user = new BP_Core_User( $friend_id );
 
+		$uninvite_url = bp_is_current_action( 'create' ) ? bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-invites/?user_id=' . $friend_id : bp_get_group_permalink( $group ) . 'send-invites/remove/' . $friend_id;
+
 		echo '<li id="uid-' . $user->id . '">';
 		echo $user->avatar_thumb;
 		echo '<h4>' . $user->user_link . '</h4>';
 		echo '<span class="activity">' . esc_attr( $user->last_active ) . '</span>';
 		echo '<div class="action">
-				<a class="button remove" href="' . wp_nonce_url( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
+				<a class="button remove" href="' . wp_nonce_url( $uninvite_url, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
 			  </div>';
 
 		if ( 'is_pending' == $user_status ) {
@@ -1271,11 +1383,8 @@ function bp_legacy_theme_ajax_messages_delete() {
 		echo "-1<div id='message' class='error'><p>" . __( 'There was a problem deleting messages.', 'buddypress' ) . '</p></div>';
 
 	} else {
-		$thread_ids = explode( ',', $_POST['thread_ids'] );
-
-		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
-			BP_Messages_Thread::delete( (int) $thread_ids[$i] );
-		}
+		$thread_ids = wp_parse_id_list( $_POST['thread_ids'] );
+		messages_delete_thread( $thread_ids );
 
 		_e( 'Messages deleted.', 'buddypress' );
 	}
@@ -1284,67 +1393,43 @@ function bp_legacy_theme_ajax_messages_delete() {
 }
 
 /**
- * AJAX handler for autocomplete. Displays friends only, unless BP_MESSAGES_AUTOCOMPLETE_ALL is defined.
+ * AJAX handler for autocomplete.
  *
- * @return string HTML
- * @since BuddyPress (1.2)
+ * Displays friends only, unless BP_MESSAGES_AUTOCOMPLETE_ALL is defined.
+ *
+ * @since BuddyPress (1.2.0)
+ *
+ * @return string HTML.
  */
 function bp_legacy_theme_ajax_messages_autocomplete_results() {
+	$limit = isset( $_GET['limit'] ) ? absint( $_GET['limit'] )          : (int) apply_filters( 'bp_autocomplete_max_results', 10 );
+	$term  = isset( $_GET['q'] )     ? sanitize_text_field( $_GET['q'] ) : '';
 
 	// Include everyone in the autocomplete, or just friends?
-	if ( bp_is_current_component( bp_get_messages_slug() ) )
-		$autocomplete_all = buddypress()->messages->autocomplete_all;
-
-	$pag_page = 1;
-	$limit    = (int) $_GET['limit'] ? $_GET['limit'] : apply_filters( 'bp_autocomplete_max_results', 10 );
-
-	// Get the user ids based on the search terms
-	if ( ! empty( $autocomplete_all ) ) {
-		$users = BP_Core_User::search_users( $_GET['q'], $limit, $pag_page );
-
-		if ( ! empty( $users['users'] ) ) {
-			// Build an array with the correct format
-			$user_ids = array();
-			foreach( $users['users'] as $user ) {
-				if ( $user->id != bp_loggedin_user_id() ) {
-					$user_ids[] = $user->id;
-				}
-			}
-
-			$user_ids = apply_filters( 'bp_core_autocomplete_ids', $user_ids, $_GET['q'], $limit );
-		}
-
+	if ( bp_is_current_component( bp_get_messages_slug() ) ) {
+		$only_friends = ( buddypress()->messages->autocomplete_all === false );
 	} else {
-		if ( bp_is_active( 'friends' ) ) {
-			$users = friends_search_friends( $_GET['q'], bp_loggedin_user_id(), $limit, 1 );
-
-			// Keeping the bp_friends_autocomplete_list filter for backward compatibility
-			$users = apply_filters( 'bp_friends_autocomplete_list', $users, $_GET['q'], $limit );
-
-			if ( ! empty( $users['friends'] ) ) {
-				$user_ids = apply_filters( 'bp_friends_autocomplete_ids', $users['friends'], $_GET['q'], $limit );
-			}
-		}
+		$only_friends = true;
 	}
 
-	if ( ! empty( $user_ids ) ) {
-		foreach ( $user_ids as $user_id ) {
-			$ud = get_userdata( $user_id );
-			if ( ! $ud ) {
-				continue;
-			}
+	$suggestions = bp_core_get_suggestions( array(
+		'limit'        => $limit,
+		'only_friends' => $only_friends,
+		'term'         => $term,
+		'type'         => 'members',
+	) );
 
-			if ( bp_is_username_compatibility_mode() ) {
-				// Sanitize for spaces. Use urlencode() rather
-				// than rawurlencode() because %20 breaks JS
-				$username = urlencode( $ud->user_login );
-			} else {
-				$username = $ud->user_nicename;
-			}
+	if ( $suggestions && ! is_wp_error( $suggestions ) ) {
+		foreach ( $suggestions as $user ) {
 
 			// Note that the final line break acts as a delimiter for the
 			// autocomplete javascript and thus should not be removed
-			echo '<span id="link-' . esc_attr( $username ) . '" href="' . bp_core_get_user_domain( $user_id ) . '"></span>' . bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => 'thumb', 'width' => 15, 'height' => 15, 'alt' => $ud->display_name ) ) . ' &nbsp;' . bp_core_get_user_displayname( $user_id ) . ' (' . esc_html( $username ) . ')' . "\n";
+			printf( '<span id="%s" href="#"></span><img src="%s" style="width: 15px"> &nbsp; %s (%s)' . "\n",
+				esc_attr( 'link-' . $user->ID ),
+				esc_url( $user->image ),
+				esc_html( $user->name ),
+				esc_html( $user->ID )
+			);
 		}
 	}
 

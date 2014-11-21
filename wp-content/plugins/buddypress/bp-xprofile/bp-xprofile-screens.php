@@ -67,7 +67,7 @@ function xprofile_screen_edit_profile() {
 
 		// Explode the posted field IDs into an array so we know which
 		// fields have been submitted
-		$posted_field_ids = explode( ',', $_POST['field_ids'] );
+		$posted_field_ids = wp_parse_id_list( $_POST['field_ids'] );
 		$is_required      = array();
 
 		// Loop through the posted fields formatting any datebox values
@@ -102,31 +102,44 @@ function xprofile_screen_edit_profile() {
 			$errors = false;
 
 			// Now we've checked for required fields, lets save the values.
+			$old_values = $new_values = array();
 			foreach ( (array) $posted_field_ids as $field_id ) {
 
 				// Certain types of fields (checkboxes, multiselects) may come through empty. Save them as an empty array so that they don't get overwritten by the default on the next edit.
-				if ( empty( $_POST['field_' . $field_id] ) ) {
-					$value = array();
-				} else {
-					$value = $_POST['field_' . $field_id];
-				}
+				$value = isset( $_POST['field_' . $field_id] ) ? $_POST['field_' . $field_id] : '';
 
-				if ( !xprofile_set_field_data( $field_id, bp_displayed_user_id(), $value, $is_required[$field_id] ) ) {
+				$visibility_level = !empty( $_POST['field_' . $field_id . '_visibility'] ) ? $_POST['field_' . $field_id . '_visibility'] : 'public';
+
+				// Save the old and new values. They will be
+				// passed to the filter and used to determine
+				// whether an activity item should be posted
+				$old_values[ $field_id ] = array(
+					'value'      => xprofile_get_field_data( $field_id, bp_displayed_user_id() ),
+					'visibility' => xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() ),
+				);
+
+				// Update the field data and visibility level
+				xprofile_set_field_visibility_level( $field_id, bp_displayed_user_id(), $visibility_level );
+				$field_updated = xprofile_set_field_data( $field_id, bp_displayed_user_id(), $value, $is_required[ $field_id ] );
+				$value         = xprofile_get_field_data( $field_id, bp_displayed_user_id() );
+
+				$new_values[ $field_id ] = array(
+					'value'      => $value,
+					'visibility' => xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() ),
+				);
+
+				if ( ! $field_updated ) {
 					$errors = true;
 				} else {
 					do_action( 'xprofile_profile_field_data_updated', $field_id, $value );
 				}
-
-				// Save the visibility level
-				$visibility_level = !empty( $_POST['field_' . $field_id . '_visibility'] ) ? $_POST['field_' . $field_id . '_visibility'] : 'public';
-				xprofile_set_field_visibility_level( $field_id, bp_displayed_user_id(), $visibility_level );
 			}
 
-			do_action( 'xprofile_updated_profile', bp_displayed_user_id(), $posted_field_ids, $errors );
+			do_action( 'xprofile_updated_profile', bp_displayed_user_id(), $posted_field_ids, $errors, $old_values, $new_values );
 
 			// Set the feedback messages
 			if ( !empty( $errors ) ) {
-				bp_core_add_message( __( 'There was a problem updating some of your profile information, please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was a problem updating some of your profile information; please try again.', 'buddypress' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'Changes saved.', 'buddypress' ) );
 			}
@@ -196,15 +209,32 @@ function xprofile_screen_change_avatar() {
 		);
 
 		if ( ! bp_core_avatar_handle_crop( $args ) ) {
-			bp_core_add_message( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was a problem cropping your profile photo.', 'buddypress' ), 'error' );
 		} else {
 			do_action( 'xprofile_avatar_uploaded' );
-			bp_core_add_message( __( 'Your new avatar was uploaded successfully.', 'buddypress' ) );
-			bp_core_redirect( bp_loggedin_user_domain() );
+			bp_core_add_message( __( 'Your new profile photo was uploaded successfully.', 'buddypress' ) );
+			bp_core_redirect( bp_displayed_user_domain() );
 		}
 	}
 
 	do_action( 'xprofile_screen_change_avatar' );
 
 	bp_core_load_template( apply_filters( 'xprofile_template_change_avatar', 'members/single/home' ) );
+}
+
+/**
+ * Show the xprofile settings template
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_xprofile_screen_settings() {
+
+	// Redirect if no privacy settings page is accessible
+	if ( bp_action_variables() || ! bp_is_active( 'xprofile' ) ) {
+		bp_do_404();
+		return;
+	}
+
+	// Load the template
+	bp_core_load_template( apply_filters( 'bp_settings_screen_xprofile', '/members/single/settings/profile' ) );
 }

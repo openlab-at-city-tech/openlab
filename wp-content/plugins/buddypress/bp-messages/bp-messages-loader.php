@@ -12,6 +12,11 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Implementation of BP_Component for the Messages component.
+ *
+ * @since BuddyPress (1.5.0)
+ */
 class BP_Messages_Component extends BP_Component {
 	/**
 	 * If this is true, the Message autocomplete will return friends only, unless
@@ -23,15 +28,15 @@ class BP_Messages_Component extends BP_Component {
 	public $autocomplete_all;
 
 	/**
-	 * Start the messages component creation process
+	 * Start the messages component creation process.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'messages',
 			__( 'Private Messages', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 50
 			)
@@ -39,7 +44,11 @@ class BP_Messages_Component extends BP_Component {
 	}
 
 	/**
-	 * Include files
+	 * Include files.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param array $includes See {BP_Component::includes()} for details.
 	 */
 	public function includes( $includes = array() ) {
 
@@ -61,12 +70,14 @@ class BP_Messages_Component extends BP_Component {
 	}
 
 	/**
-	 * Setup globals
+	 * Set up globals for the Messages component.
 	 *
 	 * The BP_MESSAGES_SLUG constant is deprecated, and only used here for
 	 * backwards compatibility.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param array $args Not used.
 	 */
 	public function setup_globals( $args = array() ) {
 		$bp = buddypress();
@@ -98,15 +109,25 @@ class BP_Messages_Component extends BP_Component {
 	}
 
 	/**
-	 * Setup BuddyBar navigation
+	 * Set up navigation for user pages.
+	 *
+	 * @param array $main_nav See {BP_Component::setup_nav()} for details.
+	 * @param array $sub_nav See {BP_Component::setup_nav()} for details.
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
-		$name = sprintf( __( 'Messages <span>%s</span>', 'buddypress' ), bp_get_total_unread_messages_count() );
+		// Only grab count if we're on a user page and current user has access
+		if ( bp_is_user() && bp_user_has_access() ) {
+			$count    = bp_get_total_unread_messages_count();
+			$class    = ( 0 === $count ) ? 'no-count' : 'count';
+			$nav_name = sprintf( __( 'Messages <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) );
+		} else {
+			$nav_name = __( 'Messages', 'buddypress' );
+		}
 
 		// Add 'Messages' to the main navigation
 		$main_nav = array(
-			'name'                    => $name,
+			'name'                    => $nav_name,
 			'slug'                    => $this->slug,
 			'position'                => 50,
 			'show_for_displayed_user' => false,
@@ -174,7 +195,10 @@ class BP_Messages_Component extends BP_Component {
 	}
 
 	/**
-	 * Set up the Toolbar
+	 * Set up the Toolbar.
+	 *
+	 * @param array $wp_admin_nav See {BP_Component::setup_admin_bar()}
+	 *        for details.
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
 		$bp = buddypress();
@@ -243,9 +267,9 @@ class BP_Messages_Component extends BP_Component {
 	}
 
 	/**
-	 * Sets up the title for pages and <title>
+	 * Set up the title for pages and <title>.
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		if ( bp_is_messages_component() ) {
@@ -265,6 +289,9 @@ class BP_Messages_Component extends BP_Component {
 	}
 }
 
+/**
+ * Bootstrap the Messages component.
+ */
 function bp_setup_messages() {
 	buddypress()->messages = new BP_Messages_Component();
 }

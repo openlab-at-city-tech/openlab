@@ -99,6 +99,47 @@ function bp_core_exclude_pages( $pages = array() ) {
 add_filter( 'wp_list_pages_excludes', 'bp_core_exclude_pages' );
 
 /**
+ * Prevent specific pages (eg 'Activate') from showing in the Pages meta box of the Menu Administration screen.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @uses bp_is_root_blog() checks if current blog is root blog.
+ * @uses buddypress() gets BuddyPress main instance
+ *
+ * @param object $object The post type object used in the meta box
+ * @return object The $object, with a query argument to remove register and activate pages id.
+ */
+function bp_core_exclude_pages_from_nav_menu_admin( $object = null ) {
+
+	// Bail if not the root blog
+	if ( ! bp_is_root_blog() ) {
+		return $object;
+	}
+
+	if ( 'page' != $object->name ) {
+		return $object;
+	}
+
+	$bp = buddypress();
+	$pages = array();
+
+	if ( ! empty( $bp->pages->activate ) ) {
+		$pages[] = $bp->pages->activate->id;
+	}
+
+	if ( ! empty( $bp->pages->register ) ) {
+		$pages[] = $bp->pages->register->id;
+	}
+
+	if ( ! empty( $pages ) ) {
+		$object->_default_query['post__not_in'] = $pages;
+	}
+
+	return $object;
+}
+add_filter( 'nav_menu_meta_box_object', 'bp_core_exclude_pages_from_nav_menu_admin', 11, 1 );
+
+/**
  * Set "From" name in outgoing email to the site name.
  *
  * @uses bp_get_option() fetches the value for a meta_key in the wp_X_options table.
@@ -208,9 +249,19 @@ add_filter( 'bp_login_redirect', 'bp_core_login_redirect', 10, 3 );
  */
 function bp_core_filter_user_welcome_email( $welcome_email ) {
 
-	// Don't touch the email if we don't have a custom registration template
-	if ( ! bp_has_custom_signup_page() )
+	// Don't touch the email when a user is registered by the site admin
+	if ( ( is_admin() || is_network_admin() ) && buddypress()->members->admin->signups_page != get_current_screen()->id ) {
 		return $welcome_email;
+	}
+
+	if ( strpos( bp_get_requested_url(), 'wp-activate.php' ) !== false ) {
+		return $welcome_email;
+	}
+
+	// Don't touch the email if we don't have a custom registration template
+	if ( ! bp_has_custom_signup_page() ) {
+		return $welcome_email;
+	}
 
 	// [User Set] Replaces 'PASSWORD' in welcome email; Represents value set by user
 	return str_replace( 'PASSWORD', __( '[User Set]', 'buddypress' ), $welcome_email );
@@ -233,6 +284,11 @@ add_filter( 'update_welcome_user_email', 'bp_core_filter_user_welcome_email' );
  * @return string Filtered $welcome_email with $password replaced by '[User Set]'.
  */
 function bp_core_filter_blog_welcome_email( $welcome_email, $blog_id, $user_id, $password ) {
+
+	// Don't touch the email when a user is registered by the site admin
+	if ( ( is_admin() || is_network_admin() ) && buddypress()->members->admin->signups_page != get_current_screen()->id ) {
+		return $welcome_email;
+	}
 
 	// Don't touch the email if we don't have a custom registration template
 	if ( ! bp_has_custom_signup_page() )
@@ -268,7 +324,7 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 	$activate_url = esc_url( $activate_url );
 
 	// Email contents
-	$message = sprintf( __( "Thanks for registering! To complete the activation of your account and blog, please click the following link:\n\n%1\$s\n\n\n\nAfter you activate, you can visit your blog here:\n\n%2\$s", 'buddypress' ), $activate_url, esc_url( "http://{$domain}{$path}" ) );
+	$message = sprintf( __( "%1\$s,\n\n\n\nThanks for registering! To complete the activation of your account and blog, please click the following link:\n\n%2\$s\n\n\n\nAfter you activate, you can visit your blog here:\n\n%3\$s", 'buddypress' ), $user, $activate_url, esc_url( "http://{$domain}{$path}" ) );
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( 'Activate %s', 'buddypress' ), 'http://' . $domain . $path ) ) );
 
 	// Email filters
@@ -301,6 +357,32 @@ add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_not
  * @return bool True on success, false on failure.
  */
 function bp_core_activation_signup_user_notification( $user, $user_email, $key, $meta ) {
+
+	if ( is_admin() ) {
+		// If the user is created from the WordPress Add User screen, don't send BuddyPress signup notifications
+		if( in_array( get_current_screen()->id, array( 'user', 'user-network' ) ) ) {
+			// If the Super Admin want to skip confirmation email
+			if ( isset( $_POST[ 'noconfirmation' ] ) && is_super_admin() ) {
+				return false;
+
+			// WordPress will manage the signup process
+			} else {
+				return $user;
+			}
+
+		/**
+		 * There can be a case where the user was created without the skip confirmation
+		 * And the super admin goes in pending accounts to resend it. In this case, as the
+		 * meta['password'] is not set, the activation url must be WordPress one
+		 */
+		} else if ( buddypress()->members->admin->signups_page == get_current_screen()->id ) {
+			$is_hashpass_in_meta = maybe_unserialize( $meta );
+
+			if ( empty( $is_hashpass_in_meta['password'] ) ) {
+				return $user;
+			}
+		}
+	}
 
 	// Set up activation link
 	$activate_url = bp_get_activation_page() . "?key=$key";
@@ -390,10 +472,14 @@ function bp_modify_page_title( $title, $sep, $seplocation ) {
 
 	// An index or directory
 	} elseif ( bp_is_directory() ) {
-		if ( !bp_current_component() ) {
-			$title = sprintf( __( '%s Directory', 'buddypress' ), bp_get_name_from_root_slug() );
+
+		$current_component = bp_current_component();
+
+		// No current component (when does this happen?)
+		if ( empty( $current_component ) ) {
+			$title = _x( 'Directory', 'component directory title', 'buddypress' );
 		} else {
-			$title = sprintf( __( '%s Directory', 'buddypress' ), bp_get_name_from_root_slug() );
+			$title = bp_get_directory_title( $current_component );
 		}
 
 	// Sign up page
@@ -450,7 +536,7 @@ function bp_setup_nav_menu_item( $menu_item ) {
 			if ( is_user_logged_in() ) {
 				$menu_item->_invalid = true;
 			} else {
-				$menu_item->url = wp_login_url( wp_guess_url() );
+				$menu_item->url = wp_login_url( bp_get_requested_url() );
 			}
 
 			break;
@@ -459,7 +545,7 @@ function bp_setup_nav_menu_item( $menu_item ) {
 			if ( ! is_user_logged_in() ) {
 				$menu_item->_invalid = true;
 			} else {
-				$menu_item->url = wp_logout_url( wp_guess_url() );
+				$menu_item->url = wp_logout_url( bp_get_requested_url() );
 			}
 
 			break;
@@ -484,12 +570,56 @@ function bp_setup_nav_menu_item( $menu_item ) {
 			break;
 	}
 
+	// If component is deactivated, make sure menu item doesn't render
+	if ( empty( $menu_item->url ) ) {
+		$menu_item->_invalid = true;
+
 	// Highlight the current page
-	$current = bp_get_requested_url();
-	if ( strpos( $current, $menu_item->url ) !== false ) {
-		$menu_item->classes[] = 'current_page_item';
+	} else {
+		$current = bp_get_requested_url();
+		if ( strpos( $current, $menu_item->url ) !== false ) {
+			$menu_item->classes[] = 'current_page_item';
+		}
 	}
 
 	return $menu_item;
 }
 add_filter( 'wp_setup_nav_menu_item', 'bp_setup_nav_menu_item', 10, 1 );
+
+/**
+ * Filter SQL query strings to swap out the 'meta_id' column.
+ *
+ * WordPress uses the meta_id column for commentmeta and postmeta, and so
+ * hardcodes the column name into its *_metadata() functions. BuddyPress, on
+ * the other hand, uses 'id' for the primary column. To make WP's functions
+ * usable for BuddyPress, we use this just-in-time filter on 'query' to swap
+ * 'meta_id' with 'id.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @access private Do not use.
+ *
+ * @param string $q SQL query.
+ * @return string
+ */
+function bp_filter_metaid_column_name( $q ) {
+	return str_replace( 'meta_id', 'id', $q );
+}
+
+/**
+ * Filter the edit post link to avoid its display in BuddyPress pages
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @param  string $link    The edit link.
+ * @param  int    $post_id Post ID.
+ * @return mixed  Will be a boolean (false) if $post_id is 0. Will be a string (the unchanged edit link)
+ *                otherwise
+ */
+function bp_core_filter_edit_post_link( $edit_link = '', $post_id = 0 ) {
+	if ( 0 === $post_id ) {
+		$edit_link = false;
+	}
+
+	return $edit_link;
+}

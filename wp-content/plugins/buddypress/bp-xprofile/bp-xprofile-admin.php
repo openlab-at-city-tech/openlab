@@ -24,7 +24,7 @@ function xprofile_add_admin_menu() {
 	if ( !bp_current_user_can( 'bp_moderate' ) )
 		return false;
 
-	add_users_page( __( 'Profile Fields', 'buddypress' ), __( 'Profile Fields', 'buddypress' ), 'manage_options', 'bp-profile-setup', 'xprofile_admin' );
+	add_users_page( _x( 'Profile Fields', 'xProfile admin page title', 'buddypress' ), _x( 'Profile Fields', 'Admin Users menu', 'buddypress' ), 'manage_options', 'bp-profile-setup', 'xprofile_admin' );
 }
 add_action( bp_core_admin_hook(), 'xprofile_add_admin_menu' );
 
@@ -36,7 +36,7 @@ function xprofile_admin( $message = '', $type = 'error' ) {
 
 	$type = preg_replace( '|[^a-z]|i', '', $type );
 
-	$groups = BP_XProfile_Group::get( array(
+	$groups = bp_xprofile_get_groups( array(
 		'fetch_fields' => true
 	) );
 
@@ -68,7 +68,7 @@ function xprofile_admin( $message = '', $type = 'error' ) {
 		<?php screen_icon( 'users' ); ?>
 
 		<h2>
-			<?php _e( 'Profile Fields', 'buddypress'); ?>
+			<?php _ex( 'Profile Fields', 'Settings page header', 'buddypress'); ?>
 			<a id="add_group" class="add-new-h2" href="users.php?page=bp-profile-setup&amp;mode=add_group"><?php _e( 'Add New Field Group', 'buddypress' ); ?></a>
 		</h2>
 
@@ -287,7 +287,7 @@ function xprofile_admin_manage_field( $group_id, $field_id = null ) {
 
 				do_action( 'xprofile_fields_saved_field', $field );
 
-				$groups = BP_XProfile_Group::get();
+				$groups = bp_xprofile_get_groups();
 				xprofile_admin( $message, $type );
 			}
 		} else {
@@ -382,69 +382,15 @@ function xprofile_admin_field( $admin_field, $admin_group, $class = '' ) {
 		<legend><span><?php bp_the_profile_field_name(); ?> <?php if( !$field->can_delete ) : ?> <?php _e( '(Primary)', 'buddypress' ); endif; ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(Required)', 'buddypress' ) ?><?php endif; ?></span></legend>
 		<div class="field-wrapper">
 
-			<?php switch ( $field->type ) : case 'textbox' : ?>
+			<?php
+			if ( in_array( $field->type, array_keys( bp_xprofile_get_field_types() ) ) ) {
+				$field_type = bp_xprofile_create_field_type( $field->type );
+				$field_type->admin_field_html();
 
-				<input type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="" />
-
-			<?php break; case 'textarea' : ?>
-
-				<textarea rows="5" cols="40" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>"></textarea>
-
-			<?php break; case 'selectbox' : ?>
-
-				<select name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>">
-
-					<?php bp_the_profile_field_options() ?>
-
-				</select>
-
-			<?php break; case 'multiselectbox' : ?>
-
-				<select name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" multiple="multiple">
-
-					<?php bp_the_profile_field_options() ?>
-
-				</select>
-
-			<?php break; case 'radio' : ?>
-
-				<?php bp_the_profile_field_options() ?>
-
-				<?php if ( !bp_get_the_profile_field_is_required() ) : ?>
-
-					<a class="clear-value" href="javascript:clear( '<?php bp_the_profile_field_input_name() ?>' );"><?php _e( 'Clear', 'buddypress' ) ?></a>
-
-				<?php endif; ?>
-
-			<?php break; case 'checkbox' : ?>
-
-				<?php bp_the_profile_field_options(); ?>
-
-			<?php break; case 'datebox' : ?>
-
-				<select name="<?php bp_the_profile_field_input_name(); ?>_day" id="<?php bp_the_profile_field_input_name(); ?>_day">
-
-					<?php bp_the_profile_field_options( 'type=day' ); ?>
-
-				</select>
-
-				<select name="<?php bp_the_profile_field_input_name(); ?>_month" id="<?php bp_the_profile_field_input_name(); ?>_month">
-
-					<?php bp_the_profile_field_options( 'type=month' ); ?>
-
-				</select>
-
-				<select name="<?php bp_the_profile_field_input_name(); ?>_year" id="<?php bp_the_profile_field_input_name(); ?>_year">
-
-					<?php bp_the_profile_field_options( 'type=year' ); ?>
-
-				</select>
-
-			<?php break; default : ?>
-
-			<?php do_action( 'xprofile_admin_field', $field, 1 ); ?>
-
-			<?php endswitch; ?>
+			} else {
+				do_action( 'xprofile_admin_field', $field, 1 );
+			}
+			?>
 
 			<?php if ( $field->description ) : ?>
 
@@ -457,7 +403,9 @@ function xprofile_admin_field( $admin_field, $admin_group, $class = '' ) {
 
 				<?php if ( $field->can_delete ) : ?>
 
-					<a class="confirm submit-delete deletion" href="users.php?page=bp-profile-setup&amp;field_id=<?php echo esc_attr( $field->id ); ?>&amp;mode=delete_field"><?php _e( 'Delete', 'buddypress' ); ?></a>
+					<div class="delete-button">
+						<a class="confirm submit-delete deletion" href="users.php?page=bp-profile-setup&amp;field_id=<?php echo esc_attr( $field->id ); ?>&amp;mode=delete_field"><?php _e( 'Delete', 'buddypress' ); ?></a>
+					</div>
 
 				<?php endif; ?>
 			</div>
@@ -466,3 +414,450 @@ function xprofile_admin_field( $admin_field, $admin_group, $class = '' ) {
 
 <?php
 }
+
+/**
+ * Print <option> elements containing the xprofile field types.
+ *
+ * @param string $select_field_type The name of the field type that should be selected. Will defaults to "textbox" if NULL is passed.
+ * @since BuddyPress (2.0.0)
+ */
+function bp_xprofile_admin_form_field_types( $select_field_type ) {
+	$categories = array();
+
+	if ( is_null( $select_field_type ) ) {
+		$select_field_type = 'textbox';
+	}
+
+	// Sort each field type into its category
+	foreach ( bp_xprofile_get_field_types() as $field_name => $field_class ) {
+		$field_type_obj = new $field_class;
+		$the_category   = $field_type_obj->category;
+
+		// Fallback to a catch-all if category not set
+		if ( ! $the_category ) {
+			$the_category = _x( 'Other', 'xprofile field type category', 'buddypress' );
+		}
+
+		if ( isset( $categories[$the_category] ) ) {
+			$categories[$the_category][] = array( $field_name, $field_type_obj );
+		} else {
+			$categories[$the_category] = array( array( $field_name, $field_type_obj ) );
+		}
+	}
+
+	// Sort the categories alphabetically. ksort()'s SORT_NATURAL is only in PHP >= 5.4 :((
+	uksort( $categories, 'strnatcmp' );
+
+	// Loop through each category and output form <options>
+	foreach ( $categories as $category => $fields ) {
+		printf( '<optgroup label="%1$s">', esc_attr( $category ) );  // Already i18n'd in each profile type class
+
+		// Sort these fields types alphabetically
+		uasort( $fields, create_function( '$a, $b', 'return strnatcmp( $a[1]->name, $b[1]->name );' ) );
+
+		foreach ( $fields as $field_type_obj ) {
+			$field_name     = $field_type_obj[0];
+			$field_type_obj = $field_type_obj[1];
+
+			printf( '<option value="%1$s" %2$s>%3$s</option>', esc_attr( $field_name ), selected( $select_field_type, $field_name, false ), esc_html( $field_type_obj->name ) );
+		}
+
+		printf( '</optgroup>' );
+	}
+}
+
+if ( ! class_exists( 'BP_XProfile_User_Admin' ) ) :
+/**
+ * Load xProfile Profile admin area.
+ *
+ * @package BuddyPress
+ * @subpackage xProfileAdministration
+ *
+ * @since BuddyPress (2.0.0)
+ */
+class BP_XProfile_User_Admin {
+
+	/**
+	 * Setup xProfile User Admin.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @uses buddypress() to get BuddyPress main instance
+	 */
+	public static function register_xprofile_user_admin() {
+
+		// Bail if not in admin
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$bp = buddypress();
+
+		if ( empty( $bp->profile->admin ) ) {
+			$bp->profile->admin = new self;
+		}
+
+		return $bp->profile->admin;
+	}
+
+	/**
+	 * Constructor method.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 */
+	public function __construct() {
+		$this->setup_actions();
+	}
+
+	/**
+	 * Set admin-related actions and filters.
+	 *
+	 * @access private
+	 * @since BuddyPress (2.0.0)
+	 */
+	private function setup_actions() {
+
+		// Register the metabox in Member's community admin profile
+		add_action( 'bp_members_admin_xprofile_metabox', array( $this, 'register_metaboxes' ), 10, 3 );
+
+		// Saves the profile actions for user ( avatar, profile fields )
+		add_action( 'bp_members_admin_update_user',      array( $this, 'user_admin_load'    ), 10, 4 );
+	}
+
+	/**
+	 * Register the xProfile metabox on Community Profile admin page.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param int $user_id ID of the user being edited.
+	 * @param string $screen_id Screen ID to load the metabox in.
+	 * @param object $stats_metabox Context and priority for the stats metabox.
+	 */
+	public function register_metaboxes( $user_id = 0, $screen_id = '', $stats_metabox = null ) {
+
+		// Set the screen ID if none was passed
+		if ( empty( $screen_id ) ) {
+			$screen_id = buddypress()->members->admin->user_page;
+		}
+
+		// Setup a new metabox class if none was passed
+		if ( empty( $stats_metabox ) ) {
+			$stats_metabox = new StdClass();
+		}
+
+		// Moving the Stats Metabox
+		$stats_metabox->context  = 'side';
+		$stats_metabox->priority = 'low';
+
+		// Each Group of fields will have his own metabox
+		$profile_args = array(
+			'fetch_fields' => false,
+			'user_id'      => $user_id,
+		);
+
+		if ( ! bp_is_user_spammer( $user_id ) && bp_has_profile( $profile_args ) ) {
+
+			// Loop through field groups and add a metabox for each one
+			while ( bp_profile_groups() ) : bp_the_profile_group();
+				add_meta_box(
+					'bp_xprofile_user_admin_fields_' . sanitize_key( bp_get_the_profile_group_slug() ),
+					esc_html( bp_get_the_profile_group_name() ),
+					array( $this, 'user_admin_profile_metaboxes' ),
+					$screen_id,
+					'normal',
+					'core',
+					array( 'profile_group_id' => absint( bp_get_the_profile_group_id() ) )
+				);
+			endwhile;
+
+		// If member is already a spammer, show a generic metabox
+		} else {
+			add_meta_box(
+				'bp_xprofile_user_admin_empty_profile',
+				_x( 'User marked as a spammer', 'xprofile user-admin edit screen', 'buddypress' ),
+				array( $this, 'user_admin_spammer_metabox' ),
+				$screen_id,
+				'normal',
+				'core'
+			);
+		}
+
+		// Avatar Metabox
+		add_meta_box(
+			'bp_xprofile_user_admin_avatar',
+			_x( 'Profile Photo', 'xprofile user-admin edit screen', 'buddypress' ),
+			array( $this, 'user_admin_avatar_metabox' ),
+			$screen_id,
+			'side',
+			'low'
+		);
+	}
+
+	/**
+	 * Save the profile fields in Members community profile page.
+	 *
+	 * Loaded before the page is rendered, this function is processing form
+	 * requests.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 */
+	public function user_admin_load( $doaction = '', $user_id = 0, $request = array(), $redirect_to = '' ) {
+
+		// Eventually delete avatar
+		if ( 'delete_avatar' === $doaction ) {
+
+			check_admin_referer( 'delete_avatar' );
+
+			$redirect_to = remove_query_arg( '_wpnonce', $redirect_to );
+
+			if ( bp_core_delete_existing_avatar( array( 'item_id' => $user_id ) ) ) {
+				$redirect_to = add_query_arg( 'updated', 'avatar', $redirect_to );
+			} else {
+				$redirect_to = add_query_arg( 'error', 'avatar', $redirect_to );
+			}
+
+			bp_core_redirect( $redirect_to );
+
+		// Update profile fields
+		} elseif ( isset( $_POST['field_ids'] ) ) {
+
+			// Check the nonce
+			check_admin_referer( 'edit-bp-profile_' . $user_id );
+
+			// Check we have field ID's
+			if ( empty( $_POST['field_ids'] ) ) {
+				$redirect_to = add_query_arg( 'error', '1', $redirect_to );
+				bp_core_redirect( $redirect_to );
+			}
+
+			/**
+			 * Unlike front-end edit-fields screens, the wp-admin/profile
+			 * displays all groups of fields on a single page, so the list of
+			 * field ids is an array gathering for each group of fields a
+			 * distinct comma separated list of ids.
+			 *
+			 * As a result, before using the wp_parse_id_list() function, we
+			 * must ensure that these ids are "merged" into a single comma
+			 * separated list.
+			 */
+			$merge_ids = join( ',', $_POST['field_ids'] );
+
+			// Explode the posted field IDs into an array so we know which fields have been submitted
+			$posted_field_ids = wp_parse_id_list( $merge_ids );
+			$is_required      = array();
+
+			// Loop through the posted fields formatting any datebox values then validate the field
+			foreach ( (array) $posted_field_ids as $field_id ) {
+				if ( ! isset( $_POST['field_' . $field_id ] ) ) {
+					if ( ! empty( $_POST['field_' . $field_id . '_day'] ) && ! empty( $_POST['field_' . $field_id . '_month'] ) && ! empty( $_POST['field_' . $field_id . '_year'] ) ) {
+
+						// Concatenate the values
+						$date_value =   $_POST['field_' . $field_id . '_day'] . ' ' . $_POST['field_' . $field_id . '_month'] . ' ' . $_POST['field_' . $field_id . '_year'];
+
+						// Turn the concatenated value into a timestamp
+						$_POST['field_' . $field_id] = date( 'Y-m-d H:i:s', strtotime( $date_value ) );
+					}
+				}
+
+				$is_required[ $field_id ] = xprofile_check_is_required_field( $field_id );
+				if ( $is_required[ $field_id ] && empty( $_POST['field_' . $field_id ] ) ) {
+					$redirect_to = add_query_arg( 'error', '2', $redirect_to );
+					bp_core_redirect( $redirect_to );
+				}
+			}
+
+			// Set the errors var
+			$errors = false;
+
+			// Now we've checked for required fields, let's save the values.
+			foreach ( (array) $posted_field_ids as $field_id ) {
+
+				// Certain types of fields (checkboxes, multiselects) may come through empty. Save them as an empty array so that they don't get overwritten by the default on the next edit.
+				$value = isset( $_POST['field_' . $field_id] ) ? $_POST['field_' . $field_id] : '';
+
+				if ( ! xprofile_set_field_data( $field_id, $user_id, $value, $is_required[ $field_id ] ) ) {
+					$errors = true;
+				} else {
+					do_action( 'xprofile_profile_field_data_updated', $field_id, $value );
+				}
+
+				// Save the visibility level
+				$visibility_level = ! empty( $_POST['field_' . $field_id . '_visibility'] ) ? $_POST['field_' . $field_id . '_visibility'] : 'public';
+				xprofile_set_field_visibility_level( $field_id, $user_id, $visibility_level );
+			}
+
+			do_action( 'xprofile_updated_profile', $user_id, $posted_field_ids, $errors );
+
+			// Set the feedback messages
+			if ( ! empty( $errors ) ) {
+				$redirect_to = add_query_arg( 'error',   '3', $redirect_to );
+			} else {
+				$redirect_to = add_query_arg( 'updated', '1', $redirect_to );
+			}
+
+			bp_core_redirect( $redirect_to );
+		}
+	}
+
+	/**
+	 * Render the xprofile metabox for Community Profile screen.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param WP_User $user The WP_User object for the user being edited.
+	 */
+	public function user_admin_profile_metaboxes( $user = null, $args = array() ) {
+
+		// Bail if no user ID
+		if ( empty( $user->ID ) ) {
+			return;
+		}
+
+		$r = bp_parse_args( $args['args'], array(
+			'profile_group_id' => 0,
+			'user_id'          => $user->ID
+		), 'bp_xprofile_user_admin_profile_loop_args' );
+
+		// We really need these args
+		if ( empty( $r['profile_group_id'] ) || empty( $r['user_id'] ) ) {
+			return;
+		}
+
+		// Bail if no profile fields are available
+		if ( ! bp_has_profile( $r ) ) {
+			return;
+		}
+
+		// Loop through profile groups & fields
+		while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
+
+			<input type="hidden" name="field_ids[]" id="<?php echo esc_attr( 'field_ids_' . bp_get_the_profile_group_slug() ); ?>" value="<?php echo esc_attr( bp_get_the_profile_group_field_ids() ); ?>" />
+
+			<?php if ( bp_get_the_profile_group_description() ) : ?>
+
+				<p class="description"><?php bp_the_profile_group_description(); ?></p>
+
+			<?php endif; ?>
+
+			<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
+
+				<div<?php bp_field_css_class( 'bp-profile-field' ); ?>>
+
+					<?php
+
+					$field_type = bp_xprofile_create_field_type( bp_get_the_profile_field_type() );
+					$field_type->edit_field_html( array( 'user_id' => $r['user_id'] ) );
+
+					if ( bp_get_the_profile_field_description() ) : ?>
+
+						<p class="description"><?php bp_the_profile_field_description(); ?></p>
+
+					<?php endif;
+
+					do_action( 'bp_custom_profile_edit_fields_pre_visibility' );
+
+					$can_change_visibility = bp_current_user_can( 'bp_xprofile_change_field_visibility' ); ?>
+
+					<p class="field-visibility-settings-<?php echo $can_change_visibility ? 'toggle' : 'notoggle'; ?>" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id(); ?>">
+
+						<?php printf( __( 'This field can be seen by: <span class="%s">%s</span>', 'buddypress' ), esc_attr( 'current-visibility-level' ), bp_get_the_profile_field_visibility_level_label() ); ?>
+
+						<?php if ( $can_change_visibility ) : ?>
+
+							<a href="#" class="button visibility-toggle-link"><?php esc_html_e( 'Change', 'buddypress' ); ?></a>
+
+						<?php endif; ?>
+					</p>
+
+					<?php if ( $can_change_visibility ) : ?>
+
+						<div class="field-visibility-settings" id="field-visibility-settings-<?php bp_the_profile_field_id() ?>">
+							<fieldset>
+								<legend><?php _e( 'Who can see this field?', 'buddypress' ); ?></legend>
+
+								<?php bp_profile_visibility_radio_buttons(); ?>
+
+							</fieldset>
+							<a class="button field-visibility-settings-close" href="#"><?php esc_html_e( 'Close', 'buddypress' ); ?></a>
+						</div>
+
+					<?php endif; ?>
+
+					<?php do_action( 'bp_custom_profile_edit_fields' ); ?>
+
+				</div>
+
+			<?php endwhile; // bp_profile_fields() ?>
+
+		<?php endwhile; // bp_profile_groups
+	}
+
+	/**
+	 * Render the fallback metabox in case a user has been marked as a spammer.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param WP_User $user The WP_User object for the user being edited.
+	 */
+	public function user_admin_spammer_metabox( $user = null ) {
+	?>
+		<p><?php printf( __( '%s has been marked as a spammer. All BuddyPress data associated with the user has been removed', 'buddypress' ), esc_html( bp_core_get_user_displayname( $user->ID ) ) ) ;?></p>
+	<?php
+	}
+
+	/**
+	 * Render the Avatar metabox to moderate inappropriate images.
+	 *
+	 * @access public
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param WP_User $user The WP_User object for the user being edited.
+	 */
+	public function user_admin_avatar_metabox( $user = null ) {
+
+		if ( empty( $user->ID ) ) {
+			return;
+		} ?>
+
+		<div class="avatar">
+
+			<?php echo bp_core_fetch_avatar( array(
+				'item_id' => $user->ID,
+				'object'  => 'user',
+				'type'    => 'full',
+				'title'   => $user->display_name
+			) ); ?>
+
+			<?php if ( bp_get_user_has_avatar( $user->ID ) ) :
+
+				$query_args = array(
+					'user_id' => $user->ID,
+					'action'  => 'delete_avatar'
+				);
+
+				if ( ! empty( $_REQUEST['wp_http_referer'] ) ) {
+					$query_args['wp_http_referer'] = urlencode( wp_unslash( $_REQUEST['wp_http_referer'] ) );
+				}
+
+				$community_url = add_query_arg( $query_args, buddypress()->members->admin->edit_profile_url );
+				$delete_link   = wp_nonce_url( $community_url, 'delete_avatar' ); ?>
+
+				<a href="<?php echo esc_url( $delete_link ); ?>" title="<?php esc_attr_e( 'Delete Profile Photo', 'buddypress' ); ?>" class="bp-xprofile-avatar-user-admin"><?php esc_html_e( 'Delete Profile Photo', 'buddypress' ); ?></a></li>
+
+			<?php endif; ?>
+
+		</div>
+		<?php
+	}
+
+}
+endif; // class_exists check
+
+// Load the xprofile user admin
+add_action( 'bp_init', array( 'BP_XProfile_User_Admin', 'register_xprofile_user_admin' ), 11 );

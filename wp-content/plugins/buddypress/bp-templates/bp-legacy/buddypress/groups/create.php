@@ -51,32 +51,35 @@
 				<h4><?php _e( 'Privacy Options', 'buddypress' ); ?></h4>
 
 				<div class="radio">
-					<label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-						<strong><?php _e( 'This is a public group', 'buddypress' ); ?></strong>
-						<ul>
-							<li><?php _e( 'Any site member can join this group.', 'buddypress' ); ?></li>
-							<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
-							<li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
-						</ul>
-					</label>
+					<label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> /> <strong><?php _e( 'This is a public group', 'buddypress' ); ?></strong></label>
+					<ul>
+						<li><?php _e( 'Any site member can join this group.', 'buddypress' ); ?></li>
+						<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
+						<li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
+					</ul>
 
-					<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
+
+					<label>
+						<input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> /> 
 						<strong><?php _e( 'This is a private group', 'buddypress' ); ?></strong>
-						<ul>
-							<li><?php _e( 'Only users who request membership and are accepted can join the group.', 'buddypress' ); ?></li>
-							<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
-							<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
-						</ul>
 					</label>
+					<ul>
+						<li><?php _e( 'Only users who request membership and are accepted can join the group.', 'buddypress' ); ?></li>
+						<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
+						<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+					</ul>
 
-					<label><input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
+
+					<label>
+						<input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> /> 
 						<strong><?php _e('This is a hidden group', 'buddypress' ); ?></strong>
-						<ul>
-							<li><?php _e( 'Only users who are invited can join the group.', 'buddypress' ); ?></li>
-							<li><?php _e( 'This group will not be listed in the groups directory or search results.', 'buddypress' ); ?></li>
-							<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
-						</ul>
 					</label>
+					<ul>
+						<li><?php _e( 'Only users who are invited can join the group.', 'buddypress' ); ?></li>
+						<li><?php _e( 'This group will not be listed in the groups directory or search results.', 'buddypress' ); ?></li>
+						<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+					</ul>
+
 				</div>
 
 				<h4><?php _e( 'Group Invitations', 'buddypress' ); ?></h4>
@@ -139,30 +142,30 @@
 					</div><!-- .left-menu -->
 
 					<div class="main-column">
-						<p><?php _e( "Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress' ); ?></p>
+						<p><?php _e( "Upload an image to use as a profile photo for this group. The image will be shown on the main group page, and in search results.", 'buddypress' ); ?></p>
 
 						<p>
 							<input type="file" name="file" id="file" />
-							<input type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ); ?>" />
+							<input type="submit" name="upload" id="upload" value="<?php esc_attr_e( 'Upload Image', 'buddypress' ); ?>" />
 							<input type="hidden" name="action" id="action" value="bp_avatar_upload" />
 						</p>
 
-						<p><?php _e( 'To skip the avatar upload process, hit the "Next Step" button.', 'buddypress' ); ?></p>
+						<p><?php _e( 'To skip the group profile photo upload process, hit the "Next Step" button.', 'buddypress' ); ?></p>
 					</div><!-- .main-column -->
 
 				<?php endif; ?>
 
 				<?php if ( 'crop-image' == bp_get_avatar_admin_step() ) : ?>
 
-					<h4><?php _e( 'Crop Group Avatar', 'buddypress' ); ?></h4>
+					<h4><?php _e( 'Crop Group Profile Photo', 'buddypress' ); ?></h4>
 
-					<img src="<?php bp_avatar_to_crop(); ?>" id="avatar-to-crop" class="avatar" alt="<?php _e( 'Avatar to crop', 'buddypress' ); ?>" />
+					<img src="<?php bp_avatar_to_crop(); ?>" id="avatar-to-crop" class="avatar" alt="<?php esc_attr_e( 'Profile photo to crop', 'buddypress' ); ?>" />
 
 					<div id="avatar-crop-pane">
-						<img src="<?php bp_avatar_to_crop(); ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e( 'Avatar preview', 'buddypress' ); ?>" />
+						<img src="<?php bp_avatar_to_crop(); ?>" id="avatar-crop-preview" class="avatar" alt="<?php esc_attr_e( 'Profile photo preview', 'buddypress' ); ?>" />
 					</div>
 
-					<input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e( 'Crop Image', 'buddypress' ); ?>" />
+					<input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php esc_attr_e( 'Crop Image', 'buddypress' ); ?>" />
 
 					<input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src(); ?>" />
 					<input type="hidden" name="upload" id="upload" />
@@ -258,28 +261,28 @@
 					<?php /* Previous Button */ ?>
 					<?php if ( !bp_is_first_group_creation_step() ) : ?>
 
-						<input type="button" value="<?php _e( 'Back to Previous Step', 'buddypress' ); ?>" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'" />
+						<input type="button" value="<?php esc_attr_e( 'Back to Previous Step', 'buddypress' ); ?>" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'" />
 
 					<?php endif; ?>
 
 					<?php /* Next Button */ ?>
 					<?php if ( !bp_is_last_group_creation_step() && !bp_is_first_group_creation_step() ) : ?>
 
-						<input type="submit" value="<?php _e( 'Next Step', 'buddypress' ); ?>" id="group-creation-next" name="save" />
+						<input type="submit" value="<?php esc_attr_e( 'Next Step', 'buddypress' ); ?>" id="group-creation-next" name="save" />
 
 					<?php endif;?>
 
 					<?php /* Create Button */ ?>
 					<?php if ( bp_is_first_group_creation_step() ) : ?>
 
-						<input type="submit" value="<?php _e( 'Create Group and Continue', 'buddypress' ); ?>" id="group-creation-create" name="save" />
+						<input type="submit" value="<?php esc_attr_e( 'Create Group and Continue', 'buddypress' ); ?>" id="group-creation-create" name="save" />
 
 					<?php endif; ?>
 
 					<?php /* Finish Button */ ?>
 					<?php if ( bp_is_last_group_creation_step() ) : ?>
 
-						<input type="submit" value="<?php _e( 'Finish', 'buddypress' ); ?>" id="group-creation-finish" name="save" />
+						<input type="submit" value="<?php esc_attr_e( 'Finish', 'buddypress' ); ?>" id="group-creation-finish" name="save" />
 
 					<?php endif; ?>
 				</div>

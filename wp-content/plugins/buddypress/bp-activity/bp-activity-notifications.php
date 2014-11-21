@@ -336,18 +336,60 @@ function bp_activity_at_mention_add_notification( $activity, $subject, $message,
 add_action( 'bp_activity_sent_mention_email', 'bp_activity_at_mention_add_notification', 10, 5 );
 
 /**
- * Remove activity notifications when a user clicks on them.
+ * Mark at-mention notifications as read when users visit their Mentions page.
  *
  * @since BuddyPress (1.5)
  *
  * @uses bp_notifications_mark_all_notifications_by_type()
  */
 function bp_activity_remove_screen_notifications() {
-	if ( bp_is_active( 'notifications' ) ) {
-		bp_notifications_mark_notifications_by_type( bp_loggedin_user_id(), buddypress()->activity->id, 'new_at_mention' );
+	if ( ! bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	// Only mark read if you're looking at your own mentions
+	if ( ! bp_is_my_profile() ) {
+		return;
+	}
+
+	bp_notifications_mark_notifications_by_type( bp_loggedin_user_id(), buddypress()->activity->id, 'new_at_mention' );
+}
+add_action( 'bp_activity_screen_mentions', 'bp_activity_remove_screen_notifications' );
+
+/**
+ * Mark at-mention notification as read when user visits the activity with the mention.
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_activity_remove_screen_notifications_single_activity_permalink( $activity ) {
+	if ( ! bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	// Mark as read any notifications for the current user related to this
+	// activity item
+	bp_notifications_mark_notifications_by_item_id( bp_loggedin_user_id(), $activity->id, buddypress()->activity->id, 'new_at_mention' );
+}
+add_action( 'bp_activity_screen_single_activity_permalink', 'bp_activity_remove_screen_notifications_single_activity_permalink' );
+
+/**
+ * Delete at-mention notifications when the corresponding activity item is deleted.
+ *
+ * @since BuddyPress (2.0.0)
+ *
+ * @param array $activity_ids_deleted IDs of deleted activity items.
+ */
+function bp_activity_at_mention_delete_notification( $activity_ids_deleted = array() ) {
+	// Let's delete all without checking if content contains any mentions
+	// to avoid a query to get the activity
+	if ( bp_is_active( 'notifications' ) && ! empty( $activity_ids_deleted ) ) {
+		foreach ( $activity_ids_deleted as $activity_id ) {
+			bp_notifications_delete_all_notifications_by_type( $activity_id, buddypress()->activity->id );
+		}
 	}
 }
-add_action( 'bp_activity_screen_my_activity',               'bp_activity_remove_screen_notifications' );
-add_action( 'bp_activity_screen_single_activity_permalink', 'bp_activity_remove_screen_notifications' );
-add_action( 'bp_activity_screen_mentions',                  'bp_activity_remove_screen_notifications' );
-
+add_action( 'bp_activity_deleted_activities', 'bp_activity_at_mention_delete_notification', 10 );

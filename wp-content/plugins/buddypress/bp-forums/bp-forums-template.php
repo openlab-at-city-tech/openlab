@@ -480,7 +480,7 @@ function bp_has_forum_topics( $args = '' ) {
 		'do_stickies'  => $do_stickies
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_forum_topics' );
 	extract( $r );
 
 	// If we're viewing a tag URL in the directory, let's override the type and
@@ -1524,7 +1524,7 @@ function bp_forum_pagination_count() {
 		if ( 'tags' == $forum_template->type && !empty( $forum_template->search_terms ) )
 			$pag_filter = sprintf( __( ' matching tag "%s"', 'buddypress' ), $forum_template->search_terms );
 
-		return apply_filters( 'bp_get_forum_pagination_count', sprintf( _n( 'Viewing topic %s to %s (of %d topic%s)', 'Viewing topic %s to %s (of %d total topics%s)', $total, 'buddypress' ), $from_num, $to_num, $total, $pag_filter ), $from_num, $to_num, $total );
+		return apply_filters( 'bp_get_forum_pagination_count', sprintf( _n( 'Viewing 1 topic', 'Viewing %1$s - %2$s of %3$s topics', (int) $forum_template->total_topic_count, 'buddypress' ), $from_num, $to_num, $total, $pag_filter ), $from_num, $to_num, $total );
 	}
 
 /**
@@ -1844,7 +1844,7 @@ function bp_has_forum_topic_posts( $args = '' ) {
 		'order'    => 'ASC'
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_forum_topic_posts' );
 	extract( $r, EXTR_SKIP );
 
 	if ( empty( $topic_id ) && bp_is_groups_component() && bp_is_current_action( 'forum' ) && bp_is_action_variable( 'topic', 0 ) && bp_action_variable( 1 ) )
@@ -2163,7 +2163,7 @@ function bp_the_topic_pagination_count() {
 	$to_num = bp_core_number_format( ( $start_num + ( $topic_template->pag_num - 1  ) > $topic_template->total_post_count ) ? $topic_template->total_post_count : $start_num + ( $topic_template->pag_num - 1 ) );
 	$total = bp_core_number_format( $topic_template->total_post_count );
 
-	echo apply_filters( 'bp_the_topic_pagination_count', sprintf( _n( 'Viewing post %1$s to %2$s (%3$s post)', 'Viewing post %1$s to %2$s (%3$s total posts)', $total, 'buddypress' ), $from_num, $to_num, $total ), $from_num, $to_num, $total );
+	echo apply_filters( 'bp_the_topic_pagination_count', sprintf( _n( 'Viewing 1 post', 'Viewing %1$s - %2$s of %3$s posts', (int) $topic_template->total_post_count, 'buddypress' ), $from_num, $to_num, $total ), $from_num, $to_num, $total );
 }
 
 /**

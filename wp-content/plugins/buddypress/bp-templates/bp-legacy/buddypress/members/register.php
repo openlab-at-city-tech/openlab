@@ -39,11 +39,12 @@
 
 				<label for="signup_password"><?php _e( 'Choose a Password', 'buddypress' ); ?> <?php _e( '(required)', 'buddypress' ); ?></label>
 				<?php do_action( 'bp_signup_password_errors' ); ?>
-				<input type="password" name="signup_password" id="signup_password" value="" />
+				<input type="password" name="signup_password" id="signup_password" value="" class="password-entry" />
+				<div id="pass-strength-result"></div>
 
 				<label for="signup_password_confirm"><?php _e( 'Confirm Password', 'buddypress' ); ?> <?php _e( '(required)', 'buddypress' ); ?></label>
 				<?php do_action( 'bp_signup_password_confirm_errors' ); ?>
-				<input type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
+				<input type="password" name="signup_password_confirm" id="signup_password_confirm" value="" class="password-entry-confirm" />
 
 				<?php do_action( 'bp_account_details_fields' ); ?>
 
@@ -66,94 +67,15 @@
 
 					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
-						<div class="editfield">
+						<div<?php bp_field_css_class( 'editfield' ); ?>>
 
-							<?php if ( 'textbox' == bp_get_the_profile_field_type() ) : ?>
+							<?php
+							$field_type = bp_xprofile_create_field_type( bp_get_the_profile_field_type() );
+							$field_type->edit_field_html();
 
-								<label for="<?php bp_the_profile_field_input_name(); ?>"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></label>
-								<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-								<input type="text" name="<?php bp_the_profile_field_input_name(); ?>" id="<?php bp_the_profile_field_input_name(); ?>" value="<?php bp_the_profile_field_edit_value(); ?>" />
+							do_action( 'bp_custom_profile_edit_fields_pre_visibility' );
 
-							<?php endif; ?>
-
-							<?php if ( 'textarea' == bp_get_the_profile_field_type() ) : ?>
-
-								<label for="<?php bp_the_profile_field_input_name(); ?>"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></label>
-								<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-								<textarea rows="5" cols="40" name="<?php bp_the_profile_field_input_name(); ?>" id="<?php bp_the_profile_field_input_name(); ?>"><?php bp_the_profile_field_edit_value(); ?></textarea>
-
-							<?php endif; ?>
-
-							<?php if ( 'selectbox' == bp_get_the_profile_field_type() ) : ?>
-
-								<label for="<?php bp_the_profile_field_input_name(); ?>"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></label>
-								<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-								<select name="<?php bp_the_profile_field_input_name(); ?>" id="<?php bp_the_profile_field_input_name(); ?>">
-									<?php bp_the_profile_field_options(); ?>
-								</select>
-
-							<?php endif; ?>
-
-							<?php if ( 'multiselectbox' == bp_get_the_profile_field_type() ) : ?>
-
-								<label for="<?php bp_the_profile_field_input_name(); ?>"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></label>
-								<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-								<select name="<?php bp_the_profile_field_input_name(); ?>" id="<?php bp_the_profile_field_input_name(); ?>" multiple="multiple">
-									<?php bp_the_profile_field_options(); ?>
-								</select>
-
-							<?php endif; ?>
-
-							<?php if ( 'radio' == bp_get_the_profile_field_type() ) : ?>
-
-								<div class="radio">
-									<span class="label"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></span>
-
-									<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-									<?php bp_the_profile_field_options(); ?>
-
-									<?php if ( !bp_get_the_profile_field_is_required() ) : ?>
-										<a class="clear-value" href="javascript:clear( '<?php bp_the_profile_field_input_name(); ?>' );"><?php _e( 'Clear', 'buddypress' ); ?></a>
-									<?php endif; ?>
-								</div>
-
-							<?php endif; ?>
-
-							<?php if ( 'checkbox' == bp_get_the_profile_field_type() ) : ?>
-
-								<div class="checkbox">
-									<span class="label"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></span>
-
-									<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-									<?php bp_the_profile_field_options(); ?>
-								</div>
-
-							<?php endif; ?>
-
-							<?php if ( 'datebox' == bp_get_the_profile_field_type() ) : ?>
-
-								<div class="datebox">
-									<label for="<?php bp_the_profile_field_input_name(); ?>_day"><?php bp_the_profile_field_name(); ?> <?php if ( bp_get_the_profile_field_is_required() ) : ?><?php _e( '(required)', 'buddypress' ); ?><?php endif; ?></label>
-									<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
-
-									<select name="<?php bp_the_profile_field_input_name(); ?>_day" id="<?php bp_the_profile_field_input_name(); ?>_day">
-										<?php bp_the_profile_field_options( 'type=day' ); ?>
-									</select>
-
-									<select name="<?php bp_the_profile_field_input_name(); ?>_month" id="<?php bp_the_profile_field_input_name(); ?>_month">
-										<?php bp_the_profile_field_options( 'type=month' ); ?>
-									</select>
-
-									<select name="<?php bp_the_profile_field_input_name(); ?>_year" id="<?php bp_the_profile_field_input_name(); ?>_year">
-										<?php bp_the_profile_field_options( 'type=year' ); ?>
-									</select>
-								</div>
-
-							<?php endif; ?>
-
-							<?php do_action( 'bp_custom_profile_edit_fields_pre_visibility' ); ?>
-
-							<?php if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
+							if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
 								<p class="field-visibility-settings-toggle" id="field-visibility-settings-toggle-<?php bp_the_profile_field_id() ?>">
 									<?php printf( __( 'This field can be seen by: <span class="current-visibility-level">%s</span>', 'buddypress' ), bp_get_the_profile_field_visibility_level_label() ) ?> <a href="#" class="visibility-toggle-link"><?php _ex( 'Change', 'Change profile field visibility level', 'buddypress' ); ?></a>
 								</p>
@@ -182,7 +104,7 @@
 
 					<?php endwhile; ?>
 
-					<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="<?php bp_the_profile_group_field_ids(); ?>" />
+					<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="<?php bp_the_profile_field_ids(); ?>" />
 
 					<?php endwhile; endif; endif; ?>
 
@@ -212,7 +134,7 @@
 						<?php do_action( 'bp_signup_blog_url_errors' ); ?>
 
 						<?php if ( is_subdomain_install() ) : ?>
-							http:// <input type="text" name="signup_blog_url" id="signup_blog_url" value="<?php bp_signup_blog_url_value(); ?>" /> .<?php bp_blogs_subdomain_base(); ?>
+							http:// <input type="text" name="signup_blog_url" id="signup_blog_url" value="<?php bp_signup_blog_url_value(); ?>" /> .<?php bp_signup_subdomain_base(); ?>
 						<?php else : ?>
 							<?php echo home_url( '/' ); ?> <input type="text" name="signup_blog_url" id="signup_blog_url" value="<?php bp_signup_blog_url_value(); ?>" />
 						<?php endif; ?>
@@ -221,7 +143,7 @@
 						<?php do_action( 'bp_signup_blog_title_errors' ); ?>
 						<input type="text" name="signup_blog_title" id="signup_blog_title" value="<?php bp_signup_blog_title_value(); ?>" />
 
-						<span class="label"><?php _e( 'I would like my site to appear in search engines, and in public listings around this network.', 'buddypress' ); ?>:</span>
+						<span class="label"><?php _e( 'I would like my site to appear in search engines, and in public listings around this network.', 'buddypress' ); ?></span>
 						<?php do_action( 'bp_signup_blog_privacy_errors' ); ?>
 
 						<label><input type="radio" name="signup_blog_privacy" id="signup_blog_privacy_public" value="public"<?php if ( 'public' == bp_get_signup_blog_privacy_value() || !bp_get_signup_blog_privacy_value() ) : ?> checked="checked"<?php endif; ?> /> <?php _e( 'Yes', 'buddypress' ); ?></label>
@@ -240,7 +162,7 @@
 			<?php do_action( 'bp_before_registration_submit_buttons' ); ?>
 
 			<div class="submit">
-				<input type="submit" name="signup_submit" id="signup_submit" value="<?php _e( 'Complete Sign Up', 'buddypress' ); ?>" />
+				<input type="submit" name="signup_submit" id="signup_submit" value="<?php esc_attr_e( 'Complete Sign Up', 'buddypress' ); ?>" />
 			</div>
 
 			<?php do_action( 'bp_after_registration_submit_buttons' ); ?>

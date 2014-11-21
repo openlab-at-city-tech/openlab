@@ -137,11 +137,19 @@ class BP_Activity_Activity {
 	public function populate() {
 		global $wpdb, $bp;
 
-		if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->activity->table_name} WHERE id = %d", $this->id ) ) ) {
-			$this->id                = $row->id;
-			$this->item_id           = $row->item_id;
-			$this->secondary_item_id = $row->secondary_item_id;
-			$this->user_id           = $row->user_id;
+		$row = wp_cache_get( $this->id, 'bp_activity' );
+
+		if ( false === $row ) {
+			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->activity->table_name} WHERE id = %d", $this->id ) );
+
+			wp_cache_set( $this->id, $row, 'bp_activity' );
+		}
+
+		if ( ! empty( $row ) ) {
+			$this->id                = (int) $row->id;
+			$this->item_id           = (int) $row->item_id;
+			$this->secondary_item_id = (int) $row->secondary_item_id;
+			$this->user_id           = (int) $row->user_id;
 			$this->primary_link      = $row->primary_link;
 			$this->component         = $row->component;
 			$this->type              = $row->type;
@@ -149,11 +157,24 @@ class BP_Activity_Activity {
 			$this->content           = $row->content;
 			$this->date_recorded     = $row->date_recorded;
 			$this->hide_sitewide     = $row->hide_sitewide;
-			$this->mptt_left         = $row->mptt_left;
-			$this->mptt_right        = $row->mptt_right;
+			$this->mptt_left         = (int) $row->mptt_left;
+			$this->mptt_right        = (int) $row->mptt_right;
 			$this->is_spam           = $row->is_spam;
+		}
 
-			bp_activity_update_meta_cache( $this->id );
+		// Generate dynamic 'action' when possible
+		$action = bp_activity_generate_action_string( $this );
+		if ( false !== $action ) {
+			$this->action = $action;
+
+		// If no callback is available, use the literal string from
+		// the database row
+		} else if ( ! empty( $row->action ) ) {
+			$this->action = $row->action;
+
+		// Provide a fallback to avoid PHP notices
+		} else {
+			$this->action = '';
 		}
 	}
 
@@ -236,6 +257,9 @@ class BP_Activity_Activity {
 	 *                     Default: false.
 	 *     @type array $meta_query An array of meta_query conditions.
 	 *                             See WP_Meta_Query::queries for description.
+	 *     @type array $date_query An array of date_query conditions.
+	 *                             See first parameter of WP_Date_Query::__construct()
+	 *                             for description.
 	 *     @type array $filter See BP_Activity_Activity::get_filter_sql().
 	 *     @type string $search_terms Limit results by a search term.
 	 *                                Default: false.
@@ -244,6 +268,11 @@ class BP_Activity_Activity {
 	 *     @type bool $show_hidden Whether to show items marked hide_sitewide.
 	 *                             Default: false.
 	 *     @type string $spam Spam status. Default: 'ham_only'.
+	 *     @type bool $update_meta_cache Whether to pre-fetch metadata for
+	 *           queried activity items. Default: true.
+	 *     @type string|bool $count_total If true, an additional DB query
+	 *           is run to count the total activity items for the query.
+	 *           Default: false.
 	 * }
 	 * @return array The array returned has two keys:
 	 *     - 'total' is the count of located activities
@@ -275,31 +304,37 @@ class BP_Activity_Activity {
 		}
 
 		$defaults = array(
-			'page'             => 1,          // The current page
-			'per_page'         => 25,         // Activity items per page
-			'max'              => false,      // Max number of items to return
-			'sort'             => 'DESC',     // ASC or DESC
-			'exclude'          => false,      // Array of ids to exclude
-			'in'               => false,      // Array of ids to limit query by (IN)
-			'meta_query'       => false,      // Filter by activitymeta
-			'filter'           => false,      // See self::get_filter_sql()
-			'search_terms'     => false,      // Terms to search by
-			'display_comments' => false,      // Whether to include activity comments
-			'show_hidden'      => false,      // Show items marked hide_sitewide
-			'spam'             => 'ham_only', // Spam status
+			'page'              => 1,          // The current page
+			'per_page'          => 25,         // Activity items per page
+			'max'               => false,      // Max number of items to return
+			'sort'              => 'DESC',     // ASC or DESC
+			'exclude'           => false,      // Array of ids to exclude
+			'in'                => false,      // Array of ids to limit query by (IN)
+			'meta_query'        => false,      // Filter by activitymeta
+			'date_query'        => false,      // Filter by date
+			'filter'            => false,      // See self::get_filter_sql()
+			'search_terms'      => false,      // Terms to search by
+			'display_comments'  => false,      // Whether to include activity comments
+			'show_hidden'       => false,      // Show items marked hide_sitewide
+			'spam'              => 'ham_only', // Spam status
+			'update_meta_cache' => true,
+			'count_total'       => false,
 		);
 		$r = wp_parse_args( $args, $defaults );
 		extract( $r );
 
 		// Select conditions
-		$select_sql = "SELECT DISTINCT a.*, u.user_email, u.user_nicename, u.user_login, u.display_name";
+		$select_sql = "SELECT DISTINCT a.id";
 
-		$from_sql = " FROM {$bp->activity->table_name} a LEFT JOIN {$wpdb->users} u ON a.user_id = u.ID";
+		$from_sql   = " FROM {$bp->activity->table_name} a";
 
-		$join_sql = '';
+		$join_sql   = '';
 
 		// Where conditions
 		$where_conditions = array();
+
+		// Excluded types
+		$excluded_types = array();
 
 		// Spam
 		if ( 'ham_only' == $spam )
@@ -309,8 +344,8 @@ class BP_Activity_Activity {
 
 		// Searching
 		if ( $search_terms ) {
-			$search_terms = esc_sql( $search_terms );
-			$where_conditions['search_sql'] = "a.content LIKE '%%" . esc_sql( like_escape( $search_terms ) ) . "%%'";
+			$search_terms_like = '%' . bp_esc_like( $search_terms ) . '%';
+			$where_conditions['search_sql'] = $wpdb->prepare( 'a.content LIKE %s', $search_terms_like );
 		}
 
 		// Filtering
@@ -348,11 +383,35 @@ class BP_Activity_Activity {
 			$where_conditions[] = $meta_query_sql['where'];
 		}
 
+		// Process date_query into SQL
+		$date_query_sql = self::get_date_query_sql( $date_query );
+
+		if ( ! empty( $date_query_sql ) ) {
+			$where_conditions['date'] = $date_query_sql;
+		}
+
 		// Alter the query based on whether we want to show activity item
 		// comments in the stream like normal comments or threaded below
 		// the activity.
 		if ( false === $display_comments || 'threaded' === $display_comments ) {
-			$where_conditions[] = "a.type != 'activity_comment'";
+			$excluded_types[] = 'activity_comment';
+		}
+
+		// Exclude 'last_activity' items unless the 'action' filter has
+		// been explicitly set
+		if ( empty( $filter['object'] ) ) {
+			$excluded_types[] = 'last_activity';
+		}
+
+		// Exclude 'new_member' items if xprofile component is not active
+		if ( ! bp_is_active( 'xprofile' ) ) {
+			$excluded_types[] = 'new_member';
+		}
+
+		// Build the excluded type sql part
+		if ( ! empty( $excluded_types ) ) {
+			$not_in = "'" . implode( "', '", esc_sql( $excluded_types ) ) . "'";
+			$where_conditions['excluded_types'] = "a.type NOT IN ({$not_in})";
 		}
 
 		// Filter the where conditions
@@ -377,42 +436,58 @@ class BP_Activity_Activity {
 			$index_hint_sql = '';
 		}
 
-		if ( !empty( $per_page ) && !empty( $page ) ) {
+		// Sanitize page and per_page parameters
+		$page     = absint( $page     );
+		$per_page = absint( $per_page );
 
-			// Make sure page values are absolute integers
-			$page     = absint( $page     );
-			$per_page = absint( $per_page );
+		$retval = array(
+			'activities'     => null,
+			'total'          => null,
+			'has_more_items' => null,
+		);
 
-			$pag_sql    = $wpdb->prepare( "LIMIT %d, %d", absint( ( $page - 1 ) * $per_page ), $per_page );
-			$activities = $wpdb->get_results( apply_filters( 'bp_activity_get_user_join_filter', "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort} {$pag_sql}", $select_sql, $from_sql, $where_sql, $sort, $pag_sql ) );
+		// Filter and return true to use the legacy query structure (not recommended)
+		if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $r ) ) {
+
+			// Legacy queries joined against the user table
+			$select_sql = "SELECT DISTINCT a.*, u.user_email, u.user_nicename, u.user_login, u.display_name";
+			$from_sql   = " FROM {$bp->activity->table_name} a LEFT JOIN {$wpdb->users} u ON a.user_id = u.ID";
+
+			if ( ! empty( $page ) && ! empty( $per_page ) ) {
+				$pag_sql    = $wpdb->prepare( "LIMIT %d, %d", absint( ( $page - 1 ) * $per_page ), $per_page );
+				$activities = $wpdb->get_results( apply_filters( 'bp_activity_get_user_join_filter', "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort} {$pag_sql}", $select_sql, $from_sql, $where_sql, $sort, $pag_sql ) );
+			} else {
+				$activities = $wpdb->get_results( apply_filters( 'bp_activity_get_user_join_filter', "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}", $select_sql, $from_sql, $where_sql, $sort ) );
+			}
+
 		} else {
-			$activities = $wpdb->get_results( apply_filters( 'bp_activity_get_user_join_filter', "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}", $select_sql, $from_sql, $where_sql, $sort ) );
+
+			// Query first for activity IDs
+			$activity_ids_sql = "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}";
+
+			if ( ! empty( $per_page ) && ! empty( $page ) ) {
+				// We query for $per_page + 1 items in order to
+				// populate the has_more_items flag
+				$activity_ids_sql .= $wpdb->prepare( " LIMIT %d, %d", absint( ( $page - 1 ) * $per_page ), $per_page + 1 );
+			}
+
+			$activity_ids_sql = apply_filters( 'bp_activity_paged_activities_sql', $activity_ids_sql, $r );
+
+			$activity_ids = $wpdb->get_col( $activity_ids_sql );
+
+			$retval['has_more_items'] = ! empty( $per_page ) && count( $activity_ids ) > $per_page;
+
+			// If we've fetched more than the $per_page value, we
+			// can discard the extra now
+			if ( ! empty( $per_page ) && count( $activity_ids ) === $per_page + 1 ) {
+				array_pop( $activity_ids );
+			}
+
+			$activities = self::get_activity_data( $activity_ids );
 		}
-
-		$total_activities_sql = apply_filters( 'bp_activity_total_activities_sql', "SELECT count(DISTINCT a.id) FROM {$bp->activity->table_name} a {$index_hint_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}", $where_sql, $sort );
-
-		$total_activities = $wpdb->get_var( $total_activities_sql );
 
 		// Get the fullnames of users so we don't have to query in the loop
-		if ( bp_is_active( 'xprofile' ) && !empty( $activities ) ) {
-			$activity_user_ids = wp_list_pluck( $activities, 'user_id' );
-			$activity_user_ids = implode( ',', wp_parse_id_list( $activity_user_ids ) );
-
-			if ( !empty( $activity_user_ids ) ) {
-				if ( $names = $wpdb->get_results( "SELECT user_id, value AS user_fullname FROM {$bp->profile->table_name_data} WHERE field_id = 1 AND user_id IN ({$activity_user_ids})" ) ) {
-					foreach ( (array) $names as $name )
-						$tmp_names[$name->user_id] = $name->user_fullname;
-
-					foreach ( (array) $activities as $i => $activity ) {
-						if ( !empty( $tmp_names[$activity->user_id] ) )
-							$activities[$i]->user_fullname = $tmp_names[$activity->user_id];
-					}
-
-					unset( $names );
-					unset( $tmp_names );
-				}
-			}
-		}
+		$activities = self::append_user_fullnames( $activities );
 
 		// Get activity meta
 		$activity_ids = array();
@@ -420,20 +495,177 @@ class BP_Activity_Activity {
 			$activity_ids[] = $activity->id;
 		}
 
-		if ( !empty( $activity_ids ) ) {
+		if ( ! empty( $activity_ids ) && $update_meta_cache ) {
 			bp_activity_update_meta_cache( $activity_ids );
 		}
 
 		if ( $activities && $display_comments )
 			$activities = BP_Activity_Activity::append_comments( $activities, $spam );
 
+		// Pre-fetch data associated with activity users and other objects
+		BP_Activity_Activity::prefetch_object_data( $activities );
+
+		// Generate action strings
+		$activities = BP_Activity_Activity::generate_action_strings( $activities );
+
+		$retval['activities'] = $activities;
+
 		// If $max is set, only return up to the max results
-		if ( !empty( $max ) ) {
-			if ( (int) $total_activities > (int) $max )
-				$total_activities = $max;
+		if ( ! empty( $r['count_total'] ) ) {
+
+			$total_activities_sql = apply_filters( 'bp_activity_total_activities_sql', "SELECT count(DISTINCT a.id) FROM {$bp->activity->table_name} a {$join_sql} {$where_sql}", $where_sql, $sort );
+			$total_activities     = $wpdb->get_var( $total_activities_sql );
+
+			if ( !empty( $max ) ) {
+				if ( (int) $total_activities > (int) $max )
+					$total_activities = $max;
+			}
+
+			$retval['total'] = $total_activities;
 		}
 
-		return array( 'activities' => $activities, 'total' => (int) $total_activities );
+		return $retval;
+	}
+
+	/**
+	 * Convert activity IDs to activity objects, as expected in template loop.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $activity_ids Array of activity IDs.
+	 * @return array
+	 */
+	protected static function get_activity_data( $activity_ids = array() ) {
+		global $wpdb;
+
+		// Bail if no activity ID's passed
+		if ( empty( $activity_ids ) ) {
+			return array();
+		}
+
+		// Get BuddyPress
+		$bp = buddypress();
+
+		$activities   = array();
+		$uncached_ids = bp_get_non_cached_ids( $activity_ids, 'bp_activity' );
+
+		// Prime caches as necessary
+		if ( ! empty( $uncached_ids ) ) {
+			// Format the activity ID's for use in the query below
+			$uncached_ids_sql = implode( ',', wp_parse_id_list( $uncached_ids ) );
+
+			// Fetch data from activity table, preserving order
+			$queried_adata = $wpdb->get_results( "SELECT * FROM {$bp->activity->table_name} WHERE id IN ({$uncached_ids_sql})");
+
+			// Put that data into the placeholders created earlier,
+			// and add it to the cache
+			foreach ( (array) $queried_adata as $adata ) {
+				wp_cache_set( $adata->id, $adata, 'bp_activity' );
+			}
+		}
+
+		// Now fetch data from the cache
+		foreach ( $activity_ids as $activity_id ) {
+			$activities[] = wp_cache_get( $activity_id, 'bp_activity' );
+		}
+
+		// Then fetch user data
+		$user_query = new BP_User_Query( array(
+			'user_ids'        => wp_list_pluck( $activities, 'user_id' ),
+			'populate_extras' => false,
+		) );
+
+		// Associated located user data with activity items
+		foreach ( $activities as $a_index => $a_item ) {
+			$a_user_id = intval( $a_item->user_id );
+			$a_user    = isset( $user_query->results[ $a_user_id ] ) ? $user_query->results[ $a_user_id ] : '';
+
+			if ( !empty( $a_user ) ) {
+				$activities[ $a_index ]->user_email    = $a_user->user_email;
+				$activities[ $a_index ]->user_nicename = $a_user->user_nicename;
+				$activities[ $a_index ]->user_login    = $a_user->user_login;
+				$activities[ $a_index ]->display_name  = $a_user->display_name;
+			}
+		}
+
+		return $activities;
+	}
+
+	/**
+	 * Append xProfile fullnames to an activity array.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $activities Activities array.
+	 * @return array
+	 */
+	protected static function append_user_fullnames( $activities ) {
+
+		if ( bp_is_active( 'xprofile' ) && ! empty( $activities ) ) {
+			$activity_user_ids = wp_list_pluck( $activities, 'user_id' );
+
+			if ( ! empty( $activity_user_ids ) ) {
+				$fullnames = bp_core_get_user_displaynames( $activity_user_ids );
+				if ( ! empty( $fullnames ) ) {
+					foreach ( (array) $activities as $i => $activity ) {
+						if ( ! empty( $fullnames[ $activity->user_id ] ) ) {
+							$activities[ $i ]->user_fullname = $fullnames[ $activity->user_id ];
+						}
+					}
+				}
+			}
+		}
+
+		return $activities;
+	}
+
+	/**
+	 * Pre-fetch data for objects associated with activity items.
+	 *
+	 * Activity items are associated with users, and often with other
+	 * BuddyPress data objects. Here, we pre-fetch data about these
+	 * associated objects, so that inline lookups - done primarily when
+	 * building action strings - do not result in excess database queries.
+	 *
+	 * The only object data required for activity component activity types
+	 * (activity_update and activity_comment) is related to users, and that
+	 * info is fetched separately in BP_Activity_Activity::get_activity_data().
+	 * So this method contains nothing but a filter that allows other
+	 * components, such as bp-friends and bp-groups, to hook in and prime
+	 * their own caches at the beginning of an activity loop.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $activities Array of activities.
+	 */
+	protected static function prefetch_object_data( $activities ) {
+		return apply_filters( 'bp_activity_prefetch_object_data', $activities );
+	}
+
+	/**
+	 * Generate action strings for the activities located in BP_Activity_Activity::get().
+	 *
+	 * If no string can be dynamically generated for a given item
+	 * (typically because the activity type has not been properly
+	 * registered), the static 'action' value pulled from the database will
+	 * be left in place.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $activities Array of activities.
+	 * @return array
+	 */
+	protected static function generate_action_strings( $activities ) {
+		foreach ( $activities as $key => $activity ) {
+			$generated_action = bp_activity_generate_action_string( $activity );
+			if ( false !== $generated_action ) {
+				$activity->action = $generated_action;
+			}
+
+			$activities[ $key ] = $activity;
+		}
+
+		return $activities;
 	}
 
 	/**
@@ -474,6 +706,33 @@ class BP_Activity_Activity {
 		}
 
 		return $sql_array;
+	}
+
+	/**
+	 * Get the SQL for the 'date_query' param in BP_Activity_Activity::get().
+	 *
+	 * We use BP_Date_Query, which extends WP_Date_Query, to do the heavy lifting
+	 * of parsing the date_query array and creating the necessary SQL clauses.
+	 * However, since BP_Activity_Activity::get() builds its SQL differently than
+	 * WP_Query, we have to alter the return value (stripping the leading AND
+	 * keyword from the query).
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param array $date_query An array of date_query parameters. See the
+	 *        documentation for the first parameter of WP_Date_Query.
+	 * @return string
+	 */
+	public static function get_date_query_sql( $date_query = array() ) {
+		$sql = '';
+
+		// Date query
+		if ( ! empty( $date_query ) && is_array( $date_query ) && class_exists( 'BP_Date_Query' ) ) {
+			$date_query = new BP_Date_Query( $date_query, 'date_recorded' );
+			$sql = preg_replace( '/^\sAND/', '', $date_query->get_sql() );
+		}
+
+		return $sql;
 	}
 
 	/**
@@ -701,15 +960,13 @@ class BP_Activity_Activity {
 	 * @return bool True on success.
 	 */
 	public static function delete_activity_meta_entries( $activity_ids = array() ) {
-		global $bp, $wpdb;
+		$activity_ids = wp_parse_id_list( $activity_ids );
 
-		$activity_ids = implode( ',', wp_parse_id_list( $activity_ids ) );
-
-		foreach ( (array) $activity_ids as $activity_id ) {
-			bp_activity_clear_meta_cache_for_activity( $activity_id );
+		foreach ( $activity_ids as $activity_id ) {
+			bp_activity_delete_meta( $activity_id );
 		}
 
-		return $wpdb->query( "DELETE FROM {$bp->activity->table_name_meta} WHERE activity_id IN ({$activity_ids})" );
+		return true;
 	}
 
 	/**
@@ -727,15 +984,17 @@ class BP_Activity_Activity {
 		$activity_comments = array();
 
 		// Now fetch the activity comments and parse them into the correct position in the activities array.
-		foreach( (array) $activities as $activity ) {
+		foreach ( (array) $activities as $activity ) {
 			$top_level_parent_id = 'activity_comment' == $activity->type ? $activity->item_id : 0;
 			$activity_comments[$activity->id] = BP_Activity_Activity::get_activity_comments( $activity->id, $activity->mptt_left, $activity->mptt_right, $spam, $top_level_parent_id );
 		}
 
 		// Merge the comments with the activity items
-		foreach( (array) $activities as $key => $activity )
-			if ( isset( $activity_comments[$activity->id] ) )
+		foreach ( (array) $activities as $key => $activity ) {
+			if ( isset( $activity_comments[$activity->id] ) ) {
 				$activities[$key]->children = $activity_comments[$activity->id];
+			}
+		}
 
 		return $activities;
 	}
@@ -762,7 +1021,15 @@ class BP_Activity_Activity {
 			$top_level_parent_id = $activity_id;
 		}
 
-		if ( !$comments = wp_cache_get( 'bp_activity_comments_' . $activity_id ) ) {
+		$comments = wp_cache_get( $activity_id, 'bp_activity_comments' );
+
+		// We store the string 'none' to cache the fact that the
+		// activity item has no comments
+		if ( 'none' === $comments ) {
+			$comments = false;
+
+		// A true cache miss
+		} else if ( empty( $comments ) ) {
 
 			// Select the user's fullname with the query
 			if ( bp_is_active( 'xprofile' ) ) {
@@ -784,12 +1051,24 @@ class BP_Activity_Activity {
 				$spam_sql = '';
 			}
 
-			// The mptt BETWEEN clause allows us to limit returned descendants to the right part of the tree
-			$sql = apply_filters( 'bp_activity_comments_user_join_filter', $wpdb->prepare( "SELECT a.*, u.user_email, u.user_nicename, u.user_login, u.display_name{$fullname_select} FROM {$bp->activity->table_name} a, {$wpdb->users} u{$fullname_from} WHERE u.ID = a.user_id {$fullname_where} AND a.type = 'activity_comment' {$spam_sql} AND a.item_id = %d AND a.mptt_left > %d AND a.mptt_left < %d ORDER BY a.date_recorded ASC", $top_level_parent_id, $left, $right ), $activity_id, $left, $right, $spam_sql );
+			// Legacy query - not recommended
+			$func_args = func_get_args();
+			if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $func_args ) ) {
+				$sql = apply_filters( 'bp_activity_comments_user_join_filter', $wpdb->prepare( "SELECT a.*, u.user_email, u.user_nicename, u.user_login, u.display_name{$fullname_select} FROM {$bp->activity->table_name} a, {$wpdb->users} u{$fullname_from} WHERE u.ID = a.user_id {$fullname_where} AND a.type = 'activity_comment' {$spam_sql} AND a.item_id = %d AND a.mptt_left > %d AND a.mptt_left < %d ORDER BY a.date_recorded ASC", $top_level_parent_id, $left, $right ), $activity_id, $left, $right, $spam_sql );
 
-			// Retrieve all descendants of the $root node
-			$descendants = $wpdb->get_results( $sql );
-			$ref         = array();
+				$descendants = $wpdb->get_results( $sql );
+
+			// We use the mptt BETWEEN clause to limit returned
+			// descendants to the correct part of the tree.
+			} else {
+				$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} a WHERE a.type = 'activity_comment' {$spam_sql} AND a.item_id = %d and a.mptt_left > %d AND a.mptt_left < %d ORDER BY a.date_recorded ASC", $top_level_parent_id, $left, $right );
+
+				$descendant_ids = $wpdb->get_col( $sql );
+				$descendants    = self::get_activity_data( $descendant_ids );
+				$descendants    = self::append_user_fullnames( $descendants );
+			}
+
+			$ref = array();
 
 			// Loop descendants and build an assoc array
 			foreach ( (array) $descendants as $d ) {
@@ -806,7 +1085,46 @@ class BP_Activity_Activity {
 					$ref[ $d->id ] =& $comments[ $d->id ];
 				}
 			}
-			wp_cache_set( 'bp_activity_comments_' . $activity_id, $comments, 'bp' );
+
+			// Calculate depth for each item
+			foreach ( $ref as &$r ) {
+				$depth = 1;
+				$parent_id = $r->secondary_item_id;
+				while ( $parent_id !== $r->item_id ) {
+					$depth++;
+
+					// When display_comments=stream, the
+					// parent comment may not be part of
+					// the returned results, so we manually
+					// fetch it
+					if ( empty( $ref[ $parent_id ] ) ) {
+						$direct_parent = new BP_Activity_Activity( $parent_id );
+						if ( isset( $direct_parent->secondary_item_id ) ) {
+							$parent_id = $direct_parent->secondary_item_id;
+						} else {
+							// Something went wrong
+							// Short-circuit the
+							// depth calculation
+							$parent_id = $r->item_id;
+						}
+					} else {
+						$parent_id = $ref[ $parent_id ]->secondary_item_id;
+					}
+				}
+				$r->depth = $depth;
+			}
+
+			// If we cache a value of false, it'll count as a cache
+			// miss the next time the activity comments are fetched.
+			// Storing the string 'none' is a hack workaround to
+			// avoid unnecessary queries.
+			if ( false === $comments ) {
+				$cache_value = 'none';
+			} else {
+				$cache_value = $comments;
+			}
+
+			wp_cache_set( $activity_id, $cache_value, 'bp_activity_comments' );
 		}
 
 		return $comments;
@@ -866,13 +1184,25 @@ class BP_Activity_Activity {
 	}
 
 	/**
-	 * Get a list of components that have recorded activity associated with them
+	 * Get a list of components that have recorded activity associated with them.
 	 *
+	 * @param bool $skip_last_activity If true, components will not be
+	 *        included if the only activity type associated with them is
+	 *        'last_activity'. (Since 2.0.0, 'last_activity' is stored in
+	 *        the activity table, but these items are not full-fledged
+	 *        activity items.) Default: true.
 	 * @return array List of component names.
 	 */
-	public static function get_recorded_components() {
+	public static function get_recorded_components( $skip_last_activity = true ) {
 		global $wpdb, $bp;
-		return $wpdb->get_col( "SELECT DISTINCT component FROM {$bp->activity->table_name} ORDER BY component ASC" );
+
+		if ( $skip_last_activity ) {
+			$components = $wpdb->get_col( "SELECT DISTINCT component FROM {$bp->activity->table_name} WHERE action != '' AND action != 'last_activity' ORDER BY component ASC" );
+		} else {
+			$components = $wpdb->get_col( "SELECT DISTINCT component FROM {$bp->activity->table_name} ORDER BY component ASC" );
+		}
+
+		return $components;
 	}
 
 	/**
@@ -910,13 +1240,15 @@ class BP_Activity_Activity {
 		global $wpdb;
 
 		// split items at the comma
-		$items_dirty = explode( ',', $items );
+		if ( ! is_array( $items ) ) {
+			$items = explode( ',', $items );
+		}
 
 		// array of prepared integers or quoted strings
 		$items_prepared = array();
 
 		// clean up and format each item
-		foreach ( $items_dirty as $item ) {
+		foreach ( $items as $item ) {
 			// clean up the string
 			$item = trim( $item );
 			// pass everything through prepare for security and to safely quote strings
@@ -933,21 +1265,25 @@ class BP_Activity_Activity {
 	/**
 	 * Create filter SQL clauses.
 	 *
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 *
-	 * @param array $filter_array Fields and values to filter by. Should be
-	 *     in the format:
-	 *         $filter_array = array(
-	 *             'filter1' => $value,
-	 *             'filter2' => $value,
-	 *         )
-	 *     Possible filters are as follows. Each can be either a single
-	 *     string, a comma-separated list, or an array of values.
-	 *       - 'user_id' User ID(s)
-	 *       - 'object' Corresponds to the 'component' column in the database.
-	 *       - 'action' Corresponds to the 'type' column in the database.
-	 *       - 'primary_id' Corresponds to the 'item_id' column in the database.
-	 *       - 'secondary_id' Corresponds to the 'secondary_item_id' column in the database.
+	 * @param array $filter_array {
+	 *     Fields and values to filter by.
+	 *     @type array|string|id $user_id User ID(s).
+	 *     @type array|string $object Corresponds to the 'component'
+	 *           column in the database.
+	 *     @type array|string $action Corresponds to the 'type' column
+	 *           in the database.
+	 *     @type array|string|int $primary_id Corresponds to the 'item_id'
+	 *           column in the database.
+	 *     @type array|string|int $secondary_id Corresponds to the
+	 *           'secondary_item_id' column in the database.
+	 *     @type int $offset Return only those items with an ID greater
+	 *           than the offset value.
+	 *     @type string $since Return only those items that have a
+	 *           date_recorded value greater than a given MySQL-formatted
+	 *           date.
+	 * }
 	 * @return string The filter clause, for use in a SQL query.
 	 */
 	public static function get_filter_sql( $filter_array ) {
@@ -968,7 +1304,7 @@ class BP_Activity_Activity {
 
 		if ( !empty( $filter_array['action'] ) ) {
 			$action_sql = BP_Activity_Activity::get_in_operator_sql( 'a.type', $filter_array['action'] );
-			if ( !empty( $action_sql ) )
+			if ( ! empty( $action_sql ) )
 				$filter_sql[] = $action_sql;
 		}
 
@@ -982,6 +1318,20 @@ class BP_Activity_Activity {
 			$sid_sql = BP_Activity_Activity::get_in_operator_sql( 'a.secondary_item_id', $filter_array['secondary_id'] );
 			if ( !empty( $sid_sql ) )
 				$filter_sql[] = $sid_sql;
+		}
+
+		if ( ! empty( $filter_array['offset'] ) ) {
+			$sid_sql = absint( $filter_array['offset'] );
+			$filter_sql[] = "a.id >= {$sid_sql}";
+		}
+
+		if ( ! empty( $filter_array['since'] ) ) {
+			// Validate that this is a proper Y-m-d H:i:s date
+			// Trick: parse to UNIX date then translate back
+			$translated_date = date( 'Y-m-d H:i:s', strtotime( $filter_array['since'] ) );
+			if ( $translated_date === $filter_array['since'] ) {
+				$filter_sql[] = "a.date_recorded > '{$translated_date}'";
+			}
 		}
 
 		if ( empty( $filter_sql ) )

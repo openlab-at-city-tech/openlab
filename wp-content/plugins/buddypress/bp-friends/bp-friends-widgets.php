@@ -20,6 +20,13 @@ function bp_friends_register_widgets() {
 		return;
 	}
 
+	// The Friends widget works only when looking an a displayed user,
+	// and the concept of "displayed user" doesn't exist on non-root blogs,
+	// so we don't register the widget there.
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
 	add_action( 'widgets_init', create_function( '', 'return register_widget("BP_Core_Friends_Widget");' ) );
 }
 add_action( 'bp_register_widgets', 'bp_friends_register_widgets' );
@@ -59,7 +66,7 @@ class BP_Core_Friends_Widget extends WP_Widget {
 		}
 
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'bp_core_widget_friends-js', BP_PLUGIN_URL . "bp-friends/js/widget-friends{$min}.js", array( 'jquery' ), bp_get_version() );
+		wp_enqueue_script( 'bp_core_widget_friends-js', buddypress()->plugin_url . "bp-friends/js/widget-friends{$min}.js", array( 'jquery' ), bp_get_version() );
 
 		$user_id = bp_displayed_user_id();
 		$link = trailingslashit( bp_displayed_user_domain() . bp_get_friends_slug() );

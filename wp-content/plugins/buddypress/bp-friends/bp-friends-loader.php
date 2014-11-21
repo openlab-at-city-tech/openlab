@@ -18,11 +18,11 @@ class BP_Friends_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5.0)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'friends',
-			__( 'Friend Connections', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			_x( 'Friend Connections', 'Friends screen page <title>', 'buddypress' ),
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 60
 			)
@@ -38,6 +38,7 @@ class BP_Friends_Component extends BP_Component {
 	 */
 	public function includes( $includes = array() ) {
 		$includes = array(
+			'cache',
 			'actions',
 			'screens',
 			'filters',
@@ -112,8 +113,10 @@ class BP_Friends_Component extends BP_Component {
 		$bp = buddypress();
 
 		// Add 'Friends' to the main navigation
+		$count    = friends_get_total_friend_count();
+		$class    = ( 0 === $count ) ? 'no-count' : 'count';
 		$main_nav = array(
-			'name'                => sprintf( __( 'Friends <span>%d</span>', 'buddypress' ), friends_get_total_friend_count() ),
+			'name'                => sprintf( __( 'Friends <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) ),
 			'slug'                => $this->slug,
 			'position'            => 60,
 			'screen_function'     => 'friends_screen_my_friends',
@@ -134,7 +137,7 @@ class BP_Friends_Component extends BP_Component {
 
 		// Add the subnav items to the friends nav item
 		$sub_nav[] = array(
-			'name'            => __( 'Friendships', 'buddypress' ),
+			'name'            => _x( 'Friendships', 'Friends screen sub nav', 'buddypress' ),
 			'slug'            => 'my-friends',
 			'parent_url'      => $friends_link,
 			'parent_slug'     => bp_get_friends_slug(),
@@ -144,7 +147,7 @@ class BP_Friends_Component extends BP_Component {
 		);
 
 		$sub_nav[] = array(
-			'name'            => __( 'Requests',   'buddypress' ),
+			'name'            => _x( 'Requests', 'Friends screen sub nav', 'buddypress' ),
 			'slug'            => 'requests',
 			'parent_url'      => $friends_link,
 			'parent_slug'     => bp_get_friends_slug(),
@@ -179,11 +182,11 @@ class BP_Friends_Component extends BP_Component {
 			// Pending friend requests
 			$count = count( friends_get_friendship_request_user_ids( bp_loggedin_user_id() ) );
 			if ( !empty( $count ) ) {
-				$title   = sprintf( __( 'Friends <span class="count">%s</span>',          'buddypress' ), number_format_i18n( $count ) );
-				$pending = sprintf( __( 'Pending Requests <span class="count">%s</span>', 'buddypress' ), number_format_i18n( $count ) );
+				$title   = sprintf( _x( 'Friends <span class="count">%s</span>', 'My Account Friends menu', 'buddypress' ), number_format_i18n( $count ) );
+				$pending = sprintf( _x( 'Pending Requests <span class="count">%s</span>', 'My Account Friends menu sub nav', 'buddypress' ), number_format_i18n( $count ) );
 			} else {
-				$title   = __( 'Friends',             'buddypress' );
-				$pending = __( 'No Pending Requests', 'buddypress' );
+				$title   = _x( 'Friends', 'My Account Friends menu', 'buddypress' );
+				$pending = _x( 'No Pending Requests','My Account Friends menu sub nav', 'buddypress' );
 			}
 
 			// Add the "My Account" sub menus
@@ -194,11 +197,11 @@ class BP_Friends_Component extends BP_Component {
 				'href'   => trailingslashit( $friends_link )
 			);
 
-			// My Groups
+			// My Friends
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-friendships',
-				'title'  => __( 'Friendships', 'buddypress' ),
+				'title'  => _x( 'Friendships', 'My Account Friends menu sub nav', 'buddypress' ),
 				'href'   => trailingslashit( $friends_link )
 			);
 
@@ -217,7 +220,7 @@ class BP_Friends_Component extends BP_Component {
 	/**
 	 * Set up the title for pages and <title>.
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		// Adjust title

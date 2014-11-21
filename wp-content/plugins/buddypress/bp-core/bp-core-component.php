@@ -107,6 +107,24 @@ class BP_Component {
 	 */
 	public $root_slug = '';
 
+	/**
+	 * Metadata tables for the component (if applicable)
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @var array
+	 */
+	public $meta_tables = array();
+
+	/**
+	 * Global tables for the component (if applicable)
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @var array
+	 */
+	public $global_tables = array();
+
 	/** Methods ***************************************************************/
 
 	/**
@@ -181,6 +199,8 @@ class BP_Component {
 	 *           component directory search box. Eg, 'Search Groups...'.
 	 *     @type array $global_tables Optional. An array of database table
 	 *           names.
+	 *     @type array $meta_tables Optional. An array of metadata table
+	 *           names.
 	 * }
 	 */
 	public function setup_globals( $args = array() ) {
@@ -195,9 +215,11 @@ class BP_Component {
 			'slug'                  => $this->id,
 			'root_slug'             => $default_root_slug,
 			'has_directory'         => false,
+			'directory_title'       => '',
 			'notification_callback' => '',
 			'search_string'         => '',
-			'global_tables'         => ''
+			'global_tables'         => '',
+			'meta_tables'           => '',
 		) );
 
 		// Slug used for permalink URI chunk after root
@@ -209,22 +231,23 @@ class BP_Component {
 		// Does this component have a top-level directory?
 		$this->has_directory         = apply_filters( 'bp_' . $this->id . '_has_directory',         $r['has_directory']         );
 
+		// Does this component have a top-level directory?
+		$this->directory_title       = apply_filters( 'bp_' . $this->id . '_directory_title',       $r['directory_title']         );
+
 		// Search string
 		$this->search_string         = apply_filters( 'bp_' . $this->id . '_search_string',         $r['search_string']         );
 
 		// Notifications callback
 		$this->notification_callback = apply_filters( 'bp_' . $this->id . '_notification_callback', $r['notification_callback'] );
 
-		// Set up global table names
-		if ( !empty( $r['global_tables'] ) ) {
+		// Set the global table names, if applicable
+		if ( ! empty( $r['global_tables'] ) ) {
+			$this->register_global_tables( $r['global_tables'] );
+		}
 
-			// This filter allows for component-specific filtering of table names
-			// To filter *all* tables, use the 'bp_core_get_table_prefix' filter instead
-			$r['global_tables'] = apply_filters( 'bp_' . $this->id . '_global_tables', $r['global_tables'] );
-
-			foreach ( $r['global_tables'] as $global_name => $table_name ) {
-				$this->$global_name = $table_name;
-			}
+		// Set the metadata table, if applicable
+		if ( ! empty( $r['meta_tables'] ) ) {
+			$this->register_meta_tables( $r['meta_tables'] );
 		}
 
 		/** BuddyPress ********************************************************/
@@ -269,31 +292,30 @@ class BP_Component {
 	public function includes( $includes = array() ) {
 
 		// Bail if no files to include
-		if ( empty( $includes ) )
-			return;
+		if ( ! empty( $includes ) ) {
+			$slashed_path = trailingslashit( $this->path );
 
-		$slashed_path = trailingslashit( $this->path );
+			// Loop through files to be included
+			foreach ( (array) $includes as $file ) {
 
-		// Loop through files to be included
-		foreach ( (array) $includes as $file ) {
+				$paths = array(
 
-			$paths = array(
+					// Passed with no extension
+					'bp-' . $this->id . '/bp-' . $this->id . '-' . $file  . '.php',
+					'bp-' . $this->id . '-' . $file . '.php',
+					'bp-' . $this->id . '/' . $file . '.php',
 
-				// Passed with no extension
-				'bp-' . $this->id . '/bp-' . $this->id . '-' . $file  . '.php',
-				'bp-' . $this->id . '-' . $file . '.php',
-				'bp-' . $this->id . '/' . $file . '.php',
+					// Passed with extension
+					$file,
+					'bp-' . $this->id . '-' . $file,
+					'bp-' . $this->id . '/' . $file,
+				);
 
-				// Passed with extension
-				$file,
-				'bp-' . $this->id . '-' . $file,
-				'bp-' . $this->id . '/' . $file,
-			);
-
-			foreach ( $paths as $path ) {
-				if ( @is_file( $slashed_path . $path ) ) {
-					require( $slashed_path . $path );
-					break;
+				foreach ( $paths as $path ) {
+					if ( @is_file( $slashed_path . $path ) ) {
+						require( $slashed_path . $path );
+						break;
+					}
 				}
 			}
 		}
@@ -314,6 +336,9 @@ class BP_Component {
 
 		// Setup globals
 		add_action( 'bp_setup_globals',          array( $this, 'setup_globals'          ), 10 );
+
+		// Set up canonical stack
+		add_action( 'bp_setup_canonical_stack',  array( $this, 'setup_canonical_stack'  ), 10 );
 
 		// Include required files. Called early to ensure that BP core
 		// components are loaded before plugins that hook their loader functions
@@ -355,6 +380,13 @@ class BP_Component {
 		// Additional actions can be attached here
 		do_action( 'bp_' . $this->id . '_setup_actions' );
 	}
+
+	/**
+	 * Set up the canonical URL stack for this component.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 */
+	public function setup_canonical_stack() {}
 
 	/**
 	 * Set up component navigation.
@@ -403,12 +435,14 @@ class BP_Component {
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
 
 		// Bail if this is an ajax request
-		if ( defined( 'DOING_AJAX' ) )
+		if ( defined( 'DOING_AJAX' ) ) {
 			return;
+		}
 
 		// Do not proceed if BP_USE_WP_ADMIN_BAR constant is not set or is false
-		if ( !bp_use_wp_admin_bar() )
+		if ( ! bp_use_wp_admin_bar() ) {
 			return;
+		}
 
 		// Filter the passed admin nav
 		$wp_admin_nav = apply_filters( 'bp_' . $this->id . '_admin_nav', $wp_admin_nav );
@@ -441,6 +475,65 @@ class BP_Component {
 	 */
 	public function setup_title() {
 		do_action(  'bp_' . $this->id . '_setup_title' );
+	}
+
+	/**
+	 * Register global tables for the component, so that it may use WordPress's database API.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $tables
+	 */
+	public function register_global_tables( $tables = array() ) {
+
+		// This filter allows for component-specific filtering of table names
+		// To filter *all* tables, use the 'bp_core_get_table_prefix' filter instead
+		$tables = apply_filters( 'bp_' . $this->id . '_global_tables', $tables );
+
+		// Add to the BuddyPress global object
+		if ( !empty( $tables ) && is_array( $tables ) ) {
+			foreach ( $tables as $global_name => $table_name ) {
+				$this->$global_name = $table_name;
+			}
+
+			// Keep a record of the metadata tables in the component
+			$this->global_tables = $tables;
+		}
+
+		do_action( 'bp_' . $this->id . '_register_global_tables' );
+	}
+
+	/**
+	 * Register component metadata tables.
+	 *
+	 * Metadata tables are registered in the $wpdb global, for
+	 * compatibility with the WordPress metadata API.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $tables
+	 */
+	public function register_meta_tables( $tables = array() ) {
+		global $wpdb;
+
+		// This filter allows for component-specific filtering of table names
+		// To filter *all* tables, use the 'bp_core_get_table_prefix' filter instead
+		$tables = apply_filters( 'bp_' . $this->id . '_meta_tables', $tables );
+
+		/**
+		 * Add the name of each metadata table to WPDB to allow BuddyPress
+		 * components to play nicely with the WordPress metadata API.
+		 */
+		if ( !empty( $tables ) && is_array( $tables ) ) {
+			foreach( $tables as $meta_prefix => $table_name ) {
+				$wpdb->{$meta_prefix . 'meta'} = $table_name;
+			}
+
+			// Keep a record of the metadata tables in the component
+			$this->meta_tables = $tables;
+		}
+
+		do_action( 'bp_' . $this->id . '_register_meta_tables' );
 	}
 
 	/**

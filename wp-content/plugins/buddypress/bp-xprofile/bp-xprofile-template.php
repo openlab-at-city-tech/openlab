@@ -24,8 +24,8 @@ class BP_XProfile_Data_Template {
 	var $in_the_loop;
 	var $user_id;
 
-	function __construct( $user_id, $profile_group_id, $hide_empty_groups = false, $fetch_fields = false, $fetch_field_data = false, $exclude_groups = false, $exclude_fields = false, $hide_empty_fields = false, $fetch_visibility_level = false ) {
-		$this->groups = BP_XProfile_Group::get( array(
+	function __construct( $user_id, $profile_group_id, $hide_empty_groups = false, $fetch_fields = false, $fetch_field_data = false, $exclude_groups = false, $exclude_fields = false, $hide_empty_fields = false, $fetch_visibility_level = false, $update_meta_cache = true ) {
+		$this->groups = bp_xprofile_get_groups( array(
 			'profile_group_id'    => $profile_group_id,
 			'user_id'             => $user_id,
 			'hide_empty_groups'   => $hide_empty_groups,
@@ -34,7 +34,8 @@ class BP_XProfile_Data_Template {
 			'fetch_field_data'    => $fetch_field_data,
 			'fetch_visibility_level' => $fetch_visibility_level,
 			'exclude_groups'      => $exclude_groups,
-			'exclude_fields'      => $exclude_fields
+			'exclude_fields'      => $exclude_fields,
+			'update_meta_cache'   => $update_meta_cache,
 		) );
 
 		$this->group_count = count($this->groups);
@@ -51,9 +52,13 @@ class BP_XProfile_Data_Template {
 	function next_group() {
 		$this->current_group++;
 
-		$this->group         = $this->groups[$this->current_group];
-		$this->group->fields = apply_filters( 'xprofile_group_fields', $this->group->fields, $this->group->id );
-		$this->field_count   = count( $this->group->fields );
+		$this->group       = $this->groups[$this->current_group];
+		$this->field_count = 0;
+
+		if( ! empty( $this->group->fields ) ) {
+			$this->group->fields = apply_filters( 'xprofile_group_fields', $this->group->fields, $this->group->id );
+			$this->field_count   = count( $this->group->fields );
+		}
 
 		return $this->group;
 	}
@@ -137,9 +142,14 @@ class BP_XProfile_Data_Template {
 
 		$field = $this->next_field();
 
-		$value = !empty( $field->data ) && !empty( $field->data->value ) ? maybe_unserialize( $field->data->value ) : false;
+		// Valid field values of 0 or '0' get caught by empty(), so we have an extra check for these. See #BP5731
+		if ( ! empty( $field->data ) && ( ! empty( $field->data->value ) || '0' == $field->data->value ) ) {
+			$value = maybe_unserialize( $field->data->value );
+		} else {
+			$value = false;
+		}
 
-		if ( !empty( $value ) ) {
+		if ( ! empty( $value ) || '0' == $value ) {
 			$this->field_has_data = true;
 		} else {
 			$this->field_has_data = false;
@@ -170,13 +180,14 @@ function bp_has_profile( $args = '' ) {
 		'fetch_field_data'    => true,
 		'fetch_visibility_level' => $fetch_visibility_level_default,
 		'exclude_groups'      => false, // Comma-separated list of profile field group IDs to exclude
-		'exclude_fields'      => false  // Comma-separated list of profile field IDs to exclude
+		'exclude_fields'      => false,  // Comma-separated list of profile field IDs to exclude
+		'update_meta_cache'   => true,
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'has_profile' );
 	extract( $r, EXTR_SKIP );
 
-	$profile_template = new BP_XProfile_Data_Template( $user_id, $profile_group_id, $hide_empty_groups, $fetch_fields, $fetch_field_data, $exclude_groups, $exclude_fields, $hide_empty_fields, $fetch_visibility_level );
+	$profile_template = new BP_XProfile_Data_Template( $user_id, $profile_group_id, $hide_empty_groups, $fetch_fields, $fetch_field_data, $exclude_groups, $exclude_fields, $hide_empty_fields, $fetch_visibility_level, $update_meta_cache );
 	return apply_filters( 'bp_has_profile', $profile_template->has_groups(), $profile_template );
 }
 
@@ -212,9 +223,20 @@ function bp_field_css_class( $class = false ) {
 		// Set a class with the field name (sanitized)
 		$css_classes[] = 'field_' . sanitize_title( $profile_template->field->name );
 
+		// Set a class indicating whether the field is required or optional
+		if ( ! empty( $profile_template->field->is_required ) ) {
+			$css_classes[] = 'required-field';
+		} else {
+			$css_classes[] = 'optional-field';
+		}
+
+		// Add the field visibility level
+		$css_classes[] = 'visibility-' . esc_attr( bp_get_the_profile_field_visibility_level() );
+
 		if ( $profile_template->current_field % 2 == 1 )
 			$css_classes[] = 'alt';
 
+		$css_classes[] = 'field_type_' . sanitize_title( $profile_template->field->type );
 		$css_classes = apply_filters_ref_array( 'bp_field_css_classes', array( &$css_classes ) );
 
 		return apply_filters( 'bp_get_field_css_class', ' class="' . implode( ' ', $css_classes ) . '"' );
@@ -263,7 +285,7 @@ function bp_the_profile_group_description() {
 }
 	function bp_get_the_profile_group_description() {
 		global $group;
-		echo apply_filters( 'bp_get_the_profile_group_description', $group->description );
+		return apply_filters( 'bp_get_the_profile_group_description', $group->description );
 	}
 
 function bp_the_profile_group_edit_form_action() {
@@ -282,10 +304,44 @@ function bp_the_profile_group_field_ids() {
 		global $group;
 
 		$field_ids = '';
-		foreach ( (array) $group->fields as $field )
-			$field_ids .= $field->id . ',';
+
+		if ( !empty( $group->fields ) ) {
+			foreach ( (array) $group->fields as $field ) {
+				$field_ids .= $field->id . ',';
+			}
+		}
 
 		return substr( $field_ids, 0, -1 );
+	}
+
+/**
+ * Output a comma-separated list of field IDs that are to be submitted on profile edit.
+ *
+ * @since BuddyPress (2.1.0)
+ */
+function bp_the_profile_field_ids() {
+	echo bp_get_the_profile_field_ids();
+}
+	/**
+	 * Generate a comma-separated list of field IDs that are to be submitted on profile edit.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @return string
+	 */
+	function bp_get_the_profile_field_ids() {
+		global $profile_template;
+
+		$field_ids = array();
+		foreach ( $profile_template->groups as $group ) {
+			if ( ! empty( $group->fields ) ) {
+				$field_ids = array_merge( $field_ids, wp_list_pluck( $group->fields, 'id' ) );
+			}
+		}
+
+		$field_ids = implode( ',', wp_parse_id_list( $field_ids ) );
+
+		return apply_filters( 'bp_get_the_profile_field_ids', $field_ids );
 	}
 
 function bp_profile_fields() {
@@ -380,11 +436,7 @@ function bp_the_profile_field_input_name() {
 	function bp_get_the_profile_field_input_name() {
 		global $field;
 
-		$array_box = false;
-		if ( 'multiselectbox' == $field->type )
-			$array_box = '[]';
-
-		return apply_filters( 'bp_get_the_profile_field_input_name', 'field_' . $field->id . $array_box );
+		return apply_filters( 'bp_get_the_profile_field_input_name', 'field_' . $field->id );
 	}
 
 /**
@@ -417,14 +469,13 @@ function bp_get_the_profile_field_errors_action() {
  *
  * @param array $args Specify type for datebox. Allowed 'day', 'month', 'year'.
  */
-function bp_the_profile_field_options( $args = '' ) {
+function bp_the_profile_field_options( $args = array() ) {
 	echo bp_get_the_profile_field_options( $args );
 }
 	/**
 	 * bp_get_the_profile_field_options()
 	 *
-	 * Retrieves field options HTML for field types of 'selectbox', 'multiselectbox',
-	 * 'radio', 'checkbox', and 'datebox'.
+	 * Retrieves field options HTML for field types of 'selectbox', 'multiselectbox', 'radio', 'checkbox', and 'datebox'.
 	 *
 	 * @package BuddyPress Xprofile
 	 * @since BuddyPress (1.1)
@@ -432,280 +483,41 @@ function bp_the_profile_field_options( $args = '' ) {
 	 * @uses BP_XProfile_Field::get_children()
 	 * @uses BP_XProfile_ProfileData::get_value_byid()
 	 *
-	 * @param array $args Specify type for datebox. Allowed 'day', 'month', 'year'.
+	 * @param array $args {
+	 *     Array of optional arguments.
+	 *     @type string|bool $type Type of datebox. False if it's not a
+	 *           datebox, otherwise 'day, 'month', or 'year'. Default: false.
+	 *     @type int $user_id ID of the user whose profile values should be
+	 *           used when rendering options. Default: displayed user.
+	 * }
 	 */
-	function bp_get_the_profile_field_options( $args = '' ) {
+	function bp_get_the_profile_field_options( $args = array() ) {
 		global $field;
 
-		$defaults = array(
-			'type' => false,
-		);
+		$args = bp_parse_args( $args, array(
+			'type'    => false,
+			'user_id' => bp_displayed_user_id(),
+		), 'get_the_profile_field_options' );
 
-		$r = wp_parse_args( $args, $defaults );
-		extract( $r, EXTR_SKIP );
-
-		// In some cases, the $field global is not an instantiation of the BP_XProfile_Field
-		// class. However, we have to make sure that all data originally in $field gets
-		// merged back in, after reinstantiation.
-		if ( !method_exists( $field, 'get_children' ) ) {
+		/**
+		 * In some cases, the $field global is not an instantiation of the BP_XProfile_Field class.
+		 * However, we have to make sure that all data originally in $field gets merged back in, after reinstantiation.
+		 */
+		if ( ! method_exists( $field, 'get_children' ) ) {
 			$field_obj = new BP_XProfile_Field( $field->id );
 
-			foreach( $field as $field_prop => $field_prop_value ) {
-				if ( !isset( $field_obj->{$field_prop} ) ) {
+			foreach ( $field as $field_prop => $field_prop_value ) {
+				if ( ! isset( $field_obj->{$field_prop} ) )
 					$field_obj->{$field_prop} = $field_prop_value;
-				}
 			}
 
 			$field = $field_obj;
 		}
 
-		$options = $field->get_children();
-
-		// Setup some defaults
-		$html     = '';
-		$selected = '';
-
-		switch ( $field->type ) {
-			case 'selectbox':
-
-				$html .= '<option value="">' . /* translators: no option picked in select box */ __( '----', 'buddypress' ) . '</option>';
-
-				$original_option_values = '';
-				$original_option_values = maybe_unserialize( BP_XProfile_ProfileData::get_value_byid( $field->id ) );
-
-				if ( empty( $original_option_values ) && !empty( $_POST['field_' . $field->id] ) ) {
-					$original_option_values = $_POST['field_' . $field->id];
-				}
-
-				$option_values = (array) $original_option_values;
-
-				for ( $k = 0, $count = count( $options ); $k < $count; ++$k ) {
-
-					// Check for updated posted values, but errors preventing them from being saved first time
-					foreach( $option_values as $i => $option_value ) {
-						if ( isset( $_POST['field_' . $field->id] ) && $_POST['field_' . $field->id] != $option_value ) {
-							if ( !empty( $_POST['field_' . $field->id] ) ) {
-								$option_values[$i] = $_POST['field_' . $field->id];
-							}
-						}
-					}
-
-					$selected = '';
-
-					// Run the allowed option name through the before_save filter, so we'll be sure to get a match
-					$allowed_options = xprofile_sanitize_data_value_before_save( $options[$k]->name, false, false );
-
-					// First, check to see whether the user-entered value matches
-					if ( in_array( $allowed_options, (array) $option_values ) ) {
-						$selected = ' selected="selected"';
-					}
-
-					// Then, if the user has not provided a value, check for defaults
-					if ( !is_array( $original_option_values ) && empty( $option_values ) && $options[$k]->is_default_option ) {
-						$selected = ' selected="selected"';
-					}
-
-					$html .= apply_filters( 'bp_get_the_profile_field_options_select', '<option' . $selected . ' value="' . esc_attr( stripslashes( $options[$k]->name ) ) . '">' . esc_attr( stripslashes( $options[$k]->name ) ) . '</option>', $options[$k], $field->id, $selected, $k );
-				}
-				break;
-
-			case 'multiselectbox':
-				$original_option_values = '';
-				$original_option_values = maybe_unserialize( BP_XProfile_ProfileData::get_value_byid( $field->id ) );
-
-				if ( empty( $original_option_values ) && !empty( $_POST['field_' . $field->id] ) ) {
-					$original_option_values = $_POST['field_' . $field->id];
-				}
-
-				$option_values = (array) $original_option_values;
-
-				for ( $k = 0, $count = count( $options ); $k < $count; ++$k ) {
-
-					// Check for updated posted values, but errors preventing them from being saved first time
-					foreach( $option_values as $i => $option_value ) {
-						if ( isset( $_POST['field_' . $field->id] ) && $_POST['field_' . $field->id][$i] != $option_value ) {
-							if ( !empty( $_POST['field_' . $field->id][$i] ) ) {
-								$option_values[] = $_POST['field_' . $field->id][$i];
-							}
-						}
-					}
-					$selected = '';
-
-					// Run the allowed option name through the before_save filter, so we'll be sure to get a match
-					$allowed_options = xprofile_sanitize_data_value_before_save( $options[$k]->name, false, false );
-
-					// First, check to see whether the user-entered value matches
-					if ( in_array( $allowed_options, (array) $option_values ) ) {
-						$selected = ' selected="selected"';
-					}
-
-					// Then, if the user has not provided a value, check for defaults
-					if ( !is_array( $original_option_values ) && empty( $option_values ) && !empty( $options[$k]->is_default_option ) ) {
-						$selected = ' selected="selected"';
-					}
-
-					$html .= apply_filters( 'bp_get_the_profile_field_options_multiselect', '<option' . $selected . ' value="' . esc_attr( stripslashes( $options[$k]->name ) ) . '">' . esc_attr( stripslashes( $options[$k]->name ) ) . '</option>', $options[$k], $field->id, $selected, $k );
-				}
-				break;
-
-			case 'radio':
-				$html .= '<div id="field_' . $field->id . '">';
-				$option_value = BP_XProfile_ProfileData::get_value_byid( $field->id );
-
-				for ( $k = 0, $count = count( $options ); $k < $count; ++$k ) {
-
-					// Check for updated posted values, but errors preventing them from being saved first time
-					if ( isset( $_POST['field_' . $field->id] ) && $option_value != $_POST['field_' . $field->id] ) {
-						if ( !empty( $_POST['field_' . $field->id] ) ) {
-							$option_value = $_POST['field_' . $field->id];
-						}
-					}
-
-					// Run the allowed option name through the before_save
-					// filter, so we'll be sure to get a match
-					$allowed_options = xprofile_sanitize_data_value_before_save( $options[$k]->name, false, false );
-					$selected        = '';
-
-					// @todo $value is never created
-					if ( $option_value == $allowed_options || !empty( $value ) && $value == $allowed_options || ( empty( $option_value ) && !empty( $options[$k]->is_default_option ) ) )
-						$selected = ' checked="checked"';
-
-					$html .= apply_filters( 'bp_get_the_profile_field_options_radio', '<label><input' . $selected . ' type="radio" name="field_' . $field->id . '" id="option_' . $options[$k]->id . '" value="' . esc_attr( stripslashes( $options[$k]->name ) ) . '"> ' . esc_attr( stripslashes( $options[$k]->name ) ) . '</label>', $options[$k], $field->id, $selected, $k );
-				}
-
-				$html .= '</div>';
-				break;
-
-			case 'checkbox':
-				$option_values = BP_XProfile_ProfileData::get_value_byid( $field->id );
-				$option_values = (array) maybe_unserialize( $option_values );
-
-				// Check for updated posted values, but errors preventing them from being saved first time
-				if ( isset( $_POST['field_' . $field->id] ) && $option_values != maybe_serialize( $_POST['field_' . $field->id] ) ) {
-					if ( !empty( $_POST['field_' . $field->id] ) )
-						$option_values = $_POST['field_' . $field->id];
-				}
-
-				for ( $k = 0, $count = count( $options ); $k < $count; ++$k ) {
-					$selected = '';
-
-					// First, check to see whether the user's saved values
-					// match the option
-					for ( $j = 0, $count_values = count( $option_values ); $j < $count_values; ++$j ) {
-
-						// Run the allowed option name through the
-						// before_save filter, so we'll be sure to get a match
-						$allowed_options = xprofile_sanitize_data_value_before_save( $options[$k]->name, false, false );
-
-						// @todo $value is never created
-						if ( $option_values[$j] == $allowed_options || @in_array( $allowed_options, $option_values ) ) {
-							$selected = ' checked="checked"';
-							break;
-						}
-					}
-
-					// If the user has not yet supplied a value for this field,
-					// check to see whether there is a default value available
-					if ( !is_array( $option_values ) && empty( $option_values ) && empty( $selected ) && !empty( $options[$k]->is_default_option ) ) {
-						$selected = ' checked="checked"';
-					}
-
-					$html .= apply_filters( 'bp_get_the_profile_field_options_checkbox', '<label><input' . $selected . ' type="checkbox" name="field_' . $field->id . '[]" id="field_' . $options[$k]->id . '_' . $k . '" value="' . esc_attr( stripslashes( $options[$k]->name ) ) . '"> ' . esc_attr( stripslashes( $options[$k]->name ) ) . '</label>', $options[$k], $field->id, $selected, $k );
-				}
-				break;
-
-			case 'datebox':
-				$date = BP_XProfile_ProfileData::get_value_byid( $field->id );
-
-				// Set day, month, year defaults
-				$day   = '';
-				$month = '';
-				$year  = '';
-
-				if ( !empty( $date ) ) {
-
-					// If Unix timestamp
-					if ( is_numeric( $date ) ) {
-						$day   = date( 'j', $date );
-						$month = date( 'F', $date );
-						$year  = date( 'Y', $date );
-
-					// If MySQL timestamp
-					} else {
-						$day   = mysql2date( 'j', $date );
-						$month = mysql2date( 'F', $date, false ); // Not localized, so that selected() works below
-						$year  = mysql2date( 'Y', $date );
-					}
-				}
-
-				// Check for updated posted values, and errors preventing
-				// them from being saved first time.
-				if ( !empty( $_POST['field_' . $field->id . '_day'] ) ) {
-					if ( $day != $_POST['field_' . $field->id . '_day'] ) {
-						$day = $_POST['field_' . $field->id . '_day'];
-					}
-				}
-
-				if ( !empty( $_POST['field_' . $field->id . '_month'] ) ) {
-					if ( $month != $_POST['field_' . $field->id . '_month'] ) {
-						$month = $_POST['field_' . $field->id . '_month'];
-					}
-				}
-
-				if ( !empty( $_POST['field_' . $field->id . '_year'] ) ) {
-					if ( $year != date( "j", $_POST['field_' . $field->id . '_year'] ) ) {
-						$year = $_POST['field_' . $field->id . '_year'];
-					}
-				}
-
-				// $type will be passed by calling function when needed
-				switch ( $type ) {
-					case 'day':
-						$html .= '<option value=""' . selected( $day, '', false ) . '>--</option>';
-
-						for ( $i = 1; $i < 32; ++$i ) {
-							$html .= '<option value="' . $i .'"' . selected( $day, $i, false ) . '>' . $i . '</option>';
-						}
-						break;
-
-					case 'month':
-						$eng_months = array( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
-
-						$months = array(
-							__( 'January', 'buddypress' ),
-							__( 'February', 'buddypress' ),
-							__( 'March', 'buddypress' ),
-							__( 'April', 'buddypress' ),
-							__( 'May', 'buddypress' ),
-							__( 'June', 'buddypress' ),
-							__( 'July', 'buddypress' ),
-							__( 'August', 'buddypress' ),
-							__( 'September', 'buddypress' ),
-							__( 'October', 'buddypress' ),
-							__( 'November', 'buddypress' ),
-							__( 'December', 'buddypress' )
-						);
-
-						$html .= '<option value=""' . selected( $month, '', false ) . '>------</option>';
-
-						for ( $i = 0; $i < 12; ++$i ) {
-							$html .= '<option value="' . $eng_months[$i] . '"' . selected( $month, $eng_months[$i], false ) . '>' . $months[$i] . '</option>';
-						}
-						break;
-
-					case 'year':
-						$html .= '<option value=""' . selected( $year, '', false ) . '>----</option>';
-
-						for ( $i = 2037; $i > 1901; $i-- ) {
-							$html .= '<option value="' . $i .'"' . selected( $year, $i, false ) . '>' . $i . '</option>';
-						}
-						break;
-				}
-
-				$html = apply_filters( 'bp_get_the_profile_field_datebox', $html, $type, $day, $month, $year, $field->id, $date );
-
-				break;
-		}
+		ob_start();
+		$field->type_obj->edit_field_options_html( $args );
+		$html = ob_get_contents();
+		ob_end_clean();
 
 		return $html;
 	}
@@ -807,13 +619,45 @@ function bp_profile_field_data( $args = '' ) {
 		return apply_filters( 'bp_get_profile_field_data', xprofile_get_field_data( $field, $user_id ) );
 	}
 
+/**
+ * Get all profile field groups.
+ *
+ * @since  BuddyPress (2.1.0)
+ *
+ * @return object $groups
+ */
+function bp_profile_get_field_groups() {
+	$groups = wp_cache_get( 'xprofile_groups_inc_empty', 'bp' );
+
+	if ( empty( $groups ) ) {
+		$groups = bp_xprofile_get_groups( array( 'fetch_fields' => true ) );
+		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
+	}
+
+	return apply_filters( 'bp_profile_get_field_groups', $groups );
+}
+
+/**
+ * Check if there is more than one group of fields for the profile being edited.
+ *
+ * @since  BuddyPress (2.1.0)
+ *
+ * @return bool True if there is more than one profile field group.
+ */
+function bp_profile_has_multiple_groups() {
+	$has_multiple_groups = count( (array) bp_profile_get_field_groups() ) > 1;
+	return (bool) apply_filters( 'bp_profile_has_multiple_groups', $has_multiple_groups );
+}
+
+/**
+ * Output the tabs to switch between profile field groups.
+ *
+ * @return string Field group tabs markup.
+ */
 function bp_profile_group_tabs() {
 	global $bp, $group_name;
 
-	if ( !$groups = wp_cache_get( 'xprofile_groups_inc_empty', 'bp' ) ) {
-		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
-		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
-	}
+	$groups = bp_profile_get_field_groups();
 
 	if ( empty( $group_name ) )
 		$group_name = bp_profile_group_name(false);
@@ -859,15 +703,6 @@ function bp_profile_group_name( $deprecated = true ) {
 
 		return apply_filters( 'bp_get_profile_group_name', $group->name );
 	}
-
-function bp_avatar_upload_form() {
-	global $bp;
-
-	if ( !(int) $bp->site_options['bp-disable-avatar-uploads'] )
-		bp_core_avatar_admin( null, bp_loggedin_user_domain() . $bp->profile->slug . '/change-avatar/', bp_loggedin_user_domain() . $bp->profile->slug . '/delete-avatar/' );
-	else
-		_e( 'Avatar uploads are currently disabled. Why not use a <a href="http://gravatar.com" target="_blank">gravatar</a> instead?', 'buddypress' );
-}
 
 function bp_profile_last_updated() {
 
@@ -923,29 +758,128 @@ function bp_edit_profile_button() {
 	) );
 }
 
+/** Visibility ****************************************************************/
+
 /**
  * Echo the field visibility radio buttons
  */
-function bp_profile_visibility_radio_buttons() {
-	echo bp_profile_get_visibility_radio_buttons();
+function bp_profile_visibility_radio_buttons( $args = '' ) {
+	echo bp_profile_get_visibility_radio_buttons( $args );
 }
 	/**
 	 * Return the field visibility radio buttons
 	 */
-	function bp_profile_get_visibility_radio_buttons() {
-		$html = '<ul class="radio">';
+	function bp_profile_get_visibility_radio_buttons( $args = '' ) {
 
-		foreach( bp_xprofile_get_visibility_levels() as $level ) {
-			$checked = $level['id'] == bp_get_the_profile_field_visibility_level() ? ' checked="checked" ' : '';
+		// Parse optional arguments
+		$r = bp_parse_args( $args, array(
+			'field_id'     => bp_get_the_profile_field_id(),
+			'before'       => '<ul class="radio">',
+			'after'        => '</ul>',
+			'before_radio' => '<li class="%s">',
+			'after_radio'  => '</li>',
+			'class'        => 'bp-xprofile-visibility'
+		), 'xprofile_visibility_radio_buttons' );
 
-			// Only sanitize once
-			$field_id = bp_get_the_profile_field_id();
-			$level_id = esc_attr( $level['id'] );
+		// Empty return value, filled in below if a valid field ID is found
+		$retval = '';
 
-			$html .= '<li><label for="see-field_' . $field_id . '_' . $level_id . '"><input type="radio" id="see-field_' . $field_id . '_' . $level_id . '" name="field_' . $field_id . '_visibility" value="' . $level_id . '"' . $checked . ' /> ' . esc_html( $level['label'] ) . '</label></li>';
-		}
+		// Only do-the-do if there's a valid field ID
+		if ( ! empty( $r['field_id'] ) ) :
 
-		$html .= '</ul>';
+			// Start the output buffer
+			ob_start();
 
-		return apply_filters( 'bp_profile_get_visibility_radio_buttons', $html );
+			// Output anything before
+			echo $r['before']; ?>
+
+			<?php if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
+
+				<?php foreach( bp_xprofile_get_visibility_levels() as $level ) : ?>
+
+					<?php printf( $r['before_radio'], esc_attr( $level['id'] ) ); ?>
+
+					<label for="<?php echo esc_attr( 'see-field_' . $r['field_id'] . '_' . $level['id'] ); ?>">
+						<input type="radio" id="<?php echo esc_attr( 'see-field_' . $r['field_id'] . '_' . $level['id'] ); ?>" name="<?php echo esc_attr( 'field_' . $r['field_id'] . '_visibility' ); ?>" value="<?php echo esc_attr( $level['id'] ); ?>" <?php checked( $level['id'], bp_get_the_profile_field_visibility_level() ); ?> />
+						<span class="field-visibility-text"><?php echo esc_html( $level['label'] ); ?></span>
+					</label>
+
+					<?php echo $r['after_radio']; ?>
+
+				<?php endforeach; ?>
+
+			<?php endif;
+
+			// Output anything after
+			echo $r['after'];
+
+			// Get the output buffer and empty it
+			$retval = ob_get_clean();
+		endif;
+
+		return apply_filters( 'bp_profile_get_visibility_radio_buttons', $retval, $r, $args );
+	}
+
+/**
+ * Output the XProfile field visibility select list for settings
+ *
+ * @since BuddyPress (2.0.0)
+ */
+function bp_profile_settings_visibility_select( $args = '' ) {
+	echo bp_profile_get_settings_visibility_select( $args );
+}
+	/**
+	 * Return the XProfile field visibility select list for settings
+	 *
+	 * @since BuddyPress (2.0.0)
+	 */
+	function bp_profile_get_settings_visibility_select( $args = '' ) {
+
+		// Parse optional arguments
+		$r = bp_parse_args( $args, array(
+			'field_id' => bp_get_the_profile_field_id(),
+			'before'   => '',
+			'after'    => '',
+			'class'    => 'bp-xprofile-visibility'
+		), 'xprofile_settings_visibility_select' );
+
+		// Empty return value, filled in below if a valid field ID is found
+		$retval = '';
+
+		// Only do-the-do if there's a valid field ID
+		if ( ! empty( $r['field_id'] ) ) :
+
+			// Start the output buffer
+			ob_start();
+
+			// Output anything before
+			echo $r['before']; ?>
+
+			<?php if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
+
+				<select class="<?php echo esc_attr( $r['class'] ); ?>" name="<?php echo esc_attr( 'field_' . $r['field_id'] ) ; ?>_visibility">
+
+					<?php foreach ( bp_xprofile_get_visibility_levels() as $level ) : ?>
+
+						<option value="<?php echo esc_attr( $level['id'] ); ?>" <?php selected( $level['id'], bp_get_the_profile_field_visibility_level() ); ?>><?php echo esc_html( $level['label'] ); ?></option>
+
+					<?php endforeach; ?>
+
+				</select>
+
+			<?php else : ?>
+
+				<span class="field-visibility-settings-notoggle" title="<?php esc_attr_e( "This field's visibility cannot be changed.", 'buddypress' ); ?>"><?php bp_the_profile_field_visibility_level_label(); ?></span>
+
+			<?php endif;
+
+			// Output anything after
+			echo $r['after'];
+
+			// Get the output buffer and empty it
+			$retval = ob_get_clean();
+		endif;
+
+		// Output the dropdown list
+		return apply_filters( 'bp_profile_settings_visibility_select', $retval, $r, $args );
 	}

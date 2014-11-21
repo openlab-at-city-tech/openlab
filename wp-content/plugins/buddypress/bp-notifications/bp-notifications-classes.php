@@ -26,6 +26,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The notification ID.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var int
 	 */
 	public $id;
@@ -33,6 +35,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The ID of the item associated with the notification.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var int
 	 */
 	public $item_id;
@@ -40,6 +44,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The ID of the secondary item associated with the notification.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var int
 	 */
 	public $secondary_item_id = null;
@@ -47,6 +53,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The ID of the user the notification is associated with.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var int
 	 */
 	public $user_id;
@@ -54,6 +62,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The name of the component that the notification is for.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var string
 	 */
 	public $component_name;
@@ -61,6 +71,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The component action which the notification is related to.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var string
 	 */
 	public $component_action;
@@ -68,6 +80,8 @@ class BP_Notifications_Notification {
 	/**
 	 * The date the notification was created.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var string
 	 */
 	public $date_notified;
@@ -75,6 +89,8 @@ class BP_Notifications_Notification {
 	/**
 	 * Is the notification new, or has it already been read.
 	 *
+	 * @since BuddyPress (1.9.0)
+	 * @access public
 	 * @var bool
 	 */
 	public $is_new;
@@ -122,6 +138,8 @@ class BP_Notifications_Notification {
 		);
 		$data_format = array( '%d', '%d', '%d', '%s', '%s', '%s', '%d' );
 
+		do_action_ref_array( 'bp_notification_before_save', array( &$this ) );
+
 		// Update
 		if ( ! empty( $this->id ) ) {
 			$result = self::_update( $data, array( 'ID' => $this->id ), $data_format, array( '%d' ) );
@@ -138,6 +156,8 @@ class BP_Notifications_Notification {
 			$this->id = $wpdb->insert_id;
 			$retval   = $wpdb->insert_id;
 		}
+
+		do_action_ref_array( 'bp_notification_after_save', array( &$this ) );
 
 		// Return the result
 		return $retval;
@@ -315,16 +335,16 @@ class BP_Notifications_Notification {
 		}
 
 		// is_new
-		if ( ! empty( $args['is_new'] ) ) {
+		if ( ! empty( $args['is_new'] ) && 'both' !== $args['is_new'] ) {
 			$where_conditions['is_new'] = "is_new = 1";
-		} elseif ( ( 0 === $args['is_new'] ) || ( false === $args['is_new'] ) ) {
+		} elseif ( isset( $args['is_new'] ) && ( 0 === $args['is_new'] || false === $args['is_new'] ) ) {
 			$where_conditions['is_new'] = "is_new = 0";
 		}
 
 		// search_terms
 		if ( ! empty( $args['search_terms'] ) ) {
-			$search_terms = like_escape( esc_sql( $args['search_terms'] ) );
-			$where_conditions['search_terms'] = "( component_name LIKE '%%$search_terms%%' OR component_action LIKE '%%$search_terms%%' )";
+			$search_terms_like = '%' . bp_esc_like( $args['search_terms'] ) . '%';
+			$where_conditions['search_terms'] = $wpdb->prepare( "( component_name LIKE %s OR component_action LIKE %s )", $search_terms_like, $search_terms_like );
 		}
 
 		// Custom WHERE
@@ -533,10 +553,15 @@ class BP_Notifications_Notification {
 	 *           filter by. Can be an array of component names.
 	 *     @type string|array $component_action Name of the action to
 	 *           filter by. Can be an array of actions.
-	 *     @type bool $is_new Whether to limit the query to is_new (unread)
-	 *           notifications. Default: true.
+	 *     @type bool $is_new Whether to limit to new notifications. True
+	 *           returns only new notifications, false returns only non-new
+	 *           notifications. 'both' returns all. Default: true.
 	 *     @type string $search_terms Term to match against component_name
 	 *           or component_action fields.
+	 *     @type string $order_by Database column to order notifications by.
+	 *     @type string $sort_order Either 'ASC' or 'DESC'.
+	 *     @type string $order_by Field to order results by.
+	 *     @type string $sort_order ASC or DESC.
 	 *     @type int $page Number of the current page of results. Default:
 	 *           false (no pagination - all items).
 	 *     @type int $per_page Number of items to show per page. Default:
@@ -612,16 +637,25 @@ class BP_Notifications_Notification {
 	public static function get_total_count( $args ) {
 		global $wpdb;
 
+		/**
+		 * Default component_name to active_components
+		 *
+		 * @see http://buddypress.trac.wordpress.org/ticket/5300
+		 */
 		$args = wp_parse_args( $args, array(
-			'component_name' => bp_notifications_get_registered_components(),
+			'component_name' => bp_notifications_get_registered_components()
 		) );
 
-		$bp         = buddypress();
+		// Load BuddyPress
+		$bp = buddypress();
+
+		// Build the query
 		$select_sql = "SELECT COUNT(*)";
 		$from_sql   = "FROM {$bp->notifications->table_name}";
 		$where_sql  = self::get_where_sql( $args );
 		$sql        = "{$select_sql} {$from_sql} {$where_sql}";
 
+		// Return the queried results
 		return $wpdb->get_var( $sql );
 	}
 
@@ -645,6 +679,11 @@ class BP_Notifications_Notification {
 		$update = self::get_query_clauses( $update_args );
 		$where  = self::get_query_clauses( $where_args  );
 
+		// make sure we delete the notification cache for the user on update
+		if ( ! empty( $where_args['user_id'] ) ) {
+			wp_cache_delete( 'all_for_user_' . $where_args['user_id'], 'bp_notifications' );
+		}
+
 		return self::_update( $update['data'], $where['data'], $update['format'], $where['format'] );
 	}
 
@@ -664,10 +703,12 @@ class BP_Notifications_Notification {
 	public static function delete( $args = array() ) {
 		$where = self::get_query_clauses( $args );
 
+		do_action( 'bp_notification_before_delete', $args );
+
 		return self::_delete( $where['data'], $where['format'] );
 	}
 
-	/** Convenience methods ***************************************************/
+	/** Convenience methods ***********************************************/
 
 	/**
 	 * Delete a single notification by ID.
@@ -780,7 +821,7 @@ class BP_Notifications_Notification {
 		return array( 'notifications' => &$notifications, 'total' => $total_count );
 	}
 
-	/** Mark ******************************************************************/
+	/** Mark **************************************************************/
 
 	/**
 	 * Mark all user notifications as read.
