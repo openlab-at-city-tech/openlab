@@ -189,3 +189,14 @@ function get_the_content_with_formatting($more_link_text = '(more...)', $stripte
     $content = str_replace(']]>', ']]&gt;', $content);
     return $content;
 }
+
+/**
+* Get a value from a failed POST request, especially during registration.
+*/
+function openlab_post_value( $key ) {
+$value = '';
+if ( ! empty( $_POST[ $key ] ) ) {
+$value = wp_unslash( $_POST[ $key ] );
+}
+return $value;
+}

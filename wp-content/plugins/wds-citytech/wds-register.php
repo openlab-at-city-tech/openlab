@@ -140,8 +140,15 @@ function wds_email_validate() {
 //
 add_action( 'bp_signup_validate', 'wds_email_validate' );
 //
-function wds_get_register_fields( $account_type ){
-	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
+function wds_get_register_fields($account_type, $post_data = array()) {
+    // Fake it until you make it
+    if (!empty($post_data)) {
+        foreach ($post_data as $pdk => $pdv) {
+            $_POST[$pdk] = $pdv;
+        }
+    }
+    
+    $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return="";
 	if ( function_exists( 'bp_has_profile' ) ) :
@@ -197,11 +204,8 @@ function wds_get_register_fields( $account_type ){
 				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				//WDS ADDED $$$
 
-				if(bp_get_the_profile_field_name()=="Account Type"){
-					$onchange=' onchange="wds_load_account_type(\''.bp_get_the_profile_field_input_name().'\',\'\');"';
-				}else{
-					$onchange="";
-				}
+				$onchange = '';
+                                
 				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
 					 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
 						$return .= '<option selected="selected" value=""> ---- </option>';

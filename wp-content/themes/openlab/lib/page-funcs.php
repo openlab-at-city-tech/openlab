@@ -352,10 +352,10 @@ function openlab_registration_page() {
 
                     <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
                     <?php do_action('bp_signup_email_errors') ?>
-                    <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
+                    <input type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value( 'signup_email' ) ?>" />
 
                     <label for="signup_email_confirm">Confirm Email Address (required)</label>
-                    <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="" />
+                    <input type="text" name="signup_email_confirm" id="signup_email_confirm" value="<?php echo openlab_post_value( 'signup_email_confirm' ) ?>" />
 
                     <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
                     <?php do_action('bp_signup_password_errors') ?>
