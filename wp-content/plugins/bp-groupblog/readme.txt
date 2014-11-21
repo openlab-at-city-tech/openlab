@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 3.6 / BP 1.8
-Stable tag: 1.8.5
+Tested up to: WP 3.9.1 / BP 2.0.1
+Stable tag: 1.8.8
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -100,6 +100,15 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.8.8 =
+* Better wording for activity filter dropdown
+
+= 1.8.7 =
+* Prevent fatal error when blogs or activity component is disabled
+
+= 1.8.6 =
+* Don't suggest blog domains longer than 63 characters, for better standards compliance
 
 = 1.8.5 =
 * Delete groupblog activity item when the groupblog post is deleted
