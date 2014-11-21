@@ -13,6 +13,10 @@ function add_slave($read, $host, $lhost = '', $user = DB_USER, $password = DB_PA
 /* Add your configuration here */
 $shardb_hash_length = 2;
 $shardb_local_db = true;
+$shardb_dataset = 'openlab';
+$enable_home_db = false;
+$num_vipdbs = 0;
+$slaves = null;
 
 /* Use this configuration for a hexidecimal based hash
 
