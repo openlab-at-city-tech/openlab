@@ -22,6 +22,7 @@ function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
+        require ( dirname( __FILE__ ) . '/includes/related-links.php' );
 	require ( dirname( __FILE__ ) . '/includes/search.php' );
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
