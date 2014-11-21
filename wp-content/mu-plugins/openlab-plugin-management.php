@@ -22,6 +22,7 @@ function openlab_hide_plugins( $plugins ) {
 			'bp-template-pack/loader.php',
 			'cac-group-announcements/cac-group-announcements.php',
 			'cubepoints-buddypress-integration/loader.php',
+                        'digressit/digressit.php',
 			'forum-attachments-for-buddypress/forum-attachments-for-buddypress.php',
 			'genesis-connect/genesis-connect.php',
 			'genesis-connect-for-buddypress/genesis-connect.php',
