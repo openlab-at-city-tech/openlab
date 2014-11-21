@@ -1,0 +1,110 @@
+# Translation of Slideshare in Persian
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-01-06 10:53:42+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "پیکربندی SlideShare"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "پهنای پیش‌فرض"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "به روز رساني تنظيمات افزونه"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "نحوه استفاده از افزونه"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "تنها کد وردپرس را کپی و درج نمایید. %s این برای نمایش کافی است"
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "مقدارعرض پیش فرض"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "اگر اینجا چیزی وارد نکنید. شما می توانید به صورت دستی w= را تغییر دهید."
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr ""
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "چرا هر یا همه از موارد زیر را انجام دهید:"
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "پیوند به کسانی که می توانند آن را پیدا کنند."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "امتیاز بهتری در وردپرس بدهید."
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "برای ارسال هدیه از لینک زیر استفاده نمایید."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "افراد دیگر را از تنظیمات خودتان آگاه کنید."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "حمايت از افزونه"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "این افزونه با هزینه شخصی کار می کند. اگرآن را دوست دارید، می توانید برای ما هدیه بفرستید."
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "اگر خطای مشاهد نمودید، آن را در انجمن پشتیبانی برای رفع آن ثبت کنید."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "خطایی یافته اید ؟"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "هیچ آیتم جدیدی یافته نشد ، ممکن است فید اشتباه باشد ..."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "اشتراک بوسیله ی فید rss"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "اشتراك ايميلي"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "آخرين خبرها از yoast"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "اگر این ابزارک را دوباره بارگذاری نمایید. آن دیگر نمایش داده نخواهد شد. مگر اینکه دیتابیس  'yoastdbwidget' را نیز حذف کنی."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "پاك كردن ابزارك از پيشخوان تمامي كاربرها"
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "نمایش اسلاید های سایت  slideshare.net"

@@ -1,0 +1,110 @@
+# Translation of Slideshare in German
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-08-24 08:09:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "SlideShare Einstellungen"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "Standard Breite"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "Aktualisiere SlideShare Einstellungen"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "Erklärung zur Benutzung"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "Kopiere einfach den \"Embed (wordpress.com)\" Code von %s, füge ihn ein und du bist fertig"
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "Erklärung zur Standard Breite"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "Wenn du hier nichts eingibst, dann kannst du die Standard Breite manuell verändern, indem du den w= Wert änderst, welcher hier fett und rot ist:"
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr "<em>Wenn</em> du hier einen Wert eingibst, dann wird die Breite immer mit diesem Wert überschrieben."
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "Warum nicht auch etwas (oder alles?) hiervon tun:"
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "Verlinke es, damit auch andere darüber etwas erfahren."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "Vergib eine gute Bewertung auf WordPress.org."
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "Zeige deine Anerkennung mit einer kleinen Spende durch einen Klick auf den Button."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "Lass andere wissen, dass das Plugin mit deinen WordPress Einstellungen funktioniert."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "Gefällt dir dieses Plugin?"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "Dieses Plugin kostet sehr viel Arbeit. Wenn du es benutzt, würde ich mich über eine kleine Spende sehr freuen!"
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "Wenn du einen Fehler in diesem Plugin findest, dann reiche diesen Fehler bitte im Support Forum ein, zusammen mit einer genauen Beschreibung wie dieser Fehler entstanden ist."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "Einen Fehler gefunden?"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "Keine neuen Einträge, vielleicht ist der Feed nicht verfügbar..."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "Via RSS abonnieren"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "Via Email abonnieren"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "Aktuelles von Yoast"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "Bei einer Aktualisierung wird dieses Widget verschwinden und nicht wieder angezeigt werden, bis du die Datenbank-Option 'yoastdbwidget' löschst."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "Entferne dieses Widget aus allen Benutzer-Dashboards."
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "Ein Plugin für WordPress zur einfachen Anzeige von slideshare.net Präsentationen."

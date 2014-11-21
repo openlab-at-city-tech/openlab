@@ -1,6 +1,37 @@
 <?php
-require_once (preg_replace("/wp-content.*/ism","wp-blog-header.php",__FILE__));
-require_once (preg_replace("/wp-content.*/ism","/wp-admin/includes/admin.php",__FILE__));
+/**
+ * Display entry details in AJAX lightbox
+ */
+
+if(!isset($_REQUEST['leadid']) || !isset($_REQUEST['form']) || !isset($_GET['view'])) {
+	die( 'Entry ID, Form ID, and access key must be set.');
+}
+
+// Bootstratp WordPress core.
+$bootstrapSearchDir = dirname($_SERVER["SCRIPT_FILENAME"]);
+$docRoot = dirname(isset($_SERVER["APPL_PHYSICAL_PATH"]) ? $_SERVER["APPL_PHYSICAL_PATH"] : $_SERVER["DOCUMENT_ROOT"]);
+
+while (!file_exists($bootstrapSearchDir . "/wp-load.php")) {
+	$bootstrapSearchDir = dirname($bootstrapSearchDir);
+	if (strpos($bootstrapSearchDir, $docRoot) === false){
+		$bootstrapSearchDir = "../../.."; // critical failure in our directory finding, so fall back to relative
+		break;
+	}
+}
+
+// Include the two files we need instead of using `wp-load.php`
+require_once ($bootstrapSearchDir."/wp-blog-header.php");
+require_once ($bootstrapSearchDir."/wp-admin/includes/admin.php");
+
+// Check that the GF Directory plugin is active. If it isn't, this shouldn't be shown.
+if(!is_plugin_active( 'gravity-forms-addons/gravity-forms-addons.php' )) {
+	wp_die( 'The Gravity Forms Directory plugin is not active.', 'gravity-forms-addons');
+}
+
+// Verify that the link is accessed properly
+if ( false == wp_verify_nonce( $_GET['view'], sprintf('view-%d-%d', $_REQUEST['leadid'], $_REQUEST['form']) )) {
+     wp_die( 'Verication failed. Please return to the original page, refresh, and click on the entry again.', 'gravity-forms-addons');
+}
 
 // Force a happy header
 header("HTTP/1.1 200 OK");
@@ -30,6 +61,7 @@ wp_iframe('show_table');
  * Generate the output for the IFRAME
  */
 function show_table() {
+
 	if(isset($_REQUEST['leadid']) && isset($_REQUEST['form'])) {
 
 			require_once(dirname( __FILE__ )."/gravity-forms-addons.php");

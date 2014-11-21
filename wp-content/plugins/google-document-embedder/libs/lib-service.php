@@ -13,9 +13,6 @@ if ( ! function_exists('gde_activate') ) {
 }
 
 if ( isset( $_REQUEST['json'] ) ) {
-	// exclude API key from export to file (can't be imported)
-	unset( $gdeoptions['api_key'] );
-	
 	switch ( $_REQUEST['json'] ) {
 		case "profiles":
 			if ( isset( $_REQUEST['id'] ) ) {

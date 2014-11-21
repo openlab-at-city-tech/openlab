@@ -85,7 +85,6 @@ function wpcf7_l10n() {
 		'fa_IR' => __( 'Persian', 'contact-form-7' ),
 		'pl_PL' => __( 'Polish', 'contact-form-7' ),
 		'pt_PT' => __( 'Portuguese', 'contact-form-7' ),
-		'pa_IN' => __( 'Punjabi', 'contact-form-7' ),
 		'ru_RU' => __( 'Russian', 'contact-form-7' ),
 		'ro_RO' => __( 'Romanian', 'contact-form-7' ),
 		'sr_RS' => __( 'Serbian', 'contact-form-7' ),
@@ -210,7 +209,11 @@ function wpcf7_format_atts( $atts ) {
 	foreach ( $prioritized_atts as $att ) {
 		if ( isset( $atts[$att] ) ) {
 			$value = trim( $atts[$att] );
-			$html .= sprintf( ' %s="%s"', $att, esc_attr( $value ) );
+
+			if ( '' !== $value ) {
+				$html .= sprintf( ' %s="%s"', $att, esc_attr( $value ) );
+			}
+
 			unset( $atts[$att] );
 		}
 	}
@@ -362,31 +365,6 @@ function wpcf7_enctype_value( $enctype ) {
 	}
 
 	return '';
-}
-
-function wpcf7_rmdir_p( $dir ) {
-	if ( is_file( $dir ) ) {
-		@unlink( $dir );
-		return true;
-	}
-
-	if ( ! is_dir( $dir ) ) {
-		return false;
-	}
-
-	if ( $handle = @opendir( $dir ) ) {
-		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( $file == "." || $file == ".." ) {
-				continue;
-			}
-
-			wpcf7_rmdir_p( path_join( $dir, $file ) );
-		}
-
-		closedir( $handle );
-	}
-
-	return @rmdir( $dir );
 }
 
 ?>

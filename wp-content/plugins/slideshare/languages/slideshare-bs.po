@@ -1,0 +1,110 @@
+# Translation of Slideshare in Bosnian
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-08-24 08:13:40+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "Konfiguracija SlideSharea"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "Početna širina"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "Ažuriraj opcije SlideSharea"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "Postavke"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "Upute za korištenje"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "Jednostavno kopirajte i zalijepite \"ugrađeni (wordpress.com)\" kod s %s i to je to"
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "Objašnjenje za početnu širinu"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "Ako ovdje ništa niste upisali, širinu možete promijeniti ručno mijenjanjem vrijednosti w=, koja je prikazana podebljanim crvenim slovima ovdje:"
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr "Ako ovdje <em>upišete</em> vrijednost, ta vrijednost će se koristiti za širinu."
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "Zašto ne učinite nešto ili sve od sljedećeg:"
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "Šaljite linkove kako bi druge osobe saznale o ovom."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "Ocijenite ga dobro na WordPress.org."
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "Donirajte određenu sumu novca pomoću dugmeta ispod."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "Kažite i drugima da ovo radi sa vašom WordPress instalacijom."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "Sviđa vam se ovaj plugin?"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "Na ovom pluginu sa radio jako dugo pa, ako ga koristite, molimo bih vas da mi donirate određenu sumu novca kako biste mi pomogli u daljem radu!"
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "Ako ste pronašli grešku u ovom pluginu, molimo vas da nam je prijavite i detaljno opišete na našem forumu."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "Pronašli ste grešku?"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "Nema vijesti, kanal bi mogao biti pokvaren..."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "Pretplatite se preko RSS-a"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "Pretplatite se preko emaila"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "Najnovije vijesti sa Yoasta"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "Ako izvršite ponovno učitavanje, dodatak će nestati i više se neće prikazivati, osim ako ne odlučite da obrišete opciju 'yoastdbwidget' u bazi podataka."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "Ukloni ovaj dodatak na kontrolnoj ploči svih korisnika"
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "WordPress plugin za jednostavno prikazivanje slideshare.net prezentacija."

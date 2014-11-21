@@ -26,6 +26,8 @@ class s2class_upgrade {
 				}
 			}
 		}
+		// let's make sure that the 's2_authors' key exists on every site for all Registered Users too
+		$this->upgrade70();
 	} // end upgrade_core()
 
 	function upgrade23() {
@@ -236,9 +238,9 @@ class s2class_upgrade {
 	} // end upgrade64()
 
 	function upgrade70() {
-		global $mysubscribe2;
+		global $mysubscribe2, $wpdb;
 		if ( version_compare($mysubscribe2->wp_release, '3.5', '<') ) {
-			$users = $mysubscribe2->get_all_registered('ID');
+			$users = $wpdb->get_col($wpdb->prepare("SELECT ID from $wpdb->users WHERE ID NOT IN (SELECT user_id from $wpdb->usermeta WHERE meta_key=%s", $mysubscribe2->get_usermeta_keyname('s2_authors')));
 			foreach ( $users as $user_ID ) {
 				$check_authors = get_user_meta($user_ID, $mysubscribe2->get_usermeta_keyname('s2_authors'), true);
 				if ( empty($check_authors) ) {
@@ -338,5 +340,13 @@ class s2class_upgrade {
 		}
 		maybe_add_column($mysubscribe2->public, 'time', "ALTER TABLE $mysubscribe2->public ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date");
 	} // end upgrade88()
+
+	function upgrade95() {
+		global $mysubscribe2;
+		if ( $mysubscribe2->subscribe2_options['email_freq'] != 'never' ) {
+			$mysubscribe2->subscribe2_options['last_s2cron'] = '';
+			unset($mysubscribe2->subscribe2_options['previous_s2cron']);
+		}
+	} // end upgrade95()
 }
 ?>

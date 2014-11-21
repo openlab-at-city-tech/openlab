@@ -101,7 +101,7 @@ class s2_multisite {
 			return array();
 		}
 
-		return $blog_list;
+		return apply_filters('s2_mu_blog_list', $blog_list);
 	} // end get_mu_blog_list()
 
 	/**

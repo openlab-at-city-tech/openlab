@@ -233,7 +233,7 @@ EOD;
 		}
 	}
 
-	static function add_mce_popup(){
+	function add_mce_popup(){
 
 		//Action target that displays the popup to insert a form to a post/page
 		?>
@@ -316,9 +316,9 @@ EOD;
 					echo $setvalues;
 			?>
 
-				var win = window.dialogArguments || opener || parent || top;
+				//var win = window.dialogArguments || opener || parent || top;
 				var shortcode = "[directory form=\"" + directory_id +"\"" + <?php echo addslashes($idOutputList); ?>"]";
-				win.send_to_editor(shortcode);
+				window.send_to_editor(shortcode);
 				return false;
 			}
 		});
@@ -364,7 +364,7 @@ EOD;
 		<?php
 	}
 
-	function make_popup_options($js = false) {
+	static function make_popup_options($js = false) {
 		$i = 0;
 
 		$defaults = GFDirectory::directory_defaults();
@@ -426,11 +426,11 @@ EOD;
 				#array('checkbox',  'lightbox'  ,  true, __( sprintf("Show images in a %slightbox%s", '<a href="http://en.wikipedia.org/wiki/Lightbox_(JavaScript)" target="_blank">', '</a>'), 'gravity-forms-addons')),
 				array('radio'	, 'lightboxstyle' ,
 					array(
-						array('label' =>'Style 1 <a href="'.GFDirectory::get_base_url().'/colorbox/example1/index.html" target="_blank">See example</a>', 'value'=>'1'),
-						array('label' =>'Style 2 <a href="'.GFDirectory::get_base_url().'/colorbox/example2/index.html" target="_blank">See example</a>', 'value'=>'2'),
-						array('label' =>'Style 3 <a href="'.GFDirectory::get_base_url().'/colorbox/example3/index.html" target="_blank">See example</a>', 'value'=>'3','default'=>'1'),
-						array('label' =>'Style 4 <a href="'.GFDirectory::get_base_url().'/colorbox/example4/index.html" target="_blank">See example</a>', 'value'=>'4'),
-						array('label' =>'Style 5 <a href="'.GFDirectory::get_base_url().'/colorbox/example5/index.html" target="_blank">See example</a>', 'value'=>'5')
+						array('label' =>'Style 1 <a href="http://www.jacklmoore.com/colorbox/example1/" target="_blank">See example</a>', 'value'=>'1'),
+						array('label' =>'Style 2 <a href="http://www.jacklmoore.com/colorbox/example2/" target="_blank">See example</a>', 'value'=>'2'),
+						array('label' =>'Style 3 <a href="http://www.jacklmoore.com/colorbox/example3/" target="_blank">See example</a>', 'value'=>'3','default'=>'1'),
+						array('label' =>'Style 4 <a href="http://www.jacklmoore.com/colorbox/example4/" target="_blank">See example</a>', 'value'=>'4'),
+						array('label' =>'Style 5 <a href="http://www.jacklmoore.com/colorbox/example5/" target="_blank">See example</a>', 'value'=>'5')
 					), "What style should the lightbox use?"
 				),
 				array('checkboxes'	, 'lightboxsettings' ,
@@ -531,7 +531,7 @@ EOD;
 			}
 		}
 	$advanced = array(
-			array('text', 'tableclass' ,  'gf_directory widefat fixed', __( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
+			array('text', 'tableclass' ,  'gf_directory widefat', __( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
 			array('text', 'tablestyle' ,  '', __( "inline CSS for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
 			array('text', 'rowclass' ,  '', __( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
 			array('text', 'rowstyle' ,  '', __( "Inline CSS for all <tbody><tr>'s, <ul><li>'s, or <dl><dt>'s", 'gravity-forms-addons')),
@@ -559,7 +559,7 @@ EOD;
 		}
 	}
 
-	function make_field($type, $id, $default, $label, $defaults = array()) {
+	static function make_field($type, $id, $default, $label, $defaults = array()) {
 		$rawid = $id;
 		$idLabel = '';
 		if(GFDirectory::is_gravity_page('gf_settings')){
@@ -639,7 +639,7 @@ EOD;
 		}
 	}
 
-	function make_popup_js($type, $id, $defaults) {
+	static function make_popup_js($type, $id, $defaults) {
 
 		foreach($defaults as $key => $default) {
 			if($default === true || $default === 'on') {
@@ -714,16 +714,16 @@ EOD;
 	}
 
 	//Creates directory left nav menu under Forms
-    public static function create_menu($menus){
+    public function create_menu($menus){
         // Adding submenu if user has access
         $permission = GFDirectory::has_access("gravityforms_directory");
         if(!empty($permission))
-            $menus[] = array("name" => "gf_settings&addon=Directory+%26+Addons", "label" => __("Directory &amp; Addons", "gravity-forms-addons"), "callback" =>  array("GFDirectory_Admin", "settings_page"), "permission" => $permission);
+            $menus[] = array("name" => "gf_settings&addon=Directory+%26+Addons", "label" => __("Directory &amp; Addons", "gravity-forms-addons"), "callback" =>  array(&$this, "settings_page"), "permission" => $permission);
 
         return $menus;
     }
 
-    public static function settings_page(){
+    public function settings_page(){
 		$message = $validimage = false; global $plugin_page;
 
         if(isset($_POST["gf_addons_submit"])){
@@ -750,21 +750,41 @@ EOD;
             .form-table label { font-size: 1em!important; margin: .4em 0; display: block;}
             li.setting-container { border: none!important; }
             #kws_gf_donate {
-				float: right;
-				width: 300px;
-				padding: 0 10px;
+				float: left;
+				width: 95%;
+				border: 1px solid #ccc;
+				padding: 10px 2.5%;
 				color: #333;
+				margin: 0;
+				margin-bottom: 10px;
+				background: #fff;
+				text-align: center;
+				<?php echo isset($_GET['viewinstructions']) ? 'display:none;' : ''; ?>
+			}
+			#kws_gf_donate div.aligncenter {
+				max-width: 700px;
+				margin: 0 auto;
+				float: none;
+			}
+			#kws_gf_donate * { text-align: left;}
+			#kws_gf_donate h3 {
+				margin: 0;
+				margin-top: 10px;
+			}
+			#kws_gf_donate .email {
+				padding: 5px;
+				font-size: 15px;
+				line-height: 20px;
 				margin-bottom: 10px;
 			}
 			#kws_gf_donate .button-primary {
 				display:block; float:left; margin:5px 0; text-align:center;
 			}
 			#kws_gf_donate img {
-				float: left;
-				margin-right: 10px;
-				margin-bottom: .5em;
-				-moz-border-radius: 5px;
-				-webkit-border-radius: 5px;
+				max-width: 100%;
+				margin: 0 auto 10px;
+				display: block;
+				text-align: center;
 			}
 
         </style>
@@ -829,14 +849,17 @@ EOD;
 		// if you must, you can filter this out...
 		if(apply_filters('kws_gf_show_donate_box', true)) {
 		?>
-		<div id="kws_gf_donate" class="alert_gray"<?php echo isset($_GET['viewinstructions']) ? ' style="display:none;"' : ''; ?>>
-			<p>
-			<?php if(!is_ssl()) {?><img src="http://www.gravatar.com/avatar/f0f175f8545912adbdab86f0b586f4c3?s=64" alt="Zack Katz, plugin author" height="64" width="64" /> <?php } _e('Hi there! If you find this plugin useful, consider showing your appreciation by making a small donation to its author!', 'gravity-forms-addons'); ?>
-			<a href="http://katz.si/35" target="_blank" class="clear alignleft button button-primary"><?php _e('Donate using PayPal', 'gravity-forms-addons'); ?></a>
-			</p>
+		<div id="kws_gf_donate">
+			<div class="aligncenter">
+				<a href="https://katz.co/gravityview/" title="<?php esc_attr_e( 'Go to GravityView Website', 'gravity-forms-addons' ); ?>" class="aligncenter"><img src= "<?php echo plugins_url( '/images/GravityView.png', __FILE__ ); ?>" alt="GravityView Logo" /></a>
+				<h3><?php _e('Better, simpler, and landing soon.', 'gravity-forms-addons'); ?></h3>
+				<p><?php _e('A brand-new Directory plugin is almost ready, and we need testers. Sign up below for early access.'); ?></p>
+				<iframe id='prefinery_iframe_inline' allowTransparency='true' width='100%' height='300' scrolling='no' frameborder='0' src="https://kws.prefinery.com/betas/4444/testers/new?display=inline&amp;version=2"></iframe>
+			</div>
 		</div>
-		<?php } ?>
-		<p class="submit"><span style="padding-right:.5em;" class="description">Need help getting started?</span> <a href="#" class="button button-secondary" id="kws_gf_instructions_button"><?php
+		<div class="clear"></div>
+		<?php } // End donate box ?>
+		<p class="submit"><span style="padding-right:.5em;" class="description"><?php _e('Need help getting started?', 'gravity-forms-addons'); ?></span> <a href="#" class="button button-secondary" id="kws_gf_instructions_button"><?php
 			if(!empty($settings['saved']) && !isset($_REQUEST['viewinstructions'])) {
 				_e('View Directory Instructions', 'gravity-forms-addons');
 			} else {

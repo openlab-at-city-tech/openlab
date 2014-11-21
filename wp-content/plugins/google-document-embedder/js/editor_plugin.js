@@ -1,5 +1,4 @@
 (function() {
-	tinymce.PluginManager.requireLangPack('gde');
 	tinymce.create('tinymce.plugins.gde', {
 		init : function(ed,url) {
 			// fix path

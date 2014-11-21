@@ -10,7 +10,7 @@ if ( isset( $_POST['s2_admin']) ) {
 	check_admin_referer('subscribe2-options_subscribers' . $s2nonce);
 	if ( isset($_POST['reset']) ) {
 		$this->reset();
-		echo "<div id=\"message\" class=\"updated fade\"><p><strong>$this->options_reset</strong></p></div>";
+		echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Options reset!', 'subscribe2') . "</strong></p></div>";
 	} elseif ( isset($_POST['preview']) ) {
 		global $user_email, $post;
 		$this->preview_email = true;
@@ -85,7 +85,6 @@ if ( isset( $_POST['s2_admin']) ) {
 					if ( $interval == 0 ) {
 						// if we are on per-post emails remove last_cron entry
 						unset($this->subscribe2_options['last_s2cron']);
-						unset($this->subscribe2_options['previous_s2cron']);
 					} else {
 						// if we are using digest schedule the event and prime last_cron as now
 						$time = time() + $interval;
@@ -100,9 +99,6 @@ if ( isset( $_POST['s2_admin']) ) {
 							$timestamp += $interval;
 						}
 						wp_schedule_event($timestamp, $email_freq, 's2_digest_cron');
-						if ( !isset($this->subscribe2_options['last_s2cron']) ) {
-							$this->subscribe2_options['last_s2cron'] = current_time('mysql');
-						}
 					}
 				}
 			} else {
@@ -112,7 +108,7 @@ if ( isset( $_POST['s2_admin']) ) {
 			}
 		}
 
-		echo "<div id=\"message\" class=\"updated fade\"><p><strong>$this->options_saved</strong></p></div>";
+		echo "<div id=\"message\" class=\"updated fade\"><p><strong>" . __('Options saved!', 'subscribe2') . "</strong></p></div>";
 		update_option('subscribe2_options', $this->subscribe2_options);
 	}
 }
@@ -121,7 +117,7 @@ if ( isset( $_POST['s2_admin']) ) {
 $sql = "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' LIMIT 1";
 $id = $wpdb->get_var($sql);
 if ( empty($id) ) {
-	echo "<div id=\"page_message\" class=\"error\"><p class=\"s2_error\"><strong>$this->no_page</strong></p></div>";
+	echo "<div id=\"page_message\" class=\"error\"><p class=\"s2_error\"><strong>" . __('You must create a WordPress page for this plugin to work correctly.', 'subscribe2') . "</strong></p></div>";
 }
 
 if ( $this->subscribe2_options['email_freq'] != 'never' ) {
@@ -149,8 +145,8 @@ if ( $this->subscribe2_options['sender'] == 'blogname' ) {
 	$sender = $userdata->user_email;
 }
 list($user, $domain) = explode('@', $sender, 2);
-if ( !strstr($_SERVER['SERVER_NAME'], $domain) && $this->subscribe2_options['sender'] != 'author' ) {
-	echo "<div id=\"sender_message\" class=\"error\"><p class=\"s2_error\"><strong>" . __('You appear to be sending notifications from an email address from a different domain name to your blog, this may result in failed emails', 'subscribe2') . "</strong></p></div>";
+if ( !stristr($_SERVER['SERVER_NAME'], $domain) && $this->subscribe2_options['sender'] != 'author' ) {
+	echo "<div id=\"sender_message\" class=\"error\"><p class=\"s2_error\"><strong>" . sprintf(__('You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2'), $sender, $_SERVER['SERVER_NAME']) . "</strong></p></div>";
 }
 
 // detect or define which tab we are in
@@ -386,18 +382,21 @@ switch ($current_tab) {
 		echo __('Yes', 'subscribe2') . "</label>&nbsp;&nbsp;";
 		echo "<label><input type=\"radio\" name=\"autosub_def\" value=\"no\"" . checked($this->subscribe2_options['autosub_def'], 'no', false) . " /> ";
 		echo __('No', 'subscribe2') . "</label><br /><br />";
-		echo __('Display checkbox to allow subscriptions from the comment form', 'subscribe2') . ": <br />\r\n";
-		echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"before\"" . checked($this->subscribe2_options['comment_subs'], 'before', false) . " /> ";
-		echo __('Before the Comment Submit button', 'subscribe2') . "</label>&nbsp;&nbsp;";
-		echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"after\"" . checked($this->subscribe2_options['comment_subs'], 'after', false) . " /> ";
-		echo __('After the Comment Submit button', 'subscribe2') . "</label>&nbsp;&nbsp;";
-		echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"no\"" . checked($this->subscribe2_options['comment_subs'], 'no', false) . " /> ";
-		echo __('No', 'subscribe2') . "</label><br /><br />";
-		echo __('Comment form checkbox is checked by default', 'subscribe2') . ": <br />\r\n";
-		echo "<label><input type=\"radio\" name=\"comment_def\" value=\"yes\"" . checked($this->subscribe2_options['comment_def'], 'yes', false) . " /> ";
-		echo __('Yes', 'subscribe2') . "</label>&nbsp;&nbsp;";
-		echo "<label><input type=\"radio\" name=\"comment_def\" value=\"no\"" . checked($this->subscribe2_options['comment_def'], 'no', false) . " /> ";
-		echo __('No', 'subscribe2') . "</label><br /><br />\r\n";
+		// Hide these options if using Jetpack Comments
+		if ( !class_exists('Jetpack_Comments') ) {
+			echo __('Display checkbox to allow subscriptions from the comment form', 'subscribe2') . ": <br />\r\n";
+			echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"before\"" . checked($this->subscribe2_options['comment_subs'], 'before', false) . " /> ";
+			echo __('Before the Comment Submit button', 'subscribe2') . "</label>&nbsp;&nbsp;";
+			echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"after\"" . checked($this->subscribe2_options['comment_subs'], 'after', false) . " /> ";
+			echo __('After the Comment Submit button', 'subscribe2') . "</label>&nbsp;&nbsp;";
+			echo "<label><input type=\"radio\" name=\"comment_subs\" value=\"no\"" . checked($this->subscribe2_options['comment_subs'], 'no', false) . " /> ";
+			echo __('No', 'subscribe2') . "</label><br /><br />";
+			echo __('Comment form checkbox is checked by default', 'subscribe2') . ": <br />\r\n";
+			echo "<label><input type=\"radio\" name=\"comment_def\" value=\"yes\"" . checked($this->subscribe2_options['comment_def'], 'yes', false) . " /> ";
+			echo __('Yes', 'subscribe2') . "</label>&nbsp;&nbsp;";
+			echo "<label><input type=\"radio\" name=\"comment_def\" value=\"no\"" . checked($this->subscribe2_options['comment_def'], 'no', false) . " /> ";
+			echo __('No', 'subscribe2') . "</label><br /><br />\r\n";
+		}
 		echo __('Show one-click subscription on profile page', 'subscribe2') . ":<br />\r\n";
 		echo "<label><input type=\"radio\" name=\"one_click_profile\" value=\"yes\"" . checked($this->subscribe2_options['one_click_profile'], 'yes', false) . " /> ";
 		echo __('Yes', 'subscribe2') . "</label>&nbsp;&nbsp;";

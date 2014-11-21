@@ -82,11 +82,11 @@ if ( isset($_POST['s2_admin']) && 'mail' == $_POST['s2_admin'] ) {
 		if ( isset($_POST['preview']) ) {
 			$message = "<p class=\"s2_message\">" . __('Preview message sent!', 'subscribe2') . "</p>";
 		} else {
-			$message = $this->mail_sent;
+			$message = "<p class=\"s2_message\">" . __('Message sent!', 'subscribe2') . "</p>";
 		}
 	} else {
 		global $phpmailer;
-		$message = $this->mail_failed . $error_message . $phpmailer->ErrorInfo;
+		$message = "<p class=\"s2_error\">" . __('Message failed!', 'subscribe2') . "</p>" . $error_message . $phpmailer->ErrorInfo;
 	}
 	echo "<div id=\"message\" class=\"updated\"><strong><p>" . $message . "</p></strong></div>\r\n";
 }

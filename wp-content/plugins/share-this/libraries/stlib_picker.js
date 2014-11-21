@@ -67,16 +67,22 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	}
 	html += "'></ul></div>";
 	
-	html += "<div class='picker_headings'><span id='sharingBtn' class='stp_header highlightSelection' onclick='showSocialButtons()'>Sharing Buttons</span>";
-	html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header' style='padding-left:5px;'  onclick='showSocialPlugins()'>Social Plugins</span></div>";
+	html += "<div class='picker_headings'><span id='sharingBtn' class='stp_header' onclick='showSocialButtons()'>Sharing Buttons</span>";
+	
+	// For HoverBar and PullDown Bar - Disable Social Plugins Tab
+	if( (st_btnType == "_none") && ((st_selectedBarStyle == "hoverbarStyle") || (st_selectedBarStyle == "pulldownStyle"))) {
+		html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header highlightSelection' style='padding-left:5px;color:#CCCCCC;cursor: none !important;'>Social Plugins</span></div>";
+	}else{
+		html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header highlightSelection' style='padding-left:5px;'  onclick='showSocialPlugins()'>Social Plugins</span></div>";
+	}
 	
 	html += "<div class='stp_pickerArrow stp_pickerArrowRtNative'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag'></div>";
-	html += "<div class='stp_pickerRight'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulRight'></ul></div>";
+	html += "<div class='stp_pickerRight' style='display:block;'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulRight'></ul></div>";
 	if (options && !options.showNative) {
 		html += "<div class='stp_clear'></div>";
 	} else {
-		html += "<div class='stp_pickerArrow stp_pickerArrowBtmNative'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag_bottom'></div>";
-		html += "<div class='stp_pickerBottom stp_pickerRightNative'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulBottom'></ul></div>";
+		html += "<div class='stp_pickerArrow stp_pickerArrowBtmNative' style='display:none;'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag_bottom'></div>";
+		html += "<div class='stp_pickerBottom stp_pickerRightNative' style='display:none;'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulBottom'></ul></div>";
 		html += "<div class='stp_clear'></div>";
 	}
 	html += "</div>";

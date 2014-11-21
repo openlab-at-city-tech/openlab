@@ -3,7 +3,7 @@
  * Date Module
  * Can't use DWOpts object because value = the actual date
  *
- * @version $Id: date_module.php 580343 2012-08-01 17:34:38Z qurl $
+ * @version $Id: date_module.php 937227 2014-06-23 15:10:15Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -18,7 +18,7 @@
 			parent::admin();
 
 			$date_yes_selected = 'checked="checked"';
-			$opt_date = $DW->getOpt($_GET['id'], 'date');
+			$opt_date = $DW->getOpt($GLOBALS['widget_id'], 'date');
 
 			if ( count($opt_date) > 0 ) {
 				foreach ( $opt_date as $value ) {

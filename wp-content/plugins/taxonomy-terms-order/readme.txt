@@ -3,17 +3,17 @@ Contributors: Nsp Code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order
 Requires at least: 2.8
-Tested up to: 3.6
-Stable tag: 1.3.4
+Tested up to: 3.9
+Stable tag: 1.3.6
 
-Order Categories and all custom taxonomies terms and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
+Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
 
 == Description ==
 
-Order Categories and all custom taxonomies terms using a Drag and Drop Sortable javascript capability. <strong>No Theme update is required</strong> the code will change the query on the fly.
-If multiple taxonomies are created for a custom post type, a menu will allow to chose the one you need sorted. If child categories (terms) are define, tose can be sorder too using the same interface
+Order Categories and all custom taxonomies terms (hierarchically) using a Drag and Drop Sortable javascript capability. <strong>No Theme update is required</strong> the code will change the query on the fly.
+If multiple taxonomies are created for a custom post type, a menu will allow to chose the one need sorted. If child categories (terms) are defined, tose can be sorder too using the same interface
 <br />Also you can have the admin terms interface sorted per your new sort.
-<br />This plugin it's developed by <a target="_blank" href="http://www.nsp-code.com">Nsp-Code</a>
+<br />This plugin is developed by <a target="_blank" href="http://www.nsp-code.com">Nsp-Code</a>
 
 == Installation ==
 
@@ -49,6 +49,10 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 
 == Change Log ==
 
+= 1.3.6 =
+ - Traditional Chineze Language (Thanks to Danny http://sofree.cc)
+ - Minor admin styling
+   
 = 1.3.4 =
  - Menu walker update
  - Translations load fix
@@ -66,8 +70,7 @@ All ideas are welcome and i put them on my list to be implemented into the new v
  - Localisation Implement, Dutch and Romanian.
  Many thanks to Anja Fokker  http://www.werkgroepen.net/
 
- Whant to contribute with a translation to your language? Please use the attached to.pot file
-
+ 
 == Upgrade Notice ==
 
 Make sure you get the latest version
@@ -75,4 +78,5 @@ Make sure you get the latest version
 
 == Localization ==
 
-Currently available in English, Dutch, French, Deutch, Slovak, Japanese and Romanian
+Available in English, Dutch, French, Deutch, Slovak, Japanese, Traditional Chineze and Romanian
+Whant to contribute with a translation to your language? Please use the attached to.pot file 

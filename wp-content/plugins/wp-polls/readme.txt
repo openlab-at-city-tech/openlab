@@ -2,31 +2,20 @@
 Contributors: GamerZ  
 Donate link: http://lesterchan.net/site/donation/  
 Tags: poll, polls, polling, vote, booth, democracy, ajax, survey, post, widget  
-Requires at least: 2.8  
-Tested up to: 3.7
-Stable tag: trunk  
+Requires at least: 3.9  
+Tested up to: 3.9  
+Stable tag: 2.66  
 
 Adds an AJAX poll system to your WordPress blog. You can also easily add a poll into your WordPress's blog post/page.
 
 == Description ==
-
 WP-Polls is extremely customizable via templates and css styles and there are tons of options for you to choose to ensure that WP-Polls runs the way you wanted. It now supports multiple selection of answers.
 
-= Previous Versions =
-* [WP-Polls 2.40 For WordPress 2.7.x](http://downloads.wordpress.org/plugin/wp-polls.2.40.zip "WP-Polls 2.40 For WordPress 2.7.x")
-* [WP-Polls 2.31 For WordPress 2.5.x And 2.6.x](http://downloads.wordpress.org/plugin/wp-polls.2.31.zip "WP-Polls 2.31 For WordPress 2.5.x And 2.6.x")
-* [WP-Polls 2.20 For WordPress 2.1.x, 2.2.x And 2.3.x](http://downloads.wordpress.org/plugin/wp-polls.2.20.zip "WP-Polls 2.20 For WordPress 2.1.x, 2.2.x And 2.3.x")
-* [WP-Polls 2.13 For WordPress 2.0.x](http://downloads.wordpress.org/plugin/wp-polls.2.13.zip "WP-Polls 2.13 For WordPress 2.0.x")
-* [WP-Polls 2.02a For WordPress 1.5.2](http://downloads.wordpress.org/plugin/wp-polls.2.02a.zip "WP-Polls 2.02a For WordPress 1.5.2")
-
 = Development =
-* [http://dev.wp-plugins.org/browser/wp-polls/](http://dev.wp-plugins.org/browser/wp-polls/ "http://dev.wp-plugins.org/browser/wp-polls/")
+* [https://github.com/lesterchan/wp-polls](https://github.com/lesterchan/wp-polls "https://github.com/lesterchan/wp-polls")
 
 = Translations =
 * [http://dev.wp-plugins.org/browser/wp-polls/i18n/](http://dev.wp-plugins.org/browser/wp-polls/i18n/ "http://dev.wp-plugins.org/browser/wp-polls/i18n/")
-
-= Support Forums =
-* [http://forums.lesterchan.net/index.php?board=15.0](http://forums.lesterchan.net/index.php?board=15.0 "http://forums.lesterchan.net/index.php?board=15.0")
 
 = Credits =
 * __ngetext() by [Anna Ozeritskaya](http://hweia.ru/ "Anna Ozeritskaya")
@@ -36,6 +25,21 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 * I spent most of my free time creating, updating, maintaining and supporting these plugins, if you really love my plugins and could spare me a couple of bucks, I will really appericiate it. If not feel free to use it without any obligations.
 
 == Changelog ==
+
+= Version 2.66 =
+* FIXED: Notices from polls_archive function. Props. @prettyboymp.
+* FIXED: Ajax request in parallel with animation. Props @nodecode.
+* FIXED: Editor button was outputting the wrong shortcode.
+* FIXED: ReferenceError: pollsEdL10n is not defined if TinyMCE 4.0 is loaded outside the Add/Edit Posts/Pages.
+
+= Version 2.65 =
+* NEW: Use Dashicons
+* NEW: Supports TinyMCE 4.0 For WordPress 3.9
+* NEW: Added Poll ID after adding it
+* FIXED: Use SITECOOKIEPATH instead of COOKIEPATH.
+* FIXED: Use http://ipinfo.io instead of http://ws.arin.net to get check IP information.
+* FIXED: Wrapped all JS function in jQuery.ready(). It is ugly, but it will do till I have time to rewrite it.
+* FIXED: Add INDEX for wp_pollsip: pollip_ip_qid (pollip_ip, pollip_qid) to prevent full table scan. Thanks archon810 from AndroidPolice.
 
 = Version 2.64 =
 * NEW: Add in various filters in the plugin. Props Machiel.
@@ -68,7 +72,7 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 * NEW: Renamed polls-js.js To polls-js.dev.js
 * NEW: Translate Javascript Variables Using wp_localize_script()
 * NEW: Add "Add Poll" To WordPress Favourite Actions
-* NEW: Minified editor_plugin.js And Added Non-Minified editor_plugin.dev.js
+* NEW: Minified plugin.js And Added Non-Minified plugin.min.js
 * NEW: Able To Remove Individual Answers When Adding Or Editing A Poll
 * NEW: Use _n() Instead Of __ngettext() And _n_noop() Instead Of __ngettext_noop()
 * NEW: Uses New Widget Class From WordPress
@@ -265,17 +269,17 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 
 = General Usage (Without Widget) =
 1. Open `wp-content/themes/<YOUR THEME NAME>/sidebar.php`
-2. Add:
+2. Add:  
 <code>
-<?php if (function_exists('vote_poll') && !in_pollarchive()): ?>  
-  <li>  
-    <h2>Polls</h2>  
-    <ul>  
-      <li><?php get_poll();?></li>  
-    </ul>  
-    <?php display_polls_archive_link(); ?>  
-  </li>  
-<?php endif; ?>  
+&lt;?php if (function_exists('vote_poll') && !in_pollarchive()): ?&gt;  
+&nbsp;&nbsp;&lt;li&gt;  
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;Polls&lt;/h2&gt;  
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;?php get_poll();?&gt;&lt;/li&gt;  
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;  
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;?php display_polls_archive_link(); ?&gt;  
+&nbsp;&nbsp;&lt;/li&gt;  
+&lt;?php endif; ?&gt;  
 </code>
 
 * To show specific poll, use `<?php get_poll(2); ?>` where 2 is your poll id.
@@ -331,8 +335,8 @@ N/A
 * If you ARE NOT using nice permalinks, you need to go to `WP-Admin -> Polls -> Poll Options` and under `Poll Archive -> Polls Archive URL`, you need to fill in the URL to the Polls Archive Page you created above.
 
 = How Does WP-Polls Load CSS? =
-* WP-Polls will load 'polls-css.css' from your theme's directory if it exists.
-* If it doesn't exists, it will just load the default 'polls-css.css' that comes with WP-Polls.
+* WP-Polls will load `polls-css.css` from your theme's directory if it exists.
+* If it doesn't exists, it will just load the default `polls-css.css` that comes with WP-Polls.
 * This will allow you to upgrade WP-Polls without worrying about overwriting your polls styles that you have created.
 
 = Why In Internet Explorer (IE) The poll's Text Appear Jagged? =
@@ -356,40 +360,40 @@ N/A
 .wp-polls-ul li:nth-child(08) .pollbar{ background:#66cc9a}  
 .wp-polls-ul li:nth-child(09) .pollbar{ background:#98CBCB}  
 .wp-polls-ul li:nth-child(10) .pollbar{ background:#a67c52}  
-.wp-polls-ul li .pollbar{-webkit-transition: background 0.7s ease-in-out}  
-.wp-polls-ul li .pollbar:hover{background:#F00}  
+.wp-polls-ul li .pollbar{ transition: background 0.7s ease-in-out }  
+.wp-polls-ul li .pollbar:hover{ background:#F00 }
 </code>
 
 = Polls Stats (Outside WP Loop) =
 
 = To Display Total Polls =
-* Use:
+* Use:  
 <code>
-<?php if (function_exists('get_pollquestions')): ?>  
-	<?php get_pollquestions(); ?>  
-<?php endif; ?>
+&lt;?php if (function_exists('get_pollquestions')): ?&gt;  
+&nbsp;&nbsp;&lt;?php get_pollquestions(); ?&gt;  
+&lt;?php endif; ?&gt;
 </code>
 
 = To Display Total Poll Answers =
-* Use:
+* Use:  
 <code>
-<?php if (function_exists('get_pollanswers')): ?>  
-	<?php get_pollanswers(); ?>  
-<?php endif; ?>
+&lt;?php if (function_exists('get_pollanswers')): ?&gt;  
+&nbsp;&nbsp;&lt;?php get_pollanswers(); ?&gt;  
+&lt;?php endif; ?&gt;
 </code>
 
 = To Display Total Poll Votes =
-* Use:
+* Use:  
 <code>
-<?php if (function_exists('get_pollvotes')): ?>  
-	<?php get_pollvotes(); ?>  
-<?php endif; ?>
+&lt;?php if (function_exists('get_pollvotes')): ?&gt;  
+&nbsp;&nbsp;&lt;?php get_pollvotes(); ?&gt;  
+&lt;?php endif; ?&gt;
 </code>
 
 = To Display Total Poll Voters =
-* Use:
+* Use:  
 <code>
-<?php if (function_exists('get_pollvoters')): ?>  
-	<?php get_pollvoters(); ?>  
-<?php endif; ?>
+&lt;?php if (function_exists('get_pollvoters')): ?&gt;  
+&nbsp;&nbsp;&lt;?php get_pollvoters(); ?&gt;  
+&lt;?php endif; ?&gt;
 </code>

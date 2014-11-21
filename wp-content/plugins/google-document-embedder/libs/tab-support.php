@@ -64,7 +64,7 @@
 	</td>
 </tr>
 <tr valign="top">
-	<th scope="row"><label for="msg" id="msg_label"><?php _e('Message', 'gde'); ?></label></th>
+	<th scope="row"><label for="msg" id="msg_label"><?php _e('Message', 'gde'); ?>*</label></th>
 	<td>
 		<textarea name="message" id="msg" style="width:75%;min-height:50px;"></textarea>
 	</td>
@@ -89,7 +89,6 @@
 	echo "=== GDE Debug Information ===\n\n";
 	
 	echo "GDE Version: $gde_ver / GDE DB: " . get_site_option( 'gde_db_version', 0 ) . "\n";
-	echo "API Key: " . $gdeoptions['api_key'] . "\n";
 	echo "Profiles: " . gde_debug_tables( 'gde_profiles', true ) . "\n";
 	echo "Secure Docs: " . gde_debug_tables( 'gde_secure', true );
 	

@@ -3,8 +3,8 @@
 Plugin Name: Subscribe2
 Plugin URI: http://subscribe2.wordpress.com
 Description: Notifies an email list when new entries are posted.
-Version: 9.1
-Author: Matthew Robinson
+Version: 10.12
+Author: Matthew Robinson, tanaylakhani
 Author URI: http://subscribe2.wordpress.com
 Licence: GPL3
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
@@ -12,7 +12,7 @@ Text Domain: subscribe2
 */
 
 /*
-Copyright (C) 2006-13 Matthew Robinson
+Copyright (C) 2006-14 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
@@ -49,13 +49,13 @@ if ( !function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( is_plugin_active_for_network(plugin_basename(__FILE__)) ) {
 	deactivate_plugins( plugin_basename(__FILE__) );
-	$exit_msg = __('Subscribe2 cannot be activated as a network plugin. Please activate it at on a site level', 'subscribe2');
+	$exit_msg = __('Subscribe2 cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2');
 	exit($exit_msg);
 }
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '9.1' );
+define( 'S2VERSION', '10.12' );
 define( 'S2PATH', trailingslashit(dirname(__FILE__)) );
 define( 'S2DIR', trailingslashit(dirname(plugin_basename(__FILE__))) );
 define( 'S2URL', plugin_dir_url(dirname(__FILE__)) . S2DIR );
@@ -78,4 +78,11 @@ if ( is_admin() ) {
 	$mysubscribe2 = new s2_frontend;
 	$mysubscribe2->s2init();
 }
+
+function s2_install() {
+	add_option('rg_s2_plugin_do_activation_redirect', true);
+}
+register_activation_hook(__FILE__, 's2_install');
+
+include "readygraph-extension.php"
 ?>

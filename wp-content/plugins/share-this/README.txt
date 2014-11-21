@@ -3,19 +3,32 @@ Tags:share, share this, sharethis, addthis, addtoany, share this, bookmark faceb
 
 Contributors:ShareThis
 Requires at least: 1.5
-Tested up to: 3.5
+Tested up to: 3.8.1
 Stable tag: trunk
 
 Social Charge your Content with ShareThis - features Social Analytics, CopyNShare, Open Graph Sharing, and the Hovering Bar!
 
 == Description ==
 
+**Updates 4/23/2014**
 
-**Increase social activity on your site with ShareThis!**
+New Look. Same Function.
+You may have been selected to get a free ShareThis Multi Post widget upgrade.
+This subtle change will give your social tools a more modern look and improved user interaction. And don’t worry, the widget still functions the same way so your users can choose from 120 social channels to share your content with their friends and family. [Learn More](http://support.sharethis.com/customer/portal/articles/517332-share-widget-faqs)
 
-* Choose from to 120 social channels, including Facebook, Twitter, LinkedIn, and Pinterest.
+**Increase social activity on your site with [ShareThis](www.sharethis.com)!**
+
+* Choose from 120 social channels, including Facebook, Twitter, LinkedIn, and Pinterest.
 * Use small or large buttons, add counters or use one of the Sharing Bars 
 * Access to greater insights by creating a Social Analytics Dashboard account
+
+**Miss our Webinars? Watch our 4-part Webinar Series to learn how to improve your social media strategies.**
+
+* ​Evaluate your Social Cycle: Connect. Engage. Increase. Repeat. [Watch Now](http://slidesbysharethis.com/v/4cmrl8)
+* Turning the Lights On: Increasing Engagement in your Mobile App [Watch Now](http://slidesbysharethis.com/v/sppp8n)
+* Leveraging Social Analytics to Power Quality Referral Traffic [Watch Now](http://slidesbysharethis.com/v/r5g4te)
+* Verdict: Infinite Scroll Found Guilty in Page View’s Death [Watch Now](http://slidesbysharethis.com/v/uyk7bd)
+
 
 **Join the ShareThis Network**  
 Join the ShareThis Network of over 2.4M sites and get access to your analytics: Check out the [live demo](http://sharethis.com/publishers/metrics-dashboard?txtHidDemo=demo#home).
@@ -24,10 +37,6 @@ Join the ShareThis Network of over 2.4M sites and get access to your analytics: 
 * Detailed reports on the top shared URLs of your site(s)
 * Top social channel reports
 * Analysis of the social quality of your site via [SQI – Social Quality Index](www.sharethis.com/sqi).
-
-
-**SnapSets Beta - Released on July 18, 2013**  
-We've just released [SnapSets](http://snapsets.sharethis.com/publishers.html) in open beta! Contact us to learn more. 
 
 **Track Users' Copy and Paste Shares**  
 [CopyNShare](http://support.sharethis.com/customer/portal/articles/517332#copynshare) is a ShareThis widget feature in open beta that enables you to track the shares that occur when a user copies and pastes your website's URL or content. Two options are available:
@@ -58,8 +67,64 @@ More information about the [ShareNow plugin for WordPress](http://support.sharet
 6. To enable Hovering Bar (floating share buttons), go to the ShareThis Options page and scroll down check the 'Enable Hovering Bar' button.
 
 == Changelog ==
-7.0.6
+7.0.17
 
+Added option to Show/Hide Buttons on Post Excerpts. 
+User can now configure whether to show buttons on Post Excerpts by selecting the checkbox provided on Configuration Page Step 4.
+
+7.0.16
+
+Updated Configuration Page Screenshots.
+
+7.0.15
+
+1. Fix for conflict between Facebook and SEO Plugin and ShareThis Plugin
+
+
+7.0.14
+1. Fix for ShareThis Settings keeps Resetting after activation of any plugin
+2. Fix for Warning messages display
+
+7.0.13
+Maintenance Fix
+Buttons not showing up on the Page
+
+7.0.12
+Maintenance Fixes
+1. HoverBar buttons get cut-off when placed on right position
+2. Unwanted <BR> Tags were getting inserted in button SPAN tags
+
+7.0.11
+Maintenance Fixes
+Fix for Conflict between Open Graph Plugin and ShareThis Plugin
+
+7.0.10
+Maintenance Fixes
+1. Social Plugins are showing-up on Hoverbar and messing the other buttons
+2. Wordpress Plugin Configuration Page Error when only HoverBar option is selected
+3. Hover Bar Position (Left/Right) not getting updated on the actual website
+4. Pulldown Bar logo image not getting saved
+
+7.0.9
+1. Option to add or edit http/https option in code.
+2. Options to show buttons on selected pages.
+3. Advance configuration to edit code.
+4. Added option to show/hide 
+	a. Step 3 Sharing method.
+	b. Step 4 Manage page exceptions.
+	c. Step 6 View & Edit code.
+5. Removed drop downs for Page & Post selection from Step 4.
+6. Minor bug fixes.
+
+7.0.8
+Hot fix for plugin upgradation failure(Content not displaying on website after plugin upgradation)
+
+7.0.7
+1. ShareThis plugin support for Wordpress 3.8
+2. Option to show buttons on Top or Below the post
+3. Option to Logout in Plugin
+
+7.0.6
 1. Secunia vulnerability issue resolved
 
 7.0.5

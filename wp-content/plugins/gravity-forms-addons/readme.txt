@@ -1,8 +1,8 @@
 === Gravity Forms Directory ===
 Tags: gravity forms, gravity form, forms, gravity, form, crm, directory, business, business directory, list, listings, sort, submissions, table, tables, member, contact, contacts, directorypress, business directory, directory plugin, wordpress directory, classifieds, captcha, cforms, contact, contact form, contact form 7, contact forms, CRM, email, enhanced wp contact form, feedback, form, forms, gravity, gravity form, gravity forms, secure form, simplemodal contact form, wp contact form, widget
 Requires at least: 3.3
-Tested up to: 3.8
-Stable tag: trunk
+Tested up to: 3.8.2
+Stable tag: 3.6.1.2
 Contributors: katzwebdesign, katzwebservices
 License: GPLv2 or later
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms%20Addons&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -10,6 +10,12 @@ Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackka
 Add directory capabilities and other functionality to the great Gravity Forms plugin.
 
 == Description ==
+
+> #### [GravityView](https://gravityview.co/) is landing soon.
+> 
+> We're getting ready to release a totally re-written version of the Directory plugin!
+>
+> [Sign up for email updates](https://gravityview.co/) to learn when it's released.
 
 ### Turn Gravity Forms into a Directory plugin
 
@@ -215,6 +221,46 @@ To fix this issue, add this to your theme's `functions.php` file:
 <code>add_filter('kws_gf_display_all_fields', create_function('$content', 'return "";') );</code>
 
 == Changelog ==
+
+= 3.6.1.1 & 3.6.1.2 (April 10th, 2014) =
+* Fixed: Post Image wasn't showing on the single entry view.
+* Fixed: When updating an entry on the frontend, allow the update of conditional hidden fields with cascade conditions
+
+= 3.6.1 (March 31, 2014) =
+* Fixed: When updating an entry on the frontend, allow the update of conditional hidden fields (if visible)
+* Fixed: Add Directory button (to introduce directory shortcode)
+* Fixed: Colorbox examples' paths
+* Fixed: Approve toggle icons for entries shown by default (no form selected)
+
+= 3.6 (March 27, 2014) =
+* Updated Colorbox js plugin (v 1.5.5)
+	* Fixed: jquery.colorbox-min.js path
+* Updated Tablesorter plugin
+	- Now Tablesorter supports more themes using the `kws_gf_tablesorter_theme` filter:
+		- `black-ice`, `blue`, `bootstrap`, `bootstrap_2`, `dark`, `default`, `dropbox`, `green`, `grey`, `ice`, `jui`
+		- [See themes here](http://mottie.github.io/tablesorter/docs/themes.html)
+* Fixed: When displaying the post link allow `nofollow` and `target` configuration
+* Fixed: Added support for non-standard locations of plugin directories
+* Modified: Removed the default `fixed` table class, this was conflicting with several WordPress themes' CSS
+
+= 3.5.4.5 (March 21, 2014) =
+* Fixed: View entry issue when website has too many users caused by entry creator change select box. If more than 300 users, show only administrators.
+* Fixed: Undefined variable notice (line 2606)
+* Added filter to convert the post_title field in a link to the post itself
+
+= 3.5.4.3 (March 10, 2014) =
+* IMPORTANT SECURITY UPDATE - security hole patched. __Update as soon as possible.__ (Thanks, BMoskovits)
+* Fixed: Lightbox entry view now allows `wp-content` to be a different name
+* Fixed: Static PHP messages on settings page
+* Fixed: Back to Directory link now works with Javascript disabled
+* Fixed: Back to Directory link now displays properly on lightbox entry view. Note: it will link to the originating entry, not a blog archive page if the directory is embedded in a blog post.
+
+= 3.5.4.2 (March 10, 2014) =
+* Fix broken path to Change Lead Creator plugin
+
+= 3.5.4.1 (March 10, 2014) =
+* Small fix on showing the edit entry link for own user entries
+* Renamed filename from `change-lead-creator.php` to `gravity-forms-lead-creator.php` as WordPress activates the first file with plugin info encountered in the directory (ordered by name) - this way, the main file `gravity-forms-addons.php` will appear first.
 
 = 3.5.4 (January 23, 2014) =
 * Separated Change Entry Creator functionality into a separate, packaged plugin. This will allow you to enable or disable the functionality as you would a plugin.
@@ -460,6 +506,46 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 
 
 == Upgrade Notice ==
+
+= 3.6.1.1 & 3.6.1.2 (April 10th, 2014) =
+* Fixed: Post Image wasn't showing on the single entry view.
+* Fixed: When updating an entry on the frontend, allow the update of conditional hidden fields with cascade conditions
+
+= 3.6.1 (March 31, 2014) =
+* Fixed: When updating an entry on the frontend, allow the update of conditional hidden fields (if visible)
+* Fixed: Add Directory button (to introduce directory shortcode)
+* Fixed: Colorbox examples' paths
+* Fixed: Approve toggle icons for entries shown by default (no form selected)
+
+= 3.6 (March 27, 2014) =
+* Updated Colorbox js plugin (v 1.5.5)
+	* Fixed: jquery.colorbox-min.js path
+* Updated Tablesorter plugin
+	- Now Tablesorter supports more themes using the `kws_gf_tablesorter_theme` filter:
+		- `black-ice`, `blue`, `bootstrap`, `bootstrap_2`, `dark`, `default`, `dropbox`, `green`, `grey`, `ice`, `jui`
+		- [See themes here](http://mottie.github.io/tablesorter/docs/themes.html)
+* Fixed: When displaying the post link allow `nofollow` and `target` configuration
+* Fixed: Added support for non-standard locations of plugin directories
+* Modified: Removed the default `fixed` table class, this was conflicting with several WordPress themes' CSS
+
+= 3.5.4.5 (March 21, 2014) =
+* Fixed: View entry issue when website has too many users caused by entry creator change select box. If more than 300 users, show only administrators.
+* Fixed: Undefined variable notice (line 2606)
+* Added filter to convert the post_title field in a link to the post itself
+
+= 3.5.4.3 (March 10, 2014) =
+* IMPORTANT SECURITY UPDATE - security hole patched. __Update as soon as possible.__
+* Fixed: Lightbox entry view now allows `wp-content` to be a different name
+* Fixed: Static PHP messages on settings page
+* Fixed: Back to Directory link now works with Javascript disabled
+* Fixed: Back to Directory link now displays properly on lightbox entry view. Note: it will link to the originating entry, not a blog archive page if the directory is embedded in a blog post.
+
+= 3.5.4.2 (March 10, 2014) =
+* Fix broken path to Change Lead Creator plugin
+
+= 3.5.4.1 (March 10, 2014) =
+* Small fix on showing the edit entry link for own user entries
+* Renamed filename from `change-lead-creator.php` to `gravity-forms-lead-creator.php` as WordPress activates the first file with plugin info encountered in the directory (ordered by name) - this way, the main file `gravity-forms-addons.php` will appear first.
 
 = 3.5.4 (January 23, 2014) =
 * Separated Change Entry Creator functionality into a separate, packaged plugin. This will allow you to enable or disable the functionality as you would a plugin.

@@ -1,0 +1,110 @@
+# Translation of Slideshare in Greek
+# This file is distributed under the same license as the Slideshare package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-08-24 08:08:43+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Slideshare\n"
+
+#: slideshare.php:29 slideshare.php:56
+msgid "SlideShare Configuration"
+msgstr "Παραμετροποίηση του SlideShare"
+
+#: slideshare.php:66
+msgid "Default width"
+msgstr "Προεπιλεγμένο πλάτος"
+
+#: slideshare.php:69
+msgid "Update SlideShare Settings"
+msgstr "Ενημέρωση των παραμέτρων του SlideShare"
+
+#: slideshare.php:70 yst_plugin_tools.php:63
+msgid "Settings"
+msgstr "Παράμετροι"
+
+#: slideshare.php:71
+msgid "Explanation of usage"
+msgstr "Επεξήγηση της λειτουργίας"
+
+#: slideshare.php:71
+msgid "Just copy and paste the \"Embed (wordpress.com)\" code from %s and you're done"
+msgstr "Απλά κάντε αντιγραφή και επικόλληση του κώδικα \"Embed (wordpress.com)\" απο το %s και είστε έτοιμοι."
+
+#: slideshare.php:72
+msgid "Explanation of default width"
+msgstr "Επεξήγηση του προεπιλεγμένου πλάτους"
+
+#: slideshare.php:72
+msgid "If you enter nothing here, you can change the width by hand by changing the w= value, that is bolded and red here:"
+msgstr "Αν δεν συμπληρώσετε τίποτα εδώ, μπορείτε να αλλάζετε το πλάτος με το χέρι, αλλάζοντας την τιμή του w=, το οποίο είναι bold και κόκκινο εδώ:"
+
+#: slideshare.php:72
+msgid "If you <em>do</em> enter a value, it will always replace the width with that value."
+msgstr "Αν όμως <em>συμπληρώσετε</em> κάτι, θα αντικαθιστά πάντα την τιμή πλάτους με αυτή."
+
+#: yst_plugin_tools.php:154
+msgid "Why not do any or all of the following:"
+msgstr "Αν θέλετε κάντε ένα ή όλα απο τα παρακάτω: "
+
+#: yst_plugin_tools.php:156
+msgid "Link to it so other folks can find out about it."
+msgstr "Βάλτε ένα σύνδεσμο ώστε να το μάθουν και άλλοι."
+
+#: yst_plugin_tools.php:157
+msgid "Give it a good rating on WordPress.org."
+msgstr "Δώστε καλή βαθμολογία στο WordPress.org"
+
+#: yst_plugin_tools.php:158
+msgid "Donate a token of your appreciation using the button below."
+msgstr "Δείξτε την εκτίμηση σας με μια δωρεά κάνοντας κλικ στο παρακάτω κουμπί."
+
+#: yst_plugin_tools.php:159
+msgid "Let other people know that it works with your WordPress setup."
+msgstr "Ενημερώστε τον υπόλοιπο κόσμο ότι λειτουργεί με το WordPress σας."
+
+#: yst_plugin_tools.php:161
+msgid "Like this plugin?"
+msgstr "Σας αρέσει αυτό το plugin;"
+
+#: yst_plugin_tools.php:165
+msgid "This plugin has cost me countless hours of work, if you use it, please donate a token of your appreciation!"
+msgstr "Το plugin αυτό μου έχει \"κοστίσει\" αμέτρητες ώρες δουλειάς, αν το χρησιμοποιείτε, δείξτε την ευγνωμοσύνη σας με μια δωρεά!"
+
+#: yst_plugin_tools.php:180
+msgid "If you've found a bug in this plugin, please submit it in the Support Forums with a clear description."
+msgstr "Αν βρήκατε κάποιο bug στο plugin, παρακαλώ υποβάλετε το στα Support Forums με μια ξεκάθαρη περιγραφή του προβλήματος."
+
+#: yst_plugin_tools.php:181
+msgid "Found a bug?"
+msgstr "Βρήκατε κάποιο bug;"
+
+#: yst_plugin_tools.php:223 yst_plugin_tools.php:263
+msgid "No news items, feed might be broken..."
+msgstr "Δεν υπάρχουν νεα, το κανάλι ενημερώσεων μπορεί να έχει χαλάσει."
+
+#: yst_plugin_tools.php:231 yst_plugin_tools.php:276
+msgid "Subscribe with RSS"
+msgstr "Εγγραφείτε με RSS"
+
+#: yst_plugin_tools.php:232 yst_plugin_tools.php:278
+msgid "Subscribe by email"
+msgstr "Εγγραφείτε με email"
+
+#: yst_plugin_tools.php:234 yst_plugin_tools.php:291
+msgid "Latest news from Yoast"
+msgstr "Τελευταία νέα από τον Yoast"
+
+#: yst_plugin_tools.php:252
+msgid "If you reload, this widget will be gone and never appear again, unless you decide to delete the database option 'yoastdbwidget'."
+msgstr "Αν ανανεώστε την σελίδα, το widget θα εξαφανιστεί και δεν θα εμφανιστεί ποτέ ξανά, εκτός αν αποφασίσετε να διαγράψετε την παράμετρο 'yoastdbwidget' απο την βάση δεδομένων."
+
+#: yst_plugin_tools.php:279
+msgid "Remove this widget from all users dashboards"
+msgstr "Αφαίρεση του widget απο τα dashboards όλων των χρηστών"
+
+msgid "A plugin for WordPress to easily display slideshare.net presentations."
+msgstr "Ένα plugin για WordPress για εύκολη προβολή παρουσιάσεων από το slideshare.net."

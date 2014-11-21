@@ -4,7 +4,7 @@ Plugin Name: Gravity Forms Directory & Addons
 Plugin URI: http://katz.co/gravity-forms-addons/
 Description: Turn <a href="http://katz.si/gravityforms" rel="nofollow">Gravity Forms</a> into a great WordPress directory...and more!
 Author: Katz Web Services, Inc.
-Version: 3.5.4
+Version: 3.6.1.2
 Author URI: http://www.katzwebservices.com
 
 Copyright 2014 Katz Web Services, Inc.  (email: info@katzwebservices.com)
@@ -32,7 +32,7 @@ class GFDirectory {
 
 	private static $path = "gravity-forms-addons/gravity-forms-addons.php";
 	private static $slug = "gravity-forms-addons";
-	private static $version = "3.5.4";
+	private static $version = "3.6.1.2";
 	private static $min_gravityforms_version = "1.5";
 
 	public static function directory_defaults($args = array()) {
@@ -43,7 +43,7 @@ class GFDirectory {
 			'directoryview' => 'table', // Table, list or DL
 			'entryview' => 'table', // Table, list or DL
 			'hovertitle' => true, // Show column name as user hovers over cell
-			'tableclass' => 'gf_directory widefat fixed', // Class for the <table>
+			'tableclass' => 'gf_directory widefat', // Class for the <table>
 			'tablestyle' => '', // inline CSS for the <table>
 			'rowclass' => '', // Class for the <table>
 			'rowstyle' => '', // inline CSS for all <tbody><tr>'s
@@ -125,9 +125,9 @@ class GFDirectory {
 
 		if(!self::is_gravityforms_installed()) { return false; }
 
-		include_once(WP_PLUGIN_DIR . '/' . basename(dirname( __FILE__ )) .'/edit-form.php');
-		include_once(WP_PLUGIN_DIR . '/' . basename(dirname( __FILE__ )) .'/admin.php');
-        include_once(WP_PLUGIN_DIR . '/' . basename(dirname( __FILE__ )) .'/change-lead-creator.php');
+		include_once(plugin_dir_path( __FILE__ ) .'/edit-form.php');
+		include_once(plugin_dir_path( __FILE__ ) .'/admin.php');
+        include_once(plugin_dir_path( __FILE__ ) .'/gravity-forms-lead-creator.php');
 
 		if(in_array(RG_CURRENT_PAGE, array("gf_entries", "admin.php", "admin-ajax.php"))) {
 	    	self::globals_get_approved_column();
@@ -251,7 +251,7 @@ class GFDirectory {
 		if(preg_match('/'.sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'\/([0-9]+)(?:\/|-)([0-9]+)\/?/ism',$url, $matches)) {
 			$link = add_query_arg(array('form'=>(int)$matches[1], 'leadid'=>(int)$matches[2]), $link);
 		} elseif(isset($_REQUEST['leadid']) && isset($_REQUEST['form'])) {
-			$link = add_query_arg(array('leadid'=>(int)$_REQUEST['leadid'], 'form'=>(int)$_REQUEST['form']), $link);
+			$link = wp_nonce_url(add_query_arg(array('leadid'=>(int)$_REQUEST['leadid'], 'form'=>(int)$_REQUEST['form']), $link), sprintf('view-%d-%d', $_REQUEST['leadid'], $_REQUEST['form']), 'view');
 		}
 		return $link;
 	}
@@ -271,7 +271,7 @@ class GFDirectory {
 			if($matches)  { $leadid = $matches[2]; $form = $matches[1]; }
 			else { $leadid = $_REQUEST['leadid']; $form = $_REQUEST['form']; }
 
-			return add_query_arg(array('leadid' =>$leadid, 'form'=>$form), trailingslashit($permalink));
+			return wp_nonce_url(add_query_arg(array('leadid' =>$leadid, 'form'=>$form), trailingslashit($permalink)), sprintf('view-%d-%d', $leadid, $form), 'view');
 		}
 		return $permalink;
 	}
@@ -297,15 +297,15 @@ class GFDirectory {
 
     		if($jstable) {
     			$theme = apply_filters('kws_gf_tablesorter_theme', 'blue', $form);
-    			wp_enqueue_style('tablesorter-'.$theme, plugins_url( "/tablesorter/themes/{$theme}/style.css", __FILE__));
-    			wp_enqueue_script('tablesorter-min', plugins_url( "/tablesorter/jquery.tablesorter.min.js", __FILE__), array('jquery'));
+    			wp_enqueue_style('tablesorter-'.$theme, plugins_url( "/bower_components/jquery.tablesorter/css/theme.{$theme}.css", __FILE__));
+    			wp_enqueue_script('tablesorter-min', plugins_url( "/bower_components/jquery.tablesorter/js/jquery.tablesorter.min.js", __FILE__), array('jquery'));
     			$kws_gf_styles[] = 'tablesorter-'.$theme;
     			$kws_gf_scripts[] = 'tablesorter-min';
     		}
 
     		if(!empty($lightboxsettings)) {
-    			wp_enqueue_script('colorbox', plugins_url( "/colorbox/js/jquery.colorbox-min.js", __FILE__), array('jquery'));
-    			wp_enqueue_style('colorbox', plugins_url( "/colorbox/example{$lightboxstyle}/colorbox.css", __FILE__), array());
+    			wp_enqueue_script('colorbox', plugins_url( "/bower_components/colorbox/jquery.colorbox-min.js", __FILE__), array('jquery'));
+    			wp_enqueue_style('colorbox', plugins_url( "/bower_components/colorbox/example{$lightboxstyle}/colorbox.css", __FILE__), array());
     			$kws_gf_scripts[] = $kws_gf_styles[] = 'colorbox';
     			add_action(apply_filters('kws_gf_directory_colorbox_action', 'wp_footer'), array('GFDirectory', 'load_colorbox'), 1000);
 			}
@@ -403,7 +403,7 @@ class GFDirectory {
 	    return in_array($current_page, $gf_pages);
     }
 
-    function directory_update_approved($lead_id = 0, $approved = 0, $form_id = 0, $approvedcolumn = 0) {
+    static function directory_update_approved($lead_id = 0, $approved = 0, $form_id = 0, $approvedcolumn = 0) {
         global $wpdb, $_gform_directory_approvedcolumn, $current_user;
         $current_user = wp_get_current_user();
         $user_data = get_userdata($current_user->ID);
@@ -505,7 +505,8 @@ class GFDirectory {
 	    	// Product fields can't be edited, so that doesn't really matter.
            if(!empty($is_valid) || (empty($is_valid) && empty($validation_message))) {
 	            do_action('kws_gf_directory_pre_update_lead', $lead, $Form);
-	            RGFormsModel::save_lead($Form, $lead);
+	            // since @3.6.1 to enable conditional fields' updates.
+	            self::save_lead($Form, $lead);
 	            $lead = RGFormsModel::get_lead($lead["id"]);
 
 	            do_action('kws_gf_directory_post_update_lead', $lead, $Form);
@@ -569,6 +570,9 @@ class GFDirectory {
 
 
 	static public function lead_detail($Form, $lead, $allow_display_empty_fields=false, $inline = true, $options = array()) {
+
+			if( !class_exists('GFEntryList')) { require_once(GFCommon::get_base_path() . "/entry_list.php"); }
+
 			global $current_user, $_gform_directory_approvedcolumn;
 			get_currentuserinfo();
 
@@ -658,8 +662,8 @@ class GFDirectory {
 								$size = '';
 								if(!empty($url)){
 									//displaying thumbnail (if file is an image) or an icon based on the extension
-									 $icon = GFEntryList::get_icon_url($url);
-									 if(!preg_match('/icon\_image\.gif/ism', $icon)) {
+									$icon = GFEntryList::get_icon_url($url);
+									if(!preg_match('/icon\_image\.gif/ism', $icon)) {
 									 	$lightboxclass = '';
 									 	$src = $icon;
 									 	if(!empty($getimagesize)) {
@@ -669,7 +673,7 @@ class GFDirectory {
 											$size = false;
 											$img = "<img src='$src' />";
 										}
-									 } else { // No thickbox for non-images please
+									} else { // No thickbox for non-images please
 									 	switch(strtolower(trim($postimage))) {
 									 		case 'image':
 									 			$src = $url;
@@ -684,8 +688,8 @@ class GFDirectory {
 										} else {
 											$size = false;
 										}
-									 }
-									 $img = array(
+									}
+									$img = array(
 									 	'src' => $src,
 									 	'size' => $size,
 									 	'title' => $title,
@@ -693,46 +697,61 @@ class GFDirectory {
 									 	'description' => $description,
 									 	'url' => esc_attr($url),
 									 	'code' => isset($size[3]) ? "<img src='$src' {$size[3]} />" : "<img src='$src' />"
-									 );
-									 $img = apply_filters('kws_gf_directory_lead_image', apply_filters('kws_gf_directory_lead_image_'.$postimage, apply_filters('kws_gf_directory_lead_image_'.$lead['id'], $img)));
-									 $value = $display_value = "<a href='{$url}'{$target}{$lightboxclass}>{$img['code']}</a>";
+									);
+									$img = apply_filters('kws_gf_directory_lead_image', apply_filters('kws_gf_directory_lead_image_'.$postimage, apply_filters('kws_gf_directory_lead_image_'.$lead['id'], $img)));
+
+									//lightbox class
+									$lightboxclass = '';
+				 					if(!empty($lightboxsettings['images'])) {
+										if(wp_script_is('colorbox', 'registered')) {
+											$lightboxclass = ' class="colorbox lightbox"';
+										} else if(wp_script_is('thickbox', 'registered')) {
+											$lightboxclass = ' class="thickbox lightbox"';
+										}
+									}
+									// link target
+									$target = ($linknewwindow && empty($lightboxsettings['images'])) ? ' target="_blank"' : '';
+
+									$value = $display_value = "<a href='{$url}'{$target}{$lightboxclass}>{$img['code']}</a>";
 								}
 							break;
 
 							default :
 								//ignore product fields as they will be grouped together at the end of the grid
-                            if(GFCommon::is_product_field($field["type"])){
-                                $has_product_fields = true;
-                                continue;
-                            }
+	                            if(GFCommon::is_product_field($field["type"])){
+	                                $has_product_fields = true;
+	                                continue;
+	                            }
 
-                            $value = RGFormsModel::get_lead_field_value($lead, $field);
-                            $display_value = GFCommon::get_lead_field_display($field, $value, $lead["currency"]);
+	                            $value = RGFormsModel::get_lead_field_value($lead, $field);
+	                            $display_value = GFCommon::get_lead_field_display($field, $value, $lead["currency"]);
+	                        break;
 
-                            $display_value = apply_filters("gform_entry_field_value", $display_value, $field, $lead, $Form);
-                            if($display_empty_fields || !empty($display_value) || $display_value === "0"){
-                                $count++;
-                                $is_last = $count >= $field_count && !$has_product_fields ? true : false;
-                                $last_row = $is_last ? " lastrow" : "";
+						} // end switch
 
-                                $display_value =  empty($display_value) && $display_value !== "0" ? "&nbsp;" : $display_value;
+						$display_value = apply_filters("gform_entry_field_value", $display_value, $field, $lead, $Form);
+                        if($display_empty_fields || !empty($display_value) || $display_value === "0"){
+                            $count++;
+                            $is_last = $count >= $field_count && !$has_product_fields ? true : false;
+                            $last_row = $is_last ? " lastrow" : "";
 
-                                $content = '
-                                <tr>
-                                    <th colspan="2" class="entry-view-field-name">' . esc_html(GFCommon::get_label($field)) . '</th>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
-                                </tr>';
+                            $display_value =  empty($display_value) && $display_value !== "0" ? "&nbsp;" : $display_value;
 
-                                $content = apply_filters("gform_field_content", $content, $field, $value, $lead["id"], $Form["id"]);
+                            $content = '
+                            <tr>
+                                <th colspan="2" class="entry-view-field-name">' . esc_html(GFCommon::get_label($field)) . '</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
+                            </tr>';
 
-                                echo $content;
+                            $content = apply_filters("gform_field_content", $content, $field, $value, $lead["id"], $Form["id"]);
 
-                            }
-							break;
-						}
-					} // End switch
+                            echo $content;
+
+                        }
+
+					} // End foreach
 
 					$products = array();
                 if($has_product_fields){
@@ -829,7 +848,7 @@ class GFDirectory {
 
 					// Edit link
 					if(
-						!empty($options['useredit']) && is_user_logged_in() && $current_user->ID === $lead['created_by'] || // Is user who created the entry
+						!empty($options['useredit']) && is_user_logged_in() && intval( $current_user->ID ) === intval( $lead['created_by'] ) || // Is user who created the entry
 						!empty($options['adminedit']) && self::has_access("gravityforms_directory") // Or is an administrator
 					) {
 
@@ -911,10 +930,10 @@ class GFDirectory {
 	 * @param string $entryback (default: '') The text of the back-link anchor
 	 * @return string The HTML link for the backlink
 	 */
-	static public function get_back_link($options = array()) {
+	static public function get_back_link($passed_entryback = '') {
 		global $pagenow,$wp_rewrite;
 
-		$options = self::directory_defaults($options);
+		$options = self::directory_defaults();
 
 		if(isset($_GET['edit'])) {
 			return '<p class="entryback"><a href="'.add_query_arg(array(), remove_query_arg(array('edit'))).'">'.esc_html(__(apply_filters('kws_gf_directory_edit_entry_cancel', "&larr; Cancel Editing"), "gravity-forms-addons")).'</a></p>';
@@ -923,21 +942,35 @@ class GFDirectory {
 		list($formid, $leadid) = self::get_form_and_lead_ids();
 		extract($options);
 
-        if($pagenow !== 'entry-details.php') {
-            $href = remove_query_arg(array('row', 'leadid', 'form', 'edit'));
-    		if($wp_rewrite->using_permalinks()) {
-    			$href = preg_replace('/('.sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'\/(?:[0-9]+)(?:\/|-)(?:[0-9]+)\/?)/ism', '', $href);
-    		}
-    		$url = parse_url(add_query_arg(array(), $href));
-    		if(!empty($url['query']) && !empty($permalink)) { $href .= '?'.$url['query']; }
-    		if(!empty($options['entryanchor'])) { $href .= '#lead_row_'.$leadid; }
+		// Use passed value, if available. Otherwise, use default
+		$entryback = !empty($passed_entryback) ? $passed_entryback : $entryback;
+
+        if($pagenow === 'entry-details.php') {
+
+        	// If possible, link back to the original post.
+        	if(isset($_GET['post'])) {
+        		$href = get_permalink((int)$_GET['post']);
+        	} else {
+        	// Otherwise we rely on Javascript below.
+        		$href = '#';
+        	}
+
+        	$onclick = ' onclick="parent.jQuery.fn.colorbox.close();"';
         } else {
-            $href = '#" onclick="parent.jQuery.fn.colorbox.close();';
+        	$onclick = '';
+	        $href = remove_query_arg(array('row', 'leadid', 'form', 'edit'));
+			if($wp_rewrite->using_permalinks()) {
+				$href = preg_replace('/('.sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'\/(?:[0-9]+)(?:\/|-)(?:[0-9]+)\/?)/ism', '', $href);
+			}
         }
+
+        $url = parse_url(add_query_arg(array(), $href));
+        if(!empty($url['query']) && !empty($permalink)) { $href .= '?'.$url['query']; }
+		if(!empty($options['entryanchor'])) { $href .= '#lead_row_'.$leadid; }
 
 		// If there's a back link, format it
 		if(!empty($entryback) && !empty($entryonly)) {
-			$link = apply_filters('kws_gf_directory_backlink', '<p class="entryback"><a href="'.$href.'">'.esc_html($entryback).'</a></p>', $href, $entryback);
+			$link = apply_filters('kws_gf_directory_backlink', '<p class="entryback"><a href="'.$href.'"'.$onclick.'>'.esc_html($entryback).'</a></p>', $href, $entryback);
 		} else {
 			$link = '';
 		}
@@ -969,7 +1002,7 @@ class GFDirectory {
 			ob_end_clean(); // Clear the buffer
 
 			// Get the back link if this is a single entry.
-			$link = !empty($entryonly) ? self::get_back_link(array('entryback' => $entryback)) : '';
+			$link = !empty($entryonly) ? self::get_back_link($entryback) : '';
 
 			$content = $link . $content;
 			$content = apply_filters('kws_gf_directory_detail', apply_filters('kws_gf_directory_detail_'.(int)$leadid, $content, (int)$leadid), (int)$leadid);
@@ -1108,9 +1141,9 @@ class GFDirectory {
 		global $wpdb,$wp_rewrite,$post, $wpdb,$directory_shown,$kws_gf_scripts,$kws_gf_styles;
 
 		if(!class_exists('GFEntryDetail')) { @require_once(GFCommon::get_base_path() . "/entry_detail.php"); }
-		if(!class_exists('GFCommon')) { @require_once(WP_PLUGIN_DIR . "/gravityforms/common.php"); }
-		if(!class_exists('RGFormsModel')) { @require_once(WP_PLUGIN_DIR . "/gravityforms/forms_model.php"); }
-		if(!class_exists('GFEntryList')) { require_once(WP_PLUGIN_DIR . "/gravityforms/entry_list.php"); }
+		if(!class_exists('GFCommon')) { @require_once(GFCommon::get_base_path() . "/common.php"); }
+		if(!class_exists('RGFormsModel')) { @require_once(GFCommon::get_base_path() . "/forms_model.php"); }
+		if(!class_exists('GFEntryList')) { require_once(GFCommon::get_base_path() . "/entry_list.php"); }
 
 		//quit if version of wp is not supported
 		if(!class_exists('GFCommon') || !GFCommon::ensure_wp_version())
@@ -1168,7 +1201,7 @@ class GFDirectory {
 		$link_params = array();
 		if(!empty($page_index)) { $link_params['pagenum'] = $page_index; }
 		$formaction = remove_query_arg(array('gf_search','sort','dir', 'pagenum', 'edit'), add_query_arg($link_params));
-		$tableclass .= !empty($jstable) ? ' tablesorter' : '';
+		$tableclass .= !empty($jstable) ? sprintf(' tablesorter tablesorter-%s', apply_filters('kws_gf_tablesorter_theme', 'blue', $form)) : '';
 		$title = $form["title"];
 		$sort_field_meta = RGFormsModel::get_field($form, $sort_field);
 		$is_numeric = $sort_field_meta["type"] == "number";
@@ -1466,7 +1499,7 @@ class GFDirectory {
 				<?php } ?>
 				<tbody class="list:user user-list">
 					<?php
-						include(WP_PLUGIN_DIR . "/" . basename(dirname(__FILE__)) . "/template-row.php");
+						include(plugin_dir_path( __FILE__ ) . "/template-row.php");
 					?>
 				</tbody>
 				<?php if($tfoot) {
@@ -2321,8 +2354,7 @@ class GFDirectory {
 		$entrytitle = apply_filters('kws_gf_directory_detail_title', apply_filters('kws_gf_directory_detail_title_'.$lead_id, $entrytitle));
 
 		if(!empty($lightboxsettings['entry'])) {
-			$href = plugins_url( "/entry-details.php?leadid=$lead_id&amp;form={$form_id}&amp;post={$post->ID}", __FILE__);
-
+			$href = wp_nonce_url(plugins_url( "/entry-details.php?leadid=$lead_id&amp;form={$form_id}&amp;post={$post->ID}", __FILE__), sprintf('view-%d-%d', $lead_id, $form_id), 'view');
 			if(wp_script_is('colorbox', 'registered')) {
 				$linkClass = ' class="colorbox lightbox" rel="directory_all directory_entry"';
 			} else if(wp_script_is('thickbox', 'registered')) {
@@ -2343,7 +2375,7 @@ class GFDirectory {
 				$href = add_query_arg(array('gf_search' => !empty($_REQUEST['gf_search']) ? $_REQUEST['gf_search'] : null, 'sort' => isset($_REQUEST['sort']) ? $_REQUEST['sort'] : null, 'dir' => isset($_REQUEST['dir']) ? $_REQUEST['dir'] : null, 'pagenum' => isset($_REQUEST['pagenum']) ? $_REQUEST['pagenum'] : null, 'start_date' => isset($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null, 'end_date' => isset($_REQUEST['start_date']) ? $_REQUEST['end_date'] : null), $href);
 			} else {
 				// example.com/?page_id=24&leadid=14&form=4
-				$href = add_query_arg(array('leadid'=>$lead_id, 'form' => $form_id));
+				$href = wp_nonce_url(add_query_arg(array('leadid'=>$lead_id, 'form' => $form_id)), sprintf('view-%d-%d', $lead_id, $form_id), 'view');
 			}
 		}
 
@@ -2590,7 +2622,7 @@ class GFDirectory {
 		}
 
 		// check if is and admin only field and remove if not authorized to be shown
-		if( !$show_admin_only && @in_array( $field_id, $admin_only ) && $field_id != $approved && $key != floor($approved) ) {
+		if( !$show_admin_only && @in_array( $field_id, $admin_only ) && $field_id != $approved && $field_id != floor($approved) ) {
 			return true;
 		}
 
@@ -2602,6 +2634,117 @@ class GFDirectory {
 		return false;
 
 	}
+
+	/**
+	 * Adapted from forms_model.php, RGFormsModel::save_lead($Form, $lead)
+	 * @param  array $form Form object.
+	 * @param  array $lead Lead object
+	 * @return void
+	 */
+	public static function save_lead($form, &$lead ){
+        global $wpdb;
+
+        if(IS_ADMIN && !GFCommon::current_user_can_any("gravityforms_edit_entries"))
+            die(__("You don't have adequate permission to edit entries.", "gravityforms"));
+
+        $lead_detail_table = RGFormsModel::get_lead_details_table_name();
+
+        //Inserting lead if null
+        if($lead == null){
+            global $current_user;
+            $user_id = $current_user && $current_user->ID ? $current_user->ID : 'NULL';
+
+            $lead_table = RGFormsModel::get_lead_table_name();
+            $user_agent = RGFormsModel::truncate($_SERVER["HTTP_USER_AGENT"], 250);
+            $currency = GFCommon::get_currency();
+            $source_url = RGFormsModel::truncate(RGFormsModel::get_current_page_url(), 200);
+
+            $wpdb->query($wpdb->prepare("INSERT INTO $lead_table(form_id, ip, source_url, date_created, user_agent, currency, created_by) VALUES(%d, %s, %s, utc_timestamp(), %s, %s, {$user_id})", $form["id"], RGFormsModel::get_ip(), $source_url, $user_agent, $currency));
+
+
+            //reading newly created lead id
+            $lead_id = $wpdb->insert_id;
+            $lead = array("id" => $lead_id);
+
+        }
+
+        $current_fields = $wpdb->get_results($wpdb->prepare("SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead["id"]));
+        $original_post_id = rgget("post_id", $lead);
+
+        $total_fields = array();
+        $calculation_fields = array();
+        $recalculate_total = false;
+
+        foreach($form["fields"] as $field){
+
+            //Ignore fields that are marked as display only
+            if(rgget("displayOnly", $field) && $field["type"] != "password"){
+                continue;
+            }
+
+            //ignore pricing fields in the entry detail
+            if(RG_CURRENT_VIEW == "entry" && GFCommon::is_pricing_field($field["type"])){
+                continue;
+            }
+
+
+            //process total field after all fields have been saved
+            if($field["type"] == "total"){
+                $total_fields[] = $field;
+                continue;
+            }
+
+            //only save fields that are not hidden (except on entry screen)
+            if(RG_CURRENT_VIEW == "entry" || !RGFormsModel::is_field_hidden($form, $field, array(), $lead ) ){
+                // process calculation fields after all fields have been saved (moved after the is hidden check)
+                if( GFCommon::has_field_calculation($field) ) {
+                    $calculation_fields[] = $field;
+                    continue;
+                }
+
+                if($field['type'] == 'post_category')
+                    $field = GFCommon::add_categories_as_choices($field, '');
+
+                if(isset($field["inputs"]) && is_array($field["inputs"])){
+
+                    foreach($field["inputs"] as $input)
+                        RGFormsModel::save_input($form, $field, $lead, $current_fields, $input["id"]);
+                }
+                else{
+                    RGFormsModel::save_input($form, $field, $lead, $current_fields, $field["id"]);
+                }
+            }
+
+	        //Refresh lead to support conditionals (not optimal but...)
+	        $lead = RGFormsModel::get_lead( $lead['id'] );
+        }
+
+        if(!empty($calculation_fields)) {
+            foreach($calculation_fields as $calculation_field) {
+
+                if(isset($calculation_field["inputs"]) && is_array($calculation_field["inputs"])){
+                    foreach($calculation_field["inputs"] as $input) {
+                        RGFormsModel::save_input($form, $calculation_field, $lead, $current_fields, $input["id"]);
+                        RGFormsModel::refresh_lead_field_value($lead["id"], $input["id"]);
+                    }
+                }
+                else{
+                    RGFormsModel::save_input($form, $calculation_field, $lead, $current_fields, $calculation_field["id"]);
+                    RGFormsModel::refresh_lead_field_value($lead["id"], $calculation_field["id"]);
+                }
+
+            }
+            RGFormsModel::refresh_product_cache($form, $lead = RGFormsModel::get_lead($lead['id']));
+        }
+
+        //saving total field as the last field of the form.
+        if(!empty($total_fields)) {
+            foreach($total_fields as $total_field){
+                GFCommon::log_debug("Saving total field.");
+                RGFormsModel::save_input($form, $total_field, $lead, $current_fields, $total_field["id"]);
+            }
+        }
+    }
 
 
 }

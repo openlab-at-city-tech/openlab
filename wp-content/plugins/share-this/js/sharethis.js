@@ -1,5 +1,5 @@
 var headerInformation = [{"back":"","title":"1. Choose Buttons and Options","next":"Select Services"},
-{"back":"Button Styles","title":"2. Select Social Channels","next":"Sharing Method"},{"back":"Social Channels","title":"3. Choose a Sharing Method","next":"Additional Features"},{"back":"Sharing Method","title":"4. Additional Features","next":"Get your publisher key!"},{"back":"Additional Features","title":"5. Sign In","next":"Final step"},{"back":"Sign In","title":"6. Your Current Configuration","next":""}];
+{"back":"Button Styles","title":"2. Select Services","next":"Sharing Method"},{"back":"Social Channels","title":"3. Sharing Method","next":"Additional Features"},{"back":"Sharing Method","title":"4. Additional Features","next":"Get your publisher key!"},{"back":"Additional Features","title":"5. Sign In","next":"Final step"},{"back":"Sign In","title":"6. Your Current Configuration","next":""}];
 
 var st_selectedServicesList = [];
 // page should be set up only once
@@ -34,7 +34,7 @@ var st_socialPluginValues = {
 	foursquarefollow_textbox2 : "",
 	youtube_textbox : ""
 };
-
+	
 function st_log() {
 	if (jQuery('#st_callesi').val() == 0) {
 		_gaq.push(['_trackEvent', 'WordPressPlugin', 'ClosedLoopBetaPublishers', st_publisherKey]);
@@ -53,51 +53,201 @@ jQuery(document).ready(function(){
 	
 	removeInterval();
 	
-	jQuery('#st_add_to_content').change(function() {
-		if(jQuery('#st_add_to_content').val() == "no") {
-			jQuery('#st_add_to_content1').attr('disabled', 'disabled');
-		} else {
-			jQuery('#st_add_to_content1').removeAttr('disabled');
-		}
-	});
-	
-	jQuery('#st_add_to_page').change(function() {
-		if(jQuery('#st_add_to_page').val() == "no") {
-			jQuery('#st_add_to_page2').attr('disabled', 'disabled');
-		} else {
-			jQuery('#st_add_to_page2').removeAttr('disabled');
-		}
-	});
-	
 	jQuery('#st_cns_settings').find('input').live('click', updateDoNotHash);
 	if(jQuery('#st_callesi').val() == 1){
 		getGlobalCNSConfig();
 	}
+	
+	toggleExpandCollapse('#headingimgPageList', '#divPageList', 'headingimgPageList_right', 'headingimgPageList_down', '', '');	
+	toggleExpandCollapse('#headingAddionalOptions', '#addOptions', 'headingAddionalOptions_right', 'headingAddionalOptions_down', '', '');
+	toggleExpandCollapse('#codeToggle', '#codeDiv', 'headingimg_right', 'headingimg_down', '', '');
+	
+	jQuery('#st_pages_on_top, #st_pages_on_bot').live('click', function() {
+		if(jQuery('#st_pages_on_top').attr('checked') != 'checked' && jQuery('#st_pages_on_bot').attr('checked') != 'checked')
+			jQuery("#divPageList").find("*").attr("disabled","disabled");
+		else
+			jQuery("#divPageList").find("*").removeAttr("disabled");
+	});
+
 	submitForm();
 	PLUGIN_PATH = st_script_vars.plugin_url;
 	window.onload  = function (){
 		windowLoaded();
+		setPostExcerpt();
 	}
+	
+	jQuery("input[name='protocolType']").click(function() {
+		var editCode = jQuery('#st_widget').val();
+		var selected = jQuery("input[name='protocolType']:checked");
+		if(selected[0].value == "https") {
+			editCode = editCode.replace('http://w.sharethis.com/button/buttons.js', 'https://ws.sharethis.com/button/buttons.js');
+			editCode = editCode.replace('http://s.sharethis.com/loader.js', 'https://ss.sharethis.com/loader.js');
+		} else {
+			editCode = editCode.replace('https://ws.sharethis.com/button/buttons.js', 'http://w.sharethis.com/button/buttons.js');
+			editCode = editCode.replace('https://ss.sharethis.com/loader.js', 'http://s.sharethis.com/loader.js');
+		}
+		jQuery('#st_widget').val(editCode);
+	});
+
 });
 
-function st_signOut() {
+function toggleExpandCollapse(elem, displayDiv, classOn, classOff, cssOn, cssOff) {
+	jQuery(elem).live('click', function() {
+		if(jQuery(displayDiv).css('display') == 'none') {
+			jQuery(elem).removeClass(classOn);
+			jQuery(elem).addClass(classOff);			
+			if(cssOn != '')
+				jQuery(elem).css(cssOn);
+		} else {			
+			jQuery(elem).removeClass(classOff);
+			jQuery(elem).addClass(classOn);			
+			if(cssOff != '')
+				jQuery(elem).css(cssOff);			
+		}
+			
+		jQuery(displayDiv).toggle('slow');
+	});
+}
+
+function st_signOut(pKey) {
 	jQuery('<iframe />', {
 		name: 'tempIframe',
 		id:   'tempIframe',
 		src: 'http://www.sharethis.com/account/signout.php'
 	}).appendTo('body');
 	jQuery('#tempIframe').css({'width': '1px', 'height': '1px', 'position': 'absolute', 'top': '-100px'});
-	jQuery('#st_pkey').val('');
+	jQuery('#st_pkey').val(pKey);
+	jQuery('#st_widget').val(jQuery('#st_widget').val().replace(/publisher:"(.*?)"/,'publisher:"'+pKey+'"'));
 	jQuery('#st_user_name').val('');
 	jQuery("#ak_sharethis").submit();
+	
 	//Once the signout is done then reload the page.
 	jQuery('#tempIframe').load(function() {
 		document.location.reload();
 	});
 }
 
+function setChannelServicesForBars(elemName, searchBarOptionRegex, barDivElement) {
+	var o = gtc.getScriptTagObj(elemName);
+	var Obj = gtc.parseBarOptions(o, searchBarOptionRegex);
+	if((typeof Obj) != "undefined") {
+		jQuery('#' + barDivElement).val(Obj.chicklets.items.toString());
+		st_selectedServicesList = Obj.chicklets.items;
+		jQuery("#st_services").val(Obj.chicklets.items.toString());
+		if("h_options" == searchBarOptionRegex) {
+			removeHoverbar();
+			scriptLoading('hoverbarStyle');
+		} else if("p_options" == searchBarOptionRegex) {
+			removePulldownbar();
+			scriptLoading("pulldownStyle");		
+		}
+	}
+}
+
+function manageBarsOnSave() {
+	var str1 = jQuery('#st_widget').val().replace(/\n/g, "");
+	var hb_matches = str1.match(/sharethis\.widgets\.hoverbuttons/);
+	var pb_matches = str1.match(/sharethis\.widgets\.pulldownbar/);
+	var sn_matches = str1.match(/sharethis\.widgets\.serviceWidget/);
+	var so_matches = str1.match(/stLight\.options/);
+	
+	if( !(hb_matches || pb_matches) && !sn_matches && !so_matches) {
+		jQuery("#preview").show();
+		jQuery("#preview").addClass("wp_st_error_message");
+		jQuery("#preview").html("At least one button or bar style option code should be present");
+		location.href = "#wp_st_header";	
+		return false;
+	} else {
+		if(jQuery("#preview").hasClass("wp_st_error_message")){
+			jQuery("#preview").removeClass("wp_st_error_message");
+		}
+		jQuery("#page_list_error").css('display', 'none');
+		return true;
+	}
+		
+	var arrButtonType = ['_small', '_large', '_vcount', '_hcount'];
+	
+	if(jQuery.inArray(jQuery('#st_current_type').val(), arrButtonType ) >= 0 && !so_matches) {
+		jQuery('#preview').css('display', 'none');
+		jQuery('#st_current_type').val('_none');
+		jQuery('#selectSizeType').removeClass('wp_st_show');	
+		
+		if(jQuery('#chickletStyle').hasClass("selected")) 
+			jQuery('#chickletStyle').removeClass('selected');
+		else if(jQuery('#hcountStyle').hasClass("selected")) 
+			jQuery('#hcountStyle').removeClass('selected');
+		else if(jQuery('#vcountStyle').hasClass("selected")) 
+			jQuery('#vcountStyle').removeClass('selected');
+			
+		jQuery('#donotcopy').attr('disabled', 'true');
+		jQuery('#hashaddress').attr('disabled', 'true');
+	}
+	
+	if(jQuery('#st_selected_bar').val() == 'hoverbarStyle' && !hb_matches) {
+		st_selectedBarStyle = '';
+		jQuery('#st_selected_bar').val('');
+		removeHoverbar();
+		updatePreviewArrow();
+		updateUI();
+		jQuery('#hoverbarStyle').removeClass('selected');
+	} else if(jQuery('#st_selected_bar').val() == 'pulldownStyle' && !pb_matches) {
+		st_selectedBarStyle = '';
+		jQuery('#st_selected_bar').val('');
+		removePulldownbar();
+		updatePreviewArrow();
+		updateUI();
+		jQuery('#pulldownStyle').removeClass('selected');
+	}	
+	
+	if(jQuery('#st_sharenow_selected').val() == 'true' && !sn_matches) {
+		jQuery('#st_sharenow_selected').val('false');
+		jQuery('#fbStyle').removeClass('selected');
+		jQuery('#stservicewidget').remove();
+		st_isShareNowSelected = false;
+	}
+	
+	return true;
+}
+
 function submitForm(){
 	jQuery("#ak_sharethis").submit(function(event) {
+		
+		//Set the protocol type (http or https) i.e. if user modifies the http or https protocols from the edit box
+		var str1 = jQuery('#st_widget').val().replace(/\n/g, "");
+		var t = str1.match(/src=(.*?)><\/script>/);
+		var whichProtocol = "http";
+		if((typeof t) != "undefined" && t != null)
+			whichProtocol = gtc.checkProtocolOptions(t[1]);
+
+		jQuery("input[name=protocolType][value=" + whichProtocol + "]").attr('checked', 'checked');
+
+		//Set widgetType (Multipost or Directpost) i.e. if user modifies the swithTo5x option from the edit box
+		var widgetType = str1.match(/switchTo5x=(true|false)/);
+		if((typeof widgetType) != "undefined" && widgetType != null && "false" == widgetType[1]) {
+			jQuery('#st_5xwidget').removeClass('selected');
+			jQuery('#st_4xwidget').addClass('selected');
+			jQuery('#st_version').val('4x');
+		} else {
+			jQuery('#st_4xwidget').removeClass('selected');
+			jQuery('#st_5xwidget').addClass('selected');		
+			jQuery('#st_version').val('5x');
+		}
+		
+		//Set the channel services for bars i.e. if user adds/remove the services from the edit box
+		setChannelServicesForBars('st_widget', 'h_options', 'st_hoverbar_services');
+		setChannelServicesForBars('st_widget', 'p_options', 'st_pulldownbar_services');
+	  
+		//Set the pulldownbar scrolling height i.e. if user modifies the height from the edit box
+		setScrollpxHeight();
+		
+		//Set sharenow theme i.e. if user modifies the theme from the edit box
+		setSharenowTheme();
+	
+		st_getServicesFromSpanTag();
+		 
+		var isOptionSel = manageBarsOnSave();
+		if(!isOptionSel) return false;
+		
 		event.preventDefault();
 		var getform = jQuery( this ),
 		url = getform.attr('action');
@@ -109,9 +259,66 @@ function submitForm(){
 			jQuery("#st_updated").show();
 			jQuery('#st_updated').delay(2000).fadeOut();
 	  });
+	  
+	  //Update preview and picker list once the span tags are modified and saved.
+	  var servArray = jQuery("#st_services").val().split(',');
+	  if((typeof servArray) != "undefined" && servArray != null)
+		st_selectedServicesList = servArray;
+	  stlib_preview.setupPreview(jQuery("#preview"),st_selectedServicesList);
+	  
+	  //Button type (_large or _small or hcount or vcount)
+	  jQuery('#st_current_type_from_db').val(jQuery('#st_current_type').val());
+	  jQuery('#st_tags_from_db').val(jQuery('#st_tags').val());
 	  return false;
 	});
 }	
+
+function setSharenowTheme() {
+	var str1 = jQuery('#st_widget').val().replace(/\n/g, "");
+	var t = str1.match(/\"style\":[\s\"\']{0,}(\d)[\s\"\']{0,}/);
+	if(t != null) {
+		sharenow.stgOptions.style = t[1];
+		jQuery('#st_sharenow_theme').val(t[1]);
+		jQuery('.wp_st_sharenowImg').removeClass('selected');
+		jQuery('#st_sharenowImg'+t[1]).addClass('selected');
+		jQuery('#st_sharenowImg'+t[1]).attr('data-value', t[1]);
+	}	
+}
+
+function setScrollpxHeight() {
+	var str1 = jQuery('#st_widget').val().replace(/\n/g, "");
+	var t = str1.match(/\"scrollpx\":[\s\"\']{0,}(\d+)[\s\"\']{0,}/);
+	if(t != null) {
+		jQuery('#st_pulldownbar_scrollpx').val(t[1]);
+		jQuery('#selectScrollHeight_id').val(t[1]);
+	}
+}
+
+/*
+Below function collects services from modified span tags.
+i.e. if services are added or modified then accordingly update the st_services hidden textbox before saving into database.
+*/
+function st_getServicesFromSpanTag() {
+	var spanTags = jQuery('#st_tags').val();
+	var arrSpanTags = spanTags.split('</span>');
+	var service = '';
+	for(var i=0;i<arrSpanTags.length;i++) {
+		var matches = arrSpanTags[i].match(/='st_(.*?)'/);
+		if (matches!=null && typeof(matches[1])!="undefined"){
+			var pos = matches[1].indexOf('_');
+			if('' != service)
+				service += ',';
+			
+			if(pos != -1)
+				service += matches[1].substring(0,pos);	
+			else
+				service += matches[1]
+		}
+	}
+	
+	if(service.length > 0)
+		jQuery('#st_services').val(service);
+}
 
 function checkButtonJsStatus(){  
 	if(typeof(stbuttons) != "undefined"){ 
@@ -266,6 +473,9 @@ function windowLoaded(){
 			jQuery(".jqBtnStyle").removeClass("selected");
 			jQuery(this).addClass("selected");
 			st_selectedButtonStyle = jQuery(this).attr("id");
+			jQuery('#donotcopy').removeAttr('disabled');
+			jQuery('#hashaddress').removeAttr('disabled');	
+			st_selectedServicesList = jQuery.unique(st_selectedServicesList);
 		}
 		selectStyle(st_selectedButtonStyle);
 	});
@@ -333,6 +543,7 @@ function windowLoaded(){
 				st_isShareNowSelected = false;
 				jQuery("#st_customize_sharenow").hide();
 				jQuery("#wp_st_slidingContainer").hide();
+				jQuery("#st_sharenow_theme").val('');
 			}else{
 				selectShareNow();
 			}
@@ -375,10 +586,13 @@ function windowLoaded(){
 	jQuery("p.wp_st_post_heading").click(function(event){
 		jQuery("p.wp_st_post_heading").removeClass("selected");
 		jQuery(this).addClass("selected");
+		var code=jQuery('#st_widget').val();
 		if(event.target.id == "st_5xwidget"){
 			st_widgetVersion = "5x";
+			jQuery('#st_widget').val(code.replace('switchTo5x=false','switchTo5x=true'));
 		}else if(event.target.id == "st_4xwidget"){
 			st_widgetVersion = "4x";
+			jQuery('#st_widget').val(code.replace('switchTo5x=true','switchTo5x=false'));
 		}
 		jQuery("#st_version").val(st_widgetVersion);
 	});		
@@ -485,10 +699,12 @@ function checkForLoginCredentials(){
 * JSONP Request called on closing the external-login iframe
 */
 function getPublisherInfo(){
-	var url = "http://sharethis.com/get-publisher-info.php?callback=parsePublisherInfo";
-	var script = document.createElement('script');
-	script.setAttribute('src', url);
-	document.getElementsByTagName('head')[0].appendChild(script); 
+	 jQuery.ajax({
+		url: 'http://www.sharethis.com/get-publisher-info.php?callback=?',
+		type: "GET",
+		dataType: "jsonp",
+		jsonpCallback: "parsePublisherInfo"
+	});
 }
 
 
@@ -689,7 +905,7 @@ function selectStyle(obj) {
 					}
 				}
 			}
-		}		
+		}	
 	} catch (err) {}
 	updatePreviewArrow();
 	updateUI();
@@ -810,7 +1026,7 @@ function removeSocialPluginsFromBar(){
 			}
 		}			
 	}else if(st_selectedBarStyle == "hoverbarStyle"){
-	for(var i=0; i<chickletServicesArray.length; i++){
+		for(var i=0; i<chickletServicesArray.length; i++){
 		// Skip social services from bar, instagram is part of hoverbar 
 			if(jQuery.trim(chickletServicesArray[i]) != 'plusone' && jQuery.trim(chickletServicesArray[i]) != 'fblike' && jQuery.trim(chickletServicesArray[i]) != 'fbrec'&& jQuery.trim(chickletServicesArray[i]) != 'fbsend'&& jQuery.trim(chickletServicesArray[i]) != 'fbsub'&& jQuery.trim(chickletServicesArray[i]) != 'foursquaresave'&& jQuery.trim(chickletServicesArray[i]) != 'foursquarefollow'&& jQuery.trim(chickletServicesArray[i]) != 'youtube'&& jQuery.trim(chickletServicesArray[i]) != 'pinterestfollow' && jQuery.trim(chickletServicesArray[i]) != 'twitterfollow') {
 				newchickletServicesArray[jCounter] = jQuery.trim(chickletServicesArray[i]);
@@ -837,7 +1053,7 @@ function removePulldownbar(){
 
 function removeBars() {
 	removeHoverbar();
-	removePulldownbar()
+	removePulldownbar();
 }
 
 function disableLeftArrow(){
@@ -899,7 +1115,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "instagram") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Instagram badge username</label>";
+			html += "<label class='leftLabel'>Instagram Username</label>";
 			html += "<input id='instagram_textbox' type='textbox' value='"+st_socialPluginValues["instagram_textbox"]+"' name='instagram[username]' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -908,7 +1124,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "googleplusadd") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Google add profile id</label>";
+			html += "<label class='leftLabel'>Google Add Profile ID</label>";
 			html += "<input id='googleplusadd_textbox' type='textbox' value='' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -917,7 +1133,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "googleplusfollow") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Google follow page id</label>";
+			html += "<label class='leftLabel'>Google Follow page ID</label>";
 			html += "<input id='googleplusfollow_textbox' type='textbox' value='' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -926,7 +1142,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "youtube") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Youtube subscribe username</label>";
+			html += "<label class='leftLabel'>Youtube subscribe Username</label>";
 			html += "<input id='youtube_textbox' type='textbox' value='"+st_socialPluginValues["youtube_textbox"]+"' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -935,7 +1151,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "linkedinfollow") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>LinkedIn follow profile id</label>";
+			html += "<label class='leftLabel'>LinkedIn Follow Profile ID</label>";
 			html += "<input id='linkedinfollow_textbox' type='textbox' value='' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -944,7 +1160,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "twitterfollow") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Twitter follow username</label>";
+			html += "<label class='leftLabel'>Twitter follow Username</label>";
 			html += "<input id='twitterfollow_textbox' type='textbox' name='twitterfollow[via]' value='"+st_socialPluginValues["twitterfollow_textbox"]+"' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -953,7 +1169,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "fbsub") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Facebook subscribe username</label>";
+			html += "<label class='leftLabel'>Facebook subscribe Username</label>";
 			html += "<input id='fbsub_textbox' type='textbox' value='"+st_socialPluginValues["fbsub_textbox"]+"' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -968,7 +1184,7 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		} else if (services[s] == "foursquarefollow") {
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Foursquare follow username</label>";
+			html += "<label class='leftLabel'>Foursquare follow Username</label>";
 			html += "<input id='foursquarefollow_textbox'  style='width:15%;' type='textbox' value='"+st_socialPluginValues["foursquarefollow_textbox"]+"' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
@@ -983,22 +1199,22 @@ function getNativeConfigOptions(services,callback) {
 			html += "</div>";
 		}else if(services[s] == "twitter"){
 			html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-			html += "<label class='leftLabel'>Twitter via username</label>";
+			html += "<label class='leftLabel'>Twitter Via</label>";
 			html += "<input id='twitter_via_textbox' type='textbox' value='"+st_socialPluginValues["twitter_via_textbox"]+"' name='twitter[via]' data-value=''";
 			if (callback) {
 				html += " onblur='"+callback+"'";
 			}
-			html += "><label class='wp_st_defaultCursor'>Example: Enter 'sharethis' for username</label>";
+			html += "><label class='wp_st_defaultCursor'>Username to attribute tweet to (defaults to @ShareThis)</label>";
 			html += "</div>";
 			
 			if(st_btnType != "_none"){
 				html += "<div class='wp_st_buttonCodeGeneratorConfig'>";
-				html += "<label class='leftLabel'>Twitter account username</label>";
+				html += "<label class='leftLabel'>Twitter Username</label>";
 				html += "<input id='twitter_username_textbox' type='textbox' value='"+st_socialPluginValues["twitter_username_textbox"]+"' name='twitter[username]' data-value=''";
 				if (callback) {
 					html += " onblur='"+callback+"'";
 				}
-				html += "><label class='wp_st_defaultCursor'>Example: Enter 'sharethis' for username</label>";
+				html += "><label class='wp_st_defaultCursor'>Twitter will recommend users follow this account after they tweet</label>";
 				html += "</div>";
 			}
 		}
@@ -1017,39 +1233,44 @@ function getCopyNShare(){
 	var retval = '';
 	if(jQuery('#st_callesi').val() == 0){		
 		if(jQuery(jQuery('#st_cns_settings').find('input')[0]).is(':checked')){
-			retval += ', doNotCopy: false';
+			retval += ', "doNotCopy": false';
 		}else{
-			retval += ', doNotCopy: true';
+			retval += ', "doNotCopy": true';
 		}
 		if(jQuery(jQuery('#st_cns_settings').find('input')[1]).is(':checked')){
-			retval += ', hashAddressBar: true';
+			retval += ', "hashAddressBar": true';
 		}else{
-			retval += ', hashAddressBar: false';
+			retval += ', "hashAddressBar": false';
 		}
 		
 		if(jQuery(jQuery('#st_cns_settings').find('input')[0]).is(':checked') || jQuery(jQuery('#st_cns_settings').find('input')[1]).is(':checked')){
-			retval += ', doNotHash: false';
+			retval += ', "doNotHash": false';
 		}else{
-			retval += ', doNotHash: true';
+			retval += ', "doNotHash": true';
 		}
 	}
 	return retval;
 }
 
 function checkCopyNShare(){	
+	if(jQuery('#st_current_type').val() == '_none') {
+		jQuery('#donotcopy').attr('disabled', 'true');
+		jQuery('#hashaddress').attr('disabled', 'true');	
+	}
+	
 	var tag=jQuery('#st_widget').val();
-	if (tag.match(/doNotHash:(\s)*false/)){
-		if (tag.match(/doNotCopy:(\s)*false/)){
-			jQuery(jQuery('#st_cns_settings').find('input')[0]).attr("checked","checked").val(true);;
+	if (tag.match(/("|)doNotHash("|):(\s)*false/)){
+		if (tag.match(/("|)doNotCopy("|):(\s)*false/)){
+			jQuery(jQuery('#st_cns_settings').find('input')[0]).attr("checked","checked").val(true);
 		}else{
     		jQuery(jQuery('#st_cns_settings').find('input')[0]).removeAttr("checked").val(false);
     	}
-		if (tag.match(/hashAddressBar:(\s)*false/)){
+		if (tag.match(/("|)hashAddressBar("|):(\s)*false/)){
     		jQuery(jQuery('#st_cns_settings').find('input')[1]).removeAttr("checked").val(false);
 		}else{
-			jQuery(jQuery('#st_cns_settings').find('input')[1]).attr("checked","checked").val(true);;
+			jQuery(jQuery('#st_cns_settings').find('input')[1]).attr("checked","checked").val(true);
     	}
-	}else if (tag.match(/doNotHash:(\s)*true/)){
+	}else if (tag.match(/("|)doNotHash("|):(\s)*true/)){
 		jQuery('#st_cns_settings').find('input').each(function( index ){
 			jQuery(this).removeAttr("checked").val(false);
 		});
@@ -1198,7 +1419,14 @@ function generateSpanTags(type,svcList) {
 	 buttonType = "";
 	}
 	var html = "";
+	var a = 0;
+	
+	var str = jQuery('#st_tags_from_db').val().replace(/<\/span>(\n+)/g, "</span>");//Get saved span tags from database
+	var obj = jQuery('<div/>').html(str).contents();//Convert string of span tags into object
+	var arrClassName = new Array();
+		
 	for (var i=0; i<svcList.length; i++) {
+		
 		var title;
 		if (stlib_picker._all_services[svcList[i]])
 			title = stlib_picker._all_services[svcList[i]].title;
@@ -1248,10 +1476,53 @@ function generateSpanTags(type,svcList) {
 				spanTag+=" st_username='"+st_socialPluginValues["twitter_username_textbox"]+"'";	
 			}	
 		}
-		spanTag+=" class='st_" + svcList[i] + buttonType + "' st_title='<?php the_title(); ?>' st_url='<?php the_permalink(); ?>'></span>";
+		
+		if(jQuery('#st_current_type_from_db').val() != st_btnType) {
+			if(jQuery.inArray( 'st_' + svcList[i] + buttonType, arrClassName ) <= 0) {
+				spanTag+=" class='st_" + svcList[i] + buttonType + "' st_title='<?php the_title(); ?>' st_url='<?php the_permalink(); ?>'></span>\n";
+				arrClassName.push('st_' + svcList[i] + buttonType);
+				//spanTag+=" class='st_" + svcList[i] + buttonType + "' ";
+			} else {
+				spanTag = "";
+			}
+		} else {
+			if(i > 0) a += 2;
+			spanTag+= st_modifiedSpanTag(obj[i], svcList[i], buttonType);
+		}
 		html += spanTag;
 	}
 	return html;
+}
+
+/*
+Below function gets attributes from modified span tags saved in database
+*/
+function st_modifiedSpanTag(spanObj, servList, btnType) {
+	var spanTags = '';
+	
+	//if((typeof spanObj) != "undefined" && spanObj.nodeName != 'SPAN') 
+	//	spanObj = spanObj.nextSibling;
+		
+	if((typeof spanObj) != "undefined" && (typeof spanObj.attributes) != "undefined" && spanObj.attributes.length > 0) {
+		for(var j=0;j<spanObj.attributes.length;j++) {
+			if(spanObj.className.indexOf(servList) == -1) continue;
+			if(jQuery.trim(spanObj.attributes[j].nodeName) == 'st_url' || 
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'st_title' || 
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'st_image' || 
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'st_summary' ||
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'st_msg' ||
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'st_native' ||
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'displayText' ||
+				jQuery.trim(spanObj.attributes[j].nodeName) == 'class') {
+				spanTags += " " + jQuery.trim(spanObj.attributes[j].nodeName) + "='" + jQuery.trim(spanObj.attributes[j].nodeValue) + "'";
+			}
+		}
+	}
+		
+	if(spanTags == '')
+		spanTags += " st_title='<?php the_title(); ?>' st_url='<?php the_permalink(); ?>' class='st_" + servList + btnType + "'";
+		
+	return spanTags+"></span>\n";
 }
 
 function checkAdditionalOptions(){
@@ -1260,65 +1531,76 @@ function checkAdditionalOptions(){
 	jQuery("#st_additional_options").show();
 }
  
- function getAdditionalOptions(services){
+function getAdditionalOptions(services){
 	var html="";
-	html="<h1>Your Additional Selected Options:</h1>"
-	html+="<ul class='wp_st_additional_opts_list'>";
-	if(st_widgetVersion != ""){
-		var sharingMethod;
-		if(st_widgetVersion == "5x"){
-			sharingMethod = "Multi-Post";
-		}else if(st_widgetVersion == "4x"){
-			sharingMethod = "Classic";
-		}
-		html+="<li><span style='position:relative;top:7px;left:12px;'>Sharing Method</span><span class='value'>"+sharingMethod+"</span></li>";
-	}
+	var html1="";
+	var showSelectOptionTitle = false;
+	html1="<h1 style='font-size:16px;'>Your Selected Options:</h1>"
+	html1+="<ul class='wp_st_additional_opts_list'>";
+
 	if(jQuery('#st_callesi').val() == 0){
 		html+="<li><span style='position:relative;top:7px;left:12px;'>CopyNShare </span><span class='value'>Selected</span></li>";
+		showSelectOptionTitle = true
 	}	
    for(s=0;s<services.length;s++){
 	 if(services[s] == "twitter"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_via_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Twitter Via </span><span class='value'>"+st_socialPluginValues[services[s]+"_via_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_username_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Twitter Username </span><span class='value'>"+st_socialPluginValues[services[s]+"_username_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}
 	  }else if(services[s]=="pinterestfollow"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Pinterest Follow Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 	   }
 	  }else if (services[s] == "instagram"){
 	  	if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Instagram Badge Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true			
 		}
 	  }else if (services[s] == "youtube"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Youtube Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}	
 	  }else if (services[s] == "linkedinfollow"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Linkedin Follow Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}	
 	  }else if (services[s] == "twitterfollow"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Twitter Follow Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true			
 		}	
 	  }else if (services[s] == "fbsub"){
 	  if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Facebook Subscribe Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}	
 	  }else if (services[s] == "foursquaresave"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Foursquare Save Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true
 		}	
 	  }else if (services[s] == "foursquarefollow"){
 		if(jQuery.trim(st_socialPluginValues[services[s]+"_textbox"]) != ""){
 			html+="<li><span class='wp_st_alignPluginIcons'><img src='http://w.sharethis.com/images/"+services[s]+"_32.png'></img></span><span class='label'>Foursquare Follow Username</span><span class='value'>"+st_socialPluginValues[services[s]+"_textbox"]+"</span></li>";
+			showSelectOptionTitle = true			
 		}	
 	  } 
 	}
+	
 	html+="</ul>";
+	
+	if(showSelectOptionTitle) {
+		return html1 + html;
+	}
+	
 	return html;
  }
  
@@ -1329,10 +1611,11 @@ function validateUserSelection(){
 		jQuery("#preview").html("Please select any of the button style or bar style");
 		location.href = "#wp_st_header";
 		return false;
-	}else{
+	} else {
 		if(jQuery("#preview").hasClass("wp_st_error_message")){
 			jQuery("#preview").removeClass("wp_st_error_message");
 		}
+		jQuery("#page_list_error").css('display', 'none');
 		return true;
 	}
 }
@@ -1356,6 +1639,8 @@ function moveToPrevious(stepNumber){
 	if(stepNumber == 2){
 		setPreviousValues("#st_step1",stepNumber);
 		disableLeftArrow();
+		setScrollpxHeight();
+		setSharenowTheme();
 	}else if(stepNumber == 3){
 		setPreviousValues("#st_step2",stepNumber);
 		setPageView();
@@ -1374,6 +1659,11 @@ function moveToPrevious(stepNumber){
 		enableRightArrow();
 		checkForLoginCredentials();
 	}
+	
+	if(stepNumber == 6 || stepNumber == 4)
+		jQuery('#lastStep').css('padding-bottom', '20px');
+	else
+		jQuery('#lastStep').css('padding-bottom', '0px');	
 }
 
 function setPreviousValues(id,number){
@@ -1381,6 +1671,16 @@ function setPreviousValues(id,number){
 	 jQuery(id).show();
 	 setHeaderValues((number-2));
 	 st_button_state = (number-1);
+	 
+	 if(st_button_state != 3) {
+		jQuery('#addOptDiv').css('display','none');
+		jQuery('#addOptDivSep').css('display','none');
+		jQuery('#addOptions').css('border-top', 'none');
+	 } else {
+		jQuery('#addOptDiv').css('display','block');
+		jQuery('#addOptDivSep').css('display','block');
+		jQuery('#addOptions').css('border-top', '1px solid #DFDFDF');
+	 }
 }
 
 function moveToNext(stepNumber){
@@ -1394,16 +1694,21 @@ function moveToNext(stepNumber){
 	}else if(stepNumber == 2){
 		st_sharethisServiceIndex = checkShareThisService();
 		setNextValues("#st_step3",stepNumber);
+		UpdateSocialPluginValues();		
 		checkSpecialServices();
 		if(st_sharethisServiceIndex == -1){
 				jQuery("#st_step3").hide();
 		}
 	}else if(stepNumber == 3){
 		setNextValues("#st_step4",stepNumber);
+		checkCopyNShare();
 	}else if(stepNumber == 4){
-		setNextValues("#st_step5",stepNumber);
-		jQuery(".wp_st_nextText").html("Almost Done : ");
-		checkForLoginCredentials();
+		var isBtnBarSelected = validateUserSelection();
+		if(isBtnBarSelected == true) {	
+			setNextValues("#st_step5",stepNumber);
+			jQuery(".wp_st_nextText").html("Almost Done : ");
+			checkForLoginCredentials();
+		}
 	}else if(stepNumber == 5){
 		checkAdditionalOptions();
 		generateCode();
@@ -1412,7 +1717,14 @@ function moveToNext(stepNumber){
 		jQuery("#wp_st_savebutton").attr("disabled", false);
 		jQuery("#edit").show();
 		disableRightArrow();
+		
+		gtc.getTheCode();
 	}
+	
+	if(stepNumber == 5 || stepNumber == 3)
+		jQuery('#lastStep').css('padding-bottom', '20px');
+	else
+		jQuery('#lastStep').css('padding-bottom', '0px');
 }
 
 function setNextValues(id,number){
@@ -1420,5 +1732,350 @@ function setNextValues(id,number){
 	 jQuery(id).show();
 	 setHeaderValues((number));
 	 st_button_state = (number+1);
+	 
+	 if(st_button_state != 3) {
+		jQuery('#addOptDiv').css('display','none');
+		jQuery('#addOptDivSep').css('display','none');
+		jQuery('#addOptions').css('border-top', 'none');
+	 } else {
+		jQuery('#addOptDiv').css('display','block');
+		jQuery('#addOptDivSep').css('display','block');
+		jQuery('#addOptions').css('border-top', '1px solid #DFDFDF');
+	 }
 }
 
+//===============GET THE CODE
+gtc = new function () {
+	this.gtc_st_version = '';
+	this.gtc_st_pubid = '';
+	this.gtc_st_type = '';
+	this.gtc_st_hoverbar_pos = '';
+	this.gtc_st_twitter_via = '';
+	this.gtc_st_instagram_username = '';
+	this.gtc_st_services = '';
+	this.gtc_st_hoverbar_services = '';
+	this.gtc_st_pulldownbar_scrollpx = '';
+	this.gtc_st_pulldownbar_logo = '';
+	this.gtc_st_pulldown_services = '';
+	this.gtc_st_sharenow_theme = '';
+	this.gtc_st_pulldownbar_logo = '';
+	this.gtc_st_current_type = '';
+	this.gtc_st_selected_bar = '';
+	this.gtc_st_sharenow_selected = '';
+	this.gtc_st_copyAndShare = '';
+	
+	this.initGetTheCode = function(){
+		this.gtc_st_version = this.clearString(jQuery('#st_version').val());
+		this.gtc_st_pubid = this.clearString(jQuery('#st_pkey').val());
+		this.gtc_st_type = this.clearString(jQuery('#st_type').val());
+		this.gtc_st_hoverbar_pos =this.clearString(jQuery('#st_hoverbar_position').val());
+		this.gtc_st_twitter_via = this.clearString(jQuery('#twitter_via_textbox').val());
+		this.gtc_st_instagram_username = this.clearString(jQuery('#instagram_textbox').val());
+		this.gtc_st_services = this.clearString(jQuery('#st_services').val());
+		this.gtc_st_hoverbar_services = this.clearString(jQuery('#st_hoverbar_services').val());
+		this.gtc_st_pulldownbar_scrollpx = this.clearString(jQuery('#st_pulldownbar_scrollpx').val());
+		this.gtc_st_pulldownbar_logo = this.clearString(jQuery('#pulldown_optionsTextbox_id').val());
+		this.gtc_st_pulldown_services = this.clearString(jQuery('#st_pulldownbar_services').val());
+		this.gtc_st_sharenow_theme = this.clearString(jQuery('#st_sharenow_theme').val());
+		this.gtc_st_pulldownbar_logo = this.clearString(jQuery('#st_pulldownbar_logo').val());
+		this.gtc_st_current_type = this.clearString(jQuery('#st_current_type').val());
+		this.gtc_st_selected_bar = this.clearString(jQuery('#st_selected_bar').val());
+		this.gtc_st_sharenow_selected = this.clearString(jQuery('#st_sharenow_selected').val());
+		this.gtc_st_copyAndShare = this.clearString(jQuery('#copynshareSettings').val());
+	};
+	
+	this.getSelectedServices = function(selServiceString) {
+		arrServices = selServiceString.split(',');
+		strServices = '';
+		
+		if((typeof arrServices) != "undefined") {
+			for(var i=0;i<arrServices.length;i++) {
+				if(strServices != '')
+					strServices += '", "';
+					
+				strServices += arrServices[i];
+			}
+		}
+		
+		return '"'+strServices+'"';
+	};
+	
+	this.getTheCode = function() {
+		var scriptCode = '';
+		var optionType = 'chickletStyle';
+		var styleType = '';
+		
+		this.initGetTheCode();
+		
+		if((typeof this.gtc_st_current_type) != undefined && this.gtc_st_current_type.length > 0) {
+			if('_hcount' == this.gtc_st_current_type)
+				optionType = 'hcountStyle';
+			else if('_vcount' == this.gtc_st_current_type)
+				optionType = 'vcountStyle';	
+			else
+				optionType = 'chickletStyle';
+		} else
+			optionType = 'chickletStyle';
+		
+		if((typeof this.gtc_st_selected_bar) != undefined && this.gtc_st_selected_bar.length > 0) {
+			if('hoverbarStyle' == this.gtc_st_selected_bar)
+				styleType = 'hoverbarStyle';
+			else if('pulldownStyle' == this.gtc_st_selected_bar)
+				styleType = 'pulldownStyle';
+		}
+		
+		scriptCode = this.createCode(optionType, styleType, this.gtc_st_sharenow_selected);
+		jQuery('#st_widget').val(scriptCode);
+	};
+	
+	this.checkProtocolOptions = function(srcElement) {
+		var matches = srcElement.match(/https|http/);
+		if(matches[0] == "https") {
+			jQuery('#typehttps').attr('checked', 'checked');
+			jQuery('#typehttp').removeAttr('checked');
+		} else {
+			jQuery('#typehttp').attr('checked', 'checked');
+			jQuery('#typehttps').removeAttr('checked');
+		}
+		return matches[0];
+	};
+	
+	this.parseBarOptions = function(scriptTagObj, barOptionType) {
+		for(var i=0;i<scriptTagObj.length;i++) {				
+			var scriptTag = scriptTagObj[i].innerHTML.replace(/\\"/g,'"');
+			var arrScriptTag = scriptTag.split(';');
+			
+			if(arrScriptTag.length > 2) {
+				var pattern = new RegExp(barOptionType);
+				if(arrScriptTag[0].match(pattern)) {
+					var temp = arrScriptTag[0].split('=');
+					return jQuery.parseJSON(JSON.stringify(eval('('+temp[1]+')')));
+				}
+			}			
+		}
+	};
+	
+	this.getScriptTagObj = function(elemId) {
+		var str = jQuery('#'+elemId).val().replace(/(\n+)/g, "");
+		var obj;
+		if(str.match(/\\"/g))
+			obj = jQuery('<div/>').html(str).contents();//Convert string of span tags into object	
+		else
+			obj = jQuery('<div/>').html(str.replace(/"/g,'\\"')).contents();//Convert string of span tags into object	
+			
+		return obj;
+	};
+	
+	this.getBarOptions = function(styleType) {
+		var objEditBoxBarOptions;
+		var objDBBarOptions;
+		
+		var scriptTagEditBoxObj = this.getScriptTagObj('st_widget');
+		var scriptTagDBObj = this.getScriptTagObj('st_script_tags_from_db');
+			
+		if('hoverbarStyle' == styleType) {
+			objEditBoxBarOptions = this.parseBarOptions(scriptTagEditBoxObj, "h_options");
+			objDBBarOptions = this.parseBarOptions(scriptTagDBObj, "h_options");		
+			
+			if((typeof objEditBoxBarOptions) != "undefined") {
+				objEditBoxBarOptions.position = this.gtc_st_hoverbar_pos;
+				
+				if((typeof objDBBarOptions) != "undefined" && objEditBoxBarOptions.chicklets_params.instagram.st_username != objDBBarOptions.chicklets_params.instagram.st_username)
+					objEditBoxBarOptions.chicklets_params.instagram.st_username = this.gtc_st_instagram_username;
+				if((typeof objDBBarOptions) != "undefined" && objEditBoxBarOptions.chicklets_params.twitter.st_via != objDBBarOptions.chicklets_params.twitter.st_via)
+					objEditBoxBarOptions.chicklets_params.instagram.st_username = this.gtc_st_twitter_via;
+				if(st_selectedServicesList.length != objEditBoxBarOptions.chicklets.items.length) {
+					if (st_selectedServicesList instanceof Array) {
+						var newServicesCounter=0;	
+						var newselectedServicesArray = new Array();
+						
+						for(var i=0; i<st_selectedServicesList.length; i++){
+							if(st_selectedServicesList[i] != 'plusone' && st_selectedServicesList[i] != 'fblike' && st_selectedServicesList[i] != 'fbrec'&& st_selectedServicesList[i] != 'fbsend'&& st_selectedServicesList[i] != 'fbsub'&& st_selectedServicesList[i] != 'foursquaresave'&& st_selectedServicesList[i] != 'foursquarefollow'&& st_selectedServicesList[i] != 'youtube'&& st_selectedServicesList[i] != 'pinterestfollow'&&
+							st_selectedServicesList[i] != 'twitterfollow') {
+								newselectedServicesArray[newServicesCounter] = st_selectedServicesList[i];
+								newServicesCounter++;
+							}
+						}
+						objEditBoxBarOptions.chicklets.items = newselectedServicesArray;
+					}else{
+						objEditBoxBarOptions.chicklets.items = st_selectedServicesList;
+					}	
+				}	
+					
+				
+			}
+			return objEditBoxBarOptions;
+		} else if('pulldownStyle' == styleType) {
+			objEditBoxBarOptions = this.parseBarOptions(scriptTagEditBoxObj, "p_options");
+			objDBBarOptions = this.parseBarOptions(scriptTagDBObj, "p_options");		
+			
+			if((typeof objEditBoxBarOptions) != "undefined") {
+				if((typeof objDBBarOptions) != "undefined" && objEditBoxBarOptions.scrollpx != objDBBarOptions.scrollpx)
+					objEditBoxBarOptions.scrollpx = this.gtc_st_pulldownbar_scrollpx;
+				else if(objEditBoxBarOptions.scrollpx != jQuery('#selectScrollHeight_id').val() && jQuery('#selectScrollHeight_id').val() != "") {
+					objEditBoxBarOptions.scrollpx = jQuery('#selectScrollHeight_id').val();
+					jQuery('#st_pulldownbar_scrollpx').val(jQuery('#selectScrollHeight_id').val());
+				} 
+				if(st_selectedServicesList.length != objEditBoxBarOptions.chicklets.items.length) {
+					if (st_selectedServicesList instanceof Array) {
+						var newServicesCounter=0;	
+						var newselectedServicesArray = new Array();
+						
+						for(var i=0; i<st_selectedServicesList.length; i++){
+							if(st_selectedServicesList[i] != 'plusone' && st_selectedServicesList[i] != 'fblike' && st_selectedServicesList[i] != 'fbrec'&& st_selectedServicesList[i] != 'fbsend'&& st_selectedServicesList[i] != 'fbsub'&& st_selectedServicesList[i] != 'foursquaresave'&& st_selectedServicesList[i] != 'foursquarefollow'&& st_selectedServicesList[i] != 'youtube'&& st_selectedServicesList[i] != 'pinterestfollow'&&
+							st_selectedServicesList[i] != 'twitterfollow'&& st_selectedServicesList[i] != 'instagram') {
+								newselectedServicesArray[newServicesCounter] = st_selectedServicesList[i];
+								newServicesCounter++;
+							}
+						}
+						objEditBoxBarOptions.chicklets.items = newselectedServicesArray;
+					}else{
+						objEditBoxBarOptions.chicklets.items = st_selectedServicesList;
+					}	
+					
+				}
+			}
+			return objEditBoxBarOptions;
+		}
+		
+		if("sharebar" == styleType) {
+			if('true' == this.gtc_st_sharenow_selected) {
+				objEditBoxBarOptions = this.parseBarOptions(scriptTagEditBoxObj, "sb_options");
+				objDBBarOptions = this.parseBarOptions(scriptTagDBObj, "sb_options");
+				
+				if((typeof objEditBoxBarOptions) != "undefined") {
+					//if((typeof objDBBarOptions) != "undefined" && objEditBoxBarOptions.style != objDBBarOptions.style)
+					if(objEditBoxBarOptions.style != this.gtc_st_sharenow_theme)
+						objEditBoxBarOptions.style = this.gtc_st_sharenow_theme;
+					else if(objEditBoxBarOptions.style == this.gtc_st_sharenow_theme)
+						objEditBoxBarOptions.style = this.gtc_st_sharenow_theme;
+					else 
+						objEditBoxBarOptions.style = '3';
+				}
+			}
+			return objEditBoxBarOptions;
+		}
+	};
+	
+	this.createCode = function(optionType, styleType, isSharebarSelected) {
+		var switchTo5x = 'true';
+		var jsScriptCode = '';
+		var copyAndShare = '';
+		var temp = '';
+		var selected = jQuery("input[name='protocolType']:checked");
+		var barOpt;
+		var objStlightOpt;
+		
+		if('5x' != this.gtc_st_version)
+			switchTo5x = 'false';
+		
+		if('' != this.gtc_st_copyAndShare)
+			copyAndShare = this.gtc_st_copyAndShare;
+			
+		//===================================	
+		var str1 = jQuery('#st_widget').val().replace(/(\n+)/g, "");
+		var scriptTagEditBoxObj1;
+		if(str1.match(/\\"/g))
+			scriptTagEditBoxObj1 = jQuery('<div/>').html(str1).contents();//Convert string of span tags into object	
+		else
+			scriptTagEditBoxObj1 = jQuery('<div/>').html(str1.replace(/"/g,'\\"')).contents();//Convert string of span tags into object
+
+		for(var i=0;i<scriptTagEditBoxObj1.length;i++) {
+			var scriptTag1 = scriptTagEditBoxObj1[i].innerHTML.replace(/\\"/g,'"');
+			var arrScriptTag1 = scriptTag1.split(';');
+			
+			if(arrScriptTag1.length > 2) {
+				var pattern1 = new RegExp("stLight.options\\((.*)\\)");
+				var matches = arrScriptTag1[0].match(pattern1);
+				if(matches) {
+					if(copyAndShare != "")
+						temp = matches[1].replace(/\}/, copyAndShare + "}");
+					else
+						temp = matches[1];
+					objStlightOpt = jQuery.parseJSON(JSON.stringify(eval('('+temp+')')));
+				}
+			}			
+		}
+		
+		//==================================
+		
+		jsScriptCode += '<script charset="utf-8" type="text/javascript">var switchTo5x='+switchTo5x+';</script>\n';
+		if(selected[0].value == "https")
+			jsScriptCode += '<script charset="utf-8" type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>\n';
+		else
+			jsScriptCode += '<script charset="utf-8" type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>\n';
+		
+		if(this.gtc_st_current_type == '_none')
+			objStlightOpt = null;
+			
+		if(objStlightOpt) {
+			objStlightOpt.publisher = this.gtc_st_pubid;
+			jsScriptCode += '<script charset="utf-8" type="text/javascript">stLight.options('+JSON.stringify(objStlightOpt)+');var st_type="'+this.gtc_st_type+'";</script>\n';
+		} else if(!objStlightOpt && this.gtc_st_current_type != '_none')
+			jsScriptCode += '<script charset="utf-8" type="text/javascript">stLight.options({"publisher":"'+this.gtc_st_pubid+'"});var st_type="'+this.gtc_st_type+'";</script>\n';
+		
+		if('hoverbarStyle' == styleType || 'pulldownStyle' == styleType || 'true' == isSharebarSelected) {
+			if(selected[0].value == "https")
+				jsScriptCode += '<script charset="utf-8" type="text/javascript" src="https://ss.sharethis.com/loader.js"></script>\n';
+			else
+				jsScriptCode += '<script charset="utf-8" type="text/javascript" src="http://s.sharethis.com/loader.js"></script>\n';
+		}
+		
+		if('hoverbarStyle' == styleType || 'pulldownStyle' == styleType) {
+			barOpt = this.getBarOptions(styleType);
+			if('hoverbarStyle' == styleType) {
+				jsScriptCode += '<script charset="utf-8" type="text/javascript">\n';
+				if((typeof barOpt) == "undefined")
+					barOpt = '{ "publisher":"'+this.gtc_st_pubid+'", "position": "'+this.gtc_st_hoverbar_pos+'", "chicklets_params": {"twitter":{"st_via":"'+this.gtc_st_twitter_via+'" }, "instagram" :{"st_username":"'+this.gtc_st_instagram_username+'" } }, "chicklets": { "items": ['+this.getSelectedServices(this.gtc_st_hoverbar_services)+'] } }\n';
+				else {
+					barOpt.publisher = this.gtc_st_pubid;
+					barOpt = JSON.stringify(barOpt);			
+				}
+				jsScriptCode += 'var h_options=' + barOpt;
+				jsScriptCode += ';var st_hover_widget = new sharethis.widgets.hoverbuttons(h_options);\n';
+			} else {
+				jsScriptCode += '<script charset="utf-8" type="text/javascript">\n';
+				if((typeof barOpt) == "undefined") {
+					var logoStr = '';
+					barOpt = '{ "publisher": "'+this.gtc_st_pubid+'", "scrollpx": "'+this.gtc_st_pulldownbar_scrollpx+'", "ad": { "visible": false}, "chicklets": { "items": ['+this.getSelectedServices(this.gtc_st_pulldown_services)+']} '+logoStr+'}\n';
+				} else {
+					barOpt.publisher = this.gtc_st_pubid;
+					barOpt = JSON.stringify(barOpt);
+				}
+				jsScriptCode += 'var p_options=' + barOpt;
+				jsScriptCode += ';var st_pulldown_widget = new sharethis.widgets.pulldownbar(p_options);\n';
+			}
+				
+			jsScriptCode += '</script>\n';
+		} 
+		
+		if('true' == isSharebarSelected) {
+			jsScriptCode += '<script charset="utf-8" type="text/javascript">\n';
+			barOpt = this.getBarOptions("sharebar");
+			if((typeof barOpt) == "undefined") {
+				barOpt = '{ "service": "facebook", "timer": { "countdown": 30, "interval": 10, "enable": false}, "frictionlessShare": false, "style": "'+this.gtc_st_sharenow_theme+'", "publisher":"'+this.gtc_st_pubid+'"}\n';
+			} else {
+				barOpt.publisher = this.gtc_st_pubid;
+				barOpt = JSON.stringify(barOpt);
+			}
+			jsScriptCode += 'var sb_options= ' + barOpt;
+			jsScriptCode += ';var st_service_widget = new sharethis.widgets.serviceWidget(sb_options);\n';
+			jsScriptCode += '</script>\n';
+		}
+		
+		return jsScriptCode;
+	};
+	
+	this.clearString = function(val) {
+		return jQuery.trim(val);
+	};
+}
+
+function setPostExcerpt() {
+	//	Disable the post excerpt checkbox if buttons are not selected on top/bottom
+	if (!document.getElementById('st_posts_on_top').checked && !document.getElementById('st_posts_on_bot').checked) {
+		document.getElementById('st_post_excerpt').disabled = true;
+	}else{
+		document.getElementById('st_post_excerpt').disabled = false;
+	}
+}

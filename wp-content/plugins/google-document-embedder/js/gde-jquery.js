@@ -340,7 +340,6 @@ jQuery(function ($) {
 		}
 	});
 	
-	
 	// validate input
 	$("#debugsend").click(function(e) {
 		$(".err").hide();
@@ -354,7 +353,9 @@ jQuery(function ($) {
 		
 		e.preventDefault();
 		
-		if ($('#sc').val() == "" && $('#msg').val() == "") {
+		if ($('#sc').val() !== "" && $('#msg').val() == "") {
+			alert( jqs_vars.baddebug );
+		} else if ($('#msg').val() == "") {
 			alert( jqs_vars.baddebug );
 		} else {
 			$("#debugsend").attr("disabled","true");

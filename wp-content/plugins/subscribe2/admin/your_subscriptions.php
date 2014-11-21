@@ -7,7 +7,7 @@ global $user_ID, $s2nonce;
 
 if ( isset($_GET['email']) ) {
 	global $wpdb;
-	$user_ID = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->users WHERE user_email = %s", urldecode($_GET['email'])));
+	$user_ID = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->users WHERE user_email = %s", $_GET['email']));
 } else {
 	get_currentuserinfo();
 }

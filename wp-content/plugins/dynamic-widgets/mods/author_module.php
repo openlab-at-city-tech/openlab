@@ -2,7 +2,7 @@
 /**
  * Author Module
  *
- * @version $Id: author_module.php 523481 2012-03-25 19:49:08Z qurl $
+ * @version $Id: author_module.php 938420 2014-06-25 11:18:19Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -14,7 +14,7 @@
 
 		public static function admin() {
 			parent::admin();
-			self::mkGUI();
+			self::mkGUI(self::$type, self::$option[self::$name], self::$question);
 		}
 
 		public static function getAuthors() {
@@ -39,12 +39,12 @@
 			return $list;
 		}
 
-		public static function mkGUI($single = FALSE) {
+		public static function mkGUI($type, $title, $question, $info = FALSE, $except = FALSE, $list = FALSE, $name = NULL) {
 			$DW = &$GLOBALS['DW'];
 			$list = self::getAuthors();
 
-			if ( $single ) {
-				self::$opt = $DW->getDWOpt($_GET['id'], 'single-author');
+			if ( $info ) {
+				self::$opt = $DW->getDWOpt($GLOBALS['widget_id'], 'single-author');
 
 				if ( count($list) > DW_LIST_LIMIT ) {
 					$select_style = DW_LIST_STYLE;

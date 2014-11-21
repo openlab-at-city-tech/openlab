@@ -1,0 +1,54 @@
+#afg-wrap {
+    margin-right: 1%;
+}
+
+/* Help Text */
+.afg-help {
+    font-size:90%;
+    font-style:italic;
+}
+
+#afg-container {
+    margin: 0 auto;
+}
+
+table.afg-settings-box {
+    border: 1px solid #009edd;
+}
+
+table.afg-side-box {
+    border: 1px solid #ddc000;
+}
+
+#afg-main-box {
+    float:left;
+    width: 69%;
+}
+
+#afg-side-box {
+    float:right;
+    width: 29%;
+}
+
+th.afg-label {
+    width:15%;
+}
+
+th.afg-input {
+    width: 30%;
+}
+
+th.afg-help-bubble {
+    width: 35%;
+}
+
+.afg-small-input {
+    width: 50% !important;
+}
+
+.afg-input[type="text"] {
+    width: 90%;
+}
+
+.afg-saved-alternate {
+    background: #f9f9f9;

@@ -13,8 +13,6 @@ class S2_Counter_widget extends WP_Widget {
 	Displays the Widget
 	*/
 	function widget($args, $instance) {
-		extract($args);
-
 		$title = empty($instance['title']) ? 'Subscriber Count' : $instance['title'];
 		$s2w_bg = empty($instance['s2w_bg']) ? '#e3dacf' : $instance['s2w_bg'];
 		$s2w_fg = empty($instance['s2w_fg']) ? '#345797' : $instance['s2w_fg'];
@@ -22,8 +20,10 @@ class S2_Counter_widget extends WP_Widget {
 		$s2w_height = empty($instance['s2w_height']) ? '16' : $instance['s2w_height'];
 		$s2w_font = empty($instance['s2w_font']) ? '11' : $instance['s2w_font'];
 
-		echo $before_widget;
-		echo $before_title . $title . $after_title;
+		echo $args['before_widget'];
+		if ( !empty($title) ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
 		global $mysubscribe2;
 		$registered = $mysubscribe2->get_registered();
 		$confirmed = $mysubscribe2->get_public();
@@ -31,7 +31,7 @@ class S2_Counter_widget extends WP_Widget {
 		echo "<ul><div style=\"text-align:center; background-color:" . $s2w_bg . "; color:" . $s2w_fg . "; width:" . $s2w_width . "px; height:" . $s2w_height . "px; font:" . $s2w_font . "pt Verdana, Arial, Helvetica, sans-serif; vertical-align:middle; padding:3px; border:1px solid #444;\">";
 		echo $count;
 		echo "</div></ul>";
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 	/**

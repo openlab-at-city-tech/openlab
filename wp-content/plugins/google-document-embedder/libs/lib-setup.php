@@ -1,5 +1,10 @@
 <?php
 
+if ( ! function_exists('gde_activate') ) {
+	// no access if parent plugin is disabled or when accessed directly
+	wp_die('<p>'.__('You do not have sufficient permissions to access this page.').'</p>');
+}
+
 /**
  * Define system defaults (settings/profiles)
  *
@@ -18,16 +23,14 @@ function gde_defaults( $type ) {
 		$env = array(
 			'pdata'				=>	$pdata,
 			'baseurl'			=>	$baseurl,
-			'default_lang'		=>	$default_lang,
-			'apikey'			=>	$apikey
+			'default_lang'		=>	$default_lang
 		);
 	}
 	
 	// define "global" options (multisite only)
 	$globalopts = array(
 		'file_maxsize'			=>	'12',
-		'beta_check'			=>	'no',
-		'api_key'				=>	$env['apikey']
+		'beta_check'			=>	'no'
 	);
 	
 	// define default options
@@ -42,8 +45,7 @@ function gde_defaults( $type ) {
 		'beta_check'			=>	'no',
 		'ga_enable'				=>	'no',
 		'ga_category'			=>	$env['pdata']['Name'],
-		'ga_label'				=>	'url',
-		'api_key'				=>	$env['apikey']
+		'ga_label'				=>	'url'
 	);
 	
 	// define default profile(s)
@@ -273,13 +275,6 @@ function gde_get_options() {
 			if ( $updated ) {
 				gde_dx_log('Options were updated');
 				update_option('gde_options', $defopts);
-			}
-			
-			// set API key if empty (ie., failed on earlier attempt or first upgrade)
-			if ( empty( $gdeoptions['api_key'] ) && ! empty( $apikey ) ) {
-				$gdeoptions['api_key'] = $apikey;
-				gde_dx_log("Updated API Key");
-				update_option( 'gde_options', $gdeoptions );
 			}
 		}
 	}

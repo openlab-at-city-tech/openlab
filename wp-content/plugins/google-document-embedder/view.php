@@ -6,7 +6,12 @@
 
 // access wp functions externally
 require_once('libs/lib-bootstrap.php');
- 
+
+// no access if parent plugin is disabled
+if ( ! function_exists('gde_activate') ) {
+	wp_die('<p>'.__('You do not have sufficient permissions to access this page.').'</p>');
+}
+
 if ( isset( $_GET['a'] ) && $_GET['a'] == 'gt') {
 	// proxy xml content - must be done to avoid XSS failures (contains embedded link data and enables text selection)
 	
@@ -252,9 +257,9 @@ if ( isset( $_GET['a'] ) && $_GET['a'] == 'gt') {
 			if ( $profile['tb_fullwin'] == "same" ) {
 				$arg[] = "a=fs";
 			}
-			if ( $profile['tb_print'] == "yes" ) {
-				$arg[] = "p=1";
-			}
+			//if ( $profile['tb_print'] == "yes" ) {
+			//	$arg[] = "p=1";
+			//}
 			if ( isset( $arg ) && is_array( $arg ) ) {
 				$src .= "?hl=$lang&" . implode("&", $arg);
 			}
@@ -291,7 +296,13 @@ if ( isset( $_GET['a'] ) && $_GET['a'] == 'gt') {
  */
 function gde_get_contents( $url ) {
 	
-	$response = wp_remote_get( $url, array( 'timeout' => 15, 'sslverify' => false ) );
+	$opts = array(
+		'user-agent'	=> 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0',
+		'timeout'		=>	20,
+		'ssl_verify'	=>	false
+	);
+	
+	$response = wp_remote_get( $url, $opts );
 	
 	if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
 		gde_dx_log("Error retrieving document");
@@ -326,7 +337,7 @@ function gde_curl_get_contents( $url ) {
 	curl_setopt_array( $ch, array(
 	    CURLOPT_URL            => $url, 
 	    CURLOPT_RETURNTRANSFER => true,
-	    CURLOPT_CONNECTTIMEOUT => 15,	// HTTP API is 5, overridden in gde_get_contents to match this
+	    CURLOPT_CONNECTTIMEOUT => 20,	// HTTP API is 5, overridden in gde_get_contents to match this
 	    CURLOPT_SSL_VERIFYPEER => false
 	) );
 	$file_contents = curl_exec( $ch );
@@ -384,7 +395,8 @@ function gde_get_mode( $get ) {
 	} elseif ( isset( $get['mobile'] ) ) {
 		return "mobile";
 	} elseif ( isset( $get['chrome'] ) ) {
-		return "chrome";
+		//return "chrome";
+		return "embedded";
 	} else {
 		return false;
 	}

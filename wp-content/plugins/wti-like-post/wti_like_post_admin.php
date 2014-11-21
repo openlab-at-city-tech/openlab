@@ -433,8 +433,8 @@ function WtiLikePostAdminContent() {
 						
 						echo '<tr>';
 						echo '<th class="check-column" scope="row" align="center"><input type="checkbox" value="' . $post->post_id . '" class="administrator" id="post_id_' . $post->post_id . '" name="post_ids[]"></th>';
-						echo '<td><a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow" target="_blank">' . $post_title . '</a></td>';
-						echo '<td>'.$like_count.'</td>';
+						echo '<td><a href="' . $permalink . '" title="' . $post_title . '" target="_blank">' . $post_title . '</a></td>';
+						echo '<td>' . $like_count . '</td>';
 						echo '</tr>';
 					}
 		 
@@ -556,3 +556,26 @@ function WtiLikePostSaveData($post_id) {
 		}
 	}
 }
+
+/**
+ * Additional links on plugins page
+ * 
+ * @param array
+ * @param string
+ * @return array
+ */
+function WtiLikePostSetPluginMeta( $links, $file ) {
+	if ( strpos( $file, 'wti-like-post/wti_like_post.php' ) !== false ) {
+		$new_links = array(
+						'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.com/thanks/" target="_blank">' . __( 'Donate', 'wti-like-post' ) . '</a>',
+						'<a href="http://www.webtechideas.com/product/wti-like-post-pro/" target="_blank">' . __( 'PRO Version', 'wti-like-post' ) . '</a>',
+						'<a href="http://support.webtechideas.com/forums/forum/wti-like-post-pro/" target="_blank">' . __( 'PRO Support Forum', 'wti-like-post' ) . '</a>',
+					);
+		
+		$links = array_merge( $links, $new_links );
+	}
+	
+	return $links;
+}
+
+add_filter( 'plugin_row_meta', 'WtiLikePostSetPluginMeta', 10, 2 );

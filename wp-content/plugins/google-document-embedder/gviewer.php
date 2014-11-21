@@ -8,7 +8,7 @@ Author: Kevin Davis
 Author URI: http://www.davistribe.org/
 Text Domain: gde
 Domain Path: /languages/
-Version: 2.5.12
+Version: 2.5.14
 License: GPLv2
 */
 
@@ -38,7 +38,7 @@ License: GPLv2
  */
 
 // boring init junk
-$gde_ver 				= "2.5.12.98";
+$gde_ver 				= "2.5.14.98";
 $gde_db_ver 			= "1.2";		// update also in gde_activate()
 
 require_once( plugin_dir_path( __FILE__ ) . 'functions.php' );
@@ -94,13 +94,9 @@ function gde_do_shortcode( $atts ) {
 		'save' => '',
 		'width' => '',
 		'height' => '',
-		'cache' => '',
-		'title' => '', // not yet implemented
+		'cache' => ''
+		//'title' => '', // not yet implemented
 		//'page' => '',	// support broken in Google Viewer
-		
-		// backwards compatibility < gde 2.5 (still work but now "deprecated" and discouraged in the documentation)
-		'authonly' => '',
-		'lang' => ''
 	), $atts ) );
 	
 	// get requested profile data (or default if doesn't exist)
@@ -110,7 +106,7 @@ function gde_do_shortcode( $atts ) {
 		if ( ! $profile = gde_get_profiles( $term ) ) {
 			gde_dx_log("Loading default profile instead");
 			if ( ! $profile = gde_get_profiles( 1 ) ) {
-				$code = gde_show_error( __('Unable to load requested profile.', 'gde') );
+				return gde_show_error( __('Unable to load requested profile.', 'gde') );
 			} else {
 				$pid = 1;
 			}
@@ -122,7 +118,7 @@ function gde_do_shortcode( $atts ) {
 		if ( ! $profile = gde_get_profiles( strtolower( $term ) ) ) {
 			gde_dx_log("Loading default profile instead");
 			if ( ! $profile = gde_get_profiles( 1 ) ) {
-				$code = gde_show_error( __('Unable to load requested profile.', 'gde') );
+				return gde_show_error( __('Unable to load requested profile.', 'gde') );
 			} else {
 				$pid = 1;
 			}
@@ -148,11 +144,9 @@ function gde_do_shortcode( $atts ) {
 			$cache = $profile['cache'];
 		}
 	}
-	if ( empty( $lang ) ) {
-		if ( $profile['language'] !== "en_US" ) {
-			$lang =  $profile['language'];
-		}
-	}
+	//if ( $profile['language'] !== "en_US" ) {
+		$lang =  $profile['language'];
+	//}
 	
 	// tweak the dimensions if necessary
 	$width = gde_sanitize_dims( $width );
@@ -180,6 +174,11 @@ function gde_do_shortcode( $atts ) {
 	// capture file details
 	$fn = basename( $file );
 	$fnp = gde_split_filename( $fn );
+	
+	// check for missing required field
+	if ( ! $file ) {
+		return gde_show_error( __('File not specified, check shortcode syntax', 'gde') );
+	}
 	
 	// file validation
 	if ( $gdeoptions['error_check'] == "no" ) {
@@ -278,7 +277,7 @@ function gde_do_shortcode( $atts ) {
 			if ( ! empty( $links[1] ) ) {	// link empty = secure document; ignore any other save attribute
 				if ( $save == "all" || $save == "1" ) {
 					$allow_save = true;
-				} elseif ( ( $save == "users" || $authonly == "1" ) && is_user_logged_in() ) {
+				} elseif ( $save == "users" && is_user_logged_in() ) {
 					$allow_save = true;
 				}
 			}
@@ -305,8 +304,8 @@ function gde_do_shortcode( $atts ) {
 				if ( empty( $profile['link_text'] ) ) {
 					$profile['link_text'] = __('Download', 'gde');
 				}
-				$dltext = str_replace( "%TITLE", $title, $profile['link_text'] );
-				$dltext = str_replace( "%FILE", $fn, $dltext );
+				
+				$dltext = str_replace( "%FILE", $fn, $profile['link_text'] );
 				$dltext = str_replace( "%TYPE", $ftype, $dltext );
 				$dltext = str_replace( "%SIZE", gde_format_bytes( $status['fsize'] ), $dltext );
 				

@@ -3,8 +3,8 @@
 Plugin Name: Resize Image After Upload
 Plugin URI: http://www.jepsonrae.com/?utm_campaign=plugins&utm_source=wp-resize-image-after-upload&utm_medium=plugin-url
 Description: This plugin resizes uploaded images to a given width or height (whichever is the largest) after uploading, discarding the original uploaded file in the process.
-Author: Jepson Rae
-Version: 1.4.2
+Author: JEPSONRAE
+Version: 1.5.0
 Author URI: http://www.jepsonrae.com/?utm_campaign=plugins&utm_source=wp-resize-image-after-upload&utm_medium=author-url
 
 
@@ -36,7 +36,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-$PLUGIN_VERSION = '1.4.2';
+$PLUGIN_VERSION = '1.5.0';
 
 
 // Default plugin values
@@ -47,7 +47,9 @@ if(get_option('jr_resizeupload_version') != $PLUGIN_VERSION) {
   add_option('jr_resizeupload_height',				'1200', '', 'yes');
   add_option('jr_resizeupload_quality',				'90', '', 'yes');
   add_option('jr_resizeupload_resize_yesno', 		'yes', '','yes');
+  add_option('jr_resizeupload_recompress_yesno', 	'no', '','yes');
   add_option('jr_resizeupload_convertbmp_yesno', 	'no', '', 'no');
+  add_option('jr_resizeupload_convertpng_yesno', 	'no', '', 'no');
 }
 
 
@@ -93,6 +95,8 @@ function jr_uploadresize_options(){
     $maxheight = trim(mysql_real_escape_string($_POST['maxheight']));
     $quality = trim(mysql_real_escape_string($_POST['quality']));
     $yesno = $_POST['yesno'];
+    $recompress_yesno = $_POST['recompress_yesno'];
+    $convert_png = $_POST['convertpng'];
     $convert_bmp = $_POST['convertbmp'];
     
     // if input is empty or not an integer, use previous setting
@@ -128,6 +132,22 @@ function jr_uploadresize_options(){
     } // else
     
     
+    if ($recompress_yesno == 'yes') {
+      update_option('jr_resizeupload_recompress_yesno','yes');
+    } // if
+    else {
+      update_option('jr_resizeupload_recompress_yesno','no');
+    } // else
+    
+    
+    if ($convert_png == 'yes') {
+      update_option('jr_resizeupload_convertpng_yesno','yes');
+    } // if
+    else {
+      update_option('jr_resizeupload_convertpng_yesno','no');
+    } // else
+    
+    
     if ($convert_bmp == 'yes') {
       update_option('jr_resizeupload_convertbmp_yesno','yes');
     } // if
@@ -147,6 +167,8 @@ function jr_uploadresize_options(){
   $maxheight = get_option('jr_resizeupload_height');
   $quality = intval(get_option('jr_resizeupload_quality'));
   $yesno = get_option('jr_resizeupload_resize_yesno');
+  $recompress_yesno = get_option('jr_resizeupload_recompress_yesno');
+  $convert_png = get_option('jr_resizeupload_convertpng_yesno');
   $convert_bmp = get_option('jr_resizeupload_convertbmp_yesno');
 ?>
 
@@ -166,12 +188,23 @@ function jr_uploadresize_options(){
 		<h3 style="margin-top:20px;border-top:1px solid #eee;padding-top:20px;">Settings</h3>
 		<table class="form-table">
 			<tr>
-				<td valign="top">Resize images:&nbsp;</td>
+				<td valign="top">Re-size images:&nbsp;</td>
 				<td valign="top">
 					<select name="yesno" id="yesno">  
 						<option value="no" label="no" <?php echo ($yesno == 'no') ? 'selected="selected"' : ''; ?>>No</option>
 						<option value="yes" label="yes" <?php echo ($yesno == 'yes') ? 'selected="selected"' : ''; ?>>Yes</option>
 					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td valign="top">Re-compress even if no resize required:&nbsp;</td>
+				<td valign="top">
+					<select name="recompress_yesno" id="yesno">  
+						<option value="no" label="no" <?php echo ($recompress_yesno == 'no') ? 'selected="selected"' : ''; ?>>No</option>
+						<option value="yes" label="yes" <?php echo ($recompress_yesno == 'yes') ? 'selected="selected"' : ''; ?>>Yes</option>
+					</select>
+					<br /><small>Normally only images requiring resizing will be re-compressed.</small>
 				</td>
 			</tr>
 
@@ -198,6 +231,20 @@ function jr_uploadresize_options(){
 					<br />Default value: 90</small>
 				</td>
 			</tr>
+
+<!-- 
+			<tr>
+				<td valign="top">Convert PNGs to JPEGs:&nbsp;</td>
+				<td valign="top">
+					<select id="convert-png" name="convertpng">
+						<option value="no" <?php if($convert_png == 'no') : ?>selected<?php endif; ?>>No</option>
+						<option value="yes" <?php if($convert_png == 'yes') : ?>selected<?php endif; ?>>Yes</option>
+					</select>
+					<br /><small>When a PNG is uploaded, it will automatically be converted to a JPEG
+					<br />Selecting 'No' will <strong>not</strong> prevent PNGs from being resized</small>
+				</td>
+			</tr>
+ -->
 			
 <!-- 
 			<tr>
@@ -244,40 +291,56 @@ function jr_uploadresize_resize($array){
     // Include the file to carry out the resizing
     require_once('class.resize.php');
 
-	// Get resizing limits
+		// Get resizing limits
     $max_width = get_option('jr_resizeupload_width');
     $max_height = get_option('jr_resizeupload_height');
     
     $quality = get_option('jr_resizeupload_quality');
     
+    $recompress_yesno = get_option('jr_resizeupload_recompress_yesno');
+		$recompress_yesno = ($recompress_yesno=='yes') ? true : false;
+		$protect_image = ($recompress_yesno ? false : true); // opposite of recompress_yesno
+		    
+    $convert_png = get_option('jr_resizeupload_convertpng_yesno');
+		$convert_png = ($convert_png=='yes') ? true : false;
+    
     $convert_bmp = get_option('jr_resizeupload_convertbmp_yesno');
-	$convert_bmp = ($convert_bmp=='yes') ? true : false;
+		$convert_bmp = ($convert_bmp=='yes') ? true : false;
 
 
-	// Get original image sizes
+		// Get original image sizes
     $original_info = getimagesize($array['file']);
     $original_width = $original_info[0];
     $original_height = $original_info[1];
+    $is_png = ($array['type'] == 'image/png') ? true : false;
     $is_bitmap = ($array['type'] == 'image/bmp') ? true : false;
 
+				
+
+		// Perform resizing operations if reduction is required
+		if($original_width >= $max_width || $original_height >= $max_height) {
+
+			//Resize by width
+			if($original_width > $original_height && $max_width != 0) {
+				$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'W', $max_width, $protect_image, $quality);
+			} 
 	
-	// Perform the resize only if required, i.e. the image is larger than the max sizes
-	if( $original_width > $max_width || 
-		$original_height > $max_height || 
-		($is_bitmap && $convert_bmp)
-	) {
-	
-		//Resize by width
-		if($original_width > $original_height && $max_width != 0) {
-			$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'W', $max_width, true, $quality);
-		
-		} 
-	
-		//Resize by height
-		else if($max_height != 0) {
-			$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'H', $max_height, true, $quality);
+			//Resize by height
+			else if($max_height != 0) {		
+				$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'H', $max_height, $protect_image, $quality);
+			}
 		}
-	}
+
+		
+		// Resizing is not required, but still need to re-compress to desired quality and filetype
+		else if($recompress_yesno	|| ($is_png && $convert_png) || ($is_bitmap && $convert_bmp)) {
+			$objResize = new RVJ_ImageResize($array['file'], $array['file'], 'P', 100, $protect_image, $quality);
+		}
+		
+		else {
+			// no resize/recompress
+		}
+		
   } // if(...) 
   
   return $array;

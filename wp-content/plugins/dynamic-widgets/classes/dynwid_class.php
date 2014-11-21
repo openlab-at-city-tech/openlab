@@ -8,10 +8,12 @@
 
 	class dynWid {
 		private $dbtable;
+		public  $device;
 		public  $dwoptions = array();
 		public  $dynwid_list;
 		public  $enabled;
 		private $firstmessage = TRUE;
+		public	$ip_address;
 		public  $listmade = FALSE;
 		public  $overrule_maintype = array();
 		private $registered_sidebars;
@@ -43,6 +45,7 @@
 			$this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
 			$this->sidebars = wp_get_sidebars_widgets();
 			$this->useragent = $this->getBrowser();
+			$this->ip_address = $this->getIP();
 
 			// DB init
 			$this->wpdb = $GLOBALS['wpdb'];
@@ -127,6 +130,30 @@
 			}
 		}
 
+		/**
+         * dynWid::addIPs() Saves IP options
+		 *
+		 * @param string $widget_id ID of the widget
+		 * @param array $default Default setting
+		 * @param string $ips IPs
+		 */
+		public function addIPs($widget_id, $default, $ips) {
+			$value = serialize($ips);
+			if ( $default == 'no' ) {
+				$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'ip', 'default', '0')";
+				$this->wpdb->query($query);
+			}
+
+			$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'ip', 'ip', '" . $value . "')";
+			$this->wpdb->query($query);
+		}		
+		
 		/**
 		 * dynWid::addUrls() Saves url options
 		 *
@@ -445,6 +472,13 @@
 			$results = new DWOpts($this->wpdb->get_results($query), $maintype);
 			return $results;
 		}
+		
+		private function getIP() {
+			$ip = $_SERVER['REMOTE_ADDR'];
+			$this->message( 'Raw IP: ' . $ip );
+			
+			return ( strstr($ip, '.') !== FALSE ) ? $ip : NULL;
+		}
 
 		/**
 		 * dynWid::getModuleName() Full registration of the modules
@@ -460,13 +494,14 @@
 			DWModule::registerOption(DW_bbPress::$option);
 			DWModule::registerOption(DW_BP::$option);
 			DWModule::registerOption(DW_Browser::$option);
+			DWModule::registerOption(DW_IP::$option);
 			DWModule::registerOption(DW_Category::$option);
 			DW_CustomPost::registerOption(NULL);
 			DWModule::registerOption(DW_Date::$option);
 			DWModule::registerOption(DW_Day::$option);
 			DWModule::registerOption(DW_E404::$option);
 			DWModule::registerOption(DW_Front_page::$option);
-			DWModule::registerOption(DW_Mobile::$option);
+			DWModule::registerOption(DW_Device::$option);
 			DWModule::registerOption(DW_Page::$option);
 			DWModule::registerOption(DW_Pods::$option);
 			DWModule::registerOption(DW_QT::$option);
@@ -683,6 +718,79 @@
 		}
 
 		/**
+		 * dynWid::IPinRange() IP address in range
+		 *
+		 * @param $ip string IP address
+		 * @param $range string IP range
+		 * @return boolean
+		 */		
+		public function IPinRange($ip, $range) {
+		 /* Copyright 2008: Paul Gregg <pgregg@pgregg.com>
+		  * 10 January 2008
+		  * Version: 1.2
+		  *
+		  * Source website: http://www.pgregg.com/projects/php/ip_in_range/
+		  * Version 1.2			
+		  */
+		 	
+		  if ( strpos($range, '/') !== FALSE ) {
+				// $range is in IP/NETMASK format
+				list($range, $netmask) = explode('/', $range, 2);
+				
+				if ( strpos($netmask, '.') !== FALSE ) {
+				  // $netmask is a 255.255.0.0 format
+				  $netmask = str_replace('*', '0', $netmask);
+				  $netmask_dec = ip2long($netmask);
+				  
+				  return ( (ip2long($ip) & $netmask_dec) == (ip2long($range) & $netmask_dec) );
+				} else {
+				  // $netmask is a CIDR size block
+				  // fix the range argument
+				  $x = explode('.', $range);
+				  while ( count($x) < 4 ) {
+						$x[ ] = '0';
+				  }
+				  
+				  list( $a, $b, $c, $d ) = $x;
+				  $range = sprintf( "%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d );
+				  $range_dec = ip2long($range);
+				  $ip_dec = ip2long($ip);
+		
+				  // Use math to create it
+				  $wildcard_dec = pow( 2, (32-$netmask) ) - 1;
+				  $netmask_dec = ~ $wildcard_dec;
+		
+				  return ( ($ip_dec & $netmask_dec) == ($range_dec & $netmask_dec) );
+				}
+		  } else {
+				// range might be 255.255.*.* or 1.2.3.0-1.2.3.255
+				if ( strpos($range, '*') !== FALSE ) { // a.b.*.* format
+				  // Just convert to A-B format by setting * to 0 for A and 255 for B
+				  $lower = str_replace('*', '0', $range);
+				  $upper = str_replace('*', '255', $range);
+				  $range = "$lower-$upper";
+				}
+		
+				if ( strpos($range, '-') !== FALSE ) { // A-B format
+				  list( $lower, $upper ) = explode('-', $range, 2);
+				  $lower_dec = (float) sprintf( "%u", ip2long($lower) );
+				  $upper_dec = (float) sprintf( "%u", ip2long($upper) );
+				  $ip_dec = (float) sprintf( "%u",ip2long($ip) );
+				  return ( ($ip_dec >= $lower_dec) && ($ip_dec <= $upper_dec) );
+				}
+				
+				// last resort
+				if ( substr($range, -3) != '/32' ) {
+					$range .= '/32';
+					return $this->IPinRange($ip, $range);
+				}
+		
+				$this->message('Range argument is not in 1.2.3.4/24 or 1.2.3.4/255.255.255.0 format');
+				return FALSE;
+		  }
+	
+		}
+		/**
 		 * dynWid::loadModules() Full load of all modules
 		 *
 		 */
@@ -733,7 +841,8 @@
 			include_once(DW_MODULES . 'role_module.php');
 			include_once(DW_MODULES . 'tpl_module.php');
 			include_once(DW_MODULES . 'url_module.php');
-			include_once(DW_MODULES . 'mobile_module.php');
+			include_once(DW_MODULES . 'device_module.php');
+			include_once(DW_MODULES . 'ip_module.php');
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
 			DW_Day::checkOverrule('DW_Day');
@@ -741,7 +850,8 @@
 			DW_Role::checkOverrule('DW_Role');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
-			DW_URL::checkOverrule('DW_Mobile');
+			DW_URL::checkOverrule('DW_Device');
+			DW_URL::checkOverrule('DW_IP');
 
 			// WPML Plugin Support
 			include_once(DW_MODULES . 'wpml_module.php');

@@ -72,14 +72,14 @@ function GetWtiLikePost($arg = null) {
           $wti_like_post .= "<div class='watch-position " . $alignment . "'>";
           
           $wti_like_post .= "<div class='action-like'>";
-          $wti_like_post .= "<a class='lbg-" . $style . " like-" . $post_id . " jlk' href='" . $ajax_like_link . "' data-task='like' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "'>";
+          $wti_like_post .= "<a class='lbg-" . $style . " like-" . $post_id . " jlk' href='" . $ajax_like_link . "' data-task='like' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
           $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_like, 'wti-like-post') . "' />";
           $wti_like_post .= "<span class='lc-" . $post_id . " lc'>" . $like_count . "</span>";
           $wti_like_post .= "</a></div>";
           
           if ($show_dislike) {
                $wti_like_post .= "<div class='action-unlike'>";
-               $wti_like_post .= "<a class='unlbg-" . $style . " unlike-" . $post_id . " jlk' href='" . $ajax_unlike_link . "' data-task='unlike' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "'>";
+               $wti_like_post .= "<a class='unlbg-" . $style . " unlike-" . $post_id . " jlk' href='" . $ajax_unlike_link . "' data-task='unlike' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
                $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_unlike, 'wti-like-post') . "' />";
                $wti_like_post .= "<span class='unlc-" . $post_id . " unlc'>" . $unlike_count . "</span>";
                $wti_like_post .= "</a></div> ";
@@ -137,139 +137,27 @@ add_filter('the_content', 'PutWtiLikePost');
 function GetWtiVotedMessage($post_id, $ip = null) {
      global $wpdb;
      $wti_voted_message = '';
+     $voting_period = get_option('wti_like_post_voting_period');
      
      if (null == $ip) {
-          $ip = $_SERVER['REMOTE_ADDR'];
+          $ip = WtiGetRealIpAddress();
      }
      
-     $wti_has_voted = $wpdb->get_var("SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'");
+     $query = "SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'";
+     
+     if ($voting_period != 0 && $voting_period != 'once') {
+          // If there is restriction on revoting with voting period, check with voting time
+          $last_voted_date = GetWtiLastDate($voting_period);
+          $query .= " AND date_time >= '$last_voted_date'";
+     }
+
+     $wti_has_voted = $wpdb->get_var($query);
      
      if ($wti_has_voted > 0) {
           $wti_voted_message = get_option('wti_like_post_voted_message');
      }
      
      return $wti_voted_message;
-}
-
-/**
- * Get last voted date for a given post by ip
- * @param $post_id integer
- * @param $ip string
- * @return string
- */
-function GetWtiLastVotedDate($post_id, $ip = null) {
-     global $wpdb;
-     
-     if (null == $ip) {
-          $ip = $_SERVER['REMOTE_ADDR'];
-     }
-     
-     $wti_has_voted = $wpdb->get_var("SELECT date_time FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'");
-
-     return $wti_has_voted;
-}
-
-/**
- * Get next vote date for a given user
- * @param $last_voted_date string
- * @param $voting_period integer
- * @return string
- */
-function GetWtiNextVoteDate($last_voted_date, $voting_period) {
-     switch($voting_period) {
-          case "1":
-               $day = 1;
-               break;
-          case "2":
-               $day = 2;
-               break;
-          case "3":
-               $day = 3;
-               break;
-          case "7":
-               $day = 7;
-               break;
-          case "14":
-               $day = 14;
-               break;
-          case "21":
-               $day = 21;
-               break;
-          case "1m":
-               $month = 1;
-               break;
-          case "2m":
-               $month = 2;
-               break;
-          case "3m":
-               $month = 3;
-               break;
-          case "6m":
-               $month = 6;
-               break;
-          case "1y":
-               $year = 1;
-            break;
-     }
-     
-     $last_strtotime = strtotime($last_voted_date);
-     $next_strtotime = mktime(date('H', $last_strtotime), date('i', $last_strtotime), date('s', $last_strtotime),
-                    date('m', $last_strtotime) + $month, date('d', $last_strtotime) + $day, date('Y', $last_strtotime) + $year);
-     
-     $next_voting_date = date('Y-m-d H:i:s', $next_strtotime);
-     
-     return $next_voting_date;
-}
-
-/**
- * Get last voted date as per voting period
- * @param $post_id integer
- * @return string
- */
-function GetWtiLastDate($voting_period) {
-     switch($voting_period) {
-          case "1":
-               $day = 1;
-               break;
-          case "2":
-               $day = 2;
-               break;
-          case "3":
-               $day = 3;
-               break;
-          case "7":
-               $day = 7;
-               break;
-          case "14":
-               $day = 14;
-               break;
-          case "21":
-               $day = 21;
-               break;
-          case "1m":
-               $month = 1;
-               break;
-          case "2m":
-               $month = 2;
-               break;
-          case "3m":
-               $month = 3;
-               break;
-          case "6m":
-               $month = 6;
-               break;
-          case "1y":
-               $year = 1;
-            break;
-     }
-     
-     $last_strtotime = strtotime(date('Y-m-d H:i:s'));
-     $last_strtotime = mktime(date('H', $last_strtotime), date('i', $last_strtotime), date('s', $last_strtotime),
-                    date('m', $last_strtotime) - $month, date('d', $last_strtotime) - $day, date('Y', $last_strtotime) - $year);
-     
-     $last_voting_date = date('Y-m-d H:i:s', $last_strtotime);
-     
-     return $last_voting_date;
 }
 
 add_shortcode('most_liked_posts', 'WtiMostLikedPostsShortcode');
@@ -289,7 +177,7 @@ function WtiMostLikedPostsShortcode($args) {
           $limit = 10;
      }
      
-     if ($args['time'] != 'all') {
+     if (!empty($args['time']) && $args['time'] != 'all') {
           $last_date = GetWtiLastDate($args['time']);
           $where .= " AND date_time >= '$last_date'";
      }
@@ -301,7 +189,7 @@ function WtiMostLikedPostsShortcode($args) {
      $posts = $wpdb->get_results($query);
  
      if (count($posts) > 0) {
-          $most_liked_post .= '<table>';
+          $most_liked_post .= '<table class="most-liked-posts-table">';
           $most_liked_post .= '<tr>';
           $most_liked_post .= '<td>' . __('Title', 'wti-like-post') .'</td>';
           $most_liked_post .= '<td>' . __('Like Count', 'wti-like-post') .'</td>';
@@ -313,7 +201,7 @@ function WtiMostLikedPostsShortcode($args) {
                $like_count = $post->like_count;
                
                $most_liked_post .= '<tr>';
-               $most_liked_post .= '<td><a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">' . $post_title . '</a></td>';
+               $most_liked_post .= '<td><a href="' . $permalink . '" title="' . $post_title . '">' . $post_title . '</a></td>';
                $most_liked_post .= '<td>' . $like_count . '</td>';
                $most_liked_post .= '</tr>';
           }
@@ -337,7 +225,7 @@ function WtiRecentlyLikedPostsShortcode($args) {
      global $wpdb;
      $recently_liked_post = '';
      
-     if ($args['limit']) {
+     if ( $args['limit'] ) {
           $limit = $args['limit'];
      } else {
           $limit = 10;
@@ -346,38 +234,41 @@ function WtiRecentlyLikedPostsShortcode($args) {
      $show_excluded_posts = get_option('wti_like_post_show_on_widget');
      $excluded_post_ids = explode(',', get_option('wti_like_post_excluded_posts'));
      
-     if (!$show_excluded_posts && count($excluded_post_ids) > 0) {
+     if ( !$show_excluded_posts && count( $excluded_post_ids ) > 0 ) {
           $where = "AND post_id NOT IN (" . get_option('wti_like_post_excluded_posts') . ")";
      }
-     
-     $recent_ids = $wpdb->get_col("SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post` $where ORDER BY date_time DESC");
-          
-     if (count($recent_ids) > 0) {
+
+     // Get the post IDs recently voted
+     $recent_ids = $wpdb->get_col("SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post`
+                                  WHERE value > 0 $where GROUP BY post_id ORDER BY MAX(date_time) DESC");
+
+     if ( count( $recent_ids ) > 0 ) {
           $where = "AND post_id IN(" . implode(",", $recent_ids) . ")";
-     }
      
-     // Getting the most liked posts
-     $query = "SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P ";
-     $query .= "WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where GROUP BY post_id ORDER BY date_time DESC LIMIT $limit";
-
-     $posts = $wpdb->get_results($query);
-
-     if (count($posts) > 0) {
-          $recently_liked_post .= '<table>';
-          $recently_liked_post .= '<tr>';
-          $recently_liked_post .= '<td>' . __('Title', 'wti-like-post') .'</td>';
-          $recently_liked_post .= '</tr>';
-       
-          foreach ($posts as $post) {
-               $post_title = stripslashes($post->post_title);
-               $permalink = get_permalink($post->post_id);
-               
+          // Getting the most liked posts
+          $query = "SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
+                    WHERE L.post_id = P.ID AND post_status = 'publish' $where GROUP BY post_id
+                    ORDER BY FIELD(post_id, " . implode(",", $recent_ids) . ") ASC LIMIT $limit";
+     
+          $posts = $wpdb->get_results($query);
+     
+          if ( count( $posts ) > 0 ) {
+               $recently_liked_post .= '<table class="recently-liked-posts-table">';
                $recently_liked_post .= '<tr>';
-               $recently_liked_post .= '<td><a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">' . $post_title . '</a></td>';
+               $recently_liked_post .= '<td>' . __('Title', 'wti-like-post') .'</td>';
                $recently_liked_post .= '</tr>';
+            
+               foreach ( $posts as $post ) {
+                    $post_title = stripslashes($post->post_title);
+                    $permalink = get_permalink($post->post_id);
+                    
+                    $recently_liked_post .= '<tr>';
+                    $recently_liked_post .= '<td><a href="' . $permalink . '" title="' . $post_title . '">' . $post_title . '</a></td>';
+                    $recently_liked_post .= '</tr>';
+               }
+            
+               $recently_liked_post .= '</table>';
           }
-       
-          $recently_liked_post .= '</table>';
      } else {
           $recently_liked_post .= '<p>' . __('No posts liked yet.', 'wti-like-post') . '</p>';
      }

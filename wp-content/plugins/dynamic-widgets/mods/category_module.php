@@ -2,7 +2,7 @@
 /**
  * Category Module
  *
- * @version $Id: category_module.php 523481 2012-03-25 19:49:08Z qurl $
+ * @version $Id: category_module.php 938226 2014-06-25 05:16:47Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -18,11 +18,11 @@
 
 			parent::admin();
 
-			self::$opt = $DW->getDWOpt($_GET['id'], self::$name);
+			self::$opt = $DW->getDWOpt($GLOBALS['widget_id'], self::$name);
 
 			self::GUIHeader(self::$option[self::$name], self::$question, FALSE);
 			self::GUIOption();
-			self::GUIComplex();
+			self::GUIComplex(NULL, NULL);
 			self::GUIFooter();
 		}
 
@@ -39,18 +39,18 @@
 			return $arr;
 		}
 
-		public static function GUIComplex($single = FALSE, $opt = NULL) {
+		public static function GUIComplex($except, $list, $extra = FALSE, $name = NULL) {
 			$DW = &$GLOBALS['DW'];
 
 			// Needs an own complex list
 			$list = get_categories( array('hide_empty' => FALSE) );
 			$catmap = self::getCatChilds(array(), 0, array());
 
-			if (! is_null($opt) ) {
-				self::$opt = $opt;
+			if (! is_null($name) ) {
+				self::$opt = $name;
 			}
 			if ( self::$opt->count > 0 ) {
-				$opt_category_childs = $DW->getDWOpt($_GET['id'], ( $single ? 'single-' : '' ) . 'category-childs');
+				$opt_category_childs = $DW->getDWOpt($GLOBALS['widget_id'], ( ($extra) ? 'single-' : '' ) . 'category-childs');
 				$childs = $opt_category_childs->act;
 
 				$DW->dumpOpt($opt_category_childs);
@@ -66,7 +66,7 @@
 			_e(self::$except, DW_L10N_DOMAIN);
 			echo '<br />';
 			echo '<div id="' . self::$name . '-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
-			self::prtCat($catmap, self::$opt->act, $childs, $single);
+			self::prtCat($catmap, self::$opt->act, $childs, $extra);
 			echo '</div>' . "\n";
 		}
 

@@ -4,7 +4,7 @@ Tags: doc, docx, pdf, ppt, pptx, xls, psd, zip, rar, tiff, ttf, office, powerpoi
 Author URI: http://www.davistribe.org/code/
 Donate link: http://www.davistribe.org/gde/donate/
 Requires at least: 3.5
-Tested up to: 3.8
+Tested up to: 3.9
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -74,7 +74,8 @@ You can upload it to your WordPress site using the standard techniques, or link 
 There are several ways you can insert a supported document, depending on your preference:
 
 * Manually enter the shortcode (explained below).
-* Upload a supported file type from a page or post, and from the Media Library, click the "Insert" button.
+* Click the "Add Media" button to upload or select a file from your media library, and ensure the "Link To" setting in Attachment Display Settings
+is set to "Media File." Then click "Insert into post."
 * Use the Google Doc Embedder button in the Visual editor to insert the `[gview]` shortcode.
 * Paste the URL into the HTML editor, select it, and click the "GDE" quicktag button (HTML/Text editor).
 
@@ -134,6 +135,16 @@ More common questions are answered on the GDE web site [here](http://www.davistr
 == Changelog ==
 
 (E) Enhanced Viewer
+
+= 2.5.14 =
+* Fixed: Download link had no text in some circumstances
+* Updated: Hungarian translation (thanks szemcse)
+
+= 2.5.13 =
+* Fixed: Javascript error within WP 3.9 visual editor (thanks Sergey)
+* Fixed: (E) Unsupported browser message on some documents
+* Changed: (E) Lengthened default network timeout
+* Removed: Long-useless authonly= and lang= shortcode parameters (use profiles)
 
 = 2.5.12 =
 * Changed: Updated mobile detection library
@@ -233,5 +244,5 @@ More common questions are answered on the GDE web site [here](http://www.davistr
 
 == Upgrade Notice ==
 
-= 2.5.12 =
+= 2.5.13 =
 Maintenance release

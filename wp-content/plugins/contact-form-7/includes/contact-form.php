@@ -547,14 +547,17 @@ class WPCF7_ContactForm {
 
 		$result = array(
 			'status' => $submission->get_status(),
-			'message' => $submission->get_response(),
-			'demo_mode' => $this->in_demo_mode() );
+			'message' => $submission->get_response() );
 
 		if ( $submission->is( 'validation_failed' ) ) {
 			$result['invalid_fields'] = $submission->get_invalid_fields();
 		}
 
 		if ( $submission->is( 'mail_sent' ) ) {
+			if ( $this->in_demo_mode() ) {
+				$result['status'] = 'demo_mode';
+			}
+
 			if ( $ajax ) {
 				$on_sent_ok = $this->additional_setting( 'on_sent_ok', false );
 

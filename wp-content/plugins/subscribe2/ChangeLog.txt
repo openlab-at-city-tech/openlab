@@ -1,3 +1,110 @@
+= 10.12 =
+
+* Popup customization templates selection
+* Performance update for faster javascript load.
+* updated signup form information
+
+= Version 10.11 =
+
+* 2-way synchronization with readygraph popup
+* Performance update for faster javascript load.
+* contact information for readygraph
+
+= Version 10.10 =
+
+* Send blog updates to readygraph for weekly digest. You can turn it off from readygraph settings page.
+* Fix Readygraph banner close permanently
+
+= Version 10.9 =
+
+* Close button to dismiss Readygraph connect button on plugins page
+* Add option to hide Powered by Readygraph from popup
+* Readygraph TOS and Privacy Policy link is required as Readygraph stores the sign up email address on behalf of site owner, to remove these links you will need to disconnect the Readygraph from Readygraph Settings page.
+
+= Version 10.8 =
+
+* Re-Integrate Readygraph Features into Subscribe2
+* Disconnect readygraph option inside readygraph settings page
+
+= Version 10.7 =
+
+* Roll back to version with basic Readygraph - v.10.3
+
+= Version 10.6 =
+
+* Bug Fix
+
+= Version 10.5 =
+
+* Bug Fix
+
+= Version 10.4 =
+
+* Integrate Readygraph Wordpress Plugin
+* Readygraph feature is handled by Readygraph plugin
+
+= Version 10.3 =
+
+* Fix ReadyGraph page for i18n
+* Fix ReadyGraph page for HTML validity
+* Add feature to unlink ReadyGraph
+
+= Version 10.2 =
+
+* Fix bugs for readygraph features
+
+= Version 10.1 by Matthew Robinson =
+
+* Revert introduction of ReadyGraph features until they are production ready
+* Resolve a critical SQL Injection vulnerability introduced in recent code
+* Fix jQuery conflict caused by TinyMCE4 plugin - props Greg Ross
+
+= Version 10.0 =
+
+* Initial introduction of ReadyGraph features
+
+= Version 9.5 by Matthew Robinson =
+
+* Improved placement and usage of the 's2_custom_keywords' filter in the digest emails
+* Fix for some undefined variable notices
+* Fixes for database connectivity in the upgrade class file - thanks to rushu25
+* Fix for bug when antispam measures are disabled - thanks to serinx
+* Add option to Sidebar Widget to not wrap the button below the form
+* Straightened quotes in the ChangeLog
+* Remove all uses of PHP extract() function as per core ticket (https://core.trac.wordpress.org/ticket/22400)
+
+= Version 9.4 by Matthew Robinson =
+
+* Fix for non-existing variable errors on Subscribe2->Subscribers page - thanks to bapakrob and perezlr
+* Don't display Excluded Categories in Bulk Management is Registered users cannot override the exclusion
+* Fix for disappearing Jetpack Stats module - thanks to desertravenart
+* Fix for undefined variable notices in the digest emails
+
+= Version 9.3 by Matthew Robinson =
+
+* Only add 'weekly' cron schedule interval if it does not already exist
+* Add capability to add social media share buttons to HTML emails
+* Update editor plugin for TinyMCE version 4 bundled with WordPress 3.9
+* Rework Digest emails to collect posts based on transition status rather than time - see ticket https://plugins.trac.wordpress.org/ticket/2058
+* Hide comment form subscription options if using Jetpack Comments and improve compatibility
+* Fixed typos in the Help tab on the Settings page
+* Improved domain name comparison for sender email check - props garypardun
+* Tidied load_string() function and moved it to class-s2-frontend.php as all strings are not for user side only
+* Ensure 's2_authors' keys exist on all sites and for all Registered Users as per illmasterc's bug report
+* Introduce 's2_mu_blog_list' filter to allow filter of blog list for WordPress Multisite installs - props careb
+* Enable built-in widget by default - props by MadtownLems
+* Use a better method for unendcoding HTML special characters for plain text emails - proposed by Dainius Kaupaitis
+* Fixed a bug affecting handling of Registered users with email aliases (e.g. name+alias@gmail.com) - thanks to Alexandre (bosseal)
+* Improved Character Set encoding of some email headers
+* Improved user registration hooking for Multisite installs - thanks to dsl255
+* Introduce a filter to allow filtering of the confirm link URL - props diddledan
+* Introduce a confirmation box for Registered User deletion - props geoorgge1968
+* Improved Bulk Management user experience by retaining submitted settings
+
+= Version 9.2 by Matthew Robinson =
+
+* Fixed an error in the Registered User deletion code - thanks to Jay Wasack
+
 = Version 9.1 by Matthew Robinson =
 
 * Shortcode parameters are now not case sensitive
@@ -13,8 +120,8 @@
 * Fix link to jQuery CSS for servers using HTTPS connections - props Christian (aka Alariel)
 * Introduce link to Templates page with unsupported keywords are detected - props MadtownLems
 * Ensure all JavaScript passes the JSHint WordPress Coding Standards
-* Initialise ‘colorpicker’ boxes on page load so they are coloured before first user click
-* Only add a new Weekly schedule if it doesn’t already exist
+* Initialise 'colorpicker' boxes on page load so they are coloured before first user click
+* Only add a new Weekly schedule if it doesn't already exist
 * Use trim() on post excerpt to account for blank but non-empty excerpts
 * Don't display screen icons in WordPress 3.8 as they are hidden by CSS - see ticket http://core.trac.wordpress.org/ticket/26119
 * Added 's2_confirm_email' filter to allow amendment or replacement of the subscribe and unsubscribe emails - proposed by Tim Büttner
