@@ -1128,12 +1128,21 @@ HTML;
             wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
             wp_enqueue_style('google-open-sans');
             
+            $openlab_theme_link = get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css';
+            $openlab_theme_link = set_url_scheme($openlab_theme_link);
+            
             //registering font-awesome here so it can be used on the admin bar and on the main site
-            wp_register_style('font-awesome', get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css', array(), '20130604', 'all');
+            wp_register_style('font-awesome', $openlab_theme_link, array(), '20130604', 'all');
             wp_enqueue_style('font-awesome');
             //custom admin bar styles
-            wp_enqueue_style( 'admin-bar-custom', WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css',array('font-awesome') );            
-            wp_enqueue_style( 'openlab-toolbar', WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css',array('font-awesome') );
+            
+            $adminbar_custom_url = WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css';
+            $adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
+            $openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
+            $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
+            
+            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome') );            
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome') );
         }
         
         function adminbar_special_body_class($classes){
