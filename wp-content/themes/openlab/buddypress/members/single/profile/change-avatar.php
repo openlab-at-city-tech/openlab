@@ -11,6 +11,7 @@
 		<?php if ( 'upload-image' == bp_get_avatar_admin_step() ) : ?>
                 <div class="panel-heading">Upload Avatar</div>
                     <div class="panel-body">
+                        <?php do_action('template_notices') ?>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div id="avatar-wrapper">
@@ -47,7 +48,7 @@
 
                 <div class="panel-heading">Crop Avatar</div>
                         <div class="panel-body">
-
+                            <?php do_action('template_notices') ?>
                             <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
 
                             <div id="avatar-crop-pane">
