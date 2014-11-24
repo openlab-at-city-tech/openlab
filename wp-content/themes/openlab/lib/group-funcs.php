@@ -793,7 +793,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -970,7 +970,7 @@ function openlab_group_profile_activity_list() {
 
                         </div>
 
-                    <?php endif; //end of if $group != 'portfolio'         ?>
+                    <?php endif; //end of if $group != 'portfolio'          ?>
 
                 <?php elseif (!bp_group_is_visible()) : ?>
                     <?php
@@ -984,13 +984,13 @@ function openlab_group_profile_activity_list() {
                     ?>
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )          ?>
+                    <?php // do_action( 'bp_before_group_status_message' )           ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                      ?></p>
+                                                            <p><?php // bp_group_status_message()                       ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )         ?>
+                    <?php // do_action( 'bp_after_group_status_message' )          ?>
 
                 <?php endif; ?>
 
@@ -1009,13 +1009,13 @@ function openlab_group_profile_activity_list() {
 
                     <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )          ?>
+                    <?php // do_action( 'bp_before_group_status_message' )           ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                      ?></p>
+                                                            <p><?php // bp_group_status_message()                       ?></p>
                                                     </div>
                     -->
-                    <?php // do_action( 'bp_after_group_status_message' )           ?>
+                    <?php // do_action( 'bp_after_group_status_message' )            ?>
 
                 <?php endif; ?>
 
@@ -1208,7 +1208,7 @@ function openlab_get_directory_filter($filter_type, $label_type) {
                 'staff' => 'Staff'
             );
             break;
-        
+
         case 'semester' :
             $filter_array['label'] = 'Semester';
             $filter_array['options'] = array();
@@ -1266,12 +1266,12 @@ function openlab_current_directory_filters() {
         $filter_words = array();
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
-            
+
             $word = isset($filter_data['options'][$fvalue]) ? $filter_data['options'][$fvalue] : ucwords($fvalue);
-            
+
             //dump hyphens from semester values
-            if($filter_data['type'] == 'semester'){
-                $word = str_replace('-',' ',$word);
+            if ($filter_data['type'] == 'semester') {
+                $word = str_replace('-', ' ', $word);
             }
 
             // Leave out the 'All's
@@ -1416,7 +1416,7 @@ function openlab_show_site_posts_and_comments() {
 
 function openlab_output_course_info_line($group_id) {
     $infoline_mup = '';
-    
+
     $admins = groups_get_group_admins($group_id);
     $faculty_id = $admins[0]->user_id;
     $first_name = ucfirst(xprofile_get_field_data('First Name', $faculty_id));
@@ -1425,26 +1425,26 @@ function openlab_output_course_info_line($group_id) {
     $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
     $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
     $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-    $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'),20,false);
-    
+    $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'), 20, false);
+
     $infoline_elems = array();
-    
-    if (openlab_not_empty($wds_faculty)){
-        array_push($infoline_elems,$wds_faculty);
+
+    if (openlab_not_empty($wds_faculty)) {
+        array_push($infoline_elems, $wds_faculty);
     }
-    if (openlab_not_empty($wds_departments)){
-        array_push($infoline_elems,$wds_departments);
+    if (openlab_not_empty($wds_departments)) {
+        array_push($infoline_elems, $wds_departments);
     }
-    if (openlab_not_empty($wds_course_code)){
-        array_push($infoline_elems,$wds_course_code);
+    if (openlab_not_empty($wds_course_code)) {
+        array_push($infoline_elems, $wds_course_code);
     }
-    if(openlab_not_empty($wds_semester) || openlab_not_empty($wds_year)){
-        $semester_year = '<span class="bold">'.$wds_semester.' '.$wds_year.'</span>';
-        array_push($infoline_elems,$semester_year);
+    if (openlab_not_empty($wds_semester) || openlab_not_empty($wds_year)) {
+        $semester_year = '<span class="bold">' . $wds_semester . ' ' . $wds_year . '</span>';
+        array_push($infoline_elems, $semester_year);
     }
-    
+
     $infoline_mup = implode('|', $infoline_elems);
-    
+
     return $infoline_mup;
 }
 
