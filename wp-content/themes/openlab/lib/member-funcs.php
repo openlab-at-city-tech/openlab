@@ -355,6 +355,7 @@ function openlab_group_status_message($group = null) {
     $site_id = openlab_get_site_id_by_group_id($group->id);
     $site_url = openlab_get_group_site_url($group->id);
 
+    $site_status = 1;
     if ($site_url) {
         // If we have a site URL but no ID, it's an external site, and is public
         if (!$site_id) {
