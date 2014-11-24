@@ -448,7 +448,6 @@ function openlab_get_active_semesters() {
         $combos = array_values(array_reverse($combos));
 
         set_transient($tkey, $combos);
-        var_dump('Miss');
     }
 
     return $combos;
@@ -1195,6 +1194,14 @@ function openlab_get_directory_filter($filter_type, $label_type) {
                 'faculty' => 'Faculty',
                 'staff' => 'Staff'
             );
+            break;
+        
+        case 'semester' :
+            $filter_array['label'] = 'Semester';
+            $filter_array['options'] = array();
+            foreach (openlab_get_active_semesters() as $sem) {
+                $filter_array['options'][$sem['option_value']] = $sem['option_label'];
+            }
             break;
     }
 
