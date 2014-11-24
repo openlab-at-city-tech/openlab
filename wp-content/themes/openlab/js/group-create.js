@@ -334,7 +334,7 @@ jQuery(document).ready(function($){
                 }
 
 		// If "Set up a site" is not checked, there's no validation to do
-		if ( ! $(setuptoggle).is( ':checked' ) ) {
+		if ( $( setuptoggle ).length && ! $(setuptoggle).is( ':checked' ) ) {
 			return true;
 		}
 
