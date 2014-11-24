@@ -60,4 +60,21 @@ add_filter( 'widget_display_callback', 'openlab_ssl_widget_display_callback', 10
  * This is very heavy-handed, but should be harmless, and is faster than
  * preg_replace() to catch things like inline images.
  */
-add_filter( 'the_content', 'openlab_ssl_fix' );
+add_filter('the_content', 'openlab_ssl_fix');
+
+/**
+ * YouTube embeds
+ */
+function openlab_ssl_youtube_embeds($content) {
+    return str_replace(
+            array(
+        'http://youtube.com',
+        'http://www.youtube.com',
+            ), array(
+        'https://youtube.com',
+        'https://www.youtube.com',
+            ), $content
+    );
+}
+
+add_filter('the_content', 'openlab_ssl_youtube_embeds');
