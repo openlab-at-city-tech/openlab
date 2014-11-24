@@ -463,12 +463,15 @@ class Openlab_Clone_Course_Group {
 	}
 
 	protected function get_source_group_admins() {
-		if ( empty( $this->source_group_admins ) ) {
-			$g = groups_get_group( array( 'group_id' => $this->source_group_id ) );
-			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
-		}
+            if (empty($this->source_group_admins)) {
+            $g = groups_get_group(array(
+                'group_id' => $this->source_group_id,
+                'populate_extras' => true,
+                    ));
+            $this->source_group_admins = wp_list_pluck($g->admins, 'user_id');
+        }
 
-		return $this->source_group_admins;
+        return $this->source_group_admins;
 	}
 }
 
@@ -657,7 +660,10 @@ class Openlab_Clone_Course_Site {
 
 	protected function get_source_group_admins() {
 		if ( empty( $this->source_group_admins ) ) {
-			$g = groups_get_group( array( 'group_id' => $this->source_group_id ) );
+			$g = groups_get_group(array(
+                        'group_id' => $this->source_group_id,
+                        'populate_extras' => true,
+                            ));
 			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
 		}
 
