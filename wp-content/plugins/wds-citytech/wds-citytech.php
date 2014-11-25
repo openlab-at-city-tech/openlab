@@ -2286,3 +2286,12 @@ function openlab_bbp_map_group_forum_meta_caps($caps = array(), $cap = '', $user
 }
 
 add_filter('bbp_map_meta_caps', 'openlab_bbp_map_group_forum_meta_caps', 10, 4);
+
+/**
+ * Force bbPress to display all forums (ie don't hide any hidden forums during bbp_has_forums() queries).
+ *
+ * We manage visibility ourselves.
+ *
+ * See #1299.
+ */
+add_filter('bbp_include_all_forums', '__return_true');
