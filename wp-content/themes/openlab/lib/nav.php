@@ -50,3 +50,69 @@ function openlab_custom_nav_classes($classes,$item){
 }
 
 add_filter('nav_menu_css_class','openlab_custom_nav_classes', 10, 2);
+
+/**
+ * Filter pagination links on group/member directories to include misc GET params.
+ */
+function openlab_loop_pagination_links_filter($has_items) {
+    global $groups_template, $members_template;
+    // Only run on directories.
+    $current_page = get_queried_object();
+    if (!in_array($current_page->post_name, array('people', 'courses', 'projects', 'clubs', 'portfolios',))) {
+        return $has_items;
+    }
+    switch (current_filter()) {
+        case 'bp_has_groups' :
+            $t = $groups_template;
+            $pagarg = 'grpage';
+            $count = (int) $t->total_group_count;
+            break;
+        case 'bp_has_members' :
+            $t = $members_template;
+            $pagarg = 'upage';
+            $count = (int) $t->total_member_count;
+            break;
+    }
+    if (empty($t)) {
+        return $has_items;
+    }
+    if ($count && (int) $t->pag_num) {
+        $pag_args = array(
+            $pagarg => '%#%',
+            'num' => $t->pag_num,
+            'sortby' => $t->sort_by,
+            'order' => $t->order,
+        );
+        if (defined('DOING_AJAX') && true === (bool) DOING_AJAX) {
+            $base = remove_query_arg('s', wp_get_referer());
+        } else {
+            $base = '';
+        }
+        $ol_args = array(
+            'department',
+            'group_sequence',
+            'school',
+            'search',
+            'semester',
+            'usertype',
+        );
+        foreach ($ol_args as $ol_arg) {
+            if (isset($_GET[$ol_arg])) {
+                $pag_args[$ol_arg] = urldecode($_GET[$ol_arg]);
+            }
+        }
+        $t->pag_links = paginate_links(array(
+            'base' => add_query_arg($pag_args, $base),
+            'format' => '',
+            'total' => ceil($count / (int) $t->pag_num),
+            'current' => $t->pag_page,
+            'prev_text' => _x('&larr;', 'Group pagination previous text', 'buddypress'),
+            'next_text' => _x('&rarr;', 'Group pagination next text', 'buddypress'),
+            'mid_size' => 1
+                ));
+    }
+    return $has_items;
+}
+
+add_filter('bp_has_groups', 'openlab_loop_pagination_links_filter');
+add_filter('bp_has_members', 'openlab_loop_pagination_links_filter');
