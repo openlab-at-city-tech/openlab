@@ -47,62 +47,6 @@ function wds_content_excerpt( $text, $text_length ) {
 	return bp_create_excerpt( $text, $text_length );
 }
 
-/**
- * Following filter is to correct Forum display of time since a post was written
- */
-function openlab_get_the_topic_post_time_since( $current_time ) {
-	global $topic_template;
-
-	return bp_core_time_since( $topic_template->post->post_time );
-}
-//add_filter( 'bp_get_the_topic_post_time_since', 'openlab_get_the_topic_post_time_since' );
-
-/**
- * Filtering the member last active value
- */
-function openlab_get_last_activity( $last_activity, $last_activity_date, $string ) {
-	if ( !is_numeric( $last_activity_date ) )
-		$last_activity_date = strtotime( $last_activity_date );
-
-	if ( !$last_activity_date || empty( $last_activity_date ) )
-		$last_active = __( 'not recently active', 'buddypress' );
-	else
-		$last_active = sprintf( $string, bp_core_time_since( $last_activity_date ) );
-
-	return $last_active;
-}
-add_filter( 'bp_core_get_last_activity', 'openlab_get_last_activity', 10, 3 );
-
-/**
- * Filtering group last active value
- */
-function openlab_get_group_last_active( $last_active ) {
-	global $groups_template;
-
-	if ( empty( $group ) )
-		$group =& $groups_template->group;
-
-	$last_active = $group->last_activity;
-
-	if ( !$last_active )
-		$last_active = groups_get_groupmeta( $group->id, 'last_activity' );
-
-	if ( empty( $last_active ) ) {
-		return __( 'not yet active', 'buddypress' );
-	} else {
-		return bp_core_time_since( strtotime( $last_active ) );
-	}
-}
-add_filter( 'bp_get_group_last_active', 'openlab_get_group_last_active' );
-
-/**
- * Filtering activity value
- */
-function openlab_activity_time_since( $text, $activity ) {
-	return '<span class="time-since">' . bp_core_time_since( strtotime( $activity->date_recorded ) ) . '</span>';
-}
-add_filter( 'bp_activity_time_since', 'openlab_activity_time_since', 10, 2 );
-
 add_action( 'bp_before_group_forum_topic_posts', 'wds_forum_topic_next_prev' );
 function wds_forum_topic_next_prev() {
 	global $groups_template, $wpdb;
