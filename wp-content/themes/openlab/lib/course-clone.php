@@ -398,41 +398,65 @@ class Openlab_Clone_Course_Group {
 		}
 	}
 
-	protected function migrate_topics() {
-		do_action( 'bbpress_init' );
+        protected function migrate_topics() {
+            $source_group_admins = $this->get_source_group_admins();
+            $forum_ids = bbp_get_group_forum_ids($this->group_id);
+            // Should never happen, but just in case
+            // (without this, it returns all topics)
+            if (empty($forum_ids)) {
+                return;
+            }
+            $forum_id = $forum_ids[0];
+            // Get source topics
+            $source_forum_ids = bbp_get_group_forum_ids($this->source_group_id);
+            if (empty($source_forum_ids)) {
+                return;
+            }
+            $source_forum_id = $source_forum_ids[0];
+            if (!$source_forum_id) {
+                return;
+            }
+            $source_forum_topics = new WP_Query(array(
+                'post_type' => bbp_get_topic_post_type(),
+                'post_parent' => $source_forum_id,
+                'posts_per_page' => -1,
+                    ));
+            $group = groups_get_group(array('group_id' => $this->group_id));
+            // Set the default forum status
+            switch ($group->status) {
+                case 'hidden' :
+                    $status = bbp_get_hidden_status_id();
+                    break;
+                case 'private' :
+                    $status = bbp_get_private_status_id();
+                    break;
+                case 'public' :
+                default :
+                    $status = bbp_get_public_status_id();
+                    break;
+            }
+            // Then post them
+            foreach ($source_forum_topics->posts as $sftk) {
+                bbp_insert_topic(array(
+                    'post_parent' => $forum_id,
+                    'post_status' => $status,
+                    'post_author' => $sftk->post_author,
+                    'post_content' => $sftk->post_content,
+                    'post_title' => $sftk->post_title,
+                    'post_date' => $sftk->post_date,
+                ));
+            }
+            return;
+            // rekey for better lookups
+            $source_forum_topics_keyed = array();
+            foreach ($source_forum_topics as $sft) {
+                if (!in_array($sft->post_author, $source_group_admins)) {
+                    continue;
+                }
+                $source_forum_topics_keyed[$sft->ID] = $sft;
+            }
 
-		$source_group_admins = $this->get_source_group_admins();
-
-		// Set up forum
-		$group = groups_get_group( array( 'group_id' => $this->group_id ) );
-		groups_new_group_forum( $this->group_id, $group->name, $group->description );
-		$forum_id = groups_get_groupmeta( $this->group_id, 'forum_id' );
-
-		// Get source topics
-		$source_forum_id = groups_get_groupmeta( $this->source_group_id, 'forum_id' );
-
-		// Should never happen, but just in case
-		// (without this, it returns all topics)
-		if ( ! $source_forum_id ) {
-			return;
-		}
-
-		$source_forum_topics = bp_forums_get_forum_topics( array(
-			'forum_id' => $source_forum_id,
-			'per_page' => 10000000,
-		) );
-
-		// rekey for better lookups
-		$source_forum_topics_keyed = array();
-		foreach ( $source_forum_topics as $sft ) {
-			if ( ! in_array( $sft->topic_poster, $source_group_admins ) ) {
-				continue;
-			}
-
-			$source_forum_topics_keyed[ $sft->topic_id ] = $sft;
-		}
-
-		// And their first posts
+                // And their first posts
 		global $wpdb, $bp, $bbdb;
 		$source_forum_topic_ids = implode( ',', wp_list_pluck( $source_forum_topics, 'topic_id' ) );
 		$source_forum_posts = $wpdb->get_results( "SELECT topic_id, post_text FROM {$bbdb->posts} WHERE topic_id IN ({$source_forum_topic_ids}) AND post_position = 1" );
