@@ -920,4 +920,25 @@ function bp_docs_locate_template( $template = '' ) {
 
 	return apply_filters( 'bp_docs_locate_template', $template_path, $template );
 }
-?>
+
+/**
+ * Get group's Docs settings.
+ *
+ * We use this wrapper function because of changes in BP 2.0.0 that exposed
+ * some 'bp-docs' to 'bpdocs' meta key conversion.
+ */
+function bp_docs_get_group_settings( $group_id ) {
+	$settings = groups_get_groupmeta( $group_id, 'bp-docs' );
+
+	if ( '' === $settings ) {
+		$settings = groups_get_groupmeta( $group_id, 'bpdocs' );
+	}
+
+	if ( '' === $settings ) {
+		$settings = array();
+	}
+
+	return $settings;
+}
+
+
