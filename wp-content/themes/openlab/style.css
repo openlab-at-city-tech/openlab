@@ -7298,6 +7298,13 @@ input[type="submit"] {
 .bbp-author-role {
   display: none;
 }
+#validation-code {
+  margin-top: 8px;
+  background: #eaeaea;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 8px 16px;
+}
 /**header**/
 .navbar-default {
   border: none;
