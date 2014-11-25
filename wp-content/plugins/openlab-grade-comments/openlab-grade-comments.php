@@ -48,7 +48,7 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 
 	return $args;
 }
-add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields' );
+add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 1000 );
 
 /**
  * Catch and save values after comment submit.
@@ -248,6 +248,10 @@ function olgc_is_author( $post_id = null ) {
 		$post = get_post( $post_id );
 	} else {
 		$post = get_queried_object();
+	}
+
+	if ( ! is_a( $post, 'WP_Post' ) ) {
+		return false;
 	}
 
 	return is_user_logged_in() && get_current_user_id() == $post->post_author;
