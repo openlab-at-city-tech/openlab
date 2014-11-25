@@ -2305,11 +2305,11 @@ add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
  * bbPress uses get_permalink(). On a BP group, this refers to the Groups WP
  * page. For some reason, it's not getting filtered correctly by bbPress.
  */
-function openlab_fix_new_topic_form_action($url, $post) {
+function openlab_fix_new_topic_form_action( $url ) {
     if (!bp_is_group()) {
-        return;
+        return $url;
     }
-    return bp_get_group_permalink();
+    return bp_get_group_permalink( groups_get_current_group() );
 }
 
 add_filter('page_link', 'openlab_fix_new_topic_form_action');
