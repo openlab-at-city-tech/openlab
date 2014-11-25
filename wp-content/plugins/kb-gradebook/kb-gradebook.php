@@ -105,7 +105,7 @@ function kbgv_plugin_init(){
 	// THE ACTION IS HERE
 	///////////////////////////////////////////////
 	function kbgv_admin_page(){		// for teachers to import their gradesheet from excel or whatever
-		$postpath = get_settings('siteurl').'/wp-admin/edit.php?page=kb-gradebook.php';
+		$postpath = set_url_scheme( get_settings('siteurl').'/wp-admin/edit.php?page=kb-gradebook.php' );
 		$courselist = get_option('kbgv_courses');
 		$args = array( 'postpath'=>$postpath, 'courselist'=>$courselist );
 
