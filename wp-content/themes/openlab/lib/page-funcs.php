@@ -231,7 +231,7 @@ function cuny_home_square($type) {
 
         $activity = $wpdb->get_results("
 	  		SELECT
-	  			content, item_id
+	  			content, item_id, date_recorded
 	  		FROM
 	  			{$bp->activity->table_name}
 	  		WHERE
@@ -241,14 +241,17 @@ function cuny_home_square($type) {
 	  			AND
 	  			item_id IN ({$group_ids_sql})
 	  		ORDER BY
-	  			date_recorded DESC");
+	  			date_recorded DESC" );
 
         // Now walk down the list and try to match with a group. Once one is found, remove
         // that group from the stack
         $group_activity_items = array();
         foreach ((array) $activity as $act) {
             if (!empty($act->content) && in_array($act->item_id, $group_ids) && !isset($group_activity_items[$act->item_id])) {
-                $group_activity_items[$act->item_id] = $act->content;
+                $group_activity_items[$act->item_id] = array(
+                    'content' => $act->content,
+                    'date_recorded' => $act->date_recorded,
+                );
                 $key = array_search($act->item_id, $group_ids);
                 unset($group_ids[$key]);
             }
@@ -273,7 +276,16 @@ function cuny_home_square($type) {
                     ?>
                     <div class="item-avatar">
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
-                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf(__('%s', 'buddypress'), bp_get_group_last_active()) ?></div>
+                        
+                        <?php
+                        if (!empty($group_activity_items[$group->id]['date_recorded'])) {
+                            $last_active = bp_core_time_since($group_activity_items[$group->id]['date_recorded']);
+                        } else {
+                            $last_active = bp_get_group_last_active();
+                        }
+                        ?>
+                        
+                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf( __( 'active %s', 'buddypress' ), $last_active ) ?></div>
                     </div>
                     <div class="item-content-wrapper">
                     <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
