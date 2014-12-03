@@ -7458,16 +7458,16 @@ body .fill-gutter.fill-gutter-left {
   padding-left: 0;
 }
 body .no-margin.no-margin-top {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 body .no-margin.no-margin-bottom {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 body .no-margin.no-margin-right {
-  margin-right: 0;
+  margin-right: 0 !important;
 }
 body .no-margin.no-margin-left {
-  margin-left: 0;
+  margin-left: 0 !important;
 }
 body .btn-margin.btn-margin-top {
   margin-top: 20px;
@@ -7599,6 +7599,15 @@ body #ubpfattach-message.updated {
 body .bp-template-notice.margin-bottom,
 body #ubpfattach-message.margin-bottom {
   margin-bottom: 17px;
+}
+body #register-page .error {
+  font-weight: 400;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 17px;
+  margin-top: 5px;
+  background: #f7e700;
+  border-color: #f7e700;
 }
 body .panel-body .bp-template-notice {
   margin-top: 0;
