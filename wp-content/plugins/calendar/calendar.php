@@ -378,6 +378,8 @@ function check_calendar()
   // version is checked through various means and if it is not up to date 
   // then it is upgraded.
 
+  return;
+
   // Lets see if this is first run and create us a table if it is!
   global $wpdb, $initial_style;
 
