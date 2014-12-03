@@ -187,37 +187,66 @@
             auto: 4000,
             speed: 200,
         });
-        
+
         $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700);
 
     });
-    
+
+    $(document).ajaxComplete(function () {
+
+        if ($('.wpcf7').length && !$('.wpcf7-mail-sent-ok').length) {
+            $('.wpcf7-form-control-wrap').each(function () {
+                var thisElem = $(this);
+                if (thisElem.find('.wpcf7-not-valid-tip').text()) {
+                    
+                    thisElem.remove('.wpcf7-not-valid-tip');
+                    
+                    var thisText = 'Please enter your ' + thisElem.find('.wpcf7-form-control').attr('name');
+                    var newValidTip = '<div class="bp-template-notice error" style="display: none;"><p>'+thisText+'</p></div>';
+                    
+                    thisElem.prepend(newValidTip);
+                    thisElem.find('.bp-template-notice.error').css('visiblity','visible').hide().fadeIn(550);
+                    
+                }
+            });
+        }
+        if ($('.wpcf7').length && $('.wpcf7-mail-sent-ok').length) {
+            $('.wpcf7-form-control-wrap').each(function () {
+                var thisElem = $(this);
+                if(thisElem.find('.bp-template-notice.error')){
+                    thisElem.remove('.bp-template-notice.error');
+                }
+            });
+        }
+
+    });
+
     function create_new_related_link_field() {
         $cloned_related_link_fields = $add_new_related_link.closest('li').clone();
-        
+
         // Get count of existing link fields for the iterator
         related_links_count = $('.related-links-edit-items li').length + 1;
-        
+
         // Swap label:for and input:id attributes
         $cloned_related_link_fields.html(function (i, old_html) {
             return old_html.replace(/(related\-links\-)[0-9]+\-(name|url)/g, '$1' + related_links_count + '-$2');
         });
-        
+
         // Swap name iterator
         $cloned_related_link_fields.html(function (i, old_html) {
             return old_html.replace(/(related\-links\[)[0-9]+(\])/g, '$1' + related_links_count + '$2');
         });
-        
+
         // Remove current button from the DOM, as the cloned fields contain the new one
         $add_new_related_link.remove();
-        
+
         // Add new fields to the DOM
         $('.related-links-edit-items').append($cloned_related_link_fields);
-        
+
         // Remove values
         $('#related-links-' + related_links_count + '-name').val('');
         $('#related-links-' + related_links_count + '-url').val('');
-        
+
         // Reindex new Add button and bind click event
         $add_new_related_link = $('#add-new-related-link');
         $add_new_related_link.on('click', function () {

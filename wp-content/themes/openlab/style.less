@@ -1526,14 +1526,25 @@ body{
 }
 /**contact form**/
 .wpcf7{
-    .wpcf7-validation-errors{
+    .wpcf7-response-output{
         border: none;
-        background: @yellow;
-        border-radius: @border-radius-base;
         padding: 15px;
         font-weight: 600;
         font-size: 14px;
-        margin: 30px 0;
+        margin: 8px 0 17px;
+        border-radius: @border-radius-base;
+        &.wpcf7-validation-errors{
+            background: @yellow;
+        }
+        &.wpcf7-mail-sent-ok{
+            background: @cyan;
+        }
+    }
+    .wpcf7-not-valid-tip{
+        display: none;
+    }
+    .wpcf7-form-control-wrap {
+        width: 100%;
     }
 }
 /**Custom media query items**/
