@@ -442,15 +442,20 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             
             <?php do_action('template_notices'); ?>
 
-            <div id="message" class="bp-template-notice error">
+            <div id="message" class="bp-template-notice error margin-bottom">
                 <p><?php printf('WARNING: Deleting this %s will completely remove ALL content associated with it. There is no way back, please be careful with this option.', openlab_get_group_type()); ?></p>
             </div>
 
-            <input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if (this.checked) {
+            <div class="checkbox no-margin no-margin-bottom">
+                <label>
+                    <input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if (this.checked) {
                             document.getElementById('delete-group-button').disabled = '';
                         } else {
                             document.getElementById('delete-group-button').disabled = 'disabled';
-                        }" /> <?php printf('I understand the consequences of deleting this %s.', openlab_get_group_type()); ?>
+                        }" /> 
+                           <?php printf('I understand the consequences of deleting this %s.', openlab_get_group_type()); ?>
+                </label>
+            </div>
 
             <?php do_action('bp_after_group_delete_admin'); ?>
 

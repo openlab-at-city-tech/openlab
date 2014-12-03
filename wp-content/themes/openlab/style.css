@@ -7430,6 +7430,9 @@ input[type="submit"] {
 .search-mobile #search-submit {
   padding: 8px 12px;
 }
+.checkbox input[type="checkbox"] {
+  margin-top: 1px;
+}
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
@@ -7592,6 +7595,10 @@ body .bp-template-notice.updated,
 body #ubpfattach-message.updated {
   background: #63dfd2;
   border-color: #63dfd2;
+}
+body .bp-template-notice.margin-bottom,
+body #ubpfattach-message.margin-bottom {
+  margin-bottom: 17px;
 }
 body .panel-body .bp-template-notice {
   margin-top: 0;
