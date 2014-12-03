@@ -1,10 +1,10 @@
-(function($) {
-    
+(function ($) {
+
     var related_links_count,
             $add_new_related_link,
             $cloned_related_link_fields;
-    
-    $(document).ready(function() {
+
+    $(document).ready(function () {
 
         // Workshop fields on Contact Us
         function toggle_workshop_meeting_items() {
@@ -18,7 +18,7 @@
                 }
             }
         }
-        
+
         // + button on Related Links List Settings
         $add_new_related_link = $('#add-new-related-link');
         $add_new_related_link.css('display', 'inline-block');
@@ -26,7 +26,7 @@
             create_new_related_link_field();
         });
 
-        jQuery('#contact-us-topic').on('change', function() {
+        jQuery('#contact-us-topic').on('change', function () {
             toggle_workshop_meeting_items();
         });
         toggle_workshop_meeting_items();
@@ -44,7 +44,7 @@
             var searchForm = $('.search-form-wrapper');
             var searchTrigger = $('.search-trigger-wrapper');
             var select = $('.search-form-wrapper .hidden-custom-select select');
-            $('.search-trigger').on('click', function() {
+            $('.search-trigger').on('click', function () {
                 if (searchForm.is(':visible')) {
                     searchForm.slideUp(700);
                     searchTrigger.toggleClass('search-live');
@@ -58,9 +58,9 @@
 
         // this add an onclick event to the "New Topic" button while preserving 
         // the original event; this is so "New Topic" can have a "current" class
-        $('.show-hide-new').click(function() {
+        $('.show-hide-new').click(function () {
             var origOnClick = $('.show-hide-new').onclick;
-            return function(e) {
+            return function (e) {
                 if (origOnClick != null && !origOnClick()) {
                     return false;
                 }
@@ -69,7 +69,7 @@
         });
 
         window.new_topic_is_visible = $('#new-topic-post').is(":visible");
-        $('.show-hide-new').click(function() {
+        $('.show-hide-new').click(function () {
             if (window.new_topic_is_visible) {
                 $('.single-forum #message').slideUp(300);
                 window.new_topic_is_visible = false;
@@ -84,14 +84,14 @@
 
         //printing page
         if ($('.print-page').length) {
-            $('.print-page').on('click', function(e) {
+            $('.print-page').on('click', function (e) {
                 e.preventDefault();
                 window.print();
             });
         }
 
         //ajax functionality for courses archive
-        $('#school-select').change(function() {
+        $('#school-select').change(function () {
             var school = $(this).val();
             var nonce = $('#nonce-value').text();
 
@@ -114,14 +114,14 @@
                             school: school,
                             nonce: nonce
                         },
-                success: function(data, textStatus, XMLHttpRequest)
+                success: function (data, textStatus, XMLHttpRequest)
                 {
                     $('#dept-select').removeAttr('disabled');
                     $('#dept-select').removeClass('processing');
                     $('#dept-select').html(data);
                     $('.custom-select select').trigger('render');
                 },
-                error: function(MLHttpRequest, textStatus, errorThrown) {
+                error: function (MLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);
                 }
             });
@@ -133,12 +133,12 @@
         //member profile friend/cancel friend hover fx
         if ($('.btn.is_friend.friendship-button').length) {
             var allButtons = $('.btn.is_friend.friendship-button');
-            allButtons.each(function() {
+            allButtons.each(function () {
                 var thisButton = $(this);
                 var thisButtonHTML = $(this).html();
-                thisButton.hover(function() {
+                thisButton.hover(function () {
                     thisButton.html('<span class="pull-left"><i class="fa fa-user"></i> Cancel Friend</span><i class="fa fa-minus-circle pull-right"></i>');
-                }, function() {
+                }, function () {
                     thisButton.html(thisButtonHTML);
                 });
             });
@@ -146,21 +146,21 @@
 
         //member notificatoins page - injecting Bootstrap classes
         if ($('table.notification-settings').length) {
-            $('table.notification-settings').each(function() {
+            $('table.notification-settings').each(function () {
                 $(this).addClass('table');
             });
         }
-        
+
         //clear login form
-        if($('#user-login').length){
-            $('#sidebar-user-login, #sidebar-user-pass').on('focus',function(){
+        if ($('#user-login').length) {
+            $('#sidebar-user-login, #sidebar-user-pass').on('focus', function () {
                 $(this).val('');
             });
         }
 
     });//end document.ready
 
-    $(window).load(function() {
+    $(window).load(function () {
 
         //setting equal rows on homepage group list
         equal_row_height();
@@ -259,7 +259,7 @@
     function equal_row_height() {
         /*first we get the number of rows by finding the column with the greatest number of rows*/
         var $row_num = 0;
-        $('.activity-list').each(function() {
+        $('.activity-list').each(function () {
             var $row_check = $(this).find('.activity-item').length;
 
             if ($row_check > $row_num) {
@@ -274,7 +274,7 @@
             //check each cell in the row - find the one with the greatest height
             var $greatest_height = 0;
 
-            $('.row-' + $i).each(function() {
+            $('.row-' + $i).each(function () {
                 var $cell_height = $(this).outerHeight();
 
                 if ($cell_height > $greatest_height) {
