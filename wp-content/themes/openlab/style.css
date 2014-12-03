@@ -7593,6 +7593,10 @@ body #ubpfattach-message.updated {
   background: #63dfd2;
   border-color: #63dfd2;
 }
+body .panel-body .bp-template-notice {
+  margin-top: 0;
+  margin-bottom: 17px;
+}
 body .group-header .bp-template-notice {
   color: #000000;
   margin-top: 4px;

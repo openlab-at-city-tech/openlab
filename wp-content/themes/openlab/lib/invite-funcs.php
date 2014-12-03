@@ -88,14 +88,6 @@ function openlab_invite_anyone_screen_one_content() {
     // Get the returned email message, if there is one
     $returned_message = !empty($returned_data['message']) ? stripslashes($returned_data['message']) : false;
 
-    if (!empty($returned_data['error_message'])) {
-        ?>
-        <div class="invite-anyone-error error">
-            <p><?php _e("Some of your invitations were not sent. Please see the errors below and resubmit the failed invitations.", 'bp-invite-anyone') ?></p>
-        </div>
-        <?php
-    }
-
     $blogname = get_bloginfo('name');
     $welcome_message = sprintf(__('Invite friends to join %s by following these steps:', 'bp-invite-anyone'), $blogname);
     ?>
@@ -104,6 +96,21 @@ function openlab_invite_anyone_screen_one_content() {
         <div class="panel panel-default">
             <div class="panel-heading"><?php _e('Invite New Members', 'bp-invite-anyone'); ?></div>
             <div class="panel-body">
+
+                <?php
+                if (!empty($returned_data['error_message'])) {
+                    ?>
+                    <div class="invite-anyone-error bp-template-notice error">
+                        <p><?php _e("Some of your invitations were not sent. Please see the errors below and resubmit the failed invitations.", 'bp-invite-anyone') ?></p>
+                    </div>
+                    <?php
+                }
+                if (!empty($returned_data['error_message'])) :
+                    ?>
+                    <div class="invite-anyone-error bp-template-notice error">
+                        <p><?php echo $returned_data['error_message'] ?></p>
+                    </div>
+                <?php endif ?>
 
                 <?php
                 if (isset($iaoptions['email_limit_invites_toggle']) && $iaoptions['email_limit_invites_toggle'] == 'yes' && !current_user_can('delete_others_pages')) {
@@ -130,12 +137,6 @@ function openlab_invite_anyone_screen_one_content() {
                 <ol id="invite-anyone-steps" class="inline-element-list">
 
                     <li>
-                        <?php if (!empty($returned_data['error_message'])) : ?>
-                            <div class="invite-anyone-error error">
-                                <p><?php echo $returned_data['error_message'] ?></p>
-                            </div>
-                        <?php endif ?>
-
                         <div class="manual-email">
                             <p>
                                 <?php _e('Enter email addresses below, one per line.', 'bp-invite-anyone') ?>
