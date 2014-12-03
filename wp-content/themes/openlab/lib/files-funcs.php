@@ -122,7 +122,7 @@ function openlab_bp_group_documents_display_content() {
 
     <?php } else { ?>
                 <div id="message" class="info">
-                    <p><?php _e('There have been no documents uploaded for this group', 'bp-group-documents') ?></p>
+                    <p class="bold"><?php _e('There have been no documents uploaded for this group', 'bp-group-documents') ?></p>
                 </div>
 
     <?php } ?>

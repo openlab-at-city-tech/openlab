@@ -292,11 +292,15 @@ function openlab_group_archive() {
             <?php echo openlab_groups_pagination_links() ?>
         </div>
     <?php else: ?>
-        <div class="current-group-filters current-portfolio-filters">
-            <?php openlab_current_directory_filters(); ?>
+        <div class="row group-archive-header-row">
+            <div class="current-group-filters current-portfolio-filters col-sm-19">
+                <?php openlab_current_directory_filters(); ?>
+            </div>
         </div>
-        <div class="widget-error">
-            <?php _e('There are no ' . $group_type . 's to display.', 'buddypress') ?>
+        <div id="group-list" class="item-list row">
+            <div class="widget-error query-no-results col-sm-24">
+                <p class="bold"><?php _e('There are no ' . $group_type . 's to display.', 'buddypress') ?></p>
+            </div>
         </div>
 
     <?php endif; ?>
@@ -793,7 +797,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -866,7 +870,7 @@ function openlab_group_profile_activity_list() {
                                         ?>
 
                                         <?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
-                                            <?php while ( bbp_topics() ) : bbp_the_topic(); ?>
+                                            <?php while (bbp_topics()) : bbp_the_topic(); ?>
 
 
                                                 <div class="panel panel-default">
@@ -875,14 +879,14 @@ function openlab_group_profile_activity_list() {
 
                                                         <?php
                                                         $topic_id = bbp_get_topic_id();
-							$last_reply_id = bbp_get_topic_last_reply_id( $topic_id );
+                                                        $last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
-							// Oh, bbPress.
-							$last_reply = get_post( $last_reply_id );
-							if ( ! empty( $last_reply->post_content ) ) {
-								$last_topic_content = wds_content_excerpt( strip_tags( $last_reply->post_content ), 135 );
-								echo $last_topic_content;
-							}
+                                                        // Oh, bbPress.
+                                                        $last_reply = get_post($last_reply_id);
+                                                        if (!empty($last_reply->post_content)) {
+                                                            $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 135);
+                                                            echo $last_topic_content;
+                                                        }
                                                         ?>
 
                                                         <p><a href="<?php bbp_topic_permalink(); ?>" class="read-more">See More</a></p>
@@ -987,7 +991,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )           ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                       ?></p>
+                                                            <p><?php // bp_group_status_message()                        ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )          ?>
@@ -1012,7 +1016,7 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_before_group_status_message' )           ?>
                     <!--
                                                     <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                       ?></p>
+                                                            <p><?php // bp_group_status_message()                        ?></p>
                                                     </div>
                     -->
                     <?php // do_action( 'bp_after_group_status_message' )            ?>

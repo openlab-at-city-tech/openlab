@@ -70,9 +70,9 @@
 
 <?php else: ?>
 
-	<div id="message" class="info row">
+	<div id="message" class="info group-list row">
             <div class="col-md-24">
-		<p><?php _e( 'You have no outstanding group invites.', 'buddypress' ) ?></p>
+		<p class="bold"><?php _e( 'You have no outstanding group invites.', 'buddypress' ) ?></p>
             </div>
 	</div>
 

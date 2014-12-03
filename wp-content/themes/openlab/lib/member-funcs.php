@@ -287,9 +287,16 @@ function openlab_list_members($view) {
             $user_type = 'people';
         }
         ?>
+        <div class="row group-archive-header-row">
+            <div class="current-group-filters current-portfolio-filters col-sm-18">
+                <?php openlab_current_directory_filters(); ?>
+            </div>
+        </div>
 
-        <div class="widget-error">
-            <p><?php _e('There are no ' . strtolower($user_type) . ' to display.', 'buddypress') ?></p>
+        <div id="group-list" class="item-list row">
+            <div class="widget-error query-no-results col-sm-24">
+                <p class="bold"><?php _e('There are no ' . strtolower($user_type) . ' to display.', 'buddypress') ?></p>
+            </div>
         </div>
 
     <?php
