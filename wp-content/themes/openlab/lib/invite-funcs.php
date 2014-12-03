@@ -218,7 +218,7 @@ function openlab_invite_anyone_screen_one_content() {
         </div>
 
         <div class="submit">
-            <input type="submit" name="invite-anyone-submit" id="invite-anyone-submit" class="btn btn-primary" value="<?php _e('Send Invites', 'buddypress') ?> " />
+            <input type="submit" name="invite-anyone-submit" id="invite-anyone-submit" class="btn btn-primary btn-margin-top" value="<?php _e('Send Invites', 'buddypress') ?> " />
         </div>
 
 
