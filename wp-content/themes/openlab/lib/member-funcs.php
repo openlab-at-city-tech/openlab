@@ -571,7 +571,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
             <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8 col-xs-12">
                 <?php
                 if ($bp->is_item_admin || $bp->is_item_mod):
-                    $href = bp_get_root_domain() . './my-' . $type . 's';
+                    $href = bp_get_root_domain() . '/my-' . $type . 's';
                 else:
                     $href = $bp->displayed_user->domain . 'groups/?type=' . $type;
                 endif;
