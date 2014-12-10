@@ -1210,8 +1210,9 @@ function cac_adminbar_js() {
 		$("#wp-admin-bar-bp-login").append(loginform);
 
 		$("#wp-admin-bar-bp-login > a").click(function(){
-			$("#sidebar-login-form").toggle();
-			$("#sidebar-user-login").focus();
+			$(".ab-submenu #sidebar-login-form").toggle(400,function(){
+                            $(".ab-submenu #sidebar-user-login").focus();
+                        });
 			$(this).toggleClass("login-click");
 			return false;
 		});
