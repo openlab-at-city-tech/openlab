@@ -8272,6 +8272,14 @@ body .align-left {
 #invite-anyone-group-list.group-list .group-item-wrapper {
   height: 83px;
 }
+#invite-anyone-group-list.group-list .group-item-wrapper label {
+  width: 100%;
+}
+@media (max-width: 767px) {
+  #invite-anyone-group-list.group-list .group-item-wrapper {
+    height: auto;
+  }
+}
 /**member profiles**/
 .profile-type {
   display: inline-block;

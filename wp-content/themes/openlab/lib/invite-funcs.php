@@ -192,13 +192,13 @@ function openlab_invite_anyone_screen_one_content() {
                                             continue;
                                         }
                                         ?>
-                                        <li class="col-sm-8">
+                                        <li class="col-md-8 col-sm-12">
                                             <div class="group-item-wrapper pointer">
                                                 <label for="invite_anyone_groups-<?php bp_group_id() ?>" class="invite-anyone-group-name">
                                                     <div class="row">
-                                                        <div class="col-sm-2"><input type="checkbox" class="no-margin no-margin-top" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php bp_group_id() ?>" value="<?php bp_group_id() ?>" <?php if ($from_group == bp_get_group_id() || array_search(bp_get_group_id(), $returned_groups)) : ?>checked<?php endif; ?> /></div>
-                                                        <div class="col-sm-8"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></div>
-                                                        <div class="col-sm-14"><?php bp_group_name() ?></div>
+                                                        <div class="col-xs-2"><input type="checkbox" class="no-margin no-margin-top" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php bp_group_id() ?>" value="<?php bp_group_id() ?>" <?php if ($from_group == bp_get_group_id() || array_search(bp_get_group_id(), $returned_groups)) : ?>checked<?php endif; ?> /></div>
+                                                        <div class="col-xs-8"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></div>
+                                                        <div class="col-xs-14"><?php bp_group_name() ?></div>
                                                     </div>
                                                 </label>
                                             </div>
