@@ -842,6 +842,7 @@ function openlab_group_profile_activity_list() {
         $first_class = "first";
         ?>
         <?php $group_slug = bp_get_group_slug(); ?>
+        <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
 
         <?php if (bp_is_group_home()) { ?>
 
