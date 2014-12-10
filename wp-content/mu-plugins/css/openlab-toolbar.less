@@ -169,6 +169,10 @@
                 width: 127px;
                 overflow: hidden;
                 height: 0;
+                @media (max-width: 479px){
+                    width: 37px;
+                    background-position: -11% 58%;
+                }
             }
             .ab-sub-wrapper{
                 width: 170px;
@@ -210,6 +214,11 @@
                 #sidebar-login-form{
                     padding: 3% 5%;
                 }
+            }
+        }
+        #wp-admin-bar-updates{
+            @media (max-width: 767px){
+                display: none;
             }
         }
     }

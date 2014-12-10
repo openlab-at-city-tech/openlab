@@ -162,6 +162,12 @@
   overflow: hidden;
   height: 0;
 }
+@media (max-width: 479px) {
+  #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
+    width: 37px;
+    background-position: -11% 58%;
+  }
+}
 #wpadminbar #wp-toolbar #wp-admin-bar-openlab .ab-sub-wrapper {
   width: 170px;
 }
@@ -200,6 +206,11 @@
 }
 #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
+}
+@media (max-width: 767px) {
+  #wpadminbar #wp-toolbar #wp-admin-bar-updates {
+    display: none;
+  }
 }
 /**Bootstrap/custom stylesheet styles - these are here to help out admin, which currently does not load main theme stylesheet**/
 body.adminbar-manual-bootstrap #wpadminbar .container-fluid,
