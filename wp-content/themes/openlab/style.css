@@ -7721,7 +7721,8 @@ body .align-left {
 }
 .custom-select span.customSelect .customSelectInner,
 .hidden-custom-select span.customSelect .customSelectInner {
-  max-width: 192px;
+  max-width: 90%;
+  min-width: 90%;
   overflow: hidden;
   white-space: nowrap;
 }
