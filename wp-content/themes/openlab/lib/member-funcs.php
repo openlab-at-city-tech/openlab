@@ -514,9 +514,10 @@ function cuny_student_profile() {
             ?>
 
             <div id="members-list" class="info-group col-xs-24">
-                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                 <?php if ($friend_ids) { ?>
+                
+                    <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                     <ul id="member-list" class="inline-element-list">
 
@@ -531,6 +532,8 @@ function cuny_student_profile() {
 
                     </ul>
                 <?php } else { ?>
+                    
+                    <h4 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h4>
 
                     <div id="message" class="info">
                         <p><?php bp_word_or_name(__("You haven't added any friend connections yet.", 'buddypress'), __("%s hasn't created any friend connections yet.", 'buddypress')) ?></p>
@@ -623,35 +626,39 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
 
             </div>
         <?php else : ?>
-            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?>">
+            <div id="<?php echo $type ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last ?> col-sm-8 col-xs-12">
                 <h4><?php echo $title ?></h4>
 
-                <div>
-                    <?php
-                    if ($type != "course") {
-                        if ($bp->loggedin_user->id == $bp->displayed_user->id) {
-                            ?>
-                            You aren't participating in any <?php echo $type; ?>s on the OpenLab yet. Why not <a href="<?php echo site_url(); ?>/groups/create/step/group-details/?type=<?php echo $type; ?>&new=true">create a <?php echo $type; ?></a>?
-                            <?php
-                        } else {
-                            echo $bp->displayed_user->fullname;
-                            ?>
-                            hasn't created or joined any <?php echo $type ?>s yet.
-                            <?php
-                        }
-                    } else {
-                        if ($bp->loggedin_user->id == $bp->displayed_user->id) {
-                            ?>
-                            You haven't created any courses yet.
-                            <?php
-                        } else {
-                            echo $bp->displayed_user->fullname;
-                            ?>
-                            hasn't joined any <?php echo $type ?>s yet.
-                            <?php
-                        }
-                    }
-                    ?>
+                <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>
+                                <?php
+                                if ($type != "course") {
+                                    if ($bp->loggedin_user->id == $bp->displayed_user->id) {
+                                        ?>
+                                        You aren't participating in any <?php echo $type; ?>s on the OpenLab yet. Why not <a href="<?php echo site_url(); ?>/groups/create/step/group-details/?type=<?php echo $type; ?>&new=true">create a <?php echo $type; ?></a>?
+                                        <?php
+                                    } else {
+                                        echo $bp->displayed_user->fullname;
+                                        ?>
+                                        hasn't created or joined any <?php echo $type ?>s yet.
+                                        <?php
+                                    }
+                                } else {
+                                    if ($bp->loggedin_user->id == $bp->displayed_user->id) {
+                                        ?>
+                                        You haven't created any courses yet.
+                                        <?php
+                                    } else {
+                                        echo $bp->displayed_user->fullname;
+                                        ?>
+                                        hasn't joined any <?php echo $type ?>s yet.
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </p>
+                        </div>
                 </div>
             </div>
         <?php endif; ?>
