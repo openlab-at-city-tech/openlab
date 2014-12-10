@@ -85,14 +85,6 @@ function openlab_custom_menu_items($items, $menu) {
 
 add_filter('wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2);
 
-function openlab_activity_log_text($text) {
-    $text = '%s';
-
-    return $text;
-}
-
-add_filter('bp_core_time_since_ago_text', 'openlab_activity_log_text');
-
 function openlab_form_classes($classes) {
 
     $classes[] = 'field-group';

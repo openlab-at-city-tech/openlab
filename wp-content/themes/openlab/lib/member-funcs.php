@@ -771,7 +771,7 @@ function cuny_member_profile_header() {
         <div id="member-header-content" class="col-sm-16 col-xs-24">
 
             <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
-            <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
+            <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
 
             <?php do_action('bp_before_member_header_meta') ?>
 
