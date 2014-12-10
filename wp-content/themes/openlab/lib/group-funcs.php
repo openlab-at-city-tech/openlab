@@ -802,9 +802,8 @@ function cuny_group_single() {
     <?php endif; ?>
 
     <?php
-    if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) {
-        openlab_group_profile_activity_list();
-    }
+    
+    openlab_group_profile_activity_list();
 }
 
 function openlab_render_message() {
@@ -846,9 +845,7 @@ function openlab_group_profile_activity_list() {
 
         <?php if (bp_is_group_home()) { ?>
 
-            <?php if (bp_group_is_visible() || !bp_is_active('activity')) { ?>
-
-                <?php if (bp_group_is_visible() && bp_is_active('activity')) : ?>
+                <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
                     <?php
                     if (wds_site_can_be_viewed()) {
                         openlab_show_site_posts_and_comments();
@@ -977,7 +974,7 @@ function openlab_group_profile_activity_list() {
 
                     <?php endif; //end of if $group != 'portfolio'          ?>
 
-                <?php elseif (!bp_group_is_visible()) : ?>
+                <?php else: ?>
                     <?php
                     //   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
                     //   case show site posts and comments even though this group is private
@@ -998,34 +995,6 @@ function openlab_group_profile_activity_list() {
                     <?php // do_action( 'bp_after_group_status_message' )          ?>
 
                 <?php endif; ?>
-
-            <?php } else { ?>
-
-                <?php if (!bp_group_is_visible()) : ?>
-                    <?php
-                    //   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
-                    //   case show site posts and comments even though this group is private
-                    //
-					if (wds_site_can_be_viewed()) {
-                        openlab_show_site_posts_and_comments();
-                        echo "<div class='clear'></div>";
-                    }
-                    ?>
-
-                    <?php /* The group is not visible, show the status message */ ?>
-
-                    <?php // do_action( 'bp_before_group_status_message' )           ?>
-                    <!--
-                                                    <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                        ?></p>
-                                                    </div>
-                    -->
-                    <?php // do_action( 'bp_after_group_status_message' )            ?>
-
-                <?php endif; ?>
-
-
-            <?php } ?>
 
             <?php
         } else {

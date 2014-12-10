@@ -7573,6 +7573,10 @@ body #ubpfattach-message {
   border-radius: 4px;
   margin-top: 17px;
 }
+body .bp-template-notice p,
+body #ubpfattach-message p {
+  white-space: normal;
+}
 body .bp-template-notice p:last-child,
 body #ubpfattach-message p:last-child,
 body .bp-template-notice p:only-child,
@@ -7922,7 +7926,7 @@ body .align-left {
 .home-page #whos-online .avatar-block .cuny-member {
   position: relative;
   display: inline-block;
-  width: 24.3%;
+  width: 24.1%;
 }
 .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
   background-color: #000000;
