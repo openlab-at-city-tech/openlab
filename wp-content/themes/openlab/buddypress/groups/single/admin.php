@@ -260,7 +260,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                 <div class="group-item-wrapper admins <?php echo (count(bp_group_admin_ids(false, 'array')) > 1 ? '' : 'no-btn'); ?>">
                                     <div class="row info-row">
                                         <div class="col-md-9 col-xs-7">
-                                            <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
+                                            <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                         </div>
                                         <div class="col-md-15 col-xs-17">
                                             <h4>
@@ -293,7 +293,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                     <div class="group-item-wrapper moderators">
                                         <div class="row info-row">
                                             <div class="col-md-9 col-xs-7">
-                                                <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
+                                                <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             </div>
                                             <div class="col-md-15 col-xs-17">
                                                 <h4>
@@ -342,7 +342,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                 <div class="group-item-wrapper members">
                                     <div class="row info-row">
                                         <div class="col-md-9 col-xs-7">
-                                            <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
+                                            <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             <span class="italics"><?php if (bp_get_group_member_is_banned()) _e('(banned)', 'buddypress'); ?></span>
                                         </div>
                                         <div class="col-md-15 col-xs-17">
