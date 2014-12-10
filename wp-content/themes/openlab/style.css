@@ -8155,6 +8155,12 @@ body .align-left {
 .info-panel .table td:last-child {
   width: 65%;
 }
+.group-subscription-status {
+  background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
+  font-weight: bold;
+  margin-left: 2px;
+  padding-left: 20px !important;
+}
 .group-activity-overview .panel {
   height: 105px;
 }
