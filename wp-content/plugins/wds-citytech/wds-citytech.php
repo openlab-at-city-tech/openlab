@@ -445,6 +445,14 @@ function wds_groups_ajax() {
 
 		function wds_load_group_departments( id ) {
 			<?php $group= bp_get_current_group_id();
+                        
+                        //get group type
+                        if (!empty($_GET['type'])) {
+                            $group_type = $_GET['type'];
+                        } else {
+                            $group_type = 'club';
+                        }
+                        
 			echo $sack;?>
 			var schools="0";
 			if ( document.getElementById( 'school_tech' ).checked ) {
@@ -463,7 +471,7 @@ function wds_groups_ajax() {
 			isack.setVar( "schools", schools );
 			isack.setVar( "group", "<?php echo $group;?>" );
 			isack.setVar( "is_group_create", "<?php echo intval( bp_is_group_create() ) ?>" );
-			isack.setVar( "group_type", group_type );
+			isack.setVar( "group_type", "<?php echo $group_type; ?>");
 			isack.runAJAX();
 			return true;
 		}
