@@ -941,13 +941,13 @@ function openlab_group_profile_activity_list() {
 
                             <?php
                             if ($bp->is_item_admin || $bp->is_item_mod):
-                                $href = site_url() . '/groups/' . $group_slug . '/admin/manage-members/">See All</a></div>';
+                                $href = site_url() . '/groups/' . $group_slug . '/admin/manage-members/';
                             else:
-                                $href = site_url() . '/groups/' . $group_slug . '/members/">See All</a></div>';
+                                $href = site_url() . '/groups/' . $group_slug . '/members/';
                             endif;
                             ?>
 
-                            <h4 class="title activity-title"><a class="no-deco" href="<?php $href; ?>/groups/<?php echo $group_slug; ?>/docs/">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
+                            <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
                             <?php $member_arg = Array("exclude_admins_mods" => false); ?>
                             <?php if (bp_group_has_members($member_arg)) : ?>
 
