@@ -8145,6 +8145,12 @@ body .align-left {
   margin-bottom: 5px;
 }
 /**group profiles**/
+@media (max-width: 480px) {
+  #course-header-avatar {
+    width: 100%;
+    max-width: 225px;
+  }
+}
 .info-panel {
   margin-top: 30px;
   padding: 0 1.5%;
