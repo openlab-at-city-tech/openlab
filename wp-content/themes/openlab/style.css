@@ -8146,7 +8146,8 @@ body .align-left {
 }
 /**group profiles**/
 @media (max-width: 480px) {
-  #course-header-avatar {
+  #course-header-avatar,
+  #member-header-avatar {
     width: 100%;
     max-width: 225px;
   }
