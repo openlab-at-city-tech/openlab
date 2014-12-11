@@ -7996,6 +7996,7 @@ body .align-left {
 }
 .home-page .activity-list .activity-wrapper .activity-item p {
   word-wrap: break-word;
+  word-break: break-all;
 }
 .home-page .activity-list .activity-wrapper .activity-item h4 {
   margin-top: 15px;
@@ -8172,6 +8173,7 @@ body .align-left {
 }
 .info-panel .table td a {
   word-wrap: break-word;
+  word-break: break-all;
 }
 .info-panel .table td:first-child {
   width: 45%;
