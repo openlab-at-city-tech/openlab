@@ -8170,6 +8170,9 @@ body .align-left {
   margin-top: 30px;
   padding: 0 1.5%;
 }
+.info-panel .table td a {
+  word-wrap: break-word;
+}
 .info-panel .table td:first-child {
   width: 45%;
 }
