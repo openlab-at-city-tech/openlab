@@ -37,6 +37,9 @@
     font-size: 13px;
   }
 }
+#wpadminbar #wp-toolbar > ul > li#wp-admin-bar-messages > .ab-item {
+  padding-bottom: 20px;
+}
 #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
