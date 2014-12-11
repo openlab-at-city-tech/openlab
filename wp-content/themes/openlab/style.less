@@ -767,6 +767,9 @@ body{
     .row-home-top{
         margin-bottom: 15px;
         margin-top: 27px;
+        @media (max-width: @screen-xs-max){
+            margin-top: 0;
+        }
         .login{
             background: url('images/log_in_background.png') no-repeat 207px -70px @magenta;
             float: left;
@@ -777,6 +780,7 @@ body{
             @media (max-width: @screen-xs-max){
                 width: 100%;
                 float: none;
+                padding-top: 1px;
             }
             h4{
                 margin-bottom: 25px;
@@ -826,6 +830,9 @@ body{
                 float: none;
             }
             .camera_wrap{
+                @media (max-width: @screen-xs-max){
+                    margin-bottom: 0 !important;
+                }
                 .camera_fakehover{
                     width: 95.5%;
                     float: left;
@@ -1009,6 +1016,9 @@ body{
                 border-radius: inherit;
                 padding: 5px;
                 margin-bottom: 15px;
+                p{
+                    word-wrap: break-word
+                }
                 h4{
                     margin-top: 15px;
                 }

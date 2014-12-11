@@ -1427,11 +1427,18 @@ function openlab_trim_group_name($name) {
 
     $groups = array('Courses', 'Projects', 'Clubs', 'Portfolios');
 
-    if (strstr($post->post_title, 'My') || in_array($post->post_title, $groups)) {
+    if (strstr($post->post_title, 'My') || in_array($post->post_title, $groups) || is_home()) {
         $process_name = explode(' ', $name);
         $new_name = '';
+        
+        $trim_num = 15;
+        
+        if(is_home()){
+            $trim_num = 12;
+        }
+        
         foreach ($process_name as $process) {
-            $new_name .= ' ' . openlab_shortened_text($process, 15, false);
+            $new_name .= ' ' . openlab_shortened_text($process, $trim_num, false);
         }
 
         $name = openlab_shortened_text($new_name, 52, false);

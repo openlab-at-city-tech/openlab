@@ -7745,6 +7745,11 @@ body .align-left {
   margin-bottom: 15px;
   margin-top: 27px;
 }
+@media (max-width: 767px) {
+  .home-page .row-home-top {
+    margin-top: 0;
+  }
+}
 .home-page .row-home-top .login {
   background: url('images/log_in_background.png') no-repeat 207px -70px #ff5959;
   float: left;
@@ -7757,6 +7762,7 @@ body .align-left {
   .home-page .row-home-top .login {
     width: 100%;
     float: none;
+    padding-top: 1px;
   }
 }
 .home-page .row-home-top .login h4 {
@@ -7804,6 +7810,11 @@ body .align-left {
   .home-page .row-home-top .slider {
     width: 100%;
     float: none;
+  }
+}
+@media (max-width: 767px) {
+  .home-page .row-home-top .slider .camera_wrap {
+    margin-bottom: 0 !important;
   }
 }
 .home-page .row-home-top .slider .camera_wrap .camera_fakehover {
@@ -7982,6 +7993,9 @@ body .align-left {
   border-radius: inherit;
   padding: 5px;
   margin-bottom: 15px;
+}
+.home-page .activity-list .activity-wrapper .activity-item p {
+  word-wrap: break-word;
 }
 .home-page .activity-list .activity-wrapper .activity-item h4 {
   margin-top: 15px;
