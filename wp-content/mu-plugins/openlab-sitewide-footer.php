@@ -104,7 +104,7 @@ restore_current_blog();
                 <div class="col-sm-14 col-logos">
                     <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>
                     <p class="semibold"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
-                        <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                        <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                 </div>
                 <div class="col-sm-6 col-links semibold">
                     <h2>Support</h2>

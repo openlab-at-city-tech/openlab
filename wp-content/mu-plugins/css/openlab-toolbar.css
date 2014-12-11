@@ -572,6 +572,9 @@ body.adminbar-manual-bootstrap #openlab-footer #wp-admin-bar-my-hamburger {
   padding-top: 30px;
   background: #f0f0f0;
 }
+#openlab-footer .cuny-logo {
+  max-width: 74px;
+}
 #openlab-footer p,
 #openlab-footer a {
   font-size: 12px;
