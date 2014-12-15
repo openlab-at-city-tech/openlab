@@ -7567,6 +7567,7 @@ body .site-visibility .fa {
   width: 20px;
 }
 body .bp-template-notice,
+body .bbp-template-notice,
 body #ubpfattach-message {
   font-weight: 400;
   padding: 15px;
@@ -7574,35 +7575,43 @@ body #ubpfattach-message {
   margin-top: 17px;
 }
 body .bp-template-notice p,
+body .bbp-template-notice p,
 body #ubpfattach-message p {
   white-space: normal;
-}
-body .bp-template-notice p:last-child,
-body #ubpfattach-message p:last-child,
-body .bp-template-notice p:only-child,
-body #ubpfattach-message p:only-child {
-  margin-bottom: 0;
+  margin: 0 !important;
+  padding: 0;
 }
 body .bp-template-notice.error,
+body .bbp-template-notice.error,
 body #ubpfattach-message.error,
 body .bp-template-notice.err,
+body .bbp-template-notice.err,
 body #ubpfattach-message.err {
   background: #f7e700;
   border-color: #f7e700;
 }
 body .bp-template-notice.err,
+body .bbp-template-notice.err,
 body #ubpfattach-message.err {
   padding: 15px;
   color: #333333;
 }
 body .bp-template-notice.updated,
+body .bbp-template-notice.updated,
 body #ubpfattach-message.updated {
   background: #63dfd2;
   border-color: #63dfd2;
 }
 body .bp-template-notice.margin-bottom,
+body .bbp-template-notice.margin-bottom,
 body #ubpfattach-message.margin-bottom {
   margin-bottom: 17px;
+}
+body .bbp-template-notice {
+  background: #f7e700;
+}
+body .bbp-template-notice.info {
+  background: #63dfd2;
 }
 body #register-page .error {
   font-weight: 400;
@@ -8289,6 +8298,13 @@ body .align-left {
 }
 #doc-meta .toggle-content {
   width: 100%;
+}
+/**forum (bbpress) styles**/
+.forum #item-body {
+  margin-top: 0px;
+}
+#item-body > #bbpress-forums > h3 {
+  display: none;
 }
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {

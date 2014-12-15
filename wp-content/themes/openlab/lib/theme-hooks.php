@@ -219,3 +219,25 @@ function openlab_manage_members_email_status($user_id = '', $group = '') {
 
 remove_action('bp_group_manage_members_admin_item', 'ass_manage_members_email_status');
 add_action('bp_group_manage_members_admin_item', 'openlab_manage_members_email_status');
+
+function openlab_forum_tabs_output() {
+    ?>
+        <ul class="nav nav-inline">
+            <?php openlab_forum_tabs(); ?>
+        </ul>
+    <?php
+}
+
+add_action('bbp_before_group_forum_display','openlab_forum_tabs_output');
+
+function openlab_custom_bbp_content($output, $args, $post_content){
+    
+    if(strpos($output,'textarea') !== false){
+        $output = str_replace('wp-editor-area','form-control',$output);
+    }
+    
+    return $output;
+    
+}
+
+add_filter('bbp_get_the_content','openlab_custom_bbp_content',10,3);

@@ -587,6 +587,7 @@ body{
         width: 20px;
     }
     .bp-template-notice,
+    .bbp-template-notice,
     #ubpfattach-message{
         font-weight: 400;
         padding: 15px;
@@ -594,10 +595,8 @@ body{
         margin-top: 17px;
         p{
             white-space: normal;
-            &:last-child,
-                &:only-child{
-                margin-bottom: 0;
-            }
+            margin: 0 !important; //thanks bbpress stylesheet
+            padding: 0;
         }
         &.error,
         &.err{
@@ -614,6 +613,12 @@ body{
         }
         &.margin-bottom{
             margin-bottom: 17px;
+        }
+    }
+    .bbp-template-notice{
+        background: @yellow;
+        &.info{
+            background: @cyan;
         }
     }
     #register-page{
@@ -1354,6 +1359,19 @@ body{
         width: 100%;
     }
 }
+/**forum (bbpress) styles**/
+.forum{
+    #item-body{
+        margin-top: 0px;
+    }
+}
+#item-body{
+    > #bbpress-forums{
+        > h3{
+            display: none;
+        }    
+    } 
+} 
 /**invite-anyone specific**/
 #invite-anyone-invite-list{
     li{

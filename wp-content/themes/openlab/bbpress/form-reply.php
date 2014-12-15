@@ -20,12 +20,13 @@
 
 	<div id="new-reply-<?php bbp_topic_id(); ?>" class="bbp-reply-form">
 
-		<form id="new-post" name="new-post" method="post" action="">
+		<form id="new-post" class="form-panel" name="new-post" method="post" action="">
 
 			<?php do_action( 'bbp_theme_before_reply_form' ); ?>
 
-			<fieldset class="bbp-form">
-				<legend><?php printf( __( 'Reply To: %s', 'bbpress' ), bbp_get_topic_title() ); ?></legend>
+			<div class="bbp-form panel panel-default">
+				<div class="panel-heading"><?php printf( __( 'Reply To: %s', 'bbpress' ), bbp_get_topic_title() ); ?></div>
+                                    <div class="panel-body">
 
 				<?php do_action( 'bbp_theme_before_reply_form_notices' ); ?>
 
@@ -142,37 +143,15 @@
 				</div>
 
 				<?php bbp_reply_form_fields(); ?>
-
-			</fieldset>
+                                    </div>
+			</div>
 
 			<?php do_action( 'bbp_theme_after_reply_form' ); ?>
 
 		</form>
 	</div>
 
-<?php elseif ( bbp_is_topic_closed() ) : ?>
-
-	<div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
-		<div class="bbp-template-notice">
-			<p><?php printf( __( 'The topic &#8216;%s&#8217; is closed to new replies.', 'bbpress' ), bbp_get_topic_title() ); ?></p>
-		</div>
-	</div>
-
-<?php elseif ( bbp_is_forum_closed( bbp_get_topic_forum_id() ) ) : ?>
-
-	<div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
-		<div class="bbp-template-notice">
-			<p><?php printf( __( 'The forum &#8216;%s&#8217; is closed to new topics and replies.', 'bbpress' ), bbp_get_forum_title( bbp_get_topic_forum_id() ) ); ?></p>
-		</div>
-	</div>
-
 <?php else : ?>
-
-	<div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
-		<div class="bbp-template-notice">
-			<p><?php is_user_logged_in() ? _e( 'You cannot reply to this topic.', 'bbpress' ) : _e( 'You must be logged in to reply to this topic.', 'bbpress' ); ?></p>
-		</div>
-	</div>
 
 <?php endif; ?>
 

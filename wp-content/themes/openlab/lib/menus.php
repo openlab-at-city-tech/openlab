@@ -848,6 +848,42 @@ function openlab_docs_tabs() {
     <?php
 }
 
+function openlab_forum_tabs() {
+            global $bp, $groups_template, $wp_query;
+            $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+            // Load up bbPress once
+		$bbp = bbpress();
+
+		/** Query Resets ******************************************************/
+
+		// Forum data
+		$forum_action = bp_action_variable( $offset );
+		$forum_ids    = bbp_get_group_forum_ids( bp_get_current_group_id() );
+		$forum_id     = array_shift( $forum_ids );
+                
+                $bbp->current_forum_id = $forum_id;
+                
+                bbp_set_query_name( 'bbp_single_forum' ); 
+                
+                // Get the topic
+                bbp_has_topics( array(
+                        'name'           => bp_action_variable( $offset + 1 ),
+                        'posts_per_page' => 1,
+                        'show_stickies'  => false
+                ) );
+
+                // Setup the topic
+                bbp_the_topic();
+            ?>
+
+        <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li>
+    <?php if (bp_action_variable() == 'topic'): ?>
+                <li class="current-menu-item"><?php bbp_topic_title() ?></li>
+    <?php endif; ?>
+
+    <?php
+}
+
 function openlab_is_create_group($group_type) {
     global $bp;
     $return = NULL;

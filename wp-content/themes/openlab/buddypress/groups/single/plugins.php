@@ -14,7 +14,6 @@
                                 <ul class="nav nav-inline">
                                     <?php openlab_group_membership_tabs(); ?>
                                 </ul>
-                            
                         <?php elseif ($bp->current_action == 'docs'): ?>
                             
                                 <ul class="nav nav-inline">
