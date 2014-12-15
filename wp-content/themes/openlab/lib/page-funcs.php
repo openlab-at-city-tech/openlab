@@ -126,7 +126,7 @@ function cuny_home_new_members() {
                 </div>
                 <div class="home-new-member-info">
                     <?php echo "<h2>" . $firstname . "</h2>"; ?>
-                    <div class="registered timestamp"><?php bp_member_registered() ?> ago</div>
+                    <div class="registered timestamp"><?php bp_member_registered() ?></div>
                 </div>
             </li>
             <?php
