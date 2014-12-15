@@ -7796,6 +7796,9 @@ body .align-left {
 .home-page .row-home-top .login .log-box#open-lab-join .btn-primary {
   margin-right: 15px;
 }
+.home-page .row-home-top .login .log-box#user-login input {
+  color: #bbbbbb;
+}
 .home-page .row-home-top .login .log-box #keep-logged-in {
   margin-top: 12px;
   line-height: 3.5;

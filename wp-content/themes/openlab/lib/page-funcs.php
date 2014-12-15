@@ -61,9 +61,9 @@ function cuny_home_login() {
         <?php do_action('bp_before_sidebar_login_form') ?>
 
         <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="Username" tabindex="97" />
+                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="97" />
 
-                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="Password" tabindex="98" />
+                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="98" />
 
             <div id="below-login-form">
                 <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
