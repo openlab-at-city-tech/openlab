@@ -7129,6 +7129,7 @@ blockquote .h6 {
 .pagination li span {
   border-radius: 0;
   color: #444444;
+  font-size: 14px;
 }
 .pagination li a.prev,
 .pagination li span.prev {
@@ -8306,6 +8307,10 @@ body .align-left {
 }
 #item-body > #bbpress-forums > h3 {
   display: none;
+}
+#bbpress-forums div.odd,
+#bbpress-forums ul.odd {
+  background: #f0f0f0;
 }
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {

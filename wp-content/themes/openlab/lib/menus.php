@@ -657,7 +657,7 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
     }
 }
 
-add_filter('bp_get_options_nav_forums', 'openlab_filter_subnav_forums');
+add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 
 function openlab_filter_subnav_forums($subnav_item) {
     //update "current" class to "current-menu-item" to unify site identification of current menu page

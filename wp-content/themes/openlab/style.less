@@ -158,6 +158,7 @@ blockquote {
         span{
             border-radius: 0;
             color: @70gray;
+            font-size: @font-size-base;
             &.prev{
                 border-radius: @border-radius-left;
                 padding: 8px 12px;
@@ -1372,7 +1373,15 @@ body{
             display: none;
         }    
     } 
-} 
+}
+#bbpress-forums{
+    div,
+    ul{
+        &.odd{
+            background: @5gray;
+        }
+    }
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list{
     li{

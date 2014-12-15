@@ -241,3 +241,23 @@ function openlab_custom_bbp_content($output, $args, $post_content){
 }
 
 add_filter('bbp_get_the_content','openlab_custom_bbp_content',10,3);
+
+function openlab_bbp_pagination($pag_args) {
+    
+    $pag_args['prev_text'] = __('<i class="fa fa-angle-left"></i>');
+    $pag_args['next_text'] = __('<i class="fa fa-angle-right"></i>');
+    $pag_args['type'] = 'list';
+
+    return $pag_args;
+}
+
+add_filter('bbp_topic_pagination', 'openlab_bbp_pagination');
+
+function openlab_bbp_paginatin_custom_markup($pagination){
+    
+    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+    
+    return $pagination;
+}
+
+add_filter('bbp_get_forum_pagination_links','openlab_bbp_paginatin_custom_markup');
