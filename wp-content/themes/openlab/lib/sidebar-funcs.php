@@ -193,7 +193,7 @@ function openlab_member_sidebar_menu($mobile = false) {
             $invite_count = isset($invites['total']) ? (int) $invites['total'] : 0;
             ?>
 
-                            <li class="sq-bullet <?php if (bp_is_user_groups() && bp_is_current_action('invites')) : ?>selected-page<?php endif ?> mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
+                            <li class="sq-bullet <?php if (bp_is_current_action('invites') || bp_is_current_action('sent-invites') || bp_is_current_action('invite-new-members')) : ?>selected-page<?php endif ?> mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
         <?php endif ?>
 
                 </ul>

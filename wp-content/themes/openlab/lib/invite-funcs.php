@@ -266,11 +266,11 @@ function openlab_invite_anyone_screen_two_content() {
 
     <?php $pagination->setup_query($invites) ?>
 
+    <?php if ($invites->have_posts()) : ?>
     <div class="panel panel-default">
         <div class="panel-heading"><span class="bold"><?php _e('Sent Invites', 'bp-invite-anyone'); ?></span><div class="pull-right"><?php $pagination->currently_viewing_text() ?></div></div>
         <div class="panel-body">
 
-            <?php if ($invites->have_posts()) : ?>
                 <p id="sent-invites-intro"><?php _e('You have sent invitations to the following people.', 'bp-invite-anyone') ?></p>
 
                 <table class="invite-anyone-sent-invites zebra table no-margin no-margin-bottom"
@@ -368,10 +368,12 @@ function openlab_invite_anyone_screen_two_content() {
 
 
     <?php else : ?>
-
-        <div class="row">
-            <p id="sent-invites-intro"><?php _e("You haven't sent any email invitations yet.", 'bp-invite-anyone') ?></p>
-        </div>
+    
+        <div class="info group-list row" id="message">
+            <div class="col-md-24">
+		<p class="bold"><?php _e("You haven't sent any email invitations yet.", 'bp-invite-anyone') ?></p>
+            </div>
+	</div>
 
     <?php endif; ?>
     <?php
