@@ -7580,6 +7580,7 @@ body #ubpfattach-message p {
   white-space: normal;
   margin: 0 !important;
   padding: 0;
+  color: #333333;
 }
 body .bp-template-notice.error,
 body .bbp-template-notice.error,
