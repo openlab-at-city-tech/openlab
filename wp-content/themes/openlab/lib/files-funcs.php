@@ -98,7 +98,7 @@ function openlab_bp_group_documents_display_content() {
                             echo '</div>';
                             ?>
 
-            <?php if (get_option('bp_group_documents_display_icons')) $document->icon(); ?>
+                            <?php if (get_option('bp_group_documents_display_icons')) $document->icon(); ?>
 
                             <a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo $document->name; ?>
 
@@ -120,12 +120,12 @@ function openlab_bp_group_documents_display_content() {
                         ?>
                 </ul>
 
-    <?php } else { ?>
+            <?php } else { ?>
                 <div id="message" class="info">
                     <p class="bold"><?php _e('There have been no documents uploaded for this group', 'bp-group-documents') ?></p>
                 </div>
 
-    <?php } ?>
+            <?php } ?>
             <div class="spacer">&nbsp;</div>
 
             <?php //-------------------------------------------------------------------DETAIL VIEW--   ?>
