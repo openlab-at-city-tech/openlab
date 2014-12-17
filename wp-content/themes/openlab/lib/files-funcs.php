@@ -143,54 +143,55 @@ function openlab_bp_group_documents_display_content() {
                 <div id="<?php echo $this_id; ?>">
 
                     <form method="post" id="bp-group-documents-form" class="standard-form form-panel" action="<?php echo $template->action_link; ?>" enctype="multipart/form-data">
-                        <input type="hidden" name="bp_group_documents_operation" value="<?php echo $template->operation; ?>" />
-                        <input type="hidden" name="bp_group_documents_id" value="<?php echo $template->id; ?>" />
 
                         <div class="panel panel-default">
                             <div class="panel-heading"><?php echo $template->header ?></div>
                             <div class="panel-body">
 
-        <?php if ($template->operation == 'add') { ?>
+                                <input type="hidden" name="bp_group_documents_operation" value="<?php echo $template->operation; ?>" />
+                                <input type="hidden" name="bp_group_documents_id" value="<?php echo $template->id; ?>" />
+
+                                <?php if ($template->operation == 'add') { ?>
 
                                     <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo return_bytes(ini_get('post_max_size')) ?>" />
                                     <label><?php _e('Choose File:', 'bp-group-documents'); ?></label>
                                     <input type="file" name="bp_group_documents_file" class="bp-group-documents-file form-control" />
                                 <?php } ?>
 
-        <?php if (BP_GROUP_DOCUMENTS_FEATURED) { ?>
+                                <?php if (BP_GROUP_DOCUMENTS_FEATURED) { ?>
                                     <div class="checkbox">
                                         <label class="bp-group-documents-featured-label"><input type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php if ($template->featured) echo 'checked="checked"'; ?> > <?php _e('Featured Document', 'bp-group-documents'); ?></label>
                                     </div>
-        <?php } ?>
+                                <?php } ?>
 
                                 <div id="document-detail-clear" class="clear"></div>
                                 <div class="document-info">
                                     <label><?php _e('Display Name:', 'bp-group-documents'); ?></label>
                                     <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo $template->name ?>" />
-        <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
+                                    <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
                                         <label><?php _e('Description:', 'bp-group-documents'); ?></label>
                                         <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo $template->description; ?></textarea>
-        <?php } ?>
+                                    <?php } ?>
                                     <label></label>
                                 </div>
                             </div>
                         </div>
 
-                        <input type="submit" class="button" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
+                        <input type="submit" class="btn btn-primary btn-margin btn-margin-top" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
 
-        <?php if (get_option('bp_group_documents_use_categories')) { ?>
+                        <?php if (get_option('bp_group_documents_use_categories')) { ?>
                             <div class="bp-group-documents-category-wrapper">
                                 <label><?php _e('Category:', 'bp-group-documents'); ?></label>
                                 <div class="bp-group-documents-category-list">
                                     <ul class="inline-element-list">
                                         <?php foreach ($template->get_group_categories(false) as $category) { ?>
                                             <li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo $category->term_id; ?>" <?php if ($template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /><?php echo $category->name; ?></li>
-            <?php } ?>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                                 <input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-category" />
                             </div><!-- .bp-group-documents-category-wrapper -->
-        <?php } ?>
+                        <?php } ?>
 
                     </form>
 
@@ -200,23 +201,48 @@ function openlab_bp_group_documents_display_content() {
                     <a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php _e('Upload a New Document', 'bp-group-documents'); ?></a>
                 <?php } ?>
 
-    <?php } ?>
+            <?php } ?>
 
             <div class="pagination no-ajax">
-                    <?php if ($template->show_pagination()) { ?>
+                <?php if ($template->show_pagination()) { ?>
                     <div id="group-documents-page-links" class="pagination-links">
-                    <?php $template->pagination_links(); ?>
+                        <?php $template->pagination_links(); ?>
                     </div>
-    <?php } ?>
+                <?php } ?>
             </div>
 
     </div><!--end #group-documents-->
     <?php
 }
 
+/**
+ * Custom file pagination
+ * Pulled from BP_Group_Documents_Template->do_paging_logic()
+ * @global type $wpdb
+ * @global type $bp
+ */
 function openlab_get_files_count() {
+    global $wpdb, $bp;
 
-    $template = new BP_Group_Documents_Template();
+    $start_record = 1;
+    $page = 1;
 
-    return $template->pagination_count();
+    $group_id = bp_get_group_id();
+
+    $sql = "SELECT COUNT(*) FROM {$bp->group_documents->table_name} WHERE group_id = %d ";
+
+    $total_records = $wpdb->get_var($wpdb->prepare($sql, $group_id));
+
+    $items_per_page = get_option('bp_group_documents_items_per_page');
+    $total_pages = ceil($total_records / $items_per_page);
+
+    if (isset($_GET['page']) && ctype_digit($_GET['page'])) {
+        $page = $_GET['page'];
+        $start_record = (($page - 1) * $items_per_page) + 1;
+    }
+
+    $last_possible = $items_per_page * $page;
+    $end_record = ($total_records < $last_possible) ? $total_records : $last_possible;
+
+    printf(__('Viewing item %s to %s (of %s items)', 'bp-group-documents'), $start_record, $end_record, $total_records);
 }
