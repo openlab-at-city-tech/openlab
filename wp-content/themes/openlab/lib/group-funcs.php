@@ -828,7 +828,7 @@ function openlab_render_message() {
 }
 
 function openlab_group_profile_activity_list() {
-    global $wpdb;
+    global $wpdb, $bp;
     ?>
     <div id="single-course-body">
         <?php
