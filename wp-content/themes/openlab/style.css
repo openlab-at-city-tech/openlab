@@ -7672,6 +7672,30 @@ body .align-center {
 body .align-left {
   text-align: left;
 }
+/**shortcodes**/
+.callout-list .row {
+  margin-bottom: 24px;
+}
+.callout-list .callout-list-number {
+  padding-right: 0;
+  padding-top: 8px;
+}
+.callout-list .callout-list-number span {
+  background: #ff5959;
+  border-radius: 4px;
+  color: #ffffff;
+  display: block;
+  font-size: 34px;
+  line-height: 35px;
+  padding-bottom: 3px;
+  text-align: center;
+  width: 78%;
+}
+.callout-list .callout-list-content {
+  padding-left: 0;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 11px;
+}
 /**form custom**/
 #departments_html .department-list-container {
   height: 120px;
