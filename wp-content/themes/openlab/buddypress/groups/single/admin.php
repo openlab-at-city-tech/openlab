@@ -20,11 +20,14 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php else: ?>
 
-                <div class="submenu-text pull-left bold"><?php echo $group_label_uc ?> Settings:</div>
-                <ul class="nav nav-inline">
+                <div class="submenu-text pull-left bold hidden-sm hidden-xs"><?php echo $group_label_uc ?> Settings:</div>
+                <div class="submenu-text clearfix bold visible-sm visible-xs"><?php echo $group_label_uc ?> Settings:</div>
+                <ul class="nav nav-inline hidden-xs">
                     <?php openlab_group_admin_tabs(); ?>
                 </ul>
-
+                <ul class="nav nav-inline visible-xs">
+                    <?php openlab_group_admin_tabs(false, true); ?>
+                </ul>
             <?php endif; ?>
 
         </div><!-- .item-list-tabs -->

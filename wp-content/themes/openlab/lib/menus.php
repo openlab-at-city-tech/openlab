@@ -730,7 +730,7 @@ add_action('bp_actions', 'openlab_group_submenu_nav', 1);
 /**
  * Markup for group admin tabs
  */
-function openlab_group_admin_tabs($group = false) {
+function openlab_group_admin_tabs($group = false, $mobile = false) {
     global $bp, $groups_template;
 
     if (!$group)
@@ -780,7 +780,11 @@ function openlab_group_admin_tabs($group = false) {
         --><li<?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li><!--
 
         --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
-
+        
+        <?php if($mobile): ?>
+        --></ul><ul class="nav nav-inline visible-xs"><!--
+            <?php endif; ?>
+                                                                                                                                                                                 
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )     ?>
 
         <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>

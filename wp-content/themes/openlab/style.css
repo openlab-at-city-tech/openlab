@@ -7088,6 +7088,7 @@ blockquote .h6 {
 }
 .nav.nav-inline li {
   display: inline-block;
+  margin-bottom: 0;
 }
 .nav.nav-inline li a {
   color: #000000;
@@ -7121,6 +7122,10 @@ blockquote .h6 {
 }
 .nav.nav-inline li:first-child a {
   padding-left: 0;
+}
+.nav.nav-inline li:first-child .fa {
+  padding-left: 0;
+  padding-right: 7px;
 }
 .pagination {
   margin: 0;
