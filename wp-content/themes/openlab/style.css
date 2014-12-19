@@ -7628,6 +7628,10 @@ body .panel-body .bp-template-notice {
   margin-top: 0;
   margin-bottom: 17px;
 }
+body .panel-body a {
+  word-wrap: break-word;
+  word-break: break-all;
+}
 body .group-header .bp-template-notice {
   color: #000000;
   margin-top: 4px;
