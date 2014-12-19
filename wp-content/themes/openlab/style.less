@@ -605,6 +605,10 @@ body{
             padding: 0;
             color: @80gray;
         }
+        a,
+        p{
+            font-size: @font-size-base;
+        }
         &.error,
         &.err{
             background: @yellow;
@@ -625,7 +629,11 @@ body{
     .bbp-template-notice{
         background: @yellow;
         &.info{
-            background: @cyan;
+            background: none;
+            font-weight: 700;
+            border: none;
+            padding-left: 0;
+            padding-right: 0;
         }
     }
     #register-page{

@@ -7588,6 +7588,14 @@ body #ubpfattach-message p {
   padding: 0;
   color: #333333;
 }
+body .bp-template-notice a,
+body .bbp-template-notice a,
+body #ubpfattach-message a,
+body .bp-template-notice p,
+body .bbp-template-notice p,
+body #ubpfattach-message p {
+  font-size: 14px;
+}
 body .bp-template-notice.error,
 body .bbp-template-notice.error,
 body #ubpfattach-message.error,
@@ -7618,7 +7626,11 @@ body .bbp-template-notice {
   background: #f7e700;
 }
 body .bbp-template-notice.info {
-  background: #63dfd2;
+  background: none;
+  font-weight: 700;
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
 }
 body #register-page .error {
   font-weight: 400;
