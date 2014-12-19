@@ -1439,17 +1439,29 @@ body{
         }    
     } 
 }
-#bbpress-forums{
-    div,
-    ul{
-        &.odd{
-            background: @5gray;
+#content{
+    #bbpress-forums{
+        div,
+        ul{
+            &.odd{
+                background: @5gray;
+            }
+            .avatar{
+                margin: 0;
+                min-width: 22px;
+                min-height: 22px;
+            }
+            span,
+            a,
+            p{
+                font-size: @font-size-base;
+            }
         }
-    }
-    fieldset.bbp-form {
-        border: none;
-        margin-bottom: 0;
-        padding: 0;
+        fieldset.bbp-form {
+            border: none;
+            margin-bottom: 0;
+            padding: 0;
+        }
     }
 }
 /**invite-anyone specific**/

@@ -8369,11 +8369,25 @@ body .align-left {
 #item-body > #bbpress-forums > h3 {
   display: none;
 }
-#bbpress-forums div.odd,
-#bbpress-forums ul.odd {
+#content #bbpress-forums div.odd,
+#content #bbpress-forums ul.odd {
   background: #f0f0f0;
 }
-#bbpress-forums fieldset.bbp-form {
+#content #bbpress-forums div .avatar,
+#content #bbpress-forums ul .avatar {
+  margin: 0;
+  min-width: 22px;
+  min-height: 22px;
+}
+#content #bbpress-forums div span,
+#content #bbpress-forums ul span,
+#content #bbpress-forums div a,
+#content #bbpress-forums ul a,
+#content #bbpress-forums div p,
+#content #bbpress-forums ul p {
+  font-size: 14px;
+}
+#content #bbpress-forums fieldset.bbp-form {
   border: none;
   margin-bottom: 0;
   padding: 0;
