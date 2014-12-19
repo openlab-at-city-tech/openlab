@@ -123,6 +123,9 @@
 						<?php do_action( 'bbp_theme_after_reply_form_revisions' ); ?>
 
 					<?php endif; ?>
+                                                
+                                                </div>
+                                        </div>
 
 					<?php do_action( 'bbp_theme_before_reply_form_submit_wrapper' ); ?>
 
@@ -132,7 +135,7 @@
 
 						<?php bbp_cancel_reply_to_link(); ?>
 
-						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="button submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="btn  btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
 
 						<?php do_action( 'bbp_theme_after_reply_form_submit_button' ); ?>
 
@@ -140,10 +143,9 @@
 
 					<?php do_action( 'bbp_theme_after_reply_form_submit_wrapper' ); ?>
 
-				</div>
 
 				<?php bbp_reply_form_fields(); ?>
-                                    </div>
+                                    
 			</div>
 
 			<?php do_action( 'bbp_theme_after_reply_form' ); ?>

@@ -8361,6 +8361,11 @@ body .align-left {
 #bbpress-forums ul.odd {
   background: #f0f0f0;
 }
+#bbpress-forums fieldset.bbp-form {
+  border: none;
+  margin-bottom: 0;
+  padding: 0;
+}
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {
   border: 1px solid #dddddd;

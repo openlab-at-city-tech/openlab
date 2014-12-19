@@ -28,12 +28,19 @@
 <?php if ( bbp_current_user_can_access_create_topic_form() ) : ?>
 
 	<div id="new-topic-<?php bbp_topic_id(); ?>" class="bbp-topic-form">
-
-		<form id="new-post" name="new-post" method="post" action="">
+            
+		<form class="form form-panel" id="new-post" name="new-post" method="post" action="">
 
 			<?php do_action( 'bbp_theme_before_topic_form' ); ?>
 
-			<fieldset class="bbp-form">
+			<div class="bbp-form panel panel-default">
+                            <div class="panel-heading"><?php
+						if ( bbp_is_topic_edit() )
+							printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+						else
+							bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
+					?></div>
+                            <div class="panel-body">
 				<?php /*
 				<legend>
 
@@ -181,6 +188,10 @@
 						<?php do_action( 'bbp_theme_after_topic_form_revisions' ); ?>
 
 					<?php endif; ?>
+                                                
+                                                </div>
+                        </div>
+                        </div>
 
 					<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
 
@@ -188,7 +199,7 @@
 
 						<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
 
-						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="button submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
 
 						<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
 
@@ -196,15 +207,12 @@
 
 					<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
 
-				</div>
-
 				<?php bbp_topic_form_fields(); ?>
-
-			</fieldset>
 
 			<?php do_action( 'bbp_theme_after_topic_form' ); ?>
 
 		</form>
+
 	</div>
 
 <?php elseif ( bbp_is_forum_closed() ) : ?>
