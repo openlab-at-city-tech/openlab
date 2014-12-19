@@ -792,7 +792,7 @@ function cuny_member_profile_header() {
                 <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
                 <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
                     <div class="info-panel panel panel-default">
-                        <table class="profile-fields table">
+                        <div class="profile-fields table-div">
 
                             <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
@@ -808,12 +808,12 @@ function cuny_member_profile_header() {
                                                     bp_get_the_profile_field_name() != "Last Name") :
                                                 ?>
 
-                                                <tr>
-                                                    <td class="bold">
+                                                <div class="table-row row">
+                                                    <div class="bold col-sm-5">
                                                         <?php bp_the_profile_field_name() ?>
-                                                    </td>
+                                                    </div>
 
-                                                    <td>
+                                                    <div class="col-sm-19">
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
@@ -823,8 +823,8 @@ function cuny_member_profile_header() {
                                                             echo $field_value;
                                                         }
                                                         ?>
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                </div>
 
                                             <?php endif; ?>
 
@@ -835,7 +835,7 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
-                        </table>
+                        </div>
                     </div>
                 <?php endif; // bp_has_profile()     ?>
             </div>

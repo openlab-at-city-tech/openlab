@@ -744,42 +744,42 @@ function cuny_group_single() {
                         $wds_year = groups_get_groupmeta($group_id, 'wds_year');
                         $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
                         ?>
-                        <table class="table">
+                        <div class="table-div">
                             <?php
                             if (bp_is_group_home() && openlab_group_status_message() != '') {
 
                                 do_action('bp_before_group_status_message')
                                 ?>
 
-                                <tr>
-                                    <th colspan="2" class="regular text-danger"><?php echo openlab_group_status_message() ?></th>
-                                </tr>
+                                <div class="table-row row">
+                                    <div class="col-xs-24 regular text-danger"><?php echo openlab_group_status_message() ?></div>
+                                </div>
 
                                 <?php
                                 do_action('bp_after_group_status_message');
                             }
                             ?>
-                            <tr>
-                                <td class = "bold">Professor(s)</td>
-                                <td><?php echo $first_name . " " . $last_name; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="bold">Department</td>
-                                <td><?php echo $wds_departments; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="bold">Course Code</td>
-                                <td><?php echo $wds_course_code; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="bold">Semester / Year</td>
-                                <td><?php echo $wds_semester; ?> <?php echo $wds_year; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="bold">Course Description</td>
-                                <td><?php echo apply_filters('the_content', $group_description); ?></td>
-                            </tr>
-                        </table>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5">Professor(s)</div>
+                                <div class="col-sm-19 row-content"><?php echo $first_name . " " . $last_name; ?></div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5">Department</div>
+                                <div class="col-sm-19 row-content"><?php echo $wds_departments; ?></div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5">Course Code</div>
+                                <div class="col-sm-19 row-content"><?php echo $wds_course_code; ?></div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5">Semester / Year</div>
+                                <div class="col-sm-19 row-content"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5">Course Description</div>
+                                <div class="col-sm-19 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -797,12 +797,11 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
     <?php
-    
     openlab_group_profile_activity_list();
 }
 
@@ -845,156 +844,156 @@ function openlab_group_profile_activity_list() {
 
         <?php if (bp_is_group_home()) { ?>
 
-                <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
-                    <?php
-                    if (wds_site_can_be_viewed()) {
-                        openlab_show_site_posts_and_comments();
-                    }
-                    ?>
+            <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
+                <?php
+                if (wds_site_can_be_viewed()) {
+                    openlab_show_site_posts_and_comments();
+                }
+                ?>
 
-                    <?php if ($group_type != "portfolio"): ?>
-                        <div class="row group-activity-overview">
-                            <div class="col-sm-12">
-                                <div class="recent-discussions">
-                                    <div class="recent-posts">
-                                        <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
-                                        <?php
-                                        $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
-
-                                        // Get the first forum ID
-                                        if (!empty($forum_ids)) {
-                                            $forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
-                                        }
-                                        ?>
-
-                                        <?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
-                                            <?php while (bbp_topics()) : bbp_the_topic(); ?>
-
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-                                                        <h6 class="semibold"><?php bbp_topic_title() ?></h6>
-
-                                                        <?php
-                                                        $topic_id = bbp_get_topic_id();
-                                                        $last_reply_id = bbp_get_topic_last_reply_id($topic_id);
-
-                                                        // Oh, bbPress.
-                                                        $last_reply = get_post($last_reply_id);
-                                                        if (!empty($last_reply->post_content)) {
-                                                            $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 135);
-                                                            echo $last_topic_content;
-                                                        }
-                                                        ?>
-
-                                                        <p><a href="<?php bbp_topic_permalink(); ?>" class="read-more">See More</a></p>
-                                                    </div></div>                                            <?php endwhile; ?>
-                                        <?php else: ?>
-                                            <div class="panel panel-default"><div class="panel-body">
-                                                    <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
-                                                </div></div>
-                                        <?php endif; ?>
-                                    </div><!-- .recent-post -->
-                                </div>
-                            </div>
-                            <?php $first_class = ""; ?>
-                            <div class="col-sm-12">
-                                <div id="recent-docs">
-                                    <div class="recent-posts">
-                                        <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
-                                        <?php
-                                        $docs_arg = Array("posts_per_page" => "3",
-                                            "post_type" => "bp_doc",
-                                            "tax_query" =>
-                                            Array(Array("taxonomy" => "bp_docs_associated_item",
-                                                    "field" => "slug",
-                                                    "terms" => $group_slug)));
-                                        $query = new WP_Query($docs_arg);
-                                        //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
-                                        //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-                                        global $post;
-                                        if ($query->have_posts()) {
-                                            while ($query->have_posts()) : $query->the_post();
-                                                echo '<div class="panel panel-default"><div class="panel-body">';
-                                                echo '<h6 class="semibold">';
-                                                the_title();
-                                                echo '</h6>';
-                                                ?>
-                                                <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
-                                                <?php
-                                                echo '</div></div>';
-                                            endwhile;
-                                            ?>
-                                            <?php
-                                        }else {
-                                            echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="members-list" class="info-group">
-
-                            <?php
-                            if ($bp->is_item_admin || $bp->is_item_mod):
-                                $href = site_url() . '/groups/' . $group_slug . '/admin/manage-members/';
-                            else:
-                                $href = site_url() . '/groups/' . $group_slug . '/members/';
-                            endif;
-                            ?>
-
-                            <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
-                            <?php $member_arg = Array("exclude_admins_mods" => false); ?>
-                            <?php if (bp_group_has_members($member_arg)) : ?>
-
-                                <ul id="member-list" class="inline-element-list">
+                <?php if ($group_type != "portfolio"): ?>
+                    <div class="row group-activity-overview">
+                        <div class="col-sm-12">
+                            <div class="recent-discussions">
+                                <div class="recent-posts">
+                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
                                     <?php
-                                    while (bp_group_members()) : bp_group_the_member();
-                                        global $members_template;
-                                        $member = $members_template->member;
-                                        ?>
-                                        <li class="inline-element">
-                                            <a href="<?php echo bp_group_member_domain() ?>">
-                                                <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
-                                            </a>
-                                        </li>
-                                    <?php endwhile; ?>
-                                </ul>
-                                <?php bp_group_member_pagination(); ?>
-                            <?php else: ?>
+                                    $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
-                                <div id="message" class="info">
-                                    <p>This group has no members.</p>
-                                </div>
+                                    // Get the first forum ID
+                                    if (!empty($forum_ids)) {
+                                        $forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
+                                    }
+                                    ?>
 
-                            <?php endif; ?>
+                                    <?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
+                                        <?php while (bbp_topics()) : bbp_the_topic(); ?>
 
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    <h6 class="semibold"><?php bbp_topic_title() ?></h6>
+
+                                                    <?php
+                                                    $topic_id = bbp_get_topic_id();
+                                                    $last_reply_id = bbp_get_topic_last_reply_id($topic_id);
+
+                                                    // Oh, bbPress.
+                                                    $last_reply = get_post($last_reply_id);
+                                                    if (!empty($last_reply->post_content)) {
+                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 135);
+                                                        echo $last_topic_content;
+                                                    }
+                                                    ?>
+
+                                                    <p><a href="<?php bbp_topic_permalink(); ?>" class="read-more">See More</a></p>
+                                                </div></div>                                            <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <div class="panel panel-default"><div class="panel-body">
+                                                <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
+                                            </div></div>
+                                    <?php endif; ?>
+                                </div><!-- .recent-post -->
+                            </div>
                         </div>
+                        <?php $first_class = ""; ?>
+                        <div class="col-sm-12">
+                            <div id="recent-docs">
+                                <div class="recent-posts">
+                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
+                                    <?php
+                                    $docs_arg = Array("posts_per_page" => "3",
+                                        "post_type" => "bp_doc",
+                                        "tax_query" =>
+                                        Array(Array("taxonomy" => "bp_docs_associated_item",
+                                                "field" => "slug",
+                                                "terms" => $group_slug)));
+                                    $query = new WP_Query($docs_arg);
+                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
+                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
+                                    global $post;
+                                    if ($query->have_posts()) {
+                                        while ($query->have_posts()) : $query->the_post();
+                                            echo '<div class="panel panel-default"><div class="panel-body">';
+                                            echo '<h6 class="semibold">';
+                                            the_title();
+                                            echo '</h6>';
+                                            ?>
+                                            <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
+                                            <?php
+                                            echo '</div></div>';
+                                        endwhile;
+                                        ?>
+                                        <?php
+                                    }else {
+                                        echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="members-list" class="info-group">
 
-                    <?php endif; //end of if $group != 'portfolio'          ?>
+                        <?php
+                        if ($bp->is_item_admin || $bp->is_item_mod):
+                            $href = site_url() . '/groups/' . $group_slug . '/admin/manage-members/';
+                        else:
+                            $href = site_url() . '/groups/' . $group_slug . '/members/';
+                        endif;
+                        ?>
 
-                <?php else: ?>
-                    <?php
-                    //   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
-                    //   case show site posts and comments even though this group is private
-                    //
+                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <?php $member_arg = Array("exclude_admins_mods" => false); ?>
+                        <?php if (bp_group_has_members($member_arg)) : ?>
+
+                            <ul id="member-list" class="inline-element-list">
+                                <?php
+                                while (bp_group_members()) : bp_group_the_member();
+                                    global $members_template;
+                                    $member = $members_template->member;
+                                    ?>
+                                    <li class="inline-element">
+                                        <a href="<?php echo bp_group_member_domain() ?>">
+                                            <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                        </a>
+                                    </li>
+                                <?php endwhile; ?>
+                            </ul>
+                            <?php bp_group_member_pagination(); ?>
+                        <?php else: ?>
+
+                            <div id="message" class="info">
+                                <p>This group has no members.</p>
+                            </div>
+
+                        <?php endif; ?>
+
+                    </div>
+
+                <?php endif; //end of if $group != 'portfolio'           ?>
+
+            <?php else: ?>
+                <?php
+                //   check if blog (site) is NOT private (option blog_public Not = '_2"), in which
+                //   case show site posts and comments even though this group is private
+                //
 					if (wds_site_can_be_viewed()) {
-                        openlab_show_site_posts_and_comments();
-                        echo "<div class='clear'></div>";
-                    }
-                    ?>
-                    <?php /* The group is not visible, show the status message */ ?>
+                    openlab_show_site_posts_and_comments();
+                    echo "<div class='clear'></div>";
+                }
+                ?>
+                <?php /* The group is not visible, show the status message */ ?>
 
-                    <?php // do_action( 'bp_before_group_status_message' )           ?>
-                    <!--
-                                                    <div id="message" class="info">
-                                                            <p><?php // bp_group_status_message()                        ?></p>
-                                                    </div>
-                    -->
-                    <?php // do_action( 'bp_after_group_status_message' )          ?>
+                <?php // do_action( 'bp_before_group_status_message' )            ?>
+                <!--
+                                                <div id="message" class="info">
+                                                        <p><?php // bp_group_status_message()                          ?></p>
+                                                </div>
+                -->
+                <?php // do_action( 'bp_after_group_status_message' )           ?>
 
-                <?php endif; ?>
+            <?php endif; ?>
 
             <?php
         } else {
@@ -1430,13 +1429,13 @@ function openlab_trim_group_name($name) {
     if (strstr($post->post_title, 'My') || in_array($post->post_title, $groups) || is_home()) {
         $process_name = explode(' ', $name);
         $new_name = '';
-        
+
         $trim_num = 15;
-        
-        if(is_home()){
+
+        if (is_home()) {
             $trim_num = 12;
         }
-        
+
         foreach ($process_name as $process) {
             $new_name .= ' ' . openlab_shortened_text($process, $trim_num, false);
         }

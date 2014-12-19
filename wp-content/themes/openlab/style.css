@@ -8223,6 +8223,19 @@ body .align-left {
 .info-panel .table td:last-child {
   width: 65%;
 }
+.info-panel .table-div {
+  width: 97%;
+  margin: 0 auto;
+}
+.info-panel .table-div .table-row div {
+  border-top: 1px solid #dddddd;
+  padding: 7.5px;
+  border-radius: 0;
+  word-wrap: break-word;
+}
+.info-panel .table-div .table-row:first-child div {
+  border-top: none;
+}
 .group-subscription-status {
   background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
   font-weight: bold;
