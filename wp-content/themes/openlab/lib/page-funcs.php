@@ -329,7 +329,7 @@ function openlab_registration_page() {
                     <?php do_action('bp_signup_username_errors') ?>
                     <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
 
-                    <label for="signup_email"><?php _e('Email Address (required) - Please use your City Tech email address to register', 'buddypress') ?> </label>
+                   <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
                     <?php do_action('bp_signup_email_errors') ?>
                     <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value( 'signup_email' ) ?>" />
 

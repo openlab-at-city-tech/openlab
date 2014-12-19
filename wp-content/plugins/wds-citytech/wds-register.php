@@ -81,32 +81,38 @@ function wds_email_validate() {
 	if ( !defined( 'OPENLAB_SKIP_EMAIL_CHECK' ) || !OPENLAB_SKIP_EMAIL_CHECK ) {
 
 		$email = $_POST['signup_email'];
-		/*$email2 = $email;
-		$email = explode ( '.', $email );
-		$email2 = explode ( '@', $email[0] );
-		$domains = array_merge ($email, $email2);*/
-		//$error = 1;
+		$email_parts = explode( '@', $email );
+		$domain = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ) : '';
 
-		//print_r ($domains);
-		//Students
-		if($_POST['field_7']=="Student"){
-			//if ( in_array('mail', $domains) && in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) && $_POST['field_7']=="Student") {
-			//}else{
-				$pos = strrpos($email, "@mail.citytech.cuny.edu");
-				if ($pos === false) {
-				$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
+		$account_type = isset( $_POST['field_7'] ) ? stripslashes( $_POST['field_7'] ) : 'Student';
+
+		switch ( $account_type ) {
+			case 'Student' :
+				if ( 'mail.citytech.cuny.edu' !== $domain ) {
+					$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
+				}
+				break;
+
+			case 'Faculty' :
+			case 'Staff' :
+				if ( 'citytech.cuny.edu' !== $domain ) {
+					$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
 				}
 
-			//}
-		//}elseif ( in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) ) {
+				break;
 
-		}else{
-			$pos = strrpos($email, "@citytech.cuny.edu");
-			if ($pos === false) {
-				$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
-			}
+			case 'Non-City Tech' :
+				$code = '';
+				if ( isset( $_POST['signup_validation_code'] ) ) {
+					$code = stripslashes( $_POST['signup_validation_code'] );
+				}
+
+				if ( ! cac_ncs_validate_code( $code ) ) {
+					$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
+
+				}
+				break;
 		}
-
 	}
 
 	// Check that the email addresses match
