@@ -8038,11 +8038,17 @@ body .align-left {
 }
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member {
   width: 50%;
+  height: 274px;
 }
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar,
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info {
   margin: 0 auto;
   width: 97%;
+}
+.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar h2,
+.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info h2 {
+  margin: 0;
+  padding: 20px 0 15px;
 }
 .home-page .activity-list .activity-wrapper {
   border-radius: inherit;
