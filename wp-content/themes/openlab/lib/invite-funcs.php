@@ -267,6 +267,7 @@ function openlab_invite_anyone_screen_two_content() {
     <?php $pagination->setup_query($invites) ?>
 
     <?php if ($invites->have_posts()) : ?>
+    <div class="form-panel">
     <div class="panel panel-default">
         <div class="panel-heading"><span class="bold"><?php _e('Sent Invites', 'bp-invite-anyone'); ?></span><div class="pull-right"><?php $pagination->currently_viewing_text() ?></div></div>
         <div class="panel-body">
@@ -365,6 +366,7 @@ function openlab_invite_anyone_screen_two_content() {
                 </div>
             </div>
         </div>
+    </div>
 
 
     <?php else : ?>
