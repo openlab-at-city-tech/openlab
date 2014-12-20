@@ -11,12 +11,13 @@
                     
                     <div class="panel panel-default">
 
-			<?php do_action( 'template_notices' ) ?>
-
 			<?php if ( bp_account_was_activated() ) : ?>
 
 				<div class="panel-heading"><?php _e( 'Account Activated', 'buddypress' ) ?></div>
                                 <div class="panel-body">
+                                
+                                <?php do_action( 'template_notices' ) ?>
+                                
 				<?php do_action( 'bp_before_activate_content' ) ?>
 
 				<?php if ( isset( $_GET['e'] ) ) : ?>
