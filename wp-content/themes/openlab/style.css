@@ -8313,6 +8313,9 @@ body .align-left {
 .plugins #item-body {
   margin-top: 30px;
 }
+#bp-group-documents .bp-template-notice.error {
+  margin-bottom: 17px;
+}
 .docs-info-header #tags-toggle {
   padding: 6px 16px;
 }
