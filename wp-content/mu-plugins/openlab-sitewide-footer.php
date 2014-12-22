@@ -98,7 +98,8 @@ $site=site_url();
 restore_current_blog();
 ?>
 
-<div id="openlab-footer">
+<div id="openlab-footer" class="oplb-bs">
+    <div class="oplb-bs">
     <div class="container-fluid">
         <div class="row row-footer">
                 <div class="col-sm-14 col-logos">
@@ -120,9 +121,10 @@ restore_current_blog();
             </div>
         <div class="row row-copyright">
             <div class="col-sm-24">
-                <p><span class="alignleft">&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span class="alignright"><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
+                <p><span>&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <script type="text/javascript">

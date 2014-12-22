@@ -1223,5 +1223,23 @@ function cac_adminbar_js() {
 }
 add_action( 'wp_footer', 'cac_adminbar_js', 999 );
 
+/**
+ * The following functions wrap the admin bar in an 'oplb-bs' class to isolate bootstrap styles from the rest of the page
+ * This is to avoid styling conflicts on the admin pages and group sites
+ * FYI: due to an undiagnosed issue in the LESS compilation, the class has to be wrapped twice to work; definitely will try to fix this in the future
+ */
+function openlab_wrap_adminbar_top(){
+    ?>
+        <div class="oplb-bs"><div class="oplb-bs">
+    <?php
+}
 
-?>
+add_action('wp_before_admin_bar_render','openlab_wrap_adminbar_top');
+
+function openlab_wrap_adminbar_bottom(){
+    ?>
+        </div></div><!--oplb-bs-->
+    <?php
+}
+
+add_action('wp_after_admin_bar_render','openlab_wrap_adminbar_bottom');
