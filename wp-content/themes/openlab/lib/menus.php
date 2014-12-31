@@ -846,7 +846,8 @@ function openlab_docs_tabs() {
         <li <?php echo (bp_docs_current_view() == 'create' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/create">New Doc</a></li>
     <?php endif; ?>
     <?php if ((bp_docs_current_view() == 'edit' || bp_docs_current_view() == 'single') && bp_docs_is_existing_doc()): ?>
-        <li class="current-menu-item"><?php the_title() ?></li>
+        <?php $doc_obj = bp_docs_get_current_doc(); ?>
+        <li class="current-menu-item"><?php echo $doc_obj->post_title; ?></li>
         <?php endif; ?>
 
     <?php
