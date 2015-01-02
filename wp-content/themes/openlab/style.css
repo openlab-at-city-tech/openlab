@@ -8395,6 +8395,10 @@ body .align-left {
 #item-body > #bbpress-forums > h3 {
   display: none;
 }
+#content #bbpress-forums div,
+#content #bbpress-forums ul {
+  font-size: 14px;
+}
 #content #bbpress-forums div.odd,
 #content #bbpress-forums ul.odd {
   background: #f0f0f0;
