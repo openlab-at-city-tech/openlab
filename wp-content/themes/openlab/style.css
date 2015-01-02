@@ -7127,6 +7127,23 @@ blockquote .h6 {
   padding-left: 0;
   padding-right: 7px;
 }
+@media (max-width: 767px) {
+  .nav.nav-inline {
+    float: none;
+    clear: both;
+  }
+  .nav.nav-inline li {
+    display: block;
+  }
+  .nav.nav-inline li a {
+    border-right: none;
+    padding: 0;
+  }
+  .nav.nav-inline li .fa {
+    padding-left: 0;
+    padding-right: 7px;
+  }
+}
 .pagination {
   margin: 0;
 }

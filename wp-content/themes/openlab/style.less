@@ -151,6 +151,21 @@ blockquote {
                 }
             }
         }
+        @media (max-width: @screen-xs-max){
+            float: none;
+            clear: both;
+            li{
+                display: block;
+                a{
+                    border-right: none;
+                    padding: 0;
+                }
+                .fa{
+                    padding-left: 0;
+                    padding-right: 7px;
+                }
+            }
+        }
     }
 }
 //
