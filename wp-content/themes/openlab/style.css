@@ -7131,9 +7131,11 @@ blockquote .h6 {
   .nav.nav-inline {
     float: none;
     clear: both;
+    width: 60%;
   }
   .nav.nav-inline li {
     display: block;
+    line-height: 1.75;
   }
   .nav.nav-inline li a {
     border-right: none;
