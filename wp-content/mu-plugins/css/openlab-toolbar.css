@@ -6971,6 +6971,10 @@ button.oplb-bs .close {
   height: 50px;
   min-width: 0;
 }
+#wpadminbar p,
+#wpadminbar a {
+  text-shadow: none !important;
+}
 #wpadminbar #wp-toolbar {
   line-height: normal;
   margin: 0 auto;
@@ -7205,6 +7209,14 @@ button.oplb-bs .close {
 #openlab-footer a {
   font-size: 12px;
 }
+#openlab-footer p,
+#openlab-footer a,
+#openlab-footer h2 {
+  text-shadow: none !important;
+}
+#openlab-footer .row h2 {
+  color: #333;
+}
 #openlab-footer .col-logos {
   display: inline-block;
 }
@@ -7217,9 +7229,6 @@ button.oplb-bs .close {
 }
 #openlab-footer .col-links {
   color: #797979;
-}
-#openlab-footer .col-links h2 {
-  color: #333;
 }
 #openlab-footer .col-links a {
   color: #797979;
