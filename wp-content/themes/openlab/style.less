@@ -1380,8 +1380,11 @@ body{
     }
 }
 #bp-group-documents{
-    .bp-template-notice.error{
-        margin-bottom: 17px;
+    .bp-template-notice{
+        &.error,
+        &.updated{
+            margin-bottom: 17px;
+        }
     }
 }
 .docs-info-header{

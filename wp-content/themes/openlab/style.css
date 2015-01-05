@@ -8332,7 +8332,8 @@ body .align-left {
 .plugins #item-body {
   margin-top: 30px;
 }
-#bp-group-documents .bp-template-notice.error {
+#bp-group-documents .bp-template-notice.error,
+#bp-group-documents .bp-template-notice.updated {
   margin-bottom: 17px;
 }
 .docs-info-header #tags-toggle {
