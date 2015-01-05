@@ -7135,11 +7135,11 @@ blockquote .h6 {
   }
   .nav.nav-inline li {
     display: block;
-    line-height: 175%;
   }
   .nav.nav-inline li a {
     border-right: none;
     padding: 0;
+    line-height: 185%;
   }
   .nav.nav-inline li .fa {
     padding-left: 0;
