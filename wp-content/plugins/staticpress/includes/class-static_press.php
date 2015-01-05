@@ -324,7 +324,7 @@ CREATE TABLE `{$this->url_table}` (
 			$this->fetch_last_id()
 			);
 		$result = $wpdb->get_row($sql);
-		if (!is_wp_error($result) && $result->ID) {
+		if (!is_null($result) && !is_wp_error($result) && $result->ID) {
 			$next_id = $this->fetch_last_id($result->ID);
 			return $result;
 		} else {
@@ -551,7 +551,7 @@ CREATE TABLE `{$this->url_table}` (
 				$url['enable'] = 0;
 			} else if (preg_match('#/wp-admin/$#i', $url['url'])) {
 				$url['enable'] = 0;
-			} else if ($url['type'] == 'static_file') {
+			} else if (isset($url['type']) && $url['type'] == 'static_file') {
 				$plugin_dir  = trailingslashit(str_replace(ABSPATH, '/', WP_PLUGIN_DIR));
 				$theme_dir   = trailingslashit(str_replace(ABSPATH, '/', WP_CONTENT_DIR) . '/themes');
 				$file_source = untrailingslashit(ABSPATH) . $url['url'];
