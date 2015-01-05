@@ -7,6 +7,13 @@
     @import "../less/variables.less";
 }
 
+//for proper placement of footer
+html{
+    position: relative;
+    padding-bottom: 228px;
+    height: auto;
+}
+
 #wpadminbar{
     font-family: "Open Sans",Helvetica,Arial,sans-serif;
     background: #444;
@@ -239,6 +246,10 @@
 }
 /**footer - also a sitewide component**/
 #openlab-footer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
     color: #333333;
     font-family: "Open Sans",Helvetica,Arial,sans-serif;
     font-size: 14px;
@@ -309,11 +320,10 @@
     }
     .row-copyright{
         margin-top: 42px;
-        p{
+        p,
+        span,
+        a{
             color: lighten(#666, 7.5%);
-            a{
-                color: inherit;
-            }
         }
     }
 }

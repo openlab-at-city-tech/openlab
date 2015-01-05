@@ -6962,6 +6962,11 @@ button.oplb-bs .close {
     display: none !important;
   }
 }
+html {
+  position: relative;
+  padding-bottom: 228px;
+  height: auto;
+}
 #wpadminbar {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   background: #444;
@@ -7183,6 +7188,10 @@ button.oplb-bs .close {
 }
 /**footer - also a sitewide component**/
 #openlab-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
   color: #333333;
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -7249,9 +7258,8 @@ button.oplb-bs .close {
 #openlab-footer .row-copyright {
   margin-top: 42px;
 }
-#openlab-footer .row-copyright p {
+#openlab-footer .row-copyright p,
+#openlab-footer .row-copyright span,
+#openlab-footer .row-copyright a {
   color: #797979;
-}
-#openlab-footer .row-copyright p a {
-  color: inherit;
 }
