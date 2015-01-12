@@ -27,11 +27,7 @@
 	<?php do_action( 'bp_docs_single_doc_meta' ) ?>
 </div>
 
-<?php 
-$template_path = bp_docs_locate_template('comments.php'); 
-
-include( apply_filters( 'bp_docs_template', $template_path ) );
-?>
+<?php comments_template( '/docs/comments.php' ) ?>
 
 <?php endwhile; ?>
 
