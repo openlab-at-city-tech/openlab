@@ -95,8 +95,10 @@ function openlab_form_classes($classes) {
 add_filter('bp_field_css_classes', 'openlab_form_classes');
 
 function openlab_hide_docs_native_menu($menu_template) {
-
-    return false;
+    
+    $path = STYLESHEETPATH.'/buddypress/groups/single/docs/docs-header.php';
+    
+    return $path;
 }
 
 add_filter('bp_docs_header_template', 'openlab_hide_docs_native_menu');
@@ -121,35 +123,6 @@ function openlab_custom_docs_templates($path, $template) {
 }
 
 add_filter('bp_docs_template', 'openlab_custom_docs_templates', 10, 2);
-
-function openlab_plugin_custom_header_elements() {
-    global $post, $bp;
-
-    if (bp_docs_is_existing_doc()) :
-        ?>
-        <?php // echo '<pre>'.print_r($post,true).'</pre>'; ?>
-        <?php // echo '<pre>'.print_r(bp_docs_get_group_doc_permalink(),true).'</pre>'; ?>
-        <div class="doc-tabs">
-            <ul>
-                <li<?php if ('single' == bp_docs_current_view()) : ?> class="current"<?php endif ?>>
-                    <a href="<?php echo bp_docs_get_group_doc_permalink() ?>"><?php _e('Read', 'bp-docs') ?></a>
-                </li>
-
-                <?php if (bp_docs_current_user_can('edit')) : ?>
-                    <li<?php if ('edit' == bp_docs_current_view()) : ?> class="current"<?php endif ?>>
-                        <a href="<?php echo bp_docs_get_group_doc_permalink() . '/' . BP_DOCS_EDIT_SLUG ?>"><?php _e('Edit', 'bp-docs') ?></a>
-                    </li>
-                <?php endif ?>
-
-                <?php do_action('bp_docs_header_tabs') ?>
-            </ul>
-        </div>
-
-        <?php
-    endif;
-}
-
-add_action('bp_before_group_plugin_template', 'openlab_plugin_custom_header_elements');
 
 function openlab_custom_form_classes($classes) {
     return 'form-panel ' . $classes;
