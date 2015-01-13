@@ -43,8 +43,8 @@ if (!$dud = bp_displayed_user_domain()) {
 <?php elseif (openlab_is_my_profile() && !bp_is_group_create()) : ?>
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
     <div class="sidebar-widget" id="portfolio-sidebar-widget">
-        <h2 class="sidebar-header">
-                <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper&user_id=' . bp_displayed_user_id() ) ?></a>
+        <h2 class="sidebar-header"><?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
+                <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper&user_id=' . $displayed_user_id ) ?></a>
         </h2>
     </div>
 
