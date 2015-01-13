@@ -8078,10 +8078,6 @@ body .align-left {
   padding: 5px;
   margin-bottom: 15px;
 }
-.home-page .activity-list .activity-wrapper .activity-item p {
-  word-wrap: break-word;
-  word-break: break-all;
-}
 .home-page .activity-list .activity-wrapper .activity-item h4 {
   margin-top: 15px;
 }
