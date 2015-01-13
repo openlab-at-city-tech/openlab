@@ -1,8 +1,8 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
-<div id="content" class="hfeed row">
     <?php openlab_bp_mobile_sidebar('members'); ?>
     <div class="col-sm-18 col-xs-24 members-single-home">
+        <div class="content-wrapper">
 
 <?php do_action( 'bp_before_member_body' );
 
@@ -43,8 +43,8 @@
 
 		do_action( 'bp_after_member_body' ); ?>
                         </div>
+    </div>
 
 <?php do_action( 'bp_after_member_home_content' ); ?>
     
 <?php openlab_bp_sidebar('members'); ?>
-                        </div><!--content-->
