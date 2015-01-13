@@ -261,3 +261,12 @@ function openlab_bbp_paginatin_custom_markup($pagination){
 }
 
 add_filter('bbp_get_forum_pagination_links','openlab_bbp_paginatin_custom_markup');
+
+function openlab_style_bbp_subscribe_link($html, $r, $user_id, $topic_id){
+    
+    $html = str_replace('class="subscription-toggle"','class="subscription-toggle btn btn-primary btn-margin btn-margin-top no-deco"',$html);
+    
+    return $html;
+}
+
+add_filter('bbp_get_user_subscribe_link','openlab_style_bbp_subscribe_link');
