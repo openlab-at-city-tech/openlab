@@ -7310,6 +7310,7 @@ input[type="submit"] {
 }
 .form-panel .panel-heading {
   font-size: 16px;
+  font-weight: 600;
 }
 .panel-button-group .panel:last-of-type {
   margin-bottom: 20px;

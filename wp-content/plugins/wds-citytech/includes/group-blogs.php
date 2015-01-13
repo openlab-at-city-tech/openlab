@@ -547,7 +547,7 @@ function wds_bp_group_meta() {
         ?>
 
         <div class="panel panel-default">
-            <div class="panel-heading bold">Site Details</div>
+            <div class="panel-heading">Site Details</div>
             <div class="panel-body">
 
                 <?php if (!empty($group_site_url)) : ?>

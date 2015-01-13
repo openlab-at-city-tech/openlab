@@ -751,7 +751,7 @@ function wds_load_group_type( $group_type ) {
         
         $return = '<div class="panel panel-default">';
 
-	$return .= '<div class="panel-heading bold">School(s)';
+	$return .= '<div class="panel-heading">School(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
@@ -855,7 +855,7 @@ function wds_load_group_type( $group_type ) {
         if ( 'course' == $group_type ) {
         
         $return .= '<div class="panel panel-default">';
-        $return .= '<div class="panel-heading bold">Course Information</div>';
+        $return .= '<div class="panel-heading">Course Information</div>';
         $return .= '<div class="panel-body"><table>';
 
 		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
