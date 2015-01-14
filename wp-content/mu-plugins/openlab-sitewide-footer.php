@@ -37,8 +37,8 @@ function cuny_local_env_flag() {
 		<?php
 	}
 }
-add_action( 'wp_footer', 'cuny_local_env_flag' );
-add_action( 'admin_footer', 'cuny_local_env_flag' );
+//add_action( 'wp_footer', 'cuny_local_env_flag' );
+//add_action( 'admin_footer', 'cuny_local_env_flag' );
 
 add_action('wp_enqueue_scripts','wds_jquery');
 function wds_jquery() {
