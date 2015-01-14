@@ -20,6 +20,7 @@ function openlab_hide_plugins( $plugins ) {
 			'buddypress-docs/loader.php',
 			'buddypress-group-email-subscription/bp-activity-subscription.php',
 			'bp-template-pack/loader.php',
+                        'staticpress/plugin.php',
 			'cac-group-announcements/cac-group-announcements.php',
 			'cubepoints-buddypress-integration/loader.php',
                         'digressit/digressit.php',
