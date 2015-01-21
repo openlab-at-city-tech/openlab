@@ -8576,7 +8576,8 @@ body .align-left {
   padding-top: 0;
 }
 .archive h2.help-title,
-.archive .help-tags {
+.archive .help-tags,
+.archive .cat-list {
   margin-left: 21px;
 }
 /**breadcrumbs**/
