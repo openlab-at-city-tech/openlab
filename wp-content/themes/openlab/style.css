@@ -7747,10 +7747,13 @@ body .align-left {
 .groupblog-setup th {
   width: 25%;
 }
+.ct-group-meta tr label {
+  margin-right: 32px;
+}
 .ct-group-meta tr label input[type="checkbox"] {
   margin-top: -2px;
   margin-right: 5px;
-  margin-left: 32px;
+  margin-left: 0;
   vertical-align: middle;
 }
 .ct-group-meta tr label:first-child input[type="checkbox"] {
