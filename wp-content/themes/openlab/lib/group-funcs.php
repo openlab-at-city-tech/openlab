@@ -607,7 +607,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
     <div class="radio group-site">
 
-        <h4><?php _e('Public', 'buddypress') ?></h4>
+        <h5><?php _e('Public', 'buddypress') ?></h5>
         <p id="search-setting-note" class="italics note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</p>
         <div class="row">
             <div class="col-sm-23 col-sm-offset-1">
@@ -619,7 +619,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
-            <h4><?php _e('Private', 'buddypress') ?></h4>
+            <h5><?php _e('Private', 'buddypress') ?></h5>
             <div class="row">
                 <div class="col-sm-23 col-sm-offset-1">
                     <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
@@ -628,7 +628,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
                 </div>
             </div>
 
-            <h4><?php _e('Hidden', 'buddypress') ?></h4>
+            <h5><?php _e('Hidden', 'buddypress') ?></h5>
             <div class="row">
                 <div class="col-sm-23 col-sm-offset-1">
                     <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label></p>
@@ -638,7 +638,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
         <?php else : ?>
 
             <?php /* Portfolios */ ?>
-            <h4>Private</h4>
+            <h5>Private</h5>
             <div class="row">
                 <div class="col-sm-23 col-sm-offset-1">
                     <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
