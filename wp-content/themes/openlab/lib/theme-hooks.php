@@ -242,4 +242,4 @@ function openlab_style_bbp_subscribe_link($html, $r, $user_id, $topic_id){
     return $html;
 }
 
-add_filter('bbp_get_user_subscribe_link','openlab_style_bbp_subscribe_link');
+add_filter('bbp_get_user_subscribe_link','openlab_style_bbp_subscribe_link',10,4);
