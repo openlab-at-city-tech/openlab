@@ -8389,7 +8389,17 @@ body .align-left {
   font-size: 1.1em;
 }
 #doc-meta .toggle-content {
+  padding-top: 12px;
   width: 100%;
+}
+#doc-meta #toggle-table-settings .desc-column {
+  vertical-align: top;
+}
+#doc-meta #toggle-table-settings tr td {
+  padding-top: 12px;
+}
+#doc-meta #toggle-table-settings tr:first-child td {
+  padding-top: 0;
 }
 /**forum (bbpress) styles**/
 .forum #item-body {
