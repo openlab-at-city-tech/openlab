@@ -8449,6 +8449,12 @@ body .align-left {
   padding: 0;
 }
 @media (max-width: 767px) {
+  #content #bbpress-forums .forum-titles .bbp-topic-voice-count,
+  #content #bbpress-forums .bp_group .bbp-topic-voice-count,
+  #content #bbpress-forums .forum-titles .bbp-topic-freshness,
+  #content #bbpress-forums .bp_group .bbp-topic-freshness {
+    display: none;
+  }
   #content #bbpress-forums #subscription-toggle,
   #content #bbpress-forums #favorite-toggle {
     display: none;
