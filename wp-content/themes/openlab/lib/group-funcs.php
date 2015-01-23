@@ -272,8 +272,8 @@ function openlab_group_archive() {
 
                                 <?php
                                 $len = strlen(bp_get_group_description());
-                                if ($len > 135) {
-                                    $this_description = substr(bp_get_group_description(), 0, 135);
+                                if ($len > 110) {
+                                    $this_description = substr(bp_get_group_description(), 0, 110);
                                     $this_description = str_replace("</p>", "", $this_description);
                                     echo $this_description . '&hellip; <a href="' . bp_get_group_permalink() . '">See&nbsp;More</a></p>';
                                 } else {
@@ -881,7 +881,7 @@ function openlab_group_profile_activity_list() {
                                                     // Oh, bbPress.
                                                     $last_reply = get_post($last_reply_id);
                                                     if (!empty($last_reply->post_content)) {
-                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 135);
+                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 110);
                                                         echo $last_topic_content;
                                                     }
                                                     ?>
@@ -919,7 +919,7 @@ function openlab_group_profile_activity_list() {
                                             the_title();
                                             echo '</h6>';
                                             ?>
-                                            <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 135); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
+                                            <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 110); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
                                             <?php
                                             echo '</div></div>';
                                         endwhile;
@@ -1292,7 +1292,7 @@ function openlab_show_site_posts_and_comments() {
             foreach ($wp_posts as $wp_post) {
                 $posts[] = array(
                     'title' => $wp_post->post_title,
-                    'content' => strip_tags(bp_create_excerpt($wp_post->post_content, 135, array('html' => true))),
+                    'content' => strip_tags(bp_create_excerpt($wp_post->post_content, 110, array('html' => true))),
                     'permalink' => get_permalink($wp_post->ID)
                 );
             }
@@ -1313,7 +1313,7 @@ function openlab_show_site_posts_and_comments() {
                 $post_id = $wp_comment->comment_post_ID;
 
                 $comments[] = array(
-                    'content' => strip_tags(bp_create_excerpt($wp_comment->comment_content, 135, array('html' => false))),
+                    'content' => strip_tags(bp_create_excerpt($wp_comment->comment_content, 110, array('html' => false))),
                     'permalink' => get_permalink($post_id)
                 );
             }
