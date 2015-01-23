@@ -84,6 +84,7 @@ add_action('wp_enqueue_scripts', 'openlab_load_scripts');
  * Giving the main stylesheet the highest priority among stylesheets to make sure it loads last
  */
 function openlab_load_scripts_high_priority() {
+    global $post;
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
@@ -96,6 +97,11 @@ function openlab_load_scripts_high_priority() {
 
     wp_register_style('main-styles', get_stylesheet_uri(), array(), '20130604', 'all');
     wp_enqueue_style('main-styles');
+
+    if ($post->post_type == 'help') {
+        wp_register_style('print-styles', get_stylesheet_directory_uri().'/css/print.css', array(), '2015', 'print');
+        wp_enqueue_style('print-styles');
+    }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);
@@ -194,12 +200,12 @@ function get_the_content_with_formatting($more_link_text = '(more...)', $stripte
 }
 
 /**
-* Get a value from a failed POST request, especially during registration.
-*/
-function openlab_post_value( $key ) {
-$value = '';
-if ( ! empty( $_POST[ $key ] ) ) {
-$value = wp_unslash( $_POST[ $key ] );
-}
-return $value;
+ * Get a value from a failed POST request, especially during registration.
+ */
+function openlab_post_value($key) {
+    $value = '';
+    if (!empty($_POST[$key])) {
+        $value = wp_unslash($_POST[$key]);
+    }
+    return $value;
 }
