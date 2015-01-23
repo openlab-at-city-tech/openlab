@@ -8352,7 +8352,7 @@ body .align-left {
 }
 .doctable-panel {
   padding-bottom: 12px;
-  min-width: 330px;
+  min-width: 480px;
 }
 .doctable-panel .doctable tr:nth-child(2n) {
   background-color: #ffffff;
@@ -8493,6 +8493,17 @@ body .align-left {
 @media (max-width: 767px) {
   #invite-anyone-group-list.group-list .group-item-wrapper {
     height: auto;
+  }
+}
+.sent-invites-panel {
+  min-width: 480px;
+}
+@media (max-width: 767px) {
+  .sent-invites-panel .panel-body {
+    padding: 15px 0;
+  }
+  .sent-invites-panel .panel-body p {
+    padding: 0 10px;
   }
 }
 /**member profiles**/

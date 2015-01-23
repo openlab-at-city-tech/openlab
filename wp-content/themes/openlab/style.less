@@ -1405,7 +1405,7 @@ body{
 }
 .doctable-panel{
     padding-bottom: 12px;
-    min-width: 330px;
+    min-width: 480px;
     .doctable{
         tr:nth-child(2n) {
             background-color: @white;
@@ -1573,6 +1573,17 @@ body{
             }
             @media (max-width:@screen-xs-max){
                 height: auto;
+            }
+        }
+    }
+}
+.sent-invites-panel{
+    min-width: 480px;
+    @media (max-width: @screen-xs-max){
+        .panel-body{
+            padding: 15px 0;
+            p{
+                padding: 0 10px;
             }
         }
     }
