@@ -1502,10 +1502,33 @@ body{
                 font-size: @font-size-base;
             }
         }
+        .bbp-header{
+            .bbp-reply-author{
+                text-align: left;
+            } 
+            .bbp-reply-content{
+                margin-left: 130px;
+            }
+        }
+        .bp_group{
+            .bbp-reply-author{
+                padding-top: 12px;
+                .avatar{
+                    position: relative;
+                    top: 0;
+                }
+            }
+        }
         fieldset.bbp-form {
             border: none;
             margin-bottom: 0;
             padding: 0;
+        }
+        @media (max-width: @screen-xs-max){
+            #subscription-toggle,
+            #favorite-toggle{
+                display: none;
+            }
         }
     }
 }

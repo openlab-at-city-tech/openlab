@@ -8430,10 +8430,29 @@ body .align-left {
 #content #bbpress-forums ul p {
   font-size: 14px;
 }
+#content #bbpress-forums .bbp-header .bbp-reply-author {
+  text-align: left;
+}
+#content #bbpress-forums .bbp-header .bbp-reply-content {
+  margin-left: 130px;
+}
+#content #bbpress-forums .bp_group .bbp-reply-author {
+  padding-top: 12px;
+}
+#content #bbpress-forums .bp_group .bbp-reply-author .avatar {
+  position: relative;
+  top: 0;
+}
 #content #bbpress-forums fieldset.bbp-form {
   border: none;
   margin-bottom: 0;
   padding: 0;
+}
+@media (max-width: 767px) {
+  #content #bbpress-forums #subscription-toggle,
+  #content #bbpress-forums #favorite-toggle {
+    display: none;
+  }
 }
 /**invite-anyone specific**/
 #invite-anyone-invite-list li {
