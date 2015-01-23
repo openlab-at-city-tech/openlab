@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-sm-16">
                             
-                                <p class="italics"><?php _e( 'Upload an image to use as an avatar for this ' . bp_get_group_type() . '. The image will be shown on the main ' . bp_get_group_type() . ' page, and in search results.', 'buddypress') ?></p>
+                                <p class="italics"><?php _e( 'Your avatar will be used on your profile and throughout the site. If there is a Gravatar associated with your account email we will use that, or you can upload an image from your computer. Click below to select a JPG, GIF or PNG format photo from your computer and then click "Upload Image" to proceed.', 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
                                     <div class="form-group form-inline">
