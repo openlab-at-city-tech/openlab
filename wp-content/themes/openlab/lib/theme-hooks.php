@@ -54,12 +54,12 @@ function openlab_header_bar() {
 add_action('bp_before_header', 'openlab_header_bar', 10);
 
 function openlab_custom_menu_items($items, $menu) {
-    global $post,$bp;
-    
+    global $post, $bp;
+
     if ($menu->theme_location == 'main') {
 
         $opl_link = '';
-        
+
         $classes = '';
 
         if (is_user_logged_in()) {
@@ -71,13 +71,11 @@ function openlab_custom_menu_items($items, $menu) {
         $mobile_search = '<li class="visible-xs search-mobile">' . openlab_site_wide_bp_search(true) . '</li>';
 
         return $items . $opl_link . $mobile_search;
-    
-    } else if ($menu->theme_location == 'aboutmenu'){
-        
-        $items = str_replace('Privacy Policy','<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy',$items);
-        
+    } else if ($menu->theme_location == 'aboutmenu') {
+
+        $items = str_replace('Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items);
+
         return $items;
-        
     } else {
         return $items;
     }
@@ -95,9 +93,9 @@ function openlab_form_classes($classes) {
 add_filter('bp_field_css_classes', 'openlab_form_classes');
 
 function openlab_hide_docs_native_menu($menu_template) {
-    
-    $path = STYLESHEETPATH.'/buddypress/groups/single/docs/docs-header.php';
-    
+
+    $path = STYLESHEETPATH . '/buddypress/groups/single/docs/docs-header.php';
+
     return $path;
 }
 
@@ -195,51 +193,53 @@ add_action('bp_group_manage_members_admin_item', 'openlab_manage_members_email_s
 
 function openlab_forum_tabs_output() {
     ?>
-        <ul class="nav nav-inline">
-            <?php openlab_forum_tabs(); ?>
-        </ul>
-    <?php
-}
-
-add_action('bbp_before_group_forum_display','openlab_forum_tabs_output');
-
-function openlab_custom_bbp_content($output, $args, $post_content){
-    
-    if(strpos($output,'textarea') !== false){
-        $output = str_replace('wp-editor-area','form-control',$output);
+    <ul class="nav nav-inline">
+    <?php openlab_forum_tabs(); ?>
+    </ul>
+        <?php
     }
+
+    add_action('bbp_before_group_forum_display', 'openlab_forum_tabs_output');
+
+    function openlab_custom_bbp_content($output, $args, $post_content) {
+
+        if (strpos($output, 'textarea') !== false) {
+            $output = str_replace('wp-editor-area', 'form-control', $output);
+        }
+
+        return $output;
+    }
+
+    add_filter('bbp_get_the_content', 'openlab_custom_bbp_content', 10, 3);
+
+    function openlab_bbp_pagination($pag_args) {
+
+        $pag_args['prev_text'] = __('<i class="fa fa-angle-left"></i>');
+        $pag_args['next_text'] = __('<i class="fa fa-angle-right"></i>');
+        $pag_args['type'] = 'list';
+
+        return $pag_args;
+    }
+
+    add_filter('bbp_topic_pagination', 'openlab_bbp_pagination');
+
+    function openlab_bbp_paginatin_custom_markup($pagination) {
+
+        $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+        return $pagination;
+    }
+
+    add_filter('bbp_get_forum_pagination_links', 'openlab_bbp_paginatin_custom_markup');
+
+    function openlab_style_bbp_subscribe_link($html, $r, $user_id, $topic_id) {
+
+        if (!bbp_is_single_topic()) {
+            $html = str_replace('class="subscription-toggle"', 'class="subscription-toggle btn btn-primary btn-margin btn-margin-top no-deco"', $html);
+        }
+
+        return $html;
+    }
+
+    add_filter('bbp_get_user_subscribe_link', 'openlab_style_bbp_subscribe_link', 10, 4);
     
-    return $output;
-    
-}
-
-add_filter('bbp_get_the_content','openlab_custom_bbp_content',10,3);
-
-function openlab_bbp_pagination($pag_args) {
-    
-    $pag_args['prev_text'] = __('<i class="fa fa-angle-left"></i>');
-    $pag_args['next_text'] = __('<i class="fa fa-angle-right"></i>');
-    $pag_args['type'] = 'list';
-
-    return $pag_args;
-}
-
-add_filter('bbp_topic_pagination', 'openlab_bbp_pagination');
-
-function openlab_bbp_paginatin_custom_markup($pagination){
-    
-    $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
-    
-    return $pagination;
-}
-
-add_filter('bbp_get_forum_pagination_links','openlab_bbp_paginatin_custom_markup');
-
-function openlab_style_bbp_subscribe_link($html, $r, $user_id, $topic_id){
-    
-    $html = str_replace('class="subscription-toggle"','class="subscription-toggle btn btn-primary btn-margin btn-margin-top no-deco"',$html);
-    
-    return $html;
-}
-
-add_filter('bbp_get_user_subscribe_link','openlab_style_bbp_subscribe_link',10,4);
