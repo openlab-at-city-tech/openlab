@@ -2357,3 +2357,23 @@ function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
 	return $public;
 }
 add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
+
+/**
+ * Don't let users logged into an account created by Social remain logged in
+ *
+ * See #3476
+ */
+function openlab_log_out_social_accounts() {
+       if ( ! is_user_logged_in() ) {
+               return;
+       }
+
+       $social = get_user_meta( get_current_user_id(), 'social_commenter', true );
+
+       if ( 'true' === $social ) {
+               wp_clear_auth_cookie();
+               wp_redirect( '/' );
+               die();
+       }
+}
+add_action( 'init', 'openlab_log_out_social_accounts', 0 );
