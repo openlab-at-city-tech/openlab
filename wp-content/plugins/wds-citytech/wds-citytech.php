@@ -2364,16 +2364,28 @@ add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
  * See #3476
  */
 function openlab_log_out_social_accounts() {
-       if ( ! is_user_logged_in() ) {
-               return;
-       }
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
 
-       $social = get_user_meta( get_current_user_id(), 'social_commenter', true );
+	$user_id = get_current_user_id();
+	$social = get_user_meta( $user_id, 'social_commenter', true );
 
-       if ( 'true' === $social ) {
-               wp_clear_auth_cookie();
-               wp_redirect( '/' );
-               die();
-       }
+	if ( 'true' === $social ) {
+		// Make sure there's no last_activity, so the user doesn't show in directories.
+		BP_Core_User::delete_last_activity( $user_id );
+
+		// Mark the user as spam, so the profile can't be viewed directly.
+		global $wpdb;
+		$wpdb->update( $wpdb->users, array( 'status' => 1 ), array( 'ID' => $user_id ) );
+
+		$user = new WP_User( $user_id );
+		clean_user_cache( $user );
+
+		// Log out and redirect.
+		wp_clear_auth_cookie();
+		wp_redirect( '/' );
+		die();
+	}
 }
 add_action( 'init', 'openlab_log_out_social_accounts', 0 );
