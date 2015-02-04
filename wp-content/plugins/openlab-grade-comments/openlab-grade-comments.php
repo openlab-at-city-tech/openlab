@@ -256,3 +256,38 @@ function olgc_is_author( $post_id = null ) {
 
 	return is_user_logged_in() && get_current_user_id() == $post->post_author;
 }
+
+/** Admin ********************************************************************/
+
+/**
+ * Add Grade column to wp-admin Posts list.
+ */
+function olgc_add_grade_column( $columns ) {
+	$columns['grade'] = __( 'Grade', 'openlab-grade-comments' );
+	return $columns;
+}
+add_filter( 'manage_post_posts_columns', 'olgc_add_grade_column' );
+
+/**
+ * Content of the Grade column.
+ */
+function olgc_add_grade_column_content( $column_name, $post_id ) {
+	if ( 'grade' !== $column_name ) {
+		return;
+	}
+
+	// Find the first available grade on a post comment.
+	$comments = get_comments( array(
+		'post_id' => $post_id,
+	) );
+
+	foreach ( $comments as $comment ) {
+		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
+
+		if ( $grade ) {
+			echo esc_html( $grade );
+			break;
+		}
+	}
+}
+add_action( 'manage_post_posts_custom_column', 'olgc_add_grade_column_content', 10, 2 );
