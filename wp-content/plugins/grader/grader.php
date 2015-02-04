@@ -351,6 +351,9 @@ function grader_user_has_cap ($allcaps,$caps,$args)
 	global $current_user;
 
 	if ($comment == NULL && $post==NULL) return $allcaps;
+	if ( ! is_user_logged_in() ) {
+		return $allcaps;
+	}
 	if (grader_is_grader($current_user->data)) return $allcaps;
 	$grade_comment_id = grader_get_grade_comment($post);
 	if ($grade_comment_id===false) return $allcaps;
