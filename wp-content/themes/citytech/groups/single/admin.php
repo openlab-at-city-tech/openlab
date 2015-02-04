@@ -71,17 +71,13 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 	<?php do_action( 'bp_before_group_settings_admin' ); ?>
 
-	<?php if ( function_exists('bp_forums_is_installed_correctly') && !openlab_is_portfolio() ) : ?>
-
-		<?php if ( bp_forums_is_installed_correctly() ) : ?>
-
-			<div class="checkbox">
-        <h4>Discussion Settings</h4>
-        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
-				<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
-			</div>
-
-		<?php endif; ?>
+	<?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
+		<?php $forum_enabled = bp_group_is_forum_enabled() ?>
+		<div class="checkbox">
+			<h4>Discussion Settings</h4>
+			<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
+			<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ) ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
+		</div>
 
 		<hr />
 	<?php endif; ?>
