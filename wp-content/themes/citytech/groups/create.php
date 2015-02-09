@@ -166,18 +166,8 @@ function cuny_create_group() {
 
                     <?php do_action('bp_before_group_settings_creation_step'); ?>
 
-                    <?php /* Don't show Discussion toggle for portfolios */
-                    /* Changed this to hidden in case this value is needed */
-                    ?>
-
 			<?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
-				<div class="checkbox">
-					<h4>Discussion Settings</h4>
-					<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
-					<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1" checked="checked" /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
-				</div>
-
-				<hr />
+				<input type="hidden" name="group-show-forum" value="1" />
 			<?php endif; ?>
 
                     <hr />
