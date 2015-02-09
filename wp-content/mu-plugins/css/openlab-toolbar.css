@@ -6964,7 +6964,6 @@ button.oplb-bs .close {
 }
 html {
   position: relative;
-  padding-bottom: 228px;
   height: auto;
 }
 #wpadminbar {
@@ -7198,6 +7197,10 @@ html {
   line-height: 1.42857;
   padding-top: 30px;
   background: #f0f0f0;
+}
+#openlab-footer.placeholder {
+  position: relative;
+  visibility: hidden;
 }
 #openlab-footer .container-fluid {
   max-width: 1155px;
