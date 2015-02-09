@@ -169,19 +169,16 @@ function cuny_create_group() {
                     <?php /* Don't show Discussion toggle for portfolios */
                     /* Changed this to hidden in case this value is needed */
                     ?>
-                    <?php if (!openlab_is_portfolio() && function_exists('bp_forums_is_installed_correctly')) : ?>
-                        <?php if (bp_forums_is_installed_correctly()) : ?>
-                            <div class="checkbox">
-                                <label><input type="hidden" name="group-show-forum" id="group-show-forum" value="1"<?php if (bp_get_new_group_enable_forum()) { ?> checked="checked"<?php } ?> /></label>
-                            </div>
-            <?php else : ?>
-                            <?php if (is_super_admin()) : ?>
-                                <div class="checkbox">
-                                    <label><input type="hidden" disabled="disabled" name="disabled" id="disabled" value="0" /> <?php printf(__('<strong>Attention Site Admin:</strong> ' . $group_type . ' forums require the <a href="%s">correct setup and configuration</a> of a bbPress installation.', 'buddypress'), bp_get_root_domain() . '/wp-admin/admin.php?page=bb-forums-setup') ?></label>
-                                </div>
-                <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endif; ?>
+
+			<?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
+				<div class="checkbox">
+					<h4>Discussion Settings</h4>
+					<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
+					<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1" checked="checked" /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
+				</div>
+
+				<hr />
+			<?php endif; ?>
 
                     <hr />
 
