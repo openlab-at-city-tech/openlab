@@ -257,6 +257,30 @@ function olgc_is_author( $post_id = null ) {
 	return is_user_logged_in() && get_current_user_id() == $post->post_author;
 }
 
+/**
+ * Prevent private comments from appearing in BuddyPress activity streams.
+ *
+ * For now, we are going with the sledgehammer of deleting the comment altogether. In the
+ * future, we could use hide_sitewide.
+ */
+function olgc_prevent_private_comments_from_creating_bp_activity_items( $comment_id ) {
+	$is_private = get_comment_meta( $comment_id, 'olgc_is_private', true );
+
+	if ( ! $is_private ) {
+		return;
+	}
+
+	if ( 'comment_post' === current_action() ) {
+		remove_action( 'comment_post', 'bp_blogs_record_comment', 10, 2 );
+	} else if ( 'edit_comment' === current_action() ) {
+		remove_action( 'edit_comment', 'bp_blogs_record_comment', 10 );
+	}
+}
+add_action( 'comment_post', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
+add_action( 'edit_comment', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
+
+
+
 /** Admin ********************************************************************/
 
 /**
