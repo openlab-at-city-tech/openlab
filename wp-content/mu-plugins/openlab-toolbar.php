@@ -207,6 +207,13 @@ class OpenLab_Admin_Bar {
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
+			'id'     => 'my-settings',
+			'title'  => 'My Settings',
+			'href'   => trailingslashit( bp_get_root_domain() . '/settings' )
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
 			'title'  => 'My Courses',
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' )
