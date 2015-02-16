@@ -51,7 +51,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 					<?php do_action( 'bp_group_header_actions' ); ?>
 			</div>
 		<?php endif; ?>
-		</div><!-- #course-header-avatar -->	
+		</div><!-- #course-header-avatar -->
 		<div id="course-header-content" class="alignleft">
 			<h2 class="course-title"><?php echo $group_name; ?> <a href="<?php bp_group_permalink() ?>/feed" class="rss"><img src="<?php bloginfo('stylesheet_directory') ?>/images/icon-RSS.png" alt="Subscribe To <?php echo $group_name; ?>'s Feeds"></a></h2>
 			<div class="info-line"><span class="highlight"><?php if ($section != "") {echo "Section Code: $section";} ?></span></div>
@@ -66,24 +66,24 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 				$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
 				?>
 				<div class="info-line" style="margin-top:2px;"><?php echo $wds_course_code;?> | <?php echo $wds_departments;?> | <?php echo $wds_semester;?> <?php echo $wds_year;?></div>
-			
+
 			</div><!-- .course-info -->
 			<?php //do_action( 'bp_before_group_header_meta' ) ?>
 			<div class="course-description">
 				<?php echo apply_filters('the_content', $group_description ); ?>
 			</div>
 			<?php //do_action( 'bp_group_header_meta' ) ?>
-			
+
 			<?php if ($html): ?>
 			<div class="course-html-block">
 				<?php echo $html; ?>
 			</div>
 			<?php endif; ?>
 		</div><!-- .header-content -->
-	
+
 	<?php do_action( 'bp_after_group_header' ) ?>
-	
+
 	<?php do_action( 'template_notices' ) ?>
    </div><!-- #single-course-header -->
     <?php endif; ?>
-	
+
