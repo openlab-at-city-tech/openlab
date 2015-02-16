@@ -209,7 +209,7 @@ class OpenLab_Admin_Bar {
 			'parent' => 'my-openlab',
 			'id'     => 'my-settings',
 			'title'  => 'My Settings',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . '/settings' )
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'settings' )
 		) );
 
 		$wp_admin_bar->add_node( array(
