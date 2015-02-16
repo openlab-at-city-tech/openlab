@@ -11,13 +11,11 @@ $group_name = $bp->groups->current_group->name;
 $group_description = $bp->groups->current_group->description;
 // $faculty = groups_get_groupmeta($group_id, 'wds_faculty');
 $faculty_id = $bp->groups->current_group->admins[0]->user_id;
-$first_name= ucfirst(xprofile_get_field_data( 'First Name', $faculty_id));
-$last_name= ucfirst(xprofile_get_field_data( 'Last Name', $faculty_id));
 $group_type = openlab_get_group_type( bp_get_current_group_id());
 
 /*
-$member_arg = Array("exclude_admins_mods"=>false); 
-if ( bp_group_has_members($member_arg) ) : 
+$member_arg = Array("exclude_admins_mods"=>false);
+if ( bp_group_has_members($member_arg) ) :
 	  while ( bp_group_members() ) : bp_group_the_member();
 	      echo "<br />Member ID: " . bp_get_group_member_id();
 	      echo "<br />BP: <pre>";print_r($bp);echo "</pre>";
@@ -59,7 +57,7 @@ $html = groups_get_groupmeta($group_id, 'wds_course_html');
 			<div class="info-line"><span class="highlight"><?php if ($section != "") {echo "Section Code: $section";} ?></span></div>
 			<div class="info-line"><span class="highlight"><?php bp_group_type() ?></span> <span class="activity"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ) ?></span></div>
 			<div class="course-byline">
-				<span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>  
+				<span class="faculty-name"><b>Faculty:</b> <?php echo bp_core_get_user_displayname( $faculty_id ) ?></span>
 			<!--	<span class="days-offered"><?php // printf( __( '%s Days offered', 'buddypress' ), bp_core_time_since( $bp->groups->current_group->last_activity ) ) ?></span> -->
 				<?php
 				$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );

@@ -75,8 +75,11 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 		  			$wds_departments=groups_get_groupmeta($group_id, 'wds_departments' );
 					?>
                     <div class="info-line">
-					<?php if ($wds_faculty){
-						echo $wds_faculty;
+					<?php
+
+					// $wds_faculty is used only as a "faculty exists" check.
+					if ( $wds_faculty ) {
+						echo bp_core_get_user_displayname( bp_get_group_creator_id() );
 					}
 					if ($wds_departments){
 						echo ' | '.$wds_departments;
