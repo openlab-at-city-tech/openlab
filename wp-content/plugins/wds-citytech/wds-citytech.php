@@ -587,11 +587,11 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 
 	$all_departments = array(
 		'tech' => array(
-			'advertising-design-and-graphic-arts' => array(
-				'label' => 'Advertising Design and Graphic Arts',
-			),
 			'architectural-technology' => array(
 				'label' => 'Architectural Technology',
+			),
+			'communication-design' => array(
+				'label' => 'Communication Design',
 			),
 			'computer-engineering-technology' => array(
 				'label' => 'Computer Engineering Technology',
@@ -836,12 +836,11 @@ function wds_load_group_type( $group_type ) {
 		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
 		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
-	//$return. = '<tr>';
-   //$return. = ' <td>Faculty:';
-		//$return. = '<td><input type="text" name="wds_faculty" value="'.$bp->loggedin_user->fullname.'"></td>';
-	//$return. = '</tr>';
+
 	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
-	$return.= '<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
+
+	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
+	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
 	$return.= '<tr class="department-title">';
 
@@ -2357,3 +2356,64 @@ function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
 	return $public;
 }
 add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
+
+/**
+ * Handle discussion forum toggling for groups.
+ */
+function openlab_bbp_group_toggle( $group_id ) {
+	$enable_forum = ! empty( $_POST['openlab-edit-group-forum'] );
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$group->enable_forum = $enable_forum;
+	$group->save();
+}
+add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
+
+/**
+ * If Discussion is disabled for a group, ensure it's removed from the menu.
+ *
+ * Gah gah gah gah gah gah.
+ */
+function openlab_bbp_remove_group_nav_item() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	$enable_forum = groups_get_current_group()->enable_forum;
+
+	if ( ! $enable_forum ) {
+		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
+	}
+}
+add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
+
+/**
+ * Don't let users logged into an account created by Social remain logged in
+ *
+ * See #3476
+ */
+function openlab_log_out_social_accounts() {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$user_id = get_current_user_id();
+	$social = get_user_meta( $user_id, 'social_commenter', true );
+
+	if ( 'true' === $social ) {
+		// Make sure there's no last_activity, so the user doesn't show in directories.
+		BP_Core_User::delete_last_activity( $user_id );
+
+		// Mark the user as spam, so the profile can't be viewed directly.
+		global $wpdb;
+		$wpdb->update( $wpdb->users, array( 'status' => 1 ), array( 'ID' => $user_id ) );
+
+		$user = new WP_User( $user_id );
+		clean_user_cache( $user );
+
+		// Log out and redirect.
+		wp_clear_auth_cookie();
+		wp_redirect( '/' );
+		die();
+	}
+}
+add_action( 'init', 'openlab_log_out_social_accounts', 0 );

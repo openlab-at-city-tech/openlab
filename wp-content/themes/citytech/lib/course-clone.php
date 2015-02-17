@@ -426,6 +426,7 @@ class Openlab_Clone_Course_Group {
 			'post_type' => bbp_get_topic_post_type(),
 			'post_parent' => $source_forum_id,
 			'posts_per_page' => -1,
+			'author__in' => $source_group_admins,
 		) );
 
 		$group = groups_get_group( array( 'group_id' => $this->group_id ) );
@@ -689,9 +690,11 @@ class Openlab_Clone_Course_Site {
 			}
 		}
 
-		restore_current_blog();
+		// Copy over attachments. Whee!
+		$upload_dir = wp_upload_dir();
+		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
-		// @todo - move attachment files? May not be necessary
+		restore_current_blog();
 	}
 
 	protected function get_source_group_admins() {
@@ -704,6 +707,49 @@ class Openlab_Clone_Course_Site {
 		}
 
 		return $this->source_group_admins;
+	}
+
+	/**
+	 * Copy a file, or recursively copy a folder and its contents
+	 *
+	 * @author      Aidan Lister <aidan@php.net>
+	 * @version     1.0.1
+	 * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
+	 * @param       string   $source    Source path
+	 * @param       string   $dest      Destination path
+	 * @return      bool     Returns TRUE on success, FALSE on failure
+	 */
+	function copyr($source, $dest) {
+	    // Check for symlinks
+	    if (is_link($source)) {
+		return symlink(readlink($source), $dest);
+	    }
+
+	    // Simple copy for a file
+	    if (is_file($source)) {
+		return copy($source, $dest);
+	    }
+
+	    // Make destination directory
+	    if (!is_dir($dest)) {
+		mkdir($dest);
+	    }
+
+	    // Loop through the folder
+	    $dir = dir($source);
+	    while (false !== $entry = $dir->read()) {
+		// Skip pointers
+		if ($entry == '.' || $entry == '..') {
+		    continue;
+		}
+
+		// Deep copy directories
+		$this->copyr("$source/$entry", "$dest/$entry");
+	    }
+
+	    // Clean up
+	    $dir->close();
+	    return true;
 	}
 }
 
