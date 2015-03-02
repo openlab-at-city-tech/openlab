@@ -293,6 +293,16 @@ HTML;
                             'class' => 'admin-bar-menu-item'
                         )
 		) );
+                
+                $wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-settings',
+			'title'  => 'My Settings',
+			'href'   => bp_loggedin_user_domain().'/settings/',
+                        'meta' => array(
+                            'class' => 'admin-bar-menu-item'
+                        )
+		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
