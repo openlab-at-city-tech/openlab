@@ -1744,6 +1744,16 @@ input#submit_topic,input#submit_reply {
     margin-top:20px;
 }
 
+#bbpress-forums .reply a,
+#bbpress-forums .reply a:visited {
+	color: inherit;
+	background: none;
+	float: none;
+	font-size: inherit;
+	text-transform: none;
+	text-decoration: inherit;
+}
+
 /* Form Styling */
 /** boxes **/
 #search-terms,#search-which,#whats-new-post-in,#activity-filter-select select,.ac-input,.dir-search label input,.item-list-tabs ul li.filter select,#field_ids,#message_content,#subject,#send-notice,#send-to-input,#pass1,#pass2 {
