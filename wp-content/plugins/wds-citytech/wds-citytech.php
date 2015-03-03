@@ -2365,8 +2365,43 @@ function openlab_bbp_group_toggle( $group_id ) {
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 	$group->enable_forum = $enable_forum;
 	$group->save();
+
+	if ( $enable_forum ) {
+		groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+
+	}
 }
 add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
+
+/**
+ * Failsafe method for determining whether forums should be enabled for a group.
+ *
+ * Another kewl hack due to issues with bbPress. It should be possible to rely on the `enable_forum` group toggle to
+ * determine whether the Discussion tab should be shown. But something about the combination between the old bbPress
+ * and the new one means that some groups used to have an associated forum_id without having enable_forum turned on,
+ * yet still expect to see the Discussion tab. Our workaround is to require the explicit presence of a 'disable' flag
+ * for a group's Discussion tab to be turned off.
+ */
+function openlab_is_forum_enabled_for_group( $group_id = false ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	$disable = (bool) groups_get_groupmeta( $group_id, 'openlab_disable_forum' );
+	$forum_id = groups_get_groupmeta( $group_id, 'forum_id' );
+
+	if ( $disable || ! $forum_id ) {
+		return false;
+	}
+
+	return true;
+}
 
 /**
  * If Discussion is disabled for a group, ensure it's removed from the menu.
@@ -2378,9 +2413,7 @@ function openlab_bbp_remove_group_nav_item() {
 		return;
 	}
 
-	$enable_forum = groups_get_current_group()->enable_forum;
-
-	if ( ! $enable_forum ) {
+	if ( ! openlab_is_forum_enabled_for_group() ) {
 		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
 	}
 }
