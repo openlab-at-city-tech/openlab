@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 3.5.2 (BP 1.8)
-Stable tag: 3.4
+Tested up to: 4.0.1 (BP 2.1.1)
+Stable tag: 3.5
 
 == Description ==
 
@@ -87,6 +87,17 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 3.5 =
+* Fixes bug so that user no longer gets an email for their own group activity update
+* Improved email content parsing, so that the URLs contained in links are not completed removed from the email
+* Improved JavaScript and CSS asset loading, for better cache busting
+* Fixed bug that caused email footer to be repeated multiple times in certain cases
+* Better support for plugin whitelabeling/changed directory names
+* Improved compatibility with the WP Better Emails plugin
+* Update JS not to use deprecated jQuery.live()
+* Improved compatibility with BuddyPress 2.2
+* Better filters for customizing the format of digest emails, nav item visibility, and redirect URLs
 
 = 3.4 =
 * Reinstate bbPress "Subscribe" option in forum threads for group members not subscribed to "All Mail"

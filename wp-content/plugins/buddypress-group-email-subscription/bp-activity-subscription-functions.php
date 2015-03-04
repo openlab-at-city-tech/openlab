@@ -102,7 +102,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 		$action = $activity->action  = sprintf( __( '%s started the forum topic "%s" in the group "%s"', 'bp-ass' ), bp_core_get_user_displayname( $post->poster_id ), $topic->topic_title, $group->name );
 
 		$subject     = apply_filters( 'bp_ass_new_topic_subject', $action . ' ' . $blogname, $action, $blogname );
-		$the_content = apply_filters( 'bp_ass_new_topic_content', $post->post_text, $activity );
+		$the_content = apply_filters( 'bp_ass_new_topic_content', $post->post_text, $activity, $topic, $group );
 	}
 	// this is a forum reply
 	else {
@@ -124,7 +124,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 		$activity->primary_link = $primary_link;
 
 		$subject     = apply_filters( 'bp_ass_forum_reply_subject', $action . ' ' . $blogname, $action, $blogname );
-		$the_content = apply_filters( 'bp_ass_forum_reply_content', $post->post_text, $activity );
+		$the_content = apply_filters( 'bp_ass_forum_reply_content', $post->post_text, $activity, $topic, $group );
 	}
 
 	// Convert entities and do other cleanup
@@ -133,7 +133,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 	// if group is not public, change primary link to login URL to verify
 	// authentication and for easier redirection after logging in
 	if ( $group->status != 'public' ) {
-		$primary_link = ass_get_login_redirect_url( $primary_link );
+		$primary_link = ass_get_login_redirect_url( $primary_link, 'legacy_forums_view' );
 
 		$text_before_primary = __( 'To view or reply to this topic, go to:', 'bp-ass' );
 
@@ -200,11 +200,12 @@ function ass_group_notification_forum_posts( $post_id ) {
 		$send_it = $notice = false;
 
 		// default settings link
-		$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ) );
+		$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ), 'legacy_forums_settings' );
 
 		// Self-notification emails
 		if ( $self_notify === true ) {
 			$send_it = true;
+			$group_status = 'self_notify';
 
 			// notification settings link
 			$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/';
@@ -258,6 +259,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 			// User is manually subscribed to this topic
 			elseif ( $topic_status == 'sub' ) {
 				$send_it = true;
+				$group_status = 'manual_topic';
 
 				// change settings link to the forum thread
 				// get rid of any query args and anchors from the thread permalink
@@ -271,6 +273,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 			// User started the topic and wants to receive email replies to his/her topic
 			elseif ( $topic->topic_poster == $user_id && isset( $ass_replies_to_my_topic[$user_id] ) && $ass_replies_to_my_topic[$user_id] != 'no' ) {
 				$send_it = true;
+				$group_status = 'replies_to_my_topic';
 
 				// override settings link to user's notifications
 				$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/';
@@ -284,6 +287,7 @@ function ass_group_notification_forum_posts( $post_id ) {
 			// User posted in this topic and wants to receive all subsequent replies
 			elseif ( isset( $previous_posters[$user_id] ) && isset( $ass_replies_after_me_topic[$user_id] ) && $ass_replies_after_me_topic[$user_id] != 'no' ) {
 				$send_it = true;
+				$group_status = 'replies_after_me_topic';
 
 				// override settings link to user's notifications
 				$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/';
@@ -297,12 +301,23 @@ function ass_group_notification_forum_posts( $post_id ) {
 
 		// if we're good to send, send the email!
 		if ( $send_it ) {
+			// One last chance to filter the message content
+			$user_message = apply_filters( 'bp_ass_forum_notification_message', $message . $notice, array(
+				'message'           => $message,
+				'notice'            => $notice,
+				'user_id'           => $user_id,
+				'subscription_type' => $group_status,
+				'content'           => $the_content,
+				'view_link'         => $primary_link,
+				'settings_link'     => $settings_link
+			) );
+
 			// Get the details for the user
 			$user = bp_core_get_core_userdata( $user_id );
 
 			// Send the email
 			if ( $user->user_email ) {
-				wp_mail( $user->user_email, $subject, $message . $notice );
+				wp_mail( $user->user_email, $subject, $user_message );
 			}
 		}
 
@@ -400,7 +415,7 @@ function ass_group_notification_activity( $content ) {
 	/* Subject & Content */
 	$blogname    = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
 	$subject     = apply_filters( 'bp_ass_activity_notification_subject', $action . ' ' . $blogname, $action, $blogname );
-	$the_content = apply_filters( 'bp_ass_activity_notification_content', $content->content, $content );
+	$the_content = apply_filters( 'bp_ass_activity_notification_content', $content->content, $content, $action, $group );
 	$the_content = ass_clean_content( $the_content );
 
 	/* If it's an activity item, switch the activity permalink to the group homepage rather than the user's homepage */
@@ -489,7 +504,8 @@ To view or reply, log in and go to:
 
 		// Self-notification email for bbPress posts
 		if ( $self_notify === true ) {
-			$send_it = true;
+			$send_it      = true;
+			$group_status = 'self_notify';
 
 			// notification settings link
 			$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/';
@@ -502,9 +518,15 @@ To view or reply, log in and go to:
 		// User is subscribed to "All Mail"
 		// OR user is subscribed to "New Topics" (bbPress 2)
 		} elseif ( $group_status == 'supersub' || ( $group_status == 'sub' && $type == 'bbp_topic_create' ) ) {
+
+            // if someone is signed up for all email and they post a group update, they should not receive an email
+            if ( 'activity_update' == $type && $sender_id === $user_id ) {
+                continue;
+            }
+
 			$send_it = true;
 
-			$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ) );
+			$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ), $group_status );
 
 			$notice  = __( 'Your email setting for this group is: ', 'bp-ass' ) . ass_subscribe_translate( $group_status );
 			$notice .= "\n" . sprintf( __( 'To change your email setting for this group, please log in and go to: %s', 'bp-ass' ), $settings_link );
@@ -514,12 +536,22 @@ To view or reply, log in and go to:
 
 		// if we're good to send, send the email!
 		if ( $send_it ) {
+			// One last chance to filter the message content
+			$user_message = apply_filters( 'bp_ass_activity_notification_message', $message . $notice, array(
+				'message'           => $message,
+				'notice'            => $notice,
+				'user_id'           => $user_id,
+				'subscription_type' => $group_status,
+				'content'           => $the_content,
+				'settings_link'     => ! empty( $settings_link ) ? $settings_link : '',
+			) );
+
 			// Get the details for the user
 			$user = bp_core_get_core_userdata( $user_id );
 
 			// Send the email
 			if ( $user->user_email ) {
-				wp_mail( $user->user_email, $subject, $message . $notice );
+				wp_mail( $user->user_email, $subject, $user_message );
 			}
 
 		}
@@ -725,9 +757,10 @@ add_action( 'login_init', 'ass_login_redirector', 1 );
  * @since 3.4
  *
  * @param string $url The URL you want to redirect to.
+ * @param string $context The context of the redirect.
  * @return mixed String of the login URL with the passed redirect link. Boolean false on failure.
  */
-function ass_get_login_redirect_url( $url = '' ) {
+function ass_get_login_redirect_url( $url = '', $context = '' ) {
 	$url = esc_url_raw( $url );
 
 	if ( empty( $url ) ) {
@@ -738,7 +771,7 @@ function ass_get_login_redirect_url( $url = '' ) {
 	$query_args = array(
 		'action'      => 'bpnoaccess',
 		'auth'        => 1,
-		'redirect_to' => urlencode( $url )
+		'redirect_to' => apply_filters( 'ass_login_redirect_to', urlencode( $url ), $context )
 	);
 
 	return add_query_arg(
@@ -1127,6 +1160,8 @@ function ass_get_default_subscription( $group = false ) {
 //	!TOPIC SUBSCRIPTION
 //
 
+/** BBPRESS *************************************************************/
+
 /**
  * Disables bbPress 2's subscription block if the user's group setting is set
  * to "All Mail".
@@ -1171,16 +1206,110 @@ function ass_bbp_subscriptions( $retval ) {
 add_filter( 'bbp_is_subscriptions_active', 'ass_bbp_subscriptions' );
 
 /**
+ * Stuff to do when the bbPress plugin is ready.
+ *
+ * @since 3.4.1
+ */
+function ass_bbp_ready() {
+	/**
+	 * bbPress v2.5.4 changed how emails are sent out.
+	 *
+	 * They now send one BCC email to their subscribers, so we have to filter out
+	 * the topic subscribers before their email is sent.
+	 */
+	if ( version_compare( bbp_get_version(), '2.5.4' ) >= 0 ) {
+		add_filter( 'bbp_subscription_mail_title', 'ass_bbp_add_topic_subscribers_filter',    99 );
+		add_action( 'bbp_pre_notify_subscribers',  'ass_bbp_remove_topic_subscribers_filter', 0 );
+
+	// bbPress <= v2.5.3
+	} else {
+		add_filter( 'bbp_subscription_mail_message', 'ass_bbp_disable_email', 10, 4 );
+	}
+}
+add_action( 'bbp_ready', 'ass_bbp_ready' );
+
+/**
+ * Removes subscriber from bbP's topic subscriber's list.
+ *
+ * If the recipient is already subscribed to the group's "All Mail" option, we
+ * remove the recipient from bbPress' subscription list to prevent duplicate
+ * emails.
+ *
+ * This scenario might happen if a user subscribed to a bunch of bbP group
+ * topics and later switched to the group's "All Mail" subscription.
+ *
+ * Note: Only applicable for bbPress 2.5.4 and above.
+ *
+ * @since 3.4.1
+ *
+ * @param array $retval Array of user IDs subscribed to a topic
+ * @return array
+ */
+function ass_bbp_remove_topic_subscribers( $retval = array() ) {
+	// make sure we're on a BP group page
+	if ( bp_is_group() ) {
+		global $bp;
+
+		// get group sub status
+		// we're using the direct, global reference for sanity's sake
+		$group_user_subscriptions = groups_get_groupmeta( $bp->groups->current_group->id, 'ass_subscribed_users' );
+
+		// loop through all bbP topic subscribers and check against group sub status
+		foreach ( $retval as $index => $user_id ) {
+			$user_subscription = isset( $group_user_subscriptions[$user_id] ) ? $group_user_subscriptions[$user_id] : false;
+
+			// if user's group status is "All Mail", remove user ID from topic subscribers
+			if ( 'supersub' === $user_subscription ) {
+				unset( $retval[$index] );
+			}
+		}
+	}
+
+	return $retval;
+}
+
+/**
+ * Wrapper function to fire our topic subscriber filter for bbPress.
+ *
+ * This fires when the subscription email subject is being filtered.  Only
+ * applicable for bbPress >= 2.5.4.
+ *
+ * @since 3.4.1
+ *
+ * @param string $retval The subscription email subject
+ * @return string
+ */
+function ass_bbp_add_topic_subscribers_filter( $retval ) {
+	// add our filter to check topic subscribers
+	add_filter( 'bbp_get_topic_subscribers', 'ass_bbp_remove_topic_subscribers' );
+
+	return $retval;
+}
+
+/**
+ * Wrapper function to remove our topic subscriber filter for bbPress.
+ *
+ * This fires before the bbPress subscription email is sent.  Only
+ * applicable for bbPress >= 2.5.4.
+ *
+ * @since 3.4.1
+ */
+function ass_bbp_remove_topic_subscribers_filter() {
+	remove_filter( 'bbp_get_topic_subscribers', 'ass_bbp_remove_topic_subscribers' );
+}
+
+/**
  * Disable bbP's subscription email blast if group user is already subscribed
  * to "All Mail".
  *
  * This scenario might happen if a user subscribed to a bunch of bbP group
  * topics and later switched to the group's "All Mail" subscription.
  *
+ * Note: Only applicable for bbPress 2.5.3 and below.
+ *
  * @since 3.4
  */
 function ass_bbp_disable_email( $message, $reply_id, $topic_id, $user_id ) {
-
 	// make sure we're on a BP group page
 	if ( bp_is_group() ) {
 		global $bp;
@@ -1198,8 +1327,8 @@ function ass_bbp_disable_email( $message, $reply_id, $topic_id, $user_id ) {
 
 	return $message;
 }
-add_filter( 'bbp_subscription_mail_message', 'ass_bbp_disable_email', 10, 4 );
 
+/** LEGACY FORUMS *******************************************************/
 
 function ass_get_topic_subscription_status( $user_id, $topic_id ) {
 	global $bp;
@@ -1367,7 +1496,7 @@ function ass_get_group_admins_mods( $group_id ) {
  *
  * By default we do the following to outgoing email content:
  *   - strip slashes
- *   - strip HTML tags
+ *   - convert anchor tags to "Link Text <URL>" format, then strip other HTML tags
  *   - convert HTML entities
  *
  * @uses apply_filters() Filter 'ass_clean_content' to modify our cleaning routine
@@ -1375,8 +1504,37 @@ function ass_get_group_admins_mods( $group_id ) {
  * @return string $clean_content The email content, cleaned up for plaintext email
  */
 function ass_clean_content( $content ) {
-	$clean_content = html_entity_decode( strip_tags( stripslashes( $content ) ), ENT_QUOTES );
-	return apply_filters( 'ass_clean_content', $clean_content, $content );
+	return apply_filters( 'ass_clean_content', $content );
+}
+
+// By default, we run content through these filters, which can be individually removed
+add_filter( 'ass_clean_content', 'stripslashes', 2 );
+add_filter( 'ass_clean_content', 'strip_tags', 4 );
+add_filter( 'ass_clean_content', 'ass_convert_links', 6 );
+add_filter( 'ass_clean_content', 'ass_html_entity_decode', 8 );
+
+/**
+ * Wrapper for html_entity_decode() that can be used as an apply_filters() callback
+ *
+ * @param string
+ * @return string
+ */
+function ass_html_entity_decode( $content ) {
+	return html_entity_decode( $content, ENT_QUOTES );
+}
+
+/**
+ * Convert <a> tags to a plain-text version.
+ *
+ * Links like <a href="http://foo.com">Foo</a> become Foo <http://foo.com>
+ *
+ * @param string $content
+ * @return string
+ */
+function ass_convert_links( $content ) {
+	$pattern = '|<a .*?href=["\']([a-zA-Z0-9\-_\./:]+?)["\'].*?>([^<]+)</a>|';
+	$content = preg_replace( $pattern, '\2 <\1>', $content );
+	return $content;
 }
 
 /**
@@ -1405,10 +1563,13 @@ function ass_clean_subject( $subject, $add_quotes = true ) {
 		$subject = preg_replace( '/:$/', '', $subject ); // remove trailing colon
 	}
 
-	$subject = html_entity_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
-
 	return apply_filters( 'ass_clean_subject', $subject );
 }
+
+// By default, we run content through these filters, which can be individually removed
+add_filter( 'ass_clean_subject', 'stripslashes', 2 );
+add_filter( 'ass_clean_subject', 'strip_tags', 4 );
+add_filter( 'ass_clean_subject', 'ass_html_entity_decode', 8 );
 
 function ass_clean_subject_html( $subject ) {
 	$subject = preg_replace( '/:$/', '', $subject ); // remove trailing colon
@@ -1861,7 +2022,7 @@ function ass_admin_notice() {
 			$group_link = bp_get_group_permalink( $group );
 
 			if ( $group->status != 'public' ) {
-				$group_link = ass_get_login_redirect_url( $group_link );
+				$group_link = ass_get_login_redirect_url( $group_link, 'admin_notice' );
 			}
 
 			$blogname   = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
