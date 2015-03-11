@@ -1761,7 +1761,7 @@ input#submit_topic,input#submit_reply {
 	float: none;
 	font-size: inherit;
 	text-transform: none;
-	text-decoration: inherit;
+	text-decoration: underline;
 }
 
 /* Form Styling */
