@@ -79,6 +79,8 @@ class OpenLab_Admin_Bar {
                 } else {
                     //adjust the padding at the top of the page - group sites
                     add_action('wp_head',array($this,'admin_bar_group_sites_html_update'),99999);
+                    //add meta tag for viewport (some of the themes lack this)
+                    add_action('wp_head',array($this,'groups_sites_fix_for_mobile'));
                 }
                 
                 //for top padding in admin
@@ -1217,6 +1219,14 @@ HTML;
                                 padding-top: 50px;
                             }
                     </style>
+
+        <?php
+    }
+    
+    function groups_sites_fix_for_mobile(){
+        ?>
+
+            <meta name="viewport" content="width=device-width">
 
         <?php
     }
