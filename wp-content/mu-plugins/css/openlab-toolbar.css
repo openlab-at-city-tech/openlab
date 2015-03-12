@@ -7188,7 +7188,7 @@ html {
   }
 }
 /**group site only**/
-.oplb-bs #wpadminbar {
+.adminbar-manual-bootstrap #wpadminbar {
   top: 0;
 }
 /**footer - also a sitewide component**/

@@ -7412,14 +7412,14 @@ input[type="submit"] {
   display: none;
   position: absolute;
   right: 0;
-  top: 63px;
+  top: 66px;
   width: 336px;
   border: 1px solid #dddddd;
   border-radius: 4px;
 }
 .search .search-form-wrapper .form-group {
   margin-left: 18px;
-  padding: 10px 0 6px;
+  padding: 5px 0 0;
 }
 @media (max-width: 767px) {
   .search .search-form-wrapper {
@@ -7447,10 +7447,14 @@ input[type="submit"] {
   }
 }
 .search .search-trigger-wrapper.search-live {
-  background: #fff;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  height: 66px;
+  background: none repeat scroll 0 0 #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  box-sizing: padding-box;
+  height: 68px;
   z-index: 3;
 }
 .search .search-trigger-wrapper.search-live span {
