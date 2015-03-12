@@ -73,8 +73,16 @@ class OpenLab_Admin_Bar {
                     add_filter('admin_body_class',array($this,'adminbar_special_admin_body_class'));
                 }
                 
-                //adjust the padding at the top of the page
-                add_action('wp_head',array($this,'admin_bar_html_update'),99999);
+                if(get_current_blog_id() === 1){
+                    //adjust the padding at the top of the page
+                    add_action('wp_head',array($this,'admin_bar_html_update'),99999);
+                } else {
+                    //adjust the padding at the top of the page - group sites
+                    add_action('wp_head',array($this,'admin_bar_group_sites_html_update'),99999);
+                }
+                
+                //for top padding in admin
+                add_action('admin_footer',array($this,'admin_bar_padding_in_admin'));
                 
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
@@ -1175,6 +1183,21 @@ HTML;
             ?>
 
             <style type="text/css" media="screen">
+                    html { margin-top: 154px !important; }
+                    * html body { margin-top: 154px !important; }
+                    @media screen and ( max-width: 782px ) {
+                            html { margin-top: 154px !important; }
+                            * html body { margin-top: 154px !important; }
+                    }
+            </style>
+
+            <?php
+        }
+        
+        function admin_bar_group_sites_html_update(){
+         ?>
+
+            <style type="text/css" media="screen">
                     html { margin-top: 50px !important; }
                     * html body { margin-top: 50px !important; }
                     @media screen and ( max-width: 782px ) {
@@ -1185,6 +1208,19 @@ HTML;
 
             <?php
         }
+        
+        function admin_bar_padding_in_admin() {
+        ?>
+
+                    <style type="text/css" media="screen">
+                            html.wp-toolbar {
+                                padding-top: 50px;
+                            }
+                    </style>
+
+        <?php
+    }
+
 }
 
 function openlab_admin_bar_counts($count, $pull_right = ' pull-right'){

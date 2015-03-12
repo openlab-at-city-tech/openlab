@@ -6973,7 +6973,9 @@ html {
   line-height: 1.42857;
   color: #fff;
   height: 50px;
+  top: 64px;
   min-width: 0;
+  z-index: 99998;
 }
 #wpadminbar p,
 #wpadminbar a {
@@ -7184,6 +7186,10 @@ html {
   #wpadminbar #wp-toolbar #wp-admin-bar-updates {
     display: none;
   }
+}
+/**group site only**/
+.oplb-bs #wpadminbar {
+  top: 0;
 }
 /**footer - also a sitewide component**/
 #openlab-footer {

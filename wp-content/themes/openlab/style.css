@@ -7333,8 +7333,14 @@ input[type="submit"] {
 }
 /**header**/
 .navbar-default {
+  background: #fff;
   border: none;
   border-bottom: 1px solid #dddddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
 }
 .navbar-default .container-fluid {
   margin: 0 auto;
@@ -7402,6 +7408,7 @@ input[type="submit"] {
   position: relative;
 }
 .search .search-form-wrapper {
+  background: #fff;
   display: none;
   position: absolute;
   right: 0;

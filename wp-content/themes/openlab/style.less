@@ -320,8 +320,14 @@ input[type="submit"]{
 }
 /**header**/
 .navbar-default{
+    background: #fff;
     border: none;
     border-bottom: 1px solid @10gray;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
     .container-fluid{
         margin: 0 auto;
         .navbar-header{
@@ -394,6 +400,7 @@ input[type="submit"]{
 .search{
     position: relative;
     .search-form-wrapper{
+        background: #fff;
         display: none;
         position: absolute;
         right: 0;
