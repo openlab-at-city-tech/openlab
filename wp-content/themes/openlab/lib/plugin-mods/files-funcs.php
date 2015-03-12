@@ -1,9 +1,8 @@
 <?php
 /**
- * Buddypress Group Docs functions
- * These functions are clones of those found in the BuddyPress Group Docs plugin
+ * Buddypress Group Documents functions
+ * These functions are clones of those found in the BuddyPress Group Documents plugin
  * They are duplicated here so that Bootstrap markup can be injected for uniform styling
- * The hope is that a future release of the plugin will provide the ability to inject markup changes via hooks and/or template overrides, eliminating the need for these custom functions
  */
 
 /**

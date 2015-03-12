@@ -3,7 +3,7 @@
  * Invite only functions
  * These functions are clones of those found in the Invite Anyone plugin
  * They are duplicated here so that Bootstrap markup can be injected for uniform styling
- * The hope is that a future release of the plugin will provide the ability to inject markup changes via hooks and/or template overrides, eliminating the need for these custom functions
+ * See also: openlab/buddypress/members/single/invite-anyone.php for template overrides
  */
 
 /**

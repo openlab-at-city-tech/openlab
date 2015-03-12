@@ -117,30 +117,6 @@ To view this $grouptype log in and follow the link below:
 add_filter('gettext', array('bpass_Translation_Mangler', 'filter_gettext'), 10, 4);
 
 /**
- * Put the group type in email notification subject lines
- */
-function openlab_group_type_in_notification_subject( $subject ) {
-
-   if ( !empty( $groups_template->group->id ) ) {
-   	$group_id = $groups_template->group->id;
-   } else if ( !empty( $bp->groups->current_group->id ) ) {
-   	$group_id = $bp->groups->current_group->id;
-   } else {
-   	return $subject;
-   }
-
-
-   if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
-   	$grouptype = $_COOKIE['wds_bp_group_type'];
-   } else {
-   	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
-   }
-
-   return str_replace( 'in the group', 'in the ' . $grouptype, $subject );
-}
-add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
-
-/**
  * Add members to wpms website if attached to bp group and they are a group member
  *
  * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
@@ -180,26 +156,6 @@ function wds_add_group_members_2_blog(){
 		restore_current_blog();
 	}
 }
-
-/**
- * Allow super admins to edit any BuddyPress Doc
- */
-function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
-	global $bp;
-
-	if ( 'edit' == $action ) {
-		if ( is_super_admin() || bp_loggedin_user_id() == get_the_author_meta( 'ID' ) || $user_can ) {
-			$user_can = true;
-			$bp->bp_docs->current_user_can[$action] = 'yes';
-		} else {
-			$user_can = false;
-			$bp->bp_docs->current_user_can[$action] = 'no';
-		}
-	}
-
-	return $user_can;
-}
-add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
 /**
  * When a Notice is sent, send an email to all members
@@ -342,26 +298,6 @@ add_action('groups_create_group', 'openlab_create_forum_on_group_creation', 10, 
 add_filter('bp_get_new_group_enable_forum', '__return_true');
 
 /**
- * When getting a blog avatar in the context of the Featured Content widget, test to see whether
- * the blog is associated with a group. If so, fetch the group avatar instead
- */
-function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id ) {
-	global $wpdb, $bp;
-
-	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
-
-	if ( $group_id ) {
-		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false, 'type' => 'full' ) );
-
-		if ( !empty( $group_avatar ) ) {
-			$avatar = preg_replace( '/(src=").*?(")/', "$1" . $group_avatar . "$2", $avatar );
-		}
-	}
-	return $avatar;
-}
-add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avatar_with_group_avatar', 10, 2 );
-
-/**
  * Blogs must be public in order for BP to record their activity. Only at save time
  */
 add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
@@ -378,13 +314,6 @@ add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_a
  * Auto-enable BuddyPress Docs for all group types
  */
 add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
-
-/**
- * Don't send friend requests when accepting Invite Anyone invitations
- *
- * @see #666
- */
-add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false' );
 
 /**
  * Bust the home page activity transients when new items are posted

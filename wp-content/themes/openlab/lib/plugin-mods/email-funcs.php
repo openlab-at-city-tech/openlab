@@ -1,6 +1,7 @@
 <?php
 /**
- * Custom functionality extrapolated from BuddyPress Group Email Subscription 
+ * Custom functionality extrapolated from BuddyPress Group Email Subscription
+ * See also: openlab/buddypress/groups/single/notifications.php for template overrides
  */
 
 /**

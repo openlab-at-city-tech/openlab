@@ -1841,19 +1841,6 @@ function openlab_disable_new_site_link( $registration ) {
 }
 add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
 
-/**
- * Default subscription level for group emails should be All
- */
-function openlab_default_group_subscription( $level ) {
-	if ( ! $level ) {
-		$level = 'supersub';
-	}
-
-	return $level;
-}
-
-add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
-
 function openlab_set_default_group_subscription_on_creation( $group_id ) {
 	groups_update_groupmeta( $group_id, 'ass_default_subscription', 'supersub' );
 }
@@ -1896,24 +1883,6 @@ function openlab_block_add_new_user( $allcaps, $cap, $args ) {
 		return $allcaps;
 }
 add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
-
-/**
- * Hack alert! Allow group avatars to be deleted
- *
- * There is a bug in BuddyPress Docs that blocks group avatar deletion, because
- * BP Docs is too greedy about setting its current view, and thinks that you're
- * trying to delete a Doc instead. Instead of fixing that, which I have no
- * patience for at the moment, I'm just going to override BP Docs's current
- * view in the case of deleting an avatar.
- */
-function openlab_fix_avatar_delete( $view ) {
-	if ( bp_is_group_admin_page() ) {
-		$view = '';
-	}
-
-	return $view;
-}
-add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
 
 /**
  * Remove user from group blog when leaving group
@@ -2250,103 +2219,3 @@ function openlab_lazy_flush_rewrite_rules() {
 	}
 }
 add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
-
-/**
- * More generous cap mapping for bbPress topic posting.
- *
- * bbPress maps everything onto Participant. We don't want to have to use that.
- */
-function openlab_bbp_map_group_forum_meta_caps($caps = array(), $cap = '', $user_id = 0, $args = array()) {
-    if (!bp_is_group()) {
-        return $caps;
-    }
-    switch ($cap) {
-// If user is a group mmember, allow them to create content.
-        case 'read_forum' :
-        case 'publish_replies' :
-        case 'publish_topics' :
-        case 'read_hidden_forums' :
-        case 'read_private_forums' :
-            if (bbp_group_is_member() || bbp_group_is_mod() || bbp_group_is_admin()) {
-                $caps = array('exist');
-            }
-            break;
-// If user is a group mod ar admin, map to participate cap.
-        case 'moderate' :
-        case 'edit_topic' :
-        case 'edit_reply' :
-        case 'view_trash' :
-        case 'edit_others_replies' :
-        case 'edit_others_topics' :
-            if (bbp_group_is_mod() || bbp_group_is_admin()) {
-                $caps = array('exist');
-            }
-            break;
-// If user is a group admin, allow them to delete topics and replies.
-        case 'delete_topic' :
-        case 'delete_reply' :
-            if (bbp_group_is_admin()) {
-                $caps = array('exist');
-            }
-            break;
-    }
-    return apply_filters('bbp_map_group_forum_topic_meta_caps', $caps, $cap, $user_id, $args);
-}
-
-add_filter('bbp_map_meta_caps', 'openlab_bbp_map_group_forum_meta_caps', 10, 4);
-
-/**
- * Force bbPress to display all forums (ie don't hide any hidden forums during bbp_has_forums() queries).
- *
- * We manage visibility ourselves.
- *
- * See #1299.
- */
-add_filter('bbp_include_all_forums', '__return_true');
-
-/**
- * Force bbp_has_forums() to show all post statuses.
- *
- * As above, I have no idea why bbPress makes some items hidden, but it appears
- * incompatible with BuddyPress groups.
- */
-function openlab_bbp_force_all_forum_statuses($r) {
-    $r['post_status'] = array(bbp_get_public_status_id(), bbp_get_private_status_id(), bbp_get_hidden_status_id());
-    return $r;
-}
-
-add_filter('bbp_before_has_forums_parse_args', 'openlab_bbp_force_all_forum_statuses');
-
-/**
- * Ensure that post results for bbPres forum queries are never marked hidden.
- *
- * Working with bbPress is really exhausting.
- */
-function openlab_bbp_force_forums_to_public($posts, $query) {
-    if (!function_exists('bp_is_group') || !bp_is_group()) {
-        return $posts;
-    }
-    if ('forum' !== $query->get('post_type')) {
-        return $posts;
-    }
-    foreach ($posts as &$post) {
-        $post->post_status = 'publish';
-    }
-    return $posts;
-}
-
-add_filter('posts_results', 'openlab_bbp_force_forums_to_public', 10, 2);
-
-/**
- * Force site public to 1 for bbPress.
- *
- * Otherwise activity is not posted.
- */
-function openlab_bbp_force_site_public_to_1($public, $site_id) {
-    if (1 == $site_id) {
-        $public = 1;
-    }
-    return $public;
-}
-
-add_filter('bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2);

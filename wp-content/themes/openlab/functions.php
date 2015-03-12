@@ -30,9 +30,6 @@ require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/invite-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/email-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/files-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
 function openlab_load_scripts() {
@@ -160,11 +157,6 @@ function openlab_group_admin_body_classes($classes) {
 }
 
 add_filter('bp_get_the_body_class', 'openlab_group_admin_body_classes');
-
-/**
- * Don't allow BuddyPress Docs to use its own theme compatibility layer
- */
-add_filter('bp_docs_do_theme_compat', '__return_false');
 
 //for less js - local dev only
 function enqueue_less_styles($tag, $handle) {
