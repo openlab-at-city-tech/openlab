@@ -112,11 +112,11 @@ function openlab_help_categories_menu( $items, $args ) {
 						$child_classes = "help-cat menu-item";
 						if ( get_query_var( 'taxonomy' ) != 'help_tags' ) {
 							if ( $child_cat->term_id == $current_term->term_id ) {
-                                $child_classes .= " current-menu-item";
+								$child_classes .= " current-menu-item";
 							} else if ( $post->post_type == 'help' ) {
-                                if ( in_array( $child_cat->term_id, $post_cats_array ) ) {
-                                    $child_classes .= " current-menu-item";
-                                }
+								if ( in_array( $child_cat->term_id, $post_cats_array ) ) {
+									$child_classes .= " current-menu-item";
+								}
 							}
 						}
 

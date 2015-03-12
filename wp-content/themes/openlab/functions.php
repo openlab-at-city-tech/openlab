@@ -33,43 +33,45 @@ require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
 function openlab_load_scripts() {
+    $stylesheet_dir_uri = get_stylesheet_directory_uri();
+
     /**
      * scripts, additional functionality
      */
     if (!is_admin()) {
 
         //google fonts
-        wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
+        wp_register_style('google-open-sans', set_url_scheme( 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic' ), array(), '2014', 'all');
         wp_enqueue_style('google-open-sans');
 
-        wp_register_style('camera-js-styles', get_stylesheet_directory_uri() . '/css/camera.css', array(), '20130604', 'all');
+        wp_register_style('camera-js-styles', $stylesheet_dir_uri . '/css/camera.css', array(), '20130604', 'all');
         wp_enqueue_style('camera-js-styles');
 
         //less compliation via js so we can check styles in firebug via fireless - local dev only
         if (CSS_DEBUG) {
-            wp_register_script('less-config-js', get_stylesheet_directory_uri() . '/js/less.config.js', array('jquery'));
+            wp_register_script('less-config-js', $stylesheet_dir_uri . '/js/less.config.js', array('jquery'));
             wp_enqueue_script('less-config-js');
-            wp_register_script('less-js', get_stylesheet_directory_uri() . '/js/less-1.7.4.js', array('jquery'));
+            wp_register_script('less-js', $stylesheet_dir_uri . '/js/less-1.7.4.js', array('jquery'));
             wp_enqueue_script('less-js');
         }
 
-        wp_register_script('bootstrap-js', get_stylesheet_directory_uri() . '/js/bootstrap.min.js', array('jquery'));
+        wp_register_script('bootstrap-js', $stylesheet_dir_uri . '/js/bootstrap.min.js', array('jquery'));
         wp_enqueue_script('bootstrap-js');
-        wp_register_script('jcarousellite', get_bloginfo('stylesheet_directory') . '/js/jcarousellite.js');
+        wp_register_script('jcarousellite', $stylesheet_dir_uri . '/js/jcarousellite.js');
         wp_enqueue_script('jcarousellite');
-        wp_register_script('easyaccordion', get_bloginfo('stylesheet_directory') . '/js/easyaccordion.js');
+        wp_register_script('easyaccordion', $stylesheet_dir_uri . '/js/easyaccordion.js');
         wp_enqueue_script('easyaccordion');
-        wp_register_script('easing-js', get_stylesheet_directory_uri() . '/js/jquery.easing.1.3.js', array('jquery'));
+        wp_register_script('easing-js', $stylesheet_dir_uri . '/js/jquery.easing.1.3.js', array('jquery'));
         wp_enqueue_script('easing-js');
-        wp_register_script('mobile-custom-js', get_stylesheet_directory_uri() . '/js/jquery.mobile.customized.min.js', array('jquery'));
+        wp_register_script('mobile-custom-js', $stylesheet_dir_uri . '/js/jquery.mobile.customized.min.js', array('jquery'));
         wp_enqueue_script('mobile-custom-js');
-        wp_register_script('camera-js', get_stylesheet_directory_uri() . '/js/camera.min.js', array('jquery'));
+        wp_register_script('camera-js', $stylesheet_dir_uri . '/js/camera.min.js', array('jquery'));
         wp_enqueue_script('camera-js');
-        wp_register_script('select-js', get_stylesheet_directory_uri() . '/js/jquery.customSelect.min.js', array('jquery'));
+        wp_register_script('select-js', $stylesheet_dir_uri . '/js/jquery.customSelect.min.js', array('jquery'));
         wp_enqueue_script('select-js');
-        wp_register_script('hyphenator-js', get_stylesheet_directory_uri() . '/js/hyphenator.js', array('jquery'));
+        wp_register_script('hyphenator-js', $stylesheet_dir_uri . '/js/hyphenator.js', array('jquery'));
         wp_enqueue_script('hyphenator-js');
-        wp_register_script('utility', get_bloginfo('stylesheet_directory') . '/js/utility.js');
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js');
         wp_enqueue_script('utility');
     }
 }
@@ -80,11 +82,13 @@ add_action('wp_enqueue_scripts', 'openlab_load_scripts');
  * Giving the main stylesheet the highest priority among stylesheets to make sure it loads last
  */
 function openlab_load_scripts_high_priority() {
+    $stylesheet_dir_uri = get_stylesheet_directory_uri();
+
     global $post;
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', get_stylesheet_directory_uri() . '/style.less', array(), '20130604', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
     } else {
         wp_register_style('main-styles', get_stylesheet_uri(), array(), '20130604', 'all');
@@ -95,7 +99,7 @@ function openlab_load_scripts_high_priority() {
     wp_enqueue_style('main-styles');
 
     if ($post->post_type == 'help') {
-        wp_register_style('print-styles', get_stylesheet_directory_uri().'/css/print.css', array(), '2015', 'print');
+        wp_register_style('print-styles', $stylesheet_dir_uri .'/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }
 }
