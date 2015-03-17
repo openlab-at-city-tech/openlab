@@ -2505,3 +2505,14 @@ function openlab_log_out_social_accounts() {
 	}
 }
 add_action( 'init', 'openlab_log_out_social_accounts', 0 );
+
+/**
+ * Whitelist the 'webcal' protocol.
+ *
+ * Prevents the protocol from being stripped for non-privileged users.
+ */
+function openlab_add_webcal_to_allowed_protocols( $protocols ) {
+	$protocols[] = 'webcal';
+	return $protocols;
+}
+add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
