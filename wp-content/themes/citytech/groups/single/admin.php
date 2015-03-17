@@ -72,7 +72,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 	<?php do_action( 'bp_before_group_settings_admin' ); ?>
 
 	<?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
-		<?php $forum_enabled = bp_group_is_forum_enabled() ?>
+		<?php $forum_enabled = openlab_is_forum_enabled_for_group() ?>
 		<div class="checkbox">
 			<h4>Discussion Settings</h4>
 			<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>

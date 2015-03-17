@@ -659,6 +659,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'biological-sciences' => array(
 				'label' => 'Biological Sciences',
 			),
+			'biomedical-informatics' => array(
+				'label' => 'Biomedical Informatics',
+			),
 			'chemistry' => array(
 				'label' => 'Chemistry',
 			),
@@ -673,6 +676,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			),
 			'mathematics' => array(
 				'label' => 'Mathematics',
+			),
+			'professional-and-technical-writing' => array(
+				'label' => 'Professional and Technical Writing',
 			),
 			'physics' => array(
 				'label' => 'Physics',
@@ -1861,6 +1867,55 @@ function openlab_set_default_group_subscription_on_creation( $group_id ) {
 add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
 
 /**
+ * Load the bp-ass textdomain.
+ *
+ * We do this because `load_plugin_textdomain()` in `activitysub_textdomain()` doesn't support custom locations.
+ */
+function openlab_load_bpass_textdomain() {
+	load_textdomain( 'bp-ass', WP_LANG_DIR . '/bp-ass-en_US.mo' );
+}
+add_action( 'init', 'openlab_load_bpass_textdomain', 11 );
+
+/**
+ * Use entire text of comment or blog post when sending BPGES notifications.
+ *
+ * @param string $content Activity content.
+ * @param object $activity Activity object.
+ */
+function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $activity ) {
+	if ( 'groups' !== $activity->component ) {
+		return $content;
+	}
+
+	// @todo new-style blog comments?
+	if ( ! in_array( $activity->type, array( 'new_blog_post', 'new_blog_comment' ) ) ) {
+		return $content;
+	}
+
+	$group_id = $activity->item_id;
+	$blog_id = openlab_get_site_id_by_group_id( $group_id );
+
+	if ( ! $blog_id ) {
+		return $content;
+	}
+
+	switch_to_blog( $blog_id );
+
+	if ( 'new_blog_post' === $activity->type ) {
+		$post = get_post( $activity->secondary_item_id );
+		$content = $post->post_content;
+	} else if ( 'new_blog_comment' === $activity->type ) {
+		$comment = get_comment( $activity->secondary_item_id );
+		$content = $comment->comment_content;
+	}
+
+	restore_current_blog();
+
+	return $content;
+}
+add_action( 'bp_ass_activity_notification_content', 'openlab_use_full_text_for_blog_related_bpges_notifications', 10, 2 );
+
+/**
  * Brackets in password reset emails cause problems in some clients. Remove them
  */
 function openlab_strip_brackets_from_pw_reset_email( $message ) {
@@ -2365,8 +2420,43 @@ function openlab_bbp_group_toggle( $group_id ) {
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 	$group->enable_forum = $enable_forum;
 	$group->save();
+
+	if ( $enable_forum ) {
+		groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+
+	}
 }
 add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
+
+/**
+ * Failsafe method for determining whether forums should be enabled for a group.
+ *
+ * Another kewl hack due to issues with bbPress. It should be possible to rely on the `enable_forum` group toggle to
+ * determine whether the Discussion tab should be shown. But something about the combination between the old bbPress
+ * and the new one means that some groups used to have an associated forum_id without having enable_forum turned on,
+ * yet still expect to see the Discussion tab. Our workaround is to require the explicit presence of a 'disable' flag
+ * for a group's Discussion tab to be turned off.
+ */
+function openlab_is_forum_enabled_for_group( $group_id = false ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	$disable = (bool) groups_get_groupmeta( $group_id, 'openlab_disable_forum' );
+	$forum_id = groups_get_groupmeta( $group_id, 'forum_id' );
+
+	if ( $disable || ! $forum_id ) {
+		return false;
+	}
+
+	return true;
+}
 
 /**
  * If Discussion is disabled for a group, ensure it's removed from the menu.
@@ -2378,9 +2468,7 @@ function openlab_bbp_remove_group_nav_item() {
 		return;
 	}
 
-	$enable_forum = groups_get_current_group()->enable_forum;
-
-	if ( ! $enable_forum ) {
+	if ( ! openlab_is_forum_enabled_for_group() ) {
 		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
 	}
 }
@@ -2417,3 +2505,14 @@ function openlab_log_out_social_accounts() {
 	}
 }
 add_action( 'init', 'openlab_log_out_social_accounts', 0 );
+
+/**
+ * Whitelist the 'webcal' protocol.
+ *
+ * Prevents the protocol from being stripped for non-privileged users.
+ */
+function openlab_add_webcal_to_allowed_protocols( $protocols ) {
+	$protocols[] = 'webcal';
+	return $protocols;
+}
+add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
