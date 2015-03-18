@@ -34,6 +34,7 @@ require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
+require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
 function openlab_load_scripts() {
