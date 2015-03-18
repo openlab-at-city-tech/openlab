@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'CSS_DEBUG' ) ) {
+	define( 'CSS_DEBUG', false );
+}
+
 function openlab_core_setup() {
     add_theme_support('post-thumbnails');
     global $content_width;
