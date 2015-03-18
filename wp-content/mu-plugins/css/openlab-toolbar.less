@@ -83,6 +83,15 @@
                     }
                     @media (max-width: @screen-xs-max){
                         position: static;
+                        &.hamburger{
+                            .ab-item{
+                                padding: 0;
+                                .navbar-toggle{
+                                    margin: 0;
+                                    padding: 17px 12px;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -170,7 +179,13 @@
                 @media (max-width: @screen-xs-max){
                     left: 0;
                     right: 0;
-                    width: 100%;
+                    width: 100% !important;
+                    .ab-submenu{
+                        .ab-item{
+                            padding: 6px 12px;
+                            float: none;
+                        }
+                    }
                 }
             }
             #wp-admin-bar-mobile-centered{
@@ -183,17 +198,23 @@
                     }
                 }
             }
-            #wp-admin-bar-my-hamburger,
-            #wp-admin-bar-my-hamburger-mol{
+            #wp-admin-bar-menu-toggle{
                 .ab-item{
-                    padding: 8px 12%;
-                    .navbar-toggle{
-                        margin: 0;
-                        float: none;
-                        .icon-bar{
-                            background: #ccc;
-                        }
+                    margin: 0;
+                    padding: 0;
+                    .icon-bar{
+                        background: @white;
                     }
+                }
+            }
+            #wp-admin-bar-my-hamburger{
+                .icon-bar{
+                    background: @cyan;
+                }
+            }
+            #wp-admin-bar-my-hamburger-mol{
+                .icon-bar{
+                    background: @yellow;
                 }
             }
             #wp-admin-bar-openlab{
@@ -221,7 +242,8 @@
                     width: 170%;
                 }
             }
-            #wp-admin-bar-my-openlab{
+            #wp-admin-bar-my-openlab,
+            #wp-admin-bar-network-menu-mobile{
                 @media(max-width: @screen-xs-max){
                     border: none;
                     > .ab-item{

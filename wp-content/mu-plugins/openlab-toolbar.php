@@ -69,6 +69,7 @@ class OpenLab_Admin_Bar {
                 //restricting network menu to group sites only
                 if(get_current_blog_id() !== 1 || is_admin()){
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
+                    $this->openlab_menu_items('openlab');
                     add_filter('body_class',array($this,'adminbar_special_body_class'));
                     add_filter('admin_body_class',array($this,'adminbar_special_admin_body_class'));
                 }
@@ -88,10 +89,17 @@ class OpenLab_Admin_Bar {
                 
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
-                add_action('admin_bar_menu',array($this,'openlab_hamburger_mol_menu'),1);
-
+                $this->openlab_menu_items('network-menu-mobile');
+                
 		// Logged-in only
 		if ( is_user_logged_in() ) {
+                    
+                        //hamburger mol menu
+                        add_action('admin_bar_menu',array($this,'openlab_hamburger_mol_menu'),1);
+                    
+                        //remove the default mobile dashboard toggle, we need a custom one for this for styling purposes
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
+                        add_action('admin_bar_menu',array($this,'custom_admin_bar_sidebar_toggle'),0);
                     
                         add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
@@ -144,6 +152,31 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
+        
+        /**
+         * Custom dashboard toggle on mobile
+         */
+        function custom_admin_bar_sidebar_toggle($wp_admin_bar){
+            if ( is_admin() ) {
+                
+                $sr_text = __( 'Menu' );
+                
+                $hamburger = <<<HTML
+                    <button type="button" class="navbar-toggle mobile-toggle">
+                        <span class="sr-only">{$sr_text}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+HTML;
+                
+		$wp_admin_bar->add_menu( array(
+			'id'    => 'menu-toggle',
+			'title' => $hamburger,
+			'href'  => '#',
+		) );
+            }
+        }
 
  	/**
  	 * Add the main OpenLab menu
@@ -159,63 +192,67 @@ class OpenLab_Admin_Bar {
                                 'class' => 'admin-bar-menu',
 			)
  		) );
-
-		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+ 	}
+        
+        function openlab_menu_items($parent){
+            global $wp_admin_bar;
+            
+            $wp_admin_bar->add_node( array(
+			'parent' => $parent,
 			'id'     => 'home',
 			'title'  => 'Home',
 			'href'   => bp_get_root_domain()
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'about',
 			'title'  => 'About',
 			'href'   => trailingslashit( bp_get_root_domain() . '/about' )
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'people',
 			'title'  => 'People',
 			'href'   => trailingslashit( bp_get_root_domain() . '/people' )
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'courses',
 			'title'  => 'Courses',
 			'href'   => trailingslashit( bp_get_root_domain() . '/courses' )
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'projects',
 			'title'  => 'Projects',
 			'href'   => trailingslashit( bp_get_root_domain() . '/projects' )
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'clubs',
 			'title'  => 'Clubs',
 			'href'   => trailingslashit( bp_get_root_domain() . '/clubs' )
  		) );
 
  		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'portfolios',
 			'title'  => 'Portfolios',
 			'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' )
  		) );
 
 		$wp_admin_bar->add_node( array(
-			'parent' => 'openlab',
+			'parent' => $parent,
 			'id'     => 'help',
 			'title'  => 'Help',
 			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' )
  		) );
- 	}
+        }
 
  	/**
  	 * Adds 'My OpenLab' menu
@@ -274,7 +311,7 @@ class OpenLab_Admin_Bar {
         function openlab_hamburger_menu($wp_admin_bar){
             
             $hamburger = <<<HTML
-                    <button type="button" class="navbar-toggle mobile-toggle direct-toggle" data-target="#main-nav">
+                    <button type="button" class="navbar-toggle mobile-toggle direct-toggle network-menu" data-target="#wp-admin-bar-network-menu-mobile .ab-sub-wrapper">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -285,7 +322,15 @@ HTML;
 			'id'    => 'my-hamburger',
 			'title' => $hamburger,
                         'meta'  => array(
-                            'class' => 'visible-xs',
+                            'class' => 'visible-xs hamburger',
+                        ),
+		) );
+//            
+            $wp_admin_bar->add_node( array(
+			'id'    => 'network-menu-mobile',
+			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
+                        'meta'  => array(
+                            'class' => 'visible-xs mobile-menu',
                         ),
 		) );
             
@@ -308,7 +353,7 @@ HTML;
 			'id'    => 'my-hamburger-mol',
 			'title' => $hamburger,
                         'meta'  => array(
-                            'class' => 'visible-xs',
+                            'class' => 'visible-xs hamburger',
                         ),
 		) );
             

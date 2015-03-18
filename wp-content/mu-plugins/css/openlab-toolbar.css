@@ -7045,6 +7045,13 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar > ul > li {
     position: static;
   }
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item {
+    padding: 0;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item .navbar-toggle {
+    margin: 0;
+    padding: 17px 12px;
+  }
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
   font-size: 14px;
@@ -7126,7 +7133,11 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
     left: 0;
     right: 0;
-    width: 100%;
+    width: 100% !important;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .ab-item {
+    padding: 6px 12px;
+    float: none;
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered {
@@ -7141,18 +7152,18 @@ button.oplb-bs .close {
     display: none !important;
   }
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item,
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item {
-  padding: 8px 12%;
-}
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle,
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item .navbar-toggle {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item {
   margin: 0;
-  float: none;
+  padding: 0;
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle .icon-bar,
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item .navbar-toggle .icon-bar {
-  background: #ccc;
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .icon-bar {
+  background: #ffffff;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .icon-bar {
+  background: #63dfd2;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .icon-bar {
+  background: #f7e700;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
   background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;
@@ -7180,10 +7191,12 @@ button.oplb-bs .close {
   width: 170%;
 }
 @media (max-width: 767px) {
-  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile {
     border: none;
   }
-  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile > .ab-item {
     padding: 7px 0 0;
     visibility: hidden;
     width: 0;
