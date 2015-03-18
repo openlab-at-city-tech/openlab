@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'CSS_DEBUG' ) ) {
+	define( 'CSS_DEBUG', false );
+}
+
 function openlab_core_setup() {
     add_theme_support('post-thumbnails');
     global $content_width;
@@ -30,6 +34,7 @@ require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
+require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
 function openlab_load_scripts() {
