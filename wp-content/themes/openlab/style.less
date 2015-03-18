@@ -320,35 +320,49 @@ input[type="submit"]{
 }
 /**header**/
 .navbar-default{
-    background: #fff;
+    background: transparent;
     border: none;
-    border-bottom: 1px solid @10gray;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 99999;
-    .container-fluid{
-        margin: 0 auto;
-        .navbar-header{
-            h1{
+    .main-nav-wrapper,
+    .header-mobile-wrapper{
+        background: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 99999;
+    }
+    .main-nav-wrapper{
+        border-bottom: 1px solid @10gray;
+        @media(max-width: @screen-xs-max){
+            top: 114px;
+            border-bottom: none;
+        }
+    }
+    .navbar-header{
+        h1{
+            margin: 0;
+            border-right: 1px solid @10gray;
+            a{
+                display: block;
+                background: url('images/openlab_menu_logo.png') no-repeat;
+                padding-top: 63px;
+                width: 185px;
+                height: 0;
+                overflow: hidden;
+            }
+            @media(max-width: @screen-sm-max){
+                width: 136px;
                 margin: 0;
-                border-right: 1px solid @10gray;
                 a{
-                    display: block;
-                    background: url('images/openlab_menu_logo.png') no-repeat;
-                    padding-top: 63px;
-                    width: 185px;
-                    height: 0;
-                    overflow: hidden;
-                    @media(max-width: @screen-sm-max){
-                        width: 135px;
-                        background-size: 100%;
-                        background-position: 0 8px;
-                    }
+                    width: 135px;
+                    background-size: 100%;
+                    background-position: 0 8px;
                 }
             }
         }
+    }
+    .container-fluid{
+        margin: 0 auto;
         ul.nav{
             margin: 0;
             padding: 0;
@@ -412,8 +426,19 @@ input[type="submit"]{
             margin-left: 18px;
             padding: 5px 0 0;
         }
-        @media(max-width:@screen-xs-max){
-            display: block;
+        @media (max-width: @screen-xs-max){
+            position: relative;
+            top: 0;
+            width: 100%;
+            .form-group{
+                margin-bottom: 0;
+                .form-control{
+                    display: inline-block;
+                    &#search-terms{
+                        width: 40%;
+                    }
+                }
+            }
         }
     }
     .search-trigger-wrapper{
@@ -446,6 +471,9 @@ input[type="submit"]{
             span{
                 color: @aqua;
             }
+        }
+        @media(max-width: @screen-xs-max){
+
         }
     }
 }

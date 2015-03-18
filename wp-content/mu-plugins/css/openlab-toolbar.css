@@ -14,6 +14,7 @@ Custom Vars
 Bootstrap variable overrides
 */
   /**Mixins**/
+  /**footer - also a sitewide component**/
 }
 .oplb-bs html {
   font-family: sans-serif;
@@ -6962,11 +6963,7 @@ button.oplb-bs .close {
     display: none !important;
   }
 }
-html {
-  position: relative;
-  height: auto;
-}
-#wpadminbar {
+.oplb-bs #wpadminbar {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   background: #444;
   font-size: 14px;
@@ -6977,19 +6974,19 @@ html {
   min-width: 0;
   z-index: 99998;
 }
-#wpadminbar p,
-#wpadminbar a {
+.oplb-bs #wpadminbar p,
+.oplb-bs #wpadminbar a {
   text-shadow: none !important;
 }
-#wpadminbar #wp-toolbar {
+.oplb-bs #wpadminbar #wp-toolbar {
   line-height: normal;
   margin: 0 auto;
   max-width: 1140px;
 }
-#wpadminbar #wp-toolbar > ul > li {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li {
   position: relative;
 }
-#wpadminbar #wp-toolbar > ul > li > .ab-item {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item {
   color: #ffffff;
   cursor: pointer;
   text-align: center;
@@ -6999,26 +6996,26 @@ html {
   font-size: 14px;
   text-decoration: none;
 }
-#wpadminbar #wp-toolbar > ul > li > .ab-item:before {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item:before {
   margin: 0;
   content: '';
 }
-#wpadminbar #wp-toolbar > ul > li > .ab-item .fa-caret-down {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item .fa-caret-down {
   font-size: 12px;
   padding-left: 8px;
 }
 @media (max-width: 992px) {
-  #wpadminbar #wp-toolbar > ul > li > .ab-item {
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item {
     font-size: 13px;
   }
 }
-#wpadminbar #wp-toolbar > ul > li > .fa {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
   width: 14px;
   margin: 0 auto;
 }
-#wpadminbar #wp-toolbar > ul > li .toolbar-item-count {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li .toolbar-item-count {
   background: #ff5959;
   color: #fff;
   border-radius: 8px;
@@ -7032,105 +7029,132 @@ html {
   width: 16px;
   opacity: 1;
 }
-#wpadminbar #wp-toolbar > ul > li .toolbar-item-count.sub-count {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li .toolbar-item-count.sub-count {
   position: absolute;
   right: 8px;
   top: 11px;
 }
-#wpadminbar #wp-toolbar > ul > li.hover > a,
-#wpadminbar #wp-toolbar > ul > li:hover > a,
-#wpadminbar #wp-toolbar > ul > li.hover > .ab-item,
-#wpadminbar #wp-toolbar > ul > li:hover > .ab-item {
+.oplb-bs #wpadminbar #wp-toolbar > ul > li.hover > a,
+.oplb-bs #wpadminbar #wp-toolbar > ul > li:hover > a,
+.oplb-bs #wpadminbar #wp-toolbar > ul > li.hover > .ab-item,
+.oplb-bs #wpadminbar #wp-toolbar > ul > li:hover > .ab-item {
   background: #333;
   color: #63dfd2;
 }
-#wpadminbar #wp-toolbar .admin-bar-menu li {
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li {
+    position: static;
+  }
+}
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
   font-size: 14px;
 }
-#wpadminbar #wp-toolbar .admin-bar-menu li a {
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
   color: #333;
   padding: 6px 12px;
   text-decoration: none;
 }
-#wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
   background: #63dfd2;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
   border-radius: 0 0 4px 4px;
   margin-top: 1px;
   width: 600%;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
   padding: 0;
   background: #fff;
   border-radius: inherit;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p {
   color: #333;
   margin-bottom: 8px;
   font-size: 12px;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
   margin-bottom: 0;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
   background: #b8e2df;
   margin-bottom: 16px;
   color: #333;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title .ab-item {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title .ab-item {
   padding: 5px 10px;
   font-size: 14px;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link {
   background: #b8e2df;
   padding: 9px 16px;
   text-align: right;
   border-radius: inherit;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a {
   color: #333;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
   color: #49cabe;
   text-decoration: underline;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item {
   padding-bottom: 16px;
   margin-top: 16px;
   border-bottom: 1px solid #e5e5e5;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item {
   width: 90%;
   margin: 0 auto;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item .actions .btn {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .ab-item .actions .btn {
   float: left;
   font-size: 14px;
   margin-right: 2%;
   position: relative;
   width: auto;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a {
   display: inline-block;
 }
-#wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
   display: block;
   margin-top: 8px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item {
-  padding: 9px 12%;
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered {
+  margin: 0 auto;
+  overflow: hidden;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile {
+  float: none;
+}
+@media (max-width: 479px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile {
+    display: none !important;
+  }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item {
+  padding: 8px 12%;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item .navbar-toggle {
   margin: 0;
   float: none;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle .icon-bar {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .ab-item .navbar-toggle .icon-bar,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .ab-item .navbar-toggle .icon-bar {
   background: #ccc;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
   background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;
   padding: 49px 0 0;
   width: 127px;
@@ -7138,61 +7162,66 @@ html {
   height: 0;
 }
 @media (max-width: 479px) {
-  #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
     width: 37px;
     background-position: -11% 58%;
   }
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-openlab .ab-sub-wrapper {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab .ab-sub-wrapper {
   width: 170px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-openlab,
-#wpadminbar #wp-toolbar #wp-admin-bar-site-name {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-site-name {
   border-left: 1px #000 solid;
   border-right: 1px #000 solid;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
-#wpadminbar #wp-toolbar #wp-admin-bar-site-name .ab-sub-wrapper {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-site-name .ab-sub-wrapper {
   width: 170%;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab {
+    border: none;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item {
+    padding: 7px 0 0;
+    visibility: hidden;
+    width: 0;
+  }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p {
   color: #333;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p.actions {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p.actions {
   padding-top: 6px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
   background: #000;
   border-left: 1px #666666 solid;
   border-right: 1px #666666 solid;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
   max-width: 70px;
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
   color: #333;
   width: 350%;
   left: -250%;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
-#wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
 }
 @media (max-width: 767px) {
-  #wpadminbar #wp-toolbar #wp-admin-bar-updates {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-updates {
     display: none;
   }
 }
-/**group site only**/
-.adminbar-manual-bootstrap #wpadminbar {
-  top: 0;
-}
-/**footer - also a sitewide component**/
-#openlab-footer {
+.oplb-bs#openlab-footer {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -7204,55 +7233,55 @@ html {
   padding-top: 30px;
   background: #f0f0f0;
 }
-#openlab-footer.placeholder {
+.oplb-bs#openlab-footer.placeholder {
   position: relative;
   visibility: hidden;
 }
-#openlab-footer .container-fluid {
+.oplb-bs#openlab-footer .container-fluid {
   max-width: 1155px;
 }
-#openlab-footer .semibold {
+.oplb-bs#openlab-footer .semibold {
   font-weight: 600;
 }
-#openlab-footer .bold {
+.oplb-bs#openlab-footer .bold {
   font-weight: 700;
 }
-#openlab-footer .regular {
+.oplb-bs#openlab-footer .regular {
   font-weight: 400;
 }
-#openlab-footer .cuny-logo {
+.oplb-bs#openlab-footer .cuny-logo {
   max-width: 74px;
 }
-#openlab-footer p,
-#openlab-footer a {
+.oplb-bs#openlab-footer p,
+.oplb-bs#openlab-footer a {
   font-size: 12px;
 }
-#openlab-footer p,
-#openlab-footer a,
-#openlab-footer h2 {
+.oplb-bs#openlab-footer p,
+.oplb-bs#openlab-footer a,
+.oplb-bs#openlab-footer h2 {
   text-shadow: none !important;
 }
-#openlab-footer .row h2 {
+.oplb-bs#openlab-footer .row h2 {
   color: #333;
 }
-#openlab-footer .col-logos {
+.oplb-bs#openlab-footer .col-logos {
   display: inline-block;
 }
-#openlab-footer .col-logos p {
+.oplb-bs#openlab-footer .col-logos p {
   color: #444;
 }
-#openlab-footer .col-logos a img {
+.oplb-bs#openlab-footer .col-logos a img {
   padding-top: 5px;
   margin-right: 15px;
 }
-#openlab-footer .col-links {
+.oplb-bs#openlab-footer .col-links {
   color: #797979;
 }
-#openlab-footer .col-links a {
+.oplb-bs#openlab-footer .col-links a {
   color: #797979;
   font-weight: inherit;
 }
-#openlab-footer .col-share a {
+.oplb-bs#openlab-footer .col-share a {
   display: inline-block;
   background: url('images/share_icons.png') no-repeat 0 0;
   padding-top: 22px;
@@ -7261,14 +7290,22 @@ html {
   overflow: hidden;
   margin-right: 6px;
 }
-#openlab-footer .col-share a.rss-link {
+.oplb-bs#openlab-footer .col-share a.rss-link {
   background-position: -32px 0;
 }
-#openlab-footer .row-copyright {
+.oplb-bs#openlab-footer .row-copyright {
   margin-top: 42px;
 }
-#openlab-footer .row-copyright p,
-#openlab-footer .row-copyright span,
-#openlab-footer .row-copyright a {
+.oplb-bs#openlab-footer .row-copyright p,
+.oplb-bs#openlab-footer .row-copyright span,
+.oplb-bs#openlab-footer .row-copyright a {
   color: #797979;
+}
+html {
+  position: relative;
+  height: auto;
+}
+/**group site only**/
+.adminbar-manual-bootstrap #wpadminbar {
+  top: 0;
 }

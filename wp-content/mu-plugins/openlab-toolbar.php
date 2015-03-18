@@ -88,11 +88,14 @@ class OpenLab_Admin_Bar {
                 
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
+                add_action('admin_bar_menu',array($this,'openlab_hamburger_mol_menu'),1);
 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
                     
+                        add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
+                        add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
@@ -123,7 +126,7 @@ class OpenLab_Admin_Bar {
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
-
+                        
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
@@ -225,7 +228,7 @@ class OpenLab_Admin_Bar {
             
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => '<span class="hidden-xs">My OpenLab <span class="fa fa-caret-down"></span></span><span class="visible-xs">'.$howdy.'</span>',
+			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'admin-bar-menu',
@@ -234,12 +237,44 @@ class OpenLab_Admin_Bar {
  	}
         
         /**
+         * The MOL link on mobile needs to sit between the hamburger menus and the logout link
+         * So we'll need a third group for this (makes styling easier)
+         */
+        function add_middle_group_for_mobile($wp_admin_bar) {
+            $wp_admin_bar->add_group(array(
+                'id' => 'mobile-centered',
+                'meta' => array(
+                    'class' => 'ab-mobile-centered',
+                ),
+            ));
+        }
+
+    /**
+         * Mol link on mobile
+         */
+        function add_mobile_mol_link($wp_admin_bar){
+            $current_user = wp_get_current_user();
+
+                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+            
+ 		$wp_admin_bar->add_menu( array(
+                        'parent' => 'mobile-centered',
+			'id'    => 'my-openlab-mobile',
+			'title' => $howdy,
+			'href'  => bp_loggedin_user_domain(),
+                        'meta'  => array(
+                            'class' => 'visible-xs',
+                        ),
+		) );
+        }
+        
+        /**
          * Hamurger menu (mobile only)
          */
         function openlab_hamburger_menu($wp_admin_bar){
             
             $hamburger = <<<HTML
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                    <button type="button" class="navbar-toggle mobile-toggle direct-toggle" data-target="#main-nav">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -248,6 +283,29 @@ class OpenLab_Admin_Bar {
 HTML;
             $wp_admin_bar->add_node( array(
 			'id'    => 'my-hamburger',
+			'title' => $hamburger,
+                        'meta'  => array(
+                            'class' => 'visible-xs',
+                        ),
+		) );
+            
+        }
+        
+        /**
+         * Hamurger menu (mobile only)
+         */
+        function openlab_hamburger_mol_menu($wp_admin_bar){
+            
+            $hamburger = <<<HTML
+                    <button type="button" class="navbar-toggle mobile-toggle direct-toggle mol-menu" data-target="#wp-admin-bar-my-openlab .ab-sub-wrapper">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+HTML;
+            $wp_admin_bar->add_node( array(
+			'id'    => 'my-hamburger-mol',
 			'title' => $hamburger,
                         'meta'  => array(
                             'class' => 'visible-xs',
@@ -995,7 +1053,7 @@ HTML;
 	public function remove_adduser( $wp_admin_bar ) {
 		$wp_admin_bar->remove_menu( 'new-user' );
 	}
-
+        
 	/**
 	 * Add a 'Log Out' link to the far right
 	 */
@@ -1272,6 +1330,41 @@ function cac_adminbar_js() {
 			$(this).toggleClass("login-click");
 			return false;
 		});
+                $('.direct-toggle').on('click',function(e){
+                    e.stopImmediatePropagation();
+                    
+                    var thisElem = $(this);
+                        
+                    if (!thisElem.hasClass('in-action')){
+                         
+                        $('.direct-toggle').removeClass('in-action');
+                        thisElem.addClass('in-action');
+                        
+                        var thisTarget = $(this).data('target');
+                        var thisTargetElem = $(thisTarget);
+                        
+                        if(thisTargetElem.is(':visible')){
+                            
+                            thisTargetElem.slideUp(700,function(){
+                                thisElem.removeClass('in-action');
+                            });
+                            
+                        } else {
+                            
+                            $('.direct-toggle').each(function(){
+                                var thisToggleTarget = $(this).data('target');
+                                if($(thisToggleTarget).is(':visible')){
+                                    $(thisToggleTarget).slideUp(700);
+                                }
+                            });
+                            
+                            thisTargetElem.slideDown(700,function(){
+                                thisElem.removeClass('in-action');
+                            });
+                            
+                        }
+                    }
+                });
 	});
 	</script>
 

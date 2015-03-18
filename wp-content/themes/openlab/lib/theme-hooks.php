@@ -27,23 +27,40 @@ add_filter('the_content', 'openlab_custom_the_content');
 function openlab_header_bar() {
     ?>
     <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+        <div class="header-mobile-wrapper visible-xs">
+            <div class="container-fluid">
+                <div class="navbar-header clearfix">
+                    <h1 id="title" class="pull-left"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+                    <div class="pull-right search search-trigger">
+                        <div class="search-trigger-wrapper">
+                            <span class="fa fa-search search-trigger" data-mode="mobile"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="search search-form row">
+                    <?php openlab_site_wide_bp_search('mobile'); ?>
+                </div>
             </div>
-            <div class="navbar-collapse collapse" id="main-nav"> 
-                <?php
-                //this adds the main menu, controlled through the WP menu interface
-                $args = array(
-                    'theme_location' => 'main',
-                    'container' => false,
-                    'menu_class' => 'nav navbar-nav',
-                );
+        </div>
+        <div class="main-nav-wrapper">
+            <div class="container-fluid">
+                <div class="navbar-header hidden-xs">
+                    <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+                </div>
+                <div class="navbar-collapse collapse" id="main-nav">
+                    <?php
+                    //this adds the main menu, controlled through the WP menu interface
+                    $args = array(
+                        'theme_location' => 'main',
+                        'container' => false,
+                        'menu_class' => 'nav navbar-nav',
+                    );
 
-                wp_nav_menu($args);
-                ?>
-                <div class="navbar-right search hidden-xs">
-                    <?php openlab_site_wide_bp_search(); ?>
+                    wp_nav_menu($args);
+                    ?>
+                    <div class="navbar-right search hidden-xs">
+                        <?php openlab_site_wide_bp_search('desktop'); ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,9 +85,7 @@ function openlab_custom_menu_items($items, $menu) {
             $opl_link .= '</li>';
         }
 
-        $mobile_search = '<li class="visible-xs search-mobile">' . openlab_site_wide_bp_search(true) . '</li>';
-
-        return $items . $opl_link . $mobile_search;
+        return $items . $opl_link;
     } else if ($menu->theme_location == 'aboutmenu') {
 
         $items = str_replace('Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items);

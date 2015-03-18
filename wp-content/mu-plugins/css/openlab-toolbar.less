@@ -5,338 +5,365 @@
     @import "../less/bootstrap/bootstrap.less";
     /**import boostrap overrides**/
     @import "../less/variables.less";
-}
 
+    #wpadminbar{
+        font-family: "Open Sans",Helvetica,Arial,sans-serif;
+        background: #444;
+        font-size: 14px;
+        line-height: 1.42857;
+        color: #fff;
+        height: 50px;
+        top: 64px;
+        min-width: 0;
+        z-index: 99998;
+        p,
+        a{
+            text-shadow: none !important;
+        }
+        #wp-toolbar{
+            line-height: normal;
+            margin: 0 auto;
+            max-width: 1140px;
+            > ul{
+                > li{
+                    position: relative;
+                    > .ab-item{
+                        color: #ffffff;
+                        cursor: pointer;
+                        text-align: center;
+                        line-height: 120%;
+                        margin-right: 0;
+                        padding: 14px 14px 19px;
+                        font-size: 14px;
+                        text-decoration: none;
+                        &:before{
+                            margin: 0;
+                            content: '';
+                        }
+                        .fa-caret-down{
+                            font-size: 12px;
+                            padding-left: 8px;
+                        }
+                        @media(max-width: 992px){
+                            font-size: 13px;
+                        }
+                    }
+                    > .fa{
+                        font-family: FontAwesome;
+                        font-size: 14px;
+                        width: 14px;
+                        margin: 0 auto;
+                    }
+                    .toolbar-item-count{
+                        background: #ff5959;
+                        color: #fff;
+                        border-radius: 8px;
+                        display: inline-block;
+                        font-size: 10px;
+                        font-weight: 400;
+                        height: 16px;
+                        line-height: 164%;
+                        text-align: center;
+                        vertical-align: middle;
+                        width: 16px;
+                        opacity: 1;
+                        &.sub-count{
+                            position: absolute;
+                            right: 8px;
+                            top: 11px;
+                        }
+                    }
+                    &.hover,
+                    &:hover{
+                        > a,
+                        > .ab-item{
+                            background: #333;
+                            color: #63dfd2;
+                        }
+                    }
+                    @media (max-width: @screen-xs-max){
+                        position: static;
+                    }
+                }
+            }
+            .admin-bar-menu{
+                li{
+                    font-size: 14px;
+                    a{
+                        color: #333;
+                        padding: 6px 12px;
+                        text-decoration: none;
+                        &:hover{
+                            background: #63dfd2;
+                        }
+                    }
+                }
+            }
+            .ab-sub-wrapper{
+                background: #fff;
+                border-radius: 0 0 4px 4px;
+                margin-top: 1px;
+                width: 600%;
+                .ab-submenu{
+                    padding: 0;
+                    background: #fff;
+                    border-radius: inherit;
+                    p{
+                        color: #333;
+                        margin-bottom: 8px;
+                        font-size: 12px;
+                        &:last-child{
+                            margin-bottom: 0;
+                        }
+                    }
+                    .submenu-title{
+                        background: #b8e2df;
+                        margin-bottom: 16px;
+                        color: #333;
+                        .ab-item{
+                            padding: 5px 10px;
+                            font-size: 14px;
+                        }
+                    }
+                    .menu-bottom-link{
+                        background: #b8e2df;
+                        padding: 9px 16px;
+                        text-align: right;
+                        border-radius: inherit;
+                        a{
+                            color: #333;
+                            &:hover, 
+                                &:focus {
+                                color: #49cabe;
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                    .nav-content-item{
+                        padding-bottom: 16px;
+                        margin-top: 16px;
+                        border-bottom: 1px solid #e5e5e5;
+                        .ab-item{
+                            width: 90%;
+                            margin: 0 auto;
+                            .actions{
+                                .btn{
+                                    float: left;
+                                    font-size: 14px;
+                                    margin-right: 2%;
+                                    position: relative;
+                                    width: auto;
+                                }
+                            }
+                        }
+                        .inline-links{
+                            a{
+                                display: inline-block;
+                                &.activity-action{
+                                    display: block;
+                                    margin-top: 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+                @media (max-width: @screen-xs-max){
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                }
+            }
+            #wp-admin-bar-mobile-centered{
+                margin: 0 auto;
+                overflow: hidden;
+                #wp-admin-bar-my-openlab-mobile{
+                    float: none;
+                    @media(max-width: @screen-xxs-max){
+                        display: none !important;
+                    }
+                }
+            }
+            #wp-admin-bar-my-hamburger,
+            #wp-admin-bar-my-hamburger-mol{
+                .ab-item{
+                    padding: 8px 12%;
+                    .navbar-toggle{
+                        margin: 0;
+                        float: none;
+                        .icon-bar{
+                            background: #ccc;
+                        }
+                    }
+                }
+            }
+            #wp-admin-bar-openlab{
+                > .ab-item{
+                    background: url('images/openlab_admin_bar_logo.png') #fff no-repeat 44% 58%;
+                    padding: 49px 0 0;
+                    width: 127px;
+                    overflow: hidden;
+                    height: 0;
+                    @media (max-width: 479px){
+                        width: 37px;
+                        background-position: -11% 58%;
+                    }
+                }
+                .ab-sub-wrapper{
+                    width: 170px;
+                }
+            }
+            #wp-admin-bar-my-openlab,
+            #wp-admin-bar-site-name
+            {
+                border-left: 1px #000 solid;
+                border-right: 1px #000 solid;
+                .ab-sub-wrapper{
+                    width: 170%;
+                }
+            }
+            #wp-admin-bar-my-openlab{
+                @media(max-width: @screen-xs-max){
+                    border: none;
+                    > .ab-item{
+                        padding: 7px 0 0;
+                        visibility: hidden;
+                        width: 0;
+                    }
+                }
+            }
+            #wp-admin-bar-my-account{
+                .ab-sub-wrapper{
+                    width: 150%;
+                    p{
+                        color: #333;
+                        &.actions{
+                            padding-top: 6px;
+                        }
+                    }
+                }
+            }
+            #wp-admin-bar-top-logout{
+                background: #000;
+                border-left: 1px #666666 solid;
+                border-right: 1px #666666 solid;
+            }
+            #wp-admin-bar-bp-login{
+                max-width: 70px;
+                .ab-sub-wrapper{
+                    color: #333;
+                    width: 350%;
+                    left: -250%;
+                    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    #sidebar-login-form{
+                        padding: 3% 5%;
+                    }
+                }
+            }
+            #wp-admin-bar-updates{
+                @media (max-width: 767px){
+                    display: none;
+                }
+            }
+        }
+    }
+
+    /**footer - also a sitewide component**/
+    &#openlab-footer{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        color: #333333;
+        font-family: "Open Sans",Helvetica,Arial,sans-serif;
+        font-size: 14px;
+        line-height: 1.42857;
+        padding-top: 30px;
+        background: #f0f0f0;
+        &.placeholder{
+            position: relative;
+            visibility: hidden;
+        }
+        .container-fluid {
+            max-width: 1155px;
+        }
+        .semibold{
+            font-weight: 600;
+        }
+        .bold{
+            font-weight: 700;
+        }
+        .regular{
+            font-weight: 400;
+        }
+        .cuny-logo{
+            max-width: 74px;
+        }
+        p,
+        a{
+            font-size: 12px;
+        }
+        p,
+        a,
+        h2{
+            text-shadow: none !important;
+        }
+        .row{
+            h2{
+                color: #333;
+            }
+        }
+        .col-logos{
+            display: inline-block;
+            p{
+                color: #444;
+            }
+            a{
+                img{
+                    padding-top: 5px;
+                    margin-right: 15px;
+                }
+            }
+        }
+        .col-links{
+            color: lighten(#666, 7.5%);
+            a{
+                color: lighten(#666, 7.5%);
+                font-weight: inherit;
+            }
+        }
+        .col-share{
+            a{
+                display: inline-block;
+                background: url('images/share_icons.png') no-repeat 0 0;
+                padding-top: 22px;
+                width: 22px;
+                height: 0;
+                overflow: hidden;
+                margin-right: 6px;
+                &.rss-link{
+                    background-position: -32px 0;
+                }
+            }
+        }
+        .row-copyright{
+            margin-top: 42px;
+            p,
+            span,
+            a{
+                color: lighten(#666, 7.5%);
+            }
+        }
+    }
+}
 //for proper placement of footer
 html{
     position: relative;
     height: auto;
 }
-
-#wpadminbar{
-    font-family: "Open Sans",Helvetica,Arial,sans-serif;
-    background: #444;
-    font-size: 14px;
-    line-height: 1.42857;
-    color: #fff;
-    height: 50px;
-    top: 64px;
-    min-width: 0;
-    z-index: 99998;
-    p,
-    a{
-        text-shadow: none !important;
-    }
-    #wp-toolbar{
-        line-height: normal;
-        margin: 0 auto;
-        max-width: 1140px;
-        > ul{
-            > li{
-                position: relative;
-                > .ab-item{
-                    color: #ffffff;
-                    cursor: pointer;
-                    text-align: center;
-                    line-height: 120%;
-                    margin-right: 0;
-                    padding: 14px 14px 19px;
-                    font-size: 14px;
-                    text-decoration: none;
-                    &:before{
-                        margin: 0;
-                        content: '';
-                    }
-                    .fa-caret-down{
-                        font-size: 12px;
-                        padding-left: 8px;
-                    }
-                    @media(max-width: 992px){
-                        font-size: 13px;
-                    }
-                }
-                > .fa{
-                    font-family: FontAwesome;
-                    font-size: 14px;
-                    width: 14px;
-                    margin: 0 auto;
-                }
-                .toolbar-item-count{
-                    background: #ff5959;
-                    color: #fff;
-                    border-radius: 8px;
-                    display: inline-block;
-                    font-size: 10px;
-                    font-weight: 400;
-                    height: 16px;
-                    line-height: 164%;
-                    text-align: center;
-                    vertical-align: middle;
-                    width: 16px;
-                    opacity: 1;
-                    &.sub-count{
-                        position: absolute;
-                        right: 8px;
-                        top: 11px;
-                    }
-                }
-                &.hover,
-                &:hover{
-                    > a,
-                    > .ab-item{
-                        background: #333;
-                        color: #63dfd2;
-                    }
-                }
-            }
-        }
-        .admin-bar-menu{
-            li{
-                font-size: 14px;
-                a{
-                    color: #333;
-                    padding: 6px 12px;
-                    text-decoration: none;
-                    &:hover{
-                        background: #63dfd2;
-                    }
-                }
-            }
-        }
-        .ab-sub-wrapper{
-            background: #fff;
-            border-radius: 0 0 4px 4px;
-            margin-top: 1px;
-            width: 600%;
-            .ab-submenu{
-                padding: 0;
-                background: #fff;
-                border-radius: inherit;
-                p{
-                    color: #333;
-                    margin-bottom: 8px;
-                    font-size: 12px;
-                    &:last-child{
-                        margin-bottom: 0;
-                    }
-                }
-                .submenu-title{
-                    background: #b8e2df;
-                    margin-bottom: 16px;
-                    color: #333;
-                    .ab-item{
-                        padding: 5px 10px;
-                        font-size: 14px;
-                    }
-                }
-                .menu-bottom-link{
-                    background: #b8e2df;
-                    padding: 9px 16px;
-                    text-align: right;
-                    border-radius: inherit;
-                    a{
-                        color: #333;
-                        &:hover, 
-                            &:focus {
-                            color: #49cabe;
-                            text-decoration: underline;
-                        }
-                    }
-                }
-                .nav-content-item{
-                    padding-bottom: 16px;
-                    margin-top: 16px;
-                    border-bottom: 1px solid #e5e5e5;
-                    .ab-item{
-                        width: 90%;
-                        margin: 0 auto;
-                        .actions{
-                            .btn{
-                                float: left;
-                                font-size: 14px;
-                                margin-right: 2%;
-                                position: relative;
-                                width: auto;
-                            }
-                        }
-                    }
-                    .inline-links{
-                        a{
-                            display: inline-block;
-                            &.activity-action{
-                                display: block;
-                                margin-top: 8px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        #wp-admin-bar-my-hamburger{
-            .ab-item{
-                padding: 9px 12%;
-                .navbar-toggle{
-                    margin: 0;
-                    float: none;
-                    .icon-bar{
-                        background: #ccc;
-                    }
-                }
-            }
-        }
-        #wp-admin-bar-openlab{
-            > .ab-item{
-                background: url('images/openlab_admin_bar_logo.png') #fff no-repeat 44% 58%;
-                padding: 49px 0 0;
-                width: 127px;
-                overflow: hidden;
-                height: 0;
-                @media (max-width: 479px){
-                    width: 37px;
-                    background-position: -11% 58%;
-                }
-            }
-            .ab-sub-wrapper{
-                width: 170px;
-            }
-        }
-        #wp-admin-bar-my-openlab,
-        #wp-admin-bar-site-name
-        {
-            border-left: 1px #000 solid;
-            border-right: 1px #000 solid;
-            .ab-sub-wrapper{
-                width: 170%;
-            }
-        }
-        #wp-admin-bar-my-account{
-            .ab-sub-wrapper{
-                width: 150%;
-                p{
-                    color: #333;
-                    &.actions{
-                        padding-top: 6px;
-                    }
-                }
-            }
-        }
-        #wp-admin-bar-top-logout{
-            background: #000;
-            border-left: 1px #666666 solid;
-            border-right: 1px #666666 solid;
-        }
-        #wp-admin-bar-bp-login{
-            max-width: 70px;
-            .ab-sub-wrapper{
-                color: #333;
-                width: 350%;
-                left: -250%;
-                -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-                box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-                #sidebar-login-form{
-                    padding: 3% 5%;
-                }
-            }
-        }
-        #wp-admin-bar-updates{
-            @media (max-width: 767px){
-                display: none;
-            }
-        }
-    }
-}
-
 /**group site only**/
 .adminbar-manual-bootstrap{
     #wpadminbar{
         top: 0;
-    }
-}
-
-/**footer - also a sitewide component**/
-#openlab-footer{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    color: #333333;
-    font-family: "Open Sans",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857;
-    padding-top: 30px;
-    background: #f0f0f0;
-    &.placeholder{
-        position: relative;
-        visibility: hidden;
-    }
-    .container-fluid {
-        max-width: 1155px;
-    }
-    .semibold{
-        font-weight: 600;
-    }
-    .bold{
-        font-weight: 700;
-    }
-    .regular{
-        font-weight: 400;
-    }
-    .cuny-logo{
-        max-width: 74px;
-    }
-    p,
-    a{
-        font-size: 12px;
-    }
-    p,
-    a,
-    h2{
-        text-shadow: none !important;
-    }
-    .row{
-        h2{
-            color: #333;
-        }
-    }
-    .col-logos{
-        display: inline-block;
-        p{
-            color: #444;
-        }
-        a{
-            img{
-                padding-top: 5px;
-                margin-right: 15px;
-            }
-        }
-    }
-    .col-links{
-        color: lighten(#666, 7.5%);
-        a{
-            color: lighten(#666, 7.5%);
-            font-weight: inherit;
-        }
-    }
-    .col-share{
-        a{
-            display: inline-block;
-            background: url('images/share_icons.png') no-repeat 0 0;
-            padding-top: 22px;
-            width: 22px;
-            height: 0;
-            overflow: hidden;
-            margin-right: 6px;
-            &.rss-link{
-                background-position: -32px 0;
-            }
-        }
-    }
-    .row-copyright{
-        margin-top: 42px;
-        p,
-        span,
-        a{
-            color: lighten(#666, 7.5%);
-        }
     }
 }

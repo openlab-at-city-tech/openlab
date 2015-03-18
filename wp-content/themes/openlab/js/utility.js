@@ -41,16 +41,40 @@
 
         //search
         if ($('.search-trigger-wrapper').length) {
-            var searchForm = $('.search-form-wrapper');
-            var searchTrigger = $('.search-trigger-wrapper');
             var select = $('.search-form-wrapper .hidden-custom-select select');
+            var adminBar = $('#wpadminbar');
+
+            $('.search-form-wrapper').each(function () {
+                var searchFormDim = invisibleDimensions($(this));
+                $(this).data('thisheight', searchFormDim.height);
+            });
+
             $('.search-trigger').on('click', function () {
-                if (searchForm.is(':visible')) {
-                    searchForm.slideUp(700);
-                    searchTrigger.toggleClass('search-live');
+                var searchTrigger = $(this);
+                var mode = searchTrigger.data('mode');
+                var searchForm = $('.search-form-wrapper.search-mode-' + mode);
+                if (searchTrigger.parent().hasClass('search-live')) {
+
+                    searchForm.slideUp(700, function () {
+                        searchTrigger.parent().toggleClass('search-live');
+                    });
+
+                    if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.animate({
+                            top: "-=" + searchForm.data('thisheight')
+                        }, 700);
+                    }
+
                 } else {
+                    searchTrigger.parent().toggleClass('search-live');
                     searchForm.slideDown(700);
-                    searchTrigger.toggleClass('search-live');
+
+                    if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.animate({
+                            top: "+=" + searchForm.data('thisheight')
+                        }, 700);
+                    }
+
                 }
                 select.customSelect();
             })
@@ -154,11 +178,38 @@
         //clear login form
         if ($('#user-login').length) {
             $('#sidebar-user-login, #sidebar-user-pass').on('focus', function () {
-                $(this).attr('placeholder','');
+                $(this).attr('placeholder', '');
             });
         }
 
     });//end document.ready
+
+    $(window).resize(function () {
+        //resetting the search on resize
+        if ($('.search-trigger-wrapper').length) {
+            var adminBar = $('#wpadminbar');
+
+            $('.search-trigger-wrapper').each(function () {
+                var searchTriggerWrapper = $(this);
+                var searchTrigger = $(this).find('.search-trigger');
+                if (searchTriggerWrapper.hasClass('search-live')) {
+                    var mode = searchTrigger.data('mode');
+                    var searchForm = $('.search-form-wrapper.search-mode-' + mode);
+                    
+                    searchForm.slideUp(700, function () {
+                        searchTrigger.parent().toggleClass('search-live');
+                    });
+
+                    if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.animate({
+                            top: "-=" + searchForm.data('thisheight')
+                        }, 700);
+                    }
+                }
+            });
+        }
+
+    });
 
     $(window).load(function () {
 
@@ -198,22 +249,22 @@
             $('.wpcf7-form-control-wrap').each(function () {
                 var thisElem = $(this);
                 if (thisElem.find('.wpcf7-not-valid-tip').text()) {
-                    
+
                     thisElem.remove('.wpcf7-not-valid-tip');
-                    
+
                     var thisText = 'Please enter your ' + thisElem.find('.wpcf7-form-control').attr('name');
-                    var newValidTip = '<div class="bp-template-notice error" style="display: none;"><p>'+thisText+'</p></div>';
-                    
+                    var newValidTip = '<div class="bp-template-notice error" style="display: none;"><p>' + thisText + '</p></div>';
+
                     thisElem.prepend(newValidTip);
-                    thisElem.find('.bp-template-notice.error').css('visiblity','visible').hide().fadeIn(550);
-                    
+                    thisElem.find('.bp-template-notice.error').css('visiblity', 'visible').hide().fadeIn(550);
+
                 }
             });
         }
         if ($('.wpcf7').length && $('.wpcf7-mail-sent-ok').length) {
             $('.wpcf7-form-control-wrap').each(function () {
                 var thisElem = $(this);
-                if(thisElem.find('.bp-template-notice.error')){
+                if (thisElem.find('.bp-template-notice.error')) {
                     thisElem.remove('.bp-template-notice.error');
                 }
             });
@@ -294,5 +345,23 @@
         $('.activity-list').css('visibility', 'visible').hide().fadeIn(700);
 
     }
+
+    function invisibleDimensions(el) {
+
+        $(el).css({
+            'display': 'block',
+            'visibility': 'hidden'
+        });
+        var dim = {
+            height: $(el).outerHeight(),
+            width: $(el).outerWidth()
+        };
+        $(el).css({
+            'display': 'none',
+            'visibility': ''
+        });
+        return dim;
+    }
+
 
 })(jQuery);
