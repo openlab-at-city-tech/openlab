@@ -8533,15 +8533,35 @@ body .align-left {
     height: auto;
   }
 }
-.sent-invites-panel {
-  min-width: 480px;
-}
 @media (max-width: 767px) {
+  .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {
+    display: none;
+  }
+  .sent-invites-panel table.invite-anyone-sent-invites .col-date-invited {
+    display: none;
+  }
   .sent-invites-panel .panel-body {
     padding: 15px 0;
   }
   .sent-invites-panel .panel-body p {
     padding: 0 10px;
+  }
+}
+@media (max-width: 480px) {
+  .sent-invites-panel table.invite-anyone-sent-invites .col-date-joined {
+    display: none;
+  }
+  .sent-invites-panel ul#invite-anyone-clear-links li {
+    float: none;
+    margin-left: 15px;
+    padding-left: 0;
+  }
+  .sent-invites-panel ul#invite-anyone-clear-links li a {
+    border: 0;
+    padding-left: 10px;
+  }
+  .sent-invites-panel .pagination-viewing {
+    display: none;
   }
 }
 /**member profiles**/
