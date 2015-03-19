@@ -70,7 +70,7 @@
                     </td>
 
                     <?php
-                            $tags = wp_get_post_terms(get_the_ID(), $this->docs_tag_tax_name);
+                            $tags = wp_get_post_terms(get_the_ID(), buddypress()->bp_docs->docs_tag_tax_name);
                             $tagtext = array();
 
                             foreach ($tags as $tag) {
