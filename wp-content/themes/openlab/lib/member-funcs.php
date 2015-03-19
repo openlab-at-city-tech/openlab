@@ -744,7 +744,7 @@ function cuny_member_profile_header() {
         <div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
             <div id="avatar-wrapper">
                 <div class="padded-img">
-                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $this_user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname( $this_user_id ); ?>"/>
                 </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
