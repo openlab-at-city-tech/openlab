@@ -58,7 +58,7 @@ function openlab_loop_pagination_links_filter($has_items) {
     global $groups_template, $members_template;
     // Only run on directories.
     $current_page = get_queried_object();
-    if (!in_array($current_page->post_name, array('people', 'courses', 'projects', 'clubs', 'portfolios',))) {
+    if ( !($current_page instanceof WP_Post) || !in_array($current_page->post_name, array('people', 'courses', 'projects', 'clubs', 'portfolios',))) {
         return $has_items;
     }
     switch (current_filter()) {

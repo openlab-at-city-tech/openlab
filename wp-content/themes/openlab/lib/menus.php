@@ -836,8 +836,14 @@ function openlab_group_membership_tabs($group = false) {
 }
 
 function openlab_docs_tabs() {
-    global $bp;
-    $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+    global $bp, $groups_template;
+
+    $group = null;
+    if ( bp_is_group() ) {
+	    $group = groups_get_current_group();
+    } elseif ( ! empty( $groups_template->group ) ) {
+	    $group = $groups_template->group;
+    }
     ?>
 
     <li <?php echo (bp_docs_current_view() == 'list' ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/docs/">View Docs</a></li>
