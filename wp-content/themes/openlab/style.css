@@ -8383,6 +8383,26 @@ body .align-left {
 .docs-info-header #tags-list {
   margin-top: 0;
 }
+@media (max-width: 767px) {
+  .created-date-cell {
+    display: none;
+  }
+  .tags-cell {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .groups-cell {
+    display: none;
+  }
+  .attachment-clip-cell,
+  .edited-date-cell {
+    display: none;
+  }
+  .doc-search-element {
+    display: none;
+  }
+}
 .doc-tabs ul {
   padding: 0;
   margin: 0;
@@ -8390,7 +8410,6 @@ body .align-left {
 }
 .doctable-panel {
   padding-bottom: 12px;
-  min-width: 480px;
 }
 .doctable-panel .doctable tr:nth-child(2n) {
   background-color: #ffffff;
