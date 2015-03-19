@@ -251,7 +251,7 @@ function openlab_group_archive() {
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-7">
-                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
                             </div>
                             <div class="item col-xs-16">
 
