@@ -52,7 +52,7 @@
 
                         <?php the_excerpt() ?>
 
-                        <div class="row-actions">					
+                        <div class="row-actions">
                             <?php bp_docs_doc_action_links() ?>
                         </div>
                     </td>
@@ -61,11 +61,11 @@
                         <a href="<?php echo bp_core_get_user_domain(get_the_author_meta('ID')) ?>" title="<?php echo bp_core_get_user_displayname(get_the_author_meta('ID')) ?>"><?php echo bp_core_get_user_displayname(get_the_author_meta('ID')) ?></a>
                     </td>
 
-                    <td class="date-cell created-date-cell"> 
+                    <td class="date-cell created-date-cell">
                         <?php echo get_the_date() ?>
                     </td>
 
-                    <td class="date-cell edited-date-cell"> 
+                    <td class="date-cell edited-date-cell">
                         <?php echo get_the_modified_date() ?>
                     </td>
 
@@ -81,9 +81,9 @@
                             <td class="tags-cell hidden-xs">
                                 <?php echo implode(', ', $tagtext) ?>
                             </td>
-		
+
                 </tr>
-            <?php endwhile ?>        
+            <?php endwhile ?>
         </tbody>
 
     </table>
@@ -95,7 +95,7 @@
         </div>
 
         <div id="bp-docs-paginate-links">
-            <?php bp_docs_paginate_links() ?> 
+            <?php bp_docs_paginate_links() ?>
         </div>
     </div>
 
