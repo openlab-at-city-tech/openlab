@@ -370,7 +370,7 @@ function openlab_invite_anyone_screen_two_content() {
 
 
     <?php else : ?>
-    
+
         <div class="info group-list row" id="message">
             <div class="col-md-24">
 		<p class="bold"><?php _e("You haven't sent any email invitations yet.", 'bp-invite-anyone') ?></p>
