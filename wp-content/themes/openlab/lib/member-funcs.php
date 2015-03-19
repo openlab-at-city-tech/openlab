@@ -950,7 +950,7 @@ function openlab_get_custom_activity_action() {
     
     $time_since = apply_filters_ref_array( 'bp_activity_time_since', array( '<span class="time-since">' . bp_core_time_since( $activities_template->activity->date_recorded ) . '</span>', &$activities_template->activity ) );
 
-    $title .= '<p class="item inline-links semibold">' . $action_output . '</p>';
+    $title  = '<p class="item inline-links semibold">' . $action_output . '</p>';
     $title .= '<p class="item timestamp font-size font-14"><span class="fa fa-undo"></span> ' . $time_since . '</p>';
     
     return $title;
