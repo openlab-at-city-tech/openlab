@@ -269,7 +269,7 @@ function openlab_my_groups_submenu($group) {
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
     $no_link = 'no-link';
-    
+
     $span_start = '<span class="semibold">';
     $span_end = '</span>';
 
@@ -377,7 +377,7 @@ function openlab_my_friends_submenu($count = true) {
         $count_span = openlab_get_menu_count_mup($count);
     }
 
-    
+
     if($bp->is_item_admin){
         $menu_list = array(
             $my_friends => 'My Friends',
@@ -387,7 +387,7 @@ function openlab_my_friends_submenu($count = true) {
     }else{
         return '';
     }
-    
+
     return openlab_submenu_gen($menu_list);
 }
 
@@ -665,7 +665,7 @@ add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 function openlab_filter_subnav_forums($subnav_item) {
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-    
+
     $subnav_item = str_replace('Forum','Discussion',$subnav_item);
 
     return $subnav_item;
@@ -783,7 +783,7 @@ function openlab_group_admin_tabs($group = false) {
         --><li<?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li><!--
 
         --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
-        
+
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )     ?>
 
         <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
@@ -870,11 +870,11 @@ function openlab_forum_tabs() {
 		$forum_action = bp_action_variable( $offset );
 		$forum_ids    = bbp_get_group_forum_ids( bp_get_current_group_id() );
 		$forum_id     = array_shift( $forum_ids );
-                
+
                 $bbp->current_forum_id = $forum_id;
-                
-                bbp_set_query_name( 'bbp_single_forum' ); 
-                
+
+                bbp_set_query_name( 'bbp_single_forum' );
+
                 // Get the topic
                 bbp_has_topics( array(
                         'name'           => bp_action_variable( $offset + 1 ),
