@@ -117,6 +117,8 @@ function cuny_site_wide_footer() {
  * @param type $placholder
  */
 function openlab_footer_markup($placeholder = NULL) {
+	$site = bp_get_root_domain();
+
     ?>
     <div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>">
         <div class="oplb-bs">
