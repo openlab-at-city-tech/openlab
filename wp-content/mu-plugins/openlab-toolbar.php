@@ -189,7 +189,7 @@ HTML;
 			'href'   => bp_get_root_domain(),
 			'meta'	 => array(
 				'tabindex' => 90,
-                                'class' => 'admin-bar-menu',
+                                'class' => 'admin-bar-menu hidden-xs',
 			)
  		) );
  	}
@@ -1416,6 +1416,54 @@ function cac_adminbar_js() {
 <?php
 }
 add_action( 'wp_footer', 'cac_adminbar_js', 999 );
+
+function openlab_mobile_menu_actions() {
+    ?>
+    	<script type="text/javascript">
+    	jQuery(document).ready(function($) {
+                    $('.direct-toggle').on('click',function(e){
+                        e.stopImmediatePropagation();
+                        
+                        var thisElem = $(this);
+                            
+                        if (!thisElem.hasClass('in-action')){
+                             
+                            $('.direct-toggle').removeClass('in-action');
+                            thisElem.addClass('in-action');
+                            
+                            var thisTarget = $(this).data('target');
+                            var thisTargetElem = $(thisTarget);
+                            
+                            if(thisTargetElem.is(':visible')){
+                                
+                                thisTargetElem.slideUp(700,function(){
+                                    thisElem.removeClass('in-action');
+                                });
+                                
+                            } else {
+                                
+                                $('.direct-toggle').each(function(){
+                                    var thisToggleTarget = $(this).data('target');
+                                    if($(thisToggleTarget).is(':visible')){
+                                        $(thisToggleTarget).slideUp(700);
+                                    }
+                                });
+                                
+                                thisTargetElem.slideDown(700,function(){
+                                    thisElem.removeClass('in-action');
+                                });
+                                
+                            }
+                        }
+                    });
+    	});
+    	</script>
+
+    <?php
+}
+
+add_action('wp_footer','openlab_mobile_menu_actions',999);
+add_action('admin_footer','openlab_mobile_menu_actions',999);
 
 /**
  * The following functions wrap the admin bar in an 'oplb-bs' class to isolate bootstrap styles from the rest of the page
