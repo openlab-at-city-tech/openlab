@@ -59,7 +59,7 @@ function openlab_group_privacy_settings($group_type) {
     }
     ?>
     <div class="panel panel-default">
-        <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>    
+        <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
 
         <div class="radio group-profile panel-body">
 
@@ -251,7 +251,7 @@ function openlab_group_archive() {
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-7">
-                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
                             </div>
                             <div class="item col-xs-16">
 
@@ -709,7 +709,7 @@ function cuny_group_single() {
 
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
                 <div class="padded-img">
-                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group_name->name; ?>"/>
+                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( $group_name ); ?>"/>
                 </div>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
@@ -841,6 +841,10 @@ function openlab_group_profile_activity_list() {
         ?>
         <?php $group_slug = bp_get_group_slug(); ?>
         <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
+
+	<?php
+	$group = groups_get_current_group();
+	?>
 
         <?php if (bp_is_group_home()) { ?>
 

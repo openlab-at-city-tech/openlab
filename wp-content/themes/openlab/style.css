@@ -8383,6 +8383,26 @@ body .align-left {
 .docs-info-header #tags-list {
   margin-top: 0;
 }
+@media (max-width: 767px) {
+  .created-date-cell {
+    display: none;
+  }
+  .tags-cell {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .groups-cell {
+    display: none;
+  }
+  .attachment-clip-cell,
+  .edited-date-cell {
+    display: none;
+  }
+  .doc-search-element {
+    display: none;
+  }
+}
 .doc-tabs ul {
   padding: 0;
   margin: 0;
@@ -8390,7 +8410,6 @@ body .align-left {
 }
 .doctable-panel {
   padding-bottom: 12px;
-  min-width: 480px;
 }
 .doctable-panel .doctable tr:nth-child(2n) {
   background-color: #ffffff;
@@ -8533,15 +8552,35 @@ body .align-left {
     height: auto;
   }
 }
-.sent-invites-panel {
-  min-width: 480px;
-}
 @media (max-width: 767px) {
+  .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {
+    display: none;
+  }
+  .sent-invites-panel table.invite-anyone-sent-invites .col-date-invited {
+    display: none;
+  }
   .sent-invites-panel .panel-body {
     padding: 15px 0;
   }
   .sent-invites-panel .panel-body p {
     padding: 0 10px;
+  }
+}
+@media (max-width: 480px) {
+  .sent-invites-panel table.invite-anyone-sent-invites .col-date-joined {
+    display: none;
+  }
+  .sent-invites-panel ul#invite-anyone-clear-links li {
+    float: none;
+    margin-left: 15px;
+    padding-left: 0;
+  }
+  .sent-invites-panel ul#invite-anyone-clear-links li a {
+    border: 0;
+    padding-left: 10px;
+  }
+  .sent-invites-panel .pagination-viewing {
+    display: none;
   }
 }
 /**member profiles**/

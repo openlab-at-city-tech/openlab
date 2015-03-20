@@ -516,7 +516,7 @@ function cuny_student_profile() {
             <div id="members-list" class="info-group col-xs-24">
 
                 <?php if ($friend_ids) { ?>
-                
+
                     <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                     <ul id="member-list" class="inline-element-list">
@@ -532,7 +532,7 @@ function cuny_student_profile() {
 
                     </ul>
                 <?php } else { ?>
-                    
+
                     <h4 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h4>
 
                     <div id="message" class="info">
@@ -744,7 +744,7 @@ function cuny_member_profile_header() {
         <div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
             <div id="avatar-wrapper">
                 <div class="padded-img">
-                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $this_user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname( $this_user_id ); ?>"/>
                 </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
@@ -905,7 +905,7 @@ function openlab_member_header() {
     <h1 class="entry-title profile-title clearfix">
         <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
         <span class="profile-type pull-right"><?php echo $account_type ?></span>
-    </h1> 
+    </h1>
     <?php
 }
 
@@ -947,36 +947,36 @@ function openlab_get_custom_activity_action() {
             $count++;
         }
     }
-    
+
     $time_since = apply_filters_ref_array( 'bp_activity_time_since', array( '<span class="time-since">' . bp_core_time_since( $activities_template->activity->date_recorded ) . '</span>', &$activities_template->activity ) );
 
-    $title .= '<p class="item inline-links semibold">' . $action_output . '</p>';
+    $title  = '<p class="item inline-links semibold">' . $action_output . '</p>';
     $title .= '<p class="item timestamp font-size font-14"><span class="fa fa-undo"></span> ' . $time_since . '</p>';
-    
+
     return $title;
 }
 
 function openlab_trim_member_name($name){
     global $post, $bp;
-    
+
     $trim_switch = false;
-    
+
     if($post->post_name == 'people' || $bp->current_action == 'members'){
         $trim_switch = true;
     }else if ($bp->action_variables[0] == 'manage-members' || ($bp->current_action == 'members' && $bp->current_component == 'groups')){
         $trim_switch = true;
     }
-    
+
     if($trim_switch){
         $process_name = explode(' ',$name);
         $new_name = '';
         foreach($process_name as $process){
             $new_name .= ' '.openlab_shortened_text($process,12,false);
         }
-        
+
         $name = $new_name;
     }
-    
+
     return $name;
 }
 
@@ -984,11 +984,11 @@ add_filter('bp_member_name','openlab_trim_member_name');
 
 function openlab_trim_message_subject($subject){
     global $bp;
-    
+
     if ($bp->current_component == 'messages' && ($bp->current_action == 'inbox' || $bp->current_action== 'sentbox')){
         $subject = openlab_shortened_text($subject, 20, false);
     }
-    
+
     return $subject;
 }
 
