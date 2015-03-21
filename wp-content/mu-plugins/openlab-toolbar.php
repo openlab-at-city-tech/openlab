@@ -330,7 +330,7 @@ HTML;
 			'id'    => 'network-menu-mobile',
 			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
                         'meta'  => array(
-                            'class' => 'visible-xs mobile-menu',
+                            'class' => 'visible-xs mobile-menu admin-bar-menu',
                         ),
 		) );
             
@@ -507,7 +507,7 @@ HTML;
                         $wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-activity',
-				'title'  => 'Activity',
+				'title'  => 'My Activity',
 				'href'   => $link,
                                 'meta' => array(
                                     'class' => 'admin-bar-menu-item visible-xs'
@@ -522,16 +522,6 @@ HTML;
 		$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
 
 		if ( !empty( $primary_site_id ) && !empty( $primary_site_url ) ) {
-
-			// @todo Do we really want this kind of separator?
-			$wp_admin_bar->add_node( array(
-				'parent' => 'my-openlab',
-				'id'     => 'my-openlab-separator',
-				'title'  => '-----------',
-                                'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
-                                )
-			) );
 
 			$wp_admin_bar->add_node( array(
 				'parent' => 'my-openlab',
@@ -1288,11 +1278,11 @@ HTML;
             ?>
 
             <style type="text/css" media="screen">
-                    html { margin-top: 154px !important; }
-                    * html body { margin-top: 154px !important; }
+                    html { margin-top: 0px !important; }
+                    * html body { margin-top: 0px !important; }
                     @media screen and ( max-width: 782px ) {
-                            html { margin-top: 154px !important; }
-                            * html body { margin-top: 154px !important; }
+                            html { margin-top: 0px !important; }
+                            * html body { margin-top: 0px !important; }
                     }
             </style>
 
@@ -1303,11 +1293,11 @@ HTML;
          ?>
 
             <style type="text/css" media="screen">
-                    html { margin-top: 50px !important; }
-                    * html body { margin-top: 50px !important; }
+                    html { margin-top: 0px !important; }
+                    * html body { margin-top: 0px !important; }
                     @media screen and ( max-width: 782px ) {
-                            html { margin-top: 50px !important; }
-                            * html body { margin-top: 50px !important; }
+                            html { margin-top: 0px !important; }
+                            * html body { margin-top: 0px !important; }
                     }
             </style>
 
@@ -1375,41 +1365,6 @@ function cac_adminbar_js() {
 			$(this).toggleClass("login-click");
 			return false;
 		});
-                $('.direct-toggle').on('click',function(e){
-                    e.stopImmediatePropagation();
-                    
-                    var thisElem = $(this);
-                        
-                    if (!thisElem.hasClass('in-action')){
-                         
-                        $('.direct-toggle').removeClass('in-action');
-                        thisElem.addClass('in-action');
-                        
-                        var thisTarget = $(this).data('target');
-                        var thisTargetElem = $(thisTarget);
-                        
-                        if(thisTargetElem.is(':visible')){
-                            
-                            thisTargetElem.slideUp(700,function(){
-                                thisElem.removeClass('in-action');
-                            });
-                            
-                        } else {
-                            
-                            $('.direct-toggle').each(function(){
-                                var thisToggleTarget = $(this).data('target');
-                                if($(thisToggleTarget).is(':visible')){
-                                    $(thisToggleTarget).slideUp(700);
-                                }
-                            });
-                            
-                            thisTargetElem.slideDown(700,function(){
-                                thisElem.removeClass('in-action');
-                            });
-                            
-                        }
-                    }
-                });
 	});
 	</script>
 
@@ -1422,10 +1377,11 @@ function openlab_mobile_menu_actions() {
     	<script type="text/javascript">
     	jQuery(document).ready(function($) {
                     $('.direct-toggle').on('click',function(e){
+                        $('.direct-toggle').removeClass('active')
                         e.stopImmediatePropagation();
                         
                         var thisElem = $(this);
-                            
+                        thisElem.addClass('active');
                         if (!thisElem.hasClass('in-action')){
                              
                             $('.direct-toggle').removeClass('in-action');

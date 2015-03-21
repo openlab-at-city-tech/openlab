@@ -6964,6 +6964,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs #wpadminbar {
+  position: absolute;
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   background: #444;
   font-size: 14px;
@@ -7049,8 +7050,15 @@ button.oplb-bs .close {
     padding: 0;
   }
   .oplb-bs #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item .navbar-toggle {
-    margin: 0;
-    padding: 17px 12px;
+    border-radius: 0;
+    margin: 7px 1px 0;
+    padding: 10px 5px 17px;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item .navbar-toggle.network-menu.active {
+    background: #737373;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item .navbar-toggle.mol-menu.active {
+    background: #a2a2a2;
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
@@ -7063,6 +7071,11 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
   background: #63dfd2;
+}
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
+    font-weight: bold;
+  }
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;

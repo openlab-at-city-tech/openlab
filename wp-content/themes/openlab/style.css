@@ -7335,15 +7335,12 @@ input[type="submit"] {
 .navbar-default {
   background: transparent;
   border: none;
+  margin-bottom: 85px;
 }
 .navbar-default .main-nav-wrapper,
 .navbar-default .header-mobile-wrapper {
   background: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 99999;
+  position: relative;
 }
 .navbar-default .main-nav-wrapper {
   border-bottom: 1px solid #dddddd;
