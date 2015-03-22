@@ -411,6 +411,7 @@ input[type="submit"]{
 }
 .search{
     position: relative;
+    z-index: 999999;
     .search-form-wrapper{
         background: #fff;
         display: none;
@@ -433,7 +434,10 @@ input[type="submit"]{
                 .form-control{
                     display: inline-block;
                     &#search-terms{
-                        width: 40%;
+                        width: 50%;
+                    }
+                    &#search-which{
+                        width: 32%;
                     }
                 }
             }
@@ -452,9 +456,6 @@ input[type="submit"]{
         }
         span{
             line-height: 4.5;
-            @media(max-width: @screen-sm-max){
-                line-height: 4;
-            }
         }
         &.search-live{
             background: none repeat scroll 0 0 #ffffff;
@@ -471,15 +472,22 @@ input[type="submit"]{
             }
         }
         @media(max-width: @screen-xs-max){
-
+            span{
+                line-height: 4;
+            }
+            &.search-live{
+                height: 64px;
+            }
+        }
+    }
+    @media(max-width: @screen-xs-max){
+        z-index: 0;
+        &.search-trigger{
+            z-index: 1;
         }
     }
 }
-.search-mobile{
-    #search-terms{
-        display: inline-block;
-        width: 50%;
-    }
+.search-mode-mobile{
     #search-submit{
         padding: 8px 12px;
     }
@@ -1636,7 +1644,7 @@ body{
     @media (max-width: @screen-xs-max){
         table.invite-anyone-sent-invites .col-group-invitations {
             display: none;
-	}
+        }
         table.invite-anyone-sent-invites .col-date-invited {
             display: none;
         }
@@ -1660,9 +1668,9 @@ body{
             border: 0;
             padding-left: 10px;
         }
-	.pagination-viewing {
+        .pagination-viewing {
             display: none;
-	}
+        }
     }
 }
 /**member profiles**/

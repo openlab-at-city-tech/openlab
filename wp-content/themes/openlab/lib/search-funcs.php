@@ -26,7 +26,7 @@ HTML;
     <form action="{$form_action}" method="post" id="search-form" class="form-inline">
         <div class="form-group">
         <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" />
-        <select style="width: auto" id="search-which" name="search-which" class="form-control">
+        <select id="search-which" name="search-which" class="form-control">
             <option value="members">People</option>
             <option value="courses">Courses</option>
             <option value="projects">Projects</option>

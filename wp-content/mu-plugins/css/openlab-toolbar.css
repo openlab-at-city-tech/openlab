@@ -7061,6 +7061,11 @@ button.oplb-bs .close {
     background: #a2a2a2;
   }
 }
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar > ul {
+    padding-left: 1%;
+  }
+}
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
   font-size: 14px;
 }
@@ -7144,9 +7149,16 @@ button.oplb-bs .close {
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
-    left: 0;
+    left: -1%;
     right: 0;
-    width: 100% !important;
+    top: 1px;
+    width: 101% !important;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
+    padding-left: 1%;
   }
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .ab-item {
     padding: 6px 12px;
@@ -7214,6 +7226,20 @@ button.oplb-bs .close {
     visibility: hidden;
     width: 0;
   }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile .ab-sub-wrapper {
+    top: 50px;
+  }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile .ab-sub-wrapper {
+  border: none;
+  border-top: 9px solid #a2a2a2;
+}
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper {
+    border: none;
+    border-top: 9px solid #d1d1d1;
+  }
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
@@ -7234,7 +7260,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
   color: #333;
-  width: 350%;
+  width: 350% !important;
   left: -250%;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);

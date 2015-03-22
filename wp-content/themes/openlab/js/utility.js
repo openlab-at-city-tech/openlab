@@ -48,7 +48,7 @@
                 var searchFormDim = invisibleDimensions($(this));
                 $(this).data('thisheight', searchFormDim.height);
             });
-
+            
             $('.search-trigger').on('click', function () {
                 var searchTrigger = $(this);
                 var mode = searchTrigger.data('mode');
@@ -58,7 +58,7 @@
                     searchForm.slideUp(700, function () {
                         searchTrigger.parent().toggleClass('search-live');
                     });
-
+                    
                     if (searchTrigger.data('mode') == 'mobile') {
                         adminBar.animate({
                             top: "-=" + searchForm.data('thisheight')
@@ -68,7 +68,6 @@
                 } else {
                     searchTrigger.parent().toggleClass('search-live');
                     searchForm.slideDown(700);
-
                     if (searchTrigger.data('mode') == 'mobile') {
                         adminBar.animate({
                             top: "+=" + searchForm.data('thisheight')
@@ -192,18 +191,22 @@
             $('.search-trigger-wrapper').each(function () {
                 var searchTriggerWrapper = $(this);
                 var searchTrigger = $(this).find('.search-trigger');
-                if (searchTriggerWrapper.hasClass('search-live')) {
-                    var mode = searchTrigger.data('mode');
-                    var searchForm = $('.search-form-wrapper.search-mode-' + mode);
-                    
-                    searchForm.slideUp(700, function () {
-                        searchTrigger.parent().toggleClass('search-live');
-                    });
 
-                    if (searchTrigger.data('mode') == 'mobile') {
-                        adminBar.animate({
-                            top: "-=" + searchForm.data('thisheight')
-                        }, 700);
+                if (!searchTrigger.parent().hasClass('sliding-active')) {
+                    if (searchTriggerWrapper.hasClass('search-live')) {
+                        searchTrigger.parent().addClass('sliding-active');
+                        var mode = searchTrigger.data('mode');
+                        var searchForm = $('.search-form-wrapper.search-mode-' + mode);
+                        searchForm.slideUp(700, function () {
+                            searchTrigger.parent().toggleClass('search-live');
+                            searchTrigger.parent().removeClass('sliding-active');
+                        });
+
+                        if (searchTrigger.data('mode') == 'mobile') {
+                            adminBar.animate({
+                                top: "-=" + searchForm.data('thisheight')
+                            }, 700);
+                        }
                     }
                 }
             });

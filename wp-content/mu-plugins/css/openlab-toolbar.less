@@ -102,6 +102,9 @@
                         }
                     }
                 }
+                @media (max-width: @screen-xs-max){
+                    padding-left: 1%;
+                }
             }
             .admin-bar-menu{
                 li{
@@ -188,10 +191,15 @@
                     }
                 }
                 @media (max-width: @screen-xs-max){
-                    left: 0;
+                    left: -1%;
                     right: 0;
-                    width: 100% !important;
+                    top: 1px;
+                    width: 101% !important;
+                    border: none;
+                    border-radius: 0;
+                    margin: 0;
                     .ab-submenu{
+                        padding-left: 1%;
                         .ab-item{
                             padding: 6px 12px;
                             float: none;
@@ -262,6 +270,23 @@
                         visibility: hidden;
                         width: 0;
                     }
+                    .ab-sub-wrapper{
+                        top: 50px;
+                    }
+                }
+            }
+            #wp-admin-bar-network-menu-mobile{
+                .ab-sub-wrapper{
+                    border: none;
+                    border-top: 9px solid #a2a2a2;
+                }
+            }
+            #wp-admin-bar-my-openlab{
+                @media (max-width: @screen-xs-max){
+                    .ab-sub-wrapper{
+                        border: none;
+                        border-top: 9px solid #d1d1d1;
+                    }
                 }
             }
             #wp-admin-bar-my-account{
@@ -284,7 +309,7 @@
                 max-width: 70px;
                 .ab-sub-wrapper{
                     color: #333;
-                    width: 350%;
+                    width: 350% !important;
                     left: -250%;
                     -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
                     box-shadow: 0 3px 5px rgba(0,0,0,0.2);
