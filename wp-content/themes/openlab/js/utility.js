@@ -9,9 +9,8 @@
         //fixing hover issues on mobile
         if (isBreakpoint('xs') || isBreakpoint('sm')) {
             $('.mobile-no-hover').bind('touchend', function () {
-                console.log('touchend triggered');
-                fixHoverOnMobile($(this)[0]);
-            })
+                fixHoverOnMobile($(this));
+            });
         }
 
         // Workshop fields on Contact Us
@@ -388,15 +387,8 @@
     }
 
     //fixing hover on mobile
-    function fixHoverOnMobile(el)
-    {
-        console.log(el);
-        var par = el.parentNode;
-        var next = el.nextSibling;
-        par.removeChild(el);
-        setTimeout(function () {
-            par.insertBefore(el, next);
-        }, 0);
+    function fixHoverOnMobile(thisElem) {
+        thisElem.trigger('click');
     }
 
 })(jQuery);
