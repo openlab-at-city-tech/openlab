@@ -7074,13 +7074,13 @@ button.oplb-bs .close {
   padding: 6px 12px;
   text-decoration: none;
 }
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
+  background: #63dfd2;
+}
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
     font-weight: bold;
   }
-}
-.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li:hover {
-  background: #63dfd2;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
