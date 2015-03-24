@@ -10,7 +10,7 @@
         if (isBreakpoint('xs') || isBreakpoint('sm')) {
             $('.mobile-no-hover').bind('touchend', function () {
                 console.log('touchend triggered');
-                fixHoverOnMobile($(this));
+                fixHoverOnMobile($(this)[0]);
             })
         }
 
@@ -396,7 +396,7 @@
         par.removeChild(el);
         setTimeout(function () {
             par.insertBefore(el, next);
-        }, 0)
+        }, 0);
     }
 
 })(jQuery);
