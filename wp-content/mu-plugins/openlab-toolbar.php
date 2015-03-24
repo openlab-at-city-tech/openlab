@@ -1333,8 +1333,11 @@ HTML;
 
                     <style type="text/css" media="screen">
                             html.wp-toolbar {
-                                padding-top: 50px;
+                                padding-top: 0;
                             }
+                            html.wp-toolbar #wpwrap{
+                                    padding-top: 50px;
+                                }
                     </style>
 
         <?php
