@@ -122,3 +122,19 @@ function openlab_message_thread_excerpt_custom_size($message) {
 }
 
 add_filter('bp_get_message_thread_excerpt', 'openlab_message_thread_excerpt_custom_size');
+
+/**
+ * Adds divs that can be used for client-side detection of bootstrap breakpoints
+ */
+function openlab_add_breakpoint_detection() {
+    ?>
+
+    <div class="device-xs visible-xs"></div>
+    <div class="device-sm visible-sm"></div>
+    <div class="device-md visible-md"></div>
+    <div class="device-lg visible-lg"></div>
+
+    <?php
+}
+
+add_action('wp_footer', 'openlab_add_breakpoint_detection');
