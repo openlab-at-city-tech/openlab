@@ -197,60 +197,84 @@ HTML;
         function openlab_menu_items($parent){
             global $wp_admin_bar;
             
-            $wp_admin_bar->add_node( array(
-			'parent' => $parent,
-			'id'     => 'home',
-			'title'  => 'Home',
-			'href'   => bp_get_root_domain()
- 		) );
+                $wp_admin_bar->add_node(array(
+                    'parent' => $parent,
+                    'id' => 'home',
+                    'title' => 'Home',
+                    'href' => bp_get_root_domain(),
+                    'meta' => array(
+                        'class' => 'mobile-no-hover',
+                    ),
+                ));
 
- 		$wp_admin_bar->add_node( array(
+                $wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'about',
 			'title'  => 'About',
-			'href'   => trailingslashit( bp_get_root_domain() . '/about' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/about' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'people',
 			'title'  => 'People',
-			'href'   => trailingslashit( bp_get_root_domain() . '/people' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/people' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'courses',
 			'title'  => 'Courses',
-			'href'   => trailingslashit( bp_get_root_domain() . '/courses' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/courses' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'projects',
 			'title'  => 'Projects',
-			'href'   => trailingslashit( bp_get_root_domain() . '/projects' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/projects' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'clubs',
 			'title'  => 'Clubs',
-			'href'   => trailingslashit( bp_get_root_domain() . '/clubs' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/clubs' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'portfolios',
 			'title'  => 'Portfolios',
-			'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id'     => 'help',
 			'title'  => 'Help',
-			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' )
+			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' ),
+                        'meta' => array(
+                            'class' => 'mobile-no-hover',
+                        ),
  		) );
         }
 
@@ -403,7 +427,7 @@ HTML;
 			'title'  => 'My Profile',
 			'href'   => bp_loggedin_user_domain(),
                         'meta' => array(
-                            'class' => 'admin-bar-menu-item'
+                            'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
                 
@@ -413,7 +437,7 @@ HTML;
 			'title'  => 'My Settings',
 			'href'   => bp_loggedin_user_domain().'/settings/',
                         'meta' => array(
-                            'class' => 'admin-bar-menu-item'
+                            'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
 
@@ -423,7 +447,7 @@ HTML;
 			'title'  => 'My Courses',
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' ),
                         'meta' => array(
-                            'class' => 'admin-bar-menu-item'
+                            'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
 
@@ -433,7 +457,7 @@ HTML;
 			'title'  => 'My Projects',
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' ),
                         'meta' => array(
-                            'class' => 'admin-bar-menu-item'
+                            'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
 
@@ -443,7 +467,7 @@ HTML;
 			'title'  => 'My Clubs',
 			'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' ),
                         'meta' => array(
-                            'class' => 'admin-bar-menu-item'
+                            'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
 
@@ -456,7 +480,7 @@ HTML;
 				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
 				'href'   => $portfolio_url,
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
 		}
@@ -470,7 +494,7 @@ HTML;
 				'title'  => 'My Friends '.$request_count,
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
 		}
@@ -483,7 +507,7 @@ HTML;
 				'title'  => sprintf( 'My Messages %s', $messages_count ),
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
 		}
@@ -497,7 +521,7 @@ HTML;
 				'title'  => sprintf( 'My Invitations %s', $invite_count ),
 				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
                         
@@ -510,7 +534,7 @@ HTML;
 				'title'  => 'My Activity',
 				'href'   => $link,
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item visible-xs'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover visible-xs'
                                 )
 			) );
         }
@@ -529,7 +553,7 @@ HTML;
 				'title'  => 'My Dashboard',
 				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
 		}
