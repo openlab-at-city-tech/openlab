@@ -110,13 +110,19 @@
                 li{
                     font-size: 14px;
                     a{
+                        background: #fff;
                         color: #333;
                         padding: 6px 12px;
                         text-decoration: none;
+                        width: 75%;
                         &:hover{
                             background: #63dfd2;
                         }
-                        @media (max-width: @screen-xs-max){
+                    }
+                    @media (max-width: @screen-xs-max){
+                        background: rgba(239, 239, 239, 0.8);
+                        a{
+                            background: rgba(255,255,255,0.42);
                             font-weight: bold;
                         }
                     }
@@ -191,6 +197,7 @@
                     }
                 }
                 @media (max-width: @screen-xs-max){
+                    background: transparent;
                     left: -1%;
                     right: 0;
                     top: 1px;
@@ -199,6 +206,7 @@
                     border-radius: 0;
                     margin: 0;
                     .ab-submenu{
+                        background: rgba(255, 255, 255, 0.42);
                         padding-left: 1%;
                         .ab-item{
                             padding: 6px 12px;
@@ -219,10 +227,16 @@
             }
             #wp-admin-bar-menu-toggle{
                 .ab-item{
-                    margin: 0;
+                    height: 44px;
+                    margin: 6px 0 0;
                     padding: 0;
-                    .icon-bar{
-                        background: @white;
+                    .navbar-toggle{
+                        border-radius: 0;
+                        margin: 0 1px;
+                        padding: 10px 5px 17px;
+                        .icon-bar{
+                            background: @white;
+                        }
                     }
                 }
             }
@@ -424,4 +438,22 @@ html{
     #wpadminbar{
         top: 0;
     }
+}
+/**behind menu background**/
+#behind_menu_background{
+    display: none;
+    position: absolute;
+    top: 123px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    &.active{
+        z-index: 9999;
+        background: #000;
+        opacity: 0.42;
+        display: block;
+    }
+}
+.wp-admin #behind_menu_background{
+    top: 59px;
 }

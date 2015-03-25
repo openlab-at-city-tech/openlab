@@ -7070,15 +7070,21 @@ button.oplb-bs .close {
   font-size: 14px;
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
+  background: #fff;
   color: #333;
   padding: 6px 12px;
   text-decoration: none;
+  width: 75%;
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
   background: #63dfd2;
 }
 @media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
+    background: rgba(239, 239, 239, 0.8);
+  }
   .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
+    background: rgba(255, 255, 255, 0.42);
     font-weight: bold;
   }
 }
@@ -7149,6 +7155,7 @@ button.oplb-bs .close {
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
+    background: transparent;
     left: -1%;
     right: 0;
     top: 1px;
@@ -7158,6 +7165,7 @@ button.oplb-bs .close {
     margin: 0;
   }
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu {
+    background: rgba(255, 255, 255, 0.42);
     padding-left: 1%;
   }
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .ab-item {
@@ -7178,10 +7186,16 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item {
-  margin: 0;
+  height: 44px;
+  margin: 6px 0 0;
   padding: 0;
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .icon-bar {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .navbar-toggle {
+  border-radius: 0;
+  margin: 0 1px;
+  padding: 10px 5px 17px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .navbar-toggle .icon-bar {
   background: #ffffff;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .icon-bar {
@@ -7360,4 +7374,22 @@ html {
 /**group site only**/
 .adminbar-manual-bootstrap #wpadminbar {
   top: 0;
+}
+/**behind menu background**/
+#behind_menu_background {
+  display: none;
+  position: absolute;
+  top: 123px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+#behind_menu_background.active {
+  z-index: 9999;
+  background: #000;
+  opacity: 0.42;
+  display: block;
+}
+.wp-admin #behind_menu_background {
+  top: 59px;
 }

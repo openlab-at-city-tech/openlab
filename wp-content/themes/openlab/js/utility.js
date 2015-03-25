@@ -8,7 +8,7 @@
 
         //fixing hover issues on mobile
         if (isBreakpoint('xs') || isBreakpoint('sm')) {
-            $('.mobile-no-hover').bind('touchend', function () {
+            $('.mobile-no-hover a').bind('touchend', function () {
                 fixHoverOnMobile($(this));
             });
         }

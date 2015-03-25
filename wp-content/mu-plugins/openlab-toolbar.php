@@ -1335,7 +1335,8 @@ HTML;
                             html.wp-toolbar {
                                 padding-top: 0;
                             }
-                            html.wp-toolbar #wpwrap{
+                            html.wp-toolbar #wpcontent,
+                            html.wp-toolbar #adminmenuwrap{
                                     padding-top: 50px;
                                 }
                     </style>
@@ -1408,6 +1409,7 @@ function openlab_mobile_menu_actions() {
                         e.stopImmediatePropagation();
                         
                         var thisElem = $(this);
+                        var background = $('#behind_menu_background');
                         thisElem.addClass('active');
                         if (!thisElem.hasClass('in-action')){
                              
@@ -1418,27 +1420,51 @@ function openlab_mobile_menu_actions() {
                             var thisTargetElem = $(thisTarget);
                             
                             if(thisTargetElem.is(':visible')){
-                                
+                                var thisTargetElem_h = thisTargetElem.height();
                                 thisTargetElem.slideUp(700,function(){
                                     thisElem.removeClass('in-action');
+                                    thisElem.removeClass('active');
+                                    background.removeClass('active').animate({ 'top': '-='+thisTargetElem_h+'px' },50);
                                 });
                                 
                             } else {
                                 
                                 $('.direct-toggle').each(function(){
-                                    var thisToggleTarget = $(this).data('target');
+                                    var thisElem = $(this);
+                                    var thisToggleTarget = thisElem.data('target');
+                                    var thisTargetElem_h = $(thisToggleTarget).height();
                                     if($(thisToggleTarget).is(':visible')){
-                                        $(thisToggleTarget).slideUp(700);
+                                        $(thisToggleTarget).slideUp(700,function(){
+                                            thisElem.removeClass('in-action');
+                                            thisElem.removeClass('active');
+                                            background.removeClass('active').animate({ 'top': '-='+thisTargetElem_h+'px' },50);
+                                        });
                                     }
                                 });
                                 
                                 thisTargetElem.slideDown(700,function(){
                                     thisElem.removeClass('in-action');
+                                    background.addClass('active').animate({ 'top': '+='+thisTargetElem.height()+'px' },50);
                                 });
                                 
                             }
                         }
                     });
+                    
+                    $('#behind_menu_background').on('click',function(){
+                           
+                           var thisElem = $(this);
+                           var currentActiveButton = $('.direct-toggle.active');
+                           var targetToClose = currentActiveButton.data('target');
+                           var targetToClose_h = $(targetToClose).height();
+                           
+                           $(targetToClose).slideUp(700,function(){
+                                                currentActiveButton.removeClass('in-action');
+                                                currentActiveButton.removeClass('active');
+                                                thisElem.removeClass('active').animate({ 'top': '-='+targetToClose_h+'px' },50);
+                                            });
+                           
+                        });
     	});
     	</script>
 
@@ -1464,6 +1490,7 @@ add_action('wp_before_admin_bar_render','openlab_wrap_adminbar_top');
 function openlab_wrap_adminbar_bottom(){
     ?>
         </div></div><!--oplb-bs-->
+        <div id="behind_menu_background"></div>
     <?php
 }
 
