@@ -285,7 +285,7 @@ HTML;
             
                 $current_user = wp_get_current_user();
 
-                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+                $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
             
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
@@ -316,12 +316,24 @@ HTML;
         function add_mobile_mol_link($wp_admin_bar){
             $current_user = wp_get_current_user();
 
-                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+                //truncating to be on the safe side
+                $username = $current_user->display_name;
+                if(mb_strlen($username) > 50){
+                    $username = substr($username,0,50).'...';
+                }
+                if(mb_strlen($username) > 12){
+                    $username_small = substr($username,0,13).'...';
+                } else {
+                    $username_small = $username;
+                }
+            
+                $howdy = '<span class="small-size">'.sprintf(__('Hi, %1$s'), $username).'</span>';
+                $howdy_small = '<span class="very-small-size">'.sprintf(__('Hi, %1$s'), $username_small).'</span>';
             
  		$wp_admin_bar->add_menu( array(
                         'parent' => 'mobile-centered',
 			'id'    => 'my-openlab-mobile',
-			'title' => $howdy,
+			'title' => $howdy.$howdy_small,
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'visible-xs',
@@ -1137,7 +1149,7 @@ HTML;
                 if (!$user_id)
                     return;
 
-                $howdy = sprintf(__('Howdy, %1$s'), $current_user->display_name);
+                $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',

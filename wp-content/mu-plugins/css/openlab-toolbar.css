@@ -7180,9 +7180,15 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile {
   float: none;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile .very-small-size {
+  display: none;
+}
 @media (max-width: 479px) {
-  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile {
-    display: none !important;
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile .small-size {
+    display: none;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile .very-small-size {
+    display: block;
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item {

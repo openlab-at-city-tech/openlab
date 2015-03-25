@@ -220,8 +220,16 @@
                 overflow: hidden;
                 #wp-admin-bar-my-openlab-mobile{
                     float: none;
+                    .very-small-size{
+                        display: none;
+                    }
                     @media(max-width: @screen-xxs-max){
-                        display: none !important;
+                        .small-size{
+                            display: none;
+                        }
+                        .very-small-size{
+                            display: block;
+                        }
                     }
                 }
             }
