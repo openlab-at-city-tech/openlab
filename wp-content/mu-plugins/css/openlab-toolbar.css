@@ -7283,6 +7283,11 @@ button.oplb-bs .close {
   padding: 3% 5%;
 }
 @media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-submenu {
+    background: #fff;
+  }
+}
+@media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-updates {
     display: none;
   }
