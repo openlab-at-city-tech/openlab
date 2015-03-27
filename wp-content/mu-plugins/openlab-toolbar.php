@@ -321,8 +321,8 @@ HTML;
                 if(mb_strlen($username) > 50){
                     $username = substr($username,0,50).'...';
                 }
-                if(mb_strlen($username) > 11){
-                    $username_small = substr($username,0,11).'...';
+                if(mb_strlen($username) > 12){
+                    $username_small = substr($username,0,12).'...';
                 } else {
                     $username_small = $username;
                 }
