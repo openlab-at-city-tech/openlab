@@ -7335,7 +7335,7 @@ input[type="submit"] {
 .navbar-default {
   background: transparent;
   border: none;
-  margin-bottom: 85px;
+  margin-bottom: 80px;
 }
 .navbar-default .main-nav-wrapper,
 .navbar-default .header-mobile-wrapper {
@@ -7522,6 +7522,9 @@ h2.course-title {
   line-height: 1.25;
   margin: 0 4px;
 }
+.fa.flush-left {
+  margin-left: 0;
+}
 /**custom tags**/
 body .no-gutter.no-gutter-right {
   padding-right: 0;
@@ -7543,6 +7546,9 @@ body .no-margin.no-margin-left {
 }
 body .btn-margin.btn-margin-top {
   margin-top: 20px;
+}
+body .font-size.font-12 {
+  font-size: 13px !important;
 }
 body .font-size.font-13 {
   font-size: 13px !important;
@@ -7623,6 +7629,17 @@ body .activity-title .fa {
 body .tag-btn {
   padding: 0 2%;
   font-weight: 600;
+}
+body .display-table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+body .display-table .display-table-row {
+  display: table-row;
+}
+body .display-table .display-table-row .display-table-cell {
+  display: table-cell;
 }
 body .mol-count,
 body .site-visibility .fa {
@@ -7867,8 +7884,7 @@ body .align-left {
   font-size: 12px;
 }
 .home-page .row-home-top {
-  margin-bottom: 15px;
-  margin-top: 27px;
+  margin-bottom: 14px;
 }
 @media (max-width: 767px) {
   .home-page .row-home-top {
@@ -7876,12 +7892,13 @@ body .align-left {
   }
 }
 .home-page .row-home-top .login {
-  background: url('images/log_in_background.png') no-repeat 207px -70px #ff5959;
+  background: url('images/log_in_background.png') no-repeat 123px -44px #ec6348;
+  border-bottom: 13px solid #ff5959;
   float: left;
   width: 32.5%;
   border-radius: 4px 0 0 4px;
   color: #ffffff;
-  height: 400px;
+  height: 295px;
 }
 @media (max-width: 767px) {
   .home-page .row-home-top .login {
@@ -7900,39 +7917,77 @@ body .align-left {
 .home-page .row-home-top .login a:hover {
   color: #63dfd2;
 }
+.home-page .row-home-top .login .fa {
+  font-size: inherit;
+}
 .home-page .row-home-top .login .log-box {
-  padding: 0 6.5%;
+  padding: 0 4.5% 0 7.5%;
+}
+.home-page .row-home-top .login .log-box#open-lab-join h2 {
+  margin: 18px 0 9px;
+}
+.home-page .row-home-top .login .log-box#open-lab-join p {
+  margin-bottom: 12px;
+}
+.home-page .row-home-top .login .log-box#open-lab-join .link-btn {
+  margin-bottom: 7px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login {
-  border-bottom: 12px solid #e94646;
-  padding-bottom: 22px;
+  border-bottom: 13px solid #e94646;
 }
-.home-page .row-home-top .login .log-box#open-lab-join .btn-primary {
-  margin-right: 15px;
+.home-page .row-home-top .login .log-box#open-lab-login h2 {
+  margin: 20px 0 18px;
 }
-.home-page .row-home-top .login .log-box#user-login input {
-  color: #bbbbbb;
+.home-page .row-home-top .login .log-box#open-lab-login .avatar img {
+  border: 1px solid #000000;
+  max-width: 86px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login .avatar,
+.home-page .row-home-top .login .log-box#open-lab-login .content-list {
+  display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: 23px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login .content-list {
+  margin-left: 10px;
+}
+.home-page .row-home-top .login .log-box#login-help h4 {
+  margin: 12px 0;
+}
+.home-page .row-home-top .login .log-box#user-login h2 {
+  margin: 14px 0 18px;
+}
+.home-page .row-home-top .login .log-box#user-login input[type="text"],
+.home-page .row-home-top .login .log-box#user-login input[type="password"] {
+  font-size: 13px;
+  height: 29px;
+  margin-bottom: 7px;
+  padding: 4px 10px;
+  width: 94%;
+  color: #999999;
 }
 .home-page .row-home-top .login .log-box #keep-logged-in {
-  margin-top: 12px;
-  line-height: 3.5;
+  margin-top: 10px;
 }
-.home-page .row-home-top .login .log-box #keep-logged-in .btn-primary {
-  margin-right: 15px;
+.home-page .row-home-top .login .log-box #keep-logged-in .forgot-password-link {
+  margin-right: 20px;
+  vertical-align: middle;
 }
-.home-page .row-home-top .login .log-box #keep-logged-in input {
+.home-page .row-home-top .login .log-box #keep-logged-in #sidebar-rememberme {
+  margin-right: 3px;
   vertical-align: middle;
 }
 .home-page .row-home-top .login .log-box #keep-logged-in span {
-  line-height: 2.5;
-  padding-left: 7px;
   vertical-align: middle;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in #sidebar-wp-submit {
+  margin-top: 7px;
 }
 .home-page .row-home-top .slider {
   float: left;
   width: 67.5%;
   border-radius: 0 4px 4px 0;
-  max-height: 400px;
+  max-height: 295px;
 }
 @media (max-width: 767px) {
   .home-page .row-home-top .slider {
@@ -7981,7 +8036,7 @@ body .align-left {
   right: 0;
   top: 0;
   width: 33%;
-  padding: 5% 4%;
+  padding: 2.5%;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content a {
   color: inherit;
@@ -7991,10 +8046,17 @@ body .align-left {
   text-decoration: none;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content h2 {
-  margin: 15px 0;
+  font-size: 32px;
+  margin: 0 0 17px;
+  font-weight: 600;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_content h2,
+.home-page .row-home-top .slider .camera_wrap .camera_content p {
+  text-shadow: 1px 1px 1px rgba(99, 219, 152, 0.8);
 }
 @media (max-width: 767px) {
   .home-page .row-home-top .slider .camera_wrap .camera_content {

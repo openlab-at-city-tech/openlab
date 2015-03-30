@@ -13,25 +13,22 @@ function cuny_home_login() {
     if (is_user_logged_in()) :
 
         echo '<div id="open-lab-login" class="log-box">';
-        echo '<h2 class="title">Welcome...</h2>';
+        echo '<h2 class="title">Welcome, ' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h2>';
         do_action('bp_before_sidebar_me')
         ?>
 
-        <div id="sidebar-me" class="row">
-            <div class="col-xs-11">
-                <a class="alignleft avatar" href="<?php echo bp_loggedin_user_domain() ?>">
+        <div id="sidebar-me" class="clearfix">
+            <div id="user-info">
+                <a class="avatar" href="<?php echo bp_loggedin_user_domain() ?>">
                     <img class="img-responsive" src="<?php bp_loggedin_user_avatar(array('type' => 'full', 'html' => false)); ?>" alt="Avatar for <?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?>" />
                 </a>
-            </div>
 
-            <div id="user-info" class="col-xs-13">
-                <h4 class="no-margin no-margin-top"><?php echo bp_core_get_user_displayname(bp_loggedin_user_id()); ?></h4>
                 <ul class="content-list">
-                    <li><a class="button logout font-size font-14 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>
-                    <li><a class="button logout font-size font-14 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></li>
+                    <li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>">Not <?php echo bp_core_get_username(bp_loggedin_user_id()); ?>?</a></li>
+                    <li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo wp_logout_url(bp_get_root_domain()) ?>"><?php _e('Log Out', 'buddypress') ?></a></li>
                 </ul>
-            </div><!--user-info-->
-
+                </span><!--user-info-->
+            </div>
             <?php do_action('bp_sidebar_me') ?>
         </div><!--sidebar-me-->
 
@@ -40,43 +37,40 @@ function cuny_home_login() {
         <?php echo '</div>'; ?>
 
         <div id="login-help" class="log-box">
-            <h4 class="title">Need HELP?</h4>
-            <p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help</a> section or <a class="roll-over-loss" href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
+            <h4 class="title">Need Help?</h4>
+            <p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo site_url(); ?>/blog/help/openlab-help/">Help section</a> or <a class="roll-over-loss" href='<?php echo site_url(); ?>/about/contact-us/'>contact us</a> with a question.</p>
         </div><!--login-help-->
 
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box">'; ?>
-        <?php echo '<h2 class="title"><span class="fa fa-plus-circle"></span> Join OpenLab</h2>'; ?>
-        <p class="italics font-size font-14">&nbsp;&nbsp;A place to learn, work, and share</p>
-        <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-left" href="' . site_url() . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>', 'buddypress') ?>
+        <?php echo '<h2 class="title"><span class="fa fa-plus-circle flush-left"></span> Join OpenLab</h2>'; ?>
+        <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-right semibold" href="' . site_url() . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
         <?php echo '<div id="open-lab-login" class="log-box">'; ?>
         <?php do_action('bp_after_sidebar_login_form') ?>
         <?php echo '</div>'; ?>
-        
+
         <div id="user-login" class="log-box">
 
-        <?php echo '<h2 class="title"><span class="fa fa-arrow-circle-right"></span> Log in</h2>'; ?>
-        <?php do_action('bp_before_sidebar_login_form') ?>
+            <?php echo '<h2 class="title"><span class="fa fa-arrow-circle-right"></span> Log in</h2>'; ?>
+            <?php do_action('bp_before_sidebar_login_form') ?>
 
-        <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
+            <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
                 <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="97" />
 
                 <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="98" />
 
-            <div id="below-login-form">
-                <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-            </div>
-            <div id="keep-logged-in" class="small-text">
-                <input class="btn btn-default btn-primary link-btn pull-left" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
-                <input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
-            </div>
-            <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
+                <div id="keep-logged-in" class="small-text">
+                    <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
+                    <input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
+                    <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
+                </div>
+                <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
-            <?php do_action('bp_sidebar_login_form') ?>
+                <?php do_action('bp_sidebar_login_form') ?>
 
-        </form>
+            </form>
         </div>
     <?php
     endif;
@@ -228,7 +222,6 @@ function cuny_home_square($type) {
             $group_ids[] = $g->id;
         }
         $group_ids_sql = implode(',', $group_ids);
-
         ?>
 
 
@@ -249,238 +242,239 @@ function cuny_home_square($type) {
                     ?>
                     <div class="item-avatar">
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
-                        
+
                         <?php $last_active = bp_get_group_last_active(); ?>
-                        
-                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf( __( 'active %s', 'buddypress' ), $last_active ) ?></div>
+
+                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf(__('active %s', 'buddypress'), $last_active) ?></div>
                     </div>
                     <div class="item-content-wrapper">
-                    <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
+                        <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
+                        ?>
+                        <?php
+                        //echo '<div class="byline">Author Name | Date</div>';
+
+                        echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
+                        echo '</div>';
+                        echo '</div>';
+                        $i++;
+                    endwhile;
                     ?>
-                    <?php
-                    //echo '<div class="byline">Author Name | Date</div>';
-
-                    echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
-                    echo '</div>';
-                    echo '</div>';
-                    $i++;
-                endwhile;
-                ?>
-            </div>
-        </div><!--activity-list-->
-
-        <?php
-    endif;
-
-    $meta_filter->remove_filters();
-}
-
-/**
- * 	openlab_groups_filter_clause()
- *
- */
-function openlab_groups_filter_clause($sql) {
-    global $openlab_group_type, $bp;
-
-    // Join to groupmeta table for group type
-    $ex = explode(" WHERE ", $sql);
-    $ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
-    $ex = implode(" WHERE ", $ex);
-
-    // Add the necessary where clause
-    $ex = explode(" AND ", $ex);
-    array_splice($ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords($openlab_group_type) . "' OR gt.meta_value = '" . strtolower($openlab_group_type) . "' )");
-    $ex = implode(" AND ", $ex);
-
-    return $ex;
-}
-
-/**
- * 	Registration page layout
- *
- */
-function openlab_registration_page() {
-    do_action('bp_before_register_page')
-    ?>
-
-    <div class="page" id="register-page">
-        
-        <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
-
-        <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
-
-            <?php if ('request-details' == bp_get_current_signup_step()) : ?>
-            
-            <div class="panel panel-default">
-                            <div class="panel-heading semibold">Account Details</div>
-                            <div class="panel-body">
-
-                <?php do_action('template_notices') ?>
-
-                <p><?php _e('Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress') ?></p>
-                <p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
-                <?php do_action('bp_before_account_details_fields') ?>
-
-                <div class="register-section" id="basic-details-section">
-
-                    <?php /*                     * *** Basic Account Details ***** */ ?>
-
-                    <label for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
-                    <?php do_action('bp_signup_username_errors') ?>
-                    <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
-
-                   <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
-                    <?php do_action('bp_signup_email_errors') ?>
-                    <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value( 'signup_email' ) ?>" />
-
-                    <label for="signup_email_confirm">Confirm Email Address (required)</label>
-                    <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="<?php echo openlab_post_value( 'signup_email_confirm' ) ?>" />
-
-                    <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                    <?php do_action('bp_signup_password_errors') ?>
-                    <input class="form-control" type="password" name="signup_password" id="signup_password" value="" />
-
-                    <label for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                    <?php do_action('bp_signup_password_confirm_errors') ?>
-                    <input class="form-control" type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
-
-                </div><!-- #basic-details-section -->
                 </div>
-            </div><!--.panel-->
+            </div><!--activity-list-->
 
-                <?php do_action('bp_after_account_details_fields') ?>
+            <?php
+        endif;
 
-                <?php /*                 * *** Extra Profile Details ***** */ ?>
+        $meta_filter->remove_filters();
+    }
 
-                <?php if (bp_is_active('xprofile')) : ?>
-            
+    /**
+     * 	openlab_groups_filter_clause()
+     *
+     */
+    function openlab_groups_filter_clause($sql) {
+        global $openlab_group_type, $bp;
+
+        // Join to groupmeta table for group type
+        $ex = explode(" WHERE ", $sql);
+        $ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
+        $ex = implode(" WHERE ", $ex);
+
+        // Add the necessary where clause
+        $ex = explode(" AND ", $ex);
+        array_splice($ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords($openlab_group_type) . "' OR gt.meta_value = '" . strtolower($openlab_group_type) . "' )");
+        $ex = implode(" AND ", $ex);
+
+        return $ex;
+    }
+
+    /**
+     * 	Registration page layout
+     *
+     */
+    function openlab_registration_page() {
+        do_action('bp_before_register_page')
+        ?>
+
+        <div class="page" id="register-page">
+
+            <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
+
+            <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
+
+                <?php if ('request-details' == bp_get_current_signup_step()) : ?>
+
                     <div class="panel panel-default">
+                        <div class="panel-heading semibold">Account Details</div>
+                        <div class="panel-body">
+
+                            <?php do_action('template_notices') ?>
+
+                            <p><?php _e('Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress') ?></p>
+                            <p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
+                            <?php do_action('bp_before_account_details_fields') ?>
+
+                            <div class="register-section" id="basic-details-section">
+
+                                <?php /*                                 * *** Basic Account Details ***** */ ?>
+
+                                <label for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
+                                <?php do_action('bp_signup_username_errors') ?>
+                                <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
+
+                                <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
+                                <?php do_action('bp_signup_email_errors') ?>
+                                <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value('signup_email') ?>" />
+
+                                <label for="signup_email_confirm">Confirm Email Address (required)</label>
+                                <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="<?php echo openlab_post_value('signup_email_confirm') ?>" />
+
+                                <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+                                <?php do_action('bp_signup_password_errors') ?>
+                                <input class="form-control" type="password" name="signup_password" id="signup_password" value="" />
+
+                                <label for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+                                <?php do_action('bp_signup_password_confirm_errors') ?>
+                                <input class="form-control" type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
+
+                            </div><!-- #basic-details-section -->
+                        </div>
+                    </div><!--.panel-->
+
+                    <?php do_action('bp_after_account_details_fields') ?>
+
+                    <?php /*                     * *** Extra Profile Details ***** */ ?>
+
+                    <?php if (bp_is_active('xprofile')) : ?>
+
+                        <div class="panel panel-default">
                             <div class="panel-heading semibold">Public Profile Details</div>
                             <div class="panel-body">
 
-                    <?php do_action('bp_before_signup_profile_fields') ?>
+                                <?php do_action('bp_before_signup_profile_fields') ?>
 
-                    <div class="register-section" id="profile-details-section">
+                                <div class="register-section" id="profile-details-section">
 
-                        <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
+                                    <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
 
-                        <?php echo wds_get_register_fields('Base'); ?>
+                                    <?php echo wds_get_register_fields('Base'); ?>
 
-                        <?php do_action('bp_after_signup_profile_fields') ?>
+                                    <?php do_action('bp_after_signup_profile_fields') ?>
 
-                    </div><!-- #profile-details-section -->
+                                </div><!-- #profile-details-section -->
+                            </div>
+                        </div><!--.panel-->
+
+
+
+                    <?php endif; ?>
+
+                    <?php do_action('bp_before_registration_submit_buttons') ?>
+
+                    <p class="sign-up-terms">
+                        By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
+                    </p>
+
+                    <div class="submit">
+                        <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
                     </div>
-            </div><!--.panel-->
 
+                    <?php do_action('bp_after_registration_submit_buttons') ?>
 
+                    <?php wp_nonce_field('bp_new_signup') ?>
 
-                <?php endif; ?>
+                <?php endif; // request-details signup step    ?>
 
-                <?php do_action('bp_before_registration_submit_buttons') ?>
+                <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
 
-                <p class="sign-up-terms">
-                    By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
-                </p>
+                    <div class="panel panel-default">
+                        <div class="panel-heading semibold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
+                        <div class="panel-body">
 
-                <div class="submit">
-                    <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
-                </div>
+                            <?php do_action('template_notices') ?>
 
-                <?php do_action('bp_after_registration_submit_buttons') ?>
+                            <?php if (bp_registration_needs_activation()) : ?>
+                                <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress') ?></p>
+                            <?php else : ?>
+                                <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress') ?></p>
+                            <?php endif; ?>
 
-                <?php wp_nonce_field('bp_new_signup') ?>
+                            <!--<?php if (bp_is_active('xprofile') && !(int) bp_get_option('bp-disable-avatar-uploads')) : ?>
+                                
+                                <?php if ('upload-image' == bp_get_avatar_admin_step()) : ?>
+                                                    
+                                                                                                                                    <h4><?php _e('Your Current Avatar', 'buddypress') ?></h4>
+                                                                                                                                    <p><?php _e("We've fetched an avatar for your new account. If you'd like to change this, why not upload a new one?", 'buddypress') ?></p>
+                                                    
+                                                                                                                                    <div id="signup-avatar">
+                                    <?php bp_signup_avatar() ?>
+                                                                                                                                    </div>
+                                                    
+                                                                                                                                    <p>
+                                                                                                                                            <input type="file" name="file" id="file" />
+                                                                                                                                            <input type="submit" name="upload" id="upload" value="<?php _e('Upload Image', 'buddypress') ?>" />
+                                                                                                                                            <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
+                                                                                                                                            <input type="hidden" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
+                                                                                                                                            <input type="hidden" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
+                                                                                                                                    </p>
+                                                    
+                                    <?php wp_nonce_field('bp_avatar_upload') ?>
+                                                    
+                                <?php endif; ?>
+                                
+                                <?php if ('crop-image' == bp_get_avatar_admin_step()) : ?>
+                                                    
+                                                                                                                                    <h3><?php _e('Crop Your New Avatar', 'buddypress') ?></h3>
+                                                    
+                                                                                                                                    <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
+                                                    
+                                                                                                                                    <div id="avatar-crop-pane">
+                                                                                                                                            <img src="<?php bp_avatar_to_crop() ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e('Avatar preview', 'buddypress') ?>" />
+                                                                                                                                    </div>
+                                                    
+                                                                                                                                    <input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e('Crop Image', 'buddypress') ?>" />
+                                                    
+                                                                                                                                    <input type="hidden" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
+                                                                                                                                    <input type="hidden" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
+                                                                                                                                    <input type="hidden" name="signup_avatar_dir" id="signup_avatar_dir" value="<?php bp_signup_avatar_dir_value() ?>" />
+                                                    
+                                                                                                                                    <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src() ?>" />
+                                                                                                                                    <input type="hidden" id="x" name="x" />
+                                                                                                                                    <input type="hidden" id="y" name="y" />
+                                                                                                                                    <input type="hidden" id="w" name="w" />
+                                                                                                                                    <input type="hidden" id="h" name="h" />
+                                                    
+                                    <?php wp_nonce_field('bp_avatar_cropstore') ?>
+                                                    
+                                <?php endif; ?>
+                                
+                            <?php endif; ?> -->
 
-            <?php endif; // request-details signup step   ?>
+                        </div>
+                    </div><!--.panel-->
 
-            <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
+                <?php endif; // completed-confirmation signup step    ?>
 
-                <div class="panel panel-default">
-                            <div class="panel-heading semibold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
-                            <div class="panel-body">
+                <?php do_action('bp_custom_signup_steps') ?>
 
-                <?php do_action('template_notices') ?>
+            </form>
 
-                <?php if (bp_registration_needs_activation()) : ?>
-                    <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress') ?></p>
-                <?php else : ?>
-                    <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress') ?></p>
-                <?php endif; ?>
+        </div>
 
-                <!--<?php if (bp_is_active('xprofile') && !(int) bp_get_option('bp-disable-avatar-uploads')) : ?>
+        <?php do_action('bp_after_register_page') ?>
 
-                    <?php if ('upload-image' == bp_get_avatar_admin_step()) : ?>
+        <?php do_action('bp_after_directory_activity_content') ?>
 
-                                                                                <h4><?php _e('Your Current Avatar', 'buddypress') ?></h4>
-                                                                                <p><?php _e("We've fetched an avatar for your new account. If you'd like to change this, why not upload a new one?", 'buddypress') ?></p>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                if (jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show'))
+                    jQuery('div#blog-details').toggle();
 
-                                                                                <div id="signup-avatar">
-                        <?php bp_signup_avatar() ?>
-                                                                                </div>
-
-                                                                                <p>
-                                                                                        <input type="file" name="file" id="file" />
-                                                                                        <input type="submit" name="upload" id="upload" value="<?php _e('Upload Image', 'buddypress') ?>" />
-                                                                                        <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
-                                                                                        <input type="hidden" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
-                                                                                        <input type="hidden" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
-                                                                                </p>
-
-                        <?php wp_nonce_field('bp_avatar_upload') ?>
-
-                    <?php endif; ?>
-
-                    <?php if ('crop-image' == bp_get_avatar_admin_step()) : ?>
-
-                                                                                <h3><?php _e('Crop Your New Avatar', 'buddypress') ?></h3>
-
-                                                                                <img src="<?php bp_avatar_to_crop() ?>" id="avatar-to-crop" class="avatar" alt="<?php _e('Avatar to crop', 'buddypress') ?>" />
-
-                                                                                <div id="avatar-crop-pane">
-                                                                                        <img src="<?php bp_avatar_to_crop() ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e('Avatar preview', 'buddypress') ?>" />
-                                                                                </div>
-
-                                                                                <input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e('Crop Image', 'buddypress') ?>" />
-
-                                                                                <input type="hidden" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />
-                                                                                <input type="hidden" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
-                                                                                <input type="hidden" name="signup_avatar_dir" id="signup_avatar_dir" value="<?php bp_signup_avatar_dir_value() ?>" />
-
-                                                                                <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src() ?>" />
-                                                                                <input type="hidden" id="x" name="x" />
-                                                                                <input type="hidden" id="y" name="y" />
-                                                                                <input type="hidden" id="w" name="w" />
-                                                                                <input type="hidden" id="h" name="h" />
-
-                        <?php wp_nonce_field('bp_avatar_cropstore') ?>
-
-                    <?php endif; ?>
-
-                <?php endif; ?> -->
-                
-                </div>
-            </div><!--.panel-->
-
-            <?php endif; // completed-confirmation signup step   ?>
-
-            <?php do_action('bp_custom_signup_steps') ?>
-
-        </form>
-
-    </div>
-
-    <?php do_action('bp_after_register_page') ?>
-
-    <?php do_action('bp_after_directory_activity_content') ?>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
-            if (jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show'))
-                jQuery('div#blog-details').toggle();
-
-            jQuery('input#signup_with_blog').click(function() {
-                jQuery('div#blog-details').fadeOut().toggle();
+                jQuery('input#signup_with_blog').click(function () {
+                    jQuery('div#blog-details').fadeOut().toggle();
+                });
             });
-        });
-    </script>
-    <?php
-}
+        </script>
+        <?php
+    }
+    

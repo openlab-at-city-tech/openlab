@@ -115,7 +115,7 @@ add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);
  * Custom image sizes
  */
 //front page slider
-add_image_size('front-page-slider', 735, 400, true);
+add_image_size('front-page-slider', 735, 295, true);
 
 //custom widgets for OpenLab
 function cuny_widgets_init() {

@@ -322,7 +322,7 @@ input[type="submit"]{
 .navbar-default{
     background: transparent;
     border: none;
-    margin-bottom: 85px;
+    margin-bottom: 80px;
     .main-nav-wrapper,
     .header-mobile-wrapper{
         background: #fff;
@@ -514,6 +514,9 @@ h2.course-title{
     font-size: 16px;
     line-height: 1.25;
     margin: 0 4px;
+    &.flush-left{
+        margin-left: 0;
+    }
 }
 
 /**custom tags**/
@@ -548,6 +551,9 @@ body{
         }
     }
     .font-size{
+        &.font-12{
+            font-size: 13px !important;
+        }
         &.font-13{
             font-size: 13px !important;
         }
@@ -640,6 +646,17 @@ body{
     .tag-btn{
         padding: 0 2%;
         font-weight: 600;
+    }
+    .display-table{
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        .display-table-row{
+            display: table-row;
+            .display-table-cell{
+                display: table-cell;
+            }
+        }
     }
     .mol-count,
     .site-visibility .fa{
@@ -879,18 +896,18 @@ body{
         font-size: @font-size-small;
     }
     .row-home-top{
-        margin-bottom: 15px;
-        margin-top: 27px;
+        margin-bottom: 14px;
         @media (max-width: @screen-xs-max){
             margin-top: 0;
         }
         .login{
-            background: url('images/log_in_background.png') no-repeat 207px -70px @magenta;
+            background: url('images/log_in_background.png') no-repeat 123px -44px @orange;
+            border-bottom: 13px solid @magenta;
             float: left;
             width: 32.5%;
             border-radius: @border-radius-left;
             color: @white;
-            height: 400px;
+            height: 295px;
             @media (max-width: @screen-xs-max){
                 width: 100%;
                 float: none;
@@ -906,35 +923,80 @@ body{
                     color: @cyan;
                 }
             }
+            .fa{
+                font-size: inherit;
+            }
             .log-box{
-                padding: 0 6.5%;
-                &#open-lab-login{
-                    border-bottom: 12px solid darken(desaturate(@magenta,21%),8%);
-                    padding-bottom: 22px;
-                }
+                padding: 0 4.5% 0 7.5%;
                 &#open-lab-join{
-                    .btn-primary{
-                        margin-right: 15px;
+                    h2{
+                        margin: 18px 0 9px;
+                    }
+                    p{
+                        margin-bottom: 12px;
+                    }
+                    .link-btn{
+                        margin-bottom: 7px;
+                    }
+                }
+                &#open-lab-login{
+                    border-bottom: 13px solid darken(desaturate(@magenta,21%),8%);
+                    h2{
+                        margin: 20px 0 18px;
+                    }
+                    .avatar{
+                        img{
+                            border: 1px solid @black;
+                            max-width: 86px;
+                        }
+                    }
+                    .avatar,
+                    .content-list{
+                        display: inline-block;
+                        vertical-align: bottom;
+                        margin-bottom: 23px;
+                    }
+                    .content-list{
+                        margin-left: 10px;
+                    }
+                }
+                &#login-help{
+                    h4{
+                        margin: 12px 0;
                     }
                 }
                 &#user-login{
+                    h2{
+                        margin: 14px 0 18px;
+                    }
                     input{
-                        color: @30gray;
+                        &[type="text"],
+                        &[type="password"]{
+                            color: @40gray;
+                            font-size: 13px;
+                            height: 29px;
+                            margin-bottom: 7px;
+                            padding: 4px 10px;
+                            width: 94%;
+                            color: @40gray;
+                        }
                     }
                 }
                 #keep-logged-in{
-                    margin-top: 12px;
-                    line-height: 3.5;
-                    .btn-primary{
-                        margin-right: 15px;
+                    margin-top: 10px;
+                    .forgot-password-link{
+                        margin-right: 20px;
+                        vertical-align: middle;
                     }
-                    input{
+                    #sidebar-rememberme{
+                        margin-right: 3px;
                         vertical-align: middle;
                     }
                     span{
-                        line-height: 2.5;
-                        padding-left: 7px;
                         vertical-align: middle;
+                    }
+                    #sidebar-wp-submit{
+                        margin-top: 7px;
                     }
                 }
             }
@@ -943,7 +1005,7 @@ body{
             float: left;
             width: 67.5%;
             border-radius: @border-radius-right;
-            max-height: 400px;
+            max-height: 295px;
             @media (max-width: @screen-xs-max){
                 width: 100%;
                 float: none;
@@ -988,7 +1050,7 @@ body{
                     right: 0;
                     top: 0;
                     width: 33%;
-                    padding: 5% 4%;
+                    padding: 2.5%;
                     a{
                         color: inherit;
                         &:hover,
@@ -997,10 +1059,17 @@ body{
                         }
                     }
                     h2{
-                        margin: 15px 0;
+                        font-size: 32px;
+                        margin: 0 0 17px;
+                        font-weight: 600;
                     }
                     p{
-                        font-size: (@font-size-base - 1);
+                        font-size: @font-size-h5;
+                        font-weight: 600;
+                    }
+                    h2,
+                    p{
+                        text-shadow: 1px 1px 1px rgba(99, 219, 152, 0.8);
                     }
                     @media (max-width: @screen-xs-max){
                         width: 72%;

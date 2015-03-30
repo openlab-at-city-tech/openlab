@@ -240,7 +240,8 @@
                 autoAdvance: false,
                 fx: 'simpleFade',
                 playPause: false,
-                height: '400px',
+                height: '295px',
+                navigation: false,
                 navigationHover: false
             });
         }
