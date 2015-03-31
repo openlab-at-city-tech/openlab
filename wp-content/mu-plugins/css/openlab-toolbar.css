@@ -7180,6 +7180,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile {
   float: none;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile .ab-item {
+  text-align: right;
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered #wp-admin-bar-my-openlab-mobile .very-small-size {
   display: none;
 }
