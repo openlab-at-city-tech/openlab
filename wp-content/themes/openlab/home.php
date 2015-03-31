@@ -23,8 +23,8 @@ get_header();
     <div id="home-left" class="col-sm-8">
         <?php dynamic_sidebar('cac-featured') ?>
 
-        <div class="box-1" id="whos-online">
-            <h2 class="title">Who's Online?</h2>
+        <div class="box-1 left-box" id="whos-online">
+            <h2 class="title uppercase">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
         </div>
 

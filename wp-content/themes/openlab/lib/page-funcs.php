@@ -82,17 +82,17 @@ function cuny_home_login() {
  */
 function cuny_home_new_members() {
     global $wpdb, $bp;
-    echo '<div id="new-members" class="box-1 last">';
-    echo '<h2 class="title">New OpenLab Members</h2>';
+    echo '<div id="new-members" class="box-1 left-box last">';
+    echo '<h2 class="title uppercase">New OpenLab Members</h2>';
     echo '<div class="left-block-content new-members-wrapper">'
     ?>
     <div id="new-members-top-wrapper">
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
                     <a class="prev btn" href="#">
-                        <i class="fa fa-angle-left"></i></a>
+                        <i class="fa fa-chevron-circle-left"></i></a>
                     <a class="next btn" href="#">
-                        <i class="fa fa-angle-right"></i></a>
+                        <i class="fa fa-chevron-circle-right"></i></a>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>
@@ -242,18 +242,14 @@ function cuny_home_square($type) {
                     ?>
                     <div class="item-avatar">
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
-
-                        <?php $last_active = bp_get_group_last_active(); ?>
-
-                        <div class="timestamp"><span class="fa fa-history"></span> <?php printf(__('active %s', 'buddypress'), $last_active) ?></div>
                     </div>
                     <div class="item-content-wrapper">
-                        <?php echo '<h4 class="group-title"><a href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
+                        <?php echo '<h4 class="group-title"><a class="no-deco" href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
                         ?>
                         <?php
                         //echo '<div class="byline">Author Name | Date</div>';
 
-                        echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
+                        echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p class="see-more"><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
                         echo '</div>';
                         echo '</div>';
                         $i++;

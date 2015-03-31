@@ -7100,7 +7100,7 @@ blockquote .h6 {
 .nav.nav-inline li.no-link {
   color: #49cabe;
   padding: 0 7px;
-  font-weight: bold;
+  font-weight: 700;
 }
 .nav.nav-inline li.current-menu-item,
 .nav.nav-inline li:hover {
@@ -7625,6 +7625,7 @@ body ol.inline-element-list {
 body .activity-title .fa {
   margin-left: 10px;
   color: #63dfd2;
+  font-size: 18px;
 }
 body .tag-btn {
   padding: 0 2%;
@@ -8087,25 +8088,37 @@ body .align-left {
   left: auto;
   right: 27%;
 }
-.home-page .left-block-content {
-  background: #f0f0f0;
-  border-radius: 4px;
-  padding: 3% 2%;
+.home-page .row-home-bottom h2 {
+  margin-bottom: 10px;
+  font-weight: 600;
 }
-.home-page #cac-featured .cfcw-content {
-  background: #f0f0f0;
+.home-page .row-home-bottom .left-box {
+  margin-top: 36px;
+}
+.home-page .left-block-content {
+  border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 2%;
 }
+.home-page #cac-featured h2 {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.home-page #cac-featured .cfcw-content {
+  background: #fdf57d;
+  border-radius: 4px;
+  padding: 5%;
+}
 .home-page #cac-featured .cfcw-content img {
+  border: 17px solid #ffffff;
   float: left;
-  max-width: 46%;
-  margin-right: 18px;
+  margin-right: 12px;
+  width: 163px;
 }
 .home-page #cac-featured .cfcw-content p {
   float: left;
   width: 45%;
-  font-weight: normal;
+  font-weight: 400;
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title {
   font-weight: 600;
@@ -8113,6 +8126,7 @@ body .align-left {
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
   line-height: 1.1em;
+  text-decoration: none;
 }
 .home-page #cac-featured .cfcw-content:after {
   clear: both;
@@ -8150,12 +8164,15 @@ body .align-left {
 .home-page #whos-online .avatar-block .cuny-member:hover .cuny-member-info {
   display: block;
 }
+.home-page .new-members-wrapper {
+  padding: 5% 3% 1%;
+}
 .home-page .new-members-wrapper .btn {
-  padding-top: 0;
+  padding-top: 2px;
 }
 .home-page .new-members-wrapper .btn .fa {
-  color: #63dfd2;
-  font-size: 24px;
+  color: #a3a3a3;
+  font-size: 18px;
   line-height: 90%;
 }
 .home-page .new-members-wrapper .btn .fa:hover {
@@ -8169,17 +8186,22 @@ body .align-left {
 }
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member {
   width: 50%;
-  height: 274px;
+  height: 250px;
+  margin-bottom: 0;
 }
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar,
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info {
   margin: 0 auto;
-  width: 97%;
+  width: 95%;
 }
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar h2,
 .home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info h2 {
   margin: 0;
-  padding: 20px 0 15px;
+  padding: 12px 0 2px;
+}
+.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .timestamp {
+  font-size: 10px;
+  font-weight: 400;
 }
 .home-page .activity-list .activity-wrapper {
   border-radius: inherit;
@@ -8191,20 +8213,20 @@ body .align-left {
   margin-bottom: 15px;
 }
 .home-page .activity-list .activity-wrapper .activity-item h4 {
-  margin-top: 15px;
+  margin: 15px auto 8px;
+  font-size: 14px;
 }
 .home-page .activity-list .activity-wrapper .activity-item a {
   display: block;
 }
+.home-page .activity-list .activity-wrapper .activity-item p {
+  margin-bottom: 8px;
+}
+.home-page .activity-list .activity-wrapper .activity-item p.see-more {
+  margin-bottom: 25px;
+}
 .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
   position: relative;
-}
-.home-page .activity-list .activity-wrapper .activity-item .item-avatar .timestamp {
-  background: #ffffff;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding-right: 3%;
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-content-wrapper {
   margin: 0 auto;
@@ -8388,7 +8410,7 @@ body .align-left {
 }
 .group-subscription-status {
   background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
-  font-weight: bold;
+  font-weight: 700;
   margin-left: 2px;
   padding-left: 20px !important;
 }

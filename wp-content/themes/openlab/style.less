@@ -20,7 +20,7 @@ Direct Bootstrap overrides
 // Headings
 // -------------------------
 h1, .h1{
-    font-weight: 700;
+    font-weight: @bold;
 }
 h1, .h1,
 h2, .h2,
@@ -86,7 +86,7 @@ blockquote {
     border: 1px solid @blockquote-border-color;
     border-radius: @border-radius-base;
     p{
-        font-weight: 600;
+        font-weight: @semibold;
     }
     h1, .h1,
     h2, .h2,
@@ -106,7 +106,7 @@ blockquote {
     &.nav-inline{
         margin-top: 0;
         .submenu-text{
-            font-weight: 700;
+            font-weight: @bold;
         }
         li{
             display: inline-block;
@@ -121,7 +121,7 @@ blockquote {
             &.no-link{
                 color: @aqua;
                 padding: 0 7px;
-                font-weight: bold;
+                font-weight: @bold;
             }
             &.current-menu-item,
             &:hover{
@@ -236,7 +236,7 @@ input[type="submit"]{
 .radio,
 .radio-inline {
     label{
-        font-weight: 700;
+        font-weight: @bold;
     }
     input[type="radio"]{
         margin-top: 2px;
@@ -290,7 +290,7 @@ input[type="submit"]{
     }
     .panel-heading{
         font-size: 16px;
-        font-weight: 600;
+        font-weight: @semibold;
     }
 }
 .panel-button-group{
@@ -370,7 +370,7 @@ input[type="submit"]{
                     color: @black;
                     display: block;
                     text-decoration: none;
-                    font-weight: 700;
+                    font-weight: @bold;
                     line-height: 150%;
                     padding: 21px 15px;
                     &:hover,
@@ -578,7 +578,7 @@ body{
         font-size: @font-size-small;
         color: @60gray;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: @semibold;
         .fa{
             font-size: inherit;
             margin-right: 0;
@@ -586,7 +586,7 @@ body{
     }
     .print-link{
         font-size: 14px;
-        font-weight: 400;
+        font-weight: @normal;
         a{
             text-decoration: none;
         }
@@ -641,11 +641,12 @@ body{
         .fa{
             margin-left: 10px;
             color: @cyan;
+            font-size: floor((@font-size-base * 1.3));
         }
     }
     .tag-btn{
         padding: 0 2%;
-        font-weight: 600;
+        font-weight: @semibold;
     }
     .display-table{
         display: table;
@@ -665,7 +666,7 @@ body{
         border-radius: 10px;
         display: inline-block;
         font-size: 13px;
-        font-weight: 400;
+        font-weight: @normal;
         height: 20px;
         line-height: 155%;
         text-align: center;
@@ -675,7 +676,7 @@ body{
     .bp-template-notice,
     .bbp-template-notice,
     #ubpfattach-message{
-        font-weight: 400;
+        font-weight: @normal;
         padding: 15px;
         border-radius: @border-radius-base;
         margin-top: 17px;
@@ -710,7 +711,7 @@ body{
         background: @yellow;
         &.info{
             background: none;
-            font-weight: 700;
+            font-weight: @bold;
             border: none;
             padding-left: 0;
             padding-right: 0;
@@ -718,7 +719,7 @@ body{
     }
     #register-page{
         .error{
-            font-weight: 400;
+            font-weight: @normal;
             padding: 15px;
             border-radius: @border-radius-base;
             margin-bottom: 17px;
@@ -757,13 +758,13 @@ body{
         text-transform: uppercase;
     }
     .semibold{
-        font-weight: 600;
+        font-weight: @semibold;
     }
     .bold{
-        font-weight: 700;
+        font-weight: @bold;
     }
     .regular{
-        font-weight: 400;
+        font-weight: @normal;
     }
     .italics{
         font-style: italic;
@@ -861,7 +862,7 @@ body{
 .custom-select,
 .hidden-custom-select{
     option{
-        font-weight: 600;
+        font-weight: @semibold;
     }
     position: relative;
     span.customSelect {
@@ -870,7 +871,7 @@ body{
         border:1px solid @10gray;
         padding: 8px 5%;
         width:100%;
-        font-weight: 600;
+        font-weight: @semibold;
         .border-radius;
         &.customSelectOpen{
             background-image: url('images/select-arrow-close.png');
@@ -1061,11 +1062,11 @@ body{
                     h2{
                         font-size: 32px;
                         margin: 0 0 17px;
-                        font-weight: 600;
+                        font-weight: @semibold;
                     }
                     p{
                         font-size: @font-size-h5;
-                        font-weight: 600;
+                        font-weight: @semibold;
                     }
                     h2,
                     p{
@@ -1101,30 +1102,45 @@ body{
             }
         }
     }
+    .row-home-bottom{
+        h2{
+            margin-bottom: 10px;
+            font-weight: @semibold;
+        }
+        .left-box{
+            margin-top: 36px;
+        }
+    }
     .left-block-content{
-        background: @5gray;
+        border: @border-light-gray;
         border-radius: @border-radius-base;
-        padding: 3% 2%;
+        padding: 2%;
     }
     #cac-featured{
+        h2{
+            text-transform: uppercase;
+            font-weight: @semibold;
+        }
         .cfcw-content{
-            background: @5gray;
+            background: desaturate(lighten(@yellow,25.7%),3%);
             border-radius: @border-radius-base;
-            padding: 2%;
+            padding: 5%;
             img{
+                border: 17px solid @white;
                 float: left;
-                max-width: 46%;
-                margin-right: 18px;
+                margin-right: 12px;
+                width: 163px;
             }
             p{
                 float: left;
                 width: 45%;
-                font-weight: normal;
+                font-weight: @normal;
                 &.cfcw-title{
-                    font-weight: 600;
+                    font-weight: @semibold;
                     a{
                         font-size: @font-size-h2;
                         line-height: @headings-line-height;
+                        text-decoration: none;
                     }
                 }
             }
@@ -1170,11 +1186,12 @@ body{
         }
     }
     .new-members-wrapper{
+        padding: 5% 3% 1%;
         .btn{
-            padding-top: 0;
+            padding-top: 2px;
             .fa{
-                color: @cyan;
-                font-size: @font-size-h3;
+                color: lighten(@40gray,4%);
+                font-size: floor((@font-size-base * 1.3)); 
                 line-height: 90%;
                 &:hover{
                     color: @aqua;
@@ -1188,15 +1205,20 @@ body{
             max-width: 100%;
             .home-new-member{
                 width: 50%;
-                height: 274px;
+                height: 250px;
+                margin-bottom: 0;
                 .home-new-member-avatar,
                 .home-new-member-info{
                     margin: 0 auto;
-                    width: 97%;
+                    width: 95%;
                     h2{
                         margin: 0;
-                        padding: 20px 0 15px;
+                        padding: 12px 0 2px;
                     }
+                }
+                .timestamp{
+                    font-size: 10px;
+                    font-weight: @normal;
                 }
             }
         }
@@ -1210,20 +1232,20 @@ body{
                 padding: 5px;
                 margin-bottom: 15px;
                 h4{
-                    margin-top: 15px;
+                    margin: 15px auto 8px;
+                    font-size: @font-size-base;
                 }
                 a{
                     display:block;
                 }
+                p{
+                    margin-bottom: 8px;
+                    &.see-more{
+                        margin-bottom: 25px;
+                    }
+                }
                 .item-avatar{
                     position: relative;
-                    .timestamp{
-                        background: @white;
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        padding-right: 3%;
-                    }
                 }
                 .item-content-wrapper{
                     margin: 0 auto;
@@ -1239,7 +1261,7 @@ body{
     h2{
         &.sidebar-title,
         &.sidebar-header{
-            font-weight: 700;
+            font-weight: @bold;
             margin-bottom: 6px;
         }
     }
@@ -1260,7 +1282,7 @@ body{
                     color: @black;
                     display: block;
                     text-decoration: none;
-                    font-weight: 600;
+                    font-weight: @semibold;
                     padding: 6px 15px;
                     &:hover,
                         &:focus{
@@ -1425,7 +1447,7 @@ body{
 }
 .group-subscription-status{
     background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
-    font-weight: bold;
+    font-weight: @bold;
     margin-left: 2px;
     padding-left: 20px !important;
 }
@@ -1764,7 +1786,7 @@ body{
     margin-top: 60px;
     .member-name-title{
         font-size: 32px;
-        font-weight: 600;
+        font-weight: @semibold;
         margin: 0 0 8px;
     }
     .timestamp{
@@ -1922,7 +1944,7 @@ body{
     .wpcf7-response-output{
         border: none;
         padding: 15px;
-        font-weight: 600;
+        font-weight: @semibold;
         font-size: 14px;
         margin: 8px 0 17px;
         border-radius: @border-radius-base;
