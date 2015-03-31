@@ -8049,15 +8049,15 @@ body .align-left {
 .home-page .row-home-top .slider .camera_wrap .camera_content h2 {
   font-size: 32px;
   margin: 0 0 17px;
-  font-weight: 600;
+  font-weight: 400;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content h2,
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
-  text-shadow: 1px 1px 1px rgba(99, 219, 152, 0.8);
+  text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
 }
 @media (max-width: 767px) {
   .home-page .row-home-top .slider .camera_wrap .camera_content {
