@@ -66,6 +66,10 @@ function grader_is_grader($userdata)
 {
 	global $wpdb;
 
+	if ( empty( $userdata->ID ) ) {
+		return false;
+	}
+
 	$user = new WP_User( $userdata->ID );
 	if ( !empty( $user->roles ) && is_array( $user->roles ) ) {
 		foreach ( $user->roles as $role )
