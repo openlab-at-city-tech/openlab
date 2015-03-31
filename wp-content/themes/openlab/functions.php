@@ -15,6 +15,8 @@ function openlab_core_setup() {
     ));
 }
 
+// test
+
 add_action('after_setup_theme', 'openlab_core_setup');
 
 /* * creating a library to organize functions* */
