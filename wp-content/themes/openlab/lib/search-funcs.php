@@ -6,14 +6,14 @@
  */
 
 //openlab search function
-function openlab_site_wide_bp_search($mode = 'desktop') {
+function openlab_site_wide_bp_search($mode = 'desktop', $location) {
     $mobile_mup = '';
     
     if($mode == 'desktop'):
 
     $mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
-    <span class="fa fa-search search-trigger" data-mode="desktop"></span>
+    <span class="fa fa-search search-trigger" data-mode="desktop" data-location={$location}></span>
 </div>
 HTML;
     endif;
@@ -22,7 +22,7 @@ HTML;
     $nonce = wp_nonce_field('bp_search_form','_wpnonce' ,true,false);
     
     $mobile_mup .= <<<HTML
-    <div class="search-form-wrapper search-mode-{$mode}">
+    <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form" class="form-inline">
         <div class="form-group">
         <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" />

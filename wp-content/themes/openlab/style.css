@@ -7417,6 +7417,9 @@ input[type="submit"] {
 .navbar-default .container-fluid .navbar-right.search .btn {
   padding: 8px 2%;
 }
+.navbar-default.navbar-location-footer {
+  margin-bottom: 0;
+}
 .search {
   position: relative;
   z-index: 999999;

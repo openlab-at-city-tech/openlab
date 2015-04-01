@@ -59,7 +59,8 @@
             $('.search-trigger').on('click', function () {
                 var searchTrigger = $(this);
                 var mode = searchTrigger.data('mode');
-                var searchForm = $('.search-form-wrapper.search-mode-' + mode);
+                var location = searchTrigger.data('location');
+                var searchForm = $('.search-form-wrapper.search-mode-' + mode + '.search-form-location-' + location);
                 if (searchTrigger.parent().hasClass('search-live')) {
 
                     searchForm.slideUp(700, function () {
@@ -70,12 +71,14 @@
                         adminBar.animate({
                             top: "-=" + searchForm.data('thisheight')
                         }, 700);
+                        adminBar.removeClass('dropped');
                     }
 
                 } else {
                     searchTrigger.parent().toggleClass('search-live');
                     searchForm.slideDown(700);
                     if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.addClass('dropped');
                         adminBar.animate({
                             top: "+=" + searchForm.data('thisheight')
                         }, 700);
@@ -202,6 +205,11 @@
         //resetting the search on resize
         if ($('.search-trigger-wrapper').length) {
             var adminBar = $('#wpadminbar');
+            
+            $('.search-form-wrapper').each(function () {
+                var searchFormDim = invisibleDimensions($(this));
+                $(this).data('thisheight', searchFormDim.height);
+            });
 
             $('.search-trigger-wrapper').each(function () {
                 var searchTriggerWrapper = $(this);
@@ -217,10 +225,11 @@
                             searchTrigger.parent().removeClass('sliding-active');
                         });
 
-                        if (searchTrigger.data('mode') == 'mobile') {
+                        if (searchTrigger.data('mode') == 'mobile' && adminBar.hasClass('dropped')) {
                             adminBar.animate({
                                 top: "-=" + searchForm.data('thisheight')
                             }, 700);
+                            adminBar.removeClass('dropped');
                         }
                     }
                 }

@@ -24,42 +24,47 @@ HTML;
 
 add_filter('the_content', 'openlab_custom_the_content');
 
-function openlab_header_bar() {
+/**
+ * OpenLab main menu markup
+ * @param type $location
+ */
+function openlab_main_menu($location = 'header') {
     ?>
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-default navbar-location-<?= $location ?>" role="navigation">
         <div class="header-mobile-wrapper visible-xs">
             <div class="container-fluid">
                 <div class="navbar-header clearfix">
-                    <h1 id="title" class="pull-left"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+                    <h1 class="menu-title pull-left"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
                     <div class="pull-right search search-trigger">
                         <div class="search-trigger-wrapper">
-                            <span class="fa fa-search search-trigger" data-mode="mobile"></span>
+                            <span class="fa fa-search search-trigger" data-mode="mobile" data-location="<?= $location ?>"></span>
                         </div>
                     </div>
                 </div>
                 <div class="search search-form row">
-                    <?php openlab_site_wide_bp_search('mobile'); ?>
+                    <?php openlab_site_wide_bp_search('mobile',$location); ?>
                 </div>
             </div>
         </div>
         <div class="main-nav-wrapper">
             <div class="container-fluid">
                 <div class="navbar-header hidden-xs">
-                    <h1 id="title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+                    <h1 class="menu-title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
                 </div>
-                <div class="navbar-collapse collapse" id="main-nav">
+                <div class="navbar-collapse collapse" id="main-nav-<?= $location ?>">
                     <?php
                     //this adds the main menu, controlled through the WP menu interface
                     $args = array(
                         'theme_location' => 'main',
                         'container' => false,
                         'menu_class' => 'nav navbar-nav',
+                        'menu_id' => 'menu-main-menu-' . $location,
                     );
 
                     wp_nav_menu($args);
                     ?>
                     <div class="navbar-right search hidden-xs">
-                        <?php openlab_site_wide_bp_search('desktop'); ?>
+                        <?php openlab_site_wide_bp_search('desktop',$location); ?>
                     </div>
                 </div>
             </div>
@@ -68,7 +73,22 @@ function openlab_header_bar() {
     <?php
 }
 
+/**
+ * Main menu in header
+ */
+function openlab_header_bar() {
+    openlab_main_menu('header');
+}
+
+/*
+ * Main menu in footer
+ */
+function openlab_footer_bar() {
+    openlab_main_menu('footer');
+}
+
 add_action('bp_before_header', 'openlab_header_bar', 10);
+add_action('bp_before_footer', 'openlab_footer_bar', 6);
 
 function openlab_custom_menu_items($items, $menu) {
     global $post, $bp;
