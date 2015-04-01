@@ -124,16 +124,18 @@ function openlab_footer_markup($placeholder = NULL) {
         <div class="oplb-bs">
             <div class="container-fluid">
                 <div class="row row-footer">
-                    <div class="col-sm-14 col-logos">
+                    <div class="col-sm-12 col-logos">
                         <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>
                         <p class="semibold"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
                             <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                     </div>
-                    <div class="col-sm-6 col-links semibold">
+                    <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
+                    <div class="col-sm-8 col-links semibold">
                         <h2>Support</h2>
                         <a class="no-deco roll-over-color" href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> | <a class="no-deco roll-over-color" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> | <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/credits/">Credits</a>
                     </div>
-                    <div class="col-sm-4 col-share">
+                    <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
+                    <div class="col-sm-2 col-share">
                         <h2>Share</h2>
                         <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
                         <!-- Place this tag in your head or just before your close body tag -->

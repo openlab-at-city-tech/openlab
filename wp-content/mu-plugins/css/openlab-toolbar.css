@@ -7343,6 +7343,7 @@ button.oplb-bs .close {
 }
 .oplb-bs#openlab-footer .row h2 {
   color: #333;
+  margin: 0 auto 22px;
 }
 .oplb-bs#openlab-footer .col-logos {
   display: inline-block;
@@ -7373,8 +7374,18 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .col-share a.rss-link {
   background-position: -32px 0;
 }
+.oplb-bs#openlab-footer .horiz-bar-wrapper {
+  float: left;
+  width: 2%;
+}
+.oplb-bs#openlab-footer .horiz-bar-wrapper .horiz-bar {
+  background: none repeat scroll 0 0 #bbbbbb;
+  margin-left: 35%;
+  padding-top: 135px;
+  width: 1px;
+}
 .oplb-bs#openlab-footer .row-copyright {
-  margin-top: 42px;
+  margin-bottom: 100px;
 }
 .oplb-bs#openlab-footer .row-copyright p,
 .oplb-bs#openlab-footer .row-copyright span,
