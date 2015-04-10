@@ -8267,6 +8267,10 @@ body .align-left {
   background: #63dfd2;
   color: #000000;
 }
+.sidebar .sidebar-block ul.sidebar-nav li a .fa {
+  font-size: 17px;
+  color: #63dfd2;
+}
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item > a,
 .sidebar .sidebar-block ul.sidebar-nav li.selected-page > a {
   background: #63dfd2;
