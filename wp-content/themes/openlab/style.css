@@ -8412,6 +8412,9 @@ body .align-left {
   border-radius: 0;
   word-wrap: break-word;
 }
+.info-panel .table-div .table-row div.status-message {
+  font-size: 12px;
+}
 .info-panel .table-div .table-row:first-child div {
   border-top: none;
 }

@@ -752,7 +752,7 @@ function cuny_group_single() {
                                 ?>
 
                                 <div class="table-row row">
-                                    <div class="col-xs-24 regular text-danger"><?php echo openlab_group_status_message() ?></div>
+                                    <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
                                 </div>
 
                                 <?php
