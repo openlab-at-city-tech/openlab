@@ -420,7 +420,7 @@ function wds_bp_group_site_pages() {
                     <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                         <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                             <li class="portfolio-site-link">
-                                <span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag('site'); ?></span>
+                                <span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Site</a>
                             </li>
 
                             <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
@@ -433,7 +433,7 @@ function wds_bp_group_site_pages() {
 
                         <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                             <li class="portfolio-site-link">
-                                <span class="fa fa-external-link"></span><a class="bold" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Site</a><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag('site'); ?></span>
+                                <span class="fa fa-external-link"></span><a class="bold" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Site</a>
                             </li>
                         </ul>
 
@@ -451,7 +451,7 @@ function wds_bp_group_site_pages() {
                 <div class="sidebar-block">
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link">
-                            <span class="fa fa-external-link"></span> <?php echo '<a class="bold" href="' . trailingslashit(esc_attr($site_url)) . '">' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site</a>'; ?><span class="site-visibility pull-right"><?php echo openlab_group_visibility_flag('site'); ?></span>
+                            <span class="fa fa-external-link"></span> <?php echo '<a class="bold" href="' . trailingslashit(esc_attr($site_url)) . '">' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site</a>'; ?>
                         </li>
                         <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
                             <li class="portfolio-dashboard-link">
