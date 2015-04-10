@@ -7588,6 +7588,9 @@ body .timestamp .fa {
   font-size: inherit;
   margin-right: 0;
 }
+body .timestamp.info-line-timestamp {
+  font-size: 10px;
+}
 body .print-link {
   font-size: 14px;
   font-weight: 400;
@@ -7743,6 +7746,9 @@ body .panel-body .bp-template-notice {
 body .panel-body a {
   word-wrap: break-word;
   word-break: break-all;
+}
+body .group-header {
+  margin-top: 40px;
 }
 body .group-header .bp-template-notice {
   color: #000000;
@@ -8711,11 +8717,8 @@ body .align-left {
   padding: 0 19px;
   vertical-align: middle;
 }
-#avatar-wrapper {
-  margin-top: 5px;
-}
 #member-header {
-  margin-top: 60px;
+  margin-top: 41px;
 }
 #member-header .member-name-title {
   font-size: 32px;

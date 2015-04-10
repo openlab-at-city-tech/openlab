@@ -525,6 +525,13 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 function openlab_group_profile_header() {
     ?>
     <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?></h1>
+    <div class="clearfix">
+            <?php if ($group_type == "portfolio") : ?>
+                    <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
+                <?php else : ?>
+                    <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+                <?php endif; ?>
+        </div>
     <?php
 }
 
@@ -593,18 +600,11 @@ function cuny_group_single() {
         </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
             <div id="<?php echo $group_type; ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo $group_id; ?>">
-                <h2 class="<?php echo $group_type; ?>-title"><?php bp_group_name() ?></h2>
-
-                <?php if ($group_type == "portfolio") : ?>
-                    <div class="portfolio-displayname"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
-                <?php else : ?>
-                    <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
-                <?php endif; ?>
 
                 <?php do_action('bp_before_group_header_meta') ?>
 
                 <?php if ($group_type == "course"): ?>
-                    <div class="info-panel panel panel-default">
+                    <div class="info-panel panel panel-default no-margin no-margin-top">
                         <?php
                         $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');

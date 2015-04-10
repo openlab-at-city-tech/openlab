@@ -777,9 +777,6 @@ function cuny_member_profile_header() {
 
         <div id="member-header-content" class="col-sm-16 col-xs-24">
 
-            <h2 class="member-name-title fn"><?php bp_displayed_user_fullname() ?></h2>
-            <div class="info-line"><span class="timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
-
             <?php do_action('bp_before_member_header_meta') ?>
 
             <div id="item-meta">
@@ -791,7 +788,7 @@ function cuny_member_profile_header() {
             <div class="profile-fields">
                 <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
                 <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
-                    <div class="info-panel panel panel-default">
+                    <div class="info-panel panel panel-default no-margin no-margin-top">
                         <div class="profile-fields table-div">
 
                             <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
@@ -906,6 +903,9 @@ function openlab_member_header() {
         <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
         <span class="profile-type pull-right"><?php echo $account_type ?></span>
     </h1>
+    <div class="clearfix">
+        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
+    </div>
     <?php
 }
 
