@@ -1,0 +1,32 @@
+.hide-if-js {
+	display: none;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
+}
+
+.ui-autocomplete {
+	background: #fff;
+	max-width: 200px;
+	border: 1px solid #ccc;
+	padding: 4px;
+}
+
+.ui-autocomplete .ui-menu-item a {
+	display: block;
+	width: 100%;
+}
+
+.ui-state-focus {
+	background: #aaa;
+}
+
+#additional-faculty-list li {
+	padding: 4px;
+}
+
+body.group-create #additional-faculty-admin {
+	margin-top: -1em; /* Someone shoot me */
+	margin-bottom: 3em;
+}
