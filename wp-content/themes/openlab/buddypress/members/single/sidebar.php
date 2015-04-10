@@ -7,8 +7,6 @@ if (!$dud = bp_displayed_user_domain()) {
 }
 ?>
 
-<?php openlab_member_sidebar_menu(); ?>
-
 <?php /* Portfolio links */ ?>
 
 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
@@ -17,16 +15,14 @@ if (!$dud = bp_displayed_user_domain()) {
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
     <div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
-        <h2 class="sidebar-header">
-    <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper') ?> Site
-        </h2>
+        <h2 class="sidebar-header">Member Profile</h2>
 
         <div class="sidebar-block">
 
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
                 <li class="portfolio-profile-link bold">
-                    <span class="fa fa-external-link"></span><a class="bold" href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site</a>
+                    <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
                 </li>
 
                 <li class="portfolio-site-link">
@@ -51,6 +47,8 @@ if (!$dud = bp_displayed_user_domain()) {
 <?php endif ?>
 
 <?php /* End portfolio links */ ?>
+
+<?php openlab_member_sidebar_menu(); ?>
 
 <?php /* Recent Account Activity / Recent Friend Activity */ ?>
 

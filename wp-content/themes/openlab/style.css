@@ -7512,6 +7512,7 @@ input[type="submit"] {
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
   margin-bottom: 10px;
+  margin-top: 18px;
   padding-bottom: 6px;
   line-height: 140%;
 }
@@ -7527,6 +7528,13 @@ h2.course-title {
 }
 .fa.flush-left {
   margin-left: 0;
+}
+.fa.cyan-circle {
+  font-size: 17px;
+  color: #63dfd2;
+}
+.fa.cyan-circle:hover {
+  color: #333333;
 }
 /**custom tags**/
 body .no-gutter.no-gutter-right {
@@ -8248,7 +8256,10 @@ body .align-left {
   border-top: 1px solid #bbbbbb;
 }
 .sidebar .sidebar-block:first-of-type {
-  margin-top: 11px;
+  margin: 9px 0;
+}
+.sidebar .sidebar-block.mol-menu {
+  border-top: none;
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
@@ -8266,10 +8277,6 @@ body .align-left {
 .sidebar .sidebar-block ul.sidebar-nav li a:focus {
   background: #63dfd2;
   color: #000000;
-}
-.sidebar .sidebar-block ul.sidebar-nav li a .fa {
-  font-size: 17px;
-  color: #63dfd2;
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item > a,
 .sidebar .sidebar-block ul.sidebar-nav li.selected-page > a {
@@ -8294,7 +8301,13 @@ body .align-left {
   display: block;
 }
 .sidebar .sidebar-block ul.sidebar-sublinks {
-  padding: 3% 4%;
+  padding: 6% 5%;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks li {
+  margin-bottom: 10px;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks li:last-child {
+  margin-bottom: 0;
 }
 .sidebar .sidebar-block.padded-block {
   padding: 6%;

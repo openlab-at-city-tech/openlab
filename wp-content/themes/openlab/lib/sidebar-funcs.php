@@ -153,9 +153,7 @@ function openlab_member_sidebar_menu($mobile = false) {
     if (is_user_logged_in() && openlab_is_my_profile()) :
     ?>
 
-            <h2 class="sidebar-title <?php echo $classes; ?>">My OpenLab</h2>
-
-            <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+            <div id="item-buttons" class="mol-menu sidebar-block no-margin no-margin-top <?php echo $classes; ?>">
 
                 <ul class="sidebar-nav">
 
@@ -204,7 +202,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 		$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
             ?>
                             
-                            <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right"></span></a></li>
+                            <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right cyan-circle"></span></a></li>
 
                 </ul>
 
@@ -212,9 +210,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
     <?php else : ?>
 
-            <h2 class="sidebar-title <?php echo $classes; ?>">People</h2>
-
-            <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+            <div id="item-buttons" class="mol-menu sidebar-block no-margin no-margin-top <?php echo $classes; ?>">
 
                 <ul class="sidebar-nav">
 
