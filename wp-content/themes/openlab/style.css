@@ -8687,18 +8687,16 @@ body .align-left {
 }
 /**member profiles**/
 .profile-type {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 14px;
   background: #f0f0f0;
-  color: #ff5959;
-  padding: 0 15px;
+  color: #444444;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
   height: 30px;
-  line-height: 200%;
+  line-height: 220%;
   margin-bottom: -5px;
-}
-.profile-type .fa-eye-slash {
-  margin-left: 0;
+  padding: 0 19px;
+  vertical-align: middle;
 }
 #avatar-wrapper {
   margin-top: 5px;
