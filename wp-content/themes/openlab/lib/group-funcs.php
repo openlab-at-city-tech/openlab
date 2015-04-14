@@ -654,10 +654,16 @@ function cuny_group_single() {
 
                 <?php else : ?>
 
-                    <div id="item-meta">
-                        <div class="status-message italics"><?php echo openlab_group_status_message() ?></div>
-                        <?php bp_group_description() ?>
-                        <?php do_action('bp_group_header_meta') ?>
+                    <div class="info-panel panel panel-default no-margin no-margin-top">
+                        <div class="table-div">
+                            <div class="table-row row">
+                                <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="bold col-sm-5"><?php echo ucfirst($group_type); ?> Description</div>
+                                <div class="col-sm-19 row-content"><?php bp_group_description() ?></div>
+                            </div>
+                        </div>
                     </div>
 
                 <?php endif; ?>
