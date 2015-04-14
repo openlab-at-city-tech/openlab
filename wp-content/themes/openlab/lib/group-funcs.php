@@ -655,6 +655,7 @@ function cuny_group_single() {
                 <?php else : ?>
 
                     <div id="item-meta">
+                        <div class="status-message italics"><?php echo openlab_group_status_message() ?></div>
                         <?php bp_group_description() ?>
                         <?php do_action('bp_group_header_meta') ?>
                     </div>
