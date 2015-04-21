@@ -7,7 +7,7 @@ function openlab_bp_sidebar($type) {
     
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
     
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24'.$pull_classes.'">';
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24'.$pull_classes.' type-'.$type.'">';
 
     switch ($type) {
         case 'actions':

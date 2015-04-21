@@ -13,6 +13,11 @@ function openlab_conditional_body_classes($classes) {
     } else if (isset($post->post_name) && $post->post_name == 'register') {
         $classes[] = 'content-sidebar';
     }
+    
+    $group_archives = array('people','courses','projects','clubs','portfolios');
+    if(in_array($post->post_name,$group_archives)){
+        $classes[] = 'group-archive-page';
+    }
 
     return $classes;
 }

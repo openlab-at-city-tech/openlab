@@ -1433,6 +1433,9 @@ function openlab_mobile_menu_actions() {
                             
                             if(thisTargetElem.is(':visible')){
                                 var thisTargetElem_h = thisTargetElem.height();
+                                if($(this).data('plusheight')){
+                                    thisTargetElem_h += parseInt($(this).data('plusheight'));
+                                }
                                 thisTargetElem.slideUp(700,function(){
                                     thisElem.removeClass('in-action');
                                     thisElem.removeClass('active');
@@ -1445,6 +1448,9 @@ function openlab_mobile_menu_actions() {
                                     var thisElem = $(this);
                                     var thisToggleTarget = thisElem.data('target');
                                     var thisTargetElem_h = $(thisToggleTarget).height();
+                                    if(thisElem.data('plusheight')){
+                                        thisTargetElem_h += parseInt(thisElem.data('plusheight'));
+                                    }
                                     if($(thisToggleTarget).is(':visible')){
                                         $(thisToggleTarget).slideUp(700,function(){
                                             thisElem.removeClass('in-action');
@@ -1455,8 +1461,25 @@ function openlab_mobile_menu_actions() {
                                 });
                                 
                                 thisTargetElem.slideDown(700,function(){
+                                    
+                                    var thisTargetElem_h = thisTargetElem.height();
+                                    if(thisElem.data('plusheight')){
+                                        thisTargetElem_h += parseInt(thisElem.data('plusheight'));
+                                    }
+                                    
                                     thisElem.removeClass('in-action');
-                                    background.addClass('active').animate({ 'top': '+='+thisTargetElem.height()+'px' },50);
+                                    
+                                    background.addClass('active').animate({ 'top': '+='+thisTargetElem_h+'px' },50);
+                                    
+                                    //for customSelect
+                                    $('.custom-select').each(function(){
+                                        var customSelect_h = $(this).find('.customSelect').outerHeight();
+                                        var customSelect_w = $(this).find('.customSelect').outerWidth();
+                                        $(this).find('select').css({
+                                           'height' : customSelect_h + 'px',
+                                           'width'  : customSelect_w + 'px'
+                                        });
+                                    })
                                 });
                                 
                             }
@@ -1469,6 +1492,9 @@ function openlab_mobile_menu_actions() {
                            var currentActiveButton = $('.direct-toggle.active');
                            var targetToClose = currentActiveButton.data('target');
                            var targetToClose_h = $(targetToClose).height();
+                           if(currentActiveButton.data('plusheight')){
+                                        targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
+                                    }
                            
                            $(targetToClose).slideUp(700,function(){
                                                 currentActiveButton.removeClass('in-action');
