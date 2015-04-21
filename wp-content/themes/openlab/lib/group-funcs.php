@@ -524,7 +524,12 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
 function openlab_group_profile_header() {
     ?>
-    <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?></h1>
+    <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?><button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button></h1>
     <div class="clearfix">
             <?php if ($group_type == "portfolio") : ?>
                     <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
