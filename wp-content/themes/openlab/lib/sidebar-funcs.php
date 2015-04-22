@@ -57,7 +57,7 @@ function openlab_bp_mobile_sidebar($type) {
             echo '</div>';
             break;
         case 'members':
-            echo '<div id="sidebar-mobile" class="sidebar col-xs-20 visible-xs clearfix">';
+            echo '<div id="sidebar-mobile" class="sidebar group-single-item clearfix">';
             openlab_member_sidebar_menu(true);
             echo '</div>';
             break;
@@ -103,6 +103,12 @@ function openlab_group_sidebar($mobile = false) {
 
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
+            <?php if (!$mobile): ?>
+                <h2 class="sidebar-header">
+                    <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
+                </h2>
+            <?php openlab_bp_group_site_pages(); ?>
+            <?php endif; ?>
             <div class="profile-nav <?php echo $classes; ?>">
                 <div id="item-buttons">
                     <div class="sidebar-block">

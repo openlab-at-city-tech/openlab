@@ -1330,3 +1330,103 @@ function openlab_trim_group_name($name) {
 }
 
 add_filter('bp_get_group_name', 'openlab_trim_group_name');
+
+/**
+ * Displays per group or porftolio site links
+ * @global type $bp
+ */
+function openlab_bp_group_site_pages() {
+    global $bp;
+
+    $group_id = bp_get_current_group_id();
+
+    // Set up data. Look for local site first. Fall back on external site.
+    $site_id = openlab_get_site_id_by_group_id($group_id);
+
+    if ($site_id) {
+        $site_url = get_blog_option($site_id, 'siteurl');
+        $is_local = true;
+
+        $blog_public = (float) get_blog_option($site_id, 'blog_public');
+        switch ($blog_public) {
+            case 1 :
+            case 0 :
+                $is_visible = true;
+                break;
+
+            case -1 :
+                $is_visible = is_user_logged_in();
+                break;
+
+            case -2 :
+                $group = groups_get_current_group();
+                $is_visible = $group->is_member || current_user_can('bp_moderate');
+                break;
+
+            case -3 :
+                $caps = get_user_meta(get_current_user_id(), 'wp_' . $site_id . '_capabilities', true);
+                $is_visible = isset($caps['administrator']);
+                break;
+        }
+    } else {
+        $site_url = groups_get_groupmeta($group_id, 'external_site_url');
+        $is_local = false;
+        $is_visible = true;
+    }
+
+    if (!empty($site_url) && $is_visible) {
+
+        if (openlab_is_portfolio()) {
+            ?>
+            <div class="sidebar-widget" id="portfolio-sidebar-widget">
+
+                <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
+                <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
+
+                <div class="sidebar-block">
+
+                    <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
+                        <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                            <li class="portfolio-site-link bold">
+                                <a class="bold no-deco" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                            </li>
+
+                            <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
+                                <li class="portfolio-dashboard-link">
+                                    <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>/wp-admin">Site Dashboard</a>
+                                </li>
+                            <?php endif ?>
+                        </ul>
+                    <?php else: ?>
+
+                        <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                            <li class="portfolio-site-link">
+                                <a class="bold" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                            </li>
+                        </ul>
+
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php } else { ?>
+
+            <div class="sidebar-widget" id="portfolio-sidebar-widget">
+
+                <div class="sidebar-block">
+                    <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                        <li class="portfolio-site-link">
+                            <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($site_url)) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></a>'; ?>
+                        </li>
+                        <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                            <li class="portfolio-dashboard-link">
+                                <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($site_url)) . 'wp-admin/">Site Dashboard</a>'; ?>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+
+                </div>
+            </div>
+            <?php
+        } // openlab_is_portfolio()
+    } // !empty( $site_url )
+}

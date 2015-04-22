@@ -413,7 +413,8 @@ input[type="submit"]{
     }
 }
 .group-archive-page,
-.single-item{
+.single-item,
+.bp-user{
     .navbar-default{
         @media(max-width: @screen-xs-max){
             margin-bottom: 44px;
@@ -1339,9 +1340,14 @@ body{
                     text-decoration: none;
                     font-weight: @semibold;
                     padding: 6px 15px;
-                    &:hover,
-                        &:focus{
+                }
+                &:hover,
+                    &:focus{
+                    a{
                         background: @cyan;
+                        color: @black;
+                    }
+                    .fa{
                         color: @black;
                     }
                 }
@@ -1370,6 +1376,10 @@ body{
                     ul{
                         display: block;
                     }
+                }
+                @media (max-width: @screen-xs-max){
+                    float: right;
+                    width: 80%;
                 }
             }
         }
@@ -1432,13 +1442,15 @@ body{
         }
     }
 }
-.single-item{
+.single-item,
+.bp-user{
     #sidebar-mobile{
         display: none;
     }
 }
 .group-archive-page,
-.single-item{
+.single-item,
+.bp-user{
     #content{
         @media(max-width: @screen-xs-max){
             position: relative;
@@ -1519,6 +1531,11 @@ body{
     @media (max-width: @screen-xs-min){
         width: 100%;
         max-width: 225px;
+    }
+}
+.group-header-content{
+    @media (max-width: @screen-xs-max){
+        margin-top: 21px;
     }
 }
 .info-panel{
@@ -1882,14 +1899,18 @@ body{
 .profile-type{
     background: @5gray;
     color: @70gray;
-    display: inline-block;
     font-size: @font-size-base;
     font-weight: 600;
     height: 30px;
     line-height: 220%;
     margin-bottom: -5px;
     padding: 0 19px;
-    vertical-align: middle;
+    @media (max-width: @screen-xs-max){
+        margin-bottom: 0;
+        position: absolute;
+        right: 34px;
+        top: -3px;
+    }
 }
 #member-header{
     margin-top: 41px;

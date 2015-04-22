@@ -7422,7 +7422,8 @@ input[type="submit"] {
 }
 @media (max-width: 767px) {
   .group-archive-page .navbar-default,
-  .single-item .navbar-default {
+  .single-item .navbar-default,
+  .bp-user .navbar-default {
     margin-bottom: 44px;
   }
 }
@@ -8318,9 +8319,13 @@ body .inline-visible-xs {
   font-weight: 600;
   padding: 6px 15px;
 }
-.sidebar .sidebar-block ul.sidebar-nav li a:hover,
-.sidebar .sidebar-block ul.sidebar-nav li a:focus {
+.sidebar .sidebar-block ul.sidebar-nav li:hover a,
+.sidebar .sidebar-block ul.sidebar-nav li:focus a {
   background: #63dfd2;
+  color: #000000;
+}
+.sidebar .sidebar-block ul.sidebar-nav li:hover .fa,
+.sidebar .sidebar-block ul.sidebar-nav li:focus .fa {
   color: #000000;
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item > a,
@@ -8344,6 +8349,12 @@ body .inline-visible-xs {
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item ul {
   display: block;
+}
+@media (max-width: 767px) {
+  .sidebar .sidebar-block ul.sidebar-nav li {
+    float: right;
+    width: 80%;
+  }
 }
 .sidebar .sidebar-block ul.sidebar-sublinks {
   padding: 6% 5%;
@@ -8395,12 +8406,14 @@ body .inline-visible-xs {
     display: none;
   }
 }
-.single-item #sidebar-mobile {
+.single-item #sidebar-mobile,
+.bp-user #sidebar-mobile {
   display: none;
 }
 @media (max-width: 767px) {
   .group-archive-page #content,
-  .single-item #content {
+  .single-item #content,
+  .bp-user #content {
     position: relative;
   }
 }
@@ -8488,6 +8501,11 @@ body .inline-visible-xs {
   #member-header-avatar {
     width: 100%;
     max-width: 225px;
+  }
+}
+@media (max-width: 767px) {
+  .group-header-content {
+    margin-top: 21px;
   }
 }
 .info-panel {
@@ -8791,14 +8809,20 @@ body .inline-visible-xs {
 .profile-type {
   background: #f0f0f0;
   color: #444444;
-  display: inline-block;
   font-size: 14px;
   font-weight: 600;
   height: 30px;
   line-height: 220%;
   margin-bottom: -5px;
   padding: 0 19px;
-  vertical-align: middle;
+}
+@media (max-width: 767px) {
+  .profile-type {
+    margin-bottom: 0;
+    position: absolute;
+    right: 34px;
+    top: -3px;
+  }
 }
 #member-header {
   margin-top: 41px;
