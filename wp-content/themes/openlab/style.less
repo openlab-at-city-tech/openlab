@@ -830,6 +830,12 @@ body{
     .align-left{
         text-align: left;
     }
+    .inline-visible-xs{
+        display: none !important;
+        @media(max-width: @screen-xs-max){
+            display: inline-block !important;
+        }
+    }
 }
 /**shortcodes**/
 .callout-list{

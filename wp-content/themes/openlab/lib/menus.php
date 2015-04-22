@@ -530,12 +530,37 @@ function openlab_submenu_gen($items) {
 add_filter('bp_get_options_nav_home', 'openlab_filter_subnav_home');
 
 function openlab_filter_subnav_home($subnav_item) {
-    $new_item = str_replace("Home", "Profile", $subnav_item);
+    global $bp;
+    
+    $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id();
+    $group_label = openlab_get_group_type_label('case=upper');
+    $new_label = '<span class="inline-visible-xs">'.$group_label.'</span> Profile';
+    
+    $new_item = str_replace("Home", $new_label, $subnav_item);
 
     //update "current" class to "current-menu-item" to unify site identification of current menu page
     $new_item = str_replace("current selected", "current-menu-item", $new_item);
-
-    return $new_item;
+    
+    //for mobile menu add course site and site dashboard (if available)
+    $site_id = openlab_get_site_id_by_group_id(bp_get_current_group_id());
+    
+    if (openlab_is_portfolio()) {
+        $site_url = openlab_user_portfolio_url($displayed_user_id);
+    } else if ($site_id) {
+        $site_url = get_blog_option($site_id, 'siteurl');
+    } else {
+        $site_url = groups_get_groupmeta(bp_get_current_group_id(), 'external_site_url');
+    }
+    
+    $site_link = '<li id="site-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($site_url)) . '" id="site">'.$group_label.' Site</a></li>';
+    
+    if(openlab_is_my_portfolio() || $bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())){
+        
+        $site_link .= '<li id="site-admin-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($site_url)) . 'wp-admin/" id="site-admin">Site Dashboard</a></li>';
+        
+    }
+    
+    return $new_item.$site_link;
 }
 
 add_filter('bp_get_options_nav_admin', 'openlab_filter_subnav_admin');
@@ -543,7 +568,7 @@ add_filter('bp_get_options_nav_admin', 'openlab_filter_subnav_admin');
 function openlab_filter_subnav_admin($subnav_item) {
     global $bp;
     $group_label = openlab_get_group_type_label('case=upper');
-    $new_item = str_replace('Manage', $group_label . ' Settings', $subnav_item);
+    $new_item = str_replace('Settings', 'Profile Settings', $subnav_item);
     //this is to stop the course settings menu item from getting a current class on membership pages
     if (bp_action_variable(0)) {
         if ($bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->action_variables[0] == 'membership-requests') {
@@ -710,7 +735,10 @@ function openlab_group_submenu_nav() {
                     $nav_item['position'] = 10;
                     break;
                 case ( $nav_item['slug'] == 'admin' ):
-                    $nav_item['position'] = 15;
+                    $nav_item['position'] = 11;
+                    break;
+                case ( $nav_item['slug'] == 'nav-forum' ):
+                    $nav_item['position'] = 25;
                     break;
                 case ( $nav_item['slug'] == 'members' ):
                     $nav_item['position'] = 35;
@@ -728,7 +756,7 @@ function openlab_group_submenu_nav() {
     $bp->bp_options_nav[$bp->current_item] = $final_nav;
 }
 
-add_action('bp_actions', 'openlab_group_submenu_nav', 1);
+add_action('bp_screens', 'openlab_group_submenu_nav', 1);
 
 /**
  * Markup for group admin tabs
@@ -908,4 +936,31 @@ function openlab_is_create_group($group_type) {
     }
 
     return $return;
+}
+
+function openlab_get_group_profile_mobile_anchor_links(){
+    $links = '';
+    $group_id = bp_get_current_group_id();
+    
+    // Non-public groups shouldn't show this to non-members.
+    $group = groups_get_current_group();
+    if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
+            return $links;
+    }
+    
+    $related_links = openlab_get_group_related_links( $group_id );
+    if(!empty($related_links)){
+        
+        $links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
+        
+    }
+    
+    $portfolio_data = openlab_get_group_member_portfolios( $group_id );
+    if(!empty($portfolio_data)){
+        
+        $links .= '<li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-member-portfolio-sidebar-widget" id="portfolios">Portfolios</a></li>';
+        
+    }
+    
+    return $links;
 }

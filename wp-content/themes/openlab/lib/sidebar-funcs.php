@@ -108,6 +108,15 @@ function openlab_group_sidebar($mobile = false) {
                     <div class="sidebar-block">
                         <ul class="sidebar-nav">
                             <?php bp_get_options_nav(); ?>
+                            
+                            <?php
+                            if ($mobile):
+
+                                echo openlab_get_group_profile_mobile_anchor_links();
+
+                            endif;
+                            ?>
+                            
                         </ul>
                     </div>
                 </div><!-- #item-buttons -->

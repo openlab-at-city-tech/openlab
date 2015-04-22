@@ -7825,6 +7825,14 @@ body .align-center {
 body .align-left {
   text-align: left;
 }
+body .inline-visible-xs {
+  display: none !important;
+}
+@media (max-width: 767px) {
+  body .inline-visible-xs {
+    display: inline-block !important;
+  }
+}
 /**shortcodes**/
 .callout-list .row {
   margin-bottom: 24px;

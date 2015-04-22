@@ -1503,6 +1503,35 @@ function openlab_mobile_menu_actions() {
                                             });
                            
                         });
+                        
+                        //running smooth scroll on mobile anchor links
+                        if ($('.mobile-anchor-link')){
+                            $('.mobile-anchor-link').find('a').on('click',function(e){
+                                e.preventDefault();
+                                var thisElem = $(this);
+                                var thisAnchor = thisElem.attr('href');
+                                
+                                var currentActiveButton = $('.direct-toggle.active');
+                                var background = $('#behind_menu_background');
+                                var targetToClose = currentActiveButton.data('target');
+                                var targetToClose_h = $(targetToClose).height();
+                                if(currentActiveButton.data('plusheight')){
+                                             targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
+                                         }
+
+                                $(targetToClose).slideUp(700,function(){
+                                                     currentActiveButton.removeClass('in-action');
+                                                     currentActiveButton.removeClass('active');
+                                                     background.removeClass('active').animate({ 'top': '-='+targetToClose_h+'px' },50);
+                                                     
+                                                     $.smoothScroll({
+                                                        scrollTarget: thisAnchor 
+                                                     });
+                                                 });
+                            });
+                        }
+                        
+                        
     	});
     	</script>
 
