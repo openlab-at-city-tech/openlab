@@ -1,7 +1,7 @@
 <?php
 
-if ( ! defined( 'CSS_DEBUG' ) ) {
-	define( 'CSS_DEBUG', false );
+if (!defined('CSS_DEBUG')) {
+    define('CSS_DEBUG', false);
 }
 
 function openlab_core_setup() {
@@ -48,7 +48,7 @@ function openlab_load_scripts() {
     if (!is_admin()) {
 
         //google fonts
-        wp_register_style('google-open-sans', set_url_scheme( 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic' ), array(), '2014', 'all');
+        wp_register_style('google-open-sans', set_url_scheme('http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic'), array(), '2014', 'all');
         wp_enqueue_style('google-open-sans');
 
         wp_register_style('camera-js-styles', $stylesheet_dir_uri . '/css/camera.css', array(), '20130604', 'all');
@@ -108,7 +108,7 @@ function openlab_load_scripts_high_priority() {
     wp_enqueue_style('main-styles');
 
     if ($post->post_type == 'help') {
-        wp_register_style('print-styles', $stylesheet_dir_uri .'/css/print.css', array(), '2015', 'print');
+        wp_register_style('print-styles', $stylesheet_dir_uri . '/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }
 }
