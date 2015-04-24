@@ -3,7 +3,7 @@
 Plugin Name: Page Links To
 Plugin URI: http://txfx.net/wordpress-plugins/page-links-to/
 Description: Allows you to point WordPress pages or posts to a URL of your choosing.  Good for setting up navigational links to non-WP sections of your site or to off-site resources.
-Version: 2.9.3
+Version: 2.9.6
 Author: Mark Jaquith
 Author URI: http://coveredwebservices.com/
 Text Domain: page-links-to
@@ -65,13 +65,16 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 */
 	function register_hooks() {
 		// Hook in to URL generation
-		$this->hook( 'page_link',      'link', 20 );
-		$this->hook( 'post_link',      'link', 20 );
-		$this->hook( 'post_type_link', 'link', 20 );
+		$this->hook( 'page_link',       'link', 20 );
+		$this->hook( 'post_link',       'link', 20 );
+		$this->hook( 'post_type_link',  'link', 20 );
+		$this->hook( 'attachment_link', 'link', 20 );
 
 		// Non-standard priority hooks
 		$this->hook( 'do_meta_boxes', 20 );
 		$this->hook( 'wp_footer',     19 );
+		$this->hook( 'wp_enqueue_scripts', 'start_buffer', -9999 );
+		$this->hook( 'wp_head', 'end_buffer', 9999 );
 
 		// Non-standard callback hooks
 		$this->hook( 'load-post.php', 'load_post' );
@@ -80,8 +83,13 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		$this->hook( 'wp_list_pages'       );
 		$this->hook( 'template_redirect'   );
 		$this->hook( 'save_post'           );
+		$this->hook( 'edit_attachment'     );
 		$this->hook( 'wp_nav_menu_objects' );
 		$this->hook( 'plugin_row_meta'     );
+
+		// Metadata validation grants users editing privileges for our custom fields
+		register_meta('post', self::LINK_META_KEY, null, '__return_true');
+		register_meta('post', self::TARGET_META_KEY, null, '__return_true');
 	}
 
 	/**
@@ -117,6 +125,31 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function wp_footer() {
 		if ( count( $this->targets_on_this_page ) )
 			wp_enqueue_script( 'jquery' );
+	}
+
+	/**
+	 * Starts a buffer, for rescuing the jQuery object
+	 */
+	function start_buffer() {
+		ob_start( array( $this, 'buffer_callback' ) );
+	}
+
+	/**
+	 * Collects the buffer, and injects a `jQueryWP` JS object as a
+	 * copy of `jQuery`, so that dumb themes and plugins can't hurt it
+	 */
+	function buffer_callback( $content ) {
+		$pattern = "#wp-includes/js/jquery/jquery\.js\?ver=([^']+)'></script>#";
+		if ( preg_match( $pattern, $content ) )
+			$content = preg_replace( $pattern, '$0<script>jQueryWP = jQuery;</script>', $content );
+		return $content;
+	}
+
+	/**
+	 * Flushes the buffer
+	 */
+	function end_buffer() {
+		ob_end_flush();
 	}
 
 	/**
@@ -242,6 +275,16 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		</div>
 		<script src="<?php echo trailingslashit( plugin_dir_url( self::FILE ) ) . 'js/page-links-to.js?v=4'; ?>"></script>
 	<?php
+	}
+
+	/**
+	 * Saves data on attachment save
+	 *
+	 * @param  int $post_id
+	 * @return int the attachment post ID that was passed in
+	 */
+	function edit_attachment( $post_id ) {
+		return $this->save_post( $post_id );
 	}
 
 	/**
@@ -432,7 +475,24 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		if ( ! get_queried_object_id() )
 			return false;
 
-		return $this->get_link( get_queried_object_id() );
+		$link = $this->get_link( get_queried_object_id() );
+
+		// Convert server- and protocol-relative URLs to absolute URLs
+		if ( "/" === $link[0] ) {
+			// Protocol-relative
+			if ( "/" === $link[1] ) {
+				$link = set_url_scheme( 'http:' . $link );
+			} else {
+				// Host-relative
+				$link = set_url_scheme( 'http://' . $_SERVER["HTTP_HOST"] . $link );
+			}
+		}
+
+		if ( 'mailto' !== parse_url( $link, PHP_URL_SCHEME ) ) {
+			$link = str_replace( '@', '%40', $link );
+		}
+
+		return $link;
 	}
 
 	/**
@@ -486,7 +546,7 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function wp_nav_menu_objects( $items ) {
 		$new_items = array();
 		foreach ( $items as $item ) {
-			if ( $this->get_target( $item->object_id ) )
+			if ( isset( $item->object_id ) && $this->get_target( $item->object_id ) )
 				$item->target = '_blank';
 			$new_items[] = $item;
 		}
