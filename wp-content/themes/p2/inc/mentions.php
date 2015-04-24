@@ -111,8 +111,10 @@ class P2_Mentions extends P2_Terms_In_Comments {
 				$classes .= ' mention-current-user';
 
 			$url = get_term_link( $name, P2_MENTIONS_TAXONOMY );
-			if ( is_wp_error( $url ) )
+			$url = apply_filters( 'p2_mention_url', $url, $name );
+			if ( is_wp_error( $url ) || ! $url ) {
 				continue;
+			}
 
 			$replacement = "<a href='" . esc_url( $url ) . "' class='$classes'>@$name</a>";
 			$replacement = apply_filters( 'p2_mention_link', $replacement, $name );
@@ -131,7 +133,7 @@ class P2_Mentions extends P2_Terms_In_Comments {
 
 		// Membership check
 		$user = wp_get_current_user();
-		if ( ! is_super_admin() && function_exists( 'is_user_member_of_blog' ) && ! is_user_member_of_blog( $user->ID ) )
+		if ( function_exists( 'is_user_member_of_blog' ) && ! is_user_member_of_blog( $user->ID ) )
 			return;
 
 		// Capability check
@@ -153,5 +155,3 @@ class P2_Mentions extends P2_Terms_In_Comments {
 		return apply_filters( 'p2_user_suggestion', $js_users );
 	}
 }
-
-?>

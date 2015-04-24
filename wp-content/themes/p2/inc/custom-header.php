@@ -115,6 +115,7 @@ function p2_header_style() {
 			margin-top: 0;
 			margin-right: 0;
 			position: relative;
+			width: 100%;
 			height: <?php echo get_custom_header()->height; ?>px;
 			-webkit-box-shadow: none !important;
 			-moz-box-shadow: none !important;
@@ -132,7 +133,8 @@ function p2_header_style() {
 		#header h1,
 		#header small {
 			padding: 0;
-			text-indent: -1000em;
+			clip: rect(1px, 1px, 1px, 1px);
+			position: absolute;
 		}
 	<?php elseif ( $text_color != get_theme_support( 'custom-header', 'default-text-color' ) ) : ?>
 		#header h1 a,

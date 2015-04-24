@@ -51,7 +51,7 @@
 									)
 								);
 
-								edit_post_link( __( 'Edit this entry.', 'p2' ), ' <span class="meta-sep">|</span> ', '' );
+								edit_post_link( __( 'Edit', 'p2' ), ' <span class="meta-sep">|</span> ', '' );
 							?>
 
 								<div class="attachment-image">
@@ -69,7 +69,7 @@
 								<p><?php _e( 'View file:', 'p2' ); ?> <a href="<?php echo wp_get_attachment_url(); ?>" title="<?php echo esc_attr( get_the_title() ); ?>" rel="attachment"><?php echo basename( get_permalink() ); ?></a></p>
 								<?php the_content( __( '(More ...)' , 'p2' ) ); ?>
 								<?php wp_link_pages(); ?>
-								<?php edit_post_link( __( 'Edit this entry.', 'p2' ), '<p>', '</p>' ); ?>
+								<?php edit_post_link( __( 'Edit', 'p2' ), '<p>', '</p>' ); ?>
 
 							<?php endif; ?>
 

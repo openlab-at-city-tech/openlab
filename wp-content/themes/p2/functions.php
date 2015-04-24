@@ -56,7 +56,7 @@ class P2 {
 		require_once( P2_INC_PATH . "/template-tags.php" );
 
 		// Logged-out/unprivileged users use the add_feed() + ::ajax_read() API rather than the /admin-ajax.php API
-		// current_user_can( 'read' ) should be equivalent to is_user_member_of_blog() || is_super_admin()
+		// current_user_can( 'read' ) should be equivalent to is_user_member_of_blog()
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( p2_user_can_post() || current_user_can( 'read' ) ) )
 			$includes[] = 'ajax';
 
@@ -303,7 +303,7 @@ function p2_the_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
 	global $post;
 
 	$temp = $post;
-	$t = apply_filters( 'the_title', $temp->post_title );
+	$t = apply_filters( 'the_title', $temp->post_title, $temp->ID );
 	$title = $temp->post_title;
 	$content = $temp->post_content;
 	$pos = 0;
@@ -525,20 +525,6 @@ function p2_new_post_noajax() {
 	exit;
 }
 add_filter( 'template_redirect', 'p2_new_post_noajax' );
-
-/**
- * iPhone viewport meta tag.
- *
- * Hooks into the wp_head action late.
- *
- * @uses p2_is_iphone()
- * @since P2 1.4
- */
-function p2_viewport_meta_tag() {
-	if ( p2_is_iphone() )
-		echo '<meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"/>';
-}
-add_action( 'wp_head', 'p2_viewport_meta_tag', 1000 );
 
 /**
  * iPhone Stylesheet.

@@ -1,0 +1,578 @@
+# Translation of P2 in Dutch
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-06-01 17:21:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: P2\n"
+
+msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
+msgstr ""
+
+#: single.php:42
+msgctxt "Previous post link"
+msgid "&larr; %title"
+msgstr "&larr; %title"
+
+#: single.php:43
+msgctxt "Next post link"
+msgid "%title &rarr;"
+msgstr "%title &rarr;"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Tagged:%s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Geen berichten gevonden!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "Zoekresultaten voor: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Plaats het"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Link"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Blogbericht"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Citeren"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr ""
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Nog geen berichten!"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Status update"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Recente updates"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Aantal tags  tonen:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Recente tags"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s op <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "P2 recente tags"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "De tags van de laatste berichten."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "Anoniem"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatars:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Recente reacties"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Aantal te tonen reacties:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Titel:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Recente reacties met avatars."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Geen avatar"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "Wat ben je aan het doen?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "P2 Recente reacties"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr "%1$s discussieert."
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr "%1$s en %2$s discussiëren."
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr "%1$s, %2$s, en %3$s zijn in discussie"
+
+#: inc/template-tags.php:94
+msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
+msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
+msgstr[0] "%1$s, %2$s, %3$s, en %4$d ander zijn aan het discussiëren."
+msgstr[1] "%1$s, %2$s, %3$s, en %4$d anderen zijn aan het discussiëren."
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Hallo, %s. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Tekst tonen"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Tekst verbergen"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Instellingen bijwerken"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr "indien leeg gaat het standaard naar <strong>Wat ben je aan het doen?</strong>"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Berichttitels:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Toon titels"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Zijbalk weergeven:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Verberg de zijbalk"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "Berichtprompt:"
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr "Plaid"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Strepen"
+
+#: inc/options-page.php:166
+msgid "Santa"
+msgstr "Santa"
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Stippen"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Vierkanten"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr "Bubbles"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Geen"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Kies een kleur"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Achtergrondafbeelding:"
+
+#: inc/options-page.php:134
+msgid "Hide comment threads by default on all non-single views"
+msgstr ""
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Design opties"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Aangepaste achtergrondkleur:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Sta elke WordPress.com gebruiker toe wat te plaatsen"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Sta elke geregistreerde gebruiker toe wat te plaatsen"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Verberg Onderwerpen:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "P2 Opties"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Functionaliteitsopties"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Terbeschikkingstelling Bereikbaarheid:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Opties opgeslagen."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "Wat ben je aan het doen?"
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "Dit veld is vereist."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Thema opties"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Weet je zeker dat je dit commentaar wilt wissen? De inhoud zal worden verwijderd."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Oeps! Het lijkt erop dat je niet bent ingelogd"
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Gelieve opnieuw in te loggen"
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "Oeps! Het ziet ernaar uit dat je niet met de server bent verbonden. P2 kon niet met WordPress verbinden."
+
+#: inc/js.php:145 inc/template-tags.php:254
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%1$s <em>op</em> %2$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr "Na het intikken van @, typt u een naam of gebruikersnaam om een lid van deze site te vinden"
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Niets gevonden"
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Toon onderwerpen"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "Je reacties of berichten gaan verloren als je verdergaat."
+
+#: inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Verberg threads"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Opslaan"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Laden&#8230;"
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Er heeft zich een fout voorgedaan, je bericht is niet geplaatst."
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "Je update is geplaatst"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d nieuwe reactie (s)"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "Ga naar boven"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d nieuwe update(s) "
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Citaat"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Ga naar homepage"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Berichttitel"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Tags:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "Error: u mag hier niet posten."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Tag het"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "Fout: de post aanpassen is niet toegestaan"
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "Fout: geen rechten om deze reactie te bewerken."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "Fout: Onbekende fout opgetreden. Reactie niet geplaatst."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "Fout: niet ingelogd"
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "Fout: voer een reactie in."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "Mislukt: vul een geldig e-mailadres in."
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "Fout: je moet ingelogd zijn om een reactie te plaatsen."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "Mislukt: vul de verplichte velden in (naam, e-mailadres)."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Spring naar inhoud"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Menu"
+
+#: header.php:30
+msgid "Post"
+msgstr "Bericht"
+
+#: functions.php:717 index.php:24
+msgid "Page %s"
+msgstr "Pagina %s"
+
+#: functions.php:618
+msgid "Proudly powered by %s."
+msgstr "Proudly powered by %s."
+
+#: functions.php:618
+msgid "http://wordpress.org/"
+msgstr "http://nl.wordpress.org/"
+
+#: functions.php:439
+msgid "Image Post"
+msgstr "Afbeelding bericht"
+
+#: functions.php:575
+msgid "Log in to Reply"
+msgstr "Login om te reageren"
+
+#: functions.php:437
+msgid "Video Post"
+msgstr "Video bericht"
+
+#: functions.php:398
+msgid "Your comment is awaiting moderation."
+msgstr "Je reactie is in afwachting van moderatie."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Sidebar"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Primair menu"
+
+#: footer.php:31
+msgid "Show/Hide help"
+msgstr "hulp weergeven/verbergen"
+
+#: footer.php:32
+msgid "shift + esc"
+msgstr ""
+
+#: footer.php:32 inc/js.php:140
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: footer.php:29
+msgid "Go to top"
+msgstr "ga naar boven"
+
+#: footer.php:30
+msgid "Go to login"
+msgstr "ga naar log-in"
+
+#: footer.php:28
+msgid "Show/Hide comments"
+msgstr "toon / verberg reacties"
+
+#: footer.php:24
+msgid "Next post/Next comment"
+msgstr "volgende post/volgende reactie "
+
+#: footer.php:25
+msgid "Previous post/Previous comment"
+msgstr "vorige post / vorige opmerking"
+
+#: footer.php:23
+msgid "Compose new post"
+msgstr "Maak een nieuw bericht"
+
+#: footer.php:15
+msgid "Theme: %1$s by %2$s."
+msgstr "Thema: %1$s door %2$s."
+
+#: entry.php:117
+msgid "Toggle Comments"
+msgstr "Toggle Reacties"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Pagina&#39;s:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Tags:"
+
+#: entry.php:100
+msgid "Required fields are marked %s"
+msgstr "Verplichte velden zijn gemarkeerd met %s"
+
+#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
+#: functions.php:463 functions.php:574 functions.php:596
+msgid "Reply"
+msgstr "Beantwoorden"
+
+#: entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "Berichten door %1$s ( @%2$s )"
+
+#: entry.php:37 functions.php:383
+msgid "Permalink"
+msgstr "Permalink"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Nieuwe reacties &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Oudere reacties"
+
+#: author.php:35
+msgid "Apologies, looks like this author does not have any posts."
+msgstr ""
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Oudere berichten"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Nieuwere berichten &rarr;"
+
+#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr ""
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Wissel reactie discussies"
+
+#: attachment.php:69
+msgid "View file:"
+msgstr "Bekijk bestand:"
+
+#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Meer...)"
+
+#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
+#: functions.php:388
+msgid "Edit"
+msgstr "Bewerken"
+
+#: attachment.php:45
+msgid "Full size is %s pixels"
+msgstr "Volledige grootte is %s pixels"
+
+#: attachment.php:48
+msgid "Link to full-size image"
+msgstr "Link naar afbeelding op ware grootte"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Helaas, maar de door u opgevraagde pagina kon niet worden gevonden. Misschien kan zoeken helpen."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Niet gevonden"
