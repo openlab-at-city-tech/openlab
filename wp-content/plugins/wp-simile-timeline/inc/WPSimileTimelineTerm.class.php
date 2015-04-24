@@ -241,7 +241,8 @@ class WPSimileTimelineTerm{
 			}
 		} else {
 			// Term error can occur here with certain custom taxonomy definitions
-			print_r($terms);
+                        // Terms may be empty
+                        echo '<tr><td>' . __('No entries available', 'stl_timeline') . '</td></tr>';
 			return false;
 		}
 	}

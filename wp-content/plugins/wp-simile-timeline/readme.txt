@@ -3,8 +3,8 @@ Contributors: freshlabs
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F9HV8RZH76SHU
 Tags: api, widget, visualization, javascript, simile, timeline, time, posts, post, ajax, integration, rss, feed, links, lifestream, twitter, xml
 Requires at least: 3.0
-Tested up to: 3.5
-Stable tag: 0.4.8.6
+Tested up to: 4.0
+Stable tag: 0.4.9
 
 Integrates the SIMILE Timeline into WordPress and provides an option interface for the various timeline settings.
 
@@ -89,6 +89,11 @@ call that file directly to see if posts show up there.
 
 == Upgrade Notice ==
 
+= 0.4.9 =
+WordPress 4.0 compatibility
+Fixes calls to readTerm() with empty ID
+Fixed sql statements for creating additional posts columns
+
 = 0.4.8.6 =
 Fixed wpdb::prepare() calls with second parameter
 
@@ -116,6 +121,13 @@ Fixes initialization issues when prototype.js is used (empty timeline frame)
 Fixes missing argument error in template function & WordPress 3.0 compatibility
 
 == Changelog ==
+
+**0.4.9 (26/09/2014)**
+
+*       WordPress 4.0 compatibility
+*       Fixed start and end dates for posts
+*	Fixed faulty SQL queries
+*       Various bugfixes
 
 **0.4.8.6 (10/01/2013)**
 
