@@ -4,8 +4,8 @@ Author URI: http://humanshell.net
 Plugin URI: https://github.com/cuny-academic-commons/cac-featured-content
 Tags: buddypress, multisite, feature, featured, highlight
 Requires at least: 3.3
-Tested up to: 3.4.2
-Stable tag: 1.0.3
+Tested up to: 4.2
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,13 @@ There is not currently a FAQ available for this plugin. I'm workin' on it though
 
 == Changelog ==
 
+= 1.0.5 =
+* Fixed bug that prevented Featured Member from being found when a username was provided
+
+= 1.0.4 =
+* multisite optimizations for Featured "Post" Content type
+* fixed $wpdb->prepare warning
+
 = 1.0.3 =
 * fixed js error that was improperly referencing widget number on new widgets
 
@@ -86,7 +93,7 @@ There is not currently a FAQ available for this plugin. I'm workin' on it though
 * added the ability to choose the widget title's HTML element
 * adjusted layout of some admin input elements
 * added some more default styles
-* updated HTML output in content type views 
+* updated HTML output in content type views
 
 = 1.0.0 =
 * separated plugin responsibilities into MVC-like structure
