@@ -4,6 +4,9 @@
 	 * Support tab content
 	 */
 	 
+	 // bypass for now - directed to support forums
+	 exit;
+	 
 	if ( ! defined( 'ABSPATH' ) ) {
 		exit;
 	}

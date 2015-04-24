@@ -4,6 +4,10 @@
  * Enhanced Viewer
  */
 
+// disable if adddressed. $_GET['gpid'] below has SQL injection vulnerability and should
+// be replaced if this file is used again.
+exit;
+ 
 // access wp functions externally
 require_once('libs/lib-bootstrap.php');
 
@@ -49,7 +53,8 @@ if ( isset( $_GET['a'] ) && $_GET['a'] == 'gt') {
 	
 	// get profile
 	if ( isset( $_GET['gpid'] ) ) {
-		if ( $profile = gde_get_profile( $_GET['gpid'] ) ) {
+		$gpid = mysql_real_escape_string( $_GET['gpid'] );
+		if ( $profile = gde_get_profile( $gpid ) ) {
 			$tb = $profile['tb_flags'];
 			$vw = $profile['vw_flags'];
 			$bg = $profile['vw_bgcolor'];
