@@ -493,6 +493,7 @@ function openlab_additional_faculty_field() {
 		<?php /* Data about existing faculty */ ?>
 		<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
 		<label for="additional-faculty">Additional Faculty</label>
+		<p>If your course is taught by multiple faculty, type the name in the box below and select from the dropdown list.</p>
 
 		<input class="hide-if-no-js" type="textbox" id="additional-faculty-autocomplete" value="" />
 		<?php wp_nonce_field( 'openlab_additional_faculty_autocomplete', '_ol_addl_faculty_nonce', false ) ?>
