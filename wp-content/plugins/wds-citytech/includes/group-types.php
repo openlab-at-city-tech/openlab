@@ -510,6 +510,8 @@ add_action( 'bp_after_group_details_admin', 'openlab_additional_faculty_field', 
  * AJAX handler for additional faculty autocomplete.
  */
 function openlab_additional_faculty_autocomplete_cb() {
+	global $wpdb;
+
 	$nonce = $term = '';
 
 	if ( isset( $_GET['nonce'] ) ) {
@@ -526,14 +528,14 @@ function openlab_additional_faculty_autocomplete_cb() {
 		$term = urldecode( $_GET['term'] );
 	}
 
-//	add_action( 'bp_user_query_uid_clauses', 'openlab_restrict_user_search_to_name_field', 20, 2 );
-	$found = new BP_User_Query( array(
-		'search_terms' => $term,
-	) );
-//	remove_action( 'bp_user_query_uid_clauses', 'openlab_restrict_user_search_to_name_field', 20, 2 );
+	// Direct query for speed.
+	$bp = buddypress();
+	$at_field_id = xprofile_get_field_id_from_name( 'Account Type' );
+	$like = $wpdb->esc_like( $term );
+	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$bp->profile->table_name_data} x ON (u.ID = x.user_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND x.field_id = %d AND x.value = 'Faculty'", $at_field_id ) );
 
 	$retval = array();
-	foreach ( $found->results as $u ) {
+	foreach ( (array) $found as $u ) {
 		$retval[] = array(
 			'label' => sprintf( '%s (%s)', esc_html( $u->display_name ), esc_html( $u->user_nicename ) ),
 			'value' => esc_attr( $u->user_nicename ),
