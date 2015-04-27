@@ -18,6 +18,12 @@ function openlab_conditional_body_classes($classes) {
     if(in_array($post->post_name,$group_archives)){
         $classes[] = 'group-archive-page';
     }
+    
+    $about_page_obj = get_page_by_path('about');
+    
+    if(in_array($post->post_name,$group_archives) || bp_is_single_item() || bp_is_user() || $post->ID == $about_page_obj->ID || $post->post_parent == $about_page_obj->ID || $post->post_type == 'help' || $post->post_type == 'help_glossary'){
+        $classes[] = 'sidebar-mobile-dropdown';
+    }
 
     return $classes;
 }

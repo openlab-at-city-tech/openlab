@@ -7,7 +7,7 @@ function openlab_bp_sidebar($type) {
 
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
 
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . '">';
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . ' mobile-dropdown">';
 
     switch ($type) {
         case 'actions':
@@ -52,32 +52,30 @@ function openlab_bp_mobile_sidebar($type) {
 
     switch ($type) {
         case 'actions':
-            echo '<div id="sidebar-mobile" class="sidebar group-single-item clearfix">';
+            echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix">';
             openlab_group_sidebar(true);
             echo '</div>';
             break;
         case 'members':
-            echo '<div id="sidebar-mobile" class="sidebar group-single-item clearfix">';
+            echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix">';
             openlab_member_sidebar_menu(true);
             echo '</div>';
             break;
         case 'about':
-            echo '<div id="sidebar-mobile" class="sidebar col-xs-20 visible-xs clearfix">';
+            echo '<div id="sidebar-mobile" class="sidebar clearfix mobile-dropdown">';
             $args = array(
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
                 'menu_class' => 'sidebar-nav'
             );
-            echo '<h2 class="sidebar-title">About</h2>';
             echo '<div class="sidebar-block">';
             wp_nav_menu($args);
             echo '</div>';
             echo '</div>';
             break;
         case 'help':
-            echo '<div id="sidebar-mobile" class="sidebar col-xs-20 visible-xs clearfix">';
-            echo '<h2 class="sidebar-title">Help</h2>';
+            echo '<div id="sidebar-mobile" class="sidebar clearfix mobile-dropdown">';
             echo '<div class="sidebar-block">';
 
             $args = array(

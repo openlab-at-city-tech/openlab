@@ -545,7 +545,7 @@ function openlab_filter_subnav_home($subnav_item) {
     $site_id = openlab_get_site_id_by_group_id(bp_get_current_group_id());
     
     if (openlab_is_portfolio()) {
-        $site_url = openlab_user_portfolio_url($displayed_user_id);
+        $site_url = openlab_get_user_portfolio_url($displayed_user_id);
     } else if ($site_id) {
         $site_url = get_blog_option($site_id, 'siteurl');
     } else {

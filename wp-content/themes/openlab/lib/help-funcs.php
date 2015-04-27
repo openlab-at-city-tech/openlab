@@ -50,18 +50,39 @@ function openlab_help_loop() {
         ?>
 
         <?php if ($help_cats): ?>
-<h1 class="entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a><span class="print-link pull-right"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
+            <h1 class="entry-title help-entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a>
+                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="print-link pull-right"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
                     <?php if ($this_term->parent != 0): ?>
-                    <a class="regular" href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
+                        <a class="regular" href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
                     <?php endif; ?>
                     <span><?php the_title(); ?></span></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
-            <h1 class="entry-title"><?php echo the_title(); ?></h1>
+            <h1 class="entry-title"><?php echo the_title(); ?>
+                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
-            <h1 class="entry-title"><?php echo the_title(); ?></h1>
+            <h1 class="entry-title"><?php echo the_title(); ?>
+                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </h1>
         <?php endif; ?>
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation('top')); ?>
@@ -116,10 +137,16 @@ function openlab_help_tags_loop() {
     );
 
 
-    $tags_query = new WP_Query( $args );
+    $tags_query = new WP_Query($args);
     ?>
 
-    <h1 class="parent-cat entry-title">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
+    <h1 class="parent-cat entry-title">Tag Archive for: "<?php echo $parent_cat_name; ?>"
+        <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button></h1>
 
     <?php
     while ($tags_query->have_posts()) : $tags_query->the_post();
@@ -175,20 +202,37 @@ function openlab_help_cats_loop() {
     );
 
 
-    $help_query = new WP_Query( $args );
+    $help_query = new WP_Query($args);
     ?>
 
     <?php if ($parent_term->parent == 0): ?>
-    <h1 class="parent-cat entry-title"><?php echo $parent_cat_name; ?></h1>
-    <?php else:
-        $head_term = get_term_by('id',$parent_term->parent,'help_category');
-    $child_title = '<h1 class="parent-cat entry-title"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
-    $child_title .= '<h2 class="child-cat child-cat-num-0">'. $parent_cat_name .'</h2>';
-    echo $child_title;
-    endif; ?>
+        <h1 class="parent-cat entry-title"><?php echo $parent_cat_name; ?>
+            <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </h1>
+        <?php
+    else:
+        $head_term = get_term_by('id', $parent_term->parent, 'help_category');
+        ?>
+        <h1 class="parent-cat entry-title"><a href="<?php echo get_term_link($head_term) ?>"><?php echo $head_term->name ?></a>
+            <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </h1>
+        <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
+    <?php
+    endif;
+    ?>
 
     <?php
-    while ( $help_query->have_posts()) : $help_query->the_post();
+    while ($help_query->have_posts()) : $help_query->the_post();
 
         $post_id = get_the_ID();
         ?>
@@ -269,14 +313,20 @@ function openlab_glossary_cats_loop() {
         'post_type' => 'help_glossary',
         'orderby' => 'menu_order',
         'order' => 'ASC',
-	'posts_per_page' => '-1',
+        'posts_per_page' => '-1',
     );
 
 
-    $cat_query = new WP_Query( $args );
+    $cat_query = new WP_Query($args);
     ?>
 
-    <h1 class="parent-cat entry-title">Glossary</h1>
+    <h1 class="parent-cat entry-title">Glossary
+        <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button></h1>
     <div class="glossary-description"><p><?php echo $parent_term->description; ?></p></div>
 
     <?php
