@@ -548,29 +548,6 @@ function openlab_additional_faculty_autocomplete_cb() {
 add_action( 'wp_ajax_openlab_additional_faculty_autocomplete', 'openlab_additional_faculty_autocomplete_cb' );
 
 /**
- * Restrict `BP_User_Query` searches to match only against xprofile Name field.
- *
- * We don't need to match all xprofile fields.
- *
- * @param array         $s SQL clause array.
- * @param BP_User_Query $q User query object.
- */
-function openlab_restrict_user_search_to_name_field( $s, BP_User_Query $q ) {
-	if ( ! isset( $s['where'] ) ) {
-		return $s;
-	}
-
-	$table = buddypress()->profile->table_name_data;
-	$pattern = '/' . $table . ' WHERE ([^)]+)/';
-	echo $pattern;
-	var_Dump( preg_match( $pattern, $s['where'], $f ) );
-	print_r( $f ); die();
-	$s['where'] = preg_replace( $table . ' WHERE', $table . ' WHERE field_id = 1 AND ', $s['where'] );
-
-	return $s;
-}
-
-/**
  * Process the saving of additional faculty.
  */
 function openlab_additional_faculty_save( $group ) {
