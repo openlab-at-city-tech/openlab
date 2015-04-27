@@ -24,9 +24,18 @@
 
 #additional-faculty-list li {
 	padding: 4px;
+	line-height: 1.5em;
 }
 
 body.group-create #additional-faculty-admin {
 	margin-top: -1em; /* Someone shoot me */
 	margin-bottom: 3em;
+}
+
+.addl-faculty-remove a {
+	background: url( '../../../../themes/citytech/images/submenu_sprite.png' ) no-repeat scroll;
+	background-position: 0 -1px;
+	height: 17px;
+	padding: 2px 0 0 18px !important;
+	margin-left: 8px;
 }

@@ -46,6 +46,7 @@ window.wp = window.wp || {};
 			var li = '';
 
 			li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '"><span class="addl-faculty-remove"><a href="#">x</a></span> ' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"></li>';
+			li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"></a></span></li>';
 			$( '#additional-faculty-list' ).append( li );
 		}
 	}
