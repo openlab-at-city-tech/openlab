@@ -8,12 +8,12 @@
 		    scrollpx: 50,
 		    ad: {visible: false},
 		    chicklets:{"items":["sharethis", "facebook", "twitter", "linkedin", "email"]},
-		    logo: 'http://sd.sharethis.com/disc/images/Logo_Area.png'
+		    logo: '//sd.sharethis.com/disc/images/Logo_Area.png'
 		},
 		
 		updateLogo	 		: function () {
 			var value = jQuery("#pulldown_optionsTextbox_id").val();
-			pulldown.stgOptions.logo = (value == '' ? 'http://sd.sharethis.com/disc/images/Logo_Area.png' : value);
+			pulldown.stgOptions.logo = (value == '' ? '//sd.sharethis.com/disc/images/Logo_Area.png' : value);
 		},
 		
 		updateScrollHeight	: function () {

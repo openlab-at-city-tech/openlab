@@ -86,9 +86,6 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		wp_nonce_field( 'groups_' . $type . '_save_' . $this->slug );
 	}
 
-	function display() {
-	}
-
 	function widget_display() {
 	}
 

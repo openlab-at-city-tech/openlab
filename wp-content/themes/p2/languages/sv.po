@@ -1,0 +1,578 @@
+# Translation of P2 in Swedish
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-06-09 20:33:37+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: P2\n"
+
+msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
+msgstr ""
+
+#: single.php:42
+msgctxt "Previous post link"
+msgid "&larr; %title"
+msgstr ""
+
+#: single.php:43
+msgctxt "Next post link"
+msgid "%title &rarr;"
+msgstr ""
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Etiketter: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Inga inlägg funna!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "Sökresultat för: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Posta"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Länk"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Blogginlägg"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Citat"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr "Uppdateringar från %s"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Inga inlägg än!"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Statusuppdatering"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Senaste uppdateringar"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Antal etiketter att visa:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Senaste etiketterna"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s till <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "P2 Senaste etiketterna"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "Etiketterna från det senaste inlägget."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "Anonym"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatarer:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Senaste kommentarer"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Antal kommentarer att visa:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Titel:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Senaste kommentarer med avatarer."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Inga avatar"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "Vad händer?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "P2 Senaste kommentarer"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr ""
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr ""
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr ""
+
+#: inc/template-tags.php:94
+msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
+msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Hej, %s. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Dölj text"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Göm text"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Uppdatera inställningar"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr "om tom så visas standard <strong>Vad händer?</strong>"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Inläggstitlar:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Visa titlar"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Visning sidopanel:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Göm sidopanelen"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "Snabbpostning:"
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr "Skotsrutigt"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Ränder"
+
+#: inc/options-page.php:166
+msgid "Santa"
+msgstr ""
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Prickar"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Fyrkanter"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr "Bubblor"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Inget"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Välj en färg"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Bakgrundsbild:"
+
+#: inc/options-page.php:134
+msgid "Hide comment threads by default on all non-single views"
+msgstr "Göm kommentartrådar som standard på alla besök som inte är på individuella sidor"
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Inställningar för design"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Anpassad bakgrundsfärg:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Tillåt alla WordPress.com medlemmar att posta"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Tillåt alla registrerade medlemmar att posta"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Göm trådar:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "P2 Inställningar"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Inställningar för funktionalitet"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Publiceringsbehörigheter:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Inställningarna sparade."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "Vad händer?"
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "Detta fält är obligatoriskt."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Temainställningar"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Är du säker på att du vill ta bort denna kommentar? Dess innehåll kommer att raderas."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Oops! Verkar som om du inte loggat in."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Logga in igen"
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "Hoppsan! Ser ut som du inte är ansluten till servern. P2 kunde inte ansluta till WordPress."
+
+#: inc/js.php:145 inc/template-tags.php:254
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%1$s <em>den</em> %2$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr "Efter att ha angett ett @, ange ett namn eller användarnamn för att hitta en medlem för denna webbplats"
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Inga matchningar."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Visa trådar"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "Dina kommentarer eller inlägg kommer att gå förlorade om du fortsätter."
+
+#: inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Göm trådar"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Spara"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Laddar..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Ett fel uppstod, ditt inlägg postades inte"
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "Din uppdatering har postats"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d nya kommentarer"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "Till toppen av sidan"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d nya uppdateringar"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Refererande citat"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Gå till startsidan"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Inläggstitel"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Etiketter:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "Fel: inte tillåten att posta."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Tagga"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "Fel: inte tillåten att redigera inlägg."
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "Fel: inte tillåten att redigera denna kommentar."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "Fel: ett okänt fel uppstod. Kommentaren postades inte."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "Fel: inte inloggad."
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "Fel: vänligen ange en kommentar."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "Fel: vänligen ange en riktig e-postadress."
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "Fel: du måste vara inloggad för att kunna posta kommentarer."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "Fel: vänligen fyll i alla obligatoriska fält (namn, e-post)."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Hoppa till innehåll"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Meny"
+
+#: header.php:30
+msgid "Post"
+msgstr "Inlägg"
+
+#: functions.php:717 index.php:24
+msgid "Page %s"
+msgstr "Sida %s"
+
+#: functions.php:618
+msgid "Proudly powered by %s."
+msgstr "Drivs med %s"
+
+#: functions.php:618
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: functions.php:439
+msgid "Image Post"
+msgstr "Bildinlägg"
+
+#: functions.php:575
+msgid "Log in to Reply"
+msgstr "Logga in för att svara"
+
+#: functions.php:437
+msgid "Video Post"
+msgstr "Videoinlägg"
+
+#: functions.php:398
+msgid "Your comment is awaiting moderation."
+msgstr "Din kommentar inväntar granskning."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Sidopanel"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Primär meny"
+
+#: footer.php:31
+msgid "Show/Hide help"
+msgstr "visa/göm hjälp"
+
+#: footer.php:32
+msgid "shift + esc"
+msgstr "shift + esc"
+
+#: footer.php:32 inc/js.php:140
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: footer.php:29
+msgid "Go to top"
+msgstr "gå till toppen"
+
+#: footer.php:30
+msgid "Go to login"
+msgstr "gå till inloggning"
+
+#: footer.php:28
+msgid "Show/Hide comments"
+msgstr "visa/göm kommentarer"
+
+#: footer.php:24
+msgid "Next post/Next comment"
+msgstr "nästa inlägg/nästa kommentar"
+
+#: footer.php:25
+msgid "Previous post/Previous comment"
+msgstr "föregående inlägg/föregående kommentar"
+
+#: footer.php:23
+msgid "Compose new post"
+msgstr "skapa ett nytt inlägg"
+
+#: footer.php:15
+msgid "Theme: %1$s by %2$s."
+msgstr "Tema: %1$s av %2$s."
+
+#: entry.php:117
+msgid "Toggle Comments"
+msgstr "Visa/göm kommentarer"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Sidor:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Etiketter:"
+
+#: entry.php:100
+msgid "Required fields are marked %s"
+msgstr "Obligatoriska fält är märkta %s"
+
+#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
+#: functions.php:463 functions.php:574 functions.php:596
+msgid "Reply"
+msgstr "Svara"
+
+#: entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "Inlägg av %1$s ( @%2$s )"
+
+#: entry.php:37 functions.php:383
+msgid "Permalink"
+msgstr "Direktlänk"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Nyare kommentarer &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Äldre kommentarer"
+
+#: author.php:35
+msgid "Apologies, looks like this author does not have any posts."
+msgstr ""
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Äldre inlägg"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Nyare inlägg &rarr;"
+
+#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Tangentbordsgenvägar"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr "Uppdateringar av %s"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Visa/dölj trådning av kommentarer"
+
+#: attachment.php:69
+msgid "View file:"
+msgstr "Visa fil:"
+
+#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Mer ...)"
+
+#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
+#: functions.php:388
+msgid "Edit"
+msgstr "Redigera"
+
+#: attachment.php:45
+msgid "Full size is %s pixels"
+msgstr "Full storlek är %s pixlar"
+
+#: attachment.php:48
+msgid "Link to full-size image"
+msgstr "Länk till bild i fullstorlek"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Beklagar, sidan du efterfrågade kunde inte hittas. Kanske kan en sökning hjälpa?"
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Kunde inte hittas"

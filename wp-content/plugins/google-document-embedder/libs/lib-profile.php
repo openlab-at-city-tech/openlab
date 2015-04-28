@@ -37,12 +37,12 @@ function gde_profile_form( $id = 1 ) {
 
 	<form action="" method="post">
 	<?php wp_nonce_field($naction, $nname); ?>
-	<input type="hidden" name="profile_id" value="<?php echo $id; ?>">
+	<input type="hidden" name="profile_id" value="<?php echo esc_attr($id); ?>">
 
 	<?php gde_help_link( GDE_STDOPT_URL, 'right' ); ?>
 	<h3><?php echo $title; ?></h3>
 	
-		<?php if ( isset( $desc ) ) { echo $desc; } ?>
+		<?php if ( isset( $desc ) ) { echo htmlentities($desc); } ?>
 		
 		<table class="form-table">
 			<tbody>
@@ -52,15 +52,19 @@ function gde_profile_form( $id = 1 ) {
 						<select name="viewer" id="viewer">
 <?php
 	gde_profile_option( $p['viewer'], 'standard', __('Standard Viewer', 'gde'), __('Embed the basic viewer only', 'gde') );
-	gde_profile_option( $p['viewer'], 'enhanced', __('Enhanced Viewer', 'gde'), __('Enable extended viewer options', 'gde') );
+	//gde_profile_option( $p['viewer'], 'enhanced', __('Enhanced Viewer', 'gde'), __('Enable extended viewer options', 'gde') );
 ?>
 						</select><br/>
 						<span class="gde-fnote" id="viewer-h"></span>
+						
+						<p><b>To find out why Enhanced Mode is no longer available, see the notice on our 
+							<a href="https://wordpress.org/plugins/google-document-embedder/" target="_blank">plugin homepage</a>.
+						</b></p>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		
+		<!--
 		<fieldset class="gde-inner<?php echo $hideenh; ?>" id="gde-enh-fs">
 			<legend><?php _e('Enhanced Viewer Settings', 'gde'); ?></legend>
 				<table class="form-table">
@@ -158,7 +162,7 @@ function gde_profile_form( $id = 1 ) {
 				</tbody>
 			</table>
 		</fieldset>
-		
+		-->
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -218,7 +222,7 @@ function gde_profile_form( $id = 1 ) {
 				<tr valign="top" id="linktext">
 					<th scope="row"><?php _e('Link Text', 'gde'); ?></th>
 					<td>
-						<input size="50" name="link_text" value="<?php echo $p['link_text']; ?>" type="text"><br/>
+						<input size="50" name="link_text" value="<?php echo esc_attr($p['link_text']); ?>" type="text"><br/>
 						<span class="gde-fnote"><?php _e('You can further customize text using these dynamic replacements:', 'gde'); ?></span><br>
 						<code>%FILE</code> : <?php _e('filename', 'gde'); ?> &nbsp;&nbsp;&nbsp;
 						<code>%TYPE</code> : <?php _e('file type', 'gde'); ?> &nbsp;&nbsp;&nbsp;
@@ -241,7 +245,7 @@ function gde_profile_form( $id = 1 ) {
 					<td>
 <?php
 	gde_profile_checkbox( $p['link_force'], 'force', __('Force download (bypass browser plugins)', 'gde'), 'linkforce', 1 );
-	gde_profile_checkbox( $p['link_mask'], 'mask', __('Shorten URL', 'gde'), 'linkmask', 1 );
+	//gde_profile_checkbox( $p['link_mask'], 'mask', __('Shorten URL', 'gde'), 'linkmask', 1 );
 ?>
 					</td>
 				</tr>

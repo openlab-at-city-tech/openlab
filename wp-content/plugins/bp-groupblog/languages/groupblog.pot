@@ -1,14 +1,14 @@
-# Copyright (C) 2014 BP Groupblog
+# Copyright (C) 2015 BP Groupblog
 # This file is distributed under the same license as the BP Groupblog package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Groupblog 1.8.7\n"
+"Project-Id-Version: BP Groupblog 1.8.10\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/bp-groupblog\n"
-"POT-Creation-Date: 2014-07-23 17:03:18+00:00\n"
+"POT-Creation-Date: 2015-03-17 14:59:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -550,15 +550,15 @@ msgstr ""
 msgid " &raquo; Has to contain letters as well."
 msgstr ""
 
-#: bp-groupblog.php:1084
+#: bp-groupblog.php:1168
 msgid "%s edited the blog post %s in the group %s:"
 msgstr ""
 
-#: bp-groupblog.php:1088
+#: bp-groupblog.php:1172
 msgid "%s wrote a new blog post %s in the group %s:"
 msgstr ""
 
-#: bp-groupblog.php:1199
+#: bp-groupblog.php:1328
 msgid "Blog Posts"
 msgstr ""
 

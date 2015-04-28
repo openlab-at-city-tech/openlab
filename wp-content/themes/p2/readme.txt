@@ -25,6 +25,29 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 
 == Changelog ==
 
+= 1.5.5 - July 2014 =
+* Allow user scaling on mobile version, props ryansommers
+* Move viewport meta element to header, to load for all user agents, props ryansommers
+* Fix audio player styles, props targz-1
+* Fix menu display bug when custom header image is enabled and header text is hidden + a menu is visible
+* Fix PHP warnings for strict mode
+* Fix a bug where Author users could not add media via front end editor, props mfkelly
+* Translation updates (pulled automatically from https://translate.wordpress.com/projects/wpcom/themes/p2)
+
+= 1.5.4 - June 2014 =
+* Reduce text strings to avoid too many similar strings for easier translation
+* Add display inline-block to Sharedaddy lists to avoid issue with lists in the content
+* Fix tooltip issue with Recent Comments widget, reported by Mazen Gamal Mesbah @mazengamal
+
+= 1.5.3 =
+* Add earlier filter to mentions URLs in case term doesn't exist
+* Add !important to #wrapper width property to fix iPhone stylesheet issue if no sidebar option is ticked
+* Stylesheet tags: update Width terms to Layout
+* Add ID argument when applying the_title filters, to match core
+* Remove reliance on is_super_admin() for mention functionality
+* Image optimization (PNG crushing!)
+* Update screenshot size to new standard, 880x660
+
 = 1.5.2 - November 2013 =
 * Fix posting bug with Chrome 31.x
 * Fix broken "selected" class values for post form
@@ -37,7 +60,6 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 * When hide comments on homepage option is on, don't try to link to in-page comments in Recent Comments widget
 * Turkish translation added, via erayaydin
 * Serbian translation added, from Andrijana Nikolic
-
 
 = 1.5.1 - July 2013 =
 * Fix broken "Allow any registered member to post" feature

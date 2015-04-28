@@ -22,25 +22,6 @@ div.inside ul li {
 	line-height:16px;
 }
 
-div.inside a, div.inside a.rsswidget {
-	font-family: 'Lucida Grande', Verdana, Arial, 'Bitstream Vera Sans', sans-serif;
-	text-decoration: none;
-}
-div.inside a:hover, div.inside a.rsswidget:hover {
-	text-decoration: underline;
-}
-div.inside ul li.rss {
-	list-style-image: url(images/rss.png);
-}
-
-div.inside ul li.email {
-	list-style-image: url(images/email_sub.png);
-}
-
-div.inside ul li.yoast {
-	list-style-image: url(images/yoast-16x16.png); 
-}
-
 .text {
 	width: 250px;
 }
@@ -58,7 +39,7 @@ div.inside ul li.yoast {
 	background: lightyellow;
 }
 
-.side .postbox p, .side .postbox a, .side .postbox a.rsswidget {
+.side .postbox p, .side .postbox a {
 	font-size: 11px;
 }
 
@@ -72,15 +53,4 @@ div.inside .button:hover, div.inside .button-primary:hover {
 
 #yoast-icon {
 	background: url(images/yoast-32x32.png) top left no-repeat;
-}
-
-strong.red {
-	color: green;
-	font-weight: bold;
-	font-size: 105%;
-}
-
-.postbox#donate {
-	border-color: green;
-	border-width: 2px;
 }

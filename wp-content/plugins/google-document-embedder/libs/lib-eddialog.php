@@ -1,5 +1,8 @@
 <?php
 
+// make it work with localization (ie cyrillic languages)
+header('Content-type: text/html; charset=UTF-8');
+
 // access wp functions externally
 require_once( dirname( __FILE__ ) . '/lib-bootstrap.php');
 

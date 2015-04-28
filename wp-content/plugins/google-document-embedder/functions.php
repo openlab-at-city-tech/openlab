@@ -283,6 +283,8 @@ function gde_sanitize_dims( $dim ) {
  * @return  string Short url response from API call, or false on error
  */
 function gde_get_short_url( $u ) {
+	return $u; //bypass this function - breaks in current viewer
+	
 	$u = urlencode( $u );
 	$service[] = "http://tinyurl.com/api-create.php?url=" . $u;
 	$service[] = "http://is.gd/create.php?format=simple&url=" . $u;
@@ -319,6 +321,8 @@ function gde_get_short_url( $u ) {
  * @return  string Secure URL, or false on error
  */
 function gde_get_secure_url( $u ) {
+	return $u; //bypass this function - breaks in current viewer
+	
 	require_once( GDE_PLUGIN_DIR . 'libs/lib-secure.php' );
 
 	if ( ! $url = gde_make_secure_url( $u ) ) {

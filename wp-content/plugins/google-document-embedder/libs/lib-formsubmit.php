@@ -1,5 +1,8 @@
 <?php
 
+// don't use this form - direct to WP public forums
+exit;
+
 // access wp functions externally
 require_once('lib-bootstrap.php');
 include_once(ABSPATH . 'wp-includes/pluggable.php'); // required for wp_mail

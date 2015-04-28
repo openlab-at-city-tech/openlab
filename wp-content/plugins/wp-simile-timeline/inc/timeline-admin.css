@@ -31,19 +31,21 @@
  * Option Page UI Tabs
  * ===================================================*/
 #stl-timeline-options-tabs li{
-	background: #f1f1f1;
+	background: #dedede;
 	-moz-border-radius:3px;
+        -webkit-border-radius:3px;
+        border-radius:3px;
 	padding:5px 8px;
 	display: inline;
 }
 
 #stl-timeline-options-tabs.ui-tabs-nav a{ text-decoration: none; }
 
-#stl-timeline-options-tabs li.ui-tabs-selected{
+#stl-timeline-options-tabs li.ui-state-active{
 	background: #6D6D6D;
 }
 
-#stl-timeline-options-tabs li.ui-tabs-selected a{ color: #fff; font-weight: bold; }
+#stl-timeline-options-tabs li.ui-state-active a{ color: #fff; font-weight: bold; }
 
 /* Option page elements */
 #stl-timeline-option-container h4{
@@ -58,11 +60,11 @@
 
 /* Post interface input fields */
 input.stl_timeline_2di{
-	width: 25px;
+	width: 28px;
 }
 
 input.stl_timeline_4di{
-	width: 40px;
+	width: 43px;
 }
 
 /*

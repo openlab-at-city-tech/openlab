@@ -154,8 +154,8 @@ $stl_startdate = null;
 // Evaluate the timeline start date (Where to focus on load)
 switch($stl_startdate_id){
 	case 3:		// In the middle of all events
-		$a1= WPSimileTimelineToolbox::myGetDate(WPSimileTimelineDatabase::getMinMaxEventDate('MAX','end', null, $categories));
-		$b1= WPSimileTimelineToolbox::myGetDate(WPSimileTimelineDatabase::getMinMaxEventDate('MIN','start', null, $categories));
+		$a1= WPSimileTimelineToolbox::myGetDate(WPSimileTimelinePost::getMinMaxEventDate('MAX','end', null, $categories));
+		$b1= WPSimileTimelineToolbox::myGetDate(WPSimileTimelinePost::getMinMaxEventDate('MIN','start', null, $categories));
 		// calculate arithmetic middle date
 		$amd = adodb_mktime(
 			($a1['hour'] + $b1['hour'])/2,
@@ -168,10 +168,10 @@ switch($stl_startdate_id){
 		$stl_startdate = adodb_date('r', $amd);
 		break;
 	case 2:		// at end date of last post
-		$stl_startdate = WPSimileTimelineDatabase::getMinMaxEventDate('MAX','end', 'r', $categories);
+		$stl_startdate = WPSimileTimelinePost::getMinMaxEventDate('MAX','end', 'r', $categories);
 		break;
 	case 1:		// at start date of first post
-		$stl_startdate = WPSimileTimelineDatabase::getMinMaxEventDate('MIN','start', 'r', $categories);
+		$stl_startdate = WPSimileTimelinePost::getMinMaxEventDate('MIN','start', 'r', $categories);
 		break;
 	case 0:  // at current date
 		$stl_startdate = date('r');

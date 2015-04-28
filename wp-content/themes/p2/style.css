@@ -4,10 +4,10 @@ Theme URI: http://p2theme.com/
 Author: Automattic
 Author URI: http://theme.wordpress.com/
 Description: Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more.
-Version: 1.5.2
+Version: 1.5.5
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: blue, custom-colors, two-columns, fixed-width, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, custom-background, custom-header, custom-menu, post-formats, sticky-post, theme-options
+Tags: blue, custom-colors, two-columns, fixed-layout, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, custom-background, custom-header, custom-menu, post-formats, sticky-post, theme-options
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
@@ -241,7 +241,29 @@ form#new_post {
 	padding: 0;
 	line-height: inherit;
 }
-
+#wrapper .mejs-controls .mejs-button button {
+	background: transparent url(/wp-includes/js/mediaelement/controls.svg) no-repeat;
+	border: 0;
+	cursor: pointer;
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	margin: 7px 5px;
+	padding: 0;
+	position: absolute;
+	text-decoration: none;
+	width: 16px;
+	height: 16px;
+}
+#wrapper .mejs-controls .mejs-pause button {
+	background-position: 0 -16px;
+}
+#wrapper .mejs-controls .mejs-mute button {
+	background-position: -16px -16px;
+}
+#wrapper .mejs-controls .mejs-unmute button {
+	background-position: -16px 0;
+}
 #postbox input#posttitle,
 #postbox input#postcitation {
 	width: 97%;
@@ -1723,6 +1745,10 @@ div.possibly-related {
 }
 .milestone-widget .difference {
 	padding-top: 15px;
+}
+#main ul#postlist .postcontent .sharedaddy ul li {
+	display: inline-block;
+	padding: 0;
 }
 
 
