@@ -1401,7 +1401,7 @@ function openlab_bp_group_site_pages() {
 
                         <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                             <li class="portfolio-site-link">
-                                <a class="bold" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                                <a class="bold no-deco" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
                             </li>
                         </ul>
 

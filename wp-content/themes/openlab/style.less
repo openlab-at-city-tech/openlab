@@ -559,12 +559,15 @@ h2.course-title{
     &.cyan-circle{
         font-size: 17px;
         color: @cyan;
-        &:hover{
-            color: @80gray;
+    }
+}
+a{
+    &:hover{
+        .cyan-circle{
+            color: @aqua;
         }
     }
 }
-
 /**custom tags**/
 body{
     .no-gutter{
@@ -1348,9 +1351,6 @@ body{
                     &:focus{
                     a{
                         background: @cyan;
-                        color: @black;
-                    }
-                    .fa{
                         color: @black;
                     }
                 }

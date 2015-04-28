@@ -7566,8 +7566,8 @@ h2.course-title {
   font-size: 17px;
   color: #63dfd2;
 }
-.fa.cyan-circle:hover {
-  color: #333333;
+a:hover .cyan-circle {
+  color: #49cabe;
 }
 /**custom tags**/
 body .no-gutter.no-gutter-right {
@@ -8323,10 +8323,6 @@ body .inline-visible-xs {
 .sidebar .sidebar-block ul.sidebar-nav li:hover a,
 .sidebar .sidebar-block ul.sidebar-nav li:focus a {
   background: #63dfd2;
-  color: #000000;
-}
-.sidebar .sidebar-block ul.sidebar-nav li:hover .fa,
-.sidebar .sidebar-block ul.sidebar-nav li:focus .fa {
   color: #000000;
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item > a,
