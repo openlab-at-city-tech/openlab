@@ -191,6 +191,8 @@ function p2_media_buttons() {
 
 	include_once( ABSPATH . '/wp-admin/includes/media.php' );
 	ob_start();
+	global $post_ID, $post;
+	$post_ID = $post = 0;
 	do_action( 'media_buttons' );
 	$buttons = ob_get_clean();
 

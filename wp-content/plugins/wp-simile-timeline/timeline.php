@@ -5,7 +5,7 @@ Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-si
 Description: Integrates the <a href="http://simile.mit.edu/timeline/">SIMILE Timeline</a> with WordPress and provides an option interface for the various timeline settings. With this plugin you can display posts from a specific category in the Timeline Widget. Simply include the <strong>[similetimeline]</strong> shortcode in your page or post and specify the category on the <a href="options-general.php?page=timeline.php">admin page</a>.
 Author: Tim Isenheim
 Author URI: http://www.freshlabs.de/journal
-Version: 0.4.8.6
+Version: 0.4.9
 */
 /*
 	SIMILE Timeline for WordPress
@@ -29,19 +29,21 @@ Version: 0.4.8.6
  * TODO: implement support for dates BC
  * TODO: Update screenshots
  * TODO: Make dynamic timelines. Extend the api function to stl_simile_timeline($id, $terms, $scriptfile, $theme, $bands, $hotzones, $decorators)
+ * TODO: Implement abstract class for Band,Hotzone,Decorator class to extend from
  */
 include('inc/adodb-time.inc.php');  // AdoDB Time+Date Library
 include('inc/WPSimileTimeline.class.php');	// class for timeline database functions
 include('inc/WPSimileTimelineDatabase.class.php');	// class for timeline database functions
 include('inc/WPSimileTimelineAdmin.class.php'); // class for helper functions
+include('inc/WPSimileTimelinePost.class.php'); // class for post related functions
 include('inc/WPSimileTimelineTerm.class.php'); // class for term functions
 include('inc/WPSimileTimelineToolbox.class.php'); // class for helper functions
 include('inc/WPSimileTimelineBand.class.php'); // class for timeline band
 include('inc/WPSimileTimelineHotzone.class.php'); // class for timeline hotzone
 include('inc/WPSimileTimelineDecorator.class.php'); // class for timeline decorator
 
-@define('STL_TIMELINE_PLUGIN_DATESTRING', '20130110');
-@define('STL_TIMELINE_PLUGIN_VERSION', '0.4.8.6');
+@define('STL_TIMELINE_PLUGIN_DATESTRING', '20140920');
+@define('STL_TIMELINE_PLUGIN_VERSION', '0.4.9');
 @define('STL_TIMELINE_FOLDER', WP_PLUGIN_URL.'/wp-simile-timeline');
 @define('STL_TIMELINE_DATA_FOLDER', STL_TIMELINE_FOLDER.'/data');
 @define('STL_TIMELINE_API_URL', 'http://api.simile-widgets.org/timeline/2.3.1/timeline-api.js?bundle=true'); // use &defaultLocale to override detected locale
@@ -62,13 +64,13 @@ class WPSimileTimelineLoader{
 		// add options page
 		add_action('admin_menu', array('WPSimileTimelineLoader','registerOptionsPage'));
 		// save event dates on post edit/save/publish
-		add_action('wp_insert_post', array('WPSimileTimelineDatabase','updateEventDates'));
+		add_action('wp_insert_post', array('WPSimileTimelinePost','updateEventDates'));
 		// update term relations on category creation/editing
 		add_action('create_term', array('WPSimileTimelineTerm','addTerm'));
 		// and deletion
 		add_action('delete_term', array('WPSimileTimelineTerm','deleteTerm'));
 		// contextual help links
-		add_filter('contextual_help_list', array('WPSimileTimelineLoader', 'showContextualHelp'), 10, 2);
+		add_filter('contextual_help', array('WPSimileTimelineLoader', 'showContextualHelp'), 10, 3);
 		
 		// filters and shortcode for the frontend
 		add_filter('wp_head', array('WPSimileTimeline', 'outputFrontendHeaderMarkup'), 5);
@@ -95,11 +97,7 @@ class WPSimileTimelineLoader{
 				add_option($option, $v);
 		}
 		// add database columns for start and end dates
-		WPSimileTimelineDatabase::addEventColumn('stl_timeline_event_start');
-		WPSimileTimelineDatabase::addEventColumn('stl_timeline_event_latest_start');
-		WPSimileTimelineDatabase::addEventColumn('stl_timeline_event_end');
-		WPSimileTimelineDatabase::addEventColumn('stl_timeline_event_earliest_end');
-		
+		WPSimileTimelinePost::createColumns();
 		// add database table for category settings
 		WPSimileTimelineTerm::createTable();	
 		// update possibly new categories
@@ -119,18 +117,7 @@ class WPSimileTimelineLoader{
 	 * Execute version specific updates
 	 */
 	function doVersionUpdates(){
-		$deprecated_options = array(
-			'stl_timeline_band_options', 	// since 0.4.6.4
-			'stl_timelinecategories',		// since 0.4.7
-			'stl_timeline_locale'			// since 0.4.8.2
-		);
-		// remove deprecated options from database
-		foreach($deprecated_options as $d){
-			if(get_option($d)){
-				delete_option($d);
-			}
-		}
-		
+
 		// process database updates
 		WPSimileTimelineDatabase::doUpdates();
 		
@@ -150,10 +137,8 @@ class WPSimileTimelineLoader{
 		delete_option('stl_timeline_plugin_version');
 
 		// remove columns in wp_posts
-		WPSimileTimelineDatabase::removeEventColumn('stl_timeline_event_start');
-		WPSimileTimelineDatabase::removeEventColumn('stl_timeline_event_latest_start');
-		WPSimileTimelineDatabase::removeEventColumn('stl_timeline_event_end');
-		WPSimileTimelineDatabase::removeEventColumn('stl_timeline_event_earliest_end');
+		WPSimileTimelinePost::deleteColumns();
+
 		// remove timeline specific configuration tables
 		WPSimileTimelineDatabase::deleteTable('stl_timeline_terms');
 		WPSimileTimelineDatabase::deleteTable('stl_timeline_bands');
@@ -240,21 +225,19 @@ class WPSimileTimelineLoader{
 	/*
 	 * Adds help links to WordPress help tab
 	 */
-	function showContextualHelp($filter, $page){
-		if($page->id=='settings_page_timeline' || $page=='settings_page_timeline'){
-			$filter['settings_page_timeline'] = '';
+	function showContextualHelp($contextual_help, $screen_id, $screen){
+		if($screen_id=='toplevel_page_wp-simile-timeline'){
 			$links = array(
-				__('Plugin Documentation', 'stl_timeline') => 'http://groups.google.com/group/wp-simile-timeline/web/documentation',
 				__('WP SIMILE Timeline Support Group', 'stl_timeline') => 'http://groups.google.com/group/wp-simile-timeline/',
 				__('SIMILE Widgets Timeline Documentation', 'stl_timeline') => 'http://code.google.com/p/simile-widgets/wiki/Timeline'
 			);
 			$i=0;
 			foreach($links as $title=>$url){
-				$filter['settings_page_timeline'] .= '<a href="'.$url.'">' . $title . '</a>' . ($i<count($links)-1 ? '<br />' : '');
+				$contextual_help .= '<a href="'.$url.'">' . $title . '</a>' . ($i<count($links)-1 ? '<br />' : '');
 				$i++;
 			}
 		}
-		return $filter;
+		return $contextual_help;
 	}
 }
 

@@ -454,3 +454,140 @@ function openlab_group_type_meta_box_save( $group_id ) {
 	groups_update_groupmeta( $group_id, 'wds_group_type', $type );
 }
 add_action( 'bp_group_admin_edit_after', 'openlab_group_type_meta_box_save' );
+
+/**
+ * Render the "Additional Faculty" field when creating/editing a course.
+ */
+function openlab_additional_faculty_field() {
+	// Courses only.
+	if ( bp_is_group() && ! openlab_is_course() ) {
+		return;
+	}
+
+	if ( bp_is_group_create() && ( ! isset( $_GET['type'] ) || 'course' !== $_GET['type'] ) ) {
+		return;
+	}
+
+	// Enqueue JS and CSS.
+	wp_enqueue_script( 'openlab-additional-faculty', plugins_url() . '/wds-citytech/assets/js/additional-faculty.js', array( 'jquery-ui-autocomplete' ) );
+	wp_enqueue_style( 'openlab-additional-faculty', plugins_url() . '/wds-citytech/assets/css/additional-faculty.css' );
+
+	$group_id = 0;
+	if ( bp_is_group() ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	$addl_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+	$addl_faculty_data = array();
+	foreach ( $addl_faculty as $fid ) {
+		$f = new WP_User( $fid );
+		$addl_faculty_data[] = array(
+			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
+			'value' => esc_attr( $f->user_nicename ),
+		);
+	}
+
+	?>
+
+	<div id="additional-faculty-admin">
+		<?php /* Data about existing faculty */ ?>
+		<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
+		<label for="additional-faculty">Additional Faculty</label>
+		<p>If your course is taught by multiple faculty, type the name in the box below and select from the dropdown list.</p>
+
+		<input class="hide-if-no-js" type="textbox" id="additional-faculty-autocomplete" value="" />
+		<?php wp_nonce_field( 'openlab_additional_faculty_autocomplete', '_ol_addl_faculty_nonce', false ) ?>
+
+		<ul id="additional-faculty-list"></ul>
+
+		<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ) ?>" />
+	</div>
+	<?php
+}
+add_action( 'bp_after_group_details_creation_step', 'openlab_additional_faculty_field', 5 );
+add_action( 'bp_after_group_details_admin', 'openlab_additional_faculty_field', 5 );
+
+/**
+ * AJAX handler for additional faculty autocomplete.
+ */
+function openlab_additional_faculty_autocomplete_cb() {
+	global $wpdb;
+
+	$nonce = $term = '';
+
+	if ( isset( $_GET['nonce'] ) ) {
+		$nonce = urldecode( $_GET['nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'openlab_additional_faculty_autocomplete' ) ) {
+		die( json_encode( -1 ) );
+	}
+
+	// @todo Permissions? Faculty only?
+
+	if ( isset( $_GET['term'] ) ) {
+		$term = urldecode( $_GET['term'] );
+	}
+
+	// Direct query for speed.
+	$bp = buddypress();
+	$at_field_id = xprofile_get_field_id_from_name( 'Account Type' );
+	$like = $wpdb->esc_like( $term );
+	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$bp->profile->table_name_data} x ON (u.ID = x.user_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND x.field_id = %d AND x.value = 'Faculty'", $at_field_id ) );
+
+	$retval = array();
+	foreach ( (array) $found as $u ) {
+		$retval[] = array(
+			'label' => sprintf( '%s (%s)', esc_html( $u->display_name ), esc_html( $u->user_nicename ) ),
+			'value' => esc_attr( $u->user_nicename ),
+		);
+	}
+
+	echo json_encode( $retval );
+	die();
+}
+add_action( 'wp_ajax_openlab_additional_faculty_autocomplete', 'openlab_additional_faculty_autocomplete_cb' );
+
+/**
+ * Process the saving of additional faculty.
+ */
+function openlab_additional_faculty_save( $group ) {
+	$nonce = '';
+
+	if ( isset( $_POST['_ol_addl_faculty_nonce'] ) ) {
+		$nonce = urldecode( $_POST['_ol_addl_faculty_nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'openlab_additional_faculty_autocomplete' ) ) {
+		return;
+	}
+
+	// Admins only.
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
+	// Give preference to JS-saved items.
+	$addl_faculty = isset( $_POST['additional-faculty-js'] ) ? $_POST['additional-faculty-js'] : null;
+	if ( null === $addl_faculty ) {
+		$addl_faculty = $_POST['additional-faculty'];
+	}
+
+	// Delete all existing items.
+	$existing = groups_get_groupmeta( $group->id, 'additional_faculty', false );
+	foreach ( $existing as $e ) {
+		groups_delete_groupmeta( $group->id, 'additional_faculty', $e );
+	}
+
+	foreach ( (array) $addl_faculty as $nicename ) {
+		$f = get_user_by( 'slug', stripslashes( $nicename ) );
+
+		if ( ! $f ) {
+			continue;
+		}
+
+		// @todo Verify that it's a faculty member?
+		groups_add_groupmeta( $group->id, 'additional_faculty', $f->ID );
+	}
+}
+add_action( 'groups_group_after_save', 'openlab_additional_faculty_save' );

@@ -1,0 +1,41 @@
+.hide-if-js {
+	display: none;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
+}
+
+.ui-autocomplete {
+	background: #fff;
+	max-width: 200px;
+	border: 1px solid #ccc;
+	padding: 4px;
+}
+
+.ui-autocomplete .ui-menu-item a {
+	display: block;
+	width: 100%;
+}
+
+.ui-state-focus {
+	background: #aaa;
+}
+
+#additional-faculty-list li {
+	padding: 4px;
+	line-height: 1.5em;
+}
+
+body.group-create #additional-faculty-admin {
+	margin-top: -1em; /* Someone shoot me */
+	margin-bottom: 3em;
+}
+
+.addl-faculty-remove a {
+	background: url( '../../../../themes/citytech/images/submenu_sprite.png' ) no-repeat scroll;
+	background-position: 0 -1px;
+	height: 17px;
+	padding: 2px 0 0 18px !important;
+	margin-left: 8px;
+}

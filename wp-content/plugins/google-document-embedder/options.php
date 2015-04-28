@@ -166,7 +166,7 @@ if ( ! $import ) {
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
 	<h2>Google Doc Embedder <?php _e('Settings', 'gde'); ?></h2>
-	
+		
 	<div id="gdeadmintabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 		<ul class="nav-tab-wrapper ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 <?php
@@ -203,11 +203,11 @@ if ( ! $import ) {
 					<span><?php _e('Advanced', 'gde'); ?></span>
 				</a>
 			</li>
-			<li id="suptab" class="ui-state-default ui-corner-top">
+			<!--li id="suptab" class="ui-state-default ui-corner-top">
 				<a href="#support" class="nav-tab">
 					<span><?php _e('Support', 'gde'); ?></span>
 				</a>
-			</li>
+			</li-->
 		</ul>
 	</div>
 	
@@ -241,7 +241,7 @@ if ( ! $import ) {
 		</div>
 
 		<div id="supcontent" class="gde-tab">
-			<?php gde_show_tab('support'); ?>
+			<?php //gde_show_tab('support'); ?>
 		</div>
 	</div>
 	
@@ -254,9 +254,9 @@ function gde_opts_checkbox( $field, $label, $wrap = '', $br = '', $disabled = fa
 	global $gdeoptions;
 	
 	if ( ! empty( $wrap ) ) {
-		echo '<span id="'.$wrap.'">';
+		echo '<span id="'.esc_attr($wrap).'">';
 	}
-	echo '<input type="checkbox" id="'.$field.'" name="'.$field.'"';
+	echo '<input type="checkbox" id="'.esc_attr($field).'" name="'.esc_attr($field).'"';
 	if ( ( isset( $gdeoptions[$field] ) && $gdeoptions[$field] == "yes" ) || ( $disabled ) ) {
 		echo ' checked="checked"';
 	}
@@ -265,7 +265,7 @@ function gde_opts_checkbox( $field, $label, $wrap = '', $br = '', $disabled = fa
 		echo ' disabled="disabled"';
 	}
 	
-	echo ' value="'.$field.'"> <label for="'.$field.'">'.$label.'</label>';
+	echo ' value="'.esc_attr($field).'"> <label for="'.esc_attr($field).'">'.htmlentities($label).'</label>';
 	if ( ! empty( $br ) ) {
 		echo '<br/>';
 	}
@@ -275,9 +275,9 @@ function gde_opts_checkbox( $field, $label, $wrap = '', $br = '', $disabled = fa
 }
 
 function gde_profile_option( $option, $value, $label, $helptext = '' ) {
-	echo "<option value=\"$value\"";
+	echo "<option value=\"".esc_attr($value)."\"";
 	if ( ! empty( $helptext ) ) {
-		echo " title=\"$helptext\"";
+		echo " title=\"".esc_attr($helptext)."\"";
 	}
 	if ( $option == $value ) {
 		echo ' selected="selected"';
@@ -287,9 +287,9 @@ function gde_profile_option( $option, $value, $label, $helptext = '' ) {
 
 function gde_profile_checkbox( $option, $field, $label, $wrap = '', $br = '' ) {
 	if ( ! empty( $wrap ) ) {
-		echo '<span id="'.$wrap.'">';
+		echo '<span id="'.esc_attr($wrap).'">';
 	}
-	echo '<input type="checkbox" id="'.$field.'" name="'.$field.'"';
+	echo '<input type="checkbox" id="'.esc_attr($field).'" name="'.esc_attr($field).'"';
 	
 	// toolbar items
 	if ( substr( $field, 0, 5 ) == "gdet_" ) {
@@ -321,7 +321,7 @@ function gde_profile_checkbox( $option, $field, $label, $wrap = '', $br = '' ) {
 		echo ' checked="checked"';
 	}
 	
-	echo ' value="'.$field.'"> <label for="'.$field.'">'.$label.'</label>';
+	echo ' value="'.esc_attr($field).'"> <label for="'.esc_attr($field).'">'.htmlentities($label).'</label>';
 	if ( ! empty( $br ) ) {
 		echo '<br/>';
 	}
@@ -331,12 +331,12 @@ function gde_profile_checkbox( $option, $field, $label, $wrap = '', $br = '' ) {
 }
 
 function gde_profile_text( $option, $field, $class = '', $size = '', $enabled = true ) {
-	echo '<input type="text" id="'.$field.'" name="'.$field.'" value="'.$option.'"';
+	echo '<input type="text" id="'.esc_attr($field).'" name="'.esc_attr($field).'" value="'.esc_attr($option).'"';
 	if ( ! empty( $class ) ) {
-		echo ' class="'.$class.'"';
+		echo ' class="'.esc_attr($class).'"';
 	}
 	if ( ! empty( $size ) ) {
-		echo ' size="'.$size.'"';
+		echo ' size="'.esc_attr($size).'"';
 	}
 	if ( $enabled === false ) {
 		echo ' disabled="disabled"';
@@ -350,10 +350,10 @@ function gde_help_link( $url, $float = '' ) {
 	$img = GDE_PLUGIN_URL . "img/help.png";
 	
 	if ( ! empty( $float ) ) {
-		echo '<div style="float:'.$float.';">';
+		echo '<div style="float:'.esc_attr($float).';">';
 	}
 	
-	echo '<a href="'.$url.'" target="_blank" title="'.$title.'"><img src="'.$img.'" alt="?"></a>';
+	echo '<a href="'.esc_attr($url).'" target="_blank" title="'.esc_attr($title).'"><img src="'.esc_attr($img).'" alt="?"></a>';
 	
 	if ( ! empty( $float ) ) {
 		echo "</div>\n";
@@ -365,7 +365,7 @@ function gde_row_cb( $pid ) {
 	if ( $pid == 1 ) {
 		return " ";
 	} else {
-		return '<input type="checkbox" value="'.$pid.'" name="delete_tags[]">';
+		return '<input type="checkbox" value="'.esc_attr($pid).'" name="delete_tags[]">';
 	}
 }
 
@@ -383,7 +383,7 @@ function gde_row_actions( $pid ) {
 	}
 	
 	foreach ($actions as $k => $v) {
-		$act[] = '<span class="'.$v[1].'" id="'.$k.'-'.$pid.'"><a href="options-general.php?page=gde-settings">'.$v[0].'</a></span>';
+		$act[] = '<span class="'.esc_attr($v[1]).'" id="'.esc_attr($k).'-'.esc_attr($pid).'"><a href="options-general.php?page=gde-settings">'.htmlentities($v[0]).'</a></span>';
 	}
 	$acts = implode( " | ", $act );
 	

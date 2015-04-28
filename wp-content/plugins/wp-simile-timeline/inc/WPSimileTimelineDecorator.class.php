@@ -74,15 +74,21 @@ class WPSimileTimelineDecorator{
 	}
 	
 	function create($data){
-		foreach($data as $key=>$value){
-			$this->{$key} = $value;
-		}
-		if(is_array($data)){
-			$ds1 = $data['start_date']['year'].'-'.$data['start_date']['month'].'-'.$data['start_date']['day'].' '.$data['start_date']['hour'].':'.$data['start_date']['minute'].':'.$data['start_date']['second'];
-			$ds2 = $data['end_date']['year']  .'-'.$data['end_date']['month']  .'-'.$data['end_date']['day']  .' '.$data['end_date']['hour']  .':'.$data['end_date']['minute']  .':'.$data['end_date']['second'];
-			$this->start_date = adodb_date2('Y-m-d H:i:s', $ds1);
-			$this->end_date = adodb_date2('Y-m-d H:i:s', $ds2);
-		}
+            foreach($data as $key=>$value){
+                    $this->{$key} = $value;
+            }
+            if(is_array($data)){
+                if(sizeof($data['start_date']) > 1){
+                    $ds1 = $data['start_date']['year'].'-'.$data['start_date']['month'].'-'.$data['start_date']['day'].' '.$data['start_date']['hour'].':'.$data['start_date']['minute'].':'.$data['start_date']['second'];
+                    $ds2 = $data['end_date']['year']  .'-'.$data['end_date']['month']  .'-'.$data['end_date']['day']  .' '.$data['end_date']['hour']  .':'.$data['end_date']['minute']  .':'.$data['end_date']['second'];
+                }
+                else{
+                    $ds1 = $data['start_date'];
+                    $ds2 = $data['end_date'];
+                }
+                $this->start_date = adodb_date2('Y-m-d H:i:s', $ds1);
+                $this->end_date = adodb_date2('Y-m-d H:i:s', $ds2);
+            }
 	}
 	
 	/**

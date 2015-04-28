@@ -38,7 +38,7 @@ class WPSimileTimelineAdmin{
 		#echo '</pre>';
 		#exit();		
 		// Save options for bands, hotzones and highlight decorators
-		foreach($postdata['stl_timeline']['bands'] as $band){
+		foreach($postdata['stl_timeline']['bands'] as $band){		
 			$band_obj = new WPSimileTimelineBand();
 			$band_obj->set($band);
 			$band_obj->save();
@@ -202,11 +202,18 @@ class WPSimileTimelineAdmin{
 	/** -----------------------------------------------------------------------------
 	 * WPSimileTimelineAdmin::outputDatepicker
 	 * Create and output Date Picker input elements
-	 * TODO: Interface Design
+         * TODO: Implement dates BC
 	 * ---------------------------------------------------------------------------*/
-	function outputDatepicker($name, $date, $show_existing=true, $edit=1){
+	function outputDatepicker($name, $date, $show_existing=true, $edit=1) {
 		global $month;
-
+                /*
+                echo $date;
+                echo '<br />';
+                $prefix     = substr($date, 0, 1);  // Get date prefix A/B
+                $date       = substr($date, 1);     // Handle date without prefix
+                $is_date_bc = ($prefix == 'B');     // Date BC existent with prefix 'B'
+                $bc_checked = $is_date_bc ? ' checked' : '';
+                */
 		$stl_time_adj = time() + (get_option('gmt_offset') * 3600);
 		
 		$stl_jj = ($edit) ? adodb_date2('d', $date) : adodb_gmdate('d', $stl_time_adj);
@@ -215,11 +222,19 @@ class WPSimileTimelineAdmin{
 		$stl_hh = ($edit) ? adodb_date2('H', $date) : adodb_gmdate('H', $stl_time_adj);
 		$stl_mn = ($edit) ? adodb_date2('i', $date) : adodb_gmdate('i', $stl_time_adj);
 		$stl_ss = ($edit) ? adodb_date2('s', $date) : adodb_gmdate('s', $stl_time_adj);
+                
+                
 
 		if ($show_existing && $edit && $date != '0000-00-00 00:00:00' ) {
-			echo '<small>';
-			_e('Existing timestamp', 'stl_timeline');
-			echo ": {$month[$stl_mm]} $stl_jj, $stl_aa @ $stl_hh:$stl_mn" . "</small>";
+			echo '<small>' . __('Existing timestamp', 'stl_timeline') . ': ';
+                        #if($is_date_bc){
+                            // Only show year for BC dates (TODO: reference)
+                        #    echo "$stl_aa B.C.";
+                        #}
+                        #else{
+                            echo "{$month[$stl_mm]} $stl_jj, $stl_aa, $stl_hh:$stl_mn";
+                        #}
+                        echo '</small>';
 		}
 		                                                
 		echo "<select name=\"".($name)."[month]\">\n";
@@ -237,9 +252,13 @@ class WPSimileTimelineAdmin{
 		
 		echo '</select>';
 		echo '<input type="text" class="stl_timeline_2di" id="stl_jj_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name . '[day]" value="' . $stl_jj . '" size="2" maxlength="2" />';
-		echo '<input type="text" class="stl_timeline_4di" id="stl_aa_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[year]" value="' . $stl_aa .'" size="4" maxlength="4" /> @ ';
+		echo '<input type="text" class="stl_timeline_4di" id="stl_aa_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[year]" value="' . $stl_aa .'" size="4" maxlength="4" />';
+                #echo ', ';
 		echo '<input type="text" class="stl_timeline_2di" id="stl_hh_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[hour]" value="' . $stl_hh .'" size="2" maxlength="2" /> : ';
 		echo '<input type="text" class="stl_timeline_2di" id="stl_mn_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[minute]" value="' . $stl_mn .'" size="2" maxlength="2" />';
+                // Is date B.C. checkbox
+                #echo ' <input type="checkbox" id="stl_is_bc_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name . '[is_bc]" value="1" ' . $bc_checked . ' />';
+                #echo ' <label for="stl_is_bc_' . WPSimileTimelineToolbox::filterDomString($name) .'">' . _e('B.C.', 'stl_timeline') . '</label>';
 		echo '<input type="hidden" id="stl_ss_' . WPSimileTimelineToolbox::filterDomString($name) .'" name="' . $name .'[second]" value="' . $stl_ss .'" size="2" maxlength="2" />';
 	}
 	
@@ -852,7 +871,7 @@ class WPSimileTimelineAdmin{
 		?>
 		<h4 class="stl-suboption-handle"><?php echo $decorator->name; ?></h4>
 		<div class="stl-delete-link">
-			<a id="stl-delete-decorator<?php echo $decorator->id; ?>" href="<?php echo wp_nonce_url('options-general.php?page=timeline.php&amp;action=delete-decorator&amp;id='.$decorator->id.'#stl-design', STL_TIMELINE_NONCE_NAME); ?>"><?php _e('Delete', 'stl_timeline'); ?></a>
+			<a id="stl-delete-decorator<?php echo $decorator->id; ?>" href="<?php echo wp_nonce_url('admin.php?page=wp-simile-timeline&amp;action=delete-decorator&amp;id='.$decorator->id.'#stl-design', STL_TIMELINE_NONCE_NAME); ?>"><?php _e('Delete', 'stl_timeline'); ?></a>
 			<script type="text/javascript">
 			jQuery(document).ready( function($){
 				$('#stl-delete-decorator<?php echo $decorator->id; ?>').click(function(){

@@ -13,51 +13,35 @@ class CAC_Featured_Content_Helper {
 	 * Somewhat surprisingly, this function doesn't (or at least, this
 	 * functionality) doesn't seem to exist in the core.
 	 *
-	 * @param string $domain - The domain of the blog you're looking for info on
+	 * @param string $domain - The URL of the blog you're looking for info on
 	 * @return object - An object containing information about the blog.
 	 */
 	public static function get_blog_by_domain($domain) {
 		global $wpdb;
 
-		if ( is_subdomain_install() ) {
-			$blog_id = $wpdb->get_var( $wpdb->prepare(
-				"SELECT blog_id FROM $wpdb->blogs
-				WHERE domain = %s", $domain )
-			);
-		} else {
-			// Gotta be funky here
-			$blogs = $wpdb->get_results( $wpdb->prepare(
-				"SELECT blog_id, path FROM $wpdb->blogs
-        			WHERE path LIKE '%%" . like_escape( $domain ) . "%%'" )
-        		);
-
-			// If there's just one, it's the one. Otherwise go fish
-			if ( count( $blogs ) == 1 ) {
-				$blog_id = $blogs[0]->blog_id;
-			} else {
-				// Gotta do it this way bc of installs that are themselves inside subdomains
-				foreach( $blogs as $blog ) {
-					$path_a = explode( '/', $blog->path );
-					$last_path = array_pop( $path_a );
-					if ( $blog->path == $domain || $last_path == $domain ) {
-						$blog_id = $blog->blog_id;
-						break;
-					}
-				}
-			}
+		// if no scheme, add one
+		if ( false === strpos( $domain, '://' ) ) {
+			$domain = "http://{$domain}";
 		}
 
-		$blog_data = get_blog_details($blog_id);
+		// parse the URL
+		$url_parts = parse_url( trailingslashit( $domain ) );
 
-	  // update the blog domain on MS installs
-	  // this makes domain mapping plugin work
-	  if ( is_multisite() ) {
-	  	if ( $blog_data ) {
-		  	switch_to_blog( $blog_data->blog_id );
-		  	$blog_data->siteurl = home_url('/');
-		  	restore_current_blog();
-	  	}
-	  }
+		if ( is_subdomain_install() ) {
+			$blog_id = get_blog_id_from_url( $url_parts['host'] );
+
+		// subdirectory install
+		} else {
+			$blog_id = get_blog_id_from_url( $url_parts['host'], $url_parts['path'] );
+		}
+
+		$blog_data = get_blog_details( $blog_id );
+
+		// update the blog domain on MS installs
+		// this makes domain mapping plugin work
+		if ( is_multisite() && $blog_data ) {
+			$blog_data->siteurl = get_home_url( $blog_id, '/' );
+		}
 
 		return $blog_data;
 	}
@@ -70,8 +54,6 @@ class CAC_Featured_Content_Helper {
 	 * @return object
 	 */
 	public static function get_post_by_slug( $slug, $blog_id = '' ) {
-		global $post;
-
 		$single_post = false;
 
 		// setup $posts var
@@ -86,17 +68,18 @@ class CAC_Featured_Content_Helper {
 		if ( $posts->have_posts() ) :
 			while ( $posts->have_posts() ) :
 				$posts->the_post();
-				if ( $post->post_name == $slug ) {
-					$single_post = $post;
+				if ( $posts->post->post_name == $slug ) {
+					$single_post = $posts->post;
 					break;
 				}
 			endwhile;
 		endif;
 
-	  // update the post guid on MS installs
-	  // this makes domain mapping plugin work
-	  if ( is_multisite() )
-	    $single_post->guid = get_blog_permalink( $blog_id, $single_post->ID );
+		// update the post guid on MS installs
+		// this makes domain mapping plugin work
+		if ( is_multisite() ) {
+			$single_post->guid = get_blog_permalink( $blog_id, $single_post->ID );
+		}
 
 		return $single_post;
 	}
@@ -161,7 +144,7 @@ class CAC_Featured_Content_Helper {
 				  '" class="align-left thumbnail" />';
 			}
 		} else {
-      $content = false;
+			$content = false;
 		}
 
 		return $content;
@@ -169,7 +152,7 @@ class CAC_Featured_Content_Helper {
 
 	/**
 	 * Widget Error
-	 * 
+	 *
 	 * This function can be used to render an error message on the front end of your site.
 	 * It matches the HTML structure of the rest of the widget views.
 	 *
@@ -178,43 +161,37 @@ class CAC_Featured_Content_Helper {
 	 * @param array $sidebar
 	 */
 	public static function error( $msg = '' ) {
-		?>
-		  <h3><?php _e( 'Error', 'cac-featured-content' ) ?></h3>
-      <div class="cfcw-content">
-      	<p><?php echo $msg ?></p>
-        <p><?php _e( 'Please correct and reload.', 'cac-featured-content' ) ?></p>
-      </div>
-		<?php 
+	?>
+
+		<h3><?php _e( 'Error', 'cac-featured-content' ) ?></h3>
+		<div class="cfcw-content">
+			<p><?php echo $msg ?></p>
+			<p><?php _e( 'Please correct and reload.', 'cac-featured-content' ) ?></p>
+		</div>
+
+	<?php
 	}
 
 } // end CAC_Featured_Content_Helper class
 
 /**
  * Get a numeric user ID from either an email address or a login.
- * This function has been copied from ms-functions.php to provide
- * the same functionality when not running mulitsite
  *
  * @param string $string
  * @return int
  */
-if ( ! function_exists( 'get_user_id_from_string' ) ) {
-	function get_user_id_from_string( $string ) {
-		$user_id = 0;
+function cacfc_get_user_id_from_string( $string ) {
+	$user_id = 0;
 
-		if ( is_email( $string ) ) {
-			$user = get_user_by('email', $string);
-			if ( $user )
-				$user_id = $user->ID;
-		} elseif ( is_numeric( $string ) ) {
-			$user_id = $string;
-		} else {
-			$user = get_user_by('login', $string);
-			if ( $user )
-				$user_id = $user->ID;
-		}
-
-		return $user_id;
+	if ( is_email( $string ) ) {
+		$user = get_user_by( 'email', $string );
+	} else {
+		$user = get_user_by( 'login', $string );
 	}
-}
 
-?>
+	if ( $user ) {
+		$user_id = $user->ID;
+	}
+
+	return $user_id;
+}

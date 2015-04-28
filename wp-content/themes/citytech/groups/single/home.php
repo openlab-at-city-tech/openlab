@@ -32,7 +32,11 @@ function cuny_group_single() { ?>
 		$group_id = $bp->groups->current_group->id;
 		$group_name = $bp->groups->current_group->name;
 		$group_description = $bp->groups->current_group->description;
+
 		$faculty_id = $bp->groups->current_group->admins[0]->user_id;
+		$faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+		array_unshift( $faculty_ids, $faculty_id );
+
 		$first_name= ucfirst(xprofile_get_field_data( 'First Name', $faculty_id));
 		$last_name= ucfirst(xprofile_get_field_data( 'Last Name', $faculty_id));
 		$group_type = openlab_get_group_type( bp_get_current_group_id());
@@ -88,7 +92,10 @@ function cuny_group_single() { ?>
 
 				<?php if ($group_type == "course"): ?>
 					<div class="course-byline">
-						<span class="faculty-name"><b>Faculty:</b> <?php echo $first_name . " " . $last_name; ?></span>
+						<?php foreach ( $faculty_ids as $faculty_id ) : ?>
+							<span class="faculty-name"><b>Faculty:</b> <?php echo bp_core_get_user_displayname( $faculty_id ) ?></span><br />
+						<?php endforeach; ?>
+
 						<?php
 						$wds_course_code=groups_get_groupmeta($group_id, 'wds_course_code' );
 						$wds_semester=groups_get_groupmeta($group_id, 'wds_semester' );

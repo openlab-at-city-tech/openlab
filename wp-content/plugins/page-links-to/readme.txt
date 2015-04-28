@@ -5,9 +5,9 @@
 Contributors: markjaquith  
 Donate link: http://txfx.net/wordpress-plugins/donate  
 Tags: page, redirect, link, external link, repoint  
-Requires at least: 3.4  
-Tested up to: 3.6  
-Stable tag: 2.9.3  
+Requires at least: 3.9.2  
+Tested up to: 4.2  
+Stable tag: 2.9.6  
 
 Lets you make a WordPress page (or other content type) link to an external URL of your choosing, instead of its WordPress URL.
 
@@ -57,7 +57,23 @@ If you want to link to a full URL, you *must* include the `http://` portion.
 
 Yes. Linking to `/my-photos.php` is a good idea, as it'll still work if you move your site to a different domain.
 
+== Contribute ==
+
+You can contribute (or report bugs) on [Github](https://github.com/markjaquith/page-links-to/).
+
 == Changelog ==
+
+= 2.9.6 =
+* Fixed an issue with redirects that have `@` in the URL
+* Fixed issues with setting and displaying custom URLs for attachments
+
+= 2.9.5 =
+* Made relative URLs absolute in redirects
+* Fixed a potential PHP warning
+* Registered the metadata fields for better XML-RPC integration
+
+= 2.9.4 =
+* Add Hungarian translation.
 
 = 2.9.3 =
 * Only rely on an internal cache for `wp_list_pages()` processing, and time-limit the cache.

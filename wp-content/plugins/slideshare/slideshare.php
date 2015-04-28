@@ -3,22 +3,22 @@
 Plugin Name: SlideShare
 Plugin URI: http://yoast.com/wordpress/slideshare/
 Description: A plugin for WordPress to easily display slideshare.net presentations.
-Version: 1.9
+Version: 1.9.1
 Author: Joost de Valk
 Author URI: https://yoast.com/
 */
 
-function slideshare_init() {
+function yst_slideshare_init() {
 	load_plugin_textdomain( 'slideshare', null, plugins_url( 'languages', __FILE__ ) );
 }
 
-add_action( 'init', 'slideshare_init' );
+add_action( 'init', 'yst_slideshare_init' );
 
-if ( ! class_exists( 'SlideShare_Admin' ) && is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+if ( ! class_exists( 'Yoast_SlideShare_Admin' ) && is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 
 	require_once( 'yst_plugin_tools.php' );
 
-	class SlideShare_Admin extends Yoast_Plugin_Admin {
+	class Yoast_SlideShare_Admin extends Yoast_Plugin_Admin {
 
 		var $hook = 'slideshare';
 		var $longname;
@@ -39,6 +39,13 @@ if ( ! class_exists( 'SlideShare_Admin' ) && is_admin() && ( ! defined( 'DOING_A
 		}
 
 		/**
+		 * Register the SlideShare option
+		 */
+		function options_init(){
+			register_setting( 'yoast_slideshare_options', 'slideshare' );
+		}
+
+		/**
 		 * Create the config page
 		 */
 		function config_page() {
@@ -50,10 +57,6 @@ if ( ! class_exists( 'SlideShare_Admin' ) && is_admin() && ( ! defined( 'DOING_A
 			}
 			?>
 			<div class="wrap">
-				<a href="http://yoast.com/">
-					<div id="yoast-icon" class="icon32"><br /></div>
-				</a>
-
 				<h2><?php _e( "SlideShare Configuration", 'slideshare' ); ?></h2>
 
 				<div class="postbox-container" style="width:70%;">
@@ -91,7 +94,7 @@ if ( ! class_exists( 'SlideShare_Admin' ) && is_admin() && ( ! defined( 'DOING_A
 		}
 	}
 
-	$ssa = new SlideShare_Admin();
+	$ssa = new Yoast_SlideShare_Admin();
 }
 
 if ( ! is_admin() ) {

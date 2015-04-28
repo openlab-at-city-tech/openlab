@@ -22,7 +22,7 @@
  Plugin Name: ShareThis
  Plugin URI: http://www.sharethis.com
  Description: Let your visitors share a post/page with others. Supports e-mail and posting to social bookmarking sites. <a href="options-general.php?page=sharethis.php">Configuration options are here</a>. Questions on configuration, etc.? Make sure to read the README.
- Version: 7.0.17
+ Version: 7.0.20
  Author: <a href="http://www.sharethis.com">The ShareThis Team</a>
  Author URI: http://www.sharethis.com
  */
@@ -219,8 +219,8 @@ function sendWelcomeEmail($newUser){
 
 	$body = "The ShareThis plugin on your website has been activated on ".get_option('siteurl')."\n\n"
 	."If you would like to customize the look of your widget, go to the ShareThis Options page in your WordPress administration area. $updatePage\n\n" 
-	."Get more information on customization options at http://help.sharethis.com/integration/wordpress." 
-	."To get reporting on share data login to your account at http://www.sharethis.com/account and choose options in the Analytics section\n\n"
+	."Get more information on customization options at //support.sharethis.com/customer/portal/articles/446440-wordpress-integration" 
+	."To get reporting on share data login to your account at //www.sharethis.com/account and choose options in the Analytics section\n\n"
     ."If you have any additional questions or need help please email us at support@sharethis.com\n\n--The ShareThis Team";
 
 	$subject = "ShareThis WordPress Plugin";
@@ -232,7 +232,7 @@ function sendWelcomeEmail($newUser){
 		$subject = "ShareThis WordPress Plugin Activation";
 		$body ="Thanks for installing the ShareThis plugin on your blog.\n\n" 
 		."If you would like to customize the look of your widget, go to the ShareThis Options page in your WordPress administration area. $updatePage\n\n" 
-		."Get more information on customization options at http://help.sharethis.com/integration/wordpress.\n\n" 		
+		."Get more information on customization options at //support.sharethis.com/customer/portal/articles/446440-wordpress-integration\n\n" 		
 		."If you have any additional questions or need help please email us at support@sharethis.com\n\n--The ShareThis Team";
 	}
 	$headers = "From: ShareThis Support <support@sharethis.com>\r\n" ."X-Mailer: php";
@@ -247,8 +247,8 @@ function sendUpgradeEmail() {
 	
 	$body = "The ShareThis plugin on your website has been updated!\n\n"
 	."If you would like to customize the look of your widget, go to the ShareThis Options page in your WordPress administration area. $updatePage\n\n" 
-	."Get more information on customization options at http://help.sharethis.com/integration/wordpress." 
-	."To get reporting on share data login to your account at http://www.sharethis.com/account and choose options in the Analytics section\n\n"
+	."Get more information on customization options at //support.sharethis.com/customer/portal/articles/446440-wordpress-integration" 
+	."To get reporting on share data login to your account at //www.sharethis.com/account and choose options in the Analytics section\n\n"
     ."If you have any additional questions or need help please email us at support@sharethis.com\n\n--The ShareThis Team";
 
 	$subject = "ShareThis WordPress Plugin Updated";
@@ -265,7 +265,7 @@ function sendUpgradeEmail() {
 function st_link() {
 	global $post;
 
-	$sharethis = '<p><a href="http://www.sharethis.com/item?&wp='
+	$sharethis = '<p><a href="//www.sharethis.com/item?&wp='
 	.get_bloginfo('version').'&amp;publisher='
 	.get_option('st_pubid').'&amp;title='
 	.urlencode(get_the_title()).'&amp;url='
@@ -532,7 +532,6 @@ function st_options_form() {
 	$stPostsBot = get_option('st_posts_on_bot');
 	$stPostExcerpt = get_option('st_post_excerpt');
 	$freshInstalation = empty($services)?1:0;
-	$sharenow_style = "3"; // Default Style
 
 	$checkPagesTop = '';
 	$checkPagesBot = '';
@@ -581,8 +580,13 @@ function st_options_form() {
 			$isSecure = '';		
 		}
 	} else {
-		$isNonSecure = 'checked="checked"';
-		$isSecure = '';	
+		if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || $_SERVER['HTTPS'] == 'on') {
+			$isNonSecure = '';
+			$isSecure = 'checked="checked"';		
+		} else {
+			$isNonSecure = 'checked="checked"';
+			$isSecure = '';	
+		}
 	}
 	
 	if(empty($st_username)){
@@ -590,7 +594,7 @@ function st_options_form() {
 	}
 	
 	if(empty($st_pulldownlogo)){
-		$st_pulldownlogo = "http://sd.sharethis.com/disc/images/Logo_Area.png";
+		$st_pulldownlogo = "//sd.sharethis.com/disc/images/Logo_Area.png";
 	}
 	
 	if(empty($pulldown_scrollpx))
@@ -646,22 +650,6 @@ function st_options_form() {
 	else{
 		$toShow = $widgetTag;
 	}	
-	
-	//echo $toShow;
-	/* Pulls the theme ID for the sharenow feature*/
-	$a = preg_replace('~[\r\n]+~', '', $toShow);
-	if (preg_match('/serviceWidget/',$a)) { 
-            $pattern = "/<script(.*?)<\/script>/";
-            preg_match_all($pattern, $a, $matches);
-            foreach($matches[1] as $k=>$v)
-            {
-                  if (preg_match('/serviceWidget/',$v)) {
-                        preg_match("/\"style(.*):[\s\"\']{0,}(\d)[\s\"\']{0,}/", $v, $matches);
-                        $sharenow_style = $matches[2];
-                        break;
-                  }
-            }
-      }
 
 	/* Pulls the scrollpx value for the  pull down bar  */
 	$a = preg_replace('~[\r\n]+~', '', $toShow);
@@ -775,6 +763,7 @@ function st_options_form() {
 													</div>
 												</div>
 												<div id="preview" style="margin-top:30px;font-size:30px;"></div>
+												<div id="errorMessage" style="margin-top:30px;font-size:30px;" class="wp_st_error_message"></div>
 												<div id="barPreview2" class="wp_st_barPreview2">
 													<div class="wp_st_bartext">
 														<div class="wp_st_barPreviewHeader">Look to the side!</div>
@@ -823,8 +812,7 @@ function st_options_form() {
 										<div class="wp_st_widget4x">	
 											<ul class="bars wp_st_show" style="padding-left:80px">
 												<li class="wp_st_styleLink jqBarStyle hoverbarStyle" id="hoverbarStyle"><div class="wp_st_hoverState2 hoverbarStyle"></div><div class="wp_st_hoverState hoverbarStyle">This bar can float either on the left side or the right side of the page to provide an always-visible view of the sharing tools.</div><img id="hoverBarImage" src="'.$plugin_location.'images/HOVER_Buttons.png" class="wp_st_hoverbarStyleButtonImg"/><img id="hoverbarLoadingImg" src="'.$plugin_location.'images/loading.gif" class="wp_st_loadingImage" style="display:none"/></li>
-												<li class="wp_st_styleLink jqBarStyle pulldownStyle" id="pulldownStyle"><div class="wp_st_hoverState2 pulldownStyle"></div><div class="wp_st_hoverState pulldownStyle">This bar with sharing buttons is placed at the top of page, but appears only when the reader scrolls down.</div><img id="pullDownBarImage" src="'.$plugin_location.'images/PULLDOWN.png" class="wp_st_pulldownStyleButtonImg"/><img id="pulldownLoadingImg" src="'.$plugin_location.'images/loading.gif" class="wp_st_loadingImage" style="display:none"/></li>
-												<li class="wp_st_styleLink jqShareNow fbStyle" id="fbStyle"><div class="wp_st_hoverState2 fbStyle"></div><div class="wp_st_hoverState fbStyle">ShareNow allows any publisher to leverage Facebook frictionless sharing without having to create their own solution.</div><img id="shareNowImage" src="'.$plugin_location.'images/ShareNow_Button.png" class="wp_st_sharebarStyleButtonImg"/><img id="sharenowLoadingImg" src="'.$plugin_location.'images/loading.gif" class="wp_st_loadingImage" style="display:none"/></li>
+												<li class="wp_st_styleLink jqBarStyle pulldownStyle" id="pulldownStyle"><div class="wp_st_hoverState2 pulldownStyle"></div><div class="wp_st_hoverState pulldownStyle">This bar with sharing buttons is placed at the top of page, but appears only when the reader scrolls down.</div><img id="pullDownBarImage" src="'.$plugin_location.'images/PULLDOWN.png" class="wp_st_pulldownStyleButtonImg"/><img id="pulldownLoadingImg" src="'.$plugin_location.'images/loading.gif" class="wp_st_loadingImage" style="display:none"/></li>											
 											</ul>
 											<ul style="width:100px">
 												<li style="border:0px" class="wp_st_inputBoxLI"><div class="btnDiv" >
@@ -838,38 +826,14 @@ function st_options_form() {
 												
 												<li class="wp_st_pulldownCustomization wp_st_inputBoxLI" style="border:0px" >
 													<span id="st_configure_pulldown" style="display:none">&nbsp;&nbsp;Configure it!</span>
-												</li>
-												
-												<li class="wp_st_shareNowCustomization wp_st_inputBoxLI" style="border:0px" >
-													<span id="st_customize_sharenow" style="display:none;position:relative;top:5px;">&nbsp;&nbsp;Customize it!</span>
-												</li>
-												
+												</li>									
+																							
 											</ul>		
 										</div>	
 										<div style="clear:both;" class="bars wp_st_show"></div>
 									</div>
 								</div>
 								
-								<div id="wp_st_slidingContainer" style="display:none;"> 
-									 <h3 style="margin-left:5px">Customize ShareNow:</h3>
-									 <ul id="themeList" class="wp_st_subOptions">
-										<li data-value="3" class="wp_st_sharenowImg" id="st_sharenowImg3">
-											<a><img class="widgetIconSelected" id="opt_theme3" src="'.$plugin_location.'images/fbtheme_3.png"/></a>
-										</li>
-										<li data-value="4" class="wp_st_sharenowImg" id="st_sharenowImg4">
-											<a><img class="widgetIconSelected" id="opt_theme4" src="'.$plugin_location.'images/fbtheme_4.png"/></a>
-										</li>
-										<li data-value="5" class="wp_st_sharenowImg" id="st_sharenowImg5">
-											<a><img class="widgetIconSelected" id="opt_theme5" src="'.$plugin_location.'images/fbtheme_5.png"/></a>
-										</li>
-										<li data-value="6" class="wp_st_sharenowImg" id="st_sharenowImg6">
-											<a><img class="widgetIconSelected" id="opt_theme6" src="'.$plugin_location.'images/fbtheme_6.png"/></a>
-										</li>
-										<li data-value="7" class="wp_st_sharenowImg" id="st_sharenowImg7">
-											<a><img class="widgetIconSelected" id="opt_theme7" src="'.$plugin_location.'images/fbtheme_7.png"/></a>
-										</li>
-									</ul>
-								</div>
 								
 								<div id="st_pulldownConfig" class="wp_st_pulldownConfig" style="display:none;"> 
 									<h3 style="margin-left:5px">Customize PullDownBar:</h3>
@@ -905,7 +869,7 @@ function st_options_form() {
 									</div>								
 									<div id="addOptions" style="height:250px;text-align: center;display:none;">
 										<div id="st_widget5x" class="wp_st_widget5x">
-											<div style="width:48%; float:left">
+											<div style="width:50%; float:left;margin-top:5px;">
 												<img src="'.$plugin_location.'images/widget-5x.png"/>
 											</div>
 											<div style="width:48%; float:right;">
@@ -1007,6 +971,7 @@ function st_options_form() {
 												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manage Page Exceptions
 											</span>
 									  </div>
+									  <br/>
 									  <div id="divPageList" style="display:none;">
 										  <div class="wp_st_customizewidget_heading">
 												<span style="font-size:12px;">Do <strong style="font-family: sans-serif;font-weight:bold;"><i>not</i></strong> show on</span>
@@ -1023,7 +988,7 @@ function st_options_form() {
 							<!-- STEP 5 -->
 							<div id="st_step5" class="wp_st_centerContainer2" style="display:none;">
 								<div id="loginWindowDiv" class="wp_st_loginWindowDiv">
-									<iframe id="loginFrame" width="644px" height="398px" frameborder="0" src="http://www.sharethis.com/external-login?pluginType=newPlugins"></iframe>
+									<iframe id="loginFrame" width="644px" height="398px" frameborder="0" src="//www.sharethis.com/external-login?pluginType=newPlugins"></iframe>
 									<div class="wp_st_login_message">You are successfully logged-in with ShareThis.</div>		
 								</div>
 							</div>
@@ -1041,14 +1006,14 @@ function st_options_form() {
 								</div>							
 								<div id="codeDiv" style="display:none;">
 									<div id="divScripTag" style="background:#ECECEC;display:inline-block;padding:5px;">
-										<div style="float: left;color:#36759A;">Modify script tags<a style="padding-left:5px;" href="http://support.sharethis.com/customer/portal/articles/464663-customize-functionality" title="Customize Functionality" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
+										<div style="float: left;color:#36759A;">Modify script tags<a style="padding-left:5px;" href="//support.sharethis.com/customer/portal/articles/464663-customize-functionality" title="Customize Functionality" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
 										<div style="float: left; margin-left: 288px;color:#36759A;margin-top:1px;"><input type="radio" name="protocolType" id="typehttp" value="http" '.$isNonSecure.' style="'.$scriptProtocolCss.'"/>http&nbsp;&nbsp;&nbsp;</div>
-										<div style="float:left;color:#36759A;"><input type="radio" name="protocolType" id="typehttps" value="https" '.$isSecure.' style="'.$scriptProtocolCss.'" />https<a style="padding-left:5px;" href="http://support.sharethis.com/customer/portal/articles/475097-ssl-support" title="SSL Support" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
+										<div style="float:left;color:#36759A;"><input type="radio" name="protocolType" id="typehttps" value="https" '.$isSecure.' style="'.$scriptProtocolCss.'" />https<a style="padding-left:5px;" href="//support.sharethis.com/customer/portal/articles/475097-ssl-support" title="SSL Support" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
 									</div>
 									<div style="clear:both;"><textarea id="st_widget" name="st_widget" style="height: 150px; width: 525px;font-size:12px;">'.htmlspecialchars($toShow).'</textarea></div>
 									<div>&nbsp;</div>
 									<div id="divHtmlTag" style="background:#ECECEC;display:inline-block;padding:5px;width:517px;text-align:left;">
-										<div style="float: left;color:#36759A;">Modify HTML tags<a style="padding-left:5px;" href="http://support.sharethis.com/customer/portal/articles/475079-share-properties-and-sharing-custom-information#Properties_Tags" title="Share Properties and Sharing Custom Information" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
+										<div style="float: left;color:#36759A;">Modify HTML tags<a style="padding-left:5px;" href="//support.sharethis.com/customer/portal/articles/475079-share-properties-and-sharing-custom-information#Properties_Tags" title="Share Properties and Sharing Custom Information" target="_blank"><img src="'.$plugin_location.'images/QUESTION_Icon.png" /></a></div>
 									</div>									
 									<div style="clear:both;"><textarea id="st_tags" name="st_tags" style="height: 150px; width: 525px;font-size:12px;">'.htmlspecialchars($tags).'</textarea></div>
 								</div>							
@@ -1085,8 +1050,7 @@ function st_options_form() {
 						<script src="'.$plugin_location.'js/sharethis.js" type="text/javascript"></script>
 					</fieldset>
 
-					<input type="hidden" id="is_hoverbar_selected" value=""/>
-					<input type="hidden" id="is_sharenow_selected" value=""/>
+					<input type="hidden" id="is_hoverbar_selected" value=""/>				
 					<input type="hidden" id="is_copynshre_selected" value=""/>
 					<input type="hidden" name="st_action" value="st_update_settings" />
 					
@@ -1109,8 +1073,6 @@ function st_options_form() {
 					<input type="hidden" name="pulldownbar[logo]" id="st_pulldownbar_logo" value="'.$st_pulldownlogo.'"/>
 					<input type="hidden" name="pulldownbar[services]" id="st_pulldownbar_services" value="'.$st_pulldownbarServices.'"/>
 					
-					<input type="hidden" name="sharenowSelected" id="st_sharenow_selected" value="false"/>
-					<input type="hidden" name="sharenow[theme]" id="st_sharenow_theme" value="'.$sharenow_style.'"/>
 					
 					<input type="hidden" name="copynshareSettings" id="copynshareSettings" value="'.$cns_settings.'"/>
 					<input type="hidden" name="st_callesi" id="st_callesi" value="'.$sharethis_callesi.'" />

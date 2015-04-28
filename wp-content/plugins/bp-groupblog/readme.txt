@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 3.9.1 / BP 2.0.1
-Stable tag: 1.8.8
+Tested up to: WP 4.1.1 / BP 2.2.1
+Stable tag: 1.8.11
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -99,7 +99,16 @@ function bp_core_avatar_url() {
 1. Screenshot of the group blog creation stage.
 2. Screenshot of the group blog page.
 
-== Changelog == 
+== Changelog ==
+
+= 1.8.11 =
+=======
+* Removed duplicate CSS selector in nav item
+* Improved compatibility with BuddyPress 2.2.0
+
+= 1.8.9 =
+* Allow some simple HTML in groupblog post titles in activity stream
+* Add 'new_groupblog_post' type to activity filter dropdown
 
 = 1.8.8 =
 * Better wording for activity filter dropdown
@@ -149,7 +158,7 @@ function bp_core_avatar_url() {
 
 = 1.6 =
 * Compatibility with BuddyPress 1.5
-* Cosmetic changes to the P2 BuddyPress to match the default BuddyPress 
+* Cosmetic changes to the P2 BuddyPress to match the default BuddyPress
 * Bug fixes related to blog autojoining
 
 = 1.5 =
@@ -241,10 +250,10 @@ Updated language files
 = 1.1.3 =
 * Now using plugin-template.php, so there is no longer a need to move the groupblog folder to the active theme folder. Also updating the plugin through the wordpress plugin interface now works without problems.
 
-= 1.1.2 = 
+= 1.1.2 =
 * Updated language files.
 
-= 1.1.1 = 
+= 1.1.1 =
 * Improved jquery handeling on check boxes and radio buttons.
 
 = 1.1 =

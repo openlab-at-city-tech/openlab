@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is responsible for gathering all required variable values that 
- * will be used in each of the specific view files depending on what type of 
+ * This file is responsible for gathering all required variable values that
+ * will be used in each of the specific view files depending on what type of
  * featured content has been chosen by the user.
  *
  * @author Dominic Giglio
@@ -39,7 +39,7 @@ if ( $cfcw_view->content_type == 'blog' ) {
     CAC_Featured_Content_Helper::error( __( 'Invalid Blog Name.', 'cac-featured-content' ) );
     return false;
   }
-  
+
   // if there is a custom description, use it
   if ( $cfcw_view->description )
     $cfcw_view->blog->description = bp_create_excerpt( $cfcw_view->description, $cfcw_view->crop_length );
@@ -58,7 +58,7 @@ if ( $cfcw_view->content_type == 'blog' ) {
     // if we still don't have an image, get an avatar
     if ( ! $cfcw_view->image_url ) {
       $cfcw_view->avatar = bp_core_fetch_avatar( array(
-        'item_id' => get_user_id_from_string( get_blog_option( $cfcw_view->blog->blog_id, 'admin_email' ) ),
+        'item_id' => cacfc_get_user_id_from_string( get_blog_option( $cfcw_view->blog->blog_id, 'admin_email' ) ),
         'width'   => $cfcw_view->image_width,
         'height'  => $cfcw_view->image_height,
         'type'    => 'full',
@@ -153,7 +153,7 @@ if ( $cfcw_view->content_type == 'post' ) {
 
 // member specific view template variables
 if ( $cfcw_view->content_type == 'member' ) {
-  $cfcw_view->member = bp_core_get_core_userdata( get_user_id_from_string( $params['featured_member'] ) );
+  $cfcw_view->member = bp_core_get_core_userdata( cacfc_get_user_id_from_string( $params['featured_member'] ) );
 
   // if we don't have a valid member bail now
   if ( ! $cfcw_view->member ) {
@@ -170,7 +170,7 @@ if ( $cfcw_view->content_type == 'member' ) {
     // if the admin entered a static url use it
     if ( $cfcw_view->image_url )
       $cfcw_view->image_url = '<img src="' . $cfcw_view->image_url . '" alt="Thumbnail" class="avatar" width="' . $cfcw_view->image_width . '" height="' . $cfcw_view->image_height . '" />';
-    
+
     // if we still don't have an image, get an avatar
     if ( ! $cfcw_view->image_url ) {
       $cfcw_view->avatar = bp_core_fetch_avatar( array(
@@ -180,7 +180,7 @@ if ( $cfcw_view->content_type == 'member' ) {
         'type'    => 'full',
         'no_grav' => false ) );
     }
-  
+
   }
 }
 

@@ -503,7 +503,7 @@ h1 a {
 	overflow: visible;
 	padding: 0;
 	position: static;
-	width: 100%;
+	width: 100% !important;
 }
 .avatar {
 	width: 20px;

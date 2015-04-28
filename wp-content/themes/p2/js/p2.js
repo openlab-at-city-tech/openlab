@@ -1294,8 +1294,9 @@ window.p2 = window.p2 || {};
 			alink.hover(function(e){
 				this.t = this.title;
 				this.title = "";
-				$("body").append("<div id='tooltip'>"+ this.t +"</div>");
+				$("body").append("<div id='tooltip'></div>");
 				$("#tooltip")
+					.text( this.t )
 					.css("top",(e.pageY - yOffset) + "px")
 					.css("left",(e.pageX + xOffset) + "px")
 					.fadeIn("fast");
