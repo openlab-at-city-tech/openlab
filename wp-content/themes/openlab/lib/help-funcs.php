@@ -11,15 +11,14 @@
  * @param type $requested_url
  * @return type
  */
-
-function openlab_help_404_handler($redirect_url,$requested_url){
-    if (is_404() && strpos($requested_url,'help')){
+function openlab_help_404_handler($redirect_url, $requested_url) {
+    if (is_404() && strpos($requested_url, 'help')) {
         $redirect_url = site_url('blog/help/openlab-help');
         return $redirect_url;
     }
 }
 
-add_filter('redirect_canonical','openlab_help_404_handler',10,2);
+add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
 
 /**
  * 	Loop for single help pages
@@ -94,7 +93,7 @@ function openlab_help_loop() {
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>
 
-    <?php endwhile; // end of the loop.  ?>
+    <?php endwhile; // end of the loop.   ?>
 
     <?php
 }
@@ -105,7 +104,7 @@ function openlab_get_help_tag_list($id) {
 
     $terms = get_the_term_list($id, 'help_tags', '', ', ', '');
     $term_list = '<div id="help-identity">'
-            . '<div class="help-tags">Tags: '.($terms ? $terms : 'None assigned').'</div>'
+            . '<div class="help-tags">Tags: ' . ($terms ? $terms : 'None assigned') . '</div>'
             . '</div>';
 
     return $term_list;
@@ -163,7 +162,7 @@ function openlab_help_tags_loop() {
     wp_reset_query();
     ?>
 
-        <a class="pull-right" href="#help-top">Go To Top <span class="fa fa-angle-up"></span></a>
+    <a class="pull-right" href="#help-top">Go To Top <span class="fa fa-angle-up"></span></a>
 
     <?php
 }
@@ -252,7 +251,7 @@ function openlab_help_cats_loop() {
 
     foreach ($child_cats as $child) {
         $child_cat_id = $child->cat_ID;
-        echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="'.get_term_link($child).'">' . $child->name . '</a></h2>';
+        echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="' . get_term_link($child) . '">' . $child->name . '</a></h2>';
 
         $args = array('tax_query' => array(
                 array(
@@ -266,10 +265,10 @@ function openlab_help_cats_loop() {
             'post_type' => 'help',
             'orderby' => 'menu_order',
             'order' => 'ASC',
-	    'posts_per_page' => '-1',
+            'posts_per_page' => '-1',
         );
         $child_query = null;
-        $child_query = new WP_Query( $args ); //new WP_Query($args);
+        $child_query = new WP_Query($args); //new WP_Query($args);
 
         while ($child_query->have_posts()) : $child_query->the_post();
             ?>
