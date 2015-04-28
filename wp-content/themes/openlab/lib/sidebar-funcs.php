@@ -3,11 +3,12 @@
 /**
  * Sidebar based functionality
  */
-function openlab_bp_sidebar($type) {
+function openlab_bp_sidebar($type, $mobile_dropdown = false) {
 
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
+    $pull_classes .= ($mobile_dropdown ? ' mobile-dropdown' : '');
 
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . ' mobile-dropdown">';
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . '">';
 
     switch ($type) {
         case 'actions':
