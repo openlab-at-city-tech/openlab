@@ -50,7 +50,7 @@ abstract class QM_Dispatcher {
 			return true;
 		}
 
-		return $this->user_verified();
+		return true;
 
 	}
 
