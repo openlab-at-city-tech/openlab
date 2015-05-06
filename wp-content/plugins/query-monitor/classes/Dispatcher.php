@@ -58,7 +58,7 @@ abstract class QM_Dispatcher {
 		if ( isset( $_COOKIE[QM_COOKIE] ) ) {
 			return $this->verify_cookie( stripslashes( $_COOKIE[QM_COOKIE] ) );
 		}
-		return true;
+		return false;
 	}
 
 	public static function verify_cookie( $value ) {

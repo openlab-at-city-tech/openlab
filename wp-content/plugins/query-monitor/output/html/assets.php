@@ -56,7 +56,8 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			echo '<tbody>';
 
 			foreach ( array(
-				'broken'  => __( 'Missing Dependencies', 'query-monitor' ),
+				'missing' => __( 'Missing %s', 'query-monitor' ),
+				'broken'  => __( 'Broken Dependencies', 'query-monitor' ),
 				'header'  => __( 'Header %s', 'query-monitor' ),
 				'footer'  => __( 'Footer %s', 'query-monitor' ),
 			) as $position => $position_label ) {
@@ -147,9 +148,10 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		$handles    = array_unique( array_merge( $dependencies->queue, $dependencies->done ) );
 
 		foreach ( $handles as $handle ) {
-			$item = $dependencies->query( $handle );
-			if ( in_array( $script->handle, $item->deps ) ) {
-				$dependents[] = $handle;
+			if ( $item = $dependencies->query( $handle ) ) {
+				if ( in_array( $script->handle, $item->deps ) ) {
+					$dependents[] = $handle;
+				}
 			}
 		}
 
@@ -163,7 +165,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 		$data = $this->collector->get_data();
 
-		if ( !empty( $data['broken'] ) ) {
+		if ( !empty( $data['broken'] ) or !empty( $data['missing'] ) ) {
 			$class[] = 'qm-error';
 		}
 
@@ -178,7 +180,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			'title' => $this->collector->name()
 		);
 
-		if ( !empty( $data['broken'] ) ) {
+		if ( !empty( $data['broken'] ) or !empty( $data['missing'] ) ) {
 			$args['meta']['classname'] = 'qm-error';
 		}
 
@@ -191,7 +193,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 }
 
 function register_qm_output_html_assets( array $output, QM_Collectors $collectors ) {
-	if ( $collector = $collectors::get( 'assets' ) ) {
+	if ( $collector = QM_Collectors::get( 'assets' ) ) {
 		$output['assets'] = new QM_Output_Html_Assets( $collector );
 	}
 	return $output;

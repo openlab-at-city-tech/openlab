@@ -64,7 +64,7 @@ class QM_Output_Html_DB_Components extends QM_Output_Html {
 
 				foreach ( $data['types'] as $type_name => $type_count ) {
 					if ( isset( $row['types'][$type_name] ) ) {
-						echo "<td valign='top' class='qm-num'>{$row['types'][$type_name]}</td>";
+						echo "<td valign='top' class='qm-num'>" . number_format_i18n( $row['types'][$type_name] ) . "</td>";
 					} else {
 						echo "<td valign='top' class='qm-num'>&nbsp;</td>";
 					}
@@ -123,7 +123,7 @@ class QM_Output_Html_DB_Components extends QM_Output_Html {
 }
 
 function register_qm_output_html_db_components( array $output, QM_Collectors $collectors ) {
-	if ( $collector = $collectors::get( 'db_components' ) ) {
+	if ( $collector = QM_Collectors::get( 'db_components' ) ) {
 		$output['db_components'] = new QM_Output_Html_DB_Components( $collector );
 	}
 	return $output;

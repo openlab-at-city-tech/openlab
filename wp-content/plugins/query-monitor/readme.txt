@@ -2,8 +2,8 @@
 Contributors: johnbillion
 Tags: debug, debug-bar, debugging, development, developer, performance, profiler, profiling, queries, query monitor
 Requires at least: 3.5
-Tested up to: 4.1.1
-Stable tag: 2.7.0
+Tested up to: 4.2
+Stable tag: 2.7.4
 License: GPLv2 or later
 
 View debugging and performance information on database queries, hooks, conditionals, HTTP requests, redirects and more.
@@ -155,6 +155,32 @@ Please use [the issue tracker on Query Monitor's GitHub repo](https://github.com
 No, I do not accept donations. If you like the plugin, I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about the plugin too!
 
 == Changelog ==
+
+= 2.7.4 =
+* An unknown component now gets marked as such, not as Core.
+* Support for invokable objects in action and filter callbacks.
+* Fix fatal error when activating Debug Bar plugin after Query Monitor has already been activated.
+* Implement escaping inside `QM_Output_Html::format_url()` which can deal with unsafe output. Thanks to Stephen Harris for the responsible disclosure.
+
+= 2.7.3 =
+* Improvements to the shutdown handler for PHP errors, so it handles syntax and compilation errors too.
+
+= 2.7.2 =
+* Implement a shutdown handler for PHP errors to avoid fatals being unintentionally hidden when `display_errors` is on.
+* Don't attempt to do anything with scripts and styles if a corresponding header action hasn't fired.
+* Don't sort the enqueued scripts and styles, so they're output in the order in which they're enqueued.
+* For the time being, let's not load QM when using the CLI because we've no persistent storage and no means of outputting collected data on the CLI.
+* Call static methods using their class name, not a variable. Fixes compatibility with PHP 5.2.
+
+= 2.7.1 =
+* Display a warning (rather than triggering a fatal error) for scripts and style dependencies which have gone missing during the duration of the page load.
+* Tweak some more Debug Bar add-on styles.
+* Ensure erroneous non-SELECT queries are also highlighted in red.
+* Further tweaks to QM's output if JavaScript isn't available for any reason.
+* Add PHP4-style constructors to the Debug Bar classes to avoid fatals with Debug Bar add-ons which are explicitly using them.
+* In the event that QM's JavaScript doesn't get enqueued, force the QM output to display so users can at least debug the issue.
+* Remove the abstract `output()` methods from abstract classes which implement `QM_Output` to avoid PHP bug #43200.
+* Fixing a notice in the admin component when `get_current_screen()` isn't an object.
 
 = 2.7.0 =
 * Detect broken dependencies for scripts and styles.

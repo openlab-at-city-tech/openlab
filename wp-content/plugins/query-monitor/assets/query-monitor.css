@@ -383,6 +383,7 @@ body.wp-admin.folded #qm {
 .qm .qm-warn,
 .qm .qm-warn td,
 .qm .qm-warn th,
+.qm .qm-warn td .qm-nonselectsql,
 .qm .qm-warn td .qm-info {
 	color: #f00 !important;
 }
@@ -484,11 +485,30 @@ html[dir="rtl"] .qm th {
 	text-align: right !important;
 }
 
+/* No-JS tweaks */
+
+.qm-no-js #qm-authentication,
+.qm-no-js .qm-sort-controls,
+.qm-no-js a.qm-toggle,
+.qm-no-js select.qm-filter {
+	display: none !important;
+}
+
 /* Debug bar add-ons */
 
+.qm-debug-bar textarea,
 .qm-debug-bar pre {
 	font-size: 11px !important;
 	padding: 10px !important;
+	border: 1px solid #e8e8e8 !important;
+	margin: 4px 0 !important;
+	color: inherit !important;
+	background: transparent !important;
+	font-family: Menlo, Monaco, Consolas, 'Courier New', monospace !important;
+}
+
+.qm-debug-bar textarea {
+	resize: vertical !important;
 }
 
 .qm-debug-bar .left {

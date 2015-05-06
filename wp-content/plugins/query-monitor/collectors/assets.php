@@ -38,6 +38,10 @@ class QM_Collector_Assets extends QM_Collector {
 	public function action_print_footer_scripts() {
 		global $wp_scripts, $wp_styles;
 
+		if ( empty( $this->data['header'] ) ) {
+			return;
+		}
+
 		// @TODO remove the need for these raw scripts & styles to be collected
 		$this->data['raw']['scripts'] = $wp_scripts;
 		$this->data['raw']['styles']  = $wp_styles;
@@ -56,21 +60,32 @@ class QM_Collector_Assets extends QM_Collector {
 			foreach ( array( 'header', 'footer' ) as $position ) {
 				if ( empty( $this->data[ $position ][ $type ] ) ) {
 					$this->data[ $position ][ $type ] = array();
-				} else {
-					sort( $this->data[ $position ][ $type ] );
 				}
 			}
 			$raw = $this->data['raw'][ $type ];
-			$broken = array_diff( $raw->queue, $raw->done );
+			$broken = array_values( array_diff( $raw->queue, $raw->done ) );
+			$missing = array();
 
 			if ( !empty( $broken ) ) {
-				foreach ( $broken as $handle ) {
-					$item   = $raw->query( $handle );
-					$broken = array_merge( $broken, $this->get_broken_dependencies( $item, $raw ) );
+				foreach ( $broken as $key => $handle ) {
+					if ( $item = $raw->query( $handle ) ) {
+						$broken = array_merge( $broken, $this->get_broken_dependencies( $item, $raw ) );
+					} else {
+						unset( $broken[ $key ] );
+						$missing[] = $handle;
+					}
 				}
 
-				$this->data['broken'][ $type ] = array_unique( $broken );
-				sort( $this->data['broken'][ $type ] );
+				if ( !empty( $broken ) ) {
+					$this->data['broken'][ $type ] = array_unique( $broken );
+				}
+			}
+
+			if ( ! empty( $missing ) ) {
+				$this->data['missing'][ $type ] = array_unique( $missing );
+				foreach ( $this->data['missing'][ $type ] as $handle ) {
+					$raw->add( $handle, false );
+				}
 			}
 
 		}
