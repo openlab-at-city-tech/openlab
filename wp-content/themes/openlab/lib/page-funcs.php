@@ -232,7 +232,6 @@ function cuny_home_square($type) {
                 </div><!--title-wrapper-->
                 <?php
                 while (bp_groups()) : bp_the_group();
-                    global $groups_template;
                     $group = $groups_template->group;
 
                     // Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291

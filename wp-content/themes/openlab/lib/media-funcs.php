@@ -31,7 +31,6 @@ function openlab_get_home_slider() {
         $slider_mup .= '</div>';
     endif;
 
-    wp_reset_postdata();
     $post = $legacy;
 
     return $slider_mup;

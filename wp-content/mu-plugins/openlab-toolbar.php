@@ -52,6 +52,9 @@ class OpenLab_Admin_Bar {
 			return;
 		}
                 
+                //remove BP admin bar styling too
+                add_filter('bp_core_register_common_styles',array($this,'remove_bp_admin_bar_styles'));
+                
 		// Add a body style to distinguish between sites
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
@@ -152,6 +155,11 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
+        
+        function remove_bp_admin_bar_styles($styles){
+            
+            return array();
+        }
         
         /**
          * Custom dashboard toggle on mobile
