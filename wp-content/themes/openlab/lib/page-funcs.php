@@ -61,9 +61,11 @@ function cuny_home_login() {
 
                 <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="98" />
 
-                <div id="keep-logged-in" class="small-text">
-                    <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                    <input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><span><?php _e('Keep me logged in', 'buddypress') ?></span>
+                <div id="keep-logged-in" class="small-text clearfix">
+                    <div class="password-wrapper">
+                        <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                    </div>
                     <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
                 </div>
                 <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />

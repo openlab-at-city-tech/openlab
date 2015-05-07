@@ -8016,6 +8016,12 @@ body .inline-visible-xs {
 .home-page .row-home-top .login .log-box#user-login h2 {
   margin: 14px 0 18px;
 }
+@media (max-width: 1199px) {
+  .home-page .row-home-top .login .log-box#user-login h2 {
+    margin: 7px 0 9px;
+    font-size: 16px;
+  }
+}
 .home-page .row-home-top .login .log-box#user-login input[type="text"],
 .home-page .row-home-top .login .log-box#user-login input[type="password"] {
   font-size: 13px;
@@ -8028,16 +8034,33 @@ body .inline-visible-xs {
 .home-page .row-home-top .login .log-box #keep-logged-in {
   margin-top: 10px;
 }
-.home-page .row-home-top .login .log-box #keep-logged-in .forgot-password-link {
-  margin-right: 20px;
+.home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper {
+  width: 77%;
+  float: left;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper .forgot-password-link {
+  margin-right: 6%;
   vertical-align: middle;
 }
-.home-page .row-home-top .login .log-box #keep-logged-in #sidebar-rememberme {
+@media (max-width: 1199px) {
+  .home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper .forgot-password-link {
+    margin-right: 2%;
+  }
+}
+.home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper .keep-logged-in-checkbox {
+  display: inline-block;
+}
+.home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper #sidebar-rememberme {
   margin-right: 3px;
   vertical-align: middle;
 }
-.home-page .row-home-top .login .log-box #keep-logged-in span {
+.home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper span {
   vertical-align: middle;
+}
+@media (max-width: 1199px) {
+  .home-page .row-home-top .login .log-box #keep-logged-in .password-wrapper {
+    width: 60%;
+  }
 }
 .home-page .row-home-top .login .log-box #keep-logged-in #sidebar-wp-submit {
   margin-top: 7px;

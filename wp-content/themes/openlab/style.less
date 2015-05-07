@@ -1028,6 +1028,10 @@ body{
                 &#user-login{
                     h2{
                         margin: 14px 0 18px;
+                        @media (max-width: @screen-md-max){
+                            margin: 7px 0 9px;
+                            font-size: 16px;
+                        }
                     }
                     input{
                         &[type="text"],
@@ -1044,16 +1048,29 @@ body{
                 }
                 #keep-logged-in{
                     margin-top: 10px;
-                    .forgot-password-link{
-                        margin-right: 20px;
-                        vertical-align: middle;
-                    }
-                    #sidebar-rememberme{
-                        margin-right: 3px;
-                        vertical-align: middle;
-                    }
-                    span{
-                        vertical-align: middle;
+                    .password-wrapper{
+                        width: 77%;
+                        float: left;
+                        .forgot-password-link{
+                            margin-right: 6%;
+                            vertical-align: middle;
+                            @media (max-width: @screen-md-max){
+                                margin-right: 2%;
+                            }
+                        }
+                        .keep-logged-in-checkbox{
+                            display: inline-block;
+                        }
+                        #sidebar-rememberme{
+                            margin-right: 3px;
+                            vertical-align: middle;
+                        }
+                        span{
+                            vertical-align: middle;
+                        }
+                        @media (max-width: @screen-md-max){
+                            width: 60%;
+                        }
                     }
                     #sidebar-wp-submit{
                         margin-top: 7px;
