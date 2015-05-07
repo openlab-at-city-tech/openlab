@@ -69,50 +69,49 @@ $activity_args = array(
 <?php if (bp_is_user_friends()) : ?>
     <h2 class="sidebar-header">Recent Friend Activity</h2>
 <?php else : ?>
-    <h2 class="sidebar-header">Recent Account Activity</h2>
+    <h2 class="sidebar-header">Recent Activity</h2>
 <?php endif ?>
-
+    
+<div class="activity-wrapper">
 <?php if (bp_has_activities($activity_args)) : ?>
-    <div class="sidebar-block">
-        <ul id="activity-stream" class="activity-list item-list inline-element-list sidebar-sublinks">
-            <div class="row">
-    <?php while (bp_activities()) : bp_the_activity(); ?>
-
-                    <div class="activity-avatar col-sm-7">
-                        <a href="<?php bp_activity_user_link() ?>">
-                            <?php echo openlab_activity_user_avatar(); ?>
-                        </a>
-                    </div>
-
-                    <div class="activity-content col-sm-17">
-
-                        <div class="activity-header">
-                        <?php echo openlab_get_custom_activity_action(); ?>
+        <div id="activity-stream" class="activity-list item-list inline-element-list sidebar-sublinks">
+            <?php while (bp_activities()) : bp_the_activity(); ?>
+                <div class="sidebar-block activity-block">
+                    <div class="row activity-row">
+                        <div class="activity-avatar col-sm-8">
+                            <a href="<?php bp_activity_user_link() ?>">
+                                <?php echo openlab_activity_user_avatar(); ?>
+                            </a>
                         </div>
 
-                        <?php if (bp_activity_has_content()) : ?>
-                            <div class="activity-inner semibold hyphenate">
-                            <?php bp_activity_content_body() ?>
+                        <div class="activity-content col-sm-16">
+
+                            <div class="activity-header">
+                                <?php echo openlab_get_custom_activity_action(); ?>
                             </div>
-        <?php endif; ?>
 
-        <?php do_action('bp_activity_entry_content') ?>
+                            <?php if (bp_activity_has_content()) : ?>
+                                <div class="activity-inner semibold hyphenate">
+                                    <?php bp_activity_content_body() ?>
+                                </div>
+                            <?php endif; ?>
 
+                            <?php do_action('bp_activity_entry_content') ?>
+
+                        </div>
                     </div>
-                    <hr style="clear:both" />
-
-    <?php endwhile; ?>
-            </div>
-        </ul>
-    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
 <?php else : ?>
-    <div class="sidebar-block">
-        <ul id="activity-stream" class="activity-list item-list">
-            <div>
-                <div id="message" class="info">
-                    <p><?php _e('No recent activity.', 'buddypress') ?></p>
+        <div id="activity-stream" class="activity-list item-list">
+            <div class="sidebar-block">
+                <div class="row activity-row">
+                    <div id="message" class="info col-sm-24">
+                        <p><?php _e('No recent activity.', 'buddypress') ?></p>
+                    </div>
                 </div>
             </div>
-        </ul>
-    </div>
+        </div>
 <?php endif; ?>
+</div>

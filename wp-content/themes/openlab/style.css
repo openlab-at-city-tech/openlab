@@ -8305,8 +8305,23 @@ body .inline-visible-xs {
 .sidebar .sidebar-block:first-of-type {
   margin: 9px 0;
 }
-.sidebar .sidebar-block.mol-menu {
+.sidebar .sidebar-block:first-of-type.activity-block {
+  border-top: 1px solid #bbbbbb;
+}
+.sidebar .sidebar-block.mol-menu,
+.sidebar .sidebar-block.activity-block {
   border-top: none;
+}
+.sidebar .sidebar-block.activity-block {
+  padding: 6%;
+}
+.sidebar .sidebar-block.activity-block p,
+.sidebar .sidebar-block.activity-block a {
+  font-size: 12px;
+}
+.sidebar .sidebar-block.activity-block .time-since,
+.sidebar .sidebar-block.activity-block .fa.fa-undo {
+  font-size: 11px;
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;

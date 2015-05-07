@@ -1331,9 +1331,24 @@ body{
         border-top: 1px solid @30gray;
         &:first-of-type{
             margin: 9px 0;
+            &.activity-block{
+                border-top: 1px solid @30gray;
+            }
         }
-        &.mol-menu{
+        &.mol-menu,
+        &.activity-block{
             border-top: none;
+        }
+        &.activity-block{
+            padding: 6%;
+            p,
+            a{
+                font-size: 12px;
+            }
+            .time-since,
+            .fa.fa-undo{
+                font-size: 11px;
+            }
         }
         ul.sidebar-nav{
             margin: 0;
