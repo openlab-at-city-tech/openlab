@@ -29,7 +29,7 @@ if (!$dud = bp_displayed_user_domain()) {
                     <a href="<?php openlab_user_portfolio_profile_url() ?>">Profile</a>
                     <?php if (openlab_is_my_profile() && openlab_user_portfolio_site_is_local()) : ?>
                         | <a class="portfolio-dashboard-link" href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
-    <?php endif ?>
+                    <?php endif ?>
                 </li>
 
             </ul>
@@ -40,7 +40,7 @@ if (!$dud = bp_displayed_user_domain()) {
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
     <div class="sidebar-widget" id="portfolio-sidebar-widget">
         <h2 class="sidebar-header"><?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
-                <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label( 'leading_a=1&case=upper&user_id=' . $displayed_user_id ) ?></a>
+            <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
         </h2>
     </div>
 
