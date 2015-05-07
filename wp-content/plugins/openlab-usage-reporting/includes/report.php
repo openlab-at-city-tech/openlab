@@ -470,7 +470,7 @@ function olur_portfolio_counts( $start, $end, $group_status, $user_type ) {
 	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created < %s", $start ) );
 
 	// End
-	$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.user_id AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created < %s", $end ) );
+	$counts['end']   = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created < %s", $end ) );
 
 	// Created
 	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.user_id AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created >= %s AND g.date_created < %s", $start, $end ) );
