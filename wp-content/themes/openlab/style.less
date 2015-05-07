@@ -367,7 +367,7 @@ input[type="submit"]{
             li{
                 margin:0;
                 a{
-                    color: @black;
+                    color: @70gray;
                     display: block;
                     text-decoration: none;
                     font-weight: @bold;
@@ -410,6 +410,9 @@ input[type="submit"]{
     }
     &.navbar-location-footer{
         margin-bottom: 0;
+        .main-nav-wrapper {
+	        border-top: 1px solid @10gray;
+        }
     }
 }
 .sidebar-mobile-dropdown{
@@ -1179,6 +1182,7 @@ body{
         h2{
             text-transform: uppercase;
             font-weight: @semibold;
+            padding-left: 5px;
         }
         .cfcw-content{
             background: desaturate(lighten(@yellow,25.7%),3%);
@@ -1212,14 +1216,19 @@ body{
         }
     }
     #whos-online{
+	    h2 {
+            padding-left: 5px;
+	    }
         .avatar-block{
             position: relative;
             margin: 0;
-            position: relative;
+            padding: 2px !important;
             .cuny-member{
                 position:relative;
                 display:inline-block;
-                width: 24.1%;
+                width: 23.8%;
+                float: left;
+                margin: 2px;
                 .cuny-member-info{
                     background-color:@black;
                     top:42px;
@@ -1244,44 +1253,49 @@ body{
             }
         }
     }
-    .new-members-wrapper{
-        padding: 5% 3% 1%;
-        .btn{
-            padding-top: 2px;
-            .fa{
-                color: lighten(@40gray,4%);
-                font-size: floor((@font-size-base * 1.3)); 
-                line-height: 90%;
-                &:hover{
-                    color: @aqua;
-                }
-            }
-            &.prev{
-                padding-right: 0;
-            }
-        }
-        #home-new-member-wrap{
-            max-width: 100%;
-            .home-new-member{
-                width: 50%;
-                height: 250px;
-                margin-bottom: 0;
-                .home-new-member-avatar,
-                .home-new-member-info{
-                    margin: 0 auto;
-                    width: 95%;
-                    h2{
-                        margin: 0;
-                        padding: 12px 0 2px;
-                    }
-                }
-                .timestamp{
-                    font-size: 10px;
-                    font-weight: @normal;
-                }
-            }
-        }
-    }
+    #new-members {
+	    h2 {
+            padding-left: 5px;
+	    }
+	    .new-members-wrapper{
+	        padding: 5% 3% 1%;
+	        .btn{
+	            padding-top: 2px;
+	            .fa{
+	                color: lighten(@40gray,4%);
+	                font-size: floor((@font-size-base * 1.3)); 
+	                line-height: 90%;
+	                &:hover{
+	                    color: @aqua;
+	                }
+	            }
+	            &.prev{
+	                padding-right: 0;
+	            }
+	        }
+	        #home-new-member-wrap{
+	            max-width: 100%;
+	            .home-new-member{
+	                width: 50%;
+	                height: 245px;
+	                margin-bottom: 0;
+	                .home-new-member-avatar,
+	                .home-new-member-info{
+	                    margin: 0 auto;
+	                    width: 95%;
+	                    h2{
+	                        margin: 0;
+	                        padding: 12px 0 2px;
+	                    }
+	                }
+	                .timestamp{
+	                    font-size: 10px;
+	                    font-weight: @normal;
+	                }
+	            }
+	        }
+	    }
+	}
     .activity-list{
         .activity-wrapper{
             border-radius: inherit;
@@ -2044,7 +2058,7 @@ body{
 /**breadcrumbs**/
 #breadcrumb-container{
     background-color: darken(desaturate(@cyan,1.7%),2.1%);
-    margin-top: 60px;
+    margin-top: 46px;
     .breadcrumb-col{
         color: @white;
         line-height: 3.5;

@@ -157,7 +157,7 @@ function cuny_whos_online() {
         $x+=1;
         ?>
 
-        <div class="avatar-block left-block-content">
+        <div class="avatar-block left-block-content page-funcs.php">
             <?php
             while (bp_members()) : bp_the_member();
                 global $members_template;
