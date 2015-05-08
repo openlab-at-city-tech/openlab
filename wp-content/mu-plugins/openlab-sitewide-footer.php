@@ -45,6 +45,10 @@ add_action('wp_enqueue_scripts', 'wds_jquery');
 
 function wds_jquery() {
     wp_enqueue_script('jquery');
+    
+    //adding smooth scroll
+    wp_register_script('smoothscroll-js', plugins_url( 'js', __FILE__ ) . '/jquery.smooth-scroll.min.js', array('jquery'));
+    wp_enqueue_script('smoothscroll-js');
 }
 
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
@@ -151,7 +155,17 @@ function openlab_footer_markup($placeholder = NULL) {
                 </div>
             </div>
         </div>
+        <a id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
     </div>
+    <?php
+    /**
+    * Adds divs that can be used for client-side detection of bootstrap breakpoints
+    */ ?>
+       <div class="device-xs visible-xs"></div>
+       <div class="device-sm visible-sm"></div>
+       <div class="device-md visible-md"></div>
+       <div class="device-lg visible-lg"></div>
+       
     <?php if (!$placeholder): ?>
         <script type="text/javascript">
 
@@ -168,6 +182,46 @@ function openlab_footer_markup($placeholder = NULL) {
                 var s = document.getElementsByTagName('script')[0];
                 s.parentNode.insertBefore(ga, s);
             })();
+            
+            jQuery(document).ready(function($) {
+                getCurrentScroll();
+                
+                //go to top functionality
+                $('#go-to-top').on('click', function (e) {
+                    e.preventDefault();
+                    
+                    var offsetHeight = $('#wpadminbar').height() + $('.navbar').height();
+
+                    $.smoothScroll({
+                        offset: -offsetHeight
+                    });
+
+                });
+                
+            });
+            jQuery(window).scroll(function ($) {
+                    getCurrentScroll();
+            });
+            
+            function getCurrentScroll(){
+                //go to top button functionality
+                if (isBreakpoint('xs')) {
+
+                    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+                    if (currentScroll > 250) {
+                        jQuery('#go-to-top').css('display', 'block');
+                    } else {
+                        jQuery('#go-to-top').css('display', 'none');
+                    }
+
+                }
+            }
+
+            //detection of bootstrap breakpoints
+            function isBreakpoint(alias) {
+                return jQuery('.device-' + alias).is(':visible');
+            }
 
         </script>
     <?php endif; ?>

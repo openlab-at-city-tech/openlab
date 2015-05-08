@@ -205,7 +205,7 @@
         //resetting the search on resize
         if ($('.search-trigger-wrapper').length) {
             var adminBar = $('#wpadminbar');
-            
+
             $('.search-form-wrapper').each(function () {
                 var searchFormDim = invisibleDimensions($(this));
                 $(this).data('thisheight', searchFormDim.height);

@@ -15,6 +15,7 @@ Bootstrap variable overrides
 */
   /**Mixins**/
   /**footer - also a sitewide component**/
+  /**go to the top button (mobile only)**/
 }
 .oplb-bs html {
   font-family: sans-serif;
@@ -7394,6 +7395,18 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .row-copyright span,
 .oplb-bs#openlab-footer .row-copyright a {
   color: #797979;
+}
+.oplb-bs #go-to-top {
+  background: rgba(73, 202, 190, 0.42);
+  bottom: 5%;
+  display: none;
+  font-size: 13px;
+  font-style: italic;
+  padding: 6px 12px;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  z-index: 10;
 }
 html {
   position: relative;
