@@ -1444,10 +1444,15 @@ function openlab_mobile_menu_actions() {
                                 if($(this).data('plusheight')){
                                     thisTargetElem_h += parseInt($(this).data('plusheight'));
                                 }
+                                background.removeClass('active').animate({
+                                    'opacity' : 0,
+                                    'top': '-='+thisTargetElem_h+'px' 
+                                },50, function(){
+                                    $(this).hide();
+                                });
                                 thisTargetElem.slideUp(700,function(){
                                     thisElem.removeClass('in-action');
                                     thisElem.removeClass('active');
-                                    background.removeClass('active').animate({ 'top': '-='+thisTargetElem_h+'px' },50);
                                 });
                                 
                             } else {
@@ -1460,10 +1465,15 @@ function openlab_mobile_menu_actions() {
                                         thisTargetElem_h += parseInt(thisElem.data('plusheight'));
                                     }
                                     if($(thisToggleTarget).is(':visible')){
+                                        background.removeClass('active').animate({
+                                            'opacity' : 0,
+                                            'top': '-='+thisTargetElem_h+'px' 
+                                        },50, function(){
+                                            $(this).hide();
+                                        });
                                         $(thisToggleTarget).slideUp(700,function(){
                                             thisElem.removeClass('in-action');
                                             thisElem.removeClass('active');
-                                            background.removeClass('active').animate({ 'top': '-='+thisTargetElem_h+'px' },50);
                                         });
                                     }
                                 });
@@ -1477,7 +1487,13 @@ function openlab_mobile_menu_actions() {
                                     
                                     thisElem.removeClass('in-action');
                                     
-                                    background.addClass('active').animate({ 'top': '+='+thisTargetElem_h+'px' },50);
+                                    background.addClass('active').show()
+                                                .css({
+                                                    'top': '+='+thisTargetElem_h+'px' 
+                                                })
+                                                .animate({
+                                            'opacity': 0.42,
+                                        },500);
                                     
                                     //for customSelect
                                     $('.custom-select').each(function(){
@@ -1503,11 +1519,15 @@ function openlab_mobile_menu_actions() {
                            if(currentActiveButton.data('plusheight')){
                                         targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
                                     }
-                           
+                           thisElem.removeClass('active').animate({
+                               'opacity' : 0,
+                               'top': '-='+targetToClose_h+'px' 
+                           },50, function(){
+                                $(this).hide();
+                            });
                            $(targetToClose).slideUp(700,function(){
                                                 currentActiveButton.removeClass('in-action');
                                                 currentActiveButton.removeClass('active');
-                                                thisElem.removeClass('active').animate({ 'top': '-='+targetToClose_h+'px' },50);
                                             });
                            
                         });
@@ -1526,11 +1546,13 @@ function openlab_mobile_menu_actions() {
                                 if(currentActiveButton.data('plusheight')){
                                              targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
                                          }
-
+                                background.removeClass('active').animate({
+                                    'opacity' : 0,
+                                    'top': '-='+targetToClose_h+'px' 
+                                },50);
                                 $(targetToClose).slideUp(700,function(){
                                                      currentActiveButton.removeClass('in-action');
                                                      currentActiveButton.removeClass('active');
-                                                     background.removeClass('active').animate({ 'top': '-='+targetToClose_h+'px' },50);
                                                      
                                                      $.smoothScroll({
                                                         scrollTarget: thisAnchor 

@@ -7428,8 +7428,7 @@ html {
 #behind_menu_background.active {
   z-index: 9999;
   background: #000;
-  opacity: 0.42;
-  display: block;
+  opacity: 0;
 }
 .wp-admin #behind_menu_background {
   top: 59px;
