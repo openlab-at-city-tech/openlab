@@ -7385,7 +7385,7 @@ input[type="submit"] {
   margin: 0;
 }
 .navbar-default .container-fluid ul.nav li a {
-  color: #000000;
+  color: #444444;
   display: block;
   text-decoration: none;
   font-weight: 700;
@@ -7419,6 +7419,9 @@ input[type="submit"] {
 }
 .navbar-default.navbar-location-footer {
   margin-bottom: 0;
+}
+.navbar-default.navbar-location-footer .main-nav-wrapper {
+  border-top: 1px solid #dddddd;
 }
 @media (max-width: 767px) {
   .sidebar-mobile-dropdown .navbar-default {
@@ -8194,6 +8197,7 @@ body .inline-visible-xs {
 .home-page #cac-featured h2 {
   text-transform: uppercase;
   font-weight: 600;
+  padding-left: 5px;
 }
 .home-page #cac-featured .cfcw-content {
   background: #fdf57d;
@@ -8225,14 +8229,20 @@ body .inline-visible-xs {
   display: table;
   box-sizing: border-box;
 }
+.home-page #whos-online h2 {
+  padding-left: 5px;
+}
 .home-page #whos-online .avatar-block {
-  margin: 0;
   position: relative;
+  margin: 0;
+  padding: 2px !important;
 }
 .home-page #whos-online .avatar-block .cuny-member {
   position: relative;
   display: inline-block;
-  width: 24.1%;
+  width: 23.8%;
+  float: left;
+  margin: 2px;
 }
 .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
   background-color: #000000;
@@ -8255,42 +8265,45 @@ body .inline-visible-xs {
 .home-page #whos-online .avatar-block .cuny-member:hover .cuny-member-info {
   display: block;
 }
-.home-page .new-members-wrapper {
+.home-page #new-members h2 {
+  padding-left: 5px;
+}
+.home-page #new-members .new-members-wrapper {
   padding: 5% 3% 1%;
 }
-.home-page .new-members-wrapper .btn {
+.home-page #new-members .new-members-wrapper .btn {
   padding-top: 2px;
 }
-.home-page .new-members-wrapper .btn .fa {
+.home-page #new-members .new-members-wrapper .btn .fa {
   color: #a3a3a3;
   font-size: 18px;
   line-height: 90%;
 }
-.home-page .new-members-wrapper .btn .fa:hover {
+.home-page #new-members .new-members-wrapper .btn .fa:hover {
   color: #49cabe;
 }
-.home-page .new-members-wrapper .btn.prev {
+.home-page #new-members .new-members-wrapper .btn.prev {
   padding-right: 0;
 }
-.home-page .new-members-wrapper #home-new-member-wrap {
+.home-page #new-members .new-members-wrapper #home-new-member-wrap {
   max-width: 100%;
 }
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member {
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member {
   width: 50%;
-  height: 250px;
+  height: 245px;
   margin-bottom: 0;
 }
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar,
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info {
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar,
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info {
   margin: 0 auto;
   width: 95%;
 }
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar h2,
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info h2 {
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-avatar h2,
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member .home-new-member-info h2 {
   margin: 0;
   padding: 12px 0 2px;
 }
-.home-page .new-members-wrapper #home-new-member-wrap .home-new-member .timestamp {
+.home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member .timestamp {
   font-size: 10px;
   font-weight: 400;
 }
@@ -8986,7 +8999,7 @@ body .inline-visible-xs {
 /**breadcrumbs**/
 #breadcrumb-container {
   background-color: #5cdbce;
-  margin-top: 60px;
+  margin-top: 46px;
 }
 #breadcrumb-container .breadcrumb-col {
   color: #ffffff;
