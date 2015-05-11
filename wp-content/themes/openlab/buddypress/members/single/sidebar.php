@@ -43,9 +43,8 @@ if (!$dud = bp_displayed_user_domain()) {
     <div class="sidebar-block" id="portfolio-sidebar-widget">
         <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
             <li>
-                <h2 class="sidebar-header no-margin no-margin-all"><?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
-                    <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
-                </h2>
+                <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
+                <a class="bold" href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
             </li>
         </ul>
     </div>
