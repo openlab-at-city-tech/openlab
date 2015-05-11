@@ -9,13 +9,16 @@ if (!$dud = bp_displayed_user_domain()) {
 
 <?php /* Portfolio links */ ?>
 
+<div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
+
+    <h2 class="sidebar-header hidden-xs">Member Profile</h2>
+
 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
+    
+    <h2 class="sidebar-header visible-xs">Member Portfolio</h2>
 
     <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
-
-    <div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
-        <h2 class="sidebar-header">Member Profile</h2>
 
         <div class="sidebar-block">
 
@@ -34,21 +37,22 @@ if (!$dud = bp_displayed_user_domain()) {
 
             </ul>
         </div>
-    </div>
 
 <?php elseif (openlab_is_my_profile() && !bp_is_group_create()) : ?>
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
-    <div class="sidebar-widget" id="portfolio-sidebar-widget">
+    <div class="sidebar-block" id="portfolio-sidebar-widget">
         <h2 class="sidebar-header"><?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
             <a href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
         </h2>
     </div>
 
-<?php endif ?>
+<?php endif; ?>
+    
+    <?php openlab_member_sidebar_menu(); ?>
+    
+    </div>
 
 <?php /* End portfolio links */ ?>
-
-<?php openlab_member_sidebar_menu(); ?>
 
 <?php /* Recent Account Activity / Recent Friend Activity */ ?>
 
