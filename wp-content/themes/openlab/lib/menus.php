@@ -616,7 +616,7 @@ function openlab_filter_subnav_members($subnav_item) {
 
     //added classes to span
     if ($total_mem > 0) {
-        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . '">' . $total_mem . '</span>', $new_item);
+        $new_item = str_replace('<span>' . $total_mem . '</span>', '<span class="mol-count pull-right count-' . $total_mem . ' gray">' . $total_mem . '</span>', $new_item);
     } else {
         $new_item = str_replace('<span>' . $total_mem . '</span>', '', $new_item);
     }
@@ -659,7 +659,7 @@ function openlab_filter_subnav_docs($subnav_item) {
     wp_reset_query();
 
     if ($total_doc_count > 0) {
-        $new_item = str_replace('<span>' . $span_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . '">' . $total_doc_count . '</span>', $subnav_item);
+        $new_item = str_replace('<span>' . $span_count . '</span>', '<span class="mol-count pull-right count-' . $total_doc_count . ' gray">' . $total_doc_count . '</span>', $subnav_item);
     } else {
         $new_item = str_replace('<span>' . $span_count . '</span>', '', $subnav_item);
     }

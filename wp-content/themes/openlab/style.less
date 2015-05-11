@@ -538,6 +538,9 @@ h1.entry-title{
             right: 123px;
         }
     }
+    &.group-title{
+        margin-top: 12px;
+    }
     @media (max-width: @screen-xs-max){
         margin-top: 27px;
         padding-bottom: 2px;
@@ -655,8 +658,8 @@ body{
     .padded-img{
         border-radius: @border-radius-base;
         border: 25px solid @5gray;
-        img{
-            border-radius: @border-radius-base;
+        &.darker{
+            border-color: @70gray;
         }
     }
     .pointer{
@@ -727,6 +730,9 @@ body{
         text-align: center;
         vertical-align: middle;
         width: 20px;
+        &.gray{
+            background: @70gray;
+        }
     }
     .bp-template-notice,
     .bbp-template-notice,
@@ -1342,6 +1348,15 @@ body{
         &.sidebar-header{
             font-weight: @bold;
             margin-bottom: 9px;
+        }
+        &.sidebar-header{
+            margin-top: 26px;
+            &.top-sidebar-header{
+                margin-top: 20px;
+                &.group-single{
+                    margin-top: 14px;
+                }
+            }
         }
     }
     .sidebar-block{

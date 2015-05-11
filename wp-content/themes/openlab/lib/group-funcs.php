@@ -587,7 +587,7 @@ function cuny_group_single() {
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
-                <div class="padded-img">
+                <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( $group_name ); ?>"/>
                 </div>
 
@@ -1378,7 +1378,6 @@ function openlab_bp_group_site_pages() {
 
         if (openlab_is_portfolio()) {
             ?>
-            <div class="sidebar-widget" id="portfolio-sidebar-widget">
 
                 <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
                 <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
@@ -1407,15 +1406,12 @@ function openlab_bp_group_site_pages() {
 
                     <?php endif ?>
                 </div>
-            </div>
         <?php } else { ?>
-
-            <div class="sidebar-widget" id="portfolio-sidebar-widget">
 
                 <div class="sidebar-block">
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link">
-                            <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($site_url)) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></a>'; ?>
+                            <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($site_url)) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
                         </li>
                         <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
                             <li class="portfolio-dashboard-link">
@@ -1425,7 +1421,6 @@ function openlab_bp_group_site_pages() {
                     </ul>
 
                 </div>
-            </div>
             <?php
         } // openlab_is_portfolio()
     } // !empty( $site_url )

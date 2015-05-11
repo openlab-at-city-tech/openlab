@@ -7543,6 +7543,9 @@ h1.entry-title .direct-toggle .icon-bar {
 h1.entry-title.help-entry-title .direct-toggle {
   right: 123px;
 }
+h1.entry-title.group-title {
+  margin-top: 12px;
+}
 @media (max-width: 767px) {
   h1.entry-title {
     margin-top: 27px;
@@ -7644,8 +7647,8 @@ body .padded-img {
   border-radius: 4px;
   border: 25px solid #f0f0f0;
 }
-body .padded-img img {
-  border-radius: 4px;
+body .padded-img.darker {
+  border-color: #444444;
 }
 body .pointer {
   cursor: pointer;
@@ -7705,6 +7708,10 @@ body .site-visibility .fa {
   text-align: center;
   vertical-align: middle;
   width: 20px;
+}
+body .mol-count.gray,
+body .site-visibility .fa.gray {
+  background: #444444;
 }
 body .bp-template-notice,
 body .bbp-template-notice,
@@ -8321,6 +8328,15 @@ body .inline-visible-xs {
 .sidebar h2.sidebar-header {
   font-weight: 700;
   margin-bottom: 9px;
+}
+.sidebar h2.sidebar-header {
+  margin-top: 26px;
+}
+.sidebar h2.sidebar-header.top-sidebar-header {
+  margin-top: 20px;
+}
+.sidebar h2.sidebar-header.top-sidebar-header.group-single {
+  margin-top: 14px;
 }
 .sidebar .sidebar-block {
   background: #f0f0f0;

@@ -102,33 +102,31 @@ function openlab_group_sidebar($mobile = false) {
 
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
-            <?php if (!$mobile): ?>
-                <h2 class="sidebar-header">
-                    <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
-                </h2>
-            <?php openlab_bp_group_site_pages(); ?>
-            <?php endif; ?>
-            <div class="profile-nav <?php echo $classes; ?>">
-                <div id="item-buttons">
-                    <div class="sidebar-block">
-                        <ul class="sidebar-nav">
-                            <?php bp_get_options_nav(); ?>
-                            
-                            <?php
-                            if ($mobile):
+            <div class="sidebar-widget" id="portfolio-sidebar-widget">
+                <?php if (!$mobile): ?>
+                    <h2 class="sidebar-header group-single top-sidebar-header">
+                        <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
+                    </h2>
+                <?php openlab_bp_group_site_pages(); ?>
+                <?php endif; ?>
+                <div id="item-buttons" class="profile-nav sidebar-block <?php echo $classes; ?>">
+                    <ul class="sidebar-nav">
+                        <?php bp_get_options_nav(); ?>
 
-                                echo openlab_get_group_profile_mobile_anchor_links();
+                        <?php
+                        if ($mobile):
 
-                            endif;
-                            ?>
-                            
-                        </ul>
-                    </div>
+                            echo openlab_get_group_profile_mobile_anchor_links();
+
+                        endif;
+                        ?>
+
+                    </ul>
                 </div><!-- #item-buttons -->
+                <?php if (!$mobile): ?>
+                    <?php do_action('bp_group_options_nav') ?>
+                <?php endif; ?>
             </div>
-            <?php if (!$mobile): ?>
-                <?php do_action('bp_group_options_nav') ?>
-            <?php endif; ?>
             <?php
         endwhile;
     endif;
