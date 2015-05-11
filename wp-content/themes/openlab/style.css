@@ -7588,6 +7588,9 @@ body .no-margin.no-margin-right {
 body .no-margin.no-margin-left {
   margin-left: 0 !important;
 }
+body .no-margin.no-margin-all {
+  margin: 0 !important;
+}
 body .btn-margin.btn-margin-top {
   margin-top: 20px;
 }
@@ -8317,23 +8320,17 @@ body .inline-visible-xs {
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 9px;
 }
 .sidebar .sidebar-block {
   background: #f0f0f0;
   margin: 15px 0;
   border-radius: 0 0 4px 4px;
-  border-top: 1px solid #bbbbbb;
+  border-top: none;
 }
 .sidebar .sidebar-block:first-of-type {
-  margin: 9px 0;
-}
-.sidebar .sidebar-block:first-of-type.activity-block {
+  margin: 0;
   border-top: 1px solid #bbbbbb;
-}
-.sidebar .sidebar-block.mol-menu,
-.sidebar .sidebar-block.activity-block {
-  border-top: none;
 }
 .sidebar .sidebar-block.activity-block {
   padding: 6%;
