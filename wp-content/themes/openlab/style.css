@@ -7463,6 +7463,7 @@ input[type="submit"] {
   }
   .search .search-form-wrapper .form-group .form-control#search-which {
     width: 32%;
+    height: 35px;
   }
 }
 .search .search-trigger-wrapper {
@@ -7511,7 +7512,12 @@ input[type="submit"] {
   }
 }
 .search-mode-mobile #search-submit {
-  padding: 8px 12px;
+  padding: 9px 12px;
+}
+@media (max-width: 479px) {
+  .search-mode-mobile #search-submit {
+    padding: 9px 3%;
+  }
 }
 .checkbox input[type="checkbox"] {
   margin-top: 1px;

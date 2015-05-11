@@ -451,6 +451,7 @@ input[type="submit"]{
                     }
                     &#search-which{
                         width: 32%;
+                        height: 35px;
                     }
                 }
             }
@@ -502,7 +503,10 @@ input[type="submit"]{
 }
 .search-mode-mobile{
     #search-submit{
-        padding: 8px 12px;
+        padding: 9px 12px;
+        @media (max-width: @screen-xxs-max){
+            padding: 9px 3%;
+        }
     }
 }
 .checkbox{

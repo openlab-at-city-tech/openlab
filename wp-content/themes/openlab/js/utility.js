@@ -1,10 +1,89 @@
 (function ($) {
 
+    if (window.OpenLab === undefined) {
+        var OpenLab = {};
+    }
+
+    var resizeTimer;
+
+    OpenLab.utility = {
+        init: function () {
+
+            //search
+            if ($('.search-trigger-wrapper').length) {
+                OpenLab.utility.searchBarLoadActions();
+                $('.search-trigger').on('click', function () {
+                    console.log('click');
+                    OpenLab.utility.searchBarEventActions($(this));
+                });
+            }
+
+        },
+        searchBarLoadActions: function () {
+
+            $('.search-form-wrapper').each(function () {
+                var searchFormDim = invisibleDimensions($(this));
+                $(this).data('thisheight', searchFormDim.height);
+            });
+
+        },
+        searchBarEventActions: function (searchTrigger) {
+
+            var select = $('.search-form-wrapper .hidden-custom-select select');
+            var adminBar = $('#wpadminbar');
+            var mode = searchTrigger.data('mode');
+            var location = searchTrigger.data('location');
+            var searchForm = $('.search-form-wrapper.search-mode-' + mode + '.search-form-location-' + location);
+            if (!searchTrigger.hasClass('in-action')) {
+                searchTrigger.addClass('in-action');
+                if (searchTrigger.parent().hasClass('search-live')) {
+
+                    if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.animate({
+                            top: "-=" + searchForm.data('thisheight')
+                        }, 700);
+                        adminBar.removeClass('dropped');
+                    }
+
+                    searchForm.slideUp(800, function () {
+                        searchTrigger.parent().toggleClass('search-live');
+                        searchTrigger.removeClass('in-action');
+                    });
+
+
+                } else {
+                    searchTrigger.parent().toggleClass('search-live');
+                    if (searchTrigger.data('mode') == 'mobile') {
+                        adminBar.addClass('dropped');
+                        adminBar.animate({
+                            top: "+=" + searchForm.data('thisheight')
+                        }, 700);
+                    }
+                    searchForm.slideDown(700, function () {
+                        searchTrigger.removeClass('in-action');
+                    });
+                }
+                select.customSelect();
+            }
+
+        },
+        hoverFixes: function () {
+            //fixing hover issues on mobile
+            if (isBreakpoint('xs') || isBreakpoint('sm')) {
+                $('.mobile-no-hover').bind('touchend', function () {
+                    fixHoverOnMobile($(this));
+                })
+            }
+        }
+    }
+
     var related_links_count,
             $add_new_related_link,
             $cloned_related_link_fields;
 
     $(document).ready(function () {
+
+        OpenLab.utility.init();
 
         //fixing hover issues on mobile
         if (isBreakpoint('xs') || isBreakpoint('sm')) {
@@ -45,49 +124,6 @@
         });
 
         jQuery("#header #menu-item-40 ul li ul li a").prepend("+ ");
-
-        //search
-        if ($('.search-trigger-wrapper').length) {
-            var select = $('.search-form-wrapper .hidden-custom-select select');
-            var adminBar = $('#wpadminbar');
-
-            $('.search-form-wrapper').each(function () {
-                var searchFormDim = invisibleDimensions($(this));
-                $(this).data('thisheight', searchFormDim.height);
-            });
-
-            $('.search-trigger').on('click', function () {
-                var searchTrigger = $(this);
-                var mode = searchTrigger.data('mode');
-                var location = searchTrigger.data('location');
-                var searchForm = $('.search-form-wrapper.search-mode-' + mode + '.search-form-location-' + location);
-                if (searchTrigger.parent().hasClass('search-live')) {
-
-                    searchForm.slideUp(700, function () {
-                        searchTrigger.parent().toggleClass('search-live');
-                    });
-
-                    if (searchTrigger.data('mode') == 'mobile') {
-                        adminBar.animate({
-                            top: "-=" + searchForm.data('thisheight')
-                        }, 700);
-                        adminBar.removeClass('dropped');
-                    }
-
-                } else {
-                    searchTrigger.parent().toggleClass('search-live');
-                    searchForm.slideDown(700);
-                    if (searchTrigger.data('mode') == 'mobile') {
-                        adminBar.addClass('dropped');
-                        adminBar.animate({
-                            top: "+=" + searchForm.data('thisheight')
-                        }, 700);
-                    }
-
-                }
-                select.customSelect();
-            })
-        }
 
         // this add an onclick event to the "New Topic" button while preserving 
         // the original event; this is so "New Topic" can have a "current" class
@@ -193,48 +229,18 @@
 
     });//end document.ready
 
-    $(window).resize(function () {
+    $(window).on('resize', function (e) {
 
-        //fixing hover issues on mobile
-        if (isBreakpoint('xs') || isBreakpoint('sm')) {
-            $('.mobile-no-hover').bind('touchend', function () {
-                fixHoverOnMobile($(this));
-            })
-        }
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
 
-        //resetting the search on resize
-        if ($('.search-trigger-wrapper').length) {
-            var adminBar = $('#wpadminbar');
+            if ($('.search-trigger-wrapper.search-live').length) {
+                OpenLab.utility.searchBarEventActions($('.search-trigger-wrapper.search-live').find('.search-trigger'));
+            }
 
-            $('.search-form-wrapper').each(function () {
-                var searchFormDim = invisibleDimensions($(this));
-                $(this).data('thisheight', searchFormDim.height);
-            });
+            OpenLab.utility.hoverFixes();
 
-            $('.search-trigger-wrapper').each(function () {
-                var searchTriggerWrapper = $(this);
-                var searchTrigger = $(this).find('.search-trigger');
-
-                if (!searchTrigger.parent().hasClass('sliding-active')) {
-                    if (searchTriggerWrapper.hasClass('search-live')) {
-                        searchTrigger.parent().addClass('sliding-active');
-                        var mode = searchTrigger.data('mode');
-                        var searchForm = $('.search-form-wrapper.search-mode-' + mode);
-                        searchForm.slideUp(700, function () {
-                            searchTrigger.parent().toggleClass('search-live');
-                            searchTrigger.parent().removeClass('sliding-active');
-                        });
-
-                        if (searchTrigger.data('mode') == 'mobile' && adminBar.hasClass('dropped')) {
-                            adminBar.animate({
-                                top: "-=" + searchForm.data('thisheight')
-                            }, 700);
-                            adminBar.removeClass('dropped');
-                        }
-                    }
-                }
-            });
-        }
+        }, 250);
 
     });
 
