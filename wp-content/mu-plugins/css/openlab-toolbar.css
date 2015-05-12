@@ -7219,7 +7219,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
   background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;
-  padding: 49px 0 0;
+  padding: 50px 0 0;
   width: 127px;
   overflow: hidden;
   height: 0;
@@ -7415,6 +7415,17 @@ html {
 /**group site only**/
 .adminbar-manual-bootstrap #wpadminbar {
   top: 0;
+  height: auto;
+  border-bottom: 19px solid #fff;
+}
+.adminbar-manual-bootstrap #wpadminbar:before {
+  border-bottom: 1px solid #000000;
+  bottom: -20px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: -1;
 }
 /**behind menu background**/
 #behind_menu_background {
