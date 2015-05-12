@@ -7221,6 +7221,11 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-query-monitor .ab-item {
   padding-bottom: 0;
 }
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-query-monitor .ab-item {
+    padding-top: 0;
+  }
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-openlab > .ab-item {
   background: url('images/openlab_admin_bar_logo.png') #ffffff no-repeat 44% 58%;
   padding: 50px 0 0;

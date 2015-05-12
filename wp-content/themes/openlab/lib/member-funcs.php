@@ -901,7 +901,7 @@ function openlab_member_header() {
 
     <h1 class="entry-title profile-title clearfix">
         <span class="profile-name"><?php bp_displayed_user_fullname() ?>&rsquo;s Profile</span>
-        <span class="profile-type pull-right"><?php echo $account_type ?></span>
+        <span class="profile-type pull-right hidden-xs"><?php echo $account_type ?></span>
         <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -910,6 +910,7 @@ function openlab_member_header() {
         </button>
     </h1>
     <div class="clearfix">
+        <span class="profile-type pull-left visible-xs"><?php echo $account_type ?></span>
         <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
     </div>
     <?php

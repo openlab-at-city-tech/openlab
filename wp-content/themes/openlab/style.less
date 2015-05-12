@@ -379,7 +379,7 @@ input[type="submit"]{
     }
 }
 .sidebar-mobile-dropdown{
-    .navbar-default{
+    .navbar.navbar-default{
         @media(max-width: @screen-xs-max){
             margin-bottom: 44px;
         }
@@ -427,6 +427,10 @@ h1.entry-title{
     @media (max-width: @screen-xs-max){
         margin-top: 27px;
         padding-bottom: 2px;
+        span{
+            display: inline-block;
+            max-width: 74%;
+        }
     }
 }
 h2.course-title{
@@ -1856,9 +1860,7 @@ body{
     padding: 0 19px;
     @media (max-width: @screen-xs-max){
         margin-bottom: 0;
-        position: absolute;
-        right: 34px;
-        top: -3px;
+        margin-top: -10px;
     }
 }
 #member-header{

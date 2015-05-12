@@ -7392,7 +7392,7 @@ input[type="submit"] {
   border-top: 1px solid #dddddd;
 }
 @media (max-width: 767px) {
-  .sidebar-mobile-dropdown .navbar-default {
+  .sidebar-mobile-dropdown .navbar.navbar-default {
     margin-bottom: 44px;
   }
 }
@@ -7436,6 +7436,10 @@ h1.entry-title.group-title {
   h1.entry-title {
     margin-top: 27px;
     padding-bottom: 2px;
+  }
+  h1.entry-title span {
+    display: inline-block;
+    max-width: 74%;
   }
 }
 h2.course-title {
@@ -8772,9 +8776,7 @@ body .inline-visible-xs {
 @media (max-width: 767px) {
   .profile-type {
     margin-bottom: 0;
-    position: absolute;
-    right: 34px;
-    top: -3px;
+    margin-top: -10px;
   }
 }
 #member-header {
