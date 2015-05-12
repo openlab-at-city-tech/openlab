@@ -541,8 +541,18 @@ body{
     .padded-img{
         border-radius: @border-radius-base;
         border: 25px solid @5gray;
+        background: @5gray;
         &.darker{
             border-color: @70gray;
+            background: @70gray;
+        }
+        img{
+            margin: 0 auto;
+        }
+    }
+    .group-header-avatar{
+        @media (max-width: @screen-xxs-max){
+            width: 100%;
         }
     }
     .pointer{
@@ -1472,13 +1482,6 @@ body{
     }
 }
 /**group profiles**/
-.group-header-avatar,
-#member-header-avatar{
-    @media (max-width: @screen-xs-min){
-        width: 100%;
-        max-width: 225px;
-    }
-}
 .group-header-content{
     @media (max-width: @screen-xs-max){
         margin-top: 21px;
@@ -1874,6 +1877,9 @@ body{
         &:hover{
             color: @aqua;
         }
+    }
+    #profile-action-wrapper{
+        margin-bottom: 12px;
     }
 }
 #member-item-body{

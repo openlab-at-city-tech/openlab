@@ -586,7 +586,7 @@ function cuny_group_single() {
     <?php if (bp_is_group_home()): ?>
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
-            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-11">
+            <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( $group_name ); ?>"/>
                 </div>
