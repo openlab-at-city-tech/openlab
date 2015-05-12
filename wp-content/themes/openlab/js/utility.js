@@ -9,63 +9,6 @@
     OpenLab.utility = {
         init: function () {
 
-            //search
-            if ($('.search-trigger-wrapper').length) {
-                OpenLab.utility.searchBarLoadActions();
-                $('.search-trigger').on('click', function () {
-                    console.log('click');
-                    OpenLab.utility.searchBarEventActions($(this));
-                });
-            }
-
-        },
-        searchBarLoadActions: function () {
-
-            $('.search-form-wrapper').each(function () {
-                var searchFormDim = invisibleDimensions($(this));
-                $(this).data('thisheight', searchFormDim.height);
-            });
-
-        },
-        searchBarEventActions: function (searchTrigger) {
-
-            var select = $('.search-form-wrapper .hidden-custom-select select');
-            var adminBar = $('#wpadminbar');
-            var mode = searchTrigger.data('mode');
-            var location = searchTrigger.data('location');
-            var searchForm = $('.search-form-wrapper.search-mode-' + mode + '.search-form-location-' + location);
-            if (!searchTrigger.hasClass('in-action')) {
-                searchTrigger.addClass('in-action');
-                if (searchTrigger.parent().hasClass('search-live')) {
-
-                    if (searchTrigger.data('mode') == 'mobile') {
-                        adminBar.animate({
-                            top: "-=" + searchForm.data('thisheight')
-                        }, 700);
-                        adminBar.removeClass('dropped');
-                    }
-
-                    searchForm.slideUp(800, function () {
-                        searchTrigger.parent().toggleClass('search-live');
-                        searchTrigger.removeClass('in-action');
-                    });
-
-
-                } else {
-                    searchTrigger.parent().toggleClass('search-live');
-                    if (searchTrigger.data('mode') == 'mobile') {
-                        adminBar.addClass('dropped');
-                        adminBar.animate({
-                            top: "+=" + searchForm.data('thisheight')
-                        }, 700);
-                    }
-                    searchForm.slideDown(700, function () {
-                        searchTrigger.removeClass('in-action');
-                    });
-                }
-                select.customSelect();
-            }
-
         },
         hoverFixes: function () {
             //fixing hover issues on mobile
@@ -234,10 +177,6 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
 
-            if ($('.search-trigger-wrapper.search-live').length) {
-                OpenLab.utility.searchBarEventActions($('.search-trigger-wrapper.search-live').find('.search-trigger'));
-            }
-
             OpenLab.utility.hoverFixes();
 
         }, 250);
@@ -378,23 +317,6 @@
         //there is an inline script that hides the lists from the user on load (just so the adjusment isn't jarring) - this will show the lists
         $('.activity-list').css('visibility', 'visible').hide().fadeIn(700);
 
-    }
-
-    function invisibleDimensions(el) {
-
-        $(el).css({
-            'display': 'block',
-            'visibility': 'hidden'
-        });
-        var dim = {
-            height: $(el).outerHeight(),
-            width: $(el).outerWidth()
-        };
-        $(el).css({
-            'display': 'none',
-            'visibility': ''
-        });
-        return dim;
     }
 
     //detection of bootstrap breakpoints

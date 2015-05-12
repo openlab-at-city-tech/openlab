@@ -323,40 +323,13 @@ input[type="submit"]{
     background: transparent;
     border: none;
     margin-bottom: 80px;
-    .main-nav-wrapper,
-    .header-mobile-wrapper{
+    .main-nav-wrapper{
         background: #fff;
         position: relative;
-
-    }
-    .main-nav-wrapper{
         border-bottom: 1px solid @10gray;
         @media(max-width: @screen-xs-max){
             top: 114px;
             border-bottom: none;
-        }
-    }
-    .navbar-header{
-        h1{
-            margin: 0;
-            border-right: 1px solid @10gray;
-            a{
-                display: block;
-                background: url('images/openlab_menu_logo.png') no-repeat;
-                padding-top: 63px;
-                width: 185px;
-                height: 0;
-                overflow: hidden;
-            }
-            @media(max-width: @screen-sm-max){
-                width: 136px;
-                margin: 0;
-                a{
-                    width: 135px;
-                    background-size: 100%;
-                    background-position: 0 8px;
-                }
-            }
         }
     }
     .container-fluid{
@@ -397,16 +370,6 @@ input[type="submit"]{
                 }
             }
         }
-        .navbar-right{
-            &.search{
-                input[type="text"]{
-                    width: 43%;
-                }
-                .btn{
-                    padding: 8px 2%;
-                }
-            }
-        }
     }
     &.navbar-location-footer{
         margin-bottom: 0;
@@ -419,93 +382,6 @@ input[type="submit"]{
     .navbar-default{
         @media(max-width: @screen-xs-max){
             margin-bottom: 44px;
-        }
-    }
-}
-.search{
-    position: relative;
-    z-index: 999999;
-    .search-form-wrapper{
-        background: #fff;
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 66px;
-        width: 336px;
-        border: 1px solid @10gray;
-        border-radius: @border-radius-base;
-        .form-group{
-            margin-left: 18px;
-            padding: 5px 0 0;
-        }
-        @media (max-width: @screen-xs-max){
-            position: relative;
-            top: 0;
-            width: 100%;
-            .form-group{
-                margin-bottom: 0;
-                .form-control{
-                    display: inline-block;
-                    &#search-terms{
-                        width: 50%;
-                    }
-                    &#search-which{
-                        width: 32%;
-                        height: 35px;
-                    }
-                }
-            }
-        }
-    }
-    .search-trigger-wrapper{
-        height: 63px;
-        position: absolute;
-        right: 0;
-        text-align: center;
-        width: 30px;
-        cursor: pointer;
-        color: @40gray;
-        &:hover{
-            color: @aqua;
-        }
-        span{
-            line-height: 4.5;
-        }
-        &.search-live{
-            background: none repeat scroll 0 0 #ffffff;
-            border-bottom: 1px solid #ffffff;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            border-left: 1px solid #dddddd;
-            border-right: 1px solid #dddddd;
-            box-sizing: padding-box;
-            height: 68px;
-            z-index: 3;
-            span{
-                color: @aqua;
-            }
-        }
-        @media(max-width: @screen-xs-max){
-            span{
-                line-height: 4;
-            }
-            &.search-live{
-                height: 64px;
-            }
-        }
-    }
-    @media(max-width: @screen-xs-max){
-        z-index: 0;
-        &.search-trigger{
-            z-index: 1;
-        }
-    }
-}
-.search-mode-mobile{
-    #search-submit{
-        padding: 9px 12px;
-        @media (max-width: @screen-xxs-max){
-            padding: 9px 3%;
         }
     }
 }

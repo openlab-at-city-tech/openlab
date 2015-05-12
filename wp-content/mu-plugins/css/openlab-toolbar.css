@@ -14,8 +14,12 @@ Custom Vars
 Bootstrap variable overrides
 */
   /**Mixins**/
+  /**sitewide header elements on admin and group sites (mobile only)**/
+  /**sitewide header**/
+  /**sitewide search**/
   /**footer - also a sitewide component**/
   /**go to the top button (mobile only)**/
+  /**group site only**/
 }
 .oplb-bs html {
   font-family: sans-serif;
@@ -6974,7 +6978,7 @@ button.oplb-bs .close {
   height: 50px;
   top: 64px;
   min-width: 0;
-  z-index: 99998;
+  z-index: 99997;
 }
 .oplb-bs #wpadminbar p,
 .oplb-bs #wpadminbar a {
@@ -7305,6 +7309,154 @@ button.oplb-bs .close {
     display: none;
   }
 }
+.oplb-bs.navbar-default {
+  background: transparent;
+  border: none;
+  margin-bottom: 80px;
+}
+.oplb-bs.navbar-default .header-mobile-wrapper {
+  background: #fff;
+  position: relative;
+}
+.oplb-bs.navbar-default .main-nav-wrapper {
+  border-bottom: 1px solid #dddddd;
+}
+@media (max-width: 767px) {
+  .oplb-bs.navbar-default .main-nav-wrapper {
+    top: 114px;
+    border-bottom: none;
+  }
+}
+.oplb-bs.navbar-default .container-fluid {
+  margin: 0 auto;
+}
+.oplb-bs.navbar-default .container-fluid .navbar-right.search input[type="text"] {
+  width: 43%;
+}
+.oplb-bs.navbar-default .container-fluid .navbar-right.search .btn {
+  height: 34px;
+  padding: 0 2%;
+  vertical-align: top;
+}
+.oplb-bs.navbar-location-oplb-bs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+.oplb-bs .navbar-header h1 {
+  margin: 0;
+  border-right: 1px solid #dddddd;
+}
+.oplb-bs .navbar-header h1 a {
+  display: block;
+  background: url('images/openlab_menu_logo.png') no-repeat;
+  padding-top: 63px;
+  width: 185px;
+  height: 0;
+  overflow: hidden;
+}
+@media (max-width: 991px) {
+  .oplb-bs .navbar-header h1 {
+    width: 136px;
+    margin: 0;
+  }
+  .oplb-bs .navbar-header h1 a {
+    width: 135px;
+    background-size: 100%;
+    background-position: 0 8px;
+  }
+}
+.oplb-bs .search {
+  position: relative;
+  z-index: 999999;
+}
+.oplb-bs .search.search-form {
+  z-index: 999998;
+}
+.oplb-bs .search .search-form-wrapper {
+  background: #fff;
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 66px;
+  width: 336px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+.oplb-bs .search .search-form-wrapper .form-group {
+  margin-left: 18px;
+  padding: 5px 0;
+}
+@media (max-width: 767px) {
+  .oplb-bs .search .search-form-wrapper {
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+  .oplb-bs .search .search-form-wrapper .form-group {
+    margin-bottom: 0;
+  }
+  .oplb-bs .search .search-form-wrapper .form-group .form-control {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-terms {
+    width: 50%;
+  }
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-which {
+    width: 32%;
+    height: 35px;
+  }
+}
+.oplb-bs .search .search-trigger-wrapper {
+  height: 63px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 30px;
+  cursor: pointer;
+  color: #999999;
+}
+.oplb-bs .search .search-trigger-wrapper:hover {
+  color: #49cabe;
+}
+.oplb-bs .search .search-trigger-wrapper span {
+  line-height: 4.5;
+}
+.oplb-bs .search .search-trigger-wrapper.search-live {
+  background: none repeat scroll 0 0 #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  box-sizing: padding-box;
+  height: 68px;
+  z-index: 999999;
+}
+.oplb-bs .search .search-trigger-wrapper.search-live span {
+  color: #49cabe;
+}
+@media (max-width: 767px) {
+  .oplb-bs .search .search-trigger-wrapper span {
+    line-height: 4;
+  }
+  .oplb-bs .search .search-trigger-wrapper.search-live {
+    height: 64px;
+  }
+}
+@media (max-width: 767px) {
+  .oplb-bs .search.search-trigger {
+    z-index: 1;
+  }
+}
+.oplb-bs .search-mode-mobile #search-submit {
+  height: 35px;
+  padding: 0 3%;
+  vertical-align: top;
+}
 .oplb-bs#openlab-footer {
   position: absolute;
   bottom: 0;
@@ -7408,17 +7560,12 @@ button.oplb-bs .close {
   text-align: center;
   z-index: 10;
 }
-html {
-  position: relative;
-  height: auto;
-}
-/**group site only**/
-.adminbar-manual-bootstrap #wpadminbar {
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar {
   top: 0;
   height: auto;
-  border-bottom: 19px solid #fff;
+  border-bottom: 19px solid #ffffff;
 }
-.adminbar-manual-bootstrap #wpadminbar:before {
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar:before {
   border-bottom: 1px solid #000000;
   bottom: -20px;
   content: "";
@@ -7426,6 +7573,24 @@ html {
   position: absolute;
   right: 0;
   z-index: -1;
+}
+@media (max-width: 767px) {
+  .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
+    top: 63px;
+  }
+}
+html {
+  position: relative;
+  height: auto;
+}
+/**for content placement on group sites and admin**/
+body.adminbar-special {
+  padding-top: 50px;
+}
+@media (max-width: 767px) {
+  body.adminbar-special {
+    padding-top: 123px;
+  }
 }
 /**behind menu background**/
 #behind_menu_background {

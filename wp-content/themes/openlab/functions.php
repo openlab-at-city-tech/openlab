@@ -35,7 +35,6 @@ require_once( STYLESHEETPATH . '/lib/help-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/search-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
@@ -74,8 +73,6 @@ function openlab_load_scripts() {
         wp_enqueue_script('mobile-custom-js');
         wp_register_script('camera-js', $stylesheet_dir_uri . '/js/camera.min.js', array('jquery'));
         wp_enqueue_script('camera-js');
-        wp_register_script('select-js', $stylesheet_dir_uri . '/js/jquery.customSelect.min.js', array('jquery'));
-        wp_enqueue_script('select-js');
         wp_register_script('hyphenator-js', $stylesheet_dir_uri . '/js/hyphenator.js', array('jquery'));
         wp_enqueue_script('hyphenator-js');
         wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js');

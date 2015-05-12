@@ -74,7 +74,6 @@ class OpenLab_Admin_Bar {
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
                     $this->openlab_menu_items('openlab');
                     add_filter('body_class',array($this,'adminbar_special_body_class'));
-                    add_filter('admin_body_class',array($this,'adminbar_special_admin_body_class'));
                 }
                 
                 if(get_current_blog_id() === 1){
@@ -1304,15 +1303,7 @@ HTML;
         
         function adminbar_special_body_class($classes){
             
-            $classes[] = 'adminbar-manual-bootstrap';
-            
-            return $classes;
-            
-        }
-        
-        function adminbar_special_admin_body_class($classes){
-            
-            $classes .= 'adminbar-manual-bootstrap';
+            $classes[] = 'adminbar-special';
             
             return $classes;
             
@@ -1357,8 +1348,14 @@ HTML;
                             }
                             html.wp-toolbar #wpcontent,
                             html.wp-toolbar #adminmenuwrap{
-                                    padding-top: 50px;
+                                    padding-top: 80px;
                                 }
+                                @media (max-width: 767px){
+                                            html.wp-toolbar #wpcontent,
+                                            html.wp-toolbar #adminmenuwrap{
+                                                padding-top: 93px;
+                                            }
+                                        }
                     </style>
 
         <?php
@@ -1577,9 +1574,12 @@ add_action('admin_footer','openlab_mobile_menu_actions',999);
  * FYI: due to an undiagnosed issue in the LESS compilation, the class has to be wrapped twice to work; definitely will try to fix this in the future
  */
 function openlab_wrap_adminbar_top(){
+    if(get_current_blog_id() !== 1 || is_admin()):
     ?>
+        <div class="oplb-bs adminbar-manual-bootstrap"><div class="oplb-bs adminbar-manual-bootstrap">
+    <?php else : ?>
         <div class="oplb-bs"><div class="oplb-bs">
-    <?php
+    <?php endif;
 }
 
 add_action('wp_before_admin_bar_render','openlab_wrap_adminbar_top');

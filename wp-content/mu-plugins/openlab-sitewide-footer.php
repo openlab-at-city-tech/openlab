@@ -41,16 +41,6 @@ function cuny_local_env_flag() {
 //add_action( 'wp_footer', 'cuny_local_env_flag' );
 //add_action( 'admin_footer', 'cuny_local_env_flag' );
 
-add_action('wp_enqueue_scripts', 'wds_jquery');
-
-function wds_jquery() {
-    wp_enqueue_script('jquery');
-    
-    //adding smooth scroll
-    wp_register_script('smoothscroll-js', plugins_url( 'js', __FILE__ ) . '/jquery.smooth-scroll.min.js', array('jquery'));
-    wp_enqueue_script('smoothscroll-js');
-}
-
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
 function cuny_site_wide_navi_styles() {

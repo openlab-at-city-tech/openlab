@@ -30,22 +30,8 @@ add_filter('the_content', 'openlab_custom_the_content');
  */
 function openlab_main_menu($location = 'header') {
     ?>
-    <nav class="navbar navbar-default navbar-location-<?= $location ?>" role="navigation">
-        <div class="header-mobile-wrapper visible-xs">
-            <div class="container-fluid">
-                <div class="navbar-header clearfix">
-                    <h1 class="menu-title pull-left"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
-                    <div class="pull-right search search-trigger">
-                        <div class="search-trigger-wrapper">
-                            <span class="fa fa-search search-trigger" data-mode="mobile" data-location="<?= $location ?>"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="search search-form row">
-                    <?php openlab_site_wide_bp_search('mobile',$location); ?>
-                </div>
-            </div>
-        </div>
+    <nav class="navbar navbar-default oplb-bs navbar-location-<?= $location ?>" role="navigation">
+        <?php openlab_sitewide_header(); ?>
         <div class="main-nav-wrapper">
             <div class="container-fluid">
                 <div class="navbar-header hidden-xs">
