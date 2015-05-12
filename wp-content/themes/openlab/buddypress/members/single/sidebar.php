@@ -11,12 +11,20 @@ if (!$dud = bp_displayed_user_domain()) {
 
 <div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
 
-    <h2 class="sidebar-header top-sidebar-header hidden-xs">Member Profile</h2>
-
+    <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
+        <h2 class="sidebar-header top-sidebar-header hidden-xs">My OpenLab</h2>
+    <?php else: ?>
+        <h2 class="sidebar-header top-sidebar-header hidden-xs">Member Profile</h2>
+    <?php endif; ?>
+        
 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
+        
+    <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
+        <h2 class="sidebar-header top-sidebar-header visible-xs">My Portfolio</h2>
+    <?php else: ?>
+        <h2 class="sidebar-header top-sidebar-header visible-xs">Member Portfolio</h2>
+    <?php endif; ?>
     
-    <h2 class="sidebar-header top-sidebar-header visible-xs">Member Portfolio</h2>
-
     <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
