@@ -900,7 +900,7 @@ function openlab_member_header() {
     <?php $account_type = xprofile_get_field_data('Account Type', $this_user_id); ?>
 
     <h1 class="entry-title profile-title clearfix">
-        <?php bp_displayed_user_fullname() ?>&rsquo;s Profile
+        <span class="profile-name"><?php bp_displayed_user_fullname() ?>&rsquo;s Profile</span>
         <span class="profile-type pull-right"><?php echo $account_type ?></span>
         <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>

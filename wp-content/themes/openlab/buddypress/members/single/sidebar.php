@@ -20,9 +20,9 @@ if (!$dud = bp_displayed_user_domain()) {
 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
         
     <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
-        <h2 class="sidebar-header top-sidebar-header visible-xs">My Portfolio</h2>
+        <h2 class="sidebar-header top-sidebar-header visible-xs">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
     <?php else: ?>
-        <h2 class="sidebar-header top-sidebar-header visible-xs">Member Portfolio</h2>
+        <h2 class="sidebar-header top-sidebar-header visible-xs">Member <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
     <?php endif; ?>
     
     <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
