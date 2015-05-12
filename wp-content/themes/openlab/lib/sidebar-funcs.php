@@ -181,6 +181,10 @@ function openlab_member_sidebar_menu($mobile = false) {
                 
                 <li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-widget" id="portfolios">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
                 
+                <?php else: ?>
+                
+                <li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-widget" id="portfolios">Create <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
+                
                 <?php endif; ?>
 
                 <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?> mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>

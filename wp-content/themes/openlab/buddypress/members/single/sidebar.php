@@ -48,13 +48,20 @@ if (!$dud = bp_displayed_user_domain()) {
 
 <?php elseif (openlab_is_my_profile() && !bp_is_group_create()) : ?>
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
-    <div class="sidebar-block" id="portfolio-sidebar-widget">
-        <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
-            <li>
-                <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
-                <a class="bold" href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
-            </li>
-        </ul>
+    <div class="sidebar-widget" id="portfolio-sidebar-widget">
+        
+        <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
+        <h2 class="sidebar-header top-sidebar-header visible-xs">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
+        <?php endif; ?>
+        
+        <div class="sidebar-block">
+            <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                <li>
+                    <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
+                    <a class="bold" href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>
+                </li>
+            </ul>
+        </div>
     </div>
 
 <?php endif; ?>
