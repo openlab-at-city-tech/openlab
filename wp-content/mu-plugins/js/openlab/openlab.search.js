@@ -41,7 +41,7 @@
                 searchTrigger.addClass('in-action');
                 if (searchTrigger.parent().hasClass('search-live')) {
                     searchTrigger.parent().toggleClass('search-live');
-                    if (searchTrigger.data('mode') == 'mobile') {
+                    if (searchTrigger.data('mode') == 'mobile' && searchTrigger.data('location') == 'header') {
                         adminBar.animate({
                             top: "-=" + searchForm.data('thisheight')
                         }, 700);
@@ -55,7 +55,7 @@
 
                 } else {
                     searchTrigger.parent().toggleClass('search-live');
-                    if (searchTrigger.data('mode') == 'mobile') {
+                    if (searchTrigger.data('mode') == 'mobile' && searchTrigger.data('location') == 'header') {
                         adminBar.addClass('dropped');
                         adminBar.animate({
                             top: "+=" + searchForm.data('thisheight')

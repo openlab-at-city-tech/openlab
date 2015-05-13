@@ -31,7 +31,7 @@ add_filter('the_content', 'openlab_custom_the_content');
 function openlab_main_menu($location = 'header') {
     ?>
     <nav class="navbar navbar-default oplb-bs navbar-location-<?= $location ?>" role="navigation">
-        <?php openlab_sitewide_header(); ?>
+        <?php openlab_sitewide_header($location); ?>
         <div class="main-nav-wrapper">
             <div class="container-fluid">
                 <div class="navbar-header hidden-xs">

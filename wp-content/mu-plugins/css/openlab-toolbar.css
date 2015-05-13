@@ -7655,7 +7655,7 @@ button.oplb-bs .close {
 }
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
-    top: 63px;
+    top: 57px;
   }
 }
 html {

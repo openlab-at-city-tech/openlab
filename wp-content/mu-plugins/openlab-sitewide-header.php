@@ -7,7 +7,7 @@
  * Sitewide header markup
  * Includs sitewide logo and sitewide search
  */
-function openlab_sitewide_header() {
+function openlab_sitewide_header($location = 'header') {
     ?>
 
     <div class="header-mobile-wrapper visible-xs">
