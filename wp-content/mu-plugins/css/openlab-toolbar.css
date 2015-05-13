@@ -7079,7 +7079,6 @@ button.oplb-bs .close {
   color: #333;
   padding: 6px 12px;
   text-decoration: none;
-  width: 75%;
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
   background: #63dfd2;
@@ -7091,6 +7090,7 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
     background: rgba(255, 255, 255, 0.42);
     font-weight: bold;
+    width: 75%;
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
