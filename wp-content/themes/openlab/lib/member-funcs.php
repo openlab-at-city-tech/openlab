@@ -493,6 +493,7 @@ function cuny_student_profile() {
 
     <?php if (bp_is_user_activity() || 'public' == bp_current_action()) { ?>
         <?php cuny_member_profile_header(); ?>
+        <div id="portfolio-sidebar-inline-widget" class="visible-xs sidebar sidebar-inline"><?php openlab_members_sidebar_blocks(); ?></div>
     <?php } ?>
 
 
@@ -594,7 +595,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                 <div class="activity-content col-sm-14 col-xs-16">
 
                                     <h6>
-                                        <a class="font-size font-14" href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
+                                        <a class="font-size font-14 no-deco" href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
                                     </h6>
 
                                     <p>
@@ -911,7 +912,7 @@ function openlab_member_header() {
     </h1>
     <div class="clearfix">
         <span class="profile-type pull-left visible-xs"><?php echo $account_type ?></span>
-        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
+        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
     </div>
     <?php
 }

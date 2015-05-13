@@ -7502,6 +7502,14 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer h2 {
   text-shadow: none !important;
 }
+.oplb-bs#openlab-footer .footer-wrapper {
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  .oplb-bs#openlab-footer .footer-wrapper {
+    width: 95%;
+  }
+}
 .oplb-bs#openlab-footer .row h2 {
   color: #333;
   margin: 0 auto 22px;
@@ -7559,6 +7567,7 @@ button.oplb-bs .close {
   .oplb-bs#openlab-footer .col-links ul {
     padding: 0;
     margin: 0;
+    list-style-type: none;
   }
   .oplb-bs#openlab-footer .col-links ul li {
     margin-bottom: 0;

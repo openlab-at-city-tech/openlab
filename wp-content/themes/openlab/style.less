@@ -232,6 +232,10 @@ input[type="submit"]{
 }
 .container-fluid .content-wrapper{
     width: 98.5%;
+    margin: 0 auto;
+    @media (max-width: @screen-xs-max){
+        width: 95%;
+    }
 }
 .radio,
 .radio-inline {
@@ -424,7 +428,7 @@ h1.entry-title{
     @media (max-width: @screen-xs-max){
         margin-top: 12px;
         padding-bottom: 2px;
-        span{
+        .profile-name{
             display: inline-block;
             max-width: 74%;
         }
@@ -1251,6 +1255,12 @@ body{
 
 /**sidebar**/
 .sidebar{
+    .sidebar-wrapper{
+        @media (max-width: @screen-xs-max){
+            width: 95%;
+            margin: 0 auto;
+        }
+    }
     h2{
         &.sidebar-title,
         &.sidebar-header{
@@ -1264,6 +1274,14 @@ body{
                 &.group-single{
                     margin-top: 14px;
                 }
+            }
+        }
+    }
+    &.sidebar-inline{
+        margin-bottom: 10px;
+        .sidebar-header{
+            &.top-sidebar-header{
+                margin-top: 6px;
             }
         }
     }
@@ -1483,6 +1501,11 @@ body{
     }
 }
 /**group profiles**/
+#group-action-wrapper{
+    .link-btn{
+        padding: 9px 12px;
+    }
+}
 .group-header-content{
     @media (max-width: @screen-xs-max){
         margin-top: 21px;
@@ -1555,6 +1578,9 @@ body{
         width: 9.2%;
         &:last-child{
             margin-right: 0;
+        }
+        @media (max-width: @screen-xs-max){
+            width: 11.2%;
         }
     }
 }
@@ -1858,6 +1884,9 @@ body{
     @media (max-width: @screen-xs-max){
         margin-bottom: 0;
         margin-top: -10px;
+        font-size: 12px;
+        height: 26px;
+        line-height: 198%;
     }
 }
 #member-header{
@@ -1880,6 +1909,9 @@ body{
     #profile-action-wrapper{
         margin-bottom: 12px;
     }
+    @media (max-width: @screen-xs-max){
+        margin-top: 20px;
+    }
 }
 #member-item-body{
     .panel{
@@ -1888,7 +1920,7 @@ body{
             padding: 2%;
             h6{
                 margin-top: 0;
-                margin-bottom: 5px;
+                margin-bottom: 10px;
             }
             p,
             a{
@@ -2001,6 +2033,13 @@ body{
 #breadcrumb-container{
     background-color: darken(desaturate(@cyan,1.7%),2.1%);
     margin-top: 46px;
+    .breadcrumb-wrapper{
+        margin: 0 auto;
+        width: 98%;
+        @media (max-width: @screen-xs-max){
+            width: 91%;
+        }
+    }
     .breadcrumb-col{
         color: @white;
         line-height: 3.5;
@@ -2019,12 +2058,12 @@ body{
                 max-width: 143px;
             }
             &.breadcrumbs{
-               max-width: 65%;
-               line-height: 1;
-               vertical-align: middle;
-               a{
-                   line-height: 1;
-               }
+                max-width: 65%;
+                line-height: 1;
+                vertical-align: middle;
+                a{
+                    line-height: 1;
+                }
             }
         }
         .breadcrumb-prefix-label{
@@ -2047,6 +2086,9 @@ body{
                 padding: 7px 0;
             }
         }
+    }
+    @media (max-width: @screen-xs-max){
+        margin-top: 10px;
     }
 }
 /**contact form**/
