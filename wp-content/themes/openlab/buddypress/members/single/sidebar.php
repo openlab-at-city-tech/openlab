@@ -10,10 +10,11 @@ if (!$dud = bp_displayed_user_domain()) {
 <?php /* Portfolio links */ ?>
 
 <div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
-    
-    <div class="hidden-xs"><?php openlab_members_sidebar_blocks(); ?></div>
-    <?php openlab_member_sidebar_menu(); ?>
-    
+
+    <div class="hidden-xs"><?php openlab_members_sidebar_blocks(); ?>
+        <?php openlab_member_sidebar_menu(); ?>
+    </div>
+
 </div>
 
 <?php /* End portfolio links */ ?>
@@ -39,9 +40,9 @@ $activity_args = array(
 <?php else : ?>
     <h2 class="sidebar-header">Recent Activity</h2>
 <?php endif ?>
-    
+
 <div class="activity-wrapper">
-<?php if (bp_has_activities($activity_args)) : ?>
+    <?php if (bp_has_activities($activity_args)) : ?>
         <div id="activity-stream" class="activity-list item-list inline-element-list sidebar-sublinks">
             <?php while (bp_activities()) : bp_the_activity(); ?>
                 <div class="sidebar-block activity-block">
@@ -71,7 +72,7 @@ $activity_args = array(
                 </div>
             <?php endwhile; ?>
         </div>
-<?php else : ?>
+    <?php else : ?>
         <div id="activity-stream" class="activity-list item-list">
             <div class="sidebar-block">
                 <div class="row activity-row">
@@ -81,5 +82,5 @@ $activity_args = array(
                 </div>
             </div>
         </div>
-<?php endif; ?>
+    <?php endif; ?>
 </div>
