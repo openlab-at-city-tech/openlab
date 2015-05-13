@@ -22,7 +22,7 @@
                                     <a href="<?php bp_message_thread_view_link() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $messages_template->thread->last_sender_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Message #<?php echo bp_message_thread_id(); ?>"/></a>
 				</div>
 				<div class="item col-sm-15 col-xs-17">
-					<h2 class="item-title"><a href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><?php bp_message_thread_subject() ?></a></h2>
+					<h2 class="item-title"><a  class="no-deco"href="<?php bp_message_thread_view_link() ?>" title="<?php _e( "View Message", "buddypress" ); ?>"><?php bp_message_thread_subject() ?></a></h2>
 					<div class="info-line">
 						<?php if ( 'sentbox' != bp_current_action() ) : ?>
 							<?php _e( 'From:', 'buddypress' ); ?> <?php bp_message_thread_from() ?><br />

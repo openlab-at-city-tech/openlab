@@ -29,7 +29,7 @@
 			</div>
 
 			<div class="item col-sm-15 col-xs-17">
-				<h5 class="item-title"><a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h5>
+				<h5 class="item-title"><a class="no-deco" href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a></h5>
 
 					<?php if ( bp_get_member_latest_update() ) : ?>
 
