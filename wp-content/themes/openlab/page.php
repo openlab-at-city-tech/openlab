@@ -20,7 +20,7 @@
                     <div class="content-wrapper">
                         <h1 class="entry-title"><?php the_title(); ?>
                             <?php if ($postID == "49" || $parent == "49"): ?>
-                                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                                <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                                     <span class="sr-only">Toggle navigation</span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>

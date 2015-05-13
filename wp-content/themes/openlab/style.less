@@ -371,17 +371,17 @@ input[type="submit"]{
             }
         }
     }
-    &.navbar-location-footer{
-        margin-bottom: 0;
-        .main-nav-wrapper {
-            border-top: 1px solid @10gray;
-        }
-    }
 }
 .sidebar-mobile-dropdown{
     .navbar.navbar-default{
         @media(max-width: @screen-xs-max){
-            margin-bottom: 44px;
+            margin-bottom: 59px;
+        }
+        &.navbar-location-footer{
+            margin-bottom: 0;
+            .main-nav-wrapper {
+                border-top: 1px solid @10gray;
+            }
         }
     }
 }
@@ -412,7 +412,7 @@ h1.entry-title{
             border-radius: 1px;
             display: block;
             height: 2px;
-            margin: 4px 0;
+            margin: 4px auto;
             width: 22px;
         }
     }
@@ -421,11 +421,8 @@ h1.entry-title{
             right: 123px;
         }
     }
-    &.group-title{
-        margin-top: 12px;
-    }
     @media (max-width: @screen-xs-max){
-        margin-top: 27px;
+        margin-top: 12px;
         padding-bottom: 2px;
         span{
             display: inline-block;
@@ -1367,7 +1364,7 @@ body{
             border-top: 9px solid darken(@10gray,4.7%);
             border-radius: 0;
             position: absolute;
-            top: 54px;
+            top: 39px;
             padding: 0 5% 20px;
             display: none;
             z-index: 1;
@@ -2007,19 +2004,48 @@ body{
     .breadcrumb-col{
         color: @white;
         line-height: 3.5;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1155px;
         a{
             font-weight: inherit;
             color: inherit;
+            text-decoration: none;
+        }
+        .breadcrumb-inline{
+            display: inline-block;
+            &.prefix-label{
+                width: 35%;
+                max-width: 143px;
+            }
+            &.breadcrumbs{
+               max-width: 65%;
+               line-height: 1;
+               vertical-align: middle;
+               a{
+                   line-height: 1;
+               }
+            }
         }
         .breadcrumb-prefix-label{
             background: @aqua;
             display: inline-block;
             text-align: center;
-            width: 129px;
+            width: 86%;
         }
         .fa.fa-caret-right{
-            margin: 0 14px 0 0;
+            margin: 0 10% 0 0;
             color: @aqua;
+        }
+        @media (max-width: @screen-xs-max){
+            font-size: 10px;
+            .breadcrumb-prefix-label,
+            a{
+                font-size: 10px;
+            }
+            .breadcrumb-prefix-label{
+                padding: 7px 0;
+            }
         }
     }
 }

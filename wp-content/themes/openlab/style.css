@@ -7385,16 +7385,16 @@ input[type="submit"] {
     padding-left: 30px;
   }
 }
-.navbar-default.navbar-location-footer {
-  margin-bottom: 0;
-}
-.navbar-default.navbar-location-footer .main-nav-wrapper {
-  border-top: 1px solid #dddddd;
-}
 @media (max-width: 767px) {
   .sidebar-mobile-dropdown .navbar.navbar-default {
-    margin-bottom: 44px;
+    margin-bottom: 59px;
   }
+}
+.sidebar-mobile-dropdown .navbar.navbar-default.navbar-location-footer {
+  margin-bottom: 0;
+}
+.sidebar-mobile-dropdown .navbar.navbar-default.navbar-location-footer .main-nav-wrapper {
+  border-top: 1px solid #dddddd;
 }
 .checkbox input[type="checkbox"] {
   margin-top: 1px;
@@ -7423,18 +7423,15 @@ h1.entry-title .direct-toggle .icon-bar {
   border-radius: 1px;
   display: block;
   height: 2px;
-  margin: 4px 0;
+  margin: 4px auto;
   width: 22px;
 }
 h1.entry-title.help-entry-title .direct-toggle {
   right: 123px;
 }
-h1.entry-title.group-title {
-  margin-top: 12px;
-}
 @media (max-width: 767px) {
   h1.entry-title {
-    margin-top: 27px;
+    margin-top: 12px;
     padding-bottom: 2px;
   }
   h1.entry-title span {
@@ -8340,7 +8337,7 @@ body .inline-visible-xs {
     border-top: 9px solid #d1d1d1;
     border-radius: 0;
     position: absolute;
-    top: 54px;
+    top: 39px;
     padding: 0 5% 20px;
     display: none;
     z-index: 1;
@@ -8900,20 +8897,51 @@ body .inline-visible-xs {
 #breadcrumb-container .breadcrumb-col {
   color: #ffffff;
   line-height: 3.5;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1155px;
 }
 #breadcrumb-container .breadcrumb-col a {
   font-weight: inherit;
   color: inherit;
+  text-decoration: none;
+}
+#breadcrumb-container .breadcrumb-col .breadcrumb-inline {
+  display: inline-block;
+}
+#breadcrumb-container .breadcrumb-col .breadcrumb-inline.prefix-label {
+  width: 35%;
+  max-width: 143px;
+}
+#breadcrumb-container .breadcrumb-col .breadcrumb-inline.breadcrumbs {
+  max-width: 65%;
+  line-height: 1;
+  vertical-align: middle;
+}
+#breadcrumb-container .breadcrumb-col .breadcrumb-inline.breadcrumbs a {
+  line-height: 1;
 }
 #breadcrumb-container .breadcrumb-col .breadcrumb-prefix-label {
   background: #49cabe;
   display: inline-block;
   text-align: center;
-  width: 129px;
+  width: 86%;
 }
 #breadcrumb-container .breadcrumb-col .fa.fa-caret-right {
-  margin: 0 14px 0 0;
+  margin: 0 10% 0 0;
   color: #49cabe;
+}
+@media (max-width: 767px) {
+  #breadcrumb-container .breadcrumb-col {
+    font-size: 10px;
+  }
+  #breadcrumb-container .breadcrumb-col .breadcrumb-prefix-label,
+  #breadcrumb-container .breadcrumb-col a {
+    font-size: 10px;
+  }
+  #breadcrumb-container .breadcrumb-col .breadcrumb-prefix-label {
+    padding: 7px 0;
+  }
 }
 /**contact form**/
 .wpcf7 .wpcf7-response-output {

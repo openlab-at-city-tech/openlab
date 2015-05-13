@@ -6976,7 +6976,7 @@ button.oplb-bs .close {
   line-height: 1.42857;
   color: #fff;
   height: 50px;
-  top: 64px;
+  top: 57px;
   min-width: 0;
   z-index: 99997;
 }
@@ -7357,7 +7357,7 @@ button.oplb-bs .close {
 .oplb-bs .navbar-header h1 a {
   display: block;
   background: url('images/openlab_menu_logo.png') no-repeat;
-  padding-top: 63px;
+  padding-top: 56px;
   width: 185px;
   height: 0;
   overflow: hidden;
@@ -7449,7 +7449,7 @@ button.oplb-bs .close {
     line-height: 4;
   }
   .oplb-bs .search .search-trigger-wrapper.search-live {
-    height: 64px;
+    height: 58px;
   }
 }
 @media (max-width: 767px) {

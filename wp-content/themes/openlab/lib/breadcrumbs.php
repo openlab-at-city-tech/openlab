@@ -17,9 +17,9 @@ add_action('bp_before_footer', 'openlab_do_breadcrumbs', 5);
 add_filter('openlab_breadcrumb_args', 'custom_breadcrumb_args');
 
 function custom_breadcrumb_args($args) {
-    $args['labels']['prefix'] = '<div class="breadcrumb-prefix-label">You are here</div><i class="fa fa-caret-right"></i>';
-    $args['prefix'] = '<div id="breadcrumb-container"><div class="container-fluid"><div class="breadcrumb-row row"><div class="col-sm-24 breadcrumb-col semibold uppercase">';
-    $args['suffix'] = '</div></div></div></div>';
+    $args['labels']['prefix'] = '<div class="breadcrumb-inline prefix-label"><div class="breadcrumb-prefix-label">You are here</div><i class="fa fa-caret-right"></i></div><div class="breadcrumb-inline breadcrumbs">';
+    $args['prefix'] = '<div id="breadcrumb-container"><div class="breadcrumb-col semibold uppercase">';
+    $args['suffix'] = '</div></div></div>';
     return $args;
 }
 

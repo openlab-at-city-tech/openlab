@@ -1427,6 +1427,8 @@ function openlab_mobile_menu_actions() {
                         
                         var thisElem = $(this);
                         var background = $('#behind_menu_background');
+                        var plusHeight = 40;
+                        
                         thisElem.addClass('active');
                         if (!thisElem.hasClass('in-action')){
                              
@@ -1438,9 +1440,7 @@ function openlab_mobile_menu_actions() {
                             
                             if(thisTargetElem.is(':visible')){
                                 var thisTargetElem_h = thisTargetElem.height();
-                                if($(this).data('plusheight')){
-                                    thisTargetElem_h += parseInt($(this).data('plusheight'));
-                                }
+                                thisTargetElem_h += plusHeight;
                                 background.removeClass('active').animate({
                                     'opacity' : 0,
                                     'top': '-='+thisTargetElem_h+'px' 
@@ -1458,10 +1458,9 @@ function openlab_mobile_menu_actions() {
                                     var thisElem = $(this);
                                     var thisToggleTarget = thisElem.data('target');
                                     var thisTargetElem_h = $(thisToggleTarget).height();
-                                    if(thisElem.data('plusheight')){
-                                        thisTargetElem_h += parseInt(thisElem.data('plusheight'));
-                                    }
-                                    if($(thisToggleTarget).is(':visible')){
+                                    thisTargetElem_h += plusHeight;
+                                    
+        if($(thisToggleTarget).is(':visible')){
                                         background.removeClass('active').animate({
                                             'opacity' : 0,
                                             'top': '-='+thisTargetElem_h+'px' 
@@ -1478,9 +1477,7 @@ function openlab_mobile_menu_actions() {
                                 thisTargetElem.slideDown(700,function(){
                                     
                                     var thisTargetElem_h = thisTargetElem.height();
-                                    if(thisElem.data('plusheight')){
-                                        thisTargetElem_h += parseInt(thisElem.data('plusheight'));
-                                    }
+                                    thisTargetElem_h += plusHeight;
                                     
                                     thisElem.removeClass('in-action');
                                     
@@ -1513,9 +1510,9 @@ function openlab_mobile_menu_actions() {
                            var currentActiveButton = $('.direct-toggle.active');
                            var targetToClose = currentActiveButton.data('target');
                            var targetToClose_h = $(targetToClose).height();
-                           if(currentActiveButton.data('plusheight')){
-                                        targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
-                                    }
+                           var plusHeight = 40;
+                           
+                           targetToClose_h += plusHeight;
                            thisElem.removeClass('active').animate({
                                'opacity' : 0,
                                'top': '-='+targetToClose_h+'px' 
@@ -1540,9 +1537,10 @@ function openlab_mobile_menu_actions() {
                                 var background = $('#behind_menu_background');
                                 var targetToClose = currentActiveButton.data('target');
                                 var targetToClose_h = $(targetToClose).height();
-                                if(currentActiveButton.data('plusheight')){
-                                             targetToClose_h += parseInt(currentActiveButton.data('plusheight'));
-                                         }
+                                var plusHeight = 40;
+                                
+                                targetToClose_h += plusHeight;
+                                
                                 background.removeClass('active').animate({
                                     'opacity' : 0,
                                     'top': '-='+targetToClose_h+'px' 

@@ -50,7 +50,7 @@ function openlab_help_loop() {
 
         <?php if ($help_cats): ?>
             <h1 class="entry-title help-entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a>
-                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -65,7 +65,7 @@ function openlab_help_loop() {
                     <span><?php the_title(); ?></span></h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?>
-                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -75,7 +75,7 @@ function openlab_help_loop() {
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
             <h1 class="entry-title"><?php echo the_title(); ?>
-                <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -140,7 +140,7 @@ function openlab_help_tags_loop() {
     ?>
 
     <h1 class="parent-cat entry-title">Tag Archive for: "<?php echo $parent_cat_name; ?>"
-        <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+        <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -206,7 +206,7 @@ function openlab_help_cats_loop() {
 
     <?php if ($parent_term->parent == 0): ?>
         <h1 class="parent-cat entry-title"><?php echo $parent_cat_name; ?>
-            <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+            <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -218,7 +218,7 @@ function openlab_help_cats_loop() {
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
         ?>
         <h1 class="parent-cat entry-title"><a href="<?php echo get_term_link($head_term) ?>"><?php echo $head_term->name ?></a>
-            <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+            <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -320,7 +320,7 @@ function openlab_glossary_cats_loop() {
     ?>
 
     <h1 class="parent-cat entry-title">Glossary
-        <button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+        <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>

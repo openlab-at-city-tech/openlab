@@ -524,7 +524,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
 function openlab_group_profile_header() {
     ?>
-    <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?><button data-target="#sidebar-mobile" data-plusheight="47" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+    <h1 class="entry-title group-title clearfix"><?php echo bp_group_name(); ?><button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
