@@ -563,6 +563,9 @@
             h2{
                 color: #333;
                 margin: 0 auto 22px;
+                @media (max-width: @screen-xs-max){
+                    margin: 0 auto 8px;
+                }
             }
         }
         .col-logos{
@@ -576,12 +579,49 @@
                     margin-right: 15px;
                 }
             }
+            @media (max-width: @screen-xs-max){
+                h2{
+                    font-size: 17px;
+                    span{
+                        font-size: 11px;
+                    }
+                }
+                p{
+                    font-size: 11px;
+                    margin-bottom: 8px;
+                    &.mobile-logos{
+                        width: 67px;
+                        a{
+                            width: 49%;
+                            float: left;
+                            img{
+                                max-width: 100%;
+                                padding: 0;
+                                margin: 0;
+                            }
+                            &:first-child{
+                                padding-right: 10%;
+                            }
+                        }
+                    }
+                }
+            }
         }
         .col-links{
             color: lighten(#666, 7.5%);
             a{
                 color: lighten(#666, 7.5%);
                 font-weight: inherit;
+            }
+            @media (max-width: @screen-xs-max){
+                ul{
+                    padding: 0;
+                    margin: 0;
+                    li{
+                        margin-bottom: 0;
+                        line-height: 1.1;
+                    }
+                }
             }
         }
         .col-share{
@@ -596,6 +636,10 @@
                 &.rss-link{
                     background-position: -32px 0;
                 }
+            }
+            @media (max-width: @screen-xs-max){
+                margin-top: 20px;
+                margin-bottom: 40px;
             }
         }
         .horiz-bar-wrapper{
@@ -614,6 +658,17 @@
             span,
             a{
                 color: lighten(#666, 7.5%);
+                @media (max-width: @screen-xs-max){
+                    font-size: 8px;
+                }
+            }
+            @media (max-width: @screen-xs-max){
+                margin-bottom: 0;
+                p{
+                    border-bottom: 1px solid @30gray;
+                    margin-bottom: 20px;
+                    padding-bottom: 20px;
+                }
             }
         }
     }

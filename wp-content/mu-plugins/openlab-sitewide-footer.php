@@ -111,12 +111,12 @@ function cuny_site_wide_footer() {
  * @param type $placholder
  */
 function openlab_footer_markup($placeholder = NULL) {
-	$site = bp_get_root_domain();
-
+    $site = bp_get_root_domain();
     ?>
     <div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>">
         <div class="oplb-bs">
-            <div class="container-fluid">
+            <!--footer: desktop-->
+            <div class="container-fluid footer-desktop hidden-xs">
                 <div class="row row-footer">
                     <div class="col-sm-12 col-logos">
                         <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>
@@ -144,18 +144,53 @@ function openlab_footer_markup($placeholder = NULL) {
                     </div>
                 </div>
             </div>
+            <!--end footer: desktop-->
+            <!--footer: mobile-->
+            <div class="container-fluid footer-mobile visible-xs">
+                <div class="row row-footer">
+                    <div class="col-sm-12 col-logos">
+                        <h2>OPENLAB at City Tech:<br /><span>A place to learn, work, and share</span></h2>
+                        <p><span class="semibold">OpenLab</span> is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                        <p class="clearfix mobile-logos"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
+                            <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a></p>
+                    </div>
+                    <div class="row-copyright">
+                        <div class="col-sm-24">
+                            <p><span>&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> | <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-links semibold">
+                        <h2>Support</h2>
+                        <ul class="support-list">
+                            <li><a class="no-deco roll-over-color" href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a></li>
+                            <li><a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/contact-us/">Contact Us</a></li>
+                            <li><a class="no-deco roll-over-color" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a></li>
+                            <li><a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a></li>
+                            <li><a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/credits/">Credits</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-2 col-share">
+                        <h2>Share</h2>
+                        <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
+                        <!-- Place this tag in your head or just before your close body tag -->
+                        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                        <a class="google-plus-link" href="https://plus.google.com/share?url={URL}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+            return false;">Google +</a>
+                    </div>
+                </div>
+            </div>
+            <!--end footer: mobile-->
         </div>
         <a id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
     </div>
-    <?php
-    /**
-    * Adds divs that can be used for client-side detection of bootstrap breakpoints
-    */ ?>
-       <div class="device-xs visible-xs"></div>
-       <div class="device-sm visible-sm"></div>
-       <div class="device-md visible-md"></div>
-       <div class="device-lg visible-lg"></div>
-       
+    <?php /**
+     * Adds divs that can be used for client-side detection of bootstrap breakpoints
+     */ ?>
+    <div class="device-xs visible-xs"></div>
+    <div class="device-sm visible-sm"></div>
+    <div class="device-md visible-md"></div>
+    <div class="device-lg visible-lg"></div>
+
     <?php if (!$placeholder): ?>
         <script type="text/javascript">
 
@@ -172,14 +207,14 @@ function openlab_footer_markup($placeholder = NULL) {
                 var s = document.getElementsByTagName('script')[0];
                 s.parentNode.insertBefore(ga, s);
             })();
-            
-            jQuery(document).ready(function($) {
+
+            jQuery(document).ready(function ($) {
                 getCurrentScroll();
-                
+
                 //go to top functionality
                 $('#go-to-top').on('click', function (e) {
                     e.preventDefault();
-                    
+
                     var offsetHeight = $('#wpadminbar').height() + $('.navbar').height();
 
                     $.smoothScroll({
@@ -187,13 +222,13 @@ function openlab_footer_markup($placeholder = NULL) {
                     });
 
                 });
-                
+
             });
             jQuery(window).scroll(function ($) {
-                    getCurrentScroll();
+                getCurrentScroll();
             });
-            
-            function getCurrentScroll(){
+
+            function getCurrentScroll() {
                 //go to top button functionality
                 if (isBreakpoint('xs')) {
 
