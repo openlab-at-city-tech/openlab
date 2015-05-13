@@ -294,7 +294,10 @@ function openlab_members_sidebar_blocks(){
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
                 <li class="portfolio-profile-link bold">
-                    <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>"><?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                    <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>">
+                        <?php echo (is_user_logged_in() && openlab_is_my_profile() ? 'My ' : '');?>
+                        <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span>
+                    </a>
                 </li>
 
                 <li class="portfolio-site-link">
