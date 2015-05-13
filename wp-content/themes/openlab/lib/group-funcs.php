@@ -255,7 +255,7 @@ function openlab_group_archive() {
                             </div>
                             <div class="item col-xs-16">
 
-                                <h2 class="item-title"><a href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+                                <h2 class="item-title"><a class="no-deco" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
                                 <?php
                                 //course group type
                                 if ($group_type == 'course'):
