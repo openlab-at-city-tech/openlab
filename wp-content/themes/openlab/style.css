@@ -8888,6 +8888,12 @@ body .inline-visible-xs {
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
+#team-thumbs .thumb-wrapper .team-thumb a img {
+  width: 100%;
+}
+#team-thumbs .thumb-wrapper .team-name a {
+  font-weight: 600;
+}
 #creative-commons a {
   background: url("images/cc_license.gif") no-repeat;
   display: block;
