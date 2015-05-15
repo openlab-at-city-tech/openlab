@@ -68,7 +68,7 @@ wp_nav_menu($args);
 
         echo '<div id="team-thumbs" class="row">';
         foreach ($attachments as $attachment) {
-            $thumb_class = "col-sm-12 thumb-wrapper";
+            $thumb_class = "col-sm-12 col-xs-12 thumb-wrapper";
 
             echo '<div class="' . $thumb_class . '">';
             echo '<div class="team-thumb">';
