@@ -260,7 +260,7 @@ function openlab_profile_settings_submenu() {
         $dud . 'settings/notifications' => 'Email Notifications',
         $dud . 'settings/delete-account' => 'Delete Account',
     );
-    return openlab_submenu_gen($menu_list);
+    return openlab_submenu_gen($menu_list, true);
 }
 
 //sub-menus for my-<groups> pages
@@ -421,7 +421,7 @@ function openlab_my_invitations_submenu() {
     return openlab_submenu_gen($menu_list);
 }
 
-function openlab_submenu_gen($items) {
+function openlab_submenu_gen($items, $timestamp = false) {
     global $bp, $post;
 
     //get $items length so we know how many menu items there are ( for tagging the "last-item" class )
@@ -517,6 +517,11 @@ function openlab_submenu_gen($items) {
         //increment counter
         $i++;
     }
+    
+    if($timestamp){
+        $submenu .= '<li class="info-line pull-right visible-lg"><span class="timestamp info-line-timestamp">'.bp_get_last_activity( bp_displayed_user_id() ).'</span></li>';
+    }
+    
     $submenu .= '</ul>';
 
     return $submenu;
@@ -818,7 +823,13 @@ function openlab_group_admin_tabs($group = false) {
             --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
         <?php endif ?>
 
-        --><li class="delete-button <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
+        --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
+        
+        <?php if ($group_type == "portfolio") : ?>
+            <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+        <?php else : ?>
+            <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+        <?php endif; ?>
 
     <?php endif ?>
     <?php

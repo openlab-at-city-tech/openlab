@@ -7113,7 +7113,8 @@ blockquote .h6 {
   color: inherit;
   text-decoration: none;
 }
-.nav.nav-inline li:last-child a {
+.nav.nav-inline li:last-child a,
+.nav.nav-inline li.last-item a {
   border-right: none;
 }
 .nav.nav-inline li .fa {

@@ -910,8 +910,13 @@ function openlab_member_header() {
             <span class="icon-bar"></span>
         </button>
     </h1>
-    <div class="clearfix">
-        <span class="profile-type pull-left visible-xs"><?php echo $account_type ?></span>
+    <?php if (bp_is_user_activity()): ?>
+        <div class="clearfix hidden-xs">
+            <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
+        </div>
+    <?php endif; ?>
+    <div class="clearfix visible-xs">
+        <span class="profile-type pull-left"><?php echo $account_type ?></span>
         <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
     </div>
     <?php
