@@ -252,7 +252,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
                 <?php if (bp_has_members('&include=' . bp_group_admin_ids())) : ?>
 
-                    <div id="group-list" class="item-list inline-element-list row group-manage-members">
+                    <div id="group-manage-admins-members" class="group-list item-list inline-element-list row group-manage-members">
 
                         <?php while (bp_members()) : bp_the_member(); ?>
                             <div class="col-md-8 col-xs-12 group-item">
@@ -285,7 +285,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                     <h4><?php _e('Moderators', 'buddypress'); ?></h4>
 
                     <?php if (bp_has_members('&include=' . bp_group_mod_ids())) : ?>
-                        <div id="group-list" class="item-list single-line inline-element-list row group-manage-members">
+                        <div id="group-manage-moderators-members" class="item-list single-line inline-element-list row group-manage-members group-list">
 
                             <?php while (bp_members()) : bp_the_member(); ?>
                                 <div class="col-md-8 col-xs-12 group-item">
@@ -334,7 +334,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
                     <?php endif; ?>
 
-                    <div id="group-list" class="item-list inline-element-list row group-manage-members">
+                    <div id="group-manage-members" class="item-list inline-element-list row group-manage-members group-list">
                         <?php while (bp_group_members()) : bp_group_the_member(); ?>
 
                             <div class="col-md-8 col-xs-12 group-item">

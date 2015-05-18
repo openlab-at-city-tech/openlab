@@ -3,7 +3,7 @@
 
 <?php if ( bp_has_groups( 'type=invites&user_id=' . bp_loggedin_user_id() ) ) : ?>
 
-            <div id="group-list" class="invites item-list row">
+            <div id="group-invites" class="invites group-list item-list row">
 
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 

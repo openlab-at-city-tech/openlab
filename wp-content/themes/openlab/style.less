@@ -133,7 +133,7 @@ blockquote {
                 }
             }
             &:last-child,
-            &.last-item{
+                &.last-item{
                 a{
                     border-right: none;
                 }
@@ -1434,16 +1434,16 @@ body{
     }
 }
 /**group archives**/
-#group-list,
 .group-list{
     margin-top: 50px;
     .group-item-wrapper{
         border-radius: @border-radius-base;
         border: 1px solid @10gray;
         padding: 1.2%;
-        height: 235px;
+        height: 180px;
         margin-bottom: 12px;
         color: @60gray;
+        overflow: hidden;
         h1,
         h3,
         h4,
@@ -1451,7 +1451,10 @@ body{
             margin: 0 0 5px;
         }
         h2{
-            margin: 10px 0 12px;
+            margin: 6px 0 12px;
+            a{
+                color: @60gray;
+            }
         }
         a{
             :not(.btn-primary){
@@ -1471,11 +1474,36 @@ body{
                 padding-right: 1.5%;
             }
         }
-        @media(max-width: @screen-md-max){
-            height: 302px;
+        @media (max-width: @screen-sm-max) and (min-width: @screen-xxs-max){
+            h2{
+                margin: 3px 0 6px;
+            }
+            .info-line{
+                margin-bottom: 6px;
+                font-size: 11px;
+            }
         }
-        @media(max-width: @screen-xs-max){
-            height: 352px;
+        @media (max-width: @screen-xs-max) and (min-width: @screen-xxs-max){
+            h2{
+                font-size: 16px;
+            }
+            .description-line{
+                p{
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+#group-list{
+    .group-item-wrapper{
+        .item-avatar{
+            img{
+                max-width: 95%;
+            }
+        }
+        .item-content-wrapper{
+            padding: 0 2%;
         }
     }
 }
@@ -1586,14 +1614,14 @@ body{
     }
 }
 .group-members{
-    &#group-list{
+    &.group-list{
         .group-item-wrapper{
             height: 95px;
         }
     }
 }
 .group-manage-members{
-    &#group-list{
+    &.group-list{
         .group-item{
             .group-item-wrapper{
                 height: 120px;
@@ -1932,7 +1960,7 @@ body{
     }
 }
 .members.friends{
-    #group-list{
+    .group-list{
         .group-item-wrapper{
             height: auto;
             .info-row{
@@ -1942,7 +1970,7 @@ body{
     }
 }
 .messages{
-    #group-list{
+    .group-list{
         .group-item-wrapper{
             height: 152px;
             @media (max-width: @screen-sm-max){
@@ -1988,18 +2016,18 @@ body{
 #team-thumbs{
     .thumb-wrapper{
         margin-bottom: 17px;
-    	.team-thumb {
-	        a {
-		        img {
-			        width: 100%;
-		        }
-	        }
-    	}
-    	.team-name {
-	    	a {
-		    	font-weight: 600;
-	    	}
-    	}
+        .team-thumb {
+            a {
+                img {
+                    width: 100%;
+                }
+            }
+        }
+        .team-name {
+            a {
+                font-weight: 600;
+            }
+        }
     }
 }
 #creative-commons{

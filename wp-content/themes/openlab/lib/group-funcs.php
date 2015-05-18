@@ -241,7 +241,7 @@ function openlab_group_archive() {
             </div>
             <div class="group-count col-sm-5"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
         </div>
-        <div id="group-list" class="item-list row">
+        <div id="group-list" class="item-list group-list row">
             <?php
             $count = 1;
             while (bp_groups()) : bp_the_group();
@@ -250,12 +250,15 @@ function openlab_group_archive() {
                 <div class="group-item col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row">
-                            <div class="item-avatar alignleft col-xs-7">
+                            <div class="item-avatar alignleft col-xs-6">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
                             </div>
-                            <div class="item col-xs-16">
+                            <div class="item col-xs-18">
 
-                                <h2 class="item-title"><a class="no-deco" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>"><?php bp_group_name() ?></a></h2>
+                                <h2 class="item-title">
+                                    <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                    <span class="original-copy hidden"><?php bp_group_name() ?></span>
+                                </h2>
                                 <?php
                                 //course group type
                                 if ($group_type == 'course'):
@@ -269,17 +272,13 @@ function openlab_group_archive() {
                                     <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
 
                                 <?php endif; ?>
-
-                                <?php
-                                $len = strlen(bp_get_group_description());
-                                if ($len > 110) {
-                                    $this_description = substr(bp_get_group_description(), 0, 110);
-                                    $this_description = str_replace("</p>", "", $this_description);
-                                    echo $this_description . '&hellip; <a href="' . bp_get_group_permalink() . '">See&nbsp;More</a></p>';
-                                } else {
-                                    bp_group_description();
-                                }
-                                ?>
+                                <div class="description-line">
+                                    <?php
+                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="'.  bp_get_group_permalink().'" data-basevalue="105" data-basewidth="290">', bp_get_group_description());
+                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description());
+                                    echo $this_description;
+                                    ?>
+                                </div>
                             </div>
                         </div><!--item-->
                     </div>

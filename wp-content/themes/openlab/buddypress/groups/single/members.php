@@ -15,7 +15,7 @@
 
 	<?php do_action( 'bp_before_group_members_list' ) ?>
 
-	<div id="group-list" class="item-list group-members">
+	<div id="group-members-list" class="item-list group-members group-list">
 		<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
 
 			<div class="group-item col-md-8 col-xs-12">

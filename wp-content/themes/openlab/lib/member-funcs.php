@@ -241,7 +241,7 @@ function openlab_list_members($view) {
             <div class="group-count col-sm-6"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
-        <div id="group-list" class="item-list row">
+        <div id="group-members-list" class="group-list item-list row">
             <?php
             while (bp_members()) : bp_the_member();
                 //the following checks the current $id agains the passed list from the query
@@ -293,7 +293,7 @@ function openlab_list_members($view) {
             </div>
         </div>
 
-        <div id="group-list" class="item-list row">
+        <div id="group-members-list" class="item-list group-list row">
             <div class="widget-error query-no-results col-sm-24">
                 <p class="bold"><?php _e('There are no ' . strtolower($user_type) . ' to display.', 'buddypress') ?></p>
             </div>

@@ -9,6 +9,10 @@
     OpenLab.utility = {
         init: function () {
 
+            if ($('.truncate-on-the-fly').length) {
+                OpenLab.utility.truncateOnTheFly(true);
+            }
+
         },
         hoverFixes: function () {
             //fixing hover issues on mobile
@@ -17,8 +21,81 @@
                     fixHoverOnMobile($(this));
                 })
             }
+        },
+        truncateOnTheFly: function (onInit) {
+            if (onInit === undefined) {
+                var onInit = false;
+            }
+
+            $('.truncate-on-the-fly').each(function () {
+
+                var thisElem = $(this);
+                var truncationBaseValue = thisElem.data('basevalue');
+                var truncationBaseWidth = thisElem.data('basewidth');
+
+                if (!onInit) {
+                    var originalCopy = thisElem.parent().find('.original-copy').html();
+
+                    thisElem.css('opacity', '1.0');
+                    thisElem.html(originalCopy);
+                }
+
+                var container_w = thisElem.width();
+
+                if (thisElem.data('link')) {
+                    var thisOmission = '<a href="' + thisElem.data('link') + '">See More</a>';
+                } else {
+                    var thisOmission = '';
+                }
+
+                if (container_w < truncationBaseWidth) {
+
+                    var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w)/truncationBaseWidth) * 100));
+                    thisElem.find('.omission').remove();
+
+                    if (!onInit) {
+                        OpenLab.utility.truncateMainAction(thisElem, truncationValue, thisOmission);
+                    }
+
+                } else {
+
+                    var truncationValue = truncationBaseValue;
+
+                    if (!onInit) {
+                        OpenLab.utility.truncateMainAction(thisElem, truncationValue, thisOmission);
+                    }
+
+                }
+                
+                if (onInit) {
+                    OpenLab.utility.truncateMainAction(thisElem, truncationValue, thisOmission);
+                }
+
+                thisElem.animate({
+                    opacity: '1.0'
+                });
+
+            });
+        },
+        truncateMainAction: function (thisElem, truncationValue, thisOmission) {
+            
+            if(thisElem.data('minvalue')){
+                if(truncationValue < thisElem.data('minvalue')){
+                    truncationValue = thisElem.data('minvalue');
+                }
+            }
+            
+            if (truncationValue > 10) {
+                thisElem.succinct({
+                    size: truncationValue,
+                    omission: '<span class="omission">&hellip;' + thisOmission + '</span>'
+                });
+            } else {
+                thisElem.html('<span class="omission">' + thisOmission + '</span>');
+            }
+
         }
-    }
+    };
 
     var related_links_count,
             $add_new_related_link,
@@ -178,6 +255,7 @@
         resizeTimer = setTimeout(function () {
 
             OpenLab.utility.hoverFixes();
+            OpenLab.utility.truncateOnTheFly();
 
         }, 250);
 

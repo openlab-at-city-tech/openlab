@@ -8398,64 +8398,68 @@ body .inline-visible-xs {
   }
 }
 /**group archives**/
-#group-list,
 .group-list {
   margin-top: 50px;
 }
-#group-list .group-item-wrapper,
 .group-list .group-item-wrapper {
   border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 1.2%;
-  height: 235px;
+  height: 180px;
   margin-bottom: 12px;
   color: #666666;
+  overflow: hidden;
 }
-#group-list .group-item-wrapper h1,
 .group-list .group-item-wrapper h1,
-#group-list .group-item-wrapper h3,
 .group-list .group-item-wrapper h3,
-#group-list .group-item-wrapper h4,
 .group-list .group-item-wrapper h4,
-#group-list .group-item-wrapper h5,
 .group-list .group-item-wrapper h5 {
   margin: 0 0 5px;
 }
-#group-list .group-item-wrapper h2,
 .group-list .group-item-wrapper h2 {
-  margin: 10px 0 12px;
+  margin: 6px 0 12px;
 }
-#group-list .group-item-wrapper a :not(.btn-primary),
+.group-list .group-item-wrapper h2 a {
+  color: #666666;
+}
 .group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
 }
-#group-list .group-item-wrapper p,
 .group-list .group-item-wrapper p {
   color: #333333;
 }
-#group-list .group-item-wrapper .info-line,
 .group-list .group-item-wrapper .info-line {
   font-size: 12px;
   margin-bottom: 12px;
 }
 @media (max-width: 1199px) {
-  #group-list .group-item-wrapper .item,
   .group-list .group-item-wrapper .item {
     padding-left: 1.5%;
     padding-right: 1.5%;
   }
 }
-@media (max-width: 1199px) {
-  #group-list .group-item-wrapper,
-  .group-list .group-item-wrapper {
-    height: 302px;
+@media (max-width: 991px) and (min-width: 479px) {
+  .group-list .group-item-wrapper h2 {
+    margin: 3px 0 6px;
+  }
+  .group-list .group-item-wrapper .info-line {
+    margin-bottom: 6px;
+    font-size: 11px;
   }
 }
-@media (max-width: 767px) {
-  #group-list .group-item-wrapper,
-  .group-list .group-item-wrapper {
-    height: 352px;
+@media (max-width: 767px) and (min-width: 479px) {
+  .group-list .group-item-wrapper h2 {
+    font-size: 16px;
   }
+  .group-list .group-item-wrapper .description-line p {
+    font-size: 13px;
+  }
+}
+#group-list .group-item-wrapper .item-avatar img {
+  max-width: 95%;
+}
+#group-list .group-item-wrapper .item-content-wrapper {
+  padding: 0 2%;
 }
 #people-listing .group-item-wrapper {
   height: 110px;
@@ -8547,26 +8551,26 @@ body .inline-visible-xs {
     width: 11.2%;
   }
 }
-.group-members#group-list .group-item-wrapper {
+.group-members.group-list .group-item-wrapper {
   height: 95px;
 }
-.group-manage-members#group-list .group-item .group-item-wrapper {
+.group-manage-members.group-list .group-item .group-item-wrapper {
   height: 120px;
 }
-.group-manage-members#group-list .group-item .group-item-wrapper.no-btn {
+.group-manage-members.group-list .group-item .group-item-wrapper.no-btn {
   height: 98px;
 }
-.group-manage-members#group-list .group-item .group-item-wrapper.moderators {
+.group-manage-members.group-list .group-item .group-item-wrapper.moderators {
   height: 107px;
 }
-.group-manage-members#group-list .group-item .group-item-wrapper.members {
+.group-manage-members.group-list .group-item .group-item-wrapper.members {
   height: 222px;
 }
-.group-manage-members#group-list .group-item .group-item-wrapper.members .link-btn {
+.group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-  .group-manage-members#group-list .group-item .group-item-wrapper {
+  .group-manage-members.group-list .group-item .group-item-wrapper {
     height: 258px;
   }
 }
@@ -8843,17 +8847,17 @@ body .inline-visible-xs {
   margin-bottom: 0;
   font-size: 12px;
 }
-.members.friends #group-list .group-item-wrapper {
+.members.friends .group-list .group-item-wrapper {
   height: auto;
 }
-.members.friends #group-list .group-item-wrapper .info-row {
+.members.friends .group-list .group-item-wrapper .info-row {
   height: 90px;
 }
-.messages #group-list .group-item-wrapper {
+.messages .group-list .group-item-wrapper {
   height: 152px;
 }
 @media (max-width: 991px) {
-  .messages #group-list .group-item-wrapper {
+  .messages .group-list .group-item-wrapper {
     height: 221px;
   }
 }
