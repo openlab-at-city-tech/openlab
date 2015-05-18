@@ -247,6 +247,7 @@
                         padding: 10px 5px 17px;
                         .icon-bar{
                             background: @white;
+                            height: 3px;
                         }
                     }
                 }
@@ -254,11 +255,13 @@
             #wp-admin-bar-my-hamburger{
                 .icon-bar{
                     background: @cyan;
+                    height: 3px;
                 }
             }
             #wp-admin-bar-my-hamburger-mol{
                 .icon-bar{
                     background: @yellow;
+                    height: 3px;
                 }
             }
             #wp-admin-bar-query-monitor{
@@ -712,6 +715,10 @@
             }
             @media (max-width: @screen-xs-max){
                 top: 57px;
+                border-bottom: none;
+                &:before{
+                    bottom: 0;
+                }
             }
         }
     }
@@ -724,9 +731,9 @@ html{
 /**for content placement on group sites and admin**/
 body{
     &.adminbar-special{
-        padding-top: 50px;
+        padding-top: 70px;
         @media (max-width: 767px){
-            padding-top: 123px;
+            padding-top: 110px;
         }
     }
 }

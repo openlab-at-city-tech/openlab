@@ -12,6 +12,7 @@
             if ($('.truncate-on-the-fly').length) {
                 OpenLab.utility.truncateOnTheFly(true);
             }
+            OpenLab.utility.adjustLoginBox();
 
         },
         hoverFixes: function () {
@@ -20,6 +21,22 @@
                 $('.mobile-no-hover').bind('touchend', function () {
                     fixHoverOnMobile($(this));
                 })
+            }
+        },
+        adjustLoginBox: function(){
+            if($('#user-info')){
+                
+                var userInfo = $('#user-info');
+                var helpInfo = $('#login-help')
+                var avatar = userInfo.find('.avatar');
+                if(userInfo.height() > avatar.height()){
+                    userInfo.addClass('multi-line');
+                    helpInfo.addClass('multi-line');
+                } else {
+                    userInfo.removeClass('multi-line');
+                    helpInfo.removeClass('multi-line');
+                }
+                
             }
         },
         truncateOnTheFly: function (onInit) {
@@ -256,6 +273,7 @@
 
             OpenLab.utility.hoverFixes();
             OpenLab.utility.truncateOnTheFly();
+            OpenLab.utility.adjustLoginBox();
 
         }, 250);
 

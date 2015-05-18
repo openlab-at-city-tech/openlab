@@ -416,7 +416,7 @@ h1.entry-title{
             background: @magenta;
             border-radius: 1px;
             display: block;
-            height: 2px;
+            height: 3px;
             margin: 4px auto;
             width: 22px;
         }
@@ -877,6 +877,7 @@ body{
             color: @white;
             height: 295px;
             @media (max-width: @screen-xs-max){
+                background-position: right -44px;
                 width: 100%;
                 float: none;
                 padding-top: 1px;
@@ -912,25 +913,35 @@ body{
                     h2{
                         margin: 20px 0 18px;
                     }
-                    .avatar{
-                        img{
-                            border: 1px solid @black;
-                            max-width: 86px;
-                        }
-                    }
-                    .avatar,
-                    .content-list{
-                        display: inline-block;
-                        vertical-align: bottom;
+                    #user-info{
                         margin-bottom: 23px;
-                    }
-                    .content-list{
-                        margin-left: 10px;
+                        .avatar{
+                            img{
+                                border: 1px solid @black;
+                                max-width: 86px;
+                            }
+                        }
+                        .avatar,
+                        .content-list{
+                            display: inline-block;
+                            vertical-align: bottom;
+                        }
+                        .avatar{
+                            margin-right: 10px;
+                        }
+                        &.multi-line{
+                            margin-bottom: 5px;
+                        }
                     }
                 }
                 &#login-help{
                     h4{
                         margin: 12px 0;
+                    }
+                    &.multi-line{
+                        h4{
+                            margin: 6px 0 12px;
+                        }
                     }
                 }
                 &#user-login{

@@ -7429,7 +7429,7 @@ h1.entry-title .direct-toggle .icon-bar {
   background: #ff5959;
   border-radius: 1px;
   display: block;
-  height: 2px;
+  height: 3px;
   margin: 4px auto;
   width: 22px;
 }
@@ -7875,6 +7875,7 @@ body .inline-visible-xs {
 }
 @media (max-width: 767px) {
   .home-page .row-home-top .login {
+    background-position: right -44px;
     width: 100%;
     float: none;
     padding-top: 1px;
@@ -7911,21 +7912,29 @@ body .inline-visible-xs {
 .home-page .row-home-top .login .log-box#open-lab-login h2 {
   margin: 20px 0 18px;
 }
-.home-page .row-home-top .login .log-box#open-lab-login .avatar img {
+.home-page .row-home-top .login .log-box#open-lab-login #user-info {
+  margin-bottom: 23px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .avatar img {
   border: 1px solid #000000;
   max-width: 86px;
 }
-.home-page .row-home-top .login .log-box#open-lab-login .avatar,
-.home-page .row-home-top .login .log-box#open-lab-login .content-list {
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .avatar,
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .content-list {
   display: inline-block;
   vertical-align: bottom;
-  margin-bottom: 23px;
 }
-.home-page .row-home-top .login .log-box#open-lab-login .content-list {
-  margin-left: 10px;
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .avatar {
+  margin-right: 10px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info.multi-line {
+  margin-bottom: 5px;
 }
 .home-page .row-home-top .login .log-box#login-help h4 {
   margin: 12px 0;
+}
+.home-page .row-home-top .login .log-box#login-help.multi-line h4 {
+  margin: 6px 0 12px;
 }
 .home-page .row-home-top .login .log-box#user-login h2 {
   margin: 14px 0 18px;

@@ -7211,12 +7211,15 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .navbar-toggle .icon-bar {
   background: #ffffff;
+  height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .icon-bar {
   background: #63dfd2;
+  height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .icon-bar {
   background: #f7e700;
+  height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-query-monitor .ab-item {
   padding-bottom: 0;
@@ -7661,6 +7664,10 @@ button.oplb-bs .close {
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
     top: 57px;
+    border-bottom: none;
+  }
+  .oplb-bs.adminbar-manual-bootstrap #wpadminbar:before {
+    bottom: 0;
   }
 }
 html {
@@ -7669,11 +7676,11 @@ html {
 }
 /**for content placement on group sites and admin**/
 body.adminbar-special {
-  padding-top: 50px;
+  padding-top: 70px;
 }
 @media (max-width: 767px) {
   body.adminbar-special {
-    padding-top: 123px;
+    padding-top: 110px;
   }
 }
 /**behind menu background**/

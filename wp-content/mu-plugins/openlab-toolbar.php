@@ -1353,7 +1353,10 @@ HTML;
                                 @media (max-width: 767px){
                                             html.wp-toolbar #wpcontent,
                                             html.wp-toolbar #adminmenuwrap{
-                                                padding-top: 93px;
+                                                padding-top: 120px;
+                                            }
+                                            html.wp-toolbar #wpbody{
+                                                padding-top: 0;
                                             }
                                         }
                     </style>
