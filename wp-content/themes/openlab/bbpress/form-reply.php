@@ -152,7 +152,41 @@
             </form>
         </div>
 
+    <?php elseif (bbp_is_topic_closed()) : ?>
+
+        <div class="bbp-form panel panel-default">
+            <div class="panel-body">
+                <div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
+                    <div class="bbp-template-notice">
+                        <p><?php printf(__('The topic &#8216;%s&#8217; is closed to new replies.', 'bbpress'), bbp_get_topic_title()); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <?php elseif (bbp_is_forum_closed(bbp_get_topic_forum_id())) : ?>
+
+        <div class="bbp-form panel panel-default">
+            <div class="panel-body">
+                <div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
+                    <div class="bbp-template-notice">
+                        <p><?php printf(__('The forum &#8216;%s&#8217; is closed to new topics and replies.', 'bbpress'), bbp_get_forum_title(bbp_get_topic_forum_id())); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <?php else : ?>
+
+        <div class="bbp-form panel panel-default">
+            <div class="panel-body">
+                <div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
+                    <div class="bbp-template-notice">
+                        <p><?php is_user_logged_in() ? _e('You cannot reply to this topic.', 'bbpress') : _e('You must be logged in to reply to this topic.', 'bbpress'); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <?php endif; ?>
 
