@@ -64,8 +64,8 @@ function olur_admin_panel() {
 		<h4><?php _e( 'For each group type (course, project, club, student ePortfolio, faculty Portfolio, staff Portfolio, each subdivided by privacy level):', 'openlab-usage-reporting' ) ?></h4>
 		<ul>
 			<li><?php _e( 'Total counts for the start and end date.', 'openlab-usage-reporting' ) ?></li>
-			<li><?php _e( 'Number of users created during the period', 'openlab-usage-reporting' ) ?></li>
-			<li><?php _e( 'Number of users deleted during the period', 'openlab-usage-reporting' ) ?></li>
+			<li><?php _e( 'Number of groups created during the period', 'openlab-usage-reporting' ) ?></li>
+			<li><?php _e( 'Number of groups deleted during the period', 'openlab-usage-reporting' ) ?></li>
 		</ul>
 	</div>
 	<?php
