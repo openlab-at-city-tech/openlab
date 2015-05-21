@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 4.0.1 (BP 2.1.1)
-Stable tag: 3.5
+Tested up to: 4.1.1 (BP 2.2.1)
+Stable tag: 3.5.1
 
 == Description ==
 
@@ -87,6 +87,10 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 3.5.1 =
+* Localization improvements
+* Fixes bug that could cause fatal error in some bbPress configurations
 
 = 3.5 =
 * Fixes bug so that user no longer gets an email for their own group activity update
