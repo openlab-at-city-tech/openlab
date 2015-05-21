@@ -454,7 +454,7 @@ HTML;
 			'parent' => 'my-openlab',
 			'id'     => 'my-settings',
 			'title'  => 'My Settings',
-			'href'   => trailingslashit( bp_loggedin_user_domain() . '/settings' ),
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'settings' ),
                         'meta' => array(
                             'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
