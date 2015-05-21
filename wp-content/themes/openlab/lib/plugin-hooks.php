@@ -518,6 +518,33 @@ function openlab_bbp_remove_group_nav_item() {
 add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
 
 /**
+ * Enforce group privacy settings when determining bbPress forum privacy.
+ *
+ * This helps ensure that activity items are marked hide_sitewide as appropriate.
+ *
+ * See https://bbpress.trac.wordpress.org/ticket/2782,
+ * https://bbpress.trac.wordpress.org/ticket/2327,
+ * http://openlab.citytech.cuny.edu/redmine/issues/1428
+ */
+function openlab_enforce_forum_privacy( $is_public, $forum_id ) {
+	$group_ids = bbp_get_forum_group_ids( $forum_id );
+
+	if ( ! empty( $group_ids ) ) {
+		foreach ( $group_ids as $group_id ) {
+			$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+			if ( 'public' !== $group->status ) {
+				$is_public = false;
+				break;
+			}
+		}
+	}
+
+	return $is_public;
+}
+add_filter( 'bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2 );
+
+/**
  * Plugin: Social
  */
 
