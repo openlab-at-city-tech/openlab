@@ -84,24 +84,19 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php do_action('bp_before_group_settings_admin'); ?>
             
             <?php do_action('template_notices') ?>
-
-            <?php if (function_exists('bp_forums_is_installed_correctly') && !openlab_is_portfolio()) : ?>
-
-                <?php if (bp_forums_is_installed_correctly()) : ?>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Discussion Settings</div>
+                
+            <?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
+		<?php $forum_enabled = openlab_is_forum_enabled_for_group() ?>
+                     <div class="panel panel-default">
+			<div class="panel-heading">Discussion Settings</div>
                         <div class="panel-body">
-                        <p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
+			<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php bp_group_show_forum_setting() ?> /> <?php _e('Enable discussions forum', 'buddypress') ?></label>
+                                <label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ) ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
                         </div>
-                    </div>
-                    </div>
-
-                <?php endif; ?>
-
-                <hr />
+                        </div>
+                     </div>
+                        <hr />
             <?php endif; ?>
                 
             <?php /* "Related Links List Settings" - Course only for now */ ?>

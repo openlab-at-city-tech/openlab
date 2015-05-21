@@ -407,6 +407,42 @@ function openlab_bbp_force_site_public_to_1($public, $site_id) {
 add_filter('bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2);
 
 /**
+ * Handle discussion forum toggling for groups.
+ */
+function openlab_bbp_group_toggle( $group_id ) {
+	$enable_forum = ! empty( $_POST['openlab-edit-group-forum'] );
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$group->enable_forum = $enable_forum;
+	$group->save();
+
+	if ( $enable_forum ) {
+		groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+
+	}
+}
+add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
+
+/**
+ * If Discussion is disabled for a group, ensure it's removed from the menu.
+ *
+ * Gah gah gah gah gah gah.
+ */
+function openlab_bbp_remove_group_nav_item() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	$enable_forum = groups_get_current_group()->enable_forum;
+
+	if ( ! $enable_forum ) {
+		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
+	}
+}
+add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
+
+/**
  * Plugin: Social
  */
 
