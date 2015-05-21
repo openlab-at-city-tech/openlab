@@ -1,0 +1,578 @@
+# Translation of P2 in Albanian
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-06-01 17:21:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: P2\n"
+
+msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
+msgstr ""
+
+#: single.php:42
+msgctxt "Previous post link"
+msgid "&larr; %title"
+msgstr "&larr; %title"
+
+#: single.php:43
+msgctxt "Next post link"
+msgid "%title &rarr;"
+msgstr "%title &rarr;"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Të etiketuar: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Nuk u gjetën postime!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "Përfundime Kërkimi për: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Postojeni"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Lidhje"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Postim Blogu"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Përmendje"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr "Përditësime prej %s"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Ende pa postime!"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Prditësim Gjendjeje"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Përditësimet Së Fundmi"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Numër etiketash për shfaqje:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Etiketat më të fundit"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s më <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "Etiketat Më të Fundit P2"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "Etiketat prej postimeve më të fundit."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "I paemër"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatare:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Komentet Më të Fundit"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Numër komentesh për shfaqje:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Titull:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Komentet e fundit me avatare."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Pa avatar"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr ""
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "Komentet Më të Fundit P2"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr "%1$s po diskuton."
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr ""
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr "%1$s, %2$s, dhe %3$s po diskutojnë."
+
+#: inc/template-tags.php:94
+msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
+msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
+msgstr[0] "%1$s, %2$s, %3$s, dhe %4$d tjetër po diskutojnë."
+msgstr[1] "%1$s, %2$s, %3$s, dhe %4$d të tjerë po diskutojnë."
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Njatjeta, %s. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Shfaqe Tekstin"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Fshihe Tekstin"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Mundësi Përditësimi"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr ""
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Tituj Postimesh:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Shfaq titujt"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Shfaqje anështylle:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Fshihe Anështyllën"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "Gati për postim:"
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr ""
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Shirita"
+
+#: inc/options-page.php:166
+msgid "Santa"
+msgstr ""
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Me Pika"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Katrorë"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr ""
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Asnjë"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Merrni një Ngjyrë"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Figurë Sfond:"
+
+#: inc/options-page.php:134
+msgid "Hide comment threads by default on all non-single views"
+msgstr ""
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Mundësi Grafike"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Ngjyrë Sfondi e Përshtatur:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Lejoni të postojë cilido anëtar të WordPress.com-it"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Lejoni të postojë cilido anëtar i regjistruar"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Fshihi Rrrjedhat:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "Mundësi për P2"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Mundësi Funksionesh"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Hyrje për Postim:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Mundësitë u ruajtën."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr ""
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "Kjo fushë është e domosdoshme."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Mundësi Teme"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Jeni i sigurt se doni të pastrohet ky koment? Lënda e tij do të fshihet."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Hmm! Duket se nuk keni bërë hyrjen."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Ju lutemi, rihyni"
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr ""
+
+#: inc/js.php:145 inc/template-tags.php:254
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%1$s <em>më</em> %2$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr ""
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Pa përputhje."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Shfaqi rrjedhat"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "Komentet ose postimet tuaj do të humbin, nëse vazhdoni."
+
+#: inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Fshihi rrjedhat"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Ruaje"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Po ngarkohet..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Ndodhi një gabim, postimi juaj nuk u postua"
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "Përditësimi juaj u postua"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d koment(e) i ri"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "Hidhu në krye"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d përditësim(e) i ri"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Përmendje"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Shko te kreu"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Titull Postimi"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Etiketa:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "Gabim: nuk ju lejohet të postoni."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Vërini etiketë"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "Gabim: nuk ju lejohet të përpunoni postim."
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "Gabim: nuk ju lejohet të përpunoni këtë koment."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "Gabim: Ndodhi një gabim i panjohur. Komenti nuk u postua."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "Gabim: jo i futur."
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "Gabim: Ju lutemi, shkruani një koment."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "Gabim: ju lutemi, jepni një adresë email të vlefshme."
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "Gabim: duhet të jeni i futur që të postoni një koment."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "Gabim: ju lutemi, plotësoni kutitë e domosdoshme (emër, email)."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Hidhu te lënda"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Menu"
+
+#: header.php:30
+msgid "Post"
+msgstr "Postim"
+
+#: functions.php:717 index.php:24
+msgid "Page %s"
+msgstr "Faqe %s"
+
+#: functions.php:618
+msgid "Proudly powered by %s."
+msgstr "Bazohet me krenari në %s."
+
+#: functions.php:618
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: functions.php:439
+msgid "Image Post"
+msgstr "Postim Figure"
+
+#: functions.php:575
+msgid "Log in to Reply"
+msgstr "Që të Përgjigjeni, Hyni"
+
+#: functions.php:437
+msgid "Video Post"
+msgstr "Postim Video"
+
+#: functions.php:398
+msgid "Your comment is awaiting moderation."
+msgstr "Komenti juaj po pret moderimin."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Anështyllë"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Menuja Parësore"
+
+#: footer.php:31
+msgid "Show/Hide help"
+msgstr "shfaq/fshih ndihmën"
+
+#: footer.php:32
+msgid "shift + esc"
+msgstr ""
+
+#: footer.php:32 inc/js.php:140
+msgid "Cancel"
+msgstr "Anuloje"
+
+#: footer.php:29
+msgid "Go to top"
+msgstr "shko në krye"
+
+#: footer.php:30
+msgid "Go to login"
+msgstr "kaloni te hyrja"
+
+#: footer.php:28
+msgid "Show/Hide comments"
+msgstr "shfaqi/fshihi komentet"
+
+#: footer.php:24
+msgid "Next post/Next comment"
+msgstr "postimi pasues/komenti pasues"
+
+#: footer.php:25
+msgid "Previous post/Previous comment"
+msgstr "postimi i mëparshëm/komenti i mëparshëm"
+
+#: footer.php:23
+msgid "Compose new post"
+msgstr "hartoni postim të ri"
+
+#: footer.php:15
+msgid "Theme: %1$s by %2$s."
+msgstr "Temë: %1$s nga %2$s."
+
+#: entry.php:117
+msgid "Toggle Comments"
+msgstr "Shfaq/Fshih Komentet"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Faqe:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Etiketa:"
+
+#: entry.php:100
+msgid "Required fields are marked %s"
+msgstr "Fushat e domosdoshme shënohen si %s"
+
+#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
+#: functions.php:463 functions.php:574 functions.php:596
+msgid "Reply"
+msgstr "Përgjigje"
+
+#: entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "Postime nga %1$s ( @%2$s )"
+
+#: entry.php:37 functions.php:383
+msgid "Permalink"
+msgstr "Permalink"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Komentet Më të Reja &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Komentet Më të Vjetra"
+
+#: author.php:35
+msgid "Apologies, looks like this author does not have any posts."
+msgstr "Ndjesë, duket sikur ky autor nuk ka ndonjë postim."
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Postime Më të Vjetra"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Postime Më të Reja &rarr;"
+
+#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Shkurtore Tastiere"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr "Përditësime prej %s"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Shfaq/Fshih Rrjedha Komentesh"
+
+#: attachment.php:69
+msgid "View file:"
+msgstr "Shihni kartelën:"
+
+#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Më tepër ...)"
+
+#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
+#: functions.php:388
+msgid "Edit"
+msgstr "Përpunoni"
+
+#: attachment.php:45
+msgid "Full size is %s pixels"
+msgstr "Madhësia e plotë është %s piksela"
+
+#: attachment.php:48
+msgid "Link to full-size image"
+msgstr "Lidhje për te figura në madhësi të plotë"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Na ndjeni, por faqja që kërkuat nuk gjendet dot. Ndoshta mund t&#8217;ju ndihë kërkimi."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Nuk u Gjet"

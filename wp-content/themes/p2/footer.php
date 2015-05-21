@@ -20,16 +20,16 @@
 
 <div id="help">
 	<dl class="directions">
-		<dt>c</dt><dd><?php _e( 'compose new post', 'p2' ); ?></dd>
-		<dt>j</dt><dd><?php _e( 'next post/next comment', 'p2' ); ?></dd>
-		<dt>k</dt> <dd><?php _e( 'previous post/previous comment', 'p2' ); ?></dd>
-		<dt>r</dt> <dd><?php _e( 'reply', 'p2' ); ?></dd>
-		<dt>e</dt> <dd><?php _e( 'edit', 'p2' ); ?></dd>
-		<dt>o</dt> <dd><?php _e( 'show/hide comments', 'p2' ); ?></dd>
-		<dt>t</dt> <dd><?php _e( 'go to top', 'p2' ); ?></dd>
-		<dt>l</dt> <dd><?php _e( 'go to login', 'p2' ); ?></dd>
-		<dt>h</dt> <dd><?php _e( 'show/hide help', 'p2' ); ?></dd>
-		<dt><?php _e( 'shift + esc', 'p2' ); ?></dt> <dd><?php _e( 'cancel', 'p2' ); ?></dd>
+		<dt>c</dt><dd><?php _e( 'Compose new post', 'p2' ); ?></dd>
+		<dt>j</dt><dd><?php _e( 'Next post/Next comment', 'p2' ); ?></dd>
+		<dt>k</dt> <dd><?php _e( 'Previous post/Previous comment', 'p2' ); ?></dd>
+		<dt>r</dt> <dd><?php _e( 'Reply', 'p2' ); ?></dd>
+		<dt>e</dt> <dd><?php _e( 'Edit', 'p2' ); ?></dd>
+		<dt>o</dt> <dd><?php _e( 'Show/Hide comments', 'p2' ); ?></dd>
+		<dt>t</dt> <dd><?php _e( 'Go to top', 'p2' ); ?></dd>
+		<dt>l</dt> <dd><?php _e( 'Go to login', 'p2' ); ?></dd>
+		<dt>h</dt> <dd><?php _e( 'Show/Hide help', 'p2' ); ?></dd>
+		<dt><?php _e( 'shift + esc', 'p2' ); ?></dt> <dd><?php _e( 'Cancel', 'p2' ); ?></dd>
 	</dl>
 </div>
 
