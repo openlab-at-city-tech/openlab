@@ -586,17 +586,6 @@ function cuny_group_single() {
     $group_id = $bp->groups->current_group->id;
     $group_name = $bp->groups->current_group->name;
     $group_description = $bp->groups->current_group->description;
-    $faculty_id = $bp->groups->current_group->admins[0]->user_id;
-    $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-    array_unshift( $faculty_ids, $faculty_id );
-    $faculty = array();
-    
-    foreach($faculty_ids as $id){
-        
-        array_push($faculty,bp_core_get_user_displayname( $faculty_id ));
-        
-    }
-    
     $group_type = openlab_get_group_type(bp_get_current_group_id());
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
@@ -652,7 +641,7 @@ function cuny_group_single() {
                             ?>
                             <div class="table-row row">
                                 <div class="bold col-sm-5">Professor(s)</div>
-                                <div class="col-sm-19 row-content"><?php echo implode(',',$faculty) ?></div>
+                                <div class="col-sm-19 row-content"><?php echo openlab_get_faculty_list() ?></div>
                             </div>
                             <div class="table-row row">
                                 <div class="bold col-sm-5">Department</div>
@@ -1293,18 +1282,7 @@ function openlab_output_course_info_line($group_id) {
     $infoline_mup = '';
 
     $admins = groups_get_group_admins($group_id);
-    $faculty_id = $admins[0]->user_id;
-    $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-    array_unshift( $faculty_ids, $faculty_id );
-    $faculty = array();
-    
-    foreach($faculty_ids as $id){
-        
-        array_push($faculty,bp_core_get_user_displayname( $faculty_id ));
-        
-    }
-    
-    $wds_faculty = implode(',',$faculty);
+    $wds_faculty = openlab_get_faculty_list();
     $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
     $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
     $wds_year = groups_get_groupmeta($group_id, 'wds_year');
@@ -1451,4 +1429,27 @@ function openlab_bp_group_site_pages() {
             <?php
         } // openlab_is_portfolio()
     } // !empty( $site_url )
+}
+
+function openlab_get_faculty_list(){
+    global $bp;
+    
+    $faculty_list = '';
+    
+    $faculty_id = $bp->groups->current_group->admins[0]->user_id;
+    $group_id = $bp->groups->current_group->id;
+    
+    $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+    array_unshift( $faculty_ids, $faculty_id );
+
+    $faculty = array();
+    foreach($faculty_ids as $id){
+        
+        array_push($faculty,bp_core_get_user_displayname( $id ));
+        
+    }
+    
+    $faculty_list = implode(', ',$faculty);
+    
+    return $faculty_list;
 }

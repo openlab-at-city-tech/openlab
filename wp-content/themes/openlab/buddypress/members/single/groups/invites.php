@@ -24,17 +24,7 @@
 
                                             <?php
                                             $admins = groups_get_group_admins($group_id);
-                                            $faculty_id = $admins[0]->user_id;
-                                            $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-                                            array_unshift( $faculty_ids, $faculty_id );
-                                            $faculty = array();
-
-                                            foreach($faculty_ids as $id){
-
-                                                array_push($faculty,bp_core_get_user_displayname( $faculty_id ));
-
-                                            }
-                                            $wds_faculty = implode(',',$faculty);
+                                            $wds_faculty = openlab_get_faculty_list;
                                             $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                                             $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
                                             $wds_year = groups_get_groupmeta($group_id, 'wds_year');
