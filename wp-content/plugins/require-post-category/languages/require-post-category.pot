@@ -1,0 +1,18 @@
+# Copyright (C) 2013 Josh Hartman
+# This file is distributed under the same license as the Require Post Category package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Require Post Category 1.02\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-12-04 22:07-0600\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+
+#: require-post-category.php:44
+msgid "Please select a category before publishing this post."
+msgstr ""
