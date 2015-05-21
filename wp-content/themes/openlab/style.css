@@ -8716,6 +8716,15 @@ body .inline-visible-xs {
   position: relative;
   top: 0;
 }
+#content #bbpress-forums .reply a,
+#content #bbpress-forums .reply a:visited {
+  color: inherit;
+  background: none;
+  float: none;
+  font-size: inherit;
+  text-transform: none;
+  text-decoration: inherit;
+}
 #content #bbpress-forums fieldset.bbp-form {
   border: none;
   margin-bottom: 0;
