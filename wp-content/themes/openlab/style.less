@@ -1803,6 +1803,23 @@ body{
                 font-size: @font-size-base;
             }
         }
+        .bbp-reply-author{
+            a{
+                float: none;
+                display: block;
+                &.bbp-author-name{
+                    margin: 0 0 1em 0;
+                }
+            }
+        }
+        .bbp-reply-content{
+            a,
+            a:visited{
+                color: inherit;
+                background: none;
+                float: none;
+            }
+        }
         .bbp-header{
             .bbp-reply-author{
                 text-align: left;

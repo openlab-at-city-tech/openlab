@@ -8703,6 +8703,19 @@ body .inline-visible-xs {
 #content #bbpress-forums ul p {
   font-size: 14px;
 }
+#content #bbpress-forums .bbp-reply-author a {
+  float: none;
+  display: block;
+}
+#content #bbpress-forums .bbp-reply-author a.bbp-author-name {
+  margin: 0 0 1em 0;
+}
+#content #bbpress-forums .bbp-reply-content a,
+#content #bbpress-forums .bbp-reply-content a:visited {
+  color: inherit;
+  background: none;
+  float: none;
+}
 #content #bbpress-forums .bbp-header .bbp-reply-author {
   text-align: left;
 }
