@@ -833,12 +833,11 @@ function wds_load_group_type( $group_type ) {
 		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
 		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
-	//$return. = '<tr>';
-   //$return. = ' <td>Faculty:';
-		//$return. = '<td><input type="text" name="wds_faculty" value="'.$bp->loggedin_user->fullname.'"></td>';
-	//$return. = '</tr>';
+        
 	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
-	$return.= '<input type="hidden" name="wds_faculty" value="'.$bp->loggedin_user->fullname.' '.$last_name.'">';
+        
+	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
+	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
 	$return.= '<tr class="department-title">';
 
