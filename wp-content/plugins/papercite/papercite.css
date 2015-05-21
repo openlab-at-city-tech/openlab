@@ -1,0 +1,53 @@
+.papercite_errors:before {
+  content: "Papercite errors";
+}
+
+.papercite_errors {
+  border: 1px solid red;
+  background: #eee;
+  padding: 5px;
+}
+
+.papercite_errors > div {
+  display: list-item;  
+}
+
+.papercite_bibtex {
+    display: none;
+}
+
+.papercite_bibtex pre {
+    white-space: pre-wrap;
+}
+
+.papercite_toggle:link, .papercite_toggle:visited {
+    color: gray;
+    text-decoration: none;
+}
+
+
+.papercite_link, .papercite_link:link, .papercite_link:visited {
+  color: #222;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+.papercite_info {
+  color: #555;
+}
+
+.papercite_highlight {
+  font-weight: bold;
+}
+
+span.papercite_checked_files 
+{
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid black;
+	font-size: 150%;
+	cursor: pointer;
+	background: #eee;
+	color: red;
+	border-radius: 3px;
+}
