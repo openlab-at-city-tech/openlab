@@ -657,6 +657,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'biological-sciences' => array(
 				'label' => 'Biological Sciences',
 			),
+                        'biomedical-informatics' => array(
+				'label' => 'Biomedical Informatics',
+			),
 			'chemistry' => array(
 				'label' => 'Chemistry',
 			),
@@ -672,6 +675,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'mathematics' => array(
 				'label' => 'Mathematics',
 			),
+                        'professional-and-technical-writing' => array(
+                                'label' => 'Professional and Technical Writing',
+                        ),
 			'physics' => array(
 				'label' => 'Physics',
 			),
