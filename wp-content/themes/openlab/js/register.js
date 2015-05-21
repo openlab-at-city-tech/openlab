@@ -127,7 +127,7 @@ jQuery(document).ready(function($){
 			var $typedrop = $('#field_7');
 			$typedrop.html(newtypes);
 
-			/* 
+			/*
 			 * Because there is no alternative in the dropdown, the 'change' event never
 			 * fires. So we trigger it manually.
 			 */
@@ -204,7 +204,19 @@ jQuery(document).ready(function($){
 			method: 'POST',
 			success: function( response ) {
 				$( '#wds-account-type' ).html( response );
+                                load_error_messages();
 			}
+		} );
+	}
+        
+        /**
+	 * Put registration error messages into the template dynamically.
+	 *
+	 * See openlab_registration_errors_object().
+	 */
+	function load_error_messages() {
+		jQuery.each( OpenLab_Registration_Errors, function( k, v ) {
+			$( '#' + k ).before( v );
 		} );
 	}
 },(jQuery));
