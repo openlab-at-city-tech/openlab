@@ -420,6 +420,7 @@ class Openlab_Clone_Course_Group {
                 'post_type' => bbp_get_topic_post_type(),
                 'post_parent' => $source_forum_id,
                 'posts_per_page' => -1,
+                'author__in' => $source_group_admins,
                     ));
             $group = groups_get_group(array('group_id' => $this->group_id));
             // Set the default forum status
