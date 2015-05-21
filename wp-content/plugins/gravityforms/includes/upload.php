@@ -19,6 +19,8 @@ class GFAsyncUpload {
         send_nosniff_header();
         nocache_headers();
         status_header(200);
+	
+    die('{"status" : "error", "error" : {"code": 500, "message": "' . __("Failed to upload file.", "gravityforms") . '"}}');
 
         // If the file is bigger than the server can accept then the form_id might not arrive.
         // This might happen if the file is bigger than the max post size ini setting.
