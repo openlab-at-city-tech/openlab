@@ -6,7 +6,19 @@
  */
 
 function openlab_hide_plugins( $plugins ) {
-	$super_admin_only = $network_admin_only = array();
+	$network_admin_only = array();
+
+	$super_admin_only = array(
+		'cac-non-cuny-signup/loader.php',
+	);
+
+	if ( ! is_super_admin() ) {
+		foreach ( $plugins as $pkey => $plugin ) {
+			if ( in_array( $pkey, $super_admin_only ) ) {
+				unset( $plugins[ $pkey ] );
+			}
+		}
+	}
 
 	if ( ! is_network_admin() ) {
 		$network_admin_only = array(
