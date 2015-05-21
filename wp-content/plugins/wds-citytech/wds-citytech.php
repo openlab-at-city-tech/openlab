@@ -2224,3 +2224,14 @@ function openlab_lazy_flush_rewrite_rules() {
 	}
 }
 add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
+
+/**
+ * Whitelist the 'webcal' protocol.
+ *
+ * Prevents the protocol from being stripped for non-privileged users.
+ */
+function openlab_add_webcal_to_allowed_protocols( $protocols ) {
+	$protocols[] = 'webcal';
+	return $protocols;
+}
+add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
