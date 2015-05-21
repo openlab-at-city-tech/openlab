@@ -27,6 +27,10 @@ The interactive features of the widget's admin interface come from a combination
 
 ## Changelog
 
+### 1.0.4
+* multisite optimizations for Featured "Post" Content type
+* fixed $wpdb->prepare warning
+
 ### 1.0.3
 * fixed js error that was improperly referencing widget number on new widgets
 

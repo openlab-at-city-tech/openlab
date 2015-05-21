@@ -1,10 +1,10 @@
 === SlideShare for WordPress by Yoast ===
 Contributors: joostdevalk
-Donate link: http://yoast.com/donate/
+Donate link: https://yoast.com/donate/
 Tags: slideshare, powerpoint, keynote, ppt, presentation, slide shows, presentations
 Requires at least: 3.0
-Tested up to: 3.9
-Stable tag: 1.9
+Tested up to: 4.0
+Stable tag: 1.9.1
 
 Easily embed SlideShare presentations into your WordPress posts by using the SlideShare WordPress.com embed code.
 
@@ -18,12 +18,25 @@ Just paste the URL of a presentation on its own line in a post, hit Publish / Up
 = Embed with shortcode =
 Once installed, simply go to any SlideShare presentation, click on Share and copy / paste the WordPress embed code.
 
+> <strong>Development on GitHub</strong><br>
+> Development for the SlideShare plugin happens in [this GitHub repository](https://github.com/Yoast/slideshare), bug reports and pull requests are welcome there.
+
 More info:
 
 * [SlideShare WordPress plugin](https://yoast.com/wordpress/plugins/slideshare/).
 * Check out the other [Wordpress plugins](https://yoast.com/wordpress/plugins/) by the same author.
 
 == Changelog ==
+
+= 1.9.1 =
+
+* Bugfixes
+	* Add missing function options_init function, fixes fatal error.
+
+* Enhancements
+	* Namespace all functions and classes.
+	* Moved development to GitHub.
+	* Removed unused classes from CSS and unused images from plugin download.
 
 = 1.9 =
 

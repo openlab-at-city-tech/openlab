@@ -185,7 +185,7 @@ while ($query->have_posts()) : $query->the_post();
 	 * decide which color definition to use in case there are duplicate terms found
 	 * =========================================================================
 	 */
-	$tids = array(); // Array for term IDs
+	$tids = array(); // Array for all term IDs that exist for this post
 	
 	// assigned terms for post
 	$term_cats = get_the_terms($post->ID, 'category');
@@ -200,14 +200,17 @@ while ($query->have_posts()) : $query->the_post();
 	}
 	$tids_a = explode(',', $wpst_term->getActiveTerms()); // Terms set active in admin options
 	$tids_b = array();
+	// Extract term IDs of term objects assigned to the current post and store them in a 2nd array 
 	foreach($tids as $tid){
-		$i = array_pop($tid);
-		array_push($tids_b, $i->term_id);
+		foreach($tid as $id){
+			array_push($tids_b, $id->term_id);	
+		}
 	}
 	// intersect array to avoid duplicate terms
 	$intersect = array_intersect($tids_a, $tids_b);
-	
+
 	// Get first term_id that is assigned to this post and active in the STL settings
+	// TODO: Implement option to prioritize category
 	$stl_term = $wpst_term->readTerm(array_pop($intersect));
 
 	// finally print the color

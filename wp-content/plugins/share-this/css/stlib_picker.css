@@ -80,7 +80,7 @@
 }
 
 .stp_li {
-    background : url("http://sharethis.com/images/Gradient_Default.jpg") repeat scroll 0 0 transparent;
+    background : url("//www.sharethis.com/images/Gradient_Default.jpg") repeat scroll 0 0 transparent;
     border-bottom : 1px solid grey !important;
     color : gray !important;
     display : block;
@@ -178,7 +178,7 @@
 }
 
 .stp_li:hover {
-    background: url("http://sharethis.com/images/Gradient_Over.jpg") repeat scroll 0 0 transparent;
+    background: url("//www.sharethis.com/images/Gradient_Over.jpg") repeat scroll 0 0 transparent;
     border-bottom: 1px solid grey;
     border-left: 1px solid grey;
     color: black;

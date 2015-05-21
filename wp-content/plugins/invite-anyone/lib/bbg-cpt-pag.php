@@ -27,6 +27,16 @@ class BBG_CPT_Pag {
 	var $total_pages;
 
 	/**
+	 * PHP 4 constructor
+	 *
+	 * @package BBG CPT Pag
+	 * @since 1.0
+	 */
+	function bbg_cpt_pag() {
+		$this->__construct();
+	}
+
+	/**
 	 * PHP 5 constructor
 	 *
 	 * @package BBG CPT Pag

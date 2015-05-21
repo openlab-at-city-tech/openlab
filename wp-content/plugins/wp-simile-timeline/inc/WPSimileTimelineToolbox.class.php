@@ -71,6 +71,28 @@ class WPSimileTimelineToolbox {
 		}
 		return $s;
 	}
+        
+        /**
+         * Parse and return date string. Check for date string prefix (A/B) and return elements accordingly
+         * @param type $date
+         * @return type
+         */
+        function parseDateString($rawdate) {
+            $prefix     = substr($rawdate, 0, 1);  // Get date prefix A/B
+            $date       = substr($rawdate, 1);     // Handle date without prefix
+            $is_date_bc = ($prefix == 'B');     // Date BC existent with prefix 'B'
+            
+            if($is_date_bc){
+                // custom date parsing for BC dates
+                $string = adodb_date2('Y', $date) . ' BC';
+            }
+            else{
+                // Regular date parsing
+                $string = adodb_date2('r', $date);
+            }
+            
+            return $string;  
+        }
 	
 	function implodeDate($a){
 		//$time = adodb_mktime($a['hour'], $a['minute'], $a['second'], $a['day'], $a['month'], $a['year']);

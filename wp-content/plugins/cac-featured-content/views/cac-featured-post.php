@@ -25,7 +25,7 @@
         echo $cfcw_view->avatar;
     }
   ?>
-
+  
   <p class="cfcw-title">
     <a href="<?php echo esc_url( $cfcw_view->post->guid ) ?>"><?php esc_html_e( $cfcw_view->post->post_title ) ?></a>
   </p>

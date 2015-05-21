@@ -2088,12 +2088,10 @@ function bbp_topic_replies_link( $topic_id = 0 ) {
 	 * @uses bbp_get_topic() To get the topic
 	 * @uses bbp_get_topic_reply_count() To get the topic reply count
 	 * @uses bbp_get_topic_permalink() To get the topic permalink
-	 * @uses remove_query_arg() To remove args from the url
 	 * @uses bbp_get_topic_reply_count_hidden() To get the topic hidden
 	 *                                           reply count
 	 * @uses current_user_can() To check if the current user can edit others
 	 *                           replies
-	 * @uses add_query_arg() To add custom args to the url
 	 * @uses apply_filters() Calls 'bbp_get_topic_replies_link' with the
 	 *                        replies link and topic id
 	 */

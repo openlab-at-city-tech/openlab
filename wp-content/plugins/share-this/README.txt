@@ -3,7 +3,7 @@ Tags:share, share this, sharethis, addthis, addtoany, share this, bookmark faceb
 
 Contributors:ShareThis
 Requires at least: 1.5
-Tested up to: 3.8.1
+Tested up to: 4.0
 Stable tag: trunk
 
 Social Charge your Content with ShareThis - features Social Analytics, CopyNShare, Open Graph Sharing, and the Hovering Bar!
@@ -50,23 +50,31 @@ Enable CopyNShare for your widget! [FAQs](http://support.sharethis.com/customer/
 **Make it Easier for your Users to Share your Content**  
 Hovering Bar is always present on the left or right side of content, makes it easier for your users to share. It's always in view - even when your users scroll up and down the page. [Get the Hovering Bar Now!](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration#Plugin-Options)
 
+More information about the [ShareThis plugin for WordPress](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
 
-**Leverage Frictionless Sharing**  
-[ShareNow](http://sharethis.com/publishers/get-sharenow) is the new social tool that allows you to leverage frictionless sharing without having to create your own custom solution and puts your users in control over how they share content. Placed on the right or left side of your content, ShareNow makes it easier for your users to share, delete and re-share to their social network timeline. Increase sharing activity on your site and add ShareNow! [FAQs](http://support.sharethis.com/customer/portal/articles/542253-sharenow-by-sharethis)
-
-More information about the [ShareThis plugin for WordPress](http://help.sharethis.com/integration/wordpress)
-
-More information about the [ShareNow plugin for WordPress](http://support.sharethis.com/customer/portal/articles/542253-sharenow-by-sharethis).
 == Installation ==
 
 1. Download the plugin archive and expand it (you've likely already done this).
 2. Put the 'sharethis.php' file into your wp-content/plugins/ directory.
 3. Go to the Plugins page in your WordPress Administration area and click 'Activate' for ShareThis.
 4. In the WordPress Administration area, open the ShareThis Options page, and customize the sharing buttons based on your need.
-5. To enable ShareNow, go to the ShareThis Options page and scroll down check the 'Enable ShareNow' button.
-6. To enable Hovering Bar (floating share buttons), go to the ShareThis Options page and scroll down check the 'Enable Hovering Bar' button.
+5. Please refer this article for detailed instructions - [wordpress installation](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
 
 == Changelog ==
+7.0.20
+
+1. Removed ShareNow Widget from configuration section
+2. Updated Direct Post screenshots
+
+7.0.19
+
+Added HTTPS Support for Publishers who manage the ShareThis Plugin over HTTPS Admin Panel.
+
+7.0.18
+
+1. Updated Help links in the Welcome Email
+2. Updated Screenshot of the New Updated Multi-Post Widget on Configuration page
+
 7.0.17
 
 Added option to Show/Hide Buttons on Post Excerpts. 
@@ -223,5 +231,4 @@ Check out some screenshots of our widget in action!
 1. Screenshot of the ShareThis widget when a user clicks on it.
 2. Screenshot of the Social Analytics Dashboard
 3. Screenshot of the ShareThis widget above content.
-4. Screenshot of the ShareNow widget.
-5. Example of the Hovering Bar.
+4. Example of the Hovering Bar.

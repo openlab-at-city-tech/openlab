@@ -25,7 +25,7 @@
         echo $cfcw_view->avatar;
     }
   ?>
-
+  
   <p class="cfcw-title">
     <a href="<?php echo esc_url( $cfcw_view->group->permalink ) ?>"><?php esc_html_e( $cfcw_view->group->name ) ?></a>
   </p>

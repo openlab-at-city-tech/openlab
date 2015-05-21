@@ -217,7 +217,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 }
 
 stlib_picker.addServiceLink = function(ul, key, value, before) {
-	var title = "";
+	var title = "", imgProto = '';
 	if (value.title) {
 		title = value.title; 
 	} else {
@@ -226,10 +226,13 @@ stlib_picker.addServiceLink = function(ul, key, value, before) {
 		else if (stlib_picker._all_native_services[value])
 			title = stlib_picker._all_native_services[value].title;
 	}
+	
+	imgProto = (document.location.protocol === "https:") ? "https://ws" : "http://w";
+		
 	if (before && before == true)
-		ul.prepend("<li id='st_li_" + key + "' class='stp_li'><img src='http://w.sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
+		ul.prepend("<li id='st_li_" + key + "' class='stp_li'><img src="+imgProto+"'.sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 	else
-		ul.append("<li id='st_li_" + key + "' class='stp_li'><img src='http://w.sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
+		ul.append("<li id='st_li_" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 }
 
 stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
