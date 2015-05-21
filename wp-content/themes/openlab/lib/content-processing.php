@@ -58,7 +58,7 @@ add_filter('bp_get_the_profile_field_value', 'openlab_filter_profile_fields', 10
 
 function openlab_filter_profile_fields($value, $type) {
     global $field;
-    $truncate_link_candidates = array('Website', 'LinkedIn Profile Link', 'Facebook Profile Link');
+    $truncate_link_candidates = array('Website','LinkedIn Profile Link','Facebook Profile Link','Google Scholar profile');
     if (in_array($field->name, $truncate_link_candidates)) {
         $args = array(
             'ending' => __('&hellip;', 'buddypress'),
