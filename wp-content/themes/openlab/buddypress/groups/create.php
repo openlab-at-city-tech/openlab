@@ -155,24 +155,10 @@
                 <?php if (bp_is_group_creation_step('group-settings')) : ?>
 
                     <?php do_action('bp_before_group_settings_creation_step'); ?>
-
-                    <?php
-                    /* Don't show Discussion toggle for portfolios */
-                    /* Changed this to hidden in case this value is needed */
-                    ?>
-                    <?php if (!openlab_is_portfolio() && function_exists('bp_forums_is_installed_correctly')) : ?>
-        <?php if (bp_forums_is_installed_correctly()) : ?>
-                            <div class="checkbox hidden">
-                                <label><input type="hidden" name="group-show-forum" id="group-show-forum" value="1"<?php if (bp_get_new_group_enable_forum()) { ?> checked="checked"<?php } ?> /></label>
-                            </div>
-                        <?php else : ?>
-            <?php if (is_super_admin()) : ?>
-                                <div class="checkbox">
-                                    <label><input type="hidden" disabled="disabled" name="disabled" id="disabled" value="0" /> <?php printf(__('<strong>Attention Site Admin:</strong> ' . $group_type . ' forums require the <a href="%s">correct setup and configuration</a> of a bbPress installation.', 'buddypress'), bp_get_root_domain() . '/wp-admin/admin.php?page=bb-forums-setup') ?></label>
-                                </div>
-                            <?php endif; ?>
-                        <?php endif; ?>
-    <?php endif; ?>
+                    
+                    <?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
+                        <input type="hidden" name="group-show-forum" value="1" />
+                    <?php endif; ?>
 
                     <?php openlab_group_privacy_settings($group_type); ?>
 
