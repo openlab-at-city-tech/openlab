@@ -585,12 +585,12 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 
 	$all_departments = array(
 		'tech' => array(
-			'advertising-design-and-graphic-arts' => array(
-				'label' => 'Advertising Design and Graphic Arts',
-			),
 			'architectural-technology' => array(
 				'label' => 'Architectural Technology',
 			),
+                        'communication-design' => array(
+                                'label' => 'Communication Design',
+                        ),
 			'computer-engineering-technology' => array(
 				'label' => 'Computer Engineering Technology',
 			),
