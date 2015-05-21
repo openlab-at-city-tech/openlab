@@ -8,6 +8,10 @@ function openlab_registration_avatars() {
 	if ( !bp_is_register_page() ) {
 		return;
 	}
+        
+        if ( empty( $bp->avatar_admin ) ) {
+		$bp->avatar_admin = new stdClass;
+	}
 
 	$bp->avatar_admin->step = 'upload-image';
 
