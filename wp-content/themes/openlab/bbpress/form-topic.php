@@ -107,13 +107,7 @@
 
                             <?php if (!bbp_is_single_forum()) : ?>
 
-                                <?php do_action('bbp_theme_before_topic_form_forum'); ?>
-
-                                <p>
-                                    <label for="bbp_forum_id"><?php _e('Forum:', 'bbpress'); ?></label><br />
-                                </p>
-
-        <?php do_action('bbp_theme_after_topic_form_forum'); ?>
+                                <input type="hidden" name="bbp_forum_id" value="<?php echo bbp_get_form_topic_forum() ?>" />
 
                             <?php endif; ?>
 
