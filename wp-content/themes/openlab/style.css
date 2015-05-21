@@ -8736,7 +8736,7 @@ body .inline-visible-xs {
   float: none;
   font-size: inherit;
   text-transform: none;
-  text-decoration: inherit;
+  text-decoration: underline;
 }
 #content #bbpress-forums fieldset.bbp-form {
   border: none;
