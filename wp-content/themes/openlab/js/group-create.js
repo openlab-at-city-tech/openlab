@@ -323,6 +323,9 @@ jQuery(document).ready(function($){
 
 	/* AJAX validation for blog URLs */
 	$('form input[type="submit"]').click(function(e){
+            
+                var thisForm = $(this).closest('form');
+            
                 /* Don't hijack the wrong clicks */
                 if ( $(e.target).attr('name') != 'save' ) {
                         return true;
@@ -363,9 +366,8 @@ jQuery(document).ready(function($){
 					$(domain).after('<span class="ajax-warning">Sorry, that URL is already taken.</span>');
 					return false;
 				} else {
-					var theform = $('form');
-					$(theform).append('<input type="hidden" name="save" value="1" />');
-					$('form').submit();
+					$(thisForm).append('<input type="hidden" name="save" value="1" />');
+					thisForm.submit();
 					return true;
 				}
 			}
