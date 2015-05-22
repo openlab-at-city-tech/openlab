@@ -7393,10 +7393,10 @@ button.oplb-bs .close {
   display: none;
   position: absolute;
   right: 0;
-  top: 66px;
+  top: 59px;
   width: 336px;
   border: 1px solid #dddddd;
-  border-radius: 4px;
+  border-radius: 4px 0 4px 4px;
 }
 .oplb-bs .search .search-form-wrapper .form-group {
   margin-left: 18px;
@@ -7424,7 +7424,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs .search .search-trigger-wrapper {
-  height: 63px;
+  height: 59px;
   position: absolute;
   right: 0;
   text-align: center;
@@ -7446,7 +7446,7 @@ button.oplb-bs .close {
   border-left: 1px solid #dddddd;
   border-right: 1px solid #dddddd;
   box-sizing: padding-box;
-  height: 68px;
+  height: 59px;
   z-index: 999999;
 }
 .oplb-bs .search .search-trigger-wrapper.search-live span {
