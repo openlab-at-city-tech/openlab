@@ -25,7 +25,7 @@
 				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                                 </div>
                                 <div class="item col-md-15 col-xs-17">
-				<h4><a href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h4>
+				<h4><a class="no-deco" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h4>
 				<span class="activity"><?php bp_group_member_joined_since() ?></span>
 
 				<?php do_action( 'bp_group_members_list_item' ) ?>

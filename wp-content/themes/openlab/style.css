@@ -8920,6 +8920,9 @@ body .inline-visible-xs {
 .help-title:first-of-type {
   margin-top: 64px;
 }
+#sidebar.type-help .sidebar-wrapper .sidebar-block {
+  border-top: 1px solid #bbbbbb;
+}
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
