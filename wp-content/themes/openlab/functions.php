@@ -100,7 +100,7 @@ function openlab_load_scripts() {
         //$minifier = new MatthiasMullie\Minify\JS($bootstrap, $jcarousellite, $easyaccordion, $easing, $mobile_custom, $camera, $hyphenator, $succinct, $utility);
         //$minifier->minify($result_path);
 
-        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.min.js', array('jquery'));
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.min.js', array('jquery'),'',true);
         wp_enqueue_script('utility');
     }
 }
