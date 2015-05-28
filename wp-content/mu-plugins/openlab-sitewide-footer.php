@@ -112,6 +112,7 @@ function cuny_site_wide_footer() {
  */
 function openlab_footer_markup($placeholder = NULL) {
     $site = bp_get_root_domain();
+    $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     ?>
     <div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>">
         <div class="oplb-bs">
@@ -132,9 +133,7 @@ function openlab_footer_markup($placeholder = NULL) {
                     <div class="col-sm-2 col-share">
                         <h2>Share</h2>
                         <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
-                        <!-- Place this tag in your head or just before your close body tag -->
-                        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-                        <a class="google-plus-link" href="https://plus.google.com/share?url={URL}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+                        <a class="google-plus-link" href="https://plus.google.com/share?url=<?= $url ?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
             return false;">Google +</a>
                     </div>
                 </div>
@@ -173,8 +172,6 @@ function openlab_footer_markup($placeholder = NULL) {
                         <div class="col-sm-2 col-share">
                             <h2>Share</h2>
                             <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
-                            <!-- Place this tag in your head or just before your close body tag -->
-                            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
                             <a class="google-plus-link" href="https://plus.google.com/share?url={URL}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
             return false;">Google +</a>
                         </div>
