@@ -1176,6 +1176,7 @@ HTML;
          * @return type
          */
         function openlab_custom_my_account_menu($wp_admin_bar){
+            $user_login = '';
             $user_id      = get_current_user_id();
             $current_user = wp_get_current_user();
             $profile_url  = get_edit_profile_url( $user_id );
