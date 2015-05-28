@@ -34,8 +34,8 @@ function openlab_mu_enqueue() {
     $openlab_search = WPMU_PLUGIN_DIR . '/js/openlab/openlab.search.js';
     $openlab_nav = WPMU_PLUGIN_DIR . '/js/openlab/openlab.nav.js';
 
-    $minifier = new MatthiasMullie\Minify\JS($smoothscroll, $select, $openlab_search, $openlab_nav);
-    $minifier->minify($result_path);
+    //$minifier = new MatthiasMullie\Minify\JS($smoothscroll, $select, $openlab_search, $openlab_nav);
+    //$minifier->minify($result_path);
 
     wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.min.js', array('jquery'));
     wp_enqueue_script('openlab-nav-js');
