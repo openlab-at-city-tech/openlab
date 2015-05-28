@@ -10,86 +10,153 @@
 
     var resizeTimer;
 
-    OpenLab.search = {
+    OpenLab.nav = {
+        backgroundCont: {},
+        plusHeight: 66,
         init: function () {
 
-            //search
-            if ($('.search-trigger-wrapper').length) {
-                OpenLab.search.searchBarLoadActions();
-                $('.search-trigger').on('click', function () {
-                    OpenLab.search.searchBarEventActions($(this));
+            OpenLab.nav.backgroundCont = $('#behind_menu_background');
+
+            OpenLab.nav.directToggleAction();
+            OpenLab.nav.backgroundAction();
+            OpenLab.nav.mobileAnchorLinks();
+
+        },
+        directToggleAction: function () {
+
+            //if there is no direct toggle, we're done
+            if (!$('.direct-toggle').length) {
+                return false;
+            }
+
+            var directToggle = $('.direct-toggle');
+
+            directToggle.on('click', function (e) {
+                directToggle.removeClass('active')
+                e.stopImmediatePropagation();
+
+                var thisElem = $(this);
+
+                thisElem.addClass('active');
+                if (!thisElem.hasClass('in-action')) {
+
+                    directToggle.removeClass('in-action');
+                    thisElem.addClass('in-action');
+
+                    var thisTarget = $(this).data('target');
+                    var thisTargetElem = $(thisTarget);
+
+                    if (thisTargetElem.is(':visible')) {
+
+                        OpenLab.nav.hideNavMenu(thisElem, thisTargetElem);
+
+                    } else {
+
+                        directToggle.each(function () {
+                            var thisElem = $(this);
+                            var thisToggleTarget = thisElem.data('target');
+
+                            if ($(thisToggleTarget).is(':visible')) {
+
+                                OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget);
+
+                            }
+                        });
+
+                        OpenLab.nav.showNavMenu(thisElem, thisTargetElem);
+
+                    }
+                }
+            });
+        },
+        hideNavMenu: function (thisElem, thisToggleTarget) {
+            var plusHeight = OpenLab.nav.plusHeight;
+            
+            if (thisElem.attr('data-plusheight')) {
+                plusHeight = parseInt(thisElem.data('plusheight'));
+            }
+
+            var thisTargetElem_h = $(thisToggleTarget).height();
+            thisTargetElem_h += plusHeight;
+
+            OpenLab.nav.backgroundCont.removeClass('active').animate({
+                'opacity': 0,
+                'top': '-=' + thisTargetElem_h + 'px'
+            }, 50, function () {
+                $(this).hide();
+            });
+            $(thisToggleTarget).slideUp(700, function () {
+                thisElem.removeClass('in-action');
+                thisElem.removeClass('active');
+            });
+        },
+        showNavMenu: function (thisElem, thisTargetElem) {
+            var plusHeight = OpenLab.nav.plusHeight;
+
+            if (thisElem.attr('data-plusheight')) {
+                plusHeight = parseInt(thisElem.data('plusheight'));
+            }
+            
+            thisTargetElem.slideDown(700, function () {
+                
+                var thisTargetElem_h = thisTargetElem.height();
+                thisTargetElem_h += plusHeight;
+
+                thisElem.removeClass('in-action');
+
+                OpenLab.nav.backgroundCont.addClass('active').show()
+                        .css({
+                            'top': '+=' + thisTargetElem_h + 'px'
+                        })
+                        .animate({
+                            'opacity': 0.42,
+                        }, 500);
+
+                //for customSelect
+                $('.custom-select').each(function () {
+                    var customSelect_h = $(this).find('.customSelect').outerHeight();
+                    var customSelect_w = $(this).find('.customSelect').outerWidth();
+                    $(this).find('select').css({
+                        'height': customSelect_h + 'px',
+                        'width': customSelect_w + 'px'
+                    });
+                })
+            });
+        },
+        backgroundAction: function () {
+
+            OpenLab.nav.backgroundCont.on('click', function () {
+
+                var thisElem = $(this);
+                var currentActiveButton = $('.direct-toggle.active');
+                var targetToClose = currentActiveButton.data('target');
+
+                OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose);
+
+            });
+
+        },
+        mobileAnchorLinks: function () {
+            if ($('.mobile-anchor-link')) {
+                $('.mobile-anchor-link').find('a').on('click', function (e) {
+                    e.preventDefault();
+                    var thisElem = $(this);
+                    var thisAnchor = thisElem.attr('href');
+
+                    var currentActiveButton = $('.direct-toggle.active');
+                    var background = $('#behind_menu_background');
+                    var targetToClose = currentActiveButton.data('target');
+
+                    OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose);
+
                 });
             }
-
-        },
-        searchBarLoadActions: function () {
-
-            $('.search-form-wrapper').each(function () {
-                var searchFormDim = OpenLab.search.invisibleDimensions($(this));
-                $(this).data('thisheight', searchFormDim.height);
-            });
-
-        },
-        searchBarEventActions: function (searchTrigger) {
-
-            var select = $('.search-form-wrapper .hidden-custom-select select');
-            var adminBar = $('#wpadminbar');
-            var mode = searchTrigger.data('mode');
-            var location = searchTrigger.data('location');
-            var searchForm = $('.search-form-wrapper.search-mode-' + mode + '.search-form-location-' + location);
-            if (!searchTrigger.hasClass('in-action')) {
-                searchTrigger.addClass('in-action');
-                if (searchTrigger.parent().hasClass('search-live')) {
-                    searchTrigger.parent().toggleClass('search-live');
-                    if (searchTrigger.data('mode') == 'mobile' && searchTrigger.data('location') == 'header') {
-                        adminBar.animate({
-                            top: "-=" + searchForm.data('thisheight')
-                        }, 700);
-                        adminBar.removeClass('dropped');
-                    }
-
-                    searchForm.slideUp(800, function () {
-                        searchTrigger.removeClass('in-action');
-                    });
-
-
-                } else {
-                    searchTrigger.parent().toggleClass('search-live');
-                    if (searchTrigger.data('mode') == 'mobile' && searchTrigger.data('location') == 'header') {
-                        adminBar.addClass('dropped');
-                        adminBar.animate({
-                            top: "+=" + searchForm.data('thisheight')
-                        }, 700);
-                    }
-                    searchForm.slideDown(700, function () {
-                        searchTrigger.removeClass('in-action');
-                    });
-                }
-                select.customSelect();
-            }
-
-        },
-        invisibleDimensions: function (el) {
-
-            $(el).css({
-                'display': 'block',
-                'visibility': 'hidden'
-            });
-            var dim = {
-                height: $(el).outerHeight(),
-                width: $(el).outerWidth()
-            };
-            $(el).css({
-                'display': 'none',
-                'visibility': ''
-            });
-            return dim;
         }
-    }
+    };
 
     $(document).ready(function () {
 
-        OpenLab.search.init();
+        OpenLab.nav.init();
 
     });
 
@@ -98,9 +165,7 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
 
-            if ($('.search-trigger-wrapper.search-live').length) {
-                OpenLab.search.searchBarEventActions($('.search-trigger-wrapper.search-live').find('.search-trigger'));
-            }
+
 
         }, 250);
 
