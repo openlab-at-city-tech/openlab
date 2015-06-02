@@ -1,0 +1,318 @@
+-- MySQL dump 10.13  Distrib 5.1.61, for debian-linux-gnu (i486)
+--
+-- Host: localhost    Database: wordpress_tfwp_test
+-- ------------------------------------------------------
+-- Server version	5.1.61-0ubuntu0.10.04.1-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `wp_tfk_item`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item` (
+  `item_id` int(1) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `item_parent_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `priority` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `context` varchar(64) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `creation_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `start_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deadline_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `completion_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `expected_duration` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `actual_duration` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `show_in_calendar` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `show_private` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `author_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `last_change_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_change_author_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`),
+  KEY `project_id` (`project_id`),
+  KEY `user_id` (`user_id`),
+  KEY `author_id` (`author_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item`
+--
+
+LOCK TABLES `wp_tfk_item` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item` DISABLE KEYS */;
+INSERT INTO `wp_tfk_item` VALUES (1,1,0,1,'0','Any visitor can read this task','','2013-09-12 16:31:37','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'2013-09-13 08:42:59',0),(2,1,0,1,'0','Nobody but admin can read this draft','<p>Nobody but admin can read this draft.</p>','2013-09-12 16:32:56','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0),(3,1,0,1,'0','Any visitor can read this closed task','<p>Any visitor can read this closed task but only admin can edit it.</p>','2013-09-12 16:48:24','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'2013-09-13 08:00:37',0),(4,2,0,1,'0','Access to this task is restricted to subscribers and above','<p>Access to this task is restricted to subscribers and above.</p>','2013-09-12 17:02:23','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0),(5,3,0,1,'0','Access to this task is restricted to contributors and above','<p>Access to this task is restricted to contributors and above.</p>','2013-09-12 18:32:01','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0),(6,5,0,1,'0','Access to this task is restricted to authors and above','<p>Access to this task is restricted to authors and above.</p>','2013-09-12 18:32:46','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0),(7,6,0,1,'0','Access to this task is restricted to editors and above','<p>Access to this task is restricted to editors and above.</p>','2013-09-12 18:33:11','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0),(8,7,0,1,'0','Access to this task is restricted to admin','<p>Access to this task is restricted to admin.</p>','2013-09-12 18:33:43','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,0,0,1,'0000-00-00 00:00:00',0);
+/*!40000 ALTER TABLE `wp_tfk_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_item_comment`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item_comment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item_comment` (
+  `item_comment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `post_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `body` text NOT NULL,
+  `last_change_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`item_comment_id`),
+  KEY `itemId` (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item_comment`
+--
+
+LOCK TABLES `wp_tfk_item_comment` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item_comment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_item_comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_item_comment_like`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item_comment_like`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item_comment_like` (
+  `item_comment_id` int(10) unsigned NOT NULL,
+  `user_id` mediumint(8) unsigned NOT NULL,
+  `post_date` datetime NOT NULL,
+  `vote` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (`item_comment_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item_comment_like`
+--
+
+LOCK TABLES `wp_tfk_item_comment_like` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item_comment_like` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_item_comment_like` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_item_file`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item_file` (
+  `item_file_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `file_title` varchar(200) NOT NULL DEFAULT '',
+  `file_name` varchar(127) NOT NULL DEFAULT '',
+  `file_type` varchar(30) NOT NULL DEFAULT '',
+  `file_size` bigint(20) NOT NULL DEFAULT '0',
+  `post_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_change_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `file_tags` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`item_file_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item_file`
+--
+
+LOCK TABLES `wp_tfk_item_file` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item_file` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_item_file` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_item_like`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item_like`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item_like` (
+  `item_id` mediumint(8) unsigned NOT NULL,
+  `user_id` mediumint(8) unsigned NOT NULL,
+  `post_date` datetime NOT NULL,
+  PRIMARY KEY (`item_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item_like`
+--
+
+LOCK TABLES `wp_tfk_item_like` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item_like` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_item_like` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_item_status`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_item_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_item_status` (
+  `item_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `status_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `status_key` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`,`status_date`),
+  KEY `itemId` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_item_status`
+--
+
+LOCK TABLES `wp_tfk_item_status` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_item_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_item_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_log`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_log` (
+  `log_date` datetime NOT NULL,
+  `user_id` mediumint(8) unsigned NOT NULL,
+  `action_code` varchar(3) NOT NULL,
+  `item_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `project_id` mediumint(8) unsigned NOT NULL,
+  `comment_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `info` varchar(255) NOT NULL DEFAULT '',
+  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`log_date`,`user_id`,`action_code`),
+  KEY `project_id` (`project_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_log`
+--
+
+LOCK TABLES `wp_tfk_log` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_log` DISABLE KEYS */;
+INSERT INTO `wp_tfk_log` VALUES ('2013-09-12 09:41:50',1,'20',0,1,0,'creation',0),('2013-09-12 09:45:40',1,'20',0,2,0,'creation',0),('2013-09-12 10:08:41',1,'20',0,3,0,'creation',0),('2013-09-12 11:36:02',1,'20',0,4,0,'creation',0),('2013-09-12 11:36:52',1,'20',0,5,0,'creation',0),('2013-09-12 11:37:25',1,'20',0,6,0,'creation',0),('2013-09-12 11:43:42',1,'20',0,7,0,'creation',0),('2013-09-12 16:31:37',1,'20',1,0,0,'creation',0),('2013-09-12 16:32:56',1,'0',2,0,0,'creation',0),('2013-09-12 16:48:24',1,'60',3,0,0,'creation',0),('2013-09-12 17:02:23',1,'20',4,0,0,'creation',0),('2013-09-12 18:32:01',1,'20',5,0,0,'creation',0),('2013-09-12 18:32:46',1,'20',6,0,0,'creation',0),('2013-09-12 18:33:11',1,'20',7,0,0,'creation',0),('2013-09-12 18:33:43',1,'20',8,0,0,'creation',0),('2013-09-13 08:00:07',5,'',1,0,0,'title',0),('2013-09-13 08:00:37',5,'',3,0,0,'title',0);
+/*!40000 ALTER TABLE `wp_tfk_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_project`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_project` (
+  `project_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `who_read` varchar(64) NOT NULL,
+  `who_comment` varchar(64) NOT NULL,
+  `who_post` varchar(64) NOT NULL,
+  `who_manage` varchar(64) NOT NULL,
+  `creation_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `trashed` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`project_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_project`
+--
+
+LOCK TABLES `wp_tfk_project` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_project` DISABLE KEYS */;
+INSERT INTO `wp_tfk_project` VALUES (1,'Any visitor has access to this project','<p>Any visitor has access to this project.</p>\r\n<p>Subscribers can comment tasks.</p>\r\n<p>Authors can create tasks.</p>\r\n<p>Editors can manage the project (and as such, can see drafts !)</p>','','subscriber','author','editor','2013-09-12 09:41:50',0),(2,'Project access level : subscribers and above','<p>Project access level : subscribers and above</p>','subscriber','contributor','author','editor','2013-09-12 09:45:40',0),(3,'Project access level : contributors and above','<p>Project access level : contributors and above</p>','contributor','author','editor','administrator','2013-09-12 10:08:41',0),(4,'Project access level : contributors and above','<p>Project access level : contributors and above</p>','contributor','author','editor','administrator','2013-09-12 11:36:02',1),(5,'Project access level : authors and above','<p>Project access level : authors and above</p>','author','editor','administrator','administrator','2013-09-12 11:36:52',0),(6,'Project access level : editors and above','<p>Project access level : editors and above</p>','editor','administrator','administrator','administrator','2013-09-12 11:37:25',0),(7,'Project access level : admin','<p>Project access level : admin</p>','administrator','administrator','administrator','administrator','2013-09-12 11:43:42',0);
+/*!40000 ALTER TABLE `wp_tfk_project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_project_status`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_project_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_project_status` (
+  `project_id` mediumint(10) unsigned NOT NULL DEFAULT '0',
+  `status_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `status_key` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`project_id`,`status_date`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_project_status`
+--
+
+LOCK TABLES `wp_tfk_project_status` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_project_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_project_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wp_tfk_project_user`
+--
+
+DROP TABLE IF EXISTS `wp_tfk_project_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_tfk_project_user` (
+  `project_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `position` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`project_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wp_tfk_project_user`
+--
+
+LOCK TABLES `wp_tfk_project_user` WRITE;
+/*!40000 ALTER TABLE `wp_tfk_project_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wp_tfk_project_user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-09-13 10:50:53
