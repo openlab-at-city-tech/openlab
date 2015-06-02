@@ -18,14 +18,14 @@ function openlab_mu_enqueue() {
     wp_enqueue_script('google-plus-one');
 
     //adding smooth scroll
-    /*wp_register_script('smoothscroll-js', plugins_url('js', __FILE__) . '/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array('jquery'));
+    wp_register_script('smoothscroll-js', plugins_url('js', __FILE__) . '/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array('jquery'));
     wp_enqueue_script('smoothscroll-js');
     wp_register_script('select-js', plugins_url('js', __FILE__) . '/jquery-custom-select/jquery.customSelect.min.js', array('jquery'));
     wp_enqueue_script('select-js');
     wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'));
     wp_enqueue_script('openlab-search-js');
     wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'));
-    wp_enqueue_script('openlab-nav-js');*/
+    wp_enqueue_script('openlab-nav-js');
 
     $result_path = WPMU_PLUGIN_DIR . '/js/openlab/openlab.nav.min.js';
 
@@ -37,8 +37,8 @@ function openlab_mu_enqueue() {
     //$minifier = new MatthiasMullie\Minify\JS($smoothscroll, $select, $openlab_search, $openlab_nav);
     //$minifier->minify($result_path);
 
-    wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.min.js', array('jquery'),'',true);
-    wp_enqueue_script('openlab-nav-js');
+    //wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.min.js', array('jquery'),'',true);
+    //wp_enqueue_script('openlab-nav-js');
 }
 
 add_action('wp_enqueue_scripts', 'openlab_mu_enqueue',9);
