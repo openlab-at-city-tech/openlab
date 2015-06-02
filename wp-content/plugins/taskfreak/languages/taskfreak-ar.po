@@ -1,0 +1,1069 @@
+# TaskFreak Free - French strings
+# Copyright (C) 2013 Tirzen
+# This file is distributed under the same license as the TaskFreak Free package.
+msgid ""
+msgstr ""
+"Project-Id-Version: TaskFreak Free 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/taskfreak\n"
+"POT-Creation-Date: 2013-09-26 17:28:07+00:00\n"
+"PO-Revision-Date: 2014-12-08 12:36+0200\n"
+"Last-Translator: Ahmed Ghanem <ahmed.ghanem@gmx.com>\n"
+"Language-Team: Visum Solutions <ahmed.ghanem@gmx.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Generator: Poedit 1.7.1\n"
+"Language: ar\n"
+
+#: inc/controllers/admin/project_user.php:21
+msgid "Add user to project"
+msgstr "أضف مستخدم للمشروع"
+
+#: inc/controllers/admin/project_user.php:31
+msgid "Edit user's position"
+msgstr "تعديل مركز المستخدم"
+
+#: inc/controllers/admin/project_user_add.php:21
+#: inc/controllers/admin/project_user_edit.php:21
+#: inc/views/admin/project_edit.php:65 inc/views/admin/project_edit.php:80
+#: inc/views/admin/project_list.php:85 inc/views/front/task.php:21
+msgid "Edit"
+msgstr "تعديل"
+
+#: inc/controllers/admin/project_user_add.php:22
+#: inc/controllers/admin/project_user_edit.php:22
+msgid "Remove"
+msgstr "إزالة"
+
+#: inc/controllers/admin/settings.php:32
+msgid "Changes saved"
+msgstr "تم حفظ التغييرات"
+
+#: inc/controllers/admin/settings.php:34
+msgid "No changes saved"
+msgstr "لم يتم حفظ أي تغييرات"
+
+#: inc/controllers/front/project_view.php:39
+msgid "No such project."
+msgstr "لا يوجد مشروع بهذا الاسم"
+
+#: inc/controllers/front/project_view.php:44
+msgid "Sorry, you can't access this project. Please contact an admin."
+msgstr "عذرًا. لا يمكنك الولوج لهذا المشروع. رجاءً تواصل مع أحد المدراء."
+
+#: inc/controllers/front/task_edit.php:13
+msgid "Sorry, you can't edit tasks when logged out."
+msgstr "عذرًا، لا يمكنك تعديل المهام وأنت غير مسجل للدخول."
+
+#: inc/controllers/front/task_edit.php:38
+msgid "Sorry, you can't edit this task. Please contact an admin."
+msgstr "عذرًا، لا يمكنك تعديل هذه المهمة. رجاءً تواصل مع أحد المدراء."
+
+#: inc/controllers/front/task_edit.php:72
+msgid "Unavailable project"
+msgstr "مشروع غير متوفر"
+
+#: inc/controllers/front/task_edit.php:74
+msgid "Sorry, you can't post in this project. Please contact an admin."
+msgstr "عذرًا لا يمكنك الإضافة لهذا المشروع. رجاءً تواصل مع أحد المدراء."
+
+#: inc/controllers/front/task_edit.php:77
+msgid "Please select a user who has access to this project"
+msgstr "رجاءً اختر مستخدمًا لديه صلاحية الوصول لهذا المشروع"
+
+#: inc/controllers/front/task_edit.php:123
+msgid "Changes saved."
+msgstr "تم حفظ التغييرات"
+
+#: inc/controllers/front/task_edit.php:131
+#: inc/controllers/front/task_view.php:105
+msgid "Upload failed. Check file size."
+msgstr "فشل رفع الملف. رجاءً تأكد من الحجم."
+
+#: inc/controllers/front/task_history.php:19
+#: inc/controllers/front/task_view.php:19
+msgid "Sorry, item not found"
+msgstr "عذرًا لم نستطع العثور على هذا البند."
+
+#: inc/controllers/front/task_history.php:23
+#: inc/controllers/front/task_view.php:23
+msgid "Missing \"view\" parameter"
+msgstr "متغير الـ\"view\" غير موجود"
+
+#: inc/controllers/front/task_status.php:13
+msgid "Sorry, request forbidden for security reasons."
+msgstr "عذرًا، تم منع الطلب لدواعي أمنية."
+
+#: inc/controllers/front/task_status.php:28
+#: inc/controllers/front/task_status.php:45
+msgid "No such item"
+msgstr "لا يوجد مثل هكذا بند"
+
+#: inc/controllers/front/task_status.php:32
+msgid "You can't change this status"
+msgstr "لا يمكنك تغيير هذه الحالة"
+
+#: inc/controllers/front/task_status.php:40
+msgid "Unable to set status"
+msgstr "لم نستطع تغيير الحالة"
+
+#: inc/controllers/front/task_view.php:33
+msgid "Sorry, you can't read this task. Please contact an admin."
+msgstr "عذرًا، لا يمكنك قراءة هذه المهمة. رجاءً تواصل مع أحد المدراء."
+
+#: inc/controllers/front/task_view.php:48
+msgid "Sorry, you can't comment tasks in this project. Please contact an admin."
+msgstr ""
+"عذرًا، لا يمكنك إضافة تعليقات على المهام في ها المشروع. رجاءً تواصل مع أحد "
+"المدراء."
+
+#: inc/controllers/front/task_view.php:75
+msgid "Uploaded file: "
+msgstr "الملف المرفوع:"
+
+#: inc/controllers/front/task_view.php:94
+msgid "See comment"
+msgstr "شاهد التعليق"
+
+#: inc/controllers/front/task_view.php:96
+msgid "Comment saved."
+msgstr "تم حفظ التعليق."
+
+#: inc/controllers/front.php:26
+msgid "An error has occured."
+msgstr "حدث خطأ."
+
+#: inc/models/item.php:135 inc/views/front/list.php:114
+msgid "Undefined Deadline"
+msgstr "مهلة زمنية غير محددة"
+
+#: inc/models/item.php:143
+msgid "Past due !"
+msgstr "تجاوزت المهلة الزمنية!"
+
+#: inc/models/item.php:146
+msgid "%s minute remaining"
+msgid_plural "%s minutes remaining"
+msgstr[0] "باقي %s دقائق"
+msgstr[1] "باقي %s دقائق"
+msgstr[2] "باقي %s دقائق"
+msgstr[3] "باقي %s دقائق"
+msgstr[4] "باقي %s دقيقة"
+msgstr[5] "باقي %s دقيقة"
+
+#: inc/models/item.php:149
+msgid "%s hour remaining"
+msgid_plural "%s hours remaining"
+msgstr[0] "تبقى %s ساعة"
+msgstr[1] "تبقى %s ساعة"
+msgstr[2] "تبقى %s ساعة"
+msgstr[3] "تبقى %s ساعات"
+msgstr[4] "تبقى %s ساعة"
+msgstr[5] "تبقى %s ساعة"
+
+#: inc/models/item.php:152
+msgid "%s day remaining"
+msgid_plural "%s days remaining"
+msgstr[0] "تبقى %s يوم"
+msgstr[1] "تبقى %s يوم"
+msgstr[2] "تبقى %s يوم"
+msgstr[3] "تبقى %s أيام"
+msgstr[4] "تبقى %s يوم"
+msgstr[5] "تبقى %s يوم"
+
+#: inc/models/item.php:154
+msgid "%s month remaining"
+msgid_plural "%s months remaining"
+msgstr[0] "تبقى %s شهر"
+msgstr[1] "تبقى %s شهر"
+msgstr[2] "تبقى %s شهر"
+msgstr[3] "تبقى %s أشهر"
+msgstr[4] "تبقى %s شهر"
+msgstr[5] "تبقى %s شهر"
+
+#: inc/models/item.php:207 inc/models/project.php:197
+#: inc/models/project.with_status_table.php:156
+#: inc/models/project.with_status_table.php:168
+msgid "Draft"
+msgstr "مسودة"
+
+#: inc/models/item.php:209 inc/models/project.php:199
+#: inc/models/project.with_status_table.php:158
+#: inc/models/project.with_status_table.php:169
+msgid "In Progress"
+msgstr "جاري"
+
+#: inc/models/item.php:211 inc/models/project.php:201
+#: inc/models/project.with_status_table.php:160
+#: inc/models/project.with_status_table.php:170
+msgid "Suspended"
+msgstr "مؤجل"
+
+#: inc/models/item.php:213 inc/models/project.php:203
+#: inc/models/project.with_status_table.php:162
+#: inc/models/project.with_status_table.php:171
+msgid "Closed"
+msgstr "مغلق"
+
+#: inc/models/item.php:215
+msgid "Unknown Status !"
+msgstr "حالة غير معروفة!"
+
+#: inc/models/item.php:239
+msgctxt "tasks"
+msgid "All tasks"
+msgstr "كل المهام"
+
+#: inc/models/item.php:273
+msgid "Empty comment not allowed."
+msgstr "غير مسموح بإضافة تعليق فارغ,"
+
+#: inc/models/item.php:311
+msgid "Forbidden upload: "
+msgstr "ملف غير مسموح به:"
+
+#: inc/models/item.php:317
+msgid "Unable to write file to upload directory. Please tell an admin."
+msgstr "حدث خطأ أثناء إضافة الملف لمجلد الرفع. رجاءً قم بتبليغ أحد المدراء."
+
+#: inc/models/item.php:330
+msgid "Upload of "
+msgstr "رفع"
+
+#: inc/models/item.php:330
+msgid " failed with error code "
+msgstr "فشل ورقم الخطأ"
+
+#: inc/models/item.php:415
+msgid "%d attachment"
+msgid_plural "%d attachments"
+msgstr[0] "%s مرفق"
+msgstr[1] "%s مرفق"
+msgstr[2] "%s مرفق"
+msgstr[3] "%s مرفقات"
+msgstr[4] "%s مرفق"
+msgstr[5] "%s مرفق"
+
+#: inc/models/log.php:42
+msgid "assignee"
+msgstr "المعين للعمل"
+
+#: inc/models/log.php:43
+msgid "description"
+msgstr "الوصف"
+
+#: inc/models/log.php:44
+msgid "deadline"
+msgstr "المهلة الزمنية"
+
+#: inc/models/log.php:45
+msgid "priority"
+msgstr "الأولوية"
+
+#: inc/models/log.php:46
+msgid "title"
+msgstr "العنوان"
+
+#: inc/models/log.php:47
+msgid "project"
+msgstr "المشروع"
+
+#: inc/models/log.php:52
+msgid "1 file"
+msgid_plural "%d files"
+msgstr[0] "%s ملف"
+msgstr[1] "%s ملف"
+msgstr[2] "%s ملف"
+msgstr[3] "%s ملفات"
+msgstr[4] "%s ملف"
+msgstr[5] "%s ملف"
+
+#: inc/models/log.php:65 inc/views/front/nav.php:6
+msgid "Tasks"
+msgstr "المهام"
+
+#: inc/models/log.php:66 inc/views/admin/project_list.php:6
+#: inc/views/front/nav.php:5
+msgid "Projects"
+msgstr "المشاريع"
+
+#: inc/models/log.php:67
+msgid "Comments"
+msgstr "التعليقات"
+
+#: inc/models/log.php:82
+msgctxt "updates"
+msgid "All"
+msgstr "الكل"
+
+#: inc/models/project.php:120 inc/models/project.with_status_table.php:106
+#: inc/views/admin/project_edit.php:87 inc/views/admin/settings.php:107
+msgid "Any visitor"
+msgstr "أي زائر"
+
+#: inc/models/project.php:182 inc/views/admin/project_list.php:19
+msgctxt "many projects"
+msgid "Draft"
+msgstr "مسودة"
+
+#: inc/models/project.php:183 inc/views/admin/dashboard.php:42
+#: inc/views/admin/project_list.php:23
+msgctxt "many projects"
+msgid "In Progress"
+msgstr "جاري"
+
+#: inc/models/project.php:184 inc/views/admin/dashboard.php:43
+#: inc/views/admin/project_list.php:24
+msgctxt "many projects"
+msgid "Suspended"
+msgstr "مؤجل"
+
+#: inc/models/project.php:185 inc/views/admin/dashboard.php:44
+#: inc/views/admin/project_list.php:25
+msgctxt "many projects"
+msgid "Closed"
+msgstr "مغلق"
+
+#: inc/models/project.php:212 inc/views/admin/project_list.php:15
+msgctxt "projects"
+msgid "All"
+msgstr "الكل"
+
+#: inc/models/project.php:249 inc/models/project.php:293
+#: inc/models/project.with_status_table.php:221
+#: inc/models/project.with_status_table.php:265
+msgid "Guest"
+msgstr "زائر"
+
+#: inc/models/project.php:251 inc/models/project.php:294
+#: inc/models/project.with_status_table.php:223
+#: inc/models/project.with_status_table.php:266
+msgid "Client"
+msgstr "عميل"
+
+#: inc/models/project.php:253 inc/models/project.php:295
+#: inc/models/project.with_status_table.php:225
+#: inc/models/project.with_status_table.php:267
+msgid "Staff"
+msgstr "موظف"
+
+#: inc/models/project.php:255 inc/models/project.php:296
+#: inc/models/project.with_status_table.php:227
+#: inc/models/project.with_status_table.php:268
+msgid "Manager"
+msgstr "مدير"
+
+#: inc/models/project.php:257 inc/models/project.php:297
+#: inc/models/project.with_status_table.php:229
+#: inc/models/project.with_status_table.php:269
+msgid "Project Leader"
+msgstr "مدير مشروع"
+
+#: inc/views/admin/dashboard.php:3
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: inc/views/admin/dashboard.php:9
+msgid ""
+"Learn more about this plugin on the official <a href=\"%1$s\" target=\"_blank"
+"\">TaskFreak! website</a>."
+msgstr ""
+"اعرف المزيد عن هذه الإضافة في  <a href=\"%1$s\" target=\"_blank\">الموقع "
+"الرسمي</a>. لـTaskFreak!."
+
+#: inc/views/admin/dashboard.php:16
+msgid "Start working!"
+msgstr "إبدأ العمل!"
+
+#: inc/views/admin/dashboard.php:18 inc/views/admin/settings.php:23
+msgid "Recent updates"
+msgstr "آخر التحديثات"
+
+#: inc/views/admin/dashboard.php:22
+msgid "Manage projects"
+msgstr "إدارة المشاريع"
+
+#: inc/views/admin/dashboard.php:26
+msgid "Learn more about TFWP"
+msgstr "اعرف المزيد عن TFWP"
+
+#: inc/views/admin/dashboard.php:31
+msgid ""
+"To start using TaskFreak! plugin for Wordpress, you first need to add the "
+"shortcode <code>[tfk_all]</code> in one of your <a href=\"%s\">pages</a>."
+msgstr ""
+"لتبدأ استخدام إضافة TaskFreak! للورد بريس يجب أن تضيف هذا الكود المختصر "
+"<code>[tfk_all]</code> في واحدة من <a href=\"%s\">صفحاتك</a>."
+
+#: inc/views/admin/dashboard.php:32
+msgid "You can also start by <a href=\"%s\">creating projects</a>"
+msgstr "يمكنك أيضًا البدء <a href=\"%s\">بإنشاء مشاريع</a>"
+
+#: inc/views/admin/dashboard.php:48
+msgid "My Tasks"
+msgstr "مهماتي"
+
+#: inc/views/admin/dashboard.php:54
+msgid "All Tasks"
+msgstr "كل المهمات"
+
+#: inc/views/admin/dashboard.php:60
+msgid "My Projects"
+msgstr "مشاريعي"
+
+#: inc/views/admin/dashboard.php:66 inc/views/front/project_view.php:5
+msgid "All Projects"
+msgstr "كل المشاريع"
+
+#: inc/views/admin/dashboard.php:76
+msgid ""
+"Please consider <a href=\"%s\" target=\"_blank\">making a donation</a> if you "
+"enjoy using TFWP plugin."
+msgstr ""
+"رجاءً خذ بعين الاعتبار <a href=\"%s\" target=\"_blank\">التبرع</a> إذا كنت "
+"تستمتع باستخدام إضافة TaskFreak! للوردبريس."
+
+#: inc/views/admin/project_edit.php:4
+msgid "Edit Project"
+msgstr "تعديل المشروع"
+
+#: inc/views/admin/project_edit.php:4
+msgid "New Project"
+msgstr "مشروع جديد"
+
+#: inc/views/admin/project_edit.php:9
+msgid "Project saved successfully"
+msgstr "تم حفظ المشروع بنجاح"
+
+#: inc/views/admin/project_edit.php:13
+msgid "Error saving project"
+msgstr "خطأ أثناء حفظ المشروع"
+
+#: inc/views/admin/project_edit.php:32
+msgid "Enter title here"
+msgstr "أدخل العنوان هنا"
+
+#: inc/views/admin/project_edit.php:53
+msgid "Project Status"
+msgstr "حالة المشروع"
+
+#: inc/views/admin/project_edit.php:61
+msgid "Status:"
+msgstr "الحالة:"
+
+#: inc/views/admin/project_edit.php:71 inc/views/admin/project_edit.php:103
+msgid "OK"
+msgstr "تم"
+
+#: inc/views/admin/project_edit.php:72 inc/views/admin/project_edit.php:104
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: inc/views/admin/project_edit.php:76
+msgid "Access :"
+msgstr "صلاحية الوصول:"
+
+#: inc/views/admin/project_edit.php:84
+msgid "Who can access this project"
+msgstr "من يستطيع الوصول لهذا المشروع"
+
+#: inc/views/admin/project_edit.php:91 inc/views/admin/settings.php:111
+msgid "Who can comment tasks"
+msgstr "من يستطيع التعليق على المهام"
+
+#: inc/views/admin/project_edit.php:95 inc/views/admin/settings.php:117
+msgid "Who can create tasks"
+msgstr "من يستطيع إنشاء المهام"
+
+#: inc/views/admin/project_edit.php:99 inc/views/admin/settings.php:123
+msgid "Who can moderate the project"
+msgstr "من يستطيع إدارة المشروع"
+
+#: inc/views/admin/project_edit.php:112
+msgid "Move to Trash"
+msgstr "أضف إلى سلة المهملات"
+
+#: inc/views/admin/project_edit.php:116
+msgid "Update"
+msgstr "تحديث"
+
+#: inc/views/admin/project_edit.php:131
+msgid "Click to toggle"
+msgstr "إضغط لتغيير الحالة"
+
+#: inc/views/admin/project_edit.php:132
+msgid "Project History"
+msgstr "تاريخ المشروع"
+
+#: inc/views/admin/project_edit.php:139 inc/views/front/list.php:87
+msgid " by "
+msgstr " بواسطة "
+
+#: inc/views/admin/project_edit.php:144
+msgid "New project"
+msgstr "مشروع جديد"
+
+#: inc/views/admin/project_list.php:9
+msgid "Add New"
+msgstr "أضف جديد"
+
+#: inc/views/admin/project_list.php:29
+msgid "Trash"
+msgstr "سلة المهملات"
+
+#: inc/views/admin/project_list.php:38 inc/views/admin/project_list.php:45
+#: inc/views/front/project_list.php:11 inc/views/front/project_list.php:18
+msgid "Name"
+msgstr "الاسم"
+
+#: inc/views/admin/project_list.php:39 inc/views/admin/project_list.php:46
+#: inc/views/front/edit.php:69 inc/views/front/list.php:23
+#: inc/views/front/project_list.php:12 inc/views/front/project_list.php:19
+msgid "Status"
+msgstr "الحالة"
+
+#: inc/views/admin/project_list.php:76
+msgid "Restore this item from the Trash"
+msgstr "استعد هذا البند من سلة المهملات"
+
+#: inc/views/admin/project_list.php:77
+msgid "Restore"
+msgstr "استعادة"
+
+#: inc/views/admin/project_list.php:78
+msgid "Delete this item permanently"
+msgstr "حذف هذا البند تمامًا"
+
+#: inc/views/admin/project_list.php:80
+msgid "Really delete this item?"
+msgstr "متأكد من حذف هذا البند؟"
+
+#: inc/views/admin/project_list.php:80
+msgid "Delete Permanently"
+msgstr "حذف دائم"
+
+#: inc/views/admin/project_list.php:85
+msgid "Edit this item"
+msgstr "تعديل هذا البند"
+
+#: inc/views/admin/project_list.php:86 inc/views/admin/project_list.php:94
+msgid "View"
+msgstr "عرض"
+
+#: inc/views/admin/settings.php:3
+msgid "Settings & Options"
+msgstr "الإعدادت والاختيارات"
+
+#: inc/views/admin/settings.php:15
+msgid "Setup"
+msgstr "تثبيت"
+
+#: inc/views/admin/settings.php:18
+msgid "Default [tfk_all] view"
+msgstr "العرض الافتراضي [tfk_all]"
+
+#: inc/views/admin/settings.php:21
+msgid "List of projects"
+msgstr "قائمة المشروعات"
+
+#: inc/views/admin/settings.php:22
+msgid "Tasks (to do)"
+msgstr "المهام"
+
+#: inc/views/admin/settings.php:25
+msgid "What shortcut [tfk_all] shows by default"
+msgstr "أي اختصار يعرضه [tfk_all] افتراضيًا"
+
+#: inc/views/admin/settings.php:29
+msgid "Display options"
+msgstr "اختيارات العرض"
+
+#: inc/views/admin/settings.php:32
+msgid "Number of tasks per page"
+msgstr "عدد المهام بالصفحة الواحدة"
+
+#: inc/views/admin/settings.php:44
+msgid "Date format"
+msgstr "شكل التاريخ"
+
+#: inc/views/admin/settings.php:47
+msgid "American (mm/dd/yyyy)"
+msgstr "أمريكي (شهر/يوم/سنة)"
+
+#: inc/views/admin/settings.php:48
+msgid "European (dd/mm/yyyy)"
+msgstr "أوروبي (يوم/شهر/سنة)"
+
+#: inc/views/admin/settings.php:49
+msgid "Electronic (yyyy-mm-dd)"
+msgstr "إلكتروني (سنة-شهر-يوم)"
+
+#: inc/views/admin/settings.php:54
+msgid "Time format"
+msgstr "نظام التوقيت"
+
+#: inc/views/admin/settings.php:57
+msgid "24 hours"
+msgstr "24 ساعة"
+
+#: inc/views/admin/settings.php:58
+msgid "12 hours"
+msgstr "12 ساعة"
+
+#: inc/views/admin/settings.php:63
+msgid "Proximity bar"
+msgstr "شريط التقارب"
+
+#: inc/views/admin/settings.php:66
+msgid "Visible"
+msgstr "ظاهر"
+
+#: inc/views/admin/settings.php:69
+msgid "Hidden"
+msgstr "مختفي"
+
+#: inc/views/admin/settings.php:73
+msgid "Updates page shows"
+msgstr "تحديث عرض الصفحات"
+
+#: inc/views/admin/settings.php:85
+msgid "No limit"
+msgstr "غير محدود"
+
+#: inc/views/admin/settings.php:87
+msgid "day(s)"
+msgstr "يوم/أيام"
+
+#: inc/views/admin/settings.php:91
+msgid "Avatar size"
+msgstr "حجم الصورة الشخصية"
+
+#: inc/views/admin/settings.php:94
+msgid "Small"
+msgstr "صغير"
+
+#: inc/views/admin/settings.php:95
+msgid "Medium"
+msgstr "متوسط"
+
+#: inc/views/admin/settings.php:96
+msgid "Large"
+msgstr "كبير"
+
+#: inc/views/admin/settings.php:101
+msgid "Default project access"
+msgstr "الوصول الافتراضي للمشاريع"
+
+#: inc/views/admin/settings.php:104
+msgid "Who can access the project"
+msgstr "من يستطيع الوصول للمشروع"
+
+#: inc/views/admin/settings.php:129
+msgid "Security options"
+msgstr "اختيارات الأمان"
+
+#: inc/views/admin/settings.php:132
+msgid "Allow uploads in task comments"
+msgstr "السماح برفع الملفات في تعليقات المهام"
+
+#: inc/views/admin/settings.php:135
+msgid "Yes"
+msgstr "نعم"
+
+#: inc/views/admin/settings.php:138
+msgid "No"
+msgstr "لا"
+
+#: inc/views/admin/settings.php:143
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+#: inc/views/front/edit.php:8 inc/views/front/task.php:10
+msgid "Back to list"
+msgstr "العودة للقائمة"
+
+#: inc/views/front/edit.php:9
+msgid "Edit Task"
+msgstr "تعديل المهمة"
+
+#: inc/views/front/edit.php:9 inc/views/front/list.php:2
+msgid "New Task"
+msgstr "مهمة جديدة"
+
+#: inc/views/front/edit.php:13 inc/views/front/list.php:20
+msgid "Title"
+msgstr "العنوان"
+
+#: inc/views/front/edit.php:18
+msgid "Project"
+msgstr "المشروع"
+
+#: inc/views/front/edit.php:31
+msgid "Create a project first, please"
+msgstr "أنشأ مشروعًا أولاً من فضلك"
+
+#: inc/views/front/edit.php:36 inc/views/front/list.php:19
+msgid "Priority"
+msgstr "الأولوية"
+
+#: inc/views/front/edit.php:46
+msgid "Deadline"
+msgstr "المهلة الزمنية"
+
+#: inc/views/front/edit.php:51 inc/views/front/edit.php:55
+msgid "Calendar"
+msgstr "التقويم"
+
+#: inc/views/front/edit.php:52
+msgid "Click to show calendar"
+msgstr "إضغط لتعرض التقويم"
+
+#: inc/views/front/edit.php:59 inc/views/front/list.php:56
+msgid "Assigned to"
+msgstr "المسؤول"
+
+#: inc/views/front/edit.php:95 inc/views/front/task.php:121
+msgid "Add a File:"
+msgstr "أضف ملف:"
+
+#: inc/views/front/edit.php:97 inc/views/front/edit.php:98
+#: inc/views/front/edit.php:99 inc/views/front/edit.php:100
+#: inc/views/front/task.php:123 inc/views/front/task.php:124
+msgid "more"
+msgstr "المزيد"
+
+#: inc/views/front/edit.php:107
+msgid "Attached Files:"
+msgstr "الملفات المرفقة:"
+
+#: inc/views/front/edit.php:120
+msgid "Save Task"
+msgstr "إحفظ المهمة"
+
+#: inc/views/front/list.php:11
+msgid "task"
+msgid_plural "tasks"
+msgstr[0] "مهمة"
+msgstr[1] "مهمة"
+msgstr[2] "مهمة"
+msgstr[3] "مهمات"
+msgstr[4] "مهمة"
+msgstr[5] "مهمة"
+
+#: inc/views/front/list.php:14
+msgid "Sort by:"
+msgstr "رتب بواسطة:"
+
+#: inc/views/front/list.php:17
+msgid "Deadline proximity"
+msgstr "اقتراب المهلة الزمنية"
+
+#: inc/views/front/list.php:18
+msgid "Deadline date"
+msgstr "تاريخ المهلة الزمنية"
+
+#: inc/views/front/list.php:21
+msgid "Assignee"
+msgstr "المسؤول"
+
+#: inc/views/front/list.php:22
+msgid "Modification date"
+msgstr "تاريخ التعديل"
+
+#: inc/views/front/list.php:56 inc/views/front/list.php:78
+#: inc/views/front/list.php:87 inc/views/front/recent.php:30
+#: inc/views/front/task.php:30 inc/views/front/task.php:33
+#: inc/views/front/task.php:38 inc/views/front/task.php:95
+#: inc/views/front/task_history.php:25
+msgid "[deleted user]"
+msgstr "(عضو محذوف)"
+
+#: inc/views/front/list.php:57 inc/views/front/list.php:78
+#: inc/views/front/task.php:38
+msgid "Unassigned"
+msgstr "لا مسؤول"
+
+#: inc/views/front/list.php:63 inc/views/front/list.php:135
+#: inc/views/front/task.php:56
+msgctxt "one task"
+msgid "Closed"
+msgstr "مغلقة"
+
+#: inc/views/front/list.php:77
+msgid "Prio.:"
+msgstr "الأولوية:"
+
+#: inc/views/front/list.php:81
+msgid "Add.: "
+msgstr "أضيف في:"
+
+#: inc/views/front/list.php:84
+msgid "Mod.: "
+msgstr "آخر تعديل في: "
+
+#: inc/views/front/list.php:93 inc/views/front/list.php:98
+#: inc/views/front/task.php:82
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] "تعليقات"
+msgstr[1] "تعليق"
+msgstr[2] "تعليقات"
+msgstr[3] "تعليقات"
+msgstr[4] "تعليق"
+msgstr[5] "تعليق"
+
+#: inc/views/front/task.php:25
+msgid "Comment"
+msgstr "تعليق"
+
+#: inc/views/front/list.php:106 inc/views/front/task.php:71
+msgid "Attached files"
+msgstr "الملفات المرفقة"
+
+#: inc/views/front/list.php:115 inc/views/front/task.php:37
+msgid "Deadline:"
+msgstr "المهلة الزمنية:"
+
+#: inc/views/front/list.php:119 inc/views/front/task.php:40
+msgid "Change Status:"
+msgstr "تغيير الحالة:"
+
+#: inc/views/front/list.php:124 inc/views/front/task.php:45
+msgid "Click to mark as In Progress"
+msgstr "إضغط لتحددها كجاري"
+
+#: inc/views/front/list.php:125 inc/views/front/task.php:46
+msgctxt "one task"
+msgid "In Progress"
+msgstr "جاري"
+
+#: inc/views/front/list.php:129 inc/views/front/task.php:50
+msgid "Click to mark as Suspended"
+msgstr "اضغط لتحددها كمؤجلة"
+
+#: inc/views/front/list.php:130 inc/views/front/task.php:51
+msgctxt "one task"
+msgid "Suspended"
+msgstr "مؤجلة"
+
+#: inc/views/front/list.php:134 inc/views/front/task.php:55
+msgid "Click to mark as Closed"
+msgstr "إضغط لتحددها كمغلقة"
+
+#: inc/views/front/list.php:137 inc/views/front/task.php:58
+msgid "Current Status: "
+msgstr "الحالة:"
+
+#: inc/views/front/list.php:149
+msgid "Page:"
+msgstr "الصفحة:"
+
+#: inc/views/front/list.php:160
+msgid "Results per page:"
+msgstr "النتائج في الصفحة:"
+
+#: inc/views/front/list.php:174
+msgid "No item found"
+msgstr "لا توجد مهمات"
+
+#: inc/views/front/nav.php:7
+msgid "Updates"
+msgstr "التحديثات"
+
+#: inc/views/front/project_list.php:10 inc/views/front/project_list.php:17
+msgid "ID"
+msgstr "الرقم"
+
+#: inc/views/front/project_list.php:36
+msgid "No project found"
+msgstr "لا يوجد مشروع"
+
+#: inc/views/front/recent.php:36
+msgid "commented task"
+msgstr "أضاف تعليق على المهمة"
+
+#: inc/views/front/recent.php:38
+msgid "created task"
+msgstr "أضاف المهمة"
+
+#: inc/views/front/recent.php:40
+msgid "set task"
+msgstr "قام بتغيير حالة المهمة"
+
+#: inc/views/front/recent.php:40 inc/views/front/recent.php:48
+msgid "to"
+msgstr "إلى"
+
+#: inc/views/front/recent.php:42
+msgid "modified task"
+msgstr "قام بتعديل المهمة"
+
+#: inc/views/front/recent.php:46
+msgid "created project"
+msgstr "أضاف المشروع"
+
+#: inc/views/front/recent.php:48
+msgid "set project"
+msgstr "قام بتغيير حالة المشروع"
+
+#: inc/views/front/recent.php:50
+msgid "modified project"
+msgstr "مشروع معدل"
+
+#: inc/views/front/recent.php:56
+msgid "Nothing, for the moment"
+msgstr "لا شئ إلى الآن"
+
+#: inc/views/front/status.php:5
+msgid "OK ! Task has been set to "
+msgstr "تم! تم إرسال المهمة إلى"
+
+#: inc/views/front/status.php:7
+msgid "Sorry, an error has occured."
+msgstr "عذرًا حدث خطأ ما."
+
+#: inc/views/front/task.php:16 inc/views/front/task_history.php:10
+msgid "In"
+msgstr "في"
+
+#: inc/views/front/task.php:30
+msgid "Task created by"
+msgstr "أنشات المهمة بواسطة"
+
+#: inc/views/front/task.php:33
+msgid "By"
+msgstr "بواسطة"
+
+#: inc/views/front/task.php:34
+msgid "On"
+msgstr "في"
+
+#: inc/views/front/task.php:36
+msgid "Priority:"
+msgstr "الأولوية:"
+
+#: inc/views/front/task.php:38
+msgid "Assigned To:"
+msgstr "المسؤول:"
+
+#: inc/views/front/task.php:62
+msgid "Show History"
+msgstr "تاريخ التعديلات"
+
+#: inc/views/front/task.php:63
+msgid "Hide History"
+msgstr "أخفي التاريخ"
+
+#: inc/views/front/task.php:106
+msgid "Add a Comment:"
+msgstr "أضف تعليق:"
+
+#: inc/views/front/task.php:130
+msgid "Save Comment"
+msgstr "حفظ التعليق"
+
+#: inc/views/front/task_history.php:4
+msgid "Back to task"
+msgstr "العودة للمهمة"
+
+#: inc/views/front/task_history.php:12
+msgid "Task history"
+msgstr "تاريخ المهمة"
+
+#: inc/views/front/task_history.php:17
+msgid "Date"
+msgstr "التاريخ"
+
+#: inc/views/front/task_history.php:18
+msgid "User"
+msgstr "المستخدم"
+
+#: inc/views/front/task_history.php:19
+msgid "Action"
+msgstr "الإجراء"
+
+#: inc/views/front/task_history.php:32
+msgid "Modified"
+msgstr "تم التعديل"
+
+#. Plugin Name of the plugin/theme
+msgid "TaskFreak Free"
+msgstr "TaskFreak المجاني"
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.taskfreak.com"
+msgstr "http://www.taskfreak.com"
+
+#. Description of the plugin/theme
+msgid "Task Management made easy"
+msgstr "إدارة المهام بسهولة"
+
+#. Author of the plugin/theme
+msgid "Tirzen"
+msgstr "تيرزن"
+
+#. Author URI of the plugin/theme
+msgid "http://www.tirzen.com"
+msgstr "http://www.tirzen.com"
+
+msgctxt "one task"
+msgid "Draft"
+msgstr "مسودة"
+
+msgctxt "many tasks"
+msgid "Draft"
+msgstr "مسودة"
+
+msgctxt "many tasks"
+msgid "In Progress"
+msgstr "جاري"
+
+msgctxt "many tasks"
+msgid "Suspended"
+msgstr "مؤجل"
+
+msgctxt "many tasks"
+msgid "Closed"
+msgstr "مغلق"
+
+msgctxt "one project"
+msgid "Draft"
+msgstr "مسودة"
+
+msgctxt "one project"
+msgid "In Progress"
+msgstr "جاري"
+
+msgctxt "one project"
+msgid "Suspended"
+msgstr "مؤجل"
+
+msgctxt "one project"
+msgid "Closed"
+msgstr "مغلق"
+
+#: inc/controllers/admin.php:33
+msgid "Administrator Dashboard"
+msgstr "لوحة تحكم المدير"
+
+#: inc/controllers/admin.php:35
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: inc/models/item.php:50
+msgid "Title should not be blank"
+msgstr "يجب ألا يكون العنوان فارغًا"
+
+#: inc/models/item.php:53
+msgid "Priority should be 1, 2, or 3"
+msgstr "يجب أن تكون الأولوية 1، 2 أو 3"
+
+#: inc/models/item.php:56
+msgid "Invalid date format"
+msgstr "هيئة التاريخ غير صحيحة"
+
+#: inc/models/item.php:59
+msgid "Description is too big (maybe you pasted an image into it?)"
+msgstr "الوصف كبير جدًا"
