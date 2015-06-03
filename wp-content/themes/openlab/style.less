@@ -1643,7 +1643,7 @@ body{
                     height: 107px;
                 }
                 &.members{
-                    height: 222px;
+                    height: 300px;
                     .link-btn{
                         margin-right: 3px;
                     }
@@ -1651,6 +1651,36 @@ body{
                 @media (min-width: @screen-md-min) and (max-width: @screen-md-max){
                     height: 258px;
                 }
+
+		/* User name */
+		h4 {
+		    margin: 10px 0 15px;
+		    a {
+		        text-decoration: none;
+		    }
+		}
+
+		/* "Email Status" and other secondary headers */
+		h5 {
+		    font-size: .9em;
+		    color: #333;
+		    margin-top: 20px;
+		    font-weight: bold;
+		}
+
+		ul.group-member-actions {
+		    margin-left: 0;
+		    padding-left: 0;
+		    list-style-type: none;
+		    font-size: .9em;
+		    font-weight: bold;
+		}
+
+		ul.group-manage-members-bpges-status {
+		    list-style-type: none;
+		    margin-left: 0;
+		    padding-left: 0;
+		}
             }
         }
     }

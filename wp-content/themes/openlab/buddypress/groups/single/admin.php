@@ -261,7 +261,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                                 <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                             </h4>
                                             <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
-                                            <a class="btn btn-primary link-btn btn-xs confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
+						<ul class="group-member-actions">
+							<li><a class="confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a></li>
+						</ul>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -293,8 +295,11 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                                 <h4>
                                                     <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                                 </h4>
-                                                <a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="btn btn-primary btn-xs link-btn confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a>
-                                                <a class="btn btn-primary btn-xs link-btn confirm mod-demote-to-member" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a>
+
+					        <ul class="group-member-actions">
+                                                    <li><a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a></li>
+                                                    <li><a class="confirm mod-demote-to-member" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a></li>
+						</ul>
                                             </div>
                                         </div>
                                     </div>
@@ -343,23 +348,23 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                             <h4>
                                                 <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
                                             </h4>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-24">
+
+					    <ul class="group-member-actions">
                                             <?php if (bp_get_group_member_is_banned()) : ?>
 
-                                                <a href="<?php bp_group_member_unban_link(); ?>" class="btn btn-primary btn-xs link-btn confirm member-unban" title="<?php _e('Unban this member', 'buddypress'); ?>"><?php _e('Remove Ban', 'buddypress'); ?></a>
+                                                <li><a href="<?php bp_group_member_unban_link(); ?>" class="confirm member-unban" title="<?php _e('Unban this member', 'buddypress'); ?>"><?php _e('Remove Ban', 'buddypress'); ?></a></li>
 
                                             <?php else : ?>
 
-                                                <a href="<?php bp_group_member_ban_link(); ?>" class="btn btn-primary btn-xs link-btn confirm member-ban" title="<?php _e('Kick and ban this member', 'buddypress'); ?>"><?php _e('Kick &amp; Ban', 'buddypress'); ?></a>
-                                                <a href="<?php bp_group_member_promote_mod_link(); ?>" class="btn btn-primary btn-xs link-btn confirm member-promote-to-mod" title="<?php _e('Promote to Mod', 'buddypress'); ?>"><?php _e('Promote to Mod', 'buddypress'); ?></a>
-                                                <a href="<?php bp_group_member_promote_admin_link(); ?>" class="btn btn-primary btn-xs link-btn confirm member-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a>
+                                                <li><a href="<?php bp_group_member_ban_link(); ?>" class="confirm member-ban" title="<?php _e('Kick and ban this member', 'buddypress'); ?>"><?php _e('Kick &amp; Ban', 'buddypress'); ?></a></li>
+                                                <li><a href="<?php bp_group_member_promote_mod_link(); ?>" class="confirm member-promote-to-mod" title="<?php _e('Promote to Mod', 'buddypress'); ?>"><?php _e('Promote to Mod', 'buddypress'); ?></a></li>
+                                                <li><a href="<?php bp_group_member_promote_admin_link(); ?>" class="confirm member-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a></li>
 
                                             <?php endif; ?>
 
-                                            <a href="<?php bp_group_member_remove_link(); ?>" class="btn btn-primary btn-xs link-btn confirm" title="<?php _e('Remove this member', 'buddypress'); ?>"><?php _e('Remove from group', 'buddypress'); ?></a>
+					        <li><a href="<?php bp_group_member_remove_link(); ?>" class="confirm" title="<?php _e('Remove this member', 'buddypress'); ?>"><?php _e('Remove from group', 'buddypress'); ?></a></li>
+
+					    </ul>
 
                                             <?php do_action('bp_group_manage_members_admin_item'); ?>
                                         </div>
@@ -388,34 +393,36 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('membership-requests')) : ?>
 
             <?php do_action('bp_before_group_membership_requests_admin'); ?>
-                
+
             <?php do_action('template_notices') ?>
 
             <?php if (bp_group_has_membership_requests()) : ?>
 
-                <ul id="request-list" class="item-list">
-                    <?php while (bp_group_membership_requests()) : bp_group_the_membership_request(); ?>
+		<div id="group-manage-request-list" class="group-list item-list inline-element-list row group-manage-requests group-manage-members">
+			<?php while ( bp_group_membership_requests() ) : bp_group_the_membership_request(); ?>
+			<div class="col-md-8 col-xs-12 group-item">
+                                <div class="group-item-wrapper">
+					<div class="row info-row">
+						<div class="col-md-9 col-xs-7">
+							<img class="img-responsive" src ="<?php echo bp_core_fetch_avatar( array( 'item_id' => $GLOBALS['requests_template']->request->user_id, 'object' => 'member', 'type' => 'full', 'html' => false ) ) ?>" />
+						</div>
 
-                        <li>
-                            <?php bp_group_request_user_avatar_thumb() ?>
-                            <h4><?php bp_group_request_user_link() ?> <span class="comments"><?php bp_group_request_comment() ?></span></h4>
-                            <span class="activity"><?php bp_group_request_time_since_requested() ?></span>
+						<div class="col-md-15 col-xs-17">
+							<h4>
+								<?php bp_group_request_user_link() ?>
+							</h4>
 
-                            <?php do_action('bp_group_membership_requests_admin_item'); ?>
+							<ul class="group-member-actions">
+								<li><a href="<?php bp_group_request_accept_link() ?>"><?php _e( 'Accept', 'buddypress' ); ?></a></li>
+								<li><a href="<?php bp_group_request_reject_link() ?>"><?php _e( 'Reject', 'buddypress' ); ?></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php endwhile; ?>
 
-                            <div class="action">
-
-                                <?php bp_button(array('id' => 'group_membership_accept', 'component' => 'groups', 'wrapper_class' => 'accept', 'link_href' => bp_get_group_request_accept_link(), 'link_title' => __('Accept', 'buddypress'), 'link_text' => __('Accept', 'buddypress'))); ?>
-
-                                <?php bp_button(array('id' => 'group_membership_reject', 'component' => 'groups', 'wrapper_class' => 'reject', 'link_href' => bp_get_group_request_reject_link(), 'link_title' => __('Reject', 'buddypress'), 'link_text' => __('Reject', 'buddypress'))); ?>
-
-                                <?php do_action('bp_group_membership_requests_admin_item_action'); ?>
-
-                            </div>
-                        </li>
-
-                    <?php endwhile; ?>
-                </ul>
+		</div>
 
             <?php else: ?>
 
