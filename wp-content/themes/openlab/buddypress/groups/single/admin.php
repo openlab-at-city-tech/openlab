@@ -37,7 +37,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
         <?php /* Edit Group Details */ ?>
         <?php if (bp_is_group_admin_screen('edit-details')) : ?>
-        
+
             <?php do_action('template_notices') ?>
 
             <div class="panel panel-default">
@@ -82,9 +82,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('group-settings')) : ?>
 
             <?php do_action('bp_before_group_settings_admin'); ?>
-            
+
             <?php do_action('template_notices') ?>
-                
+
             <?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
 		<?php $forum_enabled = openlab_is_forum_enabled_for_group() ?>
                      <div class="panel panel-default">
@@ -98,7 +98,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                      </div>
                         <hr />
             <?php endif; ?>
-                
+
             <?php /* "Related Links List Settings" - Course only for now */ ?>
                     <?php if ('course' === $group_type) : ?>
                         <div class="panel panel-default">
@@ -133,7 +133,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                 </ul>
                             </div>
                         </div>
-                    <?php endif; ?>   
+                    <?php endif; ?>
 
             <?php if (!openlab_is_portfolio()) : ?>
                 <div class="panel panel-default">
@@ -163,7 +163,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('group-avatar')) : ?>
 
             <?php if ('upload-image' == bp_get_avatar_admin_step()) : ?>
-                
+
                 <div class="panel panel-default">
                 <div class="panel-heading">Upload Avatar</div>
                     <div class="panel-body">
@@ -172,18 +172,18 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                             <div class="col-sm-8">
                                 <div id="avatar-wrapper">
                                     <div class="padded-img">
-                                        
+
                                         <?php if(bp_get_group_avatar()): ?>
                                         <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/>
                                         <?php else: ?>
                                             <img class="img-responsive padded" src ="<?php echo get_stylesheet_directory_uri(); ?>/images/avatar_blank.png" alt="avatar-blank"/>
                                         <?php endif; ?>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-16">
-                            
+
                                 <p class="italics"><?php _e( 'Upload an image to use as an avatar for this ' . bp_get_group_type() . '. The image will be shown on the main ' . bp_get_group_type() . ' page, and in search results.', 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
@@ -239,7 +239,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('manage-members')) : ?>
 
             <?php do_action('bp_before_group_manage_members_admin'); ?>
-                
+
             <?php do_action('template_notices') ?>
 
             <div class="bp-widget">
@@ -440,7 +440,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
         <?php if (bp_is_group_admin_screen('delete-group')) : ?>
 
             <?php do_action('bp_before_group_delete_admin'); ?>
-            
+
             <?php do_action('template_notices'); ?>
 
             <div id="message" class="bp-template-notice error margin-bottom">
@@ -453,7 +453,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                             document.getElementById('delete-group-button').disabled = '';
                         } else {
                             document.getElementById('delete-group-button').disabled = 'disabled';
-                        }" /> 
+                        }" />
                            <?php printf('I understand the consequences of deleting this %s.', openlab_get_group_type()); ?>
                 </label>
             </div>
