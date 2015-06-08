@@ -8436,6 +8436,7 @@ body .inline-visible-xs {
 }
 .group-list .group-item-wrapper p {
   color: #333333;
+  margin-bottom: 12px;
 }
 .group-list .group-item-wrapper .info-line {
   font-size: 12px;
