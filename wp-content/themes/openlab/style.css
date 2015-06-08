@@ -8491,6 +8491,12 @@ body .inline-visible-xs {
   width: 100%;
   margin-bottom: 5px;
 }
+.filter .archive-search h5 {
+  margin-bottom: 7px;
+}
+.filter .archive-search #search-submit {
+  padding: 8px 3% 9px;
+}
 /**group profiles**/
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
