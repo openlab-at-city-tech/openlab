@@ -7520,6 +7520,8 @@ body .timestamp {
 body .timestamp .fa {
   font-size: inherit;
   margin-right: 0;
+  vertical-align: top;
+  padding-top: 2px;
 }
 body .timestamp.info-line-timestamp {
   font-size: 10px;
