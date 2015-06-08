@@ -7351,6 +7351,9 @@ button.oplb-bs .close {
   padding: 0 2%;
   vertical-align: top;
 }
+.oplb-bs.navbar-default.navbar-location-footer {
+  margin-bottom: 0;
+}
 .oplb-bs.navbar-location-oplb-bs {
   position: absolute;
   top: 0;
