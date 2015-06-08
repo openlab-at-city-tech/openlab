@@ -323,26 +323,30 @@ jQuery(document).ready(function($){
 
 	/* AJAX validation for blog URLs */
 	$('form input[type="submit"]').click(function(e){
-            
+                
                 var thisForm = $(this).closest('form');
-            
+                
                 /* Don't hijack the wrong clicks */
                 if ( $(e.target).attr('name') != 'save' ) {
                         return true;
                 }
-
+                
                 /* Don't validate if a different radio button is selected */
-                if ( 'new' != $('input[name=new_or_old]:checked').val() ) {
-                        return true;
+                if ( 'new' == $('input[name=new_or_old]:checked').val() ) {
+                    var domain = $('input[name="blog[domain]"]');
+                } else if ('clone' == $('input[name=new_or_old]:checked').val()){
+                    var domain = $('input[name="clone-destination-path"]');
+                } else {
+                    return true;
                 }
 
 		// If "Set up a site" is not checked, there's no validation to do
 		if ( $( setuptoggle ).length && ! $(setuptoggle).is( ':checked' ) ) {
 			return true;
 		}
-
+                
 		e.preventDefault();
-		var domain = $('input[name="blog[domain]"]');
+		
 
 		var warn = $(domain).siblings('.ajax-warning');
 		if ( warn.length > 0 ) {
@@ -352,7 +356,7 @@ jQuery(document).ready(function($){
 		var path = $(domain).val();
 
 		if ( 0 == path.length ) {
-			$(domain).after('<span class="ajax-warning">This field cannot be blank.</span>');
+			$(domain).after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
 			return false;
 		}
 
@@ -363,7 +367,7 @@ jQuery(document).ready(function($){
 			},
 			function(response) {
 				if ( 'exists' == response ) {
-					$(domain).after('<span class="ajax-warning">Sorry, that URL is already taken.</span>');
+					$(domain).after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
 					return false;
 				} else {
 					$(thisForm).append('<input type="hidden" name="save" value="1" />');

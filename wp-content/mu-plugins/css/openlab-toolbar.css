@@ -7015,6 +7015,9 @@ button.oplb-bs .close {
     font-size: 13px;
   }
 }
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item.ab-empty-item {
+  padding-top: 16px;
+}
 .oplb-bs #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
@@ -7350,6 +7353,9 @@ button.oplb-bs .close {
   height: 34px;
   padding: 0 2%;
   vertical-align: top;
+}
+.oplb-bs.navbar-default.navbar-location-footer {
+  margin-bottom: 0;
 }
 .oplb-bs.navbar-location-oplb-bs {
   position: absolute;

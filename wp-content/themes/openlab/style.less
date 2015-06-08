@@ -526,6 +526,8 @@ body{
         .fa{
             font-size: inherit;
             margin-right: 0;
+            vertical-align: top;
+            padding-top: 2px;
         }
         &.info-line-timestamp{
             font-size: 10px;
@@ -1199,7 +1201,7 @@ body{
                 padding-top: 2px;
                 .fa{
                     color: lighten(@40gray,4%);
-                    font-size: floor((@font-size-base * 1.3)); 
+                    font-size: floor((@font-size-base * 1.3));
                     line-height: 90%;
                     &:hover{
                         color: @aqua;
@@ -1474,6 +1476,7 @@ body{
         }
         p{
             color: @80gray;
+            margin-bottom: 12px;
         }
         .info-line{
             font-size: 12px;
@@ -1538,6 +1541,14 @@ body{
     .custom-select{
         width: 100%;
         margin-bottom: 5px;
+    }
+    .archive-search{
+        h5{
+            margin-bottom: 7px;
+        }
+        #search-submit{
+            padding: 8px 3% 9px;
+        }
     }
 }
 /**group profiles**/
@@ -1643,7 +1654,7 @@ body{
                     height: 107px;
                 }
                 &.members{
-                    height: 222px;
+                    height: 300px;
                     .link-btn{
                         margin-right: 3px;
                     }
@@ -1651,6 +1662,36 @@ body{
                 @media (min-width: @screen-md-min) and (max-width: @screen-md-max){
                     height: 258px;
                 }
+
+		/* User name */
+		h4 {
+		    margin: 10px 0 15px;
+		    a {
+		        text-decoration: none;
+		    }
+		}
+
+		/* "Email Status" and other secondary headers */
+		h5 {
+		    font-size: .9em;
+		    color: #333;
+		    margin-top: 20px;
+		    font-weight: bold;
+		}
+
+		ul.group-member-actions {
+		    margin-left: 0;
+		    padding-left: 0;
+		    list-style-type: none;
+		    font-size: .9em;
+		    font-weight: bold;
+		}
+
+		ul.group-manage-members-bpges-status {
+		    list-style-type: none;
+		    margin-left: 0;
+		    padding-left: 0;
+		}
             }
         }
     }
@@ -2053,11 +2094,11 @@ body{
     margin-top: 64px;
 }
 #sidebar.type-help {
-	.sidebar-wrapper {
-		.sidebar-block {
-			border-top: 1px solid @30gray;
-		}
-	}
+    .sidebar-wrapper {
+        .sidebar-block {
+            border-top: 1px solid @30gray;
+        }
+    }
 }
 #team-thumbs{
     .thumb-wrapper{

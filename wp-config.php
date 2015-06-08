@@ -17,6 +17,7 @@
 /**
  * Include environment-specific constants, such as DB connection data
  */
+define( 'DO_BOOTSTRAP', true );
 if ( !defined( 'DB_NAME' ) ) {
 	include( dirname( __FILE__ ) . '/env.php' );
 }
