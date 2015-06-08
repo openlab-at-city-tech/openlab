@@ -124,11 +124,14 @@ function openlab_load_scripts_high_priority() {
     } else {
 
         $source_path = STYLESHEETPATH . '/style.css';
-        $result_path = STYLESHEETPATH . '/style.min.css';
-        $minifier = new MatthiasMullie\Minify\CSS($source_path);
-        $minifier->minify($result_path);
+        //$result_path = STYLESHEETPATH . '/style.min.css';
+        //$minifier = new MatthiasMullie\Minify\CSS($source_path);
+        //$minifier->minify($result_path);
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.min.css', array(), '20130604', 'all');
+        //wp_register_style('main-styles', $stylesheet_dir_uri . '/style.min.css', array(), '20130604', 'all');
+        //wp_enqueue_style('main-styles');
+        
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
     }
 
