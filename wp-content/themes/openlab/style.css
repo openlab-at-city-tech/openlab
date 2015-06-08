@@ -7520,6 +7520,8 @@ body .timestamp {
 body .timestamp .fa {
   font-size: inherit;
   margin-right: 0;
+  vertical-align: top;
+  padding-top: 2px;
 }
 body .timestamp.info-line-timestamp {
   font-size: 10px;
@@ -8436,6 +8438,7 @@ body .inline-visible-xs {
 }
 .group-list .group-item-wrapper p {
   color: #333333;
+  margin-bottom: 12px;
 }
 .group-list .group-item-wrapper .info-line {
   font-size: 12px;
@@ -8487,6 +8490,12 @@ body .inline-visible-xs {
 .filter .custom-select {
   width: 100%;
   margin-bottom: 5px;
+}
+.filter .archive-search h5 {
+  margin-bottom: 7px;
+}
+.filter .archive-search #search-submit {
+  padding: 8px 3% 9px;
 }
 /**group profiles**/
 #group-action-wrapper .link-btn {

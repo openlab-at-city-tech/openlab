@@ -526,6 +526,8 @@ body{
         .fa{
             font-size: inherit;
             margin-right: 0;
+            vertical-align: top;
+            padding-top: 2px;
         }
         &.info-line-timestamp{
             font-size: 10px;
@@ -1474,6 +1476,7 @@ body{
         }
         p{
             color: @80gray;
+            margin-bottom: 12px;
         }
         .info-line{
             font-size: 12px;
@@ -1538,6 +1541,14 @@ body{
     .custom-select{
         width: 100%;
         margin-bottom: 5px;
+    }
+    .archive-search{
+        h5{
+            margin-bottom: 7px;
+        }
+        #search-submit{
+            padding: 8px 3% 9px;
+        }
     }
 }
 /**group profiles**/
@@ -2083,11 +2094,11 @@ body{
     margin-top: 64px;
 }
 #sidebar.type-help {
-	.sidebar-wrapper {
-		.sidebar-block {
-			border-top: 1px solid @30gray;
-		}
-	}
+    .sidebar-wrapper {
+        .sidebar-block {
+            border-top: 1px solid @30gray;
+        }
+    }
 }
 #team-thumbs{
     .thumb-wrapper{
