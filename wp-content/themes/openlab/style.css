@@ -8574,6 +8574,8 @@ body .inline-visible-xs {
 }
 .group-manage-members.group-list .group-item .group-item-wrapper {
   height: 120px;
+  /* User name */
+  /* "Email Status" and other secondary headers */
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.no-btn {
   height: 98px;
@@ -8582,7 +8584,7 @@ body .inline-visible-xs {
   height: 107px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members {
-  height: 222px;
+  height: 300px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;
@@ -8591,6 +8593,30 @@ body .inline-visible-xs {
   .group-manage-members.group-list .group-item .group-item-wrapper {
     height: 258px;
   }
+}
+.group-manage-members.group-list .group-item .group-item-wrapper h4 {
+  margin: 10px 0 15px;
+}
+.group-manage-members.group-list .group-item .group-item-wrapper h4 a {
+  text-decoration: none;
+}
+.group-manage-members.group-list .group-item .group-item-wrapper h5 {
+  font-size: .9em;
+  color: #333;
+  margin-top: 20px;
+  font-weight: bold;
+}
+.group-manage-members.group-list .group-item .group-item-wrapper ul.group-member-actions {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+  font-size: .9em;
+  font-weight: bold;
+}
+.group-manage-members.group-list .group-item .group-item-wrapper ul.group-manage-members-bpges-status {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
 }
 .plugins #item-body {
   margin-top: 30px;

@@ -273,4 +273,4 @@ function bbg_debug_queries() {
     }
 }
 
-register_shutdown_function('bbg_debug_queries');
+//register_shutdown_function('bbg_debug_queries');
