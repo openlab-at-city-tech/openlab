@@ -524,30 +524,30 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 function openlab_group_profile_header() {
     global $bp;
     ?>
-        <h1 class="entry-title group-title clearfix"><span class="profile-name"><?php echo bp_group_name(); ?></span>
-            <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+    <h1 class="entry-title group-title clearfix"><span class="profile-name"><?php echo bp_group_name(); ?></span>
+        <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button></h1>
-        <?php if (bp_is_group_home() || (bp_is_group_admin_page() && !$bp->is_item_admin)): ?>
-            <div class="clearfix">
-                <?php if ($group_type == "portfolio") : ?>
-                        <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
-                    <?php else : ?>
-                        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
-                    <?php endif; ?>
-            </div>
-        <?php elseif (bp_is_group_home()): ?>
-            <div class="clearfix visible-xs">
-                <?php if ($group_type == "portfolio") : ?>
-                        <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
-                    <?php else : ?>
-                        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
-                    <?php endif; ?>
-            </div>
-        <?php endif; ?>
+    <?php if (bp_is_group_home() || (bp_is_group_admin_page() && !$bp->is_item_admin)): ?>
+        <div class="clearfix">
+            <?php if ($group_type == "portfolio") : ?>
+                <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
+            <?php else : ?>
+                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+            <?php endif; ?>
+        </div>
+    <?php elseif (bp_is_group_home()): ?>
+        <div class="clearfix visible-xs">
+            <?php if ($group_type == "portfolio") : ?>
+                <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
+            <?php else : ?>
+                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     <?php
 }
 
