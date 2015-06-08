@@ -7015,6 +7015,9 @@ button.oplb-bs .close {
     font-size: 13px;
   }
 }
+.oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item.ab-empty-item {
+  padding-top: 16px;
+}
 .oplb-bs #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
   font-size: 14px;
