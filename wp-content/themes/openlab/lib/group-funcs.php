@@ -251,7 +251,7 @@ function openlab_group_archive() {
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-6">
-                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
+                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr(bp_get_group_name()); ?>"/></a>
                             </div>
                             <div class="item col-xs-18">
 
@@ -274,7 +274,7 @@ function openlab_group_archive() {
                                 <?php endif; ?>
                                 <div class="description-line">
                                     <?php
-                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="'.  bp_get_group_permalink().'" data-basevalue="105" data-basewidth="290">', bp_get_group_description());
+                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="105" data-basewidth="290">', bp_get_group_description());
                                     $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description());
                                     echo $this_description;
                                     ?>
@@ -596,7 +596,7 @@ function cuny_group_single() {
 
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
-                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( $group_name ); ?>"/>
+                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
                 </div>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
@@ -684,7 +684,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -729,9 +729,9 @@ function openlab_group_profile_activity_list() {
         <?php $group_slug = bp_get_group_slug(); ?>
         <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
 
-	<?php
-	$group = groups_get_current_group();
-	?>
+        <?php
+        $group = groups_get_current_group();
+        ?>
 
         <?php if (bp_is_group_home()) { ?>
 
@@ -879,7 +879,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                          ?></p>
+                                                        <p><?php // bp_group_status_message()                           ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -1384,74 +1384,77 @@ function openlab_bp_group_site_pages() {
         if (openlab_is_portfolio()) {
             ?>
 
-                <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
-                <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
+            <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
+            <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
 
-                <div class="sidebar-block">
+            <div class="sidebar-block">
 
-                    <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
-                        <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
-                            <li class="portfolio-site-link bold">
-                                <a class="bold no-deco" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                <?php
+                $account_type = xprofile_get_field_data('Account Type', $displayed_user_id);
+                ?>
+
+                <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
+                    <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                        <li class="portfolio-site-link bold">
+                            <a class="bold no-deco" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>">Visit <?= openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                        </li>
+
+                        <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
+                            <li class="portfolio-dashboard-link">
+                                <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>/wp-admin">Site Dashboard</a>
                             </li>
+                        <?php endif ?>
+                    </ul>
+                <?php else: ?>
 
-                            <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
-                                <li class="portfolio-dashboard-link">
-                                    <a class="line-height height-200 font-size font-13" href="<?php openlab_user_portfolio_url($displayed_user_id) ?>/wp-admin">Site Dashboard</a>
-                                </li>
-                            <?php endif ?>
-                        </ul>
-                    <?php else: ?>
-
-                        <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
-                            <li class="portfolio-site-link">
-                                <a class="bold no-deco" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Visit Portfolio Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
-                            </li>
-                        </ul>
-
-                    <?php endif ?>
-                </div>
-        <?php } else { ?>
-
-                <div class="sidebar-block">
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link">
-                            <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($site_url)) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
+                            <a class="bold no-deco" href="<?php echo trailingslashit(esc_attr($site_url)); ?>">Visit <?= openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
                         </li>
-                        <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
-                            <li class="portfolio-dashboard-link">
-                                <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($site_url)) . 'wp-admin/">Site Dashboard</a>'; ?>
-                            </li>
-                        <?php endif; ?>
                     </ul>
 
-                </div>
+                <?php endif ?>
+            </div>
+        <?php } else { ?>
+
+            <div class="sidebar-block">
+                <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                    <li class="portfolio-site-link">
+                        <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($site_url)) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
+                    </li>
+                    <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                        <li class="portfolio-dashboard-link">
+                            <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($site_url)) . 'wp-admin/">Site Dashboard</a>'; ?>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+
+            </div>
             <?php
         } // openlab_is_portfolio()
     } // !empty( $site_url )
 }
 
-function openlab_get_faculty_list(){
+function openlab_get_faculty_list() {
     global $bp;
-    
+
     $faculty_list = '';
-    
-    if(isset($bp->groups->current_group->admins)){
+
+    if (isset($bp->groups->current_group->admins)) {
         $faculty_id = $bp->groups->current_group->admins[0]->user_id;
         $group_id = $bp->groups->current_group->id;
 
-        $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-        array_unshift( $faculty_ids, $faculty_id );
+        $faculty_ids = groups_get_groupmeta($group_id, 'additional_faculty', false);
+        array_unshift($faculty_ids, $faculty_id);
 
         $faculty = array();
-        foreach($faculty_ids as $id){
+        foreach ($faculty_ids as $id) {
 
-            array_push($faculty,bp_core_get_user_displayname( $id ));
-
+            array_push($faculty, bp_core_get_user_displayname($id));
         }
 
-        $faculty_list = implode(', ',$faculty);
+        $faculty_list = implode(', ', $faculty);
     }
-    
+
     return $faculty_list;
 }
