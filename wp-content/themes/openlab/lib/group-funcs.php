@@ -1235,7 +1235,7 @@ function openlab_show_site_posts_and_comments() {
                         <?php foreach ($posts as $post) : ?>
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <h6 class="underline semibold"><?php echo $post['title']; ?></h6>
+                                    <h6 class="semibold"><?php echo $post['title']; ?></h6>
                                     <p>
                                         <?php echo $post['content']; ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
                                     </p>
