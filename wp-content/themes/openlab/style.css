@@ -7309,7 +7309,7 @@ input[type="submit"] {
   vertical-align: top;
 }
 .form-panel .panel {
-  margin-bottom: 0;
+  margin-bottom: 17px;
   margin-top: 35px;
 }
 .form-panel .panel:last-child {
