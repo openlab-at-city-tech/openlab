@@ -7387,11 +7387,6 @@ input[type="submit"] {
   background: #63dfd2;
   color: #000000;
 }
-@media (min-width: 992px) {
-  .navbar-default .container-fluid ul.nav li:first-child a {
-    padding-left: 30px;
-  }
-}
 @media (max-width: 767px) {
   .sidebar-mobile-dropdown .navbar.navbar-default {
     margin-bottom: 59px;
