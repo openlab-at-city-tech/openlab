@@ -8538,14 +8538,14 @@ body .inline-visible-xs {
   padding-left: 20px !important;
 }
 .group-activity-overview .panel {
-  height: 105px;
+  height: 110px;
 }
 .group-activity-overview .panel .panel-body {
   padding: 3% 4%;
 }
 .group-activity-overview .panel .panel-body h6 {
   margin-top: 0;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-size: 14px;
 }
 .group-activity-overview .panel .panel-body p {
