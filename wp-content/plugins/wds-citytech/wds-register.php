@@ -182,11 +182,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 				}
 				$return.='</label>';
                                 
-                                //dump echoed messages into var so they appear inline
-                                ob_start();
-				do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
-                                $return .= ob_get_clean();
-                                
 				/*
 				$input_name = trim(bp_get_the_profile_field_input_name());
 				$return.="<br />Input field name: " . $input_name;
@@ -202,7 +197,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.='<textarea class="form-control" rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
 				$return.='</textarea>';
 			endif;
@@ -212,7 +206,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				//WDS ADDED $$$
 
 				$onchange = '';
@@ -231,7 +224,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
 					$return.=bp_get_the_profile_field_options();
 				$return.='</select>';
@@ -243,7 +235,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</span>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.=bp_get_the_profile_field_options();
 				if ( !bp_get_the_profile_field_is_required() ) :
 					//$return.='<a class="clear-value" href="javascript:clear( \''.bp_get_the_profile_field_input_name().'\' );">'._e( 'Clear', 'buddypress' ).'</a>';
@@ -257,7 +248,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</span>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.=bp_get_the_profile_field_options();
 				$return.='</div>';
 			endif;
@@ -268,7 +258,6 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.='<select name="'.bp_get_the_profile_field_input_name().'_day" id="'.bp_get_the_profile_field_input_name().'_day">';
 					$return.=bp_get_the_profile_field_options( 'type=day' );
 				$return.='</select>';
