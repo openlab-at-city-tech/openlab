@@ -8899,14 +8899,13 @@ body .inline-visible-xs {
   }
 }
 #member-item-body .panel {
-  height: 116px;
+  height: 132px;
 }
 #member-item-body .panel .panel-body {
   padding: 2%;
 }
 #member-item-body .panel .panel-body h6 {
-  margin-top: 0;
-  margin-bottom: 10px;
+  margin: 7px 0 12px;
 }
 #member-item-body .panel .panel-body p,
 #member-item-body .panel .panel-body a {

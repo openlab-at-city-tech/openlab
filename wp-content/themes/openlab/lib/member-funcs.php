@@ -595,17 +595,15 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                 <div class="activity-content col-sm-14 col-xs-16">
 
                                     <h6>
-                                        <a class="font-size font-14 no-deco" href="<?php bp_group_permalink() ?>"><?php echo openlab_shortened_text(bp_get_group_name(), 35); ?></a>
+                                        <a class="font-size font-14 no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" data-basevalue="35" data-minvalue="20" data-basewidth="143"><?= bp_get_group_name(); ?></a>
+                                        <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
                                     </h6>
 
-                                    <p>
-                                        <?php $activity = bp_get_group_description() ?>
-                                        <?php /* shorten the description if it's getting long */ ?>
-                                        <?php $activity = strip_tags(openlab_shortened_text($activity, 55)); ?>
-
-                                        <?php echo $activity . ' <a class="read-more" href="' . bp_get_group_permalink() . '">See More</a>'; ?>
-                                    </p>
-
+                                    <?php $activity = strip_tags(bp_get_group_description()); ?>
+                                    
+                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
+                                    <p class="original-copy hidden"><?= $activity ?></p>
+                                    
                                 </div>
 
                             </div>

@@ -23,20 +23,20 @@
                 })
             }
         },
-        adjustLoginBox: function(){
-            if($('#user-info')){
-                
+        adjustLoginBox: function () {
+            if ($('#user-info')) {
+
                 var userInfo = $('#user-info');
                 var helpInfo = $('#login-help')
                 var avatar = userInfo.find('.avatar');
-                if(userInfo.height() > avatar.height()){
+                if (userInfo.height() > avatar.height()) {
                     userInfo.addClass('multi-line');
                     helpInfo.addClass('multi-line');
                 } else {
                     userInfo.removeClass('multi-line');
                     helpInfo.removeClass('multi-line');
                 }
-                
+
             }
         },
         truncateOnTheFly: function (onInit) {
@@ -57,7 +57,7 @@
                     thisElem.html(originalCopy);
                 }
 
-                var container_w = thisElem.width();
+                var container_w = thisElem.parent().width();
 
                 if (thisElem.data('link')) {
                     var thisOmission = '<a href="' + thisElem.data('link') + '">See More</a>';
@@ -67,7 +67,7 @@
 
                 if (container_w < truncationBaseWidth) {
 
-                    var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w)/truncationBaseWidth) * 100));
+                    var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w) / truncationBaseWidth) * 100));
                     thisElem.find('.omission').remove();
 
                     if (!onInit) {
@@ -83,7 +83,7 @@
                     }
 
                 }
-                
+
                 if (onInit) {
                     OpenLab.utility.truncateMainAction(thisElem, truncationValue, thisOmission);
                 }
@@ -95,13 +95,13 @@
             });
         },
         truncateMainAction: function (thisElem, truncationValue, thisOmission) {
-            
-            if(thisElem.data('minvalue')){
-                if(truncationValue < thisElem.data('minvalue')){
+
+            if (thisElem.data('minvalue')) {
+                if (truncationValue < thisElem.data('minvalue')) {
                     truncationValue = thisElem.data('minvalue');
                 }
             }
-            
+
             if (truncationValue > 10) {
                 thisElem.succinct({
                     size: truncationValue,
