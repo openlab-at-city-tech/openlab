@@ -72,7 +72,6 @@ class OpenLab_Admin_Bar {
                 //restricting network menu to group sites only
                 if(get_current_blog_id() !== 1 || is_admin()){
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
-                    $this->openlab_menu_items('openlab');
                     add_filter('body_class',array($this,'adminbar_special_body_class'));
                 }
                 
@@ -91,7 +90,6 @@ class OpenLab_Admin_Bar {
                 
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
-                $this->openlab_menu_items('network-menu-mobile');
                 
 		// Logged-in only
 		if ( is_user_logged_in() ) {
@@ -199,6 +197,8 @@ HTML;
                                 'class' => 'admin-bar-menu hidden-xs',
 			)
  		) );
+                
+                $this->openlab_menu_items('openlab');
  	}
         
         function openlab_menu_items($parent){
@@ -376,6 +376,8 @@ HTML;
                             'class' => 'visible-xs mobile-menu admin-bar-menu',
                         ),
 		) );
+            
+            $this->openlab_menu_items('network-menu-mobile');
             
         }
         
