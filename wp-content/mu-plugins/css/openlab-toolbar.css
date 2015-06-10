@@ -7297,8 +7297,12 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p.actions {
   padding-top: 6px;
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-top-logout,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-register {
   background: #000;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
   border-left: 1px #666666 solid;
   border-right: 1px #666666 solid;
 }
@@ -7309,6 +7313,7 @@ button.oplb-bs .close {
   color: #333;
   width: 350% !important;
   left: -250%;
+  margin-top: 0;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
