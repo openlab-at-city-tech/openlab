@@ -8952,6 +8952,10 @@ body .inline-visible-xs {
 #sidebar.type-help .sidebar-wrapper .sidebar-block {
   border-top: 1px solid #bbbbbb;
 }
+#help-tags .btn-primary {
+  background: #999999;
+  border-color: #999999;
+}
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
