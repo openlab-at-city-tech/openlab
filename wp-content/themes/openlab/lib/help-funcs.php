@@ -213,6 +213,9 @@ function openlab_help_cats_loop() {
                 <span class="icon-bar"></span>
             </button>
         </h1>
+	<div id="help-title">
+	    <h2 class="page-title"><span>Topics</span></h2>
+	</div>
         <?php
     else:
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
@@ -225,6 +228,11 @@ function openlab_help_cats_loop() {
                 <span class="icon-bar"></span>
             </button>
         </h1>
+	<div id="help-title">
+	    <h2 class="page-title">
+                Topics: <span><?php echo esc_html( $parent_term->name ) ?></span>
+            </h2>
+	</div>
         <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
     <?php
     endif;
