@@ -21,7 +21,7 @@ function openlab_sitewide_header($location = 'header') {
                 </div>
             </div>
             <div class="search search-form row">
-                <?php openlab_site_wide_bp_search('mobile', $location); ?>
+                <?php openlab_mu_site_wide_bp_search('mobile', $location); ?>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@ function openlab_sitewide_header_to_admin_and_group_sites() {
 add_action('wp_footer', 'openlab_sitewide_header_to_admin_and_group_sites');
 add_action('in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites');
 
-function openlab_site_wide_bp_search($mode = 'desktop', $location) {
+function openlab_mu_site_wide_bp_search($mode = 'desktop', $location) {
     $mobile_mup = '';
 
     if ($mode == 'desktop'):
@@ -83,9 +83,9 @@ HTML;
     echo $mobile_mup;
 }
 
-add_action('init', 'openlab_search_override', 1);
+add_action('init', 'openlab_mu_search_override', 1);
 
-function openlab_search_override() {
+function openlab_mu_search_override() {
     global $bp;
     if (isset($_POST['search']) && $_POST['search-which']) {
         if ($_POST['search-which'] == "members") {
