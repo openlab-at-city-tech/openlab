@@ -8269,6 +8269,9 @@ body .inline-visible-xs {
 .sidebar h2.sidebar-header.top-sidebar-header.group-single {
   margin-top: 21px;
 }
+.sidebar .cc-gloss {
+  font-size: 11px;
+}
 .sidebar.sidebar-inline {
   margin-bottom: 10px;
 }
@@ -8952,11 +8955,18 @@ body .inline-visible-xs {
 #sidebar.type-help .sidebar-wrapper .sidebar-block {
   border-top: 1px solid #bbbbbb;
 }
+#help-tags .btn-primary {
+  background: #999999;
+  border-color: #999999;
+}
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
 #team-thumbs .thumb-wrapper .team-thumb a img {
   width: 100%;
+}
+#team-thumbs .thumb-wrapper .team-name {
+  text-align: center;
 }
 #team-thumbs .thumb-wrapper .team-name a {
   font-weight: 600;
@@ -8978,12 +8988,30 @@ body .inline-visible-xs {
 .page-nav a {
   line-height: 2.25;
 }
+.archive .child-cat-container {
+  border: 1px solid #999999;
+  padding: 10px 14px;
+}
+.archive .child-cat-container h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0;
+}
+.archive .child-cat-container h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 0;
+}
+.archive .child-cat-container .help-tags {
+  margin-left: 0;
+}
 .archive h2.child-cat {
   margin-top: 42px;
 }
 .archive h2.child-cat a {
   border-top: 1px solid #333333;
   padding-top: 7px;
+  text-decoration: none;
 }
 .archive h2.child-cat:first-of-type {
   margin-top: 0;

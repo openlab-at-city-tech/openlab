@@ -1291,6 +1291,9 @@ body{
             }
         }
     }
+    .cc-gloss {
+        font-size: 11px;
+    }
     &.sidebar-inline{
         margin-bottom: 10px;
         .sidebar-header{
@@ -2099,6 +2102,12 @@ body{
         }
     }
 }
+#help-tags {
+    .btn-primary {
+        background: @40gray;
+        border-color: @40gray;
+    }
+}
 #team-thumbs{
     .thumb-wrapper{
         margin-bottom: 17px;
@@ -2110,6 +2119,7 @@ body{
             }
         }
         .team-name {
+            text-align: center;
             a {
                 font-weight: 600;
             }
@@ -2136,11 +2146,29 @@ body{
     }
 }
 .archive{
+    .child-cat-container {
+        border: 1px solid @40gray;
+	padding: 10px 14px;
+	h2 {
+            font-size: 16px;
+	    font-weight: bold;
+	    margin-top: 0;
+	}
+	h3 {
+	    font-size: 14px;
+	    font-weight: bold;
+	    margin-top: 0;
+	}
+	.help-tags {
+            margin-left: 0;
+	}
+    }
     h2.child-cat{
         margin-top: 42px;
         a{
             border-top: 1px solid #333333;
             padding-top: 7px;
+	    text-decoration: none;
         }
         &:first-of-type{
             margin-top: 0;

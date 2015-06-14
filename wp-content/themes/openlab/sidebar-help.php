@@ -94,8 +94,10 @@ wp_nav_menu($args);
     <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o"></i> Contact Us</a>
 </div><!--support team-->
 </div>
-<h2 class="sidebar-title">Help Content</h2>
+<h2 class="sidebar-title">Creative Commons</h2>
 <div class="sidebar-block padded-block">
+<p>Our help is licensed under Creative Commons copyright.<br />
+<span class="italics cc-gloss">Attribution &mdash; NonCommercial &mdash; ShareAlike</span></p>
 <div id="creative-commons">
     <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a>
 </div>
