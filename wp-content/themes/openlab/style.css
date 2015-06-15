@@ -8949,6 +8949,15 @@ body .inline-visible-xs {
 .col-help .page-title span {
   color: #49cabe;
 }
+#help-title-nav {
+  display: inline-block;
+}
+#help-title-nav .nav-previous {
+  padding-right: 8px;
+}
+#help-title-nav span {
+  color: #000000;
+}
 .help-title:first-of-type {
   margin-top: 64px;
 }
