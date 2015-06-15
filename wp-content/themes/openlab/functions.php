@@ -135,7 +135,7 @@ function openlab_load_scripts_high_priority() {
         wp_enqueue_style('main-styles');
     }
 
-    if ($post->post_type == 'help') {
+    if ( isset( $post->post_type ) && $post->post_type == 'help' ) {
         wp_register_style('print-styles', $stylesheet_dir_uri . '/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }

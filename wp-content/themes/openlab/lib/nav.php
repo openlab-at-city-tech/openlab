@@ -40,6 +40,10 @@ function openlab_help_navigation($loc = 'bottom') {
 function openlab_custom_nav_classes($classes,$item){
     global $post;
 
+    if ( ! ( $post instanceof WP_Post ) ) {
+	    return $classes;
+    }
+
     if(($post->post_type == 'help') && $item->title == 'Help' ){
         $classes[] = ' current-menu-item';
     } else if ($post->post_parent == get_page_by_path('about')->ID && $item->title == 'About'){
