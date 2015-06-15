@@ -77,7 +77,7 @@ function openlab_specific_archive_breadcrumb($crumb, $args) {
         }
         $crumb .= ' / ' . $term->name;
     }
-    
+
     if ( bp_is_group() ) {
 		$group_id = $bp->groups->current_group->id;
 		$b2 = $bp->groups->current_group->name;
@@ -187,7 +187,7 @@ class Openlab_Breadcrumb {
 
         /** Merge and Filter user and default arguments * */
         $this->args = apply_filters('openlab_breadcrumb_args', wp_parse_args($args, $this->args));
-        
+
         return $this->args['prefix'] . $this->args['labels']['prefix'] . $this->build_crumbs() . $this->args['suffix'];
     }
 
@@ -332,7 +332,7 @@ class Openlab_Breadcrumb {
      */
     function get_archive_crumb() {
         global $wp_query, $wp_locale;
-        
+
         if (is_category()) {
             $crumb = $this->args['labels']['category'] . $this->get_term_parents(get_query_var('cat'), 'category');
             $crumb .= edit_term_link(__('(Edit)', 'genesis'), ' ', '', null, false);
@@ -422,7 +422,7 @@ class Openlab_Breadcrumb {
 
             $crumb .= $this->args['sep'] . single_post_title('', false);
         }
-        
+
         return apply_filters('openlab_single_crumb', $crumb, $this->args);
     }
 
