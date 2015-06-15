@@ -12,6 +12,6 @@ get_header(); ?>
             </div>
         <?php openlab_bp_sidebar('help'); ?>
             </div>
-<?php get_footer(); 
+<?php get_footer();
 /**end layout**/
 ?>

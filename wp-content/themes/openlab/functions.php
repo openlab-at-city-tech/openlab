@@ -130,7 +130,7 @@ function openlab_load_scripts_high_priority() {
 
         //wp_register_style('main-styles', $stylesheet_dir_uri . '/style.min.css', array(), '20130604', 'all');
         //wp_enqueue_style('main-styles');
-        
+
         wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
     }
@@ -218,7 +218,7 @@ function enqueue_less_styles($tag, $handle) {
 add_filter('style_loader_tag', 'enqueue_less_styles', 5, 2);
 
 /**
- * Get content with formatting in place 
+ * Get content with formatting in place
  * @param type $more_link_text
  * @param type $stripteaser
  * @param type $more_file

@@ -88,7 +88,7 @@ function openlab_help_loop() {
 
         <div class="entry-content">
             <?php the_content(); ?>
-            <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id)); ?>
+            <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list( $post_id ) ); ?>
         </div>
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>

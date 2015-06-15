@@ -13,12 +13,12 @@ function openlab_conditional_body_classes($classes) {
     } else if (isset($post->post_name) && $post->post_name == 'register') {
         $classes[] = 'content-sidebar';
     }
-    
+
     $group_archives = array('people','courses','projects','clubs','portfolios');
     if ( isset( $post->post_name ) && in_array( $post->post_name,$group_archives ) ) {
         $classes[] = 'group-archive-page';
     }
-    
+
     $about_page_obj = get_page_by_path('about');
 
     if( ( isset( $post->post_name ) && in_array( $post->post_name, $group_archives ) ) ||
@@ -118,13 +118,13 @@ function cuny_add_links_wp_trim_excerpt($text) {
 }
 
 function openlab_get_menu_count_mup($count, $pull_right = ' pull-right'){
-    
+
     if($count < 1){
         return '';
     }else{
         return '<span class="mol-count count-'.$count.$pull_right.'">'.$count.'</span>';
     }
-    
+
 }
 
 function openlab_not_empty($content){
