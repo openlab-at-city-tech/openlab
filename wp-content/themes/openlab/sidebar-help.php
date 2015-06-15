@@ -74,7 +74,7 @@ wp_nav_menu($args);
             echo '<div class="team-thumb">';
             //use wordpress native thumbnail size for hard crop, then resize to fit container requirements
             $src = wp_get_attachment_image_src($attachment->ID, 'full');
-            
+
             echo '<a href="' . bp_get_root_domain() . '/blog/help/contact-us">';
             echo '<img class="img-responsive" src="' . $src[0] . '" />';
             echo '</a>';
@@ -89,7 +89,7 @@ wp_nav_menu($args);
             $i++;
         }//end for each
         echo '</div>';
-    } //end if 
+    } //end if
     ?>
     <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o"></i> Contact Us</a>
 </div><!--support team-->
