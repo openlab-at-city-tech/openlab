@@ -30,19 +30,25 @@ add_filter('openlab_single_crumb', 'openlab_specific_blog_breadcrumb', 10, 2);
 
 function openlab_specific_blog_breadcrumb($crumb, $args) {
     global $post;
-    
+
     if ($post->post_type == 'help') {
         $crumb = '<a title="View all Help" href="' . site_url('help/openlab-help') . '">Help</a>';
-        
+
         $post_terms = get_the_terms($post->ID, 'help_category');
         $term = array();
-            foreach ($post_terms as $post_term) {
-                $term[] = $post_term;
-            }
-        $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-        $term_link = get_term_link($current_term, 'help_category');
-        
-        if(!is_wp_error($term_link)){
+	if ( is_array( $post_terms ) ) {
+		foreach ( $post_terms as $post_term ) {
+			$term[] = $post_term;
+		}
+	}
+
+	$term_link = '';
+	if ( ! empty( $term ) ) {
+		$current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+		$term_link = get_term_link($current_term, 'help_category');
+	}
+
+        if( $term_link && ! is_wp_error( $term_link ) ){
             $crumb .= ' / <a href="' . $term_link . '">' . $current_term->name . '</a>';
         }
         $crumb .= ' / '.bp_create_excerpt($post->post_title,50,array('ending' => __( '&hellip;', 'buddypress' )));

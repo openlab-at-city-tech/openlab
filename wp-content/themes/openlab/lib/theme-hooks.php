@@ -86,7 +86,11 @@ function openlab_custom_menu_items($items, $menu) {
         $classes = '';
 
         if (is_user_logged_in()) {
-            $opl_link = '<li ' . (bp_is_my_profile() || $bp->current_action == 'create' || ($post->post_name == 'my-courses' || $post->post_name == 'my-projects' || $post->post_name == 'my-clubs') ? 'class="current-menu-item"' : '') . '>';
+	    $class = '';
+	    if ( bp_is_my_profile() || bp_is_current_action( 'create' ) || is_page( 'my-courses' ) || is_page( 'my-projects' ) || is_page( 'my-clubs' ) ) {
+		    $class = 'class="current-menu-item"';
+	    }
+            $opl_link = '<li ' . $class . '>';
             $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
             $opl_link .= '</li>';
         }
