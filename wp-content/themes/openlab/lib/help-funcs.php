@@ -25,27 +25,46 @@ add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
  *
  */
 function openlab_help_loop() {
-
     global $paged, $post;
-    $args = array('post_type' => 'help',
-        'p' => get_the_ID());
-    $temp = $wp_query;
-    $wp_query = null;
-    $wp_query = new WP_Query($args);
 
-    while (have_posts()) : the_post();
+    $post_id = get_the_ID();
+    $hp_query = new WP_Query( array(
+	'post_type' => 'help',
+	'p' => $post_id,
+    ) );
+
+    while ( $hp_query->have_posts() ) : $hp_query->the_post();
         ?>
 
         <?php
         $help_cats = get_the_terms($post_id, 'help_category');
         sort($help_cats);
-        if ($help_cats[0]->parent == 0) {
-            $parent_cat_name = $help_cats[0]->name;
-            $parent_cat = $help_cats[0];
-        } else {
-            $parent_cat = get_term($help_cats[0]->parent, 'help_category');
-            $parent_cat_name = $parent_cat->name;
-        }
+	if ( ! empty( $help_cats ) ) {
+		if ( $help_cats[0]->parent == 0 ) {
+			$parent_cat_name = $help_cats[0]->name;
+			$parent_cat = $help_cats[0];
+		} else {
+			$parent_cat = get_term( $help_cats[0]->parent, 'help_category' );
+			$parent_cat_name = $parent_cat->name;
+		}
+	}
+
+	$back_next_nav = '';
+
+	$prev_post = get_adjacent_post( false, '', true );
+	$next_post = get_adjacent_post( false, '', false );
+
+	$back_next_nav .= '<nav id="help-title-nav">';
+	$back_next_nav .=   '<span class="nav-previous">';
+	$back_next_nav .=     '<span class="fa fa-chevron-circle-left"></span>';
+	$back_next_nav .=     sprintf( '<a href="%s">Back</a>', esc_url( get_permalink( $prev_post ) ) );
+	$back_next_nav .=   '</span>';
+	$back_next_nav .=   '<span class="nav-previous">';
+	$back_next_nav .=      sprintf( '<a href="%s">Next</a>', esc_url( get_permalink( $next_post ) ) );
+	$back_next_nav .=      '<span class="nav-next fa fa-chevron-circle-right"></span>';
+	$back_next_nav .=   '</span>';
+	$back_next_nav .= '</nav><!-- #nav-single -->';
+
         ?>
 
         <?php if ($help_cats): ?>
@@ -59,10 +78,13 @@ function openlab_help_loop() {
                 <span class="print-link pull-right"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
+		    Topics:
                     <?php if ($this_term->parent != 0): ?>
                         <a class="regular" href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
                     <?php endif; ?>
-                    <span><?php the_title(); ?></span></h2></div>
+                    <span><?php the_title(); ?></span> |
+		    <?php echo $back_next_nav; ?>
+	   </h2></div>
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?>
                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
