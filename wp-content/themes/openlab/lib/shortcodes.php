@@ -13,28 +13,33 @@ function openlab_callout_list_shortcode($atts, $content) {
     $index = 0;
 
     $doc = new DOMDocument();
-    $doc->loadHTML($content);
-    $sxml = simplexml_import_dom($doc);
-    $list_items = $sxml->xpath('//li');
+    $doc->loadHTML( '<?xml encoding="UTF-8">' . $content );
+    $domx = new DOMXPath( $doc );
+    $list_items = $domx->evaluate( '//li' );
+    $list_items_html = array();
+    foreach ( $list_items as $list_item ) {
+	    $list_items_html[] = $list_item->ownerDocument->saveHTML( $list_item );
+    }
 
-    if (count($list_items) > 0) {
+    if ( count( $list_items_html ) > 0 ) {
         $index = 1;
         $final_content = '<div class="callout-list">';
-        foreach ($list_items as $item) {
-            $this_item = strip_tags($item, '<b><i><strong><em><a>');
+        foreach ( $list_items_html as $this_item ) {
+	    preg_match( '|<li[^>]*>(.*)</li>|s', $this_item, $matches );
+	    $item_content = $matches[1];
             $final_content .= <<<HTML
                     <div class="row">
                         <div class="col-xs-2 callout-list-number">
                             <span class="semibold">{$index}</span>
                         </div>
                         <div class="col-xs-22 callout-list-content">
-                            {$this_item}
+                            {$item_content}
                         </div>
                     </div>
 HTML;
             $index++;
         }
-        $final_count .= '</div>';
+        $final_content .= '</div>';
     } else {
         $final_content = $content;
     }
