@@ -1131,13 +1131,43 @@ body{
                 float: left;
                 margin-right: 12px;
                 width: 163px;
+                @media (max-width: @spotlight250-screen-min){
+                    width: 100%;
+					margin: 0 0 20px;
+                }
+                @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min){
+                    width: 80%;
+					margin: 0 10% 20px;
+                }
+                @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen){
+                    width: 80%;
+					margin: 0 10% 20px;
+                }
             }
             p{
                 float: left;
                 width: 45%;
                 font-weight: @normal;
+                @media (max-width: @spotlight250-screen-min){
+                    width: 50%;
+                }
+                @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min){
+                    width: 40%;
+                }
+                @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen){
+                    width: 40%;
+                }
                 &.cfcw-title{
                     font-weight: @semibold;
+                    @media (max-width: @spotlight250-screen-min){
+	                    margin-left: 0%;
+	                }
+	                @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min) {
+	                    margin-left: 10%;
+	                }
+	                @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen) {
+	                    margin-left: 10%;
+	                }
                     a{
                         font-size: @font-size-h2;
                         line-height: @headings-line-height;
