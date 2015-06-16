@@ -69,9 +69,9 @@
                 }
             });
         },
-        hideNavMenu: function (thisElem, thisToggleTarget) {
+        hideNavMenu: function (thisElem, thisToggleTarget, thisAnchor) {
             var plusHeight = OpenLab.nav.plusHeight;
-            
+
             if (thisElem.attr('data-plusheight')) {
                 plusHeight = parseInt(thisElem.data('plusheight'));
             }
@@ -88,6 +88,13 @@
             $(thisToggleTarget).slideUp(700, function () {
                 thisElem.removeClass('in-action');
                 thisElem.removeClass('active');
+
+                if (thisAnchor) {
+                    $.smoothScroll({
+                        scrollTarget: thisAnchor
+                    });
+                }
+
             });
         },
         showNavMenu: function (thisElem, thisTargetElem) {
@@ -96,9 +103,9 @@
             if (thisElem.attr('data-plusheight')) {
                 plusHeight = parseInt(thisElem.data('plusheight'));
             }
-            
+
             thisTargetElem.slideDown(700, function () {
-                
+
                 var thisTargetElem_h = thisTargetElem.height();
                 thisTargetElem_h += plusHeight;
 
@@ -137,7 +144,7 @@
 
         },
         mobileAnchorLinks: function () {
-            if ($('.mobile-anchor-link')) {
+            if ($('.mobile-anchor-link').length) {
                 $('.mobile-anchor-link').find('a').on('click', function (e) {
                     e.preventDefault();
                     var thisElem = $(this);
@@ -147,7 +154,7 @@
                     var background = $('#behind_menu_background');
                     var targetToClose = currentActiveButton.data('target');
 
-                    OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose);
+                    OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose, thisAnchor);
 
                 });
             }
