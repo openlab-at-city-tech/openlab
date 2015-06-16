@@ -61,6 +61,7 @@ function openlab_list_members($view) {
         }
     }
 
+    $user_department = NULL;
     if (!empty($_GET['department'])) {
         $user_department = urldecode($_GET['department']);
     }

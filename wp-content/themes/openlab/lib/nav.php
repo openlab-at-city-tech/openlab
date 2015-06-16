@@ -84,9 +84,16 @@ function openlab_loop_pagination_links_filter($has_items) {
         $pag_args = array(
             $pagarg => '%#%',
             'num' => $t->pag_num,
-            'sortby' => $t->sort_by,
-            'order' => $t->order,
         );
+        
+        if(isset($t->sort_by)){
+            $pag_args['sortby'] = $t->sort_by;
+        }
+        
+        if(isset($t->order)){
+            $pag_args['order'] = $t->order;
+        }
+        
         if (defined('DOING_AJAX') && true === (bool) DOING_AJAX) {
             $base = remove_query_arg('s', wp_get_referer());
         } else {
