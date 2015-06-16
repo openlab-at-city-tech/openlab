@@ -8495,6 +8495,11 @@ body .inline-visible-xs {
 .filter .archive-search #search-submit {
   padding: 8px 3% 9px;
 }
+/**group archives - widget error (no groups to display for a user) **/
+.widget-error {
+  margin-top: 50px;
+  font-weight: 800;
+}
 /**group profiles**/
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
