@@ -8429,7 +8429,7 @@ body .inline-visible-xs {
   margin: 6px 0 12px;
 }
 .group-list .group-item-wrapper h2 a {
-  color: #666666;
+  color: #333333;
 }
 .group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
