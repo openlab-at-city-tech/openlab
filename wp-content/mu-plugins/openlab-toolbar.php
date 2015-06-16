@@ -461,6 +461,20 @@ HTML;
                             'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
+                
+                // Only show a My Portfolio link for users who actually have one
+		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
+		if ( !empty( $portfolio_url ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-portfolio',
+				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
+				'href'   => $portfolio_url,
+                                'meta' => array(
+                                    'class' => 'admin-bar-menu-item mobile-no-hover'
+                                )
+			) );
+		}
 
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
@@ -491,20 +505,6 @@ HTML;
                             'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
-
-		// Only show a My Portfolio link for users who actually have one
-		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
-		if ( !empty( $portfolio_url ) ) {
-			$wp_admin_bar->add_node( array(
-				'parent' => 'my-openlab',
-				'id'     => 'my-portfolio',
-				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
-				'href'   => $portfolio_url,
-                                'meta' => array(
-                                    'class' => 'admin-bar-menu-item mobile-no-hover'
-                                )
-			) );
-		}
 
 		if ( bp_is_active( 'friends' ) ) {
 			$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
