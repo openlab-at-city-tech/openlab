@@ -197,16 +197,15 @@ HTML;
                                 'class' => 'admin-bar-menu hidden-xs',
 			)
  		) );
-                
                 $this->openlab_menu_items('openlab');
  	}
         
         function openlab_menu_items($parent){
             global $wp_admin_bar;
-            
+                
                 $wp_admin_bar->add_node(array(
                     'parent' => $parent,
-                    'id' => 'home',
+                    'id' => 'home-'.$parent,
                     'title' => 'Home',
                     'href' => bp_get_root_domain(),
                     'meta' => array(
@@ -216,7 +215,7 @@ HTML;
 
                 $wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'about',
+			'id'     => 'about-'.$parent,
 			'title'  => 'About',
 			'href'   => trailingslashit( bp_get_root_domain() . '/about' ),
                         'meta' => array(
@@ -226,7 +225,7 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'people',
+			'id'     => 'people-'.$parent,
 			'title'  => 'People',
 			'href'   => trailingslashit( bp_get_root_domain() . '/people' ),
                         'meta' => array(
@@ -236,7 +235,7 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'courses',
+			'id'     => 'courses-'.$parent,
 			'title'  => 'Courses',
 			'href'   => trailingslashit( bp_get_root_domain() . '/courses' ),
                         'meta' => array(
@@ -246,7 +245,7 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'projects',
+			'id'     => 'projects-'.$parent,
 			'title'  => 'Projects',
 			'href'   => trailingslashit( bp_get_root_domain() . '/projects' ),
                         'meta' => array(
@@ -256,7 +255,7 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'clubs',
+			'id'     => 'clubs-'.$parent,
 			'title'  => 'Clubs',
 			'href'   => trailingslashit( bp_get_root_domain() . '/clubs' ),
                         'meta' => array(
@@ -266,7 +265,7 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'portfolios',
+			'id'     => 'portfolios-'.$parent,
 			'title'  => 'Portfolios',
 			'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' ),
                         'meta' => array(
@@ -276,7 +275,7 @@ HTML;
 
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
-			'id'     => 'help',
+			'id'     => 'help-'.$parent,
 			'title'  => 'Help',
 			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' ),
                         'meta' => array(
