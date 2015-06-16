@@ -9075,6 +9075,9 @@ body .inline-visible-xs {
 #breadcrumb-container .breadcrumb-col .breadcrumb-inline.breadcrumbs a {
   line-height: 1;
 }
+#breadcrumb-container .breadcrumb-col .breadcrumb-inline.breadcrumbs a:focus {
+  text-decoration: underline;
+}
 #breadcrumb-container .breadcrumb-col .breadcrumb-prefix-label {
   background: #49cabe;
   display: inline-block;
