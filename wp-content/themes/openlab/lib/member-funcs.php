@@ -497,7 +497,6 @@ function cuny_student_profile() {
         <div id="portfolio-sidebar-inline-widget" class="visible-xs sidebar sidebar-inline"><?php openlab_members_sidebar_blocks(); ?></div>
     <?php } ?>
 
-
     <div id="member-item-body" class="row">
 
         <?php echo cuny_profile_activty_block('course', 'My Courses', '', 25); ?>

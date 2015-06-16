@@ -9,11 +9,18 @@ if (!$dud = bp_displayed_user_domain()) {
 
 <?php /* Portfolio links */ ?>
 
-<div class="sidebar-widget mol-menu" id="portfolio-sidebar-widget">
+ <?php if ( (bp_is_user_activity() || !bp_current_component()) && !(strpos($post->post_name,'my-') > -1)) :
+        $mobile_hide = true;
+        $id = 'portfolio-sidebar-widget';
+     else:
+         $mobile_hide = false;
+         $id = 'portfolio-sidebar-inline-widget';
+     endif; ?>
 
-    <div class="hidden-xs"><?php openlab_members_sidebar_blocks(); ?>
-        <?php openlab_member_sidebar_menu(); ?>
-    </div>
+<div class="sidebar-widget mol-menu" id="<?= $id ?>">
+    
+    <?php openlab_members_sidebar_blocks($mobile_hide); ?>
+    <?php openlab_member_sidebar_menu(); ?>
 
 </div>
 

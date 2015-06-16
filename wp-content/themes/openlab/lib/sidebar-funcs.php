@@ -270,7 +270,13 @@ function openlab_member_sidebar_menu($mobile = false) {
 /**
  * Member pages sidebar blocks (portfolio link) - modularized for easier parsing of mobile menus
  */
-function openlab_members_sidebar_blocks(){
+function openlab_members_sidebar_blocks($mobile_hide = false){
+    
+    $block_classes = '';
+    
+    if($mobile_hide){
+        $block_classes = ' hidden-xs';
+    }
     
     if (is_user_logged_in() && openlab_is_my_profile()): ?>
         <h2 class="sidebar-header top-sidebar-header hidden-xs">My OpenLab</h2>
@@ -289,7 +295,7 @@ function openlab_members_sidebar_blocks(){
     <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
-        <div class="sidebar-block">
+        <div class="sidebar-block<?= $block_classes ?>">
 
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
@@ -318,7 +324,7 @@ function openlab_members_sidebar_blocks(){
         <h2 class="sidebar-header top-sidebar-header visible-xs">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
         <?php endif; ?>
         
-        <div class="sidebar-block">
+        <div class="sidebar-block<?= $block_classes ?>">
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                 <li>
                     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
