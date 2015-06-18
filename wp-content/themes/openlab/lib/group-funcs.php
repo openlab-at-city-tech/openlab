@@ -523,6 +523,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
 function openlab_group_profile_header() {
     global $bp;
+    $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
     ?>
     <h1 class="entry-title group-title clearfix"><span class="profile-name"><?php echo bp_group_name(); ?></span>
         <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">

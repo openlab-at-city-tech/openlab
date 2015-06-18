@@ -90,7 +90,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                      <div class="panel panel-default">
 			<div class="panel-heading">Discussion Settings</div>
                         <div class="panel-body">
-			<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_type_uc ?> profile.</p>
+			<p id="discussion-settings-tag">These settings enable or disable the discussion forum on your <?php echo $group_label_uc ?> profile.</p>
                         <div class="checkbox">
                                 <label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ) ?> /> <?php _e( 'Enable discussions forum', 'buddypress' ) ?></label>
                         </div>
