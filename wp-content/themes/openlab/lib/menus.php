@@ -735,24 +735,26 @@ function openlab_group_submenu_nav() {
     //manual sorting of current item menu
     if ($nav_items) {
         foreach ($nav_items as $nav_key => $nav_item) {
-            switch ($nav_items) {
-                case ( $nav_item['slug'] == 'home' ):
-                    $nav_item['position'] = 10;
-                    break;
-                case ( $nav_item['slug'] == 'admin' ):
-                    $nav_item['position'] = 11;
-                    break;
-                case ( $nav_item['slug'] == 'nav-forum' ):
-                    $nav_item['position'] = 25;
-                    break;
-                case ( $nav_item['slug'] == 'members' ):
-                    $nav_item['position'] = 35;
-                    break;
-                case ( $nav_item['slug'] == 'files' ):
-                    $nav_item['position'] = 60;
-                    break;
-                default:
-                    $nav_item['position'] = $nav_item['position'];
+            if (isset($nav_item['slug'])) {
+                switch ($nav_item) {
+                    case ( $nav_item['slug'] == 'home' ):
+                        $nav_item['position'] = 10;
+                        break;
+                    case ( $nav_item['slug'] == 'admin' ):
+                        $nav_item['position'] = 11;
+                        break;
+                    case ( $nav_item['slug'] == 'nav-forum' ):
+                        $nav_item['position'] = 25;
+                        break;
+                    case ( $nav_item['slug'] == 'members' ):
+                        $nav_item['position'] = 35;
+                        break;
+                    case ( $nav_item['slug'] == 'files' ):
+                        $nav_item['position'] = 60;
+                        break;
+                    default:
+                        $nav_item['position'] = $nav_item['position'];
+                }
             }
             $final_nav[$nav_key] = $nav_item;
         }
