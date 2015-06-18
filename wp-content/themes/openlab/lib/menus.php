@@ -72,19 +72,24 @@ function openlab_help_categories_menu($items, $args) {
     if ($args->theme_location == 'helpmenu') {
         $term = get_query_var('term');
         $parent_term = get_term_by('slug', $term, 'help_category');
+        $current_term = false;
         if ($parent_term == false) {
             $child_terms = get_the_terms($post->ID, 'help_category');
             $term = array();
-            foreach ($child_terms as $child_term) {
-                $term[] = $child_term;
-            }
+            
+            if (!empty($child_terms)) {
+                foreach ($child_terms as $child_term) {
+                    $term[] = $child_term;
+                }
 
-            $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
-            $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+                $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
+                $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+            
+            }
         }
 
         //for child term archive pages
-        if ($parent_term->parent != 0) {
+        if ($parent_term !== false && $parent_term->parent != 0) {
             $current_term = $parent_term;
             $parent_term = get_term_by('id', $current_term->parent, 'help_category');
         }
@@ -123,7 +128,7 @@ function openlab_help_categories_menu($items, $args) {
                 //see if this is the current menu item; if not, this could be a post,
                 //so we'll check against an array of cat ids for this post
                 if (get_query_var('taxonomy') != 'help_tags') {
-                    if ($help_cat->term_id == $parent_term->term_id) {
+                    if ($parent_term !== false && $help_cat->term_id == $parent_term->term_id) {
                         $help_classes .= " current-menu-item";
                     } else if ($post->post_type == 'help') {
                         if (in_array($help_cat->term_id, $post_cats_array)) {
@@ -158,7 +163,7 @@ function openlab_help_categories_menu($items, $args) {
 
                         $child_classes = "help-cat menu-item";
                         if (get_query_var('taxonomy') != 'help_tags') {
-                            if ($child_cat->term_id == $current_term->term_id) {
+                            if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
                                 $child_classes .= " current-menu-item";
                             } else if ($post->post_type == 'help') {
                                 if (in_array($child_cat->term_id, $post_cats_array)) {
