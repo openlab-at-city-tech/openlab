@@ -70,7 +70,6 @@ function openlab_filter_profile_fields($value, $type) {
             'ending' => __('&hellip;', 'buddypress'),
             'exact' => true,
             'html' => false,
-            'filter_shortcodes' => $filter_shortcodes_default
         );
         $truncated_link = bp_create_excerpt($field->data->value, 40, $args);
         $full_link = openlab_http_check($field->data->value);
