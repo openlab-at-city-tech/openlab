@@ -7428,9 +7428,6 @@ h1.entry-title .direct-toggle .icon-bar {
   margin: 4px auto;
   width: 22px;
 }
-h1.entry-title.help-entry-title .direct-toggle {
-  right: 123px;
-}
 @media (max-width: 767px) {
   h1.entry-title {
     margin-top: 12px;

@@ -85,7 +85,7 @@ function openlab_help_loop() {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="print-link pull-right"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
+                <span class="print-link pull-right hidden-xs"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
 		    Topics:
