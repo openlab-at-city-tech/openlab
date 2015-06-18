@@ -461,20 +461,6 @@ HTML;
                         )
 		) );
                 
-                // Only show a My Portfolio link for users who actually have one
-		$portfolio_url = openlab_get_user_portfolio_url( bp_loggedin_user_id() );
-		if ( !empty( $portfolio_url ) ) {
-			$wp_admin_bar->add_node( array(
-				'parent' => 'my-openlab',
-				'id'     => 'my-portfolio',
-				'title'  => sprintf( 'My %s', openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) ),
-				'href'   => $portfolio_url,
-                                'meta' => array(
-                                    'class' => 'admin-bar-menu-item mobile-no-hover'
-                                )
-			) );
-		}
-
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
@@ -545,19 +531,7 @@ HTML;
                                 )
 			) );
                         
-                        $link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
-                        $link .= trailingslashit(bp_get_groups_slug());
-                        
-                        $wp_admin_bar->add_node( array(
-				'parent' => 'my-openlab',
-				'id'     => 'my-activity',
-				'title'  => 'My Activity',
-				'href'   => $link,
-                                'meta' => array(
-                                    'class' => 'admin-bar-menu-item mobile-no-hover visible-xs'
-                                )
-			) );
-        }
+                }
 
 		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
 		// this panel only works if looking at a site where the user has Dashboard-level
