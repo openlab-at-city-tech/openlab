@@ -8215,6 +8215,12 @@ body .inline-visible-xs {
 .home-page #whos-online .avatar-block .cuny-member .cuny-member-info a {
   color: #ffffff;
 }
+@media (max-width: 767px) {
+  .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
+    width: 100px;
+    right: -10px;
+  }
+}
 .home-page #whos-online .avatar-block .cuny-member:hover {
   border: 1px solid #000000;
 }
