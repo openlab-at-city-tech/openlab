@@ -9,9 +9,9 @@
 		while ( bp_message_threads() ) : bp_message_thread(); 
 		$mstatus = true;
                 $read = 'unread';
-                if ($_GET["status"] == 'unread')
+                if (isset($_GET["status"]) && $_GET["status"] == 'unread')
                     $mstatus = bp_message_thread_has_unread();
-                if ($_GET["status"] == 'read')
+                if (isset($_GET["status"]) && $_GET["status"] == 'read')
                     $mstatus = !bp_message_thread_has_unread();
                 $read = 'read';
                 ?>

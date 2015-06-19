@@ -503,7 +503,7 @@ function cuny_student_profile() {
         <?php echo cuny_profile_activty_block('project', 'My Projects', ' last', 25); ?>
         <?php echo cuny_profile_activty_block('club', 'My Clubs', ' last', 25); ?>
 
-        <script type='text/javascript'>(function($) {
+        <script type='text/javascript'>(function ($) {
                 $('.activity-list').css('visibility', 'hidden');
             })(jQuery);</script>
         <?php
@@ -600,10 +600,10 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                     </h6>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
-                                    
+
                                     <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
                                     <p class="original-copy hidden"><?= $activity ?></p>
-                                    
+
                                 </div>
 
                             </div>
@@ -629,35 +629,35 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                 <h4><?php echo $title ?></h4>
 
                 <div class="panel panel-default">
-                        <div class="panel-body">
-                            <p>
-                                <?php
-                                if ($type != "course") {
-                                    if ($bp->loggedin_user->id == $bp->displayed_user->id) {
-                                        ?>
-                                        You aren't participating in any <?php echo $type; ?>s on the OpenLab yet. Why not <a href="<?php echo site_url(); ?>/groups/create/step/group-details/?type=<?php echo $type; ?>&new=true">create a <?php echo $type; ?></a>?
-                                        <?php
-                                    } else {
-                                        echo $bp->displayed_user->fullname;
-                                        ?>
-                                        hasn't created or joined any <?php echo $type ?>s yet.
-                                        <?php
-                                    }
+                    <div class="panel-body">
+                        <p>
+                            <?php
+                            if ($type != "course") {
+                                if ($bp->loggedin_user->id == $bp->displayed_user->id) {
+                                    ?>
+                                    You aren't participating in any <?php echo $type; ?>s on the OpenLab yet. Why not <a href="<?php echo site_url(); ?>/groups/create/step/group-details/?type=<?php echo $type; ?>&new=true">create a <?php echo $type; ?></a>?
+                                    <?php
                                 } else {
-                                    if ($bp->loggedin_user->id == $bp->displayed_user->id) {
-                                        ?>
-                                        You haven't created any courses yet.
-                                        <?php
-                                    } else {
-                                        echo $bp->displayed_user->fullname;
-                                        ?>
-                                        hasn't joined any <?php echo $type ?>s yet.
-                                        <?php
-                                    }
+                                    echo $bp->displayed_user->fullname;
+                                    ?>
+                                    hasn't created or joined any <?php echo $type ?>s yet.
+                                    <?php
                                 }
-                                ?>
-                            </p>
-                        </div>
+                            } else {
+                                if ($bp->loggedin_user->id == $bp->displayed_user->id) {
+                                    ?>
+                                    You haven't created any courses yet.
+                                    <?php
+                                } else {
+                                    echo $bp->displayed_user->fullname;
+                                    ?>
+                                    hasn't joined any <?php echo $type ?>s yet.
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </p>
+                    </div>
                 </div>
             </div>
         <?php endif; ?>
@@ -743,7 +743,7 @@ function cuny_member_profile_header() {
         <div id="member-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
             <div id="avatar-wrapper">
                 <div class="padded-img darker">
-                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $this_user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname( $this_user_id ); ?>"/>
+                    <img class="img-responsive padded" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $this_user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname($this_user_id); ?>"/>
                 </div>
             </div><!--memeber-header-avatar-->
             <div id="profile-action-wrapper">
@@ -910,12 +910,12 @@ function openlab_member_header() {
     </h1>
     <?php if (bp_is_user_activity()): ?>
         <div class="clearfix hidden-xs">
-            <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
+            <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
         </div>
     <?php endif; ?>
     <div class="clearfix visible-xs">
         <span class="profile-type pull-left"><?php echo $account_type ?></span>
-        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity( bp_displayed_user_id() ) ?></span></div>
+        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
     </div>
     <?php
 }
@@ -924,6 +924,8 @@ add_action('bp_before_member_body', 'openlab_member_header');
 
 function openlab_messages_pagination() {
     global $messages_template;
+
+    $page_arg = '%#%';
 
     if ((int) $messages_template->total_thread_count && (int) $messages_template->pag_num) {
         $pagination = paginate_links(array(
@@ -959,30 +961,30 @@ function openlab_get_custom_activity_action() {
         }
     }
 
-    $time_since = apply_filters_ref_array( 'bp_activity_time_since', array( '<span class="time-since">' . bp_core_time_since( $activities_template->activity->date_recorded ) . '</span>', &$activities_template->activity ) );
+    $time_since = apply_filters_ref_array('bp_activity_time_since', array('<span class="time-since">' . bp_core_time_since($activities_template->activity->date_recorded) . '</span>', &$activities_template->activity));
 
-    $title  = '<p class="item inline-links semibold">' . $action_output . '</p>';
+    $title = '<p class="item inline-links semibold">' . $action_output . '</p>';
     $title .= '<p class="item timestamp"><span class="fa fa-undo"></span> ' . $time_since . '</p>';
 
     return $title;
 }
 
-function openlab_trim_member_name($name){
+function openlab_trim_member_name($name) {
     global $post, $bp;
 
     $trim_switch = false;
 
-    if($post->post_name == 'people' || $bp->current_action == 'members'){
+    if ($post->post_name == 'people' || $bp->current_action == 'members') {
         $trim_switch = true;
-    }else if ($bp->action_variables[0] == 'manage-members' || ($bp->current_action == 'members' && $bp->current_component == 'groups')){
+    } else if ($bp->action_variables[0] == 'manage-members' || ($bp->current_action == 'members' && $bp->current_component == 'groups')) {
         $trim_switch = true;
     }
 
-    if($trim_switch){
-        $process_name = explode(' ',$name);
+    if ($trim_switch) {
+        $process_name = explode(' ', $name);
         $new_name = '';
-        foreach($process_name as $process){
-            $new_name .= ' '.openlab_shortened_text($process,12,false);
+        foreach ($process_name as $process) {
+            $new_name .= ' ' . openlab_shortened_text($process, 12, false);
         }
 
         $name = $new_name;
@@ -991,16 +993,16 @@ function openlab_trim_member_name($name){
     return $name;
 }
 
-add_filter('bp_member_name','openlab_trim_member_name');
+add_filter('bp_member_name', 'openlab_trim_member_name');
 
-function openlab_trim_message_subject($subject){
+function openlab_trim_message_subject($subject) {
     global $bp;
 
-    if ($bp->current_component == 'messages' && ($bp->current_action == 'inbox' || $bp->current_action== 'sentbox')){
+    if ($bp->current_component == 'messages' && ($bp->current_action == 'inbox' || $bp->current_action == 'sentbox')) {
         $subject = openlab_shortened_text($subject, 20, false);
     }
 
     return $subject;
 }
 
-add_filter('bp_get_message_thread_subject','openlab_trim_message_subject');
+add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
