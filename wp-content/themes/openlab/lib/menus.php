@@ -76,7 +76,7 @@ function openlab_help_categories_menu($items, $args) {
         if ($parent_term == false) {
             $child_terms = get_the_terms($post->ID, 'help_category');
             $term = array();
-            
+
             if (!empty($child_terms)) {
                 foreach ($child_terms as $child_term) {
                     $term[] = $child_term;
@@ -84,7 +84,6 @@ function openlab_help_categories_menu($items, $args) {
 
                 $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
                 $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-            
             }
         }
 
@@ -237,8 +236,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $menu = openlab_profile_settings_submenu();
     }
 
+    $extras = openlab_get_submenu_extras();
+
     $submenu = '<div class="' . $width . '">';
-    $submenu .= '<div class="submenu"><div class="submenu-text pull-left bold">' . $submenu_text . '</div>' . $menu . '</div>';
+    $submenu .= '<div class="submenu"><div class="submenu-text pull-left bold">' . $submenu_text . '</div>' . $menu . $extras . '</div>';
     $submenu .= '</div>';
 
     if ($row_wrapper) {
@@ -246,6 +247,37 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
     }
 
     return $submenu;
+}
+
+/**
+ * Extra items that need to be on the same line as the submenu
+ */
+function openlab_get_submenu_extras() {
+    global $bp;
+    $extras = '';
+
+    if ($bp->current_action == 'my-friends') :
+        if (bp_has_members(bp_ajax_querystring('members'))) :
+            $count = '<div class="pull-left">' . bp_get_members_pagination_count() . '</div>';
+
+            $pagination = '';
+            if (bp_get_members_pagination_links()) {
+                $pagination = '<div class="pull-left">' . bp_get_members_pagination_links() . '</div>';
+            }
+
+            $extras = <<<HTML
+            <div class="pull-right">
+                <div class="clearfix">
+                    {$count}
+                    {$pagination}
+                </div>
+            </div>
+HTML;
+
+        endif;
+    endif;
+
+    return $extras;
 }
 
 //sub-menus for profile pages - a series of functions, but all here in one place
@@ -448,7 +480,13 @@ function openlab_submenu_gen($items, $timestamp = false) {
     //counter
     $i = 1;
 
-    $submenu = '<ul class="nav nav-inline">';
+    $submenu_classes = 'nav nav-inline';
+
+    if ($bp->current_action == 'my-friends') {
+        $submenu_classes .= ' pull-left';
+    }
+
+    $submenu = '<ul class="' . $submenu_classes . '">';
 
     foreach ($items as $item => $title) {
         $slug = strtolower($title);
@@ -555,7 +593,7 @@ function openlab_filter_subnav_home($subnav_item) {
     $group_id = bp_get_current_group_id();
 
     $group_site_settings = openlab_get_group_site_settings($group_id);
-    
+
     $site_link = '';
 
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
@@ -821,7 +859,7 @@ function openlab_group_admin_tabs($group = false) {
 
         --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )      ?>
+        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )       ?>
 
         <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
             --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
@@ -931,49 +969,48 @@ function openlab_forum_tabs() {
     <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li>
     <?php if (bp_action_variable() == 'topic'): ?>
         <li class="current-menu-item"><?php bbp_topic_title() ?></li>
-    <?php endif; ?>
+        <?php endif; ?>
 
-        <?php
+    <?php
+}
+
+function openlab_is_create_group($group_type) {
+    global $bp;
+    $return = NULL;
+
+    //get group step
+    $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
+
+    $steps = array('group-details', 'group-settings', 'group-avatar', 'invite-anyone');
+
+    if (openlab_get_group_type() == $group_type && in_array($current_step, $steps) && bp_current_action() == 'create') {
+        $return = true;
     }
 
-    function openlab_is_create_group($group_type) {
-        global $bp;
-        $return = NULL;
+    return $return;
+}
 
-        //get group step
-        $current_step = isset($bp->groups->current_create_step) ? $bp->groups->current_create_step : '';
+function openlab_get_group_profile_mobile_anchor_links() {
+    $links = '';
+    $group_id = bp_get_current_group_id();
 
-        $steps = array('group-details', 'group-settings', 'group-avatar', 'invite-anyone');
-
-        if (openlab_get_group_type() == $group_type && in_array($current_step, $steps) && bp_current_action() == 'create') {
-            $return = true;
-        }
-
-        return $return;
-    }
-
-    function openlab_get_group_profile_mobile_anchor_links() {
-        $links = '';
-        $group_id = bp_get_current_group_id();
-
-        // Non-public groups shouldn't show this to non-members.
-        $group = groups_get_current_group();
-        if ('public' !== $group->status && empty($group->user_has_access)) {
-            return $links;
-        }
-
-        $related_links = openlab_get_group_related_links($group_id);
-        if (!empty($related_links)) {
-
-            $links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
-        }
-
-        $portfolio_data = openlab_get_group_member_portfolios($group_id);
-        if (!empty($portfolio_data) && openlab_portfolio_list_enabled_for_group()) {
-
-            $links .= '<li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-member-portfolio-sidebar-widget" id="portfolios">Portfolios</a></li>';
-        }
-
+    // Non-public groups shouldn't show this to non-members.
+    $group = groups_get_current_group();
+    if ('public' !== $group->status && empty($group->user_has_access)) {
         return $links;
     }
-    
+
+    $related_links = openlab_get_group_related_links($group_id);
+    if (!empty($related_links)) {
+
+        $links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
+    }
+
+    $portfolio_data = openlab_get_group_member_portfolios($group_id);
+    if (!empty($portfolio_data) && openlab_portfolio_list_enabled_for_group()) {
+
+        $links .= '<li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-member-portfolio-sidebar-widget" id="portfolios">Portfolios</a></li>';
+    }
+
+    return $links;
+}

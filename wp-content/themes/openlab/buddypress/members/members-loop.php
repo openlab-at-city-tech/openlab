@@ -4,17 +4,6 @@
 
 <?php if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : ?>
 
-	<div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-19">
-			<?php bp_members_pagination_count() ?>
-		</div>
-
-		<div class="group-count col-sm-5">
-			<?php bp_members_pagination_links() ?>
-		</div>
-
-	</div>
-
 	<?php do_action( 'bp_before_directory_members_list' ) ?>
         <?php global $bp; ?>
 
