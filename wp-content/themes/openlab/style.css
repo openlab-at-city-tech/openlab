@@ -7095,7 +7095,6 @@ blockquote .h6 {
   display: inline-block;
   border-right: 1px solid #333333;
   padding: 0 7px;
-  line-height: 100%;
 }
 .nav.nav-inline li.no-link {
   color: #49cabe;
