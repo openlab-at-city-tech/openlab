@@ -20,14 +20,16 @@ function openlab_conditional_body_classes($classes) {
     }
 
     $about_page_obj = get_page_by_path('about');
+    $my_group_pages = array('my-courses','my-clubs','my-projects');
 
-    if( ( isset( $post->post_name ) && in_array( $post->post_name, $group_archives ) ) ||
-	 bp_is_single_item() ||
-	 bp_is_user() ||
-	 ( isset( $post->post_name ) && $post->ID == $about_page_obj->ID ) ||
-	 ( isset( $post->post_parent ) && $post->post_parent == $about_page_obj->ID ) ||
-	 ( isset( $post->post_type ) && $post->post_type == 'help' ) ||
-	 ( isset( $post->post_type ) &&  $post->post_type == 'help_glossary') ) {
+    if (( isset($post->post_name) && in_array($post->post_name, $group_archives) ) ||
+            bp_is_single_item() ||
+            bp_is_user() ||
+            ( isset($post->post_name) && $post->ID == $about_page_obj->ID ) ||
+            ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
+            ( isset($post->post_type) && $post->post_type == 'help' ) ||
+            ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
+            in_array($post->post_name, $my_group_pages)) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
 
