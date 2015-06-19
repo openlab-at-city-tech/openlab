@@ -9175,6 +9175,9 @@ body .inline-visible-xs {
 .wpcf7 .wpcf7-form-control-wrap {
   width: 100%;
 }
+.wpcf7 .wpcf7-form-control-wrap input {
+  max-width: 100%;
+}
 /**Custom media query items**/
 @media (max-width: 767px) {
   .group-subscription-div {
