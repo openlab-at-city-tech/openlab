@@ -7305,11 +7305,13 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-register {
   background: #000;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-register,
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-top-logout {
   border-left: 1px #666666 solid;
   border-right: 1px #666666 solid;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
+  border-right: 1px #666666 solid;
   max-width: 70px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
