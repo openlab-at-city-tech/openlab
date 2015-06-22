@@ -8361,8 +8361,8 @@ body .inline-visible-xs {
   font-weight: 600;
   padding: 6px 15px;
 }
-.sidebar .sidebar-block ul.sidebar-nav li:hover a,
-.sidebar .sidebar-block ul.sidebar-nav li:focus a {
+.sidebar .sidebar-block ul.sidebar-nav li:hover > a,
+.sidebar .sidebar-block ul.sidebar-nav li:focus > a {
   background: #63dfd2;
   color: #000000;
 }
