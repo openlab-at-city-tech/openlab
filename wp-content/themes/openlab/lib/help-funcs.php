@@ -252,7 +252,7 @@ function openlab_help_cats_loop() {
     else:
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
         ?>
-        <h1 class="parent-cat entry-title"><a href="<?php echo get_term_link($head_term) ?>"><?php echo $head_term->name ?></a>
+        <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><?php echo $head_term->name ?></a>
             <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
