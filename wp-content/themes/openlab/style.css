@@ -5798,7 +5798,6 @@ a.list-group-item-danger.active:focus {
 }
 .panel-heading {
   padding: 10px 15px;
-  border-bottom: 1px solid transparent;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
@@ -7280,10 +7279,10 @@ input[type="submit"] {
   max-width: 100%;
 }
 .form-control {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 .form-control[type='file'] {
-  padding: 0 12px;
+  padding: 6px 12px;
 }
 .form-inline.btn-combo .form-control {
   width: 82%;
