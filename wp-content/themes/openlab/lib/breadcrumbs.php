@@ -36,22 +36,22 @@ function openlab_specific_blog_breadcrumb($crumb, $args) {
 
         $post_terms = get_the_terms($post->ID, 'help_category');
         $term = array();
-	if ( is_array( $post_terms ) ) {
-		foreach ( $post_terms as $post_term ) {
-			$term[] = $post_term;
-		}
-	}
+        if (is_array($post_terms)) {
+            foreach ($post_terms as $post_term) {
+                $term[] = $post_term;
+            }
+        }
 
-	$term_link = '';
-	if ( ! empty( $term ) ) {
-		$current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-		$term_link = get_term_link($current_term, 'help_category');
-	}
+        $term_link = '';
+        if (!empty($term)) {
+            $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+            $term_link = get_term_link($current_term, 'help_category');
+        }
 
-        if( $term_link && ! is_wp_error( $term_link ) ){
+        if ($term_link && !is_wp_error($term_link)) {
             $crumb .= ' / <a href="' . $term_link . '">' . $current_term->name . '</a>';
         }
-        $crumb .= ' / '.bp_create_excerpt($post->post_title,50,array('ending' => __( '&hellip;', 'buddypress' )));
+        $crumb .= ' / ' . bp_create_excerpt($post->post_title, 50, array('ending' => __('&hellip;', 'buddypress')));
     }
 
     return $crumb;
@@ -78,39 +78,69 @@ function openlab_specific_archive_breadcrumb($crumb, $args) {
         $crumb .= ' / ' . $term->name;
     }
 
-    if ( bp_is_group() ) {
-		$group_id = $bp->groups->current_group->id;
-		$b2 = $bp->groups->current_group->name;
-		$group_type = groups_get_groupmeta( $bp->groups->current_group->id, 'wds_group_type' );
-		if ( $group_type == "course" ) {
-			$b1 = '<a href="'.site_url().'/courses/">Courses</a>';
-		} elseif ( $group_type == "project" ) {
-			$b1 = '<a href="'.site_url().'/projects/">Projects</a>';
-		} elseif ( $group_type == "club" ) {
-			$b1 ='<a href="'.site_url().'/clubs/">Clubs</a>';
-		} else {
-			$b1 = '<a href="'.site_url().'/groups/">Groups</a>';
-		}
+    if (bp_is_group()) {
+        $group_id = $bp->groups->current_group->id;
+        $b2 = $bp->groups->current_group->name;
+        $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
+        if ($group_type == "course") {
+            $b1 = '<a href="' . site_url() . '/courses/">Courses</a>';
+        } elseif ($group_type == "project") {
+            $b1 = '<a href="' . site_url() . '/projects/">Projects</a>';
+        } elseif ($group_type == "club") {
+            $b1 = '<a href="' . site_url() . '/clubs/">Clubs</a>';
+        } else {
+            $b1 = '<a href="' . site_url() . '/groups/">Groups</a>';
+        }
+    }
+    if (!empty($bp->displayed_user->id)) {
+        $account_type = xprofile_get_field_data('Account Type', $bp->displayed_user->id);
+        if ($account_type == "Staff") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/staff/">Staff</a>';
+        } elseif ($account_type == "Faculty") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/faculty/">Faculty</a>';
+        } elseif ($account_type == "Student") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/students/">Students</a>';
+        } else {
+            $b1 = '<a href="' . site_url() . '/people/">People</a>';
+        }
+        $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
+        $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
+    }
+    if (bp_is_group() || !empty($bp->displayed_user->id)) {
+        $crumb = $b1 . ' / ' . $b2;
+    }
 
-	}
-	if ( !empty( $bp->displayed_user->id ) ) {
-		$account_type = xprofile_get_field_data( 'Account Type', $bp->displayed_user->id );
-		if ( $account_type == "Staff" ) {
-			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/staff/">Staff</a>';
-		} elseif ( $account_type == "Faculty" ) {
-			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/faculty/">Faculty</a>';
-		} elseif ( $account_type == "Student" ) {
-			$b1 = '<a href="'.site_url().'/people/">People</a> / <a href="'.site_url().'/people/students/">Students</a>';
-		} else {
-			$b1 = '<a href="'.site_url().'/people/">People</a>';
-		}
-		$last_name= xprofile_get_field_data( 'Last Name', $bp->displayed_user->id );
-		$b2 = ucfirst( $bp->displayed_user->fullname );//.''.ucfirst( $last_name )
-	}
-	if ( bp_is_group() || !empty( $bp->displayed_user->id ) ) {
-		$crumb = $b1.' / '.$b2;
-                }
+    return $crumb;
+}
 
+add_filter('openlab_page_crumb', 'openlab_page_crumb_overrides', 10, 2);
+
+function openlab_page_crumb_overrides($crumb, $args) {
+    global $post, $bp;
+
+    if (bp_is_group()) {
+
+        $group_type = openlab_get_group_type();
+        $crumb = '<a href="' . site_url() . '/' . $group_type . 's/">' . ucfirst($group_type) . '</a> / ' . bp_get_group_name();
+    }
+
+    if (bp_is_user()) {
+
+        $account_type = xprofile_get_field_data('Account Type', $bp->displayed_user->id);
+        if ($account_type == "Staff") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/staff/">Staff</a>';
+        } elseif ($account_type == "Faculty") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/faculty/">Faculty</a>';
+        } elseif ($account_type == "Student") {
+            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/students/">Students</a>';
+        } else {
+            $b1 = '<a href="' . site_url() . '/people/">People</a>';
+        }
+        $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
+        $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
+        
+        $crumb = $b1 . ' / ' . $b2;
+    }
     return $crumb;
 }
 
@@ -362,7 +392,7 @@ class Openlab_Breadcrumb {
             $crumb = $this->args['labels']['author'] . esc_html($wp_query->queried_object->display_name);
         } elseif (is_post_type_archive()) {
             $crumb = $this->args['labels']['post_type'] . esc_html(post_type_archive_title('', false));
-        } else{
+        } else {
             $crumb = $wp_query->queried_object->post_title;
         }
 
