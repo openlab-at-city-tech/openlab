@@ -1,7 +1,7 @@
 <?php if ( bp_group_has_members( 'exclude_admins_mods=0' ) ) : ?>
 
 	<?php do_action( 'bp_before_group_members_content' ) ?>
-    <div class="row"><div class="col-md-24">
+    <div class="row">
         <div class="submenu col-sm-16">
 		<ul class="nav nav-inline">
 			<?php openlab_group_membership_tabs(); ?>
@@ -11,7 +11,7 @@
 			<?php bp_group_member_pagination_count() ?>
 		</div>
 
-        </div></div>
+        </div>
 
 	<?php do_action( 'bp_before_group_members_list' ) ?>
 

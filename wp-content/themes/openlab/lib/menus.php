@@ -947,9 +947,9 @@ function openlab_forum_tabs() {
 
     /** Query Resets ***************************************************** */
     // Forum data
-    $forum_action = bp_action_variable($offset);
     $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
     $forum_id = array_shift($forum_ids);
+    $offset = 0;
 
     $bbp->current_forum_id = $forum_id;
 
