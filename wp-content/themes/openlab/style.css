@@ -9003,12 +9003,14 @@ input#group-request-send {
 .col-help .page-title {
   font-size: 14px;
   margin: 15px 0 35px;
+  font-weight: bold;
 }
 .col-help .page-title span {
   color: #49cabe;
 }
 #help-title-nav {
   display: inline-block;
+  font-weight: normal;
 }
 #help-title-nav .nav-previous {
   padding-right: 8px;
