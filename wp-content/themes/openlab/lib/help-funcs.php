@@ -38,11 +38,11 @@ function openlab_help_loop() {
 
         <?php
         $help_cats = get_the_terms($post_id, 'help_category');
-        
+
 	if ( ! empty( $help_cats ) ) {
-                
+
                 sort($help_cats);
-            
+
 		if ( $help_cats[0]->parent == 0 ) {
 			$parent_cat_name = $help_cats[0]->name;
 			$parent_cat = $help_cats[0];
