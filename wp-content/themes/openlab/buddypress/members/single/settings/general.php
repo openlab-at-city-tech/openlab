@@ -8,6 +8,8 @@ do_action('bp_before_member_settings_template');
 
 <?php echo openlab_submenu_markup(); ?>
 
+<?php do_action( 'template_notices' ); ?>
+
 <div id="item-body" role="main">
 
     <?php do_action('bp_template_content') ?>
