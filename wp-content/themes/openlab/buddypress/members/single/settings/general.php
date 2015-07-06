@@ -15,11 +15,11 @@ do_action('bp_before_member_settings_template');
     <?php do_action('bp_template_content') ?>
 
     <form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/general'; ?>" method="post" class="standard-form form-panel" id="settings-form">
-        
+
         <div class="panel panel-default">
             <div class="panel-heading">Update Settings</div>
                 <div class="panel-body">
-        
+
         <div class="form-group settings-section username-section">
             <label for="username">Username</label>
             <input class="form-control" type="text" id="username" disabled="disabled" value="<?php bp_displayed_user_username() ?>" />
@@ -67,7 +67,7 @@ do_action('bp_before_member_settings_template');
                 </select>
             </div>
         <?php endif ?>
-                        
+
             </div>
         </div>
         <?php do_action('bp_core_general_settings_before_submit'); ?>
