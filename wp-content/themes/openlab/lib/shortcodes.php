@@ -33,7 +33,9 @@ function openlab_callout_list_shortcode($atts, $content) {
                             <span class="semibold">{$index}</span>
                         </div>
                         <div class="col-xs-22 callout-list-content">
-                            {$item_content}
+                            <div class="item-wrapper">
+                                {$item_content}
+                            </div>
                         </div>
                     </div>
 HTML;

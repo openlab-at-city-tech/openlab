@@ -755,7 +755,7 @@ body{
     }
     .callout-list-number{
         padding-right: 0;
-        padding-top: 8px;
+        padding-top: 4px;
         span{
             background: @magenta;
             border-radius: @border-radius-base;
@@ -769,9 +769,13 @@ body{
         }
     }
     .callout-list-content{
+        position: relative;
         padding-left: 0;
-        border-bottom: 1px solid @10gray;
-        padding-bottom: 11px;
+        .item-wrapper{
+            min-height: 42px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid @10gray;
+        }
     }
 }
 /**form custom**/
@@ -1373,7 +1377,7 @@ body{
                     padding: 6px 15px;
                 }
                 &:hover,
-                &:focus{
+                    &:focus{
                     > a{
                         background: @cyan;
                         color: @black;
@@ -1599,7 +1603,7 @@ body{
 }
 /**portfolio request membership**/
 input#group-request-send {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 /**group profiles**/
 #group-action-wrapper{

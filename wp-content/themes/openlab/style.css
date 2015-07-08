@@ -7747,7 +7747,7 @@ body .inline-visible-xs {
 }
 .callout-list .callout-list-number {
   padding-right: 0;
-  padding-top: 8px;
+  padding-top: 4px;
 }
 .callout-list .callout-list-number span {
   background: #ff5959;
@@ -7761,9 +7761,13 @@ body .inline-visible-xs {
   width: 78%;
 }
 .callout-list .callout-list-content {
+  position: relative;
   padding-left: 0;
-  border-bottom: 1px solid #dddddd;
+}
+.callout-list .callout-list-content .item-wrapper {
+  min-height: 42px;
   padding-bottom: 11px;
+  border-bottom: 1px solid #dddddd;
 }
 /**form custom**/
 #departments_html .department-list-container {
