@@ -30,7 +30,7 @@ $field_ids = array( 1 );
 
 <?php do_action( 'template_notices' ); ?>
 
-<form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?> form-panel">
+<form action="" method="post" id="profile-edit-form" class="standard-form form-panel">
 
 <?php
 

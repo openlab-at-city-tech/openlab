@@ -13,6 +13,13 @@ function openlab_is_admin_truly_member($group = false) {
     return apply_filters('bp_group_is_member', !empty($group->is_member));
 }
 
+function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors){
+    
+    clean_user_cache($user_id);
+}
+
+add_action('xprofile_updated_profile','openlab_flush_user_cache_on_save',10,3);
+
 /**
  * 	People archive page
  *
