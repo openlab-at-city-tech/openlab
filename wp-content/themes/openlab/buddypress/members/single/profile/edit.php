@@ -28,6 +28,8 @@ $field_ids = array( 1 );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
+<?php do_action( 'template_notices' ); ?>
+
 <form action="" method="post" id="profile-edit-form" class="standard-form <?php bp_the_profile_group_slug() ?> form-panel">
 
 <?php
@@ -36,13 +38,13 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
 
+                <?php if(is_super_admin( $user_ID )): ?>
 		<ul class="button-nav">
-			<?php
-			if(is_super_admin( $user_ID )){
-				bp_profile_group_tabs();
-			}
-			?>
+			
+                    <?php bp_profile_group_tabs(); ?>
+		
 		</ul>
+                <?php endif; ?>
 
 		<div class="clear"></div>
                 
