@@ -7689,10 +7689,10 @@ button.oplb-bs .close {
   position: relative;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li > .ab-item {
+  min-height: 51px;
   padding-bottom: 17px;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li > .ab-item.ab-empty-item {
-  min-height: 51px;
   padding-bottom: 16px;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-openlab {
