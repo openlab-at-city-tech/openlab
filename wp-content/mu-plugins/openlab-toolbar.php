@@ -1082,7 +1082,7 @@ HTML;
         if (!$update_data['counts']['total'])
             return;
 
-        $title = '<span class="ab-label">' . number_format_i18n($update_data['counts']['total']) . '</span>';
+        $title = '<span> ' . number_format_i18n($update_data['counts']['total']) . '</span>';
         $title .= '<span class="screen-reader-text">' . $update_data['title'] . '</span>';
         
         $icon = '<span class="fa fa fa-cogs"></span>';

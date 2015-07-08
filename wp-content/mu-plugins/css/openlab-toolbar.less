@@ -21,6 +21,11 @@
         a{
             text-shadow: none !important;
         }
+        .fa {
+            font-size: 14px;
+            line-height: 1;
+            margin: 0 4px;
+        }
         #wp-toolbar{
             line-height: normal;
             margin: 0 auto;
@@ -281,7 +286,7 @@
             #wp-admin-bar-openlab{
                 > .ab-item{
                     background: url('images/openlab_admin_bar_logo.png') #fff no-repeat 44% 58%;
-                    padding: 50px 0 0;
+                    padding: 51px 0 0;
                     width: 127px;
                     overflow: hidden;
                     height: 0;
@@ -731,6 +736,28 @@
                 position: absolute;
                 right: 0;
                 z-index: -1;
+            }
+            #wp-toolbar{
+                > ul{
+                    > li{
+                        position: relative;
+                        > .ab-item{
+                            padding-bottom: 17px;
+                            &.ab-empty-item{
+                                min-height: 51px;
+                                padding-bottom: 16px;
+                            }
+                        }
+                    }
+                }
+                #wp-admin-bar-openlab{
+                    .box-sizing(border-box);
+                    border-bottom: 1px solid #444;
+                }
+                #wp-admin-bar-top-logout{
+                    .box-sizing(border-box);
+                    border-bottom: 1px solid @black;
+                }
             }
             @media (max-width: @screen-xs-max){
                 top: 57px;
