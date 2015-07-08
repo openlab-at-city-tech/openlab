@@ -1205,9 +1205,19 @@ body{
                     a{
                         color: @white;
                     }
+                    @media (max-width: @screen-md-max){
+                        right: -30px;
+                    }
+                    @media (max-width: @screen-sm-max){
+                        right: -50px;
+                    }
                     @media (max-width: @screen-xs-max){
                         width: 100px;
                         right: -10px;
+                    }
+                    @media (max-width: @screen-xxs-max){
+                        width: 100px;
+                        right: -30px;
                     }
                 }
                 &:hover{

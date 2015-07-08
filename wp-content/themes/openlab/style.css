@@ -8214,10 +8214,26 @@ body .inline-visible-xs {
 .home-page #whos-online .avatar-block .cuny-member .cuny-member-info a {
   color: #ffffff;
 }
+@media (max-width: 1199px) {
+  .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
+    right: -30px;
+  }
+}
+@media (max-width: 991px) {
+  .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
+    right: -50px;
+  }
+}
 @media (max-width: 767px) {
   .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
     width: 100px;
     right: -10px;
+  }
+}
+@media (max-width: 479px) {
+  .home-page #whos-online .avatar-block .cuny-member .cuny-member-info {
+    width: 100px;
+    right: -30px;
   }
 }
 .home-page #whos-online .avatar-block .cuny-member:hover {
