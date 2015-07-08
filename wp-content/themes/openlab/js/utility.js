@@ -39,14 +39,23 @@
 
             }
         },
-        truncateOnTheFly: function (onInit) {
+        truncateOnTheFly: function (onInit, loadDelay) {
             if (onInit === undefined) {
                 var onInit = false;
             }
+            
+            if (loadDelay === undefined){
+                var loadDelay = false;
+            }
 
             $('.truncate-on-the-fly').each(function () {
-
+                
                 var thisElem = $(this);
+                
+                if(!loadDelay && thisElem.hasClass('load-delay')){
+                    return true;
+                }
+                
                 var truncationBaseValue = thisElem.data('basevalue');
                 var truncationBaseWidth = thisElem.data('basewidth');
 
@@ -308,7 +317,11 @@
             speed: 200,
         });
 
-        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700);
+        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function(){
+            
+            OpenLab.utility.truncateOnTheFly(false,true);
+            
+        });
 
     });
 
