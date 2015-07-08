@@ -6976,7 +6976,7 @@ button.oplb-bs .close {
   line-height: 1.42857;
   color: #fff;
   height: 50px;
-  top: 57px;
+  top: 63px;
   min-width: 0;
   z-index: 99997;
 }
@@ -7395,7 +7395,7 @@ button.oplb-bs .close {
 .oplb-bs .navbar-header h1 a {
   display: block;
   background: url('images/openlab_menu_logo.png') no-repeat;
-  padding-top: 56px;
+  padding-top: 63px;
   width: 185px;
   height: 0;
   overflow: hidden;
@@ -7423,7 +7423,7 @@ button.oplb-bs .close {
   display: none;
   position: absolute;
   right: 0;
-  top: 59px;
+  top: 65px;
   width: 336px;
   border: 1px solid #dddddd;
   border-radius: 4px 0 4px 4px;
@@ -7476,7 +7476,7 @@ button.oplb-bs .close {
   border-left: 1px solid #dddddd;
   border-right: 1px solid #dddddd;
   box-sizing: padding-box;
-  height: 59px;
+  height: 67px;
   z-index: 999999;
 }
 .oplb-bs .search .search-trigger-wrapper.search-live span {
@@ -7487,7 +7487,7 @@ button.oplb-bs .close {
     line-height: 4;
   }
   .oplb-bs .search .search-trigger-wrapper.search-live {
-    height: 58px;
+    height: 64px;
   }
 }
 @media (max-width: 767px) {
