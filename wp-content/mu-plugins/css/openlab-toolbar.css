@@ -6998,7 +6998,7 @@ button.oplb-bs .close {
   text-align: center;
   line-height: 120%;
   margin-right: 0;
-  padding: 14px 14px 19px;
+  padding: 17px 14px 16px;
   font-size: 14px;
   text-decoration: none;
 }
@@ -7016,7 +7016,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar > ul > li > .ab-item.ab-empty-item {
-  padding-top: 16px;
+  padding: 18px 14px 17px;
 }
 .oplb-bs #wpadminbar #wp-toolbar > ul > li > .fa {
   font-family: FontAwesome;
@@ -7041,7 +7041,7 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar > ul > li .toolbar-item-count.sub-count {
   position: absolute;
   right: 8px;
-  top: 11px;
+  top: 13px;
 }
 .oplb-bs #wpadminbar #wp-toolbar > ul > li.hover > a,
 .oplb-bs #wpadminbar #wp-toolbar > ul > li:hover > a,
@@ -7261,6 +7261,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-site-name .ab-sub-wrapper {
   width: 170%;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-site-name {
+  border-left: none;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab,

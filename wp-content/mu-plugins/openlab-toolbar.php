@@ -138,6 +138,10 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
+                        
+                        add_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 40 );
+                        add_action('admin_bar_menu',array($this,'add_custom_updates_menu'), 40);
+                        
                         if (!is_network_admin() && !is_user_admin()) {
                             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
                             remove_action('admin_bar_menu', 'wp_admin_bar_new_content_menu', 70);
@@ -1072,6 +1076,27 @@ HTML;
 	}
     }
     
+    function add_custom_updates_menu($wp_admin_bar) {
+        $update_data = wp_get_update_data();
+
+        if (!$update_data['counts']['total'])
+            return;
+
+        $title = '<span class="ab-label">' . number_format_i18n($update_data['counts']['total']) . '</span>';
+        $title .= '<span class="screen-reader-text">' . $update_data['title'] . '</span>';
+        
+        $icon = '<span class="fa fa fa-cogs"></span>';
+
+        $wp_admin_bar->add_menu(array(
+            'id' => 'updates',
+            'title' => $icon.$title,
+            'href' => network_admin_url('update-core.php'),
+            'meta' => array(
+                'title' => $update_data['title'],
+            ),
+        ));
+    }
+
     /**
      * Custom comments menu
      * @param type $wp_admin_bar
