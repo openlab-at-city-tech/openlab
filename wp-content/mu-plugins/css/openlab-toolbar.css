@@ -7141,7 +7141,6 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
   color: #49cabe;
-  text-decoration: underline;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item {
   padding-bottom: 16px;
@@ -7165,6 +7164,13 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
   display: block;
   margin-top: 8px;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a {
+  text-decoration: underline;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:hover,
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:focus {
+  text-decoration: none;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
