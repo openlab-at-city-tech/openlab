@@ -7713,6 +7713,10 @@ button.oplb-bs .close {
   box-sizing: border-box;
   border-bottom: 1px solid #000000;
 }
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
+  margin-top: 1px;
+  position: absolute;
+}
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
     top: 57px;
