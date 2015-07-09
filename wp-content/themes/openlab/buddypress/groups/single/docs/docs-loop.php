@@ -1,5 +1,9 @@
 <?php include( apply_filters('bp_docs_header_template', bp_docs_locate_template('docs-header.php')) ) ?>
 
+<?php bp_docs_inline_toggle_js() ?>
+
+<?php if (have_posts()) : ?>
+
 <div class="docs-info-header img-rounded">
     <div class="row">
         <div class="col-sm-24">
@@ -16,9 +20,6 @@
     </div>
 </div>
 
-<?php bp_docs_inline_toggle_js() ?>
-
-<?php if (have_posts()) : ?>
 <div class="info-panel panel panel-default doctable-panel">
     <table class="doctable table table-striped">
 
