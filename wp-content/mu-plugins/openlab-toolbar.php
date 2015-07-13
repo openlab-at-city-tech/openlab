@@ -116,6 +116,9 @@ class OpenLab_Admin_Bar {
 			remove_action( 'admin_bar_menu', 'bp_groups_group_admin_menu', 99 );
 			remove_action( 'admin_bar_menu', 'bp_members_admin_bar_user_admin_menu', 99 );
 
+			// Don't show the My Achievements menu item.
+			remove_action( 'admin_bar_menu', 'dpa_admin_bar_menu' );
+
 			// Add the notification menus
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
