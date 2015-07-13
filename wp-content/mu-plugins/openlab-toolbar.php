@@ -13,15 +13,15 @@ add_filter( 'show_admin_bar', '__return_true', 999999 );
  * Removing the default WP admin bar styles; a customized version of the default styles can now be found
  * in the mu-plugins folder
  * This is done for two reasons:
- * 
+ *
  *  1) The current default css uses a an all selector ('*') to apply a number of default styles that completely
  *     inhibit the ability to inject Bootstrap into the admin, and make custom responsive styling an immense challenge
  *  2) Because this admin bar is now highly customized, we do not want future releases of WP to upset those customizations
  *     without proper vetting
- * 
+ *
  * Note: in addition to removing the all selector styles, there are also a number of customizations to the custom default admin
  * bar css, to reduce overall styling overhead
- * 
+ *
  * @param type $styles
  */
 function openlab_remove_admin_bar_default_css($styles) {
@@ -51,10 +51,10 @@ class OpenLab_Admin_Bar {
 		if ( !class_exists( 'BP_Core' ) ) {
 			return;
 		}
-                
+
                 //remove BP admin bar styling too
                 add_filter('bp_core_register_common_styles',array($this,'remove_bp_admin_bar_styles'));
-                
+
 		// Add a body style to distinguish between sites
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
@@ -68,13 +68,13 @@ class OpenLab_Admin_Bar {
 
 		// Removes the Search menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 4 );
-                
+
                 //restricting network menu to group sites only
                 if(get_current_blog_id() !== 1 || is_admin()){
                     add_action( 'admin_bar_menu', array( $this, 'add_network_menu' ), 1 );
                     add_filter('body_class',array($this,'adminbar_special_body_class'));
                 }
-                
+
                 if(get_current_blog_id() === 1){
                     //adjust the padding at the top of the page
                     add_action('wp_head',array($this,'admin_bar_html_update'),99999);
@@ -84,23 +84,23 @@ class OpenLab_Admin_Bar {
                     //add meta tag for viewport (some of the themes lack this)
                     add_action('wp_head',array($this,'groups_sites_fix_for_mobile'));
                 }
-                
+
                 //for top padding in admin
                 add_action('admin_footer',array($this,'admin_bar_padding_in_admin'));
-                
+
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
-                
+
 		// Logged-in only
 		if ( is_user_logged_in() ) {
-                    
+
                         //hamburger mol menu
                         add_action('admin_bar_menu',array($this,'openlab_hamburger_mol_menu'),1);
-                    
+
                         //remove the default mobile dashboard toggle, we need a custom one for this for styling purposes
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
                         add_action('admin_bar_menu',array($this,'custom_admin_bar_sidebar_toggle'),0);
-                    
+
                         add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
                         add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
@@ -123,7 +123,7 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_invites_menu' ), 22 );
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
 			add_action( 'admin_bar_menu', array( $this, 'add_activity_menu' ), 26 );
-                        
+
                         //customizations for site menu
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_site_menu', 30 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_admin_bar_site_menu'),30);
@@ -131,27 +131,27 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
-                        
+
                         //removing the default account information item and menu so we can a custom Bootstrap-style one
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
-                        
+
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
-                        
+
                         add_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 40 );
                         add_action('admin_bar_menu',array($this,'add_custom_updates_menu'), 40);
-                        
+
                         if (!is_network_admin() && !is_user_admin()) {
                             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
                             remove_action('admin_bar_menu', 'wp_admin_bar_new_content_menu', 70);
                             add_action('admin_bar_menu',array($this,'add_custom_comments_menu'), 60);
                             add_action('admin_bar_menu',array($this,'add_custom_content_menu'), 70);
                         }
-                        
+
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
                         add_action('admin_bar_menu',array($this,'add_custom_edit_menu'),80);
         } else {
@@ -159,20 +159,20 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
 		}
 	}
-        
+
         function remove_bp_admin_bar_styles($styles){
-            
+
             return array();
         }
-        
+
         /**
          * Custom dashboard toggle on mobile
          */
         function custom_admin_bar_sidebar_toggle($wp_admin_bar){
             if ( is_admin() ) {
-                
+
                 $sr_text = __( 'Menu' );
-                
+
                 $hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle">
                         <span class="sr-only">{$sr_text}</span>
@@ -181,7 +181,7 @@ class OpenLab_Admin_Bar {
                         <span class="icon-bar"></span>
                     </button>
 HTML;
-                
+
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'menu-toggle',
 			'title' => $hamburger,
@@ -206,10 +206,10 @@ HTML;
  		) );
                 $this->openlab_menu_items('openlab');
  	}
-        
+
         function openlab_menu_items($parent){
             global $wp_admin_bar;
-                
+
                 $wp_admin_bar->add_node(array(
                     'parent' => $parent,
                     'id' => 'home-'.$parent,
@@ -295,11 +295,11 @@ HTML;
  	 * Adds 'My OpenLab' menu
  	 */
  	function add_my_openlab_menu( $wp_admin_bar ) {
-            
+
                 $current_user = wp_get_current_user();
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
-            
+
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
 			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
@@ -309,7 +309,7 @@ HTML;
                         ),
 		) );
  	}
-        
+
         /**
          * The MOL link on mobile needs to sit between the hamburger menus and the logout link
          * So we'll need a third group for this (makes styling easier)
@@ -339,10 +339,10 @@ HTML;
                 } else {
                     $username_small = $username;
                 }
-            
+
                 $howdy = '<span class="small-size">'.sprintf(__('Hi, %1$s'), $username).'</span>';
                 $howdy_small = '<span class="very-small-size">'.sprintf(__('Hi, %1$s'), $username_small).'</span>';
-            
+
  		$wp_admin_bar->add_menu( array(
                         'parent' => 'mobile-centered',
 			'id'    => 'my-openlab-mobile',
@@ -353,12 +353,12 @@ HTML;
                         ),
 		) );
         }
-        
+
         /**
          * Hamurger menu (mobile only)
          */
         function openlab_hamburger_menu($wp_admin_bar){
-            
+
             $hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle network-menu" data-target="#wp-admin-bar-network-menu-mobile .ab-sub-wrapper" data-plusheight="19">
                         <span class="sr-only">Toggle navigation</span>
@@ -374,7 +374,7 @@ HTML;
                             'class' => 'visible-xs hamburger',
                         ),
 		) );
-//            
+//
             $wp_admin_bar->add_node( array(
 			'id'    => 'network-menu-mobile',
 			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
@@ -382,16 +382,16 @@ HTML;
                             'class' => 'visible-xs mobile-menu admin-bar-menu',
                         ),
 		) );
-            
+
             $this->openlab_menu_items('network-menu-mobile');
-            
+
         }
-        
+
         /**
          * Hamurger menu (mobile only)
          */
         function openlab_hamburger_mol_menu($wp_admin_bar){
-            
+
             $hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle mol-menu" data-target="#wp-admin-bar-my-openlab .ab-sub-wrapper" data-plusheight="19">
                         <span class="sr-only">Toggle navigation</span>
@@ -407,7 +407,7 @@ HTML;
                             'class' => 'visible-xs hamburger',
                         ),
 		) );
-            
+
         }
 
 	/**
@@ -457,7 +457,7 @@ HTML;
                             'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
-                
+
                 $wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-settings',
@@ -467,7 +467,7 @@ HTML;
                             'class' => 'admin-bar-menu-item mobile-no-hover'
                         )
 		) );
-                
+
 		$wp_admin_bar->add_node( array(
 			'parent' => 'my-openlab',
 			'id'     => 'my-courses',
@@ -537,7 +537,7 @@ HTML;
                                     'class' => 'admin-bar-menu-item mobile-no-hover'
                                 )
 			) );
-                        
+
                 }
 
 		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
@@ -600,7 +600,7 @@ HTML;
 			'id' => 'invites',
 			'title' => '<span class="toolbar-item-icon fa fa-user"></span>' . $total_count,
                         'meta' => array(
-                          'class' => 'hidden-xs',  
+                          'class' => 'hidden-xs',
                         ),
 		) );
 
@@ -627,7 +627,7 @@ HTML;
 		if ( bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
 				bp_the_member();
-                                
+
 				// avatar
 				$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_member_link() . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '.bp_get_member_name().'"/></a></div></div>';
 
@@ -662,7 +662,7 @@ HTML;
 		/**
 		 * INVITATIONS
 		 */
-                
+
                 $title = 'Invitations';
                 if ( !empty( $invites['groups'] )){
                     $title .= '<span class="see-all pull-right"><a class="regular" href="'.trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug()) . '/invites">See All Invites</a></span>';
@@ -730,12 +730,12 @@ HTML;
 		}
 
 		$total_count = openlab_admin_bar_counts(bp_get_total_unread_messages_count(),' sub-count');
-                
+
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
 			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span>' . $total_count,
                         'meta' => array(
-                          'class' => 'hidden-xs',  
+                          'class' => 'hidden-xs',
                         ),
 		) );
 
@@ -778,7 +778,7 @@ HTML;
 				}
 
 				$messages_counter++;
-                                
+
 			}
 
 		} else {
@@ -813,7 +813,7 @@ HTML;
 			'id' => 'activity',
 			'title' => '<span class="toolbar-item-name fa fa-bullhorn"></span>',
                         'meta' => array(
-                          'class' => 'hidden-xs',  
+                          'class' => 'hidden-xs',
                         ),
 		) );
 
@@ -833,7 +833,7 @@ HTML;
 
 				// action
 				$title .= '<div class="col-sm-18">';
-                                
+
                                 //the things we do...
                                 $action_output = '';
                                 $action_output_raw = $activities_template->activity->action;
@@ -846,7 +846,7 @@ HTML;
                                         $count++;
                                     }
                                 }
-                                
+
                                 $title .= '<p class="item inline-links">'.$action_output.'</p>';
                                 $title .= '<p class="item">'.bp_insert_activity_meta('').' ago</p>';
                                 $title .= '</div></div>';
@@ -878,7 +878,7 @@ HTML;
                             )
 		) );
 	}
-        
+
         function openlab_custom_admin_bar_site_menu($wp_admin_bar){
             // Don't show for logged out users.
             if ( ! is_user_logged_in() )
@@ -943,7 +943,7 @@ HTML;
                     wp_admin_bar_appearance_menu( $wp_admin_bar );
             }
         }
-        
+
         function add_custom_edit_menu( $wp_admin_bar ) {
                 global $tag, $wp_the_query;
 
@@ -1009,7 +1009,7 @@ HTML;
                         }
                 }
         }
-        
+
     /**
      * Custom content menu
      * @param type $wp_admin_bar
@@ -1078,7 +1078,7 @@ HTML;
 		) );
 	}
     }
-    
+
     function add_custom_updates_menu($wp_admin_bar) {
         $update_data = wp_get_update_data();
 
@@ -1087,7 +1087,7 @@ HTML;
 
         $title = '<span> ' . number_format_i18n($update_data['counts']['total']) . '</span>';
         $title .= '<span class="screen-reader-text">' . $update_data['title'] . '</span>';
-        
+
         $icon = '<span class="fa fa fa-cogs"></span>';
 
         $wp_admin_bar->add_menu(array(
@@ -1134,7 +1134,7 @@ HTML;
 	public function remove_adduser( $wp_admin_bar ) {
 		$wp_admin_bar->remove_menu( 'new-user' );
 	}
-        
+
 	/**
 	 * Add a 'Log Out' link to the far right
 	 */
@@ -1149,9 +1149,9 @@ HTML;
                         ),
 		) );
 	}
-        
+
         function openlab_custom_my_account_item($wp_admin_bar) {
-            
+
                 $user_id = get_current_user_id();
                 $current_user = wp_get_current_user();
                 $profile_url = get_edit_profile_url($user_id);
@@ -1172,7 +1172,7 @@ HTML;
                     ),
                 ));
         }
-        
+
         /**
          * Custom account menu
          * @param type $wp_admin_bar
@@ -1189,7 +1189,7 @@ HTML;
 
             if ( $current_user->display_name !== $current_user->user_login )
                     $user_login = "<br /><span class='username'>{$current_user->user_login}</span>";
-                    
+
             // avatar
             $user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $current_user->display_name.'"/></a></div></div>' ;
 
@@ -1258,7 +1258,7 @@ HTML;
 			)
 		) );
 	}
-        
+
 	function body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class[] = 'openlab-main';
@@ -1281,38 +1281,38 @@ HTML;
 
 	function enqueue_styles() {
             global $wpdb;
-            
+
             //getting the theme folder for the main site
             $main_site_theme = $wpdb->get_var('SELECT option_value FROM wp_options WHERE option_name = "template"');
-            
+
             wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
             wp_enqueue_style('google-open-sans');
-            
+
             $openlab_theme_link = get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css';
             $openlab_theme_link = set_url_scheme($openlab_theme_link);
-            
+
             //registering font-awesome here so it can be used on the admin bar and on the main site
             wp_register_style('font-awesome', $openlab_theme_link, array(), '20130604', 'all');
             wp_enqueue_style('font-awesome');
             //custom admin bar styles
-            
+
             $adminbar_custom_url = WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css';
             $adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
             $openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
-            
-            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome') );            
+
+            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome') );
             wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome') );
         }
-        
+
         function adminbar_special_body_class($classes){
-            
+
             $classes[] = 'adminbar-special';
-            
+
             return $classes;
-            
+
         }
-        
+
         function admin_bar_html_update(){
             ?>
 
@@ -1327,7 +1327,7 @@ HTML;
 
             <?php
         }
-        
+
         function admin_bar_group_sites_html_update(){
          ?>
 
@@ -1342,7 +1342,7 @@ HTML;
 
             <?php
         }
-        
+
         function admin_bar_padding_in_admin() {
         ?>
 
@@ -1367,7 +1367,7 @@ HTML;
 
         <?php
     }
-    
+
     function groups_sites_fix_for_mobile(){
         ?>
 
@@ -1379,13 +1379,13 @@ HTML;
 }
 
 function openlab_admin_bar_counts($count, $pull_right = ' pull-right'){
-    
+
     if($count < 1){
         return '';
     }else{
         return '<span class="toolbar-item-count count-' . $count .$pull_right. '">'.$count.'</span>';
     }
-    
+
 }
 
 // Themes like TwentyTen don't use jQuery by default, so let's enqueue it!
@@ -1405,7 +1405,7 @@ function cac_adminbar_js() {
 ?>
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
-            
+
 		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
