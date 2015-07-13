@@ -54,8 +54,15 @@ function openlab_help_loop() {
 
 	$back_next_nav = '';
 
-	$prev_post = get_adjacent_post( false, '', true );
-	$next_post = get_adjacent_post( false, '', false );
+        $adj_args = array(
+                'order_by' => 'menu_order',
+                'order_2nd' => 'post_date',
+                'post_type' => '"help"',
+                'return' => 'object',
+        );
+
+        $prev_post = adjacent_post_link_plus( $adj_args, '', true );
+        $next_post = adjacent_post_link_plus( $adj_args, '', false );
 
 	$back_next_nav .= '<nav id="help-title-nav">';
 
