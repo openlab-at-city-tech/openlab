@@ -1372,9 +1372,13 @@ body{
         }
         ul.sidebar-nav{
             margin: 0;
-            padding: 12px 0;
+            padding: 0px 0 7px;
             list-style-type: none;
+            background: rgba(255, 255, 255, 0.42);
             li{
+	            background: rgba(239, 239, 239, 0.8);
+				width: 100% !important;
+				margin: 0;
                 a{
                     color: @black;
                     display: block;
@@ -1465,6 +1469,9 @@ body{
                     li{
                         a{
                             text-align: right;
+                            width: 75%;
+							float: right;
+							background: rgba(255, 255, 255, 0.42);
                             .mol-count{
                                 display: none;
                             }
