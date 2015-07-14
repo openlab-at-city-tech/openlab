@@ -96,7 +96,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                         </div>
                         </div>
                      </div>
-                        <hr />
+                        
             <?php endif; ?>
 
             <?php /* "Related Links List Settings" - Course only for now */ ?>
@@ -152,7 +152,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                     </div>
                 </div>
 
-                <hr />
+                
             <?php endif; ?>
 
             <?php openlab_group_privacy_settings($group_type); ?>
