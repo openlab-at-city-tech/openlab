@@ -251,10 +251,15 @@ input[type="submit"]{
     max-width: 100%;
 }
 .form-control{
-    margin-bottom: 0px;
+    margin-bottom: 15px;
     &[type='file']{
         padding: 6px 12px;
     }
+}
+.notify-settings {
+	.notify-members {
+		font-weight: @bold;
+	}
 }
 .form-inline{
     &.btn-combo{
@@ -785,6 +790,7 @@ body{
         border: 1px solid @30gray;
         border-radius: @border-radius-base;
         overflow: auto;
+        padding: 6px 12px;
     }
 }
 .groupblog-setup{
