@@ -275,8 +275,8 @@ function openlab_help_cats_loop() {
     ?>
 
     <?php if ( $help_query->have_posts() ) : ?>
-    <div class="col-md-12">
-        <div class="child-cat-container">
+    <div>
+        <div class="child-cat-container help-cat-block">
             <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
 	    <ul>
 	    <?php

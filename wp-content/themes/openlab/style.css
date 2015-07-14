@@ -9082,8 +9082,9 @@ input#group-request-send {
   line-height: 2.25;
 }
 .archive .child-cat-container {
-  border: 1px solid #999999;
-  padding: 10px 14px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 2%;
 }
 .archive .child-cat-container h2 {
   font-size: 16px;
@@ -9097,6 +9098,9 @@ input#group-request-send {
 }
 .archive .child-cat-container .help-tags {
   margin-left: 0;
+}
+.archive .child-cat-container li {
+  margin-bottom: 12px;
 }
 .archive h2.child-cat {
   margin-top: 42px;
