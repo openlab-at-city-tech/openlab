@@ -311,7 +311,7 @@ function openlab_help_cats_loop() {
     $count = 0;
 
     foreach ( $cols as $col_name => $col_cats ) {
-	    echo '<div class="col-md-12">';
+	    echo '<div>';
 	    foreach ( $col_cats as $child ) {
 		$child_cat_id = $child->cat_ID;
 		echo '<div class="child-cat-container child-cat-container-' . intval( $child_cat_id ) . '">';
