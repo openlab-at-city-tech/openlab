@@ -7088,11 +7088,11 @@ blockquote .h6 {
 .nav.nav-inline li {
   display: inline-block;
   margin-bottom: 0;
+  border-right: 1px solid #333333;
 }
 .nav.nav-inline li a {
   color: #000000;
   display: inline-block;
-  border-right: 1px solid #333333;
   padding: 0 7px;
 }
 .nav.nav-inline li.no-link {
@@ -7111,8 +7111,8 @@ blockquote .h6 {
   color: inherit;
   text-decoration: none;
 }
-.nav.nav-inline li:last-child a,
-.nav.nav-inline li.last-item a {
+.nav.nav-inline li:last-child,
+.nav.nav-inline li.last-item {
   border-right: none;
 }
 .nav.nav-inline li .fa {
@@ -9024,6 +9024,9 @@ input#group-request-send {
   }
 }
 /**help**/
+.col-help {
+  /* Unsure whether this is needed */
+}
 .col-help .page-title {
   font-size: 14px;
   margin: 15px 0 35px;
@@ -9031,15 +9034,40 @@ input#group-request-send {
 .col-help .page-title span {
   color: #49cabe;
 }
+.col-help span.page-title {
+  font-weight: 600;
+  color: #49cabe;
+  margin: auto;
+  padding: 0 7px;
+}
+.row.help-nav {
+  margin-bottom: 35px;
+  /* Overrides - I'm not confident of the original purpose of these styles */
+}
+.row.help-nav .nav.nav-inline li:hover a {
+  text-decoration: underline;
+}
 #help-title-nav {
-  display: inline-block;
-  font-weight: normal;
+  margin-left: 6px;
+  /* Overrides */
 }
 #help-title-nav .nav-previous {
   padding-right: 8px;
 }
 #help-title-nav span {
   color: #000000;
+}
+#help-title-nav a {
+  padding: 0;
+}
+#help-title-nav a:hover,
+#help-title-nav a:focus {
+  color: #49cabe;
+  text-decoration: underline;
+}
+#help-title-nav .fa {
+  margin: 0 4px;
+  padding-left: 0;
 }
 .help-title:first-of-type {
   margin-top: 64px;

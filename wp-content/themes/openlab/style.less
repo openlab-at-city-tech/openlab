@@ -111,10 +111,10 @@ blockquote {
         li{
             display: inline-block;
             margin-bottom: 0;
+            border-right: 1px solid @80gray;
             a{
                 color: @black;
                 display: inline-block;
-                border-right: 1px solid @80gray;
                 padding: 0 7px;
             }
             &.no-link{
@@ -133,9 +133,7 @@ blockquote {
             }
             &:last-child,
                 &.last-item{
-                a{
-                    border-right: none;
-                }
+                border-right: none;
             }
             .fa{
                 padding-left: 7px;
@@ -2141,6 +2139,7 @@ input#group-request-send {
 }
 /**help**/
 .col-help{
+    /* Unsure whether this is needed */
     .page-title{
         font-size: 14px;
         margin: 15px 0 35px;
@@ -2148,16 +2147,46 @@ input#group-request-send {
             color: @aqua;
         }
     }
+
+    span.page-title {
+        font-weight: 600;
+	color: @aqua;
+	margin: auto;
+	padding: 0 7px;
+    }
+}
+.row.help-nav {
+    margin-bottom: 35px;
+
+    /* Overrides - I'm not confident of the original purpose of these styles */
+    .nav.nav-inline li:hover a {
+        text-decoration: underline;
+    }
 }
 #help-title-nav {
-    display: inline-block;
-    font-weight: normal;
+    margin-left: 6px;
+
     .nav-previous {
         padding-right: 8px;
     }
 
     span {
         color: @black;
+    }
+
+    /* Overrides */
+    a {
+        padding: 0;
+
+	&:hover, &:focus {
+		color: @aqua;
+		text-decoration: underline;
+	}
+    }
+
+    .fa {
+        margin: 0 4px;
+	padding-left: 0;
     }
 }
 .help-title:first-of-type {
