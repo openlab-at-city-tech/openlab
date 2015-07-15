@@ -110,7 +110,7 @@ function openlab_group_sidebar($mobile = false) {
                 <?php openlab_bp_group_site_pages(); ?>
                 <?php endif; ?>
                 <div id="item-buttons" class="profile-nav sidebar-block <?php echo $classes; ?>">
-                    <ul class="sidebar-nav">
+                    <ul class="sidebar-nav clearfix">
                         <?php bp_get_options_nav(); ?>
 
                         <?php

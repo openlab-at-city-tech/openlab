@@ -8374,8 +8374,14 @@ body .inline-visible-xs {
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
-  padding: 12px 0;
+  padding: 0px 0 7px;
   list-style-type: none;
+  background: rgba(255, 255, 255, 0.42);
+}
+.sidebar .sidebar-block ul.sidebar-nav li {
+  background: rgba(239, 239, 239, 0.8);
+  width: 100% !important;
+  margin: 0;
 }
 .sidebar .sidebar-block ul.sidebar-nav li a {
   color: #000000;
@@ -8456,6 +8462,9 @@ body .inline-visible-xs {
   }
   .sidebar.mobile-dropdown .sidebar-block ul li a {
     text-align: right;
+    width: 75%;
+    float: right;
+    background: rgba(255, 255, 255, 0.42);
   }
   .sidebar.mobile-dropdown .sidebar-block ul li a .mol-count {
     display: none;
@@ -8500,9 +8509,6 @@ body .inline-visible-xs {
 }
 .group-list .group-item-wrapper h2 {
   margin: 6px 0 12px;
-}
-.group-list .group-item-wrapper h2 a {
-  color: #333333;
 }
 .group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
