@@ -9046,6 +9046,9 @@ input#group-request-send {
   margin: auto;
   padding: 0 7px;
 }
+.col-help ul.nav li:first-child span.page-title {
+  padding-left: 0;
+}
 .row.help-nav {
   margin-bottom: 35px;
   /* Overrides - I'm not confident of the original purpose of these styles */
