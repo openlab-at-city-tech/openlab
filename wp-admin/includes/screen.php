@@ -25,7 +25,7 @@ function get_column_headers( $screen ) {
 		/**
 		 * Filter the column headers for a list table on a specific screen.
 		 *
-		 * The dynamic portion of the hook name, $screen->id, refers to the
+		 * The dynamic portion of the hook name, `$screen->id`, refers to the
 		 * ID of a specific screen. For example, the screen ID for the Posts
 		 * list table is edit-post, so the filter for that screen would be
 		 * manage_edit-post_columns.
@@ -60,7 +60,7 @@ function get_hidden_columns( $screen ) {
  *
  * @since 2.7.0
  *
- * @param string|WP_Screen $screen
+ * @param WP_Screen $screen
  */
 function meta_box_prefs( $screen ) {
 	global $wp_meta_boxes;
@@ -177,7 +177,6 @@ function get_current_screen() {
  * Set the current screen object
  *
  * @since 3.0.0
- * @uses $current_screen
  *
  * @param mixed $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen,
  *	or an existing screen object.
@@ -369,14 +368,15 @@ final class WP_Screen {
 	 * @since 3.3.0
 	 * @access public
 	 *
-	 * @param string $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen.
+	 * @param string|WP_Screen $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen.
 	 * 	Defaults to the current $hook_suffix global.
 	 * @return WP_Screen Screen object.
 	 */
 	public static function get( $hook_name = '' ) {
 
-		if ( is_a( $hook_name, 'WP_Screen' ) )
+		if ( $hook_name instanceof WP_Screen ) {
 			return $hook_name;
+		}
 
 		$post_type = $taxonomy = null;
 		$in_admin = false;
@@ -648,8 +648,10 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string $option Option ID.
-	 * @param mixed $key Optional. Specific array key for when the option is an array.
+	 * @param string $option Option name.
+	 * @param string $key    Optional. Specific array key for when the option is an array.
+	 *                       Default false.
+	 * @return string The option value if set, null otherwise.
 	 */
 	public function get_option( $option, $key = false ) {
 		if ( ! isset( $this->_options[ $option ] ) )
@@ -974,7 +976,7 @@ final class WP_Screen {
 			case 'post' :
 				$expand = '<div class="editor-expand hidden"><label for="editor-expand-toggle">';
 				$expand .= '<input type="checkbox" id="editor-expand-toggle"' . checked( get_user_setting( 'editor_expand', 'on' ), 'on', false ) . ' />';
-				$expand .= __( 'Expand the editor to match the window height.' ) . '</label></div>';
+				$expand .= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label></div>';
 				$this->_screen_settings = $expand;
 				break;
 			default:
@@ -1024,7 +1026,7 @@ final class WP_Screen {
 
 		?>
 		<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="<?php esc_attr_e('Screen Options Tab'); ?>">
-		<form id="adv-settings" action="" method="post">
+		<form id="adv-settings" method="post">
 		<?php if ( isset( $wp_meta_boxes[ $this->id ] ) || $this->get_option( 'per_page' ) || ( $columns && empty( $columns['_title'] ) ) ) : ?>
 			<h5><?php _e( 'Show on screen' ); ?></h5>
 		<?php
@@ -1125,20 +1127,26 @@ final class WP_Screen {
 	 * @since 3.3.0
 	 */
 	public function render_per_page_options() {
-		if ( ! $this->get_option( 'per_page' ) )
+		if ( null === $this->get_option( 'per_page' ) ) {
 			return;
+		}
 
 		$per_page_label = $this->get_option( 'per_page', 'label' );
+		if ( null === $per_page_label ) {
+			$per_page_label = __( 'Number of items per page:' );
+		}
 
 		$option = $this->get_option( 'per_page', 'option' );
-		if ( ! $option )
+		if ( ! $option ) {
 			$option = str_replace( '-', '_', "{$this->id}_per_page" );
+		}
 
 		$per_page = (int) get_user_option( $option );
 		if ( empty( $per_page ) || $per_page < 1 ) {
 			$per_page = $this->get_option( 'per_page', 'default' );
-			if ( ! $per_page )
+			if ( ! $per_page ) {
 				$per_page = 20;
+			}
 		}
 
 		if ( 'edit_comments_per_page' == $option ) {
@@ -1163,16 +1171,14 @@ final class WP_Screen {
 		?>
 		<div class="screen-options">
 			<?php if ( $per_page_label ) : ?>
+				<label for="<?php echo esc_attr( $option ); ?>"><?php echo $per_page_label; ?></label>
 				<input type="number" step="1" min="1" max="999" class="screen-per-page" name="wp_screen_options[value]"
 					id="<?php echo esc_attr( $option ); ?>" maxlength="3"
 					value="<?php echo esc_attr( $per_page ); ?>" />
-				<label for="<?php echo esc_attr( $option ); ?>">
-					<?php echo esc_html( $per_page_label ); ?>
-				</label>
 			<?php endif;
 
 			echo get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false ); ?>
-			<input type='hidden' name='wp_screen_options[option]' value='<?php echo esc_attr($option); ?>' />
+			<input type="hidden" name="wp_screen_options[option]" value="<?php echo esc_attr( $option ); ?>" />
 		</div>
 		<?php
 	}

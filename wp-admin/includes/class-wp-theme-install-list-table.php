@@ -106,7 +106,7 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 		/**
 		 * Filter API request arguments for each Install Themes screen tab.
 		 *
-		 * The dynamic portion of the hook name, $tab, refers to the theme install
+		 * The dynamic portion of the hook name, `$tab`, refers to the theme install
 		 * tabs. Default tabs are 'dashboard', 'search', 'upload', 'featured',
 		 * 'new', and 'updated'.
 		 *
@@ -173,7 +173,7 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 		</div>
 
 		<?php
-		parent::tablenav( 'bottom' );
+		$this->tablenav( 'bottom' );
 	}
 
 	public function display_rows() {

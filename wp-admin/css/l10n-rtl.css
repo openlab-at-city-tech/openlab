@@ -8,6 +8,16 @@ body.rtl .press-this a.wp-switch-editor {
 	font-family: Tahoma, Arial, sans-serif;
 }
 
+/* Arial is best for RTL headings. */
+.rtl h1,
+.rtl h2,
+.rtl h3,
+.rtl h4,
+.rtl h5,
+.rtl h6 {
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+}
 
 /* he_IL: Remove Tahoma from the font stack. Arial is best for Hebrew. */
 body.locale-he-il,
@@ -44,7 +54,7 @@ body.locale-he-il .press-this a.wp-switch-editor {
 /* zn_CH: Enlarge font size, set font-size: normal */
 .locale-zh-cn form.upgrade .hint { font-style: normal; font-size: 100%; }
 
-/* Zn_CH: Distraction free writing.
+/* Zn_CH: Distraction-free writing.
  *  More beautiful font for "Just write."
  *  Larger text for HTML/Visual mode.
  */

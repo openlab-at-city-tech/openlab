@@ -155,7 +155,7 @@ function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_
 }
 
 function _wp_dashboard_control_callback( $dashboard, $meta_box ) {
-	echo '<form action="" method="post" class="dashboard-widget-control-form">';
+	echo '<form method="post" class="dashboard-widget-control-form">';
 	wp_dashboard_trigger_widget_control( $meta_box['id'] );
 	wp_nonce_field( 'edit-dashboard-widget_' . $meta_box['id'], 'dashboard-widget-nonce' );
 	echo '<input type="hidden" name="widget_id" value="' . esc_attr($meta_box['id']) . '" />';
@@ -235,8 +235,8 @@ function wp_dashboard_right_now() {
 	}
 	// Comments
 	$num_comm = wp_count_comments();
-	if ( $num_comm && $num_comm->total_comments ) {
-		$text = sprintf( _n( '%s Comment', '%s Comments', $num_comm->total_comments ), number_format_i18n( $num_comm->total_comments ) );
+	if ( $num_comm && $num_comm->approved ) {
+		$text = sprintf( _n( '%s Comment', '%s Comments', $num_comm->approved ), number_format_i18n( $num_comm->approved ) );
 		?>
 		<li class="comment-count"><a href="edit-comments.php"><?php echo $text; ?></a></li>
 		<?php
@@ -379,14 +379,16 @@ function wp_network_dashboard_right_now() {
 
 	<form action="<?php echo network_admin_url('users.php'); ?>" method="get">
 		<p>
-			<input type="search" name="s" value="" size="30" autocomplete="off" />
+			<label class="screen-reader-text" for="search-users"><?php _e( 'Search Users' ); ?></label>
+			<input type="search" name="s" value="" size="30" autocomplete="off" id="search-users"/>
 			<?php submit_button( __( 'Search Users' ), 'button', 'submit', false, array( 'id' => 'submit_users' ) ); ?>
 		</p>
 	</form>
 
 	<form action="<?php echo network_admin_url('sites.php'); ?>" method="get">
 		<p>
-			<input type="search" name="s" value="" size="30" autocomplete="off" />
+			<label class="screen-reader-text" for="search-sites"><?php _e( 'Search Sites' ); ?></label>
+			<input type="search" name="s" value="" size="30" autocomplete="off" id="search-sites"/>
 			<?php submit_button( __( 'Search Sites' ), 'button', 'submit', false, array( 'id' => 'submit_sites' ) ); ?>
 		</p>
 	</form>
@@ -689,6 +691,15 @@ function wp_dashboard_recent_posts( $args ) {
 		'cache_results'  => false,
 		'perm'           => ( 'future' === $args['status'] ) ? 'editable' : 'readable',
 	);
+
+	/**
+	 * Filter the query arguments used for the Recent Posts widget.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param array $query_args The arguments passed to WP_Query to produce the list of posts.
+	 */
+	$query_args = apply_filters( 'dashboard_recent_posts_query_args', $query_args );
 	$posts = new WP_Query( $query_args );
 
 	if ( $posts->have_posts() ) {
@@ -715,15 +726,12 @@ function wp_dashboard_recent_posts( $args ) {
 				$relative = date_i18n( __( 'M jS' ), $time );
 			}
 
-			if ( current_user_can( 'edit_post', get_the_ID() ) ) {
-				/* translators: 1: relative date, 2: time, 3: post edit link, 4: post title */
-				$format = __( '<span>%1$s, %2$s</span> <a href="%3$s">%4$s</a>' );
-				printf( "<li>$format</li>", $relative, get_the_time(), get_edit_post_link(), _draft_or_post_title() );
-			} else {
-				/* translators: 1: relative date, 2: time, 3: post title */
-				$format = __( '<span>%1$s, %2$s</span> %3$s' );
-				printf( "<li>$format</li>", $relative, get_the_time(), _draft_or_post_title() );
-			}
+			// Use the post edit link for those who can edit, the permalink otherwise.
+			$recent_post_link = current_user_can( 'edit_post', get_the_ID() ) ? get_edit_post_link() : get_permalink();
+
+			/* translators: 1: relative date, 2: time, 3: post edit link or permalink, 4: post title */
+			$format = __( '<span>%1$s, %2$s</span> <a href="%3$s">%4$s</a>' );
+			printf( "<li>$format</li>", $relative, get_the_time(), $recent_post_link, _draft_or_post_title() );
 		}
 
 		echo '</ul>';
@@ -967,7 +975,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's secondary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_secondary_link', __( 'http://planet.wordpress.org/' ) ),
+			'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
 
 			/**
 			 * Filter the secondary feed URL for the 'WordPress News' dashboard widget.
@@ -976,7 +984,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's secondary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_secondary_feed', __( 'http://planet.wordpress.org/feed/' ) ),
+			'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
 
 			/**
 			 * Filter the secondary link title for the 'WordPress News' dashboard widget.
@@ -1111,7 +1119,7 @@ function wp_dashboard_plugins_output( $rss, $args = array() ) {
  *
  * @since 3.0.0
  *
- * @return bool True if not multisite, user can't upload files, or the space check option is disabled.
+ * @return bool|null True if not multisite, user can't upload files, or the space check option is disabled.
 */
 function wp_dashboard_quota() {
 	if ( !is_multisite() || !current_user_can( 'upload_files' ) || get_site_option( 'upload_space_check_disabled' ) )
@@ -1324,7 +1332,7 @@ function wp_welcome_panel() {
 		<?php if ( current_user_can( 'manage_options' ) ) : ?>
 			<li><?php printf( '<a href="%s" class="welcome-icon welcome-comments">' . __( 'Turn comments on or off' ) . '</a>', admin_url( 'options-discussion.php' ) ); ?></li>
 		<?php endif; ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', __( 'http://codex.wordpress.org/First_Steps_With_WordPress' ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', __( 'https://codex.wordpress.org/First_Steps_With_WordPress' ) ); ?></li>
 		</ul>
 	</div>
 	</div>

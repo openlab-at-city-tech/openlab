@@ -100,7 +100,7 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 
 	/*
 	 * Store original value for language with untypical grammars.
-	 * See http://core.trac.wordpress.org/ticket/9396
+	 * See https://core.trac.wordpress.org/ticket/9396
 	 */
 	$req_format = $dateformatstring;
 
@@ -182,7 +182,7 @@ function number_format_i18n( $number, $decimals = 0 ) {
 /**
  * Convert number of bytes largest unit bytes will fit into.
  *
- * It is easier to read 1kB than 1024 bytes and 1MB than 1048576 bytes. Converts
+ * It is easier to read 1 kB than 1024 bytes and 1 MB than 1048576 bytes. Converts
  * number of bytes to human readable number by taking the number of that unit
  * that the bytes will go into it. Supports TB value.
  *
@@ -197,7 +197,7 @@ function number_format_i18n( $number, $decimals = 0 ) {
  *
  * @param int|string $bytes    Number of bytes. Note max integer size for integers.
  * @param int        $decimals Optional. Precision of number of decimal places. Default 0.
- * @return bool|string False on failure. Number string on success.
+ * @return string|false False on failure. Number string on success.
  */
 function size_format( $bytes, $decimals = 0 ) {
 	$quant = array(
@@ -206,11 +206,14 @@ function size_format( $bytes, $decimals = 0 ) {
 		'GB' => 1073741824,     // pow( 1024, 3)
 		'MB' => 1048576,        // pow( 1024, 2)
 		'kB' => 1024,           // pow( 1024, 1)
-		'B ' => 1,              // pow( 1024, 0)
+		'B'  => 1,              // pow( 1024, 0)
 	);
-	foreach ( $quant as $unit => $mag )
-		if ( doubleval($bytes) >= $mag )
+
+	foreach ( $quant as $unit => $mag ) {
+		if ( doubleval( $bytes ) >= $mag ) {
 			return number_format_i18n( $bytes / $mag, $decimals ) . ' ' . $unit;
+		}
+	}
 
 	return false;
 }
@@ -377,7 +380,7 @@ function maybe_serialize( $data ) {
 		return serialize( $data );
 
 	// Double serialization is required for backward compatibility.
-	// See http://core.trac.wordpress.org/ticket/12930
+	// See https://core.trac.wordpress.org/ticket/12930
 	if ( is_serialized( $data, false ) )
 		return serialize( $data );
 
@@ -457,23 +460,23 @@ function xmlrpc_removepostdata( $content ) {
  */
 function wp_extract_urls( $content ) {
 	preg_match_all(
-		"#("
+		"#([\"']?)("
 			. "(?:([\w-]+:)?//?)"
 			. "[^\s()<>]+"
 			. "[.]"
 			. "(?:"
 				. "\([\w\d]+\)|"
 				. "(?:"
-					. "[^`!()\[\]{};:'\".,<>?«»“”‘’\s]|"
+					. "[^`!()\[\]{};:'\".,<>«»“”‘’\s]|"
 					. "(?:[:]\d+)?/?"
 				. ")+"
 			. ")"
-		. ")#",
+		. ")\\1#",
 		$content,
 		$post_links
 	);
 
-	$post_links = array_unique( array_map( 'html_entity_decode', $post_links[0] ) );
+	$post_links = array_unique( array_map( 'html_entity_decode', $post_links[2] ) );
 
 	return array_values( $post_links );
 }
@@ -641,7 +644,7 @@ function wp_get_http_headers( $url, $deprecated = false ) {
  * @global string $currentday  The day of the current post in the loop.
  * @global string $previousday The day of the previous post in the loop.
  *
- * @return int|bool 1|true when new day, 0|false if not a new day.
+ * @return int 1 when new day, 0 if not a new day.
  */
 function is_new_day() {
 	global $currentday, $previousday;
@@ -700,7 +703,7 @@ function _http_build_query( $data, $prefix = null, $sep = null, $key = '', $urle
 			$k = $key . '%5B' . $k . '%5D';
 		if ( $v === null )
 			continue;
-		elseif ( $v === FALSE )
+		elseif ( $v === false )
 			$v = '0';
 
 		if ( is_array($v) || is_object($v) )
@@ -778,8 +781,9 @@ function add_query_arg() {
 	wp_parse_str( $query, $qs );
 	$qs = urlencode_deep( $qs ); // this re-URL-encodes things that were already in the query string
 	if ( is_array( $args[0] ) ) {
-		$kayvees = $args[0];
-		$qs = array_merge( $qs, $kayvees );
+		foreach ( $args[0] as $k => $v ) {
+			$qs[ $k ] = $v;
+		}
 	} else {
 		$qs[ $args[0] ] = $args[1];
 	}
@@ -803,7 +807,7 @@ function add_query_arg() {
  * @since 1.5.0
  *
  * @param string|array $key   Query key or keys to remove.
- * @param bool         $query Optional. When false uses the $_SERVER value. Default false.
+ * @param bool|string  $query Optional. When false uses the $_SERVER value. Default false.
  * @return string New URL query string.
  */
 function remove_query_arg( $key, $query = false ) {
@@ -842,7 +846,7 @@ function add_magic_quotes( $array ) {
  * @see wp_safe_remote_get()
  *
  * @param string $uri URI/URL of web page to retrieve.
- * @return bool|string HTTP content. False on failure.
+ * @return false|string HTTP content. False on failure.
  */
 function wp_remote_fopen( $uri ) {
 	$parsed_url = @parse_url( $uri );
@@ -866,7 +870,7 @@ function wp_remote_fopen( $uri ) {
  *
  * @since 2.0.0
  *
- * @param string $query_vars Default WP_Query arguments.
+ * @param string|array $query_vars Default WP_Query arguments.
  */
 function wp( $query_vars = '' ) {
 	global $wp, $wp_query, $wp_the_query;
@@ -1087,7 +1091,7 @@ function cache_javascript_headers() {
  *
  * @since 2.0.0
  *
- * @global wpdb $wpdb WordPress database access abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @return int Number of database queries.
  */
@@ -1253,7 +1257,7 @@ function do_robots() {
  *
  * @since 2.1.0
  *
- * @global wpdb $wpdb WordPress database access abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @return bool Whether the blog is already installed.
  */
@@ -1327,9 +1331,9 @@ function is_blog_installed() {
  *
  * @since 2.0.4
  *
- * @param string $actionurl URL to add nonce action.
- * @param string $action    Optional. Nonce action name. Default -1.
- * @param string $name      Optional. Nonce name. Default '_wpnonce'.
+ * @param string     $actionurl URL to add nonce action.
+ * @param int|string $action    Optional. Nonce action name. Default -1.
+ * @param string     $name      Optional. Nonce name. Default '_wpnonce'.
  * @return string Escaped URL with nonce action added.
  */
 function wp_nonce_url( $actionurl, $action = -1, $name = '_wpnonce' ) {
@@ -1357,10 +1361,10 @@ function wp_nonce_url( $actionurl, $action = -1, $name = '_wpnonce' ) {
  *
  * @since 2.0.4
  *
- * @param string $action  Optional. Action name. Default -1.
- * @param string $name    Optional. Nonce name. Default '_wpnonce'.
- * @param bool   $referer Optional. Whether to set the referer field for validation. Default true.
- * @param bool   $echo    Optional. Whether to display or return hidden form field. Default true.
+ * @param int|string $action  Optional. Action name. Default -1.
+ * @param string     $name    Optional. Nonce name. Default '_wpnonce'.
+ * @param bool       $referer Optional. Whether to set the referer field for validation. Default true.
+ * @param bool       $echo    Optional. Whether to display or return hidden form field. Default true.
  * @return string Nonce field HTML markup.
  */
 function wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
@@ -1426,7 +1430,7 @@ function wp_original_referer_field( $echo = true, $jump_back_to = 'current' ) {
  *
  * @since 2.0.4
  *
- * @return string|bool False on failure. Referer URL on success.
+ * @return false|string False on failure. Referer URL on success.
  */
 function wp_get_referer() {
 	if ( ! function_exists( 'wp_validate_redirect' ) )
@@ -1434,7 +1438,7 @@ function wp_get_referer() {
 	$ref = false;
 	if ( ! empty( $_REQUEST['_wp_http_referer'] ) )
 		$ref = wp_unslash( $_REQUEST['_wp_http_referer'] );
-	else if ( ! empty( $_SERVER['HTTP_REFERER'] ) )
+	elseif ( ! empty( $_SERVER['HTTP_REFERER'] ) )
 		$ref = wp_unslash( $_SERVER['HTTP_REFERER'] );
 
 	if ( $ref && $ref !== wp_unslash( $_SERVER['REQUEST_URI'] ) )
@@ -1447,7 +1451,7 @@ function wp_get_referer() {
  *
  * @since 2.0.4
  *
- * @return string|bool False if no original referer or original referer if set.
+ * @return string|false False if no original referer or original referer if set.
  */
 function wp_get_original_referer() {
 	if ( ! empty( $_REQUEST['_wp_original_http_referer'] ) && function_exists( 'wp_validate_redirect' ) )
@@ -1513,7 +1517,7 @@ function wp_mkdir_p( $target ) {
 		 */
 		if ( $dir_perms != ( $dir_perms & ~umask() ) ) {
 			$folder_parts = explode( '/', substr( $target, strlen( $target_parent ) + 1 ) );
-			for ( $i = 1; $i <= count( $folder_parts ); $i++ ) {
+			for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i++ ) {
 				@chmod( $target_parent . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
 			}
 		}
@@ -1667,11 +1671,11 @@ function wp_is_writable( $path ) {
  */
 function win_is_writable( $path ) {
 
-	if ( $path[strlen( $path ) - 1] == '/' ) // if it looks like a directory, check a random file within the directory
+	if ( $path[strlen( $path ) - 1] == '/' ) { // if it looks like a directory, check a random file within the directory
 		return win_is_writable( $path . uniqid( mt_rand() ) . '.tmp');
-	else if ( is_dir( $path ) ) // If it's a directory (and not a file) check a random file within the directory
+	} elseif ( is_dir( $path ) ) { // If it's a directory (and not a file) check a random file within the directory
 		return win_is_writable( $path . '/' . uniqid( mt_rand() ) . '.tmp' );
-
+	}
 	// check tmp file for read/write capabilities
 	$should_delete_tmp_file = !file_exists( $path );
 	$f = @fopen( $path, 'a' );
@@ -1918,10 +1922,10 @@ function wp_unique_filename( $dir, $filename, $unique_filename_callback = null )
  *
  * @since 2.0.0
  *
- * @param string $name       Filename.
- * @param null   $deprecated Never used. Set to null.
- * @param mixed  $bits       File content
- * @param string $time       Optional. Time formatted in 'yyyy/mm'. Default null.
+ * @param string       $name       Filename.
+ * @param null|string  $deprecated Never used. Set to null.
+ * @param mixed        $bits       File content
+ * @param string       $time       Optional. Time formatted in 'yyyy/mm'. Default null.
  * @return array
  */
 function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
@@ -2016,7 +2020,7 @@ function wp_ext2type( $ext ) {
 		'image'       => array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico' ),
 		'audio'       => array( 'aac', 'ac3',  'aif',  'aiff', 'm3a',  'm4a',   'm4b',  'mka',  'mp1',  'mp2',  'mp3', 'ogg', 'oga', 'ram', 'wav', 'wma' ),
 		'video'       => array( '3g2',  '3gp', '3gpp', 'asf', 'avi',  'divx', 'dv',   'flv',  'm4v',   'mkv',  'mov',  'mp4',  'mpeg', 'mpg', 'mpv', 'ogm', 'ogv', 'qt',  'rm', 'vob', 'wmv' ),
-		'document'    => array( 'doc', 'docx', 'docm', 'dotm', 'odt',  'pages', 'pdf',  'xps',  'oxps', 'rtf',  'wp',   'wpd' ),
+		'document'    => array( 'doc', 'docx', 'docm', 'dotm', 'odt',  'pages', 'pdf',  'xps',  'oxps', 'rtf',  'wp', 'wpd', 'psd', 'xcf' ),
 		'spreadsheet' => array( 'numbers',     'ods',  'xls',  'xlsx', 'xlsm',  'xlsb' ),
 		'interactive' => array( 'swf', 'key',  'ppt',  'pptx', 'pptm', 'pps',   'ppsx', 'ppsm', 'sldx', 'sldm', 'odp' ),
 		'text'        => array( 'asc', 'csv',  'tsv',  'txt' ),
@@ -2153,6 +2157,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
  * Retrieve list of mime types and file extensions.
  *
  * @since 3.5.0
+ * @since 4.2.0 Support was added for GIMP (xcf) files.
  *
  * @return array Array of mime types keyed by the file extension regex corresponding to those types.
  */
@@ -2174,7 +2179,7 @@ function wp_get_mime_types() {
 	'gif' => 'image/gif',
 	'png' => 'image/png',
 	'bmp' => 'image/bmp',
-	'tif|tiff' => 'image/tiff',
+	'tiff|tif' => 'image/tiff',
 	'ico' => 'image/x-icon',
 	// Video formats.
 	'asf|asx' => 'video/x-ms-asf',
@@ -2223,6 +2228,8 @@ function wp_get_mime_types() {
 	'rar' => 'application/rar',
 	'7z' => 'application/x-7z-compressed',
 	'exe' => 'application/x-msdownload',
+	'psd' => 'application/octet-stream',
+	'xcf' => 'application/octet-stream',
 	// MS Office formats.
 	'doc' => 'application/msword',
 	'pot|pps|ppt' => 'application/vnd.ms-powerpoint',
@@ -2273,8 +2280,6 @@ function wp_get_mime_types() {
  *
  * @since 2.8.6
  *
- * @uses wp_get_upload_mime_types() to fetch the list of mime types
- *
  * @param int|WP_User $user Optional. User to check. Defaults to current user.
  * @return array Array of mime types keyed by the file extension regex corresponding
  *               to those types.
@@ -2313,7 +2318,6 @@ function get_allowed_mime_types( $user = null ) {
  * @param string $action The nonce action.
  */
 function wp_nonce_ays( $action ) {
-	$title = __( 'WordPress Failure Notice' );
 	if ( 'log-out' == $action ) {
 		$html = sprintf( __( 'You are attempting to log out of %s' ), get_bloginfo( 'name' ) ) . '</p><p>';
 		$redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';
@@ -2324,25 +2328,51 @@ function wp_nonce_ays( $action ) {
 			$html .= "</p><p><a href='" . esc_url( remove_query_arg( 'updated', wp_get_referer() ) ) . "'>" . __( 'Please try again.' ) . "</a>";
 	}
 
-	wp_die( $html, $title, array('response' => 403) );
+	wp_die( $html, __( 'WordPress Failure Notice' ), 403 );
 }
 
 /**
  * Kill WordPress execution and display HTML message with error message.
  *
- * This function complements the die() PHP function. The difference is that
+ * This function complements the `die()` PHP function. The difference is that
  * HTML will be displayed to the user. It is recommended to use this function
- * only, when the execution should not continue any further. It is not
- * recommended to call this function very often and try to handle as many errors
- * as possible silently.
+ * only when the execution should not continue any further. It is not recommended
+ * to call this function very often, and try to handle as many errors as possible
+ * silently or more gracefully.
+ *
+ * As a shorthand, the desired HTTP response code may be passed as an integer to
+ * the `$title` parameter (the default title would apply) or the `$args` parameter.
  *
  * @since 2.0.4
+ * @since 4.1.0 The `$title` and `$args` parameters were changed to optionally accept
+ *              an integer to be used as the response code.
  *
- * @param string       $message Optional. Error message. Default empty.
- * @param string       $title   Optional. Error title. Default empty.
- * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ * @param string|WP_Error  $message Optional. Error message. If this is a {@see WP_Error} object,
+ *                                  the error's messages are used. Default empty.
+ * @param string|int       $title   Optional. Error title. If `$message` is a `WP_Error` object,
+ *                                  error data with the key 'title' may be used to specify the title.
+ *                                  If `$title` is an integer, then it is treated as the response
+ *                                  code. Default empty.
+ * @param string|array|int $args {
+ *     Optional. Arguments to control behavior. If `$args` is an integer, then it is treated
+ *     as the response code. Default empty array.
+ *
+ *     @type int    $response       The HTTP response code. Default 500.
+ *     @type bool   $back_link      Whether to include a link to go back. Default false.
+ *     @type string $text_direction The text direction. This is only useful internally, when WordPress
+ *                                  is still loading and the site's locale is not set up yet. Accepts 'rtl'.
+ *                                  Default is the value of {@see is_rtl()}.
+ * }
  */
 function wp_die( $message = '', $title = '', $args = array() ) {
+
+	if ( is_int( $args ) ) {
+		$args = array( 'response' => $args );
+	} elseif ( is_int( $title ) ) {
+		$args  = array( 'response' => $title );
+		$title = '';
+	}
+
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		/**
 		 * Filter callback for killing WordPress execution for AJAX requests.
@@ -2612,6 +2642,142 @@ function _scalar_wp_die_handler( $message = '' ) {
 }
 
 /**
+ * Encode a variable into JSON, with some sanity checks.
+ *
+ * @since 4.1.0
+ *
+ * @param mixed $data    Variable (usually an array or object) to encode as JSON.
+ * @param int   $options Optional. Options to be passed to json_encode(). Default 0.
+ * @param int   $depth   Optional. Maximum depth to walk through $data. Must be
+ *                       greater than 0. Default 512.
+ * @return bool|string The JSON encoded string, or false if it cannot be encoded.
+ */
+function wp_json_encode( $data, $options = 0, $depth = 512 ) {
+	/*
+	 * json_encode() has had extra params added over the years.
+	 * $options was added in 5.3, and $depth in 5.5.
+	 * We need to make sure we call it with the correct arguments.
+	 */
+	if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
+		$args = array( $data, $options, $depth );
+	} elseif ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
+		$args = array( $data, $options );
+	} else {
+		$args = array( $data );
+	}
+
+	$json = call_user_func_array( 'json_encode', $args );
+
+	// If json_encode() was successful, no need to do more sanity checking.
+	// ... unless we're in an old version of PHP, and json_encode() returned
+	// a string containing 'null'. Then we need to do more sanity checking.
+	if ( false !== $json && ( version_compare( PHP_VERSION, '5.5', '>=' ) || false === strpos( $json, 'null' ) ) )  {
+		return $json;
+	}
+
+	try {
+		$args[0] = _wp_json_sanity_check( $data, $depth );
+	} catch ( Exception $e ) {
+		return false;
+	}
+
+	return call_user_func_array( 'json_encode', $args );
+}
+
+/**
+ * Perform sanity checks on data that shall be encoded to JSON.
+ *
+ * @ignore
+ * @since 4.1.0
+ * @access private
+ *
+ * @see wp_json_encode()
+ *
+ * @param mixed $data  Variable (usually an array or object) to encode as JSON.
+ * @param int   $depth Maximum depth to walk through $data. Must be greater than 0.
+ * @return mixed The sanitized data that shall be encoded to JSON.
+ */
+function _wp_json_sanity_check( $data, $depth ) {
+	if ( $depth < 0 ) {
+		throw new Exception( 'Reached depth limit' );
+	}
+
+	if ( is_array( $data ) ) {
+		$output = array();
+		foreach ( $data as $id => $el ) {
+			// Don't forget to sanitize the ID!
+			if ( is_string( $id ) ) {
+				$clean_id = _wp_json_convert_string( $id );
+			} else {
+				$clean_id = $id;
+			}
+
+			// Check the element type, so that we're only recursing if we really have to.
+			if ( is_array( $el ) || is_object( $el ) ) {
+				$output[ $clean_id ] = _wp_json_sanity_check( $el, $depth - 1 );
+			} elseif ( is_string( $el ) ) {
+				$output[ $clean_id ] = _wp_json_convert_string( $el );
+			} else {
+				$output[ $clean_id ] = $el;
+			}
+		}
+	} elseif ( is_object( $data ) ) {
+		$output = new stdClass;
+		foreach ( $data as $id => $el ) {
+			if ( is_string( $id ) ) {
+				$clean_id = _wp_json_convert_string( $id );
+			} else {
+				$clean_id = $id;
+			}
+
+			if ( is_array( $el ) || is_object( $el ) ) {
+				$output->$clean_id = _wp_json_sanity_check( $el, $depth - 1 );
+			} elseif ( is_string( $el ) ) {
+				$output->$clean_id = _wp_json_convert_string( $el );
+			} else {
+				$output->$clean_id = $el;
+			}
+		}
+	} elseif ( is_string( $data ) ) {
+		return _wp_json_convert_string( $data );
+	} else {
+		return $data;
+	}
+
+	return $output;
+}
+
+/**
+ * Convert a string to UTF-8, so that it can be safely encoded to JSON.
+ *
+ * @ignore
+ * @since 4.1.0
+ * @access private
+ *
+ * @see _wp_json_sanity_check()
+ *
+ * @param string $string The string which is to be converted.
+ * @return string The checked string.
+ */
+function _wp_json_convert_string( $string ) {
+	static $use_mb = null;
+	if ( is_null( $use_mb ) ) {
+		$use_mb = function_exists( 'mb_convert_encoding' );
+	}
+
+	if ( $use_mb ) {
+		$encoding = mb_detect_encoding( $string, mb_detect_order(), true );
+		if ( $encoding ) {
+			return mb_convert_encoding( $string, 'UTF-8', $encoding );
+		} else {
+			return mb_convert_encoding( $string, 'UTF-8', 'UTF-8' );
+		}
+	} else {
+		return wp_check_invalid_utf8( $string, true );
+	}
+}
+
+/**
  * Send a JSON response back to an Ajax request.
  *
  * @since 3.5.0
@@ -2621,7 +2787,7 @@ function _scalar_wp_die_handler( $message = '' ) {
  */
 function wp_send_json( $response ) {
 	@header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
-	echo json_encode( $response );
+	echo wp_json_encode( $response );
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 		wp_die();
 	else
@@ -2647,15 +2813,34 @@ function wp_send_json_success( $data = null ) {
 /**
  * Send a JSON response back to an Ajax request, indicating failure.
  *
+ * If the `$data` parameter is a {@see WP_Error} object, the errors
+ * within the object are processed and output as an array of error
+ * codes and corresponding messages. All other types are output
+ * without further processing.
+ *
  * @since 3.5.0
+ * @since 4.1.0 The `$data` parameter is now processed if a {@see WP_Error}
+ *              object is passed in.
  *
  * @param mixed $data Data to encode as JSON, then print and die.
  */
 function wp_send_json_error( $data = null ) {
 	$response = array( 'success' => false );
 
-	if ( isset( $data ) )
-		$response['data'] = $data;
+	if ( isset( $data ) ) {
+		if ( is_wp_error( $data ) ) {
+			$result = array();
+			foreach ( $data->errors as $code => $messages ) {
+				foreach ( $messages as $message ) {
+					$result[] = array( 'code' => $code, 'message' => $message );
+				}
+			}
+
+			$response['data'] = $result;
+		} else {
+			$response['data'] = $data;
+		}
+	}
 
 	wp_send_json( $response );
 }
@@ -2722,8 +2907,14 @@ function _config_wp_siteurl( $url = '' ) {
 function _mce_set_direction( $input ) {
 	if ( is_rtl() ) {
 		$input['directionality'] = 'rtl';
-		$input['plugins'] .= ',directionality';
-		$input['toolbar1'] .= ',ltr';
+
+		if ( ! empty( $input['plugins'] ) && strpos( $input['plugins'], 'directionality' ) === false ) {
+			$input['plugins'] .= ',directionality';
+		}
+
+		if ( ! empty( $input['toolbar1'] ) && ! preg_match( '/\bltr\b/', $input['toolbar1'] ) ) {
+			$input['toolbar1'] .= ',ltr';
+		}
 	}
 
 	return $input;
@@ -2761,51 +2952,51 @@ function smilies_init() {
 
 	if ( !isset( $wpsmiliestrans ) ) {
 		$wpsmiliestrans = array(
-		':mrgreen:' => 'icon_mrgreen.gif',
-		':neutral:' => 'icon_neutral.gif',
-		':twisted:' => 'icon_twisted.gif',
-		  ':arrow:' => 'icon_arrow.gif',
-		  ':shock:' => 'icon_eek.gif',
-		  ':smile:' => 'icon_smile.gif',
-		    ':???:' => 'icon_confused.gif',
-		   ':cool:' => 'icon_cool.gif',
-		   ':evil:' => 'icon_evil.gif',
-		   ':grin:' => 'icon_biggrin.gif',
-		   ':idea:' => 'icon_idea.gif',
-		   ':oops:' => 'icon_redface.gif',
-		   ':razz:' => 'icon_razz.gif',
-		   ':roll:' => 'icon_rolleyes.gif',
-		   ':wink:' => 'icon_wink.gif',
-		    ':cry:' => 'icon_cry.gif',
-		    ':eek:' => 'icon_surprised.gif',
-		    ':lol:' => 'icon_lol.gif',
-		    ':mad:' => 'icon_mad.gif',
-		    ':sad:' => 'icon_sad.gif',
-		      '8-)' => 'icon_cool.gif',
-		      '8-O' => 'icon_eek.gif',
-		      ':-(' => 'icon_sad.gif',
-		      ':-)' => 'icon_smile.gif',
-		      ':-?' => 'icon_confused.gif',
-		      ':-D' => 'icon_biggrin.gif',
-		      ':-P' => 'icon_razz.gif',
-		      ':-o' => 'icon_surprised.gif',
-		      ':-x' => 'icon_mad.gif',
-		      ':-|' => 'icon_neutral.gif',
-		      ';-)' => 'icon_wink.gif',
+		':mrgreen:' => 'mrgreen.png',
+		':neutral:' => "\xf0\x9f\x98\x90",
+		':twisted:' => "\xf0\x9f\x98\x88",
+		  ':arrow:' => "\xe2\x9e\xa1",
+		  ':shock:' => "\xf0\x9f\x98\xaf",
+		  ':smile:' => 'simple-smile.png',
+		    ':???:' => "\xf0\x9f\x98\x95",
+		   ':cool:' => "\xf0\x9f\x98\x8e",
+		   ':evil:' => "\xf0\x9f\x91\xbf",
+		   ':grin:' => "\xf0\x9f\x98\x80",
+		   ':idea:' => "\xf0\x9f\x92\xa1",
+		   ':oops:' => "\xf0\x9f\x98\xb3",
+		   ':razz:' => "\xf0\x9f\x98\x9b",
+		   ':roll:' => 'rolleyes.png',
+		   ':wink:' => "\xf0\x9f\x98\x89",
+		    ':cry:' => "\xf0\x9f\x98\xa5",
+		    ':eek:' => "\xf0\x9f\x98\xae",
+		    ':lol:' => "\xf0\x9f\x98\x86",
+		    ':mad:' => "\xf0\x9f\x98\xa1",
+		    ':sad:' => 'frownie.png',
+		      '8-)' => "\xf0\x9f\x98\x8e",
+		      '8-O' => "\xf0\x9f\x98\xaf",
+		      ':-(' => 'frownie.png',
+		      ':-)' => 'simple-smile.png',
+		      ':-?' => "\xf0\x9f\x98\x95",
+		      ':-D' => "\xf0\x9f\x98\x80",
+		      ':-P' => "\xf0\x9f\x98\x9b",
+		      ':-o' => "\xf0\x9f\x98\xae",
+		      ':-x' => "\xf0\x9f\x98\xa1",
+		      ':-|' => "\xf0\x9f\x98\x90",
+		      ';-)' => "\xf0\x9f\x98\x89",
 		// This one transformation breaks regular text with frequency.
-		//     '8)' => 'icon_cool.gif',
-		       '8O' => 'icon_eek.gif',
-		       ':(' => 'icon_sad.gif',
-		       ':)' => 'icon_smile.gif',
-		       ':?' => 'icon_confused.gif',
-		       ':D' => 'icon_biggrin.gif',
-		       ':P' => 'icon_razz.gif',
-		       ':o' => 'icon_surprised.gif',
-		       ':x' => 'icon_mad.gif',
-		       ':|' => 'icon_neutral.gif',
-		       ';)' => 'icon_wink.gif',
-		      ':!:' => 'icon_exclaim.gif',
-		      ':?:' => 'icon_question.gif',
+		//     '8)' => "\xf0\x9f\x98\x8e",
+		       '8O' => "\xf0\x9f\x98\xaf",
+		       ':(' => 'frownie.png',
+		       ':)' => 'simple-smile.png',
+		       ':?' => "\xf0\x9f\x98\x95",
+		       ':D' => "\xf0\x9f\x98\x80",
+		       ':P' => "\xf0\x9f\x98\x9b",
+		       ':o' => "\xf0\x9f\x98\xae",
+		       ':x' => "\xf0\x9f\x98\xa1",
+		       ':|' => "\xf0\x9f\x98\x90",
+		       ';)' => "\xf0\x9f\x98\x89",
+		      ':!:' => "\xe2\x9d\x97",
+		      ':?:' => "\xe2\x9d\x93",
 		);
 	}
 
@@ -2990,8 +3181,9 @@ function wp_list_filter( $list, $args = array(), $operator = 'AND' ) {
  * @param int|string $field     Field from the object to place instead of the entire object
  * @param int|string $index_key Optional. Field from the object to use as keys for the new array.
  *                              Default null.
- * @return array Array of found values. If $index_key is set, an array of found values with keys
- *               corresponding to $index_key.
+ * @return array Array of found values. If `$index_key` is set, an array of found values with keys
+ *               corresponding to `$index_key`. If `$index_key` is null, array keys from the original
+ *               `$list` will be preserved in the results.
  */
 function wp_list_pluck( $list, $field, $index_key = null ) {
 	if ( ! $index_key ) {
@@ -3066,8 +3258,6 @@ function wp_maybe_load_widgets() {
  * Append the Widgets menu to the themes main menu.
  *
  * @since 2.2.0
- *
- * @uses $submenu The administration submenu list.
  */
 function wp_widgets_add_menu() {
 	global $submenu;
@@ -3108,7 +3298,7 @@ function wp_ob_end_flush_all() {
  *
  * @since 2.3.2
  *
- * @global wpdb $wpdb WordPress database access abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  */
 function dead_db() {
 	global $wpdb;
@@ -3273,11 +3463,11 @@ function _deprecated_file( $file, $version, $replacement = null, $message = '' )
  * Before this function is called, the argument must be checked for whether it was
  * used by comparing it to its default value or evaluating whether it is empty.
  * For example:
- * <code>
- * if ( ! empty( $deprecated ) ) {
- * 	_deprecated_argument( __FUNCTION__, '3.0' );
- * }
- * </code>
+ *
+ *     if ( ! empty( $deprecated ) ) {
+ *         _deprecated_argument( __FUNCTION__, '3.0' );
+ *     }
+ *
  *
  * There is a hook deprecated_argument_run that will be called that can be used
  * to get the backtrace up to what file and function used the deprecated
@@ -3366,11 +3556,11 @@ function _doing_it_wrong( $function, $message, $version ) {
 	if ( WP_DEBUG && apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
 		if ( function_exists( '__' ) ) {
 			$version = is_null( $version ) ? '' : sprintf( __( '(This message was added in version %s.)' ), $version );
-			$message .= ' ' . __( 'Please see <a href="http://codex.wordpress.org/Debugging_in_WordPress">Debugging in WordPress</a> for more information.' );
+			$message .= ' ' . __( 'Please see <a href="https://codex.wordpress.org/Debugging_in_WordPress">Debugging in WordPress</a> for more information.' );
 			trigger_error( sprintf( __( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s' ), $function, $message, $version ) );
 		} else {
 			$version = is_null( $version ) ? '' : sprintf( '(This message was added in version %s.)', $version );
-			$message .= ' Please see <a href="http://codex.wordpress.org/Debugging_in_WordPress">Debugging in WordPress</a> for more information.';
+			$message .= ' Please see <a href="https://codex.wordpress.org/Debugging_in_WordPress">Debugging in WordPress</a> for more information.';
 			trigger_error( sprintf( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s', $function, $message, $version ) );
 		}
 	}
@@ -3439,7 +3629,7 @@ function iis7_supports_permalinks() {
 		 * Lastly we make sure that PHP is running via FastCGI. This is important because if it runs
 		 * via ISAPI then pretty permalinks will not work.
 		 */
-		$supports_permalinks = class_exists('DOMDocument') && isset($_SERVER['IIS_UrlRewriteModule']) && ( php_sapi_name() == 'cgi-fcgi' );
+		$supports_permalinks = class_exists('DOMDocument') && isset($_SERVER['IIS_UrlRewriteModule']) && ( PHP_SAPI == 'cgi-fcgi' );
 	}
 
 	/**
@@ -3926,7 +4116,7 @@ function wp_timezone_choice( $selected_zone ) {
  * @since 2.8.0
  * @access private
  *
- * @see http://core.trac.wordpress.org/ticket/8497
+ * @see https://core.trac.wordpress.org/ticket/8497
  *
  * @param string $str Header comment to clean up.
  * @return string
@@ -3936,8 +4126,10 @@ function _cleanup_header_comment( $str ) {
 }
 
 /**
- * Permanently delete posts, pages, attachments, and comments which have been
- * in the trash for EMPTY_TRASH_DAYS.
+ * Permanently delete comments or posts of any type that have held a status
+ * of 'trash' for the number of days defined in EMPTY_TRASH_DAYS.
+ *
+ * The default value of `EMPTY_TRASH_DAYS` is 30 (days).
  *
  * @since 2.9.0
  */
@@ -3991,13 +4183,15 @@ function wp_scheduled_delete() {
  * If the file data is not within that first 8kiB, then the author should correct
  * their plugin file and move the data headers to the top.
  *
- * @see http://codex.wordpress.org/File_Header
+ * @link https://codex.wordpress.org/File_Header
  *
  * @since 2.9.0
+ *
  * @param string $file            Path to the file.
  * @param array  $default_headers List of headers, in the format array('HeaderKey' => 'Header Name').
  * @param string $context         Optional. If specified adds filter hook "extra_{$context}_headers".
  *                                Default empty.
+ * @return array Array of file headers in `HeaderKey => Header Value` format.
  */
 function get_file_data( $file, $default_headers, $context = '' ) {
 	// We don't need to write to the file, so just open for reading.
@@ -4015,8 +4209,8 @@ function get_file_data( $file, $default_headers, $context = '' ) {
 	/**
 	 * Filter extra file headers by context.
 	 *
-	 * The dynamic portion of the hook name, $context, refers to the context
-	 * where extra headers might be loaded.
+	 * The dynamic portion of the hook name, `$context`, refers to
+	 * the context where extra headers might be loaded.
 	 *
 	 * @since 2.9.0
 	 *
@@ -4138,7 +4332,7 @@ function send_nosniff_header() {
 /**
  * Return a MySQL expression for selecting the week number based on the start_of_week option.
  *
- * @internal
+ * @ignore
  * @since 3.0.0
  *
  * @param string $column Database column.
@@ -4275,7 +4469,7 @@ function wp_allowed_protocols() {
  *
  * @since 3.4.0
  *
- * @see http://core.trac.wordpress.org/ticket/19589
+ * @see https://core.trac.wordpress.org/ticket/19589
  *
  * @param string $ignore_class Optional. A class to ignore all function calls within - useful
  *                             when you want to just give info about the callee. Default null.
@@ -4536,7 +4730,7 @@ function get_tag_regex( $tag ) {
  * @since 3.6.0
  * @access private
  *
- * @see http://core.trac.wordpress.org/ticket/23688
+ * @see https://core.trac.wordpress.org/ticket/23688
  *
  * @param string $charset A charset name.
  * @return string The canonical form of the charset.
@@ -4610,7 +4804,9 @@ function reset_mbstring_encoding() {
 }
 
 /**
- * Alternative to filter_var( $var, FILTER_VALIDATE_BOOLEAN ).
+ * Filter/validate a variable as a boolean.
+ *
+ * Alternative to `filter_var( $var, FILTER_VALIDATE_BOOLEAN )`.
  *
  * @since 4.0.0
  *
@@ -4622,9 +4818,30 @@ function wp_validate_boolean( $var ) {
 		return $var;
 	}
 
-	if ( 'false' === $var ) {
+	if ( is_string( $var ) && 'false' === strtolower( $var ) ) {
 		return false;
 	}
 
 	return (bool) $var;
+}
+
+/**
+ * Delete a file
+ *
+ * @since 4.2.0
+ *
+ * @param string $file The path to the file to delete.
+ */
+function wp_delete_file( $file ) {
+	/**
+	 * Filter the path of the file to delete.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $medium Path to the file to delete.
+	 */
+	$delete = apply_filters( 'wp_delete_file', $file );
+	if ( ! empty( $delete ) ) {
+		@unlink( $delete );
+	}
 }

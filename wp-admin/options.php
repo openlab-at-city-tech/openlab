@@ -45,7 +45,7 @@ if ( empty($option_page) ) {
 }
 
 if ( !current_user_can( $capability ) )
-	wp_die(__('Cheatin&#8217; uh?'));
+	wp_die( __( 'Cheatin&#8217; uh?' ), 403 );
 
 // Handle admin email change requests
 if ( is_multisite() ) {
@@ -69,7 +69,7 @@ if ( is_multisite() ) {
 }
 
 if ( is_multisite() && !is_super_admin() && 'update' != $action )
-	wp_die(__('Cheatin&#8217; uh?'));
+	wp_die( __( 'Cheatin&#8217; uh?' ), 403 );
 
 $whitelist_options = array(
 	'general' => array( 'blogname', 'blogdescription', 'gmt_offset', 'date_format', 'time_format', 'start_of_week', 'timezone_string', 'WPLANG' ),
@@ -151,8 +151,8 @@ if ( 'update' == $action ) {
 		$options = $whitelist_options[ $option_page ];
 	}
 
-	// Handle custom date/time formats.
 	if ( 'general' == $option_page ) {
+		// Handle custom date/time formats.
 		if ( !empty($_POST['date_format']) && isset($_POST['date_format_custom']) && '\c\u\s\t\o\m' == wp_unslash( $_POST['date_format'] ) )
 			$_POST['date_format'] = $_POST['date_format_custom'];
 		if ( !empty($_POST['time_format']) && isset($_POST['time_format_custom']) && '\c\u\s\t\o\m' == wp_unslash( $_POST['time_format'] ) )
@@ -163,12 +163,24 @@ if ( 'update' == $action ) {
 			$_POST['gmt_offset'] = preg_replace('/UTC\+?/', '', $_POST['gmt_offset']);
 			$_POST['timezone_string'] = '';
 		}
+
+		// Handle translation install.
+		if ( ! empty( $_POST['WPLANG'] ) && ( ! is_multisite() || is_super_admin() ) ) { // @todo: Skip if already installed
+			require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+
+			if ( wp_can_install_language_pack() ) {
+				$language = wp_download_language_pack( $_POST['WPLANG'] );
+				if ( $language ) {
+					$_POST['WPLANG'] = $language;
+				}
+			}
+		}
 	}
 
 	if ( $options ) {
 		foreach ( $options as $option ) {
 			if ( $unregistered )
-				_deprecated_argument( 'options.php', '2.7', sprintf( __( 'The <code>%1$s</code> setting is unregistered. Unregistered settings are deprecated. See http://codex.wordpress.org/Settings_API' ), $option, $option_page ) );
+				_deprecated_argument( 'options.php', '2.7', sprintf( __( 'The <code>%1$s</code> setting is unregistered. Unregistered settings are deprecated. See https://codex.wordpress.org/Settings_API' ), $option, $option_page ) );
 
 			$option = trim( $option );
 			$value = null;

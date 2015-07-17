@@ -44,6 +44,7 @@ final class WP_Theme implements ArrayAccess {
 		'twentytwelve'   => 'Twenty Twelve',
 		'twentythirteen' => 'Twenty Thirteen',
 		'twentyfourteen' => 'Twenty Fourteen',
+		'twentyfifteen'  => 'Twenty Fifteen',
 	);
 
 	/**
@@ -273,7 +274,7 @@ final class WP_Theme implements ArrayAccess {
 		// Set the parent, if we're a child theme.
 		if ( $this->template != $this->stylesheet ) {
 			// If we are a parent, then there is a problem. Only two generations allowed! Cancel things out.
-			if ( is_a( $_child, 'WP_Theme' ) && $_child->template == $this->stylesheet ) {
+			if ( $_child instanceof WP_Theme && $_child->template == $this->stylesheet ) {
 				$_child->parent = null;
 				$_child->errors = new WP_Error( 'theme_parent_invalid', sprintf( __( 'The "%s" theme is not a valid parent theme.' ), $_child->template ) );
 				$_child->cache_add( 'theme', array( 'headers' => $_child->headers, 'errors' => $_child->errors, 'stylesheet' => $_child->stylesheet, 'template' => $_child->template ) );
@@ -635,6 +636,9 @@ final class WP_Theme implements ArrayAccess {
 			case 'Tags' :
 				$value = array_filter( array_map( 'trim', explode( ',', strip_tags( $value ) ) ) );
 				break;
+			case 'Version' :
+				$value = strip_tags( $value );
+				break;
 		}
 
 		return $value;
@@ -854,8 +858,6 @@ final class WP_Theme implements ArrayAccess {
 	 * for all other URLs returned by WP_Theme, so we pass it to the public function
 	 * get_theme_root_uri() and allow it to run the theme_root_uri filter.
 	 *
-	 * @uses get_theme_root_uri()
-	 *
 	 * @since 3.4.0
 	 * @access public
 	 *
@@ -1034,8 +1036,8 @@ final class WP_Theme implements ArrayAccess {
 	 * @since 3.4.0
 	 * @access public
 	 *
-	 * @return True if the textdomain was successfully loaded or has already been loaded. False if
-	 * 	no textdomain was specified in the file headers, or if the domain could not be loaded.
+	 * @return bool True if the textdomain was successfully loaded or has already been loaded.
+	 * 	False if no textdomain was specified in the file headers, or if the domain could not be loaded.
 	 */
 	public function load_textdomain() {
 		if ( isset( $this->textdomain_loaded ) )

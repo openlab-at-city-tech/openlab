@@ -5,7 +5,7 @@
  * @package WordPress
  * @subpackage Administration
  *
- * @link http://codex.wordpress.org/AJAX_in_Plugins
+ * @link https://codex.wordpress.org/AJAX_in_Plugins
  */
 
 /**
@@ -61,7 +61,8 @@ $core_actions_post = array(
 	'query-attachments', 'save-attachment', 'save-attachment-compat', 'send-link-to-editor',
 	'send-attachment-to-editor', 'save-attachment-order', 'heartbeat', 'get-revision-diffs',
 	'save-user-color-scheme', 'update-widget', 'query-themes', 'parse-embed', 'set-attachment-thumbnail',
-	'parse-media-shortcode'
+	'parse-media-shortcode', 'destroy-sessions', 'install-plugin', 'update-plugin', 'press-this-save-post',
+	'press-this-add-category',
 );
 
 // Register core Ajax calls.
@@ -77,7 +78,7 @@ if ( is_user_logged_in() ) {
 	/**
 	 * Fires authenticated AJAX actions for logged-in users.
 	 *
-	 * The dynamic portion of the hook name, $_REQUEST['action'],
+	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
 	 * refers to the name of the AJAX action callback being fired.
 	 *
 	 * @since 2.1.0
@@ -87,7 +88,7 @@ if ( is_user_logged_in() ) {
 	/**
 	 * Fires non-authenticated AJAX actions for logged-out users.
 	 *
-	 * The dynamic portion of the hook name, $_REQUEST['action'],
+	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
 	 * refers to the name of the AJAX action callback being fired.
 	 *
 	 * @since 2.8.0

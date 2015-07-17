@@ -72,12 +72,6 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 	.keys .right {
 		text-align: right;
 	}
-
-	.macos .win,
-	.windows .mac {
-		display: none;
-	}
-
 </style>
 <?php if ( is_rtl() ) : ?>
 <style type="text/css">
@@ -94,11 +88,6 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 <?php endif; ?>
 </head>
 <body class="windows wp-core-ui">
-<script type="text/javascript">
-if ( navigator.userAgent.indexOf( 'Mac OS' ) > -1 ) {
-	document.body.className = document.body.className.replace( /windows/, 'macos' );
-}
-</script>
 
 <div class="wrap">
 
@@ -111,33 +100,41 @@ if ( navigator.userAgent.indexOf( 'Mac OS' ) > -1 ) {
 		<tr><th>a</th><td><?php _e('Select all'); ?></td><th>x</th><td><?php _e('Cut'); ?></td></tr>
 		<tr><th>z</th><td><?php _e('Undo'); ?></td><th>y</th><td><?php _e('Redo'); ?></td></tr>
 		<tr><th>b</th><td><?php _e('Bold'); ?></td><th>i</th><td><?php _e('Italic'); ?></td></tr>
-		<tr><th>u</th><td><?php _e('Underline'); ?></td><th>1</th><td><?php _e('Heading 1'); ?></td></tr>
-		<tr><th>2</th><td><?php _e('Heading 2'); ?></td><th>3</th><td><?php _e('Heading 3'); ?></td></tr>
-		<tr><th>4</th><td><?php _e('Heading 4'); ?></td><th>5</th><td><?php _e('Heading 5'); ?></td></tr>
-		<tr><th>6</th><td><?php _e('Heading 6'); ?></td><th>9</th><td><?php _e('Address'); ?></td></tr>
-		<tr><th>k</th><td><?php _e('Insert/edit link'); ?></td><th> </th><td>&nbsp;</td></tr>
+		<tr><th>u</th><td><?php _e('Underline'); ?></td><th>k</th><td><?php _e('Insert/edit link'); ?></td></tr>
 	</table>
 
-	<p><?php _e('The following shortcuts use different access keys: Alt + Shift + letter.'); ?></p>
+	<p>
+		<?php _e('The following shortcuts use different access keys: Alt + Shift + letter.'); ?>
+		<?php _e('Macintosh uses Ctrl + Alt + letter.'); ?>
+	</p>
 	<table class="keys">
 		<tr class="top"><th class="key center"><?php _e('Letter'); ?></th><th class="left"><?php _e('Action'); ?></th><th class="key center"><?php _e('Letter'); ?></th><th class="left"><?php _e('Action'); ?></th></tr>
+
+		<tr><th>1</th><td><?php _e('Heading 1'); ?></td><th>2</th><td><?php _e('Heading 2'); ?></td></tr>
+		<tr><th>3</th><td><?php _e('Heading 3'); ?></td><th>4</th><td><?php _e('Heading 4'); ?></td></tr>
+		<tr><th>5</th><td><?php _e('Heading 5'); ?></td><th>6</th><td><?php _e('Heading 6'); ?></td></tr>
+
 		<tr><th>n</th><td><?php _e('Check Spelling'); ?></td><th>l</th><td><?php _e('Align Left'); ?></td></tr>
 		<tr><th>j</th><td><?php _e('Justify Text'); ?></td><th>c</th><td><?php _e('Align Center'); ?></td></tr>
 		<tr><th>d</th><td><span style="text-decoration: line-through;"><?php _e('Strikethrough'); ?></span></td><th>r</th><td><?php _e('Align Right'); ?></td></tr>
-		<tr><th>u</th><td><strong>&bull;</strong> <?php _e('List'); ?></td><th>a</th><td><?php _e('Insert link'); ?></td></tr>
+		<tr><th>u</th><td><strong>&bull;</strong> <?php _e('List'); ?></td><th>a</th><td><?php _e('Insert/edit link'); ?></td></tr>
 		<tr><th>o</th><td>1. <?php _e('List'); ?></td><th>s</th><td><?php _e('Remove link'); ?></td></tr>
 		<tr><th>q</th><td><?php _e('Quote'); ?></td><th>m</th><td><?php _e('Insert Image'); ?></td></tr>
-		<tr><th>w</th><td><?php _e('Distraction Free Writing mode'); ?></td><th>t</th><td><?php _e('Insert More Tag'); ?></td></tr>
+		<tr><th>w</th><td><?php _e('Distraction-free writing mode'); ?></td><th>t</th><td><?php _e('Insert More Tag'); ?></td></tr>
 		<tr><th>p</th><td><?php _e('Insert Page Break tag'); ?></td><th>h</th><td><?php _e('Help'); ?></td></tr>
 		<tr><th>x</th><td><?php _e('Add/remove code tag'); ?></td><th> </th><td>&nbsp;</td></tr>
 	</table>
 
-	<p style="padding: 15px 10px 10px;"><?php _e('Editor width in Distraction Free Writing mode:'); ?></p>
-	<table class="keys">
-		<tr><th><span class="win">Alt +</span><span class="mac">Ctrl +</span></th><td><?php _e('Wider'); ?></td>
-			<th><span class="win">Alt -</span><span class="mac">Ctrl -</span></th><td><?php _e('Narrower'); ?></td></tr>
-		<tr><th><span class="win">Alt 0</span><span class="mac">Ctrl 0</span></th><td><?php _e('Default width'); ?></td><th></th><td></td></tr>
+	<p><?php _e('Focus shortcuts:'); ?></p>
+
+	<table class="keys focus">
+		<tr><th class="left">Alt + F8</th><td><?php _e('Image toolbar (when an image is selected)'); ?></td></tr>
+		<tr><th class="left">Alt + F9</th><td><?php _e('Editor menu (when enabled)'); ?></td></tr>
+		<tr><th class="left">Alt + F10</th><td><?php _e('Editor toolbar'); ?></td></tr>
+		<tr><th class="left">Alt + F11</th><td><?php _e('Elements path'); ?></td></tr>
 	</table>
+
+	<p><?php _e('To move focus to other buttons use Tab or the arrow keys. To return focus to the editor press Escape or use one of the buttons.'); ?></p>
 </div>
 
 </div>

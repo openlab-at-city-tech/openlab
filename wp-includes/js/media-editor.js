@@ -880,7 +880,7 @@
 
 				if ( 'link' === type ) {
 					_.defaults( embed, {
-						title:   embed.url,
+						linkText: embed.url,
 						linkUrl: embed.url
 					});
 
@@ -1034,11 +1034,11 @@
 			 */
 			link: function( embed ) {
 				return wp.media.post( 'send-link-to-editor', {
-					nonce:   wp.media.view.settings.nonce.sendToEditor,
-					src:     embed.linkUrl,
-					title:   embed.title,
-					html:    wp.media.string.link( embed ),
-					post_id: wp.media.view.settings.post.id
+					nonce:     wp.media.view.settings.nonce.sendToEditor,
+					src:       embed.linkUrl,
+					link_text: embed.linkText,
+					html:      wp.media.string.link( embed ),
+					post_id:   wp.media.view.settings.post.id
 				});
 			}
 		},
@@ -1077,7 +1077,7 @@
 		 */
 		init: function() {
 			$(document.body)
-				.on( 'click', '.insert-media', function( event ) {
+				.on( 'click.add-media-button', '.insert-media', function( event ) {
 					var elem = $( event.currentTarget ),
 						editor = elem.data('editor'),
 						options = {
@@ -1093,7 +1093,7 @@
 					// Prevents Opera from showing the outline of the button
 					// above the modal.
 					//
-					// See: http://core.trac.wordpress.org/ticket/22445
+					// See: https://core.trac.wordpress.org/ticket/22445
 					elem.blur();
 
 					if ( elem.hasClass( 'gallery' ) ) {

@@ -63,7 +63,7 @@ function edit_user( $user_id = 0 ) {
 	}
 
 	if ( isset( $_POST['email'] ))
-		$user->user_email = sanitize_text_field( $_POST['email'] );
+		$user->user_email = sanitize_text_field( wp_unslash( $_POST['email'] ) );
 	if ( isset( $_POST['url'] ) ) {
 		if ( empty ( $_POST['url'] ) || $_POST['url'] == 'http://' ) {
 			$user->user_url = '';
@@ -195,7 +195,7 @@ function edit_user( $user_id = 0 ) {
  *
  * @since 2.8.0
  *
- * @return unknown
+ * @return array
  */
 function get_editable_roles() {
 	global $wp_roles;
@@ -257,7 +257,7 @@ function get_users_drafts( $user_id ) {
 /**
  * Remove user and optionally reassign posts and links to another user.
  *
- * If the $reassign parameter is not assigned to an User ID, then all posts will
+ * If the $reassign parameter is not assigned to a User ID, then all posts will
  * be deleted of that user. The action 'delete_user' that is passed the User ID
  * being deleted will be run after the posts are either reassigned or deleted.
  * The user meta will also be deleted that are for that User ID.
