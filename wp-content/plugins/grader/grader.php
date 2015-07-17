@@ -388,7 +388,7 @@ function grader_admin_init()
 add_action('admin_menu', 'grader_plugin_menu');
 function grader_plugin_menu()
 {
-	add_options_page('Grader Options', 'Grader Options', 8, __FILE__, 'grader_plugin_options');
+	add_options_page('Grader Options', 'Grader Options', 'manage_options', __FILE__, 'grader_plugin_options');
 }
 
 function grader_plugin_options()
