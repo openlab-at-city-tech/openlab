@@ -171,7 +171,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
         <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav clearfix">
 
                 <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
 
@@ -238,7 +238,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
         <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav clearfix">
 
                 <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
                 
