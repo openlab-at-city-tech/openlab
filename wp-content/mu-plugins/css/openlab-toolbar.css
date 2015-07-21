@@ -7137,6 +7137,8 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a {
   color: #333;
+  font-size: 12px;
+  text-decoration: underline;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
