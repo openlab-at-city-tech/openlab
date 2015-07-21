@@ -24,7 +24,6 @@ $title = __('Export');
 function export_add_js() {
 ?>
 <script type="text/javascript">
-//<![CDATA[
 	jQuery(document).ready(function($){
  		var form = $('#export-filters'),
  			filters = form.find('.export-filters');
@@ -37,7 +36,6 @@ function export_add_js() {
 			}
  		});
 	});
-//]]>
 </script>
 <?php
 }
@@ -52,16 +50,17 @@ get_current_screen()->add_help_tab( array(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __('For more information:') . '</strong></p>' .
-	'<p>' . __('<a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">Documentation on Export</a>') . '</p>' .
+	'<p>' . __('<a href="https://codex.wordpress.org/Tools_Export_Screen" target="_blank">Documentation on Export</a>') . '</p>' .
 	'<p>' . __('<a href="https://wordpress.org/support/" target="_blank">Support Forums</a>') . '</p>'
 );
 
+// If the 'download' URL parameter is set, a WXR export file is baked and returned.
 if ( isset( $_GET['download'] ) ) {
 	$args = array();
 
 	if ( ! isset( $_GET['content'] ) || 'all' == $_GET['content'] ) {
 		$args['content'] = 'all';
-	} else if ( 'posts' == $_GET['content'] ) {
+	} elseif ( 'posts' == $_GET['content'] ) {
 		$args['content'] = 'post';
 
 		if ( $_GET['cat'] )
@@ -77,7 +76,7 @@ if ( isset( $_GET['download'] ) ) {
 
 		if ( $_GET['post_status'] )
 			$args['status'] = $_GET['post_status'];
-	} else if ( 'pages' == $_GET['content'] ) {
+	} elseif ( 'pages' == $_GET['content'] ) {
 		$args['content'] = 'page';
 
 		if ( $_GET['page_author'] )
@@ -112,7 +111,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 /**
  * Create the date options fields for exporting a given post type.
  *
- * @global wpdb      $wpdb      WordPress database object.
+ * @global wpdb      $wpdb      WordPress database abstraction object.
  * @global WP_Locale $wp_locale Date and Time Locale object.
  *
  * @since 3.1.0
@@ -151,7 +150,7 @@ function export_date_options( $post_type = 'post' ) {
 <p><?php _e('Once you&#8217;ve saved the download file, you can use the Import function in another WordPress installation to import the content from this site.'); ?></p>
 
 <h3><?php _e( 'Choose what to export' ); ?></h3>
-<form action="" method="get" id="export-filters">
+<form method="get" id="export-filters">
 <input type="hidden" name="download" value="true" />
 <p><label><input type="radio" name="content" value="all" checked="checked" /> <?php _e( 'All content' ); ?></label></p>
 <p class="description"><?php _e( 'This will contain all of your posts, pages, comments, custom fields, terms, navigation menus and custom posts.' ); ?></p>

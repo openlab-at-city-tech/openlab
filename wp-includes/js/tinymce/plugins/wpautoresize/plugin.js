@@ -25,12 +25,12 @@ tinymce.PluginManager.add( 'wpautoresize', function( editor ) {
 		oldSize = 300,
 		isActive = false;
 
-	function isFullscreen() {
-		return editor.plugins.fullscreen && editor.plugins.fullscreen.isFullscreen();
+	if ( editor.settings.inline || tinymce.Env.iOS ) {
+		return;
 	}
 
-	if ( editor.settings.inline ) {
-		return;
+	function isFullscreen() {
+		return editor.plugins.fullscreen && editor.plugins.fullscreen.isFullscreen();
 	}
 
 	function getInt( n ) {
@@ -117,7 +117,7 @@ tinymce.PluginManager.add( 'wpautoresize', function( editor ) {
 				resize( e );
 			}
 
-			editor.fire( 'wp-autoresize', { height: resizeHeight } );
+			editor.fire( 'wp-autoresize', { height: resizeHeight, deltaHeight: e.type === 'nodechange' ? deltaSize : null } );
 		}
 	}
 

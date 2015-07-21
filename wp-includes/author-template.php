@@ -4,7 +4,7 @@
  *
  * These functions must be used within the WordPress Loop.
  *
- * @link http://codex.wordpress.org/Author_Templates
+ * @link https://codex.wordpress.org/Author_Templates
  *
  * @package WordPress
  * @subpackage Template
@@ -16,7 +16,6 @@
  * @since 1.5.0
  *
  * @uses $authordata The current author's DB object.
- * @uses apply_filters() Calls 'the_author' hook on the author display name.
  *
  * @param string $deprecated Deprecated.
  * @return string The author's display name.
@@ -50,7 +49,7 @@ function get_the_author($deprecated = '') {
  *
  * @since 0.71
  * @see get_the_author()
- * @link http://codex.wordpress.org/Template_Tags/the_author
+ * @link https://codex.wordpress.org/Template_Tags/the_author
  *
  * @param string $deprecated Deprecated.
  * @param string $deprecated_echo Deprecated. Use get_the_author(). Echo the string or return it.
@@ -71,10 +70,6 @@ function the_author( $deprecated = '', $deprecated_echo = true ) {
  *
  * @since 2.8.0
  *
- * @uses $post The current post's DB object.
- * @uses get_post_meta() Retrieves the ID of the author who last edited the current post.
- * @uses get_userdata() Retrieves the author's DB object.
- * @uses apply_filters() Calls 'the_modified_author' hook on the author display name.
  * @return string The author's display name.
  */
 function get_the_modified_author() {
@@ -106,9 +101,8 @@ function the_modified_author() {
 
 /**
  * Retrieve the requested data of the author of the current post.
- * @link http://codex.wordpress.org/Template_Tags/the_author_meta
+ * @link https://codex.wordpress.org/Template_Tags/the_author_meta
  * @since 2.8.0
- * @uses $authordata The current author's DB object (if $user_id not specified).
  * @param string $field selects the field of the users record.
  * @param int $user_id Optional. User ID.
  * @return string The author's field from the current author's DB object.
@@ -141,7 +135,7 @@ function get_the_author_meta( $field = '', $user_id = false ) {
 
 /**
  * Retrieve the requested data of the author of the current post.
- * @link http://codex.wordpress.org/Template_Tags/the_author_meta
+ * @link https://codex.wordpress.org/Template_Tags/the_author_meta
  * @since 2.8.0
  * @param string $field selects the field of the users record.
  * @param int $user_id Optional. User ID.
@@ -168,9 +162,6 @@ function the_author_meta( $field = '', $user_id = false ) {
  *
  * If the author has a home page set, return an HTML link, otherwise just return the
  * author's name.
- *
- * @uses get_the_author_meta()
- * @uses get_the_author()
  */
 function get_the_author_link() {
 	if ( get_the_author_meta('url') ) {
@@ -186,11 +177,9 @@ function get_the_author_link() {
  * If the author has a home page set, echo an HTML link, otherwise just echo the
  * author's name.
  *
- * @link http://codex.wordpress.org/Template_Tags/the_author_link
+ * @link https://codex.wordpress.org/Template_Tags/the_author_link
  *
  * @since 2.1.0
- *
- * @uses get_the_author_link()
  */
 function the_author_link() {
 	echo get_the_author_link();
@@ -201,8 +190,6 @@ function the_author_link() {
  *
  * @since 1.5.0
  *
- * @uses $post The current post in the Loop's DB object.
- * @uses count_user_posts()
  * @return int The number of posts by the author.
  */
 function get_the_author_posts() {
@@ -210,15 +197,14 @@ function get_the_author_posts() {
 	if ( ! $post ) {
 		return 0;
 	}
-	return count_user_posts( $post->post_author );
+	return count_user_posts( $post->post_author, $post->post_type );
 }
 
 /**
  * Display the number of posts by the author of the current post.
  *
- * @link http://codex.wordpress.org/Template_Tags/the_author_posts
+ * @link https://codex.wordpress.org/Template_Tags/the_author_posts
  * @since 0.71
- * @uses get_the_author_posts() Echoes returned value from function.
  */
 function the_author_posts() {
 	echo get_the_author_posts();
@@ -231,11 +217,8 @@ function the_author_posts() {
  * reason for this, is that another function is used to help in printing the
  * link to the author's posts.
  *
- * @link http://codex.wordpress.org/Template_Tags/the_author_posts_link
+ * @link https://codex.wordpress.org/Template_Tags/the_author_posts_link
  * @since 1.2.0
- * @uses $authordata The current author's DB object.
- * @uses get_author_posts_url()
- * @uses get_the_author()
  * @param string $deprecated Deprecated.
  */
 function the_author_posts_link($deprecated = '') {
@@ -304,7 +287,7 @@ function get_author_posts_url($author_id, $author_nicename = '') {
 /**
  * List all the authors of the blog, with several options available.
  *
- * @link http://codex.wordpress.org/Template_Tags/wp_list_authors
+ * @link https://codex.wordpress.org/Template_Tags/wp_list_authors
  *
  * @since 1.2.0
  *
@@ -354,7 +337,7 @@ function wp_list_authors( $args = '' ) {
 	$authors = get_users( $query_args );
 
 	$author_count = array();
-	foreach ( (array) $wpdb->get_results( "SELECT DISTINCT post_author, COUNT(ID) AS count FROM $wpdb->posts WHERE post_type = 'post' AND " . get_private_posts_cap_sql( 'post' ) . " GROUP BY post_author" ) as $row ) {
+	foreach ( (array) $wpdb->get_results( "SELECT DISTINCT post_author, COUNT(ID) AS count FROM $wpdb->posts WHERE " . get_private_posts_cap_sql( 'post' ) . " GROUP BY post_author" ) as $row ) {
 		$author_count[$row->post_author] = $row->count;
 	}
 	foreach ( $authors as $author_id ) {
@@ -468,4 +451,3 @@ function is_multi_author() {
 function __clear_multi_author_cache() {
 	delete_transient( 'is_multi_author' );
 }
-add_action('transition_post_status', '__clear_multi_author_cache');

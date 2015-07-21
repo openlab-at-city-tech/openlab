@@ -66,7 +66,9 @@ wpWidgets = {
 				wpWidgets.save( target.closest('div.widget'), 1, 1, 0 );
 				e.preventDefault();
 			} else if ( target.hasClass('widget-control-close') ) {
-				wpWidgets.close( target.closest('div.widget') );
+				widget = target.closest('div.widget');
+				widget.removeClass( 'open' );
+				wpWidgets.close( widget );
 				e.preventDefault();
 			}
 		});
@@ -231,7 +233,7 @@ wpWidgets = {
 			},
 			drop: function(e,ui) {
 				ui.draggable.addClass('deleting');
-				$('#removing-widget').hide().children('span').html('');
+				$('#removing-widget').hide().children('span').empty();
 			},
 			over: function(e,ui) {
 				ui.draggable.addClass('deleting');
@@ -245,7 +247,7 @@ wpWidgets = {
 			out: function(e,ui) {
 				ui.draggable.removeClass('deleting');
 				$('div.widget-placeholder').show();
-				$('#removing-widget').hide().children('span').html('');
+				$('#removing-widget').hide().children('span').empty();
 			}
 		});
 
@@ -319,7 +321,7 @@ wpWidgets = {
 		};
 
 		if ( sidebarId ) {
-			$( '#' + sidebarId ).find('.spinner:first').css('display', 'inline-block');
+			$( '#' + sidebarId ).find( '.spinner:first' ).addClass( 'is-active' );
 		}
 
 		$('div.widgets-sortables').each( function() {
@@ -329,7 +331,7 @@ wpWidgets = {
 		});
 
 		$.post( ajaxurl, data, function() {
-			$('.spinner').hide();
+			$( '.spinner' ).removeClass( 'is-active' );
 		});
 	},
 
@@ -338,7 +340,7 @@ wpWidgets = {
 			data = widget.find('form').serialize(), a;
 
 		widget = $(widget);
-		$('.spinner', widget).show();
+		$( '.spinner', widget ).addClass( 'is-active' );
 
 		a = {
 			action: 'save-widget',
@@ -375,7 +377,7 @@ wpWidgets = {
 					widget.remove();
 				}
 			} else {
-				$('.spinner').hide();
+				$( '.spinner' ).removeClass( 'is-active' );
 				if ( r && r.length > 2 ) {
 					$( 'div.widget-content', widget ).html( r );
 					wpWidgets.appendTitle( widget );

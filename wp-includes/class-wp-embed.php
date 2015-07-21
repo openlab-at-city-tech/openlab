@@ -43,9 +43,6 @@ class WP_Embed {
 	 * calls {@link do_shortcode()}, and then re-registers the old shortcodes.
 	 *
 	 * @uses $shortcode_tags
-	 * @uses remove_all_shortcodes()
-	 * @uses add_shortcode()
-	 * @uses do_shortcode()
 	 *
 	 * @param string $content Content to parse
 	 * @return string Content with shortcode parsed
@@ -80,11 +77,9 @@ class WP_Embed {
 
 ?>
 <script type="text/javascript">
-/* <![CDATA[ */
 	jQuery(document).ready(function($){
 		$.get("<?php echo admin_url( 'admin-ajax.php?action=oembed-cache&post=' . $post->ID, 'relative' ); ?>");
 	});
-/* ]]> */
 </script>
 <?php
 	}
@@ -122,17 +117,6 @@ class WP_Embed {
 	 * Attempts to convert a URL into embed HTML. Starts by checking the URL against the regex of the registered embed handlers.
 	 * If none of the regex matches and it's enabled, then the URL will be given to the {@link WP_oEmbed} class.
 	 *
-	 * @uses wp_oembed_get()
-	 * @uses wp_parse_args()
-	 * @uses wp_embed_defaults()
-	 * @uses WP_Embed::maybe_make_link()
-	 * @uses get_option()
-	 * @uses author_can()
-	 * @uses wp_cache_get()
-	 * @uses wp_cache_set()
-	 * @uses get_post_meta()
-	 * @uses update_post_meta()
-	 *
 	 * @param array $attr {
 	 *     Shortcode attributes. Optional.
 	 *
@@ -140,7 +124,8 @@ class WP_Embed {
 	 *     @type int $height Height of the embed in pixels.
 	 * }
 	 * @param string $url The URL attempting to be embedded.
-	 * @return string The embed HTML on success, otherwise the original URL.
+	 * @return string|false The embed HTML on success, otherwise the original URL.
+	 *                      `->maybe_make_link()` can return false on failure.
 	 */
 	public function shortcode( $attr, $url = '' ) {
 		$post = get_post();
@@ -149,6 +134,7 @@ class WP_Embed {
 			$url = $attr['src'];
 		}
 
+
 		if ( empty( $url ) )
 			return '';
 
@@ -156,7 +142,7 @@ class WP_Embed {
 		$attr = wp_parse_args( $attr, wp_embed_defaults( $url ) );
 
 		// kses converts & into &amp; and we need to undo this
-		// See http://core.trac.wordpress.org/ticket/11311
+		// See https://core.trac.wordpress.org/ticket/11311
 		$url = str_replace( '&amp;', '&', $url );
 
 		// Look for known internal handlers
@@ -237,13 +223,13 @@ class WP_Embed {
 			}
 
 			/**
-			 * Filter whether to inspect the given URL for discoverable <link> tags.
+			 * Filter whether to inspect the given URL for discoverable link tags.
 			 *
 			 * @since 2.9.0
 			 *
 			 * @see WP_oEmbed::discover()
 			 *
-			 * @param bool $enable Whether to enable <link> tag discovery. Default false.
+			 * @param bool $enable Whether to enable `<link>` tag discovery. Default false.
 			 */
 			$attr['discover'] = ( apply_filters( 'embed_oembed_discover', false ) && author_can( $post_ID, 'unfiltered_html' ) );
 
@@ -326,13 +312,11 @@ class WP_Embed {
 	 * @return string Potentially modified $content.
 	 */
 	public function autoembed( $content ) {
-		return preg_replace_callback( '|^\s*(https?://[^\s"]+)\s*$|im', array( $this, 'autoembed_callback' ), $content );
+		return preg_replace_callback( '|^(\s*)(https?://[^\s"]+)(\s*)$|im', array( $this, 'autoembed_callback' ), $content );
 	}
 
 	/**
 	 * Callback function for {@link WP_Embed::autoembed()}.
-	 *
-	 * @uses WP_Embed::shortcode()
 	 *
 	 * @param array $match A regex match array.
 	 * @return string The embed HTML on success, otherwise the original URL.
@@ -340,17 +324,17 @@ class WP_Embed {
 	public function autoembed_callback( $match ) {
 		$oldval = $this->linkifunknown;
 		$this->linkifunknown = false;
-		$return = $this->shortcode( array(), $match[1] );
+		$return = $this->shortcode( array(), $match[2] );
 		$this->linkifunknown = $oldval;
 
-		return "\n$return\n";
+		return $match[1] . $return . $match[3];
 	}
 
 	/**
 	 * Conditionally makes a hyperlink based on an internal class variable.
 	 *
 	 * @param string $url URL to potentially be linked.
-	 * @return string Linked URL or the original URL.
+	 * @return false|string Linked URL or the original URL. False if 'return_false_on_fail' is true.
 	 */
 	public function maybe_make_link( $url ) {
 		if ( $this->return_false_on_fail ) {

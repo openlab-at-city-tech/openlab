@@ -69,8 +69,8 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		return;
 
 	// Some PHP setups turn requests for / into /index.php in REQUEST_URI
-	// See: http://trac.wordpress.org/ticket/5017
-	// See: http://trac.wordpress.org/ticket/7173
+	// See: https://core.trac.wordpress.org/ticket/5017
+	// See: https://core.trac.wordpress.org/ticket/7173
 	// Disabled, for now:
 	// $original['path'] = preg_replace('|/index\.php$|', '/', $original['path']);
 
@@ -82,6 +82,11 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		$redirect['path'] = '';
 	if ( !isset($redirect['query']) )
 		$redirect['query'] = '';
+
+	// If the original URL ended with non-breaking spaces, they were almost
+	// certainly inserted by accident. Let's remove them, so the reader doesn't
+	// see a 404 error with no obvious cause.
+	$redirect['path'] = preg_replace( '|(%C2%A0)+$|i', '', $redirect['path'] );
 
 	// It's not a preview, so remove it from URL
 	if ( get_query_var( 'preview' ) ) {
@@ -194,7 +199,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		} elseif ( is_category() || is_tag() || is_tax() ) { // Terms (Tags/categories)
 
 			$term_count = 0;
-			foreach ( $wp_query->tax_query->queries as $tax_query )
+			foreach ( $wp_query->tax_query->queried_terms as $tax_query )
 				$term_count += count( $tax_query['terms'] );
 
 			$obj = $wp_query->get_queried_object();
@@ -254,11 +259,11 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 
 		// paging and feeds
 		if ( get_query_var('paged') || is_feed() || get_query_var('cpage') ) {
-			while ( preg_match( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", $redirect['path'] ) || preg_match( '#/(comments/?)?(feed|rss|rdf|atom|rss2)(/+)?$#', $redirect['path'] ) || preg_match( '#/comment-page-[0-9]+(/+)?$#', $redirect['path'] ) ) {
+			while ( preg_match( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", $redirect['path'] ) || preg_match( '#/(comments/?)?(feed|rss|rdf|atom|rss2)(/+)?$#', $redirect['path'] ) || preg_match( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+(/+)?$#", $redirect['path'] ) ) {
 				// Strip off paging and feed
 				$redirect['path'] = preg_replace("#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", '/', $redirect['path']); // strip off any existing paging
 				$redirect['path'] = preg_replace('#/(comments/?)?(feed|rss2?|rdf|atom)(/+|$)#', '/', $redirect['path']); // strip off feed endings
-				$redirect['path'] = preg_replace('#/comment-page-[0-9]+?(/+)?$#', '/', $redirect['path']); // strip off any existing comment paging
+				$redirect['path'] = preg_replace("#/{$wp_rewrite->comments_pagination_base}-[0-9]+?(/+)?$#", '/', $redirect['path']); // strip off any existing comment paging
 			}
 
 			$addl_path = '';
@@ -302,7 +307,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			}
 
 			if ( get_option('page_comments') && ( ( 'newest' == get_option('default_comments_page') && get_query_var('cpage') > 0 ) || ( 'newest' != get_option('default_comments_page') && get_query_var('cpage') > 1 ) ) ) {
-				$addl_path = ( !empty( $addl_path ) ? trailingslashit($addl_path) : '' ) . user_trailingslashit( 'comment-page-' . get_query_var('cpage'), 'commentpaged' );
+				$addl_path = ( !empty( $addl_path ) ? trailingslashit($addl_path) : '' ) . user_trailingslashit( $wp_rewrite->comments_pagination_base . '-' . get_query_var('cpage'), 'commentpaged' );
 				$redirect['query'] = remove_query_arg( 'cpage', $redirect['query'] );
 			}
 
@@ -492,6 +497,9 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
  * @since 3.4.0
  * @access private
  *
+ * @param string $query_string
+ * @param array $args_to_check
+ * @param string $url
  * @return string The altered query string
  */
 function _remove_qs_args_if_not_in_url( $query_string, Array $args_to_check, $url ) {
@@ -512,7 +520,8 @@ function _remove_qs_args_if_not_in_url( $query_string, Array $args_to_check, $ur
  * Attempts to guess the correct URL based on query vars
  *
  * @since 2.3.0
- * @uses $wpdb
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @return bool|string The correct URL if one is found. False on failure.
  */
@@ -549,8 +558,6 @@ function redirect_guess_404_permalink() {
 	return false;
 }
 
-add_action('template_redirect', 'redirect_canonical');
-
 function wp_redirect_admin_locations() {
 	global $wp_rewrite;
 	if ( ! ( is_404() && $wp_rewrite->using_permalinks() ) )
@@ -578,5 +585,3 @@ function wp_redirect_admin_locations() {
 		exit;
 	}
 }
-
-add_action( 'template_redirect', 'wp_redirect_admin_locations', 1000 );

@@ -183,7 +183,7 @@ if ( !function_exists('json_encode') ) {
 	function json_encode( $string ) {
 		global $wp_json;
 
-		if ( !is_a($wp_json, 'Services_JSON') ) {
+		if ( ! ( $wp_json instanceof Services_JSON ) ) {
 			require_once( ABSPATH . WPINC . '/class-json.php' );
 			$wp_json = new Services_JSON();
 		}
@@ -196,7 +196,7 @@ if ( !function_exists('json_decode') ) {
 	function json_decode( $string, $assoc_array = false ) {
 		global $wp_json;
 
-		if ( !is_a($wp_json, 'Services_JSON') ) {
+		if ( ! ($wp_json instanceof Services_JSON ) ) {
 			require_once( ABSPATH . WPINC . '/class-json.php' );
 			$wp_json = new Services_JSON();
 		}
@@ -241,3 +241,9 @@ function hash_equals( $a, $b ) {
 	return $result === 0;
 }
 endif;
+
+// JSON_PRETTY_PRINT was introduced in PHP 5.4
+// Defined here to prevent a notice when using it with wp_json_encode()
+if ( ! defined( 'JSON_PRETTY_PRINT' ) ) {
+	define( 'JSON_PRETTY_PRINT', 128 );
+}

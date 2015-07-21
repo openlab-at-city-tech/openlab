@@ -28,7 +28,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false) {
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
-                'menu_class' => 'sidebar-nav'
+                'menu_class' => 'sidebar-nav clearfix'
             );
             echo '<h2 class="sidebar-title hidden-xs">About</h2>';
             echo '<div class="sidebar-block hidden-xs">';
@@ -68,7 +68,7 @@ function openlab_bp_mobile_sidebar($type) {
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
-                'menu_class' => 'sidebar-nav'
+                'menu_class' => 'sidebar-nav clearfix'
             );
             echo '<div class="sidebar-block">';
             wp_nav_menu($args);
@@ -83,7 +83,7 @@ function openlab_bp_mobile_sidebar($type) {
                 'theme_location' => 'helpmenu',
                 'container' => 'div',
                 'container_id' => 'help-menu',
-                'menu_class' => 'sidebar-nav',
+                'menu_class' => 'sidebar-nav clearfix',
             );
             wp_nav_menu($args);
 
@@ -110,7 +110,7 @@ function openlab_group_sidebar($mobile = false) {
                 <?php openlab_bp_group_site_pages(); ?>
                 <?php endif; ?>
                 <div id="item-buttons" class="profile-nav sidebar-block <?php echo $classes; ?>">
-                    <ul class="sidebar-nav">
+                    <ul class="sidebar-nav clearfix">
                         <?php bp_get_options_nav(); ?>
 
                         <?php
@@ -171,7 +171,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
         <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav clearfix">
 
                 <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
 
@@ -238,7 +238,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
         <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav clearfix">
 
                 <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
                 

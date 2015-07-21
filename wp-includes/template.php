@@ -30,13 +30,13 @@ function get_query_template( $type, $templates = array() ) {
 	/**
 	 * Filter the path of the queried template by type.
 	 *
-	 * The dynamic portion of the hook name, $type, refers to the filename
+	 * The dynamic portion of the hook name, `$type`, refers to the filename
 	 * -- minus the extension -- of the file to load. This hook also applies
 	 * to various types of files loaded as part of the Template Hierarchy.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $template Path to the template. @see locate_template()
+	 * @param string $template Path to the template. See {@see locate_template()}.
 	 */
 	return apply_filters( "{$type}_template", $template );
 }
@@ -135,7 +135,7 @@ function get_author_template() {
 
 	$templates = array();
 
-	if ( is_a( $author, 'WP_User' ) ) {
+	if ( $author instanceof WP_User ) {
 		$templates[] = "author-{$author->user_nicename}.php";
 		$templates[] = "author-{$author->ID}.php";
 	}
@@ -467,7 +467,7 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 		if ( file_exists(STYLESHEETPATH . '/' . $template_name)) {
 			$located = STYLESHEETPATH . '/' . $template_name;
 			break;
-		} else if ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
+		} elseif ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
 			$located = TEMPLATEPATH . '/' . $template_name;
 			break;
 		}

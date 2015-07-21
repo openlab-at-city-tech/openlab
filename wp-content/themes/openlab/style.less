@@ -111,10 +111,10 @@ blockquote {
         li{
             display: inline-block;
             margin-bottom: 0;
+            border-right: 1px solid @80gray;
             a{
                 color: @black;
                 display: inline-block;
-                border-right: 1px solid @80gray;
                 padding: 0 7px;
             }
             &.no-link{
@@ -133,9 +133,7 @@ blockquote {
             }
             &:last-child,
                 &.last-item{
-                a{
-                    border-right: none;
-                }
+                border-right: none;
             }
             .fa{
                 padding-left: 7px;
@@ -251,10 +249,15 @@ input[type="submit"]{
     max-width: 100%;
 }
 .form-control{
-    margin-bottom: 0px;
+    margin-bottom: 15px;
     &[type='file']{
         padding: 6px 12px;
     }
+}
+.notify-settings {
+	.notify-members {
+		font-weight: @bold;
+	}
 }
 .form-inline{
     &.btn-combo{
@@ -756,6 +759,8 @@ body{
     .callout-list-number{
         padding-right: 0;
         padding-top: 4px;
+        padding-bottom: 4px;
+        min-width: 45px;
         span{
             background: @magenta;
             border-radius: @border-radius-base;
@@ -770,7 +775,7 @@ body{
     }
     .callout-list-content{
         position: relative;
-        padding-left: 0;
+        padding-left: 7.5px;
         .item-wrapper{
             min-height: 42px;
             padding-bottom: 11px;
@@ -785,6 +790,7 @@ body{
         border: 1px solid @30gray;
         border-radius: @border-radius-base;
         overflow: auto;
+        padding: 6px 12px;
     }
 }
 .groupblog-setup{
@@ -1366,9 +1372,13 @@ body{
         }
         ul.sidebar-nav{
             margin: 0;
-            padding: 12px 0;
+            padding: 0px 0 7px;
             list-style-type: none;
+            background: rgba(255, 255, 255, 0.42);
             li{
+	            background: rgba(239, 239, 239, 0.8);
+				width: 100% !important;
+				margin: 0;
                 a{
                     color: @black;
                     display: block;
@@ -1396,11 +1406,12 @@ body{
                     padding: 0;
                     list-style-type: none;
                     li{
-                        margin: 1px 0 0 15px;
+                        // margin: 1px 0 0 15px;
                         a{
                             color: @70gray;
                             border-left: 1px solid @30gray;
-                            padding: 10px 0 10px 15px;
+                            padding: 10px 15px;
+                            margin: 1px 0 0 15px;
                         }
                     }
                 }
@@ -1446,7 +1457,7 @@ body{
             display: none;
             z-index: 1;
             width: 100%;
-            padding: 0;
+            padding: 0 0 7px;
             h2{
                 margin: 12px 0;
             }
@@ -1459,6 +1470,10 @@ body{
                     li{
                         a{
                             text-align: right;
+                            width: 75%;
+							float: right;
+							font-weight: @bold;
+							background: rgba(255, 255, 255, 0.42);
                             .mol-count{
                                 display: none;
                             }
@@ -1511,7 +1526,7 @@ body{
         h2{
             margin: 6px 0 12px;
             a{
-                color: @80gray;
+                // color: @80gray;
             }
         }
         a{
@@ -2070,7 +2085,7 @@ input#group-request-send {
         }
     }
     #profile-action-wrapper{
-        margin-bottom: 12px;
+        margin-bottom: 20px;
     }
     @media (max-width: @screen-xs-max){
         margin-top: 20px;
@@ -2135,24 +2150,58 @@ input#group-request-send {
 }
 /**help**/
 .col-help{
+    /* Unsure whether this is needed */
     .page-title{
         font-size: 14px;
         margin: 15px 0 35px;
-        font-weight: bold;
         span{
             color: @aqua;
         }
     }
+
+    span.page-title {
+        font-weight: 600;
+	color: @aqua;
+	margin: auto;
+	padding: 0 7px;
+    }
+
+    ul.nav li:first-child span.page-title {
+        padding-left: 0;
+    }
+}
+.row.help-nav {
+    margin-bottom: 35px;
+
+    /* Overrides - I'm not confident of the original purpose of these styles */
+    .nav.nav-inline li:hover a {
+        text-decoration: underline;
+    }
 }
 #help-title-nav {
-    display: inline-block;
-    font-weight: normal;
+    margin-left: 6px;
+
     .nav-previous {
         padding-right: 8px;
     }
 
     span {
         color: @black;
+    }
+
+    /* Overrides */
+    a {
+        padding: 0;
+
+	&:hover, &:focus {
+		color: @aqua;
+		text-decoration: underline;
+	}
+    }
+
+    .fa {
+        margin: 0 4px;
+	padding-left: 0;
     }
 }
 .help-title:first-of-type {
@@ -2210,8 +2259,10 @@ input#group-request-send {
 }
 .archive{
     .child-cat-container {
-        border: 1px solid @40gray;
-        padding: 10px 14px;
+        border: 1px solid @10gray;
+	border-radius: 4px;
+        padding: 2%;
+	margin-bottom: 18px;
         h2 {
             font-size: 16px;
             font-weight: bold;
@@ -2225,6 +2276,9 @@ input#group-request-send {
         .help-tags {
             margin-left: 0;
         }
+	li {
+	  margin-bottom: 12px;
+	}
     }
     h2.child-cat{
         margin-top: 42px;

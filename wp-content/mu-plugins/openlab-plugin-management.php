@@ -10,6 +10,7 @@ function openlab_hide_plugins( $plugins ) {
 
 	$super_admin_only = array(
 		'cac-non-cuny-signup/loader.php',
+		'social/social.php',
 	);
 
 	if ( ! is_super_admin() ) {

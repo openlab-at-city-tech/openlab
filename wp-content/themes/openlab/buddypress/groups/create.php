@@ -107,7 +107,7 @@
                     <?php endif ?>
 
                     <?php /* Name/Description */ ?>
-            
+
                     <div class="panel panel-default">
                             <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></div>
                             <div class="panel-body">
@@ -137,7 +137,7 @@
                     <?php endif ?>
                             </div>
                     </div>
-            
+
                     <div class="panel panel-default">
                     <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></div>
                     <div class="panel-body">
@@ -155,7 +155,7 @@
                 <?php if (bp_is_group_creation_step('group-settings')) : ?>
 
                     <?php do_action('bp_before_group_settings_creation_step'); ?>
-                    
+
                     <?php if ( function_exists( 'bbpress' ) && ! openlab_is_portfolio() ) : ?>
                         <input type="hidden" name="group-show-forum" value="1" />
                     <?php endif; ?>
@@ -171,7 +171,7 @@
                     <?php do_action('bp_before_group_avatar_creation_step'); ?>
 
     <?php if (!bp_get_avatar_admin_step() || 'upload-image' == bp_get_avatar_admin_step()) : ?>
-                        
+
                         <div class="panel panel-default">
                         <div class="panel-heading">Upload Avatar</div>
                     <div class="panel-body">
@@ -182,7 +182,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-16">
-                            
+
                                 <p class="italics"><?php _e("Upload an image to use as an avatar for this " . $group_type . ". The image will be shown on the main " . $group_type . " page, and in search results.", 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
@@ -202,7 +202,7 @@
                     <?php endif; ?>
 
     <?php if ('crop-image' == bp_get_avatar_admin_step()) : ?>
-                        
+
                         <div class="panel panel-default">
                         <div class="panel-heading">Crop Avatar</div>
                         <div class="panel-body">

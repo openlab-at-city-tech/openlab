@@ -54,8 +54,15 @@ function openlab_help_loop() {
 
 	$back_next_nav = '';
 
-	$prev_post = get_adjacent_post( false, '', true );
-	$next_post = get_adjacent_post( false, '', false );
+	$adj_args = array(
+		'order_by' => 'menu_order',
+		'order_2nd' => 'post_date',
+		'post_type' => '"help"',
+		'return' => 'object',
+	);
+
+	$prev_post = adjacent_post_link_plus( $adj_args, '', true );
+	$next_post = adjacent_post_link_plus( $adj_args, '', false );
 
 	$back_next_nav .= '<nav id="help-title-nav">';
 
@@ -86,15 +93,33 @@ function openlab_help_loop() {
                     <span class="icon-bar"></span>
                 </button>
                 <span class="print-link pull-right hidden-xs"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
-            <?php $this_term = openlab_get_primary_help_term_name(); ?>
-            <div id="help-title"><h2 class="page-title">
-		    Topics:
-                    <?php if ($this_term->parent != 0): ?>
-                        <a class="regular" href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
-                    <?php endif; ?>
-                    <span><?php the_title(); ?></span> |
-		    <?php echo $back_next_nav; ?>
-	   </h2></div>
+
+            <?php
+            $nav_links = array(
+		'<span class="page-title">' . get_the_title() . '</span>',
+                $back_next_nav,
+	    );
+
+	    $this_term = openlab_get_primary_help_term_name();
+            if ( $this_term->parent != 0 ) {
+		$nav_links = array_merge( array( '<a class="regular" href="' . get_term_link( $this_term ) . '">' . esc_html( $this_term->name ) . '</a>' ), $nav_links );
+	    }
+
+	    ?>
+
+	    <div class="row help-nav">
+                <div class="col-md-24">
+                    <div class="submenu">
+                        <div class="submenu-text pull-left bold">Topics: </div>
+		        <ul class="nav nav-inline">
+		        <?php foreach ( $nav_links as $nav_link ) :
+                            ?><li><?php echo $nav_link ?></li><?php
+		        endforeach; ?>
+		        </ul>
+		    </div>
+                </div>
+	    </div>
+
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?>
                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
@@ -268,8 +293,8 @@ function openlab_help_cats_loop() {
     ?>
 
     <?php if ( $help_query->have_posts() ) : ?>
-    <div class="col-md-12">
-        <div class="child-cat-container">
+    <div>
+        <div class="child-cat-container help-cat-block">
             <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
 	    <ul>
 	    <?php
@@ -304,7 +329,7 @@ function openlab_help_cats_loop() {
     $count = 0;
 
     foreach ( $cols as $col_name => $col_cats ) {
-	    echo '<div class="col-md-12">';
+	    echo '<div>';
 	    foreach ( $col_cats as $child ) {
 		$child_cat_id = $child->cat_ID;
 		echo '<div class="child-cat-container child-cat-container-' . intval( $child_cat_id ) . '">';
