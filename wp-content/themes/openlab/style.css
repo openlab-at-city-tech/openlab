@@ -7751,6 +7751,8 @@ body .inline-visible-xs {
 .callout-list .callout-list-number {
   padding-right: 0;
   padding-top: 4px;
+  padding-bottom: 4px;
+  min-width: 45px;
 }
 .callout-list .callout-list-number span {
   background: #ff5959;
@@ -7765,7 +7767,7 @@ body .inline-visible-xs {
 }
 .callout-list .callout-list-content {
   position: relative;
-  padding-left: 0;
+  padding-left: 7.5px;
 }
 .callout-list .callout-list-content .item-wrapper {
   min-height: 42px;
