@@ -1,6 +1,6 @@
 /* exported add_option, show_options, hide, fixHelper */
 /* jshint scripturl: true */
-/* global XProfileAdmin */
+/* global XProfileAdmin, ajaxurl */
 
 /**
  * Add option for the forWhat type.
@@ -59,7 +59,7 @@ function add_option(forWhat) {
 	newDiv.appendChild( toDeleteWrap );
 	holder.appendChild( newDiv );
 
-	// re-initialize the sorable ui
+	// re-initialize the sortable ui
 	enableSortableFieldOptions( forWhat );
 
 	// set focus on newly created element
@@ -119,11 +119,39 @@ function destroySortableFieldOptions() {
 	jQuery( '.sortable, .sortable span' ).css( 'cursor', 'default' );
 }
 
+function titleHint( id ) {
+	id = id || 'title';
+
+	var title = jQuery('#' + id), titleprompt = jQuery('#' + id + '-prompt-text');
+
+	if ( '' === title.val() ) {
+		titleprompt.removeClass('screen-reader-text');
+	} else {
+		titleprompt.addClass('screen-reader-text');
+	}
+
+	titleprompt.click(function(){
+		jQuery(this).addClass('screen-reader-text');
+		title.focus();
+	});
+
+	title.blur(function(){
+		if ( '' === this.value ) {
+			titleprompt.removeClass('screen-reader-text');
+		}
+	}).focus(function(){
+		titleprompt.addClass('screen-reader-text');
+	}).keydown(function(e){
+		titleprompt.addClass('screen-reader-text');
+		jQuery(this).unbind(e);
+	});
+}
+
 jQuery( document ).ready( function() {
 
 	// Set focus in Field Title, if we're on the right page
 	jQuery( '#bp-xprofile-add-field #title' ).focus();
-	
+
 	// Set up deleting options ajax
 	jQuery( 'a.ajax-option-delete' ).on( 'click', function() {
 		var theId = this.id.split( '-' );
@@ -172,9 +200,9 @@ jQuery( document ).ready( function() {
 	// Allow reordering of fields within groups
 	jQuery( 'fieldset.field-group' ).sortable({
 		cursor: 'move',
-		opacity: 1,
+		opacity: 0.7,
 		items: 'fieldset',
-		tolerance: 'ponter',
+		tolerance: 'pointer',
 
 		update: function() {
 			jQuery.post( ajaxurl, {
@@ -189,13 +217,13 @@ jQuery( document ).ready( function() {
 	})
 
 	// Disallow text selection
-	.disableSelection()
-
-	// Change cursor to move if JS is enabled
-	.css( 'cursor', 'move' );
+	.disableSelection();
 
 	// Allow reordering of field options
 	enableSortableFieldOptions( jQuery('#fieldtype :selected').val() );
+
+	// Handle title placeholder text the WordPress way
+	titleHint( 'title' );
 
 	// tabs init with a custom tab template and an "add" callback filling in the content
 	var $tab_items,

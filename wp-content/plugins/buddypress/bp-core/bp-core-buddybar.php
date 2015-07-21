@@ -9,12 +9,10 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Add an item to the main BuddyPress navigation array.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
  *
  * @param array $args {
  *     Array describing the new nav item.
@@ -38,7 +36,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @return bool|null Returns false on failure.
  */
 function bp_core_new_nav_item( $args = '' ) {
-	global $bp;
+	$bp = buddypress();
 
 	$defaults = array(
 		'name'                    => false, // Display name for the nav item
@@ -108,18 +106,35 @@ function bp_core_new_nav_item( $args = '' ) {
 			}
 
 			if ( !empty( $default_subnav_slug ) ) {
+
+				/**
+				 * Filters the default component subnav item.
+				 *
+				 * @since BuddyPress (1.5.0)
+				 *
+				 * @param string $default_subnav_slug The slug of the default subnav item
+				 *                                    to select when clicked.
+				 * @param array  $r                   Parsed arguments for the nav item.
+				 */
 				$bp->current_action = apply_filters( 'bp_default_component_subnav', $default_subnav_slug, $r );
 			}
 		}
 	}
 
+	/**
+	 * Fires after adding an item to the main BuddyPress navigation array.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param array $r        Parsed arguments for the nav item.
+	 * @param array $args     Originally passed in arguments for the nav item.
+	 * @param array $defaults Default arguments for a nav item.
+	 */
 	do_action( 'bp_core_new_nav_item', $r, $args, $defaults );
 }
 
 /**
  * Modify the default subnav item that loads when a top level nav item is clicked.
- *
- * @global BuddyPress $bp The one true BuddyPress instance.
  *
  * @param array $args {
  *     @type string $parent_slug The slug of the nav item whose default is
@@ -130,7 +145,7 @@ function bp_core_new_nav_item( $args = '' ) {
  * }
  */
 function bp_core_new_nav_default( $args = '' ) {
-	global $bp;
+	$bp = buddypress();
 
 	$defaults = array(
 		'parent_slug'     => false, // Slug of the parent
@@ -195,12 +210,10 @@ function bp_core_new_nav_default( $args = '' ) {
  * The sorting is split into a separate function because it can only happen
  * after all plugins have had a chance to register their navigation items.
  *
- * @global BuddyPress $bp The one true BuddyPress instance
- *
  * @return bool|null Returns false on failure.
  */
 function bp_core_sort_nav_items() {
-	global $bp;
+	$bp = buddypress();
 
 	if ( empty( $bp->bp_nav ) || !is_array( $bp->bp_nav ) )
 		return false;
@@ -229,8 +242,6 @@ add_action( 'admin_head', 'bp_core_sort_nav_items' );
 /**
  * Add a subnav item to the BuddyPress navigation.
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @param array $args {
  *     Array describing the new subnav item.
  *     @type string $name Display name for the subnav item.
@@ -253,24 +264,28 @@ add_action( 'admin_head', 'bp_core_sort_nav_items' );
  *           when the nav item is clicked.
  *     @type string $link Optional. The URL that the subnav item should point
  *           to. Defaults to a value generated from the $parent_url + $slug.
+ *     @type bool $show_in_admin_bar Optional. Whether the nav item should be
+ *           added into the group's "Edit" Admin Bar menu for group admins.
+ *           Default: false.
  * }
  * @return bool|null Returns false on failure.
  */
 function bp_core_new_subnav_item( $args = '' ) {
-	global $bp;
+	$bp = buddypress();
 
 	$r = wp_parse_args( $args, array(
-		'name'            => false, // Display name for the nav item
-		'slug'            => false, // URL slug for the nav item
-		'parent_slug'     => false, // URL slug of the parent nav item
-		'parent_url'      => false, // URL of the parent item
-		'item_css_id'     => false, // The CSS ID to apply to the HTML of the nav item
-		'user_has_access' => true,  // Can the logged in user see this nav item?
-		'no_access_url'   => '',
-		'site_admin_only' => false, // Can only site admins see this nav item?
-		'position'        => 90,    // Index of where this nav item should be positioned
-		'screen_function' => false, // The name of the function to run when clicked
-		'link'            => ''     // The link for the subnav item; optional, not usually required.
+		'name'              => false, // Display name for the nav item
+		'slug'              => false, // URL slug for the nav item
+		'parent_slug'       => false, // URL slug of the parent nav item
+		'parent_url'        => false, // URL of the parent item
+		'item_css_id'       => false, // The CSS ID to apply to the HTML of the nav item
+		'user_has_access'   => true,  // Can the logged in user see this nav item?
+		'no_access_url'     => '',
+		'site_admin_only'   => false, // Can only site admins see this nav item?
+		'position'          => 90,    // Index of where this nav item should be positioned
+		'screen_function'   => false, // The name of the function to run when clicked
+		'link'              => '',    // The link for the subnav item; optional, not usually required.
+		'show_in_admin_bar' => false, // Show the Manage link in the current group's "Edit" Admin Bar menu
 	) );
 
 	extract( $r, EXTR_SKIP );
@@ -281,11 +296,11 @@ function bp_core_new_subnav_item( $args = '' ) {
 
 	// Link was not forced, so create one
 	if ( empty( $link ) ) {
-		$link = $parent_url . $slug;
+		$link = trailingslashit( $parent_url . $slug );
 
 		// If this sub item is the default for its parent, skip the slug
 		if ( ! empty( $bp->bp_nav[$parent_slug]['default_subnav_slug'] ) && $slug == $bp->bp_nav[$parent_slug]['default_subnav_slug'] ) {
-			$link = $parent_url;
+			$link = trailingslashit( $parent_url );
 		}
 	}
 
@@ -297,15 +312,17 @@ function bp_core_new_subnav_item( $args = '' ) {
 		$item_css_id = $slug;
 
 	$subnav_item = array(
-		'name'            => $name,
-		'link'            => trailingslashit( $link ),
-		'slug'            => $slug,
-		'css_id'          => $item_css_id,
-		'position'        => $position,
-		'user_has_access' => $user_has_access,
-		'no_access_url'   => $no_access_url,
-		'screen_function' => &$screen_function
+		'name'              => $name,
+		'link'              => $link,
+		'slug'              => $slug,
+		'css_id'            => $item_css_id,
+		'position'          => $position,
+		'user_has_access'   => $user_has_access,
+		'no_access_url'     => $no_access_url,
+		'screen_function'   => &$screen_function,
+		'show_in_admin_bar' => (bool) $r['show_in_admin_bar'],
 	);
+
 	$bp->bp_options_nav[$parent_slug][$slug] = $subnav_item;
 
 	/**
@@ -385,7 +402,7 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item ) {
 
 			// In the case of a user page, we try to assume a
 			// redirect URL
-			} else if ( bp_is_user() ) {
+			} elseif ( bp_is_user() ) {
 
 				// Redirect to the displayed user's default
 				// component, as long as that component is
@@ -435,12 +452,10 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item ) {
 /**
  * Sort all subnavigation arrays.
  *
- * @global BuddyPress $bp The one true BuddyPress instance
- *
  * @return bool|null Returns false on failure.
  */
 function bp_core_sort_subnav_items() {
-	global $bp;
+	$bp = buddypress();
 
 	if ( empty( $bp->bp_options_nav ) || !is_array( $bp->bp_options_nav ) )
 		return false;
@@ -480,13 +495,22 @@ add_action( 'admin_head', 'bp_core_sort_subnav_items' );
  *        items; false otherwise.
  */
 function bp_nav_item_has_subnav( $nav_item = '' ) {
-	global $bp;
+	$bp = buddypress();
 
 	if ( !$nav_item )
 		$nav_item = bp_current_component();
 
 	$has_subnav = isset( $bp->bp_options_nav[$nav_item] ) && count( $bp->bp_options_nav[$nav_item] ) > 0;
 
+	/**
+	 * Filters whether or not a given nav item has subnav items.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param bool   $has_subnav Whether or not there is any subnav items.
+	 * @param string $nav_item   The slug of the top-level nav item whose subnav
+	 *                           items you're checking.
+	 */
 	return apply_filters( 'bp_nav_item_has_subnav', $has_subnav, $nav_item );
 }
 
@@ -497,7 +521,7 @@ function bp_nav_item_has_subnav( $nav_item = '' ) {
  * @param bool Returns false on failure, ie if the nav item can't be found.
  */
 function bp_core_remove_nav_item( $parent_id ) {
-	global $bp;
+	$bp = buddypress();
 
 	// Unset subnav items for this nav item
 	if ( isset( $bp->bp_options_nav[$parent_id] ) && is_array( $bp->bp_options_nav[$parent_id] ) ) {
@@ -526,9 +550,11 @@ function bp_core_remove_nav_item( $parent_id ) {
  * @param string $slug The slug of the subnav item to be removed.
  */
 function bp_core_remove_subnav_item( $parent_id, $slug ) {
-	global $bp;
+	$bp = buddypress();
 
-	$screen_function = isset( $bp->bp_options_nav[$parent_id][$slug]['screen_function'] ) ? $bp->bp_options_nav[$parent_id][$slug]['screen_function'] : false;
+	$screen_function = isset( $bp->bp_options_nav[$parent_id][$slug]['screen_function'] )
+		? $bp->bp_options_nav[$parent_id][$slug]['screen_function']
+		: false;
 
 	if ( ! empty( $screen_function ) ) {
 		// Remove our screen hook if screen function is callable
@@ -546,12 +572,10 @@ function bp_core_remove_subnav_item( $parent_id, $slug ) {
 /**
  * Clear all subnav items from a specific nav item.
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @param string $parent_slug The slug of the parent navigation item.
  */
 function bp_core_reset_subnav_items( $parent_slug ) {
-	global $bp;
+	$bp = buddypress();
 
 	unset( $bp->bp_options_nav[$parent_slug] );
 }

@@ -8,19 +8,17 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Register activity actions for the blogs component.
  *
  * @since BuddyPress (1.0.0)
  *
- * @global object $bp The BuddyPress global settings object.
- *
  * @return bool|null Returns false if activity component is not active.
  */
 function bp_blogs_register_activity_actions() {
-	global $bp;
+	$bp = buddypress();
 
 	// Bail if activity is not active
 	if ( ! bp_is_active( 'activity' ) ) {
@@ -33,28 +31,30 @@ function bp_blogs_register_activity_actions() {
 			'new_blog',
 			__( 'New site created', 'buddypress' ),
 			'bp_blogs_format_activity_action_new_blog',
-			__( 'New Sites', 'buddypress' )
+			__( 'New Sites', 'buddypress' ),
+			array( 'activity', 'member' ),
+			0
 		);
 	}
 
-	bp_activity_set_action(
-		$bp->blogs->id,
-		'new_blog_post',
-		__( 'New post published', 'buddypress' ),
-		'bp_blogs_format_activity_action_new_blog_post',
-		__( 'Posts', 'buddypress' ),
-		array( 'activity', 'member' )
-	);
+	// Only add the comment type if the 'post' post type is trackable
+	if ( post_type_supports( 'post', 'buddypress-activity' ) ) {
+		bp_activity_set_action(
+			$bp->blogs->id,
+			'new_blog_comment',
+			__( 'New post comment posted', 'buddypress' ),
+			'bp_blogs_format_activity_action_new_blog_comment',
+			__( 'Comments', 'buddypress' ),
+			array( 'activity', 'member' ),
+			10
+		);
+	}
 
-	bp_activity_set_action(
-		$bp->blogs->id,
-		'new_blog_comment',
-		__( 'New post comment posted', 'buddypress' ),
-		'bp_blogs_format_activity_action_new_blog_comment',
-		__( 'Comments', 'buddypress' ),
-		array( 'activity', 'member' )
-	);
-
+	/**
+	 * Fires after the registry of the default blog component activity actions.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 */
 	do_action( 'bp_blogs_register_activity_actions' );
 }
 add_action( 'bp_register_activity_actions', 'bp_blogs_register_activity_actions' );
@@ -85,6 +85,14 @@ function bp_blogs_format_activity_action_new_blog( $action, $activity ) {
 		}
 	}
 
+	/**
+	 * Filters the new blog activity action for the new blog.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param string $action   Constructed activity action.
+	 * @param obj    $activity Activity data object.
+	 */
 	return apply_filters( 'bp_blogs_format_activity_action_new_blog', $action, $activity );
 }
 
@@ -108,27 +116,68 @@ function bp_blogs_format_activity_action_new_blog_post( $action, $activity ) {
 		bp_blogs_update_blogmeta( $activity->item_id, 'name', $blog_name );
 	}
 
-	$post_url = add_query_arg( 'p', $activity->secondary_item_id, trailingslashit( $blog_url ) );
+	/**
+	 * When the post is published we are faking an activity object
+	 * to which we add 2 properties :
+	 * - the post url
+	 * - the post title
+	 * This is done to build the 'post link' part of the activity
+	 * action string.
+	 * NB: in this case the activity has not yet been created.
+	 */
+	if ( isset( $activity->post_url ) ) {
+		$post_url = $activity->post_url;
 
-	$post_title = bp_activity_get_meta( $activity->id, 'post_title' );
+	/**
+	 * The post_url property is not set, we need to build the url
+	 * thanks to the post id which is also saved as the secondary
+	 * item id property of the activity object.
+	 */
+	} else {
+		$post_url = add_query_arg( 'p', $activity->secondary_item_id, trailingslashit( $blog_url ) );
+	}
 
-	// Should only be empty at the time of post creation
+	// Should be the case when the post has just been published
+	if ( isset( $activity->post_title ) ) {
+		$post_title = $activity->post_title;
+
+	// If activity already exists try to get the post title from activity meta
+	} else if ( ! empty( $activity->id ) ) {
+		$post_title = bp_activity_get_meta( $activity->id, 'post_title' );
+	}
+
+	/**
+	 * In case the post was published without a title
+	 * or the activity meta was not found
+	 */
 	if ( empty( $post_title ) ) {
+		// Defaults to no title
+		$post_title = esc_html__( '(no title)', 'buddypress' );
+
 		switch_to_blog( $activity->item_id );
 
 		$post = get_post( $activity->secondary_item_id );
 		if ( is_a( $post, 'WP_Post' ) ) {
-			$post_title = $post->post_title;
-			bp_activity_update_meta( $activity->id, 'post_title', $post_title );
+			// Does the post have a title ?
+			if ( ! empty( $post->post_title ) ) {
+				$post_title = $post->post_title;
+			}
+
+			// Make sure the activity exists before saving the post title in activity meta
+			if ( ! empty( $activity->id ) ) {
+				bp_activity_update_meta( $activity->id, 'post_title', $post_title );
+			}
 		}
 
 		restore_current_blog();
 	}
 
-	$post_link  = '<a href="' . $post_url . '">' . $post_title . '</a>';
+	// Build the 'post link' part of the activity action string
+	$post_link  = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
 
 	$user_link = bp_core_get_userlink( $activity->user_id );
 
+	// Build the complete activity action string
 	if ( is_multisite() ) {
 		$action  = sprintf( __( '%1$s wrote a new post, %2$s, on the site %3$s', 'buddypress' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
 	} else {
@@ -146,6 +195,14 @@ function bp_blogs_format_activity_action_new_blog_post( $action, $activity ) {
 		}
 	}
 
+	/**
+	 * Filters the new blog post action for the new blog.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param string $action   Constructed activity action.
+	 * @param obj    $activity Activity data object.
+	 */
 	return apply_filters( 'bp_blogs_format_activity_action_new_blog_post', $action, $activity );
 }
 
@@ -193,7 +250,7 @@ function bp_blogs_format_activity_action_new_blog_comment( $action, $activity ) 
 		restore_current_blog();
 	}
 
-	$post_link = '<a href="' . $post_url . '">' . $post_title . '</a>';
+	$post_link = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
 	$user_link = bp_core_get_userlink( $activity->user_id );
 
 	if ( is_multisite() ) {
@@ -213,6 +270,14 @@ function bp_blogs_format_activity_action_new_blog_comment( $action, $activity ) 
 		}
 	}
 
+	/**
+	 * Filters the new blog comment action for the new blog.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param string $action   Constructed activity action.
+	 * @param obj    $activity Activity data object.
+	 */
 	return apply_filters( 'bp_blogs_format_activity_action_new_blog_comment', $action, $activity );
 }
 
@@ -255,7 +320,6 @@ add_filter( 'bp_activity_prefetch_object_data', 'bp_blogs_prefetch_activity_obje
  * @since BuddyPress (1.0.0)
  *
  * @see bp_activity_add() for description of parameters.
- * @global object $bp The BuddyPress global settings object.
  *
  * @param array $args {
  *     See {@link bp_activity_add()} for complete description of arguments.
@@ -266,12 +330,13 @@ add_filter( 'bp_activity_prefetch_object_data', 'bp_blogs_prefetch_activity_obje
  * @return int|bool On success, returns the activity ID. False on failure.
  */
 function bp_blogs_record_activity( $args = '' ) {
-	global $bp;
 
 	// Bail if activity is not active
 	if ( ! bp_is_active( 'activity' ) ) {
 		return false;
 	}
+
+	$bp = buddypress();
 
 	$defaults = array(
 		'user_id'           => bp_loggedin_user_id(),
@@ -288,17 +353,30 @@ function bp_blogs_record_activity( $args = '' ) {
 
 	$r = wp_parse_args( $args, $defaults );
 
-	// Remove large images and replace them with just one image thumbnail
-	if ( ! empty( $r['content'] ) ) {
-		$r['content'] = bp_activity_thumbnail_content_images( $r['content'], $r['primary_link'], $r );
-	}
-
 	if ( ! empty( $r['action'] ) ) {
+
+		/**
+		 * Filters the action associated with activity for activity stream.
+		 *
+		 * @since BuddyPress (1.2.0)
+		 *
+		 * @param string $value Action for the activity stream.
+		 */
 		$r['action'] = apply_filters( 'bp_blogs_record_activity_action', $r['action'] );
 	}
 
 	if ( ! empty( $r['content'] ) ) {
-		$r['content'] = apply_filters( 'bp_blogs_record_activity_content', bp_create_excerpt( $r['content'] ), $r['content'], $r );
+
+		/**
+		 * Filters the content associated with activity for activity stream.
+		 *
+		 * @since BuddyPress (1.2.0)
+		 *
+		 * @param string $value Generated summary from content for the activity stream.
+		 * @param string $value Content for the activity stream.
+		 * @param array  $r     Array of arguments used for the activity stream item.
+		 */
+		$r['content'] = apply_filters( 'bp_blogs_record_activity_content', bp_activity_create_summary( $r['content'], $r ), $r['content'], $r );
 	}
 
 	// Check for an existing entry and update if one exists.
@@ -527,6 +605,16 @@ function bp_blogs_sync_add_from_activity_comment( $comment_id, $params, $parent_
 	// add the comment hook back
 	add_action( 'comment_post', 'bp_blogs_record_comment', 10, 2 );
 
+	/**
+	 * Fires after activity comments have been synced and posted as blog comments.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param int    $comment_id      The activity ID for the posted activity comment.
+	 * @param array  $args            Array of args used for the comment syncing.
+	 * @param object $parent_activity Parameters of the blog post parent activity item.
+	 * @param object $user            User data object for the blog comment.
+	 */
 	do_action( 'bp_blogs_sync_add_from_activity_comment', $comment_id, $args, $parent_activity, $user );
 }
 add_action( 'bp_activity_comment_posted', 'bp_blogs_sync_add_from_activity_comment', 10, 3 );

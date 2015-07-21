@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Load the "My Blogs" screen.
@@ -17,6 +17,11 @@ function bp_blogs_screen_my_blogs() {
 	if ( !is_multisite() )
 		return false;
 
+	/**
+	 * Fires right before the loading of the My Blogs screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'bp_blogs_screen_my_blogs' );
 
 	bp_core_load_template( apply_filters( 'bp_blogs_template_my_blogs', 'members/single/home' ) );
@@ -33,6 +38,11 @@ function bp_blogs_screen_create_a_blog() {
 	if ( !is_user_logged_in() || !bp_blog_signup_enabled() )
 		return false;
 
+	/**
+	 * Fires right before the loading of the Create A Blog screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'bp_blogs_screen_create_a_blog' );
 
 	bp_core_load_template( apply_filters( 'bp_blogs_template_create_a_blog', 'blogs/create' ) );
@@ -46,6 +56,11 @@ function bp_blogs_screen_index() {
 	if ( bp_is_blogs_directory() ) {
 		bp_update_is_directory( true, 'blogs' );
 
+		/**
+		 * Fires right before the loading of the top-level Blogs screen template file.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 */
 		do_action( 'bp_blogs_screen_index' );
 
 		bp_core_load_template( apply_filters( 'bp_blogs_screen_index', 'blogs/index' ) );
@@ -53,12 +68,12 @@ function bp_blogs_screen_index() {
 }
 add_action( 'bp_screens', 'bp_blogs_screen_index', 2 );
 
-/** Theme Compatability *******************************************************/
+/** Theme Compatibility *******************************************************/
 
 /**
  * The main theme compat class for BuddyPress Blogs
  *
- * This class sets up the necessary theme compatability actions to safely output
+ * This class sets up the necessary theme compatibility actions to safely output
  * group template parts to the_title and the_content areas of a theme.
  *
  * @since BuddyPress (1.7.0)
@@ -75,7 +90,7 @@ class BP_Blogs_Theme_Compat {
 	}
 
 	/**
-	 * Are we looking at something that needs Blogs theme compatability?
+	 * Are we looking at something that needs Blogs theme compatibility?
 	 *
 	 * @since BuddyPress (1.7.0)
 	 */
@@ -93,6 +108,12 @@ class BP_Blogs_Theme_Compat {
 		if ( is_multisite() && ! bp_current_action() ) {
 			bp_update_is_directory( true, 'blogs' );
 
+			/**
+			 * Fires if in the blog directory and BuddyPress needs Blog theme compatibility,
+			 * before the actions and filters are added.
+			 *
+			 * @since BuddyPress (1.5.0)
+			 */
 			do_action( 'bp_blogs_screen_index' );
 
 			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
@@ -122,7 +143,14 @@ class BP_Blogs_Theme_Compat {
 	 * @return array $templates Array of custom templates to look for.
 	 */
 	public function directory_template_hierarchy( $templates ) {
-		// Setup our templates based on priority
+
+		/**
+		 * Filters the custom templates used for theme compat with the blog directory page.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param array $value Array of template paths to add to template list to look for.
+		 */
 		$new_templates = apply_filters( 'bp_template_hierarchy_blogs_create', array(
 			'blogs/index-directory.php'
 		) );
@@ -141,11 +169,9 @@ class BP_Blogs_Theme_Compat {
 	 */
 	public function directory_dummy_post() {
 
-		$title = apply_filters( 'bp_blogs_directory_header', __( 'Sites', 'buddypress' ) );
-
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => $title,
+			'post_title'     => __( 'Sites', 'buddypress' ),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
@@ -180,7 +206,14 @@ class BP_Blogs_Theme_Compat {
 	 * @return array $templates Array of custom templates to look for.
 	 */
 	public function create_template_hierarchy( $templates ) {
-		// Setup our templates based on priority
+
+		/**
+		 * Filters the custom templates used for theme compat with the blog create page.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param array $value Array of template paths to add to template list to look for.
+		 */
 		$new_templates = apply_filters( 'bp_template_hierarchy_blogs_create', array(
 			'blogs/index-create.php'
 		) );
@@ -201,7 +234,7 @@ class BP_Blogs_Theme_Compat {
 
 		// Title based on ability to create blogs
 		if ( is_user_logged_in() && bp_blog_signup_enabled() ) {
-			$title = '<a class="button bp-title-button" href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_blogs_root_slug() ) . '">' . __( 'Sites', 'buddypress' ) . '</a>&nbsp;' . __( 'Create a Site', 'buddypress' );
+			$title = __( 'Create a Site', 'buddypress' );
 		} else {
 			$title = __( 'Sites', 'buddypress' );
 		}

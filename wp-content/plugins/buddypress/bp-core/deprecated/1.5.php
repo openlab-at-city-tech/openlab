@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /** Loader ********************************************************************/
 
@@ -449,7 +449,7 @@ function bp_is_friend_requests() {
 
 /**
  * Checks to see if a component's URL should be in the root, not under a member page:
- * eg: http://domain.com/groups/the-group NOT http://domain.com/members/andy/groups/the-group
+ * eg: http://example.com/groups/the-group NOT http://example.com/members/andy/groups/the-group
  * You should be using bp_is_root_component().
  *
  * @deprecated BuddyPress (1.5)
@@ -561,8 +561,8 @@ function bp_dtheme_deprecated() {
 
 	if ( !function_exists( 'bp_dtheme_add_blog_comments_js' ) ) :
 	/**
-	 * In BuddyPress 1.2.x, this added the javascript needed for blog comment replies.
-	 * As of 1.5.x, we recommend that you enqueue the comment-reply javascript in your theme's header.php.
+	 * In BuddyPress 1.2.x, this added the JavaScript needed for blog comment replies.
+	 * As of 1.5.x, we recommend that you enqueue the comment-reply JavaScript in your theme's header.php.
 	 *
 	 * @deprecated BuddyPress (1.5)
 	 * @deprecated Enqueue the comment-reply script in your theme's header.php.
