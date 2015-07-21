@@ -28,7 +28,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false) {
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
-                'menu_class' => 'sidebar-nav'
+                'menu_class' => 'sidebar-nav clearfix'
             );
             echo '<h2 class="sidebar-title hidden-xs">About</h2>';
             echo '<div class="sidebar-block hidden-xs">';
@@ -68,7 +68,7 @@ function openlab_bp_mobile_sidebar($type) {
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
                 'container_id' => 'about-menu',
-                'menu_class' => 'sidebar-nav'
+                'menu_class' => 'sidebar-nav clearfix'
             );
             echo '<div class="sidebar-block">';
             wp_nav_menu($args);
@@ -83,7 +83,7 @@ function openlab_bp_mobile_sidebar($type) {
                 'theme_location' => 'helpmenu',
                 'container' => 'div',
                 'container_id' => 'help-menu',
-                'menu_class' => 'sidebar-nav',
+                'menu_class' => 'sidebar-nav clearfix',
             );
             wp_nav_menu($args);
 

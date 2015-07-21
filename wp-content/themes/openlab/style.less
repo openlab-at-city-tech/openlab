@@ -1404,11 +1404,12 @@ body{
                     padding: 0;
                     list-style-type: none;
                     li{
-                        margin: 1px 0 0 15px;
+                        // margin: 1px 0 0 15px;
                         a{
                             color: @70gray;
                             border-left: 1px solid @30gray;
-                            padding: 10px 0 10px 15px;
+                            padding: 10px 15px;
+                            margin: 1px 0 0 15px;
                         }
                     }
                 }
@@ -1454,7 +1455,7 @@ body{
             display: none;
             z-index: 1;
             width: 100%;
-            padding: 0;
+            padding: 0 0 7px;
             h2{
                 margin: 12px 0;
             }
@@ -1469,6 +1470,7 @@ body{
                             text-align: right;
                             width: 75%;
 							float: right;
+							font-weight: @bold;
 							background: rgba(255, 255, 255, 0.42);
                             .mol-count{
                                 display: none;

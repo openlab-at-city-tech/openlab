@@ -8406,13 +8406,11 @@ body .inline-visible-xs {
   padding: 0;
   list-style-type: none;
 }
-.sidebar .sidebar-block ul.sidebar-nav li ul li {
-  margin: 1px 0 0 15px;
-}
 .sidebar .sidebar-block ul.sidebar-nav li ul li a {
   color: #444444;
   border-left: 1px solid #bbbbbb;
-  padding: 10px 0 10px 15px;
+  padding: 10px 15px;
+  margin: 1px 0 0 15px;
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item ul {
   display: block;
@@ -8449,7 +8447,7 @@ body .inline-visible-xs {
     display: none;
     z-index: 1;
     width: 100%;
-    padding: 0;
+    padding: 0 0 7px;
   }
   .sidebar.mobile-dropdown h2 {
     margin: 12px 0;
@@ -8464,6 +8462,7 @@ body .inline-visible-xs {
     text-align: right;
     width: 75%;
     float: right;
+    font-weight: 700;
     background: rgba(255, 255, 255, 0.42);
   }
   .sidebar.mobile-dropdown .sidebar-block ul li a .mol-count {
