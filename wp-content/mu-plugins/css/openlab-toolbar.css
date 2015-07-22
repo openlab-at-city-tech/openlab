@@ -7693,9 +7693,6 @@ button.oplb-bs .close {
   right: 0;
   z-index: -1;
 }
-.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li {
-  position: relative;
-}
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li > .ab-item {
   min-height: 51px;
   padding-bottom: 17px;
