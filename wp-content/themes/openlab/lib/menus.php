@@ -599,7 +599,7 @@ function openlab_filter_subnav_home($subnav_item) {
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
         $site_link = '<li id="site-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '" id="site">' . $group_label . ' Site</a></li>';
 
-        if (openlab_is_my_portfolio() || $bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) {
+        if (openlab_is_my_portfolio() || $bp->is_item_admin || is_super_admin()) {
 
             $site_link .= '<li id="site-admin-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . 'wp-admin/" id="site-admin">Site Dashboard</a></li>';
         }
