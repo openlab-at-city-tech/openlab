@@ -764,7 +764,6 @@ function openlab_group_profile_activity_list() {
 
                                             <div class="panel panel-default">
                                                 <div class="panel-body">
-                                                    <h6 class="semibold"><?php bbp_topic_title() ?></h6>
 
                                                     <?php
                                                     $topic_id = bbp_get_topic_id();
@@ -774,9 +773,10 @@ function openlab_group_profile_activity_list() {
                                                     $last_reply = get_post($last_reply_id);
                                                     if (!empty($last_reply->post_content)) {
                                                         $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 110);
-                                                        echo $last_topic_content;
                                                     }
                                                     ?>
+                                                    
+                                                    <?= openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content) ?>
 
                                                     <p><a href="<?php bbp_topic_permalink(); ?>" class="read-more">See More</a></p>
                                                 </div></div>                                            <?php endwhile; ?>
@@ -895,6 +895,22 @@ function openlab_group_profile_activity_list() {
 
     </div><!-- #single-course-body -->
     <?php
+}
+
+function openlab_get_group_activity_content($title, $content) {
+    
+    $markup = <<<HTML
+            <h6 class="semibold truncate-on-the-fly">
+                <span class="truncate-on-the-fly" data-basevalue="155" data-minvalue="20" data-basewidth="376">{$title}</span>
+                <span class="original-copy hidden">{$title}</span>
+            </h6>
+            <p class="activity-content">
+                <span class="truncate-on-the-fly" data-basevalue="250" data-minvalue="20" data-basewidth="376">{$content}</span>
+                <span class="original-copy hidden">{$content}</span>
+            </p>
+HTML;
+
+    return $markup;
 }
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'cuny_send_invite_fac_only');
