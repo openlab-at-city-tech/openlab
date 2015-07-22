@@ -7,19 +7,17 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Check whether the $bp global lists an activity directory page.
  *
  * @since BuddyPress (1.5.0)
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @return bool True if set, false if empty.
  */
 function bp_blogs_has_directory() {
-	global $bp;
+	$bp = buddypress();
 
 	return (bool) !empty( $bp->pages->blogs->id );
 }
@@ -236,12 +234,12 @@ function bp_blogs_record_blog( $blog_id, $user_id, $no_activity = false ) {
 		return false;
 
 	$name = get_blog_option( $blog_id, 'blogname' );
+	$url  = get_home_url( $blog_id );
 
 	if ( empty( $name ) ) {
-		return false;
+		$name = $url;
 	}
 
-	$url             = get_home_url( $blog_id );
 	$description     = get_blog_option( $blog_id, 'blogdescription' );
 	$close_old_posts = get_blog_option( $blog_id, 'close_comments_for_old_posts' );
 	$close_days_old  = get_blog_option( $blog_id, 'close_comments_days_old' );
@@ -283,6 +281,15 @@ function bp_blogs_record_blog( $blog_id, $user_id, $no_activity = false ) {
 		) );
 	}
 
+	/**
+	 * Fires after BuddyPress has been made aware of a new site for activity tracking.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param BP_Blogs_Blog $recorded_blog Current blog being recorded. Passed by reference.
+	 * @param bool          $is_private    Whether or not the current blog being recorded is private.
+	 * @param bool          $is_recorded   Whether or not the current blog was recorded.
+	 */
 	do_action_ref_array( 'bp_blogs_new_blog', array( &$recorded_blog, $is_private, $is_recorded ) );
 }
 add_action( 'wpmu_new_blog', 'bp_blogs_record_blog', 10, 2 );
@@ -402,199 +409,78 @@ function bp_blogs_update_option_thread_comments_depth( $oldvalue, $newvalue ) {
 add_action( 'update_option_thread_comments_depth', 'bp_blogs_update_option_thread_comments_depth', 10, 2 );
 
 /**
- * Detect a change in post status, and initiate an activity update if necessary.
+ * Deletes the 'url' blogmeta for a site.
  *
- * Posts get new activity updates when (a) they are being published, and (b)
- * they have not already been published. This enables proper posting for
- * regular posts as well as scheduled posts, while preventing post bumping.
+ * Hooked to 'refresh_blog_details', which is notably used when editing a site
+ * under "Network Admin > Sites".
  *
- * See #4090, #3746, #2546 for background.
+ * @since BuddyPress (2.3.0)
  *
- * @since BuddyPress (2.0.0)
- *
- * @todo Support untrashing better
- *
- * @param string $new_status New status for the post.
- * @param string $old_status Old status for the post.
- * @param object $post Post data.
+ * @param int $site_id The site ID
  */
-function bp_blogs_catch_transition_post_status( $new_status, $old_status, $post ) {
-
-	// This is an edit
-	if ( $new_status === $old_status ) {
-		if ( $new_status == 'publish' ) {
-			bp_blogs_update_post( $post );
-			return;
-		}
-	}
-
-	// Publishing a previously unpublished post
-	if ( 'publish' === $new_status ) {
-		// Untrashing the post
-		// Nothing here yet
-		if ( 'trash' == $old_status ) {}
-
-		// Record the post
-		bp_blogs_record_post( $post->ID, $post );
-
-	// Unpublishing a previously published post
-	} else if ( 'publish' === $old_status ) {
-		// Some form of pending status
-		// Only remove the activity entry
-		bp_blogs_delete_activity( array(
-			'item_id'           => get_current_blog_id(),
-			'secondary_item_id' => $post->ID,
-			'component'         => buddypress()->blogs->id,
-			'type'              => 'new_blog_post'
-		) );
-	}
+function bp_blogs_delete_url_blogmeta( $site_id = 0 ) {
+	bp_blogs_delete_blogmeta( (int) $site_id, 'url' );
 }
-add_action( 'transition_post_status', 'bp_blogs_catch_transition_post_status', 10, 3 );
+add_action( 'refresh_blog_details', 'bp_blogs_delete_url_blogmeta' );
 
 /**
- * Record a new blog post in the BuddyPress activity stream.
+ * Record activity metadata about a published blog post.
  *
- * @param int $post_id ID of the post being recorded.
- * @param object $post The WP post object passed to the 'save_post' action.
- * @param int $user_id Optional. The user to whom the activity item will be
- *        associated. Defaults to the post_author.
- * @return bool|null Returns false on failure.
+ * @since BuddyPress (2.2.0)
+ *
+ * @param  int     $activity_id ID of the activity item.
+ * @param  WP_Post $post        Post object.
  */
-function bp_blogs_record_post( $post_id, $post, $user_id = 0 ) {
-	global $bp, $wpdb;
-
-	$post_id = (int) $post_id;
-	$blog_id = (int) $wpdb->blogid;
-
-	// If blog is not trackable, do not record the activity.
-	if ( ! bp_blogs_is_blog_trackable( $blog_id, $user_id ) )
-		return false;
-
-	if ( !$user_id )
-		$user_id = (int) $post->post_author;
-
-	// Stop infinite loops with WordPress MU Sitewide Tags.
-	// That plugin changed the way its settings were stored at some point. Thus the dual check.
-	if ( !empty( $bp->site_options['sitewide_tags_blog'] ) ) {
-		$st_options = maybe_unserialize( $bp->site_options['sitewide_tags_blog'] );
-		$tags_blog_id = isset( $st_options['tags_blog_id'] ) ? $st_options['tags_blog_id'] : 0;
-	} else {
-		$tags_blog_id = isset( $bp->site_options['tags_blog_id'] ) ? $bp->site_options['tags_blog_id'] : 0;
-	}
-
-	if ( (int) $blog_id == $tags_blog_id && apply_filters( 'bp_blogs_block_sitewide_tags_activity', true ) )
-		return false;
-
-	// Don't record this if it's not a post
-	if ( !in_array( $post->post_type, apply_filters( 'bp_blogs_record_post_post_types', array( 'post' ) ) ) )
-		return false;
-
-	$is_blog_public = apply_filters( 'bp_is_blog_public', (int)get_blog_option( $blog_id, 'blog_public' ) );
-
-	if ( 'publish' == $post->post_status && empty( $post->post_password ) ) {
-		if ( $is_blog_public || !is_multisite() ) {
-
-			// Record this in activity streams
-			$post_permalink = add_query_arg(
-				'p',
-				$post_id,
-				trailingslashit( get_home_url( $blog_id ) )
-			);
-
-			if ( is_multisite() )
-				$activity_action  = sprintf( __( '%1$s wrote a new post, %2$s, on the site %3$s', 'buddypress' ), bp_core_get_userlink( (int) $post->post_author ), '<a href="' . $post_permalink . '">' . $post->post_title . '</a>', '<a href="' . get_blog_option( $blog_id, 'home' ) . '">' . get_blog_option( $blog_id, 'blogname' ) . '</a>' );
-			else
-				$activity_action  = sprintf( __( '%1$s wrote a new post, %2$s', 'buddypress' ), bp_core_get_userlink( (int) $post->post_author ), '<a href="' . $post_permalink . '">' . $post->post_title . '</a>' );
-
-			// Make sure there's not an existing entry for this post (prevent bumping)
-			if ( bp_is_active( 'activity' ) ) {
-				$existing = bp_activity_get( array(
-					'filter' => array(
-						'action'       => 'new_blog_post',
-						'primary_id'   => $blog_id,
-						'secondary_id' => $post_id,
-					)
-				) );
-
-				if ( !empty( $existing['activities'] ) ) {
-					return;
-				}
-			}
-
-			$activity_content = $post->post_content;
-
-			$activity_id = bp_blogs_record_activity( array(
-				'user_id'           => (int) $post->post_author,
-				'content'           => apply_filters( 'bp_blogs_activity_new_post_content',      $activity_content, $post, $post_permalink ),
-				'primary_link'      => apply_filters( 'bp_blogs_activity_new_post_primary_link', $post_permalink,   $post_id               ),
-				'type'              => 'new_blog_post',
-				'item_id'           => $blog_id,
-				'secondary_item_id' => $post_id,
-				'recorded_time'     => $post->post_date_gmt,
-			) );
-
-			// save post title in activity meta
-			if ( bp_is_active( 'activity' ) ) {
-				bp_activity_update_meta( $activity_id, 'post_title', $post->post_title );
-				bp_activity_update_meta( $activity_id, 'post_url',   $post_permalink );
-			}
-		}
-
-		// Update the blogs last activity
-		bp_blogs_update_blogmeta( $blog_id, 'last_activity', bp_core_current_time() );
-	} else {
-		bp_blogs_remove_post( $post_id, $blog_id, $user_id );
-	}
-
-	do_action( 'bp_blogs_new_blog_post', $post_id, $post, $user_id );
-}
-
-/**
- * Updates a blog post's corresponding activity entry during a post edit.
- *
- * @since BuddyPress (2.0.0)
- *
- * @see bp_blogs_catch_transition_post_status()
- *
- * @param WP_Post $post
- */
-function bp_blogs_update_post( $post ) {
-	if ( ! bp_is_active( 'activity' ) ) {
+function bp_blogs_publish_post_activity_meta( $activity_id, $post, $args ) {
+	if ( empty( $activity_id ) || 'post' != $post->post_type ) {
 		return;
 	}
 
-	$activity_id = bp_activity_get_activity_id( array(
-		'component'         => buddypress()->blogs->id,
-		'item_id'           => get_current_blog_id(),
-		'secondary_item_id' => $post->ID,
-		'type'              => 'new_blog_post',
-	 ) );
+	bp_activity_update_meta( $activity_id, 'post_title', $post->post_title );
 
-	// activity ID doesn't exist, so stop!
-	if ( empty( $activity_id ) ) {
+	if ( ! empty( $args['post_url'] ) ) {
+		$post_permalink = $args['post_url'];
+	} else {
+		$post_permalink = $post->guid;
+	}
+
+	bp_activity_update_meta( $activity_id, 'post_url',   $post_permalink );
+
+	// Update the blog's last activity.
+	bp_blogs_update_blogmeta( $args['item_id'], 'last_activity', bp_core_current_time() );
+
+	/**
+	 * Fires after BuddyPress has recorded metadata about a published blog post.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int     $ID    ID of the blog post being recorded.
+	 * @param WP_Post $post  WP_Post object for the current blog post.
+	 * @param string  $value ID of the user associated with the current blog post.
+	 */
+	do_action( 'bp_blogs_new_blog_post', $post->ID, $post, $args['user_id'] );
+}
+add_action( 'bp_activity_post_type_published', 'bp_blogs_publish_post_activity_meta', 10, 3 );
+
+/**
+ * Updates a blog post's activity meta entry during a post edit.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @param WP_Post              $post     Post object.
+ * @param BP_Activity_Activity $activity Activity object.
+ */
+function bp_blogs_update_post_activity_meta( $post, $activity ) {
+	if ( empty( $activity->id ) || 'post' != $post->post_type ) {
 		return;
 	}
 
-	// update the activity entry
-	$activity = new BP_Activity_Activity( $activity_id );
-
-	if ( ! empty( $post->post_content ) ) {
-		// Make sure to update the thumbnail image
-		$post_content = bp_activity_thumbnail_content_images( $post->post_content, $activity->primary_link, (array) $activity );
-
-		// Make sure to apply the blop post excerpt
-		$activity->content = apply_filters( 'bp_blogs_record_activity_content', bp_create_excerpt( $post_content ), $post_content, (array) $activity );
-	}
-
-	// Save the updated activity
-	$activity->save();
-
-	// update post title in activity meta
-	$existing_title = bp_activity_get_meta( $activity_id, 'post_title' );
+	// Update post title in activity meta.
+	$existing_title = bp_activity_get_meta( $activity->id, 'post_title' );
 	if ( $post->post_title !== $existing_title ) {
-		bp_activity_update_meta( $activity_id, 'post_title', $post->post_title );
+		bp_activity_update_meta( $activity->id, 'post_title', $post->post_title );
 
-		// now update activity meta for post comments... sigh
+		// Now update activity meta for post comments... sigh.
 		add_filter( 'comments_clauses', 'bp_blogs_comments_clauses_select_by_id' );
 		$comments = get_comments( array( 'post_id' => $post->ID ) );
 		remove_filter( 'comments_clauses', 'bp_blogs_comments_clauses_select_by_id' );
@@ -603,14 +489,14 @@ function bp_blogs_update_post( $post ) {
 			$activity_ids = array();
 			$comment_ids  = wp_list_pluck( $comments, 'comment_ID' );
 
-			// setup activity args
+			// Set up activity args.
 			$args = array(
 				'update_meta_cache' => false,
 				'show_hidden'       => true,
 				'per_page'          => 99999,
 			);
 
-			// query for old-style "new_blog_comment" activity items
+			// Query for old-style "new_blog_comment" activity items.
 			$args['filter'] = array(
 				'object'       => buddypress()->blogs->id,
 				'action'       => 'new_blog_comment',
@@ -622,7 +508,7 @@ function bp_blogs_update_post( $post ) {
 				$activity_ids = (array) wp_list_pluck( $activities['activities'], 'id' );
 			}
 
-			// query for activity comments connected to a blog post
+			// Query for activity comments connected to a blog post.
 			unset( $args['filter'] );
 			$args['meta_query'] = array( array(
 				'key'     => 'bp_blogs_post_comment_id',
@@ -637,7 +523,7 @@ function bp_blogs_update_post( $post ) {
 				$activity_ids = array_merge( $activity_ids, (array) wp_list_pluck( $activities['activities'], 'id' ) );
 			}
 
-			// update activity meta for all found activity items
+			// Update activity meta for all found activity items.
 			if ( ! empty( $activity_ids ) ) {
 				foreach ( $activity_ids as $aid ) {
 					bp_activity_update_meta( $aid, 'post_title', $post->post_title );
@@ -648,13 +534,14 @@ function bp_blogs_update_post( $post ) {
 		}
 	}
 
-	// add post comment status to activity meta if closed
+	// Add post comment status to activity meta if closed.
 	if( 'closed' == $post->comment_status ) {
-		bp_activity_update_meta( $activity_id, 'post_comment_status', $post->comment_status );
+		bp_activity_update_meta( $activity->id, 'post_comment_status', $post->comment_status );
 	} else {
-		bp_activity_delete_meta( $activity_id, 'post_comment_status' );
+		bp_activity_delete_meta( $activity->id, 'post_comment_status' );
 	}
 }
+add_action( 'bp_activity_post_type_updated', 'bp_blogs_update_post_activity_meta', 10, 2 );
 
 /**
  * Record a new blog comment in the BuddyPress activity stream.
@@ -932,9 +819,9 @@ add_action( 'remove_user_from_blog', 'bp_blogs_remove_user_from_blog', 10, 2 );
  * WordPress catches add-user-to-blog requests at init:10. In some cases, this
  * can precede BP's Blogs component. This function bumps the priority of the
  * core function, so that we can be sure that the Blogs component is loaded
- * first. See http://buddypress.trac.wordpress.org/ticket/3916.
+ * first. See https://buddypress.trac.wordpress.org/ticket/3916.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  * @access private
  */
 function bp_blogs_maybe_add_user_to_blog() {
@@ -952,16 +839,36 @@ add_action( 'init', 'bp_blogs_maybe_add_user_to_blog', 1 );
  * @param int $blog_id ID of the blog being removed.
  */
 function bp_blogs_remove_blog( $blog_id ) {
-	global $bp;
 
 	$blog_id = (int) $blog_id;
+
+	/**
+	 * Fires before a "blog created" item is removed from blogs
+	 * tracker and activity stream.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $blog_id ID of the blog having its item removed.
+	 */
 	do_action( 'bp_blogs_before_remove_blog', $blog_id );
 
 	BP_Blogs_Blog::delete_blog_for_all( $blog_id );
 
 	// Delete activity stream item
-	bp_blogs_delete_activity( array( 'item_id' => $blog_id, 'component' => $bp->blogs->id, 'type' => 'new_blog' ) );
+	bp_blogs_delete_activity( array(
+		'item_id'   => $blog_id,
+		'component' => buddypress()->blogs->id,
+		'type'      => 'new_blog'
+	) );
 
+	/**
+	 * Fires after a "blog created" item has been removed from blogs
+	 * tracker and activity stream.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $blog_id ID of the blog who had its item removed.
+	 */
 	do_action( 'bp_blogs_remove_blog', $blog_id );
 }
 add_action( 'delete_blog', 'bp_blogs_remove_blog' );
@@ -973,11 +880,18 @@ add_action( 'delete_blog', 'bp_blogs_remove_blog' );
  * @param int $blog_id ID of the blog being removed.
  */
 function bp_blogs_remove_blog_for_user( $user_id, $blog_id ) {
-	global $bp;
 
 	$blog_id = (int) $blog_id;
 	$user_id = (int) $user_id;
 
+	/**
+	 * Fires before a blog is removed from the tracker for a specific user.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $blog_id ID of the blog being removed.
+	 * @param int $user_id ID of the user having the blog removed for.
+	 */
 	do_action( 'bp_blogs_before_remove_blog_for_user', $blog_id, $user_id );
 
 	BP_Blogs_Blog::delete_blog_for_user( $blog_id, $user_id );
@@ -985,10 +899,18 @@ function bp_blogs_remove_blog_for_user( $user_id, $blog_id ) {
 	// Delete activity stream item
 	bp_blogs_delete_activity( array(
 		'item_id'   => $blog_id,
-		'component' => $bp->blogs->id,
+		'component' => buddypress()->blogs->id,
 		'type'      => 'new_blog'
 	) );
 
+	/**
+	 * Fires after a blog has been removed from the tracker for a specific user.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $blog_id ID of the blog that was removed.
+	 * @param int $user_id ID of the user having the blog removed for.
+	 */
 	do_action( 'bp_blogs_remove_blog_for_user', $blog_id, $user_id );
 }
 add_action( 'remove_user_from_blog', 'bp_blogs_remove_blog_for_user', 10, 2 );
@@ -1002,7 +924,7 @@ add_action( 'remove_user_from_blog', 'bp_blogs_remove_blog_for_user', 10, 2 );
  *        is currently unused in the function (but is passed to hooks).
  */
 function bp_blogs_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
-	global $wpdb, $bp;
+	global $wpdb;
 
 	if ( empty( $wpdb->blogid ) )
 		return false;
@@ -1015,11 +937,34 @@ function bp_blogs_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 	if ( !$user_id )
 		$user_id = bp_loggedin_user_id();
 
+	/**
+	 * Fires before removal of a blog post activity item from the activity stream.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $blog_id ID of the blog associated with the post that was removed.
+	 * @param int $post_id ID of the post that was removed.
+	 * @param int $user_id ID of the user having the blog removed for.
+	 */
 	do_action( 'bp_blogs_before_remove_post', $blog_id, $post_id, $user_id );
 
 	// Delete activity stream item
-	bp_blogs_delete_activity( array( 'item_id' => $blog_id, 'secondary_item_id' => $post_id, 'component' => $bp->blogs->id, 'type' => 'new_blog_post' ) );
+	bp_blogs_delete_activity( array(
+		'item_id'           => $blog_id,
+		'secondary_item_id' => $post_id,
+		'component'         => buddypress()->blogs->id,
+		'type'              => 'new_blog_post'
+	) );
 
+	/**
+	 * Fires after removal of a blog post activity item from the activity stream.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $blog_id ID of the blog associated with the post that was removed.
+	 * @param int $post_id ID of the post that was removed.
+	 * @param int $user_id ID of the user having the blog removed for.
+	 */
 	do_action( 'bp_blogs_remove_post', $blog_id, $post_id, $user_id );
 }
 add_action( 'delete_post', 'bp_blogs_remove_post' );
@@ -1079,6 +1024,15 @@ function bp_blogs_remove_comment( $comment_id ) {
 		}
 	}
 
+	/**
+	 * Fires after a blog comment activity item was removed from activity stream.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $blogid     Item ID for the blog associated with the removed comment.
+	 * @param int $comment_id ID of the comment being removed.
+	 * @param int $value      ID of the current logged in user.
+	 */
 	do_action( 'bp_blogs_remove_comment', $wpdb->blogid, $comment_id, bp_loggedin_user_id() );
 }
 add_action( 'delete_comment', 'bp_blogs_remove_comment' );
@@ -1129,14 +1083,11 @@ function bp_blogs_remove_associated_blog_comments( $activity_ids = array(), $for
  *
  * @since BuddyPress (1.6.0)
  *
- * @global object $bp BuddyPress global settings.
- *
  * @param string $new_status New comment status.
  * @param string $old_status Previous comment status.
  * @param object $comment Comment data.
  */
 function bp_blogs_transition_activity_status( $new_status, $old_status, $comment ) {
-	global $bp;
 
 	// Check the Activity component is active
 	if ( ! bp_is_active( 'activity' ) )
@@ -1165,7 +1116,12 @@ function bp_blogs_transition_activity_status( $new_status, $old_status, $comment
 
 	// Get the activity
 	if ( bp_disable_blogforum_comments() ) {
-		$activity_id = bp_activity_get_activity_id( array( 'component' => $bp->blogs->id, 'item_id' => get_current_blog_id(), 'secondary_item_id' => $comment->comment_ID, 'type' => 'new_blog_comment', ) );
+		$activity_id = bp_activity_get_activity_id( array(
+			'component'         => buddypress()->blogs->id,
+			'item_id'           => get_current_blog_id(),
+			'secondary_item_id' => $comment->comment_ID,
+			'type'              => 'new_blog_comment'
+		) );
 	} else {
 		$activity_id = get_comment_meta( $comment->comment_ID, 'bp_activity_comment_id', true );
 	}
@@ -1210,7 +1166,9 @@ add_action( 'transition_comment_status', 'bp_blogs_transition_activity_status', 
  * @return int $count Total blog count.
  */
 function bp_blogs_total_blogs() {
-	if ( !$count = wp_cache_get( 'bp_total_blogs', 'bp' ) ) {
+	$count = wp_cache_get( 'bp_total_blogs', 'bp' );
+
+	if ( false === $count ) {
 		$blogs = BP_Blogs_Blog::get_all();
 		$count = $blogs['total'];
 		wp_cache_set( 'bp_total_blogs', $count, 'bp' );
@@ -1252,16 +1210,35 @@ function bp_blogs_total_blogs_for_user( $user_id = 0 ) {
  * @param int $blog_id The ID of the blog to expunge.
  */
 function bp_blogs_remove_data_for_blog( $blog_id ) {
-	global $bp;
 
+	/**
+	 * Fires before all data related to a given blog is removed from blogs tracker
+	 * and activity stream.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $blog_id ID of the blog whose data is being removed.
+	 */
 	do_action( 'bp_blogs_before_remove_data_for_blog', $blog_id );
 
 	// If this is regular blog, delete all data for that blog.
 	BP_Blogs_Blog::delete_blog_for_all( $blog_id );
 
 	// Delete activity stream item
-	bp_blogs_delete_activity( array( 'item_id' => $blog_id, 'component' => $bp->blogs->id, 'type' => false ) );
+	bp_blogs_delete_activity( array(
+		'item_id'   => $blog_id,
+		'component' => buddypress()->blogs->id,
+		'type'      => false
+	) );
 
+	/**
+	 * Fires after all data related to a given blog has been removed from blogs tracker
+	 * and activity stream.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $blog_id ID of the blog whose data is being removed.
+	 */
 	do_action( 'bp_blogs_remove_data_for_blog', $blog_id );
 }
 add_action( 'delete_blog', 'bp_blogs_remove_data_for_blog', 1 );
@@ -1328,10 +1305,9 @@ function bp_blogs_is_blog_hidden( $blog_id ) {
  */
 
 /**
- * Delete a metadta from the DB for a blog.
+ * Delete a metadata from the DB for a blog.
  *
  * @global object $wpdb WordPress database access object.
- * @global object $bp BuddyPress global settings.
  *
  * @param int $blog_id ID of the blog whose metadata is being deleted.
  * @param string $meta_key Optional. The key of the metadata being deleted. If
@@ -1345,7 +1321,7 @@ function bp_blogs_is_blog_hidden( $blog_id ) {
  * @return bool True on success, false on failure.
  */
 function bp_blogs_delete_blogmeta( $blog_id, $meta_key = false, $meta_value = false, $delete_all = false ) {
-	global $wpdb, $bp;
+	global $wpdb;
 
 	// Legacy - if no meta_key is passed, delete all for the blog_id
 	if ( empty( $meta_key ) ) {
@@ -1373,7 +1349,6 @@ function bp_blogs_delete_blogmeta( $blog_id, $meta_key = false, $meta_value = fa
  * @since BuddyPress (1.2.0)
  *
  * @global object $wpdb WordPress database access object.
- * @global object $bp BuddyPress global settings.
  *
  * @param int $blog_id ID of the blog whose metadata is being requested.
  * @param string $meta_key Optional. If present, only the metadata matching
@@ -1396,7 +1371,6 @@ function bp_blogs_get_blogmeta( $blog_id, $meta_key = '', $single = true ) {
  * Update a piece of blog meta.
  *
  * @global object $wpdb WordPress database access object.
- * @global object $bp BuddyPress global settings.
  *
  * @param int $blog_id ID of the blog whose metadata is being updated.
  * @param string $meta_key Key of the metadata being updated.
@@ -1446,13 +1420,53 @@ function bp_blogs_remove_data( $user_id ) {
 	if ( !is_multisite() )
 		return false;
 
+	/**
+	 * Fires before all blog associations are removed for a given user.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $user_id ID of the user whose blog associations are being removed.
+	 */
 	do_action( 'bp_blogs_before_remove_data', $user_id );
 
 	// If this is regular blog, delete all data for that blog.
 	BP_Blogs_Blog::delete_blogs_for_user( $user_id );
 
+	/**
+	 * Fires after all blog associations are removed for a given user.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $user_id ID of the user whose blog associations were removed.
+	 */
 	do_action( 'bp_blogs_remove_data', $user_id );
 }
 add_action( 'wpmu_delete_user',  'bp_blogs_remove_data' );
 add_action( 'delete_user',       'bp_blogs_remove_data' );
 add_action( 'bp_make_spam_user', 'bp_blogs_remove_data' );
+
+/**
+ * Restore all blog associations for a given user
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @param int $user_id ID whose blog data should be restored.
+ */
+function bp_blogs_restore_data( $user_id = 0 ) {
+	if ( ! is_multisite() ) {
+		return;
+	}
+
+	// Get the user's blogs
+	$user_blogs = get_blogs_of_user( $user_id );
+	if ( empty( $user_blogs ) ) {
+		return;
+	}
+
+	$blogs = array_keys( $user_blogs );
+
+	foreach ( $blogs as $blog_id ) {
+		bp_blogs_add_user_to_blog( $user_id, false, $blog_id );
+	}
+}
+add_action( 'bp_make_ham_user', 'bp_blogs_restore_data', 10, 1 );

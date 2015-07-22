@@ -1336,7 +1336,7 @@ function openlab_bp_group_site_pages() {
     $group_id = bp_get_current_group_id();
 
     $group_site_settings = openlab_get_group_site_settings($group_id);
-    
+
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
 
         if (openlab_is_portfolio()) {
@@ -1418,7 +1418,7 @@ function openlab_get_faculty_list() {
 }
 
 function openlab_get_group_site_settings($group_id){
-    
+
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
 
@@ -1452,12 +1452,12 @@ function openlab_get_group_site_settings($group_id){
         $is_local = false;
         $is_visible = true;
     }
-    
+
     $group_site_settings = array(
         'site_url' => $site_url,
         'is_local' => $is_local,
         'is_visible' => $is_visible,
     );
-    
+
     return $group_site_settings;
 }

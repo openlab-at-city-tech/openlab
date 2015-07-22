@@ -1,19 +1,25 @@
-/*! jquery.atwho - v0.5.0 - 2014-07-14
-* Copyright (c) 2014 chord.luo <chord.luo@gmail.com>; 
-* homepage: http://ichord.github.com/At.js 
+/*! jquery.atwho - v0.5.2 %>
+* Copyright (c) 2014 chord.luo <chord.luo@gmail.com>;
+* homepage: http://ichord.github.com/At.js
 * Licensed MIT
 */
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(["jquery"], function ($) {
+      return (root.returnExportsGlobal = factory($));
+    });
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like enviroments that support module.exports,
+    // like Node.
+    module.exports = factory(require("jquery"));
+  } else {
+    factory(jQuery);
+  }
+}(this, function ($) {
 
-(function() {
-  (function(factory) {
-    if (typeof define === 'function' && define.amd) {
-      return define(['jquery'], factory);
-    } else {
-      return factory(window.jQuery);
-    }
-  })(function($) {
-
-var $CONTAINER, Api, App, Controller, DEFAULT_CALLBACKS, KEY_CODE, Model, View,
+var Api, App, Controller, DEFAULT_CALLBACKS, KEY_CODE, Model, View,
   __slice = [].slice;
 
 App = (function() {
@@ -22,20 +28,37 @@ App = (function() {
     this.controllers = {};
     this.alias_maps = {};
     this.$inputor = $(inputor);
-    this.iframe = null;
     this.setIframe();
     this.listen();
   }
 
-  App.prototype.setIframe = function(iframe) {
+  App.prototype.createContainer = function(doc) {
+    if ((this.$el = $("#atwho-container", doc)).length === 0) {
+      return $(doc.body).append(this.$el = $("<div id='atwho-container'></div>"));
+    }
+  };
+
+  App.prototype.setIframe = function(iframe, standalone) {
+    var _ref;
+    if (standalone == null) {
+      standalone = false;
+    }
     if (iframe) {
       this.window = iframe.contentWindow;
       this.document = iframe.contentDocument || this.window.document;
-      return this.iframe = iframe;
+      this.iframe = iframe;
     } else {
       this.document = document;
       this.window = window;
-      return this.iframe = null;
+      this.iframe = null;
+    }
+    if (this.iframeStandalone = standalone) {
+      if ((_ref = this.$el) != null) {
+        _ref.remove();
+      }
+      return this.createContainer(this.document);
+    } else {
+      return this.createContainer(document);
     }
   };
 
@@ -98,8 +121,7 @@ App = (function() {
       };
     })(this)).on('click.atwhoInner', (function(_this) {
       return function(e) {
-        var _ref;
-        return (_ref = _this.controller()) != null ? _ref.view.hide(e) : void 0;
+        return _this.dispatch();
       };
     })(this));
   };
@@ -112,7 +134,8 @@ App = (function() {
       c.destroy();
       delete this.controllers[_];
     }
-    return this.$inputor.off('.atwhoInner');
+    this.$inputor.off('.atwhoInner');
+    return this.$el.remove();
   };
 
   App.prototype.dispatch = function() {
@@ -225,7 +248,9 @@ Controller = (function() {
     this.pos = 0;
     this.cur_rect = null;
     this.range = null;
-    $CONTAINER.append(this.$el = $("<div id='atwho-ground-" + this.id + "'></div>"));
+    if ((this.$el = $("#atwho-ground-" + this.id, this.app.$el)).length === 0) {
+      this.app.$el.append(this.$el = $("<div id='atwho-ground-" + this.id + "'></div>"));
+    }
     this.model = new Model(this);
     this.view = new View(this);
   }
@@ -280,10 +305,14 @@ Controller = (function() {
   };
 
   Controller.prototype.content = function() {
+    var range;
     if (this.$inputor.is('textarea, input')) {
       return this.$inputor.val();
     } else {
-      return this.$inputor.text();
+      if (!(range = this.mark_range())) {
+        return;
+      }
+      return (range.startContainer.textContent || "").slice(0, range.startOffset);
     }
   };
 
@@ -313,14 +342,19 @@ Controller = (function() {
   };
 
   Controller.prototype.rect = function() {
-    var c, scale_bottom;
+    var c, iframe_offset, scale_bottom;
     if (!(c = this.$inputor.caret('offset', this.pos - 1, {
       iframe: this.app.iframe
     }))) {
       return;
     }
-    if (this.$inputor.attr('contentEditable') === 'true') {
-      c = (this.cur_rect || (this.cur_rect = c)) || c;
+    if (this.app.iframe && !this.app.iframeStandalone) {
+      iframe_offset = $(this.app.iframe).offset();
+      c.left += iframe_offset.left;
+      c.top += iframe_offset.top;
+    }
+    if (this.$inputor.is('[contentEditable]')) {
+      c = this.cur_rect || (this.cur_rect = c);
     }
     scale_bottom = this.app.document.selection ? 0 : 2;
     return {
@@ -331,19 +365,20 @@ Controller = (function() {
   };
 
   Controller.prototype.reset_rect = function() {
-    if (this.$inputor.attr('contentEditable') === 'true') {
+    if (this.$inputor.is('[contentEditable]')) {
       return this.cur_rect = null;
     }
   };
 
   Controller.prototype.mark_range = function() {
-    if (this.$inputor.attr('contentEditable') === 'true') {
-      if (this.app.window.getSelection) {
-        this.range = this.app.window.getSelection().getRangeAt(0);
-      }
-      if (this.app.document.selection) {
-        return this.ie8_range = this.app.document.selection.createRange();
-      }
+    var sel;
+    if (!this.$inputor.is('[contentEditable]')) {
+      return;
+    }
+    if (this.app.window.getSelection && (sel = this.app.window.getSelection()).rangeCount > 0) {
+      return this.range = sel.getRangeAt(0);
+    } else if (this.app.document.selection) {
+      return this.ie8_range = this.app.document.selection.createRange();
     }
   };
 
@@ -362,15 +397,15 @@ Controller = (function() {
   };
 
   Controller.prototype.insert = function(content, $li) {
-    var $inputor, content_node, pos, range, sel, source, start_str, text, wrapped_content;
+    var $inputor, node, pos, range, sel, source, start_str, text, wrapped_contents, _i, _len, _ref;
     $inputor = this.$inputor;
-    wrapped_content = this.callbacks('inserting_wrapper').call(this, $inputor, content, this.get_opt("suffix"));
+    wrapped_contents = this.callbacks('inserting_wrapper').call(this, $inputor, content, this.get_opt("suffix"));
     if ($inputor.is('textarea, input')) {
       source = $inputor.val();
       start_str = source.slice(0, Math.max(this.query.head_pos - this.at.length, 0));
-      text = "" + start_str + wrapped_content + (source.slice(this.query['end_pos'] || 0));
+      text = "" + start_str + wrapped_contents + (source.slice(this.query['end_pos'] || 0));
       $inputor.val(text);
-      $inputor.caret('pos', start_str.length + wrapped_content.length, {
+      $inputor.caret('pos', start_str.length + wrapped_contents.length, {
         iframe: this.app.iframe
       });
     } else if (range = this.range) {
@@ -378,16 +413,19 @@ Controller = (function() {
       range.setStart(range.endContainer, Math.max(pos, 0));
       range.setEnd(range.endContainer, range.endOffset);
       range.deleteContents();
-      content_node = $(wrapped_content, this.app.document)[0];
-      range.insertNode(content_node);
-      range.setEndAfter(content_node);
-      range.collapse(false);
+      _ref = $(wrapped_contents, this.app.document);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        node = _ref[_i];
+        range.insertNode(node);
+        range.setEndAfter(node);
+        range.collapse(false);
+      }
       sel = this.app.window.getSelection();
       sel.removeAllRanges();
       sel.addRange(range);
     } else if (range = this.ie8_range) {
       range.moveStart('character', this.query.end_pos - this.query.head_pos - this.at.length);
-      range.pasteHTML(wrapped_content);
+      range.pasteHTML(wrapped_contents);
       range.collapse(false);
       range.select();
     }
@@ -515,8 +553,10 @@ View = (function() {
     return $menu.on('mouseenter.atwho-view', 'li', function(e) {
       $menu.find('.cur').removeClass('cur');
       return $(e.currentTarget).addClass('cur');
-    }).on('click', (function(_this) {
+    }).on('click.atwho-view', 'li', (function(_this) {
       return function(e) {
+        $menu.find('.cur').removeClass('cur');
+        $(e.currentTarget).addClass('cur');
         _this.choose(e);
         return e.preventDefault();
       };
@@ -541,9 +581,13 @@ View = (function() {
   };
 
   View.prototype.reposition = function(rect) {
-    var offset, _ref;
-    if (rect.bottom + this.$el.height() - $(window).scrollTop() > $(window).height()) {
+    var offset, overflowOffset, _ref, _window;
+    _window = this.context.app.iframeStandalone ? this.context.app.window : window;
+    if (rect.bottom + this.$el.height() - $(_window).scrollTop() > $(_window).height()) {
       rect.bottom = rect.top - this.$el.height();
+    }
+    if (rect.left > (overflowOffset = $(_window).width() - this.$el.width() - 5)) {
+      rect.left = overflowOffset;
     }
     offset = {
       left: rect.left,
@@ -563,7 +607,10 @@ View = (function() {
     if (!next.length) {
       next = this.$el.find('li:first');
     }
-    return next.addClass('cur');
+    next.addClass('cur');
+    return this.$el.animate({
+      scrollTop: Math.max(0, cur.innerHeight() * (next.index() + 2) - this.$el.height())
+    }, 150);
   };
 
   View.prototype.prev = function() {
@@ -573,7 +620,10 @@ View = (function() {
     if (!prev.length) {
       prev = this.$el.find('li:last');
     }
-    return prev.addClass('cur');
+    prev.addClass('cur');
+    return this.$el.animate({
+      scrollTop: Math.max(0, cur.innerHeight() * (prev.index() + 2) - this.$el.height())
+    }, 150);
   };
 
   View.prototype.show = function() {
@@ -585,6 +635,7 @@ View = (function() {
     this.context.mark_range();
     if (!this.visible()) {
       this.$el.show();
+      this.$el.scrollTop(0);
       this.context.trigger('shown');
     }
     if (rect = this.context.rect()) {
@@ -672,12 +723,14 @@ DEFAULT_CALLBACKS = {
     return _results;
   },
   matcher: function(flag, subtext, should_start_with_space) {
-    var match, regexp;
+    var match, regexp, _a, _y;
     flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     if (should_start_with_space) {
       flag = '(?:^|\\s)' + flag;
     }
-    regexp = new RegExp(flag + '([A-Za-z0-9_\+\-]*)$|' + flag + '([^\\x00-\\xff]*)$', 'gi');
+    _a = decodeURI("%C3%80");
+    _y = decodeURI("%C3%BF");
+    regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
     match = regexp.exec(subtext);
     if (match) {
       return match[2] || match[1];
@@ -690,7 +743,7 @@ DEFAULT_CALLBACKS = {
     _results = [];
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       item = data[_i];
-      if (~item[search_key].toLowerCase().indexOf(query.toLowerCase())) {
+      if (~new String(item[search_key]).toLowerCase().indexOf(query.toLowerCase())) {
         _results.push(item);
       }
     }
@@ -705,7 +758,7 @@ DEFAULT_CALLBACKS = {
     _results = [];
     for (_i = 0, _len = items.length; _i < _len; _i++) {
       item = items[_i];
-      item.atwho_order = item[search_key].toLowerCase().indexOf(query.toLowerCase());
+      item.atwho_order = new String(item[search_key]).toLowerCase().indexOf(query.toLowerCase());
       if (item.atwho_order > -1) {
         _results.push(item);
       }
@@ -739,22 +792,22 @@ DEFAULT_CALLBACKS = {
     return value;
   },
   inserting_wrapper: function($inputor, content, suffix) {
-    var new_suffix, wrapped_content;
-    new_suffix = suffix === "" ? suffix : suffix || " ";
+    var wrapped_content;
+    suffix = suffix === "" ? suffix : suffix || " ";
     if ($inputor.is('textarea, input')) {
-      return '' + content + new_suffix;
+      return '' + content + suffix;
     } else if ($inputor.attr('contentEditable') === 'true') {
-      new_suffix = suffix === "" ? suffix : suffix || "&nbsp;";
+      suffix = suffix === " " ? "&nbsp;" : suffix;
       if (/firefox/i.test(navigator.userAgent)) {
-        wrapped_content = "<span>" + content + new_suffix + "</span>";
+        wrapped_content = "<span>" + content + suffix + "</span>";
       } else {
-        suffix = "<span contenteditable='false'>" + new_suffix + "<span>";
+        suffix = "<span contenteditable='false'>" + suffix + "</span>";
         wrapped_content = "<span contenteditable='false'>" + content + suffix + "</span>";
       }
       if (this.app.document.selection) {
         wrapped_content = "<span contenteditable='true'>" + content + "</span>";
       }
-      return wrapped_content;
+      return wrapped_content + "<span></span>";
     }
   }
 };
@@ -766,8 +819,8 @@ Api = {
       return c.model.load(data);
     }
   },
-  setIframe: function(iframe) {
-    this.setIframe(iframe);
+  setIframe: function(iframe, standalone) {
+    this.setIframe(iframe, standalone);
     return null;
   },
   run: function() {
@@ -779,14 +832,11 @@ Api = {
   }
 };
 
-$CONTAINER = $("<div id='atwho-container'></div>");
-
 $.fn.atwho = function(method) {
   var result, _args;
   _args = arguments;
-  $('body').append($CONTAINER);
   result = null;
-  this.filter('textarea, input, [contenteditable=true]').each(function() {
+  this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function() {
     var $this, app;
     if (!(app = ($this = $(this)).data("atwho"))) {
       $this.data('atwho', (app = new App(this)));
@@ -820,5 +870,6 @@ $.fn.atwho["default"] = {
   delay: null
 };
 
-  });
-}).call(this);
+
+
+}));

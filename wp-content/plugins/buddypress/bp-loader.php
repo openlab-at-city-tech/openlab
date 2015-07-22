@@ -10,18 +10,18 @@
 
 /**
  * Plugin Name: BuddyPress
- * Plugin URI:  http://buddypress.org
- * Description: Social networking in a box. Build a social network for your company, school, sports team or niche community all based on the power and flexibility of WordPress.
+ * Plugin URI:  https://buddypress.org/
+ * Description: BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.
  * Author:      The BuddyPress Community
- * Author URI:  http://buddypress.org/community/members/
- * Version:     2.1.1
+ * Author URI:  https://buddypress.org/
+ * Version:     2.3.2.1
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /** Constants *****************************************************************/
 
@@ -79,6 +79,11 @@ class BuddyPress {
 	 * @var array Additional navigation elements (supplemental).
 	 */
 	public $action_variables = array();
+
+	/**
+	 * @var string Current member directory type.
+	 */
+	public $current_member_type = '';
 
 	/**
 	 * @var array Required components (core, members).
@@ -143,6 +148,8 @@ class BuddyPress {
 
 		// Always return the instance
 		return $instance;
+
+		// The last metroid is in captivity. The galaxy is at peace.
 	}
 
 	/** Magic Methods *********************************************************/
@@ -178,14 +185,14 @@ class BuddyPress {
 	public function __isset( $key ) { return isset( $this->data[$key] ); }
 
 	/**
-	 * Magic method for getting BuddyPress varibles.
+	 * Magic method for getting BuddyPress variables.
 	 *
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function __get( $key ) { return isset( $this->data[$key] ) ? $this->data[$key] : null; }
 
 	/**
-	 * Magic method for setting BuddyPress varibles.
+	 * Magic method for setting BuddyPress variables.
 	 *
 	 * @since BuddyPress (1.7.0)
 	 */
@@ -222,8 +229,9 @@ class BuddyPress {
 
 		// Place your custom code (actions/filters) in a file called
 		// '/plugins/bp-custom.php' and it will be loaded before anything else.
-		if ( file_exists( WP_PLUGIN_DIR . '/bp-custom.php' ) )
+		if ( file_exists( WP_PLUGIN_DIR . '/bp-custom.php' ) ) {
 			require( WP_PLUGIN_DIR . '/bp-custom.php' );
+		}
 
 		// Path and URL
 		if ( ! defined( 'BP_PLUGIN_DIR' ) ) {
@@ -282,8 +290,9 @@ class BuddyPress {
 		// search requests are loaded
 		//
 		// @todo Make this better
-		if ( !defined( 'BP_SEARCH_SLUG' ) )
+		if ( ! defined( 'BP_SEARCH_SLUG' ) ) {
 			define( 'BP_SEARCH_SLUG', 'search' );
+		}
 	}
 
 	/**
@@ -300,11 +309,18 @@ class BuddyPress {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '2.1.1';
-		$this->db_version = 8311;
+		$this->version    = '2.3.2.1';
+		$this->db_version = 9951;
 
 		/** Loading ***********************************************************/
 
+		/**
+		 * Filters the load_deprecated property value.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param constant BP_IGNORE_DEPRECATED Whether or not to ignore deprecated functionality.
+		 */
 		$this->load_deprecated = ! apply_filters( 'bp_ignore_deprecated', BP_IGNORE_DEPRECATED );
 
 		/** Toolbar ***********************************************************/
@@ -352,6 +368,13 @@ class BuddyPress {
 		/** Root **************************************************************/
 
 		// BuddyPress Root blog ID
+		/**
+		 * Filters the BuddyPress Root blog ID.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param constant BP_ROOT_BLOG BuddyPress Root blog ID.
+		 */
 		$this->root_blog_id = (int) apply_filters( 'bp_get_root_blog_id', BP_ROOT_BLOG );
 
 		/** Paths**************************************************************/
@@ -365,7 +388,7 @@ class BuddyPress {
 		// Languages
 		$this->lang_dir       = $this->plugin_dir . 'bp-languages';
 
-		// Templates (theme compatability)
+		// Templates (theme compatibility)
 		$this->themes_dir     = $this->plugin_dir . 'bp-templates';
 		$this->themes_url     = $this->plugin_url . 'bp-templates';
 
@@ -395,10 +418,14 @@ class BuddyPress {
 	private function legacy_constants() {
 
 		// Define the BuddyPress version
-		if ( !defined( 'BP_VERSION'    ) ) define( 'BP_VERSION',    $this->version   );
+		if ( ! defined( 'BP_VERSION' ) ) {
+			define( 'BP_VERSION', $this->version );
+		}
 
 		// Define the database version
-		if ( !defined( 'BP_DB_VERSION' ) ) define( 'BP_DB_VERSION', $this->db_version );
+		if ( ! defined( 'BP_DB_VERSION' ) ) {
+			define( 'BP_DB_VERSION', $this->db_version );
+		}
 	}
 
 	/**
@@ -419,30 +446,32 @@ class BuddyPress {
 
 		/** Update/Install ****************************************************/
 
-		// Theme compatability
+		// Theme compatibility
 		require( $this->plugin_dir . 'bp-core/bp-core-template-loader.php'     );
 		require( $this->plugin_dir . 'bp-core/bp-core-theme-compatibility.php' );
 
 		// Require all of the BuddyPress core libraries
-		require( $this->plugin_dir . 'bp-core/bp-core-dependency.php' );
-		require( $this->plugin_dir . 'bp-core/bp-core-actions.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-caps.php'       );
-		require( $this->plugin_dir . 'bp-core/bp-core-cache.php'      );
-		require( $this->plugin_dir . 'bp-core/bp-core-cssjs.php'      );
-		require( $this->plugin_dir . 'bp-core/bp-core-update.php'     );
-		require( $this->plugin_dir . 'bp-core/bp-core-options.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-classes.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-filters.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-avatars.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-widgets.php'    );
-		require( $this->plugin_dir . 'bp-core/bp-core-template.php'   );
-		require( $this->plugin_dir . 'bp-core/bp-core-adminbar.php'   );
-		require( $this->plugin_dir . 'bp-core/bp-core-buddybar.php'   );
-		require( $this->plugin_dir . 'bp-core/bp-core-catchuri.php'   );
-		require( $this->plugin_dir . 'bp-core/bp-core-component.php'  );
-		require( $this->plugin_dir . 'bp-core/bp-core-functions.php'  );
-		require( $this->plugin_dir . 'bp-core/bp-core-moderation.php' );
-		require( $this->plugin_dir . 'bp-core/bp-core-loader.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-dependency.php'  );
+		require( $this->plugin_dir . 'bp-core/bp-core-actions.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-caps.php'        );
+		require( $this->plugin_dir . 'bp-core/bp-core-cache.php'       );
+		require( $this->plugin_dir . 'bp-core/bp-core-cssjs.php'       );
+		require( $this->plugin_dir . 'bp-core/bp-core-update.php'      );
+		require( $this->plugin_dir . 'bp-core/bp-core-options.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-classes.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-taxonomy.php'    );
+		require( $this->plugin_dir . 'bp-core/bp-core-filters.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-attachments.php' );
+		require( $this->plugin_dir . 'bp-core/bp-core-avatars.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-widgets.php'     );
+		require( $this->plugin_dir . 'bp-core/bp-core-template.php'    );
+		require( $this->plugin_dir . 'bp-core/bp-core-adminbar.php'    );
+		require( $this->plugin_dir . 'bp-core/bp-core-buddybar.php'    );
+		require( $this->plugin_dir . 'bp-core/bp-core-catchuri.php'    );
+		require( $this->plugin_dir . 'bp-core/bp-core-component.php'   );
+		require( $this->plugin_dir . 'bp-core/bp-core-functions.php'   );
+		require( $this->plugin_dir . 'bp-core/bp-core-moderation.php'  );
+		require( $this->plugin_dir . 'bp-core/bp-core-loader.php'      );
 
 		// Skip or load deprecated content
 		if ( false !== $this->load_deprecated ) {
@@ -453,6 +482,8 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/1.9.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.0.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.1.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.2.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.3.php' );
 		}
 	}
 
@@ -473,8 +504,9 @@ class BuddyPress {
 		add_action( 'deactivate_' . $this->basename, 'bp_deactivation' );
 
 		// If BuddyPress is being deactivated, do not add any actions
-		if ( bp_is_deactivation( $this->basename ) )
+		if ( bp_is_deactivation( $this->basename ) ) {
 			return;
+		}
 
 		// Array of BuddyPress core actions
 		$actions = array(
@@ -492,10 +524,21 @@ class BuddyPress {
 		);
 
 		// Add the actions
-		foreach( $actions as $class_action )
-			add_action( 'bp_' . $class_action, array( $this, $class_action ), 5 );
+		foreach( $actions as $class_action ) {
+			if ( method_exists( $this, $class_action ) ) {
+				add_action( 'bp_' . $class_action, array( $this, $class_action ), 5 );
+			}
+		}
 
-		// All BuddyPress actions are setup (includes bbp-core-hooks.php)
+		/**
+		 * Fires after the setup of all BuddyPress actions.
+		 *
+		 * Includes bbp-core-hooks.php.
+		 *
+		 * @since BuddyPress (1.7.0)
+		 *
+		 * @param BuddyPress $this. Current BuddyPress instance. Passed by reference.
+		 */
 		do_action_ref_array( 'bp_after_setup_actions', array( &$this ) );
 	}
 
@@ -578,15 +621,16 @@ class BuddyPress {
 	}
 
 	/**
-	 * Set up the default BuddyPress theme compatability location.
+	 * Set up the default BuddyPress theme compatibility location.
 	 *
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function setup_theme() {
 
 		// Bail if something already has this under control
-		if ( ! empty( $this->theme_compat->theme ) )
+		if ( ! empty( $this->theme_compat->theme ) ) {
 			return;
+		}
 
 		// Setup the theme package to use for compatibility
 		bp_setup_theme_compat( bp_get_theme_package_id() );

@@ -9,8 +9,13 @@ function openlab_hide_plugins( $plugins ) {
 	$network_admin_only = array();
 
 	$super_admin_only = array(
+		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
+		'bbpress/bbpress.php',
 		'cac-non-cuny-signup/loader.php',
+		'google-maps-embed/cets_EmbedGmaps.php',
+		'grader/grader.php',
 		'social/social.php',
+		'stout-google-calendar/stout-google-calendar.php',
 	);
 
 	if ( ! is_super_admin() ) {

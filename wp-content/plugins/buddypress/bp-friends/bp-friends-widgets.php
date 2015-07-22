@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Register the friends widget.
@@ -76,7 +76,17 @@ class BP_Core_Friends_Widget extends WP_Widget {
 			$instance['friend_default'] = 'active';
 		}
 
-		$title = apply_filters( 'widget_title', $instance['title'] );
+		/**
+		 * Filters the Friends widget title.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 * @since BuddyPress (2.3.0) Added 'instance' and 'id_base' to arguments passed to filter.
+		 *
+		 * @param string $title    The widget title.
+		 * @param array  $instance The settings for the particular instance of the widget.
+		 * @param string $id_base  Root ID for all widgets of this type.
+		 */
+		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
 		echo $before_widget;
 
@@ -145,7 +155,7 @@ class BP_Core_Friends_Widget extends WP_Widget {
 	 * Process a widget save.
 	 *
 	 * @param array $new_instance The parameters saved by the user.
-	 * @param array $old_instance The paramaters as previously saved to the database.
+	 * @param array $old_instance The parameters as previously saved to the database.
 	 * @return array $instance The processed settings to save.
 	 */
 	function update( $new_instance, $old_instance ) {

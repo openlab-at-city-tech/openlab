@@ -10,7 +10,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 add_filter( 'bp_get_the_profile_group_name',            'wp_filter_kses',       1 );
 add_filter( 'bp_get_the_profile_group_description',     'wp_filter_kses',       1 );
@@ -55,6 +55,56 @@ add_filter( 'bp_xprofile_set_field_data_pre_validate',  'xprofile_filter_pre_val
 add_filter( 'xprofile_data_value_before_save',          'xprofile_sanitize_data_value_before_save', 1, 4 );
 add_filter( 'xprofile_filtered_data_value_before_save', 'trim', 2 );
 
+// Save field groups
+add_filter( 'xprofile_group_name_before_save',        'wp_filter_kses' );
+add_filter( 'xprofile_group_description_before_save', 'wp_filter_kses' );
+
+// Save fields
+add_filter( 'xprofile_field_name_before_save',         'wp_filter_kses' );
+add_filter( 'xprofile_field_type_before_save',         'wp_filter_kses' );
+add_filter( 'xprofile_field_description_before_save',  'wp_filter_kses' );
+add_filter( 'xprofile_field_order_by_before_save',     'wp_filter_kses' );
+add_filter( 'xprofile_field_is_required_before_save',  'absint' );
+add_filter( 'xprofile_field_field_order_before_save',  'absint' );
+add_filter( 'xprofile_field_option_order_before_save', 'absint' );
+add_filter( 'xprofile_field_can_delete_before_save',   'absint' );
+
+// Save field options
+add_filter( 'xprofile_field_options_before_save', 'bp_xprofile_sanitize_field_options' );
+add_filter( 'xprofile_field_default_before_save', 'bp_xprofile_sanitize_field_default' );
+
+/**
+ * Sanitize each field option name for saving to the database
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param  mixed $field_options
+ * @return mixed
+ */
+function bp_xprofile_sanitize_field_options( $field_options = '' ) {
+	if ( is_array( $field_options ) ) {
+		return array_map( 'sanitize_text_field', $field_options );
+	} else {
+		return sanitize_text_field( $field_options );
+	}
+}
+
+/**
+ * Sanitize each field option default for saving to the database
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param  mixed $field_default
+ * @return mixed
+ */
+function bp_xprofile_sanitize_field_default( $field_default = '' ) {
+	if ( is_array( $field_default ) ) {
+		return array_map( 'intval', $field_default );
+	} else {
+		return intval( $field_default );
+	}
+}
+
 /**
  * xprofile_filter_kses ( $content )
  *
@@ -70,6 +120,14 @@ function xprofile_filter_kses( $content, $data_obj = null ) {
 	$xprofile_allowedtags             = $allowedtags;
 	$xprofile_allowedtags['a']['rel'] = array();
 
+	/**
+	 * Filters the allowed tags for use within xprofile_filter_kses().
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param array                   $xprofile_allowedtags Array of allowed tags for profile field values.
+	 * @param BP_XProfile_ProfileData $data_obj             The BP_XProfile_ProfileData object.
+	 */
 	$xprofile_allowedtags = apply_filters( 'xprofile_allowed_tags', $xprofile_allowedtags, $data_obj );
 	return wp_kses( $content, $xprofile_allowedtags );
 }
@@ -97,6 +155,16 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 	if ( !is_array( $field_value ) ) {
 		$kses_field_value     = xprofile_filter_kses( $field_value, $data_obj );
 		$filtered_field_value = wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
+
+		/**
+		 * Filters the kses-filtered data before saving to database.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param string                  $filtered_field_value The filtered value.
+		 * @param string                  $field_value          The original value before filtering.
+		 * @param BP_XProfile_ProfileData $data_obj             The BP_XProfile_ProfileData object.
+		 */
 		$filtered_field_value = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_field_value, $field_value, $data_obj );
 
 	// Filter each array item independently
@@ -105,6 +173,8 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 		foreach ( (array) $field_value as $value ) {
 			$kses_field_value       = xprofile_filter_kses( $value, $data_obj );
 			$filtered_value 	= wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
+
+			/** This filter is documented in bp-xprofile/bp-xprofile-filters.php */
 			$filtered_values[] = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_value, $value, $data_obj );
 
 		}
@@ -200,13 +270,13 @@ function xprofile_filter_pre_validate_value_by_field_type( $value, $field, $fiel
 /**
  * Filter an Extended Profile field value, and attempt to make clickable links
  * to members search results out of them.
- * 
+ *
  * - Not run on datebox field types
  * - Not run on values without commas with less than 5 words
  * - URL's are made clickable
  * - To disable: remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
  *
- * @since BuddyPress (1.1)
+ * @since BuddyPress (1.1.0)
  *
  * @param string $field_value
  * @param string  $field_type
@@ -300,7 +370,7 @@ add_filter( 'comments_array', 'xprofile_filter_comments', 10, 2 );
 /**
  * Filter BP_User_Query::populate_extras to override each queries users fullname
  *
- * @since BuddyPress (1.7)
+ * @since BuddyPress (1.7.0)
  *
  * @param BP_User_Query $user_query
  * @param string $user_ids_sql
@@ -323,6 +393,30 @@ function bp_xprofile_filter_user_query_populate_extras( BP_User_Query $user_quer
 add_filter( 'bp_user_query_populate_extras', 'bp_xprofile_filter_user_query_populate_extras', 2, 2 );
 
 /**
+ * Parse 'xprofile_query' argument passed to BP_User_Query.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @param BP_User_Query User query object.
+ */
+function bp_xprofile_add_xprofile_query_to_user_query( BP_User_Query $q ) {
+
+	// Bail if no `xprofile_query` clause
+	if ( empty( $q->query_vars['xprofile_query'] ) ) {
+		return;
+	}
+
+	$xprofile_query = new BP_XProfile_Query( $q->query_vars['xprofile_query'] );
+	$sql            = $xprofile_query->get_sql( 'u', $q->uid_name );
+
+	if ( ! empty( $sql['join'] ) ) {
+		$q->uid_clauses['select'] .= $sql['join'];
+		$q->uid_clauses['where'] .= $sql['where'];
+	}
+}
+add_action( 'bp_pre_user_query', 'bp_xprofile_add_xprofile_query_to_user_query' );
+
+/**
  * Filter meta queries to modify for the xprofile data schema.
  *
  * @since BuddyPress (2.0.0)
@@ -335,18 +429,28 @@ add_filter( 'bp_user_query_populate_extras', 'bp_xprofile_filter_user_query_popu
 function bp_xprofile_filter_meta_query( $q ) {
 	global $wpdb;
 
+	$raw_q = $q;
+
+	/*
+	 * Replace quoted content with __QUOTE__ to avoid false positives.
+	 * This regular expression will match nested quotes.
+	 */
+	$quoted_regex = "/'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'/s";
+	preg_match_all( $quoted_regex, $q, $quoted_matches );
+	$q = preg_replace( $quoted_regex, '__QUOTE__', $q );
+
 	// Get the first word of the command
 	preg_match( '/^(\S+)/', $q, $first_word_matches );
 
 	if ( empty( $first_word_matches[0] ) ) {
-		return $q;
+		return $raw_q;
 	}
 
 	// Get the field type
 	preg_match( '/xprofile_(group|field|data)_id/', $q, $matches );
 
 	if ( empty( $matches[0] ) || empty( $matches[1] ) ) {
-		return $q;
+		return $raw_q;
 	}
 
 	switch ( $first_word_matches[0] ) {
@@ -413,6 +517,14 @@ function bp_xprofile_filter_meta_query( $q ) {
 				$q
 			);
 			break;
+	}
+
+	// Put quoted content back into the string.
+	if ( ! empty( $quoted_matches[0] ) ) {
+		for ( $i = 0; $i < count( $quoted_matches[0] ); $i++ ) {
+			$quote_pos = strpos( $q, '__QUOTE__' );
+			$q = substr_replace( $q, $quoted_matches[0][ $i ], $quote_pos, 9 );
+		}
 	}
 
 	return $q;

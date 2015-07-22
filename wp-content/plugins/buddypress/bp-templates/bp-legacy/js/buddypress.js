@@ -5,7 +5,7 @@ var jq = jQuery;
 // Global variable to prevent multiple AJAX requests
 var bp_ajax_request = null;
 
-// Global variables to temporarly store newest activities
+// Global variables to temporarily store newest activities
 var newest_activities = '';
 var activity_last_recorded  = 0;
 
@@ -33,7 +33,7 @@ jq(document).ready( function() {
 		var $member_nicename = $whats_new.val();
 
 		jq('#whats-new-options').animate({
-			height:'40px'
+			height:'50px'
 		});
 
 		$whats_new.animate({
@@ -53,7 +53,7 @@ jq(document).ready( function() {
 	/* Textarea focus */
 	$whats_new.focus( function(){
 		jq('#whats-new-options').animate({
-			height:'40px'
+			height:'50px'
 		});
 		jq('#whats-new-form textarea').animate({
 			height:'50px'
@@ -71,7 +71,7 @@ jq(document).ready( function() {
 		// to avoid inconsistencies with the heartbeat integration
 		if ( $activity_all.length  ) {
 			if ( ! $activity_all.hasClass( 'selected' ) ) {
-				// reset to everyting
+				// reset to everything
 				jq( '#activity-filter-select select' ).val( '-1' );
 				$activity_all.children( 'a' ).trigger( 'click' );
 			} else if ( '-1' !== jq( '#activity-filter-select select' ).val() ) {
@@ -87,7 +87,7 @@ jq(document).ready( function() {
 			if (!this.value.match(/\S+/)) {
 				this.value = '';
 				jq('#whats-new-options').animate({
-					height:'40px'
+					height:'0'
 				});
 				jq('form#whats-new-form textarea').animate({
 					height:'20px'
@@ -616,7 +616,7 @@ jq(document).ready( function() {
 							}
 						}
 
-						/* Preceeding whitespace breaks output with jQuery 1.9.0 */
+						/* Preceding whitespace breaks output with jQuery 1.9.0 */
 						var the_comment = jq.trim( response );
 
 						activity_comments.children('ul').append( jq( the_comment ).hide().fadeIn( 200 ) );
@@ -820,7 +820,7 @@ jq(document).ready( function() {
 			template = null;
 
 			// The Group Members page specifies its own template
-			if ( 'members' === object && 'groups' === css_id[1] ) {
+			if ( event.currentTarget.className === 'groups-members-search' ) {
 				object = 'group_members';
 				template = 'groups/single/members';
 			}
@@ -835,7 +835,7 @@ jq(document).ready( function() {
 
 	/* When a navigation tab is clicked - e.g. | All Groups | My Groups | */
 	jq('div.item-list-tabs').on( 'click', function(event) {
-		if ( jq(this).hasClass('no-ajax') )  {
+		if ( jq(this).hasClass('no-ajax')  || jq( event.target ).hasClass('no-ajax') )  {
 			return;
 		}
 
@@ -889,6 +889,8 @@ jq(document).ready( function() {
 		$gm_search = jq( '.groups-members-search input' );
 		if ( $gm_search.length ) {
 			search_terms = $gm_search.val();
+			object = 'members';
+			scope = 'groups';
 		}
 
 		// On the Groups Members page, we specify a template
@@ -910,7 +912,8 @@ jq(document).ready( function() {
 	jq('#buddypress').on( 'click', function(event) {
 		var target = jq(event.target),
 			el,
-			css_id, object, search_terms, pagination_id, template, page_number,
+			css_id, object, search_terms, pagination_id, template,
+			url_parameters,	page_number,
 			$gm_search,
 			caller;
 
@@ -935,12 +938,18 @@ jq(document).ready( function() {
 			pagination_id = jq(target).closest('.pagination-links').attr('id');
 			template = null;
 
-			page_number = target.attr('href').split( '=' );
+			url_parameters = target.attr('href').split( '&' );
+			// The page number is the first parameter.
+			page_number = url_parameters[0].split( '=' );
 			page_number = page_number[1];
 
 			// Search terms
 			if ( jq('div.dir-search input').length ) {
-				search_terms =  jq('.dir-search input').prop('placeholder') ? jq('.dir-search input').prop('placeholder') : jq('.dir-search input').val();
+				search_terms =  jq('.dir-search input').val();
+
+				if ( ! search_terms && bp_get_querystring('s') ) {
+					search_terms = jq('.dir-search input').prop('placeholder');
+				}
 			}
 
 			// The Group Members page has a different selector for
@@ -948,6 +957,7 @@ jq(document).ready( function() {
 			$gm_search = jq( '.groups-members-search input' );
 			if ( $gm_search.length ) {
 				search_terms = $gm_search.val();
+				object = 'members';
 			}
 
 			// On the Groups Members page, we specify a template
@@ -1201,7 +1211,7 @@ jq(document).ready( function() {
 	});
 
 	/* Add / Remove friendship buttons */
-	jq( '#members-dir-list, #members-group-list' ).on('click', '.friendship-button a', function() {
+	jq( '#members-dir-list, #members-group-list, #item-header' ).on('click', '.friendship-button a', function() {
 		jq(this).parent().addClass('loading');
 		var fid   = jq(this).attr('id'),
 			nonce   = jq(this).attr('href'),
@@ -1288,7 +1298,7 @@ jq(document).ready( function() {
 
 			// user groups page
 			if ( ! jq('body.directory').length ) {
-				location.href = location.href;
+				window.location.reload();
 
 			// groups directory
 			} else {
@@ -1332,9 +1342,25 @@ jq(document).ready( function() {
 		return false;
 	});
 
+	/** Registration ***********************************************/
+
+	if ( jq('body').hasClass('register') ) {
+		var blog_checked = jq('#signup_with_blog');
+
+		// hide "Blog Details" block if not checked by default
+		if ( ! blog_checked.prop('checked') ) {
+			jq('#blog-details').toggle();
+		}
+
+		// toggle "Blog Details" block whenever checkbox is checked
+		blog_checked.change(function() {
+			jq('#blog-details').toggle();
+		});
+	}
+
 	/** Private Messaging ******************************************/
 
-	/** Message search*/
+	/** Message search */
 	jq('.message-search').on( 'click', function(event) {
 		if ( jq(this).hasClass('no-ajax') ) {
 			return;
@@ -1343,11 +1369,17 @@ jq(document).ready( function() {
 		var target = jq(event.target),
 			object;
 
-		if ( target.attr('type') === 'submit' ) {
-			//var css_id = jq('.item-list-tabs li.selected').attr('id').split( '-' );
+		if ( target.attr('type') === 'submit' || target.attr('type') === 'button' ) {
 			object = 'messages';
 
-			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope') , 'div.' + object, target.parent().children('label').children('input').val(), 1, jq.cookie('bp-' + object + '-extras') );
+			bp_filter_request(
+				object,
+				jq.cookie('bp-' + object + '-filter'),
+				jq.cookie('bp-' + object + '-scope'),
+				'div.' + object, jq('#messages_search').val(),
+				1,
+				jq.cookie('bp-' + object + '-extras')
+			);
 
 			return false;
 		}
@@ -1525,6 +1557,126 @@ jq(document).ready( function() {
 		return false;
 	});
 
+	/* Selecting/Deselecting all messages */
+	jq('#select-all-messages').click(function(event) {
+		if( this.checked ) {
+			jq('.message-check').each(function() {
+				this.checked = true;
+			});
+		} else {
+			jq('.message-check').each(function() {
+				this.checked = false;
+			});
+		}
+	});
+
+	/* Make sure a 'Bulk Action' is selected before submitting the messages bulk action form */
+	jq('#messages-bulk-manage').attr('disabled', 'disabled');
+
+	/* Remove the disabled attribute from the messages form submit button when bulk action has a value */
+	jq('#messages-select').on('change', function(){
+		jq('#messages-bulk-manage').attr('disabled', jq(this).val().length <= 0);
+	});
+
+	/* Star action function */
+	starAction = function() {
+		var link = jq(this);
+
+		jq.post( ajaxurl, {
+			action: 'messages_star',
+			'message_id': link.data('message-id'),
+			'star_status': link.data('star-status'),
+			'nonce': link.data('star-nonce'),
+			'bulk': link.data('star-bulk')
+		},
+		function(response) {
+			if ( 1 === parseInt( response, 10 ) ) {
+				if ( 'unstar' === link.data('star-status') ) {
+					link.data('star-status', 'star');
+					link.removeClass('message-action-unstar').addClass('message-action-star');
+					link.find('.bp-screen-reader-text').text( BP_PM_Star.strings.text_star );
+
+					if ( 1 === BP_PM_Star.is_single_thread ) {
+						link.prop('title', BP_PM_Star.strings.title_star );
+					} else {
+						link.prop('title', BP_PM_Star.strings.title_star_thread );
+					}
+
+				} else {
+					link.data('star-status', 'unstar');
+					link.removeClass('message-action-star').addClass('message-action-unstar');
+					link.find('.bp-screen-reader-text').text(BP_PM_Star.strings.text_unstar);
+
+					if ( 1 === BP_PM_Star.is_single_thread ) {
+						link.prop('title', BP_PM_Star.strings.title_unstar );
+					} else {
+						link.prop('title', BP_PM_Star.strings.title_unstar_thread );
+					}
+				}
+			}
+		});
+		return false;
+	};
+
+	/* Star actions */
+	jq('#message-threads').on('click', 'td.thread-star a', starAction );
+	jq('#message-thread').on('click', '.message-star-actions a', starAction );
+
+	/* Star bulk manage - Show only the valid action based on the starred item. */
+	jq('#message-threads td.bulk-select-check :checkbox').on('change', function() {
+		var box = jq(this),
+			star = box.closest('tr').find('.thread-star a');
+
+		if ( box.prop('checked') ) {
+			if( 'unstar' === star.data('star-status') ) {
+				BP_PM_Star.star_counter++;
+			} else {
+				BP_PM_Star.unstar_counter++;
+			}
+		} else {
+			if( 'unstar' === star.data('star-status') ) {
+				BP_PM_Star.star_counter--;
+			} else {
+				BP_PM_Star.unstar_counter--;
+			}
+		}
+
+		if ( BP_PM_Star.star_counter > 0 && parseInt( BP_PM_Star.unstar_counter, 10 ) === 0 ) {
+			jq('option[value="star"]').hide();
+		} else {
+			jq('option[value="star"]').show();
+		}
+
+		if ( BP_PM_Star.unstar_counter > 0 && parseInt( BP_PM_Star.star_counter, 10 ) === 0 ) {
+			jq('option[value="unstar"]').hide();
+		} else {
+			jq('option[value="unstar"]').show();
+		}
+	});
+
+	/** Notifications **********************************************/
+
+	/* Selecting/Deselecting all notifications */
+	jq('#select-all-notifications').click(function(event) {
+		if( this.checked ) {
+			jq('.notification-check').each(function() {
+				this.checked = true;
+			});
+		} else {
+			jq('.notification-check').each(function() {
+				this.checked = false;
+			});
+		}
+	});
+
+	/* Make sure a 'Bulk Action' is selected before submitting the form */
+	jq('#notification-bulk-manage').attr('disabled', 'disabled');
+
+	/* Remove the disabled attribute from the form submit button when bulk action has a value */
+	jq('#notification-select').on('change', function(){
+		jq('#notification-bulk-manage').attr('disabled', jq(this).val().length <= 0);
+	});
+
 	/* Close site wide notices in the sidebar */
 	jq('#close-notice').on( 'click', function() {
 		jq(this).addClass('loading');
@@ -1547,7 +1699,7 @@ jq(document).ready( function() {
 		return false;
 	});
 
-	/* Toolbar & wp_list_pages Javascript IE6 hover class */
+	/* Toolbar & wp_list_pages JavaScript IE6 hover class */
 	jq('#wp-admin-bar ul.main-nav li, #nav li').mouseover( function() {
 		jq(this).addClass('sfhover');
 	});
@@ -1557,7 +1709,7 @@ jq(document).ready( function() {
 	});
 
 	/* Clear BP cookies on logout */
-	jq('a.logout').on( 'click', function() {
+	jq('#wp-admin-bar-logout, a.logout').on( 'click', function() {
 		jq.removeCookie('bp-activity-scope', {
 			path: '/'
 		});
@@ -1602,9 +1754,10 @@ jq(document).ready( function() {
 	}
 
 	// Set the last id to request after
+	var first_item_recorded = 0;
 	jq( document ).on( 'heartbeat-send.buddypress', function( e, data ) {
 
-		firstrow = 0;
+		first_item_recorded = 0;
 
 		// First row is default latest activity id
 		if ( jq( '#buddypress ul.activity-list li' ).first().prop( 'id' ) ) {
@@ -1612,12 +1765,12 @@ jq(document).ready( function() {
 			timestamp = jq( '#buddypress ul.activity-list li' ).first().prop( 'class' ).match( /date-recorded-([0-9]+)/ );
 
 			if ( timestamp ) {
-				firstrow = timestamp[1];
+				first_item_recorded = timestamp[1];
 			}
 		}
 
-		if ( 0 === activity_last_recorded || Number( firstrow ) > activity_last_recorded ) {
-			activity_last_recorded = Number( firstrow );
+		if ( 0 === activity_last_recorded || Number( first_item_recorded ) > activity_last_recorded ) {
+			activity_last_recorded = Number( first_item_recorded );
 		}
 
 		data.bp_activity_last_recorded = activity_last_recorded;
@@ -1655,12 +1808,12 @@ function bp_init_activity() {
 		path: '/'
 	} );
 
-	if ( null != jq.cookie('bp-activity-filter') && jq('#activity-filter-select').length ) {
+	if ( null !== jq.cookie('bp-activity-filter') && jq('#activity-filter-select').length ) {
 		jq('#activity-filter-select select option[value="' + jq.cookie('bp-activity-filter') + '"]').prop( 'selected', true );
 	}
 
 	/* Activity Tab Set */
-	if ( null != jq.cookie('bp-activity-scope') && jq('.activity-type-tabs').length ) {
+	if ( null !== jq.cookie('bp-activity-scope') && jq('.activity-type-tabs').length ) {
 		jq('.activity-type-tabs li').each( function() {
 			jq(this).removeClass('selected');
 		});
@@ -1671,11 +1824,11 @@ function bp_init_activity() {
 /* Setup object scope and filter based on the current cookie settings for the object. */
 function bp_init_objects(objects) {
 	jq(objects).each( function(i) {
-		if ( null != jq.cookie('bp-' + objects[i] + '-filter') && jq('#' + objects[i] + '-order-select select').length ) {
+		if ( null !== jq.cookie('bp-' + objects[i] + '-filter') && jq('#' + objects[i] + '-order-select select').length ) {
 			jq('#' + objects[i] + '-order-select select option[value="' + jq.cookie('bp-' + objects[i] + '-filter') + '"]').prop( 'selected', true );
 		}
 
-		if ( null != jq.cookie('bp-' + objects[i] + '-scope') && jq('div.' + objects[i]).length ) {
+		if ( null !== jq.cookie('bp-' + objects[i] + '-scope') && jq('div.' + objects[i]).length ) {
 			jq('.item-list-tabs li').each( function() {
 				jq(this).removeClass('selected');
 			});
@@ -1804,7 +1957,7 @@ function bp_activity_request(scope, filter) {
 		});
 
 		/* Update the feed link */
-		if ( null != response.feed_url ) {
+		if ( null !== response.feed_url ) {
 			jq('.directory #subnav li.feed a, .home-page #subnav li.feed a').attr('href', response.feed_url);
 		}
 

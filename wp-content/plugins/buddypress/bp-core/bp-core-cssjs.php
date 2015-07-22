@@ -7,7 +7,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Register scripts commonly used by BuddyPress.
@@ -17,23 +17,37 @@ if ( !defined( 'ABSPATH' ) ) exit;
 function bp_core_register_common_scripts() {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	$url = buddypress()->plugin_url . 'bp-core/js/';
-	
+
+	/**
+	 * Filters the BuddyPress Core javascript files to register.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param array $value Array of javascript file information to register.
+	 */
 	$scripts = apply_filters( 'bp_core_register_common_scripts', array(
 
 		// Legacy
-		'bp-confirm'        => array( 'file' => "{$url}confirm{$min}.js",        'dependencies' => array( 'jquery' ) ),
-		'bp-widget-members' => array( 'file' => "{$url}widget-members{$min}.js", 'dependencies' => array( 'jquery' ) ),
-		'bp-jquery-query'   => array( 'file' => "{$url}jquery-query{$min}.js",   'dependencies' => array( 'jquery' ) ),
-		'bp-jquery-cookie'  => array( 'file' => "{$url}jquery-cookie{$min}.js",  'dependencies' => array( 'jquery' ) ),
+		'bp-confirm'        => array( 'file' => "{$url}confirm{$min}.js",        'dependencies' => array( 'jquery' ), 'footer' => false ),
+		'bp-widget-members' => array( 'file' => "{$url}widget-members{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => false ),
+		'bp-jquery-query'   => array( 'file' => "{$url}jquery-query{$min}.js",   'dependencies' => array( 'jquery' ), 'footer' => false ),
+		'bp-jquery-cookie'  => array( 'file' => "{$url}jquery-cookie{$min}.js",  'dependencies' => array( 'jquery' ), 'footer' => false ),
+		'bp-jquery-scroll-to' => array( 'file' => "{$url}jquery-scroll-to{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => false ),
 
 		// 2.1
-		'jquery-caret' => array( 'file' => "{$url}jquery.caret{$min}.js", 'dependencies' => array( 'jquery' ) ),
-		'jquery-atwho' => array( 'file' => "{$url}jquery.atwho{$min}.js", 'dependencies' => array( 'jquery', 'jquery-caret' ) ),
+		'jquery-caret' => array( 'file' => "{$url}jquery.caret{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => true ),
+		'jquery-atwho' => array( 'file' => "{$url}jquery.atwho{$min}.js", 'dependencies' => array( 'jquery', 'jquery-caret' ), 'footer' => true ),
+
+		// 2.3
+		'bp-plupload' => array( 'file' => "{$url}bp-plupload{$min}.js", 'dependencies' => array( 'plupload', 'jquery', 'json2', 'wp-backbone' ), 'footer' => true ),
+		'bp-avatar'   => array( 'file' => "{$url}avatar{$min}.js", 'dependencies' => array( 'jcrop' ), 'footer' => true ),
+		'bp-webcam'   => array( 'file' => "{$url}webcam{$min}.js", 'dependencies' => array( 'bp-avatar' ), 'footer' => true ),
+
 	) );
 
 	$version = bp_get_version();
 	foreach ( $scripts as $id => $script ) {
-		wp_register_script( $id, $script['file'], $script['dependencies'], $version );
+		wp_register_script( $id, $script['file'], $script['dependencies'], $version, $script['footer'] );
 	}
 }
 add_action( 'bp_enqueue_scripts',       'bp_core_register_common_scripts', 1 );
@@ -48,11 +62,31 @@ function bp_core_register_common_styles() {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	$url = buddypress()->plugin_url . 'bp-core/css/';
 
+	/**
+	 * Filters the URL for the Admin Bar stylesheet.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 *
+	 * @param string $value URL for the Admin Bar stylesheet.
+	 */
+	$admin_bar_file = apply_filters( 'bp_core_admin_bar_css', "{$url}admin-bar{$min}.css" );
+
+	/**
+	 * Filters the BuddyPress Core stylesheet files to register.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param array $value Array of stylesheet file information to register.
+	 */
 	$styles = apply_filters( 'bp_core_register_common_styles', array(
 		'bp-admin-bar' => array(
-			'file'         => apply_filters( 'bp_core_admin_bar_css', "{$url}admin-bar{$min}.css" ),
+			'file'         => $admin_bar_file,
 			'dependencies' => array( 'admin-bar' )
-		)
+		),
+		'bp-avatar' => array(
+			'file'         => "{$url}avatar{$min}.css",
+			'dependencies' => array( 'jcrop' )
+		),
 	) );
 
 	foreach ( $styles as $id => $style ) {
@@ -82,8 +116,28 @@ function bp_core_confirmation_js() {
 	) );
 
 }
-add_action( 'bp_enqueue_scripts',    'bp_core_confirmation_js' );
-add_action( 'admin_enqueue_scripts', 'bp_core_confirmation_js' );
+add_action( 'bp_enqueue_scripts',       'bp_core_confirmation_js' );
+add_action( 'bp_admin_enqueue_scripts', 'bp_core_confirmation_js' );
+
+/**
+ * Enqueues the css and js required by the Avatar UI
+ *
+ * @since  BuddyPress (2.3.0)
+ */
+function bp_core_avatar_scripts() {
+	if ( ! bp_avatar_is_front_edit() ) {
+		return false;
+	}
+
+	// Enqueue the Attachments scripts for the Avatar UI
+	bp_attachments_enqueue_scripts( 'BP_Attachment_Avatar' );
+
+	// Add Some actions for Theme backcompat
+	add_action( 'bp_after_profile_avatar_upload_content', 'bp_avatar_template_check' );
+	add_action( 'bp_after_group_admin_content',           'bp_avatar_template_check' );
+	add_action( 'bp_after_group_avatar_creation_step',    'bp_avatar_template_check' );
+}
+add_action( 'bp_enqueue_scripts', 'bp_core_avatar_scripts' );
 
 /**
  * Enqueues jCrop library and hooks BP's custom cropper JS.
@@ -100,7 +154,13 @@ function bp_core_add_jquery_cropper() {
  */
 function bp_core_add_cropper_inline_js() {
 
-	// Bail if no image was uploaded
+	/**
+	 * Filters the return value of getimagesize to determine if an image was uploaded.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 *
+	 * @param array $value Array of data found by getimagesize.
+	 */
 	$image = apply_filters( 'bp_inline_cropper_image', getimagesize( bp_core_avatar_upload_path() . buddypress()->avatar_admin->image->dir ) );
 	if ( empty( $image ) ) {
 		return;
@@ -125,7 +185,7 @@ function bp_core_add_cropper_inline_js() {
 		$crop_right = $image[0];
 
 	// Less than 2x full-width: cropper defaults to full-width
-	} else if ( $image[0] < ( $full_width * 2 ) ) {
+	} elseif ( $image[0] < ( $full_width * 2 ) ) {
 		$padding_w  = round( ( $image[0] - $full_width ) / 2 );
 		$crop_left  = $padding_w;
 		$crop_right = $image[0] - $padding_w;
@@ -142,7 +202,7 @@ function bp_core_add_cropper_inline_js() {
 		$crop_bottom = $image[1];
 
 	// Less than double full-height: cropper defaults to full-height
-	} else if ( $image[1] < ( $full_height * 2 ) ) {
+	} elseif ( $image[1] < ( $full_height * 2 ) ) {
 		$padding_h   = round( ( $image[1] - $full_height ) / 2 );
 		$crop_top    = $padding_h;
 		$crop_bottom = $image[1] - $padding_h;
@@ -163,7 +223,6 @@ function bp_core_add_cropper_inline_js() {
 				aspectRatio: <?php echo (int) $aspect_ratio; ?>,
 				setSelect: [ <?php echo (int) $crop_left; ?>, <?php echo (int) $crop_top; ?>, <?php echo (int) $crop_right; ?>, <?php echo (int) $crop_bottom; ?> ]
 			});
-			updateCoords({x: <?php echo (int) $crop_left; ?>, y: <?php echo (int) $crop_top; ?>, w: <?php echo (int) $crop_right; ?>, h: <?php echo (int) $crop_bottom; ?>});
 		});
 
 		function updateCoords(c) {
@@ -240,19 +299,35 @@ add_action( 'wp_head', 'bp_core_add_ajax_url_js' );
  * @return string AJAX endpoint URL.
  */
 function bp_core_ajax_url() {
+
+	/**
+	 * Filters the proper value for BuddyPress' ajaxurl.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param string $value Proper ajaxurl value for BuddyPress.
+	 */
 	return apply_filters( 'bp_core_ajax_url', admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' ) );
 }
 
 /**
- * Get the javascript dependencies for buddypress.js.
+ * Get the JavaScript dependencies for buddypress.js.
  *
  * @since BuddyPress (2.0.0)
  *
  * @uses apply_filters() to allow other component to load extra dependencies
  *
- * @return array The javascript dependencies.
+ * @return array The JavaScript dependencies.
  */
 function bp_core_get_js_dependencies() {
+
+	/**
+	 * Filters the javascript dependencies for buddypress.js.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $value Array of javascript dependencies for buddypress.js.
+	 */
 	return apply_filters( 'bp_core_get_js_dependencies', array(
 		'jquery',
 		'bp-confirm',

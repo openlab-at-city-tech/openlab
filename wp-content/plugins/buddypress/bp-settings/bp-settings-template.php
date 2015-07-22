@@ -8,14 +8,14 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Output the settings component slug
  *
  * @package BuddyPress
  * @subpackage SettingsTemplate
- * @since BuddyPress (1.5)
+ * @since BuddyPress (1.5.0)
  *
  * @uses bp_get_settings_slug()
  */
@@ -27,9 +27,17 @@ function bp_settings_slug() {
 	 *
 	 * @package BuddyPress
 	 * @subpackage SettingsTemplate
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_settings_slug() {
+
+		/**
+		 * Filters the Settings component slug.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param string $slug Settings component slug.
+		 */
 		return apply_filters( 'bp_get_settings_slug', buddypress()->settings->slug );
 	}
 
@@ -38,7 +46,7 @@ function bp_settings_slug() {
  *
  * @package BuddyPress
  * @subpackage SettingsTemplate
- * @since BuddyPress (1.5)
+ * @since BuddyPress (1.5.0)
  *
  * @uses bp_get_settings_root_slug()
  */
@@ -50,9 +58,17 @@ function bp_settings_root_slug() {
 	 *
 	 * @package BuddyPress
 	 * @subpackage SettingsTemplate
-	 * @since BuddyPress (1.5)
+	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_settings_root_slug() {
+
+		/**
+		 * Filters the Settings component root slug.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param string $root_slug Settings component root slug.
+		 */
 		return apply_filters( 'bp_get_settings_root_slug', buddypress()->settings->root_slug );
 	}
 

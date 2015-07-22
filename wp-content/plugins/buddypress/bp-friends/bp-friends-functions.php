@@ -13,7 +13,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Create a new friendship.
@@ -59,16 +59,28 @@ function friends_add_friend( $initiator_userid, $friend_userid, $force_accept = 
 
 	// Send notifications
 	if ( empty( $force_accept ) ) {
-		$action = 'friends_friendship_requested';
+		$action = 'requested';
 
 	// Update friend totals
 	} else {
-		$action = 'friends_friendship_accepted';
+		$action = 'accepted';
 		friends_update_friend_totals( $friendship->initiator_user_id, $friendship->friend_user_id, 'add' );
 	}
 
-	// Call the above titled action and pass friendship data into it
-	do_action( $action, $friendship->id, $friendship->initiator_user_id, $friendship->friend_user_id, $friendship );
+	/**
+	 * Fires at the end of initiating a new friendship connection.
+	 *
+	 * This is a variable hook, depending on context.
+	 * The two potential hooks are: friends_friendship_requested, friends_friendship_accepted.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int    $id ID of the pending friendship connection.
+	 * @param int    $initiator_user_id ID of the friendship initiator.
+	 * @param int    $friend_user_id ID of the friend user.
+	 * @param object $friendship BuddyPress Friendship Object.
+	 */
+	do_action( 'friends_friendship_' . $action, $friendship->id, $friendship->initiator_user_id, $friendship->friend_user_id, $friendship );
 
 	return true;
 }
@@ -87,18 +99,46 @@ function friends_remove_friend( $initiator_userid, $friend_userid ) {
 	$friendship_id = BP_Friends_Friendship::get_friendship_id( $initiator_userid, $friend_userid );
 	$friendship    = new BP_Friends_Friendship( $friendship_id );
 
+	/**
+	 * Fires before the deletion of a friendship activity item
+	 * for the user who canceled the friendship.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $friendship_id ID of the friendship object, if any, between a pair of users.
+	 * @param int $initiator_userid ID of the friendship initiator.
+	 * @param int $friend_userid ID of the friend user.
+	 */
 	do_action( 'friends_before_friendship_delete', $friendship_id, $initiator_userid, $friend_userid );
 
-	// Remove the activity stream item for the user who canceled the friendship
-	friends_delete_activity( array( 'item_id' => $friendship_id, 'type' => 'friendship_accepted', 'user_id' => bp_displayed_user_id() ) );
+	// Remove the activity stream items about the friendship id
+	friends_delete_activity( array( 'item_id' => $friendship_id, 'type' => 'friendship_created', 'user_id' => 0 ) );
 
-	// This hook is misleadingly named - the friendship is not yet deleted.
-	// This is your last chance to do something while the friendship exists
+	/**
+	 * Fires before the friendship connection is removed.
+	 *
+	 * This hook is misleadingly named - the friendship is not yet deleted.
+	 * This is your last chance to do something while the friendship exists.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $friendship_id ID of the friendship object, if any, between a pair of users.
+	 * @param int $initiator_userid ID of the friendship initiator.
+	 * @param int $friend_userid ID of the friend user.
+	 */
 	do_action( 'friends_friendship_deleted', $friendship_id, $initiator_userid, $friend_userid );
 
 	if ( $friendship->delete() ) {
 		friends_update_friend_totals( $initiator_userid, $friend_userid, 'remove' );
 
+		/**
+		 * Fires after the friendship connection is removed.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param int $initiator_userid ID of the friendship initiator.
+		 * @param int $friend_userid ID of the friend user.
+		 */
 		do_action( 'friends_friendship_post_delete', $initiator_userid, $friend_userid );
 
 		return true;
@@ -117,7 +157,7 @@ function friends_remove_friend( $initiator_userid, $friend_userid ) {
  */
 function friends_accept_friendship( $friendship_id ) {
 
-	// Get the friesdhip data
+	// Get the friendship data
 	$friendship = new BP_Friends_Friendship( $friendship_id, true, false );
 
 	// Accepting friendship
@@ -126,6 +166,16 @@ function friends_accept_friendship( $friendship_id ) {
 		// Bump the friendship counts
 		friends_update_friend_totals( $friendship->initiator_user_id, $friendship->friend_user_id );
 
+		/**
+		 * Fires after a friendship is accepted.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int    $id ID of the pending friendship object.
+		 * @param int    $initiator_user_id ID of the friendship initiator.
+		 * @param int    $friend_user_id ID of the user requested friendship with.
+		 * @param object $friendship BuddyPress Friendship Object.
+		 */
 		do_action( 'friends_friendship_accepted', $friendship->id, $friendship->initiator_user_id, $friendship->friend_user_id, $friendship );
 
 		return true;
@@ -144,6 +194,15 @@ function friends_reject_friendship( $friendship_id ) {
 	$friendship = new BP_Friends_Friendship( $friendship_id, true, false );
 
 	if ( empty( $friendship->is_confirmed ) && BP_Friends_Friendship::reject( $friendship_id ) ) {
+
+		/**
+		 * Fires after a friendship request is rejected.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int                   $friendship_id ID of the pending friendship.
+		 * @param BP_Friends_Friendship $friendships Friendship object. Passed by reference.
+		 */
 		do_action_ref_array( 'friends_friendship_rejected', array( $friendship_id, &$friendship ) );
 		return true;
 	}
@@ -168,7 +227,14 @@ function friends_withdraw_friendship( $initiator_userid, $friend_userid ) {
 		// @deprecated Since 1.9
 		do_action_ref_array( 'friends_friendship_whithdrawn', array( $friendship_id, &$friendship ) );
 
-		// @since 1.9
+		/**
+		 * Fires after a friendship request has been withdrawn.
+		 *
+		 * @since BuddyPress (1.9.0)
+		 *
+		 * @param int                   $friendship_id ID of the friendship.
+		 * @param BP_Friends_Friendship $friendship Friendship object. Passed by reference.
+		 */
 		do_action_ref_array( 'friends_friendship_withdrawn',  array( $friendship_id, &$friendship ) );
 
 		return true;
@@ -234,6 +300,13 @@ function friends_get_total_friend_count( $user_id = 0 ) {
 	if ( empty( $count ) )
 		$count = 0;
 
+	/**
+	 * Filters the total friend count for a given user.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param int $count Total friend count for a given user.
+	 */
 	return apply_filters( 'friends_get_total_friend_count', $count );
 }
 
@@ -269,7 +342,7 @@ function friends_get_friendship_id( $initiator_user_id, $friend_user_id ) {
 /**
  * Get the IDs of a given user's friends.
  *
- * @param int $user_id ID of the user whose friends are being retreived.
+ * @param int $user_id ID of the user whose friends are being retrieved.
  * @param bool $friend_requests_only Optional. Whether to fetch unaccepted
  *        requests only. Default: false.
  * @param bool $assoc_arr Optional. True to receive an array of arrays keyed as
@@ -315,7 +388,7 @@ function friends_get_friendship_request_user_ids( $user_id ) {
  *
  * @see BP_Core_User::get_users() for a description of return value.
  *
- * @param int $user_id ID of the user whose friends are being retreived.
+ * @param int $user_id ID of the user whose friends are being retrieved.
  * @param int $per_page Optional. Number of results to return per page.
  *        Default: 0 (no pagination; show all results).
  * @param int $page Optional. Number of the page of results to return.
@@ -325,6 +398,17 @@ function friends_get_friendship_request_user_ids( $user_id ) {
  * @return array See {@link BP_Core_User::get_users()}.
  */
 function friends_get_recently_active( $user_id, $per_page = 0, $page = 0, $filter = '' ) {
+
+	/**
+	 * Filters a user's most recently active friends.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param array {
+	 *     @type int   $total_users Total number of users matched by query params.
+	 *     @type array $paged_users The current page of users matched by query params.
+	 * }
+	 */
 	return apply_filters( 'friends_get_recently_active', BP_Core_User::get_users( 'active', $per_page, $page, $user_id, $filter ) );
 }
 
@@ -333,7 +417,7 @@ function friends_get_recently_active( $user_id, $per_page = 0, $page = 0, $filte
  *
  * @see BP_Core_User::get_users() for a description of return value.
  *
- * @param int $user_id ID of the user whose friends are being retreived.
+ * @param int $user_id ID of the user whose friends are being retrieved.
  * @param int $per_page Optional. Number of results to return per page.
  *        Default: 0 (no pagination; show all results).
  * @param int $page Optional. Number of the page of results to return.
@@ -343,6 +427,17 @@ function friends_get_recently_active( $user_id, $per_page = 0, $page = 0, $filte
  * @return array See {@link BP_Core_User::get_users()}.
  */
 function friends_get_alphabetically( $user_id, $per_page = 0, $page = 0, $filter = '' ) {
+
+	/**
+	 * Filters a user's friends listed in alphabetical order.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @return array {
+	 *     @type int   $total_users Total number of users matched by query params.
+	 *     @type array $paged_users The current page of users matched by query params.
+	 * }
+	 */
 	return apply_filters( 'friends_get_alphabetically', BP_Core_User::get_users( 'alphabetical', $per_page, $page, $user_id, $filter ) );
 }
 
@@ -351,7 +446,7 @@ function friends_get_alphabetically( $user_id, $per_page = 0, $page = 0, $filter
  *
  * @see BP_Core_User::get_users() for a description of return value.
  *
- * @param int $user_id ID of the user whose friends are being retreived.
+ * @param int $user_id ID of the user whose friends are being retrieved.
  * @param int $per_page Optional. Number of results to return per page.
  *        Default: 0 (no pagination; show all results).
  * @param int $page Optional. Number of the page of results to return.
@@ -361,6 +456,17 @@ function friends_get_alphabetically( $user_id, $per_page = 0, $page = 0, $filter
  * @return array See {@link BP_Core_User::get_users()}.
  */
 function friends_get_newest( $user_id, $per_page = 0, $page = 0, $filter = '' ) {
+
+	/**
+	 * Filters a user's friends listed from newest to oldest.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param array {
+	 *     @type int   $total_users Total number of users matched by query params.
+	 *     @type array $paged_users The current page of users matched by query params.
+	 * }
+	 */
 	return apply_filters( 'friends_get_newest', BP_Core_User::get_users( 'newest', $per_page, $page, $user_id, $filter ) );
 }
 
@@ -402,7 +508,13 @@ function friends_get_friends_invite_list( $user_id = 0, $group_id = 0 ) {
 	// Assume no friends
 	$friends = array();
 
-	// Default args
+	/**
+	 * Filters default arguments for list of friends a user can invite into this group.
+	 *
+	 * @since BuddyPress (1.5.4)
+	 *
+	 * @param array $value Array of default parameters for invite list.
+	 */
 	$args = apply_filters( 'bp_friends_pre_get_invite_list', array(
 		'user_id'  => $user_id,
 		'type'     => 'alphabetical',
@@ -449,7 +561,15 @@ function friends_get_friends_invite_list( $user_id = 0, $group_id = 0 ) {
 	if ( empty( $friends ) )
 		$friends = false;
 
-	// Allow friends to be filtered
+	/**
+	 * Filters the list of potential friends that can be invited to this group.
+	 *
+	 * @since BuddyPress (1.5.4)
+	 *
+	 * @param array|bool $friends Array friends available to invite or false for no friends.
+	 * @param int        $user_id ID of the user checked for who they can invite.
+	 * @param int        $group_id ID of the group being checked on.
+	 */
 	return apply_filters( 'bp_friends_get_invite_list', $friends, $user_id, $group_id );
 }
 
@@ -554,6 +674,13 @@ function friends_update_friend_totals( $initiator_user_id, $friend_user_id, $sta
  */
 function friends_remove_data( $user_id ) {
 
+	/**
+	 * Fires before deletion of friend-related data for a given user.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int $user_id ID for the user whose friend data is being removed.
+	 */
 	do_action( 'friends_before_remove_data', $user_id );
 
 	BP_Friends_Friendship::delete_all_for_user( $user_id );
@@ -561,6 +688,13 @@ function friends_remove_data( $user_id ) {
 	// Remove usermeta
 	bp_delete_user_meta( $user_id, 'total_friend_count' );
 
+	/**
+	 * Fires after deletion of friend-related data for a given user.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $user_id ID for the user whose friend data is being removed.
+	 */
 	do_action( 'friends_remove_data', $user_id );
 }
 add_action( 'wpmu_delete_user',  'friends_remove_data' );
@@ -579,6 +713,15 @@ function bp_friends_prime_mentions_results() {
 		return;
 	}
 
+	// Bail out if the site has a ton of users.
+	if ( is_multisite() && wp_is_large_network( 'users' ) ) {
+		return;
+	}
+
+	if ( friends_get_total_friend_count( get_current_user_id() ) > 150 ) {
+		return;
+	}
+
 	$friends_query = array(
 		'count_total'     => '',                    // Prevents total count
 		'populate_extras' => false,
@@ -594,7 +737,12 @@ function bp_friends_prime_mentions_results() {
 		$result        = new stdClass();
 		$result->ID    = $user->user_nicename;
 		$result->image = bp_core_fetch_avatar( array( 'html' => false, 'item_id' => $user->ID ) );
-		$result->name  = bp_core_get_user_displayname( $user->ID );
+
+		if ( ! empty( $user->display_name ) && ! bp_disable_profile_sync() ) {
+			$result->name = $user->display_name;
+		} else {
+			$result->name = bp_core_get_user_displayname( $user->ID );
+		}
 
 		$results[] = $result;
 	}

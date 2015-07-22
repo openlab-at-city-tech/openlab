@@ -1,16 +1,27 @@
 <?php
 
 /**
- * BuddyPress Member Loader
+ * BuddyPress Member Loader.
  *
  * @package BuddyPress
  * @subpackage Members
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 class BP_Members_Component extends BP_Component {
+
+	/**
+	 * Member types.
+	 *
+	 * @see bp_register_member_type()
+	 *
+	 * @access public
+	 * @since  BuddyPress (2.2.0)
+	 * @var    array
+	 */
+	public $types = array();
 
 	/**
 	 * Start the members component creation process.
@@ -45,8 +56,14 @@ class BP_Members_Component extends BP_Component {
 			'screens',
 			'template',
 			'adminbar',
-			'functions'
+			'functions',
+			'widgets',
+			'cache',
 		);
+
+		if ( bp_is_active( 'activity' ) ) {
+			$includes[] = 'activity';
+		}
 
 		// Include these only if in admin
 		if ( is_admin() ) {
@@ -104,7 +121,7 @@ class BP_Members_Component extends BP_Component {
 		// Hits the DB on single WP installs so get this separately
 		$bp->loggedin_user->is_super_admin = $bp->loggedin_user->is_site_admin = is_super_admin( bp_loggedin_user_id() );
 
-		// The domain for the user currently logged in. eg: http://domain.com/members/andy
+		// The domain for the user currently logged in. eg: http://example.com/members/andy
 		$bp->loggedin_user->domain         = bp_core_get_user_domain( bp_loggedin_user_id() );
 
 		/** Displayed user ****************************************************/
@@ -197,9 +214,9 @@ class BP_Members_Component extends BP_Component {
 	 * @see BP_Component::setup_nav() for a description of arguments.
 	 *
 	 * @param array $main_nav Optional. See BP_Component::setup_nav() for
-	 *        description.
-	 * @param array $sub_nav Optional. See BP_Component::setup_nav() for
-	 *        description.
+	 *                        description.
+	 * @param array $sub_nav  Optional. See BP_Component::setup_nav() for
+	 *                        description.
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
@@ -260,6 +277,22 @@ class BP_Members_Component extends BP_Component {
 		}
 
 		parent::setup_title();
+	}
+
+	/**
+	 * Setup cache groups.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 */
+	public function setup_cache_groups() {
+
+		// Global groups
+		wp_cache_add_global_groups( array(
+			'bp_last_activity',
+			'bp_member_type'
+		) );
+
+		parent::setup_cache_groups();
 	}
 }
 
