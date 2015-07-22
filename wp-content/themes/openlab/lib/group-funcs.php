@@ -772,13 +772,12 @@ function openlab_group_profile_activity_list() {
                                                     // Oh, bbPress.
                                                     $last_reply = get_post($last_reply_id);
                                                     if (!empty($last_reply->post_content)) {
-                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 110);
+                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
                                                     }
                                                     ?>
                                                     
-                                                    <?= openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content) ?>
+                                                    <?= openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
 
-                                                    <p><a href="<?php bbp_topic_permalink(); ?>" class="read-more">See More</a></p>
                                                 </div></div>                                            <?php endwhile; ?>
                                     <?php else: ?>
                                         <div class="panel panel-default"><div class="panel-body">
@@ -806,18 +805,13 @@ function openlab_group_profile_activity_list() {
                                     global $post;
                                     if ($query->have_posts()) {
                                         while ($query->have_posts()) : $query->the_post();
-                                            echo '<div class="panel panel-default"><div class="panel-body">';
-                                            echo '<h6 class="semibold">';
-                                            the_title();
-                                            echo '</h6>';
                                             ?>
-                                            <p><?php echo wds_content_excerpt(strip_tags($post->post_content), 110); ?> <a href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/<?php echo $post->post_name; ?>" class="read-more">See&nbsp;More</a></p>
+                                            <div class="panel panel-default"><div class="panel-body">
+                                                <?= openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
+                                            </div></div>
                                             <?php
-                                            echo '</div></div>';
                                         endwhile;
-                                        ?>
-                                        <?php
-                                    }else {
+                                    } else {
                                         echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
                                     }
                                     ?>
@@ -897,15 +891,21 @@ function openlab_group_profile_activity_list() {
     <?php
 }
 
-function openlab_get_group_activity_content($title, $content) {
+function openlab_get_group_activity_content($title, $content, $link) {
+
+    if($title !== ''){
+        $markup = <<<HTML
+                <h6 class="semibold">
+                    <span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">{$title}</span>
+                    <span class="original-copy hidden">{$title}</span>
+                </h6>
+HTML;
+    }
     
-    $markup = <<<HTML
-            <h6 class="semibold truncate-on-the-fly">
-                <span class="truncate-on-the-fly" data-basevalue="155" data-minvalue="20" data-basewidth="376">{$title}</span>
-                <span class="original-copy hidden">{$title}</span>
-            </h6>
+    $markup .= <<<HTML
             <p class="activity-content">
-                <span class="truncate-on-the-fly" data-basevalue="250" data-minvalue="20" data-basewidth="376">{$content}</span>
+                <span class="hyphenate truncate-on-the-fly" data-basevalue="120" data-minvalue="75" data-basewidth="376">{$content}</span>
+                <span><a href="{$link}" class="read-more">See More</a><span>
                 <span class="original-copy hidden">{$content}</span>
             </p>
 HTML;
@@ -1235,10 +1235,10 @@ function openlab_show_site_posts_and_comments() {
         case 'external':
             $posts = openlab_get_external_posts_by_group_id();
             $comments = openlab_get_external_comments_by_group_id();
-
+            
             break;
     }
-
+    
     // If we have either, show both
     if (!empty($posts) || !empty($comments)) {
         ?>
@@ -1252,10 +1252,7 @@ function openlab_show_site_posts_and_comments() {
                         <?php foreach ($posts as $post) : ?>
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <h6 class="semibold"><?php echo $post['title']; ?></h6>
-                                    <p>
-                                        <?php echo $post['content']; ?> <a href="<?php echo $post['permalink'] ?>" class="read-more">See&nbsp;More</a>
-                                    </p>
+                                    <?= openlab_get_group_activity_content($post['title'], $post['content'], $post['permalink']) ?>
                                 </div>
                             </div>
                         <?php endforeach ?>
@@ -1275,7 +1272,7 @@ function openlab_show_site_posts_and_comments() {
                             <?php foreach ($comments as $comment) : ?>
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <p><?php echo $comment['content'] ?> <a href="<?php echo $comment['permalink'] ?>" class="read-more">See&nbsp;More</a></p>
+                                        <?= openlab_get_group_activity_content('', $comment['content'], $comment['permalink']) ?>
                                     </div></div>
                             <?php endforeach ?>
                         <?php else : ?>
