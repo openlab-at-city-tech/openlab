@@ -241,3 +241,8 @@ function openlab_post_value($key) {
     }
     return $value;
 }
+
+/**
+ * Disable the new avatar upload interface introduced in BP 2.3.
+ */
+add_filter( 'bp_avatar_is_front_edit', '__return_false' );
