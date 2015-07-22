@@ -245,11 +245,12 @@ function cuny_home_square($type) {
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                     </div>
                     <div class="item-content-wrapper">
-                        <?php echo '<h4 class="group-title"><a class="no-deco" href="' . bp_get_group_permalink() . '">' . bp_get_group_name() . '</a></h4>';
-                        ?>
-                        <?php
-                        //echo '<div class="byline">Author Name | Date</div>';
+                        <h4 class="group-title">
+                            <a class="no-deco truncate-on-the-fly" href="<?= bp_get_group_permalink() ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?= bp_get_group_name() ?></a>
+                            <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
+                        </h4>
 
+                        <?php
                         echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p class="see-more"><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
                         echo '</div>';
                         echo '</div>';
