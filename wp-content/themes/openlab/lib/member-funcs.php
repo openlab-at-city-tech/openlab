@@ -812,11 +812,11 @@ function cuny_member_profile_header() {
                                                 ?>
 
                                                 <div class="table-row row">
-                                                    <div class="bold col-sm-5">
+                                                    <div class="bold col-sm-7">
                                                         <?php bp_the_profile_field_name() ?>
                                                     </div>
 
-                                                    <div class="col-sm-19">
+                                                    <div class="col-sm-17">
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
