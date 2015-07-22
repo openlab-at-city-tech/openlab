@@ -162,7 +162,6 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 			</div>
 		<?php endwhile; ?>
 
-	<?php endwhile; ?>
                         </div><!--panel-body-->
                 </div>
 
@@ -174,6 +173,8 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 </div>
 <input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode( ',', $field_ids ) ?>" />
 <?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
+
+<?php endwhile; ?>
 
 <?php endif; ?>
 

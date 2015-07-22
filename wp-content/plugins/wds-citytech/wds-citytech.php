@@ -1815,6 +1815,7 @@ function openlab_addl_settings_fields() {
 
 	$fname = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
 	$lname = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
+        $account_type = isset($_POST['account_type']) ? $_POST['account_type'] : '';
 
 	// Don't let this continue if a password error was recorded
 	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
@@ -1829,8 +1830,21 @@ function openlab_addl_settings_fields() {
 
 		bp_core_add_message( __( 'Your settings have been saved.', 'buddypress' ), 'success' );
 	}
+        
+        if (!empty($account_type)) {
+        //saving account type for students or alumni
+        $types = array('Student', 'Alumni');
+        $account_type = in_array($_POST['account_type'], $types) ? $_POST['account_type'] : 'Student';
+        $user_id = bp_displayed_user_id();
+        $current_type = openlab_get_displayed_user_account_type();
 
-	bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
+        // Only students and alums can do this
+        if (in_array($current_type, $types)) {
+            xprofile_set_field_data('Account Type', bp_displayed_user_id(), $account_type);
+        }
+    }
+
+    bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
 }
 add_action( 'bp_core_general_settings_after_save', 'openlab_addl_settings_fields' );
 
