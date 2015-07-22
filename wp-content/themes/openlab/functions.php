@@ -82,7 +82,7 @@ function openlab_load_scripts() {
         wp_enqueue_script('camera-js');
         wp_register_script('hyphenator-js', $stylesheet_dir_uri . '/js/hyphenator.js', array('jquery'));
         wp_enqueue_script('hyphenator-js');
-        wp_register_script('succinct-js', $stylesheet_dir_uri . '/js/jQuery.succinct.min.js', array('jquery'));
+        wp_register_script('succinct-js', $stylesheet_dir_uri . '/js/jQuery.succinct.mod.js', array('jquery'));
         wp_enqueue_script('succinct-js');
         wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', array('jquery'), '', true);
         wp_enqueue_script('utility');
@@ -96,7 +96,7 @@ function openlab_load_scripts() {
         $mobile_custom = STYLESHEETPATH . '/js/jquery.mobile.customized.min.js';
         $camera = STYLESHEETPATH . '/js/camera.min.js';
         $hyphenator = STYLESHEETPATH . '/js/hyphenator.js';
-        $succinct = STYLESHEETPATH . '/js/jQuery.succinct.min.js';
+        $succinct = STYLESHEETPATH . '/js/jQuery.succinct.mod.js';
         $utility = STYLESHEETPATH . '/js/utility.js';
 
         //$minifier = new MatthiasMullie\Minify\JS($bootstrap, $jcarousellite, $easyaccordion, $easing, $mobile_custom, $camera, $hyphenator, $succinct, $utility);
