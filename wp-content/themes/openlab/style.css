@@ -8480,6 +8480,9 @@ body .inline-visible-xs {
     margin: 1px 0 0;
     width: 100%;
   }
+  .sidebar.mobile-dropdown .sidebar-block ul.sidebar-nav > li:last-child {
+    padding-bottom: 15px;
+  }
   .sidebar.mobile-dropdown.type-groups {
     background: #ffffff;
     padding: 0 5%;
