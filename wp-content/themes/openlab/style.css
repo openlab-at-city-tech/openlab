@@ -7686,10 +7686,6 @@ body .panel-body .bp-template-notice {
   margin-top: 0;
   margin-bottom: 17px;
 }
-body .panel-body a {
-  word-wrap: break-word;
-  word-break: break-all;
-}
 body .group-header {
   margin-top: 40px;
 }
