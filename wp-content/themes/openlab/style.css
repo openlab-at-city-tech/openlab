@@ -7414,11 +7414,11 @@ h1.entry-title {
 }
 h1.entry-title .direct-toggle {
   background: #d1d1d1;
-  height: 47px;
+  height: 48px;
   border: none;
   color: #ff5959;
   position: absolute;
-  top: -20px;
+  top: -21px;
   right: 0;
   z-index: 1;
 }
