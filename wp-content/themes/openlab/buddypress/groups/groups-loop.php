@@ -86,8 +86,8 @@ if ( !empty( $_GET['group_sequence'] ) ) {
                                             <?php endif; ?>
                                                 <div class="description-line">
                                                     <?php
-                                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="'.  bp_get_group_permalink().'" data-basevalue="105" data-basewidth="290">', bp_get_group_description());
-                                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description());
+                                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="105" data-basewidth="290">', bp_get_group_description_excerpt());
+                                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description_excerpt());
                                                     echo $this_description;
                                                     ?>
                                                 </div>
