@@ -8467,6 +8467,19 @@ body .inline-visible-xs {
   .sidebar.mobile-dropdown .sidebar-block ul li a .mol-count {
     display: none;
   }
+  .sidebar.mobile-dropdown .sidebar-block ul.sidebar-nav li ul {
+    width: 75%;
+    float: right;
+  }
+  .sidebar.mobile-dropdown .sidebar-block ul.sidebar-nav li ul li {
+    padding-right: 22px;
+  }
+  .sidebar.mobile-dropdown .sidebar-block ul.sidebar-nav li ul li a {
+    border-left: none !important;
+    border-right: 1px solid #bbbbbb;
+    margin: 1px 0 0;
+    width: 100%;
+  }
   .sidebar.mobile-dropdown.type-groups {
     background: #ffffff;
     padding: 0 5%;
