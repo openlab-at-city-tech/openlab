@@ -7134,6 +7134,7 @@ blockquote .h6 {
   }
   .nav.nav-inline li {
     display: block;
+    border-right: none;
   }
   .nav.nav-inline li a {
     border-right: none;
