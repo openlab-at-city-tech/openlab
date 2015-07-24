@@ -29,19 +29,19 @@
                     <a href="<?php bp_docs_order_by_link('title') ?>"><?php _e('Title', 'bp-docs'); ?></a>
                 </th>
 
-                <th scope="column" class="author-cell<?php bp_docs_is_current_orderby_class('author') ?>">
+                <th scope="column" class="author-cell<?php bp_docs_is_current_orderby_class('author') ?> hidden-xs">
                     <a href="<?php bp_docs_order_by_link('author') ?>"><?php _e('Author', 'bp-docs'); ?></a>
                 </th>
 
-                <th scope="column" class="created-date-cell<?php bp_docs_is_current_orderby_class('created') ?>">
+                <th scope="column" class="created-date-cell<?php bp_docs_is_current_orderby_class('created') ?> hidden-sm hidden-xs">
                     <a href="<?php bp_docs_order_by_link('created') ?>"><?php _e('Created', 'bp-docs'); ?></a>
                 </th>
 
-                <th scope="column" class="edited-date-cell<?php bp_docs_is_current_orderby_class('modified') ?>">
+                <th scope="column" class="edited-date-cell<?php bp_docs_is_current_orderby_class('modified') ?> hidden-sm hidden-xs">
                     <a href="<?php bp_docs_order_by_link('modified') ?>"><?php _e('Last Edited', 'bp-docs'); ?></a>
                 </th>
 
-                <th scope="column" class="tags-cell hidden-xs"><?php _e( 'Tags', 'bp-docs' ); ?></th>
+                <th scope="column" class="tags-cell hidden-sm hidden-xs"><?php _e( 'Tags', 'bp-docs' ); ?></th>
             </tr>
         </thead>
 
@@ -49,24 +49,33 @@
             <?php while (have_posts()) : the_post() ?>
                 <tr>
                     <td class="title-cell">
-                        <a href="<?php bp_docs_group_doc_permalink() ?>"><?php the_title() ?></a>
-
-                        <?php the_excerpt() ?>
+                        <span class="title-wrapper">
+                            <a class="hyphenate truncate-on-the-fly" href="<?php bp_docs_group_doc_permalink() ?>" data-basevalue="80" data-minvalue="55" data-basewidth="376"><?php the_title() ?></a>
+                            <span class="original-copy hidden"><?php the_title() ?></span>
+                        </span>
+                        
+                        <span class="hyphenate">
+                            <?php the_excerpt() ?>
+                        </span>
 
                         <div class="row-actions">
                             <?php bp_docs_doc_action_links() ?>
                         </div>
+                        
+                        <div class="author-info-mobile visible-xs">
+                            <span class="bold"><?php _e('Author', 'bp-docs'); ?>:</span> <a href="<?php bp_docs_order_by_link('author') ?>"><?php _e('Author', 'bp-docs'); ?></a>
+                        </div>
                     </td>
 
-                    <td class="author-cell">
+                    <td class="author-cell hidden-xs">
                         <a href="<?php echo bp_core_get_user_domain(get_the_author_meta('ID')) ?>" title="<?php echo bp_core_get_user_displayname(get_the_author_meta('ID')) ?>"><?php echo bp_core_get_user_displayname(get_the_author_meta('ID')) ?></a>
                     </td>
 
-                    <td class="date-cell created-date-cell">
+                    <td class="date-cell created-date-cell hidden-sm hidden-xs">
                         <?php echo get_the_date() ?>
                     </td>
 
-                    <td class="date-cell edited-date-cell">
+                    <td class="date-cell edited-date-cell hidden-sm hidden-xs">
                         <?php echo get_the_modified_date() ?>
                     </td>
 
@@ -79,7 +88,7 @@
                             }
                             ?>
 
-                            <td class="tags-cell hidden-xs">
+                            <td class="tags-cell hidden-sm hidden-xs">
                                 <?php echo implode(', ', $tagtext) ?>
                             </td>
 

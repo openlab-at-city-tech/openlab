@@ -256,9 +256,9 @@ input[type="submit"]{
     }
 }
 .notify-settings {
-	.notify-members {
-		font-weight: @bold;
-	}
+    .notify-members {
+        font-weight: @bold;
+    }
 }
 .form-inline{
     &.btn-combo{
@@ -1373,9 +1373,9 @@ body{
             list-style-type: none;
             background: rgba(255, 255, 255, 0.42);
             li{
-	            background: rgba(239, 239, 239, 0.8);
-				width: 100% !important;
-				margin: 0;
+                background: rgba(239, 239, 239, 0.8);
+                width: 100% !important;
+                margin: 0;
                 a{
                     color: @black;
                     display: block;
@@ -1468,9 +1468,9 @@ body{
                         a{
                             text-align: right;
                             width: 75%;
-							float: right;
-							font-weight: @bold;
-							background: rgba(255, 255, 255, 0.42);
+                            float: right;
+                            font-weight: @bold;
+                            background: rgba(255, 255, 255, 0.42);
                             .mol-count{
                                 display: none;
                             }
@@ -1828,6 +1828,24 @@ input#group-request-send {
             }
         }
     }
+    @media (max-width: @screen-xs-max){
+        table,
+        thead,
+        th,
+        tbody,
+        tr,
+        td{
+            display: block;
+            width: 100%;
+        }
+        &.info-panel{
+            table{
+                td.title-cell{
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 .doc-content{
     .wp-switch-editor{
@@ -2158,9 +2176,9 @@ input#group-request-send {
 
     span.page-title {
         font-weight: 600;
-	color: @aqua;
-	margin: auto;
-	padding: 0 7px;
+        color: @aqua;
+        margin: auto;
+        padding: 0 7px;
     }
 
     ul.nav li:first-child span.page-title {
@@ -2190,15 +2208,15 @@ input#group-request-send {
     a {
         padding: 0;
 
-	&:hover, &:focus {
-		color: @aqua;
-		text-decoration: underline;
-	}
+        &:hover, &:focus {
+            color: @aqua;
+            text-decoration: underline;
+        }
     }
 
     .fa {
         margin: 0 4px;
-	padding-left: 0;
+        padding-left: 0;
     }
 }
 .help-title:first-of-type {
@@ -2257,9 +2275,9 @@ input#group-request-send {
 .archive{
     .child-cat-container {
         border: 1px solid @10gray;
-	border-radius: 4px;
+        border-radius: 4px;
         padding: 2%;
-	margin-bottom: 18px;
+        margin-bottom: 18px;
         h2 {
             font-size: 16px;
             font-weight: bold;
@@ -2273,9 +2291,9 @@ input#group-request-send {
         .help-tags {
             margin-left: 0;
         }
-	li {
-	  margin-bottom: 12px;
-	}
+        li {
+            margin-bottom: 12px;
+        }
     }
     h2.child-cat{
         margin-top: 42px;

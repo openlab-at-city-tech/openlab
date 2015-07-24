@@ -8758,6 +8758,20 @@ input#group-request-send {
 .doctable-panel .doctable td.tags-cell {
   width: auto;
 }
+@media (max-width: 767px) {
+  .doctable-panel table,
+  .doctable-panel thead,
+  .doctable-panel th,
+  .doctable-panel tbody,
+  .doctable-panel tr,
+  .doctable-panel td {
+    display: block;
+    width: 100%;
+  }
+  .doctable-panel.info-panel table td.title-cell {
+    width: 100%;
+  }
+}
 .doc-content .wp-switch-editor {
   padding: 0 8px;
   text-decoration: none;
