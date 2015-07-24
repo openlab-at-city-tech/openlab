@@ -364,6 +364,15 @@ function openlab_bust_group_portfolios_cache_on_group_remove($user_id, $group_id
 
 add_action('groups_removed_member', 'openlab_bust_group_portfolios_cache_on_group_remove', 10, 2);
 
+/* Bust group portfolio cache when a member removes themselves from the group
+ *
+ */
+function openlab_bust_group_portfolios_cache_on_self_remove($group_id, $user_id) {
+    openlab_bust_group_portfolio_cache($group_id);
+}
+
+add_action('groups_leave_group','openlab_bust_group_portfolios_cache_on_self_remove', 10, 2);
+
 /**
  * Bust group portfolio cache when membership changes
  */
