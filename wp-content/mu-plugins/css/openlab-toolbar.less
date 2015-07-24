@@ -750,10 +750,16 @@
                 > ul{
                     > li{
                         > .ab-item{
-                            min-height: 51px;
-                            padding-bottom: 17px;
+                            min-height: 49px;
                             &.ab-empty-item{
                                 padding-bottom: 16px;
+                            }
+                        }
+                        &.hamburger{ 
+                            .ab-item {
+                                .navbar-toggle{
+                                    padding-bottom: 14px;
+                                }
                             }
                         }
                     }
@@ -771,10 +777,16 @@
                         margin-top: 1px;
                         position: absolute;
                     }
-                } 
+                }
+                #wp-admin-bar-network-menu-mobile,
+                #wp-admin-bar-my-openlab{
+                    > .ab-item{
+                        display: none;
+                    }
+                }
             }
             @media (max-width: @screen-xs-max){
-                top: 57px;
+                top: 63px;
                 border-bottom: none;
                 &:before{
                     bottom: 0;

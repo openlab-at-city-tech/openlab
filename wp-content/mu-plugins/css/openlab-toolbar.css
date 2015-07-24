@@ -7695,11 +7695,13 @@ button.oplb-bs .close {
   z-index: -1;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li > .ab-item {
-  min-height: 51px;
-  padding-bottom: 17px;
+  min-height: 49px;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li > .ab-item.ab-empty-item {
   padding-bottom: 16px;
+}
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar > ul > li.hamburger .ab-item .navbar-toggle {
+  padding-bottom: 14px;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-openlab {
   -webkit-box-sizing: border-box;
@@ -7717,9 +7719,13 @@ button.oplb-bs .close {
   margin-top: 1px;
   position: absolute;
 }
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile > .ab-item,
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item {
+  display: none;
+}
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
-    top: 57px;
+    top: 63px;
     border-bottom: none;
   }
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar:before {
