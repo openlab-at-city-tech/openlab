@@ -8437,7 +8437,7 @@ body .inline-visible-xs {
 }
 @media (max-width: 767px) {
   .sidebar.mobile-dropdown {
-    background: rgba(255, 255, 255, 0.8);
+    background: transparent;
     border-top: 9px solid #d1d1d1;
     border-radius: 0;
     position: absolute;
