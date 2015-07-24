@@ -514,7 +514,7 @@ function openlab_submenu_gen($items, $timestamp = false) {
             $item_classes .= " current-menu-item";
         } else if ($page_identify == "my-friends" && $title == "My Friends") {
             //special case just for my friends page
-            $item_classes .= " current-menu-item";
+            $item_classes .= " current-menu-item bold";
         } else if ($page_identify == "invite-new-members" && $title == "Invite New Members") {
             //special case just for Invite New Members page
             $item_classes .= " current-menu-item";
