@@ -7306,6 +7306,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
+  min-width: 250px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p {
   color: #333;
