@@ -1,5 +1,9 @@
 /**print styles - help pages**/
+a[href]:after {
+    display: none;
+}
 .navbar,
+#help-title-nav,
 #sidebar,
 #sdiebar-mobile,
 #nav-single,
