@@ -8598,6 +8598,9 @@ input#group-request-send {
   margin-top: 10px;
 }
 /**group profiles**/
+#group-action-wrapper {
+  margin-bottom: 20px;
+}
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
 }
