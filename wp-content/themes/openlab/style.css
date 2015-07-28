@@ -9047,7 +9047,7 @@ input#group-request-send {
 }
 .col-help .page-title {
   font-size: 14px;
-  margin: 15px 0 35px;
+  margin: 11px 0 35px;
 }
 .col-help .page-title span {
   color: #49cabe;
@@ -9089,6 +9089,7 @@ input#group-request-send {
 #help-title-nav .fa {
   margin: 0 4px;
   padding-left: 0;
+  vertical-align: middle;
 }
 .help-title:first-of-type {
   margin-top: 64px;

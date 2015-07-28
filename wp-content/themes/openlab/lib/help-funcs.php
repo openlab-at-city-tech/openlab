@@ -269,7 +269,7 @@ function openlab_help_cats_loop() {
             </button>
         </h1>
 	<div id="help-title">
-	    <h2 class="page-title"><span>Topics</span></h2>
+	    <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
 	</div>
         <?php
     else:
@@ -284,8 +284,8 @@ function openlab_help_cats_loop() {
             </button>
         </h1>
 	<div id="help-title">
-	    <h2 class="page-title">
-                Topics: <span><?php echo esc_html( $parent_term->name ) ?></span>
+	    <h2 class="page-title clearfix submenu">
+                <div class="submenu-text pull-left bold">Topics: </div><span><?php echo esc_html( $parent_term->name ) ?></span>
             </h2>
 	</div>
     <?php
