@@ -7745,6 +7745,11 @@ body .inline-visible-xs {
 .callout-list .row {
   margin-bottom: 34px;
 }
+@media (max-width: 767px) {
+  .callout-list .row {
+    margin-bottom: 17px;
+  }
+}
 .callout-list .callout-list-number {
   padding-right: 0;
   padding-top: 4px;
