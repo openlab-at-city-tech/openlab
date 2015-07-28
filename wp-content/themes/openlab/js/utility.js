@@ -296,7 +296,8 @@
         //camera js slider on home
         if ($('.camera_wrap').length) {
             $('.camera_wrap').camera({
-                autoAdvance: false,
+                autoAdvance: true,
+                loader: 'none',
                 fx: 'simpleFade',
                 playPause: false,
                 height: '295px',
