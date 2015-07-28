@@ -8,7 +8,6 @@ do_action('bp_before_member_settings_template');
 
 <?php echo openlab_submenu_markup(); ?>
 
-<?php do_action( 'template_notices' ); ?>
 
 <div id="item-body" role="main">
 
@@ -19,6 +18,7 @@ do_action('bp_before_member_settings_template');
         <div class="panel panel-default">
             <div class="panel-heading">Update Settings</div>
                 <div class="panel-body">
+	            	<?php do_action( 'template_notices' ); ?>
 
         <div class="form-group settings-section username-section">
             <label for="username">Username</label>

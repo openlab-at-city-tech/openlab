@@ -28,7 +28,7 @@ $field_ids = array( 1 );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
-<?php do_action( 'template_notices' ); ?>
+
 
 <form action="" method="post" id="profile-edit-form" class="standard-form form-panel">
 
@@ -51,6 +51,8 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
                 <div class="panel panel-default">
                     <div class="panel-heading">Edit Profile</div>
                     <div class="panel-body">
+	                    
+	                	<?php do_action( 'template_notices' ); ?>
                 
 		<?php if ( ! $display_name_shown ) {?>
 			<div class="editfield field_1 field_name alt form-group">
