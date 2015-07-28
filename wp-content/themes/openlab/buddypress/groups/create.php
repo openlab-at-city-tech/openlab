@@ -296,7 +296,7 @@
 
                     <?php if ('crop-image' != bp_get_avatar_admin_step()) : ?>
                         <?php /* Previous Button */ ?>
-                        <?php if (!bp_is_first_group_creation_step()) : ?>
+                        <?php if ( ! bp_is_first_group_creation_step() && 'group-settings' !== bp_get_groups_current_create_step() ) : ?>
                             <input class="btn btn-primary prev-btn btn-margin btn-margin-top" type="button" value="&#xf137; <?php _e('Previous Step', 'buddypress') ?>" id="group-creation-previous" name="previous" onclick="location.href = '<?php bp_group_creation_previous_link() ?>'" />
                         <?php endif; ?>
 
