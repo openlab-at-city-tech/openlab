@@ -376,15 +376,15 @@ function openlab_create_group_menu($grouptype) {
     }
 
     if ($grouptype == 'course') {
-        $title = 'Create/Clone a Course: ';
+        $title = 'Create/Clone a Course ';
     } else {
-        $title = 'Create a ' . ucfirst($grouptype) . ': ';
+        $title = 'Create a ' . ucfirst($grouptype) . ' ';
     }
 
     $menu_mup = <<<HTML
-            <div class="submenu">
+            <div class="submenu create-group-submenu">
                 <ul class="nav nav-inline">
-                    <li class="submenu-item bold">{$title}</li>
+                    <li class="submenu-item submenu-title bold">{$title}</li>
                     <li class="submenu-item item-create-clone-a-course current-menu-item bold">{$step_name}</li>
                 </ul>
             </div>

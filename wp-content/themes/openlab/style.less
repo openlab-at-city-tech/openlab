@@ -1478,26 +1478,26 @@ body{
                     }
                 }
                 ul.sidebar-nav {
-	                li {
-		                ul {
-			                width: 75%;
-			                float: right;
-			                li {
-				                padding-right: 22px;
-				                a {
-					                border-left: none !important;
-					                border-right: 1px solid @30gray;
-					                margin: 1px 0 0;
-					                width: 100%;
-				                }
-			                }
-		                }
-	                }
-	                > li {
-		                &:last-child {
-					    	padding-bottom: 15px;
-					    }
-	                }
+                    li {
+                        ul {
+                            width: 75%;
+                            float: right;
+                            li {
+                                padding-right: 22px;
+                                a {
+                                    border-left: none !important;
+                                    border-right: 1px solid @30gray;
+                                    margin: 1px 0 0;
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                    > li {
+                        &:last-child {
+                            padding-bottom: 15px;
+                        }
+                    }
                 }
             }
             &.type-groups{
@@ -1588,6 +1588,12 @@ body{
         }
     }
 }
+.create-group-submenu{
+    .submenu-title{
+        padding-right: 7px;
+        margin-right: 4px;
+    }
+}
 #group-list{
     .group-item-wrapper{
         .item-avatar{
@@ -1641,7 +1647,7 @@ input#group-request-send {
 }
 /**group profiles**/
 #group-action-wrapper{
-	margin-bottom: 20px;
+    margin-bottom: 20px;
     .link-btn{
         padding: 9px 12px;
     }
