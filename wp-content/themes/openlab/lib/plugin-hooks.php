@@ -175,6 +175,9 @@ function openlab_manage_members_email_status($user_id = '', $group = '') {
 remove_action('bp_group_manage_members_admin_item', 'ass_manage_members_email_status');
 add_action('bp_group_manage_members_admin_item', 'openlab_manage_members_email_status');
 
+//remove status from group profile pages
+remove_action ( 'bp_group_header_meta', 'ass_group_subscribe_button' );
+
 /**
  * Put the group type in email notification subject lines
  * @param type $subject
