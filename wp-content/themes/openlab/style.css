@@ -8687,6 +8687,9 @@ input#group-request-send {
 .group-members.group-list .group-item-wrapper {
   height: 95px;
 }
+.group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
+  font-weight: normal;
+}
 .group-manage-members.group-list .group-item .group-item-wrapper {
   height: 120px;
   /* User name */
@@ -8733,8 +8736,15 @@ input#group-request-send {
   margin-left: 0;
   padding-left: 0;
 }
+body.membership-requests .item-body {
+  margin-top: 35px;
+}
+body.membership-requests .group-list {
+  margin-top: 0;
+}
 .bp-widget > h4 {
   margin-top: 25px;
+  font-size: 16px;
 }
 .bp-widget .group-list {
   margin-top: 0;
