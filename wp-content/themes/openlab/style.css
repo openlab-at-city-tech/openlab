@@ -8512,7 +8512,7 @@ body .inline-visible-xs {
 .group-list .group-item-wrapper {
   border-radius: 4px;
   border: 1px solid #dddddd;
-  padding: 1.2%;
+  padding: 1.2% 4% 1.2% 1.2%;
   height: 180px;
   margin-bottom: 12px;
   color: #666666;
