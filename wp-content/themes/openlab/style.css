@@ -8733,6 +8733,12 @@ input#group-request-send {
   margin-left: 0;
   padding-left: 0;
 }
+.bp-widget > h4 {
+  margin-top: 25px;
+}
+.bp-widget .group-list {
+  margin-top: 0;
+}
 .plugins #item-body {
   margin-top: 30px;
 }
