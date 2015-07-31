@@ -15,14 +15,6 @@
             OpenLab.utility.adjustLoginBox();
 
         },
-        hoverFixes: function () {
-            //fixing hover issues on mobile
-            if (isBreakpoint('xs') || isBreakpoint('sm')) {
-                $('.mobile-no-hover').bind('touchend', function () {
-                    fixHoverOnMobile($(this));
-                })
-            }
-        },
         adjustLoginBox: function () {
             if ($('#user-info')) {
 
@@ -130,13 +122,6 @@
     $(document).ready(function () {
 
         OpenLab.utility.init();
-
-        //fixing hover issues on mobile
-        if (isBreakpoint('xs') || isBreakpoint('sm')) {
-            $('.mobile-no-hover a').bind('touchend', function () {
-                fixHoverOnMobile($(this));
-            });
-        }
 
         // Workshop fields on Contact Us
         function toggle_workshop_meeting_items() {
@@ -280,7 +265,6 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
 
-            OpenLab.utility.hoverFixes();
             OpenLab.utility.truncateOnTheFly();
             OpenLab.utility.adjustLoginBox();
 
@@ -427,16 +411,6 @@
         //there is an inline script that hides the lists from the user on load (just so the adjusment isn't jarring) - this will show the lists
         $('.activity-list').css('visibility', 'visible').hide().fadeIn(700);
 
-    }
-
-    //detection of bootstrap breakpoints
-    function isBreakpoint(alias) {
-        return $('.device-' + alias).is(':visible');
-    }
-
-    //fixing hover on mobile
-    function fixHoverOnMobile(thisElem) {
-        thisElem.trigger('click');
     }
 
 })(jQuery);

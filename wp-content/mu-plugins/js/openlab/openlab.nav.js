@@ -20,7 +20,16 @@
             OpenLab.nav.directToggleAction();
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
+            OpenLab.nav.hoverFixes();
 
+        },
+        hoverFixes: function () {
+            //fixing hover issues on mobile
+            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
+                $('.mobile-no-hover').bind('touchend', function () {
+                    OpenLab.nav.fixHoverOnMobile($(this));
+                })
+            }
         },
         directToggleAction: function () {
 
@@ -158,6 +167,12 @@
 
                 });
             }
+        },
+        isBreakpoint: function (alias) {
+            return $('.device-' + alias).is(':visible');
+        },
+        fixHoverOnMobile: function (thisElem) {
+            thisElem.trigger('click');
         }
     };
 
@@ -171,8 +186,8 @@
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-
-
+            
+            OpenLab.nav.hoverFixes();
 
         }, 250);
 
