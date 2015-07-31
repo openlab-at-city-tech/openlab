@@ -27,21 +27,29 @@ jQuery(document).ready(function($){
 			var thisval = $(v).val();
 			var thisid = '#noo_' + thisval + '_options';
 
-			if ( noo == thisval ) {
-				$(thisid).removeClass('disabled-opt');
+			if ( noo == thisval) {
 				$(thisid).find('input').each(function(index,element){
-					$(element).removeProp('disabled').removeClass('disabled');
+                                        $(element).removeClass('disabled-opt');
+                                        $(element).removeProp('disabled').removeClass('disabled');
 				});
 				$(thisid).find('select').each(function(index,element){
+                                    if ($(element).attr('type') !== 'radio') {
+                                        $(element).removeClass('disabled-opt');
 					$(element).removeProp('disabled').removeClass('disabled');
+                                    }
 				});
 			} else {
-				$(thisid).addClass('disabled-opt');
 				$(thisid).find('input').each(function(index,element){
+                                    if ($(element).attr('type') !== 'radio') {
+                                        $(element).addClass('disabled-opt');
 					$(element).prop('disabled','disabled').addClass('disabled');
+                                    }
 				});
 				$(thisid).find('select').each(function(index,element){
+                                    if ($(element).attr('type') !== 'radio') {
+                                        $(element).addClass('disabled-opt');
 					$(element).prop('disabled','disabled').addClass('disabled');
+                                    }
 				});
 			}
 		});
@@ -224,7 +232,7 @@ jQuery(document).ready(function($){
 				// Associated site
 				if ( r.site_id ) {
 					// Un-grey the website clone options
-					$('#wds-website-clone th').removeClass('disabled-opt');
+					$('#wds-website-clone .radio').removeClass('disabled-opt');
 					$('#wds-website-clone input[name="new_or_old"]').removeAttr('disabled');
 
 					// Auto-select the "Name your cloned site" option,
@@ -237,7 +245,7 @@ jQuery(document).ready(function($){
 					$('#blog-id-to-clone').val( r.site_id );
 				} else {
 					// Grey out the website clone options
-					$('#wds-website-clone th').addClass('disabled-opt');
+					$('#wds-website-clone .radio').addClass('disabled-opt');
 					$('#wds-website-clone input[name="new_or_old"]').attr('disabled','disabled');
 
 					// Pre-select "Create a new site"

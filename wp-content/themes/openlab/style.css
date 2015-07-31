@@ -7285,6 +7285,9 @@ input[type="submit"] {
 .form-control[type='file'] {
   padding: 6px 12px;
 }
+.form-control.disabled-opt {
+  opacity: 0.4;
+}
 .notify-settings .notify-members {
   font-weight: 700;
 }
@@ -7782,9 +7785,6 @@ body .inline-visible-xs {
 .groupblog-setup th {
   width: 25%;
 }
-.ct-group-meta tr label {
-  margin-right: 32px;
-}
 .ct-group-meta tr label input[type="checkbox"] {
   margin-top: -2px;
   margin-right: 5px;
@@ -7793,6 +7793,9 @@ body .inline-visible-xs {
 }
 .ct-group-meta tr label:first-child input[type="checkbox"] {
   margin-left: 0;
+}
+.ct-group-meta tr #external-site-url {
+  width: 88%;
 }
 .ct-group-meta .groupblog-setup .site-label {
   padding-top: 9px;

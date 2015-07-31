@@ -254,6 +254,9 @@ input[type="submit"]{
     &[type='file']{
         padding: 6px 12px;
     }
+    &.disabled-opt{
+        opacity: 0.4;
+    }
 }
 .notify-settings {
     .notify-members {
@@ -798,7 +801,6 @@ body{
 .ct-group-meta{
     tr{
         label{
-            margin-right: 32px;
             input[type="checkbox"]{
                 margin-top: -2px;
                 margin-right: 5px;
@@ -810,6 +812,9 @@ body{
                     margin-left: 0;
                 }
             }
+        }
+        #external-site-url{
+            width: 88%;
         }
     }
     .groupblog-setup{
