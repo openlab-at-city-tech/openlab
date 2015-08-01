@@ -85,7 +85,7 @@ function openlab_help_loop() {
         ?>
 
         <?php if ($help_cats): ?>
-            <h1 class="entry-title help-entry-title"><a class="no-deco hyphenate profile-name" href="<?php echo get_term_link($parent_cat); ?>"><?php echo $parent_cat_name; ?></a>
+<h1 class="entry-title help-entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span></a>
                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
