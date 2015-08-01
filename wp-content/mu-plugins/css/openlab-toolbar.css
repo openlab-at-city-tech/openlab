@@ -7182,7 +7182,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:focus {
-  text-decoration: none;
+  color: #49cabe;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
