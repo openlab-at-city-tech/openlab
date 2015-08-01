@@ -1749,6 +1749,11 @@ input#group-request-send {
 }
 .group-manage-members{
     &.group-list{
+        &.group-manage-requests {
+            .group-item .group-item-wrapper ul.group-member-actions {
+                font-weight: normal;
+            }
+        }
         .group-item{
             .group-item-wrapper{
                 height: 120px;
@@ -1789,7 +1794,7 @@ input#group-request-send {
                     padding-left: 0;
                     list-style-type: none;
                     font-size: .9em;
-                    font-weight: bold;
+		    font-weight: bold;
                 }
 
                 ul.group-manage-members-bpges-status {
@@ -1799,6 +1804,23 @@ input#group-request-send {
                 }
             }
         }
+    }
+}
+body.membership-requests {
+    .item-body {
+        margin-top: 35px;
+    }
+    .group-list {
+        margin-top: 0;
+    }
+}
+.bp-widget {
+    & > h4 {
+        margin-top: 25px;
+	font-size: 16px;
+    }
+    .group-list {
+        margin-top: 0;
     }
 }
 .plugins{
