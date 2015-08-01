@@ -307,7 +307,7 @@ function openlab_my_groups_submenu($group) {
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
     $no_link = 'no-link';
 
-    $span_start = '<span class="semibold">';
+    $span_start = '<span class="bold">';
     $span_end = '</span>';
 
     //get account type to see if they're faculty
