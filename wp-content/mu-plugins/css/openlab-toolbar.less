@@ -30,6 +30,20 @@
             line-height: normal;
             margin: 0 auto;
             max-width: 1140px;
+            #wp-admin-bar-root-default{
+                .ab-icon{
+                    &.dashicon-icon{
+                        font: 400 34px/1 dashicons;
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        top: 0;
+                        &:before{
+                            top: 5px;
+                        }
+                    }
+                }
+            }
             > ul{
                 > li{
                     position: relative;
@@ -356,6 +370,36 @@
                         &.actions{
                             padding-top: 6px;
                         }
+                    }
+                }
+            }
+            #wp-admin-bar-dashboard-link,
+            #wp-admin-bar-new-content,
+            #wp-admin-bar-comments{
+                @media(max-width: @screen-xs-max){
+                    a{
+                        position: relative;
+                        margin: 0 4px;
+                        padding: 0 18px;
+                    }
+                    &.hover,
+                    &:hover{
+                        a{
+                            background: transparent;
+                        }
+                        > .ab-sub-wrapper{
+                            display: none;
+                        }
+                    }
+                }
+            }
+            #wp-admin-bar-dashboard-link{
+                a{
+                    margin: 0 10px;
+                }
+                .dashicon-icon{
+                    &:before{
+                        top: 4px;
                     }
                 }
             }
@@ -784,6 +828,7 @@
                         display: none;
                     }
                 }
+
             }
             @media (max-width: @screen-xs-max){
                 top: 63px;
@@ -791,6 +836,12 @@
                 &:before{
                     bottom: 0;
                 }
+            }
+        }
+        &.admin-area{
+            #wp-admin-bar-new-content,
+            #wp-admin-bar-comments{
+                display: none;
             }
         }
     }

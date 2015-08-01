@@ -101,9 +101,7 @@ class OpenLab_Admin_Bar {
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
                         add_action('admin_bar_menu',array($this,'custom_admin_bar_sidebar_toggle'),0);
 
-                        add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
-                        add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
@@ -148,6 +146,7 @@ class OpenLab_Admin_Bar {
                         if (!is_network_admin() && !is_user_admin()) {
                             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
                             remove_action('admin_bar_menu', 'wp_admin_bar_new_content_menu', 70);
+                            add_action('admin_bar_menu',array($this,'add_dashboard_link'), 50);
                             add_action('admin_bar_menu',array($this,'add_custom_comments_menu'), 60);
                             add_action('admin_bar_menu',array($this,'add_custom_content_menu'), 70);
                         }
@@ -309,50 +308,6 @@ HTML;
                         ),
 		) );
  	}
-
-        /**
-         * The MOL link on mobile needs to sit between the hamburger menus and the logout link
-         * So we'll need a third group for this (makes styling easier)
-         */
-        function add_middle_group_for_mobile($wp_admin_bar) {
-            $wp_admin_bar->add_group(array(
-                'id' => 'mobile-centered',
-                'meta' => array(
-                    'class' => 'ab-mobile-centered',
-                ),
-            ));
-        }
-
-    /**
-         * Mol link on mobile
-         */
-        function add_mobile_mol_link($wp_admin_bar){
-            $current_user = wp_get_current_user();
-
-                //truncating to be on the safe side
-                $username = $current_user->display_name;
-                if(mb_strlen($username) > 50){
-                    $username = substr($username,0,50).'...';
-                }
-                if(mb_strlen($username) > 12){
-                    $username_small = substr($username,0,12).'...';
-                } else {
-                    $username_small = $username;
-                }
-
-                $howdy = '<span class="small-size">'.sprintf(__('Hi, %1$s'), $username).'</span>';
-                $howdy_small = '<span class="very-small-size">'.sprintf(__('Hi, %1$s'), $username_small).'</span>';
-
- 		$wp_admin_bar->add_menu( array(
-                        'parent' => 'mobile-centered',
-			'id'    => 'my-openlab-mobile',
-			'title' => $howdy.$howdy_small,
-			'href'  => bp_loggedin_user_domain(),
-                        'meta'  => array(
-                            'class' => 'visible-xs',
-                        ),
-		) );
-        }
 
         /**
          * Hamurger menu (mobile only)
@@ -1052,14 +1007,13 @@ HTML;
 	if ( ! $actions )
 		return;
 
-	$title = '<span class="fa fa-plus-circle"></span>';
+	$title = '<span class="fa fa-plus-circle hidden-xs"></span><span class="ab-icon dashicon-icon visible-xs"></span>';
 
 	$wp_admin_bar->add_menu( array(
 		'id'    => 'new-content',
 		'title' => $title,
 		'href'  => admin_url( current( array_keys( $actions ) ) ),
 		'meta'  => array(
-                        'class' => 'admin-bar-menu hidden-xs',
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
 		),
 	) );
@@ -1077,6 +1031,24 @@ HTML;
                             )
 		) );
 	}
+    }
+    
+    function add_dashboard_link($wp_admin_bar){
+        
+        $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
+        
+        $href = (is_admin() ? get_site_url() : admin_url());
+
+	$wp_admin_bar->add_menu( array(
+		'id'    => 'dashboard-link',
+		'title' => $title,
+		'href'   => $href,
+		'meta'  => array(
+			'title' => _x( 'Dashboard', 'admin bar menu group label' ),
+                        'class' => 'visible-xs',
+		),
+	) );
+        
     }
 
     function add_custom_updates_menu($wp_admin_bar) {
@@ -1114,16 +1086,14 @@ HTML;
         $awaiting_count = openlab_admin_bar_counts(number_format_i18n($awaiting_mod),' sub-count');
         $awaiting_title = esc_attr(sprintf(_n('%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod), number_format_i18n($awaiting_mod)));
 
-        $icon = '<span class="fa fa-comment"></span>';
-        $title = $awaiting_count;
-
+        $icon = '<span class="fa fa-comment hidden-xs"></span><span class="ab-icon dashicon-icon visible-xs"></span>';
         $wp_admin_bar->add_menu(array(
             'id' => 'comments',
-            'title' => $icon . $title,
+            'title' => $icon,
             'href' => admin_url('edit-comments.php'),
             'meta' => array(
                 'title' => $awaiting_title,
-                'class' => 'hidden-xs',
+                'class' => '',
                     ),
         ));
     }
@@ -1290,6 +1260,12 @@ HTML;
 
             $openlab_theme_link = get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css';
             $openlab_theme_link = set_url_scheme($openlab_theme_link);
+            
+            //making sure dashicons fire up for front end
+            if(!is_admin()){
+                wp_register_style('dashicons','/wp-includes/css/dashicons.min.css');
+                wp_enqueue_style('dashicons');
+            }
 
             //registering font-awesome here so it can be used on the admin bar and on the main site
             wp_register_style('font-awesome', $openlab_theme_link, array(), '20130604', 'all');
@@ -1431,8 +1407,10 @@ add_action( 'wp_footer', 'cac_adminbar_js', 999 );
  */
 function openlab_wrap_adminbar_top(){
     if(get_current_blog_id() !== 1 || is_admin()):
+        
+        $admin_class = (is_admin() ? ' admin-area' : '');
     ?>
-        <div class="oplb-bs adminbar-manual-bootstrap"><div class="oplb-bs adminbar-manual-bootstrap">
+        <div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
     <?php else : ?>
         <div class="oplb-bs"><div class="oplb-bs">
     <?php endif;

@@ -6994,6 +6994,16 @@ button.oplb-bs .close {
   margin: 0 auto;
   max-width: 1140px;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon {
+  font: 400 34px/1 dashicons;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:before {
+  top: 5px;
+}
 .oplb-bs #wpadminbar #wp-toolbar > ul > li {
   position: relative;
 }
@@ -7313,6 +7323,37 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper p.actions {
   padding-top: 6px;
+}
+@media (max-width: 767px) {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a {
+    position: relative;
+    margin: 0 4px;
+    padding: 0 18px;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments.hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover a {
+    background: transparent;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments.hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover > .ab-sub-wrapper {
+    display: none;
+  }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link a {
+  margin: 0 10px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link .dashicon-icon:before {
+  top: 4px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-activity {
   border-right: 1px solid #000000;
@@ -7731,6 +7772,10 @@ button.oplb-bs .close {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar:before {
     bottom: 0;
   }
+}
+.oplb-bs.adminbar-manual-bootstrap.admin-area #wp-admin-bar-new-content,
+.oplb-bs.adminbar-manual-bootstrap.admin-area #wp-admin-bar-comments {
+  display: none;
 }
 html {
   position: relative;
