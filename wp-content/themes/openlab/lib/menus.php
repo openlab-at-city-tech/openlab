@@ -376,9 +376,9 @@ function openlab_create_group_menu($grouptype) {
     }
 
     if ($grouptype == 'course') {
-        $title = 'Create/Clone a Course ';
+        $title = 'Create/Clone a Course: ';
     } else {
-        $title = 'Create a ' . ucfirst($grouptype) . ' ';
+        $title = 'Create a ' . ucfirst($grouptype) . ': ';
     }
 
     $menu_mup = <<<HTML

@@ -8566,9 +8566,9 @@ body .inline-visible-xs {
     font-size: 13px;
   }
 }
-.create-group-submenu .submenu-title {
-  padding-right: 7px;
+#content .create-group-submenu .submenu-title {
   margin-right: 4px;
+  border-right: none;
 }
 #group-list .group-item-wrapper .item-avatar img {
   max-width: 95%;
