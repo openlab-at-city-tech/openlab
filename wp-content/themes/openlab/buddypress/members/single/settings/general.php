@@ -39,7 +39,7 @@ do_action('bp_before_member_settings_template');
             
             <?php 
             $account_type = openlab_get_displayed_user_account_type();
-            $include_acct_type = in_array($account_type, array('Student', 'Alumni')) ? ' account type, ' : '';
+            $include_acct_type = in_array($account_type, array('Student', 'Alumni')) ? ' account type, ' : ' ';
             ?>
             
             <p class="description">Required to change<?= $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
