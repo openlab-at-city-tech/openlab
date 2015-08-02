@@ -1198,11 +1198,17 @@ function openlab_show_site_posts_and_comments() {
             ));
 
             foreach ($wp_posts as $wp_post) {
-                $posts[] = array(
+                $_post = array(
                     'title' => $wp_post->post_title,
                     'content' => strip_tags(bp_create_excerpt($wp_post->post_content, 110, array('html' => true))),
                     'permalink' => get_permalink($wp_post->ID)
                 );
+
+                if ( ! empty( $wp_post->post_password ) ) {
+                    $_post['content'] = 'This content is password protected.';
+                }
+
+                $posts[] = $_post;
             }
 
             // Set up comments
