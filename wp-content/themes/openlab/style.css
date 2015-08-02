@@ -8736,9 +8736,6 @@ input#group-request-send {
   margin-left: 0;
   padding-left: 0;
 }
-body.membership-requests .item-body {
-  margin-top: 35px;
-}
 body.membership-requests .group-list {
   margin-top: 0;
 }
@@ -8749,8 +8746,11 @@ body.membership-requests .group-list {
 .bp-widget .group-list {
   margin-top: 0;
 }
+.item-body {
+  margin-top: 35px;
+}
 .plugins #item-body {
-  margin-top: 30px;
+  margin-top: 35px;
 }
 #bp-group-documents .bp-template-notice.error,
 #bp-group-documents .bp-template-notice.updated {
