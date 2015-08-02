@@ -100,6 +100,11 @@ class OpenLab_Admin_Bar {
                         //remove the default mobile dashboard toggle, we need a custom one for this for styling purposes
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
                         add_action('admin_bar_menu',array($this,'custom_admin_bar_sidebar_toggle'),0);
+                        
+                        if(get_current_blog_id() === 1 && !is_admin()){
+                            add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
+                            add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
+                        }
 
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
@@ -288,6 +293,50 @@ HTML;
                             'class' => 'mobile-no-hover',
                         ),
  		) );
+        }
+        
+         /**
+         * The MOL link on mobile needs to sit between the hamburger menus and the logout link
+         * So we'll need a third group for this (makes styling easier)
+         */
+        function add_middle_group_for_mobile($wp_admin_bar) {
+            $wp_admin_bar->add_group(array(
+                'id' => 'mobile-centered',
+                'meta' => array(
+                    'class' => 'ab-mobile-centered',
+                ),
+            ));
+        }
+
+    /**
+         * Mol link on mobile
+         */
+        function add_mobile_mol_link($wp_admin_bar){
+            $current_user = wp_get_current_user();
+
+                //truncating to be on the safe side
+                $username = $current_user->display_name;
+                if(mb_strlen($username) > 50){
+                    $username = substr($username,0,50).'...';
+                }
+                if(mb_strlen($username) > 12){
+                    $username_small = substr($username,0,12).'...';
+                } else {
+                    $username_small = $username;
+                }
+
+                $howdy = '<span class="small-size">'.sprintf(__('Hi, %1$s'), $username).'</span>';
+                $howdy_small = '<span class="very-small-size">'.sprintf(__('Hi, %1$s'), $username_small).'</span>';
+
+ 		$wp_admin_bar->add_menu( array(
+                        'parent' => 'mobile-centered',
+			'id'    => 'my-openlab-mobile',
+			'title' => $howdy.$howdy_small,
+			'href'  => bp_loggedin_user_domain(),
+                        'meta'  => array(
+                            'class' => 'visible-xs',
+                        ),
+		) );
         }
 
  	/**
@@ -1033,22 +1082,25 @@ HTML;
 	}
     }
     
-    function add_dashboard_link($wp_admin_bar){
-        
-        $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
-        
-        $href = (is_admin() ? get_site_url() : admin_url());
+    function add_dashboard_link($wp_admin_bar) {
+        global $bp;
 
-	$wp_admin_bar->add_menu( array(
-		'id'    => 'dashboard-link',
-		'title' => $title,
-		'href'   => $href,
-		'meta'  => array(
-			'title' => _x( 'Dashboard', 'admin bar menu group label' ),
-                        'class' => 'visible-xs',
-		),
-	) );
-        
+        if (current_user_can( 'manage_options' )) {
+
+            $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
+
+            $href = (is_admin() ? get_site_url() : admin_url());
+
+            $wp_admin_bar->add_menu(array(
+                'id' => 'dashboard-link',
+                'title' => $title,
+                'href' => $href,
+                'meta' => array(
+                    'title' => _x('Dashboard', 'admin bar menu group label'),
+                    'class' => 'visible-xs',
+                ),
+            ));
+        }
     }
 
     function add_custom_updates_menu($wp_admin_bar) {
