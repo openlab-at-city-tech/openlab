@@ -775,7 +775,7 @@ function openlab_group_profile_activity_list() {
                                                         $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
                                                     }
                                                     ?>
-                                                    
+
                                                     <?= openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
 
                                                 </div></div>                                            <?php endwhile; ?>
@@ -901,7 +901,7 @@ function openlab_get_group_activity_content($title, $content, $link) {
                 </h6>
 HTML;
     }
-    
+
     $markup .= <<<HTML
             <p class="activity-content">
                 <span class="hyphenate truncate-on-the-fly" data-basevalue="120" data-minvalue="75" data-basewidth="376">{$content}</span>
@@ -1198,11 +1198,17 @@ function openlab_show_site_posts_and_comments() {
             ));
 
             foreach ($wp_posts as $wp_post) {
-                $posts[] = array(
+                $_post = array(
                     'title' => $wp_post->post_title,
                     'content' => strip_tags(bp_create_excerpt($wp_post->post_content, 110, array('html' => true))),
                     'permalink' => get_permalink($wp_post->ID)
                 );
+
+                if ( ! empty( $wp_post->post_password ) ) {
+                    $_post['content'] = 'This content is password protected.';
+                }
+
+                $posts[] = $_post;
             }
 
             // Set up comments
@@ -1235,10 +1241,10 @@ function openlab_show_site_posts_and_comments() {
         case 'external':
             $posts = openlab_get_external_posts_by_group_id();
             $comments = openlab_get_external_comments_by_group_id();
-            
+
             break;
     }
-    
+
     // If we have either, show both
     if (!empty($posts) || !empty($comments)) {
         ?>

@@ -8610,7 +8610,7 @@ input#group-request-send {
   margin-top: 10px;
 }
 /**group profiles**/
-#group-action-wrapper {
+.group-header-avatar {
   margin-bottom: 20px;
 }
 #group-action-wrapper .link-btn {
@@ -8729,15 +8729,12 @@ input#group-request-send {
   padding-left: 0;
   list-style-type: none;
   font-size: .9em;
-  font-weight: bold;
+  font-weight: 600;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper ul.group-manage-members-bpges-status {
   list-style-type: none;
   margin-left: 0;
   padding-left: 0;
-}
-body.membership-requests .item-body {
-  margin-top: 35px;
 }
 body.membership-requests .group-list {
   margin-top: 0;
@@ -8749,8 +8746,11 @@ body.membership-requests .group-list {
 .bp-widget .group-list {
   margin-top: 0;
 }
+.item-body {
+  margin-top: 35px;
+}
 .plugins #item-body {
-  margin-top: 30px;
+  margin-top: 35px;
 }
 #bp-group-documents .bp-template-notice.error,
 #bp-group-documents .bp-template-notice.updated {
@@ -9034,9 +9034,6 @@ body.membership-requests .group-list {
 }
 #member-header .btn.is_friend.friendship-button:hover {
   color: #49cabe;
-}
-#member-header #profile-action-wrapper {
-  margin-bottom: 20px;
 }
 @media (max-width: 767px) {
   #member-header {

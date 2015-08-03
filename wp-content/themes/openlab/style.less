@@ -1656,8 +1656,10 @@ input#group-request-send {
     margin-top: 10px;
 }
 /**group profiles**/
+.group-header-avatar {
+	margin-bottom: 20px;
+}
 #group-action-wrapper{
-    margin-bottom: 20px;
     .link-btn{
         padding: 9px 12px;
     }
@@ -1794,7 +1796,7 @@ input#group-request-send {
                     padding-left: 0;
                     list-style-type: none;
                     font-size: .9em;
-		    font-weight: bold;
+		    font-weight: @semibold;
                 }
 
                 ul.group-manage-members-bpges-status {
@@ -1807,9 +1809,6 @@ input#group-request-send {
     }
 }
 body.membership-requests {
-    .item-body {
-        margin-top: 35px;
-    }
     .group-list {
         margin-top: 0;
     }
@@ -1823,9 +1822,12 @@ body.membership-requests {
         margin-top: 0;
     }
 }
+.item-body {
+    margin-top: 35px;
+}
 .plugins{
     #item-body{
-        margin-top: 30px;
+        margin-top: 35px;
     }
 }
 #bp-group-documents{
@@ -2159,9 +2161,6 @@ body.membership-requests {
         &:hover{
             color: @aqua;
         }
-    }
-    #profile-action-wrapper{
-        margin-bottom: 20px;
     }
     @media (max-width: @screen-xs-max){
         margin-top: 20px;
