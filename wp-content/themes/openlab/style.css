@@ -7126,6 +7126,10 @@ blockquote .h6 {
   padding-left: 0;
   padding-right: 7px;
 }
+.nav.nav-inline li.submenu-title:hover,
+.nav.nav-inline li.submenu-title:active {
+  color: #000000;
+}
 @media (max-width: 767px) {
   .nav.nav-inline {
     float: none;

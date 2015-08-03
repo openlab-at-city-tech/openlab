@@ -148,6 +148,12 @@ blockquote {
                     padding-right: 7px;
                 }
             }
+            &.submenu-title{
+                &:hover,
+                    &:active{
+                    color: @black;
+                }
+            }
         }
         @media (max-width: @screen-xs-max){
             float: none;
@@ -1657,7 +1663,7 @@ input#group-request-send {
 }
 /**group profiles**/
 .group-header-avatar {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 #group-action-wrapper{
     .link-btn{
@@ -1796,7 +1802,7 @@ input#group-request-send {
                     padding-left: 0;
                     list-style-type: none;
                     font-size: .9em;
-		    font-weight: @semibold;
+                    font-weight: @semibold;
                 }
 
                 ul.group-manage-members-bpges-status {
@@ -1816,7 +1822,7 @@ body.membership-requests {
 .bp-widget {
     & > h4 {
         margin-top: 25px;
-	font-size: 16px;
+        font-size: 16px;
     }
     .group-list {
         margin-top: 0;
