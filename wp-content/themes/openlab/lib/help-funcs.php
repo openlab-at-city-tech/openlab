@@ -121,7 +121,7 @@ function openlab_help_loop() {
 	    </div>
 
         <?php elseif ($post->post_name == "openlab-help"): ?>
-            <h1 class="entry-title"><?php echo the_title(); ?>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -131,7 +131,7 @@ function openlab_help_loop() {
             </h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
-            <h1 class="entry-title"><?php echo the_title(); ?>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -194,7 +194,7 @@ function openlab_help_tags_loop() {
     $tags_query = new WP_Query($args);
     ?>
 
-    <h1 class="parent-cat entry-title">Tag Archive for: "<?php echo $parent_cat_name; ?>"
+    <h1 class="parent-cat entry-title"><span class="profile-name hyphenate">Tag Archive for: "<?php echo $parent_cat_name; ?>"</span>
         <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -260,7 +260,7 @@ function openlab_help_cats_loop() {
     ?>
 
     <?php if ($parent_term->parent == 0): ?>
-        <h1 class="parent-cat entry-title"><?php echo $parent_cat_name; ?>
+    <h1 class="parent-cat entry-title"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span>
             <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -275,7 +275,7 @@ function openlab_help_cats_loop() {
     else:
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
         ?>
-        <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><?php echo $head_term->name ?></a>
+    <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><span class="profile-name hyphenate"><?php echo $head_term->name ?></span></a>
             <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -408,7 +408,7 @@ function openlab_glossary_cats_loop() {
     $cat_query = new WP_Query($args);
     ?>
 
-    <h1 class="parent-cat entry-title">Glossary
+    <h1 class="parent-cat entry-title"><span class="profile-name hyphenate">Glossary</span>
         <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
