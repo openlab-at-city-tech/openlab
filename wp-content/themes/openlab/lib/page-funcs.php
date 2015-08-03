@@ -120,7 +120,7 @@ function cuny_home_new_members() {
                     <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?= $firstname ?>"/></a>
                 </div>
                 <div class="home-new-member-info">
-                    <h2 class="truncate-on-the-fly load-delay" data-basevalue="16" data-minvalue="8" data-basewidth="164"><?= $firstname ?></h2>
+                    <h2 class="truncate-on-the-fly load-delay" data-basevalue="16" data-minvalue="11" data-basewidth="164"><?= $firstname ?></h2>
                     <span class="original-copy hidden"><?= $firstname ?></span>
                     <div class="registered timestamp"><?php bp_member_registered() ?></div>
                 </div>
