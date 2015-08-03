@@ -1086,7 +1086,14 @@ HTML;
     function add_dashboard_link($wp_admin_bar) {
         global $bp;
         
-        if (current_user_can('edit_published_posts')) {
+        $current_screen = new stdClass();
+        $current_screen->base = '';
+        
+        if (is_admin()) {
+            $current_screen = get_current_screen();
+        }
+
+        if (current_user_can('edit_published_posts') && $current_screen->base !== 'my-sites') {
 
             $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
 
