@@ -7292,6 +7292,9 @@ input[type="submit"] {
 .form-control.disabled-opt {
   opacity: 0.4;
 }
+.form-control[type="file"] {
+  padding: 0 12px;
+}
 .notify-settings .notify-members {
   font-weight: 700;
 }
