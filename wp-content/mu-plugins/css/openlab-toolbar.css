@@ -7378,6 +7378,10 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a .dashicon-icon {
   padding-top: 2px;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link a .dashicon-icon.dashicons-admin-home:before,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a .dashicon-icon.dashicons-admin-home:before {
+  top: 10px;
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a .dashicon-icon:before {
   left: 3px;
 }
