@@ -33,13 +33,20 @@
             #wp-admin-bar-root-default{
                 .ab-icon{
                     &.dashicon-icon{
-                        font: 400 34px/1 dashicons;
+                        font: 400 28px/1 dashicons;
+                        height: auto;
                         position: absolute;
                         left: 0;
                         right: 0;
                         top: 0;
+                        width: auto;
+                        margin:0 auto;
                         &:before{
-                            top: 5px;
+                            top: 11px;
+                        }
+                        &:hover,
+                            &:focus{
+                            color: @white;
                         }
                     }
                 }
@@ -380,12 +387,15 @@
                     a{
                         position: relative;
                         margin: 0 4px;
-                        padding: 0 18px;
+                        padding: 0 14px;
                     }
                     &.hover,
-                    &:hover{
+                    &:hover,
+                        &:focus{
+                        background: transparent;
                         a{
                             background: transparent;
+                            color: @white;
                         }
                         > .ab-sub-wrapper{
                             display: none;
@@ -393,13 +403,20 @@
                     }
                 }
             }
-            #wp-admin-bar-dashboard-link{
+            #wp-admin-bar-dashboard-link,
+            #wp-admin-bar-comments{
                 a{
-                    margin: 0 10px;
+                    .dashicon-icon{
+                        padding-top: 2px;
+                    }
                 }
-                .dashicon-icon{
-                    &:before{
-                        top: 4px;
+            }
+            #wp-admin-bar-comments{
+                a{
+                    .dashicon-icon{
+                        &:before{
+                            left: 3px;
+                        }
                     }
                 }
             }

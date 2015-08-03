@@ -1064,6 +1064,7 @@ HTML;
 		'href'  => admin_url( current( array_keys( $actions ) ) ),
 		'meta'  => array(
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
+                        'class' => 'mobile-no-hover',
 		),
 	) );
 
@@ -1084,8 +1085,8 @@ HTML;
     
     function add_dashboard_link($wp_admin_bar) {
         global $bp;
-
-        if (current_user_can( 'manage_options' )) {
+        
+        if (current_user_can('edit_published_posts')) {
 
             $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
 
@@ -1097,7 +1098,7 @@ HTML;
                 'href' => $href,
                 'meta' => array(
                     'title' => _x('Dashboard', 'admin bar menu group label'),
-                    'class' => 'visible-xs',
+                    'class' => 'mobile-no-hover visible-xs',
                 ),
             ));
         }
@@ -1120,6 +1121,7 @@ HTML;
             'href' => network_admin_url('update-core.php'),
             'meta' => array(
                 'title' => $update_data['title'],
+                'class' => 'mobile-no-hover',
             ),
         ));
     }
@@ -1145,7 +1147,7 @@ HTML;
             'href' => admin_url('edit-comments.php'),
             'meta' => array(
                 'title' => $awaiting_title,
-                'class' => '',
+                'class' => 'mobile-no-hover',
                     ),
         ));
     }

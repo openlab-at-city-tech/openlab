@@ -6995,14 +6995,21 @@ button.oplb-bs .close {
   max-width: 1140px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon {
-  font: 400 34px/1 dashicons;
+  font: 400 28px/1 dashicons;
+  height: auto;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
+  width: auto;
+  margin: 0 auto;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:before {
-  top: 5px;
+  top: 11px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:hover,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:focus {
+  color: #ffffff;
 }
 .oplb-bs #wpadminbar #wp-toolbar > ul > li {
   position: relative;
@@ -7330,30 +7337,49 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a {
     position: relative;
     margin: 0 4px;
-    padding: 0 18px;
+    padding: 0 14px;
+  }
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments.hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:focus,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:focus,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:focus {
+    background: transparent;
   }
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover a,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover a,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments.hover a,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:hover a,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:hover a,
-  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover a {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:focus a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:focus a,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:focus a {
     background: transparent;
+    color: #ffffff;
   }
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover > .ab-sub-wrapper,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover > .ab-sub-wrapper,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments.hover > .ab-sub-wrapper,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:hover > .ab-sub-wrapper,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:hover > .ab-sub-wrapper,
-  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover > .ab-sub-wrapper {
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:hover > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link:focus > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:focus > .ab-sub-wrapper,
+  .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:focus > .ab-sub-wrapper {
     display: none;
   }
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link a {
-  margin: 0 10px;
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link a .dashicon-icon,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a .dashicon-icon {
+  padding-top: 2px;
 }
-.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link .dashicon-icon:before {
-  top: 4px;
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments a .dashicon-icon:before {
+  left: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-activity {
   border-right: 1px solid #000000;
