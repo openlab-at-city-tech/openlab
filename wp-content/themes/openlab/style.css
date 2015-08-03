@@ -8610,7 +8610,7 @@ input#group-request-send {
   margin-top: 10px;
 }
 /**group profiles**/
-#group-action-wrapper {
+.group-header-avatar {
   margin-bottom: 20px;
 }
 #group-action-wrapper .link-btn {
@@ -9034,9 +9034,6 @@ body.membership-requests .group-list {
 }
 #member-header .btn.is_friend.friendship-button:hover {
   color: #49cabe;
-}
-#member-header #profile-action-wrapper {
-  margin-bottom: 20px;
 }
 @media (max-width: 767px) {
   #member-header {
