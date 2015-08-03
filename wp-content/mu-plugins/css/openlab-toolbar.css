@@ -7303,7 +7303,7 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-network-menu-mobile > .ab-item {
     padding: 7px 0 0;
-    visibility: hidden;
+    display: none;
     width: 0;
   }
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper,
