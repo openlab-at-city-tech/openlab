@@ -263,8 +263,18 @@ input[type="submit"]{
     &.disabled-opt{
         opacity: 0.4;
     }
-    &[type="file"]{
+    &.type-file-wrapper{
         padding: 0 12px;
+        vertical-align: middle;
+        &:after{
+            content: "";
+            height: 110%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        input{
+            display: inline-block;
+        }
     }
 }
 .notify-settings {

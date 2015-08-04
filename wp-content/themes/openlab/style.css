@@ -7292,8 +7292,18 @@ input[type="submit"] {
 .form-control.disabled-opt {
   opacity: 0.4;
 }
-.form-control[type="file"] {
+.form-control.type-file-wrapper {
   padding: 0 12px;
+  vertical-align: middle;
+}
+.form-control.type-file-wrapper:after {
+  content: "";
+  height: 110%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.form-control.type-file-wrapper input {
+  display: inline-block;
 }
 .notify-settings .notify-members {
   font-weight: 700;

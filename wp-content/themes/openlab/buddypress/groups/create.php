@@ -187,7 +187,9 @@
 
                                 <p id="avatar-upload">
                                     <div class="form-group form-inline">
-                                            <input class="form-control" type="file" name="file" id="file" />
+                                            <div class="form-control type-file-wrapper">
+                                                <input type="file" name="file" id="file" />
+                                            </div>
                                             <input class="btn btn-primary top-align" type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ) ?>" />
                                             <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                                     </div>

@@ -409,7 +409,9 @@ function cuny_home_square($type) {
                                                                                                                                             </div>
                                                             
                                                                                                                                             <p>
-                                                                                                                                                    <input type="file" name="file" id="file" />
+                                                                                                                                                    <div class="form-control type-file-wrapper">
+                                                                                                                                                        <input type="file" name="file" id="file" />
+                                                                                                                                                    </div>
                                                                                                                                                     <input type="submit" name="upload" id="upload" value="<?php _e('Upload Image', 'buddypress') ?>" />
                                                                                                                                                     <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                                                                                                                                                     <input type="hidden" name="signup_email" id="signup_email" value="<?php bp_signup_email_value() ?>" />

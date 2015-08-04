@@ -154,7 +154,9 @@ function openlab_bp_group_documents_display_content() {
 
                                     <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo return_bytes(ini_get('post_max_size')) ?>" />
                                     <label><?php _e('Choose File:', 'bp-group-documents'); ?></label>
-                                    <input type="file" name="bp_group_documents_file" class="bp-group-documents-file form-control" />
+                                    <div class="form-control type-file-wrapper">
+                                        <input type="file" name="bp_group_documents_file" class="bp-group-documents-file" />
+                                    </div>
                                 <?php } ?>
 
                                 <?php if (BP_GROUP_DOCUMENTS_FEATURED) { ?>
