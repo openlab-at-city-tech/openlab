@@ -38,13 +38,6 @@ require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 
-/* * minify library* */
-require_once( WPMU_PLUGIN_DIR . '/minify/src/Converter.php' );
-require_once( WPMU_PLUGIN_DIR . '/minify/src/Minify.php' );
-require_once( WPMU_PLUGIN_DIR . '/minify/src/Exception.php' );
-require_once( WPMU_PLUGIN_DIR . '/minify/src/JS.php' );
-require_once( WPMU_PLUGIN_DIR . '/minify/src/CSS.php' );
-
 function openlab_load_scripts() {
     $stylesheet_dir_uri = get_stylesheet_directory_uri();
 
@@ -86,24 +79,6 @@ function openlab_load_scripts() {
         wp_enqueue_script('succinct-js');
         wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', array('jquery'), '', true);
         wp_enqueue_script('utility');
-
-        $result_path = STYLESHEETPATH . '/js/utility.min.js';
-
-        $bootstrap = STYLESHEETPATH . '/js/bootstrap.min.js';
-        $jcarousellite = STYLESHEETPATH . '/js/jcarousellite.js';
-        $easyaccordion = STYLESHEETPATH . '/js/easyaccordion.js';
-        $easing = STYLESHEETPATH . '/js/jquery.easing.1.3.js';
-        $mobile_custom = STYLESHEETPATH . '/js/jquery.mobile.customized.min.js';
-        $camera = STYLESHEETPATH . '/js/camera.min.js';
-        $hyphenator = STYLESHEETPATH . '/js/hyphenator.js';
-        $succinct = STYLESHEETPATH . '/js/jQuery.succinct.mod.js';
-        $utility = STYLESHEETPATH . '/js/utility.js';
-
-        //$minifier = new MatthiasMullie\Minify\JS($bootstrap, $jcarousellite, $easyaccordion, $easing, $mobile_custom, $camera, $hyphenator, $succinct, $utility);
-        //$minifier->minify($result_path);
-
-        //wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.min.js', array('jquery'), '', true);
-        //wp_enqueue_script('utility');
     }
 }
 
@@ -122,14 +97,6 @@ function openlab_load_scripts_high_priority() {
         wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
     } else {
-
-        $source_path = STYLESHEETPATH . '/style.css';
-        //$result_path = STYLESHEETPATH . '/style.min.css';
-        //$minifier = new MatthiasMullie\Minify\CSS($source_path);
-        //$minifier->minify($result_path);
-
-        //wp_register_style('main-styles', $stylesheet_dir_uri . '/style.min.css', array(), '20130604', 'all');
-        //wp_enqueue_style('main-styles');
 
         wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '20130604', 'all');
         wp_enqueue_style('main-styles');
