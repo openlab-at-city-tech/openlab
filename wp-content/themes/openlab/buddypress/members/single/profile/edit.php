@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_profile_edit_content' ) ?>
 
 <?php
-global $bp,$user_ID;
+global $bp,$user_ID, $profile_template;
 if(is_super_admin( $user_ID )){
 	$pgroup=bp_get_current_profile_group_id();
 	$account_type=bp_get_profile_field_data( 'field=Account Type&user_id=' . bp_displayed_user_id() );
@@ -36,6 +36,12 @@ $field_ids = array( 1 );
 
 if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
+        <?php if(bp_get_profile_group_name() === 'Alumni' && $profile_template->current_group === 1): ?>
+                        
+                            <?php //do nothing so that student and alumni fields show up in one seamless panel ?>
+                        
+                        <?php else: ?>
+    
 	<?php do_action( 'bp_before_profile_field_content' ) ?>
 
                 <?php if(is_super_admin( $user_ID )): ?>
@@ -62,6 +68,8 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 			</div>
 			<?php $display_name_shown = true ?>
 		<?php } ?>
+                        
+                <?php endif; ?>
 
 		<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
@@ -163,6 +171,12 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 				<p class="description"><?php bp_the_profile_field_description() ?></p>
 			</div>
 		<?php endwhile; ?>
+                        
+                        <?php if(bp_get_profile_group_name() === 'Alumni' && $profile_template->current_group === 0): ?>
+                        
+                            <?php //do nothing so that student and alumni fields show up in one seamless panel ?>
+                        
+                        <?php else: ?>
 
                         </div><!--panel-body-->
                 </div>
@@ -175,6 +189,8 @@ if ( bp_has_profile( $profile_args ) ) : while ( bp_profile_groups() ) : bp_the_
 </div>
 <input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode( ',', $field_ids ) ?>" />
 <?php wp_nonce_field( 'bp_xprofile_edit' ) ?>
+
+<?php endif; ?>
 
 <?php endwhile; ?>
 
