@@ -1064,7 +1064,7 @@ HTML;
 		'href'  => admin_url( current( array_keys( $actions ) ) ),
 		'meta'  => array(
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
-                        'class' => 'mobile-no-hover',
+                        'class' => 'mobile-no-hover admin-bar-menu',
 		),
 	) );
 
