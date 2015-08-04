@@ -8668,6 +8668,9 @@ input#group-request-send {
 .info-panel .table-div .table-row:first-child div {
   border-top: none;
 }
+.school-inputs > label {
+  margin-right: 18px;
+}
 .group-subscription-status {
   background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
   font-weight: 700;
