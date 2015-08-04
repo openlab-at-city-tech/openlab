@@ -31,42 +31,36 @@ $field_ids = array(1);
 
 <form action="" method="post" id="profile-edit-form" class="standard-form form-panel">
 
-    <?php if (bp_has_profile($profile_args)) : while (bp_profile_groups()) : bp_the_profile_group(); ?>
+    <?php if (bp_has_profile($profile_args)) : ?>
 
-            <?php if (bp_get_profile_group_name() === 'Alumni' && $profile_template->current_group === 1): ?>
+        <?php do_action('bp_before_profile_field_content') ?>
 
-                <?php //do nothing so that student and alumni fields show up in one seamless panel  ?>
+        <?php if (is_super_admin($user_ID)): ?>
+            <ul class="button-nav">
 
-            <?php else: ?>
+                <?php bp_profile_group_tabs(); ?>
 
-                <?php do_action('bp_before_profile_field_content') ?>
+            </ul>
+        <?php endif; ?>
 
-                <?php if (is_super_admin($user_ID)): ?>
-                    <ul class="button-nav">
+        <div class="clear"></div>
 
-                    <?php bp_profile_group_tabs(); ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Edit Profile</div>
+            <div class="panel-body">
 
-                    </ul>
-                    <?php endif; ?>
+                <?php do_action('template_notices'); ?>
 
-                <div class="clear"></div>
+                <?php if (!$display_name_shown) { ?>
+                    <div class="editfield field_1 field_name alt form-group">
+                        <label for="field_1">Display Name (required)</label>
+                        <input class="form-control" type="text" value="<?php echo $display_name; ?>" id="field_1" name="field_1">
+                        <p class="description"></p>
+                    </div>
+                    <?php $display_name_shown = true ?>
+                <?php } ?>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Edit Profile</div>
-                    <div class="panel-body">
-
-            <?php do_action('template_notices'); ?>
-
-                        <?php if (!$display_name_shown) { ?>
-                            <div class="editfield field_1 field_name alt form-group">
-                                <label for="field_1">Display Name (required)</label>
-                                <input class="form-control" type="text" value="<?php echo $display_name; ?>" id="field_1" name="field_1">
-                                <p class="description"></p>
-                            </div>
-                <?php $display_name_shown = true ?>
-            <?php } ?>
-
-                    <?php endif; ?>
+                <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
@@ -75,8 +69,8 @@ $field_ids = array(1);
 
                         <div<?php bp_field_css_class('editfield') ?>>
 
-            <?php if ('textbox' == bp_get_the_profile_field_type()) : ?>
-                <?php if (bp_get_the_profile_field_name() == "Name") { ?>
+                            <?php if ('textbox' == bp_get_the_profile_field_type()) : ?>
+                                <?php if (bp_get_the_profile_field_name() == "Name") { ?>
                                     <label for="<?php bp_the_profile_field_input_name() ?>"><?php echo "Display Name"; ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
                                 <?php }else { ?>
                                     <label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
@@ -84,14 +78,14 @@ $field_ids = array(1);
 
                                 <input class="form-control" type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="<?php bp_the_profile_field_edit_value() ?>" />
 
-            <?php endif; ?>
+                            <?php endif; ?>
 
                             <?php if ('textarea' == bp_get_the_profile_field_type()) : ?>
 
                                 <label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
                                 <textarea class="form-control" rows="5" cols="40" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_edit_value() ?></textarea>
 
-            <?php endif; ?>
+                            <?php endif; ?>
 
                             <?php
                             if ('selectbox' == bp_get_the_profile_field_type()) :
@@ -171,27 +165,19 @@ $field_ids = array(1);
                         </div>
                     <?php endwhile; ?>
 
-                    <?php if (bp_get_profile_group_name() === 'Alumni' && $profile_template->current_group === 0): ?>
+                <?php endwhile; ?>
 
-                        <?php //do nothing so that student and alumni fields show up in one seamless panel  ?>
-
-                    <?php else: ?>
-
-                    </div><!--panel-body-->
-                </div>
+            </div><!--panel-body-->
+        </div>
 
 
-                <?php do_action('bp_after_profile_field_content') ?>
+        <?php do_action('bp_after_profile_field_content') ?>
 
-                <div class="submit">
-                    <input class="btn btn-primary btn-margin btn-margin-top" type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e('Save Changes', 'buddypress') ?> " />
-                </div>
-                <input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode(',', $field_ids) ?>" />
-                <?php wp_nonce_field('bp_xprofile_edit') ?>
-
-            <?php endif; ?>
-
-        <?php endwhile; ?>
+        <div class="submit">
+            <input class="btn btn-primary btn-margin btn-margin-top" type="submit" name="profile-group-edit-submit" id="profile-group-edit-submit" value="<?php _e('Save Changes', 'buddypress') ?> " />
+        </div>
+        <input type="hidden" name="field_ids" id="field_ids" value="<?php echo implode(',', $field_ids) ?>" />
+        <?php wp_nonce_field('bp_xprofile_edit') ?>
 
     <?php endif; ?>
 
