@@ -188,25 +188,28 @@ jQuery(document).ready(function($){
 	function load_account_type_fields() {
 		var default_type = '';
 		var selected_account_type = $account_type_field.val();
+                
+                if (document.getElementById('signup_submit')) {
 
-		if ( selected_account_type != "" ) {
-			document.getElementById( 'signup_submit' ).style.display='';
-		} else {
-			document.getElementById( 'signup_submit' ).style.display='none';
-		}
+                    if (selected_account_type != "") {
+                        document.getElementById('signup_submit').style.display = '';
+                    } else {
+                        document.getElementById('signup_submit').style.display = 'none';
+                    }
 
-		$.ajax( ajaxurl, {
-			data: {
-				action: 'wds_load_account_type',
-				account_type: selected_account_type,
-				post_data: OLReg.post_data
-			},
-			method: 'POST',
-			success: function( response ) {
-				$( '#wds-account-type' ).html( response );
-                                load_error_messages();
-			}
-		} );
+                    $.ajax(ajaxurl, {
+                        data: {
+                            action: 'wds_load_account_type',
+                            account_type: selected_account_type,
+                            post_data: OLReg.post_data
+                        },
+                        method: 'POST',
+                        success: function (response) {
+                            $('#wds-account-type').html(response);
+                            load_error_messages();
+                        }
+                    });
+            }
 	}
         
         /**
