@@ -47,6 +47,13 @@
 		<?php endwhile; ?>
 
 	</div>
+        <div id="pag-top" class="pagination">
+
+            <div class="pagination-links" id="member-dir-pag-top">
+                <?php echo openlab_members_pagination_links() ?>
+            </div>
+
+        </div>
 
 	<?php do_action( 'bp_after_group_members_content' ) ?>
 
