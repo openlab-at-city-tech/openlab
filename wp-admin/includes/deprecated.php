@@ -33,7 +33,6 @@ function tinymce_include() {
  */
 function documentation_link() {
 	_deprecated_function( __FUNCTION__, '2.5' );
-	return;
 }
 
 /**
@@ -80,9 +79,9 @@ function get_udims( $width, $height ) {
  * @deprecated Use wp_category_checklist()
  * @see wp_category_checklist()
  *
- * @param unknown_type $default
- * @param unknown_type $parent
- * @param unknown_type $popular_ids
+ * @param int $default
+ * @param int $parent
+ * @param array $popular_ids
  */
 function dropdown_categories( $default = 0, $parent = 0, $popular_ids = array() ) {
 	_deprecated_function( __FUNCTION__, '2.6', 'wp_category_checklist()' );
@@ -98,7 +97,7 @@ function dropdown_categories( $default = 0, $parent = 0, $popular_ids = array() 
  * @deprecated Use wp_link_category_checklist()
  * @see wp_link_category_checklist()
  *
- * @param unknown_type $default
+ * @param int $default
  */
 function dropdown_link_categories( $default = 0 ) {
 	_deprecated_function( __FUNCTION__, '2.6', 'wp_link_category_checklist()' );
@@ -130,12 +129,12 @@ function get_real_file_to_edit( $file ) {
  * @deprecated Use wp_dropdown_categories()
  * @see wp_dropdown_categories()
  *
- * @param unknown_type $currentcat
- * @param unknown_type $currentparent
- * @param unknown_type $parent
- * @param unknown_type $level
- * @param unknown_type $categories
- * @return unknown
+ * @param int $currentcat
+ * @param int $currentparent
+ * @param int $parent
+ * @param int $level
+ * @param array $categories
+ * @return bool|null
  */
 function wp_dropdown_cats( $currentcat = 0, $currentparent = 0, $parent = 0, $level = 0, $categories = 0 ) {
 	_deprecated_function( __FUNCTION__, '3.0', 'wp_dropdown_categories()' );
@@ -170,12 +169,11 @@ function wp_dropdown_cats( $currentcat = 0, $currentparent = 0, $parent = 0, $le
  * @param string $option_group A settings group name. Should correspond to a whitelisted option key name.
  * 	Default whitelisted option key names include "general," "discussion," and "reading," among others.
  * @param string $option_name The name of an option to sanitize and save.
- * @param unknown_type $sanitize_callback A callback function that sanitizes the option's value.
- * @return unknown
+ * @param callable $sanitize_callback A callback function that sanitizes the option's value.
  */
 function add_option_update_handler( $option_group, $option_name, $sanitize_callback = '' ) {
 	_deprecated_function( __FUNCTION__, '3.0', 'register_setting()' );
-	return register_setting( $option_group, $option_name, $sanitize_callback );
+	register_setting( $option_group, $option_name, $sanitize_callback );
 }
 
 /**
@@ -186,14 +184,13 @@ function add_option_update_handler( $option_group, $option_name, $sanitize_callb
  * @deprecated Use unregister_setting()
  * @see unregister_setting()
  *
- * @param unknown_type $option_group
- * @param unknown_type $option_name
- * @param unknown_type $sanitize_callback
- * @return unknown
+ * @param string $option_group
+ * @param string $option_name
+ * @param callable $sanitize_callback
  */
 function remove_option_update_handler( $option_group, $option_name, $sanitize_callback = '' ) {
 	_deprecated_function( __FUNCTION__, '3.0', 'unregister_setting()' );
-	return unregister_setting( $option_group, $option_name, $sanitize_callback );
+	unregister_setting( $option_group, $option_name, $sanitize_callback );
 }
 
 /**
@@ -206,18 +203,16 @@ function remove_option_update_handler( $option_group, $option_name, $sanitize_ca
 **/
 function codepress_get_lang( $filename ) {
 	_deprecated_function( __FUNCTION__, '3.0' );
-	return;
 }
 
 /**
- * Adds Javascript required to make CodePress work on the theme/plugin editors.
+ * Adds JavaScript required to make CodePress work on the theme/plugin editors.
  *
  * @since 2.8.0
  * @deprecated 3.0.0
 **/
 function codepress_footer_js() {
 	_deprecated_function( __FUNCTION__, '3.0' );
-	return;
 }
 
 /**
@@ -228,7 +223,6 @@ function codepress_footer_js() {
 **/
 function use_codepress() {
 	_deprecated_function( __FUNCTION__, '3.0' );
-	return;
 }
 
 /**
@@ -276,7 +270,7 @@ function get_editable_authors( $user_id ) {
  *
  * @param int $user_id User ID.
  * @param bool $exclude_zeros Optional, default is true. Whether to exclude zeros.
- * @return unknown
+ * @return mixed
  */
 function get_editable_user_ids( $user_id, $exclude_zeros = true, $post_type = 'post' ) {
 	_deprecated_function( __FUNCTION__, '3.1', 'get_users()' );
@@ -336,7 +330,7 @@ class WP_User_Search {
 	 *
 	 * @since 2.1.0
 	 * @access private
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	var $results;
 
@@ -345,7 +339,7 @@ class WP_User_Search {
 	 *
 	 * @since 2.1.0
 	 * @access private
-	 * @var unknown_type
+	 * @var string
 	 */
 	var $search_term;
 
@@ -390,7 +384,7 @@ class WP_User_Search {
 	 *
 	 * @since 2.1.0
 	 * @access private
-	 * @var unknown_type
+	 * @var int
 	 */
 	var $first_user;
 
@@ -462,7 +456,7 @@ class WP_User_Search {
 	 *
 	 * @since 2.1.0
 	 * @access private
-	 * @var unknown_type
+	 * @var WP_Error
 	 */
 	var $search_errors;
 
@@ -471,7 +465,7 @@ class WP_User_Search {
 	 *
 	 * @since 2.7.0
 	 * @access private
-	 * @var unknown_type
+	 * @var string
 	 */
 	var $paging_text;
 
@@ -554,7 +548,7 @@ class WP_User_Search {
 		if ( $this->results )
 			$this->total_users_for_query = $wpdb->get_var("SELECT COUNT(DISTINCT($wpdb->users.ID))" . $this->query_from . $this->query_where); // no limit
 		else
-			$this->search_errors = new WP_Error('no_matching_users_found', __('No matching users were found!'));
+			$this->search_errors = new WP_Error('no_matching_users_found', __('No users found.'));
 	}
 
 	/**
@@ -609,7 +603,7 @@ class WP_User_Search {
 	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return unknown
+	 * @return array
 	 */
 	function get_results() {
 		return (array) $this->results;
@@ -942,7 +936,7 @@ function get_allowed_themes() {
  * @since 1.5.0
  * @deprecated 3.4.0
  *
- * @return unknown
+ * @return array
  */
 function get_broken_themes() {
 	_deprecated_function( __FUNCTION__, '3.4', "wp_get_themes( array( 'errors' => true )" );
@@ -966,7 +960,7 @@ function get_broken_themes() {
  * @since 2.0.0
  * @deprecated 3.4.0
  *
- * @return unknown
+ * @return WP_Theme
  */
 function current_theme_info() {
 	_deprecated_function( __FUNCTION__, '3.4', 'wp_get_theme()' );
@@ -1128,8 +1122,7 @@ function wp_update_theme($theme, $feedback = '') {
  * @since 2.0.0
  * @deprecated 3.7.0
  *
- * @param unknown_type $id
- * @return unknown
+ * @param int|bool $id
  */
 function the_attachment_links( $id = false ) {
 	_deprecated_function( __FUNCTION__, '3.7' );

@@ -13,7 +13,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /*** Field Group Management **************************************************/
 
@@ -32,6 +32,14 @@ function bp_xprofile_get_groups( $args = array() ) {
 
 	$groups = BP_XProfile_Group::get( $args );
 
+	/**
+	 * Filters a set of field groups, populated with fields and field data.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param array $groups Array of field groups and field data.
+	 * @param array $args   Array of arguments used to query for groups.
+	 */
 	return apply_filters( 'bp_xprofile_get_groups', $groups, $args );
 }
 
@@ -146,7 +154,15 @@ function bp_xprofile_get_field_types() {
 		'textbox'        => 'BP_XProfile_Field_Type_Textbox',
 	);
 
-	// If you've added a custom field type in a plugin, register it with this filter.
+	/**
+	 * Filters the list of all xprofile field types.
+	 *
+	 * If you've added a custom field type in a plugin, register it with this filter.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $fields Array of field type/class name pairings.
+	 */
 	return apply_filters( 'bp_xprofile_get_field_types', $fields );
 }
 
@@ -173,48 +189,46 @@ function bp_xprofile_create_field_type( $type ) {
 }
 
 /**
- * Insert an xprofile field.
+ * Insert or update an xprofile field.
  *
  * @param array $args {
  *     Array of arguments.
- *     @type int $field_id Optional. Pass the ID of an existing field to edit
- *           that field.
- *     @type int $field_group_id ID of the associated field group.
- *     @type int $parent_id Optional. ID of the parent field.
- *     @type string $type Field type. Checked against a field_types whitelist.
- *     @type string $name Name of the new field.
- *     @type string $description Optional. Descriptive text for the field.
- *     @type bool $is_required Optional. Whether users must provide a value for
- *           the field. Default: false.
- *     @type bool $can_delete Optional. Whether admins can delete this field in
- *           the Dashboard interface. Generally this is true only for the Name
- *           field, which is required throughout BP. Default: true.
- *     @type string $order_by Optional. For field types that support options
- *           (such as 'radio'), this flag determines whether the sort order of
- *           the options will be 'default' (order created) or 'custom'.
- *     @type bool $is_default_option Optional. For the 'option' field type,
- *           setting this value to true means that it'll be the default value
- *           for the parent field when the user has not yet overridden.
- *     @type int $option_order Optional. For the 'option' field type, this
- *           determines the order in which the options appear.
+ *     @type int    $field_id          Optional. Pass the ID of an existing field to edit that field.
+ *     @type int    $field_group_id    ID of the associated field group.
+ *     @type int    $parent_id         Optional. ID of the parent field.
+ *     @type string $type              Field type. Checked against a field_types whitelist.
+ *     @type string $name              Name of the new field.
+ *     @type string $description       Optional. Descriptive text for the field.
+ *     @type bool   $is_required       Optional. Whether users must provide a value for the field. Default: false.
+ *     @type bool   $can_delete        Optional. Whether admins can delete this field in the Dashboard interface.
+ *                                     Generally this is false only for the Name field, which is required throughout BP.
+ *                                     Default: true.
+ *     @type string $order_by          Optional. For field types that support options (such as 'radio'), this flag
+ *                                     determines whether the sort order of the options will be 'default'
+ *                                     (order created) or 'custom'.
+ *     @type bool   $is_default_option Optional. For the 'option' field type, setting this value to true means that
+ *                                     it'll be the default value for the parent field when the user has not yet
+ *                                     overridden. Default: true.
+ *     @type int    $option_order      Optional. For the 'option' field type, this determines the order in which the
+ *                                     options appear.
  * }
  * @return bool|int False on failure, ID of new field on success.
  */
 function xprofile_insert_field( $args = '' ) {
-	global $bp;
 
 	$r = wp_parse_args( $args, array(
-		'field_id' => null,
-		'field_group_id' => null,
-		'parent_id' => null,
-		'type' => '',
-		'name' => '',
-		'description' => '',
-		'is_required' => false,
-		'can_delete' => true,
-		'order_by' => '',
+		'field_id'          => null,
+		'field_group_id'    => null,
+		'parent_id'         => null,
+		'type'              => '',
+		'name'              => '',
+		'description'       => '',
+		'is_required'       => false,
+		'can_delete'        => true,
+		'order_by'          => '',
 		'is_default_option' => false,
-		'option_order' => null,
+		'option_order'      => null,
+		'field_order'       => null,
 	) );
 
 	// field_group_id is required
@@ -222,8 +236,8 @@ function xprofile_insert_field( $args = '' ) {
 		return false;
 	}
 
-	// Check this is a valid field type
-	if ( ! in_array( $r['type'], (array) $bp->profile->field_types ) ) {
+	// Check this is a non-empty, valid field type.
+	if ( ! in_array( $r['type'], (array) buddypress()->profile->field_types ) ) {
 		return false;
 	}
 
@@ -235,46 +249,21 @@ function xprofile_insert_field( $args = '' ) {
 	}
 
 	$field->group_id = $r['field_group_id'];
+	$field->type     = $r['type'];
 
-	if ( ! empty( $r['parent_id'] ) ) {
-		$field->parent_id = $r['parent_id'];
-	}
-
-	if ( ! empty( $r['type'] ) ) {
-		$field->type = $r['type'];
-	}
-
+	// The 'name' field cannot be empty.
 	if ( ! empty( $r['name'] ) ) {
 		$field->name = $r['name'];
 	}
 
-	if ( ! empty( $r['description'] ) ) {
-		$field->description = $r['description'];
-	}
-
-	if ( ! empty( $r['is_required'] ) ) {
-		$field->is_required = $r['is_required'];
-	}
-
-	if ( ! empty( $r['can_delete'] ) ) {
-		$field->can_delete = $r['can_delete'];
-	}
-
-	if ( ! empty( $r['field_order'] ) ) {
-		$field->field_order = $r['field_order'];
-	}
-
-	if ( ! empty( $r['order_by'] ) ) {
-		$field->order_by = $r['order_by'];
-	}
-
-	if ( ! empty( $r['is_default_option'] ) ) {
-		$field->is_default_option = $r['is_default_option'];
-	}
-
-	if ( ! empty( $r['option_order'] ) ) {
-		$field->option_order = $r['option_order'];
-	}
+	$field->description       = $r['description'];
+	$field->order_by          = $r['order_by'];
+	$field->parent_id         = (int) $r['parent_id'];
+	$field->field_order       = (int) $r['field_order'];
+	$field->option_order      = (int) $r['option_order'];
+	$field->is_required       = (bool) $r['is_required'];
+	$field->can_delete        = (bool) $r['can_delete'];
+	$field->is_default_option = (bool) $r['is_default_option'];
 
 	return $field->save();
 }
@@ -330,6 +319,16 @@ function xprofile_get_field_data( $field, $user_id = 0, $multi_format = 'array' 
 	if ( is_array( $values ) ) {
 		$data = array();
 		foreach( (array) $values as $value ) {
+
+			/**
+			 * Filters the field data value for a specific field for the user.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param string $value    Value saved for the field.
+			 * @param int    $field_id ID of the field being displayed.
+			 * @param int    $user_id  ID of the user being displayed.
+			 */
 			$data[] = apply_filters( 'xprofile_get_field_data', $value, $field_id, $user_id );
 		}
 
@@ -337,6 +336,7 @@ function xprofile_get_field_data( $field, $user_id = 0, $multi_format = 'array' 
 			$data = implode( ', ', $data );
 		}
 	} else {
+		/** This filter is documented in bp-xprofile/bp-xprofile-functions.php */
 		$data = apply_filters( 'xprofile_get_field_data', $values, $field_id, $user_id );
 	}
 
@@ -563,6 +563,13 @@ function xprofile_get_random_profile_data( $user_id, $exclude_fullname = true ) 
 		return false;
 	}
 
+	/**
+	 * Filters a random piece of profile data for the user.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param array $field_data Array holding random profile data.
+	 */
 	return apply_filters( 'xprofile_get_random_profile_data', $field_data );
 }
 
@@ -595,7 +602,7 @@ function xprofile_update_field_position( $field_id, $position, $field_group_id )
 }
 
 /**
- * Replace the displayed and logged-in userss fullnames with the xprofile name, if required.
+ * Replace the displayed and logged-in users fullnames with the xprofile name, if required.
  *
  * The Members component uses the logged-in user's display_name to set the
  * value of buddypress()->loggedin_user->fullname. However, in cases where
@@ -647,17 +654,19 @@ function xprofile_avatar_upload_dir( $directory = 'avatars', $user_id = 0 ) {
 		$directory = 'avatars';
 	}
 
-	$path    = bp_core_avatar_upload_path() . '/' . $directory. '/' . $user_id;
-	$newbdir = $path;
-
-	if ( ! file_exists( $path ) ) {
-		@wp_mkdir_p( $path );
-	}
-
+	$path      = bp_core_avatar_upload_path() . '/' . $directory. '/' . $user_id;
+	$newbdir   = $path;
 	$newurl    = bp_core_avatar_url() . '/' . $directory. '/' . $user_id;
 	$newburl   = $newurl;
 	$newsubdir = '/' . $directory. '/' . $user_id;
 
+	/**
+	 * Filters the avatar upload directory for a user.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 *
+	 * @param array $value Array containing the path, URL, and other helpful settings.
+	 */
 	return apply_filters( 'xprofile_avatar_upload_dir', array(
 		'path'    => $path,
 		'url'     => $newurl,
@@ -958,11 +967,19 @@ function bp_xprofile_fullname_field_id() {
  * Return the field name for the Full Name xprofile field
  *
  * @package BuddyPress
- * @since BuddyPress (1.5)
+ * @since BuddyPress (1.5.0)
  *
  * @return string The field name
  */
 function bp_xprofile_fullname_field_name() {
+
+	/**
+	 * Filters the field name for the Full Name xprofile field.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param string BP_XPROFILE_FULLNAME_FIELD_NAME Full name field constant.
+	 */
 	return apply_filters( 'bp_xprofile_fullname_field_name', BP_XPROFILE_FULLNAME_FIELD_NAME );
 }
 
@@ -972,9 +989,15 @@ function bp_xprofile_fullname_field_name() {
  * @return array
  */
 function bp_xprofile_get_visibility_levels() {
-	global $bp;
 
-	return apply_filters( 'bp_xprofile_get_visibility_levels', $bp->profile->visibility_levels );
+	/**
+	 * Filters the visibility levels out of the $bp global.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param array $visibility_levels Array of visibility levels.
+	 */
+	return apply_filters( 'bp_xprofile_get_visibility_levels', buddypress()->profile->visibility_levels );
 }
 
 /**
@@ -985,7 +1008,7 @@ function bp_xprofile_get_visibility_levels() {
  * profile viewer). Then, based on that relationship, we query for the set of fields that should
  * be excluded from the profile loop.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  * @see BP_XProfile_Group::get()
  * @uses apply_filters() Filter bp_xprofile_get_hidden_fields_for_user to modify visibility levels,
  *   or if you have added your own custom levels
@@ -1011,6 +1034,15 @@ function bp_xprofile_get_hidden_fields_for_user( $displayed_user_id = 0, $curren
 	$hidden_levels = bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id, $current_user_id );
 	$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
 
+	/**
+	 * Filters the ids of fields that are hidden for this displayed/loggedin user pair.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param array $hidden_fields     Array of hidden fields for the displayed/logged in user.
+	 * @param int   $displayed_user_id ID of the displayed user.
+	 * @param int   $current_user_id   ID of the current user.
+	 */
 	return apply_filters( 'bp_xprofile_get_hidden_fields_for_user', $hidden_fields, $displayed_user_id, $current_user_id );
 }
 
@@ -1054,13 +1086,22 @@ function bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id = 0, $c
 		$hidden_levels = array( 'friends', 'loggedin', 'adminsonly', );
 	}
 
+	/**
+	 * Filters the visibility levels that should be hidden for this user pair.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param array $hidden_fields     Array of hidden fields for the displayed/logged in user.
+	 * @param int   $displayed_user_id ID of the displayed user.
+	 * @param int   $current_user_id   ID of the current user.
+	 */
 	return apply_filters( 'bp_xprofile_get_hidden_field_types_for_user', $hidden_levels, $displayed_user_id, $current_user_id );
 }
 
 /**
  * Fetch an array of the xprofile fields that a given user has marked with certain visibility levels
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  * @see bp_xprofile_get_hidden_fields_for_user()
  *
  * @param int $user_id The id of the profile owner

@@ -6,8 +6,8 @@
  * theme as custom template tags. Others are attached to action and filter
  * hooks in WordPress to change core functionality.
  *
- * When using a child theme (see http://codex.wordpress.org/Theme_Development
- * and http://codex.wordpress.org/Child_Themes), you can override certain
+ * When using a child theme (see https://codex.wordpress.org/Theme_Development
+ * and https://codex.wordpress.org/Child_Themes), you can override certain
  * functions (those wrapped in a function_exists() call) by defining them first
  * in your child theme's functions.php file. The child theme's functions.php
  * file is included before the parent theme's file, so the child theme
@@ -16,7 +16,7 @@
  * Functions that are not pluggable (not wrapped in function_exists()) are
  * instead attached to a filter or action hook.
  *
- * For more information on hooks, actions, and filters, @link http://codex.wordpress.org/Plugin_API
+ * For more information on hooks, actions, and filters, @link https://codex.wordpress.org/Plugin_API
  *
  * @package WordPress
  * @subpackage Twenty_Thirteen
@@ -56,8 +56,6 @@ if ( version_compare( $GLOBALS['wp_version'], '3.6-alpha', '<' ) )
  * @uses set_post_thumbnail_size() To set a custom post thumbnail size.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_setup() {
 	/*
@@ -74,7 +72,7 @@ function twentythirteen_setup() {
 	 * This theme styles the visual editor to resemble the theme style,
 	 * specifically font, colors, icons, and column width.
 	 */
-	add_editor_style( array( 'css/editor-style.css', 'fonts/genericons.css', twentythirteen_fonts_url() ) );
+	add_editor_style( array( 'css/editor-style.css', 'genericons/genericons.css', twentythirteen_fonts_url() ) );
 
 	// Adds RSS feed links to <head> for posts and comments.
 	add_theme_support( 'automatic-feed-links' );
@@ -83,11 +81,13 @@ function twentythirteen_setup() {
 	 * Switches default core markup for search form, comment form,
 	 * and comments to output valid HTML5.
 	 */
-	add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list' ) );
+	add_theme_support( 'html5', array(
+		'search-form', 'comment-form', 'comment-list', 'gallery', 'caption'
+	) );
 
 	/*
 	 * This theme supports all available post formats by default.
-	 * See http://codex.wordpress.org/Post_Formats
+	 * See https://codex.wordpress.org/Post_Formats
 	 */
 	add_theme_support( 'post-formats', array(
 		'aside', 'audio', 'chat', 'gallery', 'image', 'link', 'quote', 'status', 'video'
@@ -146,7 +146,7 @@ function twentythirteen_fonts_url() {
 			'family' => urlencode( implode( '|', $font_families ) ),
 			'subset' => urlencode( 'latin,latin-ext' ),
 		);
-		$fonts_url = add_query_arg( $query_args, "//fonts.googleapis.com/css" );
+		$fonts_url = add_query_arg( $query_args, '//fonts.googleapis.com/css' );
 	}
 
 	return $fonts_url;
@@ -156,8 +156,6 @@ function twentythirteen_fonts_url() {
  * Enqueue scripts and styles for the front end.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_scripts_styles() {
 	/*
@@ -172,13 +170,13 @@ function twentythirteen_scripts_styles() {
 		wp_enqueue_script( 'jquery-masonry' );
 
 	// Loads JavaScript file with functionality specific to Twenty Thirteen.
-	wp_enqueue_script( 'twentythirteen-script', get_template_directory_uri() . '/js/functions.js', array( 'jquery' ), '2013-07-18', true );
+	wp_enqueue_script( 'twentythirteen-script', get_template_directory_uri() . '/js/functions.js', array( 'jquery' ), '20150330', true );
 
 	// Add Source Sans Pro and Bitter fonts, used in the main stylesheet.
 	wp_enqueue_style( 'twentythirteen-fonts', twentythirteen_fonts_url(), array(), null );
 
 	// Add Genericons font, used in the main stylesheet.
-	wp_enqueue_style( 'genericons', get_template_directory_uri() . '/fonts/genericons.css', array(), '2.09' );
+	wp_enqueue_style( 'genericons', get_template_directory_uri() . '/genericons/genericons.css', array(), '3.03' );
 
 	// Loads our main stylesheet.
 	wp_enqueue_style( 'twentythirteen-style', get_stylesheet_uri(), array(), '2013-07-18' );
@@ -208,7 +206,7 @@ function twentythirteen_wp_title( $title, $sep ) {
 		return $title;
 
 	// Add the site name.
-	$title .= get_bloginfo( 'name' );
+	$title .= get_bloginfo( 'name', 'display' );
 
 	// Add the site description for the home/front page.
 	$site_description = get_bloginfo( 'description', 'display' );
@@ -216,7 +214,7 @@ function twentythirteen_wp_title( $title, $sep ) {
 		$title = "$title $sep $site_description";
 
 	// Add a page number if necessary.
-	if ( $paged >= 2 || $page >= 2 )
+	if ( ( $paged >= 2 || $page >= 2 ) && ! is_404() )
 		$title = "$title $sep " . sprintf( __( 'Page %s', 'twentythirteen' ), max( $paged, $page ) );
 
 	return $title;
@@ -227,8 +225,6 @@ add_filter( 'wp_title', 'twentythirteen_wp_title', 10, 2 );
  * Register two widget areas.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_widgets_init() {
 	register_sidebar( array(
@@ -258,8 +254,6 @@ if ( ! function_exists( 'twentythirteen_paging_nav' ) ) :
  * Display navigation to next/previous set of posts when applicable.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_paging_nav() {
 	global $wp_query;
@@ -291,8 +285,6 @@ if ( ! function_exists( 'twentythirteen_post_nav' ) ) :
  * Display navigation to next/previous post when applicable.
 *
 * @since Twenty Thirteen 1.0
-*
-* @return void
 */
 function twentythirteen_post_nav() {
 	global $post;
@@ -324,12 +316,10 @@ if ( ! function_exists( 'twentythirteen_entry_meta' ) ) :
  * Create your own twentythirteen_entry_meta() to override in a child theme.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_entry_meta() {
 	if ( is_sticky() && is_home() && ! is_paged() )
-		echo '<span class="featured-post">' . __( 'Sticky', 'twentythirteen' ) . '</span>';
+		echo '<span class="featured-post">' . esc_html__( 'Sticky', 'twentythirteen' ) . '</span>';
 
 	if ( ! has_post_format( 'link' ) && 'post' == get_post_type() )
 		twentythirteen_entry_date();
@@ -393,8 +383,6 @@ if ( ! function_exists( 'twentythirteen_the_attached_image' ) ) :
  * Print the attached image with a link to the next attached image.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_the_attached_image() {
 	/**
@@ -425,7 +413,7 @@ function twentythirteen_the_attached_image() {
 		'post_type'      => 'attachment',
 		'post_mime_type' => 'image',
 		'order'          => 'ASC',
-		'orderby'        => 'menu_order ID'
+		'orderby'        => 'menu_order ID',
 	) );
 
 	// If there is more than 1 attachment in a gallery...
@@ -443,7 +431,7 @@ function twentythirteen_the_attached_image() {
 
 		// or get the URL of the first image attachment.
 		else
-			$next_attachment_url = get_attachment_link( array_shift( $attachment_ids ) );
+			$next_attachment_url = get_attachment_link( reset( $attachment_ids ) );
 	}
 
 	printf( '<a href="%1$s" title="%2$s" rel="attachment">%3$s</a>',
@@ -472,6 +460,27 @@ function twentythirteen_get_link_url() {
 
 	return ( $has_url ) ? $has_url : apply_filters( 'the_permalink', get_permalink() );
 }
+
+if ( ! function_exists( 'twentythirteen_excerpt_more' ) && ! is_admin() ) :
+/**
+ * Replaces "[...]" (appended to automatically generated excerpts) with ...
+ * and a Continue reading link.
+ *
+ * @since Twenty Thirteen 1.4
+ *
+ * @param string $more Default Read More excerpt link.
+ * @return string Filtered Read More excerpt link.
+ */
+function twentythirteen_excerpt_more( $more ) {
+	$link = sprintf( '<a href="%1$s" class="more-link">%2$s</a>',
+		esc_url( get_permalink( get_the_ID() ) ),
+			/* translators: %s: Name of current post */
+			sprintf( __( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'twentythirteen' ), '<span class="screen-reader-text">' . get_the_title( get_the_ID() ) . '</span>' )
+		);
+	return ' &hellip; ' . $link;
+}
+add_filter( 'excerpt_more', 'twentythirteen_excerpt_more' );
+endif;
 
 /**
  * Extend the default WordPress body classes.
@@ -504,8 +513,6 @@ add_filter( 'body_class', 'twentythirteen_body_class' );
  * Adjust content_width value for video post formats and attachment templates.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_content_width() {
 	global $content_width;
@@ -523,7 +530,6 @@ add_action( 'template_redirect', 'twentythirteen_content_width' );
  * @since Twenty Thirteen 1.0
  *
  * @param WP_Customize_Manager $wp_customize Customizer object.
- * @return void
  */
 function twentythirteen_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
@@ -539,10 +545,8 @@ add_action( 'customize_register', 'twentythirteen_customize_register' );
  * reload changes asynchronously.
  *
  * @since Twenty Thirteen 1.0
- *
- * @return void
  */
 function twentythirteen_customize_preview_js() {
-	wp_enqueue_script( 'twentythirteen-customizer', get_template_directory_uri() . '/js/theme-customizer.js', array( 'customize-preview' ), '20130226', true );
+	wp_enqueue_script( 'twentythirteen-customizer', get_template_directory_uri() . '/js/theme-customizer.js', array( 'customize-preview' ), '20141120', true );
 }
 add_action( 'customize_preview_init', 'twentythirteen_customize_preview_js' );

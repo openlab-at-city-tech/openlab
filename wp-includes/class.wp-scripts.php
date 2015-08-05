@@ -47,13 +47,15 @@ class WP_Scripts extends WP_Dependencies {
 	}
 
 	/**
-	 * Prints scripts
+	 * Prints scripts.
 	 *
 	 * Prints the scripts passed to it or the print queue. Also prints all necessary dependencies.
 	 *
-	 * @param mixed $handles (optional) Scripts to be printed. (void) prints queue, (string) prints that script, (array of strings) prints those scripts.
-	 * @param int $group (optional) If scripts were queued in groups prints this group number.
-	 * @return array Scripts that have been printed
+	 * @param mixed $handles Optional. Scripts to be printed. (void) prints queue, (string) prints
+	 *                       that script, (array of strings) prints those scripts. Default false.
+	 * @param int   $group   Optional. If scripts were queued in groups prints this group number.
+	 *                       Default false.
+	 * @return array Scripts that have been printed.
 	 */
 	public function print_scripts( $handles = false, $group = false ) {
 		return $this->do_items( $handles, $group );
@@ -93,15 +95,25 @@ class WP_Scripts extends WP_Dependencies {
 		if ( false === $group && in_array($handle, $this->in_footer, true) )
 			$this->in_footer = array_diff( $this->in_footer, (array) $handle );
 
-		if ( null === $this->registered[$handle]->ver )
+		$obj = $this->registered[$handle];
+
+		if ( null === $obj->ver ) {
 			$ver = '';
-		else
-			$ver = $this->registered[$handle]->ver ? $this->registered[$handle]->ver : $this->default_version;
+		} else {
+			$ver = $obj->ver ? $obj->ver : $this->default_version;
+		}
 
 		if ( isset($this->args[$handle]) )
 			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
 
-		$src = $this->registered[$handle]->src;
+		$src = $obj->src;
+		$cond_before = $cond_after = '';
+		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
+
+		if ( $conditional ) {
+			$cond_before = "<!--[if {$conditional}]>\n";
+			$cond_after = "<![endif]-->\n";
+		}
 
 		if ( $this->do_concat ) {
 			/**
@@ -113,7 +125,7 @@ class WP_Scripts extends WP_Dependencies {
 			 * @param string $handle Script handle.
 			 */
 			$srce = apply_filters( 'script_loader_src', $src, $handle );
-			if ( $this->in_default_dir($srce) ) {
+			if ( $this->in_default_dir( $srce ) && ! $conditional ) {
 				$this->print_code .= $this->print_extra_script( $handle, false );
 				$this->concat .= "$handle,";
 				$this->concat_version .= "$handle$ver";
@@ -124,13 +136,24 @@ class WP_Scripts extends WP_Dependencies {
 			}
 		}
 
+		$has_conditional_data = $conditional && $this->get_data( $handle, 'data' );
+
+		if ( $has_conditional_data ) {
+			echo $cond_before;
+		}
+
 		$this->print_extra_script( $handle );
-		if ( !preg_match('|^(https?:)?//|', $src) && ! ( $this->content_url && 0 === strpos($src, $this->content_url) ) ) {
+
+		if ( $has_conditional_data ) {
+			echo $cond_after;
+		}
+
+		if ( ! preg_match( '|^(https?:)?//|', $src ) && ! ( $this->content_url && 0 === strpos( $src, $this->content_url ) ) ) {
 			$src = $this->base_url . $src;
 		}
 
-		if ( !empty($ver) )
-			$src = add_query_arg('ver', $ver, $src);
+		if ( ! empty( $ver ) )
+			$src = add_query_arg( 'ver', $ver, $src );
 
 		/** This filter is documented in wp-includes/class.wp-scripts.php */
 		$src = esc_url( apply_filters( 'script_loader_src', $src, $handle ) );
@@ -138,10 +161,24 @@ class WP_Scripts extends WP_Dependencies {
 		if ( ! $src )
 			return true;
 
-		if ( $this->do_concat )
-			$this->print_html .= "<script type='text/javascript' src='$src'></script>\n";
-		else
-			echo "<script type='text/javascript' src='$src'></script>\n";
+		$tag = "{$cond_before}<script type='text/javascript' src='$src'></script>\n{$cond_after}";
+
+		/** 
+		 * Filter the HTML script tag of an enqueued script.
+		 *
+		 * @since 4.1.0
+		 *
+		 * @param string $tag    The `<script>` tag for the enqueued script.
+		 * @param string $handle The script's registered handle.
+		 * @param string $src    The script's source URL.
+		 */
+		$tag = apply_filters( 'script_loader_tag', $tag, $handle, $src );
+
+		if ( $this->do_concat ) {
+			$this->print_html .= $tag;
+		} else {
+			echo $tag;
+		}
 
 		return true;
 	}
@@ -167,7 +204,7 @@ class WP_Scripts extends WP_Dependencies {
 			$l10n[$key] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8');
 		}
 
-		$script = "var $object_name = " . json_encode($l10n) . ';';
+		$script = "var $object_name = " . wp_json_encode( $l10n ) . ';';
 
 		if ( !empty($after) )
 			$script .= "\n$after;";

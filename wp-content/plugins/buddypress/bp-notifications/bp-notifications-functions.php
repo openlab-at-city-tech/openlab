@@ -10,7 +10,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Add a notification for a specific user, from a specific component.
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @param array $args {
  *     Array of arguments describing the notification. All are optional.
- *     @type int $user_id ID of the user to associate the notificiton with.
+ *     @type int $user_id ID of the user to associate the notification with.
  *     @type int $item_id ID of the item to associate the notification with.
  *     @type int $secondary_item_id ID of the secondary item to associate the
  *           notification with.
@@ -151,7 +151,14 @@ function bp_notifications_get_all_notifications_for_user( $user_id = 0 ) {
 		wp_cache_set( 'all_for_user_' . $user_id, $notifications, 'bp_notifications' );
 	}
 
-	// Filter and return
+	/**
+	 * Filters all notifications for a user.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param array $notifications Array of notifications for user.
+	 * @param int   $user_id       ID of the user being fetched.
+	 */
 	return apply_filters( 'bp_notifications_get_all_notifications_for_user', $notifications, $user_id );
 }
 
@@ -261,7 +268,13 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 				// Function should return an object
 				if ( 'object' === $format ) {
 
-					// Retrieve the content of the notification using the callback
+					/**
+					 * Filters the notifications for a user.
+					 *
+					 * @since BuddyPress (1.9.0)
+					 *
+					 * @param array $ref_array Array of properties for the current notification being rendered.
+					 */
 					$content = apply_filters_ref_array( 'bp_notifications_get_notifications_for_user', $ref_array );
 
 					// Create the object to be returned
@@ -281,6 +294,8 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 
 				// Return an array of content strings
 				} else {
+
+					/** This filters is documented in bp-notifications/bp-notifications-functions.php */
 					$renderable[] = apply_filters_ref_array( 'bp_notifications_get_notifications_for_user', $ref_array );
 				}
 			}
@@ -292,7 +307,15 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 		$renderable = false;
 	}
 
-	// Filter and return
+	/**
+	 * Filters the final array of notifications to be displayed for a user.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param Array|Bool $renderable Array of notifications to render or false if no notifications.
+	 * @param int        $user_id    ID of the user whose notifications are being displayed.
+	 * @param string     $format     Display format requested for the notifications.
+	 */
 	return apply_filters( 'bp_core_get_notifications_for_user', $renderable, $user_id, $format );
 }
 
@@ -377,7 +400,7 @@ function bp_notifications_delete_all_notifications_by_type( $item_id, $component
  *
  * @since BuddyPress (1.9.0)
  *
- * @param int $user_id ID of the user whose associated items are beind deleted.
+ * @param int $user_id ID of the user whose associated items are being deleted.
  * @param string $component_name Name of the associated component.
  * @param string $component_action Name of the associated action.
  * @return bool True on success, false on failure.
@@ -490,7 +513,7 @@ function bp_notifications_mark_all_notifications_by_type( $item_id, $component_n
  *
  * @since BuddyPress (1.9.0)
  *
- * @param int $user_id ID of the user whose associated items are beind deleted.
+ * @param int $user_id ID of the user whose associated items are being deleted.
  * @param int $is_new 0 for read, 1 for unread
  * @param string $component_name Name of the associated component.
  * @param string $component_action Name of the associated action.
@@ -540,6 +563,13 @@ function bp_notifications_get_unread_notification_count( $user_id = 0 ) {
 	$notifications = bp_notifications_get_all_notifications_for_user( $user_id );
 	$count         = ! empty( $notifications ) ? count( $notifications ) : 0;
 
+	/**
+	 * Filters the count of unread notification items for a user.
+	 *
+	 * @since BuddyPress (1.9.0)
+	 *
+	 * @param int $count Count of unread notification items for a user.
+	 */
 	return apply_filters( 'bp_notifications_get_total_notification_count', (int) $count );
 }
 
@@ -571,6 +601,144 @@ function bp_notifications_get_registered_components() {
 		}
 	}
 
-	// Return active components with registered notifications callbacks
+	/**
+	 * Filters active components with registered notifications callbacks.
+	 *
+	 * @since BuddyPress (1.9.1)
+	 *
+	 * @param array $component_names   Array of registered component names.
+	 * @param array $active_components Array of active components.
+	 */
 	return apply_filters( 'bp_notifications_get_registered_components', $component_names, $active_components );
+}
+
+/** Meta **********************************************************************/
+
+/**
+ * Delete a meta entry from the DB for a notification item.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @global object $wpdb WordPress database access object.
+ *
+ * @param int    $notification_id ID of the notification item whose metadata is being deleted.
+ * @param string $meta_key        Optional. The key of the metadata being deleted. If
+ *                                omitted, all metadata associated with the notification
+ *                                item will be deleted.
+ * @param string $meta_value      Optional. If present, the metadata will only be
+ *                                deleted if the meta_value matches this parameter.
+ * @param bool   $delete_all      Optional. If true, delete matching metadata entries
+ * 	                              for all objects, ignoring the specified object_id. Otherwise,
+ * 	                              only delete matching metadata entries for the specified
+ * 	                              notification item. Default: false.
+ *
+ * @return bool                   True on success, false on failure.
+ */
+function bp_notifications_delete_meta( $notification_id, $meta_key = '', $meta_value = '', $delete_all = false ) {
+
+	// Legacy - if no meta_key is passed, delete all for the item
+	if ( empty( $meta_key ) ) {
+		$all_meta = bp_notifications_get_meta( $notification_id );
+		$keys     = ! empty( $all_meta )
+			? array_keys( $all_meta )
+			: array();
+
+		// With no meta_key, ignore $delete_all
+		$delete_all = false;
+	} else {
+		$keys = array( $meta_key );
+	}
+
+	$retval = true;
+
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'notifications', $notification_id, $key, $meta_value, $delete_all );
+	}
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
+
+/**
+ * Get metadata for a given notification item.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @uses apply_filters() To call the 'bp_notifications_get_meta' hook.
+ *
+ * @param int    $notification_id ID of the notification item whose metadata is being requested.
+ * @param string $meta_key        Optional. If present, only the metadata matching
+ *                                that meta key will be returned. Otherwise, all metadata for the
+ *                                notification item will be fetched.
+ * @param bool   $single          Optional. If true, return only the first value of the
+ *	                              specified meta_key. This parameter has no effect if meta_key is not
+ *	                              specified. Default: true.
+ *
+ * @return mixed                  The meta value(s) being requested.
+ */
+function bp_notifications_get_meta( $notification_id = 0, $meta_key = '', $single = true ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = get_metadata( 'notifications', $notification_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	/**
+	 * Filters the metadata for a specified notification item.
+	 *
+	 * @since BuddyPress (2.3.0)
+	 *
+	 * @param mixed  $retval          The meta values for the notification item.
+	 * @param int    $notification_id ID of the notification item.
+	 * @param string $meta_key        Meta key for the value being requested.
+	 * @param bool   $single          Whether to return one matched meta key row or all.
+	 */
+	return apply_filters( 'bp_notifications_get_meta', $retval, $notification_id, $meta_key, $single );
+}
+
+/**
+ * Update a piece of notification meta.
+ *
+ * @since BuddyPress (1.2.0)
+ *
+ * @param  int    $notification_id ID of the notification item whose metadata is being
+ *                                 updated.
+ * @param  string $meta_key        Key of the metadata being updated.
+ * @param  mixed  $meta_value      Value to be set.
+ * @param  mixed  $prev_value      Optional. If specified, only update existing
+ *                                 metadata entries with the specified value.
+ *                                 Otherwise, update all entries.
+ *
+ * @return bool|int                Returns false on failure. On successful
+ *                                 update of existing metadata, returns true. On
+ *                                 successful creation of new metadata,  returns
+ *                                 the integer ID of the new metadata row.
+ */
+function bp_notifications_update_meta( $notification_id, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = update_metadata( 'notifications', $notification_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
+
+/**
+ * Add a piece of notification metadata.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param int    $notification_id ID of the notification item.
+ * @param string $meta_key        Metadata key.
+ * @param mixed  $meta_value      Metadata value.
+ * @param bool   $unique          Optional. Whether to enforce a single metadata value
+ *                                for the given key. If true, and the object already has a value for
+ *                                the key, no change will be made. Default: false.
+ *
+ * @return int|bool               The meta ID on successful update, false on failure.
+ */
+function bp_notifications_add_meta( $notification_id, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = add_metadata( 'notifications', $notification_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
 }

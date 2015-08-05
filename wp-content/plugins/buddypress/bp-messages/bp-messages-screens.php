@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Messages Screens
+ * BuddyPress Messages Screens.
  *
  * Screen functions are the controllers of BuddyPress. They will execute when
  * their specific URL is caught. They will first save or manipulate data using
@@ -12,7 +12,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Load the Messages > Inbox screen.
@@ -23,7 +23,20 @@ function messages_screen_inbox() {
 		return;
 	}
 
+	/**
+	 * Fires right before the loading of the Messages inbox screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'messages_screen_inbox' );
+
+	/**
+	 * Filters the template to load for the Messages inbox screen.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $template Path to the messages template to load.
+	 */
 	bp_core_load_template( apply_filters( 'messages_template_inbox', 'members/single/home' ) );
 }
 
@@ -36,7 +49,20 @@ function messages_screen_sentbox() {
 		return;
 	}
 
+	/**
+	 * Fires right before the loading of the Messages sentbox screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'messages_screen_sentbox' );
+
+	/**
+	 * Filters the template to load for the Messages sentbox screen.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $template Path to the messages template to load.
+	 */
 	bp_core_load_template( apply_filters( 'messages_template_sentbox', 'members/single/home' ) );
 }
 
@@ -61,7 +87,7 @@ function messages_screen_compose() {
 
 		// Check we have what we need
 		if ( empty( $_POST['subject'] ) || empty( $_POST['content'] ) ) {
-			bp_core_add_message( __( 'There was an error sending that message, please try again', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was an error sending that message. Please try again.', 'buddypress' ), 'error' );
 		} else {
 			// If this is a notice, send it
 			if ( isset( $_POST['send-notice'] ) ) {
@@ -69,13 +95,21 @@ function messages_screen_compose() {
 					bp_core_add_message( __( 'Notice sent successfully!', 'buddypress' ) );
 					bp_core_redirect( bp_loggedin_user_domain() . bp_get_messages_slug() . '/inbox/' );
 				} else {
-					bp_core_add_message( __( 'There was an error sending that notice, please try again', 'buddypress' ), 'error' );
+					bp_core_add_message( __( 'There was an error sending that notice. Please try again.', 'buddypress' ), 'error' );
 				}
 			} else {
 				// Filter recipients into the format we need - array( 'username/userid', 'username/userid' )
 				$autocomplete_recipients = explode( ',', $_POST['send-to-input'] );
 				$typed_recipients        = explode( ' ', $_POST['send_to_usernames'] );
 				$recipients              = array_merge( (array) $autocomplete_recipients, (array) $typed_recipients );
+
+				/**
+				 * Filters the array of recipients to receive the composed message.
+				 *
+				 * @since BuddyPress (1.2.10)
+				 *
+				 * @param array $recipients Array of recipients to receive message.
+				 */
 				$recipients              = apply_filters( 'bp_messages_recipients', $recipients );
 				$thread_id               = messages_new_message( array(
 					'recipients' => $recipients,
@@ -88,14 +122,26 @@ function messages_screen_compose() {
 					bp_core_add_message( __( 'Message sent successfully!', 'buddypress' ) );
 					bp_core_redirect( bp_loggedin_user_domain() . bp_get_messages_slug() . '/view/' . $thread_id . '/' );
 				} else {
-					bp_core_add_message( __( 'There was an error sending that message, please try again', 'buddypress' ), 'error' );
+					bp_core_add_message( __( 'There was an error sending that message. Please try again.', 'buddypress' ), 'error' );
 				}
 			}
 		}
 	}
 
+	/**
+	 * Fires right before the loading of the Messages compose screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'messages_screen_compose' );
 
+	/**
+	 * Filters the template to load for the Messages compose screen.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $template Path to the messages template to load.
+	 */
 	bp_core_load_template( apply_filters( 'messages_template_compose', 'members/single/home' ) );
 }
 
@@ -123,8 +169,20 @@ function messages_screen_conversation() {
 	// Decrease the unread count in the nav before it's rendered
 	$bp->bp_nav[$bp->messages->slug]['name'] = sprintf( __( 'Messages <span>%s</span>', 'buddypress' ), bp_get_total_unread_messages_count() );
 
+	/**
+	 * Fires right before the loading of the Messages view screen template file.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 */
 	do_action( 'messages_screen_conversation' );
 
+	/**
+	 * Filters the template to load for the Messages view screen.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $template Path to the messages template to load.
+	 */
 	bp_core_load_template( apply_filters( 'messages_template_view_message', 'members/single/home' ) );
 }
 add_action( 'bp_screens', 'messages_screen_conversation' );
@@ -152,13 +210,13 @@ function messages_screen_notices() {
 			} else {
 				bp_core_add_message( __('Notice deactivated.', 'buddypress') );
 			}
-		} else if ( bp_is_action_variable( 'activate', 0 ) ) {
+		} elseif ( bp_is_action_variable( 'activate', 0 ) ) {
 			if ( !$notice->activate() ) {
 				bp_core_add_message( __('There was a problem activating that notice.', 'buddypress'), 'error' );
 			} else {
 				bp_core_add_message( __('Notice activated.', 'buddypress') );
 			}
-		} else if ( bp_is_action_variable( 'delete' ) ) {
+		} elseif ( bp_is_action_variable( 'delete' ) ) {
 			if ( !$notice->delete() ) {
 				bp_core_add_message( __('There was a problem deleting that notice.', 'buddypress'), 'buddypress' );
 			} else {
@@ -173,8 +231,20 @@ function messages_screen_notices() {
 		return;
 	}
 
+	/**
+	 * Fires right before the loading of the Messages notices screen template file.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'messages_screen_notices' );
 
+	/**
+	 * Filters the template to load for the Messages notices screen.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $template Path to the messages template to load.
+	 */
 	bp_core_load_template( apply_filters( 'messages_template_notices', 'members/single/home' ) );
 }
 
@@ -209,7 +279,14 @@ function messages_screen_notification_settings() {
 				<td class="no"><input type="radio" name="notifications[notification_messages_new_message]" value="no" <?php checked( $new_messages, 'no', true ) ?>/></td>
 			</tr>
 
-			<?php do_action( 'messages_screen_notification_settings' ) ?>
+			<?php
+
+			/**
+			 * Fires inside the closing </tbody> tag for messages screen notification settings.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 */
+			do_action( 'messages_screen_notification_settings' ); ?>
 		</tbody>
 	</table>
 

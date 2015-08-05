@@ -9,15 +9,15 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the changing and saving of user email addressos and passwords
+ * Handles the changing and saving of user email addresses and passwords
  *
  * We do quite a bit of logic and error handling here to make sure that users
  * do not accidentally lock themselves out of their accounts. We also try to
  * provide as accurate of feedback as possible without exposing anyone else's
- * inforation to them.
+ * information to them.
  *
  * Special considerations are made for super admins that are able to edit any
  * users accounts already, without knowing their existing password.
@@ -128,12 +128,12 @@ Regards,
 					 *
 					 * @since BuddyPress (2.1.0)
 					 *
-					 * @param string $email_text Text of the email.
-					 * @param string $new_user_email New user email that
-					 *        the current user has changed to.
-					 * @param string $old_user_email Existing email addres
-					 *        for the current user.
-					 * @param object $update_user Userdata for the current user.
+					 * @param string  $email_text     Text of the email.
+					 * @param string  $new_user_email New user email that the
+					 *                                current user has changed to.
+					 * @param string  $old_user_email Existing email address
+					 *                                for the current user.
+					 * @param WP_User $update_user    Userdata object for the current user.
 					 */
 					$content = apply_filters( 'bp_new_user_email_content', $email_text, $user_email, $old_user_email, $update_user );
 
@@ -142,7 +142,7 @@ Regards,
 
 					// We mark that the change has taken place so as to ensure a
 					// success message, even though verification is still required
-					$_POST['email'] = $current_user->user_email;
+					$_POST['email'] = $update_user->user_email;
 					$email_changed = true;
 				}
 
@@ -160,10 +160,17 @@ Regards,
 
 		if ( !empty( $_POST['pass1'] ) && !empty( $_POST['pass2'] ) ) {
 
-			// Password change attempt is successful
 			if ( ( $_POST['pass1'] == $_POST['pass2'] ) && !strpos( " " . $_POST['pass1'], "\\" ) ) {
-				$update_user->user_pass = $_POST['pass1'];
-				$pass_changed = true;
+
+				// Password change attempt is successful
+				if ( ( ! empty( $_POST['pwd'] ) && $_POST['pwd'] != $_POST['pass1'] ) || is_super_admin() )  {
+					$update_user->user_pass = $_POST['pass1'];
+					$pass_changed = true;
+
+				// The new password is the same as the current password
+				} else {
+					$pass_error = 'same';
+				}
 
 			// Password change attempt was unsuccessful
 			} else {
@@ -235,6 +242,9 @@ Regards,
 		case 'empty' :
 			$feedback['pass_empty']    = __( 'One of the password fields was empty.', 'buddypress' );
 			break;
+		case 'same' :
+			$feedback['pass_same'] 	   = __( 'The new password must be different from the current password.', 'buddypress' );
+			break;
 		case false :
 			// No change
 			break;
@@ -255,9 +265,13 @@ Regards,
 	}
 
 	// Set the feedback
-	bp_core_add_message( implode( '</p><p>', $feedback ), $feedback_type );
+	bp_core_add_message( implode( "\n", $feedback ), $feedback_type );
 
-	// Execute additional code
+	/**
+	 * Fires after the general settings have been saved, and before redirect.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 */
 	do_action( 'bp_core_general_settings_after_save' );
 
 	// Redirect to prevent issues with browser back button
@@ -303,6 +317,11 @@ function bp_settings_action_notifications() {
 		bp_core_add_message( __( "This user's notification settings have been saved.", 'buddypress' ), 'success' );
 	}
 
+	/**
+	 * Fires after the notification settings have been saved, and before redirect.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 */
 	do_action( 'bp_core_notification_settings_after_save' );
 
 	bp_core_redirect( bp_displayed_user_domain() . bp_get_settings_slug() . '/notifications/' );
@@ -341,6 +360,11 @@ function bp_settings_action_capabilities() {
 	// Nonce check
 	check_admin_referer( 'capabilities' );
 
+	/**
+	 * Fires before the capabilities settings have been saved.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 */
 	do_action( 'bp_settings_capabilities_before_save' );
 
 	/** Spam **************************************************************/
@@ -350,11 +374,25 @@ function bp_settings_action_capabilities() {
 	if ( bp_is_user_spammer( bp_displayed_user_id() ) != $is_spammer ) {
 		$status = ( true == $is_spammer ) ? 'spam' : 'ham';
 		bp_core_process_spammer_status( bp_displayed_user_id(), $status );
+
+		/**
+		 * Fires after processing a user as a spammer.
+		 *
+		 * @since BuddyPress (1.1.0)
+		 *
+		 * @param int    $value  ID of the currently displayed user.
+		 * @param string $status Determined status of "spam" or "ham" for the displayed user.
+		 */
 		do_action( 'bp_core_action_set_spammer_status', bp_displayed_user_id(), $status );
 	}
 
 	/** Other *************************************************************/
 
+	/**
+	 * Fires after the capabilities settings have been saved and before redirect.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 */
 	do_action( 'bp_settings_capabilities_after_save' );
 
 	// Redirect to the root domain
@@ -399,7 +437,7 @@ function bp_settings_action_delete_account() {
 	// delete the users account
 	if ( bp_core_delete_account( bp_displayed_user_id() ) ) {
 
-		// Add feedback ater deleting a user
+		// Add feedback after deleting a user
 		bp_core_add_message( sprintf( __( '%s was successfully deleted.', 'buddypress' ), $username ), 'success' );
 
 		// Redirect to the root domain
@@ -465,3 +503,15 @@ function bp_settings_verify_email_change(){
 	}
 }
 add_action( 'bp_actions', 'bp_settings_verify_email_change' );
+
+/**
+ * Removes 'Email' sub nav, if no component has registered options there.
+ *
+ * @since BuddyPress (2.2.0)
+ */
+function bp_settings_remove_email_subnav() {
+	if ( ! has_action( 'bp_notification_settings' ) ) {
+		bp_core_remove_subnav_item( BP_SETTINGS_SLUG, 'notifications' );
+	}
+}
+add_action( 'bp_actions', 'bp_settings_remove_email_subnav' );

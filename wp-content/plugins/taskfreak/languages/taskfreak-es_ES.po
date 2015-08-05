@@ -1,0 +1,1049 @@
+# TaskFreak Free - French strings
+# Copyright (C) 2013 Tirzen
+# This file is distributed under the same license as the TaskFreak Free package.
+msgid ""
+msgstr ""
+"Project-Id-Version: TaskFreak Free 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/taskfreak\n"
+"POT-Creation-Date: 2013-09-26 17:28:07+00:00\n"
+"PO-Revision-Date: 2014-11-22 09:56-0400\n"
+"Last-Translator: José Miranda <joseamirandavelez@gmail.com>\n"
+"Language-Team: Tirzen <dev@tirzen.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.10\n"
+"Language: es_PR\n"
+
+#: inc/controllers/admin/project_user.php:21
+msgid "Add user to project"
+msgstr "Añadir usuario al proyecto"
+
+#: inc/controllers/admin/project_user.php:31
+msgid "Edit user's position"
+msgstr "Editar posición del usuario"
+
+#: inc/controllers/admin/project_user_add.php:21
+#: inc/controllers/admin/project_user_edit.php:21
+#: inc/views/admin/project_edit.php:65 inc/views/admin/project_edit.php:80
+#: inc/views/admin/project_list.php:85 inc/views/front/task.php:21
+msgid "Edit"
+msgstr "Editar"
+
+#: inc/controllers/admin/project_user_add.php:22
+#: inc/controllers/admin/project_user_edit.php:22
+msgid "Remove"
+msgstr "Eliminar"
+
+#: inc/controllers/admin/settings.php:32
+msgid "Changes saved"
+msgstr "Cabios guardados"
+
+#: inc/controllers/admin/settings.php:34
+msgid "No changes saved"
+msgstr "Los cambios no fueron guardados"
+
+#: inc/controllers/front/project_view.php:39
+msgid "No such project."
+msgstr "No existe el proyecto."
+
+#: inc/controllers/front/project_view.php:44
+msgid "Sorry, you can't access this project. Please contact an admin."
+msgstr ""
+"Lo siento. Usted no puede accesar este proyecto. Porfavor contacte a un "
+"administrador."
+
+#: inc/controllers/front/task_edit.php:13
+msgid "Sorry, you can't edit tasks when logged out."
+msgstr "Lo siento. Usted no puede editar tareas cuando no está logueado."
+
+#: inc/controllers/front/task_edit.php:38
+msgid "Sorry, you can't edit this task. Please contact an admin."
+msgstr ""
+"Lo sient. Usted no puede editar esta tarea. Por favor contacte a un "
+"administrador."
+
+#: inc/controllers/front/task_edit.php:72
+msgid "Unavailable project"
+msgstr "Proyecto no disponible"
+
+#: inc/controllers/front/task_edit.php:74
+msgid "Sorry, you can't post in this project. Please contact an admin."
+msgstr ""
+"Lo siento. Usted no puede publicar en este proyecto. Por favor contacte a un "
+"administrador."
+
+#: inc/controllers/front/task_edit.php:77
+msgid "Please select a user who has access to this project"
+msgstr "Por favor seleccione un usuario que tenga acceso a este proyecto"
+
+#: inc/controllers/front/task_edit.php:123
+msgid "Changes saved."
+msgstr "Cambios guardados."
+
+#: inc/controllers/front/task_edit.php:131
+#: inc/controllers/front/task_view.php:105
+msgid "Upload failed. Check file size."
+msgstr "El archivo no se pudo subir. Verifique el tamaño del archivo."
+
+#: inc/controllers/front/task_history.php:19
+#: inc/controllers/front/task_view.php:19
+msgid "Sorry, item not found"
+msgstr "Lo siento. Articulo no encontrado."
+
+#: inc/controllers/front/task_history.php:23
+#: inc/controllers/front/task_view.php:23
+msgid "Missing \"view\" parameter"
+msgstr "Falta el parametro \"visita\""
+
+#: inc/controllers/front/task_status.php:13
+msgid "Sorry, request forbidden for security reasons."
+msgstr "Lo siento. Su pedido ha sido denegado por razones de seguridad."
+
+#: inc/controllers/front/task_status.php:28
+#: inc/controllers/front/task_status.php:45
+msgid "No such item"
+msgstr "No existe el artículo"
+
+#: inc/controllers/front/task_status.php:32
+msgid "You can't change this status"
+msgstr "Usted no puede cambiar este estatus."
+
+#: inc/controllers/front/task_status.php:40
+msgid "Unable to set status"
+msgstr "No se pudo guarder el estatus"
+
+#: inc/controllers/front/task_view.php:33
+msgid "Sorry, you can't read this task. Please contact an admin."
+msgstr ""
+"Lo siento. Usted no puede leer esta tarea. Por favor contacte a un "
+"administrador."
+
+#: inc/controllers/front/task_view.php:48
+msgid ""
+"Sorry, you can't comment tasks in this project. Please contact an admin."
+msgstr ""
+"Lo siento. Usted no puede comentar en las tareas de este proyecto. Por favor "
+"contacte a un administrador."
+
+#: inc/controllers/front/task_view.php:75
+msgid "Uploaded file: "
+msgstr "Archivo cargado:"
+
+#: inc/controllers/front/task_view.php:94
+msgid "See comment"
+msgstr "Ver comentario"
+
+#: inc/controllers/front/task_view.php:96
+msgid "Comment saved."
+msgstr "Comentario guardado."
+
+#: inc/controllers/front.php:26
+msgid "An error has occured."
+msgstr "Ha ocurrido un error."
+
+#: inc/models/item.php:135 inc/views/front/list.php:114
+msgid "Undefined Deadline"
+msgstr "Fecha limite no definida"
+
+#: inc/models/item.php:143
+msgid "Past due !"
+msgstr "Atrasado!"
+
+#: inc/models/item.php:146
+msgid "%s minute remaining"
+msgid_plural "%s minutes remaining"
+msgstr[0] "Rimangono %s minuti"
+msgstr[1] "Rimangono %s minuti"
+
+#: inc/models/item.php:149
+msgid "%s hour remaining"
+msgid_plural "%s hours remaining"
+msgstr[0] "Rimane %s ora"
+msgstr[1] "Rimangono %s ore"
+
+#: inc/models/item.php:152
+msgid "%s day remaining"
+msgid_plural "%s days remaining"
+msgstr[0] "Rimane %s giorno"
+msgstr[1] "Rimangono %s giorni"
+
+#: inc/models/item.php:154
+msgid "%s month remaining"
+msgid_plural "%s months remaining"
+msgstr[0] "Rimane %s mese"
+msgstr[1] "Rimangono %s mesi"
+
+#: inc/models/item.php:207 inc/models/project.php:197
+#: inc/models/project.with_status_table.php:156
+#: inc/models/project.with_status_table.php:168
+msgid "Draft"
+msgstr "Borrador"
+
+#: inc/models/item.php:209 inc/models/project.php:199
+#: inc/models/project.with_status_table.php:158
+#: inc/models/project.with_status_table.php:169
+msgid "In Progress"
+msgstr "En Progreso"
+
+#: inc/models/item.php:211 inc/models/project.php:201
+#: inc/models/project.with_status_table.php:160
+#: inc/models/project.with_status_table.php:170
+msgid "Suspended"
+msgstr "Suspendido"
+
+#: inc/models/item.php:213 inc/models/project.php:203
+#: inc/models/project.with_status_table.php:162
+#: inc/models/project.with_status_table.php:171
+msgid "Closed"
+msgstr "Cerrado"
+
+#: inc/models/item.php:215
+msgid "Unknown Status !"
+msgstr "Estatus desconocido!"
+
+#: inc/models/item.php:239
+msgctxt "tasks"
+msgid "All tasks"
+msgstr "Todas las tareas"
+
+#: inc/models/item.php:273
+msgid "Empty comment not allowed."
+msgstr "No se permiten comentarios vacios."
+
+#: inc/models/item.php:311
+msgid "Forbidden upload: "
+msgstr "Archivo no permitido:"
+
+#: inc/models/item.php:317
+msgid "Unable to write file to upload directory. Please tell an admin."
+msgstr ""
+"No se pudo escribir el file al directorio de uploads. Por favor contacte a "
+"un administrador."
+
+#: inc/models/item.php:330
+msgid "Upload of "
+msgstr "Archivo subido de"
+
+#: inc/models/item.php:330
+msgid " failed with error code "
+msgstr " falló con código de error "
+
+#: inc/models/item.php:415
+msgid "%d attachment"
+msgid_plural "%d attachments"
+msgstr[0] "%d allegato"
+msgstr[1] "%d allegati"
+
+#: inc/models/log.php:42
+msgid "assignee"
+msgstr "cesionario"
+
+#: inc/models/log.php:43
+msgid "description"
+msgstr "descripción"
+
+#: inc/models/log.php:44
+msgid "deadline"
+msgstr "limite"
+
+#: inc/models/log.php:45
+msgid "priority"
+msgstr "prioridad"
+
+#: inc/models/log.php:46
+msgid "title"
+msgstr "título"
+
+#: inc/models/log.php:47
+msgid "project"
+msgstr "proyecto"
+
+#: inc/models/log.php:52
+msgid "1 file"
+msgid_plural "%d files"
+msgstr[0] "1 file"
+msgstr[1] "%d file"
+
+#: inc/models/log.php:65 inc/views/front/nav.php:6
+msgid "Tasks"
+msgstr "Tareas"
+
+#: inc/models/log.php:66 inc/views/admin/project_list.php:6
+#: inc/views/front/nav.php:5
+msgid "Projects"
+msgstr "Proyectos"
+
+#: inc/models/log.php:67
+msgid "Comments"
+msgstr "Comentarios"
+
+#: inc/models/log.php:82
+msgctxt "updates"
+msgid "All"
+msgstr "Todas"
+
+#: inc/models/project.php:120 inc/models/project.with_status_table.php:106
+#: inc/views/admin/project_edit.php:87 inc/views/admin/settings.php:107
+msgid "Any visitor"
+msgstr "Cualquier visitante"
+
+#: inc/models/project.php:182 inc/views/admin/project_list.php:19
+msgctxt "many projects"
+msgid "Draft"
+msgstr "Borradores"
+
+#: inc/models/project.php:183 inc/views/admin/dashboard.php:42
+#: inc/views/admin/project_list.php:23
+msgctxt "many projects"
+msgid "In Progress"
+msgstr "En progreso"
+
+#: inc/models/project.php:184 inc/views/admin/dashboard.php:43
+#: inc/views/admin/project_list.php:24
+msgctxt "many projects"
+msgid "Suspended"
+msgstr "Suspendidos"
+
+#: inc/models/project.php:185 inc/views/admin/dashboard.php:44
+#: inc/views/admin/project_list.php:25
+msgctxt "many projects"
+msgid "Closed"
+msgstr "Cerrados"
+
+#: inc/models/project.php:212 inc/views/admin/project_list.php:15
+msgctxt "projects"
+msgid "All"
+msgstr "Todos"
+
+#: inc/models/project.php:249 inc/models/project.php:293
+#: inc/models/project.with_status_table.php:221
+#: inc/models/project.with_status_table.php:265
+msgid "Guest"
+msgstr "Invitado"
+
+#: inc/models/project.php:251 inc/models/project.php:294
+#: inc/models/project.with_status_table.php:223
+#: inc/models/project.with_status_table.php:266
+msgid "Client"
+msgstr "Cliente"
+
+#: inc/models/project.php:253 inc/models/project.php:295
+#: inc/models/project.with_status_table.php:225
+#: inc/models/project.with_status_table.php:267
+msgid "Staff"
+msgstr "Equipo"
+
+#: inc/models/project.php:255 inc/models/project.php:296
+#: inc/models/project.with_status_table.php:227
+#: inc/models/project.with_status_table.php:268
+msgid "Manager"
+msgstr "Jefe"
+
+#: inc/models/project.php:257 inc/models/project.php:297
+#: inc/models/project.with_status_table.php:229
+#: inc/models/project.with_status_table.php:269
+msgid "Project Leader"
+msgstr "Lider del proyecto"
+
+#: inc/views/admin/dashboard.php:3
+msgid "Dashboard"
+msgstr "Panel"
+
+#: inc/views/admin/dashboard.php:9
+msgid ""
+"Learn more about this plugin on the official <a href=\"%1$s\" target=\"_blank"
+"\">TaskFreak! website</a>."
+msgstr ""
+"Aprede mas acerca de este plugin en la pagina official de <a href=\"%1$s\" "
+"target=\"_blank\">TaskFreak!</a>."
+
+#: inc/views/admin/dashboard.php:16
+msgid "Start working!"
+msgstr "Empezar a trabajar!"
+
+#: inc/views/admin/dashboard.php:18 inc/views/admin/settings.php:23
+msgid "Recent updates"
+msgstr "Actualizaciones recientes"
+
+#: inc/views/admin/dashboard.php:22
+msgid "Manage projects"
+msgstr "Manjar proyectos"
+
+#: inc/views/admin/dashboard.php:26
+msgid "Learn more about TFWP"
+msgstr "Aprender mas sobre TFWP"
+
+#: inc/views/admin/dashboard.php:31
+msgid ""
+"To start using TaskFreak! plugin for Wordpress, you first need to add the "
+"shortcode <code>[tfk_all]</code> in one of your <a href=\"%s\">pages</a>."
+msgstr ""
+"Para empezar a usar el plugin de TaskFreak! para Wordpress, primero tiene "
+"que añadir el shortcode <code>[tfk_all]</code> en una de tus < a href=\"%s"
+"\">páginas</a>."
+
+#: inc/views/admin/dashboard.php:32
+msgid "You can also start by <a href=\"%s\">creating projects</a>"
+msgstr "Tambien puede empezar al <a href=\"%s\">creando proyectos</a>"
+
+#: inc/views/admin/dashboard.php:48
+msgid "My Tasks"
+msgstr "Mis Tareas"
+
+#: inc/views/admin/dashboard.php:54
+msgid "All Tasks"
+msgstr "Todas las Tareas"
+
+#: inc/views/admin/dashboard.php:60
+msgid "My Projects"
+msgstr "Mis proyectos"
+
+#: inc/views/admin/dashboard.php:66 inc/views/front/project_view.php:5
+msgid "All Projects"
+msgstr "Todos lo proyectos"
+
+#: inc/views/admin/dashboard.php:76
+msgid ""
+"Please consider <a href=\"%s\" target=\"_blank\">making a donation</a> if "
+"you enjoy using TFWP plugin."
+msgstr ""
+"Por favor considere <a href=\"%s\" target=\"_blank\">hacer una donacion</a> "
+"si disfruta el plugin TFWP."
+
+#: inc/views/admin/project_edit.php:4
+msgid "Edit Project"
+msgstr "Editar Proyecto"
+
+#: inc/views/admin/project_edit.php:4
+msgid "New Project"
+msgstr "Proyecto Nuevo"
+
+#: inc/views/admin/project_edit.php:9
+msgid "Project saved successfully"
+msgstr "Proyecto guardado exitosamente"
+
+#: inc/views/admin/project_edit.php:13
+msgid "Error saving project"
+msgstr "Errror guardando el proyecto"
+
+#: inc/views/admin/project_edit.php:32
+msgid "Enter title here"
+msgstr "Entra el titulo aquí"
+
+#: inc/views/admin/project_edit.php:53
+msgid "Project Status"
+msgstr "Estatus del Proyecto"
+
+#: inc/views/admin/project_edit.php:61
+msgid "Status:"
+msgstr "Estatus:"
+
+#: inc/views/admin/project_edit.php:71 inc/views/admin/project_edit.php:103
+msgid "OK"
+msgstr "OK"
+
+#: inc/views/admin/project_edit.php:72 inc/views/admin/project_edit.php:104
+msgid "Cancel"
+msgstr "Cancel"
+
+#: inc/views/admin/project_edit.php:76
+msgid "Access :"
+msgstr "Acceso:"
+
+#: inc/views/admin/project_edit.php:84
+msgid "Who can access this project"
+msgstr "Quien puede accede mi proyecto"
+
+#: inc/views/admin/project_edit.php:91 inc/views/admin/settings.php:111
+msgid "Who can comment tasks"
+msgstr "Quien puede comentar tareas"
+
+#: inc/views/admin/project_edit.php:95 inc/views/admin/settings.php:117
+msgid "Who can create tasks"
+msgstr "Quien puede crear tareas"
+
+#: inc/views/admin/project_edit.php:99 inc/views/admin/settings.php:123
+msgid "Who can moderate the project"
+msgstr "Quien puede moderar el proyecto"
+
+#: inc/views/admin/project_edit.php:112
+msgid "Move to Trash"
+msgstr "Mover a la basura"
+
+#: inc/views/admin/project_edit.php:116
+msgid "Update"
+msgstr "Actualizar"
+
+#: inc/views/admin/project_edit.php:131
+msgid "Click to toggle"
+msgstr "Click para alternar"
+
+#: inc/views/admin/project_edit.php:132
+msgid "Project History"
+msgstr "Historial del Proyecto"
+
+#: inc/views/admin/project_edit.php:139 inc/views/front/list.php:87
+msgid " by "
+msgstr " por "
+
+#: inc/views/admin/project_edit.php:144
+msgid "New project"
+msgstr "Proyecto nuevo"
+
+#: inc/views/admin/project_list.php:9
+msgid "Add New"
+msgstr "Añadir nuevo"
+
+#: inc/views/admin/project_list.php:29
+msgid "Trash"
+msgstr "Basura"
+
+#: inc/views/admin/project_list.php:38 inc/views/admin/project_list.php:45
+#: inc/views/front/project_list.php:11 inc/views/front/project_list.php:18
+msgid "Name"
+msgstr "Nombre"
+
+#: inc/views/admin/project_list.php:39 inc/views/admin/project_list.php:46
+#: inc/views/front/edit.php:69 inc/views/front/list.php:23
+#: inc/views/front/project_list.php:12 inc/views/front/project_list.php:19
+msgid "Status"
+msgstr "Estatus"
+
+#: inc/views/admin/project_list.php:76
+msgid "Restore this item from the Trash"
+msgstr "Restaurar este artículo de la basura"
+
+#: inc/views/admin/project_list.php:77
+msgid "Restore"
+msgstr "Restaurar"
+
+#: inc/views/admin/project_list.php:78
+msgid "Delete this item permanently"
+msgstr "Borrar esto permanéntemente"
+
+#: inc/views/admin/project_list.php:80
+msgid "Really delete this item?"
+msgstr "¿Está seguro que quiere borrar este item?"
+
+#: inc/views/admin/project_list.php:80
+msgid "Delete Permanently"
+msgstr "Borrar permanéntemente"
+
+#: inc/views/admin/project_list.php:85
+msgid "Edit this item"
+msgstr "Editar este item"
+
+#: inc/views/admin/project_list.php:86 inc/views/admin/project_list.php:94
+msgid "View"
+msgstr "Ver"
+
+#: inc/views/admin/settings.php:3
+msgid "Settings & Options"
+msgstr "Configuración y Opciones"
+
+#: inc/views/admin/settings.php:15
+msgid "Setup"
+msgstr "Configuración"
+
+#: inc/views/admin/settings.php:18
+msgid "Default [tfk_all] view"
+msgstr "Vista por defecto mostrada por [tfk_all]"
+
+#: inc/views/admin/settings.php:21
+msgid "List of projects"
+msgstr "Lista de proyectos"
+
+#: inc/views/admin/settings.php:22
+msgid "Tasks (to do)"
+msgstr "Tareas (para hacer)"
+
+#: inc/views/admin/settings.php:25
+msgid "What shortcut [tfk_all] shows by default"
+msgstr "Lo que el shortcut [tfk_all] muestra por defecto"
+
+#: inc/views/admin/settings.php:29
+msgid "Display options"
+msgstr "Opciones de visualización"
+
+#: inc/views/admin/settings.php:32
+msgid "Number of tasks per page"
+msgstr "Numeros de tareas por página"
+
+#: inc/views/admin/settings.php:44
+msgid "Date format"
+msgstr "Formato de fecha"
+
+#: inc/views/admin/settings.php:47
+msgid "American (mm/dd/yyyy)"
+msgstr "Americana (mm/dd/yyyy)"
+
+#: inc/views/admin/settings.php:48
+msgid "European (dd/mm/yyyy)"
+msgstr "Europea (dd/mm/yyyy)"
+
+#: inc/views/admin/settings.php:49
+msgid "Electronic (yyyy-mm-dd)"
+msgstr "Electrónica (yyyy-mm-dd)"
+
+#: inc/views/admin/settings.php:54
+msgid "Time format"
+msgstr "Formato de hora"
+
+#: inc/views/admin/settings.php:57
+msgid "24 hours"
+msgstr "24 horas"
+
+#: inc/views/admin/settings.php:58
+msgid "12 hours"
+msgstr "12 horas"
+
+#: inc/views/admin/settings.php:63
+msgid "Proximity bar"
+msgstr "Barra de proximidad"
+
+#: inc/views/admin/settings.php:66
+msgid "Visible"
+msgstr "Visible"
+
+#: inc/views/admin/settings.php:69
+msgid "Hidden"
+msgstr "Escondida"
+
+#: inc/views/admin/settings.php:73
+msgid "Updates page shows"
+msgstr "Página de actualizaciones muestra"
+
+#: inc/views/admin/settings.php:85
+msgid "No limit"
+msgstr "Sin limites"
+
+#: inc/views/admin/settings.php:87
+msgid "day(s)"
+msgstr "dia(s)"
+
+#: inc/views/admin/settings.php:91
+msgid "Avatar size"
+msgstr "Tamaño del Avatar"
+
+#: inc/views/admin/settings.php:94
+msgid "Small"
+msgstr "Pequeño"
+
+#: inc/views/admin/settings.php:95
+msgid "Medium"
+msgstr "Mediano"
+
+#: inc/views/admin/settings.php:96
+msgid "Large"
+msgstr "Grande"
+
+#: inc/views/admin/settings.php:101
+msgid "Default project access"
+msgstr "Acceso al proyecto por defecto"
+
+#: inc/views/admin/settings.php:104
+msgid "Who can access the project"
+msgstr "Quien puede accesar el proyecto"
+
+#: inc/views/admin/settings.php:129
+msgid "Security options"
+msgstr "Opciones de seguridad"
+
+#: inc/views/admin/settings.php:132
+msgid "Allow uploads in task comments"
+msgstr "Permitir cargar archivos en los comentarios de esta tarea"
+
+#: inc/views/admin/settings.php:135
+msgid "Yes"
+msgstr "Si"
+
+#: inc/views/admin/settings.php:138
+msgid "No"
+msgstr "No"
+
+#: inc/views/admin/settings.php:143
+msgid "Save Changes"
+msgstr "Guardar Cambios"
+
+#: inc/views/front/edit.php:8 inc/views/front/task.php:10
+msgid "Back to list"
+msgstr "Volver a la lista"
+
+#: inc/views/front/edit.php:9
+msgid "Edit Task"
+msgstr "Editar Tarea"
+
+#: inc/views/front/edit.php:9 inc/views/front/list.php:2
+msgid "New Task"
+msgstr "Tarea Nueva"
+
+#: inc/views/front/edit.php:13 inc/views/front/list.php:20
+msgid "Title"
+msgstr "Título"
+
+#: inc/views/front/edit.php:18
+msgid "Project"
+msgstr "Protejer"
+
+#: inc/views/front/edit.php:31
+msgid "Create a project first, please"
+msgstr "Por favor, cree un proyecto primero"
+
+#: inc/views/front/edit.php:36 inc/views/front/list.php:19
+msgid "Priority"
+msgstr "Prioridad"
+
+#: inc/views/front/edit.php:46
+msgid "Deadline"
+msgstr "Fecha limite"
+
+#: inc/views/front/edit.php:51 inc/views/front/edit.php:55
+msgid "Calendar"
+msgstr "Calendario"
+
+#: inc/views/front/edit.php:52
+msgid "Click to show calendar"
+msgstr "Click para mostrar el calendario"
+
+#: inc/views/front/edit.php:59 inc/views/front/list.php:56
+msgid "Assigned to"
+msgstr "Asignado a"
+
+#: inc/views/front/edit.php:95 inc/views/front/task.php:121
+msgid "Add a File:"
+msgstr "Añadir un file:"
+
+#: inc/views/front/edit.php:97 inc/views/front/edit.php:98
+#: inc/views/front/edit.php:99 inc/views/front/edit.php:100
+#: inc/views/front/task.php:123 inc/views/front/task.php:124
+msgid "more"
+msgstr "mas"
+
+#: inc/views/front/edit.php:107
+msgid "Attached Files:"
+msgstr "Adjuntar File:"
+
+#: inc/views/front/edit.php:120
+msgid "Save Task"
+msgstr "Guardar Tarea"
+
+#: inc/views/front/list.php:11
+msgid "task"
+msgid_plural "tasks"
+msgstr[0] "task"
+msgstr[1] "task"
+
+#: inc/views/front/list.php:14
+msgid "Sort by:"
+msgstr "Organizar por:"
+
+#: inc/views/front/list.php:17
+msgid "Deadline proximity"
+msgstr "Proximidad de la fecha límite"
+
+#: inc/views/front/list.php:18
+msgid "Deadline date"
+msgstr "Fecha límite"
+
+#: inc/views/front/list.php:21
+msgid "Assignee"
+msgstr "Asignado a"
+
+#: inc/views/front/list.php:22
+msgid "Modification date"
+msgstr "Modificación de fecha"
+
+#: inc/views/front/list.php:56 inc/views/front/list.php:78
+#: inc/views/front/list.php:87 inc/views/front/recent.php:30
+#: inc/views/front/task.php:30 inc/views/front/task.php:33
+#: inc/views/front/task.php:38 inc/views/front/task.php:95
+#: inc/views/front/task_history.php:25
+msgid "[deleted user]"
+msgstr "[usuario borrado]"
+
+#: inc/views/front/list.php:57 inc/views/front/list.php:78
+#: inc/views/front/task.php:38
+msgid "Unassigned"
+msgstr "No asignado"
+
+#: inc/views/front/list.php:63 inc/views/front/list.php:135
+#: inc/views/front/task.php:56
+msgctxt "one task"
+msgid "Closed"
+msgstr "Cerrada"
+
+#: inc/views/front/list.php:77
+msgid "Prio.:"
+msgstr "Prio.:"
+
+#: inc/views/front/list.php:81
+msgid "Add.: "
+msgstr "Aña.:"
+
+#: inc/views/front/list.php:84
+msgid "Mod.: "
+msgstr "Mod.:"
+
+#: inc/views/front/list.php:93 inc/views/front/list.php:98
+#: inc/views/front/task.php:82
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] "commento"
+msgstr[1] "commenti"
+
+#: inc/views/front/task.php:25
+msgid "Comment"
+msgstr "Comentario:"
+
+#: inc/views/front/list.php:106 inc/views/front/task.php:71
+msgid "Attached files"
+msgstr "Adjuntar archivos"
+
+#: inc/views/front/list.php:115 inc/views/front/task.php:37
+msgid "Deadline:"
+msgstr "Fecha Limite:"
+
+#: inc/views/front/list.php:119 inc/views/front/task.php:40
+msgid "Change Status:"
+msgstr "Cambiar estatus:"
+
+#: inc/views/front/list.php:124 inc/views/front/task.php:45
+msgid "Click to mark as In Progress"
+msgstr "Click para marcar como En Progreso"
+
+#: inc/views/front/list.php:125 inc/views/front/task.php:46
+msgctxt "one task"
+msgid "In Progress"
+msgstr "En Progreso"
+
+#: inc/views/front/list.php:129 inc/views/front/task.php:50
+msgid "Click to mark as Suspended"
+msgstr "Click para marcar como Suependida"
+
+#: inc/views/front/list.php:130 inc/views/front/task.php:51
+msgctxt "one task"
+msgid "Suspended"
+msgstr "Suspendida"
+
+#: inc/views/front/list.php:134 inc/views/front/task.php:55
+msgid "Click to mark as Closed"
+msgstr "Click para marcar como Cerrada"
+
+#: inc/views/front/list.php:137 inc/views/front/task.php:58
+msgid "Current Status: "
+msgstr "Estatus Actual:"
+
+#: inc/views/front/list.php:149
+msgid "Page:"
+msgstr "Página:"
+
+#: inc/views/front/list.php:160
+msgid "Results per page:"
+msgstr "Resultados por página:"
+
+#: inc/views/front/list.php:174
+msgid "No item found"
+msgstr "No se encontró nada"
+
+#: inc/views/front/nav.php:7
+msgid "Updates"
+msgstr "Actualizaciónes"
+
+#: inc/views/front/project_list.php:10 inc/views/front/project_list.php:17
+msgid "ID"
+msgstr "ID"
+
+#: inc/views/front/project_list.php:36
+msgid "No project found"
+msgstr "No se encontró nungún proyecto"
+
+#: inc/views/front/recent.php:36
+msgid "commented task"
+msgstr "tarea comentada"
+
+#: inc/views/front/recent.php:38
+msgid "created task"
+msgstr "tarea creada"
+
+#: inc/views/front/recent.php:40
+msgid "set task"
+msgstr "cambiar tarea"
+
+#: inc/views/front/recent.php:40 inc/views/front/recent.php:48
+msgid "to"
+msgstr "a"
+
+#: inc/views/front/recent.php:42
+msgid "modified task"
+msgstr "tarea modificada"
+
+#: inc/views/front/recent.php:46
+msgid "created project"
+msgstr "crear proyecto"
+
+#: inc/views/front/recent.php:48
+msgid "set project"
+msgstr "marcar proyecto"
+
+#: inc/views/front/recent.php:50
+msgid "modified project"
+msgstr "modificar proyecto"
+
+#: inc/views/front/recent.php:56
+msgid "Nothing, for the moment"
+msgstr "Nada por el momento"
+
+#: inc/views/front/status.php:5
+msgid "OK ! Task has been set to "
+msgstr "¡OK! La tarea a sida marcada como"
+
+#: inc/views/front/status.php:7
+msgid "Sorry, an error has occured."
+msgstr "Lo siento. Ha ocurrido un error."
+
+#: inc/views/front/task.php:16 inc/views/front/task_history.php:10
+msgid "In"
+msgstr "En"
+
+#: inc/views/front/task.php:30
+msgid "Task created by"
+msgstr "Tarea creada por"
+
+#: inc/views/front/task.php:33
+msgid "By"
+msgstr "Por"
+
+#: inc/views/front/task.php:34
+msgid "On"
+msgstr "En"
+
+#: inc/views/front/task.php:36
+msgid "Priority:"
+msgstr "Prioridad:"
+
+#: inc/views/front/task.php:38
+msgid "Assigned To:"
+msgstr "Asignada a:"
+
+#: inc/views/front/task.php:62
+msgid "Show History"
+msgstr "Mostrar Historial"
+
+#: inc/views/front/task.php:63
+msgid "Hide History"
+msgstr "Esconder Historial"
+
+#: inc/views/front/task.php:106
+msgid "Add a Comment:"
+msgstr "Añadir un Comentario"
+
+#: inc/views/front/task.php:130
+msgid "Save Comment"
+msgstr "Guardar Comentario"
+
+#: inc/views/front/task_history.php:4
+msgid "Back to task"
+msgstr "Volver a la tarea"
+
+#: inc/views/front/task_history.php:12
+msgid "Task history"
+msgstr "Historial de la tarea"
+
+#: inc/views/front/task_history.php:17
+msgid "Date"
+msgstr "Fecha"
+
+#: inc/views/front/task_history.php:18
+msgid "User"
+msgstr "Usuario"
+
+#: inc/views/front/task_history.php:19
+msgid "Action"
+msgstr "Acción"
+
+#: inc/views/front/task_history.php:32
+msgid "Modified"
+msgstr "Modificado"
+
+#. Plugin Name of the plugin/theme
+msgid "TaskFreak Free"
+msgstr "TaskFreak Gratis"
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.taskfreak.com"
+msgstr "http://www.taskfreak.com"
+
+#. Description of the plugin/theme
+msgid "Task Management made easy"
+msgstr "Manejo de tareas con facilidad"
+
+#. Author of the plugin/theme
+msgid "Tirzen"
+msgstr "Tirzen"
+
+#. Author URI of the plugin/theme
+msgid "http://www.tirzen.com"
+msgstr "http://www.tirzen.com"
+
+msgctxt "one task"
+msgid "Draft"
+msgstr "Borrador"
+
+msgctxt "many tasks"
+msgid "Draft"
+msgstr "Borradores"
+
+msgctxt "many tasks"
+msgid "In Progress"
+msgstr "En Progreso"
+
+msgctxt "many tasks"
+msgid "Suspended"
+msgstr "Suspendidas"
+
+msgctxt "many tasks"
+msgid "Closed"
+msgstr "Cerradas"
+
+msgctxt "one project"
+msgid "Draft"
+msgstr "Borrador"
+
+msgctxt "one project"
+msgid "In Progress"
+msgstr "En Progreso"
+
+msgctxt "one project"
+msgid "Suspended"
+msgstr "Suspendido"
+
+msgctxt "one project"
+msgid "Closed"
+msgstr "Cerrado"
+
+#: inc/controllers/admin.php:33
+msgid "Administrator Dashboard"
+msgstr "Tablero de Administración"
+
+#: inc/controllers/admin.php:35
+msgid "Settings"
+msgstr "Cofiguración"
+
+#: inc/models/item.php:50
+msgid "Title should not be blank"
+msgstr "El título no puede estar en blanco"
+
+#: inc/models/item.php:53
+msgid "Priority should be 1, 2, or 3"
+msgstr "La prioridad debe ser 1, 2 o 3"
+
+#: inc/models/item.php:56
+msgid "Invalid date format"
+msgstr "Formato de fecha invalido"
+
+#: inc/models/item.php:59
+msgid "Description is too big (maybe you pasted an image into it?)"
+msgstr ""
+"La descripción es muy larga (¿Quizas le diste paste a una imágen en ella?)"

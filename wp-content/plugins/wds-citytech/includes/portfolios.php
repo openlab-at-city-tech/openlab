@@ -253,17 +253,17 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			if ( 'all' !== $type && 'hidden' === $portfolio_group->status ) {
 				continue;
 			}
+                        
+                        // If the portfolio_blog_id is empty, this may be an
+                        // external portfolio
+                        if (empty($portfolio_blog_id)) {
+                            $external_url = openlab_get_external_site_url_by_group_id($portfolio_id);
+                            if (empty($external_url)) {
+                                continue;
+                            }
+                        }
 
-			// If the portfolio_blog_id is empty, this may be an
-			// external portfolio
-			if ( empty( $portfolio_blog_id ) ) {
-				$external_url = openlab_get_external_site_url_by_group_id( $portfolio_id );
-				if ( empty( $external_url ) ) {
-					continue;
-				}
-			}
-
-			$portfolio = array(
+                        $portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
 				'user_type' => xprofile_get_field_data( 'Account Type', $member->ID ),
@@ -341,6 +341,37 @@ function openlab_bust_group_portfolios_cache_on_membership_change( $member ) {
 	openlab_bust_group_portfolio_cache( $member->group_id );
 }
 add_action( 'groups_member_after_save', 'openlab_bust_group_portfolios_cache_on_membership_change' );
+
+
+/**
+ * Bust group portfolio cache when member leaves group
+ */
+function openlab_bust_group_portfolios_cache_on_group_leave($group_id) {
+    openlab_bust_group_portfolio_cache($group_id);
+}
+
+add_action('groups_uninvite_user', 'openlab_bust_group_portfolios_cache_on_group_leave');
+
+/* Bust group portfolio cache when member is removed from group.
+ *
+ * We can't run on 'groups_remove_member' because it runs before the member
+ * is removed.
+ */
+
+function openlab_bust_group_portfolios_cache_on_group_remove($user_id, $group_id) {
+    openlab_bust_group_portfolio_cache($group_id);
+}
+
+add_action('groups_removed_member', 'openlab_bust_group_portfolios_cache_on_group_remove', 10, 2);
+
+/* Bust group portfolio cache when a member removes themselves from the group
+ *
+ */
+function openlab_bust_group_portfolios_cache_on_self_remove($group_id, $user_id) {
+    openlab_bust_group_portfolio_cache($group_id);
+}
+
+add_action('groups_leave_group','openlab_bust_group_portfolios_cache_on_self_remove', 10, 2);
 
 /**
  * Bust group portfolio cache when member leaves group
@@ -472,16 +503,20 @@ function openlab_portfolio_list_group_display() {
 	?>
 
 	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
-		<h4 class="sidebar-header">
+		<h2 class="sidebar-header">
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
-		</h4>
+		</h2>
+            
+                <div class="sidebar-block">
 
-		<ul class="group-member-portfolio-list group-data-list">
+		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
 		<?php foreach ( $portfolio_data as $pdata ) : ?>
 			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
 			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
 		<?php endforeach ?>
 		</ul>
+                    
+                </div>
 	</div>
 
 	<?php

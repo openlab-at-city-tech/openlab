@@ -117,30 +117,6 @@ To view this $grouptype log in and follow the link below:
 add_filter('gettext', array('bpass_Translation_Mangler', 'filter_gettext'), 10, 4);
 
 /**
- * Put the group type in email notification subject lines
- */
-function openlab_group_type_in_notification_subject( $subject ) {
-
-   if ( !empty( $groups_template->group->id ) ) {
-   	$group_id = $groups_template->group->id;
-   } else if ( !empty( $bp->groups->current_group->id ) ) {
-   	$group_id = $bp->groups->current_group->id;
-   } else {
-   	return $subject;
-   }
-
-
-   if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
-   	$grouptype = $_COOKIE['wds_bp_group_type'];
-   } else {
-   	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
-   }
-
-   return str_replace( 'in the group', 'in the ' . $grouptype, $subject );
-}
-add_filter( 'ass_clean_subject', 'openlab_group_type_in_notification_subject' );
-
-/**
  * Add members to wpms website if attached to bp group and they are a group member
  *
  * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
@@ -180,26 +156,6 @@ function wds_add_group_members_2_blog(){
 		restore_current_blog();
 	}
 }
-
-/**
- * Allow super admins to edit any BuddyPress Doc
- */
-function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
-	global $bp;
-
-	if ( 'edit' == $action ) {
-		if ( is_super_admin() || bp_loggedin_user_id() == get_the_author_meta( 'ID' ) || $user_can ) {
-			$user_can = true;
-			$bp->bp_docs->current_user_can[$action] = 'yes';
-		} else {
-			$user_can = false;
-			$bp->bp_docs->current_user_can[$action] = 'no';
-		}
-	}
-
-	return $user_can;
-}
-add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
 /**
  * When a Notice is sent, send an email to all members
@@ -289,83 +245,57 @@ add_filter( 'wp_redirect', 'openlab_group_creation_redirect' );
  * Don't show a bbPress step during group creation.
  */
 function openlab_remove_forum_step_from_group_creation() {
-	$gcs = buddypress()->groups->group_creation_steps;
-	if ( isset( $gcs['forum'] ) ) {
-		unset( $gcs['forum'] );
-	}
-	buddypress()->groups->group_creation_steps = $gcs;
+    $gcs = buddypress()->groups->group_creation_steps;
+    if (isset($gcs['forum'])) {
+        unset($gcs['forum']);
+    }
+    buddypress()->groups->group_creation_steps = $gcs;
 }
-add_action( 'bp_actions', 'openlab_remove_forum_step_from_group_creation', 9 );
+
+add_action('bp_actions', 'openlab_remove_forum_step_from_group_creation', 9);
 
 /**
  * Create bbPress 2.x forum for newly created groups.
  */
-function openlab_create_forum_on_group_creation( $group_id, $member, $group ) {
-
-	// Set the default forum status
-	switch ( $group->status ) {
-		case 'hidden'  :
-			$status = bbp_get_hidden_status_id();
-			break;
-		case 'private' :
-			$status = bbp_get_private_status_id();
-			break;
-		case 'public'  :
-		default        :
-			$status = bbp_get_public_status_id();
-			break;
-	}
-
-	// Create the initial forum
-	$forum_id = bbp_insert_forum( array(
-		'post_parent'  => bbp_get_group_forums_root_id(),
-		'post_title'   => $group->name,
-		'post_content' => $group->description,
-		'post_status'  => $status
-	) );
-
-	bbp_add_forum_id_to_group( $group_id, $forum_id );
-	bbp_add_group_id_to_forum( $forum_id, $group_id );
-
-	// Update forum active
-	groups_update_groupmeta( $group_id, '_bbp_forum_enabled_' . $forum_id, true );
-
-	// Set forum enabled status
-	$group->enable_forum = 1;
-
-	// Save the group
-	$group->save();
-
-	bbp_repair_forum_visibility();
+function openlab_create_forum_on_group_creation($group_id, $member, $group) {
+// Set the default forum status
+    switch ($group->status) {
+        case 'hidden' :
+            $status = bbp_get_hidden_status_id();
+            break;
+        case 'private' :
+            $status = bbp_get_private_status_id();
+            break;
+        case 'public' :
+        default :
+            $status = bbp_get_public_status_id();
+            break;
+    }
+// Create the initial forum
+    $forum_id = bbp_insert_forum(array(
+        'post_parent' => bbp_get_group_forums_root_id(),
+        'post_title' => $group->name,
+        'post_content' => $group->description,
+        'post_status' => $status
+            ));
+    bbp_add_forum_id_to_group($group_id, $forum_id);
+    bbp_add_group_id_to_forum($forum_id, $group_id);
+// Update forum active
+    groups_update_groupmeta($group_id, '_bbp_forum_enabled_' . $forum_id, true);
+// Set forum enabled status
+    $group->enable_forum = 1;
+// Save the group
+    $group->save();
+    bbp_repair_forum_visibility();
 }
-add_action( 'groups_create_group', 'openlab_create_forum_on_group_creation', 10, 3 );
 
+add_action('groups_create_group', 'openlab_create_forum_on_group_creation', 10, 3);
 /**
  * Force group forums to be active.
  *
  * This is redundant but for some reason bbPress requires it.
  */
-add_filter( 'bp_get_new_group_enable_forum', '__return_true' );
-
-/**
- * When getting a blog avatar in the context of the Featured Content widget, test to see whether
- * the blog is associated with a group. If so, fetch the group avatar instead
- */
-function openlab_swap_featured_blog_avatar_with_group_avatar( $avatar, $blog_id ) {
-	global $wpdb, $bp;
-
-	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
-
-	if ( $group_id ) {
-		$group_avatar = bp_core_fetch_avatar( array( 'item_id' => $group_id, 'object' => 'group', 'html' => false, 'type' => 'full' ) );
-
-		if ( !empty( $group_avatar ) ) {
-			$avatar = preg_replace( '/(src=").*?(")/', "$1" . $group_avatar . "$2", $avatar );
-		}
-	}
-	return $avatar;
-}
-add_filter( 'cac_featured_content_blog_avatar', 'openlab_swap_featured_blog_avatar_with_group_avatar', 10, 2 );
+add_filter('bp_get_new_group_enable_forum', '__return_true');
 
 /**
  * Blogs must be public in order for BP to record their activity. Only at save time
@@ -384,13 +314,6 @@ add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_a
  * Auto-enable BuddyPress Docs for all group types
  */
 add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
-
-/**
- * Don't send friend requests when accepting Invite Anyone invitations
- *
- * @see #666
- */
-add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false' );
 
 /**
  * Bust the home page activity transients when new items are posted

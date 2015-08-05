@@ -63,7 +63,11 @@ if ( get_option('db_upgraded') ) {
 	 */
 	} elseif ( apply_filters( 'do_mu_upgrade', true ) ) {
 		$c = get_blog_count();
-		// If 50 or fewer sites, run every time. Else, run "about ten percent" of the time. Shh, don't check that math.
+
+		/*
+		 * If there are 50 or fewer sites, run every time. Otherwise, throttle to reduce load:
+		 * attempt to do no more than threshold value, with some +/- allowed.
+		 */
 		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int)( $c / 50 ) ) == 1 ) ) {
 			require_once( ABSPATH . WPINC . '/http.php' );
 			$response = wp_remote_get( admin_url( 'upgrade.php?step=1' ), array( 'timeout' => 120, 'httpversion' => '1.1' ) );
@@ -89,6 +93,15 @@ $date_format = get_option('date_format');
 $time_format = get_option('time_format');
 
 wp_enqueue_script( 'common' );
+
+// $pagenow is set in vars.php
+// $wp_importers is sometimes set in wp-admin/includes/import.php
+//
+// The remaining variables are imported as globals elsewhere,
+//     declared as globals here
+global $pagenow, $wp_importers, $hook_suffix, $plugin_page, $typenow, $taxnow;
+
+$page_hook = null;
 
 $editing = false;
 
@@ -167,12 +180,13 @@ if ( isset($plugin_page) ) {
 }
 
 $hook_suffix = '';
-if ( isset($page_hook) )
+if ( isset( $page_hook ) ) {
 	$hook_suffix = $page_hook;
-else if ( isset($plugin_page) )
+} elseif ( isset( $plugin_page ) ) {
 	$hook_suffix = $plugin_page;
-else if ( isset($pagenow) )
+} elseif ( isset( $pagenow ) ) {
 	$hook_suffix = $pagenow;
+}
 
 set_current_screen();
 
@@ -185,14 +199,14 @@ if ( isset($plugin_page) ) {
 		 * The load-* hook fires in a number of contexts. This hook is for plugin screens
 		 * where a callback is provided when the screen is registered.
 		 *
-		 * The dynamic portion of the hook name, $page_hook, refers to a mixture of plugin
+		 * The dynamic portion of the hook name, `$page_hook`, refers to a mixture of plugin
 		 * page information including:
 		 * 1. The page type. If the plugin page is registered as a submenu page, such as for
 		 *    Settings, the page type would be 'settings'. Otherwise the type is 'toplevel'.
 		 * 2. A separator of '_page_'.
 		 * 3. The plugin basename minus the file extension.
 		 *
-		 * Together, the three parts form the $page_hook. Citing the example above,
+		 * Together, the three parts form the `$page_hook`. Citing the example above,
 		 * the hook name used would be 'load-settings_page_pluginbasename'.
 		 *
 		 * @see get_plugin_page_hook()
@@ -206,7 +220,7 @@ if ( isset($plugin_page) ) {
 		/**
 		 * Used to call the registered callback for a plugin screen.
 		 *
-		 * @internal
+		 * @ignore
 		 * @since 1.5.0
 		 */
 		do_action( $page_hook );
@@ -223,7 +237,7 @@ if ( isset($plugin_page) ) {
 		 * The load-* hook fires in a number of contexts. This hook is for plugin screens
 		 * where the file to load is directly included, rather than the use of a function.
 		 *
-		 * The dynamic portion of the hook name, $plugin_page, refers to the plugin basename.
+		 * The dynamic portion of the hook name, `$plugin_page`, refers to the plugin basename.
 		 *
 		 * @see plugin_basename()
 		 *
@@ -243,7 +257,7 @@ if ( isset($plugin_page) ) {
 	include(ABSPATH . 'wp-admin/admin-footer.php');
 
 	exit();
-} else if (isset($_GET['import'])) {
+} elseif ( isset( $_GET['import'] ) ) {
 
 	$importer = $_GET['import'];
 
@@ -263,7 +277,7 @@ if ( isset($plugin_page) ) {
 	/**
 	 * Fires before an importer screen is loaded.
 	 *
-	 * The dynamic portion of the hook name, $importer, refers to the importer slug.
+	 * The dynamic portion of the hook name, `$importer`, refers to the importer slug.
 	 *
 	 * @since 3.5.0
 	 */
@@ -308,7 +322,7 @@ if ( isset($plugin_page) ) {
 	 *
 	 * The load-* hook fires in a number of contexts. This hook is for core screens.
 	 *
-	 * The dynamic portion of the hook name, $pagenow, is a global variable
+	 * The dynamic portion of the hook name, `$pagenow`, is a global variable
 	 * referring to the filename of the current page, such as 'admin.php',
 	 * 'post-new.php' etc. A complete hook for the latter would be
 	 * 'load-post-new.php'.
@@ -338,8 +352,8 @@ if ( ! empty( $_REQUEST['action'] ) ) {
 	/**
 	 * Fires when an 'action' request variable is sent.
 	 *
-	 * The dynamic portion of the hook name, $_REQUEST['action'],
-	 * refers to the action derived from the GET or POST request.
+	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
+	 * refers to the action derived from the `GET` or `POST` request.
 	 *
 	 * @since 2.6.0
 	 */

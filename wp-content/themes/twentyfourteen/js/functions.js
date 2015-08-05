@@ -7,29 +7,34 @@
  */
 ( function( $ ) {
 	var body    = $( 'body' ),
-		_window = $( window );
+		_window = $( window ),
+		nav, button, menu;
+
+	nav = $( '#primary-navigation' );
+	button = nav.find( '.menu-toggle' );
+	menu = nav.find( '.nav-menu' );
 
 	// Enable menu toggle for small screens.
 	( function() {
-		var nav = $( '#primary-navigation' ), button, menu;
-		if ( ! nav ) {
-			return;
-		}
-
-		button = nav.find( '.menu-toggle' );
-		if ( ! button ) {
+		if ( ! nav || ! button ) {
 			return;
 		}
 
 		// Hide button if menu is missing or empty.
-		menu = nav.find( '.nav-menu' );
 		if ( ! menu || ! menu.children().length ) {
 			button.hide();
 			return;
 		}
 
-		$( '.menu-toggle' ).on( 'click.twentyfourteen', function() {
+		button.on( 'click.twentyfourteen', function() {
 			nav.toggleClass( 'toggled-on' );
+			if ( nav.hasClass( 'toggled-on' ) ) {
+				$( this ).attr( 'aria-expanded', 'true' );
+				menu.attr( 'aria-expanded', 'true' );
+			} else {
+				$( this ).attr( 'aria-expanded', 'false' );
+				menu.attr( 'aria-expanded', 'false' );
+			}
 		} );
 	} )();
 
@@ -40,7 +45,13 @@
 	 * @link http://www.nczonline.net/blog/2013/01/15/fixing-skip-to-content-links/
 	 */
 	_window.on( 'hashchange.twentyfourteen', function() {
-		var element = document.getElementById( location.hash.substring( 1 ) );
+		var hash = location.hash.substring( 1 ), element;
+
+		if ( ! hash ) {
+			return;
+		}
+
+		element = document.getElementById( hash );
 
 		if ( element ) {
 			if ( ! /^(?:a|select|input|button|textarea)$/i.test( element.tagName ) ) {
@@ -58,10 +69,17 @@
 		// Search toggle.
 		$( '.search-toggle' ).on( 'click.twentyfourteen', function( event ) {
 			var that    = $( this ),
-				wrapper = $( '.search-box-wrapper' );
+				wrapper = $( '#search-container' ),
+				container = that.find( 'a' );
 
 			that.toggleClass( 'active' );
 			wrapper.toggleClass( 'hide' );
+
+			if ( that.hasClass( 'active' ) ) {
+				container.attr( 'aria-expanded', 'true' );
+			} else {
+				container.attr( 'aria-expanded', 'false' );
+			}
 
 			if ( that.is( '.active' ) || $( '.search-toggle .screen-reader-text' )[0] === event.target ) {
 				wrapper.find( '.search-field' ).focus();
@@ -88,7 +106,7 @@
 				mastheadOffset = $( '#masthead' ).offset().top - toolbarOffset;
 
 				_window.on( 'scroll.twentyfourteen', function() {
-					if ( ( window.scrollY > mastheadOffset ) && ( mastheadHeight < 49 ) ) {
+					if ( _window.scrollTop() > mastheadOffset && mastheadHeight < 49 ) {
 						body.addClass( 'masthead-fixed' );
 					} else {
 						body.removeClass( 'masthead-fixed' );
@@ -103,21 +121,45 @@
 		} );
 	} );
 
-	// Arrange footer widgets vertically.
-	if ( $.isFunction( $.fn.masonry ) ) {
-		$( '#footer-sidebar' ).masonry( {
-			itemSelector: '.widget',
-			columnWidth: function( containerWidth ) {
-				return containerWidth / 4;
-			},
-			gutterWidth: 0,
-			isResizable: true,
-			isRTL: $( 'body' ).is( '.rtl' )
-		} );
+	/**
+	 * @summary Add or remove ARIA attributes.
+	 * Uses jQuery's width() function to determine the size of the window and add
+	 * the default ARIA attributes for the menu toggle if it's visible.
+	 * @since Twenty Fourteen 1.4
+	 */
+	function onResizeARIA() {
+		if ( 781 > _window.width() ) {
+			button.attr( 'aria-expanded', 'false' );
+			menu.attr( 'aria-expanded', 'false' );
+			button.attr( 'aria-controls', 'primary-menu' );
+		} else {
+			button.removeAttr( 'aria-expanded' );
+			menu.removeAttr( 'aria-expanded' );
+			button.removeAttr( 'aria-controls' );
+		}
 	}
 
-	// Initialize Featured Content slider.
+	_window
+		.on( 'load.twentyfourteen', onResizeARIA )
+		.on( 'resize.twentyfourteen', function() {
+			onResizeARIA();
+	} );
+
 	_window.load( function() {
+		// Arrange footer widgets vertically.
+		if ( $.isFunction( $.fn.masonry ) ) {
+			$( '#footer-sidebar' ).masonry( {
+				itemSelector: '.widget',
+				columnWidth: function( containerWidth ) {
+					return containerWidth / 4;
+				},
+				gutterWidth: 0,
+				isResizable: true,
+				isRTL: $( 'body' ).is( '.rtl' )
+			} );
+		}
+
+		// Initialize Featured Content slider.
 		if ( body.is( '.slider' ) ) {
 			$( '.featured-content' ).featuredslider( {
 				selector: '.featured-content-inner > article',

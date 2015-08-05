@@ -1,5 +1,9 @@
 /* Additional default styles for the editor */
 
+html {
+	cursor: text;
+}
+
 html.ios {
 	height: 100%;
 }
@@ -11,14 +15,23 @@ html.ios {
 
 body {
 	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
-	font-size: 13px;
-	line-height: 19px;
+	font-size: 16px;
+	line-height: 1.5;
 	color: #333;
 	margin: 9px 10px;
+	max-width: 100%;
+	-webkit-font-smoothing: antialiased !important;
+}
+
+body.rtl {
+	font-family: Tahoma, "Times New Roman", "Bitstream Charter", Times, serif;
+}
+
+body.locale-he-il {
+	font-family: Arial, "Times New Roman", "Bitstream Charter", Times, serif;
 }
 
 body.wp-autoresize {
-	max-width: 100%;
 	overflow: visible !important;
 	/* The padding ensures margins of the children are contained in the body. */
 	padding-top: 1px !important;
@@ -32,6 +45,30 @@ Chrome and Safari replace <strong> and <b> with spans with inline styles on past
 body.webkit strong,
 body.webkit b {
 	font-weight: bold !important;
+}
+
+pre {
+	font-family: Consolas, Monaco, monospace;
+}
+
+td,
+th {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+/* For emoji replacement images */
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
 }
 
 /* DFW mode */
@@ -102,18 +139,8 @@ dl.wp-caption * {
 	margin: 0;
 }
 
-pre {
-	font: 12px/18px Consolas, Monaco, monospace;
-}
-
-td {
-	color: #000;
-	font-size: 11px;
-	margin: 8px;
-}
-
 /* Remove blue highlighting of selected images in WebKit */
-img::selection {
+img[data-mce-selected]::selection {
 	background-color: transparent;
 }
 
@@ -135,7 +162,7 @@ img::selection {
 	cursor: default;
 }
 
-.mce-content-body img[data-wp-more][data-mce-selected] {
+.mce-content-body img[data-mce-placeholder][data-mce-selected] {
 	outline: 1px dotted #888;
 }
 
@@ -211,9 +238,7 @@ audio {
 
 /* delegate the handling of the selection to the wpview tinymce plugin */
 .wpview-wrap,
-.wpview-wrap *,
-#wp-image-toolbar,
-#wp-image-toolbar * {
+.wpview-wrap * {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -308,18 +333,6 @@ audio {
 	display: none;
 }
 
-.wpview-wrap .toolbar {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: none;
-	z-index: 100;
-}
-
-.wpview-wrap[data-mce-selected] .toolbar {
-	display: block;
-}
-
 .wpview-wrap .loading-placeholder {
 	border: 1px dashed #ccc;
 	padding: 10px;
@@ -371,44 +384,6 @@ audio {
 	background: transparent;
 }
 
-#wp-image-toolbar {
-	position: absolute;
-	margin: 0;
-}
-
-.wpview-wrap .toolbar div,
-#wp-image-toolbar i {
-	margin-top: 7px;
-	margin-left: 7px;
-	padding: 2px;
-	width: 30px;
-	height: 30px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	background-color: #000;
-	background-color: rgba(0,0,0,0.9);
-	cursor: pointer;
-	color: white;
-	font-size: 30px;
-}
-
-.ie8 .wpview-wrap .toolbar div,
-.ie7 .wpview-wrap .toolbar div,
-.ie8 #wp-image-toolbar i,
-.ie7 #wp-image-toolbar i {
-	display: inline;
-	padding: 0;
-}
-
-.ie8 .dashicons-edit,
-.ie7 .dashicons-edit {
-	background-image: url(images/dashicon-edit.png);
-}
-
-.ie8 .dashicons-no-alt,
-.ie7 .dashicons-no-alt {
-	background-image: url(images/dashicon-no-alt.png);
-}
-
 .wpview-error {
 	border: 1px solid #dedede;
 	padding: 1em 0;
@@ -433,40 +408,6 @@ audio {
 	margin: 0;
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
-}
-
-.wpview-wrap .toolbar div:hover,
-#wp-image-toolbar i:hover {
-	box-shadow: 0 1px 3px rgba(0,0,0,0.8);
-	background-color: #000;
-	color: #2ea2cc;
-}
-
-/* Audio player is short; therefore let's put the toolbar above */
-.wpview-wrap[data-wpview-type="audio"] .toolbar {
-	top: auto;
-	bottom: -34px;
-}
-
-.wpview-wrap[data-wpview-type="audio"] .toolbar div {
-	margin-top: 0;
-}
-
-.wpview-wrap[data-wpview-type="audio"] .toolbar div:first-child {
-	margin-left: 0;
-}
-
-.wont-play {
-	padding: 4px 0;
-}
-
-.wont-play p {
-	font-size: 13px;
-	line-height: 1.3;
-	display: block;
-	width: 70%;
-	margin: 0 15%;
-	text-align: center;
 }
 
 .wpview-type-gallery:after {
@@ -494,7 +435,6 @@ audio {
 .ie8 .gallery {
 	margin: auto;
 }
-
 
 .gallery .gallery-item {
 	float: left;
@@ -580,17 +520,6 @@ img.wp-oembed {
 /* rtl */
 .rtl .gallery .gallery-item {
 	float: right;
-}
-
-.rtl .wpview-wrap .toolbar {
-	left: auto;
-	right: 0;
-}
-
-.rtl .wpview-wrap .toolbar div,
-.rtl #wp-image-toolbar i {
-	margin-left: auto;
-	margin-right: 7px;
 }
 
 @media print,

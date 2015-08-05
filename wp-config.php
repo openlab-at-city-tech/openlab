@@ -17,6 +17,7 @@
 /**
  * Include environment-specific constants, such as DB connection data
  */
+define( 'DO_BOOTSTRAP', true );
 if ( !defined( 'DB_NAME' ) ) {
 	include( dirname( __FILE__ ) . '/env.php' );
 }
@@ -83,6 +84,8 @@ define( 'BP_USE_WP_ADMIN_BAR', true );
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
+
+define( 'WP_DEFAULT_THEME', 'twentytwelve' );
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');

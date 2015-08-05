@@ -1,0 +1,17 @@
+/**print styles - help pages**/
+a[href]:after {
+    display: none;
+}
+.navbar,
+#help-title-nav,
+#sidebar,
+#sdiebar-mobile,
+#nav-single,
+.print-link,
+#breadcrumb-container,
+#openlab-footer{
+    display: none;
+}
+#content {
+    position: relative !important;
+}

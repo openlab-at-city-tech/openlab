@@ -24,18 +24,16 @@ class WP_Error {
 	 *
 	 * @since 2.1.0
 	 * @var array
-	 * @access private
 	 */
-	private $errors = array();
+	public $errors = array();
 
 	/**
 	 * Stores the list of data for error codes.
 	 *
 	 * @since 2.1.0
 	 * @var array
-	 * @access private
 	 */
-	private $error_data = array();
+	public $error_data = array();
 
 	/**
 	 * Initialize the error.
@@ -53,7 +51,6 @@ class WP_Error {
 	 * @param string|int $code Error code
 	 * @param string $message Error message
 	 * @param mixed $data Optional. Error data.
-	 * @return WP_Error
 	 */
 	public function __construct( $code = '', $message = '', $data = '' ) {
 		if ( empty($code) )
@@ -242,6 +239,21 @@ class WP_Error {
 
 		$this->error_data[$code] = $data;
 	}
+
+	/**
+	 * Removes the specified error.
+	 *
+	 * This function removes all error messages associated with the specified
+	 * error code, along with any error data for that code.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string|int $code Error code.
+	 */
+	public function remove( $code ) {
+		unset( $this->errors[ $code ] );
+		unset( $this->error_data[ $code ] );
+	}
 }
 
 /**
@@ -254,8 +266,6 @@ class WP_Error {
  * @param mixed $thing Check if unknown variable is a WP_Error object.
  * @return bool True, if WP_Error. False, if not WP_Error.
  */
-function is_wp_error($thing) {
-	if ( is_object($thing) && is_a($thing, 'WP_Error') )
-		return true;
-	return false;
+function is_wp_error( $thing ) {
+	return ( $thing instanceof WP_Error );
 }

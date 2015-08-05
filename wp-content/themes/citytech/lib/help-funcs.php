@@ -11,15 +11,14 @@
  * @param type $requested_url
  * @return type
  */
-
-function openlab_help_404_handler($redirect_url,$requested_url){
-    if (is_404() && strpos($requested_url,'help')){
+function openlab_help_404_handler($redirect_url, $requested_url) {
+    if (is_404() && strpos($requested_url, 'help')) {
         $redirect_url = site_url('blog/help/openlab-help');
         return $redirect_url;
     }
 }
 
-add_filter('redirect_canonical','openlab_help_404_handler',10,2);
+add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
 
 /**
  * 	Loop for single help pages
@@ -54,20 +53,20 @@ function openlab_help_loop() {
             <?php $this_term = openlab_get_primary_help_term_name(); ?>
             <div id="help-title"><h2 class="page-title">
                     <?php if ($this_term->parent != 0): ?>
-                    <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
+                        <a href="<?php echo get_term_link($this_term) ?>"><?php echo $this_term->name; ?></a> |
                     <?php endif; ?>
-                        <?php the_title(); ?></h2></div>
-        <?php elseif ($post->post_name == "openlab-help"): ?>
+                    <?php the_title(); ?></h2></div>
+                <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
             <h1 class="entry-title"><?php echo the_title(); ?></h1>
         <?php endif; ?>
 
-        <?php //print this page button - this is going to be absolutely positioned for now ?>
+        <?php //print this page button - this is going to be absolutely positioned for now  ?>
         <div class="print-page"><input type="button" value="Print this page"
                                        onclick="window.print();
-                                               return false;" /></div>
+                                                       return false;" /></div>
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation('top')); ?>
 
@@ -89,7 +88,7 @@ function openlab_get_help_tag_list($id) {
 
     $terms = get_the_term_list($id, 'help_tags', '', ', ', '');
     $term_list = '<div id="help-identity">'
-            . '<div class="help-tags">Tags: '.($terms ? $terms : 'None assigned').'</div>'
+            . '<div class="help-tags">Tags: ' . ($terms ? $terms : 'None assigned') . '</div>'
             . '</div>';
 
     return $term_list;
@@ -121,7 +120,7 @@ function openlab_help_tags_loop() {
     );
 
 
-    $tags_query = new WP_Query( $args );
+    $tags_query = new WP_Query($args);
     ?>
 
     <h1 class="parent-cat">Tag Archive for: "<?php echo $parent_cat_name; ?>"</h1>
@@ -180,20 +179,22 @@ function openlab_help_cats_loop() {
     );
 
 
-    $help_query = new WP_Query( $args );
+    $help_query = new WP_Query($args);
     ?>
 
     <?php if ($parent_term->parent == 0): ?>
-    <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
-    <?php else:
-        $head_term = get_term_by('id',$parent_term->parent,'help_category');
-    $child_title = '<h1 class="parent-cat"><a href="'.get_term_link($head_term).'">'.$head_term->name.'</a></h1>';
-    $child_title .= '<h2 class="child-cat child-cat-num-0">'. $parent_cat_name .'</h2>';
-    echo $child_title;
-    endif; ?>
+        <h1 class="parent-cat"><?php echo $parent_cat_name; ?></h1>
+    <?php
+    else:
+        $head_term = get_term_by('id', $parent_term->parent, 'help_category');
+        $child_title = '<h1 class="parent-cat"><a href="' . get_term_link($head_term) . '">' . $head_term->name . '</a></h1>';
+        $child_title .= '<h2 class="child-cat child-cat-num-0">' . $parent_cat_name . '</h2>';
+        echo $child_title;
+    endif;
+    ?>
 
     <?php
-    while ( $help_query->have_posts()) : $help_query->the_post();
+    while ($help_query->have_posts()) : $help_query->the_post();
 
         $post_id = get_the_ID();
         ?>
@@ -213,7 +214,7 @@ function openlab_help_cats_loop() {
 
     foreach ($child_cats as $child) {
         $child_cat_id = $child->cat_ID;
-        echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="'.get_term_link($child).'">' . $child->name . '</a></h2>';
+        echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="' . get_term_link($child) . '">' . $child->name . '</a></h2>';
 
         $args = array('tax_query' => array(
                 array(
@@ -227,10 +228,10 @@ function openlab_help_cats_loop() {
             'post_type' => 'help',
             'orderby' => 'menu_order',
             'order' => 'ASC',
-	    'posts_per_page' => '-1',
+            'posts_per_page' => '-1',
         );
         $child_query = null;
-        $child_query = new WP_Query( $args ); //new WP_Query($args);
+        $child_query = new WP_Query($args); //new WP_Query($args);
 
         while ($child_query->have_posts()) : $child_query->the_post();
             ?>
@@ -274,11 +275,11 @@ function openlab_glossary_cats_loop() {
         'post_type' => 'help_glossary',
         'orderby' => 'menu_order',
         'order' => 'ASC',
-	'posts_per_page' => '-1',
+        'posts_per_page' => '-1',
     );
 
 
-    $cat_query = new WP_Query( $args );
+    $cat_query = new WP_Query($args);
     ?>
 
     <h1 class="parent-cat">Glossary</h1>

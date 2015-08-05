@@ -13,7 +13,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Attach BuddyPress to WordPress.
@@ -53,7 +53,9 @@ add_action( 'generate_rewrite_rules',  'bp_generate_rewrite_rules', 10    );
  */
 add_action( 'bp_loaded', 'bp_setup_components',         2  );
 add_action( 'bp_loaded', 'bp_include',                  4  );
+add_action( 'bp_loaded', 'bp_setup_cache_groups',       5  );
 add_action( 'bp_loaded', 'bp_setup_widgets',            6  );
+add_action( 'bp_loaded', 'bp_register_member_types',    8  );
 add_action( 'bp_loaded', 'bp_register_theme_packages',  12 );
 add_action( 'bp_loaded', 'bp_register_theme_directory', 14 );
 
@@ -65,6 +67,7 @@ add_action( 'bp_loaded', 'bp_register_theme_directory', 14 );
  *                                                   v---Load order
  */
 add_action( 'bp_init', 'bp_core_set_uri_globals',    2  );
+add_action( 'bp_init', 'bp_register_taxonomies',     3  );
 add_action( 'bp_init', 'bp_setup_globals',           4  );
 add_action( 'bp_init', 'bp_setup_canonical_stack',   5  );
 add_action( 'bp_init', 'bp_setup_nav',               6  );

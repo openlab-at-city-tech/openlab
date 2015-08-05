@@ -76,6 +76,7 @@ window.switchEditors = {
 
 			DOM.removeClass( wrap_id, 'html-active' );
 			DOM.addClass( wrap_id, 'tmce-active' );
+			DOM.setAttrib( txtarea_el, 'aria-hidden', true );
 			setUserSetting( 'editor', 'tinymce' );
 
 		} else if ( 'html' === mode ) {
@@ -112,6 +113,7 @@ window.switchEditors = {
 
 			DOM.removeClass( wrap_id, 'tmce-active' );
 			DOM.addClass( wrap_id, 'html-active' );
+			DOM.setAttrib( txtarea_el, 'aria-hidden', false );
 			setUserSetting( 'editor', 'html' );
 		}
 		return false;
@@ -209,7 +211,7 @@ window.switchEditors = {
 			preserve_br = false,
 			blocklist = 'table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre' +
 				'|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section' +
-				'|article|aside|hgroup|header|footer|nav|figure|details|menu|summary';
+				'|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary';
 
 		if ( pee.indexOf( '<object' ) !== -1 ) {
 			pee = pee.replace( /<object[\s\S]+?<\/object>/g, function( a ) {

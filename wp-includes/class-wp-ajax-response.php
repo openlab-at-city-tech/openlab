@@ -11,9 +11,8 @@ class WP_Ajax_Response {
 	 *
 	 * @since 2.1.0
 	 * @var array
-	 * @access private
 	 */
-	private $responses = array();
+	public $responses = array();
 
 	/**
 	 * Constructor - Passes args to {@link WP_Ajax_Response::add()}.
@@ -22,7 +21,6 @@ class WP_Ajax_Response {
 	 * @see WP_Ajax_Response::add()
 	 *
 	 * @param string|array $args Optional. Will be passed to add() method.
-	 * @return WP_Ajax_Response
 	 */
 	public function __construct( $args = '' ) {
 		if ( !empty($args) )

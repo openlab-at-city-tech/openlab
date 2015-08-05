@@ -9,7 +9,13 @@ function openlab_hide_plugins( $plugins ) {
 	$network_admin_only = array();
 
 	$super_admin_only = array(
+		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
+		'bbpress/bbpress.php',
 		'cac-non-cuny-signup/loader.php',
+		'google-maps-embed/cets_EmbedGmaps.php',
+		'grader/grader.php',
+		'social/social.php',
+		'stout-google-calendar/stout-google-calendar.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -32,9 +38,10 @@ function openlab_hide_plugins( $plugins ) {
 			'buddypress-docs/loader.php',
 			'buddypress-group-email-subscription/bp-activity-subscription.php',
 			'bp-template-pack/loader.php',
+                        'staticpress/plugin.php',
 			'cac-group-announcements/cac-group-announcements.php',
 			'cubepoints-buddypress-integration/loader.php',
-			'digressit/digressit.php',
+                        'digressit/digressit.php',
 			'forum-attachments-for-buddypress/forum-attachments-for-buddypress.php',
 			'genesis-connect/genesis-connect.php',
 			'genesis-connect-for-buddypress/genesis-connect.php',

@@ -1,17 +1,17 @@
 /*
 Theme Name: Twenty Eleven
-Theme URI: http://wordpress.org/themes/twentyeleven
+Theme URI: https://wordpress.org/themes/twentyeleven/
 Author: the WordPress team
-Author URI: http://wordpress.org/
+Author URI: https://wordpress.org/
 Description: The 2011 theme for WordPress is sophisticated, lightweight, and adaptable. Make it yours with a custom menu, header image, and background -- then go further with available theme options for light or dark color scheme, custom link colors, and three layout choices. Twenty Eleven comes equipped with a Showcase page template that transforms your front page into a showcase to show off your best content, widget support galore (sidebar, three footer areas, and a Showcase page widget area), and a custom "Ephemera" widget to display your Aside, Link, Quote, or Status posts. Included are styles for print and for the admin editor, support for featured images (as custom header images on posts and pages and as large images on featured "sticky" posts), and special styles for six different post formats.
-Version: 1.7
+Version: 2.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: dark, light, white, black, gray, one-column, two-columns, left-sidebar, right-sidebar, fixed-width, flexible-width, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-image-header, featured-images, flexible-header, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, translation-ready
+Tags: dark, light, white, black, gray, one-column, two-columns, left-sidebar, right-sidebar, fixed-layout, responsive-layout, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-image-header, featured-images, flexible-header, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, translation-ready
 Text Domain: twentyeleven
 */
 
-/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+/* =Reset default browser CSS. Based on work by Eric Meyer.
 -------------------------------------------------------------- */
 
 html, body, div, span, applet, object, iframe,
@@ -493,12 +493,19 @@ a:hover {
 }
 
 /* Assistive text */
-.assistive-text {
+.assistive-text,
+.screen-reader-text {
 	position: absolute !important;
 	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
 	clip: rect(1px, 1px, 1px, 1px);
+	overflow: hidden;
+	height: 1px;
+	width: 1px;
 }
-#access a.assistive-text:focus {
+#access a.assistive-text:focus,
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus {
 	background: #eee;
 	border-bottom: 1px solid #ddd;
 	color: #1982d1;
@@ -767,6 +774,9 @@ a:hover {
 .entry-content,
 .entry-summary {
 	padding: 1.625em 0 0;
+}
+.entry-content .more-link {
+	white-space: nowrap;
 }
 .entry-content h1,
 .entry-content h2,
@@ -1238,6 +1248,15 @@ blockquote.pull.alignright {
 	padding: 0;
 }
 
+/* =Standard
+----------------------------------------------- */
+
+.format-standard .wp-video,
+.format-standard .wp-audio-shortcode,
+.format-audio .wp-audio-shortcode,
+.format-standard .video-player {
+	margin-bottom: 24px;
+}
 
 /* =Quote
 ----------------------------------------------- */
@@ -1706,6 +1725,18 @@ section.recent-posts .other-recent-posts li:after {
 	text-transform: uppercase;
 }
 
+/* =Media
+-------------------------------------------------------------- */
+
+audio,
+video {
+	display: inline-block;
+	max-width: 100%;
+}
+
+.attachment .entry-content .mejs-container {
+	margin-bottom: 24px;
+}
 
 /* =Navigation
 -------------------------------------------------------------- */
@@ -2283,6 +2314,18 @@ p.comment-form-comment {
 /* =Responsive Structure
 ----------------------------------------------- */
 
+/* Does the same thing as <meta name="viewport" content="width=device-width">,
+ * but in the future W3C standard way. -ms- prefix is required for IE10+ to
+ * render responsive styling in Windows 8 "snapped" views; IE10+ does not honor
+ * the meta tag. See https://core.trac.wordpress.org/ticket/25888.
+ */
+@-ms-viewport {
+	width: device-width;
+}
+@viewport {
+	width: device-width;
+}
+
 @media (max-width: 800px) {
 	/* Simplify the basic layout */
 	#main #content {
@@ -2409,6 +2452,9 @@ p.comment-form-comment {
 	#access ul {
 		font-size: 12px;
 	}
+	#branding .only-search + #access div {
+		padding-right: 0;
+	}
 	article.intro .entry-content {
 		font-size: 12px;
 	}
@@ -2460,6 +2506,11 @@ p.comment-form-comment {
 	}
 	.singular.page .hentry {
 		padding: 1.625em 0 0;
+	}
+	.singular .entry-header .entry-meta,
+	.singular .entry-header .entry-format,
+	.singular .entry-meta .edit-link a {
+		position: static;
 	}
 	/* Talking avatars take up too much room at this size */
 	.commentlist > li.comment,
@@ -2515,11 +2566,6 @@ p.comment-form-comment {
 	}
 	#branding {
 		border-top: none;
-	}
-	.singular .entry-header .entry-meta,
-	.singular .entry-header .entry-format,
-	.singular .entry-meta .edit-link a {
-		position: static;
 	}
 }
 

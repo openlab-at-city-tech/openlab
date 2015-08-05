@@ -76,20 +76,50 @@
 				 * @since BuddyPress (2.1.0)
 				 */
 				before_reposition: function( offset ) {
-					var $view = $( '#atwho-ground-' + this.id + ' .atwho-view' ),
-						caret = this.$inputor.caret( 'offset', { iframe: $( '#content_ifr' )[0] } ).left,
-						move;
+					// get the iframe, if any, already applied with atwho
+					var caret,
+							line,
+							iframeOffset,
+							move,
+							$view = $( '#atwho-ground-' + this.id + ' .atwho-view' ),
+							$body = $( 'body' ),
+							atwhoDataValue = this.$inputor.data( 'atwho' );
 
-					// If the caret is past horizontal half, then flip it, yo.
-					if ( caret > ( $( 'body' ).width() / 2 ) ) {
-						$view.addClass( 'right' );
-						move = caret - offset.left - this.view.$el.width();
+					if ( 'undefined' !== atwhoDataValue && 'undefined' !== atwhoDataValue.iframe && null !== atwhoDataValue.iframe ) {
+						caret = this.$inputor.caret( 'offset', { iframe: atwhoDataValue.iframe } );
+						// Caret.js no longer calculates iframe caret position from the window (it's now just within the iframe).
+						// We need to get the iframe offset from the window and merge that into our object.
+						iframeOffset = $( atwhoDataValue.iframe ).offset();
+						if ( 'undefined' !== iframeOffset ) {
+							caret.left += iframeOffset.left;
+							caret.top  += iframeOffset.top;
+						}
 					} else {
-						$view.removeClass( 'right' );
-						move = caret - offset.left + 1;
+						caret = this.$inputor.caret( 'offset' );
 					}
 
-					offset.top  += 1;
+					// If the caret is past horizontal half, then flip it, yo
+					if ( caret.left > ( $body.width() / 2 ) ) {
+						$view.addClass( 'right' );
+						move = caret.left - offset.left - this.view.$el.width();
+					} else {
+						$view.removeClass( 'right' );
+						move = caret.left - offset.left + 1;
+					}
+
+					// If we're on a small screen, scroll to caret
+					if ( $body.width() <= 400 ) {
+						$( document ).scrollTop( caret.top - 6 );
+					}
+
+					// New position is under the caret (never above) and positioned to follow
+					// Dynamic sizing based on the input area (remove 'px' from end)
+					line = parseInt( this.$inputor.css( 'line-height' ).substr( 0, this.$inputor.css( 'line-height' ).length - 2 ), 10 );
+					if ( !line || line < 5 ) { // sanity check, and catch no line-height
+						line = 19;
+					}
+
+					offset.top   = caret.top + line;
 					offset.left += move;
 				},
 
@@ -103,8 +133,7 @@
 				 * @since BuddyPress (2.1.0)
 				 */
 				inserting_wrapper: function( $inputor, content, suffix ) {
-					var new_suffix = ( suffix === '' ) ? suffix : suffix || ' ';
-					return '' + content + new_suffix;
+					return '' + content + suffix;
 				}
 			}
 		},
@@ -122,7 +151,8 @@
 				 * @since BuddyPress (2.1.0)
 				 */
 				remote_filter: function( query, render_view ) {
-					var self = $( this );
+					var self = $( this ),
+						params = {};
 
 					mentionsItem = mentionsQueryCache[ query ];
 					if ( typeof mentionsItem === 'object' ) {
@@ -134,7 +164,13 @@
 						self.xhr.abort();
 					}
 
-					self.xhr = $.getJSON( ajaxurl, { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' } )
+					params = { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' };
+
+					if ( $.isNumeric( this.$inputor.data( 'suggestions-group-id' ) ) ) {
+						params['group-id'] = parseInt( this.$inputor.data( 'suggestions-group-id' ), 10 );
+					}
+
+					self.xhr = $.getJSON( ajaxurl, params )
 						/**
 						 * Success callback for the @suggestions lookup.
 						 *
@@ -192,13 +228,34 @@
 	};
 
 	$( document ).ready(function() {
-		var users = [];
+		var loadMentionsInTinyMCE,
+			loadAttempts = 0,
+			users        = [];
 
 		if ( typeof window.BP_Suggestions === 'object' ) {
 			users = window.BP_Suggestions.friends || users;
 		}
 
+		// Dashboard post 'visual' editor.
+		loadMentionsInTinyMCE = function() {
+			if ( loadAttempts < 4 || ! $( 'body' ).hasClass( 'wp-admin' ) ) {
+				loadAttempts++;
+
+				if ( typeof window.tinyMCE === 'undefined' || window.tinyMCE.activeEditor === null || typeof window.tinyMCE.activeEditor === 'undefined' ) {
+					setTimeout( loadMentionsInTinyMCE, 500 );
+					return;
+				}
+			}
+
+			$( window.tinyMCE.activeEditor.contentDocument.activeElement )
+				.atwho( 'setIframe', $( '#content_ifr' )[0] )
+				.bp_mentions( users );
+		};
+
 		// Activity/reply, post comments, dashboard post 'text' editor.
 		$( '.bp-suggestions, #comments form textarea, .wp-editor-area' ).bp_mentions( users );
+
+		// Dashboard post 'visual' editor.
+		loadMentionsInTinyMCE();
 	});
 })( jQuery );

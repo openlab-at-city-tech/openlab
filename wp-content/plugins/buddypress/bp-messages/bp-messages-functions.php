@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Messages Functions
+ * BuddyPress Messages Functions.
  *
  * Business functions are where all the magic happens in BuddyPress. They will
  * handle the actual saving or manipulation of information. Usually they will
@@ -13,26 +13,25 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Create a new message.
  *
- * @param array $args {
+ * @param array|string $args {
  *     Array of arguments.
- *     @type int $sender_id Optional. ID of the user who is sending the
- *           message. Default: ID of the logged-in user.
- *     @type int $thread_id Optional. ID of the parent thread. Leave blank to
- *           create a new thread for the message.
- *     @type array $recipients IDs or usernames of message recipients. If this
- *           is an existing thread, it is unnecessary to pass a $recipients
- *           argument - existing thread recipients will be assumed.
- *     @type string $subject Optional. Subject line for the message. For
- *           existing threads, the existing subject will be used. For new
- *           threads, 'No Subject' will be used if no $subject is provided.
- *     @type string $content Content of the message. Cannot be empty.
- *     @type string $date_sent Date sent, in 'Y-m-d H:i:s' format. Default:
- *           current date/time.
+ *     @type int    $sender_id  Optional. ID of the user who is sending the
+ *                              message. Default: ID of the logged-in user.
+ *     @type int    $thread_id  Optional. ID of the parent thread. Leave blank to
+ *                              create a new thread for the message.
+ *     @type array  $recipients IDs or usernames of message recipients. If this
+ *                              is an existing thread, it is unnecessary to pass a $recipients
+ *                              argument - existing thread recipients will be assumed.
+ *     @type string $subject    Optional. Subject line for the message. For
+ *                              existing threads, the existing subject will be used. For new
+ *                              threads, 'No Subject' will be used if no $subject is provided.
+ *     @type string $content    Content of the message. Cannot be empty.
+ *     @type string $date_sent  Date sent, in 'Y-m-d H:i:s' format. Default: current date/time.
  * }
  * @return int|bool ID of the message thread on success, false on failure.
  */
@@ -155,7 +154,13 @@ function messages_new_message( $args = '' ) {
 		return false;
 	}
 
-	// Allow additional actions when a message is sent successfully
+	/**
+	 * Fires after a message has been successfully sent.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 *
+	 * @param BP_Messages_Message $message Message object. Passed by reference.
+	 */
 	do_action_ref_array( 'messages_message_sent', array( &$message ) );
 
 	// Return the thread ID
@@ -167,6 +172,7 @@ function messages_new_message( $args = '' ) {
  *
  * @param string $subject Subject of the notice.
  * @param string $message Content of the notice.
+ *
  * @return bool True on success, false on failure.
  */
 function messages_send_notice( $subject, $message ) {
@@ -182,6 +188,14 @@ function messages_send_notice( $subject, $message ) {
 		$notice->is_active = 1;
 		$notice->save(); // send it.
 
+		/**
+		 * Fires after a notice has been successfully sent.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param string $subject Subject of the notice.
+		 * @param string $message Content of the notice.
+		 */
 		do_action_ref_array( 'messages_send_notice', array( $subject, $message ) );
 
 		return true;
@@ -192,9 +206,18 @@ function messages_send_notice( $subject, $message ) {
  * Delete message thread(s).
  *
  * @param int|array Thread ID or array of thread IDs.
+ *
  * @return bool True on success, false on failure.
  */
 function messages_delete_thread( $thread_ids ) {
+
+	/**
+	 * Fires before specified thread IDs have been deleted.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param int|array Thread ID or array of thread IDs that were deleted.
+	 */
 	do_action( 'messages_before_delete_thread', $thread_ids );
 
 	if ( is_array( $thread_ids ) ) {
@@ -209,6 +232,13 @@ function messages_delete_thread( $thread_ids ) {
 			return false;
 		}
 
+		/**
+		 * Fires after specified thread IDs have been deleted.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int|array Thread ID or array of thread IDs that were deleted.
+		 */
 		do_action( 'messages_delete_thread', $thread_ids );
 
 		return true;
@@ -217,6 +247,7 @@ function messages_delete_thread( $thread_ids ) {
 			return false;
 		}
 
+		/** This action is documented in bp-messages/bp-messages-functions.php */
 		do_action( 'messages_delete_thread', $thread_ids );
 
 		return true;
@@ -227,8 +258,8 @@ function messages_delete_thread( $thread_ids ) {
  * Check whether a user has access to a thread.
  *
  * @param int $thread_id ID of the thread.
- * @param int $user_id Optional. ID of the user. Default: ID of the logged-in
- *        user.
+ * @param int $user_id   Optional. ID of the user. Default: ID of the logged-in user.
+ *
  * @return int|null Message ID if the user has access, otherwise null.
  */
 function messages_check_thread_access( $thread_id, $user_id = 0 ) {
@@ -269,8 +300,8 @@ function messages_mark_thread_unread( $thread_id ) {
  * values on the messages page.
  *
  * @param string $recipients Comma-separated list of recipient usernames.
- * @param string $subject Subject of the message.
- * @param string $content Content of the message.
+ * @param string $subject    Subject of the message.
+ * @param string $content    Content of the message.
  */
 function messages_add_callback_values( $recipients, $subject, $content ) {
 	@setcookie( 'bp_messages_send_to', $recipients, time() + 60 * 60 * 24, COOKIEPATH );
@@ -292,8 +323,8 @@ function messages_remove_callback_values() {
 /**
  * Get the unread messages count for a user.
  *
- * @param int $user_id Optional. ID of the user. Default: ID of the
- *        logged-in user.
+ * @param int $user_id Optional. ID of the user. Default: ID of the logged-in user.
+ *
  * @return int
  */
 function messages_get_unread_count( $user_id = 0 ) {
@@ -307,10 +338,11 @@ function messages_get_unread_count( $user_id = 0 ) {
 /**
  * Check whether a user is the sender of a message.
  *
- * @param int $user_id ID of the user.
+ * @param int $user_id    ID of the user.
  * @param int $message_id ID of the message.
+ *
  * @return int|null Returns the ID of the message if the user is the
- *         sender, otherwise null.
+ *                  sender, otherwise null.
  */
 function messages_is_user_sender( $user_id, $message_id ) {
 	return BP_Messages_Message::is_user_sender( $user_id, $message_id );
@@ -320,6 +352,7 @@ function messages_is_user_sender( $user_id, $message_id ) {
  * Get the ID of the sender of a message.
  *
  * @param int $message_id ID of the message.
+ *
  * @return int|null The ID of the sender if found, otherwise null.
  */
 function messages_get_message_sender( $message_id ) {
@@ -330,8 +363,140 @@ function messages_get_message_sender( $message_id ) {
  * Check whether a message thread exists.
  *
  * @param int $thread_id ID of the thread.
+ *
  * @return int|null The message thread ID on success, null on failure.
  */
 function messages_is_valid_thread( $thread_id ) {
 	return BP_Messages_Thread::is_valid( $thread_id );
+}
+
+/**
+ * Get the thread ID from a message ID.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param  int $message_id ID of the message.
+ * @return int The ID of the thread if found, otherwise 0.
+ */
+function messages_get_message_thread_id( $message_id = 0 ) {
+	global $wpdb;
+
+	$bp = buddypress();
+
+	return (int) $wpdb->get_var( $wpdb->prepare( "SELECT thread_id FROM {$bp->messages->table_name_messages} WHERE id = %d", $message_id ) );
+}
+
+/** Messages Meta *******************************************************/
+
+/**
+ * Delete metadata for a message.
+ *
+ * If $meta_key is false, this will delete all meta for the message ID.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @see delete_metadata() for full documentation excluding $meta_type variable.
+ *
+ * @param int         $message_id ID of the message to have meta deleted for.
+ * @param string|bool $meta_key   Meta key to delete. Default false.
+ * @param string|bool $meta_value Meta value to delete. Default false.
+ * @param bool        $delete_all Whether or not to delete all meta data.
+ *
+ * @return bool
+ */
+function bp_messages_delete_meta( $message_id, $meta_key = false, $meta_value = false, $delete_all = false ) {
+	// Legacy - if no meta_key is passed, delete all for the item
+	if ( empty( $meta_key ) ) {
+		global $wpdb;
+
+		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$wpdb->messagemeta} WHERE message_id = %d", $message_id ) );
+
+		// With no meta_key, ignore $delete_all
+		$delete_all = false;
+	} else {
+		$keys = array( $meta_key );
+	}
+
+	// no keys, so stop now!
+	if ( empty( $keys ) ) {
+		return false;
+	}
+
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	foreach ( $keys as $key ) {
+		$retval = delete_metadata( 'message', $message_id, $key, $meta_value, $delete_all );
+	}
+
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
+
+/**
+ * Get a piece of message metadata.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @see get_metadata() for full documentation excluding $meta_type variable.
+ *
+ * @param int    $message_id ID of the message to retrieve meta for.
+ * @param string $meta_key   Meta key to retrieve. Default empty string.
+ * @param bool   $single     Whether or not to fetch all or a single value.
+ *
+ * @return mixed
+ */
+function bp_messages_get_meta( $message_id, $meta_key = '', $single = true ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = get_metadata( 'message', $message_id, $meta_key, $single );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
+
+/**
+ * Update a piece of message metadata.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @see update_metadata() for full documentation excluding $meta_type variable.
+ *
+ * @param int         $message_id ID of the message to have meta deleted for.
+ * @param string|bool $meta_key   Meta key to update.
+ * @param string|bool $meta_value Meta value to update.
+ * @param string      $prev_value If specified, only update existing metadata entries with
+ * 		                          the specified value. Otherwise, update all entries.
+ *
+ * @return mixed
+ */
+function bp_messages_update_meta( $message_id, $meta_key, $meta_value, $prev_value = '' ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = update_metadata( 'message', $message_id, $meta_key, $meta_value, $prev_value );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
+}
+
+/**
+ * Add a piece of message metadata.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @see add_metadata() for full documentation excluding $meta_type variable.
+ *
+ * @param int         $message_id ID of the message to have meta deleted for.
+ * @param string|bool $meta_key   Meta key to update.
+ * @param string|bool $meta_value Meta value to update.
+ * @param bool        $unique     Whether the specified metadata key should be
+ * 		                          unique for the object. If true, and the object
+ * 		                          already has a value for the specified metadata key,
+ *                                no change will be made.
+ * @return mixed
+ */
+function bp_messages_add_meta( $message_id, $meta_key, $meta_value, $unique = false ) {
+	add_filter( 'query', 'bp_filter_metaid_column_name' );
+	$retval = add_metadata( 'message', $message_id, $meta_key, $meta_value, $unique );
+	remove_filter( 'query', 'bp_filter_metaid_column_name' );
+
+	return $retval;
 }

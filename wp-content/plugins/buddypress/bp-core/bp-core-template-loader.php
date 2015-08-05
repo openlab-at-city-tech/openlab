@@ -12,7 +12,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Get a BuddyPress template part for display in a theme.
@@ -32,15 +32,35 @@ if ( !defined( 'ABSPATH' ) ) exit;
 function bp_get_template_part( $slug, $name = null ) {
 
 	// Execute code for this part
+	/**
+	 * Fires at the start of bp_get_template_part().
+	 *
+	 * This is a variable hook that is dependent on the slug passed in.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param string $slug Template part slug requested.
+	 * @param string $name Template part name requested.
+	 */
 	do_action( 'get_template_part_' . $slug, $slug, $name );
 
 	// Setup possible parts
 	$templates = array();
-	if ( isset( $name ) )
+	if ( isset( $name ) ) {
 		$templates[] = $slug . '-' . $name . '.php';
+	}
 	$templates[] = $slug . '.php';
 
 	// Allow template parts to be filtered
+	/**
+	 * Filters the template parts to be loaded.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param array  $templates Array of templates located.
+	 * @param string $slug      Template part slug requested.
+	 * @param string $name      Template part name requested.
+	 */
 	$templates = apply_filters( 'bp_get_template_part', $templates, $slug, $name );
 
 	// Return the part that is found
@@ -73,8 +93,9 @@ function bp_locate_template( $template_names, $load = false, $require_once = tru
 	foreach ( (array) $template_names as $template_name ) {
 
 		// Continue if template is empty
-		if ( empty( $template_name ) )
+		if ( empty( $template_name ) ) {
 			continue;
+		}
 
 		// Trim off any slashes from the template name
 		$template_name  = ltrim( $template_name, '/' );
@@ -83,8 +104,9 @@ function bp_locate_template( $template_names, $load = false, $require_once = tru
 		foreach ( (array) $template_locations as $template_location ) {
 
 			// Continue if $template_location is empty
-			if ( empty( $template_location ) )
+			if ( empty( $template_location ) ) {
 				continue;
+			}
 
 			// Check child theme first
 			if ( file_exists( trailingslashit( $template_location ) . $template_name ) ) {
@@ -212,6 +234,13 @@ function bp_get_template_stack() {
 	// Remove empties and duplicates
 	$stack = array_unique( array_filter( $stack ) );
 
+	/**
+	 * Filters the "template stack" list of registered directories where templates can be found.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param array $stack Array of registered directories for template locations.
+	 */
 	return (array) apply_filters( 'bp_get_template_stack', $stack ) ;
 }
 
@@ -271,23 +300,45 @@ function bp_buffer_template_part( $slug, $name = null, $echo = true ) {
 function bp_get_query_template( $type, $templates = array() ) {
 	$type = preg_replace( '|[^a-z0-9-]+|', '', $type );
 
-	if ( empty( $templates ) )
+	if ( empty( $templates ) ) {
 		$templates = array( "{$type}.php" );
+	}
+
+	/**
+	 * Filters possible file paths to check for for a template.
+	 *
+	 * This is a variable filter based on the type passed into
+	 * bp_get_query_template.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param array $templates Array of template files already prepared.
+	 */
+	$templates = apply_filters( "bp_get_{$type}_template", $templates );
 
 	// Filter possible templates, try to match one, and set any BuddyPress theme
 	// compat properties so they can be cross-checked later.
-	$templates = apply_filters( "bp_get_{$type}_template", $templates );
 	$templates = bp_set_theme_compat_templates( $templates );
 	$template  = bp_locate_template( $templates );
 	$template  = bp_set_theme_compat_template( $template );
 
+	/**
+	 * Filters the path to a template file.
+	 *
+	 * This is a variable filter based on the type passed into
+	 * bp_get_query_template.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param string $template Path to the most appropriate found template file.
+	 */
 	return apply_filters( "bp_{$type}_template", $template );
 }
 
 /**
  * Get the possible subdirectories to check for templates in
  *
- * @since BuddyPress (1.7)
+ * @since BuddyPress (1.7.0)
  * @param array $templates Templates we are looking for
  * @return array Possible subfolders to look in
  */
@@ -297,6 +348,15 @@ function bp_get_template_locations( $templates = array() ) {
 		'community',
 		''
 	);
+
+	/**
+	 * Filters the possible subdirectories to check for templates in.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param array $locations Array of subfolders to look in.
+	 * @param array $templates Array of templates we are looking for.
+	 */
 	return apply_filters( 'bp_get_template_locations', $locations, $templates );
 }
 
@@ -315,10 +375,20 @@ function bp_add_template_stack_locations( $stacks = array() ) {
 	$locations = bp_get_template_locations();
 
 	// Loop through locations and stacks and combine
-	foreach ( (array) $stacks as $stack )
-		foreach ( (array) $locations as $custom_location )
+	foreach ( (array) $stacks as $stack ) {
+		foreach ( (array) $locations as $custom_location ) {
 			$retval[] = untrailingslashit( trailingslashit( $stack ) . $custom_location );
+		}
+	}
 
+	/**
+	 * Filters the template locations to template files being searched for.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param array $value  Array of all template locations registered so far.
+	 * @param array $stacks Array of template locations.
+	 */
 	return apply_filters( 'bp_add_template_stack_locations', array_unique( $retval ), $stacks );
 }
 
@@ -332,18 +402,29 @@ function bp_add_template_stack_locations( $stacks = array() ) {
 function bp_parse_query( $posts_query ) {
 
 	// Bail if $posts_query is not the main loop
-	if ( ! $posts_query->is_main_query() )
+	if ( ! $posts_query->is_main_query() ) {
 		return;
+	}
 
 	// Bail if filters are suppressed on this query
-	if ( true == $posts_query->get( 'suppress_filters' ) )
+	if ( true == $posts_query->get( 'suppress_filters' ) ) {
 		return;
+	}
 
 	// Bail if in admin
-	if ( is_admin() )
+	if ( is_admin() ) {
 		return;
+	}
 
-	// Allow BuddyPress components to parse the main query
+	/**
+	 * Fires at the end of the bp_parse_query function.
+	 *
+	 * Allow BuddyPress components to parse the main query.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param WP_Query $posts_query WP_Query instance. Passed by reference.
+	 */
 	do_action_ref_array( 'bp_parse_query', array( &$posts_query ) );
 }
 
@@ -364,15 +445,29 @@ function bp_parse_query( $posts_query ) {
  */
 function bp_template_include_theme_supports( $template = '' ) {
 
-	// Look for root BuddyPress template files in parent/child themes
+	/**
+	 * Filters whether or not to override the template being loaded in parent/child themes.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param bool   $value    Whether or not there is a file override. Default false.
+	 * @param string $template The path to the template file that is being used.
+	 */
 	$new_template = apply_filters( 'bp_get_root_template', false, $template );
 
 	// A BuddyPress template file was located, so override the WordPress
 	// template and use it to switch off BuddyPress's theme compatibility.
-	if ( !empty( $new_template ) ) {
+	if ( ! empty( $new_template ) ) {
 		$template = bp_set_template_included( $new_template );
 	}
 
+	/**
+	 * Filters the final template being loaded in parent/child themes.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param string $template The path to the template file that is being used.
+	 */
 	return apply_filters( 'bp_template_include_theme_supports', $template );
 }
 
@@ -417,8 +512,9 @@ function bp_load_theme_functions() {
 	}
 
 	// Do not include on BuddyPress deactivation
-	if ( bp_is_deactivation() )
+	if ( bp_is_deactivation() ) {
 		return;
+	}
 
 	// If the $wp_query global is empty (the main query has not been run,
 	// or has been reset), load_template() will fail at setting certain
@@ -442,7 +538,7 @@ function bp_load_theme_functions() {
  * @return array Array of possible root level wrapper template files.
  */
 function bp_get_theme_compat_templates() {
-	$templates = array(
+	return bp_get_query_template( 'buddypress', array(
 		'plugin-buddypress.php',
 		'buddypress.php',
 		'community.php',
@@ -450,6 +546,5 @@ function bp_get_theme_compat_templates() {
 		'page.php',
 		'single.php',
 		'index.php'
-	);
-	return bp_get_query_template( 'buddypress', $templates );
+	) );
 }

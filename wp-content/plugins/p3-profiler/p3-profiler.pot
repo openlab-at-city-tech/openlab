@@ -1,0 +1,1496 @@
+# Copyright (C) 2012 P3 (Plugin Performance Profiler)
+# This file is distributed under the same license as the P3 (Plugin Performance Profiler) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: P3 (Plugin Performance Profiler) 1.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p3-profiler\n"
+"POT-Creation-Date: 2012-11-19 18:50:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: classes/class.p3-profiler-plugin-admin.php:127
+msgid "Scan does not exist"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:153
+msgid ""
+"No visits recorded during this profiling session.  Check the <a href=\"%s"
+"\">help</a> page for more information"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:161
+msgid "Error reading scan"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:169
+msgid "Click \"Start Scan\" to run a performance scan of your website."
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:264
+#: classes/class.p3-profiler-plugin-admin.php:302
+#: classes/class.p3-profiler-plugin-admin.php:331
+#: classes/class.p3-profiler-plugin-admin.php:366
+#: classes/class.p3-profiler-plugin-admin.php:411
+#: classes/class.p3-profiler-plugin-admin.php:422
+#: classes/class.p3-profiler-table.php:210
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:313
+msgid "Turned off performance scanning."
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:386
+#: classes/class.p3-profiler-plugin-admin.php:389
+msgid "Invalid subject"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:393
+msgid "<a href=\"%s\" target=\"_blank\">wp_mail()</a> function returned false"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:439 templates/help.php:366
+#: templates/help.php:406
+msgid "Profiling Enabled"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:440 templates/help.php:367
+#: templates/help.php:407
+msgid "Recording IP"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:441 templates/callouts.php:257
+#: templates/help.php:368 templates/help.php:408
+msgid "Scan Name"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:442 templates/help.php:369
+#: templates/help.php:409
+msgid "Recording"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:443 templates/help.php:370
+#: templates/help.php:410
+msgid "Disable Optimizers"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:444 templates/help.php:371
+#: templates/help.php:411
+msgid "URL"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:445 templates/help.php:372
+#: templates/help.php:412
+msgid "Visitor IP"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:446 templates/help.php:373
+#: templates/help.php:413
+msgid "Time"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:447 templates/help.php:374
+#: templates/help.php:414
+msgctxt "Abbreviation for process id"
+msgid "PID"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:482
+msgid "Cannot read profiles directory"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:544
+msgid "Performance scanning is enabled."
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:598
+msgctxt "Abbreviation for bytes"
+msgid "B"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:599
+msgctxt "Abbreviation for kilobytes"
+msgid "KB"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:600 templates/view-scan.php:959
+msgctxt "Abbreviation for megabytes"
+msgid "MB"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:601
+msgctxt "Abbreviation for gigabytes"
+msgid "GB"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin-admin.php:602
+msgctxt "Abbreviation for terabytes"
+msgid "TB"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin.php:16
+#: classes/class.p3-profiler-plugin.php:17
+msgid "P3 Plugin Profiler"
+msgstr ""
+
+#: classes/class.p3-profiler-plugin.php:32
+msgid "Scan Now"
+msgstr ""
+
+#: classes/class.p3-profiler-reader.php:155
+msgid "Cannot open file: "
+msgstr ""
+
+#: classes/class.p3-profiler-reader.php:167
+msgid "Cannot parse file: "
+msgstr ""
+
+#: classes/class.p3-profiler-reader.php:191
+msgid "No visits recorded during this profiling session."
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:25
+#: classes/class.p3-profiler-table.php:26
+msgid "scan"
+msgid_plural "scans"
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/class.p3-profiler-table.php:106
+#: classes/class.p3-profiler-table.php:183
+#: classes/class.p3-profiler-table.php:198
+msgid "Delete"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:138
+msgid "Name"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:139
+msgid "Date"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:140
+msgid "Visits"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:141
+msgid "Size"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:174
+#: classes/class.p3-profiler-table.php:177
+msgid "View the results of this scan"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:177
+msgid "View"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:180
+msgid "Continue this scan"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:180
+msgid "Continue"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:183
+msgid "Delete this scan"
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:215
+msgid "Error removing file: "
+msgstr ""
+
+#: classes/class.p3-profiler-table.php:220
+msgid "Deleted %d scan. "
+msgid_plural "Deleted %d scans."
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/class.p3-profiler.php:513
+msgid "A fatal error occurred during profiling: %s in file %s on line %d "
+msgstr ""
+
+#: templates/callouts.php:93
+msgid "Scanning is paused."
+msgstr ""
+
+#: templates/callouts.php:142
+msgid "Scanning is complete."
+msgstr ""
+
+#: templates/callouts.php:148
+msgid "Scanning"
+msgstr ""
+
+#: templates/callouts.php:202 templates/callouts.php:489
+msgid "Advanced Settings"
+msgstr ""
+
+#: templates/callouts.php:206 templates/view-scan.php:55
+msgid "OK"
+msgstr ""
+
+#: templates/callouts.php:226 templates/callouts.php:627
+#: templates/view-scan.php:121
+msgid "Cancel"
+msgstr ""
+
+#: templates/callouts.php:244
+msgid "Performance Scan"
+msgstr ""
+
+#: templates/callouts.php:479 templates/callouts.php:662
+msgid "Stop Scan"
+msgstr ""
+
+#: templates/callouts.php:486
+msgid "My IP:"
+msgstr ""
+
+#: templates/callouts.php:488
+msgid "Start Scan"
+msgstr ""
+
+#: templates/callouts.php:497
+msgid ""
+"Total number of active plugins, including must-use plugins, on your site."
+msgstr ""
+
+#: templates/callouts.php:499
+msgid "Total Plugins:"
+msgstr ""
+
+#: templates/callouts.php:512
+msgid "currently active"
+msgstr ""
+
+#: templates/callouts.php:519
+msgid ""
+"Total number of seconds dedicated to plugin code per visit on your site."
+msgstr ""
+
+#: templates/callouts.php:520 templates/callouts.php:538
+#: templates/callouts.php:556
+msgid "From"
+msgstr ""
+
+#: templates/callouts.php:522 templates/help.php:483
+msgid "Plugin Load Time"
+msgstr ""
+
+#: templates/callouts.php:525 templates/callouts.php:543
+#: templates/callouts.php:561
+msgid "n/a"
+msgstr ""
+
+#: templates/callouts.php:530
+msgid "sec. per visit"
+msgstr ""
+
+#: templates/callouts.php:537
+msgid "Percent of load time on your site dedicated to plugin code"
+msgstr ""
+
+#: templates/callouts.php:540
+msgid "Plugin Impact"
+msgstr ""
+
+#: templates/callouts.php:548
+msgid "of page load time"
+msgstr ""
+
+#: templates/callouts.php:555
+msgid "Total number of database queries per visit"
+msgstr ""
+
+#: templates/callouts.php:558 templates/help.php:545
+msgid "MySQL Queries"
+msgstr ""
+
+#: templates/callouts.php:566
+msgid "per visit"
+msgstr ""
+
+#: templates/callouts.php:577
+msgid "IP address or pattern:"
+msgstr ""
+
+#: templates/callouts.php:579
+msgid "Use my IP address"
+msgstr ""
+
+#: templates/callouts.php:581
+msgid "Enter IP address or regular expression pattern"
+msgstr ""
+
+#: templates/callouts.php:583
+msgid "Example: 1.2.3.4 or ( 1.2.3.4|4.5.6.7 )"
+msgstr ""
+
+#: templates/callouts.php:588
+msgid "Attempt to disable opcode optimizers"
+msgstr ""
+
+#: templates/callouts.php:588
+msgid "recommended"
+msgstr ""
+
+#: templates/callouts.php:590
+msgid ""
+"This can increase accuracy in plugin detection, but decrease accuracy in "
+"timing"
+msgstr ""
+
+#: templates/callouts.php:595
+msgid "Attempt to circumvent browser cache"
+msgstr ""
+
+#: templates/callouts.php:597
+msgid ""
+"This may help fix a \"No visits recorded\" error message.  See the <a href="
+"\"%s\">help</a> page for details."
+msgstr ""
+
+#: templates/callouts.php:604
+msgid "Debug mode"
+msgstr ""
+
+#: templates/callouts.php:606
+msgid ""
+"This will log the last 100 visits.  Check the <a href=\"%s\">help</a> page "
+"to view log messages."
+msgstr ""
+
+#: templates/callouts.php:618
+msgid ""
+"The scanner will analyze the speed and resource usage of all active plugins "
+"on your website. It may take several minutes, and this window must remain "
+"open for the scan to finish successfully."
+msgstr ""
+
+#: templates/callouts.php:624
+msgid ""
+"Click the links and pages of your site, and the scanner will analyze the "
+"speed and resource usage of all of your active plugins."
+msgstr ""
+
+#: templates/callouts.php:631
+msgid "I'm Done"
+msgstr ""
+
+#: templates/callouts.php:641 templates/template.php:76
+msgid "Scan name:"
+msgstr ""
+
+#: templates/callouts.php:642
+msgid "Enter scan name here"
+msgstr ""
+
+#: templates/callouts.php:645
+msgid "Enter the name of a previous scan to continue scanning"
+msgstr ""
+
+#: templates/callouts.php:648
+msgid "Auto Scan"
+msgstr ""
+
+#: templates/callouts.php:649
+msgid "Manual Scan"
+msgstr ""
+
+#: templates/callouts.php:656
+msgid "Scanning ..."
+msgstr ""
+
+#: templates/callouts.php:667
+msgid "Resume"
+msgstr ""
+
+#: templates/callouts.php:669 templates/callouts.php:675
+msgid "View Results"
+msgstr ""
+
+#: templates/help.php:10 templates/help.php:13
+msgid "Hide Glossary"
+msgstr ""
+
+#: templates/help.php:11
+msgid "Show Glossary"
+msgstr ""
+
+#: templates/help.php:24 templates/help.php:31 templates/help.php:38
+#: templates/help.php:47 templates/help.php:358 templates/help.php:450
+msgid "Hide"
+msgstr ""
+
+#: templates/help.php:27 templates/help.php:42
+msgid "Show"
+msgstr ""
+
+#: templates/help.php:67
+msgid "Back to top"
+msgstr ""
+
+#: templates/help.php:77
+msgid "Contents"
+msgstr ""
+
+#: templates/help.php:85
+msgid "What does the P3 plugin do?"
+msgstr ""
+
+#: templates/help.php:87
+msgid ""
+"This plugin does just what its name says, it creates a profile of your "
+"WordPress site's plugins' performance by measuring their impact on your "
+"site's load time.\n"
+"<br /><br />\n"
+"Often times, WordPress sites load slowly because of poorly-configured "
+"plugins or because there are so many of them. This plugin can help you "
+"narrow down the cause of your site's slowness."
+msgstr ""
+
+#: templates/help.php:94
+msgid "How do I use this?"
+msgstr ""
+
+#: templates/help.php:96
+msgid ""
+"Simply click \"Start Scan\" to run an automated scan of your site. The "
+"scanner generates some traffic on your site and monitors your site's "
+"performance on the server, then shows you the results. With this "
+"information, you can decide what action to take."
+msgstr ""
+
+#: templates/help.php:101
+msgid "What do I do with these results?"
+msgstr ""
+
+#: templates/help.php:103
+msgid ""
+"If your site loads in an acceptable time (usually &lt; 0.5 seconds), you "
+"might consider other explanation for sluggish loading. For example, loading "
+"large images, large videos, or a lot of content can cause slowness. Tools "
+"like <a href=\"%1$s\" target=\"_blank\">%2$s</a>, <a href=\"%3$s\" target="
+"\"_blank\">%4$s</a>, <a href=\"%5$s\" target=\"_blank\">%6$s</a>, or <a href="
+"\"%7$s\" target=\"_blank\">%8$s</a> or <a href=\"%9$s\" target=\"_blank\">"
+"%10$s</a> can show you a connection breakdown of your site's content."
+msgstr ""
+
+#: templates/help.php:104
+msgid "webpagetest.org"
+msgstr ""
+
+#: templates/help.php:105 templates/help.php:339
+msgid "Firebug"
+msgstr ""
+
+#: templates/help.php:106
+msgid "Pingdom tools"
+msgstr ""
+
+#: templates/help.php:107 templates/help.php:341
+msgid "Safari Developer Tools"
+msgstr ""
+
+#: templates/help.php:108 templates/help.php:340
+msgid "Chrome Developer Tools"
+msgstr ""
+
+#: templates/help.php:114
+msgid "How do I fix \"No visits recorded...\" ?"
+msgstr ""
+
+#: templates/help.php:116
+msgid ""
+"This error message means that after being disabled, the profiler did not "
+"record any traffic on your site.  There are several common causes for this:"
+msgstr ""
+
+#: templates/help.php:119 templates/help.php:126 templates/help.php:133
+msgid "Cause:"
+msgstr ""
+
+#: templates/help.php:120
+msgid ""
+"Your site is using a caching plugin.  The pages that are being scanned "
+"aren't actually loading on the server because they're cached in your browser "
+"or on the server before WordPress can generate them.  The P3 plugin doesn't "
+"load and doesn't record any traffic."
+msgstr ""
+
+#: templates/help.php:122 templates/help.php:129 templates/help.php:136
+msgid "Solution:"
+msgstr ""
+
+#: templates/help.php:123
+msgid ""
+"Enable the \"Attempt to circumvent browser cache\" option in the advanced "
+"settings."
+msgstr ""
+
+#: templates/help.php:127
+msgid ""
+"The IP address you've entered in the advanced settings dialog doesn't match "
+"the IP address you're scanning from."
+msgstr ""
+
+#: templates/help.php:130
+msgid "Check the IP address you've entered and try again."
+msgstr ""
+
+#: templates/help.php:134
+msgid "You've selected a manual scan, but haven't generated any traffic."
+msgstr ""
+
+#: templates/help.php:137
+msgid "Try the automated scan."
+msgstr ""
+
+#: templates/help.php:144
+msgid "Why did P3 only record 2 or 3 visits during the scan?"
+msgstr ""
+
+#: templates/help.php:146
+msgid ""
+"If your site is using a caching plugin, some pages might be cached in your "
+"browser or on the server and are loading before before WordPress can "
+"generate them.  When this happens, the P3 plugin doesn't load and doesn't "
+"record any traffic.  Please enable the \"Attempt to circumvent browser cache"
+"\" option in the advanced settings."
+msgstr ""
+
+#: templates/help.php:151
+msgid "How does this work?"
+msgstr ""
+
+#: templates/help.php:153
+msgid ""
+"When you activate the plugin by clicking \"Start Scan,\" it detects visits "
+"from your IP address, and actively monitors all <a href=\"%s\" target="
+"\"_blank\">php user defined function calls</a> while the server generates "
+"your WordPress pages. It then records the information in a report file you "
+"can view later. When the scan is complete, or you click \"Stop Scan,\" the "
+"plugin becomes dormant again."
+msgstr ""
+
+#: templates/help.php:160
+msgid "How does my site load the plugin?"
+msgstr ""
+
+#: templates/help.php:162
+msgid ""
+"This plugin automatically creates a <a href=\"%s\" target=\"_blank\">must-"
+"use</a> plugin to load before other plugins. If that doesn't work, it runs "
+"like a regular plugin."
+msgstr ""
+
+#: templates/help.php:166
+msgid "You are currently using:"
+msgstr ""
+
+#: templates/help.php:173
+msgid "must-use plugin"
+msgstr ""
+
+#: templates/help.php:177
+msgid "plugin"
+msgstr ""
+
+#: templates/help.php:184
+msgid "How accurate are these results?"
+msgstr ""
+
+#: templates/help.php:186
+msgid ""
+"The results have an inherent margin of error because of the nature of the "
+"tool and its multi-layered design. The plugin changes the environment to "
+"measure it, and that makes it impossible to get completely accurate "
+"results.\n"
+"<br /><br />\n"
+"It gets really close, though! The \"margin of error\" on the Advanced "
+"Metrics page displays the discrepancy between the measured results (the time "
+"for your site's PHP code to completely run) and the expected results (sum of "
+"the plugins, core, theme, profile load times) to show you the plugin's "
+"accuracy.\n"
+"<br /><br />\n"
+"If you want more accurate results, you'll need to resort to a different "
+"profiler like <a href=\"%1$s\" target=\"_blank\">%2$s</a>, but this will not "
+"break down results by plugin."
+msgstr ""
+
+#: templates/help.php:191
+msgid "xdebug"
+msgstr ""
+
+#: templates/help.php:197
+msgid "Why are some plugins slow?"
+msgstr ""
+
+#: templates/help.php:199
+msgid ""
+"WordPress is a complex ecosystem of plugins and themes, and it lives on a "
+"complex ecosystem of software on your web server.\n"
+"<br /><br />\n"
+"If a plugin runs slowly just once, it's probably an anomaly, a transient "
+"hiccup, and you can safely ignore it.\n"
+"<br /><br />\n"
+"If a plugin shows slowness once on a reguarly basis (e.g. every time you run "
+"a scan, once a day, once an hour), a scheduled task might be causing it. "
+"Plugins that backup your site, monitor your site for changes, contact "
+"outside sources (e.g. RSS feeds), warm up caches, etc. can exhibit this kind "
+"of behavior.\n"
+"<br /><br />\n"
+"If a plugin shows as fast-slow-fast-slow-fast-slow, it could be caused as "
+"the plugin loads its main code, then a follow-up piece of code, like a piece "
+"of generated JavaScript.\n"
+"<br /><br />\n"
+"If a plugin consistently shows slowness, you might want to contact the "
+"plugin author or try deactivating the plugin temporarily to see if it makes "
+"a difference on your site."
+msgstr ""
+
+#: templates/help.php:212
+msgid ""
+"How are these results different from YSlow / PageSpeed / Webpagetest.org / "
+"Pingdom Tools?"
+msgstr ""
+
+#: templates/help.php:214
+msgid ""
+"This plugin measures how your site was generated on the server. Tools like "
+"<a href=\"%1$s\" target=\"_blank\">%2$s</a>, <a href=\"%3$s\" target=\"_blank"
+"\">%4$s</a>, <a href=\"%5$s\" target=\"_blank\">%6$s</a>, and <a href=\"%7$s"
+"\" target=\"_blank\">%8$s</a> measure how your site looks to the browser."
+msgstr ""
+
+#: templates/help.php:215 templates/help.php:337
+msgid "YSlow"
+msgstr ""
+
+#: templates/help.php:216
+msgid "PageSpeed"
+msgstr ""
+
+#: templates/help.php:217
+msgid "Webpagetest.org"
+msgstr ""
+
+#: templates/help.php:218 templates/help.php:335
+msgid "Pingdom Tools"
+msgstr ""
+
+#: templates/help.php:224
+msgid "What can interfere with testing?"
+msgstr ""
+
+#: templates/help.php:226
+msgid ""
+"Opcode optimizers can interfere with PHP backtraces. Leaving opcode "
+"optimizers turned on will result in timing that more accurately reflects "
+"your site's real performance, but the function calls to plugins may be "
+"\"optimized\" out of the backtraces and some plugins (especially those with "
+"only one hook) might not show up. Disabling opcode caches results in slower "
+"times, but shows all plugins.\n"
+"<br /><br />\n"
+"By default, this plugin attempts to disable any detected opcode optimizers "
+"when it runs. You can change this setting by clicking \"Advanced Settings\" "
+"under \"Start Scan.\"\n"
+"<br /><br />\n"
+"Caching plugins that have an option to disable caches for logged in users "
+"will not give you the same performance profile that an anonymous users "
+"experience. To get around this, you should select a manual scan, then run an "
+"incognito browser window, or run another browser, and browse your site as a "
+"logged out user. When you're finished, click \"I'm done,\" and your scan "
+"should show the performance of an anonymous user."
+msgstr ""
+
+#: templates/help.php:235
+msgid "Is my site using an opcode optimizer?"
+msgstr ""
+
+#: templates/help.php:238
+msgid ""
+"Your site is using XCache.  Although XCache reports that no opcode "
+"optimization won't be implemented until version 2.0, this has been known to "
+"cause problems with P3."
+msgstr ""
+
+#: templates/help.php:242
+msgid ""
+"Your site is using APC.  This has not been known to cause problems with P3."
+msgstr ""
+
+#: templates/help.php:246
+msgid ""
+"Your site is using eaccelerator with optimization enabled.  This has been "
+"known to cause problems with P3."
+msgstr ""
+
+#: templates/help.php:248
+msgid ""
+"To temporarily disable the optimizer you can add <code>php_flag eaccelerator."
+"optimizer Off</code> to your site's .htaccess file."
+msgstr ""
+
+#: templates/help.php:250
+msgid ""
+"To temporarily disable the optimizer you can add <code>eaccelerator."
+"optimizer = 0</code> to your site's <a href=\"%1$s\" target=\"_blank\">%2$s "
+"file</a>."
+msgstr ""
+
+#: templates/help.php:255
+msgid "To temporarily disable the optimizer you can ask your hosting provider."
+msgstr ""
+
+#: templates/help.php:260
+msgid ""
+"Your site is using Zend Optimizer+.  This has not been known to cause "
+"problems with P3."
+msgstr ""
+
+#: templates/help.php:264
+msgid ""
+"Your site is using the IonCube loader.  This has not been known to cause "
+"problems with P3."
+msgstr ""
+
+#: templates/help.php:268
+msgid ""
+"Your site is using wincache.  This has not been known to cause problems with "
+"P3."
+msgstr ""
+
+#: templates/help.php:272
+msgid ""
+"Your site is using the Zend Guard loader.  This has not been known to cause "
+"problems with P3."
+msgstr ""
+
+#: templates/help.php:276
+msgid ""
+"Your site is using the Zend Optimizer.  This extension has not been tested "
+"with P3.  Please report any problems."
+msgstr ""
+
+#: templates/help.php:280
+msgid ""
+"P3 has not detected any opcode optimizers on your site.  Although none were "
+"detected, an opcode optimizer may still be present.  Contact your server "
+"administrator with any questions."
+msgstr ""
+
+#: templates/help.php:287
+msgid "How much room do these profiles take up on my server"
+msgstr ""
+
+#: templates/help.php:300
+msgid ""
+"The scans are stored in <code>%1$s</code> and take up %2$s of disk space.  "
+"Each time you run a scan, this storage requirement goes up, and each time "
+"you delete a scan, it goes down."
+msgstr ""
+
+#: templates/help.php:308
+msgid "Is this plugin always running?"
+msgstr ""
+
+#: templates/help.php:310
+msgid ""
+"The short answer is no.\n"
+"<br /><br />\n"
+"The more detailed answer is the loader is always running, but checks very "
+"early in the page loading process to see if you've enabled profiling mode "
+"and if the user's IP address matches the IP address the plugin is "
+"monitoring. For multisite installations, it also matches the site URL. If "
+"all these match, the plugin becomes active and profiles. Otherwise, your "
+"site loads as normal with no other code overhead.\n"
+"<br /><br />\n"
+"Deactivating the plugin ensures it's not running at all, and does not delete "
+"your scans. However, uninstalling the plugin does delete your scans."
+msgstr ""
+
+#: templates/help.php:319
+msgid "How can I test specific pages on my site?"
+msgstr ""
+
+#: templates/help.php:321
+msgid ""
+"When you start a scan, choose \"Manual Scan\" and then you can visit "
+"specific links on your site that you want to profile. If you want to profile "
+"the admin section, just click the \"X\" in the top right of the scan window "
+"and you'll be returned to your admin section. You can browse as normal, then "
+"come back to the profile page and click \"Stop Scan\" when you're ready to "
+"view the results.\n"
+"<br /><br />\n"
+"To scan your site as an anonymous user, select \"Manual Mode\" as above, but "
+"instead of clicking your site in the scan window, open a different browser "
+"(or an incognito window) and browse your site as a logged out user. When "
+"you're done, close that browser and return to your admin. Click \"I'm done\" "
+"and view your scan results."
+msgstr ""
+
+#: templates/help.php:328
+msgid ""
+"My plugins don't seem to cause site slowness.  Why is my site still slow?"
+msgstr ""
+
+#: templates/help.php:330
+msgid ""
+"Your site can be slow for a number of reasons. Your site could have a lot of "
+"traffic, other sites on your server could have a lot of traffic, you could "
+"be referencing content from other sites that are slow, your Internet "
+"connection could be slow, your server could be out of RAM, your site could "
+"be very image heavy, your site could require a lot of HTTP requests, etc. In "
+"short, a lot of factors can cause slowness on your site\n"
+"<br /><br />\n"
+"Your next stop should be to use <a href=\"%1$s\" target=\"_blank\">%2$s</a>, "
+"<a href=\"%3$s\" target=\"_blank\">%4$s</a>, <a href=\"%5$s\" target=\"_blank"
+"\">%6$s</a>, <a href=\"%7$s\" target=\"_blank\">%8$s</a>, and your browser's "
+"development tools like <a href=\"%9$s\" target=\"_blank\">%10$s</a> for "
+"Firefox, <a href=\"%11$s\" target=\"_blank\">%12$s</a> for Chrome, or <a "
+"href=\"%13$s\" target=\"_blank\">%14$s</a> for Safari.\n"
+"<br /><br />\n"
+"After you've tuned your site up as much as possible, if you're still not "
+"happy with its performance, you should consult your site/server "
+"administrator or hosting support."
+msgstr ""
+
+#: templates/help.php:336
+msgid "Webpage Test"
+msgstr ""
+
+#: templates/help.php:338
+msgid "Google PageSpeed"
+msgstr ""
+
+#: templates/help.php:347
+msgid "Where can I view the debug log?"
+msgstr ""
+
+#: templates/help.php:349
+msgid ""
+"Debug mode will record 100 visits to your site, then turn off "
+"automatically.  You can view the log below.  The entries are shown in "
+"reverse order with the latest visits appearing at the top of the list.  You "
+"can also <a href=\"%1$s\" class=\"button-secondary\">Clear the log</a> or <a "
+"href=\"%2$s\" class=\"button-secondary\">Download the log</a> as a CSV."
+msgstr ""
+
+#: templates/help.php:356
+msgid "Debug Log"
+msgstr ""
+
+#: templates/help.php:365 templates/help.php:405
+msgctxt "Symbol meaning number"
+msgid "#"
+msgstr ""
+
+#: templates/help.php:398
+msgid "ago"
+msgstr ""
+
+#: templates/help.php:424
+msgid "What if I get a warning about usort()?"
+msgstr ""
+
+#: templates/help.php:426
+msgctxt "Warning message is taken verbatim from PHP output"
+msgid ""
+"Warning messages like this: <code>Warning: usort() [function.usort]: Array "
+"was modified by the user comparison function</code> are due to a known php "
+"bug.  See <a href=\"%s\" target=\"_blank\">php bug #50688</a> for more "
+"information.  This warning does not affect the functionality of your site "
+"and it is not visible to your users."
+msgstr ""
+
+#: templates/help.php:433
+msgid "Does this plugin increase memory usage on my site?"
+msgstr ""
+
+#: templates/help.php:435
+msgid ""
+"When you run a performance scan on your site, the memory requirements go up "
+"during the scan.  Accordingly, P3 sets your <a href=\"%1$s\" target=\"_blank"
+"\">%2$s</a> to 256 MB and <a href=\"%3$s\" target=\"_blank\">%4$s</a> to 90 "
+"seconds during a performance scan.  These changes are not permanent and are "
+"only in effect when a performance scan is actively running."
+msgstr ""
+
+#: templates/help.php:436
+msgid "memory limit"
+msgstr ""
+
+#: templates/help.php:437
+msgid "time limit"
+msgstr ""
+
+#: templates/help.php:443 templates/help.php:448
+msgid "Glossary"
+msgstr ""
+
+#: templates/help.php:461
+msgid "Total Load Time"
+msgstr ""
+
+#: templates/help.php:463
+msgid ""
+"The length of time the site took to load. This is an observed measurement "
+"(start timing when the page was requested, stop timing when the page was "
+"delivered to the browser, calculate the difference). Lower is better."
+msgstr ""
+
+#: templates/help.php:469 templates/view-scan.php:414
+#: templates/view-scan.php:472 templates/view-scan.php:887
+msgid "Site Load Time"
+msgstr ""
+
+#: templates/help.php:471 templates/view-scan.php:886
+msgid ""
+"The calculated total load time minus the profile overhead. This is closer to "
+"your site's real-life load time. Lower is better."
+msgstr ""
+
+#: templates/help.php:476
+msgid "Profile Overhead"
+msgstr ""
+
+#: templates/help.php:478
+msgid ""
+"The load time spent profiling code. Because the profiler slows down your "
+"load time, it is important to know how much impact the profiler has. "
+"However, it doesn't impact your site's real-life load time."
+msgstr ""
+
+#: templates/help.php:485
+msgid ""
+"The load time caused by plugins. Because of WordPress' construction, we can "
+"trace a function call from a plugin through a theme through the core. The "
+"profiler prioritizes plugin calls first, theme calls second, and core calls "
+"last. Lower is better."
+msgstr ""
+
+#: templates/help.php:490
+msgid "Theme Load Time"
+msgstr ""
+
+#: templates/help.php:492 templates/view-scan.php:910
+msgid ""
+"The load time spent applying the theme. Because of WordPress' construction, "
+"we can trace a function call from a plugin through a theme through the core. "
+"The profiler prioritizes plugin calls first, theme calls second, and core "
+"calls last. Lower is better."
+msgstr ""
+
+#: templates/help.php:497
+msgid "Core Load Time"
+msgstr ""
+
+#: templates/help.php:499 templates/view-scan.php:918
+msgid ""
+"The load time caused by the WordPress core. Because of WordPress' "
+"construction, we can trace a function call from a plugin through a theme "
+"through the core. The profiler prioritizes plugin calls first, theme calls "
+"second, and core calls last. This will probably be constant."
+msgstr ""
+
+#: templates/help.php:504
+msgid "Margin of Error"
+msgstr ""
+
+#: templates/help.php:506
+msgid ""
+"This is the difference between the observed runtime (what actually happened) "
+"and expected runtime (adding the plugin runtime, theme runtime, core "
+"runtime, and profiler overhead).\n"
+"<br /><br />\n"
+"There are several reasons this margin of error can exist. Most likely, the "
+"profiler is missing microseconds while adding the runtime it observed. Using "
+"a network clock to set the time (NTP) can also cause minute timing changes.\n"
+"<br /><br />\n"
+"Ideally, this number should be zero, but there's nothing you can do to "
+"change it. It will give you an idea of how accurate the other results are."
+msgstr ""
+
+#: templates/help.php:515
+msgid "Observed"
+msgstr ""
+
+#: templates/help.php:517
+msgid ""
+"The time the site took to load. This is an observed measurement (start "
+"timing when the page was requested, stop timing when the page was delivered "
+"to the browser, calculate the difference)."
+msgstr ""
+
+#: templates/help.php:522
+msgid "Expected"
+msgstr ""
+
+#: templates/help.php:524 templates/view-scan.php:934
+msgid ""
+"The expected site load time calculated by adding plugin load time, core load "
+"time, theme load time, and profiler overhead."
+msgstr ""
+
+#: templates/help.php:529
+msgid "Plugin Function Calls"
+msgstr ""
+
+#: templates/help.php:531
+msgid ""
+"The number of PHP function calls generated by a plugin. Fewer is better."
+msgstr ""
+
+#: templates/help.php:536
+msgid "Memory Usage"
+msgstr ""
+
+#: templates/help.php:538
+msgid ""
+"The amount of RAM usage observed. This is reported by <a href=\"%s\" target="
+"\"_blank\">memory_get_peak_usage()</a>.  Lower is better."
+msgstr ""
+
+#: templates/help.php:547
+msgid ""
+"The number of queries sent to the database. This is reported by the "
+"WordPress function <a href=\"%s\" target=\"_blank\">get_num_queries()</a>.  "
+"Fewer is better."
+msgstr ""
+
+#: templates/help.php:566
+msgid "License"
+msgstr ""
+
+#: templates/help.php:568 templates/template.php:108
+msgid ""
+"P3 (Plugin Performance Profiler) is Copyright &copy; %1$s - %2$s <a href="
+"\"%3$s\" target=\"_blank\">GoDaddy.com</a>.  All rights reserved."
+msgstr ""
+
+#: templates/help.php:570
+msgid ""
+"This program is offered under the terms of the GNU General Public License "
+"Version 2 as published by the Free Software Foundation.\n"
+"<br /><br />\n"
+"This program offered WITHOUT WARRANTY; without even the implied warranty of "
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General "
+"Public License Version 2 for the specific terms.\n"
+"<br /><br />\n"
+"A copy of the GNU General Public License has been provided with this "
+"program.  Alternatively, you may find a copy of the license here: <a href="
+"\"%s\" target=\"_blank\">%s</a>."
+msgstr ""
+
+#: templates/list-scans.php:16
+msgid "Are you sure you want to delete these scans?"
+msgstr ""
+
+#: templates/list-scans.php:24
+msgid "Are you sure you want to delete this scan?"
+msgstr ""
+
+#: templates/template.php:62
+msgid "P3 - Plugin Performance Profiler"
+msgstr ""
+
+#: templates/template.php:68
+msgid "Current"
+msgstr ""
+
+#: templates/template.php:70
+msgid "History"
+msgstr ""
+
+#: templates/template.php:71
+msgid "Help"
+msgstr ""
+
+#: templates/template.php:97
+msgid "Do you like this plugin?"
+msgstr ""
+
+#: templates/template.php:99
+msgid "I just optimized my WordPress site with %1$s %2$s"
+msgstr ""
+
+#: templates/template.php:99
+msgid "Tweet about it"
+msgstr ""
+
+#: templates/template.php:100
+msgid "Rate it on the repository"
+msgstr ""
+
+#: templates/template.php:106
+msgid "Logo"
+msgstr ""
+
+#: templates/view-scan.php:51
+msgid "Toggle Series"
+msgstr ""
+
+#: templates/view-scan.php:71
+msgid "Email Report"
+msgstr ""
+
+#: templates/view-scan.php:75
+msgid "Send"
+msgstr ""
+
+#: templates/view-scan.php:176
+msgid "No plugins"
+msgstr ""
+
+#: templates/view-scan.php:206 templates/view-scan.php:311
+#: templates/view-scan.php:501 templates/view-scan.php:664
+#: templates/view-scan.php:882 templates/view-scan.php:890
+#: templates/view-scan.php:898 templates/view-scan.php:906
+#: templates/view-scan.php:914 templates/view-scan.php:922
+#: templates/view-scan.php:930
+msgid "seconds"
+msgstr ""
+
+#: templates/view-scan.php:222
+msgid "WP Core time"
+msgstr ""
+
+#: templates/view-scan.php:233
+msgid "Theme time"
+msgstr ""
+
+#: templates/view-scan.php:244
+msgid "Plugin time"
+msgstr ""
+
+#: templates/view-scan.php:328
+msgid "# of Queries"
+msgstr ""
+
+#: templates/view-scan.php:394
+msgid "query"
+msgstr ""
+
+#: templates/view-scan.php:394 templates/view-scan.php:967
+msgid "queries"
+msgstr ""
+
+#: templates/view-scan.php:429 templates/view-scan.php:473
+#: templates/view-scan.php:527 templates/view-scan.php:577
+msgid "WP Core Time"
+msgstr ""
+
+#: templates/view-scan.php:433 templates/view-scan.php:474
+#: templates/view-scan.php:540 templates/view-scan.php:578
+msgid "Theme"
+msgstr ""
+
+#: templates/view-scan.php:607
+msgid "No data"
+msgstr ""
+
+#: templates/view-scan.php:698
+msgid "Runtime By Plugin"
+msgstr ""
+
+#: templates/view-scan.php:699 templates/view-scan.php:708
+msgid "Detailed Breakdown"
+msgstr ""
+
+#: templates/view-scan.php:700
+msgid "Simple Timeline"
+msgstr ""
+
+#: templates/view-scan.php:701 templates/view-scan.php:835
+msgid "Detailed Timeline"
+msgstr ""
+
+#: templates/view-scan.php:702 templates/view-scan.php:800
+msgid "Query Timeline"
+msgstr ""
+
+#: templates/view-scan.php:703 templates/view-scan.php:872
+msgid "Advanced Metrics"
+msgstr ""
+
+#: templates/view-scan.php:714 templates/view-scan.php:771
+#: templates/view-scan.php:841
+msgid "Seconds"
+msgstr ""
+
+#: templates/view-scan.php:721 templates/view-scan.php:751
+#: templates/view-scan.php:778 templates/view-scan.php:813
+#: templates/view-scan.php:848
+msgctxt "How to interpret the chart or graph"
+msgid "Legend"
+msgstr ""
+
+#: templates/view-scan.php:733
+msgid "Component"
+msgstr ""
+
+#: templates/view-scan.php:743
+msgid "Runtime by Plugin"
+msgstr ""
+
+#: templates/view-scan.php:765
+msgid "Summary Timeline"
+msgstr ""
+
+#: templates/view-scan.php:806
+msgid "Queries"
+msgstr ""
+
+#: templates/view-scan.php:878
+msgid ""
+"The time the site took to load. This is an observed measurement (start "
+"timing when the page was requested, stop timing when the page was delivered "
+"to the browser, calculate the difference). Lower is better."
+msgstr ""
+
+#: templates/view-scan.php:879
+msgid "Total Load Time:"
+msgstr ""
+
+#: templates/view-scan.php:882 templates/view-scan.php:890
+#: templates/view-scan.php:898 templates/view-scan.php:906
+#: templates/view-scan.php:914 templates/view-scan.php:922
+#: templates/view-scan.php:930 templates/view-scan.php:951
+#: templates/view-scan.php:959 templates/view-scan.php:967
+msgctxt "Abbreviation for 'average'"
+msgid "avg."
+msgstr ""
+
+#: templates/view-scan.php:894
+msgid ""
+"The load time spent profiling code. Because the profiler slows down your "
+"load time, it is important to know how much impact the profiler has. "
+"However, it doesn't impact your site's\treal-life load time."
+msgstr ""
+
+#: templates/view-scan.php:895
+msgid "Profile Overhead:"
+msgstr ""
+
+#: templates/view-scan.php:902
+msgid ""
+"The load time caused by plugins. Because of WordPress' construction, we can "
+"trace a function call  from a plugin through a theme through the core. The "
+"profiler prioritizes plugin calls first, theme calls second, and core calls "
+"last. Lower is better."
+msgstr ""
+
+#: templates/view-scan.php:903
+msgid "Plugin Load Time:"
+msgstr ""
+
+#: templates/view-scan.php:911
+msgid "Theme Load Time:"
+msgstr ""
+
+#: templates/view-scan.php:919
+msgid "Core Load Time:"
+msgstr ""
+
+#: templates/view-scan.php:926
+msgid ""
+"This is the difference between the observed runtime (what actually happened) "
+"and expected runtime (adding the plugin runtime, theme runtime, core "
+"runtime, and profiler overhead). There are several reasons this margin of "
+"error can exist. Most likely, the profiler is missing microseconds while "
+"adding the runtime it observed. Using a network clock to set the time (NTP) "
+"can also cause minute timing changes. Ideally, this number should be zero, "
+"but there's nothing you can do to change it. It will give you an idea of how "
+"accurate the other results are."
+msgstr ""
+
+#: templates/view-scan.php:927
+msgid "Margin of Error:"
+msgstr ""
+
+#: templates/view-scan.php:933
+msgid ""
+"How long the site took to load. This is an observed measurement (start "
+"timing when the page was requested, stop timing when the page was delivered "
+"to the browser, calculate the difference)."
+msgstr ""
+
+#: templates/view-scan.php:933
+msgid "observed"
+msgstr ""
+
+#: templates/view-scan.php:934
+msgid "expected"
+msgstr ""
+
+#: templates/view-scan.php:939
+msgid ""
+"The number of visits registered during a profiling session.  More visits "
+"produce a more accurate summary."
+msgstr ""
+
+#: templates/view-scan.php:940
+msgid "Visits:"
+msgstr ""
+
+#: templates/view-scan.php:947
+msgid ""
+"The number of PHP ticks recorded during the profiling session.  A tick is "
+"loosely correlated to a PHP statement or function call.  Fewer is better."
+msgstr ""
+
+#: templates/view-scan.php:948
+msgid "Number of PHP ticks:"
+msgstr ""
+
+#: templates/view-scan.php:951
+msgid "calls"
+msgstr ""
+
+#: templates/view-scan.php:955
+msgid ""
+"The amount of RAM usage observed.  This is reported by memory_get_peak_usage"
+"(). Lower is better."
+msgstr ""
+
+#: templates/view-scan.php:956
+msgid "Memory Usage:"
+msgstr ""
+
+#: templates/view-scan.php:963
+msgid ""
+"The count of queries sent to the database.  This is reported by the "
+"WordPress function get_num_queries(). Lower is better."
+msgstr ""
+
+#: templates/view-scan.php:964
+msgid "MySQL Queries:"
+msgstr ""
+
+#: templates/view-scan.php:981 templates/view-scan.php:982
+msgid "Email these results"
+msgstr ""
+
+#: templates/view-scan.php:990
+msgid "From:"
+msgstr ""
+
+#: templates/view-scan.php:992
+msgid "Enter the e-mail address to send from"
+msgstr ""
+
+#: templates/view-scan.php:996
+msgid "Recipient:"
+msgstr ""
+
+#: templates/view-scan.php:999
+msgid "Enter the e-mail address where you would like to send these results"
+msgstr ""
+
+#: templates/view-scan.php:1003
+msgid "Subject:"
+msgstr ""
+
+#: templates/view-scan.php:1005
+msgid "Performance Profile Results for %s"
+msgstr ""
+
+#: templates/view-scan.php:1005
+msgid "Enter the e-mail subject"
+msgstr ""
+
+#: templates/view-scan.php:1009
+msgid "Message:"
+msgstr ""
+
+#: templates/view-scan.php:1009
+msgid "(optional)"
+msgstr ""
+
+#: templates/view-scan.php:1010
+msgid ""
+"Hello,\n"
+"\n"
+"I profiled my WordPress site's performance using the Profile Plugin and I "
+"wanted\n"
+"to share the results with you.  Please take a look at the information below:"
+msgstr ""
+
+#: templates/view-scan.php:1017
+msgid "Results:"
+msgstr ""
+
+#: templates/view-scan.php:1017
+msgid "(system generated, do not edit)"
+msgstr ""
+
+#: templates/view-scan.php:1023
+msgid ""
+"WordPress Plugin Profile Report\n"
+"===========================================\n"
+"Report date: %1$s\n"
+"Theme name: %2$s\n"
+"Pages browsed: %3$s\n"
+"Avg. load time: %4$s sec\n"
+"Number of plugins: %5$s\n"
+"Plugin impact: %6$s of load time\n"
+"Avg. plugin time: %7$s sec\n"
+"Avg. core time: %8$s sec\n"
+"Avg. theme time: %9$s sec\n"
+"Avg. mem usage: %10$s MB\n"
+"Avg. ticks: %11$s\n"
+"Avg. db queries : %12$s\n"
+"Margin of error : %13$s sec\n"
+"\n"
+"Plugin list:\n"
+"===========================================\n"
+"%14$s\n"
+msgstr ""
+
+#: templates/view-scan.php:1065
+msgid "Loading"
+msgstr ""
+
+#: templates/view-scan.php:1068
+msgid "There was a problem sending the e-mail:"
+msgstr ""
+
+#: templates/view-scan.php:1071
+msgid "Your report was sent successfully to"
+msgstr ""
+
+#: templates/view-scan.php:1074
+msgid "Done"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "P3 (Plugin Performance Profiler)"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://support.godaddy.com/godaddy/wordpress-p3-plugin/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"See which plugins are slowing down your site.  Create a profile of your "
+"WordPress site's plugins' performance by measuring their impact on your "
+"site's load time."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "GoDaddy.com"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.godaddy.com/"
+msgstr ""

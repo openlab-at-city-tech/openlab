@@ -1,3 +1,4 @@
+
 <div class="left-menu">
 
 	<div id="invite-list">
@@ -14,7 +15,14 @@
 
 <div class="main-column">
 
-	<?php do_action( 'bp_before_group_send_invites_list' ); ?>
+	<?php
+
+	/**
+	 * Fires before the display of the group send invites list.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 */
+	do_action( 'bp_before_group_send_invites_list' ); ?>
 
 	<?php if ( bp_group_has_invites( bp_ajax_querystring( 'invite' ) . '&per_page=10' ) ) : ?>
 
@@ -45,12 +53,26 @@
 				<h4><?php bp_group_invite_user_link(); ?></h4>
 				<span class="activity"><?php bp_group_invite_user_last_active(); ?></span>
 
-				<?php do_action( 'bp_group_send_invites_item' ); ?>
+				<?php
+
+				/**
+				 * Fires inside the invite item listing.
+				 *
+				 * @since BuddyPress (1.1.0)
+				 */
+				do_action( 'bp_group_send_invites_item' ); ?>
 
 				<div class="action">
 					<a class="button remove" href="<?php bp_group_invite_user_remove_invite_url(); ?>" id="<?php bp_group_invite_item_id(); ?>"><?php _e( 'Remove Invite', 'buddypress' ); ?></a>
 
-					<?php do_action( 'bp_group_send_invites_item_action' ); ?>
+					<?php
+
+					/**
+					 * Fires inside the action area for a send invites item.
+					 *
+					 * @since BuddyPress (1.1.0)
+					 */
+					do_action( 'bp_group_send_invites_item_action' ); ?>
 				</div>
 			</li>
 
@@ -75,19 +97,20 @@
 		</div>
 
 	<?php else : ?>
+
 		<div id="message" class="info">
-			<p><?php _e( 'Select people to invite from your friends list.', 'buddypress' ); ?></p>
+			<p><?php _e( 'Select friends to invite.', 'buddypress' ); ?></p>
 		</div>
+
 	<?php endif; ?>
 
-<?php do_action( 'bp_after_group_send_invites_list' ); ?>
+<?php
+
+/**
+ * Fires after the display of the group send invites list.
+ *
+ * @since BuddyPress (1.1.0)
+ */
+do_action( 'bp_after_group_send_invites_list' ); ?>
 
 </div><!-- .main-column -->
-
-<div class="clear"></div>
-
-<div class="submit">
-	<input type="submit" name="submit" id="submit" value="<?php esc_attr_e( 'Send Invites', 'buddypress' ); ?>" />
-</div>
-
-<?php wp_nonce_field( 'groups_send_invites', '_wpnonce_send_invites' ); ?>

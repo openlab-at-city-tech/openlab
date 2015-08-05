@@ -1,7 +1,7 @@
 <?php
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 if ( !class_exists( 'BP_Members_Admin' ) ) :
 /**
@@ -105,7 +105,7 @@ class BP_Members_Admin {
 		$this->js_url    = trailingslashit( $this->admin_url . 'js'  ); // Admin CSS URL
 
 		// Capability depends on config
-		$this->capability = bp_core_do_network_admin() ? 'manage_network_options' : 'manage_options';
+		$this->capability = bp_core_do_network_admin() ? 'manage_network_users' : 'edit_users';
 
 		// The Edit Profile Screen id
 		$this->user_page = '';
@@ -144,7 +144,7 @@ class BP_Members_Admin {
 
 		// When BuddyPress is not network activated, only Super Admin can moderate signups
 		if ( ! empty( $this->subsite_activated ) ) {
-			$this->capability = 'manage_network_options';
+			$this->capability = 'manage_network_users';
 		}
 	}
 
@@ -186,6 +186,9 @@ class BP_Members_Admin {
 		// Add user row actions for single site
 		add_filter( 'user_row_actions', array( $this, 'row_actions' ), 10, 2 );
 
+		// Process changes to member type.
+		add_action( 'bp_members_admin_load', array( $this, 'process_member_type_update' ) );
+
 		/** Signups ***********************************************************/
 
 		if ( is_admin() ) {
@@ -204,7 +207,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Get the user ID
+	 * Get the user ID.
 	 *
 	 * Look for $_GET['user_id']. If anything else, force the user ID to the
 	 * current user's ID so they aren't left without a user to edit.
@@ -214,24 +217,22 @@ class BP_Members_Admin {
 	 * @return int
 	 */
 	private function get_user_id() {
-
-		// No user ID to start
-		$user_id = 0;
-
-		// We'll need a user ID when not on the user admin
-		if ( ! empty( $_GET['user_id'] ) ) {
-			$user_id = $_GET['user_id'];
-
-		// Assume the current user ID
-		} else {
-			$user_id = get_current_user_id();
+		if ( ! empty( $this->user_id ) ) {
+			return $this->user_id;
 		}
 
-		return intval( $user_id );
+		$this->user_id = (int) get_current_user_id();
+
+		// We'll need a user ID when not on self profile
+		if ( ! empty( $_GET['user_id'] ) ) {
+			$this->user_id = (int) $_GET['user_id'];
+		}
+
+		return $this->user_id;
 	}
 
 	/**
-	 * Can the current user edit the one displayed
+	 * Can the current user edit the one displayed.
 	 *
 	 * self profile editing / or bp_moderate check.
 	 * This might be replaced by more granular capabilities
@@ -239,6 +240,10 @@ class BP_Members_Admin {
 	 *
 	 * @access public
 	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param int $user_id ID of the user being checked for edit ability.
+	 *
+	 * @return bool
 	 */
 	private function member_can_edit( $user_id = 0 ) {
 		$retval = false;
@@ -261,7 +266,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Get admin notice when saving a user or member profile
+	 * Get admin notice when saving a user or member profile.
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
@@ -308,7 +313,7 @@ class BP_Members_Admin {
 			case 'avatar':
 				$notice = array(
 					'class'   => 'error',
-					'message' => __( 'There was a problem deleting that avatar, please try again.', 'buddypress' )
+					'message' => __( 'There was a problem deleting that profile photo. Please try again.', 'buddypress' )
 				);
 				break;
 			case 'ham' :
@@ -326,7 +331,7 @@ class BP_Members_Admin {
 			case 1 :
 				$notice = array(
 					'class'   => 'error',
-					'message' => __( 'An error occured while trying to update the profile.', 'buddypress' )
+					'message' => __( 'An error occurred while trying to update the profile.', 'buddypress' )
 				);
 				break;
 			case 2:
@@ -338,7 +343,7 @@ class BP_Members_Admin {
 			case 3:
 				$notice = array(
 					'class'   => 'error',
-					'message' => __( 'There was a problem updating some of your profile information, please try again.', 'buddypress' )
+					'message' => __( 'There was a problem updating some of your profile information. Please try again.', 'buddypress' )
 				);
 				break;
 			}
@@ -462,9 +467,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Highlight the Users menu if on Edit Profile.
-	 *
-	 * + Check if on the user's admin profile
+	 * Highlight the Users menu if on Edit Profile and check if on the user's admin profile.
 	 *
 	 * @access public
 	 * @since BuddyPress (2.1.0)
@@ -477,7 +480,7 @@ class BP_Members_Admin {
 			$this->is_self_profile = true;
 
 		// Is the user attempting to edit their own profile
-		} else {
+		} elseif ( isset( $_GET['user_id' ] ) || ( isset( $_GET['page'] ) && ( 'bp-profile-edit' === $_GET['page'] ) ) ) {
 			$this->is_self_profile = (bool) ( $this->get_user_id() === $this->current_user_id );
 		}
 
@@ -549,6 +552,14 @@ class BP_Members_Admin {
 
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$css = $this->css_url . "admin{$min}.css";
+
+		/**
+		 * Filters the CSS URL to enqueue in the Members admin area.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param string $css URL to the CSS admin file to load.
+		 */
 		$css = apply_filters( 'bp_members_admin_css', $css );
 
 		wp_enqueue_style( 'bp-members-css', $css, array(), bp_get_version() );
@@ -558,14 +569,29 @@ class BP_Members_Admin {
 			wp_style_add_data( 'bp-members-css', 'suffix', $min );
 		}
 
-		// Only load javascript for BuddyPress profile
+		// Only load JavaScript for BuddyPress profile
 		if ( get_current_screen()->id == $this->user_page ) {
 			$js = $this->js_url . "admin{$min}.js";
+
+			/**
+			 * Filters the JS URL to enqueue in the Members admin area.
+			 *
+			 * @since BuddyPress (2.0.0)
+			 *
+			 * @param string $js URL to the JavaScript admin file to load.
+			 */
 			$js = apply_filters( 'bp_members_admin_js', $js );
 			wp_enqueue_script( 'bp-members-js', $js, array( 'jquery' ), bp_get_version(), true );
 		}
 
-		// Plugins may want to hook here to load some css/js
+		/**
+		 * Fires after all of the members JavaScript and CSS are enqueued.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param string $id        ID of the current screen.
+		 * @param array  $screen_id Array of allowed screens to add scripts and styles to.
+		 */
 		do_action( 'bp_members_admin_enqueue_scripts', get_current_screen()->id, $this->screen_id );
 	}
 
@@ -574,6 +600,11 @@ class BP_Members_Admin {
 	 *
 	 * @access public
 	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param object|null $user   User to create profile navigation for.
+	 * @param string      $active Which profile to highlight.
+	 *
+	 * @return string
 	 */
 	public function profile_nav( $user = null, $active = 'WordPress' ) {
 
@@ -582,7 +613,7 @@ class BP_Members_Admin {
 			return;
 		}
 
-		// Add the user ID to query agruments when not editing yourself
+		// Add the user ID to query arguments when not editing yourself
 		if ( false === $this->is_self_profile ) {
 			$query_args = array( 'user_id' => $user->ID );
 		} else {
@@ -656,10 +687,23 @@ class BP_Members_Admin {
 			}
 		}
 
-		// Call an action for plugins to hook in early
+		/**
+		 * Fires at the start of the signups admin load.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param string $doaction Current bulk action being processed.
+		 * @param array  $_REQUEST Current $_REQUEST global.
+		 */
 		do_action_ref_array( 'bp_members_admin_load', array( $doaction, $_REQUEST ) );
 
-		// Allowed actions
+		/**
+		 * Filters the allowed actions for use in the user admin page.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param array $value Array of allowed actions to use.
+		 */
 		$allowed_actions = apply_filters( 'bp_members_admin_allowed_actions', array( 'update', 'delete_avatar', 'spam', 'ham' ) );
 
 		// Prepare the display of the Community Profile screen
@@ -678,8 +722,8 @@ class BP_Members_Admin {
 			// Help panel - sidebar links
 			get_current_screen()->set_help_sidebar(
 				'<p><strong>' . __( 'For more information:', 'buddypress' ) . '</strong></p>' .
-				'<p>' . __( '<a href="http://codex.buddypress.org/buddypress-site-administration/managing-user-profiles/">Managing Profiles</a>', 'buddypress' ) . '</p>' .
-				'<p>' . __( '<a href="http://buddypress.org/support/">Support Forums</a>', 'buddypress' ) . '</p>'
+				'<p>' . __( '<a href="https://codex.buddypress.org/administrator-guide/extended-profiles/">Managing Profiles</a>', 'buddypress' ) . '</p>' .
+				'<p>' . __( '<a href="https://buddypress.org/support/">Support Forums</a>', 'buddypress' ) . '</p>'
 			);
 
 			// Register metaboxes for the edit screen.
@@ -697,8 +741,15 @@ class BP_Members_Admin {
 			$this->stats_metabox->priority = 'core';
 
 			/**
-			 * xProfile Hooks to load the profile fields if component is active
-			 * Plugins should not use this hook, please use 'bp_members_admin_user_metaboxes' instead
+			 * Fires before loading the profile fields if component is active.
+			 *
+			 * Plugins should not use this hook, please use 'bp_members_admin_user_metaboxes' instead.
+			 *
+			 * @since BuddyPress (2.0.0)
+			 *
+			 * @param int    $user_id       Current user ID for the screen.
+			 * @param string $id            Current screen ID.
+			 * @param object $stats_metabox Object holding position data for use with the stats metabox.
 			 */
 			do_action_ref_array( 'bp_members_admin_xprofile_metabox', array( $user_id, get_current_screen()->id, $this->stats_metabox ) );
 
@@ -719,16 +770,35 @@ class BP_Members_Admin {
 				sanitize_key( $this->stats_metabox->priority )
 			);
 
+			// Member Type metabox. Only added if member types have been registered.
+			$member_types = bp_get_member_types();
+			if ( ! empty( $member_types ) ) {
+				add_meta_box(
+					'bp_members_admin_member_type',
+					_x( 'Member Type', 'members user-admin edit screen', 'buddypress' ),
+					array( $this, 'user_admin_member_type_metabox' ),
+					get_current_screen()->id,
+					'side',
+					'core'
+				);
+			}
+
 			/**
-			 * Custom metabox ?
-			 * Plugins can restrict metabox to "bp_moderate" admins checking
-			 * the first argument ($this->is_self_profile) is false in their hook
-			 * They can also restruct their metabox to self profile editing
-			 * by cheking it set to true.
+			 * Fires at the end of the Community Profile screen.
+			 *
+			 * Plugins can restrict metabox to "bp_moderate" admins by checking if
+			 * the first argument ($this->is_self_profile) is false in their callback.
+			 * They can also restrict their metabox to self profile editing
+			 * by setting it to true.
+			 *
+			 * @since BuddyPress (2.0.0)
+			 *
+			 * @param bool $is_self_profile Whether or not it is the current user's profile.
+			 * @param int  $user_id         Current user ID.
 			 */
 			do_action( 'bp_members_admin_user_metaboxes', $this->is_self_profile, $user_id );
 
-			// Enqueue javascripts
+			// Enqueue JavaScript files
 			wp_enqueue_script( 'postbox'   );
 			wp_enqueue_script( 'dashboard' );
 
@@ -749,6 +819,16 @@ class BP_Members_Admin {
 		} else {
 			$this->redirect = $redirect_to;
 
+			/**
+			 * Fires at end of user profile admin load if doaction does not match any available actions.
+			 *
+			 * @since BuddyPress (2.0.0)
+			 *
+			 * @param string $doaction Current bulk action being processed.
+			 * @param int    $user_id  Current user ID.
+			 * @param array  $_REQUEST Current $_REQUEST global.
+			 * @param string $redirect Determined redirect url to send user to.
+			 */
 			do_action_ref_array( 'bp_members_admin_update_user', array( $doaction, $user_id, $_REQUEST, $this->redirect ) );
 
 			bp_core_redirect( $this->redirect );
@@ -832,8 +912,6 @@ class BP_Members_Admin {
 					<div id="poststuff">
 
 						<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
-							<div id="post-body-content">
-							</div><!-- #post-body-content -->
 
 							<div id="postbox-container-1" class="postbox-container">
 								<?php do_meta_boxes( get_current_screen()->id, 'side', $user ); ?>
@@ -882,7 +960,7 @@ class BP_Members_Admin {
 			return;
 		}
 
-		// Bail if user has not been activated yet (how didy ou get here?)
+		// Bail if user has not been activated yet (how did you get here?)
 		if ( isset( $user->user_status ) && ( 2 == $user->user_status ) ) : ?>
 
 			<p class="not-activated"><?php esc_html_e( 'User account has not yet been activated', 'buddypress' ); ?></p><br/>
@@ -991,6 +1069,15 @@ class BP_Members_Admin {
 			<?php
 			// Loading other stats only if user has activated their account
 			if ( empty( $user->user_status ) ) {
+
+				/**
+				 * Fires in the user stats metabox if the user has activated their account.
+				 *
+				 * @since BuddyPress (2.0.0)
+				 *
+				 * @param array  $value Array holding the user ID.
+				 * @param object $user  Current displayed user object.
+				 */
 				do_action( 'bp_members_admin_user_stats', array( 'user_id' => $user->ID ), $user );
 			}
 			?>
@@ -1000,13 +1087,80 @@ class BP_Members_Admin {
 	}
 
 	/**
+	 * Render the Member Type metabox.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 * @access public
+	 *
+	 * @param WP_User $user The WP_User object to be edited.
+	 */
+	public function user_admin_member_type_metabox( $user = null ) {
+
+		// Bail if no user ID.
+		if ( empty( $user->ID ) ) {
+			return;
+		}
+
+		$types = bp_get_member_types( array(), 'objects' );
+		$current_type = bp_get_member_type( $user->ID );
+		?>
+
+		<select name="bp-members-profile-member-type">
+			<option value="" <?php selected( '', $current_type ); ?>><?php /* translators: no option picked in select box */ esc_attr_e( '----', 'buddypress' ) ?></option>
+			<?php foreach ( $types as $type ) : ?>
+				<option value="<?php echo esc_attr( $type->name ) ?>" <?php selected( $type->name, $current_type ) ?>><?php echo esc_html( $type->labels['singular_name'] ) ?></option>
+			<?php endforeach; ?>
+		</select>
+
+		<?php
+
+		wp_nonce_field( 'bp-member-type-change-' . $user->ID, 'bp-member-type-nonce' );
+	}
+
+	/**
+	 * Process changes from the Member Type metabox.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 * @access public
+	 */
+	public function process_member_type_update() {
+		if ( ! isset( $_POST['bp-member-type-nonce'] ) || ! isset( $_POST['bp-members-profile-member-type'] ) ) {
+			return;
+		}
+
+		$user_id = $this->get_user_id();
+
+		check_admin_referer( 'bp-member-type-change-' . $user_id, 'bp-member-type-nonce' );
+
+		// Permission check.
+		if ( ! current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
+			return;
+		}
+
+		// Member type string must either reference a valid member type, or be empty.
+		$member_type = stripslashes( $_POST['bp-members-profile-member-type'] );
+		if ( ! empty( $member_type ) && ! bp_get_member_type_object( $member_type ) ) {
+			return;
+		}
+
+		/*
+		 * If an invalid member type is passed, someone's doing something
+		 * fishy with the POST request, so we can fail silently.
+		 */
+		if ( bp_set_member_type( $user_id, $member_type ) ) {
+			// @todo Success messages can't be posted because other stuff happens on the page load.
+		}
+	}
+
+	/**
 	 * Add a link to Profile in Users listing row actions.
 	 *
 	 * @access public
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param array $actions WordPress row actions (edit, delete).
-	 * @param object $user The object for the user row.
+	 * @param array|string $actions WordPress row actions (edit, delete).
+	 * @param object       $user    The object for the user row.
+	 *
 	 * @return array Merged actions.
 	 */
 	public function row_actions( $actions = '', $user = null ) {
@@ -1059,7 +1213,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Add a filter to edit profile url in WP Admin Bar
+	 * Add a filter to edit profile url in WP Admin Bar.
 	 *
 	 * @access public
 	 * @since BuddyPress (2.1.0)
@@ -1069,12 +1223,18 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Filter the profile url
+	 * Filter the profile url.
 	 *
 	 * @access public
 	 * @since BuddyPress (2.1.0)
 	 *
 	 * @uses  user_admin_url()
+	 *
+	 * @param string $profile_link Profile Link for admin bar.
+	 * @param string $url          Profile URL.
+	 * @param int    $user_id      User ID.
+	 *
+	 * @return string
 	 */
 	public function filter_adminbar_profile_link( $profile_link = '', $url = '', $user_id = 0 ) {
 		if ( ! is_super_admin( $user_id ) && is_admin() ) {
@@ -1084,7 +1244,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Remove the filter to edit profile url in WP Admin Bar
+	 * Remove the filter to edit profile url in WP Admin Bar.
 	 *
 	 * @access public
 	 * @since BuddyPress (2.1.0)
@@ -1101,10 +1261,11 @@ class BP_Members_Admin {
 	 * @access public
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param  int $value
-	 * @param  string $option
-	 * @param  int $new_value
-	 * @return int the pagination preferences
+	 * @param int    $value
+	 * @param string $option
+	 * @param int    $new_value
+	 *
+	 * @return int The pagination preferences.
 	 */
 	public function signup_screen_options( $value = 0, $option = '', $new_value = 0 ) {
 		if ( 'users_page_bp_signups_network_per_page' != $option && 'users_page_bp_signups_per_page' != $option ) {
@@ -1128,7 +1289,8 @@ class BP_Members_Admin {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param  WP_User_Query $query The users query.
+	 * @param WP_User_Query $query The users query.
+	 *
 	 * @return WP_User_Query The users query without the signups.
 	 */
 	public function remove_signups_from_user_query( $query = null ) {
@@ -1170,7 +1332,8 @@ class BP_Members_Admin {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param  array $views WP List Table views.
+	 * @param array $views WP List Table views.
+	 *
 	 * @return array The views with the signup view added.
 	 */
 	public function signup_filter_view( $views = array() ) {
@@ -1187,7 +1350,7 @@ class BP_Members_Admin {
 		$url     = add_query_arg( 'page', 'bp-signups', bp_get_admin_url( 'users.php' ) );
 		$text    = sprintf( _x( 'Pending %s', 'signup users', 'buddypress' ), '<span class="count">(' . number_format_i18n( $signups ) . ')</span>' );
 
-		$views['registered'] = sprintf( '<a href="%1$s" class="%2$s">%3$s</a>', $url, $class, $text );
+		$views['registered'] = sprintf( '<a href="%1$s" class="%2$s">%3$s</a>', esc_url( $url ), $class, $text );
 
 		return $views;
 	}
@@ -1197,8 +1360,9 @@ class BP_Members_Admin {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param  string $class    The name of the class to use.
-	 * @param  string $required The parent class.
+	 * @param string $class    The name of the class to use.
+	 * @param string $required The parent class.
+	 *
 	 * @return WP_List_Table    The List table.
 	 */
 	public static function get_list_table_class( $class = '', $required = '' ) {
@@ -1208,7 +1372,7 @@ class BP_Members_Admin {
 
 		if ( ! empty( $required ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-' . $required . '-list-table.php' );
-			require_once( buddypress()->members->admin->admin_dir . 'bp-members-classes.php'    );
+			require_once( buddypress()->members->admin->admin_dir . 'bp-members-admin-classes.php' );
 		}
 
 		return new $class();
@@ -1232,10 +1396,23 @@ class BP_Members_Admin {
 		$redirect_to = remove_query_arg( array( 'action', 'error', 'updated', 'activated', 'notactivated', 'deleted', 'notdeleted', 'resent', 'notresent', 'do_delete', 'do_resend', 'do_activate', '_wpnonce', 'signup_ids' ), $_SERVER['REQUEST_URI'] );
 		$doaction    = bp_admin_list_table_current_bulk_action();
 
-		// Call an action for plugins to hook in early
+		/**
+		 * Fires at the start of the signups admin load.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param string $doaction Current bulk action being processed.
+		 * @param array  $_REQUEST Current $_REQUEST global.
+		 */
 		do_action( 'bp_signups_admin_load', $doaction, $_REQUEST );
 
-		// Allowed actions
+		/**
+		 * Filters the allowed actions for use in the user signups admin page.
+		 *
+		 * @since BuddyPress (2.0.0)
+		 *
+		 * @param array $value Array of allowed actions to use.
+		 */
 		$allowed_actions = apply_filters( 'bp_signups_admin_allowed_actions', array( 'do_delete', 'do_activate', 'do_resend' ) );
 
 		// Prepare the display of the Community Profile screen
@@ -1254,7 +1431,7 @@ class BP_Members_Admin {
 				'id'      => 'bp-signups-overview',
 				'title'   => __( 'Overview', 'buddypress' ),
 				'content' =>
-				'<p>' . __( 'This is the admininistration screen for pending accounts on your site.', 'buddypress' ) . '</p>' .
+				'<p>' . __( 'This is the administration screen for pending accounts on your site.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'From the screen options, you can customize the displayed columns and the pagination of this screen.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'You can reorder the list of your pending accounts by clicking on the Username, Email or Registered column headers.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'Using the search form, you can find pending accounts more easily. The Username and Email fields will be included in the search.', 'buddypress' ) . '</p>'
@@ -1274,7 +1451,7 @@ class BP_Members_Admin {
 			// Help panel - sidebar links
 			get_current_screen()->set_help_sidebar(
 				'<p><strong>' . __( 'For more information:', 'buddypress' ) . '</strong></p>' .
-				'<p>' . __( '<a href="http://buddypress.org/support/">Support Forums</a>', 'buddypress' ) . '</p>'
+				'<p>' . __( '<a href="https://buddypress.org/support/">Support Forums</a>', 'buddypress' ) . '</p>'
 			);
 		} else {
 			if ( ! empty( $_REQUEST['signup_ids' ] ) ) {
@@ -1309,7 +1486,7 @@ class BP_Members_Admin {
 				bp_core_redirect( $redirect_to );
 
 			// Handle activated accounts
-			} else if ( 'do_activate' == $doaction ) {
+			} elseif ( 'do_activate' == $doaction ) {
 
 				// nonce check
 				check_admin_referer( 'signups_activate' );
@@ -1336,7 +1513,7 @@ class BP_Members_Admin {
 				bp_core_redirect( $redirect_to );
 
 			// Handle sign-ups delete
-			} else if ( 'do_delete' == $doaction ) {
+			} elseif ( 'do_delete' == $doaction ) {
 
 				// nonce check
 				check_admin_referer( 'signups_delete' );
@@ -1366,6 +1543,15 @@ class BP_Members_Admin {
 			} else {
 				$this->redirect = $redirect_to;
 
+				/**
+				 * Fires at end of signups admin load if doaction does not match any actions.
+				 *
+				 * @since BuddyPress (2.0.0)
+				 *
+				 * @param string $doaction Current bulk action being processed.
+				 * @param array  $_REQUEST Current $_REQUEST global.
+				 * @param string $redirect Determined redirect url to send user to.
+				 */
 				do_action( 'bp_members_admin_update_signups', $doaction, $_REQUEST, $this->redirect );
 
 				bp_core_redirect( $this->redirect );
@@ -1400,7 +1586,7 @@ class BP_Members_Admin {
 	}
 
 	/**
-	 * Get admin notice when viewing the sign-up page
+	 * Get admin notice when viewing the sign-up page.
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
@@ -1524,21 +1710,21 @@ class BP_Members_Admin {
 				case 'do_resend':
 					$notice = array(
 						'class'   => 'error',
-						'message' => esc_html__( 'There was a problem sending the activation emails, please try again.', 'buddypress' ),
+						'message' => esc_html__( 'There was a problem sending the activation emails. Please try again.', 'buddypress' ),
 					);
 					break;
 
 				case 'do_activate':
 					$notice = array(
 						'class'   => 'error',
-						'message' => esc_html__( 'There was a problem activating accounts, please try again.', 'buddypress' ),
+						'message' => esc_html__( 'There was a problem activating accounts. Please try again.', 'buddypress' ),
 					);
 					break;
 
 				case 'do_delete':
 					$notice = array(
 						'class'   => 'error',
-						'message' => esc_html__( 'There was a problem deleting sign-ups, please try again.', 'buddypress' ),
+						'message' => esc_html__( 'There was a problem deleting sign-ups. Please try again.', 'buddypress' ),
 					);
 					break;
 			}
@@ -1551,10 +1737,10 @@ class BP_Members_Admin {
 	 * Signups admin page router.
 	 *
 	 * Depending on the context, display
-	 * - the list of signups
-	 * - or the delete confirmation screen
-	 * - or the activate confirmation screen
-	 * - or the "resend" email confirmation screen
+	 * - the list of signups,
+	 * - or the delete confirmation screen,
+	 * - or the activate confirmation screen,
+	 * - or the "resend" email confirmation screen.
 	 *
 	 * Also prepare the admin notices.
 	 *
@@ -1695,9 +1881,11 @@ class BP_Members_Admin {
 	 * @since BuddyPress (2.0.0)
 	 *
 	 * @param string $action Delete, activate, or resend activation link.
+	 *
+	 * @return string
 	 */
 	public function signups_admin_manage( $action = '' ) {
-		if ( ! is_super_admin() || empty( $action ) ) {
+		if ( ! current_user_can( $this->capability ) || empty( $action ) ) {
 			die( '-1' );
 		}
 
@@ -1705,7 +1893,7 @@ class BP_Members_Admin {
 		$ids = false;
 		if ( ! empty( $_POST['allsignups'] ) ) {
 			$ids = wp_parse_id_list( $_POST['allsignups'] );
-		} else if ( ! empty( $_GET['signup_id'] ) ) {
+		} elseif ( ! empty( $_GET['signup_id'] ) ) {
 			$ids = absint( $_GET['signup_id'] );
 		}
 
@@ -1726,17 +1914,29 @@ class BP_Members_Admin {
 		switch ( $action ) {
 			case 'delete' :
 				$header_text = __( 'Delete Pending Accounts', 'buddypress' );
-				$helper_text = _n( 'You are about to delete the following account:', 'You are about to delete the following accounts:', count( $signup_ids ), 'buddypress' );
+				if ( 1 == count( $signup_ids ) ) {
+					$helper_text = __( 'You are about to delete the following account:', 'buddypress' );
+				} else {
+					$helper_text = __( 'You are about to delete the following accounts:', 'buddypress' );
+				}
 				break;
 
 			case 'activate' :
 				$header_text = __( 'Activate Pending Accounts', 'buddypress' );
-				$helper_text = _n( 'You are about to activate the following account:', 'You are about to activate the following accounts:', count( $signup_ids ), 'buddypress' );
+				if ( 1 == count( $signup_ids ) ) {
+					$helper_text = __( 'You are about to activate the following account:', 'buddypress' );
+				} else {
+					$helper_text = __( 'You are about to activate the following accounts:', 'buddypress' );
+				}
 				break;
 
 			case 'resend' :
 				$header_text = __( 'Resend Activation Emails', 'buddypress' );
-				$helper_text = _n( 'You are about to resend an activation email to the following account:', 'You are about to resend activation emails to the following accounts:', count( $signup_ids ), 'buddypress' );
+				if ( 1 == count( $signup_ids ) ) {
+					$helper_text = __( 'You are about to resend an activation email to the following account:', 'buddypress' );
+				} else {
+					$helper_text = __( 'You are about to resend an activation email to the following accounts:', 'buddypress' );
+				}
 				break;
 		}
 

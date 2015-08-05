@@ -22,18 +22,13 @@ function openlab_load_custom_bp_functions() {
 	require ( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require ( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require ( dirname( __FILE__ ) . '/includes/portfolios.php' );
-	require ( dirname( __FILE__ ) . '/includes/related-links.php' );
+        require ( dirname( __FILE__ ) . '/includes/related-links.php' );
 	require ( dirname( __FILE__ ) . '/includes/search.php' );
 }
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
 global $wpdb;
 date_default_timezone_set( 'America/New_York' );
-
-function wds_add_default_member_avatar( $url = false ) {
-	return set_url_scheme( WP_CONTENT_URL . '/img/bubbleavatar.jpg' );
-}
-add_filter( 'bp_core_mysteryman_src', 'wds_add_default_member_avatar' );
 
 function wds_default_signup_avatar( $img ) {
 	if ( false !== strpos( $img, 'mystery-man' ) ) {
@@ -231,7 +226,7 @@ function cuny_group_menu_items() {
 }
 
 //add breadcrumbs for buddypress pages
-add_action( 'wp_footer','wds_footer_breadcrumbs' );
+//add_action( 'wp_footer','wds_footer_breadcrumbs' );
 function wds_footer_breadcrumbs() {
 	global $bp, $bp_current;
 	if ( bp_is_group() ) {
@@ -349,11 +344,6 @@ function wds_registration_ajax() {
 	wp_print_scripts( array( 'sack' ) );
 	$sack = 'var isack = new sack( "'.get_bloginfo( 'wpurl' ).'/wp-admin/admin-ajax.php" );';
 	$loading = '<img src="'.get_bloginfo( 'template_directory' ).'/_inc/images/ajax-loader.gif">';?>
-	<script type="text/javascript">
-		//<![CDATA[
-
-		//]]>
-	</script>
 	<?php
 }
 add_action( 'bp_after_registration_submit_buttons' , 'wds_load_default_account_type' );
@@ -389,16 +379,16 @@ function wds_load_default_account_type() {
 
 function wds_load_account_type() {
 	$return = '';
-
+        
 	$account_type = $_POST['account_type'];
-	$post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
-
+        $post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
+        
 	if ( $account_type ) {
 		$return .= wds_get_register_fields( $account_type, $post_data );
 	} else {
 		$return = "Please select an Account Type.";
 	}
-
+	$return = str_replace( "'","\'", $return );
 	die( $return );
 }
 add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );
@@ -455,6 +445,14 @@ function wds_groups_ajax() {
 
 		function wds_load_group_departments( id ) {
 			<?php $group= bp_get_current_group_id();
+                        
+                        //get group type
+                        if (!empty($_GET['type'])) {
+                            $group_type = $_GET['type'];
+                        } else {
+                            $group_type = 'club';
+                        }
+                        
 			echo $sack;?>
 			var schools="0";
 			if ( document.getElementById( 'school_tech' ).checked ) {
@@ -473,7 +471,7 @@ function wds_groups_ajax() {
 			isack.setVar( "schools", schools );
 			isack.setVar( "group", "<?php echo $group;?>" );
 			isack.setVar( "is_group_create", "<?php echo intval( bp_is_group_create() ) ?>" );
-			isack.setVar( "group_type", group_type );
+			isack.setVar( "group_type", "<?php echo $group_type; ?>");
 			isack.runAJAX();
 			return true;
 		}
@@ -590,9 +588,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'architectural-technology' => array(
 				'label' => 'Architectural Technology',
 			),
-			'communication-design' => array(
-				'label' => 'Communication Design',
-			),
+                        'communication-design' => array(
+                                'label' => 'Communication Design',
+                        ),
 			'computer-engineering-technology' => array(
 				'label' => 'Computer Engineering Technology',
 			),
@@ -659,7 +657,7 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'biological-sciences' => array(
 				'label' => 'Biological Sciences',
 			),
-			'biomedical-informatics' => array(
+                        'biomedical-informatics' => array(
 				'label' => 'Biomedical Informatics',
 			),
 			'chemistry' => array(
@@ -677,9 +675,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'mathematics' => array(
 				'label' => 'Mathematics',
 			),
-			'professional-and-technical-writing' => array(
-				'label' => 'Professional and Technical Writing',
-			),
+                        'professional-and-technical-writing' => array(
+                                'label' => 'Professional and Technical Writing',
+                        ),
 			'physics' => array(
 				'label' => 'Physics',
 			),
@@ -756,16 +754,15 @@ function wds_load_group_type( $group_type ) {
 	$wds_group_school = explode( ",", $wds_group_school );
 
 	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+        
+        $return = '<div class="panel panel-default">';
 
-	$return .= '<table>';
-
-	$return .= '<tr class="schools">';
-
-	$return .= '<td class="block-title" colspan="2">School(s)';
+	$return .= '<div class="panel-heading">School(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
-	$return .= '</td></tr>';
+        $return .= '</div><div class="panel-body">';
+	$return .= '<table>';
 
 		$return .= '<tr class="school-tooltip"><td colspan="2">';
 
@@ -830,8 +827,8 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '</td>';
 	$return .= '</tr>';
-
-	// For the love of Pete, it's not that hard to cast variables
+        
+        // For the love of Pete, it's not that hard to cast variables
 	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
 	if ( bp_get_current_group_id() ) {
@@ -842,39 +839,45 @@ function wds_load_group_type( $group_type ) {
 		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
 		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
-
+        
 	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
-
+        
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
 	$return.= '<tr class="department-title">';
 
-	$return .= '<td colspan="2" class="block-title">Department(s)';
+	$return .= '<td colspan="2" class="block-title italics">Department(s)';
 	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</td></tr>';
 		$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
 	$return.= '</tr>';
-
-	if ( 'course' == $group_type ) {
+        
+        $return .= '</table></div></div>';
+        
+        if ( 'course' == $group_type ) {
+        
+        $return .= '<div class="panel panel-default">';
+        $return .= '<div class="panel-heading">Course Information</div>';
+        $return .= '<div class="panel-body"><table>';
 
 		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
 		$return .= '<tr class="additional-field course-code-field">';
 		$return .= '<td class="additional-field-label">Course Code:</td>';
-		$return .= '<td><input type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field section-code-field">';
 		$return .= '<td class="additional-field-label">Section Code:';
-		$return .= '<td><input type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field semester-field">';
 		$return .= '<td class="additional-field-label">Semester:';
-		$return .= '<td><select name="wds_semester">';
+		$return .= '<td><select class="form-control" name="wds_semester">';
 		$return .= '<option value="">--select one--';
 
 		$checked = $Spring = $Summer = $Fall = $Winter = "";
@@ -898,16 +901,16 @@ function wds_load_group_type( $group_type ) {
 
 		$return .= '<tr class="additional-field year-field">';
 		$return .= '<td class="additional-field-label">Year:';
-		$return .= '<td><input type="text" name="wds_year" value="' . $wds_year . '"></td>';
+		$return .= '<td><input class="form-control" type="text" name="wds_year" value="' . $wds_year . '"></td>';
 		$return .= '</tr>';
 
 		$return .= '<tr class="additional-field additional-description-field">';
 		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-		$return .= '<tr><td colspan="2"><textarea name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
+		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return.= '</tr>';
+                
+                $return.= '</table></div></div><!--.panel-->';
 	}
-
-	$return.= '</table>';
 
 	$return.= '<script>wds_load_group_departments();</script>';
 
@@ -1455,7 +1458,7 @@ class buddypress_Translation_Mangler {
 
    $uc_grouptype = ucfirst( $grouptype );
    $translations = get_translations_for_domain( 'buddypress' );
-
+   
    switch( $text ) {
 	case "Forum":
 		return $translations->translate( "Discussion" );
@@ -1484,55 +1487,50 @@ class buddypress_Translation_Mangler {
 	case "Create a Group":
 		return $translations->translate( "Create a " . $uc_grouptype );
 		break;
-	case "Manage" :
-		return $translations->translate( 'Settings' );
-		break;
-  }
+        case "Manage" :
+                return $translations->translate('Settings');
+                break;
+        }
   return $translation;
  }
 }
 
 function openlab_launch_translator() {
 	add_filter( 'gettext', array( 'buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
-	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
-	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
+        add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+        add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
 add_action( 'bp_setup_globals', 'openlab_launch_translator' );
 
-function openlab_gettext_with_context( $translations, $text, $context, $domain ) {
-	if ( 'buddypress' !== $domain ) {
-		return $translations;
-	}
-
-	switch ( $text ) {
-		case 'Manage' :
-			if ( 'My Group screen nav' === $context ) {
-				return 'Settings';
-			}
-			break;
-
-	}
-
-	return $translations;
+function openlab_gettext_with_context($translations, $text, $context, $domain) {
+    if ('buddypress' !== $domain) {
+        return $translations;
+    }
+    switch ($text) {
+        case 'Manage' :
+            if ('My Group screen nav' === $context) {
+                return 'Settings';
+            }
+            break;
+    }
+    return $translations;
 }
 
 class bbPress_Translation_Mangler {
-	static function filter_gettext( $translation, $text, $domain ) {
 
-		if ( 'bbpress' != $domain ) {
-			return $translation;
-		}
+    static function filter_gettext($translation, $text, $domain) {
+        if ('bbpress' != $domain) {
+            return $translation;
+        }
+        $translations = get_translations_for_domain('buddypress');
+        switch ($text) {
+            case "Forum":
+                return $translations->translate("Discussion");
+                break;
+        }
+        return $translation;
+    }
 
-		$translations = get_translations_for_domain( 'buddypress' );
-
-		switch( $text ) {
-			case "Forum":
-				return $translations->translate( "Discussion" );
-				break;
-		}
-
-		return $translation;
-	}
 }
 
 class buddypress_ajax_Translation_Mangler {
@@ -1817,6 +1815,7 @@ function openlab_addl_settings_fields() {
 
 	$fname = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
 	$lname = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
+        $account_type = isset($_POST['account_type']) ? $_POST['account_type'] : '';
 
 	// Don't let this continue if a password error was recorded
 	if ( isset( $bp->template_message_type ) && 'error' == $bp->template_message_type && 'No changes were made to your account.' != $bp->template_message ) {
@@ -1831,8 +1830,21 @@ function openlab_addl_settings_fields() {
 
 		bp_core_add_message( __( 'Your settings have been saved.', 'buddypress' ), 'success' );
 	}
+        
+        if (!empty($account_type)) {
+        //saving account type for students or alumni
+        $types = array('Student', 'Alumni');
+        $account_type = in_array($_POST['account_type'], $types) ? $_POST['account_type'] : 'Student';
+        $user_id = bp_displayed_user_id();
+        $current_type = openlab_get_displayed_user_account_type();
 
-	bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
+        // Only students and alums can do this
+        if (in_array($current_type, $types)) {
+            xprofile_set_field_data('Account Type', bp_displayed_user_id(), $account_type);
+        }
+    }
+
+    bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() . '/general' ) );
 }
 add_action( 'bp_core_general_settings_after_save', 'openlab_addl_settings_fields' );
 
@@ -1847,19 +1859,6 @@ function openlab_disable_new_site_link( $registration ) {
 	return $registration;
 }
 add_filter( 'site_option_registration', 'openlab_disable_new_site_link' );
-
-/**
- * Default subscription level for group emails should be All
- */
-function openlab_default_group_subscription( $level ) {
-	if ( ! $level ) {
-		$level = 'supersub';
-	}
-
-	return $level;
-}
-
-add_filter( 'ass_default_subscription_level', 'openlab_default_group_subscription' );
 
 function openlab_set_default_group_subscription_on_creation( $group_id ) {
 	groups_update_groupmeta( $group_id, 'ass_default_subscription', 'supersub' );
@@ -1952,24 +1951,6 @@ function openlab_block_add_new_user( $allcaps, $cap, $args ) {
 		return $allcaps;
 }
 add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
-
-/**
- * Hack alert! Allow group avatars to be deleted
- *
- * There is a bug in BuddyPress Docs that blocks group avatar deletion, because
- * BP Docs is too greedy about setting its current view, and thinks that you're
- * trying to delete a Doc instead. Instead of fixing that, which I have no
- * patience for at the moment, I'm just going to override BP Docs's current
- * view in the case of deleting an avatar.
- */
-function openlab_fix_avatar_delete( $view ) {
-	if ( bp_is_group_admin_page() ) {
-		$view = '';
-	}
-
-	return $view;
-}
-add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
 
 /**
  * Remove user from group blog when leaving group
@@ -2306,232 +2287,6 @@ function openlab_lazy_flush_rewrite_rules() {
 	}
 }
 add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
-
-/**
- * More generous cap mapping for bbPress topic posting.
- *
- * bbPress maps everything onto Participant. We don't want to have to use that.
- */
-function openlab_bbp_map_group_forum_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
-
-	if ( ! bp_is_group() ) {
-		return $caps;
-	}
-
-	switch ( $cap ) {
-
-		// If user is a group mmember, allow them to create content.
-		case 'read_forum'          :
-		case 'publish_replies'     :
-		case 'publish_topics'      :
-		case 'read_hidden_forums'  :
-		case 'read_private_forums' :
-			if ( bbp_group_is_member() || bbp_group_is_mod() || bbp_group_is_admin() ) {
-				$caps = array( 'exist' );
-			}
-			break;
-
-		// If user is a group mod ar admin, map to participate cap.
-		case 'moderate'     :
-		case 'edit_topic'   :
-		case 'edit_reply'   :
-		case 'view_trash'   :
-		case 'edit_others_replies' :
-		case 'edit_others_topics'  :
-			if ( bbp_group_is_mod() || bbp_group_is_admin() ) {
-				$caps = array( 'exist' );
-			}
-			break;
-
-		// If user is a group admin, allow them to delete topics and replies.
-		case 'delete_topic' :
-		case 'delete_reply' :
-			if ( bbp_group_is_admin() ) {
-				$caps = array( 'exist' );
-			}
-			break;
-	}
-
-	return apply_filters( 'bbp_map_group_forum_topic_meta_caps', $caps, $cap, $user_id, $args );
-}
-add_filter( 'bbp_map_meta_caps', 'openlab_bbp_map_group_forum_meta_caps', 10, 4 );
-
-/**
- * Force bbPress to display all forums (ie don't hide any hidden forums during bbp_has_forums() queries).
- *
- * We manage visibility ourselves.
- *
- * See #1299.
- */
-add_filter( 'bbp_include_all_forums', '__return_true' );
-
-/**
- * Force bbp_has_forums() to show all post statuses.
- *
- * As above, I have no idea why bbPress makes some items hidden, but it appears
- * incompatible with BuddyPress groups.
- */
-function openlab_bbp_force_all_forum_statuses( $r ) {
-        $r['post_status'] = array( bbp_get_public_status_id(), bbp_get_private_status_id(), bbp_get_hidden_status_id() );
-        return $r;
-}
-add_filter( 'bbp_before_has_forums_parse_args', 'openlab_bbp_force_all_forum_statuses' );
-
-/**
- * Ensure that post results for bbPres forum queries are never marked hidden.
- *
- * Working with bbPress is really exhausting.
- */
-function openlab_bbp_force_forums_to_public( $posts, $query ) {
-        if ( ! function_exists( 'bp_is_group' ) || ! bp_is_group() ) {
-                return $posts;
-        }
-
-        if ( 'forum' !== $query->get( 'post_type' ) ) {
-                return $posts;
-        }
-
-        foreach ( $posts as &$post ) {
-                $post->post_status = 'publish';
-        }
-
-        return $posts;
-}
-add_filter( 'posts_results', 'openlab_bbp_force_forums_to_public', 10, 2 );
-
-/**
- * Force site public to 1 for bbPress.
- *
- * Otherwise activity is not posted.
- */
-function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
-	if ( 1 == $site_id ) {
-		$public = 1;
-	}
-	return $public;
-}
-add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
-
-/**
- * Handle discussion forum toggling for groups.
- */
-function openlab_bbp_group_toggle( $group_id ) {
-	$enable_forum = ! empty( $_POST['openlab-edit-group-forum'] );
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
-	$group->enable_forum = $enable_forum;
-	$group->save();
-
-	if ( $enable_forum ) {
-		groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
-	} else {
-		groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
-
-	}
-}
-add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
-
-/**
- * Failsafe method for determining whether forums should be enabled for a group.
- *
- * Another kewl hack due to issues with bbPress. It should be possible to rely on the `enable_forum` group toggle to
- * determine whether the Discussion tab should be shown. But something about the combination between the old bbPress
- * and the new one means that some groups used to have an associated forum_id without having enable_forum turned on,
- * yet still expect to see the Discussion tab. Our workaround is to require the explicit presence of a 'disable' flag
- * for a group's Discussion tab to be turned off.
- */
-function openlab_is_forum_enabled_for_group( $group_id = false ) {
-	if ( ! $group_id ) {
-		$group_id = bp_get_current_group_id();
-	}
-
-	if ( ! $group_id ) {
-		return false;
-	}
-
-	$disable = (bool) groups_get_groupmeta( $group_id, 'openlab_disable_forum' );
-	$forum_id = groups_get_groupmeta( $group_id, 'forum_id' );
-
-	if ( $disable || ! $forum_id ) {
-		return false;
-	}
-
-	return true;
-}
-
-/**
- * If Discussion is disabled for a group, ensure it's removed from the menu.
- *
- * Gah gah gah gah gah gah.
- */
-function openlab_bbp_remove_group_nav_item() {
-	if ( ! bp_is_group() ) {
-		return;
-	}
-
-	if ( ! openlab_is_forum_enabled_for_group() ) {
-		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
-	}
-}
-add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
-
-/**
- * Enforce group privacy settings when determining bbPress forum privacy.
- *
- * This helps ensure that activity items are marked hide_sitewide as appropriate.
- *
- * See https://bbpress.trac.wordpress.org/ticket/2782,
- * https://bbpress.trac.wordpress.org/ticket/2327,
- * http://openlab.citytech.cuny.edu/redmine/issues/1428
- */
-function openlab_enforce_forum_privacy( $is_public, $forum_id ) {
-	$group_ids = bbp_get_forum_group_ids( $forum_id );
-
-	if ( ! empty( $group_ids ) ) {
-		foreach ( $group_ids as $group_id ) {
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
-
-			if ( 'public' !== $group->status ) {
-				$is_public = false;
-				break;
-			}
-		}
-	}
-
-	return $is_public;
-}
-add_filter( 'bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2 );
-
-/**
- * Don't let users logged into an account created by Social remain logged in
- *
- * See #3476
- */
-function openlab_log_out_social_accounts() {
-	if ( ! is_user_logged_in() ) {
-		return;
-	}
-
-	$user_id = get_current_user_id();
-	$social = get_user_meta( $user_id, 'social_commenter', true );
-
-	if ( 'true' === $social ) {
-		// Make sure there's no last_activity, so the user doesn't show in directories.
-		BP_Core_User::delete_last_activity( $user_id );
-
-		// Mark the user as spam, so the profile can't be viewed directly.
-		global $wpdb;
-		$wpdb->update( $wpdb->users, array( 'status' => 1 ), array( 'ID' => $user_id ) );
-
-		$user = new WP_User( $user_id );
-		clean_user_cache( $user );
-
-		// Log out and redirect.
-		wp_clear_auth_cookie();
-		wp_redirect( '/' );
-		die();
-	}
-}
-add_action( 'init', 'openlab_log_out_social_accounts', 0 );
 
 /**
  * Whitelist the 'webcal' protocol.

@@ -11,7 +11,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 class BP_Notifications_Component extends BP_Component {
 
@@ -64,6 +64,8 @@ class BP_Notifications_Component extends BP_Component {
 	 * @param array $args See BP_Component::setup_globals() for a description.
 	 */
 	public function setup_globals( $args = array() ) {
+		$bp = buddypress();
+
 		// Define a slug, if necessary
 		if ( !defined( 'BP_NOTIFICATIONS_SLUG' ) ) {
 			define( 'BP_NOTIFICATIONS_SLUG', $this->id );
@@ -71,7 +73,8 @@ class BP_Notifications_Component extends BP_Component {
 
 		// Global tables for the notifications component
 		$global_tables = array(
-			'table_name' => bp_core_get_table_prefix() . 'bp_notifications'
+			'table_name'      => $bp->table_prefix . 'bp_notifications',
+			'table_name_meta' => $bp->table_prefix . 'bp_notifications_meta',
 		);
 
 		// All globals for the notifications component.
@@ -205,7 +208,7 @@ class BP_Notifications_Component extends BP_Component {
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-read',
-				'title'  => __( 'Read', 'buddypress' ),
+				'title'  => _x( 'Read', 'My Account Notification sub nav', 'buddypress' ),
 				'href'   => trailingslashit( $notifications_link . 'read' ),
 			);
 		}
@@ -236,6 +239,22 @@ class BP_Notifications_Component extends BP_Component {
 		}
 
 		parent::setup_title();
+	}
+
+	/**
+	 * Setup cache groups
+	 *
+	 * @since BuddyPress (2.2.0)
+	 */
+	public function setup_cache_groups() {
+
+		// Global groups
+		wp_cache_add_global_groups( array(
+			'bp_notifications',
+			'notification_meta'
+		) );
+
+		parent::setup_cache_groups();
 	}
 }
 

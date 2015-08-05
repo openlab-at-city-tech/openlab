@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Get the default site options and their values.
@@ -55,6 +55,9 @@ function bp_get_default_options() {
 		// Avatar uploads
 		'bp-disable-avatar-uploads'       => false,
 
+		// Group Profile Photos
+		'bp-disable-group-avatar-uploads' => false,
+
 		// Allow users to delete their own accounts
 		'bp-disable-account-deletion'     => false,
 
@@ -100,6 +103,13 @@ function bp_get_default_options() {
 		'widget_bp_messages_sitewide_notices_widget' => false,
 	);
 
+	/**
+	 * Filters the default options to be set upon activation.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param array $options Array of default options to set.
+	 */
 	return apply_filters( 'bp_get_default_options', $options );
 }
 
@@ -125,7 +135,13 @@ function bp_add_options() {
 		bp_add_option( $key, $value );
 	}
 
-	// Allow previously activated plugins to append their own options.
+	/**
+	 * Fires after the addition of default options when BuddyPress is first activated.
+	 *
+	 * Allows previously activated plugins to append their own options.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 */
 	do_action( 'bp_add_options' );
 }
 
@@ -153,7 +169,13 @@ function bp_delete_options() {
 		delete_option( $key );
 	}
 
-	// Allow previously activated plugins to append their own options.
+	/**
+	 * Fires after the deletion of default options when BuddyPress is first deactivated.
+	 *
+	 * Allows previously activated plugins to append their own options.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 */
 	do_action( 'bp_delete_options' );
 }
 
@@ -178,7 +200,13 @@ function bp_setup_option_filters() {
 		add_filter( 'pre_option_' . $key, 'bp_pre_get_option' );
 	}
 
-	// Allow previously activated plugins to append their own options.
+	/**
+	 * Fires after the addition of filters to each BuddyPress option.
+	 *
+	 * Allows previously activated plugins to append their own options.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 */
 	do_action( 'bp_setup_option_filters' );
 }
 
@@ -187,7 +215,7 @@ function bp_setup_option_filters() {
  *
  * Currently unused.
  *
- * @since BuddyPress (1.6)
+ * @since BuddyPress (1.6.0)
  *
  * @param bool $value Optional. Default value false
  * @return mixed false if not overloaded, mixed if set
@@ -218,7 +246,7 @@ function bp_pre_get_option( $value = false ) {
  *
  * The 'bp_get_option' filter is primarily for backward-compatibility.
  *
- * @since BuddyPress (1.5.0)
+ * @since BuddyPress (1.2.0)
  *
  * @uses bp_get_root_blog_id()
  *
@@ -229,6 +257,14 @@ function bp_pre_get_option( $value = false ) {
  */
 function bp_get_option( $option_name, $default = '' ) {
 	$value = get_blog_option( bp_get_root_blog_id(), $option_name, $default );
+
+	/**
+	 * Filters the option value for the requested option.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param mixed $value The value for the option.
+	 */
 	return apply_filters( 'bp_get_option', $value );
 }
 
@@ -296,9 +332,10 @@ function bp_delete_option( $option_name ) {
  * @deprecated 1.6.0
  */
 function bp_core_activate_site_options( $keys = array() ) {
-	global $bp;
 
 	if ( !empty( $keys ) && is_array( $keys ) ) {
+		$bp = buddypress();
+
 		$errors = false;
 
 		foreach ( $keys as $key => $default ) {
@@ -353,6 +390,14 @@ function bp_core_get_root_options() {
 
 		// On Multisite installations, some options must always be fetched from sitemeta
 		if ( is_multisite() ) {
+
+			/**
+			 * Filters multisite options retrieved from sitemeta.
+			 *
+			 * @since BuddyPress (1.5.0)
+			 *
+			 * @param array $value Array of multisite options from sitemeta table.
+			 */
 			$network_options = apply_filters( 'bp_core_network_options', array(
 				'tags_blog_id'       => '0',
 				'sitewide_tags_blog' => '',
@@ -429,13 +474,47 @@ function bp_core_get_root_options() {
 		wp_cache_set( 'root_blog_options', $root_blog_options_meta, 'bp' );
 	}
 
+	/**
+	 * Filters the global BP options.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 *
+	 * @param array $root_blog_options_meta Array of global BP options.
+	 */
 	return apply_filters( 'bp_core_get_root_options', $root_blog_options_meta );
+}
+
+/**
+ * Get a root option.
+ *
+ * "Root options" are those that apply across an entire installation, and are fetched only a single
+ * time during a pageload and stored in `buddypress()->site_options` to prevent future lookups.
+ * See {@see bp_core_get_root_options()}.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param  string $option Name of the option key.
+ * @return mixed Value, if found.
+ */
+function bp_core_get_root_option( $option ) {
+	$bp = buddypress();
+
+	if ( ! isset( $bp->site_options ) ) {
+		$bp->site_options = bp_core_get_root_options();
+	}
+
+	$value = '';
+	if ( isset( $bp->site_options[ $option ] ) ) {
+		$value = $bp->site_options[ $option ];
+	}
+
+	return $value;
 }
 
 /** Active? *******************************************************************/
 
 /**
- * Is profile sycing disabled?
+ * Is profile syncing disabled?
  *
  * @since BuddyPress (1.6.0)
  *
@@ -446,6 +525,14 @@ function bp_core_get_root_options() {
  * @return bool True if profile sync is enabled, otherwise false.
  */
 function bp_disable_profile_sync( $default = false ) {
+
+	/**
+	 * Filters whether or not profile syncing is disabled.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not syncing is disabled.
+	 */
 	return (bool) apply_filters( 'bp_disable_profile_sync', (bool) bp_get_option( 'bp-disable-profile-sync', $default ) );
 }
 
@@ -462,6 +549,14 @@ function bp_disable_profile_sync( $default = false ) {
  *         otherwise false.
  */
 function bp_hide_loggedout_adminbar( $default = true ) {
+
+	/**
+	 * Filters whether or not the toolbar is hidden for logged out users.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not the toolbar is hidden.
+	 */
 	return (bool) apply_filters( 'bp_hide_loggedout_adminbar', (bool) bp_get_option( 'hide-loggedout-adminbar', $default ) );
 }
 
@@ -477,7 +572,49 @@ function bp_hide_loggedout_adminbar( $default = true ) {
  * @return bool True if avatar uploads are disabled, otherwise false.
  */
 function bp_disable_avatar_uploads( $default = true ) {
+
+	/**
+	 * Filters whether or not members are able to upload their own avatars.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not members are able to upload their own avatars.
+	 */
 	return (bool) apply_filters( 'bp_disable_avatar_uploads', (bool) bp_get_option( 'bp-disable-avatar-uploads', $default ) );
+}
+
+/**
+ * Are group avatars disabled?
+ *
+ * For backward compatibility, this option falls back on the value of 'bp-disable-avatar-uploads' when no value is
+ * found in the database.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param bool $default Optional. Fallback value if not found in the database.
+ *                      Defaults to the value of `bp_disable_avatar_uploads()`.
+ * @return bool True if group avatar uploads are disabled, otherwise false.
+ */
+function bp_disable_group_avatar_uploads( $default = null ) {
+	$disabled = bp_get_option( 'bp-disable-group-avatar-uploads', '' );
+
+	if ( '' === $disabled ) {
+		if ( is_null( $default ) ) {
+			$disabled = bp_disable_avatar_uploads();
+		} else {
+			$disabled = $default;
+		}
+	}
+
+	/**
+	 * Filters whether or not members are able to upload group avatars.
+	 *
+	 * @since BuddyPress (2.3.0)
+	 *
+	 * @param bool $disabled Whether or not members are able to upload their groups avatars.
+	 * @param bool $default  Default value passed to the function.
+	 */
+	return (bool) apply_filters( 'bp_disable_group_avatar_uploads', $disabled, $default );
 }
 
 /**
@@ -493,6 +630,14 @@ function bp_disable_avatar_uploads( $default = true ) {
  *         false.
  */
 function bp_disable_account_deletion( $default = false ) {
+
+	/**
+	 * Filters whether or not members are able to delete their own accounts.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not members are able to delete their own accounts.
+	 */
 	return apply_filters( 'bp_disable_account_deletion', (bool) bp_get_option( 'bp-disable-account-deletion', $default ) );
 }
 
@@ -510,6 +655,14 @@ function bp_disable_account_deletion( $default = false ) {
  *         items, otherwise false.
  */
 function bp_disable_blogforum_comments( $default = false ) {
+
+	/**
+	 * Filters whether or not blog and forum activity stream comments are disabled.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not blog and forum activity stream comments are disabled.
+	 */
 	return (bool) apply_filters( 'bp_disable_blogforum_comments', (bool) bp_get_option( 'bp-disable-blogforum-comments', $default ) );
 }
 
@@ -526,6 +679,14 @@ function bp_disable_blogforum_comments( $default = false ) {
  * @return bool True if group creation is restricted, otherwise false.
  */
 function bp_restrict_group_creation( $default = true ) {
+
+	/**
+	 * Filters whether or not group creation is turned off.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not group creation is turned off.
+	 */
 	return (bool) apply_filters( 'bp_restrict_group_creation', (bool) bp_get_option( 'bp_restrict_group_creation', $default ) );
 }
 
@@ -541,6 +702,14 @@ function bp_restrict_group_creation( $default = true ) {
  * @return bool True if the BuddyBar should be forced on, otherwise false.
  */
 function bp_force_buddybar( $default = true ) {
+
+	/**
+	 * Filters whether or not BuddyBar should be forced in place of WP Admin Bar.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not BuddyBar should be forced in place of WP Admin Bar.
+	 */
 	return (bool) apply_filters( 'bp_force_buddybar', (bool) bp_get_option( '_bp_force_buddybar', $default ) );
 }
 
@@ -565,6 +734,14 @@ function bp_group_forums_root_id( $default = '0' ) {
 	 * @return int The ID of the group forums root forum.
 	 */
 	function bp_get_group_forums_root_id( $default = '0' ) {
+
+		/**
+		 * Filters the group forums root parent forum id.
+		 *
+		 * @since BuddyPress (1.6.0)
+		 *
+		 * @param int $value The group forums root parent forum id.
+		 */
 		return (int) apply_filters( 'bp_get_group_forums_root_id', (int) bp_get_option( '_bp_group_forums_root_id', $default ) );
 	}
 
@@ -580,6 +757,14 @@ function bp_group_forums_root_id( $default = '0' ) {
  * @return bool True if group forums are active, otherwise false.
  */
 function bp_is_group_forums_active( $default = true ) {
+
+	/**
+	 * Filters whether or not BuddyPress Group Forums are enabled.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not BuddyPress Group Forums are enabled.
+	 */
 	return (bool) apply_filters( 'bp_is_group_forums_active', (bool) bp_get_option( '_bp_enable_group_forums', $default ) );
 }
 
@@ -595,6 +780,14 @@ function bp_is_group_forums_active( $default = true ) {
  * @return bool True if Akismet is enabled, otherwise false.
  */
 function bp_is_akismet_active( $default = true ) {
+
+	/**
+	 * Filters whether or not Akismet is enabled.
+	 *
+	 * @since BuddyPress (1.6.0)
+	 *
+	 * @param bool $value Whether or not Akismet is enabled.
+	 */
 	return (bool) apply_filters( 'bp_is_akismet_active', (bool) bp_get_option( '_bp_enable_akismet', $default ) );
 }
 
@@ -610,6 +803,14 @@ function bp_is_akismet_active( $default = true ) {
  * @return bool True if Heartbeat refresh is enabled, otherwise false.
  */
 function bp_is_activity_heartbeat_active( $default = true ) {
+
+	/**
+	 * Filters whether or not Activity Heartbeat refresh is enabled.
+	 *
+	 * @since BuddyPress (2.0.0)
+	 *
+	 * @param bool $value Whether or not Activity Heartbeat refresh is enabled.
+	 */
 	return (bool) apply_filters( 'bp_is_activity_heartbeat_active', (bool) bp_get_option( '_bp_enable_heartbeat_refresh', $default ) );
 }
 
@@ -625,5 +826,13 @@ function bp_is_activity_heartbeat_active( $default = true ) {
  * @return string ID of the theme package.
  */
 function bp_get_theme_package_id( $default = 'legacy' ) {
+
+	/**
+	 * Filters the current theme package ID.
+	 *
+	 * @since BuddyPress (1.7.0)
+	 *
+	 * @param string $value The current theme package ID.
+	 */
 	return apply_filters( 'bp_get_theme_package_id', bp_get_option( '_bp_theme_package_id', $default ) );
 }

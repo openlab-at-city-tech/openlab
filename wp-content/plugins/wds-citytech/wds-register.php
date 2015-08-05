@@ -8,6 +8,10 @@ function openlab_registration_avatars() {
 	if ( !bp_is_register_page() ) {
 		return;
 	}
+        
+        if ( empty( $bp->avatar_admin ) ) {
+		$bp->avatar_admin = new stdClass;
+	}
 
 	if ( empty( $bp->avatar_admin ) ) {
 		$bp->avatar_admin = new stdClass;
@@ -92,7 +96,7 @@ function wds_email_validate() {
 
 		switch ( $account_type ) {
 			case 'Student' :
-			case 'Alumni' :
+                        case 'Alumni' :
 				if ( 'mail.citytech.cuny.edu' !== $domain ) {
 					$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
 				}
@@ -151,15 +155,15 @@ function wds_email_validate() {
 //
 add_action( 'bp_signup_validate', 'wds_email_validate' );
 //
-function wds_get_register_fields( $account_type, $post_data = array() ){
-	// Fake it until you make it
-	if ( ! empty( $post_data ) ) {
-		foreach ( $post_data as $pdk => $pdv ) {
-			$_POST[ $pdk ] = $pdv;
-		}
-	}
-
-	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
+function wds_get_register_fields($account_type, $post_data = array()) {
+    // Fake it until you make it
+    if (!empty($post_data)) {
+        foreach ($post_data as $pdk => $pdv) {
+            $_POST[$pdk] = $pdv;
+        }
+    }
+    
+    $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return="";
 	if ( function_exists( 'bp_has_profile' ) ) :
@@ -181,7 +185,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					}
 				}
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
+                                
 				/*
 				$input_name = trim(bp_get_the_profile_field_input_name());
 				$return.="<br />Input field name: " . $input_name;
@@ -189,7 +193,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 				$return .= "<br />Post Field 193: " . $_POST['field_193'];
 				$input_value = $_POST["{$input_name}"];
 				*/
-				$return.='<input type="text" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" value="'.bp_get_the_profile_field_edit_value().'" />';
+				$return.='<input class="form-control" type="text" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" value="'.bp_get_the_profile_field_edit_value().'" />';
 			endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
 				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
@@ -197,8 +201,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
-				$return.='<textarea rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
+				$return.='<textarea class="form-control" rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
 				$return.='</textarea>';
 			endif;
 			if ( 'selectbox' == bp_get_the_profile_field_type() ) :
@@ -207,12 +210,11 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				//WDS ADDED $$$
 
 				$onchange = '';
-
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
+                                
+				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
 					 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
 						$return .= '<option selected="selected" value=""> ---- </option>';
 					 }
@@ -226,8 +228,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
+				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
 					$return.=bp_get_the_profile_field_options();
 				$return.='</select>';
 			endif;
@@ -238,7 +239,6 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</span>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.=bp_get_the_profile_field_options();
 				if ( !bp_get_the_profile_field_is_required() ) :
 					//$return.='<a class="clear-value" href="javascript:clear( \''.bp_get_the_profile_field_input_name().'\' );">'._e( 'Clear', 'buddypress' ).'</a>';
@@ -252,7 +252,6 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</span>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.=bp_get_the_profile_field_options();
 				$return.='</div>';
 			endif;
@@ -263,7 +262,6 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
-				$return.=do_action( 'bp_' . bp_get_the_profile_field_input_name() . '_errors' );
 				$return.='<select name="'.bp_get_the_profile_field_input_name().'_day" id="'.bp_get_the_profile_field_input_name().'_day">';
 					$return.=bp_get_the_profile_field_options( 'type=day' );
 				$return.='</select>';
@@ -292,7 +290,6 @@ function wds_get_register_fields( $account_type, $post_data = array() ){
 			$profile_field_ids = implode( ',', $pfids_a );
 		}
 
-		// dead code?
 		if ( isset( $group_id ) && 1 != $group_id ) {
 			$profile_field_ids = '3,7,241,' . $profile_field_ids;
 		}

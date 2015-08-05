@@ -125,7 +125,6 @@ abstract class WP_Image_Editor {
 	 * @access public
 	 * @abstract
 	 *
-	 * @param string|int $src The source file or Attachment ID.
 	 * @param int $src_x The start x position to crop from.
 	 * @param int $src_y The start y position to crop from.
 	 * @param int $src_w The width to crop.
@@ -194,6 +193,7 @@ abstract class WP_Image_Editor {
 	 *
 	 * @param int $width
 	 * @param int $height
+	 * @return true
 	 */
 	protected function update_size( $width = null, $height = null ) {
 		$this->size = array(
@@ -213,8 +213,29 @@ abstract class WP_Image_Editor {
 	 */
 	public function get_quality() {
 		if ( ! $this->quality ) {
+			$this->set_quality();
+		}
+
+		return $this->quality;
+	}
+
+	/**
+	 * Sets Image Compression quality on a 1-100% scale.
+	 *
+	 * @since 4.0.0
+	 * @access public
+	 *
+	 * @return int $quality Compression Quality. Range: [1,100]
+	 */
+	public function set_quality( $quality = null ) {
+		if ( null === $quality ) {
 			/**
 			 * Filter the default image compression quality setting.
+			 *
+			 * Applies only during initial editor instantiation, or when set_quality() is run
+			 * manually without the `$quality` argument.
+			 *
+			 * set_quality() has priority over the filter.
 			 *
 			 * @since 3.5.0
 			 *
@@ -227,6 +248,11 @@ abstract class WP_Image_Editor {
 				/**
 				 * Filter the JPEG compression quality for backward-compatibility.
 				 *
+				 * Applies only during initial editor instantiation, or when set_quality() is run
+				 * manually without the `$quality` argument.
+				 *
+				 * set_quality() has priority over the filter.
+				 *
 				 * The filter is evaluated under two contexts: 'image_resize', and 'edit_image',
 				 * (when a JPEG image is saved to file).
 				 *
@@ -236,28 +262,15 @@ abstract class WP_Image_Editor {
 				 * @param string $context Context of the filter.
 				 */
 				$quality = apply_filters( 'jpeg_quality', $quality, 'image_resize' );
+			}
 
-				if ( ! $this->set_quality( $quality ) ) {
-					$this->quality = $this->default_quality;
-				}
+			if ( $quality < 0 || $quality > 100 ) {
+				$quality = $this->default_quality;
 			}
 		}
 
-		return $this->quality;
-	}
-
-	/**
-	 * Sets Image Compression quality on a 1-100% scale.
-	 *
-	 * @since 3.5.0
-	 * @access public
-	 *
-	 * @param int $quality Compression Quality. Range: [1,100]
-	 * @return boolean|WP_Error True if set successfully; WP_Error on failure.
-	 */
-	public function set_quality( $quality = null ) {
 		// Allow 0, but squash to 1 due to identical images in GD, and for backwards compatibility.
-		if ( $quality == 0 ) {
+		if ( 0 === $quality ) {
 			$quality = 1;
 		}
 
@@ -374,7 +387,7 @@ abstract class WP_Image_Editor {
 	 * @since 3.5.0
 	 * @access public
 	 *
-	 * @return string suffix
+	 * @return false|string suffix
 	 */
 	public function get_suffix() {
 		if ( ! $this->get_size() )

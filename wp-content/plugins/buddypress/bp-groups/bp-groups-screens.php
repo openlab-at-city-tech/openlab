@@ -12,7 +12,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Handle the display of the Groups directory index.
@@ -21,8 +21,20 @@ function groups_directory_groups_setup() {
 	if ( bp_is_groups_directory() ) {
 		bp_update_is_directory( true, 'groups' );
 
+		/**
+		 * Fires before the loading of the Groups directory index.
+		 *
+		 * @since BuddyPress (1.1.0)
+		 */
 		do_action( 'groups_directory_groups_setup' );
 
+		/**
+		 * Filters the template to load for the Groups directory index.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param string $value Path to the groups directory index template to load.
+		 */
 		bp_core_load_template( apply_filters( 'groups_template_directory_groups', 'groups/index' ) );
 	}
 }
@@ -33,8 +45,20 @@ add_action( 'bp_screens', 'groups_directory_groups_setup', 2 );
  */
 function groups_screen_my_groups() {
 
+	/**
+	 * Fires before the loading of the My Groups page.
+	 *
+	 * @since BuddyPress (1.1.0)
+	 */
 	do_action( 'groups_screen_my_groups' );
 
+	/**
+	 * Filters the template to load for the My Groups page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to the My Groups page template to load.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_my_groups', 'members/single/home' ) );
 }
 
@@ -71,7 +95,7 @@ function groups_screen_group_invites() {
 
 		bp_core_redirect( $redirect_to );
 
-	} else if ( bp_is_action_variable( 'reject' ) && is_numeric( $group_id ) ) {
+	} elseif ( bp_is_action_variable( 'reject' ) && is_numeric( $group_id ) ) {
 		// Check the nonce
 		if ( !check_admin_referer( 'groups_reject_invite' ) )
 			return false;
@@ -91,8 +115,22 @@ function groups_screen_group_invites() {
 		bp_core_redirect( $redirect_to );
 	}
 
+	/**
+	 * Fires before the loading of a users Groups > Invites template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $group_id ID of the group being displayed
+	 */
 	do_action( 'groups_screen_group_invites', $group_id );
 
+	/**
+	 * Filters the template to load for a users Groups > Invites page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a users Groups > Invites page template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_invites', 'members/single/home' ) );
 }
 
@@ -105,8 +143,20 @@ function groups_screen_group_home() {
 		return false;
 	}
 
+	/**
+	 * Fires before the loading of a single group's page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 */
 	do_action( 'groups_screen_group_home' );
 
+	/**
+	 * Filters the template to load for a single group's page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a single group's template to load.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_home', 'groups/single/home' ) );
 }
 
@@ -179,7 +229,7 @@ function groups_screen_group_forum() {
 		}
 
 		// Sticky a topic
-		else if ( bp_is_action_variable( 'stick', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
+		elseif ( bp_is_action_variable( 'stick', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_stick_topic' );
 
@@ -189,12 +239,19 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The topic was made sticky successfully', 'buddypress' ) );
 			}
 
+			/**
+			 * Fires after a group forum topic has been stickied.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param int $topic_id ID of the topic being stickied.
+			 */
 			do_action( 'groups_stick_forum_topic', $topic_id );
 			bp_core_redirect( wp_get_referer() );
 		}
 
 		// Un-Sticky a topic
-		else if ( bp_is_action_variable( 'unstick', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
+		elseif ( bp_is_action_variable( 'unstick', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_unstick_topic' );
 
@@ -204,12 +261,19 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The topic was unstuck successfully', 'buddypress') );
 			}
 
+			/**
+			 * Fires after a group forum topic has been un-stickied.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param int $topic_id ID of the topic being un-stickied.
+			 */
 			do_action( 'groups_unstick_forum_topic', $topic_id );
 			bp_core_redirect( wp_get_referer() );
 		}
 
 		// Close a topic
-		else if ( bp_is_action_variable( 'close', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
+		elseif ( bp_is_action_variable( 'close', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_close_topic' );
 
@@ -219,12 +283,19 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The topic was closed successfully', 'buddypress') );
 			}
 
+			/**
+			 * Fires after a group forum topic has been closed.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param int $topic_id ID of the topic being closed.
+			 */
 			do_action( 'groups_close_forum_topic', $topic_id );
 			bp_core_redirect( wp_get_referer() );
 		}
 
 		// Open a topic
-		else if ( bp_is_action_variable( 'open', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
+		elseif ( bp_is_action_variable( 'open', 2 ) && ( bp_is_item_admin() || bp_is_item_mod() ) ) {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_open_topic' );
 
@@ -234,12 +305,19 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The topic was opened successfully', 'buddypress') );
 			}
 
+			/**
+			 * Fires after a group forum topic has been opened.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param int $topic_id ID of the topic being opened.
+			 */
 			do_action( 'groups_open_forum_topic', $topic_id );
 			bp_core_redirect( wp_get_referer() );
 		}
 
 		// Delete a topic
-		else if ( empty( $user_is_banned ) && bp_is_action_variable( 'delete', 2 ) && !bp_action_variable( 3 ) ) {
+		elseif ( empty( $user_is_banned ) && bp_is_action_variable( 'delete', 2 ) && !bp_action_variable( 3 ) ) {
 			// Fetch the topic
 			$topic = bp_forums_get_topic_details( $topic_id );
 
@@ -251,6 +329,13 @@ function groups_screen_group_forum() {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_delete_topic' );
 
+			/**
+			 * Fires before a group forum topic is deleted.
+			 *
+			 * @since BuddyPress (1.5.0)
+			 *
+			 * @param int $topic_id ID of the topic being deleted.
+			 */
 			do_action( 'groups_before_delete_forum_topic', $topic_id );
 
 			if ( !groups_delete_group_forum_topic( $topic_id ) ) {
@@ -259,12 +344,19 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The topic was deleted successfully', 'buddypress' ) );
 			}
 
+			/**
+			 * Fires after a group forum topic has been deleted.
+			 *
+			 * @since BuddyPress (1.5.0)
+			 *
+			 * @param int $topic_id ID of the topic being deleted.
+			 */
 			do_action( 'groups_delete_forum_topic', $topic_id );
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'forum/' );
 		}
 
 		// Editing a topic
-		else if ( empty( $user_is_banned ) && bp_is_action_variable( 'edit', 2 ) && !bp_action_variable( 3 ) ) {
+		elseif ( empty( $user_is_banned ) && bp_is_action_variable( 'edit', 2 ) && !bp_action_variable( 3 ) ) {
 			// Fetch the topic
 			$topic = bp_forums_get_topic_details( $topic_id );
 
@@ -285,14 +377,28 @@ function groups_screen_group_forum() {
 					bp_core_add_message( __( 'The topic was edited successfully', 'buddypress') );
 				}
 
+				/**
+				 * Fires after a group forum topic has been edited.
+				 *
+				 * @since BuddyPress (1.1.0)
+				 *
+				 * @param int $topic_id ID of the topic being edited.
+				 */
 				do_action( 'groups_edit_forum_topic', $topic_id );
 				bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'forum/topic/' . $topic_slug . '/' );
 			}
 
+			/**
+			 * Filters the template to load for a topic edit page.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param string $value Path to a topic edit template.
+			 */
 			bp_core_load_template( apply_filters( 'groups_template_group_forum_topic_edit', 'groups/single/home' ) );
 
 		// Delete a post
-		} else if ( empty( $user_is_banned ) && bp_is_action_variable( 'delete', 2 ) && $post_id = bp_action_variable( 4 ) ) {
+		} elseif ( empty( $user_is_banned ) && bp_is_action_variable( 'delete', 2 ) && $post_id = bp_action_variable( 4 ) ) {
 			// Fetch the post
 			$post = bp_forums_get_post( $post_id );
 
@@ -304,6 +410,13 @@ function groups_screen_group_forum() {
 			// Check the nonce
 			check_admin_referer( 'bp_forums_delete_post' );
 
+			/**
+			 * Fires before the deletion of a group forum post.
+			 *
+			 * @since BuddyPress (1.5.0)
+			 *
+			 * @param int $post_id ID of the forum post being deleted.
+			 */
 			do_action( 'groups_before_delete_forum_post', $post_id );
 
 			if ( !groups_delete_group_forum_post( $post_id ) ) {
@@ -312,11 +425,18 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( 'The post was deleted successfully', 'buddypress') );
 			}
 
+			/**
+			 * Fires after the deletion of a group forum post.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param int $post_id ID of the forum post being deleted.
+			 */
 			do_action( 'groups_delete_forum_post', $post_id );
 			bp_core_redirect( wp_get_referer() );
 
 		// Editing a post
-		} else if ( empty( $user_is_banned ) && bp_is_action_variable( 'edit', 2 ) && $post_id = bp_action_variable( 4 ) ) {
+		} elseif ( empty( $user_is_banned ) && bp_is_action_variable( 'edit', 2 ) && $post_id = bp_action_variable( 4 ) ) {
 
 			// Fetch the post
 			$post = bp_forums_get_post( $post_id );
@@ -342,10 +462,18 @@ function groups_screen_group_forum() {
 					$query_vars = '?' . $_SERVER['QUERY_STRING'];
 				}
 
+				/**
+				 * Fires after the editing of a group forum post.
+				 *
+				 * @since BuddyPress (1.1.0)
+				 *
+				 * @param int $post_id ID of the forum post being edited.
+				 */
 				do_action( 'groups_edit_forum_post', $post_id );
 				bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) . 'forum/topic/' . $topic_slug . '/' . $query_vars . '#post-' . $post_id );
 			}
 
+			/** This filter is documented in bp-groups/bp-groups-screens.php */
 			bp_core_load_template( apply_filters( 'groups_template_group_forum_topic_edit', 'groups/single/home' ) );
 
 		// Standard topic display
@@ -354,6 +482,13 @@ function groups_screen_group_forum() {
 				bp_core_add_message( __( "You have been banned from this group.", 'buddypress' ) );
 			}
 
+			/**
+			 * Filters the template to load for a topic page.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 *
+			 * @param string $value Path to a topic template.
+			 */
 			bp_core_load_template( apply_filters( 'groups_template_group_forum_topic', 'groups/single/home' ) );
 		}
 
@@ -379,7 +514,7 @@ function groups_screen_group_forum() {
 
 			if ( empty( $_POST['topic_title'] ) ) {
 				$error_message = __( 'Please provide a title for your forum topic.', 'buddypress' );
-			} else if ( empty( $_POST['topic_text'] ) ) {
+			} elseif ( empty( $_POST['topic_text'] ) ) {
 				$error_message = __( 'Forum posts cannot be empty. Please enter some text.', 'buddypress' );
 			}
 
@@ -403,8 +538,23 @@ function groups_screen_group_forum() {
 			bp_core_redirect( $redirect );
 		}
 
+		/**
+		 * Fires at the end of the group forum screen loading process.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int $topic_id ID of the topic being displayed.
+		 * @param int $forum_id ID of the forum being displayed.
+		 */
 		do_action( 'groups_screen_group_forum', $topic_id, $forum_id );
 
+		/**
+		 * Filters the template to load for a group forum page.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param string $value Path to a group forum template.
+		 */
 		bp_core_load_template( apply_filters( 'groups_template_group_forum', 'groups/single/home' ) );
 	}
 }
@@ -422,7 +572,22 @@ function groups_screen_group_members() {
 	// Refresh the group member count meta
 	groups_update_groupmeta( $bp->groups->current_group->id, 'total_member_count', groups_get_total_member_count( $bp->groups->current_group->id ) );
 
+	/**
+	 * Fires before the loading of a group's Members page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group whose members are being displayed.
+	 */
 	do_action( 'groups_screen_group_members', $bp->groups->current_group->id );
+
+	/**
+	 * Filters the template to load for a group's Members page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's Members template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_members', 'groups/single/home' ) );
 }
 
@@ -450,11 +615,26 @@ function groups_screen_group_invite() {
 		// Send the invites.
 		groups_send_invites( bp_loggedin_user_id(), $bp->groups->current_group->id );
 		bp_core_add_message( __('Group invites sent.', 'buddypress') );
+
+		/**
+		 * Fires after the sending of a group invite inside the group's Send Invites page.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int $id ID of the group whose members are being displayed.
+		 */
 		do_action( 'groups_screen_group_invite', $bp->groups->current_group->id );
 		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) );
 
 	} elseif ( !bp_action_variable( 0 ) ) {
-		// Show send invite page
+
+		/**
+		 * Filters the template to load for a group's Send Invites page.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param string $value Path to a group's Send Invites template.
+		 */
 		bp_core_load_template( apply_filters( 'groups_template_group_invite', 'groups/single/home' ) );
 
 	} else {
@@ -492,10 +672,10 @@ function groups_remove_group_invite() {
 	if ( ! bp_groups_user_can_send_invites( $group_id ) ) {
 		$message = __( 'You are not allowed to send or remove invites', 'buddypress' );
 		$error = 'error';
-	} else if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
+	} elseif ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
 		$message = __( 'The member requested to join the group', 'buddypress' );
 		$error = 'error';
-	} else if ( ! groups_uninvite_user( $friend_id, $group_id ) ) {
+	} elseif ( ! groups_uninvite_user( $friend_id, $group_id ) ) {
 		$message = __( 'There was an error removing the invite', 'buddypress' );
 		$error = 'error';
 	}
@@ -509,7 +689,6 @@ add_action( 'bp_screens', 'groups_remove_group_invite' );
  * Handle the display of a group's Request Membership page.
  */
 function groups_screen_group_request_membership() {
-	global $bp;
 
 	if ( !is_user_logged_in() )
 		return false;
@@ -524,7 +703,7 @@ function groups_screen_group_request_membership() {
 		if ( groups_accept_invite( bp_loggedin_user_id(), $bp->groups->current_group->id ) )
 			bp_core_add_message( __( 'Group invite accepted', 'buddypress' ) );
 		else
-			bp_core_add_message( __( 'There was an error accepting the group invitation; please try again.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was an error accepting the group invitation. Please try again.', 'buddypress' ), 'error' );
 		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) );
 	}
 
@@ -536,15 +715,29 @@ function groups_screen_group_request_membership() {
 			return false;
 
 		if ( !groups_send_membership_request( bp_loggedin_user_id(), $bp->groups->current_group->id ) ) {
-			bp_core_add_message( __( 'There was an error sending your group membership request; please try again.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was an error sending your group membership request. Please try again.', 'buddypress' ), 'error' );
 		} else {
 			bp_core_add_message( __( 'Your membership request was sent to the group administrator successfully. You will be notified when the group administrator responds to your request.', 'buddypress' ) );
 		}
 		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) );
 	}
 
+	/**
+	 * Fires before the loading of a group's Request Memebership page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group currently being displayed.
+	 */
 	do_action( 'groups_screen_group_request_membership', $bp->groups->current_group->id );
 
+	/**
+	 * Filters the template to load for a group's Request Membership page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's Request Membership template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_request_membership', 'groups/single/home' ) );
 }
 
@@ -558,6 +751,7 @@ function groups_screen_group_activity_permalink() {
 
 	buddypress()->is_single_item = true;
 
+	/** This filter is documented in bp-groups/bp-groups-screens.php */
 	bp_core_load_template( apply_filters( 'groups_template_group_home', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_activity_permalink' );
@@ -596,18 +790,39 @@ function groups_screen_group_admin_edit_details() {
 			$group_notify_members = isset( $_POST['group-notify-members'] ) ? (int) $_POST['group-notify-members'] : 0;
 
 			if ( !groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], $group_notify_members ) ) {
-				bp_core_add_message( __( 'There was an error updating group details; please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error updating group details. Please try again.', 'buddypress' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'Group details were successfully updated.', 'buddypress' ) );
 			}
 
+			/**
+			 * Fires before the redirect if a group details has been edited and saved.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $id ID of the group that was edited.
+			 */
 			do_action( 'groups_group_details_edited', $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/' );
 		}
 
+		/**
+		 * Fires before the loading of the group admin/edit-details page template.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int $id ID of the group that is being displayed.
+		 */
 		do_action( 'groups_screen_group_admin_edit_details', $bp->groups->current_group->id );
 
+		/**
+		 * Filters the template to load for a group's admin/edit-details page.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param string $value Path to a group's admin/edit-details template.
+		 */
 		bp_core_load_template( apply_filters( 'groups_template_group_admin', 'groups/single/home' ) );
 	}
 }
@@ -631,10 +846,12 @@ function groups_screen_group_admin_settings() {
 		$enable_forum   = ( isset($_POST['group-show-forum'] ) ) ? 1 : 0;
 
 		// Checked against a whitelist for security
+		/** This filter is documented in bp-groups/bp-groups-admin.php */
 		$allowed_status = apply_filters( 'groups_allowed_status', array( 'public', 'private', 'hidden' ) );
 		$status         = ( in_array( $_POST['group-status'], (array) $allowed_status ) ) ? $_POST['group-status'] : 'public';
 
 		// Checked against a whitelist for security
+		/** This filter is documented in bp-groups/bp-groups-admin.php */
 		$allowed_invite_status = apply_filters( 'groups_allowed_invite_status', array( 'members', 'mods', 'admins' ) );
 		$invite_status	       = isset( $_POST['group-invite-status'] ) && in_array( $_POST['group-invite-status'], (array) $allowed_invite_status ) ? $_POST['group-invite-status'] : 'members';
 
@@ -643,18 +860,39 @@ function groups_screen_group_admin_settings() {
 			return false;
 
 		if ( !groups_edit_group_settings( $_POST['group-id'], $enable_forum, $status, $invite_status ) ) {
-			bp_core_add_message( __( 'There was an error updating group settings; please try again.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was an error updating group settings. Please try again.', 'buddypress' ), 'error' );
 		} else {
 			bp_core_add_message( __( 'Group settings were successfully updated.', 'buddypress' ) );
 		}
 
+		/**
+		 * Fires before the redirect if a group settings has been edited and saved.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int $id ID of the group that was edited.
+		 */
 		do_action( 'groups_group_settings_edited', $bp->groups->current_group->id );
 
 		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/group-settings/' );
 	}
 
+	/**
+	 * Fires before the loading of the group admin/group-settings page template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group that is being displayed.
+	 */
 	do_action( 'groups_screen_group_admin_settings', $bp->groups->current_group->id );
 
+	/**
+	 * Filters the template to load for a group's admin/group-settings page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's admin/group-settings template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_admin_settings', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_settings' );
@@ -668,7 +906,7 @@ function groups_screen_group_admin_avatar() {
 		return false;
 
 	// If the logged-in user doesn't have permission or if avatar uploads are disabled, then stop here
-	if ( ! bp_is_item_admin() || (int) bp_get_option( 'bp-disable-avatar-uploads' ) || ! buddypress()->avatar->show_avatars )
+	if ( ! bp_is_item_admin() || bp_disable_group_avatar_uploads() || ! buddypress()->avatar->show_avatars )
 		return false;
 
 	$bp = buddypress();
@@ -682,7 +920,7 @@ function groups_screen_group_admin_avatar() {
 		if ( bp_core_delete_existing_avatar( array( 'item_id' => $bp->groups->current_group->id, 'object' => 'group' ) ) ) {
 			bp_core_add_message( __( 'The group profile photo was deleted successfully!', 'buddypress' ) );
 		} else {
-			bp_core_add_message( __( 'There was a problem deleting the group profile photo; please try again.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was a problem deleting the group profile photo. Please try again.', 'buddypress' ), 'error' );
 		}
 	}
 
@@ -731,8 +969,22 @@ function groups_screen_group_admin_avatar() {
 		}
 	}
 
+	/**
+	 * Fires before the loading of the group Change Avatar page template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group that is being displayed.
+	 */
 	do_action( 'groups_screen_group_admin_avatar', $bp->groups->current_group->id );
 
+	/**
+	 * Filters the template to load for a group's Change Avatar page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's Change Avatar template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_admin_avatar', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_avatar' );
@@ -761,10 +1013,18 @@ function groups_screen_group_admin_manage_members() {
 
 			// Promote a user.
 			if ( !groups_promote_member( $user_id, $bp->groups->current_group->id, $status ) )
-				bp_core_add_message( __( 'There was an error when promoting that user, please try again', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error when promoting that user. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'User promoted successfully', 'buddypress' ) );
 
+			/**
+			 * Fires before the redirect after a group member has been promoted.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $user_id ID of the user being promoted.
+			 * @param int $id      ID of the group user is promoted within.
+			 */
 			do_action( 'groups_promoted_member', $user_id, $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/manage-members/' );
@@ -786,10 +1046,18 @@ function groups_screen_group_admin_manage_members() {
 
 			// Demote a user.
 			elseif ( !groups_demote_member( $user_id, $bp->groups->current_group->id ) )
-				bp_core_add_message( __( 'There was an error when demoting that user; please try again', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error when demoting that user. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'User demoted successfully', 'buddypress' ) );
 
+			/**
+			 * Fires before the redirect after a group member has been demoted.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $user_id ID of the user being demoted.
+			 * @param int $id      ID of the group user is demoted within.
+			 */
 			do_action( 'groups_demoted_member', $user_id, $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/manage-members/' );
@@ -804,10 +1072,18 @@ function groups_screen_group_admin_manage_members() {
 
 			// Ban a user.
 			if ( !groups_ban_member( $user_id, $bp->groups->current_group->id ) )
-				bp_core_add_message( __( 'There was an error when banning that user; please try again', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error when banning that user. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'User banned successfully', 'buddypress' ) );
 
+			/**
+			 * Fires before the redirect after a group member has been banned.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $user_id ID of the user being banned.
+			 * @param int $id      ID of the group user is banned from.
+			 */
 			do_action( 'groups_banned_member', $user_id, $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/manage-members/' );
@@ -822,10 +1098,18 @@ function groups_screen_group_admin_manage_members() {
 
 			// Remove a ban for user.
 			if ( !groups_unban_member( $user_id, $bp->groups->current_group->id ) )
-				bp_core_add_message( __( 'There was an error when unbanning that user, please try again', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error when unbanning that user. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'User ban removed successfully', 'buddypress' ) );
 
+			/**
+			 * Fires before the redirect after a group member has been unbanned.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $user_id ID of the user being unbanned.
+			 * @param int $id      ID of the group user is unbanned from.
+			 */
 			do_action( 'groups_unbanned_member', $user_id, $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/manage-members/' );
@@ -840,18 +1124,40 @@ function groups_screen_group_admin_manage_members() {
 
 			// Remove a user.
 			if ( !groups_remove_member( $user_id, $bp->groups->current_group->id ) )
-				bp_core_add_message( __( 'There was an error removing that user from the group; please try again', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error removing that user from the group. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'User removed successfully', 'buddypress' ) );
 
+			/**
+			 * Fires before the redirect after a group member has been removed.
+			 *
+			 * @since BuddyPress (1.2.6)
+			 *
+			 * @param int $user_id ID of the user being removed.
+			 * @param int $id      ID of the group the user is removed from.
+			 */
 			do_action( 'groups_removed_member', $user_id, $bp->groups->current_group->id );
 
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/manage-members/' );
 		}
 	}
 
+	/**
+	 * Fires before the loading of a group's manage members template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group whose manage members page is being displayed.
+	 */
 	do_action( 'groups_screen_group_admin_manage_members', $bp->groups->current_group->id );
 
+	/**
+	 * Filters the template to load for a group's manage members page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's manage members template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_admin_manage_members', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_manage_members' );
@@ -882,7 +1188,7 @@ function groups_screen_group_admin_requests() {
 
 			// Accept the membership request
 			if ( !groups_accept_membership_request( $membership_id ) )
-				bp_core_add_message( __( 'There was an error accepting the membership request; please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error accepting the membership request. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'Group membership request accepted', 'buddypress' ) );
 
@@ -893,16 +1199,40 @@ function groups_screen_group_admin_requests() {
 
 			// Reject the membership request
 			if ( !groups_reject_membership_request( $membership_id ) )
-				bp_core_add_message( __( 'There was an error rejecting the membership request; please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error rejecting the membership request. Please try again.', 'buddypress' ), 'error' );
 			else
 				bp_core_add_message( __( 'Group membership request rejected', 'buddypress' ) );
 		}
 
+		/**
+		 * Fires before the redirect if a group membership request has been handled.
+		 *
+		 * @since BuddyPress (1.0.0)
+		 *
+		 * @param int    $id             ID of the group that was edited.
+		 * @param string $request_action Membership request action being performed.
+		 * @param int    $membership_id  The key of the action_variables array that you want.
+		 */
 		do_action( 'groups_group_request_managed', $bp->groups->current_group->id, $request_action, $membership_id );
 		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/membership-requests/' );
 	}
 
+	/**
+	 * Fires before the loading of the group membership request page template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group that is being displayed.
+	 */
 	do_action( 'groups_screen_group_admin_requests', $bp->groups->current_group->id );
+
+	/**
+	 * Filters the template to load for a group's membership request page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to a group's membership request template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_admin_requests', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_requests' );
@@ -911,13 +1241,14 @@ add_action( 'bp_screens', 'groups_screen_group_admin_requests' );
  * Handle the display of the Delete Group page.
  */
 function groups_screen_group_admin_delete_group() {
-	global $bp;
 
 	if ( 'delete-group' != bp_get_group_current_admin_tab() )
 		return false;
 
 	if ( ! bp_is_item_admin() && !bp_current_user_can( 'bp_moderate' ) )
 		return false;
+
+	$bp = buddypress();
 
 	if ( isset( $_REQUEST['delete-group-button'] ) && isset( $_REQUEST['delete-group-understand'] ) ) {
 
@@ -926,14 +1257,28 @@ function groups_screen_group_admin_delete_group() {
 			return false;
 		}
 
+		/**
+		 * Fires before the deletion of a group from the Delete Group page.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param int $id ID of the group being deleted.
+		 */
 		do_action( 'groups_before_group_deleted', $bp->groups->current_group->id );
 
 		// Group admin has deleted the group, now do it.
 		if ( !groups_delete_group( $bp->groups->current_group->id ) ) {
-			bp_core_add_message( __( 'There was an error deleting the group; please try again.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was an error deleting the group. Please try again.', 'buddypress' ), 'error' );
 		} else {
 			bp_core_add_message( __( 'The group was deleted successfully', 'buddypress' ) );
 
+			/**
+			 * Fires after the deletion of a group from the Delete Group page.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 *
+			 * @param int $id ID of the group being deleted.
+			 */
 			do_action( 'groups_group_deleted', $bp->groups->current_group->id );
 
 			bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) );
@@ -942,8 +1287,22 @@ function groups_screen_group_admin_delete_group() {
 		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) );
 	}
 
+	/**
+	 * Fires before the loading of the Delete Group page template.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param int $id ID of the group that is being displayed.
+	 */
 	do_action( 'groups_screen_group_admin_delete_group', $bp->groups->current_group->id );
 
+	/**
+	 * Filters the template to load for the Delete Group page.
+	 *
+	 * @since BuddyPress (1.0.0)
+	 *
+	 * @param string $value Path to the Delete Group template.
+	 */
 	bp_core_load_template( apply_filters( 'groups_template_group_admin_delete_group', 'groups/single/home' ) );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_delete_group' );
@@ -1001,7 +1360,14 @@ function groups_screen_notification_settings() {
 				<td class="no"><input type="radio" name="notifications[notification_groups_membership_request]" value="no" <?php checked( $group_request, 'no', true ) ?>/></td>
 			</tr>
 
-			<?php do_action( 'groups_screen_notification_settings' ); ?>
+			<?php
+
+			/**
+			 * Fires at the end of the available group settings fields on Notification Settings page.
+			 *
+			 * @since BuddyPress (1.0.0)
+			 */
+			do_action( 'groups_screen_notification_settings' ); ?>
 
 		</tbody>
 	</table>
@@ -1010,12 +1376,12 @@ function groups_screen_notification_settings() {
 }
 add_action( 'bp_notification_settings', 'groups_screen_notification_settings' );
 
-/** Theme Compatability *******************************************************/
+/** Theme Compatibility *******************************************************/
 
 /**
  * The main theme compat class for BuddyPress Groups.
  *
- * This class sets up the necessary theme compatability actions to safely output
+ * This class sets up the necessary theme compatibility actions to safely output
  * group template parts to the_title and the_content areas of a theme.
  *
  * @since BuddyPress (1.7.0)
@@ -1032,7 +1398,7 @@ class BP_Groups_Theme_Compat {
 	}
 
 	/**
-	 * Are we looking at something that needs group theme compatability?
+	 * Are we looking at something that needs group theme compatibility?
 	 *
 	 * @since BuddyPress (1.7.0)
 	 */
@@ -1046,6 +1412,11 @@ class BP_Groups_Theme_Compat {
 		if ( ! bp_current_action() && ! bp_current_item() ) {
 			bp_update_is_directory( true, 'groups' );
 
+			/**
+			 * Fires at the start of the group theme compatibility setup.
+			 *
+			 * @since BuddyPress (1.1.0)
+			 */
 			do_action( 'groups_directory_groups_setup' );
 
 			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
@@ -1081,7 +1452,14 @@ class BP_Groups_Theme_Compat {
 	 * @return array $templates Array of custom templates to look for.
 	 */
 	public function directory_template_hierarchy( $templates ) {
-		// Setup our templates based on priority
+
+		/**
+		 * Filters the Groups directory page template hierarchy based on priority.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param array $value Array of default template files to use.
+		 */
 		$new_templates = apply_filters( 'bp_template_hierarchy_groups_directory', array(
 			'groups/index-directory.php'
 		) );
@@ -1099,12 +1477,9 @@ class BP_Groups_Theme_Compat {
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function directory_dummy_post() {
-
-		$title = apply_filters( 'bp_groups_directory_header', bp_get_directory_title( 'groups' ) );
-
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => $title,
+			'post_title'     => bp_get_directory_title( 'groups' ),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
@@ -1135,10 +1510,18 @@ class BP_Groups_Theme_Compat {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $templates The templates from bp_get_theme_compat_templates().
+	 *
 	 * @return array $templates Array of custom templates to look for.
 	 */
 	public function create_template_hierarchy( $templates ) {
-		// Setup our templates based on priority
+
+		/**
+		 * Filters the Groups create page template hierarchy based on priority.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param array $value Array of default template files to use.
+		 */
 		$new_templates = apply_filters( 'bp_template_hierarchy_groups_create', array(
 			'groups/index-create.php'
 		) );
@@ -1198,7 +1581,13 @@ class BP_Groups_Theme_Compat {
 		// Setup some variables we're going to reference in our custom templates
 		$group = groups_get_current_group();
 
-		// Setup our templates based on priority
+		/**
+		 * Filters the Groups single pages template hierarchy based on priority.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 *
+		 * @param array $value Array of default template files to use.
+		 */
 		$new_templates = apply_filters( 'bp_template_hierarchy_groups_single_item', array(
 			'groups/single/index-id-'     . sanitize_file_name( bp_get_current_group_id() )   . '.php',
 			'groups/single/index-slug-'   . sanitize_file_name( bp_get_current_group_slug() ) . '.php',
@@ -1222,7 +1611,7 @@ class BP_Groups_Theme_Compat {
 	public function single_dummy_post() {
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => '<a href="' . bp_get_group_permalink( groups_get_current_group() ) . '">' . bp_get_current_group_name() . '</a>',
+			'post_title'     => bp_get_current_group_name(),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
