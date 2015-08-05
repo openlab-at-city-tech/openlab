@@ -2,9 +2,7 @@
 Styles for older IE versions (previous to IE9).
 */
 
-.site {
-	min-width: 1040px;
-}
+
 
 .genericon:before:hover,
 .menu-toggle:after:hover,
@@ -197,7 +195,7 @@ img.alignleft {
 }
 
 .ie7 .screen-reader-text {
-	clip: rect(1px 1px 1px 1px); /* IE7 */
+	clip: rect(1px 1px 1px 1px);
 }
 
 .ie7 .site-header {
@@ -220,9 +218,15 @@ img.alignleft {
 	top: 40px;
 }
 
-.ie7 .nav-menu li ul ul {
-	left: 100%;
-	top: 0;
+.ie7 .nav-menu .sub-menu,
+.ie7 .nav-menu .children {
+	display: none;
+	overflow: visible;
+}
+
+.ie7 ul.nav-menu li:hover > ul,
+.ie7 .nav-menu ul li:hover > ul {
+	display: block;
 }
 
 .ie7 .site-header .search-form [type="search"],
