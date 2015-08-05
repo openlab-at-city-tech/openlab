@@ -311,11 +311,11 @@ function openlab_list_members($view) {
     endif;
 }
 
-function openlab_members_pagination_links() {
+function openlab_members_pagination_links($page_args = 'upage') {
     global $members_template;
 
     $pagination = paginate_links(array(
-        'base' => add_query_arg('upage', '%#%'),
+        'base' => add_query_arg($page_args, '%#%'),
         'format' => '',
         'total' => ceil((int) $members_template->total_member_count / (int) $members_template->pag_num),
         'current' => (int) $members_template->pag_page,
