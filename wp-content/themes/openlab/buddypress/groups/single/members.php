@@ -15,7 +15,7 @@
 
 	<?php do_action( 'bp_before_group_members_list' ) ?>
 
-	<div id="group-members-list" class="item-list group-members group-list">
+	<div id="group-members-list" class="item-list group-members group-list clearfix">
 		<?php while ( bp_group_members() ) : bp_group_the_member(); ?>
 
 			<div class="group-item col-md-8 col-xs-12">
@@ -47,10 +47,10 @@
 		<?php endwhile; ?>
 
 	</div>
-        <div id="pag-top" class="pagination">
+        <div id="pag-top" class="pagination clearfix">
 
             <div class="pagination-links" id="member-dir-pag-top">
-                <?php echo openlab_members_pagination_links() ?>
+                <?php echo openlab_members_pagination_links('mlpage') ?>
             </div>
 
         </div>
