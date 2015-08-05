@@ -85,5 +85,7 @@ define( 'BP_USE_WP_ADMIN_BAR', true );
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
+define( 'WP_DEFAULT_THEME', 'twentytwelve' );
+
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
