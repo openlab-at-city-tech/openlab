@@ -260,16 +260,10 @@ function openlab_get_submenu_extras() {
         if (bp_has_members(bp_ajax_querystring('members'))) :
             $count = '<div class="pull-left">' . bp_get_members_pagination_count() . '</div>';
 
-            $pagination = '';
-            if (bp_get_members_pagination_links()) {
-                $pagination = '<div class="pull-left">' . bp_get_members_pagination_links() . '</div>';
-            }
-
             $extras = <<<HTML
             <div class="pull-right">
                 <div class="clearfix">
                     {$count}
-                    {$pagination}
                 </div>
             </div>
 HTML;
