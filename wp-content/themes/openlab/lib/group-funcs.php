@@ -273,11 +273,8 @@ function openlab_group_archive() {
 
                                 <?php endif; ?>
                                 <div class="description-line">
-                                    <?php
-                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="105" data-basewidth="290">', bp_get_group_description_excerpt());
-                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description_excerpt());
-                                    echo $this_description;
-                                    ?>
+                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?= bp_get_group_description_excerpt() ?></p>
+                                    <p class="original-copy hidden"><?= bp_get_group_description_excerpt() ?></p>
                                 </div>
                             </div>
                         </div><!--item-->
@@ -1464,3 +1461,16 @@ function openlab_get_group_site_settings($group_id){
 
     return $group_site_settings;
 }
+
+function openlab_custom_group_excerpts($excerpt, $group) {
+    global $post;
+
+    $hits = array('courses', 'projects', 'clubs', 'portfolios','my-courses', 'my-projects', 'my-clubs');
+    if (in_array($post->post_name, $hits)) {
+        $excerpt = strip_tags($excerpt);
+    }
+
+    return $excerpt;
+}
+
+add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 10, 2);
