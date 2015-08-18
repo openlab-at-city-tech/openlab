@@ -24,7 +24,7 @@
                 <?php do_action('bbp_theme_before_reply_form'); ?>
 
                 <div class="bbp-form panel panel-default">
-                    <div class="panel-heading"><?php printf(__('Reply To: %s', 'bbpress'), bbp_get_topic_title()); ?></div>
+                    <div class="panel-heading hyphenate"><?php printf(__('Reply To: %s', 'bbpress'), bbp_get_topic_title()); ?></div>
                     <div class="panel-body">
 
                         <?php do_action('bbp_theme_before_reply_form_notices'); ?>
