@@ -866,7 +866,9 @@
         &.admin-area{
             #wp-admin-bar-new-content,
             #wp-admin-bar-comments{
-                display: none;
+                @media (max-width: @screen-xs-max){
+                    display: none;
+                }
             }
         }
     }
