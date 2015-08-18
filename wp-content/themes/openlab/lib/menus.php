@@ -960,7 +960,7 @@ function openlab_forum_tabs() {
     bbp_the_topic();
     ?>
 
-    <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussionz</a></li>
+    <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li>
     <?php if (bp_action_variable() == 'topic'): ?>
         <li class="current-menu-item hyphenate"><?php bbp_topic_title() ?></li>
         <?php endif; ?>
