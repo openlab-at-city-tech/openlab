@@ -28,6 +28,7 @@ add_action( 'wp_print_styles', 'openlab_load_theme_fixes', 9999 );
  */
 function openlab_reorder_theme_selections( $themes ) {
 	$preferred_themes = array(
+		'twentyfifteen',
 		'filtered',
 		'herothemetrust',
 		'twentyeleven',
@@ -45,6 +46,14 @@ function openlab_reorder_theme_selections( $themes ) {
 			$t2[ $theme_name ] = $theme;
 		}
 	}
+
+	// Sort the $t1 array to match the preferred order.
+	uasort( $t1, function( $a, $b ) use ( $preferred_themes ) {
+		$apos = array_search( $a['id'], $preferred_themes );
+		$bpos = array_search( $b['id'], $preferred_themes );
+
+		return ( $apos < $bpos ) ? -1 : 1;
+	} );
 
 	return array_merge( $t1, $t2 );
 }
