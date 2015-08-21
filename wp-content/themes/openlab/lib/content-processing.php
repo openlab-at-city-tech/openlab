@@ -135,3 +135,9 @@ function openlab_not_empty($content){
         return false;
     }
 }
+
+function openlab_strip_iframes($content){
+    
+    return preg_replace('/<iframe.*?\/iframe>/i','', $content);
+    
+}
