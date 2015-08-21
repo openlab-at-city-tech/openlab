@@ -8396,6 +8396,9 @@ body .inline-visible-xs {
 .sidebar .sidebar-block.activity-block .fa.fa-undo {
   font-size: 11px;
 }
+.sidebar .sidebar-block.activity-block img {
+  max-width: 100%;
+}
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
   padding: 0px 0 7px;

@@ -260,16 +260,10 @@ function openlab_get_submenu_extras() {
         if (bp_has_members(bp_ajax_querystring('members'))) :
             $count = '<div class="pull-left">' . bp_get_members_pagination_count() . '</div>';
 
-            $pagination = '';
-            if (bp_get_members_pagination_links()) {
-                $pagination = '<div class="pull-left">' . bp_get_members_pagination_links() . '</div>';
-            }
-
             $extras = <<<HTML
             <div class="pull-right">
                 <div class="clearfix">
                     {$count}
-                    {$pagination}
                 </div>
             </div>
 HTML;
@@ -902,7 +896,7 @@ function openlab_group_membership_tabs($group = false) {
     <?php endif; ?>
 
     <?php if (bp_group_is_member() && invite_anyone_access_test() && openlab_is_admin_truly_member()): ?>
-        <li<?php if ($bp->current_action == 'invite-anyone') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e('Invite New Member', 'buddypress'); ?></a></li>
+        <li<?php if ($bp->current_action == 'invite-anyone') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e('Invite New Members', 'buddypress'); ?></a></li>
     <?php endif; ?>
 
     <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
@@ -968,7 +962,7 @@ function openlab_forum_tabs() {
 
     <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li>
     <?php if (bp_action_variable() == 'topic'): ?>
-        <li class="current-menu-item"><?php bbp_topic_title() ?></li>
+        <li class="current-menu-item hyphenate"><?php bbp_topic_title() ?></li>
         <?php endif; ?>
 
     <?php

@@ -313,7 +313,7 @@ function openlab_list_members($view) {
 
 function openlab_members_pagination_links($page_args = 'upage') {
     global $members_template;
-
+    
     $pagination = paginate_links(array(
         'base' => add_query_arg($page_args, '%#%'),
         'format' => '',

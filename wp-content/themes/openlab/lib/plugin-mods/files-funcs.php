@@ -198,19 +198,26 @@ function openlab_bp_group_documents_display_content() {
 
                 </div>
 
+                <div class="pagination no-ajax">
+                    <?php if ($template->show_pagination()) { ?>
+                    <div class="pagination" id="pag-bottom">
+
+                        <div id="member-dir-pag-bottom" class="pagination-links">
+                            <ul class="page-numbers pagination">
+                                <?php echo openlab_bp_group_documents_custom_pagination_links($template); ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+
+            <div>
                 <?php if ($template->operation == 'add') { ?>
                     <a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php _e('Upload a New Document', 'bp-group-documents'); ?></a>
                 <?php } ?>
+            </div>
 
             <?php } ?>
-
-            <div class="pagination no-ajax">
-                <?php if ($template->show_pagination()) { ?>
-                    <div id="group-documents-page-links" class="pagination-links">
-                        <?php $template->pagination_links(); ?>
-                    </div>
-                <?php } ?>
-            </div>
 
     </div><!--end #group-documents-->
     <?php
@@ -246,4 +253,30 @@ function openlab_get_files_count() {
     $end_record = ($total_records < $last_possible) ? $total_records : $last_possible;
 
     printf(__('Viewing item %s to %s (of %s items)', 'bp-group-documents'), $start_record, $end_record, $total_records);
+}
+
+/**
+ * Buddypress Group Documents is very secretive about it's pagination, so we'll
+ * have to do this with some str_replace fun
+ * @param type $template
+ */
+function openlab_bp_group_documents_custom_pagination_links($template) {
+    
+    //dump the echoed legacy pagination into a string
+    ob_start();
+    $template->pagination_links();
+    $legacy_pag = ob_get_clean();
+    
+    //redesign
+    $legacy_pag = str_replace(array('<span'),'<li><span',$legacy_pag);
+    $legacy_pag = str_replace(array('</span>'),'</li></span>',$legacy_pag);
+    $legacy_pag = str_replace(array('<a'),'<li><a',$legacy_pag);
+    $legacy_pag = str_replace(array('</a>'),'</li></a>',$legacy_pag);
+    
+    $legacy_pag = str_replace('page-numbers','page-numbers pagination',$legacy_pag);
+    
+    $legacy_pag = str_replace('&raquo;','<i class="fa fa-angle-right"></i>', $legacy_pag);
+    $legacy_pag = str_replace('&laquo;','<i class="fa fa-angle-left"></i>', $legacy_pag);
+ 
+    return $legacy_pag;
 }

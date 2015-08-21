@@ -273,11 +273,8 @@ function openlab_group_archive() {
 
                                 <?php endif; ?>
                                 <div class="description-line">
-                                    <?php
-                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="105" data-basewidth="290">', bp_get_group_description_excerpt());
-                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description_excerpt());
-                                    echo $this_description;
-                                    ?>
+                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?= bp_get_group_description_excerpt() ?></p>
+                                    <p class="original-copy hidden"><?= bp_get_group_description_excerpt() ?></p>
                                 </div>
                             </div>
                         </div><!--item-->
@@ -685,7 +682,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -807,8 +804,8 @@ function openlab_group_profile_activity_list() {
                                         while ($query->have_posts()) : $query->the_post();
                                             ?>
                                             <div class="panel panel-default"><div class="panel-body">
-                                                <?= openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
-                                            </div></div>
+                                                    <?= openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
+                                                </div></div>
                                             <?php
                                         endwhile;
                                     } else {
@@ -874,7 +871,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                           ?></p>
+                                                        <p><?php // bp_group_status_message()                              ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -893,7 +890,7 @@ function openlab_group_profile_activity_list() {
 
 function openlab_get_group_activity_content($title, $content, $link) {
 
-    if($title !== ''){
+    if ($title !== '') {
         $markup = <<<HTML
                 <h6 class="semibold">
                     <span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">{$title}</span>
@@ -1204,7 +1201,7 @@ function openlab_show_site_posts_and_comments() {
                     'permalink' => get_permalink($wp_post->ID)
                 );
 
-                if ( ! empty( $wp_post->post_password ) ) {
+                if (!empty($wp_post->post_password)) {
                     $_post['content'] = 'This content is password protected.';
                 }
 
@@ -1420,7 +1417,7 @@ function openlab_get_faculty_list() {
     return $faculty_list;
 }
 
-function openlab_get_group_site_settings($group_id){
+function openlab_get_group_site_settings($group_id) {
 
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
@@ -1464,3 +1461,16 @@ function openlab_get_group_site_settings($group_id){
 
     return $group_site_settings;
 }
+
+function openlab_custom_group_excerpts($excerpt, $group) {
+    global $post;
+
+    $hits = array('courses', 'projects', 'clubs', 'portfolios','my-courses', 'my-projects', 'my-clubs');
+    if (in_array($post->post_name, $hits)) {
+        $excerpt = strip_tags($excerpt);
+    }
+
+    return $excerpt;
+}
+
+add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 10, 2);
