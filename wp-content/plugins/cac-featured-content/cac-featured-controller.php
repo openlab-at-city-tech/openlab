@@ -191,6 +191,11 @@ if ( $cfcw_view->content_type == 'resource' ) {
 }
 
 // load the appropriate view file
-require dirname( __FILE__ ) . DS . 'views' . DS . "cac-featured-{$cfcw_view->content_type}.php";
+// provides the opportunity to overwrite the core template in the theme folder
+if ($template = locate_template("cac-featured-content/cac-featured-{$cfcw_view->content_type}.php")) {
+    include($template);
+} else {
+    require dirname(__FILE__) . DS . 'views' . DS . "cac-featured-{$cfcw_view->content_type}.php";
+}
 
 ?>
