@@ -253,14 +253,13 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			if ( 'all' !== $type && 'hidden' === $portfolio_group->status ) {
 				continue;
 			}
-                        
-                        // If the portfolio_blog_id is empty, this may be an
-                        // external portfolio
-                        if (empty($portfolio_blog_id)) {
-                            $external_url = openlab_get_external_site_url_by_group_id($portfolio_id);
-                            if (empty($external_url)) {
-                                continue;
-                            }
+
+                        // If the portfolio_blog_id is empty, this may be an external portfolio.
+                        if ( empty( $portfolio_blog_id ) ) {
+				$external_url = openlab_get_external_site_url_by_group_id( $portfolio_id );
+				if ( empty( $external_url ) ) {
+					continue;
+				}
                         }
 
                         $portfolio = array(
@@ -487,7 +486,7 @@ function openlab_portfolio_list_group_display() {
 		<h2 class="sidebar-header">
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
 		</h2>
-            
+
                 <div class="sidebar-block">
 
 		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
@@ -496,7 +495,7 @@ function openlab_portfolio_list_group_display() {
 			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
 		<?php endforeach ?>
 		</ul>
-                    
+
                 </div>
 	</div>
 
