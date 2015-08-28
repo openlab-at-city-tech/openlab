@@ -117,7 +117,7 @@
             if (truncationValue > 10) {
                 thisElem.succinct({
                     size: truncationValue,
-                    omission: '<span class="omission">&hellip;' + thisOmission + '</span>'
+                    omission: '<span class="omission">&hellip; ' + thisOmission + '</span>'
                 });
             } else {
                 thisElem.html('<span class="omission">' + thisOmission + '</span>');
