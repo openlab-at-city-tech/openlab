@@ -23,13 +23,13 @@ echo "</{$cfcw_view->title_element}>";
         <?php if ($cfcw_view->display_images && $cfcw_view->image_url): ?>
 
 
-            <div class="col-md-12 cfcw-image-wrapper">
+            <div class="col-xs-12 cfcw-image-wrapper">
                 <a href="<?php echo esc_url($cfcw_view->resource_link) ?>">
                     <img src="<?= $cfcw_view->image_url ?>" alt="Thumbnail" class="img-responsive" />
                 </a>
             </div>
 
-            <div class="col-md-12 cfcw-copy-wrapper">
+            <div class="col-xs-12 cfcw-copy-wrapper">
                 <p class="cfcw-title">
                     <a href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php esc_html_e($cfcw_view->resource_title) ?></a>
                 </p>

@@ -8148,6 +8148,9 @@ body .inline-visible-xs {
 }
 .home-page #cac-featured .cfcw-content .cfcw-image-wrapper img {
   border: 17px solid #ffffff;
+  width: 100%;
+  max-width: 225px;
+  margin: 0 auto;
 }
 @media (max-width: 991px) {
   .home-page #cac-featured .cfcw-content .cfcw-image-wrapper {
@@ -8170,6 +8173,11 @@ body .inline-visible-xs {
   content: " ";
   display: table;
   box-sizing: border-box;
+}
+@media (max-width: 479px) {
+  .home-page #cac-featured [class*="col-"] {
+    width: 100%;
+  }
 }
 .home-page #whos-online h2 {
   padding-left: 5px;

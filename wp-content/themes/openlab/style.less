@@ -1160,6 +1160,9 @@ body{
             .cfcw-image-wrapper{
                 img{
                     border: 17px solid @white;
+                    width: 100%;
+                    max-width: 225px;
+                    margin: 0 auto;
                 }
                 @media (max-width: @screen-sm-max){
                     margin-bottom: 21px;
@@ -1181,6 +1184,11 @@ body{
                 content: " ";
                 display: table;
                 box-sizing: border-box;
+            }
+        }
+        @media (max-width: @screen-xxs-max){
+            [class*="col-"]{
+                width: 100%;
             }
         }
     }
