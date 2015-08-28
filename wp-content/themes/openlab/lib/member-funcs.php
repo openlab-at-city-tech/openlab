@@ -602,13 +602,13 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                 <div class="activity-content col-sm-14 col-xs-16">
 
                                     <h6>
-                                        <a class="font-size font-14 no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" data-basevalue="35" data-minvalue="20" data-basewidth="143"><?= bp_get_group_name(); ?></a>
+                                        <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?= bp_get_group_name(); ?></a>
                                         <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
                                     </h6>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
 
-                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
+                                    <p class="truncate-on-the-fly hyphenate" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
                                     <p class="original-copy hidden"><?= $activity ?></p>
 
                                 </div>
