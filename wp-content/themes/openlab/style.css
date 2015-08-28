@@ -8734,6 +8734,10 @@ body.membership-requests .group-list {
 #bp-group-documents .bp-template-notice.updated {
   margin-bottom: 17px;
 }
+#bp-group-documents #pag-bottom {
+  margin-bottom: 19px;
+  margin-top: 3px;
+}
 .docs-info-header #tags-toggle {
   padding: 6px 16px;
 }
