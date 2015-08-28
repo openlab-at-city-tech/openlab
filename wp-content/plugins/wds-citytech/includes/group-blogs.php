@@ -1199,6 +1199,9 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
 				case 'student' :
 					$template = 'template-eportfolio';
 					break;
+				case 'alumni' :
+					$template = 'template-eportfolio-alumni';
+					break;
 			}
 			break;
 
