@@ -68,7 +68,9 @@ $activity_args = array(
 
                             <?php if (bp_activity_has_content()) : ?>
                                 <div class="activity-inner semibold hyphenate">
-                                    <?php echo openlab_strip_iframes(bp_get_activity_content_body()); ?>
+                                    <p>
+                                        <?php echo openlab_sidebar_cleanup(bp_get_activity_content_body()); ?>
+                                    </p>
                                 </div>
                             <?php endif; ?>
 
