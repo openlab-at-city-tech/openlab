@@ -531,17 +531,13 @@ function openlab_group_profile_header() {
         </button></h1>
     <?php if (bp_is_group_home() || (bp_is_group_admin_page() && !$bp->is_item_admin)): ?>
         <div class="clearfix">
-            <?php if ($group_type == "portfolio") : ?>
-                <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
-            <?php else : ?>
+            <?php if ($group_type != "portfolio") : ?>
                 <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
             <?php endif; ?>
         </div>
     <?php elseif (bp_is_group_home()): ?>
         <div class="clearfix visible-xs">
-            <?php if ($group_type == "portfolio") : ?>
-                <div class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></div>
-            <?php else : ?>
+            <?php if ($group_type != "portfolio") : ?>
                 <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
             <?php endif; ?>
         </div>
@@ -674,6 +670,16 @@ function cuny_group_single() {
                                 <div class="bold col-sm-5"><?php echo ucfirst($group_type); ?> Description</div>
                                 <div class="col-sm-19 row-content"><?php bp_group_description() ?></div>
                             </div>
+
+                            <?php if ($group_type == "portfolio"): ?>
+
+                                <div class="table-row row">
+                                    <div class="bold col-sm-5">Member Profile</div>
+                                    <div class="col-sm-19 row-content"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
+                                </div>
+
+                            <?php endif; ?>
+
                         </div>
                     </div>
 
@@ -682,7 +688,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -871,7 +877,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                              ?></p>
+                                                        <p><?php // bp_group_status_message()                               ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -1354,7 +1360,7 @@ function openlab_bp_group_site_pages() {
                 <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link bold">
-                            <a class="bold no-deco" href="<?php echo esc_url( $group_site_settings['site_url'] ) ?>">Visit <?= openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                            <a class="bold no-deco" href="<?php echo esc_url($group_site_settings['site_url']) ?>">Visit <?= openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
                         </li>
 
                         <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
@@ -1465,7 +1471,7 @@ function openlab_get_group_site_settings($group_id) {
 function openlab_custom_group_excerpts($excerpt, $group) {
     global $post;
 
-    $hits = array('courses', 'projects', 'clubs', 'portfolios','my-courses', 'my-projects', 'my-clubs');
+    $hits = array('courses', 'projects', 'clubs', 'portfolios', 'my-courses', 'my-projects', 'my-clubs');
     if (in_array($post->post_name, $hits)) {
         $excerpt = strip_tags($excerpt);
     }

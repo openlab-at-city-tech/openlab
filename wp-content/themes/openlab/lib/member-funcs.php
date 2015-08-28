@@ -839,6 +839,7 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
+                            
                         </div>
                     </div>
                 <?php endif; // bp_has_profile()     ?>
