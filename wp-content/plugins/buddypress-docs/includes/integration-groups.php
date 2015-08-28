@@ -368,18 +368,19 @@ class BP_Docs_Groups_Integration {
 
 				break;
 
-			case 'delete' : // Delete and Edit are the same for the time being
+			case 'delete' :
+				// OpenLab fix - only allow doc deletion for authors.
+				if ( $doc->post_author == $user_id ) {
+					$user_can = true;
+				}
+				break;
+
 			case 'edit' :
 			default :
 				// Group admins and mods always get to edit
 				if ( groups_is_user_admin( $user_id, $group_id ) || groups_is_user_mod( $user_id, $group_id ) ) {
 					$user_can = true;
 				} else {
-					// Delete defaults to Edit for now
-					if ( 'delete' == $action ) {
-						$action = 'edit';
-					}
-
 					// Make sure there's a default
 					if ( empty( $doc_settings[$action] ) ) {
 						$doc_settings[$action] = 'group-members';
