@@ -13,12 +13,12 @@ function openlab_is_admin_truly_member($group = false) {
     return apply_filters('bp_group_is_member', !empty($group->is_member));
 }
 
-function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors){
-    
+function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors) {
+
     clean_user_cache($user_id);
 }
 
-add_action('xprofile_updated_profile','openlab_flush_user_cache_on_save',10,3);
+add_action('xprofile_updated_profile', 'openlab_flush_user_cache_on_save', 10, 3);
 
 /**
  * 	People archive page
@@ -313,7 +313,7 @@ function openlab_list_members($view) {
 
 function openlab_members_pagination_links($page_args = 'upage') {
     global $members_template;
-    
+
     $pagination = paginate_links(array(
         'base' => add_query_arg($page_args, '%#%'),
         'format' => '',
@@ -601,15 +601,16 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
 
                                 <div class="activity-content col-sm-14 col-xs-16">
 
-                                    <h6>
+                                    <h6 class="overflow-hidden">
                                         <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?= bp_get_group_name(); ?></a>
                                         <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
                                     </h6>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
-
-                                    <p class="truncate-on-the-fly hyphenate" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
-                                    <p class="original-copy hidden"><?= $activity ?></p>
+                                    <div class="truncate-wrapper overflow-hidden">
+                                        <p class="truncate-on-the-fly hyphenate" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
+                                        <p class="original-copy hidden"><?= $activity ?></p>
+                                    </div>
 
                                 </div>
 

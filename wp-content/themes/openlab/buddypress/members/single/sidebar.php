@@ -60,7 +60,7 @@ $activity_args = array(
                             </a>
                         </div>
 
-                        <div class="activity-content col-sm-16 col-xs-17">
+                        <div class="activity-content overflow-hidden col-sm-16 col-xs-17">
 
                             <div class="activity-header">
                                 <?php echo openlab_get_custom_activity_action(); ?>

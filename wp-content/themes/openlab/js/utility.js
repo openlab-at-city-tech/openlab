@@ -14,6 +14,17 @@
             }
             OpenLab.utility.adjustLoginBox();
 
+            OpenLab.utility.hyphenateInit();
+        },
+        hyphenateInit: function () {
+            Hyphenator.config(
+                    {onhyphenationdonecallback: onHyphenationDone = function (context) {
+                            return undefined;
+                        },
+                        useCSS3hyphenation: true
+                    }
+            );
+            Hyphenator.run();
         },
         adjustLoginBox: function () {
             if ($('#user-info')) {
@@ -35,19 +46,19 @@
             if (onInit === undefined) {
                 var onInit = false;
             }
-            
-            if (loadDelay === undefined){
+
+            if (loadDelay === undefined) {
                 var loadDelay = false;
             }
 
             $('.truncate-on-the-fly').each(function () {
-                
+
                 var thisElem = $(this);
-                
-                if(!loadDelay && thisElem.hasClass('load-delay')){
+
+                if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
                 }
-                
+
                 var truncationBaseValue = thisElem.data('basevalue');
                 var truncationBaseWidth = thisElem.data('basewidth');
 
@@ -302,10 +313,10 @@
             speed: 200,
         });
 
-        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function(){
-            
-            OpenLab.utility.truncateOnTheFly(false,true);
-            
+        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
+
+            OpenLab.utility.truncateOnTheFly(false, true);
+
         });
 
     });
