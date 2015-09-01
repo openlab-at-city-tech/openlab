@@ -21,7 +21,19 @@
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
+            
+            OpenLab.nav.hyphenateInit();
 
+        },
+        hyphenateInit: function () {
+            Hyphenator.config(
+                    {onhyphenationdonecallback: onHyphenationDone = function (context) {
+                            return undefined;
+                        },
+                        useCSS3hyphenation: true
+                    }
+            );
+            Hyphenator.run();
         },
         hoverFixes: function () {
             //fixing hover issues on mobile

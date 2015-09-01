@@ -7177,12 +7177,11 @@ button.oplb-bs .close {
   position: relative;
   width: auto;
 }
-.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a {
-  display: inline-block;
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .activity-row {
+  overflow: hidden;
 }
-.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a.activity-action {
-  display: block;
-  margin-top: 8px;
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item .inline-links a {
+  display: inline;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a {
   text-decoration: underline;
