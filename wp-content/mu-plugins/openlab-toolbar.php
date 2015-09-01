@@ -851,7 +851,7 @@ HTML;
                                     }
                                 }
 
-                                $title .= '<p class="item inline-links">'.$action_output.'</p>';
+                                $title .= '<p class="item inline-links">'.openlab_sidebar_cleanup($action_output).'</p>';
                                 $title .= '<p class="item">'.bp_insert_activity_meta('').' ago</p>';
                                 $title .= '</div></div>';
 
@@ -1487,3 +1487,11 @@ function openlab_wrap_adminbar_bottom(){
 }
 
 add_action('wp_after_admin_bar_render','openlab_wrap_adminbar_bottom');
+
+function openlab_sidebar_cleanup($content){
+    
+    $content = preg_replace('/<iframe.*?\/iframe>/i','', $content);
+    $content = strip_tags($content,'<br><i><em><b><strong><a><img>');
+    
+    return $content;
+}
