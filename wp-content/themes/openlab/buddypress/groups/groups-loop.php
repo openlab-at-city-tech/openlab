@@ -85,8 +85,8 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 
                                             <?php endif; ?>
                                                 <div class="description-line">
-                                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?= bp_get_group_description_excerpt() ?></p>
-                                                    <p class="original-copy hidden"><?= bp_get_group_description_excerpt() ?></p>
+                                                    <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?php echo bp_get_group_description_excerpt() ?></p>
+                                                    <p class="original-copy hidden"><?php echo bp_get_group_description_excerpt() ?></p>
                                                 </div>
                                     </div>
 				</div>

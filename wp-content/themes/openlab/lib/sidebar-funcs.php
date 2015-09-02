@@ -293,11 +293,11 @@ function openlab_members_sidebar_blocks($mobile_hide = false){
             <h2 class="sidebar-header top-sidebar-header visible-xs">Member <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
         <?php endif; ?>
     <?php endif; ?>
-    
+
     <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id() ?>
 
-        <div class="sidebar-block<?= $block_classes ?>">
+        <div class="sidebar-block<?php echo $block_classes ?>">
 
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
@@ -321,12 +321,12 @@ function openlab_members_sidebar_blocks($mobile_hide = false){
 <?php elseif (openlab_is_my_profile() && !bp_is_group_create()) : ?>
     <?php /* Don't show the 'Create a Portfolio' link during group (ie Portfolio) creation */ ?>
     <div class="sidebar-widget" id="portfolio-sidebar-widget">
-        
+
         <?php if (is_user_logged_in() && openlab_is_my_profile()): ?>
         <h2 class="sidebar-header top-sidebar-header visible-xs">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></h2>
         <?php endif; ?>
-        
-        <div class="sidebar-block<?= $block_classes ?>">
+
+        <div class="sidebar-block<?php echo $block_classes ?>">
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                 <li>
                     <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>

@@ -17,8 +17,8 @@ if (!$dud = bp_displayed_user_domain()) {
          $id = 'portfolio-sidebar-inline-widget';
      endif; ?>
 
-<div class="sidebar-widget mol-menu" id="<?= $id ?>">
-    
+<div class="sidebar-widget mol-menu" id="<?php echo $id ?>">
+
     <?php openlab_members_sidebar_blocks($mobile_hide); ?>
     <?php openlab_member_sidebar_menu(); ?>
 

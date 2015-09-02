@@ -25,7 +25,7 @@ echo "</{$cfcw_view->title_element}>";
 
             <div class="col-xs-12 cfcw-image-wrapper">
                 <a href="<?php echo esc_url($cfcw_view->resource_link) ?>">
-                    <img src="<?= $cfcw_view->image_url ?>" alt="Thumbnail" class="img-responsive" />
+                    <img src="<?php echo $cfcw_view->image_url ?>" alt="Thumbnail" class="img-responsive" />
                 </a>
             </div>
 
@@ -35,7 +35,7 @@ echo "</{$cfcw_view->title_element}>";
                 </p>
 
                 <p><?php echo bp_create_excerpt($cfcw_view->description, $cfcw_view->crop_length) ?></p>
-                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?= __('See More', 'cac-featured-content') ?></a></p>
+                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?></a></p>
             </div>
 
         <?php else: ?>
@@ -46,7 +46,7 @@ echo "</{$cfcw_view->title_element}>";
                 </p>
 
                 <p><?php echo bp_create_excerpt($cfcw_view->description, $cfcw_view->crop_length) ?></p>
-                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?= __('See More', 'cac-featured-content') ?></a></p>
+                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?></a></p>
             </div>
 
         <?php endif; ?>

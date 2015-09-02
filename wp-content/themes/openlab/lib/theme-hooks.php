@@ -30,14 +30,14 @@ add_filter('the_content', 'openlab_custom_the_content');
  */
 function openlab_main_menu($location = 'header') {
     ?>
-    <nav class="navbar navbar-default oplb-bs navbar-location-<?= $location ?>" role="navigation">
+    <nav class="navbar navbar-default oplb-bs navbar-location-<?php echo $location ?>" role="navigation">
         <?php openlab_sitewide_header($location); ?>
         <div class="main-nav-wrapper">
             <div class="container-fluid">
                 <div class="navbar-header hidden-xs">
                     <h1 class="menu-title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
                 </div>
-                <div class="navbar-collapse collapse" id="main-nav-<?= $location ?>">
+                <div class="navbar-collapse collapse" id="main-nav-<?php echo $location ?>">
                     <?php
                     //this adds the main menu, controlled through the WP menu interface
                     $args = array(
