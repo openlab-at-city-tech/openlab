@@ -4,38 +4,37 @@
  * Adds 'local environment' tab
  */
 function cuny_local_env_flag() {
+	if ( defined( 'IS_LOCAL_ENV' ) && IS_LOCAL_ENV ) {
+		$env_type = 'local';
+		if ( defined( 'ENV_TYPE' ) ) {
+		$env_type = ENV_TYPE;
+	}
+	?>
 
-    if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
-        $env_type = 'local';
-        if (defined('ENV_TYPE')) {
-            $env_type = ENV_TYPE;
-        }
-        ?>
+	<style type="text/css">
+	#local-env-flag {
+		position: fixed;
+		left: 0;
+		top: 35px;
+		width: 150px;
+		padding: 10px 15px;
+		text-align: center;
+		background: #600;
+		color: #fff;
+		font-size: 1em;
+		line-height: 1.8em;
+		border: 2px solid #666;
+		z-index: 1000;
+		opacity: 0.7;
+	}
+	</style>
 
-        <style type="text/css">
-            #local-env-flag {
-                position: fixed;
-                left: 0;
-                top: 35px;
-                width: 150px;
-                padding: 10px 15px;
-                text-align: center;
-                background: #600;
-                color: #fff;
-                font-size: 1em;
-                line-height: 1.8em;
-                border: 2px solid #666;
-                z-index: 1000;
-                opacity: 0.7;
-            }
-        </style>
+	<div id="local-env-flag">
+		<?php echo esc_html( strtoupper( $env_type ) ) ?> ENVIRONMENT
+	</div>
 
-        <div id="local-env-flag">
-            <?php echo esc_html(strtoupper($env_type)) ?> ENVIRONMENT
-        </div>
-
-        <?php
-    }
+	<?php
+	}
 }
 
 //add_action( 'wp_footer', 'cuny_local_env_flag' );
