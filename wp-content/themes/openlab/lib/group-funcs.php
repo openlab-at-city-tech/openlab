@@ -779,7 +779,7 @@ function openlab_group_profile_activity_list() {
                                                     }
                                                     ?>
 
-                                                    <?= openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
+                                                    <?php echo openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
 
                                                 </div></div>                                            <?php endwhile; ?>
                                     <?php else: ?>
@@ -810,7 +810,7 @@ function openlab_group_profile_activity_list() {
                                         while ($query->have_posts()) : $query->the_post();
                                             ?>
                                             <div class="panel panel-default"><div class="panel-body">
-                                                    <?= openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
+                                                    <?php echo openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
                                                 </div></div>
                                             <?php
                                         endwhile;
@@ -895,6 +895,7 @@ function openlab_group_profile_activity_list() {
 }
 
 function openlab_get_group_activity_content($title, $content, $link) {
+	$markup = '';
 
     if ($title !== '') {
         $markup = <<<HTML
@@ -1261,7 +1262,7 @@ function openlab_show_site_posts_and_comments() {
                         <?php foreach ($posts as $post) : ?>
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <?= openlab_get_group_activity_content($post['title'], $post['content'], $post['permalink']) ?>
+                                    <?php echo openlab_get_group_activity_content($post['title'], $post['content'], $post['permalink']) ?>
                                 </div>
                             </div>
                         <?php endforeach ?>
@@ -1281,7 +1282,7 @@ function openlab_show_site_posts_and_comments() {
                             <?php foreach ($comments as $comment) : ?>
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <?= openlab_get_group_activity_content('', $comment['content'], $comment['permalink']) ?>
+                                        <?php echo openlab_get_group_activity_content('', $comment['content'], $comment['permalink']) ?>
                                     </div></div>
                             <?php endforeach ?>
                         <?php else : ?>
