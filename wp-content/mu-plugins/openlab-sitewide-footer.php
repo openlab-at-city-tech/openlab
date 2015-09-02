@@ -24,7 +24,7 @@ function cuny_local_env_flag() {
 		font-size: 1em;
 		line-height: 1.8em;
 		border: 2px solid #666;
-		z-index: 1000;
+		z-index: 99998;
 		opacity: 0.7;
 	}
 	</style>
@@ -36,9 +36,9 @@ function cuny_local_env_flag() {
 	<?php
 	}
 }
-
-//add_action( 'wp_footer', 'cuny_local_env_flag' );
-//add_action( 'admin_footer', 'cuny_local_env_flag' );
+add_action( 'wp_footer', 'cuny_local_env_flag' );
+add_action( 'admin_footer', 'cuny_local_env_flag' );
+add_action( 'login_footer', 'cuny_local_env_flag' );
 
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
