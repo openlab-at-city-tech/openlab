@@ -1468,10 +1468,10 @@ add_action( 'wp_footer', 'cac_adminbar_js', 999 );
  */
 function openlab_wrap_adminbar_top(){
     if(get_current_blog_id() !== 1 || is_admin()):
-        
+
         $admin_class = (is_admin() ? ' admin-area' : '');
     ?>
-        <div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
+        <div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
     <?php else : ?>
         <div class="oplb-bs"><div class="oplb-bs">
     <?php endif;
