@@ -36,8 +36,8 @@ do_action('bp_before_member_settings_template');
         <div class="form-group settings-section current-pw-section">
             <label for="pwd">Current Password</label>
             <input class="form-control" type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
-            
-            <?php 
+
+            <?php
             $account_type = openlab_get_displayed_user_account_type();
             $include_acct_type = in_array($account_type, array('Student', 'Alumni')) ? ' account type, ' : ' ';
             ?>

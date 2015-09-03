@@ -429,4 +429,4 @@ function cuny_home_square($type) {
         </script>
         <?php
     }
-    
+

@@ -51,7 +51,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 			echo openlab_submenu_markup('groups', $filters['wds_group_type'],false);
 		}
 		?>
-  
+
             <div class="group-count col-sm-5 pull-right"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
 </div>
 	<div id="group-list" class="item-list group-list row">
@@ -99,7 +99,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
         </div>
         <script type="text/javascript">
             (function($){
-              $('.item-content-wrapper p').css('opacity','0');  
+              $('.item-content-wrapper p').css('opacity','0');
             })(jQuery);
         </script>
 

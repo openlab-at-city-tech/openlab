@@ -100,7 +100,7 @@ class OpenLab_Admin_Bar {
                         //remove the default mobile dashboard toggle, we need a custom one for this for styling purposes
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
                         add_action('admin_bar_menu',array($this,'custom_admin_bar_sidebar_toggle'),0);
-                        
+
                         if(get_current_blog_id() === 1 && !is_admin()){
                             add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
                             add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
@@ -294,7 +294,7 @@ HTML;
                         ),
  		) );
         }
-        
+
          /**
          * The MOL link on mobile needs to sit between the hamburger menus and the logout link
          * So we'll need a third group for this (makes styling easier)
@@ -1082,13 +1082,13 @@ HTML;
 		) );
 	}
     }
-    
+
     function add_dashboard_link($wp_admin_bar) {
         global $bp;
-        
+
         $current_screen = new stdClass();
         $current_screen->base = '';
-        
+
         if (is_admin()) {
             $current_screen = get_current_screen();
         }
@@ -1321,7 +1321,7 @@ HTML;
 
             $openlab_theme_link = get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css';
             $openlab_theme_link = set_url_scheme($openlab_theme_link);
-            
+
             //making sure dashicons fire up for front end
             if(!is_admin()){
                 wp_register_style('dashicons','/wp-includes/css/dashicons.min.css');
