@@ -9311,3 +9311,8 @@ body.membership-requests .group-list {
     display: none;
   }
 }
+@media print {
+  .col-sm-18 {
+    width: 100%;
+  }
+}
