@@ -30,7 +30,7 @@ function openlab_sitewide_header($location = 'header') {
 }
 
 function openlab_sitewide_header_to_admin_and_group_sites() {
-    
+
     if (get_current_blog_id() !== 1 || is_admin()) {
         ?>
 
@@ -86,23 +86,23 @@ HTML;
 add_action('init', 'openlab_mu_search_override', 1);
 
 function openlab_mu_search_override() {
-    global $bp;
-    if (isset($_POST['search']) && $_POST['search-which']) {
-        if ($_POST['search-which'] == "members") {
-            wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "courses") {
-            wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "projects") {
-            wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "clubs") {
-            wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "portfolios") {
-            wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
-            exit();
-        }
-    }
+	global $bp;
+	if (isset($_POST['search']) && $_POST['search-which']) {
+		if ($_POST['search-which'] == "members") {
+			wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
+			exit();
+		} elseif ($_POST['search-which'] == "courses") {
+			wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
+			exit();
+		} elseif ($_POST['search-which'] == "projects") {
+			wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
+			exit();
+		} elseif ($_POST['search-which'] == "clubs") {
+			wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
+			exit();
+		} elseif ($_POST['search-which'] == "portfolios") {
+			wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
+			exit();
+		}
+	}
 }
