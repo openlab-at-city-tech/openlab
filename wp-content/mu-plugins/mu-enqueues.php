@@ -16,7 +16,7 @@ function openlab_mu_enqueue() {
     wp_enqueue_script('smoothscroll-js');
     wp_register_script('select-js', plugins_url('js', __FILE__) . '/jquery-custom-select/jquery.customSelect.min.js', array('jquery'), '', true);
     wp_enqueue_script('select-js');
-    wp_register_script('hyphenator-js', plugins_url('js', __FILE__) . '/hyphenator/hyphenator.js', array('jquery'), '', true);
+    wp_register_script('hyphenator-js', plugins_url('js', __FILE__) . '/hyphenator/hyphenator.js', array('jquery') );
     wp_enqueue_script('hyphenator-js');
     wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'), '', true);
     wp_enqueue_script('openlab-search-js');

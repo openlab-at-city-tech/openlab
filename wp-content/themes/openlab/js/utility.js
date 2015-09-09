@@ -16,6 +16,15 @@
 
             OpenLab.utility.hyphenateInit();
         },
+        hyphenateInit: function () {
+            Hyphenator.config( {
+                onhyphenationdonecallback: onHyphenationDone = function (context) {
+                    return undefined;
+                },
+                useCSS3hyphenation: true
+            } );
+            Hyphenator.run();
+        },
         adjustLoginBox: function () {
             if ($('#user-info')) {
 
