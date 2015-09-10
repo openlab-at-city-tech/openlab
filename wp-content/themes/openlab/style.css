@@ -9038,6 +9038,7 @@ body.membership-requests .group-list {
 }
 #member-item-body .panel .panel-body h6 {
   margin: 7px 0 12px;
+  line-height: 1.3em;
 }
 #member-item-body .panel .panel-body p,
 #member-item-body .panel .panel-body a {
