@@ -256,7 +256,7 @@ function openlab_group_archive() {
                             <div class="item col-xs-18">
 
                                 <h2 class="item-title">
-                                    <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                    <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="60" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                     <span class="original-copy hidden"><?php bp_group_name() ?></span>
                                 </h2>
                                 <?php
@@ -1310,7 +1310,7 @@ function openlab_output_course_info_line($group_id) {
     $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
     $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
     $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-    $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'), 20, false);
+    $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'), 15, false);
 
     $infoline_elems = array();
 
