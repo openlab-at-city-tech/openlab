@@ -448,7 +448,7 @@ function wds_bp_group_meta() {
 
                         if ($maybe_site_id) {
                             $group_site_name = get_blog_option($maybe_site_id, 'blogname');
-                            $group_site_text = '<strong>' . $group_site_name . '</strong> ( <a href="' . $group_site_url . '">' . $group_site_url . '</a> )';
+                            $group_site_text = '<strong>' . $group_site_name . '</strong> (&nbsp;<a href="' . $group_site_url . '">' . $group_site_url . '</a>&nbsp;)';
                         } else {
                             $group_site_text = '<strong><a href="' . $group_site_url . '">' . $group_site_url . '</a></strong>';
                         }
