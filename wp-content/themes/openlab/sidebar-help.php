@@ -15,30 +15,6 @@ $args = array(
 wp_nav_menu($args);
 ?>
 </div>
-<h2 class="sidebar-help-title help-tags-title">Find a Help Topic With Tags</h2>
-<div class="sidebar-block padded-block">
-<div id="help-tags-copy"><p>Find answers throughout Help that correspond to the tags below:</p></div>
-<div id="help-tags">
-    <?php
-    $args = array(
-        'orderby' => 'name',
-        'order' => 'ASC',
-        'hierarchical' => false,
-    );
-
-
-    $terms = get_terms(array('help_tags'),$args);
-
-    $count = count($terms);
-    if ($count > 0) {
-        foreach ($terms as $term) {
-            echo '<a href="' . get_term_link($term) . '" class="btn btn-default btn-primary link-btn tag-btn tag-count-' . $term->count . '">' . $term->name . '</a> ';
-        }
-    }
-    ?>
-    <div class="clearfloat"></div>
-</div>
-</div>
 <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
 <div class="sidebar-block padded-block">
 <div id="support-team">
@@ -94,6 +70,32 @@ wp_nav_menu($args);
     <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o"></i> Contact Us</a>
 </div><!--support team-->
 </div>
+
+<h2 class="sidebar-help-title help-tags-title">Find a Help Topic With Tags</h2>
+<div class="sidebar-block padded-block">
+<div id="help-tags-copy"><p>Find answers throughout Help that correspond to the tags below:</p></div>
+<div id="help-tags">
+    <?php
+    $args = array(
+        'orderby' => 'name',
+        'order' => 'ASC',
+        'hierarchical' => false,
+    );
+
+
+    $terms = get_terms(array('help_tags'),$args);
+
+    $count = count($terms);
+    if ($count > 0) {
+        foreach ($terms as $term) {
+            echo '<a href="' . get_term_link($term) . '" class="btn btn-default btn-primary link-btn tag-btn tag-count-' . $term->count . '">' . $term->name . '</a> ';
+        }
+    }
+    ?>
+    <div class="clearfloat"></div>
+</div>
+</div>
+
 <h2 class="sidebar-title">Creative Commons</h2>
 <div class="sidebar-block padded-block">
 <p>Our help is licensed under Creative Commons copyright.<br />
