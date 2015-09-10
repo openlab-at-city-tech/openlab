@@ -13,17 +13,6 @@
                 OpenLab.utility.truncateOnTheFly(true);
             }
             OpenLab.utility.adjustLoginBox();
-
-            OpenLab.utility.hyphenateInit();
-        },
-        hyphenateInit: function () {
-            Hyphenator.config( {
-                onhyphenationdonecallback: onHyphenationDone = function (context) {
-                    return undefined;
-                },
-                useCSS3hyphenation: true
-            } );
-            Hyphenator.run();
         },
         adjustLoginBox: function () {
             if ($('#user-info')) {
