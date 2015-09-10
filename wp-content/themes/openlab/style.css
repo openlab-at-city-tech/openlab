@@ -9135,6 +9135,9 @@ body.membership-requests .group-list {
   background: #999999;
   border-color: #999999;
 }
+#team-thumbs > div {
+  min-height: 140px;
+}
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
 }
