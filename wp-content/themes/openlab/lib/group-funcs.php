@@ -256,7 +256,7 @@ function openlab_group_archive() {
                             <div class="item col-xs-18">
 
                                 <h2 class="item-title">
-                                    <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="60" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                    <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="55" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                     <span class="original-copy hidden"><?php bp_group_name() ?></span>
                                 </h2>
                                 <?php
