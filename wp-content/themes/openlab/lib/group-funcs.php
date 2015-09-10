@@ -236,10 +236,10 @@ function openlab_group_archive() {
     if (bp_has_groups($group_args)) :
         ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-19">
+            <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">
                 <?php openlab_current_directory_filters(); ?>
             </div>
-            <div class="group-count col-sm-5"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
+            <div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
         </div>
         <div id="group-list" class="item-list group-list row">
             <?php
