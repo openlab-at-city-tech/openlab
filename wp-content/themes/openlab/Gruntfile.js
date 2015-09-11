@@ -25,12 +25,13 @@ module.exports = function (grunt) {
                 },
                 files: {
                     "style.css": "style.less", // destination file and source file
+                    "../../mu-plugins/css/openlab-toolbar.css" : "../../mu-plugins/css/openlab-toolbar.less"
                 }
             }
         },
         watch: {
             styles: {
-                files: ['*.less'], // which files to watch
+                files: ['*.less', '../../mu-plugins/css/*.less'], // which files to watch
                 tasks: ['less'],
                 options: {
                     nospawn: true
