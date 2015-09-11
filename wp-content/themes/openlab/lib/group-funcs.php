@@ -1417,6 +1417,8 @@ function openlab_get_faculty_list() {
 
             array_push($faculty, bp_core_get_user_displayname($id));
         }
+        
+        $faculty = array_unique($faculty);
 
         $faculty_list = implode(', ', $faculty);
     }

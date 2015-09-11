@@ -540,7 +540,7 @@ function openlab_submenu_gen($items, $timestamp = false) {
             $item_classes .= " no-link";
         }
 
-        $submenu .= '--><li class="' . $item_classes . '"><!--';
+        $submenu .= '--><li class="' . $item_classes . '">';
 
         //for delete
         $submenu .= (strstr($slug, 'delete-') > -1 ? '<span class="fa fa-minus-circle"></span>' : '');
@@ -549,7 +549,7 @@ function openlab_submenu_gen($items, $timestamp = false) {
         $submenu .= ( $item == 'no-link' ? '' : '<a href="' . $item . '">' );
         $submenu .= $title;
         $submenu .= ( $item == 'no-link' ? '' : '</a>' );
-        $submenu .= '--></li><!--';
+        $submenu .= '</li><!--';
 
         //increment counter
         $i++;
@@ -814,9 +814,8 @@ function openlab_group_admin_tabs($group = false) {
 
     // Portfolio tabs look different from other groups
     ?>
-
+    <!--
     <?php if (openlab_is_portfolio()) : ?>
-        <!--
         <?php if ($bp->is_item_admin || $bp->is_item_mod) { ?>
             --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li><!--
         <?php } ?>
