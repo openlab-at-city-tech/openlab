@@ -243,10 +243,10 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">
+            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">
                 <?php openlab_current_directory_filters(); ?>
             </div>
-            <div class="col-lg-5 col-md-6 col-sm-8"><?php cuny_members_pagination_count('members'); ?></div>
+            <div class="col-md-6 col-sm-8 text-right"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
         <div id="group-members-list" class="group-list item-list row">
