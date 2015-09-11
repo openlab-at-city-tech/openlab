@@ -634,24 +634,24 @@ function cuny_group_single() {
                             }
                             ?>
                             <div class="table-row row">
-                                <div class="bold col-sm-5">Professor(s)</div>
-                                <div class="col-sm-19 row-content"><?php echo openlab_get_faculty_list() ?></div>
+                                <div class="bold col-sm-7">Professor(s)</div>
+                                <div class="col-sm-17 row-content"><?php echo openlab_get_faculty_list() ?></div>
                             </div>
                             <div class="table-row row">
-                                <div class="bold col-sm-5">Department</div>
-                                <div class="col-sm-19 row-content"><?php echo $wds_departments; ?></div>
+                                <div class="bold col-sm-7">Department</div>
+                                <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
                             </div>
                             <div class="table-row row">
-                                <div class="bold col-sm-5">Course Code</div>
-                                <div class="col-sm-19 row-content"><?php echo $wds_course_code; ?></div>
+                                <div class="bold col-sm-7">Course Code</div>
+                                <div class="col-sm-17 row-content"><?php echo $wds_course_code; ?></div>
                             </div>
                             <div class="table-row row">
-                                <div class="bold col-sm-5">Semester / Year</div>
-                                <div class="col-sm-19 row-content"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
+                                <div class="bold col-sm-7">Semester / Year</div>
+                                <div class="col-sm-17 row-content"><?php echo $wds_semester; ?> <?php echo $wds_year; ?></div>
                             </div>
                             <div class="table-row row">
-                                <div class="bold col-sm-5">Course Description</div>
-                                <div class="col-sm-19 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
+                                <div class="bold col-sm-7">Course Description</div>
+                                <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
                             </div>
                         </div>
 
@@ -667,15 +667,15 @@ function cuny_group_single() {
                                 <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
                             </div>
                             <div class="table-row row">
-                                <div class="bold col-sm-5"><?php echo ucfirst($group_type); ?> Description</div>
-                                <div class="col-sm-19 row-content"><?php bp_group_description() ?></div>
+                                <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
+                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
                             </div>
 
                             <?php if ($group_type == "portfolio"): ?>
 
                                 <div class="table-row row">
-                                    <div class="bold col-sm-5">Member Profile</div>
-                                    <div class="col-sm-19 row-content"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
+                                    <div class="bold col-sm-7">Member Profile</div>
+                                    <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
                                 </div>
 
                             <?php endif; ?>
