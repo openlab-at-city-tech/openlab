@@ -859,7 +859,7 @@ function openlab_group_admin_tabs($group = false) {
         <?php endif ?>
 
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
-        -->    
+         
         <?php if ($group_type == "portfolio") : ?>
             <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
@@ -867,6 +867,7 @@ function openlab_group_admin_tabs($group = false) {
         <?php endif; ?>
 
     <?php endif ?>
+    -->   
     <?php
 }
 
