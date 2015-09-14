@@ -35,7 +35,9 @@ wp_nav_menu($args);
 		'post_type' => 'attachment',
 		'numberposts' => -1,
 		'post_status' => 'any',
-		'post_parent' => $post_id
+		'post_parent' => $post_id,
+		'orderby' => 'name',
+		'order' => 'ASC',
 	);
 	$attachments = get_posts( $args );
 
