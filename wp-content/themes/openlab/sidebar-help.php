@@ -20,24 +20,24 @@ wp_nav_menu($args);
 <div id="support-team">
     <div id="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
     <?php
-    $args = array(
-        'name' => 'contact-us',
-        'post_type' => 'help',
-        'post_status' => 'publish',
-        'numberposts' => 1
-    );
-    $my_posts = get_posts($args);
+	$args = array(
+		'name' => 'contact-us',
+		'post_type' => 'help',
+		'post_status' => 'publish',
+		'numberposts' => 1,
+	);
+	$my_posts = get_posts( $args );
 
-    if ($my_posts) {
-        $post_id = $my_posts[0]->ID;
-    }
-    $args = array(
-        'post_type' => 'attachment',
-        'numberposts' => -1,
-        'post_status' => 'any',
-        'post_parent' => $post_id
-    );
-    $attachments = get_posts($args);
+	if ( $my_posts ) {
+		$post_id = $my_posts[0]->ID;
+	}
+	$args = array(
+		'post_type' => 'attachment',
+		'numberposts' => -1,
+		'post_status' => 'any',
+		'post_parent' => $post_id
+	);
+	$attachments = get_posts( $args );
 
     if ($attachments) {
         $i = 0;
