@@ -117,11 +117,11 @@ function cuny_home_new_members() {
             ?>
             <li class="home-new-member">
                 <div class="home-new-member-avatar">
-                    <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?= $firstname ?>"/></a>
+                    <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $firstname ?>"/></a>
                 </div>
                 <div class="home-new-member-info">
-                    <h2 class="truncate-on-the-fly load-delay" data-basevalue="16" data-minvalue="11" data-basewidth="164"><?= $firstname ?></h2>
-                    <span class="original-copy hidden"><?= $firstname ?></span>
+                    <h2 class="truncate-on-the-fly load-delay" data-basevalue="16" data-minvalue="11" data-basewidth="164"><?php echo $firstname ?></h2>
+                    <span class="original-copy hidden"><?php echo $firstname ?></span>
                     <div class="registered timestamp"><?php bp_member_registered() ?></div>
                 </div>
             </li>
@@ -245,15 +245,20 @@ function cuny_home_square($type) {
                         <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
                     </div>
                     <div class="item-content-wrapper">
-                        <h4 class="group-title">
-                            <a class="no-deco truncate-on-the-fly" href="<?= bp_get_group_permalink() ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?= bp_get_group_name() ?></a>
-                            <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
+                        <h4 class="group-title overflow-hidden">
+                            <a class="no-deco truncate-on-the-fly hyphenate" href="<?php echo bp_get_group_permalink() ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?php echo bp_get_group_name() ?></a>
+                            <span class="original-copy hidden"><?php echo bp_get_group_name() ?></span>
                         </h4>
 
-                        <?php
-                        echo '<p class="hyphenate">' . bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) . '</p><p class="see-more"><a class="semibold" href="' . bp_get_group_permalink() . '">See More</a></p>';
-                        echo '</div>';
-                        echo '</div>';
+                        <p class="hyphenate overflow-hidden">
+                            <?php echo bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) ?>
+                        </p>
+                        <p class="see-more">
+                            <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More</a>
+                        </p>
+                        </div>
+                        </div>
+                    <?php
                         $i++;
                     endwhile;
                     ?>
@@ -424,4 +429,4 @@ function cuny_home_square($type) {
         </script>
         <?php
     }
-    
+

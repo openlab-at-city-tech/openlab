@@ -15,11 +15,11 @@
                         </div>
                         <div class="item col-xs-17">
                             <h2 class="item-title"><a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="280"><?php bp_group_name() ?></a></h2>
-                            <?php
-                            $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="100" data-basewidth="280">', bp_get_group_description());
-                            $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description());
-                            echo $this_description;
-                            ?>
+
+                            <div class="description-line">
+                                <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="100" data-basewidth="280"><?php echo bp_get_group_description_excerpt() ?></p>
+                                <p class="original-copy hidden"><?php echo bp_get_group_description_excerpt() ?></p>
+                            </div>
 
                             <?php do_action('bp_group_invites_item') ?>
 

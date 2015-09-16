@@ -43,6 +43,7 @@ function bp_cubepoint_setup_globals() {
     
 	global $bp, $wpdb;
 
+	$bp->cubepoint = new stdClass;
 	$bp->cubepoint->id = 'cubepoint';
 	$bp->cubepoint->table_name = $wpdb->base_prefix . 'cubepoints';
 	$bp->cubepoint->table_name = $wpdb->prefix . 'cubepoints';

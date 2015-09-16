@@ -1,7 +1,7 @@
 # Exclude user generated content
-wp-content/blogs.dir/
-wp-content/uploads/*
-wp-content/cache/*
+wp-content/blogs.dir
+wp-content/uploads
+wp-content/cache
 
 sql/*
 wiki/images/*
@@ -45,3 +45,6 @@ tags
 nbproject/*
 
 wp-config.php
+
+#hiding vendor files
+wp-content/themes/*/node_modules/

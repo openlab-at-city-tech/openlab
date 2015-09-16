@@ -7090,7 +7090,8 @@ blockquote .h6 {
   margin-bottom: 0;
   border-right: 1px solid #333333;
 }
-.nav.nav-inline li a {
+.nav.nav-inline li a,
+.nav.nav-inline li span {
   color: #000000;
   display: inline-block;
   padding: 0 7px;
@@ -7117,6 +7118,7 @@ blockquote .h6 {
 }
 .nav.nav-inline li .fa {
   padding-left: 7px;
+  padding-right: 0;
   margin: 0;
 }
 .nav.nav-inline li:first-child a {
@@ -7524,6 +7526,9 @@ body .content-list {
   margin: 0;
   padding: 0;
   list-style-type: none;
+}
+body .overflow-hidden {
+  overflow: hidden;
 }
 body .timestamp {
   font-size: 12px;
@@ -8143,67 +8148,22 @@ body .inline-visible-xs {
   border-radius: 4px;
   padding: 5%;
 }
-.home-page #cac-featured .cfcw-content img {
+.home-page #cac-featured .cfcw-content .cfcw-image-wrapper img {
   border: 17px solid #ffffff;
-  float: left;
-  margin-right: 12px;
-  width: 163px;
+  width: 100%;
+  max-width: 225px;
+  margin: 0 auto;
 }
-@media (max-width: 250px) {
-  .home-page #cac-featured .cfcw-content img {
-    width: 100%;
-    margin: 0 0 20px;
-  }
-}
-@media (min-width: 251px) and (max-width: 375px) {
-  .home-page #cac-featured .cfcw-content img {
-    width: 80%;
-    margin: 0 10% 20px;
-  }
-}
-@media (min-width: 768px) and (max-width: 1110px) {
-  .home-page #cac-featured .cfcw-content img {
-    width: 80%;
-    margin: 0 10% 20px;
+@media (max-width: 991px) {
+  .home-page #cac-featured .cfcw-content .cfcw-image-wrapper {
+    margin-bottom: 21px;
   }
 }
 .home-page #cac-featured .cfcw-content p {
-  float: left;
-  width: 45%;
   font-weight: 400;
-}
-@media (max-width: 250px) {
-  .home-page #cac-featured .cfcw-content p {
-    width: 50%;
-  }
-}
-@media (min-width: 251px) and (max-width: 375px) {
-  .home-page #cac-featured .cfcw-content p {
-    width: 40%;
-  }
-}
-@media (min-width: 768px) and (max-width: 1110px) {
-  .home-page #cac-featured .cfcw-content p {
-    width: 40%;
-  }
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title {
   font-weight: 600;
-}
-@media (max-width: 250px) {
-  .home-page #cac-featured .cfcw-content p.cfcw-title {
-    margin-left: 0%;
-  }
-}
-@media (min-width: 251px) and (max-width: 375px) {
-  .home-page #cac-featured .cfcw-content p.cfcw-title {
-    margin-left: 10%;
-  }
-}
-@media (min-width: 768px) and (max-width: 1110px) {
-  .home-page #cac-featured .cfcw-content p.cfcw-title {
-    margin-left: 10%;
-  }
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
@@ -8215,6 +8175,11 @@ body .inline-visible-xs {
   content: " ";
   display: table;
   box-sizing: border-box;
+}
+@media (max-width: 479px) {
+  .home-page #cac-featured [class*="col-"] {
+    width: 100%;
+  }
 }
 .home-page #whos-online h2 {
   padding-left: 5px;
@@ -8395,6 +8360,9 @@ body .inline-visible-xs {
 .sidebar .sidebar-block.activity-block .time-since,
 .sidebar .sidebar-block.activity-block .fa.fa-undo {
   font-size: 11px;
+}
+.sidebar .sidebar-block.activity-block img {
+  max-width: 100%;
 }
 .sidebar .sidebar-block ul.sidebar-nav {
   margin: 0;
@@ -8776,6 +8744,10 @@ body.membership-requests .group-list {
 #bp-group-documents .bp-template-notice.updated {
   margin-bottom: 17px;
 }
+#bp-group-documents #pag-bottom {
+  margin-bottom: 19px;
+  margin-top: 3px;
+}
 .docs-info-header #tags-toggle {
   padding: 6px 16px;
 }
@@ -9067,7 +9039,9 @@ body.membership-requests .group-list {
   padding: 2%;
 }
 #member-item-body .panel .panel-body h6 {
-  margin: 7px 0 12px;
+  margin: 7px 0 9px;
+  line-height: 1.2;
+  padding: 0 0 3px;
 }
 #member-item-body .panel .panel-body p,
 #member-item-body .panel .panel-body a {
@@ -9164,6 +9138,9 @@ body.membership-requests .group-list {
 #help-tags .btn-primary {
   background: #999999;
   border-color: #999999;
+}
+#team-thumbs > div {
+  min-height: 140px;
 }
 #team-thumbs .thumb-wrapper {
   margin-bottom: 17px;
@@ -9339,5 +9316,10 @@ body.membership-requests .group-list {
 @media (max-width: 767px) {
   .group-subscription-div {
     display: none;
+  }
+}
+@media print {
+  .col-sm-18 {
+    width: 100%;
   }
 }

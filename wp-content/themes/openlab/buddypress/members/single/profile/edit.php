@@ -69,7 +69,7 @@ $field_ids = array(1);
 
                         <div<?php bp_field_css_class('editfield') ?>>
 
-                            <?php if ('textbox' == bp_get_the_profile_field_type()) : ?>
+                            <?php if ( 'textbox' == bp_get_the_profile_field_type() || 'url' == bp_get_the_profile_field_type() ) : ?>
                                 <?php if (bp_get_the_profile_field_name() == "Name") { ?>
                                     <label for="<?php bp_the_profile_field_input_name() ?>"><?php echo "Display Name"; ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
                                 <?php }else { ?>

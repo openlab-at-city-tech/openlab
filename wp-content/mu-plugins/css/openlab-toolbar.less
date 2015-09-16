@@ -215,13 +215,12 @@
                                 }
                             }
                         }
+                        .activity-row{
+                            overflow: hidden;
+                        }
                         .inline-links{
                             a{
-                                display: inline-block;
-                                &.activity-action{
-                                    display: block;
-                                    margin-top: 8px;
-                                }
+                                display: inline;
                             }
                         }
                         a{
@@ -866,7 +865,9 @@
         &.admin-area{
             #wp-admin-bar-new-content,
             #wp-admin-bar-comments{
-                display: none;
+                @media (max-width: @screen-xs-max){
+                    display: none;
+                }
             }
         }
     }

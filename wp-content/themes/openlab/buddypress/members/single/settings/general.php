@@ -36,13 +36,13 @@ do_action('bp_before_member_settings_template');
         <div class="form-group settings-section current-pw-section">
             <label for="pwd">Current Password</label>
             <input class="form-control" type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
-            
-            <?php 
+
+            <?php
             $account_type = openlab_get_displayed_user_account_type();
             $include_acct_type = in_array($account_type, array('Student', 'Alumni')) ? ' account type, ' : ' ';
             ?>
-            
-            <p class="description">Required to change<?= $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
+
+            <p class="description">Required to change<?php echo $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
         </div>
 
         <div class="form-group settings-section change-pw-section">

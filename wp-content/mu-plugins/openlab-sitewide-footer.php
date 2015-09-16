@@ -4,7 +4,6 @@
  * Adds 'local environment' tab
  */
 function cuny_local_env_flag() {
-
     if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
         $env_type = 'local';
         if (defined('ENV_TYPE')) {
@@ -25,7 +24,7 @@ function cuny_local_env_flag() {
                 font-size: 1em;
                 line-height: 1.8em;
                 border: 2px solid #666;
-                z-index: 1000;
+                z-index: 99998;
                 opacity: 0.7;
             }
         </style>
@@ -38,8 +37,9 @@ function cuny_local_env_flag() {
     }
 }
 
-//add_action( 'wp_footer', 'cuny_local_env_flag' );
-//add_action( 'admin_footer', 'cuny_local_env_flag' );
+add_action('wp_footer', 'cuny_local_env_flag');
+add_action('admin_footer', 'cuny_local_env_flag');
+add_action('login_footer', 'cuny_local_env_flag');
 
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
@@ -134,7 +134,7 @@ function openlab_footer_markup($placeholder = NULL) {
                         <h2>Share</h2>
                         <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
                         <a class="google-plus-link" href="https://plus.google.com/share?url=<?= $url ?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-            return false;">Google +</a>
+                                    return false;">Google +</a>
                     </div>
                 </div>
                 <div class="row row-copyright">
@@ -173,14 +173,14 @@ function openlab_footer_markup($placeholder = NULL) {
                             <h2>Share</h2>
                             <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
                             <a class="google-plus-link" href="https://plus.google.com/share?url={URL}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-            return false;">Google +</a>
+                                        return false;">Google +</a>
                         </div>
                     </div>
                 </div>
             </div>
             <!--end footer: mobile-->
         </div>
-        <a id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
+        <a class="visible-xs" id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
     </div>
     <?php /**
      * Adds divs that can be used for client-side detection of bootstrap breakpoints
@@ -229,17 +229,14 @@ function openlab_footer_markup($placeholder = NULL) {
 
             function getCurrentScroll() {
                 //go to top button functionality
-                if (isBreakpoint('xs')) {
+                var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-                    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-                    if (currentScroll > 250) {
-                        jQuery('#go-to-top').css('display', 'block');
-                    } else {
-                        jQuery('#go-to-top').css('display', 'none');
-                    }
-
+                if (currentScroll > 250) {
+                    jQuery('#go-to-top').css('display', 'block');
+                } else {
+                    jQuery('#go-to-top').css('display', 'none');
                 }
+
             }
 
             //detection of bootstrap breakpoints

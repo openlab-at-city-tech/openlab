@@ -13,12 +13,12 @@ function openlab_is_admin_truly_member($group = false) {
     return apply_filters('bp_group_is_member', !empty($group->is_member));
 }
 
-function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors){
-    
+function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors) {
+
     clean_user_cache($user_id);
 }
 
-add_action('xprofile_updated_profile','openlab_flush_user_cache_on_save',10,3);
+add_action('xprofile_updated_profile', 'openlab_flush_user_cache_on_save', 10, 3);
 
 /**
  * 	People archive page
@@ -243,10 +243,10 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-18">
+            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">
                 <?php openlab_current_directory_filters(); ?>
             </div>
-            <div class="group-count col-sm-6"><?php cuny_members_pagination_count('members'); ?></div>
+            <div class="col-md-6 col-sm-8 text-right"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
         <div id="group-members-list" class="group-list item-list row">
@@ -601,15 +601,16 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
 
                                 <div class="activity-content col-sm-14 col-xs-16">
 
-                                    <h6>
-                                        <a class="font-size font-14 no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" data-basevalue="35" data-minvalue="20" data-basewidth="143"><?= bp_get_group_name(); ?></a>
-                                        <span class="original-copy hidden"><?= bp_get_group_name() ?></span>
+                                    <h6 class="overflow-hidden">
+                                        <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?php echo bp_get_group_name(); ?></a>
+                                        <span class="original-copy hidden"><?php echo bp_get_group_name() ?></span>
                                     </h6>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
-
-                                    <p class="truncate-on-the-fly" data-link="<?= bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?= $activity ?></p>
-                                    <p class="original-copy hidden"><?= $activity ?></p>
+                                    <div class="truncate-wrapper overflow-hidden">
+                                        <p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity ?></p>
+                                        <p class="original-copy hidden"><?php echo $activity ?></p>
+                                    </div>
 
                                 </div>
 
@@ -838,6 +839,7 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
+
                         </div>
                     </div>
                 <?php endif; // bp_has_profile()     ?>

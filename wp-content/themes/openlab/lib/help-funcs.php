@@ -111,11 +111,11 @@ function openlab_help_loop() {
                 <div class="col-md-24">
                     <div class="submenu">
                         <div class="submenu-text pull-left bold">Topics: </div>
-		        <ul class="nav nav-inline">
+		        <ul class="nav nav-inline"><!--
 		        <?php foreach ( $nav_links as $nav_link ) :
-                            ?><li><?php echo $nav_link ?></li><?php
+                            ?>--><li><?php echo $nav_link ?></li><!--<?php
 		        endforeach; ?>
-		        </ul>
+		        --></ul>
 		    </div>
                 </div>
 	    </div>

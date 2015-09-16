@@ -13,7 +13,6 @@
                 OpenLab.utility.truncateOnTheFly(true);
             }
             OpenLab.utility.adjustLoginBox();
-
         },
         adjustLoginBox: function () {
             if ($('#user-info')) {
@@ -35,19 +34,19 @@
             if (onInit === undefined) {
                 var onInit = false;
             }
-            
-            if (loadDelay === undefined){
+
+            if (loadDelay === undefined) {
                 var loadDelay = false;
             }
 
             $('.truncate-on-the-fly').each(function () {
-                
+
                 var thisElem = $(this);
-                
-                if(!loadDelay && thisElem.hasClass('load-delay')){
+
+                if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
                 }
-                
+
                 var truncationBaseValue = thisElem.data('basevalue');
                 var truncationBaseWidth = thisElem.data('basewidth');
 
@@ -106,7 +105,7 @@
             if (truncationValue > 10) {
                 thisElem.succinct({
                     size: truncationValue,
-                    omission: '<span class="omission">&hellip;' + thisOmission + '</span>'
+                    omission: '<span class="omission">&hellip; ' + thisOmission + '</span>'
                 });
             } else {
                 thisElem.html('<span class="omission">' + thisOmission + '</span>');
@@ -302,10 +301,10 @@
             speed: 200,
         });
 
-        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function(){
-            
-            OpenLab.utility.truncateOnTheFly(false,true);
-            
+        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
+
+            OpenLab.utility.truncateOnTheFly(false, true);
+
         });
 
     });

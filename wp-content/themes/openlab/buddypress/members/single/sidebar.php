@@ -17,8 +17,8 @@ if (!$dud = bp_displayed_user_domain()) {
          $id = 'portfolio-sidebar-inline-widget';
      endif; ?>
 
-<div class="sidebar-widget mol-menu" id="<?= $id ?>">
-    
+<div class="sidebar-widget mol-menu" id="<?php echo $id ?>">
+
     <?php openlab_members_sidebar_blocks($mobile_hide); ?>
     <?php openlab_member_sidebar_menu(); ?>
 
@@ -60,7 +60,7 @@ $activity_args = array(
                             </a>
                         </div>
 
-                        <div class="activity-content col-sm-16 col-xs-17">
+                        <div class="activity-content overflow-hidden col-sm-16 col-xs-17">
 
                             <div class="activity-header">
                                 <?php echo openlab_get_custom_activity_action(); ?>
@@ -68,7 +68,9 @@ $activity_args = array(
 
                             <?php if (bp_activity_has_content()) : ?>
                                 <div class="activity-inner semibold hyphenate">
-                                    <?php bp_activity_content_body() ?>
+                                    <p>
+                                        <?php echo openlab_sidebar_cleanup(bp_get_activity_content_body()); ?>
+                                    </p>
                                 </div>
                             <?php endif; ?>
 

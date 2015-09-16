@@ -253,23 +253,30 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			if ( 'all' !== $type && 'hidden' === $portfolio_group->status ) {
 				continue;
 			}
-                        
-                        // If the portfolio_blog_id is empty, this may be an
-                        // external portfolio
-                        if (empty($portfolio_blog_id)) {
-                            $external_url = openlab_get_external_site_url_by_group_id($portfolio_id);
-                            if (empty($external_url)) {
-                                continue;
-                            }
-                        }
+
+                        // If the portfolio_blog_id is empty, this may be an external portfolio.
+                        if ( empty( $portfolio_blog_id ) ) {
+				$portfolio_url = openlab_get_external_site_url_by_group_id( $portfolio_id );
+
+				// No URL found? There's no portfolio to link to.
+				if ( empty( $portfolio_url ) ) {
+					continue;
+				}
+
+				// Use the group title for the link text.
+				$portfolio_title = $portfolio_group->name;
+                        } else {
+				$portfolio_url = openlab_get_user_portfolio_url( $member->ID );
+				$portfolio_title = get_blog_option( $portfolio_blog_id, 'blogname' );
+			}
 
                         $portfolio = array(
 				'user_id' => $member->ID,
 				'user_display_name' => $member->display_name,
 				'user_type' => xprofile_get_field_data( 'Account Type', $member->ID ),
 				'portfolio_id' => $portfolio_id,
-				'portfolio_url' => openlab_get_user_portfolio_url( $member->ID ),
-				'portfolio_title' => get_blog_option( $portfolio_blog_id, 'blogname' ),
+				'portfolio_url' => $portfolio_url,
+				'portfolio_title' => $portfolio_title,
 			);
 
 			$portfolios[] = $portfolio;
@@ -506,7 +513,7 @@ function openlab_portfolio_list_group_display() {
 		<h2 class="sidebar-header">
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
 		</h2>
-            
+
                 <div class="sidebar-block">
 
 		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
@@ -515,7 +522,7 @@ function openlab_portfolio_list_group_display() {
 			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
 		<?php endforeach ?>
 		</ul>
-                    
+
                 </div>
 	</div>
 

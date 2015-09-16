@@ -448,7 +448,7 @@ function wds_bp_group_meta() {
 
                         if ($maybe_site_id) {
                             $group_site_name = get_blog_option($maybe_site_id, 'blogname');
-                            $group_site_text = '<strong>' . $group_site_name . '</strong> ( <a href="' . $group_site_url . '">' . $group_site_url . '</a> )';
+                            $group_site_text = '<strong>' . $group_site_name . '</strong> (&nbsp;<a href="' . $group_site_url . '">' . $group_site_url . '</a>&nbsp;)';
                         } else {
                             $group_site_text = '<strong><a href="' . $group_site_url . '">' . $group_site_url . '</a></strong>';
                         }
@@ -1184,29 +1184,32 @@ add_action('bp_actions', 'openlab_catch_refresh_feed_requests');
  * Until we get the dynamic portfolio picker working properly, we manually fall
  * back on old logic
  */
-function openlab_get_groupblog_template($user_id, $group_type) {
-    switch ($group_type) {
-        case 'portfolio' :
-            $account_type = strtolower(xprofile_get_field_data('Account Type', $user_id));
+function openlab_get_groupblog_template( $user_id, $group_type ) {
+	switch ( $group_type ) {
+		case 'portfolio' :
+			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
 
-            switch ($account_type) {
-                case 'faculty' :
-                    $template = 'template-portfolio';
-                    break;
-                case 'staff' :
-                    $template = 'template-portfolio-staff';
-                    break;
-                case 'student' :
-                    $template = 'template-eportfolio';
-                    break;
-            }
-            break;
+			switch ( $account_type ) {
+				case 'faculty' :
+					$template = 'template-portfolio';
+					break;
+				case 'staff' :
+					$template = 'template-portfolio-staff';
+					break;
+				case 'student' :
+					$template = 'template-eportfolio';
+					break;
+				case 'alumni' :
+					$template = 'template-eportfolio-alumni';
+					break;
+			}
+			break;
 
-        default :
-            $template = 'template-' . strtolower($group_type);
-            break;
-    }
-    return $template;
+		default :
+			$template = 'template-' . strtolower($group_type);
+			break;
+	}
+	return $template;
 //	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
 //	return $tp->get_portfolio_template_for_user();
 }

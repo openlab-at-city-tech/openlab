@@ -213,6 +213,63 @@ function openlab_redirect_to_profile_edit_group() {
 add_action( 'bp_actions', 'openlab_redirect_to_profile_edit_group', 1 );
 
 /**
+ * Custom reordering of profile fields.
+ *
+ * - For Alumni, "Graduation Year" should always follow "Major Program of Study".
+ */
+function openlab_reorder_profile_fields( $has_profile ) {
+	global $profile_template;
+
+	$alumni_group_index = false;
+	$student_group_index = false;
+	foreach ( $profile_template->groups as $group_index => $group ) {
+		if ( 'Alumni' === $group->name ) {
+			$alumni_group_index = $group_index;
+		} elseif ( 'Student' === $group->name ) {
+			$student_group_index = $group_index;
+		}
+	}
+
+	if ( false !== $alumni_group_index && false !== $student_group_index ) {
+		// Find the Graduation Year field.
+		$gy_field = $gy_field_index = null;
+		foreach ( $profile_template->groups[ $alumni_group_index ]->fields as $field_index => $field ) {
+			if ( 'Graduation Year' === $field->name ) {
+				$gy_field = clone $field;
+				$gy_field_index = $field_index;
+			}
+		}
+
+		if ( null !== $gy_field ) {
+			// Put it in the right place in the Student array.
+			$mpos_field_index = null;
+			foreach ( $profile_template->groups[ $student_group_index ]->fields as $field_index => $field ) {
+				if ( 'Major Program of Study' === $field->name ) {
+					$mpos_field_index = $field_index;
+					break;
+				}
+			}
+
+			if ( null !== $mpos_field_index ) {
+				$sfields = $profile_template->groups[ $student_group_index ]->fields;
+
+				// Can't make array_splice() work for some reason.
+				$sfields_before = array_slice( $sfields, 0, $mpos_field_index + 1 );
+				$sfields_after = array_slice( $sfields, $mpos_field_index + 1 );
+				$sfields = array_merge( $sfields_before, array( $gy_field ), $sfields_after );
+				$profile_template->groups[ $student_group_index ]->fields = $sfields;
+
+				// Unset the original field location.
+				unset( $profile_template->groups[ $alumni_group_index ]->fields[ $gy_field_index ] );
+			}
+		}
+	}
+
+	return $has_profile;
+}
+add_filter( 'bp_has_profile', 'openlab_reorder_profile_fields' );
+
+/**
  * Add the group type to the form action of the group creation forms
  */
 function openlab_group_type_in_creation_form_action( $action ) {

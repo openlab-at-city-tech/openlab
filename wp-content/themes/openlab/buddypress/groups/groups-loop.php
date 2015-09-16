@@ -51,7 +51,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 			echo openlab_submenu_markup('groups', $filters['wds_group_type'],false);
 		}
 		?>
-  
+
             <div class="group-count col-sm-5 pull-right"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
 </div>
 	<div id="group-list" class="item-list group-list row">
@@ -68,7 +68,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 				<div class="item col-xs-18">
                                     <div class="item-content-wrapper">
                                             <h2 class="item-title">
-                                                <a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                                 <span class="original-copy hidden"><?php bp_group_name() ?></span>
                                             </h2>
                                             <?php
@@ -85,11 +85,8 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 
                                             <?php endif; ?>
                                                 <div class="description-line">
-                                                    <?php
-                                                    $this_description = str_replace('<p>', '<p class="truncate-on-the-fly" data-link="' . bp_get_group_permalink() . '" data-basevalue="105" data-basewidth="290">', bp_get_group_description_excerpt());
-                                                    $this_description .= str_replace('<p>', '<p class="original-copy hidden">', bp_get_group_description_excerpt());
-                                                    echo $this_description;
-                                                    ?>
+                                                    <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?php echo bp_get_group_description_excerpt() ?></p>
+                                                    <p class="original-copy hidden"><?php echo bp_get_group_description_excerpt() ?></p>
                                                 </div>
                                     </div>
 				</div>
@@ -102,7 +99,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
         </div>
         <script type="text/javascript">
             (function($){
-              $('.item-content-wrapper p').css('opacity','0');  
+              $('.item-content-wrapper p').css('opacity','0');
             })(jQuery);
         </script>
 

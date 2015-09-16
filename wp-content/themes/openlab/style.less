@@ -112,7 +112,8 @@ blockquote {
             display: inline-block;
             margin-bottom: 0;
             border-right: 1px solid @80gray;
-            a{
+            a,
+            span{
                 color: @black;
                 display: inline-block;
                 padding: 0 7px;
@@ -137,6 +138,7 @@ blockquote {
             }
             .fa{
                 padding-left: 7px;
+                padding-right: 0;
                 margin: 0;
             }
             &:first-child{
@@ -537,6 +539,9 @@ body{
         margin: 0;
         padding: 0;
         list-style-type: none;
+    }
+    .overflow-hidden{
+        overflow: hidden;
     }
     .timestamp{
         font-size: @font-size-small;
@@ -1154,48 +1159,21 @@ body{
             background: desaturate(lighten(@yellow,25.7%),3%);
             border-radius: @border-radius-base;
             padding: 5%;
-            img{
-                border: 17px solid @white;
-                float: left;
-                margin-right: 12px;
-                width: 163px;
-                @media (max-width: @spotlight250-screen-min){
+            .cfcw-image-wrapper{
+                img{
+                    border: 17px solid @white;
                     width: 100%;
-                    margin: 0 0 20px;
+                    max-width: 225px;
+                    margin: 0 auto;
                 }
-                @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min){
-                    width: 80%;
-                    margin: 0 10% 20px;
-                }
-                @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen){
-                    width: 80%;
-                    margin: 0 10% 20px;
+                @media (max-width: @screen-sm-max){
+                    margin-bottom: 21px;
                 }
             }
             p{
-                float: left;
-                width: 45%;
                 font-weight: @normal;
-                @media (max-width: @spotlight250-screen-min){
-                    width: 50%;
-                }
-                @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min){
-                    width: 40%;
-                }
-                @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen){
-                    width: 40%;
-                }
                 &.cfcw-title{
                     font-weight: @semibold;
-                    @media (max-width: @spotlight250-screen-min){
-                        margin-left: 0%;
-                    }
-                    @media (min-width: @spotlight250-screen-max ) and (max-width: @spotlight375-screen-min) {
-                        margin-left: 10%;
-                    }
-                    @media (min-width: @spotlight768-screen ) and (max-width: @spotlight1110-screen) {
-                        margin-left: 10%;
-                    }
                     a{
                         font-size: @font-size-h2;
                         line-height: @headings-line-height;
@@ -1208,6 +1186,11 @@ body{
                 content: " ";
                 display: table;
                 box-sizing: border-box;
+            }
+        }
+        @media (max-width: @screen-xxs-max){
+            [class*="col-"]{
+                width: 100%;
             }
         }
     }
@@ -1392,6 +1375,9 @@ body{
             .time-since,
             .fa.fa-undo{
                 font-size: 11px;
+            }
+            img{
+                max-width: 100%;
             }
         }
         ul.sidebar-nav{
@@ -1859,6 +1845,10 @@ body.membership-requests {
             margin-bottom: 17px;
         }
     }
+    #pag-bottom{
+        margin-bottom: 19px;
+        margin-top: 3px;
+    }
 }
 .docs-info-header{
     #tags-toggle{
@@ -2194,7 +2184,9 @@ body.membership-requests {
         .panel-body{
             padding: 2%;
             h6{
-                margin: 7px 0 12px;
+                margin: 7px 0 9px;
+                line-height: 1.2;
+                padding: 0 0 3px;
             }
             p,
             a{
@@ -2319,6 +2311,9 @@ body.membership-requests {
     }
 }
 #team-thumbs{
+    & > div {
+        min-height: 140px;
+    }
     .thumb-wrapper{
         margin-bottom: 17px;
         .team-thumb {
@@ -2498,5 +2493,10 @@ body.membership-requests {
 @media(max-width:@screen-xs-max){
     .group-subscription-div{
         display: none;
+    }
+}
+@media print {
+    .col-sm-18 {
+        width: 100%;
     }
 }
