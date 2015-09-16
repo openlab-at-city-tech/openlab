@@ -1472,10 +1472,10 @@ function openlab_get_group_site_settings($group_id) {
 }
 
 function openlab_custom_group_excerpts($excerpt, $group) {
-    global $post;
+    global $post, $bp;
 
     $hits = array('courses', 'projects', 'clubs', 'portfolios', 'my-courses', 'my-projects', 'my-clubs');
-    if (in_array($post->post_name, $hits)) {
+    if (in_array($post->post_name, $hits) || $bp->current_action == 'invites') {
         $excerpt = strip_tags($excerpt);
     }
 
