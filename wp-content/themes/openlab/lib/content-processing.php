@@ -83,7 +83,7 @@ function openlab_filter_profile_fields($value, $type) {
 function openlab_http_check($link) {
     $http_check = strpos($link, "http");
 
-    if ($http_check == false) {
+    if ($http_check === false) {
         $link = "http://" . $link;
     }
 
