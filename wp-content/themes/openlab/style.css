@@ -7089,17 +7089,18 @@ blockquote .h6 {
   display: inline-block;
   margin-bottom: 0;
   border-right: 1px solid #333333;
+  padding: 0 7px;
 }
 .nav.nav-inline li a,
 .nav.nav-inline li span {
   color: #000000;
   display: inline-block;
-  padding: 0 7px;
+  padding: 0;
 }
 .nav.nav-inline li.no-link {
   color: #49cabe;
-  padding: 0 7px;
   font-weight: 700;
+  padding: 0;
 }
 .nav.nav-inline li.current-menu-item,
 .nav.nav-inline li:hover {
@@ -7117,16 +7118,12 @@ blockquote .h6 {
   border-right: none;
 }
 .nav.nav-inline li .fa {
-  padding-left: 7px;
-  padding-right: 0;
-  margin: 0;
-}
-.nav.nav-inline li:first-child a {
-  padding-left: 0;
-}
-.nav.nav-inline li:first-child .fa {
   padding-left: 0;
   padding-right: 7px;
+  margin: 0;
+}
+.nav.nav-inline li:first-child {
+  padding-left: 0;
 }
 .nav.nav-inline li.submenu-title:hover,
 .nav.nav-inline li.submenu-title:active {
@@ -7141,10 +7138,10 @@ blockquote .h6 {
   .nav.nav-inline li {
     display: block;
     border-right: none;
+    padding: 0;
   }
   .nav.nav-inline li a {
     border-right: none;
-    padding: 0;
     line-height: 185%;
   }
   .nav.nav-inline li .fa {

@@ -112,16 +112,17 @@ blockquote {
             display: inline-block;
             margin-bottom: 0;
             border-right: 1px solid @80gray;
+            padding: 0 7px;
             a,
             span{
                 color: @black;
                 display: inline-block;
-                padding: 0 7px;
+                padding: 0;
             }
             &.no-link{
                 color: @aqua;
-                padding: 0 7px;
                 font-weight: @bold;
+                padding: 0;
             }
             &.current-menu-item,
             &:hover{
@@ -137,18 +138,12 @@ blockquote {
                 border-right: none;
             }
             .fa{
-                padding-left: 7px;
-                padding-right: 0;
+                padding-left: 0;
+                padding-right: 7px;
                 margin: 0;
             }
             &:first-child{
-                a{
-                    padding-left: 0;
-                }
-                .fa{
-                    padding-left: 0;
-                    padding-right: 7px;
-                }
+                padding-left: 0;
             }
             &.submenu-title{
                 &:hover,
@@ -164,9 +159,9 @@ blockquote {
             li{
                 display: block;
                 border-right: none;
+                padding: 0;
                 a{
                     border-right: none;
-                    padding: 0;
                     line-height: 185%;
                 }
                 .fa{
