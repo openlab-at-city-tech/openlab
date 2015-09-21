@@ -8301,7 +8301,15 @@ body .inline-visible-xs {
   margin-bottom: 25px;
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
+  height: 0;
+  padding-top: 100%;
   position: relative;
+}
+.home-page .activity-list .activity-wrapper .activity-item .item-avatar a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-content-wrapper {
   margin: 0 auto;
