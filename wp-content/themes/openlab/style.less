@@ -2240,6 +2240,41 @@ body.membership-requests {
         }
     }
 }
+#settings-form{
+    .table{
+        thead{
+            tr{
+                th{
+                    border-width: 1px;
+                    padding: 4px 8px 4px 0;
+                    &.icon{
+                        display: none;
+                    }
+                }
+            }
+        }   
+        tbody{
+            tr{
+                td{
+                    border: none;
+                    padding: 4px 8px 4px 0;
+                    &:first-child{
+                        display: none;
+                    }
+                }
+            }
+        }
+        .yes,
+        .no{
+            text-align: center;
+        }
+    }
+    #group-email-settings{
+        .table{
+            margin-bottom: 0;
+        }
+    }
+}
 /**help**/
 .col-help{
     /* Unsure whether this is needed */

@@ -9084,6 +9084,27 @@ body.membership-requests .group-list {
     height: 130px;
   }
 }
+#settings-form .table thead tr th {
+  border-width: 1px;
+  padding: 4px 8px 4px 0;
+}
+#settings-form .table thead tr th.icon {
+  display: none;
+}
+#settings-form .table tbody tr td {
+  border: none;
+  padding: 4px 8px 4px 0;
+}
+#settings-form .table tbody tr td:first-child {
+  display: none;
+}
+#settings-form .table .yes,
+#settings-form .table .no {
+  text-align: center;
+}
+#settings-form #group-email-settings .table {
+  margin-bottom: 0;
+}
 /**help**/
 .col-help {
   /* Unsure whether this is needed */
