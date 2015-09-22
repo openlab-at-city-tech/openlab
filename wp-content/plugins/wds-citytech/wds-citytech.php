@@ -2249,3 +2249,15 @@ function openlab_add_webcal_to_allowed_protocols( $protocols ) {
 	return $protocols;
 }
 add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
+
+/**
+ * Don't limit upload space on blog 1.
+ */
+function openlab_allow_unlimited_space_on_blog_1( $check ) {
+	if ( 1 === get_current_blog_id() ) {
+		return 0;
+	}
+
+	return $check;
+}
+add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
