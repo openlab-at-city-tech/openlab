@@ -9102,6 +9102,12 @@ body.membership-requests .group-list {
 #settings-form .table .no {
   text-align: center;
 }
+#settings-form .table .no {
+  padding-right: 7%;
+}
+#settings-form .table .yes {
+  padding-right: 5%;
+}
 #settings-form #group-email-settings .table {
   margin-bottom: 0;
 }
