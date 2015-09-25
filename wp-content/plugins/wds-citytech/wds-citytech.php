@@ -379,10 +379,10 @@ function wds_load_default_account_type() {
 
 function wds_load_account_type() {
 	$return = '';
-        
+
 	$account_type = $_POST['account_type'];
         $post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
-        
+
 	if ( $account_type ) {
 		$return .= wds_get_register_fields( $account_type, $post_data );
 	} else {
@@ -445,14 +445,14 @@ function wds_groups_ajax() {
 
 		function wds_load_group_departments( id ) {
 			<?php $group= bp_get_current_group_id();
-                        
+
                         //get group type
                         if (!empty($_GET['type'])) {
                             $group_type = $_GET['type'];
                         } else {
                             $group_type = 'club';
                         }
-                        
+
 			echo $sack;?>
 			var schools="0";
 			if ( document.getElementById( 'school_tech' ).checked ) {
@@ -754,7 +754,7 @@ function wds_load_group_type( $group_type ) {
 	$wds_group_school = explode( ",", $wds_group_school );
 
 	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
-        
+
         $return = '<div class="panel panel-default">';
 
 	$return .= '<div class="panel-heading">School(s)';
@@ -827,7 +827,7 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '</td>';
 	$return .= '</tr>';
-        
+
         // For the love of Pete, it's not that hard to cast variables
 	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
@@ -839,9 +839,9 @@ function wds_load_group_type( $group_type ) {
 		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
 		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
-        
+
 	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
-        
+
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
@@ -854,11 +854,11 @@ function wds_load_group_type( $group_type ) {
 	$return .= '</td></tr>';
 		$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
 	$return.= '</tr>';
-        
+
         $return .= '</table></div></div>';
-        
+
         if ( 'course' == $group_type ) {
-        
+
         $return .= '<div class="panel panel-default">';
         $return .= '<div class="panel-heading">Course Information</div>';
         $return .= '<div class="panel-body"><table>';
@@ -908,7 +908,7 @@ function wds_load_group_type( $group_type ) {
 		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
 		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
 		$return.= '</tr>';
-                
+
                 $return.= '</table></div></div><!--.panel-->';
 	}
 
@@ -1458,7 +1458,7 @@ class buddypress_Translation_Mangler {
 
    $uc_grouptype = ucfirst( $grouptype );
    $translations = get_translations_for_domain( 'buddypress' );
-   
+
    switch( $text ) {
 	case "Forum":
 		return $translations->translate( "Discussion" );
@@ -1830,7 +1830,7 @@ function openlab_addl_settings_fields() {
 
 		bp_core_add_message( __( 'Your settings have been saved.', 'buddypress' ), 'success' );
 	}
-        
+
         if (!empty($account_type)) {
         //saving account type for students or alumni
         $types = array('Student', 'Alumni');
@@ -2249,3 +2249,15 @@ function openlab_add_webcal_to_allowed_protocols( $protocols ) {
 	return $protocols;
 }
 add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
+
+/**
+ * Don't limit upload space on blog 1.
+ */
+function openlab_allow_unlimited_space_on_blog_1( $check ) {
+	if ( 1 === get_current_blog_id() ) {
+		return 0;
+	}
+
+	return $check;
+}
+add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
