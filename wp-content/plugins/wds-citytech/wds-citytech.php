@@ -1494,6 +1494,9 @@ class buddypress_Translation_Mangler {
         case "%s edited the blog post %s in the group %s:":
                 return $translations_bpgroupblog->translate("%s edited the blog post %s in the group %s");
                 break;
+        case "%s wrote a new blog post %s in the group %s:":
+                return $translations_bpgroupblog->translate("%s wrote a new blog post %s in the group %s");
+                break;
         }
 
         return $translation;
