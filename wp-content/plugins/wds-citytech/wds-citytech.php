@@ -1458,7 +1458,6 @@ class buddypress_Translation_Mangler {
 
    $uc_grouptype = ucfirst( $grouptype );
    $translations = get_translations_for_domain( 'buddypress' );
-   $translations_bpgroupblog = get_translations_for_domain( 'groupblog' );
 
    switch( $text ) {
 	case "Forum":
@@ -1491,15 +1490,8 @@ class buddypress_Translation_Mangler {
         case "Manage" :
                 return $translations->translate('Settings');
                 break;
-        case "%s edited the blog post %s in the group %s:":
-                return $translations_bpgroupblog->translate("%s edited the blog post %s in the group %s");
-                break;
-        case "%s wrote a new blog post %s in the group %s:":
-                return $translations_bpgroupblog->translate("%s wrote a new blog post %s in the group %s");
-                break;
         }
-
-        return $translation;
+  return $translation;
  }
 }
 
