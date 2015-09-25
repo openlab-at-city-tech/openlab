@@ -255,7 +255,7 @@ function openlab_group_blog_activity($activity) {
             $userlink = '<a href="' . esc_attr($comment->comment_author_url) . '">' . esc_html($comment->comment_author) . '</a>';
         }
         $activity->action = sprintf(
-                __('%s commented on %s in the group %s:', 'groupblog'), $userlink, '<a href="' . get_permalink($post->ID) . '">' . esc_html($post->post_title) . '</a>', '<a href="' . bp_get_group_permalink($group) . '">' . esc_html($group->name) . '</a>'
+                __('%s commented on %s in the group %s', 'groupblog'), $userlink, '<a href="' . get_permalink($post->ID) . '">' . esc_html($post->post_title) . '</a>', '<a href="' . bp_get_group_permalink($group) . '">' . esc_html($group->name) . '</a>'
         );
     }
 
