@@ -13,8 +13,9 @@ function wpcf7_autop( $pee, $br = 1 ) {
 	$pee = preg_replace( '!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee );
 	$pee = preg_replace( '!(</' . $allblocks . '>)!', "$1\n\n", $pee );
 
-	/* wpcf7: take care of [response] tag */
-	$pee = preg_replace( '!(\[response[^]]*\])!', "\n$1\n\n", $pee );
+	/* wpcf7: take care of [response] and [recaptcha] tag */
+	$pee = preg_replace( '!(\[(?:response|recaptcha)[^]]*\])!',
+		"\n$1\n\n", $pee );
 
 	$pee = str_replace( array( "\r\n", "\r" ), "\n", $pee ); // cross-platform newlines
 
@@ -41,9 +42,11 @@ function wpcf7_autop( $pee, $br = 1 ) {
 	$pee = preg_replace( '!<p>\s*(</?' . $allblocks . '[^>]*>)!', "$1", $pee );
 	$pee = preg_replace( '!(</?' . $allblocks . '[^>]*>)\s*</p>!', "$1", $pee );
 
-	/* wpcf7: take care of [response] tag */
-	$pee = preg_replace( '!<p>\s*(\[response[^]]*\])!', "$1", $pee );
-	$pee = preg_replace( '!(\[response[^]]*\])\s*</p>!', "$1", $pee );
+	/* wpcf7: take care of [response] and [recaptcha] tag */
+	$pee = preg_replace( '!<p>\s*(\[(?:response|recaptcha)[^]]*\])!',
+		"$1", $pee );
+	$pee = preg_replace( '!(\[(?:response|recaptcha)[^]]*\])\s*</p>!',
+		"$1", $pee );
 
 	if ( $br ) {
 		/* wpcf7: add textarea */
@@ -58,6 +61,22 @@ function wpcf7_autop( $pee, $br = 1 ) {
 	$pee = preg_replace( "|\n</p>$|", '</p>', $pee );
 
 	return $pee;
+}
+
+function wpcf7_sanitize_query_var( $text ) {
+	$text = wp_unslash( $text );
+	$text = wp_check_invalid_utf8( $text );
+
+	if ( false !== strpos( $text, '<' ) ) {
+		$text = wp_pre_kses_less_than( $text );
+		$text = wp_strip_all_tags( $text );
+	}
+
+	$text = preg_replace( '/%[a-f0-9]{2}/i', '', $text );
+	$text = preg_replace( '/ +/', ' ', $text );
+	$text = trim( $text, ' ' );
+
+	return $text;
 }
 
 function wpcf7_strip_quote( $text ) {
@@ -117,20 +136,28 @@ function wpcf7_strip_newline( $str ) {
 }
 
 function wpcf7_canonicalize( $text ) {
-	if ( function_exists( 'mb_convert_kana' ) && 'UTF-8' == get_option( 'blog_charset' ) )
+	if ( function_exists( 'mb_convert_kana' )
+	&& 'UTF-8' == get_option( 'blog_charset' ) ) {
 		$text = mb_convert_kana( $text, 'asKV', 'UTF-8' );
+	}
 
 	$text = strtolower( $text );
 	$text = trim( $text );
 	return $text;
 }
 
+/**
+ * Check whether a string is a valid NAME token.
+ *
+ * ID and NAME tokens must begin with a letter ([A-Za-z])
+ * and may be followed by any number of letters, digits ([0-9]),
+ * hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
+ *
+ * @see http://www.w3.org/TR/html401/types.html#h-6.2
+ *
+ * @return bool True if it is a valid name, false if not.
+ */
 function wpcf7_is_name( $string ) {
-	// See http://www.w3.org/TR/html401/types.html#h-6.2
-	// ID and NAME tokens must begin with a letter ([A-Za-z])
-	// and may be followed by any number of letters, digits ([0-9]),
-	// hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
-
 	return preg_match( '/^[A-Za-z][-A-Za-z0-9_:.]*$/', $string );
 }
 
@@ -195,4 +222,21 @@ function wpcf7_antiscript_file_name( $filename ) {
 	return $filename;
 }
 
-?>
+function wpcf7_mask_password( $text, $length_unmasked = 0 ) {
+	$length = strlen( $text );
+	$length_unmasked = absint( $length_unmasked );
+
+	if ( 0 == $length_unmasked ) {
+		if ( 9 < $length ) {
+			$length_unmasked = 4;
+		} elseif ( 3 < $length ) {
+			$length_unmasked = 2;
+		} else {
+			$length_unmasked = $length;
+		}
+	}
+
+	$text = substr( $text, 0 - $length_unmasked );
+	$text = str_pad( $text, $length, '*', STR_PAD_LEFT );
+	return $text;
+}
