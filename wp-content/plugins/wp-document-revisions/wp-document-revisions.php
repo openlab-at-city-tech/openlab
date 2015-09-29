@@ -3,8 +3,8 @@
 Plugin Name: WP Document Revisions
 Plugin URI: http://ben.balter.com/2011/08/29/wp-document-revisions-document-management-version-control-wordpress/
 Description: A document management and version control plugin for WordPress that allows teams of any size to collaboratively edit files and manage their workflow.
-Version: 1.3.6
-Author: Benjamin J. Balter
+Version: 2.0.0
+Author: Ben Balter
 Author URI: http://ben.balter.com
 License: GPL3
 */
@@ -14,7 +14,7 @@ License: GPL3
  *  A document management and version control plugin for WordPress that allows
  *  teams of any size to collaboratively edit files and manage their workflow.
  *
- *  Copyright (C) 2011-2012  Benjamin J. Balter  ( ben@balter.com -- http://ben.balter.com )
+ *  Copyright (C) 2011-2014 Ben Balter  ( ben@balter.com -- http://ben.balter.com )
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,18 +29,21 @@ License: GPL3
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  @copyright 2011-2012
+ *  @copyright 2011-2014
  *  @license GPL v3
- *  @version 1.3.6
+ *  @version 2.0.0
  *  @package WP_Document_Revisions
- *  @author Benjamin J. Balter <ben@balter.com>
+ *  @author Ben Balter <ben@balter.com>
  */
 
-class Document_Revisions {
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/includes');
+require_once "HTTP/WebDAV/Server.php";
+
+class Document_Revisions extends HTTP_WebDAV_Server {
 	static $instance;
 	static $key_length = 32;
 	static $meta_key   = 'document_revisions_feed_key';
-	public $version = '1.3.6';
+	public $version = '2.0.0';
 
 	/**
 	 * Initiates an instance of the class and adds hooks
@@ -68,6 +71,8 @@ class Document_Revisions {
 		add_action( 'post_type_link', array(&$this, 'permalink'), 10, 4 );
 		add_action( 'post_link', array(&$this, 'permalink'), 10, 4 );
 		add_filter( 'template_include', array(&$this, 'serve_file'), 10, 1 );
+		add_action( 'after_setup_theme', array(&$this, 'auth_webdav_requests'));
+		add_action( 'template_redirect', array(&$this, 'check_webdav_requests'));
 		add_filter( 'serve_document_auth', array( &$this, 'serve_document_auth'), 10, 3 );
 		add_action( 'parse_request', array( &$this, 'ie_cache_fix' ) );
 		add_filter( 'query_vars', array(&$this, 'add_query_var'), 10, 4 );
@@ -108,6 +113,228 @@ class Document_Revisions {
 
 	}
 
+
+	###################################################
+	#
+	# Support some basic WebDav requests
+	#
+	###################################################
+
+	function auth_webdav_requests($post) {
+		$request_method = $_SERVER['REQUEST_METHOD'];
+
+		// OPTIONS must always be unauthenticated
+		if ($request_method == 'OPTIONS') {
+			nocache_headers();
+			parent::http_OPTIONS();
+			header("Allow: OPTIONS GET POST PUT HEAD LOCK");
+			header("DAV: 1,2");
+			status_header( 200 );
+			die();
+		}
+
+		$webdav_methods = array( "LOCK", "PUT" );
+		$private_checked_methods = array( "GET", "HEAD" );
+
+		if ( in_array( $request_method, $webdav_methods ) || ( in_array( $request_method, $private_checked_methods ) && $this->is_webdav_client() ) ) {
+			$this->basic_auth();
+		}
+	}
+
+	function is_webdav_client() {
+		$client = $_SERVER['HTTP_USER_AGENT'];
+		if ( strpos( $client, 'Office' ) !== false ) {
+			return true;
+		}
+		if ( strpos( $client, 'DAV' ) !== false ) {
+			return true;
+		}
+		if ( strpos( $client, 'cadaver' ) !== false ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check for WebDav request types and handle them
+	 */
+	function check_webdav_requests() {
+		global $post;
+		if ( $post ) {
+			$request_method = $_SERVER['REQUEST_METHOD'];
+			switch ( $request_method ) {
+				case "LOCK":
+					if ( current_user_can( 'edit_post', $post->ID ) ) {
+						$this->do_LOCK();
+					} else {
+						nocache_headers();
+						status_header( 403 );
+						die();
+					}
+					break;
+
+				case "PUT":
+					if ( current_user_can( 'edit_post', $post->ID ) ) {
+						$this->do_PUT();
+					} else {
+						nocache_headers();
+						status_header( 403 );
+						die();
+					}
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Do basic authentication
+	 */
+	function basic_auth() {
+		nocache_headers();
+		if ( is_user_logged_in() ) {
+			return;
+		}
+
+		$usr = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
+		$pwd = isset($_SERVER['PHP_AUTH_PW'])   ? $_SERVER['PHP_AUTH_PW']   : '';
+		if (empty($usr) && empty($pwd) && isset($_SERVER['HTTP_AUTHORIZATION']) && $_SERVER['HTTP_AUTHORIZATION']) {
+			list($type, $auth) = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+			if (strtolower($type) === 'basic') {
+				list($usr, $pwd) = explode(':', base64_decode($auth));
+			}
+		}
+		$creds = array();
+		$creds['user_login'] = $usr;
+		$creds['user_password'] = $pwd;
+		$creds['remember'] = false;
+		$login = wp_signon($creds, false);
+		if ( !is_wp_error( $login ) ) {
+			$current_user = wp_set_current_user($login);
+			return;
+		}
+
+		header('WWW-Authenticate: Basic realm="Please Enter Your Password"');
+		status_header ( 401 );
+		echo 'Authorization Required';
+		die();
+	}
+
+
+	/**
+	 * Check for lock on document
+	 */
+	function LOCK( &$options ) {
+		$options["timeout"] = time()+300; // 5min. hardcoded
+		$options["owner"] = "";
+		$options["scope"] = "exclusive";
+		$options["type"] = "write";
+		return true;
+	}
+
+	function do_LOCK() {
+		global $post;
+		if ( $post ) {
+			$current_user = wp_get_current_user();
+
+			include_once "wp-admin/includes/post.php";
+			$current_owner = wp_check_post_lock( $post->ID );
+			if ( $current_owner && $current_owner != $current_user->ID ) {
+				nocache_headers();
+				status_header ( 423 );
+				die();
+			}
+			nocache_headers();
+			parent::http_LOCK();
+			die();
+		} else {
+			nocache_headers();
+			status_header ( 404 );
+			die();
+		}
+	}
+
+	function do_PUT() {
+		global $post;
+
+		if ( $post ) {
+			$file = $this->_parsePutFile();
+			$dir = $this->document_upload_dir();
+			$wp_filetype = wp_check_filetype( basename( $file, null ) );
+
+			$file_array = apply_filters( 'wp_handle_upload_prefilter', array(
+					'name' => basename( $file ),
+					'tmp_name' => $file,
+					'type' => $wp_filetype['type'],
+					'size' => 1,
+				)
+			);
+
+			$attachment = array(
+				'post_mime_type' => $wp_filetype['type'],
+				'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $file ) ),
+				'post_content' => '',
+				'post_status' => 'inherit',
+			);
+
+			$newfilepath = $dir . '/' . $file_array['name'];
+			copy( $file, $newfilepath );
+			unlink( $file );
+
+			$attach_id = wp_insert_attachment( $attachment, $newfilepath, $post->ID );
+			if ( !is_wp_error( $attach_id ) ) {
+				$post_array = array(
+					'ID' => $post->ID,
+					'post_content' => $attach_id,
+					'post_excerpt' => __('Revised by Desktop Edit', 'wp-document-revisions')
+				);
+				$result = wp_update_post( $post_array );
+				wp_cache_flush();
+				if ( !is_wp_error ( $result ) ) {
+					nocache_headers();
+					status_header( 204 );
+					die();
+				} else {
+					nocache_headers();
+					status_header( 500 );
+					die();
+				}
+			}
+		} else {
+			nocache_headers();
+			status_header ( 404 );
+			die();
+		}
+
+	}
+
+	private function _parsePutFile() {
+		/* PUT data comes in on the stdin stream */
+		$putdata = fopen("php://input", "r");
+
+		$raw_data = '';
+
+		/* Read the data 1 KB at a time
+			and write to the file */
+		while ($chunk = fread($putdata, 1024))
+			$raw_data .= $chunk;
+
+		/* Close the streams */
+		fclose($putdata);
+
+		//get tmp name
+		$path_only = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		$filename_parts = pathinfo( $path_only );
+		$file = tempnam( ini_get( 'upload_tmp_dir' ), $filename_parts['filename'] ) . '.' . $filename_parts['extension'];
+		file_put_contents($file, $raw_data);
+
+		return $file;
+	}
+
+	###################################################
+	#
+	# END basic WebDav requests
+	#
+	###################################################
 
 	/**
 	 * Init i18n files
@@ -366,23 +593,24 @@ class Document_Revisions {
 		//note, changing $post here would break $post in the global scope
 		// rename $post to attachment, or grab the attachment from $post
 		// either way, $attachment is now the object we're looking to query
-		if ( get_post_type( $post ) == 'attachment' )
+		if ( get_post_type( $post ) == 'attachment' ) {
 			$attachment = $post;
-		else if ( get_post_type( $post ) == 'document' )
+		} else if ( get_post_type( $post ) == 'document' ) {
 				$latest_revision = $this->get_latest_revision( $post->ID );
 
 				// verify a previous revision exists
 				if ( !$latest_revision )
 					return '';
-					
+
 				$attachment = get_post( $latest_revision->post_content );
 
 			//sanity check in case post_content somehow doesn't represent an attachment,
 			// or in case some sort of non-document, non-attachment object/ID was passed
 			if ( get_post_type( $attachment ) != 'attachment' )
 				return '';
+		}
 
-			return $this->get_extension( get_attached_file( $attachment->ID ) );
+		return $this->get_extension( get_attached_file( $attachment->ID ) );
 
 	}
 
@@ -787,6 +1015,12 @@ class Document_Revisions {
 		//in case this is a large file, remove PHP time limits
 		@set_time_limit( 0 );
 
+		// clear output buffer to prevent other plugins from corrupting the file
+		if (ob_get_level()) {
+			ob_clean();
+			flush();
+		}
+
 		// If we made it this far, just serve the file
 		readfile( $file );
 
@@ -1106,7 +1340,7 @@ class Document_Revisions {
 			return $default;
 
 		return 'revision_log';
-			
+
 	}
 
 
@@ -1330,17 +1564,12 @@ class Document_Revisions {
 
 			//if the role is a standard role, map the default caps, otherwise, map as a subscriber
 			$caps = ( array_key_exists( $role, $defaults ) ) ? $defaults[$role] : $defaults['subscriber'];
-
 			$caps = apply_filters( 'document_caps', $caps, $role );
 
 			//loop and assign
-			foreach ( $caps as $cap=>$grant ) {
+			foreach ( $caps as $cap => $grant )
+				$wp_roles->add_cap( $role, $cap, $grant );
 
-				//check to see if the user already has this capability, if so, don't re-add as that would override grant
-				if ( !isset( $wp_roles->roles[$role]['capabilities'][$cap] ) )
-					$wp_roles->add_cap( $role, $cap, $grant );
-
-			}
 		}
 
 	}
@@ -1694,11 +1923,10 @@ class Document_Revisions {
 
 	}
 
-
 }
 
-
 // $wpdr is a global reference to the class
+global $wpdr;
 $wpdr = new Document_Revisions;
 
 //declare global functions
