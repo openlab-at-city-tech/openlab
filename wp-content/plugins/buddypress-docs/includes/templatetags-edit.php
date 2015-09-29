@@ -25,15 +25,22 @@ function bp_docs_edit_doc_title() {
 	 * @return string Doc title
 	 */
 	function bp_docs_get_edit_doc_title() {
-		global $bp;
-
-		if ( empty( $bp->bp_docs->current_post ) || empty( $bp->bp_docs->current_post->post_title ) ) {
-			$title = isset( $_GET['create_title'] ) ? urldecode( $_GET['create_title'] ) : '';
+		// If a previously-submitted value is found, prefer it. It
+		// means that there was a failed submission just prior to this
+		if ( ! empty( buddypress()->bp_docs->submitted_data->doc->title ) ) {
+			$title = buddypress()->bp_docs->submitted_data->doc->title;
 		} else {
-			$title = $bp->bp_docs->current_post->post_title;
+			$title = bp_docs_is_existing_doc() ? get_the_title() : '';
 		}
 
-		return apply_filters( 'bp_docs_get_edit_doc_title', $title );
+		// If no title has been found yet, check to see whether one has
+		// been submitted using create_title URL param (from the
+		// [[wikitext]] linking functionality)
+		if ( empty( $title ) && ! empty( $_GET['create_title'] ) ) {
+			$title = urldecode( $_GET['create_title'] );
+		}
+
+		return apply_filters( 'bp_docs_get_edit_doc_title', esc_attr( $title ) );
 	}
 
 /**
@@ -54,15 +61,17 @@ function bp_docs_edit_doc_slug() {
 	 * @return string Doc slug
 	 */
 	function bp_docs_get_edit_doc_slug() {
-		global $bp;
+		global $post;
 
-		if ( empty( $bp->bp_docs->current_post ) || empty( $bp->bp_docs->current_post->post_name ) ) {
-			$slug = '';
+		// If a previously-submitted value is found, prefer it. It
+		// means that there was a failed submission just prior to this
+		if ( ! empty( buddypress()->bp_docs->submitted_data->doc->permalink ) ) {
+			$slug = buddypress()->bp_docs->submitted_data->doc->permalink;
 		} else {
-			$slug = $bp->bp_docs->current_post->post_name;
+			$slug = isset( $post->post_name ) ? $post->post_name : '';
 		}
 
-		return apply_filters( 'bp_docs_get_edit_doc_slug', $slug );
+		return apply_filters( 'bp_docs_get_edit_doc_slug', esc_attr( $slug ) );
 	}
 
 /**
@@ -83,12 +92,12 @@ function bp_docs_edit_doc_content() {
 	 * @return string Doc content
 	 */
 	function bp_docs_get_edit_doc_content() {
-		global $bp;
+		global $post;
 
-		if ( empty( $bp->bp_docs->current_post ) || empty( $bp->bp_docs->current_post->post_content ) ) {
-			$content = '';
+		if ( ! empty( buddypress()->bp_docs->submitted_data->doc_content ) ) {
+			$content = buddypress()->bp_docs->submitted_data->doc_content;
 		} else {
-			$content = $bp->bp_docs->current_post->post_content;
+			$content = bp_docs_is_existing_doc() ? $post->post_content : '';
 		}
 
 		return apply_filters( 'bp_docs_get_edit_doc_content', $content );
@@ -103,34 +112,32 @@ function bp_docs_edit_doc_content() {
 function bp_docs_edit_parent_dropdown() {
 	global $bp;
 
-	// Get the item docs to use as Include arguments
-	$q 			= new BP_Docs_Query;
-	$q->current_view 	= 'list';
-	$qt 			= $q->build_query();
-
-	// Make sure we don't limit the posts displayed
-	$qt['showposts']	= -1;
-
-	// Order them by name, no matter what
-	$qt['orderby'] 		= 'post_title';
-	$qt['order']		= 'ASC';
-
-	$include_posts		= new WP_Query( $qt );
-
 	$include = array();
 
-	if ( $include_posts->have_posts() ) {
-		while ( $include_posts->have_posts() ) {
-			$include_posts->the_post();
+	$query_args = apply_filters( 'bp_docs_parent_dropdown_query_args', array(
+		'doc_slug' => false,
+		'posts_per_page' => -1,
+	) );
+	$doc_query_builder = new BP_Docs_Query( $query_args );
+	$doc_query = $doc_query_builder->get_wp_query();
+
+	if ( $doc_query->have_posts() ) {
+		while ( $doc_query->have_posts() ) {
+			$doc_query->the_post();;
 			$include[] = get_the_ID();
 		}
 	}
 
-	// Exclude the current doc, if this is 'edit' and not 'create' mode
-	$exclude 	= ! empty( $bp->bp_docs->current_post->ID ) ? array( $bp->bp_docs->current_post->ID ) : false;
+	$current_doc = get_queried_object();
+	$exclude = $parent = false;
 
-	// Highlight the existing parent doc, if any
-	$parent 	= ! empty( $bp->bp_docs->current_post->post_parent ) ? $bp->bp_docs->current_post->post_parent : false;
+	// If this is a failed submission, use the value from the POST cookie
+	if ( ! empty( buddypress()->bp_docs->submitted_data->parent_id ) ) {
+		$parent = intval( buddypress()->bp_docs->submitted_data->parent_id );
+	} else if ( isset( $current_doc->post_type ) && bp_docs_get_post_type_name() === $current_doc->post_type ) {
+		$exclude = array( $current_doc->ID );
+		$parent = $current_doc->post_parent;
+	}
 
 	$pages = wp_dropdown_pages( array(
 		'post_type' 	=> $bp->bp_docs->post_type_name,
@@ -169,40 +176,6 @@ function bp_docs_remove_tinymce_more_button( $buttons ) {
 add_filter( 'mce_buttons', 'bp_docs_remove_tinymce_more_button' );
 
 /**
- * Modifies TinyMCE init parameters to include and exclude plugins
- *
- * WP 3.1 introduced a fancy wplink plugin for TinyMCE, which allows for internal linking. It's not
- * playing nice with BuddyPress Docs, so I'm removing it for the moment and falling back on
- * TinyMCE's default link button.
- *
- * This function also adds the
- *
- * @package BuddyPress Docs
- * @since 1.0.4
- *
- * @param array $initArray The default TinyMCE init array as set by WordPress
- * @return array $initArray The init array with the wplink plugin removed
- */
-function bp_docs_remove_tinymce_plugins( $initArray ) {
-	if ( bp_docs_is_bp_docs_page() ) {
-		$plugins 	= explode( ',', $initArray['plugins'] );
-
-		// Remove internal linking
-		$wplink_key = array_search( 'wplink', $plugins );
-		if ( $wplink_key ) {
-			unset( $plugins[$wplink_key] );
-		}
-
-		$plugins = array_values( $plugins );
-
-		$initArray['plugins'] = implode( ',', $plugins );
-	}
-
-	return $initArray;
-}
-add_filter( 'tiny_mce_before_init', 'bp_docs_remove_tinymce_plugins' );
-
-/**
  * Hook our idle function to the TinyMCE.onInit event
  *
  * @package BuddyPress_Docs
@@ -216,16 +189,16 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 			ed.onInit.add(
 				function(ed) {
 					_initJQuery();
-					
+
 					// Set up listeners
 					jQuery(\'#\' + ed.id + \'_parent\').bind(\'mousemove\',function (evt){
 						_active(evt);
-					});	
-					
+					});
+
 					bp_docs_load_idle();
 
 					/* Hide rows 3+ */
-					var rows = jQuery(\'#\' + ed.editorContainer).find(\'table.mceToolbar\');
+					var rows = jQuery(ed.editorContainer).find(\'table.mceToolbar\');
 					jQuery(rows).each(function(k,row){
 						if ( !jQuery(row).hasClass(\'mceToolbarRow2\') && !jQuery(row).hasClass(\'mceToolbarRow1\' ) ) {
 							jQuery(row).toggle();
@@ -236,7 +209,7 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 
 				}
 			);
-			
+
 			ed.onKeyDown.add(
 				function(ed) {
 					_active();
@@ -244,7 +217,7 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 			);
 		}';
 	}
-	
+
 	return $initArray;
 }
 add_filter( 'tiny_mce_before_init', 'bp_docs_add_idle_function_to_tinymce' );
@@ -264,9 +237,9 @@ add_filter( 'tiny_mce_before_init', 'bp_docs_add_idle_function_to_tinymce' );
  */
 function bp_docs_add_external_tinymce_plugins( $plugins ) {
 	if ( bp_docs_is_bp_docs_page() ) {
-		$plugins['table'] 	= WP_PLUGIN_URL . '/buddypress-docs/lib/js/tinymce/plugins/table/editor_plugin.js';
-		$plugins['tabindent'] 	= WP_PLUGIN_URL . '/buddypress-docs/lib/js/tinymce/plugins/tabindent/editor_plugin.js';
-		$plugins['print'] 	= WP_PLUGIN_URL . '/buddypress-docs/lib/js/tinymce/plugins/print/editor_plugin.js';
+		$plugins['table']     = WP_PLUGIN_URL . '/'. BP_DOCS_PLUGIN_SLUG . '/lib/js/tinymce/plugins/table/editor_plugin.js';
+		$plugins['tabindent'] = WP_PLUGIN_URL . '/'. BP_DOCS_PLUGIN_SLUG . '/lib/js/tinymce/plugins/tabindent/editor_plugin.js';
+		$plugins['print']     = WP_PLUGIN_URL . '/'. BP_DOCS_PLUGIN_SLUG . '/lib/js/tinymce/plugins/print/editor_plugin.js';
 	}
 
 	return $plugins;
@@ -289,7 +262,13 @@ add_filter( 'mce_external_plugins', 'bp_docs_add_external_tinymce_plugins' );
  * @return array $buttons Button list, with BP Docs buttons added
  */
 function bp_docs_add_external_tinymce_buttons_row1( $buttons ) {
-	$justify_right_key = array_search( 'justifyright', $buttons );
+	// TinyMCE 4.0+
+	$justify_right_key = array_search( 'alignright', $buttons );
+
+	// 3.0
+	if ( false === $justify_right_key ) {
+		$justify_right_key = array_search( 'justifyright', $buttons );
+	}
 
 	if ( $justify_right_key !== 0 ) {
 		// Shift the buttons one to the right and remove from original array
@@ -307,6 +286,15 @@ function bp_docs_add_external_tinymce_buttons_row1( $buttons ) {
 	// Add the Print button just before the kitchen sink
 	$ks = array_pop( $buttons );
 	$buttons = array_merge( $buttons, array( 'print' ), array( $ks ) );
+
+	// Fullscreen is kinda busted here, so remove it
+	$fs = array_search( 'fullscreen', $buttons );
+	if ( false !== $fs ) {
+		unset( $buttons[ $fs ] );
+	}
+
+	// Reset indexes
+	$buttons = array_values( $buttons );
 
 	return $buttons;
 }
