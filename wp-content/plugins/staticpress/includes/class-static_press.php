@@ -21,8 +21,8 @@ class static_press {
 
 	private $static_files_ext = array(
 		'html','htm','txt','css','js','gif','png','jpg','jpeg',
-		'mp3','ico','ttf','woff','otf','eot','svg','svgz','xml',
-		'gz','zip', 'pdf', 'swf',
+		'mp3','ico','ttf','woff','woff2','otf','eot','svg','svgz','xml',
+		'gz','zip', 'pdf', 'swf', 'xsl',
 		);
 
 	function __construct($plugin_basename, $static_url = '/', $static_dir = '', $remote_get_option = array()){
@@ -108,7 +108,7 @@ CREATE TABLE `{$this->url_table}` (
  `parent` bigint(20) unsigned NOT NULL DEFAULT 0,
  `pages` bigint(20) unsigned NOT NULL DEFAULT 1,
  `enable` int(1) unsigned NOT NULL DEFAULT '1',
- `file_name` varchar(255) NOT NULL,
+ `file_name` varchar(255) NOT NULL DEFAULT '',
  `file_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
  `last_statuscode` int(20) NULL,
  `last_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -368,6 +368,7 @@ CREATE TABLE `{$this->url_table}` (
 			$file_dest = str_replace('/', $dir_sep, $file_dest);
 
 		$http_code = 200;
+		$blog_charset = get_option('blog_charset');
 		switch ($file_type) {
 		case 'front_page':
 		case 'single':
@@ -376,8 +377,11 @@ CREATE TABLE `{$this->url_table}` (
 		case 'other_page':
 			// get remote file
 			if (($content = $this->remote_get($url)) && isset($content['body'])) {
+				if ($blog_charset === 'UTF-8') {
+					$content['body'] = $this->clean_utf8($content['body']);
+				}
 				$http_code = intval($content['code']);
-				switch (intval($http_code)) {
+				switch ($http_code) {
 				case 200:
 					if ($crawling)
 						$this->other_url($content['body'], $url, $http_code);
@@ -645,8 +649,51 @@ CREATE TABLE `{$this->url_table}` (
 		$urls = array_merge($urls, $this->terms_url());
 		$urls = array_merge($urls, $this->author_url());
 		$urls = array_merge($urls, $this->static_files_url());
+		$urls = array_merge($urls, $this->seo_url());
 		return $urls;
 	}
+
+	// Check correct sitemap url by robots.txt
+	private function seo_url($url_type = 'seo_files'){
+		$urls = array();
+		$analyzed = array();
+		$sitemap = '/sitemap.xml';
+		$robots = '/robots.txt';
+		$urls[] = array('type' => $url_type, 'url' => $robots, 'last_modified' => date('Y-m-d h:i:s'));
+		if(($txt = $this->remote_get($robots)) && isset($txt['body'])){
+			$http_code = intval($txt['code']);
+			switch (intval($http_code)){
+			case 200:
+				if(preg_match('/sitemap:\s.*?(\/[\-_a-z0-9%]+\.xml)/i',$txt['body'],$match)){
+					$sitemap = $match[1];
+				}
+			}
+		}
+		$this->sitemap_analyzer($analyzed,$urls,$sitemap,$url_type);
+		return $urls;
+	}
+
+	// Crawling sitemap XML files
+	private function sitemap_analyzer(&$analyzed,&$urls,$url,$url_type){
+		$urls[] = array('type' => $url_type, 'url' => $url, 'last_modified' => date('Y-m-d h:i:s'));
+		$analyzed[] = $url;
+		if(($xml = $this->remote_get($url)) && isset($xml['body'])){
+			$http_code = intval($xml['code']);
+			switch (intval($http_code)){
+			case 200:
+				if(preg_match_all('/<loc>(.*?)<\/loc>/i',$xml['body'],$matches)){
+					foreach($matches[1] as $link){
+						if(preg_match('/\/([\-_a-z0-9%]+\.xml)$/i',$link,$matchSub)){
+							if(!in_array($matchSub[0],$analyzed)){
+								$this->sitemap_analyzer($analyzed,$urls,$matchSub[0],$url_type);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 
 	private function front_page_url($url_type = 'front_page'){
 		$urls = array();
@@ -911,5 +958,21 @@ SELECT DISTINCT post_author, COUNT(ID) AS count, MAX(post_modified) AS modified
 		}
 
 		return $list;
+	}
+
+	private function clean_utf8($content) {
+		$regex = <<<'END'
+		/
+		  (
+		    (?: [\x00-\x7F]                 # single-byte sequences   0xxxxxxx
+		    |   [\xC0-\xDF][\x80-\xBF]      # double-byte sequences   110xxxxx 10xxxxxx
+		    |   [\xE0-\xEF][\x80-\xBF]{2}   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+		    |   [\xF0-\xF7][\x80-\xBF]{3}   # quadruple-byte sequence 11110xxx 10xxxxxx * 3 
+		    ){1,100}                        # ...one or more times
+		  )
+		| .                                 # anything else
+		/x
+END;
+		return preg_replace($regex, '$1', $content);
 	}
 }
